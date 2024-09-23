@@ -174,23 +174,23 @@ set (engine_SOURCES
   gnc-rational.cpp
   gnc-session.c
   gnc-timezone.cpp
-  gnc-uri-utils.c
+  gnc-uri-utils.cpp
   engine-helpers.c
   guid.cpp
   policy.cpp
-  gncAddress.c
-  gncBillTerm.c
+  gncAddress.cpp
+  gncBillTerm.cpp
   gncBusiness.c
-  gncCustomer.c
-  gncEmployee.c
-  gncEntry.c
+  gncCustomer.cpp
+  gncEmployee.cpp
+  gncEntry.cpp
   gncIDSearch.c
-  gncInvoice.c
-  gncJob.c
-  gncOrder.c
-  gncOwner.c
-  gncTaxTable.c
-  gncVendor.c
+  gncInvoice.cpp
+  gncJob.cpp
+  gncOrder.cpp
+  gncOwner.cpp
+  gncTaxTable.cpp
+  gncVendor.cpp
   kvp-frame.cpp
   kvp-value.cpp
   qof-backend.cpp

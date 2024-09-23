@@ -306,7 +306,7 @@ GncCustomer *gncCustomerCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    cust = g_object_new (GNC_TYPE_CUSTOMER, NULL);
+    cust = GNC_CUSTOMER(g_object_new (GNC_TYPE_CUSTOMER, NULL));
     qof_instance_init_data (&cust->inst, _GNC_MOD_NAME, book);
 
     cust->id = CACHE_INSERT ("");
@@ -700,7 +700,7 @@ GList * gncCustomerGetJoblist (const GncCustomer *cust, gboolean show_all)
         GList *list = NULL, *iterator;
         for (iterator = cust->jobs; iterator; iterator = iterator->next)
         {
-            GncJob *j = iterator->data;
+            auto j = GNC_JOB(iterator->data);
             if (gncJobGetActive (j))
                 list = g_list_prepend (list, j);
         }
@@ -913,7 +913,7 @@ static QofObject gncCustomerDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Customer",
-    DI(.create            = ) (gpointer)gncCustomerCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncCustomerCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_customer_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,

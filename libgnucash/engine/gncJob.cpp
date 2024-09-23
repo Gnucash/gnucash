@@ -215,7 +215,7 @@ GncJob *gncJobCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    job = g_object_new (GNC_TYPE_JOB, NULL);
+    job = GNC_JOB(g_object_new (GNC_TYPE_JOB, NULL));
     qof_instance_init_data (&job->inst, _GNC_MOD_NAME, book);
 
     job->id = CACHE_INSERT ("");
@@ -556,7 +556,7 @@ static const char * _gncJobPrintable (gpointer item)
 {
     GncJob *c;
     if (!item) return NULL;
-    c = item;
+    c = GNC_JOB(item);
     return c->name;
 }
 
@@ -565,7 +565,7 @@ static QofObject gncJobDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Job",
-    DI(.create            = ) (gpointer)gncJobCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncJobCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) NULL,
     DI(.is_dirty          = ) qof_collection_is_dirty,

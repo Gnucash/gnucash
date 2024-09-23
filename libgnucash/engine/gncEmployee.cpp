@@ -205,13 +205,13 @@ gnc_employee_set_property (GObject         *object,
         gncEmployeeSetLanguage(emp, g_value_get_string(value));
         break;
     case PROP_CURRENCY:
-        gncEmployeeSetCurrency(emp, g_value_get_object(value));
+        gncEmployeeSetCurrency(emp, GNC_COMMODITY(g_value_get_object(value)));
         break;
     case PROP_ACL:
         gncEmployeeSetAcl(emp, g_value_get_string(value));
         break;
     case PROP_ADDRESS:
-        qofEmployeeSetAddr(emp, g_value_get_object(value));
+        qofEmployeeSetAddr(emp, QOF_INSTANCE(g_value_get_object(value)));
         break;
     case PROP_WORKDAY:
         gncEmployeeSetWorkday(emp, *(gnc_numeric*)g_value_get_boxed(value));
@@ -220,7 +220,7 @@ gnc_employee_set_property (GObject         *object,
         gncEmployeeSetRate(emp, *(gnc_numeric*)g_value_get_boxed(value));
         break;
     case PROP_CCARD:
-        gncEmployeeSetCCard(emp, g_value_get_object(value));
+        gncEmployeeSetCCard(emp, GNC_ACCOUNT(g_value_get_object(value)));
         break;
     case PROP_PDF_DIRNAME:
         qof_instance_set_kvp (QOF_INSTANCE (emp), value, 1, OWNER_EXPORT_PDF_DIRNAME);
@@ -431,7 +431,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    employee = g_object_new (GNC_TYPE_EMPLOYEE, NULL);
+    employee = GNC_EMPLOYEE(g_object_new (GNC_TYPE_EMPLOYEE, NULL));
     qof_instance_init_data (&employee->inst, _GNC_MOD_NAME, book);
 
     employee->id = CACHE_INSERT ("");
@@ -809,7 +809,7 @@ gboolean gncEmployeeEqual(const GncEmployee* a, const GncEmployee* b)
 
 static const char * _gncEmployeePrintable (gpointer item)
 {
-    GncEmployee *v = item;
+    auto v = GNC_EMPLOYEE(item);
     if (!item) return NULL;
     return gncAddressGetName(v->addr);
 }
@@ -899,7 +899,7 @@ static QofObject gncEmployeeDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Employee",
-    DI(.create            = ) (gpointer)gncEmployeeCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncEmployeeCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_employee_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,

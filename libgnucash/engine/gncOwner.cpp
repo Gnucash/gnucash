@@ -705,7 +705,7 @@ gboolean gncOwnerIsValid (const GncOwner *owner)
 gboolean
 gncOwnerLotMatchOwnerFunc (GNCLot *lot, gpointer user_data)
 {
-    const GncOwner *req_owner = user_data;
+    auto req_owner = static_cast<const GncOwner*>(user_data);
     GncOwner lot_owner;
     const GncOwner *end_owner;
     GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
@@ -905,7 +905,7 @@ Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_amount)
 
     for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
     {
-        Split *split = ls_iter->data;
+        auto split = GNC_SPLIT(ls_iter->data);
 
         if (!split)
             continue;
@@ -1024,7 +1024,7 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
     // Find all splits in the lot link transaction that are also in a document lot
     for (lts_iter = xaccTransGetSplitList (ll_txn); lts_iter; lts_iter = lts_iter->next)
     {
-        Split *split = lts_iter->data;
+        auto split = GNC_SPLIT(lts_iter->data);
         GNCLot *lot;
         GncInvoice *invoice;
         gchar *title;
@@ -1052,10 +1052,10 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
     titles = g_list_sort (titles, (GCompareFunc)g_strcmp0);
 
     // Create the memo as we'd want it to be
-    new_memo = g_strconcat (memo_prefix, titles->data, NULL);
+    new_memo = g_strconcat (memo_prefix, static_cast<const char*>(titles->data), NULL);
     for (titer = titles->next; titer; titer = titer->next)
     {
-        gchar *tmp_memo = g_strconcat (new_memo, " - ", titer->data, NULL);
+        gchar *tmp_memo = g_strconcat (new_memo, " - ", static_cast<const char*>(titer->data), NULL);
         g_free (new_memo);
         new_memo = tmp_memo;
     }
@@ -1064,8 +1064,8 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
     // Update the memos of all the splits we found previously (if needed)
     for (siter = splits; siter; siter = siter->next)
     {
-        if (g_strcmp0 (xaccSplitGetMemo (siter->data), new_memo) != 0)
-            xaccSplitSetMemo (siter->data, new_memo);
+        if (g_strcmp0 (xaccSplitGetMemo (GNC_SPLIT(siter->data)), new_memo) != 0)
+            xaccSplitSetMemo (GNC_SPLIT(siter->data), new_memo);
     }
 
     g_list_free (splits);
@@ -1091,7 +1091,7 @@ get_ll_transaction_from_lot (GNCLot *lot)
      */
     for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
     {
-        Split *ls = ls_iter->data;
+        auto ls = GNC_SPLIT(ls_iter->data);
         Transaction *ll_txn = xaccSplitGetParent (ls);
         SplitList *ts_iter;
 
@@ -1100,7 +1100,7 @@ get_ll_transaction_from_lot (GNCLot *lot)
 
         for (ts_iter = xaccTransGetSplitList (ll_txn); ts_iter; ts_iter = ts_iter->next)
         {
-            Split *ts = ts_iter->data;
+            auto ts = GNC_SPLIT(ts_iter->data);
             GNCLot *tslot = xaccSplitGetLot (ts);
 
             if (!tslot)
@@ -1271,7 +1271,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 
     for (left_iter = lots; left_iter; left_iter = left_iter->next)
     {
-        GNCLot *left_lot = left_iter->data;
+        auto left_lot = GNC_LOT(left_iter->data);
         gnc_numeric left_lot_bal;
         gboolean left_lot_has_doc;
         gboolean left_modified = FALSE;
@@ -1305,7 +1305,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
          */
         for (right_iter = left_iter->next; right_iter; right_iter = right_iter->next)
         {
-            GNCLot *right_lot = right_iter->data;
+            auto right_lot = GNC_LOT(right_iter->data);
             gnc_numeric right_lot_bal;
             gboolean right_lot_has_doc;
 
@@ -1502,7 +1502,7 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
         /* For each account */
         for (acct_node = acct_list; acct_node; acct_node = acct_node->next)
         {
-            Account *account = acct_node->data;
+            auto account = GNC_ACCOUNT(acct_node->data);
             GList *lot_list = NULL, *lot_node;
 
             /* Check if this account can have lots for the owner, otherwise skip to next */
@@ -1520,7 +1520,7 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
             /* For each lot */
             for (lot_node = lot_list; lot_node; lot_node = lot_node->next)
             {
-                GNCLot *lot = lot_node->data;
+                auto lot = GNC_LOT(lot_node->data);
                 gnc_numeric lot_balance = gnc_lot_get_balance (lot);
                 GncInvoice *invoice = gncInvoiceGetInvoiceFromLot(lot);
                 if (invoice)

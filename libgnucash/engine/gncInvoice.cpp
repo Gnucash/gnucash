@@ -47,6 +47,8 @@
 #include "gncOwnerP.h"
 #include "engine-helpers.h"
 
+#include <optional>
+
 struct _gncInvoice
 {
     QofInstance   inst;
@@ -317,7 +319,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+    invoice = GNC_INVOICE(g_object_new (GNC_TYPE_INVOICE, NULL));
     qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
 
     invoice->id = CACHE_INSERT ("");
@@ -345,7 +347,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     book = qof_instance_get_book (from);
     g_assert (book);
 
-    invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+    invoice = GNC_INVOICE(g_object_new (GNC_TYPE_INVOICE, NULL));
     qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
 
     gncInvoiceBeginEdit (invoice);
@@ -378,7 +380,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     // Copy all invoice->entries
     for (node = from->entries; node; node = node->next)
     {
-        GncEntry *from_entry = node->data;
+        auto from_entry = GNC_ENTRY(node->data);
         GncEntry *to_entry = gncEntryCreate (book);
         gncEntryCopy (from_entry, to_entry, FALSE);
 
@@ -703,7 +705,7 @@ void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price)
     commodity = gnc_price_get_commodity (price);
     while (node != NULL)
     {
-        GNCPrice *curr = (GNCPrice*)node->data;
+        auto curr = GNC_PRICE(node->data);
         if (gnc_commodity_equal (commodity, gnc_price_get_commodity (curr)))
             break;
         node = g_list_next (node);
@@ -767,7 +769,7 @@ void gncInvoiceRemoveEntries (GncInvoice *invoice)
     for (GList *next, *node = invoice->entries; node; node = next)
     {
         next = node->next;
-        GncEntry *entry = node->data;
+        auto entry = GNC_ENTRY(node->data);
 
         switch (gncInvoiceGetOwnerType (invoice))
         {
@@ -907,7 +909,7 @@ static gnc_numeric gncInvoiceSumTaxesInternal (AccountValueList *taxes)
         // to the desired denom and addition will just preserve it in that case.
         for (node = taxes; node; node=node->next)
         {
-            GncAccountValue *acc_val = node->data;
+            auto acc_val = static_cast<GncAccountValue*>(node->data);
             tt = gnc_numeric_add (tt, acc_val->value, GNC_DENOM_AUTO,
                                   GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
         }
@@ -917,8 +919,7 @@ static gnc_numeric gncInvoiceSumTaxesInternal (AccountValueList *taxes)
 
 static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboolean use_value,
                                                      AccountValueList **taxes,
-                                                     gboolean use_payment_type,
-                                                     GncEntryPaymentType type)
+                                                     std::optional<GncEntryPaymentType> type)
 {
     GList *node;
     gnc_numeric net_total = gnc_numeric_zero ();
@@ -938,10 +939,10 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
 
     for (node = gncInvoiceGetEntries (invoice); node; node = node->next)
     {
-        GncEntry *entry = node->data;
+        auto entry = GNC_ENTRY(node->data);
         gnc_numeric value;
 
-        if (use_payment_type && gncEntryGetBillPayment (entry) != type)
+        if (type.has_value() && gncEntryGetBillPayment (entry) != type.value())
             continue;
 
         if (use_value)
@@ -970,7 +971,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
         // which could otherwise happen when using a tax table with multiple tax rates
         for (node = tv_list; node; node=node->next)
         {
-            GncAccountValue *acc_val = node->data;
+            auto acc_val = static_cast<GncAccountValue*>(node->data);
             acc_val->value = gnc_numeric_convert (acc_val->value,
                                   denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
         }
@@ -983,7 +984,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
 
 static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
                                                gboolean use_tax,
-                                               gboolean use_payment_type, GncEntryPaymentType type)
+                                               std::optional<GncEntryPaymentType> type)
 {
     AccountValueList *taxes;
     gnc_numeric total;
@@ -991,7 +992,7 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
     if (!invoice) return gnc_numeric_zero ();
 
     ENTER ("");
-    total = gncInvoiceGetNetAndTaxesInternal (invoice, use_value, use_tax? &taxes : NULL, use_payment_type, type);
+    total = gncInvoiceGetNetAndTaxesInternal (invoice, use_value, use_tax? &taxes : NULL, type);
 
     if (use_tax)
     {
@@ -1009,25 +1010,25 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, FALSE, 0);
+    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, {});
 }
 
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, TRUE, FALSE, FALSE, 0);
+    return gncInvoiceGetTotalInternal (invoice, TRUE, FALSE, {});
 }
 
 gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, FALSE, TRUE, FALSE, 0);
+    return gncInvoiceGetTotalInternal (invoice, FALSE, TRUE, {});
 }
 
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, TRUE, type);
+    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, type);
 }
 
 AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
@@ -1035,7 +1036,7 @@ AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
     AccountValueList *taxes;
     if (!invoice) return NULL;
 
-    gncInvoiceGetNetAndTaxesInternal (invoice, FALSE, &taxes, FALSE, 0);
+    gncInvoiceGetNetAndTaxesInternal (invoice, FALSE, &taxes, {});
     return taxes;
 }
 
@@ -1174,7 +1175,7 @@ GNCPrice * gncInvoiceGetPrice (GncInvoice *invoice, gnc_commodity *commodity)
 
     while (node != NULL)
     {
-        GNCPrice *curr = (GNCPrice*)node->data;
+        auto curr = GNC_PRICE(node->data);
 
         if (gnc_commodity_equal (commodity, gnc_price_get_commodity (curr)))
             return curr;
@@ -1371,7 +1372,7 @@ GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice)
 
     for (entries_iter = invoice->entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
     {
-        GncEntry *entry = (GncEntry*)entries_iter->data;
+        auto entry = GNC_ENTRY(entries_iter->data);
         Account *this_acc;
         gnc_commodity *account_currency;
         AccountValueList *tt_amts = NULL, *tt_iter;
@@ -1401,7 +1402,7 @@ GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice)
 
         for (tt_iter = tt_amts; tt_iter != NULL; tt_iter = g_list_next(tt_iter))
         {
-            GncAccountValue *tt_amt_val = (GncAccountValue*)tt_iter->data;
+            auto tt_amt_val = static_cast<GncAccountValue*>(tt_iter->data);
             Account *tt_acc = tt_amt_val->account;
             gnc_commodity *tt_acc_currency = xaccAccountGetCommodity (tt_acc);
 
@@ -1580,7 +1581,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         total = gnc_numeric_neg (total);
         for (node = taxes; node; node = node->next)
         {
-            GncAccountValue *acc_val = node->data;
+            auto acc_val = static_cast<GncAccountValue*>(node->data);
             acc_val->value = gnc_numeric_neg (acc_val->value);
         }
     }
@@ -1592,7 +1593,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     for (iter = gncInvoiceGetEntries (invoice); iter; iter = iter->next)
     {
         gnc_numeric value, tax;
-        GncEntry * entry = iter->data;
+        auto entry = GNC_ENTRY(iter->data);
         Account *this_acc;
 
         /* Stabilize the TaxTable in this entry */
@@ -1695,7 +1696,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         PINFO ("Processing Split List");
     for (iter = splitinfo; iter; iter = iter->next)
     {
-        GncAccountValue *acc_val = iter->data;
+        auto acc_val = static_cast<GncAccountValue*>(iter->data);
 
         //gnc_numeric amt_rounded = gnc_numeric_convert(acc_val->value,
         //    denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
@@ -1833,7 +1834,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
         PINFO ("Recreating link transactions for remaining lots");
     for (lot_split_iter = lot_split_list; lot_split_iter; lot_split_iter = lot_split_iter->next)
     {
-        Split *split = lot_split_iter->data;
+        auto split = GNC_SPLIT(lot_split_iter->data);
         GList *other_split_list, *list_iter;
         Transaction *other_txn = xaccSplitGetParent (split);
         GList *lot_list = NULL;
@@ -1847,7 +1848,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
         other_split_list = xaccTransGetSplitList (other_txn);
         for (list_iter = other_split_list; list_iter; list_iter = list_iter->next)
         {
-            Split *other_split = list_iter->data;
+            auto other_split = GNC_SPLIT(list_iter->data);
             GNCLot *other_lot = xaccSplitGetLot (other_split);
 
             /* Omit the lot we are about to delete */
@@ -1873,7 +1874,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
          * send it a modified event to reset its paid status */
         for (list_iter = lot_list; list_iter; list_iter = list_iter->next)
         {
-            GNCLot *other_lot = list_iter->data;
+            auto other_lot = GNC_LOT(list_iter->data);
             GncInvoice *other_invoice = gncInvoiceGetInvoiceFromLot (other_lot);
 
             if (!gnc_lot_count_splits (other_lot))
@@ -1905,7 +1906,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
 
         for (iter = gncInvoiceGetEntries (invoice); iter; iter = iter->next)
         {
-            GncEntry *entry = iter->data;
+            auto entry = GNC_ENTRY(iter->data);
 
             gncEntryBeginEdit (entry);
             if (is_cust_doc)
@@ -1935,7 +1936,7 @@ struct lotmatch
 static gboolean
 gnc_lot_match_owner_balancing (GNCLot *lot, gpointer user_data)
 {
-    struct lotmatch *lm = user_data;
+    struct lotmatch *lm = static_cast<struct lotmatch *>(user_data);
     GncOwner owner_def;
     const GncOwner *owner;
     gnc_numeric balance = gnc_lot_get_balance (lot);
@@ -2185,7 +2186,7 @@ gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b)
 
 static const char * _gncInvoicePrintable (gpointer obj)
 {
-    GncInvoice *invoice = obj;
+    auto invoice = GNC_INVOICE(obj);
 
     g_return_val_if_fail (invoice, NULL);
 
@@ -2224,7 +2225,7 @@ static QofObject gncInvoiceDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Invoice",
-    DI(.create            = ) (gpointer)gncInvoiceCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncInvoiceCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_invoice_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
