@@ -9,7 +9,7 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021, 2022.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
-# Francisco Serrador <fserrador@gmail.com>, 2021, 2022, 2023.
+# Francisco Serrador <fserrador@gmail.com>, 2021, 2022, 2023, 2024.
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
@@ -86,8 +86,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-07-04 13:09+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2024-09-23 20:01+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -95,7 +95,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
@@ -1792,7 +1792,7 @@ msgstr ""
 "realizar un pago compensatorio por el capital devuelto. Esto reduce la base "
 "de coste (menos negativa, hacia el valor 0,00) sin afectar a las unidades #. "
 "Una distribución previamente registrada como dividendo compensatorio se "
-"reclasifica a devolución compensatoria de capital,a menudo debido a la "
+"reclasifica a devolución compensatoria de capital, a menudo debido a la "
 "información fiscal de final de año."
 
 #. Translators: this is a stock transaction describing a
@@ -8517,7 +8517,6 @@ msgid "Not enough information for quotes dump"
 msgstr "Sin información suficiente para volcar las cotizaciones"
 
 #: gnucash/gnucash-cli.cpp:170
-#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "Instrucción '{1}' entrecomillado desconocido"
 
@@ -8526,7 +8525,6 @@ msgid "Missing --name parameter"
 msgstr "Falta el parámetro --name"
 
 #: gnucash/gnucash-cli.cpp:214
-#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "Instrucción de informe desconocido '{1}'"
 
@@ -8536,7 +8534,6 @@ msgstr "Falta un mandato u opción"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
-#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Encontrada la versión de Finance::Quote {1}."
 
@@ -8558,13 +8555,11 @@ msgstr "Comunique defectos y otros problemas a gnucash-devel@gnucash.org"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "Además puede mejorar y comunicar gazapos y defectos a {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "Para buscar la última versión estable, refiérase a {1}"
 
@@ -8582,7 +8577,6 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash, para contabilidad financiera personal y pequeños negocios"
 
 #: gnucash/gnucash-core-app.cpp:208
-#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [opciones] [fichero de datos]"
 
@@ -8591,12 +8585,10 @@ msgid "GnuCash Paths"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1}, versión de desarrollo"
 
@@ -9748,11 +9740,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://"
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Alpha Vantage requiere una clave API para utilizar su servicio. Puede "
+"obtener una clave registrando una cuenta gratuita en el sitio web de Alpha "
+"Vantage, https://alphavantage.co/support/#api-key."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "Clave API de Finanza YH (FinanceAPI)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
@@ -9762,6 +9757,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
+"YH Finance requiere una clave API para utilizar su servicio FinanceAPI. "
+"Puede obtener una clave registrándose para obtener una cuenta gratuita en la "
+"página web de YH Finance, https://financeapi.net/pricing."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -9952,8 +9950,8 @@ msgstr ""
 "\"never\" significa no conservar los ficheros de bitácora/respaldo más "
 "antiguos. Cada vez que guarda, las versiones más antiguas del fichero se "
 "eliminan. \"days\" significa conservar los ficheros antiguos por un número "
-"de días. Cuanta cantidad de días está especificado en la clave 'retain-days' "
-"(días de conservación)"
+"de días. Cuanta cantidad de días está especificado en la clave 'retain-"
+"days' (días de conservación)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
@@ -11835,33 +11833,6 @@ msgid "CSV Transaction Import"
 msgstr "Importación de Transacción CSV"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. You can save your adjusted settings to reuse them on "
-#| "later imports. After loading your settings you can also tweak them again "
-#| "for similar imports and save them under another name."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -11900,7 +11871,7 @@ msgstr ""
 "el dato de importación:\n"
 "• una columna de Fecha\n"
 "• una columna de Descripción\n"
-"• una columna de Depósito o Retirada\n"
+"• una columna (negada) de Depósito o Retirada\n"
 "\n"
 "Si no hay ningún dato disponible de Cuenta, puede seleccionarse una cuenta "
 "básica a la cual todos los datos serán importados.\n"
@@ -16319,6 +16290,9 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Alpha Vantage requiere una clave API para utilizar su servicio. Puede "
+"obtener una clave registrándose para obtener una cuenta gratuita en la "
+"página web de Alpha Vantage, https://www.alphavantage.co/support/#api-key."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3711
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
@@ -19884,7 +19858,6 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "Las transacciones fueron importadas desde el fichero «{1}»."
 
@@ -20124,7 +20097,6 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
-#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -31116,7 +31088,6 @@ msgstr "Ubicación efectiva:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
-#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31129,14 +31100,12 @@ msgid "In addition:"
 msgstr "En adición:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "El siguiente fichero ha sido copiado a {1} en su lugar:"
 msgstr[1] "Los siguientes ficheros han sido copiados a {1} en su lugar:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
-#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "El siguiente fichero en {1} ha sido renombrado:"
 
@@ -31149,7 +31118,6 @@ msgstr[1] ""
 "Los siguientes ficheros se han convertido en obsoletos y serán descartados:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "El fichero siguiente no se pudo ser trasladado a {1}:"
@@ -31858,16 +31826,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "Comprobando negocios de desgloses en cuenta %s: %u de %u"
 
 #: libgnucash/engine/Scrub.cpp:146
-#, fuzzy, c-format
-#| msgid "Looking for orphans in transaction: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %zu"
-msgstr "Buscando huérfanos en cuenta: %u de %u"
+msgstr "Buscando huérfanos en transacción: %u de %zu"
 
 #: libgnucash/engine/Scrub.cpp:357
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in transaction date %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %zu"
-msgstr "Búsqueda de los descuadres en la fecha de transacción %s: %u de %u"
+msgstr "Búsqueda de los descuadres en la fecha de transacción %s: %u de %zu"
 
 #: libgnucash/engine/Split.cpp:1644
 msgctxt ""
