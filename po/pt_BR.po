@@ -17,11 +17,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-09-16 00:09+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2024-09-23 21:16+0000\n"
+"Last-Translator: Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -9597,11 +9597,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://"
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Alpha Vantage exige uma chave de API para usar o serviço. Você pode obter "
+"uma chave registrando-se para uma conta gratuita no site Alpha Vantage, "
+"https://alphavantage.co/support/#api-key."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "Chave da API YH Finance (FinanceAPI)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
@@ -9611,6 +9614,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
+"YH Finance exige uma chave de API para usar o serviço FinanceAPI. Você pode "
+"obter uma chave registrando-se para uma conta gratuita no site YH Finance, "
+"https://financeapi.net/pricing."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -16113,6 +16119,9 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Alpha Vantage exige uma chave de API para usar o serviço. Você pode obter "
+"uma chave registrando-se para uma conta gratuita no site Alpha Vantage, "
+"https://www.alphavantage.co/support/#api-key."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3711
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
