@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-09-22 19:15+0000\n"
+"PO-Revision-Date: 2024-09-24 21:35+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1296,7 +1296,7 @@ msgstr "Kategórianév"
 #: gnucash/gnome/assistant-hierarchy.cpp:873
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "Számlák a(z) '%s' kategóriában"
+msgstr "%s kategória számlái"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:881
 msgid "No description provided."
@@ -1304,7 +1304,7 @@ msgstr "Nincs megadva leírás."
 
 #: gnucash/gnome/assistant-hierarchy.cpp:896
 msgid "Accounts in Category"
-msgstr "Számlák a kategóriában"
+msgstr "A kategória számlái"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1108
 msgid "zero"
@@ -1409,7 +1409,7 @@ msgstr "Kölcsön"
 #: gnucash/gnome/assistant-loan.cpp:1475
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Kölcsön-visszafizetési beállítás: %s"
+msgstr "Visszafizetés beállítása: %s"
 
 #: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:985
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
@@ -2526,7 +2526,7 @@ msgstr "Ügyfél keresése"
 #: gnucash/gnome/dialog-custom-report.c:330
 #, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "Biztosan törölni kívánja ezt: \"%s\"?"
+msgstr "Biztosan törölni kívánja ezt: %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:435
 msgid "You must select a report configuration to load."
@@ -2791,7 +2791,7 @@ msgstr "Költségbizonylatok"
 
 #: gnucash/gnome/dialog-employee.c:679
 msgid "Employee ID"
-msgstr "Alkalmazott-azonosító"
+msgstr "Alkalmazott azonosítója"
 
 #: gnucash/gnome/dialog-employee.c:681
 msgid "Employee Username"
@@ -7245,9 +7245,8 @@ msgid "1 month"
 msgstr "1 hónap"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:331
-#, fuzzy
 msgid "View"
-msgstr "_Nézet"
+msgstr "Nézet"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:379
 #: gnucash/report/stylesheets/footer.scm:344
@@ -9574,11 +9573,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://"
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Az Alpha Vantage szolgáltatás használatához API-kulcsra van szükség. A "
+"kulcsot az Alpha Vantage - https://www.alphavantage.co/support/#api-key - "
+"weboldalán ingyenes regisztrációval szerezheti be."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "YH Finance (FinanceAPI) API kulcs"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
@@ -9588,6 +9590,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
+"Az YH Finance FinanceAPI szolgáltatásának használatához API-kulcsra van "
+"szükség. A kulcsot az YH Finance - https://financeapi.net/pricing - "
+"weboldalán ingyenes regisztrációval szerezheti be."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -9645,13 +9650,15 @@ msgstr "Fájltömörítés engedélyezése az adatfájl írásakor."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:35
 msgid "Show auto-save explanation"
-msgstr ""
+msgstr "Az automatikus mentés magyarázatának megjelenítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:36
 msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
+"Ha aktív, a GnuCash az automatikus mentés első indításakor megjeleníti a "
+"funkció magyarázatát. Ellenkező esetben nem jelenik meg magyarázat."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
 msgid "Auto-save time interval"
@@ -9845,7 +9852,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
-msgstr "Bezárásgomb feltüntetése a lapok fülein"
+msgstr "Bezárás gomb megjelenítése a lapok fülein"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:126
 msgid ""
@@ -9854,10 +9861,10 @@ msgid ""
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
-"Ha aktív, a bezárásgomb minden bezárható lap fülén megjelenik. Ellenkező "
+"Ha aktív, a bezárás gomb minden bezárható lap fülén megjelenik. Ellenkező "
 "esetben nem jelenik meg ilyen gomb a lapok fülein. Ettől a beállítástól "
-"függetlenül a lapok mindig bezárhatók a bezárásmenüponttal vagy az eszköztár "
-"bezárásgombjával."
+"függetlenül a lapok mindig bezárhatók a bezárás menüponttal vagy az "
+"eszköztár bezárás gombjával."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
@@ -9915,6 +9922,9 @@ msgid ""
 "currency-choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
+"Ez a beállítás határozza meg az új számlákhoz használt alapértelmezett "
+"pénznemet, ha a pénznemválasztás beállítása „egyéb”. Ennek a mezőnek "
+"tartalmaznia kell a pénznem hárombetűs ISO 4217 kódját (pl. USD, GBP, HUF)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
@@ -9979,32 +9989,28 @@ msgstr ""
 "kiiegészítésekor legfeljebb hány hónapot lehet visszafelé haladni az időben."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
-#, fuzzy
 msgid "Show Horizontal Grid Lines"
-msgstr "Vízszintes keretek megjelenítése a regiszterben"
+msgstr "Vízszintes rácsvonalak megjelenítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:181
-#, fuzzy
 msgid ""
 "If active, horizontal grid lines will be shown on table displays. Otherwise "
 "no horizontal grid lines will be shown."
 msgstr ""
-"Ha aktív, megjelenik az új felhasználó párbeszédablak. Különben nem jelenik "
-"meg."
+"Ha aktív, vízszintes rácsvonalak lesznek megjelenítve a táblázatokon. "
+"Ellenkező esetben nem lesznek vízszintes rácsvonalak megjelenítve."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:185
-#, fuzzy
 msgid "Show Vertical Grid Lines"
-msgstr "Függőleges keretek megjelenítése"
+msgstr "Függőleges rácsvonalak megjelenítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:186
-#, fuzzy
 msgid ""
 "If active, vertical grid lines will be shown on table displays. Otherwise no "
 "vertical grid lines will be shown."
 msgstr ""
-"Ha aktív, megjelenik az új felhasználó párbeszédablak. Különben nem jelenik "
-"meg."
+"Ha aktív, függőleges rácsvonalak lesznek megjelenítve a táblázatokon. "
+"Ellenkező esetben nem lesznek függőleges rácsvonalak megjelenítve."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:190
 msgid "Show splash screen"
@@ -11482,7 +11488,7 @@ msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
 msgstr ""
-"<b>Az árfolyamok importálásához kattintson az Alkalmazás gombra.\n"
+"<b>Az árfolyamok importálásához kattintson az Alkalmaz gombra.\n"
 "Megszakításhoz kattintson a Mégsem gombra.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1029
@@ -11967,7 +11973,7 @@ msgstr "Kezdődátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:178
 msgid "Length"
-msgstr "Hossz"
+msgstr "Időtartama"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:204
 msgid "Loan Account"
@@ -11983,7 +11989,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:288
 msgid "Months Remaining"
-msgstr "Hátralévő hónapok"
+msgstr "Hátralevő hónapok"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:340
 msgid ""
@@ -12076,11 +12082,11 @@ msgstr "Törlesztés gyakorisága"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1032
 msgid "Previous Option"
-msgstr "Előző opció"
+msgstr "Előző beállítás"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1046
 msgid "Next Option"
-msgstr "Következő opció"
+msgstr "Következő beállítás"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1068
 msgid "Loan Payment"
@@ -12092,7 +12098,7 @@ msgid ""
 "schedule."
 msgstr ""
 "Tekintse át az alábbi részleteket, és ha minden helyes nyomja meg az "
-"„Alkalmaz” gombot az ütemezés létrehozásához."
+"Alkalmaz gombot az ütemezés létrehozásához."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1108
 msgid "Range"
@@ -12131,7 +12137,7 @@ msgstr "Ütemezés sikeresen hozzáadva."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1258
 msgid "Loan Summary"
-msgstr "Kölcsön-összefoglaló"
+msgstr "Kölcsön összefoglalása"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 msgid "QIF Import Assistant"
@@ -12154,11 +12160,11 @@ msgstr ""
 "típusú fájlokból, Quicken/QuickBooks, MS Money, Moneydance és sok más "
 "program által létrehozottakból.\n"
 "\n"
-"Az importálási folyamatnak számos lépése van. Az Ön GnuCash számlái nem "
-"változnak, míg az „Alkalmazás”-ra nem kattint a folyamat végén.\n"
+"Az importálási folyamatnak számos lépése van. Az Ön GnuCash számlái addig "
+"nem változnak, amíg az Alkalmaz gombra nem kattint a folyamat végén.\n"
 "\n"
-"Kattintson az „Következő”-re a QIF fájl betöltéséhez, vagy a „Megszakítás”-"
-"ra a kilépéshez."
+"Kattintson az Következő gombra a QIF fájl betöltéséhez, vagy a Mégsem gombra "
+"a kilépéshez."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -14270,9 +14276,8 @@ msgid "Beginning"
 msgstr "Kezdet"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:634
-#, fuzzy
 msgid "<b>Compounding</b>"
-msgstr "<b>Hozam:</b>"
+msgstr "<b>Összevonás</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:780
 msgid "When paid"
@@ -15309,7 +15314,8 @@ msgid ""
 "views like the Accounts page."
 msgstr ""
 "Vízszintes rácsvonalak engedélyezése táblázatokban, azaz főként fa "
-"nézetekben, mint amilyen a Számlák lapja amiben az összes számla látható."
+"nézetekben, mint amilyen a főablak számlák lapja amiben az összes számla "
+"látható."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1941
 msgid "Enable vertical grid lines on table displays"
@@ -15321,7 +15327,8 @@ msgid ""
 "views like the Accounts page."
 msgstr ""
 "Függőleges rácsvonalak engedélyezése táblázatokban, azaz főként fa "
-"nézetekben, mint amilyen a Számlák lapja amiben az összes számla látható."
+"nézetekben, mint amilyen a főablak számlák lapja amiben az összes számla "
+"látható."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1961
 msgid "<b>Linked Files</b>"
@@ -15766,15 +15773,15 @@ msgstr "<b>Lapok fülei</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3521
 msgid "Show close button on _notebook tabs"
-msgstr "Bezárásgomb megjelenítése a lapok fülei_n"
+msgstr "Bezárás gomb megjelenítése a lapok fülei_n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3527
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
-"Minden lap fülén bezárásgombot jelenít meg, ami a bezárásmenüponttal azonos "
-"módon működik."
+"Minden lap fülén bezárás gombot jelenít meg, ami a bezárás menüponttal "
+"azonos módon működik."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3548
 msgid ""
@@ -15810,6 +15817,9 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Az Alpha Vantage szolgáltatás használatához API-kulcsra van szükség. A "
+"kulcsot az Alpha Vantage - https://www.alphavantage.co/support/#api-key - "
+"weboldalán ingyenes regisztrációval szerezheti be."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3711
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
@@ -15941,7 +15951,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:708
 msgid "_Added by the application"
-msgstr "_Alkalmazás hozzáadta"
+msgstr "_Automatikusan hozzáadva"
 
 #: gnucash/gtkbuilder/dialog-price.glade:712
 msgid ""
@@ -19250,7 +19260,7 @@ msgstr ""
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
 "Kattintson duplán a módosítani kívánt sorokra, majd az importáláshoz "
-"kattintson az Alkalmazás gombra"
+"kattintson az Alkalmaz gombra"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
@@ -28804,7 +28814,7 @@ msgstr "Kapcsolódó üzleti dokumentumok"
 
 #: gnucash/ui/gnc-plugin-business.ui:140
 msgid "View all Linked Business Documents"
-msgstr "Az összes kapcsolódó üzleti dokumentum megnyitása"
+msgstr "Az összes kapcsolódó üzleti dokumentum megtekintése"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
