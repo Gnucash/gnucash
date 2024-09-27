@@ -3563,14 +3563,14 @@ gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
-    gchar *text;
 
-    if (wind->load_stop)
-        text = g_strdup_printf (_("There was a problem with the import."));
-    else
-        text = g_strdup_printf (_("QIF Import Completed."));
+    const gchar *msg = wind->load_stop ?
+        _("There was a problem with the import.") :
+        _("QIF Import Completed.");
 
-    gtk_label_set_markup (GTK_LABEL(wind->summary_text), g_strdup_printf ("<span size=\"large\"><b>%s</b></span>", text));
+    gchar *text = g_markup_printf_escaped ("<span size=\"large\"><b>%s</b></span>", msg);
+
+    gtk_label_set_markup (GTK_LABEL(wind->summary_text), text);
 
     g_free (text);
 
