@@ -659,24 +659,33 @@ GNCPrice*
 GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
 {
     PriceParams p;
+    bpt::ptree comm_pt;
+
     p.ns = gnc_commodity_get_namespace (comm);
     p.mnemonic = gnc_commodity_get_mnemonic (comm);
     if (gnc_commodity_equiv(comm, m_dflt_curr) ||
         (!p.mnemonic || (strcmp (p.mnemonic, "XXX") == 0)))
         return nullptr;
-    auto comm_pt_ai{pt.find(p.mnemonic)};
-    if (comm_pt_ai == pt.not_found())
+    auto source{gnc_quote_source_get_internal_name(gnc_commodity_get_quote_source(comm))};
+    auto source_pt_ai{pt.find(source)};
+    auto ok{source_pt_ai != pt.not_found()};
+    if (ok)
+    {
+        auto comm_pt_ai{source_pt_ai->second.find(p.mnemonic)};
+        ok = (comm_pt_ai != pt.not_found());
+        if (ok)
+            comm_pt = comm_pt_ai->second;
+    }
+    if (!ok)
     {
         m_failures.emplace_back(p.ns, p.mnemonic, GncQuoteError::NO_RESULT,
                                 empty_string);
-        PINFO("Skipped %s:%s - Finance::Quote didn't return any data.",
-              p.ns, p.mnemonic);
+        PINFO("Skipped %s:%s - Finance::Quote didn't return any data from %s.",
+              p.ns, p.mnemonic, source);
         return nullptr;
     }
 
-    auto comm_pt{comm_pt_ai->second};
     parse_quote_json(p, comm_pt);
-
     if (!p.success)
     {
         m_failures.emplace_back(p.ns, p.mnemonic, GncQuoteError::QUOTE_FAILED,

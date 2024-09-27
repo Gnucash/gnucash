@@ -176,7 +176,7 @@ sub parse_currencies {
         $results{$from_currency}{"currency"} = $to_currency;
         $results{$from_currency}{"last"} = $price;
     }
-    return %results;
+    return ("currency" => \%results);
 }
 
 sub parse_commodities {
@@ -184,7 +184,7 @@ sub parse_commodities {
 
     my %quote_data = $quoter->fetch($quote_method_name, keys %$commodities);
     my %normalized_quote_data = sanitize_hash(%quote_data);
-    return %normalized_quote_data;
+    return ($quote_method_name => \%normalized_quote_data);
 }
 
 #---------------------------------------------------------------------------
