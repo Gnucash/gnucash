@@ -39,7 +39,10 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-session.h"
 #include "gnc-warnings.h"
+#include "Account.hpp"
 
+#include <vector>
+#include <string>
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
 #define STATE_SECTION "dialogs/edit_commodities"
@@ -155,8 +158,6 @@ gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
     GNCPriceDB *pdb;
     GList *node;
     GList *prices;
-    GList *accounts;
-    gboolean can_delete;
     gnc_commodity *commodity;
     GtkWidget *dialog;
     const gchar *message, *warning;
@@ -166,33 +167,32 @@ gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
     if (commodity == NULL)
         return;
 
-    accounts = gnc_account_get_descendants (gnc_book_get_root_account(cd->book));
-    can_delete = TRUE;
+    std::vector<Account*> commodity_accounts;
 
-    for (node = accounts; node; node = node->next)
-    {
-        Account *account = GNC_ACCOUNT(node->data);
-
-        if (commodity == xaccAccountGetCommodity (account))
-        {
-            can_delete = FALSE;
-            break;
-        }
-    }
+    gnc_account_foreach_descendant (gnc_book_get_root_account(cd->book),
+                                    [commodity, &commodity_accounts](auto acct)
+                                    {
+                                        if (commodity == xaccAccountGetCommodity (acct))
+                                            commodity_accounts.push_back (acct);
+                                    });
 
     /* FIXME check for transaction references */
 
-    if (!can_delete)
+    if (!commodity_accounts.empty())
     {
-        const char *message = _("That commodity is currently used by "
-                                "at least one of your accounts. You may "
-                                "not delete it.");
+        std::string msg{_("This commodity is currently used by the following accounts. You may "
+                          "not delete it.\n")};
 
-        gnc_warning_dialog (GTK_WINDOW (cd->window), "%s", message);
-        g_list_free (accounts);
+        for (const auto acct : commodity_accounts)
+        {
+            auto full_name = gnc_account_get_full_name (acct);
+            msg.append ("\n* ").append (full_name);
+            g_free (full_name);
+        }
+
+        gnc_warning_dialog (GTK_WINDOW (cd->window), "%s", msg.c_str());
         return;
     }
-    g_list_free (accounts);
 
     pdb = gnc_pricedb_get_db (cd->book);
     prices = gnc_pricedb_get_prices (pdb, commodity, NULL);
