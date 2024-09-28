@@ -6,14 +6,17 @@ cmake_minimum_required (VERSION 3.14.5)
 if (POLICY CMP0094)
   cmake_policy(SET CMP0094 NEW)
 endif()
-# CMake 3.30+ Use Boost's builtin BoostConfig.cmake instead of FindBoost, the latter of which is removed. Stting this policy to OLD temporarily restores it. BoostConfig.cmake was introduced in Boost 1.70.
-# A fair number of distros are still shipping Boost 1.69 in "legacy" versions so make it OLD for the 5.x series and NEW for 6.x.
+# CMake 3.30+ Use Boost's builtin BoostConfig.cmake instead of
+# FindBoost, the latter of which is removed. Setting this policy to OLD
+# temporarily restores it. BoostConfig.cmake was introduced in Boost
+# 1.70.  A fair number of distros are still shipping Boost 1.69 in
+# "legacy" versions so make it OLD for the 5.x series and NEW for 6.x.
 if (POLICY CMP0167)
   cmake_policy(SET CMP0167 OLD)
 endif()
 
 project (gnucash
-    VERSION 5.8
+    VERSION 5.9
 )
 
 enable_testing()

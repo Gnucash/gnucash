@@ -1,5 +1,53 @@
 Version history:
 ------- -------
+5.9  - 29 September 2024
+The following bugs have been fixed:
+    Bug 724745 - Added new transaction during reconcile, didn't show up in
+                 reconcile window.
+    Bug 797045 - Improve error reporting for bad credentials with MySQL backend
+                 ("bad or corrupt data" => "access denied")
+    Bug 798568 - Transaction Copy/Paste problem
+    Bug 799308 - sqlite backend: Example Python script prints error when
+                 creating new file.
+    Bug 799370 - Transaction Journal view cursor placement after commit to
+                 transaction change.
+    Bug 799384 - Reconciled date cannot be parsed.
+    Bug 799389 - Crash when removing an account
+    Bug 799391 - Transaction Cut/Paste doesn't move the transaction to the
+                 target account
+    Bug 799395 - relative date offset quarters occasionally wrong
+    Bug 799399 - Windows Keypad decimal locale error
+    Bug 799416 - Post invoice: post to account dropdown listbox too small
+    Bug 799419 - Intermittent quote price issue
+
+Other repairs or enhancements not marked as bugs:
+
+    Add YH Finance (FINANCEAPI) API Key to Quotes infrastructure with a
+        preference in the Online Quotes page and add financeapi to known
+        sources.
+    Move copied_class and copied_leader_guid
+    Move static copied_class and static copied_leader_guid to be part of the
+        copied_item structure. This makes it more evident that calling
+        clear_copied_item needs to be called before copied_item is used.
+    [gnc-datetime] improve CSV date parser with ICU and Boost.
+        1. Add dateformat "Locale" with ICU; uses current locale for date
+           parsing. ICU's locale date parser may parse "3 May 2023" or
+           "2024年9月13日" (LC_TIME=zh_TW.utf8) and maybe others.
+        2. Augment d-m-y m-d-y and y-m-d with boost UK/US/ISO parsers. This
+           allows CSV import of dates with months as words as "30 Sep 2023"
+           or "May 4, 1978" or "2023-Dec-25". Note boost parser cannot
+           recognise 2-digit years, therefore "30 Sep 24" is invalid.
+    Csv Import - improve assisant's introduction page
+    Correctly handle uncommitted edits when opening a file from history.
+    Don't use gnc_difftime and deprecate it because it casts time64 to doubles
+    [gnc-pricedb.h] remove unused gnc_pricedb_substitute_commodity
+    [gnc-pricedb.h] remove unused gnc_pricedb_lookup_at_time64
+
+New and Updated Translations: Assamese, Chinese (Simplified),
+    Chinese (Traditional), Croatian, Dutch, English (United Kingdom), Hebrew,
+    Hungarian, Macedonian, Norwegian Bokmål, Portuguese (Brazil), Russian,
+    Spanish, Swedish, Turkish
+
 5.8  - 7 July 2024
 The following bugs have been fixed:
 
@@ -16,27 +64,30 @@ The following bugs have been fixed:
     Bug 799047 - AutoComplete Only Considers Visible Transactions
     Bug 799258 - Reports calculating net worth incorrectly after stock split
     Bug 799262 - Failed import QIF investment
-    Bug 799264 - option account selector fails to include appropriate hidden accounts.
+    Bug 799264 - option account selector fails to include appropriate hidden
+                 accounts.
     Bug 799268 - Cannot write a check over $1000
     Bug 799272 - Crashes when pasting a copied transaction
-    Bug 799279 - Import Matcher (CSV) does not compute correctly the share amount based
+    Bug 799279 - Import Matcher (CSV) does not compute correctly the share
+                 amount based
                  on security price
     Bug 799281 - Deleting a transaction may trigger a crash
     Bug 799290 - Invoice register context menu issue
-    Bug 799298 - Shortcut Ctrl-G does not work in the General Journal register for the
-                 default date value
+    Bug 799298 - Shortcut Ctrl-G does not work in the General Journal register
+                 for the default date value
     Bug 799300 - Nullpointer exception in gnc_quote_source_s
-    Bug 799305 - Crash when there is more than one unknown quote source for commodities
-    Bug 799309 - Import Multi-split CSV can duplicate 'Notes' field from one transaction to next
+    Bug 799305 - Crash when there is more than one unknown quote source for
+                 commodities
+    Bug 799309 - Import Multi-split CSV can duplicate 'Notes' field from one
+                 transaction to next
     Bug 799320 - GNUCash Immediately Exits on Startup
     Bug 799324 - Invalid free in gvalue_from_kvp_value()
-    Bug 799334 - GnuCash re-opens to incorrect account window if there are transient tabs
-                 present when closed.
+    Bug 799334 - GnuCash re-opens to incorrect account window if there are
+                 transient tabs present when closed.
     Bug 799336 - Stock Assistant closes with its New Account dialog
     Bug 799339 - RFE: Add Document Link for Payments to Owner Report
 
 Other repairs or enhancements not marked as bugs:
-
 
     New Report: Exprimental>Transaction Breakdown Report
 
