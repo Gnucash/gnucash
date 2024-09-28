@@ -63,7 +63,7 @@ gnucash/gnome/business-options-gnome.cpp
 gnucash/gnome/business-urls.c
 gnucash/gnome/dialog-billterms.c
 gnucash/gnome/dialog-choose-owner.c
-gnucash/gnome/dialog-commodities.c
+gnucash/gnome/dialog-commodities.cpp
 gnucash/gnome/dialog-customer.c
 gnucash/gnome/dialog-custom-report.c
 gnucash/gnome/dialog-date-close.c

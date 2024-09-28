@@ -76,7 +76,7 @@ set (gnc_gnome_SOURCES
   dialog-doclink.c
   dialog-billterms.c
   dialog-choose-owner.c
-  dialog-commodities.c
+  dialog-commodities.cpp
   dialog-customer.c
   dialog-custom-report.c
   dialog-date-close.c
