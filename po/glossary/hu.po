@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-09-06 21:09+0000\n"
+"PO-Revision-Date: 2024-09-25 09:45+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -585,7 +585,7 @@ msgstr "árva"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr "kiállító (a kimenő- és bejövőszámlának vagy költségutalványnak)"
+msgstr "tulajdonos (a kimenő-/bejövőszámlának vagy utalványnak)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -609,7 +609,7 @@ msgstr "fizetés"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "töltelék (helyörző)"
+msgstr "helyőrző (töltelék)"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
@@ -617,7 +617,7 @@ msgstr "portfólió"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr "nyivántartásba vétel"
+msgstr "könyvelés, oda"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -793,7 +793,7 @@ msgstr "áruk és szolgáltatások adója"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "ÁFA"
+msgstr "áfa"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -817,7 +817,7 @@ msgstr "tranzakció"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "érvényesített"
+msgstr "kiegyenlített (elszámolt)"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -829,7 +829,7 @@ msgstr "egyeztetve"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "lenullázott (egy fordított tranzakcióval visszavont)"
+msgstr "törölt (egy fordított tranzakcióval visszavont)"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
