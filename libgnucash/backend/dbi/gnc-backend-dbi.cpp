@@ -708,7 +708,7 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
     else if (m_exists)
     {
         PERR ("Unable to connect to database '%s'\n", uri.dbname());
-        set_error (ERR_BACKEND_SERVER_ERR);
+        set_error (ERR_BACKEND_CANT_CONNECT);
         dbi_conn_close(conn);
         LEAVE("Error");
         return;
