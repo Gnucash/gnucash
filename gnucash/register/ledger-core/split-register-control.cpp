@@ -364,6 +364,12 @@ gnc_split_register_check_account (SplitRegister *reg,
     return TRUE;
 }
 
+static inline bool
+is_trading_split (Split* split)
+{
+    return xaccAccountGetType (xaccSplitGetAccount (split)) == ACCT_TYPE_TRADING;
+}
+
 static void
 gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                 gpointer user_data)
@@ -374,10 +380,10 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     Transaction *pending_trans;
     Transaction *new_trans;
     Transaction *old_trans;
-    Split *old_trans_split;
+    Split *old_trans_split{nullptr};
     Split *new_trans_split;
     Split *new_split;
-    Split *old_split;
+    Split *old_split{nullptr};
     CursorClass new_class;
     CursorClass old_class;
     gboolean exact_traversal;
@@ -399,10 +405,13 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     info = gnc_split_register_get_info (reg);
 
     /* The transaction we are coming from */
-    old_split = gnc_split_register_get_current_split (reg);
+    if (auto s{gnc_split_register_get_current_split (reg)}; !is_trading_split(s))
+        old_split = s;
     old_trans = gnc_split_register_get_current_trans (reg);
-    old_trans_split =
-        gnc_split_register_get_current_trans_split (reg, &old_trans_split_loc);
+    if (auto s{gnc_split_register_get_current_trans_split (reg, &old_trans_split_loc)};
+        is_trading_split(s))
+        old_trans_split = s;
+
     old_class = gnc_split_register_get_current_cursor_class (reg);
 
     exact_traversal = info->exact_traversal;
