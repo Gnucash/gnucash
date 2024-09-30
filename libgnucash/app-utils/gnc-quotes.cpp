@@ -342,10 +342,11 @@ GncQuotesImpl::report (const char* source, const StrVec& commodities,
     {
         auto quote_str{query_fq (source, commodities)};
         auto ptree{parse_quotes (quote_str)};
+        auto source_pt_ai{ptree.find(source)};
         if (is_currency)
-            show_currency_quotes(ptree, commodities, verbose);
+            show_currency_quotes(source_pt_ai->second, commodities, verbose);
         else
-            show_quotes(ptree, commodities, verbose);
+            show_quotes(source_pt_ai->second, commodities, verbose);
     }
     catch (const GncQuoteException& err)
     {
