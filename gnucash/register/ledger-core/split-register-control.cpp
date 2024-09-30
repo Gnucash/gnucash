@@ -43,6 +43,7 @@
 #include "split-register.h"
 #include "table-allgui.h"
 #include "engine-helpers.h"
+#include <gnc-gui-query.h> //for gnc_error_dialog
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -90,6 +91,12 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
                 multi_currency = FALSE;
             else
                 multi_currency = TRUE;
+            if (multi_currency &&
+                imbal_mon->value.denom > gnc_commodity_get_fraction(imbal_mon->commodity))
+            {
+                gnc_error_dialog(gnc_ui_get_main_window(GTK_WIDGET(reg)), "%s", _("This transaction cannot be balanced: The imbalance is a fraction smaller than the commodity allows."));
+                return FALSE;
+            }
         }
 
         /* We're done with the imbalance list, the real work will be done
