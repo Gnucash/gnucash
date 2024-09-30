@@ -1,4 +1,7 @@
 /********************************************************************\
+ * gnc-qrencode.h -- link to libqrencode or stub                    *
+ * Copyright (C) Christopher Lam                                    *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -15,34 +18,23 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *                                                                  *
 \********************************************************************/
 
-%module sw_report
-%{
-/* Includes the header in the wrapper code */
-#include <config.h>
-#include <gnc-report.h>
-#include <gnc-qrencode.h>
-%}
-#if defined(SWIGGUILE)
-%{
-#include "guile-mappings.h"
+#ifndef GNC_QRENCODE_H
+#define GNC_QRENCODE_H
 
-SCM scm_init_sw_report_module (void);
-%}
+#include <libguile.h>
+#include <glib.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-%import "base-typemaps.i"
-
-SCM gnc_report_find(gint id);
-gint gnc_report_add(SCM report);
-
-%newobject gnc_get_default_report_font_family;
-gchar* gnc_get_default_report_font_family();
-
-void gnc_saved_reports_backup (void);
-gboolean gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite);
-
-SCM gnc_qrcode_encodestring (gchar *str);
+SCM gnc_qrcode_encodestring (const char *str);
 SCM gnc_qrcode_available (void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

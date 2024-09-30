@@ -394,6 +394,12 @@ endif()
 # Determine where to install our guile modules libraries.
 find_guile_dirs()
 
+pkg_check_modules (QRENCODE IMPORTED_TARGET libqrencode>=3.4.4)
+
+if (QRENCODE_FOUND)
+  set (HAVE_QRENCODE TRUE)
+endif ()
+
 # ############################################################
 if (WITH_AQBANKING)
   pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=5.6.0)
