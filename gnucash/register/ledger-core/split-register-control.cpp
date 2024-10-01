@@ -416,7 +416,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
         old_split = s;
     old_trans = gnc_split_register_get_current_trans (reg);
     if (auto s{gnc_split_register_get_current_trans_split (reg, &old_trans_split_loc)};
-        is_trading_split(s))
+        !is_trading_split(s))
         old_trans_split = s;
 
     old_class = gnc_split_register_get_current_cursor_class (reg);
