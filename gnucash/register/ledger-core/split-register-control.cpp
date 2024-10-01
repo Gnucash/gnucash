@@ -374,7 +374,8 @@ gnc_split_register_check_account (SplitRegister *reg,
 static inline bool
 is_trading_split (Split* split)
 {
-    return xaccAccountGetType (xaccSplitGetAccount (split)) == ACCT_TYPE_TRADING;
+    auto acct{xaccSplitGetAccount (split)};
+    return GNC_IS_ACCOUNT (acct) && xaccAccountGetType (acct) == ACCT_TYPE_TRADING;
 }
 
 static void
