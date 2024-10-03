@@ -415,6 +415,25 @@ gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
         GdkEventButton *event,
         GncPluginPage *page);
 
+/*  Callback function invoked when the user clicks on a GtkNotebook tab.
+ *
+ *  This function is needed to make it possible to close a tab
+ *  when it's clicked using the middle mouse button;
+ *  there does not seem to be a way to do this with GtkNotebook natively.
+ *
+ *  @param widget The event box in the tab, which was clicked.
+ *
+ *  @param event The event parameter describing where on the screen
+ *  the mouse was pointing when clicked, type of click, modifiers,
+ *  etc.
+ *
+ *  @param page This is the GncPluginPage corresponding to the tab.
+ *
+ *  @return Returns TRUE if this was a middle-click, meaning Gnucash
+ *  handled the click.
+ */
+gboolean
+gnc_tab_clicked_cb(GtkWidget *widget, GdkEventButton *event, GncPluginPage *page);
 
 /** Callback function invoked when the user requests that Gnucash
  *  popup the contextual menu via the keyboard context-menu request
