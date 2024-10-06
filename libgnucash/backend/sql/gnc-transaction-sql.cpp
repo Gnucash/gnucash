@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
+#include <TransactionP.hpp>
 #include <Scrub.h>
 #include "gnc-lot.h"
 #include "engine-helpers.h"
@@ -389,10 +390,12 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
 					     (BookLookupFn)xaccTransLookup);
     }
 
-    // Commit all of the transactions
+    // Commit all of the transactions, but don't scrub because any
+    // scrubbing changes won't be written back to the database
+    xaccDisableDataScrubbing();
     for (auto instance : instances)
          xaccTransCommitEdit(GNC_TRANSACTION(instance));
-
+    xaccEnableDataScrubbing();
 }
 
 
