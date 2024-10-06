@@ -185,6 +185,66 @@
                 (push (list "</style>" style-text "<style type=\"text/css\">\n")))
             (if (not (string-null? title))
                 (push (list "</title>" title "<title>\n")))
+
+(push "<pre id='log'></pre>\n")
+
+(push "<script>\n")
+
+(push "  // helper function: log message to screen\n")
+(push "  function log(msg) {\n")
+(push "    document.getElementById('log').textContent += msg + '\\n';\n")
+(push "  }\n")
+
+(push "  var url=location.href;\n")
+(push "  log(url);\n")
+(push "  var urlFilename = url.substring(url.lastIndexOf('/')+1);\n")
+(push "  log(urlFilename);\n")
+
+(push "  // setup websocket with callbacks\n")
+(push "  var ws = new WebSocket('ws://localhost:8080/' + urlFilename);\n")
+(push "  ws.onopen = function() {\n")
+(push "    log('CONNECT');\n")
+(push "  };\n")
+(push "  ws.onclose = function() {\n")
+(push "    log('DISCONNECT');\n")
+(push "  };\n")
+(push "  ws.onmessage = function(event) {\n")
+(push "    log('MESSAGE: ' + event.data);\n")
+
+(push "  if (event.data.localeCompare('RELOAD') == 0) {\n")
+(push "    location.reload();\n")
+(push "  }\n");
+
+(push "  if (event.data.localeCompare('PRINT') == 0) {\n")
+(push "    window.print();\n")
+(push "  }\n");
+
+
+(push "  };\n")
+(push "  ws.addEventListener('message', (event) => {\n")
+(push "    console.log('Message from server ', event.data);\n")
+(push "  });\n")
+
+(push "window.onclick = function(e) {\n")
+(push "  var node = e.target;\n")
+(push "  while (node != undefined && node.localName != 'a') {\n")
+(push "    node = node.parentNode;\n")
+(push "  }\n")
+(push "  if (node != undefined)\n")
+(push "  {\n")
+(push "    log(node.href);\n")
+
+(push "    ws.send(node.href);\n")
+
+(push "    return false;  // stop handling the click\n")
+(push "  } else {\n")
+(push "    return true;  // handle other clicks\n")
+(push "  }\n")
+(push "}\n")
+
+(push "</script>\n")
+
+
             (push "</head>")
 
             ;; this lovely little number just makes sure that <body>

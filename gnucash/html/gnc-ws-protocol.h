@@ -1,7 +1,6 @@
 /********************************************************************
- * gnc-html_factory.c -- Factory to create HTML component           *
- *                                                                  *
- * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
+ * gnc-ws-protocol.h -- basic websocket server protocol             *
+ * Copyright (C) 2024 Bob Fewell                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,27 +20,26 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#ifndef WS_PROTOCOL_H
+#define WS_PROTOCOL_H
+
 #include <config.h>
 
-#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gio/gio.h>
 
-#include "gnc-html.h"
-#include "gnc-html-browser.h"
-#include "qoflog.h"
-#include "gnc-engine.h"
+#define OPCODE_CONTINUATION 0x0
+#define OPCODE_TEXT 0x1
+#define OPCODE_BINARY 0x2
+#define OPCODE_CLOSE 0x8
+#define OPCODE_PING 0x9
+#define OPCODE_PONG 0xa
 
-#include "gnc-html-factory.h"
+gchar *gnc_ws_make_handshake (const gchar *message, gchar **id);
 
-/* indicates the debugging module that this .o belongs to.  */
-G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
+gchar *gnc_ws_parse_bytes_in (GBytes *bytes_in, gint *opcode);
 
-GncHtml* gnc_html_factory_create_html (void)
-{
-    return gnc_html_browser_new ();
-}
+GBytes *gnc_ws_send_message (const gchar *message);
 
-gboolean
-gnc_html_engine_supports_css (void)
-{
-    return TRUE;
-}
+#endif
