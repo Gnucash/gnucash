@@ -754,7 +754,20 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
                                  (gpointer)gnc_plugin_page_account_tree_summarybar_position_changed,
                                  page);
 
-    // Save account filter state information to account section
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_CHOICE_ABS,
+                                (gpointer)accounting_period_changed_cb, page);
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_DATE,
+                                (gpointer)accounting_period_changed_cb, page);
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_PERIOD,
+                                (gpointer)accounting_period_changed_cb, page);
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_CHOICE_ABS,
+                                (gpointer)accounting_period_changed_cb, page);
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_DATE,
+                                (gpointer)accounting_period_changed_cb, page);
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_PERIOD,
+                                (gpointer)accounting_period_changed_cb, page);
+
+// Save account filter state information to account section
     gnc_tree_view_account_save_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &priv->fd,
        gnc_state_get_current(), gnc_tree_view_get_state_section (GNC_TREE_VIEW(priv->tree_view)));
 
