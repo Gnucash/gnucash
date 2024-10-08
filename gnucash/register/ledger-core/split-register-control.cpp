@@ -49,6 +49,34 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_LEDGER;
 
+static inline bool
+check_imbalance_fraction (const SplitRegister* reg,
+                          const gnc_monetary* imbal_mon,
+                          const Transaction* trans)
+{
+    auto commodity_fraction{gnc_commodity_get_fraction (imbal_mon->commodity)};
+    auto denom_diff = imbal_mon->value.denom > commodity_fraction;
+    if (!denom_diff)
+    {
+        const auto imbal_comm = imbal_mon->commodity;
+        for (auto node = xaccTransGetSplitList(trans); node;
+             node = g_list_next(node))
+        {
+            auto acc = xaccSplitGetAccount(GNC_SPLIT (node->data));
+            if (xaccAccountGetCommodity(acc) == imbal_comm &&
+                imbal_mon->value.denom > xaccAccountGetCommoditySCU (acc))
+            {
+                denom_diff = true;
+                break;
+            }
+        }
+    }
+
+    if (denom_diff)
+        gnc_error_dialog(gnc_ui_get_main_window(GTK_WIDGET(reg)), "%s", _("This transaction cannot be balanced: The imbalance is a fraction smaller than the commodity allows."));
+
+    return denom_diff;
+}
 
 static gboolean
 gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
@@ -91,12 +119,9 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
                 multi_currency = FALSE;
             else
                 multi_currency = TRUE;
-            if (multi_currency &&
-                imbal_mon->value.denom > gnc_commodity_get_fraction(imbal_mon->commodity))
-            {
-                gnc_error_dialog(gnc_ui_get_main_window(GTK_WIDGET(reg)), "%s", _("This transaction cannot be balanced: The imbalance is a fraction smaller than the commodity allows."));
+
+            if (multi_currency && check_imbalance_fraction (reg, imbal_mon, trans))
                 return FALSE;
-            }
         }
 
         /* We're done with the imbalance list, the real work will be done
