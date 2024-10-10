@@ -46,6 +46,7 @@
 (export gnc:report-anchor-text)
 (export gnc:make-report-anchor)
 (export gnc:html-account-anchor)
+(export gnc:html-long-account-anchor)
 (export gnc:html-split-anchor)
 (export gnc:html-transaction-anchor)
 (export gnc:html-transaction-doclink-anchor)
@@ -187,6 +188,14 @@
                           (gnc:html-markup-anchor
                            (gnc:account-anchor-text acct)
                            (xaccAccountGetName acct))
+                          "")))
+
+;; returns the long account name as html-text and anchor to the register.
+(define (gnc:html-long-account-anchor acct)
+  (gnc:make-html-text (if (and acct (not (null? acct)))
+                          (gnc:html-markup-anchor
+                           (gnc:account-anchor-text acct)
+                           (gnc-account-get-full-name acct))
                           "")))
 
 (define (gnc:html-split-anchor split text)
