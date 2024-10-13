@@ -327,10 +327,6 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
-    priv->higher_balance_limit = {};
-    priv->lower_balance_limit = {};
-    priv->include_sub_account_balances = {};
-
     new (&priv->children) AccountVec ();
     new (&priv->splits) SplitsVec ();
     priv->splits_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -4640,196 +4636,59 @@ xaccAccountSetLastNum (Account *acc, const char *num)
 /********************************************************************\
 \********************************************************************/
 
+static bool
+get_balance_limit (const Account* acc, const std::string& key, gnc_numeric* balance)
+{
+    auto limit = get_kvp_gnc_numeric_path (acc, {KEY_BALANCE_LIMIT, key});
+    if (limit)
+        *balance = gnc_numeric_create (limit->num, limit->denom);
+    return limit.has_value();
+}
+
+static void
+set_balance_limit (Account *acc, const std::string& key, std::optional<gnc_numeric> balance)
+{
+    if (balance && gnc_numeric_check (*balance))
+        return;
+    set_kvp_gnc_numeric_path (acc, {KEY_BALANCE_LIMIT, key}, balance);
+}
+
 gboolean
 xaccAccountGetHigherBalanceLimit (const Account *acc,
                                   gnc_numeric *balance)
 {
-    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
-
-    if (GET_PRIVATE(acc)->higher_balance_limit.has_value())
-    {
-        *balance = GET_PRIVATE(acc)->higher_balance_limit.value();
-
-        if (gnc_numeric_check (*balance) == 0)
-            return true;
-        else
-            return false;
-    }
-    else
-    {
-        gnc_numeric bal = gnc_numeric_create (1,0);
-        GValue v = G_VALUE_INIT;
-        gboolean retval = false;
-
-        qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_BALANCE_LIMIT,
-                                                           KEY_BALANCE_HIGHER_LIMIT_VALUE});
-        if (G_VALUE_HOLDS_BOXED(&v))
-        {
-            bal = *(gnc_numeric*)g_value_get_boxed (&v);
-            if (bal.denom)
-            {
-                if (balance)
-                   *balance = bal;
-                retval = true;
-            }
-        }
-        g_value_unset (&v);
-
-        GET_PRIVATE(acc)->higher_balance_limit = bal;
-        return retval;
-    }
+    return get_balance_limit (acc, KEY_BALANCE_HIGHER_LIMIT_VALUE, balance);
 }
 
 gboolean
 xaccAccountGetLowerBalanceLimit (const Account *acc,
                                  gnc_numeric *balance)
 {
-    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
-
-    if (GET_PRIVATE(acc)->lower_balance_limit.has_value())
-    {
-        *balance = GET_PRIVATE(acc)->lower_balance_limit.value();
-
-        if (gnc_numeric_check (*balance) == 0)
-            return true;
-        else
-            return false;
-    }
-    else
-    {
-        gnc_numeric bal = gnc_numeric_create (1,0);
-        GValue v = G_VALUE_INIT;
-        gboolean retval = false;
-
-        qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_BALANCE_LIMIT,
-                                                           KEY_BALANCE_LOWER_LIMIT_VALUE});
-        if (G_VALUE_HOLDS_BOXED(&v))
-        {
-            bal = *(gnc_numeric*)g_value_get_boxed (&v);
-            if (bal.denom)
-            {
-                if (balance)
-                   *balance = bal;
-                retval = true;
-            }
-        }
-        g_value_unset (&v);
-
-        GET_PRIVATE(acc)->lower_balance_limit = bal;
-        return retval;
-    }
-}
-
-
-static void
-set_balance_limits (Account *acc, gnc_numeric balance, gboolean higher)
-{
-    gnc_numeric balance_limit;
-    gboolean balance_limit_valid;
-    std::vector<std::string> path {KEY_BALANCE_LIMIT};
-
-    if (higher)
-    {
-        path.push_back (KEY_BALANCE_HIGHER_LIMIT_VALUE);
-        balance_limit_valid = xaccAccountGetHigherBalanceLimit (acc, &balance_limit);
-    }
-    else
-    {
-        path.push_back (KEY_BALANCE_LOWER_LIMIT_VALUE);
-        balance_limit_valid = xaccAccountGetLowerBalanceLimit (acc, &balance_limit);
-    }
-
-    if (!balance_limit_valid  || gnc_numeric_compare (balance, balance_limit) != 0)
-    {
-        GValue v = G_VALUE_INIT;
-        g_value_init (&v, GNC_TYPE_NUMERIC);
-        g_value_set_boxed (&v, &balance);
-        xaccAccountBeginEdit (acc);
-
-        qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, path);
-        if (higher)
-        {
-            GET_PRIVATE(acc)->higher_balance_limit = balance;
-        }
-        else
-        {
-            GET_PRIVATE(acc)->lower_balance_limit = balance;
-        }
-        mark_account (acc);
-        xaccAccountCommitEdit (acc);
-        g_value_unset (&v);
-    }
+    return get_balance_limit (acc, KEY_BALANCE_LOWER_LIMIT_VALUE, balance);
 }
 
 void
 xaccAccountSetHigherBalanceLimit (Account *acc, gnc_numeric balance)
 {
-    g_return_if_fail (GNC_IS_ACCOUNT(acc));
-
-    if (gnc_numeric_check (balance) != 0)
-        return;
-
-    set_balance_limits (acc, balance, true);
+    set_balance_limit (acc, KEY_BALANCE_HIGHER_LIMIT_VALUE, balance);
 }
 
 void
 xaccAccountSetLowerBalanceLimit (Account *acc, gnc_numeric balance)
 {
-    g_return_if_fail (GNC_IS_ACCOUNT(acc));
-
-    if (gnc_numeric_check (balance) != 0)
-        return;
-
-    set_balance_limits (acc, balance, false);
-}
-
-
-static void
-clear_balance_limits (Account *acc, gboolean higher)
-{
-    gnc_numeric balance_limit;
-    gboolean balance_limit_valid;
-    std::vector<std::string> path {KEY_BALANCE_LIMIT};
-
-    if (higher)
-    {
-        path.push_back (KEY_BALANCE_HIGHER_LIMIT_VALUE);
-        balance_limit_valid = xaccAccountGetHigherBalanceLimit (acc, &balance_limit);
-    }
-    else
-    {
-        path.push_back (KEY_BALANCE_LOWER_LIMIT_VALUE);
-        balance_limit_valid = xaccAccountGetLowerBalanceLimit (acc, &balance_limit);
-    }
-
-    if (balance_limit_valid)
-    {
-        xaccAccountBeginEdit (acc);
-        qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, path);
-        qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), {KEY_BALANCE_LIMIT});
-        if (higher)
-            GET_PRIVATE(acc)->higher_balance_limit.reset();
-        else
-            GET_PRIVATE(acc)->lower_balance_limit.reset();
-        mark_account (acc);
-        xaccAccountCommitEdit (acc);
-    }
+    set_balance_limit (acc, KEY_BALANCE_LOWER_LIMIT_VALUE, balance);
 }
 
 void
 xaccAccountClearHigherBalanceLimit (Account *acc)
 {
-    g_return_if_fail (GNC_IS_ACCOUNT(acc));
-
-    clear_balance_limits (acc, true);
+    set_balance_limit (acc, KEY_BALANCE_HIGHER_LIMIT_VALUE, {});
 }
 
 void
 xaccAccountClearLowerBalanceLimit (Account *acc)
 {
-    g_return_if_fail (GNC_IS_ACCOUNT(acc));
-
-    clear_balance_limits (acc, false);
+    set_balance_limit (acc, KEY_BALANCE_LOWER_LIMIT_VALUE, {});
 }
 
 gboolean
