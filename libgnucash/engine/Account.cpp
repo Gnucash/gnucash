@@ -4812,13 +4812,18 @@ xaccAccountGetLastNum (const Account *acc)
 void
 xaccAccountSetLastNum (Account *acc, const char *num)
 {
-    GValue v = G_VALUE_INIT;
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
-    g_value_init (&v, G_TYPE_STRING);
-
-    g_value_set_static_string (&v, num);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"last-num"});
+    if (num && *num)
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_static_string (&v, num);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"last-num"});
+        g_value_unset (&v);
+   }
+    else
+         qof_instance_set_path_kvp (QOF_INSTANCE (acc), nullptr, {"last-num"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
