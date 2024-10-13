@@ -36,6 +36,7 @@
 #ifdef __cplusplus
 #include "kvp-frame.hpp"
 #include <string>
+#include <optional>
 extern "C"
 {
 #endif
@@ -164,6 +165,12 @@ void qof_instance_foreach_slot (const QofInstance *inst, const char *head,
 void qof_instance_get_path_kvp (QofInstance *, GValue *, std::vector<std::string> const &);
 
 void qof_instance_set_path_kvp (QofInstance *, GValue const *, std::vector<std::string> const &);
+
+template <typename T> std::optional<T>
+qof_instance_get_path_kvp (QofInstance*, const Path&);
+
+template <typename T> void
+qof_instance_set_path_kvp (QofInstance*, std::optional<T>, const Path&);
 
 bool qof_instance_has_path_slot (QofInstance const *, std::vector<std::string> const &);
 
