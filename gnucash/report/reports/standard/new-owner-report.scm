@@ -1128,8 +1128,8 @@ and do not match the transaction."))))))))
 
           (gnc:html-document-add-object!
            document (gnc:make-html-text
-                     (string-append (G_ "Date Range") ": " (qof-print-date start-date)
-                                    " - " (qof-print-date end-date))))
+                     (string-append (G_ "Date Range") ": "
+                                    (gnc-date-interval-format start-date end-date))))
 
           (make-break! document)
 

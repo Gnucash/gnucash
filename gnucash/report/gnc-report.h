@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <libguile.h>
+#include <gnc-engine-guile.h>
 #ifdef __cplusplus
 extern "C"
 {
@@ -73,6 +74,8 @@ gchar* gnc_get_default_report_font_family(void);
 gboolean gnc_saved_reports_backup(void);
 
 gboolean gnc_saved_reports_write_to_file(const gchar* report_def, gboolean overwrite);
+
+gchar* gnc_date_interval_format (time64 from_date, time64 to_date);
 
 #ifdef __cplusplus
 } //extern "C"

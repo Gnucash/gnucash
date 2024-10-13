@@ -254,11 +254,7 @@
           (gnc:report-percent-done 90)
 
           (gnc:html-chart-set-title!
-           chart (list report-title
-                       (format #f
-                               (G_ "~a to ~a")
-                               (qof-print-date from-date-t64)
-                               (qof-print-date to-date-t64))))
+           chart (list report-title (gnc-date-interval-format from-date-t64 to-date-t64)))
           (gnc:html-chart-set-width! chart width)
           (gnc:html-chart-set-height! chart height)
           (gnc:html-chart-set-y-axis-label!

@@ -291,6 +291,12 @@ in the Options panel."))
 (define (split->time64 s)
   (xaccTransGetDate (xaccSplitGetParent s)))
 
+
+(define (date-get-week-year-string date)
+  (let ((beginweekt64 (* (gnc:time64-get-week (gnc-mktime date)) 7 86400)))
+    (gnc-date-interval-format (+ beginweekt64 (* 3 86400))
+                              (+ beginweekt64 (* 9 86400)))))
+
 (define date-subtotal-list
   ;; List for date option.
   ;; Defines the different date sorting keys, as an association-list. Each entry:
@@ -316,7 +322,7 @@ in the Options panel."))
          (cons 'split-sortvalue (lambda (s) (time64-week (split->time64 s))))
          (cons 'date-sortvalue time64-week)
          (cons 'text (G_ "Weekly"))
-         (cons 'renderer-fn (compose gnc:date-get-week-year-string
+         (cons 'renderer-fn (compose date-get-week-year-string
                                      gnc-localtime
                                      split->time64)))
 
@@ -2542,11 +2548,7 @@ be excluded from periodic reporting.")
            document
            (gnc:make-html-text
             (gnc:html-markup-h3
-             (format #f
-                     ;; Translators: Both ~a's are dates
-                     (G_ "From ~a to ~a")
-                     (qof-print-date begindate)
-                     (qof-print-date enddate)))))
+             (gnc-date-interval-format begindate enddate))))
 
           (when (eq? infobox-display 'always)
             (gnc:html-document-add-object!
