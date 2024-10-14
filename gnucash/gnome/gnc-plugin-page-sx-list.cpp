@@ -873,6 +873,9 @@ _destroy_sx(gpointer data, gpointer user_data)
     QofBook *book;
     book = gnc_get_current_book ();
     sxes = gnc_book_get_schedxactions (book);
+
+    DEBUG("deleting sx [%s]", xaccSchedXactionGetName (sx));
+
     gnc_sxes_del_sx (sxes, sx);
     gnc_sx_begin_edit (sx);
     xaccSchedXactionDestroy (sx);
@@ -935,11 +938,7 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
     if (gnc_verify_dialog (window, FALSE, "%s", message))
     {
         gppsl_update_selected_list (plugin_page, TRUE, NULL);
-        for (GList *list = to_delete; list != NULL; list = list->next)
-        {
-            DEBUG("to-delete [%s]\n", xaccSchedXactionGetName (GNC_SCHEDXACTION(list->data)));
-            gppsl_update_selected_list (plugin_page, FALSE, GNC_SCHEDXACTION(list->data));
-        }
+
         g_list_foreach (to_delete, (GFunc)_destroy_sx, NULL);
     }
 
