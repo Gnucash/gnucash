@@ -450,14 +450,14 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
     GtkListStore *store;
     GtkTreeIter iter;
     GList *list, *node;
-    const gchar *text;
 
     g_return_val_if_fail (combo && GTK_IS_COMBO_BOX(combo), NULL);
     g_return_val_if_fail (book, NULL);
     g_return_val_if_fail (acct_types, NULL);
 
     /* Figure out if anything is set in the combo */
-    text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(combo)))));
+    char* text =
+      g_strdup (gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(combo))))));
 
     g_object_set_data (G_OBJECT(combo), "book", book);
     list = gnc_account_get_descendants (gnc_book_get_root_account (book));
@@ -496,6 +496,7 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
         /* Save the first account name in case no account name was set */
         if (!text || g_strcmp0 (text, "") == 0)
         {
+          g_free (text);
             text = g_strdup (name);
         }
         g_free(name);
@@ -506,6 +507,7 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
 
     gnc_cbwe_set_by_string(GTK_COMBO_BOX(combo), text);
 
+    g_free (text);
     return gnc_account_select_combo_get_active (combo);
 }
 
