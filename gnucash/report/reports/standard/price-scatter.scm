@@ -55,9 +55,6 @@
      options gnc:pagename-general
      optname-from-date optname-to-date "a")
 
-    (gnc:options-add-interval-choice! 
-     options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
-
     (gnc:options-add-currency! 
      options pagename-price optname-report-currency "d")
 
@@ -108,15 +105,6 @@
   (define (get-option section name)
     (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
-  (define intervals
-    (list (list 'DayDelta (G_ "Days") 86400)
-          (list 'WeekDelta (G_ "Weeks") 604800)
-          (list 'TwoWeekDelta (G_ "Double-Weeks") 1209600)
-          (list 'MonthDelta (G_ "Months") 2628000)
-          (list 'QuarterDelta (G_ "Quarters") (/ 31536000 4))
-          (list 'HalfYearDelta (G_ "Half Years") (/ 31536000 2))
-          (list 'YearDelta (G_ "Years") 31536000)))
-
   (let* ((to-date (gnc:time64-end-day-time 
                    (gnc:date-option-absolute-time
                     (get-option gnc:pagename-general 
@@ -125,7 +113,6 @@
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general 
                                   optname-from-date))))
-         (interval (get-option gnc:pagename-general optname-stepsize))
          (report-title (get-option gnc:pagename-general 
                                    gnc:optname-reportname))
 
@@ -143,12 +130,6 @@
                                       optname-price-commodity))
          (price-source (get-option pagename-price
                                    optname-price-source))
-
-         (dates-list (gnc:make-date-list
-                      (gnc:time64-end-day-time from-date) 
-                      (gnc:time64-end-day-time to-date)
-                      (gnc:deltasym-to-delta interval)))
-         
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
          (currency-accounts
@@ -157,8 +138,7 @@
          (invert (get-option pagename-price optname-invert))
          (amount-commodity (if invert price-commodity report-currency))
          (base-commodity (if invert report-currency price-commodity))
-         (int-label (car (assq-ref intervals interval)))
-         (int-secs (cadr (assq-ref intervals interval)))
+         (iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO))
          (data '()))
 
     ;; Short helper for all the warnings below
@@ -201,7 +181,7 @@
     (gnc:html-chart-set-y-axis-label!
      chart (gnc-commodity-get-mnemonic amount-commodity))
 
-    (gnc:html-chart-set-x-axis-label! chart int-label)
+    (gnc:html-chart-set-x-axis-label! chart (G_ "Date"))
 
     (gnc:html-chart-set! chart '(options scales xAxes (0) type) 'linear)
     (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
@@ -240,7 +220,7 @@ commodities.")))
          (match-lambda
            ((date amt)
             (and (<= from-date date to-date)
-                 (list (/ (- date from-date) int-secs)
+                 (list date
                        (if invert (/ 1 amt) amt)))))
          data))
 
@@ -277,19 +257,25 @@ Unfortunately, the plotting tool can't handle that.")))
          chart (map
                 (match-lambda
                   ((x y)
-                   (format #f "~2,2f ~a = ~a"
-                           x int-label (gnc:monetary->string
-                                        (gnc:make-gnc-monetary amount-commodity y)))))
+                   (format #f "~a = ~a"
+                           (qof-print-date x)
+                           (gnc:monetary->string (gnc:make-gnc-monetary amount-commodity y)))))
                 data))
 
         (gnc:html-chart-add-data-series!
          chart (G_ "Price")
-         (map (match-lambda ((x y) (list (cons 'x x) (cons 'y y)))) data)
+         (map (match-lambda ((x y) (list (cons 'x (gnc-print-time64 x iso-date)) (cons 'y y)))) data)
          mcolor
          'pointBorderColor mcolor 'fill #f 'borderColor "#4bb2c5"
          'pointBackgroundColor
          (if (memq marker '(filledcircle filledsquare filleddiamond)) mcolor "white"))
 
+        (gnc:html-chart-set! chart '(options scales xAxes (0) type) 'time)
+
+        (gnc:html-chart-set! chart '(options scales xAxes (0) time)
+                             (list (cons 'unit 'day)
+                                   (list 'displayFormats (cons 'day "DD-MM-YYYY"))
+                                   (cons 'tooltipFormat "DD-MM-YYYY")))
         (gnc:html-document-add-object! document chart)))))
 
     document))
