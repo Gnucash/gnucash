@@ -131,6 +131,10 @@ typedef struct QofBackend QofBackend;
     /* The following functions are used in C files. */
 /** Get the last backend error. */
     QofBackendError qof_backend_get_error (QofBackend*);
+
+/** Get the last backend error string. */
+    const char* qof_backend_get_error_string (QofBackendError);
+
 /** Set the error on the specified QofBackend. */
     void qof_backend_set_error (QofBackend*, QofBackendError);
 

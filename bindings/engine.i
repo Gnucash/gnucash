@@ -261,6 +261,41 @@ QofBook * qof_session_get_book (QofSession *session);
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
+/* note: copied from qofsession.h -- maintain manually until
+   qofsession can be %included properly */
+typedef enum
+{
+    SESSION_NORMAL_OPEN = 0,
+    SESSION_NEW_STORE = 2,
+    SESSION_NEW_OVERWRITE = 3,
+    SESSION_READ_ONLY = 4,
+    SESSION_BREAK_LOCK = 5
+} SessionOpenMode;
+
+%inline {
+static void qof_session_save_quiet ()
+{
+    QofSession *session = gnc_get_current_session();
+    qof_session_save (session, [](const char* message, double percent){});
+}
+
+static bool qof_session_load_quiet (const char *filename, SessionOpenMode mode)
+{
+    gnc_clear_current_session();
+    QofSession *session = gnc_get_current_session();
+    qof_session_begin (session, filename, mode);
+    auto io_error = qof_session_get_error (session);
+    if (io_error != ERR_BACKEND_NO_ERR)
+    {
+        PWARN ("Loading error: %s", qof_backend_get_error_string (io_error));
+        return false;
+    }
+    qof_session_load (session, [](const char* message, double percent){});
+    return true;
+}
+
+}
+
 %ignore qof_print_date_time_buff;
 %ignore gnc_tm_free;
 %newobject qof_print_date;
@@ -415,6 +450,12 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
 
     SET_ENUM("HOOK-REPORT");
     SET_ENUM("HOOK-SAVE-OPTIONS");
+
+    SET_ENUM("SESSION-NORMAL-OPEN");
+    SET_ENUM("SESSION-NEW-STORE");
+    SET_ENUM("SESSION-NEW-OVERWRITE");
+    SET_ENUM("SESSION-READ-ONLY");
+    SET_ENUM("SESSION-BREAK-LOCK");
 
     //SET_ENUM("GNC-ID-ACCOUNT");
     SET_ENUM("QOF-ID-BOOK-SCM");

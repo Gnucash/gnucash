@@ -31,6 +31,8 @@
 
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
+#include "gnc-ui-util.h"
+#include "gnc-path.h"
 
 #include <gnc-filepath-utils.h>
 #include <gnc-engine-guile.h>
@@ -40,11 +42,16 @@
 #include <qoflog.h>
 
 #include <boost/locale.hpp>
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <gnc-report.h>
 #include <gnc-quotes.hpp>
+
+#ifdef HAVE_PYTHON_H
+#include <Python.h>
+#endif
 
 namespace bl = boost::locale;
 
@@ -52,6 +59,38 @@ static std::string empty_string{};
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
+
+#ifdef _WIN32
+struct ConsoleStruct
+{
+public:
+    bool has_ansi () { return m_has_ansi; };
+private:
+    HANDLE m_stdoutHandle = INVALID_HANDLE_VALUE;
+    DWORD m_outModeInit = 0;
+    bool m_has_ansi = false;
+    ConsoleStruct () : m_stdoutHandle {GetStdHandle(STD_OUTPUT_HANDLE)}
+    {
+        if (m_stdoutHandle != INVALID_HANDLE_VALUE && GetConsoleMode(m_stdoutHandle, &m_outModeInit))
+        {
+            SetConsoleMode (m_stdoutHandle, m_outModeInit | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+            m_has_ansi = true;
+        }
+    }
+    ~ConsoleStruct ()
+    {
+        if (m_stdoutHandle == INVALID_HANDLE_VALUE)
+            return;
+        printf ("\x1b[0m");
+        SetConsoleMode (m_stdoutHandle, m_outModeInit);
+    }
+} console_ansi;
+#else
+struct ConsoleStruct
+{
+    bool has_ansi () { return true; };
+} console_ansi;
+#endif
 
 static int
 cleanup_and_exit_with_failure (QofSession *session)
@@ -99,6 +138,64 @@ report_session_percentage (const char *message, double percent)
     return;
 }
 
+static std::string
+get_line (const char* prompt)
+{
+    std::string rv;
+    std::cout << (console_ansi.has_ansi() ? "\x1b[1;33m" : "") << prompt
+              << (console_ansi.has_ansi() ? "\x1b[m" : "");
+    if (!std::getline (std::cin, rv))
+        gnc_shutdown_cli (1);
+    return rv;
+}
+
+static std::string
+get_choice (const char* prompt, const std::vector<std::string> choices)
+{
+    std::string response;
+    do
+    {
+        response = get_line (prompt);
+    }
+    while (std::none_of (choices.begin(), choices.end(),
+                         [&response](auto& choice) { return choice == response; } ));
+    return response;
+}
+
+struct scripting_args
+{
+    const boost::optional<std::string>& script;
+    bool interactive;
+};
+
+// when guile or python script/interactive session succeed
+static void
+cleanup_and_exit_with_save ()
+{
+    if (gnc_current_session_exist())
+    {
+        auto session = gnc_get_current_session();
+        auto book = gnc_get_current_book();
+        auto is_yes = [] (const char* prompt)
+        {
+            auto s = get_choice (prompt, {"Y","y","N","n"});
+            return s == "Y" || s == "y";
+        };
+
+        std::cerr << _("Warning: session was not cleared.") << std::endl;
+
+        if (!qof_book_session_not_saved (book))
+            std::cerr << _("Please don't forget to clear session before shutdown.") << std::endl;
+        else if (qof_book_is_readonly (book))
+            std::cerr << _("Book is readonly. Unsaved changes will be lost.") << std::endl;
+        else if (is_yes (_("There are unsaved changes. Save before clearing [YN]?")))
+            qof_session_save (session, report_session_percentage);
+
+        gnc_clear_current_session ();
+    }
+    gnc_shutdown_cli (0);
+}
+
 /* Don't try to use std::string& for the members of the following struct, it
  * results in the values getting corrupted as it passes through initializing
  * Scheme when compiled with Clang.
@@ -122,6 +219,48 @@ write_report_file (const char *html, const char* file)
     }
     ofs << html << std::endl;
     // ofs destructor will close the file
+}
+
+static QofSession*
+load_file (const std::string& file_to_load, bool open_readwrite)
+{
+    PINFO ("Loading %s %s", file_to_load.c_str(), open_readwrite ? "(r/w)" : "(readonly)");
+    auto session = gnc_get_current_session();
+    if (!session)
+        gnc_shutdown_cli (1);
+
+    auto mode = open_readwrite ? SESSION_NORMAL_OPEN : SESSION_READ_ONLY;
+    while (true)
+    {
+        qof_session_begin (session, file_to_load.c_str(), mode);
+        auto io_err = qof_session_get_error (session);
+        switch (io_err)
+        {
+        case ERR_BACKEND_NO_ERR:
+            qof_session_load (session, report_session_percentage);
+            return session;
+        case ERR_BACKEND_LOCKED:
+        {
+            // Translators: [R] [U] and [A] are responses and must not be translated.
+            auto response = get_choice (_("File Locked. Open [R]eadonly, [U]nlock or [A]bort?"),
+                                        {"R","r","U","u","A","a"});
+            if (response == "R" || response == "r")
+                mode = SESSION_READ_ONLY;
+            else if (response == "U" || response == "u")
+                mode = SESSION_BREAK_LOCK;
+            else if (response == "A" || response == "a")
+                gnc_shutdown_cli (1);
+            break;
+        }
+        case ERR_BACKEND_READONLY:
+            std::cerr << _("File is readonly. Cannot open read-write") << std::endl;
+            mode = SESSION_READ_ONLY;
+            break;
+        default:
+            std::cerr << _("Unknown error. Abort.") << std::endl;
+            scm_cleanup_and_exit_with_failure (session);
+        }
+    }
 }
 
 static void
@@ -160,17 +299,7 @@ scm_run_report (void *data,
 
     PINFO ("Loading datafile %s...\n", datafile);
 
-    auto session = gnc_get_current_session ();
-    if (!session)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_begin (session, datafile, SESSION_READ_ONLY);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_load (session, report_session_percentage);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
+    auto session = load_file (args->file_to_load, false);
 
     if (!args->export_type.empty())
     {
@@ -273,14 +402,7 @@ scm_report_show (void *data,
     {
         auto datafile = args->file_to_load.c_str();
         PINFO ("Loading datafile %s...\n", datafile);
-
-        auto session = gnc_get_current_session ();
-        if (session)
-        {
-            qof_session_begin (session, datafile, SESSION_READ_ONLY);
-            if (qof_session_get_error (session) == ERR_BACKEND_NO_ERR)
-                qof_session_load (session, report_session_percentage);
-        }
+        [[maybe_unused]] auto session = load_file (args->file_to_load, false);
     }
 
     scm_call_2 (scm_c_eval_string ("gnc:cmdline-report-show"),
@@ -345,17 +467,7 @@ Gnucash::add_quotes (const bo_str& uri)
     gnc_prefs_init ();
     qof_event_suspend();
 
-    auto session = gnc_get_current_session();
-    if (!session)
-        return 1;
-
-    qof_session_begin(session, uri->c_str(), SESSION_NORMAL_OPEN);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
-
-    qof_session_load(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
+    auto session = load_file (*uri, true);
 
     try
     {
@@ -432,4 +544,171 @@ Gnucash::report_list (void)
 {
     scm_boot_guile (0, nullptr, scm_report_list, NULL);
     return 0;
+}
+
+// scripting code follows:
+
+static void
+run_guile_cli (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
+    auto args = static_cast<scripting_args*>(data);
+    if (args->script)
+    {
+        PINFO ("Running script from %s... ", args->script->c_str());
+        scm_c_primitive_load (args->script->c_str());
+    }
+    if (args->interactive)
+    {
+        std::cout << _("Welcome to Gnucash Interactive Guile Session") << std::endl;
+        std::vector<const char*> modules =
+            { "gnucash core-utils", "gnucash engine", "gnucash app-utils", "gnucash report",
+              "system repl repl", "ice-9 readline" };
+        auto show_and_load = [](const auto& mod)
+        {
+            std::cout << bl::format ("(use-modules ({1}))") % mod << std::endl;
+            scm_c_use_module (mod);
+        };
+        std::for_each (modules.begin(), modules.end(), show_and_load);
+        scm_c_eval_string ("(activate-readline)");
+        scm_c_eval_string ("(start-repl)");
+    }
+    cleanup_and_exit_with_save ();
+}
+
+
+#ifdef HAVE_PYTHON_H
+static void
+python_cleanup_and_exit (PyConfig& config, PyStatus& status)
+{
+    if (qof_book_session_not_saved (gnc_get_current_book()))
+        std::cerr << _("Book is readonly. Unsaved changes will be lost.") << std::endl;
+    gnc_clear_current_session ();
+
+    PyConfig_Clear(&config);
+    if (status.err_msg && *status.err_msg)
+        std::cerr << bl::format (_("Python Config failed with error {1}")) % status.err_msg
+                  << std::endl;
+    gnc_shutdown_cli (status.exitcode);
+}
+
+static void
+run_python_cli (int argc, char **argv, scripting_args* args)
+{
+    PyConfig config;
+    PyConfig_InitPythonConfig(&config);
+
+    PyStatus status = PyConfig_SetBytesArgv(&config, argc, argv);
+    if (PyStatus_Exception(status))
+        python_cleanup_and_exit (config, status);
+
+    status = Py_InitializeFromConfig(&config);
+    if (PyStatus_Exception(status))
+        python_cleanup_and_exit (config, status);
+
+    PyConfig_Clear(&config);
+
+    if (args->script)
+    {
+        auto script_filename = args->script->c_str();
+        PINFO ("Running python script %s...", script_filename);
+        auto fp = fopen (script_filename, "rb");
+        if (!fp)
+        {
+            std::cerr << bl::format (_("Unable to load Python script {1}")) % script_filename
+                      << std::endl;
+            python_cleanup_and_exit (config, status);
+        }
+        else if (PyRun_SimpleFileEx (fp, script_filename, 1) != 0)
+        {
+            std::cerr << bl::format (_("Python script {1} execution failed.")) % script_filename
+                      << std::endl;
+            python_cleanup_and_exit (config, status);
+        }
+    }
+    if (args->interactive)
+    {
+        std::cout << _("Welcome to Gnucash Interactive Python Session") << std::endl;
+        PyRun_InteractiveLoop (stdin, "foo");
+    }
+    Py_Finalize();
+    cleanup_and_exit_with_save ();
+}
+#endif
+
+static const std::vector<const char*> valid_schemes = { "file", "mysql", "postgres" };
+
+static bool
+is_valid_uri (const bo_str& uri)
+{
+    if (!uri)
+        return false;
+
+    if (boost::filesystem::is_regular_file (*uri))
+        return true;
+
+    auto scheme = g_uri_parse_scheme (uri->c_str());
+
+    if (!scheme)
+        return false;
+
+    auto rv = std::any_of (valid_schemes.begin(), valid_schemes.end(),
+                           [&scheme](const char* str) { return !g_strcmp0(str, scheme); });
+
+    g_free (scheme);
+    return rv;
+}
+
+int
+Gnucash::run_scripting (std::vector<const char*> newArgv,
+                        const bo_str& file_to_load,
+                        std::string& language,
+                        const bo_str& script,
+                        bool open_readwrite,
+                        bool interactive)
+{
+    std::vector<std::string> errors;
+    static const std::vector<std::string> languages = { "guile", "python" };
+
+    if (open_readwrite && !file_to_load)
+        errors.push_back (_ ("--readwrite: missing datafile!"));
+
+    if (script && (!boost::filesystem::is_regular_file (*script)))
+        errors.push_back ((bl::format (_("--script: {1} is not a file")) % *script).str());
+
+    if (std::none_of (languages.begin(), languages.end(),
+                      [&language](auto& lang){ return language == lang; }))
+        errors.push_back (_ ("--language: must be 'python' or 'guile'"));
+#ifndef HAVE_PYTHON_H
+    else if (language == "python")
+        errors.push_back (_("--language: python wasn't compiled in this build"));
+#endif
+
+    if (!errors.empty())
+    {
+        std::cerr << _("Errors parsing arguments:") << std::endl;
+        auto to_console = [](const auto& str){ std::cerr << str << std::endl; };
+        std::for_each (errors.begin(), errors.end(), to_console);
+        gnc_shutdown_cli (1);
+    }
+
+    gnc_prefs_init ();
+    gnc_ui_util_init();
+    if (is_valid_uri (file_to_load))
+        [[maybe_unused]] auto session = load_file (*file_to_load, open_readwrite);
+
+    scripting_args args { script, interactive };
+    if (language == "guile")
+    {
+        scm_boot_guile (newArgv.size(), (char**)newArgv.data(), run_guile_cli, &args);
+        return 0;               // never reached...
+    }
+#ifdef HAVE_PYTHON_H
+    else if (language == "python")
+    {
+        run_python_cli (newArgv.size(), (char**)newArgv.data(), &args);
+        return 0;               // never reached...
+    }
+#endif
+
+    return 0;                   // never reached
 }

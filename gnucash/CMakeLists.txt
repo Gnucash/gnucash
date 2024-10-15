@@ -111,6 +111,7 @@ target_link_libraries (gnucash
    gnc-bi-import gnc-customer-import gnc-report
    PkgConfig::GTK3 ${GUILE_LDFLAGS} PkgConfig::GLIB2
    ${Boost_LIBRARIES}
+   ${Python3_LIBRARIES}
 )
 
 set(gnucash_cli_SOURCES
@@ -137,14 +138,19 @@ endif()
 
 add_dependencies (gnucash-cli gnucash)
 
-target_compile_definitions(gnucash-cli PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
+target_compile_definitions(gnucash-cli PRIVATE
+   -DG_LOG_DOMAIN=\"gnc.bin\"
+   $<$<BOOL:${WITH_PYTHON}>:HAVE_PYTHON_H>)
 
 target_link_libraries (gnucash-cli
    gnc-app-utils
    gnc-engine gnc-core-utils gnucash-guile gnc-report
    ${GUILE_LDFLAGS} PkgConfig::GLIB2
    ${Boost_LIBRARIES}
+   ${Python3_LIBRARIES}
 )
+
+target_include_directories (gnucash-cli PRIVATE ${Python3_INCLUDE_DIRS})
 
 if (BUILDING_FROM_VCS)
     target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
