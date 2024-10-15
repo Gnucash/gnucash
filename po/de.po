@@ -38,11 +38,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-06-01 16:09+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2024-10-14 09:15+0000\n"
+"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -9742,7 +9742,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3663
 msgid "Alpha Vantage API key"
-msgstr "Alpha Vantage 'API key'"
+msgstr "Alpha Vantage API-Schlüssel"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3674
@@ -9751,11 +9751,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://"
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Zur Benutzung von Alpha Vantage wird ein API-Schlüssel benötigt. Diesen "
+"erhalten Sie, wenn Sie sich für ein kostenloses Konto auf der Alpha Vantage "
+"Webseite, https://alphavantage.co/support/#api-key registrieren."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "YH Finance (FinanceAPI) API-Schlüssel"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
