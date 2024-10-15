@@ -1653,14 +1653,22 @@ be excluded from periodic reporting.")
                   (gnc-commodity-equal commodity (gnc:gnc-monetary-commodity mon)))
                 list-of-monetary))
 
+        (define anchor
+          (gensym "subtotals"))
+
+        (define (cell-add-id cell)
+          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute (list "id" anchor))
+          cell)
+
         (define (first-column string)
           (if (report-uses? 'export-table)
               (cons
-               (gnc:make-html-table-cell/markup "total-label-cell" string)
+               (cell-add-id (gnc:make-html-table-cell/markup "total-label-cell" string))
                (gnc:html-make-empty-cells (+ right-indent width-left-columns -1)))
               (list
-               (gnc:make-html-table-cell/size/markup
-                1 (+ right-indent width-left-columns) "total-label-cell" string))))
+               (cell-add-id
+                (gnc:make-html-table-cell/size/markup
+                 1 (+ right-indent width-left-columns) "total-label-cell" string)))))
 
         (define (data-columns commodity)
           (let loop ((merging? #f)
@@ -1719,7 +1727,7 @@ be excluded from periodic reporting.")
                 zero))))
 
         (set! grid
-          (grid-add grid row col (map get-commodity-grid-amount list-of-commodities)))
+          (grid-add grid row col (map get-commodity-grid-amount list-of-commodities) anchor))
 
         ;; each commodity subtotal gets a separate line in the html-table
         ;; each line comprises: indenting, first-column, data-columns
@@ -2008,12 +2016,20 @@ be excluded from periodic reporting.")
                       calculated-cells total-collectors)))))
       (values table grid csvlist))))
 
+(define-record-type :subtotal-table-cell
+  (make-subtotal-table-cell row col data anchor)
+  subtotal-table-cell?
+  (row get-subtotal-table-cell-row)
+  (col get-subtotal-table-cell-col)
+  (data get-subtotal-table-cell-data)
+  (anchor get-subtotal-table-cell-anchor))
+
 ;; grid data structure
 (define (make-grid)
   '())
 (define (cell-match? cell row col)
-  (and (or (not row) (equal? row (vector-ref cell 0)))
-       (or (not col) (equal? col (vector-ref cell 1)))))
+  (and (or (not row) (equal? row (get-subtotal-table-cell-row cell)))
+       (or (not col) (equal? col (get-subtotal-table-cell-col cell)))))
 (define (grid-get grid row col)
   ;; grid filter - get all row/col - if #f then retrieve whole row/col
   (filter
@@ -2021,13 +2037,13 @@ be excluded from periodic reporting.")
      (cell-match? cell row col))
    grid))
 (define (grid-rows grid)
-  (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
+  (delete-duplicates (map get-subtotal-table-cell-row grid)))
 (define (grid-cols grid)
-  (delete-duplicates (map (lambda (cell) (vector-ref cell 1)) grid)))
-(define (grid-add grid row col data)
+  (delete-duplicates (map get-subtotal-table-cell-col grid)))
+(define (grid-add grid row col data anchor)
   ;; we don't need to check for duplicate cells in a row/col because
   ;; in the trep it should never happen.
-  (cons (vector row col data) grid))
+  (cons (make-subtotal-table-cell row col data anchor) grid))
 (define (grid->html-table grid)
   (define (<? a b)
     (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
@@ -2050,25 +2066,29 @@ be excluded from periodic reporting.")
            (map (lambda (col)
                   (let ((cell (grid-get grid row col)))
                     (if (null? cell) 0
-                        (length (vector-ref (car cell) 2)))))
+                        (length (get-subtotal-table-cell-data (car cell))))))
                 (cons 'col-total list-of-cols))))
   (define (make-table-cell row col commodity-idx divisor)
     (let ((cell (grid-get grid row col)))
       (if (null? cell) ""
           (gnc:make-html-table-cell/markup
            "number-cell"
-           (monetary-div
-            (list-ref-safe (vector-ref (car cell) 2) commodity-idx)
-            divisor)))))
+           (gnc:make-html-text
+            (let ((subtotal (list-ref-safe (get-subtotal-table-cell-data (car cell)) commodity-idx)))
+              (if divisor
+                  (monetary-div subtotal divisor)
+                  (gnc:html-markup-anchor
+                   (format #f "#~a" (get-subtotal-table-cell-anchor (car cell)))
+                   subtotal))))))))
   (define (make-row row commodity-idx)
     (append
      (list (cond
             ((positive? commodity-idx) "")
             ((eq? row 'row-total) (G_ "Grand Total"))
             (else (cdr row))))
-     (map (lambda (col) (make-table-cell row col commodity-idx 1))
+     (map (lambda (col) (make-table-cell row col commodity-idx #f))
           list-of-cols)
-     (list (make-table-cell row 'col-total commodity-idx 1))
+     (list (make-table-cell row 'col-total commodity-idx #f))
      (if row-average-enabled?
          (list (make-table-cell
                 row 'col-total commodity-idx (length list-of-cols)))
