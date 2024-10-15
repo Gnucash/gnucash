@@ -1,17 +1,17 @@
 # Portuguese (Portugal) translation for Gnucash-4.3
 # Copyright (C) 2020
 # This file is distributed under the same license as the Gnucash package.
-# Pedro Albuquerque <pmra@protonmail.com>, 2015-2021.
+# Pedro Albuquerque <pmra@protonmail.com>, 2015-2021, 2024.
 # Pedro Albuquerque <pmra@gmx.com>, 2021, 2022, 2023, 2024.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-03-17 12:02+0000\n"
-"Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
+"PO-Revision-Date: 2024-10-14 07:16+0000\n"
+"Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
 "Language: pt\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1428,12 +1428,6 @@ msgid "Sell"
 msgstr "Venda"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:198
-#, fuzzy
-#| msgid ""
-#| "Selling stock long, and record capital gain/loss.\n"
-#| "\n"
-#| "If you are unable to calculate capital gains you can enter aplaceholder "
-#| "amount and correct it in the transaction later."
 msgid ""
 "Selling stock long, and record capital gain/loss.\n"
 "\n"
@@ -1442,8 +1436,8 @@ msgid ""
 msgstr ""
 "Vender acções e registar ganhos/perdas de capital.\n"
 "\n"
-"Se não consegue calcular ganhos de capital, pode inserir um marcador e "
-"corrigir mais tarde na transacção."
+"Se não consegue calcular ganhos de capital, pode inserir um valor provisório "
+"e corrigir mais tarde na transacção."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -9456,17 +9450,13 @@ msgstr "Quantos dias antes se deve avisar o utilizador."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
-#, fuzzy
-#| msgid "The number of payments cannot be zero."
 msgid "The number of months to be shown in editor."
-msgstr "O número de prestações não pode ser zero."
+msgstr "O número de meses a mostrar no editor."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:65
-#, fuzzy
-#| msgid "Position of the vertical pane divider."
 msgid "The horizontal position of the editor divider."
-msgstr "Posição do divisor vertical."
+msgstr "Posição horizontal do divisor do editor."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:76
 msgid "Set the \"notify\" flag by default"
@@ -9519,11 +9509,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://"
 "alphavantage.co/support/#api-key."
 msgstr ""
+"O Alpha Vantage requer uma chave de API para usar o seu serviço. Pode obter "
+"uma chave registando uma conta gratuita na página https://alphavantage.co/"
+"support/#api-key."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "Chave API de YH Finance (FinanceAPI)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
@@ -9533,6 +9526,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
+"A YH Finance requer uma chave API para utilizar o seu serviço FinanceAPI. "
+"Pode obter uma chave registando uma conta gratuita no sítio web da YH "
+"Finance, https://financeapi.net/pricing."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -11543,33 +11539,6 @@ msgid "CSV Transaction Import"
 msgstr "Importação de transacções CSV"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. You can save your adjusted settings to reuse them on "
-#| "later imports. After loading your settings you can also tweak them again "
-#| "for similar imports and save them under another name."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -11608,7 +11577,7 @@ msgstr ""
 "dados de importação:\n"
 "• uma coluna Data\n"
 "• uma coluna Descrição\n"
-"• uma coluna Depósito ou Levantamento\n"
+"• uma coluna Montante ou Montante (negado)\n"
 "\n"
 "Se não houver dados de conta disponíveis, poderá ser seleccionada uma conta "
 "base para a qual todos os dados serão importados.\n"
@@ -11619,8 +11588,12 @@ msgstr ""
 "vários formatos de data e número. A codificação do ficheiro pode ser "
 "definida.\n"
 "\n"
-"O importador pode gerir ficheiros em que as transacções são divididas em "
-"várias linhas, com cada linha representando uma parcela.\n"
+"O importador pode gerir ficheiros onde as transacções são divididas em "
+"várias linhas, com cada linha representando uma parcela. É iniciada uma nova "
+"transacção sempre que o valor de qualquer uma das colunas relacionadas com a "
+"transacção for diferente do valor de uma transacção anterior, não vazia. "
+"Essas colunas são ID da transacção, Data, Número, Descrição, Notas, "
+"Mercadoria da transacção e Motivo de anulação.\n"
 "\n"
 "Por fim, para importações repetidas, a página de antevisão tem botões para "
 "carregar e gravar as definições. Pode gravar as definições para utilização "
@@ -13803,7 +13776,7 @@ msgstr "Diálogo Escolher titular"
 #: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
-msgstr "Garantias"
+msgstr "Títulos"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
@@ -15964,6 +15937,9 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
+"O Alpha Vantage requer uma chave API para utilizar o seu serviço. Pode obter "
+"uma chave registando uma conta gratuita no sítio web do Alpha Vantage, "
+"https://www.alphavantage.co/support/#api-key."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3711
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
@@ -19850,17 +19826,13 @@ msgstr ""
 "de preço ou valor (negativo) está em falta ou é inválida."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
-#, fuzzy
-#| msgid ""
-#| "Choice of account makes this a multi-currency transaction but price, "
-#| "(negated) value or (negated) transfer column is missing or invalid."
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer amount column is missing or invalid."
 msgstr ""
 "A escolha da conta torna-a numa transacção em várias moedas, mas o preço, o "
-"valor (negativo) ou a coluna de transferência (negativa) está em falta ou é "
-"inválida."
+"valor (negativo) ou o montante de transferência (negativo) está em falta ou "
+"é inválido."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -20180,10 +20152,8 @@ msgid "Unknown OFX investment account"
 msgstr "Conta de investimentos OFX desconhecida"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1308
-#, fuzzy
-#| msgid "Finding duplicate transactions"
 msgid "Removing duplicate transactions…"
-msgstr "A localizar transacções duplicadas"
+msgstr "A localizar transacções duplicadas…"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1362
 #, c-format
@@ -22910,7 +22880,7 @@ msgstr "Gráfico circular do activo"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:39
 msgid "Security Piechart"
-msgstr "Gráfico circular de garantias"
+msgstr "Gráfico circular de títulos"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
@@ -27308,26 +27278,20 @@ msgid "Net Loss"
 msgstr "Perda líquida"
 
 #: gnucash/report/reports/standard/txn-columns.scm:33
-#, fuzzy
-#| msgid "Transaction Report"
 msgid "Transaction Breakdown Report"
-msgstr "Relatório de transacções"
+msgstr "Relatório descritivo de transacções"
 
 #: gnucash/report/reports/standard/txn-columns.scm:37
-#, fuzzy
-#| msgid "Number of columns"
 msgid "Limit for number of columns"
-msgstr "Número de colunas"
+msgstr "Limite do número de colunas"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
-msgstr ""
+msgstr "Define o número máximo de colunas"
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
-#, fuzzy
-#| msgid "Income summary accounts"
 msgid "Too many accounts"
-msgstr "Contas resumo de receita"
+msgstr "Demasiadas contas"
 
 #: gnucash/report/reports/standard/txn-columns.scm:155
 msgid ""
@@ -27335,6 +27299,9 @@ msgid ""
 "Select a different subset of transactions, or increase the limit in the "
 "options."
 msgstr ""
+"O número de contas ligadas pelas transacções encontradas excede o limite. "
+"Selecione um subconjunto diferente de transacções ou aumente o limite nas "
+"opções."
 
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
@@ -28865,7 +28832,7 @@ msgstr "Veja e edite os preços de acções e fundos mutualistas"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
-msgstr "_Editor de garantias"
+msgstr "_Editor de títulos"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -30141,11 +30108,11 @@ msgstr "Exportar _relatório"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:37
 msgid "_Save layout as default"
-msgstr ""
+msgstr "Gravar di_sposição como pré-definição"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:39
 msgid "Save current layout as default"
-msgstr ""
+msgstr "Gravar a disposição actual como pré-definição"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:155
@@ -31318,16 +31285,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "A verificar desdobramentos na conta %s: %u de %u"
 
 #: libgnucash/engine/Scrub.cpp:146
-#, fuzzy, c-format
-#| msgid "Looking for orphans in transaction: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %zu"
-msgstr "A procurar órfãs na transacção: %u de %u"
+msgstr "A procurar órfãs na transacção: %u de %zu"
 
 #: libgnucash/engine/Scrub.cpp:357
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in transaction date %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %zu"
-msgstr "A procurar desequilíbrios na data da transacção %s: %u de %u"
+msgstr "A procurar desequilíbrios na data da transacção %s: %u de %zu"
 
 #: libgnucash/engine/Split.cpp:1644
 msgctxt ""
