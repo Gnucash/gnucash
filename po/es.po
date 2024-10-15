@@ -86,8 +86,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-09-23 21:16+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2024-10-15 09:45+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -95,7 +95,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -213,13 +213,13 @@ msgstr "Final de este mes"
 #: bindings/guile/date-utilities.scm:767
 #: libgnucash/engine/gnc-option-date.cpp:176
 msgid "Last day of the current month."
-msgstr "Último día del mes efectivo."
+msgstr "Último día del mes actual."
 
 #: bindings/guile/date-utilities.scm:771
 #: gnucash/gnome-utils/gnc-period-select.c:67
 #: libgnucash/engine/gnc-option-date.cpp:183
 msgid "Start of previous month"
-msgstr "Inicio del anterior mes"
+msgstr "Inicio del mes anterior"
 
 #: bindings/guile/date-utilities.scm:774
 #: libgnucash/engine/gnc-option-date.cpp:184
@@ -240,12 +240,12 @@ msgstr "Último día del mes anterior."
 #: bindings/guile/date-utilities.scm:785
 #: libgnucash/engine/gnc-option-date.cpp:215
 msgid "Start of current quarter"
-msgstr "Inicio del trimestre efectivo"
+msgstr "Inicio del trimestre actual"
 
 #: bindings/guile/date-utilities.scm:788
 #: libgnucash/engine/gnc-option-date.cpp:216
 msgid "First day of the current quarterly accounting period."
-msgstr "Primer día del periodo trimestral contable efectivo."
+msgstr "Primer día del periodo contable trimestral actual."
 
 #: bindings/guile/date-utilities.scm:792
 #: libgnucash/engine/gnc-option-date.cpp:223
@@ -1147,7 +1147,7 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
-"Puede asignar o modificar los atajos del teclado para muchas acciones de "
+"Puede asignar o modificar los atajos del teclado para muchas operaciones de "
 "GnuCash. Consulte https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
@@ -1788,12 +1788,12 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
-"La empresa devuelve capital, y el titular de las acciones debe realizar un "
-"pago compensatorio por el capital devuelto. Esto reduce la base de coste ("
-"menos negativa, hacia el valor 0,00) sin afectar a las unidades #. Una "
-"distribución previamente registrada como dividendo compensatorio se "
-"reclasifica a devolución compensatoria de capital,a menudo debido a la "
-"información fiscal de final de año."
+"La empresa devuelve capital, y el titular de las provisiones debe realizar "
+"una remuneración compensatoria por el capital devuelto. Esto reduce la base "
+"de coste (menos negativa, hacia el valor 0,00) sin afectar al número de "
+"unidades. Una distribución previamente registrada como dividendo "
+"compensatorio se reclasifica a devolución compensatoria de capital, a menudo "
+"debido a la información fiscal de final de año."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
@@ -1849,9 +1849,9 @@ msgstr ""
 "acciones en un divisor, pero manteniendo constante el valor monetario total "
 "de la inversión global. \n"
 "\n"
-"Si la división da lugar a un pago en efectivo por las unidades restantes, "
-"registra primero la compra utilizando el Asistente para transacciones con "
-"acciones y, a continuación, registra la división."
+"Si el desglose da lugar a una remuneración en efectivo por las unidades "
+"restantes, registra primero la compra cubierta utilizando el Asistente para "
+"Mercancías de Transacciones y, a continuación, registre el desglose."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:411
 msgid ""
@@ -1948,17 +1948,17 @@ msgstr "No se pueden comprar para cobertura más unidades de las adeudadas."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1129
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
-msgstr "Stock"
+msgstr "Albarán"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1131
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
-msgstr "Caja"
+msgstr "Efectivo"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1133
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
-msgstr "Tasas"
+msgstr "Comisiones"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1135
 msgctxt "Stock Assistant: Page name"
@@ -2000,7 +2000,7 @@ msgstr "La transacción no puede cuadrar, %s es erróneo con valor %s"
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
-"Los débitos totales de %s no están equilibrados con los créditos totales de "
+"Los Débitos Totales de %s no están equilibrados con los Créditos Totales de "
 "%s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1922
@@ -4161,7 +4161,8 @@ msgstr "Resalte primero una fecha para ordenarla por fecha de aparición."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr "Resalte primero un horario para ordenarlo por nombre de horario."
+msgstr ""
+"Resalte primero una planificación para ordenarla por nombre de planificación."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -5172,7 +5173,7 @@ msgstr "Borra el desglose efectivo"
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:389
 msgid "Show Splits"
-msgstr "Mostrar divisiones"
+msgstr "Mostrar desgloses"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:390
 msgid "Jump"
@@ -5555,17 +5556,17 @@ msgstr "Factura Adornada"
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:398
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 msgid "_New Schedule"
-msgstr "_Nuevo horario"
+msgstr "_Nueva planificación"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:404
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 msgid "_Edit Schedule"
-msgstr "_Editar horario"
+msgstr "_Editar planificación"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:410
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:65
 msgid "_Delete Schedule"
-msgstr "_Borrar horario"
+msgstr "_Borrar planificación"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:492
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -5579,8 +5580,8 @@ msgstr "Transacciones Aproximándose"
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:927
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] "¿Realmente desea eliminar esta transacción programada?"
-msgstr[1] "¿Realmente desea eliminar estas transacciones programadas?"
+msgstr[0] "¿Realmente desea eliminar esta transacción planificada?"
+msgstr[1] "¿Realmente desea eliminar estas transacciones planificadas?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -6188,7 +6189,7 @@ msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
 msgid "New item"
-msgstr "Nuevo elemento"
+msgstr "Crear elemento"
 
 #: gnucash/gnome-search/dialog-search.c:1163
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
@@ -6671,7 +6672,7 @@ msgstr "Crear Cuenta"
 #: gnucash/gnome-utils/dialog-account.c:2355
 #, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "¿Renumerar las subcuentas inmediatas de '%s'?"
+msgstr "¿Remunerar las subcuentas inmediatas de «%s»?"
 
 #: gnucash/gnome-utils/dialog-account.c:2461
 #, c-format
@@ -7166,7 +7167,7 @@ msgstr "Establecer la visibilidad de las cuentas contenedor y ocultas."
 #.
 #: gnucash/gnome-utils/gnc-account-sel.c:982
 msgid "New…"
-msgstr "Nueva…"
+msgstr "Nuevo…"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:453
 #: gnucash/register/register-core/formulacell.c:121
@@ -7188,7 +7189,7 @@ msgstr "La cuenta ya está en Balance Auto-Punteado."
 #: gnucash/gnome-utils/gnc-autoclear.c:157
 #, c-format
 msgid "No uncleared splits found."
-msgstr "No se encontraron divisiones sin borrar."
+msgstr "No se encontraron desgloses sin borrar."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:173
 #, c-format
@@ -7657,9 +7658,9 @@ msgid ""
 "the budgets and amend signs if necessary."
 msgstr ""
 "Este libro tiene presupuestos. La representación interna de las cantidades "
-"del presupuesto ya no depende de la opción \"Cuentas balanceadas a la "
-"inversa\". Por favor, revise sus presupuestos y corrija los signos en caso "
-"de ser necesario."
+"del presupuesto ya no depende de la opción «Cuentas balanceadas a la inversa»"
+". Por favor, revise sus presupuestos y corrija los signos en caso de ser "
+"necesario."
 
 #: gnucash/gnome-utils/gnc-file.c:754
 msgid "The following are noted in this file:"
@@ -7758,7 +7759,7 @@ msgstr "<unknown></unknown>"
 
 #: gnucash/gnome-utils/gnc-general-select.c:183
 msgid "View…"
-msgstr "Ver…"
+msgstr "Vista…"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
 msgid "GnuCash could not find the files of the help documentation."
@@ -7876,8 +7877,8 @@ msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
 msgstr ""
-"Se ha alcanzado el número máximo de entradas de menú de la ventana, no se "
-"van a añadir mas entradas."
+"Se ha alcanzado el número máximo de apuntes de menú de la ventana, no se van "
+"a añadir más apuntes."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5227
 #: gnucash/gnucash-core-app.cpp:241
@@ -8094,11 +8095,11 @@ msgstr "Último Núm"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 msgid "Present"
-msgstr "Actual"
+msgstr "Presente"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:830
 msgid "Present (Report)"
-msgstr "Actual (boletín)"
+msgstr "Presente (boletín)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:844
 msgid "Balance (Report)"
@@ -8130,7 +8131,7 @@ msgstr "Mínimo Futuro (boletín)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:913
 msgid "Total (Report)"
-msgstr "Totales (boletín)"
+msgstr "Total (boletín)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:920
 msgid "Total (Period)"
@@ -8397,7 +8398,7 @@ msgstr "Última aparición"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:139
 msgid "Next Occur"
-msgstr "Próxima Aparición"
+msgstr "Siguiente aparición"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:309
 #, c-format
@@ -8407,7 +8408,7 @@ msgstr "%s, total:"
 #: gnucash/gnome-utils/window-main-summarybar.c:312
 #, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr "%s, Sin Total de Acciones No Monetarias:"
+msgstr "%s, sin total de mercancías no monetarias:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:315
 #, c-format
@@ -8429,7 +8430,7 @@ msgstr "Beneficios:"
 
 #: gnucash/gnucash-cli.cpp:94
 msgid "Price Quotes Retrieval Options"
-msgstr "Opciones de recuperación de precios de cotización"
+msgstr "Opciones de obtención de precios cotizados"
 
 #: gnucash/gnucash-cli.cpp:97
 msgid ""
@@ -8464,16 +8465,17 @@ msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for when using the get command"
 msgstr ""
-"Expresión regular que determina qué productos del espacio de nombres se "
-"recuperarán al usar el comando get"
+"Expresión regular que determina cuáles productos del espacio de nombres "
+"serán recuperados utilizando la instrucción get"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
-"Al usar el comando dump, muestra la lista de todos los parámetros que "
-"Finance::Quote devuelve para el símbolo en lugar de los que GnuCash solicita."
+"Al usar la instrucción dump, muestra el listado de todos los parámetros que "
+"Finance::Quote devueltos para el símbolo en lugar de los que GnuCash "
+"solicita."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8530,7 +8532,7 @@ msgstr "Instrucción de informe desconocido '{1}'"
 
 #: gnucash/gnucash-cli.cpp:220
 msgid "Missing command or option"
-msgstr "Falta un mandato u opción"
+msgstr "Falta una instrucción u opción"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
