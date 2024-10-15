@@ -302,4 +302,5 @@ Unfortunately, the plotting tool can't handle that.")))
  'menu-path (list gnc:menuname-asset-liability)
  'menu-name (N_ "Price Scatterplot")
  'options-generator options-generator
+ 'chart? #t
  'renderer renderer)

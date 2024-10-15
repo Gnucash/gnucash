@@ -351,4 +351,5 @@
  'menu-tip (N_ "Shows a barchart with cash flow over time")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator cashflow-barchart-options-generator
+ 'chart? #t
  'renderer cashflow-barchart-renderer)

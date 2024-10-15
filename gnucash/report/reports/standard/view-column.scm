@@ -29,6 +29,7 @@
 (define-module (gnucash reports standard view-column))
 (use-modules (gnucash engine))
 (use-modules (ice-9 match))
+(use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
@@ -176,6 +177,14 @@
         (((child rowspan colspan _) . rest)
          (loop rest (cons (list child rowspan colspan #f) new-reports)))))))
 
+(define (include-chart? report)
+  (let* ((options (gnc:report-options report))
+         (reports
+          (gnc-optiondb-lookup-value options "__general" "report-list"))
+         (has-chart? (lambda (child)
+                        (gnc:report-chart? (gnc-report-find (car child))))))
+    (any has-chart? reports)))
+
 ;; define the view now.
 (gnc:define-report
  'version 1
@@ -186,4 +195,5 @@
  'renderer render-view
  'options-generator make-options
  'options-cleanup-cb cleanup-options
- 'options-changed-cb options-changed-cb)
+ 'options-changed-cb options-changed-cb
+ 'chart? include-chart?)

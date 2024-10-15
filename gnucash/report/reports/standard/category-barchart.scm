@@ -703,6 +703,7 @@ Please deselect the accounts with negative balances."))
      'menu-name menuname
      'menu-tip menutip
      'options-generator (lambda () (options-generator account-types inc-exp?))
+     'chart? #t
      'export-types '(("CSV" . csv))
      'export-thunk (lambda (report-obj export-type)
                      (category-barchart-renderer
