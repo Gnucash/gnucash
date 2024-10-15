@@ -19,14 +19,15 @@
 # hades <dev@hades.name>, 2023.
 # Xangel2Net <xangel1@mail.ru>, 2023.
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024.
+# hitmman <hitmman@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-22 14:30-0700\n"
-"PO-Revision-Date: 2024-07-26 15:09+0000\n"
-"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
+"PO-Revision-Date: 2024-10-14 01:25+0000\n"
+"Last-Translator: hitmman <hitmman@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -35,7 +36,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1015,6 +1016,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"Вы можете назначить или изменить сочетания клавиш для многих действий "
+"GnuCash. См. https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -32065,7 +32068,7 @@ msgstr "Ссылка на набор"
 
 #: libgnucash/engine/policy.cpp:53
 msgid "First In, First Out"
-msgstr ""
+msgstr "Первый пришел, первый ушел (FIFO)"
 
 #: libgnucash/engine/policy.cpp:54
 msgid "Use oldest lots first."
