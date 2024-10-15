@@ -263,6 +263,7 @@
           (gnc:html-chart-set-height! chart height)
           (gnc:html-chart-set-y-axis-label!
            chart (gnc-commodity-get-mnemonic report-currency))
+          (gnc:html-chart-set-y-axis-begin-at-zero! chart #t)
           (gnc:html-chart-set-currency-iso!
            chart (gnc-commodity-get-mnemonic report-currency))
           (gnc:html-chart-set-currency-symbol!
