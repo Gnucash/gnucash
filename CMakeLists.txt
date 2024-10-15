@@ -215,7 +215,7 @@ if (NOT PKG_CONFIG_FOUND)
  endif()
 
 # glib et al.
-set(GLIB_MIN_VERSION 2.56.1)
+set(GLIB_MIN_VERSION 2.68.1)
 set(GTK_MIN_VERSION 3.22.30)
 
 pkg_check_modules (GLIB2 REQUIRED IMPORTED_TARGET glib-2.0>=${GLIB_MIN_VERSION})
