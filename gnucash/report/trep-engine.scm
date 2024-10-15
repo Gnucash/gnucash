@@ -59,6 +59,8 @@
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-26))
 (use-modules (ice-9 match))
+(use-modules (ice-9 regex))
+(use-modules (ice-9 i18n))
 
 (export gnc:trep-options-generator)
 (export gnc:trep-renderer)
@@ -98,6 +100,12 @@
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
+(define optname-substring-matcher (N_ "Substring Match Pattern"))
+(define optname-substring-custom-headings (N_ "Custom Substring Headings"))
+(define optname-substring-use-regexp
+  (N_ "Use regular expression for Substring Matching"))
+(define optname-substring-matcher-caseinsensitive
+  (N_ "Substring Matching is case insensitive"))
 
 ;;General
 (define optname-startdate (N_ "Start Date"))
@@ -159,6 +167,63 @@ in the Options panel."))
         (cons #\y (G_ "Reconciled"))
         (cons #\f (G_ "Frozen"))
         (cons #\v (G_ "Voided"))))
+
+;; Create a function which helps find a substring within a split
+;; or transaction as per various user-defined options in pagename-sorting section.
+;; Memorize both the sortvalue and rendering in hashtable for later retrieval
+;; because get-substring-from-split is slow.
+;; Returns either the sort value or rendered value as per sortvalue?
+(define (split-substring split parameters sortvalue?)
+  (let* ((substring-htable (assq-ref parameters 'substring/htable)))
+  (cond
+   ((hash-ref substring-htable split) =>
+    (lambda (found) (if sortvalue? (car found) (cadr found))))
+   (else
+    (let ((sstring (get-substring-from-split split parameters)))
+      (hash-set! substring-htable split sstring)
+          (if sortvalue? (car sstring) (cadr sstring)))))))
+
+;; Finds a substring withing a split as per user-defined options.
+;; Returns a list with both (substring-sortvalue substring-rendered)
+(define (get-substring-from-split split parameters)
+  (let* ((regexp (assq-ref parameters 'substring/matcher-regexp))
+         (no-match-heading (assq-ref parameters 'substring/no-match-heading))
+         (blank-heading (assq-ref parameters 'substring/blank-heading))
+         (change-case (assq-ref parameters 'substring/change-case))
+         (sm (or (regexp-exec regexp
+                  (string-append " " (xaccSplitGetMemo split) " "))
+                 (regexp-exec regexp
+                  (string-append " " ((compose xaccTransGetNotes xaccSplitGetParent) split) " "))
+                 (regexp-exec regexp
+                  (string-append " " ((compose xaccTransGetDescription xaccSplitGetParent) split) " "))))
+         (substring-count (and sm (match:count sm)))
+         (substring-matched
+           ;; If at least one match was returned
+           (if substring-count
+             ;; If there is at least one submatch
+             (if (> substring-count 1)
+               ;; then return a join of all submatches that return a string
+               (string-join
+                 (map (lambda (n) (if (string? (match:substring sm n)) (match:substring sm n) ""))
+                      (cdr (list-tabulate (match:count sm) values)))
+                 "")
+               ;; otherwise return the main match
+               (match:substring sm))
+             #f))
+         (substring-cased
+           (cond ((not substring-matched) #f)
+                 ((equal? (string-trim substring-matched) "") 'first-string)
+                 ((eq? change-case 'upcase) (string-locale-upcase substring-matched))
+                 ((eq? change-case 'downcase) (string-locale-downcase substring-matched))
+                 ((eq? change-case 'titlecase) (string-locale-titlecase substring-matched))
+                 (else substring-matched))))
+    (if substring-cased
+      (list substring-cased
+        (if (eq? substring-cased 'first-string)
+            (if (string-null? blank-heading) (G_ "[Empty String]") blank-heading)
+            substring-cased))
+      (list 'last-string
+            (if (string-null? no-match-heading) (G_ "[No Match]") no-match-heading)))))
 
 (define (sortkey-list parameters)
   ;; Defines the different sorting keys, as an association-list
@@ -268,6 +333,12 @@ in the Options panel."))
               (cons 'split-sortvalue (compose xaccTransGetNotes xaccSplitGetParent))
               (cons 'text (G_ "Notes"))
               (cons 'renderer-fn (compose xaccTransGetNotes xaccSplitGetParent)))
+
+        (list 'substring
+              (cons 'sortkey #f)
+              (cons 'split-sortvalue (lambda (s) (split-substring s parameters #t)))
+              (cons 'text (G_ "Substring"))
+              (cons 'renderer-fn (lambda (s) (split-substring s parameters #f))))
 
         (list 'none
               (cons 'sortkey '())
@@ -696,7 +767,9 @@ be excluded from periodic reporting.")
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
              (sec-sortkey-subtotal-enabled
               (SUBTOTAL-ENABLED? sec-sortkey parameters))
-             (sec-date-sortingtype-enabled (memq sec-sortkey DATE-SORTING-TYPES)))
+             (sec-date-sortingtype-enabled (memq sec-sortkey DATE-SORTING-TYPES))
+             (substring-sortingtype-enabled
+              (or (eq? prime-sortkey 'substring) (eq? sec-sortkey 'substring))))
 
         (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-prime-subtotal
@@ -754,7 +827,23 @@ be excluded from periodic reporting.")
 
         (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
-         sec-date-sortingtype-enabled)))
+         sec-date-sortingtype-enabled)
+
+        (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-substring-matcher
+         substring-sortingtype-enabled)
+
+        (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-substring-custom-headings
+         substring-sortingtype-enabled)
+
+        (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-substring-use-regexp
+         substring-sortingtype-enabled)
+
+        (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-substring-matcher-caseinsensitive
+         substring-sortingtype-enabled)))
 
     ;; primary sorting criterion
     (gnc-register-multichoice-callback-option options
@@ -857,7 +946,59 @@ be excluded from periodic reporting.")
       pagename-sorting optname-sec-sortorder
       "i" (G_ "Order of Secondary sorting.")
       "ascend"
-      ascending-choice-list))
+      ascending-choice-list)
+
+    ;; Sort by Substring options
+
+    (gnc-register-string-option options
+      pagename-sorting optname-substring-matcher
+      "k1"
+      (G_ "Use this option along with the Substring primary or secondary key \
+and subtotal.
+In its simple form, the Match Pattern is a prefix that will match substrings \
+with the same prefix up to the first space or end-of-string.
+In its advanced form, the Match Pattern is a regular expression enabled when the \
+'use regular expression' checkbox is selected. \
+Refer to the checkbox help text for more information on regexp format.
+The match is case sensitive, so it considers uppercase and lowercase \
+letters separately, unless the 'case insensitive' checkbox is selected.
+Only the first match is considered on each split, starting with the split memo, \
+then the transaction notes, and finally the transaction description.")
+      "")
+
+    (gnc-register-simple-boolean-option options
+      pagename-sorting optname-substring-use-regexp
+      "k2"
+      (G_ "Check this box to enable full POSIX regular expressions capabilities.
+Examples: #work|#family will match both #work and #family substrings.
+#[^ ]* will match any substring starting with # and ending with a space.
+Use parenthesis to identify a submatch to retain for the sorting and grouping.
+Examples: #(work)|#(family) and #([^ ]*) perform the same matches as the previous examples \
+but remove the # from the final sorting and grouping.
+Because POSIX doesn't provide word boundary capability, a space is automatically added \
+on each end of the memos, notes and descriptions being searched so that spaces and \
+other character classes can be used for word boundary matches.
+Example: [ ](work)[ ]|[ ](family)[ ] will match the words work and family but \
+not working and multifamily")
+      #f)
+
+    (gnc-register-simple-boolean-option options
+      pagename-sorting optname-substring-matcher-caseinsensitive
+      "k3"
+      (G_ "If this option is selected, substring matching is not case sensitive. \
+The resulting substrings will follow the same capitalization as the Custom Headings \
+(either Title Case, lowercase, UPPERCASE).")
+      #f)
+
+    (gnc-register-string-option options
+      pagename-sorting optname-substring-custom-headings
+      "k4"
+      (G_ "Use this option to customize the heading for the subtotal group containing \
+the transactions with no matching substring, and optionally, the group containing the \
+transactions with an empty matching substring (as can occur with regexp match).
+If the second heading is required, it must be separated by a slash.
+Default is [No Match]/[Empty String].")
+      (string-append (G_ "[No Match]" ) "/" (G_ "[Empty String]" ))))
 
   ;; Display options
 
@@ -1032,6 +1173,16 @@ be excluded from periodic reporting.")
       (() #f)
       (((? (cut assq <> cell)) . rest) (lp rest))
       ((fld . _) (gnc:error "field " fld " missing in cell " cell) #t))))
+
+(define (stringplus< a b)
+  (cond
+    ((eq? a 'last-string) #f)
+    ((eq? b 'first-string) #f)
+    ((eq? b 'last-string) #t)
+    ((eq? a 'first-string) #t)
+    (else (gnc:string-locale<? a b))))
+
+(define (stringplus> a b) (stringplus< b a))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
@@ -2030,7 +2181,8 @@ be excluded from periodic reporting.")
   (cons (vector row col data) grid))
 (define (grid->html-table grid)
   (define (<? a b)
-    (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
+    (cond ((or (symbol? (car a)) (string? (car a)) (symbol? (car b)) (string? (car b)))
+           (stringplus< (car a) (car b)))
           ((number? (car a)) (< (car a) (car b)))
           (else (gnc:error "unknown sortvalue"))))
   (define list-of-rows (sort (delete 'row-total (grid-rows grid)) <?))
@@ -2203,6 +2355,40 @@ be excluded from periodic reporting.")
                                (memq (opt-val gnc:pagename-display (N_ "Amount"))
                                      '(single double))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
+         (substring-sort? (or (eq? primary-key 'substring) (eq? secondary-key 'substring)))
+         (substring-matcher (string-trim (opt-val pagename-sorting optname-substring-matcher)))
+         (substring-matcher-caseinsensitive
+           (and substring-sort?
+                (opt-val pagename-sorting optname-substring-matcher-caseinsensitive)))
+         (substring-matcher-regexp
+           (and substring-sort?
+             (if (defined? 'make-regexp)
+               (if (not (string-null? substring-matcher))
+                 (if (opt-val pagename-sorting optname-substring-use-regexp)
+                   (catch 'regular-expression-syntax
+                     (lambda ()
+                       (if substring-matcher-caseinsensitive
+                         (make-regexp substring-matcher regexp/icase)
+                         (make-regexp substring-matcher)))
+                     (const 'invalid-substring-match-pattern-regexp))
+                   (catch 'regular-expression-syntax
+                     (lambda ()
+                       (let ((r (string-append
+                                  (regexp-substitute/global
+                                    #f "[#-.]|[[-^]|[?|{}]" substring-matcher
+                                    'pre (lambda (m) (string-append "\\" (match:substring m))) 'post)
+                                  "[^ ]*")))
+                         (if substring-matcher-caseinsensitive
+                           (make-regexp r regexp/icase)
+                           (make-regexp r))))
+                     (const 'invalid-substring-match-pattern)))
+                 'missing-substring-match-pattern)
+               'no-guile-regex-support)))
+         (substring-custom-headings
+           (and substring-sort? (opt-val pagename-sorting optname-substring-custom-headings)))
+         (substring-custom-headings-sm
+           (and substring-custom-headings
+                (string-match "([^|]*)[/]([^|]*)" substring-custom-headings)))
          (query (qof-query-create-for-splits)))
 
     ;; define a preprocessed alist of report parameters.
@@ -2284,6 +2470,26 @@ be excluded from periodic reporting.")
                 (cons 'sort-account-description
                       (opt-val pagename-sorting (N_ "Show Account Description")))
                 (cons 'informal-headers (opt-val pagename-sorting optname-show-informal-headers))
+                ;; parameters based on substring options
+                (cons 'substring/matcher-regexp substring-matcher-regexp)
+                (cons 'substring/change-case
+                  (cond ((not substring-matcher-caseinsensitive) #f)
+                        ((equal? (string-locale-upcase substring-custom-headings)
+                                 substring-custom-headings) 'upcase)
+                        ((equal? (string-locale-downcase substring-custom-headings)
+                                 substring-custom-headings) 'downcase)
+                        (else 'titlecase)))
+                (cons 'substring/no-match-heading
+                  (if (and substring-custom-headings-sm
+                           (> (match:count substring-custom-headings-sm) 1))
+                      (match:substring substring-custom-headings-sm 1)
+                      substring-custom-headings))
+                (cons 'substring/blank-heading
+                  (if (and substring-custom-headings-sm
+                           (> (match:count substring-custom-headings-sm) 2))
+                      (match:substring substring-custom-headings-sm 2)
+                      ""))
+                (cons 'substring/htable (and substring-sort? (make-hash-table)))
                 ;; Parameters based on a mix of options
                 ;; This parameter is set to #t if an account balance can be displayed
                 ;; as a running balance with a balance forward at the top.
@@ -2381,8 +2587,8 @@ be excluded from periodic reporting.")
                       (lambda (s) #f))))
              (value-of-X (comparator-function split-X))
              (value-of-Y (comparator-function split-Y))
-             (op (if (string? value-of-X)
-                     (if ascend? gnc:string-locale<? gnc:string-locale>?)
+             (op (if (or (string? value-of-X) (symbol? value-of-X))
+                     (if ascend? stringplus< stringplus>)
                      (if ascend? < >))))
         (and value-of-X (op value-of-X value-of-Y))))
 
@@ -2418,7 +2624,8 @@ be excluded from periodic reporting.")
     (cond
      ((or (null? c_account_1)
           (symbol? account-matcher-regexp)
-          (symbol? transaction-matcher-regexp))
+          (symbol? transaction-matcher-regexp)
+          (symbol? substring-matcher-regexp))
 
       (gnc:html-document-add-object!
        document
@@ -2436,7 +2643,18 @@ be excluded from periodic reporting.")
          (gnc:html-make-generic-warning
           report-title (gnc:report-id report-obj)
           (string-append (G_ "Error") " " (symbol->string transaction-matcher-regexp))
-          ""))))
+          ""))
+
+        ((symbol? substring-matcher-regexp)
+         (if (eq? substring-matcher-regexp 'missing-substring-match-pattern)
+          (gnc:html-make-generic-warning
+            report-title (gnc:report-id report-obj)
+            (G_ "You selected the sort by substring option. Please specify a Substring Match Pattern in the sorting options.")
+            "")
+          (gnc:html-make-generic-warning
+            report-title (gnc:report-id report-obj)
+            (string-append (G_ "Error") " " (symbol->string substring-matcher-regexp))
+            "")))))
 
       (gnc:html-document-set-export-error document "No accounts, or regexp error")
 
