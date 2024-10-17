@@ -197,6 +197,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, "Borsa Italiana, IT", "borsa_italiana" },
     { false, SOURCE_SINGLE, "BSE India, IN", "bseindia" },
     { false, SOURCE_SINGLE, "Bursa de Valori Bucuresti, RO", "bvb" },
+    { false, SOURCE_SINGLE, "Colombo Stock Exchange, LK", "cse" },
     { false, SOURCE_SINGLE, "comdirect, DE", "comdirect" },
     { false, SOURCE_SINGLE, "Consors Bank, DE", "consorsbank" },
     { false, SOURCE_SINGLE, "Deka Investments, DE", "deka" },
