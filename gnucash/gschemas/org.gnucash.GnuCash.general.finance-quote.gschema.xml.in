@@ -3,7 +3,7 @@
     <key name="alphavantage-api-key" type="s">
       <default>''</default>
       <summary>Alpha Vantage API key</summary>
-      <description>Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://alphavantage.co/support/#api-key.</description>
+      <description>Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://www.alphavantage.co/support/#api-key.</description>
     </key>
     <key name="yhfinance-api-key" type="s">
       <default>''</default>

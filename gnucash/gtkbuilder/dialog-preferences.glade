@@ -3671,7 +3671,7 @@ many months before the current month</property>
                   <object class="GtkEntry" id="pref/general.finance-quote/alphavantage-api-key">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://alphavantage.co/support/#api-key.</property>
+                    <property name="tooltip-text" translatable="yes">Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://www.alphavantage.co/support/#api-key.</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
