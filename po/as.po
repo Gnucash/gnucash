@@ -4,10 +4,10 @@
 # Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.9-pot2\n"
+"Project-Id-Version: GnuCash 5.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-09-22 14:30-0700\n"
+"POT-Creation-Date: 2024-10-17 17:12+0200\n"
 "PO-Revision-Date: 2024-09-08 15:09+0000\n"
 "Last-Translator: Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate."
 "org>\n"
@@ -45,163 +45,163 @@ msgstr ""
 
 #: bindings/guile/date-utilities.scm:715
 #: gnucash/gnome-utils/gnc-period-select.c:70
-#: libgnucash/engine/gnc-option-date.cpp:263
+#: libgnucash/engine/gnc-option-date.cpp:264
 msgid "Start of this year"
 msgstr "এই বছৰটোৰ আৰম্ভনি"
 
 #: bindings/guile/date-utilities.scm:718
-#: libgnucash/engine/gnc-option-date.cpp:264
+#: libgnucash/engine/gnc-option-date.cpp:265
 msgid "First day of the current calendar year."
 msgstr "চলিত কেলেণ্ডাৰ বৰ্ষৰ প্ৰথম দিনটো."
 
 #: bindings/guile/date-utilities.scm:722
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/engine/gnc-option-date.cpp:271
+#: libgnucash/engine/gnc-option-date.cpp:272
 msgid "End of this year"
 msgstr "এই বছৰটোৰ শেষ"
 
 #: bindings/guile/date-utilities.scm:725
-#: libgnucash/engine/gnc-option-date.cpp:272
+#: libgnucash/engine/gnc-option-date.cpp:273
 msgid "Last day of the current calendar year."
 msgstr "চলিত কেলেণ্ডাৰ বৰ্ষৰ অন্তিম দিনটো."
 
 #: bindings/guile/date-utilities.scm:729
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/engine/gnc-option-date.cpp:279
+#: libgnucash/engine/gnc-option-date.cpp:280
 msgid "Start of previous year"
 msgstr "আগৰ বছৰৰ আৰম্ভনি"
 
 #: bindings/guile/date-utilities.scm:732
-#: libgnucash/engine/gnc-option-date.cpp:280
+#: libgnucash/engine/gnc-option-date.cpp:281
 msgid "First day of the previous calendar year."
 msgstr "আগৰ কেলেণ্ডাৰ বৰ্ষৰ প্ৰথম দিনটো."
 
 #: bindings/guile/date-utilities.scm:736
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/engine/gnc-option-date.cpp:287
+#: libgnucash/engine/gnc-option-date.cpp:288
 msgid "End of previous year"
 msgstr "আগৰ বছৰৰ শেষ"
 
 #: bindings/guile/date-utilities.scm:739
-#: libgnucash/engine/gnc-option-date.cpp:288
+#: libgnucash/engine/gnc-option-date.cpp:289
 msgid "Last day of the previous calendar year."
 msgstr "আগৰ কেলেণ্ডাৰ বৰ্ষৰ অন্তিম দিনটো."
 
 #: bindings/guile/date-utilities.scm:743
-#: libgnucash/engine/gnc-option-date.cpp:311
+#: libgnucash/engine/gnc-option-date.cpp:312
 msgid "Start of accounting period"
 msgstr "হিচাপৰ সময়সীমাৰ আৰম্ভনি"
 
 #: bindings/guile/date-utilities.scm:746
-#: libgnucash/engine/gnc-option-date.cpp:312
+#: libgnucash/engine/gnc-option-date.cpp:313
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr "গণনাৰ সময়সীমাটোৰ প্ৰথম দিনটো, সাৰ্বজনীন পছন্দবোৰত ছেট কৰাৰ দৰে."
 
 #: bindings/guile/date-utilities.scm:750
-#: libgnucash/engine/gnc-option-date.cpp:319
+#: libgnucash/engine/gnc-option-date.cpp:320
 msgid "End of accounting period"
 msgstr "হিচাপৰ সময়সীমাৰ শেষ"
 
 #: bindings/guile/date-utilities.scm:753
-#: libgnucash/engine/gnc-option-date.cpp:320
+#: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr "গণনাৰ সময়সীমাটোৰ অন্তিম দিনটো, সাৰ্বজনীন পছন্দবোৰত ছেট কৰাৰ দৰে."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
-#: libgnucash/engine/gnc-option-date.cpp:167
+#: libgnucash/engine/gnc-option-date.cpp:168
 msgid "Start of this month"
 msgstr "এই মাহটোৰ আৰম্ভনি"
 
 #: bindings/guile/date-utilities.scm:760
-#: libgnucash/engine/gnc-option-date.cpp:168
+#: libgnucash/engine/gnc-option-date.cpp:169
 msgid "First day of the current month."
 msgstr "চলিত মাহৰ প্ৰথম দিনটো."
 
 #: bindings/guile/date-utilities.scm:764
 #: gnucash/gnome-utils/gnc-period-select.c:82
-#: libgnucash/engine/gnc-option-date.cpp:175
+#: libgnucash/engine/gnc-option-date.cpp:176
 msgid "End of this month"
 msgstr "এই মাহটোৰ শেষ"
 
 #: bindings/guile/date-utilities.scm:767
-#: libgnucash/engine/gnc-option-date.cpp:176
+#: libgnucash/engine/gnc-option-date.cpp:177
 msgid "Last day of the current month."
 msgstr "চলিত মাহৰ অন্তিম দিনটো"
 
 #: bindings/guile/date-utilities.scm:771
 #: gnucash/gnome-utils/gnc-period-select.c:67
-#: libgnucash/engine/gnc-option-date.cpp:183
+#: libgnucash/engine/gnc-option-date.cpp:184
 msgid "Start of previous month"
 msgstr "এই আগৰ মাহৰ আৰম্ভনি"
 
 #: bindings/guile/date-utilities.scm:774
-#: libgnucash/engine/gnc-option-date.cpp:184
+#: libgnucash/engine/gnc-option-date.cpp:185
 msgid "First day of the previous month."
 msgstr "আগৰ মাহৰ প্ৰথম দিনটো"
 
 #: bindings/guile/date-utilities.scm:778
 #: gnucash/gnome-utils/gnc-period-select.c:83
-#: libgnucash/engine/gnc-option-date.cpp:191
+#: libgnucash/engine/gnc-option-date.cpp:192
 msgid "End of previous month"
 msgstr "আগৰ মাহৰ শেষ"
 
 #: bindings/guile/date-utilities.scm:781
-#: libgnucash/engine/gnc-option-date.cpp:192
+#: libgnucash/engine/gnc-option-date.cpp:193
 msgid "Last day of previous month."
 msgstr "আগৰ মাহৰ অন্তিম দিনটো"
 
 #: bindings/guile/date-utilities.scm:785
-#: libgnucash/engine/gnc-option-date.cpp:215
+#: libgnucash/engine/gnc-option-date.cpp:216
 msgid "Start of current quarter"
 msgstr "চলিত তিনি মাহৰ আৰম্ভনিত "
 
 #: bindings/guile/date-utilities.scm:788
-#: libgnucash/engine/gnc-option-date.cpp:216
+#: libgnucash/engine/gnc-option-date.cpp:217
 msgid "First day of the current quarterly accounting period."
 msgstr "চলিত তিনিমহীয়াকৈ গণনা কৰা সময়সীমাটোৰ প্ৰথম দিনটো."
 
 #: bindings/guile/date-utilities.scm:792
-#: libgnucash/engine/gnc-option-date.cpp:223
+#: libgnucash/engine/gnc-option-date.cpp:224
 msgid "End of current quarter"
 msgstr "চলিত তিনি মাহৰ শেষত"
 
 #: bindings/guile/date-utilities.scm:795
-#: libgnucash/engine/gnc-option-date.cpp:224
+#: libgnucash/engine/gnc-option-date.cpp:225
 msgid "Last day of the current quarterly accounting period."
 msgstr "চলিত তিনিমহীয়াকৈ গণনা কৰা সময়সীমাটোৰ অন্তিম দিনটো."
 
 #: bindings/guile/date-utilities.scm:799
 #: gnucash/gnome-utils/gnc-period-select.c:69
-#: libgnucash/engine/gnc-option-date.cpp:231
+#: libgnucash/engine/gnc-option-date.cpp:232
 msgid "Start of previous quarter"
 msgstr "আগৰ তিনি মাহৰ আৰম্ভনি"
 
 #: bindings/guile/date-utilities.scm:802
-#: libgnucash/engine/gnc-option-date.cpp:232
+#: libgnucash/engine/gnc-option-date.cpp:233
 msgid "First day of the previous quarterly accounting period."
 msgstr "আগৰ তিনিমহীয়াকৈ গণনা কৰা সময়সীমাটোৰ প্ৰথম দিনটো."
 
 #: bindings/guile/date-utilities.scm:806
 #: gnucash/gnome-utils/gnc-period-select.c:85
-#: libgnucash/engine/gnc-option-date.cpp:239
+#: libgnucash/engine/gnc-option-date.cpp:240
 msgid "End of previous quarter"
 msgstr "আগৰ তিনি মাহৰ শেষ"
 
 #: bindings/guile/date-utilities.scm:809
-#: libgnucash/engine/gnc-option-date.cpp:240
+#: libgnucash/engine/gnc-option-date.cpp:241
 msgid "Last day of previous quarterly accounting period."
 msgstr "আগৰ তিনিমহীয়াকৈ গণনা কৰা সময়সীমাটোৰ অন্তিম দিনটো."
 
 #: bindings/guile/date-utilities.scm:813
 #: gnucash/gnome-utils/gnc-period-select.c:65
 #: gnucash/gnome-utils/gnc-period-select.c:81
-#: libgnucash/engine/gnc-option-date.cpp:79
+#: libgnucash/engine/gnc-option-date.cpp:80
 msgid "Today"
 msgstr "আজিৰ দিনটো"
 
 #: bindings/guile/date-utilities.scm:815
-#: libgnucash/engine/gnc-option-date.cpp:80
+#: libgnucash/engine/gnc-option-date.cpp:81
 msgid "The current date."
 msgstr "চলিত তাৰিখটো."
 
@@ -1120,12 +1120,12 @@ msgid "existing account"
 msgstr "বর্তি থকা একাউন্ট"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1259
-#: gnucash/gnome/business-gnome-utils.c:696
+#: gnucash/gnome/business-gnome-utils.c:698
 msgid "Yes"
 msgstr "হয়"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1262
-#: gnucash/gnome/business-gnome-utils.c:698
+#: gnucash/gnome/business-gnome-utils.c:700
 #: gnucash/report/reports/standard/investment-lots.scm:265
 #: gnucash/report/reports/standard/investment-lots.scm:382
 msgid "No"
@@ -1954,7 +1954,7 @@ msgstr "ৰছিদ"
 msgid "Invoice"
 msgstr "ইনভইছ"
 
-#: gnucash/gnome/business-gnome-utils.c:580 gnucash/gnome/gnc-split-reg.c:648
+#: gnucash/gnome/business-gnome-utils.c:582 gnucash/gnome/gnc-split-reg.c:648
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:657
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
@@ -1967,7 +1967,7 @@ msgstr "ইনভইছ"
 msgid "None"
 msgstr "কোনো নহয়"
 
-#: gnucash/gnome/business-gnome-utils.c:700
+#: gnucash/gnome/business-gnome-utils.c:702
 msgid "Use Global"
 msgstr "গ্ল'বেল ব্যৱহাৰ কৰক"
 
@@ -2063,15 +2063,19 @@ msgstr ""
 "এই লেনদেনটো ব্যৱসায়ী এজনলৈ নিৰ্ধাৰণ কৰাটো দৰকাৰী. অনুগ্ৰহ কৰি তলৰ ব্যৱসায়ীজন "
 "নিৰ্বাচন কৰক."
 
-#: gnucash/gnome/dialog-commodities.c:183
+#: gnucash/gnome/dialog-commodities.cpp:183
+#, fuzzy
+#| msgid ""
+#| "That commodity is currently used by at least one of your accounts. You "
+#| "may not delete it."
 msgid ""
-"That commodity is currently used by at least one of your accounts. You may "
-"not delete it."
+"This commodity is currently used by the following accounts. You may not "
+"delete it.\n"
 msgstr ""
 "আপোনাৰ একাউন্টবোৰৰ অতিকমেও এটাই বৰ্তমান সেই সামগ্ৰীটো ব্যৱহাৰ কৰি আছে. আপুনি এইটো "
 "ডিলিট কৰিব নোৱাৰে."
 
-#: gnucash/gnome/dialog-commodities.c:197
+#: gnucash/gnome/dialog-commodities.cpp:201
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
@@ -2079,19 +2083,19 @@ msgstr ""
 "এই সামগ্ৰীটোৰ দামৰ উদ্ধৃতিবোৰ আছে. আপুনি নিৰ্বাচিত সামগ্ৰী আৰু ইয়াৰ দামৰ উদ্ধৃতিবোৰ "
 "ডিলিট কৰিব বুলি নিশ্চিতনে?"
 
-#: gnucash/gnome/dialog-commodities.c:204
+#: gnucash/gnome/dialog-commodities.cpp:208
 msgid "Are you sure you want to delete the selected commodity?"
 msgstr "নিৰ্বাচিত সামগ্ৰীটো ডিলিট কৰিব বুলি নিশ্চিতনে?"
 
-#: gnucash/gnome/dialog-commodities.c:213
+#: gnucash/gnome/dialog-commodities.cpp:217
 msgid "Delete commodity?"
 msgstr "সামগ্ৰী ডিলিট কৰক?"
 
-#: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:164
+#: gnucash/gnome/dialog-commodities.cpp:221 gnucash/gnome/dialog-doclink.c:164
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
 #: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
 #: gnucash/gnome/gnc-plugin-budget.c:321
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1647
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1660
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1061
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1875
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
@@ -2176,7 +2180,7 @@ msgstr "সামগ্ৰী ডিলিট কৰক?"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2101
 #: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.cpp:1535
+#: gnucash/register/ledger-core/split-register-control.cpp:1577
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2184,9 +2188,9 @@ msgstr "সামগ্ৰী ডিলিট কৰক?"
 msgid "_Cancel"
 msgstr "_বাতিল কৰক"
 
-#: gnucash/gnome/dialog-commodities.c:218
+#: gnucash/gnome/dialog-commodities.cpp:222
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1648
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1661
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1062
 #: gnucash/gtkbuilder/dialog-account.glade:396
 #: gnucash/gtkbuilder/dialog-billterms.glade:476
@@ -3901,7 +3905,7 @@ msgstr ""
 "চলিত লেনদেনৰ নমুনাটো সলনি কৰা হৈছে. আপুনি সলনিবোৰ ৰেকৰ্ড কৰিব বিচাৰিব নেকি?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1847
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:233
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:234
 msgid "Scheduled Transactions"
 msgstr "লেনদেনবোৰৰ সময়সূচী নিৰ্ধাৰণ কৰা হল"
 
@@ -4222,7 +4226,7 @@ msgstr ""
 msgid "Accounts"
 msgstr "একাউন্টবোৰ কৰক"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1290
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1303
 #, fuzzy, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
@@ -4230,27 +4234,27 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr "আপুনি বৰ্তি থকা লেনদেন এটা অভাৰৰাইট কৰিব. আপুনি সেইটো কৰিব বুলি নিশ্চিতনে?"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1298
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1311
 #, fuzzy
 msgid "_Pick another account"
 msgstr "_বদলি একাউন্ট নিৰ্বাচন কৰক"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1299
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1312
 msgid "_Do it anyway"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1381
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1523
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1394
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1536
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1044
 msgid "(no name)"
 msgstr "(নাম নোহোৱা)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1393
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1406
 #, c-format
 msgid "Deleting account %s"
 msgstr "ডিলিট হোৱা %s একাউন্টটো"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1513
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1526
 msgid ""
 "The list below shows objects which make use of the account which you want to "
 "delete.\n"
@@ -4259,7 +4263,7 @@ msgid ""
 "of another account"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1526
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1539
 #, c-format
 msgid ""
 "The account \"%s\" has more than one subaccount.\n"
@@ -4267,40 +4271,40 @@ msgid ""
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1586
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1599
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "%s একাউন্টটো ডিলিট কৰা হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1595
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1608
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "এই একাউন্টটোৰ সকলোবোৰ লেনদেন %s একাউন্টটোলৈ নিয়া হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1602
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1615
 msgid "All transactions in this account will be deleted."
 msgstr "এই একাউন্টটোত সকলোবোৰ লেনদেন ডিলিট কৰা হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1611
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1624
 #, fuzzy, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "ইয়াৰ সকলোবোৰ উপ-একাউন্ট %s একাউন্টটোলৈ নিয়া হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1617
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1630
 #, fuzzy
 msgid "Its subaccount will be deleted."
 msgstr "ইয়াৰ সকলোবোৰ উপ-একাউন্ট ডিলিট কৰা হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1621
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "ইয়াৰ সকলোবোৰ উপ-একাউন্টৰ লেনদেনবোৰ %s একাউন্টটোলৈ নিয়া হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1628
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1641
 msgid "All sub-account transactions will be deleted."
 msgstr "ইয়াৰ সকলোবোৰ উপ-একাউন্টৰ লেনদেনবোৰ ডিলিট কৰা হব."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1647
 msgid "Are you sure you want to do this?"
 msgstr "আপুনি এইটো কৰিব বিচাৰে বুলি নিশ্চিতনে?"
 
@@ -5415,34 +5419,34 @@ msgstr "সহজ ইনভইছ"
 msgid "Fancy Invoice"
 msgstr "শুৱনি ইনভইছ"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:398
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 #, fuzzy
 msgid "_New Schedule"
 msgstr "_নিৰ্ধাৰণ কৰা হল"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:404
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 #, fuzzy
 msgid "_Edit Schedule"
 msgstr "_নিৰ্ধাৰণ কৰা হল"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:410
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:411
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:65
 #, fuzzy
 msgid "_Delete Schedule"
 msgstr "_নিৰ্ধাৰণ কৰা হল"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:492
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:493
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
 msgstr "লেনেদেনবোৰ"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:562
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:565
 msgid "Upcoming Transactions"
 msgstr "হবলগীয়া লেনদেন"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:927
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:933
 #, fuzzy
 #| msgid "Do you really want to delete this scheduled transaction?"
 msgid "Do you really want to delete this scheduled transaction?"
@@ -9569,10 +9573,11 @@ msgid "Alpha Vantage API key"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
+#: gnucash/gtkbuilder/dialog-preferences.glade:3662
 #: gnucash/gtkbuilder/dialog-preferences.glade:3674
 msgid ""
 "Alpha Vantage requires an API key to use their service. You can obtain a key "
-"by registering for a free account at the Alpha Vantage website, https://"
+"by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
 
@@ -16048,13 +16053,6 @@ msgstr ""
 msgid "Windows"
 msgstr "উইণ্ডোজ"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3662
-msgid ""
-"Alpha Vantage requires an API key to use their service. You can obtain a key "
-"by registering for a free account at the Alpha Vantage website, https://www."
-"alphavantage.co/support/#api-key."
-msgstr ""
-
 #: gnucash/gtkbuilder/dialog-preferences.glade:3711
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
 #, fuzzy
@@ -20512,13 +20510,11 @@ msgstr ""
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "আপোনাৰ মেপ কৰা পছন্দবোৰ GnuCash য়ে ছেভ কৰিবলৈ সমৰ্থ নহয়."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3569
-#, c-format
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3568
 msgid "There was a problem with the import."
 msgstr "আমদানিটোত এটা সমস্যা আছিল."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3571
-#, c-format
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3569
 msgid "QIF Import Completed."
 msgstr "QIF আমদানি সম্পূৰ্ণ হল."
 
@@ -21376,68 +21372,74 @@ msgstr "STCG"
 msgid "Dist"
 msgstr "ডিষ্ট"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:61
+#: gnucash/register/ledger-core/split-register-control.cpp:76
+msgid ""
+"This transaction cannot be balanced: The imbalance is a fraction smaller "
+"than the commodity allows."
+msgstr ""
+
+#: gnucash/register/ledger-core/split-register-control.cpp:90
 msgid "Rebalance Transaction"
 msgstr "লেনডেনটো পুনৰ পৰিমাণ কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:62
+#: gnucash/register/ledger-core/split-register-control.cpp:91
 msgid "The current transaction is not balanced."
 msgstr "বৰ্তমানৰ লেনডেনটো সাম্য নহয়."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:140
+#: gnucash/register/ledger-core/split-register-control.cpp:172
 msgid "Balance it _manually"
 msgstr "হাতেৰে সাম্য কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:142
+#: gnucash/register/ledger-core/split-register-control.cpp:174
 msgid "Let GnuCash _add an adjusting split"
 msgstr "GnuCash ক এটা থিক কৰিব পৰা স্প্লিট যোগ কৰিব দিয়ক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:147
+#: gnucash/register/ledger-core/split-register-control.cpp:179
 msgid "Adjust current account _split total"
 msgstr "বৰ্তমানৰ একাউন্টৰ মুঠ স্প্লিট থিক কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:153
+#: gnucash/register/ledger-core/split-register-control.cpp:185
 msgid "Adjust _other account split total"
 msgstr "অন্য একাউন্টৰ মুঠ স্প্লিট থিক কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:164
+#: gnucash/register/ledger-core/split-register-control.cpp:196
 msgid "_Rebalance"
 msgstr "পুনৰ পৰিমাণ কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1305
-#: gnucash/register/ledger-core/split-register-control.cpp:1318
+#: gnucash/register/ledger-core/split-register-control.cpp:1347
+#: gnucash/register/ledger-core/split-register-control.cpp:1360
 msgid "This register does not support editing exchange rates."
 msgstr "এই পঞ্জীয়নটোৱে সালসলনি কৰা হাৰবোৰ সম্পাদনা কৰাটো সমৰ্থন নকৰে."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1344
+#: gnucash/register/ledger-core/split-register-control.cpp:1386
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr "ইয়াৰ সালসলনিৰ হাৰ পৰিবৰ্তন কৰিবলৈ আপুনি স্প্লিট এটা নিৰ্বাচন কৰাটো প্ৰয়োজনীয়"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1359
-#: gnucash/register/ledger-core/split-register-control.cpp:1434
+#: gnucash/register/ledger-core/split-register-control.cpp:1401
+#: gnucash/register/ledger-core/split-register-control.cpp:1476
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr ""
 "ইয়াৰ সালসলনিৰ হাৰবোৰ পৰিবৰ্তন কৰিবলৈ আপুনি এটা লেনদেন প্ৰসাৰিত কৰাটো প্ৰয়োজনীয়."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1371
+#: gnucash/register/ledger-core/split-register-control.cpp:1413
 msgid "The entered account could not be found."
 msgstr "ভৰোৱা একাউন্টটো পোৱা নগল"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1406
-#: gnucash/register/ledger-core/split-register-control.cpp:1419
+#: gnucash/register/ledger-core/split-register-control.cpp:1448
+#: gnucash/register/ledger-core/split-register-control.cpp:1461
 msgid "The two currencies involved equal each other."
 msgstr "জড়িত হোৱা মুদ্ৰা দুটা এটা আনটোৰ সমান."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1470
+#: gnucash/register/ledger-core/split-register-control.cpp:1512
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr "স্প্লিটৰ পৰিমাণটো শূন্য, গতিকে কোনো সালসলনিৰ হাৰ দৰকাৰী নহয়."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1519
+#: gnucash/register/ledger-core/split-register-control.cpp:1561
 msgid "Save the changed transaction?"
 msgstr "সলনি কৰা লেনদেনবোৰ ছেভ কৰেনে?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1521
+#: gnucash/register/ledger-core/split-register-control.cpp:1563
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -21446,19 +21448,19 @@ msgstr ""
 "চলিত লেনদেনটো সলনি কৰা হৈছে. এটা নতুন লেনদেনলৈ যোৱা, সলনিবোৰ আওকাণ কৰা, বা "
 "সলনি কৰা লেনদেনটোলৈ উভতি যোৱাৰ আগতে আপুনি সলনিবোৰ ৰেকৰ্ড কৰিব বিচাৰে নেকি?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1534
+#: gnucash/register/ledger-core/split-register-control.cpp:1576
 msgid "_Discard Changes"
 msgstr "সলনিবোৰ উপেক্ষিত কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1536
+#: gnucash/register/ledger-core/split-register-control.cpp:1578
 msgid "_Record Changes"
 msgstr "সলনিবোৰ ৰেকৰ্ড কৰক"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1823
+#: gnucash/register/ledger-core/split-register-control.cpp:1865
 msgid "Mark split as unreconciled?"
 msgstr "স্প্লিটটো পুনৰসংযোজিত নোহোৱা হিচাপে চিহ্নিত কৰেনে?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1825
+#: gnucash/register/ledger-core/split-register-control.cpp:1867
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
@@ -21466,7 +21468,7 @@ msgstr ""
 "আপুনি পুনৰসংযোজিত স্প্লিট এটা পুনৰসংযোজন নকৰা হিচাপে চিহ্নিত কৰিব ওলাইছে. এইটোৱে "
 "ভৱিষ্যতৰ পুনৰসংযোজনটো কঠিন কৰি তুলিব পাৰে! এই সলনিটোৰ সৈতে অব্যাহত থাকক?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1842
+#: gnucash/register/ledger-core/split-register-control.cpp:1884
 msgid "_Unreconcile"
 msgstr "পুনৰসংযোজন বাতিল কৰক"
 
@@ -31016,78 +31018,78 @@ msgstr ""
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "এই ৰিপোৰ্টৰ কৰণে কোনো বিকল্প নাই."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:352
+#: libgnucash/app-utils/gnc-quotes.cpp:353
 msgid "Finance::Quote retrieval failed with error "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:370
-#: libgnucash/app-utils/gnc-quotes.cpp:846
+#: libgnucash/app-utils/gnc-quotes.cpp:371
+#: libgnucash/app-utils/gnc-quotes.cpp:856
 msgid "Finance::Quote returned no data and set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:372
+#: libgnucash/app-utils/gnc-quotes.cpp:373
 msgid "Finance::Quote returned an error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:376
+#: libgnucash/app-utils/gnc-quotes.cpp:377
 msgid "Finance::Quote reported failure set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:378
+#: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Finance::Quote reported failure with error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:381
+#: libgnucash/app-utils/gnc-quotes.cpp:382
 msgid "Finance::Quote returned a quote with no currency."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:384
+#: libgnucash/app-utils/gnc-quotes.cpp:385
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:387
+#: libgnucash/app-utils/gnc-quotes.cpp:388
 msgid "Finance::Quote returned a quote with no price element."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:390
+#: libgnucash/app-utils/gnc-quotes.cpp:391
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:394
+#: libgnucash/app-utils/gnc-quotes.cpp:395
 #, fuzzy
 #| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
 msgstr "%s ত প্ৰৱেশ কৰোতে এটা ভুল হৈছিল."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:403
+#: libgnucash/app-utils/gnc-quotes.cpp:404
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:489
+#: libgnucash/app-utils/gnc-quotes.cpp:490
 msgid "Currency quotes requires at least two currencies"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:748
 #: libgnucash/app-utils/gnc-quotes.cpp:758
+#: libgnucash/app-utils/gnc-quotes.cpp:768
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr ""
 
 #. Translators: This labels the return value of a query to Finance::Quote written in an error.
-#: libgnucash/app-utils/gnc-quotes.cpp:751
-#: libgnucash/app-utils/gnc-quotes.cpp:766
+#: libgnucash/app-utils/gnc-quotes.cpp:761
+#: libgnucash/app-utils/gnc-quotes.cpp:776
 msgid "Result:"
 msgstr ""
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
-#: libgnucash/app-utils/gnc-quotes.cpp:761
+#: libgnucash/app-utils/gnc-quotes.cpp:771
 msgid "Error message:"
 msgstr ""
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:806
+#: libgnucash/app-utils/gnc-quotes.cpp:816
 #, fuzzy
 #| msgid "Date required."
 msgctxt "Finance::Quote"
@@ -31095,14 +31097,14 @@ msgid "required"
 msgstr "তাৰিখৰ প্ৰয়োজন হল."
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:808
+#: libgnucash/app-utils/gnc-quotes.cpp:818
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "_পুনৰসংযোজন বাতিল কৰা হল"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:810
+#: libgnucash/app-utils/gnc-quotes.cpp:820
 #, fuzzy
 #| msgid "End of this year"
 msgctxt "Finance::Quote"
@@ -31110,18 +31112,18 @@ msgid "one of these"
 msgstr "এই বছৰটোৰ শেষ"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:812
+#: libgnucash/app-utils/gnc-quotes.cpp:822
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "দলালি"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:819
+#: libgnucash/app-utils/gnc-quotes.cpp:829
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:821
+#: libgnucash/app-utils/gnc-quotes.cpp:831
 #, fuzzy
 #| msgid "Symbol"
 msgctxt "Finance::Quote"
@@ -31129,7 +31131,7 @@ msgid "symbol: "
 msgstr "প্ৰতীক"
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:823
+#: libgnucash/app-utils/gnc-quotes.cpp:833
 #, fuzzy
 #| msgid "Date: "
 msgctxt "Finance::Quote"
@@ -31137,7 +31139,7 @@ msgid "date: "
 msgstr "তাৰিখ: "
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:825
+#: libgnucash/app-utils/gnc-quotes.cpp:835
 #, fuzzy
 #| msgid "Currency"
 msgctxt "Finance::Quote"
@@ -31145,7 +31147,7 @@ msgid "currency: "
 msgstr "মুদ্ৰা"
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:831
+#: libgnucash/app-utils/gnc-quotes.cpp:841
 #, fuzzy
 #| msgid "last %s"
 msgctxt "Finance::Quote"
@@ -31153,39 +31155,39 @@ msgid "last: "
 msgstr "অন্তিম %s"
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:833
+#: libgnucash/app-utils/gnc-quotes.cpp:843
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:835
+#: libgnucash/app-utils/gnc-quotes.cpp:845
 #, fuzzy
 #| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "দাম"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:855
+#: libgnucash/app-utils/gnc-quotes.cpp:865
 msgid "Finance::Quote reported a failure for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:858
+#: libgnucash/app-utils/gnc-quotes.cpp:868
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:921
+#: libgnucash/app-utils/gnc-quotes.cpp:931
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:927
+#: libgnucash/app-utils/gnc-quotes.cpp:937
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:933
+#: libgnucash/app-utils/gnc-quotes.cpp:943
 #, fuzzy
 #| msgid "Unrecognized or inconsistent format."
 msgid "Unrecognized Finance::Quote Error: "
@@ -31485,131 +31487,131 @@ msgstr "ইনভইছ এখনৰ পৰা উলিয়াওক. ইনভ�
 msgid " (posted)"
 msgstr "(পোষ্টটেড)"
 
-#: libgnucash/engine/gnc-option-date.cpp:87
+#: libgnucash/engine/gnc-option-date.cpp:88
 msgid "One Week Ago"
 msgstr "এসপ্তাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:88
+#: libgnucash/engine/gnc-option-date.cpp:89
 msgid "One Week Ago."
 msgstr "এসপ্তাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:95
+#: libgnucash/engine/gnc-option-date.cpp:96
 msgid "One Week Ahead"
 msgstr "এসপ্তাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:96
+#: libgnucash/engine/gnc-option-date.cpp:97
 msgid "One Week Ahead."
 msgstr "এসপ্তাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:103
+#: libgnucash/engine/gnc-option-date.cpp:104
 msgid "One Month Ago"
 msgstr "এমাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:104
+#: libgnucash/engine/gnc-option-date.cpp:105
 msgid "One Month Ago."
 msgstr "এমাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:111
+#: libgnucash/engine/gnc-option-date.cpp:112
 msgid "One Month Ahead"
 msgstr "এমাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:112
+#: libgnucash/engine/gnc-option-date.cpp:113
 msgid "One Month Ahead."
 msgstr "এমাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:119
+#: libgnucash/engine/gnc-option-date.cpp:120
 msgid "Three Months Ago"
 msgstr "তিনিমাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:120
+#: libgnucash/engine/gnc-option-date.cpp:121
 msgid "Three Months Ago."
 msgstr "তিনিমাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:127
+#: libgnucash/engine/gnc-option-date.cpp:128
 msgid "Three Months Ahead"
 msgstr "তিনিমাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:128
+#: libgnucash/engine/gnc-option-date.cpp:129
 msgid "Three Months Ahead."
 msgstr "তিনিমাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:135
+#: libgnucash/engine/gnc-option-date.cpp:136
 msgid "Six Months Ago"
 msgstr "ছমাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:136
+#: libgnucash/engine/gnc-option-date.cpp:137
 msgid "Six Months Ago."
 msgstr "ছমাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:143
+#: libgnucash/engine/gnc-option-date.cpp:144
 msgid "Six Months Ahead"
 msgstr "ছমাহ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:144
+#: libgnucash/engine/gnc-option-date.cpp:145
 msgid "Six Months Ahead."
 msgstr "ছমাহ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:151
+#: libgnucash/engine/gnc-option-date.cpp:152
 msgid "One Year Ago"
 msgstr "এবছৰ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:152
+#: libgnucash/engine/gnc-option-date.cpp:153
 msgid "One Year Ago."
 msgstr "এবছৰ আগত."
 
-#: libgnucash/engine/gnc-option-date.cpp:159
+#: libgnucash/engine/gnc-option-date.cpp:160
 msgid "One Year Ahead"
 msgstr "এবছৰ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:160
+#: libgnucash/engine/gnc-option-date.cpp:161
 msgid "One Year Ahead."
 msgstr "এবছৰ আগত"
 
-#: libgnucash/engine/gnc-option-date.cpp:199
+#: libgnucash/engine/gnc-option-date.cpp:200
 msgid "Start of next month"
 msgstr "পৰৱৰ্তী মাহটোৰ আৰম্ভনি"
 
-#: libgnucash/engine/gnc-option-date.cpp:200
+#: libgnucash/engine/gnc-option-date.cpp:201
 msgid "First day of the next month."
 msgstr "পৰৱৰ্তী মাহৰ প্ৰথম দিনটো"
 
-#: libgnucash/engine/gnc-option-date.cpp:207
+#: libgnucash/engine/gnc-option-date.cpp:208
 msgid "End of next month"
 msgstr "পৰৱৰ্তী মাহটোৰ শেষত"
 
-#: libgnucash/engine/gnc-option-date.cpp:208
+#: libgnucash/engine/gnc-option-date.cpp:209
 msgid "Last day of next month."
 msgstr "পৰৱৰ্তী মাহৰ অন্তিম দিনটো"
 
-#: libgnucash/engine/gnc-option-date.cpp:247
+#: libgnucash/engine/gnc-option-date.cpp:248
 msgid "Start of next quarter"
 msgstr "পৰৱৰ্তী তিনি মাহৰ আৰম্ভনি"
 
-#: libgnucash/engine/gnc-option-date.cpp:248
+#: libgnucash/engine/gnc-option-date.cpp:249
 msgid "First day of the next quarterly accounting period."
 msgstr "পৰৱৰ্তী তিনিমহীয়াকৈ গণনা কৰা সময়সীমাটোৰ প্ৰথম দিনটো."
 
-#: libgnucash/engine/gnc-option-date.cpp:255
+#: libgnucash/engine/gnc-option-date.cpp:256
 msgid "End of next quarter"
 msgstr "পৰৱৰ্তী তিনি মাহৰ শেষত"
 
-#: libgnucash/engine/gnc-option-date.cpp:256
+#: libgnucash/engine/gnc-option-date.cpp:257
 msgid "Last day of next quarterly accounting period."
 msgstr "পৰৱৰ্তী তিনিমহীয়াকৈ গণনা কৰা সময়সীমাটোৰ অন্তিম দিনটো."
 
-#: libgnucash/engine/gnc-option-date.cpp:295
+#: libgnucash/engine/gnc-option-date.cpp:296
 msgid "Start of next year"
 msgstr "পৰৱৰ্তী বৰ্ষটোৰ আৰম্ভনিত"
 
-#: libgnucash/engine/gnc-option-date.cpp:296
+#: libgnucash/engine/gnc-option-date.cpp:297
 msgid "First day of the next calendar year."
 msgstr "পৰৱৰ্তী কেলেণ্ডাৰ বৰ্ষৰ প্ৰথম দিনটো."
 
-#: libgnucash/engine/gnc-option-date.cpp:303
+#: libgnucash/engine/gnc-option-date.cpp:304
 msgid "End of next year"
 msgstr "পৰৱৰ্তী বৰ্ষটোৰ শেষত"
 
-#: libgnucash/engine/gnc-option-date.cpp:304
+#: libgnucash/engine/gnc-option-date.cpp:305
 msgid "Last day of the next calendar year."
 msgstr "পৰৱৰ্তী কেলেণ্ডাৰ বৰ্ষৰ অন্তিম দিনটো."
 

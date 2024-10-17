@@ -10,10 +10,10 @@
 # toddchou <toddchou@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.9-pot2\n"
+"Project-Id-Version: GnuCash 5.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-09-22 14:30-0700\n"
+"POT-Creation-Date: 2024-10-17 17:12+0200\n"
 "PO-Revision-Date: 2024-08-04 05:10+0000\n"
 "Last-Translator: toddchou <toddchou@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -52,163 +52,163 @@ msgstr ""
 
 #: bindings/guile/date-utilities.scm:715
 #: gnucash/gnome-utils/gnc-period-select.c:70
-#: libgnucash/engine/gnc-option-date.cpp:263
+#: libgnucash/engine/gnc-option-date.cpp:264
 msgid "Start of this year"
 msgstr "今年年初"
 
 #: bindings/guile/date-utilities.scm:718
-#: libgnucash/engine/gnc-option-date.cpp:264
+#: libgnucash/engine/gnc-option-date.cpp:265
 msgid "First day of the current calendar year."
 msgstr "當前日曆年的第一天。"
 
 #: bindings/guile/date-utilities.scm:722
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/engine/gnc-option-date.cpp:271
+#: libgnucash/engine/gnc-option-date.cpp:272
 msgid "End of this year"
 msgstr "今年年底"
 
 #: bindings/guile/date-utilities.scm:725
-#: libgnucash/engine/gnc-option-date.cpp:272
+#: libgnucash/engine/gnc-option-date.cpp:273
 msgid "Last day of the current calendar year."
 msgstr "當前日曆年的最後一天。"
 
 #: bindings/guile/date-utilities.scm:729
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/engine/gnc-option-date.cpp:279
+#: libgnucash/engine/gnc-option-date.cpp:280
 msgid "Start of previous year"
 msgstr "去年年初"
 
 #: bindings/guile/date-utilities.scm:732
-#: libgnucash/engine/gnc-option-date.cpp:280
+#: libgnucash/engine/gnc-option-date.cpp:281
 msgid "First day of the previous calendar year."
 msgstr "前一日曆年的第一天。"
 
 #: bindings/guile/date-utilities.scm:736
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/engine/gnc-option-date.cpp:287
+#: libgnucash/engine/gnc-option-date.cpp:288
 msgid "End of previous year"
 msgstr "去年年底"
 
 #: bindings/guile/date-utilities.scm:739
-#: libgnucash/engine/gnc-option-date.cpp:288
+#: libgnucash/engine/gnc-option-date.cpp:289
 msgid "Last day of the previous calendar year."
 msgstr "前一日曆年的最後一天。"
 
 #: bindings/guile/date-utilities.scm:743
-#: libgnucash/engine/gnc-option-date.cpp:311
+#: libgnucash/engine/gnc-option-date.cpp:312
 msgid "Start of accounting period"
 msgstr "此次會計期間的起始日"
 
 #: bindings/guile/date-utilities.scm:746
-#: libgnucash/engine/gnc-option-date.cpp:312
+#: libgnucash/engine/gnc-option-date.cpp:313
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr "於全域偏好設定中指定的，會計期間的第一天。"
 
 #: bindings/guile/date-utilities.scm:750
-#: libgnucash/engine/gnc-option-date.cpp:319
+#: libgnucash/engine/gnc-option-date.cpp:320
 msgid "End of accounting period"
 msgstr "會計期間的結束日期"
 
 #: bindings/guile/date-utilities.scm:753
-#: libgnucash/engine/gnc-option-date.cpp:320
+#: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr "於全域偏好設定中指定的，會計期間的最後一天。"
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
-#: libgnucash/engine/gnc-option-date.cpp:167
+#: libgnucash/engine/gnc-option-date.cpp:168
 msgid "Start of this month"
 msgstr "本月月初"
 
 #: bindings/guile/date-utilities.scm:760
-#: libgnucash/engine/gnc-option-date.cpp:168
+#: libgnucash/engine/gnc-option-date.cpp:169
 msgid "First day of the current month."
 msgstr "當前月份的第一天。"
 
 #: bindings/guile/date-utilities.scm:764
 #: gnucash/gnome-utils/gnc-period-select.c:82
-#: libgnucash/engine/gnc-option-date.cpp:175
+#: libgnucash/engine/gnc-option-date.cpp:176
 msgid "End of this month"
 msgstr "本月月底"
 
 #: bindings/guile/date-utilities.scm:767
-#: libgnucash/engine/gnc-option-date.cpp:176
+#: libgnucash/engine/gnc-option-date.cpp:177
 msgid "Last day of the current month."
 msgstr "當前月份的最後一天。"
 
 #: bindings/guile/date-utilities.scm:771
 #: gnucash/gnome-utils/gnc-period-select.c:67
-#: libgnucash/engine/gnc-option-date.cpp:183
+#: libgnucash/engine/gnc-option-date.cpp:184
 msgid "Start of previous month"
 msgstr "上月月初"
 
 #: bindings/guile/date-utilities.scm:774
-#: libgnucash/engine/gnc-option-date.cpp:184
+#: libgnucash/engine/gnc-option-date.cpp:185
 msgid "First day of the previous month."
 msgstr "前一月份的第一天。"
 
 #: bindings/guile/date-utilities.scm:778
 #: gnucash/gnome-utils/gnc-period-select.c:83
-#: libgnucash/engine/gnc-option-date.cpp:191
+#: libgnucash/engine/gnc-option-date.cpp:192
 msgid "End of previous month"
 msgstr "上月月底"
 
 #: bindings/guile/date-utilities.scm:781
-#: libgnucash/engine/gnc-option-date.cpp:192
+#: libgnucash/engine/gnc-option-date.cpp:193
 msgid "Last day of previous month."
 msgstr "前一月份的最後一天。"
 
 #: bindings/guile/date-utilities.scm:785
-#: libgnucash/engine/gnc-option-date.cpp:215
+#: libgnucash/engine/gnc-option-date.cpp:216
 msgid "Start of current quarter"
 msgstr "本季季初"
 
 #: bindings/guile/date-utilities.scm:788
-#: libgnucash/engine/gnc-option-date.cpp:216
+#: libgnucash/engine/gnc-option-date.cpp:217
 msgid "First day of the current quarterly accounting period."
 msgstr "當前會計季度的第一天。"
 
 #: bindings/guile/date-utilities.scm:792
-#: libgnucash/engine/gnc-option-date.cpp:223
+#: libgnucash/engine/gnc-option-date.cpp:224
 msgid "End of current quarter"
 msgstr "本季季末"
 
 #: bindings/guile/date-utilities.scm:795
-#: libgnucash/engine/gnc-option-date.cpp:224
+#: libgnucash/engine/gnc-option-date.cpp:225
 msgid "Last day of the current quarterly accounting period."
 msgstr "當前會計季度的最後一天。"
 
 #: bindings/guile/date-utilities.scm:799
 #: gnucash/gnome-utils/gnc-period-select.c:69
-#: libgnucash/engine/gnc-option-date.cpp:231
+#: libgnucash/engine/gnc-option-date.cpp:232
 msgid "Start of previous quarter"
 msgstr "上季季初"
 
 #: bindings/guile/date-utilities.scm:802
-#: libgnucash/engine/gnc-option-date.cpp:232
+#: libgnucash/engine/gnc-option-date.cpp:233
 msgid "First day of the previous quarterly accounting period."
 msgstr "前一會計季度的第一天。"
 
 #: bindings/guile/date-utilities.scm:806
 #: gnucash/gnome-utils/gnc-period-select.c:85
-#: libgnucash/engine/gnc-option-date.cpp:239
+#: libgnucash/engine/gnc-option-date.cpp:240
 msgid "End of previous quarter"
 msgstr "上季季末"
 
 #: bindings/guile/date-utilities.scm:809
-#: libgnucash/engine/gnc-option-date.cpp:240
+#: libgnucash/engine/gnc-option-date.cpp:241
 msgid "Last day of previous quarterly accounting period."
 msgstr "前一會計季度的最後一天。"
 
 #: bindings/guile/date-utilities.scm:813
 #: gnucash/gnome-utils/gnc-period-select.c:65
 #: gnucash/gnome-utils/gnc-period-select.c:81
-#: libgnucash/engine/gnc-option-date.cpp:79
+#: libgnucash/engine/gnc-option-date.cpp:80
 msgid "Today"
 msgstr "今日"
 
 #: bindings/guile/date-utilities.scm:815
-#: libgnucash/engine/gnc-option-date.cpp:80
+#: libgnucash/engine/gnc-option-date.cpp:81
 msgid "The current date."
 msgstr "當前日期。"
 
@@ -1099,12 +1099,12 @@ msgid "existing account"
 msgstr "既存科目"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1259
-#: gnucash/gnome/business-gnome-utils.c:696
+#: gnucash/gnome/business-gnome-utils.c:698
 msgid "Yes"
 msgstr "是"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1262
-#: gnucash/gnome/business-gnome-utils.c:698
+#: gnucash/gnome/business-gnome-utils.c:700
 #: gnucash/report/reports/standard/investment-lots.scm:265
 #: gnucash/report/reports/standard/investment-lots.scm:382
 msgid "No"
@@ -1948,7 +1948,7 @@ msgstr "憑證"
 msgid "Invoice"
 msgstr "發票"
 
-#: gnucash/gnome/business-gnome-utils.c:580 gnucash/gnome/gnc-split-reg.c:648
+#: gnucash/gnome/business-gnome-utils.c:582 gnucash/gnome/gnc-split-reg.c:648
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:657
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
@@ -1961,7 +1961,7 @@ msgstr "發票"
 msgid "None"
 msgstr "無"
 
-#: gnucash/gnome/business-gnome-utils.c:700
+#: gnucash/gnome/business-gnome-utils.c:702
 msgid "Use Global"
 msgstr "使用全域設定"
 
@@ -2051,31 +2051,35 @@ msgid ""
 "below."
 msgstr "此項交易需指定一個供應商，請於下方選擇一個。"
 
-#: gnucash/gnome/dialog-commodities.c:183
+#: gnucash/gnome/dialog-commodities.cpp:183
+#, fuzzy
+#| msgid ""
+#| "That commodity is currently used by at least one of your accounts. You "
+#| "may not delete it."
 msgid ""
-"That commodity is currently used by at least one of your accounts. You may "
-"not delete it."
+"This commodity is currently used by the following accounts. You may not "
+"delete it.\n"
 msgstr "至少有一個科目在使用此商品，您不能將它刪除。"
 
-#: gnucash/gnome/dialog-commodities.c:197
+#: gnucash/gnome/dialog-commodities.cpp:201
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
 msgstr "這個商品已有報價，您確定要刪除選擇的商品及其報價？"
 
-#: gnucash/gnome/dialog-commodities.c:204
+#: gnucash/gnome/dialog-commodities.cpp:208
 msgid "Are you sure you want to delete the selected commodity?"
 msgstr "您確定要刪除選擇的商品？"
 
-#: gnucash/gnome/dialog-commodities.c:213
+#: gnucash/gnome/dialog-commodities.cpp:217
 msgid "Delete commodity?"
 msgstr "刪除商品？"
 
-#: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:164
+#: gnucash/gnome/dialog-commodities.cpp:221 gnucash/gnome/dialog-doclink.c:164
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
 #: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
 #: gnucash/gnome/gnc-plugin-budget.c:321
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1647
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1660
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1061
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1875
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
@@ -2160,7 +2164,7 @@ msgstr "刪除商品？"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2101
 #: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.cpp:1535
+#: gnucash/register/ledger-core/split-register-control.cpp:1577
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2168,9 +2172,9 @@ msgstr "刪除商品？"
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: gnucash/gnome/dialog-commodities.c:218
+#: gnucash/gnome/dialog-commodities.cpp:222
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1648
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1661
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1062
 #: gnucash/gtkbuilder/dialog-account.glade:396
 #: gnucash/gtkbuilder/dialog-billterms.glade:476
@@ -3831,7 +3835,7 @@ msgid ""
 msgstr "目前的範本交易經過修改，您想要記錄它的變更嗎？"
 
 #: gnucash/gnome/dialog-sx-editor.c:1847
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:233
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:234
 msgid "Scheduled Transactions"
 msgstr "排程交易"
 
@@ -4137,7 +4141,7 @@ msgstr "「檢查和修復」正在執行中，您確定要中斷嗎？"
 msgid "Accounts"
 msgstr "科目"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1290
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1303
 #, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
@@ -4147,26 +4151,26 @@ msgstr ""
 "「%s」科目和您想要轉自的科目使用不同的貨幣。\n"
 "您確定要這樣做嗎？"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1298
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1311
 msgid "_Pick another account"
 msgstr "選擇另一個科目(_P)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1299
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1312
 msgid "_Do it anyway"
 msgstr "不管，總之繼續(_D)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1381
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1523
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1394
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1536
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1044
 msgid "(no name)"
 msgstr "(未命名)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1393
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1406
 #, c-format
 msgid "Deleting account %s"
 msgstr "刪除科目 %s"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1513
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1526
 msgid ""
 "The list below shows objects which make use of the account which you want to "
 "delete.\n"
@@ -4178,7 +4182,7 @@ msgstr ""
 "在您刪除科目前，您必須刪除這些東西，或編輯這些相目，\n"
 "讓他們使用別的科目"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1526
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1539
 #, c-format
 msgid ""
 "The account \"%s\" has more than one subaccount.\n"
@@ -4189,39 +4193,39 @@ msgstr ""
 "\n"
 "删除該科目前請先删除所有的子科目或將其移至別處。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1586
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1599
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "科目 %s 將被刪除。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1595
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1608
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "所有這個科目的交易，都將被移到科目 %s 當中。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1602
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1615
 msgid "All transactions in this account will be deleted."
 msgstr "在這個科目中所有的交易將會被刪除。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1611
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1624
 #, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "這個科目的所有子科目將會移到科目 %s。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1617
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1630
 msgid "Its subaccount will be deleted."
 msgstr "這個科目的所有子科目將會被刪除。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1621
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "所有子科目的交易將會移到科目 %s。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1628
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1641
 msgid "All sub-account transactions will be deleted."
 msgstr "所有子科目的交易將會被刪除。"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1647
 msgid "Are you sure you want to do this?"
 msgstr "您確定要這麼作嗎？"
 
@@ -5244,37 +5248,37 @@ msgstr "簡單發票"
 msgid "Fancy Invoice"
 msgstr "精美的發票"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:398
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 #, fuzzy
 #| msgid "_Schedule"
 msgid "_New Schedule"
 msgstr "排程(_S)"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:404
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 #, fuzzy
 #| msgid "_Schedule"
 msgid "_Edit Schedule"
 msgstr "排程(_S)"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:410
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:411
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:65
 #, fuzzy
 #| msgid "_Schedule"
 msgid "_Delete Schedule"
 msgstr "排程(_S)"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:492
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:493
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
 msgstr "交易"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:562
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:565
 msgid "Upcoming Transactions"
 msgstr "接下來的交易"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:927
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:933
 #, fuzzy
 #| msgid "Do you really want to delete this scheduled transaction?"
 #| msgid_plural "Do you really want to delete %d scheduled transactions?"
@@ -9234,10 +9238,11 @@ msgid "Alpha Vantage API key"
 msgstr "Alpha Vantage API 金鑰"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
+#: gnucash/gtkbuilder/dialog-preferences.glade:3662
 #: gnucash/gtkbuilder/dialog-preferences.glade:3674
 msgid ""
 "Alpha Vantage requires an API key to use their service. You can obtain a key "
-"by registering for a free account at the Alpha Vantage website, https://"
+"by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
 
@@ -15336,13 +15341,6 @@ msgstr "在目前的頁籤旁開啟新頁籤，而非在最後端開啟。"
 msgid "Windows"
 msgstr "視窗"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3662
-msgid ""
-"Alpha Vantage requires an API key to use their service. You can obtain a key "
-"by registering for a free account at the Alpha Vantage website, https://www."
-"alphavantage.co/support/#api-key."
-msgstr ""
-
 #: gnucash/gtkbuilder/dialog-preferences.glade:3711
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
 msgid "Online Quotes"
@@ -19591,13 +19589,11 @@ msgstr ""
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash 無法儲存您的對應的偏好設定。"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3569
-#, c-format
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3568
 msgid "There was a problem with the import."
 msgstr "匯入時發生問題。"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3571
-#, c-format
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3569
 msgid "QIF Import Completed."
 msgstr "已完成 QIF 匯入。"
 
@@ -20420,67 +20416,73 @@ msgstr "短期資本利得"
 msgid "Dist"
 msgstr "分配"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:61
+#: gnucash/register/ledger-core/split-register-control.cpp:76
+msgid ""
+"This transaction cannot be balanced: The imbalance is a fraction smaller "
+"than the commodity allows."
+msgstr ""
+
+#: gnucash/register/ledger-core/split-register-control.cpp:90
 msgid "Rebalance Transaction"
 msgstr "重新結算交易"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:62
+#: gnucash/register/ledger-core/split-register-control.cpp:91
 msgid "The current transaction is not balanced."
 msgstr "目前的交易尚未結算。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:140
+#: gnucash/register/ledger-core/split-register-control.cpp:172
 msgid "Balance it _manually"
 msgstr "手動結算(_M)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:142
+#: gnucash/register/ledger-core/split-register-control.cpp:174
 msgid "Let GnuCash _add an adjusting split"
 msgstr "讓 GnuCash 新增或調整分割 (_A)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:147
+#: gnucash/register/ledger-core/split-register-control.cpp:179
 msgid "Adjust current account _split total"
 msgstr "調整目前科目分割加總(_S)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:153
+#: gnucash/register/ledger-core/split-register-control.cpp:185
 msgid "Adjust _other account split total"
 msgstr "調整其他科目分割加總(_O)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:164
+#: gnucash/register/ledger-core/split-register-control.cpp:196
 msgid "_Rebalance"
 msgstr "重新平衡(_R)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1305
-#: gnucash/register/ledger-core/split-register-control.cpp:1318
+#: gnucash/register/ledger-core/split-register-control.cpp:1347
+#: gnucash/register/ledger-core/split-register-control.cpp:1360
 msgid "This register does not support editing exchange rates."
 msgstr "此登錄簿不支援修改匯率。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1344
+#: gnucash/register/ledger-core/split-register-control.cpp:1386
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr "您需要選擇分割以修改它的匯率。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1359
-#: gnucash/register/ledger-core/split-register-control.cpp:1434
+#: gnucash/register/ledger-core/split-register-control.cpp:1401
+#: gnucash/register/ledger-core/split-register-control.cpp:1476
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr "您需要展開這個交易才能修改它的匯率。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1371
+#: gnucash/register/ledger-core/split-register-control.cpp:1413
 msgid "The entered account could not be found."
 msgstr "無法找到輸入的科目。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1406
-#: gnucash/register/ledger-core/split-register-control.cpp:1419
+#: gnucash/register/ledger-core/split-register-control.cpp:1448
+#: gnucash/register/ledger-core/split-register-control.cpp:1461
 msgid "The two currencies involved equal each other."
 msgstr "交易雙方是相同的貨幣。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1470
+#: gnucash/register/ledger-core/split-register-control.cpp:1512
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr "此分割的金額為零，因此不需要匯率。"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1519
+#: gnucash/register/ledger-core/split-register-control.cpp:1561
 msgid "Save the changed transaction?"
 msgstr "儲存變更過的交易？"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1521
+#: gnucash/register/ledger-core/split-register-control.cpp:1563
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -20489,19 +20491,19 @@ msgstr ""
 "目前的交易已經變更。在移動到新的交易前，您想要記錄他的變更，捨棄變更或是回到"
 "已變更的交易？"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1534
+#: gnucash/register/ledger-core/split-register-control.cpp:1576
 msgid "_Discard Changes"
 msgstr "捨棄變更(_D)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1536
+#: gnucash/register/ledger-core/split-register-control.cpp:1578
 msgid "_Record Changes"
 msgstr "記錄變更(_R)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1823
+#: gnucash/register/ledger-core/split-register-control.cpp:1865
 msgid "Mark split as unreconciled?"
 msgstr "將分割標記為未對帳？"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1825
+#: gnucash/register/ledger-core/split-register-control.cpp:1867
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
@@ -20509,7 +20511,7 @@ msgstr ""
 "您即將把已對帳交易改標記成未對帳。這麼做可能使未來的對帳很困難！繼續這個修"
 "改？"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1842
+#: gnucash/register/ledger-core/split-register-control.cpp:1884
 msgid "_Unreconcile"
 msgstr "未對帳(_U)"
 
@@ -29370,152 +29372,152 @@ msgstr "呼叫 GncQuotes::Report 時未代入來源。"
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "無可取得報價的商品。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:352
+#: libgnucash/app-utils/gnc-quotes.cpp:353
 msgid "Finance::Quote retrieval failed with error "
 msgstr "Finance::Quote 因以下錯誤而無法取得報價： "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:370
-#: libgnucash/app-utils/gnc-quotes.cpp:846
+#: libgnucash/app-utils/gnc-quotes.cpp:371
+#: libgnucash/app-utils/gnc-quotes.cpp:856
 msgid "Finance::Quote returned no data and set no error."
 msgstr "Finance::Quote 未返回任何資料無任何錯誤訊息。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:372
+#: libgnucash/app-utils/gnc-quotes.cpp:373
 msgid "Finance::Quote returned an error: "
 msgstr "Finance::Quote 返回以下錯誤： "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:376
+#: libgnucash/app-utils/gnc-quotes.cpp:377
 msgid "Finance::Quote reported failure set no error."
 msgstr "Finance::Quote 回報失敗但未設定錯誤訊息。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:378
+#: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Finance::Quote reported failure with error: "
 msgstr "Finance::Quote 回報失敗並返回以下錯誤訊息： "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:381
+#: libgnucash/app-utils/gnc-quotes.cpp:382
 msgid "Finance::Quote returned a quote with no currency."
 msgstr "Finance::Quote 返回了沒有幣別的報價。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:384
+#: libgnucash/app-utils/gnc-quotes.cpp:385
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr "Finance::Quote 返回了 GnuCash 不認得的貨幣。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:387
+#: libgnucash/app-utils/gnc-quotes.cpp:388
 msgid "Finance::Quote returned a quote with no price element."
 msgstr "Finance::Quote 返回了沒有價格資料的報價。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:390
+#: libgnucash/app-utils/gnc-quotes.cpp:391
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr "Finance::Quote 返回了 GnuCash 無法解析成數字的價格。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:394
+#: libgnucash/app-utils/gnc-quotes.cpp:395
 msgid "The quote has no error set."
 msgstr "取得報價時沒有錯誤產生。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:403
+#: libgnucash/app-utils/gnc-quotes.cpp:404
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr "無法取得以下商品的報價：\n"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:489
+#: libgnucash/app-utils/gnc-quotes.cpp:490
 msgid "Currency quotes requires at least two currencies"
 msgstr "貨幣報價最少需要兩種貨幣"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:748
 #: libgnucash/app-utils/gnc-quotes.cpp:758
+#: libgnucash/app-utils/gnc-quotes.cpp:768
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr "無法解析 Finance::Quote 所返回的錯誤訊息。"
 
 #. Translators: This labels the return value of a query to Finance::Quote written in an error.
-#: libgnucash/app-utils/gnc-quotes.cpp:751
-#: libgnucash/app-utils/gnc-quotes.cpp:766
+#: libgnucash/app-utils/gnc-quotes.cpp:761
+#: libgnucash/app-utils/gnc-quotes.cpp:776
 msgid "Result:"
 msgstr "結果："
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
-#: libgnucash/app-utils/gnc-quotes.cpp:761
+#: libgnucash/app-utils/gnc-quotes.cpp:771
 msgid "Error message:"
 msgstr "錯誤訊息："
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:806
+#: libgnucash/app-utils/gnc-quotes.cpp:816
 msgctxt "Finance::Quote"
 msgid "required"
 msgstr "必要"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:808
+#: libgnucash/app-utils/gnc-quotes.cpp:818
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "建議"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:810
+#: libgnucash/app-utils/gnc-quotes.cpp:820
 msgctxt "Finance::Quote"
 msgid "one of these"
 msgstr "需要其中之一"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:812
+#: libgnucash/app-utils/gnc-quotes.cpp:822
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "**缺失**"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:819
+#: libgnucash/app-utils/gnc-quotes.cpp:829
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr "GnuCash 所使用的 Finance::Quote 欄位："
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:821
+#: libgnucash/app-utils/gnc-quotes.cpp:831
 msgctxt "Finance::Quote"
 msgid "symbol: "
 msgstr "代號： "
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:823
+#: libgnucash/app-utils/gnc-quotes.cpp:833
 msgctxt "Finance::Quote"
 msgid "date: "
 msgstr "日期： "
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:825
+#: libgnucash/app-utils/gnc-quotes.cpp:835
 msgctxt "Finance::Quote"
 msgid "currency: "
 msgstr "貨幣： "
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:831
+#: libgnucash/app-utils/gnc-quotes.cpp:841
 msgctxt "Finance::Quote"
 msgid "last: "
 msgstr "收盤價：%s "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:833
+#: libgnucash/app-utils/gnc-quotes.cpp:843
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr "淨值： "
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:835
+#: libgnucash/app-utils/gnc-quotes.cpp:845
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "價格： "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:855
+#: libgnucash/app-utils/gnc-quotes.cpp:865
 msgid "Finance::Quote reported a failure for symbol "
 msgstr "Finance::Quote 回報了關於以下商品代號的失敗訊息 "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:858
+#: libgnucash/app-utils/gnc-quotes.cpp:868
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr "Finance::Quote 在取得以下商品代號的報價時失敗，但無任何錯誤訊息 "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:921
+#: libgnucash/app-utils/gnc-quotes.cpp:931
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr "GnuCash 送出了不合法的 json 到 Finance::Quote。詳情已被記錄。"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:927
+#: libgnucash/app-utils/gnc-quotes.cpp:937
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
@@ -29523,7 +29525,7 @@ msgstr ""
 "Perl 缺少以下模組。請參照 https://wiki.gnucash.org/wiki/"
 "Online_Quotes#Finance::Quote 了解詳細的修正方式。 "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:933
+#: libgnucash/app-utils/gnc-quotes.cpp:943
 msgid "Unrecognized Finance::Quote Error: "
 msgstr "未知的 Finance::Quote 錯誤： "
 
@@ -29811,131 +29813,131 @@ msgstr "從發票產生。試著取消過帳此發票。"
 msgid " (posted)"
 msgstr " (已過帳)"
 
-#: libgnucash/engine/gnc-option-date.cpp:87
+#: libgnucash/engine/gnc-option-date.cpp:88
 msgid "One Week Ago"
 msgstr "一星期以前"
 
-#: libgnucash/engine/gnc-option-date.cpp:88
+#: libgnucash/engine/gnc-option-date.cpp:89
 msgid "One Week Ago."
 msgstr "一星期以前。"
 
-#: libgnucash/engine/gnc-option-date.cpp:95
+#: libgnucash/engine/gnc-option-date.cpp:96
 msgid "One Week Ahead"
 msgstr "一星期以後"
 
-#: libgnucash/engine/gnc-option-date.cpp:96
+#: libgnucash/engine/gnc-option-date.cpp:97
 msgid "One Week Ahead."
 msgstr "一星期以後。"
 
-#: libgnucash/engine/gnc-option-date.cpp:103
+#: libgnucash/engine/gnc-option-date.cpp:104
 msgid "One Month Ago"
 msgstr "一個月以前"
 
-#: libgnucash/engine/gnc-option-date.cpp:104
+#: libgnucash/engine/gnc-option-date.cpp:105
 msgid "One Month Ago."
 msgstr "一個月以前。"
 
-#: libgnucash/engine/gnc-option-date.cpp:111
+#: libgnucash/engine/gnc-option-date.cpp:112
 msgid "One Month Ahead"
 msgstr "一個月以後"
 
-#: libgnucash/engine/gnc-option-date.cpp:112
+#: libgnucash/engine/gnc-option-date.cpp:113
 msgid "One Month Ahead."
 msgstr "一個月以後。"
 
-#: libgnucash/engine/gnc-option-date.cpp:119
+#: libgnucash/engine/gnc-option-date.cpp:120
 msgid "Three Months Ago"
 msgstr "三個月以前"
 
-#: libgnucash/engine/gnc-option-date.cpp:120
+#: libgnucash/engine/gnc-option-date.cpp:121
 msgid "Three Months Ago."
 msgstr "三個月以前。"
 
-#: libgnucash/engine/gnc-option-date.cpp:127
+#: libgnucash/engine/gnc-option-date.cpp:128
 msgid "Three Months Ahead"
 msgstr "三個月以後"
 
-#: libgnucash/engine/gnc-option-date.cpp:128
+#: libgnucash/engine/gnc-option-date.cpp:129
 msgid "Three Months Ahead."
 msgstr "三個月以後。"
 
-#: libgnucash/engine/gnc-option-date.cpp:135
+#: libgnucash/engine/gnc-option-date.cpp:136
 msgid "Six Months Ago"
 msgstr "六個月以前"
 
-#: libgnucash/engine/gnc-option-date.cpp:136
+#: libgnucash/engine/gnc-option-date.cpp:137
 msgid "Six Months Ago."
 msgstr "六個月以前。"
 
-#: libgnucash/engine/gnc-option-date.cpp:143
+#: libgnucash/engine/gnc-option-date.cpp:144
 msgid "Six Months Ahead"
 msgstr "六個月以後"
 
-#: libgnucash/engine/gnc-option-date.cpp:144
+#: libgnucash/engine/gnc-option-date.cpp:145
 msgid "Six Months Ahead."
 msgstr "六個月以後。"
 
-#: libgnucash/engine/gnc-option-date.cpp:151
+#: libgnucash/engine/gnc-option-date.cpp:152
 msgid "One Year Ago"
 msgstr "一年以前"
 
-#: libgnucash/engine/gnc-option-date.cpp:152
+#: libgnucash/engine/gnc-option-date.cpp:153
 msgid "One Year Ago."
 msgstr "一年以前。"
 
-#: libgnucash/engine/gnc-option-date.cpp:159
+#: libgnucash/engine/gnc-option-date.cpp:160
 msgid "One Year Ahead"
 msgstr "一年以後"
 
-#: libgnucash/engine/gnc-option-date.cpp:160
+#: libgnucash/engine/gnc-option-date.cpp:161
 msgid "One Year Ahead."
 msgstr "一年以後。"
 
-#: libgnucash/engine/gnc-option-date.cpp:199
+#: libgnucash/engine/gnc-option-date.cpp:200
 msgid "Start of next month"
 msgstr "下個月月初"
 
-#: libgnucash/engine/gnc-option-date.cpp:200
+#: libgnucash/engine/gnc-option-date.cpp:201
 msgid "First day of the next month."
 msgstr "下個月的第一天。"
 
-#: libgnucash/engine/gnc-option-date.cpp:207
+#: libgnucash/engine/gnc-option-date.cpp:208
 msgid "End of next month"
 msgstr "下個月月底"
 
-#: libgnucash/engine/gnc-option-date.cpp:208
+#: libgnucash/engine/gnc-option-date.cpp:209
 msgid "Last day of next month."
 msgstr "下個月的最後一天。"
 
-#: libgnucash/engine/gnc-option-date.cpp:247
+#: libgnucash/engine/gnc-option-date.cpp:248
 msgid "Start of next quarter"
 msgstr "下一季初"
 
-#: libgnucash/engine/gnc-option-date.cpp:248
+#: libgnucash/engine/gnc-option-date.cpp:249
 msgid "First day of the next quarterly accounting period."
 msgstr "下一季會計週期的第一天。"
 
-#: libgnucash/engine/gnc-option-date.cpp:255
+#: libgnucash/engine/gnc-option-date.cpp:256
 msgid "End of next quarter"
 msgstr "下一季末"
 
-#: libgnucash/engine/gnc-option-date.cpp:256
+#: libgnucash/engine/gnc-option-date.cpp:257
 msgid "Last day of next quarterly accounting period."
 msgstr "下一季會計週期的最後一天。"
 
-#: libgnucash/engine/gnc-option-date.cpp:295
+#: libgnucash/engine/gnc-option-date.cpp:296
 msgid "Start of next year"
 msgstr "明年初"
 
-#: libgnucash/engine/gnc-option-date.cpp:296
+#: libgnucash/engine/gnc-option-date.cpp:297
 msgid "First day of the next calendar year."
 msgstr "下一日曆年的第一天。"
 
-#: libgnucash/engine/gnc-option-date.cpp:303
+#: libgnucash/engine/gnc-option-date.cpp:304
 msgid "End of next year"
 msgstr "明年底"
 
-#: libgnucash/engine/gnc-option-date.cpp:304
+#: libgnucash/engine/gnc-option-date.cpp:305
 msgid "Last day of the next calendar year."
 msgstr "下個日曆年的最後一天。"
 
