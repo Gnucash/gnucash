@@ -235,6 +235,12 @@
     <child name="report" schema="org.gnucash.GnuCash.general.report"/>
   </schema>
 
+  <enum id="org.gnucash.GnuCash.general.register.JumpMultipleSplits"><!-- enum GncPrefJumpMultSplits -->
+    <value nick="default" value="0"/>
+    <value nick="largest-value-first-split" value="1"/>
+    <value nick="smallest-value-first-split" value="2"/>
+  </enum>
+
   <schema id="org.gnucash.GnuCash.general.register" path="/org/gnucash/GnuCash/general/register/">
     <key name="use-gnucash-color-theme" type="b">
       <default>true</default>
@@ -255,6 +261,11 @@
       <default>false</default>
       <summary>Move to Transfer field when memorised transaction auto filled</summary>
       <description>If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field.</description>
+    </key>
+    <key name="jump-multiple-splits" enum="org.gnucash.GnuCash.general.register.JumpMultipleSplits">
+      <default>'default'</default>
+      <summary>"Jump" behaviour when there are multiple splits</summary>
+      <description>Select how the "Jump" operation should behave when a transaction has multiple splits.</description>
     </key>
     <key name="use-new-window" type="b">
       <default>false</default>
@@ -337,7 +348,7 @@
       <description>This sets the number of characters before auto complete starts for description, notes and memo fields.</description>
     </key>
   </schema>
-  
+
   <schema id="org.gnucash.GnuCash.general.report" path="/org/gnucash/GnuCash/general/report/">
     <key name="use-new-window" type="b">
       <default>false</default>
