@@ -83,10 +83,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-10-17 17:12+0200\n"
-"PO-Revision-Date: 2024-10-15 09:45+0000\n"
+"PO-Revision-Date: 2024-10-17 18:16+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -98,8 +98,8 @@ msgstr ""
 "X-Generator: Weblate 5.8-rc\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1999,9 +1999,7 @@ msgstr "La transacción no puede cuadrar, %s es erróneo con valor %s"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1417
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
-msgstr ""
-"Los Débitos Totales de %s no están equilibrados con los Créditos Totales de "
-"%s."
+msgstr "Los débitos totales de %s no cuadran con los créditos totales de %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1922
 msgid "Ne_w Balance"
@@ -2250,16 +2248,12 @@ msgstr ""
 "debajo."
 
 #: gnucash/gnome/dialog-commodities.cpp:183
-#, fuzzy
-#| msgid ""
-#| "That commodity is currently used by at least one of your accounts. You "
-#| "may not delete it."
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
 msgstr ""
-"Esa materia prima es empleada por al menos una de sus cuentas. No puede "
-"borrarlo."
+"Este producto es utilizado actualmente por las siguientes cuentas. No puede "
+"eliminarlo.\n"
 
 #: gnucash/gnome/dialog-commodities.cpp:201
 msgid ""
@@ -8477,9 +8471,8 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
-"Al usar la instrucción dump, muestra el listado de todos los parámetros que "
-"Finance::Quote devueltos para el símbolo en lugar de los que GnuCash "
-"solicita."
+"Cuando se usa la lista de comandos dump todos los parámetros Finance::Quote "
+"devuelve para el símbolo en lugar de los que requiere Gnucash."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8538,7 +8531,7 @@ msgstr "Instrucción de informe desconocido '{1}'"
 
 #: gnucash/gnucash-cli.cpp:220
 msgid "Missing command or option"
-msgstr "Falta una instrucción u opción"
+msgstr "Falta comando u opción"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
@@ -21611,6 +21604,8 @@ msgid ""
 "This transaction cannot be balanced: The imbalance is a fraction smaller "
 "than the commodity allows."
 msgstr ""
+"Esta transacción no puede cuadrar: el descuadre es una pequeña parte de lo "
+"que permite la mercancía."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:90
 msgid "Rebalance Transaction"
