@@ -240,7 +240,7 @@ static GncToolBarShortNames toolbar_labels[] =
     /* Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
        to be used as toolbar button label. */
     { "ReportSaveAsAction",   N_("Save Config As…") },
-    { "FilePrintPDFAction",   N_("Make Pdf") },
+    { "FilePrintPDFAction",   N_("Export as PDF") },
     { nullptr, nullptr },
 };
 

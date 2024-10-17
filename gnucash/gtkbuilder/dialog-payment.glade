@@ -167,9 +167,9 @@
                     <property name="tooltip-markup">The company associated with this payment.</property>
                     <property name="tooltip-text" translatable="yes">The company associated with this payment.</property>
                     <property name="label" translatable="yes">Partner</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -205,9 +205,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Post To</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -333,9 +333,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Documents</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -417,9 +417,9 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Amount</property>
                         <property name="justify">right</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -660,9 +660,9 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Transaction Details</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -696,9 +696,9 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Transfer Account</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                 </child>
               </object>

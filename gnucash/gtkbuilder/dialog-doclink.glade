@@ -47,9 +47,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Change Linked Document path head</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -596,9 +596,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">All Linked Documents</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>

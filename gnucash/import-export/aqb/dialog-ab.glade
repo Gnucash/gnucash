@@ -81,9 +81,9 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Progress</property>
                     <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -208,7 +208,10 @@
                   <object class="GtkLabel" id="label8877444">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;_Log Messages&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">_Log Messages</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
@@ -368,9 +371,9 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">From</property>
                     <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -473,9 +476,9 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">To</property>
                     <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1727,7 +1730,7 @@
                     <property name="model">imexporter-list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">This list contains the file formats that AQBanking knows how to import. The profile list contains specializations and is populated according to which format you select in this list.</property>
+                    <property name="tooltip-text" translatable="yes">This list contains the file formats that AqBanking knows how to import. The profile list contains specializations and is populated according to which format you select in this list.</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="imexporter-name">
                         <property name="title" translatable="yes">File Format</property>

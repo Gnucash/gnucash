@@ -124,9 +124,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">1. Choose the file to import</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
               </object>
             </child>
           </object>
@@ -189,7 +189,10 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;2. Select Import Type&lt;/b&gt;</property>
+                <property name="label" translatable="yes">2. Select Import Type</property>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
                 <property name="use-markup">True</property>
               </object>
             </child>
@@ -308,9 +311,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">3. Select import options</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
               </object>
             </child>
           </object>
@@ -351,9 +354,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">4. Preview</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
               </object>
             </child>
           </object>

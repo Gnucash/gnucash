@@ -519,9 +519,9 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Colors</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -633,7 +633,10 @@
               <object class="GtkLabel" id="label847795">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;Actions&lt;/b&gt;</property>
+                <property name="label" translatable="yes">Actions</property>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
                 <property name="use-markup">True</property>
               </object>
               <packing>
