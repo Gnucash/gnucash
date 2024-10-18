@@ -209,6 +209,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, "Google Web, US Stocks", "googleweb" },
     { false, SOURCE_SINGLE, "IEX (Investors Exchange), US", "iexcloud" },
     { false, SOURCE_SINGLE, "Market Watch", "marketwatch" },
+    { false, SOURCE_SINGLE, "Morningstar, AU", "morningstarau" },
     { false, SOURCE_SINGLE, "Morningstar, CH", "morningstarch" },
     { false, SOURCE_SINGLE, "Morningstar, GB", "morningstaruk" },
     { false, SOURCE_SINGLE, "Morningstar, JP", "morningstarjp" },
@@ -241,6 +242,7 @@ static QuoteSourceList single_quote_sources =
 static QuoteSourceList multiple_quote_sources =
 {
     { false, SOURCE_MULTI, "Australia (ASX)", "australia" },
+    { false, SOURCE_MULTI, "Australia Funds (MorningstarAU)", "aufunds" },
     { false, SOURCE_MULTI, "Canada (Alphavantage, TMX)", "canada" },
     { false, SOURCE_MULTI, "Dutch (AEX)", "dutch" },
     { false, SOURCE_MULTI, "Europe (ASEGR, Bourso, ...)", "europe" },
