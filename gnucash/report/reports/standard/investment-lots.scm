@@ -60,12 +60,14 @@
 (define optname-show-sold-columns (N_ "Show sold columns"))
 (define optname-show-end-columns (N_ "Show end columns"))
 (define optname-show-realized-gain-columns
-    (N_ "Show realized gain column(s)"))
+    (N_ "Show realized gain columns"))
 (define optname-show-unrealized-gain-columns
-    (N_ "Show unrealized gain column(s)"))
+    (N_ "Show unrealized gain columns"))
 (define optname-group-gains-by-age
     (N_ "Group gains by age (short term and long term)"))
 (define optname-long-term-years (N_ "Long term gains age (years)"))
+(define optname-show-roi-columns (N_ "Show ROI columns"))
+(define optname-show-cagr-columns (N_ "Show CAGR columns"))
 
 ;; Display
 (define optname-show-long-account-names (N_ "Show long account names"))
@@ -123,10 +125,12 @@
 (define colname-short-term-realized-gain (N_ "ST Realized Gain"))
 (define colname-long-term-realized-gain (N_ "LT Realized Gain"))
 (define colname-realized-roi (N_ "Realized ROI"))
+(define colname-realized-cagr (N_ "Realized CAGR"))
 (define colname-unrealized-gain (N_ "Unrealized Gain"))
 (define colname-short-term-unrealized-gain (N_ "ST Unrealized Gain"))
 (define colname-long-term-unrealized-gain (N_ "LT Unrealized Gain"))
 (define colname-unrealized-roi (N_ "Unrealized ROI"))
+(define colname-unrealized-cagr (N_ "Unrealized CAGR"))
 
 (define label-account-total (N_ "Account Lots Total"))
 (define label-grand-total (N_ "Grand Total"))
@@ -135,7 +139,22 @@
 ;; will use to display a dialog where the user can select
 ;; values for the report's parameters.
 (define (options-generator)
-  (let* ((options (gnc-new-optiondb)))
+  (let* ((options (gnc-new-optiondb))
+         (uncommited-show-realized-gain-columns #f)
+         (uncommited-show-unrealized-gain-columns #f))
+
+    ;; When both realized and unrealized gain columns are hidden, the gain
+    ;; percentage columns (ROI and CAGR) won't be visible anyways, so disable
+    ;; their corresponding options.
+    (define (update-gain-percentage-columns-enabled)
+      (let ((enabled (or uncommited-show-realized-gain-columns
+                         uncommited-show-unrealized-gain-columns)))
+        (for-each
+          (lambda (name)
+            (gnc-optiondb-set-option-selectable-by-name options
+                pagename-columns name enabled))
+          (list optname-show-roi-columns
+                optname-show-cagr-columns))))
 
     ;; Accounts tab
     (gnc-register-account-list-limited-option options
@@ -207,7 +226,7 @@
       (cons 'percent 50.0))
 
     ;; Columns tab
-    (gnc-register-simple-boolean-option options
+  (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-lot-guid-column
         "a"
@@ -242,19 +261,25 @@
         (N_ "Show end date amount and value table columns")
         #t)
 
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
         pagename-columns
         optname-show-realized-gain-columns
         "f"
         (N_ "Show realized gain table column(s) for sold shares")
-        #t)
+        #t 
+        (lambda (x)
+            (set! uncommited-show-realized-gain-columns x)
+            (update-gain-percentage-columns-enabled)))
 
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
         pagename-columns
         optname-show-unrealized-gain-columns
         "g"
         (N_ "Show unrealized gain table column(s) for unsold shares")
-        #t)
+        #t 
+        (lambda (x)
+            (set! uncommited-show-unrealized-gain-columns x)
+            (update-gain-percentage-columns-enabled)))
 
     (gnc-register-multichoice-callback-option options
         pagename-columns
@@ -284,6 +309,20 @@
       0 ;; lower-bound
       10E9 ;; upper-bound
       1) ;; step-size
+
+    (gnc-register-simple-boolean-option options
+        pagename-columns
+        optname-show-roi-columns
+        "j"
+        (N_ "Show Return On Investment (ROI) columns")
+        #f)
+
+    (gnc-register-simple-boolean-option options
+        pagename-columns
+        optname-show-cagr-columns
+        "k"
+        (N_ "Show Compound Annual Growth Rate (CAGR) columns")
+        #t)
 
     ;; Display tab
     (gnc-register-simple-boolean-option options
@@ -324,6 +363,14 @@
     ;; General tab
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-from-date optname-to-date "a")
+
+    ;; Use a default report date of 'today'. Otherwise, 
+    ;; 'end of accounting period' would be the default. A future date
+    ;; makes a poor default because they may result in misleading/non-sensical
+    ;; unrealized CAGR percentages.
+    (GncOption-set-default-value
+      (gnc-lookup-option options gnc:pagename-general optname-to-date)
+      'today)
 
     (gnc:options-add-currency!
       options
@@ -402,8 +449,7 @@
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-      (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   ;; Given a price list and a currency find the price for that currency on the
   ;; list. If there is none for the requested currency, return the first one.
@@ -458,6 +504,10 @@
             (get-option pagename-columns optname-group-gains-by-age))
          (long-term-years
             (get-option pagename-columns optname-long-term-years))
+         (show-roi-columns
+            (get-option pagename-columns optname-show-roi-columns))
+         (show-cagr-columns
+            (get-option pagename-columns optname-show-cagr-columns))
 
          ;; Display options
          (include-closed-lots
@@ -577,6 +627,18 @@
         (let ((years-held (gnc:date-year-delta bought-date sold-date)))
           (> years-held long-term-years))
         #f))
+
+    ;; Returns the Compound Annual Growth Rate (CAGR). Returns false if basis
+    ;; and/or years are zero or false.
+    (define (get-cagr basis end-value years)  
+      (if (or (eq? basis #f)
+              (gnc-numeric-zero-p basis)
+              (eq? years #f)
+              (zero? years))
+        #f ; Unable to compute CAGR.
+        (- (expt (/ end-value basis)
+              (/ 1 years))
+          1)))
 
     ;; Gets the account name.
     (define (account->name account)
@@ -830,6 +892,28 @@
     ;; accounts may have different commodities, so combining their amounts
     ;; would not make sense).
     (define (get-column-header-list is-grand-total)
+
+      ;; Helper function for getting the list of gains-related column names.
+      (define (get-gains-column-header-list 
+                  colname-short-term-gain
+                  colname-long-term-gain
+                  colname-gain
+                  colname-roi
+                  colname-cagr)
+          (append
+            (if group-gains-by-age
+              (list
+                colname-short-term-gain
+                colname-long-term-gain)
+              (list
+                colname-gain))
+            (if show-roi-columns 
+              (list colname-roi)
+              '())
+            (if show-cagr-columns 
+              (list 
+                (if is-grand-total #f colname-cagr))
+              '())))
       (append
         (list (if is-grand-total #f colname-lot-title))
         (if show-lot-guid-column
@@ -871,24 +955,20 @@
             colname-end-value)
           '())
         (if show-realized-gain-columns
-          (if group-gains-by-age
-            (list
-              colname-short-term-realized-gain
-              colname-long-term-realized-gain
-              colname-realized-roi)
-            (list
-              colname-realized-gain
-              colname-realized-roi))
+          (get-gains-column-header-list
+                  colname-short-term-realized-gain
+                  colname-long-term-realized-gain
+                  colname-realized-gain
+                  colname-realized-roi
+                  colname-realized-cagr)
           '())
         (if show-unrealized-gain-columns
-          (if group-gains-by-age
-            (list
-              colname-short-term-unrealized-gain
-              colname-long-term-unrealized-gain
-              colname-unrealized-roi)
-            (list
-              colname-unrealized-gain
-              colname-unrealized-roi))
+          (get-gains-column-header-list
+                  colname-short-term-unrealized-gain
+                  colname-long-term-unrealized-gain
+                  colname-unrealized-gain
+                  colname-unrealized-roi
+                  colname-unrealized-cagr)
           '())))
 
     ;; The number of table columns.
@@ -965,8 +1045,10 @@
               end-value
               short-term-realized-gain
               long-term-realized-gain
+              realized-cagr
               short-term-unrealized-gain
-              long-term-unrealized-gain)
+              long-term-unrealized-gain
+              unrealized-cagr)
       ;; Helper function for converting a numeric value to an html table cell.
       (define (to-cell val format-val-fn)
         (if (or (not val)
@@ -1022,7 +1104,7 @@
             (value->monetary value))))
 
       ;; Helper function for adding capital gains columns
-      (define (get-gains-fn show-columns basis short-gain long-gain)
+      (define (get-gains-fn show-columns basis short-gain long-gain cagr-value)
         (append
           (if show-columns
             (let* ((total-gain (gnc-numeric-add-fixed
@@ -1036,15 +1118,24 @@
                               ((gnc-numeric-zero-p basis)
                                 0)
                               (else
-                                (* 100 (/ total-gain basis)))))))
-              (if group-gains-by-age
-                (list
-                  (value->cell short-gain)
-                  (value->cell long-gain)
-                  roi)
-                (list
-                  (value->cell total-gain)
-                  roi)))
+                                (* 100 (/ total-gain basis))))))
+                    (cagr (percentage->cell
+                      (if cagr-value
+                       (* 100 cagr-value)
+                       #f))))
+              (append
+                (if group-gains-by-age
+                  (list
+                    (value->cell short-gain)
+                    (value->cell long-gain))
+                  (list
+                    (value->cell total-gain)))
+                (if show-roi-columns 
+                  (list roi)
+                  '())
+                (if show-cagr-columns 
+                  (list cagr)
+                  '())))
             '())))
 
       (if is-bold
@@ -1113,12 +1204,14 @@
             show-realized-gain-columns
             sold-basis
             short-term-realized-gain
-            long-term-realized-gain)
+            long-term-realized-gain
+            realized-cagr)
           (get-gains-fn
             show-unrealized-gain-columns
             end-basis
             short-term-unrealized-gain
-            long-term-unrealized-gain))))
+            long-term-unrealized-gain
+            unrealized-cagr))))
       (gnc:html-table-append-row/markup!
         table
         (if is-bold "grand-total" (get-row-style is-odd-row))
@@ -1163,12 +1256,14 @@
              (long-term-sold-basis (get-report-value-zero))
              (long-term-sold-value (get-report-value-zero))
              (long-term-realized-gain (get-report-value-zero))
+             (weighted-realized-cagr 0.0)
              (end-amount (get-amount-zero))
              (end-basis (get-report-value-zero))
              (end-value (get-report-value-zero))
              (unrealized-gain (get-report-value-zero))
              (short-term-unrealized-gain (get-report-value-zero))
              (long-term-unrealized-gain (get-report-value-zero))
+             (weighted-unrealized-cagr 0.0)
              (has-warnings #f)
              (is-active-in-window #f)
              (currency '())
@@ -1221,7 +1316,8 @@
                   sold-basis
                   sold-value
                   sold-gain
-                  is-long-term)
+                  is-long-term
+                  cagr)
           (if show-split-rows
             (let ((date-cell
                     (to-split-cell (qof-print-date trans-date) split))
@@ -1260,8 +1356,10 @@
                 (if (and is-long-term sold-gain) 0 sold-gain)
                 ;; long-term-realized-gain
                 (if (and is-long-term sold-gain) sold-gain 0)
+                cagr ;; realized-cagr
                 #f ;; short-term-unrealized-gain
-                #f)))) ;; long-term-unrealized-gain
+                #f ;; long-term-unrealized-gain
+                #f)))) ;; unrealized-cagr
 
         ;; Adds the stats to the given html table.
         (define (add-to-table table is-odd-row)
@@ -1287,7 +1385,32 @@
                     (cond
                       (is-lot-row (lot->title lot))
                       (is-account-row label-account-total)
-                      (is-grand-total-row label-grand-total))))
+                      (is-grand-total-row label-grand-total)))
+                  (years-held 
+                    (cond
+                      (is-lot-row
+                        (gnc:date-year-delta
+                          latest-bought-split-date
+                          to-date))
+                      (else #f)))
+                  (unrealized-cagr 
+                      (cond
+                        (is-lot-row (get-cagr end-basis end-value years-held))
+                        (is-account-row  
+                          (if (gnc-numeric-zero-p end-amount)
+                            0
+                            (/ weighted-unrealized-cagr end-amount)))
+                        (is-grand-total-row #f)))
+                  (sold-amount (gnc-numeric-add-fixed 
+                                    long-term-sold-amount
+                                    short-term-sold-amount))
+                  (realized-cagr 
+                    (cond
+                      ((or is-lot-row is-account-row)
+                        (if (gnc-numeric-zero-p sold-amount)
+                          0
+                          (/ weighted-realized-cagr sold-amount)))
+                      (is-grand-total-row #f))))
             (add-data-row
               table
               (if (not is-grand-total-row) currency #f)
@@ -1311,11 +1434,18 @@
               end-value
               short-term-realized-gain
               long-term-realized-gain
+              (if (not is-grand-total-row) realized-cagr #f)
               short-term-unrealized-gain
-              long-term-unrealized-gain)
+              long-term-unrealized-gain
+              (if (not is-grand-total-row) unrealized-cagr #f))
 
             (if is-lot-row
-              (copy-table-rows splits-table table (get-row-style is-odd-row)))
+              (begin
+                (if unrealized-cagr
+                  (set! weighted-unrealized-cagr 
+                      (+ weighted-unrealized-cagr 
+                        (* unrealized-cagr end-amount))))
+                (copy-table-rows splits-table table (get-row-style is-odd-row))))
 
             (add-warnings-to-table table)
 
@@ -1508,7 +1638,7 @@
         ;; Merges in the given split.
         (define (merge-split split trans-date trans-currency)
           (let* (; Convert split value to the report's currency.
-                 (value
+                 (value 
                     (value->report-currency-value
                       (xaccSplitGetValue split)
                       trans-currency))
@@ -1572,45 +1702,58 @@
 
           (cond
             ((>= trans-date from-date)
-              ;; Remember if a sale within the report window causes the
-              ;; lot's balance to go negative.
-              (if (and (null? first-negative-split)
-                      (gnc-numeric-negative-p end-amount))
-              (set! first-negative-split split))
+              (let* ((years-held
+                        (gnc:date-year-delta
+                            latest-bought-split-date
+                            trans-date))
+                     (cagr (get-cagr basis value years-held)))
+                ;; Remember if a sale within the report window causes the
+                ;; lot's balance to go negative.
+                (if (and (null? first-negative-split)
+                        (gnc-numeric-negative-p end-amount))
+                  (set! first-negative-split split))
 
-              (cond
-                (is-long-term
-                  (set! long-term-sold-amount
-                    (gnc-numeric-add-fixed long-term-sold-amount amount))
-                  (set! long-term-sold-basis
-                    (gnc-numeric-add-fixed long-term-sold-basis basis))
-                  (set! long-term-sold-value
-                    (gnc-numeric-add-fixed long-term-sold-value value))
-                  (set! long-term-realized-gain
-                    (gnc-numeric-add-fixed long-term-realized-gain gain)))
-                (else
-                  (set! short-term-sold-amount
-                    (gnc-numeric-add-fixed short-term-sold-amount amount))
-                  (set! short-term-sold-basis
-                    (gnc-numeric-add-fixed short-term-sold-basis basis))
-                  (set! short-term-sold-value
-                    (gnc-numeric-add-fixed short-term-sold-value value))
-                  (set! short-term-realized-gain
-                    (gnc-numeric-add-fixed short-term-realized-gain gain))))
+                ;; if CAGR could not be computed because the basis and/or the
+                ;; years held are zero (like if a security was bought and sold
+                ;; on the same day), then do not include it in the total.
+                (if cagr
+                  (set! weighted-realized-cagr
+                    (+ weighted-realized-cagr (* cagr amount))))
 
-              (add-split-row
-                split
-                trans-date
-                #f      ;; bought-amount
-                #f      ;; bought-value
-                amount  ;; sold-amount
-                basis   ;; sold-basis
-                value   ;; sold-value
-                gain    ;; sold-gain
-                is-long-term)
+                (cond
+                  (is-long-term
+                    (set! long-term-sold-amount
+                      (gnc-numeric-add-fixed long-term-sold-amount amount))
+                    (set! long-term-sold-basis
+                      (gnc-numeric-add-fixed long-term-sold-basis basis))
+                    (set! long-term-sold-value
+                      (gnc-numeric-add-fixed long-term-sold-value value))
+                    (set! long-term-realized-gain
+                      (gnc-numeric-add-fixed long-term-realized-gain gain)))
+                  (else
+                    (set! short-term-sold-amount
+                      (gnc-numeric-add-fixed short-term-sold-amount amount))
+                    (set! short-term-sold-basis
+                      (gnc-numeric-add-fixed short-term-sold-basis basis))
+                    (set! short-term-sold-value
+                      (gnc-numeric-add-fixed short-term-sold-value value))
+                    (set! short-term-realized-gain
+                      (gnc-numeric-add-fixed short-term-realized-gain gain))))
 
-              (set! sold-split-count (+ sold-split-count 1))
-              (set! last-sold-split split)))))
+                (add-split-row
+                  split
+                  trans-date
+                  #f      ;; bought-amount
+                  #f      ;; bought-value
+                  amount  ;; sold-amount
+                  basis   ;; sold-basis
+                  value   ;; sold-value
+                  gain    ;; sold-gain
+                  is-long-term
+                  cagr)
+
+                (set! sold-split-count (+ sold-split-count 1))
+                (set! last-sold-split split))))))
 
         ;; Merges in the purchase split info.
         (define (merge-purchase-split split trans-date amount value)
@@ -1646,7 +1789,8 @@
                 #f      ;; sold-basis
                 #f      ;; sold-value
                 #f      ;; sold-gain
-                #f))    ;; is-long-term
+                #f      ;; is-long-term
+                #f))    ;; cagr
 
             ;; The split is from before the report's start date.
             ;; So we won't include it in the report table, but
@@ -1709,6 +1853,9 @@
               (gnc-numeric-add-fixed
                 long-term-realized-gain
                 (stats 'get-long-term-realized-gain)))
+            (set! weighted-realized-cagr
+              (+ weighted-realized-cagr 
+                (stats 'get-weighted-realized-cagr)))
             (set! end-basis
               (gnc-numeric-add-fixed end-basis (stats 'get-end-basis)))
             (set! end-value
@@ -1725,6 +1872,9 @@
               (gnc-numeric-add-fixed
                 long-term-unrealized-gain
                 (stats 'get-long-term-unrealized-gain)))
+            (set! weighted-unrealized-cagr
+              (+ weighted-unrealized-cagr 
+                (stats 'get-weighted-unrealized-cagr)))                
             (set! has-warnings
               (or has-warnings
                   (stats 'get-has-warnings)))
@@ -1781,6 +1931,7 @@
               ((get-short-term-realized-gain)
                   (lambda () short-term-realized-gain))
               ((get-long-term-realized-gain) (lambda () long-term-realized-gain))
+              ((get-weighted-realized-cagr) (lambda () weighted-realized-cagr))
               ((get-end-amount) (lambda () end-amount))
               ((get-end-basis) (lambda () end-basis))
               ((get-end-value) (lambda () end-value))
@@ -1789,6 +1940,7 @@
                   (lambda () short-term-unrealized-gain))
               ((get-long-term-unrealized-gain)
                   (lambda () long-term-unrealized-gain))
+              ((get-weighted-unrealized-cagr) (lambda () weighted-unrealized-cagr))
               ((get-has-warnings) (lambda () has-warnings))
               ((get-is-active-in-window) (lambda () is-active-in-window))
               ((get-currency) (lambda () currency))
