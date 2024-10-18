@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-10-17 17:12+0200\n"
-"PO-Revision-Date: 2024-07-20 16:09+0000\n"
+"PO-Revision-Date: 2024-10-18 02:15+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -2102,16 +2102,11 @@ msgstr ""
 "nedan."
 
 #: gnucash/gnome/dialog-commodities.cpp:183
-#, fuzzy
-#| msgid ""
-#| "That commodity is currently used by at least one of your accounts. You "
-#| "may not delete it."
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
 msgstr ""
-"Den varan används just nu av minst ett av dina konton. Du får inte ta bort "
-"den."
+"Denna vara används just nu av följande konton. Du får inte ta bort den.\n"
 
 #: gnucash/gnome/dialog-commodities.cpp:201
 msgid ""
@@ -9524,11 +9519,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Alpha Vantage kräver en API-nyckel för att använda deras tjänst. Du kan få "
+"en nyckel genom att registrera ett gratis konto på Alpha Vantages webbplats, "
+"https://www.alphavantage.co/support/#api-key."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "YH Finance (FinanceAPI) API-nyckel"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
@@ -9538,6 +9536,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
+"YH Finance kräver en API-nyckel för att använda deras FinanceAPI-tjänst. Du "
+"kan få en nyckel genom att registrera ett gratis konto på YH Finances "
+"webbplats, https://financeapi.net/pricing."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -11554,33 +11555,6 @@ msgid "CSV Transaction Import"
 msgstr "CSV-transaktionsimport"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. You can save your adjusted settings to reuse them on "
-#| "later imports. After loading your settings you can also tweak them again "
-#| "for similar imports and save them under another name."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -11615,11 +11589,11 @@ msgstr ""
 "innehåller en lista över transaktioner. Den stödjer både teckenavdelade "
 "filer (komma-avdelning, semikolonavdelning) och data med fast bredd.\n"
 "\n"
-"För att importen ska lyckas måste tre kolumner finns i den importerade "
-"datan:\n"
+"För att importen ska lyckas måste tre kolumner finns i den importerade datan:"
+"\n"
 "• en Datumkolumn\n"
 "• en Beskrivningkolumn\n"
-"• en kolumn för Insättning eller Uttag\n"
+"• en kolumn för Belopp eller Belopp (Negativt)\n"
 "\n"
 "Om det inte finns någon kontodata kommer ett baskonto väljas dit all data "
 "kommer att importeras.\n"
@@ -11630,7 +11604,10 @@ msgstr ""
 "textkodning kan definieras.\n"
 "\n"
 "Importen kan hantera filer där transaktioner delas över flera rader, där "
-"varje rad representerar en delning.\n"
+"varje rad representerar en delning. An ny transaktion påbörjas varje gång "
+"någon av transaktionens relaterade kolumnvärden skiljer sig från en tidigare "
+"ej tom transaktion. Dessa kolumner är Transaktions-ID, Datum, Nummer, "
+"Beskrivning, Anteckningar, Transaktionens produkt och Annulleringsorsak.\n"
 "\n"
 "Till sist, för upprepade importer har förhandsgranskningssidan knappar för "
 "att läsa in och spara inställningarna. För att spara inställningarna, "
@@ -21204,6 +21181,8 @@ msgid ""
 "This transaction cannot be balanced: The imbalance is a fraction smaller "
 "than the commodity allows."
 msgstr ""
+"Transaktionen kan inte balanseras: Obalansen är en fraktion mindre än "
+"produkten tillåter."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:90
 msgid "Rebalance Transaction"
@@ -31271,16 +31250,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "Kontrollerar företagets splitar i konto %s: %u av %u"
 
 #: libgnucash/engine/Scrub.cpp:146
-#, fuzzy, c-format
-#| msgid "Looking for orphans in transaction: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %zu"
-msgstr "Letar efter föräldralösa i transaktion: %u av %u"
+msgstr "Letar efter föräldralösa i transaktion: %u av %zu"
 
 #: libgnucash/engine/Scrub.cpp:357
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in transaction date %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %zu"
-msgstr "Letar efter obalans i transaktionsdatum %s: %u av %u"
+msgstr "Letar efter obalans i transaktionsdatum %s: %u av %zu"
 
 #: libgnucash/engine/Split.cpp:1644
 msgctxt ""
