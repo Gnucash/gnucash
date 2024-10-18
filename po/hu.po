@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-10-17 17:12+0200\n"
-"PO-Revision-Date: 2024-09-28 20:52+0000\n"
+"PO-Revision-Date: 2024-10-18 22:15+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -2289,15 +2289,10 @@ msgstr ""
 "beszállítót alul."
 
 #: gnucash/gnome/dialog-commodities.cpp:183
-#, fuzzy
-#| msgid ""
-#| "That commodity is currently used by at least one of your accounts. You "
-#| "may not delete it."
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
-msgstr ""
-"Ez a pénznem jelenleg használatban van legalább egy számlán. Nem törölhető."
+msgstr "Ezt az árut/pénznemet a következő számlák használják. Nem törölhető.\n"
 
 #: gnucash/gnome/dialog-commodities.cpp:201
 msgid ""
@@ -9285,8 +9280,8 @@ msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Ez a mező azt a legkisebb napszámot határozza meg, amelyen kívül a listán "
-"egy tranzakció valószínűleg nem egyezik."
+"Ez a mező azt a legkisebb napszámot határozza meg, amelynél a listán egy "
+"tranzakció dátum szerinti egyezése valószínűtlen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
