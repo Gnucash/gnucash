@@ -444,7 +444,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Sub-accounts&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Sub-accounts</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                   </object>
                   <packing>
@@ -551,9 +554,9 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Transactions</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -671,7 +674,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Sub-account Transactions&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Sub-account Transactions</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                   </object>
                   <packing>
@@ -1192,9 +1198,9 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Identification</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -1703,9 +1709,9 @@ Clear the entry to have no warning.</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Balance Limit</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -1778,7 +1784,10 @@ Clear the entry to have no warning.</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Balance Information&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">Balance Information</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                       </object>
                       <packing>
@@ -1792,7 +1801,10 @@ Clear the entry to have no warning.</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Initial Balance Transfer&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">Initial Balance Transfer</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                       </object>
                       <packing>

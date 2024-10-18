@@ -268,9 +268,9 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a stock
         // split
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor "
-           ", while keeping the total monetary value of the overall investment constant. "
-           "\n\nIf the split results in a cash in lieu for remainder units, please "
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, "
+           "while keeping the total monetary value of the overall investment constant.\n\nIf "
+           "the split results in a cash in lieu for remainder units, please "
            "record the sale using the Stock Transaction Assistant first, then record the split.")
     },
     {
@@ -310,8 +310,8 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),
-        N_("Buy back stock to cover short position, and record capital gain/loss. "
-           "\n\nIf you are unable to calculate capital gains you can enter a placeholder "
+        N_("Buy back stock to cover short position, and record capital gain/loss.\n\nIf "
+           "you are unable to calculate capital gains you can enter a placeholder "
            "amount and correct it in the transaction later.")
     },
     {
@@ -352,7 +352,7 @@ static const TxnTypeVec short_types
         N_("Company returns capital, and the short stock holder must make a compensatory "
            "payment for the returned capital. This reduces the cost basis (less negative, "
            "towards 0.00 value) without affecting # units. A distribution previously recorded "
-           "as a compensatory dividend is reclassified to compensatory return of capital,"
+           "as a compensatory dividend is reclassified to compensatory return of capital, "
            "often due to end-of-year tax information.")
     },
     {
@@ -395,8 +395,8 @@ static const TxnTypeVec short_types
         // split when shorting stock
         N_("Stock split"),
         N_("Company issues additional units, thereby reducing the stock price by a divisor, "
-           "while keeping the total monetary value of the overall investment constant. "
-           "\n\nIf the split results in a cash in lieu for remainder units, please "
+           "while keeping the total monetary value of the overall investment constant.\n\nIf "
+           "the split results in a cash in lieu for remainder units, please "
            "record the cover buy using the Stock Transaction Assistant first, then record the split.")
     },
     {

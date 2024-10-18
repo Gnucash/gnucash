@@ -480,7 +480,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
   (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Use Detailed Tax Summary")
-    "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line.?") #f)
+    "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line?") #f)
 
   (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "References")
