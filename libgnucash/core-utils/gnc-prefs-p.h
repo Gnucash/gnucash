@@ -54,6 +54,7 @@ typedef struct
 
     void (*bind) (const gchar *group,
                   /*@ null @*/ const gchar *pref_name,
+                  /*@ null @*/ const gchar *pref_value,
                   gpointer object,
                   const gchar *property);
 

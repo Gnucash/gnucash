@@ -180,11 +180,12 @@ void gnc_prefs_remove_group_cb_by_func (const gchar *group,
 
 void gnc_prefs_bind (const gchar *group,
                      /*@ null @*/ const gchar *pref_name,
+                     /*@ null @*/ const gchar *pref_value,
                      gpointer object,
                      const gchar *property)
 {
     if (prefsbackend && prefsbackend->bind)
-        (prefsbackend->bind) (group, pref_name, object, property);
+        (prefsbackend->bind) (group, pref_name, pref_value, object, property);
 }
 
 

@@ -992,7 +992,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         GObject *object = gtk_builder_get_object (builder, "paned");
-        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, object, "position");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, NULL, object, "position");
     }
 
     gtk_builder_connect_signals (builder, info);

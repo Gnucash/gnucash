@@ -394,7 +394,7 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
 
     gtk_window_set_transient_for (GTK_WINDOW (matcher->transaction_matcher), GTK_WINDOW(parent));
 
-    gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_DISPLAY_RECONCILED,
+    gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_DISPLAY_RECONCILED, nullptr,
                     matcher->reconciled_chk, "active");
 
     gnc_import_match_picker_init_downloaded_view(matcher);
