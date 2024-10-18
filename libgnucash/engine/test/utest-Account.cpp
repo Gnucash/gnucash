@@ -1107,7 +1107,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "red");
 
     xaccAccountSetLastNum (account, "");
-    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "");
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, nullptr);
 
     xaccAccountSetLastNum (account, "  ");
     g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "  ");

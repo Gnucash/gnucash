@@ -1063,6 +1063,32 @@ qof_instance_set_kvp (QofInstance * inst, GValue const * value, unsigned count, 
     delete inst->kvp_data->set_path (path, kvp_value_from_gvalue (value));
 }
 
+template <typename T> std::optional<T>
+qof_instance_get_path_kvp (QofInstance* inst, const Path& path)
+{
+    g_return_val_if_fail (QOF_IS_INSTANCE(inst), std::nullopt);
+    auto kvp_value{inst->kvp_data->get_slot(path)};
+    return kvp_value ? std::make_optional<T>(kvp_value->get<T>()) : std::nullopt;
+}
+
+template <typename T> void
+qof_instance_set_path_kvp (QofInstance* inst, std::optional<T> value, const Path& path)
+{
+    g_return_if_fail (QOF_IS_INSTANCE(inst));
+    delete inst->kvp_data->set_path(path, value ? new KvpValue(*value) : nullptr);
+    qof_instance_set_dirty (inst);
+}
+
+template std::optional<const char*> qof_instance_get_path_kvp <const char*> (QofInstance*, const Path&);
+template std::optional<gnc_numeric> qof_instance_get_path_kvp <gnc_numeric> (QofInstance*, const Path&);
+template std::optional<GncGUID*> qof_instance_get_path_kvp <GncGUID*> (QofInstance*, const Path&);
+template std::optional<int64_t> qof_instance_get_path_kvp <int64_t> (QofInstance*, const Path&);
+
+template void qof_instance_set_path_kvp <const char*> (QofInstance*, std::optional<const char*>, const Path& path);
+template void qof_instance_set_path_kvp <gnc_numeric> (QofInstance*, std::optional<gnc_numeric>, const Path& path);
+template void qof_instance_set_path_kvp <GncGUID*> (QofInstance*, std::optional<GncGUID*>, const Path& path);
+template void qof_instance_set_path_kvp <int64_t> (QofInstance*, std::optional<int64_t>, const Path& path);
+
 void qof_instance_get_path_kvp (QofInstance * inst, GValue * value, std::vector<std::string> const & path)
 {
     gvalue_from_kvp_value (inst->kvp_data->get_slot (path), value);
@@ -1316,17 +1342,16 @@ struct wrap_param
 static void
 wrap_gvalue_function (const char* key, KvpValue *val, wrap_param & param)
 {
-    GValue *gv;
-    gv = g_slice_new0 (GValue);
+    GValue gv;
     if (val->get_type() != KvpValue::Type::FRAME)
-        gvalue_from_kvp_value(val, gv);
+        gvalue_from_kvp_value(val, &gv);
     else
     {
-        g_value_init (gv, G_TYPE_STRING);
-        g_value_set_string (gv, nullptr);
+        g_value_init (&gv, G_TYPE_STRING);
+        g_value_set_string (&gv, nullptr);
     }
-    param.proc(key, gv, param.user_data);
-    g_slice_free (GValue, gv);
+    param.proc(key, &gv, param.user_data);
+    g_value_unset (&gv);
 }
 
 void
