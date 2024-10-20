@@ -245,18 +245,18 @@ static QuoteSourceList multiple_quote_sources =
     { false, SOURCE_MULTI, "Australia Funds (MorningstarAU)", "aufunds" },
     { false, SOURCE_MULTI, "Canada (Alphavantage, TMX)", "canada" },
     { false, SOURCE_MULTI, "Dutch (AEX)", "dutch" },
-    { false, SOURCE_MULTI, "Europe (ASEGR, Bourso, ...)", "europe" },
+    { false, SOURCE_MULTI, "Europe (ASEGR, Bourso, …)", "europe" },
     { false, SOURCE_MULTI, "France (Bourso)", "france" },
     { false, SOURCE_MULTI, "Greece (ASEGR)", "greece" },
     { false, SOURCE_MULTI, "India (BSEIndia, NSEIndia)", "india"},
     { false, SOURCE_MULTI, "India Mutual (AMFI)", "indiamutual" },
-    { false, SOURCE_MULTI, "Nasdaq (Alphavantage, FinanceAPI, ...)", "nasdaq" },
-    { false, SOURCE_MULTI, "NYSE (Alphavantage, FinanceAPI, ...)", "nyse" },
+    { false, SOURCE_MULTI, "Nasdaq (Alphavantage, FinanceAPI, …)", "nasdaq" },
+    { false, SOURCE_MULTI, "NYSE (Alphavantage, FinanceAPI, …)", "nyse" },
     { false, SOURCE_MULTI, "Poland (Stooq)", "poland" },
     { false, SOURCE_MULTI, "Romania (BVB)", "romania" },
     { false, SOURCE_MULTI, "South Africa (Sharenet)", "za" },
     { false, SOURCE_MULTI, "U.K. Funds (FTfunds, MorningstarUK)", "ukfunds" },
-    { false, SOURCE_MULTI, "USA (Alphavantage, FinanceAPI, ...)", "usa" },
+    { false, SOURCE_MULTI, "USA (Alphavantage, FinanceAPI, …)", "usa" },
 };
 
 static QuoteSourceList new_quote_sources;
