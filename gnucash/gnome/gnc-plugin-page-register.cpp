@@ -5335,6 +5335,14 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
     {
         if (GNC_IS_MAIN_WINDOW (window))
         {
+            GncPluginPageRegisterPrivate *priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+            
+            if (!gnc_ledger_display_leader (priv->ledger))
+            {
+                LEAVE ("account is NULL");
+                return;
+            }
+
             gchar *name = gnc_plugin_page_register_get_tab_name (GNC_PLUGIN_PAGE (page));
             main_window_update_page_name (GNC_PLUGIN_PAGE (page), name);
 
@@ -5350,7 +5358,7 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
             g_free (name);
             g_free (long_name);
         }
-        LEAVE ("tab name updated");
+        LEAVE ("tab contents updated");
         return;
     }
 
