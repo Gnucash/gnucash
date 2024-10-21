@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-10-17 17:12+0200\n"
-"PO-Revision-Date: 2024-07-14 13:09+0000\n"
+"PO-Revision-Date: 2024-10-20 06:18+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -2057,14 +2057,10 @@ msgid ""
 msgstr "על תנועה זו להיות משויכת לספק. נא לבחור ספק."
 
 #: gnucash/gnome/dialog-commodities.cpp:183
-#, fuzzy
-#| msgid ""
-#| "That commodity is currently used by at least one of your accounts. You "
-#| "may not delete it."
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
-msgstr "סחורה זו משמשת לפחות באחד מהחשבונות. לא ניתן למחוק אותה."
+msgstr "סחורה זו משמשת בחשבונות הבאים כרגע. לא ניתן למחוק אותה.\n"
 
 #: gnucash/gnome/dialog-commodities.cpp:201
 msgid ""
