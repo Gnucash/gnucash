@@ -42,10 +42,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.9\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-10-17 17:12+0200\n"
-"PO-Revision-Date: 2024-06-12 09:09+0000\n"
+"PO-Revision-Date: 2024-10-21 15:15+0000\n"
 "Last-Translator: Martin LORANG <wablate@lorang.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -54,7 +54,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1642,15 +1642,6 @@ msgid "Stock split"
 msgstr "Division d'actions"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:271
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the sale using the Stock Transaction Assistant first, then "
-#| "record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1659,13 +1650,13 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"La société rachète des parts, augmentant ainsi le cours de l’action par un "
-"multiple, tout en maintenant constante la valeur monétaire totale de "
-"l’investissement global.\n"
+"La société émet des unités supplémentaires, réduisant ainsi le prix de "
+"l'action d'un diviseur, tout en maintenant constante la valeur monétaire "
+"totale de l'investissement global.\n"
 "\n"
-"Si le regroupement donne lieu à une encaisse pour les parts restantes, "
-"veuillez d’abord enregistrer la vente à l’aide de l’assistant de transaction "
-"boursière, puis enregistrer le regroupement d'actions."
+"Si la division se traduit par un paiement en espèces pour les unités "
+"restantes, veuillez d'abord enregistrer la vente à l'aide de l'assistant "
+"pour les transactions sur actions, puis enregistrer la division."
 
 # messages-i18n.c:80
 #. Translators: this is a stock transaction describing a reverse split
@@ -1825,15 +1816,6 @@ msgstr ""
 "valeur de 0,00) sans affecter le nombre de titres."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:397
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the cover buy using the Stock Transaction Assistant first, "
-#| "then record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1843,13 +1825,13 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
-"La société rachète des parts, ce qui augmente le prix de l'action par un "
-"multiple, tout en maintenant constante la valeur monétaire totale de "
-"l'investissement global.\n"
+"La société émet des unités supplémentaires, réduisant ainsi le prix de "
+"l'action d'un diviseur, tout en maintenant constante la valeur monétaire "
+"totale de l'investissement global.\n"
 "\n"
-"Si le regroupement se traduit par un paiement en espèces pour les unités "
-"restantes, veuillez d'abord enregistrer l'achat de couverture à l'aide de "
-"l'assistant de transaction boursière, puis enregistrer le regroupement."
+"Si la division se traduit par un paiement en espèces pour les unités "
+"restantes, veuillez d'abord enregistrer la vente à l'aide de l'assistant "
+"pour les transactions sur actions, puis enregistrer la division."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:411
 msgid ""
@@ -2287,16 +2269,12 @@ msgstr ""
 "fournisseur ci-dessous."
 
 #: gnucash/gnome/dialog-commodities.cpp:183
-#, fuzzy
-#| msgid ""
-#| "That commodity is currently used by at least one of your accounts. You "
-#| "may not delete it."
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
 msgstr ""
-"Ce produit est actuellement utilisé par au moins un de vos comptes. Vous ne "
-"pouvez pas le supprimer."
+"Ce produit est actuellement utilisé par les comptes suivants. Vous ne pouvez "
+"pas le supprimer.\n"
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-commodities.cpp:201
@@ -2305,12 +2283,12 @@ msgid ""
 "selected commodity and its price quotes?"
 msgstr ""
 "Des cotations de cours sont associées à ce produit. Voulez-vous vraiment "
-"effacer ce produit et les cotations associées ?"
+"effacer ce produit et les cotations associées ?"
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-commodities.cpp:208
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Voulez-vous vraiment supprimer le produit sélectionné ?"
+msgstr "Voulez-vous vraiment supprimer le produit sélectionné ?"
 
 # messages-i18n.c:262
 #: gnucash/gnome/dialog-commodities.cpp:217
@@ -5982,16 +5960,10 @@ msgstr "Transactions à venir"
 
 # messages-i18n.c:56
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:933
-#, fuzzy
-#| msgid "Do you really want to delete this scheduled transaction?"
-#| msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] ""
-"Voulez-vous vraiment supprimer la transaction récurrente sélectionnée ?"
-msgstr[1] ""
-"Voulez-vous vraiment supprimer les %d transactions récurrentes "
-"sélectionnées ?"
+msgstr[0] "Voulez-vous vraiment supprimer cette transaction récurrente ?"
+msgstr[1] "Voulez-vous vraiment supprimer ces transactions récurrentes ?"
 
 # po/guile_strings.txt:242
 #: gnucash/gnome/gnc-plugin-report-system.c:163
@@ -10370,35 +10342,23 @@ msgstr ""
 
 # messages-i18n.c:80
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Définit l'ordre de tri dans le dialogue \"depuis le dernier lancement\"."
+"Définir l'ordre de tri dans le dialogue \"depuis le dernier lancement\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
-#, fuzzy
-#| msgid ""
-#| "This setting controls whether as default the \"review created "
-#| "transactions\" is set for the \"since last run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Ce réglage permet de définir l'ordre de tri dans le dialogue \"depuis la "
-"dernière exécution\"."
+"Ce réglage définit l'ordre de tri dans le dialogue \"depuis la dernière "
+"exécution\"."
 
 # messages-i18n.c:80
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "The depth used in the tree to sort in the \"since last run\" dialog."
 msgstr ""
-"Ces réglages définissent la colonne de tri dans le dialogue \"depuis le "
-"dernier lancement\"."
+"La profondeur utilisée dans l'arbre à trier dans la boîte de dialogue "
+"\"depuis la dernière exécution\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
@@ -10423,17 +10383,13 @@ msgstr "Le nombre de jours à l'avance pour avertir l'utilisateur."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
-#, fuzzy
-#| msgid "The number of payments cannot be zero."
 msgid "The number of months to be shown in editor."
-msgstr "Le nombre de paiements ne peut être zéro."
+msgstr "Le nombre de mois à afficher dans l'éditeur."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:65
-#, fuzzy
-#| msgid "Position of the vertical pane divider."
 msgid "The horizontal position of the editor divider."
-msgstr "Position du séparateur vertical."
+msgstr "Position horizontale du séparateur de l'éditeur."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:76
 msgid "Set the \"notify\" flag by default"
@@ -10487,11 +10443,14 @@ msgid ""
 "by registering for a free account at the Alpha Vantage website, https://www."
 "alphavantage.co/support/#api-key."
 msgstr ""
+"Alpha Vantage demande une clé API pour utiliser son service. Vous pouvez "
+"obtenir une clé en créant un compte gratuit sur le site web d'Alpha Vantage, "
+"https://www.alphavantage.co/support/#api-key."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "YH Finance (FinanceAPI) clé API"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3686
@@ -10501,6 +10460,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
+"YH Finance a besoin d'une clé API pour utiliser son service FinanceAPI. Vous "
+"pouvez obtenir une clé en créant un compte gratuit sur le site web de YH "
+"Finance, https://financeapi.net/pricing."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -12197,7 +12159,7 @@ msgstr "Virgule (,)"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:349
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:338
 msgid "Semicolon (;)"
-msgstr "Point-virgule (;)"
+msgstr "Point-virgule ( ; )"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:175
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
@@ -12210,7 +12172,7 @@ msgstr "Expression régulière personnalisée"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:333
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:322
 msgid "Colon (:)"
-msgstr "Deux-points (:)"
+msgstr "Deux-points ( : )"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:217
@@ -12696,33 +12658,6 @@ msgid "CSV Transaction Import"
 msgstr "Importation de transactions CSV"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. You can save your adjusted settings to reuse them on "
-#| "later imports. After loading your settings you can also tweak them again "
-#| "for similar imports and save them under another name."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -12769,17 +12704,22 @@ msgstr ""
 "\n"
 "En plus du choix du séparateur (virgule, point virgule, etc.), plusieurs "
 "options permet d'ajuster l'importation. Par exemple, un certain nombre de "
-"lignes peuvent êtres ignorées en début et/ou à la fin du fichier, mais aussi "
+"lignes peuvent être ignorées en début et/ou à la fin du fichier, mais aussi "
 "pouvoir ignorer les lignes impaires. Plusieurs formats de date et de nombre "
 "sont supportés. L'encodage du fichier peut être aussi spécifié.\n"
 "\n"
 "De plus, l'assistant supporte les transactions sur plusieurs lignes, où "
-"chaque ligne représente une répartition.\n"
+"chaque ligne représente une répartition. Une nouvelle transaction est "
+"initiée chaque fois que la valeur de l'une des colonnes liées à la "
+"transaction diffère de celle d'une transaction précédente non vide. Ces "
+"colonnes sont l'identifiant de la transaction, la date, le numéro, la "
+"description, les notes, le produit de la transaction et la raison de "
+"l'annulation.\n"
 "\n"
 "Enfin, pour faciliter plusieurs importations à la suite, la page d'aperçu "
 "contient deux boutons pour charger et enregistrer ces préférences, et ainsi "
 "les sauvegarder pour les réutiliser lors des importations suivantes. Après "
-"le chargement des préférences, il est toujours possible les ré-ajuster pour "
+"le chargement des préférences, il est toujours possible les réajuster pour "
 "différentes importations ultérieures en les sauvegardant sous un autre nom."
 
 # messages-i18n.c:346
@@ -21824,17 +21764,13 @@ msgstr ""
 "mais la colonne prix ou valeur (négativée) est manquante ou invalide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
-#, fuzzy
-#| msgid ""
-#| "Choice of account makes this a multi-currency transaction but price, "
-#| "(negated) value or (negated) transfer column is missing or invalid."
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer amount column is missing or invalid."
 msgstr ""
-"Le choix du compte fait de cette transaction une opération multidevise mais "
-"la colonne prix, valeur (négativée) ou transfert (négativé) est manquante ou "
-"invalide."
+"Le choix des comptes fait de cette transaction une opération multidevise, "
+"mais la colonne prix, valeur (négativée) ou transfert (négativé) est "
+"manquant ou invalide."
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
@@ -22180,10 +22116,8 @@ msgstr "Compte d'investissement OFX inconnu"
 
 # messages-i18n.c:176
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1308
-#, fuzzy
-#| msgid "Finding duplicate transactions"
 msgid "Removing duplicate transactions…"
-msgstr "Recherche en cours des transactions en doublon"
+msgstr "Suppression des transactions doublons…"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1362
 #, c-format
@@ -22547,7 +22481,7 @@ msgstr "Ignore la ligne de sécurité"
 # messages-i18n.c:67
 #: gnucash/import-export/qif-imp/qif-file.scm:532
 msgid "Could not parse price line"
-msgstr "Impossible d'analyser la ligne de cours."
+msgstr "Impossible d'analyser la ligne de cours"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:540
 msgid "File does not appear to be in QIF format"
@@ -22704,10 +22638,8 @@ msgid "Discarding duplicate prices"
 msgstr "Ignore les cours en doublon"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
-#, fuzzy
-#| msgid "Add a new price."
 msgid "Adding prices"
-msgstr "Ajouter un nouveau cours."
+msgstr "Ajouter des cours"
 
 # po/guile_strings.txt:219
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:589
@@ -23341,6 +23273,8 @@ msgid ""
 "This transaction cannot be balanced: The imbalance is a fraction smaller "
 "than the commodity allows."
 msgstr ""
+"Cette transaction ne peut pas être équilibrée : le déséquilibre est une "
+"fraction plus petite que ce qui est autorisé par ce produit."
 
 # messages-i18n.c:57
 #: gnucash/register/ledger-core/split-register-control.cpp:90
@@ -30190,28 +30124,22 @@ msgstr "Perte nette"
 
 # messages-i18n.c:346
 #: gnucash/report/reports/standard/txn-columns.scm:33
-#, fuzzy
-#| msgid "Transaction Report"
 msgid "Transaction Breakdown Report"
-msgstr "Rapport de transaction"
+msgstr "Rapport de ventilation de transaction"
 
 # po/guile_strings.txt:144
 #: gnucash/report/reports/standard/txn-columns.scm:37
-#, fuzzy
-#| msgid "Number of columns"
 msgid "Limit for number of columns"
-msgstr "Nombre de colonnes"
+msgstr "Limite du nombre de colonnes"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
-msgstr ""
+msgstr "Fixer la limite supérieure du nombre de colonnes"
 
 # messages-i18n.c:190
 #: gnucash/report/reports/standard/txn-columns.scm:154
-#, fuzzy
-#| msgid "Income summary accounts"
 msgid "Too many accounts"
-msgstr "Comptes de synthèse des revenus"
+msgstr "Trop de comptes"
 
 #: gnucash/report/reports/standard/txn-columns.scm:155
 msgid ""
@@ -30219,6 +30147,9 @@ msgid ""
 "Select a different subset of transactions, or increase the limit in the "
 "options."
 msgstr ""
+"Le nombre de comptes liés par les transactions trouvées dépasse la limite. "
+"Sélectionnez un autre sous-ensemble de transactions ou augmentez la limite "
+"dans les options."
 
 # po/guile_strings.txt:144
 #: gnucash/report/reports/standard/view-column.scm:45
@@ -33399,11 +33330,11 @@ msgstr "Exporter _rapport"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:37
 msgid "_Save layout as default"
-msgstr ""
+msgstr "_Sauvegarder la mise en page en tant que valeur par défaut"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:39
 msgid "Save current layout as default"
-msgstr ""
+msgstr "Sauvegarder la mise actuelle en tant que valeur par défaut"
 
 # messages-i18n.c:26
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
@@ -34684,16 +34615,14 @@ msgstr ""
 "Vérification des répartitions commerciales dans le compte %s : %u sur %u"
 
 #: libgnucash/engine/Scrub.cpp:146
-#, fuzzy, c-format
-#| msgid "Looking for orphans in transaction: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %zu"
-msgstr "Recherche d'éléments orphelins dans la transaction : %u sur %u"
+msgstr "Recherche d'éléments orphelins dans la transaction : %u sur %zu"
 
 #: libgnucash/engine/Scrub.cpp:357
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in transaction date %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %zu"
-msgstr "Recherche des irrégularités dans la date de transaction %s : %u sur %u"
+msgstr "Recherche des irrégularités dans la date de transaction %s : %u sur %zu"
 
 # messages-i18n.c:336
 #: libgnucash/engine/Split.cpp:1644
