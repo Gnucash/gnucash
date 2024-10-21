@@ -39,6 +39,7 @@
 
 (define optname-price-source (N_ "Price Source"))
 (define optname-shares-digits (N_ "Share decimal places"))
+(define optname-show-long-account-names (N_ "Show long account names"))
 (define optname-zero-shares (N_ "Include accounts with no shares"))
 (define optname-show-symbol (N_ "Show ticker symbols"))
 (define optname-show-listing (N_ "Show listings"))
@@ -97,27 +98,32 @@ by preventing negative stock balances.<br/>")
             (vector 'ignore-brokerage (N_ "Omit from report"))))
 
     (gnc-register-simple-boolean-option options
-        gnc:pagename-display optname-show-symbol "a"
+        gnc:pagename-display optname-show-long-account-names "a"
+        (N_ "Show long (instead of short) account names.")
+        #f)
+
+    (gnc-register-simple-boolean-option options
+        gnc:pagename-display optname-show-symbol "b"
         (N_ "Display the ticker symbols.")
         #t)
 
     (gnc-register-simple-boolean-option options
-        gnc:pagename-display optname-show-listing "b"
+        gnc:pagename-display optname-show-listing "c"
         (N_ "Display exchange listings.")
         #t)
 
     (gnc-register-simple-boolean-option options
-        gnc:pagename-display optname-show-shares "c"
+        gnc:pagename-display optname-show-shares "d"
         (N_ "Display numbers of shares in accounts.")
         #t)
 
     (gnc-register-number-range-option options
       gnc:pagename-display optname-shares-digits
-      "d" (N_ "The number of decimal places to use for share numbers.") 2
+      "e" (N_ "The number of decimal places to use for share numbers.") 2
       0 9 1)
 
     (gnc-register-simple-boolean-option options
-        gnc:pagename-display optname-show-price "e"
+        gnc:pagename-display optname-show-price "f"
         (N_ "Display share prices.")
         #t)
 
@@ -381,6 +387,8 @@ by preventing negative stock balances.<br/>")
                  (unit-collector (gnc:account-get-comm-balance-at-date
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
+                 (show-long-account-names (get-option gnc:pagename-display
+                                            optname-show-long-account-names))
 
                  ;; Counter to keep track of stuff
                  (brokeragecoll (gnc:make-commodity-collector))
@@ -408,6 +416,12 @@ by preventing negative stock balances.<br/>")
                  (drp-holding-amount (gnc-numeric-zero))
                  )
 
+            ;; Gets the account name.
+            (define (account->name account)
+              (if show-long-account-names
+                (gnc-account-get-full-name account)
+                (xaccAccountGetName account)))
+
             (define (my-exchange-fn fromunits tocurrency)
               (if (and (gnc-commodity-equiv currency tocurrency)
                        (gnc-commodity-equiv (gnc:gnc-monetary-commodity fromunits) commodity))
@@ -429,7 +443,7 @@ by preventing negative stock balances.<br/>")
                       tocurrency)
                     (exchange-fn fromunits tocurrency)))
 
-            (gnc:debug "Starting account " (xaccAccountGetName current) ", initial price: "
+            (gnc:debug "Starting account " (account->name current) ", initial price: "
                        (and price
                             (gnc:monetary->string
                              (gnc:make-gnc-monetary
@@ -799,8 +813,7 @@ by preventing negative stock balances.<br/>")
             ;; the report even though it doesn't have a split in the account
             ;; being reported on.
 
-            (let ((parent-account (gnc-account-get-parent current))
-                  (account-name (xaccAccountGetName current)))
+            (let ((parent-account (gnc-account-get-parent current)))
               (if (and (not (null? parent-account))
                        (member (xaccAccountGetType parent-account) (list ACCT-TYPE-ASSET ACCT-TYPE-BANK))
                        (gnc-commodity-is-currency (xaccAccountGetCommodity parent-account)))
@@ -813,7 +826,7 @@ by preventing negative stock balances.<br/>")
                            (txn-date (xaccTransGetDate parent)))
                       (if (and (not (null? other-acct))
                                (<= txn-date to-date)
-                               (string=? (xaccAccountGetName other-acct) account-name)
+                               (string=? (account->name other-acct) (account->name current))
                                (gnc-commodity-is-currency (xaccAccountGetCommodity other-acct)))
                         ;; This is a two split transaction where the other split is to an
                         ;; account with the same name as the current account.  If it's an
@@ -867,7 +880,9 @@ by preventing negative stock balances.<br/>")
                                                                                     (gnc:gnc-monetary-amount income)
                                                                                 currency-frac GNC-RND-ROUND)))
 
-                  (activecols (list (gnc:html-account-anchor current)))
+                  (activecols (list (if show-long-account-names
+                                      (gnc:html-long-account-anchor current)
+                                      (gnc:html-account-anchor current))))
                   )
 
               ;; If we're using the txn, warn the user
