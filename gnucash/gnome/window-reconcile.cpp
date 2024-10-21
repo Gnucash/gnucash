@@ -983,7 +983,11 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
         {
             GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
 
-            gtk_tree_selection_select_path (selection, path);
+            if (!gtk_tree_selection_path_is_selected (selection, path))
+            {
+                gtk_tree_selection_unselect_all (selection);
+                gtk_tree_selection_select_path (selection, path);
+            }
             gtk_tree_path_free (path);
         }
         do_popup_menu (recnData, event);
