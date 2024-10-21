@@ -247,7 +247,8 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 
     g_free (info);
 
-    gnc_gui_refresh_all ();
+    if (!gnc_gui_refresh_suspended ())
+        gnc_gui_refresh_all ();
 }
 
 bool
