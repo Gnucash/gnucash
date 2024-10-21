@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-10-17 17:12+0200\n"
-"PO-Revision-Date: 2024-10-18 22:15+0000\n"
+"PO-Revision-Date: 2024-10-20 22:20+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -969,13 +969,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"Minden tranzakcióhoz tartozik egy Megjegyzések mező ahol hasznos "
+"Minden tranzakcióhoz tartozik egy megjegyzések mező ahol hasznos "
 "információkat tárolhat.\n"
 "\n"
 "Láthatóvá tételéhez\n"
-"a Nézet menüben jelölje be a Kétsoros lehetőséget,\n"
-"vagy a Beállítások ablak Regiszter-alapbeállítások lapján jelölje be a "
-"Kétsoros nézet lehetőséget."
+"a nézet menüben jelölje be a kétsoros lehetőséget,\n"
+"vagy a GnuCash beállítások ablakában a regiszter-alapbeállítások lapon "
+"jelölje be a kétsoros nézet lehetőséget."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -985,8 +985,8 @@ msgid ""
 "Transaction Journal."
 msgstr ""
 "Többfelé osztott tranzakciók (példul többféle levonást tartalmazó munkabér) "
-"beviteléhez kattintson az eszköztáron a Felosztás gombra. Vagy a Nézet "
-"menüben válassza ki a Szerkesztett felosztás kinyitva vagy a Felosztások "
+"beviteléhez kattintson az eszköztáron a felosztás gombra. Vagy a nézet "
+"menüben válassza ki a szerkesztett felosztás kinyitva vagy a felosztások "
 "kinyitva lehetőséget."
 
 #: doc/tip_of_the_day.list.c:55
@@ -996,11 +996,11 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"Miközben összegeket ír be a könyvelésbe, a GnuCash kalkulátorral összeadhat, "
-"kivonhat, szorozhat és oszthat. Egyszerűen írja be az első értéket, majd a "
-"+, -, * és / billentyűk közül nyomja meg a kívánt művelethez tartozót. Írja "
-"be a második értéket, és nyomja meg az Entert a számított összeg "
-"rögzítéséhez."
+"Miközben összegeket ír be a könyvelésbe, a beviteli mezőt egyszerű "
+"számológépként használhatja. Összeadhat, kivonhat, szorozhat és oszthat. "
+"Egyszerűen írja be az első értéket, majd a +, -, * és / billentyűk közül "
+"nyomja meg a kívánt művelethez tartozót. Írja be a második értéket, és "
+"nyomja meg az entert a számított összeg rögzítéséhez."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -1021,7 +1021,7 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"Írja be egy létező számlanév első betűjét (betűit) az Átutalás oszlopba és a "
+"Írja be egy létező számlanév első betűjét (betűit) az átutalás oszlopba és a "
 "GnuCash kiegészíti a nevet a létező számlák alapján. Alszámlák esetén írja "
 "be a főszámla első betűjét (betűit), majd a kettőspontot és az alszámla első "
 "betűjét (pl. E:K az Eszközök:Készpénz beviteléhez)."
@@ -1072,7 +1072,7 @@ msgid ""
 msgstr ""
 "A különböző pénznemben tartott számlák közötti átutaláshoz kattintson az "
 "Átutalás gombra a regiszter eszköztárában, válassza ki a számlákat, a "
-"Pénznem átváltása lehetőség alatt pedig írja be az árfolyamot vagy az "
+"pénznem átváltása lehetőség alatt pedig írja be az árfolyamot vagy az "
 "átváltott összeget."
 
 #: doc/tip_of_the_day.list.c:91
@@ -1195,7 +1195,7 @@ msgid ""
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
 "A GnuCash támogatja a FinTS szabvány szerinti internetbanki "
-"szolgáltatásokat. Az Eszközök menüben találja az internetbanki hozzáférés "
+"szolgáltatásokat. Az eszközök menüben találja az internetbanki hozzáférés "
 "beállítására szolgáló menüpontot. Az internetbanki hozzáférés beállítása "
 "után a számlaablakban használhatók a Műveletek -> Internetes műveletek "
 "menüpontjai.\n"
@@ -3501,7 +3501,7 @@ msgstr "Kimenőszámla keresése"
 #: gnucash/report/trep-engine.scm:1333 gnucash/report/trep-engine.scm:1436
 #: gnucash/report/trep-engine.scm:2183 gnucash/report/trep-engine.scm:2203
 msgid "Amount"
-msgstr "Mennyiség"
+msgstr "Összeg"
 
 # msgid_plural "The following %d bills are due:"
 #. Translators: %d is the number of bills/credit notes due. This is a
@@ -9269,11 +9269,11 @@ msgid ""
 "be a match in the list."
 msgstr ""
 "Ez a mező azt a legnagyobb napszámot határozza meg, amelyen belül a listán "
-"egy tranzakció valószínűleg egyezik."
+"egy tranzakció valószínűleg egyező."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Valószínűtlen, hogy az ezeken a napokon kívüli tranzakció egyezik"
+msgstr "Valószínűtlen, hogy e napokon túl a tranzakció egyező"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
 msgid ""
@@ -9345,7 +9345,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
 #: gnucash/gtkbuilder/dialog-preferences.glade:2275
 msgid "Automatically create new commodities"
-msgstr "Új árucikk automatikus létrehozása"
+msgstr "Új áruk automatikus létrehozása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:2281
@@ -9354,6 +9354,9 @@ msgid ""
 "is encountered during import. Otherwise the user will be asked what to do "
 "with each unknown commodity."
 msgstr ""
+"Engedélyezi az új áruk automatikus létrehozását, ha az importálás során "
+"ismeretlen áruval találkozott. Ellenkező esetben a program megkérdezi a "
+"felhasználót, mit tegyen az ismeretlen áruval."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
 msgid "Display or hide reconciled matches"
@@ -9402,7 +9405,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
-msgstr ""
+msgstr "A kiegyenlített tranzakciók előre kiválasztása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:6
 msgid ""
@@ -9410,8 +9413,9 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
-"Ha aktív, minden elszámoltként megjelölt tranzakció kiválasztottként jelenik "
-"meg az egyeztetés ablakban. Különben nincs kezdetben kiválasztott tranzakció."
+"Ha aktív, minden kiegyenlítettként megjelölt tranzakció kiválasztottként "
+"jelenik meg az egyeztetési párbeszédablakban. Különben nincs kezdetben "
+"kiválasztott tranzakció."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
@@ -9728,7 +9732,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:55
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:56
 msgid "Display negative amounts in red"
-msgstr "Negatív mennyiségeket pirosan"
+msgstr "Negatív összegek megjelenítése pirosan"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:60
 msgid "Automatically insert a decimal point"
@@ -15187,11 +15191,11 @@ msgstr "Az á_rak megjelenítésénél a tizedesszámok kényszerítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1243
 msgid "Display ne_gative amounts in red"
-msgstr "Ne_gatív mennyiségek pirosan"
+msgstr "Ne_gatív összegek megjelenítése pirosan"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1249
 msgid "Display negative amounts in red."
-msgstr "Negatív mennyiségek megjelenítése pirossal."
+msgstr "Negatív összegek megjelenítése pirossal."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1261
 msgid "_Automatic decimal point"
@@ -15404,9 +15408,9 @@ msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
-"A tranzakció, amelynek a legjobb egyezés-pontszáma a zöld sávba esik (a "
-"belépő auto-egyezés küszöb felett, vagy azzal szintben) elszámoltnak "
-"jelölése alapértelmezésént."
+"Az a tranzakció, amelynek a legjobb egyezéspontszáma a zöld sávba esik (az "
+"automatikus kiegyenlítetnek jelölési küszöbérték felett, vagy azzal szintben)"
+" alapértelmezésént kiegyenlítettnek lesz jelölve."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2160
 msgid ""
@@ -15434,7 +15438,7 @@ msgstr "Kereskedelmi ATM pénzautomata _díjak küszöbértéke"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2217
 msgid "Auto-c_lear threshold"
-msgstr "Auto-e_gyezés küszöb"
+msgstr "Automatikus _kiegyenlítettnek jelölés küszöbértéke"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2231
@@ -19417,7 +19421,7 @@ msgstr "Válasszon ki egy leírás oszlopot."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
 msgid "Please select a (negated) amount column."
-msgstr "Kérjük, válasszon egy (negált) mennyiség oszlopot."
+msgstr "Kérjük, válasszon egy (negált) összeg oszlopot."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
@@ -19520,7 +19524,7 @@ msgstr "Nincs dátum oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:281
 msgid "No amount column."
-msgstr "Nincs Mennyiség oszlop."
+msgstr "Nincs összegoszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:283
 msgid "No 'Currency to'."
@@ -19540,7 +19544,7 @@ msgstr "Tranzakciószimbólum"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 msgid "Amount (Negated)"
-msgstr "Mennyiség (negált)"
+msgstr "Összeg (negált)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
@@ -19610,11 +19614,11 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
 msgid "No amount or negated amount column."
-msgstr "Nincs Mennyiség vagy Mennyiség (negált) oszlop."
+msgstr "Nincs összeg vagy negált összeg oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:644
 msgid "Split is reconciled but reconcile date column is missing or invalid."
-msgstr "A felosztás egyeztetett, de az Egyeztetés napja hiányzik vagy hibás."
+msgstr "A felosztás egyeztetett, de az egyeztetés napja hiányzik vagy hibás."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:647
 msgid ""
@@ -19628,7 +19632,7 @@ msgid ""
 "(negated) value column is missing or invalid."
 msgstr ""
 "A kiválasztott számlák miatt ez egy több sorba felosztott tranzakció, de az "
-"Árfolyam vagy a (negált) Érték oszlop hiányzik vagy hibás."
+"árfolyam vagy a (negált) érték oszlop hiányzik vagy érvénytelen."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
@@ -19636,7 +19640,8 @@ msgid ""
 "(negated) value or (negated) transfer amount column is missing or invalid."
 msgstr ""
 "A kiválasztott számlák miatt ez egy több sorba felosztott tranzakció, de az "
-"árfolyam vagy a (negált) átutalási összeg oszlop hiányzik vagy érvénytelen."
+"árfolyam, (negált) érték vagy a (negált) átutalási összeg oszlop hiányzik "
+"vagy érvénytelen."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -19644,11 +19649,11 @@ msgstr "Mentetlen beállítások"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:47
 msgid "GnuCash Export Format"
-msgstr "GnuCash Exportálási Formátum"
+msgstr "GnuCash exportálási formátum"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:48
 msgid "GnuCash Export Format (4.x and older)"
-msgstr "GnuCash Exportálási Formátum (4.x vagy korábbi verzió)"
+msgstr "GnuCash exportálási formátum (4.x vagy korábbi verzió)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 #, fuzzy
@@ -21102,7 +21107,7 @@ msgstr "Egy tranzakció leírása"
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr "Hiv."
+msgstr "L"
 
 #: gnucash/register/ledger-core/split-register-layout.c:713
 #: gnucash/register/ledger-core/split-register-layout.c:753
@@ -25423,7 +25428,7 @@ msgstr ""
 #: gnucash/report/reports/standard/investment-lots.scm:1425
 #, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr ": mennyiség ~a, érték ~a"
+msgstr ": összeg ~a, érték ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
