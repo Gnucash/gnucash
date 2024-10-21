@@ -169,7 +169,8 @@ from gnucash.function_class import \
      ClassFromFunctions, extract_attributes_with_prefix, \
      default_arguments_decorator, method_function_returns_instance, \
      methods_return_instance, process_list_convert_to_instance, \
-     method_function_returns_instance_list, methods_return_instance_lists
+     method_function_returns_instance_list, methods_return_instance_lists, \
+     classmethod_function_returns_instance
 
 from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
@@ -1004,6 +1005,8 @@ GncCommodityNamespace.get_commodity_list = \
 
 # GncLot
 GncLot.add_constructor_and_methods_with_prefix('gnc_lot_', 'new')
+# replace method for gnc_lot_make_default() to be a classmethod
+GncLot.add_classmethod('gnc_lot_make_default', 'make_default')
 
 gnclot_dict =   {
                     'get_account' : Account,
@@ -1011,10 +1014,13 @@ gnclot_dict =   {
                     'get_earliest_split' : Split,
                     'get_latest_split' : Split,
                     'get_balance' : GncNumeric,
-                    'lookup' : GncLot,
-                    'make_default' : GncLot
+                    'lookup' : GncLot
                 }
 methods_return_instance(GncLot, gnclot_dict)
+GncLot.make_default = classmethod_function_returns_instance(GncLot.make_default, GncLot)
+methods_return_instance_lists(
+    GncLot, { 'get_split_list': Split
+    })
 
 # Transaction
 Transaction.add_methods_with_prefix('xaccTrans')
@@ -1054,6 +1060,7 @@ split_dict =    {
                     'GetBook': Book,
                     'GetAccount': Account,
                     'GetParent': Transaction,
+                    'GetLot': GncLot,
                     'Lookup': Split,
                     'GetOtherSplit': Split,
                     'GetAmount': GncNumeric,
@@ -1066,7 +1073,8 @@ split_dict =    {
                     'GetReconciledBalance': GncNumeric,
                     'VoidFormerAmount': GncNumeric,
                     'VoidFormerValue': GncNumeric,
-                    'GetGUID': GUID
+                    'GetGUID': GUID,
+                    'AssignToLot': Split
                 }
 methods_return_instance(Split, split_dict)
 
@@ -1111,6 +1119,7 @@ account_dict =  {
 methods_return_instance(Account, account_dict)
 methods_return_instance_lists(
     Account, { 'GetSplitList': Split,
+               'GetLotList': GncLot,
                'get_children': Account,
                'get_children_sorted': Account,
                'get_descendants': Account,
