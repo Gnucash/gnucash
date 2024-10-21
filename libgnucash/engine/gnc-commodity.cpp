@@ -191,7 +191,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, "Alphavantage, US", "alphavantage" },
     { false, SOURCE_SINGLE, "Amsterdam Euronext eXchange, NL", "aex" },
     { false, SOURCE_SINGLE, "Association of Mutual Funds in India", "amfiindia" },
-    { false, SOURCE_SINGLE, "Athens Exchange Group, AU", "asegr" },
+    { false, SOURCE_SINGLE, "Athens Exchange Group, GR", "asegr" },
     { false, SOURCE_SINGLE, "Australian Stock Exchange, AU", "asx" },
     { false, SOURCE_SINGLE, "Bloomberg", "bloomberg" },
     { false, SOURCE_SINGLE, "Borsa Italiana, IT", "borsa_italiana" },
