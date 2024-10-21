@@ -1461,20 +1461,21 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
             DEBUG("Right mouseClick detected - popup the menu.");
 
             auto selection = gtk_tree_view_get_selection (treeview);
-            auto selected_rows = gtk_tree_selection_count_selected_rows (selection);
-            /* If no rows are selected yet, select the row that was clicked on
-             * before proceeding */
-            if (!selected_rows)
+            GtkTreePath* path = nullptr;
+
+            /* Get tree path for row that was clicked */
+            if (gtk_tree_view_get_path_at_pos (treeview, event_button->x,
+                                               event_button->y, &path,
+                                               nullptr, nullptr, nullptr))
             {
-                GtkTreePath* path = nullptr;
-                if (gtk_tree_view_get_path_at_pos (treeview, event_button->x,
-                    event_button->y, &path, nullptr, nullptr, nullptr))
+                if (!gtk_tree_selection_path_is_selected (selection, path))
                 {
+                    gtk_tree_selection_unselect_all (selection);
                     gtk_tree_selection_select_path (selection, path);
-                    selected_rows++;
-                    gtk_tree_path_free (path);
                 }
+                gtk_tree_path_free (path);
             }
+
             if (gtk_tree_selection_count_selected_rows (selection) > 0)
             {
                 GtkTreeModel *model;
