@@ -13,12 +13,12 @@
     <key name="close-on-finish" type="b">
       <default>true</default>
       <summary>Close window when finished</summary>
-      <description>If active, the window will be closed automatically when you finish the HBCI/AqBanking import process. Otherwise it will stay open.</description>
+      <description>If active, the window will be closed automatically when you finish the AqBanking import process. Otherwise it will stay open.</description>
     </key>
     <key name="remember-pin" type="b">
       <default>false</default>
       <summary>Remember the PIN in memory</summary>
-      <description>If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</description>
+      <description>If active, the PIN for AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</description>
     </key>
     <key name="use-ns-transaction-text" type="b">
       <default>true</default>
@@ -27,8 +27,8 @@
     </key>
     <key name="verbose-debug" type="b">
       <default>false</default>
-      <summary>Verbose HBCI debug messages</summary>
-      <description>Enables verbose debug messages for HBCI/AqBanking Online Banking.</description>
+      <summary>Verbose debug messages</summary>
+      <description>Enables verbose debug messages for AqBanking.</description>
     </key>
     <key name="format-dtaus" type="s">
       <default>'default'</default>
