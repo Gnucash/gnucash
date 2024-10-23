@@ -91,6 +91,14 @@
 #include "qofbookslots.h"
 #include "gnc-gtk-utils.h"
 
+/* gschema: org.gnucash.GnuCash.general.register.JumpMultipleSplits */
+typedef enum : gint
+{
+    JUMP_DEFAULT = 0, /* Do nothing */
+    JUMP_LARGEST_VALUE_FIRST_SPLIT = 1,
+    JUMP_SMALLEST_VALUE_FIRST_SPLIT = 2,
+} GncPrefJumpMultSplits;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -4810,6 +4818,115 @@ gnc_plugin_page_register_cmd_exchange_rate (GSimpleAction *simple,
     LEAVE (" ");
 }
 
+static Split*
+jump_multiple_splits_by_single_account (Account *account, Split *split)
+{
+    Transaction *trans;
+    SplitList *splits;
+    Account *other_account = NULL;
+    Split *other_split = NULL;
+
+    trans = xaccSplitGetParent(split);
+    if (!trans)
+        return NULL;
+
+    for (splits = xaccTransGetSplitList(trans); splits; splits = splits->next)
+    {
+        Split *s = (Split*)splits->data;
+        Account *a = xaccSplitGetAccount(s);
+
+        if (!xaccTransStillHasSplit(trans, s))
+            continue;
+
+        if (a == account)
+            continue;
+
+        if (other_split)
+        {
+            if (other_account != a)
+                return NULL;
+
+            continue;
+        }
+
+        other_account = a;
+        other_split = s;
+    }
+
+    // Jump to the same account so that the right warning is triggered
+    if (!other_split)
+        other_split = split;
+
+    return other_split;
+}
+
+static Split*
+jump_multiple_splits_by_value (Account *account, Split *split, gboolean largest)
+{
+    Transaction *trans;
+    SplitList *splits;
+    Split *other_split = NULL;
+    gnc_numeric best;
+    int cmp = largest ? 1 : -1;
+
+    trans = xaccSplitGetParent(split);
+    if (!trans)
+        return NULL;
+
+    for (splits = xaccTransGetSplitList(trans); splits; splits = splits->next)
+    {
+        Split *s = (Split*)splits->data;
+        gnc_numeric value;
+
+        if (!xaccTransStillHasSplit(trans, s))
+            continue;
+
+        if (xaccSplitGetAccount(s) == account)
+            continue;
+
+        value = gnc_numeric_abs(xaccSplitGetValue(s));
+        if (gnc_numeric_check(value))
+            continue;
+
+        /* For splits with the same value as the best, the first split
+         * encountered is used.
+         */
+        if (other_split && gnc_numeric_compare(value, best) != cmp)
+            continue;
+
+        best = value;
+        other_split = s;
+    }
+
+    // Jump to the same account so that the right warning is triggered
+    if (!other_split)
+        other_split = split;
+
+    return other_split;
+}
+
+static Split*
+jump_multiple_splits (Account* account, Split *split)
+{
+    GncPrefJumpMultSplits mode = (GncPrefJumpMultSplits)gnc_prefs_get_enum(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_JUMP_MULT_SPLITS);
+
+    switch (mode)
+    {
+    case JUMP_LARGEST_VALUE_FIRST_SPLIT:
+        return jump_multiple_splits_by_value (account, split, TRUE);
+
+    case JUMP_SMALLEST_VALUE_FIRST_SPLIT:
+        return jump_multiple_splits_by_value (account, split, FALSE);
+
+    case JUMP_DEFAULT:
+    default:
+        break;
+    }
+
+    // If there's only one other account, use that one
+    return jump_multiple_splits_by_single_account (account, split);
+}
+
 static void
 gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
                                    GVariant      *paramter,
@@ -4855,12 +4972,56 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
     leader = gnc_ledger_display_leader (priv->ledger);
     if (account == leader)
     {
-        split = xaccSplitGetOtherSplit (split);
-        if (split == NULL)
+        CursorClass cursor_class = gnc_split_register_get_current_cursor_class (reg);
+        if (cursor_class == CURSOR_CLASS_SPLIT)
         {
+            /* If you've selected the transaction itself, we jump to the "other"
+             * account corresponding to the anchoring split.
+             *
+             * If you've selected the split for another account, we jump to that
+             * split's account (account != leader, so this block is never
+             * reached).
+             *
+             * If you've selected a split for this account, for consistency with
+             * selecting the split of another account we should do nothing.
+             * You're already on the account for the split you selected. Jumping
+             * to the "other" account now would make the "multiple split"
+             * options confusing.
+             *
+             * We could jump to a different anchoring split but that'll be very
+             * subtle and only cause problems because it'll have to save any
+             * modifications to the current register.
+             */
+            LEAVE ("split for this account");
+            return;
+        }
+
+        Split* other_split = xaccSplitGetOtherSplit (split);
+        if (other_split == NULL)
+        {
+            other_split = jump_multiple_splits (account, split);
+        }
+        if (other_split == NULL)
+        {
+            GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                             (GtkDialogFlags)(GTK_DIALOG_MODAL
+                                                | GTK_DIALOG_DESTROY_WITH_PARENT),
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_NONE,
+                                             "%s",
+                                             _("Unable to jump to other account"));
+
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                    "%s", _("This transaction involves more than one other account. Select a specific split to jump to that account."));
+            gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
+            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_MULTIPLE_SPLITS);
+            gtk_widget_destroy (dialog);
+
             LEAVE ("no split (2)");
             return;
         }
+
+        split = other_split;
 
         account = xaccSplitGetAccount (split);
         if (account == NULL)
@@ -4871,6 +5032,20 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
 
         if (account == leader)
         {
+            GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                             (GtkDialogFlags)(GTK_DIALOG_MODAL
+                                                | GTK_DIALOG_DESTROY_WITH_PARENT),
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_NONE,
+                                             "%s",
+                                             _("Unable to jump to other account"));
+
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                    "%s", _("This transaction only involves the current account so there is no other account to jump to."));
+            gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
+            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_SINGLE_ACCOUNT);
+            gtk_widget_destroy (dialog);
+
             LEAVE ("register open for account");
             return;
         }

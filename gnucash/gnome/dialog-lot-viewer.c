@@ -1129,10 +1129,10 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     {
         GObject *object;
         object = gtk_builder_get_object (builder, "lot_vpaned");
-        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_VPOS, object, "position");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_VPOS, NULL, object, "position");
 
         object = gtk_builder_get_object (builder, "lot_hpaned");
-        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_HPOS, object, "position");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_HPOS, NULL, object, "position");
     }
 
     lv->selected_lot = NULL;
