@@ -236,7 +236,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;S_ystem input encodings&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">S_ystem input encodings</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">available_encs_view</property>
@@ -322,7 +325,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;_Custom encoding&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">_Custom encoding</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">custom_enc_entry</property>
@@ -405,7 +411,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;_Selected encodings&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">_Selected encodings</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">selected_encs_view</property>

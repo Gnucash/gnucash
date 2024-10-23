@@ -317,9 +317,9 @@
        (set-opt options headingpage optname-tax-rate (G_ "GST Rate"))
        (set-opt options headingpage optname-tax-amount (G_ "GST Amount"))
        (set-opt options headingpage2 optname-amount-due (G_ "Amount Due (inc GST)"))
-       (set-opt options headingpage2 optname-invoice-number-text (G_ "Invoice #: "))
-       (set-opt options headingpage2 optname-ref-text (G_ "Reference: "))
-       (set-opt options headingpage2 optname-jobname-text (G_ "Engagement: "))
+       (set-opt options headingpage2 optname-invoice-number-text (G_ "Invoice #:"))
+       (set-opt options headingpage2 optname-ref-text (G_ "Reference:"))
+       (set-opt options headingpage2 optname-jobname-text (G_ "Engagement:"))
        (set-opt options notespage optname-extra-css "h1.coyname { text-align: right; margin-bottom: 0px ; font-size: 200%; } h2.invoice { text-align: left; margin-bottom: 0px ; font-size: 500%; }")
        options))
 

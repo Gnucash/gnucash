@@ -34,9 +34,9 @@
             <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">General</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -112,7 +112,10 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">&lt;b&gt;Invoices&lt;/b&gt;</property>
+            <property name="label" translatable="yes">Invoices</property>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
             <property name="use-markup">True</property>
           </object>
           <packing>
@@ -189,7 +192,10 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">&lt;b&gt;Bills&lt;/b&gt;</property>
+            <property name="label" translatable="yes">Bills</property>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
             <property name="use-markup">True</property>
           </object>
           <packing>

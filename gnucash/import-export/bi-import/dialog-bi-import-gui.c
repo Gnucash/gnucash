@@ -191,7 +191,7 @@ gnc_plugin_bi_import_getFilename(GtkWindow *parent)
     gtk_file_filter_set_name (filter, "text files (*.txt)");
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
-    filename = gnc_file_dialog(parent, _("Import Bills or Invoices from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
+    filename = gnc_file_dialog(parent, _("Import Bills or Invoices from CSV"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
 }

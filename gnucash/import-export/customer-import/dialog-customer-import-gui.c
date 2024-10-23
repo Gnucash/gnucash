@@ -169,7 +169,7 @@ gnc_plugin_customer_import_getFilename (GtkWindow *parent)
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
     filename = gnc_file_dialog(parent,
-                               _("Import Customers from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
+                               _("Import Customers from CSV"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
 }

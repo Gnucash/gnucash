@@ -151,9 +151,9 @@
                         <property name="label" translatable="yes">_Notes</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">lot_notes_text</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -190,7 +190,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;_Title&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">_Title</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="justify">center</property>
@@ -220,7 +223,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;_Lots in This Account&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">_Lots in This Account</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">lot_view</property>
@@ -301,7 +307,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Splits _free&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">Splits _free</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">split_free_view</property>
@@ -356,7 +365,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Splits _in lot&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">Splits _in lot</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">split_in_lot_view</property>

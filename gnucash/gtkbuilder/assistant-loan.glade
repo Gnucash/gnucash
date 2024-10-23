@@ -216,7 +216,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="invisible-char">●</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="secondary-icon-activatable">False</property>
-                <property name="secondary-icon-tooltip-text" translatable="yes">Enter the number of months still to be paid off. This determines both the remaining principle and the duration of the scheduled transaction.</property>
+                <property name="secondary-icon-tooltip-text" translatable="yes">Enter the number of months still to be paid off. This determines both the remaining principal and the duration of the scheduled transaction.</property>
                 <property name="climb-rate">1</property>
               </object>
               <packing>
@@ -545,7 +545,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
             <property name="justify">center</property>
             <property name="wrap">True</property>
             <style>
-              <class name="gnc-class-highlight"/>
+              <class name="gnc-class-strong"/>
             </style>
           </object>
           <packing>
@@ -1078,7 +1078,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Review the details below and if correct press "Apply"" to create the schedule.</property>
+            <property name="label" translatable="yes">Review the details below and if correct press "Apply" to create the schedule.</property>
             <property name="justify">center</property>
           </object>
           <packing>
