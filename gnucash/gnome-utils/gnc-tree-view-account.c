@@ -1486,6 +1486,7 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
     gtk_tree_path_free(parent_path);
 
     gtk_tree_selection_select_path (selection, s_path);
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), s_path, 0, FALSE);
 
     /* give gtk+ a chance to resize the tree view first by handling pending
      * configure events */
