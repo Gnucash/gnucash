@@ -39,13 +39,31 @@ set(test_autoclear_LIBS
   gtest
 )
 
+set(test_list_model_container_SOURCES
+  test-list-model-container.cpp
+)
+
+set(test_list_model_container_INCLUDE_DIRS
+)
+
+set(test_list_model_container_LIBS
+  gnc-gnome-utils
+  gtest
+)
+
 gnc_add_test(test-autoclear "${test_autoclear_SOURCES}"
     test_autoclear_INCLUDE_DIRS
     test_autoclear_LIBS
+)
+
+gnc_add_test(test-list-model-container "${test_list_model_container_SOURCES}"
+    test_list_model_container_INCLUDE_DIRS
+    test_list_model_container_LIBS
 )
 
 gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
 
 set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-load-gnome-utils-module.scm
+  ${test_list_model_container_SOURCES}
   ${test_autoclear_SOURCES})
