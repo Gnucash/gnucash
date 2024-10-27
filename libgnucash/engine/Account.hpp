@@ -39,6 +39,7 @@
 
 using SplitsVec = std::vector<Split*>;
 using AccountVec = std::vector<Account*>;
+using LotVec = std::vector<GNCLot*>;
 
 const SplitsVec& xaccAccountGetSplits (const Account*);
 

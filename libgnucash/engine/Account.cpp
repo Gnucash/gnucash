@@ -313,7 +313,6 @@ gnc_account_init(Account* acc)
     priv->mark = 0;
 
     priv->policy = xaccGetFIFOPolicy();
-    priv->lots = nullptr;
 
     priv->commodity = nullptr;
     priv->commodity_scu = 0;
@@ -329,6 +328,7 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
+    new (&priv->lots) LotVec ();
     new (&priv->children) AccountVec ();
     new (&priv->splits) SplitsVec ();
     priv->splits_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -1370,7 +1370,6 @@ static void
 xaccFreeAccount (Account *acc)
 {
     AccountPrivate *priv;
-    GList *lp;
 
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
@@ -1393,18 +1392,13 @@ xaccFreeAccount (Account *acc)
     }
 
     /* remove lots -- although these should be gone by now. */
-    if (priv->lots)
+    if (!priv->lots.empty())
     {
         PERR (" instead of calling xaccFreeAccount(), please call\n"
               " xaccAccountBeginEdit(); xaccAccountDestroy();\n");
 
-        for (lp = priv->lots; lp; lp = lp->next)
-        {
-            GNCLot *lot = static_cast<GNCLot*>(lp->data);
-            gnc_lot_destroy (lot);
-        }
-        g_list_free (priv->lots);
-        priv->lots = nullptr;
+        std::for_each (priv->lots.rbegin(), priv->lots.rend(), gnc_lot_destroy);
+        priv->lots.~LotVec();
     }
 
     /* Next, clean up the splits */
@@ -1564,14 +1558,10 @@ xaccAccountCommitEdit (Account *acc)
             qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
 
             /* the lots should be empty by now */
-            for (auto lp = priv->lots; lp; lp = lp->next)
-            {
-                GNCLot *lot = static_cast<GNCLot*>(lp->data);
-                gnc_lot_destroy (lot);
-            }
+            std::for_each (priv->lots.rbegin(), priv->lots.rend(), gnc_lot_destroy);
         }
-        g_list_free(priv->lots);
-        priv->lots = nullptr;
+        priv->lots.clear();     // this is crucial otherwise test-engine fails
+        priv->lots.~LotVec();
 
         qof_instance_set_dirty(&acc->inst);
         qof_instance_decrease_editlevel(acc);
@@ -2125,10 +2115,10 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
     g_return_if_fail(GNC_IS_LOT(lot));
 
     priv = GET_PRIVATE(acc);
-    g_return_if_fail(priv->lots);
+    g_return_if_fail(!priv->lots.empty());
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
-    priv->lots = g_list_remove(priv->lots, lot);
+    priv->lots.erase (std::remove (priv->lots.begin(), priv->lots.end(), lot), priv->lots.end());
     qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_REMOVE, nullptr);
     qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, nullptr);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
@@ -2137,16 +2127,12 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
-    AccountPrivate *priv, *opriv;
-    Account * old_acc = nullptr;
-    Account* lot_account;
-
     /* errors */
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
     g_return_if_fail(GNC_IS_LOT(lot));
 
     /* optimizations */
-    lot_account = gnc_lot_get_account(lot);
+    auto lot_account = gnc_lot_get_account(lot);
     if (lot_account == acc)
         return;
 
@@ -2155,13 +2141,12 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
     /* pull it out of the old account */
     if (lot_account)
     {
-        old_acc = lot_account;
-        opriv = GET_PRIVATE(old_acc);
-        opriv->lots = g_list_remove(opriv->lots, lot);
+        auto& lot_acc_lots = GET_PRIVATE(lot_account)->lots;
+        lot_acc_lots.erase (std::remove (lot_acc_lots.begin(), lot_acc_lots.end(), lot),
+                            lot_acc_lots.end());
     }
 
-    priv = GET_PRIVATE(acc);
-    priv->lots = g_list_prepend(priv->lots, lot);
+    GET_PRIVATE(acc)->lots.push_back (lot);
     gnc_lot_set_account(lot, acc);
 
     /* Don't move the splits to the new account.  The caller will do this
@@ -2237,7 +2222,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
     /* Finally empty accfrom. */
     g_assert(from_priv->splits.empty());
-    g_assert(from_priv->lots == nullptr);
+    g_assert(from_priv->lots.empty());
     xaccAccountCommitEdit(accfrom);
     xaccAccountCommitEdit(accto);
 
@@ -3927,7 +3912,9 @@ LotList *
 xaccAccountGetLotList (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
-    return g_list_copy(GET_PRIVATE(acc)->lots);
+    auto priv = GET_PRIVATE (acc);
+    return std::accumulate (priv->lots.rbegin(), priv->lots.rend(),
+                            static_cast<GList*>(nullptr), g_list_prepend);
 }
 
 LotList *
@@ -3937,16 +3924,13 @@ xaccAccountFindOpenLots (const Account *acc,
                          gpointer user_data, GCompareFunc sort_func)
 {
     AccountPrivate *priv;
-    GList *lot_list;
     GList *retval = nullptr;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
 
     priv = GET_PRIVATE(acc);
-    for (lot_list = priv->lots; lot_list; lot_list = lot_list->next)
+    for (auto lot : priv->lots)
     {
-        GNCLot *lot = static_cast<GNCLot*>(lot_list->data);
-
         /* If this lot is closed, then ignore it */
         if (gnc_lot_is_closed (lot))
             continue;
@@ -3971,8 +3955,8 @@ xaccAccountForEachLot(const Account *acc,
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
     g_return_val_if_fail(proc, nullptr);
 
-    for (auto node = GET_PRIVATE(acc)->lots; node; node = node->next)
-        if (auto result = proc(GNC_LOT(node->data), data))
+    for (auto lot : GET_PRIVATE(acc)->lots)
+        if (auto result = proc(lot, data))
             return result;
 
     return nullptr;

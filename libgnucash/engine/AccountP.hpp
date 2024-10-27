@@ -119,7 +119,7 @@ typedef struct AccountPrivate
     GHashTable* splits_hash;
     gboolean sort_dirty;        /* sort order of splits is bad */
 
-    LotList   *lots;		/* list of lot pointers */
+    std::vector<GNCLot*> lots;		/* list of lot pointers */
     GNCPolicy *policy;		/* Cached pointer to policy method */
 
     char *notes;
