@@ -2288,6 +2288,96 @@ acct_traverse_descendants (Account *acct, std::function<void(Account*)> fn)
         gnc_account_foreach_descendant (acct, fn);
 }
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <iostream>
+#include "gnc-datetime.hpp"
+#include "gnc-numeric.hpp"
+
+static void
+output_reconciliation (const std::string filename, Account *account,
+                       time64 end_date, gnc_numeric end_bal,
+                       SplitsVec& splits)
+{
+    auto time64_to_str = [](time64 date){ return GncDateTime(date).format("%Y%m%d%H%M%S");};
+    auto amount_to_str = [](gnc_numeric num){ return GncNumeric(num).to_string(); };
+
+    // Initialize libxml library
+    LIBXML_TEST_VERSION
+
+    auto doc = xmlNewDoc(BAD_CAST "1.0");
+
+    auto root = xmlNewNode(nullptr, BAD_CAST "OFX");
+    xmlDocSetRootElement(doc, root);
+
+    auto signonmsgsrsv1 = xmlNewChild(root, nullptr, BAD_CAST "SIGNONMSGSRSV1", nullptr);
+    auto sonrs = xmlNewChild(signonmsgsrsv1, nullptr, BAD_CAST "SONRS", nullptr);
+
+    auto status = xmlNewChild(sonrs, nullptr, BAD_CAST "STATUS", nullptr);
+    xmlNewChild(status, nullptr, BAD_CAST "CODE", BAD_CAST "0");
+    xmlNewChild(status, nullptr, BAD_CAST "SEVERITY", BAD_CAST "INFO");
+    xmlNewChild(status, nullptr, BAD_CAST "MESSAGE", BAD_CAST "OK");
+
+    auto today{time64_to_str(gnc_time(nullptr))};
+    xmlNewChild(sonrs, nullptr, BAD_CAST "DTSERVER", BAD_CAST today.c_str());
+    xmlNewChild(sonrs, nullptr, BAD_CAST "LANGUAGE", BAD_CAST "ENG");
+
+    auto bankmsgsrsv1 = xmlNewChild(root, nullptr, BAD_CAST "BANKMSGSRSV1", nullptr);
+    auto stmttrnrs = xmlNewChild(bankmsgsrsv1, nullptr, BAD_CAST "STMTTRNRS", nullptr);
+    auto stmtrs = xmlNewChild(stmttrnrs, nullptr, BAD_CAST "STMTRS", nullptr);
+    auto banktranlist = xmlNewChild(stmtrs, nullptr, BAD_CAST "BANKTRANLIST", nullptr);
+
+    for (const auto& split : splits)
+    {
+        auto stmttrn = xmlNewChild(banktranlist, nullptr, BAD_CAST "STMTTRN", nullptr);
+        auto trans{xaccSplitGetParent(split)};
+        auto date_posted{time64_to_str(xaccTransGetDate (trans))};
+        auto amount{amount_to_str(xaccSplitGetAmount(split))};
+        xmlNewChild(stmttrn, nullptr, BAD_CAST "TRNTYPE", BAD_CAST "CREDIT");
+        xmlNewChild(stmttrn, nullptr, BAD_CAST "DTPOSTED", BAD_CAST date_posted.c_str());
+        xmlNewChild(stmttrn, nullptr, BAD_CAST "TRNAMT", BAD_CAST amount.c_str());
+        // xmlNewChild(stmttrn, nullptr, BAD_CAST "FITID", BAD_CAST txn.fitid.c_str());
+        xmlNewChild(stmttrn, nullptr, BAD_CAST "MEMO", BAD_CAST xaccTransGetDescription(trans));
+    }
+
+    static const char* ofx_header{"OFXHEADER:100\nDATA:OFXSGML\nVERSION:102\nSECURITY:NONE\nENCODING:USASCII\nCHARSET:1252\nCOMPRESSION:NONE\nOLDFILEUID:NONE\nNEWFILEUID:NONE\n\n"};
+
+    FILE* file = fopen(filename.c_str(), "w");
+    int result = 0;
+    xmlOutputBufferPtr output = nullptr;
+    if (!file)
+    {
+        PWARN("Cannot open file for writing");
+        goto cleanup;
+    }
+
+    fprintf (file, "%s", ofx_header);
+    output = xmlOutputBufferCreateFile(file, NULL);
+    if (output == NULL)
+    {
+        PWARN ("Failed to create output buffer.");
+        goto cleanup;
+    }
+
+    result = xmlSaveFormatFileTo(output, doc, "UTF-8", 1);
+    if (result == -1)
+    {
+        PWARN ("Failed to write XML to file stream.\n");
+        goto cleanup;
+    }
+
+ cleanup:
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+    if (file) fclose (file);
+}
+
+static void
+add_to_split (Split *split, gpointer value, std::vector<Split*> *splits)
+{
+    splits->push_back (split);
+}
+
 /********************************************************************\
  * recnFinishCB                                                     *
  *   saves reconcile information                                    *
@@ -2325,6 +2415,13 @@ recnFinishCB (GSimpleAction *simple,
     gnc_reconcile_view_commit(GNC_RECONCILE_VIEW(recnData->credit), date);
     gnc_reconcile_view_commit(GNC_RECONCILE_VIEW(recnData->debit), date);
     acct_traverse_descendants (account, xaccAccountCommitEdit);
+
+    std::vector<Split*> splits;
+    g_hash_table_foreach (GNC_RECONCILE_VIEW(recnData->credit)->reconciled,
+                          (GHFunc)add_to_split, &splits);
+    g_hash_table_foreach (GNC_RECONCILE_VIEW(recnData->debit)->reconciled,
+                          (GHFunc)add_to_split, &splits);
+    output_reconciliation ("../../output2.ofx", account, date, recnData->new_ending, splits);
 
     auto_payment = gnc_prefs_get_bool(GNC_PREFS_GROUP_RECONCILE, GNC_PREF_AUTO_CC_PAYMENT);
 
