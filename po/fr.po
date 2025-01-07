@@ -70,7 +70,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr "~a jusqu'à ~a"
+msgstr "du ~a au ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -27107,7 +27107,7 @@ msgstr "~a et sous-comptes sélectionnés"
 # messages-i18n.c:101
 #: gnucash/report/reports/standard/cash-flow.scm:263
 msgid "Money into selected accounts comes from"
-msgstr "L'argent entrant dans des comptes sélectionnés vient de"
+msgstr "L'argent entrant dans les comptes sélectionnés vient de"
 
 # po/guile_strings.txt:100
 #: gnucash/report/reports/standard/cash-flow.scm:284
