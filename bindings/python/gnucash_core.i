@@ -261,6 +261,77 @@ GNC_ACCEPT_WRAPPER(GncEntry)
     }
 }
 
+/* SWIG type converter for functions that take lists as arguments so that a Python list can be passed and automatically converted into a GList*. */
+%typemap(in) GList *, CommodityList *, SplitList *, AccountList *, LotList *, MonetaryList *, PriceList *, EntryList * {
+    $1 = NULL;
+    /* Check if is a list */
+    if (PyList_Check($input)) {
+        int i;
+        int size = PyList_Size($input);
+        for (i = size - 1; i >= 0; i--) {
+            // Get the high-level Python object from bindings/python/gnucash_core.py.
+            PyObject *python_object_wrapper = PyList_GetItem($input, i);
+            // Get the .instance attribute of the Python object, which is the raw SWIG handle.
+            PyObject *python_object = PyObject_GetAttrString(python_object_wrapper, "instance");
+            void *c_object;
+            // Attempt to convert the SWIG handle into a Gnucash C/C++ object and add it to the GList.
+            if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncCustomer *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncCustomer *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(Account *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (Account *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GNCLot *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GNCLot *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(Split *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (Split *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(Transaction *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (Transaction *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(gnc_commodity *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (gnc_commodity *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(gnc_monetary *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (gnc_monetary *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(gnc_commodity_namespace *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (gnc_commodity_namespace *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GNCPrice *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GNCPrice *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncInvoice *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncInvoice *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncEntry *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncEntry *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncVendor *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncVendor *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncEmployee *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncEmployee *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncJob *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncJob *) c_object);
+            }
+            else if (SWIG_ConvertPtr(python_object, &c_object, $descriptor(GncTaxTable *), SWIG_POINTER_EXCEPTION) == 0) {
+                $1 = g_list_prepend($1, (GncTaxTable *) c_object);
+            }
+            else {
+                PyErr_SetString(PyExc_TypeError, "list must contain object of known type with .instance attribute, see base-typemaps.i in SWIG bindings.");
+                g_list_free($1);
+                return NULL;
+            }
+        }
+    } else {
+        PyErr_SetString(PyExc_TypeError, "not a Python list, cannot convert to GList");
+        return NULL;
+    }
+}
+
 %typemap(freearg) GncOwner * {
     gncOwnerFree($1);
 }
