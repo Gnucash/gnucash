@@ -13186,7 +13186,7 @@ msgstr "Kapitalertragskonto"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:891
 msgid "Capital Gains"
-msgstr "Kapitalertäge"
+msgstr "Kapitalerträge"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
 msgid ""
