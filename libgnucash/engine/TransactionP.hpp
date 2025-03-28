@@ -116,6 +116,7 @@ struct transaction_s
      */
     char txn_type;
 
+    signed char is_closing_cached;
 };
 
 struct _TransactionClass

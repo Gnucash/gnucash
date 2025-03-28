@@ -273,6 +273,7 @@ gnc_transaction_init(Transaction* trans)
     trans->marker = 0;
     trans->orig = nullptr;
     trans->txn_type = TXN_TYPE_UNCACHED;
+    trans->is_closing_cached = -1;
     LEAVE (" ");
 }
 
@@ -2129,6 +2130,7 @@ xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
 {
     if (!trans) return;
     xaccTransBeginEdit(trans);
+    trans->is_closing_cached = is_closing ? 1 : 0;
 
     if (is_closing)
     {
@@ -2337,16 +2339,15 @@ xaccTransGetIsClosingTxn (const Transaction *trans)
 {
     if (!trans) return FALSE;
 
-    GValue v = G_VALUE_INIT;
-    gboolean rv;
-    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
-    if (G_VALUE_HOLDS_INT64 (&v))
-        rv = (g_value_get_int64 (&v) ? 1 : 0);
-    else
-        rv = 0;
-    g_value_unset (&v);
-
-    return rv;
+    if (trans->is_closing_cached == -1)
+    {
+        auto t = const_cast<Transaction*>(trans);
+        GValue v = G_VALUE_INIT;
+        qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
+        t->is_closing_cached = G_VALUE_HOLDS_INT64 (&v) && g_value_get_int64 (&v) ? 1 : 0;
+        g_value_unset (&v);
+    }
+    return trans->is_closing_cached != 0;
 }
 
 /********************************************************************\

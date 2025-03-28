@@ -1778,7 +1778,6 @@ test_xaccTransGetReadOnly (Fixture *fixture, gconstpointer pData)
  * xaccTransSetDescription C: 20 in 18 SCM: 5 in 3 Local: 2:0:0
  * qofTransSetNotes Local: 0:0:0
  * xaccTransSetNotes C: 5 in 5 SCM: 3 in 3 Local: 1:0:0
- * xaccTransSetIsClosingTxn C: 1  Local: 0:0:0
  * xaccTransGetSplit C: 57 in 24 SCM: 30 in 21 Local: 0:0:0
  * xaccTransGetSplitIndex C: 7 in 2  Local: 0:0:0
  * xaccTransGetSplitList C: 23 in 15 SCM: 19 in 15 Local: 2:1:0
@@ -1786,7 +1785,6 @@ test_xaccTransGetReadOnly (Fixture *fixture, gconstpointer pData)
  * xaccTransGetNum C: 15 in 12 SCM: 13 in 13 Local: 0:1:0
  * xaccTransGetDescription C: 43 in 23 SCM: 9 in 9 Local: 0:2:0
  * xaccTransGetNotes C: 8 in 6 SCM: 7 in 7 Local: 0:1:0
- * xaccTransGetIsClosingTxn SCM: 1  Local: 0:1:0
  * xaccTransGetDate C: 42 in 19  Local: 0:0:0
  * xaccTransGetDatePostedTS C: 6 in 5  Local: 1:0:0
  * xaccTransGetDateEnteredTS C: 1  Local: 0:0:0
@@ -1796,6 +1794,20 @@ test_xaccTransGetReadOnly (Fixture *fixture, gconstpointer pData)
  * xaccTransGetDateDueTS C: 1  Local: 1:0:0
  * xaccTransRetDateDueTS C: 1 SCM: 2 in 2 Local: 0:1:0
  * xaccTransGetTxnType C: 3 in 2 SCM: 12 in 6 Local: 0:1:0*/
+
+static void
+test_xaccTrans_IsClosing (Fixture *fixture, gconstpointer pData)
+{
+    auto txn = fixture->txn;
+    g_assert_false (xaccTransGetIsClosingTxn (txn));
+
+    xaccTransSetIsClosingTxn (txn, TRUE);
+    g_assert_true (xaccTransGetIsClosingTxn (txn));
+
+    xaccTransSetIsClosingTxn (txn, FALSE);
+    g_assert_false (xaccTransGetIsClosingTxn (txn));
+}
+
 static void
 test_xaccTransGetTxnType (Fixture *fixture, gconstpointer pData)
 {
@@ -2049,6 +2061,7 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransRollbackEdit - Backend Errors", Fixture, NULL, setup, test_xaccTransRollbackEdit_BackendErrors, teardown);
     GNC_TEST_ADD (suitename, "xaccTransOrder_num_action", Fixture, NULL, setup, test_xaccTransOrder_num_action, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetTxnType", Fixture, NULL, setup, test_xaccTransGetTxnType, teardown);
+    GNC_TEST_ADD (suitename, "xaccTransIsClosing", Fixture, NULL, setup, test_xaccTrans_IsClosing, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetreadOnly", Fixture, NULL, setup, test_xaccTransGetReadOnly, teardown);
     GNC_TEST_ADD (suitename, "xaccTransSetDocLink", Fixture, NULL, setup, test_xaccTransSetDocLink, teardown);
     GNC_TEST_ADD (suitename, "xaccTransVoid", Fixture, NULL, setup, test_xaccTransVoid, teardown);
