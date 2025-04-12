@@ -47,7 +47,7 @@ enum
     PROP_CURSOR_NAME, /* the name of the current cursor */
 };
 
-G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_LAYOUT)
+G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_FIXED)
 
 static void
 gnc_header_draw_offscreen (GncHeader *header)
@@ -216,11 +216,11 @@ static gboolean
 gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {
     GnucashSheet *sheet = GNC_HEADER(header)->sheet;
-    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
+//FIXME gtk4    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
     gint x, y;
 
     // use this to get the scroll x value to align the header
-    gdk_window_get_position (sheet_layout_win, &x, &y);
+//FIXME gtk4    gdk_window_get_position (sheet_layout_win, &x, &y);
 
     // if the register page is moved to another window, the surface is
     // not created so test for a surface and create one if null
@@ -313,8 +313,8 @@ gnc_header_reconfigure (GncHeader *header)
     {
         header->height = h;
         header->width = w;
-        gtk_layout_set_size (GTK_LAYOUT(header), w, h);
-        gtk_widget_set_size_request (GTK_WIDGET(header), -1, h);
+//FIXME gtk4        gtk_layout_set_size (GTK_LAYOUT(header), w, h);
+//FIXME gtk4        gtk_widget_set_size_request (GTK_WIDGET(header), -1, h);
         gnc_header_request_redraw (header);
     }
 }
@@ -418,7 +418,8 @@ gnc_header_auto_resize_column (GncHeader *header, gint col)
 
     gnc_header_resize_column (header, col, width);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gint
 gnc_header_event (GtkWidget *widget, GdkEvent *event)
 {
@@ -539,7 +540,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
     }
     return FALSE;
 }
-
+#endif
 
 /* Note that g_value_set_object() refs the object, as does
  * g_object_get(). But g_object_get() only unrefs once when it disgorges
@@ -576,7 +577,7 @@ gnc_header_set_property (GObject *object,
                          GParamSpec *pspec)
 {
     GncHeader *header = GNC_HEADER(object);
-    GtkLayout *layout = GTK_LAYOUT(header);
+    GtkFixed *layout = GTK_FIXED(header);
     gboolean needs_update = FALSE;
     gchar *old_name;
 
@@ -660,8 +661,8 @@ gnc_header_class_init (GncHeaderClass *header_class)
 
 
     item_class->unrealize = gnc_header_unrealize;
-    item_class->draw      = gnc_header_draw;
-    item_class->event     = gnc_header_event;
+//FIXME gtk4    item_class->draw      = gnc_header_draw;
+//FIXME gtk4    item_class->event     = gnc_header_event;
 }
 
 GtkWidget *

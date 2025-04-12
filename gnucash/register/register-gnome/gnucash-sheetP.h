@@ -36,7 +36,7 @@
 
 struct _GnucashSheet
 {
-    GtkLayout layout;
+    GtkFixed layout;
 
     GtkWidget *window;
 
@@ -109,7 +109,7 @@ struct _GnucashSheet
 
 struct _GnucashSheetClass
 {
-    GtkLayoutClass parent_class;
+    GtkFixedClass parent_class;
 };
 
 

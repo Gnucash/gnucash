@@ -39,7 +39,7 @@ GType    gnc_header_get_type (void);
 
 typedef struct
 {
-    GtkLayout parent;
+    GtkFixed parent;
 
     GnucashSheet *sheet;
     SheetBlockStyle *style;
@@ -64,7 +64,7 @@ typedef struct
 
 typedef struct
 {
-    GtkLayoutClass parent_class;
+    GtkFixedClass parent_class;
 } GncHeaderClass;
 
 
