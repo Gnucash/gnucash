@@ -290,7 +290,7 @@ main(int argc, char ** argv)
     boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
 #endif
     /* We need to initialize gtk before looking up all modules */
-    if(!gtk_init_check (&argc, &argv))
+    if(!gtk_init_check ())
     {
         std::cerr << bl::format (std::string{("Run '{1} --help' to see a full list of available command line options.")}) % *argv[0]
         << "\n"
