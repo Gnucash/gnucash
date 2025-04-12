@@ -128,7 +128,7 @@ gnc_plugin_menu_additions_finalize (GObject *object)
 
     ENTER("plugin %p", object);
 
-    g_hash_table_destroy (GNC_PLUGIN_MENU_ADDITIONS(object)->item_hash);
+//FIXME gtk4    g_hash_table_destroy (GNC_PLUGIN_MENU_ADDITIONS(object)->item_hash);
 
     G_OBJECT_CLASS (gnc_plugin_menu_additions_parent_class)->finalize (object);
     LEAVE("");
