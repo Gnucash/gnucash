@@ -34,6 +34,7 @@
 #include "search-string.h"
 #include "search-core-utils.h"
 #include "qof.h"
+#include "dialog-utils.h"
 
 #define d(x)
 
