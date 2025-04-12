@@ -182,7 +182,7 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
     gobject_class->finalize = gnc_tree_view_finalize;
 
     /* GtkWidget signals */
-    gtkwidget_class->destroy = gnc_tree_view_destroy;
+//FIXME gtk4    gtkwidget_class->destroy = gnc_tree_view_destroy;
 }
 
 static void
@@ -191,7 +191,8 @@ gnc_tree_view_update_grid_lines (gpointer prefs, gchar* pref, gpointer user_data
     GncTreeView *view = user_data;
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_tree_view_select_column_icon_cb (GtkWidget *widget,
                                      const GdkEvent *event,
@@ -228,7 +229,7 @@ gnc_tree_view_select_column_icon_cb (GtkWidget *widget,
     }
     return FALSE;
 }
-
+#endif
 /** Initialize a new instance of a base gnucash tree view.  This
  *  function allocates and initializes the object private storage
  *  space.  It also adds the new object to a list (for memory tracking
@@ -316,11 +317,11 @@ gnc_tree_view_init (GncTreeView *view)
             /* this part will restrict the mouse click to just where the
                icon is, tried using an eventbox but it would only work
                some of the time */
-            gtk_widget_set_events (button, GDK_BUTTON_PRESS_MASK);
+//FIXME gtk4            gtk_widget_set_events (button, GDK_BUTTON_PRESS_MASK);
 
-            g_signal_connect (G_OBJECT(button), "button_press_event",
-                              G_CALLBACK(gnc_tree_view_select_column_icon_cb),
-                              view);
+//            g_signal_connect (G_OBJECT(button), "button_press_event",
+//                              G_CALLBACK(gnc_tree_view_select_column_icon_cb),
+//                              view);
         }
     }
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
@@ -407,7 +408,7 @@ gnc_tree_view_destroy (GtkWidget *widget)
         priv->column_menu = NULL;
     }
 
-    GTK_WIDGET_CLASS(gnc_tree_view_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS(gnc_tree_view_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
@@ -1242,6 +1243,8 @@ void gnc_tree_view_save_state (GncTreeView *view)
  *
  *  @internal
  */
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
                                 GncTreeView *view)
@@ -1296,7 +1299,7 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
     g_object_set_data_full (G_OBJECT(widget), STATE_KEY, key, g_free);
     // LEAVE(" ");
 }
-
+#endif
 static gint
 column_menu_sort (GtkTreeViewColumn *columna, GtkTreeViewColumn *columnb)
 {
@@ -1350,7 +1353,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
         /* Now build a new menu */
         column_list = gtk_tree_view_get_columns (GTK_TREE_VIEW(view));
         column_list = g_list_sort (column_list, (GCompareFunc)column_menu_sort);
-        g_list_foreach (column_list, (GFunc)gnc_tree_view_create_menu_item, view);
+//FIXME gtk4        g_list_foreach (column_list, (GFunc)gnc_tree_view_create_menu_item, view);
         g_list_free (column_list);
     }
     else
@@ -1372,6 +1375,8 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
  *
  *  @internal
  */
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
                                        GncTreeView *view)
@@ -1394,7 +1399,7 @@ gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
     }
     gtk_check_menu_item_set_active (checkmenuitem, visible);
 }
-
+#endif
 /** This function when the user clicks on the button to show the
  *  column selection menu.  It first synchronize the checkboxes on all
  *  menu item with the state visibility values.  It then pops up the
@@ -1431,7 +1436,7 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 //FIXME gtk4    gtk_widget_show_all (menu);
 
     /* Pop the menu up at the button */
-    gtk_menu_popup_at_pointer (GTK_MENU(priv->column_menu), NULL);
+//FIXME gtk4    gtk_menu_popup_at_pointer (GTK_MENU(priv->column_menu), NULL);
 }
 
 
@@ -1755,7 +1760,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
     /* Add to the column selection menu */
     if (pref_name)
     {
-        gnc_tree_view_create_menu_item (column, view);
+//FIXME gtk4        gnc_tree_view_create_menu_item (column, view);
     }
 }
 
@@ -2169,6 +2174,8 @@ gnc_tree_view_keynav (GncTreeView *view, GtkTreeViewColumn **col,
     GtkTreeView *tv = GTK_TREE_VIEW(view);
     gint depth;
     gboolean shifted;
+//FIXME gtk4
+#ifdef skip
     if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return;
 
@@ -2235,6 +2242,7 @@ gnc_tree_view_keynav (GncTreeView *view, GtkTreeViewColumn **col,
         break;
     }
     return;
+#endif
 }
 
 void

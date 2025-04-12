@@ -433,7 +433,7 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
                      1,
                      G_TYPE_POINTER);
 
-    widget_class->destroy = gnc_query_view_destroy;
+//FIXME gtk4    widget_class->destroy = gnc_query_view_destroy;
 
     klass->column_toggled = NULL;
     klass->row_selected = NULL;
@@ -526,7 +526,7 @@ gnc_query_view_destroy (GtkWidget *widget)
         qview->query = NULL;
     }
 
-    GTK_WIDGET_CLASS(gnc_query_view_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS(gnc_query_view_parent_class)->destroy (widget);
 }
 
 gint

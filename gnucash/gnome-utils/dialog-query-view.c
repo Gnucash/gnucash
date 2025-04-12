@@ -188,12 +188,13 @@ gnc_dialog_query_view_close (GtkButton *button, DialogQueryView *dqv)
 }
 
 static gboolean
-dqv_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+dqv_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                         guint keycode, GdkModifierType state,
                          gpointer user_data)
 {
     DialogQueryView *dqv = user_data;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
         dqv_save_window_size (dqv);
 
     return FALSE;
@@ -277,8 +278,11 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
         gnc_gui_component_watch_entity (dqv->component_id, (GncGUID*)node->data,
                                         QOF_EVENT_DESTROY);
 
-    g_signal_connect (G_OBJECT (dqv->dialog), "key_press_event",
-                      G_CALLBACK (dqv_window_key_press_cb), dqv);
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dqv->dialog), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window),
+                      "key-pressed",
+                      G_CALLBACK(dqv_window_key_press_cb), dqv);
 
     if (pref_group)
         gnc_restore_window_size (pref_group, GTK_WINDOW(dqv->dialog), GTK_WINDOW(parent));

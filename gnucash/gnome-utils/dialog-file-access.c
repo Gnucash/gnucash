@@ -256,11 +256,11 @@ get_default_database( void )
 
 typedef bool (*CharToBool)(const char*);
 
-static bool datafile_filter (const GtkFileFilterInfo* filter_info,
+static bool datafile_filter (GtkFileFilter* filter_info,
                              CharToBool filename_checker)
 {
-    return filter_info && filter_info->filename &&
-        filename_checker (filter_info->filename);
+    return filter_info && gtk_file_filter_get_name (filter_info) &&
+        filename_checker (gtk_file_filter_get_name (filter_info));
 }
 
 static void free_file_access_window (FileAccessWindow *faw)
@@ -372,9 +372,9 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     /* Translators: *.gnucash and *.xac are file patterns and must not
        be translated*/
     gtk_file_filter_set_name (filter, _("Datafiles only (*.gnucash, *.xac)"));
-    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
-                                (GtkFileFilterFunc)datafile_filter,
-                                gnc_filename_is_datafile, NULL);
+//FIXME gtk4    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
+//                                (GtkFileFilterFunc)datafile_filter,
+//                                gnc_filename_is_datafile, NULL);
     gtk_file_chooser_add_filter (faw->fileChooser, filter);
     gtk_file_chooser_set_filter (faw->fileChooser, filter);
 
@@ -382,9 +382,9 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     /* Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
        patterns and must not be translated*/
     gtk_file_filter_set_name (filter, _("Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"));
-    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
-                                (GtkFileFilterFunc)datafile_filter,
-                                gnc_filename_is_backup, NULL);
+//FIXME gtk4    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
+//                                (GtkFileFilterFunc)datafile_filter,
+//                                gnc_filename_is_backup, NULL);
     gtk_file_chooser_add_filter (faw->fileChooser, filter);
 
     /* Set the default directory */
@@ -412,8 +412,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     uri_type_container = GTK_WIDGET(gtk_builder_get_object (builder, "vb_uri_type_container" ));
     faw->cb_uri_type = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
     gtk_box_prepend (GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type));
-    gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
-                               /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
+//FIXME gtk4    gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
+//                               /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
     g_object_connect( G_OBJECT(faw->cb_uri_type),
                       "signal::changed", cb_uri_type_changed_cb, NULL,
                       NULL );

@@ -277,6 +277,7 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
                            gpointer user_data)
 {
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
+    gint result;
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
@@ -304,6 +305,7 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
         else
             decimal = g_strdup_printf ("%c",'.');
 
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
         GtkEditable *editable = GTK_EDITABLE(widget);
         gint start_pos, end_pos;
         gint position = gtk_editable_get_position (editable);
@@ -325,7 +327,6 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
         g_free (decimal);
         result = TRUE;
     }
-    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
     switch (keyval)
     {

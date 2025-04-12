@@ -239,8 +239,8 @@ gnc_plugin_init_short_names (GtkWidget *toolbar,
         if (!tool_item)
             continue;
 
-        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
-        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
+//FIXME gtk4        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
+//FIXME gtk4        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
     }
 }
 
@@ -298,7 +298,7 @@ for_each_tool_action (GtkWidget *widget, gpointer user_data)
 void
 gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar, GtkWidget *statusbar)
 {
-    g_return_if_fail (GTK_IS_TOOLBAR(toolbar));
+//FIXME gtk4    g_return_if_fail (GTK_IS_TOOLBAR(toolbar));
     g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
 
 //FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(toolbar), for_each_tool_action, statusbar);

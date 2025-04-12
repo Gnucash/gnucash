@@ -75,7 +75,7 @@ gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
     o_class->finalize = gnc_tree_view_commodity_finalize;
 
     /* GtkWidget signals */
-    widget_class->destroy = gnc_tree_view_commodity_destroy;
+//FIXME gtk4    widget_class->destroy = gnc_tree_view_commodity_destroy;
 }
 
 static void
@@ -102,7 +102,7 @@ gnc_tree_view_commodity_destroy (GtkWidget *widget)
 
     ENTER("view %p", widget);
 
-    GTK_WIDGET_CLASS (gnc_tree_view_commodity_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS (gnc_tree_view_commodity_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 

@@ -495,16 +495,16 @@ static void
 toggle_placeholder_cb (GtkWidget *widget, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
-    gas->hide_placeholder = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
-    update_entry_and_refilter (gas);
+//FIXME gtk4    gas->hide_placeholder = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
+//FIXME gtk4    update_entry_and_refilter (gas);
 }
 
 static void
 toggle_hidden_cb (GtkWidget *widget, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
-    gas->hide_hidden = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
-    update_entry_and_refilter (gas);
+//FIXME gtk4    gas->hide_hidden = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
+//    update_entry_and_refilter (gas);
 }
 
 static void
@@ -517,22 +517,22 @@ icon_release_cb (GtkEntry *entry, GtkEntryIconPosition icon_pos,
     if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
         return;
 
-    menu = gtk_menu_new ();
-    h_placeholder = gtk_check_menu_item_new_with_mnemonic (_("Hide _Placeholder Accounts"));
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_placeholder), gas->hide_placeholder);
-    h_hidden = gtk_check_menu_item_new_with_mnemonic (_("Hide _Hidden Accounts"));
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_hidden), gas->hide_hidden);
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(gas), NULL);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_placeholder);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_hidden);
+//FIXME gtk4    menu = gtk_menu_new ();
+//FIXME gtk4    h_placeholder = gtk_check_menu_item_new_with_mnemonic (_("Hide _Placeholder Accounts"));
+//FIXME gtk4    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_placeholder), gas->hide_placeholder);
+//FIXME gtk4    h_hidden = gtk_check_menu_item_new_with_mnemonic (_("Hide _Hidden Accounts"));
+//FIXME gtk4    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_hidden), gas->hide_hidden);
+//FIXME gtk4    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(gas), NULL);
+//FIXME gtk4    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_placeholder);
+//FIXME gtk4    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_hidden);
 //FIXME gtk4    gtk_widget_show_all (menu);
 
-    g_signal_connect (G_OBJECT(h_placeholder), "toggled",
-                      G_CALLBACK(toggle_placeholder_cb), gas);
-    g_signal_connect (G_OBJECT(h_hidden), "toggled",
-                      G_CALLBACK(toggle_hidden_cb), gas);
+//FIXME gtk4    g_signal_connect (G_OBJECT(h_placeholder), "toggled",
+//FIXME gtk4                      G_CALLBACK(toggle_placeholder_cb), gas);
+//FIXME gtk4    g_signal_connect (G_OBJECT(h_hidden), "toggled",
+//FIXME gtk4                      G_CALLBACK(toggle_hidden_cb), gas);
 
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *)event);
+//FIXME gtk4    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *)event);
 }
 
 /* An account is included if gas->acctTypeFilters or gas->acctCommodityFilters

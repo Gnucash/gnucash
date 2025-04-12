@@ -139,19 +139,16 @@ gnc_add_css_file (void)
 {
     GtkCssProvider *provider_user, *provider_app, *provider_fallback;
     GdkDisplay *display;
-    GdkScreen *screen;
     const gchar *var;
-    GError *error = 0;
 
     provider_user = gtk_css_provider_new ();
     provider_app = gtk_css_provider_new ();
     provider_fallback = gtk_css_provider_new ();
     display = gdk_display_get_default ();
-    screen = gdk_display_get_default_screen (display);
 
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+    gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     gtk_css_provider_load_from_resource (provider_app, GNUCASH_RESOURCE_PREFIX "/gnucash.css");
     gtk_css_provider_load_from_resource (provider_fallback,  GNUCASH_RESOURCE_PREFIX "/gnucash-fallback.css");
@@ -160,8 +157,8 @@ gnc_add_css_file (void)
     if (var)
     {
         gchar *str;
-        str = g_build_filename (var, "gtk-3.0.css", (char *)NULL);
-        gtk_css_provider_load_from_path (provider_user, str, &error);
+        str = g_build_filename (var, "gtk-4.0.css", (char *)NULL);
+        gtk_css_provider_load_from_path (provider_user, str);
         g_free (str);
     }
     g_object_unref (provider_user);
@@ -353,8 +350,9 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 
     DEBUG ("Attempting to opening help uri %s", uri);
 
-    if (uri)
-        success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
+//FIXME gtk4    if (uri)
+//        success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
+// may be gtk_show_uri
 
     g_free (uri);
     if (success)
@@ -438,14 +436,14 @@ void
 gnc_launch_doclink (GtkWindow *parent, const char *uri)
 {
     GError *error = NULL;
-    gboolean success;
+    gboolean success = TRUE;
 
     if (!uri)
         return;
 
     DEBUG ("Attempting to open uri %s", uri);
 
-    success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
+//FIXME gtk4    success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
 
     if (success)
         return;
@@ -544,8 +542,8 @@ gnc_ui_check_events (gpointer not_used)
     QofSession *session;
     gboolean force;
 
-    if (gtk_main_level() != 1)
-        return TRUE;
+//FIXME gtk4    if (gtk_main_level() != 1)
+//        return TRUE;
 
     if (!gnc_current_session_exist())
         return TRUE;
@@ -583,7 +581,7 @@ gnc_ui_start_event_loop (void)
     scm_call_1(scm_c_eval_string("gnc:set-ui-status"), SCM_BOOL_T);
 
     /* Enter gnome event loop */
-    gtk_main ();
+//FIXME gtk4    gtk_main ();
 
     g_source_remove (id);
 
@@ -672,7 +670,7 @@ gnc_gui_init(void)
         g_free(data_dir);
     }
 
-    gtk_accel_map_load(map);
+//FIXME gtk4    gtk_accel_map_load(map);
     g_free(map);
 
     /* Load css configuration file */
@@ -736,7 +734,8 @@ gnc_gui_shutdown (void)
 //        gtk_accel_map_save(map);
 //        g_free(map);
         gnc_component_manager_shutdown ();
-        gtk_main_quit();
+//FIXME gtk4        gtk_main_quit();
+// maybe g_main_quit
     }
 }
 
