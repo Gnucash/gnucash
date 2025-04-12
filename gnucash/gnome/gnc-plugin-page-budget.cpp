@@ -96,9 +96,12 @@ static void gnc_plugin_page_budget_save_page (GncPluginPage *plugin_page,
 static GncPluginPage *gnc_plugin_page_budget_recreate_page (GtkWidget *window,
                                                             GKeyFile *file,
                                                             const gchar *group);
-static gboolean gppb_button_press_cb (GtkWidget *widget,
-                                      const GdkEvent *event,
-                                      GncPluginPage *page);
+static gboolean gppb_button_press_cb (GtkGestureClick *gesture,
+                                      int n_press,
+                                      double x,
+                                      double y,
+                                      gpointer user_data);
+
 static void gppb_account_activated_cb (GncBudgetView* view,
                                        Account* account,
                                        GncPluginPageBudget *page);
@@ -452,8 +455,12 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     g_signal_connect (G_OBJECT(selection), "changed",
                       G_CALLBACK(gppb_selection_changed_cb), plugin_page);
 #endif
-    g_signal_connect (G_OBJECT(priv->budget_view), "button-press-event",
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(priv->budget_view), GTK_EVENT_CONTROLLER(event_gesture));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+    g_signal_connect (G_OBJECT(event_gesture), "pressed",
                       G_CALLBACK(gppb_button_press_cb), plugin_page);
+
     g_signal_connect (G_OBJECT(priv->budget_view), "account-activated",
                       G_CALLBACK(gppb_account_activated_cb), page);
 
@@ -633,7 +640,7 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
 
 
 /***********************************************************************
- *   This button press handler calls the common button press handler
+ *  This button press handler calls the common button press handler
  *  for all pages.  The GtkTreeView eats all button presses and
  *  doesn't pass them up the widget tree, even when it doesn't do
  *  anything with them.  The only way to get access to the button
@@ -642,16 +649,37 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
  *  registered in gnc-main-window.c.
  **********************************************************************/
 static gboolean
-gppb_button_press_cb (GtkWidget *widget, const GdkEvent *event,
-                      GncPluginPage *page)
+gppb_button_press_cb  (GtkGestureClick *gesture,
+                       int n_press,
+                       double x,
+                       double y,
+                       gpointer user_data)
 {
+    GncPluginPage *page = (GncPluginPage*)user_data;
     gboolean result;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
-    ENTER("widget %p, event %p, page %p", widget, event, page);
-    result = gnc_main_window_button_press_cb (widget, event, page);
-    LEAVE(" ");
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
+
+    ENTER("widget %p, x %f, y %f, page %p",  widget, x, y, page);
+
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(widget));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(widget), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+    result = gnc_main_window_button_press_cb (gesture, n_press,
+                                              x + x_translation,
+                                              y + y_translation,
+                                              page);
+
+    LEAVE("x_translation %f, y_translation %f", x_translation, y_translation);
     return result;
 }
 

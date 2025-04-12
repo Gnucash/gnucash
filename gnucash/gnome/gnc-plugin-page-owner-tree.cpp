@@ -106,9 +106,12 @@ static GncPluginPage *gnc_plugin_page_owner_tree_recreate_page (GtkWidget *windo
 static void set_menu_and_toolbar_qualifier (GncPluginPage *plugin_page);
 
 /* Callbacks */
-static gboolean gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
-                                                            const GdkEvent *event,
-                                                            GncPluginPage *page);
+static gboolean gnc_plugin_page_owner_tree_button_press_cb (GtkGestureClick *gesture,
+                                                            int n_press,
+                                                            double x,
+                                                            double y,
+                                                            gpointer user_data);
+
 static void gnc_plugin_page_owner_tree_double_click_cb (GtkTreeView *treeview,
                                                         GtkTreePath *path,
                                                         GtkTreeViewColumn  *col,
@@ -586,8 +589,13 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     selection = gtk_tree_view_get_selection(tree_view);
     g_signal_connect (G_OBJECT (selection), "changed",
                       G_CALLBACK (gnc_plugin_page_owner_tree_selection_changed_cb), page);
-    g_signal_connect (G_OBJECT (tree_view), "button-press-event",
-                      G_CALLBACK (gnc_plugin_page_owner_tree_button_press_cb), page);
+
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(tree_view), GTK_EVENT_CONTROLLER(event_gesture));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+    g_signal_connect (G_OBJECT(event_gesture), "pressed",
+                      G_CALLBACK(gnc_plugin_page_owner_tree_button_press_cb), page);
+
     g_signal_connect (G_OBJECT (tree_view), "row-activated",
                       G_CALLBACK (gnc_plugin_page_owner_tree_double_click_cb), page);
 
@@ -772,21 +780,42 @@ static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
  *  Button presses on all other pages are caught by the signal
  *  registered in gnc-main-window.c. */
 static gboolean
-gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
-                                            const GdkEvent *event,
-                                            GncPluginPage *page)
+gnc_plugin_page_owner_tree_button_press_cb  (GtkGestureClick *gesture,
+                                             int n_press,
+                                             double x,
+                                             double y,
+                                             gpointer user_data)
 {
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+    GncPluginPage *page = (GncPluginPage*)user_data;
 
-    ENTER("widget %p, event %p, page %p", widget, event, page);
-    gnc_main_window_button_press_cb(widget, event, page);
-    LEAVE(" ");
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
+
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
+
+    ENTER("widget %p, x %f, y %f, page %p",  widget, x, y, page);
+
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(widget));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(widget), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+    gnc_main_window_button_press_cb (gesture, n_press,
+                                     x + x_translation,
+                                     y + y_translation,
+                                     page);
+
+    LEAVE("x_translation %f, y_translation %f", x_translation, y_translation);
 
     /* Always return FALSE.  This will let the tree view callback run as
      * well which will select the item under the cursor.  By the time
      * the user sees the menu both callbacks will have run and the menu
      * actions will operate on the just-selected owner. */
-    return FALSE;
+    return false;
 }
 
 static void
