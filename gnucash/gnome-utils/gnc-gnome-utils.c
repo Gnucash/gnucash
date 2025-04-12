@@ -473,34 +473,41 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
 #endif
 
 /********************************************************************\
- * gnc_gnome_get_pixmap                                             *
- *   returns a GtkWidget given a pixmap filename                    *
+ * gnc_gnome_get_picture                                            *
+ *   returns a GtkWidget of a given a picture for filename          *
  *                                                                  *
  * Args: none                                                       *
  * Returns: GtkWidget or NULL if there was a problem                *
  \*******************************************************************/
 GtkWidget *
-gnc_gnome_get_pixmap (const char *name)
+gnc_gnome_get_picture (const char *name)
 {
-    GtkWidget *pixmap;
+    GtkWidget *picture = NULL;
     char *fullname;
+    GError *error = NULL;
 
     g_return_val_if_fail (name != NULL, NULL);
 
     fullname = gnc_filepath_locate_pixmap (name);
+
     if (fullname == NULL)
         return NULL;
 
-    DEBUG ("Loading pixmap file %s", fullname);
+    DEBUG ("Loading picture file %s", fullname);
 
-    pixmap = gtk_image_new_from_file (fullname);
-    if (pixmap == NULL)
-    {
-        PERR ("Could not load pixmap");
-    }
+    GFile *file = g_file_new_for_path (fullname);
+    GdkTexture *texture = gdk_texture_new_from_file (file, &error);
+    g_object_unref (file);
     g_free (fullname);
 
-    return pixmap;
+    if (!error)
+        picture = gtk_picture_new_for_paintable (GDK_PAINTABLE(texture));
+    else
+        g_error_free (error);
+
+    g_object_unref (texture);
+
+    return picture;
 }
 
 /********************************************************************\
