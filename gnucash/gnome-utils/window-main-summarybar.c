@@ -670,8 +670,14 @@ gnc_main_window_summary_new (void)
 
     gnc_box_set_all_margins (GTK_BOX(retval->hbox), 2);
     gtk_box_append (GTK_BOX(retval->hbox), GTK_WIDGET(retval->totals_combo));
+    gtk_box_set_spacing (GTK_BOX(retval->hbox), 5);
+
     gtk_widget_set_visible (GTK_WIDGET(retval->totals_combo), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(retval->hbox), TRUE);
+
+    gtk_widget_set_vexpand (GTK_WIDGET(retval->totals_combo), FALSE);
+    gtk_widget_set_hexpand (GTK_WIDGET(retval->totals_combo), TRUE);
+    gtk_widget_set_valign (GTK_WIDGET(retval->totals_combo), GTK_ALIGN_END);
 
     g_signal_connect_swapped (G_OBJECT (retval->hbox), "destroy",
                               G_CALLBACK (gnc_main_window_summary_destroy_cb),
