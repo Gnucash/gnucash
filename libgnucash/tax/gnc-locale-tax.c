@@ -48,13 +48,17 @@ gnc_locale_tax_init(void)
 # ifdef G_OS_WIN32
     gchar *thislocale = g_win32_getlocale();
     gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
+    gboolean is_ca = (strncmp(thislocale, "ca", 2) == 0);
     g_free(thislocale);
 # else /* !G_OS_WIN32 */
     const char *thislocale = gnc_locale_name();
     gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
+    gboolean is_ca = (strncmp(thislocale, "ca", 2) == 0);
 # endif /* G_OS_WIN32 */
     if (is_de_DE)
         scm_c_use_module("gnucash locale de_DE tax");
+    else if (is_ca)
+        scm_c_use_module("gnucash locale ca tax");
     else
         scm_c_use_module("gnucash locale us tax");
 }

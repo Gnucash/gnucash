@@ -70,6 +70,10 @@ set(reports_us_SCHEME
   locale-specific/us/taxtxf.scm
 )
 
+set(reports_ca_SCHEME
+  locale-specific/ca/taxtxf.scm
+)
+
 set(reports_de_DE_SCHEME
   locale-specific/de_DE/taxtxf.scm
 )
@@ -145,6 +149,12 @@ gnc_add_scheme_targets(scm-reports-us
     DEPENDS "${scm_rpt_locale_specific_GUILE_DEPENDS}"
     MAKE_LINKS)
 
+gnc_add_scheme_targets(scm-reports-ca
+    SOURCES "${reports_ca_SCHEME}"
+    OUTPUT_DIR "gnucash/reports/locale-specific/ca"
+    DEPENDS "${scm_rpt_locale_specific_GUILE_DEPENDS}"
+    MAKE_LINKS)
+
 gnc_add_scheme_targets(scm-reports-de_DE
     SOURCES "${reports_de_DE_SCHEME}"
     OUTPUT_DIR "gnucash/reports/locale-specific/de_DE"
@@ -164,6 +174,7 @@ add_custom_target(scm-reports ALL DEPENDS
     scm-reports-common
     scm-rpt-reports
     scm-reports-us
+    scm-reports-ca
     scm-reports-de_DE)
 
 

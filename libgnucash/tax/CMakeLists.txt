@@ -39,6 +39,10 @@ set(gncmod_tax_us_SCHEME_1 us/txf-help.scm)
 set(gncmod_tax_us_SCHEME_2 us/txf.scm)
 set(gncmod_tax_us_SCHEME_3 us/tax.scm)
 
+set(gncmod_tax_ca_SCHEME_1 ca/txf-help.scm)
+set(gncmod_tax_ca_SCHEME_2 ca/txf.scm)
+set(gncmod_tax_ca_SCHEME_3 ca/tax.scm)
+
 set(gncmod_tax_de_DE_SCHEME_1 de_DE/txf-help.scm)
 set(gncmod_tax_de_DE_SCHEME_2 de_DE/txf.scm)
 set(gncmod_tax_de_DE_SCHEME_3 de_DE/tax.scm)
@@ -63,6 +67,24 @@ gnc_add_scheme_targets(scm-tax-us-3
     DEPENDS "scm-tax-us-2;${GUILE_DEPENDS}"
     MAKE_LINKS)
 
+gnc_add_scheme_targets(scm-tax-ca-1
+    SOURCES "${gncmod_tax_ca_SCHEME_1}"
+    OUTPUT_DIR "gnucash/locale/ca/tax"
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
+                       
+gnc_add_scheme_targets(scm-tax-ca-2
+    SOURCES "${gncmod_tax_ca_SCHEME_2}"
+    OUTPUT_DIR "gnucash/locale/ca/tax"
+    DEPENDS "scm-tax-us-1;${GUILE_DEPENDS}"
+    MAKE_LINKS)
+
+gnc_add_scheme_targets(scm-tax-ca-3
+    SOURCES "${gncmod_tax_ca_SCHEME_3}"
+    OUTPUT_DIR "gnucash/locale/ca"
+    DEPENDS "scm-tax-us-2;${GUILE_DEPENDS}"
+    MAKE_LINKS)
+
 gnc_add_scheme_targets(scm-tax-de_DE-1
     SOURCES "${gncmod_tax_de_DE_SCHEME_1}"
     OUTPUT_DIR "gnucash/locale/de_DE/tax"
@@ -80,7 +102,7 @@ gnc_add_scheme_targets(scm-tax-de_DE-3
     OUTPUT_DIR "gnucash/locale/de_DE"
     DEPENDS "scm-tax-de_DE-2;${GUILE_DEPENDS}")
 
-add_custom_target(scm-locale-tax ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-us-3 scm-tax-de_DE-1 scm-tax-de_DE-2 scm-tax-de_DE-3)
+add_custom_target(scm-locale-tax ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-us-3 scm-tax-ca-1 scm-tax-ca-2 scm-tax-ca-3 scm-tax-de_DE-1 scm-tax-de_DE-2 scm-tax-de_DE-3)
 
 set(de_DE_tax_EXTRA_DIST
     "de_DE/taxtxf - LIES MICH.txt"
@@ -88,6 +110,7 @@ set(de_DE_tax_EXTRA_DIST
     "de_DE/txf-USt-VA Anleitung 2011.pdf")
 set_local_dist(tax_DIST_local CMakeLists.txt ${locale_tax_SOURCES}
     ${gncmod_tax_us_SCHEME_1} ${gncmod_tax_us_SCHEME_2} ${gncmod_tax_us_SCHEME_3}
+    ${gncmod_tax_ca_SCHEME_1} ${gncmod_tax_ca_SCHEME_2} ${gncmod_tax_ca_SCHEME_3}
     ${gncmod_tax_de_DE_SCHEME_1} ${gncmod_tax_de_DE_SCHEME_2} ${gncmod_tax_de_DE_SCHEME_3}
     ${de_DE_tax_EXTRA_DIST})
 set(tax_DIST ${tax_DIST_local} ${locale_tax_DIST} ${test_locale_tax_DIST} PARENT_SCOPE)
