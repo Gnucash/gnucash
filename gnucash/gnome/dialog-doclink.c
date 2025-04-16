@@ -27,6 +27,7 @@
 
 #include "dialog-doclink.h"
 #include "dialog-doclink-utils.h"
+#include "dialog-doclink-view.h"
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -45,39 +46,24 @@
 #include "Account.h"
 #include "dialog-invoice.h"
 
-#define DIALOG_DOCLINK_CM_CLASS    "dialog-doclink"
+#define DIALOG_DOCLINK_CM_CLASS  "dialog-doclink"
 #define GNC_PREFS_GROUP_BUS      "dialogs.business-doclink"
 #define GNC_PREFS_GROUP_TRANS    "dialogs.trans-doclink"
-
-/** Enumeration for the tree-store */
-enum GncDoclinkColumn
-{
-    DATE_ITEM,
-    DATE_INT64, // used just for sorting date_trans
-    DESC_ID,
-    DESC_ITEM,
-    DISPLAY_URI,
-    AVAILABLE,
-    ITEM_POINTER,
-    URI,
-    URI_RELATIVE, // used just for sorting relative_pix
-    URI_RELATIVE_PIX
-};
 
 typedef struct
 {
     GtkWidget    *window;
-    GtkWidget    *view;
     GtkWidget    *path_head_label;
     GtkWidget    *total_entries_label;
     gchar        *path_head;
     gboolean      is_list_trans;
     gboolean      book_ro;
-    GtkTreeModel *model;
     gint          component_id;
     QofSession   *session;
 
-    GtkTreeIter   iter;
+    GtkWidget    *column_view;
+    GListModel   *column_model;
+    guint         column_model_position;
 
     DoclinkReturn *ret_dlr;
 }DoclinkDialog;
@@ -567,6 +553,8 @@ gnc_doclink_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
     if (doclink_dialog->window)
     {
         g_free (doclink_dialog->path_head);
+        g_object_unref (doclink_dialog->column_model);
+
         gtk_window_destroy (GTK_WINDOW(doclink_dialog->window));
         doclink_dialog->window = NULL;
     }
@@ -613,68 +601,66 @@ gnc_doclink_dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval
 static void
 doclink_dialog_update (DoclinkDialog *doclink_dialog)
 {
-    GtkTreeModel     *model;
-    GtkTreeIter       iter;
-    gboolean          valid;
+    /* disconnect the model from the column view */
+    GtkSelectionModel *selection_model = gtk_column_view_get_model (GTK_COLUMN_VIEW(
+                                            doclink_dialog->column_view));
+    g_object_ref (selection_model);
 
-    /* disconnect the model from the treeview */
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(doclink_dialog->view));
-    g_object_ref (G_OBJECT(model));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(doclink_dialog->view), NULL);
+    gtk_column_view_set_model (GTK_COLUMN_VIEW(doclink_dialog->column_view), NULL);
 
-    /* Get first row in list store */
-    valid = gtk_tree_model_get_iter_first (model, &iter);
+    guint n_items = g_list_model_get_n_items (doclink_dialog->column_model);
 
-    while (valid)
+    for (gint i = 0; i < n_items; i++)
     {
-        gchar *uri;
-        gchar *scheme;
+        DoclinkViewItem *item = g_list_model_get_item (G_LIST_MODEL(
+                                                       doclink_dialog->column_model), i);
 
-        gtk_tree_model_get (model, &iter, URI, &uri, -1);
-
-        scheme = gnc_uri_get_scheme (uri);
-
-        if (!scheme || gnc_uri_is_file_scheme (scheme))
+        if (item)
         {
-            gchar *filename =
-                gnc_doclink_get_unescape_uri (doclink_dialog->path_head,
-                                               uri, scheme);
+            gchar *scheme = gnc_uri_get_scheme (item->uri);
 
-            if (g_file_test (filename, G_FILE_TEST_EXISTS))
-                gtk_list_store_set (GTK_LIST_STORE(model), &iter, AVAILABLE, _("File Found"), -1);
-            else
-                gtk_list_store_set (GTK_LIST_STORE(model), &iter, AVAILABLE, _("File Not Found"), -1);
-
-            g_free (filename);
-        }
-        else
-        {
-            gchar           *escaped = g_uri_escape_string (uri, ":/.", TRUE);
-            GNetworkMonitor      *nm = g_network_monitor_get_default ();
-            GSocketConnectable *conn = g_network_address_parse_uri (escaped, 80, NULL);
-
-            if (conn)
+            if (!scheme || gnc_uri_is_file_scheme (scheme))
             {
-                if (g_network_monitor_can_reach (nm, conn, NULL, NULL))
-                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, AVAILABLE, _("Address Found"), -1);
-                else
-                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, AVAILABLE, _("Address Not Found"), -1);
-            }
-            g_free (escaped);
-        }
-        g_free (uri);
-        g_free (scheme);
+                gchar *filename = gnc_doclink_get_unescape_uri (
+                                      doclink_dialog->path_head,
+                                      item->uri, scheme);
 
-        valid = gtk_tree_model_iter_next (model, &iter);
+                g_free (item->available);
+                if (g_file_test (filename, G_FILE_TEST_EXISTS))
+                    item->available = g_strdup (_("File Found"));
+                else
+                    item->available = g_strdup (_("File Not Found"));
+
+                g_free (filename);
+            }
+            else
+            {
+                gchar           *escaped = g_uri_escape_string (item->uri, ":/.", TRUE);
+                GNetworkMonitor      *nm = g_network_monitor_get_default ();
+                GSocketConnectable *conn = g_network_address_parse_uri (escaped, 80, NULL);
+
+                if (conn)
+                {
+                    g_free (item->available);
+                    if (g_network_monitor_can_reach (nm, conn, NULL, NULL))
+                        item->available = g_strdup (_("Address Found"));
+                    else
+                        item->available = g_strdup (_("Address Not Found"));
+                }
+                g_free (escaped);
+            }
+            g_free (scheme);
+        }
+        g_clear_object (&item);
     }
-    /* reconnect the model to the treeview */
-    gtk_tree_view_set_model (GTK_TREE_VIEW(doclink_dialog->view), model);
-    g_object_unref (G_OBJECT(model));
+    /* reconnect the model to the column view */
+    gtk_column_view_set_model (GTK_COLUMN_VIEW(doclink_dialog->column_view),
+                               GTK_SELECTION_MODEL(selection_model));
+    g_object_unref (selection_model);
 }
 
 static void
-update_model_with_changes (DoclinkDialog *doclink_dialog, GtkTreeIter *iter,
-                           const gchar *uri)
+update_model_with_changes (DoclinkDialog *doclink_dialog, const gchar *uri)
 {
     gchar *display_uri;
     gboolean rel = FALSE;
@@ -685,16 +671,34 @@ update_model_with_changes (DoclinkDialog *doclink_dialog, GtkTreeIter *iter,
 
     display_uri = gnc_doclink_get_unescape_uri (doclink_dialog->path_head,
                                                  uri, scheme);
-    gtk_list_store_set (GTK_LIST_STORE(doclink_dialog->model), iter,
-                        DISPLAY_URI, display_uri, AVAILABLE, _("File Found"),
-                        URI, uri,
-                        URI_RELATIVE, rel, // used just for sorting relative column
-                        URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
 
-    if (!rel && !gnc_uri_is_file_scheme (scheme))
-        gtk_list_store_set (GTK_LIST_STORE(doclink_dialog->model), iter,
-                            AVAILABLE, _("Unknown"), -1);
+    DoclinkViewItem *item = g_list_model_get_item (G_LIST_MODEL(doclink_dialog->column_model),
+                                                   doclink_dialog->column_model_position);
+    if (item)
+    {
+        g_free (item->display_uri);
+        item->display_uri = g_strdup (display_uri);
 
+        g_free (item->available);
+        item->available = g_strdup (_("File Found"));
+
+        g_free (item->uri);
+        item->uri = g_strdup (uri);
+
+        item->uri_relative = FALSE;
+
+        g_free (item->uri_relative_pix);
+        item->uri_relative_pix = (rel == TRUE ? g_strdup ("emblem-default") : NULL);
+
+        if (!rel && !gnc_uri_is_file_scheme (scheme))
+        {
+            g_free (item->available);
+            item->available = g_strdup (_("Unknown"));
+        }
+        g_list_model_items_changed (G_LIST_MODEL(doclink_dialog->column_model),
+                                    doclink_dialog->column_model_position, 1, 1);
+    }
+    g_clear_object (&item);
     g_free (display_uri);
     g_free (scheme);
 }
@@ -702,9 +706,7 @@ update_model_with_changes (DoclinkDialog *doclink_dialog, GtkTreeIter *iter,
 static void
 update_total_entries (DoclinkDialog *doclink_dialog)
 {
-    gint entries =
-        gtk_tree_model_iter_n_children (GTK_TREE_MODEL(doclink_dialog->model),
-                                        NULL);
+    gint entries = g_list_model_get_n_items (doclink_dialog->column_model);
 
     if (entries > 0)
     {
@@ -736,8 +738,10 @@ update_bus_gui_destroy_cb (GtkWidget *object, gpointer user_data)
                 {
                     // update the asooc parts for invoice window if present
                     gnc_invoice_update_doclink_for_window (invoice, dlr->updated_uri);
-                    gtk_list_store_remove (GTK_LIST_STORE(doclink_dialog->model),
-                                           &doclink_dialog->iter);
+
+                    g_list_store_remove (G_LIST_STORE(doclink_dialog->column_model),
+                                                      doclink_dialog->column_model_position);
+
                     update_total_entries (doclink_dialog);
                 }
                 else // update uri
@@ -748,8 +752,7 @@ update_bus_gui_destroy_cb (GtkWidget *object, gpointer user_data)
                     display_uri = gnc_doclink_get_unescape_uri (doclink_dialog->path_head,
                                                                 dlr->updated_uri, scheme);
 
-                    update_model_with_changes (doclink_dialog, &doclink_dialog->iter,
-                                               dlr->updated_uri);
+                    update_model_with_changes (doclink_dialog, dlr->updated_uri);
 
                     // update the asooc parts for invoice window if present
                     gnc_invoice_update_doclink_for_window (invoice, display_uri);
@@ -765,36 +768,55 @@ update_bus_gui_destroy_cb (GtkWidget *object, gpointer user_data)
     g_free (dlr);
 }
 
-static void
-row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
-                     GtkTreeViewColumn  *col, gpointer user_data)
+static gboolean
+row_selected_bus_cb (GtkGestureClick *gesture, int n_press,
+                     double x, double y, gpointer user_data)
 {
-    DoclinkDialog *doclink_dialog = user_data;
-    GncInvoice    *invoice;
-    gchar         *uri;
+    DoclinkDialog     *doclink_dialog = user_data;
+    DoclinkViewItem *item;
+    gint               prop_position = 0;
 
-    // path describes a non-existing row - should not happen
-    g_return_if_fail (gtk_tree_model_get_iter (doclink_dialog->model,
-                                               &doclink_dialog->iter, path));
-
-    gtk_tree_model_get (doclink_dialog->model, &doclink_dialog->iter, URI,
-                        &uri, ITEM_POINTER, &invoice, -1);
-
-    // Open linked document, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(doclink_dialog->view),
-                                  DISPLAY_URI - 1) == col)
-        gnc_doclink_open_uri (GTK_WINDOW(doclink_dialog->window), uri);
-
-    if (!invoice)
+    if (n_press == 2)
     {
-        g_free (uri);
-        return;
+        GtkWidget *widget = gtk_widget_pick (doclink_dialog->column_view, x, y, GTK_PICK_DEFAULT);
+
+        if (widget)
+            prop_position = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(widget), "prop_position"));
+    }
+    else
+        return FALSE;
+
+    if (prop_position == 0)
+        return FALSE;
+
+    GtkSelectionModel *selection_model = gtk_column_view_get_model (GTK_COLUMN_VIEW(
+                                            doclink_dialog->column_view));
+
+    GtkBitset *bitset = gtk_selection_model_get_selection (selection_model);
+    guint64 bit_size = gtk_bitset_get_size (bitset);
+
+    if (bit_size == 1)
+    {
+        item = g_list_model_get_item (G_LIST_MODEL(selection_model), gtk_bitset_get_nth (bitset, 0));
+
+        if (!item)
+            return FALSE;
     }
 
-    // Open Invoice, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(doclink_dialog->view),
-                                  DESC_ID - 1) == col)
+    // Open linked document
+    if (prop_position == PROP_DOCLINK_DISPLAY_URI)
+        gnc_doclink_open_uri (GTK_WINDOW(doclink_dialog->window), item->uri);
+
+    if (!item->item_pointer) // invoice
     {
+        g_clear_object (&item);
+        return FALSE;
+    }
+
+    // Open Invoice
+    if (prop_position == PROP_DOCLINK_DESCRIPTION)
+    {
+        GncInvoice    *invoice = GNC_INVOICE(item->item_pointer);
         InvoiceWindow *iw;
 
         iw =  gnc_ui_invoice_edit (GTK_WINDOW(doclink_dialog->window),
@@ -802,27 +824,41 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
         gnc_plugin_page_invoice_new (iw);
     }
 
-    // Open Invoice document link dialog, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(doclink_dialog->view),
-                                  AVAILABLE - 1) == col)
+    // Open Invoice document link dialog
+    if (prop_position == PROP_DOCLINK_AVAILABLE)
     {
+        GncInvoice *invoice = GNC_INVOICE(item->item_pointer);
+
         if (doclink_dialog->book_ro)
         {
             gnc_warning_dialog (GTK_WINDOW(doclink_dialog->window), "%s",
                                 _("Business item can not be modified."));
-            g_free (uri);
-            return;
+            g_clear_object (&item);
+            return FALSE;
+        }
+        // not sure this is right, translate the select/sort position to real position
+        guint n_items = g_list_model_get_n_items (G_LIST_MODEL(doclink_dialog->column_model));
+        for (gint i = 0; i < n_items; i++)
+        {
+            DoclinkViewItem *test_item = g_list_model_get_item (G_LIST_MODEL(
+                                                                doclink_dialog->column_model), i);
+            if (test_item == item)
+            {
+                doclink_dialog->column_model_position = i;
+                break;
+            }
+            g_clear_object (&test_item);
         }
 
         DoclinkReturn *dlr = g_new0 (DoclinkReturn, 1);
-        dlr->existing_uri = g_strdup (uri);
+        dlr->existing_uri = g_strdup (item->uri);
         dlr->updated_uri = NULL;
         dlr->user_data = invoice;
 
         doclink_dialog->ret_dlr = dlr;
 
-/* Translators: This is the title of a dialog box for linking an external
-   file or URI with the current bill, invoice, transaction, or voucher. */
+        /* Translators: This is the title of a dialog box for linking an external
+           file or URI with the current bill, invoice, transaction, or voucher. */
         GtkWidget *win =
             gnc_doclink_get_uri_dialog (GTK_WINDOW(doclink_dialog->window),
                                         _("Manage Document Link"), dlr);
@@ -830,7 +866,8 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
         g_signal_connect (G_OBJECT(win), "destroy",
                           G_CALLBACK(update_bus_gui_destroy_cb), doclink_dialog);
     }
-    g_free (uri);
+    g_clear_object (&item);
+    return TRUE;
 }
 
 static void
@@ -849,12 +886,13 @@ update_trans_gui_destroy_cb (GtkWidget *object, gpointer user_data)
                 xaccTransSetDocLink (trans, dlr->updated_uri);
                 if (g_strcmp0 (dlr->updated_uri, "") == 0) // deleted uri
                 {
-                    gtk_list_store_remove (GTK_LIST_STORE(doclink_dialog->model),
-                                           &doclink_dialog->iter);
+                    g_list_store_remove (G_LIST_STORE(doclink_dialog->column_model),
+                                                      doclink_dialog->column_model_position);
+
                     update_total_entries (doclink_dialog);
                 }
                 else // updated uri
-                    update_model_with_changes (doclink_dialog, &doclink_dialog->iter, dlr->updated_uri);
+                    update_model_with_changes (doclink_dialog, dlr->updated_uri);
             }
         }
     }
@@ -863,38 +901,56 @@ update_trans_gui_destroy_cb (GtkWidget *object, gpointer user_data)
     g_free (dlr);
 }
 
-static void
-row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
-                       GtkTreeViewColumn  *col, gpointer user_data)
+static gboolean
+row_selected_trans_cb (GtkGestureClick *gesture, int n_press,
+                       double x, double y, gpointer user_data)
 {
-    DoclinkDialog *doclink_dialog = user_data;
-    Split         *split;
-    gchar         *uri;
+    DoclinkDialog     *doclink_dialog = user_data;
+    DoclinkViewItem *item;
+    gint               prop_position = 0;
 
-    // path describes a non-existing row - should not happen
-    g_return_if_fail (gtk_tree_model_get_iter (doclink_dialog->model,
-                                               &doclink_dialog->iter, path));
-
-    gtk_tree_model_get (doclink_dialog->model, &doclink_dialog->iter, URI,
-                        &uri, ITEM_POINTER, &split, -1);
-
-    // Open linked document, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(doclink_dialog->view),
-                                  DISPLAY_URI - 1) == col)
-        gnc_doclink_open_uri (GTK_WINDOW(doclink_dialog->window), uri);
-
-    if (!split)
+    if (n_press == 2)
     {
-        g_free (uri);
-        return;
+        GtkWidget *widget = gtk_widget_pick (doclink_dialog->column_view, x, y, GTK_PICK_DEFAULT);
+
+        if (widget)
+            prop_position = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(widget), "prop-position"));
+    }
+    else
+        return FALSE;
+
+    if (prop_position == 0)
+        return FALSE;
+
+    GtkSelectionModel *selection_model = gtk_column_view_get_model (GTK_COLUMN_VIEW(doclink_dialog->column_view));
+
+    GtkBitset *bitset = gtk_selection_model_get_selection (selection_model);
+    guint64 bit_size = gtk_bitset_get_size (bitset);
+
+    if (bit_size == 1)
+    {
+        item = g_list_model_get_item (G_LIST_MODEL(selection_model), gtk_bitset_get_nth (bitset, 0));
+
+        if (!item)
+            return FALSE;
+    }
+
+    // Open linked document
+    if (prop_position == PROP_DOCLINK_DISPLAY_URI)
+        gnc_doclink_open_uri (GTK_WINDOW(doclink_dialog->window), item->uri);
+
+    if (!item->item_pointer) // split
+    {
+        g_clear_object (&item);
+        return FALSE;
     }
 
     // Open transaction, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(doclink_dialog->view),
-                                  DESC_ITEM - 1) == col)
+    if (prop_position == PROP_DOCLINK_DESCRIPTION)
     {
         GncPluginPage *page;
         GNCSplitReg   *gsr;
+        Split         *split = GNC_SPLIT(item->item_pointer);
         Account       *account = xaccSplitGetAccount (split);
 
         page = gnc_plugin_page_register_new (account, FALSE);
@@ -903,15 +959,16 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
         gnc_split_reg_raise (gsr);
 
         // Test for visibility of split
-        if (gnc_split_reg_clear_filter_for_split (gsr, split))
+        if (gnc_split_reg_clear_filter_for_split (gsr, (split)))
             gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(page));
 
         gnc_split_reg_jump_to_split (gsr, split);
     }
 
-    // Open transaction document link dialog, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(doclink_dialog->view), AVAILABLE - 1) == col)
+    // Open transaction document link dialog
+    if (prop_position == PROP_DOCLINK_AVAILABLE)
     {
+        Split       *split = GNC_SPLIT(item->item_pointer);
         Transaction *trans = xaccSplitGetParent (split);
 
         if (xaccTransIsReadonlyByPostedDate (trans) ||
@@ -920,12 +977,25 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
         {
             gnc_warning_dialog (GTK_WINDOW(doclink_dialog->window), "%s",
                                 _("Transaction can not be modified."));
-            g_free (uri);
-            return;
+            g_clear_object (&item);
+            return FALSE;
+        }
+        // not sure this is right, translate the select/sort position to real position
+        guint n_items = g_list_model_get_n_items (G_LIST_MODEL(doclink_dialog->column_model));
+        for (gint i = 0; i < n_items; i++)
+        {
+            DoclinkViewItem *test_item = g_list_model_get_item (G_LIST_MODEL(
+                                                                doclink_dialog->column_model), i);
+            if (test_item == item)
+            {
+                doclink_dialog->column_model_position = i;
+                break;
+            }
+            g_clear_object (&test_item);
         }
 
         DoclinkReturn *dlr = g_new0 (DoclinkReturn, 1);
-        dlr->existing_uri = g_strdup (uri);
+        dlr->existing_uri = g_strdup (item->uri);
         dlr->updated_uri = NULL;
         dlr->user_data = trans;
 
@@ -938,7 +1008,8 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
         g_signal_connect (G_OBJECT(win), "destroy",
                           G_CALLBACK(update_trans_gui_destroy_cb), doclink_dialog);
     }
-    g_free (uri);
+    g_clear_object (&item);
+    return TRUE;
 }
 
 static void
@@ -947,7 +1018,6 @@ add_bus_info_to_model (QofInstance* data, gpointer user_data)
     DoclinkDialog *doclink_dialog = user_data;
     GncInvoice    *invoice = GNC_INVOICE(data);
     const gchar   *uri = gncInvoiceGetDocLink (invoice);
-    GtkTreeIter   iter;
 
     if (uri && *uri)
     {
@@ -986,17 +1056,22 @@ add_bus_info_to_model (QofInstance* data, gpointer user_data)
         display_uri = gnc_doclink_get_unescape_uri (doclink_dialog->path_head,
                                                     uri, scheme);
 
-        gtk_list_store_append (GTK_LIST_STORE(doclink_dialog->model), &iter);
+        DoclinkViewItem *item = g_object_new (DOCLINKVIEW_TYPE_ITEM, NULL);
 
-        gtk_list_store_set (GTK_LIST_STORE(doclink_dialog->model), &iter,
-                            DATE_ITEM, datebuff,
-                            DATE_INT64, t, // used just for sorting date column
-                            DESC_ID, gncInvoiceGetID (invoice),
-                            DESC_ITEM, inv_type,
-                            DISPLAY_URI, display_uri, AVAILABLE, _("Unknown"),
-                            ITEM_POINTER, invoice, URI, uri,
-                            URI_RELATIVE, rel, // used just for sorting relative column
-                            URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
+        item->item_date = g_strdup (datebuff);
+        item->item_time64 = t;
+        item->invoice_id = g_strdup (gncInvoiceGetID (invoice)),
+        item->description = g_strdup (inv_type);
+        item->display_uri = g_strdup (display_uri);
+        item->available = g_strdup (_("Unknown"));
+        item->item_pointer = invoice;
+        item->uri = g_strdup (uri);
+        item->uri_relative = rel;
+        item->uri_relative_pix = (rel == TRUE ? g_strdup ("emblem-default") : NULL);
+
+        g_list_store_append (G_LIST_STORE(doclink_dialog->column_model), item);
+        g_object_unref (item);
+
         g_free (display_uri);
         g_free (scheme);
     }
@@ -1008,7 +1083,6 @@ add_trans_info_to_model (QofInstance* data, gpointer user_data)
     DoclinkDialog *doclink_dialog = user_data;
     Transaction   *trans = GNC_TRANSACTION(data);
     gchar         *uri;
-    GtkTreeIter   iter;
 
     // fix an earlier error when storing relative paths before version 3.5
     uri = gnc_doclink_convert_trans_link_uri (trans, doclink_dialog->book_ro);
@@ -1025,7 +1099,6 @@ add_trans_info_to_model (QofInstance* data, gpointer user_data)
         if (t == 0)
             t = gnc_time (NULL);
         qof_print_date_buff (datebuff, MAX_DATE_LENGTH, t);
-        gtk_list_store_append (GTK_LIST_STORE (doclink_dialog->model), &iter);
 
         if (!scheme) // path is relative
             rel = TRUE;
@@ -1033,14 +1106,22 @@ add_trans_info_to_model (QofInstance* data, gpointer user_data)
         display_uri = gnc_doclink_get_unescape_uri (doclink_dialog->path_head,
                                                     uri, scheme);
 
-        gtk_list_store_set (GTK_LIST_STORE(doclink_dialog->model), &iter,
-                            DATE_ITEM, datebuff,
-                            DATE_INT64, t, // used just for sorting date column
-                            DESC_ITEM, xaccTransGetDescription (trans),
-                            DISPLAY_URI, display_uri, AVAILABLE, _("Unknown"),
-                            ITEM_POINTER, split, URI, uri,
-                            URI_RELATIVE, rel, // used just for sorting relative column
-                            URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
+        DoclinkViewItem *item = g_object_new (DOCLINKVIEW_TYPE_ITEM, NULL);
+
+        item->item_date = g_strdup (datebuff);
+        item->item_time64 = t;
+        item->invoice_id = NULL;
+        item->description = g_strdup (xaccTransGetDescription (trans));
+        item->display_uri = g_strdup (display_uri);
+        item->available = g_strdup (_("Unknown"));
+        item->item_pointer = split;
+        item->uri = g_strdup (uri);
+        item->uri_relative = rel;
+        item->uri_relative_pix = (rel == TRUE ? g_strdup ("emblem-default") : NULL);
+
+        g_list_store_append (G_LIST_STORE(doclink_dialog->column_model), item);
+        g_object_unref (item);
+
         g_free (display_uri);
         g_free (scheme);
         g_free (uri);
@@ -1052,25 +1133,29 @@ get_bus_info (DoclinkDialog *doclink_dialog)
 {
     QofBook *book = gnc_get_current_book();
 
-    /* disconnect the model from the treeview */
-    doclink_dialog->model =
-        gtk_tree_view_get_model (GTK_TREE_VIEW(doclink_dialog->view));
-    g_object_ref (G_OBJECT(doclink_dialog->model));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(doclink_dialog->view), NULL);
+    doclink_dialog->book_ro = qof_book_is_readonly (book);
 
-    /* Clear the list store */
-    gtk_list_store_clear (GTK_LIST_STORE(doclink_dialog->model));
+    /* disconnect the model from the column view */
+    GtkSelectionModel *selection_model = gtk_column_view_get_model (GTK_COLUMN_VIEW(
+                                            doclink_dialog->column_view));
+    g_object_ref (selection_model);
 
-    /* Loop through the invoices */
+    gtk_column_view_set_model (GTK_COLUMN_VIEW(doclink_dialog->column_view), NULL);
+
+    g_list_store_remove_all (G_LIST_STORE(doclink_dialog->column_model));
+
+    /* Loop through the transactions */
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
                             add_bus_info_to_model, doclink_dialog);
 
-    update_total_entries (doclink_dialog);
+    /* reconnect the model to the column view */
+    gtk_column_view_set_model (GTK_COLUMN_VIEW(doclink_dialog->column_view),
+                               GTK_SELECTION_MODEL(selection_model));
+    g_object_unref (selection_model);
 
-    /* reconnect the model to the treeview */
-    gtk_tree_view_set_model (GTK_TREE_VIEW(doclink_dialog->view),
-                             doclink_dialog->model);
-    g_object_unref (G_OBJECT(doclink_dialog->model));
+    gtk_single_selection_set_selected (GTK_SINGLE_SELECTION(selection_model), 0);
+
+    update_total_entries (doclink_dialog);
 }
 
 static void
@@ -1080,25 +1165,27 @@ get_trans_info (DoclinkDialog *doclink_dialog)
 
     doclink_dialog->book_ro = qof_book_is_readonly (book);
 
-    /* disconnect the model from the treeview */
-    doclink_dialog->model =
-        gtk_tree_view_get_model (GTK_TREE_VIEW(doclink_dialog->view));
-    g_object_ref (G_OBJECT(doclink_dialog->model));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(doclink_dialog->view), NULL);
+    /* disconnect the model from the column view */
+    GtkSelectionModel *selection_model = gtk_column_view_get_model (GTK_COLUMN_VIEW(
+                                            doclink_dialog->column_view));
+    g_object_ref (selection_model);
 
-    /* Clear the list store */
-    gtk_list_store_clear (GTK_LIST_STORE(doclink_dialog->model));
+    gtk_column_view_set_model (GTK_COLUMN_VIEW(doclink_dialog->column_view), NULL);
+
+    g_list_store_remove_all (G_LIST_STORE(doclink_dialog->column_model));
 
     /* Loop through the transactions */
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
                             add_trans_info_to_model, doclink_dialog);
 
-    update_total_entries (doclink_dialog);
+    /* reconnect the model to the column view */
+    gtk_column_view_set_model (GTK_COLUMN_VIEW(doclink_dialog->column_view),
+                               GTK_SELECTION_MODEL(selection_model));
+    g_object_unref (selection_model);
 
-    /* reconnect the model to the treeview */
-    gtk_tree_view_set_model (GTK_TREE_VIEW(doclink_dialog->view),
-                             doclink_dialog->model);
-    g_object_unref (G_OBJECT(doclink_dialog->model));
+    gtk_single_selection_set_selected (GTK_SINGLE_SELECTION(selection_model), 0);
+
+    update_total_entries (doclink_dialog);
 }
 
 static void
@@ -1114,7 +1201,7 @@ gnc_doclink_dialog_reload_button_cb (GtkWidget *widget, gpointer user_data)
 
         // display path head text and test if present
         gnc_doclink_set_path_head_label (doclink_dialog->path_head_label,
-                                          NULL, NULL);
+                                         NULL, NULL);
     }
     g_free (path_head);
 
@@ -1150,20 +1237,19 @@ gnc_doclink_dialog_close_button_cb (GtkWidget *widget, gpointer user_data)
 static void
 gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
 {
-    GtkWidget         *window;
-    GtkBuilder        *builder;
-    GtkTreeSelection  *selection;
-    GtkTreeViewColumn *expanding_column;
-    GtkWidget         *button;
+    GtkBuilder *builder;
+    GtkWidget  *button;
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-doclink.ui", "list-store");
     gnc_builder_add_from_file (builder, "dialog-doclink.ui", "linked_doc_window");
 
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "linked_doc_window"));
-    doclink_dialog->window = window;
+    doclink_dialog->window = GTK_WIDGET(gtk_builder_get_object (builder, "linked_doc_window"));
     doclink_dialog->session = gnc_get_current_session();
+
+    GtkWidget *sw = GTK_WIDGET(gtk_builder_get_object (builder, "scrolled_window"));
+    doclink_dialog->column_model = G_LIST_MODEL(g_list_store_new (DOCLINKVIEW_TYPE_ITEM));
+    doclink_dialog->column_view = gnc_doclink_create_column_view (sw, doclink_dialog->column_model);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "reload_button"));
     g_signal_connect (G_OBJECT(button), "clicked",
@@ -1182,14 +1268,13 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
                       G_CALLBACK(gnc_doclink_dialog_close_button_cb), doclink_dialog);
 
     /* default to 'close' button */
-    gtk_window_set_default_widget (GTK_WINDOW(window),
+    gtk_window_set_default_widget (GTK_WINDOW(doclink_dialog->window),
                                    GTK_WIDGET(button)); //FIXME gtk4, may not work
 
     // Set the widget name and style context for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-transaction-doclinks");
-    gnc_widget_style_context_add_class (GTK_WIDGET(window), "gnc-class-doclink");
+    gtk_widget_set_name (GTK_WIDGET(doclink_dialog->window), "gnc-id-transaction-doclinks");
+    gnc_widget_style_context_add_class (GTK_WIDGET(doclink_dialog->window), "gnc-class-doclink");
 
-    doclink_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     doclink_dialog->path_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
     doclink_dialog->total_entries_label = GTK_WIDGET(gtk_builder_get_object (builder, "total_entries_label"));
     doclink_dialog->path_head = gnc_doclink_get_path_head ();
@@ -1197,20 +1282,11 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
     // display path head text and test if present
     gnc_doclink_set_path_head_label (doclink_dialog->path_head_label, NULL, NULL);
 
-    // Get the column we want to be the expanding column.
-    expanding_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "doclink"));
-
-    /* default sort order */
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gtk_tree_view_get_model(
-                                          GTK_TREE_VIEW(doclink_dialog->view))),
-                                          DATE_INT64, GTK_SORT_ASCENDING);
-
     // Set grid lines option to preference
-    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (doclink_dialog->view),
-                                  gnc_tree_view_get_grid_lines_pref ());
-
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(doclink_dialog->view));
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+    gtk_column_view_set_show_row_separators (GTK_COLUMN_VIEW(doclink_dialog->column_view),
+                                             gnc_tree_view_get_grid_lines_pref ());
+    gtk_column_view_set_show_column_separators (GTK_COLUMN_VIEW(doclink_dialog->column_view),
+                                                gnc_tree_view_get_grid_lines_pref ());
 
     g_signal_connect (G_OBJECT(doclink_dialog->window), "destroy",
                       G_CALLBACK(gnc_doclink_dialog_window_destroy_cb), doclink_dialog);
@@ -1227,21 +1303,30 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
     g_signal_connect (G_OBJECT(event_controller_window), "key-pressed",
                       G_CALLBACK(gnc_doclink_dialog_window_key_press_cb), doclink_dialog);
 
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(doclink_dialog->column_view),
+                               GTK_EVENT_CONTROLLER(event_gesture));
+
+    gtk_event_controller_set_name (GTK_EVENT_CONTROLLER(event_gesture), "mytest");
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(event_gesture), GTK_PHASE_CAPTURE);
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 1);
+
     // Setup the correct parts for each dialog
     if (doclink_dialog->is_list_trans)
     {
-        GObject *desc_item_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_item"));
-        GObject *desc_id_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_id"));
+        GtkColumnViewColumn *id_column = g_object_get_data (G_OBJECT(doclink_dialog->column_view), "id-column");
+        GtkColumnViewColumn *type_column = g_object_get_data (G_OBJECT(doclink_dialog->column_view), "type-column");
 
         /* Translators: This is the label of a dialog box that lists all of the
            transaction that have files or URIs linked with them. */
-        gtk_window_set_title (GTK_WINDOW(window), _("Transaction Document Links"));
+        gtk_window_set_title (GTK_WINDOW(doclink_dialog->window), _("Transaction Document Links"));
 
-        gtk_tree_view_column_set_visible (GTK_TREE_VIEW_COLUMN(desc_id_tree_column), FALSE);
-        gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN(desc_item_tree_column), _("Description"));
+        gtk_column_view_column_set_visible (id_column, FALSE);
+        gtk_column_view_column_set_title (type_column, _("Description"));
 
-        g_signal_connect (G_OBJECT(doclink_dialog->view), "row-activated",
+        g_signal_connect (G_OBJECT(event_gesture), "released",
                           G_CALLBACK(row_selected_trans_cb), doclink_dialog);
+
         get_trans_info (doclink_dialog);
     }
     else
@@ -1260,17 +1345,15 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
                               _("Business Document Links"));
         gtk_label_set_text (GTK_LABEL(help_label), gettext (item_string));
 
-        g_signal_connect (G_OBJECT(doclink_dialog->view), "row-activated",
+        g_signal_connect (G_OBJECT(event_gesture), "released",
                           G_CALLBACK(row_selected_bus_cb), doclink_dialog);
+
         get_bus_info (doclink_dialog);
     }
-
     gtk_widget_set_visible (GTK_WIDGET(doclink_dialog->window), TRUE);
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_tree_view_column_set_expand (expanding_column, TRUE);
-    gtk_tree_view_columns_autosize (GTK_TREE_VIEW(doclink_dialog->view));
     LEAVE(" ");
 }
 
