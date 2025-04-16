@@ -161,9 +161,8 @@ gncs_validate (GNCSearchCoreType *fe)
                                          GTK_BUTTONS_OK,
                                          "%s",
                                          _("You need to enter some search text."));
-//FIXME gtk4        gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return FALSE;
     }
 
@@ -199,9 +198,8 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_OK,
                                              "%s", errmsg);
-//FIXME gtk4            gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
+            gnc_dialog_run (GTK_DIALOG (dialog));
+
             g_free (errmsg);
             valid = FALSE;
         }

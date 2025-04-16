@@ -50,9 +50,9 @@
  * Return: the result the user selected                             *
 \********************************************************************/
 gint
-gnc_ok_cancel_dialog(GtkWindow *parent,
-                     gint default_result,
-                     const gchar *format, ...)
+gnc_ok_cancel_dialog (GtkWindow *parent,
+                      gint default_result,
+                      const gchar *format, ...)
 {
     GtkWidget *dialog = NULL;
     gint result;
@@ -62,26 +62,25 @@ gnc_ok_cancel_dialog(GtkWindow *parent,
     if (!parent)
         parent = gnc_ui_get_main_window (NULL);
 
-    va_start(args, format);
-    buffer = g_strdup_vprintf(format, args);
+    va_start (args, format);
+    buffer = g_strdup_vprintf (format, args);
     dialog = gtk_message_dialog_new (parent,
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_DIALOG_MODAL |
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_OK_CANCEL,
                                      "%s",
                                      buffer);
-    g_free(buffer);
-    va_end(args);
+    g_free (buffer);
+    va_end (args);
 
 //FIXME gtk4    if (!parent)
 //        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
-//FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-result = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
-    return(result);
+    result = gnc_dialog_run (GTK_DIALOG(dialog));
+
+    return (result);
 }
 
 
@@ -112,31 +111,31 @@ gnc_verify_dialog(GtkWindow *parent, gboolean yes_is_default,
     if (!parent)
         parent = gnc_ui_get_main_window (NULL);
 
-    va_start(args, format);
-    buffer = g_strdup_vprintf(format, args);
+    va_start (args, format);
+    buffer = g_strdup_vprintf (format, args);
     dialog = gtk_message_dialog_new (parent,
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_DIALOG_MODAL |
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
                                      "%s",
                                      buffer);
-    g_free(buffer);
-    va_end(args);
+    g_free (buffer);
+    va_end (args);
 
 //FIXME gtk4    if (!parent)
 //        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog),
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog),
                                     (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
-//FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-result = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    result = gnc_dialog_run (GTK_DIALOG(dialog));
+
     return (result == GTK_RESPONSE_YES);
 }
 
 static void
-gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageType msg_type, va_list args)
+gnc_message_dialog_common (GtkWindow *parent, const gchar *format,
+                           GtkMessageType msg_type, va_list args)
 {
     GtkWidget *dialog = NULL;
     gchar *buffer;
@@ -144,21 +143,20 @@ gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageTyp
     if (!parent)
         parent = gnc_ui_get_main_window (NULL);
 
-    buffer = g_strdup_vprintf(format, args);
+    buffer = g_strdup_vprintf (format, args);
     dialog = gtk_message_dialog_new (parent,
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_DIALOG_MODAL |
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                      msg_type,
                                      GTK_BUTTONS_CLOSE,
                                      "%s",
                                      buffer);
-    g_free(buffer);
+    g_free (buffer);
 
 //FIXME gtk4    if (!parent)
 //        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
-//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    gnc_dialog_run (GTK_DIALOG(dialog));
 }
 
 /********************************************************************\
@@ -177,9 +175,9 @@ gnc_info_dialog (GtkWindow *parent, const gchar *format, ...)
 {
     va_list args;
 
-    va_start(args, format);
+    va_start (args, format);
     gnc_message_dialog_common (parent, format, GTK_MESSAGE_INFO, args);
-    va_end(args);
+    va_end (args);
 }
 
 
@@ -201,9 +199,9 @@ gnc_warning_dialog (GtkWindow *parent, const gchar *format, ...)
 {
     va_list args;
 
-    va_start(args, format);
+    va_start (args, format);
     gnc_message_dialog_common (parent, format, GTK_MESSAGE_WARNING, args);
-    va_end(args);
+    va_end (args);
 }
 
 
@@ -222,18 +220,18 @@ void gnc_error_dialog (GtkWindow* parent, const char* format, ...)
 {
     va_list args;
 
-    va_start(args, format);
+    va_start (args, format);
     gnc_message_dialog_common (parent, format, GTK_MESSAGE_ERROR, args);
-    va_end(args);
+    va_end (args);
 }
 
 static void
-gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
+gnc_choose_check_button_cb (GtkWidget *w, gpointer data)
 {
     int *result = data;
 
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w)))
-        *result = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w), INDEX_LABEL));
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON(w)))
+        *result = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(w), INDEX_LABEL));
 }
 
 /********************************************************************
@@ -244,21 +242,21 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 */
 
 int
-gnc_choose_radio_option_dialog(GtkWidget *parent,
-                               const char *title,
-                               const char *msg,
-                               const char *button_name,
-                               int default_value,
-                               GList *radio_list)
+gnc_choose_radio_option_dialog (GtkWidget *parent,
+                                const char *title,
+                                const char *msg,
+                                const char *button_name,
+                                int default_value,
+                                GList *radio_list)
 {
     int radio_result = 0; /* initial selected value is first one */
     GtkWidget *vbox;
     GtkWidget *main_vbox;
     GtkWidget *label;
-    GtkWidget *radio_button;
+    GtkWidget *check_button;
     GtkWidget *dialog;
     GtkWidget *dvbox;
-    GSList *group = NULL;
+    GtkWidget *first_check_button;
     GList *node;
     int i;
 
@@ -268,7 +266,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     gtk_widget_set_visible (GTK_WIDGET(main_vbox), TRUE);
 
     label = gtk_label_new(msg);
-    gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
+    gtk_label_set_justify (GTK_LABEL(label), GTK_JUSTIFY_LEFT);
     gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(label));
     gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
 
@@ -280,52 +278,58 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
     {
-//FIXME gtk4        radio_button = gtk_radio_button_new_with_mnemonic(group, node->data);
-//        group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
-//        gtk_widget_set_halign (GTK_WIDGET(radio_button), GTK_ALIGN_START);
+        check_button = gtk_check_button_new_with_mnemonic (node->data);
 
-//        if (i == default_value) /* default is first radio button */
-//        {
-//            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), TRUE);
-//            radio_result = default_value;
-//        }
+        if (i == 0)
+            first_check_button = check_button;
+        else
+            gtk_check_button_set_group (GTK_CHECK_BUTTON(check_button),
+                                        GTK_CHECK_BUTTON(first_check_button));
 
-//        gtk_widget_set_visible (GTK_WIDGET(radio_button), TRUE);
-//        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(radio_button));
-//        g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
-//        g_signal_connect(radio_button, "clicked",
-//                         G_CALLBACK(gnc_choose_radio_button_cb),
-//                         &radio_result);
+        gtk_widget_set_halign (GTK_WIDGET(check_button), GTK_ALIGN_START);
+
+        if (i == default_value) /* default is first radio button */
+        {
+            gtk_check_button_set_active (GTK_CHECK_BUTTON(check_button), TRUE);
+            radio_result = default_value;
+        }
+
+        gtk_widget_set_visible (GTK_WIDGET(check_button), TRUE);
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(check_button));
+        g_object_set_data (G_OBJECT(check_button), INDEX_LABEL, GINT_TO_POINTER(i));
+        g_signal_connect (G_OBJECT(check_button), "clicked",
+                          G_CALLBACK(gnc_choose_check_button_cb),
+                          &radio_result);
     }
 
     if (!button_name)
         button_name = _("_OK");
-    dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
+    dialog = gtk_dialog_new_with_buttons (title,
+                                          GTK_WINDOW(parent),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                          button_name, GTK_RESPONSE_OK,
+                                          _("_Cancel"),
+                                          GTK_RESPONSE_CANCEL,
+                                          button_name, 
+                                          GTK_RESPONSE_OK,
                                           NULL);
 
     /* default to ok */
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
     dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
 
     gtk_box_append (GTK_BOX(dvbox), GTK_WIDGET(main_vbox));
 
-//FIXME gtk4    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-
-//    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+    if (gnc_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
         radio_result = -1;
-
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     return radio_result;
 }
 
 static gchar *
-gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input, gboolean use_entry)
+gnc_input_dialog_internal (GtkWidget *parent, const gchar *title,
+                           const gchar *msg, const gchar *default_input,
+                           gboolean use_entry)
 {
     gint result;
     GtkWidget *view;
@@ -334,11 +338,13 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
     GtkTextIter start, end;
     
     /* Create the widgets */
-    GtkWidget* dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
-                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("_OK"), GTK_RESPONSE_ACCEPT,
-                                          _("_Cancel"), GTK_RESPONSE_REJECT,
-                                          NULL);
+    GtkWidget* dialog = gtk_dialog_new_with_buttons (title,
+                                                     GTK_WINDOW(parent),
+                                                     GTK_DIALOG_MODAL |
+                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                     _("_OK"), GTK_RESPONSE_ACCEPT,
+                                                     _("_Cancel"), GTK_RESPONSE_REJECT,
+                                                     NULL);
     GtkWidget* content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
     
     // add a label
@@ -361,16 +367,12 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
     gtk_box_append (GTK_BOX(content_area), GTK_WIDGET(view));
 
     // run the dialog
-//FIXME gtk4    gtk_widget_show_all (dialog);
-
-//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+    result = gnc_dialog_run (GTK_DIALOG(dialog));
     
     if (result != GTK_RESPONSE_REJECT)
     {
         if (use_entry)
-            user_input = g_strdup (gnc_entry_get_text ((GTK_ENTRY (view))));
+            user_input = g_strdup (gnc_entry_get_text ((GTK_ENTRY(view))));
         else
         {
             gtk_text_buffer_get_start_iter (buffer, &start);
@@ -378,9 +380,6 @@ result = GTK_RESPONSE_CANCEL; //FIXME gtk4
             user_input = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
         }
     }
-    
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
-    
     return user_input;
 }
 
@@ -399,7 +398,8 @@ result = GTK_RESPONSE_CANCEL; //FIXME gtk4
  *         NULL, if pressed "Cancel"                                *
  \********************************************************************/
 gchar *
-gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input)
+gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg,
+                  const gchar *default_input)
 {
     return gnc_input_dialog_internal (parent, title, msg, default_input, FALSE);
 }
@@ -410,7 +410,8 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
  *   user may choose between "Ok" and "Cancel"                      *
  \********************************************************************/
 gchar *
-gnc_input_dialog_with_entry (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input)
+gnc_input_dialog_with_entry (GtkWidget *parent, const gchar *title,
+                             const gchar *msg, const gchar *default_input)
 {
     return gnc_input_dialog_internal (parent, title, msg, default_input, TRUE);
 }
@@ -423,10 +424,12 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     gint width, height;
     
     /* Create the widgets */
-    GtkWidget* dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
-                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("_OK"), GTK_RESPONSE_ACCEPT,
-                                          NULL);
+    GtkWidget* dialog = gtk_dialog_new_with_buttons (title,
+                                                     GTK_WINDOW(parent),
+                                                     GTK_DIALOG_MODAL |
+                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                     _("_OK"), GTK_RESPONSE_ACCEPT,
+                                                     NULL);
     GtkWidget* content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
     
     // add a scroll area
@@ -435,8 +438,8 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
 
     // add a textview
     view = gtk_text_view_new ();
-    gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
-    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+    gtk_text_view_set_editable (GTK_TEXT_VIEW(view), FALSE);
+    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(view));
     gtk_text_buffer_set_text (buffer, msg, -1);
     gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_WIDGET(view));
@@ -447,8 +450,5 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
         gtk_window_get_default_size (GTK_WINDOW(parent), &width, &height);
         gtk_window_set_default_size (GTK_WINDOW(dialog), width, height);
     }
-//FIXME gtk4    gtk_widget_show_all (dialog);
-//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    gnc_dialog_run (GTK_DIALOG(dialog));
 }

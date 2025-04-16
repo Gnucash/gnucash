@@ -1885,10 +1885,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     gnc_gtk_dialog_add_button (dialog, _ ("_Save Transaction"),
                                "document-save", GTK_RESPONSE_ACCEPT);
 
-//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    response = gnc_dialog_run (GTK_DIALOG(dialog));
 
     switch (response)
     {
@@ -3618,9 +3615,9 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                                                               "%s", message);
                     gtk_dialog_add_button (GTK_DIALOG (dialog), _ ("_Print checks"),
                                            GTK_RESPONSE_YES);
-                    response = gnc_dialog_run (GTK_DIALOG (dialog),
-                                               GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
-//FIXME gtk4                    gtk_window_destroy (GTK_WINDOW(dialog));
+                    response = gnc_warning_dialog_run (GTK_DIALOG(dialog),
+                                                       GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
+
                     if (response != GTK_RESPONSE_YES)
                     {
                         LEAVE ("Multiple accounts");
@@ -5068,9 +5065,7 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                     "%s", _("This transaction involves more than one other account. Select a specific split to jump to that account."));
             gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
-//FIXME gtk4            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_MULTIPLE_SPLITS);
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4            gtk_widget_destroy (dialog);
+            gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_MULTIPLE_SPLITS);
 
             LEAVE ("no split (2)");
             return;
@@ -5098,9 +5093,7 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                     "%s", _("This transaction only involves the current account so there is no other account to jump to."));
             gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
-//FIXME gtk4            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_SINGLE_ACCOUNT);
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4            gtk_widget_destroy (dialog);
+            gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_SINGLE_ACCOUNT);
 
             LEAVE ("register open for account");
             return;

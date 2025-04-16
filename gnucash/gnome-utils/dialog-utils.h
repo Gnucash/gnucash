@@ -148,10 +148,21 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
                                 const gchar *icon_name,
                                 guint response);
 
-/** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)
+/** Note: This dialog is modal! Uses preference settings for default
  */
 gint
-gnc_dialog_run(GtkDialog *dialog, const gchar *pref_key);
+gnc_warning_dialog_run (GtkDialog *dialog, const gchar *pref_key);
+
+/** Note: This dialog is modal!
+ */
+gint
+gnc_dialog_run (GtkDialog *dialog);
+
+/** Note: This dialog is modal!
+ *  Ask OK to close window
+ */
+gboolean
+gnc_ok_to_close_window (GtkWidget *parent);
 
 /* If this is a new book, this function can be used to display book options
  * dialog so user can specify options, before any transactions can be
