@@ -444,7 +444,7 @@ gnc_main_window_foreach_page (GncMainWindowPageFunc fn, gpointer user_data)
  *
  *  @param data A data structure containing state about the
  *  window/page restoration process.
- * 
+ *
  *  @return true if page was added else false.
  *  */
 static gboolean
@@ -798,7 +798,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         if (!page_added) // if page not added, increase offset to compensate
         {
             offset ++;
-            added_page_offsets = g_slist_append (added_page_offsets, 
+            added_page_offsets = g_slist_append (added_page_offsets,
                                                  GINT_TO_POINTER(-1));
         }
         else
@@ -842,7 +842,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         {
             gint zero_based_page_number = order[i] - 1;
 
-            gint offset = GPOINTER_TO_INT(g_slist_nth_data (added_page_offsets, 
+            gint offset = GPOINTER_TO_INT(g_slist_nth_data (added_page_offsets,
                                                             zero_based_page_number));
 
             if (offset == -1)
@@ -1649,29 +1649,21 @@ gnc_main_window_update_all_titles (void)
  *  This function is needed to make it possible to close a tab
  *  when it's clicked using the middle mouse button;
  *  there does not seem to be a way to do this with GtkNotebook natively.
- *
- *  @param widget The event box in the tab, which was clicked.
- *
- *  @param event The event parameter describing where on the screen
- *  the mouse was pointing when clicked, type of click, modifiers,
- *  etc.
- *
- *  @param page This is the GncPluginPage corresponding to the tab.
- *
- *  @return Returns TRUE if this was a middle-click, meaning Gnucash
- *  handled the click.
  */
-//FIXME gtk4
-//static gboolean
-//gnc_tab_clicked_cb (GtkWidget *widget, GdkEventButton *event, GncPluginPage *page)
-//{
-//    if (event->type == GDK_BUTTON_PRESS && event->button == 2)
-//    {
-//        gnc_main_window_close_page (page);
-//        return TRUE;
-//    }
-//    return FALSE;
-//}
+static gboolean
+gnc_tab_clicked_cb (GtkGestureClick *gesture,
+                    int n_press,
+                    double x, double y,
+                    gpointer user_data)
+{
+    GncPluginPage *page = GNC_PLUGIN_PAGE(user_data);
+
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
+
+    gnc_main_window_close_page (page);
+
+    return true;
+}
 
 static void
 gnc_main_window_book_dirty_cb (QofBook *book,
@@ -2302,7 +2294,7 @@ main_window_find_tab_items (GncMainWindow *window,
                             GtkWidget **entry_p)
 {
     GncMainWindowPrivate *priv;
-    GtkWidget *tab_hbox, *tab_widget;
+    GtkWidget *tab_content, *tab_widget;
 
     ENTER("window %p, page %p, label_p %p, entry_p %p",
           window, page, label_p, entry_p);
@@ -2318,20 +2310,9 @@ main_window_find_tab_items (GncMainWindow *window,
     tab_widget = gtk_notebook_get_tab_label (GTK_NOTEBOOK(priv->notebook),
                                              page->notebook_page);
 
-    // Walk through children to find the box containing label+entry
-    tab_hbox = tab_widget;
-    while (tab_hbox)
-    {
-        if (g_strcmp0 (gtk_widget_get_name (tab_hbox), "tab-content") == 0)
-        {
-            break;
-        }
-//FIXME gtk4        GList* _children = gtk_container_get_children (GTK_CONTAINER(tab_hbox));
-//        tab_hbox = _children ? GTK_WIDGET(_children->data) : nullptr;
-//        g_list_free (_children);
-    }
-
-    if (!GTK_IS_BOX(tab_hbox))
+    if (GTK_IS_BOX(tab_widget))
+        tab_content = tab_widget;
+    else
     {
         PWARN ("Unknown widget for tab label %p", tab_widget);
         return FALSE;
@@ -2339,7 +2320,7 @@ main_window_find_tab_items (GncMainWindow *window,
 
 //FIXME gtk4
     GtkWidget *child;
-    for (child = gtk_widget_get_first_child (GTK_WIDGET(tab_hbox));
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(tab_content));
          child != nullptr;
          child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
@@ -2375,8 +2356,8 @@ main_window_find_tab_widget (GncMainWindow *window,
     }
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    *widget_p = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
-                                           page->notebook_page);
+    *widget_p = gtk_notebook_get_tab_label (GTK_NOTEBOOK(priv->notebook),
+                                            page->notebook_page);
 
     LEAVE("widget %p", *widget_p);
     return TRUE;
@@ -2616,23 +2597,23 @@ static void
 gnc_main_window_tab_entry_activate (GtkWidget *entry,
                                     GncPluginPage *page)
 {
-    GtkWidget *label, *entry2;
+    GtkWidget *found_label, *found_entry;
 
-    g_return_if_fail(GTK_IS_ENTRY(entry));
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE(page));
+    g_return_if_fail (GTK_IS_ENTRY(entry));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     ENTER("");
-    if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
-                                    page, &label, &entry2))
+    if (!main_window_find_tab_items (GNC_MAIN_WINDOW(page->window),
+                                     page, &found_label, &found_entry))
     {
         LEAVE("can't find required widgets");
         return;
     }
 
-    main_window_update_page_name(page, gnc_entry_get_text(GTK_ENTRY(entry)));
+    main_window_update_page_name (page, gnc_entry_get_text (GTK_ENTRY(entry)));
 
     gtk_widget_set_visible (GTK_WIDGET(entry), false);
-    gtk_widget_set_visible (GTK_WIDGET(label), true);
+    gtk_widget_set_visible (GTK_WIDGET(found_label), true);
     LEAVE("");
 }
 
@@ -2642,7 +2623,7 @@ gnc_main_window_tab_entry_editing_done (GtkWidget *entry,
                                         GncPluginPage *page)
 {
     ENTER("");
-    gnc_main_window_tab_entry_activate(entry, page);
+    gnc_main_window_tab_entry_activate (entry, page);
     LEAVE("");
     return FALSE;
 }
@@ -2667,22 +2648,21 @@ gnc_main_window_tab_entry_key_press_event (GtkEventControllerKey *key, guint key
     {
         GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
         GncPluginPage *page = GNC_PLUGIN_PAGE(user_data);
-        GtkWidget *label, *entry2;
+        GtkWidget *found_label, *found_entry;
 
         g_return_val_if_fail (GTK_IS_ENTRY(widget), false);
         g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
         ENTER("");
-        if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
-                                        page, &label, &entry2))
+        if (!main_window_find_tab_items (GNC_MAIN_WINDOW(page->window),
+                                         page, &found_label, &found_entry))
         {
             LEAVE("can't find required widgets");
             return false;
         }
-
-        gnc_entry_set_text(GTK_ENTRY(widget), gtk_label_get_text(GTK_LABEL(label)));
+        gnc_entry_set_text (GTK_ENTRY(widget), gtk_label_get_text (GTK_LABEL(found_label)));
         gtk_widget_set_visible (GTK_WIDGET(widget), false);
-        gtk_widget_set_visible (GTK_WIDGET(label), true);
+        gtk_widget_set_visible (GTK_WIDGET(found_label), true);
 
         LEAVE("");
     }
@@ -3121,7 +3101,7 @@ gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
  *  @param page The GncPluginPage that should be added to the window.
  *  The visible widget for this plugin must have already been created.
  *
- *  @param tab_hbox The widget that should be added into the notebook
+ *  @param tab_content The widget that should be added into the notebook
  *  tab for this page.  Generally this is a GtkLabel, but could also
  *  be a GtkBox containing an icon and a label.
  *
@@ -3131,7 +3111,7 @@ gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 static void
 gnc_main_window_connect (GncMainWindow *window,
                          GncPluginPage *page,
-                         GtkWidget *tab_hbox,
+                         GtkWidget *tab_content,
                          GtkWidget *menu_label)
 {
     GncMainWindowPrivate *priv;
@@ -3149,7 +3129,7 @@ gnc_main_window_connect (GncMainWindow *window,
     priv->installed_pages = g_list_insert (priv->installed_pages, page, current_position);
     priv->usage_order = g_list_prepend (priv->usage_order, page);
     gtk_notebook_insert_page_menu (notebook, page->notebook_page,
-                                   tab_hbox, menu_label, current_position);
+                                   tab_content, menu_label, current_position);
     gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
     gnc_plugin_page_inserted (page);
     if (!priv->restoring_pages)
@@ -3166,7 +3146,7 @@ gnc_main_window_connect (GncMainWindow *window,
 //FIXME gtk4 Not sure we need this
 //    GtkGesture *event_gesture = gtk_gesture_click_new ();
 //    gtk_widget_add_controller (GTK_WIDGET(page->notebook_page), GTK_EVENT_CONTROLLER(event_gesture));
-//    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+//    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), GDK_BUTTON_SECONDARY);
 //    g_signal_connect_after (G_OBJECT(event_gesture), "pressed",
 //                            G_CALLBACK(gnc_main_window_button_press_cb), page);
 }
@@ -3289,8 +3269,8 @@ gnc_main_window_open_page (GncMainWindow *window,
                            GncPluginPage *page)
 {
     GncMainWindowPrivate *priv;
-    GtkWidget *tab_container, *tab_clickable_area;
-    GtkWidget *label, *entry;
+    GtkWidget *tab_content;
+    GtkWidget *label;
     const gchar *icon, *text, *color_string, *lab_text;
     GtkWidget *image;
     GList *tmp;
@@ -3339,18 +3319,16 @@ gnc_main_window_open_page (GncMainWindow *window,
      * The page tab.
      * Component structure:
      *
-     * tab_container (GtkBox)
-     * ├── tab_clickable_area (GtkEventBox)
-     * │   └── tab_content (GtkBox)
-     * │       ├── image (GtkImage, optional)
-     * │       ├── label (GtkLabel)
-     * │       └── entry (GtkEntry, hidden)
+     * tab_content (GtkBox)
+     * ├── image (GtkImage, optional)
+     * ├── label (GtkLabel)
+     * ├── entry (GtkEntry, hidden)
      * └── close_button (GtkButton, if not immutable)
      */
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
     lab_text = gnc_plugin_page_get_page_name(page);
     label = gtk_label_new (lab_text);
-    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
+    g_object_set_data (G_OBJECT(page), PLUGIN_PAGE_TAB_LABEL, label);
 
     tw = populate_tab_width_struct ();
     gnc_main_window_update_tab_width_one_page (page, tw);
@@ -3358,31 +3336,14 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     gtk_widget_set_visible (GTK_WIDGET(label), true);
 
-    tab_container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-
-    text = gnc_plugin_page_get_page_long_name(page);
-    if (text)
-    {
-        gtk_widget_set_tooltip_text(tab_container, text);
-    }
+    tab_content = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
     if (g_strcmp0 (gnc_plugin_page_get_plugin_name (page), "GncPluginPageAccountTree") == 0)
-        gtk_widget_set_name (GTK_WIDGET(tab_container), "gnc-id-account-page-tab-box");
+        gtk_widget_set_name (GTK_WIDGET(tab_content), "gnc-id-account-page-tab-box");
+    else
+        gtk_widget_set_name (GTK_WIDGET(tab_content), "gnc-id-plugin-page-tab-box");
 
-    gtk_box_set_homogeneous (GTK_BOX (tab_container), FALSE);
-    gtk_widget_set_visible (GTK_WIDGET(tab_container), true);
-
-    // Create a custom clickable area for the tab to support middle-clicking
-//FIXME gtk4    tab_clickable_area = gtk_event_box_new();
-    tab_clickable_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_show (tab_clickable_area);
-    gtk_box_append (GTK_BOX(tab_container), tab_clickable_area);
-
-    // Create a box for the tab's content
-    // Give it a name so we can find it later (see main_window_find_tab_items)
-    GtkWidget *tab_content = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-    gtk_widget_set_name (tab_content, "tab-content");
-    gtk_box_append (GTK_BOX(tab_clickable_area), tab_content);
+    gtk_box_set_homogeneous (GTK_BOX(tab_content), false);
     gtk_widget_set_visible (GTK_WIDGET(tab_content), true);
 
     if (icon != nullptr)
@@ -3399,16 +3360,14 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     text = gnc_plugin_page_get_page_long_name (page);
     if (text)
-    {
         gtk_widget_set_tooltip_text (tab_content, text);
-    }
 
-    entry = gtk_entry_new();
+    GtkWidget *entry = gtk_entry_new();
     gtk_widget_set_visible (GTK_WIDGET(entry), false);
+    gtk_widget_set_focusable (GTK_WIDGET(entry), true);
     gtk_box_append (GTK_BOX(tab_content), GTK_WIDGET(entry));
-
-    g_signal_connect(G_OBJECT(entry), "activate",
-                     G_CALLBACK(gnc_main_window_tab_entry_activate), page);
+    g_signal_connect (G_OBJECT(entry), "activate",
+                      G_CALLBACK(gnc_main_window_tab_entry_activate), page);
 
 //FIXME gtk4    g_signal_connect(G_OBJECT(entry), "focus-out-event",
 //invalid for instance                     G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
@@ -3416,43 +3375,41 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     GtkEventController *event_controller_entry = gtk_event_controller_key_new ();
     gtk_widget_add_controller (GTK_WIDGET(entry), event_controller_entry);
-    g_signal_connect (event_controller_entry,
-                      "key-pressed",
+    g_signal_connect (event_controller_entry, "key-pressed",
                       G_CALLBACK(gnc_main_window_tab_entry_key_press_event), page);
 
-    g_signal_connect(G_OBJECT(entry), "editing-done",
-                     G_CALLBACK(gnc_main_window_tab_entry_editing_done),
-                     page);
+    g_signal_connect (G_OBJECT(entry), "editing-done",
+                      G_CALLBACK(gnc_main_window_tab_entry_editing_done), page);
 
     /* Add close button - Not for immutable pages */
     if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE))
     {
-        GtkWidget *close_image, *close_button;
-        GtkRequisition requisition;
+        GtkWidget *close_button = gtk_button_new ();
+        GtkWidget *close_image = gtk_image_new_from_icon_name ("window-close");
 
-        close_button = gtk_button_new();
-//FIXME gtk4        gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-        close_image = gtk_image_new_from_icon_name ("window-close");
-        gtk_image_set_icon_size (GTK_IMAGE(close_image), GTK_ICON_SIZE_NORMAL);
+        gtk_image_set_icon_size (GTK_IMAGE(close_image), GTK_ICON_SIZE_INHERIT);
         gtk_widget_set_visible (GTK_WIDGET(close_image), true);
-        gtk_widget_get_preferred_size (close_image, &requisition, nullptr);
-        gtk_widget_set_size_request(close_button, requisition.width + 4,
-                                    requisition.height + 2);
-        gtk_box_prepend (GTK_BOX(close_button), GTK_WIDGET(close_image));
-        gtk_widget_set_visible (GTK_WIDGET(close_button), 
-                                gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON));
+        gtk_widget_add_css_class (GTK_WIDGET(close_button), "flat");
+        gtk_button_set_child (GTK_BUTTON(close_button), GTK_WIDGET(close_image));
+        gtk_widget_set_visible (GTK_WIDGET(close_button),
+                                gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
+                                GNC_PREF_SHOW_CLOSE_BUTTON));
 
         // Custom handler to close on middle-clicks
-//FIXME gtk4        g_signal_connect(G_OBJECT(tab_clickable_area), "button-press-event",
-//                         G_CALLBACK(gnc_tab_clicked_cb), page);
+        GtkGesture *event_gesture_tab_content = gtk_gesture_click_new ();
+        gtk_widget_add_controller (GTK_WIDGET(tab_content),
+                                   GTK_EVENT_CONTROLLER(event_gesture_tab_content));
+        gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture_tab_content),
+                                       GDK_BUTTON_MIDDLE);
+        g_signal_connect (G_OBJECT(event_gesture_tab_content), "pressed",
+                          G_CALLBACK(gnc_tab_clicked_cb), page);
 
-        g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
+        g_signal_connect_swapped (G_OBJECT(close_button), "clicked",
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
-        gtk_box_append (GTK_BOX(tab_container), GTK_WIDGET(close_button));
-
+        gtk_box_append (GTK_BOX(tab_content), GTK_WIDGET(close_button));
         gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
-        g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
+        g_object_set_data (G_OBJECT(page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
 
     /*
@@ -3463,7 +3420,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * Now install it all in the window.
      */
-    gnc_main_window_connect(window, page, tab_container, label);
+    gnc_main_window_connect (window, page, tab_content, label);
 
     color_string = gnc_plugin_page_get_page_color(page);
     main_window_update_page_color (page, color_string);
@@ -5040,17 +4997,23 @@ gnc_main_window_cmd_actions_rename_page (GSimpleAction *simple,
         return;
     }
 
-    if (!main_window_find_tab_items(window, page, &label, &entry))
+    if (!main_window_find_tab_items (window, page, &label, &entry))
     {
         LEAVE("can't find required widgets");
         return;
     }
 
-    gnc_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
-    gtk_editable_select_region(GTK_EDITABLE(entry), 0, -1);
+    const gchar *label_text = gtk_label_get_text (GTK_LABEL(label));
+    gnc_entry_set_text (GTK_ENTRY(entry), label_text);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
     gtk_widget_set_visible (GTK_WIDGET(label), false);
     gtk_widget_set_visible (GTK_WIDGET(entry), true);
-    gtk_widget_grab_focus(entry);
+
+    gtk_editable_set_width_chars (GTK_EDITABLE(entry), strlen(label_text) + 1);
+    gtk_widget_queue_resize (gtk_widget_get_parent (GTK_WIDGET(entry)));
+    gtk_widget_set_focusable (GTK_WIDGET(entry), true);
+
+    gtk_widget_grab_focus (entry);
     LEAVE("opened for editing");
 }
 
@@ -5715,7 +5678,7 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
  *  page.
  *
  *  @param x The x position of the popup relative to main window
- * 
+ *
  *  @param y The y position of the popup relative to main window
  */
 static void
@@ -5776,7 +5739,7 @@ do_popup_menu (GncPluginPage *page, double x, double y)
     gtk_popover_set_position (GTK_POPOVER(menu), GTK_POS_LEFT);
 
     GdkRectangle rect;
-    
+
     rect.x = x;
     rect.y = y;
     rect.width = 5;
