@@ -590,27 +590,6 @@ gnc_menu_get_items (GtkWidget *menu)
 }
 
 
-struct find_tool_item_struct
-{
-    GtkWidget   *found_tool_item;
-    const gchar *action_name;
-};
-
-static void
-find_tool_action (GtkWidget *widget, gpointer user_data)
-{
-    struct find_tool_item_struct *ftis = user_data;
-
-    if (GTK_IS_ACTIONABLE(widget))
-    {
-        // this returns the full action name
-        const gchar *item_action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(widget));
-
-        if (g_str_has_suffix (item_action_name, ftis->action_name))
-            ftis->found_tool_item = GTK_WIDGET(widget);
-    }
-}
-
 /** Search the toolbar for the tool item based on the action name
  *
  *  @param toolbar The toolbar widget.
@@ -622,17 +601,28 @@ find_tool_action (GtkWidget *widget, gpointer user_data)
 GtkWidget *
 gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name)
 {
-    struct find_tool_item_struct ftis;
+    GtkWidget *ret = NULL;
 
-//FIXME gtk4    g_return_val_if_fail (GTK_IS_TOOLBAR(toolbar), NULL);
     g_return_val_if_fail (action_name != NULL, NULL);
 
-    ftis.action_name = action_name;
-    ftis.found_tool_item = NULL;
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(toolbar));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+    {
+        if (GTK_IS_ACTIONABLE(child))
+        {
+            // this returns the full action name
+            const gchar *item_action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(child));
 
-//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(toolbar), find_tool_action, &ftis);
-
-    return ftis.found_tool_item;
+            if (g_str_has_suffix (item_action_name, action_name))
+            {
+                ret = child;
+                break;
+            }
+        }
+    }
+    return ret;
 }
 
 
