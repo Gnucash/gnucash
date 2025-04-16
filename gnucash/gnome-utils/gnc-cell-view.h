@@ -26,11 +26,11 @@
 #include <gtk/gtk.h>
 
 #define GNC_TYPE_CELL_VIEW            (gnc_cell_view_get_type ())
-#define GNC_CELL_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_CELL_VIEW, GncCellView))
-#define GNC_CELL_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_CELL_VIEW, GncCellViewClass))
-#define GNC_IS_CELL_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_CELL_VIEW))
-#define GNC_IS_CELL_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GNC_TYPE_CELL_VIEW))
-#define GNC_CELL_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_CELL_VIEW, GncCellViewClass))
+#define GNC_CELL_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_CELL_VIEW, GncCellView))
+#define GNC_CELL_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GNC_TYPE_CELL_VIEW, GncCellViewClass))
+#define GNC_IS_CELL_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_CELL_VIEW))
+#define GNC_IS_CELL_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((obj), GNC_TYPE_CELL_VIEW))
+#define GNC_CELL_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GNC_TYPE_CELL_VIEW, GncCellViewClass))
 
 typedef struct _GncCellView      GncCellView;
 typedef struct _GncCellViewClass GncCellViewClass;
@@ -42,10 +42,7 @@ struct _GncCellView
     GtkWidget     *text_view;
     GtkTextBuffer *buffer;
 
-    gulong         focus_out_id;
-    gulong         populate_popup_id;
     guint          tooltip_id;
-    gboolean       in_popup_menu;
     gboolean       editing_canceled;
 };
 
@@ -54,12 +51,12 @@ struct _GncCellViewClass
     GtkBoxClass parent_class;
 };
 
-GType        gnc_cell_view_get_type (void) G_GNUC_CONST;
+GType      gnc_cell_view_get_type (void) G_GNUC_CONST;
 
-GtkWidget   *gnc_cell_view_new (void);
+GtkWidget *gnc_cell_view_new (void);
 
-void         gnc_cell_view_set_text (GncCellView *cv, const gchar *text);
+void       gnc_cell_view_set_text (GncCellView *cv, const gchar *text);
 
-gchar       *gnc_cell_view_get_text (GncCellView *cv);
+gchar     *gnc_cell_view_get_text (GncCellView *cv);
 
 #endif /* __GNC_CELL_VIEW_H__ */

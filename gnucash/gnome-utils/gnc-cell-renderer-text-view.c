@@ -27,25 +27,27 @@
 #include "gnc-cell-renderer-text-view.h"
 #include "gnc-cell-view.h"
 
-static GtkCellEditable *gcrtv_start_editing (GtkCellRenderer          *cell,
-                                             GdkEvent                 *event,
-                                             GtkWidget                *widget,
-                                             const gchar              *path,
-                                             const GdkRectangle       *background_area,
-                                             const GdkRectangle       *cell_area,
-                                             GtkCellRendererState      flags);
+static GtkCellEditable *gcrtv_start_editing (GtkCellRenderer      *cell,
+                                             GdkEvent             *event,
+                                             GtkWidget            *widget,
+                                             const gchar          *path,
+                                             const GdkRectangle   *background_area,
+                                             const GdkRectangle   *cell_area,
+                                             GtkCellRendererState  flags);
 
 #define GNC_CELL_RENDERER_TEXT_VIEW_PATH "gnc-cell-renderer-text-view-path"
 
 struct _GncCellRendererTextView
 {
-    GtkCellRendererText  parent;
+    GtkCellRendererText parent;
 
     /* The editable entry. */
     GtkWidget *editable;
 };
 
-G_DEFINE_TYPE (GncCellRendererTextView, gnc_cell_renderer_text_view, GTK_TYPE_CELL_RENDERER_TEXT)
+G_DEFINE_TYPE (GncCellRendererTextView,
+               gnc_cell_renderer_text_view,
+               GTK_TYPE_CELL_RENDERER_TEXT)
 
 static void
 gnc_cell_renderer_text_view_init (GncCellRendererTextView *self)
@@ -55,13 +57,13 @@ gnc_cell_renderer_text_view_init (GncCellRendererTextView *self)
 static void
 gnc_cell_renderer_text_view_finalize (GObject *object)
 {
-    G_OBJECT_CLASS (gnc_cell_renderer_text_view_parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_cell_renderer_text_view_parent_class)->finalize (object);
 }
 
 static void
 gnc_cell_renderer_text_view_class_init (GncCellRendererTextViewClass *klass)
 {
-    GObjectClass         *gobject_class = G_OBJECT_CLASS(klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
     GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS(klass);
 
     gobject_class->finalize = gnc_cell_renderer_text_view_finalize;
@@ -73,22 +75,8 @@ static void
 gcrtv_editing_done (GtkCellEditable         *editable,
                     GncCellRendererTextView *cell_tv)
 {
-    gchar       *path;
-    gchar       *new_text;
-
-    if (GNC_CELL_VIEW(editable)->focus_out_id > 0)
-    {
-        g_signal_handler_disconnect (GNC_CELL_VIEW(editable)->text_view,
-                                     GNC_CELL_VIEW(editable)->focus_out_id);
-        GNC_CELL_VIEW(editable)->focus_out_id = 0;
-    }
-
-    if (GNC_CELL_VIEW(editable)->populate_popup_id > 0)
-    {
-        g_signal_handler_disconnect (GNC_CELL_VIEW(editable)->text_view,
-                                     GNC_CELL_VIEW(editable)->populate_popup_id);
-        GNC_CELL_VIEW(editable)->populate_popup_id = 0;
-    }
+    gchar *path;
+    gchar *new_text;
 
     if (GNC_CELL_VIEW(editable)->editing_canceled)
     {
@@ -96,7 +84,7 @@ gcrtv_editing_done (GtkCellEditable         *editable,
         return;
     }
 
-    path = g_object_get_data (G_OBJECT(editable), 
+    path = g_object_get_data (G_OBJECT(editable),
                               GNC_CELL_RENDERER_TEXT_VIEW_PATH);
 
     new_text = gnc_cell_view_get_text (GNC_CELL_VIEW(editable));
@@ -107,17 +95,7 @@ gcrtv_editing_done (GtkCellEditable         *editable,
 
     g_free (new_text);
 }
-//FIXME gtk4
-#ifdef skip
-static gboolean
-gcrtv_button_press_event (GtkWidget      *widget,
-                          GdkEventButton *event,
-                          gpointer        user_data)
-{
-    // allows mouse clicks in text view
-    return TRUE;
-}
-#endif
+
 static GtkCellEditable *
 gcrtv_start_editing (GtkCellRenderer      *cell,
                      GdkEvent             *event,
@@ -128,9 +106,9 @@ gcrtv_start_editing (GtkCellRenderer      *cell,
                      GtkCellRendererState  flags)
 {
     GncCellRendererTextView *cell_tv = GNC_CELL_RENDERER_TEXT_VIEW(cell);
-    GtkWidget                *editable;
-    gchar                    *text = NULL;
-    gboolean                  iseditable;
+    GtkWidget               *editable;
+    gchar                   *text = NULL;
+    gboolean                 iseditable;
 
     g_object_get (G_OBJECT(cell_tv), "editable", &iseditable, NULL);
 
@@ -139,10 +117,6 @@ gcrtv_start_editing (GtkCellRenderer      *cell,
         return NULL;
 
     editable = g_object_new (GNC_TYPE_CELL_VIEW, NULL);
-
-//FIXME gtk4    g_signal_connect (editable, "button-press-event",
-//                      G_CALLBACK(gcrtv_button_press_event),
-//                      NULL);
 
     g_object_get (G_OBJECT(cell), "text", &text, NULL);
 
@@ -159,7 +133,8 @@ gcrtv_start_editing (GtkCellRenderer      *cell,
 
     gtk_widget_set_visible (GTK_WIDGET(editable), TRUE);
 
-    g_signal_connect (editable, "editing-done", G_CALLBACK(gcrtv_editing_done), cell_tv);
+    g_signal_connect (G_OBJECT(editable), "editing-done",
+                      G_CALLBACK(gcrtv_editing_done), cell_tv);
 
     cell_tv->editable = editable;
 
