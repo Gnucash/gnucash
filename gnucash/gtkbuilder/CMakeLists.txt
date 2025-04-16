@@ -58,7 +58,7 @@ set (gtkbuilder_SOURCES
         gnc-frequency.glade
         gnc-plugin-page-budget.glade
         gnc-plugin-page-register.glade
-        gnc-recurrence.glade
+        gnc-recurrence.ui
         gnc-tree-view-owner.glade
         window-autoclear.glade
         window-reconcile.glade
