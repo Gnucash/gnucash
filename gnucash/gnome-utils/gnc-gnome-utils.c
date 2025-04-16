@@ -336,12 +336,26 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
     g_free (found);
 }
 #else
+
+static void
+ready_cb (GObject* source_object, GAsyncResult* res, gpointer user_data)
+{
+    GtkWindow *parent_window = GTK_WINDOW(source_object);
+    GError *error = NULL;
+
+    if (!gtk_show_uri_full_finish (parent_window, res, &error))
+    {
+        gnc_error_dialog (parent_window, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+
+        PERR("%s", error->message);
+        g_error_free (error);
+    }
+}
+
 void
 gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 {
-    GError *error = NULL;
     gchar *uri = NULL;
-    gboolean success = TRUE;
 
     if (anchor)
         uri = g_strconcat ("help:", file_name, "/", anchor, NULL);
@@ -350,23 +364,11 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 
     DEBUG ("Attempting to opening help uri %s", uri);
 
-//FIXME gtk4    if (uri)
-//        success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-// may be gtk_show_uri
+    gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, NULL, 
+                       ready_cb, NULL);
 
     g_free (uri);
-    if (success)
-        return;
-
-    g_assert(error != NULL);
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-    }
-    PERR ("%s", error->message);
-    g_error_free(error);
 }
-
-
 #endif
 
 #ifdef MAC_INTEGRATION
