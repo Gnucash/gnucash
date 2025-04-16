@@ -40,7 +40,7 @@ set (gtkbuilder_SOURCES
         dialog-order.glade
         dialog-payment.glade
         dialog-preferences.glade
-        dialog-price.glade
+        dialog-price.ui
         dialog-print-check.glade
         dialog-progress.glade
         dialog-query-view.glade
