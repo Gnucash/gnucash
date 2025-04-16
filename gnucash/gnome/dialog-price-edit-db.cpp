@@ -59,8 +59,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 extern "C" {
 void gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer user_data);
-void gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer user_data);
-void gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer user_data);
+void gnc_prices_dialog_close_cb (GtkWidget *widget, gpointer user_data);
+void gnc_prices_dialog_help_cb (GtkWidget *widget, gpointer user_data);
 void gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer user_data);
 void gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer user_data);
 void gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer user_data);
@@ -74,16 +74,16 @@ static gboolean gnc_prices_dialog_key_press_cb (GtkEventControllerKey *key, guin
 
 struct PricesDialog
 {
-    GtkWidget * window;
+    GtkWidget  *window;
     QofSession *session;
-    QofBook *book;
+    QofBook    *book;
     GNCPriceDB *price_db;
 
-    GncTreeViewPrice * price_tree;
+    GncTreeViewPrice *price_tree;
 
-    GtkWidget * edit_button;
-    GtkWidget * remove_button;
-    GtkWidget * add_button;
+    GtkWidget *edit_button;
+    GtkWidget *remove_button;
+    GtkWidget *add_button;
 
     GtkWidget   *remove_dialog;
     GtkTreeView *remove_view;
@@ -123,7 +123,7 @@ gnc_prices_dialog_close_event_cb (GtkWidget       *widget,
 
 
 void
-gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
+gnc_prices_dialog_close_cb (GtkWidget *widget, gpointer user_data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (g_object_get_data (
                                                    G_OBJECT(user_data), "user-data"));
@@ -135,7 +135,7 @@ gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
 
 
 void
-gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer user_data)
+gnc_prices_dialog_help_cb (GtkWidget *widget, gpointer user_data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (g_object_get_data (
                                                    G_OBJECT(user_data), "user-data"));
