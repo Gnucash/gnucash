@@ -364,7 +364,7 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 
     DEBUG ("Attempting to opening help uri %s", uri);
 
-    gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, NULL, 
+    gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, NULL,
                        ready_cb, NULL);
 
     g_free (uri);
@@ -434,27 +434,18 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
 }
 
 #else
-void
-gnc_launch_doclink (GtkWindow *parent, const char *uri)
+
+static void
+doclink_ready_cb (GObject* source_object, GAsyncResult* res, gpointer user_data)
 {
+    GtkWindow *parent_window = GTK_WINDOW(source_object);
     GError *error = NULL;
-    gboolean success = TRUE;
 
-    if (!uri)
-        return;
-
-    DEBUG ("Attempting to open uri %s", uri);
-
-//FIXME gtk4    success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-
-    if (success)
-        return;
-
-    g_assert (error != NULL);
+    if (!gtk_show_uri_full_finish (parent_window, res, &error))
     {
+        const gchar *message = _("GnuCash could not open the linked document:");
+        gchar *uri = user_data;
         gchar *error_uri = NULL;
-        const gchar *message =
-            _("GnuCash could not open the linked document:");
 
         if (gnc_uri_is_file_uri (uri))
         {
@@ -465,11 +456,25 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
         else
             error_uri = g_strdup (uri);
 
-        gnc_error_dialog (parent, "%s\n%s", message, error_uri);
+        gnc_error_dialog (parent_window, "%s\n%s", message, error_uri);
+
+        PERR("%s", error->message);
+        g_error_free (error);
         g_free (error_uri);
+        g_free (uri);
     }
-    PERR ("%s", error->message);
-    g_error_free (error);
+}
+
+void
+gnc_launch_doclink (GtkWindow *parent, const char *uri)
+{
+    if (!uri)
+        return;
+
+    DEBUG ("Attempting to open uri %s", uri);
+
+    gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, NULL,
+                       doclink_ready_cb, g_strdup (uri));
 }
 
 #endif
