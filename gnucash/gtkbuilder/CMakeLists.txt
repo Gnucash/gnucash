@@ -47,7 +47,7 @@ set (gtkbuilder_SOURCES
         dialog-report.glade
         dialog-reset-warnings.glade
         dialog-search.glade
-        dialog-sx.glade
+        dialog-sx.ui
         dialog-tax-info.glade
         dialog-tax-table.glade
         dialog-totd.glade

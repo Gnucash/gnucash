@@ -747,9 +747,9 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
 
     builder = gtk_builder_new();
     gtk_builder_set_current_object (builder, G_OBJECT(sxfti));
-    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "freq_liststore");
+    gnc_builder_add_from_file  (builder , "dialog-sx.ui", "freq_liststore");
 
-    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans_dialog");
+    gnc_builder_add_from_file  (builder , "dialog-sx.ui", "sx_from_real_trans_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sx_from_real_trans_dialog"));
 
     // Set the name of this dialog so it can be easily manipulated with css
