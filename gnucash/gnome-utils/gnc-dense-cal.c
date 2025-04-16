@@ -87,7 +87,6 @@ static void gdc_reconfig (GncDenseCal *dcal);
 
 static void gdc_free_all_mark_data (GncDenseCal *dcal);
 
-static void _gdc_view_option_changed (GtkComboBox *widget, gpointer user_data);
 static void _gdc_compute_min_size (GncDenseCal *dcal,
                                    guint *min_width, guint *min_height);
 static void _gdc_set_cal_min_size_req(GncDenseCal *dcal);
@@ -152,9 +151,8 @@ typedef struct _gdc_month_coords
 
 struct _GncDenseCal
 {
-    GtkBox widget;
-
-    GtkComboBox *view_options;
+    GtkBox           widget;
+    GtkWidget       *months_dropdown;
 
     GtkDrawingArea  *cal_drawing_area;
     gint             cal_drawing_area_width;
@@ -275,30 +273,183 @@ gnc_dense_cal_class_init (GncDenseCalClass *klass)
     object_class->dispose = gnc_dense_cal_dispose;
 }
 
-enum _GdcViewOptsColumns
-{
-    VIEW_OPTS_COLUMN_LABEL = 0,
-    VIEW_OPTS_COLUMN_NUM_MONTHS,
-    VIEW_OPTS_COLUMN_NUM_MONTHS_PER_COLUMN
+/***********************************************************************/
+
+#define MONTHS_TYPE_ITEM (months_item_get_type ())
+G_DECLARE_FINAL_TYPE (MonthsItem, months_item, MONTHS, ITEM, GObject)
+
+struct _MonthsItem {
+    GObject parent_instance;
+    gchar *number_of_months_label;
+    gint   number_of_months;
+    gint   number_of_columns;
 };
 
-static GtkListStore *_cal_view_options = NULL;
-static GtkListStore*
-_gdc_get_view_options (void)
-{
-    if (_cal_view_options == NULL)
-    {
-        _cal_view_options = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("12 months"), 1, 12, 2, 3, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("6 months"), 1, 6, 2, 2, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("4 months"), 1, 4, 2, 2, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("3 months"), 1, 3, 2, 2, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("2 months"), 1, 2, 2, 1, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("1 month"), 1, 1, 2, 1, -1);
-    }
+G_DEFINE_TYPE (MonthsItem, months_item, G_TYPE_OBJECT);
 
-    return _cal_view_options;
+static void
+months_item_init (MonthsItem *item)
+{
 }
+
+static void
+months_item_finalize (GObject *object)
+{
+    MonthsItem *item = MONTHS_ITEM(object);
+
+    g_free (item->number_of_months_label);
+
+    G_OBJECT_CLASS(months_item_parent_class)->finalize (object);
+}
+
+static void
+months_item_class_init (MonthsItemClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    object_class->finalize = months_item_finalize;
+}
+
+static void
+months_dropdown_setup_item_single_line_cb (GtkSignalListItemFactory *factory,
+                                           GtkListItem *list_item)
+{
+    GtkWidget *dropdown_label = gtk_label_new ("");
+
+    g_object_set (dropdown_label, "xalign", 0.5, NULL);
+
+    g_object_set_data (G_OBJECT(list_item), "dd-label", dropdown_label);
+
+    gtk_list_item_set_child (list_item, dropdown_label);
+}
+
+static void
+months_dropdown_selected_item_changed_cb (GtkDropDown *dropdown,
+                                          GParamSpec *pspec,
+                                          GtkListItem *list_item)
+{
+    GtkWidget *dropdown_label = g_object_get_data (G_OBJECT(list_item), "dd-label");
+
+// could change the apperence here...
+
+}
+
+static void
+months_dropdown_bind_item_cb (GtkSignalListItemFactory *factory,
+                              GtkListItem *list_item,
+                              gpointer user_data)
+{
+    GtkDropDown *dropdown = GTK_DROP_DOWN(user_data);
+
+    MonthsItem *item = gtk_list_item_get_item (list_item);
+    GtkWidget *dropdown_label = g_object_get_data (G_OBJECT(list_item), "dd-label");
+    GtkWidget *popup;
+
+    gtk_label_set_text (GTK_LABEL(dropdown_label), item->number_of_months_label);
+
+    popup = gtk_widget_get_ancestor (dropdown_label, GTK_TYPE_POPOVER);
+    if (popup && gtk_widget_is_ancestor (popup, GTK_WIDGET(dropdown)))
+    {
+        g_signal_connect (G_OBJECT(dropdown), "notify::selected-item",
+                          G_CALLBACK(months_dropdown_selected_item_changed_cb), list_item);
+        months_dropdown_selected_item_changed_cb (dropdown, NULL, list_item);
+    }
+}
+
+static void
+months_dropdown_unbind_item_cb (GtkSignalListItemFactory *factory,
+                                GtkListItem *list_item,
+                                gpointer user_data)
+{
+    GtkDropDown *dropdown = user_data;
+    g_signal_handlers_disconnect_by_func (dropdown,
+                                          months_dropdown_selected_item_changed_cb,
+                                          list_item);
+}
+
+static void
+months_dropdown_selected_cb (GtkDropDown *widget, GParamSpec *pspec, gpointer user_data)
+{
+    GncDenseCal *dcal = GNC_DENSE_CAL(user_data);
+
+    MonthsItem *item = gtk_drop_down_get_selected_item (widget);
+
+    if (item)
+        gnc_dense_cal_set_num_months (dcal, item->number_of_months);
+}
+
+typedef struct
+{
+    /** The name of the entry. */
+    const gchar *month;
+    /** The number of months */
+    gint month_number;
+    /** The number of column to use */
+    gint column_number;
+} MonthEntries;
+
+/** List of entries. */
+static MonthEntries month_labels[] =
+{
+    { N_("12 months"), 12, 3 },
+    { N_("6 months"),   6, 2 },
+    { N_("4 months"),   4, 2 },
+    { N_("3 months"),   3, 2 },
+    { N_("2 month"),    2, 1 },
+    { N_("1 month"),    1, 1 },
+    { NULL, 0, 0 },
+};
+
+static void
+months_dropdown_populate_model (GListStore *store, MonthEntries *entries)
+{
+    for (gint i = 0; (entries[i].month); i++)
+    {
+        MonthsItem *item = g_object_new (MONTHS_TYPE_ITEM, NULL);
+
+        item->number_of_months_label = g_strdup (entries[i].month);
+        item->number_of_months = entries[i].month_number;
+        item->number_of_columns = entries[i].column_number;
+
+        g_list_store_append (store, item);
+        g_object_unref (item);
+    }
+}
+
+static GtkWidget *
+months_dropdown_new (GncDenseCal *dcal)
+{
+    GListStore *store = g_list_store_new (MONTHS_TYPE_ITEM);
+
+    months_dropdown_populate_model (store, month_labels);
+
+    GtkWidget *dropdown = g_object_new (GTK_TYPE_DROP_DOWN, "model",
+                                        G_LIST_MODEL(store), NULL);
+
+    g_object_unref (store);
+
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+
+    g_signal_connect (G_OBJECT(factory), "setup",
+                      G_CALLBACK(months_dropdown_setup_item_single_line_cb), dropdown);
+    g_signal_connect (G_OBJECT(factory), "bind",
+                      G_CALLBACK(months_dropdown_bind_item_cb), dropdown);
+    g_signal_connect (G_OBJECT(factory), "unbind",
+                      G_CALLBACK(months_dropdown_unbind_item_cb), dropdown);
+
+    g_signal_connect (G_OBJECT(dropdown), "notify::selected",
+                      G_CALLBACK(months_dropdown_selected_cb), dcal);
+
+    g_object_set (dropdown,
+                  "factory", factory,
+                  "list-factory", NULL,
+                  NULL);
+
+    g_object_unref (factory);
+
+    return dropdown;
+}
+
+/***********************************************************************/
 
 static void
 gnc_dense_cal_init (GncDenseCal *dcal)
@@ -314,34 +465,23 @@ gnc_dense_cal_init (GncDenseCal *dcal)
     gtk_widget_set_name (GTK_WIDGET(dcal), "gnc-id-dense-calendar");
 
     gtk_style_context_add_class (context, "calendar");
-    {
-        GtkTreeModel *options = GTK_TREE_MODEL(_gdc_get_view_options());
-        GtkCellRenderer *text_rend = GTK_CELL_RENDERER(gtk_cell_renderer_text_new ());
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-        dcal->view_options = GTK_COMBO_BOX(gtk_combo_box_new_with_model (options));
-        gtk_combo_box_set_active (GTK_COMBO_BOX(dcal->view_options), 0);
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(dcal->view_options), text_rend, TRUE);
-        gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(dcal->view_options),
-                                       text_rend, "text", VIEW_OPTS_COLUMN_LABEL);
-        g_signal_connect (G_OBJECT(dcal->view_options), "changed",
-                          G_CALLBACK(_gdc_view_option_changed), (gpointer)dcal);
-    }
+    GtkWidget *label = gtk_label_new (_("View"));
+    gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+    gtk_widget_set_halign (label, GTK_ALIGN_END);
+    gtk_widget_set_margin_end (label, 5);
+    gtk_widget_set_hexpand (GTK_WIDGET(label), TRUE);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
 
-    {
-        GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-        GtkWidget *label = gtk_label_new (_("View"));
+    dcal->months_dropdown = months_dropdown_new (dcal);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(dcal->months_dropdown));
 
-        gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
-        gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
-        gtk_widget_set_halign (label, GTK_ALIGN_END);
-        gtk_widget_set_margin_end (label, 5);
-        gtk_widget_set_hexpand (GTK_WIDGET(label), TRUE);
-        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
-        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(dcal->view_options));
-        gtk_widget_set_margin_bottom (GTK_WIDGET(hbox), 6);
-        gtk_box_append (GTK_BOX(dcal), GTK_WIDGET(hbox));
-        gnc_box_set_all_margins (GTK_BOX(dcal), 6);
-    }
+    gtk_widget_set_margin_bottom (GTK_WIDGET(hbox), 6);
+    gtk_box_append (GTK_BOX(dcal), GTK_WIDGET(hbox));
+    gnc_box_set_all_margins (GTK_BOX(dcal), 6);
+
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new ());
 
     dcal->cal_drawing_area_width = 0;
@@ -585,40 +725,45 @@ _gnc_dense_cal_set_year (GncDenseCal *dcal, guint year, gboolean redraw)
 void
 gnc_dense_cal_set_num_months (GncDenseCal *dcal, guint num_months)
 {
-    GtkListStore *options = _gdc_get_view_options ();
-    GtkTreeIter view_opts_iter, iter_closest_to_req;
-    int months_per_column = 0;
+    GListModel *months_model = gtk_drop_down_get_model (GTK_DROP_DOWN(dcal->months_dropdown));
     int closest_index_distance = G_MAXINT;
+    int index = 0;
+    int max_index = g_list_model_get_n_items (months_model);
+    int closest_index = 0;
+    int months_per_column = 0;
 
-    // find closest list value to num_months
-    if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL(options), &view_opts_iter))
+    if (!months_model)
     {
-        g_critical ("no view options?");
+        PWARN("No months model");
         return;
     }
 
     do
     {
-        gint months_val, delta_months;
-        gtk_tree_model_get (GTK_TREE_MODEL(options), &view_opts_iter,
-                            VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val,
-                            VIEW_OPTS_COLUMN_NUM_MONTHS_PER_COLUMN, &months_per_column,
-                            -1);
+        gint delta_months;
+        MonthsItem *item = g_list_model_get_item (months_model, index);
 
-        delta_months = abs (months_val - (int)num_months);
-        if (delta_months < closest_index_distance)
+        if (item)
         {
-            iter_closest_to_req = view_opts_iter;
-            closest_index_distance = delta_months;
-        }
-    }
-    while (closest_index_distance != 0
-            && (gtk_tree_model_iter_next (GTK_TREE_MODEL(options), &view_opts_iter)));
+            delta_months = abs (item->number_of_months - (int)num_months);
 
-    // set iter on view
-    g_signal_handlers_block_by_func (dcal->view_options, _gdc_view_option_changed, dcal);
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX(dcal->view_options), &iter_closest_to_req);
-    g_signal_handlers_unblock_by_func (dcal->view_options, _gdc_view_option_changed, dcal);
+            if (delta_months < closest_index_distance)
+            {
+                months_per_column = item->number_of_columns;
+                closest_index_distance = delta_months;
+                closest_index = index;
+            }
+            g_object_unref (item);
+        }
+        index++;
+    }
+    while ((closest_index_distance != 0) && (index < max_index));
+
+    PINFO("Number of months %d, closest index %d", num_months, closest_index);
+
+    g_signal_handlers_block_by_func (dcal->months_dropdown, months_dropdown_selected_cb, dcal);
+    gtk_drop_down_set_selected (GTK_DROP_DOWN(dcal->months_dropdown), closest_index);
+    g_signal_handlers_unblock_by_func (dcal->months_dropdown, months_dropdown_selected_cb, dcal);
 
     // set the number of months per column if found in model
     if (months_per_column != 0)
@@ -1459,21 +1604,6 @@ gnc_dense_cal_motion_notify (GtkWidget *widget,
     return TRUE;
 }
 #endif
-
-static void
-_gdc_view_option_changed (GtkComboBox *widget, gpointer user_data)
-{
-    GtkTreeIter iter;
-    GtkTreeModel *model;
-    gint months_val;
-
-    model = GTK_TREE_MODEL(gtk_combo_box_get_model (widget));
-    if (!gtk_combo_box_get_active_iter (widget, &iter))
-        return;
-    gtk_tree_model_get (model, &iter, VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val, -1);
-    DEBUG("changing to %d months", months_val);
-    gnc_dense_cal_set_num_months (GNC_DENSE_CAL(user_data), months_val);
-}
 
 static inline int
 day_width_at (GncDenseCal *dcal, guint xScale)
