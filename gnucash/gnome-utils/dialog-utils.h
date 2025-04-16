@@ -194,7 +194,7 @@ const gchar * gnc_entry_get_text (GtkEntry *entry);
 /** This function sets all margins of a GtkBox */
 void gnc_box_set_all_margins (GtkBox *box, gint margin);
 
-
+void gnc_builder_set_current_object (GtkBuilder *builder, gpointer user_data);
 
 #ifdef __cplusplus
 }
