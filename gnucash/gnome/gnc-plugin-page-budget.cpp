@@ -457,7 +457,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
 #endif
     GtkGesture *event_gesture = gtk_gesture_click_new ();
     gtk_widget_add_controller (GTK_WIDGET(priv->budget_view), GTK_EVENT_CONTROLLER(event_gesture));
-    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), GDK_BUTTON_SECONDARY);
     g_signal_connect (G_OBJECT(event_gesture), "pressed",
                       G_CALLBACK(gppb_button_press_cb), plugin_page);
 
