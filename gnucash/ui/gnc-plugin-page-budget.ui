@@ -92,6 +92,8 @@
     </item>
   </menu>
 
+<!-- menu ends here -->
+
   <menu id="mainwin-popup">
     <item>
       <attribute name="label" translatable="no">_Test</attribute>
@@ -99,200 +101,305 @@
     </item>
   </menu>
 
+<!-- toolbar starts here -->
 
-  <object class="GtkToolbar" id="mainwin-toolbar">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
+  <object class="GtkBox" id="mainwin-toolbar">
+    <property name="orientation">horizontal</property>
     <child>
-      <object class="GtkToolButton" id="but1">
+      <object class="GtkButton" id="but1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Save</property>
         <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
         <property name="tooltip-text" translatable="yes">Save the current file</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">document-save</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">document-save</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">_Save</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but2">
+      <object class="GtkButton" id="but2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Close</property>
         <property name="action-name">mainwin.FileCloseAction</property>
         <property name="tooltip-text" translatable="yes">Close the currently active page</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">window-close</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">window-close</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">_Close</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
+      <object class="GtkSeparator" id="separator2">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <property name="margin-end">3</property>
+        <property name="margin-start">3</property>
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but2a">
+      <object class="GtkButton" id="but2a">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-new</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-new</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">New _Invoice…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="extra_separator">
+      <object class="GtkSeparator" id="extra_separator">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <property name="margin-end">3</property>
+        <property name="margin-start">3</property>
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but3">
+      <object class="GtkButton" id="but3">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Open _Account</property>
         <property name="action-name">GncPluginPageBudgetActions.EditOpenAccountAction</property>
         <property name="tooltip-text" translatable="yes">Open the selected account</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-account-open</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-account-open</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Open _Account</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
+      <object class="GtkSeparator" id="separator3">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <property name="margin-end">3</property>
+        <property name="margin-start">3</property>
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but4">
+      <object class="GtkButton" id="but4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Budget _Options…</property>
         <property name="action-name">GncPluginPageBudgetActions.OptionsBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Edit this budget's options</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">document-properties</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">document-properties</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Budget _Options…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
+      <object class="GtkSeparator" id="separator4">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <property name="margin-end">3</property>
+        <property name="margin-start">3</property>
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but5">
+      <object class="GtkButton" id="but5">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Esti_mate Budget…</property>
         <property name="action-name">GncPluginPageBudgetActions.EstimateBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Estimate a budget value for the selected accounts from past transactions</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">system-run</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">system-run</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Esti_mate Budget…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but6">
+      <object class="GtkButton" id="but6">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_All Periods…</property>
         <property name="action-name">GncPluginPageBudgetActions.AllPeriodsBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Edit budget for all periods for the selected accounts</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">system-run</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">system-run</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">_All Periods…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but7">
+      <object class="GtkButton" id="but7">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Delete Budget…</property>
         <property name="action-name">GncPluginPageBudgetActions.DeleteBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Select this or another budget and delete it</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-account-delete</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-account-delete</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">_Delete Budget…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but8">
+      <object class="GtkButton" id="but8">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Edit Note</property>
         <property name="action-name">GncPluginPageBudgetActions.BudgetNoteAction</property>
         <property name="tooltip-text" translatable="yes">Edit note for the selected account and period</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">text-x-generic</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">text-x-generic</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Edit Note</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but9">
+      <object class="GtkButton" id="but9">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Budget Report</property>
         <property name="action-name">GncPluginPageBudgetActions.BudgetReportAction</property>
         <property name="tooltip-text" translatable="yes">Run the budget report</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">system-run</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">system-run</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Budget Report</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
   </object>
-
 </interface>

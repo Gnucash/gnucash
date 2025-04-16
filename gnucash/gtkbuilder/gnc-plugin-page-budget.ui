@@ -1,0 +1,592 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="DigitsToRound_Adj">
+    <property name="lower">1</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+    <property name="upper">12</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkWindow" id="budget_allperiods_window">
+    <property name="modal">1</property>
+    <property name="title" translatable="yes">Edit budget for all periods</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkGrid" id="table1">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">3</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Value</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="Value">
+                <property name="focusable">1</property>
+                <property name="input-purpose">number</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Action</property>
+                <property name="valign">start</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkCheckButton" id="RB_Replace">
+                    <property name="active">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Replace</property>
+                    <property name="tooltip-text" translatable="yes">Replace the budget for all periods with new 'value'. Use empty value to unset budget for the accounts.</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="RB_Add">
+                    <property name="active">0</property>
+                    <property name="group">RB_Replace</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Add</property>
+                    <property name="tooltip-text" translatable="yes">Add 'value' to current budget for each period</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="RB_Multiply">
+                    <property name="active">0</property>
+                    <property name="group">RB_Replace</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Multiply</property>
+                    <property name="tooltip-text" translatable="yes">Multiply current budget for each period by 'value'</property>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="DigitsToRound1">
+                <property name="adjustment">DigitsToRound_Adj</property>
+                <property name="climb-rate">1</property>
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
+                <property name="numeric">1</property>
+                <property name="tooltip-text" translatable="yes">The number of leading digits to keep when rounding</property>
+                <property name="value">1</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Significant Digits</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Use a fixed value or apply transformation for all periods.</property>
+                <property name="max-width-chars">0</property>
+                <property name="width-chars">40</property>
+                <property name="wrap">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="action_area">
+            <child>
+              <object class="GtkButton" id="cancelbutton3">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton3">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+
+  <object class="GtkWindow" id="budget_estimate_window">
+    <property name="modal">1</property>
+    <property name="title" translatable="yes">Estimate Budget Values</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox6">
+        <property name="orientation">vertical</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkGrid" id="table6">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">3</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkCheckButton" id="UseAverage">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Use Average</property>
+                <property name="tooltip-text" translatable="yes">Use the average value over all actual periods for all projected periods</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="DigitsToRound">
+                <property name="adjustment">DigitsToRound_Adj</property>
+                <property name="climb-rate">1</property>
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
+                <property name="numeric">1</property>
+                <property name="tooltip-text" translatable="yes">The number of leading digits to keep when rounding</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label97">
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Significant Digits</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label96">
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Start Date</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="StartDate_hbox">
+                <property name="hexpand">1</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label95">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">GnuCash will estimate budget values for the selected accounts from past transactions.</property>
+                <property name="max-width-chars">0</property>
+                <property name="width-chars">40</property>
+                <property name="wrap">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area6">
+            <child>
+              <object class="GtkButton" id="cancelbutton1">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton1">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+
+  <object class="GtkAdjustment" id="NumPeriods_Adj">
+    <property name="lower">1</property>
+    <property name="page-increment">12</property>
+    <property name="step-increment">1</property>
+    <property name="upper">60</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkWindow" id="budget_options_window">
+    <property name="modal">1</property>
+    <property name="title" translatable="yes">Budget Options</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox5">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkNotebook" id="BudgetOptions">
+            <property name="focusable">1</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-top">6</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkGrid" id="table5">
+                    <property name="column-spacing">6</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="row-spacing">3</property>
+                    <child>
+                      <object class="GtkLabel" id="label85">
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Budget Name</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="BudgetName">
+                        <property name="focusable">1</property>
+                        <property name="hexpand">1</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label86">
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Notes</property>
+                        <property name="valign">start</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow16">
+                      <property name="has-frame">1</property>
+                        <property name="child">
+                          <object class="GtkTextView" id="BudgetDescription">
+                            <property name="accepts-tab">0</property>
+                            <property name="focusable">1</property>
+                            <property name="hexpand">1</property>
+                            <property name="margin-end">3</property>
+                            <property name="margin-start">3</property>
+                            <property name="vexpand">1</property>
+                            <property name="wrap-mode">word</property>
+                          </object>
+                        </property>
+                        <property name="focusable">1</property>
+                        <property name="hexpand">1</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="vexpand">1</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label87">
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Number of Periods</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="BudgetNumPeriods">
+                        <property name="adjustment">NumPeriods_Adj</property>
+                        <property name="climb-rate">1</property>
+                        <property name="focusable">1</property>
+                        <property name="hexpand">1</property>
+                        <property name="numeric">1</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label94">
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Budget Period</property>
+                        <property name="margin-top">12</property>
+                        <property name="valign">start</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">5</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator" id="hseparator1">
+                        <property name="valign">start</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="column-span">2</property>
+                          <property name="row">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="BudgetFrame">
+                        <property name="child">
+                          <object class="GtkBox" id="BudgetPeriod">
+                            <property name="margin-end">3</property>
+                            <property name="margin-start">3</property>
+                            <property name="margin-top">3</property>
+                            <property name="margin-bottom">3</property>
+                          </object>
+                        </property>
+                        <child type="label">
+                          <object class="GtkLabel" id="BudgetFrameLabel">
+                            <property name="visible">0</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">5</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="ShowAccountCode">
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Show Account Code</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="ShowAccountDescription">
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Show Description</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label83">
+                    <property name="label" translatable="yes">Budget Options</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="budget_note">
+            <property name="label" translatable="yes">Note: Use View-&gt;'Filter By…' to control visible accounts.</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area5">
+            <child>
+              <object class="GtkButton" id="cancelbutton2">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton2">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+
+  <object class="GtkWindow" id="budget_note_window">
+    <property name="modal">1</property>
+    <property name="title" translatable="yes">Budget Notes</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
+        <property name="visible">1</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkLabel" id="NoteLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Enter Note</property>
+            <property name="valign">start</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="child">
+              <object class="GtkTextView" id="BudgetNote">
+                <property name="accepts-tab">0</property>
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin-end">3</property>
+                <property name="margin-start">3</property>
+                <property name="vexpand">1</property>
+                <property name="wrap-mode">word</property>
+              </object>
+            </property>
+            <property name="focusable">1</property>
+            <property name="height-request">100</property>
+            <property name="margin-bottom">5</property>
+            <property name="width-request">450</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="action_area2">
+            <child>
+              <object class="GtkButton" id="cancelbutton4">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton4">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+
+  <object class="GtkWindow" id="budget_select_window">
+    <property name="title" translatable="yes">Select a Budget</property>
+    <property name="modal">1</property>
+    <property name="default-width">400</property>
+    <property name="default-height">300</property>
+    <child>
+      <object class="GtkBox" id="vbox">
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkScrolledWindow" id="select_sw"/>
+        </child>
+        <child>
+          <object class="GtkBox" id="select_action_area">
+            <child>
+              <object class="GtkButton" id="select_cancel_button">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="select_ok_button">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">True</property>
+                <property name="halign">end</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+
+
+
+</interface>
