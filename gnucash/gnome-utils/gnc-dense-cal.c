@@ -95,6 +95,11 @@ static void gnc_dense_cal_button_motion (GtkEventControllerMotion *controller,
 static void gnc_dense_cal_button_press (GtkGestureClick *gesture,
                                         int n_press,
                                         double x, double y, gpointer user_data);
+static void popup_closed_cb (GtkPopover *widget, gpointer user_data);
+static void popup_focus_leave (GtkWidget *widget, gpointer user_data);
+static gboolean popover_escape_cb (GtkEventControllerKey *key, guint keyval,
+                                   guint keycode, GdkModifierType state,
+                                   gpointer user_data);
 
 static inline int day_width_at (GncDenseCal *dcal, guint xScale);
 static inline int day_width (GncDenseCal *dcal);
@@ -163,6 +168,7 @@ struct _GncDenseCal
     gboolean initialized;
 
     gboolean showPopup;
+    gboolean is_popped;
     GtkWidget *transPopup;
     gint screen_width;
     gint screen_height;
@@ -505,12 +511,11 @@ gnc_dense_cal_init (GncDenseCal *dcal)
     g_signal_connect (G_OBJECT(event_gesture), "pressed",
                       G_CALLBACK(gnc_dense_cal_button_press), dcal);
 
-//FIXME gtk4 Not sure this can be used to move popover
-//    GtkEventController *event_motion = gtk_event_controller_motion_new ();
-//    gtk_widget_add_controller (GTK_WIDGET(dcal->cal_drawing_area), GTK_EVENT_CONTROLLER(event_motion));
-//    gtk_event_controller_set_name (GTK_EVENT_CONTROLLER(event_motion), "mytest-motion");
-//    g_signal_connect (G_OBJECT(event_motion), "motion",
-//                      G_CALLBACK(gnc_dense_cal_button_motion), dcal);
+    GtkEventController *event_motion = gtk_event_controller_motion_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dcal->cal_drawing_area),
+                               GTK_EVENT_CONTROLLER(event_motion));
+    g_signal_connect (G_OBJECT(event_motion), "motion",
+                      G_CALLBACK(gnc_dense_cal_button_motion), dcal);
 
     dcal->disposed = FALSE;
     dcal->initialized = FALSE;
@@ -520,8 +525,19 @@ gnc_dense_cal_init (GncDenseCal *dcal)
     dcal->lastMarkTag = 0;
 
     dcal->showPopup = FALSE;
-
+    dcal->is_popped = FALSE;
     dcal->transPopup = gtk_popover_new();
+
+    gtk_popover_set_autohide (GTK_POPOVER(dcal->transPopup), FALSE);
+
+    GtkEventController *focus_controller = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dcal->transPopup),
+                               GTK_EVENT_CONTROLLER(focus_controller));
+    g_signal_connect (G_OBJECT(focus_controller), "leave",
+                      G_CALLBACK(popup_focus_leave), dcal);
+
+    g_signal_connect (G_OBJECT(dcal->transPopup), "closed",
+                      G_CALLBACK(popup_closed_cb), dcal);
 
     {
         GtkWidget *vbox, *hbox;
@@ -558,7 +574,15 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                                                      gtk_cell_renderer_text_new (), "text", 1, NULL);
         gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW(tree_view)), GTK_SELECTION_NONE);
         g_object_set_data (G_OBJECT(dcal->transPopup), "model", tree_data);
+        g_object_set_data (G_OBJECT(dcal->transPopup), "tree", tree_view);
         g_object_unref (tree_data);
+
+        // Use this event to capture the escape key being pressed
+        GtkEventController *event_controller_tv = gtk_event_controller_key_new ();
+        gtk_widget_add_controller (GTK_WIDGET(tree_view),
+                                   GTK_EVENT_CONTROLLER(event_controller_tv));
+        g_signal_connect (G_OBJECT(event_controller_tv), "key-pressed",
+                          G_CALLBACK(popover_escape_cb), dcal);
 
         gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(tree_view));
         gtk_widget_set_vexpand (GTK_WIDGET(tree_view), TRUE);
@@ -1482,6 +1506,48 @@ populate_hover_window (GncDenseCal *dcal)
     }
 }
 
+static gboolean
+compute_popup_position_and_populate (GncDenseCal *dcal, gint x, gint y)
+{
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(dcal->cal_drawing_area));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+    GdkRectangle rect;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(dcal->cal_drawing_area), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+    else
+        return FALSE;
+
+    populate_hover_window (dcal);
+
+    GtkAllocation alloc;
+    gtk_widget_get_allocation (GTK_WIDGET(dcal->transPopup), &alloc);
+
+    rect.x = x + x_translation - 10; // need space for the move
+    rect.y = y + y_translation;
+    rect.width = 2;
+    rect.height = 2;
+
+    if (alloc.width - 10 >= rect.x)
+    {
+        rect.x = rect.x + 10;
+        gtk_popover_set_position (GTK_POPOVER(dcal->transPopup), GTK_POS_RIGHT);
+    }
+    else
+        gtk_popover_set_position (GTK_POPOVER(dcal->transPopup), GTK_POS_LEFT);
+
+    gtk_popover_set_pointing_to (GTK_POPOVER(dcal->transPopup), &rect);
+
+    gtk_widget_queue_resize (GTK_WIDGET(dcal->transPopup));
+
+    return TRUE;
+}
+
 static void
 gnc_dense_cal_button_press (GtkGestureClick *gesture,
                             int n_press,
@@ -1491,119 +1557,91 @@ gnc_dense_cal_button_press (GtkGestureClick *gesture,
 {
     GncDenseCal *dcal = user_data;
 
+    if (dcal->is_popped)
+    {
+        gtk_popover_popdown (GTK_POPOVER(dcal->transPopup));
+        return;
+    }
+
     dcal->doc = wheres_this (dcal, x, y);
     if (dcal->doc >= 0)
     {
-        GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(dcal->cal_drawing_area));
-        graphene_matrix_t matrix;
-        float x_translation = 0.0;
-        float y_translation = 0.0;
-        GdkRectangle rect;
-
-        if (gtk_widget_compute_transform (GTK_WIDGET(dcal->cal_drawing_area), GTK_WIDGET(root), &matrix))
+        if (compute_popup_position_and_populate (dcal, x, y))
         {
-            x_translation = graphene_matrix_get_x_translation (&matrix);
-            y_translation = graphene_matrix_get_y_translation (&matrix);
-        }
-        else
-            return;
+            gtk_popover_popup (GTK_POPOVER(dcal->transPopup));
 
-        populate_hover_window (dcal);
+            gtk_widget_grab_focus (GTK_WIDGET(g_object_get_data (
+                                   G_OBJECT(dcal->transPopup), "tree")));
 
-        gtk_popover_set_position (GTK_POPOVER(dcal->transPopup), GTK_POS_LEFT);
-
-        rect.x = x + x_translation;
-        rect.y = y + y_translation;
-        rect.width = 2;
-        rect.height = 2;
-
-        gtk_popover_set_pointing_to (GTK_POPOVER(dcal->transPopup), &rect);
-
-//FIXME gtk4 there seems to be an issue on first load allocation
-//           poping it twice seems to fix it, need to check in next version
-
-        gtk_widget_queue_resize (GTK_WIDGET(dcal->transPopup));
-
-        gtk_popover_popup (GTK_POPOVER(dcal->transPopup));
-        gtk_popover_popdown (GTK_POPOVER(dcal->transPopup));
-        gtk_popover_popup (GTK_POPOVER(dcal->transPopup));
+            dcal->is_popped = TRUE;
+         }
     }
     else
+    {
+        dcal->doc = -1;
+        gtk_popover_popdown (GTK_POPOVER(dcal->transPopup));
+        dcal->is_popped = FALSE;
+    }
+}
+
+
+static void
+popup_focus_leave (GtkWidget *widget, gpointer user_data)
+{
+    GncDenseCal *dcal = user_data;
+
+    if (dcal->is_popped)
     {
         dcal->doc = -1;
         gtk_popover_popdown (GTK_POPOVER(dcal->transPopup));
     }
 }
 
-//FIXME gtk4 Not sure this is possible
+static void
+popup_closed_cb (GtkPopover *widget, gpointer user_data)
+{
+    GncDenseCal *dcal = user_data;
+    dcal->is_popped = FALSE;
+}
+
+static gboolean
+popover_escape_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
+{
+    GncDenseCal *dcal = user_data;
+
+    if (keyval == GDK_KEY_Escape)
+    {
+        dcal->doc = -1;
+        gtk_popover_popdown (GTK_POPOVER(dcal->transPopup));
+        dcal->is_popped = FALSE;
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+//FIXME gtk4 this sometimes locks up, possibly pointer under popup
 static void
 gnc_dense_cal_button_motion (GtkEventControllerMotion *controller,
                              double x, double y, gpointer user_data)
 {
     GncDenseCal *dcal = user_data;
-}
 
-//FIXME gtk4
-#ifdef skip
-static gint
-gnc_dense_cal_motion_notify (GtkWidget *widget,
-                             GdkEventMotion *event) //FIXME in GTK4
-{
-    GncDenseCal *dcal;
-    gint doc;
-    int unused;
-    GdkModifierType unused2;
+    if (!dcal->is_popped)
+        return;
 
-    dcal = GNC_DENSE_CAL(widget);
-    if (!dcal->showPopup)
-        return FALSE;
-
-    gdouble x_root, y_root;
-    if (!gdk_event_get_root_coords ((GdkEvent*)event, &x_root, &y_root)) //FIXME in GTK4
-        return FALSE;
-
-    gint win_xpos = x_root + 5;
-    gint win_ypos = y_root + 5;
-
-    GdkSeat *seat = gdk_display_get_default_seat (gdk_window_get_display (
-                                                  gdk_event_get_window ((GdkEvent*)event)));
-    GdkDevice *pointer = gdk_seat_get_pointer (seat);
-    gdk_window_get_device_position (gdk_event_get_window ((GdkEvent*)event),
-                                    pointer,  &unused,  &unused, &unused2);
-
-    gdouble x_win, y_win;
-    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
-        return FALSE;
-
-    doc = wheres_this (dcal, x_win, y_win);
-
-    if (doc >= 0)
+    dcal->doc = wheres_this (dcal, x, y);
+    if (dcal->doc >= 0)
     {
-        if (dcal->doc != doc) // if we are on the same day, no need to reload
-        {
-            dcal->doc = doc;
-            populate_hover_window(dcal);
-            gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
-//FIXME gtk4            gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
-        }
-        gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
-
-        if (x_root + 5 + alloc.width > dcal->screen_width)
-            win_xpos = x_root - 2 - alloc.width;
-
-        if (y_root + 5 + alloc.height > dcal->screen_height)
-            win_ypos = y_root - 2 - alloc.height;
-
-        gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
+        compute_popup_position_and_populate (dcal, x, y);
     }
     else
     {
         dcal->doc = -1;
-        gtk_widget_set_visible (GTK_WIDGET(dcal->transPopup), FALSE);
+        gtk_popover_popdown (GTK_POPOVER(dcal->transPopup));
     }
-    return TRUE;
 }
-#endif
 
 static inline int
 day_width_at (GncDenseCal *dcal, guint xScale)
