@@ -55,7 +55,7 @@ set (gtkbuilder_SOURCES
         dialog-userpass.glade
         dialog-vendor.glade
         gnc-date-format.glade
-        gnc-frequency.glade
+        gnc-frequency.ui
         gnc-plugin-page-budget.ui
         gnc-plugin-page-register.glade
         gnc-recurrence.ui

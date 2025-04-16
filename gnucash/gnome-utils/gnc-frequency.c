@@ -57,7 +57,8 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 /** Private Prototypes ********************/
 
-static void gnc_frequency_destroy( GtkWidget *widget );
+static void gnc_frequency_finalize (GObject *object);
+static void gnc_frequency_dispose (GObject *object);
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -116,10 +117,8 @@ static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
-    GtkWidgetClass *gtkwidget_class;
 
-    object_class = G_OBJECT_CLASS (klass);
-    gtkwidget_class = GTK_WIDGET_CLASS (klass);
+    object_class = G_OBJECT_CLASS(klass);
 
     gnc_frequency_signals[GNCFREQ_CHANGED] =
         g_signal_new ("changed",
@@ -132,8 +131,9 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       G_TYPE_NONE,
                       0);
 
-    /* GtkWidget signals */
-//FIXME gtk4    gtkwidget_class->destroy = gnc_frequency_destroy;
+    /* GObject signals */
+    object_class->finalize = gnc_frequency_finalize;
+    object_class->dispose = gnc_frequency_dispose;
 }
 
 
@@ -182,18 +182,18 @@ gnc_frequency_init(GncFrequency *gf)
 
     builder = gtk_builder_new();
     gtk_builder_set_current_object (builder, G_OBJECT(gf));
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment3");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment4");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore1");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore2");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore3");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore4");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore5");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore6");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore7");
-    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "gncfreq_vbox");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "adjustment1");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "adjustment2");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "adjustment3");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "adjustment4");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore1");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore2");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore3");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore4");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore5");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore6");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "liststore7");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.ui", "gncfreq_vbox");
 
     gf->builder = builder;
     o = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_nb"));
@@ -204,12 +204,11 @@ gnc_frequency_init(GncFrequency *gf)
     /* Add the new widget to the table. */
     {
         GtkWidget *table = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_table"));
-        gtk_grid_attach(GTK_GRID(table), GTK_WIDGET(gf->startDate), 4, 0, 1, 1);
+        gtk_grid_attach (GTK_GRID(table), GTK_WIDGET(gf->startDate), 4, 0, 1, 1);
         gtk_widget_set_vexpand (GTK_WIDGET(gf->startDate), FALSE);
         gtk_widget_set_hexpand (GTK_WIDGET(gf->startDate), FALSE);
         gtk_widget_set_valign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);
         gtk_widget_set_halign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);
-        g_object_set (GTK_WIDGET(gf->startDate), "margin", 0, NULL);
     }
     vb = GTK_BOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
@@ -241,17 +240,36 @@ gnc_frequency_init(GncFrequency *gf)
     for (i = 0; i < 7; i++)
     {
         o = GTK_WIDGET(gtk_builder_get_object (builder, CHECKBOX_NAMES[i]));
-        g_signal_connect(o, "clicked",
-                         G_CALLBACK(weekly_days_changed), gf);
+        g_signal_connect (G_OBJECT(o), "toggled",
+                          G_CALLBACK(weekly_days_changed), gf);
     }
 
-//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(&gf->widget));
+    gtk_widget_set_visible (GTK_WIDGET(&gf->widget), TRUE);
 
     /* respond to start date changes */
     g_signal_connect(gf->startDate, "date_changed", G_CALLBACK(start_date_changed), gf);
+}
 
-//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
 
+/** Finalize the GncFrequency object.  This function is called from the
+ *  G_Object level to complete the destruction of the object.  It
+ *  should release any memory not previously released by the destroy
+ *  function (i.e. the private data structure), then chain up to the
+ *  parent's destroy function.
+ *
+ *  @param object The object being destroyed.
+ *
+ *  @internal
+ */
+static void
+gnc_frequency_finalize (GObject *object)
+{
+    ENTER("view %p", object);
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_FREQUENCY(object));
+
+    G_OBJECT_CLASS(gnc_frequency_parent_class)->finalize (object);
+    LEAVE(" ");
 }
 
 
@@ -263,24 +281,22 @@ gnc_frequency_init(GncFrequency *gf)
  *  @internal
  */
 static void
-gnc_frequency_destroy (GtkWidget *widget)
+gnc_frequency_dispose (GObject *object)
 {
     GncFrequency *gf;
 
-    ENTER("frequency %p", widget);
-    g_return_if_fail (widget != NULL);
-    g_return_if_fail (GNC_IS_FREQUENCY (widget));
+    ENTER("frequency %p", object);
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_FREQUENCY (object));
 
-    gf = GNC_FREQUENCY (widget);
+    gf = GNC_FREQUENCY(object);
 
     if (gf->builder)
     {
         DEBUG("removing builder");
-        g_object_unref(G_OBJECT(gf->builder));
+        g_object_unref (G_OBJECT(gf->builder));
         gf->builder = NULL;
     }
-
-//FIXME gtk4    GTK_WIDGET_CLASS (gnc_frequency_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
@@ -392,7 +408,7 @@ _setup_weekly_recurrence(GncFrequency *gf, Recurrence *r)
     // GDateWeekday, vs. our (sunday=0)-based checkbox names array.
     checkbox_widget_name = CHECKBOX_NAMES[day_of_week % 7];
     weekday_checkbox = GTK_WIDGET(gtk_builder_get_object (gf->builder, checkbox_widget_name));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(weekday_checkbox), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(weekday_checkbox), TRUE);
 }
 
 
@@ -678,7 +694,7 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
             const char *day_widget_name = CHECKBOX_NAMES[checkbox_idx];
             GtkWidget *weekday_checkbox = GTK_WIDGET(gtk_builder_get_object (gf->builder, day_widget_name));
 
-            if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(weekday_checkbox)))
+            if (!gtk_check_button_get_active (GTK_CHECK_BUTTON(weekday_checkbox)))
                 continue;
 
             day_of_week_aligned_date = g_date_new_julian(g_date_get_julian(&start_date));
