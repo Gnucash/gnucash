@@ -27,7 +27,7 @@ set (gtkbuilder_SOURCES
         dialog-date-close.glade
         dialog-employee.glade
         dialog-file-access.glade
-        dialog-fincalc.glade
+        dialog-fincalc.ui
         dialog-find-account.glade
         dialog-imap-editor.glade
         dialog-import.glade
