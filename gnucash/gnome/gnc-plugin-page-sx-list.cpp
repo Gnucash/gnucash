@@ -385,89 +385,112 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
     }
 }
 
-
 static void
-treeview_popup (GtkTreeView *treeview, const GdkEvent *event, GncPluginPageSxList *page)
+treeview_popup (GncPluginPage *page, double x, double y)
 {
-//FIXME gtk4
-#ifdef skip
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    GMenu *menu;
+    GMenu *menu_model = g_menu_new ();
     GMenuItem *menuitem;
+
     gchar *full_action_name;
     const gchar *group_name = gnc_plugin_page_get_simple_action_group_name (GNC_PLUGIN_PAGE(page));
 
-    menu = g_menu_new();
-
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_New Schedule"));
+    menuitem = g_menu_item_new (_("_New Schedule"), nullptr);
     full_action_name = g_strconcat (group_name, ".SxListNewAction", nullptr);
-    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_menu_item_set_action_and_target (menuitem, full_action_name, nullptr);
     g_free (full_action_name);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    g_menu_append_item (menu_model, menuitem);
 
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit Schedule"));
+    menuitem = g_menu_item_new (_("_Edit Schedule"), nullptr);
     full_action_name = g_strconcat (group_name, ".SxListEditAction", nullptr);
-    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_menu_item_set_action_and_target (menuitem, full_action_name, nullptr);
     g_free (full_action_name);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    g_menu_append_item (menu_model, menuitem);
 
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete Schedule"));
+    menuitem = g_menu_item_new (_("_Delete Schedule"), nullptr);
     full_action_name = g_strconcat (group_name, ".SxListDeleteAction", nullptr);
-    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_menu_item_set_action_and_target (menuitem, full_action_name, nullptr);
     g_free (full_action_name);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    g_menu_append_item (menu_model, menuitem);
 
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(priv->tree_view), nullptr);
-    gtk_widget_set_visible (GTK_WIDGET(menu), true);
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
-#endif
+    GtkWidget *menu = gtk_popover_menu_new_from_model (G_MENU_MODEL(menu_model));
+
+    gtk_widget_set_parent (GTK_WIDGET(menu), GTK_WIDGET(page->window));
+
+    gtk_popover_set_position (GTK_POPOVER(menu), GTK_POS_LEFT);
+
+    GdkRectangle rect;
+
+    rect.x = x;
+    rect.y = y;
+    rect.width = 5;
+    rect.height = 5;
+
+    gtk_popover_set_pointing_to (GTK_POPOVER(menu), &rect);
+
+    gtk_popover_popup (GTK_POPOVER(menu));
 }
 
-//FIXME gtk4
-#ifdef skip
 static gboolean
-treeview_button_press (GtkTreeView *treeview, const GdkEvent *event,
-                       GncPluginPageSxList *page)
+treeview_popup_menu (GtkGestureClick *gesture,
+                     int n_press,
+                     double x,
+                     double y,
+                     gpointer user_data)
 {
-    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    GtkTreeView *tree_view = GTK_TREE_VIEW(priv->tree_view);
+    GncPluginPage *page = (GncPluginPage*)user_data;
 
-    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
+
+    GtkWidget *tree_view = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
+
+    ENTER("tree_view %p, x %f, y %f, page %p",  tree_view, x, y, page);
+
+    GtkTreePath *path = nullptr;
+
+    if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(tree_view), x, y,
+                                       &path, nullptr, nullptr, nullptr))
     {
-        guint button;
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree_view));
 
-        if (gdk_event_get_button (event, &button) && button == GDK_BUTTON_SECONDARY)
+        if (!gtk_tree_selection_path_is_selected (selection, path))
         {
-            gdouble x_win, y_win;
-            if (gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
-            {
-                GtkTreePath *path = nullptr;
-
-                if (gtk_tree_view_get_path_at_pos (priv->tree_view, x_win, y_win,
-                                                   &path, nullptr, nullptr, nullptr))
-                {
-                    GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->tree_view);
-
-                    if (!gtk_tree_selection_path_is_selected (selection, path))
-                    {
-                        gtk_tree_selection_unselect_all (selection);
-                        gtk_tree_selection_select_path (selection, path);
-                    }
-                }
-                gtk_tree_path_free (path);
-            }
-            treeview_popup (tree_view, event, page);
-            return true;
+            gtk_tree_selection_unselect_all (selection);
+            gtk_tree_selection_select_path (selection, path);
         }
     }
-    return false;
-}
-#endif
-static gboolean
-treeview_popup_menu (GtkTreeView *treeview, GncPluginPageSxList *page)
-{
-    treeview_popup (treeview, nullptr, page);
-    return true;
+    gtk_tree_path_free (path);
+
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(tree_view));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(tree_view), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+//FIXME gtk4 this can be done in two ways, add the popup menu to the sx.ui file and call this  or
+//           create the menu as above and call that. This needs more testing as it is a multi
+//           select tree view, if two rows selected and a row is right moused, the other row is
+//           unselected, this did not happen in gtk3.
+//
+//    gnc_main_window_button_press_cb (gesture, n_press,
+//                                     x + x_translation,
+//                                     y + y_translation,
+//                                     page);
+
+    treeview_popup (page, x + x_translation, y + y_translation);
+
+    LEAVE("x_translation %f, y_translation %f", x_translation, y_translation);
+
+    /* Always return FALSE.  This will let the tree view callback run as
+     * well which will select the item under the cursor.  By the time
+     * the user sees the menu both callbacks will have run and the menu
+     * actions will operate on the just-selected account. */
+
+    return true; //FIXME gtk4 this may need changing
 }
 
 static GtkWidget *
@@ -496,10 +519,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-sx-page");
 
-    /* Add vbox and label */
+    /* Add vbox and label to top pane */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
-//FIXME gtk4    gtk_paned_pack1 (GTK_PANED(widget), vbox, TRUE, FALSE);
     gtk_paned_set_start_child (GTK_PANED(widget), GTK_WIDGET(vbox));
 
     label = gtk_label_new (_("Transactions"));
@@ -519,6 +541,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
     gtk_box_set_spacing (GTK_BOX(vbox), 5);
     gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
+    gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), true);
 
     /* Set the paned position from the preferences, default 160 */
     gtk_paned_set_position (GTK_PANED(priv->widget),
@@ -568,15 +591,16 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gtk_tree_path_free (path);
     }
 
-//FIXME gtk4    g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
-//                      G_CALLBACK(treeview_button_press), page);
-    g_signal_connect (G_OBJECT(priv->tree_view), "popup-menu",
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(priv->tree_view), GTK_EVENT_CONTROLLER(event_gesture));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), GDK_BUTTON_SECONDARY);
+//gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER(event_gesture), "test");
+    g_signal_connect (G_OBJECT(event_gesture), "pressed",
                       G_CALLBACK(treeview_popup_menu), page);
 
-    /* Add vbox and label */
+    /* Add vbox and label to bottom pane */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
-//FIXME gtk4    gtk_paned_pack2 (GTK_PANED(widget), vbox, TRUE, FALSE);
     gtk_paned_set_end_child (GTK_PANED(widget), GTK_WIDGET(vbox));
 
     label = gtk_label_new (_("Upcoming Transactions"));
@@ -596,6 +620,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
     gtk_box_set_spacing (GTK_BOX(vbox), 5);
     gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
+    gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), true);
 
     {
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new (GNC_SX_INSTANCE_MODEL(priv->instances));
