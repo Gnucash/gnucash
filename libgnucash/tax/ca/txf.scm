@@ -71,9 +71,6 @@
 
 (define txf-tax-entity-types
   (list
-   (cons 'F1040 #("Individual, Joint, etc." "Files US Form 1040 Tax Return"))
-   (cons 'F1065 #("Partnership" "Files US Form 1065 Tax Return"))
-   (cons 'F1120 #("Corporation" "Files US Form 1120 Tax Return"))
    (cons 'T2 #("Corporation" "Files CA T2 Tax Return"))
    (cons 'Other #("None" "No Income Tax Options Provided"))))
 
