@@ -83,5 +83,16 @@ class TestBusiness(BusinessSession):
         invoice_from_transaction = posted_transaction.GetInvoiceFromTxn()
         self.assertTrue( invoice_from_transaction != None and invoice_from_transaction.GetID() == self.invoice.GetID() )
 
+    def test_invoice_payment(self):
+        """
+        Test that you can pay an invoice into a transfer account (this also tests conversion of Python lists to GList).
+        """
+        self.receivable.RecomputeBalance()
+        self.assertTrue( int(self.receivable.GetBalance().to_double()) == 100 )
+        lots = [self.invoice.GetPostedLot()]
+        self.customer.ApplyPayment(None, lots, self.receivable, self.bank, GncNumeric(100), GncNumeric(1), self.invoice.GetDatePosted(), "Paid into bank account.", "1234", False)
+        self.receivable.RecomputeBalance()
+        self.assertTrue( self.receivable.GetBalance().to_fraction().numerator == 0 )
+
 if __name__ == '__main__':
     main()
