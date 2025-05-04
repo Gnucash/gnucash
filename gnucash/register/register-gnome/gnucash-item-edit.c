@@ -125,7 +125,7 @@ gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT(item_edit), &x, &y, &w, &h);
     width = ((h - 2)*2)/3;
 
-    gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_border (context, &border);
 
     if (width < MIN_BUTT_WIDTH + border.left + border.right)
         width = MIN_BUTT_WIDTH + border.left + border.right;
@@ -169,8 +169,8 @@ gnc_item_edit_tb_class_init (GncItemEditTbClass *gnc_item_edit_tb_class)
                                              G_PARAM_READWRITE));
 
     /* GtkWidget method overrides */
-    widget_class->get_preferred_width = gnc_item_edit_tb_get_preferred_width;
-    widget_class->get_preferred_height = gnc_item_edit_tb_get_preferred_height;
+//FIXME gtk4    widget_class->get_preferred_width = gnc_item_edit_tb_get_preferred_width;
+//FIXME gtk4    widget_class->get_preferred_height = gnc_item_edit_tb_get_preferred_height;
 }
 
 GtkWidget *
@@ -182,24 +182,30 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
                                                 NULL);
 
     context = gtk_widget_get_style_context (GTK_WIDGET(item_edit_tb));
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+    gtk_style_context_add_class (context, "button");
 
     return GTK_WIDGET(item_edit_tb);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
-tb_button_press_cb (G_GNUC_UNUSED GtkWidget *widget, GdkEventButton *event,
+tb_button_press_cb (G_GNUC_UNUSED GtkWidget *widget, const GdkEvent *event,
                     G_GNUC_UNUSED gpointer *user_data)
 {
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return FALSE;
+
     /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
         // block a right click
         return TRUE;
     }
     return FALSE;
 }
-
+#endif
 /*
  * Returns the coordinates for the editor bounding box
  */
@@ -245,12 +251,12 @@ gnc_item_edit_update (GncItemEdit *item_edit)
     if (item_edit == NULL || item_edit->sheet == NULL)
         return FALSE;
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
-    gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
-                     GTK_WIDGET(item_edit), x, y);
+//FIXME gtk4    gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
+//                     GTK_WIDGET(item_edit), x, y);
 
     if (item_edit->is_popup)
     {
-        gtk_widget_show (item_edit->popup_toggle.ebox);
+        gtk_widget_set_visible (GTK_WIDGET(item_edit->popup_toggle.ebox), TRUE);
         if (item_edit->show_popup)
             gnc_item_edit_show_popup (item_edit);
     }
@@ -260,21 +266,26 @@ gnc_item_edit_update (GncItemEdit *item_edit)
 void
 gnc_item_edit_focus_in (GncItemEdit *item_edit)
 {
-    GdkEventFocus ev;
+//FIXME gtk4
+#ifdef skip
+    GdkEventFocus event; //FIXME gtk4
 
     g_return_if_fail (item_edit != NULL);
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-    ev.type = GDK_FOCUS_CHANGE;
-    ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
-    ev.in = TRUE;
-    gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+    event.type = GDK_FOCUS_CHANGE;
+    event.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
+    event.in = TRUE;
+    gtk_widget_event (item_edit->editor, (GdkEvent*) &event); //FIXME gtk4
+#endif
 }
 
 void
 gnc_item_edit_focus_out (GncItemEdit *item_edit)
 {
-    GdkEventFocus ev;
+//FIXME gtk4
+#ifdef skip
+    GdkEventFocus event; //FIXME gtk4
 
     g_return_if_fail (item_edit != NULL);
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
@@ -282,10 +293,11 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
     if (item_edit->show_popup)
         return; // Prevent recursion
 
-    ev.type = GDK_FOCUS_CHANGE;
-    ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
-    ev.in = FALSE;
-    gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+    event.type = GDK_FOCUS_CHANGE;
+    event.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
+    event.in = FALSE;
+    gtk_widget_event (item_edit->editor, (GdkEvent*) &event); //FIXME gtk4
+#endif
 }
 
 /*
@@ -374,18 +386,20 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
 void
 gnc_item_edit_cut_clipboard (GncItemEdit *item_edit)
 {
-    gtk_editable_cut_clipboard (GTK_EDITABLE(item_edit->editor));
+//FIXME gtk4    gtk_editable_cut_clipboard (GTK_EDITABLE(item_edit->editor));
 }
 
 void
 gnc_item_edit_copy_clipboard (GncItemEdit *item_edit)
 {
-    gtk_editable_copy_clipboard (GTK_EDITABLE(item_edit->editor));
+//FIXME gtk4    gtk_editable_copy_clipboard (GTK_EDITABLE(item_edit->editor));
 }
 
 void
 gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 {
+//FIXME gtk4
+#ifdef skip
     GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(item_edit->editor),
                                                         GDK_SELECTION_CLIPBOARD);
     gchar *text = gtk_clipboard_wait_for_text (clipboard);
@@ -423,17 +437,18 @@ gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 
     g_free (text);
     g_free (filtered_text);
+#endif
 }
 
 
 static gboolean
-key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
+key_press_popup_cb (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(data);
 
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
-    gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
+//FIXME gtk4    gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *)event);
 
     return TRUE;
 }
@@ -546,10 +561,11 @@ preedit_changed_cb (GtkEntry* entry, gchar *preedit, GncItemEdit* item_edit)
 static gboolean
 draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
+//FIXME gtk4
+#ifdef skip
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
     GtkEditable *editable = GTK_EDITABLE(widget);
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(widget));
-    GtkStateFlags flags = gtk_widget_get_state_flags (GTK_WIDGET(widget));
     gint height = gtk_widget_get_allocated_height (widget);
     PangoLayout *layout = gtk_entry_get_layout (GTK_ENTRY(widget));
     const char *pango_text = pango_layout_get_text (layout);
@@ -563,7 +579,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
     // Get the foreground color
     gdk_rgba_parse (&color, "black");
-    gtk_style_context_get_color (stylectxt, flags, &color);
+    gtk_style_context_get_color (stylectxt, &color);
     fg_color = &color;
 
 
@@ -600,7 +616,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
                                                            top_bottom));
 
     cairo_stroke (cr);
-
+#endif
     return FALSE;
 }
 
@@ -617,7 +633,7 @@ draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
     // allow room for a border
     gtk_render_background (context, cr, 2, 2, width - 4, height - 4);
 
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+    gtk_style_context_add_class (context, "arrow");
 
     size = MIN(width / 2, height / 2);
 
@@ -764,8 +780,8 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
                                              G_PARAM_READWRITE));
 
     /* GtkWidget method overrides */
-    widget_class->get_preferred_width = gnc_item_edit_get_preferred_width;
-    widget_class->get_preferred_height = gnc_item_edit_get_preferred_height;
+//FIXME gtk4    widget_class->get_preferred_width = gnc_item_edit_get_preferred_width;
+//FIXME gtk4    widget_class->get_preferred_height = gnc_item_edit_get_preferred_height;
 }
 
 gint
@@ -827,21 +843,26 @@ gnc_item_edit_get_button_width (GncItemEdit *item_edit)
                                            GTK_WIDGET(item_edit->popup_toggle.tbutton));
             GtkBorder border;
 
-            gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+            gtk_style_context_get_border (context, &border);
             return MIN_BUTT_WIDTH + border.left + border.right;
         }
     }
     return MIN_BUTT_WIDTH + 2; // add the default border
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
-button_press_cb (GtkWidget *widget, GdkEventButton *event, gpointer *pointer)
+button_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer *pointer)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(pointer);
     GnucashSheet *sheet = item_edit->sheet;
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return FALSE;
 
     /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
         if (!item_edit->show_popup)
         {
@@ -854,7 +875,7 @@ button_press_cb (GtkWidget *widget, GdkEventButton *event, gpointer *pointer)
     }
     return FALSE;
 }
-
+#endif
 GtkWidget *
 gnc_item_edit_new (GnucashSheet *sheet)
 {
@@ -867,20 +888,20 @@ gnc_item_edit_new (GnucashSheet *sheet)
                                            "spacing",     0,
                                            "homogeneous", FALSE,
                                             NULL);
-    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
+//FIXME gtk4    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
 
     /* Create the text entry */
     item_edit->editor = gtk_entry_new ();
     sheet->entry = item_edit->editor;
-    gtk_entry_set_width_chars (GTK_ENTRY(item_edit->editor), 1);
-    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->editor, TRUE, TRUE, 0);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(item_edit->editor), 1);
+    gtk_box_append (GTK_BOX(item_edit), GTK_WIDGET(item_edit->editor));
 
     // Get the CSS space settings for the entry
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
     gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
-    gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_margin (stylectxt, GTK_STATE_FLAG_NORMAL, &margin);
-    gtk_style_context_get_border (stylectxt, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_padding (stylectxt, &padding);
+    gtk_style_context_get_margin (stylectxt, &margin);
+    gtk_style_context_get_border (stylectxt, &border);
 
     item_edit->padding = padding;
     item_edit->margin = margin;
@@ -903,29 +924,30 @@ gnc_item_edit_new (GnucashSheet *sheet)
 
     // This call back intercepts the mouse button event so the main
     // register popup menu can be displayed instead of the entry one.
-    g_signal_connect (item_edit->editor, "button-press-event",
-                      G_CALLBACK(button_press_cb), item_edit);
+//FIXME gtk4    g_signal_connect (item_edit->editor, "button-press-event",
+//                      G_CALLBACK(button_press_cb), item_edit);
 
     /* Create the popup button
        It will only be displayed when the cell being edited provides
        a popup item (like a calendar or account list) */
     item_edit->popup_toggle.tbutton = gnc_item_edit_tb_new (sheet);
-    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);
+//FIXME gtk4    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);
 
     /* Wrap the popup button in an event box to give it its own gdkwindow.
      * Without one the button would disappear behind the grid object. */
-    item_edit->popup_toggle.ebox = gtk_event_box_new ();
-    g_object_ref (item_edit->popup_toggle.ebox);
-    gtk_container_add (GTK_CONTAINER(item_edit->popup_toggle.ebox),
-                       item_edit->popup_toggle.tbutton);
+//FIXME gtk4    item_edit->popup_toggle.ebox = gtk_event_box_new ();
+//    g_object_ref (item_edit->popup_toggle.ebox);
+//    gtk_box_append (GTK_BOX(item_edit->popup_toggle.ebox),
+//                     GTK_WIDGET(item_edit->popup_toggle.tbutton));
 
     // This call back intercepts the right mouse button event to stop the
     // gnucash_sheet_button_press_event from running.
-    g_signal_connect (item_edit->popup_toggle.ebox, "button-press-event",
-                      G_CALLBACK(tb_button_press_cb), NULL);
+//FIXME gtk4    g_signal_connect (item_edit->popup_toggle.ebox, "button-press-event",
+//                      G_CALLBACK(tb_button_press_cb), NULL);
 
-    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->popup_toggle.ebox, FALSE, FALSE, 0);
-    gtk_widget_show_all (GTK_WIDGET(item_edit));
+//FIXME gtk4    gtk_box_prepend (GTK_BOX(item_edit), GTK_WIDGET(item_edit->popup_toggle.ebox));
+    gtk_box_append (GTK_BOX(item_edit), GTK_WIDGET(item_edit->popup_toggle.tbutton));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(item_edit));
     g_signal_connect (G_OBJECT(item_edit), "destroy",
                       G_CALLBACK(gnc_item_edit_destroying), NULL);
     return GTK_WIDGET(item_edit);
@@ -954,7 +976,7 @@ check_popup_height_is_true (GtkWidget    *widget,
     if (allocation->height != item_edit->popup_returned_height)
     {
         item_edit->popup_allocation_height = allocation->height;
-        gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+        gtk_box_remove (GTK_BOX(item_edit->sheet), GTK_WIDGET(item_edit->popup_item));
 
         g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                         (GSourceFunc)gnc_item_edit_update, item_edit, NULL);
@@ -1024,8 +1046,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     else
         popup_y = y + h;
 
-    if (!gtk_widget_get_parent (item_edit->popup_item))
-        gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
+//FIXME gtk4    if (!gtk_widget_get_parent (item_edit->popup_item))
+//FIXME gtk4        gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
 
     // Lets check popup height is the true height
     item_edit->popup_returned_height = popup_h;
@@ -1081,7 +1103,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         else
             popup_x = x;
 
-        gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
+//FIXME gtk4        gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
     }
 }
 
@@ -1098,7 +1120,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     if (gtk_widget_get_parent (GTK_WIDGET(item_edit->popup_item)) != GTK_WIDGET(item_edit->sheet))
         return;
 
-    gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+    gtk_box_remove (GTK_BOX(item_edit->sheet), GTK_WIDGET(item_edit->popup_item));
 
     // set the popup arrow direction down
     item_edit->popup_toggle.arrow_down = TRUE;
@@ -1162,7 +1184,7 @@ gnc_item_edit_set_popup (GncItemEdit    *item_edit,
         disconnect_popup_toggle_signals (item_edit);
 
         gnc_item_edit_hide_popup (item_edit);
-        gtk_widget_hide (item_edit->popup_toggle.ebox);
+        gtk_widget_set_visible (GTK_WIDGET(item_edit->popup_toggle.ebox), FALSE);
     }
 }
 

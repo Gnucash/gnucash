@@ -131,20 +131,20 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
     if (ew->dialog_type == NEW_EMPLOYEE)
         qof_event_gen(QOF_INSTANCE(employee), QOF_EVENT_ADD, NULL);
 
-    gncEmployeeSetID (employee, gtk_entry_get_text (GTK_ENTRY (ew->id_entry)));
-    gncEmployeeSetUsername (employee, gtk_entry_get_text (GTK_ENTRY (ew->username_entry)));
+    gncEmployeeSetID (employee, gnc_entry_get_text (GTK_ENTRY (ew->id_entry)));
+    gncEmployeeSetUsername (employee, gnc_entry_get_text (GTK_ENTRY (ew->username_entry)));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (ew->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (ew->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (ew->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (ew->email_entry)));
+    gncAddressSetName (addr, gnc_entry_get_text (GTK_ENTRY (ew->name_entry)));
+    gncAddressSetAddr1 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
+    gncAddressSetAddr2 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
+    gncAddressSetAddr3 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
+    gncAddressSetAddr4 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
+    gncAddressSetPhone (addr, gnc_entry_get_text (GTK_ENTRY (ew->phone_entry)));
+    gncAddressSetFax (addr, gnc_entry_get_text (GTK_ENTRY (ew->fax_entry)));
+    gncAddressSetEmail (addr, gnc_entry_get_text (GTK_ENTRY (ew->email_entry)));
     gncEmployeeSetActive (employee, gtk_toggle_button_get_active
                           (GTK_TOGGLE_BUTTON (ew->active_check)));
-    gncEmployeeSetLanguage (employee, gtk_entry_get_text (GTK_ENTRY (ew->language_entry)));
+    gncEmployeeSetLanguage (employee, gnc_entry_get_text (GTK_ENTRY (ew->language_entry)));
 
     /* Parse and set the workday and rate amounts */
     gncEmployeeSetWorkday (employee, gnc_amount_edit_get_amount
@@ -168,7 +168,7 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
-    const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
+    const char *res = gnc_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
@@ -205,10 +205,10 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 
 
     /* Set the employee id if one has not been chosen */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
+    if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
     {
         string = gncEmployeeNextID (ew->book);
-        gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (ew->id_entry), string);
         g_free(string);
     }
 
@@ -306,7 +306,7 @@ gnc_employee_window_close_handler (gpointer user_data)
 {
     EmployeeWindow *ew = user_data;
 
-    gtk_widget_destroy (ew->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(ew->dialog));
 }
 
 static void
@@ -391,6 +391,7 @@ gnc_employee_new_window (GtkWindow *parent,
 
     /* Find the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ew));
     gnc_builder_add_from_file (builder, "dialog-employee.glade", "employee_dialog");
     ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
@@ -423,7 +424,7 @@ gnc_employee_new_window (GtkWindow *parent,
     ew->currency_edit = edit;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* WORKDAY: Value */
     edit = gnc_amount_edit_new();
@@ -433,10 +434,10 @@ gnc_employee_new_window (GtkWindow *parent,
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
     ew->workday_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "hours_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* RATE: Monetary Value */
     edit = gnc_amount_edit_new();
@@ -446,10 +447,10 @@ gnc_employee_new_window (GtkWindow *parent,
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
                                   gnc_commodity_get_fraction (currency));
     ew->rate_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* CCard Account Selection */
     ew->ccard_acct_check = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_check"));
@@ -460,13 +461,13 @@ gnc_employee_new_window (GtkWindow *parent,
     g_list_free (acct_types);
 
     ew->ccard_acct_sel = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_acct_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);
 
     /* Setup initial values */
     if (employee != NULL)
@@ -478,20 +479,20 @@ gnc_employee_new_window (GtkWindow *parent,
 
         addr = gncEmployeeGetAddr (employee);
 
-        gtk_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
-        gtk_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
+        gnc_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
+        gnc_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (ew->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr1_entry), gncAddressGetAddr1 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr2_entry), gncAddressGetAddr2 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr3_entry), gncAddressGetAddr3 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr4_entry), gncAddressGetAddr4 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->phone_entry), gncAddressGetPhone (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->fax_entry), gncAddressGetFax (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->email_entry), gncAddressGetEmail (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->name_entry), gncAddressGetName (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr1_entry), gncAddressGetAddr1 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr2_entry), gncAddressGetAddr2 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr3_entry), gncAddressGetAddr3 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr4_entry), gncAddressGetAddr4 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->phone_entry), gncAddressGetPhone (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->fax_entry), gncAddressGetFax (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->email_entry), gncAddressGetEmail (addr));
 
-        gtk_entry_set_text (GTK_ENTRY (ew->language_entry),
+        gnc_entry_set_text (GTK_ENTRY (ew->language_entry),
                             gncEmployeeGetLanguage (employee));
 
         /* Set toggle buttons */
@@ -544,7 +545,7 @@ gnc_employee_new_window (GtkWindow *parent,
                                          GNC_EMPLOYEE_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (ew->dialog);
+//FIXME gtk4    gtk_widget_show_all (ew->dialog);
 
     g_object_unref(G_OBJECT(builder));
 

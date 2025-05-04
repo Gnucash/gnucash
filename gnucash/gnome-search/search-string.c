@@ -34,6 +34,7 @@
 #include "search-string.h"
 #include "search-core-utils.h"
 #include "qof.h"
+#include "dialog-utils.h"
 
 #define d(x)
 
@@ -160,8 +161,8 @@ gncs_validate (GNCSearchCoreType *fe)
                                          GTK_BUTTONS_OK,
                                          "%s",
                                          _("You need to enter some search text."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return FALSE;
     }
 
@@ -197,8 +198,8 @@ gncs_validate (GNCSearchCoreType *fe)
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_OK,
                                              "%s", errmsg);
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy(dialog);
+            gnc_dialog_run (GTK_DIALOG (dialog));
+
             g_free (errmsg);
             valid = FALSE;
         }
@@ -220,7 +221,7 @@ entry_changed (GtkEntry *entry, GNCSearchString *fe)
 {
     const char *new_str;
 
-    new_str = gtk_entry_get_text(entry);
+    new_str = gnc_entry_get_text(entry);
     gnc_search_string_set_value (fe, new_str);
 }
 
@@ -293,20 +294,20 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the entry window */
     entry = gtk_entry_new ();
     if (fi->value)
-        gtk_entry_set_text (GTK_ENTRY (entry), fi->value);
+        gnc_entry_set_text (GTK_ENTRY (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     fi->entry = entry;
 
     /* Build and connect the case-sensitive check button; defaults to off */
     toggle = gtk_check_button_new_with_label (_("Match case"));
     g_signal_connect (G_OBJECT(toggle), "toggled", G_CALLBACK (toggle_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     /* And return the box */
     return box;

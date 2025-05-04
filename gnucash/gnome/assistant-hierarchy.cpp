@@ -154,7 +154,7 @@ static void
 delete_hierarchy_dialog (hierarchy_data *data)
 {
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(data->dialog));
-    gtk_widget_destroy (data->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(data->dialog));
 }
 
 static void
@@ -334,8 +334,8 @@ region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
         gnc_suspend_gui_refresh ();
 
         /* Remove the old account tree */
-        if (data->category_accounts_tree)
-            gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
+//FIXME gtk4        if (data->category_accounts_tree)
+//            gtk_window_destroy(GTK_WINDOW(data->category_accounts_tree));
         data->category_accounts_tree = nullptr;
 
         // clear the categories list store in prep for new load
@@ -831,8 +831,8 @@ on_choose_account_categories_prepare (hierarchy_data  *data)
     if (!data->account_list_added)
     {
         /* clear out the description/tree */
-        if (data->category_accounts_tree)
-            gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
+//FIXME gtk4        if (data->category_accounts_tree)
+//            gtk_window_destroy(GTK_WINDOW(data->category_accounts_tree));
         data->category_accounts_tree = nullptr;
         buffer = gtk_text_view_get_buffer(data->category_description);
         gtk_text_buffer_set_text(buffer, "", -1);
@@ -860,8 +860,8 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
     gchar *text;
 
     /* Remove the old account tree */
-    if (data->category_accounts_tree)
-        gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
+//FIXME gtk4    if (data->category_accounts_tree)
+//        gtk_window_destroy(GTK_WINDOW(data->category_accounts_tree));
     data->category_accounts_tree = nullptr;
 
     /* Add a new one if something selected */
@@ -887,8 +887,9 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 
         data->category_accounts_tree = tree_view;
         gtk_tree_view_expand_all (tree_view);
-        gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
-        gtk_widget_show(GTK_WIDGET(tree_view));
+        gtk_box_prepend (GTK_BOX(data->category_accounts_container),
+                         GTK_WIDGET(tree_view));
+        gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
     }
     else
     {
@@ -1286,7 +1287,7 @@ on_final_account_prepare (hierarchy_data  *data)
     /* Delete any existing account tree */
     if (data->final_account_tree)
     {
-        gtk_widget_destroy(GTK_WIDGET(data->final_account_tree));
+//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(data->final_account_tree));
         data->final_account_tree = nullptr;
     }
     delete_our_account_tree (data);
@@ -1381,12 +1382,12 @@ on_final_account_prepare (hierarchy_data  *data)
         g_list_free(renderers);
     }
 
-    gtk_container_add(GTK_CONTAINER(data->final_account_tree_container),
-                      GTK_WIDGET(data->final_account_tree));
+    gtk_box_prepend (GTK_BOX(data->final_account_tree_container),
+                     GTK_WIDGET(data->final_account_tree));
 
     /* Expand the entire tree */
     gtk_tree_view_expand_all (tree_view);
-    gtk_widget_show(GTK_WIDGET(data->final_account_tree));
+    gtk_widget_set_visible (GTK_WIDGET(data->final_account_tree), true);
     gnc_resume_gui_refresh ();
 }
 
@@ -1541,11 +1542,11 @@ assistant_insert_book_options_page (hierarchy_data *data)
     auto parent = gtk_widget_get_parent (options);
 
     g_object_ref (options);
-    gtk_container_remove (GTK_CONTAINER(parent), options);
-    gtk_container_add (GTK_CONTAINER(vbox), options);
+    gtk_box_remove (GTK_BOX(parent), GTK_WIDGET(options));
+    gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(options));
     g_object_unref (options);
 
-    gtk_widget_show_all (vbox);
+//FIXME gtk4    gtk_widget_show_all (vbox);
     gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 1);
     gtk_assistant_set_page_title (GTK_ASSISTANT(data->dialog), vbox, _("New Book Options"));
     gtk_assistant_set_page_complete (GTK_ASSISTANT(data->dialog), vbox, TRUE);
@@ -1571,6 +1572,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->new_book = gnc_is_new_book();
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(data));
     gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "hierarchy_assistant");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
@@ -1597,11 +1599,11 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->currency_selector = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
             gnc_default_currency());
-    gtk_widget_show (data->currency_selector);
+    gtk_widget_set_visible (GTK_WIDGET(data->currency_selector), true);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_hbox"));
     data->currency_selector_label = GTK_WIDGET(gtk_builder_get_object (builder,
                                            "choose_currency_label"));
-    gtk_box_pack_start(GTK_BOX(box), data->currency_selector, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(data->currency_selector));
 
     /* Categories Page */
     tree_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_categories_tree_view"));
@@ -1635,12 +1637,12 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     g_signal_connect (G_OBJECT(dialog), "destroy",
                       G_CALLBACK (gnc_hierarchy_destroy_cb), data);
 
-    gtk_builder_connect_signals(builder, data);
+//FIXME gtk4    gtk_builder_connect_signals(builder, data);
     g_object_unref(G_OBJECT(builder));
 
     data->when_completed = when_completed;
     data->use_defaults = use_defaults;
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     return dialog;
 }
 

@@ -105,9 +105,9 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
 
     qof_event_gen(QOF_INSTANCE(job), QOF_EVENT_ADD, NULL);
 
-    gncJobSetID (job, gtk_entry_get_text (GTK_ENTRY (jw->id_entry)));
-    gncJobSetName (job, gtk_entry_get_text (GTK_ENTRY (jw->name_entry)));
-    gncJobSetReference (job, gtk_entry_get_text (GTK_ENTRY (jw->desc_entry)));
+    gncJobSetID (job, gnc_entry_get_text (GTK_ENTRY (jw->id_entry)));
+    gncJobSetName (job, gnc_entry_get_text (GTK_ENTRY (jw->name_entry)));
+    gncJobSetReference (job, gnc_entry_get_text (GTK_ENTRY (jw->desc_entry)));
     gncJobSetRate (job, gnc_amount_edit_get_amount
                         (GNC_AMOUNT_EDIT (jw->rate_entry)));
     gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
@@ -130,7 +130,7 @@ gnc_job_verify_ok (JobWindow *jw)
     gchar *string;
 
     /* Check for valid name */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (jw->name_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         const char *message = _("The Job must be given a name.");
@@ -157,11 +157,11 @@ gnc_job_verify_ok (JobWindow *jw)
     }
 
     /* Set a valid id if one was not created */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (jw->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         string = gncJobNextID(jw->book);
-        gtk_entry_set_text (GTK_ENTRY (jw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (jw->id_entry), string);
         g_free(string);
     }
 
@@ -251,7 +251,7 @@ gnc_job_window_close_handler (gpointer user_data)
 {
     JobWindow *jw = user_data;
 
-    gtk_widget_destroy (jw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(jw->dialog));
     /* jw is already freed at this point
     jw->dialog = NULL; */
 }
@@ -326,6 +326,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
 
     /* Load the Glade File */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(jw));
     gnc_builder_add_from_file (builder, "dialog-job.glade", "job_dialog");
 
     /* Find the dialog */
@@ -349,13 +350,13 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
 
     jw->rate_entry = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_entry"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
 
 
     /* Set initial entries */
@@ -367,9 +368,9 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
         jw->cust_edit = gnc_owner_edit_create (owner_label, owner_box,
                                                bookp, owner);
 
-        gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
-        gtk_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
-        gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
         gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (jw->rate_entry),
                                       gncJobGetRate (job));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),
@@ -411,7 +412,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
                                          GNC_JOB_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (jw->dialog);
+//FIXME gtk4    gtk_widget_show_all (jw->dialog);
 
     // The job name should have keyboard focus
     gtk_widget_grab_focus(jw->name_entry);

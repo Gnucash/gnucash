@@ -50,16 +50,16 @@ extern "C"
  */
 typedef enum
 {
-    DIAG_COMM_CURRENCY,	  /**< Dialog box should only allow selection
-			       of a currency. */
-    DIAG_COMM_NON_CURRENCY, /**< Dialog box should allow selection of
-			       anything but a currency. */
+    DIAG_COMM_CURRENCY,            /**< Dialog box should only allow selection
+                                       of a currency. */
+    DIAG_COMM_NON_CURRENCY,        /**< Dialog box should allow selection of
+                                        anything but a currency. */
     DIAG_COMM_NON_CURRENCY_SELECT, /**< Dialog box should allow selection of
                                     * anything but a currency and should include
                                     * the "ALL" namespace to display all such
                                     * commodities in a single list. */
-    DIAG_COMM_ALL,	  /**< Dialog box should allow selection of
-			       anything. */
+    DIAG_COMM_ALL,                /**< Dialog box should allow selection of
+                                       anything. */
 } dialog_commodity_mode;
 
 
@@ -103,13 +103,13 @@ typedef enum
  *  commodity.
  */
 gnc_commodity *
-gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
-                                   GtkWidget * parent,
-                                   dialog_commodity_mode mode,
-                                   const char * user_message,
-                                   const char * cusip,
-                                   const char * fullname,
-                                   const char * mnemonic);
+gnc_ui_select_commodity_modal_full (gnc_commodity *orig_sel,
+                                    GtkWidget *parent,
+                                    dialog_commodity_mode mode,
+                                    const char *user_message,
+                                    const char *cusip,
+                                    const char *fullname,
+                                    const char *mnemonic);
 
 
 /** Ask the user to select a commodity from the existing set of
@@ -130,9 +130,9 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
  *  commodity.
  */
 gnc_commodity *
-gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
-                              GtkWidget * parent,
-                              dialog_commodity_mode mode);
+gnc_ui_select_commodity_modal (gnc_commodity *orig_sel,
+                               GtkWidget *parent,
+                               dialog_commodity_mode mode);
 /** @} */
 
 
@@ -166,13 +166,13 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
 gnc_commodity *
-gnc_ui_new_commodity_modal_full(const char * name_space,
-                                GtkWidget * parent,
-                                const char * cusip,
-                                const char * fullname,
-                                const char * mnemonic,
-                                const char * user_symbol,
-                                int fraction);
+gnc_ui_new_commodity_modal_full (const char *name_space,
+                                 GtkWidget  *parent,
+                                 const char *cusip,
+                                 const char *fullname,
+                                 const char *mnemonic,
+                                 const char *user_symbol,
+                                 int         fraction);
 
 /** Ask the user to provide the information necessary to create a new
  *  commodity.
@@ -186,8 +186,8 @@ gnc_ui_new_commodity_modal_full(const char * name_space,
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
 gnc_commodity *
-gnc_ui_new_commodity_modal(const char * default_namespace,
-                           GtkWidget * parent);
+gnc_ui_new_commodity_modal (const char *default_namespace,
+                            GtkWidget *parent);
 
 /** Allow the user to edit the information about a commodity.  For
  *  currencies, only the price quote information may be changed.  For
@@ -204,8 +204,8 @@ gnc_ui_new_commodity_modal(const char * default_namespace,
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
 gboolean
-gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
-                            GtkWidget * parent);
+gnc_ui_edit_commodity_modal (gnc_commodity *commodity,
+                             GtkWidget *parent);
 /** @} */
 
 
@@ -223,9 +223,9 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
  *  @param mode Determines in which namespaces the user may select a
  *  commodity
  */
-void gnc_ui_update_namespace_picker(GtkWidget *cbwe,
-                                    const gchar *sel,
-                                    dialog_commodity_mode mode);
+void gnc_ui_update_namespace_picker (GtkWidget *cbwe,
+                                     const gchar *sel,
+                                     dialog_commodity_mode mode);
 
 /** Given a combo box, return the currently selected namespaces.
  *
@@ -248,9 +248,9 @@ gchar *gnc_ui_namespace_picker_ns (GtkWidget *cbwe);
  *  @param sel The commodity that should be initially selected when
  *  the combo box appears.
  */
-void gnc_ui_update_commodity_picker(GtkWidget *cbwe,
-                                    const gchar *name_space,
-                                    const gchar *sel);
+void gnc_ui_update_commodity_picker (GtkWidget *cbwe,
+                                     const gchar *name_space,
+                                     const gchar *sel);
 /** @} */
 
 #ifdef __cplusplus

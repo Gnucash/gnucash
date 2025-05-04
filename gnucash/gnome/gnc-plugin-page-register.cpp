@@ -162,7 +162,7 @@ void gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
 extern "C"
 {
 /* Callbacks for the "Filter By" dialog */
-void gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
+void gnc_plugin_page_register_filter_select_range_cb (GtkToggleButton* button,
                                                       GncPluginPageRegister* page);
 void gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
                                                GncPluginPageRegister* page);
@@ -751,7 +751,7 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
         }
 
         // setup any short toolbar names
-        gnc_plugin_init_short_names (gnc_window_get_toolbar (gnc_window), toolbar_labels);
+//FIXME gtk4        gnc_plugin_init_short_names (gnc_window_get_toolbar (gnc_window), toolbar_labels);
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 
@@ -1245,7 +1245,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-register-page");
@@ -1259,8 +1259,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
                              numRows, priv->read_only);
     priv->gsr = (GNCSplitReg *)gsr;
 
-    gtk_widget_show (gsr);
-    gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(gsr), true);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(gsr));
 
     g_signal_connect (G_OBJECT (gsr), "help-changed",
                       G_CALLBACK (gnc_plugin_page_help_changed_cb),
@@ -1411,9 +1411,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     plugin_page->summarybar = gsr_create_summary_bar (priv->gsr);
     if (plugin_page->summarybar)
     {
-        gtk_widget_show_all (plugin_page->summarybar);
-        gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
-                            FALSE, FALSE, 0);
+//FIXME gtk4        gtk_widget_show_all (plugin_page->summarybar);
+        gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(plugin_page->summarybar));
 
         gnc_plugin_page_register_summarybar_position_changed (NULL, NULL, page);
         gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
@@ -1495,20 +1494,20 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage* plugin_page)
 
     if (priv->sd.dialog)
     {
-        gtk_widget_destroy (priv->sd.dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->sd.dialog));
         memset (&priv->sd, 0, sizeof (priv->sd));
     }
 
     if (priv->fd.dialog)
     {
-        gtk_widget_destroy (priv->fd.dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->fd.dialog));
         memset (&priv->fd, 0, sizeof (priv->fd));
     }
 
     qof_query_destroy (priv->search_query);
     qof_query_destroy (priv->filter_query);
 
-    gtk_widget_hide (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), false);
     gnc_ledger_display_close (priv->ledger);
     priv->ledger = NULL;
     LEAVE (" ");
@@ -1886,8 +1885,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     gnc_gtk_dialog_add_button (dialog, _ ("_Save Transaction"),
                                "document-save", GTK_RESPONSE_ACCEPT);
 
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+    response = gnc_dialog_run (GTK_DIALOG(dialog));
 
     switch (response)
     {
@@ -2295,9 +2293,9 @@ gnc_plugin_page_register_summarybar_position_changed (gpointer prefs,
                             GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child (GTK_BOX (priv->widget),
-                           plugin_page->summarybar,
-                           (position == GTK_POS_TOP ? 0 : -1));
+//FIXME gtk4    gtk_box_reorder_child (GTK_BOX (priv->widget),
+//                           plugin_page->summarybar,
+//                           (position == GTK_POS_TOP ? 0 : -1));
 }
 
 /** This function is called to get the query associated with this
@@ -2419,7 +2417,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
     priv->sd.dialog = NULL;
     priv->sd.num_radio = NULL;
     priv->sd.act_radio = NULL;
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE (" ");
 }
 
@@ -2444,7 +2442,7 @@ gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
     ENTER ("button %s(%p), page %p", name, button, page);
     type = SortTypefromString (name);
     gnc_split_reg_set_sort_type (priv->gsr, type);
@@ -2741,7 +2739,7 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton* button,
     g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
     ENTER ("toggle button %s (%p), plugin_page %p", name, button, page);
 
     /* Determine what status bit to change */
@@ -2921,19 +2919,19 @@ get_filter_times (GncPluginPageRegister* page)
  *  associated with this filter dialog.
  */
 void
-gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
+gnc_plugin_page_register_filter_select_range_cb (GtkToggleButton* button,
                                                  GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
     gboolean active;
     const gchar* name;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (button));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(button %p, page %p)", button, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
     active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
     if (active && g_strcmp0 (name, "filter_show_range") == 0)
@@ -3022,7 +3020,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget* unused,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(widget %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (unused)), unused, page);
+           gtk_buildable_get_buildable_id (GTK_BUILDABLE (unused)), unused, page);
     get_filter_times (page);
     gnc_ppr_update_date_query (page);
     LEAVE (" ");
@@ -3056,11 +3054,11 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
     const gchar* name;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (radio));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (radio));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(radio %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (radio)), radio, page);
+           gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio)), radio, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)))
     {
@@ -3068,7 +3066,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio));
     active = !g_strcmp0 (name, "start_date_choose");
     gtk_widget_set_sensitive (priv->fd.start_date, active);
     get_filter_times (page);
@@ -3104,11 +3102,11 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
     const gchar* name;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (radio));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (radio));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(radio %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (radio)), radio, page);
+           gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio)), radio, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)))
     {
@@ -3116,7 +3114,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio));
     active = !g_strcmp0 (name, "end_date_choose");
     gtk_widget_set_sensitive (priv->fd.end_date, active);
     get_filter_times (page);
@@ -3238,7 +3236,7 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
         }
     }
     priv->fd.dialog = NULL;
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE (" ");
 }
 
@@ -3617,9 +3615,9 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                                                               "%s", message);
                     gtk_dialog_add_button (GTK_DIALOG (dialog), _ ("_Print checks"),
                                            GTK_RESPONSE_YES);
-                    response = gnc_dialog_run (GTK_DIALOG (dialog),
-                                               GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
-                    gtk_widget_destroy (dialog);
+                    response = gnc_warning_dialog_run (GTK_DIALOG(dialog),
+                                                       GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
+
                     if (response != GTK_RESPONSE_YES)
                     {
                         LEAVE ("Multiple accounts");
@@ -3873,17 +3871,20 @@ gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple,
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), window);
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (result == GTK_RESPONSE_OK)
     {
-        reason = gtk_entry_get_text (GTK_ENTRY (entry));
+        reason = gnc_entry_get_text (GTK_ENTRY (entry));
         if (reason == NULL)
             reason = "";
         gnc_split_register_void_current_trans (reg, reason);
     }
 
     /* All done. Get rid of it. */
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref (G_OBJECT (builder));
 }
 
@@ -4052,6 +4053,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
     /* Create the dialog */
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(page));
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
                                "sort_by_dialog");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "sort_by_dialog"));
@@ -4102,11 +4104,11 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
                                  page);
 
     /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      page);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      page);
 
     /* Show it */
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
     g_object_unref (G_OBJECT (builder));
     LEAVE (" ");
 }
@@ -4139,6 +4141,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
 
     /* Create the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(page));
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
                                "days_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
@@ -4249,8 +4252,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
         priv->fd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_hbox"));
-        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.start_date, TRUE, TRUE, 0);
-        gtk_widget_show (priv->fd.start_date);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(priv->fd.start_date));
+        gtk_widget_set_visible (GTK_WIDGET(priv->fd.start_date), true);
         gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.start_date), sensitive);
         gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.start_date), time_val);
         g_signal_connect (G_OBJECT (priv->fd.start_date), "date-changed",
@@ -4284,8 +4287,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
         priv->fd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_hbox"));
-        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.end_date, TRUE, TRUE, 0);
-        gtk_widget_show (priv->fd.end_date);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(priv->fd.end_date));
+        gtk_widget_set_visible (GTK_WIDGET(priv->fd.end_date), true);
         gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.end_date), sensitive);
         gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.end_date), time_val);
         g_signal_connect (G_OBJECT (priv->fd.end_date), "date-changed",
@@ -4294,11 +4297,11 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
     }
 
     /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      page);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      page);
 
     /* Show it */
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
     g_object_unref (G_OBJECT (builder));
     LEAVE (" ");
 }
@@ -5062,8 +5065,7 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                     "%s", _("This transaction involves more than one other account. Select a specific split to jump to that account."));
             gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
-            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_MULTIPLE_SPLITS);
-            gtk_widget_destroy (dialog);
+            gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_MULTIPLE_SPLITS);
 
             LEAVE ("no split (2)");
             return;
@@ -5091,8 +5093,7 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                     "%s", _("This transaction only involves the current account so there is no other account to jump to."));
             gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
-            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_SINGLE_ACCOUNT);
-            gtk_widget_destroy (dialog);
+            gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_SINGLE_ACCOUNT);
 
             LEAVE ("register open for account");
             return;
@@ -5209,26 +5210,28 @@ gnc_plugin_page_register_cmd_scrub_current (GSimpleAction *simple,
 }
 
 static gboolean
-scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+scrub_kp_handler (GtkEventControllerKey *key, guint keyval,
+                  guint keycode, GdkModifierType state,
+                  gpointer user_data)
 {
-    if (event->length == 0) return FALSE;
-
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         {
+            GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+
             auto abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), false,
                                                   "%s", _(check_repair_abort_YN));
 
             if (abort_scrub)
-                gnc_set_abort_scrub (TRUE);
+                gnc_set_abort_scrub (true);
 
-            return TRUE;
+            return true;
         }
     default:
         break;
     }
-    return FALSE;
+    return false;
 }
 
 static void
@@ -5261,8 +5264,11 @@ gnc_plugin_page_register_cmd_scrub_all (GSimpleAction *simple,
     is_scrubbing = TRUE;
     gnc_set_abort_scrub (FALSE);
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT (window), "key-press-event",
-                                            G_CALLBACK (scrub_kp_handler), NULL);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                                            G_CALLBACK (scrub_kp_handler), nullptr);
     gnc_window_set_progressbar_window (window);
 
     splits = qof_query_run (query);

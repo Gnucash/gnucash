@@ -526,7 +526,6 @@
 
 <!-- menu ends here -->
 
-
   <menu id="mainwin-popup">
     <item>
       <attribute name="label" translatable="no">TestAction</attribute>
@@ -534,75 +533,105 @@
     </item>
   </menu>
 
+<!-- toolbar starts here -->
 
-  <object class="GtkToolbar" id="mainwin-toolbar">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
+  <object class="GtkBox" id="mainwin-toolbar">
+    <property name="orientation">horizontal</property>
     <child>
-      <object class="GtkToolButton" id="but1">
+      <object class="GtkButton" id="but1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="tooltip-text" translatable="yes">Save the current file</property>
         <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
-        <property name="label" translatable="yes">_Save</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">document-save</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">document-save</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">_Save</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but2">
+      <object class="GtkButton" id="but2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="tooltip-text" translatable="yes">Close the currently active page</property>
         <property name="action-name">mainwin.FileCloseAction</property>
-        <property name="label" translatable="yes">_Close</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">window-close</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">window-close</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">_Close</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
+      <object class="GtkSeparator" id="separator2">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <property name="margin-end">3</property>
+        <property name="margin-start">3</property>
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but2a">
+      <object class="GtkButton" id="but2a">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
-        <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
-        <property name="label" translatable="yes">New _Invoice…</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-new</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-new</property>
+                <property name="icon-size">large</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">New _Invoice…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="extra_separator">
+      <object class="GtkSeparator" id="extra_separator">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
+        <property name="margin-end">3</property>
+        <property name="margin-start">3</property>
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
   </object>
 

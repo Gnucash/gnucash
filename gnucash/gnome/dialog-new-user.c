@@ -87,7 +87,7 @@ gnc_ui_new_user_cancel_cb (GtkWidget * widget, gpointer data)
     GNCNewUserDialog *new_user = data;
 
     g_return_if_fail(new_user);
-    gtk_widget_destroy (new_user->window);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(new_user->window));
 }
 
 static void
@@ -124,7 +124,7 @@ gnc_ui_new_user_ok_cb (GtkWidget * widget, gpointer data)
     {
         gnc_gnome_help (GTK_WINDOW(new_user->window), DF_GUIDE, NULL);
     }
-    gtk_widget_destroy (new_user->window);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(new_user->window));
 }
 
 static gboolean
@@ -145,7 +145,7 @@ gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
     gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_window");
     new_user->window = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_window"));
 
-    gtk_window_set_keep_above (GTK_WINDOW(new_user->window), TRUE);
+    gtk_window_present (GTK_WINDOW(new_user->window));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(new_user->window), "gnc-id-new-user");
@@ -191,13 +191,16 @@ gnc_ui_new_user_cancel_dialog (GtkWindow *parent)
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     keepshowing = (result == GTK_RESPONSE_YES);
 
     gnc_set_first_startup (keepshowing);
 
     g_object_unref(G_OBJECT(builder));
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(dialog));
 }
 
 void
@@ -213,6 +216,6 @@ gnc_ui_new_user_dialog (void)
 
     new_user = g_new0(GNCNewUserDialog, 1);
     gnc_ui_new_user_dialog_create (new_user);
-    gtk_widget_show (new_user->window);
+    gtk_widget_set_visible (GTK_WIDGET(new_user->window), TRUE);
 }
 

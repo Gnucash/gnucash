@@ -167,7 +167,7 @@ void gnc_xfer_description_insert_cb(GtkEditable *editable,
                                     gint *start_pos,
                                     XferDialog *xferData);
 gboolean gnc_xfer_description_key_press_cb( GtkEntry *entry,
-                                            GdkEventKey *event,
+                                            const GdkEvent *event,
                                             XferDialog *xferData );
 void gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData);
 gboolean gnc_xfer_dialog_inc_exp_filter_func (Account *account,
@@ -350,20 +350,21 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 static gboolean
-gnc_xfer_dialog_key_press_cb (GtkWidget   *widget,
-                              GdkEventKey *event,
-                              gpointer     unused)
+gnc_xfer_dialog_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                              guint keycode, GdkModifierType state,
+                              gpointer user_data)
 {
-    if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
+    if ((keyval == GDK_KEY_Return) || (keyval == GDK_KEY_KP_Enter))
     {
-        auto toplevel = gtk_widget_get_toplevel (widget);
-        if (gtk_widget_is_toplevel(toplevel) && GTK_IS_WINDOW(toplevel))
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+        auto toplevel = gtk_widget_get_root (widget);
+        if (GTK_IS_WINDOW(toplevel))
         {
-            gtk_window_activate_default(GTK_WINDOW(toplevel));
-            return TRUE;
+            gtk_widget_activate_default (GTK_WIDGET(toplevel));
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 static void
@@ -377,7 +378,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
         gnc_xfer_dialog_set_price_edit(xferData, gnc_numeric_zero());
         auto entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
                           (GNC_AMOUNT_EDIT(xferData->price_edit)));
-        gtk_entry_set_text(entry, "");
+        gnc_entry_set_text(entry, "");
 
         gnc_xfer_update_to_amount (xferData);
 
@@ -439,7 +440,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
                                    gnc_numeric_zero ());
         auto entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
                                (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
-        gtk_entry_set_text(entry, "");
+        gnc_entry_set_text(entry, "");
     }
 }
 
@@ -615,7 +616,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
         info = from_info;
 
     auto tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
-    gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(tree_view));
+    gtk_box_prepend (GTK_BOX(scroll_win), GTK_WIDGET(tree_view));
     info->show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
     info->show_hidden = FALSE;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),
@@ -624,9 +625,12 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
                                       NULL    /* destroy callback */);
     g_object_set_data (G_OBJECT(tree_view), "filter-info", info);
 
-    gtk_widget_show(GTK_WIDGET(tree_view));
-    g_signal_connect (G_OBJECT (tree_view), "key-press-event",
-                      G_CALLBACK (gnc_xfer_dialog_key_press_cb), NULL);
+    gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(tree_view), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                      G_CALLBACK (gnc_xfer_dialog_key_press_cb), nullptr);
 
     auto selection = gtk_tree_view_get_selection (tree_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
@@ -701,7 +705,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
 
     match_account = gnc_transfer_dialog_get_selected_account (xferData, xferData->quickfill);
 
-    desc = gtk_entry_get_text( GTK_ENTRY(xferData->description_entry) );
+    desc = gnc_entry_get_text( GTK_ENTRY(xferData->description_entry) );
 
     if ( !desc || desc[0] == '\0' )  /* no description to match */
         return( FALSE );
@@ -739,10 +743,10 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
         changed = TRUE;
     }
 
-    if ( !g_strcmp0(gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry)), "" ))
+    if ( !g_strcmp0(gnc_entry_get_text(GTK_ENTRY(xferData->memo_entry)), "" ))
     {
         DEBUG("updating memo");
-        gtk_entry_set_text( GTK_ENTRY(xferData->memo_entry),
+        gnc_entry_set_text( GTK_ENTRY(xferData->memo_entry),
                             xaccSplitGetMemo( split ) );
         changed = TRUE;
     }
@@ -871,9 +875,9 @@ gnc_xfer_description_insert_cb(GtkEditable *editable,
 }
 
 gboolean
-gnc_xfer_description_key_press_cb( GtkEntry *entry,
-                                   GdkEventKey *event,
-                                   XferDialog *xferData )
+gnc_xfer_description_key_press_cb( GtkEntry       *entry,
+                                   const GdkEvent *event,
+                                   XferDialog     *xferData )
 {
     gboolean done_with_input = FALSE;
 
@@ -882,7 +886,11 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
      * seem to work right, so handle them here.
      */
     ENTER(" ");
-    switch ( event->keyval )
+
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
+
+    switch ( keyval )
     {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
@@ -892,8 +900,8 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
 
         case GDK_KEY_Tab:
         case GDK_KEY_ISO_Left_Tab:
-            if ( !( event->state & GDK_SHIFT_MASK) )    /* Complete on Tab,
-                                                         * but not Shift-Tab */
+            if ( !( state & GDK_SHIFT_MASK) ) /* Complete on Tab,
+                                               * but not Shift-Tab */
             {
                 gnc_xfer_dialog_quickfill( xferData );
                 /* NOT done with input, though, since we need to focus to the next
@@ -956,14 +964,14 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
 }
 
 static gboolean
-gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                          gpointer data)
+gnc_xfer_amount_update_cb (GtkEventControllerFocus *controller,
+                           gpointer user_data)
 {
-    g_return_val_if_fail (data, FALSE);
+    g_return_val_if_fail (user_data, false);
 
-    auto xferData = static_cast<XferDialog *> (data);
+    auto xferData = static_cast<XferDialog *> (user_data);
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit), NULL);
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(xferData->amount_edit), nullptr);
 
     gnc_xfer_update_to_amount (xferData);
 
@@ -1009,7 +1017,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
     /* Update the dialog. */
     gnc_amount_edit_set_amount(to_amount_edit, to_amount);
     if (gnc_numeric_zero_p(to_amount))
-        gtk_entry_set_text(GTK_ENTRY(gnc_amount_edit_gtk_entry(to_amount_edit)),
+        gnc_entry_set_text(GTK_ENTRY(gnc_amount_edit_gtk_entry(to_amount_edit)),
                            "");
 
     gnc_xfer_dialog_update_conv_info(xferData);
@@ -1017,15 +1025,15 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
 
 
 static gboolean
-gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                         gpointer data)
+gnc_xfer_price_update_cb (GtkEventControllerFocus *controller,
+                          gpointer user_data)
 {
-    auto xferData = static_cast<XferDialog *> (data);
+    auto xferData = static_cast<XferDialog *> (user_data);
 
     gnc_xfer_update_to_amount (xferData);
     xferData->price_type = PRICE_TYPE_TRN;
 
-    return FALSE;
+    return false;
 }
 
 static gboolean
@@ -1040,12 +1048,12 @@ gnc_xfer_date_changed_cb(GtkWidget *widget, gpointer data)
 }
 
 static gboolean
-gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                             gpointer data)
+gnc_xfer_to_amount_update_cb (GtkEventControllerFocus *controller,
+                              gpointer user_data)
 {
-    auto xferData = static_cast<XferDialog *> (data);
+    auto xferData = static_cast<XferDialog *> (user_data);
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit), NULL);
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit), nullptr);
     auto price_value = gnc_xfer_dialog_compute_price_value (xferData);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
@@ -1053,7 +1061,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     xferData->price_type = PRICE_TYPE_TRN;
     gnc_xfer_dialog_update_conv_info(xferData);
 
-    return FALSE;
+    return false;
 }
 
 
@@ -1153,8 +1161,8 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
 
     if (hide)
     {
-        gtk_widget_hide( scroll_win );
-        gtk_widget_hide( GTK_WIDGET(show_button) );
+        gtk_widget_set_visible (GTK_WIDGET(scroll_win), false);
+        gtk_widget_set_visible (GTK_WIDGET(show_button), false);
     }
 }
 
@@ -1310,7 +1318,7 @@ gnc_xfer_dialog_set_description(XferDialog *xferData, const char *description)
     if (xferData == NULL)
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(xferData->description_entry), description);
+    gnc_entry_set_text(GTK_ENTRY(xferData->description_entry), description);
     gnc_quickfill_insert( xferData->qf, description, QUICKFILL_LIFO );
 }
 
@@ -1328,7 +1336,7 @@ gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo)
     if (xferData == NULL)
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(xferData->memo_entry), memo);
+    gnc_entry_set_text(GTK_ENTRY(xferData->memo_entry), memo);
     /* gnc_quickfill_insert( xferData->qf, memo, QUICKFILL_LIFO ); */
 }
 
@@ -1346,7 +1354,7 @@ gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num)
     if (xferData == NULL)
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(xferData->num_entry), num);
+    gnc_entry_set_text(GTK_ENTRY(xferData->num_entry), num);
     /* gnc_quickfill_insert( xferData->qf, num, QUICKFILL_LIFO ); */
 }
 
@@ -1489,7 +1497,7 @@ create_transaction(XferDialog *xferData, time64 time,
     /* Trans-Num or Split-Action set with gnc_set_num_action below per book
      * option */
 
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->description_entry));
     xaccTransSetDescription(trans, string);
 
     /* create from split */
@@ -1512,15 +1520,15 @@ create_transaction(XferDialog *xferData, time64 time,
     xaccSplitSetBaseValue(to_split, to_amount, xferData->to_commodity);
 
     /* Set the transaction number or split action field based on book option*/
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->num_entry));
     gnc_set_num_action (trans, from_split, string, NULL);
 
     /* Set the transaction notes */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->notes_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->notes_entry));
     xaccTransSetNotes(trans, string);
 
     /* Set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->memo_entry));
     xaccSplitSetMemo(from_split, string);
     xaccSplitSetMemo(to_split, string);
 
@@ -1854,20 +1862,23 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         amount = gnc_amount_edit_new();
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "amount_hbox"));
-        gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(amount));
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         xferData->amount_edit = amount;
 
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
         gtk_entry_set_activates_default (GTK_ENTRY(entry), TRUE);
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
-                          G_CALLBACK (gnc_xfer_amount_update_cb), xferData);
+
+        GtkEventController *event_controller1 = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller1);
+        g_signal_connect (G_OBJECT(event_controller1), "leave",
+                          G_CALLBACK(gnc_xfer_amount_update_cb), xferData);
 
         date = gnc_date_edit_new(time (NULL), FALSE, FALSE);
         gnc_date_activates_default (GNC_DATE_EDIT(date), TRUE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
 
-        gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(date));
         xferData->date_entry = date;
         g_signal_connect (G_OBJECT (date), "date_changed",
                           G_CALLBACK (gnc_xfer_date_changed_cb), xferData);
@@ -1965,22 +1976,29 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         xferData->curr_xfer_table = table;
 
         edit = gnc_amount_edit_new();
+        gtk_builder_set_current_object (builder, G_OBJECT(xferData));
         gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                        gnc_default_print_info (FALSE));
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "price_hbox"));
-        gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
         xferData->price_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
+
+        GtkEventController *event_controller2 = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller2);
+        g_signal_connect (G_OBJECT (event_controller2), "leave",
                           G_CALLBACK (gnc_xfer_price_update_cb), xferData);
         gtk_entry_set_activates_default(GTK_ENTRY (entry), TRUE);
 
         edit = gnc_amount_edit_new();
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "right_amount_hbox"));
-        gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
         xferData->to_amount_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
+
+        GtkEventController *event_controller3 = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller3);
+        g_signal_connect (G_OBJECT (event_controller3), "leave",
                           G_CALLBACK (gnc_xfer_to_amount_update_cb), xferData);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 
@@ -1992,17 +2010,17 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         if (use_accounting_labels)
         {
-            gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(xferData->amount_radio))),
+            gtk_label_set_text(GTK_LABEL(gtk_widget_get_first_child (GTK_WIDGET(xferData->amount_radio))),
                                _("Debit Amount"));
         }
         else
         {
-            gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(xferData->amount_radio))),
+            gtk_label_set_text(GTK_LABEL(gtk_widget_get_first_child (GTK_WIDGET(xferData->amount_radio))),
                                _("To Amount"));
         }
     }
 
-    gtk_builder_connect_signals(builder, xferData);
+//FIXME gtk4    gtk_builder_connect_signals(builder, xferData);
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW (xferData->dialog), GTK_WINDOW (parent));
     LEAVE(" ");
@@ -2017,9 +2035,9 @@ close_handler (gpointer user_data)
     auto dialog = GTK_WIDGET (xferData->dialog);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
-    gtk_widget_hide (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), false);
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_free (to_info);
     to_info = NULL;
     g_free (from_info);
@@ -2079,7 +2097,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
 
     gnc_xfer_dialog_curr_acct_activate(xferData);
 
-    gtk_widget_show_all(xferData->dialog);
+//FIXME gtk4    gtk_widget_show_all(xferData->dialog);
 
     gnc_window_adjust_for_screen(GTK_WINDOW(xferData->dialog));
 
@@ -2182,9 +2200,9 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
         auto button = gtk_button_new_with_label( label );
         auto box = GTK_WIDGET (gtk_builder_get_object (builder,
                                                        "transfermain-vbox" ));
-        gtk_box_pack_end( GTK_BOX(box), button, FALSE, FALSE, 0 );
+        gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(button));
         g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (callback), user_data);
-        gtk_widget_show( button );
+        gtk_widget_set_visible (GTK_WIDGET(button), true);
     }
 }
 
@@ -2192,12 +2210,7 @@ void gnc_xfer_dialog_toggle_currency_table( XferDialog *xferData,
                                             gboolean show_table )
 {
     if (xferData && xferData->curr_xfer_table)
-    {
-        if (show_table)
-            gtk_widget_show(xferData->curr_xfer_table);
-        else
-            gtk_widget_hide(xferData->curr_xfer_table);
-    }
+        gtk_widget_set_visible (GTK_WIDGET(xferData->curr_xfer_table), show_table);
 }
 
 
@@ -2239,7 +2252,10 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     while ( TRUE )
     {
         DEBUG("calling gtk_dialog_run");
-        response = gtk_dialog_run (dialog);
+//FIXME gtk4        response = gtk_dialog_run (dialog);
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         DEBUG("gtk_dialog_run returned %d", response);
         gnc_xfer_dialog_response_cb (dialog, response, xferData);
 

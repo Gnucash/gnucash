@@ -40,6 +40,7 @@
 #include "qof.h"
 #include "gnc-general-search.h"
 #include "gnc-ui.h"
+#include "dialog-utils.h"
 
 #define GNCGENERALSEARCH_CLASS	"gnc-general-search-widget"
 
@@ -95,7 +96,7 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    object_class->destroy = gnc_general_search_destroy;
+//FIXME gtk4    object_class->destroy = gnc_general_search_destroy;
 
     klass->changed = NULL;
 }
@@ -137,7 +138,7 @@ gnc_general_search_destroy (GtkWidget *widget)
         priv->component_id = 0;
     }
 
-    GTK_WIDGET_CLASS (gnc_general_search_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS (gnc_general_search_parent_class)->destroy (widget);
 }
 
 /* The "selection" contents have changed.  Change the text. */
@@ -153,7 +154,7 @@ reset_selection_text (GNCGeneralSearch *gsl)
     else
         text = qof_object_printable (priv->type, gsl->selected_item);
 
-    gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
+    gnc_entry_set_text(GTK_ENTRY(gsl->entry), text);
 }
 
 /* We've got a refresh event */
@@ -273,10 +274,10 @@ gnc_gsl_match_selected_cb (GtkEntryCompletion *completion,
  *
  *   @param gsl A pointer to a general search widget. */
 static gboolean
-gnc_gsl_focus_out_cb (GtkEntry         *entry,
-                      GdkEventFocus    *event,
-                      GNCGeneralSearch *gsl)
+gnc_gsl_focus_out_cb (GtkEventControllerFocus *controller,
+                      gpointer user_data)
 {
+    GNCGeneralSearch *gsl = user_data;
     const gchar	*text;
     GtkEntryCompletion *completion;
     GtkTreeModel *model;
@@ -286,8 +287,10 @@ gnc_gsl_focus_out_cb (GtkEntry         *entry,
     QofObject *qofobject;
     gpointer selected_item = NULL;
 
+    GtkWidget *entry = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(controller));
+
     /* Attempt to match the current text to a qofobject. */
-    completion = gtk_entry_get_completion(entry);
+    completion = gtk_entry_get_completion(GTK_ENTRY(entry));
     model = gtk_entry_completion_get_model(completion);
 
     /* Return if completion tree is empty */
@@ -295,7 +298,7 @@ gnc_gsl_focus_out_cb (GtkEntry         *entry,
     if (!valid_iter)
         return FALSE;
 
-    text = gtk_entry_get_text(entry);
+    text = gnc_entry_get_text(GTK_ENTRY(entry));
     lc_text = g_utf8_strdown(text, -1);
 
     /* The last, valid selected entry can match the entered text
@@ -353,8 +356,7 @@ create_children (GNCGeneralSearch *gsl,
     gsl->entry = gtk_entry_new ();
     if (!text_editable)
         gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
-    gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
-
+    gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->entry));
 
     /* Setup a GtkEntryCompletion auxiliary widget for our Entry box
      * This requires an internal table ("model") with the possible
@@ -397,19 +399,22 @@ create_children (GNCGeneralSearch *gsl,
 
     g_signal_connect (G_OBJECT (completion), "match_selected",
                       G_CALLBACK (gnc_gsl_match_selected_cb), gsl);
+
+    GtkEventController *event_controller = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gsl->entry), event_controller);
     g_signal_connect (G_OBJECT (gsl->entry), "focus-out-event",
                       G_CALLBACK (gnc_gsl_focus_out_cb), gsl);
 
     g_object_unref (list_store);
     g_object_unref(completion);
-    gtk_widget_show (gsl->entry);
+    gtk_widget_set_visible (GTK_WIDGET(gsl->entry), TRUE);
 
     /* Add the search button */
     gsl->button = gtk_button_new_with_label (label);
-    gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->button));
     g_signal_connect (G_OBJECT (gsl->button), "clicked",
                       G_CALLBACK (search_cb), gsl);
-    gtk_widget_show (gsl->button);
+    gtk_widget_set_visible (GTK_WIDGET(gsl->button), TRUE);
 }
 
 /**

@@ -274,8 +274,8 @@ gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
                                    GTK_BUTTONS_OK,
                                    "%s",
                                    (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (iter->data);
     }
     g_list_free (results);
@@ -327,9 +327,10 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         r->optwin = std::make_unique<GncOptionsDialog>(nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
 
         /* Hide the generic dialog page list. */
-        gtk_widget_hide(r->optwin->get_page_list());
+        gtk_widget_set_visible (GTK_WIDGET(r->optwin->get_page_list()), false);
 
         builder = gtk_builder_new();
+        gtk_builder_set_current_object (builder, G_OBJECT(r));
         gnc_builder_add_from_file (builder, "dialog-report.glade", "view_contents_table");
 
         editor       = GTK_WIDGET(gtk_builder_get_object (builder, "view_contents_table"));
@@ -408,9 +409,9 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         r->optwin->set_apply_cb(gnc_column_view_edit_apply_cb, r);
         r->optwin->set_close_cb(gnc_column_view_edit_close_cb, r);
 
-        gtk_widget_show(r->optwin->get_widget());
+        gtk_widget_set_visible (GTK_WIDGET(r->optwin->get_widget()), true);
 
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, r);
+//FIXME gtk4        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, r);
 
         g_object_unref(G_OBJECT(builder));
 
@@ -525,7 +526,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     dlg = GTK_WIDGET(gtk_builder_get_object (builder, "edit_report_size"));
 
     gtk_window_set_transient_for (GTK_WINDOW(dlg),
-                         GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(button))));
+                         GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(button))));
 
     /* get the spinner widgets */
     rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));
@@ -540,8 +541,11 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(rowspin),
                                   static_cast<float>(high));
 
-        dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
-        gtk_widget_hide(dlg);
+//FIXME gtk4    dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
+gtk_window_set_modal (GTK_WINDOW(dlg), true); //FIXME gtk4
+dlg_ret = GTK_RESPONSE_CANCEL; //FIXME gtk4
+        
+        gtk_widget_set_visible (GTK_WIDGET(dlg), false);
 
         if (dlg_ret == GTK_RESPONSE_OK)
         {
@@ -558,6 +562,6 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
 
         g_object_unref(G_OBJECT(builder));
 
-        gtk_widget_destroy(dlg);
+//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(dlg));
     }
 }

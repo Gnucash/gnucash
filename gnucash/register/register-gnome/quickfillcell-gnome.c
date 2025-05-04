@@ -44,23 +44,26 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
                                   void *gui_data)
 {
     QuickFillCell *cell = (QuickFillCell *) bcell;
-    GdkEventKey *event = gui_data;
+    GdkEvent *event = (GdkEvent*)gui_data; //FIXME gtk4
     const char *match_str;
     QuickFill *match;
     int prefix_len;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type ((GdkEvent*)event) != GDK_KEY_PRESS)
         return FALSE;
 
-    switch (event->keyval)
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
+    
+    switch (keyval)
     {
     case GDK_KEY_slash:
-        if (!(event->state & GDK_MOD1_MASK))
+        if (!(state & GDK_ALT_MASK))
             return FALSE;
         break;
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
-        if (!(event->state & GDK_CONTROL_MASK))
+        if (!(state & GDK_CONTROL_MASK))
             return FALSE;
         break;
     default:

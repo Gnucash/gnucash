@@ -304,7 +304,7 @@ update_warning_tooltip (GncReportCombo *grc)
         tool_tip = g_strdup_printf (_("Report with GUID '%s' is missing"),
                                        grc->active_report_guid);
 
-    gtk_widget_show (grc->warning_image);
+    gtk_widget_set_visible (GTK_WIDGET(grc->warning_image), TRUE);
     gtk_widget_set_tooltip_text (grc->warning_image, tool_tip);
     g_free (tool_tip);
 }
@@ -497,12 +497,13 @@ gnc_report_combo_new (GSList *report_list)
     gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT(grc->combo), renderer,
                                     "text", RC_NAME, NULL);
 
-    gtk_box_pack_start (GTK_BOX(grc), GTK_WIDGET(grc->combo), TRUE, TRUE, 0);
-    grc->warning_image = gtk_image_new_from_icon_name ("dialog-warning",
-                                                        GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_box_pack_start (GTK_BOX(grc), GTK_WIDGET(grc->warning_image), FALSE, FALSE, 6);
-    gtk_widget_set_no_show_all (GTK_WIDGET(grc->warning_image), TRUE);
-    gtk_widget_hide (GTK_WIDGET(grc->warning_image));
+    gtk_box_append (GTK_BOX(grc), GTK_WIDGET(grc->combo));
+    grc->warning_image = gtk_image_new_from_icon_name ("dialog-warning");
+    gtk_image_set_icon_size (GTK_IMAGE(grc->warning_image), GTK_ICON_SIZE_NORMAL);
+    gtk_box_append (GTK_BOX(grc), GTK_WIDGET(grc->warning_image));
+    gtk_box_set_spacing (GTK_BOX(grc), 6);
+//FIXME gtk4    gtk_widget_set_no_show_all (GTK_WIDGET(grc->warning_image), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(grc->warning_image), FALSE);
 
     update_report_list (grc, report_list);
 
@@ -512,7 +513,7 @@ gnc_report_combo_new (GSList *report_list)
     g_signal_connect (G_OBJECT(grc->combo), "notify::popup-shown",
                       G_CALLBACK(combo_popped_cb), grc);
 
-    gtk_widget_show_all (GTK_WIDGET(grc));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(grc));
 
     return GTK_WIDGET(grc);
 }

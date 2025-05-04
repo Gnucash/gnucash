@@ -54,8 +54,8 @@ struct _GOOptionMenu
 {
     GtkButton button;
 
-    GtkMenuShell *menu;
-    GtkMenuItem *selected;
+//FIXME gtk4    GtkMenuShell *menu;
+//FIXME gtk4    GtkMenuItem *selected;
     GtkLabel *button_label;
 };
 
@@ -66,7 +66,8 @@ go_option_menu_new(void)
 {
     return g_object_new(GO_TYPE_OPTION_MENU, NULL);
 }
-
+//FIXME gtk4
+#ifdef skip
 static void go_option_menu_detacher(GtkWidget *widget, GtkMenu *menu)
 {
 #if 0
@@ -74,18 +75,18 @@ static void go_option_menu_detacher(GtkWidget *widget, GtkMenu *menu)
     /* What?  */
 #endif
 }
-
+#endif
 static void go_option_menu_update_contents(GOOptionMenu *option_menu)
 {
     const char *text;
     GtkWidget *w;
     g_return_if_fail(GO_IS_OPTION_MENU(option_menu));
 
-    w = gtk_bin_get_child(GTK_BIN(option_menu->selected));
-    text = g_object_get_data(G_OBJECT(w), "option-menu-text");
+//FIXME gtk4    w = gtk_combo_box_get_child (GTK_COMBO_BOX(option_menu->selected));
+//    text = g_object_get_data(G_OBJECT(w), "option-menu-text");
 
-    if (!text && GTK_IS_LABEL(w))
-        text = gtk_label_get_text(GTK_LABEL(w));
+//    if (!text && GTK_IS_LABEL(w))
+//        text = gtk_label_get_text(GTK_LABEL(w));
 
     if (!text)
         text = "";
@@ -96,7 +97,8 @@ static void go_option_menu_update_contents(GOOptionMenu *option_menu)
 
     gtk_label_set_text(option_menu->button_label, text);
 }
-
+//FIXME gtk4
+#ifdef skip
 static void go_option_menu_select_item(GOOptionMenu *option_menu,
         GtkMenuItem *item)
 {
@@ -115,34 +117,44 @@ static void go_option_menu_select_item(GOOptionMenu *option_menu,
 
     go_option_menu_update_contents(option_menu);
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gint go_option_menu_button_press(GtkWidget *widget,
-        GdkEventButton *event)
+        GdkEventButton *event) //FIXME in GTK4
 {
     GOOptionMenu *option_menu;
+    guint button;
 
     g_return_val_if_fail(GO_IS_OPTION_MENU(widget), FALSE);
     g_return_val_if_fail(event != NULL, FALSE);
 
     option_menu = GO_OPTION_MENU(widget);
 
-    if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+    if (!gdk_event_get_button ((GdkEvent*)event, &button)) //FIXME in GTK4
+        return FALSE;
+
+    if ((gdk_event_get_event_type ((GdkEvent*)event) == GDK_BUTTON_PRESS) && (button == 1)) //FIXME in GTK4
     {
         gtk_menu_popup_at_widget (GTK_MENU(option_menu->menu),
                                   widget,
                                   GDK_GRAVITY_SOUTH_WEST,
                                   GDK_GRAVITY_NORTH_WEST,
-                                  (GdkEvent *) event);
+                                  (GdkEvent *) event); //FIXME in GTK4
         return TRUE;
     }
     return FALSE;
 }
-
-static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event)
+#endif
+//FIXME gtk4
+#ifdef skip
+static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event) //FIXME in GTK4
 {
     GOOptionMenu *option_menu = GO_OPTION_MENU(widget);
 
-    switch (event->keyval)
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+
+    switch (keyval)
     {
     case GDK_KEY_KP_Space:
     case GDK_KEY_space:
@@ -150,52 +162,67 @@ static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event)
                                   widget,
                                   GDK_GRAVITY_SOUTH_WEST,
                                   GDK_GRAVITY_NORTH_WEST,
-                                  (GdkEvent *) event);
+                                  (GdkEvent *) event); //FIXME in GTK4
         return TRUE;
     }
 
     return FALSE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static void cb_select(GtkMenuItem *item, GOOptionMenu *option_menu)
 {
     go_option_menu_select_item(option_menu, item);
     g_signal_emit(option_menu, signals[CHANGED], 0);
 }
-
+#endif
 static void handle_menu_signals(GOOptionMenu *option_menu, gboolean connect)
 {
-    GList *children = gtk_container_get_children(
-            GTK_CONTAINER(option_menu->menu));
+//FIXME gtk4    GList *children = gtk_container_get_children(
+//            GTK_CONTAINER(option_menu->menu));
 
-    while (children)
-    {
-        GtkWidget *child = children->data;
-        children = g_list_remove(children, child);
 
-        if (GTK_IS_MENU_ITEM(child))
-        {
-            GtkWidget *sub = gtk_menu_item_get_submenu(GTK_MENU_ITEM(child));
+//FIXME gtk4
+//    GtkWidget *child;
+//    for (child = gtk_widget_get_first_child (GTK_WIDGET(option_menu->menu));
+//         child != NULL;
+//         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+//    {
 
-            if (sub)
-                children = g_list_concat(children,
-                        gtk_container_get_children(GTK_CONTAINER(sub)));
-            else if (connect)
-                g_signal_connect(child, "activate", G_CALLBACK(cb_select),
-                        option_menu);
 
-            else
-                g_signal_handlers_disconnect_by_func(child,
-                        G_CALLBACK(cb_select), option_menu);
+//    }
 
-        }
-    }
+//    while (children)
+//    {
+//        GtkWidget *child = children->data;
+//        children = g_list_remove(children, child);
 
-    g_list_free (children);
+//        if (GTK_IS_MENU_ITEM(child))
+//        {
+//            GtkWidget *sub = gtk_menu_item_get_submenu(GTK_MENU_ITEM(child));
+
+//            if (sub)
+//                children = g_list_concat(children,
+//                        gtk_container_get_children(GTK_CONTAINER(sub)));
+//            else if (connect)
+//                g_signal_connect(child, "activate", G_CALLBACK(cb_select),
+//                        option_menu);
+
+//            else
+//                g_signal_handlers_disconnect_by_func(child,
+//                        G_CALLBACK(cb_select), option_menu);
+
+//        }
+//    }
+
+//    g_list_free (children);
 }
 
 void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu)
 {
+//FIXME
+#ifdef skip
     GtkMenuShell *shell;
 
     g_return_if_fail(GO_IS_OPTION_MENU(option_menu));
@@ -231,13 +258,15 @@ void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu)
     }
 
     g_object_notify(G_OBJECT(option_menu), "menu");
+#endif
 }
 
 void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection)
 {
     g_return_if_fail(selection != NULL);
     g_return_if_fail(GO_IS_OPTION_MENU(option_menu));
-
+//FIXME
+#ifdef skip
     if (option_menu->menu)
     {
         GtkMenuShell *menu = option_menu->menu;
@@ -258,6 +287,7 @@ void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection)
             }
         }
     }
+#endif
 }
 
 /**
@@ -272,7 +302,8 @@ void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection)
 GtkWidget *
 go_option_menu_get_history(GOOptionMenu *option_menu)
 {
-    return GTK_WIDGET(option_menu->selected);
+//FIXME gtk4    return GTK_WIDGET(option_menu->selected);
+return NULL;
 }
 
 static void go_option_menu_set_property(GObject *object, guint prop_id,
@@ -300,7 +331,7 @@ static void go_option_menu_get_property(GObject *object, guint prop_id,
     switch (prop_id)
     {
     case PROP_MENU:
-        g_value_set_object(value, option_menu->menu);
+//FIXME gtk4        g_value_set_object(value, option_menu->menu);
         break;
 
     default:
@@ -314,18 +345,20 @@ static void go_option_menu_destroy(GtkWidget *widget)
     GOOptionMenu *option_menu;
 
     g_return_if_fail(GO_IS_OPTION_MENU(widget));
-
+//FIXME
+#ifdef skip
     option_menu = GO_OPTION_MENU(widget);
 
     if (option_menu->menu)
     {
-        gtk_widget_destroy(GTK_WIDGET(option_menu->menu));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(option_menu->menu));
         g_object_unref(option_menu->menu);
         option_menu->menu = NULL;
     }
     option_menu->selected = NULL;
 
-    GTK_WIDGET_CLASS(go_option_menu_parent_class)->destroy(widget);
+//FIXME gtk4    GTK_WIDGET_CLASS(go_option_menu_parent_class)->destroy(widget);
+#endif
 }
 
 static void go_option_menu_class_init(GOOptionMenuClass *class)
@@ -339,13 +372,13 @@ static void go_option_menu_class_init(GOOptionMenuClass *class)
 
     gobject_class->set_property = go_option_menu_set_property;
     gobject_class->get_property = go_option_menu_get_property;
-    widget_class->destroy = go_option_menu_destroy;
-    widget_class->button_press_event = go_option_menu_button_press;
-    widget_class->key_press_event = go_option_menu_key_press;
+//FIXME gtk4    widget_class->destroy = go_option_menu_destroy;
+//    widget_class->button_press_event = go_option_menu_button_press;
+//    widget_class->key_press_event = go_option_menu_key_press;
 
-    g_object_class_install_property(gobject_class, PROP_MENU,
-            g_param_spec_object("menu", _("Menu"), _("The menu of options"),
-                    GTK_TYPE_MENU, G_PARAM_READABLE | G_PARAM_WRITABLE));
+//    g_object_class_install_property(gobject_class, PROP_MENU,
+//            g_param_spec_object("menu", _("Menu"), _("The menu of options"),
+//                    GTK_TYPE_MENU, G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
 static void go_option_menu_init(GOOptionMenu *option_menu)
@@ -354,24 +387,26 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
     GtkWidget *arrow, *sep;
 
     gtk_widget_set_can_focus(GTK_WIDGET(option_menu), TRUE);
-    gtk_widget_set_can_default(GTK_WIDGET(option_menu), FALSE);
+//FIXME gtk4    gtk_widget_set_can_default(GTK_WIDGET(option_menu), FALSE);
     gtk_widget_set_receives_default(GTK_WIDGET(option_menu), FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
-    option_menu->menu = NULL;
-    option_menu->selected = NULL;
+//FIXME gtk4    option_menu->menu = NULL;
+//    option_menu->selected = NULL;
 
     option_menu->button_label = GTK_LABEL(gtk_label_new(""));
-    gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
-    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(option_menu->button_label));
+    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
+    gtk_image_set_icon_size (GTK_IMAGE(arrow), GTK_ICON_SIZE_INHERIT);
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
 
-    gtk_box_pack_end(GTK_BOX(box), arrow, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(arrow));
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_end(GTK_BOX(box), sep, FALSE, FALSE, 0);
 
-    gtk_container_add(GTK_CONTAINER(option_menu), GTK_WIDGET(box));
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(sep));
+
+    gtk_box_append (GTK_BOX(option_menu), GTK_WIDGET(box));
 }

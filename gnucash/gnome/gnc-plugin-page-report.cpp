@@ -127,10 +127,9 @@ typedef struct GncPluginPageReportPrivate
     /// the gnc_html abstraction this PluginPage contains
 //        gnc_html *html;
     GncHtml *html;
-    gboolean webkit2;
 
     /// the container the above HTML widget is in.
-    GtkContainer *container;
+    GtkWidget *frame;
 } GncPluginPageReportPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageReport, gnc_plugin_page_report, GNC_TYPE_PLUGIN_PAGE)
@@ -436,7 +435,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     g_free(child_name);
 
     g_object_add_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->frame) );
 
     priv->loaded = TRUE;
 
@@ -463,7 +462,9 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
 /* used to capture Ctrl+Alt+PgUp/Down for tab selection */
 static gboolean
-webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+webkit_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
+                           guint keycode, GdkModifierType state,
+                           gpointer user_data)
 {
     GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(user_data);
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
@@ -471,17 +472,17 @@ webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_
     GtkWidget *window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report));
 
     if (GNC_PLUGIN_PAGE(report) != gnc_main_window_get_current_page (GNC_MAIN_WINDOW(window)))
-        return FALSE;
+        return false;
 
-    if ((event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_Page_Down ||
-         event->keyval == GDK_KEY_KP_Page_Up || event->keyval == GDK_KEY_KP_Page_Down)
-          && (event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if ((keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_Page_Down ||
+         keyval == GDK_KEY_KP_Page_Up || keyval == GDK_KEY_KP_Page_Down)
+          && (state & modifiers) == (GDK_CONTROL_MASK | GDK_ALT_MASK))
     {
-        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->container)));
+        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->frame)));
         gint pages = gtk_notebook_get_n_pages (notebook);
         gint current_page = gtk_notebook_get_current_page (notebook);
 
-        if (event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_KP_Page_Up)
+        if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_KP_Page_Up)
         {
             if (current_page == 0)
                 gtk_notebook_set_current_page (notebook, pages - 1);
@@ -495,9 +496,9 @@ webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_
             else
                 gtk_notebook_next_page (notebook);
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 static
@@ -519,11 +520,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-#ifndef WEBKIT1
-    /* Hide the ExportPdf action for Webkit2 */
-    priv->webkit2 = TRUE;
-#endif
-
     topLvl = gnc_ui_get_main_window (nullptr);
 //        priv->html = gnc_html_new( topLvl );
     priv->html = gnc_html_factory_create_html();
@@ -534,14 +530,14 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                                          gnc_plugin_page_report_history_destroy_cb,
                                          (gpointer)priv);
 
-    priv->container = GTK_CONTAINER(gtk_frame_new(nullptr));
-    gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
+    priv->frame = gtk_frame_new (nullptr);
+//FIXME gtk4    gtk_frame_set_shadow_type (GTK_FRAME(priv->frame), GTK_SHADOW_NONE);
 
     // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(priv->container), "gnc-id-report-page");
+    gtk_widget_set_name (GTK_WIDGET(priv->frame), "gnc-id-report-page");
 
-    gtk_container_add(GTK_CONTAINER(priv->container),
-                      gnc_html_get_widget(priv->html));
+    gtk_frame_set_child (GTK_FRAME(priv->frame),
+                         GTK_WIDGET(gnc_html_get_widget(priv->html)));
 
     priv->component_manager_id =
         gnc_register_gui_component(WINDOW_REPORT_CM_CLASS, nullptr,
@@ -575,17 +571,19 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     webview = gnc_html_get_webview (priv->html);
     if (webview)
     {
-        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
-                               GDK_KEY_PRESS_MASK);
+//FIXME gtk4        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
+//                               GDK_KEY_PRESS_MASK);
 
-        g_signal_connect (webview, "key-press-event",
-                          G_CALLBACK(webkit_key_press_event_cb),
-                          page);
+        GtkEventController *event_controller = gtk_event_controller_key_new ();
+        gtk_widget_add_controller (GTK_WIDGET(webview), event_controller);
+        g_signal_connect (event_controller, 
+                          "key-pressed",
+                          G_CALLBACK(webkit_key_press_event_cb), page);
     }
 
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
-    LEAVE("container %p", priv->container);
-    return GTK_WIDGET( priv->container );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->frame) );
+    LEAVE("container %p", priv->frame);
+    return GTK_WIDGET( priv->frame );
 }
 
 /********************************************************************
@@ -1171,7 +1169,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 #define FUNC_NAME "gtk_widget_destroy"
             auto w{static_cast<GtkWidget*>(SWIG_MustGetPtr(editor, SWIG_TypeQuery("_p_GtkWidget"), 1, 0))};
 #undef FUNC_NAME
-            gtk_widget_destroy(GTK_WIDGET(w));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(w));
         }
     }
 
@@ -1184,8 +1182,8 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 
     gnc_html_destroy(priv->html);
 
-    priv->container     = nullptr;
-    priv->html          = nullptr;
+    priv->frame = nullptr;
+    priv->html = nullptr;
 
     if (priv->cur_report != SCM_BOOL_F)
         scm_gc_unprotect_object(priv->cur_report);
@@ -1249,8 +1247,6 @@ gnc_plugin_page_report_menu_update (GncPluginPage *plugin_page,
 static void
 gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
 {
-    GncPluginPageReportPrivate *priv;
-    GncPluginPageReport *report;
     GncMainWindow *window;
     action_toolbar_labels tooltip_list[3];
     GAction *action;
@@ -1262,9 +1258,6 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     gchar *report_saveas_str = g_strdup_printf (
         _("Add the current report's configuration to the 'Reports->Saved Report Configurations' menu. "
           "The report configuration will be saved in the file %s."), saved_reports_path);
-
-    report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
     window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page));
 
@@ -1278,11 +1271,6 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     action = gnc_main_window_find_action (window, "FilePrintAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
 
-    if (priv->webkit2)
-    {
-        GtkWidget *pdf_item = gnc_main_window_menu_find_menu_item (window, "FilePrintPDFAction");
-        gtk_widget_hide (pdf_item);
-    }
     g_free (saved_reports_path);
     g_free (report_save_str);
     g_free (report_saveas_str);
@@ -1299,7 +1287,6 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
     DEBUG("property reportId=%d", reportId);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
     priv->reportId = reportId;
-    priv->webkit2 = FALSE;
 
     gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page));
 
@@ -1991,11 +1978,7 @@ gnc_plugin_page_report_print_cb (GSimpleAction *simple,
 
     //g_warning("Setting job name=%s", job_name);
 
-#ifdef WEBKIT1
-    gnc_html_print (priv->html, job_name, FALSE);
-#else
     gnc_html_print (priv->html, job_name);
-#endif
 
     g_free (job_name);
 }
@@ -2037,11 +2020,7 @@ gnc_plugin_page_report_exportpdf_cb (GSimpleAction *simple,
 
     //g_warning("Setting job name=%s", job_name);
 
-#ifdef WEBKIT1
-    gnc_html_print (priv->html, job_name, TRUE);
-#else
     gnc_html_print (priv->html, job_name);
-#endif
 
     if (owner)
     {

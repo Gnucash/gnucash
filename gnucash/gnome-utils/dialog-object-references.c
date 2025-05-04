@@ -51,6 +51,7 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 
     /* Open the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     gnc_builder_add_from_file (builder, "dialog-object-references.glade", "object_references_dialog" );
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "object_references_dialog" ));
 
@@ -78,17 +79,20 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     gtk_tree_view_append_column( GTK_TREE_VIEW(listview), column );
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "hbox_list" ));
-    gtk_container_add( GTK_CONTAINER(box), listview );
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(listview));
 
     /* Autoconnect signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Run the dialog */
-    gtk_widget_show_all( dialog );
-    gtk_dialog_run( GTK_DIALOG(dialog) );
+//FIXME gtk4    gtk_widget_show_all( dialog );
+
+//FIXME gtk4    gtk_dialog_run( GTK_DIALOG(dialog) );
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+
     g_object_unref(G_OBJECT(builder));
     g_object_unref (store);
-    gtk_widget_destroy( dialog );
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     LEAVE("");
 }

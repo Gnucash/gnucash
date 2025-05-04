@@ -133,14 +133,14 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     gnc_suspend_gui_refresh ();
     gncOrderBeginEdit (order);
 
-    gncOrderSetID (order, gtk_entry_get_text (GTK_ENTRY (ow->id_entry)));
+    gncOrderSetID (order, gnc_entry_get_text (GTK_ENTRY (ow->id_entry)));
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
     gncOrderSetNotes (order, text);
 
-    gncOrderSetReference (order, gtk_entry_get_text (GTK_ENTRY (ow->ref_entry)));
+    gncOrderSetReference (order, gnc_entry_get_text (GTK_ENTRY (ow->ref_entry)));
 
     tt = gnc_date_edit_get_date (GNC_DATE_EDIT (ow->opened_date));
     gncOrderSetDateOpened (order, tt);
@@ -163,7 +163,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     const char *res;
 
     /* Check the ID */
-    res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (ow->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
@@ -374,11 +374,11 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
     case GNC_OWNER_JOB:
     {
         char const *msg = gncJobGetReference (gncOwnerGetJob (&(ow->owner)));
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
         break;
     }
     default:
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
         break;
     }
 
@@ -390,7 +390,7 @@ gnc_order_window_close_handler (gpointer user_data)
 {
     OrderWindow *ow = user_data;
 
-    gtk_widget_destroy (ow->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ow->dialog));
 }
 
 static void
@@ -431,8 +431,8 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (ow->owner_choice)
     {
-        gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
-        gtk_widget_destroy (ow->owner_choice);
+        gtk_box_remove (GTK_BOX(ow->owner_box), GTK_WIDGET(ow->owner_choice));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ow->owner_choice));
     }
 
     switch (ow->dialog_type)
@@ -454,14 +454,14 @@ gnc_order_update_window (OrderWindow *ow)
                       G_CALLBACK (gnc_order_owner_changed_cb),
                       ow);
 
-    gtk_widget_show_all (ow->dialog);
+//FIXME gtk4    gtk_widget_show_all (ow->dialog);
 
     {
         GtkTextBuffer* text_buffer;
         const char *string;
         time64 tt;
 
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry),
                             gncOrderGetReference (order));
 
         string = gncOrderGetNotes (order);
@@ -508,8 +508,8 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (hide_cd)
     {
-        gtk_widget_hide (ow->closed_date);
-        gtk_widget_hide (ow->cd_label);
+        gtk_widget_set_visible (GTK_WIDGET(ow->closed_date), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(ow->cd_label), FALSE);
     }
 
     if (ow->dialog_type == VIEW_ORDER)
@@ -521,7 +521,7 @@ gnc_order_update_window (OrderWindow *ow)
         gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
 
         /* Hide the 'close order' button */
-        gtk_widget_hide (ow->close_order_button);
+        gtk_widget_set_visible (GTK_WIDGET(ow->close_order_button), FALSE);
     }
 }
 
@@ -586,6 +586,7 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
 
     /* Find the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ow));
     gnc_builder_add_from_file (builder, "dialog-order.glade", "order_entry_dialog");
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "order_entry_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
@@ -609,14 +610,14 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     /* Setup Date Widgets */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "opened_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "closed_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->closed_date = date;
 
     /* Build the ledger */
@@ -649,15 +650,16 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
     vbox = GTK_WIDGET(gtk_builder_get_object (builder, "ledger_vbox"));
-    gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(regWidget));
+    gtk_box_set_spacing (GTK_BOX(vbox), 2);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
 
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
 
-    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
+    gnc_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
 
     ow->component_id =
         gnc_register_gui_component (class_name,
@@ -699,6 +701,7 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
 
     /* Find the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ow));
     gnc_builder_add_from_file (builder, "dialog-order.glade", "new_order_dialog");
 
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_order_dialog"));
@@ -720,17 +723,17 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     /* Setup date Widget */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_opened_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
 
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
     string = gncOrderNextID(bookp);
-    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
+    gnc_entry_set_text (GTK_ENTRY (ow->id_entry), string);
     g_free(string);
 
     ow->component_id =

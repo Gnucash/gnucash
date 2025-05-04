@@ -76,7 +76,7 @@ gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass)
     o_class->finalize = gnc_tree_view_price_finalize;
 
     /* GtkWidget signals */
-    widget_class->destroy = gnc_tree_view_price_destroy;
+//FIXME gtk4    widget_class->destroy = gnc_tree_view_price_destroy;
 }
 
 static void
@@ -102,7 +102,7 @@ gnc_tree_view_price_destroy (GtkWidget *widget)
     gnc_leave_return_if_fail (widget != NULL);
     gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (widget));
 
-    GTK_WIDGET_CLASS (gnc_tree_view_price_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS (gnc_tree_view_price_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
@@ -437,7 +437,7 @@ gnc_tree_view_price_new (QofBook *book,
                                              GTK_SORT_ASCENDING);
     }
 
-    gtk_widget_show(GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     LEAVE(" %p", view);
     return GTK_TREE_VIEW(view);
 }

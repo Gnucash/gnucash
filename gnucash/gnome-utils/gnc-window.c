@@ -115,16 +115,16 @@ gnc_window_get_menubar_model (GncWindow *window)
     return GNC_WINDOW_GET_IFACE(window)->get_menubar_model (window);
 }
 
-GtkAccelGroup *
-gnc_window_get_accel_group (GncWindow *window)
+GtkEventController *
+gnc_window_get_accel_group (GncWindow *window) //FIXME gtk4 rename
 {
     g_return_val_if_fail (GNC_WINDOW(window), NULL);
 
     /* optional */
-    if (GNC_WINDOW_GET_IFACE(window)->get_accel_group == NULL)
+    if (GNC_WINDOW_GET_IFACE(window)->get_accel_group == NULL) //FIXME gtk4 rename
         return NULL;
 
-    return GNC_WINDOW_GET_IFACE(window)->get_accel_group (window);
+    return GNC_WINDOW_GET_IFACE(window)->get_accel_group (window); //FIXME gtk4 rename
 }
 /************************************************************
  *              Auxiliary status bar functions              *
@@ -241,6 +241,6 @@ gnc_window_show_progress (const char *message, double percentage)
     }
 
     /* make sure new text is up */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+//FIXME gtk4    while (gtk_events_pending ())
+//        gtk_main_iteration ();
 }

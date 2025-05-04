@@ -80,8 +80,8 @@ popup_item_activate (GtkWidget *item, gpointer *user_data)
     g_return_if_fail (elem != NULL);
     g_return_if_fail (handler != NULL);
 
-    if (handler (elem, user_data))
-        gtk_widget_destroy (gtk_widget_get_toplevel (item));
+//FIXME gtk4    if (handler (elem, user_data))
+//        gtk_window_destroy (GTK_WINDOW(gtk_widget_get_root (item)));
 }
 
 static void
@@ -90,8 +90,10 @@ gnumeric_create_popup_menu_list (GSList *elements,
                                  gpointer user_data,
                                  int display_filter,
                                  int sensitive_filter,
-                                 GdkEventButton *event)
+                                 const GdkEvent *event)
 {
+//FIXME gtk4
+#ifdef skip
     GtkWidget *menu = gtk_menu_new ();
     GtkWidget *item;
 
@@ -117,14 +119,14 @@ gnumeric_create_popup_menu_list (GSList *elements,
 
             if (pix_name != NULL)
             {
-                GtkWidget *image = gtk_image_new_from_icon_name (pix_name,
-                                   GTK_ICON_SIZE_MENU);
+                GtkWidget *image = gtk_image_new_from_icon_name (pix_name);
+                gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
 
-                gtk_container_add (GTK_CONTAINER (box), image);
-                gtk_widget_show (image);
+                gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
+                gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
             }
-            gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
-            gtk_container_add (GTK_CONTAINER (item), box);
+            gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(label));
+            gtk_box_append (GTK_BOX(item), GTK_WIDGET(box));
 
             if (element->sensitive_filter != 0 &&
                     (element->sensitive_filter & sensitive_filter))
@@ -135,7 +137,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
             /* separator */
             item = gtk_separator_menu_item_new ();
         }
-        gtk_widget_show_all (item);
+//FIXME gtk4        gtk_widget_show_all (item);
 
         if (element->index != 0)
         {
@@ -148,11 +150,12 @@ gnumeric_create_popup_menu_list (GSList *elements,
                 G_OBJECT (item), "handler", (gpointer)handler);
         }
 
-        gtk_widget_show (item);
+        gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     }
 
-    gnumeric_popup_menu (GTK_MENU (menu), event);
+//FIXME gtk4    gnumeric_popup_menu (GTK_MENU (menu), event);
+#endif
 }
 
 void
@@ -160,7 +163,7 @@ gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
                             GnumericPopupMenuHandler handler,
                             gpointer user_data,
                             int display_filter, int sensitive_filter,
-                            GdkEventButton *event)
+                            const GdkEvent *event)
 {
     int i;
     GSList *tmp = NULL;
@@ -173,7 +176,8 @@ gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
                                      display_filter, sensitive_filter, event);
     g_slist_free (tmp);
 }
-
+//FIXME gtk4
+#ifdef skip
 static void
 kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
 {
@@ -182,7 +186,7 @@ kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
 
     g_object_unref (G_OBJECT (menu));
 }
-
+#endif
 /**
  * gnumeric_popup_menu :
  * @menu : #GtkMenu
@@ -192,8 +196,10 @@ kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
  * right screen.
  **/
 void
-gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
+gnumeric_popup_menu (GMenu *menu, const GdkEvent *event)
 {
+//FIXME gtk4
+#ifdef skip
     g_return_if_fail (menu != NULL);
     g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -201,7 +207,7 @@ gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
 
     if (event)
         gtk_menu_set_screen (menu,
-                             gdk_window_get_screen (event->window));
+                             gdk_window_get_screen (gdk_event_get_window(event)));
 
     g_signal_connect (G_OBJECT (menu),
                       "hide",
@@ -211,5 +217,6 @@ gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
      * instead pass 0.  Otherwise bringing up a menu with
      * the right button will disable clicking on the menu with the left.
      */
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
+#endif
 }

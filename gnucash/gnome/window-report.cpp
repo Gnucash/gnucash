@@ -38,6 +38,7 @@
 #include "swig-runtime.h"
 #include "gnc-guile-utils.h"
 #include "gnc-ui.h"
+#include "dialog-utils.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
@@ -85,8 +86,8 @@ gnc_options_dialog_apply_cb(GncOptionsDialog *opt_dialog,
                                              GTK_BUTTONS_OK,
                                              "%s",
                                              (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (iter->data);
     }
     g_list_free (results);
@@ -107,9 +108,9 @@ gnc_options_dialog_help_cb(GncOptionsDialog *opt_dialog,
                                          GTK_BUTTONS_OK,
                                          "%s",
                                          _("Set the report options you want using this dialog."));
-    g_signal_connect(G_OBJECT(dialog), "response",
-                     (GCallback)gtk_widget_destroy, nullptr);
-    gtk_widget_show(dialog);
+//FIXME gtk4    g_signal_connect(G_OBJECT(dialog), "response",
+//                     (GCallback)gtk_window_destroy, nullptr);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
 }
 
 static void

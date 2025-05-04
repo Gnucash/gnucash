@@ -137,12 +137,12 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
     /* Get the default font family from GtkStyleContext of a GtkWidget(priv->web_view). */
-    stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
-    gtk_style_context_get (stylecontext, gtk_widget_get_state_flags (GTK_WIDGET(priv->web_view)),
-                           "font", &font_desc, NULL);
+//FIXME gtk4     stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
+//FIXME gtk4     gtk_style_context_get (stylecontext, gtk_widget_get_state_flags (GTK_WIDGET(priv->web_view)),
+//                           "font", &font_desc, NULL);
 
-    default_font_family = pango_font_description_get_family (font_desc);
-    pango_font_description_free (font_desc);
+//    default_font_family = pango_font_description_get_family (font_desc);
+//    pango_font_description_free (font_desc);
 
     /* Set default webkit settings */
     webkit_settings = webkit_web_view_get_settings (priv->web_view);
@@ -153,19 +153,18 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     }
     else
     {
-        g_object_set (G_OBJECT(webkit_settings),
-                      "default-font-family", default_font_family,
-                      NULL);
-        PINFO("webkit_settings: Set default font to [%s]", default_font_family);
+//FIXME gtk4        g_object_set (G_OBJECT(webkit_settings),
+//                      "default-font-family", default_font_family,
+//                      NULL);
+//        PINFO("webkit_settings: Set default font to [%s]", default_font_family);
     }
     /* Scale everything up */
     zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
     webkit_web_view_set_full_content_zoom (priv->web_view, TRUE);
     webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
-
-    gtk_container_add( GTK_CONTAINER(priv->base.container),
-                       GTK_WIDGET(priv->web_view) );
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container),
+                                   GTK_WIDGET(priv->web_view));
 
     g_object_ref_sink( priv->base.container );
 
@@ -242,8 +241,8 @@ gnc_html_webkit_dispose( GObject* obj )
 
     if ( priv->web_view != NULL )
     {
-        gtk_container_remove( GTK_CONTAINER(priv->base.container),
-                              GTK_WIDGET(priv->web_view) );
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container), NULL);
+
         priv->web_view = NULL;
     }
 
@@ -535,10 +534,10 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
             if ( label )
             {
-                while ( gtk_events_pending() )
-                {
-                    gtk_main_iteration();
-                }
+//FIXME gtk4                while ( gtk_events_pending() )
+//                {
+//                    gtk_main_iteration();
+//                }
                 /* No action required: Webkit jumps to the anchor on its own. */
             }
 
@@ -1214,7 +1213,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
                                               _("_Cancel"), GTK_RESPONSE_CANCEL,
                                               _("_Save"), GTK_RESPONSE_ACCEPT,
                                               NULL);
-        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+//FIXME gtk4        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
         // Does the jobname look like a valid full file path?
         basename = g_path_get_basename(jobname);
@@ -1258,11 +1257,16 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         // If we have an already existing directory, propose it now.
         if (export_dirname)
         {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), export_dirname);
+            GFile *file = g_file_new_for_path (export_dirname);
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog), file, NULL);
+            g_object_unref (file);
         }
         g_free(export_dirname);
 
-        result = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4        result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         // Weird. In gtk_dialog_run, the gtk code will run a fstat() on the
         // proposed new output filename, which of course fails with "file not
         // found" as this file doesn't exist. It will still show a warning output
@@ -1272,8 +1276,11 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         {
             // The user pressed "Ok", so use the file name for the actual file output.
             gchar *dirname;
-            char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-            g_free(export_filename);
+ 
+            GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(dialog));
+            char *tmp = g_file_get_path (file);
+            g_object_unref (file);
+            g_free (export_filename);
             export_filename = tmp;
 
             // Store the directory part of the file for later
@@ -1284,7 +1291,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             }
             g_free(dirname);
         }
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
         if (result != GTK_RESPONSE_ACCEPT)
         {
@@ -1333,16 +1340,16 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
 
     if ( error != NULL )
     {
-        GtkWidget* window = gtk_widget_get_toplevel( GTK_WIDGET(priv->web_view) );
-        GtkWidget* dialog = gtk_message_dialog_new( gtk_widget_is_toplevel(window) ? GTK_WINDOW(window) : NULL,
+        GtkRoot* window = gtk_widget_get_root( GTK_WIDGET(priv->web_view) );
+        GtkWidget* dialog = gtk_message_dialog_new( GTK_IS_ROOT(window) ? GTK_WINDOW(window) : NULL,
                             GTK_DIALOG_DESTROY_WITH_PARENT,
                             GTK_MESSAGE_ERROR,
                             GTK_BUTTONS_CLOSE,
                             "%s", error->message );
         g_error_free( error );
 
-        g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
-        gtk_widget_show( dialog );
+//FIXME gtk4        g_signal_connect( dialog, "response", G_CALLBACK(gtk_window_destroy), NULL);
+        gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
     }
 
     // Remember to save the printing settings after this print job

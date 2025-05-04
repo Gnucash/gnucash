@@ -113,8 +113,7 @@ check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
                                    "%s", dialog_title);
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                                  "%s", dialog_msg);
-            gtk_dialog_run (GTK_DIALOG(dialog));
-            gtk_widget_destroy (dialog);
+            gnc_dialog_run (GTK_DIALOG(dialog));
 
 //        g_warning("Entered date %s is before the \"auto-read-only threshold\";"
 //              " resetting to the threshold.", datestr);
@@ -257,7 +256,7 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
     guint day, month, year;
     char buffer[DATE_BUF];
 
-    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
+//FIXME gtk4    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
@@ -277,7 +276,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
     guint day, month, year;
     char buffer[DATE_BUF];
 
-    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
+//FIXME gtk4    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
@@ -287,12 +286,13 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
 }
 
 static void
-key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
+key_press_item_cb (GNCDatePicker *gdp, const GdkEvent *event, gpointer data)
 {
     DateCell *cell = data;
     PopBox *box = cell->cell.gui_private;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
@@ -300,7 +300,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
         break;
 
     default:
-        gtk_widget_event(GTK_WIDGET (box->sheet), (GdkEvent *) event);
+//FIXME gtk4        gtk_widget_event (GTK_WIDGET (box->sheet), (GdkEvent*)event);
         break;
     }
 }
@@ -495,10 +495,10 @@ gnc_date_cell_direct_update (BasicCell *bcell,
 {
     DateCell *cell = (DateCell *) bcell;
     PopBox *box = cell->cell.gui_private;
-    GdkEventKey *event = gui_data;
+    const GdkEvent *event = (GdkEvent*)gui_data; //FIXME gtk4
     char buff[DATE_BUF];
 
-    if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
+    if (!gnc_handle_date_accelerator ((GdkEvent*)event, &(box->date), bcell->value))
         return FALSE;
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
@@ -623,7 +623,7 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     box->sheet = sheet;
     box->item_edit = item_edit;
     box->date_picker = GNC_DATE_PICKER (gnc_date_picker_new ());
-    gtk_widget_show_all (GTK_WIDGET(box->date_picker));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(box->date_picker));
     g_object_ref_sink(box->date_picker);
 
     /* to mark cell as realized, remove the realize method */

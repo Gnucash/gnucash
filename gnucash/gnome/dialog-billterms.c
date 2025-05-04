@@ -155,9 +155,9 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
 
     /* Disconnect the notebook from the window */
     g_object_ref (notebook->notebook);
-    gtk_container_remove (GTK_CONTAINER(parent), notebook->notebook);
+    gtk_box_remove (GTK_BOX(parent), GTK_WIDGET(notebook->notebook));
     g_object_unref (G_OBJECT(builder));
-    gtk_widget_destroy (parent);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(parent));
 
     /* NOTE: The caller needs to unref once they attach */
 }
@@ -217,7 +217,7 @@ ui_to_billterm (NewBillTerm *nbt)
     term = nbt->this_term;
     notebook = &nbt->notebook;
 
-    text = gtk_entry_get_text (GTK_ENTRY(nbt->desc_entry));
+    text = gnc_entry_get_text (GTK_ENTRY(nbt->desc_entry));
     if (text)
         gncBillTermSetDescription (term, text);
 
@@ -245,7 +245,7 @@ ui_to_billterm (NewBillTerm *nbt)
 static void
 billterm_to_ui (GncBillTerm *term, GtkWidget *desc, BillTermNB *notebook)
 {
-    gtk_entry_set_text (GTK_ENTRY(desc), gncBillTermGetDescription (term));
+    gnc_entry_set_text (GTK_ENTRY(desc), gncBillTermGetDescription (term));
     notebook->type = gncBillTermGetType (term);
 
     switch (notebook->type)
@@ -319,7 +319,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     /* verify the name, maybe */
     if (nbt->this_term == NULL)
     {
-        name = gtk_entry_get_text (GTK_ENTRY(nbt->name_entry));
+        name = gnc_entry_get_text (GTK_ENTRY(nbt->name_entry));
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Billing Term.");
@@ -433,6 +433,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
         dialog_nb = "notebook_hbox";
     }
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(nbt));
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "type_liststore");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", dialog_name);
     nbt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, dialog_name));
@@ -444,14 +445,14 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     gnc_widget_style_context_add_class (GTK_WIDGET(nbt->dialog), "gnc-class-bill-terms");
 
     if (name)
-        gtk_entry_set_text (GTK_ENTRY(nbt->name_entry), name);
+        gnc_entry_set_text (GTK_ENTRY(nbt->name_entry), name);
 
     /* Initialize the notebook widgets */
     init_notebook_widgets (&nbt->notebook, FALSE, nbt);
 
     /* Attach the notebook */
     box = GTK_WIDGET(gtk_builder_get_object (builder, dialog_nb));
-    gtk_box_pack_start (GTK_BOX(box), nbt->notebook.notebook, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(nbt->notebook.notebook));
     g_object_unref (nbt->notebook.notebook);
 
     /* Fill in the widgets appropriately */
@@ -468,13 +469,13 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     show_notebook (&nbt->notebook);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nbt);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nbt);
 
     gtk_window_set_transient_for (GTK_WINDOW(nbt->dialog),
                                   GTK_WINDOW(btw->window));
 
     /* Show what we should */
-    gtk_widget_show_all (nbt->dialog);
+//FIXME gtk4    gtk_widget_show_all (nbt->dialog);
     if (term)
     {
         gtk_widget_grab_focus (nbt->desc_entry);
@@ -485,7 +486,10 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     done = FALSE;
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG(nbt->dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(nbt->dialog));
+gtk_window_set_modal (GTK_WINDOW(nbt->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         switch (response)
         {
         case GTK_RESPONSE_OK:
@@ -503,7 +507,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy (nbt->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(nbt->dialog));
     g_free (nbt);
 
     return created_term;
@@ -520,11 +524,11 @@ billterms_term_refresh (BillTermsWindow *btw)
 
     if (!btw->current_term)
     {
-        gtk_widget_hide (btw->term_vbox);
+        gtk_widget_set_visible (GTK_WIDGET(btw->term_vbox), FALSE);
         return;
     }
 
-    gtk_widget_show_all (btw->term_vbox);
+//FIXME gtk4    gtk_widget_show_all (btw->term_vbox);
     billterm_to_ui (btw->current_term, btw->desc_entry, &btw->notebook);
     switch (gncBillTermGetType (btw->current_term))
     {
@@ -714,7 +718,7 @@ billterms_window_close_handler (gpointer data)
     g_return_if_fail (btw);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(btw->window));
-    gtk_widget_destroy (btw->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(btw->window));
 }
 
 void
@@ -750,19 +754,20 @@ billterms_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     if (btw->window)
     {
-        gtk_widget_destroy (btw->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(btw->window));
         btw->window = NULL;
     }
     g_free (btw);
 }
 
 static gboolean
-billterms_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
-                               gpointer data)
+billterms_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                               guint keycode, GdkModifierType state,
+                               gpointer user_data)
 {
-    BillTermsWindow *btw = data;
+    BillTermsWindow *btw = user_data;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         billterms_window_close_handler (btw);
         return TRUE;
@@ -815,6 +820,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 
     /* Open and read the Glade File */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(btw));
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_window");
     btw->window = GTK_WIDGET(gtk_builder_get_object (builder, "terms_window"));
     btw->terms_view = GTK_WIDGET(gtk_builder_get_object (builder, "terms_view"));
@@ -826,7 +832,10 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     gtk_widget_set_name (GTK_WIDGET(btw->window), "gnc-id-bill-terms");
     gnc_widget_style_context_add_class (GTK_WIDGET(btw->window), "gnc-class-bill-terms");
 
-    g_signal_connect (btw->window, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(btw->window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(billterms_window_key_press_cb), btw);
 
     /* Initialize the view */
@@ -852,12 +861,11 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 
     /* Attach the notebook */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "notebook_box"));
-    gtk_box_pack_start (GTK_BOX(widget), btw->notebook.notebook,
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(widget), GTK_WIDGET(btw->notebook.notebook));
     g_object_unref (btw->notebook.notebook);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, btw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, btw);
 
     /* register with component manager */
     btw->component_id =
@@ -873,7 +881,8 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(btw->window), GTK_WINDOW(parent));
 
-    gtk_widget_show_all (btw->window);
+//FIXME gtk4    gtk_widget_show_all (btw->window);
+
     billterms_window_refresh (btw);
 
     g_object_unref (G_OBJECT(builder));

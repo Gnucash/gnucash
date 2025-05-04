@@ -84,7 +84,10 @@ geturl( FileAccessWindow* faw )
     type = gtk_combo_box_text_get_active_text (faw->cb_uri_type);
     if (gnc_uri_is_file_scheme (type))
     {
-        path = gtk_file_chooser_get_filename (faw->fileChooser);
+        GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(faw->fileChooser));
+        path = g_file_get_path (file);
+        g_object_unref (file);
+
         if ( !path ) /* file protocol was chosen but no filename was set */
         {
             g_free (type);
@@ -93,10 +96,10 @@ geturl( FileAccessWindow* faw )
     }
     else                    /* db protocol was chosen */
     {
-        host = gtk_entry_get_text( faw->tf_host );
-        path = g_strdup(gtk_entry_get_text(faw->tf_database));
-        username = gtk_entry_get_text( faw->tf_username );
-        password = gtk_entry_get_text( faw->tf_password );
+        host = gnc_entry_get_text( faw->tf_host );
+        path = g_strdup(gnc_entry_get_text(faw->tf_database));
+        username = gnc_entry_get_text( faw->tf_username );
+        password = gnc_entry_get_text( faw->tf_password );
     }
 
     url = gnc_uri_create_uri (type, host, 0, username, password, path);
@@ -143,7 +146,9 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
             if ( g_file_test( g_filename_from_uri( url, NULL, NULL ),
                               G_FILE_TEST_IS_DIR ))
             {
-                gtk_file_chooser_set_current_folder_uri( faw->fileChooser, url );
+                GFile *file = g_file_new_for_uri (url);
+                gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(faw->fileChooser), file, NULL);
+                g_object_unref (file);
                 return;
             }
         }
@@ -173,10 +178,8 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         break;
     }
 
-    if ( response != GTK_RESPONSE_HELP )
-    {
-        gtk_widget_destroy( GTK_WIDGET(dialog) );
-    }
+//FIXME gtk4    if ( response != GTK_RESPONSE_HELP )
+//        gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 /* Activate the file chooser and deactivate the db selection fields */
@@ -185,14 +188,17 @@ set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
 {
     if (is_file_based_uri)
     {
-        gtk_widget_show(faw->frame_file);
-        gtk_widget_hide(faw->frame_database);
-        gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_file), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_database), FALSE);
+
+        GFile *file = g_file_new_for_path (faw->starting_dir);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(faw->fileChooser), file, NULL);
+        g_object_unref (file);
     }
     else
     {
-        gtk_widget_show(faw->frame_database);
-        gtk_widget_hide(faw->frame_file);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_file), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_database), TRUE);
     }
 //    gtk_widget_set_sensitive( faw->frame_file, is_file_based_uri );
 //	gtk_widget_set_sensitive( faw->frame_database, !is_file_based_uri );
@@ -219,13 +225,13 @@ set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_typ
 static void
 cb_uri_type_changed_cb( GtkComboBoxText* cb )
 {
-    GtkWidget* dialog;
+    GtkRoot* dialog;
     FileAccessWindow* faw;
     const gchar* type;
 
     g_return_if_fail( cb != NULL );
 
-    dialog = gtk_widget_get_toplevel( GTK_WIDGET(cb) );
+    dialog = gtk_widget_get_root( GTK_WIDGET(cb) );
     g_return_if_fail( dialog != NULL );
     faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
     g_return_if_fail( faw != NULL );
@@ -250,11 +256,11 @@ get_default_database( void )
 
 typedef bool (*CharToBool)(const char*);
 
-static bool datafile_filter (const GtkFileFilterInfo* filter_info,
+static bool datafile_filter (GtkFileFilter* filter_info,
                              CharToBool filename_checker)
 {
-    return filter_info && filter_info->filename &&
-        filename_checker (filter_info->filename);
+    return filter_info && gtk_file_filter_get_name (filter_info) &&
+        filename_checker (gtk_file_filter_get_name (filter_info));
 }
 
 static void free_file_access_window (FileAccessWindow *faw)
@@ -297,6 +303,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
 
     /* Open the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(faw));
     gnc_builder_add_from_file (builder, "dialog-file-access.glade", "file_access_dialog" );
     faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "file_access_dialog" ));
     gtk_window_set_transient_for (GTK_WINDOW (faw->dialog), parent);
@@ -310,10 +317,10 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
     faw->readonly_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "readonly_checkbutton"));
     faw->tf_host = GTK_ENTRY(gtk_builder_get_object (builder, "tf_host" ));
-    gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
+    gnc_entry_set_text( faw->tf_host, DEFAULT_HOST );
     faw->tf_database = GTK_ENTRY(gtk_builder_get_object (builder, "tf_database" ));
     default_db = get_default_database();
-    gtk_entry_set_text( faw->tf_database, default_db );
+    gnc_entry_set_text( faw->tf_database, default_db );
     faw->tf_username = GTK_ENTRY(gtk_builder_get_object (builder, "tf_username" ));
     faw->tf_password = GTK_ENTRY(gtk_builder_get_object (builder, "tf_password" ));
 
@@ -331,7 +338,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
         button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
-        gtk_widget_destroy(faw->readonly_checkbutton);
+//FIXME gtk4        gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
         break;
 
@@ -340,7 +347,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
         button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_EXPORT;
-        gtk_widget_destroy(faw->readonly_checkbutton);
+//FIXME gtk4        gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
         break;
     }
@@ -352,7 +359,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     file_chooser = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser" ));
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
     faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
-    gtk_box_pack_start( GTK_BOX(file_chooser), GTK_WIDGET(fileChooser), TRUE, TRUE, 6 );
+    gtk_box_append (GTK_BOX(file_chooser), GTK_WIDGET(fileChooser));
+    gtk_box_set_spacing (GTK_BOX(file_chooser), 6);
 
     /* set up .gnucash filters for Datafile operations */
     GtkFileFilter *filter = gtk_file_filter_new ();
@@ -364,9 +372,9 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     /* Translators: *.gnucash and *.xac are file patterns and must not
        be translated*/
     gtk_file_filter_set_name (filter, _("Datafiles only (*.gnucash, *.xac)"));
-    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
-                                (GtkFileFilterFunc)datafile_filter,
-                                gnc_filename_is_datafile, NULL);
+//FIXME gtk4    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
+//                                (GtkFileFilterFunc)datafile_filter,
+//                                gnc_filename_is_datafile, NULL);
     gtk_file_chooser_add_filter (faw->fileChooser, filter);
     gtk_file_chooser_set_filter (faw->fileChooser, filter);
 
@@ -374,9 +382,9 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     /* Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
        patterns and must not be translated*/
     gtk_file_filter_set_name (filter, _("Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"));
-    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
-                                (GtkFileFilterFunc)datafile_filter,
-                                gnc_filename_is_backup, NULL);
+//FIXME gtk4    gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
+//                                (GtkFileFilterFunc)datafile_filter,
+//                                gnc_filename_is_backup, NULL);
     gtk_file_chooser_add_filter (faw->fileChooser, filter);
 
     /* Set the default directory */
@@ -393,22 +401,25 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     }
     if (!faw->starting_dir)
         faw->starting_dir = gnc_get_default_directory(settings_section);
-    gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
+
+    GFile *file = g_file_new_for_path (faw->starting_dir);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(faw->fileChooser), file, NULL);
+    g_object_unref (file);
 
     g_object_connect( G_OBJECT(faw->fileChooser), "signal::file-activated",
                       gnc_ui_file_access_file_activated_cb, faw, NULL );
 
     uri_type_container = GTK_WIDGET(gtk_builder_get_object (builder, "vb_uri_type_container" ));
     faw->cb_uri_type = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-    gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
-    gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
-                               /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
+    gtk_box_prepend (GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type));
+//FIXME gtk4    gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
+//                               /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
     g_object_connect( G_OBJECT(faw->cb_uri_type),
                       "signal::changed", cb_uri_type_changed_cb, NULL,
                       NULL );
 
     /* Autoconnect signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, faw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, faw);
 
     /* See what qof backends are available and add appropriate ones to the combo box */
     list = qof_backend_get_registered_access_method_list();
@@ -489,7 +500,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     g_object_unref(G_OBJECT(builder));
 
     /* Run the dialog */
-    gtk_widget_show_all( faw->dialog );
+//FIXME gtk4    gtk_widget_show_all( faw->dialog );
 
     /* Hide the frame that's not required for the active access method so either only
      * the File or only the Database frame are presented. */

@@ -143,7 +143,9 @@ static gboolean
 csv_import_assistant_check_filename (GtkFileChooser *chooser,
                                      CsvImportInfo *info)
 {
-    gchar *file_name = gtk_file_chooser_get_filename (chooser);
+    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(chooser));
+    gchar *file_name = g_file_get_path (file);
+    g_object_unref (file);
 
     /* Test for a valid filename and not a directory */
     if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
@@ -286,7 +288,7 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(radio));
     if (g_strcmp0 (name, "radio_semi") == 0)
         sep = ";";
     else if (g_strcmp0 (name, "radio_colon") == 0)
@@ -367,7 +369,11 @@ csv_import_assistant_file_page_prepare (GtkAssistant *assistant,
 
     /* Set the default directory */
     if (info->starting_dir)
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), info->starting_dir);
+    {
+        GFile *file = g_file_new_for_path (info->starting_dir);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), file, NULL);
+        g_object_unref (file);
+    }
 
     /* Disable the "Next" Assistant Button */
     gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
@@ -552,7 +558,7 @@ csv_import_close_handler (gpointer user_data)
     g_object_unref (info->store);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->assistant));
-    gtk_widget_destroy (info->assistant);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->assistant));
 }
 
 /*******************************************************
@@ -567,6 +573,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     gchar *mnemonic_desc = NULL;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "num_hrows_adj");
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "csv_account_import_assistant");
     info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_account_import_assistant"));
@@ -605,8 +612,9 @@ csv_import_assistant_create (CsvImportInfo *info)
     g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
                       G_CALLBACK(csv_import_file_chooser_file_activated_cb), info);
 
-    gtk_box_pack_start (GTK_BOX(info->file_page), info->file_chooser, TRUE, TRUE, 6);
-    gtk_widget_show (info->file_chooser);
+    gtk_box_append (GTK_BOX(info->file_page), GTK_WIDGET(info->file_chooser));
+    gtk_box_set_spacing (GTK_BOX(info->file_page), 6);
+    gtk_widget_set_visible (GTK_WIDGET(info->file_chooser), TRUE);
 
     /* Account Tree Page */
     info->account_page = GTK_WIDGET(gtk_builder_get_object(builder, "import_tree_page"));
@@ -655,7 +663,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW(info->assistant), gnc_ui_get_main_window(NULL));
 
-    gtk_builder_connect_signals (builder, info);
+//FIXME gtk4    gtk_builder_connect_signals (builder, info);
     g_object_unref (G_OBJECT(builder));
     return info->assistant;
 }
@@ -685,7 +693,7 @@ gnc_file_csv_account_import(void)
                                 NULL, csv_import_close_handler,
                                 info);
 
-    gtk_widget_show_all (info->assistant);
+//FIXME gtk4    gtk_widget_show_all (info->assistant);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->assistant));
 }

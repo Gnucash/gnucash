@@ -2101,8 +2101,8 @@ xaccTransWarnReadOnly (GtkWidget* parent, Transaction* trans)
                                          GTK_BUTTONS_OK,
                                          format,
                                          reason);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return TRUE;
     }
     return FALSE;
@@ -2241,9 +2241,9 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         else
             gtk_dialog_add_button (GTK_DIALOG (dialog), _ ("Chan_ge Transaction"),
                                    GTK_RESPONSE_YES);
-        response = gnc_dialog_run (GTK_DIALOG (dialog),
-                                   GNC_PREF_WARN_REG_RECD_SPLIT_MOD);
-        gtk_widget_destroy (dialog);
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog),
+                                           GNC_PREF_WARN_REG_RECD_SPLIT_MOD);
+
         if (response != GTK_RESPONSE_YES)
             return FALSE;
 

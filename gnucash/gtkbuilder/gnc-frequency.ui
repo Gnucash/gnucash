@@ -1,0 +1,1140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="page-increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="upper">100</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">1</property>
+    <property name="page-increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="upper">100</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">1</property>
+    <property name="page-increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="upper">100</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">1</property>
+    <property name="page-increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="upper">731</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">1st</col>
+      </row>
+      <row>
+        <col id="0">2nd</col>
+      </row>
+      <row>
+        <col id="0">3rd</col>
+      </row>
+      <row>
+        <col id="0">4th</col>
+      </row>
+      <row>
+        <col id="0">5th</col>
+      </row>
+      <row>
+        <col id="0">6th</col>
+      </row>
+      <row>
+        <col id="0">7th</col>
+      </row>
+      <row>
+        <col id="0">8th</col>
+      </row>
+      <row>
+        <col id="0">9th</col>
+      </row>
+      <row>
+        <col id="0">10th</col>
+      </row>
+      <row>
+        <col id="0">11th</col>
+      </row>
+      <row>
+        <col id="0">12th</col>
+      </row>
+      <row>
+        <col id="0">13th</col>
+      </row>
+      <row>
+        <col id="0">14th</col>
+      </row>
+      <row>
+        <col id="0">15th</col>
+      </row>
+      <row>
+        <col id="0">16th</col>
+      </row>
+      <row>
+        <col id="0">17th</col>
+      </row>
+      <row>
+        <col id="0">18th</col>
+      </row>
+      <row>
+        <col id="0">19th</col>
+      </row>
+      <row>
+        <col id="0">20th</col>
+      </row>
+      <row>
+        <col id="0">21st</col>
+      </row>
+      <row>
+        <col id="0">22nd</col>
+      </row>
+      <row>
+        <col id="0">23rd</col>
+      </row>
+      <row>
+        <col id="0">24th</col>
+      </row>
+      <row>
+        <col id="0">25th</col>
+      </row>
+      <row>
+        <col id="0">26th</col>
+      </row>
+      <row>
+        <col id="0">27th</col>
+      </row>
+      <row>
+        <col id="0">28th</col>
+      </row>
+      <row>
+        <col id="0">29th</col>
+      </row>
+      <row>
+        <col id="0">30th</col>
+      </row>
+      <row>
+        <col id="0">31st</col>
+      </row>
+      <row>
+        <col id="0">Last day of month</col>
+      </row>
+      <row>
+        <col id="0">Last Monday</col>
+      </row>
+      <row>
+        <col id="0">Last Tuesday</col>
+      </row>
+      <row>
+        <col id="0">Last Wednesday</col>
+      </row>
+      <row>
+        <col id="0">Last Thursday</col>
+      </row>
+      <row>
+        <col id="0">Last Friday</col>
+      </row>
+      <row>
+        <col id="0">Last Saturday</col>
+      </row>
+      <row>
+        <col id="0">Last Sunday</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">None</col>
+      </row>
+      <row>
+        <col id="0">Once</col>
+      </row>
+      <row>
+        <col id="0">Daily</col>
+      </row>
+      <row>
+        <col id="0">Weekly</col>
+      </row>
+      <row>
+        <col id="0">Semi-Monthly</col>
+      </row>
+      <row>
+        <col id="0">Monthly</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore3">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">No change</col>
+      </row>
+      <row>
+        <col id="0">Use previous weekday</col>
+      </row>
+      <row>
+        <col id="0">Use next weekday</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">1st</col>
+      </row>
+      <row>
+        <col id="0">2nd</col>
+      </row>
+      <row>
+        <col id="0">3rd</col>
+      </row>
+      <row>
+        <col id="0">4th</col>
+      </row>
+      <row>
+        <col id="0">5th</col>
+      </row>
+      <row>
+        <col id="0">6th</col>
+      </row>
+      <row>
+        <col id="0">7th</col>
+      </row>
+      <row>
+        <col id="0">8th</col>
+      </row>
+      <row>
+        <col id="0">9th</col>
+      </row>
+      <row>
+        <col id="0">10th</col>
+      </row>
+      <row>
+        <col id="0">11th</col>
+      </row>
+      <row>
+        <col id="0">12th</col>
+      </row>
+      <row>
+        <col id="0">13th</col>
+      </row>
+      <row>
+        <col id="0">14th</col>
+      </row>
+      <row>
+        <col id="0">15th</col>
+      </row>
+      <row>
+        <col id="0">16th</col>
+      </row>
+      <row>
+        <col id="0">17th</col>
+      </row>
+      <row>
+        <col id="0">18th</col>
+      </row>
+      <row>
+        <col id="0">19th</col>
+      </row>
+      <row>
+        <col id="0">20th</col>
+      </row>
+      <row>
+        <col id="0">21st</col>
+      </row>
+      <row>
+        <col id="0">22nd</col>
+      </row>
+      <row>
+        <col id="0">23rd</col>
+      </row>
+      <row>
+        <col id="0">24th</col>
+      </row>
+      <row>
+        <col id="0">25th</col>
+      </row>
+      <row>
+        <col id="0">26th</col>
+      </row>
+      <row>
+        <col id="0">27th</col>
+      </row>
+      <row>
+        <col id="0">28th</col>
+      </row>
+      <row>
+        <col id="0">29th</col>
+      </row>
+      <row>
+        <col id="0">30th</col>
+      </row>
+      <row>
+        <col id="0">31st</col>
+      </row>
+      <row>
+        <col id="0">Last day of month</col>
+      </row>
+      <row>
+        <col id="0">Last Monday</col>
+      </row>
+      <row>
+        <col id="0">Last Tuesday</col>
+      </row>
+      <row>
+        <col id="0">Last Wednesday</col>
+      </row>
+      <row>
+        <col id="0">Last Thursday</col>
+      </row>
+      <row>
+        <col id="0">Last Friday</col>
+      </row>
+      <row>
+        <col id="0">Last Saturday</col>
+      </row>
+      <row>
+        <col id="0">Last Sunday</col>
+      </row>
+      <row>
+        <col id="0">1st Mon</col>
+      </row>
+      <row>
+        <col id="0">1st Tue</col>
+      </row>
+      <row>
+        <col id="0">1st Wed</col>
+      </row>
+      <row>
+        <col id="0">1st Thu</col>
+      </row>
+      <row>
+        <col id="0">1st Fri</col>
+      </row>
+      <row>
+        <col id="0">1st Sat</col>
+      </row>
+      <row>
+        <col id="0">1st Sun</col>
+      </row>
+      <row>
+        <col id="0">2nd Mon</col>
+      </row>
+      <row>
+        <col id="0">2nd Tue</col>
+      </row>
+      <row>
+        <col id="0">2nd Wed</col>
+      </row>
+      <row>
+        <col id="0">2nd Thu</col>
+      </row>
+      <row>
+        <col id="0">2nd Fri</col>
+      </row>
+      <row>
+        <col id="0">2nd Sat</col>
+      </row>
+      <row>
+        <col id="0">2nd Sun</col>
+      </row>
+      <row>
+        <col id="0">3rd Mon</col>
+      </row>
+      <row>
+        <col id="0">3rd Tue</col>
+      </row>
+      <row>
+        <col id="0">3rd Wed</col>
+      </row>
+      <row>
+        <col id="0">3rd Thu</col>
+      </row>
+      <row>
+        <col id="0">3rd Fri</col>
+      </row>
+      <row>
+        <col id="0">3rd Sat</col>
+      </row>
+      <row>
+        <col id="0">3rd Sun</col>
+      </row>
+      <row>
+        <col id="0">4th Mon</col>
+      </row>
+      <row>
+        <col id="0">4th Tue</col>
+      </row>
+      <row>
+        <col id="0">4th Wed</col>
+      </row>
+      <row>
+        <col id="0">4th Thu</col>
+      </row>
+      <row>
+        <col id="0">4th Fri</col>
+      </row>
+      <row>
+        <col id="0">4th Sat</col>
+      </row>
+      <row>
+        <col id="0">4th Sun</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore5">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">No change</col>
+      </row>
+      <row>
+        <col id="0">Use previous weekday</col>
+      </row>
+      <row>
+        <col id="0">Use next weekday</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore6">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">1st</col>
+      </row>
+      <row>
+        <col id="0">2nd</col>
+      </row>
+      <row>
+        <col id="0">3rd</col>
+      </row>
+      <row>
+        <col id="0">4th</col>
+      </row>
+      <row>
+        <col id="0">5th</col>
+      </row>
+      <row>
+        <col id="0">6th</col>
+      </row>
+      <row>
+        <col id="0">7th</col>
+      </row>
+      <row>
+        <col id="0">8th</col>
+      </row>
+      <row>
+        <col id="0">9th</col>
+      </row>
+      <row>
+        <col id="0">10th</col>
+      </row>
+      <row>
+        <col id="0">11th</col>
+      </row>
+      <row>
+        <col id="0">12th</col>
+      </row>
+      <row>
+        <col id="0">13th</col>
+      </row>
+      <row>
+        <col id="0">14th</col>
+      </row>
+      <row>
+        <col id="0">15th</col>
+      </row>
+      <row>
+        <col id="0">16th</col>
+      </row>
+      <row>
+        <col id="0">17th</col>
+      </row>
+      <row>
+        <col id="0">18th</col>
+      </row>
+      <row>
+        <col id="0">19th</col>
+      </row>
+      <row>
+        <col id="0">20th</col>
+      </row>
+      <row>
+        <col id="0">21st</col>
+      </row>
+      <row>
+        <col id="0">22nd</col>
+      </row>
+      <row>
+        <col id="0">23rd</col>
+      </row>
+      <row>
+        <col id="0">24th</col>
+      </row>
+      <row>
+        <col id="0">25th</col>
+      </row>
+      <row>
+        <col id="0">26th</col>
+      </row>
+      <row>
+        <col id="0">27th</col>
+      </row>
+      <row>
+        <col id="0">28th</col>
+      </row>
+      <row>
+        <col id="0">29th</col>
+      </row>
+      <row>
+        <col id="0">30th</col>
+      </row>
+      <row>
+        <col id="0">31st</col>
+      </row>
+      <row>
+        <col id="0">Last day of month</col>
+      </row>
+      <row>
+        <col id="0">Last Monday</col>
+      </row>
+      <row>
+        <col id="0">Last Tuesday</col>
+      </row>
+      <row>
+        <col id="0">Last Wednesday</col>
+      </row>
+      <row>
+        <col id="0">Last Thursday</col>
+      </row>
+      <row>
+        <col id="0">Last Friday</col>
+      </row>
+      <row>
+        <col id="0">Last Saturday</col>
+      </row>
+      <row>
+        <col id="0">Last Sunday</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore7">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">No change</col>
+      </row>
+      <row>
+        <col id="0">Use previous weekday</col>
+      </row>
+      <row>
+        <col id="0">Use next weekday</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkWindow" id="gnc_frequency_window">
+    <property name="title">This window should never be realized.</property>
+    <child>
+      <object class="GtkBox" id="gncfreq_vbox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkGrid" id="gncfreq_table">
+            <property name="column-spacing">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkLabel" id="freq_label">
+                <property name="justify">right</property>
+                <property name="label" translatable="yes">Frequency</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="startdate_label">
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">Start Date</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="freq_combobox">
+                <property name="model">liststore2</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                  <!-- Custom child fragments -->
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkNotebook" id="gncfreq_nb">
+            <property name="margin-bottom">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-top">6</property>
+            <property name="scrollable">1</property>
+            <property name="show-tabs">0</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkLabel" id="label847767">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">Not scheduled</property>
+                  </object>
+                </property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label847753">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">None</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkBox" id="hbox114">
+                    <property name="homogeneous">1</property>
+                    <child>
+                      <object class="GtkLabel" id="label847776">
+                        <property name="halign">center</property>
+                        <property name="justify">center</property>
+                        <property name="label" translatable="yes">Select occurrence date above.</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="position">1</property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label847735">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">Once</property>
+                  </object>
+                </property>
+                <property name="tab-fill">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkBox" id="hbox115">
+                    <property name="margin-bottom">6</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="spacing">6</property>
+                    <property name="valign">start</property>
+                    <child>
+                      <object class="GtkLabel" id="label847746">
+                        <property name="halign">center</property>
+                        <property name="justify">right</property>
+                        <property name="label" translatable="yes" context="Daily">Every</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="daily_spin">
+                        <property name="adjustment">adjustment4</property>
+                        <property name="climb-rate">1</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">center</property>
+                        <property name="numeric">1</property>
+                        <property name="snap-to-ticks">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label847747">
+                        <property name="halign">center</property>
+                        <property name="justify">center</property>
+                        <property name="label" translatable="yes" context="Daily">days.</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="position">2</property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label847736">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">Daily</property>
+                  </object>
+                </property>
+                <property name="tab-fill">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkBox" id="hbox113">
+                    <property name="valign">start</property>
+                    <child>
+                      <object class="GtkBox" id="vbox1">
+                        <property name="halign">start</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkBox" id="hbox110">
+                            <property name="margin-bottom">6</property>
+                            <property name="margin-end">6</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-top">6</property>
+                            <property name="spacing">6</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkLabel" id="label847748">
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes" context="Weekly">Every</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="weekly_spin">
+                                <property name="adjustment">adjustment3</property>
+                                <property name="climb-rate">1</property>
+                                <property name="focusable">1</property>
+                                <property name="halign">center</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label847749">
+                                <property name="halign">start</property>
+                                <property name="hexpand">1</property>
+                                <property name="justify">fill</property>
+                                <property name="label" translatable="yes" context="Weekly">weeks.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox220">
+                            <property name="margin-bottom">6</property>
+                            <property name="margin-end">6</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-top">6</property>
+                            <property name="spacing">6</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkLabel" id="label847856">
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes" context="Weekly">Days</property>
+                                <property name="valign">start</property>
+                                <property name="margin-top">6</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame" id="frame1">
+                                <property name="child">
+                                  <object class="GtkGrid" id="table2">
+                                    <property name="column-spacing">6</property>
+                                    <property name="halign">start</property>
+                                    <property name="margin-bottom">6</property>
+                                    <property name="margin-end">6</property>
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-top">6</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_sat">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Saturday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">2</property>
+                                          <property name="row">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_fri">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Friday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_wed">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Wednesday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_thu">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Thursday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_sun">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Sunday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_mon">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Monday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="wd_check_tue">
+                                        <property name="focusable">1</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Tuesday</property>
+                                        <property name="use-underline">1</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </property>
+                                <property name="label-xalign">0.5</property>
+                                <property name="margin-bottom">6</property>
+                                <property name="margin-end">6</property>
+                                <property name="margin-start">6</property>
+                                <property name="margin-top">6</property>
+                                <property name="valign">center</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="position">3</property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label847738">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">Weekly</property>
+                  </object>
+                </property>
+                <property name="tab-fill">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkBox" id="hbox112">
+                    <property name="valign">start</property>
+                    <child>
+                      <object class="GtkBox" id="vbox119">
+                        <property name="halign">center</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkBox" id="hbox126">
+                            <property name="valign">center</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label847757">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes" context="Semimonthly">Every</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="semimonthly_spin">
+                                <property name="adjustment">adjustment2</property>
+                                <property name="climb-rate">1</property>
+                                <property name="focusable">1</property>
+                                <property name="halign">center</property>
+                                <property name="snap-to-ticks">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label847758">
+                                <property name="halign">center</property>
+                                <property name="label" translatable="yes" context="Semimonthly">months.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox127">
+                            <property name="spacing">6</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkLabel" id="label847759">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes">First on the</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="semimonthly_first">
+                                <property name="halign">center</property>
+                                <property name="model">liststore1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                  <!-- Custom child fragments -->
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label847751">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes">except on weekends</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="semimonthly_first_weekend">
+                                <property name="halign">center</property>
+                                <property name="model">liststore7</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                                  <!-- Custom child fragments -->
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox128">
+                            <property name="spacing">6</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkLabel" id="label847760">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes">then on the</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="semimonthly_second">
+                                <property name="halign">center</property>
+                                <property name="model">liststore6</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                                  <!-- Custom child fragments -->
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label847752">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes">except on weekends</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="semimonthly_second_weekend">
+                                <property name="halign">center</property>
+                                <property name="model">liststore5</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                                  <!-- Custom child fragments -->
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="position">4</property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label847740">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">Semi-Monthly</property>
+                  </object>
+                </property>
+                <property name="tab-fill">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkBox" id="hbox1">
+                    <property name="valign">start</property>
+                    <child>
+                      <object class="GtkBox" id="vbox118">
+                        <property name="halign">center</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkBox" id="hbox124">
+                            <property name="valign">center</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label847754">
+                                <property name="halign">center</property>
+                                <property name="justify">center</property>
+                                <property name="label" translatable="yes" context="Monthly">Every</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="monthly_spin">
+                                <property name="adjustment">adjustment1</property>
+                                <property name="climb-rate">1</property>
+                                <property name="focusable">1</property>
+                                <property name="halign">center</property>
+                                <property name="numeric">1</property>
+                                <property name="snap-to-ticks">1</property>
+                                <property name="wrap">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label847755">
+                                <property name="halign">center</property>
+                                <property name="justify">center</property>
+                                <property name="label" translatable="yes" context="Monthly">months.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox125">
+                            <property name="spacing">6</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkLabel" id="label847756">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes">On the</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="monthly_day">
+                                <property name="halign">center</property>
+                                <property name="model">liststore4</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext4"/>
+                                  <!-- Custom child fragments -->
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label847750">
+                                <property name="halign">center</property>
+                                <property name="justify">right</property>
+                                <property name="label" translatable="yes">except on weekends</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="monthly_weekend">
+                                <property name="halign">center</property>
+                                <property name="model">liststore3</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                                  <!-- Custom child fragments -->
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="position">5</property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label847741">
+                    <property name="justify">center</property>
+                    <property name="label" translatable="yes">Monthly</property>
+                  </object>
+                </property>
+                <property name="tab-fill">False</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

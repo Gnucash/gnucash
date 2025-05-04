@@ -47,9 +47,9 @@ gnc_date_picker_set_date (GNCDatePicker *date_picker,
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
     g_return_if_fail (date_picker->calendar != NULL);
 
-    gtk_calendar_select_day (date_picker->calendar, 1);
-    gtk_calendar_select_month (date_picker->calendar, mon, year);
-    gtk_calendar_select_day (date_picker->calendar, day);
+//FIXME gtk4    gtk_calendar_select_day (date_picker->calendar, 1);
+//FIXME gtk4    gtk_calendar_select_month (date_picker->calendar, mon, year);
+//FIXME gtk4    gtk_calendar_select_day (date_picker->calendar, day);
 }
 
 void
@@ -59,7 +59,7 @@ gnc_date_picker_get_date (GNCDatePicker *date_picker,
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
     g_return_if_fail (date_picker->calendar != NULL);
 
-    gtk_calendar_get_date (date_picker->calendar, year, mon, day);
+//FIXME gtk4    gtk_calendar_get_date (date_picker->calendar, year, mon, day);
 }
 
 static void
@@ -70,7 +70,7 @@ gnc_date_picker_init (GNCDatePicker *date_picker)
 }
 
 static gboolean
-gnc_date_picker_button_event (GtkWidget *widget, GdkEventButton *event,
+gnc_date_picker_button_event (GtkWidget *widget, const GdkEvent *event,
                               gpointer data)
 {
     /* So the sheet doesn't use it. */
@@ -80,12 +80,13 @@ gnc_date_picker_button_event (GtkWidget *widget, GdkEventButton *event,
 }
 
 static gboolean
-gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+gnc_date_picker_key_event (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GNCDatePicker *date_picker = GNC_DATE_PICKER (data);
     gboolean retval;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
@@ -172,14 +173,14 @@ gnc_date_picker_new (void)
     calendar = gtk_calendar_new ();
     date_picker->calendar = GTK_CALENDAR (calendar);
 
-    gtk_box_pack_start (GTK_BOX(date_picker), calendar, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_picker), GTK_WIDGET(calendar));
 
     gtk_widget_get_preferred_size (calendar, &requisition, NULL);
     allocation.x = 0;
     allocation.y = 0;
     allocation.width = requisition.width;
     allocation.height = requisition.height;
-    gtk_widget_size_allocate (calendar, &allocation);
+    gtk_widget_size_allocate (calendar, &allocation, -1);
 
     g_signal_connect_after (calendar, "button_press_event",
                             G_CALLBACK (gnc_date_picker_button_event),

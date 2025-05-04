@@ -143,6 +143,8 @@ gnc_cbwe_match_selected_cb (GtkEntryCompletion *completion,
  *   @param event Unused.
  *
  *   @param cbwe A pointer to a currency entry widget. */
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_cbwe_focus_out_cb (GtkEntry *entry,
                        GdkEventFocus *event,
@@ -152,7 +154,7 @@ gnc_cbwe_focus_out_cb (GtkEntry *entry,
     gint index;
 
     /* Make a final attempt to match the current text. */
-    text = gtk_entry_get_text(entry);
+    text = gnc_entry_get_text(entry);
     gnc_cbwe_set_by_string(cbwe, text);
 
     /* Get the last known index (which may have just been set). */
@@ -160,7 +162,7 @@ gnc_cbwe_focus_out_cb (GtkEntry *entry,
     gtk_combo_box_set_active(GTK_COMBO_BOX(cbwe), index);
     return FALSE;
 }
-
+#endif
 void
 gnc_cbwe_add_completion (GtkComboBox *cbwe)
 {
@@ -168,7 +170,7 @@ gnc_cbwe_add_completion (GtkComboBox *cbwe)
     GtkEntryCompletion *completion;
     GtkTreeModel *model;
 
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbwe)));
+    entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(cbwe)));
     completion = gtk_entry_get_completion(entry);
     if (completion)
         return;
@@ -197,7 +199,7 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
     /* If an item in the combo box isn't already selected, then force
      * select the first item. Take care, the combo box may not have been
      * filled yet.  */
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbwe)));
+    entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(cbwe)));
     completion = gtk_entry_get_completion(entry);
     index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbwe));
     if (index == -1)
@@ -217,8 +219,8 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
                           G_CALLBACK(gnc_cbwe_changed_cb), cbwe);
     g_signal_connect(completion, "match_selected",
                      G_CALLBACK(gnc_cbwe_match_selected_cb), cbwe);
-    g_signal_connect(entry, "focus-out-event",
-                     G_CALLBACK(gnc_cbwe_focus_out_cb), cbwe);
+//FIXME gtk4    g_signal_connect(entry, "focus-out-event",
+//                     G_CALLBACK(gnc_cbwe_focus_out_cb), cbwe);
 
     g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }
@@ -250,71 +252,68 @@ gnc_is_dark_theme (GdkRGBA *fg_color)
  *
  *  @param context Style context of widget.
  *
- *  @param state The stateflag of the widget.
- *
  *  @param color The returned background color of the widget.
  */
 void
 gnc_style_context_get_background_color (GtkStyleContext *context,
-                                        GtkStateFlags    state,
                                         GdkRGBA         *color)
 {
-    GdkRGBA *c;
+    GdkRGBA c;
 
     g_return_if_fail (color != NULL);
     g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-    gtk_style_context_get (context,
-                           state,
-                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
-                           NULL);
-    *color = *c;
-    gdk_rgba_free (c);
+//FIXME gtk4    gtk_style_context_get (context,
+//                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+//                           NULL);
+    gdk_rgba_parse (&c, "lightblue"); //FIXME gtk4
+
+    color = gdk_rgba_copy (&c);
+    gdk_rgba_free (&c);
 }
 
 /** Wrapper to get the border color of a widget for a given state
  *
  *  @param context Style context of widget.
  *
- *  @param state The stateflag of the widget.
- *
  *  @param color The returned border color of the widget.
  */
 void
 gnc_style_context_get_border_color (GtkStyleContext *context,
-                                    GtkStateFlags    state,
                                     GdkRGBA         *color)
 {
-    GdkRGBA *c;
+    GdkRGBA c;
 
     g_return_if_fail (color != NULL);
     g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-    gtk_style_context_get (context,
-                           state,
-                           GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
-                           NULL);
-    *color = *c;
-    gdk_rgba_free (c);
+//FIXME gtk4    gtk_style_context_get (context,
+//                           GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
+//                           NULL);
+    gdk_rgba_parse (&c, "black"); //FIXME gtk4
+
+    color = gdk_rgba_copy (&c);
+    gdk_rgba_free (&c);
 }
 
 static gpointer
 find_widget_func (GtkWidget *widget, const gchar *id)
 {
-    const gchar *name = gtk_buildable_get_name (GTK_BUILDABLE(widget));
+    const gchar *name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(widget));
     GtkWidget *ret = NULL;
 
     if (g_strcmp0 (name, id) == 0)
         return widget;
 
-    if (GTK_IS_CONTAINER(widget))
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(widget));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GList *container_list = gtk_container_get_children (GTK_CONTAINER(widget));
-        for (GList *n = container_list; !ret && n; n = n->next)
-            ret = find_widget_func (n->data, id);
-        g_list_free (container_list);
+            ret = find_widget_func (child, id);
+            if (ret)
+                break;
     }
-
     return ret;
 }
 
@@ -329,8 +328,8 @@ find_widget_func (GtkWidget *widget, const gchar *id)
 GtkWidget *
 gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id)
 {
-    GtkWidget *content_area = gtk_dialog_get_content_area (dialog);
-    return find_widget_func (content_area, id);
+    GtkWidget *first_child = gtk_widget_get_first_child (GTK_WIDGET(dialog));
+    return find_widget_func (first_child, id);
 }
 
 
@@ -390,11 +389,13 @@ accel_map_foreach_func (gpointer user_data, const gchar* accel_path, guint accel
 static void
 add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
 {
+//FIXME gtk4
+#ifdef skip
     if (GTK_IS_MENU_ITEM(widget))
     {
         GtkMenuItem* menuItem = GTK_MENU_ITEM(widget);
         GtkWidget* subMenu = gtk_menu_item_get_submenu (menuItem);
-        GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(widget));
+        GtkWidget *accel_label = gtk_widget_get_first_child (GTK_WIDGET(widget));
 
         if (accel_label)
         {
@@ -413,10 +414,11 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
                                             key, mods, GTK_ACCEL_VISIBLE);
             }
         }
-        if (GTK_IS_CONTAINER(subMenu))
-            gtk_container_foreach (GTK_CONTAINER(subMenu),
-                                   add_accel_for_menu_lookup, user_data);
+//FIXME gtk4        if (GTK_IS_CONTAINER(subMenu))
+//            gtk_container_foreach (GTK_CONTAINER(subMenu),
+//                                   add_accel_for_menu_lookup, user_data);
     }
+#endif
 }
 
 /** Add accelerator keys for menu item widgets
@@ -428,16 +430,16 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
  *  @param accel_group The accelerator group to use.
  */
 void
-gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkAccelGroup *accel_group)
+gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkEventController *shortcut_controller)
 {
     g_return_if_fail (GTK_IS_WIDGET(menu));
     g_return_if_fail (model != NULL);
-    g_return_if_fail (accel_group != NULL);
+    g_return_if_fail (shortcut_controller != NULL);
 
     // this updates the menu accelerators based on accelerator-map
-    gtk_accel_map_foreach (model, (GtkAccelMapForeach)accel_map_foreach_func);
+//FIXME gtk4    gtk_accel_map_foreach (model, (GtkAccelMapForeach)accel_map_foreach_func);
 
-    gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
 }
 
 
@@ -445,7 +447,8 @@ static gpointer
 find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *action_label)
 {
     GtkWidget *ret = NULL;
-
+//FIXME gtk4
+#ifdef skip
     if (GTK_IS_MENU_ITEM(widget))
     {
         GtkWidget* subMenu;
@@ -463,7 +466,7 @@ find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *a
 
         if (action_label)
         {
-            GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(widget));
+            GtkWidget *accel_label = gtk_widget_get_first_child (GTK_WIDGET(widget));
 
             if (accel_label)
             {
@@ -477,15 +480,17 @@ find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *a
 
         subMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(widget));
 
-        if (GTK_IS_CONTAINER(subMenu))
-        {
-            GList *container_list = gtk_container_get_children (GTK_CONTAINER(subMenu));
-            for (GList *n = container_list; !ret && n; n = n->next)
-                ret = find_menu_item_func (n->data, action_name, action_label);
-            g_list_free (container_list);
-        }
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(subMenu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+    {
+        ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
+#endif
+return NULL;
 }
 
 /** Search the menu for the menu item based on action name
@@ -505,12 +510,13 @@ gnc_find_menu_item_by_action_name (GtkWidget *menu, const gchar *action_name)
     g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
     g_return_val_if_fail (action_name != NULL, NULL);
 
-    if (GTK_IS_CONTAINER(menu))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(menu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GList *container_list = gtk_container_get_children (GTK_CONTAINER(menu));
-        for (GList *n = container_list; !ret && n; n = n->next)
-            ret = find_menu_item_func (n->data, action_name, action_label);
-        g_list_free (container_list);
+        ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
 }
@@ -533,12 +539,13 @@ gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label)
     g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
     g_return_val_if_fail (action_label != NULL, NULL);
 
-    if (GTK_IS_CONTAINER(menu))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(menu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GList *container_list = gtk_container_get_children (GTK_CONTAINER(menu));
-        for (GList *n = container_list; !ret && n; n = n->next)
-            ret = find_menu_item_func (n->data, action_name, action_label);
-        g_list_free (container_list);
+        ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
 }
@@ -547,6 +554,8 @@ gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label)
 static void
 menu_item_list (GtkWidget *widget, gpointer user_data)
 {
+//FIXME gtk4
+#ifdef skip
     GList **list = user_data;
 
     if (GTK_IS_MENU_ITEM(widget))
@@ -555,10 +564,11 @@ menu_item_list (GtkWidget *widget, gpointer user_data)
 
         *list = g_list_prepend (*list, widget);
 
-        if (GTK_IS_CONTAINER(subMenu))
-            gtk_container_foreach (GTK_CONTAINER(subMenu),
-                                   menu_item_list, user_data);
+//FIXME gtk4        if (GTK_IS_CONTAINER(subMenu))
+//            gtk_container_foreach (GTK_CONTAINER(subMenu),
+//                                   menu_item_list, user_data);
     }
+#endif
 }
 
 /** Return a list of GtkMenuItems
@@ -574,32 +584,11 @@ gnc_menu_get_items (GtkWidget *menu)
 
     g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
 
-    gtk_container_foreach (GTK_CONTAINER(menu), menu_item_list, &list);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(menu), menu_item_list, &list);
 
     return list;
 }
 
-
-struct find_tool_item_struct
-{
-    GtkWidget   *found_tool_item;
-    const gchar *action_name;
-};
-
-static void
-find_tool_action (GtkWidget *widget, gpointer user_data)
-{
-    struct find_tool_item_struct *ftis = user_data;
-
-    if (GTK_IS_ACTIONABLE(widget))
-    {
-        // this returns the full action name
-        const gchar *item_action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(widget));
-
-        if (g_str_has_suffix (item_action_name, ftis->action_name))
-            ftis->found_tool_item = GTK_WIDGET(widget);
-    }
-}
 
 /** Search the toolbar for the tool item based on the action name
  *
@@ -612,17 +601,28 @@ find_tool_action (GtkWidget *widget, gpointer user_data)
 GtkWidget *
 gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name)
 {
-    struct find_tool_item_struct ftis;
+    GtkWidget *ret = NULL;
 
-    g_return_val_if_fail (GTK_IS_TOOLBAR(toolbar), NULL);
     g_return_val_if_fail (action_name != NULL, NULL);
 
-    ftis.action_name = action_name;
-    ftis.found_tool_item = NULL;
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(toolbar));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+    {
+        if (GTK_IS_ACTIONABLE(child))
+        {
+            // this returns the full action name
+            const gchar *item_action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(child));
 
-    gtk_container_foreach (GTK_CONTAINER(toolbar), find_tool_action, &ftis);
-
-    return ftis.found_tool_item;
+            if (g_str_has_suffix (item_action_name, action_name))
+            {
+                ret = child;
+                break;
+            }
+        }
+    }
+    return ret;
 }
 
 
@@ -1014,7 +1014,7 @@ statusbar_pop (GtkWidget *statusbar)
 static void
 menu_item_select_cb (GtkWidget *menu_item, GtkWidget *statusbar)
 {
-    GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(menu_item));
+    GtkWidget *accel_label = gtk_widget_get_first_child (GTK_WIDGET(menu_item));
     GMenuModel *menubar_model = g_object_get_data (G_OBJECT(statusbar), "menu-model");
 
     if (!menubar_model)
@@ -1076,9 +1076,8 @@ tool_item_enter_event (GtkWidget *button, GdkEvent *event,
                        gpointer user_data)
 {
     GtkWidget *tool_item = gtk_widget_get_parent (button);
-    gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
+    const gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
     statusbar_push (user_data, tooltip);
-    g_free (tooltip);
     return FALSE;
 }
 
@@ -1106,11 +1105,11 @@ gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
     g_return_if_fail (tool_item != NULL);
     g_return_if_fail (statusbar != NULL);
 
-    child = gtk_bin_get_child (GTK_BIN(tool_item));
+    child = gtk_widget_get_first_child (GTK_WIDGET(tool_item));
 
-    gtk_widget_add_events (GTK_WIDGET(child),
-                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
-                           | GDK_FOCUS_CHANGE_MASK);
+//FIXME gtk4    gtk_widget_add_events (GTK_WIDGET(child),
+//                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
+//                           | GDK_FOCUS_CHANGE_MASK);
 
     g_signal_connect (child, "enter-notify-event",
                       G_CALLBACK (tool_item_enter_event),

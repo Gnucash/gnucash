@@ -425,11 +425,14 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
     gnc_doclink_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
     gnc_doclink_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
 
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
     g_object_unref (G_OBJECT(builder));
 
     // run the dialog
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (result == GTK_RESPONSE_OK)
     {
         gboolean use_old = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(use_old_path_head));
@@ -440,5 +443,5 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
                                                     new_path_head_uri, use_new);
     }
     g_free (new_path_head_uri);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }

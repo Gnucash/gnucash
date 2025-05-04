@@ -153,7 +153,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     /* verify the name, maybe */
     if (ntt->new_table)
     {
-        name = gtk_entry_get_text (GTK_ENTRY(ntt->name_entry));
+        name = gnc_entry_get_text (GTK_ENTRY(ntt->name_entry));
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Tax Table.");
@@ -292,6 +292,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     /* Open and read the Glade File */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(ntt));
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "type_liststore");
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "new_tax_table_dialog");
 
@@ -303,7 +304,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
-        gtk_entry_set_text (GTK_ENTRY(ntt->name_entry), name);
+        gnc_entry_set_text (GTK_ENTRY(ntt->name_entry), name);
 
     /* Create the menu */
     combo = GTK_WIDGET(gtk_builder_get_object (builder, "type_combobox"));
@@ -316,11 +317,11 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     ntt->amount_entry = widget = gnc_amount_edit_new ();
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(widget), TRUE);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT(widget), 100000);
-    gtk_box_pack_start (GTK_BOX(box), widget, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(widget));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_window"));
     ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gtk_container_add (GTK_CONTAINER(box), ntt->acct_tree);
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(ntt->acct_tree));
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(ntt->acct_tree));
@@ -351,16 +352,17 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     gtk_window_set_transient_for (GTK_WINDOW(ntt->dialog), GTK_WINDOW(ttw->dialog));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
 
     /* Show what we should */
-    gtk_widget_show_all (ntt->dialog);
+//FIXME gtk4    gtk_widget_show_all (ntt->dialog);
     if (new_table == FALSE)
     {
-        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")));
-        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_name")));
-        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "spacer")));
-        gtk_widget_hide (ntt->name_entry);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "table_name")), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "spacer")), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(ntt->name_entry), FALSE);
+
         /* Tables are great for layout, but a pain when you hide widgets */
         GTK_WIDGET(gtk_builder_get_object (builder, "ttd_table"));
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
@@ -370,12 +372,15 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
         gtk_widget_grab_focus (ntt->name_entry);
 
     /* Display the dialog now that we're done manipulating it */
-    gtk_widget_show (ntt->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(ntt->dialog), TRUE);
 
     done = FALSE;
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG(ntt->dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(ntt->dialog));
+gtk_window_set_modal (GTK_WINDOW(ntt->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         switch (response)
         {
         case GTK_RESPONSE_OK:
@@ -393,7 +398,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy (ntt->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ntt->dialog));
     g_free (ntt);
 
     return created_table;
@@ -643,24 +648,24 @@ static const char
 
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(main_vbox), FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER(main_vbox), 6);
-    gtk_widget_show (main_vbox);
+    gnc_box_set_all_margins (GTK_BOX(main_vbox), 6);
+    gtk_widget_set_visible (GTK_WIDGET(main_vbox), TRUE);
 
     label = gtk_label_new (msg);
     gtk_label_set_justify (GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-    gtk_box_pack_start (GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show (label);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(label));
+    gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(vbox), TRUE);
-    gtk_container_set_border_width (GTK_CONTAINER(vbox), 6);
-    gtk_container_add (GTK_CONTAINER(main_vbox), vbox);
-    gtk_widget_show (vbox);
+    gnc_box_set_all_margins (GTK_BOX(vbox), 6);
+    gtk_box_prepend (GTK_BOX(main_vbox), GTK_WIDGET(vbox));
+    gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 
     textbox = gtk_entry_new ();
-    gtk_widget_show (textbox);
-    gtk_entry_set_text (GTK_ENTRY(textbox), text);
-    gtk_box_pack_start (GTK_BOX(vbox), textbox, FALSE, FALSE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(textbox), TRUE);
+    gnc_entry_set_text (GTK_ENTRY(textbox), text);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(textbox));
 
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -670,16 +675,18 @@ static const char
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
     dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
-    gtk_box_pack_start (GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(dvbox), GTK_WIDGET(main_vbox));
 
-    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-    {
-        gtk_widget_destroy (dialog);
-        return NULL;
-    }
+//FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+//    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+//    {
+//        gtk_window_destroy (GTK_WINDOW(dialog));
+//        return NULL;
+//    }
 
-    text = g_strdup (gtk_entry_get_text (GTK_ENTRY(textbox)));
-    gtk_widget_destroy (dialog);
+    text = g_strdup (gnc_entry_get_text (GTK_ENTRY(textbox)));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return text;
 }
 
@@ -811,7 +818,7 @@ tax_table_window_close_handler (gpointer data)
     g_return_if_fail (ttw);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog));
-    gtk_widget_destroy (ttw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ttw->dialog));
 }
 
 void
@@ -844,19 +851,20 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     if (ttw->dialog)
     {
-        gtk_widget_destroy (ttw->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ttw->dialog));
         ttw->dialog = NULL;
     }
     g_free (ttw);
 }
 
 static gboolean
-tax_table_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
-                               gpointer data)
+tax_table_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                               guint keycode, GdkModifierType state,
+                               gpointer user_data)
 {
-    TaxTableWindow *ttw = data;
+    TaxTableWindow *ttw = user_data;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         tax_table_window_close_handler (ttw);
         return TRUE;
@@ -908,6 +916,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 
     /* Open and read the Glade File */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(ttw));
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window");
     ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
@@ -920,8 +929,11 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     g_signal_connect (ttw->dialog, "delete-event",
                       G_CALLBACK(tax_table_window_delete_event_cb), ttw);
 
-    g_signal_connect (ttw->dialog, "key_press_event",
-                      G_CALLBACK (tax_table_window_key_press_cb), ttw);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(ttw->dialog), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
+                      G_CALLBACK(tax_table_window_key_press_cb), ttw);
 
     /* Create the tax tables view */
     view = GTK_TREE_VIEW(ttw->names_view);
@@ -974,7 +986,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
                       G_CALLBACK(tax_table_entry_row_activated), ttw);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ttw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ttw);
 
     /* register with component manager */
     ttw->component_id =
@@ -987,7 +999,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 
     tax_table_window_refresh (ttw);
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog), parent);
-    gtk_widget_show_all (ttw->dialog);
+//FIXME gtk4    gtk_widget_show_all (ttw->dialog);
 
     g_object_unref (G_OBJECT(builder));
 

@@ -107,6 +107,7 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
     gui->open_mode = "ALL";
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gui));
     gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi_import_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(gui->dialog), GTK_WINDOW(parent));
@@ -166,9 +167,9 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
                         gui);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
 
-    gtk_widget_show_all ( gui->dialog );
+//FIXME gtk4    gtk_widget_show_all ( gui->dialog );
 
     g_object_unref(G_OBJECT(builder));
 
@@ -200,7 +201,7 @@ void
 gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
     bi_import_stats stats;
     bi_import_result res;
     guint n_fixed, n_deleted, n_invoices_created, n_invoices_updated;
@@ -257,7 +258,7 @@ gnc_bi_import_gui_close_handler (gpointer user_data)
 {
     BillImportGui *gui = user_data;
 
-    gtk_widget_destroy (gui->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(gui->dialog));
     // gui has already been freed by this point.
     // gui->dialog = NULL;
 }
@@ -285,7 +286,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     if (filename)
     {
         //printf("Setting filename"); // debug
-        gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
+        gnc_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
         //printf("Set filename"); // debug
         g_free( filename );
     }
@@ -294,7 +295,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 void gnc_bi_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
 
     // generate preview
     gtk_list_store_clear (gui->store);
@@ -363,7 +364,7 @@ void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
     const gchar *name = NULL;
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     if  (g_ascii_strcasecmp(name, "radiobuttonOpenAll") == 0)gui->open_mode = "ALL";
@@ -379,7 +380,7 @@ void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
     const gchar *name = NULL;
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     if  (g_ascii_strcasecmp(name, "radiobuttonInvoice") == 0)gui->type = "INVOICE";

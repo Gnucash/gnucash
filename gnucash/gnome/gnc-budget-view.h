@@ -75,6 +75,8 @@ gboolean gnc_budget_view_get_show_account_code (GncBudgetView *budget_view);
 void gnc_budget_view_set_show_account_description (GncBudgetView *budget_view, gboolean show_account_desc);
 gboolean gnc_budget_view_get_show_account_description (GncBudgetView *budget_view);
 
+void gnc_budget_view_resized_cb (GObject *gobject, GParamSpec *pspec, gpointer user_data);
+
 G_END_DECLS
 
 #endif /* __GNC_BUDGET_VIEW_H */

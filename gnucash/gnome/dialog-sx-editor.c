@@ -119,17 +119,17 @@ struct _GncSxEditorDialog
 
     GtkLabel *lastOccurLabel;
 
-    GtkToggleButton *enabledOpt;
-    GtkToggleButton *autocreateOpt;
-    GtkToggleButton *notifyOpt;
-    GtkToggleButton *advanceOpt;
+    GtkCheckButton *enabledOpt;
+    GtkCheckButton *autocreateOpt;
+    GtkCheckButton *notifyOpt;
+    GtkCheckButton *advanceOpt;
     GtkSpinButton *advanceSpin;
-    GtkToggleButton *remindOpt;
+    GtkCheckButton *remindOpt;
     GtkSpinButton *remindSpin;
 
-    GtkToggleButton *optEndDate;
-    GtkToggleButton *optEndNone;
-    GtkToggleButton *optEndCount;
+    GtkCheckButton *optEndDate;
+    GtkCheckButton *optEndNone;
+    GtkCheckButton *optEndCount;
     EndType end_type;
     GtkEntry *endCountSpin;
     GtkEntry *endRemainSpin;
@@ -181,7 +181,7 @@ sxed_close_handler (gpointer user_data)
 
     gnc_sxed_reg_check_close (sxed);
     gnc_save_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
-    gtk_widget_destroy (sxed->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(sxed->dialog));
     /* The data will be cleaned up in the destroy handler. */
 }
 
@@ -265,7 +265,7 @@ editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed)
 static gboolean
 gnc_sxed_check_name_changed (GncSxEditorDialog *sxed)
 {
-    const char *name = gtk_entry_get_text (sxed->nameEntry);
+    const char *name = gnc_entry_get_text (sxed->nameEntry);
 
     if (!name || !name[0])
         return TRUE;
@@ -323,11 +323,11 @@ gnc_sxed_check_creation_changed (GncSxEditorDialog *sxed)
     gint dlgRemind = 0;
 
     gboolean dlgEnabled =
-        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->enabledOpt));
+        gtk_check_button_get_active (GTK_CHECK_BUTTON (sxed->enabledOpt));
     gboolean dlgAutoCreate =
-        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->autocreateOpt));
+        gtk_check_button_get_active (GTK_CHECK_BUTTON (sxed->autocreateOpt));
     gboolean dlgNotify =
-        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->notifyOpt));
+        gtk_check_button_get_active (GTK_CHECK_BUTTON (sxed->notifyOpt));
 
     if (dlgEnabled != xaccSchedXactionGetEnabled (sxed->sx))
         return TRUE;
@@ -336,12 +336,12 @@ gnc_sxed_check_creation_changed (GncSxEditorDialog *sxed)
     if (dlgAutoCreate != sxAutoCreate || dlgNotify != sxNotify)
         return TRUE;
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->advanceOpt)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (sxed->advanceOpt)))
         dlgAdvance = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (sxed->advanceSpin));
     if (dlgAdvance != xaccSchedXactionGetAdvanceCreation (sxed->sx))
         return TRUE;
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->remindOpt)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (sxed->remindOpt)))
         dlgRemind = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (sxed->remindSpin));
     if (dlgRemind != xaccSchedXactionGetAdvanceReminder (sxed->sx))
         return TRUE;
@@ -400,18 +400,18 @@ gnc_sxed_check_changed (GncSxEditorDialog *sxed)
         return TRUE;
     /* end options */
     /* dialog says... no end */
-    if (gtk_toggle_button_get_active (sxed->optEndNone) &&
+    if (gtk_check_button_get_active (sxed->optEndNone) &&
         (xaccSchedXactionHasEndDate (sxed->sx) ||
          xaccSchedXactionHasOccurDef (sxed->sx)))
         return TRUE;
 
     /* dialog says... end date */
-    if (gtk_toggle_button_get_active (sxed->optEndDate) &&
+    if (gtk_check_button_get_active (sxed->optEndDate) &&
         gnc_sxed_check_end_date_changed (sxed))
         return TRUE;
 
     /* dialog says... num occur */
-    if (gtk_toggle_button_get_active (sxed->optEndCount) &&
+    if (gtk_check_button_get_active (sxed->optEndCount) &&
         gnc_sxed_check_num_occurs_changed (sxed))
         return TRUE;
     /* SX options [autocreate, notify, reminder, advance] */
@@ -482,7 +482,7 @@ check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
 static gboolean
 gnc_sxed_check_names (GncSxEditorDialog *sxed)
 {
-    const gchar *name = gtk_entry_get_text (sxed->nameEntry);
+    const gchar *name = gnc_entry_get_text (sxed->nameEntry);
     if (!name || !name[0])
     {
         const char *sx_has_no_name_msg =
@@ -525,9 +525,9 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
     GDate startDate, endDate, nextDate;
     GList *schedule = NULL;
 
-    if (!gtk_toggle_button_get_active (sxed->optEndDate)
-         && !gtk_toggle_button_get_active (sxed->optEndCount)
-         && !gtk_toggle_button_get_active (sxed->optEndNone))
+    if (!gtk_check_button_get_active (sxed->optEndDate)
+         && !gtk_check_button_get_active (sxed->optEndCount)
+         && !gtk_check_button_get_active (sxed->optEndNone))
     {
         const char *sx_end_spec_msg =
             _("Please provide a valid end selection.");
@@ -535,7 +535,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
         return FALSE;
     }
 
-    if (gtk_toggle_button_get_active (sxed->optEndCount))
+    if (gtk_check_button_get_active (sxed->optEndCount))
     {
         gint occur  =
             gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (sxed->endCountSpin));
@@ -563,7 +563,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
     }
 
     g_date_clear (&endDate, 1);
-    if (gtk_toggle_button_get_active (sxed->optEndDate))
+    if (gtk_check_button_get_active (sxed->optEndDate))
     {
         gnc_gdate_set_time64 (&endDate,
                               gnc_date_edit_get_date (sxed-> endDateEntry));
@@ -598,8 +598,8 @@ gnc_sxed_check_autocreate (GncSxEditorDialog *sxed, int ttVarCount,
     gboolean autocreateState;
 
     autocreateState =
-        gtk_toggle_button_get_active (
-            GTK_TOGGLE_BUTTON (sxed->autocreateOpt));
+        gtk_check_button_get_active (
+            GTK_CHECK_BUTTON (sxed->autocreateOpt));
 
     if (((ttVarCount > 0) || multi_commodity) && autocreateState)
     {
@@ -706,9 +706,10 @@ split_error_warning_dialog (GtkWidget *parent, const gchar *title,
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK (gtk_widget_destroy), dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    g_signal_connect_swapped (dialog, "response",
+//                              G_CALLBACK (gtk_window_destroy), GTK_WINDOW(dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 
 }
 
@@ -900,7 +901,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     gnc_sx_begin_edit (sxed->sx);
 
     /* name */
-    const gchar *name = gtk_entry_get_text (sxed->nameEntry);
+    const gchar *name = gnc_entry_get_text (sxed->nameEntry);
     if (name && *name)
         xaccSchedXactionSetName (sxed->sx, name);
 
@@ -908,7 +909,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     {
         GDate gdate;
 
-        if (gtk_toggle_button_get_active (sxed->optEndDate))
+        if (gtk_check_button_get_active (sxed->optEndDate))
         {
             /* get the end date data */
             gnc_gdate_set_time64(&gdate,
@@ -918,7 +919,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
             /* set the num occurrences data */
             xaccSchedXactionSetNumOccur (sxed->sx, 0);
         }
-        else if (gtk_toggle_button_get_active (sxed->optEndCount))
+        else if (gtk_check_button_get_active (sxed->optEndCount))
         {
             gint num;
 
@@ -934,7 +935,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
             g_date_clear (&gdate, 1);
             xaccSchedXactionSetEndDate (sxed->sx, &gdate);
         }
-        else if (gtk_toggle_button_get_active (sxed->optEndNone))
+        else if (gtk_check_button_get_active (sxed->optEndNone))
         {
             xaccSchedXactionSetNumOccur (sxed->sx, 0);
             g_date_clear (&gdate, 1);
@@ -950,7 +951,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     {
         gboolean enabledState;
 
-        enabledState = gtk_toggle_button_get_active (sxed->enabledOpt);
+        enabledState = gtk_check_button_get_active (sxed->enabledOpt);
         xaccSchedXactionSetEnabled (sxed->sx, enabledState);
     }
 
@@ -958,8 +959,8 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     {
         gboolean autocreateState, notifyState;
 
-        autocreateState = gtk_toggle_button_get_active (sxed->autocreateOpt);
-        notifyState = gtk_toggle_button_get_active (sxed->notifyOpt);
+        autocreateState = gtk_check_button_get_active (sxed->autocreateOpt);
+        notifyState = gtk_check_button_get_active (sxed->notifyOpt);
         /* "Notify" only makes sense if AutoCreate is activated;
          * enforce that here. */
         xaccSchedXactionSetAutoCreate (sxed->sx,
@@ -972,7 +973,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
         int daysInAdvance;
 
         daysInAdvance = 0;
-        if (gtk_toggle_button_get_active (sxed->advanceOpt))
+        if (gtk_check_button_get_active (sxed->advanceOpt))
         {
             daysInAdvance =
                 gtk_spin_button_get_value_as_int (sxed->advanceSpin);
@@ -980,7 +981,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
         xaccSchedXactionSetAdvanceCreation (sxed->sx, daysInAdvance);
 
         daysInAdvance = 0;
-        if (gtk_toggle_button_get_active (sxed->remindOpt))
+        if (gtk_check_button_get_active (sxed->remindOpt))
         {
             daysInAdvance =
                 gtk_spin_button_get_value_as_int (sxed->remindSpin);
@@ -1011,10 +1012,10 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
 static void
 update_sensitivity (GncSxEditorDialog *sxed)
 {
-    gboolean enabled = gtk_toggle_button_get_active (sxed->enabledOpt);
-    gboolean autocreate = gtk_toggle_button_get_active (sxed->autocreateOpt);
-    gboolean advance = gtk_toggle_button_get_active (sxed->advanceOpt);
-    gboolean remind = gtk_toggle_button_get_active (sxed->remindOpt);
+    gboolean enabled = gtk_check_button_get_active (sxed->enabledOpt);
+    gboolean autocreate = gtk_check_button_get_active (sxed->autocreateOpt);
+    gboolean advance = gtk_check_button_get_active (sxed->advanceOpt);
+    gboolean remind = gtk_check_button_get_active (sxed->remindOpt);
     gboolean type_date = (sxed->end_type == END_DATE);
     gboolean type_occur = (sxed->end_type == END_OCCUR);
 
@@ -1044,13 +1045,13 @@ update_sensitivity (GncSxEditorDialog *sxed)
 }
 
 static void
-enabled_toggled_cb (GtkToggleButton *o, GncSxEditorDialog *sxed)
+enabled_toggled_cb (GtkCheckButton *o, GncSxEditorDialog *sxed)
 {
     update_sensitivity (sxed);
 }
 
 static void
-autocreate_toggled_cb (GtkToggleButton *o, GncSxEditorDialog *sxed)
+autocreate_toggled_cb (GtkCheckButton *o, GncSxEditorDialog *sxed)
 {
     update_sensitivity (sxed);
 }
@@ -1081,7 +1082,7 @@ scheduledxaction_editor_dialog_destroy (GtkWidget *object, gpointer data)
         (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
     gnc_embedded_window_close_page (sxed->embed_window, sxed->plugin_page);
-    gtk_widget_destroy (GTK_WIDGET (sxed->embed_window));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(sxed->embed_window));
     sxed->embed_window = NULL;
     sxed->plugin_page = NULL;
     sxed->ledger = NULL;
@@ -1184,11 +1185,12 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
 
     /* Load up Glade file */
     builder = gtk_builder_new ();
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "advance_days_adj");
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "remind_days_adj");
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "end_spin_adj");
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "remain_spin_adj");
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "scheduled_transaction_editor_dialog");
+//FIXME gtk4    gtk_builder_set_current_object (builder, G_OBJECT(sxed));
+    gnc_builder_add_from_file (builder, "dialog-sx.ui", "advance_days_adj");
+    gnc_builder_add_from_file (builder, "dialog-sx.ui", "remind_days_adj");
+    gnc_builder_add_from_file (builder, "dialog-sx.ui", "end_spin_adj");
+    gnc_builder_add_from_file (builder, "dialog-sx.ui", "remain_spin_adj");
+    gnc_builder_add_from_file (builder, "dialog-sx.ui", "scheduled_transaction_editor_dialog");
 
     sxed->builder = builder;
 
@@ -1196,17 +1198,17 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     sxed->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "scheduled_transaction_editor_dialog"));
     sxed->notebook = GTK_NOTEBOOK (gtk_builder_get_object (builder, "editor_notebook"));
     sxed->nameEntry = GTK_ENTRY (gtk_builder_get_object (builder, "sxe_name"));
-    sxed->enabledOpt = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "enabled_opt"));
-    sxed->autocreateOpt = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "autocreate_opt"));
-    sxed->notifyOpt = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "notify_opt"));
-    sxed->advanceOpt = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "advance_opt"));
+    sxed->enabledOpt = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "enabled_opt"));
+    sxed->autocreateOpt = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "autocreate_opt"));
+    sxed->notifyOpt = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "notify_opt"));
+    sxed->advanceOpt = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "advance_opt"));
     sxed->advanceSpin = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "advance_days"));
-    sxed->remindOpt = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "remind_opt"));
+    sxed->remindOpt = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "remind_opt"));
     sxed->remindSpin = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "remind_days"));
     sxed->lastOccurLabel = GTK_LABEL (gtk_builder_get_object (builder, "last_occur_label"));
-    sxed->optEndNone = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "rb_noend"));
-    sxed->optEndDate = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "rb_enddate"));
-    sxed->optEndCount = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "rb_num_occur"));
+    sxed->optEndNone = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "rb_noend"));
+    sxed->optEndDate = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "rb_enddate"));
+    sxed->optEndCount = GTK_CHECK_BUTTON (gtk_builder_get_object (builder, "rb_num_occur"));
     sxed->endCountSpin = GTK_ENTRY (gtk_builder_get_object (builder, "end_spin"));
     sxed->endRemainSpin = GTK_ENTRY (gtk_builder_get_object (builder, "remain_spin"));
 
@@ -1220,11 +1222,10 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     {
         GtkWidget *endDateBox = GTK_WIDGET (gtk_builder_get_object (builder, "editor_end_date_box"));
         sxed->endDateEntry = GNC_DATE_EDIT (gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE));
-        gtk_widget_show (GTK_WIDGET (sxed->endDateEntry));
+        gtk_widget_set_visible (GTK_WIDGET(sxed->endDateEntry), TRUE);
         g_signal_connect (sxed->endDateEntry, "date-changed",
                           G_CALLBACK (sxed_excal_update_adapt_cb), sxed);
-        gtk_box_pack_start (GTK_BOX (endDateBox), GTK_WIDGET (sxed->endDateEntry),
-                            TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(endDateBox), GTK_WIDGET(sxed->endDateEntry));
     }
 
     id = gnc_register_gui_component (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -1234,8 +1235,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     // This ensure this dialog is closed when the session is closed.
     gnc_gui_component_set_session (id, gnc_get_current_session ());
 
-    g_signal_connect (sxed->dialog, "delete_event",
-                      G_CALLBACK (sxed_delete_event), sxed);
+//FIXME gtk4    g_signal_connect (sxed->dialog, "delete_event",
+//                      G_CALLBACK (sxed_delete_event), sxed);
     g_signal_connect (sxed->dialog, "destroy",
                       G_CALLBACK (scheduledxaction_editor_dialog_destroy),
                       sxed);
@@ -1269,13 +1270,13 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     schedXact_editor_create_freq_sel (sxed);
 
     /* create the template-transaction ledger window */
-    schedXact_editor_create_ledger (sxed);
+//FIXME gtk4    schedXact_editor_create_ledger (sxed);
 
     /* populate */
     schedXact_editor_populate (sxed);
 
     /* Do not call show_all here */
-    gtk_widget_show (sxed->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(sxed->dialog), TRUE);
     gtk_notebook_set_current_page (GTK_NOTEBOOK (sxed->notebook), 0);
 
     /* Refresh the cal and the ledger */
@@ -1286,7 +1287,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     /* Move keyboard focus to the name entry */
     gtk_widget_grab_focus (GTK_WIDGET (sxed->nameEntry));
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, sxed);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, sxed);
     g_object_unref (G_OBJECT (builder));
 
     return sxed;
@@ -1297,7 +1298,7 @@ static void
 schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
 {
     GtkBox *b;
-    GtkWidget *example_cal_scrolled_win = NULL;
+    GtkWidget *scrolled_window = NULL;
 
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "gncfreq_hbox"));
 
@@ -1309,14 +1310,14 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
                       G_CALLBACK (gnc_sxed_freq_changed),
                       sxed);
 
-    gtk_box_pack_start (GTK_BOX (b), GTK_WIDGET (sxed->gncfreq), TRUE, TRUE, 0);
-
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(sxed->gncfreq));
+        
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "example_cal_hbox"));
 
-    example_cal_scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (example_cal_scrolled_win),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start (GTK_BOX (b), example_cal_scrolled_win, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(scrolled_window));
 
     sxed->dense_cal_model = gnc_dense_cal_store_new (EX_CAL_NUM_MONTHS * 31);
     sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GTK_WINDOW(sxed->dialog),
@@ -1324,10 +1325,10 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
     g_assert (sxed->example_cal);
     gnc_dense_cal_set_num_months (sxed->example_cal, EX_CAL_NUM_MONTHS);
     gnc_dense_cal_set_months_per_col (sxed->example_cal, EX_CAL_MO_PER_COL);
-    gtk_container_add (GTK_CONTAINER (example_cal_scrolled_win), GTK_WIDGET (sxed->example_cal));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(sxed->example_cal));
 
-
-    gtk_widget_show_all (example_cal_scrolled_win);
+//FIXME gtk4    gtk_widget_show_all (scrolled_window);
 }
 
 
@@ -1352,8 +1353,7 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
                                  sxed->dialog,
                                  FALSE, /* no accelerators */
                                  sxed);
-    gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (sxed->embed_window),
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(sxed->embed_window));
 
     /* Now create the register plugin page. */
     sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
@@ -1393,7 +1393,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     name = xaccSchedXactionGetName (sxed->sx);
     if (name)
     {
-        gtk_entry_set_text (sxed->nameEntry, name);
+        gnc_entry_set_text (sxed->nameEntry, name);
     }
     {
         gd = xaccSchedXactionGetLastOccurDate (sxed->sx);
@@ -1413,7 +1413,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     gd = xaccSchedXactionGetEndDate (sxed->sx);
     if (g_date_valid (gd))
     {
-        gtk_toggle_button_set_active (sxed->optEndDate, TRUE);
+        gtk_check_button_set_active (sxed->optEndDate, TRUE);
         tmpDate = gnc_time64_get_day_start_gdate (gd);
         gnc_date_edit_set_time (sxed->endDateEntry, tmpDate);
 
@@ -1424,7 +1424,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
         gint numOccur = xaccSchedXactionGetNumOccur (sxed->sx);
         gint numRemain = xaccSchedXactionGetRemOccur (sxed->sx);
 
-        gtk_toggle_button_set_active (sxed->optEndCount, TRUE);
+        gtk_check_button_set_active (sxed->optEndCount, TRUE);
 
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (sxed->endCountSpin), numOccur);
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (sxed->endRemainSpin), numRemain);
@@ -1433,12 +1433,12 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     }
     else
     {
-        gtk_toggle_button_set_active (sxed->optEndNone, TRUE);
+        gtk_check_button_set_active (sxed->optEndNone, TRUE);
         set_endgroup_toggle_states (sxed, END_NEVER);
     }
 
     enabledState = xaccSchedXactionGetEnabled (sxed->sx);
-    gtk_toggle_button_set_active (sxed->enabledOpt, enabledState);
+    gtk_check_button_set_active (sxed->enabledOpt, enabledState);
 
     /* Do auto-create/notify setup */
     if (sxed->newsxP)
@@ -1454,12 +1454,12 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
                                        &autoCreateState,
                                        &notifyState);
     }
-    gtk_toggle_button_set_active (sxed->autocreateOpt, autoCreateState);
+    gtk_check_button_set_active (sxed->autocreateOpt, autoCreateState);
     if (!autoCreateState)
     {
         notifyState = FALSE;
     }
-    gtk_toggle_button_set_active (sxed->notifyOpt, notifyState);
+    gtk_check_button_set_active (sxed->notifyOpt, notifyState);
 
     /* Do days-in-advance-to-create widget[s] setup. */
     if (sxed->newsxP)
@@ -1474,7 +1474,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     }
     if (daysInAdvance != 0)
     {
-        gtk_toggle_button_set_active (sxed->advanceOpt, TRUE);
+        gtk_check_button_set_active (sxed->advanceOpt, TRUE);
         gtk_spin_button_set_value (sxed->advanceSpin,
                                    (gfloat)daysInAdvance);
     }
@@ -1492,7 +1492,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     }
     if (daysInAdvance != 0)
     {
-        gtk_toggle_button_set_active (sxed->remindOpt, TRUE);
+        gtk_check_button_set_active (sxed->remindOpt, TRUE);
         gtk_spin_button_set_value (sxed->remindSpin,
                                    (gfloat)daysInAdvance);
     }
@@ -1501,7 +1501,8 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     {
         gnc_sx_set_instance_count (sxed->sx, 1);
     }
-
+//FIXME gtk4
+#ifdef skip
     /* populate the ledger */
     {
         /* create the split list */
@@ -1516,6 +1517,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
 
     /* Update the example cal */
     gnc_sxed_update_cal (sxed);
+#endif
 }
 
 
@@ -1651,18 +1653,18 @@ gnc_sxed_update_cal (GncSxEditorDialog *sxed)
     //gnc_dense_cal_set_year (sxed->example_cal, g_date_get_year (&first_date));
 
     /* figure out the end restriction */
-    if (gtk_toggle_button_get_active (sxed->optEndDate))
+    if (gtk_check_button_get_active (sxed->optEndDate))
     {
         GDate end_date;
         g_date_clear (&end_date, 1);
         gnc_gdate_set_time64 (&end_date, gnc_date_edit_get_date (sxed->endDateEntry));
         gnc_dense_cal_store_update_recurrences_date_end (sxed->dense_cal_model, &start_date, recurrences, &end_date);
     }
-    else if (gtk_toggle_button_get_active (sxed->optEndNone))
+    else if (gtk_check_button_get_active (sxed->optEndNone))
     {
         gnc_dense_cal_store_update_recurrences_no_end (sxed->dense_cal_model, &start_date, recurrences);
     }
-    else if (gtk_toggle_button_get_active (sxed->optEndCount))
+    else if (gtk_check_button_get_active (sxed->optEndCount))
     {
         gint num_remain
             = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (sxed->endRemainSpin));
@@ -1670,7 +1672,9 @@ gnc_sxed_update_cal (GncSxEditorDialog *sxed)
     }
     else
     {
-        g_error ("unknown end condition");
+g_print("unknown end condition\n");
+
+//        g_error ("unknown end condition");
     }
 
  cleanup:
@@ -1700,7 +1704,7 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
     GHashTable *table;
 
     PINFO ("Togglebutton is %p and user_data is %p", togglebutton, user_data);
-    PINFO ("Togglebutton builder name is %s", gtk_buildable_get_name (GTK_BUILDABLE (togglebutton)));
+    PINFO ("Togglebutton builder name is %s", gtk_buildable_get_buildable_id (GTK_BUILDABLE (togglebutton)));
 
     /* We need to use the hash table to find the required widget to activate. */
     table = g_object_get_data (G_OBJECT (user_data), "prefs_widget_hash");
@@ -1709,7 +1713,7 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
     widget_auto = g_hash_table_lookup (table, "pref/" GNC_PREFS_GROUP_SXED "/" GNC_PREF_CREATE_AUTO);
     widget_notify = g_hash_table_lookup (table, "pref/" GNC_PREFS_GROUP_SXED "/" GNC_PREF_NOTIFY);
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget_auto)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (widget_auto)))
         gtk_widget_set_sensitive (widget_notify, TRUE);
     else
         gtk_widget_set_sensitive (widget_notify, FALSE);
@@ -1718,7 +1722,7 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
     widget_auto = g_hash_table_lookup (table, "pref/" GNC_PREFS_GROUP_STARTUP "/" GNC_PREF_RUN_AT_FOPEN);
     widget_notify = g_hash_table_lookup (table, "pref/" GNC_PREFS_GROUP_STARTUP "/" GNC_PREF_SHOW_AT_FOPEN);
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget_auto)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (widget_auto)))
         gtk_widget_set_sensitive (widget_notify, TRUE);
     else
         gtk_widget_set_sensitive (widget_notify, FALSE);
@@ -1740,7 +1744,7 @@ static void
 _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
 {
     acct_deletion_handler_data *adhd = (acct_deletion_handler_data *)data;
-    gtk_widget_hide (adhd->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(adhd->dialog), FALSE);
     {
         GList *sx_iter;
         for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)
@@ -1750,7 +1754,7 @@ _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
         }
     }
     g_list_free (adhd->affected_sxes);
-    gtk_widget_destroy (GTK_WIDGET (adhd->dialog));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(adhd->dialog));
     g_free (adhd);
 }
 
@@ -1784,8 +1788,11 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         GtkTreeViewColumn *name_column;
         GtkCellRenderer *renderer;
 
+        data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
+
         builder = gtk_builder_new ();
-        gnc_builder_add_from_file (builder, "dialog-sx.glade", "account_deletion_dialog");
+        gtk_builder_set_current_object (builder, G_OBJECT(data));
+        gnc_builder_add_from_file (builder, "dialog-sx.ui", "account_deletion_dialog");
 
         dialog = GTK_WIDGET (gtk_builder_get_object (builder, "account_deletion_dialog"));
         parent = gnc_ui_get_main_window (NULL);
@@ -1797,7 +1804,6 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         // Set grid lines option to preference
         gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (list), gnc_tree_view_get_grid_lines_pref ());
 
-        data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
         data->dialog = dialog;
         data->parent = parent;
         data->affected_sxes = affected_sxes;
@@ -1825,8 +1831,8 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         g_signal_connect (G_OBJECT (dialog), "response",
                           G_CALLBACK (_open_editors), data);
 
-        gtk_widget_show_all (GTK_WIDGET (dialog));
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET (dialog));
+//FIXME gtk4        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
         g_object_unref (G_OBJECT (builder));
     }
 }
@@ -1842,7 +1848,7 @@ gnc_ui_sx_initialize (void)
 
     /* Add page to preferences page for Scheduled Transactions */
     /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
-    gnc_preferences_add_page ("dialog-sx.glade",
+    gnc_preferences_add_page ("dialog-sx.ui",
                               "create_days_adj,remind_days_adj,sx_prefs",
                               _("Scheduled Transactions"));
 }

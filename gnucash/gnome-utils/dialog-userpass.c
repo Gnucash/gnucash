@@ -65,21 +65,24 @@ gnc_get_username_password (GtkWidget *parent,
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
     if (initial_username)
-        gtk_entry_set_text (GTK_ENTRY (username_entry), initial_username);
+        gnc_entry_set_text (GTK_ENTRY (username_entry), initial_username);
     gtk_editable_select_region (GTK_EDITABLE (username_entry), 0, -1);
 
     if (initial_password)
-        gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+        gnc_entry_set_text (GTK_ENTRY (password_entry), initial_password);
 
-    result = gtk_dialog_run(GTK_DIALOG (dialog));
-    gtk_widget_hide(dialog);
+//FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
+    gtk_widget_set_visible (GTK_WIDGET(dialog), FALSE);
 
     if (result == GTK_RESPONSE_OK)
     {
         *username = gtk_editable_get_chars (GTK_EDITABLE (username_entry), 0, -1);
         *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
 
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return TRUE;
     }
 
@@ -88,6 +91,6 @@ gnc_get_username_password (GtkWidget *parent,
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return FALSE;
 }

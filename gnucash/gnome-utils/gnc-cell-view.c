@@ -27,24 +27,24 @@
 
 #include "gnc-cell-view.h"
 
-static void     gnc_cell_view_editable_init (GtkCellEditableIface *iface);
+static void  gnc_cell_view_editable_init (GtkCellEditableIface *iface);
 
-static void     gnc_cell_view_set_property  (GObject              *object,
-                                             guint                 param_id,
-                                             const GValue         *value,
-                                             GParamSpec           *pspec);
+static void  gnc_cell_view_set_property (GObject      *object,
+                                         guint         param_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec);
 
-static void     gnc_cell_view_get_property  (GObject              *object,
-                                             guint                 param_id,
-                                             GValue               *value,
-                                             GParamSpec           *pspec);
+static void  gnc_cell_view_get_property (GObject    *object,
+                                         guint       param_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec);
 
 enum {
     PROP_0,
     PROP_EDITING_CANCELED,
 };
 
-G_DEFINE_TYPE_WITH_CODE (GncCellView, gnc_cell_view, GTK_TYPE_EVENT_BOX,
+G_DEFINE_TYPE_WITH_CODE (GncCellView, gnc_cell_view, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
                          gnc_cell_view_editable_init))
 
@@ -56,7 +56,7 @@ gnc_cell_view_dispose (GObject *gobject)
         g_source_remove (GNC_CELL_VIEW(gobject)->tooltip_id);
         GNC_CELL_VIEW(gobject)->tooltip_id = 0;
     }
-    G_OBJECT_CLASS (gnc_cell_view_parent_class)->dispose (gobject);
+    G_OBJECT_CLASS(gnc_cell_view_parent_class)->dispose (gobject);
 }
 
 static void
@@ -73,16 +73,14 @@ gnc_cell_view_init (GncCellView *cv)
     gtk_widget_set_tooltip_text (GTK_WIDGET(cv->text_view),
             _("Use Shift combined with Return or Keypad Enter to finish editing"));
 
-    gtk_container_add (GTK_CONTAINER(cv), GTK_WIDGET(cv->text_view));
-    gtk_widget_show (cv->text_view);
+    gtk_box_append (GTK_BOX(cv), GTK_WIDGET(cv->text_view));
+    gtk_widget_set_visible (GTK_WIDGET(cv->text_view), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(cv), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(cv->text_view), TRUE);
 
-    cv->focus_out_id = 0;
-    cv->populate_popup_id = 0;
     cv->tooltip_id = 0;
 
     gtk_widget_set_can_focus (GTK_WIDGET(cv->text_view), TRUE);
-    gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_PRESS_MASK);
-    gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_RELEASE_MASK);
 }
 
 static void
@@ -141,11 +139,13 @@ gnc_cell_view_get_property (GObject    *object,
 }
 
 static gboolean
-gtk_cell_editable_key_press_event (GtkTextView   *text_view,
-                                   GdkEventKey   *key_event,
-                                   GncCellView   *cv)
+gtk_cell_editable_key_press_event (GtkEventControllerKey *key, guint keyval,
+                                   guint keycode, GdkModifierType state,
+                                   gpointer user_data)
 {
-    if (key_event->keyval == GDK_KEY_Escape)
+    GncCellView *cv = user_data;
+
+    if (keyval == GDK_KEY_Escape)
     {
         cv->editing_canceled = TRUE;
 
@@ -154,52 +154,12 @@ gtk_cell_editable_key_press_event (GtkTextView   *text_view,
         return TRUE;
     }
 
-    if ((key_event->keyval == GDK_KEY_Return || key_event->keyval == GDK_KEY_KP_Enter)
-         && (key_event->state & GDK_SHIFT_MASK))
+    if ((keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter)
+         && (state & GDK_SHIFT_MASK))
     {
         gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
         return TRUE;
     }
-    return FALSE;
-}
-
-static void
-gcv_popup_unmap (GtkMenu *menu, GncCellView *cv)
-{
-  cv->in_popup_menu = FALSE;
-}
-
-static void
-gcv_populate_popup (GtkTextView *text_view,
-                    GtkWidget   *popup,
-                    GncCellView *cv)
-{
-    cv->in_popup_menu = TRUE;
-    g_signal_connect (popup, "unmap",
-                      G_CALLBACK (gcv_popup_unmap), cv);
-}
-
-static gboolean
-gcv_focus_out_event (GtkWidget *widget, GdkEvent *event, GncCellView *cv)
-{
-    if (cv->in_popup_menu)
-        return FALSE;
-
-    cv->editing_canceled = TRUE;
-
-    if (cv->focus_out_id > 0)
-    {
-        g_signal_handler_disconnect (cv->text_view, cv->focus_out_id);
-        cv->focus_out_id = 0;
-    }
-    if (cv->populate_popup_id > 0)
-    {
-        g_signal_handler_disconnect (cv->text_view, cv->populate_popup_id);
-        cv->populate_popup_id = 0;
-    }
-    gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
-    gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(cv));
-
     return FALSE;
 }
 
@@ -231,17 +191,11 @@ gcv_start_editing (GtkCellEditable *cell_editable,
 
     gtk_widget_grab_focus (GTK_WIDGET(cv->text_view));
 
-    g_signal_connect (G_OBJECT(cv->text_view), "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(cv->text_view), event_controller);
+    g_signal_connect (G_OBJECT(event_controller),
+                      "key-pressed",
                       G_CALLBACK(gtk_cell_editable_key_press_event), cv);
-
-    cv->focus_out_id = g_signal_connect (G_OBJECT(cv->text_view),
-                                         "focus-out-event",
-                                         G_CALLBACK(gcv_focus_out_event), cv);
-
-    cv->populate_popup_id = g_signal_connect (G_OBJECT(cv->text_view),
-                                              "populate-popup",
-                                              G_CALLBACK(gcv_populate_popup),
-                                              cv);
 }
 
 static void
@@ -255,9 +209,7 @@ gnc_cell_view_set_text (GncCellView *cv, const gchar *text)
 {
     g_return_if_fail (GNC_IS_CELL_VIEW(cv));
 
-    gtk_text_buffer_set_text (cv->buffer,
-                              text ? text : "",
-                              -1);
+    gtk_text_buffer_set_text (cv->buffer, text ? text : "", -1);
 }
 
 gchar *
