@@ -75,6 +75,36 @@ qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
     return p != NULL;
 }
 
+std::unordered_map<gunichar, gunichar> qof_diacritics = {
+    {L'À', 'A'}, {L'à', 'a'},
+    {L'Á', 'A'}, {L'á', 'a'},
+    {L'Ç', 'C'}, {L'ç', 'c'},
+    {L'È', 'E'}, {L'è', 'e'},
+    {L'É', 'E'}, {L'é', 'e'},
+    {L'Ì', 'I'}, {L'ì', 'i'},
+    {L'Í', 'I'}, {L'í', 'i'},
+    {L'Ñ', 'N'}, {L'ñ', 'n'},
+    {L'Ò', 'O'}, {L'ò', 'o'},
+    {L'Ó', 'O'}, {L'ó', 'o'},
+    {L'Ù', 'O'}, {L'ù', 'u'},
+    {L'Ú', 'O'}, {L'ú', 'u'},
+};
+
+gchar *
+qof_utf8_replace_diacritics (const gchar *str)
+{
+    gunichar* s = g_utf8_to_ucs4(str, -1, NULL, NULL, NULL);
+    for (int i = 0; s[i] != 0; i++) {
+        auto diacritic = qof_diacritics.find(s[i]);
+        if (diacritic != qof_diacritics.end()) {
+            s[i] = diacritic->second;
+        }
+    }
+    gchar* utf8out = g_ucs4_to_utf8(s, -1, NULL, NULL, NULL);
+    g_free(s);
+    return utf8out;
+}
+
 /** Use g_utf8_casefold and g_utf8_collate to compare two utf8 strings,
  * ignore case. Return < 0 if da compares before db, 0 if they compare
  * equal, > 0 if da compares after db. */

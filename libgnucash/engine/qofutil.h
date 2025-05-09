@@ -166,6 +166,11 @@ void g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer u
  * otherwise. */
 gboolean qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle);
 
+/**
+ * Replace diacritics from a string with simple letters.
+ */
+gchar *qof_utf8_replace_diacritics (const gchar *str);
+
 /** case sensitive comparison of strings da and db - either
 may be NULL. A non-NULL string is greater than a NULL string.
 

@@ -150,16 +150,20 @@ string_match_predicate (gpointer object,
     {
         if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE)
         {
+            char* s_clean = qof_utf8_replace_diacritics(s);
+            char* m_clean = qof_utf8_replace_diacritics(pdata->matchstring);
             if (pd->how == QOF_COMPARE_CONTAINS || pd->how == QOF_COMPARE_NCONTAINS)
             {
-                if (qof_utf8_substr_nocase (s, pdata->matchstring)) //uses strstr
+                if (qof_utf8_substr_nocase (s_clean, m_clean)) //uses strstr
                     ret = 1;
             }
             else
             {
-                 if (safe_strcasecmp (s, pdata->matchstring) == 0) //uses collate
+                if (safe_strcasecmp (s_clean, m_clean) == 0) //uses collate
                     ret = 1;
             }
+            g_free(s_clean);
+            g_free(m_clean);
         }
         else
         {
