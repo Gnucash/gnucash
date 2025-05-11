@@ -331,7 +331,7 @@
         <td align="right"><?scm:d (fmtnumeric qty) ?></td>
       <?scm )) ?>
       <?scm (if (or units? qty? discount?) (begin ?>
-        <td align="right"><?scm:d (fmtmoney currency each) ?></td>
+        <td align="right"><?scm:d (nbsp (gnc:default-price-renderer currency each)) ?></td>
       <?scm )) ?>
       <?scm (if discount? (begin ?>
         <?scm (if (equal? disctype GNC-AMT-TYPE-VALUE) (begin ?>
