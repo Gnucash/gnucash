@@ -195,6 +195,38 @@
             "$50.00" "$0.00" "$50.00"
             "$50.00" "$0.00" "$50.00")
          (sxml->table-row-col sxml 1 11 #f)))
+
+    ; Tests for Exclude Unselected Amounts feature
+    (set-option options "General" "Roll over difference" #f)
+    (set-option options "Display" "Show Column with Totals" #t)
+    (set-option options "Accounts" "Exclude unselected amounts" #t)
+    (let ((sxml (options->sxml options budget-uuid "Unselected amounts skip empty Assets")))
+      (test-equal "root"
+        '("Root"
+           "-$35.00" "$0.00" "-$35.00"
+           "$70.00" "$0.00" "$70.00"
+           "-$45.00" "$0.00" "-$45.00"
+           "$25.00" "$0.00" "$25.00"
+           "." "$0.00" "."
+           "." "$0.00" "."
+           "$15.00" "$0.00" "$15.00")
+        (sxml->table-row-col sxml 1 3 #f)))
+
+    (let* ((all-accounts (gnc-optiondb-lookup-value options "Accounts" "Account"))
+            (accounts-no-bank (append (take all-accounts 2) (drop all-accounts 3))))
+      (set-option options "Accounts" "Account" accounts-no-bank))
+    (let ((sxml (options->sxml options budget-uuid "Unselected amounts skip Bank")))
+      (test-equal "root"
+        '("Root"
+           "-$55.00" "-$35.00" "-$20.00"
+           "$30.00" "$20.00" "$10.00"
+           "-$45.00" "-$67.00" "$22.00"
+           "-$35.00" "-$77.00" "$42.00"
+           "." "$0.00" "."
+           "." "$0.00" "."
+           "-$105.00" "-$159.00" "$54.00")
+        (sxml->table-row-col sxml 1 3 #f)))
+
     ))
 
 (define (test-budget-income-statement)
