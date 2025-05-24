@@ -110,17 +110,7 @@
 ;; copies the values of all options from src which exist in dest to
 ;; there.
 (define-public (gnc:options-copy-values src-options dest-options)
-  (if 
-   dest-options
-   (gnc:options-for-each 
-    (lambda (src-option) 
-      (let ((dest-option (gnc-lookup-option (gnc:optiondb dest-options)
-                                            (gnc:option-section src-option)
-                                            (gnc:option-name src-option))))
-        (if dest-option
-            (GncOption-set-value dest-option 
-                                 (GncOption-get-value src-option)))))
-    src-options)))
+  (gnc-options-copy-values src-options dest-options))
 
 ;; Get scheme commands to set changed options, used to write a file that will
 ;; restore a customized report or stylesheet.
