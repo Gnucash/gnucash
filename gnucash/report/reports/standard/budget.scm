@@ -532,6 +532,10 @@
     ;;   colnum - starting column number
     ;;   budget - budget to use
     ;;   acct - account being displayed
+    ;;   column-list - list of columns to display, each element corresponds to a single column:
+    ;;       - a number indicates a (zero-indexed) period
+    ;;       - a list of numbers indicates a range of periods to sum
+    ;;       - 'total' indicates the total column
     ;;   exchange-fn - exchange function (not used)
     (define (gnc:html-table-add-budget-line!
              html-table rownum colnum budget acct
@@ -619,7 +623,6 @@
               ((period-list
                  (cond
                   ;; if this column is a range of periods, use that list
-                  ;; TODO: is it a bug or intended behavior to not include previous periods here when accumulate is true?
                   ((list? (car column-list)) (car column-list))
                   ;; if we're accumulating or rolling over budget, use all periods up
                   ;; until the indicated one
@@ -634,9 +637,15 @@
                        (list? (car column-list))) (iota (car (car column-list))))
                     (rollover? (iota (car column-list)))
                     (else '())))
-                (note (and (= 1 (length period-list))
+                ;; value of the period to fetch the note for: i.e. current period unless it's a range
+                (note-period
+                  (cond
+                    ((list? (car column-list)) #f)
+                    (else (car column-list))))
+                ;; note value of the current period
+                (note (and note-period
                            (gnc-budget-get-account-period-note
-                            budget acct (car period-list))))
+                            budget acct note-period)))
                 ;; total budget for all periods in period-list
                 (bgt-val-all (gnc:get-account-periodlist-budget-value
                                budget acct period-list))
