@@ -2140,24 +2140,33 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
             });
     }
 
-
-    void
+    static void
     gnc_options_copy_values (GncOptionDBPtr& src, GncOptionDBPtr& dest)
     {
         if (!dest) return;
-        auto make_copy = [&](auto src_option)
+        auto make_copy = [&](const auto& src_option)
         {
-            const auto& section = GncOption_get_section (src_option);
-            const auto& name = GncOption_get_name (src_option);
-            auto dest_option = gnc_lookup_option (dest, section, name);
-            if (dest_option)
-                GncOption_set_value (dest_option, GncOption_get_value (src_option));
+            const auto& section = src_option.get_section();
+            const auto& name = src_option.get_name().c_str();
+            auto dest_option = dest->find_option(section, name);
+            /* std::cout << section << '/' << name << ": " << dest_option << '\n'; */
+            if (!dest_option) return;
+            switch (src_option.get_ui_type())
+            {
+            case GncOptionUIType::BOOLEAN:
+                dest_option->set_value (src_option.template get_value<bool>());
+                break;
+            case GncOptionUIType::TEXT:
+                dest_option->set_value (src_option.template get_value<std::string>());
+                break;
+            case GncOptionUIType::ACCOUNT_LIST:
+                dest_option->set_value (src_option.template get_value<std::string>());
+                break;
+            default:
+                break;
+            };
         };
-        src->foreach_section([&](const GncOptionSectionPtr& section)
-                             {
-                                 section->foreach_option([&](auto& option)
-                                                         { make_copy (&option); });
-                             });
+        src->foreach_section([&](auto& src_section){ src_section->foreach_option (make_copy); });
     }
 %}
 
