@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "gnc-html-history.h"
 
@@ -32,6 +33,9 @@ struct _gnc_html_history
     GList * nodes;
     GList * current_node;
     GList * last_node;
+
+    /* To know in gnc_html_history_append that the history should not be added if it was pressed */
+    bool pressedBACK, pressedFWD;
 
     /* call this whenever a node is destroyed */
     gnc_html_history_destroy_cb destroy_cb;
@@ -49,6 +53,8 @@ gnc_html_history_new(void)
     hist->nodes         = NULL;
     hist->current_node  = NULL;
     hist->last_node     = NULL;
+    hist->pressedBACK   = FALSE;
+    hist->pressedFWD    = FALSE;
     return hist;
 }
 
@@ -125,6 +131,20 @@ gnc_html_history_append(gnc_html_history * hist,
 {
     GList * n;
     gnc_html_history_node * hn;
+
+    // If Back button has been pressed don't append history.
+    if (hist && hist->pressedBACK) {
+	  hist->pressedBACK = FALSE;
+	  hist->last_node = hist->current_node;
+	  return;
+    }
+
+    // If Forward button has been pressed don't append history.
+    if (hist && hist->pressedFWD) {
+	  hist->pressedFWD = FALSE;
+	  hist->last_node = hist->current_node;
+	  return;
+    }
 
     if (hist->current_node)
     {
@@ -210,6 +230,7 @@ gnc_html_history_forward(gnc_html_history * hist)
     if (hist->current_node->next)
     {
         hist->current_node = hist->current_node->next;
+        hist->pressedFWD = TRUE;
     }
 
     return hist->current_node->data;
@@ -232,6 +253,7 @@ gnc_html_history_back(gnc_html_history * hist)
     if (hist->current_node->prev)
     {
         hist->current_node = hist->current_node->prev;
+        hist->pressedBACK = TRUE;
     }
 
     return hist->current_node->data;

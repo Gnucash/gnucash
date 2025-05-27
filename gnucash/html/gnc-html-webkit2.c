@@ -120,6 +120,11 @@ static void impl_webkit_print (GncHtml* self,const gchar* jobname);
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data);
+static gboolean webkit_context_menu_cb(WebKitWebView         *web_view,
+                                       WebKitContextMenu     *context_menu,
+                                       GdkEvent              *event,
+                                       WebKitHitTestResult   *hit_test_result,
+                                       gpointer               user_data);
 
 static GtkWidget*
 gnc_html_webkit_webview_new (void)
@@ -206,6 +211,10 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
      g_signal_connect (priv->web_view, "resource-load-started",
                        G_CALLBACK (webkit_resource_load_started_cb),
                        self);
+     g_signal_connect(priv->web_view, "context-menu",
+                       G_CALLBACK(webkit_context_menu_cb),
+                       self);
+
      gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
                             GNC_PREF_RPT_DFLT_ZOOM,
                             impl_webkit_default_zoom_changed,
@@ -725,6 +734,56 @@ webkit_resource_load_started_cb (WebKitWebView *web_view,
      g_signal_connect (resource, "finished",
                        G_CALLBACK (webkit_resource_load_finished_cb),
                        data);
+}
+
+/*
+ *
+ * We need to delete the Back and Forward items from the right-click menu because
+ * otherwise the Back and Forward buttons won't work properly.
+ *
+ */
+static gboolean
+webkit_context_menu_cb(WebKitWebView         *web_view,
+                       WebKitContextMenu     *context_menu,
+                       GdkEvent              *event,
+                       WebKitHitTestResult   *hit_test_result,
+                       gpointer               data)
+{
+     // We can only delete one item at a time.
+     GList *menu_items = webkit_context_menu_get_items(context_menu);
+     for (GList *l = menu_items; l != NULL; l = g_list_next(l)) {
+          WebKitContextMenuItem *item = WEBKIT_CONTEXT_MENU_ITEM(l->data);
+          WebKitContextMenuAction action = webkit_context_menu_item_get_stock_action(item);
+          if (action == WEBKIT_CONTEXT_MENU_ACTION_GO_BACK)
+          {
+                webkit_context_menu_remove(context_menu, item);
+                // Because GList has changed we cannot remove another item.
+                break;
+          } else if (action == WEBKIT_CONTEXT_MENU_ACTION_GO_FORWARD) {
+                webkit_context_menu_remove(context_menu, item);
+                // Because GList has changed we cannot remove another item.
+                break;
+          }
+     }
+
+     // We need to get items again.
+     menu_items = webkit_context_menu_get_items(context_menu);
+     for (GList *l = menu_items; l != NULL; l = g_list_next(l)) {
+          WebKitContextMenuItem *item = WEBKIT_CONTEXT_MENU_ITEM(l->data);
+          WebKitContextMenuAction action = webkit_context_menu_item_get_stock_action(item);
+          if (action == WEBKIT_CONTEXT_MENU_ACTION_GO_BACK)
+          {
+                webkit_context_menu_remove(context_menu, item);
+                // Because GList has changed we cannot remove another item.
+                break;
+          } else if (action == WEBKIT_CONTEXT_MENU_ACTION_GO_FORWARD) {
+                webkit_context_menu_remove(context_menu, item);
+                // Because GList has changed we cannot remove another item.
+                break;
+          }
+     }
+
+     return FALSE;
 }
 
 /********************************************************************
