@@ -134,16 +134,16 @@ gnc_html_history_append(gnc_html_history * hist,
 
     // If Back button has been pressed don't append history.
     if (hist && hist->pressedBACK) {
-	  hist->pressedBACK = FALSE;
-	  hist->last_node = hist->current_node;
-	  return;
+        hist->pressedBACK = FALSE;
+        hist->last_node = hist->current_node;
+        return;
     }
 
     // If Forward button has been pressed don't append history.
     if (hist && hist->pressedFWD) {
-	  hist->pressedFWD = FALSE;
-	  hist->last_node = hist->current_node;
-	  return;
+        hist->pressedFWD = FALSE;
+        hist->last_node = hist->current_node;
+        return;
     }
 
     if (hist->current_node)
