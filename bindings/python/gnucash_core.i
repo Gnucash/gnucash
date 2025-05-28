@@ -56,13 +56,13 @@
 %{
 import ctypes
 
-qof_percentage_func_type = ctypes.CFUNCTYPE(None, ctypes.c_char_p, ctypes.c_double)
+QofPercentageFunc = ctypes.CFUNCTYPE(None, ctypes.c_char_p, ctypes.c_double)
 
 def qof_percentage_func(py_callback):
     if py_callback == None:
         f_ptr = None
     else:
-        f = qof_percentage_func_type(py_callback)
+        f = QofPercentageFunc(py_callback)
         f_ptr = ctypes.cast(f, ctypes.c_void_p).value
     return f_ptr
 %}
