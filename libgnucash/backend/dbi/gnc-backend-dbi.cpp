@@ -616,11 +616,10 @@ adjust_sql_options (dbi_conn connection)
 template <DbType Type> bool
 drop_database(dbi_conn conn, const UriStrings& uri)
 {
-    // The user may have CREATE privileges even if it does not have access to the "root_db"
-    const char *root_db;
     if (Type == DbType::DBI_PGSQL)
     {
-        root_db = "template1";
+        // Postgresql can't drop a database it's connected to
+        const char *root_db = "template1";
 	if (dbi_conn_select_db (conn, root_db) == -1)
         {
 	    PERR ("Failed to switch out of %s, drop will fail.",
@@ -629,12 +628,9 @@ drop_database(dbi_conn conn, const UriStrings& uri)
 	    return false;
 	}
     }
-    else if (Type == DbType::DBI_MYSQL)
+    else if (Type != DbType::DBI_MYSQL)
     {
-        // There is no need to first switch to another DB
-    }
-    else
-    {
+        // MySQL can drop a database it's connected to
         PERR ("Unknown database type, can't proceed.");
         LEAVE("Error");
         return false;
