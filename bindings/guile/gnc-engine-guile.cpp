@@ -1788,6 +1788,13 @@ gnc_split_to_scm (const Split *split)
     return gnc_generic_to_scm (split, stype);
 }
 
+SCM
+gnc_account_to_scm (const Account *account)
+{
+    static auto stype = get_swig_type ("_p_Account");
+    return gnc_generic_to_scm (account, stype);
+}
+
 GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
 {
     GncAccountValue *res;
@@ -1816,7 +1823,6 @@ GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
 
 SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
 {
-    static auto account_type = get_swig_type ("_p_Account");
     gnc_commodity * com;
     gnc_numeric val;
 
@@ -1826,7 +1832,7 @@ SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
     val = gnc_numeric_convert (av->value, gnc_commodity_get_fraction (com),
                                GNC_HOW_RND_ROUND_HALF_UP);
 
-    return scm_cons (SWIG_NewPointerObj(av->account, account_type, 0),
+    return scm_cons (gnc_account_to_scm (av->account),
                      gnc_numeric_to_scm (val));
 }
 

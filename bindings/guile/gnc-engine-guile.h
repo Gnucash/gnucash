@@ -68,6 +68,8 @@ SCM gnc_book_to_scm(const QofBook* book);
 
 SCM gnc_split_to_scm (const Split *split);
 
+SCM gnc_account_to_scm (const Account *account);
+
 /* Conversion routines used with tax tables */
 GncAccountValue* gnc_scm_to_account_value_ptr(SCM valuearg);
 
