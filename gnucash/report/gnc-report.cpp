@@ -450,3 +450,16 @@ gnc_get_optiondb_from_dispatcher(SCM dispatcher)
     return u_ptr->get();
 }
 
+gboolean
+gnc_has_modern_javascript ()
+{
+    static const char* env = g_getenv ("GNC_MODERN_JS");
+    if (env)
+        return *env == '1';
+
+#ifdef WEBKIT1
+    return FALSE;
+#else
+    return TRUE;
+#endif
+}

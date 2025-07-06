@@ -26,8 +26,9 @@
 (define-module (gnucash report html-chart))
 
 (use-modules (gnucash report html-utilities))
+(use-modules (sw_report))
 
 (module-use! (module-public-interface (current-module))
-             (resolve-module (if #f
+             (resolve-module (if (gnc-has-modern-javascript)
                                  '(gnucash report html-chartjs-4)
                                  '(gnucash report html-chartjs-2))))

@@ -42,3 +42,5 @@ gchar* gnc_get_default_report_font_family();
 
 void gnc_saved_reports_backup (void);
 gboolean gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite);
+
+gboolean gnc_has_modern_javascript (void);
