@@ -60,6 +60,7 @@ set (report_SCHEME_1
     commodity-utilities.scm
     html-acct-table.scm
     html-chart.scm
+    html-chartjs-2.scm
     html-document.scm
     html-fonts.scm
     html-style-info.scm
