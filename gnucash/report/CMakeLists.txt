@@ -61,6 +61,7 @@ set (report_SCHEME_1
     html-acct-table.scm
     html-chart.scm
     html-chartjs-2.scm
+    html-chartjs-4.scm
     html-document.scm
     html-fonts.scm
     html-style-info.scm

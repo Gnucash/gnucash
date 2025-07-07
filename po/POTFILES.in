@@ -440,6 +440,7 @@ gnucash/report/gnc-report.cpp
 gnucash/report/html-acct-table.scm
 gnucash/report/html-anytag.scm
 gnucash/report/html-chartjs-2.scm
+gnucash/report/html-chartjs-4.scm
 gnucash/report/html-chart.scm
 gnucash/report/html-document.scm
 gnucash/report/html-fonts.scm
