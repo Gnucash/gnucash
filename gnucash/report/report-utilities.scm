@@ -104,6 +104,8 @@
 (export gnc:dump-book)
 (export gnc:dump-invoices)
 (export gnc:dump-lot)
+(export nested-alist-get)
+(export nested-alist-set!)
 
 (define (list-ref-safe list elt)
   (and (pair? list)
@@ -1010,6 +1012,63 @@
    ((number? data) (not (= 0 data)))
    ((pair? data) (any gnc:not-all-zeros data))
    (else #f)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; utility functions for nested list handling
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; nested-alist-set! parameters are
+;; lst - a nested alist e.g. (list (cons 'key1 'val1)
+;;                                 (cons 'key2 (list (cons 'key2-sub1 'val2a))))
+;; path - a list of symbols or single-element list
+;;        e.g. '(key2 key2-sub1)
+;;             '(key2 key2-sub2 (0))
+;;             '(key3 key3-sub1 key3-sub1-sub1)
+;; newval - the cdr of the innermost cons cell specified by the path
+;;
+;; see test-html-chart.scm for usage examples
+(define (nested-alist-set! lst path newval)
+  (define (path->nested-alist path newval)
+    (let loop ((path (reverse path)) (result newval))
+      (match path
+        (() result)
+        ((((? number? idx)) . tail)
+         (let ((v (make-vector (1+ idx))))
+           (vector-set! v idx result)
+           (loop tail v)))
+        ((head . tail) (loop tail (list (cons head result)))))))
+
+  (let loop ((nested-lst lst) (path path))
+    (define (out-of-bound? n) (and (number? n) (>= n (vector-length nested-lst))))
+    (define (existing? n) (and (number? n) (pair? (vector-ref nested-lst n))))
+    (if (null? nested-lst) (throw 'invalid-state))
+    (match path
+      (() (throw 'invalid-state))
+      ((((? out-of-bound? idx)) . _) (throw 'index-too-high idx))
+      ((((? existing? idx)) . tail) (loop (vector-ref nested-lst idx) tail))
+      ((((? number? idx)) . tail) (vector-set! nested-lst idx
+                                               (path->nested-alist tail newval)))
+      ((head . tail)
+       (let ((pair (assq head nested-lst)))
+         (cond
+          ((not pair) (set-cdr! (last-pair nested-lst) (path->nested-alist path newval)))
+          ((null? tail) (set-cdr! pair newval))
+          (else (loop (cdr pair) tail))))))))
+
+(define (nested-alist-get lst path)
+  (let loop ((nested-lst lst) (path path))
+    (define (out-of-bound? n) (and (number? n) (>= n (vector-length nested-lst))))
+    (match path
+      (() nested-lst)
+      ((((? out-of-bound? idx)) . _) (throw 'index-too-high idx))
+      ((((? number? idx)) . tail) (loop (vector-ref nested-lst idx) tail))
+      ((head . tail)
+       (let ((pair (assq head nested-lst)))
+         (if pair
+             (loop (cdr pair) tail)
+             (throw 'invalid-path path)))))))
 
 ;; Adds "file:///" to the beginning of a URL if it doesn't already exist
 ;;
