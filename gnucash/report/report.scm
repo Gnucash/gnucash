@@ -43,6 +43,7 @@
                    (gnucash report options-utilities)
                    (gnucash report html-chart)
                    (gnucash report html-fonts)
+                   (gnucash report html-sankey)
                    (gnucash report html-text)
                    (gnucash report html-anytag)
                    (gnucash report html-document)

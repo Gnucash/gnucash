@@ -25,6 +25,7 @@
 
 (use-modules (gnucash html))
 (use-modules (gnucash report html-anytag))
+(use-modules (gnucash report html-sankey))
 (use-modules (gnucash report html-chart))
 (use-modules (gnucash report html-style-info))
 (use-modules (gnucash report html-style-sheet))
@@ -357,6 +358,9 @@
 
    ((gnc:html-chart? obj)
     (gnc:make-html-object-internal gnc:html-chart-render obj))
+
+   ((gnc:html-sankey? obj)
+    (gnc:make-html-object-internal gnc:html-sankey-render obj))
 
    ((gnc:html-table-cell? obj)
     (gnc:make-html-object-internal gnc:html-table-cell-render obj))

@@ -442,6 +442,7 @@ gnucash/report/html-anytag.scm
 gnucash/report/html-chart.scm
 gnucash/report/html-document.scm
 gnucash/report/html-fonts.scm
+gnucash/report/html-sankey.scm
 gnucash/report/html-style-info.scm
 gnucash/report/html-style-sheet.scm
 gnucash/report/html-table.scm
