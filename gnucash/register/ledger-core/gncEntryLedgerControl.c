@@ -759,7 +759,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
         {
             const char *format = _("The tax table %s does not exist. "
                                    "Would you like to create it?");
-            if (!gnc_verify_dialog (GTK_WINDOW (ledger->parent), TRUE, format, name))
+            if (!gnc_action_dialog (GTK_WINDOW (ledger->parent), _("_Create"), TRUE, format, name))
                 break;
         }
 
@@ -992,7 +992,8 @@ gnc_entry_ledger_check_close_internal (GtkWidget *parent,
     if (!gnc_entry_ledger_verify_can_save (ledger))
         return FALSE;
 
-    if (dontask || gnc_verify_dialog (GTK_WINDOW (parent), TRUE, "%s", message))
+    if (dontask || gnc_action_dialog (GTK_WINDOW (parent), C_("Save entry", "_Save"), TRUE,
+                                      "%s", message))
         gnc_entry_ledger_save (ledger, TRUE);
     else
         gnc_entry_ledger_cancel_cursor_changes (ledger);

@@ -736,7 +736,8 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
         else
             msg = g_strdup (message);
 
-        result = gnc_verify_dialog (GTK_WINDOW (iw_get_window(iw)), FALSE, "%s", msg);
+        result = gnc_action_dialog (GTK_WINDOW (iw_get_window(iw)), _("_Delete"),
+                                    FALSE, "%s", msg);
         g_free (msg);
 
         if (!result)

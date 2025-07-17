@@ -1092,7 +1092,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
             gchar *msg = g_strdup_printf(
                              _("The PIN needs to be at least %d characters\n"
                                "long. Do you want to try again?"), min_len);
-            retval = gnc_verify_dialog (GTK_WINDOW (gui->parent), TRUE, "%s", msg);
+            retval = gnc_action_dialog (GTK_WINDOW (gui->parent), _("_Retry"), TRUE, "%s", msg);
             g_free(msg);
             if (!retval)
                 break;

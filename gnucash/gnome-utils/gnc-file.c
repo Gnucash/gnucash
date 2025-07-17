@@ -315,7 +315,7 @@ show_session_error (GtkWindow *parent,
     case ERR_BACKEND_NO_SUCH_DB:
         fmt = _("The database %s doesn't seem to exist. "
                 "Do you want to create it?");
-        if (gnc_verify_dialog (parent, TRUE, fmt, displayname))
+        if (gnc_action_dialog (parent, _("_Create"), TRUE, fmt, displayname))
         {
             uh_oh = FALSE;
         }
@@ -408,7 +408,7 @@ show_session_error (GtkWindow *parent,
     case ERR_FILEIO_FILE_BAD_READ:
         fmt = _("There was an error reading the file. "
                 "Do you want to continue?");
-        if (gnc_verify_dialog (parent, TRUE, "%s", fmt))
+        if (gnc_action_dialog (parent, _("_Continue"),TRUE, "%s", fmt))
         {
             uh_oh = FALSE;
         }
@@ -434,7 +434,7 @@ show_session_error (GtkWindow *parent,
             if (gnc_history_test_for_file (displayname))
             {
                 fmt = _("The file/URI %s could not be found.\n\nThe file is in the history list, do you want to remove it?");
-                if (gnc_verify_dialog (parent, FALSE, fmt, displayname))
+                if (gnc_action_dialog (parent, _("_Remove"), FALSE, fmt, displayname))
                     gnc_history_remove_file (displayname);
             }
             else
@@ -448,7 +448,7 @@ show_session_error (GtkWindow *parent,
     case ERR_FILEIO_FILE_TOO_OLD:
         fmt = _("This file is from an older version of GnuCash. "
                 "Do you want to continue?");
-        if (gnc_verify_dialog (parent, TRUE, "%s", fmt))
+        if (gnc_action_dialog (parent, C_("Load file", "_Load"), TRUE, "%s", fmt))
         {
             uh_oh = FALSE;
         }
@@ -1369,7 +1369,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         else
             name = gnc_uri_normalize_uri ( newfile, FALSE );
         /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (parent, FALSE, format, name))
+        if (!gnc_action_dialog (parent, C_("Overwrite file", "_Overwrite"), FALSE, format, name))
         {
             return;
         }
@@ -1621,7 +1621,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
             name = gnc_uri_normalize_uri ( newfile, FALSE );
 
         /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (parent, FALSE, format, name ))
+        if (!gnc_action_dialog (parent, C_("Overwrite file", "_Overwrite"), FALSE, format, name ))
         {
             xaccLogDisable();
             qof_session_destroy (new_session);
@@ -1750,7 +1750,7 @@ gnc_file_revert (GtkWindow *parent)
     else
         filename = fileurl;
 
-    if (!gnc_verify_dialog (parent, FALSE, title, filename))
+    if (!gnc_action_dialog (parent, _("_Revert changes"), FALSE, title, filename))
         return;
 
     qof_book_mark_session_saved (qof_session_get_book (session));

@@ -1649,7 +1649,7 @@ gnc_get_export_filename (SCM choice, GtkWindow *parent)
         const char *format = _("The file %s already exists. "
                                "Are you sure you want to overwrite it?");
 
-        if (!gnc_verify_dialog (parent, FALSE, format, filepath))
+        if (!gnc_action_dialog (parent, C_("Overwrite file", "_Overwrite"), FALSE, format, filepath))
         {
             g_free(filepath);
             return nullptr;

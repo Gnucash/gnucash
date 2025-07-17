@@ -1159,8 +1159,8 @@ gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
     }
 
     gtk_tree_model_get(model, &iter, TEMPLATE_NAME, &name, -1);
-    if (gnc_verify_dialog (
-                GTK_WINDOW (td->parent), FALSE,
+    if (gnc_action_dialog (
+                GTK_WINDOW (td->parent), _("_Delete"), FALSE,
                 _("Do you really want to delete the template with the name \"%s\"?"),
                 name))
     {

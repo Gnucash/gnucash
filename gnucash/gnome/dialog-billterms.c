@@ -675,7 +675,7 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW(btw->window), FALSE,
+    if (gnc_action_dialog (GTK_WINDOW(btw->window), _("_Delete"), FALSE,
                            _("Are you sure you want to delete \"%s\"?"),
                            gncBillTermGetName (btw->current_term)))
     {

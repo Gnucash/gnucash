@@ -938,7 +938,7 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
     g_free (text_list_of_scheduled_transaction_names);
     g_list_free (to_delete_names);
 
-    if (gnc_verify_dialog (window, false, "%s", message))
+    if (gnc_action_dialog (window, _("_Delete"), false, "%s", message))
     {
         gppsl_update_selected_list (plugin_page, true, nullptr);
 

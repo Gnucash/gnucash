@@ -3960,7 +3960,8 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
     {
         const char *rev = _("A reversing entry has already been created for this transaction.");
         const char *jump = _("Jump to the transaction?");
-        if (!gnc_verify_dialog (GTK_WINDOW (window), TRUE, "%s\n\n%s", rev, jump))
+        if (!gnc_action_dialog (GTK_WINDOW (window), C_("Jump to reversing transaction", "_Jump"),
+                                TRUE, "%s\n\n%s", rev, jump))
         {
             LEAVE ("reverse cancelled");
             return;

@@ -733,7 +733,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW(ttw->dialog), FALSE,
+    if (gnc_action_dialog (GTK_WINDOW(ttw->dialog), _("_Delete"), FALSE,
                            _("Are you sure you want to delete \"%s\"?"),
                            gncTaxTableGetName (ttw->current_table)))
     {
@@ -780,7 +780,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW(ttw->dialog), FALSE, "%s",
+    if (gnc_action_dialog (GTK_WINDOW(ttw->dialog), _("_Delete"), FALSE, "%s",
                            _("Are you sure you want to delete this entry?")))
     {
         /* Ok, let's remove it */

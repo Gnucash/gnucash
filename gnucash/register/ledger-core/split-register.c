@@ -986,7 +986,8 @@ gnc_split_register_paste_current (SplitRegister* reg)
                 LEAVE ("anchore split");
                 return;
             }
-            else if (!gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
+            else if (!gnc_action_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
+                                         C_("Overwrite transaction", "_Overwrite"),
                                          FALSE, "%s", message))
             {
                 LEAVE ("user cancelled");
@@ -1044,8 +1045,8 @@ gnc_split_register_paste_current (SplitRegister* reg)
 
         /* Ask before overwriting an existing transaction. */
         if (split != blank_split &&
-            !gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                                FALSE, "%s", message))
+            !gnc_action_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
+                                C_("Overwrite transaction", "_Overwrite"), FALSE, "%s", message))
         {
             LEAVE ("user cancelled");
             return;
@@ -2022,7 +2023,7 @@ gnc_split_register_get_account_by_name (SplitRegister* reg, BasicCell* bcell,
     if (!account && !creating_account)
     {
         /* Ask if they want to create a new one. */
-        if (!gnc_verify_dialog (parent, TRUE, missing, name))
+        if (!gnc_action_dialog (parent, C_("Create account", "_Create"), TRUE, missing, name))
             return NULL;
         creating_account = TRUE;
         /* User said yes, they want to create a new account. */

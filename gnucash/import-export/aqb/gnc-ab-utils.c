@@ -720,8 +720,8 @@ txn_transaction_cb (const AB_TRANSACTION *element, gpointer user_data)
         if (!job || AB_AccountSpec_GetTransactionLimitsForCommand (data->ab_acc, AB_Transaction_GetCommand (job)) == NULL)
         {
             /* Oops, no job, probably not supported by bank */
-            if (gnc_verify_dialog (
-                        GTK_WINDOW(data->parent), FALSE, "%s",
+            if (gnc_action_dialog (
+                        GTK_WINDOW(data->parent), _("_Retry"), FALSE, "%s",
                         _("The backend found an error during the preparation "
                           "of the job. It is not possible to execute this job.\n"
                           "\n"
@@ -815,7 +815,7 @@ txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     if (!(data->awaiting & AWAIT_TRANSACTIONS))
     {
-        if (gnc_verify_dialog (GTK_WINDOW(data->parent), TRUE, "%s",
+        if (gnc_action_dialog (GTK_WINDOW(data->parent), _("_Import"), TRUE, "%s",
                               _("The bank has sent transaction information "
                                 "in its response."
                                 "\n"
@@ -917,7 +917,7 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
             return NULL;
 
         /* Ask the user whether to import unawaited non-zero balance */
-        if (gnc_verify_dialog (parent, TRUE, "%s", balance_msg))
+        if (gnc_action_dialog (parent, _("_Import"), TRUE, "%s", balance_msg))
         {
             data->awaiting |= AWAIT_BALANCES;
         }
@@ -1050,7 +1050,8 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
         {
             const char *message3 = _("Reconcile account now?");
 
-            show_recn_window = gnc_verify_dialog (GTK_WINDOW(data->parent), TRUE, "%s\n%s\n%s",
+            show_recn_window = gnc_action_dialog (GTK_WINDOW(data->parent), _("_Reconcile"),
+                                                  TRUE, "%s\n%s\n%s",
                                                   message1, message2, message3);
         }
         g_free (booked_str);

@@ -739,7 +739,8 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
                                "Are you sure you want to overwrite it?");
 
         /* if user says cancel, we should go back a page */
-        if (!gnc_verify_dialog (GTK_WINDOW (assistant), FALSE, format, info->file_name))
+        if (!gnc_action_dialog (GTK_WINDOW (assistant), C_("Overwrite file", "_Overwrite"),
+                                FALSE, format, info->file_name))
             gtk_assistant_previous_page (assistant);
     }
     /* Enable the Assistant Buttons */

@@ -445,7 +445,9 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         auto comm_list = gnc_prices_dialog_get_commodities (pdb_dialog->remove_view);
 
         // Are you sure you want to delete the entries and we have commodities
-        if ((g_list_length (comm_list) != 0) && (gnc_verify_dialog (GTK_WINDOW (pdb_dialog->remove_dialog), FALSE, fmt, NULL)))
+        if (comm_list != nullptr &&
+            gnc_action_dialog (GTK_WINDOW (pdb_dialog->remove_dialog),
+                               _("_Delete"), FALSE, fmt, NULL))
         {
             time64 last;
             GDate fiscal_end_date = get_fiscal_end_date ();

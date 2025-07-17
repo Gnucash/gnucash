@@ -512,7 +512,7 @@ gnc_sxed_check_names (GncSxEditorDialog *sxed)
         const char *sx_has_existing_name_msg =
             _("A Scheduled Transaction with the name \"%s\" already exists. "
               "Are you sure you want to name this one the same?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE,
+        if (!gnc_action_dialog (GTK_WINDOW (sxed->dialog), _("_Overwrite"), FALSE,
                                 sx_has_existing_name_msg, name))
             return FALSE;
     }
@@ -584,7 +584,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
         const char *invalid_sx_check_msg =
             _("You have attempted to create a Scheduled Transaction which "
               "will never run. Do you really want to do this?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE,
+        if (!gnc_action_dialog (GTK_WINDOW (sxed->dialog), _("_Create"), FALSE,
                                "%s", invalid_sx_check_msg))
             return FALSE;
     }
@@ -873,7 +873,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
         const char *msg =
             _("The Scheduled Transaction Editor cannot automatically "
               "balance this transaction. Should it still be entered?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", msg))
+        if (!gnc_action_dialog (GTK_WINDOW (sxed->dialog), _("_Enter"), FALSE, "%s", msg))
             return FALSE;
     }
 
@@ -1579,7 +1579,7 @@ gnc_sxed_reg_check_close (GncSxEditorDialog *sxed)
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW (sxed->dialog), TRUE, "%s", message))
+    if (gnc_action_dialog (GTK_WINDOW (sxed->dialog), _("_Save"), TRUE, "%s", message))
     {
         if (!gnc_split_register_save (reg, TRUE))
             return;

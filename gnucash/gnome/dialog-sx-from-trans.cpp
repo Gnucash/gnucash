@@ -256,7 +256,8 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     }
 
     if ( ! gnc_numeric_zero_p( runningBalance )
-            && !gnc_verify_dialog (GTK_WINDOW (sxfti->dialog),
+            && !gnc_action_dialog (GTK_WINDOW (sxfti->dialog),
+                                   C_("Enter imbalanced scheduled transaction", "_Enter"),
                                    FALSE, "%s",
                                    _("The Scheduled Transaction Editor "
                                      "cannot automatically balance "

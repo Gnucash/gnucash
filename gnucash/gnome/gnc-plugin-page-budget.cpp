@@ -934,7 +934,7 @@ gnc_budget_gui_delete_budget (GncBudget *budget)
     if (!name)
         name = _("Unnamed Budget");
 
-    if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name))
+    if (gnc_action_dialog (NULL, _("_Delete"), FALSE, _("Delete %s?"), name))
     {
         QofBook* book = gnc_get_current_book ();
 

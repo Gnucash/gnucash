@@ -369,7 +369,7 @@ gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
 
         gchar *text = g_strdup_printf ("%s\n\n%s\n\n%s", message, message2, _("(Note, if there is a large number, it may take a while)"));
 
-        if (gnc_verify_dialog (GTK_WINDOW (imap_dialog->dialog), FALSE, "%s", text))
+        if (gnc_action_dialog (GTK_WINDOW (imap_dialog->dialog), _("_Remove"), FALSE, "%s", text))
         {
             gnc_imap_remove_invalid_maps (imap_dialog);
             gtk_widget_hide (imap_dialog->remove_button);

@@ -1414,7 +1414,8 @@ gnc_ui_reconcile_window_delete_cb (GSimpleAction *simple,
                                 "transaction?");
         gboolean result;
 
-        result = gnc_verify_dialog (GTK_WINDOW (recnData->window), FALSE, "%s", message);
+        result = gnc_action_dialog (GTK_WINDOW (recnData->window),
+                                    _("_Delete"), FALSE, "%s", message);
 
         if (!result)
             return;
@@ -2328,7 +2329,7 @@ recnFinishCB (GSimpleAction *simple,
     {
         const char *message = _("The account is not balanced. "
                                 "Are you sure you want to finish?");
-        if (!gnc_verify_dialog (GTK_WINDOW (recnData->window), FALSE, "%s", message))
+        if (!gnc_action_dialog (GTK_WINDOW (recnData->window), _("_Finish"), FALSE, "%s", message))
             return;
     }
 
@@ -2388,7 +2389,8 @@ recnPostponeCB (GSimpleAction *simple,
     {
         const char *message = _("Do you want to postpone this reconciliation "
                                 "and finish it later?");
-        if (!gnc_verify_dialog (GTK_WINDOW (recnData->window), FALSE, "%s", message))
+        if (!gnc_action_dialog (GTK_WINDOW (recnData->window),
+                                C_("Postpone Reconciliation", "_Postpone"), FALSE, "%s", message))
             return;
     }
 

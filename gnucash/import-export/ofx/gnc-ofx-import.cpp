@@ -634,8 +634,8 @@ continue_account_selection(GtkWidget* parent, Account* account,
                            gnc_commodity* commodity)
 {
     gboolean keep_going =
-        gnc_verify_dialog(
-            GTK_WINDOW (parent), TRUE,
+        gnc_action_dialog(
+            GTK_WINDOW (parent), _("_Choose account"), TRUE,
             "The chosen account \"%s\" does not have the correct "
             "currency/security \"%s\" (it has \"%s\" instead). "
             "This account cannot be used. "

@@ -98,7 +98,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
     if (!account)
     {
         /* Ask if they want to create a new one. */
-        if (!gnc_verify_dialog (GTK_WINDOW (ledger->parent), TRUE, missing, name))
+        if (!gnc_action_dialog (GTK_WINDOW (ledger->parent), _("_Create"), TRUE, missing, name))
             return NULL;
 
         /* No changes, as yet. */
