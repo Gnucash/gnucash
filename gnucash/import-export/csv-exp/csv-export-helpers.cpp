@@ -27,6 +27,7 @@
 #include <cstring>
 #include <cstdio>
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 #include "gnc-ui-util.h"
@@ -38,56 +39,61 @@
 /* CSV spec requires CRLF line endings. Tweak the end-of-line string so this
  * true for each platform */
 #ifdef G_OS_WIN32
-# define EOLSTR "\n"
+#define EOLSTR "\n"
 #else
-# define EOLSTR "\r\n"
+#define EOLSTR "\r\n"
 #endif
 
 #define QUOTE '"'
 
-bool
-gnc_csv_add_line (std::ostream& ss, const StringVec& str_vec,
-                  bool use_quotes, const char* sep)
+bool gnc_csv_add_line(std::ostream &ss, const StringVec &str_vec,
+                      bool use_quotes, const char *sep)
 {
-    auto first{true};
-    auto sep_view{std::string_view (sep ? sep : "")};
-    for (const auto& str : str_vec)
+    ss.exceptions(std::ios::failbit | std::ios::badbit);
+    try
     {
-        auto need_quote = use_quotes
-            || (!sep_view.empty() && str.find (sep_view) != std::string::npos)
-            || str.find_first_of ("\"\n\r") != std::string::npos;
-
-        if (first)
-            first = false;
-        else
-            ss << sep_view;
-
-        if (need_quote)
-            ss << QUOTE;
-
-        for (const char& p : str)
+        auto first{true};
+        auto sep_view{std::string_view(sep ? sep : "")};
+        for (const auto &str : str_vec)
         {
-            ss << p;
-            if (p == QUOTE)
+            auto need_quote = use_quotes || (!sep_view.empty() && str.find(sep_view) != std::string::npos) || str.find_first_of("\"\n\r") != std::string::npos;
+
+            if (first)
+                first = false;
+            else
+                ss << sep_view;
+
+            if (need_quote)
                 ss << QUOTE;
+
+            for (const char &p : str)
+            {
+                ss << p;
+                if (p == QUOTE)
+                    ss << QUOTE;
+            }
+
+            if (need_quote)
+                ss << QUOTE;
+
+            if (ss.fail())
+                return false;
         }
-
-        if (need_quote)
-            ss << QUOTE;
-
-        if (ss.fail())
-            return false;
+        ss << EOLSTR;
     }
-    ss << EOLSTR;
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 
     return !ss.fail();
 }
 
 std::string
-account_get_fullname_str (Account *account)
+account_get_fullname_str(Account *account)
 {
-    auto name{gnc_account_get_full_name (account)};
+    auto name{gnc_account_get_full_name(account)};
     auto rv{std::string(name)};
-    g_free (name);
+    g_free(name);
     return rv;
 }
