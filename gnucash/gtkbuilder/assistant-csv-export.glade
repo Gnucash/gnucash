@@ -90,6 +90,22 @@ Select the type of Export required and the separator that will be used.
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="gdpdu_layout">
+                    <property name="label" translatable="yes">GdPDU</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="draw-indicator">True</property>
+                    <signal name="toggled" handler="csv_export_gdpdu_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
