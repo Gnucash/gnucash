@@ -275,7 +275,6 @@ csv_export_simple_cb (GtkToggleButton *button, gpointer user_data)
     gtk_label_set_text (GTK_LABEL(info->start_label), msg);
     g_free (msg);
 
-    gtk_widget_set_sensitive(info->gdpdu_layout_check, !info->gdpdu_layout);
     gtk_widget_set_sensitive(info->comma_radio, !info->gdpdu_layout);
     gtk_widget_set_sensitive(info->colon_radio, !info->gdpdu_layout);
     gtk_widget_set_sensitive(info->semicolon_radio, !info->gdpdu_layout);
@@ -296,7 +295,6 @@ csv_export_gdpdu_cb (GtkToggleButton *button, gpointer user_data)
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(info->semicolon_radio), info->gdpdu_layout);
 
-    gtk_widget_set_sensitive(info->simple_layout_check, !info->simple_layout);
     gtk_widget_set_sensitive(info->comma_radio, !info->gdpdu_layout);
     gtk_widget_set_sensitive(info->colon_radio, !info->gdpdu_layout);
     gtk_widget_set_sensitive(info->semicolon_radio, !info->gdpdu_layout);

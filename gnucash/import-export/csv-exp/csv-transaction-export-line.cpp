@@ -49,7 +49,7 @@ CsvTransactionExportLine::CsvTransactionExportLine(Split *split,
                                                                         m_transaction(transaction),
                                                                         m_separator(separator),
                                                                         m_use_quotes(use_quotes),
-                                                                        m_simple(simple),
+                                                                        m_simple(simple && !gdpdu),
                                                                         m_gdpdu(gdpdu),
                                                                         m_is_trading_acc(is_trading_acc),
                                                                         m_ss(ss),
@@ -249,9 +249,11 @@ CsvTransactionExportLine::get_commodity(Transaction *trans)
 
 // Amount with Symbol or not
 std::string
-CsvTransactionExportLine::get_amount(Split *split, bool t_void, bool symbol)
+CsvTransactionExportLine::get_amount(Split *split, bool t_void, bool symbol, bool positive)
 {
     auto amt_num{t_void ? xaccSplitVoidFormerAmount(split) : xaccSplitGetAmount(split)};
+    if (positive)
+        amt_num = gnc_numeric_abs(amt_num);
     auto pinfo{gnc_split_amount_print_info(split, symbol)};
     if (!symbol)
         pinfo.use_separators = 0;
@@ -300,6 +302,11 @@ bool CsvTransactionExportLine::print_csv()
 
     if (m_simple || (!is_split_transaction() && m_gdpdu))
     {
+        auto amount = xaccSplitGetAmount(m_split);
+        /* Ignore bookings with zero value in gdpdu export*/
+        if (gnc_numeric_zero_p(amount) && m_gdpdu)
+            return true;
+
         auto line = m_gdpdu ? make_gdpdu_trans_line(m_split) : make_simple_trans_line(m_split);
         return gnc_csv_add_line(m_ss, line, m_use_quotes,
                                 m_separator);
@@ -312,6 +319,11 @@ bool CsvTransactionExportLine::print_csv()
         {
             Split *s = static_cast<Split *>(split->data);
 
+            auto amount = xaccSplitGetAmount(s);
+            /* Ignore bookings with zero value in gdpdu export*/
+            if (gnc_numeric_zero_p(amount))
+                continue;
+
             auto split_account = xaccSplitGetAccount(s);
             if (!split_account)
             {
@@ -321,7 +333,7 @@ bool CsvTransactionExportLine::print_csv()
             if (xaccAccountEqual(split_account, m_base_split_account, true))
                 continue;
 
-            auto line = make_gdpdu_trans_split_line(m_split);
+            auto line = make_gdpdu_trans_split_line(s);
             ok = gnc_csv_add_line(m_ss, line, m_use_quotes,
                                   m_separator);
             if (!ok)
@@ -360,28 +372,46 @@ StringVec
 CsvTransactionExportLine::make_gdpdu_trans_split_line(Split *split)
 {
     auto t_void{xaccTransGetVoidStatus(m_transaction)};
-    gnc_numeric amount = xaccSplitGetAmount(split);
-    bool pos = gnc_numeric_positive_p(amount);
+
+    auto base_acc_code = xaccAccountGetCode(m_base_split_account);
+    if (!base_acc_code)
+        base_acc_code = _("Unknown");
+
     return {
         get_date(m_transaction),
         get_number(m_transaction),
-        pos ? get_account_number(m_base_split) : get_account_number(split),
-        pos ? get_account_number(split) : get_account_number(m_base_split),
+        m_is_credit_split ? base_acc_code : get_account_number(split),
+        m_is_credit_split ? get_account_number(split) : base_acc_code,
         get_description(m_transaction),
-        get_amount(split, t_void, false)};
+        get_amount(split, t_void, false, true)};
 }
 
 StringVec
 CsvTransactionExportLine::make_gdpdu_trans_line(Split *split)
 {
     auto t_void{xaccTransGetVoidStatus(m_transaction)};
+    auto amount = xaccSplitGetAmount(split);
+    auto account = xaccSplitGetAccount(split);
+    auto type = xaccAccountGetType(account);
+    bool pos = gnc_numeric_positive_p(amount);
+
+    /* It is possible that other types of accounts need to be taken into account here */
+    bool exchange = false;
+    switch (type) {
+        case ACCT_TYPE_EQUITY:
+            exchange = true;
+            break;
+        default:
+            break;
+    }
+
     return {
         get_date(m_transaction),
         get_number(m_transaction),
-        get_account_number(split),
-        get_other_account_number(split),
+        pos || exchange ? get_other_account_number(split) : get_account_number(split),
+        pos || exchange ? get_account_number(split) : get_other_account_number(split),
         get_description(m_transaction),
-        get_amount(split, t_void, false)};
+        get_amount(split, t_void, false, true)};
 }
 
 StringVec

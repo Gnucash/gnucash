@@ -64,7 +64,7 @@ protected:
     std::string get_action(Split *split);
     std::string get_reconcile(Split *split);
     std::string get_commodity(Transaction *trans);
-    std::string get_amount(Split *split, bool t_void, bool symbol);
+    std::string get_amount(Split *split, bool t_void, bool symbol, bool positive = false);
     std::string get_value(Split *split, bool t_void, bool symbol);
     std::string get_rate(Split *split, bool t_void);
     std::string get_price(Split *split, bool t_void);
