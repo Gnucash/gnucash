@@ -43,11 +43,15 @@ CsvTransactionExportLine::CsvTransactionExportLine(Split *split,
                                                    const char *separator,
                                                    bool use_quotes,
                                                    bool simple,
+                                                   bool gdpdu,
+                                                   bool is_trading_acc,
                                                    std::ofstream &ss) : m_split(split),
                                                                         m_transaction(transaction),
                                                                         m_separator(separator),
                                                                         m_use_quotes(use_quotes),
                                                                         m_simple(simple),
+                                                                        m_gdpdu(gdpdu),
+                                                                        m_is_trading_acc(is_trading_acc),
                                                                         m_ss(ss),
                                                                         m_is_debit_split(false),
                                                                         m_is_credit_split(false),
@@ -151,6 +155,23 @@ CsvTransactionExportLine::get_account_name(Split *split, bool full)
 {
     auto account{xaccSplitGetAccount(split)};
     return full ? account_get_fullname_str(account) : xaccAccountGetName(account);
+}
+
+// Account ode
+std::string
+CsvTransactionExportLine::get_account_number(Split *split)
+{
+    auto account{xaccSplitGetAccount(split)};
+    const gchar *code = xaccAccountGetCode(account);
+    return code ? code : _("Unknown");
+}
+
+// Account Code
+std::string
+CsvTransactionExportLine::get_other_account_number(Split *split)
+{
+    auto other{xaccSplitGetOtherSplit(split)};
+    return get_account_number(other);
 }
 
 // Number
@@ -272,44 +293,90 @@ CsvTransactionExportLine::get_price(Split *split, bool t_void)
 
 bool CsvTransactionExportLine::print_csv()
 {
-    if (!is_split_transaction() && m_simple)
+    if (!is_split_transaction() && (m_simple || m_gdpdu))
     {
-        auto line = make_simple_trans_line(m_split);
+        auto line = m_gdpdu ? make_gdpdu_trans_line(m_split) : make_simple_trans_line(m_split);
         return gnc_csv_add_line(m_ss, line, m_use_quotes,
                                 m_separator);
     }
+    else if (m_simple || m_gdpdu)
+    {
+        bool ok = false;
+        GList *splits = xaccTransGetSplitList(m_transaction);
+        for (GList *split = splits; split != NULL; split = split->next)
+        {
+            Split *s = static_cast<Split *>(split->data);
+
+            auto split_account = xaccSplitGetAccount(s);
+            if (!split_account)
+            {
+                continue;
+            }
+
+            if (xaccAccountEqual(split_account, m_base_split_account, true))
+                continue;
+
+            auto line = m_gdpdu ? make_gdpdu_trans_line(m_split) : make_simple_trans_line(m_split);
+            ok = gnc_csv_add_line(m_ss, line, m_use_quotes,
+                                  m_separator);
+            if (!ok)
+                break;
+        }
+        return ok;
+    }
     else
     {
-        if (m_simple)
+        /* Loop through the list of splits for the Transaction */
+        bool failed = false;
+        for (auto node = xaccTransGetSplitList(m_transaction); !failed && node;
+             node = node->next)
         {
-            bool ok = false;
-            GList *splits = xaccTransGetSplitList(m_transaction);
-            for (GList *split = splits; split != NULL; split = split->next)
-            {
-                Split *s = static_cast<Split *>(split->data);
+            auto t_split{static_cast<Split *>(node->data)};
 
-                auto split_account = xaccSplitGetAccount(s);
-                if (!split_account)
-                {
-                    continue;
-                }
+            // base split is already written on the trans_line
+            if (m_split == t_split)
+                continue;
 
-                if (xaccAccountEqual(split_account, m_base_split_account, true))
-                    continue;
+            // Only export trading splits if exporting a trading account
+            Account *tsplit_acc = xaccSplitGetAccount(t_split);
+            if (!m_is_trading_acc &&
+                (xaccAccountGetType(tsplit_acc) == ACCT_TYPE_TRADING))
+                continue;
 
-                auto line = make_simple_trans_split_line(s);
-                ok = gnc_csv_add_line(m_ss, line, m_use_quotes,
-                                      m_separator);
-                if (!ok)
-                    break;
-            }
-            return ok;
+            // Write complex Split Line.
+            auto line = make_complex_trans_line(t_split);
+            failed = !gnc_csv_add_line(m_ss, line, m_use_quotes, m_separator);
         }
-        else
-        {
-            return false;
-        }
+        return failed;
     }
+}
+
+StringVec
+CsvTransactionExportLine::make_gdpdu_trans_split_line(Split *split)
+{
+    auto t_void{xaccTransGetVoidStatus(m_transaction)};
+    gnc_numeric amount = xaccSplitGetAmount(split);
+    bool pos = gnc_numeric_positive_p(amount);
+    return {
+        get_date(m_transaction),
+        get_number(m_transaction),
+        pos ? get_account_number(m_base_split) : get_account_number(split),
+        pos ? get_account_number(split) : get_account_number(m_base_split),
+        get_description(m_transaction),
+        get_amount(split, t_void, false)};
+}
+
+StringVec
+CsvTransactionExportLine::make_gdpdu_trans_line(Split *split)
+{
+    auto t_void{xaccTransGetVoidStatus(m_transaction)};
+    return {
+        get_date(m_transaction),
+        get_number(m_transaction),
+        get_account_number(split),
+        get_other_account_number(split),
+        get_description(m_transaction),
+        get_amount(split, t_void, false)};
 }
 
 StringVec

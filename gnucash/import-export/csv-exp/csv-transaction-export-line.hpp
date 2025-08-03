@@ -42,6 +42,8 @@ public:
                              const char *separator,
                              bool use_quotes,
                              bool simple,
+                             bool gdpdu,
+                             bool is_trading_acc,
                              std::ofstream &ss);
 
     bool print_csv();
@@ -51,6 +53,8 @@ protected:
     std::string get_guid(Transaction *trans);
     std::string get_reconcile_date(Split *split);
     std::string get_account_name(Split *split, bool full);
+    std::string get_account_number(Split *split);
+    std::string get_other_account_number(Split *split);
     std::string get_number(Transaction *trans);
     std::string get_description(Transaction *trans);
     std::string get_notes(Transaction *trans);
@@ -68,16 +72,20 @@ protected:
     bool is_split_transaction();
 
     StringVec make_simple_trans_split_line(Split *split);
-    StringVec make_complex_trans_line(Split *split);
     StringVec make_simple_trans_line(Split *split);
+    StringVec make_gdpdu_trans_split_line(Split *split);
+    StringVec make_gdpdu_trans_line(Split *split);   
+    StringVec make_complex_trans_line(Split *split);
 
 private:
-    Split* m_split;
+    Split *m_split;
     Transaction *m_transaction;
 
     const char *m_separator;
     bool m_use_quotes;
     bool m_simple;
+    bool m_gdpdu;
+    bool m_is_trading_acc;
     std::ofstream &m_ss;
 
     bool m_is_debit_split;

@@ -90,32 +90,8 @@ export_query_splits(CsvExportInfo *info, bool is_trading_acct,
             continue;
         }
 
-        CsvTransactionExportLine line(split, trans, info->separator_str, info->use_quotes, info->simple_layout, ss);
+        CsvTransactionExportLine line(split, trans, info->separator_str, info->use_quotes, info->simple_layout, info->gdpdu_layout, is_trading_acct, ss);
         info->failed = !line.print_csv();
-
-#if 0
-        /* Loop through the list of splits for the Transaction */
-        for (auto node = xaccTransGetSplitList(trans); !info->failed && node;
-             node = node->next)
-        {
-            auto t_split{static_cast<Split *>(node->data)};
-
-            // base split is already written on the trans_line
-            if (split == t_split)
-                continue;
-
-            // Only export trading splits if exporting a trading account
-            Account *tsplit_acc = xaccSplitGetAccount(t_split);
-            if (!is_trading_acct &&
-                (xaccAccountGetType(tsplit_acc) == ACCT_TYPE_TRADING))
-                continue;
-
-            // Write complex Split Line.
-            auto line = make_complex_trans_line(trans, t_split);
-            info->failed = !gnc_csv_add_line(ss, line, info->use_quotes,
-                                             info->separator_str);
-        }
-#endif
     }
 }
 
@@ -166,6 +142,20 @@ void csv_transactions_export(CsvExportInfo *info)
             _("Value With Sym"),
             _("Value Num."),
             _("Rate/Price"),
+        };
+    }
+    /* Header string */
+    if (info->gdpdu_layout)
+    {
+        /* Translators: The following symbols will build the header
+           line of exported CSV files for german GdPDU-Export: */
+        headers = {
+            _("Date"),
+            (num_action ? _("Transaction Number") : _("Number")),
+            _("Debit Account"),
+            _("Credit Account"),
+            _("Description"),
+            _("Amount"),
         };
     }
     else
