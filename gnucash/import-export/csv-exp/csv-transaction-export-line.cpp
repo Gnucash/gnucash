@@ -56,7 +56,8 @@ CsvTransactionExportLine::CsvTransactionExportLine(Split *split,
                                                                         m_is_debit_split(false),
                                                                         m_is_credit_split(false),
                                                                         m_base_split(NULL),
-                                                                        m_base_split_account(NULL)
+                                                                        m_base_split_account(NULL),
+                                                                        m_gdpdu_failed(false)
 {
     GList *splits = xaccTransGetSplitList(m_transaction);
     uint debit = 0;
@@ -79,7 +80,8 @@ CsvTransactionExportLine::CsvTransactionExportLine(Split *split,
         }
         if (debit > 1 && credit > 1)
         {
-            std::cerr << "Multi split booking that needs to be booked on an intermediate account, no implemented!" << std::endl;
+            /* If you have a booking with multiple credit and debit accounts this cannot be exported without an extra account*/
+            m_gdpdu_failed = true;
             return;
         }
         else if (credit > 1)
@@ -293,13 +295,16 @@ CsvTransactionExportLine::get_price(Split *split, bool t_void)
 
 bool CsvTransactionExportLine::print_csv()
 {
-    if (!is_split_transaction() && (m_simple || m_gdpdu))
+    if (m_gdpdu && m_gdpdu_failed)
+        return false;
+
+    if (m_simple || (!is_split_transaction() && m_gdpdu))
     {
         auto line = m_gdpdu ? make_gdpdu_trans_line(m_split) : make_simple_trans_line(m_split);
         return gnc_csv_add_line(m_ss, line, m_use_quotes,
                                 m_separator);
     }
-    else if (m_simple || m_gdpdu)
+    else if (is_split_transaction() && m_gdpdu)
     {
         bool ok = false;
         GList *splits = xaccTransGetSplitList(m_transaction);
@@ -316,7 +321,7 @@ bool CsvTransactionExportLine::print_csv()
             if (xaccAccountEqual(split_account, m_base_split_account, true))
                 continue;
 
-            auto line = m_gdpdu ? make_gdpdu_trans_line(m_split) : make_simple_trans_line(m_split);
+            auto line = make_gdpdu_trans_split_line(m_split);
             ok = gnc_csv_add_line(m_ss, line, m_use_quotes,
                                   m_separator);
             if (!ok)
@@ -377,26 +382,6 @@ CsvTransactionExportLine::make_gdpdu_trans_line(Split *split)
         get_other_account_number(split),
         get_description(m_transaction),
         get_amount(split, t_void, false)};
-}
-
-StringVec
-CsvTransactionExportLine::make_simple_trans_split_line(Split *split)
-{
-    auto t_void{xaccTransGetVoidStatus(m_transaction)};
-    gnc_numeric amount = xaccSplitGetAmount(split);
-    bool pos = gnc_numeric_positive_p(amount);
-    return {
-        get_date(m_transaction),
-        pos ? xaccAccountGetName(m_base_split_account) : get_account_name(split, true),
-        get_number(m_transaction),
-        get_description(m_transaction),
-        pos ? get_account_name(split, true) : xaccAccountGetName(m_base_split_account),
-        get_reconcile(split),
-        get_amount(split, t_void, true),
-        get_amount(split, t_void, false),
-        get_value(split, t_void, true),
-        get_value(split, t_void, false),
-        get_rate(split, t_void)};
 }
 
 StringVec

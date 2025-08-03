@@ -93,6 +93,8 @@ private:
 
     Split *m_base_split;
     Account *m_base_split_account;
+
+    bool m_gdpdu_failed;
 };
 
 #endif
