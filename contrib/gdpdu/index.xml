@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataSet SYSTEM "gdpdu-01-03-2019.dtd">
+<DataSet>
+	<Version>1.0</Version>
+	<DataSupplier>
+		<Name>Hier Firmenname eintragen</Name>
+		<Location>Hier Ort eintragen</Location>
+		<Comment>Datentraegerüberlassung nach GDPdU vom Hier Datum eintragen</Comment>
+	</DataSupplier>
+	<Media>
+		<Name>Cloud</Name>
+		<Table>
+			<URL>Konten.csv</URL>
+			<Name>Konten</Name>
+			<Description>Konten</Description>
+			<Validity>
+				<Range>
+					<From>20210101</From>
+					<To>20231231</To>
+				</Range>
+				<Format>YYYYMMDD</Format>
+			</Validity>
+			<!-- Spezifiziert den Dezimaltrenner -->
+			<DecimalSymbol>,</DecimalSymbol>
+			<!-- Spezifiziert den Tausender-Separator -->
+			<DigitGroupingSymbol>.</DigitGroupingSymbol>
+      <VariableLength>
+      <ColumnDelimiter>;</ColumnDelimiter>
+      <RecordDelimiter>&#10;</RecordDelimiter>
+				<!-- ein zusammengesetzter Primaerschlüssel -->
+				<VariablePrimaryKey>
+					<Name>Kontonummer</Name>
+					<Numeric/>
+				</VariablePrimaryKey>
+				<VariableColumn>
+					<Name>Typ</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+					<VariableColumn>
+					<Name>Volle Kontobezeichnung</Name>
+					<AlphaNumeric/>
+        </VariableColumn>
+					<VariableColumn>
+					<Name>Kontobezeichnung</Name>
+					<AlphaNumeric/>
+        </VariableColumn>
+				<VariableColumn>
+					<Name>Kontonummer</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Beschreibung</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Kontofarbe</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Bemerkung</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Symbol</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Namensraum</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Versteckt</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Steuerrelevante Information</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Platzhalter</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+			</VariableLength>
+		</Table>
+		<Table>
+			<URL>Buchungen.csv</URL>
+			<Name>Buchungsstapel</Name>
+			<Description>Alle Buchungen</Description>
+			<!-- Spezifiziert den Dezimaltrenner -->
+			<DecimalSymbol>,</DecimalSymbol>
+			<!-- Spezifiziert den Tausender-Separator -->
+			<DigitGroupingSymbol>.</DigitGroupingSymbol>
+			<VariableLength>
+			<ColumnDelimiter>;</ColumnDelimiter>
+      <RecordDelimiter>&#10;</RecordDelimiter>
+				<VariableColumn>
+					<Name>Datum</Name>
+					<Date>
+						<Format>DD.MM.YYYY</Format>
+					</Date>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Beschreibung</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<VariableColumn>
+					<Name>Wert</Name>
+					<AlphaNumeric/>
+				</VariableColumn>
+				<ForeignKey>
+          <Name>Sollkonto</Name>
+          <References>Konten</References>
+        </ForeignKey>
+				<ForeignKey>
+          <Name>Habenkonto</Name>
+          <References>Konten</References>
+        </ForeignKey>
+			</VariableLength>
+		</Table>
+	</Media>
+</DataSet>
