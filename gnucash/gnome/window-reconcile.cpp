@@ -307,23 +307,19 @@ recnRecalculateBalance (RecnWindow *recnData)
     return diff;
 }
 
-
-/* amount_edit_focus_out_cb
- *   Callback on focus-out event for statement Ending Balance.
+/* amount_edit_cb
+ *   Callback on activate event for statement Ending Balance.
  *   Sets the user_set_value flag true if the amount entered is
  *   different to the calculated Ending Balance as at the default
  *   Statement Date. This prevents the entered Ending Balance
  *   being recalculated if the Statement Date is changed.
  *
  * Args:   widget         - Ending Balance widget
- *         event          - event triggering this callback
  *         data           - structure containing info about this
  *                          reconciliation process.
- * Returns:  False - propagate the event to the widget's parent.
  */
-static gboolean
-amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
-                         startRecnWindowData *data)
+static void
+amount_edit_cb(GtkWidget *widget, startRecnWindowData *data)
 {
     gnc_numeric value;
     gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(data->end_value),
@@ -340,6 +336,22 @@ amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
         }
         data->user_set_value = !gnc_numeric_equal (value, data->original_value);
     }
+}
+
+/* amount_edit_focus_out_cb
+ *   Callback on focus-out event for statement Ending Balance.
+ *
+ * Args:   widget         - Ending Balance widget
+ *         event          - event triggering this callback
+ *         data           - structure containing info about this
+ *                          reconciliation process.
+ * Returns:  False - propagate the event to the widget's parent.
+ */
+static gboolean
+amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
+                         startRecnWindowData *data)
+{
+    amount_edit_cb(widget, data);
     return FALSE;
 }
 
@@ -775,6 +787,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
         gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
         fo_handler_id = g_signal_connect (G_OBJECT(entry), "focus-out-event",
                                           G_CALLBACK(amount_edit_focus_out_cb),
+                                          (gpointer) &data);
+        g_signal_connect (G_OBJECT(entry), "activate",
+                                          G_CALLBACK(amount_edit_cb),
                                           (gpointer) &data);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 

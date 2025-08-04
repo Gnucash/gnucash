@@ -4,14 +4,15 @@
 # An's Page <anspage@outlook.com>, 2020.
 # Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022.
 # Ivan Kostov <jiveq1@gmail.com>, 2025.
+# Angel Ivanov <angel.forcebg@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-04-21 20:05+0000\n"
-"Last-Translator: Ivan Kostov <jiveq1@gmail.com>\n"
+"PO-Revision-Date: 2025-07-21 17:03+0000\n"
+"Last-Translator: Angel Ivanov <angel.forcebg@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/bg/>\n"
 "Language: bg\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -95,12 +96,12 @@ msgstr "account type: взаимни фондове"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
-msgstr "account type: Актив"
+msgstr "account type: Пасивен"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 #, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "account type: Актив"
+msgstr "account type: Активи"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -204,8 +205,9 @@ msgid "action: withdraw"
 msgstr "action: теглене"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
+#, fuzzy
 msgid "aging"
-msgstr ""
+msgstr "лихви"
 
 #. "A sum of money"
 msgid "amount"
@@ -215,7 +217,7 @@ msgstr "сума"
 #, fuzzy
 #| msgid "amount"
 msgid "amount due"
-msgstr "сума"
+msgstr "дължима сума"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"

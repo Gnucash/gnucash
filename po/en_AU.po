@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.12\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2025-06-22 12:27-0700\n"
-"PO-Revision-Date: 2025-03-24 09:45+0000\n"
+"PO-Revision-Date: 2025-07-07 19:03+0000\n"
 "Last-Translator: Simon Arlott <nomis@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_AU/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -11965,10 +11965,8 @@ msgid "APR (Compounded Quarterly)"
 msgstr "APR (Compounded Quarterly)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
-#, fuzzy
-#| msgid "APR (Compounded Annually)"
 msgid "APR (Compounded Semi-annually)"
-msgstr "APR (Compounded Annually)"
+msgstr "APR (Compounded Semi-annually)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:64
 msgid "APR (Compounded Annually)"
@@ -20017,10 +20015,8 @@ msgid "A"
 msgstr "A"
 
 #: gnucash/import-export/import-main-matcher.cpp:1605
-#, fuzzy
-#| msgid "Add a reversing transaction."
 msgid "Add as a new transaction"
-msgstr "Add a reversing transaction."
+msgstr "Add as a new transaction"
 
 #: gnucash/import-export/import-main-matcher.cpp:1607
 msgctxt "Column header for 'Updating plus Clearing transaction'"
@@ -20028,15 +20024,12 @@ msgid "U+C"
 msgstr "U+C"
 
 #: gnucash/import-export/import-main-matcher.cpp:1610
-#, fuzzy
-#| msgid ""
-#| "Select \"U+C\" to update a matching transaction and mark it as cleared "
-#| "(c)."
 msgid ""
 "Update + Clear Transaction\n"
 "Update existing transaction with the imported data and mark it as cleared"
 msgstr ""
-"Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
+"Update + Clear Transaction\n"
+"Update existing transaction with the imported data and mark it as cleared"
 
 #: gnucash/import-export/import-main-matcher.cpp:1612
 msgctxt "Column header for 'Clearing transaction'"
@@ -20048,6 +20041,8 @@ msgid ""
 "Clear Transaction\n"
 "Mark existing transaction as cleared without changing its details"
 msgstr ""
+"Clear Transaction\n"
+"Mark existing transaction as cleared without changing its details"
 
 #: gnucash/import-export/import-main-matcher.cpp:1620
 msgid "Info"
@@ -30700,7 +30695,7 @@ msgstr "Bucharest Stock Exchange, RO"
 #: libgnucash/engine/gnc-commodity.cpp:199
 msgctxt "FQ Source"
 msgid "China Merchants Bank, CN"
-msgstr ""
+msgstr "China Merchants Bank, CN"
 
 #: libgnucash/engine/gnc-commodity.cpp:200
 msgctxt "FQ Source"

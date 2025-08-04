@@ -44,10 +44,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.12\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2025-06-22 12:27-0700\n"
-"PO-Revision-Date: 2025-05-31 09:45+0000\n"
+"PO-Revision-Date: 2025-07-13 17:01+0000\n"
 "Last-Translator: Frédéric Mergey <fmergey@yahoo.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -56,7 +56,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -116,7 +116,7 @@ msgstr "Début de l'année dernière"
 #: bindings/guile/date-utilities.scm:732
 #: libgnucash/engine/gnc-option-date.cpp:281
 msgid "First day of the previous calendar year."
-msgstr "Premier jour de la précédente année calendaire."
+msgstr "Premier jour de l'année calendaire précédente."
 
 # po/guile_strings.txt:166
 #: bindings/guile/date-utilities.scm:736
@@ -128,7 +128,7 @@ msgstr "Fin de l'année dernière"
 #: bindings/guile/date-utilities.scm:739
 #: libgnucash/engine/gnc-option-date.cpp:289
 msgid "Last day of the previous calendar year."
-msgstr "Dernier jour de la précédente année calendaire."
+msgstr "Dernier jour de l'année calendaire précédente."
 
 # po/guile_strings.txt:107
 #: bindings/guile/date-utilities.scm:743
@@ -140,7 +140,7 @@ msgstr "Début de la période comptable"
 #: libgnucash/engine/gnc-option-date.cpp:313
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
-"Premier jour de la période comptable, telle que définie dans les Préférences "
+"Premier jour de la période comptable, tel que défini dans les préférences "
 "globales."
 
 # po/guile_strings.txt:166
@@ -153,7 +153,7 @@ msgstr "Fin de la période comptable"
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
-"Dernier jour de la période comptable, telle que définie dans les Préférences "
+"Dernier jour de la période comptable, tel que défini dans les préférences "
 "globales."
 
 #: bindings/guile/date-utilities.scm:757
@@ -239,7 +239,7 @@ msgstr "Premier jour de la période comptable trimestrielle précédente."
 #: gnucash/gnome-utils/gnc-period-select.c:85
 #: libgnucash/engine/gnc-option-date.cpp:240
 msgid "End of previous quarter"
-msgstr "Fin du trimestre dernier"
+msgstr "Fin du trimestre précédent"
 
 # po/guile_strings.txt:166
 #: bindings/guile/date-utilities.scm:809
@@ -276,7 +276,7 @@ msgstr "Entreprise"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1301
 msgid "Company Name"
-msgstr "Nom de Société"
+msgstr "Nom de société"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1304
 msgid "Company Address"
@@ -288,11 +288,11 @@ msgstr "Identifiant de la société"
 
 #: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1312
 msgid "Company Phone Number"
-msgstr "N° de téléphone de la Société"
+msgstr "N° de téléphone de la société"
 
 #: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1316
 msgid "Company Fax Number"
-msgstr "N° de fax de la Société"
+msgstr "N° de fax de la société"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1324
 msgid "Company Website URL"
@@ -355,7 +355,7 @@ msgstr "Cyrillique"
 
 #: borrowed/goffice/go-charmap-sel.c:75
 msgid "Greek"
-msgstr "Grec"
+msgstr "Grecque"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
@@ -769,19 +769,14 @@ msgstr ""
 "org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
-#, fuzzy
-#| msgid ""
-#| "The GnuCash developers are easy to contact. As well as several mailing "
-#| "lists, you can chat to them live on IRC! Join them on #gnucash at irc."
-#| "gnome.org"
 msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gimp."
 "net"
 msgstr ""
-"L'équipe de développement de GnuCash est facile à contacter. En plus des "
-"listes de diffusion, vous pouvez discuter avec eux en direct sur IRC. "
-"Connectez-vous sur le canal #gnucash sur irc.gnome.org"
+"Les développeurs de GnuCash sont faciles à contacter. En plus de plusieurs "
+"listes de diffusion, vous pouvez discuter avec eux en direct sur IRC ! "
+"Rejoignez-les sur #gnucash à irc.gimp.net"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -791,10 +786,10 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Vous pouvez facilement importer vos données financières existantes depuis "
-"Quicken, MS Money ou d'autres programmes qui exportent des fichiers QIF "
-"(Quicken Interchange Format) ou OFX. Dans le menu fichier cliquez sur le "
-"sous-menu Import et choisissez QIF ou OFX/QFX. Ensuite, suivez les "
-"instructions fournies."
+"Quicken, MS Money ou d'autres programmes qui exportent des fichiers QIF ("
+"Quicken Interchange Format) ou OFX. Dans le menu Fichier cliquez sur le sous-"
+"menu Importer et choisissez QIF ou OFX/QFX. Ensuite, suivez les instructions "
+"fournies."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -905,9 +900,9 @@ msgid ""
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
 msgstr ""
-"Quick-fill facilite la saisie des transactions courantes. Quand vous "
-"saisissez la ou les première(s) lettre(s) d'une description de transaction "
-"courante, puis sur la touche de tabulation, GnuCash complétera "
+"Le remplissage rapide facilite la saisie des transactions courantes. Quand "
+"vous saisissez la ou les première(s) lettre(s) d'une description de "
+"transaction courante, puis sur la touche de tabulation, GnuCash complétera "
 "automatiquement le restant de la transaction comme elle fut entrée "
 "dernièrement."
 
@@ -4422,10 +4417,9 @@ msgstr "maintenant"
 
 #: gnucash/gnome/dialog-tax-info.c:871
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:401
-#, fuzzy, c-format
-#| msgid "Accounts Selected:"
+#, c-format
 msgid "Accounts Selected: %d"
-msgstr "Comptes sélectionnés :"
+msgstr "Comptes sélectionnés : %d"
 
 # messages-i18n.c:190
 #: gnucash/gnome/dialog-tax-info.c:1184
@@ -5788,10 +5782,8 @@ msgstr "Aller à la date"
 # messages-i18n.c:96
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5060
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5089
-#, fuzzy
-#| msgid "_Jump to the other account"
 msgid "Unable to jump to other account"
-msgstr "_Aller à l'autre compte"
+msgstr "Impossible de passer à un autre compte"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5063
 msgid ""
@@ -11953,10 +11945,8 @@ msgstr ""
 # messages-i18n.c:96
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:129
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:262
-#, fuzzy
-#| msgid "_Jump to the other account"
 msgid "Jump when there are multiple other accounts"
-msgstr "_Aller à l'autre compte"
+msgstr "Aller à l'autre compte lorsqu'il y a plusieurs autres comptes"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:130
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:263
@@ -11973,24 +11963,18 @@ msgstr ""
 # messages-i18n.c:96
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:134
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:267
-#, fuzzy
-#| msgid "_Jump to the other account"
 msgid "Jump when there are no other accounts"
-msgstr "_Aller à l'autre compte"
+msgstr "Aller à l'autre compte lorsqu'il y a pas autres comptes"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:135
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:268
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented when you attempt to duplicate a modified "
-#| "transaction. The changed data must be saved or the duplication canceled."
 msgid ""
 "This dialog is presented when you are unable to jump on a transaction "
 "because it only has splits for the current account."
 msgstr ""
-"Cette boîte de dialogue est presentée quand vous essayez de dupliquer une "
-"transaction en cours de modification. Les modifications doivent être sauvées "
-"ou la duplication annulée."
+"Cette boîte de dialogue s'affiche lorsque vous ne pouvez pas aller à une "
+"transaction parce qu'elle ne contient que des répartitions pour le compte "
+"actif."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
@@ -13165,29 +13149,27 @@ msgstr "Taux d’intérêt"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr "Taux annualisé effectif global (composé quotidiennement)"
+msgstr "TAEG (composé quotidiennement)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr "Taux annualisé effectif global (composé hebdomadairement)"
+msgstr "TAEG (composé hebdomadairement)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr "Taux annualisé effectif global (composé mensuellement)"
+msgstr "TAEG (composé mensuellement)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr "Taux annualisé effectif global (composé trimestriellement)"
+msgstr "TAEG (composé trimestriellement)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
-#, fuzzy
-#| msgid "APR (Compounded Annually)"
 msgid "APR (Compounded Semi-annually)"
-msgstr "Taux annualisé effectif global (composé annuellement)"
+msgstr "TAEG (composé semestriellement)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:64
 msgid "APR (Compounded Annually)"
-msgstr "Taux annualisé effectif global (composé annuellement)"
+msgstr "TAEG (composé annuellement)"
 
 # messages-i18n.c:180
 #: gnucash/gtkbuilder/assistant-loan.glade:75
@@ -13240,8 +13222,8 @@ msgstr "Configuration de remboursement d’hypothèque/emprunt"
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
 msgstr ""
-"Entrez les détails concernant le prêt ; au minimum, entrez un nom de prêt "
-"valide et un montant.\n"
+"Saisissez les détails du prêt, au minimum un compte et un montant de prêt "
+"valides.\n"
 
 # messages-i18n.c:227
 #: gnucash/gtkbuilder/assistant-loan.glade:168
@@ -13284,8 +13266,9 @@ msgid ""
 "Enter the number of months still to be paid off. This determines both the "
 "remaining principle and the duration of the scheduled transaction."
 msgstr ""
-"Entrez le nombre de mois qu'il reste à rembourser. Cela détermine à la fois "
-"le principe restant, et la durée de la transaction programmé."
+"Saisissez le nombre de mois restant à rembourser. Cela détermine à la fois "
+"le montant emprunté initialement (hors intérêts) restant et la durée de la "
+"transaction programmée."
 
 # po/guile_strings.txt:203
 #: gnucash/gtkbuilder/assistant-loan.glade:291
@@ -13297,9 +13280,9 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
-"Entrez le taux d'intérêt annuel en pourcentage. Les valeurs acceptées sont "
-"entre 0,001 et 100. L'assistant d'hypothèques ne supporte pas les prêts à "
-"taux nul."
+"Saisissez le taux d'intérêt annuel en pourcentage. Les valeurs acceptées "
+"sont entre 0,001 et 100. L'assistant d'hypothèques ne supporte pas les prêts "
+"à taux nul."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:362
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -13332,7 +13315,7 @@ msgstr "Compte en séquestre"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:534
 msgid "Loan Repayment Options"
-msgstr "Options de repaiement du prêt"
+msgstr "Options de remboursement du prêt"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:547
 msgid "All accounts must have valid entries to continue."
@@ -13349,12 +13332,12 @@ msgstr "Intérêts vers"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:682
 msgid "Repayment Frequency"
-msgstr "Fréquence des paiements"
+msgstr "Fréquence des remboursements"
 
 # messages-i18n.c:312
 #: gnucash/gtkbuilder/assistant-loan.glade:717
 msgid "Loan Repayment"
-msgstr "Repaiement du prêt"
+msgstr "Remboursement du prêt"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:730
 msgid "All enabled option pages must contain valid entries to continue."
@@ -17268,17 +17251,15 @@ msgstr "Action de saut de transaction lorsqu'il y a plus de deux répartitions."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2593
 msgid "Do _nothing"
-msgstr ""
+msgstr "Ne _rien faire"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2599
-#, fuzzy
-#| msgid "Do not show"
 msgid "Do nothing."
-msgstr "Ne pas afficher"
+msgstr "Ne rien faire."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2612
 msgid "Go to the first split with the _largest value"
-msgstr ""
+msgstr "Aller à la première répartition avec la _plus grande valeur"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2618
 msgid ""
@@ -17289,10 +17270,8 @@ msgstr ""
 
 # po/guile_strings.txt:153
 #: gnucash/gtkbuilder/dialog-preferences.glade:2632
-#, fuzzy
-#| msgid "Move to the split at the specified date."
 msgid "Go to the first split with the _smallest value"
-msgstr "Aller à la répartition à la date renseignée."
+msgstr "Aller à la première répartition avec la _plus petite valeur"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2638
 msgid ""
@@ -22048,7 +22027,7 @@ msgstr "a/j/m"
 # po/guile_strings.txt:153
 #: gnucash/import-export/import-main-matcher.cpp:503
 msgid "No new transactions were found in this import."
-msgstr "Aucune nouvelle transaction trouvée lors de cet importation."
+msgstr "Aucune nouvelle transaction trouvée lors de cette importation."
 
 #: gnucash/import-export/import-main-matcher.cpp:775
 msgid "Destination account for the auto-balance split."
@@ -22089,10 +22068,8 @@ msgstr "A"
 
 # messages-i18n.c:176
 #: gnucash/import-export/import-main-matcher.cpp:1605
-#, fuzzy
-#| msgid "Add a reversing transaction."
 msgid "Add as a new transaction"
-msgstr "Ajouter une transaction inverse."
+msgstr "Ajouter comme nouvelle transaction."
 
 #: gnucash/import-export/import-main-matcher.cpp:1607
 msgctxt "Column header for 'Updating plus Clearing transaction'"
@@ -22122,6 +22099,9 @@ msgid ""
 "Clear Transaction\n"
 "Mark existing transaction as cleared without changing its details"
 msgstr ""
+"Transaction enregistrée\n"
+"Marquer une transaction existante comme enregistrée sans en modifier les "
+"détails"
 
 # messages-i18n.c:231
 #: gnucash/import-export/import-main-matcher.cpp:1620
@@ -34140,11 +34120,9 @@ msgstr ""
 "boursiers qui n'ont pas été enregistrés ailleurs."
 
 #: libgnucash/engine/gnc-commodity.cpp:191
-#, fuzzy
-#| msgid "Alpha Vantage API key"
 msgctxt "FQ Source"
 msgid "Alphavantage"
-msgstr "Clé de l'API Alpha Vantage"
+msgstr "Alphavantage"
 
 #: libgnucash/engine/gnc-commodity.cpp:192
 msgctxt "FQ Source"
@@ -34169,7 +34147,7 @@ msgstr "Australian Stock Exchange, AU"
 #: libgnucash/engine/gnc-commodity.cpp:196
 msgctxt "FQ Source"
 msgid "Italian Stock Exchange, IT"
-msgstr ""
+msgstr "Bourse italienne, IT"
 
 #: libgnucash/engine/gnc-commodity.cpp:197
 msgctxt "FQ Source"
@@ -34179,27 +34157,27 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:198
 msgctxt "FQ Source"
 msgid "Bucharest Stock Exchange, RO"
-msgstr ""
+msgstr "Bourse de Bucarest, RO"
 
 #: libgnucash/engine/gnc-commodity.cpp:199
 msgctxt "FQ Source"
 msgid "China Merchants Bank, CN"
-msgstr ""
+msgstr "China Merchants Bank, CN"
 
 #: libgnucash/engine/gnc-commodity.cpp:200
 msgctxt "FQ Source"
 msgid "Colombo Stock Exchange, LK"
-msgstr ""
+msgstr "Bourse de Colombo, LK"
 
 #: libgnucash/engine/gnc-commodity.cpp:201
 msgctxt "FQ Source"
 msgid "comdirect, DE"
-msgstr ""
+msgstr "comdirect, DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:202
 msgctxt "FQ Source"
 msgid "Consors Bank, DE"
-msgstr ""
+msgstr "Consors Bank, DE"
 
 # messages-i18n.c:227
 #: libgnucash/engine/gnc-commodity.cpp:203
@@ -34227,12 +34205,12 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:207
 msgctxt "FQ Source"
 msgid "GoldMoney precious metals"
-msgstr ""
+msgstr "GoldMoney métaux précieux"
 
 #: libgnucash/engine/gnc-commodity.cpp:208
 msgctxt "FQ Source"
 msgid "Google Web, US Stocks"
-msgstr ""
+msgstr "Google Web, actions américaines"
 
 #: libgnucash/engine/gnc-commodity.cpp:209
 msgctxt "FQ Source"
@@ -34262,7 +34240,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:214
 msgctxt "FQ Source"
 msgid "New Zealand stock eXchange, NZ"
-msgstr ""
+msgstr "Bourse de Nouvelle-Zélande, NZ"
 
 #: libgnucash/engine/gnc-commodity.cpp:215
 msgctxt "FQ Source"
@@ -34277,7 +34255,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:217
 msgctxt "FQ Source"
 msgid "Paris Stock Exchange/Boursorama, FR"
-msgstr ""
+msgstr "Bourse de Paris/Boursorama, FR"
 
 #: libgnucash/engine/gnc-commodity.cpp:218
 msgctxt "FQ Source"
@@ -34319,7 +34297,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:224
 msgctxt "FQ Source"
 msgid "Toronto Stock eXchange, CA"
-msgstr ""
+msgstr "Bourse de Toronto, CA"
 
 #: libgnucash/engine/gnc-commodity.cpp:225
 msgctxt "FQ Source"
@@ -34382,7 +34360,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:241
 msgctxt "FQ Source"
 msgid "India (BSEIndia, NSEIndia)"
-msgstr ""
+msgstr "Inde (BSEIndia, NSEIndia)"
 
 #: libgnucash/engine/gnc-commodity.cpp:242
 msgctxt "FQ Source"

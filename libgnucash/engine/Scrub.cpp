@@ -566,11 +566,13 @@ get_trading_split (Transaction *trans, Account *base,
     if (!balance_split)
     {
         balance_split = xaccMallocSplit (qof_instance_get_book(trans));
+        xaccDisableDataScrubbing();
 
         xaccTransBeginEdit (trans);
         xaccSplitSetParent(balance_split, trans);
         xaccSplitSetAccount(balance_split, account);
         xaccTransCommitEdit (trans);
+        xaccEnableDataScrubbing();
     }
 
     return balance_split;

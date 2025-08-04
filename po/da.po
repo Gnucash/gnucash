@@ -109,7 +109,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2025-06-22 12:27-0700\n"
-"PO-Revision-Date: 2025-06-26 09:04+0000\n"
+"PO-Revision-Date: 2025-07-08 21:02+0000\n"
 "Last-Translator: Allan Olsen <allan@hamann-olsen.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "da/>\n"
@@ -14212,7 +14212,7 @@ msgstr "Skat inkluderet"
 #: gnucash/gtkbuilder/dialog-vendor.glade:590
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:97
 msgid "Tax Table"
-msgstr "Skatte-tabel"
+msgstr "Skatte tabel"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:652
 #: gnucash/gtkbuilder/dialog-vendor.glade:594

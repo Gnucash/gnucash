@@ -6,22 +6,23 @@
 # Zdenko Podobny <zdenop@gmail.com>, 2008.
 # Dullus <dullus@gmail.com>, 2022.
 # Zdenko Podobný <zdenop@gmail.com>, 2023.
+# Warder <ciksa@seznam.cz>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-09-13 19:17+0000\n"
-"Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
+"PO-Revision-Date: 2025-07-16 16:01+0000\n"
+"Last-Translator: Warder <ciksa@seznam.cz>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -29,7 +30,7 @@ msgstr "Termín"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -201,17 +202,15 @@ msgstr "action: výber"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "starnutie"
 
 #. "A sum of money"
 msgid "amount"
 msgstr "čiastka"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "čiastka"
+msgstr "dlžná suma"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -222,14 +221,12 @@ msgid "balance (noun)"
 msgstr "zostatok (podstatné meno)"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "vyrovnať"
+msgstr "zostatok b/f"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "vyrovnať"
+msgstr "zostatok c/f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -248,9 +245,8 @@ msgid "bill"
 msgstr "účet"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "platobné podmienky"
+msgstr "majiteľ účtu"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -317,9 +313,8 @@ msgid "commodity option: Symbol"
 msgstr "commodity option: Symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "úrok"
+msgstr "zložené úroky"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -334,9 +329,8 @@ msgid "credit transfer"
 msgstr "bankový prevod"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "bankový prevod"
+msgstr "dobropis"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -348,7 +342,7 @@ msgstr "Vlastné"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "palubná doska"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -387,9 +381,8 @@ msgid "Description (column in register)"
 msgstr "Popis (stĺpec v registri)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "účet"
+msgstr "zľava"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -397,15 +390,15 @@ msgstr "podvojnosť"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "odkaz na dokument"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "dva dátumy"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "e-mail"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -417,7 +410,7 @@ msgstr "vlastné imanie"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr "výkaz majetku"
+msgstr "výkaz vlastného imania"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
@@ -448,14 +441,12 @@ msgid "financial calculator: payments"
 msgstr "financial calculator: platby"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "výsledovka"
+msgstr "finančný výkaz"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "slobodný softvér"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -498,10 +489,8 @@ msgid "loan"
 msgstr "úver"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "úver"
+msgstr "úver: RPSN"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -513,7 +502,7 @@ msgstr "Stratené účty"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr ""
+msgstr "Veľa"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -524,9 +513,8 @@ msgid "marker"
 msgstr "zvýrazňovač"
 
 #. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "zvýrazňovač"
+msgstr "značky"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -541,16 +529,12 @@ msgid "Mortgage"
 msgstr "Hypotéka"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hypotéka"
+msgstr "hypotéka: ARM"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hypotéka"
+msgstr "hypotéka: FRM"
 
 #. "e.g. USD, EUR, see Currency."
 msgid "national currency"
@@ -602,7 +586,7 @@ msgstr "sirota"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "vlastník (faktúry, faktúry alebo výdavkového dokladu)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -633,18 +617,16 @@ msgid "portfolio"
 msgstr "portfólio"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "uzavrieť"
+msgstr "príspevok, na"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "nastavenia"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "action: platba"
+msgstr "istina"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -720,11 +702,11 @@ msgstr "znovu načítať"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "formulár správy: Formulár účtu T"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "formulár správy: Vertikálny formulár"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -736,7 +718,7 @@ msgstr "stornovať transakciu (Akcia v registri)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "predaj"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -756,7 +738,7 @@ msgstr "cenný papier"
 
 #. "Selling borrowed units in the hope that when you buy them back later it will be at a lower price."
 msgid "Sell short"
-msgstr ""
+msgstr "Predajte nakrátko"
 
 #. "-"
 msgid "Share Balance (register)"
@@ -791,31 +773,28 @@ msgid "subtotal"
 msgstr "medzisúčet"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "daňové informácie"
+msgstr "daňový kód"
 
 #. "field of an account"
 msgid "tax info"
 msgstr "daňové informácie"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "account type: Príjem"
+msgstr "typ dane: daň z príjmu"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "typ dane: daň z predaja"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "typ dane: DPH"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "typ dane: DPH"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -867,7 +846,7 @@ msgstr "previesť"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "skúšobná bilancia (správa)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
