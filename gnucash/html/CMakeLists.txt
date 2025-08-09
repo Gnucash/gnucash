@@ -26,9 +26,9 @@ if (WEBKIT1)
   list(APPEND html_SOURCES gnc-html-webkit1.c)
   set(html_EXTRA_DIST gnc-html-webkit2.h gnc-html-webkit2.c)
 else ()
-  list(APPEND html_HEADERS gnc-html-webkit2.h)
-  list(APPEND html_SOURCES gnc-html-webkit2.c)
-  set(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
+  list(APPEND html_HEADERS gnc-html-cef.h gnc-html-webkit2.h)
+  list(APPEND html_SOURCES gnc-html-cef.cpp gnc-html-webkit2.c)
+  set(html_EXTRA_DIST gnc-html-cef.c gnc-html-cef.h gnc-html-webkit1.h gnc-html-webkit1.c)
 endif()
 
 
@@ -58,12 +58,16 @@ target_link_libraries(gnc-html
         gnc-gnome-utils
         PkgConfig::GTK3
         PkgConfig::WEBKIT
+        ${CEF_DLL_WRAPPER}
+        cef
         ${GUILE_LDFLAGS})
 
 target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 
 
 target_include_directories (gnc-html
+PRIVATE
+    cef
 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -73,6 +77,10 @@ if (APPLE)
 endif()
 
 add_dependencies(gnc-html swig-gnc-html-c)
+
+set_target_properties(gnc-html PROPERTIES
+    LINK_FLAGS "-Wl,-rpath,${CEF_LIB_DIR}"
+)
 
 if (COVERAGE)
   add_coverage_target(gnc-html)

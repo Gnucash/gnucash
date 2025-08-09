@@ -56,6 +56,7 @@
 #include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
 #include "print-session.h"
+#include "gnc-html-cef.h"
 
 
 G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
@@ -181,6 +182,7 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                  GNC_PREF_RPT_DFLT_ZOOM);
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
+     cef_wrapper_create_browser ("about:blank");
 
      gtk_container_add( GTK_CONTAINER(priv->base.container),
                         GTK_WIDGET(priv->web_view) );
@@ -270,6 +272,7 @@ gnc_html_webkit_finalize( GObject* obj )
 //              g_free( self->priv );
      self->priv = NULL;
 //      }
+     cef_wrapper_shutdown();
 
      G_OBJECT_CLASS(gnc_html_webkit_parent_class)->finalize( obj );
 }
@@ -775,6 +778,7 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
      g_free(filename);
      DEBUG("Loading uri '%s'", uri);
      webkit_web_view_load_uri( priv->web_view, uri );
+     cef_wrapper_load_file(uri);
      g_free( uri );
 
      LEAVE("");

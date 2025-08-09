@@ -292,6 +292,7 @@ gnucash/gtkbuilder/gnc-tree-view-owner.glade
 gnucash/gtkbuilder/window-autoclear.glade
 gnucash/gtkbuilder/window-reconcile.glade
 gnucash/html/gnc-html.c
+gnucash/html/gnc-html-cef.cpp
 gnucash/html/gnc-html-factory.c
 gnucash/html/gnc-html-history.c
 gnucash/html/gnc-html-webkit1.c

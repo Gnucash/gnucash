@@ -242,6 +242,44 @@ if (WITH_GNUCASH)
   pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=${GTK_MIN_VERSION})
 endif()
 
+find_path(CEF_FIND cef_app.h)
+set(CEF_INCLUDE_DIR "${CEF_FIND}/..")
+set(CEF_LIB_DIR "${CEF_INCLUDE_DIR}/lib")
+find_path(CEF_RESOURCES_DIR icudtl.dat
+          PATHS "${CEF_INCLUDE_DIR}/share/cef"
+                "${CEF_LIB_DIR}")
+find_library(CEF_LIB cef)
+find_library(CEF_DLL_WRAPPER cef_dll_wrapper
+             PATHS "${CEF_INCLUDE_DIR}/libcef_dll_wrapper"
+                   "${CEF_LIB_DIR}")
+
+message (STATUS "Path CEF_FIND ${CEF_FIND}")
+message (STATUS "Path CEF_INCLUDE_DIR ${CEF_INCLUDE_DIR}")
+message (STATUS "Path CEF_LIB_DIR ${CEF_LIB_DIR}")
+message (STATUS "Path CEF_RESOURCES_DIR ${CEF_RESOURCES_DIR}")
+message (STATUS "Path CEF_LIB ${CEF_LIB}")
+message (STATUS "Path CEF_DLL_WRAPPER ${CEF_DLL_WRAPPER}")
+
+include_directories(${CEF_FIND})
+link_directories(${CEF_DLL_WRAPPER})
+
+# If you want to use target-based linkage, you can define an imported library:
+add_library(cef SHARED IMPORTED)
+set_target_properties(cef PROPERTIES
+    IMPORTED_LOCATION "${CEF_LIB_DIR}/libcef.so"
+    INTERFACE_INCLUDE_DIRECTORIES "${CEF_INCLUDE_DIR}"
+)
+
+# Example: install resource files (adjust destination as needed)
+install(FILES
+    "${CEF_RESOURCES_DIR}/icudtl.dat"
+    "${CEF_RESOURCES_DIR}/chrome_100_percent.pak"
+    "${CEF_RESOURCES_DIR}/chrome_200_percent.pak"
+    "${CEF_RESOURCES_DIR}/resources.pak"
+    DESTINATION share/cef
+)
+add_definitions(-DCEF_RESOURCES_DIR="${CEF_RESOURCES_DIR}")
+
 pkg_check_modules (ZLIB REQUIRED zlib)
 
 if (MSVC)

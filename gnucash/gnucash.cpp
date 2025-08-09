@@ -57,6 +57,7 @@
 #include <gnucash-register.h>
 #include <search-core-type.h>
 #include <top-level.h>
+#include "gnc-html-cef.h"
 
 #include <boost/locale.hpp>
 #include <boost/optional.hpp>
@@ -264,13 +265,17 @@ Gnucash::Gnucash::configure_program_options (void)
 }
 
 int
-Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+Gnucash::Gnucash::start (int argc, char **argv)
 {
     Gnucash::CoreApp::start();
 
     /* Now the module files are looked up, which might cause some library
      initialization to be run, hence gtk must be initialized beforehand. */
     gnc_module_system_init();
+
+    printf ("init...\n");
+    cef_wrapper_init (argc, argv);
+    printf ("complete...\n");
 
     gnc_gui_init();
 
