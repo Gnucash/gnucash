@@ -46,6 +46,7 @@
 (export gnc:decompose-accountlist)
 (export gnc:account-get-type-string-plural)
 (export gnc:accounts-get-commodities)
+(export gnc:accounts-get-commodities-sorted)
 (export gnc:get-current-account-tree-depth)
 (export gnc:accounts-and-all-descendants)
 (export gnc:make-value-collector)
@@ -226,6 +227,17 @@
       (let ((comm (xaccAccountGetCommodity (car accounts)))
             (accum (gnc:accounts-get-commodities (cdr accounts) exclude-commodity)))
         (if (or (equal? exclude-commodity comm) (member comm accum)) accum (cons comm accum)))))
+
+(define (gnc:accounts-get-commodities-sorted accounts exclude-commodity)
+  (stable-sort!
+    (stable-sort!
+      (gnc:accounts-get-commodities accounts exclude-commodity)
+      (lambda (a b)
+        (gnc:string-locale<?
+          (gnc-commodity-get-nice-symbol a) (gnc-commodity-get-nice-symbol b))))
+    (lambda (a b)
+      (gnc:string-locale<?
+        (gnc-commodity-get-namespace a) (gnc-commodity-get-namespace b)))))
 
 ;; Returns the depth of the current account hierarchy, that is, the
 ;; maximum level of subaccounts in the tree

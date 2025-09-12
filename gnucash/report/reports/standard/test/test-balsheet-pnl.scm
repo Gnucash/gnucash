@@ -331,7 +331,7 @@
         '("#200.00" "$340.00" "30. FUNDS" "$14,424.52" "$106,709.00" "$106,709.00")
         (sxml->table-row-col sxml 1 3 6))
       (test-equal "show-rates enabled"
-        '("1. FUNDS" "$480 + 85/104" "#1.00" "$1.70")
+        '("#1.00" "$1.70" "1. FUNDS" "$480 + 85/104")
         (sxml->table-row-col sxml 2 #f #f)))
 
     ;;make-multilevel
@@ -601,16 +601,16 @@
     (let ((sxml (options->sxml multicol-pnl-uuid multi-bs-options
                                "multicol-pnl-halfyear")))
       (test-equal "pnl-1/80"
-        '("01/01/80" " to 01/31/80" "$1,100.00" "$250.00" "$850.00" "#500.00 "
+        '("1980-01-01" " to 1980-01-31" "$1,100.00" "$250.00" "$850.00" "#500.00 "
           "$1,100.00" "#1.00 $1.70")
         (sxml->table-row-col sxml 1 #f 2))
       (test-equal "pnl-2/80"
-        '("02/01/80" " to 02/29/80" "$170.00" "$0.00" "$170.00" "#100.00 "
+        '("1980-02-01" " to 1980-02-29" "$170.00" "$0.00" "$170.00" "#100.00 "
           "$170.00" "#1.00 $1.70")
         (sxml->table-row-col sxml 1 #f 3))
       (test-equal "pnl-3/80"
-        '("03/01/80" " to 03/31/80" "$0.00" "$0.00" "$0.00" "#0.00 "
-          "$0.00" "#1.00 $1.70")
+        '("1980-03-01" " to 1980-03-31" "$0.00" "$0.00" "$0.00" "#0.00 " "$0.00"
+          "#1.00 $1.70")
         (sxml->table-row-col sxml 1 #f 4)))
 
     (set-option! multi-bs-options "General" "Period order is most recent first" #t)

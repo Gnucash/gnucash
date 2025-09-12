@@ -257,7 +257,7 @@
 (define (gnc:html-make-rates-table currency price-fn accounts)
   (define (cell c) (gnc:make-html-table-cell/markup "number-cell" c))
   (define table (gnc:make-html-table))
-  (let lp ((comm-list (gnc:accounts-get-commodities accounts currency)) (entries 0))
+  (let lp ((comm-list (gnc:accounts-get-commodities-sorted accounts currency)) (entries 0))
     (match comm-list
       (()
        (unless (zero? entries)
