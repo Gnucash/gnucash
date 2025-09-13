@@ -609,8 +609,8 @@
           "$170.00" "#1.00 $1.70")
         (sxml->table-row-col sxml 1 #f 3))
       (test-equal "pnl-3/80"
-        '("1980-03-01" " to 1980-03-31" "$0.00" "$0.00" "$0.00" "#0.00 " "$0.00"
-          "#1.00 $1.70")
+        '("1980-03-01" " to 1980-03-31" "$0.00" "$0.00" "$0.00" "#0.00 "
+          "$0.00" "#1.00 $1.70")
         (sxml->table-row-col sxml 1 #f 4)))
 
     (set-option! multi-bs-options "General" "Period order is most recent first" #t)
