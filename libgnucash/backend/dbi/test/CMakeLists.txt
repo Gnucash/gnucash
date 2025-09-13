@@ -34,7 +34,6 @@ set(test_dbi_backend_HEADERS test-dbi-business-stuff.h test-dbi-stuff.h)
 
 set_dist_list(test_dbi_backend_DIST ${test_dbi_backend_SOURCES} ${test_dbi_backend_HEADERS} test-dbi.xml CMakeLists.txt )
 
-# This test does not work on Win32
 if (WITH_SQL)
   gnc_add_test(test-backend-dbi "${test_dbi_backend_SOURCES}"
     BACKEND_DBI_TEST_INCLUDE_DIRS BACKEND_DBI_TEST_LIBS

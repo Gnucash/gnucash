@@ -77,7 +77,8 @@
       (options->render uuid options "null-test"))))
 
 (define (test-chart variant)
-  (test-group-with-cleanup (format #f "test variant ~a" variant)
+    (qof-date-format-set QOF-DATE-FORMAT-ISO)
+    (test-group-with-cleanup (format #f "test variant ~a" variant)
     (test-chart-variant variant)
     (gnc-clear-current-session)))
 
@@ -127,10 +128,10 @@
             '("Date" "Assets" "Liabilities" "Net Worth")
             (sxml->table-row-col sxml 1 0 #f))
           (test-equal "first data row"
-            '("01/01/70" "$25.00" "$0.00" "$25.00")
+            '("1970-01-01" "$25.00" "$0.00" "$25.00")
             (sxml->table-row-col sxml 1 1 #f))
           (test-equal "last data row"
-            '("04/15/70" "$375.00" "$0.00" "$375.00")
+            '("1970-04-15" "$375.00" "$0.00" "$375.00")
             (sxml->table-row-col sxml 1 -1 #f)))
 
         (when inc-exp?
@@ -138,10 +139,10 @@
             '("Date" "Income" "Expense" "Net Profit")
             (sxml->table-row-col sxml 1 0 #f))
           (test-equal "first data row"
-            '("01/01/70" "$100.00" "$0.00" "$100.00")
+            '("1970-01-01" "$100.00" "$0.00" "$100.00")
             (sxml->table-row-col sxml 1 1 #f))
           (test-equal "last data row"
-            '("04/01/70" "$0.00" "$0.00" "$0.00")
+            '("1970-04-01" "$0.00" "$0.00" "$0.00")
             (sxml->table-row-col sxml 1 -1 #f)))))))
 
 (define (test-chart-variant variant)
@@ -210,10 +211,10 @@
             '("Date" "Assets" "Liabilities" "Net Worth")
             (sxml->table-row-col sxml 1 0 #f))
           (test-equal "net-worth-barchart: first data row"
-            '("01/15/70" "$105.00" "$0.00" "$105.00")
+            '("1970-01-15" "$105.00" "$0.00" "$105.00")
             (sxml->table-row-col sxml 1 1 #f))
           (test-equal "net-worth-barchart: last data row"
-            '("03/15/70" "$2,701.00" "$0.00" "$2,701.00")
+            '("1970-03-15" "$2,701.00" "$0.00" "$2,701.00")
             (sxml->table-row-col sxml 1 -1 #f)))))
 
       (when (eq? variant 'income-expense-barchart)
@@ -230,10 +231,10 @@
             '("Date" "Income" "Expense" "Net Profit")
             (sxml->table-row-col sxml 1 0 #f))
           (test-equal "income-expense: first data row"
-            '("01/15/70" "$14.00" "$0.00" "$14.00")
+            '("1970-01-15" "$14.00" "$0.00" "$14.00")
             (sxml->table-row-col sxml 1 1 #f))
           (test-equal "income-expense: last data row"
-            '("03/15/70" "$73.00" "$0.00" "$73.00")
+            '("1970-03-15" "$73.00" "$0.00" "$73.00")
             (sxml->table-row-col sxml 1 -1 #f))))
       ))
 

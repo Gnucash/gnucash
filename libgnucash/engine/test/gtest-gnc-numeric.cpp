@@ -293,6 +293,7 @@ TEST(gncnumeric_stream, output_stream)
     GncNumeric rational_string(123, 456);
     output << rational_string;
     EXPECT_EQ("123/456", output.str());
+#ifndef __WIN32 // gnu libstdc++ supports only the C locale
     try
     {
         auto loc = std::locale("fr_FR.utf8");
@@ -321,6 +322,7 @@ TEST(gncnumeric_stream, output_stream)
     output.str("");
     output << decimal_string;
     EXPECT_EQ("123,456", output.str());
+#endif
     output.str("");
     output << rational_string;
     EXPECT_EQ("123/456", output.str());

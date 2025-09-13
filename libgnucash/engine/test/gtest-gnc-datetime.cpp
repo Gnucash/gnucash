@@ -438,7 +438,7 @@ test_offset(time64 start_time, int hour, int offset1, int offset2,
 TEST(gnc_datetime_constructors, test_DST_start_transition_time)
 {
 #ifdef __MINGW32__
-    TimeZoneProvider tzp_can{"A.U.S Eastern Standard Time"};
+    TimeZoneProvider tzp_can{"AUS Eastern Standard Time"};
     TimeZoneProvider tzp_la{"Pacific Standard Time"};
 #else
     TimeZoneProvider tzp_can("Australia/Canberra");
@@ -451,14 +451,24 @@ TEST(gnc_datetime_constructors, test_DST_start_transition_time)
     _reset_tzp();
     _set_tzp(tzp_can);
     for (auto hours = 0; hours < 23; ++hours)
+    {
+#ifdef __MINGW32__
+/* Windows thinks 02:59:00 is still DST; of course on the transition
+ * day there is no 02:59, local time goes from 01:59:59 to 03:00:00 so
+ * it's an artifact anyway.
+ */
+        if (hours == 2)
+            continue;
+#endif
         EXPECT_TRUE(test_offset(1601737140, hours, 36000, 39600, "Canberra"));
+    }
     _reset_tzp();
 }
 
 TEST(gnc_datetime_constructors, test_DST_end_transition_time)
 {
 #ifdef __MINGW32__
-    TimeZoneProvider tzp_can{"A.U.S Eastern Standard Time"};
+    TimeZoneProvider tzp_can{"AUS Eastern Standard Time"};
     TimeZoneProvider tzp_la{"Pacific Standard Time"};
 #else
     TimeZoneProvider tzp_can("Australia/Canberra");
@@ -474,13 +484,13 @@ TEST(gnc_datetime_constructors, test_DST_end_transition_time)
     _reset_tzp();
 }
 
+#ifndef __MINGW32__
+/* MSWindows doesn't provide historical timezone information. Brazil
+ * doesn't use DST since 2019 so these tests don't work.
+ */
 TEST(gnc_datetime_constructors, test_create_in_transition)
 {
-#ifdef __MINGW32__
-    TimeZoneProvider tzp_br{"E. South America Standard Time"};
-#else
     TimeZoneProvider tzp_br("America/Sao_Paulo");
-#endif
     _set_tzp(tzp_br);
     /* Test Daylight Savings start: When Sao Paolo had daylight
      * savings time it ended at 23:59:59 and the next second was
@@ -519,6 +529,7 @@ TEST(gnc_datetime_constructors, test_create_in_transition)
     EXPECT_EQ(gncdt3.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2019-11-01 03:00:00 UTC");
     EXPECT_EQ(gncdt3.format("%Y-%m-%d %H:%M:%S %Z"), "2019-11-01 00:00:00 -03");
 }
+#endif
 
 TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 {

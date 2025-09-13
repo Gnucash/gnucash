@@ -60,6 +60,7 @@
          (income (assoc-ref account-alist "Income"))
          (bank (assoc-ref account-alist "Bank")))
 
+    (qof-date-format-set QOF-DATE-FORMAT-ISO)
     (gnc-commodity-set-user-symbol
      (xaccAccountGetCommodity gbp-bank)
      "#")
@@ -83,7 +84,7 @@
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "capital"
-        '("Capital, 01/01/70" "$29.00")
+        '("Capital, 1970-01-01" "$29.00")
         (sxml->table-row-col sxml 1 2 #f))
 
       (test-equal "income"
@@ -107,5 +108,5 @@
         (sxml->table-row-col sxml 1 7 #f))
 
       (test-equal "capital end"
-        '("Capital, 01/01/05" "$3,115.00")
+        '("Capital, 2005-01-01" "$3,115.00")
         (sxml->table-row-col sxml 1 8 #f)))))

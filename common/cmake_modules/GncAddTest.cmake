@@ -1,82 +1,94 @@
 
 
 function(get_guile_env)
-  set(_GNC_MODULE_PATH ${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash)
+  set(_gnc_module_path ${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash)
   if (WIN32)
-    set(_GNC_MODULE_PATH ${CMAKE_BINARY_DIR}/bin)
+    set(_gnc_module_path ${CMAKE_BINARY_DIR}/bin)
   endif()
-  set(env "")
-  list(APPEND env "GNC_UNINSTALLED=yes")
-  list(APPEND env "GNC_BUILDDIR=${CMAKE_BINARY_DIR}")
-  if (APPLE)
-    list(APPEND env "DYLD_LIBRARY_PATH=${_GNC_MODULE_PATH}:$ENV{DYLD_LIBRARY_PATH}")
-  endif()
-  if (UNIX)
-    list(APPEND env "LD_LIBRARY_PATH=${_GNC_MODULE_PATH}:$ENV{LD_LIBRARY_PATH}")
-  endif()
+  set(_relative_site_dir "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}")
+  set(_relative_cache_dir "${CMAKE_BINARY_DIR}/${GUILE_REL_SITECCACHEDIR}")
+
   if (MINGW64)
     set(fpath "")
     set(path $ENV{PATH})
     list(INSERT path 0 ${CMAKE_BINARY_DIR}/bin)
-    foreach(dir ${path})
-      string(REGEX REPLACE "^([A-Za-z]):" "/\\1" dir ${dir})
-      string(REGEX REPLACE "\\\\" "/" dir ${dir})
-      set(fpath "${fpath}${dir}:")
-    endforeach(dir)
-    list(APPEND env "PATH=${fpath}")
-    set(compiled_path "${CMAKE_BINARY_DIR}/${GUILE_REL_SITECCACHEDIR}")
-    string(REGEX REPLACE "^([A-Za-z]):" "/\\1" compiled_path ${compiled_path})
-    list(APPEND env GUILE_LOAD_COMPILED_PATH=${compiled_path})
+    if (${GUILE_EFFECTIVE_VERSION} VERSION_LESS 2.2)
+      foreach(dir ${path})
+        make_unix_path(dir)
+        list(APPEND fpath ${dir})
+      endforeach(dir)
+      make_unix_path_list(fpath)
+    else()
+      set(fpath ${path})
+      make_win32_path_list(fpath)
+    endif()
   endif()
-  list(APPEND env "GNC_MODULE_PATH=${_GNC_MODULE_PATH}")
-  list(APPEND env "GUILE=${GUILE_EXECUTABLE}")
 
-  set(guile_load_paths "")
-  list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}")
-  list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/deprecated") # Path to gnucash' deprecated modules
+  set(guile_load_paths "$ENV{GUILE_LOAD_PATH}")
+  list(APPEND guile_load_paths
+    "${_relative_site_dir}"
+    "${_relative_site_dir}/gnucash/deprecated" 
+    )
   if (GUILE_COVERAGE)
-    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash")
-    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/report")
-    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/reports")
-    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/engine")
-    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/app-utils")
-    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/qif-import")
+    list(APPEND guile_load_paths
+      "${_relative_site_dir}/gnucash"
+      "${_relative_site_dir}/gnucash/report"
+      "${_relative_site_dir}/gnucash/reports"
+      "${_relative_site_dir}/gnucash/engine"
+      "${_relative_site_dir}/gnucash/app-utils"
+      "${_relative_site_dir}/gnucash/qif-import"
+      )
 
   endif()
-  set(guile_load_path "${guile_load_paths}")
+  set(_guile_load_path "${guile_load_paths}")
 
-  set(guile_load_compiled_paths "")
-  list(APPEND guile_load_compiled_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITECCACHEDIR}")
-  list(APPEND guile_load_compiled_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITECCACHEDIR}/gnucash/deprecated")
-  list(APPEND guile_load_compiled_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITECCACHEDIR}/tests")
-  set(guile_load_compiled_path "${guile_load_compiled_paths}")
+  set(guile_load_compiled_paths "$ENV{GUILE_LOAD_COMPILED_PATH}")
+  list(APPEND guile_load_compiled_paths
+    "${_relative_cache_dir}"
+    "${_relative_cache_dir}/gnucash/deprecated"
+    "${_relative_cache_dir}/tests"
+  )
+  set(_guile_load_compiled_path "${guile_load_compiled_paths}")
 
-  if (MINGW64)
+  if (MINGW64 AND ${GUILE_EFFECTIVE_VERSION} VERSION_LESS 2.2)
     set(new_path "")
-    foreach(load_item ${guile_load_path})
-      string(REGEX REPLACE "^([A-Za-z]):" "/\\1" load_item ${load_item})
+    foreach(load_item ${_guile_load_path})
+      make_unix_path(load_item)
+      list(APPEND new_path "${load_item}")
+    endforeach(load_item)
+    set(_guile_load_path ${new_path})
+
+    set(new_path "")
+    foreach(load_item ${_guile_load_compiled_path})
+      make_unix_path(load_item)
       list(APPEND new_path ${load_item})
     endforeach(load_item)
-    set(guile_load_path ${new_path})
-
-    set(new_path "")
-    foreach(load_item ${guile_load_compiled_path})
-      string(REGEX REPLACE "^([A-Za-z]):" "/\\1" load_item ${load_item})
-      list(APPEND new_path ${load_item})
-    endforeach(load_item)
-    set(guile_load_compiled_path ${new_path})
+    set(_guile_load_compiled_path ${new_path})
   endif()
-  if (WIN32 AND NOT MINGW64)
-      string(REPLACE ";" "\\\\;" GUILE_LOAD_PATH "${guile_load_path}")
-      string(REPLACE ";" "\\\\;" GUILE_LOAD_COMPILED_PATH "${guile_load_compiled_path}")
+
+  if (NOT MINGW64 OR ${GUILE_EFFECTIVE_VERSION} VERSION_LESS 2.2)
+    make_unix_path_list(_guile_load_path)
+    make_unix_path_list(_guile_load_compiled_path)
   else()
-      string(REPLACE ";" ":" GUILE_LOAD_PATH "${guile_load_path}")
-      string(REPLACE ";" ":" GUILE_LOAD_COMPILED_PATH "${guile_load_compiled_path}")
+    make_win32_path_list(_guile_load_path)
+    make_win32_path_list(_guile_load_compiled_path)
   endif()
-  list(APPEND env "GUILE_LOAD_PATH=${GUILE_LOAD_PATH}")
-  list(APPEND env "GUILE_LOAD_COMPILED_PATH=${GUILE_LOAD_COMPILED_PATH}")
-  list(APPEND env "GUILE_WARN_DEPRECATED=detailed")
-  set(GUILE_ENV ${env} PARENT_SCOPE)
+
+  set(_guile_env
+    "GNC_MODULE_PATH=${_gnc_module_path}"
+    "GUILE=${GUILE_EXECUTABLE}"
+    "GUILE_LOAD_PATH=${_guile_load_path}"
+    "GUILE_LOAD_COMPILED_PATH=${_guile_load_compiled_path}"
+    "GUILE_WARN_DEPRECATED=detailed"
+  )
+  if (MINGW64)
+    list(APPEND _guile_env "PATH=${fpath}")
+  elseif (APPLE)
+    list(APPEND _guile_env "DYLD_LIBRARY_PATH=${_gnc_module_path}:$ENV{DYLD_LIBRARY_PATH}")
+  elseif (UNIX)
+    list(APPEND _guile_env "LD_LIBRARY_PATH=${_gnc_module_path}:$ENV{LD_LIBRARY_PATH}")
+  endif()
+  set(GUILE_ENV "${_guile_env}" PARENT_SCOPE)
 endfunction()
 
 

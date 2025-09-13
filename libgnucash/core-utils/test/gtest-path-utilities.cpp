@@ -116,7 +116,12 @@ TEST_F(PathTest, gnc_path_get_datadir)
 TEST_F(PathTest, gnc_path_get_sysconfdir)
 {
     gchar *dirname = gnc_file_path_relative_part(PREFIX, SYSCONFDIR);
-    gchar *sysconfpath = g_build_filename(m_prefix, dirname, PROJECT_NAME, NULL);
+    /* G_DIR_SEPARATOR_S forces g_build_filename to use the same
+     * separator as gnc_path_get_pgksysconfdir,
+     */
+    gchar *sysconfpath = g_build_filename(m_prefix, dirname,
+                                          G_DIR_SEPARATOR_S PROJECT_NAME,
+                                          NULL);
     g_free(dirname);
 #ifdef ENABLE_BINRELOC
     EXPECT_STREQ_GFREE(gnc_path_get_pkgsysconfdir(), sysconfpath);

@@ -32,6 +32,11 @@
 #ifdef MAC_INTEGRATION
 #include <Foundation/Foundation.h>
 #endif
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#include <Shlobj.h>
+#endif
 
 struct usr_confpath_strings_struct
 {
@@ -69,7 +74,21 @@ const char *path_package = PROJECT_NAME;
 static char*
 test_get_userdatadir ()
 {
-#ifdef MAC_INTEGRATION
+#ifdef G_OS_WIN32
+  /* Duplicate the override code in get_user_data_dir(). */
+    wchar_t path[MAX_PATH+1];
+    HRESULT hr;
+    LPITEMIDLIST pidl = NULL;
+    BOOL b;
+
+    hr = SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
+    if (hr == S_OK)
+    {
+        b = SHGetPathFromIDListW (pidl, path);
+        CoTaskMemFree (pidl);
+    }
+    return b ? g_utf16_to_utf8 (path, MAX_PATH, NULL, NULL, NULL) : NULL;
+#elif defined(MAC_INTEGRATION)
      char *retval = NULL;
      NSFileManager*fm = [NSFileManager defaultManager];
      NSArray* appSupportDir = [fm URLsForDirectory:NSApplicationSupportDirectory

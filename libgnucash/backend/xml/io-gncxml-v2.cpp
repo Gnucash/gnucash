@@ -1599,7 +1599,7 @@ gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
 {
     bool success = true;
 
-    auto [file, thread] = try_gz_open (filename, "w", compress, TRUE);
+    auto [file, thread] = try_gz_open (filename, "wb", compress, TRUE);
     if (!file)
         return false;
 
@@ -1633,7 +1633,7 @@ gnc_book_write_accounts_to_xml_file_v2 (QofBackend* qof_be, QofBook* book,
     FILE* out;
     gboolean success = TRUE;
 
-    out = g_fopen (filename, "w");
+    out = g_fopen (filename, "wb");
 
     /* Try to write as much as possible */
     if (!out

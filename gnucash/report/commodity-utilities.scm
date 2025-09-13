@@ -590,8 +590,8 @@
             ;; no, create sub-alist from scratch
             (let ((pair (list txn-comm (cons (gnc:make-value-collector)
                                              (gnc:make-value-collector)))))
-              ((caadr pair) 'add value-amt)
-              ((cdadr pair) 'add share-amt)
+              ((caadr pair) 'add (- value-amt))
+              ((cdadr pair) 'add (- share-amt))
               ;; and add the new sub-alist to sumlist.
               (loop (cdr comm-splits)
                     (cons (list acc-comm (list pair)) sumlist)))))))))))

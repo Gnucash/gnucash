@@ -585,7 +585,7 @@ std::string
 GncDateTimeImpl::format_zulu(const char* format) const
 {
 #ifdef __MINGW32__
-    auto tz = m_time.zone();
+    auto tz = utc_zone;
     auto tm =  static_cast<struct tm>(*this);
     auto sformat = win_format_tz_abbrev(format, tz, tm.tm_isdst);
     sformat = win_format_tz_name(sformat, tz, tm.tm_isdst);

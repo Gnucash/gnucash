@@ -14,6 +14,11 @@ endif()
 if (POLICY CMP0167)
   cmake_policy(SET CMP0167 OLD)
 endif()
+# CMake 3.31+ Use normalization rules on install DESTINATION
+# command. We shouldn't be impacted so allow the new behavior.
+if (POLICY CMP0177)
+  cmake_policy(SET CMP0177 NEW)
+endif()
 
 project (gnucash
     VERSION 5.12

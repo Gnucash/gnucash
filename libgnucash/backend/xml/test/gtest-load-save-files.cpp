@@ -40,6 +40,7 @@
 #include <TransLog.h>
 #include <gnc-engine.h>
 #include <gnc-prefs.h>
+#include <gnc-uri-utils.h>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcpp"
@@ -208,6 +209,7 @@ public:
 TEST_P(LoadSaveFiles, test_file)
 {
     auto filename = GetParam();
+    auto base_url = gnc_uri_normalize_uri (filename.c_str (), FALSE);
     /* Verify that we can write a compressed version of the original file that
      * has the original content when uncompressed.
      */
@@ -215,7 +217,9 @@ TEST_P(LoadSaveFiles, test_file)
     /* Verify that we can read a compressed file and write an uncompressed file
      * that has the original content.
      */
+    auto compressed_url = gnc_uri_normalize_uri (new_compressed_file.c_str (), FALSE);
     auto new_uncompressed_file = filename + "-test-uncompressed~";
+    auto uncompressed_url = gnc_uri_normalize_uri (new_uncompressed_file.c_str (), FALSE);
     const char *logdomain = "backend.xml";
     GLogLevelFlags loglevel = static_cast<decltype (loglevel)>
                               (G_LOG_LEVEL_WARNING);
@@ -226,14 +230,15 @@ TEST_P(LoadSaveFiles, test_file)
     {
         auto load_uncompressed_session = std::shared_ptr<QofSession>{qof_session_new (qof_book_new ()), qof_session_destroy};
 
-        QOF_SESSION_CHECKED_CALL(qof_session_begin, load_uncompressed_session, filename.c_str (), SESSION_READ_ONLY);
+        QOF_SESSION_CHECKED_CALL(qof_session_begin, load_uncompressed_session, base_url, SESSION_READ_ONLY);
         QOF_SESSION_CHECKED_CALL(qof_session_load, load_uncompressed_session, nullptr);
 
         auto save_compressed_session = std::shared_ptr<QofSession>{qof_session_new (nullptr), qof_session_destroy};
 
         g_unlink (new_compressed_file.c_str ());
         g_unlink ((new_compressed_file + ".LCK").c_str ());
-        QOF_SESSION_CHECKED_CALL(qof_session_begin, save_compressed_session, new_compressed_file.c_str (), SESSION_NEW_OVERWRITE);
+
+        QOF_SESSION_CHECKED_CALL(qof_session_begin, save_compressed_session, compressed_url, SESSION_NEW_OVERWRITE);
 
         qof_event_suspend ();
         qof_session_swap_data (load_uncompressed_session.get (), save_compressed_session.get ());
@@ -254,14 +259,14 @@ TEST_P(LoadSaveFiles, test_file)
     {
         auto load_compressed_session = std::shared_ptr<QofSession>{qof_session_new (qof_book_new ()), qof_session_destroy};
 
-        QOF_SESSION_CHECKED_CALL(qof_session_begin, load_compressed_session, new_compressed_file.c_str (), SESSION_READ_ONLY);
+        QOF_SESSION_CHECKED_CALL(qof_session_begin, load_compressed_session, compressed_url, SESSION_READ_ONLY);
         QOF_SESSION_CHECKED_CALL(qof_session_load, load_compressed_session, nullptr);
 
         auto save_uncompressed_session = std::shared_ptr<QofSession>{qof_session_new (nullptr), qof_session_destroy};
 
         g_unlink (new_uncompressed_file.c_str ());
         g_unlink ((new_uncompressed_file + ".LCK").c_str ());
-        QOF_SESSION_CHECKED_CALL(qof_session_begin, save_uncompressed_session, new_uncompressed_file.c_str (), SESSION_NEW_OVERWRITE);
+        QOF_SESSION_CHECKED_CALL(qof_session_begin, save_uncompressed_session, uncompressed_url, SESSION_NEW_OVERWRITE);
 
         qof_event_suspend ();
         qof_session_swap_data (load_compressed_session.get (), save_uncompressed_session.get ());
@@ -275,6 +280,10 @@ TEST_P(LoadSaveFiles, test_file)
 
         qof_session_end (save_uncompressed_session.get ());
     }
+
+    g_free (base_url);
+    g_free (compressed_url);
+    g_free (uncompressed_url);
 
     if (!compare_files (filename, new_uncompressed_file))
         return;

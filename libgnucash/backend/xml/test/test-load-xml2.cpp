@@ -43,6 +43,7 @@
 #include <TransLog.h>
 #include <gnc-engine.h>
 #include <gnc-prefs.h>
+#include <gnc-uri-utils.h>
 
 #include <unittest-support.h>
 #include <test-engine-stuff.h>
@@ -91,13 +92,15 @@ test_load_file (const char* filename)
 
     auto book = qof_book_new();
     auto session = qof_session_new (book);
+    auto url = gnc_uri_normalize_uri (filename, FALSE);
 
     remove_locks (filename);
 
     ignore_lock = (g_strcmp0 (g_getenv ("SRCDIR"), ".") != 0);
     /*    gnc_prefs_set_file_save_compressed(FALSE); */
-    qof_session_begin (session, filename,
+    qof_session_begin (session, url,
                        ignore_lock ? SESSION_READ_ONLY : SESSION_NORMAL_OPEN);
+    g_free (url);
 
     qof_session_load (session, NULL);
 

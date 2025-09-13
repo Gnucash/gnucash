@@ -172,6 +172,7 @@
       (set-option! balance-sheet-options "Accounts" "Levels of Subaccounts" 'all)
       (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
       balance-sheet-options))
+  (qof-date-format-set QOF-DATE-FORMAT-ISO)
   (display "\n\n balsheet tests\n\n")
   (let* ((balance-sheet-options (default-balsheet-testing-options))
          (sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-default")))
@@ -519,7 +520,7 @@
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol-balsheet-halfyear")))
       (test-equal "bal-1/1/70"
-        '("01/01/70" "$113,100.00" "$113,100.00" "$8,970.00" "$2,000.00"
+        '("1970-01-01" "$113,100.00" "$113,100.00" "$8,970.00" "$2,000.00"
           "$6,870.00" "$0.00" "$100.00" "$4,000.00" "$2,000.00" "$2,000.00"
           "10. FUNDS " "$130.00" "$130.00" "#100.00 " "$100,000.00" "$113,100.00"
           "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00" "$103,600.00"
@@ -527,7 +528,7 @@
           "1. FUNDS $200.00")
         (sxml->table-row-col sxml 1 #f 2))
       (test-equal "bal-1/1/71"
-        '("01/01/71" "$116,006.33" "$116,006.33" "$4,709.00" "$2,000.00"
+        '("1971-01-01" "$116,006.33" "$116,006.33" "$4,709.00" "$2,000.00"
           "$2,609.00" "$0.00" "$100.00" "$11,000.30" "$2,000.00" "$9,000.30"
           "30. FUNDS " "$297.03" "$297.03" "#200.00 " "$100,000.00" "$116,006.33"
           "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00" "$103,600.00"
@@ -535,7 +536,7 @@
           "1. FUNDS $300.01")
         (sxml->table-row-col sxml 1 #f 3))
       (test-equal "bal-1/1/72"
-        '("01/01/72" "$117,437.00" "$117,437.00" "$4,709.00" "$2,000.00"
+        '("1972-01-01" "$117,437.00" "$117,437.00" "$4,709.00" "$2,000.00"
           "$2,609.00" "$0.00" "$100.00" "$12,396.63" "$2,000.00" "$10,396.63"
           "30. FUNDS " "$331.37" "$331.37" "#200.00 " "$100,000.00" "$117,437.00"
           "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00" "$103,600.00"
@@ -547,7 +548,7 @@
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol-balsheet-halfyear")))
       (test-equal "bal-1/1/70-reverse-chrono"
-        '("Date" "01/01/72" "01/01/71" "01/01/70")
+        '("Date" "1972-01-01" "1971-01-01" "1970-01-01")
         (sxml->table-row-col sxml 1 1 #f)))
 
     (set-option! multi-bs-options "General" "Period order is most recent first" #f)
@@ -617,7 +618,7 @@
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "testing period reverse chrono order pnl")))
       (test-equal "pnl-reverse chrono"
-        '("Date" "03/31/80" "03/01/80" "02/01/80" "01/01/80")
+        '("Date" "1980-03-31" "1980-03-01" "1980-02-01" "1980-01-01")
         (sxml->table-row-col sxml 1 1 #f)))
 
     (set-option! multi-bs-options "Commodities" "Price Source" 'weighted-average)

@@ -17,43 +17,50 @@ set(GNC_MODULE_TEST_LIBS
   gncmod-incompatdep
   gncmod-ordinary
   gncmod-withdep
-  )
+)
+
+set(_gnc_libdir ${LIBDIR_BUILD})
+set(_gnc_module_dir "${_gnc_libdir}/gnucash")
+if (WIN32)
+  set(_gnc_libdir "${CMAKE_BINARY_DIR}/bin")
+  set(_gnc_module_dir "${_gnc_libdir}")
+  set(path $ENV{PATH})
+  list(APPEND path "${_gnc_module_dir}/test")
+  make_win32_path_list(path)
+endif()
 
 gnc_add_test(test-load-c
     test-load-c.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
-    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test"
+    "GNC_MODULE_PATH=${_gnc_module_dir}/test"
+    "PATH=${path}"
 )
 
 gnc_add_test(test-modsysver
     test-modsysver.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
-    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test/future"
+    "GNC_MODULE_PATH=${_gnc_module_dir}/test/future"
 )
 gnc_add_test(test-incompatdep
     test-incompatdep.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
-    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test"
+    "GNC_MODULE_PATH=${_gnc_module_dir}/test"
 )
 gnc_add_test(test-agedver
     test-agedver.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
-    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test"
+    "GNC_MODULE_PATH=${_gnc_module_dir}/test"
   )
 
-set(_LIBDIR ${LIBDIR_BUILD})
-if (WIN32)
-  set(_LIBDIR ${CMAKE_BINARY_DIR}/bin)
-endif()
 gnc_add_test(test-dynload
     test-dynload.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
-    LIBDIR=${_LIBDIR}
+    LIBDIR=${_gnc_libdir}
 )
 
 set(test_gnc_module_SOURCE_DIST

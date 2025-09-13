@@ -802,8 +802,11 @@ HTML Document Title</title></head><body></body>\n\
     (let* ((doc (gnc:make-html-document)))
       (gnc:html-document-set-style-sheet! doc (gnc:html-style-sheet-find "Default"))
       (gnc:html-document-add-object! doc table)
-      (let ((render (gnc:html-document-render doc)))
-        (call-with-output-file (format #f "/tmp/html-acct-table-~a.html" prefix)
+      (let ((render (gnc:html-document-render doc))
+          (tmpdir (if (eq? (system-file-name-convention) 'windows)
+                      (getenv "TMP")
+                      "/tmp")))
+        (call-with-output-file (format #f "~a/html-acct-table-~a.html" tmpdir prefix)
           (lambda (p)
             (display render p)))
         (xml->sxml render

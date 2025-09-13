@@ -67,6 +67,7 @@
   ;; It also catches XML parsing errors, dumping the options changed.
   ;;
   ;; It also dumps the render into /tmp/test-trep-XX.html where XX is the test title
+  (qof-date-format-set QOF-DATE-FORMAT-ISO)
   (gnc:options->sxml trep-uuid options "test-trep" test-title))
 
 (define (get-row-col sxml row col)
@@ -721,7 +722,7 @@
       (set-option! options "Sorting" "Primary Key" 'date)
       (let* ((sxml (options->sxml options "sorting=date")))
         (test-equal "dates are sorted"
-          '("12/31/69" "12/31/69" "01/01/70" "02/01/70" "02/10/70")
+          '("1969-12-31" "1969-12-31" "1970-01-01" "1970-02-01" "1970-02-10")
           (get-row-col sxml #f 1)))
 
       (set-option! options "Sorting" "Primary Key" 'number)
