@@ -51,11 +51,8 @@
     (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
     (if test-title
         (gnc:html-document-set-title! document test-title))
-    (let ((render (gnc:html-document-render document))
-          (tmpdir (if (eq? (system-file-name-convention) 'windows)
-                      (getenv "TMP")
-                      "/tmp")))
-      (call-with-output-file (format #f "~a/~a-~a.html" tmpdir
+    (let ((render (gnc:html-document-render document)))
+      (call-with-output-file (format #f "/tmp/~a-~a.html"
                                    (string-map sanitize-char prefix)
                                    (string-map sanitize-char test-title))
         (lambda (p)

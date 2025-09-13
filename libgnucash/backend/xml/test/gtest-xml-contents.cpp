@@ -30,7 +30,6 @@
 #include <gnc-prefs.h>
 #include <Account.hpp>
 #include <gnc-datetime.hpp>
-#include <gnc-uri-utils.h>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcpp"
@@ -63,11 +62,8 @@ static QofBook*
 session_load (QofSession* session, const char* filename)
 {
     if (!session || !filename) return nullptr;
-    auto url = gnc_uri_normalize_uri (filename, FALSE);
 
-    qof_session_begin (session, url, SESSION_READ_ONLY);
-    g_free (url);
-
+    qof_session_begin (session, filename, SESSION_READ_ONLY);
     if (qof_session_get_error(session) != 0)
     {
         std::cerr << "Session begin failed: " << qof_session_get_error_message(session);
