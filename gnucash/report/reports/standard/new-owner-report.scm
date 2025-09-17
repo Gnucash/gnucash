@@ -62,23 +62,29 @@
 
 (define javascript "
 <script>
+// <![CDATA[
   function getID(cell) { return cell.getAttribute('link-id'); }
 
-  function clicky() {
-      var id = getID(this);
-      var ishighlighted = this.classList.contains('highlight');
-      TDs.forEach (function (item, idx) {
-          item.classList.remove('highlight')});
-      if (ishighlighted) return;
-      TDs.forEach (function (item, idx) {
-          if (getID(item) == id)
-              item.classList.add('highlight')})}
+  var locked = false;
+  function update_highlights(id) {
+    if (locked) return;
+    TDs.forEach(function (item) {
+        item.classList.toggle('highlight', id && getID(item) === id);
+  });}
 
-  var TDs = document.getElementsByTagName('td');
-  TDs = Array.prototype.slice.call (TDs);
-  TDs = TDs.filter (getID);
-  TDs.forEach(function (item, idx) {
-      item.addEventListener('click', clicky)});
+  function clicky() { locked = !locked; update_highlights (getID(this)); }
+  function hoverIn() { update_highlights (getID(this)); }
+  function hoverOut() { update_highlights (null); }
+
+  var TDs = Array.prototype.slice.call (document.getElementsByTagName('td'))
+              .filter (getID);
+
+  TDs.forEach(function (item) {
+      item.addEventListener('click', clicky);
+      item.addEventListener('mouseenter', hoverIn);
+      item.addEventListener('mouseleave', hoverOut);
+  });
+// ]]>
 </script>
 ")
 
@@ -1160,7 +1166,8 @@ and do not match the transaction."))))))))
 
           (gnc:html-document-add-object! document table)
 
-          (gnc:html-document-add-object! document javascript))))))
+          (when (eq? link-option 'detailed)
+            (gnc:html-document-add-object! document javascript)))))))
 
     document))
 
