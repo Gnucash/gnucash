@@ -177,6 +177,8 @@ static void gnc_plugin_page_report_reload_cb (GSimpleAction *simple, GVariant *p
 static void gnc_plugin_page_report_stop_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_report_save_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_report_save_as_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_export_definition_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_import_definition_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_report_export_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_report_options_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_report_print_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -193,6 +195,8 @@ static GActionEntry report_actions[] =
     { "ViewRefreshAction", gnc_plugin_page_report_reload_cb, nullptr, nullptr, nullptr },
     { "ReportSaveAction", gnc_plugin_page_report_save_cb, nullptr, nullptr, nullptr },
     { "ReportSaveAsAction", gnc_plugin_page_report_save_as_cb, nullptr, nullptr, nullptr },
+    { "ReportExportDefinitionAction", gnc_plugin_page_report_export_definition_cb, nullptr, nullptr, nullptr },
+    { "ReportImportDefinitionAction", gnc_plugin_page_report_import_definition_cb, nullptr, nullptr, nullptr },
     { "ReportExportAction", gnc_plugin_page_report_export_cb, nullptr, nullptr, nullptr },
     { "ReportOptionsAction", gnc_plugin_page_report_options_cb, nullptr, nullptr, nullptr },
     { "ReportBackAction", gnc_plugin_page_report_back_cb, nullptr, nullptr, nullptr },
@@ -1257,7 +1261,7 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     GncPluginPageReportPrivate *priv;
     GncPluginPageReport *report;
     GncMainWindow *window;
-    action_toolbar_labels tooltip_list[3];
+    action_toolbar_labels tooltip_list[5];
     GAction *action;
 
     gchar *saved_reports_path = gnc_build_userdata_path (SAVED_REPORTS_FILE);
@@ -1267,6 +1271,8 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     gchar *report_saveas_str = g_strdup_printf (
         _("Add the current report's configuration to the 'Reports->Saved Report Configurations' menu. "
           "The report configuration will be saved in the file %s."), saved_reports_path);
+    const gchar *report_export_str = "Export report to .json file";
+    const gchar *report_import_str = "Import report from .json file";
 
     report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
@@ -1275,6 +1281,8 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
 
     tooltip_list[0] = { "ReportSaveAction", N_("Save _Report Configuration"), report_save_str };
     tooltip_list[1] = { "ReportSaveAsAction", N_("Save Report Configuration As…"), report_saveas_str };
+    tooltip_list[0] = { "ReportExportDefinitionAction", N_("Export Report…"), report_export_str };
+    tooltip_list[1] = { "ReportImportDefinitionAction", N_("Import Report…"), report_import_str };
     tooltip_list[2] = { nullptr, nullptr, nullptr };
 
     gnc_plugin_page_report_menu_update (plugin_page, tooltip_list);
@@ -1748,6 +1756,108 @@ overwrite the existing saved report named \"%s\"."), report_name_str.c_str()))
          */
         gnc_plugin_page_report_save_as_cb (simple, parameter, report);
     }
+}
+
+static char *
+get_report_definition_filename (GtkWindow *parent, GNCFileDialogType type)
+{
+    auto title = "Please select report definition";
+
+    return g_strdup ("/tmp/test.json");
+
+    auto default_dir = gnc_get_default_directory (GNC_PREFS_GROUP_OPEN_SAVE);
+    auto filepath = gnc_file_dialog (parent, title, nullptr, default_dir, type);
+    g_free (default_dir);
+
+    if (!filepath)
+        return nullptr;
+
+    default_dir = g_path_get_dirname (filepath);
+    gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
+    g_free(default_dir);
+
+    GStatBuf statbuf;
+    int rc = g_stat (filepath, &statbuf);
+
+    const char *format = _("The file %s already exists. "
+                           "Are you sure you want to overwrite it?");
+    if (rc == 0 && !gnc_verify_dialog (parent, FALSE, format, filepath))
+    {
+        g_free(filepath);
+        return nullptr;
+    }
+
+    return filepath;
+}
+
+static void
+gnc_plugin_page_report_export_definition_cb (GSimpleAction *simple,
+                                             GVariant *parameter,
+                                             gpointer user_data)
+{
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    if (priv->cur_report == SCM_BOOL_F)
+        return;
+
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (report)));
+    auto filepath = get_report_definition_filename (parent, GNC_FILE_DIALOG_EXPORT);
+    if (!filepath)
+        return;
+
+    SCM to_json_func = scm_c_eval_string("gnc:report-serialize-to-json");
+    SCM scm_json_str = scm_call_1 (to_json_func, priv->cur_report);
+
+    if (scm_is_string (scm_json_str))
+    {
+        GError *err = nullptr;
+        gchar *json = scm_to_utf8_string (scm_json_str);
+        if (!g_file_set_contents (filepath, json, -1, &err))
+            gnc_error_dialog (parent, "Error during export: %s", err->message);
+        g_free (json);
+        if (err)
+            g_error_free (err);
+    }
+    else
+        gnc_error_dialog (parent, "Unknown error exporting to %s", filepath);
+
+    g_free (filepath);
+}
+
+
+static void
+gnc_plugin_page_report_import_definition_cb (GSimpleAction *simple,
+                                             GVariant *parameter,
+                                             gpointer user_data)
+{
+    auto report = static_cast<GncPluginPageReport*>(user_data);
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (report)));
+    auto filename = get_report_definition_filename (parent, GNC_FILE_DIALOG_EXPORT);
+    if (!filename)
+        return;
+
+    gchar *contents = NULL;
+    gsize length = 0;
+    GError *error = NULL;
+
+    if (!g_file_get_contents (filename, &contents, &length, &error))
+    {
+        PWARN ("Error reading file '%s': %s\n", filename, error->message);
+        g_error_free(error);
+        return;
+    }
+
+    SCM from_json_func = scm_c_eval_string("gnc:report-generate-from-json");
+    SCM scm_report_json = scm_from_utf8_string (contents);
+    SCM scm_report = scm_call_1 (from_json_func, scm_report_json);
+
+    if (scm_is_string (scm_report))
+    {
+        auto report_str = scm_to_utf8_string (scm_report);
+        PWARN ("report loaded = %s", report_str);
+        g_free (report_str);
+    }
+    g_free (contents);
 }
 
 static void

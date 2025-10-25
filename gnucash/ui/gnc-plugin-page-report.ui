@@ -71,6 +71,14 @@
 
   <menu id="ReportsPlaceholder1">
     <item>
+      <attribute name="label" translatable="yes">_Import Report Configuration</attribute>
+      <attribute name="action">GncPluginPageReportActions.ReportImportDefinitionAction</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Export Report Configuration</attribute>
+      <attribute name="action">GncPluginPageReportActions.ReportExportDefinitionAction</attribute>
+    </item>
+    <item>
       <attribute name="label" translatable="yes">Save _Report Configuration</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportSaveAction</attribute>
       <attribute name="accel">&lt;Primary&gt;&lt;Alt&gt;s</attribute>

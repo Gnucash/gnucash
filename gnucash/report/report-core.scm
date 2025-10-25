@@ -40,6 +40,7 @@
 (use-modules (gnucash report html-style-sheet))
 (use-modules (gnucash report html-document))
 (use-modules (gnucash report html-utilities))
+(use-modules (gnucash json))
 
 (load-and-reexport (sw_report)
                    (sw_engine)
@@ -87,6 +88,8 @@
 (export gnc:render-report)
 (export gnc:report-serialize)
 (export gnc:report-add-anchor!)         ;add anchor, returns the integer key
+(export gnc:report-serialize-to-json)
+(export gnc:report-generate-from-json)
 (export gnc:report-set-ctext!)
 (export gnc:report-set-dirty?!)
 (export gnc:report-set-editor-widget!)
@@ -525,6 +528,51 @@ not found.")))
 
 ;; Load and save functions
 
+
+(define (gnc:report-serialize-to-json report)
+  (let ((options (report-options report))
+        (changed-options '()))
+    (define (add-option-if-changed option)
+      (if (and (GncOption-is-changed option) (not (GncOption-is-internal option)))
+          (set! changed-options
+                (cons (vector (GncOption-get-section option)
+                              (GncOption-get-name option)
+                              (GncOption-save-scm-value option))
+                      changed-options))))
+    (gnc-optiondb-foreach (gnc:optiondb options) add-option-if-changed)
+    (let* ((scm `((type . ,(gnc:report-type report))
+                  (options . ,(list->vector (reverse changed-options)))))
+           (json (scm->json-string scm #:pretty #t)))
+      (display json)
+      json)))
+
+(define (gnc:report-generate-from-json json)
+  (catch
+   #t
+   (lambda ()
+     (let* ((scm (json-string->scm json))
+            (json-options (assoc-ref scm "options"))
+            (type (assoc-ref scm "type"))
+            (report (hash-ref *gnc:_report-templates_* type))
+            (name (gnc:report-template-name report))
+            (options (gnc:report-template-new-options/report-guid type name)))
+       (for-each
+        (match-lambda
+          (#(section name value)
+           (match (gnc:lookup-option options section name)
+             (option
+              (let* ((port (open-input-string value))
+                     (expr (read port))
+                     (val (eval expr (interaction-environment))))
+                (gnc:option-set-value option val)))
+             (_ (gnc:warn "cannot find option " section name value)))))
+        (vector->list json-options))
+       (gnc:warn "restoring report type " type " name " name " from " json)
+       (display (gnc:html-render-options-changed options #t))
+       (pk 'rv (gnc:restore-report-by-guid-with-custom-template
+                type type name #f options))))
+   ;;error parsing json or generating report: return #f
+   (const #f)))
 
 ;; Generate guile code required to recreate an instatiated report
 (define (gnc:report-serialize report)
