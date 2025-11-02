@@ -48,6 +48,7 @@ include (MacroAppendForeach)
 include (MacroAddSourceFileCompileFlags)
 include (GncAddSwigCommand)
 include (CheckIncludeFiles)
+include (CheckTypeSize)
 include (GncAddSchemeTargets)
 include (GncAddGSchemaTargets)
 include (GncAddTest)
@@ -258,6 +259,19 @@ if (WITH_GNUCASH)
 endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
+
+# Check for size of time_t.
+check_type_size (time_t SIZEOF_TIME_T)
+
+if (NOT DEFINED SIZEOF_TIME_T)
+    message(FATAL_ERROR "Failed to determine size of time_t")
+endif()
+
+message(STATUS "time_t size is ${SIZEOF_TIME_T} bytes")
+
+if (SIZEOF_TIME_T LESS 8)
+    message(FATAL_ERROR "time_t is ${SIZEOF_TIME_T} bytes (32-bit). A 64-bit time_t is required to avoid the 2038 problem.")
+endif()
 
 if (MSVC)
   message (STATUS "Hint: To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: pexports bin/libgconf-2-4.dll > lib/libgconf-2.def ; dlltool -d lib/libgconf-2.def -D bin/libgconf-2-4.dll -l lib/gconf-2.lib")
