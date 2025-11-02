@@ -1277,10 +1277,6 @@ gnc_dmy2time64_neutral (int day, int month, int year)
 }
 
 
-/* The GDate setter functions all in the end use g_date_set_time_t,
- * which in turn relies on localtime and is therefore subject to the
- * 2038 bug.
- */
 GDate time64_to_gdate (time64 t)
 {
     GDate result;
