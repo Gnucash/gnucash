@@ -1603,7 +1603,9 @@ xaccAccountDestroyAllTransactions(Account *acc)
     std::transform(priv->splits.begin(), priv->splits.end(),
                    back_inserter(transactions),
                    [](auto split) { return split->parent; });
-    std::stable_sort(transactions.begin(), transactions.end());
+    /* the splits are ordered by xaccSplitOrder, therefore, multiple
+       splits within an account from identical transactions will lead
+       to be adjacent transactions */
     transactions.erase(std::unique(transactions.begin(), transactions.end()),
                        transactions.end());
     qof_event_suspend();
