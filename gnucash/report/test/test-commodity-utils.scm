@@ -753,9 +753,9 @@
            (exchange-fn
             (gnc:make-gnc-monetary AAPL 1)
             USD
-            (gnc-dmy2time64-neutral 20 02 2012)))))
+            (gnc-dmy2time64-neutral 20 02 2012))))))
 
-      (teardown))))
+      (teardown)))
 
 (define (test-get-match-commodity-splits-sorted)
   (test-group-with-cleanup "test-get-match-commodity-splits-sorted"
@@ -818,6 +818,6 @@
                       "2012-02-20" "2013-08-09" "2014-07-11" "2014-08-08"
                       "2014-08-08" "2014-12-05" "2014-12-05" "2015-04-02"
                       "2015-10-23" "2015-10-23" "2016-03-11" "2016-03-11")
-                    (map split->date all-splits)))
+                    (map split->date all-splits))))
 
-      (teardown))))
+      (teardown)))
