@@ -34,11 +34,12 @@
         (case (test-result-kind runner)
           ((pass xpass) (set! num-passed (1+ num-passed)))
           ((fail xfail)
-           (if (test-result-ref runner 'expected-value)
+           (if (not (equal? 'no (test-result-ref runner 'expected-value 'no)))
                (format #t "~a\n -> expected: ~s\n -> obtained: ~s\n"
                        (string-join (test-runner-group-path runner) "/")
                        (test-result-ref runner 'expected-value)
-                       (test-result-ref runner 'actual-value)))
+                       (test-result-ref runner 'actual-value))
+               (format #t "~%~a~%" (test-result-alist runner)))
            (set! num-failed (1+ num-failed)))
           (else #t))))
     (test-runner-on-final! runner
