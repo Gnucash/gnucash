@@ -1067,7 +1067,7 @@
      '(("from" "01/01/2010")
        ("to" "31/12/2010")
        ("total" 23500 30000 25/7 sym))))
-  (test-error "gnc:lists->csv improper list"
+  (test-error "gnc:lists->csv improper list" #t
     (gnc:lists->csv
      '(("from" "01/01/2010")
        ("to" "31/12/2010")

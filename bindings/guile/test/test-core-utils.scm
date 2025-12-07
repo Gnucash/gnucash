@@ -42,7 +42,7 @@
     "${symbol} does not exist"
     (gnc:format "${symbol} does not exist" 'existence "none"))
 
-  (test-error "gnc:format syntax error"
+  (test-error "gnc:format syntax error" #t
     (gnc:format "${symbol} does not exist" 'existence)))
 
 (define (run-test)

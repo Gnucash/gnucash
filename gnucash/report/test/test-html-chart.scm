@@ -115,6 +115,6 @@
 
     (test-error
      "deep nested new path - cannot set 6th index"
-     'error
+     'index-too-high
      (gnc:html-chart-set! chart '(create list-kth (6) nested path) 'k4th))
     ))
