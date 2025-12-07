@@ -115,7 +115,7 @@
        option-db "waldo" "pepper" "baz"
        "Phony Option" acctlist (list ACCT-TYPE-BANK))
       (let ((acct-list (gnc-option-value option-db "waldo" "pepper")))
-        (test-equal #f (length acct-list))))))
+        (test-error 'wrong-type-arg (length acct-list))))))
 
   (define (test-make-account-sel-limited-option book)
     (test-group "test-make-account-list-option"

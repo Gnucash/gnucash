@@ -483,8 +483,8 @@
           (collector->list
            (gnc:select-assoc-account-balance account-balances bank)))
 
-        (test-equal "gnc:select-assoc-account-balance - miss"
-          #f
+        (test-error "gnc:select-assoc-account-balance - miss"
+          'wrong-type-arg
           (collector->list
            (gnc:select-assoc-account-balance account-balances expense)))
 

@@ -60,8 +60,8 @@
       'abc
       (gnc:html-chart-get chart '(options maintainAspectRatio)))
 
-    (test-equal "path doesn't exist"
-      #f
+    (test-error "path doesn't exist"
+      #t
       (gnc:html-chart-get chart '(options scales xAxes (0) time)))
 
     (gnc:html-chart-set! chart '(options scales xAxes (0) time) a-list-of-pairs)
@@ -77,11 +77,11 @@
 
     (test-error
      "1st level option fails - cannot traverse through existing path"
-     'invalid-path
+     'wrong-type-arg
      (gnc:html-chart-set! chart '(options legend position invalid) 'de))
 
-    (test-equal "deep nested new path - inexistent"
-      #f
+    (test-error "deep nested new path - nonexistent"
+      'invalid-path
       (gnc:html-chart-get chart '(create new nested path)))
 
     (gnc:html-chart-set! chart '(create new nested path) 'newpath)

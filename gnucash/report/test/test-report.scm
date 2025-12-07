@@ -195,8 +195,8 @@
     (test-equal "gnc:report-name"
       "basic report"
       (gnc:report-name report))
-    (test-equal "gnc:report-stylesheet"
-      #f
+    (test-error "gnc:report-stylesheet"
+      'wrong-type-arg
       (gnc:report-stylesheet report))
     (test-equal "(gnc:all-report-template-guids)"
       4

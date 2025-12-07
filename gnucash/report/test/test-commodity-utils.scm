@@ -270,8 +270,8 @@
     (let* ((sumlist (list (list USD  (list (list AAPL  aapl-col)))
                           (list GBP (list (list RDSA rdsa-gbp-col)))))
            (return-alist  (gnc:resolve-unknown-comm sumlist USD)))
-      (test-equal "RDSA #f" #f ((caadr (assoc RDSA return-alist)) 'total #f))
-      (test-equal "RDSA #f" #f ((cdadr (assoc RDSA return-alist)) 'total #f)))
+      (test-error "RDSA #f" 'wrong-type-arg (((assoc RDSA return-alist)) 'total #f))
+      (test-error "RDSA #f" 'wrong-type-arg ((cdadr (assoc RDSA return-alist)) 'total #f)))
     (test-end "foreign-no-coll")
     (test-begin "foreign-no-amount")
     ;; There's a collector but it doesn't have a price in it so the returned
@@ -348,8 +348,8 @@
                           (list GBP (list (list DEM gbp-dem-col)
                                           (list RDSA rdsa-gbp-col)))))
            (return-alist  (gnc:resolve-unknown-comm sumlist USD)))
-      (test-equal "Shares fails" #f ((caadr (assoc RDSA return-alist)) 'total #f))
-      (test-equal "Value fails" #f ((cdadr (assoc RDSA return-alist)) 'total #f)))
+      (test-error "Shares fails" 'wrong-type-arg ((caadr (assoc RDSA return-alist)) 'total #f))
+      (test-error "Value fails" 'wrong-type-arg ((cdadr (assoc RDSA return-alist)) 'total #f)))
     (test-end "foreign-3way-gbp->dem->eur->usd")
     (test-begin "foreign-3way-DEM>GBP")
     ;; Three-way conversion, gbp->dem->eur->usd
@@ -359,8 +359,8 @@
                           (list DEM (list (list GBP dem-gbp-col)))
                           (list GBP (list (list RDSA rdsa-gbp-col)))))
            (return-alist  (gnc:resolve-unknown-comm sumlist USD)))
-      (test-equal "Shares fails" #f ((caadr (assoc RDSA return-alist)) 'total #f))
-      (test-equal "Value fails" #f ((cdadr (assoc RDSA return-alist)) 'total #f)))
+      (test-error "Shares fails" 'wrong-type-arg ((caadr (assoc RDSA return-alist)) 'total #f))
+      (test-error "Value fails" 'wrong-type-arg ((cdadr (assoc RDSA return-alist)) 'total #f)))
     (test-end "foreign-3way-DEM>GBP")
     (test-begin "foreign-DEM>EUR")
     ;; Three-way conversion, gbp->dem->eur
@@ -369,8 +369,8 @@
                           (list GBP (list (list DEM gbp-dem-col)
                                           (list RDSA rdsa-gbp-col)))))
            (return-alist  (gnc:resolve-unknown-comm sumlist EUR)))
-      (test-equal "Shares fails" #f ((caadr (assoc RDSA return-alist)) 'total #f))
-      (test-equal "Value fails" #f ((cdadr (assoc RDSA return-alist)) 'total #f)))
+      (test-error "Shares fails" 'wrong-type-arg ((caadr (assoc RDSA return-alist)) 'total #f))
+      (test-error "Value fails" 'wrong-type-arg ((cdadr (assoc RDSA return-alist)) 'total #f)))
     (test-end "foreign-DEM>EUR"))
 
   (teardown)))
