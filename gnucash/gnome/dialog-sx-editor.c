@@ -1662,9 +1662,21 @@ gnc_sxed_update_cal (GncSxEditorDialog *sxed)
 
     if (!g_date_valid (&first_date))
     {
+        /* Note: There are no recurrences for PERIOD_NONE and on initial setting
+         * of PERIOD_WEEKLY (no days set), so still need to 'do nothing' */
+        gboolean do_nothing = TRUE;
+        if (recurrences)
+        {
+            Recurrence *r = g_list_nth_data (recurrences, 0);
+            if (r && r->ptype == PERIOD_ONCE)
+                do_nothing = FALSE;
+        }
         /* Nothing to do. */
-        gnc_dense_cal_store_clear (sxed->dense_cal_model);
-        goto cleanup;
+        if (do_nothing)
+        {
+            gnc_dense_cal_store_clear (sxed->dense_cal_model);
+            goto cleanup;
+        }
     }
 
     gnc_dense_cal_store_update_name (sxed->dense_cal_model, xaccSchedXactionGetName (sxed->sx));
