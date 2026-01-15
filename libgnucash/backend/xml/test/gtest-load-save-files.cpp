@@ -65,6 +65,7 @@ static std::vector<unsigned char> read_file (std::string filename)
 
         memcpy (data.data (), contents, length);
         g_free (contents);
+        std::cerr << filename << " contents length " << length << " vector size " << data.size() << std::endl;
         return data;
     }
     else
@@ -163,6 +164,11 @@ compare_compressed_files (std::string uncompressed_filename1, std::string compre
             << uncompressed_contents2.size () << ")";
         return false;
     }
+    else
+    {
+        std::cout << uncompressed_filename1 << " sizes match: " << uncompressed_contents1.size() << std::endl;
+    }
+
 
     if (!memcmp(uncompressed_contents1.data (), uncompressed_contents2.data (), uncompressed_contents1.size ())) {
         return true;
