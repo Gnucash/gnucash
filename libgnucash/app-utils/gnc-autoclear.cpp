@@ -89,7 +89,7 @@ path_to_str(const SplitInfoVec& path)
 {
     if (path.empty()) return "<empty>";
 
-    static char buff[1000];
+    thread_local char buff[1000];
     char* p = buff;
     char* end = buff + sizeof(buff);
     for (const auto& split_info : path)

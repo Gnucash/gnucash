@@ -1431,21 +1431,19 @@ xaccSPrintAmount (char*  bufp, gnc_numeric val, GNCPrintAmountInfo info)
 const char*
 xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 {
-    /* hack alert -- this is not thread safe ... */
-    static char buf[BUFLEN];
+    thread_local char buf[BUFLEN];
 
     if (!xaccSPrintAmount (buf, val, info))
         buf[0] = '\0';
 
-    /* its OK to return buf, since we declared it static */
+    /* its OK to return buf, since we declared it thread_local */
     return buf;
 }
 
 const char*
 gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info)
 {
-    /* hack alert -- this is not thread safe ... */
-    static char buf[BUFLEN];
+    thread_local char buf[BUFLEN];
     static const char ltr_isolate[] = { '\xe2', '\x81', '\xa6' };
     static const char ltr_pop_isolate[] = { '\xe2', '\x81', '\xa9' };
     auto offset = info.use_symbol ? 3 : 0;
@@ -1477,7 +1475,7 @@ gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info
 
         PWARN("buffer length %d exceeded, string truncated was %s", BUFLEN, buf);
     }
-    /* its OK to return buf, since we declared it static
+    /* its OK to return buf, since we declared it thread_local
        and is immediately g_strdup'd */
     return buf;
 }

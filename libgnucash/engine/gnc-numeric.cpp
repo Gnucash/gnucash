@@ -1387,8 +1387,8 @@ gnc_numeric_to_string(gnc_numeric n)
 gchar *
 gnc_num_dbg_to_string(gnc_numeric n)
 {
-    static char buff[1000];
-    static char *p = buff;
+    thread_local char buff[1000];
+    thread_local char *p = buff;
     static const size_t size = 50;
     int64_t tmpnum = n.num;
     int64_t tmpdenom = n.denom;

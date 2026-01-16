@@ -2914,7 +2914,7 @@ price_printable(gpointer obj)
     auto pr = static_cast<GNCPrice*>(obj);
     gnc_commodity *commodity;
     gnc_commodity *currency;
-    static char buff[2048];  /* nasty static OK for printing */
+    thread_local char buff[2048];
     char *val, *da;
 
     if (!pr) return "";

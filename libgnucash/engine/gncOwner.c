@@ -1544,14 +1544,10 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
     return balance;
 }
 
-
-/* XXX: Yea, this is broken, but it should work fine for Queries.
- * We're single-threaded, right?
- */
 static GncOwner *
 owner_from_lot (GNCLot *lot)
 {
-    static GncOwner owner;
+    static _Thread_local GncOwner owner;
 
     if (!lot) return NULL;
     if (gncOwnerGetOwnerFromLot (lot, &owner))
