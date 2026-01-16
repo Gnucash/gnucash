@@ -4798,12 +4798,9 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
 const char*
 dxaccAccountGetPriceSrc(const Account *acc)
 {
-    static char *source = nullptr;
     if (!acc) return nullptr;
 
     if (!xaccAccountIsPriced(acc)) return nullptr;
-
-    g_free (source);
 
     return get_kvp_string_path (acc, {"old-price-source"});
 }
