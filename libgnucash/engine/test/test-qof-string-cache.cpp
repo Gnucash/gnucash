@@ -1,6 +1,5 @@
-
 /********************************************************************
- * test-qof-string-cache.c: GLib g_test test suite for string cache *
+ * test-qof-string-cache.c: google test test suite for string cache *
  *                          functions                               *
  * Copyright 2011 Christian Stimming                                *
  * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
@@ -23,34 +22,14 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+#include <gtest/gtest.h>
 #include <config.h>
 #include <string.h>
 #include <glib.h>
 #include <unittest-support.h>
 #include "qof.h"
 
-static const gchar *suitename = "/qof/qof-string-cache";
-void test_suite_qof_string_cache ( void );
-
-typedef struct
-{
-} Fixture;
-
-G_GNUC_UNUSED static void
-setup( Fixture *fixture, gconstpointer pData )
-{
-    qof_string_cache_init();
-}
-
-G_GNUC_UNUSED static void
-teardown( Fixture *fixture, gconstpointer pData )
-{
-    qof_string_cache_destroy();
-}
-
-static void
-test_qof_string_cache( void )
+TEST(QODStringCache, qof_string_cache)
 {
     /* Strings added to the cache should always return the same string address
      * as long as the refcount > 0. */
@@ -62,23 +41,18 @@ test_qof_string_cache( void )
 
     strncpy(str, "str1", sizeof(str));
     str1_1 = qof_string_cache_insert(str);      /* Refcount = 1 */
-    g_assert_true(str1_1 != str);
+    EXPECT_NE(str1_1, str);
     str1_2 = qof_string_cache_insert(str);      /* Refcount = 2 */
-    g_assert_true(str1_1 == str1_2);
+    EXPECT_EQ(str1_1, str1_2);
     qof_string_cache_remove(str);               /* Refcount = 1 */
     str1_3 = qof_string_cache_insert(str);      /* Refcount = 2 */
-    g_assert_true(str1_1 == str1_3);
+    EXPECT_EQ(str1_1, str1_3);
     qof_string_cache_remove(str);               /* Refcount = 1 */
     qof_string_cache_remove(str);               /* Refcount = 0 */
     strncpy(str, "str2", sizeof(str));
     qof_string_cache_insert(str);               /* Refcount = 1 */
     strncpy(str, "str1", sizeof(str));
     str1_4 = qof_string_cache_insert(str);      /* Refcount = 1 */
-    g_assert_true(str1_1 != str1_4);
+    EXPECT_NE(str1_1, str1_4);
 }
 
-void
-test_suite_qof_string_cache ( void )
-{
-    GNC_TEST_ADD_FUNC( suitename, "string-cache", test_qof_string_cache);
-}

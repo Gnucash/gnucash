@@ -21,15 +21,6 @@ add_engine_test(test-guid test-guid.cpp)
 add_engine_test(test-object test-object.c)
 add_engine_test(test-commodities test-commodities.cpp)
 
-set(test_qof_SOURCES
-  test-gnc-date.cpp
-  test-qof.cpp
-  test-qofbook.cpp
-  test-qofinstance.cpp
-  test-qofobject.cpp
-  test-qof-string-cache.cpp
-)
-
 set(test_engine_SOURCES
   test-engine.c
   test-engine-kvp-properties.c
@@ -45,10 +36,6 @@ set(test_engine_SOURCES
 
 # This test does not run on Win32
 if (NOT WIN32)
-  set(SOURCES ${test_qof_SOURCES} ${CMAKE_SOURCE_DIR}/common/test-core/unittest-support.c)
-  add_engine_test(test-qof "${SOURCES}")
-  target_compile_definitions(test-qof PRIVATE TESTPROG=test_qof)
-
   set(SOURCES ${test_engine_SOURCES} ${CMAKE_SOURCE_DIR}/common/test-core/unittest-support.c)
   add_engine_test(test-engine "${SOURCES}")
   target_compile_options(test-engine PRIVATE -Wno-write-strings)
@@ -132,6 +119,21 @@ gnc_add_test(test-qofsession "${test_qofsession_SOURCES}"
 
 gnc_add_test(test-qofid  test-qofid.cpp
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
+add_engine_test(test-gnc-date test-gnc-date.cpp)
+target_link_libraries(test-gnc-date PRIVATE gtest)
+
+add_engine_test(test-qofinstance test-qofinstance.cpp)
+target_link_libraries(test-qofinstance PRIVATE gtest)
+
+add_engine_test(test-qof-string-cache test-qof-string-cache.cpp)
+target_link_libraries(test-qof-string-cache PRIVATE gtest)
+
+add_engine_test(test-qofobject test-qofobject.cpp)
+target_link_libraries(test-qofobject PRIVATE gtest)
+
+add_engine_test(test-qofbook test-qofbook.cpp)
+target_link_libraries(test-qofbook PRIVATE gtest)
 
 gnc_add_test(test-gnc-euro  gtest-gnc-euro.cpp
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
@@ -241,7 +243,6 @@ set(test_engine_SOURCES_DIST
         test-lots.cpp
         test-numeric.cpp
         test-object.c
-        test-qof.cpp
         test-qofid.cpp
         test-qofbook.cpp
         test-qofinstance.cpp

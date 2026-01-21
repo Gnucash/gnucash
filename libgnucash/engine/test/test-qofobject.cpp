@@ -1,5 +1,5 @@
 /********************************************************************
- * test-qofobject.c: GLib g_test test suite for qofobject.c.	    *
+ * test-qofobject.c: google test test suite for qofobject.c.	    *
  * Copyright 2011 Muslim Chochlov <muslim.chochlov@gmail.com>	    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -19,6 +19,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 ********************************************************************/
+#include <gtest/gtest.h>
 #include <config.h>
 #include <string.h>
 #include <glib.h>
@@ -26,14 +27,6 @@
 
 #include "../qof.h"
 #include "../qofobject-p.h"
-
-static const gchar *suitename = "/qof/qofobject";
-void test_suite_qofobject ( void );
-
-typedef struct
-{
-    QofObject *qofobject;
-} Fixture;
 
 typedef enum
 {
@@ -51,10 +44,10 @@ static void mock_object_mark_clean( QofCollection *col );
 static QofObject*
 new_object( QofIdType e_type, const char *type_label, MockFields field)
 {
-    QofObject *object = NULL;
+    QofObject *object = nullptr;
 
     object = g_new0( QofObject, 1 );
-    g_assert_true( object );
+    EXPECT_TRUE( object );
     object->interface_version = QOF_OBJECT_VERSION;
     object->e_type = e_type;
     object->type_label = type_label;
@@ -80,17 +73,24 @@ new_object( QofIdType e_type, const char *type_label, MockFields field)
 GList* get_object_modules( void );
 GList* get_book_list( void );
 
-static void
-setup( Fixture *fixture, gconstpointer pData )
+class QOFObjectFixture: public ::testing::Test
+{
+public:
+    QOFObjectFixture();
+    ~QOFObjectFixture();
+protected:
+    QofObject* m_qofobject;
+};
+
+QOFObjectFixture::QOFObjectFixture()
 {
     qof_object_initialize();
-    fixture->qofobject = new_object( "my type object", "object desc", EMPTY );
+    m_qofobject = new_object( "my type object", "object desc", EMPTY );
 }
 
-static void
-teardown( Fixture *fixture, gconstpointer pData )
+QOFObjectFixture::~QOFObjectFixture()
 {
-    g_free( fixture->qofobject );
+    g_free( m_qofobject );
     qof_object_shutdown();
 }
 
@@ -104,20 +104,19 @@ teardown( Fixture *fixture, gconstpointer pData )
 static gint32
 generate_and_register_objects( guint min_objects, MockFields mock_field )
 {
-    gint32 list_length = g_test_rand_int_range( min_objects, 5 );
+    guint32 list_length = g_test_rand_int_range( min_objects, 5 );
     const char *types[5] = {"type1", "type2", "type3", "type4", "type5"};
-    int i;
 
-    g_assert_cmpint( min_objects, >= , 0 );
-    g_assert_cmpint( min_objects, < , 5 );
-    for (i = 0; i < list_length; i++ )
+    EXPECT_GE( min_objects, 0u );
+    EXPECT_LT( min_objects, 5u );
+    for (size_t i = 0; i < list_length; i++ )
     {
         QofObject *object = new_object( types[i], "desc", mock_field );
-        g_assert_true( object );
-        g_assert_true( qof_object_register( object ) );
-        g_assert_cmpint( g_list_length( get_object_modules() ), == , (i + 1) );
+        EXPECT_TRUE( object );
+        EXPECT_TRUE( qof_object_register( object ) );
+        EXPECT_EQ( g_list_length( get_object_modules() ), (i + 1) );
     }
-    g_assert_cmpint( list_length, == , g_list_length( get_object_modules() ) );
+    EXPECT_EQ( list_length, g_list_length( get_object_modules() ) );
 
     return list_length;
 }
@@ -134,94 +133,90 @@ static struct
 static void
 mock_book_begin( QofBook *book )
 {
-    g_assert_true( book );
-    g_assert_true( book == book_begin_struct.books->data );
+    EXPECT_TRUE( book );
+    EXPECT_EQ( book, book_begin_struct.books->data );
     book_begin_struct.books = book_begin_struct.books->next;
     book_begin_struct.call_count++;
 }
 
-static void
-test_qof_object_register( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_register)
 {
-    GList *books = NULL;
-    gint32 list_length = g_test_rand_int_range( 0, 5 );
-    int i;
-    QofObject *simple_object = NULL;
+    GList *books = nullptr;
+    guint32 list_length = g_test_rand_int_range( 0, 5 );
+    QofObject *simple_object = nullptr;
 
-    for (i = 0; i < list_length; i++ )
+    for (size_t i = 0; i < list_length; i++ )
     {
         QofBook *book = qof_book_new();
-        g_assert_true( book );
+        EXPECT_TRUE( book );
         books = g_list_prepend ( books, book );
-        g_assert_cmpint( g_list_length( books ), == , (i + 1) );
+        EXPECT_EQ( g_list_length( books ), (i + 1) );
     }
-    g_assert_cmpint( list_length, == , g_list_length( books ) );
+    EXPECT_EQ( list_length, g_list_length( books ) );
 
     g_test_message( "Test null check" );
-    g_assert_true( qof_object_register( NULL ) == FALSE );
+    EXPECT_EQ( qof_object_register( nullptr ), FALSE );
 
     g_test_message( "Test new object register with book_begin specified" );
-    fixture->qofobject->book_begin = mock_book_begin;
+    m_qofobject->book_begin = mock_book_begin;
     book_begin_struct.books = books;
     book_begin_struct.call_count = 0;
-    g_assert_true( qof_object_register( fixture->qofobject ) == TRUE );
-    g_assert_true( qof_object_lookup( "my type object" ) == fixture->qofobject );
-    g_assert_cmpint( book_begin_struct.call_count, == , list_length );
+    EXPECT_EQ( qof_object_register( m_qofobject ), TRUE );
+    EXPECT_EQ( qof_object_lookup( "my type object" ), m_qofobject );
+    EXPECT_EQ( book_begin_struct.call_count, list_length );
 
     g_test_message( "Test registering the same object one more time" );
     book_begin_struct.call_count = 0;
-    g_assert_true( qof_object_register( fixture->qofobject ) == FALSE );
-    g_assert_true( qof_object_lookup( "my type object" ) == fixture->qofobject );
-    g_assert_cmpint( book_begin_struct.call_count, == , 0 );
+    EXPECT_EQ( qof_object_register( m_qofobject ), FALSE );
+    EXPECT_EQ( qof_object_lookup( "my type object" ), m_qofobject );
+    EXPECT_EQ( book_begin_struct.call_count, 0u );
 
     g_test_message( "Test new object register without book_begin specified" );
     simple_object = new_object( "my type simple", "simple desc", EMPTY );
-    g_assert_true( qof_object_register( simple_object ) == TRUE );
-    g_assert_true( qof_object_lookup( "my type simple" ) == simple_object );
-    g_assert_cmpint( book_begin_struct.call_count, == , 0 );
+    EXPECT_EQ( qof_object_register( simple_object ), TRUE );
+    EXPECT_EQ( qof_object_lookup( "my type simple" ), simple_object );
+    EXPECT_EQ( book_begin_struct.call_count, 0u );
 
     g_test_message( "Test register simple object one more time" );
-    g_assert_true( qof_object_register( simple_object ) == FALSE );
-    g_assert_true( qof_object_lookup( "my type simple" ) == simple_object );
+    EXPECT_EQ( qof_object_register( simple_object ), FALSE );
+    EXPECT_EQ( qof_object_lookup( "my type simple" ), simple_object );
 
     g_test_message( "Test book begin is called only one time when object is registered" );
     simple_object->book_begin = mock_book_begin;
     book_begin_struct.books = books;
     book_begin_struct.call_count = 0;
-    g_assert_true( qof_object_register( simple_object ) == FALSE );
-    g_assert_cmpint( book_begin_struct.call_count, == , 0 );
+    EXPECT_EQ( qof_object_register( simple_object ), FALSE );
+    EXPECT_EQ( book_begin_struct.call_count, 0u );
 
-    g_list_foreach( books, (GFunc) qof_book_destroy, NULL );
+    g_list_foreach( books, (GFunc) qof_book_destroy, nullptr );
     g_list_free( books );
     g_free( simple_object );
 }
 
-static void
-test_qof_object_lookup( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_lookup)
 {
     g_test_message( "Test null check" );
-    g_assert_true( qof_object_lookup( NULL ) == NULL );
+    EXPECT_EQ( qof_object_lookup( nullptr ), nullptr );
 
     g_test_message( "Test existing object lookup" );
-    g_assert_true( qof_object_register( fixture->qofobject ) == TRUE );
-    g_assert_true( qof_object_lookup( "my type object" ) == fixture->qofobject );
+    EXPECT_EQ( qof_object_register( m_qofobject ), TRUE );
+    EXPECT_EQ( qof_object_lookup( "my type object" ), m_qofobject );
 
     g_test_message( "Test non existing object lookup" );
-    g_assert_true( qof_object_lookup( "anytype" ) == NULL );
+    EXPECT_EQ( qof_object_lookup( "anytype" ), nullptr );
 }
 
 
-static void
-test_qof_object_get_type_label( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_get_type_label)
 {
-    g_assert_true( qof_object_get_type_label( NULL ) == NULL );
+    EXPECT_EQ( qof_object_get_type_label( nullptr ), nullptr );
 
     g_test_message( "Test with non existing object" );
-    g_assert_true( qof_object_get_type_label( "anytype" ) == NULL );
+    EXPECT_EQ( qof_object_get_type_label( "anytype" ), nullptr );
 
     g_test_message( "Test with existing registered object" );
-    g_assert_true( qof_object_register( fixture->qofobject ) == TRUE );
-    g_assert_cmpstr( qof_object_get_type_label( "my type object" ), == , "object desc" );
+    EXPECT_EQ( qof_object_register( m_qofobject ), TRUE );
+    EXPECT_STREQ( qof_object_get_type_label( "my type object" ), "object desc" );
 }
 
 static struct
@@ -232,31 +227,30 @@ static struct
 static const char *
 mock_printable( gpointer instance )
 {
-    g_assert_true( instance );
-    g_assert_true( instance == printable_struct.param );
+    EXPECT_TRUE( instance );
+    EXPECT_EQ( instance, printable_struct.param );
     return "printable was called";
 }
 
-static void
-test_qof_object_printable( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_printable)
 {
     gint param;
 
     g_test_message( "Test null checks" );
-    g_assert_true( qof_object_printable( NULL, (gpointer)&param ) == NULL );
-    g_assert_true( qof_object_printable( "test", NULL ) == NULL );
+    EXPECT_EQ( qof_object_printable( nullptr, (gpointer)&param ), nullptr );
+    EXPECT_EQ( qof_object_printable( "test", nullptr ), nullptr );
 
     g_test_message( "Test with non registered object" );
-    g_assert_true( qof_object_printable( "test", (gpointer)&param ) == NULL );
+    EXPECT_EQ( qof_object_printable( "test", (gpointer)&param ), nullptr );
 
     g_test_message( "Test with registered object and printable not set" );
-    g_assert_true( qof_object_register( fixture->qofobject ) == TRUE );
-    g_assert_true( qof_object_printable( "my type object", (gpointer)&param ) == NULL );
+    EXPECT_EQ( qof_object_register( m_qofobject ), TRUE );
+    EXPECT_EQ( qof_object_printable( "my type object", (gpointer)&param ), nullptr );
 
     g_test_message( "Test with registered object and printable set" );
-    fixture->qofobject->printable = mock_printable;
+    m_qofobject->printable = mock_printable;
     printable_struct.param = (gpointer)&param;
-    g_assert_cmpstr( qof_object_printable( "my type object", (gpointer)&param ), == , "printable was called" );
+    EXPECT_STREQ( qof_object_printable( "my type object", (gpointer)&param ), "printable was called" );
 }
 
 static struct
@@ -268,73 +262,71 @@ static struct
 static void
 mock_object_book_begin( QofBook *book )
 {
-    g_assert_true( book );
-    g_assert_true( book == object_book_begin_struct.book );
+    EXPECT_TRUE( book );
+    EXPECT_EQ( book, object_book_begin_struct.book );
     object_book_begin_struct.call_count++;
 }
 
-static void
-test_qof_object_book_begin( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_book_begin)
 {
-    QofBook *book = NULL, *book2 = NULL;
-    gint32 list_length;
+    QofBook *book = nullptr, *book2 = nullptr;
+    guint32 list_length;
 
     g_test_message( "Test book begin with no objects" );
-    g_assert_cmpint( 0, == , g_list_length( get_book_list() ) );
+    EXPECT_EQ( 0u, g_list_length( get_book_list() ) );
     object_book_begin_struct.call_count = 0;
-    book = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, NULL));
-    g_assert_true( book );
+    book = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, nullptr));
+    EXPECT_TRUE( book );
     qof_object_book_begin( book );
-    g_assert_cmpint( 1, == , g_list_length( get_book_list() ) );
-    g_assert_cmpint( g_list_index( get_book_list(), (gconstpointer) book), != , -1 );
-    g_assert_cmpint( object_book_begin_struct.call_count, == , 0 );
+    EXPECT_EQ( 1u, g_list_length( get_book_list() ) );
+    EXPECT_NE( g_list_index( get_book_list(), (gconstpointer) book), -1 );
+    EXPECT_EQ( object_book_begin_struct.call_count, 0u );
 
     qof_book_destroy( book );
 
     list_length = generate_and_register_objects( 1, MOCK_OBJECT_BOOK_BEGIN );
 
     g_test_message( "Test book begin with random objects registered and book begin set up" );
-    g_assert_cmpint( 0, == , g_list_length( get_book_list() ) );
-    book2 = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, NULL));
-    g_assert_true( book2 );
+    EXPECT_EQ( 0u, g_list_length( get_book_list() ) );
+    book2 = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, nullptr));
+    EXPECT_TRUE( book2 );
     object_book_begin_struct.book = book2;
     qof_object_book_begin( book2 );
-    g_assert_cmpint( 1, == , g_list_length( get_book_list() ) );
-    g_assert_cmpint( g_list_index( get_book_list(), (gconstpointer) book2 ), != , -1 );
-    g_assert_cmpint( object_book_begin_struct.call_count, == , list_length );
+    EXPECT_EQ( 1u, g_list_length( get_book_list() ) );
+    EXPECT_NE( g_list_index( get_book_list(), (gconstpointer) book2 ), -1 );
+    EXPECT_EQ( object_book_begin_struct.call_count, list_length );
 
     qof_book_destroy( book2 );
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, nullptr);
 }
 
-static void
-test_qof_object_book_end( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_book_end)
 {
-    QofBook *book = NULL, *book2 = NULL;
-    gint32 list_length;
+    QofBook *book = nullptr, *book2 = nullptr;
+    guint32 list_length;
 
     g_test_message( "Test book with no objects" );
     book = qof_book_new();
-    g_assert_true( book );
+    EXPECT_TRUE( book );
     object_book_begin_struct.call_count = 0;
-    g_assert_cmpint( 1, == , g_list_length( get_book_list() ) );
-    g_assert_cmpint( g_list_index( get_book_list(), (gconstpointer) book), != , -1 );
+    EXPECT_EQ( 1u, g_list_length( get_book_list() ) );
+    EXPECT_NE( g_list_index( get_book_list(), (gconstpointer) book), -1 );
     qof_book_destroy( book ); /* calls object_book_end */
-    g_assert_cmpint( object_book_begin_struct.call_count, == , 0 );
-    g_assert_cmpint( 0, == , g_list_length( get_book_list() ) );
+    EXPECT_EQ( object_book_begin_struct.call_count, 0u );
+    EXPECT_EQ( 0u, g_list_length( get_book_list() ) );
 
     list_length = generate_and_register_objects( 1, MOCK_OBJECT_BOOK_END );
 
     g_test_message( "Test book end with random objects registered and book end set up" );
     book2 = qof_book_new();
-    g_assert_true( book2 );
+    EXPECT_TRUE( book2 );
     object_book_begin_struct.book = book2;
-    g_assert_cmpint( 1, == , g_list_length( get_book_list() ) );
-    g_assert_cmpint( g_list_index( get_book_list(), (gconstpointer) book2 ), != , -1 );
+    EXPECT_EQ( 1u, g_list_length( get_book_list() ) );
+    EXPECT_NE( g_list_index( get_book_list(), (gconstpointer) book2 ), -1 );
     qof_book_destroy( book2 ); /* calls object_book_end */
-    g_assert_cmpint( object_book_begin_struct.call_count, == , list_length );
-    g_assert_cmpint( 0, == , g_list_length( get_book_list() ) );
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
+    EXPECT_EQ( object_book_begin_struct.call_count, list_length );
+    EXPECT_EQ( 0u, g_list_length( get_book_list() ) );
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, nullptr);
 }
 
 static struct
@@ -347,50 +339,49 @@ static struct
 static gboolean
 mock_object_dirty( const QofCollection *col )
 {
-    QofObject *obj = NULL;
+    QofObject *obj = nullptr;
 
-    g_assert_true( col );
+    EXPECT_TRUE( col );
     obj = static_cast<QofObject*>(object_dirty_struct.objects->data);
     object_dirty_struct.objects = object_dirty_struct.objects->next;
-    g_assert_true( obj );
-    g_assert_cmpstr( qof_collection_get_type( col ), == , obj->e_type );
+    EXPECT_TRUE( obj );
+    EXPECT_STREQ( qof_collection_get_type( col ), obj->e_type );
     object_dirty_struct.call_count++;
     return object_dirty_struct.result;
 }
 
-static void
-test_qof_object_is_dirty( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_is_dirty)
 {
-    QofBook *book = NULL;
-    gint32 list_length;
+    QofBook *book = nullptr;
+    guint32 list_length;
 
     g_test_message( "Test null check returns false" );
-    g_assert_true( qof_object_is_dirty( NULL ) == FALSE );
+    EXPECT_EQ( qof_object_is_dirty( nullptr ), FALSE );
 
     g_test_message( "Test with no objects" );
     book = qof_book_new();
-    g_assert_true( book );
+    EXPECT_TRUE( book );
     object_dirty_struct.call_count = 0;
-    g_assert_true( qof_object_is_dirty( book ) == FALSE );
-    g_assert_cmpint( object_dirty_struct.call_count, == , 0 );
+    EXPECT_EQ( qof_object_is_dirty( book ), FALSE );
+    EXPECT_EQ( object_dirty_struct.call_count, 0u );
 
     list_length = generate_and_register_objects( 1, MOCK_OBJECT_DIRTY );
 
     g_test_message( "Test with registered objects and suppose all collections are clean" );
     object_dirty_struct.objects = get_object_modules();
     object_dirty_struct.result = FALSE;
-    g_assert_true( qof_object_is_dirty( book ) == FALSE );
-    g_assert_cmpint( object_dirty_struct.call_count, == , list_length );
+    EXPECT_EQ( qof_object_is_dirty( book ), FALSE );
+    EXPECT_EQ( object_dirty_struct.call_count, list_length );
 
     g_test_message( "Test with registered objects and suppose first collection is dirty" );
     object_dirty_struct.objects = get_object_modules();
     object_dirty_struct.result = TRUE;
     object_dirty_struct.call_count = 0;
-    g_assert_true( qof_object_is_dirty( book ) == TRUE );
-    g_assert_cmpint( object_dirty_struct.call_count, == , 1 ); /* should break on first */
+    EXPECT_EQ( qof_object_is_dirty( book ), TRUE );
+    EXPECT_EQ( object_dirty_struct.call_count, 1u ); /* should break on first */
 
     qof_book_destroy( book );
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, nullptr);
 }
 
 static struct
@@ -402,39 +393,38 @@ static struct
 static void
 mock_object_mark_clean( QofCollection *col )
 {
-    QofObject *obj = NULL;
+    QofObject *obj = nullptr;
 
-    g_assert_true( col );
+    EXPECT_TRUE( col );
     obj = static_cast<QofObject*>(object_mark_clean_struct.objects->data);
     object_mark_clean_struct.objects = object_mark_clean_struct.objects->next;
-    g_assert_true( obj );
-    g_assert_cmpstr( qof_collection_get_type( col ), == , obj->e_type );
+    EXPECT_TRUE( obj );
+    EXPECT_STREQ( qof_collection_get_type( col ), obj->e_type );
     object_mark_clean_struct.call_count++;
 }
 
-static void
-test_qof_object_mark_clean( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_mark_clean)
 {
-    QofBook *book = NULL;
-    gint32 list_length;
+    QofBook *book = nullptr;
+    guint32 list_length;
 
     g_test_message( "Test with no objects" );
     book = qof_book_new();
-    g_assert_true( book );
+    EXPECT_TRUE( book );
     object_mark_clean_struct.call_count = 0;
-    g_assert_cmpint( g_list_length( get_object_modules() ), == , 0 );
+    EXPECT_EQ( g_list_length( get_object_modules() ), 0u );
     qof_object_mark_clean( book );
-    g_assert_cmpint( object_mark_clean_struct.call_count, == , 0 );
+    EXPECT_EQ( object_mark_clean_struct.call_count, 0u );
 
     list_length = generate_and_register_objects( 1, MOCK_OBJECT_MARK_CLEAN );
 
     g_test_message( "Test with registered objects and mark clean set up" );
     object_mark_clean_struct.objects = get_object_modules();
     qof_object_mark_clean( book );
-    g_assert_cmpint( object_mark_clean_struct.call_count, == , list_length );
+    EXPECT_EQ( object_mark_clean_struct.call_count, list_length );
 
     qof_book_destroy( book );
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, nullptr);
 }
 
 static struct
@@ -447,46 +437,45 @@ static struct
 static gpointer
 mock_object_create( QofBook *book )
 {
-    QofInstance *inst = NULL;
+    QofInstance *inst = nullptr;
 
-    inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, NULL));
-    g_assert_true( inst );
-    g_assert_true( QOF_IS_INSTANCE( inst ) );
-    g_assert_true( book );
-    g_assert_true( book == object_create_struct.book );
+    inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, nullptr));
+    EXPECT_TRUE( inst );
+    EXPECT_TRUE( QOF_IS_INSTANCE( inst ) );
+    EXPECT_TRUE( book );
+    EXPECT_EQ( book, object_create_struct.book );
     object_create_struct.is_called = TRUE;
     object_create_struct.inst = inst;
     return inst;
 }
 
-static void
-test_qof_object_new_instance( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_new_instance)
 {
-    QofBook *book = NULL;
-    QofInstance *inst = NULL;
+    QofBook *book = nullptr;
+    QofInstance *inst = nullptr;
 
     book = qof_book_new();
-    g_assert_true( book );
+    EXPECT_TRUE( book );
 
     g_test_message( "Test null check" );
-    g_assert_true( qof_object_new_instance( NULL, book ) == NULL );
+    EXPECT_EQ( qof_object_new_instance( nullptr, book ), nullptr );
 
     g_test_message( "Test non existing object type" );
-    g_assert_true( qof_object_new_instance( "non existing type", book ) == NULL );
+    EXPECT_EQ( qof_object_new_instance( "non existing type", book ), nullptr );
 
     g_test_message( "Test with registered object type and create not set" );
-    g_assert_true( qof_object_register( fixture->qofobject ) );
-    g_assert_true( qof_object_new_instance( fixture->qofobject->e_type, book ) == NULL );
+    EXPECT_TRUE( qof_object_register( m_qofobject ) );
+    EXPECT_EQ( qof_object_new_instance( m_qofobject->e_type, book ), nullptr );
 
     g_test_message( "Test with registered object type and create set" );
     object_create_struct.is_called = FALSE;
     object_create_struct.book = book;
-    object_create_struct.inst = NULL;
-    fixture->qofobject->create = mock_object_create;
-    inst = static_cast<QofInstance*>(qof_object_new_instance( fixture->qofobject->e_type, book ));
-    g_assert_true( inst );
-    g_assert_true( object_create_struct.is_called == TRUE );
-    g_assert_true( object_create_struct.inst == inst );
+    object_create_struct.inst = nullptr;
+    m_qofobject->create = mock_object_create;
+    inst = static_cast<QofInstance*>(qof_object_new_instance( m_qofobject->e_type, book ));
+    EXPECT_TRUE( inst );
+    EXPECT_EQ( object_create_struct.is_called, TRUE );
+    EXPECT_EQ( object_create_struct.inst, inst );
 
     g_object_unref( inst );
     qof_book_destroy( book );
@@ -497,31 +486,30 @@ mock_object_foreach( const QofCollection *col, QofInstanceForeachCB cb, gpointer
 {
 }
 
-static void
-test_qof_object_compliance( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_compliance)
 {
-    g_assert_true( qof_object_register( fixture->qofobject ) );
+    EXPECT_TRUE( qof_object_register( m_qofobject ) );
 
     g_test_message( "Test when neither create nor foreach set" );
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, FALSE ) == FALSE );
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, TRUE ) == FALSE );
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, FALSE ), FALSE );
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, TRUE ), FALSE );
 
     g_test_message( "Test when only create set" );
-    fixture->qofobject->create = mock_object_create;
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, FALSE ) == FALSE );
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, TRUE ) == FALSE );
+    m_qofobject->create = mock_object_create;
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, FALSE ), FALSE );
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, TRUE ), FALSE );
 
     g_test_message( "Test when only foreach set" );
-    fixture->qofobject->create = NULL;
-    fixture->qofobject->foreach = mock_object_foreach;
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, FALSE ) == FALSE );
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, TRUE ) == FALSE );
+    m_qofobject->create = nullptr;
+    m_qofobject->foreach = mock_object_foreach;
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, FALSE ), FALSE );
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, TRUE ), FALSE );
 
     g_test_message( "Test when both set" );
-    fixture->qofobject->create = mock_object_create;
-    fixture->qofobject->foreach = mock_object_foreach;
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, FALSE ) == TRUE );
-    g_assert_true( qof_object_compliance( fixture->qofobject->e_type, TRUE ) == TRUE );
+    m_qofobject->create = mock_object_create;
+    m_qofobject->foreach = mock_object_foreach;
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, FALSE ), TRUE );
+    EXPECT_EQ( qof_object_compliance( m_qofobject->e_type, TRUE ), TRUE );
 }
 
 static struct
@@ -534,25 +522,24 @@ static struct
 static void
 mock_foreach_type_cb( QofObject *object, gpointer user_data )
 {
-    g_assert_true( object );
-    g_assert_true( user_data );
-    g_assert_true( object == foreach_type_cb_struct.objects->data );
-    g_assert_true( user_data == foreach_type_cb_struct.user_data );
+    EXPECT_TRUE( object );
+    EXPECT_TRUE( user_data );
+    EXPECT_EQ( object, foreach_type_cb_struct.objects->data );
+    EXPECT_EQ( user_data, foreach_type_cb_struct.user_data );
     foreach_type_cb_struct.objects = foreach_type_cb_struct.objects->next;
     foreach_type_cb_struct.call_count++;
 }
 
-static void
-test_qof_object_foreach_type( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_foreach_type)
 {
     gint user_data;
-    gint32 list_length;
+    guint32 list_length;
 
     g_test_message( "Test with no objects" );
     foreach_type_cb_struct.call_count = 0;
-    g_assert_cmpint( g_list_length( get_object_modules() ), == , 0 );
+    EXPECT_EQ( g_list_length( get_object_modules() ), 0u );
     qof_object_foreach_type( mock_foreach_type_cb, ( gpointer ) &user_data );
-    g_assert_cmpint( foreach_type_cb_struct.call_count, == , 0 );
+    EXPECT_EQ( foreach_type_cb_struct.call_count, 0u );
 
     list_length = generate_and_register_objects( 1, EMPTY );
 
@@ -561,8 +548,8 @@ test_qof_object_foreach_type( Fixture *fixture, gconstpointer pData )
     foreach_type_cb_struct.user_data = ( gpointer ) &user_data;
     foreach_type_cb_struct.call_count = 0;
     qof_object_foreach_type( mock_foreach_type_cb, ( gpointer ) &user_data );
-    g_assert_cmpint( foreach_type_cb_struct.call_count, == , list_length );
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
+    EXPECT_EQ( foreach_type_cb_struct.call_count, list_length );
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, nullptr);
 }
 
 static struct
@@ -581,39 +568,38 @@ mock_instance_foreach_cb( QofInstance *inst, gpointer user_data )
 static void
 mock_foreach( const QofCollection *col, QofInstanceForeachCB cb, gpointer user_data )
 {
-    g_assert_true( col );
-    g_assert_true( cb );
-    g_assert_true( user_data );
-    g_assert_true( col == foreach_cb_struct.col );
-    g_assert_true( user_data == foreach_cb_struct.user_data );
-    g_assert_true( cb == foreach_cb_struct.cb );
+    EXPECT_TRUE( col );
+    EXPECT_TRUE( cb );
+    EXPECT_TRUE( user_data );
+    EXPECT_EQ( col, foreach_cb_struct.col );
+    EXPECT_EQ( user_data, foreach_cb_struct.user_data );
+    EXPECT_EQ( cb, foreach_cb_struct.cb );
     foreach_cb_struct.is_called = TRUE;
 }
 
-static void
-test_qof_object_foreach( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_foreach)
 {
     gint user_data;
-    QofBook *book = NULL;
-    QofCollection *col = NULL;
+    QofBook *book = nullptr;
+    QofCollection *col = nullptr;
 
     /* setup */
     book = qof_book_new();
-    g_assert_true( book );
-    g_assert_cmpint( g_list_length( get_object_modules() ), == , 0 );
-    qof_object_register( fixture->qofobject );
-    g_assert_cmpint( g_list_length( get_object_modules() ), == , 1 );
-    col = qof_book_get_collection( book, fixture->qofobject->e_type ); /* make col already exist */
-    g_assert_true( col );
+    EXPECT_TRUE( book );
+    EXPECT_EQ( g_list_length( get_object_modules() ), 0u );
+    qof_object_register( m_qofobject );
+    EXPECT_EQ( g_list_length( get_object_modules() ), 1u );
+    col = qof_book_get_collection( book, m_qofobject->e_type ); /* make col already exist */
+    EXPECT_TRUE( col );
 
     g_test_message( "Test foreach and data" );
     foreach_cb_struct.user_data = ( gpointer ) &user_data;
     foreach_cb_struct.is_called = FALSE;
     foreach_cb_struct.col = col;
     foreach_cb_struct.cb = mock_instance_foreach_cb;
-    fixture->qofobject->foreach = mock_foreach;
-    qof_object_foreach( fixture->qofobject->e_type, book, mock_instance_foreach_cb, ( gpointer ) &user_data );
-    g_assert_true( foreach_cb_struct.is_called == TRUE );
+    m_qofobject->foreach = mock_foreach;
+    qof_object_foreach( m_qofobject->e_type, book, mock_instance_foreach_cb, ( gpointer ) &user_data );
+    EXPECT_EQ( foreach_cb_struct.is_called, TRUE );
 
     qof_book_destroy( book );
 }
@@ -630,9 +616,9 @@ mock_foreach_for_sorted( const QofCollection *col, QofInstanceForeachCB cb, gpoi
 {
     GList *iter;
 
-    g_assert_true( col );
-    g_assert_true( cb );
-    g_assert_true( user_data );
+    EXPECT_TRUE( col );
+    EXPECT_TRUE( cb );
+    EXPECT_TRUE( user_data );
 
     for (iter = foreach_for_sorted_struct.instances; iter; iter = iter->next)
     {
@@ -643,65 +629,46 @@ mock_foreach_for_sorted( const QofCollection *col, QofInstanceForeachCB cb, gpoi
 static void
 mock_instance_foreach_cb_for_sorted( QofInstance *inst, gpointer user_data )
 {
-    g_assert_true( inst );
-    g_assert_true( user_data );
-    g_assert_cmpint( g_list_index( foreach_for_sorted_struct.instances, (gconstpointer) inst ), != , -1 );
-    g_assert_true( user_data == foreach_for_sorted_struct.user_data );
+    EXPECT_TRUE( inst );
+    EXPECT_TRUE( user_data );
+    EXPECT_NE( g_list_index( foreach_for_sorted_struct.instances, (gconstpointer) inst ), -1 );
+    EXPECT_EQ( user_data, foreach_for_sorted_struct.user_data );
     foreach_for_sorted_struct.call_count++;
 }
 
-static void
-test_qof_object_foreach_sorted( Fixture *fixture, gconstpointer pData )
+TEST_F(QOFObjectFixture, object_foreach_sorted)
 {
-    int i;
-    gint32 list_length = g_test_rand_int_range( 0, 5 );
+    guint32 list_length = g_test_rand_int_range( 0, 5 );
     gint user_data;
-    QofBook *book = NULL;
-    QofCollection *col = NULL;
-    foreach_for_sorted_struct.instances = NULL;
+    QofBook *book = nullptr;
+    QofCollection *col = nullptr;
+    foreach_for_sorted_struct.instances = nullptr;
 
     /* setup */
     book = qof_book_new();
-    g_assert_true( book );
-    g_assert_cmpint( g_list_length( get_object_modules() ), == , 0 );
-    qof_object_register( fixture->qofobject );
-    g_assert_cmpint( g_list_length( get_object_modules() ), == , 1 );
+    EXPECT_TRUE( book );
+    EXPECT_EQ( g_list_length( get_object_modules() ), 0u );
+    qof_object_register( m_qofobject );
+    EXPECT_EQ( g_list_length( get_object_modules() ), 1u );
 
-    fixture->qofobject->foreach = mock_foreach_for_sorted;
+    m_qofobject->foreach = mock_foreach_for_sorted;
     /* init instances */
-    col = qof_book_get_collection( book, fixture->qofobject->e_type );
-    for (i = 0; i < list_length; i++ )
+    col = qof_book_get_collection( book, m_qofobject->e_type );
+    for (size_t i = 0; i < list_length; i++ )
     {
-        QofInstance * inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
-        g_assert_true( QOF_IS_INSTANCE( inst ) );
+        QofInstance * inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, nullptr ));
+        EXPECT_TRUE( QOF_IS_INSTANCE( inst ) );
         foreach_for_sorted_struct.instances = g_list_append( foreach_for_sorted_struct.instances, inst );
         qof_collection_insert_entity( col, inst );
     }
-    g_assert_cmpint( list_length, == , g_list_length( foreach_for_sorted_struct.instances ) );
+    EXPECT_EQ( list_length, g_list_length( foreach_for_sorted_struct.instances ) );
 
     foreach_for_sorted_struct.call_count = 0;
     foreach_for_sorted_struct.user_data = &user_data;
-    qof_object_foreach_sorted( fixture->qofobject->e_type, book, mock_instance_foreach_cb_for_sorted, ( gpointer ) &user_data );
-    g_assert_cmpint( list_length, == , foreach_for_sorted_struct.call_count );
+    qof_object_foreach_sorted( m_qofobject->e_type, book, mock_instance_foreach_cb_for_sorted, ( gpointer ) &user_data );
+    EXPECT_EQ( list_length, foreach_for_sorted_struct.call_count );
 
     qof_book_destroy( book );
     g_list_free_full (foreach_for_sorted_struct.instances, g_object_unref);
 }
 
-void
-test_suite_qofobject (void)
-{
-    GNC_TEST_ADD( suitename, "qof object register", Fixture, NULL, setup, test_qof_object_register, teardown );
-    GNC_TEST_ADD( suitename, "qof object lookup", Fixture, NULL, setup, test_qof_object_lookup, teardown );
-    GNC_TEST_ADD( suitename, "qof object get type label", Fixture, NULL, setup, test_qof_object_get_type_label, teardown );
-    GNC_TEST_ADD( suitename, "qof object printable", Fixture, NULL, setup, test_qof_object_printable, teardown );
-    GNC_TEST_ADD( suitename, "qof object book begin", Fixture, NULL, setup, test_qof_object_book_begin, teardown );
-    GNC_TEST_ADD( suitename, "qof object book end", Fixture, NULL, setup, test_qof_object_book_end, teardown );
-    GNC_TEST_ADD( suitename, "qof object is dirty", Fixture, NULL, setup, test_qof_object_is_dirty, teardown );
-    GNC_TEST_ADD( suitename, "qof object mark clean", Fixture, NULL, setup, test_qof_object_mark_clean, teardown );
-    GNC_TEST_ADD( suitename, "qof object new instance", Fixture, NULL, setup, test_qof_object_new_instance, teardown );
-    GNC_TEST_ADD( suitename, "qof object compliance", Fixture, NULL, setup, test_qof_object_compliance, teardown );
-    GNC_TEST_ADD( suitename, "qof object foreach type", Fixture, NULL, setup, test_qof_object_foreach_type, teardown );
-    GNC_TEST_ADD( suitename, "qof object foreach", Fixture, NULL, setup, test_qof_object_foreach, teardown );
-    GNC_TEST_ADD( suitename, "qof object foreach sorted", Fixture, NULL, setup, test_qof_object_foreach_sorted, teardown );
-}
