@@ -29,7 +29,7 @@
 #include "../qof-backend.hpp"
 #include "../kvp-frame.hpp"
 static const gchar *suitename = "/qof/qofinstance";
-extern "C" void test_suite_qofinstance ( void );
+void test_suite_qofinstance ( void );
 static gchar* error_message;
 static gboolean is_called;
 
@@ -970,7 +970,7 @@ test_instance_get_referring_object_list( void )
     qof_book_destroy( book );
 }
 
-extern "C" void
+void
 test_suite_qofinstance ( void )
 {
     GNC_TEST_ADD( suitename, "set get book", Fixture, NULL, setup, test_instance_set_get_book, teardown );

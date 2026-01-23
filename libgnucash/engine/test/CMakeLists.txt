@@ -22,12 +22,12 @@ add_engine_test(test-object test-object.c)
 add_engine_test(test-commodities test-commodities.cpp)
 
 set(test_qof_SOURCES
-  test-gnc-date.c
-  test-qof.c
+  test-gnc-date.cpp
+  test-qof.cpp
   test-qofbook.cpp
   test-qofinstance.cpp
-  test-qofobject.c
-  test-qof-string-cache.c
+  test-qofobject.cpp
+  test-qof-string-cache.cpp
 )
 
 set(test_engine_SOURCES
@@ -229,7 +229,7 @@ set(test_engine_SOURCES_DIST
         test-employee.c
         test-engine-kvp-properties.c
         test-engine.c
-        test-gnc-date.c
+        test-gnc-date.cpp
         test-gnc-guid.cpp
 	test-gnc-uri-utils.c
         test-group-vs-book.cpp
@@ -241,13 +241,13 @@ set(test_engine_SOURCES_DIST
         test-lots.cpp
         test-numeric.cpp
         test-object.c
-        test-qof.c
+        test-qof.cpp
         test-qofid.cpp
         test-qofbook.cpp
         test-qofinstance.cpp
-        test-qofobject.c
+        test-qofobject.cpp
         test-qofsession.cpp
-        test-qof-string-cache.c
+        test-qof-string-cache.cpp
         test-query.cpp
         test-querynew.c
         test-recurrence.c

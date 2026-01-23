@@ -33,7 +33,7 @@
 #include "../Account.h"
 
 static const gchar *suitename = "/qof/qofbook";
-extern "C" void test_suite_qofbook ( void );
+void test_suite_qofbook ( void );
 
 typedef struct
 {
@@ -843,14 +843,14 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
 #else
 #define _func "void qof_book_foreach_collection(const QofBook*, QofCollectionForeachCB, gpointer)"
 #endif
-    const char* msg1 = _func ": assertion 'book' failed";
-    const char* msg2 = _func ": assertion 'cb' failed";
+    gchar msg1[] = _func ": assertion 'book' failed";
+    gchar msg2[] = _func ": assertion 'cb' failed";
 #undef _func
-    const gchar *log_domain = "qof";
-    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    gchar log_domain[] = "qof";
+    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     guint hdlr;
-    TestErrorStruct check1 = { loglevel, const_cast<char*>(log_domain), const_cast<char*>(msg1) };
-    TestErrorStruct check2 = { loglevel, const_cast<char*>(log_domain), const_cast<char*>(msg2) };
+    TestErrorStruct check1 = { loglevel, log_domain, msg1 };
+    TestErrorStruct check2 = { loglevel, log_domain, msg2 };
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -985,8 +985,8 @@ test_book_new_destroy( void )
     g_free (test_funcs);
 }
 
-extern "C" void
-test_suite_qofbook ( void )
+void
+test_suite_qofbook( void )
 {
     GNC_TEST_ADD( suitename, "readonly", Fixture, NULL, setup, test_book_readonly, teardown );
     GNC_TEST_ADD_FUNC( suitename, "validate counter", test_book_normalize_counter );

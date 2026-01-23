@@ -375,7 +375,7 @@ gnc_date_string_to_dateformat(const char* fmt_str, QofDateFormat *format)// C: 3
 static void
 test_gnc_date_string_to_dateformat (void)
 {
-    QofDateFormat fmt = 123;
+    QofDateFormat fmt = QofDateFormat(123);
     g_assert_true (gnc_date_string_to_dateformat (NULL, &fmt));
     g_assert_cmpint (fmt, ==, 123);
     g_assert_true (!gnc_date_string_to_dateformat ("us", &fmt));
@@ -394,7 +394,7 @@ test_gnc_date_string_to_dateformat (void)
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_CUSTOM);
     g_assert_true (!gnc_date_string_to_dateformat ("unset", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_UNSET);
-    fmt = 123;
+    fmt = QofDateFormat(123);
     g_assert_true (gnc_date_string_to_dateformat ("", &fmt));
     g_assert_cmpint (fmt, ==, 123);
     g_assert_true (gnc_date_string_to_dateformat ("foo", &fmt));
@@ -411,7 +411,7 @@ test_gnc_date_monthformat_to_string (void)
     g_assert_cmpstr (gnc_date_monthformat_to_string (GNCDATE_MONTH_NUMBER), ==, "number");
     g_assert_cmpstr (gnc_date_monthformat_to_string (GNCDATE_MONTH_ABBREV), ==, "abbrev");
     g_assert_cmpstr (gnc_date_monthformat_to_string (GNCDATE_MONTH_NAME), ==, "name");
-    g_assert_true (gnc_date_monthformat_to_string (93) == NULL);
+    g_assert_true (gnc_date_monthformat_to_string (GNCDateMonthFormat(93)) == NULL);
 }
 /* gnc_date_string_to_monthformat
 gboolean
@@ -420,7 +420,7 @@ gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)/
 static void
 test_gnc_date_string_to_monthformat (void)
 {
-    GNCDateMonthFormat fmt = 123;
+    GNCDateMonthFormat fmt = GNCDateMonthFormat(123);
     g_assert_true (gnc_date_string_to_monthformat (NULL, &fmt));
     g_assert_cmpint (fmt, ==, 123);
     g_assert_true (!gnc_date_string_to_monthformat ("number", &fmt));
@@ -429,7 +429,7 @@ test_gnc_date_string_to_monthformat (void)
     g_assert_cmpint (fmt, ==, GNCDATE_MONTH_ABBREV);
     g_assert_true (!gnc_date_string_to_monthformat ("name", &fmt));
     g_assert_cmpint (fmt, ==, GNCDATE_MONTH_NAME);
-    fmt = 123;
+    fmt = GNCDateMonthFormat(123);
     g_assert_true (gnc_date_string_to_monthformat ("", &fmt));
     g_assert_cmpint (fmt, ==, 123);
     g_assert_true (gnc_date_string_to_monthformat ("foo", &fmt));
@@ -439,7 +439,7 @@ test_gnc_date_string_to_monthformat (void)
 static void
 test_gnc_setlocale (int category, gchar *locale)
 {
-    gchar *suffixes[] = {"utf8", "UTF-8"};
+    const gchar *suffixes[] = {"utf8", "UTF-8"};
     guint i;
     /* Msys defines a different set of locales */
 #ifdef G_OS_WIN32
@@ -561,10 +561,10 @@ void qof_date_format_set(QofDateFormat df)// C: 3 in 2  Local: 0:0:0
 static void
 test_qof_date_format_set (void)
 {
-    gchar *msg = "[qof_date_format_set()] non-existent date format set attempted. Setting ISO default";
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, msg, 0};
+    gchar msg[] = "[qof_date_format_set()] non-existent date format set attempted. Setting ISO default";
+    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    gchar logdomain[] = "qof.engine";
+    TestErrorStruct check = {loglevel, logdomain, msg, GLogLevelFlags(0)};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     qof_date_format_set ((QofDateFormat)((guint)DATE_FORMAT_LAST + 97));
@@ -677,7 +677,7 @@ test_qof_print_date_dmy_buff (void)
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
-    test_gnc_setlocale (LC_TIME, "en_US");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_US"));
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -703,7 +703,7 @@ test_qof_print_date_dmy_buff (void)
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
 
-    test_gnc_setlocale (LC_TIME, "en_GB");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_GB"));
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -727,7 +727,7 @@ test_qof_print_date_dmy_buff (void)
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
 
-    test_gnc_setlocale (LC_TIME, "fr_FR");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("fr_FR"));
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -853,7 +853,7 @@ test_qof_print_date_buff (void)
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
-    test_gnc_setlocale (LC_TIME, "en_US");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_US"));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
@@ -868,7 +868,7 @@ test_qof_print_date_buff (void)
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "06/16/2045");
 
-    test_gnc_setlocale (LC_TIME, "en_GB");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_GB"));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
@@ -885,7 +885,7 @@ test_qof_print_date_buff (void)
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm3);
     g_assert_cmpstr (buff, ==, ans);
 
-    test_gnc_setlocale (LC_TIME, "fr_FR");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("fr_FR"));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
@@ -914,9 +914,9 @@ test_qof_print_gdate (void)
 {
     gchar buff[MAX_DATE_LENGTH + 1], t_buff[MAX_DATE_LENGTH + 1];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    GDate *gd1 = g_date_new_dmy (23, 11, 1974);
-    GDate *gd2 = g_date_new_dmy (2, 2, 1961);
-    GDate *gd3 = g_date_new_dmy (16, 6, 2045);
+    GDate *gd1 = g_date_new_dmy (23, GDateMonth(11), 1974);
+    GDate *gd2 = g_date_new_dmy (2, GDateMonth(2), 1961);
+    GDate *gd3 = g_date_new_dmy (16, GDateMonth(6), 2045);
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -978,7 +978,7 @@ test_qof_print_gdate (void)
 
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
-    test_gnc_setlocale (LC_TIME, "en_US");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_US"));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
@@ -995,7 +995,7 @@ test_qof_print_gdate (void)
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
     g_assert_cmpstr (buff, ==, t_buff);
 
-    test_gnc_setlocale (LC_TIME, "en_GB");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_GB"));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
@@ -1013,7 +1013,7 @@ test_qof_print_gdate (void)
     g_assert_cmpstr (buff, ==, t_buff);
 
 
-    test_gnc_setlocale (LC_TIME, "fr_FR");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("fr_FR"));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
@@ -1095,7 +1095,7 @@ test_qof_print_date (void)
     test_assert_qof_print_date_outside_range (time3, "2045-06-16");
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
-    test_gnc_setlocale (LC_TIME, "en_US");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_US"));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm1);
     test_assert_qof_print_date (time1,ans);
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm2);
@@ -1103,7 +1103,7 @@ test_qof_print_date (void)
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm3);
     test_assert_qof_print_date_outside_range (time3, ans);
 
-    test_gnc_setlocale (LC_TIME, "en_GB");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_GB"));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm1);
     test_assert_qof_print_date (time1, ans);
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm2);
@@ -1111,7 +1111,7 @@ test_qof_print_date (void)
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm3);
     test_assert_qof_print_date_outside_range (time3, ans);
 
-    test_gnc_setlocale (LC_TIME, "fr_FR");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("fr_FR"));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm1);
     test_assert_qof_print_date (time1, ans);
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm2);
@@ -1247,7 +1247,7 @@ test_qof_scan_date (void)
     g_assert_cmpint (yr, ==, 2045);
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
-    test_gnc_setlocale (LC_TIME, "en_GB");
+    test_gnc_setlocale (LC_TIME, const_cast<char*>("en_GB"));
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     g_assert_true (qof_scan_date (buff, &day, &mo, &yr));
@@ -1367,7 +1367,7 @@ static gchar*
 format_timestring (time64 t, TZOffset tz)
 {
     static const unsigned tzlen = MAX_DATE_LENGTH - 26;
-    char *fmt = "%Y-%m-%d %H:%M:%S";
+    char fmt[] = "%Y-%m-%d %H:%M:%S";
     struct tm *tm;
     char buf[MAX_DATE_LENGTH + 1];
     char tzbuf[tzlen];
@@ -1441,13 +1441,13 @@ gnc_dmy2time64 (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
 static void
 test_gnc_dmy2time64 (FixtureB *f, gconstpointer pData)
 {
-    gchar *msg1 = "[qof_dmy2time64()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    gint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof.engine";
+    gchar msg1[] = "[qof_dmy2time64()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
+    gchar logdomain[] = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-    for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+    for (size_t i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
         struct tm tm = {0, 0, 0, f->test[i].day, f->test[i].mon - 1,
@@ -1476,13 +1476,13 @@ gnc_dmy2time64_end (int day, int month, int year)// C: 1  Local: 0:0:0
 static void
 test_gnc_dmy2time64_end (FixtureB *f, gconstpointer pData)
 {
-    gchar *msg1 = "[qof_dmy2time64_end()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof.engine";
+    gchar msg1[] = "[qof_dmy2time64_end()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    gchar logdomain[] = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-    for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+    for (size_t i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
         struct tm tm = {59, 59, 23, f->test[i].day, f->test[i].mon - 1,
@@ -1508,9 +1508,9 @@ test_gnc_dmy2time64_end (FixtureB *f, gconstpointer pData)
 static void
 test_gnc_dmy2time64_neutral (FixtureB *f, gconstpointer pData)
 {
-    gchar *msg1 = "[qof_dmy2time64_neutral()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof.engine";
+    gchar msg1[] = "[qof_dmy2time64_neutral()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    gchar logdomain[] = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     struct tm check_tz;
@@ -1524,7 +1524,7 @@ test_gnc_dmy2time64_neutral (FixtureB *f, gconstpointer pData)
     if (check_tz.tm_mday == f->test[0].day)
     {
          g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-         for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+         for (size_t i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
          {
               time64 r_t = gnc_dmy2time64_neutral (f->test[i].day, f->test[i].mon,
                                                        f->test[i].yr);
@@ -1556,37 +1556,37 @@ test_time64_to_gdate (FixtureA *f, gconstpointer pData)
 
     date1 = time64_to_gdate (f->t0);
     gnc_localtime_r(&f->t0, &tm);
-    g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    g_date_set_dmy (&date2, tm.tm_mday, GDateMonth(tm.tm_mon + 1), tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
     date1 = time64_to_gdate (f->t1);
     gnc_localtime_r(&f->t1, &tm);
-    g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    g_date_set_dmy (&date2, tm.tm_mday, GDateMonth(tm.tm_mon + 1), tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
     date1 = time64_to_gdate (f->t2);
     gnc_localtime_r(&f->t2, &tm);
-    g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    g_date_set_dmy (&date2, tm.tm_mday, GDateMonth(tm.tm_mon + 1), tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
     date1 = time64_to_gdate (f->t3);
     gnc_localtime_r(&f->t3, &tm);
-    g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    g_date_set_dmy (&date2, tm.tm_mday, GDateMonth(tm.tm_mon + 1), tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
     date1 = time64_to_gdate (f->t4);
     gnc_localtime_r(&f->t4, &tm);
-    g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    g_date_set_dmy (&date2, tm.tm_mday, GDateMonth(tm.tm_mon + 1), tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
     date1 = time64_to_gdate (f->t5);
     gnc_localtime_r(&f->t5, &tm);
-    g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    g_date_set_dmy (&date2, tm.tm_mday, GDateMonth(tm.tm_mon + 1), tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 }
@@ -1598,10 +1598,9 @@ static void
 test_gdate_to_time64 (FixtureB *f, gconstpointer pData)
 {
 
-    gchar *msg = "g_date_set_dmy: assertion 'g_date_valid_dmy (day, m, y)' failed";
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = G_LOG_DOMAIN;
-    TestErrorStruct check = {loglevel, logdomain, msg, 0};
+    gchar msg[] = "g_date_set_dmy: assertion 'g_date_valid_dmy (day, m, y)' failed";
+    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    TestErrorStruct check = {loglevel, G_LOG_DOMAIN, msg, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     struct tm check_tz;
     gnc_localtime_r(&(f->test[0].secs), &check_tz);
@@ -1614,13 +1613,13 @@ test_gdate_to_time64 (FixtureB *f, gconstpointer pData)
     if (check_tz.tm_mday == f->test[0].day)
     {
          g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-         for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+         for (size_t i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
          {
               GDate gd, gd2;
               time64 r_t;
               g_date_clear(&gd, 1);
               g_date_clear(&gd2, 1);
-              g_date_set_dmy(&gd, f->test[i].day, f->test[i].mon, f->test[i].yr);
+              g_date_set_dmy(&gd, f->test[i].day, GDateMonth(f->test[i].mon), f->test[i].yr);
               r_t = gdate_to_time64(gd);
               g_assert_cmpint (r_t, ==, f->test[i].secs);
               if (f->test[i].secs < INT64_MAX)

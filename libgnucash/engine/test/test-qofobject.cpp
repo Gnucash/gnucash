@@ -77,8 +77,8 @@ new_object( QofIdType e_type, const char *type_label, MockFields field)
     return object;
 }
 
-extern GList* get_object_modules( void );
-extern GList* get_book_list( void );
+GList* get_object_modules( void );
+GList* get_book_list( void );
 
 static void
 setup( Fixture *fixture, gconstpointer pData )
@@ -282,7 +282,7 @@ test_qof_object_book_begin( Fixture *fixture, gconstpointer pData )
     g_test_message( "Test book begin with no objects" );
     g_assert_cmpint( 0, == , g_list_length( get_book_list() ) );
     object_book_begin_struct.call_count = 0;
-    book = g_object_new(QOF_TYPE_BOOK, NULL);
+    book = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, NULL));
     g_assert_true( book );
     qof_object_book_begin( book );
     g_assert_cmpint( 1, == , g_list_length( get_book_list() ) );
@@ -295,7 +295,7 @@ test_qof_object_book_begin( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Test book begin with random objects registered and book begin set up" );
     g_assert_cmpint( 0, == , g_list_length( get_book_list() ) );
-    book2 = g_object_new(QOF_TYPE_BOOK, NULL);
+    book2 = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, NULL));
     g_assert_true( book2 );
     object_book_begin_struct.book = book2;
     qof_object_book_begin( book2 );
@@ -350,7 +350,7 @@ mock_object_dirty( const QofCollection *col )
     QofObject *obj = NULL;
 
     g_assert_true( col );
-    obj = object_dirty_struct.objects->data;
+    obj = static_cast<QofObject*>(object_dirty_struct.objects->data);
     object_dirty_struct.objects = object_dirty_struct.objects->next;
     g_assert_true( obj );
     g_assert_cmpstr( qof_collection_get_type( col ), == , obj->e_type );
@@ -405,7 +405,7 @@ mock_object_mark_clean( QofCollection *col )
     QofObject *obj = NULL;
 
     g_assert_true( col );
-    obj = object_mark_clean_struct.objects->data;
+    obj = static_cast<QofObject*>(object_mark_clean_struct.objects->data);
     object_mark_clean_struct.objects = object_mark_clean_struct.objects->next;
     g_assert_true( obj );
     g_assert_cmpstr( qof_collection_get_type( col ), == , obj->e_type );
@@ -449,7 +449,7 @@ mock_object_create( QofBook *book )
 {
     QofInstance *inst = NULL;
 
-    inst = g_object_new(QOF_TYPE_INSTANCE, NULL);
+    inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, NULL));
     g_assert_true( inst );
     g_assert_true( QOF_IS_INSTANCE( inst ) );
     g_assert_true( book );
@@ -483,7 +483,7 @@ test_qof_object_new_instance( Fixture *fixture, gconstpointer pData )
     object_create_struct.book = book;
     object_create_struct.inst = NULL;
     fixture->qofobject->create = mock_object_create;
-    inst = qof_object_new_instance( fixture->qofobject->e_type, book );
+    inst = static_cast<QofInstance*>(qof_object_new_instance( fixture->qofobject->e_type, book ));
     g_assert_true( inst );
     g_assert_true( object_create_struct.is_called == TRUE );
     g_assert_true( object_create_struct.inst == inst );
@@ -636,7 +636,7 @@ mock_foreach_for_sorted( const QofCollection *col, QofInstanceForeachCB cb, gpoi
 
     for (iter = foreach_for_sorted_struct.instances; iter; iter = iter->next)
     {
-        cb( iter->data, user_data );
+        cb( static_cast<QofInstance*>(iter->data), user_data );
     }
 }
 
@@ -672,7 +672,7 @@ test_qof_object_foreach_sorted( Fixture *fixture, gconstpointer pData )
     col = qof_book_get_collection( book, fixture->qofobject->e_type );
     for (i = 0; i < list_length; i++ )
     {
-        QofInstance * inst = g_object_new( QOF_TYPE_INSTANCE, NULL );
+        QofInstance * inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
         g_assert_true( QOF_IS_INSTANCE( inst ) );
         foreach_for_sorted_struct.instances = g_list_append( foreach_for_sorted_struct.instances, inst );
         qof_collection_insert_entity( col, inst );

@@ -40,12 +40,8 @@ static GList *book_list = nullptr;
  * They should be removed when no longer needed
  */
 
-extern "C"
-{
-
 GList* get_object_modules( void );
 GList* get_book_list( void );
-}
 
 GList*
 get_object_modules( void )
