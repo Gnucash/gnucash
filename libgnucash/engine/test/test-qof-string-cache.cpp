@@ -23,6 +23,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 #include <gtest/gtest.h>
+#include "../qof-string-cache.h"
 #include <config.h>
 #include <string.h>
 #include <glib.h>
@@ -54,5 +55,32 @@ TEST(QODStringCache, qof_string_cache)
     strncpy(str, "str1", sizeof(str));
     str1_4 = qof_string_cache_insert(str);      /* Refcount = 1 */
     EXPECT_NE(str1_1, str1_4);
+
+    // Edge cases.
+    EXPECT_EQ(qof_string_cache_insert(nullptr), nullptr);
+    EXPECT_STREQ(qof_string_cache_insert(""), "");
+
+    // Replace
+    gchar test[100];
+    strncpy(str, "str1", sizeof(str));
+    strncpy(test, "test", sizeof(test));
+    EXPECT_EQ(str1_4, qof_string_cache_insert(str));        // Refcount = 2
+    auto test_1 = qof_string_cache_replace(str, test);      // Refcount = 1
+    EXPECT_EQ(str1_4, qof_string_cache_insert(str));        // Refcount = 2
+    EXPECT_EQ(test_1, qof_string_cache_replace(str, test)); // Refcount = 1
+    qof_string_cache_remove(str);                           // Refcount = 0
+    EXPECT_NE(str1_4, qof_string_cache_insert(str));
 }
 
+
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+
+    setlocale (LC_ALL, "");
+    qof_init(); 			/* Initialize the GObject system */
+    qof_log_init_filename_special("stderr"); /* Init the log system */
+
+    auto ret = RUN_ALL_TESTS();
+    qof_string_cache_destroy();
+    return ret;
+}
