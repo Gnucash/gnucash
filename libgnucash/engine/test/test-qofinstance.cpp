@@ -85,17 +85,27 @@ private:
 
 };
 
-class OqfInstanceTest: public ::testing::Test
+class QofInstanceTest: public ::testing::Test
 {
 public:
-    OqfInstanceTest() : m_inst(static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, nullptr))) {}
-    ~OqfInstanceTest()
-        {
-            g_object_unref(m_inst);
-        }
+    QofInstanceTest();
+    ~QofInstanceTest();
 protected:
     QofInstance* m_inst;
+    QofInstance* m_inst2;
 };
+
+QofInstanceTest::QofInstanceTest()
+    : m_inst(static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, nullptr))),
+      m_inst2(static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, nullptr)))
+{
+}
+
+QofInstanceTest::~QofInstanceTest()
+{
+    g_object_unref(m_inst);
+    g_object_unref(m_inst2);
+}
 
 static void
 on_error(QofInstance* inst, QofBackendError err) {
@@ -119,30 +129,45 @@ on_free(QofInstance* inst) {
     commit_test.m_on_free_called = true;
 }
 
-TEST_F(OqfInstanceTest, set_get_book)
+TEST_F(QofInstanceTest, set_get_book)
 {
-    QofBook *book;
-
     /* set up */
-    book = qof_book_new();
+    auto book1 = qof_book_new();
+    auto book2 = qof_book_new();
 
     EXPECT_TRUE( QOF_IS_INSTANCE( m_inst ) );
 
     printf("# Setting and getting book\n");
-    qof_instance_set_book( m_inst, book );
-    EXPECT_EQ( book, qof_instance_get_book( m_inst ) );
+    qof_instance_set_book( m_inst, book1 );
+    EXPECT_EQ( book1, qof_instance_get_book( m_inst ) );
+    qof_instance_set_book( m_inst2, book2 );
+    EXPECT_EQ( book2, qof_instance_get_book( m_inst2 ) );
 
     printf("# Getting book when instance is null\n");
     EXPECT_EQ( qof_instance_get_book( nullptr ), nullptr );
 
+    EXPECT_FALSE(qof_instance_books_equal(nullptr, m_inst2));
+    EXPECT_FALSE(qof_instance_books_equal(m_inst, nullptr));
+    EXPECT_FALSE(qof_instance_books_equal(m_inst, m_inst2));
+
+    qof_instance_copy_book(nullptr, m_inst);
+    EXPECT_EQ( book1, qof_instance_get_book( m_inst ) );
+    EXPECT_EQ( book2, qof_instance_get_book( m_inst2 ) );
+    qof_instance_copy_book(m_inst, nullptr);
+    EXPECT_EQ( book1, qof_instance_get_book( m_inst ) );
+    EXPECT_EQ( book2, qof_instance_get_book( m_inst2 ) );
+    qof_instance_copy_book(m_inst, m_inst2);
+    EXPECT_EQ( book2, qof_instance_get_book( m_inst ) );
+    EXPECT_EQ( book2, qof_instance_get_book( m_inst2 ) );
+    EXPECT_TRUE(qof_instance_books_equal(m_inst, m_inst2));
+
     /* Clean up */
-    qof_book_destroy( book );
+    qof_book_destroy( book1 );
+    qof_book_destroy( book2 );
 }
 
-TEST_F(OqfInstanceTest, set_get_guid)
+TEST_F(QofInstanceTest, set_get_guid)
 {
-    GncGUID *gncGuid;
-
     /* on null instance deprecated getter returns empty guid
      * while instance_get_guid returns null
      */
@@ -150,23 +175,43 @@ TEST_F(OqfInstanceTest, set_get_guid)
     EXPECT_EQ( qof_entity_get_guid( nullptr ), guid_null() );
 
     /* set up */
-    gncGuid = guid_new();
+    auto gncGuid1 = guid_new();
+    auto gncGuid2 = guid_new();
     EXPECT_TRUE( QOF_IS_INSTANCE( m_inst ) );
-    EXPECT_TRUE( gncGuid );
+    EXPECT_TRUE( gncGuid1 );
 
     /* guid already exists after instance init */
     printf("# Setting new guid\n");
     EXPECT_TRUE( qof_instance_get_guid( m_inst ) );
-    EXPECT_TRUE( !guid_equal( gncGuid, qof_instance_get_guid( m_inst ) ) );
-    qof_instance_set_guid( m_inst, gncGuid );
-    EXPECT_TRUE( guid_equal( gncGuid, qof_instance_get_guid( m_inst ) ) );
-    EXPECT_TRUE( guid_equal( gncGuid, qof_entity_get_guid( m_inst ) ) );
+    EXPECT_TRUE( !guid_equal( gncGuid1, qof_instance_get_guid( m_inst ) ) );
+    qof_instance_set_guid( m_inst, gncGuid1 );
+    EXPECT_TRUE( guid_equal( gncGuid1, qof_instance_get_guid( m_inst ) ) );
+    EXPECT_TRUE( guid_equal( gncGuid1, qof_entity_get_guid( m_inst ) ) );
+    qof_instance_set_guid( m_inst2, gncGuid2 );
+    EXPECT_TRUE( guid_equal( gncGuid2, qof_instance_get_guid( m_inst2 ) ) );
+    EXPECT_TRUE( guid_equal( gncGuid2, qof_entity_get_guid( m_inst2 ) ) );
+
+    EXPECT_EQ(qof_instance_guid_compare(nullptr, m_inst2), -1);
+    EXPECT_EQ(qof_instance_guid_compare(m_inst, nullptr), 1);
+    EXPECT_EQ(qof_instance_guid_compare(m_inst, m_inst2), guid_compare(gncGuid1, gncGuid2));
+
+    qof_instance_copy_guid(nullptr, m_inst);
+    EXPECT_TRUE( guid_equal(gncGuid1, qof_instance_get_guid( m_inst ) ));
+    EXPECT_TRUE( guid_equal(gncGuid2, qof_instance_get_guid( m_inst2 ) ));
+    qof_instance_copy_guid(m_inst, nullptr);
+    EXPECT_TRUE( guid_equal(gncGuid1, qof_instance_get_guid( m_inst ) ));
+    EXPECT_TRUE( guid_equal(gncGuid2, qof_instance_get_guid( m_inst2 ) ));
+    qof_instance_copy_guid(m_inst, m_inst2);
+    EXPECT_TRUE( guid_equal(gncGuid2, qof_instance_get_guid( m_inst ) ));
+    EXPECT_TRUE( guid_equal(gncGuid2, qof_instance_get_guid( m_inst2 ) ));
+    EXPECT_EQ(qof_instance_guid_compare(m_inst, m_inst2), 0);
 
     /* Clean up */
-    guid_free( gncGuid );
+    guid_free( gncGuid1 );
+    guid_free( gncGuid2 );
 }
 
-TEST_F(OqfInstanceTest, new_destroy)
+TEST_F(QofInstanceTest, new_destroy)
 {
     /* qofinstance var */
     QofInstance *inst;
@@ -207,7 +252,7 @@ TEST_F(OqfInstanceTest, new_destroy)
     test_error_struct_free(check);
 }
 
-TEST_F(OqfInstanceTest, init_data)
+TEST_F(QofInstanceTest, init_data)
 {
     QofInstance *inst;
     QofIdType test_type = "test type";
@@ -247,7 +292,7 @@ TEST_F(OqfInstanceTest, init_data)
     qof_book_destroy( book );
 }
 
-TEST_F(OqfInstanceTest, get_set_slots)
+TEST_F(QofInstanceTest, get_set_slots)
 {
     KvpFrame *kvp_frame, *kvp_frame2;
 
@@ -275,7 +320,7 @@ TEST_F(OqfInstanceTest, get_set_slots)
 
 }
 
-TEST_F(OqfInstanceTest, version_cmp)
+TEST_F(QofInstanceTest, version_cmp)
 {
     QofInstance *left, *right;
     int result;
@@ -324,7 +369,7 @@ TEST_F(OqfInstanceTest, version_cmp)
     g_object_unref( right );
 }
 
-TEST_F(OqfInstanceTest, get_set_dirty)
+TEST_F(QofInstanceTest, get_set_dirty)
 {
     QofIdType type = "test type";
     QofCollection *col;
@@ -337,6 +382,11 @@ TEST_F(OqfInstanceTest, get_set_dirty)
     printf("# Test get_dirty on empty instance returns false\n");
     EXPECT_FALSE( qof_instance_get_dirty( nullptr ));
 
+    testing::internal::CaptureStdout();
+    qof_instance_print_dirty(m_inst, nullptr);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ("", output.c_str());
+
     printf("# Test dirty\n");
     EXPECT_TRUE( !qof_instance_get_dirty_flag( m_inst ) );
     EXPECT_TRUE( !qof_collection_is_dirty( col ) );
@@ -346,9 +396,123 @@ TEST_F(OqfInstanceTest, get_set_dirty)
     EXPECT_TRUE( !qof_collection_is_dirty( col ) );
     EXPECT_TRUE( qof_instance_get_dirty( m_inst ) );
 
+    testing::internal::CaptureStdout();
+    qof_instance_print_dirty(m_inst, nullptr);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_NE(output.find("instance"), std::string::npos);
+    EXPECT_NE(output.find("is dirty."), std::string::npos);
+
+    // Test the qof_instance_set/get way.  Note on setting, it is always set to true.
+    printf("# Test dirty though the set/get interface.\n");
+    gboolean dirty = true;
+    qof_instance_get(m_inst2, "dirty", &dirty, nullptr);
+    EXPECT_FALSE(dirty);
+    qof_instance_set(m_inst2, "dirty", false, nullptr);
+    qof_instance_get(m_inst2, "dirty", &dirty, nullptr);
+    EXPECT_TRUE(dirty);
+
     /* clean up */
     qof_instance_set_collection( m_inst, nullptr );
     qof_collection_destroy( col );
+}
+
+TEST_F(QofInstanceTest, get_set_version)
+{
+    EXPECT_EQ(qof_instance_get_version(m_inst), 0);
+    EXPECT_EQ(qof_instance_get_version(nullptr), 0);
+    qof_instance_set_version(m_inst, 123);
+    EXPECT_EQ(qof_instance_get_version(m_inst), 123);
+
+    EXPECT_EQ(qof_instance_get_version(m_inst2), 0);
+    qof_instance_copy_version(m_inst2, m_inst);
+    EXPECT_EQ(qof_instance_get_version(m_inst2), 123);
+
+    EXPECT_EQ(qof_instance_get_version_check(m_inst), 0u);
+    EXPECT_EQ(qof_instance_get_version_check(nullptr), 0u);
+    qof_instance_set_version_check(m_inst, 123u);
+    EXPECT_EQ(qof_instance_get_version_check(m_inst), 123u);
+
+    EXPECT_EQ(qof_instance_get_version_check(m_inst2), 0u);
+    qof_instance_copy_version_check(m_inst2, m_inst);
+    EXPECT_EQ(qof_instance_get_version_check(m_inst2), 123u);
+
+    EXPECT_EQ(qof_instance_get_idata(nullptr), 0u);
+    EXPECT_EQ(qof_instance_get_idata(m_inst), 0u);
+    qof_instance_set_idata(nullptr, 123u);
+    qof_instance_set_idata(m_inst, 123u);
+    EXPECT_EQ(qof_instance_get_idata(m_inst), 123u);
+}
+
+TEST_F(QofInstanceTest, get_set)
+{
+    auto prm1 = "destroying";
+    auto prm2 = "version";
+    auto prm3 = "version-check";
+    gboolean val1a = false;
+    gboolean val1b = true;
+    guint32 val2a = 100u;
+    guint32 val2b = 200u;
+    guint32 val3a = 10u;
+    guint32 val3b = 20u;
+    gboolean get1;
+    guint32 get2;
+    guint32 get3;
+
+    qof_instance_set(m_inst, prm1, val1a, prm2, val2a, prm3, val3a, nullptr);
+    qof_instance_get(m_inst, prm1, &get1, prm2, &get2, prm3, &get3, nullptr);
+    EXPECT_EQ(get1, val1a);
+    EXPECT_EQ(get2, val2a);
+    EXPECT_EQ(get3, val3a);
+
+    qof_instance_set(m_inst, prm1, val1b, prm2, val2b, prm3, val3b, nullptr);
+    qof_instance_get(m_inst, prm1, &get1, prm2, &get2, prm3, &get3, nullptr);
+    EXPECT_EQ(get1, val1b);
+    EXPECT_EQ(get2, val2b);
+    EXPECT_EQ(get3, val3b);
+
+    guint32 idata = 100u;
+    qof_instance_set(m_inst, "idata", 200u, nullptr);
+    qof_instance_get(m_inst, "idata", &idata, nullptr);
+    EXPECT_EQ(idata, 200u);
+
+
+    time64* ptime;
+    qof_instance_set_last_update(m_inst, 0);// Make sure it is set before reading.
+    qof_instance_get(m_inst, "last-update", &ptime, nullptr);
+    EXPECT_EQ(*ptime, 0);
+    time64 time = 0x12345678ul;
+    ptime = &time;
+    qof_instance_set(m_inst, "last-update", ptime, nullptr);
+    time = 0;
+    qof_instance_get(m_inst, "last-update", &ptime, nullptr);
+    EXPECT_EQ(*ptime, static_cast<time64>(0x12345678ul));
+
+    auto gncGuid2 = guid_new();
+    EXPECT_FALSE(guid_compare(gncGuid2, qof_instance_get_guid(m_inst)) == 0);
+    qof_instance_set(m_inst, "guid", gncGuid2, nullptr);
+    EXPECT_TRUE(guid_compare(gncGuid2, qof_instance_get_guid(m_inst)) == 0);
+    GncGUID *gncGuid1;
+    qof_instance_get(m_inst, "guid", &gncGuid1, nullptr);
+    EXPECT_TRUE(guid_compare(gncGuid2, gncGuid1) == 0);
+    guid_free( gncGuid2 );
+    guid_free( gncGuid1 );
+
+    auto col1 = qof_collection_new("test");
+    qof_instance_set(m_inst, "collection", col1, nullptr);
+    EXPECT_EQ(col1, qof_instance_get_collection(m_inst));
+    const QofCollection* col2;
+    qof_instance_get(m_inst, "collection", &col2, nullptr);
+    EXPECT_EQ(col1, col2);
+    qof_instance_set(m_inst, "collection", nullptr, nullptr);
+    qof_collection_destroy(col1);
+
+    auto book1 = qof_book_new();
+    qof_instance_set(m_inst, "book", book1, nullptr);
+    EXPECT_EQ(book1, qof_instance_get_book(m_inst));
+    const QofBook* book2;
+    qof_instance_get(m_inst, "book", &book2, nullptr);
+    EXPECT_EQ(book1, book2);
+    qof_book_destroy(book1);
 }
 
 /* mock display name function */
@@ -364,7 +528,7 @@ mock_get_display_name(const QofInstance* inst)
     return display_name;
 }
 
-TEST_F(OqfInstanceTest, display_name)
+TEST_F(QofInstanceTest, display_name)
 {
     QofIdType type = "test type";
     QofCollection *col;
@@ -401,7 +565,7 @@ TEST_F(OqfInstanceTest, display_name)
     qof_collection_destroy( col );
 }
 
-TEST_F(OqfInstanceTest, begin_edit)
+TEST_F(QofInstanceTest, begin_edit)
 {
     QofBook *book;
     gboolean result;
@@ -427,6 +591,9 @@ TEST_F(OqfInstanceTest, begin_edit)
     result = qof_begin_edit( m_inst );
     EXPECT_FALSE( result );
     EXPECT_EQ( qof_instance_get_editlevel( m_inst ), 2 );
+    gint editlevel = 0;
+    qof_instance_get(m_inst, "editlevel", &editlevel, nullptr);
+    EXPECT_EQ( editlevel, 2 );
 
     printf("# Test when instance's editlevel is <= 0 and backend not set\n");
     qof_instance_reset_editlevel( m_inst );
@@ -452,7 +619,7 @@ TEST_F(OqfInstanceTest, begin_edit)
 
 }
 
-TEST_F(OqfInstanceTest, commit_edit)
+TEST_F(QofInstanceTest, commit_edit)
 {
     gboolean result;
     const gchar *msg = "[qof_commit_edit()] unbalanced call - resetting (was -2)";
@@ -492,7 +659,7 @@ TEST_F(OqfInstanceTest, commit_edit)
 /* backend commit test start */
 
 
-TEST_F(OqfInstanceTest, commit_edit_part2)
+TEST_F(QofInstanceTest, commit_edit_part2)
 {
     QofBook *book;
     gboolean result;
@@ -562,6 +729,9 @@ TEST_F(OqfInstanceTest, commit_edit_part2)
     EXPECT_TRUE( result );
     EXPECT_TRUE( !qof_instance_get_dirty_flag( m_inst ) );
     EXPECT_TRUE( !qof_instance_get_infant( m_inst ) );
+    gboolean infant = TRUE;
+    qof_instance_get(m_inst, "infant", &infant, nullptr);
+    EXPECT_FALSE(infant);
     EXPECT_TRUE( commit_test.m_commit_called );
     EXPECT_TRUE( !commit_test.m_commit_with_err_called );
     EXPECT_TRUE( !commit_test.m_on_error_called );
@@ -612,7 +782,7 @@ mock_refers_to_object( const QofInstance* inst, const QofInstance* ref )
     return TRUE;
 }
 
-TEST_F(OqfInstanceTest, refers_to_object)
+TEST_F(QofInstanceTest, refers_to_object)
 {
     QofInstance * ref;
 
@@ -655,7 +825,7 @@ mock_refers_to_object_from_col( const QofInstance* inst, const QofInstance* ref 
     return TRUE;
 }
 
-TEST_F(OqfInstanceTest, get_referring_object_list_from_collection)
+TEST_F(QofInstanceTest, get_referring_object_list_from_collection)
 {
     QofIdType type = "test type";
     QofBook *book;
@@ -737,7 +907,7 @@ mock_get_typed_referring_object_list( const QofInstance* inst, const QofInstance
     return g_list_append( result, (gpointer) inst );
 }
 
-TEST_F(OqfInstanceTest, get_typed_referring_object_list)
+TEST_F(QofInstanceTest, get_typed_referring_object_list)
 {
     QofInstance *inst;
     QofInstance *ref;
@@ -810,7 +980,7 @@ mock_simple_get_typed_referring_object_list(const QofInstance* inst, const QofIn
     return qof_instance_get_referring_object_list_from_collection(qof_instance_get_collection(inst), ref);
 }
 
-TEST_F(OqfInstanceTest, get_referring_object_list)
+TEST_F(QofInstanceTest, get_referring_object_list)
 {
     /* walk through the book's each collection's each instance */
     QofInstance *ref1;
@@ -927,6 +1097,129 @@ TEST_F(OqfInstanceTest, get_referring_object_list)
     g_list_free( inst_list1 );
     g_list_free( inst_list2 );
     qof_book_destroy( book );
+}
+
+TEST_F(QofInstanceTest, kvp)
+{
+    EXPECT_FALSE(qof_instance_has_kvp(m_inst));
+    GValue gvalue = G_VALUE_INIT;
+    g_value_init(&gvalue, G_TYPE_DOUBLE);
+    g_value_set_double(&gvalue, 1.234);
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "int64"});
+    qof_instance_set_path_kvp(m_inst, &gvalue, {"Test", "double"});
+    qof_instance_set_kvp(m_inst, nullptr, 2, "test3", "test4");
+    EXPECT_TRUE(qof_instance_has_kvp(m_inst));
+    auto i64 = qof_instance_get_path_kvp<int64_t>(m_inst, {"Test", "int64"});
+    EXPECT_TRUE(i64.has_value());
+    EXPECT_EQ(i64.value(), 123);
+    g_value_set_double(&gvalue, 0.0);
+    qof_instance_get_path_kvp(m_inst, &gvalue, {"Test", "double"});
+    EXPECT_EQ(g_value_get_double(&gvalue), 1.234);
+    g_value_set_double(&gvalue, 0.0);
+    qof_instance_get_kvp(m_inst, &gvalue, 2, "Test", "double");
+    EXPECT_EQ(g_value_get_double(&gvalue), 1.234);
+
+    qof_instance_swap_kvp(m_inst2, m_inst);
+    EXPECT_TRUE(qof_instance_has_kvp(m_inst2));
+    EXPECT_EQ(qof_instance_get_path_kvp<int64_t>(m_inst2, {"Test", "int64"}).value(), 123);
+    EXPECT_FALSE(qof_instance_has_kvp(m_inst));
+    EXPECT_NE(qof_instance_compare_kvp(m_inst, m_inst2), 0);
+
+    qof_instance_copy_kvp(m_inst, m_inst2);
+    EXPECT_TRUE(qof_instance_has_kvp(m_inst2));
+    EXPECT_EQ(qof_instance_get_path_kvp<int64_t>(m_inst2, {"Test", "int64"}).value(), 123);
+    EXPECT_EQ(qof_instance_get_path_kvp<int64_t>(m_inst, {"Test", "int64"}).value(), 123);
+    EXPECT_TRUE(qof_instance_has_kvp(m_inst));
+    EXPECT_EQ(qof_instance_compare_kvp(m_inst, m_inst2), 0);
+
+    auto str = qof_instance_kvp_as_string(m_inst);
+    EXPECT_NE(std::string(str).find("Test/double/1.234 (double)"), std::string::npos);
+    EXPECT_NE(std::string(str).find("Test/int64/123 (64-bit int)"), std::string::npos);
+    g_free(str);
+
+    auto gncGuid1 = guid_new();
+    EXPECT_FALSE(qof_instance_kvp_has_guid(m_inst, "guid", "mytime", gncGuid1));
+    qof_instance_kvp_add_guid(m_inst, "guid", 123u, "mytime", gncGuid1);
+    EXPECT_EQ(qof_instance_get_path_kvp<Time64>(m_inst, {"guid", "date"}).value().t, 123u);
+    EXPECT_TRUE(qof_instance_kvp_has_guid(m_inst, "guid", "mytime", gncGuid1));
+    qof_instance_kvp_remove_guid(m_inst, "guid", "mytime", gncGuid1);
+    EXPECT_FALSE(qof_instance_kvp_has_guid(m_inst, "guid", "mytime", gncGuid1));
+
+    auto gncGuid2 = guid_new();
+    qof_instance_kvp_add_guid(m_inst2, "donor", 456u, "donortime", gncGuid2);
+    qof_instance_kvp_merge_guids(m_inst, m_inst2, "donor");
+    EXPECT_EQ(qof_instance_get_path_kvp<Time64>(m_inst, {"donor", "date"}).value().t, 456u);
+    EXPECT_TRUE(qof_instance_kvp_has_guid(m_inst, "donor", "donortime", gncGuid2));
+}
+
+TEST_F(QofInstanceTest, slot)
+{
+    EXPECT_FALSE(qof_instance_has_path_slot(m_inst, {"Test"}));
+    EXPECT_FALSE(qof_instance_has_path_slot(m_inst, {"Test", "int64"}));
+    EXPECT_FALSE(qof_instance_has_slot(m_inst, "Test"));
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "int64"});
+    GValue gvalue = G_VALUE_INIT;
+    g_value_init(&gvalue, G_TYPE_DOUBLE);
+    g_value_set_double(&gvalue, 1.234);
+    qof_instance_set_path_kvp(m_inst, &gvalue, {"Test", "double"});
+    EXPECT_TRUE(qof_instance_has_path_slot(m_inst, {"Test"}));
+    EXPECT_TRUE(qof_instance_has_path_slot(m_inst, {"Test", "int64"}));
+    EXPECT_TRUE(qof_instance_has_slot(m_inst, "Test"));
+
+    qof_instance_slot_path_delete(m_inst, {"Missing"});
+    qof_instance_slot_delete(m_inst, "Missing");
+    qof_instance_slot_path_delete(m_inst, {"Test", "int64"});
+    EXPECT_FALSE(qof_instance_has_path_slot(m_inst, {"Test", "int64"}));
+    qof_instance_slot_path_delete_if_empty(m_inst, {"Test"});
+    qof_instance_slot_delete_if_empty(m_inst, "Test");
+    EXPECT_TRUE(qof_instance_has_path_slot(m_inst, {"Test"}));
+
+    qof_instance_slot_path_delete(m_inst, {"Test", "double"});
+    EXPECT_TRUE(qof_instance_has_path_slot(m_inst, {"Test"}));
+    qof_instance_slot_delete_if_empty(m_inst, "Test");
+    EXPECT_FALSE(qof_instance_has_path_slot(m_inst, {"Test"}));
+
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "int64"});
+    qof_instance_slot_path_delete(m_inst, {"Test", "int64"});
+    EXPECT_TRUE(qof_instance_has_path_slot(m_inst, {"Test"}));
+    qof_instance_slot_path_delete_if_empty(m_inst, {"Test"});
+    EXPECT_FALSE(qof_instance_has_path_slot(m_inst, {"Test"}));
+
+    qof_instance_set_path_kvp<int64_t>(m_inst2, 123, {"Yes1", "Yes2"});
+    qof_instance_set_path_kvp<int64_t>(m_inst2, 123, {"Yes1", "No2"});
+    qof_instance_set_path_kvp<int64_t>(m_inst2, 123, {"No1", "Yes3"});
+
+    auto prefix = qof_instance_get_slots_prefix(m_inst2, "Yes");
+    EXPECT_EQ(prefix.size(), 1u);
+    EXPECT_STREQ(prefix[0].first.c_str(), "Yes1");
+}
+
+static void count_fcn(const char*, const GValue*, void* data)
+{
+    auto count = static_cast<int*>(data);
+    ++(*count);
+}
+
+TEST_F(QofInstanceTest, foreach)
+{
+    int count = 0;
+    qof_instance_foreach_slot(m_inst, "Test", "Cat", &count_fcn, &count);
+    EXPECT_EQ(count, 0);
+
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "Cat", "int1"});
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "Cat", "int2"});
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "Cat", "int3"});
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "Non", "int1"});
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "Non", "int2"});
+    qof_instance_set_path_kvp<int64_t>(m_inst, 123, {"Test", "Non", "int3"});
+
+    count = 0;
+    qof_instance_foreach_slot(m_inst, "Test", nullptr, &count_fcn, &count);
+    EXPECT_EQ(count, 2);
+
+    count = 0;
+    qof_instance_foreach_slot(m_inst, "Test", "Cat", &count_fcn, &count);
+    EXPECT_EQ(count, 3);
 }
 
 int main(int argc, char **argv) {
