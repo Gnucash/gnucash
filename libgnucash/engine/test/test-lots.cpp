@@ -25,6 +25,7 @@
  * @author Linas Vepstas <linas@linas.org>
  */
 #include <glib.h>
+#include <gtest/gtest.h>
 
 #include <config.h>
 #include <ctype.h>
@@ -41,81 +42,75 @@ static gint transaction_num = 32;
 static gint	max_iterate = 1;
 
 
-static void
-test_lot_kvp ()
+TEST(LotsTest, lot_kvp)
 {
     QofSession *sess = get_random_session ();
     QofBook *book = qof_session_get_book (sess);
     GNCLot *lot = gnc_lot_new (book);
 
     // title
-    g_assert_cmpstr (gnc_lot_get_title (lot), ==, NULL);
+    EXPECT_EQ(gnc_lot_get_title(lot), nullptr);
 
     gnc_lot_set_title (lot, "");
-    g_assert_cmpstr (gnc_lot_get_title (lot), ==, "");
+    EXPECT_STREQ(gnc_lot_get_title (lot), "");
 
     gnc_lot_set_title (lot, "doc");
-    g_assert_cmpstr (gnc_lot_get_title (lot), ==, "doc");
+    EXPECT_STREQ(gnc_lot_get_title(lot), "doc");
 
     gnc_lot_set_title (lot, "unset");
-    g_assert_cmpstr (gnc_lot_get_title (lot), ==, "unset");
+    EXPECT_STREQ(gnc_lot_get_title(lot), "unset");
 
     gnc_lot_set_title (lot, NULL);
-    g_assert_cmpstr (gnc_lot_get_title (lot), ==, NULL);
+    EXPECT_EQ(gnc_lot_get_title(lot), nullptr);
 
     // notes
-    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, NULL);
+    EXPECT_EQ(gnc_lot_get_notes(lot), nullptr);
 
     gnc_lot_set_notes (lot, "");
-    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, "");
+    EXPECT_STREQ(gnc_lot_get_notes(lot), "");
 
     gnc_lot_set_notes (lot, "doc");
-    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, "doc");
+    EXPECT_STREQ(gnc_lot_get_notes(lot), "doc");
 
     gnc_lot_set_notes (lot, "unset");
-    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, "unset");
+    EXPECT_STREQ(gnc_lot_get_notes(lot), "unset");
 
     gnc_lot_set_notes (lot, NULL);
-    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, NULL);
+    EXPECT_EQ(gnc_lot_get_notes(lot), nullptr);
 
     gnc_lot_destroy (lot);
     qof_session_destroy (sess);
 }
 
-static void
-run_test (void)
+TEST(LotsTest, run_test)
 {
-    QofSession *sess;
-    QofBook *book;
-    Account *root;
+    /* Iterate the test a number of times */
+    for (auto i = 0; i < max_iterate; i++)
+    {
+        fprintf(stdout, " Lots: %d of %d paired tests . . . \r",
+            (i + 1) * 2, max_iterate * 2);
+        fflush(stdout);
 
-    /* --------------------------------------------------------- */
-    /* In the first test, we will merely try to see if we can run
-     * without crashing.  We don't check to see if data is good. */
-    sess = get_random_session ();
-    book = qof_session_get_book (sess);
-    do_test ((NULL != book), "create random data");
+        /* --------------------------------------------------------- */
+        /* In the first test, we will merely try to see if we can run
+         * without crashing.  We don't check to see if data is good. */
+        auto sess = get_random_session ();
+        auto book = qof_session_get_book (sess);
+        do_test ((NULL != book), "create random data");
 
-    add_random_transactions_to_book (book, transaction_num);
+        add_random_transactions_to_book (book, transaction_num);
 
-    root = gnc_book_get_root_account (book);
-    xaccAccountTreeScrubLots (root);
+        auto root = gnc_book_get_root_account (book);
+        xaccAccountTreeScrubLots (root);
 
-    /* --------------------------------------------------------- */
-    /* In the second test, we create an account with unrealized gains,
-     * and see if that gets fixed correctly, with the correct balances,
-     * and etc.
-     * XXX not implemented
-     */
-    success ("automatic lot scrubbing lightly tested and seem to work");
-    qof_session_destroy (sess);
-
+        qof_session_destroy (sess);
+    }
 }
 
 int
 main (int argc, char **argv)
 {
-    gint i;
+    testing::InitGoogleTest(&argc, argv);
 
     qof_init();
     if (!cashobjects_register())
@@ -126,22 +121,10 @@ main (int argc, char **argv)
     g_log_set_always_fatal((GLogLevelFlags)(G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING));
     /* Set up a reproducible test-case */
     srand(0);
-    /* Iterate the test a number of times */
-    for (i = 0; i < max_iterate; i++)
-    {
-        fprintf(stdout, " Lots: %d of %d paired tests . . . \r",
-                (i + 1) * 2, max_iterate * 2);
-        fflush(stdout);
-        run_test ();
-    }
-
-    test_lot_kvp ();
-
-    /* 'erase' the recurring tag line with dummy spaces. */
-    fprintf(stdout, "Lots: Test series complete.\n");
-    fflush(stdout);
-    print_test_results();
+    auto ret = RUN_ALL_TESTS();
 
     qof_close();
-    return get_rv();
+    get_rv();
+
+    return ret;
 }
