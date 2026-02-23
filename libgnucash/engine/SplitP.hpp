@@ -203,9 +203,6 @@ void         DxaccSplitSetShareAmount (Split *split, double amount);
 \********************************************************************/
 
 
-#define CHECK_GAINS_STATUS(s)  \
-   if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
-
 #define SET_GAINS_DIRTY(s,flg) do {                                     \
    if (FALSE == (GAINS_STATUS_GAINS & s->gains)) {                      \
       s->gains |= flg;                                                  \
