@@ -83,6 +83,12 @@ namespace bl = boost::locale;
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+static bool
+csv_tximp_account_is_eligible (Account *account)
+{
+    return account && !xaccAccountGetPlaceholder (account) && !xaccAccountIsHidden (account);
+}
+
 enum GncImportColumn {
     MAPPING_STRING,
     MAPPING_FULLPATH,
@@ -1804,9 +1810,11 @@ csv_tximp_acct_match_load_mappings (GtkTreeModel *mappings_store)
         // It may already be set in the tree model. If not we try to match the map_string with
         // - an entry in our saved account maps
         // - a full name of any of our existing accounts
-        if (account ||
-            (account = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV, map_string)) ||
-            (account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string)))
+        if ((account && csv_tximp_account_is_eligible (account)) ||
+            ((account = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV, map_string)) &&
+             csv_tximp_account_is_eligible (account)) ||
+            ((account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string)) &&
+             csv_tximp_account_is_eligible (account)))
         {
             auto fullpath = gnc_account_get_full_name (account);
             gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
