@@ -3183,7 +3183,7 @@ msgstr "Dupliser"
 #: gnucash/gnome/dialog-invoice.c:3541
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:289
 msgid "Post"
-msgstr "Oppføring"
+msgstr "Poster"
 
 #: gnucash/gnome/dialog-invoice.c:3522 gnucash/gnome/dialog-invoice.c:3531
 #: gnucash/gnome/dialog-invoice.c:3542
@@ -4466,7 +4466,7 @@ msgstr "Rediger denne fakturaen"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:382
 msgid "_Duplicate Invoice"
-msgstr "Duplisert faktura"
+msgstr "_Dupliser faktura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
