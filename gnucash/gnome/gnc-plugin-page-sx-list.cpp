@@ -117,6 +117,7 @@ static void gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_sx_list_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
+static gboolean gppsl_key_press_cb (GtkTreeView *tree_view, GdkEventKey *event, gpointer user_data);
 static void gppsl_row_activated_cb (GtkTreeView *tree_view, GtkTreePath *path,
                                     GtkTreeViewColumn *column, gpointer user_data);
 
@@ -543,6 +544,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         g_signal_connect (G_OBJECT(selection), "changed",
                           (GCallback)gppsl_selection_changed_cb, (gpointer)page);
+        g_signal_connect (G_OBJECT(priv->tree_view), "key-press-event",
+                          (GCallback)gppsl_key_press_cb, (gpointer)page);
         g_signal_connect (G_OBJECT(priv->tree_view), "row-activated",
                           (GCallback)gppsl_row_activated_cb, (gpointer)page);
         g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(priv->tree_view))),
@@ -848,6 +851,137 @@ gnc_plugin_page_sx_list_cmd_edit_tax_options (GSimpleAction *simple,
     ENTER ("(action %p, page %p)", simple, plugin_page);
     gnc_tax_info_dialog (window, nullptr);
     LEAVE (" ");
+}
+
+static gboolean
+gppsl_is_enable_column_visible (GtkTreeView *tree_view)
+{
+    gboolean retval = FALSE;
+    GList *columns = gtk_tree_view_get_columns (tree_view);
+
+    for (GList *node = columns; node; node = node->next)
+    {
+        GtkTreeViewColumn *col = GTK_TREE_VIEW_COLUMN(node->data);
+        gint id = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(col), MODEL_COLUMN));
+
+        if (id == SXLTMA_COL_ENABLED)
+        {
+            retval = gtk_tree_view_column_get_visible(col);
+            break;
+        }
+    }
+    g_list_free (columns);
+    return retval;
+}
+
+static gboolean
+gppsl_set_toggle (GtkTreeView *tree_view)
+{
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
+    GtkTreeModel *model;
+    GList *sel_list = gtk_tree_selection_get_selected_rows (selection, &model);
+    gint num_selected = gtk_tree_selection_count_selected_rows (selection);
+    gint num_toggled = 0;
+
+    for (GList *node = sel_list; node; node = node->next)
+    {
+        GtkTreePath *path = (GtkTreePath *)node->data;
+        GtkTreeIter iter;
+
+        if (gtk_tree_model_get_iter (model, &iter, path))
+        {
+            gboolean toggled;
+
+            gtk_tree_model_get (model, &iter, SXLTMA_COL_ENABLED, &toggled, -1);
+
+            if (toggled)
+            {
+                num_toggled++;
+            }
+        }
+        gtk_tree_path_free (path);
+    }
+    g_list_free (sel_list);
+
+    return num_toggled != num_selected;
+}
+
+static void
+gppsl_set_list (GncPluginPageSxList *sx_plugin_page, gboolean enable)
+{
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(sx_plugin_page);
+    GtkTreeView *tree_view = priv->tree_view;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
+    GtkTreeModel *model;
+    GList *sel_list = gtk_tree_selection_get_selected_rows (selection, &model);
+    GList *sx_list = nullptr;
+
+    gppsl_update_selected_list (sx_plugin_page, true, nullptr);
+
+    for (GList *node = sel_list; node; node = node->next)
+    {
+        GtkTreePath *path = (GtkTreePath *)node->data;
+        GncTreeViewSxList *view = GNC_TREE_VIEW_SX_LIST(tree_view);
+        SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path (view, path);
+
+        if (sx)
+        {
+            GtkTreeIter iter;
+
+            gppsl_update_selected_list (sx_plugin_page, false, sx);
+
+            if (gtk_tree_model_get_iter (model, &iter, path))
+            {
+                gboolean toggled;
+
+                gtk_tree_model_get (model, &iter, SXLTMA_COL_ENABLED, &toggled, -1);
+                if (enable != toggled)
+                {
+                    sx_list = g_list_prepend (sx_list, sx);
+                }
+            }
+        }
+        
+        gtk_tree_path_free (path);
+    }
+    g_list_free (sel_list);
+
+    for (GList *node = sx_list; node; node = node->next)
+    {
+        if (node == sx_list)
+        {
+            if (node->next)
+            {
+                qof_event_suspend ();
+            }
+        }
+        else if (!node->next)
+        {
+            qof_event_resume ();
+        }
+
+        SchedXaction *sx = GNC_SCHEDXACTION(node->data);
+
+        xaccSchedXactionSetEnabled (sx, enable);
+    }
+    g_list_free (sx_list);
+}
+
+static gboolean
+gppsl_key_press_cb (GtkTreeView *tree_view, GdkEventKey *event, gpointer user_data)
+{
+    if (event->keyval != GDK_KEY_space || !gppsl_is_enable_column_visible (tree_view))
+    {
+        return FALSE;
+    }
+
+    g_signal_stop_emission_by_name (G_OBJECT(tree_view), "key-press-event");
+
+    gboolean enable = gppsl_set_toggle (tree_view);
+
+    gppsl_set_list (GNC_PLUGIN_PAGE_SX_LIST(user_data), enable);
+
+    return TRUE;
 }
 
 
