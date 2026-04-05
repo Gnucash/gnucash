@@ -109,8 +109,8 @@ static void gnc_plugin_page_register_finalize (GObject* object);
 
 /* static Account *gnc_plugin_page_register_get_current_account (GncPluginPageRegister *page); */
 
-static GtkWidget* gnc_plugin_page_register_create_widget (
-    GncPluginPage* plugin_page);
+static GtkWidget* gnc_plugin_page_register_create_widget (GncPluginPage*
+                                                          plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage*
                                                      plugin_page);
 static void gnc_plugin_page_register_window_changed (GncPluginPage*
@@ -121,8 +121,9 @@ static void gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
                                             gboolean current_page);
 static void gnc_plugin_page_register_save_page (GncPluginPage* plugin_page,
                                                 GKeyFile* file, const gchar* group);
-static GncPluginPage* gnc_plugin_page_register_recreate_page (
-    GtkWidget* window, GKeyFile* file, const gchar* group);
+static GncPluginPage* gnc_plugin_page_register_recreate_page (GtkWidget* window,
+                                                              GKeyFile* file,
+                                                              const gchar* group);
 static void gnc_plugin_page_register_update_edit_menu (GncPluginPage* page,
                                                        gboolean hide);
 static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage* page);
@@ -134,8 +135,9 @@ static gchar* gnc_plugin_page_register_get_tab_color (GncPluginPage*
 static gchar* gnc_plugin_page_register_get_long_name (GncPluginPage*
                                                       plugin_page);
 
-static void gnc_plugin_page_register_summarybar_position_changed (
-    gpointer prefs, gchar* pref, gpointer user_data);
+static void gnc_plugin_page_register_summarybar_position_changed (gpointer prefs,
+                                                                  gchar* pref,
+                                                                  gpointer user_data);
 
 extern "C"
 {
@@ -143,19 +145,18 @@ extern "C"
 void gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
                                               GncPluginPageRegister* page);
 void gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
-                                                gint response, GncPluginPageRegister* plugin_page);
+                                                gint response,
+                                                GncPluginPageRegister* plugin_page);
 void gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton* button,
                                                   GncPluginPageRegister* page);
 void gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton* button,
                                                      GncPluginPageRegister* page);
 }
 
-static gchar* gnc_plugin_page_register_get_sort_order (GncPluginPage*
-                                                       plugin_page);
+static gchar* gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page);
 void gnc_plugin_page_register_set_sort_order (GncPluginPage* plugin_page,
                                               const gchar* sort_order);
-static gboolean gnc_plugin_page_register_get_sort_reversed (
-    GncPluginPage* plugin_page);
+static gboolean gnc_plugin_page_register_get_sort_reversed (GncPluginPage* plugin_page);
 void gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
                                                  gboolean reverse_order);
 
@@ -169,7 +170,8 @@ void gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
 void gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
                                              GncPluginPageRegister* page);
 void gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
-                                                  gint response, GncPluginPageRegister* plugin_page);
+                                                  gint response,
+                                                  GncPluginPageRegister* plugin_page);
 void gnc_plugin_page_register_filter_status_select_all_cb (GtkButton* button,
                                                            GncPluginPageRegister* plugin_page);
 void gnc_plugin_page_register_filter_status_clear_all_cb (GtkButton* button,
@@ -627,8 +629,7 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass* klass)
     gnc_plugin_class->focus_page      = gnc_plugin_page_register_focus;
     gnc_plugin_class->save_page       = gnc_plugin_page_register_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
-    gnc_plugin_class->update_edit_menu_actions =
-        gnc_plugin_page_register_update_edit_menu;
+    gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
     gnc_plugin_class->finish_pending  = gnc_plugin_page_register_finish_pending;
     gnc_plugin_class->focus_page_function = gnc_plugin_page_register_focus_widget;
 
@@ -4659,7 +4660,8 @@ gnc_plugin_page_register_cmd_linked_transaction_open (GSimpleAction *simple,
     LEAVE (" ");
 }
 
-static GncInvoice* invoice_from_split (Split* split)
+static GncInvoice*
+invoice_from_split (Split* split)
 {
     GncInvoice* invoice;
     GNCLot* lot;
@@ -4777,7 +4779,7 @@ static bool
 find_after_date (Split *split, time64* find_date)
 {
     auto trans = xaccSplitGetParent (split);
-    return !(xaccSplitGetAccount (split) != nullptr && 
+    return !(xaccSplitGetAccount (split) != nullptr &&
              xaccTransGetDate (trans) >= *find_date &&
              xaccTransCountSplits (trans) != 1);
 }
@@ -5625,7 +5627,7 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
         if (GNC_IS_MAIN_WINDOW (window))
         {
             GncPluginPageRegisterPrivate *priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-            
+
             if (!gnc_ledger_display_leader (priv->ledger))
             {
                 LEAVE ("account is NULL");
