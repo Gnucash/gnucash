@@ -90,8 +90,7 @@ GType gnc_plugin_page_register_get_type (void);
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *
-gnc_plugin_page_register_new (Account *account, gboolean subaccounts);
+GncPluginPage * gnc_plugin_page_register_new (Account *account, gboolean subaccounts);
 
 
 /** Create a new "register" plugin page, given a pointer to an already
@@ -104,16 +103,14 @@ gnc_plugin_page_register_new (Account *account, gboolean subaccounts);
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *
-gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
+GncPluginPage * gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
 
 
 /** Create a new "register" plugin page containing a general journal.
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *
-gnc_plugin_page_register_new_gl (void);
+GncPluginPage * gnc_plugin_page_register_new_gl (void);
 
 
 /** Set various register options on a newly created "register" plugin page.
@@ -125,18 +122,16 @@ gnc_plugin_page_register_new_gl (void);
  *
  *  @param read_only True if the register should be read-only.
  */
-void
-gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
-                                      gint lines_default,
-                                      gboolean read_only);
+void gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
+                                           gint lines_default,
+                                           gboolean read_only);
 
 
 /** Get the GNCSplitReg data structure associated with this register page.
  *
  *  @param plugin_page A "register" page.
  */
-GNCSplitReg *
-gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
+GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 
 
 /** Get the Query associated with this "register" plugin page.
@@ -145,8 +140,8 @@ gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
  *
  *  @return The query.
  */
-Query *
-gnc_plugin_page_register_get_query (GncPluginPage *plugin_page);
+Query * gnc_plugin_page_register_get_query (GncPluginPage *plugin_page);
+
 
 /** Get the Account associated with this register page.
  *
@@ -155,8 +150,8 @@ gnc_plugin_page_register_get_query (GncPluginPage *plugin_page);
  *  @return The account if the register contains only a single
  *  account, or an account and its sub-accounts.  NULL otherwise.
  */
-Account *
-gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
+Account * gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
+
 
 /** Get the currently selected transaction in this register page.
  *
@@ -165,17 +160,16 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
  *  @return The currently active transaction or NULL if there currently
  *  is no currently selected.
  */
-Transaction *
-gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page);
+Transaction * gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page);
+
 
 /** This function clears the registers current filter.
- *  It is used so jumps to splits from other places can be completed 
+ *  It is used so jumps to splits from other places can be completed
  *  otherwise the jump will be to the last active cell.
  *
  *  @param plugin_page A pointer to the GncPluginPageRegister.
  */
-void
-gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page);
+void gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page);
 
 
 G_END_DECLS
