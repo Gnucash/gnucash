@@ -141,27 +141,6 @@ static void gnc_plugin_page_register_summarybar_position_changed (gpointer prefs
 
 extern "C"
 {
-/* Callbacks for the "Sort By" dialog */
-void gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
-                                              GncPluginPageRegister* page);
-void gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
-                                                gint response,
-                                                GncPluginPageRegister* page);
-void gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton* button,
-                                                  GncPluginPageRegister* page);
-void gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton* button,
-                                                     GncPluginPageRegister* page);
-}
-
-static gchar* gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page);
-void gnc_plugin_page_register_set_sort_order (GncPluginPage* plugin_page,
-                                              const gchar* sort_order);
-static gboolean gnc_plugin_page_register_get_sort_reversed (GncPluginPage* plugin_page);
-void gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
-                                                 gboolean reverse_order);
-
-extern "C"
-{
 /* Callbacks for the "Filter By" dialog */
 void gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
                                                       GncPluginPageRegister* page);
@@ -426,7 +405,6 @@ static struct status_action status_actions[] =
 
 #define CLEARED_VALUE "cleared_value"
 #define DEFAULT_FILTER "0x001f"
-#define DEFAULT_SORT_ORDER "BY_STANDARD"
 
 /************************************************************/
 /*                      Data Structures                     */
@@ -450,17 +428,7 @@ typedef struct GncPluginPageRegisterPrivate
     Query* search_query;     // saved search query for comparison
     Query* filter_query;     // saved filter query for comparison
 
-    struct
-    {
-        GtkWidget* dialog;
-        GtkWidget* num_radio;
-        GtkWidget* act_radio;
-        SortType original_sort_type;
-        gboolean original_save_order;
-        gboolean save_order;
-        gboolean reverse_order;
-        gboolean original_reverse_order;
-    } sd;
+    SortData sd;
 
     struct
     {
@@ -1289,7 +1257,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         guint filtersize = 0;
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
-        order = gnc_plugin_page_register_get_sort_order (plugin_page);
+        order = gnc_ppr_sort_get_order (priv->gsr);
 
         PINFO ("Loaded Sort order is %s", order);
         gnc_split_reg_sort (priv->gsr, SortTypefromString (order), no_force, no_refresh);
@@ -1300,8 +1268,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         priv->sd.original_save_order = priv->sd.save_order;
         g_free (order);
 
-        priv->sd.reverse_order = gnc_plugin_page_register_get_sort_reversed (
-                                     plugin_page);
+        priv->sd.reverse_order = gnc_ppr_sort_get_reversed (priv->gsr);
 
         gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, no_refresh);
         if (priv->sd.reverse_order)
@@ -2085,152 +2052,6 @@ gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
 }
 
 static gchar*
-gnc_plugin_page_register_get_sort_order_gcm (GNCSplitReg *gsr)
-{
-    GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section;
-    gchar* sort_text;
-    GError* error = NULL;
-    char* sort_order = NULL;
-
-    // get the sort_order from the .gcm file
-    state_section = gsr_get_register_state_section (gsr);
-    sort_text = g_key_file_get_string (state_file, state_section, KEY_PAGE_SORT,
-                                       &error);
-
-    if (error)
-        g_clear_error (&error);
-    else
-    {
-        sort_order = g_strdup (sort_text);
-        g_free (sort_text);
-    }
-    g_free (state_section);
-    return sort_order;
-}
-
-static gchar*
-gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    char* sort_order = NULL;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
-                          _ ("unknown"));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    // load from gcm file
-    sort_order = gnc_plugin_page_register_get_sort_order_gcm (priv->gsr);
-
-    return sort_order ? sort_order : g_strdup (DEFAULT_SORT_ORDER);
-}
-
-static void
-gnc_plugin_page_register_set_sort_order_gcm (GNCSplitReg *gsr,
-                                             const gchar* sort_order)
-{
-    GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section;
-
-    // save sort_order to the .gcm file also
-    state_section = gsr_get_register_state_section (gsr);
-    if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
-    {
-        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, NULL))
-            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT, NULL);
-
-        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
-    }
-    else
-        g_key_file_set_string (state_file, state_section, KEY_PAGE_SORT, sort_order);
-
-    g_free (state_section);
-}
-void
-gnc_plugin_page_register_set_sort_order (GncPluginPage* plugin_page,
-                                         const gchar* sort_order)
-{
-    GncPluginPageRegisterPrivate* priv;
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    // save to gcm file
-    gnc_plugin_page_register_set_sort_order_gcm (priv->gsr, sort_order);
-}
-
-static gboolean
-gnc_plugin_page_register_get_sort_reversed_gcm (GNCSplitReg *gsr)
-{
-    GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section;
-    GError* error = NULL;
-    gboolean sort_reversed = FALSE;
-
-    // get the sort_reversed from the .gcm file
-    state_section = gsr_get_register_state_section (gsr);
-    sort_reversed = g_key_file_get_boolean (state_file, state_section,
-                                            KEY_PAGE_SORT_REV, &error);
-
-    if (error)
-        g_clear_error (&error);
-
-    g_free (state_section);
-    return sort_reversed;
-}
-
-static gboolean
-gnc_plugin_page_register_get_sort_reversed (GncPluginPage* plugin_page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    gboolean sort_reversed = FALSE;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), FALSE);
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    // load from gcm file
-    sort_reversed = gnc_plugin_page_register_get_sort_reversed_gcm (priv->gsr);
-    return sort_reversed;
-}
-
-static void
-gnc_plugin_page_register_set_sort_reversed_gcm (GNCSplitReg *gsr,
-                                                gboolean reverse_order)
-{
-    GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section;
-
-    // save reverse_order to the .gcm file also
-    state_section = gsr_get_register_state_section (gsr);
-
-    if (!reverse_order)
-    {
-        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL))
-            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL);
-
-        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
-    }
-    else
-        g_key_file_set_boolean (state_file, state_section, KEY_PAGE_SORT_REV,
-                                reverse_order);
-
-    g_free (state_section);
-}
-
-void
-gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
-                                            gboolean reverse_order)
-{
-    GncPluginPageRegisterPrivate* priv;
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    // save to gcm file
-    gnc_plugin_page_register_set_sort_reversed_gcm (priv->gsr, reverse_order);
-}
-
-static gchar*
 gnc_plugin_page_register_get_long_name (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
@@ -2313,197 +2134,6 @@ gnc_plugin_page_register_get_query (GncPluginPage* plugin_page)
     page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     return gnc_ledger_display_get_query (priv->ledger);
-}
-
-/************************************************************/
-/*                     "Sort By" Dialog                     */
-/************************************************************/
-
-/** This function is called whenever the number source book options is changed
- *  to adjust the displayed labels. Since the book option change may change the
- *  query sort, the gnc_split_reg_sort function is called with force and
- *  refresh to ensure the page is refreshed.
- *
- *  @param new_val A pointer to the boolean for the new value of the book option.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this sort order dialog.
- */
-static void
-gnc_plugin_page_register_sort_book_option_changed (gpointer new_val,
-                                                   gpointer user_data)
-{
-    GncPluginPageRegisterPrivate* priv;
-    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
-    gboolean* new_data = (gboolean*)new_val;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (*new_data)
-    {
-        gtk_button_set_label (GTK_BUTTON (priv->sd.num_radio),
-                              _ ("Transaction Number"));
-        gtk_button_set_label (GTK_BUTTON (priv->sd.act_radio), _ ("Number/Action"));
-    }
-    else
-    {
-        gtk_button_set_label (GTK_BUTTON (priv->sd.num_radio), _ ("Number"));
-        gtk_button_set_label (GTK_BUTTON (priv->sd.act_radio), _ ("Action"));
-    }
-    gnc_split_reg_sort (priv->gsr, (SortType)priv->gsr->sort_type, force, refresh);
-}
-
-/** This function is called when the "Sort By…" dialog is closed.
- *  If the dialog was closed by any method other than clicking the OK
- *  button, the original sorting order will be restored.
- *
- *  @param dialog A pointer to the dialog box.
- *
- *  @param response A numerical value indicating why the dialog box was closed.
- *
- *  @param page A pointer to the GncPluginPageRegister associated with
- *  this dialog box.
- */
-void
-gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
-                                           gint response,
-                                           GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GncPluginPage* plugin_page;
-    SortType type;
-    const gchar* order;
-
-    g_return_if_fail (GTK_IS_DIALOG (dialog));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER (" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    plugin_page = GNC_PLUGIN_PAGE (page);
-
-    if (response != GTK_RESPONSE_OK)
-    {
-        /* Restore the original sort order */
-        gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.original_reverse_order,
-                                         no_refresh);
-        priv->sd.reverse_order = priv->sd.original_reverse_order;
-        gnc_split_reg_sort (priv->gsr, priv->sd.original_sort_type, force, refresh);
-        priv->sd.save_order = priv->sd.original_save_order;
-    }
-    else
-    {
-        // clear the sort when unticking the save option
-        if ((!priv->sd.save_order) && ((priv->sd.original_save_order) || (priv->sd.original_reverse_order)))
-        {
-            gnc_plugin_page_register_set_sort_order (plugin_page, DEFAULT_SORT_ORDER);
-            gnc_plugin_page_register_set_sort_reversed (plugin_page, FALSE);
-        }
-        priv->sd.original_save_order = priv->sd.save_order;
-
-        if (priv->sd.save_order)
-        {
-            type = gnc_split_reg_get_sort_type (priv->gsr);
-            order = SortTypeasString (type);
-            gnc_plugin_page_register_set_sort_order (plugin_page, order);
-            gnc_plugin_page_register_set_sort_reversed (plugin_page,
-                                                        priv->sd.reverse_order);
-        }
-    }
-    gnc_book_option_remove_cb (OPTION_NAME_NUM_FIELD_SOURCE,
-                               gnc_plugin_page_register_sort_book_option_changed,
-                               page);
-    priv->sd.dialog = NULL;
-    priv->sd.num_radio = NULL;
-    priv->sd.act_radio = NULL;
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    LEAVE (" ");
-}
-
-
-/** This function is called when a radio button in the "Sort By…"
- *  dialog is clicked.
- *
- *  @param button The button that was toggled.
- *
- *  @param page A pointer to the GncPluginPageRegister associated with
- *  this dialog box.
- */
-void
-gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
-                                         GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    const gchar* name;
-    SortType type;
-
-    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
-    ENTER ("button %s(%p), page %p", name, button, page);
-    type = SortTypefromString (name);
-    gnc_split_reg_sort (priv->gsr, type, force, refresh);
-    LEAVE (" ");
-}
-
-
-/** This function is called whenever the save sort order is checked
- *  or unchecked which allows saving of the sort order.
- *
- *  @param button The toggle button that was changed.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this sort order dialog.
- */
-void
-gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton* button,
-                                             GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-
-    g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("Save toggle button (%p), plugin_page %p", button, page);
-
-    /* Compute the new save sort order */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-
-    if (gtk_toggle_button_get_active (button))
-        priv->sd.save_order = TRUE;
-    else
-        priv->sd.save_order = FALSE;
-    LEAVE (" ");
-}
-
-/** This function is called whenever the reverse sort order is checked
- *  or unchecked which allows reversing of the sort order.
- *
- *  @param button The toggle button that was changed.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this sort order dialog.
- */
-void
-gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton* button,
-                                                GncPluginPageRegister* page)
-
-{
-    GncPluginPageRegisterPrivate* priv;
-
-    g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("Reverse toggle button (%p), plugin_page %p", button, page);
-
-    /* Compute the new save sort order */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-
-    priv->sd.reverse_order = gtk_toggle_button_get_active (button);
-    gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, refresh);
-    LEAVE (" ");
 }
 
 /************************************************************/
@@ -4073,84 +3703,23 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
 {
     auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
-    SplitRegister* reg;
-    GtkWidget* dialog, *button;
-    GtkBuilder* builder;
-    SortType sort;
-    const gchar* name;
-    gchar* title;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
     ENTER ("(action %p, page %p)", simple, page);
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     if (priv->sd.dialog)
     {
         gtk_window_present (GTK_WINDOW (priv->sd.dialog));
-        LEAVE ("existing dialog");
+        LEAVE("existing dialog");
         return;
     }
 
-    /* Create the dialog */
+    SplitRegister* reg = gnc_ledger_display_get_split_register (priv->ledger);
+    gboolean show_save_button = gnc_plugin_page_register_show_fs_save (page);
 
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
-                               "sort_by_dialog");
-    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "sort_by_dialog"));
-    priv->sd.dialog = dialog;
-    gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                                  gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window)));
-    /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_ ("Sort %s by…"),
-                             gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (page)));
-    gtk_window_set_title (GTK_WINDOW (dialog), title);
-    g_free (title);
-
-    /* Set the button for the current sort order */
-    sort = gnc_split_reg_get_sort_type (priv->gsr);
-    name = SortTypeasString (sort);
-    button = GTK_WIDGET (gtk_builder_get_object (builder, name));
-    DEBUG ("current sort %d, button %s(%p)", sort, name, button);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    priv->sd.original_sort_type = sort;
-
-    button = GTK_WIDGET (gtk_builder_get_object (builder, "sort_save"));
-    if (priv->sd.save_order == TRUE)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-
-    // hide the save button if appropriate
-    gtk_widget_set_visible (GTK_WIDGET (button),
-                            gnc_plugin_page_register_show_fs_save (page));
-
-    /* Set the button for the current reverse_order order */
-    button = GTK_WIDGET (gtk_builder_get_object (builder, "sort_reverse"));
-    if (priv->sd.reverse_order == TRUE)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    priv->sd.original_reverse_order = priv->sd.reverse_order;
-
-    priv->sd.num_radio = GTK_WIDGET (gtk_builder_get_object (builder, "BY_NUM"));
-    priv->sd.act_radio = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                             "BY_ACTION"));
-    /* Adjust labels related to Num/Action radio buttons based on book option */
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
-    if (reg && !reg->use_tran_num_for_num_field)
-    {
-        gtk_button_set_label (GTK_BUTTON (priv->sd.num_radio),
-                              _ ("Transaction Number"));
-        gtk_button_set_label (GTK_BUTTON (priv->sd.act_radio), _ ("Number/Action"));
-    }
-    gnc_book_option_register_cb (OPTION_NAME_NUM_FIELD_SOURCE,
-                                 (GncBOCb)gnc_plugin_page_register_sort_book_option_changed,
-                                 page);
-
-    /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      page);
-
-    /* Show it */
-    gtk_widget_show (dialog);
-    g_object_unref (G_OBJECT (builder));
-    LEAVE (" ");
+    gnc_ppr_sort_dialog (GNC_PLUGIN_PAGE(page), reg,
+                         &priv->sd, show_save_button);
 }
 
 static void
@@ -5435,6 +5004,17 @@ gnc_plugin_page_register_get_gsr (GncPluginPage* plugin_page)
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
     return priv->gsr;
+}
+
+SortData *
+gnc_plugin_page_register_get_sort_data (GncPluginPage *plugin_page)
+{
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page), NULL);
+
+    GncPluginPageRegister* page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+    GncPluginPageRegisterPrivate* priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+    return &priv->sd;
 }
 
 static void
