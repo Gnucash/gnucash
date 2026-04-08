@@ -1229,7 +1229,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     Account* acct;
     gchar* order;
     int filter_changed = 0;
-    gboolean create_new_page = FALSE;
 
     ENTER ("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
@@ -1287,8 +1286,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         order = gnc_plugin_page_register_get_sort_order (plugin_page);
 
         PINFO ("Loaded Sort order is %s", order);
-
-        gnc_split_reg_set_sort_type (priv->gsr, SortTypefromString (order));
+        gnc_split_reg_sort (priv->gsr, SortTypefromString (order), no_force, no_refresh);
 
         if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
             priv->sd.save_order = TRUE;
@@ -1370,8 +1368,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         {
             priv->fd.days = 0;
             priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
-            gnc_split_reg_set_sort_type (priv->gsr,
-                                         SortTypefromString (DEFAULT_SORT_ORDER));
+            gnc_split_reg_sort (priv->gsr, SortTypefromString (DEFAULT_SORT_ORDER), no_force, no_refresh);
             priv->sd.reverse_order = FALSE;
             priv->fd.save_filter = FALSE;
             priv->sd.save_order = FALSE;
@@ -1385,24 +1382,13 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         priv->fd.end_time = end_time;
     }
 
-    // if enable_refresh is TRUE, default, come from creating
-    // new page instead of restoring
-    if (priv->enable_refresh == TRUE)
-    {
-        create_new_page = TRUE;
-        priv->enable_refresh = FALSE; // disable refresh
-    }
+    priv->enable_refresh = FALSE; // disable refresh
 
     /* Update Query with Filter Status and Dates */
     gnc_ppr_update_status_query (page);
     gnc_ppr_update_date_query (page);
 
-    /* Now do the refresh if this is a new page instead of restore */
-    if (create_new_page)
-    {
-        priv->enable_refresh = TRUE;
-        gnc_ledger_display_refresh (priv->ledger);
-    }
+    priv->enable_refresh = TRUE; // enable refresh
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
@@ -2328,8 +2314,8 @@ gnc_plugin_page_register_get_query (GncPluginPage* plugin_page)
 
 /** This function is called whenever the number source book options is changed
  *  to adjust the displayed labels. Since the book option change may change the
- *  query sort, the gnc_split_reg_set_sort_type_force function is called to
- *  ensure the page is refreshed.
+ *  query sort, the gnc_split_reg_sort function is called with force and
+ *  refresh to ensure the page is refreshed.
  *
  *  @param new_val A pointer to the boolean for the new value of the book option.
  *
@@ -2358,7 +2344,7 @@ gnc_plugin_page_register_sort_book_option_changed (gpointer new_val,
         gtk_button_set_label (GTK_BUTTON (priv->sd.num_radio), _ ("Number"));
         gtk_button_set_label (GTK_BUTTON (priv->sd.act_radio), _ ("Action"));
     }
-    gnc_split_reg_set_sort_type_force (priv->gsr, (SortType)priv->gsr->sort_type, TRUE);
+    gnc_split_reg_sort (priv->gsr, (SortType)priv->gsr->sort_type, force, refresh);
 }
 
 /** This function is called when the "Sort By…" dialog is closed.
@@ -2393,9 +2379,9 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
     {
         /* Restore the original sort order */
         gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.original_reverse_order,
-                                         TRUE);
+                                         FALSE);
         priv->sd.reverse_order = priv->sd.original_reverse_order;
-        gnc_split_reg_set_sort_type (priv->gsr, priv->sd.original_sort_type);
+        gnc_split_reg_sort (priv->gsr, priv->sd.original_sort_type, force, refresh);
         priv->sd.save_order = priv->sd.original_save_order;
     }
     else
@@ -2451,7 +2437,7 @@ gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
     name = gtk_buildable_get_name (GTK_BUILDABLE (button));
     ENTER ("button %s(%p), page %p", name, button, page);
     type = SortTypefromString (name);
-    gnc_split_reg_set_sort_type (priv->gsr, type);
+    gnc_split_reg_sort (priv->gsr, type, force, refresh);
     LEAVE (" ");
 }
 

@@ -49,6 +49,9 @@ extern "C"
 typedef struct _GNCSplitReg GNCSplitReg;
 typedef struct _GNCSplitRegClass GNCSplitRegClass;
 
+typedef enum { no_force, force } ForceSort;
+typedef enum { no_refresh, refresh } Refresh;
+
 struct _GNCSplitReg
 {
     /* The "parent" widget. */
@@ -207,15 +210,13 @@ GtkWidget *gsr_create_summary_bar( GNCSplitReg *gsr );
  * query to be redone even if SortType has not changed.
  **/
 SortType gnc_split_reg_get_sort_type( GNCSplitReg *gsr );
-void gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t );
-void gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean force);
+void gnc_split_reg_sort (GNCSplitReg *gsr, SortType t, ForceSort fs, Refresh ref);
 
 /**
  * Set/get sort order of register
  **/
 void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr,
                                      gboolean rev, gboolean refresh);
-
 
 /**
  * Gets/sets the style of the GNCSplitReg.
