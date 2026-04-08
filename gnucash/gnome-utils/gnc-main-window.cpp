@@ -1399,6 +1399,13 @@ gnc_main_window_quit(GncMainWindow *window)
     return FALSE;
 }
 
+gboolean
+gnc_main_window_is_quitting (GncMainWindow *window)
+{
+    g_return_val_if_fail(GNC_IS_MAIN_WINDOW(window), FALSE);
+    return window->window_quitting;
+}
+
 static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
                               GdkEvent *event,

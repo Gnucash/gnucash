@@ -1191,6 +1191,7 @@ gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
     GncPluginPageRegister* page;
     GncPluginPageRegisterPrivate* priv;
     GNCSplitReg* gsr;
+    gboolean main_window_is_quitting = FALSE;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
@@ -1198,6 +1199,9 @@ gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (plugin_page));
+
+    if (GNC_IS_MAIN_WINDOW(plugin_page->window))
+        main_window_is_quitting = gnc_main_window_is_quitting (GNC_MAIN_WINDOW(plugin_page->window));
 
     if (on_current_page)
     {
@@ -1213,7 +1217,9 @@ gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
     // set the sheet focus setting
     gnc_split_reg_set_sheet_focus (gsr, priv->page_focus);
 
-    gnc_ledger_display_set_focus (priv->ledger, priv->page_focus);
+    // No need to do a refresh on application closing
+    if (on_current_page && !main_window_is_quitting)
+        gnc_ledger_display_set_focus (priv->ledger, priv->page_focus);
 }
 
 static GtkWidget*
