@@ -786,7 +786,7 @@ If 0, all previous days included</property>
     <property name="resizable">False</property>
     <property name="window-position">center-on-parent</property>
     <property name="type-hint">dialog</property>
-    <signal name="response" handler="gnc_plugin_page_register_sort_response_cb" swapped="no"/>
+    <signal name="response" handler="gnc_ppr_sort_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox17">
         <property name="visible">True</property>
@@ -853,7 +853,7 @@ If 0, all previous days included</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -883,7 +883,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -902,7 +902,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -921,7 +921,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -940,7 +940,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -959,7 +959,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -978,7 +978,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -997,7 +997,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1016,7 +1016,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1035,7 +1035,7 @@ If 0, all previous days included</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
+                <signal name="toggled" handler="gnc_ppr_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1069,7 +1069,7 @@ If 0, all previous days included</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_sort_order_save_cb" swapped="no"/>
+                    <signal name="toggled" handler="gnc_ppr_sort_order_save_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1089,7 +1089,7 @@ If 0, all previous days included</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_sort_order_reverse_cb" swapped="no"/>
+                    <signal name="toggled" handler="gnc_ppr_sort_order_reverse_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
