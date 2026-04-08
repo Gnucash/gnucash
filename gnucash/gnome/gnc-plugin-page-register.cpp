@@ -1302,7 +1302,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 
         priv->sd.reverse_order = gnc_plugin_page_register_get_sort_reversed (
                                      plugin_page);
-        gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, FALSE);
+
+        gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, no_refresh);
         if (priv->sd.reverse_order)
             priv->sd.save_order = TRUE;
 
@@ -2385,7 +2386,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
     {
         /* Restore the original sort order */
         gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.original_reverse_order,
-                                         FALSE);
+                                         no_refresh);
         priv->sd.reverse_order = priv->sd.original_reverse_order;
         gnc_split_reg_sort (priv->gsr, priv->sd.original_sort_type, force, refresh);
         priv->sd.save_order = priv->sd.original_save_order;
@@ -2501,7 +2502,7 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton* button,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
     priv->sd.reverse_order = gtk_toggle_button_get_active (button);
-    gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, TRUE);
+    gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, refresh);
     LEAVE (" ");
 }
 
