@@ -100,6 +100,7 @@ gnucash/gnome/gnc-plugin-page-budget.cpp
 gnucash/gnome/gnc-plugin-page-invoice.cpp
 gnucash/gnome/gnc-plugin-page-owner-tree.cpp
 gnucash/gnome/gnc-plugin-page-register.cpp
+gnucash/gnome/gnc-plugin-page-register-filter.c
 gnucash/gnome/gnc-plugin-page-register-sort.c
 gnucash/gnome/gnc-plugin-page-report.cpp
 gnucash/gnome/gnc-plugin-page-sx-list.cpp

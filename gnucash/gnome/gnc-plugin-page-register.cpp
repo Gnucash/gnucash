@@ -103,7 +103,6 @@ typedef enum : gint
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DEFAULT_LINES_AMOUNT         50
-#define DEFAULT_FILTER_NUM_DAYS_GL  "30"
 
 static void gnc_plugin_page_register_finalize (GObject* object);
 
@@ -138,40 +137,6 @@ static gchar* gnc_plugin_page_register_get_long_name (GncPluginPage*
 static void gnc_plugin_page_register_summarybar_position_changed (gpointer prefs,
                                                                   gchar* pref,
                                                                   gpointer user_data);
-
-extern "C"
-{
-/* Callbacks for the "Filter By" dialog */
-void gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
-                                                      GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
-                                               GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
-                                             GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
-                                                  gint response,
-                                                  GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_status_select_all_cb (GtkButton* button,
-                                                           GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_status_clear_all_cb (GtkButton* button,
-                                                          GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton* button,
-                                                    GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_save_cb (GtkToggleButton* button,
-                                              GncPluginPageRegister* page);
-void gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton* button,
-                                                      GncPluginPageRegister* page);
-}
-
-static time64 gnc_plugin_page_register_filter_dmy2time (char* date_string);
-static gchar* gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
-static gchar* gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page);
-void gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
-                                          const gchar* filter);
-static void gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page);
-
-static void gnc_ppr_update_status_query (GncPluginPageRegister* page);
-static void gnc_ppr_update_date_query (GncPluginPageRegister* page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
@@ -386,26 +351,6 @@ static GncToolBarShortNames toolbar_labels[] =
     { NULL, NULL },
 };
 
-struct status_action
-{
-    const char* action_name;
-    int value;
-    GtkWidget* widget;
-};
-
-static struct status_action status_actions[] =
-{
-    { "filter_status_reconciled",   CLEARED_RECONCILED, NULL },
-    { "filter_status_cleared",      CLEARED_CLEARED, NULL },
-    { "filter_status_voided",       CLEARED_VOIDED, NULL },
-    { "filter_status_frozen",       CLEARED_FROZEN, NULL },
-    { "filter_status_unreconciled", CLEARED_NO, NULL },
-    { NULL, 0, NULL },
-};
-
-#define CLEARED_VALUE "cleared_value"
-#define DEFAULT_FILTER "0x001f"
-
 /************************************************************/
 /*                      Data Structures                     */
 /************************************************************/
@@ -429,29 +374,8 @@ typedef struct GncPluginPageRegisterPrivate
     Query* filter_query;     // saved filter query for comparison
 
     SortData sd;
+    FilterData fd;
 
-    struct
-    {
-        GtkWidget* dialog;
-        GtkWidget* table;
-        GtkWidget* start_date_choose;
-        GtkWidget* start_date_today;
-        GtkWidget* start_date;
-        GtkWidget* end_date_choose;
-        GtkWidget* end_date_today;
-        GtkWidget* end_date;
-        GtkWidget* num_days;
-        cleared_match_t original_cleared_match;
-        cleared_match_t cleared_match;
-        time64 original_start_time;
-        time64 original_end_time;
-        time64 start_time;
-        time64 end_time;
-        gint days;
-        gint original_days;
-        gboolean original_save_filter;
-        gboolean save_filter;
-    } fd;
 } GncPluginPageRegisterPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GncPluginPageRegister, gnc_plugin_page_register,
@@ -1137,7 +1061,7 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 }
 
 /* Virtual Functions */
-
+//FIXME ??
 static const gchar*
 get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
 {
@@ -1279,7 +1203,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         /* Set the filter for the split register and status of save filter button */
         priv->fd.save_filter = FALSE;
 
-        filter_str = gnc_plugin_page_register_get_filter (plugin_page);
+        filter_str = gnc_ppr_filter_get_filter (priv->gsr, ledger_type);
         filter = g_strsplit (filter_str, ",", -1);
         filtersize = g_strv_length (filter);
         g_free (filter_str);
@@ -1295,7 +1219,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         {
             PINFO ("Loaded Filter Start Date is %s", filter[1]);
 
-            priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time (filter[1]);
+            priv->fd.start_time = gnc_ppr_filter_dmy2time (filter[1]);
             priv->fd.start_time = gnc_time64_get_day_start (priv->fd.start_time);
             filter_changed = filter_changed + 1;
         }
@@ -1304,7 +1228,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         {
             PINFO ("Loaded Filter End Date is %s", filter[2]);
 
-            priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time (filter[2]);
+            priv->fd.end_time = gnc_ppr_filter_dmy2time (filter[2]);
             priv->fd.end_time = gnc_time64_get_day_end (priv->fd.end_time);
             filter_changed = filter_changed + 1;
         }
@@ -1359,13 +1283,13 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     priv->enable_refresh = FALSE; // disable refresh
 
     /* Update Query with Filter Status and Dates */
-    gnc_ppr_update_status_query (page);
-    gnc_ppr_update_date_query (page);
+    gnc_ppr_filter_update_status_query (plugin_page);
+    gnc_ppr_filter_update_date_query (plugin_page);
 
     priv->enable_refresh = TRUE; // enable refresh
 
     // Set filter tooltip for summary bar
-    gnc_plugin_page_register_set_filter_tooltip (page);
+    gnc_ppr_filter_set_tooltip (plugin_page, &priv->fd);
 
     plugin_page->summarybar = gsr_create_summary_bar (priv->gsr);
     if (plugin_page->summarybar)
@@ -1942,115 +1866,6 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage* plugin_page)
     return g_strdup (color ? color : "Not Set");
 }
 
-static void
-gnc_plugin_page_register_check_for_empty_group (GKeyFile *state_file,
-                                                const gchar *state_section)
-{
-    gsize num_keys;
-    gchar **keys = g_key_file_get_keys (state_file, state_section, &num_keys, NULL);
-
-    if (num_keys == 0)
-        gnc_state_drop_sections_for (state_section);
-
-    g_strfreev (keys);
-}
-
-static gchar*
-gnc_plugin_page_register_get_filter_gcm (GNCSplitReg *gsr)
-{
-    GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section;
-    GError* error = NULL;
-    char* filter = NULL;
-
-    // get the filter from the .gcm file
-    state_section = gsr_get_register_state_section (gsr);
-    filter = g_key_file_get_string (state_file, state_section,
-                                    KEY_PAGE_FILTER, &error);
-
-    if (error)
-        g_clear_error (&error);
-    else
-        g_strdelimit (filter, ";", ',');
-
-    g_free (state_section);
-    return filter;
-}
-
-static gchar*
-gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
-    char* filter = NULL;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
-                          g_strdup (_("unknown")));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    ledger_type = gnc_ledger_display_type (priv->ledger);
-
-    // load from gcm file
-    filter = gnc_plugin_page_register_get_filter_gcm (priv->gsr);
-
-    if (filter)
-        return filter;
-
-    return g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
-                            "0", "0", get_filter_default_num_of_days (ledger_type));
-}
-
-static void
-gnc_plugin_page_register_set_filter_gcm (GNCSplitReg *gsr, const gchar* filter,
-                                         gchar* default_filter)
-{
-    GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section;
-    gchar* filter_text;
-
-    // save the filter to the .gcm file also
-    state_section = gsr_get_register_state_section (gsr);
-    if (!filter || (g_strcmp0 (filter, default_filter) == 0))
-    {
-        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_FILTER, NULL))
-            g_key_file_remove_key (state_file, state_section, KEY_PAGE_FILTER, NULL);
-
-        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
-    }
-    else
-    {
-        filter_text = g_strdup (filter);
-        g_strdelimit (filter_text, ",", ';'); // make it conform to .gcm file list
-        g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER,
-                               filter_text);
-        g_free (filter_text);
-    }
-    g_free (state_section);
-}
-
-void
-gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
-                                     const gchar* filter)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
-    gchar* default_filter;
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    ledger_type = gnc_ledger_display_type (priv->ledger);
-
-    default_filter = g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
-                                      "0", "0", get_filter_default_num_of_days (ledger_type));
-
-    // save to gcm file
-    gnc_plugin_page_register_set_filter_gcm (priv->gsr, filter, default_filter);
-
-    g_free (default_filter);
-    return;
-}
-
 static gchar*
 gnc_plugin_page_register_get_long_name (GncPluginPage* plugin_page)
 {
@@ -2118,6 +1933,26 @@ gnc_plugin_page_register_summarybar_position_changed (gpointer prefs,
                            (position == GTK_POS_TOP ? 0 : -1));
 }
 
+static void
+gnc_plugin_page_register_update_page_icon (GncPluginPage* plugin_page)
+{
+    GncPluginPageRegisterPrivate* priv;
+    gboolean read_only;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+
+    if (qof_book_is_readonly (gnc_get_current_book()) ||
+        gnc_split_reg_get_read_only (priv->gsr))
+        read_only = TRUE;
+    else
+        read_only = FALSE;
+
+    main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(plugin_page),
+                                                read_only);
+}
+
 /** This function is called to get the query associated with this
  *  plugin page.
  *
@@ -2136,12 +1971,25 @@ gnc_plugin_page_register_get_query (GncPluginPage* plugin_page)
     return gnc_ledger_display_get_query (priv->ledger);
 }
 
-/************************************************************/
-/*                    "Filter By" Dialog                    */
-/************************************************************/
+void
+gnc_plugin_page_register_query_update (GncPluginPageRegister* page, Query *query)
+{
+    GncPluginPageRegisterPrivate* priv;
 
-static void
-gnc_ppr_update_for_search_query (GncPluginPageRegister* page)
+    ENTER(" ");
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+    // clear previous filter query and save current
+    qof_query_destroy (priv->filter_query);
+    priv->filter_query = qof_query_copy (query);
+
+    if (priv->enable_refresh)
+        gnc_ledger_display_refresh (priv->ledger);
+    LEAVE(" ");
+}
+
+void
+gnc_plugin_page_register_update_for_search_query (GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
@@ -2166,830 +2014,24 @@ gnc_ppr_update_for_search_query (GncPluginPageRegister* page)
     }
 }
 
-
-/** This function updates the "cleared match" term of the register
- *  query.  It unconditionally removes any old "cleared match" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-static void
-gnc_ppr_update_status_query (GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    Query* query;
-    SplitRegister* reg;
-
-    ENTER (" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (!priv->ledger)
-    {
-        LEAVE ("no ledger");
-        return;
-    }
-    // check if this a search register and save query
-    gnc_ppr_update_for_search_query (page);
-
-    query = gnc_ledger_display_get_query (priv->ledger);
-    if (!query)
-    {
-        LEAVE ("no query found");
-        return;
-    }
-
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
-
-    /* Remove the old status match */
-    if (reg->type != SEARCH_LEDGER)
-    {
-        GSList *param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
-        qof_query_purge_terms (query, param_list);
-        g_slist_free (param_list);
-    }
-
-    /* Install the new status match */
-    if (priv->fd.cleared_match != CLEARED_ALL)
-        xaccQueryAddClearedMatch (query, priv->fd.cleared_match, QOF_QUERY_AND);
-
-    // Set filter tooltip for summary bar
-    gnc_plugin_page_register_set_filter_tooltip (page);
-
-    // clear previous filter query and save current
-    qof_query_destroy (priv->filter_query);
-    priv->filter_query = qof_query_copy (query);
-
-    if (priv->enable_refresh)
-        gnc_ledger_display_refresh (priv->ledger);
-    LEAVE (" ");
-}
-
-
-/** This function updates the "date posted" term of the register
- *  query.  It unconditionally removes any old "date posted" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-static void
-gnc_ppr_update_date_query (GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    Query* query;
-    SplitRegister* reg;
-
-    ENTER (" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (!priv->ledger)
-    {
-        LEAVE ("no ledger");
-        return;
-    }
-    // check if this a search register and save query
-    gnc_ppr_update_for_search_query (page);
-
-    query = gnc_ledger_display_get_query (priv->ledger);
-
-    if (!query)
-    {
-        LEAVE ("no query");
-        return;
-    }
-
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
-
-    /* Delete any existing old date spec. */
-    if (reg->type != SEARCH_LEDGER)
-    {
-        GSList *param_list = qof_query_build_param_list (SPLIT_TRANS,
-                                                         TRANS_DATE_POSTED, NULL);
-        qof_query_purge_terms (query, param_list);
-        g_slist_free (param_list);
-    }
-
-    if (priv->fd.start_time || priv->fd.end_time)
-    {
-        /* Build a new spec */
-        xaccQueryAddDateMatchTT (query,
-                                 priv->fd.start_time != 0, priv->fd.start_time,
-                                 priv->fd.end_time != 0,   priv->fd.end_time,
-                                 QOF_QUERY_AND);
-    }
-
-    if (priv->fd.days > 0)
-    {
-        time64 start;
-        struct tm tm;
-
-        gnc_tm_get_today_start (&tm);
-
-        tm.tm_mday = tm.tm_mday - priv->fd.days;
-        start = gnc_mktime (&tm);
-        xaccQueryAddDateMatchTT (query, TRUE, start, FALSE, 0, QOF_QUERY_AND);
-    }
-
-    // Set filter tooltip for summary bar
-    gnc_plugin_page_register_set_filter_tooltip (page);
-
-    // clear previous filter query and save current
-    qof_query_destroy (priv->filter_query);
-    priv->filter_query = qof_query_copy (query);
-
-    if (priv->enable_refresh)
-        gnc_ledger_display_refresh (priv->ledger);
-    LEAVE (" ");
-}
-
-
-/* This function converts a time64 value date to a string */
-static gchar*
-gnc_plugin_page_register_filter_time2dmy (time64 raw_time)
-{
-    struct tm* timeinfo;
-    gchar date_string[11];
-
-    timeinfo = gnc_localtime (&raw_time);
-    strftime (date_string, 11, "%d-%m-%Y", timeinfo);
-    PINFO ("Date string is %s", date_string);
-    gnc_tm_free (timeinfo);
-
-    return g_strdup (date_string);
-}
-
-
-/* This function converts a string date to a time64 value */
-static time64
-gnc_plugin_page_register_filter_dmy2time (char* date_string)
-{
-    struct tm when;
-
-    PINFO ("Date string is %s", date_string);
-    memset (&when, 0, sizeof (when));
-
-    sscanf (date_string, "%d-%d-%d", &when.tm_mday,
-            &when.tm_mon, &when.tm_year);
-
-    when.tm_mon -= 1;
-    when.tm_year -= 1900;
-
-    return gnc_mktime (&when);
-}
-
-
-/** This function is called whenever one of the status entries is
- *  checked or unchecked.  It updates the status value maintained for
- *  the filter dialog, and calls another function to do the work of
- *  applying the change to the register itself.
- *
- *  @param button The toggle button that was changed.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
 void
-gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton* button,
-                                               GncPluginPageRegister* page)
+gnc_plugin_register_set_enable_refresh (GncPluginPageRegister* page, gboolean enable_refresh)
 {
     GncPluginPageRegisterPrivate* priv;
-    const gchar* name;
-    gint i, value;
 
-    g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
-    ENTER ("toggle button %s (%p), plugin_page %p", name, button, page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
-    /* Determine what status bit to change */
-    value = CLEARED_NONE;
-    for (i = 0; status_actions[i].action_name; i++)
-    {
-        if (g_strcmp0 (name, status_actions[i].action_name) == 0)
-        {
-            value = status_actions[i].value;
-            break;
-        }
-    }
-
-    /* Compute the new match status */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (gtk_toggle_button_get_active (button))
-        priv->fd.cleared_match = (cleared_match_t)(priv->fd.cleared_match | value);
-    else
-        priv->fd.cleared_match = (cleared_match_t)(priv->fd.cleared_match & ~value);
-    gnc_ppr_update_status_query (page);
-    LEAVE (" ");
-}
-
-
-/** This function is called whenever the "select all" status button is
- *  clicked.  It updates all of the checkbox widgets, then updates the
- *  query on the register.
- *
- *  @param button The button that was clicked.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_status_select_all_cb (GtkButton* button,
-                                                      GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GtkWidget* widget;
-    gint i;
-
-    g_return_if_fail (GTK_IS_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(button %p, page %p)", button, page);
-
-    /* Turn on all the check menu items */
-    for (i = 0; status_actions[i].action_name; i++)
-    {
-        widget = status_actions[i].widget;
-        g_signal_handlers_block_by_func (widget,
-                                         (gpointer)gnc_plugin_page_register_filter_status_one_cb, page);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-        g_signal_handlers_unblock_by_func (widget,
-                                           (gpointer)gnc_plugin_page_register_filter_status_one_cb, page);
-    }
-
-    /* Set the requested status */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    priv->fd.cleared_match = CLEARED_ALL;
-    gnc_ppr_update_status_query (page);
-    LEAVE (" ");
-}
-
-
-
-/** This function is called whenever the "clear all" status button is
- *  clicked.  It updates all of the checkbox widgets, then updates the
- *  query on the register.
- *
- *  @param button The button that was clicked.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_status_clear_all_cb (GtkButton* button,
-                                                     GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GtkWidget* widget;
-    gint i;
-
-    g_return_if_fail (GTK_IS_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(button %p, page %p)", button, page);
-
-    /* Turn off all the check menu items */
-    for (i = 0; status_actions[i].action_name; i++)
-    {
-        widget = status_actions[i].widget;
-        g_signal_handlers_block_by_func (widget,
-                                         (gpointer)gnc_plugin_page_register_filter_status_one_cb, page);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-        g_signal_handlers_unblock_by_func (widget,
-                                           (gpointer)gnc_plugin_page_register_filter_status_one_cb, page);
-    }
-
-    /* Set the requested status */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    priv->fd.cleared_match = CLEARED_NONE;
-    gnc_ppr_update_status_query (page);
-    LEAVE (" ");
-}
-
-
-/** This function computes the starting and ending times for the
- *  filter by examining the dialog widgets to see which ones are
- *  selected, and will pull times out of the data entry boxes if
- *  necessary.  This function must exist to handle the case where the
- *  "show all" button was Selected, and the user clicks on the "select
- *  range" button.  Since it exists, it make sense for the rest of the
- *  callbacks to take advantage of it.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-static void
-get_filter_times (GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    time64 time_val;
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-                                          priv->fd.start_date_choose)))
-    {
-        time_val = gnc_date_edit_get_date (GNC_DATE_EDIT (priv->fd.start_date));
-        time_val = gnc_time64_get_day_start (time_val);
-        priv->fd.start_time = time_val;
-    }
-    else
-    {
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-                                              priv->fd.start_date_today)))
-        {
-            priv->fd.start_time = gnc_time64_get_today_start();
-        }
-        else
-        {
-            priv->fd.start_time = 0;
-        }
-    }
-
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-                                          priv->fd.end_date_choose)))
-    {
-        time_val = gnc_date_edit_get_date (GNC_DATE_EDIT (priv->fd.end_date));
-        time_val = gnc_time64_get_day_end (time_val);
-        priv->fd.end_time = time_val;
-    }
-    else
-    {
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-                                              priv->fd.end_date_today)))
-        {
-            priv->fd.end_time = gnc_time64_get_today_end();
-        }
-        else
-        {
-            priv->fd.end_time = 0;
-        }
-    }
-}
-
-
-/** This function is called when the radio buttons changes state. This
- *  function is responsible for setting the sensitivity of the widgets
- *  controlled by each radio button choice and updating the time
- *  limitation on the register query. This is handled by a helper
- *  function as potentially all widgets will need to be examined.
- *
- *  @param button A pointer to the "select range" radio button.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
-                                                 GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    gboolean active;
-    const gchar* name;
-
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(button %p, page %p)", button, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
-    active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
-
-    if (active && g_strcmp0 (name, "filter_show_range") == 0)
-    {
-        gtk_widget_set_sensitive (priv->fd.table, active);
-        gtk_widget_set_sensitive (priv->fd.num_days, !active);
-        get_filter_times (page);
-    }
-    else if (active && g_strcmp0 (name, "filter_show_days") == 0)
-    {
-        gtk_widget_set_sensitive (priv->fd.table, !active);
-        gtk_widget_set_sensitive (priv->fd.num_days, active);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->fd.num_days), priv->fd.days);
-    }
-    else
-    {
-        gtk_widget_set_sensitive (priv->fd.table, FALSE);
-        gtk_widget_set_sensitive (priv->fd.num_days, FALSE);
-        priv->fd.days = 0;
-        priv->fd.start_time = 0;
-        priv->fd.end_time = 0;
-    }
-    gnc_ppr_update_date_query (page);
-    LEAVE (" ");
+    priv->enable_refresh = enable_refresh;
 }
 
 void
 gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page)
 {
-    GncPluginPageRegisterPrivate* priv;
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    priv->fd.days = 0;
-    priv->fd.start_time = 0;
-    priv->fd.end_time = 0;
-    priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
-
-    gnc_ppr_update_date_query (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
-}
-
-/** This function is called when the "number of days" spin button is
- *  changed which is then saved and updates the time limitation on
- *  the register query. This is handled by a helper function as
- *  potentially all widgets will need to be examined.
- *
- *  @param button A pointer to the "number of days" spin button.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton* button,
-                                                 GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-
-    g_return_if_fail (GTK_IS_SPIN_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(button %p, page %p)", button, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-
-    priv->fd.days = gtk_spin_button_get_value (GTK_SPIN_BUTTON (button));
-    gnc_ppr_update_date_query (page);
-    LEAVE (" ");
-}
-
-
-/** This function is called when one of the start date entry widgets
- *  is updated.  It simply calls common routines to determine the
- *  start/end times and update the register query.
- *
- *  @param unused A pointer to a GncDateEntry widgets, but it could be
- *  any widget.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-static void
-gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget* unused,
-                                                GncPluginPageRegister* page)
-{
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(widget %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (unused)), unused, page);
-    get_filter_times (page);
-    gnc_ppr_update_date_query (page);
-    LEAVE (" ");
-}
-
-
-/** This function is called when one of the start date radio buttons
- *  is selected.  It updates the sensitivity of the date entry widget,
- *  then calls a common routine to determine the start/end times and
- *  update the register query.
- *
- *  *Note: This function is actually called twice for each new radio
- *  button selection.  The first time call is to uncheck the old
- *  button, and the second time to check the new button.  This does
- *  make a kind of sense, as radio buttons are nothing more than
- *  linked toggle buttons where only one can be active.
- *
- *  @param radio The button whose state is changing.  This will be
- *  the previously selected button the first of the pair of calls to
- *  this function, and will be the newly selected button the second
- *  time.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
-                                          GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    const gchar* name;
-    gboolean active;
-
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (radio));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(radio %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (radio)), radio, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)))
-    {
-        LEAVE ("1st callback of pair. Defer to 2nd callback.");
-        return;
-    }
-
-    name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
-    active = !g_strcmp0 (name, "start_date_choose");
-    gtk_widget_set_sensitive (priv->fd.start_date, active);
-    get_filter_times (page);
-    gnc_ppr_update_date_query (page);
-    LEAVE (" ");
-}
-
-
-/** This function is called when one of the end date radio buttons is
- *  selected.  It updates the sensitivity of the date entry widget,
- *  then calls a common routine to determine the start/end times and
- *  update the register query.
- *
- *  *Note: This function is actually called twice for each new radio
- *  button selection.  The first time call is to uncheck the old
- *  button, and the second time to check the new button.  This does
- *  make a kind of sense, as radio buttons are nothing more than
- *  linked toggle buttons where only one can be active.
- *
- *  @param radio The button whose state is changing.  This will be
- *  the previously selected button the first of the pair of calls to
- *  this function, and will be the newly selected button the second
- *  time.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
-                                        GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    const gchar* name;
-    gboolean active;
-
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (radio));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("(radio %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (radio)), radio, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)))
-    {
-        LEAVE ("1st callback of pair. Defer to 2nd callback.");
-        return;
-    }
-
-    name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
-    active = !g_strcmp0 (name, "end_date_choose");
-    gtk_widget_set_sensitive (priv->fd.end_date, active);
-    get_filter_times (page);
-    gnc_ppr_update_date_query (page);
-    LEAVE (" ");
-}
-
-
-/** This function is called whenever the save status is checked
- *  or unchecked. It will allow saving of the filter if required.
- *
- *  @param button The toggle button that was changed.
- *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
-void
-gnc_plugin_page_register_filter_save_cb (GtkToggleButton* button,
-                                         GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-
-    g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER ("Save toggle button (%p), plugin_page %p", button, page);
-
-    /* Compute the new save filter status */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    if (gtk_toggle_button_get_active (button))
-        priv->fd.save_filter = TRUE;
-    else
-        priv->fd.save_filter = FALSE;
-    LEAVE (" ");
-}
-
-
-/** This function is called when the "Filter By…" dialog is closed.
- *  If the dialog was closed by any method other than clicking the OK
- *  button, the original sorting order will be restored.
- *
- *  @param dialog A pointer to the dialog box.
- *
- *  @param response A numerical value indicating why the dialog box was closed.
- *
- *  @param page A pointer to the GncPluginPageRegister associated with
- *  this dialog box.
- */
-void
-gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
-                                             gint response,
-                                             GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GncPluginPage* plugin_page;
-
-    g_return_if_fail (GTK_IS_DIALOG (dialog));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER (" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    plugin_page = GNC_PLUGIN_PAGE (page);
-
-    if (response != GTK_RESPONSE_OK)
-    {
-        /* Remove the old status match */
-        priv->fd.cleared_match = priv->fd.original_cleared_match;
-        priv->enable_refresh = FALSE;
-        gnc_ppr_update_status_query (page);
-        priv->enable_refresh = TRUE;
-        priv->fd.start_time = priv->fd.original_start_time;
-        priv->fd.end_time = priv->fd.original_end_time;
-        priv->fd.days = priv->fd.original_days;
-        priv->fd.save_filter = priv->fd.original_save_filter;
-        gnc_ppr_update_date_query (page);
-    }
-    else
-    {
-        // clear the filter when unticking the save option
-        if ((priv->fd.save_filter == FALSE) && (priv->fd.original_save_filter == TRUE))
-            gnc_plugin_page_register_set_filter (plugin_page, NULL);
-
-        priv->fd.original_save_filter = priv->fd.save_filter;
-
-        if (priv->fd.save_filter)
-        {
-            gchar *filter;
-            GList *flist = NULL;
-
-            // cleared match
-            flist = g_list_prepend
-                (flist, g_strdup_printf ("0x%04x", priv->fd.cleared_match));
-
-            // start time
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->fd.start_date_choose)) && priv->fd.start_time != 0)
-                flist = g_list_prepend (flist, gnc_plugin_page_register_filter_time2dmy (priv->fd.start_time));
-            else
-                flist = g_list_prepend (flist, g_strdup ("0"));
-
-            // end time
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->fd.end_date_choose))
-                && priv->fd.end_time != 0)
-                flist = g_list_prepend (flist, gnc_plugin_page_register_filter_time2dmy (priv->fd.end_time));
-            else
-                flist = g_list_prepend (flist, g_strdup ("0"));
-
-            // number of days
-            if (priv->fd.days > 0)
-                flist = g_list_prepend (flist, g_strdup_printf ("%d", priv->fd.days));
-            else
-                flist = g_list_prepend (flist, g_strdup ("0"));
-
-            flist = g_list_reverse (flist);
-            filter = gnc_g_list_stringjoin (flist, ",");
-            PINFO ("The filter to save is %s", filter);
-            gnc_plugin_page_register_set_filter (plugin_page, filter);
-            g_free (filter);
-            g_list_free_full (flist, g_free);
-        }
-    }
-    priv->fd.dialog = NULL;
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    LEAVE (" ");
-}
-
-static void
-gpp_update_match_filter_text (cleared_match_t match, const guint mask,
-                              const gchar* filter_name, GList **show, GList **hide)
-{
-    if ((match & mask) == mask)
-        *show = g_list_prepend (*show, g_strdup (filter_name));
-    else
-        *hide = g_list_prepend (*hide, g_strdup (filter_name));
-}
-
-static void
-gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    GList *t_list = NULL;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    ENTER (" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-
-    // filtered start time
-    if (priv->fd.start_time != 0)
-    {
-        gchar* sdate = qof_print_date (priv->fd.start_time);
-        t_list = g_list_prepend
-            (t_list, g_strdup_printf ("%s %s", _("Start Date:"), sdate));
-        g_free (sdate);
-    }
-
-    // filtered number of days
-    if (priv->fd.days > 0)
-        t_list = g_list_prepend
-            (t_list, g_strdup_printf ("%s %d", _("Show previous number of days:"),
-                                      priv->fd.days));
-
-    // filtered end time
-    if (priv->fd.end_time != 0)
-    {
-        gchar* edate = qof_print_date (priv->fd.end_time);
-        t_list = g_list_prepend
-            (t_list, g_strdup_printf ("%s %s", _("End Date:"), edate));
-        g_free (edate);
-    }
-
-    // filtered match items
-    if (priv->fd.cleared_match != CLEARED_ALL)
-    {
-        GList *show = NULL;
-        GList *hide = NULL;
-
-        gpp_update_match_filter_text (priv->fd.cleared_match, 0x01, _ ("Unreconciled"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (priv->fd.cleared_match, 0x02, _ ("Cleared"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (priv->fd.cleared_match, 0x04, _ ("Reconciled"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (priv->fd.cleared_match, 0x08, _ ("Frozen"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (priv->fd.cleared_match, 0x10, _ ("Voided"),
-                                      &show, &hide);
-
-        show = g_list_reverse (show);
-        hide = g_list_reverse (hide);
-
-        if (show)
-        {
-            char *str = gnc_list_formatter (show);
-            t_list = g_list_prepend
-                (t_list, g_strdup_printf ("%s %s", _("Show:"), str));
-            g_free (str);
-        }
-
-        if (hide)
-        {
-            char *str = gnc_list_formatter (hide);
-            t_list = g_list_prepend
-                (t_list, g_strdup_printf ("%s %s", _("Hide:"), str));
-            g_free (str);
-        }
-
-        g_list_free_full (show, g_free);
-        g_list_free_full (hide, g_free);
-    }
-
-    t_list = g_list_reverse (t_list);
-
-    if (t_list)
-        t_list = g_list_prepend (t_list, g_strdup (_("Filter By:")));
-
-    // free the existing text if present
-    if (priv->gsr->filter_text != NULL)
-        g_free (priv->gsr->filter_text);
-
-    // set the tooltip text variable in the gsr
-    priv->gsr->filter_text = gnc_g_list_stringjoin (t_list, "\n");
-
-    g_list_free_full (t_list, g_free);
-
-    LEAVE (" ");
-}
-
-
-static void
-gnc_plugin_page_register_update_page_icon (GncPluginPage* plugin_page)
-{
-    GncPluginPageRegisterPrivate* priv;
-    gboolean read_only;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-
-    if (qof_book_is_readonly (gnc_get_current_book()) ||
-        gnc_split_reg_get_read_only (priv->gsr))
-        read_only = TRUE;
-    else
-        read_only = FALSE;
-
-    main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(plugin_page),
-                                                read_only);
+    gnc_ppr_filter_clear_current_filter (plugin_page);
 }
 
 /************************************************************/
@@ -3729,188 +2771,24 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
 {
     auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
-    GtkWidget* dialog, *toggle, *button, *table, *hbox;
-    time64 start_time, end_time, time_val;
-    GtkBuilder* builder;
-    gboolean sensitive, value;
-    Query* query;
-    gchar* title;
-    int i;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
     ENTER ("(action %p, page %p)", simple, page);
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     if (priv->fd.dialog)
     {
-        gtk_window_present (GTK_WINDOW (priv->fd.dialog));
+        gtk_window_present (GTK_WINDOW(priv->fd.dialog));
         LEAVE ("existing dialog");
         return;
     }
 
-    /* Create the dialog */
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
-                               "days_adjustment");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
-                               "filter_by_dialog");
-    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "filter_by_dialog"));
-    priv->fd.dialog = dialog;
-    gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                                  gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window)));
+    Query* query = gnc_ledger_display_get_query (priv->ledger);
+    gboolean show_save_button = gnc_plugin_page_register_show_fs_save (page);
 
-    /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_ ("Filter %s by…"),
-                             gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (page)));
-    gtk_window_set_title (GTK_WINDOW (dialog), title);
-    g_free (title);
+    gnc_ppr_filter_by (GNC_PLUGIN_PAGE(page), query,
+                       &priv->fd, show_save_button);
 
-    /* Set the check buttons for the current status */
-    for (i = 0; status_actions[i].action_name; i++)
-    {
-        toggle = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                     status_actions[i].action_name));
-        value = priv->fd.cleared_match & status_actions[i].value;
-        status_actions[i].widget = toggle;
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), value);
-    }
-    priv->fd.original_cleared_match = priv->fd.cleared_match;
-
-    button = GTK_WIDGET (gtk_builder_get_object (builder, "filter_save"));
-    if (priv->fd.save_filter == TRUE)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-
-    // hide the save button if appropriate
-    gtk_widget_set_visible (GTK_WIDGET (button),
-                            gnc_plugin_page_register_show_fs_save (page));
-
-    /* Set up number of days */
-    priv->fd.num_days = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                            "filter_show_num_days"));
-    button = GTK_WIDGET (gtk_builder_get_object (builder, "filter_show_days"));
-
-    query = gnc_ledger_display_get_query (priv->ledger);
-
-    if (priv->fd.days > 0) // using number of days
-    {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.num_days), TRUE);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->fd.num_days), priv->fd.days);
-        priv->fd.original_days = priv->fd.days;
-
-        /* Set the start_time and end_time to 0 */
-        start_time = 0;
-        end_time = 0;
-    }
-    else
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.num_days), FALSE);
-        priv->fd.original_days = 0;
-        priv->fd.days = 0;
-
-        /* Get the start and end times */
-        xaccQueryGetDateMatchTT (query, &start_time, &end_time);
-    }
-
-    /* Set the date info */
-    priv->fd.original_start_time = start_time;
-    priv->fd.start_time = start_time;
-    priv->fd.original_end_time = end_time;
-    priv->fd.end_time = end_time;
-
-    button = GTK_WIDGET (gtk_builder_get_object (builder, "filter_show_range"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), start_time ||
-                                  end_time);
-    table = GTK_WIDGET (gtk_builder_get_object (builder, "select_range_table"));
-    priv->fd.table = table;
-    gtk_widget_set_sensitive (GTK_WIDGET (table), start_time || end_time);
-
-    priv->fd.start_date_choose = GTK_WIDGET (gtk_builder_get_object (builder,
-                                             "start_date_choose"));
-    priv->fd.start_date_today = GTK_WIDGET (gtk_builder_get_object (builder,
-                                            "start_date_today"));
-    priv->fd.end_date_choose = GTK_WIDGET (gtk_builder_get_object (builder,
-                                           "end_date_choose"));
-    priv->fd.end_date_today = GTK_WIDGET (gtk_builder_get_object (builder,
-                                          "end_date_today"));
-
-    {
-        /* Start date info */
-        if (start_time == 0)
-        {
-            button = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_earliest"));
-            time_val = xaccQueryGetEarliestDateFound (query);
-            sensitive = FALSE;
-        }
-        else
-        {
-            time_val = start_time;
-            if ((start_time >= gnc_time64_get_today_start()) &&
-                (start_time <= gnc_time64_get_today_end()))
-            {
-                button = priv->fd.start_date_today;
-                sensitive = FALSE;
-            }
-            else
-            {
-                button = priv->fd.start_date_choose;
-                sensitive = TRUE;
-            }
-        }
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-        priv->fd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-        hbox = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_hbox"));
-        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.start_date, TRUE, TRUE, 0);
-        gtk_widget_show (priv->fd.start_date);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.start_date), sensitive);
-        gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.start_date), time_val);
-        g_signal_connect (G_OBJECT (priv->fd.start_date), "date-changed",
-                          G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
-                          page);
-    }
-
-    {
-        /* End date info */
-        if (end_time == 0)
-        {
-            button = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_latest"));
-            time_val = xaccQueryGetLatestDateFound (query);
-            sensitive = FALSE;
-        }
-        else
-        {
-            time_val = end_time;
-            if ((end_time >= gnc_time64_get_today_start()) &&
-                (end_time <= gnc_time64_get_today_end()))
-            {
-                button = priv->fd.end_date_today;
-                sensitive = FALSE;
-            }
-            else
-            {
-                button = priv->fd.end_date_choose;
-                sensitive = TRUE;
-            }
-        }
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-        priv->fd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-        hbox = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_hbox"));
-        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.end_date, TRUE, TRUE, 0);
-        gtk_widget_show (priv->fd.end_date);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.end_date), sensitive);
-        gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.end_date), time_val);
-        g_signal_connect (G_OBJECT (priv->fd.end_date), "date-changed",
-                          G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
-                          page);
-    }
-
-    /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      page);
-
-    /* Show it */
-    gtk_widget_show (dialog);
-    g_object_unref (G_OBJECT (builder));
     LEAVE (" ");
 }
 
@@ -5004,6 +3882,17 @@ gnc_plugin_page_register_get_gsr (GncPluginPage* plugin_page)
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
     return priv->gsr;
+}
+
+FilterData *
+gnc_plugin_page_register_get_filter_data (GncPluginPage *plugin_page)
+{
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page), NULL);
+
+    GncPluginPageRegister* page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+    GncPluginPageRegisterPrivate* priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+    return &priv->fd;
 }
 
 SortData *
