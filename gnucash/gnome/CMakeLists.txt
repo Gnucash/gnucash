@@ -47,6 +47,7 @@ set (gnc_gnome_noinst_HEADERS
   gnc-plugin-page-invoice.h
   gnc-plugin-page-owner-tree.h
   gnc-plugin-page-register.h
+  gnc-plugin-page-register-filter.h
   gnc-plugin-page-register-sort.h
   gnc-plugin-page-report.h
   gnc-plugin-page-sx-list.h
@@ -115,6 +116,7 @@ set (gnc_gnome_SOURCES
   gnc-plugin-page-invoice.cpp
   gnc-plugin-page-owner-tree.cpp
   gnc-plugin-page-register.cpp
+  gnc-plugin-page-register-filter.c
   gnc-plugin-page-register-sort.c
   gnc-plugin-page-report.cpp
   gnc-plugin-page-sx-list.cpp

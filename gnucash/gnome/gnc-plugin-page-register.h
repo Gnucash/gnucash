@@ -42,6 +42,7 @@
 #include "gnc-plugin-page.h"
 #include "gnc-split-reg.h"
 #include "Query.h"
+#include "gnc-plugin-page-register-filter.h"
 #include "gnc-plugin-page-register-sort.h"
 
 
@@ -135,6 +136,12 @@ void gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
  */
 GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 
+/** Get the FilterData data structure associated with this register page.
+ *
+ *  @param plugin_page A "register" page.
+ */
+FilterData * gnc_plugin_page_register_get_filter_data (GncPluginPage *plugin_page);
+
 /** Get the SortData data structure associated with this register page.
  *
  *  @param plugin_page A "register" page.
@@ -149,6 +156,29 @@ SortData * gnc_plugin_page_register_get_sort_data (GncPluginPage *plugin_page);
  */
 Query * gnc_plugin_page_register_get_query (GncPluginPage *plugin_page);
 
+/** This checks if the register is a search register and if so
+ *  saves the query.
+ *
+ *  @param plugin_page A pointer to the GncPluginPageRegister.
+ */
+void gnc_plugin_page_register_update_for_search_query (GncPluginPageRegister* page);
+
+/** This updates the query after the filters have been applied.
+ *
+ *  @param plugin_page A pointer to the GncPluginPageRegister.
+ *
+ *  @param query The updated query
+ */
+void gnc_plugin_page_register_query_update (GncPluginPageRegister* page, Query *query);
+
+/** This allows controlling when refreshes happen, used to reduce refreshes when
+ *  different aspects of the register filter change, namely date and status.
+ *
+ *  @param plugin_page A pointer to the GncPluginPageRegister.
+ *
+ *  @param enable_refresh Used to controll wehn refresh is required
+ */
+void gnc_plugin_register_set_enable_refresh (GncPluginPageRegister* page, gboolean enable_refresh);
 
 /** Get the Account associated with this register page.
  *
