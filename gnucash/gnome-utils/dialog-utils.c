@@ -80,6 +80,30 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 }
 
 
+#ifdef MAC_INTEGRATION
+static gboolean
+gnc_window_redraw_idle_cb (gpointer user_data)
+{
+    GtkWidget *widget = GTK_WIDGET (user_data);
+    if (gtk_widget_get_mapped (widget))
+        gtk_widget_queue_draw (widget);
+    return G_SOURCE_REMOVE;
+}
+
+static gboolean
+gnc_window_map_event_redraw_cb (GtkWidget *widget,
+                                GdkEvent  *event,
+                                gpointer   user_data)
+{
+    /* Schedule a redraw at idle priority so the window manager has
+     * time to finish repositioning the window.  This fixes black
+     * window rendering when a tiling window manager (e.g. Aerospace)
+     * moves the window after GTK maps it. */
+    g_idle_add (gnc_window_redraw_idle_cb, widget);
+    return FALSE;
+}
+#endif
+
 /********************************************************************\
  * gnc_restore_window_size                                          *
  *   restores the position and size of the given window, if these   *
@@ -184,6 +208,19 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
         }
     }
     g_variant_unref (geometry);
+
+#ifdef MAC_INTEGRATION
+    /* Workaround for GTK3 Quartz backend rendering issue: when a
+     * third-party tiling window manager (e.g. Aerospace) repositions a
+     * window after GTK has shown it but before the initial draw
+     * completes, the window contents can remain black.  Forcing a
+     * queue_draw after the window is fully mapped ensures a
+     * complete redraw. */
+    g_signal_connect_after (window, "map-event",
+                            G_CALLBACK (gnc_window_map_event_redraw_cb),
+                            NULL);
+#endif
+
     LEAVE("");
 }
 
