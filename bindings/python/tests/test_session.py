@@ -65,7 +65,7 @@ class TestSession(TestCase):
         """Test if a minimal new sqlite file is correctly written.
         """
         with TemporaryDirectory() as tempdir:
-            targetpath = os.path.join([tempdir, "test.gnucash"])
+            targetpath = os.path.join(tempdir, "test.gnucash")
             targetfile = f"sqlite3://{targetpath}"
 
             with Session(targetfile, SessionOpenMode.SESSION_NEW_STORE) as session:
