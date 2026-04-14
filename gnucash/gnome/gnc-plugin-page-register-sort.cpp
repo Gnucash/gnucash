@@ -47,10 +47,13 @@
 #include "qofbookslots.h"
 #include "qof.h"
 
+#include <algorithm>
+#include <string>
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#define DEFAULT_SORT_ORDER "BY_STANDARD"
+static std::string DEFAULT_SORT_ORDER = "BY_STANDARD";
 
 extern "C"
 {
@@ -99,7 +102,7 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
     g_strfreev (keys);
 }
 
-static gchar*
+static std::string
 gnc_ppr_sort_get_order (GNCSplitReg *gsr)
  {
     if (!gsr)
@@ -109,25 +112,25 @@ gnc_ppr_sort_get_order (GNCSplitReg *gsr)
     GKeyFile* state_file = gnc_state_get_current();
     auto state_section = gsr_get_register_state_section (gsr);
     GError* error = nullptr;
-    gchar* sort_order = nullptr;
 
     auto sort_text = g_key_file_get_string (state_file, state_section,
                                             KEY_PAGE_SORT, &error);
+    std::string sort_order;
 
     if (error)
         g_clear_error (&error);
     else
     {
-        sort_order = g_strdup (sort_text);
+        sort_order = (sort_text);
         g_free (sort_text);
     }
     g_free (state_section);
 
-    return sort_order ? sort_order : g_strdup (DEFAULT_SORT_ORDER);
+    return !sort_order.empty() ? sort_order : (DEFAULT_SORT_ORDER);
 }
 
 static void
-gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
+gnc_ppr_sort_set_order (GNCSplitReg *gsr, std::string sort_order)
 {
     if (!gsr)
         return;
@@ -136,7 +139,7 @@ gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
     GKeyFile* state_file = gnc_state_get_current();
     auto state_section = gsr_get_register_state_section (gsr);
 
-    if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
+    if (sort_order.compare (DEFAULT_SORT_ORDER) == 0)
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, nullptr))
             g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT, nullptr);
@@ -144,7 +147,7 @@ gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
         gnc_ppr_check_for_empty_group (state_file, state_section);
     }
     else
-        g_key_file_set_string (state_file, state_section, KEY_PAGE_SORT, sort_order);
+        g_key_file_set_string (state_file, state_section, KEY_PAGE_SORT, sort_order.c_str());
 
     g_free (state_section);
 }
@@ -216,17 +219,16 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
     sd->original_reverse_order = sd->reverse_order;
 
     // Set the sort order for the split register and status of save order button
-    auto order = gnc_ppr_sort_get_order (gsr);
+    std::string sort_order = gnc_ppr_sort_get_order (gsr);
 
-    PINFO("Loaded Sort order is %s", order);
+    PINFO("Loaded Sort order is %s", sort_order.c_str());
 
-    gnc_split_reg_sort (gsr, SortTypefromString (order), no_force, no_refresh);
+    gnc_split_reg_sort (gsr, SortTypefromString (sort_order.c_str()), no_force, no_refresh);
 
-    if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
+    if (sort_order.compare (DEFAULT_SORT_ORDER) != 0)
         sd->save_order = true;
 
     sd->original_save_order = sd->save_order;
-    g_free (order);
 
     if (ledger_type == LD_GL)
     {
@@ -234,7 +236,7 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
 
         if (reg->type != GENERAL_JOURNAL) // search ledger and the like
         {
-            gnc_split_reg_sort (gsr, SortTypefromString (DEFAULT_SORT_ORDER), no_force, no_refresh);
+            gnc_split_reg_sort (gsr, SortTypefromString (DEFAULT_SORT_ORDER.c_str()), no_force, no_refresh);
             sd->reverse_order = false;
             sd->save_order = false;
         }
@@ -324,9 +326,9 @@ gnc_ppr_sort_response_cb (GtkDialog* dialog,
         if (sd->save_order)
         {
             SortType type = gnc_split_reg_get_sort_type (gsr);
-            auto order = SortTypeasString (type);
+            std::string sort_order = (SortTypeasString (type));
 
-            gnc_ppr_sort_set_order (gsr, order);
+            gnc_ppr_sort_set_order (gsr, sort_order);
             gnc_ppr_sort_set_reversed (gsr, sd->reverse_order);
         }
     }
