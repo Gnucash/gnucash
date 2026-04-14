@@ -36,6 +36,7 @@
 #include <gtk/gtk.h>
 #include "gnc-split-reg.h"
 #include "gnc-plugin-page.h"
+#include <stdbool.h>
 
 struct FilterData
 {
@@ -56,8 +57,8 @@ struct FilterData
     time64 end_time;
     int days;
     int original_days;
-    gboolean original_save_filter;
-    gboolean save_filter;
+    bool original_save_filter;
+    bool save_filter;
 };
 
 void gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, struct FilterData *fd);
@@ -67,6 +68,6 @@ void gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page);
 void gnc_ppr_filter_update_register (GncPluginPage* plugin_page);
 
 void gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
-                        struct FilterData *fd, gboolean show_save_button);
+                        struct FilterData *fd, bool show_save_button);
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER_FILTER_HPP */

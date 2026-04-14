@@ -2603,7 +2603,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
     LEAVE (" ");
 }
 
-static gboolean
+static bool
 gnc_plugin_page_register_show_fs_save (GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
@@ -2611,20 +2611,20 @@ gnc_plugin_page_register_show_fs_save (GncPluginPageRegister* page)
     SplitRegister* reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
-        return TRUE;
+        return true;
     else
     {
         switch (reg->type)
         {
         case GENERAL_JOURNAL:
-            return TRUE;
+            return true;
             break;
 
         case INCOME_LEDGER:
         case PORTFOLIO_LEDGER:
         case SEARCH_LEDGER:
         default:
-            return FALSE;
+            return false;
             break;
         }
     }
@@ -2650,7 +2650,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
     }
 
     SplitRegister* reg = gnc_ledger_display_get_split_register (priv->ledger);
-    gboolean show_save_button = gnc_plugin_page_register_show_fs_save (page);
+    bool show_save_button = gnc_plugin_page_register_show_fs_save (page);
 
     gnc_ppr_sort_dialog (GNC_PLUGIN_PAGE(page), reg,
                          &priv->sd, show_save_button);
@@ -2676,7 +2676,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
     }
 
     Query* query = gnc_ledger_display_get_query (priv->ledger);
-    gboolean show_save_button = gnc_plugin_page_register_show_fs_save (page);
+    bool show_save_button = gnc_plugin_page_register_show_fs_save (page);
 
     gnc_ppr_filter_by (GNC_PLUGIN_PAGE(page), query,
                        &priv->fd, show_save_button);
