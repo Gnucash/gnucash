@@ -191,6 +191,20 @@ gnc_ppr_filter_dmy2time (std::string date_string)
     return gnc_mktime (&when);
 }
 
+static std::vector<std::string>
+split_filter_by_delimiter (std::string str, char delimiter)
+{
+    std::istringstream ss;
+    std::vector<std::string> res;
+    std::string token;
+    ss.str (str);
+    while (std::getline (ss, token, delimiter))
+    {
+        res.push_back (token);
+    }
+    return res;
+}
+
 static void
 gnc_ppr_check_for_empty_group (GKeyFile *state_file,
                                const gchar *state_section)
@@ -205,11 +219,8 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
 }
 
 static std::string
-gnc_ppr_filter_get_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
+gnc_ppr_filter_load_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 {
-    if (!gsr)
-        return _("unknown");
-
     // get the filter from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
     auto state_section = gsr_get_register_state_section (gsr);
@@ -234,11 +245,74 @@ gnc_ppr_filter_get_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 }
 
 static void
-gnc_ppr_filter_set_filter (GNCSplitReg *gsr, std::string filter)
+set_filterdata_to_defaults (FilterData *fd)
 {
+    fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
+    fd->start_time = 0;
+    fd->end_time = 0;
+    fd->days = 0;
+    fd->save_filter = false;
+}
+
+static void
+gnc_ppr_filter_load_filter_parts (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type, FilterData *fd)
+{
+    set_filterdata_to_defaults (fd);
+    fd->dialog = nullptr;
+
     if (!gsr)
         return;
 
+    std::string filter_str = gnc_ppr_filter_load_filter (gsr, ledger_type);
+
+    PINFO("Loaded Filter String is %s", filter_str.c_str());
+
+    std::vector<std::string> split_filter = split_filter_by_delimiter (filter_str, ';');
+    int split_filter_size = split_filter.size();
+
+    if (split_filter_size > 0 && (split_filter[0].compare (DEFAULT_FILTER)) != 0)
+    {
+        PINFO("Loaded Filter Status is %s", split_filter[0].c_str());
+
+        fd->cleared_match = (cleared_match_t)std::stol (split_filter[0], nullptr, 16);
+        fd->save_filter = true;
+    }
+
+    if (split_filter_size > 1 && (split_filter[1].compare (std::string ("0"))) != 0)
+    {
+        PINFO("Loaded Filter Start Date is %s", split_filter[1].c_str());
+
+        fd->start_time = gnc_ppr_filter_dmy2time (split_filter[1]);
+        fd->start_time = gnc_time64_get_day_start (fd->start_time);
+        fd->save_filter = true;
+    }
+
+    if (split_filter_size > 2 && (split_filter[2].compare (std::string ("0"))) != 0)
+    {
+        PINFO("Loaded Filter End Date is %s", split_filter[2].c_str());
+
+        fd->end_time = gnc_ppr_filter_dmy2time (split_filter[2]);
+        fd->end_time = gnc_time64_get_day_end (fd->end_time);
+        fd->save_filter = true;
+    }
+
+    // set the default for the number of days
+    fd->days = (int)std::stol (get_filter_default_num_of_days (ledger_type), nullptr, 10);
+
+    if (split_filter_size > 3 &&
+        (split_filter[3].compare (get_filter_default_num_of_days (ledger_type)) != 0))
+    {
+        PINFO("Loaded Filter Days is %s", split_filter[3].c_str());
+
+        fd->days = (int)std::stol (split_filter[3], nullptr, 10);
+        fd->save_filter = true;
+    }
+}
+
+static void
+gnc_ppr_filter_save_filter (GNCSplitReg *gsr, std::string filter)
+
+{
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
 
     std::string default_filter_str = DEFAULT_FILTER + ";0;0;" +
@@ -257,11 +331,55 @@ gnc_ppr_filter_set_filter (GNCSplitReg *gsr, std::string filter)
     }
     else
     {
+        PINFO("The filter to save is %s", filter.c_str());
         g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER,
                                filter.c_str());
-
     }
     g_free (state_section);
+}
+
+static void
+gnc_ppr_filter_save_filter_parts (GNCSplitReg *gsr, FilterData *fd)
+{
+    if (!gsr)
+        return;
+
+    std::string save_filter_str;
+
+    if (fd->save_filter)
+    {
+        static const size_t buffer_size = 10;
+        char buffer [buffer_size];
+
+        // cleared match
+        std::snprintf (buffer, buffer_size, "0x%04x", fd->cleared_match);
+        save_filter_str.append (buffer);
+
+        // start time
+        if (fd->start_time != 0)
+        {
+            save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->start_time));
+        }
+        else
+            save_filter_str.append (";0");
+
+        // end time
+        if (fd->end_time != 0)
+        {
+            save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->end_time));
+        }
+        else
+            save_filter_str.append (";0");
+
+        // number of days
+        if (fd->days > 0)
+        {
+             save_filter_str.append (";" + std::to_string (fd->days));
+        }
+        else
+             save_filter_str.append (";0");
+    }
+    gnc_ppr_filter_save_filter (gsr, save_filter_str);
 }
 
 static void
@@ -274,6 +392,14 @@ gpp_update_match_filter_text (cleared_match_t match, const guint mask,
         *hide = g_list_prepend (*hide, g_strdup (filter_name));
 }
 
+/** This function is used to update the tooltip shown in the register
+ *  which shows a summary of the current filter.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this filter dialog.
+ * 
+ *  @param fd A pointer to the filter data used for filter state.
+ */
 void
 gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd)
 {
@@ -495,6 +621,12 @@ gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page)
     LEAVE(" ");
 }
 
+/** This function is used to clear the current filter so that a 
+ *  specific split can be shown in the register.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this filter dialog.
+ */
 void
 gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page)
 {
@@ -502,104 +634,40 @@ gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page)
 
     auto fd = gnc_plugin_page_register_get_filter_data (plugin_page);
 
-    fd->days = 0;
-    fd->start_time = 0;
-    fd->end_time = 0;
-    fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
+    set_filterdata_to_defaults (fd);
 
     gnc_ppr_filter_update_date_query (plugin_page);
 }
 
-static std::vector<std::string>
-split_filter_by_delimiter (std::string str, char delimiter)
-{
-    std::istringstream ss;
-    std::vector<std::string> res;
-    std::string token;
-    ss.str (str);
-    while (std::getline (ss, token, delimiter))
-    {
-        res.push_back (token);
-    }
-    return res;
-}
-
+/** This function is called to update the register.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this filter dialog.
+ */
 void
 gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
 {
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
-    auto fd = gnc_plugin_page_register_get_filter_data (plugin_page);
     auto gsr = gnc_plugin_page_register_get_gsr (plugin_page);
+
+    if (!gsr)
+        return;
+
+    auto fd = gnc_plugin_page_register_get_filter_data (plugin_page);
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
-    int filter_changed = 0;
 
     /* Set the filter for the split register and status of save filter button */
     fd->save_filter = false;
 
-    std::string filter_str = gnc_ppr_filter_get_filter (gsr, ledger_type);
-
-    std::vector<std::string> split_filter = split_filter_by_delimiter (filter_str, ';');
-    int split_filter_size = split_filter.size();
-
-    PINFO("Loaded Filter Status is %s", split_filter[0].c_str());
-
-    fd->cleared_match = (cleared_match_t)std::stol (split_filter[0], nullptr, 16);
-
-    if (split_filter_size > 0 && (split_filter[0].compare (DEFAULT_FILTER)) != 0)
-        filter_changed++;
-
-    if (split_filter_size > 1 && (split_filter[1].compare (std::string ("0"))) != 0)
-    {
-        PINFO("Loaded Filter Start Date is %s", split_filter[1].c_str());
-
-        fd->start_time = gnc_ppr_filter_dmy2time (split_filter[1]);
-        fd->start_time = gnc_time64_get_day_start (fd->start_time);
-        filter_changed++;
-    }
-
-    if (split_filter_size > 2 && (split_filter[2].compare (std::string ("0"))) != 0)
-    {
-        PINFO("Loaded Filter End Date is %s", split_filter[2].c_str());
-
-        fd->end_time = gnc_ppr_filter_dmy2time (split_filter[2]);
-        fd->end_time = gnc_time64_get_day_end (fd->end_time);
-        filter_changed++;
-    }
-
-    // set the default for the number of days
-    fd->days = (int)std::stol (get_filter_default_num_of_days (ledger_type), nullptr, 10);
-
-    if (split_filter_size > 3 &&
-        (split_filter[3].compare (get_filter_default_num_of_days (ledger_type)) != 0))
-    {
-        PINFO("Loaded Filter Days is %s", split_filter[3].c_str());
-
-        fd->days = (int)std::stol (split_filter[3], nullptr, 10);
-        filter_changed++;
-    }
-
-    if (filter_changed != 0)
-        fd->save_filter = true;
+    gnc_ppr_filter_load_filter_parts (gsr, ledger_type, fd);
 
     if (ledger_type == LD_GL)
     {
         SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
-        time64 start_time = 0, end_time = 0;
 
-        if (reg->type == GENERAL_JOURNAL)
-        {
-            start_time = fd->start_time;
-            end_time = fd->end_time;
-        }
-        else // search ledger and the like
-        {
-            fd->days = 0;
-            fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
-            fd->save_filter = false;
-        }
-        fd->start_time = start_time;
-        fd->end_time = end_time;
+        if (reg->type != GENERAL_JOURNAL) // search ledger and the like
+            set_filterdata_to_defaults (fd);
     }
     /* Update Query with Filter Status and Dates */
     gnc_ppr_filter_update_status_query (plugin_page);
@@ -613,8 +681,7 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
  *
  *  @param button The toggle button that was changed.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
@@ -657,8 +724,7 @@ gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
  *
  *  @param button The button that was clicked.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_status_select_all_cb (GtkButton* button,
@@ -676,11 +742,11 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
     {
         g_signal_handlers_block_by_func (action.widget,
                                          (gpointer)gnc_ppr_filter_status_one_cb,
-                                         rfd->plugin_page);
+                                         rfd);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(action.widget), TRUE);
         g_signal_handlers_unblock_by_func (action.widget,
                                            (gpointer)gnc_ppr_filter_status_one_cb,
-                                           rfd->plugin_page);
+                                           rfd);
     }
 
     /* Set the requested status */
@@ -695,8 +761,7 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
  *
  *  @param button The button that was clicked.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
@@ -714,11 +779,11 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
     {
         g_signal_handlers_block_by_func (action.widget,
                                          (gpointer)gnc_ppr_filter_status_one_cb,
-                                         rfd->plugin_page);
+                                         rfd);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(action.widget), FALSE);
         g_signal_handlers_unblock_by_func (action.widget,
                                            (gpointer)gnc_ppr_filter_status_one_cb,
-                                           rfd->plugin_page);
+                                           rfd);
     }
 
     /* Set the requested status */
@@ -735,8 +800,7 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
  *  range" button.  Since it exists, it make sense for the rest of the
  *  callbacks to take advantage of it.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 static void
 get_filter_times (RegisterFilterDialog* rfd)
@@ -782,8 +846,7 @@ get_filter_times (RegisterFilterDialog* rfd)
  *
  *  @param button A pointer to the "select range" radio button.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
@@ -815,12 +878,11 @@ gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
     {
         gtk_widget_set_sensitive (rfd->table, FALSE);
         gtk_widget_set_sensitive (rfd->num_days, FALSE);
-        fd->days = 0;
         fd->start_time = 0;
         fd->end_time = 0;
+        fd->days = 0;
     }
     gnc_ppr_filter_update_date_query (rfd->plugin_page);
-
     LEAVE(" ");
 }
 
@@ -831,8 +893,7 @@ gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
  *
  *  @param button A pointer to the "number of days" spin button.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
@@ -858,8 +919,7 @@ gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
  *  @param unused A pointer to a GncDateEntry widgets, but it could be
  *  any widget.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 static void
 gnc_ppr_filter_gde_changed_cb (GtkWidget* unused,
@@ -892,8 +952,7 @@ gnc_ppr_filter_gde_changed_cb (GtkWidget* unused,
  *  this function, and will be the newly selected button the second
  *  time.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_start_cb (GtkWidget* radio,
@@ -936,8 +995,7 @@ gnc_ppr_filter_start_cb (GtkWidget* radio,
  *  this function, and will be the newly selected button the second
  *  time.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_end_cb (GtkWidget* radio,
@@ -969,8 +1027,7 @@ gnc_ppr_filter_end_cb (GtkWidget* radio,
  *
  *  @param button The toggle button that was changed.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_save_cb (GtkToggleButton* button,
@@ -1000,8 +1057,7 @@ gnc_ppr_filter_save_cb (GtkToggleButton* button,
  *
  *  @param response A numerical value indicating why the dialog box was closed.
  *
- *  @param page A pointer to the GncPluginPageRegister associated with
- *  this dialog box.
+ *  @param rfd A pointer to the filter dialog structure.
  */
 void
 gnc_ppr_filter_response_cb (GtkDialog* dialog,
@@ -1033,50 +1089,12 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     {
         // clear the filter when unticking the save option
         if (!fd->save_filter && rfd->original_save_filter)
-            gnc_ppr_filter_set_filter (gsr, "");
+            gnc_ppr_filter_save_filter (gsr, "");
 
         rfd->original_save_filter = fd->save_filter;
 
         if (fd->save_filter)
-        {
-            std::string save_filter_str;
-            static const size_t buffer_size = 10;
-            char buffer [buffer_size];
-
-            // cleared match
-            std::snprintf (buffer, buffer_size, "0x%04x", fd->cleared_match);
-            save_filter_str.append (buffer);
-
-            // start time
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_date_choose))
-                && fd->start_time != 0)
-            {
-                save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->start_time));
-            }
-            else
-                save_filter_str.append (";0");
-
-            // end time
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_date_choose))
-                && fd->end_time != 0)
-            {
-                save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->end_time));
-            }
-            else
-                save_filter_str.append (";0");
-
-            // number of days
-            if (fd->days > 0)
-            {
-                save_filter_str.append (";" + std::to_string (fd->days));
-            }
-            else
-                save_filter_str.append (";0");
-
-            PINFO("The filter to save is %s", save_filter_str.c_str());
-
-            gnc_ppr_filter_set_filter (gsr, save_filter_str);
-        }
+            gnc_ppr_filter_save_filter_parts (gsr, fd);
     }
     rfd->dialog = nullptr;
     fd->dialog = nullptr;
@@ -1085,6 +1103,14 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     LEAVE(" ");
 }
 
+/** This function is called to create the filter dialog.
+ *
+ *  @param rfd A pointer to the filter dialog structure.
+ * 
+ *  @param fd The filter data structure for remembering state.
+ *
+ *  @param query A pointer to the current register query.
+ */
 static void
 gnc_ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *query)
 {
@@ -1250,6 +1276,17 @@ gnc_ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *
     LEAVE (" ");
 }
 
+/** This function is called for the filter dialog.
+ *
+ *  @param plugin_page  A pointer to the GncPluginPageRegister that is
+ *  associated with this filter dialog.
+ * 
+ *  @param query A pointer to the current register query.
+ * 
+ *  @param fd A pointer to the filter data structure for remembering state.
+ *
+ *  @param show_save_button Set to True to show save button.
+ */
 void
 gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
                    FilterData *fd, bool show_save_button)
