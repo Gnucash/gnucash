@@ -42,8 +42,8 @@
 #include "gnc-plugin-page.h"
 #include "gnc-split-reg.h"
 #include "Query.h"
-#include "gnc-plugin-page-register-filter.h"
-#include "gnc-plugin-page-register-sort.h"
+#include "gnc-plugin-page-register-filter.hpp"
+#include "gnc-plugin-page-register-sort.hpp"
 
 
 #ifdef __cplusplus
@@ -140,13 +140,13 @@ GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
  *
  *  @param plugin_page A "register" page.
  */
-FilterData * gnc_plugin_page_register_get_filter_data (GncPluginPage *plugin_page);
+struct FilterData * gnc_plugin_page_register_get_filter_data (GncPluginPage *plugin_page);
 
 /** Get the SortData data structure associated with this register page.
  *
  *  @param plugin_page A "register" page.
  */
-SortData * gnc_plugin_page_register_get_sort_data (GncPluginPage *plugin_page);
+struct SortData * gnc_plugin_page_register_get_sort_data (GncPluginPage *plugin_page);
 
 /** Get the Query associated with this "register" plugin page.
  *

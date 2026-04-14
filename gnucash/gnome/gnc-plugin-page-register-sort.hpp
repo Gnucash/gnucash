@@ -1,5 +1,5 @@
 /**********************************************************************
- * gnc-plugin-page-register-filter.h -- register page filter          *
+ * gnc-plugin-page-register-sort.hpp -- register page sort            *
  *                                                                    *
  * Copyright (C) 2026 Bob Fewell                                      *
  *                                                                    *
@@ -23,59 +23,35 @@
 
 /** @addtogroup ContentPlugins
     @{ */
-/** @addtogroup RegisterPlugin Register Page Filter
+/** @addtogroup RegisterPlugin Register Page Sort
     @{ */
-/** @file gnc-plugin-page-register-filter.h
-    @brief  Functions providing a register page filter for the GnuCash UI
+/** @file gnc-plugin-page-register-filter.hpp
+    @brief  Functions providing a register page sort for the GnuCash UI
     @author Copyright (C) 2026 Bob Fewell
 */
 
-#ifndef __GNC_PLUGIN_PAGE_REGISTER_FILTER_H
-#define __GNC_PLUGIN_PAGE_REGISTER_FILTER_H
+#ifndef __GNC_PLUGIN_PAGE_REGISTER_SORT_HPP
+#define __GNC_PLUGIN_PAGE_REGISTER_SORT_HPP
 
 #include <gtk/gtk.h>
 #include "gnc-split-reg.h"
 #include "gnc-plugin-page.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-typedef struct filter_data
+struct SortData
 {
     GtkWidget* dialog;
-    GtkWidget* table;
-    GtkWidget* start_date_choose;
-    GtkWidget* start_date_today;
-    GtkWidget* start_date;
-    GtkWidget* end_date_choose;
-    GtkWidget* end_date_today;
-    GtkWidget* end_date;
-    GtkWidget* num_days;
-    cleared_match_t original_cleared_match;
-    cleared_match_t cleared_match;
-    time64 original_start_time;
-    time64 original_end_time;
-    time64 start_time;
-    time64 end_time;
-    gint days;
-    gint original_days;
-    gboolean original_save_filter;
-    gboolean save_filter;
-}FilterData;
+    GtkWidget* num_radio;
+    GtkWidget* act_radio;
+    SortType   original_sort_type;
+    gboolean   original_save_order;
+    gboolean   save_order;
+    gboolean   reverse_order;
+    gboolean   original_reverse_order;
+};
 
-void gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd);
+void gnc_ppr_sort_update_register (GncPluginPage* plugin_page);
 
-void gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page);
+void gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
+                          struct SortData *sd, gboolean show_save_button);
 
-void gnc_ppr_filter_update_register (GncPluginPage* plugin_page);
-
-void gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
-                        FilterData *fd, gboolean show_save_button);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __GNC_PLUGIN_PAGE_REGISTER_FILTER_H */
+#endif /* __GNC_PLUGIN_PAGE_REGISTER_SORT_HPP */
