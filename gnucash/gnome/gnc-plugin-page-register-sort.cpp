@@ -74,6 +74,18 @@ gnc_ppr_sort_order_reverse_cb (GtkToggleButton* button,
                                GncPluginPageRegister *page);
 }
 
+static inline bool
+gboolean_to_bool (gboolean value)
+{
+    return value ? true : false;
+}
+
+static inline gboolean
+bool_to_gboolean (bool value)
+{
+    return value ? TRUE : FALSE;
+}
+
 static void
 gnc_ppr_check_for_empty_group (GKeyFile *state_file,
                                const gchar *state_section)
@@ -137,11 +149,11 @@ gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
     g_free (state_section);
 }
 
-static gboolean
+static bool
 gnc_ppr_sort_get_reversed (GNCSplitReg *gsr)
 {
     if (!gsr)
-        return FALSE;
+        return false;
 
     // get the sort_reversed from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
@@ -154,11 +166,11 @@ gnc_ppr_sort_get_reversed (GNCSplitReg *gsr)
         g_clear_error (&error);
 
     g_free (state_section);
-    return sort_reversed;
+    return gboolean_to_bool (sort_reversed);
 }
 
 static void
-gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order)
+gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, bool reverse_order)
 {
     if (!gsr)
         return;
@@ -176,7 +188,7 @@ gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order)
     }
     else
         g_key_file_set_boolean (state_file, state_section, KEY_PAGE_SORT_REV,
-                                reverse_order);
+                                bool_to_gboolean (reverse_order));
 
     g_free (state_section);
 }
@@ -190,7 +202,7 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
     auto gsr = gnc_plugin_page_register_get_gsr (plugin_page);
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
 
-    sd->save_order = FALSE;
+    sd->save_order = false;
 
     // Set the sort direction for the split register and status of save order button
     sd->reverse_order = gnc_ppr_sort_get_reversed (gsr);
@@ -199,7 +211,7 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
 
     gnc_split_reg_set_sort_reversed (gsr, sd->reverse_order, no_refresh);
     if (sd->reverse_order)
-        sd->save_order = TRUE;
+        sd->save_order = true;
 
     sd->original_reverse_order = sd->reverse_order;
 
@@ -211,7 +223,7 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
     gnc_split_reg_sort (gsr, SortTypefromString (order), no_force, no_refresh);
 
     if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
-        sd->save_order = TRUE;
+        sd->save_order = true;
 
     sd->original_save_order = sd->save_order;
     g_free (order);
@@ -223,8 +235,8 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
         if (reg->type != GENERAL_JOURNAL) // search ledger and the like
         {
             gnc_split_reg_sort (gsr, SortTypefromString (DEFAULT_SORT_ORDER), no_force, no_refresh);
-            sd->reverse_order = FALSE;
-            sd->save_order = FALSE;
+            sd->reverse_order = false;
+            sd->save_order = false;
         }
     }
 }
@@ -305,7 +317,7 @@ gnc_ppr_sort_response_cb (GtkDialog* dialog,
                                   (sd->original_reverse_order)))
         {
             gnc_ppr_sort_set_order (gsr, DEFAULT_SORT_ORDER);
-            gnc_ppr_sort_set_reversed (gsr, FALSE);
+            gnc_ppr_sort_set_reversed (gsr, false);
         }
         sd->original_save_order = sd->save_order;
 
@@ -381,9 +393,9 @@ gnc_ppr_sort_order_save_cb (GtkToggleButton* button,
     auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
 
     if (gtk_toggle_button_get_active (button))
-        sd->save_order = TRUE;
+        sd->save_order = true;
     else
-        sd->save_order = FALSE;
+        sd->save_order = false;
     LEAVE (" ");
 }
 
@@ -415,7 +427,7 @@ gnc_ppr_sort_order_reverse_cb (GtkToggleButton* button,
 
 void
 gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
-                     SortData *sd, gboolean show_save_button)
+                     SortData *sd, bool show_save_button)
 {
     /* Create the dialog */
     auto builder = gtk_builder_new();
@@ -445,7 +457,7 @@ gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
 
     // hide the save button if appropriate
-    gtk_widget_set_visible (GTK_WIDGET(button), show_save_button);
+    gtk_widget_set_visible (GTK_WIDGET(button), bool_to_gboolean (show_save_button));
 
     /* Set the button for the current reverse_order order */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));

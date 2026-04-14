@@ -36,6 +36,7 @@
 #include <gtk/gtk.h>
 #include "gnc-split-reg.h"
 #include "gnc-plugin-page.h"
+#include <stdbool.h>
 
 struct SortData
 {
@@ -43,15 +44,15 @@ struct SortData
     GtkWidget* num_radio;
     GtkWidget* act_radio;
     SortType   original_sort_type;
-    gboolean   original_save_order;
-    gboolean   save_order;
-    gboolean   reverse_order;
-    gboolean   original_reverse_order;
+    bool       original_save_order;
+    bool       save_order;
+    bool       reverse_order;
+    bool       original_reverse_order;
 };
 
 void gnc_ppr_sort_update_register (GncPluginPage* plugin_page);
 
 void gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
-                          struct SortData *sd, gboolean show_save_button);
+                          struct SortData *sd, bool show_save_button);
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER_SORT_HPP */

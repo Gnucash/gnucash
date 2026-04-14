@@ -107,6 +107,18 @@ static struct status_action status_actions[] =
     { "filter_status_unreconciled", CLEARED_NO, nullptr },
     { nullptr, 0, nullptr },
 };
+#ifdef skip
+static inline bool
+gboolean_to_bool (gboolean value)
+{
+    return value ? true : false;
+}
+#endif
+static inline gboolean
+bool_to_gboolean (bool value)
+{
+    return value ? TRUE : FALSE;
+}
 
 static const gchar*
 get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
@@ -484,7 +496,7 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
     int filter_changed = 0;
 
     /* Set the filter for the split register and status of save filter button */
-    fd->save_filter = FALSE;
+    fd->save_filter = false;
 
     gchar* filter_str = gnc_ppr_filter_get_filter (gsr, ledger_type);
     gchar** filter = g_strsplit (filter_str, ",", -1);
@@ -529,7 +541,7 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
     }
 
     if (filter_changed != 0)
-        fd->save_filter = TRUE;
+        fd->save_filter = true;
 
     fd->original_save_filter = fd->save_filter;
     g_strfreev (filter);
@@ -548,7 +560,7 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
         {
             fd->days = 0;
             fd->cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, nullptr, 16);
-            fd->save_filter = FALSE;
+            fd->save_filter = false;
         }
 
         fd->original_days = fd->days;
@@ -941,9 +953,9 @@ gnc_ppr_filter_save_cb (GtkToggleButton* button,
 
     /* Compute the new save filter status */
     if (gtk_toggle_button_get_active (button))
-        fd->save_filter = TRUE;
+        fd->save_filter = true;
     else
-        fd->save_filter = FALSE;
+        fd->save_filter = false;
 
     LEAVE(" ");
 }
@@ -1042,10 +1054,9 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
 
 void
 gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
-                   FilterData *fd, gboolean show_save_button)
+                   FilterData *fd, bool show_save_button)
 {
     time64 start_time, end_time, time_val;
-    gboolean sensitive, value;
 
     /* Create the dialog */
     auto builder = gtk_builder_new();
@@ -1069,9 +1080,9 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
     {
         auto toggle = GTK_WIDGET(gtk_builder_get_object (builder,
                                                      status_actions[i].action_name));
-        value = fd->cleared_match & status_actions[i].value;
+        bool value = fd->cleared_match & status_actions[i].value;
         status_actions[i].widget = toggle;
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(toggle), value);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(toggle), bool_to_gboolean (value));
     }
     fd->original_cleared_match = fd->cleared_match;
 
@@ -1080,7 +1091,7 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
 
     // hide the save button if appropriate
-    gtk_widget_set_visible (GTK_WIDGET(button), show_save_button);
+    gtk_widget_set_visible (GTK_WIDGET(button), bool_to_gboolean (show_save_button));
 
     /* Set up number of days */
     fd->num_days = GTK_WIDGET(gtk_builder_get_object (builder,
@@ -1125,13 +1136,14 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
     fd->end_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_choose"));
     fd->end_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_today"));
 
+    bool sensitive;
     {
         /* Start date info */
         if (start_time == 0)
         {
             button = GTK_WIDGET(gtk_builder_get_object(builder, "start_date_earliest"));
             time_val = xaccQueryGetEarliestDateFound (query);
-            sensitive = FALSE;
+            sensitive = false;
         }
         else
         {
@@ -1140,12 +1152,12 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
                 (start_time <= gnc_time64_get_today_end()))
             {
                 button = fd->start_date_today;
-                sensitive = FALSE;
+                sensitive = false;
             }
             else
             {
                 button = fd->start_date_choose;
-                sensitive = TRUE;
+                sensitive = true;
             }
         }
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
@@ -1153,7 +1165,7 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
         auto hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
         gtk_box_pack_start (GTK_BOX(hbox), fd->start_date, TRUE, TRUE, 0);
         gtk_widget_show (fd->start_date);
-        gtk_widget_set_sensitive (GTK_WIDGET(fd->start_date), sensitive);
+        gtk_widget_set_sensitive (GTK_WIDGET(fd->start_date), bool_to_gboolean (sensitive));
         gnc_date_edit_set_time (GNC_DATE_EDIT(fd->start_date), time_val);
         g_signal_connect (G_OBJECT(fd->start_date), "date-changed",
                           G_CALLBACK(gnc_ppr_filter_gde_changed_cb),
@@ -1166,7 +1178,7 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
         {
             button = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_latest"));
             time_val = xaccQueryGetLatestDateFound (query);
-            sensitive = FALSE;
+            sensitive = false;
         }
         else
         {
@@ -1175,12 +1187,12 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
                 (end_time <= gnc_time64_get_today_end()))
             {
                 button = fd->end_date_today;
-                sensitive = FALSE;
+                sensitive = false;
             }
             else
             {
                 button = fd->end_date_choose;
-                sensitive = TRUE;
+                sensitive = true;
             }
         }
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
@@ -1188,7 +1200,7 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
         auto hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
         gtk_box_pack_start (GTK_BOX(hbox), fd->end_date, TRUE, TRUE, 0);
         gtk_widget_show (fd->end_date);
-        gtk_widget_set_sensitive (GTK_WIDGET(fd->end_date), sensitive);
+        gtk_widget_set_sensitive (GTK_WIDGET(fd->end_date), bool_to_gboolean (sensitive));
         gnc_date_edit_set_time (GNC_DATE_EDIT(fd->end_date), time_val);
         g_signal_connect (G_OBJECT(fd->end_date), "date-changed",
                           G_CALLBACK(gnc_ppr_filter_gde_changed_cb),
