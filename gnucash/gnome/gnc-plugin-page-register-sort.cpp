@@ -36,7 +36,7 @@
 #include <glib/gi18n.h>
 
 #include "gnc-plugin-page-register.h"
-#include "gnc-plugin-page-register-sort.h"
+#include "gnc-plugin-page-register-sort.hpp"
 #include "dialog-utils.h"
 #include "gnc-state.h"
 #include "gnc-prefs.h"
@@ -52,6 +52,10 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DEFAULT_SORT_ORDER "BY_STANDARD"
 
+extern "C"
+{
+// These functions are the dialog callbacks. They're connected to their
+// signals in gnc-plugin-page-register.glade so they mustn't be name-mangled.
 void
 gnc_ppr_sort_response_cb (GtkDialog* dialog,
                           gint response,
@@ -68,6 +72,7 @@ gnc_ppr_sort_order_save_cb (GtkToggleButton* button,
 void
 gnc_ppr_sort_order_reverse_cb (GtkToggleButton* button,
                                GncPluginPageRegister *page);
+}
 
 static void
 gnc_ppr_check_for_empty_group (GKeyFile *state_file,
@@ -185,19 +190,20 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
     GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (plugin_page);
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
 
+    sd->save_order = FALSE;
+
     // Set the sort direction for the split register and status of save order button
     sd->reverse_order = gnc_ppr_sort_get_reversed (gsr);
 
     PINFO("Loaded Sort reversed order is %s", sd->reverse_order ? "true" : "false");
 
-    gnc_split_reg_set_sort_reversed (gsr, sd->reverse_order, FALSE);
+    gnc_split_reg_set_sort_reversed (gsr, sd->reverse_order, no_refresh);
     if (sd->reverse_order)
         sd->save_order = TRUE;
 
     sd->original_reverse_order = sd->reverse_order;
 
     // Set the sort order for the split register and status of save order button
-    sd->save_order = FALSE;
     gchar* order = gnc_ppr_sort_get_order (gsr);
 
     PINFO("Loaded Sort order is %s", order);
@@ -257,7 +263,7 @@ gnc_ppr_sort_book_option_changed (gpointer new_val,
 
     GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
 
-    gnc_split_reg_sort (gsr, gsr->sort_type, force, refresh);
+    gnc_split_reg_sort (gsr, (SortType)gsr->sort_type, force, refresh);
 }
 
 /** This function is called when the "Sort By…" dialog is closed.
@@ -413,9 +419,6 @@ gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
 {
     GtkWidget* dialog, *button;
     GtkBuilder* builder;
-    SortType sort;
-    const gchar* name;
-    gchar* title;
 
     /* Create the dialog */
     builder = gtk_builder_new();
@@ -425,7 +428,7 @@ gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
                                   gnc_window_get_gtk_window (GNC_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window)));
     /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_ ("Sort %s by…"),
+    gchar* title = g_strdup_printf (_ ("Sort %s by…"),
                              gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE(plugin_page)));
     gtk_window_set_title (GTK_WINDOW(dialog), title);
     g_free (title);
@@ -433,8 +436,8 @@ gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
     GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (plugin_page);
 
     /* Set the button for the current sort order */
-    sort = gnc_split_reg_get_sort_type (gsr);
-    name = SortTypeasString (sort);
+    SortType sort = gnc_split_reg_get_sort_type (gsr);
+    const gchar* name = SortTypeasString (sort);
     button = GTK_WIDGET(gtk_builder_get_object (builder, name));
     DEBUG("current sort %d, button %s(%p)", sort, name, button);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);

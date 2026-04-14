@@ -1,5 +1,5 @@
 /**********************************************************************
- * gnc-plugin-page-register-filter.c -- register page filter          *
+ * gnc-plugin-page-register-filter.cpp -- register page filter        *
  *                                                                    *
  * Copyright (C) 2026, Robert Fewell                                  *
  *                                                                    *
@@ -25,7 +25,7 @@
     @{ */
 /** @addtogroup RegisterPlugin Register Page Filter
     @{ */
-/** @file gnc-plugin-page-register-filter.c
+/** @file gnc-plugin-page-register-filter.cpp
     @brief  Functions providing a register page filter for the GnuCash UI
     @author Copyright (C) 2026 Bob Fewell
 */
@@ -49,15 +49,18 @@
 #include "Query.h"
 
 #include "gnc-plugin-page-register.h"
-#include "gnc-plugin-page-register-filter.h"
+#include "gnc-plugin-page-register-filter.hpp"
 
 #define DEFAULT_FILTER_NUM_DAYS_GL  "30"
-#define CLEARED_VALUE "cleared_value"
 #define DEFAULT_FILTER "0x001f"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+extern "C"
+{
+// These functions are the dialog callbacks. They're connected to their
+// signals in gnc-plugin-page-register.glade so they mustn't be name-mangled.
 void
 gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
                                 GncPluginPageRegister* page);
@@ -86,6 +89,7 @@ gnc_ppr_filter_save_cb (GtkToggleButton* button,
 void
 gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
                                 GncPluginPageRegister* page);
+}
 
 struct status_action
 {
@@ -580,11 +584,10 @@ gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
     ENTER("toggle button %s (%p), plugin_page %p", name, button, page);
 
     FilterData *fd = gnc_plugin_page_register_get_filter_data (GNC_PLUGIN_PAGE(page));
-    gint i, value;
 
     /* Determine what status bit to change */
-    value = CLEARED_NONE;
-    for (i = 0; status_actions[i].action_name; i++)
+    int value = CLEARED_NONE;
+    for (int i = 0; status_actions[i].action_name; i++)
     {
         if (g_strcmp0 (name, status_actions[i].action_name) == 0)
         {
@@ -618,7 +621,6 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
                                      GncPluginPageRegister* page)
 {
     GtkWidget* widget;
-    gint i;
 
     g_return_if_fail (GTK_IS_BUTTON(button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
@@ -628,7 +630,7 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
     FilterData *fd = gnc_plugin_page_register_get_filter_data (GNC_PLUGIN_PAGE(page));
 
     /* Turn on all the check menu items */
-    for (i = 0; status_actions[i].action_name; i++)
+    for (int i = 0; status_actions[i].action_name; i++)
     {
         widget = status_actions[i].widget;
         g_signal_handlers_block_by_func (widget,
@@ -658,7 +660,6 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
                                     GncPluginPageRegister* page)
 {
     GtkWidget* widget;
-    gint i;
 
     g_return_if_fail (GTK_IS_BUTTON(button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
@@ -668,7 +669,7 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
     FilterData *fd = gnc_plugin_page_register_get_filter_data (GNC_PLUGIN_PAGE(page));
 
     /* Turn off all the check menu items */
-    for (i = 0; status_actions[i].action_name; i++)
+    for (int i = 0; status_actions[i].action_name; i++)
     {
         widget = status_actions[i].widget;
         g_signal_handlers_block_by_func (widget,
@@ -986,7 +987,7 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
         fd->end_time = fd->original_end_time;
         fd->days = fd->original_days;
         fd->save_filter = fd->original_save_filter;
-        gnc_ppr_filter_update_date_query (GNC_PLUGIN_PAGE(page));;
+        gnc_ppr_filter_update_date_query (GNC_PLUGIN_PAGE(page));
     }
     else
     {
@@ -1051,8 +1052,6 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
     time64 start_time, end_time, time_val;
     GtkBuilder* builder;
     gboolean sensitive, value;
-    gchar* title;
-    int i;
 
     /* Create the dialog */
     builder = gtk_builder_new();
@@ -1066,13 +1065,13 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
                                   gnc_window_get_gtk_window (GNC_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window)));
 
     /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_ ("Filter %s by…"),
-                             gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE(plugin_page)));
+    gchar* title = g_strdup_printf (_ ("Filter %s by…"),
+                       gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE(plugin_page)));
     gtk_window_set_title (GTK_WINDOW(dialog), title);
     g_free (title);
 
     /* Set the check buttons for the current status */
-    for (i = 0; status_actions[i].action_name; i++)
+    for (int i = 0; status_actions[i].action_name; i++)
     {
         toggle = GTK_WIDGET(gtk_builder_get_object (builder,
                                                      status_actions[i].action_name));
