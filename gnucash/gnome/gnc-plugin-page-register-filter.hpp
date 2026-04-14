@@ -40,25 +40,12 @@
 
 struct FilterData
 {
-    GtkWidget* dialog;
-    GtkWidget* table;
-    GtkWidget* start_date_choose;
-    GtkWidget* start_date_today;
-    GtkWidget* start_date;
-    GtkWidget* end_date_choose;
-    GtkWidget* end_date_today;
-    GtkWidget* end_date;
-    GtkWidget* num_days;
-    cleared_match_t original_cleared_match;
+    GtkWidget*      dialog;
     cleared_match_t cleared_match;
-    time64 original_start_time;
-    time64 original_end_time;
-    time64 start_time;
-    time64 end_time;
-    int days;
-    int original_days;
-    bool original_save_filter;
-    bool save_filter;
+    time64          start_time;
+    time64          end_time;
+    int             days;
+    bool            save_filter;
 };
 
 void gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, struct FilterData *fd);
