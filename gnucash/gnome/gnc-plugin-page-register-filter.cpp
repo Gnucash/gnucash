@@ -48,11 +48,18 @@
 #include "qof.h"
 #include "Query.h"
 
+#include <algorithm>
+#include <cstdio>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-page-register-filter.hpp"
 
-#define DEFAULT_FILTER_NUM_DAYS_GL  "30"
-#define DEFAULT_FILTER "0x001f"
+static std::string DEFAULT_FILTER_NUM_DAYS_GL = "30";
+static std::string DEFAULT_FILTER = "0x001f";
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -120,7 +127,7 @@ bool_to_gboolean (bool value)
     return value ? TRUE : FALSE;
 }
 
-static const gchar*
+static std::string
 get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
 {
     if (ledger_type == LD_GL)
@@ -130,31 +137,31 @@ get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
 }
 
 /* This function converts a time64 value date to a string */
-static gchar*
+static std::string
 gnc_ppr_filter_time2dmy (time64 raw_time)
 {
     struct tm* timeinfo;
-    gchar date_string[11];
+    char date_string[11];
 
     timeinfo = gnc_localtime (&raw_time);
     strftime (date_string, 11, "%d-%m-%Y", timeinfo);
     PINFO("Date to string is %s", date_string);
     gnc_tm_free (timeinfo);
 
-    return g_strdup (date_string);
+    return (date_string);
 }
 
 /* This function converts a string date to a time64 value */
 static time64
-gnc_ppr_filter_dmy2time (char* date_string)
+gnc_ppr_filter_dmy2time (std::string date_string)
 {
     struct tm when;
 
-    PINFO("Date from string is %s", date_string);
+    PINFO("Date from string is %s", date_string.c_str());
     memset (&when, 0, sizeof (when));
 
-    sscanf (date_string, "%d-%d-%d", &when.tm_mday,
-            &when.tm_mon, &when.tm_year);
+    std::sscanf (date_string.c_str(), "%d-%d-%d", &when.tm_mday,
+                 &when.tm_mon, &when.tm_year);
 
     when.tm_mon -= 1;
     when.tm_year -= 1900;
@@ -175,11 +182,11 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
     g_strfreev (keys);
 }
 
-static gchar*
+static std::string
 gnc_ppr_filter_get_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 {
     if (!gsr)
-        return g_strdup (_("unknown"));
+        return _("unknown");
 
     // get the filter from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
@@ -188,37 +195,38 @@ gnc_ppr_filter_get_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 
     auto filter = g_key_file_get_string (state_file, state_section,
                                          KEY_PAGE_FILTER, &error);
+    std::string filter_str;
 
     if (error)
         g_clear_error (&error);
     else
-        g_strdelimit (filter, ";", ',');
+        filter_str = std::string (filter);
 
+    g_free (filter);
     g_free (state_section);
 
-    if (filter)
-        return filter;
+    if (!filter_str.empty())
+        return filter_str;
 
-    return g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
-                            "0", "0", get_filter_default_num_of_days (ledger_type));
+    return DEFAULT_FILTER + ";0;0;" + get_filter_default_num_of_days (ledger_type);
 }
 
 static void
-gnc_ppr_filter_set_filter (GNCSplitReg *gsr, const gchar* filter)
+gnc_ppr_filter_set_filter (GNCSplitReg *gsr, std::string filter)
 {
     if (!gsr)
         return;
 
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
 
-    auto default_filter = g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0",
-                                           get_filter_default_num_of_days (ledger_type));
+    std::string default_filter_str = DEFAULT_FILTER + ";0;0;" +
+                                     get_filter_default_num_of_days (ledger_type);
 
     // save the filter to the .gcm file also
     GKeyFile* state_file = gnc_state_get_current();
     auto state_section = gsr_get_register_state_section (gsr);
 
-    if (!filter || (g_strcmp0 (filter, default_filter) == 0))
+    if (filter.empty() || (filter.compare (default_filter_str) == 0))
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_FILTER, nullptr))
             g_key_file_remove_key (state_file, state_section, KEY_PAGE_FILTER, nullptr);
@@ -227,16 +235,11 @@ gnc_ppr_filter_set_filter (GNCSplitReg *gsr, const gchar* filter)
     }
     else
     {
-        auto filter_text = g_strdup (filter);
-        g_strdelimit (filter_text, ",", ';'); // make it conform to .gcm file list
         g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER,
-                               filter_text);
-        g_free (filter_text);
+                               filter.c_str());
+
     }
     g_free (state_section);
-    g_free (default_filter);
-
-    return;
 }
 
 static void
@@ -480,11 +483,25 @@ gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page)
     fd->days = 0;
     fd->start_time = 0;
     fd->end_time = 0;
-    fd->cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, nullptr, 16);
+    fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
 
     gnc_ppr_filter_update_date_query (plugin_page);
 }
- 
+
+static std::vector<std::string>
+split_filter_by_delimiter (std::string str, char delimiter)
+{
+    std::istringstream ss;
+    std::vector<std::string> res;
+    std::string token;
+    ss.str (str);
+    while (std::getline (ss, token, delimiter))
+    {
+        res.push_back (token);
+    }
+    return res;
+}
+
 void
 gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
 {
@@ -498,45 +515,45 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
     /* Set the filter for the split register and status of save filter button */
     fd->save_filter = false;
 
-    gchar* filter_str = gnc_ppr_filter_get_filter (gsr, ledger_type);
-    gchar** filter = g_strsplit (filter_str, ",", -1);
-    guint filtersize = g_strv_length (filter);
-    g_free (filter_str);
+    std::string filter_strx = gnc_ppr_filter_get_filter (gsr, ledger_type);
 
-    PINFO("Loaded Filter Status is %s", filter[0]);
+    std::vector<std::string> split_filter = split_filter_by_delimiter (filter_strx, ';');
+    int split_filter_size = split_filter.size();
 
-    fd->cleared_match = (cleared_match_t)g_ascii_strtoll (filter[0], nullptr, 16);
+    PINFO("Loaded Filter Status is %s", split_filter[0].c_str());
 
-    if (filtersize > 0 && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
+    fd->cleared_match = (cleared_match_t)std::stol (split_filter[0], nullptr, 16);
+
+    if (split_filter_size > 0 && (split_filter[0].compare (DEFAULT_FILTER)) != 0)
         filter_changed++;
 
-    if (filtersize > 1 && (g_strcmp0 (filter[1], "0") != 0))
+    if (split_filter_size > 1 && (split_filter[1].compare (std::string ("0"))) != 0)
     {
-        PINFO("Loaded Filter Start Date is %s", filter[1]);
+        PINFO("Loaded Filter Start Date is %s", split_filter[1].c_str());
 
-        fd->start_time = gnc_ppr_filter_dmy2time (filter[1]);
+        fd->start_time = gnc_ppr_filter_dmy2time (split_filter[1]);
         fd->start_time = gnc_time64_get_day_start (fd->start_time);
         filter_changed++;
     }
 
-    if (filtersize > 2 && (g_strcmp0 (filter[2], "0") != 0))
+    if (split_filter_size > 2 && (split_filter[2].compare (std::string ("0"))) != 0)
     {
-        PINFO("Loaded Filter End Date is %s", filter[2]);
+        PINFO("Loaded Filter End Date is %s", split_filter[2].c_str());
 
-        fd->end_time = gnc_ppr_filter_dmy2time (filter[2]);
+        fd->end_time = gnc_ppr_filter_dmy2time (split_filter[2]);
         fd->end_time = gnc_time64_get_day_end (fd->end_time);
         filter_changed++;
     }
 
     // set the default for the number of days
-    fd->days = (gint)g_ascii_strtoll (get_filter_default_num_of_days (ledger_type), nullptr, 10);
+    fd->days = (int)std::stol (get_filter_default_num_of_days (ledger_type), nullptr, 10);
 
-    if (filtersize > 3 &&
-        (g_strcmp0 (filter[3], get_filter_default_num_of_days (ledger_type)) != 0))
+    if (split_filter_size > 3 &&
+        (split_filter[3].compare (get_filter_default_num_of_days (ledger_type)) != 0))
     {
-        PINFO("Loaded Filter Days is %s", filter[3]);
+        PINFO("Loaded Filter Days is %s", split_filter[3].c_str());
 
-        fd->days = (gint)g_ascii_strtoll (filter[3], nullptr, 10);
+        fd->days = (int)std::stol (split_filter[3], nullptr, 10);
         filter_changed++;
     }
 
@@ -544,7 +561,6 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
         fd->save_filter = true;
 
     fd->original_save_filter = fd->save_filter;
-    g_strfreev (filter);
 
     if (ledger_type == LD_GL)
     {
@@ -559,7 +575,7 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
         else // search ledger and the like
         {
             fd->days = 0;
-            fd->cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, nullptr, 16);
+            fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
             fd->save_filter = false;
         }
 
@@ -1001,49 +1017,49 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     {
         // clear the filter when unticking the save option
         if (!fd->save_filter && fd->original_save_filter)
-            gnc_ppr_filter_set_filter (gsr, nullptr);
+            gnc_ppr_filter_set_filter (gsr, "");
 
         fd->original_save_filter = fd->save_filter;
 
         if (fd->save_filter)
         {
-            gchar *filter;
-            GList *flist = nullptr;
+            std::string save_filter_str;
+            static const size_t buffer_size = 10;
+            char buffer [buffer_size];
 
             // cleared match
-            flist = g_list_prepend
-                (flist, g_strdup_printf ("0x%04x", fd->cleared_match));
+            std::snprintf (buffer, buffer_size, "0x%04x", fd->cleared_match);
+            save_filter_str.append (buffer);
 
             // start time
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(fd->start_date_choose))
                 && fd->start_time != 0)
             {
-                flist = g_list_prepend (flist, gnc_ppr_filter_time2dmy (fd->start_time));
+                save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->start_time));
             }
             else
-                flist = g_list_prepend (flist, g_strdup ("0"));
+                save_filter_str.append (";0");
 
             // end time
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(fd->end_date_choose))
                 && fd->end_time != 0)
             {
-                flist = g_list_prepend (flist, gnc_ppr_filter_time2dmy (fd->end_time));
+                save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->end_time));
             }
             else
-                flist = g_list_prepend (flist, g_strdup ("0"));
+                save_filter_str.append (";0");
 
             // number of days
             if (fd->days > 0)
-                flist = g_list_prepend (flist, g_strdup_printf ("%d", fd->days));
+            {
+                save_filter_str.append (";" + std::to_string (fd->days));
+            }
             else
-                flist = g_list_prepend (flist, g_strdup ("0"));
+                save_filter_str.append (";0");
 
-            flist = g_list_reverse (flist);
-            filter = gnc_g_list_stringjoin (flist, ",");
-            PINFO("The filter to save is %s", filter);
-            gnc_ppr_filter_set_filter (gsr, filter);
-            g_free (filter);
-            g_list_free_full (flist, g_free);
+            PINFO("The filter to save is %s", save_filter_str.c_str());
+
+            gnc_ppr_filter_set_filter (gsr, save_filter_str);
         }
     }
     fd->dialog = nullptr;
