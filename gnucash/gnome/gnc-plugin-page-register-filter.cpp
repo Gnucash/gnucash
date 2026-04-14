@@ -49,6 +49,7 @@
 #include "Query.h"
 
 #include <algorithm>
+#include <array>
 #include <cstdio>
 #include <iostream>
 #include <sstream>
@@ -100,20 +101,19 @@ gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
 
 struct status_action
 {
-    const char* action_name;
+    std::string action_name;
     int value;
     GtkWidget* widget;
 };
 
-static struct status_action status_actions[] =
-{
+static std::array<status_action, 5> status_actions {{
     { "filter_status_reconciled",   CLEARED_RECONCILED, nullptr },
     { "filter_status_cleared",      CLEARED_CLEARED, nullptr },
     { "filter_status_voided",       CLEARED_VOIDED, nullptr },
     { "filter_status_frozen",       CLEARED_FROZEN, nullptr },
-    { "filter_status_unreconciled", CLEARED_NO, nullptr },
-    { nullptr, 0, nullptr },
-};
+    { "filter_status_unreconciled", CLEARED_NO, nullptr }
+}};
+
 #ifdef skip
 static inline bool
 gboolean_to_bool (gboolean value)
@@ -615,11 +615,11 @@ gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
 
     /* Determine what status bit to change */
     int value = CLEARED_NONE;
-    for (int i = 0; status_actions[i].action_name; i++)
+    for (const auto& action : status_actions)
     {
-        if (g_strcmp0 (name, status_actions[i].action_name) == 0)
+        if (action.action_name.compare (name) == 0)
         {
-            value = status_actions[i].value;
+            value = action.value;
             break;
         }
     }
@@ -656,13 +656,12 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
     auto fd = gnc_plugin_page_register_get_filter_data (GNC_PLUGIN_PAGE(page));
 
     /* Turn on all the check menu items */
-    for (int i = 0; status_actions[i].action_name; i++)
+    for (const auto& action : status_actions)
     {
-        auto widget = status_actions[i].widget;
-        g_signal_handlers_block_by_func (widget,
+        g_signal_handlers_block_by_func (action.widget,
                                          (gpointer)gnc_ppr_filter_status_one_cb, page);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), TRUE);
-        g_signal_handlers_unblock_by_func (widget,
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(action.widget), TRUE);
+        g_signal_handlers_unblock_by_func (action.widget,
                                            (gpointer)gnc_ppr_filter_status_one_cb, page);
     }
 
@@ -693,13 +692,12 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
     auto fd = gnc_plugin_page_register_get_filter_data (GNC_PLUGIN_PAGE(page));
 
     /* Turn off all the check menu items */
-    for (int i = 0; status_actions[i].action_name; i++)
+    for (const auto& action : status_actions)
     {
-        auto widget = status_actions[i].widget;
-        g_signal_handlers_block_by_func (widget,
+        g_signal_handlers_block_by_func (action.widget,
                                          (gpointer)gnc_ppr_filter_status_one_cb, page);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
-        g_signal_handlers_unblock_by_func (widget,
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(action.widget), FALSE);
+        g_signal_handlers_unblock_by_func (action.widget,
                                            (gpointer)gnc_ppr_filter_status_one_cb, page);
     }
 
@@ -1092,12 +1090,12 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
     g_free (title);
 
     /* Set the check buttons for the current status */
-    for (int i = 0; status_actions[i].action_name; i++)
+    for (auto& action : status_actions)
     {
         auto toggle = GTK_WIDGET(gtk_builder_get_object (builder,
-                                                     status_actions[i].action_name));
-        bool value = fd->cleared_match & status_actions[i].value;
-        status_actions[i].widget = toggle;
+                                                         action.action_name.c_str()));
+        bool value = fd->cleared_match & action.value;
+        action.widget = toggle;
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(toggle), bool_to_gboolean (value));
     }
     fd->original_cleared_match = fd->cleared_match;
