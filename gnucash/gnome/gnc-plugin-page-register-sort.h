@@ -54,13 +54,7 @@ typedef struct sort_data
     gboolean   original_reverse_order;
 } SortData;
 
-#define DEFAULT_SORT_ORDER "BY_STANDARD"
-
-gboolean gnc_ppr_sort_get_reversed (GNCSplitReg *gsr);
-void gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order);
-
-gchar* gnc_ppr_sort_get_order (GNCSplitReg *gsr);
-void gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order);
+void gnc_ppr_sort_update_register (GncPluginPage* plugin_page);
 
 void gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
                           SortData *sd, gboolean show_save_button);
