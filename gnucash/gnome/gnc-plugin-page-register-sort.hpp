@@ -40,14 +40,10 @@
 
 struct SortData
 {
-    GtkWidget* dialog;
-    GtkWidget* num_radio;
-    GtkWidget* act_radio;
-    SortType   original_sort_type;
-    bool       original_save_order;
-    bool       save_order;
-    bool       reverse_order;
-    bool       original_reverse_order;
+    GtkWidget*    dialog;
+    SortType      sort_type;
+    bool          reverse_order;
+    bool          save_order;
 };
 
 void gnc_ppr_sort_update_register (GncPluginPage* plugin_page);

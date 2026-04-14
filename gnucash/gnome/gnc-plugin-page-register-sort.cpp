@@ -55,6 +55,21 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 static std::string DEFAULT_SORT_ORDER = "BY_STANDARD";
 
+struct RegisterSortDialog
+{
+    GncPluginPage* plugin_page;
+    SplitRegister* reg;
+    GtkWidget*     dialog;
+    GtkWidget*     num_radio;
+    GtkWidget*     act_radio;
+
+    SortType       original_sort_type;
+    bool           original_reverse_order;
+    bool           original_save_order;
+
+    bool           show_save_button;
+};
+
 extern "C"
 {
 // These functions are the dialog callbacks. They're connected to their
@@ -62,19 +77,19 @@ extern "C"
 void
 gnc_ppr_sort_response_cb (GtkDialog* dialog,
                           gint response,
-                          GncPluginPageRegister *page);
+                          RegisterSortDialog *rsd);
 
 void
 gnc_ppr_sort_button_cb (GtkToggleButton* button,
-                        GncPluginPageRegister *page);
+                        RegisterSortDialog *rsd);
 
 void
 gnc_ppr_sort_order_save_cb (GtkToggleButton* button,
-                            GncPluginPageRegister *page);
+                            RegisterSortDialog *rsd);
 
 void
 gnc_ppr_sort_order_reverse_cb (GtkToggleButton* button,
-                               GncPluginPageRegister *page);
+                               RegisterSortDialog *rsd);
 }
 
 static inline bool
@@ -196,6 +211,11 @@ gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, bool reverse_order)
     g_free (state_section);
 }
 
+/** This function is called to update the register.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this sort order dialog.
+ */
 void
 gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
 {
@@ -216,19 +236,17 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
     if (sd->reverse_order)
         sd->save_order = true;
 
-    sd->original_reverse_order = sd->reverse_order;
-
     // Set the sort order for the split register and status of save order button
-    std::string sort_order = gnc_ppr_sort_get_order (gsr);
+    std::string sort_type = gnc_ppr_sort_get_order (gsr);
 
-    PINFO("Loaded Sort order is %s", sort_order.c_str());
+    PINFO("Loaded Sort type is %s", sort_type.c_str());
 
-    gnc_split_reg_sort (gsr, SortTypefromString (sort_order.c_str()), no_force, no_refresh);
+    SortType type = SortTypefromString (sort_type.c_str());
 
-    if (sort_order.compare (DEFAULT_SORT_ORDER) != 0)
+    gnc_split_reg_sort (gsr, type, no_force, no_refresh);
+
+    if (sort_type.compare (DEFAULT_SORT_ORDER) != 0)
         sd->save_order = true;
-
-    sd->original_save_order = sd->save_order;
 
     if (ledger_type == LD_GL)
     {
@@ -250,32 +268,29 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
  *
  *  @param new_val A pointer to the boolean for the new value of the book option.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this sort order dialog.
+ *  @param user_data A pointer to the sort dialog structure.
  */
 static void
 gnc_ppr_sort_book_option_changed (gpointer new_val,
                                   gpointer user_data)
 {
-    GncPluginPageRegister *page = GNC_PLUGIN_PAGE_REGISTER(user_data);
+    RegisterSortDialog *rsd = (RegisterSortDialog*)user_data;
     gboolean* new_data = (gboolean*)new_val;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
-
-    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rsd->plugin_page));
 
     if (*new_data)
     {
-        gtk_button_set_label (GTK_BUTTON(sd->num_radio), _("Transaction Number"));
-        gtk_button_set_label (GTK_BUTTON(sd->act_radio), _("Number/Action"));
+        gtk_button_set_label (GTK_BUTTON(rsd->num_radio), _("Transaction Number"));
+        gtk_button_set_label (GTK_BUTTON(rsd->act_radio), _("Number/Action"));
     }
     else
     {
-        gtk_button_set_label (GTK_BUTTON(sd->num_radio), _("Number"));
-        gtk_button_set_label (GTK_BUTTON(sd->act_radio), _("Action"));
+        gtk_button_set_label (GTK_BUTTON(rsd->num_radio), _("Number"));
+        gtk_button_set_label (GTK_BUTTON(rsd->act_radio), _("Action"));
     }
 
-    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto gsr = gnc_plugin_page_register_get_gsr (rsd->plugin_page);
 
     gnc_split_reg_sort (gsr, (SortType)gsr->sort_type, force, refresh);
 }
@@ -288,56 +303,60 @@ gnc_ppr_sort_book_option_changed (gpointer new_val,
  *
  *  @param response A numerical value indicating why the dialog box was closed.
  *
- *  @param page A pointer to the GncPluginPageRegister associated with
- *  this dialog box.
+ *  @param rsd A pointer to the sort dialog structure.
  */
 void
 gnc_ppr_sort_response_cb (GtkDialog* dialog,
                           gint response,
-                          GncPluginPageRegister *page)
+                          RegisterSortDialog *rsd)
 {
     g_return_if_fail (GTK_IS_DIALOG(dialog));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rsd->plugin_page));
 
     ENTER(" ");
 
-    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
-    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (rsd->plugin_page);
+    auto gsr = gnc_plugin_page_register_get_gsr (rsd->plugin_page);
 
     if (response != GTK_RESPONSE_OK)
     {
-        /* Restore the original sort order */
-        gnc_split_reg_set_sort_reversed (gsr, sd->original_reverse_order, no_refresh);
-        sd->reverse_order = sd->original_reverse_order;
-        gnc_split_reg_sort (gsr, sd->original_sort_type, no_force, refresh);
-        sd->save_order = sd->original_save_order;
+        // Restore the original sort order
+        gnc_split_reg_set_sort_reversed (gsr, rsd->original_reverse_order, no_refresh);
+        sd->reverse_order = rsd->original_reverse_order;
+        // use force as sort_type may still be the same if only reverse_order changed
+        gnc_split_reg_sort (gsr, rsd->original_sort_type, force, refresh);
+        sd->sort_type = rsd->original_sort_type;
+        sd->save_order = rsd->original_save_order;
     }
     else
     {
         // clear the sort when unticking the save option
-        if ((!sd->save_order) && ((sd->original_save_order) ||
-                                  (sd->original_reverse_order)))
+        if ((!sd->save_order) && ((rsd->original_sort_type) ||
+                                  (rsd->original_reverse_order)))
         {
             gnc_ppr_sort_set_order (gsr, DEFAULT_SORT_ORDER);
             gnc_ppr_sort_set_reversed (gsr, false);
         }
-        sd->original_save_order = sd->save_order;
+        rsd->original_sort_type = sd->sort_type;
+        rsd->original_reverse_order = sd->reverse_order;
 
         if (sd->save_order)
         {
             SortType type = gnc_split_reg_get_sort_type (gsr);
-            std::string sort_order = (SortTypeasString (type));
+            std::string sort_type = (SortTypeasString (type));
 
-            gnc_ppr_sort_set_order (gsr, sort_order);
+            gnc_ppr_sort_set_order (gsr, sort_type);
             gnc_ppr_sort_set_reversed (gsr, sd->reverse_order);
         }
     }
     gnc_book_option_remove_cb (OPTION_NAME_NUM_FIELD_SOURCE,
                                gnc_ppr_sort_book_option_changed,
-                               page);
+                               (gpointer)rsd);
+    rsd->dialog = nullptr;
+    rsd->num_radio = nullptr;
+    rsd->act_radio = nullptr;
     sd->dialog = nullptr;
-    sd->num_radio = nullptr;
-    sd->act_radio = nullptr;
+    g_free (rsd);
     gtk_widget_destroy (GTK_WIDGET(dialog));
     LEAVE (" ");
 }
@@ -347,19 +366,18 @@ gnc_ppr_sort_response_cb (GtkDialog* dialog,
  *
  *  @param button The button that was toggled.
  *
- *  @param page A pointer to the GncPluginPageRegister associated with
- *  this dialog box.
+ *  @param rsd A pointer to the sort dialog structure.
  */
 void
 gnc_ppr_sort_button_cb (GtkToggleButton* button,
-                        GncPluginPageRegister *page)
+                        RegisterSortDialog *rsd)
 {
     g_return_if_fail (GTK_IS_TOGGLE_BUTTON(button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rsd->plugin_page));
 
     auto name = gtk_buildable_get_name (GTK_BUILDABLE(button));
 
-    ENTER("button %s(%p), page %p", name, button, page);
+    ENTER("button %s(%p), page %p", name, button, rsd->plugin_page);
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
     {
@@ -367,7 +385,7 @@ gnc_ppr_sort_button_cb (GtkToggleButton* button,
         return;
     }
 
-    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto gsr = gnc_plugin_page_register_get_gsr (rsd->plugin_page);
 
     SortType type = SortTypefromString (name);
     gnc_split_reg_sort (gsr, type, no_force, refresh);
@@ -379,20 +397,19 @@ gnc_ppr_sort_button_cb (GtkToggleButton* button,
  *
  *  @param button The toggle button that was changed.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this sort order dialog.
+ *  @param rsd A pointer to the sort dialog structure.
  */
 void
 gnc_ppr_sort_order_save_cb (GtkToggleButton* button,
-                            GncPluginPageRegister *page)
+                            RegisterSortDialog *rsd)
 {
     g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rsd->plugin_page));
 
-    ENTER("Save toggle button (%p), page %p", button, page);
+    ENTER("Save toggle button (%p), page %p", button, rsd->plugin_page);
 
     /* Compute the new save sort order */
-    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (rsd->plugin_page);
 
     if (gtk_toggle_button_get_active (button))
         sd->save_order = true;
@@ -406,45 +423,52 @@ gnc_ppr_sort_order_save_cb (GtkToggleButton* button,
  *
  *  @param button The toggle button that was changed.
  *
- *  @param page A pointer to the GncPluginPageRegister that is
- *  associated with this sort order dialog.
+ *  @param rsd A pointer to the sort dialog structure.
  */
 void
 gnc_ppr_sort_order_reverse_cb (GtkToggleButton* button,
-                               GncPluginPageRegister *page)
+                               RegisterSortDialog *rsd)
 {
     g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rsd->plugin_page));
 
-    ENTER("Reverse toggle button (%p), page %p", button, page);
+    ENTER("Reverse toggle button (%p), page %p", button, rsd->plugin_page);
 
     /* Compute the new save sort order */
-    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
-    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (rsd->plugin_page);
+    auto gsr = gnc_plugin_page_register_get_gsr (rsd->plugin_page);
 
     sd->reverse_order = gtk_toggle_button_get_active (button);
     gnc_split_reg_set_sort_reversed (gsr, sd->reverse_order, refresh);
     LEAVE (" ");
 }
 
-void
-gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
-                     SortData *sd, bool show_save_button)
+/** This function is called to create the sort dialog.
+ *
+ *  @param rsd A pointer to the sort dialog structure.
+ * 
+ *  @param sd The sort data structure for remembering state.
+ */
+static void
+gnc_ppr_sort_dialog_create (RegisterSortDialog *rsd, SortData *sd)
 {
     /* Create the dialog */
     auto builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "sort_by_dialog");
     auto dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sort_by_dialog"));
-    sd->dialog = dialog;
+    rsd->dialog = dialog;
+    sd->dialog = rsd->dialog;
+
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
-                                  gnc_window_get_gtk_window (GNC_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window)));
+                                  gnc_window_get_gtk_window (GNC_WINDOW(
+                                      GNC_PLUGIN_PAGE(rsd->plugin_page)->window)));
     /* Translators: The %s is the name of the plugin page */
-    auto title = g_strdup_printf (_ ("Sort %s by…"),
-                           gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE(plugin_page)));
+    auto title = g_strdup_printf (_("Sort %s by…"),
+                           gnc_plugin_page_get_page_name (rsd->plugin_page));
     gtk_window_set_title (GTK_WINDOW(dialog), title);
     g_free (title);
 
-    auto gsr = gnc_plugin_page_register_get_gsr (plugin_page);
+    auto gsr = gnc_plugin_page_register_get_gsr (rsd->plugin_page);
 
     /* Set the button for the current sort order */
     SortType sort = gnc_split_reg_get_sort_type (gsr);
@@ -452,36 +476,38 @@ gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
     auto button = GTK_WIDGET(gtk_builder_get_object (builder, name));
     DEBUG("current sort %d, button %s(%p)", sort, name, button);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
-    sd->original_sort_type = sort;
+    rsd->original_sort_type = sort;
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
     if (sd->save_order)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
 
+    rsd->original_save_order = sd->save_order;
+
     // hide the save button if appropriate
-    gtk_widget_set_visible (GTK_WIDGET(button), bool_to_gboolean (show_save_button));
+    gtk_widget_set_visible (GTK_WIDGET(button), bool_to_gboolean (rsd->show_save_button));
 
     /* Set the button for the current reverse_order order */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));
     if (sd->reverse_order)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
-    sd->original_reverse_order = sd->reverse_order;
+    rsd->original_reverse_order = sd->reverse_order;
 
-    sd->num_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_NUM"));
-    sd->act_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_ACTION"));
+    rsd->num_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_NUM"));
+    rsd->act_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_ACTION"));
     /* Adjust labels related to Num/Action radio buttons based on book option */
-    if (reg && !reg->use_tran_num_for_num_field)
+    if (rsd->reg && !rsd->reg->use_tran_num_for_num_field)
     {
-        gtk_button_set_label (GTK_BUTTON(sd->num_radio), _ ("Transaction Number"));
-        gtk_button_set_label (GTK_BUTTON(sd->act_radio), _ ("Number/Action"));
+        gtk_button_set_label (GTK_BUTTON(rsd->num_radio), _ ("Transaction Number"));
+        gtk_button_set_label (GTK_BUTTON(rsd->act_radio), _ ("Number/Action"));
     }
     gnc_book_option_register_cb (OPTION_NAME_NUM_FIELD_SOURCE,
                                  (GncBOCb)gnc_ppr_sort_book_option_changed,
-                                 GNC_PLUGIN_PAGE_REGISTER(plugin_page));
+                                 (gpointer)rsd);
 
     /* Wire it up */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      GNC_PLUGIN_PAGE_REGISTER(plugin_page));
+                                      rsd);
 
     /* Show it */
     gtk_widget_show (dialog);
@@ -489,3 +515,32 @@ gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
     LEAVE (" ");
 }
 
+/** This function is called for the sort dialog.
+ *
+ *  @param plugin_page  A pointer to the GncPluginPageRegister that is
+ *  associated with this sort dialog.
+ * 
+ *  @param reg A pointer to the SplitRegister of the current register.
+ * 
+ *  @param fd A pointer to the sort data structure for remembering state.
+ *
+ *  @param show_save_button Set to True to show save button.
+ */
+void
+gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
+                     SortData *sd, bool show_save_button)
+{
+    RegisterSortDialog *rsd;
+
+    ENTER(" ");
+
+    rsd = g_new0 (RegisterSortDialog, 1);
+
+    rsd->plugin_page = plugin_page;
+    rsd->reg = reg;
+    rsd->show_save_button = show_save_button;
+
+    gnc_ppr_sort_dialog_create (rsd, sd);
+
+    LEAVE(" ");
+}
