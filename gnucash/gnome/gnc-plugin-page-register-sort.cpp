@@ -79,7 +79,7 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
                                const gchar *state_section)
 {
     gsize num_keys;
-    gchar **keys = g_key_file_get_keys (state_file, state_section, &num_keys, NULL);
+    gchar **keys = g_key_file_get_keys (state_file, state_section, &num_keys, nullptr);
 
     if (num_keys == 0)
         gnc_state_drop_sections_for (state_section);
@@ -96,8 +96,8 @@ gnc_ppr_sort_get_order (GNCSplitReg *gsr)
     // get the sort_order from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section = gsr_get_register_state_section (gsr);
-    GError* error = NULL;
-    gchar* sort_order = NULL;
+    GError* error = nullptr;
+    gchar* sort_order = nullptr;
 
     gchar* sort_text = g_key_file_get_string (state_file, state_section,
                                               KEY_PAGE_SORT, &error);
@@ -126,8 +126,8 @@ gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
 
     if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
     {
-        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, NULL))
-            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT, NULL);
+        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, nullptr))
+            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT, nullptr);
 
         gnc_ppr_check_for_empty_group (state_file, state_section);
     }
@@ -146,7 +146,7 @@ gnc_ppr_sort_get_reversed (GNCSplitReg *gsr)
     // get the sort_reversed from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section = gsr_get_register_state_section (gsr);
-    GError* error = NULL;
+    GError* error = nullptr;
     gboolean sort_reversed = g_key_file_get_boolean (state_file, state_section,
                                                      KEY_PAGE_SORT_REV, &error);
 
@@ -169,8 +169,8 @@ gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order)
 
     if (!reverse_order)
     {
-        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL))
-            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL);
+        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT_REV, nullptr))
+            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT_REV, nullptr);
 
         gnc_ppr_check_for_empty_group (state_file, state_section);
     }
@@ -321,9 +321,9 @@ gnc_ppr_sort_response_cb (GtkDialog* dialog,
     gnc_book_option_remove_cb (OPTION_NAME_NUM_FIELD_SOURCE,
                                gnc_ppr_sort_book_option_changed,
                                page);
-    sd->dialog = NULL;
-    sd->num_radio = NULL;
-    sd->act_radio = NULL;
+    sd->dialog = nullptr;
+    sd->num_radio = nullptr;
+    sd->act_radio = nullptr;
     gtk_widget_destroy (GTK_WIDGET(dialog));
     LEAVE (" ");
 }
