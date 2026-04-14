@@ -51,29 +51,41 @@
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-page-register-filter.h"
 
+#define DEFAULT_FILTER_NUM_DAYS_GL  "30"
+#define CLEARED_VALUE "cleared_value"
+#define DEFAULT_FILTER "0x001f"
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-
-void gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
-                                     GncPluginPageRegister* page);
-void gnc_ppr_filter_start_cb (GtkWidget* radio,
-                              GncPluginPageRegister* page);
-void gnc_ppr_filter_end_cb (GtkWidget* radio,
+void
+gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
+                                GncPluginPageRegister* page);
+void
+gnc_ppr_filter_start_cb (GtkWidget* radio,
+                         GncPluginPageRegister* page);
+void
+gnc_ppr_filter_end_cb (GtkWidget* radio,
+                       GncPluginPageRegister* page);
+void
+gnc_ppr_filter_response_cb (GtkDialog* dialog,
+                            gint response,
                             GncPluginPageRegister* page);
-void gnc_ppr_filter_response_cb (GtkDialog* dialog,
-                                 gint response,
-                                 GncPluginPageRegister* page);
-void gnc_ppr_filter_status_select_all_cb (GtkButton* button,
-                                          GncPluginPageRegister* page);
-void gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
-                                         GncPluginPageRegister* page);
-void gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
-                                   GncPluginPageRegister* page);
-void gnc_ppr_filter_save_cb (GtkToggleButton* button,
-                             GncPluginPageRegister* page);
-void gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
+void
+gnc_ppr_filter_status_select_all_cb (GtkButton* button,
                                      GncPluginPageRegister* page);
+void
+gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
+                                    GncPluginPageRegister* page);
+void
+gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
+                              GncPluginPageRegister* page);
+void
+gnc_ppr_filter_save_cb (GtkToggleButton* button,
+                        GncPluginPageRegister* page);
+void
+gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
+                                GncPluginPageRegister* page);
 
 struct status_action
 {
@@ -102,7 +114,7 @@ get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
 }
 
 /* This function converts a time64 value date to a string */
-gchar*
+static gchar*
 gnc_ppr_filter_time2dmy (time64 raw_time)
 {
     struct tm* timeinfo;
@@ -117,7 +129,7 @@ gnc_ppr_filter_time2dmy (time64 raw_time)
 }
 
 /* This function converts a string date to a time64 value */
-time64
+static time64
 gnc_ppr_filter_dmy2time (char* date_string)
 {
     struct tm when;
@@ -147,7 +159,7 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
     g_strfreev (keys);
 }
 
-gchar*
+static gchar*
 gnc_ppr_filter_get_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 {
     if (!gsr)
@@ -324,7 +336,7 @@ gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd)
  *  @param plugin_page A pointer to the GncPluginPageRegister that is
  *  associated with this filter dialog.
  */
-void
+static void
 gnc_ppr_filter_update_status_query (GncPluginPage* plugin_page)
 {
     ENTER(" ");
@@ -380,7 +392,7 @@ gnc_ppr_filter_update_status_query (GncPluginPage* plugin_page)
  *  @param plugin_page A pointer to the GncPluginPageRegister that is
  *  associated with this filter dialog.
  */
-void
+static void
 gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page)
 {
     ENTER(" ");
@@ -454,6 +466,95 @@ gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page)
     fd->end_time = 0;
     fd->cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
 
+    gnc_ppr_filter_update_date_query (plugin_page);
+}
+ 
+void
+gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
+{
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+    FilterData *fd = gnc_plugin_page_register_get_filter_data (plugin_page);
+    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (plugin_page);
+    GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
+    int filter_changed = 0;
+
+    /* Set the filter for the split register and status of save filter button */
+    fd->save_filter = FALSE;
+
+    gchar* filter_str = gnc_ppr_filter_get_filter (gsr, ledger_type);
+    gchar** filter = g_strsplit (filter_str, ",", -1);
+    guint filtersize = g_strv_length (filter);
+    g_free (filter_str);
+
+    PINFO("Loaded Filter Status is %s", filter[0]);
+
+    fd->cleared_match = (cleared_match_t)g_ascii_strtoll (filter[0], NULL, 16);
+
+    if (filtersize > 0 && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
+        filter_changed++;
+
+    if (filtersize > 1 && (g_strcmp0 (filter[1], "0") != 0))
+    {
+        PINFO("Loaded Filter Start Date is %s", filter[1]);
+
+        fd->start_time = gnc_ppr_filter_dmy2time (filter[1]);
+        fd->start_time = gnc_time64_get_day_start (fd->start_time);
+        filter_changed++;
+    }
+
+    if (filtersize > 2 && (g_strcmp0 (filter[2], "0") != 0))
+    {
+        PINFO("Loaded Filter End Date is %s", filter[2]);
+
+        fd->end_time = gnc_ppr_filter_dmy2time (filter[2]);
+        fd->end_time = gnc_time64_get_day_end (fd->end_time);
+        filter_changed++;
+    }
+
+    // set the default for the number of days
+    fd->days = (gint)g_ascii_strtoll (get_filter_default_num_of_days (ledger_type), NULL, 10);
+
+    if (filtersize > 3 &&
+        (g_strcmp0 (filter[3], get_filter_default_num_of_days (ledger_type)) != 0))
+    {
+        PINFO("Loaded Filter Days is %s", filter[3]);
+
+        fd->days = (gint)g_ascii_strtoll (filter[3], NULL, 10);
+        filter_changed++;
+    }
+
+    if (filter_changed != 0)
+        fd->save_filter = TRUE;
+
+    fd->original_save_filter = fd->save_filter;
+    g_strfreev (filter);
+
+    if (ledger_type == LD_GL)
+    {
+        SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+        time64 start_time = 0, end_time = 0;
+
+        if (reg->type == GENERAL_JOURNAL)
+        {
+            start_time = fd->start_time;
+            end_time = fd->end_time;
+        }
+        else // search ledger and the like
+        {
+            fd->days = 0;
+            fd->cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
+            fd->save_filter = FALSE;
+        }
+
+        fd->original_days = fd->days;
+        fd->original_start_time = start_time;
+        fd->start_time = start_time;
+        fd->original_end_time = end_time;
+        fd->end_time = end_time;
+    }
+    /* Update Query with Filter Status and Dates */
+    gnc_ppr_filter_update_status_query (plugin_page);
     gnc_ppr_filter_update_date_query (plugin_page);
 }
 

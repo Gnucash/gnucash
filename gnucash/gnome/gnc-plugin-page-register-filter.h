@@ -65,26 +65,14 @@ typedef struct filter_data
     gboolean save_filter;
 }FilterData;
 
-#define DEFAULT_FILTER_NUM_DAYS_GL  "30"
-#define CLEARED_VALUE "cleared_value"
-#define DEFAULT_FILTER "0x001f"
-
-time64 gnc_ppr_filter_dmy2time (char* date_string);
-gchar* gnc_ppr_filter_time2dmy (time64 raw_time);
-
-gchar* gnc_ppr_filter_get_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type);
-//void gnc_ppr_filter_set_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type, const gchar* filter);
-
-
-void gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page);
-void gnc_ppr_filter_update_status_query (GncPluginPage* plugin_page);
-
 void gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd);
 
 void gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page);
 
-void gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query, FilterData *fd, gboolean show_save_button);
+void gnc_ppr_filter_update_register (GncPluginPage* plugin_page);
 
+void gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
+                        FilterData *fd, gboolean show_save_button);
 
 #ifdef __cplusplus
 }

@@ -1060,17 +1060,6 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
                                        (gpointer)gnc_plugin_page_register_cmd_style_double_line, page);
 }
 
-/* Virtual Functions */
-//FIXME ??
-static const gchar*
-get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
-{
-    if (ledger_type == LD_GL)
-        return DEFAULT_FILTER_NUM_DAYS_GL;
-    else
-        return "0";
-}
-
 /* For setting the focus on a register page, the default gnc_plugin
  * function for 'focus_page' is overridden so that the page focus
  * can be conditionally set. This is to allow for enabling the setting
@@ -1114,19 +1103,36 @@ gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
         gnc_ledger_display_set_focus (priv->ledger, priv->page_focus);
 }
 
+static void
+gnc_ppr_update_filter_and_sort (GncPluginPage* plugin_page)
+{
+    GncPluginPageRegister *page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+    GncPluginPageRegisterPrivate *priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+    ENTER("page %p", plugin_page);
+
+    priv->enable_refresh = FALSE; // disable refresh
+
+    // Load the saved register sort and filter properties
+    gnc_ppr_sort_update_register (plugin_page);
+    gnc_ppr_filter_update_register (plugin_page);
+
+    priv->enable_refresh = TRUE; // enable refresh
+
+    // Set filter tooltip for summary bar
+    gnc_ppr_filter_set_tooltip (plugin_page, &priv->fd);
+}
+
 static GtkWidget*
 gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 {
     GncPluginPageRegister* page;
     GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
     GncWindow* gnc_window;
     guint numRows;
     GtkWidget* gsr;
     SplitRegister* reg;
     Account* acct;
-    gchar* order;
-    int filter_changed = 0;
 
     ENTER ("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
@@ -1153,7 +1159,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
                              gnc_window_get_gtk_window (gnc_window),
                              numRows, priv->read_only);
     priv->gsr = (GNCSplitReg *)gsr;
-    g_object_ref(gsr);
+    g_object_ref (gsr);
 
     gtk_widget_show (gsr);
     gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
@@ -1173,123 +1179,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     gnc_plugin_page_register_ui_initial_state (page);
     gnc_plugin_page_register_ui_update (NULL, page);
 
-    ledger_type = gnc_ledger_display_type (priv->ledger);
-
-    {
-        gchar** filter;
-        gchar* filter_str;
-        guint filtersize = 0;
-        /* Set the sort order for the split register and status of save order button */
-        priv->sd.save_order = FALSE;
-        order = gnc_ppr_sort_get_order (priv->gsr);
-
-        PINFO ("Loaded Sort order is %s", order);
-        gnc_split_reg_sort (priv->gsr, SortTypefromString (order), no_force, no_refresh);
-
-        if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
-            priv->sd.save_order = TRUE;
-
-        priv->sd.original_save_order = priv->sd.save_order;
-        g_free (order);
-
-        priv->sd.reverse_order = gnc_ppr_sort_get_reversed (priv->gsr);
-
-        gnc_split_reg_set_sort_reversed (priv->gsr, priv->sd.reverse_order, no_refresh);
-        if (priv->sd.reverse_order)
-            priv->sd.save_order = TRUE;
-
-        priv->sd.original_reverse_order = priv->sd.reverse_order;
-
-        /* Set the filter for the split register and status of save filter button */
-        priv->fd.save_filter = FALSE;
-
-        filter_str = gnc_ppr_filter_get_filter (priv->gsr, ledger_type);
-        filter = g_strsplit (filter_str, ",", -1);
-        filtersize = g_strv_length (filter);
-        g_free (filter_str);
-
-        PINFO ("Loaded Filter Status is %s", filter[0]);
-
-        priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (filter[0], NULL, 16);
-
-        if (filtersize > 0 && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
-            filter_changed = filter_changed + 1;
-
-        if (filtersize > 1 && (g_strcmp0 (filter[1], "0") != 0))
-        {
-            PINFO ("Loaded Filter Start Date is %s", filter[1]);
-
-            priv->fd.start_time = gnc_ppr_filter_dmy2time (filter[1]);
-            priv->fd.start_time = gnc_time64_get_day_start (priv->fd.start_time);
-            filter_changed = filter_changed + 1;
-        }
-
-        if (filtersize > 2 && (g_strcmp0 (filter[2], "0") != 0))
-        {
-            PINFO ("Loaded Filter End Date is %s", filter[2]);
-
-            priv->fd.end_time = gnc_ppr_filter_dmy2time (filter[2]);
-            priv->fd.end_time = gnc_time64_get_day_end (priv->fd.end_time);
-            filter_changed = filter_changed + 1;
-        }
-
-        // set the default for the number of days
-        priv->fd.days = (gint)g_ascii_strtoll (
-                            get_filter_default_num_of_days (ledger_type), NULL, 10);
-
-        if (filtersize > 3 &&
-            (g_strcmp0 (filter[3], get_filter_default_num_of_days (ledger_type)) != 0))
-        {
-            PINFO ("Loaded Filter Days is %s", filter[3]);
-
-            priv->fd.days = (gint)g_ascii_strtoll (filter[3], NULL, 10);
-            filter_changed = filter_changed + 1;
-        }
-
-        if (filter_changed != 0)
-            priv->fd.save_filter = TRUE;
-
-        priv->fd.original_save_filter = priv->fd.save_filter;
-        g_strfreev (filter);
-    }
-
-    if (ledger_type == LD_GL)
-    {
-        time64 start_time = 0, end_time = 0;
-
-        if (reg->type == GENERAL_JOURNAL)
-        {
-            start_time = priv->fd.start_time;
-            end_time = priv->fd.end_time;
-        }
-        else // search ledger and the like
-        {
-            priv->fd.days = 0;
-            priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
-            gnc_split_reg_sort (priv->gsr, SortTypefromString (DEFAULT_SORT_ORDER), no_force, no_refresh);
-            priv->sd.reverse_order = FALSE;
-            priv->fd.save_filter = FALSE;
-            priv->sd.save_order = FALSE;
-        }
-
-        priv->fd.original_days = priv->fd.days;
-
-        priv->fd.original_start_time = start_time;
-        priv->fd.start_time = start_time;
-        priv->fd.original_end_time = end_time;
-        priv->fd.end_time = end_time;
-    }
-
-    priv->enable_refresh = FALSE; // disable refresh
-
-    /* Update Query with Filter Status and Dates */
-    gnc_ppr_filter_update_status_query (plugin_page);
-    gnc_ppr_filter_update_date_query (plugin_page);
-
-    priv->enable_refresh = TRUE; // enable refresh
-
-    // Set filter tooltip for summary bar
-    gnc_ppr_filter_set_tooltip (plugin_page, &priv->fd);
+    // Now setup the sort and filter settings
+    gnc_ppr_update_filter_and_sort (plugin_page);
 
     plugin_page->summarybar = gsr_create_summary_bar (priv->gsr);
     if (plugin_page->summarybar)
@@ -2015,7 +1906,8 @@ gnc_plugin_page_register_update_for_search_query (GncPluginPageRegister* page)
 }
 
 void
-gnc_plugin_register_set_enable_refresh (GncPluginPageRegister* page, gboolean enable_refresh)
+gnc_plugin_register_set_enable_refresh (GncPluginPageRegister* page,
+                                        gboolean enable_refresh)
 {
     GncPluginPageRegisterPrivate* priv;
 

@@ -50,6 +50,8 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+#define DEFAULT_SORT_ORDER "BY_STANDARD"
+
 void
 gnc_ppr_sort_response_cb (GtkDialog* dialog,
                           gint response,
@@ -80,7 +82,7 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
     g_strfreev (keys);
 }
 
-gchar*
+static gchar*
 gnc_ppr_sort_get_order (GNCSplitReg *gsr)
  {
     if (!gsr)
@@ -107,7 +109,7 @@ gnc_ppr_sort_get_order (GNCSplitReg *gsr)
     return sort_order ? sort_order : g_strdup (DEFAULT_SORT_ORDER);
 }
 
-void
+static void
 gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
 {
     if (!gsr)
@@ -130,7 +132,7 @@ gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
     g_free (state_section);
 }
 
-gboolean
+static gboolean
 gnc_ppr_sort_get_reversed (GNCSplitReg *gsr)
 {
     if (!gsr)
@@ -150,7 +152,7 @@ gnc_ppr_sort_get_reversed (GNCSplitReg *gsr)
     return sort_reversed;
 }
 
-void
+static void
 gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order)
 {
     if (!gsr)
@@ -172,6 +174,53 @@ gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order)
                                 reverse_order);
 
     g_free (state_section);
+}
+
+void
+gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
+{
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+    SortData *sd = gnc_plugin_page_register_get_sort_data (plugin_page);
+    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (plugin_page);
+    GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
+
+    // Set the sort direction for the split register and status of save order button
+    sd->reverse_order = gnc_ppr_sort_get_reversed (gsr);
+
+    PINFO("Loaded Sort reversed order is %s", sd->reverse_order ? "true" : "false");
+
+    gnc_split_reg_set_sort_reversed (gsr, sd->reverse_order, FALSE);
+    if (sd->reverse_order)
+        sd->save_order = TRUE;
+
+    sd->original_reverse_order = sd->reverse_order;
+
+    // Set the sort order for the split register and status of save order button
+    sd->save_order = FALSE;
+    gchar* order = gnc_ppr_sort_get_order (gsr);
+
+    PINFO("Loaded Sort order is %s", order);
+
+    gnc_split_reg_sort (gsr, SortTypefromString (order), no_force, no_refresh);
+
+    if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
+        sd->save_order = TRUE;
+
+    sd->original_save_order = sd->save_order;
+    g_free (order);
+
+    if (ledger_type == LD_GL)
+    {
+        SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+
+        if (reg->type != GENERAL_JOURNAL) // search ledger and the like
+        {
+            gnc_split_reg_sort (gsr, SortTypefromString (DEFAULT_SORT_ORDER), no_force, no_refresh);
+            sd->reverse_order = FALSE;
+            sd->save_order = FALSE;
+        }
+    }
 }
 
 /** This function is called whenever the number source book options is changed
