@@ -95,12 +95,12 @@ gnc_ppr_sort_get_order (GNCSplitReg *gsr)
 
     // get the sort_order from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section = gsr_get_register_state_section (gsr);
+    auto state_section = gsr_get_register_state_section (gsr);
     GError* error = nullptr;
     gchar* sort_order = nullptr;
 
-    gchar* sort_text = g_key_file_get_string (state_file, state_section,
-                                              KEY_PAGE_SORT, &error);
+    auto sort_text = g_key_file_get_string (state_file, state_section,
+                                            KEY_PAGE_SORT, &error);
 
     if (error)
         g_clear_error (&error);
@@ -122,7 +122,7 @@ gnc_ppr_sort_set_order (GNCSplitReg *gsr, const gchar* sort_order)
 
     // save sort_order to the .gcm file also
     GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section = gsr_get_register_state_section (gsr);
+    auto state_section = gsr_get_register_state_section (gsr);
 
     if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
     {
@@ -145,7 +145,7 @@ gnc_ppr_sort_get_reversed (GNCSplitReg *gsr)
 
     // get the sort_reversed from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section = gsr_get_register_state_section (gsr);
+    auto state_section = gsr_get_register_state_section (gsr);
     GError* error = nullptr;
     gboolean sort_reversed = g_key_file_get_boolean (state_file, state_section,
                                                      KEY_PAGE_SORT_REV, &error);
@@ -165,7 +165,7 @@ gnc_ppr_sort_set_reversed (GNCSplitReg* gsr, gboolean reverse_order)
 
     // save reverse_order to the .gcm file also
     GKeyFile* state_file = gnc_state_get_current();
-    gchar* state_section = gsr_get_register_state_section (gsr);
+    auto state_section = gsr_get_register_state_section (gsr);
 
     if (!reverse_order)
     {
@@ -186,8 +186,8 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
 {
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
-    SortData *sd = gnc_plugin_page_register_get_sort_data (plugin_page);
-    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (plugin_page);
+    auto sd = gnc_plugin_page_register_get_sort_data (plugin_page);
+    auto gsr = gnc_plugin_page_register_get_gsr (plugin_page);
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
 
     sd->save_order = FALSE;
@@ -204,7 +204,7 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
     sd->original_reverse_order = sd->reverse_order;
 
     // Set the sort order for the split register and status of save order button
-    gchar* order = gnc_ppr_sort_get_order (gsr);
+    auto order = gnc_ppr_sort_get_order (gsr);
 
     PINFO("Loaded Sort order is %s", order);
 
@@ -218,7 +218,7 @@ gnc_ppr_sort_update_register (GncPluginPage* plugin_page)
 
     if (ledger_type == LD_GL)
     {
-        SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+        auto reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
         if (reg->type != GENERAL_JOURNAL) // search ledger and the like
         {
@@ -248,7 +248,7 @@ gnc_ppr_sort_book_option_changed (gpointer new_val,
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    SortData *sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
 
     if (*new_data)
     {
@@ -261,7 +261,7 @@ gnc_ppr_sort_book_option_changed (gpointer new_val,
         gtk_button_set_label (GTK_BUTTON(sd->act_radio), _("Action"));
     }
 
-    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
 
     gnc_split_reg_sort (gsr, (SortType)gsr->sort_type, force, refresh);
 }
@@ -287,8 +287,8 @@ gnc_ppr_sort_response_cb (GtkDialog* dialog,
 
     ENTER(" ");
 
-    SortData *sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
-    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
+    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
 
     if (response != GTK_RESPONSE_OK)
     {
@@ -312,7 +312,7 @@ gnc_ppr_sort_response_cb (GtkDialog* dialog,
         if (sd->save_order)
         {
             SortType type = gnc_split_reg_get_sort_type (gsr);
-            const gchar* order = SortTypeasString (type);
+            auto order = SortTypeasString (type);
 
             gnc_ppr_sort_set_order (gsr, order);
             gnc_ppr_sort_set_reversed (gsr, sd->reverse_order);
@@ -343,7 +343,7 @@ gnc_ppr_sort_button_cb (GtkToggleButton* button,
     g_return_if_fail (GTK_IS_TOGGLE_BUTTON(button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    const gchar* name = gtk_buildable_get_name (GTK_BUILDABLE(button));
+    auto name = gtk_buildable_get_name (GTK_BUILDABLE(button));
 
     ENTER("button %s(%p), page %p", name, button, page);
 
@@ -353,7 +353,7 @@ gnc_ppr_sort_button_cb (GtkToggleButton* button,
         return;
     }
 
-    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
 
     SortType type = SortTypefromString (name);
     gnc_split_reg_sort (gsr, type, no_force, refresh);
@@ -378,7 +378,7 @@ gnc_ppr_sort_order_save_cb (GtkToggleButton* button,
     ENTER("Save toggle button (%p), page %p", button, page);
 
     /* Compute the new save sort order */
-    SortData *sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
 
     if (gtk_toggle_button_get_active (button))
         sd->save_order = TRUE;
@@ -405,8 +405,8 @@ gnc_ppr_sort_order_reverse_cb (GtkToggleButton* button,
     ENTER("Reverse toggle button (%p), page %p", button, page);
 
     /* Compute the new save sort order */
-    SortData *sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
-    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
+    auto sd = gnc_plugin_page_register_get_sort_data (GNC_PLUGIN_PAGE(page));
+    auto gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(page));
 
     sd->reverse_order = gtk_toggle_button_get_active (button);
     gnc_split_reg_set_sort_reversed (gsr, sd->reverse_order, refresh);
@@ -417,28 +417,25 @@ void
 gnc_ppr_sort_dialog (GncPluginPage *plugin_page, SplitRegister* reg,
                      SortData *sd, gboolean show_save_button)
 {
-    GtkWidget* dialog, *button;
-    GtkBuilder* builder;
-
     /* Create the dialog */
-    builder = gtk_builder_new();
+    auto builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "sort_by_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sort_by_dialog"));
+    auto dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sort_by_dialog"));
     sd->dialog = dialog;
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
                                   gnc_window_get_gtk_window (GNC_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window)));
     /* Translators: The %s is the name of the plugin page */
-    gchar* title = g_strdup_printf (_ ("Sort %s by…"),
-                             gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE(plugin_page)));
+    auto title = g_strdup_printf (_ ("Sort %s by…"),
+                           gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE(plugin_page)));
     gtk_window_set_title (GTK_WINDOW(dialog), title);
     g_free (title);
 
-    GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (plugin_page);
+    auto gsr = gnc_plugin_page_register_get_gsr (plugin_page);
 
     /* Set the button for the current sort order */
     SortType sort = gnc_split_reg_get_sort_type (gsr);
-    const gchar* name = SortTypeasString (sort);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, name));
+    auto name = SortTypeasString (sort);
+    auto button = GTK_WIDGET(gtk_builder_get_object (builder, name));
     DEBUG("current sort %d, button %s(%p)", sort, name, button);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
     sd->original_sort_type = sort;
