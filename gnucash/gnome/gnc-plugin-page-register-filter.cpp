@@ -718,6 +718,21 @@ gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
     LEAVE(" ");
 }
 
+static void
+set_checkbutton_with_blocking (GtkWidget *widget,
+                               GFunc function,
+                               RegisterFilterDialog *rfd,
+                               gboolean active)
+{
+    PINFO("Block GtkToggleButton %p for setting active %s\n",
+           widget, active ? "TRUE" : "FALSE");
+    g_signal_handlers_block_by_func (widget,
+                                     (gpointer)function, rfd);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), active);
+    g_signal_handlers_unblock_by_func (widget,
+                                       (gpointer)function, rfd);
+}
+
 /** This function is called whenever the "select all" status button is
  *  clicked.  It updates all of the checkbox widgets, then updates the
  *  query on the register.
@@ -740,13 +755,9 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
     /* Turn on all the check menu items */
     for (const auto& action : status_actions)
     {
-        g_signal_handlers_block_by_func (action.widget,
-                                         (gpointer)gnc_ppr_filter_status_one_cb,
-                                         rfd);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(action.widget), TRUE);
-        g_signal_handlers_unblock_by_func (action.widget,
-                                           (gpointer)gnc_ppr_filter_status_one_cb,
-                                           rfd);
+        set_checkbutton_with_blocking (action.widget,
+                                       (GFunc)gnc_ppr_filter_status_one_cb,
+                                       rfd, TRUE);
     }
 
     /* Set the requested status */
@@ -777,13 +788,9 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
     /* Turn off all the check menu items */
     for (const auto& action : status_actions)
     {
-        g_signal_handlers_block_by_func (action.widget,
-                                         (gpointer)gnc_ppr_filter_status_one_cb,
-                                         rfd);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(action.widget), FALSE);
-        g_signal_handlers_unblock_by_func (action.widget,
-                                           (gpointer)gnc_ppr_filter_status_one_cb,
-                                           rfd);
+        set_checkbutton_with_blocking (action.widget,
+                                       (GFunc)gnc_ppr_filter_status_one_cb,
+                                       rfd, FALSE);
     }
 
     /* Set the requested status */
