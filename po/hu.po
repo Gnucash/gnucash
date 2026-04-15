@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-03-28 16:09+0000\n"
+"PO-Revision-Date: 2026-04-15 06:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1343,7 +1343,7 @@ msgstr "Új főkönyv beállításai"
 
 #: gnucash/gnome/assistant-loan.cpp:126
 msgid "Taxes"
-msgstr "Adók"
+msgstr "Adó"
 
 #: gnucash/gnome/assistant-loan.cpp:126
 msgid "Tax Payment"
@@ -1351,11 +1351,11 @@ msgstr "Adó fizetése"
 
 #: gnucash/gnome/assistant-loan.cpp:127
 msgid "Insurance"
-msgstr "Kamat"
+msgstr "Biztosítás"
 
 #: gnucash/gnome/assistant-loan.cpp:127
 msgid "Insurance Payment"
-msgstr "Kamat fizetése"
+msgstr "Biztosítás fizetése"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: gnucash/gnome/assistant-loan.cpp:129
@@ -1372,7 +1372,7 @@ msgstr "Egyéb költség"
 
 #: gnucash/gnome/assistant-loan.cpp:130
 msgid "Miscellaneous Payment"
-msgstr "Egyéb fizetés"
+msgstr "Egyéb költség fizetése"
 
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
@@ -1394,7 +1394,7 @@ msgstr "Kölcsön"
 #: gnucash/gnome/assistant-loan.cpp:1483
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "%s visszafizetésének beállítása"
+msgstr "%s fizetésének beállítása"
 
 #: gnucash/gnome/assistant-loan.cpp:1885 gnucash/gnome/dialog-lot-viewer.c:985
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
@@ -1456,11 +1456,11 @@ msgstr "Dátum"
 #: libgnucash/engine/Account.cpp:181 libgnucash/engine/gncOwner.c:836
 #: libgnucash/engine/gncOwner.c:859
 msgid "Payment"
-msgstr "Fizetés"
+msgstr "Törlesztés"
 
 #: gnucash/gnome/assistant-loan.cpp:1897 gnucash/gnome/assistant-loan.cpp:2960
 msgid "Principal"
-msgstr "Tőketartozás"
+msgstr "Tőke"
 
 #: gnucash/gnome/assistant-loan.cpp:1903 gnucash/gnome/assistant-loan.cpp:2976
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
@@ -6132,11 +6132,11 @@ msgstr ""
 
 #: gnucash/gnome/window-reconcile.cpp:575
 msgid "Interest Payment"
-msgstr "Számlakamat"
+msgstr "Jóváirt kamat"
 
 #: gnucash/gnome/window-reconcile.cpp:578
 msgid "Interest Charge"
-msgstr "Kamatdíj"
+msgstr "Terhelt kamat"
 
 #: gnucash/gnome/window-reconcile.cpp:586
 #: gnucash/gtkbuilder/dialog-vendor.glade:630
@@ -6158,16 +6158,16 @@ msgstr "Egyeztetendő számla"
 #: gnucash/gnome/window-reconcile.cpp:617
 #: gnucash/gtkbuilder/assistant-loan.glade:827
 msgid "Payment To"
-msgstr "Kifizetés ide"
+msgstr "Fizetés ide"
 
 #: gnucash/gnome/window-reconcile.cpp:881
 #: gnucash/gtkbuilder/window-reconcile.glade:218
 msgid "Enter _Interest Payment…"
-msgstr "Számla_kamat megadása…"
+msgstr "Jóváirt _kamat megadása…"
 
 #: gnucash/gnome/window-reconcile.cpp:883
 msgid "Enter _Interest Charge…"
-msgstr "_Kamatdíj megadása…"
+msgstr "Terhelt _kamat megadása…"
 
 #: gnucash/gnome/window-reconcile.cpp:1492
 msgid "Are you sure you want to delete the selected transaction?"
@@ -10157,7 +10157,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:960
 msgid "Use the system locale currency for all newly created accounts."
-msgstr "A rendszerben alapértelmezett pénznem használata minden új számlán."
+msgstr "A rendszer alapértelmezett pénznemének használata minden új számlán."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:141
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:146
@@ -10168,7 +10168,7 @@ msgid ""
 "the user's locale setting. If set to \"other\", GnuCash will use the setting "
 "specified by the currency-other key."
 msgstr ""
-"Ez a beállítás szabályozza az új számlák alapértelmezett pénznemének "
+"Ez a beállítás határozza meg az új számlák alapértelmezett pénznemének "
 "forrását. Ha a „helyi” lehetőség van bejelölve, akkor a GnuCash a rendszer "
 "alapértelmezett pénznemét használja. Ha az „egyéb” lehetőség van bejelölve, "
 "akkor a GnuCash az ott megadott pénznemet fogja használni."
@@ -10626,17 +10626,17 @@ msgstr "A naptár gombjainak megjelenítése: Mégsem, Ma és Kiválasztás."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 msgid "Move the selection to the blank split on expand"
-msgstr ""
+msgstr "Kinyitáskor vigye a kijelölést az üres felosztásra"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:338
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
-msgstr ""
+msgstr "A tranzakció kinyitásakor a kijelölés az üres felosztásra kerül."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
 msgid "Number of transactions to show in a register."
-msgstr ""
+msgstr "A regiszterben megjelenítendő tranzakciók száma."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:343
 #: gnucash/gtkbuilder/dialog-preferences.glade:3074
@@ -10649,13 +10649,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:347
 msgid "Number of characters for auto complete."
-msgstr "Betűk száma az automatikus kiegészítéshez."
+msgstr "Az automatikus kiegészítéshez beírandó karakterek száma."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:348
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
 msgstr ""
+"Ezzel állítható be, hogy a leírás, a megjegyzések és a feljegyzések mezőkben "
+"hány karakter beírása után induljon el az automatikus kiegészítés."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:355
 msgid "Create a new window for each new report"
@@ -10673,7 +10675,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:3364
 msgid "Use the system locale currency for all newly created reports."
 msgstr ""
-"A rendszerben alapértelmezett pénznem használata minden új jelentésben."
+"A rendszer alapértelmezett pénznemének használata minden új jelentésben."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:361
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:371
@@ -10683,6 +10685,10 @@ msgid ""
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
+"Ez a beállítás határozza meg a jelentésekben használt alapértelmezett "
+"pénznemet. Ha a „helyi” lehetőség van bejelölve, akkor a GnuCash a rendszer "
+"alapértelmezett pénznemét használja. Ha az „egyéb” lehetőség van bejelölve, "
+"akkor a GnuCash az ott megadott pénznemet fogja használni."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
 #: gnucash/gtkbuilder/dialog-preferences.glade:3344
@@ -10711,7 +10717,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:385
 msgid "PDF export file name format"
-msgstr ""
+msgstr "PDF exportálás fájlnevének formátuma"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:386
 msgid ""
@@ -10813,12 +10819,13 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "Ablak bezárásának megerősítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:148
 msgid "This dialog is presented when there is more than one window."
-msgstr "Ez a párbeszédablak jelenik meg, amikor egynél több ablak van."
+msgstr ""
+"Ez a párbeszédablak jelenik meg, amikor egynél több ablak van megnyitva."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
@@ -11138,7 +11145,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:129
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:262
 msgid "Jump when there are multiple other accounts"
-msgstr "Az ugrási művelet ha több másik számla van"
+msgstr "Az ugrási művelet ha több ellenszámla van"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:130
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:263
@@ -11148,13 +11155,13 @@ msgid ""
 "selected to jump to the other account."
 msgstr ""
 "Ez a párbeszédablak jelenik meg, ha egy tranzakciónál nem tud ugrani, mert "
-"az több másik számlát érintő felosztást tartalmaz. A másik számlára való "
-"ugráshoz ki kell választani egy adott felosztást."
+"az több ellenszámlát érintő felosztásokat tartalmaz. Az ellenszámlára való "
+"ugráshoz ki kell választani egy felosztást."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:134
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:267
 msgid "Jump when there are no other accounts"
-msgstr "Az ugrási művelet ha nincs másik számla"
+msgstr "Az ugrási művelet ha nincs ellenszámla"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:135
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:268
@@ -11800,10 +11807,8 @@ msgid "Miscellaneous"
 msgstr "Egyéb beállítások"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:850
-#, fuzzy
-#| msgid "<b>Commodity From</b>"
 msgid "Commodity From"
-msgstr "<b>Szimbólum</b>"
+msgstr "Szimbólum"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:898
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:56
@@ -12305,16 +12310,16 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"Ez egy lépésről lépésre módszer, egy kölcsön-visszafizetés létrehozásához a "
-"GnuCash-ban. A segédben megadhatja a kölcsön és a törlesztés részleteit. Az "
-"információkat felhasználva a megfelelő ütemezett tranzakciók elkészülnek.\n"
+"Ez egy lépésről lépésre módszer egy kölcsön-visszafizetés létrehozásához. A "
+"segédben megadhatja a kölcsön és a törlesztés részleteit. Az információkat "
+"felhasználva a megfelelő ütemezett tranzakciók elkészülnek.\n"
 "\n"
 "Ha rontott vagy később változtatni kíván, közvetlenül szerkesztheti a "
 "létrehozott ütemezett tranzakciókat."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:114
 msgid "Loan / Mortgage Repayment Setup"
-msgstr "Kölcsön / Jelzálogkölcsön visszafizetésének beállítása"
+msgstr "Kölcsön és jelzálogkölcsön visszafizetésének beállítása"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:130
 msgid ""
@@ -12351,7 +12356,7 @@ msgstr "Kezdődátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:181
 msgid "Length"
-msgstr "Időtartama"
+msgstr "Időtartam"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:207
 msgid "Loan Account"
@@ -12362,7 +12367,7 @@ msgid ""
 "Enter the number of months still to be paid off. This determines both the "
 "remaining principal and the duration of the scheduled transaction."
 msgstr ""
-"Adja meg a törlesztési hónapok számát. Ez meghatározza a hátralévő "
+"Adja meg a törlesztési hónapok számát. Ez meghatározza a hátralevő "
 "tőketartozás összegét és az ütemezett tranzakciók időtartamát."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:291
@@ -12389,7 +12394,7 @@ msgstr "Kamatlábváltozás időköze"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:439
 msgid "Loan Details"
-msgstr "A kölcsön részletei"
+msgstr "A kölcsön alapvető részletei"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:454
 msgid "Do you utilize an escrow account, if so an account must be specified…"
@@ -12405,7 +12410,7 @@ msgstr "Letéti számla"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:534
 msgid "Loan Repayment Options"
-msgstr "Kölcsön-visszafizetés beállítása"
+msgstr "A kölcsön további részletei"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:547
 msgid "All accounts must have valid entries to continue."
@@ -12414,11 +12419,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:587
 msgid "Principal To"
-msgstr "Tőketartozás"
+msgstr "Tőketörlesztés ide"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:626
 msgid "Interest To"
-msgstr "Fizetendő kamat"
+msgstr "Kamattörlesztés ide"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:682
 msgid "Repayment Frequency"
@@ -12426,7 +12431,7 @@ msgstr "Törlesztések időköze"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:717
 msgid "Loan Repayment"
-msgstr "A kölcsön visszafizetése"
+msgstr "A törlesztés részletei"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:730
 msgid "All enabled option pages must contain valid entries to continue."
@@ -12452,11 +12457,11 @@ msgstr "Letéti számla használata"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:943
 msgid "Part of Payment Transaction"
-msgstr "Fizetési tranzakció része"
+msgstr "Törlesztési tranzakció része"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1009
 msgid "Payment Frequency"
-msgstr "Fizetési időköz"
+msgstr "Fizetések időköze"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1035
 msgid "Previous Option"
@@ -12468,7 +12473,7 @@ msgstr "Következő beállítás"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1071
 msgid "Loan Payment"
-msgstr "Kölcsön fizetése"
+msgstr "Kapcsolódó költségek fizetése"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1084
 msgid ""
@@ -12507,15 +12512,15 @@ msgstr "Befejeződátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1247
 msgid "Loan Review"
-msgstr "Kölcsön áttekintése"
+msgstr "A kölcsön áttekintése"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1255
 msgid "Schedule added successfully."
-msgstr "Ütemezés sikeresen hozzáadva."
+msgstr "Az ütemezett tranzakciók létrehozása sikeresen megtörtént."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1261
 msgid "Loan Summary"
-msgstr "Kölcsön összefoglalása"
+msgstr "A kölcsön összefoglalása"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 msgid "QIF Import Assistant"
@@ -14388,7 +14393,7 @@ msgstr ""
 "2. Módosítsa a jelentés beállításait a saját ízlése szerint.\n"
 "3. Kattintson a Jelentések menüben a Jelentéskonfiguráció mentése [másként…] "
 "menüpontra,\n"
-" vagy a Jelentéskonfiguráció mentése [másként…] gombra az eszköztáron."
+" vagy a Mentés [másként…] gombra az eszköztáron."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:260
@@ -17219,190 +17224,190 @@ msgstr "Dátumformátum"
 #: gnucash/gtkbuilder/gnc-frequency.glade:434
 #: libgnucash/engine/Recurrence.cpp:666
 msgid "1st"
-msgstr "1 -én"
+msgstr "1-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:43
 #: gnucash/gtkbuilder/gnc-frequency.glade:211
 #: gnucash/gtkbuilder/gnc-frequency.glade:437
 #: libgnucash/engine/Recurrence.cpp:666
 msgid "2nd"
-msgstr "2 -án"
+msgstr "2-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:46
 #: gnucash/gtkbuilder/gnc-frequency.glade:214
 #: gnucash/gtkbuilder/gnc-frequency.glade:440
 #: libgnucash/engine/Recurrence.cpp:666
 msgid "3rd"
-msgstr "3 -án"
+msgstr "3-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:49
 #: gnucash/gtkbuilder/gnc-frequency.glade:217
 #: gnucash/gtkbuilder/gnc-frequency.glade:443
 #: libgnucash/engine/Recurrence.cpp:666
 msgid "4th"
-msgstr "4 -én"
+msgstr "4-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:52
 #: gnucash/gtkbuilder/gnc-frequency.glade:220
 #: gnucash/gtkbuilder/gnc-frequency.glade:446
 msgid "5th"
-msgstr "5 -én"
+msgstr "5-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:55
 #: gnucash/gtkbuilder/gnc-frequency.glade:223
 #: gnucash/gtkbuilder/gnc-frequency.glade:449
 msgid "6th"
-msgstr "6 -án"
+msgstr "6-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:58
 #: gnucash/gtkbuilder/gnc-frequency.glade:226
 #: gnucash/gtkbuilder/gnc-frequency.glade:452
 msgid "7th"
-msgstr "7 -én"
+msgstr "7-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:61
 #: gnucash/gtkbuilder/gnc-frequency.glade:229
 #: gnucash/gtkbuilder/gnc-frequency.glade:455
 msgid "8th"
-msgstr "8 -án"
+msgstr "8-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:64
 #: gnucash/gtkbuilder/gnc-frequency.glade:232
 #: gnucash/gtkbuilder/gnc-frequency.glade:458
 msgid "9th"
-msgstr "9 -én"
+msgstr "9-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:67
 #: gnucash/gtkbuilder/gnc-frequency.glade:235
 #: gnucash/gtkbuilder/gnc-frequency.glade:461
 msgid "10th"
-msgstr "10 -én"
+msgstr "10-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:70
 #: gnucash/gtkbuilder/gnc-frequency.glade:238
 #: gnucash/gtkbuilder/gnc-frequency.glade:464
 msgid "11th"
-msgstr "11 -én"
+msgstr "11-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:73
 #: gnucash/gtkbuilder/gnc-frequency.glade:241
 #: gnucash/gtkbuilder/gnc-frequency.glade:467
 msgid "12th"
-msgstr "12 -én"
+msgstr "12-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:76
 #: gnucash/gtkbuilder/gnc-frequency.glade:244
 #: gnucash/gtkbuilder/gnc-frequency.glade:470
 msgid "13th"
-msgstr "13 -án"
+msgstr "13-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:79
 #: gnucash/gtkbuilder/gnc-frequency.glade:247
 #: gnucash/gtkbuilder/gnc-frequency.glade:473
 msgid "14th"
-msgstr "14 -én"
+msgstr "14-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:82
 #: gnucash/gtkbuilder/gnc-frequency.glade:250
 #: gnucash/gtkbuilder/gnc-frequency.glade:476
 msgid "15th"
-msgstr "15 -én"
+msgstr "15-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:85
 #: gnucash/gtkbuilder/gnc-frequency.glade:253
 #: gnucash/gtkbuilder/gnc-frequency.glade:479
 msgid "16th"
-msgstr "16 -án"
+msgstr "16-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:88
 #: gnucash/gtkbuilder/gnc-frequency.glade:256
 #: gnucash/gtkbuilder/gnc-frequency.glade:482
 msgid "17th"
-msgstr "17 -én"
+msgstr "17-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:91
 #: gnucash/gtkbuilder/gnc-frequency.glade:259
 #: gnucash/gtkbuilder/gnc-frequency.glade:485
 msgid "18th"
-msgstr "18 -án"
+msgstr "18-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:94
 #: gnucash/gtkbuilder/gnc-frequency.glade:262
 #: gnucash/gtkbuilder/gnc-frequency.glade:488
 msgid "19th"
-msgstr "19 -én"
+msgstr "19-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:97
 #: gnucash/gtkbuilder/gnc-frequency.glade:265
 #: gnucash/gtkbuilder/gnc-frequency.glade:491
 msgid "20th"
-msgstr "20 -án"
+msgstr "20-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:100
 #: gnucash/gtkbuilder/gnc-frequency.glade:268
 #: gnucash/gtkbuilder/gnc-frequency.glade:494
 msgid "21st"
-msgstr "21 -én"
+msgstr "21-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:103
 #: gnucash/gtkbuilder/gnc-frequency.glade:271
 #: gnucash/gtkbuilder/gnc-frequency.glade:497
 msgid "22nd"
-msgstr "22 -én"
+msgstr "22-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:106
 #: gnucash/gtkbuilder/gnc-frequency.glade:274
 #: gnucash/gtkbuilder/gnc-frequency.glade:500
 msgid "23rd"
-msgstr "23 -án"
+msgstr "23-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:109
 #: gnucash/gtkbuilder/gnc-frequency.glade:277
 #: gnucash/gtkbuilder/gnc-frequency.glade:503
 msgid "24th"
-msgstr "24 -én"
+msgstr "24-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:112
 #: gnucash/gtkbuilder/gnc-frequency.glade:280
 #: gnucash/gtkbuilder/gnc-frequency.glade:506
 msgid "25th"
-msgstr "25 -én"
+msgstr "25-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:115
 #: gnucash/gtkbuilder/gnc-frequency.glade:283
 #: gnucash/gtkbuilder/gnc-frequency.glade:509
 msgid "26th"
-msgstr "26 -án"
+msgstr "26-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:118
 #: gnucash/gtkbuilder/gnc-frequency.glade:286
 #: gnucash/gtkbuilder/gnc-frequency.glade:512
 msgid "27th"
-msgstr "27 -én"
+msgstr "27-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:121
 #: gnucash/gtkbuilder/gnc-frequency.glade:289
 #: gnucash/gtkbuilder/gnc-frequency.glade:515
 msgid "28th"
-msgstr "28 -án"
+msgstr "28-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:124
 #: gnucash/gtkbuilder/gnc-frequency.glade:292
 #: gnucash/gtkbuilder/gnc-frequency.glade:518
 msgid "29th"
-msgstr "29 -én"
+msgstr "29-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:127
 #: gnucash/gtkbuilder/gnc-frequency.glade:295
 #: gnucash/gtkbuilder/gnc-frequency.glade:521
 msgid "30th"
-msgstr "30 -án"
+msgstr "30-án"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:130
 #: gnucash/gtkbuilder/gnc-frequency.glade:298
 #: gnucash/gtkbuilder/gnc-frequency.glade:524
 msgid "31st"
-msgstr "31 -én"
+msgstr "31-én"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:133
 #: gnucash/gtkbuilder/gnc-frequency.glade:301
@@ -17817,7 +17822,7 @@ msgstr "Költségvetés-megjegyzések"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:892
 msgid "Enter Note"
-msgstr ""
+msgstr "Megjegyzés bevitele"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
@@ -17827,18 +17832,19 @@ msgstr "Regiszter szűrése…"
 #. Filter By Dialog, Date Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
 msgid "Show _All"
-msgstr "Mindent mut_at"
+msgstr "_Mindent mutat"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:100
-#, fuzzy
 msgid "Show _number of days"
-msgstr "Részvények számának megjelenítése"
+msgstr "_Napok számának megjelenítése"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:120
 msgid ""
 "Valid range is 0 to 1100 days\n"
 "If 0, all previous days included"
 msgstr ""
+"Az érvényes tartomány 0 és 1100 nap között van\n"
+"Ha 0, akkor az összes korábbi nap is beletartozik"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:195
 msgid "Choo_se Date"
@@ -17851,7 +17857,7 @@ msgstr "_Nem egyeztetett"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:422
 msgid "C_leared"
-msgstr "Igazo_lt"
+msgstr "El_számolt"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:438
 msgid "_Voided"
@@ -17877,15 +17883,12 @@ msgid "_Number"
 msgstr "_Szám"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:708
-#, fuzzy
 msgid "_Transaction Number"
-msgstr "_Tranzakciónapló"
+msgstr "_Tranzakciószám"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:738
-#, fuzzy
-#| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
-msgstr "Bejegyzés törlése"
+msgstr "Kapcsolódó dokumentumbejegyzés megtartása"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:785
@@ -17907,7 +17910,7 @@ msgstr "Rendezés dátum szerint."
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:896
 #: gnucash/ui/gnc-plugin-page-invoice.ui:96
 msgid "Date of _Entry"
-msgstr "Tét_el dátuma"
+msgstr "Tétel _dátuma"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:900
 msgid "Sort by the date of entry."
@@ -17934,7 +17937,7 @@ msgstr "Szám szerinti rendezés."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:953
 msgid "Amo_unt"
-msgstr "Öss_zeg"
+msgstr "_Összeg"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
 msgid "Sort by amount."
@@ -17947,7 +17950,7 @@ msgstr "Rendezés feljegyzések szerint."
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:991
 #: gnucash/ui/gnc-plugin-page-invoice.ui:114
 msgid "Descri_ption"
-msgstr "L_eírás"
+msgstr "_Leírás"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:995
 msgid "Sort by description."
@@ -19643,7 +19646,7 @@ msgstr "Áru/pénznem"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
-msgstr ""
+msgstr "Az érvénytelenítés oka"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
@@ -28641,7 +28644,7 @@ msgstr "Átvitel innen/ide"
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1438 gnucash/report/trep-engine.scm:1539
 msgid "Running Secondary Subtotal"
-msgstr "Göngyölített Másodlagos Részösszeg"
+msgstr "Göngyölített másodlagos részösszeg"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
@@ -28649,14 +28652,14 @@ msgstr "Göngyölített Másodlagos Részösszeg"
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1454 gnucash/report/trep-engine.scm:1552
 msgid "Running Primary Subtotal"
-msgstr "Göngyölített Elsődleges Részösszeg"
+msgstr "Göngyölített elsődleges részösszeg"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1458 gnucash/report/trep-engine.scm:1553
 msgid "Running Subtotal"
-msgstr "Göngyölített Részösszeg"
+msgstr "Göngyölített részösszeg"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
@@ -28664,7 +28667,7 @@ msgstr "Göngyölített Részösszeg"
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1475 gnucash/report/trep-engine.scm:1567
 msgid "Running Grand Total"
-msgstr "Göngyölített Végösszeg"
+msgstr "Göngyölített végösszeg"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
@@ -28672,7 +28675,7 @@ msgstr "Göngyölített Végösszeg"
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1480 gnucash/report/trep-engine.scm:1568
 msgid "Running Total"
-msgstr "Göngyölített Összeg"
+msgstr "Göngyölített összeg"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -28692,7 +28695,7 @@ msgstr ""
 #: gnucash/ui/gnc-embedded-register-window.ui:9
 #: gnucash/ui/gnc-main-window.ui:102
 msgid "Cu_t"
-msgstr "_Kivágás"
+msgstr "Ki_vágás"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:12
 #: gnucash/ui/gnc-main-window.ui:105
@@ -28712,7 +28715,7 @@ msgstr "A jelenlegi kiválasztás kimásolása a vágólapra"
 #: gnucash/ui/gnc-embedded-register-window.ui:21
 #: gnucash/ui/gnc-main-window.ui:114
 msgid "_Paste"
-msgstr "_Beillesztés"
+msgstr "Be_illesztés"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:24
 #: gnucash/ui/gnc-main-window.ui:117
@@ -28853,7 +28856,7 @@ msgstr "Kilépés az alkalmazásból"
 
 #: gnucash/ui/gnc-main-window.ui:143
 msgid "Pr_eferences"
-msgstr "Beá_llítások"
+msgstr "_Beállítások"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -29172,21 +29175,21 @@ msgstr "_Árfolyam-adatbázis"
 #: gnucash/ui/gnc-plugin-basic-commands.ui:106
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
-"Értékpapírok és befektetési alapok árafolyamainak megtekintése és "
-"szerkesztése"
+"Részvények és befektetési alapok árafolyamainak megtekintése és szerkesztése"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
-msgstr "Értékpapír-szerke_sztő"
+msgstr "_Értékpapír-szerkesztő"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
-"Értékpapírok és befektetési alapok (javak) megtekintése és szerkesztése"
+"Részvényszámlákhoz és befektetési alapokhoz tartozó értékpapírok "
+"megtekintése és szerkesztése"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:114
 msgid "_Loan Repayment Calculator"
-msgstr "_Kölcsön-visszafizetési számológép"
+msgstr "Kölcsön-visszafizetési _számológép"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:116
 msgid "Use the loan/mortgage repayment calculator"
@@ -29591,7 +29594,7 @@ msgstr "A kiválasztott számla alszámláinak újraszámozása"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:372
 #: gnucash/ui/gnc-plugin-page-budget.ui:175
 msgid "Open _Account"
-msgstr "_Számla megnyitása"
+msgstr "Számla meg_nyitása"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:54
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:209
@@ -29603,7 +29606,7 @@ msgstr "A kiválasztott számla megnyitása"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:58
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:212
 msgid "Open _SubAccounts"
-msgstr "Alszámlák meg_nyitása"
+msgstr "Alszámlák megn_yitása"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:60
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:214
@@ -29684,7 +29687,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:902
 msgid "Stock Ass_istant…"
-msgstr "_Részvénytranzakció…"
+msgstr "_Részvénytranzakció-segéd…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
@@ -29766,7 +29769,7 @@ msgstr "Számla szűrése"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:217
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:387
 msgid "Edit _Account"
-msgstr "_Számla szerkesztése"
+msgstr "Számla _szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:241
 msgid "Automatically clear individual transactions, given a cleared amount"
