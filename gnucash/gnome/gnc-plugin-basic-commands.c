@@ -471,61 +471,10 @@ gnc_main_window_cmd_actions_since_last_run (GSimpleAction *simple,
                                             gpointer       user_data)
 {
     GncMainWindowActionData *data = user_data;
-    GtkWindow *window;
-    GncSxInstanceModel *sx_instances;
-    GncSxSummary summary;
-    GList *auto_created_txns = NULL;
-    GList *creation_errors = NULL;
-    const char *nothing_to_do_msg =
-        _( "There are no Scheduled Transactions to be entered at this time." );
 
     g_return_if_fail (data != NULL);
 
-    window = GTK_WINDOW(data->window);
-
-    if (qof_book_is_readonly (gnc_get_current_book()))
-    {
-        /* Is the book read-only? Then don't change anything here. */
-        return;
-    }
-
-    sx_instances = gnc_sx_get_current_instances();
-    gnc_sx_instance_model_summarize(sx_instances, &summary);
-    gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns,
-                                        &creation_errors);
-
-    if (auto_created_txns)
-        gnc_gui_refresh_all();
-
-    if (summary.need_dialog)
-    {
-        gnc_ui_sx_since_last_run_dialog (window, sx_instances, auto_created_txns);
-        auto_created_txns = NULL;
-    }
-    else
-    {
-        if (summary.num_auto_create_no_notify_instances == 0)
-        {
-            gnc_info_dialog (window, "%s", nothing_to_do_msg);
-        }
-        else
-        {
-            gnc_info_dialog (window, ngettext
-                             /* Translators: %d is the number of transactions. This is a
-                                ngettext(3) message. */
-                             ("There are no Scheduled Transactions to be entered at this time. "
-                              "(%d transaction automatically created)",
-                              "There are no Scheduled Transactions to be entered at this time. "
-                              "(%d transactions automatically created)",
-                              summary.num_auto_create_no_notify_instances),
-                              summary.num_auto_create_no_notify_instances);
-        }
-    }
-    g_list_free (auto_created_txns);
-    g_object_unref (G_OBJECT(sx_instances));
-
-    if (creation_errors)
-        gnc_ui_sx_creation_error_dialog (&creation_errors);
+    gnc_ui_sx_since_last_run_dialog (gnc_sx_get_current_instances ());
 }
 
 static void

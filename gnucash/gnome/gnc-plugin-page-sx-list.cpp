@@ -53,6 +53,7 @@
 #include "Transaction.h"
 #include "dialog-sx-editor.h"
 #include "dialog-utils.h"
+#include "dialog-sx-since-last-run.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
@@ -124,6 +125,7 @@ static void gppsl_row_activated_cb (GtkTreeView *tree_view, GtkTreePath *path,
 static void gnc_plugin_page_sx_list_cmd_new (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_sx_list_cmd_run (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_save_layout (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_edit_tax_options (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
@@ -135,6 +137,7 @@ static GActionEntry gnc_plugin_page_sx_list_actions [] =
     { "SxListNewAction", gnc_plugin_page_sx_list_cmd_new, nullptr, nullptr, nullptr },
     { "SxListEditAction", gnc_plugin_page_sx_list_cmd_edit, nullptr, nullptr, nullptr },
     { "SxListDeleteAction", gnc_plugin_page_sx_list_cmd_delete, nullptr, nullptr, nullptr },
+    { "SxListRunAction", gnc_plugin_page_sx_list_cmd_run, nullptr, nullptr, nullptr },
     { "ViewRefreshAction", gnc_plugin_page_sx_list_cmd_refresh, nullptr, nullptr, nullptr },
     { "ViewSaveLayoutAction", gnc_plugin_page_sx_list_cmd_save_layout, nullptr, nullptr, nullptr },
     { "EditTaxOptionsAction", gnc_plugin_page_sx_list_cmd_edit_tax_options, nullptr, nullptr, nullptr },
@@ -315,17 +318,19 @@ static void
 gppsl_selection_changed_cb (GtkTreeSelection *selection, gpointer user_data)
 {
     GncPluginPage *page;
-    GAction *edit_action, *delete_action;
+    GAction *edit_action, *delete_action, *run_action;
     gboolean selection_state = true;
 
     page = GNC_PLUGIN_PAGE(user_data);
     edit_action = gnc_plugin_page_get_action (page, "SxListEditAction");
     delete_action = gnc_plugin_page_get_action (page, "SxListDeleteAction");
+    run_action = gnc_plugin_page_get_action (page, "SxListRunAction");
     selection_state = gtk_tree_selection_count_selected_rows (selection) == 0
                       ? false
                       : true;
     g_simple_action_set_enabled (G_SIMPLE_ACTION(edit_action), selection_state);
     g_simple_action_set_enabled (G_SIMPLE_ACTION(delete_action), selection_state);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(run_action), selection_state);
 }
 
 
@@ -411,6 +416,12 @@ treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *pag
 
     menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete Schedule"));
     full_action_name = g_strconcat (group_name, ".SxListDeleteAction", nullptr);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_free (full_action_name);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Run Schedule"));
+    full_action_name = g_strconcat (group_name, ".SxListRunAction", nullptr);
     gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
     g_free (full_action_name);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
@@ -521,11 +532,13 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     {
-        GAction *edit_action, *delete_action;
+        GAction *edit_action, *delete_action, *run_action;
         edit_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListEditAction");
         delete_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListDeleteAction");
+        run_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListRunAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(edit_action), false);
         g_simple_action_set_enabled (G_SIMPLE_ACTION(delete_action), false);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(run_action), false);
     }
 
     {
@@ -1081,6 +1094,32 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
 
     g_free (message);
     g_list_free (to_delete);
+    g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, nullptr);
+    g_list_free (selected_paths);
+}
+
+static void
+gnc_plugin_page_sx_list_cmd_run (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
+{
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
+    auto priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
+    auto selection = gtk_tree_view_get_selection (priv->tree_view);
+    GtkTreeModel *model;
+    auto selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
+
+    if (!selected_paths)
+    {
+        PWARN ("no selection for run.");
+        return;
+    }
+
+    auto to_run = gnc_g_list_map (selected_paths, (GncGMapFunc)_argument_reorder_fn, priv->tree_view);
+
+    gnc_ui_sx_since_last_run_dialog (gnc_sx_get_select_instances (to_run));
+
+    g_list_free (to_run);
     g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, nullptr);
     g_list_free (selected_paths);
 }
