@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-15 06:09+0000\n"
+"PO-Revision-Date: 2026-04-16 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -10214,11 +10214,11 @@ msgid ""
 "Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" "
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
-"Ez a beállítás határozza meg a dátumok megjelenítésének módját. A lehetséges "
-"értékek „helyi” a rendszer helyi beállításának használatához, „ce” az "
-"európai stílusú dátumokhoz, „iso” az ISO 8601 szabvány szerinti dátumokhoz, "
-"„uk” az Egyesült Királyság stílusú dátumokhoz, és „us” az Egyesült Államok "
-"stílusú dátumokhoz."
+"Ez a beállítás határozza meg a dátumok megjelenítésének formátumát. A "
+"lehetséges értékek: „helyi” (a rendszer nyelvi beállításának dátumformátuma)"
+", „ce” (az európai kontinens dátumformátuma), „iso” (ISO 8601 szabvány "
+"szerinti dátumformátum), „uk” (az Egyesült Királyság dátumformátuma) és „us” "
+"(az Egyesült Államok dátumformátuma)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1149
@@ -10729,11 +10729,17 @@ msgid ""
 "not allowed in filenames, such as '/', will be replaced with underscores '_' "
 "in the resulting file name."
 msgstr ""
+"Ez a beállítás határozza meg a PDF exportálás fájlnevének formátumát. Ez egy "
+"három változóval rendelkező „sprintf(3)” karakterlánc: A „%1$s” a jelentés "
+"neve (például Számla). A „%2$s” a jelentés száma, amely számlajelentés "
+"esetén a számlaszám. A „%3$s” a jelentés dátuma a fájlnév-dátumformátum "
+"beállítása szerint formázva. Megjegyzés: Az összes olyan karakter, amely a "
+"fájlnevekben nem megengedett (például a / karakter), a végleges fájlnévben "
+"aláhúzásjellel (_) lesz helyettesítve."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:390
-#, fuzzy
 msgid "PDF export file name date format choice"
-msgstr "Dátumformátum választás"
+msgstr "A PDF exportálás fájlnév-dátumformátumának kiválasztása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:391
 msgid ""
@@ -10743,10 +10749,16 @@ msgid ""
 "standard dates , \"uk\" for United Kingdom style dates, and \"us\" for "
 "United States style dates."
 msgstr ""
+"Ez a beállítás határozza meg, hogy a PDF exportálás fájlnevében milyen "
+"formátumban jelenjen meg a dátum. A beállítás lehetséges értékei: „helyi” (a "
+"rendszer nyelvi beállításának dátumformátuma), „ce” (az európai kontinens "
+"dátumformátuma), „iso” (ISO 8601 szabvány szerinti dátumformátum), „uk” (az "
+"Egyesült Királyság dátumformátuma) és „us” (az Egyesült Államok "
+"dátumformátuma)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "Allow file incompatibility with older versions."
-msgstr ""
+msgstr "A régi verziókkal összeférhetetlen fájlformátumok engedélyezése."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:398
 msgid ""
@@ -10755,6 +10767,11 @@ msgid ""
 "read by an older version again. Otherwise gnucash will write data files only "
 "in formats that can be read by older versions as well."
 msgstr ""
+"Ha ez engedélyezve van, a GnuCash szándékosan megszakíthatja a fájlok "
+"kompatibilitását a régebbi verziókkal, így az ebben a verzióban mentett "
+"adatfájlokat a régebbi verziók már nem tudják megnyitni. Ellenkező esetben "
+"olyan formátumban menti az adatfájlokat a GnuCash, amelyeket a régebbi "
+"verziók is képesek megnyitni."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:5
 msgid "Number of files in history"
@@ -15374,7 +15391,7 @@ msgstr "_ISO"
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:57
 #: libgnucash/engine/gnc-datetime.cpp:161
 msgid "Locale"
-msgstr "Területi beállítás"
+msgstr "Helyi"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:140
 msgid "_Reset"
@@ -15596,7 +15613,7 @@ msgstr "A hónapok számának megadása."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1213
 msgid "Use the date format specified by the system locale."
-msgstr "A rendszer helyi beállításainak megfelelő dátumalak használata."
+msgstr "A rendszer nyelvi beállításának megfelelő dátumformátum használata."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1239
 msgid "Numbers"
@@ -16907,8 +16924,8 @@ msgstr "Tranzakciók _automatikus létrehozása"
 #: gnucash/gtkbuilder/dialog-sx.glade:585
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr ""
-"Az újonnan létrehozott, ütemezett tranzakciók megjelölése automatikusan "
-"létrehozandóként."
+"Az újonnan létrehozott ütemezett tranzakciókat alapértelmezetten "
+"automatikusan létrehozandóként jelöli meg."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:605
 msgid "Begin notifications this many days before the transaction is created."
@@ -27123,7 +27140,7 @@ msgstr "Fizetés, beérkezett szöveg"
 #: gnucash/report/reports/standard/receipt.scm:65
 #, fuzzy
 msgid "Today date format"
-msgstr "Mai dátum alakja"
+msgstr "A mai dátum formátuma"
 
 #: gnucash/report/reports/standard/receipt.scm:77
 #: gnucash/report/reports/standard/taxinvoice.scm:149
@@ -28001,7 +28018,7 @@ msgstr "A cellák al-fejléc/alösszeg színe"
 #: gnucash/report/stylesheets/footer.scm:131
 #: gnucash/report/stylesheets/head-or-tail.scm:170
 msgid "Default color for subtotal rows."
-msgstr "A alösszeg sorok színének alapértéke."
+msgstr "A részösszeg sorok alapértelmezett háttérszíne."
 
 #: gnucash/report/stylesheets/footer.scm:136
 #: gnucash/report/stylesheets/head-or-tail.scm:175
@@ -28011,7 +28028,7 @@ msgstr "A cellák al-al-fejléc/összeg színe"
 #: gnucash/report/stylesheets/footer.scm:137
 #: gnucash/report/stylesheets/head-or-tail.scm:176
 msgid "Color for subsubtotals."
-msgstr ""
+msgstr "A részösszegek színe."
 
 #: gnucash/report/stylesheets/footer.scm:142
 #: gnucash/report/stylesheets/head-or-tail.scm:181
@@ -31383,9 +31400,8 @@ msgid "m-d"
 msgstr "h-n"
 
 #: libgnucash/engine/gnc-datetime.cpp:713
-#, fuzzy
 msgid "Unknown date format specifier passed as argument."
-msgstr "A rendszer helyi beállításainak megfelelő dátumalak használata."
+msgstr "A megadott változó, ami a dátumformátumot meghatározza, ismeretlen."
 
 #: libgnucash/engine/gnc-datetime.cpp:731
 msgid "Value can't be parsed into a date using the selected date format."
