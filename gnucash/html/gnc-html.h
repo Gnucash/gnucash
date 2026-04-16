@@ -113,24 +113,6 @@ gboolean gnc_html_register_urltype( URLType type, const gchar* protocol ) NOEXCE
  */
 void gnc_html_initialize( void ) NOEXCEPT;
 
-gchar* gnc_html_encode_string( const gchar* in ) NOEXCEPT;
-gchar* gnc_html_decode_string( const gchar* in ) NOEXCEPT;
-gchar* gnc_html_escape_newlines( const gchar* in ) NOEXCEPT;
-gchar* gnc_html_unescape_newlines( const gchar* in ) NOEXCEPT;
-
-/* object handlers deal with <object classid="foo"> objects in HTML.
- * the handlers are looked up at object load time. */
-void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand ) NOEXCEPT;
-void gnc_html_unregister_object_handler( const gchar* classid ) NOEXCEPT;
-
-/* stream handlers load data for particular URLTypes. */
-void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand ) NOEXCEPT;
-void gnc_html_unregister_stream_handler( URLType url_type ) NOEXCEPT;
-
-/* handlers for particular URLTypes. */
-void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand ) NOEXCEPT;
-void gnc_html_unregister_url_handler( URLType url_type ) NOEXCEPT;
-
 #ifdef __cplusplus
 }
 #endif
