@@ -25,10 +25,10 @@ def create_new_empty_file(delete=True):
 
         with Session(targetfile, SessionOpenMode.SESSION_NEW_STORE) as session:
             session.book.get_root_account()  # Seems necessary to trigger creation of tables.
-        print(f"Gnucash file {targetfile} created")
+        print(f"Gnucash file {targetfile} created.")
 
         with Session(targetfile, SessionOpenMode.SESSION_NORMAL_OPEN) as session:
-            print("Opened again")
+            print("Opened again.")
         print("Closed again.")
 
 
