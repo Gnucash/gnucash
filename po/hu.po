@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-17 15:09+0000\n"
+"PO-Revision-Date: 2026-04-18 22:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -18450,12 +18450,12 @@ msgstr "Adja meg a jelszót"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:652
 msgid "Bar_width"
-msgstr "Oszlops_zélesség"
+msgstr "A sáv s_zélessége"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:669
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
+msgstr "A sáv szélességének beállítása a TAN-generátor méretének megfelelően."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:684
 msgid "_Delay"
@@ -18564,7 +18564,7 @@ msgstr "Kezde_ményező neve"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1301
 msgid "Originator Account Number"
-msgstr "Kezdeményező számla száma"
+msgstr "Kezdeményező számlaszáma"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1325
 msgid "Bank Code"
