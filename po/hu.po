@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-19 09:45+0000\n"
+"PO-Revision-Date: 2026-04-19 10:00+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -27651,6 +27651,8 @@ msgstr "A korrigáló tételek mintája reguláris kifejezés"
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
 msgstr ""
+"Meghatározza, hogy a korrigáló tételek mintája szabályos kifejezésként lesz-"
+"e kezelve vagy nem."
 
 #: gnucash/report/reports/standard/trial-balance.scm:188
 #, fuzzy
@@ -27675,7 +27677,7 @@ msgstr "Korrigáló tételek"
 
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/trial-balance.scm:533
 msgid "Adjustments"
