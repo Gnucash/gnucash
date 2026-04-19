@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-19 10:00+0000\n"
+"PO-Revision-Date: 2026-04-19 19:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -19398,7 +19398,7 @@ msgstr "Azonosító"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:140
 msgid "Owner-ID"
-msgstr "Tulajdonos-azonosító"
+msgstr "Tulajdonos neve"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:141
 msgid "Billing-ID"
@@ -27701,7 +27701,7 @@ msgstr "Az oszlopok számának korlátozása"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
-msgstr ""
+msgstr "Beállítja az oszlopok számának felső határát"
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
 msgid "Too many accounts"
@@ -27713,6 +27713,9 @@ msgid ""
 "Select a different subset of transactions, or increase the limit in the "
 "options."
 msgstr ""
+"A talált tranzakciókhoz kapcsolódó számlák száma meghaladja a korlátot. "
+"Válasszon ki egy másik tranzakciócsoportot, vagy növelje a korlátot a "
+"beállításokban."
 
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
@@ -27725,11 +27728,11 @@ msgstr "Hány oszlopból álljon egy sor."
 
 #: gnucash/report/reports/standard/view-column.scm:123
 msgid "Edit Options"
-msgstr "Javítási opciók"
+msgstr "Beállítások szerkesztése"
 
 #: gnucash/report/reports/standard/view-column.scm:130
 msgid "Single Report"
-msgstr "Egyetlen report"
+msgstr "Egyetlen jelentés"
 
 #: gnucash/report/reports/standard/view-column.scm:182
 msgid "Multicolumn View"
@@ -27774,21 +27777,23 @@ msgstr ""
 
 #: gnucash/report/reports/support/receipt.eguile.scm:144
 msgid "Descr."
-msgstr ""
+msgstr "Leírás"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:277
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
 msgstr ""
-"Nincs érvényesen kiválasztott Számla. számla kiválasztásához kattintson az "
-"opciók gombra."
+"Nincs kiválasztva számla. Kérjük, válasszon egyet a beállítások menüből."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:284
 msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
+"Ez a jelentés csak a kimenőszámlákhoz, az ügyfelek (értékesítési) számláihoz "
+"lett tervezve. Kérjük, a beállítások menüben a <em>Kimenőszámla</em> "
+"menüpontot válassza ki, ne pedig a bejövőszámlát vagy a költségelszámolást."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
