@@ -45,11 +45,11 @@ ${REL_INFO}
     </screenshot>
     <screenshot>
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_register_lg.png</image>
-      <caption>The checkbook-style register provides a custom, convenient and familiar interface to entering financial transactions</caption>
+      <caption>The checkbook-style register - used for entering financial transactions</caption>
     </screenshot>
     <screenshot>
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_bar_chart_lg.png</image>
-      <caption>A bar chart report showing a breakdown of expenses over time. This is one example of the many reports and graphs GnuCash provided out of the box.</caption>
+      <caption>Report sample: a bar chart report showing a breakdown of expenses over time</caption>
     </screenshot>
   </screenshots>
   <update_contact>gnucash-devel@gnucash.org</update_contact>
