@@ -30,7 +30,9 @@
   <content_rating type="oars-1.1">
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
-  <developer_name>GnuCash Project</developer_name>
+  <developer id="org.gnucash">
+    <name>The GnuCash Project</name>
+  </developer>
   <launchable type="desktop-id">gnucash.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
