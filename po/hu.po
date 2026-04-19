@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-18 22:09+0000\n"
+"PO-Revision-Date: 2026-04-19 09:13+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -19394,7 +19394,7 @@ msgstr "Nincs mit feldolgozni.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:138
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:123
 msgid "ID"
-msgstr "Sz.szám"
+msgstr "Azonosító"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:140
 #, fuzzy
@@ -19402,9 +19402,8 @@ msgid "Owner-ID"
 msgstr "Tulajdonos neve"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:141
-#, fuzzy
 msgid "Billing-ID"
-msgstr "Számlaszám"
+msgstr "Számlázási azonosító"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:92
