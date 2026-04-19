@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-19 19:09+0000\n"
+"PO-Revision-Date: 2026-04-19 21:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -10854,9 +10854,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
-#, fuzzy
 msgid "Commit changes to a invoice entry"
-msgstr "Változások jóváhagyása számlatét_elre"
+msgstr "A számlatétel változásainak jóváhagyása, mentése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
@@ -11217,7 +11216,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
-msgstr "Relatív nyereség/veszteség kezdődátum használata"
+msgstr "Relatív kezdődátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:16
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:21
@@ -11227,11 +11226,15 @@ msgid ""
 "date specified by the start-date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start-period key."
 msgstr ""
+"Ez a beállítás határozza meg, hogy a nyereség/veszteség számításhoz milyen "
+"kezdő dátumot használjon a program. Ha az értéke „abszolút”, akkor a GnuCash "
+"a „start-date” kulcsban megadott kezdő dátumot veszi alapul. Ha más értékre "
+"(relatív) van állítva, akkor a GnuCash a „start-period” kulcsban megadott "
+"kezdő dátumot veszi alapul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
-#, fuzzy
 msgid "Use absolute profit/loss starting date"
-msgstr "Nyereség/veszteség kezdő dátum típus"
+msgstr "Abszolút kezdődátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
@@ -11256,9 +11259,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
-#, fuzzy
 msgid "Use relative profit/loss ending date"
-msgstr "Nyereség/veszteség záró dátum típus"
+msgstr "Relatív záródátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:36
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:41
@@ -11270,9 +11272,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
-#, fuzzy
 msgid "Use absolute profit/loss ending date"
-msgstr "Nyereség/veszteség záró dátum típus"
+msgstr "Abszolút záródátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
@@ -27854,22 +27855,23 @@ msgid "Rendering '~a' report …"
 msgstr "~a' jelentés megjelenítése…"
 
 #: gnucash/report/report-utilities.scm:640
-#, fuzzy
 msgid "Untitled"
-msgstr "-ig"
+msgstr "Cím nélkül"
 
 #: gnucash/report/stylesheets/css.scm:119
 msgid "CSS code. This field specifies the CSS code for styling reports."
 msgstr ""
+"CSS kód. Ez a mező határozza meg a jelentések stíluslapjához a CSS kódot."
 
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
 msgstr ""
+"A „&lt;/style” használata a CSS-ben nem megengedett. Az alapértelmezett CSS "
+"lesz használva."
 
 #: gnucash/report/stylesheets/css.scm:228
-#, fuzzy
 msgid "CSS-based stylesheet (experimental)"
-msgstr "Tankönyvi stílus (kísérleti)"
+msgstr "CSS alapú stíluslap (kísérleti)"
 
 #: gnucash/report/stylesheets/footer.scm:50
 #: gnucash/report/stylesheets/head-or-tail.scm:50
