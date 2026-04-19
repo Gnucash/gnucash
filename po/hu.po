@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-19 09:13+0000\n"
+"PO-Revision-Date: 2026-04-19 09:45+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -19397,9 +19397,8 @@ msgid "ID"
 msgstr "Azonosító"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:140
-#, fuzzy
 msgid "Owner-ID"
-msgstr "Tulajdonos neve"
+msgstr "Tulajdonos-azonosító"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:141
 msgid "Billing-ID"
@@ -19465,11 +19464,20 @@ msgid ""
 "- invoices created: %u\n"
 "- invoices updated: %u"
 msgstr ""
+"Importálás:\n"
+"- figyelmen kívül hagyott sorok: %i\n"
+"- importált sorok: %i\n"
+"\n"
+"Ellenőrzés és feldolgozás:\n"
+"- kijavított sorok: %u\n"
+"- figyelmen kívül hagyott sorok: %u\n"
+"- létrehozott számlák: %u\n"
+"- frissített számlák: %u"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:225
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:201
 msgid "These lines were ignored during import"
-msgstr ""
+msgstr "Ezek a sorok az importálás során figyelmen kívül lettek hagyva"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:232
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:392
@@ -27632,6 +27640,8 @@ msgstr "A korrigáló tételek mintája kis- és nagybetűérzékeny"
 #: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
 msgstr ""
+"Meghatározza, hogy a korrigáló tételek mintája megkülönbözteti-e a kis- és "
+"nagybetűket."
 
 #: gnucash/report/reports/standard/trial-balance.scm:94
 msgid "Adjusting Entries Pattern is regular expression"
