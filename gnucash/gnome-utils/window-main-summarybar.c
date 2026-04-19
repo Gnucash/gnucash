@@ -444,19 +444,17 @@ static gchar*
 get_negative_color_str (void)
 {
     GdkRGBA color;
-    GdkRGBA *rgba;
     gchar *color_str;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    g_object_ref_sink (label);
     gtk_style_context_add_class (context, "gnc-class-negative-numbers");
     gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
-    rgba = gdk_rgba_copy (&color);
-
     color_str = g_strdup_printf ("#%02X%02X%02X",
-                              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
-                              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
-                              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
-    gdk_rgba_free (rgba);
+                                 (int)(0.5 + CLAMP (color.red, 0., 1.) * 255.),
+                                 (int)(0.5 + CLAMP (color.green, 0., 1.) * 255.),
+                                 (int)(0.5 + CLAMP (color.blue, 0., 1.) * 255.));
+    g_object_unref (label);
     return color_str;
 }
 
