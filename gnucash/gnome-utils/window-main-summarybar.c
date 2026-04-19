@@ -465,6 +465,7 @@ summarybar_update_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
     GNCMainSummary *summary = user_data;
 
+    g_free(summary->negative_color);
     summary->negative_color = get_negative_color_str();
     summary->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
