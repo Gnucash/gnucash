@@ -278,7 +278,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_dat
 
     default:
         gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*) event);
+                          reinterpret_cast<GdkEvent *>(event));
         break;
     }
 }
@@ -861,7 +861,7 @@ reset_item_list_to_default_setup (BasicCell* bcell)
     auto box = static_cast<PopBox *>(bcell->gui_private);
     PopupToggle popup_toggle;
 
-    item_store_clear ((CompletionCell*) bcell);
+    item_store_clear (reinterpret_cast<CompletionCell*>(bcell));
 
     popup_toggle = box->item_edit->popup_toggle;
     gtk_widget_set_sensitive (GTK_WIDGET(popup_toggle.tbutton), TRUE);
@@ -880,7 +880,7 @@ gnc_completion_cell_gui_move (BasicCell* bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
-    completion_disconnect_signals ((CompletionCell*) bcell);
+    completion_disconnect_signals (reinterpret_cast<CompletionCell*>(bcell));
 
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
@@ -1028,7 +1028,7 @@ gnc_completion_cell_leave (BasicCell* bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
-    completion_disconnect_signals ((CompletionCell*) bcell);
+    completion_disconnect_signals (reinterpret_cast<CompletionCell*>(bcell));
 
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);

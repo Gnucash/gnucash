@@ -120,7 +120,7 @@ gboolean
 _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
                           GtkTreeIter* iter, gpointer data)
 {
-    FindSelectionData* to_find = (FindSelectionData*)data;
+    auto to_find = static_cast<FindSelectionData *>(data);
     gchar* iterStr;
     gboolean found;
 
@@ -144,7 +144,7 @@ gnc_item_in_list (GncItemList* item_list, const char* string)
     g_return_val_if_fail (item_list != nullptr, FALSE);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), FALSE);
 
-    to_find_data = (FindSelectionData*)g_new0 (FindSelectionData, 1);
+    to_find_data = static_cast<FindSelectionData *>(g_new0 (FindSelectionData, 1));
     to_find_data->item_list = item_list;
     to_find_data->string_to_find = string;
 
@@ -175,7 +175,7 @@ gnc_item_list_select (GncItemList* item_list, const char* string)
         return;
     }
 
-    to_find_data = (FindSelectionData*)g_new0 (FindSelectionData, 1);
+    to_find_data = static_cast<FindSelectionData *>(g_new0 (FindSelectionData, 1));
     to_find_data->item_list = item_list;
     to_find_data->string_to_find = string;
 

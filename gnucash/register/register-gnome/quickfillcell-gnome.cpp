@@ -43,7 +43,7 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
                                   int *end_selection,
                                   void *gui_data)
 {
-    QuickFillCell *cell = (QuickFillCell *) bcell;
+    auto cell = reinterpret_cast<QuickFillCell *>(bcell);
     auto event = static_cast<GdkEventKey *>(gui_data);
     const char *match_str;
     QuickFill *match;

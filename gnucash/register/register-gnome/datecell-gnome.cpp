@@ -300,7 +300,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
         break;
 
     default:
-        gtk_widget_event(GTK_WIDGET (box->sheet), (GdkEvent *) event);
+        gtk_widget_event(GTK_WIDGET (box->sheet), reinterpret_cast<GdkEvent *>(event));
         break;
     }
 }
@@ -367,7 +367,7 @@ static void
 gnc_date_cell_gui_destroy (BasicCell *bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
-    DateCell *cell = (DateCell *) bcell;
+    auto cell = reinterpret_cast<DateCell *>(bcell);
 
     if (cell->cell.gui_realize == nullptr)
     {
@@ -390,7 +390,7 @@ gnc_date_cell_gui_destroy (BasicCell *bcell)
 static void
 gnc_date_cell_destroy (BasicCell *bcell)
 {
-    DateCell *cell = (DateCell *) bcell;
+    auto cell = reinterpret_cast<DateCell *>(bcell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
     gnc_date_cell_gui_destroy (&(cell->cell));
@@ -493,7 +493,7 @@ gnc_date_cell_direct_update (BasicCell *bcell,
                              int *end_selection,
                              void *gui_data)
 {
-    DateCell *cell = (DateCell *) bcell;
+    auto cell = reinterpret_cast<DateCell *>(bcell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
     auto event = static_cast<GdkEventKey *>(gui_data);
     char buff[DATE_BUF];
@@ -534,7 +534,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
                              int *start_selection,
                              int *end_selection)
 {
-    DateCell *cell = (DateCell *) _cell;
+    auto cell = reinterpret_cast<DateCell *>(_cell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
     gboolean accept = FALSE;
 
@@ -616,7 +616,7 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
 {
     auto sheet = static_cast<GnucashSheet *>(data);
     GncItemEdit *item_edit = gnucash_sheet_get_item_edit (sheet);
-    DateCell *cell = (DateCell *) bcell;
+    auto cell = reinterpret_cast<DateCell *>(bcell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
     /* initialize gui-specific, private data */
@@ -638,7 +638,7 @@ gnc_date_cell_move (BasicCell *bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
-    date_picker_disconnect_signals ((DateCell *) bcell);
+    date_picker_disconnect_signals (reinterpret_cast<DateCell *>(bcell));
 
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
@@ -676,7 +676,7 @@ gnc_date_cell_enter (BasicCell *bcell,
                      int *start_selection,
                      int *end_selection)
 {
-    DateCell *cell = (DateCell *) bcell;
+    auto cell = reinterpret_cast<DateCell *>(bcell);
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
     gnc_item_edit_set_popup (box->item_edit, GTK_WIDGET (box->date_picker),
@@ -690,7 +690,7 @@ gnc_date_cell_enter (BasicCell *bcell,
                               box->date.tm_year + 1900);
     unblock_picker_signals (cell);
 
-    date_picker_connect_signals ((DateCell *) bcell);
+    date_picker_connect_signals (reinterpret_cast<DateCell *>(bcell));
 
     *start_selection = 0;
     *end_selection = -1;
@@ -704,7 +704,7 @@ gnc_date_cell_leave (BasicCell *bcell)
     time64 time;
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
-    date_picker_disconnect_signals ((DateCell *) bcell);
+    date_picker_disconnect_signals (reinterpret_cast<DateCell *>(bcell));
 
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
@@ -712,8 +712,8 @@ gnc_date_cell_leave (BasicCell *bcell)
     box->calendar_popped = FALSE;
 
     /* Refresh the date to expand any shortcuts. */
-    gnc_date_cell_get_date ((DateCell *)bcell, &time, TRUE);
-    gnc_date_cell_set_value_secs ((DateCell *)bcell, time);
+    gnc_date_cell_get_date (reinterpret_cast<DateCell *>(bcell), &time, TRUE);
+    gnc_date_cell_set_value_secs (reinterpret_cast<DateCell *>(bcell), time);
 }
 
 void
@@ -730,7 +730,7 @@ gnc_date_cell_get_date (DateCell *cell, time64 *time, gboolean warn)
 static void
 gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
 {
-    DateCell *cell = (DateCell *) _cell;
+    auto cell = reinterpret_cast<DateCell *>(_cell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
     char buff[DATE_BUF];
 

@@ -54,7 +54,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
                                 int *end_selection,
                                 void *gui_data )
 {
-    FormulaCell *cell = (FormulaCell *)bcell;
+    auto cell = reinterpret_cast<FormulaCell *>(bcell);
     auto event = static_cast<GdkEventKey *>(gui_data);
     struct lconv *lc;
     gboolean is_return;

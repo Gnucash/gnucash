@@ -53,7 +53,7 @@ static GHashTable *color_hash_table = nullptr;
 static guint
 color_hash (gconstpointer v)
 {
-    const guint32 *c = (guint32 *) v;
+    auto c = static_cast<const std::uint32_t *>(v);
 
     return *c;
 }
@@ -62,8 +62,8 @@ color_hash (gconstpointer v)
 static gint
 color_equal (gconstpointer v, gconstpointer w)
 {
-    const guint32 *c1 = (guint32 *) v;
-    const guint32 *c2 = (guint32 *) w;
+    auto c1 = static_cast<const std::uint32_t *>(v);
+    auto c2 = static_cast<const std::uint32_t *>(w);
 
     return (*c1 == *c2);
 }

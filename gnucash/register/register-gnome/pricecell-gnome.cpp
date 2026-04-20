@@ -48,7 +48,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
                               int *end_selection,
                               void *gui_data)
 {
-    PriceCell *cell = (PriceCell *) bcell;
+    auto cell = reinterpret_cast<PriceCell *>(bcell);
     auto event = static_cast<GdkEventKey *>(gui_data);
     struct lconv *lc;
     gboolean is_return;

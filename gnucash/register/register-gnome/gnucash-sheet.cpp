@@ -1521,7 +1521,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
         sheet->editing && do_popup)
     {
-        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
+        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), reinterpret_cast<GdkEvent *>(event));
         return TRUE;
     }
 
@@ -1550,7 +1550,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gnucash_sheet_check_grab (sheet);
 
     if (do_popup)
-        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
+        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), reinterpret_cast<GdkEvent *>(event));
 
     return button_1 || do_popup;
 }
@@ -1656,7 +1656,7 @@ gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
         return;
 
     // get the horizontal scroll window value
-    hscroll_val = (gint) gtk_adjustment_get_value (sheet->hadj);
+    hscroll_val = static_cast<int>(gtk_adjustment_get_value (sheet->hadj));
 
     // offset is the start of the cell for column
     offset = gnc_header_get_cell_offset (GNC_HEADER(sheet->header_item),
@@ -1816,7 +1816,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
      */
     gnucash_sheet_set_selection_from_entry (sheet);
     /* Direct_event gets first whack */
-    if (gnucash_sheet_direct_event (sheet, (GdkEvent *) event))
+    if (gnucash_sheet_direct_event (sheet, reinterpret_cast<GdkEvent *>(event)))
         return TRUE;
     /* Followed by the input method */
     if (gtk_entry_im_context_filter_keypress (GTK_ENTRY(sheet->entry), event))
@@ -2412,8 +2412,8 @@ gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
         return FALSE;
 
     // get the scroll window values
-    hscroll_val = (gint) gtk_adjustment_get_value (sheet->hadj);
-    vscroll_val = (gint) gtk_adjustment_get_value (sheet->vadj);
+    hscroll_val = static_cast<int>(gtk_adjustment_get_value (sheet->hadj));
+    vscroll_val = static_cast<int>(gtk_adjustment_get_value (sheet->vadj));
 
     if (!gnucash_sheet_find_loc_by_pixel (sheet, x + hscroll_val, y + vscroll_val, &virt_loc))
         return FALSE;
@@ -2484,7 +2484,7 @@ gnucash_sheet_new (Table *table) noexcept
     /* some register data */
     sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
                                    g_int_equal,
-                                   g_free, (GDestroyNotify)dimensions_destroy);
+                                   g_free, reinterpret_cast<GDestroyNotify>(dimensions_destroy));
 
     /* add tooltips to sheet */
     gtk_widget_set_has_tooltip (GTK_WIDGET(sheet), TRUE);

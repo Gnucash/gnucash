@@ -268,7 +268,7 @@ gnc_item_edit_focus_in (GncItemEdit *item_edit)
     ev.type = GDK_FOCUS_CHANGE;
     ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
     ev.in = TRUE;
-    gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+    gtk_widget_event (item_edit->editor, reinterpret_cast<GdkEvent *>(&ev));
 }
 
 void
@@ -285,7 +285,7 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
     ev.type = GDK_FOCUS_CHANGE;
     ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
     ev.in = FALSE;
-    gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+    gtk_widget_event (item_edit->editor, reinterpret_cast<GdkEvent *>(&ev));
 }
 
 /*
@@ -367,7 +367,7 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
                                  nullptr, nullptr, nullptr, nullptr);
 
     g_idle_add_full (G_PRIORITY_HIGH_IDLE,
-                    (GSourceFunc)gnc_item_edit_update, item_edit, nullptr);
+                     reinterpret_cast<GSourceFunc>(gnc_item_edit_update), item_edit, nullptr);
 }
 
 
@@ -433,7 +433,7 @@ key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
-    gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
+    gtk_widget_event (GTK_WIDGET(item_edit->sheet), reinterpret_cast<GdkEvent *>(event));
 
     return TRUE;
 }
@@ -942,7 +942,7 @@ gnc_item_edit_destroying (GtkWidget *item_edit, gpointer data)
         g_signal_handler_disconnect (GNC_ITEM_EDIT(item_edit)->popup_item,
                                      GNC_ITEM_EDIT(item_edit)->popup_height_signal_id);
 
-    while (g_idle_remove_by_data ((gpointer)item_edit))
+    while (g_idle_remove_by_data (static_cast<gpointer>(item_edit)))
         continue;
 }
 
@@ -961,7 +961,7 @@ check_popup_height_is_true (GtkWidget    *widget,
         gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
 
         g_idle_add_full (G_PRIORITY_HIGH_IDLE,
-                        (GSourceFunc)gnc_item_edit_update, item_edit, nullptr);
+                         reinterpret_cast<GSourceFunc>(gnc_item_edit_update), item_edit, nullptr);
     }
 }
 

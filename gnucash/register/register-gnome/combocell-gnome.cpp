@@ -217,7 +217,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer data)
 
     default:
         gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*) event);
+                          reinterpret_cast<GdkEvent *>(event));
         break;
     }
 }
@@ -290,7 +290,7 @@ static void
 gnc_combo_cell_gui_destroy (BasicCell* bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
-    ComboCell* cell = (ComboCell*) bcell;
+    auto cell = reinterpret_cast<ComboCell *>(bcell);
 
     if (cell->cell.gui_realize == nullptr)
     {
@@ -319,7 +319,7 @@ gnc_combo_cell_gui_destroy (BasicCell* bcell)
 static void
 gnc_combo_cell_destroy (BasicCell* bcell)
 {
-    ComboCell* cell = (ComboCell*) bcell;
+    auto cell = reinterpret_cast<ComboCell *>(bcell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
     gnc_combo_cell_gui_destroy (& (cell->cell));
@@ -616,7 +616,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
                               int* start_selection,
                               int* end_selection)
 {
-    ComboCell* cell = (ComboCell*) _cell;
+    auto cell = reinterpret_cast<ComboCell *>(_cell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
     gchar* match_str = nullptr;
     glong newval_chars;
@@ -712,7 +712,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
                               int* end_selection,
                               void* gui_data)
 {
-    ComboCell* cell = (ComboCell*) bcell;
+    auto cell = reinterpret_cast<ComboCell *>(bcell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
     auto event = static_cast<GdkEventKey *>(gui_data);
     gboolean keep_on_going = FALSE;
@@ -746,7 +746,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
         {
             char* string = gnc_item_list_get_selection (box->item_list);
             g_signal_emit_by_name (G_OBJECT (box->item_list), "change_item",
-                                   string, (gpointer)bcell);
+                                   string, static_cast<gpointer>(bcell));
             g_free (string);
             return FALSE;
         }
@@ -877,7 +877,7 @@ gnc_combo_cell_gui_realize (BasicCell* bcell, gpointer data)
 {
     auto sheet = static_cast<GnucashSheet *>(data);
     GncItemEdit* item_edit = gnucash_sheet_get_item_edit (sheet);
-    ComboCell* cell = (ComboCell*) bcell;
+    auto cell = reinterpret_cast<ComboCell *>(bcell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
     /* initialize gui-specific, private data */
@@ -907,7 +907,7 @@ gnc_combo_cell_gui_move (BasicCell* bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
-    combo_disconnect_signals ((ComboCell*) bcell);
+    combo_disconnect_signals (reinterpret_cast<ComboCell *>(bcell));
 
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
@@ -1000,7 +1000,7 @@ gnc_combo_cell_enter (BasicCell* bcell,
                       int* start_selection,
                       int* end_selection)
 {
-    ComboCell* cell = (ComboCell*) bcell;
+    auto cell = reinterpret_cast<ComboCell *>(bcell);
     auto box = static_cast<PopBox *>(bcell->gui_private);
     PopupToggle popup_toggle;
     GList* find = nullptr;
@@ -1008,7 +1008,7 @@ gnc_combo_cell_enter (BasicCell* bcell,
     if (bcell->value)
         find = g_list_find_custom (box->ignore_strings,
                                    bcell->value,
-                                   (GCompareFunc) strcmp);
+                                   reinterpret_cast<GCompareFunc>(strcmp));
     if (find)
         return FALSE;
 
@@ -1049,7 +1049,7 @@ gnc_combo_cell_leave (BasicCell* bcell)
 {
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
-    combo_disconnect_signals ((ComboCell*) bcell);
+    combo_disconnect_signals (reinterpret_cast<ComboCell *>(bcell));
 
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
@@ -1065,7 +1065,7 @@ gnc_combo_cell_leave (BasicCell* bcell)
 
             if (g_list_find_custom (box->ignore_strings,
                                     bcell->value,
-                                    (GCompareFunc) strcmp))
+                                    reinterpret_cast<GCompareFunc>(strcmp)))
                 return;
         }
         gnc_basic_cell_set_value_internal (bcell, "");
