@@ -303,7 +303,7 @@ draw_cell_line (cairo_t *cr, GdkRGBA *bg_color,
 
 static void
 draw_hatching (cairo_t *cr, double x, double y,
-               G_GNUC_UNUSED double width, double height)
+               [[ maybe_unused ]] double width, double height)
 {
     GdkRGBA *fg_color;
     double h_x = x + 2.5;

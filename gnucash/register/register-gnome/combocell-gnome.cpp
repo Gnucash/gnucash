@@ -920,7 +920,7 @@ gnc_combo_cell_gui_move (BasicCell* bcell)
 static int
 popup_get_height (GtkWidget* widget,
                   int space_available,
-                  G_GNUC_UNUSED int row_height,
+                  [[ maybe_unused ]] int row_height,
                   gpointer user_data)
 {
     auto box = static_cast<PopBox *>(user_data);
@@ -967,7 +967,7 @@ popup_autosize (GtkWidget* widget,
 
 static void
 popup_set_focus (GtkWidget* widget,
-                 G_GNUC_UNUSED gpointer user_data)
+                 [[ maybe_unused ]] gpointer user_data)
 {
     /* An empty GtkTreeView grabbing focus causes the key_press events to be
      * lost because there's no entry cell to handle them.
@@ -978,7 +978,7 @@ popup_set_focus (GtkWidget* widget,
 
 static void
 popup_post_show (GtkWidget* widget,
-                 G_GNUC_UNUSED gpointer user_data)
+                 [[ maybe_unused ]] gpointer user_data)
 {
     gnc_item_list_autosize (GNC_ITEM_LIST (widget));
     gnc_item_list_show_selected (GNC_ITEM_LIST (widget));
@@ -986,7 +986,7 @@ popup_post_show (GtkWidget* widget,
 
 static int
 popup_get_width (GtkWidget* widget,
-                 G_GNUC_UNUSED gpointer user_data)
+                 [[ maybe_unused ]] gpointer user_data)
 {
     GtkAllocation alloc;
     gtk_widget_get_allocation (GTK_WIDGET (GNC_ITEM_LIST (widget)->tree_view),

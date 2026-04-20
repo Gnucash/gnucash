@@ -188,8 +188,8 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
 }
 
 static gboolean
-tb_button_press_cb (G_GNUC_UNUSED GtkWidget *widget, GdkEventButton *event,
-                    G_GNUC_UNUSED gpointer *user_data)
+tb_button_press_cb ([[ maybe_unused ]] GtkWidget *widget, GdkEventButton *event,
+                    [[ maybe_unused ]] gpointer *user_data)
 {
     /* Ignore double-clicks and triple-clicks */
     if (event->button == 3 && event->type == GDK_BUTTON_PRESS)

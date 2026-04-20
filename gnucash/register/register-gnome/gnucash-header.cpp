@@ -339,7 +339,7 @@ gnc_header_set_header_rows (GncHeader *header,
  *  argument.
  */
 static gboolean
-pointer_on_resize_line (GncHeader *header, int x, G_GNUC_UNUSED int y, int *col)
+pointer_on_resize_line (GncHeader *header, int x, [[ maybe_unused ]] int y, int *col)
 {
     SheetBlockStyle *style = header->style;
     gboolean on_the_line = FALSE;

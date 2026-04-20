@@ -648,9 +648,9 @@ gnc_date_cell_move (BasicCell *bcell)
 
 static int
 popup_get_height (GtkWidget *widget,
-                  G_GNUC_UNUSED int space_available,
-                  G_GNUC_UNUSED int row_height,
-                  G_GNUC_UNUSED gpointer user_data)
+                  [[ maybe_unused ]] int space_available,
+                  [[ maybe_unused ]] int row_height,
+                  [[ maybe_unused ]] gpointer user_data)
 {
     GtkWidget *cal = GTK_WIDGET (GNC_DATE_PICKER (widget)->calendar);
     GtkRequisition req;
@@ -665,14 +665,14 @@ popup_get_height (GtkWidget *widget,
 
 static void
 popup_set_focus (GtkWidget *widget,
-                 G_GNUC_UNUSED gpointer user_data)
+                 [[ maybe_unused ]] gpointer user_data)
 {
     gtk_widget_grab_focus (GTK_WIDGET (GNC_DATE_PICKER (widget)->calendar));
 }
 
 static gboolean
 gnc_date_cell_enter (BasicCell *bcell,
-                     G_GNUC_UNUSED int *cursor_position,
+                     [[ maybe_unused ]] int *cursor_position,
                      int *start_selection,
                      int *end_selection)
 {

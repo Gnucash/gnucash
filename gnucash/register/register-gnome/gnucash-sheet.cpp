@@ -87,7 +87,7 @@ static gboolean gnucash_sheet_check_direct_update_cell (GnucashSheet *sheet,
 extern "C" {
 // not accessed externally, should this be static?
 gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
-                                G_GNUC_UNUSED gpointer data) noexcept;
+                                [[ maybe_unused ]] gpointer data) noexcept;
 }
 
 /** Implementation *****************************************************/
@@ -831,7 +831,7 @@ gnucash_sheet_create (Table *table)
 }
 
 static void
-gnucash_sheet_get_preferred_width (G_GNUC_UNUSED GtkWidget *widget,
+gnucash_sheet_get_preferred_width ([[ maybe_unused ]] GtkWidget *widget,
                                    gint *minimal_width,
                                    gint *natural_width)
 {
@@ -841,7 +841,7 @@ gnucash_sheet_get_preferred_width (G_GNUC_UNUSED GtkWidget *widget,
 
 /* Compute the height needed to show DEFAULT_REGISTER_INITIAL_ROWS rows */
 static void
-gnucash_sheet_get_preferred_height (G_GNUC_UNUSED GtkWidget *widget,
+gnucash_sheet_get_preferred_height ([[ maybe_unused ]] GtkWidget *widget,
                                     gint *minimal_width,
                                     gint *natural_width)
 {
@@ -1185,7 +1185,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 }
 
 gboolean
-gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data) noexcept
+gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, [[ maybe_unused ]] gpointer data) noexcept
 {
     GnucashSheet *sheet = GNUCASH_SHEET(widget);
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
