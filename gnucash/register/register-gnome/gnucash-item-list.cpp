@@ -56,13 +56,13 @@ gnc_item_list_num_entries (GncItemList* item_list)
 {
     GtkTreeModel* model;
 
-    g_return_val_if_fail (item_list != NULL, 0);
+    g_return_val_if_fail (item_list != nullptr, 0);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), 0);
 
     model = gnc_item_list_using_temp (item_list) ?
         GTK_TREE_MODEL (item_list->temp_store) :
         GTK_TREE_MODEL (item_list->list_store);
-    return gtk_tree_model_iter_n_children (model, NULL);
+    return gtk_tree_model_iter_n_children (model, nullptr);
 }
 
 
@@ -72,15 +72,15 @@ gnc_item_list_clear (GncItemList* item_list)
     GtkTreeSelection* selection;
 
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
-    g_return_if_fail (item_list->list_store != NULL);
+    g_return_if_fail (item_list->list_store != nullptr);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (item_list->tree_view));
 
     g_signal_handlers_block_matched (G_OBJECT (selection), G_SIGNAL_MATCH_DATA,
-                                     0, 0, NULL, NULL, item_list);
+                                     0, 0, nullptr, nullptr, item_list);
     gtk_list_store_clear (item_list->list_store);
     g_signal_handlers_unblock_matched (G_OBJECT (selection), G_SIGNAL_MATCH_DATA,
-                                       0, 0, NULL, NULL, item_list);
+                                       0, 0, nullptr, nullptr, item_list);
 }
 
 
@@ -90,8 +90,8 @@ gnc_item_list_append (GncItemList* item_list, const char* string)
     GtkTreeIter iter;
 
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
-    g_return_if_fail (item_list->list_store != NULL);
-    g_return_if_fail (string != NULL);
+    g_return_if_fail (item_list->list_store != nullptr);
+    g_return_if_fail (string != nullptr);
     gtk_list_store_append (item_list->list_store, &iter);
     gtk_list_store_set (item_list->list_store, &iter, 0, string, -1);
 }
@@ -141,7 +141,7 @@ gnc_item_in_list (GncItemList* item_list, const char* string)
     FindSelectionData* to_find_data;
     gboolean result;
 
-    g_return_val_if_fail (item_list != NULL, FALSE);
+    g_return_val_if_fail (item_list != nullptr, FALSE);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), FALSE);
 
     to_find_data = (FindSelectionData*)g_new0 (FindSelectionData, 1);
@@ -152,7 +152,7 @@ gnc_item_in_list (GncItemList* item_list, const char* string)
                             _gnc_item_find_selection,
                             to_find_data);
 
-    result = (to_find_data->found_path != NULL);
+    result = (to_find_data->found_path != nullptr);
     g_free (to_find_data);
     return result;
 }
@@ -161,15 +161,15 @@ gnc_item_in_list (GncItemList* item_list, const char* string)
 void
 gnc_item_list_select (GncItemList* item_list, const char* string)
 {
-    GtkTreeSelection* tree_sel = NULL;
+    GtkTreeSelection* tree_sel = nullptr;
     FindSelectionData* to_find_data;
 
-    g_return_if_fail (item_list != NULL);
+    g_return_if_fail (item_list != nullptr);
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
 
     tree_sel = gtk_tree_view_get_selection (item_list->tree_view);
 
-    if (string == NULL)
+    if (string == nullptr)
     {
         gtk_tree_selection_unselect_all (tree_sel);
         return;
@@ -183,9 +183,9 @@ gnc_item_list_select (GncItemList* item_list, const char* string)
                             _gnc_item_find_selection,
                             to_find_data);
 
-    if (to_find_data->found_path != NULL)
+    if (to_find_data->found_path != nullptr)
     {
-        gtk_tree_view_set_cursor (item_list->tree_view, to_find_data->found_path, NULL,
+        gtk_tree_view_set_cursor (item_list->tree_view, to_find_data->found_path, nullptr,
                                   FALSE);
         gtk_tree_path_free (to_find_data->found_path);
 
@@ -206,7 +206,7 @@ gnc_item_list_get_selection (GncItemList *item_list)
     GtkTreeSelection *selection =
         gtk_tree_view_get_selection (item_list->tree_view);
     if (!gtk_tree_selection_get_selected (selection, &model, &iter))
-        return NULL;
+        return nullptr;
 
     gtk_tree_model_get (model, &iter, 0, &string, -1);
     return string;
@@ -220,7 +220,7 @@ gnc_item_list_show_selected (GncItemList* item_list)
     GtkTreeIter iter;
     GtkTreeModel* model;
 
-    g_return_if_fail (item_list != NULL);
+    g_return_if_fail (item_list != nullptr);
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
 
     selection = gtk_tree_view_get_selection (item_list->tree_view);
@@ -230,7 +230,7 @@ gnc_item_list_show_selected (GncItemList* item_list)
         GtkTreePath* path = gtk_tree_model_get_path (model, &iter);
 
         gtk_tree_view_scroll_to_cell (item_list->tree_view,
-                                      path, NULL, TRUE, 0.5, 0.0);
+                                      path, nullptr, TRUE, 0.5, 0.0);
         gtk_tree_path_free (path);
     }
 }
@@ -238,7 +238,7 @@ gnc_item_list_show_selected (GncItemList* item_list)
 int
 gnc_item_list_autosize (GncItemList* item_list)
 {
-    g_return_val_if_fail (item_list != NULL, 0);
+    g_return_val_if_fail (item_list != nullptr, 0);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), 0);
 
     return 150;
@@ -260,7 +260,7 @@ gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store)
     {
         gtk_tree_view_set_model (item_list->tree_view,
                                  GTK_TREE_MODEL (item_list->list_store));
-        item_list->temp_store = NULL;
+        item_list->temp_store = nullptr;
     }
 }
 
@@ -275,11 +275,11 @@ gnc_item_list_disconnect_store (GncItemList *item_list)
 {
     GtkListStore *store;
 
-    g_return_val_if_fail (item_list != NULL, NULL);
+    g_return_val_if_fail (item_list != nullptr, nullptr);
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model (item_list->tree_view));
 
-    gtk_tree_view_set_model (item_list->tree_view, NULL);
+    gtk_tree_view_set_model (item_list->tree_view, nullptr);
 
     return store;
 }
@@ -296,10 +296,10 @@ gnc_item_list_connect_store (GncItemList *item_list, GtkListStore *list_store)
 static void
 gnc_item_list_init (GncItemList* item_list)
 {
-    item_list->scrollwin = NULL;
-    item_list->tree_view = NULL;
-    item_list->list_store = NULL;
-    item_list->temp_store = NULL;
+    item_list->scrollwin = nullptr;
+    item_list->tree_view = nullptr;
+    item_list->list_store = nullptr;
+    item_list->temp_store = nullptr;
     item_list->cell_height = 0;
 }
 
@@ -326,14 +326,14 @@ gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
                                             event->x,
                                             event->y,
                                             &path,
-                                            NULL,
-                                            NULL,
-                                            NULL))
+                                            nullptr,
+                                            nullptr,
+                                            nullptr))
         {
             return FALSE;
         }
 
-        gtk_tree_view_set_cursor (item_list->tree_view, path, NULL, FALSE);
+        gtk_tree_view_set_cursor (item_list->tree_view, path, nullptr, FALSE);
 
         model = GTK_TREE_MODEL (item_list->list_store);
         success = gtk_tree_model_get_iter (model, &iter, path);
@@ -414,7 +414,7 @@ gnc_item_list_class_init (GncItemListClass* item_list_class)
                       G_OBJECT_CLASS_TYPE (object_class),
                       G_SIGNAL_RUN_LAST,
                       G_STRUCT_OFFSET (GncItemListClass, select_item),
-                      NULL, NULL,
+                      nullptr, nullptr,
                       g_cclosure_marshal_VOID__POINTER,
                       G_TYPE_NONE, 1,
                       G_TYPE_POINTER);
@@ -424,7 +424,7 @@ gnc_item_list_class_init (GncItemListClass* item_list_class)
                       G_OBJECT_CLASS_TYPE (object_class),
                       G_SIGNAL_RUN_LAST,
                       G_STRUCT_OFFSET (GncItemListClass, change_item),
-                      NULL, NULL,
+                      nullptr, nullptr,
                       g_cclosure_marshal_VOID__POINTER,
                       G_TYPE_NONE, 1,
                       G_TYPE_POINTER);
@@ -434,14 +434,14 @@ gnc_item_list_class_init (GncItemListClass* item_list_class)
                       G_OBJECT_CLASS_TYPE (object_class),
                       G_SIGNAL_RUN_LAST,
                       G_STRUCT_OFFSET (GncItemListClass, activate_item),
-                      NULL, NULL,
+                      nullptr, nullptr,
                       g_cclosure_marshal_VOID__POINTER,
                       G_TYPE_NONE, 1,
                       G_TYPE_POINTER);
 
-    item_list_class->select_item = NULL;
-    item_list_class->change_item = NULL;
-    item_list_class->activate_item = NULL;
+    item_list_class->select_item = nullptr;
+    item_list_class->change_item = nullptr;
+    item_list_class->activate_item = nullptr;
 }
 
 static void
@@ -510,10 +510,10 @@ gnc_item_list_new (GtkListStore* list_store)
 
     GncItemList* item_list =
         GNC_ITEM_LIST (g_object_new (GNC_TYPE_ITEM_LIST,
-                                     NULL));
+                                     nullptr));
 
     item_list->scrollwin =
-        GTK_SCROLLED_WINDOW (gtk_scrolled_window_new(NULL, NULL));
+        GTK_SCROLLED_WINDOW (gtk_scrolled_window_new(nullptr, nullptr));
     gtk_container_add (GTK_CONTAINER (item_list),
                        GTK_WIDGET (item_list->scrollwin));
 
@@ -521,7 +521,7 @@ gnc_item_list_new (GtkListStore* list_store)
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
 
-    if (NULL == list_store)
+    if (nullptr == list_store)
         list_store = gtk_list_store_new (1, G_TYPE_STRING);
     else
         g_object_ref (list_store);
@@ -539,7 +539,7 @@ gnc_item_list_new (GtkListStore* list_store)
     column = gtk_tree_view_column_new_with_attributes (_ ("List"),
                                                        item_list->renderer,
                                                        "text", 0,
-                                                       NULL);
+                                                       nullptr);
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
     gtk_container_add (GTK_CONTAINER (item_list->scrollwin), tree_view);

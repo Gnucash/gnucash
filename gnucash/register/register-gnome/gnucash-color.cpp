@@ -48,7 +48,7 @@ static int color_inited;
 GdkRGBA gn_white, gn_black, gn_light_gray;
 GdkRGBA gn_dark_gray, gn_blue, gn_red, gn_yellow;
 
-static GHashTable *color_hash_table = NULL;
+static GHashTable *color_hash_table = nullptr;
 
 static guint
 color_hash (gconstpointer v)

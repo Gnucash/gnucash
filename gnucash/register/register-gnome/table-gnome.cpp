@@ -79,7 +79,7 @@ gnc_table_save_state (Table *table, const gchar * state_section)
     if (!table)
         return;
 
-    if (table->ui_data == NULL)
+    if (table->ui_data == nullptr)
         return;
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
@@ -104,8 +104,8 @@ gnc_table_save_state (Table *table, const gchar * state_section)
         {
             g_key_file_set_integer (state_file, state_section, key, width);
         }
-        else if (g_key_file_has_key (state_file, state_section, key, NULL))
-            g_key_file_remove_key (state_file, state_section, key, NULL);
+        else if (g_key_file_has_key (state_file, state_section, key, nullptr))
+            g_key_file_remove_key (state_file, state_section, key, nullptr);
         g_free (key);
     }
     gnc_header_widths_destroy (widths);
@@ -116,10 +116,10 @@ table_ui_redraw_cb (Table *table)
 {
     GnucashSheet *sheet;
 
-    if (table == NULL)
+    if (table == nullptr)
         return;
 
-    if (table->ui_data == NULL)
+    if (table->ui_data == nullptr)
         return;
 
     sheet = GNUCASH_SHEET (table->ui_data);
@@ -132,17 +132,17 @@ table_destroy_cb (Table *table)
 {
     GnucashSheet *sheet;
 
-    if (table == NULL)
+    if (table == nullptr)
         return;
 
-    if (table->ui_data == NULL)
+    if (table->ui_data == nullptr)
         return;
 
     sheet = GNUCASH_SHEET (table->ui_data);
 
     g_object_unref (sheet);
 
-    table->ui_data = NULL;
+    table->ui_data = nullptr;
 }
 
 
@@ -151,8 +151,8 @@ table_destroy_cb (Table *table)
    widget, maybe some of it should be moved to gnucash-sheet.c. */
 /* Adding to previous note:  Since data doesn't appear do anything and to
    align the function with save_state() I've removed the check for
-   NULL and changed two calls in dialog_order.c and dialog_invoice.c
-   to pass NULL as second parameter. */
+   nullptr and changed two calls in dialog_order.c and dialog_invoice.c
+   to pass nullptr as second parameter. */
 
 void
 gnc_table_init_gui (Table *table)

@@ -77,7 +77,7 @@ gnc_header_draw_offscreen (GncHeader *header)
     gtk_style_context_save (stylectxt);
 
     // Get the color type and apply the css class
-    auto color_type = static_cast<RegisterColor>(gnc_table_get_color (table, virt_loc, NULL));
+    auto color_type = static_cast<RegisterColor>(gnc_table_get_color (table, virt_loc, nullptr));
     gnucash_get_style_classes (header->sheet, stylectxt, color_type, FALSE);
 
     if (header->surface)
@@ -108,7 +108,7 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     vcell = gnc_table_get_virtual_cell
             (table, table->current_cursor_loc.vcell_loc);
-    cb = vcell ? vcell->cellblock : NULL;
+    cb = vcell ? vcell->cellblock : nullptr;
     row_offset = 0;
 
     for (i = 0; i < style->nrows; i++)
@@ -163,7 +163,7 @@ gnc_header_draw_offscreen (GncHeader *header)
 
             layout = gtk_widget_create_pango_layout (GTK_WIDGET(header->sheet), text);
 
-            pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+            pango_layout_get_pixel_extents (layout, nullptr, &logical_rect);
 
             gnucash_sheet_set_text_bounds (header->sheet, &rect,
                                            col_offset, row_offset, width, height);
@@ -228,7 +228,7 @@ gnc_header_draw (GtkWidget *header, cairo_t *cr)
 
     // if the register page is moved to another window, the surface is
     // not created so test for a surface and create one if null
-    if (GNC_HEADER(header)->surface == NULL)
+    if (GNC_HEADER(header)->surface == nullptr)
         gnc_header_draw_offscreen (GNC_HEADER(header));
 
     cairo_set_source_surface (cr, GNC_HEADER(header)->surface, x, 0);
@@ -255,15 +255,15 @@ gnc_header_unrealize (GtkWidget *widget)
     GncHeader *header = GNC_HEADER(widget);
     if (header->surface)
         cairo_surface_destroy (header->surface);
-    header->surface = NULL;
+    header->surface = nullptr;
 
     if (header->resize_cursor)
         g_object_unref (header->resize_cursor);
-    header->resize_cursor = NULL;
+    header->resize_cursor = nullptr;
 
     if (header->normal_cursor)
         g_object_unref (header->normal_cursor);
-    header->normal_cursor = NULL;
+    header->normal_cursor = nullptr;
 
     if (GTK_WIDGET_CLASS(gnc_header_parent_class)->unrealize)
         GTK_WIDGET_CLASS(gnc_header_parent_class)->unrealize (GTK_WIDGET(header));
@@ -278,7 +278,7 @@ gnc_header_finalize (GObject *object)
     header = GNC_HEADER(object);
 
     g_free (header->cursor_name);
-    header->cursor_name = NULL;
+    header->cursor_name = nullptr;
 
     G_OBJECT_CLASS(gnc_header_parent_class)->finalize (object);
 }
@@ -291,7 +291,7 @@ gnc_header_reconfigure (GncHeader *header)
     SheetBlockStyle *old_style;
     int w, h;
 
-    g_return_if_fail (header != NULL);
+    g_return_if_fail (header != nullptr);
     g_return_if_fail (GNC_IS_HEADER(header));
 
     sheet = GNUCASH_SHEET(header->sheet);
@@ -300,7 +300,7 @@ gnc_header_reconfigure (GncHeader *header)
     header->style = gnucash_sheet_get_style_from_cursor
                     (sheet, header->cursor_name);
 
-    if (header->style == NULL)
+    if (header->style == nullptr)
         return;
 
     sheet->width = header->style->dimensions->width;
@@ -327,7 +327,7 @@ void
 gnc_header_set_header_rows (GncHeader *header,
                             int num_phys_rows)
 {
-    g_return_if_fail (header != NULL);
+    g_return_if_fail (header != nullptr);
     g_return_if_fail (GNC_IS_HEADER(header));
 
     header->num_phys_rows = num_phys_rows;
@@ -359,7 +359,7 @@ pointer_on_resize_line (GncHeader *header, int x, G_GNUC_UNUSED int y, int *col)
             break;
     }
 
-    if (col != NULL)
+    if (col != nullptr)
         *col = j;
 
     return on_the_line;
@@ -610,7 +610,7 @@ gnc_header_set_property (GObject *object,
         break;
     }
 
-    if ((header->sheet != NULL) && needs_update)
+    if ((header->sheet != nullptr) && needs_update)
         gnc_header_reconfigure (header);
 }
 
@@ -618,15 +618,15 @@ gnc_header_set_property (GObject *object,
 static void
 gnc_header_init (GncHeader *header)
 {
-    header->sheet = NULL;
-    header->cursor_name = NULL;
+    header->sheet = nullptr;
+    header->cursor_name = nullptr;
     header->in_resize = FALSE;
     header->resize_col = -1;
-    header->resize_cursor = NULL;
-    header->normal_cursor = NULL;
+    header->resize_cursor = nullptr;
+    header->normal_cursor = nullptr;
     header->height = 20;
     header->width = 400;
-    header->style = NULL;
+    header->style = nullptr;
 
     gtk_widget_add_events (GTK_WIDGET(header),
                           (GDK_EXPOSURE_MASK
@@ -636,7 +636,7 @@ gnc_header_init (GncHeader *header)
                           | GDK_POINTER_MOTION_HINT_MASK));
 
     g_signal_connect (G_OBJECT(header), "configure_event",
-                      G_CALLBACK(gnc_header_reconfigure), NULL);
+                      G_CALLBACK(gnc_header_reconfigure), nullptr);
     gtk_widget_show_all (GTK_WIDGET(header));
 }
 
@@ -679,7 +679,7 @@ gnc_header_new (GnucashSheet *sheet)
 {
     auto layout = static_cast<GtkWidget *>(
         g_object_new (GNC_TYPE_HEADER, "sheet", sheet,
-                      "cursor_name", CURSOR_HEADER, NULL)
+                      "cursor_name", CURSOR_HEADER, nullptr)
     );
 
     sheet->header_item = layout;

@@ -106,7 +106,7 @@ check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
                           "this book. This setting can be changed in "
                           "File->Properties->Accounts, resetting to the threshold.");
             gchar *dialog_title = _("Cannot store a transaction at this date");
-            GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (NULL),
+            GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (nullptr),
                                    static_cast<GtkDialogFlags>(0),
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_OK,
@@ -219,9 +219,9 @@ gnc_date_cell_init (DateCell *cell)
 
     box = g_new0 (PopBox, 1);
 
-    box->sheet = NULL;
-    box->item_edit = NULL;
-    box->date_picker = NULL;
+    box->sheet = nullptr;
+    box->item_edit = nullptr;
+    box->date_picker = nullptr;
 
     box->signals_connected = FALSE;
     box->calendar_popped = FALSE;
@@ -314,7 +314,7 @@ date_picker_disconnect_signals (DateCell *cell)
         return;
 
     g_signal_handlers_disconnect_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
-                                          0, 0, NULL, NULL, cell);
+                                          0, 0, nullptr, nullptr, cell);
 
     box->signals_connected = FALSE;
 }
@@ -348,7 +348,7 @@ block_picker_signals (DateCell *cell)
         return;
 
     g_signal_handlers_block_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
-                                     0, 0, NULL, NULL, cell);
+                                     0, 0, nullptr, nullptr, cell);
 }
 
 static void
@@ -360,7 +360,7 @@ unblock_picker_signals (DateCell *cell)
         return;
 
     g_signal_handlers_unblock_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
-                                       0, 0, NULL, NULL, cell);
+                                       0, 0, nullptr, nullptr, cell);
 }
 
 static void
@@ -369,21 +369,21 @@ gnc_date_cell_gui_destroy (BasicCell *bcell)
     auto box = static_cast<PopBox *>(bcell->gui_private);
     DateCell *cell = (DateCell *) bcell;
 
-    if (cell->cell.gui_realize == NULL)
+    if (cell->cell.gui_realize == nullptr)
     {
-        if (box != NULL && box->date_picker != NULL)
+        if (box != nullptr && box->date_picker != nullptr)
         {
             date_picker_disconnect_signals (cell);
             g_object_unref (box->date_picker);
-            box->date_picker = NULL;
+            box->date_picker = nullptr;
         }
 
         /* allow the widget to be shown again */
         cell->cell.gui_realize = gnc_date_cell_realize;
-        cell->cell.gui_move = NULL;
-        cell->cell.enter_cell = NULL;
-        cell->cell.leave_cell = NULL;
-        cell->cell.gui_destroy = NULL;
+        cell->cell.gui_move = nullptr;
+        cell->cell.enter_cell = nullptr;
+        cell->cell.leave_cell = nullptr;
+        cell->cell.gui_destroy = nullptr;
     }
 }
 
@@ -397,8 +397,8 @@ gnc_date_cell_destroy (BasicCell *bcell)
 
     g_free (box);
 
-    cell->cell.gui_private = NULL;
-    cell->cell.gui_realize = NULL;
+    cell->cell.gui_private = nullptr;
+    cell->cell.gui_realize = nullptr;
 }
 
 void
@@ -545,7 +545,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     }
 
     /* if user hit backspace, accept the change */
-    if (change == NULL)
+    if (change == nullptr)
         accept = TRUE;
     else if (change_len == 0)
         accept = TRUE;
@@ -627,7 +627,7 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     g_object_ref_sink(box->date_picker);
 
     /* to mark cell as realized, remove the realize method */
-    cell->cell.gui_realize = NULL;
+    cell->cell.gui_realize = nullptr;
     cell->cell.gui_move = gnc_date_cell_move;
     cell->cell.enter_cell = gnc_date_cell_enter;
     cell->cell.leave_cell = gnc_date_cell_leave;
@@ -640,8 +640,8 @@ gnc_date_cell_move (BasicCell *bcell)
 
     date_picker_disconnect_signals ((DateCell *) bcell);
 
-    gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL);
+    gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
+                             nullptr, nullptr, nullptr, nullptr, nullptr);
 
     box->calendar_popped = FALSE;
 }
@@ -658,7 +658,7 @@ popup_get_height (GtkWidget *widget,
     req.height = 0;
     req.width = 0;
 
-    gtk_widget_get_preferred_size (cal, &req, NULL);
+    gtk_widget_get_preferred_size (cal, &req, nullptr);
 
     return req.height;
 }
@@ -680,8 +680,8 @@ gnc_date_cell_enter (BasicCell *bcell,
     auto box = static_cast<PopBox *>(bcell->gui_private);
 
     gnc_item_edit_set_popup (box->item_edit, GTK_WIDGET (box->date_picker),
-                             popup_get_height, NULL, popup_set_focus,
-                             NULL, NULL, NULL);
+                             popup_get_height, nullptr, popup_set_focus,
+                             nullptr, nullptr, nullptr);
 
     block_picker_signals (cell);
     gnc_date_picker_set_date (box->date_picker,
@@ -706,8 +706,8 @@ gnc_date_cell_leave (BasicCell *bcell)
 
     date_picker_disconnect_signals ((DateCell *) bcell);
 
-    gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL);
+    gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
+                             nullptr, nullptr, nullptr, nullptr, nullptr);
 
     box->calendar_popped = FALSE;
 

@@ -116,10 +116,10 @@ gnc_completion_cell_init (CompletionCell* cell)
 
     PopBox* box = g_new0 (PopBox, 1);
 
-    box->sheet = NULL;
-    box->item_edit = NULL;
-    box->item_list = NULL;
-    box->item_store = NULL;
+    box->sheet = nullptr;
+    box->item_edit = nullptr;
+    box->item_list = nullptr;
+    box->item_store = nullptr;
 
     box->signals_connected = FALSE;
     box->list_popped = FALSE;
@@ -134,7 +134,7 @@ gnc_completion_cell_init (CompletionCell* cell)
     box->in_list_select = FALSE;
     box->occurrence = 0;
 
-    box->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    box->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
 }
 
 static void
@@ -162,7 +162,7 @@ text_width (PangoLayout *layout)
 {
     PangoRectangle logical_rect;
     pango_layout_set_width (layout, -1);
-    pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+    pango_layout_get_pixel_extents (layout, nullptr, &logical_rect);
     return logical_rect.width;
 }
 
@@ -245,7 +245,7 @@ block_list_signals (CompletionCell* cell)
 
     g_signal_handlers_block_matched (G_OBJECT(box->item_list),
                                      G_SIGNAL_MATCH_DATA,
-                                     0, 0, NULL, NULL, cell);
+                                     0, 0, nullptr, nullptr, cell);
 }
 
 static void
@@ -258,7 +258,7 @@ unblock_list_signals (CompletionCell* cell)
 
     g_signal_handlers_unblock_matched (G_OBJECT(box->item_list),
                                        G_SIGNAL_MATCH_DATA,
-                                       0, 0, NULL, NULL, cell);
+                                       0, 0, nullptr, nullptr, cell);
 }
 
 static void
@@ -271,7 +271,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_dat
     {
     case GDK_KEY_Escape:
         block_list_signals (cell); // Prevent recursion, unselect all
-        gnc_item_list_select (box->item_list, NULL);
+        gnc_item_list_select (box->item_list, nullptr);
         unblock_list_signals (cell);
         hide_popup (box);
         break;
@@ -293,7 +293,7 @@ completion_disconnect_signals (CompletionCell* cell)
 
     g_signal_handlers_disconnect_matched (G_OBJECT(box->item_list),
                                           G_SIGNAL_MATCH_DATA,
-                                          0, 0, NULL, NULL, cell);
+                                          0, 0, nullptr, nullptr, cell);
 
     box->signals_connected = FALSE;
 }
@@ -335,20 +335,20 @@ gnc_completion_cell_gui_destroy (BasicCell* bcell)
             {
                 completion_disconnect_signals (cell);
                 g_object_unref (box->item_list);
-                box->item_list = NULL;
+                box->item_list = nullptr;
             }
             if (box->item_store)
             {
                 g_object_unref (box->item_store);
-                box->item_store = NULL;
+                box->item_store = nullptr;
             }
         }
         /* allow the widget to be shown again */
         cell->cell.gui_realize = gnc_completion_cell_gui_realize;
-        cell->cell.gui_move = NULL;
-        cell->cell.enter_cell = NULL;
-        cell->cell.leave_cell = NULL;
-        cell->cell.gui_destroy = NULL;
+        cell->cell.gui_move = nullptr;
+        cell->cell.enter_cell = nullptr;
+        cell->cell.leave_cell = nullptr;
+        cell->cell.gui_destroy = nullptr;
     }
 }
 
@@ -366,10 +366,10 @@ gnc_completion_cell_destroy (BasicCell* bcell)
             g_hash_table_destroy (box->item_hash);
 
         g_free (box);
-        cell->cell.gui_private = NULL;
+        cell->cell.gui_private = nullptr;
     }
-    cell->cell.gui_private = NULL;
-    cell->cell.gui_realize = NULL;
+    cell->cell.gui_private = nullptr;
+    cell->cell.gui_realize = nullptr;
 }
 
 static gint
@@ -406,7 +406,7 @@ set_sort_column_enabled (PopBox* box, gboolean enable)
     if (enable)
     {
         gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(box->item_list->list_store),
-                                         WEIGHT_COL, sort_func, box->item_list, NULL);
+                                         WEIGHT_COL, sort_func, box->item_list, nullptr);
 
         gnc_item_list_set_sort_column (box->item_list, WEIGHT_COL);
     }
@@ -532,7 +532,7 @@ test_and_add (PopBox* box, const gchar *text, gint start_pos,
     int pos = 0, len = 0;
     if (gnc_unicode_has_substring_base_chars (box->newval, sub_text, &pos, &len))
     {
-        gchar *markup = NULL, *prefix = NULL, *match = NULL, *suffix = NULL;
+        gchar *markup = nullptr, *prefix = nullptr, *match = nullptr, *suffix = nullptr;
         gint found_location = start_pos + pos;
         gboolean have_boundary = FALSE;
         gint prefix_length;
@@ -624,7 +624,7 @@ select_first_entry_in_list (PopBox* box)
 
     GtkTreePath* path = gtk_tree_path_new_first ();
     gtk_tree_view_scroll_to_cell (box->item_list->tree_view,
-                                  path, NULL, TRUE, 0.5, 0.0);
+                                  path, nullptr, TRUE, 0.5, 0.0);
     gtk_tree_path_free (path);
     g_free (string);
 }
@@ -676,7 +676,7 @@ populate_list_store (CompletionCell* cell, gchar* str)
                                        box->item_list->tree_view, TEXT_COL));
 
     // if no entries, do not show popup
-    if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(box->item_store), NULL) == 1)
+    if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(box->item_store), nullptr) == 1)
     {
         hide_popup (box);
     }
@@ -715,7 +715,7 @@ gnc_completion_cell_modify_verify (BasicCell* bcell,
     }
 
     // Are were deleting or inserting in the middle.
-    if (change == NULL ||
+    if (change == nullptr ||
         static_cast<unsigned int>(*cursor_position) < bcell->value_chars)
     {
         *start_selection = *end_selection = *cursor_position;
@@ -728,7 +728,7 @@ gnc_completion_cell_modify_verify (BasicCell* bcell,
     if (g_strcmp0 (newval, "") == 0)
     {
         block_list_signals (cell); // Prevent recursion, unselect all
-        gnc_item_list_select (box->item_list, NULL);
+        gnc_item_list_select (box->item_list, nullptr);
         unblock_list_signals (cell);
         hide_popup (box);
     }
@@ -739,7 +739,7 @@ static char*
 get_entry_from_hash_if_size_is_one (CompletionCell* cell)
 {
     if (!cell)
-        return NULL;
+        return nullptr;
 
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
@@ -750,7 +750,7 @@ get_entry_from_hash_if_size_is_one (CompletionCell* cell)
         g_list_free (keys);
         return ret;
     }
-    return NULL;
+    return nullptr;
 }
 
 static gboolean
@@ -846,7 +846,7 @@ gnc_completion_cell_gui_realize (BasicCell* bcell, gpointer data)
     g_object_ref_sink (box->item_list);
 
     /* to mark cell as realized, remove the realize method */
-    cell->cell.gui_realize = NULL;
+    cell->cell.gui_realize = nullptr;
     cell->cell.gui_move = gnc_completion_cell_gui_move;
     cell->cell.enter_cell = gnc_completion_cell_enter;
     cell->cell.leave_cell = gnc_completion_cell_leave;
@@ -882,8 +882,8 @@ gnc_completion_cell_gui_move (BasicCell* bcell)
 
     completion_disconnect_signals ((CompletionCell*) bcell);
 
-    gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL);
+    gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
+                             nullptr, nullptr, nullptr, nullptr, nullptr);
 
     reset_item_list_to_default_setup (bcell);
 }
@@ -1030,8 +1030,8 @@ gnc_completion_cell_leave (BasicCell* bcell)
 
     completion_disconnect_signals ((CompletionCell*) bcell);
 
-    gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL);
+    gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
+                             nullptr, nullptr, nullptr, nullptr, nullptr);
 
     reset_item_list_to_default_setup (bcell);
 

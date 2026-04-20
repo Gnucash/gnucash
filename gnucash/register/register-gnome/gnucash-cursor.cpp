@@ -108,7 +108,7 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
 void
 gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style)
 {
-    g_return_if_fail (cursor != NULL);
+    g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR(cursor));
 
     cursor->style = style;
@@ -118,7 +118,7 @@ gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style)
 void
 gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
 {
-    g_return_if_fail (cursor != NULL);
+    g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     virt_loc->vcell_loc.virt_row = cursor->row;
@@ -134,7 +134,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
 {
     gint x = 0, y = 0, w = 0, h = 0;
 
-    g_return_if_fail (cursor != NULL);
+    g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     if (!cursor->sheet)
@@ -162,7 +162,7 @@ gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
 {
     GnucashSheet *sheet;
 
-    g_return_if_fail (cursor != NULL);
+    g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     sheet = cursor->sheet;
@@ -184,7 +184,7 @@ gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
 {
     SheetBlockStyle *style;
 
-    g_return_if_fail (cursor != NULL);
+    g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     style = cursor->style;
@@ -203,7 +203,7 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
 {
     GnucashSheet *sheet;
 
-    g_return_if_fail (cursor != NULL);
+    g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     sheet = cursor->sheet;
@@ -218,7 +218,7 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
     g_object_set (G_OBJECT(sheet->header_item),
                   "cursor_name",
                   cursor->style->cursor->cursor_name,
-                  NULL);
+                  nullptr);
 }
 
 
@@ -304,7 +304,7 @@ gnucash_cursor_new (GnucashSheet *sheet)
     return GNUCASH_CURSOR(
         g_object_new (gnucash_cursor_get_type(),
                       "sheet", sheet,
-                      NULL));
+                      nullptr));
 }
 
 

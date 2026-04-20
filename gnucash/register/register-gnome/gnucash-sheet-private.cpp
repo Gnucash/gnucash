@@ -60,14 +60,14 @@ find_block_by_pixel (GnucashSheet *sheet,
     SheetBlock *block;
     VirtualCellLocation vc_loc = { 1, 0 };
 
-    g_return_val_if_fail (y >= 0, NULL);
-    g_return_val_if_fail (x >= 0, NULL);
+    g_return_val_if_fail (y >= 0, nullptr);
+    g_return_val_if_fail (x >= 0, nullptr);
 
     do
     {
         block = gnucash_sheet_get_block (sheet, vc_loc);
         if (!block)
-            return NULL;
+            return nullptr;
 
         if (block->visible &&
                 y >= block->origin_y &&
@@ -82,13 +82,13 @@ find_block_by_pixel (GnucashSheet *sheet,
     while (vc_loc.virt_row < sheet->num_virt_rows);
 
     if (vc_loc.virt_row == sheet->num_virt_rows)
-        return NULL;
+        return nullptr;
 
     do
     {
         block = gnucash_sheet_get_block (sheet, vc_loc);
         if (!block)
-            return NULL;
+            return nullptr;
 
         if (block->visible &&
                 x >= block->origin_x &&
@@ -103,7 +103,7 @@ find_block_by_pixel (GnucashSheet *sheet,
     while (vc_loc.virt_col < sheet->num_virt_cols);
 
     if (vc_loc.virt_col == sheet->num_virt_cols)
-        return NULL;
+        return nullptr;
 
     return block;
 }
@@ -118,10 +118,10 @@ find_cell_by_pixel (GnucashSheet *sheet, gint x, gint y,
     gint row = 0;
     gint col = 0;
 
-    g_return_val_if_fail (virt_loc != NULL, FALSE);
+    g_return_val_if_fail (virt_loc != nullptr, FALSE);
 
     block = gnucash_sheet_get_block (sheet, virt_loc->vcell_loc);
-    if (block == NULL)
+    if (block == nullptr)
         return FALSE;
 
     /* now make x, y relative to the block origin */
@@ -129,7 +129,7 @@ find_cell_by_pixel (GnucashSheet *sheet, gint x, gint y,
     y -= block->origin_y;
 
     style = block->style;
-    if (style == NULL)
+    if (style == nullptr)
         return FALSE;
 
     do
@@ -174,12 +174,12 @@ gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
 {
     SheetBlock *block;
 
-    if (virt_loc == NULL)
+    if (virt_loc == nullptr)
         return FALSE;
 
     block = find_block_by_pixel (sheet, x, y,
             &virt_loc->vcell_loc);
-    if (block == NULL)
+    if (block == nullptr)
         return FALSE;
 
     return find_cell_by_pixel (sheet, x, y, virt_loc);
@@ -511,13 +511,13 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
     }
 #endif
 
-    if ((text != NULL) && (*text != '\0') && g_strcmp0 (PRICE_CELL_TYPE_NAME,
+    if ((text != nullptr) && (*text != '\0') && g_strcmp0 (PRICE_CELL_TYPE_NAME,
          gnc_table_get_cell_type_name (table, virt_loc)) == 0)
     {
         int text_width;
         int text_border_padding;
 
-        pango_layout_get_pixel_size (layout, &text_width, NULL);
+        pango_layout_get_pixel_size (layout, &text_width, nullptr);
 
         text_border_padding = gnc_item_edit_get_margin (item_edit, left_right) +
                               gnc_item_edit_get_padding_border (item_edit, left_right);
@@ -538,7 +538,7 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
             (!text || strlen(text) == 0))
     {
         text = gnc_table_get_label (table, virt_loc);
-        if ((text == NULL) || (*text == '\0'))
+        if ((text == nullptr) || (*text == '\0'))
             goto exit;
 
         // Make text color greyed
@@ -549,12 +549,12 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
         pango_context_set_font_description (context, font);
     }
 
-    if ((text == NULL) || (*text == '\0'))
+    if ((text == nullptr) || (*text == '\0'))
     {
         goto exit;
     }
 
-    pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+    pango_layout_get_pixel_extents (layout, nullptr, &logical_rect);
 
     gnucash_sheet_set_text_bounds (sheet, &rect, x, y, width, height);
 

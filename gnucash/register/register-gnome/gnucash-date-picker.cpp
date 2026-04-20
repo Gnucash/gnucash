@@ -45,7 +45,7 @@ gnc_date_picker_set_date (GNCDatePicker *date_picker,
                           guint day, guint mon, guint year)
 {
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
-    g_return_if_fail (date_picker->calendar != NULL);
+    g_return_if_fail (date_picker->calendar != nullptr);
 
     gtk_calendar_select_day (date_picker->calendar, 1);
     gtk_calendar_select_month (date_picker->calendar, mon, year);
@@ -57,7 +57,7 @@ gnc_date_picker_get_date (GNCDatePicker *date_picker,
                           guint *day, guint *mon, guint *year)
 {
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
-    g_return_if_fail (date_picker->calendar != NULL);
+    g_return_if_fail (date_picker->calendar != nullptr);
 
     gtk_calendar_get_date (date_picker->calendar, year, mon, day);
 }
@@ -66,7 +66,7 @@ static void
 gnc_date_picker_init (GNCDatePicker *date_picker)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(date_picker), GTK_ORIENTATION_HORIZONTAL);
-    date_picker->calendar = NULL;
+    date_picker->calendar = nullptr;
 }
 
 static gboolean
@@ -126,7 +126,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
                      G_TYPE_FROM_CLASS(object_class),
                      G_SIGNAL_RUN_LAST,
                      G_STRUCT_OFFSET(GNCDatePickerClass, date_selected),
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
@@ -135,12 +135,12 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
                      G_TYPE_FROM_CLASS(object_class),
                      G_SIGNAL_RUN_LAST,
                      G_STRUCT_OFFSET(GNCDatePickerClass, date_picked),
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    date_picker_class->date_selected = NULL;
-    date_picker_class->date_picked = NULL;
+    date_picker_class->date_selected = nullptr;
+    date_picker_class->date_picked = nullptr;
 }
 
 
@@ -165,7 +165,7 @@ gnc_date_picker_new (void)
     GtkRequisition requisition;
 
     auto date_picker = static_cast<GNCDatePicker *>(
-        g_object_new (GNC_TYPE_DATE_PICKER, "homogeneous", FALSE, NULL)
+        g_object_new (GNC_TYPE_DATE_PICKER, "homogeneous", FALSE, nullptr)
     );
 
     calendar = gtk_calendar_new ();
@@ -173,7 +173,7 @@ gnc_date_picker_new (void)
 
     gtk_box_pack_start (GTK_BOX(date_picker), calendar, TRUE, TRUE, 0);
 
-    gtk_widget_get_preferred_size (calendar, &requisition, NULL);
+    gtk_widget_get_preferred_size (calendar, &requisition, nullptr);
     allocation.x = 0;
     allocation.y = 0;
     allocation.width = requisition.width;
