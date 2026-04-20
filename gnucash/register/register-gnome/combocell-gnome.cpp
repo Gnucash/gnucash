@@ -51,7 +51,7 @@
 
 #define GNC_PREF_AUTO_RAISE_LISTS "auto-raise-lists"
 
-typedef struct _PopBox
+struct PopBox
 {
     GnucashSheet* sheet;
     GncItemEdit*  item_edit;
@@ -75,7 +75,7 @@ typedef struct _PopBox
 
     GList* ignore_strings;
 
-} PopBox;
+};
 
 
 static void gnc_combo_cell_gui_realize (BasicCell* bcell, gpointer w);

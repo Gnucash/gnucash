@@ -46,7 +46,7 @@
 #include "gnc-glib-utils.h"
 #include <gnc-unicode.h>
 
-typedef struct _PopBox
+struct PopBox
 {
     GnucashSheet* sheet;
     GncItemEdit*  item_edit;
@@ -71,7 +71,7 @@ typedef struct _PopBox
 
     gint          occurrence; // the position in the list
 
-} PopBox;
+};
 
 #define DONT_TEXT N_("Don't autocomplete")
 

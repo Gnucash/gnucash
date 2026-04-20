@@ -109,12 +109,12 @@ gnc_item_list_set_sort_column (GncItemList* item_list, gint column_id)
 }
 
 
-typedef struct _findSelectionData
+struct FindSelectionData
 {
     GncItemList* item_list;
     const char* string_to_find;
     GtkTreePath* found_path;
-} FindSelectionData;
+};
 
 gboolean
 _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,

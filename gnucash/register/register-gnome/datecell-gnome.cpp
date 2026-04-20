@@ -52,7 +52,7 @@
 
 #define DATE_BUF (MAX_DATE_LENGTH+1)
 
-typedef struct _PopBox
+struct PopBox
 {
     GnucashSheet  *sheet;
     GncItemEdit   *item_edit;
@@ -63,7 +63,7 @@ typedef struct _PopBox
     gboolean in_date_select;
 
     struct tm date;
-} PopBox;
+};
 
 
 static void block_picker_signals (DateCell *cell);
