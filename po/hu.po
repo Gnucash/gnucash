@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-19 21:09+0000\n"
+"PO-Revision-Date: 2026-04-20 14:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -11226,11 +11226,11 @@ msgid ""
 "date specified by the start-date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start-period key."
 msgstr ""
-"Ez a beállítás határozza meg, hogy a nyereség/veszteség számításhoz milyen "
-"kezdő dátumot használjon a program. Ha az értéke „abszolút”, akkor a GnuCash "
-"a „start-date” kulcsban megadott kezdő dátumot veszi alapul. Ha más értékre "
-"(relatív) van állítva, akkor a GnuCash a „start-period” kulcsban megadott "
-"kezdő dátumot veszi alapul."
+"Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
+"számításhoz milyen kezdő dátumot használjon a program. Ha az értéke „abszolút"
+"”, akkor a GnuCash a „start-date” kulcsban megadott kezdő dátumot veszi "
+"alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash a „start-period"
+"” kulcsban megadott kezdő dátumot veszi alapul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
@@ -11246,6 +11246,10 @@ msgid ""
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
+"Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke „"
+"abszolút”. A mező az 1970. január 1-jétől számított másodpercekben "
+"kifejezett dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
@@ -27733,7 +27737,7 @@ msgstr "Beállítások szerkesztése"
 
 #: gnucash/report/reports/standard/view-column.scm:130
 msgid "Single Report"
-msgstr "Egyetlen jelentés"
+msgstr "Egyedi jelentés"
 
 #: gnucash/report/reports/standard/view-column.scm:182
 msgid "Multicolumn View"
@@ -27856,7 +27860,7 @@ msgstr "~a' jelentés megjelenítése…"
 
 #: gnucash/report/report-utilities.scm:640
 msgid "Untitled"
-msgstr "Cím nélkül"
+msgstr "Cím nélküli"
 
 #: gnucash/report/stylesheets/css.scm:119
 msgid "CSS code. This field specifies the CSS code for styling reports."
@@ -27866,7 +27870,7 @@ msgstr ""
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
 msgstr ""
-"A „&lt;/style” használata a CSS-ben nem megengedett. Az alapértelmezett CSS "
+"„&lt;/style” használata a CSS-ben nem megengedett. Az alapértelmezett CSS "
 "lesz használva."
 
 #: gnucash/report/stylesheets/css.scm:228
