@@ -38,7 +38,7 @@
 #include <string.h>
 
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
 #include "gnc-gtk-utils.h"
@@ -373,7 +373,6 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
     GdkRGBA *bg_color, *fg_color;
     GdkRectangle rect;
     gboolean hatching;
-    guint32 color_type;
     int x_offset;
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(sheet));
     GdkRGBA color;
@@ -388,7 +387,9 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
         use_neg_class = FALSE;
 
     // Get the color type and apply the css class
-    color_type = gnc_table_get_color (table, virt_loc, &hatching);
+    auto color_type = static_cast<RegisterColor>(
+        gnc_table_get_color (table, virt_loc, &hatching)
+    );
     gnucash_get_style_classes (sheet, stylectxt, color_type, use_neg_class);
 
     if (sheet->read_only)

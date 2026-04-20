@@ -34,10 +34,10 @@
 #include <qof.h>
 
 #include "gnucash-color.h"
-#include "gnucash-cursor.h"
-#include "gnucash-item-edit.h"
+#include "gnucash-cursor.hpp"
+#include "gnucash-item-edit.hpp"
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 #include "gnucash-style.h"
 
 #include "gnc-ui-util.h"
@@ -62,7 +62,7 @@ enum
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-static void gnc_item_edit_destroying (GtkWidget *this, gpointer data);
+static void gnc_item_edit_destroying (GtkWidget *item_edit, gpointer data);
 
 G_DEFINE_TYPE (GncItemEdit, gnc_item_edit, GTK_TYPE_BOX)
 
@@ -177,9 +177,9 @@ GtkWidget *
 gnc_item_edit_tb_new (GnucashSheet *sheet)
 {
     GtkStyleContext *context;
-    GncItemEditTb *item_edit_tb = g_object_new (GNC_TYPE_ITEM_EDIT_TB,
-                                                "sheet", sheet,
-                                                NULL);
+    auto item_edit_tb = static_cast<GncItemEditTb *>(
+        g_object_new (GNC_TYPE_ITEM_EDIT_TB, "sheet", sheet, NULL)
+    );
 
     context = gtk_widget_get_style_context (GTK_WIDGET(item_edit_tb));
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
@@ -516,12 +516,13 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
     gint width = gtk_widget_get_allocated_width (widget);
     gint height = gtk_widget_get_allocated_height (widget);
-    guint32 color_type;
 
     gtk_style_context_save (stylectxt);
 
     // Get the color type and apply the css class
-    color_type = gnc_table_get_color (item_edit->sheet->table, item_edit->virt_loc, NULL);
+    auto color_type = static_cast<RegisterColor>(
+        gnc_table_get_color (item_edit->sheet->table, item_edit->virt_loc, NULL)
+    );
     gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type, FALSE);
 
     gtk_render_background (stylectxt, cr, 0, 1, width, height - 2);
@@ -866,11 +867,10 @@ gnc_item_edit_new (GnucashSheet *sheet)
     GtkBorder padding;
     GtkBorder margin;
     GtkBorder border;
-    GncItemEdit *item_edit = g_object_new (GNC_TYPE_ITEM_EDIT,
-                                           "sheet", sheet,
-                                           "spacing",     0,
-                                           "homogeneous", FALSE,
-                                            NULL);
+    auto item_edit = static_cast<GncItemEdit *>(
+        g_object_new (GNC_TYPE_ITEM_EDIT, "sheet", sheet,
+                      "spacing", 0, "homogeneous", FALSE, NULL)
+    );
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
 
     /* Create the text entry */

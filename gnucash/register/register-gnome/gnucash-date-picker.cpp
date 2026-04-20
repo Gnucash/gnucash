@@ -26,7 +26,7 @@
 
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
-#include "gnucash-date-picker.h"
+#include "gnucash-date-picker.hpp"
 
 /* Item list signals */
 enum
@@ -161,13 +161,12 @@ GtkWidget *
 gnc_date_picker_new (void)
 {
     GtkWidget *calendar;
-    GNCDatePicker *date_picker;
     GtkAllocation allocation;
     GtkRequisition requisition;
 
-    date_picker = g_object_new (GNC_TYPE_DATE_PICKER,
-                                "homogeneous", FALSE,
-                                NULL);
+    auto date_picker = static_cast<GNCDatePicker *>(
+        g_object_new (GNC_TYPE_DATE_PICKER, "homogeneous", FALSE, NULL)
+    );
 
     calendar = gtk_calendar_new ();
     date_picker->calendar = GTK_CALENDAR (calendar);

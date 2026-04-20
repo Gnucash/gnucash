@@ -53,6 +53,11 @@ typedef struct
     gboolean use_quickfill_cache;  /** If TRUE, we don't own the qf */
 } QuickFillCell;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 BasicCell *      gnc_quickfill_cell_new (void);
 
 /** sets the current cell value to the indicated string, simultaneously adding
@@ -72,5 +77,10 @@ void             gnc_quickfill_cell_add_completion (QuickFillCell *cell,
  * quickfill upon destruction. */
 void
 gnc_quickfill_cell_use_quickfill_cache (QuickFillCell *cell, QuickFill *shared_qf);
+
+#ifdef __cplusplus
+}
+#endif
+
 /** @} */
 #endif

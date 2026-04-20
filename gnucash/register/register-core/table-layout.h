@@ -40,6 +40,10 @@
 typedef struct table_layout_struct TableLayout;
 typedef struct cursor_buffer_struct CursorBuffer;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /** API Declarations *************************************************/
 TableLayout * gnc_table_layout_new (void);
@@ -82,5 +86,9 @@ void gnc_table_layout_save_cursor (TableLayout *layout,
 void gnc_table_layout_restore_cursor (TableLayout *layout,
                                       CellBlock *cursor,
                                       CursorBuffer *buffer);
+#ifdef __cplusplus
+}
+#endif
+
 /** @} */
 #endif

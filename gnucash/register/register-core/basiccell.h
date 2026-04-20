@@ -157,15 +157,15 @@
 #ifndef BASIC_CELL_H
 #define BASIC_CELL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 
 #include "gnc-ui-util.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct basic_cell BasicCell;
 
@@ -282,7 +282,7 @@ void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
         const char *value);
 
-char * gnc_basic_cell_validate (BasicCell *bcell, 
+char * gnc_basic_cell_validate (BasicCell *bcell,
                                 GNCPrintAmountInfo print_info,
                                 const char *change,
                                 const char *newval,

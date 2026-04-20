@@ -33,16 +33,16 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 
 #include "dialog-utils.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-prefs.h"
 #include "gnucash-color.h"
-#include "gnucash-cursor.h"
+#include "gnucash-cursor.hpp"
 #include "gnucash-style.h"
-#include "gnucash-header.h"
-#include "gnucash-item-edit.h"
+#include "gnucash-header.hpp"
+#include "gnucash-item-edit.hpp"
 #include "split-register.h"
 #include "gnc-engine.h"     // For debugging, e.g. ENTER(), LEAVE()
 
@@ -84,8 +84,11 @@ static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
 static gboolean gnucash_sheet_check_direct_update_cell (GnucashSheet *sheet,
                                                         const VirtualLocation virt_loc);
+extern "C" {
+// not accessed externally, should this be static?
 gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
-                                G_GNUC_UNUSED gpointer data);
+                                G_GNUC_UNUSED gpointer data) noexcept;
+}
 
 /** Implementation *****************************************************/
 
@@ -217,7 +220,7 @@ gnucash_sheet_cursor_set (GnucashSheet *sheet, VirtualLocation virt_loc)
 }
 
 void
-gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
+gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll) noexcept
 {
     Table *table;
     VirtualLocation v_loc;
@@ -301,7 +304,7 @@ gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
 
 void
 gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
-                               gint x, gint y, gint width, gint height)
+                               gint x, gint y, gint width, gint height) noexcept
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
@@ -313,7 +316,7 @@ gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
 
 gint
 gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation virt_loc,
-                               gint rect_width, gint logical_width)
+                               gint rect_width, gint logical_width) noexcept
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
     Table *table = sheet->table;
@@ -512,7 +515,7 @@ gnucash_sheet_y_pixel_to_block (GnucashSheet *sheet, int y)
 
 
 void
-gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
+gnucash_sheet_compute_visible_range (GnucashSheet *sheet) noexcept
 {
     VirtualCellLocation vcell_loc;
     GtkAllocation alloc;
@@ -616,7 +619,7 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
 
 
 void
-gnucash_sheet_make_cell_visible (GnucashSheet *sheet, VirtualLocation virt_loc)
+gnucash_sheet_make_cell_visible (GnucashSheet *sheet, VirtualLocation virt_loc) noexcept
 {
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -633,7 +636,7 @@ gnucash_sheet_make_cell_visible (GnucashSheet *sheet, VirtualLocation virt_loc)
 void
 gnucash_sheet_show_range (GnucashSheet *sheet,
                           VirtualCellLocation start_loc,
-                          VirtualCellLocation end_loc)
+                          VirtualCellLocation end_loc) noexcept
 {
     SheetBlock *start_block;
     SheetBlock *end_block;
@@ -699,7 +702,7 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
 
 
 void
-gnucash_sheet_update_adjustments (GnucashSheet *sheet)
+gnucash_sheet_update_adjustments (GnucashSheet *sheet) noexcept
 {
     GtkAdjustment *vadj;
 
@@ -726,7 +729,7 @@ gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
 
 
 void
-gnucash_sheet_redraw_all (GnucashSheet *sheet)
+gnucash_sheet_redraw_all (GnucashSheet *sheet) noexcept
 {
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -737,7 +740,7 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_redraw_help (GnucashSheet *sheet)
+gnucash_sheet_redraw_help (GnucashSheet *sheet) noexcept
 {
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -746,7 +749,7 @@ gnucash_sheet_redraw_help (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
+gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc) noexcept
 {
     gint x, y, w, h;
     SheetBlock *block;
@@ -770,7 +773,7 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 }
 
 gboolean
-gnucash_sheet_is_read_only (GnucashSheet *sheet)
+gnucash_sheet_is_read_only (GnucashSheet *sheet) noexcept
 {
     g_return_val_if_fail (sheet != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), TRUE);
@@ -778,7 +781,7 @@ gnucash_sheet_is_read_only (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_set_has_focus (GnucashSheet *sheet, gboolean has_focus)
+gnucash_sheet_set_has_focus (GnucashSheet *sheet, gboolean has_focus) noexcept
 {
     sheet->sheet_has_focus = has_focus;
 }
@@ -808,11 +811,11 @@ gnucash_sheet_finalize (GObject *object)
 static GnucashSheet *
 gnucash_sheet_create (Table *table)
 {
-    GnucashSheet *sheet;
-
     ENTER("table=%p", table);
 
-    sheet = g_object_new (GNUCASH_TYPE_SHEET, NULL);
+    auto sheet = static_cast<GnucashSheet *>(
+        g_object_new (GNUCASH_TYPE_SHEET, NULL)
+    );
     sheet->table = table;
     sheet->entry = NULL;
     sheet->vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
@@ -866,7 +869,7 @@ gnucash_sheet_get_preferred_height (G_GNUC_UNUSED GtkWidget *widget,
 }
 
 const char *
-gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
+gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text) noexcept
 {
     GtkEditable *editable;
     Table *table = sheet->table;
@@ -909,13 +912,13 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
     return retval;
 }
 
-typedef struct
+struct select_info
 {
     GtkEditable *editable;
     int start_sel;
     int end_sel;
 
-} select_info;
+};
 
 static gboolean
 gnucash_sheet_direct_event (GnucashSheet *sheet, GdkEvent *event)
@@ -1182,7 +1185,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 }
 
 gboolean
-gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data)
+gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data) noexcept
 {
     GnucashSheet *sheet = GNUCASH_SHEET(widget);
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
@@ -1356,6 +1359,7 @@ clamp_scrollable_value (float value, GtkAdjustment* adj)
     return CLAMP(value, lower, upper - size);
 
 }
+
 static gboolean
 gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 {
@@ -1392,8 +1396,10 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 #if defined MAC_INTEGRATION
         v_value += event->delta_y;
 #else
-        int direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
-        v_value += gtk_adjustment_get_step_increment (vadj) * direction;
+        {
+            int direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
+            v_value += gtk_adjustment_get_step_increment (vadj) * direction;
+        }
 #endif
         break;
     default:
@@ -1575,8 +1581,9 @@ gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 
     for (GList *l = classes; l; l = l->next)
     {
-        if (g_str_has_prefix (l->data, "gnc-class-"))
-            gtk_style_context_remove_class (stylectxt, l->data);
+        char *l_data = static_cast<char *>(l->data);
+        if (g_str_has_prefix (l_data, "gnc-class-"))
+            gtk_style_context_remove_class (stylectxt, l_data);
     }
     g_list_free (classes);
 
@@ -1652,7 +1659,7 @@ gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
     hscroll_val = (gint) gtk_adjustment_get_value (sheet->hadj);
 
     // offset is the start of the cell for column
-    offset = gnc_header_get_cell_offset (GNC_HEADER(sheet->header_item), 
+    offset = gnc_header_get_cell_offset (GNC_HEADER(sheet->header_item),
                                          new_virt_loc->phys_col_offset, &cell_width);
 
     if (((offset + cell_width) > sheet->window_width) || (offset < hscroll_val))
@@ -1792,7 +1799,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     gboolean abort_move;
     VirtualLocation cur_virt_loc;
     VirtualLocation new_virt_loc;
-    gncTableTraversalDir direction = 0;
+    auto direction = static_cast<gncTableTraversalDir>(0);
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
 
     g_return_val_if_fail (widget != NULL, TRUE);
@@ -1927,14 +1934,13 @@ gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 }
 
 SheetBlock *
-gnucash_sheet_get_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
+gnucash_sheet_get_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc) noexcept
 {
     g_return_val_if_fail (sheet != NULL, NULL);
     g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), NULL);
 
-    return g_table_index (sheet->blocks,
-                          vcell_loc.virt_row,
-                          vcell_loc.virt_col);
+    return static_cast<SheetBlock *>(
+        g_table_index (sheet->blocks, vcell_loc.virt_row, vcell_loc.virt_col));
 }
 
 GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet)
@@ -1949,7 +1955,7 @@ GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet)
 }
 
 
-void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window)
+void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window) noexcept
 {
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -1965,7 +1971,7 @@ void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window)
  * true if the style changed. */
 gboolean
 gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
-                                    VirtualCellLocation vcell_loc)
+                                    VirtualCellLocation vcell_loc) noexcept
 {
     Table *table;
     SheetBlock *block;
@@ -2001,7 +2007,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
 
 
 gint
-gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
+gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col) noexcept
 {
     int virt_row;
     int cell_row;
@@ -2081,7 +2087,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
 }
 
 void
-gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
+gnucash_sheet_set_scroll_region (GnucashSheet *sheet) noexcept
 {
     guint new_h, new_w;
     GtkAllocation alloc;
@@ -2106,7 +2112,7 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 static void
 gnucash_sheet_block_destroy (gpointer _block, gpointer user_data)
 {
-    SheetBlock *block = _block;
+    auto block = static_cast<SheetBlock *>(_block);
     GnucashSheet *sheet = GNUCASH_SHEET(user_data);
 
     if (block == NULL)
@@ -2122,7 +2128,7 @@ gnucash_sheet_block_destroy (gpointer _block, gpointer user_data)
 static void
 gnucash_sheet_block_construct (gpointer _block, gpointer user_data)
 {
-    SheetBlock *block = _block;
+    auto block = static_cast<SheetBlock *>(_block);
 
     block->style = NULL;
     block->visible = TRUE;
@@ -2145,7 +2151,7 @@ gnucash_sheet_resize (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet)
+gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet) noexcept
 {
     Table *table;
     SheetBlock *block;
@@ -2188,7 +2194,7 @@ gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
+gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll) noexcept
 {
     Table *table;
     gint num_header_phys_rows;
@@ -2250,15 +2256,16 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 /** Map a cell color type to a css style class. */
 void
 gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
-                           RegisterColor field_type, gboolean use_neg_class)
+                           RegisterColor field_type, gboolean use_neg_class) noexcept
 {
-    gchar *full_class, *style_class = NULL;
+    const char *full_class, *style_class = NULL;
+    int field_type_int = static_cast<int>(field_type);
 
-    if (field_type >= COLOR_NEGATIVE) // Require a Negative fg color
+    if (field_type_int >= COLOR_NEGATIVE) // Require a Negative fg color
     {
         if (use_neg_class)
             gtk_style_context_add_class (stylectxt, "gnc-class-negative-numbers");
-        field_type -= COLOR_NEGATIVE;
+        field_type_int -= COLOR_NEGATIVE;
     }
     else
     {
@@ -2266,7 +2273,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
             gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
     }
 
-    switch (field_type)
+    switch (field_type_int)
     {
     default:
     case COLOR_UNDEFINED:
@@ -2307,7 +2314,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
 
     gtk_style_context_add_class (stylectxt, full_class);
 
-    g_free (full_class);
+    g_free (const_cast<char *>(full_class));
 }
 
 /*************************************************************/
@@ -2457,7 +2464,7 @@ dimensions_destroy (BlockDimensions *dimensions)
 }
 
 GtkWidget *
-gnucash_sheet_new (Table *table)
+gnucash_sheet_new (Table *table) noexcept
 {
     GnucashSheet *sheet;
 

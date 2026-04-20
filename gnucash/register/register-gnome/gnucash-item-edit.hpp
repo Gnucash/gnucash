@@ -22,8 +22,8 @@
 #define GNUCASH_ITEM_EDIT_H
 
 #include <gtk/gtk.h>
-#include "gnucash-date-picker.h"
-#include "gnucash-item-list.h"
+#include "gnucash-date-picker.hpp"
+#include "gnucash-item-list.hpp"
 #include "gnucash-sheet.h"
 /** @ingroup Register
  * @addtogroup Gnome
@@ -42,35 +42,26 @@
 #define GNC_ITEM_EDIT_TB_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_EDIT_TB, GncItemEditTbClass))
 #define GNC_IS_ITEM_EDIT_TB(o)       (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_EDIT_TB))
 
-typedef int (*PopupGetHeight) (GtkWidget *item,
-                               int space_available,
-                               int row_height,
-                               gpointer user_data);
+using PopupGetHeight = int (*)(GtkWidget * item, int space_available,
+                           int row_height, gpointer user_data);
 
-typedef int (*PopupAutosize) (GtkWidget *item,
-                              int max_width,
-                              gpointer user_data);
+using PopupAutosize = int (*) (GtkWidget *item, int max_width, gpointer user_data);
 
-typedef void (*PopupSetFocus) (GtkWidget *item,
-                               gpointer user_data);
+using PopupSetFocus = void (*) (GtkWidget *item, gpointer user_data);
 
-typedef void (*PopupPostShow) (GtkWidget *item,
-                               gpointer user_data);
+using PopupPostShow = void (*) (GtkWidget *item, gpointer user_data);
 
-typedef int (*PopupGetWidth) (GtkWidget *item,
-                              gpointer user_data);
+using PopupGetWidth = int (*) (GtkWidget *item, gpointer user_data);
 
-typedef struct _PopupToggle PopupToggle;
-struct _PopupToggle
+struct PopupToggle
 {
     GtkWidget *ebox;
     GtkWidget *tbutton;
-    gboolean   arrow_down;
+    gboolean arrow_down;
     gboolean signals_connected;
 };
 
-
-typedef struct
+struct GncItemEdit
 {
     GtkBox hbox;
     GnucashSheet *sheet;
@@ -84,46 +75,46 @@ typedef struct
 
     PopupToggle popup_toggle;
     GtkWidget *popup_item;
-    PopupGetHeight   popup_get_height;
-    PopupAutosize    popup_autosize;
-    PopupSetFocus    popup_set_focus;
-    PopupPostShow    popup_post_show;
-    PopupGetWidth    popup_get_width;
-    gpointer         popup_user_data;
-    gint             popup_returned_height;
-    gint             popup_allocation_height;
-    gulong           popup_height_signal_id;
+    PopupGetHeight popup_get_height;
+    PopupAutosize popup_autosize;
+    PopupSetFocus popup_set_focus;
+    PopupPostShow popup_post_show;
+    PopupGetWidth popup_get_width;
+    gpointer popup_user_data;
+    gint popup_returned_height;
+    gint popup_allocation_height;
+    gulong popup_height_signal_id;
 
-    GtkBorder        padding;
-    GtkBorder        margin;
-    GtkBorder        border;
-    gint             button_width;
+    GtkBorder padding;
+    GtkBorder margin;
+    GtkBorder border;
+    gint button_width;
 
     /* Where are we */
     VirtualLocation virt_loc;
 
     SheetBlockStyle *style;
-} GncItemEdit;
+};
 
-typedef struct
+struct GncItemEditClass
 {
     GtkBoxClass parent_class;
-} GncItemEditClass;
+};
 
-typedef struct
+struct GncItemEditTb
 {
     GtkToggleButton tb;
     GnucashSheet *sheet;
-} GncItemEditTb;
+};
 
-typedef struct
+struct GncItemEditTbClass
 {
     GtkToggleButtonClass parent_class;
 
-    void (* toggled) (GncItemEditTb *item_edit_tb);
-} GncItemEditTbClass;
+    void (*toggled) (GncItemEditTb *item_edit_tb);
+};
 
-typedef enum
+enum Sides
 {
     left,
     right,
@@ -131,26 +122,24 @@ typedef enum
     bottom,
     left_right,
     top_bottom,
-} Sides;
+};
 
 GType gnc_item_edit_get_type (void);
 
 void gnc_item_edit_configure (GncItemEdit *item_edit);
 
-void gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
-                                     int *x, int *y,
+void gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit, int *x, int *y,
                                      int *w, int *h);
 
 GtkWidget *gnc_item_edit_new (GnucashSheet *sheet);
 
-void gnc_item_edit_set_popup (GncItemEdit    *item_edit,
-                              GtkWidget      *popup_item,
-                              PopupGetHeight  popup_get_height,
-                              PopupAutosize   popup_autosize,
-                              PopupSetFocus   popup_set_focus,
-                              PopupPostShow   popup_post_show,
-                              PopupGetWidth   popup_get_width,
-                              gpointer        popup_user_data);
+void gnc_item_edit_set_popup (GncItemEdit *item_edit, GtkWidget *popup_item,
+                              PopupGetHeight popup_get_height,
+                              PopupAutosize popup_autosize,
+                              PopupSetFocus popup_set_focus,
+                              PopupPostShow popup_post_show,
+                              PopupGetWidth popup_get_width,
+                              gpointer popup_user_data);
 
 void gnc_item_edit_show_popup (GncItemEdit *item_edit);
 void gnc_item_edit_hide_popup (GncItemEdit *item_edit);
@@ -166,7 +155,6 @@ void gnc_item_edit_focus_out (GncItemEdit *item_edit);
 gint gnc_item_edit_get_margin (GncItemEdit *item_edit, Sides side);
 gint gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side);
 gint gnc_item_edit_get_button_width (GncItemEdit *item_edit);
-
 
 GType gnc_item_edit_tb_get_type (void);
 GtkWidget *gnc_item_edit_tb_new (GnucashSheet *sheet);

@@ -144,6 +144,10 @@ typedef struct
     VirtCellDataCopy cell_data_copy;
 } TableModel;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 TableModel * gnc_table_model_new (void);
 void         gnc_table_model_destroy (TableModel *model);
@@ -260,5 +264,10 @@ TableSaveHandler gnc_table_model_get_pre_save_handler
 (TableModel *model);
 TableSaveHandler gnc_table_model_get_post_save_handler
 (TableModel *model);
+
+#ifdef __cplusplus
+}
+#endif
+
 /** @} */
 #endif

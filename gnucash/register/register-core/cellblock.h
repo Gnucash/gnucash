@@ -64,6 +64,11 @@ typedef struct
 } CellBlock;
 
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** Create a new CellBlock on the heap.
  * @param rows Number of rows.
  * @param cols Number of columns.
@@ -132,6 +137,10 @@ int         gnc_cellblock_changed (CellBlock *cursor,
  * @param cursor The cellblock.
  */
 void        gnc_cellblock_clear_changes (CellBlock *cursor);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /** @} */

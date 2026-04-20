@@ -31,14 +31,14 @@
 #include <string.h>
 
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
-#include "gnucash-cursor.h"
-#include "gnucash-item-edit.h"
+#include "gnucash-cursor.hpp"
+#include "gnucash-item-edit.hpp"
 #include "gnc-gtk-utils.h"
 
-#include "gnucash-header.h"
+#include "gnucash-header.hpp"
 
 enum
 {
@@ -62,7 +62,6 @@ gnc_header_draw_offscreen (GncHeader *header)
     Table *table = header->sheet->table;
     VirtualLocation virt_loc;
     VirtualCell *vcell;
-    guint32 color_type;
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(header));
     GdkRGBA color;
     int row_offset;
@@ -78,7 +77,7 @@ gnc_header_draw_offscreen (GncHeader *header)
     gtk_style_context_save (stylectxt);
 
     // Get the color type and apply the css class
-    color_type = gnc_table_get_color (table, virt_loc, NULL);
+    auto color_type = static_cast<RegisterColor>(gnc_table_get_color (table, virt_loc, NULL));
     gnucash_get_style_classes (header->sheet, stylectxt, color_type, FALSE);
 
     if (header->surface)
@@ -678,12 +677,10 @@ gnc_header_class_init (GncHeaderClass *header_class)
 GtkWidget *
 gnc_header_new (GnucashSheet *sheet)
 {
-    GtkWidget *layout;
-
-    layout = g_object_new (GNC_TYPE_HEADER,
-                           "sheet", sheet,
-                           "cursor_name", CURSOR_HEADER,
-                           NULL);
+    auto layout = static_cast<GtkWidget *>(
+        g_object_new (GNC_TYPE_HEADER, "sheet", sheet,
+                      "cursor_name", CURSOR_HEADER, NULL)
+    );
 
     sheet->header_item = layout;
     return layout;

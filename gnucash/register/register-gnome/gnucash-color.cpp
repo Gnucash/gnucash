@@ -40,6 +40,7 @@
 
 #include <gdk/gdk.h>
 #include "gnucash-color.h"
+#include <cstdint>
 
 static int color_inited;
 
@@ -73,19 +74,17 @@ color_equal (gconstpointer v, gconstpointer w)
  *  the colors.  Caller must not touch the returned color.
  */
 GdkRGBA *
-gnucash_color_argb_to_gdk (guint32 argb)
+gnucash_color_argb_to_gdk (guint32 argb) noexcept
 {
-    GdkRGBA *color;
-    const guint32 key = argb;
-    guint32 *newkey;
+    const std::uint32_t key = argb;
 
-    color = g_hash_table_lookup (color_hash_table, &key);
+    auto color = static_cast<GdkRGBA *>(g_hash_table_lookup (color_hash_table, &key));
 
     if (color)
         return color;
 
     color = g_new0(GdkRGBA, 1);
-    newkey = g_new0(guint32, 1);
+    std::uint32_t *newkey = g_new0(guint32, 1);
 
     *newkey = key;
 
@@ -101,7 +100,7 @@ gnucash_color_argb_to_gdk (guint32 argb)
 
 
 void
-gnucash_color_init (void)
+gnucash_color_init (void) noexcept
 {
     /* Allocate the default colors */
     gdk_rgba_parse (&gn_white, "white");

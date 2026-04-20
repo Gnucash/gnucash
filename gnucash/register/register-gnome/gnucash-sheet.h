@@ -26,7 +26,11 @@
 #include "table-allgui.h"
 
 #ifdef __cplusplus
-extern "C" {
+#define NOEXCEPT noexcept
+extern "C"
+{
+#else
+#define NOEXCEPT
 #endif
 
 /** @ingroup Register
@@ -61,60 +65,60 @@ typedef struct
 
 
 GType      gnucash_sheet_get_type (void);
-GtkWidget *gnucash_sheet_new (Table *table);
+GtkWidget *gnucash_sheet_new (Table *table) NOEXCEPT;
 
-void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll);
+void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll) NOEXCEPT;
 
-void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
+void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet) NOEXCEPT;
 
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
-                                     VirtualCellLocation vcell_loc);
+                                     VirtualCellLocation vcell_loc) NOEXCEPT;
 
 gint gnucash_sheet_col_max_width (GnucashSheet *sheet,
-                                  gint virt_col, gint cell_col);
+                                  gint virt_col, gint cell_col) NOEXCEPT;
 
-void gnucash_sheet_redraw_all (GnucashSheet *sheet);
-void gnucash_sheet_redraw_help (GnucashSheet *sheet);
+void gnucash_sheet_redraw_all (GnucashSheet *sheet) NOEXCEPT;
+void gnucash_sheet_redraw_help (GnucashSheet *sheet) NOEXCEPT;
 
 void gnucash_sheet_redraw_block (GnucashSheet *sheet,
-                                 VirtualCellLocation vcell_loc);
+                                 VirtualCellLocation vcell_loc) NOEXCEPT;
 
 const char * gnucash_sheet_modify_current_cell (GnucashSheet *sheet,
-                                                const gchar *new_text);
+                                                const gchar *new_text) NOEXCEPT;
 
 gboolean gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
-                                             VirtualCellLocation vcell_loc);
+                                             VirtualCellLocation vcell_loc) NOEXCEPT;
 
-void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
+void gnucash_sheet_set_scroll_region (GnucashSheet *sheet) NOEXCEPT;
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
-                                          gboolean do_scroll);
+                                          gboolean do_scroll) NOEXCEPT;
 
-void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
+void gnucash_sheet_compute_visible_range (GnucashSheet *sheet) NOEXCEPT;
 
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
-                                      VirtualLocation virt_loc);
+                                      VirtualLocation virt_loc) NOEXCEPT;
 
 void gnucash_sheet_show_range (GnucashSheet *sheet,
                                VirtualCellLocation start_loc,
-                               VirtualCellLocation end_loc);
+                               VirtualCellLocation end_loc) NOEXCEPT;
 
-void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
+void gnucash_sheet_update_adjustments (GnucashSheet *sheet) NOEXCEPT;
 
-void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window);
+void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window) NOEXCEPT;
 
 void gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
-                                RegisterColor field_type, gboolean use_neg_class);
+                                RegisterColor field_type, gboolean use_neg_class) NOEXCEPT;
 
 void gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
-                                    gint x, gint y, gint width, gint height);
+                                    gint x, gint y, gint width, gint height) NOEXCEPT;
 
 gint gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation virt_loc,
-                                    gint rect_width, gint logical_width);
+                                    gint rect_width, gint logical_width) NOEXCEPT;
 
-gboolean gnucash_sheet_is_read_only (GnucashSheet *sheet);
+gboolean gnucash_sheet_is_read_only (GnucashSheet *sheet) NOEXCEPT;
 
-void gnucash_sheet_set_has_focus (GnucashSheet *sheet, gboolean has_focus);
+void gnucash_sheet_set_has_focus (GnucashSheet *sheet, gboolean has_focus) NOEXCEPT;
 
 #ifdef __cplusplus
 }

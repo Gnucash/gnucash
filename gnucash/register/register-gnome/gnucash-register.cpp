@@ -35,12 +35,12 @@
 
 #include "gnucash-register.h"
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 
-#include "gnucash-cursor.h"
+#include "gnucash-cursor.hpp"
 #include "gnucash-style.h"
-#include "gnucash-header.h"
-#include "gnucash-item-edit.h"
+#include "gnucash-header.hpp"
+#include "gnucash-item-edit.hpp"
 #include "split-register.h"
 #include "gnc-engine.h"         // For debugging, e.g. ENTER(), LEAVE()
 #include "gnc-prefs.h"
@@ -49,10 +49,10 @@
 #include "combocell.h"
 #include "completioncell.h"
 #include "datecell.h"
-#include "formulacell-gnome.h"
-#include "pricecell-gnome.h"
-#include "quickfillcell-gnome.h"
-#include "table-gnome.h"
+#include "formulacell-gnome.hpp"
+#include "pricecell-gnome.hpp"
+#include "quickfillcell-gnome.hpp"
+#include "table-gnome.hpp"
 
 
 /* Register signals */
@@ -98,7 +98,7 @@ struct _GnucashRegisterClass
 G_DEFINE_TYPE (GnucashRegister, gnucash_register, GTK_TYPE_GRID)
 
 void
-gnucash_register_add_cell_types (void)
+gnucash_register_add_cell_types (void) noexcept
 {
     gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, gnc_combo_cell_new);
     gnc_register_add_cell_type (COMPLETION_CELL_TYPE_NAME, gnc_completion_cell_new);
@@ -113,7 +113,7 @@ gnucash_register_add_cell_types (void)
 }
 
 gboolean
-gnucash_register_has_selection (GnucashRegister *reg)
+gnucash_register_has_selection (GnucashRegister *reg) noexcept
 {
     GnucashSheet *sheet;
     GncItemEdit *item_edit;
@@ -128,7 +128,7 @@ gnucash_register_has_selection (GnucashRegister *reg)
 }
 
 void
-gnucash_register_cut_clipboard (GnucashRegister *reg)
+gnucash_register_cut_clipboard (GnucashRegister *reg) noexcept
 {
     GnucashSheet *sheet;
     GncItemEdit *item_edit;
@@ -143,7 +143,7 @@ gnucash_register_cut_clipboard (GnucashRegister *reg)
 }
 
 void
-gnucash_register_copy_clipboard (GnucashRegister *reg)
+gnucash_register_copy_clipboard (GnucashRegister *reg) noexcept
 {
     GnucashSheet *sheet;
     GncItemEdit *item_edit;
@@ -158,7 +158,7 @@ gnucash_register_copy_clipboard (GnucashRegister *reg)
 }
 
 void
-gnucash_register_paste_clipboard (GnucashRegister *reg)
+gnucash_register_paste_clipboard (GnucashRegister *reg) noexcept
 {
     GnucashSheet *sheet;
     GncItemEdit *item_edit;
@@ -173,7 +173,7 @@ gnucash_register_paste_clipboard (GnucashRegister *reg)
 }
 
 void
-gnucash_register_refresh_from_prefs (GnucashRegister *reg)
+gnucash_register_refresh_from_prefs (GnucashRegister *reg) noexcept
 {
     GnucashSheet *sheet;
 
@@ -186,7 +186,7 @@ gnucash_register_refresh_from_prefs (GnucashRegister *reg)
 }
 
 void
-gnucash_register_reset_sheet_layout (GnucashRegister *reg)
+gnucash_register_reset_sheet_layout (GnucashRegister *reg) noexcept
 {
     GNCHeaderWidths widths;
     GnucashSheet *sheet;
@@ -215,7 +215,7 @@ gnucash_register_reset_sheet_layout (GnucashRegister *reg)
 
 void
 gnucash_register_goto_virt_cell (GnucashRegister *reg,
-                                 VirtualCellLocation vcell_loc)
+                                 VirtualCellLocation vcell_loc) noexcept
 {
     GnucashSheet *sheet;
     VirtualLocation virt_loc;
@@ -234,7 +234,7 @@ gnucash_register_goto_virt_cell (GnucashRegister *reg,
 
 void
 gnucash_register_goto_virt_loc (GnucashRegister *reg,
-                                VirtualLocation virt_loc)
+                                VirtualLocation virt_loc) noexcept
 {
     GnucashSheet *sheet;
 
@@ -247,7 +247,7 @@ gnucash_register_goto_virt_loc (GnucashRegister *reg,
 }
 
 void
-gnucash_register_goto_next_virt_row (GnucashRegister *reg)
+gnucash_register_goto_next_virt_row (GnucashRegister *reg) noexcept
 {
     GnucashSheet *sheet;
     VirtualLocation virt_loc;
@@ -282,7 +282,7 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 void
 gnucash_register_goto_next_matching_row (GnucashRegister *reg,
         VirtualLocationMatchFunc match,
-        gpointer user_data)
+        gpointer user_data) noexcept
 {
     GnucashSheet *sheet;
     SheetBlockStyle *style;
@@ -432,7 +432,7 @@ gnucash_register_init (GnucashRegister *g_reg)
 void
 gnucash_register_attach_popup (GnucashRegister *reg,
                                GtkWidget *popup,
-                               gpointer data)
+                               gpointer data) noexcept
 {
     g_return_if_fail (GNUCASH_IS_REGISTER(reg));
     g_return_if_fail (reg->sheet != NULL);
@@ -484,7 +484,7 @@ gnucash_register_configure (GnucashSheet *sheet, const gchar * state_section)
         node = gnc_table_layout_get_cells (table->layout);
         for (; node; node = node->next)
         {
-            BasicCell *cell = node->data;
+            auto cell = static_cast<BasicCell *>(node->data);
 
             if (cell->expandable)
                 continue;
@@ -517,13 +517,14 @@ gnucash_register_configure (GnucashSheet *sheet, const gchar * state_section)
 static GtkWidget *
 gnucash_register_create_widget (Table *table)
 {
-    GnucashRegister *reg;
     GtkWidget *header;
     GtkWidget *widget;
     GtkWidget *sheet;
     GtkWidget *scrollbar;
 
-    reg = g_object_new (GNUCASH_TYPE_REGISTER, NULL);
+    auto reg = static_cast<GnucashRegister *>(
+        g_object_new (GNUCASH_TYPE_REGISTER, NULL)
+    );
     widget = GTK_WIDGET(reg);
 
     sheet = gnucash_sheet_new (table);
@@ -578,7 +579,7 @@ gnucash_register_create_widget (Table *table)
 
 
 GtkWidget *
-gnucash_register_new (Table *table, const gchar *state_section)
+gnucash_register_new (Table *table, const gchar *state_section) noexcept
 {
     GnucashRegister *reg;
     GtkWidget *widget;
@@ -593,7 +594,7 @@ gnucash_register_new (Table *table, const gchar *state_section)
 
 
 void gnucash_register_set_moved_cb (GnucashRegister *reg,
-                                    GFunc cb, gpointer cb_data)
+                                    GFunc cb, gpointer cb_data) noexcept
 {
     GnucashSheet *sheet;
 
@@ -605,7 +606,7 @@ void gnucash_register_set_moved_cb (GnucashRegister *reg,
 }
 
 
-GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg)
+GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg) noexcept
 {
     g_return_val_if_fail (reg != NULL, NULL);
     g_return_val_if_fail (GNUCASH_IS_REGISTER(reg), NULL);
@@ -616,7 +617,7 @@ GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg)
 
 void
 gnucash_register_set_open_doclink_cb (GnucashRegister *reg,
-                                      GFunc cb, gpointer cb_data)
+                                      GFunc cb, gpointer cb_data) noexcept
 {
     GnucashSheet *sheet;
 

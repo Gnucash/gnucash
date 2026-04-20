@@ -50,10 +50,20 @@ typedef struct
     char *formula;
 } FormulaCell;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* installs a callback to handle date recording */
 BasicCell* gnc_formula_cell_new (void);
 
 void gnc_formula_cell_set_value( FormulaCell *fc, const char *newVal );
+
+#ifdef __cplusplus
+}
+#endif
+
 /** @} */
 #endif /* FORMULA_CELL_H */
 

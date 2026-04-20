@@ -37,8 +37,8 @@
 #include "gnc-ui-util.h"
 
 #include "formulacell.h"
-#include "formulacell-gnome.h"
-#include "pricecell-gnome.h"
+#include "formulacell-gnome.hpp"
+#include "pricecell-gnome.hpp"
 
 #ifdef G_OS_WIN32
 # include <gdk/gdkwin32.h>
@@ -55,7 +55,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
                                 void *gui_data )
 {
     FormulaCell *cell = (FormulaCell *)bcell;
-    GdkEventKey *event = gui_data;
+    auto event = static_cast<GdkEventKey *>(gui_data);
     struct lconv *lc;
     gboolean is_return;
 

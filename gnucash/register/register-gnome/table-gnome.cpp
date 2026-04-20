@@ -45,10 +45,10 @@
 #include <glib.h>
 
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 #include "gnucash-style.h"
 #include "table-allgui.h"
-#include "table-gnome.h"
+#include "table-gnome.hpp"
 #include "gnc-prefs.h"
 #include "gnc-engine.h"
 #include "gnc-state.h"
@@ -93,7 +93,7 @@ gnc_table_save_state (Table *table, const gchar * state_section)
     node = gnc_table_layout_get_cells (table->layout);
     for (; node; node = node->next)
     {
-        BasicCell *cell = node->data;
+        auto cell = static_cast<BasicCell *>(node->data);
         int width;
 
         width = gnc_header_widths_get_width (widths, cell->cell_name);

@@ -192,6 +192,29 @@ typedef enum {
 } RegisterColor;
 
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+/*
+ * These 4 functions are not defined in the source file for table-allgui
+ * from register-core but rather in the source file for table-gnome from register-gnome
+ */
+void  gnc_table_save_state (Table *table, const gchar *state_section); // RRG: table-gnome.cpp
+
+void        gnc_table_init_gui (Table *table); // RRG: table-gnome.cpp
+
+/** Refresh the whole GUI from the table. */
+void        gnc_table_refresh_gui (Table *table, gboolean do_scroll); // RRG: table-gnome.cpp
+
+
+/** Try to show the whole range in the register. */
+void        gnc_table_show_range (Table *table,
+                                  VirtualCellLocation start_loc,
+                                  VirtualCellLocation end_loc); // RRG: table-gnome.cpp
+/* end table-gnome functions */
+
 /** Set the default gui handlers used by new tables. */
 void gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers);
 
@@ -201,7 +224,6 @@ Table *     gnc_table_new (TableLayout *layout,
                            TableControl *control);
 void        gnc_virtual_location_init (VirtualLocation *vloc);
 
-void        gnc_table_save_state (Table *table, const gchar *state_section);
 void        gnc_table_destroy (Table *table);
 
 
@@ -331,21 +353,12 @@ gboolean    gnc_table_find_close_valid_cell (Table *table,
 /** UI-specific functions *******************************/
 
 /** Initialize the GUI from a table */
-void        gnc_table_init_gui (Table *table);
-
 void        gnc_table_realize_gui (Table *table);
 
 /** Refresh the current cursor gui */
 void        gnc_table_refresh_current_cursor_gui (Table * table,
         gboolean do_scroll);
 
-/** Refresh the whole GUI from the table. */
-void        gnc_table_refresh_gui (Table *table, gboolean do_scroll);
-
-/** Try to show the whole range in the register. */
-void        gnc_table_show_range (Table *table,
-                                  VirtualCellLocation start_loc,
-                                  VirtualCellLocation end_loc);
 
 /** Refresh the cursor in the given location. If do_scroll is TRUE,
  * scroll the register so the location is in view. */
@@ -416,6 +429,10 @@ gboolean     gnc_table_traverse_update(Table *table,
                                        VirtualLocation virt_loc,
                                        gncTableTraversalDir dir,
                                        VirtualLocation *dest_loc);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* TABLE_ALLGUI_H */
 /** @} */

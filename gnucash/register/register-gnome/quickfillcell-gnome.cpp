@@ -33,7 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "quickfillcell.h"
-#include "quickfillcell-gnome.h"
+#include "quickfillcell-gnome.hpp"
 
 
 static gboolean
@@ -44,7 +44,7 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
                                   void *gui_data)
 {
     QuickFillCell *cell = (QuickFillCell *) bcell;
-    GdkEventKey *event = gui_data;
+    auto event = static_cast<GdkEventKey *>(gui_data);
     const char *match_str;
     QuickFill *match;
     int prefix_len;

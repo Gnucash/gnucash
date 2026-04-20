@@ -31,9 +31,9 @@
 #include <config.h>
 
 #include "gnucash-color.h"
-#include "gnucash-cursor.h"
+#include "gnucash-cursor.hpp"
 #include "gnucash-sheet.h"
-#include "gnucash-sheetP.h"
+#include "gnucash-sheetP.hpp"
 #include "gnucash-style.h"
 
 enum

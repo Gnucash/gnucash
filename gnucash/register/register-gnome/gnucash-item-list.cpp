@@ -33,7 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "gnc-engine.h"
-#include "gnucash-item-list.h"
+#include "gnucash-item-list.hpp"
 
 /* Item list signals */
 enum
