@@ -32,7 +32,7 @@
 
 #include <config.h>
 
-#include <string.h>
+#include <cstring>
 #include <stdbool.h>
 #include <gdk/gdkkeysyms.h>
 

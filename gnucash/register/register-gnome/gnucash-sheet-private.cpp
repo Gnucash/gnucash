@@ -35,7 +35,7 @@
 
 #include <config.h>
 
-#include <string.h>
+#include <cstring>
 
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.hpp"

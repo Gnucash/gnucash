@@ -29,7 +29,7 @@
 
 #include <config.h>
 
-#include <string.h>
+#include <cstring>
 #include <gdk/gdkkeysyms.h>
 
 #include "quickfillcell.h"

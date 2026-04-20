@@ -30,7 +30,7 @@
 
 #include <config.h>
 
-#include <string.h>
+#include <cstring>
 #include <qof.h>
 
 #include "gnucash-color.h"
