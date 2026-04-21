@@ -93,6 +93,15 @@ GncSxInstanceModel* gnc_sx_get_current_instances(void);
  * g_object_unref(G_OBJECT(inst_model)); when no longer in use. */
 GncSxInstanceModel* gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled);
 
+/** Allocates a new SxInstanceModel and fills it with generated
+ * instances for the given scheduled transactions up to now.  If
+ * no instance exists for a given scheduled transaction, the next
+ * instance is generated.
+ * 
+ * The caller must unref the returned object by
+ * g_object_unref(G_OBJECT(inst_model)); when no longer in use. */
+GncSxInstanceModel* gnc_sx_get_select_instances(GList *sel_sxes);
+
 /**
  * Regenerates and updates the GncSxInstances* for the given SX.  Model
  * consumers are probably going to call this in response to seeing the
