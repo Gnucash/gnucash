@@ -495,6 +495,7 @@ void
 gnc_completion_cell_set_value (CompletionCell* cell, const char* str)
 {
     if (!cell || !str)
+        return;
 
     gnc_basic_cell_set_value (&cell->cell, str);
 }
