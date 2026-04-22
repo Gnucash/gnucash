@@ -24,8 +24,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-03-28 18:10+0000\n"
-"Last-Translator: Ceaus <github@pohw.nl>\n"
+"PO-Revision-Date: 2026-04-13 22:11+0000\n"
+"Last-Translator: hamaryns <hendrik@hendrikmaryns.name>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
@@ -27250,7 +27250,7 @@ msgstr "_Deelbedrag"
 #: gnucash/report/reports/standard/new-owner-report.scm:293
 #: gnucash/report/trep-engine.scm:943 gnucash/report/trep-engine.scm:2347
 msgid "Link"
-msgstr "Partij-koppeling"
+msgstr "Koppeling"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
@@ -32354,8 +32354,8 @@ msgstr "De URL voor de website van uw bedrijf."
 #: libgnucash/engine/gnc-optiondb.cpp:1328
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr ""
-"Het identificatienummer voor uw bedrijf (bijvoorbeeld \"BTW-nummer: "
-"NL123456789B01\")."
+"Het identificatienummer voor uw bedrijf (bijvoorbeeld “btw-nummer: "
+"NL123456789B01”)."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1336
 msgid ""
@@ -32398,10 +32398,8 @@ msgid " (closed)"
 msgstr " (gesloten)"
 
 #: libgnucash/engine/gncOwner.c:1012
-#, fuzzy
-#| msgid "Offset between documents: "
 msgid "Offset between business items: "
-msgstr "Afstand tussen documenten: "
+msgstr "Compensatie van zakelijke items: "
 
 #: libgnucash/engine/gncOwner.c:1124
 msgid "Lot Link"

@@ -5,17 +5,17 @@
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021.
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021, 2026.
 # Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2025-01-16 13:00+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"PO-Revision-Date: 2026-04-04 16:09+0000\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -1626,11 +1626,11 @@ msgstr "Uusi osakesaldo on virheellinen."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:877
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "Uuden saldon tulee olla suurempi kuin vanha saldo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:879
 msgid "New balance must be lower than old balance."
-msgstr ""
+msgstr "Uuden saldon tulee olla pienempi kuin vanha saldo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:886
 msgid "Stock amount must be positive."
@@ -6832,11 +6832,11 @@ msgstr "(nimeämätön)"
 #. and must not be translated
 #: gnucash/gnome-utils/gnc-file.c:79
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "Vain datatiedostot (*.gnucash, *.xac)"
 
 #: gnucash/gnome-utils/gnc-file.c:80
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "Vain varmuuskopiot (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/gnc-file.c:110
 msgid "All files"
@@ -9041,7 +9041,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
 #: gnucash/gtkbuilder/dialog-preferences.glade:3860
 msgid "YH Finance (FinanceAPI) API key"
-msgstr ""
+msgstr "YH Finance (FinanceAPI) -rajapinta-avain"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:3859
@@ -9354,7 +9354,7 @@ msgstr "Käytä valittua valuuttaa kaikille uusille tileille."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:150
 msgid "Default currency for new accounts"
-msgstr ""
+msgstr "Oletusvaluutta uusille tileille"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:151
 msgid ""
@@ -11276,7 +11276,7 @@ msgstr "Sulkutili"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:534
 msgid "Loan Repayment Options"
-msgstr "Lainan takaisinmaksun asetukst"
+msgstr "Lainan takaisinmaksun asetukset"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:547
 msgid "All accounts must have valid entries to continue."
@@ -11699,7 +11699,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1356
 msgid "Update your GnuCash accounts"
-msgstr ""
+msgstr "Päivitä GnuCash-tilisi"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1364
 msgid "Summary Text"
@@ -12092,10 +12092,8 @@ msgstr ""
 "rivit yhdeksi riviksi. Tätä asetusta voi muuttaa laskun kirjausikkunassa."
 
 #: gnucash/gtkbuilder/business-prefs.glade:115
-#, fuzzy
-#| msgid "_Invoices"
 msgid "Invoices"
-msgstr "Myynti_laskut"
+msgstr "Laskut"
 
 #: gnucash/gtkbuilder/business-prefs.glade:128
 msgid "Not_ify when due"
@@ -12483,16 +12481,12 @@ msgid "More Properties"
 msgstr "Lisää ominaisuuksia"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1787
-#, fuzzy
-#| msgid "<b>Balance Information</b>"
 msgid "Balance Information"
-msgstr "<b>Saldotiedot</b>"
+msgstr "Saldotiedot"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1804
-#, fuzzy
-#| msgid "<b>Initial Balance Transfer</b>"
 msgid "Initial Balance Transfer"
-msgstr "<b>Avaussaldon siirto</b>"
+msgstr "Avaussaldon siirto"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1849
 #, fuzzy
@@ -13250,10 +13244,8 @@ msgid "Access Control"
 msgstr "Pääsynhallinta"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:72
-#, fuzzy
-#| msgid "Date Format"
 msgid "Data Format"
-msgstr "Päivämäärämuoto"
+msgstr "Datamuoto"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:143
 #, fuzzy
@@ -13358,10 +13350,8 @@ msgid "_Schedule"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:186
-#, fuzzy
-#| msgid "<b>Calculations</b>"
 msgid "Calculations"
-msgstr "<b>Laskelma</b>"
+msgstr "Laskelmat"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:210
 msgid "Payment periods"
@@ -13404,10 +13394,8 @@ msgid "Recalculate the (single) blank entry in the above fields."
 msgstr "Laske yllä olevaan (yksittäisen) tyhjän kentän arvo."
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:517
-#, fuzzy
-#| msgid "<b>Payment Options</b>"
 msgid "Payment Options"
-msgstr "<b>Maksun tiedot</b>"
+msgstr "Maksun tiedot"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:541
 msgid "Payment Total"
@@ -14096,10 +14084,8 @@ msgstr "_Palauta"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:185
 #: gnucash/gtkbuilder/dialog-preferences.glade:605
-#, fuzzy
-#| msgid "Select Separator Character"
 msgid "Separator Character"
-msgstr "Valitse erotinmerkki"
+msgstr "Erotinmerkki"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:214
 msgid ""
@@ -14113,10 +14099,8 @@ msgid "GnuCash Preferences"
 msgstr "GnuCashin asetukset"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:332
-#, fuzzy
-#| msgid "<b>Summarybar Content</b>"
 msgid "Summary Bar Content"
-msgstr "<b>Yhteenvetopalkin sisältö</b>"
+msgstr "Yhteenvetopalkin sisältö"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:345
 msgid "Include _grand total"
@@ -14218,10 +14202,8 @@ msgid "Reverse Balanced Accounts"
 msgstr "<b>Tilien käänteiset etumerkit</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:758
-#, fuzzy
-#| msgid "<b>Default Currency</b>"
 msgid "Default Currency"
-msgstr "<b>Oletusvaluutta</b>"
+msgstr "Oletusvaluutta"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:774
 #: gnucash/gtkbuilder/dialog-preferences.glade:3231
@@ -14276,10 +14258,8 @@ msgid "Loc_ale"
 msgstr "_Maa-asetusto"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1079
-#, fuzzy
-#| msgid "File Format"
 msgid "Time Format"
-msgstr "Tiedostomuoto"
+msgstr "Ajan muoto"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1102
 msgid "U_se 24-hour clock"
@@ -14290,10 +14270,8 @@ msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Käytä 24 tunnin kelloa 12 tunnin sijaan."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1123
-#, fuzzy
-#| msgid "<b>Date Completion</b>"
 msgid "Date Completion"
-msgstr "<b>Päivämäärän täydennys</b>"
+msgstr "Päivämäärän täydennys"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1139
 msgid "When a date is entered without year, it should be taken"
@@ -14322,10 +14300,8 @@ msgid "Use the date format specified by the system locale."
 msgstr "Käytä järjestelmän asetusta päivämäärän muotoilulle."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1239
-#, fuzzy
-#| msgid "Number"
 msgid "Numbers"
-msgstr "Numero"
+msgstr "Numerot"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1252
 msgid "Force P_rices to display as decimals"
@@ -14392,10 +14368,8 @@ msgid "days"
 msgstr "päivää"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1550
-#, fuzzy
-#| msgid "<b>_Retain log/backup files</b>"
 msgid "_Retain log/backup files"
-msgstr "<b>_Säilytä loki-/varmuuskopiotiedostot</b>"
+msgstr "_Säilytä loki-/varmuuskopiotiedostot"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1565
 msgid "Com_press files"
@@ -14824,16 +14798,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2960
-#, fuzzy
-#| msgid "Default Rate"
 msgid "Default Style"
-msgstr "Oletuskurssi"
+msgstr "Oletustyyli"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2986
-#, fuzzy
-#| msgid "<b>Other Defaults</b>"
 msgid "Other Defaults"
-msgstr "<b>Muut oletusasetukset</b>"
+msgstr "Muut oletusasetukset"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2999
 msgid "_Basic ledger"
@@ -14900,16 +14870,12 @@ msgid "Register Defaults"
 msgstr "Tilikirjan oletusasetukset"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3243
-#, fuzzy
-#| msgid "<b>Default Report Currency</b>"
 msgid "Default Report Currency"
-msgstr "<b>Raporttien oletusvaluutta</b>"
+msgstr "Raporttien oletusvaluutta"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3269
-#, fuzzy
-#| msgid "Action"
 msgid "Location"
-msgstr "Tapahtuma"
+msgstr "Sijainti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3282
 msgid "Report opens in a new _window"
@@ -14933,10 +14899,8 @@ msgid "Reports"
 msgstr "Raportit"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3451
-#, fuzzy
-#| msgid "Window geometry"
 msgid "Window Geometry"
-msgstr "Ikkunageometria"
+msgstr "Ikkunan geometria"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3474
 msgid "_Save window size and position"
@@ -14951,10 +14915,8 @@ msgid "Bring the most _recent tab to the front"
 msgstr "Tuo _viimeisin välilehti etualalle"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3525
-#, fuzzy
-#| msgid "Tab P_osition"
 msgid "Tab Position"
-msgstr "Välilehden kielekkeen _sijainti"
+msgstr "Välilehden sijainti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3538
 #: gnucash/ui/gnc-main-window.ui:195
@@ -14977,10 +14939,8 @@ msgid "_Right"
 msgstr "_Oikealla"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3617
-#, fuzzy
-#| msgid "<b>Summary Bar Position</b>"
 msgid "Summary Bar Position"
-msgstr "<b>Yhteenvetopalkin sijainti</b>"
+msgstr "Yhteenvetopalkin sijainti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3649
 #: gnucash/gtkbuilder/dialog-print-check.glade:267
@@ -14990,7 +14950,7 @@ msgstr "Alhaalla"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3681
 msgid "Tabs"
-msgstr ""
+msgstr "Välilehdet"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3694
 msgid "Show close button on _notebook tabs"
@@ -15788,10 +15748,8 @@ msgid "Tax Tables"
 msgstr "Verokannat"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:142
-#, fuzzy
-#| msgid "<b>Tax Table Entries</b>"
 msgid "Tax Table Entries"
-msgstr "<b>Verokannan sisältö</b>"
+msgstr "Verokannan sisältö"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:200
 msgid "De_lete"
@@ -15810,10 +15768,8 @@ msgid "Percent %"
 msgstr "Prosentti %"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:388
-#, fuzzy
-#| msgid "<b>Tax Table Entry</b>"
 msgid "Tax Table Entry"
-msgstr "<b>Verokannan syöttö</b>"
+msgstr "Verokannan syöttö"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:497
 #: gnucash/register/ledger-core/split-register.c:2180
@@ -17288,7 +17244,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
 msgid "_Verbose debug messages"
-msgstr ""
+msgstr "_Runsaat vianjäljitysviestit"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
