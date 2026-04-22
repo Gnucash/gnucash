@@ -372,6 +372,7 @@ class Session(GnuCashCoreClass):
         if not exc_type:
             self.save()
         self.end()
+        self.destroy()
 
     def raise_backend_errors(self, called_function="qof_session function"):
         """Raises a GnuCashBackendException if there are outstanding
