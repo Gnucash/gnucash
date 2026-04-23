@@ -60,14 +60,9 @@ gnc_header_draw_offscreen (GncHeader *header)
     SheetBlockStyle *style = header->style;
     GncItemEdit *item_edit = GNC_ITEM_EDIT(header->sheet->item_editor);
     Table *table = header->sheet->table;
-    VirtualLocation virt_loc;
-    VirtualCell *vcell;
+    VirtualLocation virt_loc{};
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(header));
-    GdkRGBA color;
-    int row_offset;
-    CellBlock *cb;
-    int i;
-    cairo_t *cr;
+
 
     virt_loc.vcell_loc.virt_row = 0;
     virt_loc.vcell_loc.virt_col = 0;
@@ -86,11 +81,12 @@ gnc_header_draw_offscreen (GncHeader *header)
                                                   header->width,
                                                   header->height);
 
-    cr = cairo_create (header->surface);
+    cairo_t *cr = cairo_create (header->surface);
 
     // Fill background color of header
     gtk_render_background (stylectxt, cr, 0, 0, header->width, header->height);
 
+    GdkRGBA color;
     gdk_rgba_parse (&color, "black");
     cairo_set_source_rgb (cr, color.red, color.green, color.blue);
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
@@ -106,15 +102,15 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     /*font = gnucash_register_font;*/
 
-    vcell = gnc_table_get_virtual_cell
+    VirtualCell *vcell = gnc_table_get_virtual_cell
             (table, table->current_cursor_loc.vcell_loc);
-    cb = vcell ? vcell->cellblock : nullptr;
-    row_offset = 0;
+    CellBlock *cb = vcell ? vcell->cellblock : nullptr;
+    int row_offset = 0;
 
-    for (i = 0; i < style->nrows; i++)
+    for (int i = 0; i < style->nrows; i++)
     {
         int col_offset = 0;
-        int height = 0, j;
+        int height = 0;
         virt_loc.phys_row_offset = i;
 
         /* TODO: This routine is duplicated in several places.
@@ -122,20 +118,15 @@ gnc_header_draw_offscreen (GncHeader *header)
            That way we'll be sure everything is drawn
            consistently, and cut down on maintenance issues. */
 
-        for (j = 0; j < style->ncols; j++)
+        for (int j = 0; j < style->ncols; j++)
         {
-            CellDimensions *cd;
-            BasicCell *cell;
-            const char *text;
-            int width;
-            PangoLayout *layout;
+            int width = 0;
             PangoRectangle logical_rect;
             GdkRectangle rect;
-            int x_offset;
 
             virt_loc.phys_col_offset = j;
 
-            cd = gnucash_style_get_cell_dimensions (style, i, j);
+            CellDimensions *cd = gnucash_style_get_cell_dimensions (style, i, j);
             if (!cd) continue;
 
             height = cd->pixel_height;
@@ -144,7 +135,7 @@ gnc_header_draw_offscreen (GncHeader *header)
             else
                 width = cd->pixel_width;
 
-            cell = gnc_cellblock_get_cell (cb, i, j);
+            BasicCell *cell = gnc_cellblock_get_cell (cb, i, j);
             if (!cell || !cell->cell_name)
             {
                 col_offset += width;
@@ -157,11 +148,11 @@ gnc_header_draw_offscreen (GncHeader *header)
 
             virt_loc.vcell_loc =
                 table->current_cursor_loc.vcell_loc;
-            text = gnc_table_get_label (table, virt_loc);
+            const char *text = gnc_table_get_label (table, virt_loc);
             if (!text)
                 text = "";
 
-            layout = gtk_widget_create_pango_layout (GTK_WIDGET(header->sheet), text);
+            PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET(header->sheet), text);
 
             pango_layout_get_pixel_extents (layout, nullptr, &logical_rect);
 
@@ -172,8 +163,8 @@ gnc_header_draw_offscreen (GncHeader *header)
             cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
             cairo_clip (cr);
 
-            x_offset = gnucash_sheet_get_text_offset (header->sheet, virt_loc,
-                                                      rect.width, logical_rect.width);
+            int x_offset = gnucash_sheet_get_text_offset (header->sheet, virt_loc,
+                                                          rect.width, logical_rect.width);
 
             gtk_render_layout (stylectxt, cr, rect.x + x_offset,
                                rect.y + gnc_item_edit_get_padding_border (item_edit, top), layout);
@@ -195,14 +186,11 @@ gint
 gnc_header_get_cell_offset (GncHeader *header, gint col, gint *cell_width)
 {
     SheetBlockStyle *style = header->style;
-    gint j;
-    gint offset = 0;
+    int offset = 0;
 
-    for (j = 0; j < style->ncols; j++)
+    for (int j = 0; j < style->ncols; j++)
     {
-        CellDimensions *cd;
-
-        cd = gnucash_style_get_cell_dimensions (style, 0, j);
+        CellDimensions *cd = gnucash_style_get_cell_dimensions (style, 0, j);
         if (!cd) continue;
 
         if (j == col)
@@ -221,9 +209,9 @@ gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {
     GnucashSheet *sheet = GNC_HEADER(header)->sheet;
     GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
-    gint x, y;
 
     // use this to get the scroll x value to align the header
+    int x, y;
     gdk_window_get_position (sheet_layout_win, &x, &y);
 
     // if the register page is moved to another window, the surface is
@@ -273,9 +261,7 @@ gnc_header_unrealize (GtkWidget *widget)
 static void
 gnc_header_finalize (GObject *object)
 {
-    GncHeader *header;
-
-    header = GNC_HEADER(object);
+    GncHeader *header = GNC_HEADER(object);
 
     g_free (header->cursor_name);
     header->cursor_name = nullptr;
@@ -287,15 +273,11 @@ gnc_header_finalize (GObject *object)
 void
 gnc_header_reconfigure (GncHeader *header)
 {
-    GnucashSheet *sheet;
-    SheetBlockStyle *old_style;
-    int w, h;
-
     g_return_if_fail (header != nullptr);
     g_return_if_fail (GNC_IS_HEADER(header));
 
-    sheet = GNUCASH_SHEET(header->sheet);
-    old_style = header->style;
+    GnucashSheet *sheet = GNUCASH_SHEET(header->sheet);
+    SheetBlockStyle *old_style = header->style;
 
     header->style = gnucash_sheet_get_style_from_cursor
                     (sheet, header->cursor_name);
@@ -305,8 +287,8 @@ gnc_header_reconfigure (GncHeader *header)
 
     sheet->width = header->style->dimensions->width;
 
-    w = header->style->dimensions->width;
-    h = header->style->dimensions->height;
+    int w = header->style->dimensions->width;
+    int h = header->style->dimensions->height;
     h *= header->num_phys_rows;
     h /= header->style->nrows;
     h += 2;
@@ -342,19 +324,18 @@ static gboolean
 pointer_on_resize_line (GncHeader *header, int x, [[ maybe_unused ]] int y, int *col)
 {
     SheetBlockStyle *style = header->style;
-    gboolean on_the_line = FALSE;
-    CellDimensions *cd;
+    bool on_the_line = false;
     int pixels = 0;
-    int j;
+    int j = 0;
 
     for (j = 0; j < style->ncols; j++)
     {
-        cd = gnucash_style_get_cell_dimensions (style, 0, j);
+        CellDimensions *cd = gnucash_style_get_cell_dimensions (style, 0, j);
         if (!cd) continue;
 
         pixels += cd->pixel_width;
         if (x >= pixels - 1 && x <= pixels + 1)
-            on_the_line = TRUE;
+            on_the_line = true;
         if (x <= pixels + 1)
             break;
     }
@@ -362,14 +343,14 @@ pointer_on_resize_line (GncHeader *header, int x, [[ maybe_unused ]] int y, int 
     if (col != nullptr)
         *col = j;
 
-    return on_the_line;
+    return on_the_line ? TRUE : FALSE;
 }
 
 static int
 find_resize_col (GncHeader *header, int col)
 {
     SheetBlockStyle *style = header->style;
-    CellDimensions *cd;
+    CellDimensions *cd = nullptr;
     int start = col;
 
     if (col < 0 || col >= style->ncols)
@@ -416,9 +397,7 @@ gnc_header_resize_column (GncHeader *header, gint col, gint width)
 static void
 gnc_header_auto_resize_column (GncHeader *header, gint col)
 {
-    int width;
-
-    width = gnucash_sheet_col_max_width (header->sheet, 0, col);
+    int width = gnucash_sheet_col_max_width (header->sheet, 0, col);
 
     gnc_header_resize_column (header, col, width);
 }
@@ -428,8 +407,8 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
 {
     GncHeader *header = GNC_HEADER(widget);
     GdkWindow *window = gtk_widget_get_window (widget);
-    int x, y;
-    int col;
+    int x = 0, y = 0;
+    int col = 0;
 
     if (!header->resize_cursor)
         header->resize_cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
@@ -464,8 +443,6 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
         break;
 
     case GDK_BUTTON_PRESS:
-    {
-        int col;
 
         if (event->button.button != 1)
             break;
@@ -480,9 +457,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
 
         if (col > -1)
         {
-            CellDimensions *cd;
-
-            cd = gnucash_style_get_cell_dimensions
+            CellDimensions *cd = gnucash_style_get_cell_dimensions
                  (header->style, 0, col);
             if (!cd) break;
 
@@ -492,9 +467,8 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->resize_x = x;
         }
         break;
-    }
+
     case GDK_BUTTON_RELEASE:
-    {
         if (event->button.button != 1)
             break;
 
@@ -512,13 +486,11 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             gnc_header_request_redraw (header);
         }
         break;
-    }
 
     case GDK_2BUTTON_PRESS:
     {
-        gboolean on_line;
-        int ptr_col;
-        int resize_col;
+        int ptr_col = 0;
+        int resize_col = 0;
 
         if (event->button.button != 1)
             break;
@@ -526,7 +498,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
         x = event->button.x;
         y = event->button.y;
 
-        on_line = pointer_on_resize_line (header, x, y, &ptr_col);
+        bool on_line = pointer_on_resize_line (header, x, y, &ptr_col);
 
         /* If we're on a resize line and the column to the right is zero
            width, resize that one. */
@@ -542,7 +514,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             gnc_header_auto_resize_column (header, resize_col);
         }
     }
-    break;
+        break;
 
     default:
         break;
@@ -587,15 +559,15 @@ gnc_header_set_property (GObject *object,
 {
     GncHeader *header = GNC_HEADER(object);
     GtkLayout *layout = GTK_LAYOUT(header);
-    gboolean needs_update = FALSE;
-    gchar *old_name;
+    bool needs_update = false;
+    char *old_name = nullptr;
 
     switch (param_id)
     {
     case PROP_SHEET:
         header->sheet = GNUCASH_SHEET(g_value_get_object (value));
         gtk_scrollable_set_hadjustment (GTK_SCROLLABLE(layout), header->sheet->hadj);
-        needs_update = TRUE;
+        needs_update = true;
         break;
     case PROP_CURSOR_NAME:
         old_name = header->cursor_name;

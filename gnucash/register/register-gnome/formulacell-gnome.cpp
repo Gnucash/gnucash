@@ -56,15 +56,13 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 {
     auto cell = reinterpret_cast<FormulaCell *>(bcell);
     auto event = static_cast<GdkEventKey *>(gui_data);
-    struct lconv *lc;
-    gboolean is_return;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
 
-    lc = gnc_localeconv ();
+    struct lconv *lc = gnc_localeconv ();
 
-    is_return = FALSE;
+    bool is_return = false;
 
     /* FIXME!! This code is almost identical (except for GDK_KEY_KP_Enter
      * handling) to pricecell-gnome.c:gnc_price_cell_direct_update.  I write
@@ -77,7 +75,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
     case GDK_KEY_Return:
         if (!(event->state &
                 (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
-            is_return = TRUE;
+            is_return = true;
         /* FALL THROUGH */
 
     case GDK_KEY_KP_Enter:
@@ -112,9 +110,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 BasicCell *
 gnc_formula_cell_gnome_new (void)
 {
-    BasicCell *cell;
-
-    cell = gnc_formula_cell_new ();
+    BasicCell *cell = gnc_formula_cell_new ();
     cell->direct_update = gnc_formula_cell_direct_update;
     return cell;
 }

@@ -46,9 +46,7 @@ static QofLogModule log_module = GNC_MOD_REGISTER;
 static gpointer
 style_get_key (SheetBlockStyle *style)
 {
-    static gint key;
-
-    key = style->cursor->num_rows;
+    static int key  = style->cursor->num_rows;
 
     return &key;
 }
@@ -56,9 +54,9 @@ style_get_key (SheetBlockStyle *style)
 static gpointer
 style_create_key (SheetBlockStyle *style)
 {
-    gint key = style->cursor->num_rows;
+    int key = style->cursor->num_rows;
 
-    gint *new_key = g_new(gint, 1);
+    int *new_key = g_new(gint, 1);
     *new_key = key;
 
     return new_key;
@@ -77,9 +75,7 @@ cell_dimensions_construct (gpointer _cd, gpointer user_data)
 static BlockDimensions *
 style_dimensions_new (SheetBlockStyle *style)
 {
-    BlockDimensions *dimensions;
-
-    dimensions = g_new0 (BlockDimensions, 1);
+    BlockDimensions *dimensions = g_new0 (BlockDimensions, 1);
 
     dimensions->nrows = style->nrows;
     dimensions->ncols = style->ncols;
@@ -150,13 +146,12 @@ gnucash_style_get_cell_dimensions (SheetBlockStyle *style, int row, int col) noe
 static int
 compute_row_width (BlockDimensions *dimensions, int row, int col1, int col2)
 {
-    int j;
     int width = 0;
 
     col1 = MAX(0, col1);
     col2 = MIN(col2, dimensions->ncols - 1);
 
-    for (j = col1; j <= col2; j++)
+    for (int j = col1; j <= col2; j++)
     {
         auto cd = static_cast<CellDimensions *>(
             g_table_index (dimensions->cell_dimensions, row, j)
@@ -178,36 +173,32 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                          BlockDimensions *dimensions)
 {
     CellDimensions *cd = nullptr;
-    int row, col;
-    gint max_height = -1;
-    PangoLayout *layout;
+    int max_height = -1;
     GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
     /* g_return_if_fail (font != nullptr); */
 
-    for (row = 0; row < cursor->num_rows; row++)
+    for (int row = 0; row < cursor->num_rows; row++)
     {
-        for (col = 0; col < cursor->num_cols; col++)
+        for (int col = 0; col < cursor->num_cols; col++)
         {
-            int width;
-            char *text;
-            BasicCell *cell;
+            int width = 0;
 
-            cd = static_cast<CellDimensions *>(
+            auto cd = static_cast<CellDimensions *>(
                 g_table_index (dimensions->cell_dimensions, row, col)
             );
 
-            cell = gnc_cellblock_get_cell (cursor, row, col);
+            BasicCell *cell = gnc_cellblock_get_cell (cursor, row, col);
             if (!cell || !cd)
                 continue;
 
-            text = cell->sample_text;
+            char *text = cell->sample_text;
             if (text)
                 cd->can_span_over = FALSE;
 
             if (text)
             {
-                layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+                PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
                 pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
                 g_object_unref (layout);
                 width += gnc_item_edit_get_margin (item_edit, left_right) +
@@ -239,9 +230,9 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
         dimensions->height += max_height;
     }
 
-    for (row = 0; row < cursor->num_rows; row++)
+    for (int row = 0; row < cursor->num_rows; row++)
     {
-        for (col = 0; col < cursor->num_cols; col++)
+        for (int col = 0; col < cursor->num_cols; col++)
         {
             cd = static_cast<CellDimensions *>(
                 g_table_index (dimensions->cell_dimensions, row, col)
@@ -260,31 +251,19 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 static void
 set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 {
-    SheetBlockStyle *style;
     GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
-    BlockDimensions *dimensions;
     CellDimensions *cd = nullptr;
-    GTable *cd_table;
-    CellBlock *cursor;
-    GList *cursors;
-    GList *node;
+    SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+    BlockDimensions *dimensions = style->dimensions;
+    GTable *cd_table = dimensions->cell_dimensions;
+    CellBlock *cursor = style->cursor;
 
-    int num_cols;
-    int *widths;
-    int width;
-    int row, col;
-
-    style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
-    dimensions = style->dimensions;
-    cd_table = dimensions->cell_dimensions;
-    cursor = style->cursor;
-
-    width = 0;
-    num_cols = cursor->num_cols;
-    widths = g_new0 (int, num_cols);
+    int width = 0;
+    int num_cols = cursor->num_cols;
+    int *widths = g_new0 (int, num_cols);
 
     /* find header widths */
-    for (col = 0; col < num_cols; col++)
+    for (int col = 0; col < num_cols; col++)
     {
         cd = static_cast<CellDimensions *>(g_table_index (cd_table, 0, col));
 
@@ -296,11 +275,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
     }
 
     if (width < default_width)
-        for (col = 0; col < num_cols; col++)
+        for (int col = 0; col < num_cols; col++)
         {
-            BasicCell *cell;
-
-            cell = gnc_cellblock_get_cell (cursor, 0, col);
+            BasicCell *cell = gnc_cellblock_get_cell (cursor, 0, col);
 
             if (!cell || !cell->expandable)
                 continue;
@@ -317,14 +294,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         }
     else if (width > default_width && width == sheet->window_width)
     {
-        for (col = 0; col < num_cols; col++)
+        for (int col = 0; col < num_cols; col++)
         {
-            BasicCell *cell;
-            const char *text;
-            int sample_width;
-            PangoLayout *layout;
-
-            cell = gnc_cellblock_get_cell (cursor, 0, col);
+            BasicCell *cell = gnc_cellblock_get_cell (cursor, 0, col);
 
             if (!cell || !cell->expandable)
                 continue;
@@ -336,10 +308,11 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
             cd->pixel_width += (default_width - width);
 
-            text = cell->sample_text;
+            const char *text = cell->sample_text;
+            int sample_width = 0;
             if (text)
             {
-                layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+                PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
                 pango_layout_get_pixel_size (layout, &sample_width, nullptr);
                 g_object_unref (layout);
                 /*sample_width = gdk_string_width (font, text);*/
@@ -357,10 +330,10 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         }
     }
 
-    cursors = gnc_table_layout_get_cursors (sheet->table->layout);
+    GList *cursors = gnc_table_layout_get_cursors (sheet->table->layout);
 
     /* adjust widths to be consistent */
-    for (node = cursors; node; node = node->next)
+    for (GList *node = cursors; node; node = node->next)
     {
         cursor = static_cast<CellBlock *>(node->data);
         style = gnucash_sheet_get_style_from_cursor
@@ -368,8 +341,8 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         dimensions = style->dimensions;
         cd_table = dimensions->cell_dimensions;
 
-        for (row = 0; row < cursor->num_rows; row++)
-            for (col = 0; col < num_cols; col++)
+        for (int row = 0; row < cursor->num_rows; row++)
+            for (int col = 0; col < num_cols; col++)
             {
                 cd = static_cast<CellDimensions *>(
                     g_table_index (cd_table, row, col)
@@ -383,7 +356,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
     }
 
     /* now expand spanning cells */
-    for (node = cursors; node; node = node->next)
+    for (GList *node = cursors; node; node = node->next)
     {
         cursor = static_cast<CellBlock *>(node->data);
         style = gnucash_sheet_get_style_from_cursor
@@ -391,15 +364,13 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         dimensions = style->dimensions;
         cd_table = dimensions->cell_dimensions;
 
-        for (row = 0; row < cursor->num_rows; row++)
+        for (int row = 0; row < cursor->num_rows; row++)
         {
             CellDimensions *cd_span = nullptr;
 
-            for (col = 0; col < num_cols; col++)
+            for (int col = 0; col < num_cols; col++)
             {
-                BasicCell *cell;
-
-                cell = gnc_cellblock_get_cell (cursor,
+                BasicCell *cell = gnc_cellblock_get_cell (cursor,
                                                row, col);
                 if (!cell)
                     continue;
@@ -441,9 +412,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 gint
 gnucash_style_row_width(SheetBlockStyle *style, int row) noexcept
 {
-    BlockDimensions *dimensions;
-
-    dimensions = style->dimensions;
+    BlockDimensions *dimensions = style->dimensions;
 
     return compute_row_width(dimensions, row, 0, dimensions->ncols - 1);
 }
@@ -451,14 +420,11 @@ gnucash_style_row_width(SheetBlockStyle *style, int row) noexcept
 static void
 compute_cell_origins_x (BlockDimensions *dimensions)
 {
-    int x;
-    int i, j;
-
-    for (i = 0; i < dimensions->nrows; i++)
+    for (int i = 0; i < dimensions->nrows; i++)
     {
-        x = 0;
+        int x = 0;
 
-        for (j = 0; j < dimensions->ncols; j++)
+        for (int j = 0; j < dimensions->ncols; j++)
         {
             auto cd = static_cast<CellDimensions *>(
                 g_table_index (dimensions->cell_dimensions, i, j)
@@ -478,11 +444,10 @@ compute_cell_origins_y (BlockDimensions *dimensions)
 {
     CellDimensions *cd = nullptr;
     int y = 0;
-    int i, j;
 
-    for (i = 0; i < dimensions->nrows; i++)
+    for (int i = 0; i < dimensions->nrows; i++)
     {
-        for (j = 0; j < dimensions->ncols; j++)
+        for (int j = 0; j < dimensions->ncols; j++)
         {
             cd = static_cast<CellDimensions *>(
                 g_table_index (dimensions->cell_dimensions, i, j)
@@ -508,21 +473,15 @@ compute_cell_origins_y (BlockDimensions *dimensions)
 static void
 set_dimensions_pass_three (GnucashSheet *sheet)
 {
-    GList *cursors;
-    GList *node;
+    GList *cursors = gnc_table_layout_get_cursors (sheet->table->layout);
 
-    cursors = gnc_table_layout_get_cursors (sheet->table->layout);
-
-    for (node = cursors; node; node = node->next)
+    for (GList *node = cursors; node; node = node->next)
     {
         auto cursor = static_cast<CellBlock *>(node->data);
 
-        SheetBlockStyle *style;
-        BlockDimensions *dimensions;
-
-        style = gnucash_sheet_get_style_from_cursor
+        SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor
                 (sheet, cursor->cursor_name);
-        dimensions = style->dimensions;
+        BlockDimensions *dimensions = style->dimensions;
 
         dimensions->width = compute_row_width (dimensions, 0, 0,
                                                dimensions->ncols - 1);
@@ -535,21 +494,16 @@ set_dimensions_pass_three (GnucashSheet *sheet)
 static void
 styles_recompute_layout_dimensions (GnucashSheet *sheet, int default_width)
 {
-    SheetBlockStyle *style;
-    BlockDimensions *dimensions;
-    GList *cursors;
-    GList *node;
+    GList *cursors = gnc_table_layout_get_cursors (sheet->table->layout);
 
-    cursors = gnc_table_layout_get_cursors (sheet->table->layout);
-
-    for (node = cursors; node; node = node->next)
+    for (GList *node = cursors; node; node = node->next)
     {
         auto cursor = static_cast<CellBlock *>(node->data);
 
-        style = gnucash_sheet_get_style_from_cursor
+        SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor
                 (sheet, cursor->cursor_name);
 
-        dimensions = style->dimensions;
+        BlockDimensions *dimensions = style->dimensions;
 
         dimensions->height = 0;
         dimensions->width = default_width;
@@ -582,11 +536,6 @@ gnucash_style_col_is_resizable (SheetBlockStyle *style, int col) noexcept
 void
 gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width) noexcept
 {
-    CellDimensions *cd;
-    SheetBlockStyle *style;
-    int total;
-    int diff;
-
     g_return_if_fail (sheet != nullptr);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
     g_return_if_fail (col >= 0);
@@ -594,18 +543,18 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width) noexcept
     if (width < 0)
         return;
 
-    style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+    SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
 
     g_return_if_fail (col < style->ncols);
 
-    cd = gnucash_style_get_cell_dimensions (style, 0, col);
+    CellDimensions *cd = gnucash_style_get_cell_dimensions (style, 0, col);
     if (!cd) return;
 
     /* adjust the overall width of this style */
-    diff = cd->pixel_width - width;
+    int diff = cd->pixel_width - width;
     cd->pixel_width = width;
 
-    total = MAX (sheet->window_width, sheet->width - diff);
+    int total = MAX (sheet->window_width, sheet->width - diff);
 
     set_dimensions_pass_two (sheet, total);
     set_dimensions_pass_three (sheet);
@@ -622,13 +571,10 @@ void
 gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                            PhysicalCellBorders *borders) noexcept
 {
-    SheetBlockStyle *style;
-    PhysicalCellBorderLineStyle line_style;
-
     g_return_if_fail (sheet != nullptr);
     g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-    line_style = sheet->use_horizontal_lines ?
+    PhysicalCellBorderLineStyle line_style = sheet->use_horizontal_lines ?
                  CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
     borders->top    = line_style;
@@ -640,7 +586,7 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
     borders->left  = line_style;
     borders->right = line_style;
 
-    style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+    SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
     if (style)
         if (virt_loc.phys_col_offset == (style->ncols - 1))
             borders->right = CELL_BORDER_LINE_NORMAL;
@@ -659,13 +605,11 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
 static SheetBlockStyle *
 gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor)
 {
-    SheetBlockStyle *style;
-
     g_return_val_if_fail (sheet != nullptr, nullptr);
     g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), nullptr);
     g_return_val_if_fail (cursor != nullptr, nullptr);
 
-    style = g_new0 (SheetBlockStyle, 1);
+    SheetBlockStyle *style = g_new0 (SheetBlockStyle, 1);
 
     style->cursor = cursor;
 
@@ -701,17 +645,14 @@ gnucash_sheet_clear_styles (GnucashSheet *sheet) noexcept
 void
 gnucash_sheet_create_styles (GnucashSheet *sheet) noexcept
 {
-    GList *cursors;
-    GList *node;
-
     g_return_if_fail (sheet != nullptr);
     g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
     gnucash_sheet_clear_styles (sheet);
 
-    cursors = gnc_table_layout_get_cursors (sheet->table->layout);
+    GList *cursors = gnc_table_layout_get_cursors (sheet->table->layout);
 
-    for (node = cursors; node; node = node->next)
+    for (GList *node = cursors; node; node = node->next)
     {
         auto cursor = static_cast<CellBlock *>(node->data);
         SheetBlockStyle *style = gnucash_sheet_style_new (sheet, cursor);
@@ -762,13 +703,11 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
                                                gint *x, gint *y, gint *w,
                                                gint *h) noexcept
 {
-    CellDimensions *cd;
-
     g_return_if_fail (style != nullptr);
     g_return_if_fail (cell_row >= 0 && cell_row <= style->nrows);
     g_return_if_fail (cell_col >= 0 && cell_col <= style->ncols);
 
-    cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
+    CellDimensions *cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
     if (!cd) return;
 
     *x = cd->origin_x;
@@ -781,12 +720,10 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 SheetBlockStyle *
 gnucash_sheet_get_style (GnucashSheet *sheet, VirtualCellLocation vcell_loc) noexcept
 {
-    SheetBlock *block;
-
     g_return_val_if_fail (sheet != nullptr, nullptr);
     g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), nullptr);
 
-    block = gnucash_sheet_get_block (sheet, vcell_loc);
+    SheetBlock *block = gnucash_sheet_get_block (sheet, vcell_loc);
 
     if (block)
         return block->style;
@@ -799,24 +736,19 @@ SheetBlockStyle *
 gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
                                     VirtualCellLocation vcell_loc) noexcept
 {
-    Table *table;
-    VirtualCell *vcell;
-    CellBlock *cursor;
-    SheetBlockStyle *style;
-
     g_return_val_if_fail (sheet != nullptr, nullptr);
     g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), nullptr);
 
-    table = sheet->table;
+    Table *table = sheet->table;
 
-    vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+    VirtualCell *vcell = gnc_table_get_virtual_cell (table, vcell_loc);
 
     if (!vcell)
         return nullptr;
 
-    cursor = vcell->cellblock;
+    CellBlock *cursor = vcell->cellblock;
 
-    style = gnucash_sheet_get_style_from_cursor (sheet,
+    SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor (sheet,
             cursor->cursor_name);
     if (style)
         return style;
@@ -933,21 +865,17 @@ void
 gnucash_sheet_get_header_widths (GnucashSheet *sheet,
                                  GNCHeaderWidths widths) noexcept
 {
-    SheetBlockStyle *style;
-    CellBlock *header;
-    int row, col;
-
     g_return_if_fail (sheet != nullptr);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
-    style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+    SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
     g_return_if_fail (style != nullptr);
 
-    header = style->cursor;
+    CellBlock *header = style->cursor;
     g_return_if_fail (header != nullptr);
 
-    for (row = 0; row < style->nrows; row++)
-        for (col = 0; col < style->ncols; col++)
+    for (int row = 0; row < style->nrows; row++)
+        for (int col = 0; col < style->ncols; col++)
         {
             CellDimensions *cd;
             BasicCell *cell;
@@ -971,21 +899,17 @@ void
 gnucash_sheet_set_header_widths (GnucashSheet *sheet,
                                  GNCHeaderWidths widths) noexcept
 {
-    SheetBlockStyle *style;
-    CellBlock *header;
-    int row, col;
-
     g_return_if_fail (sheet != nullptr);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
-    style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+    SheetBlockStyle *style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
     g_return_if_fail (style != nullptr);
 
-    header = style->cursor;
+    CellBlock *header = style->cursor;
     g_return_if_fail (header != nullptr);
 
-    for (row = 0; row < style->nrows; row++)
-        for (col = 0; col < style->ncols; col++)
+    for (int row = 0; row < style->nrows; row++)
+        for (int col = 0; col < style->ncols; col++)
         {
             CellDimensions *cd;
             BasicCell *cell;

@@ -44,7 +44,7 @@ enum
     LAST_SIGNAL
 };
 
-static guint gnc_item_list_signals[LAST_SIGNAL];
+static unsigned int gnc_item_list_signals[LAST_SIGNAL];
 
 gboolean _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
                                    GtkTreeIter* iter, gpointer data);
@@ -54,12 +54,10 @@ G_DEFINE_TYPE (GncItemList, gnc_item_list, GTK_TYPE_EVENT_BOX);
 gint
 gnc_item_list_num_entries (GncItemList* item_list)
 {
-    GtkTreeModel* model;
-
     g_return_val_if_fail (item_list != nullptr, 0);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), 0);
 
-    model = gnc_item_list_using_temp (item_list) ?
+    GtkTreeModel *model = gnc_item_list_using_temp (item_list) ?
         GTK_TREE_MODEL (item_list->temp_store) :
         GTK_TREE_MODEL (item_list->list_store);
     return gtk_tree_model_iter_n_children (model, nullptr);
@@ -69,12 +67,11 @@ gnc_item_list_num_entries (GncItemList* item_list)
 void
 gnc_item_list_clear (GncItemList* item_list)
 {
-    GtkTreeSelection* selection;
-
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
     g_return_if_fail (item_list->list_store != nullptr);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (item_list->tree_view));
+    GtkTreeSelection *selection =
+        gtk_tree_view_get_selection (GTK_TREE_VIEW (item_list->tree_view));
 
     g_signal_handlers_block_matched (G_OBJECT (selection), G_SIGNAL_MATCH_DATA,
                                      0, 0, nullptr, nullptr, item_list);
@@ -121,11 +118,12 @@ _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
                           GtkTreeIter* iter, gpointer data)
 {
     auto to_find = static_cast<FindSelectionData *>(data);
-    gchar* iterStr;
-    gboolean found;
 
+    char* iterStr;
     gtk_tree_model_get (model, iter, 0, &iterStr, -1);
-    found = g_strcmp0 (to_find->string_to_find, iterStr) == 0;
+
+    bool found = g_strcmp0 (to_find->string_to_find, iterStr) == 0;
+
     g_free (iterStr);
     if (found)
     {
@@ -138,13 +136,10 @@ _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
 gboolean
 gnc_item_in_list (GncItemList* item_list, const char* string)
 {
-    FindSelectionData* to_find_data;
-    gboolean result;
-
     g_return_val_if_fail (item_list != nullptr, FALSE);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), FALSE);
 
-    to_find_data = static_cast<FindSelectionData *>(g_new0 (FindSelectionData, 1));
+    FindSelectionData *to_find_data = static_cast<FindSelectionData *>(g_new0 (FindSelectionData, 1));
     to_find_data->item_list = item_list;
     to_find_data->string_to_find = string;
 
@@ -152,7 +147,7 @@ gnc_item_in_list (GncItemList* item_list, const char* string)
                             _gnc_item_find_selection,
                             to_find_data);
 
-    result = (to_find_data->found_path != nullptr);
+    gboolean result = (to_find_data->found_path != nullptr);
     g_free (to_find_data);
     return result;
 }
@@ -161,13 +156,10 @@ gnc_item_in_list (GncItemList* item_list, const char* string)
 void
 gnc_item_list_select (GncItemList* item_list, const char* string)
 {
-    GtkTreeSelection* tree_sel = nullptr;
-    FindSelectionData* to_find_data;
-
     g_return_if_fail (item_list != nullptr);
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
 
-    tree_sel = gtk_tree_view_get_selection (item_list->tree_view);
+    GtkTreeSelection *tree_sel = gtk_tree_view_get_selection (item_list->tree_view);
 
     if (string == nullptr)
     {
@@ -175,7 +167,7 @@ gnc_item_list_select (GncItemList* item_list, const char* string)
         return;
     }
 
-    to_find_data = static_cast<FindSelectionData *>(g_new0 (FindSelectionData, 1));
+    FindSelectionData *to_find_data = static_cast<FindSelectionData *>(g_new0 (FindSelectionData, 1));
     to_find_data->item_list = item_list;
     to_find_data->string_to_find = string;
 
@@ -200,14 +192,14 @@ char*
 gnc_item_list_get_selection (GncItemList *item_list)
 {
     GtkTreeIter iter;
-    GtkTreeModel* model;
-    gchar* string;
+    GtkTreeModel *model;
 
     GtkTreeSelection *selection =
         gtk_tree_view_get_selection (item_list->tree_view);
     if (!gtk_tree_selection_get_selected (selection, &model, &iter))
         return nullptr;
 
+    char *string;
     gtk_tree_model_get (model, &iter, 0, &string, -1);
     return string;
 }
@@ -216,15 +208,13 @@ gnc_item_list_get_selection (GncItemList *item_list)
 void
 gnc_item_list_show_selected (GncItemList* item_list)
 {
-    GtkTreeSelection* selection;
-    GtkTreeIter iter;
-    GtkTreeModel* model;
-
     g_return_if_fail (item_list != nullptr);
     g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
 
-    selection = gtk_tree_view_get_selection (item_list->tree_view);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (item_list->tree_view);
 
+    GtkTreeIter iter;
+    GtkTreeModel *model;
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
         GtkTreePath* path = gtk_tree_model_get_path (model, &iter);
@@ -273,11 +263,9 @@ gnc_item_list_using_temp (GncItemList *item_list)
 GtkListStore *
 gnc_item_list_disconnect_store (GncItemList *item_list)
 {
-    GtkListStore *store;
-
     g_return_val_if_fail (item_list != nullptr, nullptr);
 
-    store = GTK_LIST_STORE(gtk_tree_view_get_model (item_list->tree_view));
+    GtkListStore *store = GTK_LIST_STORE(gtk_tree_view_get_model (item_list->tree_view));
 
     gtk_tree_view_set_model (item_list->tree_view, nullptr);
 
@@ -308,16 +296,15 @@ static gboolean
 gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
                             gpointer data)
 {
-    GncItemList* item_list;
     GtkTreeIter iter;
-    GtkTreePath* path;
-    GtkTreeModel* model;
-    gchar* string;
+    GtkTreePath *path;
+    GtkTreeModel *model;
+    char* string;
     gboolean success;
 
     g_return_val_if_fail (IS_GNC_ITEM_LIST (data), FALSE);
 
-    item_list = GNC_ITEM_LIST (data);
+    GncItemList *item_list = GNC_ITEM_LIST (data);
 
     switch (event->button)
     {
@@ -351,19 +338,18 @@ gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
                        string);
         g_free (string);
         return TRUE;
+
     default:
         return FALSE;
     }
 
     return FALSE;
 }
-
 static gboolean
 gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
 {
     GncItemList* item_list = GNC_ITEM_LIST (data);
-    gchar* string;
-    gboolean retval;
+    char *string;
 
     switch (event->keyval)
     {
@@ -395,6 +381,7 @@ gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
     /* These go to the sheet */
     g_signal_stop_emission_by_name (G_OBJECT (widget), "key_press_event");
 
+    gboolean retval;
     g_signal_emit_by_name (G_OBJECT (item_list), "key_press_event", event,
                            &retval);
 
@@ -451,7 +438,7 @@ tree_view_selection_changed (GtkTreeSelection* selection,
     GncItemList* item_list = GNC_ITEM_LIST (data);
     GtkTreeModel* model;
     GtkTreeIter iter;
-    char* string;
+    char *string;
 
     g_return_if_fail (data);
     g_return_if_fail (selection);
@@ -472,7 +459,7 @@ static gint
 gnc_item_list_get_cell_height (GncItemList *item_list)
 {
 
-   gint min_height, nat_height;
+   int min_height, nat_height;
    gtk_cell_renderer_get_preferred_height (item_list->renderer,
                                            GTK_WIDGET(item_list->tree_view),
                                            &min_height,
@@ -494,7 +481,7 @@ gnc_item_list_get_popup_height (GncItemList *item_list)
 
     if (!overlay)
     {
-        gint minh, nath;
+        int minh, nath;
         gtk_widget_get_preferred_height (hsbar, &minh, &nath);
         height = height + minh;
     }
@@ -505,9 +492,6 @@ gnc_item_list_get_popup_height (GncItemList *item_list)
 GtkWidget*
 gnc_item_list_new (GtkListStore* list_store)
 {
-    GtkWidget* tree_view;
-    GtkTreeViewColumn* column;
-
     GncItemList* item_list =
         GNC_ITEM_LIST (g_object_new (GNC_TYPE_ITEM_LIST,
                                      nullptr));
@@ -525,7 +509,7 @@ gnc_item_list_new (GtkListStore* list_store)
         list_store = gtk_list_store_new (1, G_TYPE_STRING);
     else
         g_object_ref (list_store);
-    tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
+    GtkWidget *tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
     g_object_unref (list_store);
 
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
@@ -536,7 +520,7 @@ gnc_item_list_new (GtkListStore* list_store)
                                           0, GTK_SORT_ASCENDING);
 
     item_list->renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes (_ ("List"),
+    GtkTreeViewColumn *column = gtk_tree_view_column_new_with_attributes (_ ("List"),
                                                        item_list->renderer,
                                                        "text", 0,
                                                        nullptr);

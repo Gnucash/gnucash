@@ -70,10 +70,6 @@ static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 void
 gnc_table_save_state (Table *table, const gchar * state_section)
 {
-    GnucashSheet *sheet;
-    GNCHeaderWidths widths;
-    GList *node;
-    gchar *key;
     GKeyFile *state_file = gnc_state_get_current();
 
     if (!table)
@@ -84,22 +80,20 @@ gnc_table_save_state (Table *table, const gchar * state_section)
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
-    sheet = GNUCASH_SHEET (table->ui_data);
+    GnucashSheet *sheet = GNUCASH_SHEET (table->ui_data);
 
-    widths = gnc_header_widths_new ();
+    GNCHeaderWidths widths = gnc_header_widths_new ();
 
     gnucash_sheet_get_header_widths (sheet, widths);
 
-    node = gnc_table_layout_get_cells (table->layout);
+    GList *node = gnc_table_layout_get_cells (table->layout);
     for (; node; node = node->next)
     {
         auto cell = static_cast<BasicCell *>(node->data);
-        int width;
-
-        width = gnc_header_widths_get_width (widths, cell->cell_name);
+        int width = gnc_header_widths_get_width (widths, cell->cell_name);
 
         /* Remember whether the column is visible */
-        key = g_strdup_printf("%s_width", cell->cell_name);
+        char *key = g_strdup_printf("%s_width", cell->cell_name);
         if ((width > 0) && (!cell->expandable))
         {
             g_key_file_set_integer (state_file, state_section, key, width);
@@ -114,15 +108,13 @@ gnc_table_save_state (Table *table, const gchar * state_section)
 static void
 table_ui_redraw_cb (Table *table)
 {
-    GnucashSheet *sheet;
-
     if (table == nullptr)
         return;
 
     if (table->ui_data == nullptr)
         return;
 
-    sheet = GNUCASH_SHEET (table->ui_data);
+    GnucashSheet *sheet = GNUCASH_SHEET (table->ui_data);
 
     gnucash_sheet_redraw_help (sheet);
 }
@@ -130,15 +122,13 @@ table_ui_redraw_cb (Table *table)
 static void
 table_destroy_cb (Table *table)
 {
-    GnucashSheet *sheet;
-
     if (table == nullptr)
         return;
 
     if (table->ui_data == nullptr)
         return;
 
-    sheet = GNUCASH_SHEET (table->ui_data);
+    GnucashSheet *sheet = GNUCASH_SHEET (table->ui_data);
 
     g_object_unref (sheet);
 
@@ -164,8 +154,6 @@ gnc_table_init_gui (Table *table)
 void
 gnc_table_refresh_gui (Table * table, gboolean do_scroll)
 {
-    GnucashSheet *sheet;
-
     if (!table)
         return;
     if (!table->ui_data)
@@ -173,7 +161,7 @@ gnc_table_refresh_gui (Table * table, gboolean do_scroll)
 
     g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
-    sheet = GNUCASH_SHEET(table->ui_data);
+    GnucashSheet *sheet = GNUCASH_SHEET(table->ui_data);
 
     gnucash_sheet_styles_recompile (sheet);
     gnucash_sheet_table_load (sheet, do_scroll);
@@ -186,8 +174,6 @@ gnc_table_refresh_cursor_gnome (Table * table,
                                 VirtualCellLocation vcell_loc,
                                 gboolean do_scroll)
 {
-    GnucashSheet *sheet;
-
     if (!table || !table->ui_data)
         return;
 
@@ -196,7 +182,7 @@ gnc_table_refresh_cursor_gnome (Table * table,
     if (gnc_table_virtual_cell_out_of_bounds (table, vcell_loc))
         return;
 
-    sheet = GNUCASH_SHEET (table->ui_data);
+    GnucashSheet *sheet = GNUCASH_SHEET (table->ui_data);
 
     gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
 
@@ -216,8 +202,6 @@ gnc_table_show_range (Table *table,
                       VirtualCellLocation start_loc,
                       VirtualCellLocation end_loc)
 {
-    GnucashSheet *sheet;
-
     if (!table || !table->ui_data)
         return;
 
@@ -229,7 +213,7 @@ gnc_table_show_range (Table *table,
     if (gnc_table_virtual_cell_out_of_bounds (table, end_loc))
         return;
 
-    sheet = GNUCASH_SHEET (table->ui_data);
+    GnucashSheet *sheet = GNUCASH_SHEET (table->ui_data);
 
     gnucash_sheet_show_range (sheet, start_loc, end_loc);
 }
@@ -237,7 +221,7 @@ gnc_table_show_range (Table *table,
 void
 gnc_table_gnome_init (void)
 {
-    TableGUIHandlers gui_handlers;
+    TableGUIHandlers gui_handlers{};
 
     gui_handlers.cursor_refresh = gnc_table_refresh_cursor_gnome;
 

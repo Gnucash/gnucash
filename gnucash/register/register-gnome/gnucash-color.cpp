@@ -42,7 +42,7 @@
 #include "gnucash-color.h"
 #include <cstdint>
 
-static int color_inited;
+static bool color_inited = false;
 
 /* Public Colors */
 GdkRGBA gn_white, gn_black, gn_light_gray;
@@ -115,7 +115,7 @@ gnucash_color_init (void) noexcept
     if (!color_hash_table)
         color_hash_table = g_hash_table_new (color_hash, color_equal);
 
-    color_inited = 1;
+    color_inited = true;
 }
 
 

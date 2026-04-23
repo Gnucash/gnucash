@@ -58,13 +58,12 @@ struct PopBox
     GncItemEdit   *item_edit;
     GNCDatePicker *date_picker;
 
-    gboolean signals_connected; /* date picker signals connected? */
-    gboolean calendar_popped;   /* calendar is popped up? */
-    gboolean in_date_select;
+    bool signals_connected; /* date picker signals connected? */
+    bool calendar_popped;   /* calendar is popped up? */
+    bool in_date_select;
 
     struct tm date;
 };
-
 
 static void block_picker_signals (DateCell *cell);
 static void unblock_picker_signals (DateCell *cell);
@@ -101,11 +100,11 @@ check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
     {
         if (warn)
         {
-            gchar *dialog_msg = _("The entered date of the transaction is "
+            char *dialog_msg = _("The entered date of the transaction is "
                           "older than the \"Read-Only Threshold\" set for "
                           "this book. This setting can be changed in "
                           "File->Properties->Accounts, resetting to the threshold.");
-            gchar *dialog_title = _("Cannot store a transaction at this date");
+            char *dialog_title = _("Cannot store a transaction at this date");
             GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (nullptr),
                                    static_cast<GtkDialogFlags>(0),
                                    GTK_MESSAGE_ERROR,
@@ -131,9 +130,8 @@ check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
 static void
 gnc_parse_date (struct tm *parsed, const char * datestr, gboolean warn)
 {
-    int day, month, year;
-    gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
-    GDate *test_date;
+    int day = 0, month = 0, year = 0;
+    bool use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
     if (!parsed) return;
     if (!datestr) return;
@@ -150,7 +148,7 @@ gnc_parse_date (struct tm *parsed, const char * datestr, gboolean warn)
         year = tm_today.tm_year + 1900;
     }
 
-    test_date = g_date_new_dmy (day, static_cast<GDateMonth>(month), year);
+    GDate *test_date = g_date_new_dmy (day, static_cast<GDateMonth>(month), year);
 
     if (!gnc_gdate_in_valid_range (test_date, warn))
     {
@@ -201,9 +199,6 @@ gnc_date_cell_print_date (DateCell *cell, char *buff)
 static void
 gnc_date_cell_init (DateCell *cell)
 {
-    PopBox *box;
-    time64 secs;
-    char buff[DATE_BUF];
 
     gnc_basic_cell_init (&(cell->cell));
 
@@ -217,19 +212,21 @@ gnc_date_cell_init (DateCell *cell)
     cell->cell.direct_update = gnc_date_cell_direct_update;
     cell->cell.set_value = gnc_date_cell_set_value_internal;
 
-    box = g_new0 (PopBox, 1);
+    PopBox *box = g_new0 (PopBox, 1);
 
     box->sheet = nullptr;
     box->item_edit = nullptr;
     box->date_picker = nullptr;
 
-    box->signals_connected = FALSE;
-    box->calendar_popped = FALSE;
-    box->in_date_select = FALSE;
+    box->signals_connected = false;
+    box->calendar_popped = false;
+    box->in_date_select = false;
 
     cell->cell.gui_private = box;
 
     /* default value is today's date */
+    time64 secs;
+    char buff[DATE_BUF];
     gnc_time (&secs);
     gnc_localtime_r (&secs, &(box->date));
     gnc_date_cell_print_date (cell, buff);
@@ -240,9 +237,7 @@ gnc_date_cell_init (DateCell *cell)
 BasicCell *
 gnc_date_cell_new (void)
 {
-    DateCell *cell;
-
-    cell = g_new0 (DateCell, 1);
+    DateCell *cell = g_new0 (DateCell, 1);
 
     gnc_date_cell_init (cell);
 
@@ -254,19 +249,19 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
 {
     auto cell = static_cast<DateCell *>(data);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
-    guint day, month, year;
     char buffer[DATE_BUF];
 
+    unsigned int day, month, year;
     gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
-    box->in_date_select = TRUE;
+    box->in_date_select = true;
     gnucash_sheet_modify_current_cell (box->sheet, buffer);
-    box->in_date_select = FALSE;
+    box->in_date_select = false;
 
     gnc_item_edit_hide_popup (box->item_edit);
-    box->calendar_popped = FALSE;
+    box->calendar_popped = false;
 }
 
 static void
@@ -274,16 +269,15 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
 {
     auto cell = static_cast<DateCell *>(data);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
-    guint day, month, year;
     char buffer[DATE_BUF];
-
+    unsigned int day, month, year;
     gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
-    box->in_date_select = TRUE;
+    box->in_date_select = true;
     gnucash_sheet_modify_current_cell (box->sheet, buffer);
-    box->in_date_select = FALSE;
+    box->in_date_select = false;
 }
 
 static void
@@ -296,7 +290,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
     {
     case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
-        box->calendar_popped = FALSE;
+        box->calendar_popped = false;
         break;
 
     default:
@@ -316,7 +310,7 @@ date_picker_disconnect_signals (DateCell *cell)
     g_signal_handlers_disconnect_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
                                           0, 0, nullptr, nullptr, cell);
 
-    box->signals_connected = FALSE;
+    box->signals_connected = false;
 }
 
 static void
@@ -336,7 +330,7 @@ date_picker_connect_signals (DateCell *cell)
     g_signal_connect(box->date_picker, "key_press_event",
                      G_CALLBACK(key_press_item_cb), cell);
 
-    box->signals_connected = TRUE;
+    box->signals_connected = true;
 }
 
 static void
@@ -405,7 +399,7 @@ void
 gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
 {
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
-    struct tm dada;
+    struct tm dada{};
     char buff[DATE_BUF];
 
     dada.tm_mday = day;
@@ -536,7 +530,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
 {
     auto cell = reinterpret_cast<DateCell *>(_cell);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
-    gboolean accept = FALSE;
+    bool accept = false;
 
     if (box->in_date_select)
     {
@@ -546,15 +540,15 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
 
     /* if user hit backspace, accept the change */
     if (change == nullptr)
-        accept = TRUE;
+        accept = true;
     else if (change_len == 0)
-        accept = TRUE;
+        accept = true;
     else
     {
         int count = 0;
         unsigned char separator = dateSeparator ();
-        gboolean ok = TRUE;
-        const gchar *c;
+        bool ok = true;
+        const char *c;
         gunichar uc;
 
         /* accept only numbers or a date separator. Note that the
@@ -566,7 +560,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
             uc = g_utf8_get_char (c);
 
             if (!g_unichar_isdigit (uc) && (separator != uc))
-                ok = FALSE;
+                ok = false;
 
             if (separator == uc)
                 count++;
@@ -586,10 +580,10 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
         }
 
         if (2 < count)
-            ok = FALSE;
+            ok = false;
 
         if (ok)
-            accept = TRUE;
+            accept = true;
     }
 
     /* keep a copy of the new value */
@@ -643,7 +637,7 @@ gnc_date_cell_move (BasicCell *bcell)
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
 
-    box->calendar_popped = FALSE;
+    box->calendar_popped = false;
 }
 
 static int
@@ -709,7 +703,7 @@ gnc_date_cell_leave (BasicCell *bcell)
     gnc_item_edit_set_popup (box->item_edit, nullptr, nullptr,
                              nullptr, nullptr, nullptr, nullptr, nullptr);
 
-    box->calendar_popped = FALSE;
+    box->calendar_popped = false;
 
     /* Refresh the date to expand any shortcuts. */
     gnc_date_cell_get_date (reinterpret_cast<DateCell *>(bcell), &time, TRUE);

@@ -36,7 +36,7 @@ enum
     LAST_SIGNAL
 };
 
-static guint gnc_date_picker_signals[LAST_SIGNAL];
+static unsigned int gnc_date_picker_signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GNCDatePicker, gnc_date_picker, GTK_TYPE_BOX)
 
@@ -83,7 +83,6 @@ static gboolean
 gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     GNCDatePicker *date_picker = GNC_DATE_PICKER (data);
-    gboolean retval;
 
     switch (event->keyval)
     {
@@ -109,6 +108,7 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
     /* These go to the sheet */
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
+    gboolean retval;
     g_signal_emit_by_name (date_picker, "key_press_event", event, &retval);
 
     return retval;
@@ -160,15 +160,14 @@ day_selected_double_click (GtkCalendar *calendar, GNCDatePicker *gdp)
 GtkWidget *
 gnc_date_picker_new (void)
 {
-    GtkWidget *calendar;
-    GtkAllocation allocation;
-    GtkRequisition requisition;
+    GtkAllocation allocation{};
+    GtkRequisition requisition{};
 
     auto date_picker = static_cast<GNCDatePicker *>(
         g_object_new (GNC_TYPE_DATE_PICKER, "homogeneous", FALSE, nullptr)
     );
 
-    calendar = gtk_calendar_new ();
+    GtkWidget *calendar = gtk_calendar_new ();
     date_picker->calendar = GTK_CALENDAR (calendar);
 
     gtk_box_pack_start (GTK_BOX(date_picker), calendar, TRUE, TRUE, 0);

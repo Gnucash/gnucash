@@ -55,21 +55,21 @@ struct PopBox
     GHashTable*   item_hash; // the item hash table
     GtkListStore* item_store; // the item list store
 
-    gchar*        newval; // string value to find
-    gint          newval_len; // length of string value to find
+    char*        newval; // string value to find
+    int          newval_len; // length of string value to find
 
-    gboolean      signals_connected; // list signals connected
-    gboolean      list_popped;  // list is popped up
+    bool          signals_connected; // list signals connected
+    bool          list_popped;  // list is popped up
 
-    gboolean      autosize; // autosize the popup width
+    bool          autosize; // autosize the popup width
 
-    gboolean      sort_enabled; // sort of list store enabled
-    gboolean      register_is_reversed; // whether the register is reversed
+    bool          sort_enabled; // sort of list store enabled
+    bool          register_is_reversed; // whether the register is reversed
 
-    gboolean      strict; // text entry must be in the list
-    gboolean      in_list_select; // item selected in the list
+    bool          strict; // text entry must be in the list
+    bool          in_list_select; // item selected in the list
 
-    gint          occurrence; // the position in the list
+    int          occurrence; // the position in the list
 
 };
 
@@ -121,17 +121,17 @@ gnc_completion_cell_init (CompletionCell* cell)
     box->item_list = nullptr;
     box->item_store = nullptr;
 
-    box->signals_connected = FALSE;
-    box->list_popped = FALSE;
-    box->autosize = FALSE;
-    box->register_is_reversed = FALSE;
+    box->signals_connected = false;
+    box->list_popped = false;
+    box->autosize = false;
+    box->register_is_reversed = false;
 
-    box->sort_enabled = FALSE;
+    box->sort_enabled = false;
 
     cell->cell.gui_private = box;
 
-    box->strict = FALSE;
-    box->in_list_select = FALSE;
+    box->strict = false;
+    box->in_list_select = false;
     box->occurrence = 0;
 
     box->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
@@ -141,7 +141,7 @@ static void
 hide_popup (PopBox* box)
 {
     gnc_item_edit_hide_popup (box->item_edit);
-    box->list_popped = FALSE;
+    box->list_popped = false;
 }
 
 static void
@@ -150,9 +150,9 @@ select_item_cb (GncItemList* item_list, char* item_string, gpointer user_data)
     auto cell = static_cast<CompletionCell *>(user_data);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
-    box->in_list_select = TRUE;
+    box->in_list_select = true;
     gnucash_sheet_modify_current_cell (box->sheet, item_string);
-    box->in_list_select = FALSE;
+    box->in_list_select = false;
 
     hide_popup (box);
 }
@@ -174,8 +174,8 @@ horizontal_scroll_to_found_text (PopBox* box, char* item_string, gint found_loca
 
     GtkAllocation alloc;
     gtk_widget_get_allocation (GTK_WIDGET(box->item_list->tree_view), &alloc);
-    gint scroll_point = 0;
-    gchar *start_string = g_utf8_substring (item_string, 0, found_location + box->newval_len);
+    int scroll_point = 0;
+    char *start_string = g_utf8_substring (item_string, 0, found_location + box->newval_len);
 
     PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET(box->item_list->tree_view), item_string);
     PangoAttrList *atlist = pango_attr_list_new ();
@@ -185,11 +185,11 @@ horizontal_scroll_to_found_text (PopBox* box, char* item_string, gint found_loca
     pango_attr_list_insert (atlist, bold_weight);
     pango_layout_set_attributes (layout, atlist);
 
-    gint item_string_width = text_width (layout);
+    int item_string_width = text_width (layout);
 
     pango_layout_set_text (layout, start_string, -1);
 
-    gint start_string_width = text_width (layout);
+    int start_string_width = text_width (layout);
 
     pango_attr_list_unref (atlist);
     g_object_unref (layout);
@@ -212,16 +212,16 @@ change_item_cb (GncItemList* item_list, char* item_string, gpointer user_data)
     auto cell = static_cast<CompletionCell *>(user_data);
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
 
-    box->in_list_select = TRUE;
+    box->in_list_select = true;
     gnucash_sheet_modify_current_cell (box->sheet, item_string);
-    box->in_list_select = FALSE;
+    box->in_list_select = false;
 
     GtkTreeModel *model = gtk_tree_view_get_model (item_list->tree_view);
     GtkTreeSelection *selection = gtk_tree_view_get_selection (item_list->tree_view);
     GtkTreeIter iter;
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
-        gint found_location;
+        int found_location;
         gtk_tree_model_get (model, &iter, FOUND_LOCATION_COL, &found_location, -1);
         horizontal_scroll_to_found_text (box, item_string, found_location);
     }
@@ -295,7 +295,7 @@ completion_disconnect_signals (CompletionCell* cell)
                                           G_SIGNAL_MATCH_DATA,
                                           0, 0, nullptr, nullptr, cell);
 
-    box->signals_connected = FALSE;
+    box->signals_connected = false;
 }
 
 static void
@@ -318,7 +318,7 @@ completion_connect_signals (CompletionCell* cell)
     g_signal_connect (G_OBJECT(box->item_list), "key_press_event",
                       G_CALLBACK(key_press_item_cb), cell);
 
-    box->signals_connected = TRUE;
+    box->signals_connected = true;
 }
 
 static void
@@ -375,8 +375,8 @@ gnc_completion_cell_destroy (BasicCell* bcell)
 static gint
 sort_func (GtkTreeModel* model, GtkTreeIter* iter_a, GtkTreeIter* iter_b, gpointer user_data)
 {
-    gint a_weight, b_weight;
-    gint ret = 0;
+    int a_weight, b_weight;
+    int ret = 0;
 
     gtk_tree_model_get (model, iter_a, WEIGHT_COL, &a_weight, -1);
     gtk_tree_model_get (model, iter_b, WEIGHT_COL, &b_weight, -1);
@@ -473,14 +473,14 @@ gnc_completion_cell_add_menu_item (CompletionCell* cell,
     if (box->item_hash)
     {
         gpointer value = g_hash_table_lookup (box->item_hash, menustr);
-        gboolean update = FALSE;
+        bool update = false;
         if (value)
         {
             if (!box->register_is_reversed)
-                update = TRUE;
+                update = true;
         }
         else
-            update = TRUE;
+            update = true;
 
         if (update)
         {
@@ -522,28 +522,27 @@ static gint
 test_and_add (PopBox* box, const gchar *text, gint start_pos,
               gpointer key, gint occurrence_difference)
 {
-    gint ret_value = -1;
-    gint text_length = g_utf8_strlen (text, -1);
+    int ret_value = -1;
+    int text_length = g_utf8_strlen (text, -1);
 
     if (start_pos >= text_length)
        return ret_value;
 
-    gchar *sub_text = g_utf8_substring (text, start_pos, text_length);
+    char *sub_text = g_utf8_substring (text, start_pos, text_length);
     int pos = 0, len = 0;
     if (gnc_unicode_has_substring_base_chars (box->newval, sub_text, &pos, &len))
     {
-        gchar *markup = nullptr, *prefix = nullptr, *match = nullptr, *suffix = nullptr;
-        gint found_location = start_pos + pos;
-        gboolean have_boundary = FALSE;
-        gint prefix_length;
-        gint weight;
+        char *markup = nullptr, *prefix = nullptr, *match = nullptr, *suffix = nullptr;
+        int found_location = start_pos + pos;
+        bool have_boundary = false;
+
 
         if (found_location > 0)
             prefix = g_utf8_substring (text, 0, found_location);
         else
             prefix = g_strdup ("");
 
-        prefix_length = g_utf8_strlen (prefix, -1);
+        int prefix_length = g_utf8_strlen (prefix, -1);
 
         match = g_utf8_substring (text, found_location, found_location + len);
 
@@ -551,7 +550,7 @@ test_and_add (PopBox* box, const gchar *text, gint start_pos,
         {
             gunichar prev = g_utf8_get_char (g_utf8_offset_to_pointer (sub_text, pos - 1));
             if (prev && (g_unichar_isspace (prev) || g_unichar_ispunct (prev)))
-                have_boundary = TRUE;
+                have_boundary = true;
             else
                 ret_value = found_location + 1;
         }
@@ -562,7 +561,7 @@ test_and_add (PopBox* box, const gchar *text, gint start_pos,
 
         if ((prefix_length == 0 ) || have_boundary)
         {
-            weight = occurrence_difference; // sorted by recent first
+            int weight = occurrence_difference; // sorted by recent first
 
             if (gnc_unicode_compare_base_chars (sub_text, box->newval) == 0) // exact match
                 weight = 1;
@@ -583,12 +582,12 @@ static void
 add_item (gpointer key, gpointer value, gpointer user_data)
 {
     auto box = static_cast<PopBox *>(user_data);
-    gchar *hash_entry = g_strdup (static_cast<const char *>(key));
+    char *hash_entry = g_strdup (static_cast<const char *>(key));
 
     if (hash_entry && *hash_entry)
     {
-        gint start_pos = 0;
-        gint occurrence_difference;
+        int start_pos = 0;
+        int occurrence_difference = 0;
         gnc_utf8_strip_invalid_and_controls (hash_entry);
 
         if (box->register_is_reversed)
@@ -610,7 +609,6 @@ select_first_entry_in_list (PopBox* box)
 {
     GtkTreeModel *model = gtk_tree_view_get_model (box->item_list->tree_view);
     GtkTreeIter iter;
-    gchar* string;
 
     if (!gtk_tree_model_get_iter_first (model, &iter))
         return;
@@ -618,6 +616,7 @@ select_first_entry_in_list (PopBox* box)
     if (!gtk_tree_model_iter_next (model, &iter))
         return;
 
+    char* string;
     gtk_tree_model_get (model, &iter, TEXT_COL, &string, -1);
 
     gnc_item_list_select (box->item_list, string);
@@ -630,12 +629,12 @@ select_first_entry_in_list (PopBox* box)
 }
 
 static void
-populate_list_store (CompletionCell* cell, gchar* str)
+populate_list_store (CompletionCell* cell, char* str)
 {
     auto box = static_cast<PopBox *>(cell->cell.gui_private);
     char dont_text[] = DONT_TEXT;
 
-    box->in_list_select = FALSE;
+    box->in_list_select = false;
     box->item_edit->popup_allocation_height = -1;
 
     if (str && *str)
@@ -651,12 +650,12 @@ populate_list_store (CompletionCell* cell, gchar* str)
     block_list_signals (cell);
 
     if (box->sort_enabled) // if sorting, disable it
-        set_sort_column_enabled (box, FALSE);
+        set_sort_column_enabled (box, false);
 
     gtk_list_store_clear (box->item_store);
 
     // add the don't first entry
-    gchar *markup = g_markup_printf_escaped ("<i>%s</i>", dont_text);
+    char *markup = g_markup_printf_escaped ("<i>%s</i>", dont_text);
     list_store_append (box->item_store, dont_text, markup, 0, 0);
     g_free (markup);
 
@@ -664,7 +663,7 @@ populate_list_store (CompletionCell* cell, gchar* str)
     g_hash_table_foreach (box->item_hash, add_item, box);
 
     if (box->sort_enabled) // if sorting, enable it
-        set_sort_column_enabled (box, TRUE);
+        set_sort_column_enabled (box, true);
 
     unblock_list_signals (cell);
 
@@ -721,7 +720,7 @@ gnc_completion_cell_modify_verify (BasicCell* bcell,
         *start_selection = *end_selection = *cursor_position;
     }
 
-    gchar *start_of_text = g_utf8_substring (newval, 0, *cursor_position);
+    char *start_of_text = g_utf8_substring (newval, 0, *cursor_position);
     populate_list_store (cell, start_of_text);
     g_free (start_of_text);
 
@@ -839,7 +838,7 @@ gnc_completion_cell_gui_realize (BasicCell* bcell, gpointer data)
     box->item_list = GNC_ITEM_LIST(gnc_item_list_new (box->item_store));
 
     block_list_signals (cell);
-    set_sort_column_enabled (box, FALSE);
+    set_sort_column_enabled (box, false);
     unblock_list_signals (cell);
 
     gtk_widget_show_all (GTK_WIDGET(box->item_list));
@@ -872,7 +871,7 @@ reset_item_list_to_default_setup (BasicCell* bcell)
     gtk_tree_view_column_clear_attributes (column,box->item_list->renderer);
     gtk_tree_view_column_add_attribute (column, box->item_list->renderer,
                                         "text", TEXT_COL);
-    box->list_popped = FALSE;
+    box->list_popped = false;
 }
 
 static void
@@ -908,7 +907,7 @@ popup_get_height (GtkWidget* widget,
     {
         // if the list is empty height would be 0 so return 1 instead to
         // satisfy the check_popup_height_is_true function
-        gint ret_height = height ? height : 1;
+        int ret_height = height ? height : 1;
 
         gtk_widget_set_size_request (GTK_WIDGET(scrollwin), -1, ret_height);
         gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrollwin),
@@ -976,8 +975,8 @@ tree_view_size_allocate_cb (GtkWidget *widget,
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
         auto box = static_cast<PopBox *>(user_data);
-        gint found_location;
-        gchar *item_text;
+        int found_location;
+        char *item_text;
         gtk_tree_model_get (model, &iter, TEXT_COL, &item_text,
                                           FOUND_LOCATION_COL, &found_location, -1);
         horizontal_scroll_to_found_text (box, item_text, found_location);

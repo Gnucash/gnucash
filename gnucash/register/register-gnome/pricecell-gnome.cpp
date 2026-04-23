@@ -50,15 +50,12 @@ gnc_price_cell_direct_update (BasicCell *bcell,
 {
     auto cell = reinterpret_cast<PriceCell *>(bcell);
     auto event = static_cast<GdkEventKey *>(gui_data);
-    struct lconv *lc;
-    gboolean is_return;
+    gboolean is_return = FALSE;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
 
-    lc = gnc_localeconv ();
-
-    is_return = FALSE;
+    struct lconv *lc = gnc_localeconv ();
 
     switch (event->keyval)
     {
@@ -72,7 +69,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     {
         char *error_loc;
         gnc_numeric amount;
-        gboolean parse_ok;
+        gboolean parse_ok = FALSE;
         gboolean changed = FALSE;
 
         if (!cell->need_to_parse)
@@ -130,9 +127,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
 BasicCell *
 gnc_price_cell_gnome_new (void)
 {
-    BasicCell *cell;
-
-    cell = gnc_price_cell_new ();
+    BasicCell *cell = gnc_price_cell_new ();
 
     cell->direct_update = gnc_price_cell_direct_update;
 
@@ -146,15 +141,12 @@ gnc_basic_cell_insert_decimal(BasicCell *bcell,
                               int *start_selection,
                               int *end_selection)
 {
-    GString *newval_gs;
-    gint start, end;
-
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
-    newval_gs = g_string_new("");
+    GString *newval_gs = g_string_new("");
 
-    start = MIN(*start_selection, *end_selection);
-    end = MAX(*start_selection, *end_selection);
+    int start = MIN(*start_selection, *end_selection);
+    int end = MAX(*start_selection, *end_selection);
 
     /* length in bytes, not chars. do not use g_utf8_strlen. */
     auto buf = static_cast<gchar *>(g_malloc0(strlen(bcell->value) + 1));

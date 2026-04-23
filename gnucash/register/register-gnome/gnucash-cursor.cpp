@@ -48,39 +48,34 @@ G_DEFINE_TYPE (GnucashCursor, gnucash_cursor, G_TYPE_OBJECT)
 
 static void
 gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
-                                 gint *x, gint *y,
-                                 gint *w, gint *h)
+                                 int *x, int *y,
+                                 int *w, int *h)
 {
     GnucashSheet *sheet = cursor->sheet;
-    VirtualCellLocation vcell_loc;
-    CellDimensions *cd;
-    VirtualCell *vcell;
-    SheetBlock *block;
-    gint col;
+    VirtualCellLocation vcell_loc{};
+    int col = 0;
 
     vcell_loc.virt_row = cursor->row;
     vcell_loc.virt_col = cursor->col;
 
-    block = gnucash_sheet_get_block (sheet, vcell_loc);
+    SheetBlock *block = gnucash_sheet_get_block (sheet, vcell_loc);
     if (!block)
         return;
 
-    vcell = gnc_table_get_virtual_cell (sheet->table, vcell_loc);
+    VirtualCell *vcell = gnc_table_get_virtual_cell (sheet->table, vcell_loc);
     if (!vcell)
         return;
 
     for (col = 0; col < vcell->cellblock->num_cols; col++)
     {
-        BasicCell *cell;
-
-        cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
+        BasicCell *cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
         if (cell && cell->cell_name)
             break;
     }
 
     *y = block->origin_y;
 
-    cd = gnucash_style_get_cell_dimensions (block->style, 0, col);
+    CellDimensions *cd = gnucash_style_get_cell_dimensions (block->style, 0, col);
     if (cd)
         *x = cd->origin_x;
     else
@@ -88,9 +83,7 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
 
     for (col = vcell->cellblock->num_cols - 1; col >= 0; col--)
     {
-        BasicCell *cell;
-
-        cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
+        BasicCell *cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
         if (cell && cell->cell_name)
             break;
     }
@@ -132,7 +125,7 @@ gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
 void
 gnucash_cursor_configure (GnucashCursor *cursor)
 {
-    gint x = 0, y = 0, w = 0, h = 0;
+    int x = 0, y = 0, w = 0, h = 0;
 
     g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
@@ -160,12 +153,10 @@ gnucash_cursor_configure (GnucashCursor *cursor)
 static void
 gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
 {
-    GnucashSheet *sheet;
-
     g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    sheet = cursor->sheet;
+    GnucashSheet *sheet = cursor->sheet;
 
     if (vcell_loc.virt_row < 0 ||
             vcell_loc.virt_row >= sheet->num_virt_rows ||
@@ -182,12 +173,10 @@ gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
 static void
 gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
 {
-    SheetBlockStyle *style;
-
     g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    style = cursor->style;
+    SheetBlockStyle *style = cursor->style;
 
     if (cell_row < 0 || cell_row >= style->nrows ||
             cell_col < 0 || cell_col >= style->ncols)
@@ -201,12 +190,10 @@ gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
 void
 gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
 {
-    GnucashSheet *sheet;
-
     g_return_if_fail (cursor != nullptr);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    sheet = cursor->sheet;
+    GnucashSheet *sheet = cursor->sheet;
 
     gnucash_cursor_set_block (cursor, virt_loc.vcell_loc);
     gnucash_cursor_set_cell (cursor,
@@ -221,16 +208,13 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
                   nullptr);
 }
 
-
 static void
 gnucash_cursor_set_property (GObject         *object,
                              guint            prop_id,
                              const GValue    *value,
                              GParamSpec      *pspec)
 {
-    GnucashCursor *cursor;
-
-    cursor = GNUCASH_CURSOR (object);
+    GnucashCursor *cursor = GNUCASH_CURSOR (object);
 
     switch (prop_id)
     {
@@ -278,9 +262,7 @@ gnucash_cursor_init (GnucashCursor *instance)
 static void
 gnucash_cursor_class_init (GnucashCursorClass *klass)
 {
-    GObjectClass  *object_class;
-
-    object_class = G_OBJECT_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
     /* GObject method overrides */
     object_class->set_property = gnucash_cursor_set_property;
