@@ -18,6 +18,11 @@ gnc-id-cursor entry {
   padding: 0px 2px 0px 2px;
 }
 
+/* Selection text in entry */
+gnc-id-cursor entry selection {
+  color: #1b4332;
+}
+
 gnc-id-cursor button {
   margin: 1px 1px 1px 1px;
 }
