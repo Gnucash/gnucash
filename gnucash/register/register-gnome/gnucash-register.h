@@ -27,7 +27,11 @@
 #include "gnucash-sheet.h"
 
 #ifdef __cplusplus
-extern "C" {
+#define NOEXCEPT noexcept
+extern "C"
+{
+#else
+#define NOEXCEPT
 #endif
 
 /** @ingroup Register
@@ -55,41 +59,41 @@ GType gnucash_register_get_type (void);
  *
  *  Should be called before any table layout is created using
  *  these new types */
-void gnucash_register_add_cell_types (void);
+void gnucash_register_add_cell_types (void) NOEXCEPT;
 
 /** this already has scrollbars attached */
-GtkWidget *gnucash_register_new (Table *table, const gchar *state_section);
+GtkWidget *gnucash_register_new (Table *table, const gchar *state_section) NOEXCEPT;
 
 void gnucash_register_goto_virt_cell (GnucashRegister *reg,
-                                      VirtualCellLocation vcell_loc);
+                                      VirtualCellLocation vcell_loc) NOEXCEPT;
 
 void gnucash_register_goto_virt_loc (GnucashRegister *reg,
-                                     VirtualLocation virt_loc);
+                                     VirtualLocation virt_loc) NOEXCEPT;
 
-void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
+void gnucash_register_goto_next_virt_row (GnucashRegister *reg) NOEXCEPT;
 
 typedef gboolean (*VirtualLocationMatchFunc) (VirtualLocation virt_loc,
-        gpointer user_data);
+                                              gpointer user_data) NOEXCEPT;
 
 void gnucash_register_goto_next_matching_row (GnucashRegister *reg,
-        VirtualLocationMatchFunc match,
-        gpointer user_data);
+                                              VirtualLocationMatchFunc match,
+                                              gpointer user_data) NOEXCEPT;
 
 void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
-                                   gpointer data);
+                                   gpointer data) NOEXCEPT;
 
-gboolean gnucash_register_has_selection (GnucashRegister *reg);
-void gnucash_register_cut_clipboard (GnucashRegister *reg);
-void gnucash_register_copy_clipboard (GnucashRegister *reg);
-void gnucash_register_paste_clipboard (GnucashRegister *reg);
-void gnucash_register_refresh_from_prefs (GnucashRegister *reg);
+gboolean gnucash_register_has_selection (GnucashRegister *reg) NOEXCEPT;
+void gnucash_register_cut_clipboard (GnucashRegister *reg) NOEXCEPT;
+void gnucash_register_copy_clipboard (GnucashRegister *reg) NOEXCEPT;
+void gnucash_register_paste_clipboard (GnucashRegister *reg) NOEXCEPT;
+void gnucash_register_refresh_from_prefs (GnucashRegister *reg) NOEXCEPT;
 void gnucash_register_set_moved_cb (GnucashRegister *reg,
-                                    GFunc cb, gpointer cb_data);
+                                    GFunc cb, gpointer cb_data) NOEXCEPT;
 void gnucash_register_set_open_doclink_cb (GnucashRegister *reg,
-                                           GFunc cb, gpointer cb_data);
+                                           GFunc cb, gpointer cb_data) NOEXCEPT;
 
-GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg);
-void gnucash_register_reset_sheet_layout (GnucashRegister *reg);
+GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg) NOEXCEPT;
+void gnucash_register_reset_sheet_layout (GnucashRegister *reg) NOEXCEPT;
 /** @} */
 
 #ifdef __cplusplus

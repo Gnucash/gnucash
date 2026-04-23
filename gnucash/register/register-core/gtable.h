@@ -38,6 +38,10 @@ typedef struct GTable GTable;
 typedef void (*g_table_entry_constructor) (gpointer entry, gpointer user_data);
 typedef void (*g_table_entry_destroyer)   (gpointer entry, gpointer user_data);
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /** Create a new table with the given entry constructor and destroyer.
  * Both functions must be given. They are used to initialize the table
@@ -67,6 +71,10 @@ int      g_table_rows (GTable *gtable);
 
 /** Return the number of table columns. */
 int      g_table_cols (GTable *gtable);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 #endif

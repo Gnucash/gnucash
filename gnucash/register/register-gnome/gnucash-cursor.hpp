@@ -47,17 +47,17 @@ enum
 };
 
 
-typedef struct
+struct GnucashCursorCell
 {
     gint row;
     gint col;
 
     /* precomputed pixel coords for the item cursor*/
     gint x, y, w, h;
-} GnucashCursorCell;
+};
 
 
-typedef struct
+struct GnucashCursor
 {
     GObject obj;
 
@@ -70,12 +70,12 @@ typedef struct
     gint x, y, w, h;
 
     SheetBlockStyle *style;
-} GnucashCursor;
+};
 
-typedef struct
+struct GnucashCursorClass
 {
     GObjectClass parent_class;
-} GnucashCursorClass;
+};
 
 
 GnucashCursor *gnucash_cursor_new (GnucashSheet *sheet);

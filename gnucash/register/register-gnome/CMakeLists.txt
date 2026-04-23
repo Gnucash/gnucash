@@ -1,40 +1,40 @@
 include(CheckSymbolExists)
 
 set (register_gnome_SOURCES
-  combocell-gnome.c
-  completioncell-gnome.c
-  datecell-gnome.c
-  formulacell-gnome.c
-  gnucash-color.c
-  gnucash-cursor.c
-  gnucash-date-picker.c
-  gnucash-header.c
-  gnucash-item-edit.c
-  gnucash-item-list.c
-  gnucash-register.c
-  gnucash-sheet-private.c
-  gnucash-sheet.c
-  gnucash-style.c
-  pricecell-gnome.c
-  quickfillcell-gnome.c
-  table-gnome.c
+  combocell-gnome.cpp
+  completioncell-gnome.cpp
+  datecell-gnome.cpp
+  formulacell-gnome.cpp
+  gnucash-color.cpp
+  gnucash-cursor.cpp
+  gnucash-date-picker.cpp
+  gnucash-header.cpp
+  gnucash-item-edit.cpp
+  gnucash-item-list.cpp
+  gnucash-register.cpp
+  gnucash-sheet-private.cpp
+  gnucash-sheet.cpp
+  gnucash-style.cpp
+  pricecell-gnome.cpp
+  quickfillcell-gnome.cpp
+  table-gnome.cpp
 )
 
 set (register_gnome_noinst_HEADERS
-  formulacell-gnome.h
+  formulacell-gnome.hpp
   gnucash-color.h
-  gnucash-cursor.h
-  gnucash-date-picker.h
-  gnucash-header.h
-  gnucash-item-edit.h
-  gnucash-item-list.h
+  gnucash-cursor.hpp
+  gnucash-date-picker.hpp
+  gnucash-header.hpp
+  gnucash-item-edit.hpp
+  gnucash-item-list.hpp
   gnucash-register.h
   gnucash-sheet.h
-  gnucash-sheetP.h
+  gnucash-sheetP.hpp
   gnucash-style.h
-  pricecell-gnome.h
-  quickfillcell-gnome.h
-  table-gnome.h
+  pricecell-gnome.hpp
+  quickfillcell-gnome.hpp
+  table-gnome.hpp
 )
 
 # Add dependency on config.h

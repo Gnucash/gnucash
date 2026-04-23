@@ -68,66 +68,78 @@ struct _SheetBlockStyle
 };
 
 
-gboolean gnucash_style_init (void);
+#ifdef __cplusplus
+#define NOEXCEPT noexcept
+extern "C"
+{
+#else
+#define NOEXCEPT
+#endif
 
-void gnucash_sheet_style_init(void);
+gboolean gnucash_style_init (void) NOEXCEPT;
 
-gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
+void gnucash_sheet_style_init(void) NOEXCEPT;
 
-CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
-        int row, int col);
+gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col) NOEXCEPT;
 
-void gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width);
+CellDimensions *gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
+                                                   int row, int col) NOEXCEPT;
 
-gint gnucash_style_row_width(SheetBlockStyle *style, int row);
+void gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width) NOEXCEPT;
 
-void gnucash_sheet_styles_set_dimensions (GnucashSheet *sheet, int width);
+gint gnucash_style_row_width(SheetBlockStyle *style, int row) NOEXCEPT;
 
-void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
+void gnucash_sheet_styles_set_dimensions (GnucashSheet *sheet, int width) NOEXCEPT;
 
-void gnucash_sheet_clear_styles (GnucashSheet *sheet);
-void gnucash_sheet_create_styles (GnucashSheet *sheet);
+void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style) NOEXCEPT;
 
-void gnucash_sheet_compile_styles (GnucashSheet *sheet);
+void gnucash_sheet_clear_styles (GnucashSheet *sheet) NOEXCEPT;
+void gnucash_sheet_create_styles (GnucashSheet *sheet) NOEXCEPT;
 
-void gnucash_sheet_styles_recompile (GnucashSheet *sheet);
+void gnucash_sheet_compile_styles (GnucashSheet *sheet) NOEXCEPT;
+
+void gnucash_sheet_styles_recompile (GnucashSheet *sheet) NOEXCEPT;
 
 SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet,
-        VirtualCellLocation vcell_loc);
+                                          VirtualCellLocation vcell_loc) NOEXCEPT;
 
 SheetBlockStyle *
 gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
-                                    VirtualCellLocation vcell_loc);
+                                    VirtualCellLocation vcell_loc) NOEXCEPT;
 
 SheetBlockStyle *
 gnucash_sheet_get_style_from_cursor (GnucashSheet *sheet,
-                                     const char *cursor_name);
+                                     const char *cursor_name) NOEXCEPT;
 
 void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
-        gint cell_row,
-        gint cell_col,
-        gint *x, gint *y,
-        gint *w, gint *h);
+                                                    gint cell_row,
+                                                    gint cell_col, gint *x,
+                                                    gint *y, gint *w,
+                                                    gint *h) NOEXCEPT;
 
-void gnucash_sheet_style_ref   (GnucashSheet *sheet, SheetBlockStyle *style);
-void gnucash_sheet_style_unref (GnucashSheet *sheet, SheetBlockStyle *style);
+void gnucash_sheet_style_ref   (GnucashSheet *sheet, SheetBlockStyle *style) NOEXCEPT;
+void gnucash_sheet_style_unref (GnucashSheet *sheet, SheetBlockStyle *style) NOEXCEPT;
 
 void gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
-                                PhysicalCellBorders *borders);
+                                PhysicalCellBorders *borders) NOEXCEPT;
 
 typedef GHashTable *GNCHeaderWidths;
 
-GNCHeaderWidths gnc_header_widths_new (void);
-void gnc_header_widths_destroy (GNCHeaderWidths widths);
+GNCHeaderWidths gnc_header_widths_new (void) NOEXCEPT;
+void gnc_header_widths_destroy (GNCHeaderWidths widths) NOEXCEPT;
 void gnc_header_widths_set_width (GNCHeaderWidths widths,
                                   const char *cell_name,
-                                  int width);
+                                  int width) NOEXCEPT;
 int gnc_header_widths_get_width (GNCHeaderWidths widths,
-                                 const char *cell_name);
+                                 const char *cell_name) NOEXCEPT;
 
 void gnucash_sheet_get_header_widths (GnucashSheet *sheet,
-                                      GNCHeaderWidths widths);
+                                      GNCHeaderWidths widths) NOEXCEPT;
 void gnucash_sheet_set_header_widths (GnucashSheet *sheet,
-                                      GNCHeaderWidths widths);
+                                      GNCHeaderWidths widths) NOEXCEPT;
+#ifdef __cplusplus
+}
+#endif
+
 /** @} */
 #endif

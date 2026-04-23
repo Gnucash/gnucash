@@ -40,19 +40,20 @@
 
 #include <gdk/gdk.h>
 #include "gnucash-color.h"
+#include <cstdint>
 
-static int color_inited;
+static bool color_inited = false;
 
 /* Public Colors */
 GdkRGBA gn_white, gn_black, gn_light_gray;
 GdkRGBA gn_dark_gray, gn_blue, gn_red, gn_yellow;
 
-static GHashTable *color_hash_table = NULL;
+static GHashTable *color_hash_table = nullptr;
 
 static guint
 color_hash (gconstpointer v)
 {
-    const guint32 *c = (guint32 *) v;
+    auto c = static_cast<const std::uint32_t *>(v);
 
     return *c;
 }
@@ -61,8 +62,8 @@ color_hash (gconstpointer v)
 static gint
 color_equal (gconstpointer v, gconstpointer w)
 {
-    const guint32 *c1 = (guint32 *) v;
-    const guint32 *c2 = (guint32 *) w;
+    auto c1 = static_cast<const std::uint32_t *>(v);
+    auto c2 = static_cast<const std::uint32_t *>(w);
 
     return (*c1 == *c2);
 }
@@ -73,19 +74,17 @@ color_equal (gconstpointer v, gconstpointer w)
  *  the colors.  Caller must not touch the returned color.
  */
 GdkRGBA *
-gnucash_color_argb_to_gdk (guint32 argb)
+gnucash_color_argb_to_gdk (guint32 argb) noexcept
 {
-    GdkRGBA *color;
-    const guint32 key = argb;
-    guint32 *newkey;
+    const std::uint32_t key = argb;
 
-    color = g_hash_table_lookup (color_hash_table, &key);
+    auto color = static_cast<GdkRGBA *>(g_hash_table_lookup (color_hash_table, &key));
 
     if (color)
         return color;
 
     color = g_new0(GdkRGBA, 1);
-    newkey = g_new0(guint32, 1);
+    std::uint32_t *newkey = g_new0(guint32, 1);
 
     *newkey = key;
 
@@ -101,7 +100,7 @@ gnucash_color_argb_to_gdk (guint32 argb)
 
 
 void
-gnucash_color_init (void)
+gnucash_color_init (void) noexcept
 {
     /* Allocate the default colors */
     gdk_rgba_parse (&gn_white, "white");
@@ -116,7 +115,7 @@ gnucash_color_init (void)
     if (!color_hash_table)
         color_hash_table = g_hash_table_new (color_hash, color_equal);
 
-    color_inited = 1;
+    color_inited = true;
 }
 
 

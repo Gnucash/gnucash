@@ -29,11 +29,11 @@
 
 #include <config.h>
 
-#include <string.h>
+#include <cstring>
 #include <gdk/gdkkeysyms.h>
 
 #include "quickfillcell.h"
-#include "quickfillcell-gnome.h"
+#include "quickfillcell-gnome.hpp"
 
 
 static gboolean
@@ -43,11 +43,8 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
                                   int *end_selection,
                                   void *gui_data)
 {
-    QuickFillCell *cell = (QuickFillCell *) bcell;
-    GdkEventKey *event = gui_data;
-    const char *match_str;
-    QuickFill *match;
-    int prefix_len;
+    auto cell = reinterpret_cast<QuickFillCell *>(bcell);
+    auto event = static_cast<GdkEventKey *>(gui_data);
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
@@ -74,19 +71,20 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
              (*start_selection >= *cursor_position))
         *cursor_position = *end_selection;
 
-    match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value,
+    QuickFill *match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value,
             *cursor_position);
 
-    if (match == NULL)
+    if (match == nullptr)
         return TRUE;
 
+    int prefix_len;
     match = gnc_quickfill_get_unique_len_match (match, &prefix_len);
-    if (match == NULL)
+    if (match == nullptr)
         return TRUE;
 
-    match_str = gnc_quickfill_string (match);
+    const char *match_str = gnc_quickfill_string (match);
 
-    if ((match_str != NULL) &&
+    if ((match_str != nullptr) &&
             (strncmp (match_str, bcell->value, strlen (bcell->value)) == 0) &&
             (strcmp (match_str, bcell->value) != 0))
         gnc_basic_cell_set_value (bcell, match_str);
@@ -101,9 +99,7 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
 BasicCell *
 gnc_quickfill_cell_gnome_new (void)
 {
-    BasicCell *cell;
-
-    cell = gnc_quickfill_cell_new ();
+    BasicCell *cell = gnc_quickfill_cell_new ();
 
     cell->direct_update = gnc_quickfill_cell_direct_update;
 

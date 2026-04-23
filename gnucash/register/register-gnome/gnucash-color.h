@@ -29,13 +29,27 @@
  * @addtogroup Gnome
  * @{
  */
+
+#ifdef __cplusplus
+#define NOEXCEPT noexcept
+extern "C"
+{
+#else
+#define NOEXCEPT
+#endif
+
 /** @file gnucash-color.h
  * @brief Convenience wrapper around GdkRGBA for use in Register Gnome classes.
  */
-void      gnucash_color_init        (void);
+void gnucash_color_init (void) NOEXCEPT;
 
 /** Return the pixel value for the given red, green and blue */
-GdkRGBA  *gnucash_color_argb_to_gdk (guint32 argb);
+GdkRGBA *gnucash_color_argb_to_gdk (guint32 argb) NOEXCEPT;
+
+#ifdef __cplusplus
+}
+#endif
+
 
 extern GdkRGBA gn_white, gn_light_gray, gn_dark_gray;
 extern GdkRGBA gn_black, gn_blue, gn_red, gn_yellow;

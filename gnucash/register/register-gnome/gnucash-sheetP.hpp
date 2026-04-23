@@ -23,8 +23,8 @@
 
 #include <gtk/gtk.h>
 #include "gnucash-sheet.h"
-#include "gnucash-item-edit.h"
-#include "gnucash-cursor.h"
+#include "gnucash-item-edit.hpp"
+#include "gnucash-cursor.hpp"
 
 /** @ingroup Register
  * @addtogroup Gnome

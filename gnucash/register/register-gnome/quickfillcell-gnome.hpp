@@ -26,6 +26,6 @@
 #ifndef QUICKFILL_CELL_GNOME_H
 #define QUICKFILL_CELL_GNOME_H
 
-BasicCell * gnc_quickfill_cell_gnome_new (void);
+BasicCell *gnc_quickfill_cell_gnome_new (void);
 
 #endif

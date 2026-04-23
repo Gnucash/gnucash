@@ -38,12 +38,12 @@
 #define IS_GNC_DATE_PICKER(o)     G_TYPE_CHECK_INSTANCE_TYPE((o), gnc_date_picker_get_type ())
 
 
-typedef struct
+struct GNCDatePicker
 {
     GtkBox hbox;
 
     GtkCalendar *calendar;
-} GNCDatePicker;
+};
 
 
 GType gnc_date_picker_get_type (void);
@@ -57,7 +57,7 @@ void gnc_date_picker_set_date (GNCDatePicker *date_picker,
 void gnc_date_picker_get_date (GNCDatePicker *date_picker,
                                guint *day, guint *mon, guint *year);
 
-typedef struct
+struct GNCDatePickerClass
 {
     GtkBoxClass parent_class;
 
@@ -65,7 +65,7 @@ typedef struct
 
     void (*date_picked) (GNCDatePicker *date_picker);
 
-} GNCDatePickerClass;
+};
 
 /** @} */
 #endif /* GNUCASH_DATE_PICKER_H */

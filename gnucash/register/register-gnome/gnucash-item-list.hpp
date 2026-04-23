@@ -37,7 +37,7 @@
 #define GNC_ITEM_LIST_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_LIST, GncItemListClass))
 #define IS_GNC_ITEM_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_LIST))
 
-typedef struct
+struct GncItemList
 {
     GtkEventBox ebox;
 
@@ -47,9 +47,9 @@ typedef struct
     GtkListStore *temp_store; /* Temporary store for typeahead select */
     GtkCellRenderer *renderer;
     gint cell_height;
-} GncItemList;
+};
 
-typedef struct
+struct GncItemListClass
 {
     GtkEventBoxClass parent_class;
 
@@ -62,7 +62,7 @@ typedef struct
     void (*activate_item) (GncItemList *item_list,
                            char        *item_string);
 
-} GncItemListClass;
+};
 
 
 GType gnc_item_list_get_type (void);

@@ -73,14 +73,6 @@
 #define CHECKBOX_CELL_TYPE_NAME	 "checkbox-cell"
 #define COMPLETION_CELL_TYPE_NAME "completion-cell"
 
-void gnc_register_init (void);
-void gnc_register_shutdown (void);
-
-void gnc_register_add_cell_type (const char *cell_type_name,
-                                 CellCreateFunc cell_creator);
-BasicCell * gnc_register_make_cell (const char *cell_type_name);
-
-
 /** The VirtualCellLocation structure contains the virtual
  * location of a virtual cell.
  */
@@ -90,10 +82,6 @@ struct _VirtualCellLocation
     int virt_row;
     int virt_col;
 };
-
-
-gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
-                              VirtualCellLocation vcl2);
 
 
 /** The VirtualLocation structure contains the virtual
@@ -116,7 +104,24 @@ struct _VirtualLocation
 };
 
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+void gnc_register_init (void);
+void gnc_register_shutdown (void);
+
+void gnc_register_add_cell_type (const char *cell_type_name,
+                                 CellCreateFunc cell_creator);
+BasicCell * gnc_register_make_cell (const char *cell_type_name);
 gboolean virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2);
+gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
+                              VirtualCellLocation vcl2);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /** @} */
