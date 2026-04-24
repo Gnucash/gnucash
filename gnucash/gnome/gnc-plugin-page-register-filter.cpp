@@ -397,7 +397,7 @@ gpp_update_match_filter_text (cleared_match_t match, const guint mask,
  *
  *  @param page A pointer to the GncPluginPageRegister that is
  *  associated with this filter dialog.
- * 
+ *
  *  @param fd A pointer to the filter data used for filter state.
  */
 void
@@ -621,7 +621,7 @@ gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page)
     LEAVE(" ");
 }
 
-/** This function is used to clear the current filter so that a 
+/** This function is used to clear the current filter so that a
  *  specific split can be shown in the register.
  *
  *  @param page A pointer to the GncPluginPageRegister that is
@@ -1113,7 +1113,7 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
 /** This function is called to create the filter dialog.
  *
  *  @param rfd A pointer to the filter dialog structure.
- * 
+ *
  *  @param fd The filter data structure for remembering state.
  *
  *  @param query A pointer to the current register query.
@@ -1287,9 +1287,9 @@ gnc_ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *
  *
  *  @param plugin_page  A pointer to the GncPluginPageRegister that is
  *  associated with this filter dialog.
- * 
+ *
  *  @param query A pointer to the current register query.
- * 
+ *
  *  @param fd A pointer to the filter data structure for remembering state.
  *
  *  @param show_save_button Set to True to show save button.
