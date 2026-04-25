@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-20 22:09+0000\n"
+"PO-Revision-Date: 2026-04-24 00:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -11216,7 +11216,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
-msgstr "Relatív kezdődátum használata a nyereség/veszteség számításhoz"
+msgstr "Relatív kezdő dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:16
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:21
@@ -11227,18 +11227,18 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
-"számításokhoz milyen kezdődátumot használjon a program. Ha az értéke „"
-"abszolút”, akkor a GnuCash a „start-date” kulcsban megadott kezdődátumot "
+"számításokhoz milyen kezdő dátumot használjon a program. Ha az értéke „"
+"abszolút”, akkor a GnuCash a „start-date” kulcsban megadott kezdő dátumot "
 "veszi alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash a „start-"
-"period” kulcsban megadott kezdődátumot veszi alapul."
+"period” kulcsban megadott kezdő dátumot veszi alapul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
-msgstr "Abszolút kezdődátum használata a nyereség/veszteség számításhoz"
+msgstr "Abszolút kezdő dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr "Kezdődátum (másodpercben 1970. jan. 1-től)"
+msgstr "Kezdő dátum (másodpercben 1970. jan. 1-től)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
 msgid ""
@@ -11247,13 +11247,13 @@ msgid ""
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt kezdődátumot, amennyiben a „start-choice” beállítás értéke „abszolút"
-"”. A mező az 1970. január 1-jétől számított másodpercekben kifejezett "
-"dátumot kell tartalmazza."
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke „"
+"abszolút”. A mező az 1970. január 1-jétől számított másodpercekben "
+"kifejezett dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
-msgstr "Az időszak kezdődátum-azonosítója"
+msgstr "Az időszak kezdő dátumának azonosítója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:31
 msgid ""
@@ -11262,12 +11262,12 @@ msgid ""
 "field should contain a value between 0 and 8."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt kezdődátumot, amennyiben a „start-choice” beállítás értéke nem „"
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke nem „"
 "abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 msgid "Use relative profit/loss ending date"
-msgstr "Relatív záródátum használata a nyereség/veszteség számításhoz"
+msgstr "Relatív záró dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:36
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:41
@@ -11278,18 +11278,18 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
-"számításokhoz milyen záródátumot használjon a program. Ha az értéke „abszolút"
-"”, akkor a GnuCash az „end-date” kulcsban megadott záródátumot veszi alapul. "
-"Ha más értékre (relatív) van állítva, akkor a GnuCash az „end-period” "
-"kulcsban megadott záródátumot veszi alapul."
+"számításokhoz milyen záró dátumot használjon a program. Ha az értéke „"
+"abszolút”, akkor a GnuCash az „end-date” kulcsban megadott záró dátumot "
+"veszi alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash az „end-"
+"period” kulcsban megadott záró dátumot veszi alapul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
 msgid "Use absolute profit/loss ending date"
-msgstr "Abszolút záródátum használata a nyereség/veszteség számításhoz"
+msgstr "Abszolút záró dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr "Záródátum (másodpercben 1970. jan. 1-től)"
+msgstr "Záró dátum (másodpercben 1970. jan. 1-től)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
 msgid ""
@@ -11297,10 +11297,14 @@ msgid ""
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
+"Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
+"használt záró dátumot, amennyiben az „end-choice” beállítás értéke „abszolút"
+"”. A mező az 1970. január 1-jétől számított másodpercekben kifejezett "
+"dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
-msgstr "Záró időszak azonosítója"
+msgstr "Az időszak záró dátumának azonosítója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:51
 msgid ""
@@ -11308,6 +11312,9 @@ msgid ""
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
+"Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
+"használt záró dátumot, amennyiben az „end-choice” beállítás értéke nem „"
+"abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
@@ -11614,7 +11621,7 @@ msgstr "Exportálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
 msgid "CSV Price Import"
-msgstr ""
+msgstr "Árfolyamok importálása CSV fájlból"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
@@ -11881,9 +11888,8 @@ msgid "Import Prices Now"
 msgstr "Importálás"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
-#, fuzzy
 msgid "CSV Transaction Import"
-msgstr "Tranzakció-jelentés"
+msgstr "Tranzakciók importálása CSV fájlból"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
 msgid ""
@@ -11987,6 +11993,10 @@ msgid ""
 "Choices are displayed with a Hyphen (-) separator, but will also match Dot "
 "(.) and Slash (/) as separator."
 msgstr ""
+"Válassza ki a nap, a hónap és az év sorrendjét, hogy az megfeleljen az "
+"importált fájl formázásának.\n"
+"A választási lehetőségek kötőjellel (-) elválasztva jelennek meg, de "
+"elválasztójelként a pontot (.) és a perjelet (/) is elfogadja a rendszer."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:756
 msgid ""
@@ -15469,7 +15479,7 @@ msgstr "_Relatív"
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
-"A megadott relatív kezdődátum használata a nyereség/veszteség számításhoz."
+"A megadott relatív kezdő dátum használata a nyereség/veszteség számításhoz."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 msgid "_Absolute"
