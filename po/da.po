@@ -9,6 +9,7 @@
 # Joe Hansen <joedalton2@yahoo.dk>, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2018.
 # Allan Olsen <allan@hamann-olsen.dk>, 2025.
 # Sune Kibsgaard <sune@kibs.dk>, 2026.
+# Cecilie Nielsen <cecilie.nielsen1984@gmail.com>, 2026.
 #
 # konventioner:
 # account code -> kontonummer (ikke kontokode)
@@ -107,11 +108,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-02-25 22:09+0000\n"
-"Last-Translator: Sune Kibsgaard <sune@kibs.dk>\n"
+"PO-Revision-Date: 2026-04-25 13:11+0000\n"
+"Last-Translator: Cecilie Nielsen <cecilie.nielsen1984@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "da/>\n"
 "Language: da\n"
@@ -119,7 +120,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -129,14 +130,14 @@ msgid ""
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 "Prøvede at slå et udefineret datosymbol '~a' op. Denne rapport blev "
-"sandsynligvis gemt af en senere version af GnuCash. Standardindstillingen er "
-"i dag."
+"sandsynligvis gemt af en senere version af GnuCash. Standardindstillingen "
+"sættes til i dag."
 
 #: bindings/guile/date-utilities.scm:715
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "Start of this year"
-msgstr "Starten af dette år"
+msgstr "Begyndelsen af dette år"
 
 #: bindings/guile/date-utilities.scm:718
 #: libgnucash/engine/gnc-option-date.cpp:265
@@ -309,7 +310,7 @@ msgstr "Forretning"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1301
 msgid "Company Name"
-msgstr "Firma Navn"
+msgstr "Virksomhedsnavn"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1304
 msgid "Company Address"
