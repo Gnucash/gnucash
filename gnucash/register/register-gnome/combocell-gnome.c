@@ -1064,6 +1064,9 @@ gnc_combo_cell_leave (BasicCell* bcell)
     {
         if (bcell->value)
         {
+            if (!bcell->changed)
+                return;
+
             if (gnc_item_in_list (box->item_list, bcell->value))
                 return;
 
