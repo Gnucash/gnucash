@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-24 00:09+0000\n"
+"PO-Revision-Date: 2026-04-26 05:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -11621,7 +11621,7 @@ msgstr "Exportálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
 msgid "CSV Price Import"
-msgstr "Árfolyamok importálása CSV fájlból"
+msgstr "Árfolyam importálása CSV fájlból"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
@@ -11993,10 +11993,10 @@ msgid ""
 "Choices are displayed with a Hyphen (-) separator, but will also match Dot "
 "(.) and Slash (/) as separator."
 msgstr ""
-"Válassza ki a nap, a hónap és az év sorrendjét, hogy az megfeleljen az "
-"importált fájl formázásának.\n"
+"Válassza ki az év, hónap és nap sorrendjét, hogy az megfeleljen az "
+"importálni kívánt fájl dátumformátumának.\n"
 "A választási lehetőségek kötőjellel (-) elválasztva jelennek meg, de "
-"elválasztójelként a pontot (.) és a perjelet (/) is elfogadja a rendszer."
+"elválasztójelként a pont (.) és a perjel (/) is ugyanúgy elfogadott."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:756
 msgid ""
@@ -25354,9 +25354,8 @@ msgstr "Tőkecsökkenés"
 #: gnucash/report/reports/standard/register.scm:134
 #: gnucash/report/reports/standard/register.scm:351
 #: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:2338
-#, fuzzy
 msgid "Num/Action"
-msgstr "Művelet"
+msgstr "Szám/Művelet"
 
 #: gnucash/report/reports/standard/general-journal.scm:102
 #: gnucash/report/reports/standard/general-ledger.scm:82
@@ -27125,7 +27124,7 @@ msgstr "Fejléc logó fájlneve"
 
 #: gnucash/report/reports/standard/receipt.scm:49
 msgid "Header logo width"
-msgstr "Fejléc logó szélessége"
+msgstr "Fejléc logójának szélessége"
 
 #: gnucash/report/reports/standard/receipt.scm:50
 msgid "Footer logo filename"
@@ -27133,7 +27132,7 @@ msgstr "Lábléc logó fájlneve"
 
 #: gnucash/report/reports/standard/receipt.scm:51
 msgid "Footer logo width"
-msgstr "Lábléc logó szélessége"
+msgstr "Lábléc logójának szélessége"
 
 #: gnucash/report/reports/standard/receipt.scm:53
 #: gnucash/report/reports/standard/receipt.scm:116
@@ -27216,6 +27215,9 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"A fejléc logójának szélessége CSS formátumban, pl. 10% vagy 32px (a logó "
+"magassága ennek megfelelően lesz méretezve). Ha üresen hagyja, a logó az "
+"eredeti szélességében jelenik meg."
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid "Name of a file containing a logo to be used on the footer of the report"
@@ -27227,6 +27229,9 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"A lábléc logójának szélessége CSS formátumban, pl. 10% vagy 32px (a logó "
+"magassága ennek megfelelően lesz méretezve). Ha üresen hagyja, a logó az "
+"eredeti szélességében jelenik meg."
 
 #: gnucash/report/reports/standard/receipt.scm:104
 msgid "The format for the date->string conversion for today's date."
@@ -27522,9 +27527,9 @@ msgid ""
 "the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
-"A logó szélessége CSS formátumban, pl. 10% vagy 32px. Ha üresen hagyja, a "
-"logó eredeti szélességében jelenik meg. A logó magassága ennek megfelelően "
-"lesz méretezve."
+"A logó szélessége CSS formátumban, pl. 10% vagy 32px (a logó magassága ennek "
+"megfelelően lesz méretezve). Ha üresen hagyja, a logó az eredeti "
+"szélességében jelenik meg."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:168
 msgid "Border-collapse?"
