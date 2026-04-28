@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-26 05:09+0000\n"
+"PO-Revision-Date: 2026-04-28 21:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3660,7 +3660,7 @@ msgstr "Biztosan, le kívánja zárni a rendelést?"
 
 #: gnucash/gnome/dialog-order.c:309
 msgid "Close Date"
-msgstr "Záródátum"
+msgstr "Záró dátum"
 
 #: gnucash/gnome/dialog-order.c:859
 msgid "View/Edit Order"
@@ -5294,7 +5294,7 @@ msgstr "A keresés eredménye"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3271
 msgid "Start Date:"
-msgstr "Kezdődátum:"
+msgstr "Kezdő dátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3278
 msgid "Show previous number of days:"
@@ -5302,7 +5302,7 @@ msgstr "Mutasd az előző napokat:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3286
 msgid "End Date:"
-msgstr "Záródátum:"
+msgstr "Záró dátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3296
 #: gnucash/report/trep-engine.scm:162
@@ -12400,7 +12400,7 @@ msgstr ""
 #: gnucash/report/reports/standard/txn-columns.scm:34
 #: gnucash/report/trep-engine.scm:104
 msgid "Start Date"
-msgstr "Kezdődátum"
+msgstr "Kezdő dátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:181
 msgid "Length"
@@ -12428,7 +12428,7 @@ msgid ""
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
 "Adja meg az éves kamatlábat százalékban. Az érték 0.001 és 100 között kell "
-"legyen. A segéd nem támogatja a nulla kamatlábú kölcsönöket."
+"legyen. A segéd nem támogatja a kamatmentes kölcsönöket."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:362
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -25406,7 +25406,7 @@ msgstr "Ellenszámla neve"
 #: gnucash/report/trep-engine.scm:909 gnucash/report/trep-engine.scm:939
 #: gnucash/report/trep-engine.scm:2362
 msgid "Use Full Other Account Name"
-msgstr "Teljes ellenszámla-név használata"
+msgstr "Az ellenszámla teljes nevének használata"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
@@ -25445,7 +25445,7 @@ msgstr "Elsődleges alösszeg"
 #: gnucash/report/reports/standard/general-ledger.scm:128
 #: gnucash/report/trep-engine.scm:90
 msgid "Primary Subtotal for Date Key"
-msgstr "Elsődleges alösszeg a dátum-kulcshoz"
+msgstr "Elsődleges alösszeg a dátumkulcshoz"
 
 #: gnucash/report/reports/standard/general-ledger.scm:129
 #: gnucash/report/trep-engine.scm:89
@@ -25519,13 +25519,12 @@ msgid "This message will be removed when tax accounts are specified."
 msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
-#, fuzzy
 msgid "Individual sales columns"
-msgstr "Egyedi adók"
+msgstr "Egyedi értékesítési oszlopok"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:111
 msgid "Display individual sales columns rather than their sum"
-msgstr ""
+msgstr "Az összegoszlop helyett az egyes értékesítési oszlopokat jelenítse meg"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:112
 #, fuzzy
@@ -25789,11 +25788,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
 msgid "Start date"
-msgstr "Kezdődátum"
+msgstr "Kezdő dátum"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
 msgid "End date"
-msgstr "Záródátum"
+msgstr "Záró dátum"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
 msgid "Price source"
@@ -27111,12 +27110,12 @@ msgstr "Fejléc 2"
 #: gnucash/report/reports/standard/receipt.scm:46
 #: gnucash/report/reports/standard/taxinvoice.scm:96
 msgid "Heading font"
-msgstr "Fejléc betűtípus"
+msgstr "Fejléc betűtípusa"
 
 #: gnucash/report/reports/standard/receipt.scm:47
 #: gnucash/report/reports/standard/taxinvoice.scm:97
 msgid "Text font"
-msgstr "Szöveg betűtípus"
+msgstr "Szöveg betűtípusa"
 
 #: gnucash/report/reports/standard/receipt.scm:48
 msgid "Header logo filename"
@@ -27475,7 +27474,7 @@ msgstr "Logó fájlnév"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo width"
-msgstr "Logó szélesség"
+msgstr "Logó szélessége"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:126
 msgid "Display the Tax Rate?"
