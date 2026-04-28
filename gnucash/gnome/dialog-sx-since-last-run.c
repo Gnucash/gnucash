@@ -35,7 +35,6 @@
 #include <config.h>
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <stdint.h>
 
 #include "dialog-utils.h"
 #include "gnc-sx-instance-model.h"

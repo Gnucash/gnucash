@@ -284,9 +284,6 @@ GNC_ACCEPT_WRAPPER(GncEntry)
                 g_list_free($1);
                 return NULL;
             }
-
-            // Reverse list to preserve original order.
-            $1 = g_list_reverse($1);
         }
     }
     else {
