@@ -301,35 +301,42 @@ static gboolean
 gnc_split_register_check_account (SplitRegister *reg,
                                   const char *cell_name)
 {
-    SRInfo *info;
-    ComboCell *cell = NULL;
-    Account* new_acct;
-    Split *split;
-    char *name;
-
     g_return_val_if_fail (reg, TRUE);
+
+    BasicCell *cell{};
 
     /* See if we are leaving an account field */
     if (gnc_cell_name_equal (cell_name, XFRM_CELL))
     {
         if (gnc_table_layout_get_cell_changed (reg->table->layout,
                                                XFRM_CELL, FALSE))
-            cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                            XFRM_CELL);
+            cell = gnc_table_layout_get_cell (reg->table->layout,
+                                              XFRM_CELL);
     }
     else if (gnc_cell_name_equal (cell_name, MXFRM_CELL))
     {
         if (gnc_table_layout_get_cell_changed (reg->table->layout,
                                                MXFRM_CELL, FALSE))
-            cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                            MXFRM_CELL);
+            cell = gnc_table_layout_get_cell (reg->table->layout,
+                                              MXFRM_CELL);
     }
 
     if (!cell)
         return TRUE;
 
+    auto name = gnc_basic_cell_get_value (cell);
+    auto split = gnc_split_register_get_current_split (reg);
+    auto orig_acct = xaccSplitGetAccount (split);
+    auto orig_name = gnc_account_get_full_name (orig_acct);
+    auto changed = g_strcmp0 (name, orig_name);
+    g_free (orig_name);
+    if (!changed)
+    {
+        gnc_basic_cell_set_changed (cell, FALSE);
+        return TRUE;
+    }
+
     /* The account has been changed. */
-    name = cell->cell.value;
     DEBUG("Changed to %s", name ? name : "NULL");
     if (!name || *name == '\0' ||
         g_strcmp0 (name, SPLIT_TRANS_STR) == 0 ||
@@ -337,22 +344,18 @@ gnc_split_register_check_account (SplitRegister *reg,
         return TRUE;
 
     /* Create the account if necessary. Also checks for a placeholder. */
-    info = gnc_split_register_get_info (reg);
-    new_acct = gnc_split_register_get_account_by_name (reg,
-                                                       (BasicCell *) cell,
-                                                       cell->cell.value);
+    auto *new_acct = gnc_split_register_get_account_by_name (reg, cell, name);
     if (!new_acct)
         return FALSE;
 
-    split = gnc_split_register_get_current_split (reg);
     gnc_split_register_set_cell_fractions (reg, split);
 
     /* See if we need to reset the exchange rate. */
     if (gnc_split_reg_has_rate_cell (reg->type))
     {
-        PriceCell *rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+        auto *info = gnc_split_register_get_info (reg);
+        auto rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                                         RATE_CELL);
-        Account *orig_acct = xaccSplitGetAccount (split);
         gnc_commodity *orig_com = xaccAccountGetCommodity (orig_acct);
         gnc_commodity *last_com = xaccAccountGetCommodity (info->rate_account);
         gnc_commodity *new_com = xaccAccountGetCommodity (new_acct);
@@ -1190,8 +1193,8 @@ gnc_split_register_check_stock_shares (SplitRegister *reg,
         return;
     name = ((ComboCell *)cell)->cell.value;
 
-    if (!g_strcmp0 (name, "") ||
-        !g_strcmp0 (name, buy ? ACTION_SELL_STR : ACTION_BUY_STR))
+    if (g_strcmp0 (name, "") == 0 ||
+        g_strcmp0 (name, buy ? ACTION_SELL_STR : ACTION_BUY_STR) == 0)
     {
         gnc_combo_cell_set_value ((ComboCell *)cell,
                                    buy ? ACTION_BUY_STR : ACTION_SELL_STR);
@@ -1250,7 +1253,7 @@ gnc_split_register_get_account_always (SplitRegister *reg,
 
     /* If 'name' is "-- Split Transaction --" then return NULL or the
        register acct */
-    if (!g_strcmp0 (name, SPLIT_TRANS_STR))
+    if (g_strcmp0 (name, SPLIT_TRANS_STR) == 0)
         return NULL;
 
     return gnc_split_register_get_account_by_name (reg, cell, name);
