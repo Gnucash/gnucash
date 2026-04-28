@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-28 21:09+0000\n"
+"PO-Revision-Date: 2026-04-28 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -13342,7 +13342,7 @@ msgstr "Általános"
 
 #: gnucash/gtkbuilder/business-prefs.glade:48
 msgid "Enable extra _buttons"
-msgstr "Extra gom_bok engedélyezése"
+msgstr "Extra _gombok engedélyezése"
 
 #: gnucash/gtkbuilder/business-prefs.glade:66
 msgid "_Open in new window"
