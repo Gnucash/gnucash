@@ -261,7 +261,7 @@ unblock_list_signals (CompletionCell* cell)
                                        0, 0, NULL, NULL, cell);
 }
 
-static void
+static gboolean
 key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_data)
 {
     CompletionCell* cell = user_data;
@@ -281,6 +281,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_dat
                           (GdkEvent*) event);
         break;
     }
+    return TRUE;
 }
 
 static void
