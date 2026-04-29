@@ -110,7 +110,7 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     {
         auto result = dbi_conn_queryf (m_conn,
                                        "CREATE TABLE %s ( Hostname varchar(%d), PID int )",
-                                       lock_table.c_str(),
+                                       quote_identifier(lock_table).c_str(),
                                        GNC_HOST_NAME_MAX);
         if (result)
         {
@@ -128,7 +128,7 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     /* Check for an existing entry; delete it if break_lock is true, otherwise fail */
     char hostname[ GNC_HOST_NAME_MAX + 1 ];
     auto result = dbi_conn_queryf (m_conn, "SELECT * FROM %s",
-                                   lock_table.c_str());
+                                   quote_identifier(lock_table).c_str());
     if (result && dbi_result_get_numrows (result))
     {
         dbi_result_free (result);
@@ -140,7 +140,7 @@ GncDbiSqlConnection::lock_database (bool break_lock)
             rollback_transaction();
             return false;
         }
-        result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table.c_str());
+        result = dbi_conn_queryf (m_conn, "DELETE FROM %s", quote_identifier(lock_table).c_str());
         if (!result)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -155,8 +155,9 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
     result = dbi_conn_queryf (m_conn,
-                              "INSERT INTO %s VALUES ('%s', '%d')",
-                              lock_table.c_str(), hostname, (int)GETPID ());
+                              "INSERT INTO %s VALUES (%s, %d)",
+                              quote_identifier(lock_table).c_str(),
+                              quote_string(hostname).c_str(), (int)GETPID ());
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -190,9 +191,9 @@ GncDbiSqlConnection::unlock_database ()
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
         auto result = dbi_conn_queryf (m_conn,
-                                       "SELECT * FROM %s WHERE Hostname = '%s' "
-                                       "AND PID = '%d'", lock_table.c_str(),
-                                       hostname,
+                                       "SELECT * FROM %s WHERE Hostname = %s "
+                                       "AND PID = %d", quote_identifier(lock_table).c_str(),
+                                       quote_string(hostname).c_str(),
                                        (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
@@ -202,7 +203,7 @@ GncDbiSqlConnection::unlock_database ()
                 result = nullptr;
             }
             result = dbi_conn_queryf (m_conn, "DELETE FROM %s",
-                                      lock_table.c_str());
+                                      quote_identifier(lock_table).c_str());
             if (!result)
             {
                 PERR ("Failed to delete the lock entry");
@@ -512,6 +513,12 @@ GncDbiSqlConnection::create_index(const std::string& index_name,
     }
 
     return true;
+}
+
+std::string
+GncDbiSqlConnection::quote_identifier (const std::string& identifier) const
+{
+    return m_provider->quote_identifier (identifier);
 }
 
 bool

@@ -44,6 +44,7 @@ public:
                                 const GncSqlColumnInfo& info) = 0;
     virtual StrVec get_index_list (dbi_conn conn) = 0;
     virtual void drop_index(dbi_conn conn, const std::string& index) = 0;
+    virtual std::string quote_identifier(const std::string& identifier) const = 0;
 };
 
 using GncDbiProviderPtr = std::unique_ptr<GncDbiProvider>;

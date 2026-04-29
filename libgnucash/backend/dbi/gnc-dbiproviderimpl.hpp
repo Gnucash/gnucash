@@ -44,6 +44,7 @@ public:
     void append_col_def(std::string& ddl, const GncSqlColumnInfo& info);
     StrVec get_index_list (dbi_conn conn);
     void drop_index(dbi_conn conn, const std::string& index);
+    std::string quote_identifier(const std::string& identifier) const override;
 };
 
 template <DbType T> GncDbiProviderPtr
@@ -262,13 +263,35 @@ GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
 {
     const char* query_no_regex = "SELECT relname FROM pg_class WHERE relname"
                           "!~ '^(pg|sql)_' AND relkind = 'r' ORDER BY relname";
-    std::string query_with_regex = "SELECT relname FROM pg_class WHERE relname LIKE '";
-    query_with_regex += table + "' AND relkind = 'r' ORDER BY relname";
     dbi_result result;
     if (table.empty())
         result = dbi_conn_query (conn, query_no_regex);
     else
-        result = dbi_conn_query (conn, query_with_regex.c_str());
+    {
+        /* In a LIKE clause, we need to escape _, %, and \. */
+        std::string escaped_table;
+        for (auto c : table)
+        {
+            if (c == '_' || c == '%' || c == '\\')
+                escaped_table += '\\';
+            escaped_table += c;
+        }
+
+        char* quoted_str;
+        dbi_conn_quote_string_copy (conn, escaped_table.c_str(), &quoted_str);
+        if (quoted_str)
+        {
+            std::string query = "SELECT relname FROM pg_class WHERE relname LIKE ";
+            query += quoted_str;
+            query += " AND relkind = 'r' ORDER BY relname";
+            free(quoted_str);
+            result = dbi_conn_query (conn, query.c_str());
+        }
+        else
+        {
+            return StrVec{};
+        }
+    }
 
     StrVec list;
     const char* errmsg;
@@ -318,7 +341,7 @@ GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
     {
         auto result = dbi_conn_queryf (conn,
                                        "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
-                                       table_name.c_str());
+                                       quote_identifier(table_name).c_str());
         if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
         {
             PWARN ("Index Table Retrieval Error: %s on table %s\n",
@@ -362,9 +385,39 @@ GncDbiProviderImpl<DbType::DBI_PGSQL>::get_index_list (dbi_conn conn)
 template <DbType P> void
 GncDbiProviderImpl<P>::drop_index(dbi_conn conn, const std::string& index)
 {
-    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index.c_str());
+    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", quote_identifier(index).c_str());
     if (result)
         dbi_result_free (result);
+}
+
+template <DbType T> inline std::string
+GncDbiProviderImpl<T>::quote_identifier(const std::string& identifier) const
+{
+    std::string retval = "\"";
+    for (auto c : identifier)
+    {
+        if (c == '"')
+            retval += "\"\"";
+        else
+            retval += c;
+    }
+    retval += "\"";
+    return retval;
+}
+
+template <> inline std::string
+GncDbiProviderImpl<DbType::DBI_MYSQL>::quote_identifier(const std::string& identifier) const
+{
+    std::string retval = "`";
+    for (auto c : identifier)
+    {
+        if (c == '`')
+            retval += "``";
+        else
+            retval += c;
+    }
+    retval += "`";
+    return retval;
 }
 
 template<> void
@@ -380,8 +433,8 @@ GncDbiProviderImpl<DbType::DBI_MYSQL>::drop_index (dbi_conn conn, const std::str
     }
 
     auto result = dbi_conn_queryf (conn, "DROP INDEX %s ON %s",
-                                   index.substr(0, sep).c_str(),
-                                   index.substr(sep + 1).c_str());
+                                   quote_identifier(index.substr(0, sep)).c_str(),
+                                   quote_identifier(index.substr(sep + 1)).c_str());
     if (result)
         dbi_result_free (result);
 }
