@@ -31,6 +31,8 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
+#include <vector>
 
 #include <gnc-filepath-utils.h>
 #include "gnc-commodity.h"
@@ -255,10 +257,71 @@ make_complex_trans_line (Transaction *trans, Split *split)
 using TransSet = std::unordered_set<Transaction*>;
 
 /*******************************************************
- * account_splits
+ * export_splits
  *
- * gather the splits / transactions for an account and
- * send them to a file
+ * process a single split for export
+ *******************************************************/
+static void
+export_splits (CsvExportInfo *info, Split *split, bool is_trading_acct,
+               std::ofstream& ss, TransSet& trans_set)
+{
+    auto trans{xaccSplitGetParent (split)};
+
+    // Look for trans already exported in trans_set
+    if (!trans_set.emplace (trans).second)
+        return;
+
+    // Look for blank split
+    Account *split_acc = xaccSplitGetAccount (split);
+    if (!split_acc)
+        return;
+
+    // Only export trading splits when exporting a trading account
+    if (!is_trading_acct &&
+        (xaccAccountGetType (split_acc) == ACCT_TYPE_TRADING))
+        return;
+
+    if (info->simple_layout)
+    {
+        // Write line in simple layout, equivalent to a single line register view
+        auto line = make_simple_trans_line (trans, split);
+        info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
+                                          info->separator_str);
+        return;
+    }
+
+    // Write complex Transaction Line.
+    auto line = make_complex_trans_line (trans, split);
+    info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
+                                      info->separator_str);
+
+    /* Loop through the list of splits for the Transaction */
+    for (auto node = xaccTransGetSplitList (trans); !info->failed && node;
+         node = node->next)
+    {
+        auto t_split{static_cast<Split*>(node->data)};
+
+        // base split is already written on the trans_line
+        if (split == t_split)
+            continue;
+
+        // Only export trading splits if exporting a trading account
+        Account *tsplit_acc = xaccSplitGetAccount (t_split);
+        if (!is_trading_acct &&
+            (xaccAccountGetType (tsplit_acc) == ACCT_TYPE_TRADING))
+            continue;
+
+        // Write complex Split Line.
+        auto line = make_complex_trans_line (trans, t_split);
+        info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
+                                          info->separator_str);
+    }
+}
+
+/*******************************************************
+ * export_query_splits
+ *
+ * run a query and process the results
  *******************************************************/
 static void
 export_query_splits (CsvExportInfo *info, bool is_trading_acct,
@@ -271,75 +334,8 @@ export_query_splits (CsvExportInfo *info, bool is_trading_acct,
          splits = splits->next)
     {
         auto split{static_cast<Split*>(splits->data)};
-        auto trans{xaccSplitGetParent (split)};
-
-        // Look for trans already exported in trans_set
-        if (!trans_set.emplace (trans).second)
-            continue;
-
-        // Look for blank split
-        Account *split_acc = xaccSplitGetAccount (split);
-        if (!split_acc)
-            continue;
-
-        // Only export trading splits when exporting a trading account
-        if (!is_trading_acct &&
-            (xaccAccountGetType (split_acc) == ACCT_TYPE_TRADING))
-            continue;
-
-        if (info->simple_layout)
-        {
-            // Write line in simple layout, equivalent to a single line register view
-            auto line = make_simple_trans_line (trans, split);
-            info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
-                                              info->separator_str);
-            continue;
-        }
-
-        // Write complex Transaction Line.
-        auto line = make_complex_trans_line (trans, split);
-        info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
-                                          info->separator_str);
-
-        /* Loop through the list of splits for the Transaction */
-        for (auto node = xaccTransGetSplitList (trans); !info->failed && node;
-             node = node->next)
-        {
-            auto t_split{static_cast<Split*>(node->data)};
-
-            // base split is already written on the trans_line
-            if (split == t_split)
-                continue;
-
-            // Only export trading splits if exporting a trading account
-            Account *tsplit_acc = xaccSplitGetAccount (t_split);
-            if (!is_trading_acct &&
-                (xaccAccountGetType (tsplit_acc) == ACCT_TYPE_TRADING))
-                continue;
-
-            // Write complex Split Line.
-            auto line = make_complex_trans_line (trans, t_split);
-            info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
-                                              info->separator_str);
-        }
+        export_splits (info, split, is_trading_acct, ss, trans_set);
     }
-}
-
-static void
-account_splits (CsvExportInfo *info, Account *acc,
-                std::ofstream& ss, TransSet& trans_set)
-{
-    g_return_if_fail (info && GNC_IS_ACCOUNT (acc));
-    // Setup the query for normal transaction export
-    auto p1 = g_slist_prepend (g_slist_prepend (nullptr, (gpointer)TRANS_DATE_POSTED), (gpointer)SPLIT_TRANS);
-    auto p2 = g_slist_prepend (nullptr, (gpointer)QUERY_DEFAULT_SORT);
-    info->query = qof_query_create_for (GNC_ID_SPLIT);
-    qof_query_set_book (info->query, gnc_get_current_book());
-    qof_query_set_sort_order (info->query, p1, p2, nullptr);
-    xaccQueryAddSingleAccountMatch (info->query, acc, QOF_QUERY_AND);
-    xaccQueryAddDateMatchTT (info->query, true, info->csvd.start_time, true, info->csvd.end_time, QOF_QUERY_AND);
-    export_query_splits (info, xaccAccountGetType (acc) == ACCT_TYPE_TRADING, ss, trans_set);
-    qof_query_destroy (info->query);
 }
 
 /*******************************************************
@@ -406,9 +402,44 @@ void csv_transactions_export (CsvExportInfo *info)
     switch (info->export_type)
     {
     case XML_EXPORT_TRANS:
-        for (auto ptr = info->csva.account_list; !ss.fail() && ptr; ptr = g_list_next(ptr))
-            account_splits (info, GNC_ACCOUNT(ptr->data), ss, trans_set);
+    {
+        if (!info->csva.account_list)
+            break;
+
+        // Setup a single query for all accounts to avoid N+1 queries.
+        auto p1 = g_slist_prepend (g_slist_prepend (nullptr, (gpointer)TRANS_DATE_POSTED), (gpointer)SPLIT_TRANS);
+        auto p2 = g_slist_prepend (nullptr, (gpointer)QUERY_DEFAULT_SORT);
+        info->query = qof_query_create_for (GNC_ID_SPLIT);
+        qof_query_set_book (info->query, gnc_get_current_book());
+        qof_query_set_sort_order (info->query, p1, p2, nullptr);
+
+        xaccQueryAddAccountMatch (info->query, info->csva.account_list, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
+        xaccQueryAddDateMatchTT (info->query, true, info->csvd.start_time, true, info->csvd.end_time, QOF_QUERY_AND);
+
+        // Group the splits by account to maintain original grouping and order.
+        std::unordered_map<Account*, std::vector<Split*>> grouped_splits;
+        for (GList *l = qof_query_run (info->query); l; l = l->next)
+        {
+            auto split = static_cast<Split*>(l->data);
+            grouped_splits[xaccSplitGetAccount(split)].push_back(split);
+        }
+
+        for (auto ptr = info->csva.account_list; !ss.fail() && !info->failed && ptr; ptr = g_list_next(ptr))
+        {
+            Account *acc = GNC_ACCOUNT(ptr->data);
+            bool is_trading_acct = (xaccAccountGetType (acc) == ACCT_TYPE_TRADING);
+
+            for (auto split : grouped_splits[acc])
+            {
+                if (info->failed)
+                    break;
+                export_splits (info, split, is_trading_acct, ss, trans_set);
+            }
+        }
+        qof_query_destroy (info->query);
+        info->query = nullptr;
         break;
+    }
     case XML_EXPORT_REGISTER:
         export_query_splits (info, false, ss, trans_set);
         break;
