@@ -808,11 +808,10 @@ gsslrtma_removing_cb (GncSxInstanceModel *inst_model, SchedXaction *to_remove_sx
     GtkTreePath *model_path;
     GtkTreeIter tree_iter;
     GList *iter;
-    int index = 0;
     GncSxInstances *instances;
 
-    // get index, create path, remove
-    for (iter = gnc_sx_instance_model_get_sx_instances_list (inst_model); iter != NULL; iter = iter->next, index++)
+    // get instances, create path, remove
+    for (iter = gnc_sx_instance_model_get_sx_instances_list (inst_model); iter != NULL; iter = iter->next)
     {
         instances = (GncSxInstances*)iter->data;
         if (instances->sx == to_remove_sx)
