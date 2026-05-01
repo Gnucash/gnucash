@@ -44,7 +44,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-05-01 19:59+0000\n"
+"PO-Revision-Date: 2026-05-01 21:09+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -4659,10 +4659,8 @@ msgid "Open Linked Document"
 msgstr "Verknüpfung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
-#, fuzzy
-#| msgid "_Use as Default Layout for Customer Documents"
 msgid "_Use as Default Layout for Customer Business items"
-msgstr "Als _voreingestelltes Layout für Kundendokumente benutzen"
+msgstr "_Als Standardlayout für Geschäftsobjekte von Kunden verwenden"
 
 # Fixme: No accellerator? More unification with other business documents. [FE]
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:207
@@ -4672,10 +4670,8 @@ msgid ""
 msgstr "Verwende das aktuelle Layout als Voreinstellung für Kundendokumente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
-#, fuzzy
-#| msgid "_Reset Default Layout for Customer Documents"
 msgid "_Reset Default Layout for Customer business items"
-msgstr "Voreingestelltes Layout für Kundendokumente _zurücksetzen"
+msgstr "Standardlayout für Geschäftsobjekte von Kunden _zurücksetzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:209
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4756,10 +4752,8 @@ msgstr ""
 "Öffnen eines Lieferantenberichtsfensters für den Mandanten dieser Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
-#, fuzzy
-#| msgid "_Use as Default Layout for Vendor Documents"
 msgid "_Use as Default Layout for Vendor Business items"
-msgstr "Als _voreingestelltes Layout für Lieferantendokumente benutzen"
+msgstr "_Als Standardlayout für Geschäftsobjekte von Lieferanten verwenden"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -4767,10 +4761,8 @@ msgstr ""
 "Verwende das aktuelle Layout als Voreinstellung für Lieferantendokumente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
-#, fuzzy
-#| msgid "_Reset Default Layout for Vendor Documents"
 msgid "_Reset Default Layout for Vendor Business items"
-msgstr "Voreingestelltes Layout für Lieferantendokumente _zurücksetzen"
+msgstr "Standardlayout für Geschäftsobjekte von Lieferanten _zurücksetzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:234
 msgid ""
@@ -4851,10 +4843,8 @@ msgstr ""
 "Auslagenerstattung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
-#, fuzzy
-#| msgid "_Use as Default Layout for Employee Documents"
 msgid "_Use as Default Layout for Employee Business items"
-msgstr "Als _voreingestelltes Layout für Mitarbeiterdokumente benutzen"
+msgstr "_Als Standardlayout für Geschäftsobjekte von Mitarbeitenden verwenden"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
@@ -4863,10 +4853,8 @@ msgstr ""
 "Verwende das aktuelle Layout als Voreinstellung für Mitarbeiterdokumente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
-#, fuzzy
-#| msgid "_Reset Default Layout for Employee Documents"
 msgid "_Reset Default Layout for Employee Business items"
-msgstr "Voreingestelltes Layout für Mitarbeiterdokumente _zurücksetzen"
+msgstr "Standardlayout für Geschäftsobjekte von Mitarbeitenden _zurücksetzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:259
 msgid ""
@@ -5056,10 +5044,8 @@ msgstr "Buchung _löschen"
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
-#, fuzzy
-#| msgid "Jump to Invoice"
 msgid "Jump to Business item"
-msgstr "Zur Rechnung springen"
+msgstr "Zu Geschäftsobjekt springen"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
 msgid "Cu_t Split"
@@ -5125,10 +5111,8 @@ msgid "Open the linked document for the current transaction"
 msgstr "Die Verknüpfung der aktuellen Buchung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:292
-#, fuzzy
-#| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked invoice, bill, expense or credit note"
-msgstr "Zur verknüpften Rechnung / Gutschrift springen"
+msgstr "Zur verknüpften Rechnung oder Gutschrift springen"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:293
 msgid "Cut the selected split into clipboard"
@@ -5366,19 +5350,15 @@ msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s von %s, gebucht am %s, Betrag %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4733
-#, fuzzy
-#| msgid "Select a Budget"
 msgid "Select Business Item"
-msgstr "Budget auswählen"
+msgstr "Geschäftsobjekt auswählen"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4734
-#, fuzzy
-#| msgid ""
-#| "Several documents are linked with this transaction. Please choose one:"
 msgid ""
 "Several business items are linked with this transaction. Please choose one:"
 msgstr ""
-"Mehrere Dokumente sind mit dieser Buchung verknüpft. Bitte wählen Sie eins:"
+"Mehrere Geschäftsobjekte sind mit dieser Buchung verknüpft. Bitte wählen Sie "
+"eins:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4735
 #: gnucash/gnome-search/dialog-search.c:323
@@ -9677,16 +9657,16 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
 #: gnucash/gtkbuilder/dialog-preferences.glade:2777
-#, fuzzy
-#| msgid "Balancing entry from reconciliation"
 msgid "Enable autoclear tools in reconciliation"
-msgstr "Ausgleichsbuchung vom Abgleichen"
+msgstr "Automatischen Abgleich aktivieren"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
 msgid ""
 "If active, suggests transactions to clear based on amounts summing to the "
 "statement balance"
 msgstr ""
+"Wenn diese Option aktiviert ist, werden Buchungen zum Abgleich "
+"vorgeschlagen, deren Beträge zusammen den Saldo auf dem Kontoauszug ergeben"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
@@ -12006,11 +11986,11 @@ msgstr ""
 "definiert werden.\n"
 "\n"
 "Der Importer kann Dateien verarbeiten, in denen Buchungen über mehrere "
-"Zeilen aufgeteilt sind, wobei jede Zeile einen Buchungsteil darstellt. Eine "
-"neue Transaktion wird jedes Mal gestartet, wenn sich der Wert einer der "
-"transaktionsbezogenen Spalten von dem einer vorherigen, nicht leeren Spalte "
-"unterscheidet. Diese Spalten sind Transaktions-ID, Datum, Nummer, "
-"Beschreibung, Anmerkungen, Transaktionsware und Ungültigkeitsgrund.\n"
+"Zeilen aufgeteilt sind, wobei jede Zeile einen Buchungsteil darstellt. Jedes "
+"Mal, wenn sich der Wert einer der mit der Buchung verbundenen Spalten von "
+"dem Wert einer vorherigen, nicht leeren Buchung unterscheidet, wird eine "
+"neue Buchung gestartet. Diese Spalten sind Buchungs-ID, Datum, Nummer, "
+"Beschreibung, Anmerkungen, Buchungswährung und Ungültigkeitsgrund.\n"
 "\n"
 "Schließlich verfügt die Vorschauseite über Schaltflächen zum Laden und "
 "Speichern der Voreinstellungen für wiederkehrende Importe. Sie können Ihre "
@@ -12064,6 +12044,11 @@ msgid ""
 "Choices are displayed with a Hyphen (-) separator, but will also match Dot "
 "(.) and Slash (/) as separator."
 msgstr ""
+"Wählen Sie die Reihenfolge von Tag, Monat und Jahr so, dass sie mit der "
+"Formatierung in der importierten Datei übereinstimmt.\n"
+"Die Auswahlmöglichkeiten werden mit einem Bindestrich (-) als Trennzeichen "
+"angezeigt, akzeptieren aber auch Punkt (.) und Schrägstrich (/) als "
+"Trennzeichen."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:756
 msgid ""
@@ -14071,10 +14056,8 @@ msgid "Open not yet posted business items in tabs"
 msgstr "Noch nicht gebuchte Dokumente in Unterfenstern öffnen"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
-#, fuzzy
-#| msgid "Don't open imported documents in tabs"
 msgid "Don't open imported business items in tabs"
-msgstr "Importierte Dokumente nicht in Tabs öffnen"
+msgstr "Importierte Geschäftsobjekte nicht in Tabs öffnen"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:432
 msgid "5. Afterwards"
@@ -15470,10 +15453,8 @@ msgid "Post To"
 msgstr "Buchen nach (Soll)"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:335
-#, fuzzy
-#| msgid "Business"
 msgid "Business items"
-msgstr "Geschäft"
+msgstr "Geschäftsobjekte"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:412
 #: gnucash/gtkbuilder/dialog-payment.glade:439
@@ -16231,6 +16212,16 @@ msgid ""
 "combinations are possible, auto-clear is not offered and the icon and its "
 "tooltip reflects the outcome."
 msgstr ""
+"Stellt im Abgleichfenster ein Werkzeuge zum automatischen Abgleich bereit. "
+"Der automatische Abgleich durchsucht nicht abgeglichene Teilbuchungen und "
+"sucht nach einer eindeutigen Kombination, deren ausgeglichener Saldo mit dem "
+"eingegebenen Abgleichsaldo übereinstimmt. Der automatische Abgleich prüft "
+"alle Kombinationen von Teilbuchungen, daher ist seine Laufzeit potenziell "
+"hoch; im Abgleich ist sie jedoch auf 1 Sekunde begrenzt. Wenn keine "
+"eindeutige Übereinstimmung gefunden wird, weil der Saldo nicht erreicht "
+"werden kann, aufgrund eines Zeitüberschreitungsfehlers oder weil mehrere "
+"Kombinationen möglich sind, wird der automatische Abgleich nicht angeboten, "
+"und das Symbol sowie dessen Tooltip zeigen das Ergebnis an."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2807
 msgid "<b>Graphics</b>"
@@ -31032,8 +31023,6 @@ msgid "_Unreconcile Selection"
 msgstr "_Nicht abgeglichene Auswahl"
 
 #: gnucash/ui/gnc-reconcile-window.ui:134
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "Auto Clear"
 msgstr "Automatischer Abgleich"
 
