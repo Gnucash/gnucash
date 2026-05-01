@@ -9,13 +9,14 @@
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
 from unittest import TestCase, main
+from unittest.mock import Mock
 
 from gnucash import (
         Session,
         SessionOpenMode
 )
 
-from gnucash.gnucash_core import GnuCashBackendException
+from gnucash.gnucash_core import GnuCashBackendException, ERR_BACKEND_NO_ERR
 
 class TestSession(TestCase):
     def test_create_empty_session(self):
@@ -74,6 +75,25 @@ class TestSession(TestCase):
         self.ses = Session(instance = self.ses_instance)
         self.book = self.ses.get_book()
         self.assertIsInstance(obj = self.book, cls = Book)
+
+    def test_generate_errors(self):
+        self.ses = Session()
+
+        # Scenario 1: No errors
+        self.ses.get_error = Mock(return_value=ERR_BACKEND_NO_ERR)
+        errors = list(self.ses.generate_errors())
+        self.assertEqual(errors, [])
+        self.ses.get_error.assert_called_once()
+
+        # Scenario 2: Multiple errors
+        error_sequence = [1, 2, ERR_BACKEND_NO_ERR]
+        self.ses.get_error = Mock(side_effect=error_sequence)
+        self.ses.pop_error = Mock(side_effect=[1, 2])
+
+        errors = list(self.ses.generate_errors())
+        self.assertEqual(errors, [1, 2])
+        self.assertEqual(self.ses.get_error.call_count, 3)
+        self.assertEqual(self.ses.pop_error.call_count, 2)
 
 if __name__ == '__main__':
     main()
