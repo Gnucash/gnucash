@@ -74,6 +74,10 @@ from gnucash import \
 from gnucash import SessionOpenMode
 
 app = Flask(__name__)
+
+_customers_cache = None
+_vendors_cache = None
+
 app.debug = True
 
 @app.route('/accounts', methods=['GET', 'POST'])
@@ -606,9 +610,11 @@ def api_entry(guid):
 @app.route('/customers', methods=['GET', 'POST'])
 def api_customers(): 
 
+    global _customers_cache
     if request.method == 'GET':
-        customers = getCustomers(session.book)
-        return Response(json.dumps(customers), mimetype='application/json')
+        if _customers_cache is None:
+            _customers_cache = getCustomers(session.book)
+        return Response(json.dumps(_customers_cache), mimetype='application/json')
     elif request.method == 'POST':
 
         id = str(request.form.get('id', None))
@@ -638,6 +644,7 @@ def api_customers():
                 'message': error.message, 'data': error.data}]}), status=400,
                 mimetype='application/json')
         else:
+            _customers_cache = None
             return Response(json.dumps(customer), status=201,
                 mimetype='application/json')
 
@@ -647,6 +654,7 @@ def api_customers():
 @app.route('/customers/<id>', methods=['GET', 'POST'])
 def api_customer(id):
 
+    global _customers_cache
     if request.method == 'GET':
 
         customer = getCustomer(session.book, id)
@@ -706,9 +714,11 @@ def api_customer_invoices(id):
 @app.route('/vendors', methods=['GET', 'POST'])
 def api_vendors(): 
 
+    global _vendors_cache
     if request.method == 'GET':
-        vendors = getVendors(session.book)
-        return Response(json.dumps(vendors), mimetype='application/json')
+        if _vendors_cache is None:
+            _vendors_cache = getVendors(session.book)
+        return Response(json.dumps(_vendors_cache), mimetype='application/json')
     elif request.method == 'POST':
 
         id = str(request.form.get('id', None))
@@ -738,6 +748,7 @@ def api_vendors():
                 'message': error.message, 'data': error.data}]}), status=400,
                 mimetype='application/json')
         else:
+            _vendors_cache = None
             return Response(json.dumps(vendor), status=201,
                 mimetype='application/json')
 
@@ -747,6 +758,7 @@ def api_vendors():
 @app.route('/vendors/<id>', methods=['GET', 'POST'])
 def api_vendor(id):
 
+    global _vendors_cache
     if request.method == 'GET':
 
         vendor = getVendor(session.book, id)
@@ -775,11 +787,10 @@ def getCustomers(book):
     query = gnucash.Query()
     query.search_for('gncCustomer')
     query.set_book(book)
-    customers = []
 
-    for result in query.run():
-        customers.append(gnucash_simple.customerToDict(
-            gnucash.gnucash_business.Customer(instance=result)))
+    customers = [gnucash_simple.customerToDict(
+        gnucash.gnucash_business.Customer(instance=result))
+        for result in query.run()]
 
     query.destroy()
 
@@ -799,11 +810,10 @@ def getVendors(book):
     query = gnucash.Query()
     query.search_for('gncVendor')
     query.set_book(book)
-    vendors = []
 
-    for result in query.run():
-        vendors.append(gnucash_simple.vendorToDict(
-            gnucash.gnucash_business.Vendor(instance=result)))
+    vendors = [gnucash_simple.vendorToDict(
+        gnucash.gnucash_business.Vendor(instance=result))
+        for result in query.run()]
 
     query.destroy()
 
