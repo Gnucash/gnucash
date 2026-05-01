@@ -155,8 +155,8 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
     result = dbi_conn_queryf (m_conn,
-                              "INSERT INTO %s VALUES ('%s', '%d')",
-                              lock_table.c_str(), hostname, (int)GETPID ());
+                              "INSERT INTO %s VALUES (%s, '%d')",
+                              lock_table.c_str(), quote_string(hostname).c_str(), (int)GETPID ());
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -190,9 +190,9 @@ GncDbiSqlConnection::unlock_database ()
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
         auto result = dbi_conn_queryf (m_conn,
-                                       "SELECT * FROM %s WHERE Hostname = '%s' "
+                                       "SELECT * FROM %s WHERE Hostname = %s "
                                        "AND PID = '%d'", lock_table.c_str(),
-                                       hostname,
+                                       quote_string(hostname).c_str(),
                                        (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
