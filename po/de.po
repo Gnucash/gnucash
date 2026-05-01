@@ -44,7 +44,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-18 17:09+0000\n"
+"PO-Revision-Date: 2026-05-01 19:09+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -53,7 +53,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -2308,12 +2308,12 @@ msgstr "_Löschen"
 #: gnucash/gnome/dialog-commodities.cpp:329
 msgid "Rename failed, possibly new name exists"
 msgstr ""
+"Das Umbenennen ist fehlgeschlagen, möglicherweise existiert der neue Name "
+"bereits"
 
 #: gnucash/gnome/dialog-commodities.cpp:332
-#, fuzzy
-#| msgid "<No name>"
 msgid "No new name"
-msgstr "<Kein Name>"
+msgstr "Kein neuer Name"
 
 #: gnucash/gnome/dialog-customer.c:314 gnucash/gnome/dialog-vendor.c:205
 msgid ""
@@ -2997,10 +2997,8 @@ msgid "Online HBCI"
 msgstr "Online FinTS"
 
 #: gnucash/gnome/dialog-imap-editor.c:791
-#, fuzzy
-#| msgid "Income Account"
 msgid "OFX Income Account"
-msgstr "Ertragskonto"
+msgstr "OFX Ertragskonto"
 
 #. Translators: In this context,
 #. 'Billing information' maps to the
@@ -8199,10 +8197,8 @@ msgid "Reconciled (Report)"
 msgstr "Abgeglichen (als Bericht)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:901
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest Date"
-msgstr "Von _Anfang"
+msgstr "Frühestes Datum"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:907
 msgid "Last Reconcile Date"
@@ -14277,10 +14273,8 @@ msgid "Choose Owner Dialog"
 msgstr "Auswahl des Besitzers"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:64
-#, fuzzy
-#| msgid "From Namespace"
 msgid "Rename Namespace"
-msgstr "Von Namensraum"
+msgstr "Namensraum umbenennen"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:114
 #: gnucash/gtkbuilder/dialog-commodities.glade:133
@@ -14293,16 +14287,12 @@ msgid "Show National Currencies"
 msgstr "Nationale Währungen anzeigen"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:227
-#, fuzzy
-#| msgid "From Namespace"
 msgid "Rename _Namespace"
-msgstr "Von Namensraum"
+msgstr "_Namensraum umbenennen"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:231
-#, fuzzy
-#| msgid "Remove the current price."
 msgid "Rename the current namespace."
-msgstr "Aktuellen Kurswert entfernen."
+msgstr "Den aktuellen Namensraum umbenennen."
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:249
 msgid "Add a new commodity."
@@ -16551,10 +16541,8 @@ msgstr "Kurs-Editor"
 
 #: gnucash/gtkbuilder/dialog-price.glade:139
 #: gnucash/gtkbuilder/dialog-price.glade:814
-#, fuzzy
-#| msgid "Namespace"
 msgid "_Namespace"
-msgstr "Namensraum"
+msgstr "_Namensraum"
 
 #: gnucash/gtkbuilder/dialog-price.glade:196
 msgid "S_ource"
@@ -16668,8 +16656,6 @@ msgstr ""
 
 # Todo: Hier 'Include' hinzufügen oder bei den vorigen Optionen entfernen
 #: gnucash/gtkbuilder/dialog-price.glade:736
-#, fuzzy
-#| msgid "_Added by the application"
 msgid "Added _by the application"
 msgstr "_Automatisch erzeugte"
 
