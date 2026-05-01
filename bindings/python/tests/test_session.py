@@ -8,7 +8,7 @@
 # @date 2020-04-03
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
-from unittest import TestCase, main
+from unittest import TestCase, main, mock
 
 from gnucash import (
         Session,
@@ -74,6 +74,27 @@ class TestSession(TestCase):
         self.ses = Session(instance = self.ses_instance)
         self.book = self.ses.get_book()
         self.assertIsInstance(obj = self.book, cls = Book)
+
+    def test_raise_backend_errors_after_call(self):
+        mock_self = mock.Mock(spec=Session)
+
+        mock_function = mock.Mock(return_value="test_return")
+        mock_function.__name__ = "mock_function_name"
+
+        # Wrap the function
+        wrapped_function = Session.raise_backend_errors_after_call(mock_function)
+
+        # Call the wrapped function
+        result = wrapped_function(mock_self, 1, 2, a=3)
+
+        # Verify the original function was called with correct arguments
+        mock_function.assert_called_once_with(mock_self, 1, 2, a=3)
+
+        # Verify raise_backend_errors was called with the correct function name
+        mock_self.raise_backend_errors.assert_called_once_with("mock_function_name")
+
+        # Verify the return value
+        self.assertEqual(result, "test_return")
 
 if __name__ == '__main__':
     main()
