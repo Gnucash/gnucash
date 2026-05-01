@@ -108,10 +108,8 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     auto tables = m_provider->get_table_list(m_conn, lock_table);
     if (tables.empty())
     {
-        auto result = dbi_conn_queryf (m_conn,
-                                       "CREATE TABLE %s ( Hostname varchar(%d), PID int )",
-                                       lock_table.c_str(),
-                                       GNC_HOST_NAME_MAX);
+        std::string query = "CREATE TABLE " + lock_table + " ( Hostname varchar(" + std::to_string(GNC_HOST_NAME_MAX) + "), PID int )";
+        auto result = dbi_conn_query (m_conn, query.c_str());
         if (result)
         {
             dbi_result_free (result);
@@ -127,8 +125,8 @@ GncDbiSqlConnection::lock_database (bool break_lock)
 
     /* Check for an existing entry; delete it if break_lock is true, otherwise fail */
     char hostname[ GNC_HOST_NAME_MAX + 1 ];
-    auto result = dbi_conn_queryf (m_conn, "SELECT * FROM %s",
-                                   lock_table.c_str());
+    std::string select_query = "SELECT * FROM " + lock_table;
+    auto result = dbi_conn_query (m_conn, select_query.c_str());
     if (result && dbi_result_get_numrows (result))
     {
         dbi_result_free (result);
@@ -140,7 +138,8 @@ GncDbiSqlConnection::lock_database (bool break_lock)
             rollback_transaction();
             return false;
         }
-        result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table.c_str());
+        std::string del_query = "DELETE FROM " + lock_table;
+        result = dbi_conn_query (m_conn, del_query.c_str());
         if (!result)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -154,9 +153,8 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     /* Add an entry and commit the transaction */
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
-    result = dbi_conn_queryf (m_conn,
-                              "INSERT INTO %s VALUES ('%s', '%d')",
-                              lock_table.c_str(), hostname, (int)GETPID ());
+    std::string insert_query = "INSERT INTO " + lock_table + " VALUES (" + quote_string(hostname) + ", " + std::to_string((int)GETPID()) + ")";
+    result = dbi_conn_query (m_conn, insert_query.c_str());
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -189,11 +187,8 @@ GncDbiSqlConnection::unlock_database ()
 
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
-        auto result = dbi_conn_queryf (m_conn,
-                                       "SELECT * FROM %s WHERE Hostname = '%s' "
-                                       "AND PID = '%d'", lock_table.c_str(),
-                                       hostname,
-                                       (int)GETPID ());
+        std::string sel_query = "SELECT * FROM " + lock_table + " WHERE Hostname = " + quote_string(hostname) + " AND PID = " + std::to_string((int)GETPID());
+        auto result = dbi_conn_query (m_conn, sel_query.c_str());
         if (result && dbi_result_get_numrows (result))
         {
             if (result)
@@ -201,8 +196,8 @@ GncDbiSqlConnection::unlock_database ()
                 dbi_result_free (result);
                 result = nullptr;
             }
-            result = dbi_conn_queryf (m_conn, "DELETE FROM %s",
-                                      lock_table.c_str());
+            std::string del_query2 = "DELETE FROM " + lock_table;
+            result = dbi_conn_query (m_conn, del_query2.c_str());
             if (!result)
             {
                 PERR ("Failed to delete the lock entry");
