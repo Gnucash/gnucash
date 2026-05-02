@@ -8,7 +8,7 @@
 # @date 2020-04-03
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
-from unittest import TestCase, main
+from unittest import TestCase, main, mock
 
 from gnucash import (
         Session,
