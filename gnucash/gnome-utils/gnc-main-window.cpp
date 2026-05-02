@@ -850,10 +850,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
                 default_page_position = zero_based_page_number - offset;
 
             if (page)
-                priv->usage_order = g_list_prepend (priv->usage_order, page);
+                priv->usage_order = g_list_append (priv->usage_order, page);
         }
-        priv->usage_order = g_list_reverse (priv->usage_order);
-
         gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook),
                                        default_page_position);
 
