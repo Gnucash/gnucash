@@ -85,6 +85,35 @@ class TestGncNumeric(TestCase):
         self.assertEqual(fraction.numerator, 1000)
         self.assertEqual(fraction.denominator, 3)
 
+    def test_richcmp(self):
+        num1 = GncNumeric(5)
+        num2 = GncNumeric(10)
+
+        # op should be a callable that takes one argument, the "other" value
+        # because _richcmp calls `op(other)` or `op(GncNumeric(other))`.
+        # However, inside GncNumeric, op is passed as `self._lt` which is bound
+        # and therefore takes one argument.
+
+        # We can just test __lt__ which uses _richcmp internally, or we can use lambda
+
+        op1 = lambda other: num1._lt(other)
+        op2 = lambda other: num2._lt(other)
+
+        # Test with GncNumeric
+        self.assertTrue(num1._richcmp(num2, op1))
+        self.assertFalse(num2._richcmp(num1, op2))
+
+        # Test with int
+        self.assertTrue(num1._richcmp(10, op1))
+        self.assertFalse(num2._richcmp(5, op2))
+
+        # Test with float
+        self.assertTrue(num1._richcmp(10.0, op1))
+        self.assertFalse(num2._richcmp(5.0, op2))
+
+        # Test with unsupported type
+        self.assertEqual(num1._richcmp("10", op1), NotImplemented)
+
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)

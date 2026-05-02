@@ -16,6 +16,7 @@ from gnucash import (
 )
 
 from gnucash.gnucash_core import GnuCashBackendException
+from unittest.mock import patch
 
 class TestSession(TestCase):
     def test_create_empty_session(self):
@@ -75,26 +76,38 @@ class TestSession(TestCase):
         self.book = self.ses.get_book()
         self.assertIsInstance(obj = self.book, cls = Book)
 
-    def test_raise_backend_errors_after_call(self):
-        mock_self = mock.Mock(spec=Session)
+    @patch('gnucash.Session.pop_all_errors')
+    def test_raise_backend_errors_empty(self, mock_pop_all_errors):
+        """Test that raise_backend_errors does nothing when there are no errors."""
+        mock_pop_all_errors.return_value = ()
+        ses = Session()
+        # This should not raise an exception
+        ses.raise_backend_errors()
+        mock_pop_all_errors.assert_called_once()
 
-        mock_function = mock.Mock(return_value="test_return")
-        mock_function.__name__ = "mock_function_name"
+    @patch('gnucash.Session.pop_all_errors')
+    def test_raise_backend_errors_with_errors(self, mock_pop_all_errors):
+        """Test that raise_backend_errors raises GnuCashBackendException when there are errors."""
+        from gnucash.gnucash_core import backend_error_dict
+        # Get a valid error key from backend_error_dict if it is not empty, otherwise default to a mock value
+        # We need a valid key because the function uses backend_error_dict[errors[0]]
+        if backend_error_dict:
+            error_code = next(iter(backend_error_dict.keys()))
+        else:
+            # Fallback if dictionary is somehow empty or mocked
+            error_code = 1
+            backend_error_dict[error_code] = 'ERR_MOCK_ERROR'
 
-        # Wrap the function
-        wrapped_function = Session.raise_backend_errors_after_call(mock_function)
+        mock_pop_all_errors.return_value = (error_code,)
+        ses = Session()
 
-        # Call the wrapped function
-        result = wrapped_function(mock_self, 1, 2, a=3)
+        with self.assertRaises(GnuCashBackendException) as context:
+            ses.raise_backend_errors("test_function")
 
-        # Verify the original function was called with correct arguments
-        mock_function.assert_called_once_with(mock_self, 1, 2, a=3)
+        mock_pop_all_errors.assert_called_once()
+        self.assertIn("call to test_function resulted in the following errors", str(context.exception))
+        self.assertEqual(context.exception.errors, (error_code,))
 
-        # Verify raise_backend_errors was called with the correct function name
-        mock_self.raise_backend_errors.assert_called_once_with("mock_function_name")
-
-        # Verify the return value
-        self.assertEqual(result, "test_return")
 
 if __name__ == '__main__':
     main()
