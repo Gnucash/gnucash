@@ -153,8 +153,9 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     /* Add an entry and commit the transaction */
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
-    std::string insert_query = "INSERT INTO " + lock_table + " VALUES (" + quote_string(hostname) + ", " + std::to_string((int)GETPID()) + ")";
-    result = dbi_conn_query (m_conn, insert_query.c_str());
+    result = dbi_conn_queryf (m_conn,
+                              "INSERT INTO %s VALUES (%s, '%d')",
+                              lock_table.c_str(), quote_string(hostname).c_str(), (int)GETPID ());
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -187,8 +188,11 @@ GncDbiSqlConnection::unlock_database ()
 
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
-        std::string sel_query = "SELECT * FROM " + lock_table + " WHERE Hostname = " + quote_string(hostname) + " AND PID = " + std::to_string((int)GETPID());
-        auto result = dbi_conn_query (m_conn, sel_query.c_str());
+        auto result = dbi_conn_queryf (m_conn,
+                                       "SELECT * FROM %s WHERE Hostname = %s "
+                                       "AND PID = '%d'", lock_table.c_str(),
+                                       quote_string(hostname).c_str(),
+                                       (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
             if (result)
