@@ -40,6 +40,25 @@ static const unsigned int DBI_MAX_CONN_ATTEMPTS = 5;
 const std::string lock_table = "gnclock";
 
 /* --------------------------------------------------------- */
+
+static std::string quote_identifier(dbi_conn m_conn, const std::string& identifier)
+{
+    if (identifier.empty()) return "";
+    dbi_driver driver = dbi_conn_get_driver(m_conn);
+    const char* driver_name = driver ? dbi_driver_get_name(driver) : nullptr;
+    char quote = '"'; // default for PostgreSQL and SQLite
+    if (driver_name && strcmp(driver_name, "mysql") == 0) {
+        quote = '`';
+    }
+    std::string retval(1, quote);
+    for (char c : identifier) {
+        if (c == quote) retval += quote;
+        retval += c;
+    }
+    retval += quote;
+    return retval;
+}
+
 class GncDbiSqlStatement : public GncSqlStatement
 {
 public:
@@ -153,9 +172,8 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     /* Add an entry and commit the transaction */
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
-    result = dbi_conn_queryf (m_conn,
-                              "INSERT INTO %s VALUES (%s, '%d')",
-                              lock_table.c_str(), quote_string(hostname).c_str(), (int)GETPID ());
+    sql = "INSERT INTO " + quote_identifier(m_conn, lock_table) + " VALUES (" + quote_string(hostname) + ", " + std::to_string(GETPID()) + ")";
+    result = dbi_conn_query (m_conn, sql.c_str());
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -188,11 +206,8 @@ GncDbiSqlConnection::unlock_database ()
 
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
-        auto result = dbi_conn_queryf (m_conn,
-                                       "SELECT * FROM %s WHERE Hostname = %s "
-                                       "AND PID = '%d'", lock_table.c_str(),
-                                       quote_string(hostname).c_str(),
-                                       (int)GETPID ());
+        std::string sql = "SELECT * FROM " + quote_identifier(m_conn, lock_table) + " WHERE Hostname = " + quote_string(hostname) + " AND PID = " + std::to_string(GETPID());
+        auto result = dbi_conn_query (m_conn, sql.c_str());
         if (result && dbi_result_get_numrows (result))
         {
             if (result)
@@ -348,13 +363,13 @@ GncDbiSqlConnection::begin_transaction () noexcept
     {
         init_error ();
         if (m_sql_savepoint == 0)
-            result = dbi_conn_queryf (m_conn, "BEGIN");
+            result = dbi_conn_query (m_conn, "BEGIN");
         else
         {
             std::ostringstream savepoint;
             savepoint << "savepoint_" << m_sql_savepoint;
-            result = dbi_conn_queryf(m_conn, "SAVEPOINT %s",
-                                     savepoint.str().c_str());
+            std::string sql = "SAVEPOINT " + savepoint.str();
+            result = dbi_conn_query(m_conn, sql.c_str());
         }
     }
     while (m_retry);
@@ -387,8 +402,8 @@ GncDbiSqlConnection::rollback_transaction () noexcept
     {
         std::ostringstream savepoint;
         savepoint << "savepoint_" << m_sql_savepoint - 1;
-        result = dbi_conn_queryf(m_conn, "ROLLBACK TO SAVEPOINT %s",
-                                 savepoint.str().c_str());
+        std::string sql = "ROLLBACK TO SAVEPOINT " + savepoint.str();
+        result = dbi_conn_query(m_conn, sql.c_str());
     }
     if (!result)
     {
@@ -415,13 +430,13 @@ GncDbiSqlConnection::commit_transaction () noexcept
     if (m_sql_savepoint == 0) return false;
     dbi_result result;
     if (m_sql_savepoint == 1)
-        result = dbi_conn_queryf (m_conn, "COMMIT");
+        result = dbi_conn_query (m_conn, "COMMIT");
     else
     {
         std::ostringstream savepoint;
         savepoint << "savepoint_" << m_sql_savepoint - 1;
-        result = dbi_conn_queryf(m_conn, "RELEASE SAVEPOINT %s",
-                                 savepoint.str().c_str());
+        std::string sql = "RELEASE SAVEPOINT " + savepoint.str();
+        result = dbi_conn_query(m_conn, sql.c_str());
     }
 
     if (!result)
