@@ -127,5 +127,89 @@ class TestGncNumeric(TestCase):
         with self.assertRaises(TypeError):
             GncNumeric(complex(1, 1))
 
+    def test_operator_fallbacks_add(self):
+        n1 = GncNumeric(5)
+        n2 = GncNumeric(10)
+
+        self.assertEqual((n1 + n2).to_double(), 15.0)
+        self.assertEqual((n1 + 5).to_double(), 10.0)
+        self.assertEqual((5 + n1).to_double(), 10.0)
+        self.assertEqual((n1 + 5.5).to_double(), 10.5)
+        self.assertEqual((5.5 + n1).to_double(), 10.5)
+
+    def test_operator_fallbacks_sub(self):
+        n1 = GncNumeric(15)
+        n2 = GncNumeric(5)
+
+        self.assertEqual((n1 - n2).to_double(), 10.0)
+        self.assertEqual((n1 - 5).to_double(), 10.0)
+        self.assertEqual((15 - n2).to_double(), 10.0)
+        self.assertEqual((n1 - 5.5).to_double(), 9.5)
+        self.assertEqual((15.5 - n2).to_double(), 10.5)
+
+    def test_operator_fallbacks_mul(self):
+        n1 = GncNumeric(5)
+        n2 = GncNumeric(3)
+
+        self.assertEqual((n1 * n2).to_double(), 15.0)
+        self.assertEqual((n1 * 3).to_double(), 15.0)
+        self.assertEqual((5 * n2).to_double(), 15.0)
+        self.assertEqual((n1 * 3.5).to_double(), 17.5)
+        self.assertEqual((5.5 * n2).to_double(), 16.5)
+
+    def test_operator_fallbacks_truediv(self):
+        n1 = GncNumeric(15)
+        n2 = GncNumeric(3)
+
+        self.assertEqual((n1 / n2).to_double(), 5.0)
+        self.assertEqual((n1 / 3).to_double(), 5.0)
+        self.assertEqual((15 / n2).to_double(), 5.0)
+        self.assertEqual((n1 / 2.5).to_double(), 6.0)
+        self.assertEqual((7.5 / n2).to_double(), 2.5)
+
+    def test_operator_fallbacks_floordiv(self):
+        n1 = GncNumeric(16)
+        n2 = GncNumeric(3)
+
+        self.assertEqual((n1 // n2).to_double(), 5.0)
+        self.assertEqual((n1 // 3).to_double(), 5.0)
+        self.assertEqual((16 // n2).to_double(), 5.0)
+        self.assertEqual((n1 // 2.5).to_double(), 6.0)
+        self.assertEqual((7.5 // n2).to_double(), 2.0)
+
+    def test_operator_fallbacks_unsupported(self):
+        n1 = GncNumeric(5)
+
+        with self.assertRaises(TypeError):
+            n1 + "5"
+
+        with self.assertRaises(TypeError):
+            "5" + n1
+
+        with self.assertRaises(TypeError):
+            n1 - "5"
+
+        with self.assertRaises(TypeError):
+            "5" - n1
+
+        with self.assertRaises(TypeError):
+            n1 * "5"
+
+        with self.assertRaises(TypeError):
+            "5" * n1
+
+        with self.assertRaises(TypeError):
+            n1 / "5"
+
+        with self.assertRaises(TypeError):
+            "5" / n1
+
+        with self.assertRaises(TypeError):
+            n1 // "5"
+
+        with self.assertRaises(TypeError):
+            "5" // n1
+
+
 if __name__ == '__main__':
     main()
