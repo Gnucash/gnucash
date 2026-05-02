@@ -139,6 +139,42 @@ TEST_F(PathTest, gnc_path_get_sysconfdir)
 #endif
 }
 
+TEST_F(PathTest, gnc_path_get_scmdir)
+{
+    gchar *prefix = gnc_path_get_prefix();
+    gchar *expected_path = g_build_filename(prefix, GUILE_REL_SITEDIR, NULL);
+    g_free(prefix);
+    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), expected_path);
+    g_free(expected_path);
+}
+
+TEST_F(PathTest, gnc_path_get_reportdir)
+{
+    gchar *scmdir = gnc_path_get_scmdir();
+    gchar *expected_path = g_build_filename(scmdir, PROJECT_NAME, "report", NULL);
+    g_free(scmdir);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), expected_path);
+    g_free(expected_path);
+}
+
+TEST_F(PathTest, gnc_path_get_reportsdir)
+{
+    gchar *scmdir = gnc_path_get_scmdir();
+    gchar *expected_path = g_build_filename(scmdir, PROJECT_NAME, "reports", NULL);
+    g_free(scmdir);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportsdir(), expected_path);
+    g_free(expected_path);
+}
+
+TEST_F(PathTest, gnc_path_get_stdreportsdir)
+{
+    gchar *reportdir = gnc_path_get_reportdir();
+    gchar *expected_path = g_build_filename(reportdir, "reports", "standard", NULL);
+    g_free(reportdir);
+    EXPECT_STREQ_GFREE(gnc_path_get_stdreportsdir(), expected_path);
+    g_free(expected_path);
+}
+
 TEST_F (PathTest, gnc_filename_is_backup)
 {
     EXPECT_EQ (gnc_filename_is_backup (""), false);
