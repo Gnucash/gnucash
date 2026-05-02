@@ -139,6 +139,27 @@ TEST_F(PathTest, gnc_path_get_sysconfdir)
 #endif
 }
 
+TEST_F(PathTest, gnc_path_get_accountsdir)
+{
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, DATADIR);
+    gchar *accountspath = g_build_filename(m_prefix, dirname, PROJECT_NAME, "accounts", NULL);
+    g_free(dirname);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
+    g_free(accountspath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
+    g_free(accountspath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    accountspath = g_build_filename(DATADIR, PROJECT_NAME, "accounts", NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
+    g_free(accountspath);
+#endif
+}
+
 TEST_F (PathTest, gnc_filename_is_backup)
 {
     EXPECT_EQ (gnc_filename_is_backup (""), false);
