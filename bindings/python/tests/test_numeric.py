@@ -89,30 +89,29 @@ class TestGncNumeric(TestCase):
         num1 = GncNumeric(5)
         num2 = GncNumeric(10)
 
-        # op should be a callable that takes one argument, the "other" value
-        # because _richcmp calls `op(other)` or `op(GncNumeric(other))`.
-        # However, inside GncNumeric, op is passed as `self._lt` which is bound
-        # and therefore takes one argument.
-
-        # We can just test __lt__ which uses _richcmp internally, or we can use lambda
-
-        op1 = lambda other: num1._lt(other)
-        op2 = lambda other: num2._lt(other)
+        # Test basic operators using _richcmp directly
+        # _richcmp takes 'other' and an 'op' callable that takes one argument (the other GncNumeric instance)
+        # GncNumeric instances have _eq, _lt, _gt, etc methods for this.
 
         # Test with GncNumeric
-        self.assertTrue(num1._richcmp(num2, op1))
-        self.assertFalse(num2._richcmp(num1, op2))
+        self.assertTrue(num1._richcmp(num2, num1._lt))
+        self.assertFalse(num2._richcmp(num1, num2._lt))
+        self.assertTrue(num1._richcmp(num1, num1._eq))
 
         # Test with int
-        self.assertTrue(num1._richcmp(10, op1))
-        self.assertFalse(num2._richcmp(5, op2))
+        self.assertTrue(num1._richcmp(10, num1._lt))
+        self.assertFalse(num2._richcmp(5, num2._lt))
+        self.assertTrue(num1._richcmp(5, num1._eq))
 
         # Test with float
-        self.assertTrue(num1._richcmp(10.0, op1))
-        self.assertFalse(num2._richcmp(5.0, op2))
+        self.assertTrue(num1._richcmp(10.0, num1._lt))
+        self.assertFalse(num2._richcmp(5.0, num2._lt))
+        self.assertTrue(num1._richcmp(5.0, num1._eq))
 
         # Test with unsupported type
-        self.assertEqual(num1._richcmp("10", op1), NotImplemented)
+        self.assertEqual(num1._richcmp("10", num1._lt), NotImplemented)
+        self.assertEqual(num1._richcmp([], num1._eq), NotImplemented)
+        self.assertEqual(num1._richcmp(None, num1._gt), NotImplemented)
 
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
