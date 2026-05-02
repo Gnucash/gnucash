@@ -108,6 +108,24 @@ class TestSession(TestCase):
         self.assertIn("call to test_function resulted in the following errors", str(context.exception))
         self.assertEqual(context.exception.errors, (error_code,))
 
+    def test_raise_backend_errors_after_call(self):
+        """Test the raise_backend_errors_after_call decorator."""
+        class DummySession:
+            def __init__(self):
+                self.raise_backend_errors_called_with = None
+
+            def raise_backend_errors(self, name):
+                self.raise_backend_errors_called_with = name
+
+            @Session.raise_backend_errors_after_call
+            def dummy_method(self, val):
+                return val * 2
+
+        dummy = DummySession()
+        res = dummy.dummy_method(5)
+        self.assertEqual(res, 10)
+        self.assertEqual(dummy.raise_backend_errors_called_with, "dummy_method")
+
 
 if __name__ == '__main__':
     main()
