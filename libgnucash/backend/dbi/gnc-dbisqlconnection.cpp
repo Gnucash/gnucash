@@ -172,7 +172,7 @@ GncDbiSqlConnection::lock_database (bool break_lock)
     /* Add an entry and commit the transaction */
     memset (hostname, 0, sizeof (hostname));
     gethostname (hostname, GNC_HOST_NAME_MAX);
-    sql = "INSERT INTO " + quote_identifier(m_conn, lock_table) + " VALUES (" + quote_string(hostname) + ", " + std::to_string(GETPID()) + ")";
+    std::string sql = "INSERT INTO " + quote_identifier(m_conn, lock_table) + " VALUES (" + quote_string(hostname) + ", " + std::to_string(GETPID()) + ")";
     result = dbi_conn_query (m_conn, sql.c_str());
     if (!result)
     {

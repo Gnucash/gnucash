@@ -139,40 +139,25 @@ TEST_F(PathTest, gnc_path_get_sysconfdir)
 #endif
 }
 
-TEST_F(PathTest, gnc_path_get_scmdir)
+TEST_F(PathTest, gnc_path_get_accountsdir)
 {
-    gchar *prefix = gnc_path_get_prefix();
-    gchar *expected_path = g_build_filename(prefix, GUILE_REL_SITEDIR, NULL);
-    g_free(prefix);
-    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), expected_path);
-    g_free(expected_path);
-}
-
-TEST_F(PathTest, gnc_path_get_reportdir)
-{
-    gchar *scmdir = gnc_path_get_scmdir();
-    gchar *expected_path = g_build_filename(scmdir, PROJECT_NAME, "report", NULL);
-    g_free(scmdir);
-    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), expected_path);
-    g_free(expected_path);
-}
-
-TEST_F(PathTest, gnc_path_get_reportsdir)
-{
-    gchar *scmdir = gnc_path_get_scmdir();
-    gchar *expected_path = g_build_filename(scmdir, PROJECT_NAME, "reports", NULL);
-    g_free(scmdir);
-    EXPECT_STREQ_GFREE(gnc_path_get_reportsdir(), expected_path);
-    g_free(expected_path);
-}
-
-TEST_F(PathTest, gnc_path_get_stdreportsdir)
-{
-    gchar *reportdir = gnc_path_get_reportdir();
-    gchar *expected_path = g_build_filename(reportdir, "reports", "standard", NULL);
-    g_free(reportdir);
-    EXPECT_STREQ_GFREE(gnc_path_get_stdreportsdir(), expected_path);
-    g_free(expected_path);
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, DATADIR);
+    gchar *accountspath = g_build_filename(m_prefix, dirname, PROJECT_NAME, "accounts", NULL);
+    g_free(dirname);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
+    g_free(accountspath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
+    g_free(accountspath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    accountspath = g_build_filename(DATADIR, PROJECT_NAME, "accounts", NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
+    g_free(accountspath);
+#endif
 }
 
 TEST_F (PathTest, gnc_filename_is_backup)
