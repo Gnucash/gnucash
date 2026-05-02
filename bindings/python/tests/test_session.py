@@ -76,6 +76,28 @@ class TestSession(TestCase):
         self.book = self.ses.get_book()
         self.assertIsInstance(obj = self.book, cls = Book)
 
+    @patch('gnucash.Session.get_error')
+    def test_generate_errors_empty(self, mock_get_error):
+        from gnucash.gnucash_core import ERR_BACKEND_NO_ERR
+        mock_get_error.return_value = ERR_BACKEND_NO_ERR
+        ses = Session()
+        errors = list(ses.generate_errors())
+        self.assertEqual(errors, [])
+        mock_get_error.assert_called_once()
+
+    @patch('gnucash.Session.get_error')
+    @patch('gnucash.Session.pop_error')
+    def test_generate_errors_multiple(self, mock_pop_error, mock_get_error):
+        from gnucash.gnucash_core import ERR_BACKEND_NO_ERR
+        # Assume 1 and 2 are some backend errors.
+        mock_get_error.side_effect = [1, 2, ERR_BACKEND_NO_ERR]
+        mock_pop_error.side_effect = [1, 2]
+        ses = Session()
+        errors = list(ses.generate_errors())
+        self.assertEqual(errors, [1, 2])
+        self.assertEqual(mock_get_error.call_count, 3)
+        self.assertEqual(mock_pop_error.call_count, 2)
+
     @patch('gnucash.Session.pop_all_errors')
     def test_raise_backend_errors_empty(self, mock_pop_all_errors):
         """Test that raise_backend_errors does nothing when there are no errors."""
