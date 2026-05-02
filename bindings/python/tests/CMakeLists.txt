@@ -1,4 +1,3 @@
-
 if (WITH_PYTHON)
   find_path(test_core_dir "unittest_support.py" PATHS ${CMAKE_BINARY_DIR}/common/test-core ${CMAKE_SOURCE_DIR}/common/test-core)
   if (${test_core_dir} STREQUAL "test_core_dir-NOTFOUND")
@@ -26,6 +25,7 @@ set(test_python_bindings_DATA
         test_split.py
         test_transaction.py
         test_query.py
-        test_function_class.py)
+        test_function_class.py
+        test_deprecation.py)
 
 set_dist_list(test_python_bindings_DIST CMakeLists.txt ${test_python_bindings_DATA})
