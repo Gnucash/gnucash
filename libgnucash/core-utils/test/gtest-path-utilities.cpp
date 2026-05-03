@@ -160,6 +160,48 @@ TEST_F(PathTest, gnc_path_get_accountsdir)
 #endif
 }
 
+TEST_F(PathTest, gnc_path_get_scmdir)
+{
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, GUILE_REL_SITEDIR);
+    gchar *scmpath = g_build_filename(m_prefix, dirname, NULL);
+    g_free(dirname);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), scmpath);
+    g_free(scmpath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), scmpath);
+    g_free(scmpath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    scmpath = g_build_filename(PREFIX, GUILE_REL_SITEDIR, NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), scmpath);
+    g_free(scmpath);
+#endif
+}
+
+TEST_F(PathTest, gnc_path_get_reportdir)
+{
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, GUILE_REL_SITEDIR);
+    gchar *reportpath = g_build_filename(m_prefix, dirname, PROJECT_NAME, "report", NULL);
+    g_free(dirname);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), reportpath);
+    g_free(reportpath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), reportpath);
+    g_free(reportpath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    reportpath = g_build_filename(PREFIX, GUILE_REL_SITEDIR, PROJECT_NAME, "report", NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), reportpath);
+    g_free(reportpath);
+#endif
+}
+
 TEST_F (PathTest, gnc_filename_is_backup)
 {
     EXPECT_EQ (gnc_filename_is_backup (""), false);
