@@ -377,6 +377,9 @@ gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
 gnucash/import-export/qif-imp/string.scm
+gnucash/import-export/sie4/dialog-sie4-export.c
+gnucash/import-export/sie4/gnc-plugin-sie4-export.c
+gnucash/import-export/sie4/sie4-export.cpp
 gnucash/python/gncmod-python.c
 gnucash/python/init.py
 gnucash/python/pycons/console.py
@@ -530,6 +533,7 @@ gnucash/ui/gnc-plugin-page-sx-list.ui
 gnucash/ui/gnc-plugin-qif-import.ui
 gnucash/ui/gnc-plugin-register.ui
 gnucash/ui/gnc-plugin-report-system.ui
+gnucash/ui/gnc-plugin-sie4-export.ui
 gnucash/ui/gnc-reconcile-window.ui
 libgnucash/app-utils/calculation/expression_parser.c
 libgnucash/app-utils/calculation/fin.c

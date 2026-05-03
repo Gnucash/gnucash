@@ -69,6 +69,7 @@ set(gnucash_GRESOURCES
   ui/gnc-plugin-log-replay.ui
   ui/gnc-plugin-register.ui
   ui/gnc-plugin-report-system.ui
+  ui/gnc-plugin-sie4-export.ui
   ui/gnc-plugin-page-account-tree.ui
   ui/gnc-plugin-page-budget.ui
   ui/gnc-plugin-page-invoice.ui
@@ -107,7 +108,7 @@ target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 target_link_libraries (gnucash
    gnc-ledger-core gnc-gnome gnc-gnome-utils gnc-app-utils
    gnc-engine gnc-module gnc-core-utils gnucash-guile
-   gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
+   gnc-qif-import gnc-csv-import gnc-csv-export gnc-sie4-export gnc-log-replay
    gnc-bi-import gnc-customer-import gnc-report
    PkgConfig::GTK3 ${GUILE_LDFLAGS} PkgConfig::GLIB2
    ${Boost_LIBRARIES}
