@@ -113,6 +113,59 @@ class TestGncNumeric(TestCase):
         self.assertEqual(num1._richcmp([], num1._eq), NotImplemented)
         self.assertEqual(num1._richcmp(None, num1._gt), NotImplemented)
 
+    def test__operator_fallbacks_function(self):
+        def dummy_mono(a, b):
+            return "mono", a, b
+        dummy_mono.__doc__ = "mono doc"
+
+        def dummy_fallback(a, b):
+            pass
+        dummy_fallback.__name__ = "dummy"
+
+        forward, reverse = GncNumeric._operator_fallbacks(dummy_mono, dummy_fallback)
+
+        self.assertEqual(forward.__name__, "__dummy__")
+        self.assertEqual(forward.__doc__, "mono doc")
+        self.assertEqual(reverse.__name__, "__rdummy__")
+        self.assertEqual(reverse.__doc__, "mono doc")
+
+        n1 = GncNumeric(5)
+        n2 = GncNumeric(10)
+
+        # Test forward
+        self.assertEqual(forward(n1, n2), ("mono", n1, n2))
+
+        # Test forward with int/float (wrapped in GncNumeric)
+        res_forward_int = forward(n1, 3)
+        self.assertEqual(res_forward_int[0], "mono")
+        self.assertEqual(res_forward_int[1], n1)
+        self.assertEqual(res_forward_int[2].to_double(), 3.0)
+
+        res_forward_float = forward(n1, 4.5)
+        self.assertEqual(res_forward_float[0], "mono")
+        self.assertEqual(res_forward_float[1], n1)
+        self.assertEqual(res_forward_float[2].to_double(), 4.5)
+
+        # Test forward with unsupported type
+        self.assertEqual(forward(n1, "string"), NotImplemented)
+
+        # Test reverse
+        self.assertEqual(reverse(n1, n2), ("mono", n2, n1))
+
+        # Test reverse with int/float (wrapped in GncNumeric)
+        res_reverse_int = reverse(n1, 3)
+        self.assertEqual(res_reverse_int[0], "mono")
+        self.assertEqual(res_reverse_int[1].to_double(), 3.0)
+        self.assertEqual(res_reverse_int[2], n1)
+
+        res_reverse_float = reverse(n1, 4.5)
+        self.assertEqual(res_reverse_float[0], "mono")
+        self.assertEqual(res_reverse_float[1].to_double(), 4.5)
+        self.assertEqual(res_reverse_float[2], n1)
+
+        # Test reverse with unsupported type
+        self.assertEqual(reverse(n1, "string"), NotImplemented)
+
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)
