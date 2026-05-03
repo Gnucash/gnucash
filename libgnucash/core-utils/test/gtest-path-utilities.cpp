@@ -113,6 +113,29 @@ TEST_F(PathTest, gnc_path_get_datadir)
 #endif
 }
 
+TEST_F(PathTest, gnc_path_get_pkgdocdir)
+{
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, DATADIR);
+    gchar *datapath = g_build_filename(m_prefix, dirname, NULL);
+    gchar *pkgdocpath = g_build_filename(datapath, "doc", PROJECT_NAME, NULL);
+    g_free(dirname);
+    g_free(datapath);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_pkgdocdir(), pkgdocpath);
+    g_free(pkgdocpath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_pkgdocdir(), pkgdocpath);
+    g_free(pkgdocpath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    pkgdocpath = g_build_filename(DATADIR, "doc", PROJECT_NAME, NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_pkgdocdir(), pkgdocpath);
+    g_free(pkgdocpath);
+#endif
+}
+
 TEST_F(PathTest, gnc_path_get_sysconfdir)
 {
     gchar *dirname = gnc_file_path_relative_part(PREFIX, SYSCONFDIR);
