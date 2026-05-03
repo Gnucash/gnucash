@@ -160,6 +160,27 @@ TEST_F(PathTest, gnc_path_get_accountsdir)
 #endif
 }
 
+TEST_F(PathTest, gnc_path_get_gtkbuilderdir)
+{
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, DATADIR);
+    gchar *gtkbuilderpath = g_build_filename(m_prefix, dirname, PROJECT_NAME, "gtkbuilder", NULL);
+    g_free(dirname);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_gtkbuilderdir(), gtkbuilderpath);
+    g_free(gtkbuilderpath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_gtkbuilderdir(), gtkbuilderpath);
+    g_free(gtkbuilderpath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    gtkbuilderpath = g_build_filename(DATADIR, PROJECT_NAME, "gtkbuilder", NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_gtkbuilderdir(), gtkbuilderpath);
+    g_free(gtkbuilderpath);
+#endif
+}
+
 TEST_F (PathTest, gnc_filename_is_backup)
 {
     EXPECT_EQ (gnc_filename_is_backup (""), false);
