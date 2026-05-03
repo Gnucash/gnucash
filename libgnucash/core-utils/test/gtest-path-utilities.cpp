@@ -193,3 +193,13 @@ TEST_F (PathTest, gnc_filename_is_backup)
     EXPECT_EQ (gnc_filename_is_datafile ("a.gnucash"), true);
     EXPECT_EQ (gnc_filename_is_datafile ("a.gnucash.20201131010203.gnucash"), false);
 }
+
+TEST_F(PathTest, gnc_path_get_stdreportsdir)
+{
+    gchar *reportdir = gnc_path_get_reportdir();
+    gchar *expected = g_build_filename(reportdir, "reports", "standard", NULL);
+    g_free(reportdir);
+
+    EXPECT_STREQ_GFREE(gnc_path_get_stdreportsdir(), expected);
+    g_free(expected);
+}
