@@ -64,12 +64,15 @@ typedef struct FileAccessWindow
     GtkEntry            *tf_database;
     GtkEntry            *tf_username;
     GtkEntry            *tf_password;
+    GtkEntry            *tf_port;
 } FileAccessWindow;
 
 void gnc_ui_file_access_file_activated_cb( GtkFileChooser *chooser,
         FileAccessWindow *faw );
 void gnc_ui_file_access_response_cb( GtkDialog *, gint, GtkDialog * );
 static void cb_uri_type_changed_cb( GtkComboBoxText* cb );
+static void port_insert_text_cb( GtkEditable *editable, const gchar *text,
+                                 gint length, gint *position, gpointer data );
 
 static gchar*
 geturl( FileAccessWindow* faw )
@@ -82,6 +85,8 @@ geturl( FileAccessWindow* faw )
     gchar* type = NULL;
     /* Not const as return value of gtk_file_chooser_get_filename must be freed */
     gchar* path = NULL;
+    gint32 port = 0;
+    const gchar* port_text = NULL;
 
     type = gtk_combo_box_text_get_active_text (faw->cb_uri_type);
     if (gnc_uri_is_file_scheme (type))
@@ -101,7 +106,12 @@ geturl( FileAccessWindow* faw )
         password = gtk_entry_get_text( faw->tf_password );
     }
 
-    url = gnc_uri_create_uri (type, host, 0, username, password, path);
+    g_assert (faw->tf_port != NULL);
+    port_text = gtk_entry_get_text (faw->tf_port);
+    if (port_text && *port_text)
+        port = atoi (port_text) & 0xffff;
+
+    url = gnc_uri_create_uri (type, host, port, username, password, path);
 
     g_free (type);
     g_free (path);
@@ -210,10 +220,26 @@ set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_typ
     else if ( strcmp( uri_type, "mysql" ) == 0 || strcmp( uri_type, "postgres" ) == 0 )
     {
         set_widget_sensitivity( faw, /* is_file_based_uri */ FALSE );
+        gtk_entry_set_placeholder_text( faw->tf_port,
+            strcmp( uri_type, "mysql" ) == 0 ? _("Default: 3306") : _("Default: 5432") );
     }
     else
     {
         g_assert( FALSE );
+    }
+}
+
+static void
+port_insert_text_cb( GtkEditable *editable, const gchar *text, gint length,
+                     gint *position, gpointer data )
+{
+    for ( gint i = 0; i < length; i++ )
+    {
+        if ( !g_ascii_isdigit( text[i] ) )
+        {
+            g_signal_stop_emission_by_name( G_OBJECT(editable), "insert-text" );
+            return;
+        }
     }
 }
 
@@ -308,6 +334,10 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     gtk_entry_set_text( faw->tf_database, default_db );
     faw->tf_username = GTK_ENTRY(gtk_builder_get_object (builder, "tf_username" ));
     faw->tf_password = GTK_ENTRY(gtk_builder_get_object (builder, "tf_password" ));
+    faw->tf_port = GTK_ENTRY(gtk_builder_get_object (builder, "tf_port" ));
+    g_signal_connect( G_OBJECT(faw->tf_port), "insert-text",
+                      G_CALLBACK(port_insert_text_cb), NULL );
+    gtk_entry_set_max_length( faw->tf_port, 5 );
 
     switch ( type )
     {
