@@ -142,7 +142,9 @@ TEST_F(PathTest, gnc_path_get_sysconfdir)
 TEST_F(PathTest, gnc_path_get_accountsdir)
 {
     gchar *dirname = gnc_file_path_relative_part(PREFIX, DATADIR);
-    gchar *accountspath = g_build_filename(m_prefix, dirname, PROJECT_NAME, "accounts", NULL);
+    gchar *pkgdatadir = g_build_filename(m_prefix, dirname, PROJECT_NAME, NULL);
+    gchar *accountspath = g_build_filename(pkgdatadir, "accounts", NULL);
+    g_free(pkgdatadir);
     g_free(dirname);
 #ifdef ENABLE_BINRELOC
     EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
@@ -154,7 +156,9 @@ TEST_F(PathTest, gnc_path_get_accountsdir)
     g_free(accountspath);
     g_unsetenv("GNC_UNINSTALLED");
     g_unsetenv("GNC_BUILDDIR");
-    accountspath = g_build_filename(DATADIR, PROJECT_NAME, "accounts", NULL);
+    gchar *pkgdatadir2 = g_build_filename(DATADIR, PROJECT_NAME, NULL);
+    accountspath = g_build_filename(pkgdatadir2, "accounts", NULL);
+    g_free(pkgdatadir2);
     EXPECT_STREQ_GFREE(gnc_path_get_accountsdir(), accountspath);
     g_free(accountspath);
 #endif
