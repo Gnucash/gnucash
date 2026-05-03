@@ -113,6 +113,29 @@ TEST_F(PathTest, gnc_path_get_datadir)
 #endif
 }
 
+TEST_F(PathTest, gnc_path_get_pkgdocdir)
+{
+    gchar *dirname = gnc_file_path_relative_part(PREFIX, DATADIR);
+    gchar *datapath = g_build_filename(m_prefix, dirname, NULL);
+    gchar *pkgdocpath = g_build_filename(datapath, "doc", PROJECT_NAME, NULL);
+    g_free(dirname);
+    g_free(datapath);
+#ifdef ENABLE_BINRELOC
+    EXPECT_STREQ_GFREE(gnc_path_get_pkgdocdir(), pkgdocpath);
+    g_free(pkgdocpath);
+#else
+    g_setenv("GNC_UNINSTALLED", "1", TRUE);
+    g_setenv("GNC_BUILDDIR", m_prefix, 1);
+    EXPECT_STREQ_GFREE(gnc_path_get_pkgdocdir(), pkgdocpath);
+    g_free(pkgdocpath);
+    g_unsetenv("GNC_UNINSTALLED");
+    g_unsetenv("GNC_BUILDDIR");
+    pkgdocpath = g_build_filename(DATADIR, "doc", PROJECT_NAME, NULL);
+    EXPECT_STREQ_GFREE(gnc_path_get_pkgdocdir(), pkgdocpath);
+    g_free(pkgdocpath);
+#endif
+}
+
 TEST_F(PathTest, gnc_path_get_sysconfdir)
 {
     gchar *dirname = gnc_file_path_relative_part(PREFIX, SYSCONFDIR);
@@ -160,45 +183,26 @@ TEST_F(PathTest, gnc_path_get_accountsdir)
 #endif
 }
 
-TEST_F(PathTest, gnc_path_get_scmdir)
+TEST_F(PathTest, gnc_path_get_reportsdir)
 {
-    gchar *dirname = gnc_file_path_relative_part(PREFIX, GUILE_REL_SITEDIR);
-    gchar *scmpath = g_build_filename(m_prefix, dirname, NULL);
-    g_free(dirname);
+    gchar *scmdir = g_build_filename(m_prefix, GUILE_REL_SITEDIR, NULL);
+    gchar *reportsdir = g_build_filename(scmdir, PROJECT_NAME, "reports", NULL);
+    g_free(scmdir);
 #ifdef ENABLE_BINRELOC
-    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), scmpath);
-    g_free(scmpath);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportsdir(), reportsdir);
+    g_free(reportsdir);
 #else
     g_setenv("GNC_UNINSTALLED", "1", TRUE);
     g_setenv("GNC_BUILDDIR", m_prefix, 1);
-    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), scmpath);
-    g_free(scmpath);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportsdir(), reportsdir);
+    g_free(reportsdir);
     g_unsetenv("GNC_UNINSTALLED");
     g_unsetenv("GNC_BUILDDIR");
-    scmpath = g_build_filename(PREFIX, GUILE_REL_SITEDIR, NULL);
-    EXPECT_STREQ_GFREE(gnc_path_get_scmdir(), scmpath);
-    g_free(scmpath);
-#endif
-}
-
-TEST_F(PathTest, gnc_path_get_reportdir)
-{
-    gchar *dirname = gnc_file_path_relative_part(PREFIX, GUILE_REL_SITEDIR);
-    gchar *reportpath = g_build_filename(m_prefix, dirname, PROJECT_NAME, "report", NULL);
-    g_free(dirname);
-#ifdef ENABLE_BINRELOC
-    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), reportpath);
-    g_free(reportpath);
-#else
-    g_setenv("GNC_UNINSTALLED", "1", TRUE);
-    g_setenv("GNC_BUILDDIR", m_prefix, 1);
-    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), reportpath);
-    g_free(reportpath);
-    g_unsetenv("GNC_UNINSTALLED");
-    g_unsetenv("GNC_BUILDDIR");
-    reportpath = g_build_filename(PREFIX, GUILE_REL_SITEDIR, PROJECT_NAME, "report", NULL);
-    EXPECT_STREQ_GFREE(gnc_path_get_reportdir(), reportpath);
-    g_free(reportpath);
+    scmdir = g_build_filename(PREFIX, GUILE_REL_SITEDIR, NULL);
+    reportsdir = g_build_filename(scmdir, PROJECT_NAME, "reports", NULL);
+    g_free(scmdir);
+    EXPECT_STREQ_GFREE(gnc_path_get_reportsdir(), reportsdir);
+    g_free(reportsdir);
 #endif
 }
 
@@ -211,4 +215,14 @@ TEST_F (PathTest, gnc_filename_is_backup)
     EXPECT_EQ (gnc_filename_is_datafile (""), false);
     EXPECT_EQ (gnc_filename_is_datafile ("a.gnucash"), true);
     EXPECT_EQ (gnc_filename_is_datafile ("a.gnucash.20201131010203.gnucash"), false);
+}
+
+TEST_F(PathTest, gnc_path_get_stdreportsdir)
+{
+    gchar *reportdir = gnc_path_get_reportdir();
+    gchar *expected = g_build_filename(reportdir, "reports", "standard", NULL);
+    g_free(reportdir);
+
+    EXPECT_STREQ_GFREE(gnc_path_get_stdreportsdir(), expected);
+    g_free(expected);
 }
