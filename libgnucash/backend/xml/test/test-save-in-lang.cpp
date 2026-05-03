@@ -62,6 +62,7 @@ const char* possible_vars[] =
     NULL
 };
 
+const char* diff_command = "cmp %s %s";
 const char* test_dir = "test-files/xml2";
 const char* base_env = "C";
 
@@ -69,6 +70,12 @@ static char*
 gen_new_file_name (const char* filename, const char* env)
 {
     return g_strdup_printf ("%s-%s", filename, env);
+}
+
+static int
+run_command_get_return (const char* command)
+{
+    return system (command);
 }
 
 static char*
@@ -80,9 +87,8 @@ test_file (const char* filename)
     {
         QofBackendError err;
         QofSession* session;
+        char* cmd;
         char* new_file = gen_new_file_name (filename, possible_envs[i]);
-        gchar* argv[] = { (gchar*)"cmp", (gchar*)filename, new_file, NULL };
-        gint exit_status = 0;
 
         auto session = qof_session_new (nullptr);
 
@@ -120,17 +126,20 @@ test_file (const char* filename)
 
         qof_session_save (new_session, NULL);
 
-        if (!g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL, &exit_status, NULL) ||
-            exit_status != 0)
+        cmd = g_strdup_printf (diff_command, filename, new_file);
+
+        if (run_command_get_return (cmd) != 0)
         {
+            g_free (cmd);
             g_free (new_file);
             qof_session_destroy (session);
             qof_session_destroy (new_session);
-            return g_strdup_printf ("cmp command failed with LANG=%s",
+            return g_strdup_printf ("run_command_get_return with LANG=%s",
                                     possible_envs[i]);
         }
 
         g_free (new_file);
+        g_free (cmd);
         qof_session_destroy (session);
         qof_session_destroy (new_session);
     }

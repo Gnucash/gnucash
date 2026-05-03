@@ -290,16 +290,16 @@ template <DbType Type>bool
 GncDbiBackend<Type>::create_database(dbi_conn conn, const char* db)
 {
     const char *dbname;
-    std::string dbcreate;
+    const char *dbcreate;
     if (Type == DbType::DBI_MYSQL)
     {
         dbname = "mysql";
-        dbcreate = std::string("CREATE DATABASE ") + db + " CHARACTER SET utf8";
+        dbcreate = "CREATE DATABASE %s CHARACTER SET utf8";
     }
     else
     {
         dbname = "postgres";
-        dbcreate = std::string("CREATE DATABASE ") + db + " WITH TEMPLATE template0 ENCODING 'UTF8'";
+        dbcreate = "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'";
     }
     PairVec options;
     options.push_back(std::make_pair("dbname", dbname));
@@ -322,7 +322,7 @@ GncDbiBackend<Type>::create_database(dbi_conn conn, const char* db)
     }
     if (Type == DbType::DBI_MYSQL)
         adjust_sql_options(conn);
-    auto dresult = dbi_conn_query (conn, dbcreate.c_str());
+    auto dresult = dbi_conn_queryf (conn, dbcreate, db);
     if (dresult == nullptr)
     {
         PERR ("Unable to create database '%s'\n", db);
@@ -331,8 +331,9 @@ GncDbiBackend<Type>::create_database(dbi_conn conn, const char* db)
     }
     if (Type == DbType::DBI_PGSQL)
     {
-        std::string alterdb = std::string("ALTER DATABASE ") + db + " SET standard_conforming_strings TO on";
-        dbi_conn_query (conn, alterdb.c_str());
+        const char *alterdb = "ALTER DATABASE %s SET "
+            "standard_conforming_strings TO on";
+        dbi_conn_queryf (conn, alterdb, db);
     }
     dbi_conn_close(conn);
     conn = nullptr;
@@ -626,8 +627,8 @@ drop_database(dbi_conn conn, const UriStrings& uri)
         LEAVE ("Error");
         return false;
     }
-    std::string dropdb1 = std::string("DROP DATABASE ") + uri.quote_dbname(Type);
-    if (!dbi_conn_query (conn, dropdb1.c_str()))
+    if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
+                          uri.quote_dbname(Type).c_str()))
     {
         PERR ("Failed to drop database %s prior to recreating it."
               "Proceeding would combine old and new data.",
@@ -753,8 +754,8 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
         {
             if (Type == DbType::DBI_PGSQL)
                 dbi_conn_select_db (conn, "template1");
-            std::string dropdb2 = std::string("DROP DATABASE ") + uri.quote_dbname(Type);
-            dbi_conn_query (conn, dropdb2.c_str());
+            dbi_conn_queryf (conn, "DROP DATABASE %s",
+                                uri.quote_dbname(Type).c_str());
             dbi_conn_close(conn);
             return;
         }
