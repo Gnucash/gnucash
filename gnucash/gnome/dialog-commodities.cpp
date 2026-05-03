@@ -82,9 +82,9 @@ void gnc_commodities_dialog_rename_namespace_clicked (GtkWidget *widget, gpointe
 void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
 }
 
-gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
-                                              GdkEventKey *event,
-                                              gpointer data);
+static gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
+                                                     GdkEventKey *event,
+                                                     gpointer data);
 
 
 void
@@ -508,7 +508,7 @@ show_handler (const char *klass, gint component_id,
     return(TRUE);
 }
 
-gboolean
+static gboolean
 gnc_commodities_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
                                      gpointer data)
 {

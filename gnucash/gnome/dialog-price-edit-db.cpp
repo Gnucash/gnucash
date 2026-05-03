@@ -926,7 +926,7 @@ show_handler (const char *klass, gint component_id,
 }
 
 
-gboolean
+static gboolean
 gnc_prices_dialog_key_press_cb (GtkWidget *widget, GdkEventKey *event,
                                 gpointer data)
 {

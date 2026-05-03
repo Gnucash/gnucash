@@ -202,7 +202,7 @@ activate_item_cb (GncItemList* item_list, char* item_string, gpointer data)
     box->list_popped = FALSE;
 }
 
-static void
+static gboolean
 key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer data)
 {
     ComboCell* cell = data;
@@ -220,6 +220,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer data)
                           (GdkEvent*) event);
         break;
     }
+    return TRUE;
 }
 
 static void
