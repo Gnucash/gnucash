@@ -124,15 +124,6 @@ full_account_name (Account *account)
 }
 
 std::string
-trans_guid (Transaction *trans)
-{
-    auto guid_string = guid_to_string (qof_entity_get_guid (QOF_INSTANCE (trans)));
-    std::string result{guid_string ? guid_string : ""};
-    g_free (guid_string);
-    return result;
-}
-
-std::string
 sie_date (time64 time)
 {
     auto text = gnc_print_time64 (time, "%Y%m%d");
