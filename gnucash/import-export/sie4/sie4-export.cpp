@@ -1042,10 +1042,12 @@ write_transactions (std::ostream& ss,
         ss << "}\n";
         if (!is_zero_at_cents (balance))
         {
+            auto date_text = sie_date (date);
+            auto description = str_or_empty (xaccTransGetDescription (trans));
             throw std::runtime_error (
                 format_user_message (_("Imbalanced transaction in SIE4 export: %s %s"),
-                                     sie_date (date).c_str (),
-                                     str_or_empty (xaccTransGetDescription (trans))));
+                                     date_text.c_str (),
+                                     description.c_str ()));
         }
     }
 }
