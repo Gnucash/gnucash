@@ -765,6 +765,19 @@ gnc_completion_cell_direct_update (BasicCell* bcell,
 
     switch (event->keyval)
     {
+    case GDK_KEY_Escape:
+        if (bcell->changed)
+        {
+            const char *value = gnc_table_get_model_entry (box->sheet->table, bcell->cell_name);
+
+            gnc_basic_cell_set_value_internal (bcell, value);
+            bcell->changed = FALSE;
+            *cursor_position = 0;
+            *start_selection = 0;
+            *end_selection = -1;
+            return TRUE;
+        }
+        break;
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
         {

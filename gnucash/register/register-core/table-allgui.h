@@ -154,6 +154,8 @@ typedef struct
 
     TableRedrawHelpCB redraw_help;
     TableDestroyCB destroy;
+    
+    CellDirectUpdateFunc default_direct_update;
 } TableGUIHandlers;
 
 struct table
@@ -266,6 +268,8 @@ gboolean       gnc_table_get_cell_location (Table *table,
         const char * cell_name,
         VirtualCellLocation vcell_loc,
         VirtualLocation *virt_loc);
+
+const char *   gnc_table_get_model_entry (Table *table, const char *cell_name);
 
 void           gnc_table_save_cells (Table *table, gpointer save_data);
 
