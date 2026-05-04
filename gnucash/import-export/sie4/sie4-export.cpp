@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#include "Account.h"
+#include "Account.hpp"
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
@@ -360,9 +360,8 @@ account_needs_sie4_code (Account *account,
     gnc_numeric res_current = gnc_numeric_zero ();
     gnc_numeric res_previous = gnc_numeric_zero ();
 
-    for (auto node = xaccAccountGetSplitList (account); node; node = g_list_next (node))
+    for (auto split : xaccAccountGetSplits (account))
     {
-        auto split = GNC_SPLIT (node->data);
         auto trans = xaccSplitGetParent (split);
         if (!trans)
             continue;
@@ -489,9 +488,8 @@ validate_export_currency (const std::vector<AccountInfo>& accounts,
 
     for (const auto& account : accounts)
     {
-        for (auto node = xaccAccountGetSplitList (account.account); node; node = g_list_next (node))
+        for (auto split : xaccAccountGetSplits (account.account))
         {
-            auto split = GNC_SPLIT (node->data);
             if (is_zero_at_cents (xaccSplitGetValue (split)))
                 continue;
 
@@ -532,9 +530,8 @@ collect_totals (const std::vector<AccountInfo>& accounts,
 {
     for (const auto& account : accounts)
     {
-        for (auto node = xaccAccountGetSplitList (account.account); node; node = g_list_next (node))
+        for (auto split : xaccAccountGetSplits (account.account))
         {
-            auto split = GNC_SPLIT (node->data);
             auto trans = xaccSplitGetParent (split);
             auto date = xaccTransGetDate (trans);
             auto value = xaccSplitGetValue (split);
@@ -591,9 +588,8 @@ collect_transactions (const std::vector<AccountInfo>& accounts,
 
     for (const auto& account : accounts)
     {
-        for (auto node = xaccAccountGetSplitList (account.account); node; node = g_list_next (node))
+        for (auto split : xaccAccountGetSplits (account.account))
         {
-            auto split = GNC_SPLIT (node->data);
             if (is_zero_at_cents (xaccSplitGetValue (split)))
                 continue;
 
