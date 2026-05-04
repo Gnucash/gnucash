@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-04-20 22:09+0000\n"
+"PO-Revision-Date: 2026-04-28 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3660,7 +3660,7 @@ msgstr "Biztosan, le kívánja zárni a rendelést?"
 
 #: gnucash/gnome/dialog-order.c:309
 msgid "Close Date"
-msgstr "Záródátum"
+msgstr "Záró dátum"
 
 #: gnucash/gnome/dialog-order.c:859
 msgid "View/Edit Order"
@@ -5294,7 +5294,7 @@ msgstr "A keresés eredménye"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3271
 msgid "Start Date:"
-msgstr "Kezdődátum:"
+msgstr "Kezdő dátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3278
 msgid "Show previous number of days:"
@@ -5302,7 +5302,7 @@ msgstr "Mutasd az előző napokat:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3286
 msgid "End Date:"
-msgstr "Záródátum:"
+msgstr "Záró dátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3296
 #: gnucash/report/trep-engine.scm:162
@@ -11216,7 +11216,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
-msgstr "Relatív kezdődátum használata a nyereség/veszteség számításhoz"
+msgstr "Relatív kezdő dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:16
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:21
@@ -11227,18 +11227,18 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
-"számításokhoz milyen kezdődátumot használjon a program. Ha az értéke „"
-"abszolút”, akkor a GnuCash a „start-date” kulcsban megadott kezdődátumot "
+"számításokhoz milyen kezdő dátumot használjon a program. Ha az értéke „"
+"abszolút”, akkor a GnuCash a „start-date” kulcsban megadott kezdő dátumot "
 "veszi alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash a „start-"
-"period” kulcsban megadott kezdődátumot veszi alapul."
+"period” kulcsban megadott kezdő dátumot veszi alapul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
-msgstr "Abszolút kezdődátum használata a nyereség/veszteség számításhoz"
+msgstr "Abszolút kezdő dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr "Kezdődátum (másodpercben 1970. jan. 1-től)"
+msgstr "Kezdő dátum (másodpercben 1970. jan. 1-től)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
 msgid ""
@@ -11247,13 +11247,13 @@ msgid ""
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt kezdődátumot, amennyiben a „start-choice” beállítás értéke „abszolút"
-"”. A mező az 1970. január 1-jétől számított másodpercekben kifejezett "
-"dátumot kell tartalmazza."
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke „"
+"abszolút”. A mező az 1970. január 1-jétől számított másodpercekben "
+"kifejezett dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
-msgstr "Az időszak kezdődátum-azonosítója"
+msgstr "Az időszak kezdő dátumának azonosítója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:31
 msgid ""
@@ -11262,12 +11262,12 @@ msgid ""
 "field should contain a value between 0 and 8."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt kezdődátumot, amennyiben a „start-choice” beállítás értéke nem „"
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke nem „"
 "abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 msgid "Use relative profit/loss ending date"
-msgstr "Relatív záródátum használata a nyereség/veszteség számításhoz"
+msgstr "Relatív záró dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:36
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:41
@@ -11278,18 +11278,18 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
-"számításokhoz milyen záródátumot használjon a program. Ha az értéke „abszolút"
-"”, akkor a GnuCash az „end-date” kulcsban megadott záródátumot veszi alapul. "
-"Ha más értékre (relatív) van állítva, akkor a GnuCash az „end-period” "
-"kulcsban megadott záródátumot veszi alapul."
+"számításokhoz milyen záró dátumot használjon a program. Ha az értéke „"
+"abszolút”, akkor a GnuCash az „end-date” kulcsban megadott záró dátumot "
+"veszi alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash az „end-"
+"period” kulcsban megadott záró dátumot veszi alapul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
 msgid "Use absolute profit/loss ending date"
-msgstr "Abszolút záródátum használata a nyereség/veszteség számításhoz"
+msgstr "Abszolút záró dátum használata a nyereség/veszteség számításhoz"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr "Záródátum (másodpercben 1970. jan. 1-től)"
+msgstr "Záró dátum (másodpercben 1970. jan. 1-től)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
 msgid ""
@@ -11297,10 +11297,14 @@ msgid ""
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
+"Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
+"használt záró dátumot, amennyiben az „end-choice” beállítás értéke „abszolút"
+"”. A mező az 1970. január 1-jétől számított másodpercekben kifejezett "
+"dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
-msgstr "Záró időszak azonosítója"
+msgstr "Az időszak záró dátumának azonosítója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:51
 msgid ""
@@ -11308,6 +11312,9 @@ msgid ""
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
+"Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
+"használt záró dátumot, amennyiben az „end-choice” beállítás értéke nem „"
+"abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
@@ -11614,7 +11621,7 @@ msgstr "Exportálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
 msgid "CSV Price Import"
-msgstr ""
+msgstr "Árfolyam importálása CSV fájlból"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
@@ -11881,9 +11888,8 @@ msgid "Import Prices Now"
 msgstr "Importálás"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
-#, fuzzy
 msgid "CSV Transaction Import"
-msgstr "Tranzakció-jelentés"
+msgstr "Tranzakciók importálása CSV fájlból"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
 msgid ""
@@ -11987,6 +11993,10 @@ msgid ""
 "Choices are displayed with a Hyphen (-) separator, but will also match Dot "
 "(.) and Slash (/) as separator."
 msgstr ""
+"Válassza ki az év, hónap és nap sorrendjét, hogy az megfeleljen az "
+"importálni kívánt fájl dátumformátumának.\n"
+"A választási lehetőségek kötőjellel (-) elválasztva jelennek meg, de "
+"elválasztójelként a pont (.) és a perjel (/) is ugyanúgy elfogadott."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:756
 msgid ""
@@ -12390,7 +12400,7 @@ msgstr ""
 #: gnucash/report/reports/standard/txn-columns.scm:34
 #: gnucash/report/trep-engine.scm:104
 msgid "Start Date"
-msgstr "Kezdődátum"
+msgstr "Kezdő dátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:181
 msgid "Length"
@@ -12418,7 +12428,7 @@ msgid ""
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
 "Adja meg az éves kamatlábat százalékban. Az érték 0.001 és 100 között kell "
-"legyen. A segéd nem támogatja a nulla kamatlábú kölcsönöket."
+"legyen. A segéd nem támogatja a kamatmentes kölcsönöket."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:362
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -13332,7 +13342,7 @@ msgstr "Általános"
 
 #: gnucash/gtkbuilder/business-prefs.glade:48
 msgid "Enable extra _buttons"
-msgstr "Extra gom_bok engedélyezése"
+msgstr "Extra _gombok engedélyezése"
 
 #: gnucash/gtkbuilder/business-prefs.glade:66
 msgid "_Open in new window"
@@ -15469,7 +15479,7 @@ msgstr "_Relatív"
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
-"A megadott relatív kezdődátum használata a nyereség/veszteség számításhoz."
+"A megadott relatív kezdő dátum használata a nyereség/veszteség számításhoz."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 msgid "_Absolute"
@@ -25344,9 +25354,8 @@ msgstr "Tőkecsökkenés"
 #: gnucash/report/reports/standard/register.scm:134
 #: gnucash/report/reports/standard/register.scm:351
 #: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:2338
-#, fuzzy
 msgid "Num/Action"
-msgstr "Művelet"
+msgstr "Szám/Művelet"
 
 #: gnucash/report/reports/standard/general-journal.scm:102
 #: gnucash/report/reports/standard/general-ledger.scm:82
@@ -25397,7 +25406,7 @@ msgstr "Ellenszámla neve"
 #: gnucash/report/trep-engine.scm:909 gnucash/report/trep-engine.scm:939
 #: gnucash/report/trep-engine.scm:2362
 msgid "Use Full Other Account Name"
-msgstr "Teljes ellenszámla-név használata"
+msgstr "Az ellenszámla teljes nevének használata"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
@@ -25436,7 +25445,7 @@ msgstr "Elsődleges alösszeg"
 #: gnucash/report/reports/standard/general-ledger.scm:128
 #: gnucash/report/trep-engine.scm:90
 msgid "Primary Subtotal for Date Key"
-msgstr "Elsődleges alösszeg a dátum-kulcshoz"
+msgstr "Elsődleges alösszeg a dátumkulcshoz"
 
 #: gnucash/report/reports/standard/general-ledger.scm:129
 #: gnucash/report/trep-engine.scm:89
@@ -25510,13 +25519,12 @@ msgid "This message will be removed when tax accounts are specified."
 msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
-#, fuzzy
 msgid "Individual sales columns"
-msgstr "Egyedi adók"
+msgstr "Egyedi értékesítési oszlopok"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:111
 msgid "Display individual sales columns rather than their sum"
-msgstr ""
+msgstr "Az összegoszlop helyett az egyes értékesítési oszlopokat jelenítse meg"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:112
 #, fuzzy
@@ -25780,11 +25788,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
 msgid "Start date"
-msgstr "Kezdődátum"
+msgstr "Kezdő dátum"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
 msgid "End date"
-msgstr "Záródátum"
+msgstr "Záró dátum"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
 msgid "Price source"
@@ -27102,12 +27110,12 @@ msgstr "Fejléc 2"
 #: gnucash/report/reports/standard/receipt.scm:46
 #: gnucash/report/reports/standard/taxinvoice.scm:96
 msgid "Heading font"
-msgstr "Fejléc betűtípus"
+msgstr "Fejléc betűtípusa"
 
 #: gnucash/report/reports/standard/receipt.scm:47
 #: gnucash/report/reports/standard/taxinvoice.scm:97
 msgid "Text font"
-msgstr "Szöveg betűtípus"
+msgstr "Szöveg betűtípusa"
 
 #: gnucash/report/reports/standard/receipt.scm:48
 msgid "Header logo filename"
@@ -27115,7 +27123,7 @@ msgstr "Fejléc logó fájlneve"
 
 #: gnucash/report/reports/standard/receipt.scm:49
 msgid "Header logo width"
-msgstr "Fejléc logó szélessége"
+msgstr "Fejléc logójának szélessége"
 
 #: gnucash/report/reports/standard/receipt.scm:50
 msgid "Footer logo filename"
@@ -27123,7 +27131,7 @@ msgstr "Lábléc logó fájlneve"
 
 #: gnucash/report/reports/standard/receipt.scm:51
 msgid "Footer logo width"
-msgstr "Lábléc logó szélessége"
+msgstr "Lábléc logójának szélessége"
 
 #: gnucash/report/reports/standard/receipt.scm:53
 #: gnucash/report/reports/standard/receipt.scm:116
@@ -27206,6 +27214,9 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"A fejléc logójának szélessége CSS formátumban, pl. 10% vagy 32px (a logó "
+"magassága ennek megfelelően lesz méretezve). Ha üresen hagyja, a logó az "
+"eredeti szélességében jelenik meg."
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid "Name of a file containing a logo to be used on the footer of the report"
@@ -27217,6 +27228,9 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"A lábléc logójának szélessége CSS formátumban, pl. 10% vagy 32px (a logó "
+"magassága ennek megfelelően lesz méretezve). Ha üresen hagyja, a logó az "
+"eredeti szélességében jelenik meg."
 
 #: gnucash/report/reports/standard/receipt.scm:104
 msgid "The format for the date->string conversion for today's date."
@@ -27460,7 +27474,7 @@ msgstr "Logó fájlnév"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo width"
-msgstr "Logó szélesség"
+msgstr "Logó szélessége"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:126
 msgid "Display the Tax Rate?"
@@ -27512,9 +27526,9 @@ msgid ""
 "the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
-"A logó szélessége CSS formátumban, pl. 10% vagy 32px. Ha üresen hagyja, a "
-"logó eredeti szélességében jelenik meg. A logó magassága ennek megfelelően "
-"lesz méretezve."
+"A logó szélessége CSS formátumban, pl. 10% vagy 32px (a logó magassága ennek "
+"megfelelően lesz méretezve). Ha üresen hagyja, a logó az eredeti "
+"szélességében jelenik meg."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:168
 msgid "Border-collapse?"
