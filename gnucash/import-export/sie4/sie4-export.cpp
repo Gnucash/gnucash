@@ -566,17 +566,7 @@ struct TransactionLess
     bool operator() (Transaction *left, Transaction *right) const
     {
         /* Deterministic ordering keeps repeated exports diffable. */
-        auto left_date = xaccTransGetDate (left);
-        auto right_date = xaccTransGetDate (right);
-        if (left_date != right_date)
-            return left_date < right_date;
-
-        auto desc_cmp = g_strcmp0 (xaccTransGetDescription (left),
-                                   xaccTransGetDescription (right));
-        if (desc_cmp != 0)
-            return desc_cmp < 0;
-
-        return trans_guid (left) < trans_guid (right);
+        return xaccTransOrder (left, right) < 0;
     }
 };
 
