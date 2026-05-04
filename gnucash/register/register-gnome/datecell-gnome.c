@@ -499,6 +499,22 @@ gnc_date_cell_direct_update (BasicCell *bcell,
     GdkEventKey *event = gui_data;
     char buff[DATE_BUF];
 
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        if (bcell->changed)
+        {
+            const char *value = gnc_table_get_model_entry (box->sheet->table, bcell->cell_name);
+
+            gnc_basic_cell_set_value_internal (bcell, value);
+            bcell->changed = FALSE;
+            *cursor_position = 0;
+            *start_selection = 0;
+            *end_selection = -1;
+            return TRUE;
+        }
+        return FALSE;
+    }
+
     if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
         return FALSE;
 

@@ -39,6 +39,9 @@
 #include "formulacell.h"
 #include "formulacell-gnome.h"
 #include "pricecell-gnome.h"
+#include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
+#include "table-allgui.h"
 
 #ifdef G_OS_WIN32
 # include <gdk/gdkwin32.h>
@@ -74,6 +77,21 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 
     switch (event->keyval)
     {
+    case GDK_KEY_Escape:
+        if (bcell->changed)
+        {
+            GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
+            const char *value = gnc_table_get_model_entry (sheet->table, bcell->cell_name);
+
+            gnc_basic_cell_set_value_internal (bcell, value);
+            bcell->changed = FALSE;
+            *cursor_position = 0;
+            *start_selection = 0;
+            *end_selection = -1;
+            return TRUE;
+        }
+        return FALSE;
+
     case GDK_KEY_Return:
         if (!(event->state &
                 (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))

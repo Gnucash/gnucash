@@ -54,6 +54,22 @@ gnc_cell_name_equal (const char * cell_name_1,
     return (g_strcmp0 (cell_name_1, cell_name_2) == 0);
 }
 
+static void
+gnc_basic_cell_gui_realize (BasicCell* bcell, gpointer data)
+{
+     bcell->gui_private = data;
+     bcell->gui_realize = NULL;
+}
+
+static void
+gnc_basic_cell_gui_destroy (BasicCell* bcell)
+{
+    if (bcell->gui_realize == NULL)
+    {
+        bcell->gui_realize = gnc_basic_cell_gui_realize;
+    }
+}
+
 BasicCell *
 gnc_basic_cell_new (void)
 {
@@ -100,6 +116,9 @@ void
 gnc_basic_cell_init (BasicCell *cell)
 {
     gnc_basic_cell_clear (cell);
+
+    cell->gui_realize = gnc_basic_cell_gui_realize;
+    cell->gui_destroy = gnc_basic_cell_gui_destroy;
 
     cell->value = g_strdup ("");
 }
