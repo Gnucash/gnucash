@@ -1,4 +1,6 @@
 
+add_subdirectory(test)
+
 set(sie4_export_SOURCES
   gnc-plugin-sie4-export.c
   dialog-sie4-export.c
@@ -49,5 +51,6 @@ set_local_dist (sie4_export_DIST_local
 
 set(sie4_export_DIST
   ${sie4_export_DIST_local}
+  ${test_sie4_export_DIST}
   PARENT_SCOPE
 )
