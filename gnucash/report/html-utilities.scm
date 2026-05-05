@@ -331,6 +331,7 @@
              (retval (cons (format #f "~a / ~a" section name)
                            (disp value))))
         (if (and (GncOption-is-changed option)
+                 (not (equal? name gnc:optname-options-summary))
                  (not (GncOption-is-internal option)))
             (addto! render-list retval))))
     (define (name-fn name) (if plaintext? name (gnc:html-markup-b name)))
