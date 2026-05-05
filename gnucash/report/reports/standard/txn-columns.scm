@@ -245,8 +245,6 @@ Select a different subset of transactions, or increase the limit in the options.
 
       (gnc:html-document-set-title! document (G_ reportname))
 
-      (gnc:html-document-add-object! document (gnc:html-render-options-changed options))
-
       (gnc:html-document-add-object! document table))))
 
   document)
