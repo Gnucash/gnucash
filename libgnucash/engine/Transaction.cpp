@@ -625,12 +625,18 @@ dupe_trans (const Transaction *from)
  * a full fledged transaction with unique guid, splits, etc. and
  * writes it to the database.
 \********************************************************************/
+static gpointer
+copy_split (gconstpointer from_split, gpointer to)
+{
+    auto split = xaccSplitCloneNoKvp(GNC_SPLIT(from_split));
+    split->parent = GNC_TRANSACTION(to);
+    return split;
+}
+
 Transaction *
 xaccTransCloneNoKvp (const Transaction *from)
 {
     Transaction *to;
-    Split *split;
-    GList *node;
 
     qof_event_suspend();
     to = GNC_TRANSACTION(g_object_new (GNC_TYPE_TRANSACTION, nullptr));
@@ -649,12 +655,7 @@ xaccTransCloneNoKvp (const Transaction *from)
 			    qof_instance_get_book(from));
 
     xaccTransBeginEdit(to);
-    for (node = from->splits; node; node = node->next)
-    {
-        split = xaccSplitCloneNoKvp(GNC_SPLIT(node->data));
-        split->parent = to;
-        to->splits = g_list_append (to->splits, split);
-    }
+    to->splits = g_list_copy_deep (from->splits, copy_split, to);
     qof_instance_set_dirty(QOF_INSTANCE(to));
     xaccTransCommitEdit(to);
     qof_event_resume();

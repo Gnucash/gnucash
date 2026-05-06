@@ -105,37 +105,58 @@ clear_copied_item()
     copied_item.anchor_split_index = 0;
 }
 
+gboolean
+gnc_split_register_has_copied_item (void)
+{
+    return copied_item.ft || copied_item.fs;
+}
+
 static void
-gnc_copy_split_onto_split (Split* from, Split* to, gboolean use_cut_semantics)
+gnc_copy_split_onto_split (Split* from, Split* to,
+                           Account *template_account,
+                           gboolean use_cut_semantics)
 {
     FloatingSplit *fs;
+    gboolean is_template = FALSE;
 
     if ((from == NULL) || (to == NULL))
         return;
 
-    fs = gnc_split_to_float_split (from);
+    if (template_account)
+        is_template = TRUE;
+
+    fs = gnc_split_to_float_split (from, is_template);
     if (!fs)
         return;
 
-    gnc_float_split_to_split (fs, to);
+    gnc_float_split_to_split (fs, to, template_account);
     gnc_float_split_free (fs);
 }
 
 void
 gnc_copy_trans_onto_trans (Transaction* from, Transaction* to,
                            gboolean use_cut_semantics,
+                           Account *template_account,
                            gboolean do_commit)
 {
     FloatingTxn *ft;
+    gboolean is_template = FALSE;
 
     if ((from == NULL) || (to == NULL))
         return;
 
-    ft = gnc_txn_to_float_txn (from, use_cut_semantics);
+    if (template_account)
+        is_template = TRUE;
+
+    ft = gnc_txn_to_float_txn (from, use_cut_semantics, is_template);
     if (!ft)
         return;
 
-    gnc_float_txn_to_txn (ft, to, do_commit);
+    if (is_template)
+        gnc_float_txn_to_template_txn (ft, to, template_account, do_commit);
+    else
+        gnc_float_txn_to_txn (ft, to, do_commit);
+
     gnc_float_txn_free (ft);
 }
 
@@ -555,7 +576,11 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
 
         xaccTransBeginEdit (trans);
         xaccSplitSetParent (new_split, trans);
-        gnc_copy_split_onto_split (split, new_split, FALSE);
+
+        Account *template_account = xaccAccountLookup (&info->template_account,
+                                                       gnc_get_current_book ());
+
+        gnc_copy_split_onto_split (split, new_split, template_account, FALSE);
         if (new_act_num) /* if new number supplied by user dialog */
             gnc_set_num_action (NULL, new_split, out_num, NULL);
 
@@ -621,7 +646,8 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
                    : gnc_get_num_action (trans, NULL));
 
         if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg), NULL,
-                                   TRUE, &date, in_num, &out_num, in_tnum, &out_tnum,
+                                   !reg->is_template, &date,
+                                   in_num, &out_num, in_tnum, &out_tnum,
                                    xaccTransGetDocLink (trans), &out_tdoclink))
         {
             gnc_resume_gui_refresh ();
@@ -668,7 +694,11 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
         new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
         xaccTransBeginEdit (new_trans);
-        gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
+
+        Account *template_account = xaccAccountLookup (&info->template_account,
+                                                       gnc_get_current_book ());
+
+        gnc_copy_trans_onto_trans (trans, new_trans, FALSE, template_account, FALSE);
         xaccTransSetDatePostedSecsNormalized (new_trans, date);
         /* We also must set a new DateEntered on the new entry
          * because otherwise the ordering is not deterministic */
@@ -796,7 +826,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     if (cursor_class == CURSOR_CLASS_SPLIT)
     {
         /* We are on a split in an expanded transaction. Just copy the split. */
-        new_fs = gnc_split_to_float_split (split);
+        new_fs = gnc_split_to_float_split (split, reg->is_template);
 
         if (new_fs)
         {
@@ -810,7 +840,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     else
     {
         /* We are on a transaction row. Copy the whole transaction. */
-        new_ft = gnc_txn_to_float_txn (trans, use_cut_semantics);
+        new_ft = gnc_txn_to_float_txn (trans, use_cut_semantics, reg->is_template);
 
         if (new_ft)
         {
@@ -917,6 +947,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
     Split* blank_split;
     Split* trans_split;
     Split* split;
+    Account *template_account = NULL;
 
     ENTER ("reg=%p", reg);
 
@@ -933,6 +964,9 @@ gnc_split_register_paste_current (SplitRegister* reg)
     trans = gnc_split_register_get_current_trans (reg);
 
     trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
+
+    template_account = xaccAccountLookup (&info->template_account,
+                                          gnc_get_current_book ());
 
     /* This shouldn't happen, but be paranoid. */
     if (trans == NULL)
@@ -1015,8 +1049,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
             LEAVE ("copy buffer doesn't represent a split");
             return;
         }
-
-        gnc_float_split_to_split (copied_item.fs, split);
+        gnc_float_split_to_split (copied_item.fs, split, template_account);
     }
     else
     {
@@ -1035,11 +1068,23 @@ gnc_split_register_paste_current (SplitRegister* reg)
             return;
         }
 
-
         if (copied_item.ftype != GNC_TYPE_TRANSACTION)
         {
             LEAVE ("copy buffer doesn't represent a transaction");
             return;
+        }
+
+        if ((reg->type != SEARCH_LEDGER) && (reg->type != GENERAL_JOURNAL))
+        {
+            if (gnc_float_txn_has_template (copied_item.ft))
+            {
+                const gchar *msg_text = _("Scheduled transactions can only be pasted to the General Journal");
+
+                gnc_warning_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", msg_text);
+
+                LEAVE ("Paste only allowed to General Journal from scheduled transactions");
+                return;
+            }
         }
 
         /* Ask before overwriting an existing transaction. */
@@ -1069,15 +1114,24 @@ gnc_split_register_paste_current (SplitRegister* reg)
         copied_leader = xaccAccountLookup (&copied_item.leader_guid,
                                            gnc_get_current_book ());
         default_account = gnc_split_register_get_default_account (reg);
+
         if (copied_leader && default_account)
         {
             gnc_float_txn_to_txn_swap_accounts (copied_item.ft, trans,
                                                 copied_leader,
-                                                default_account, FALSE);
+                                                default_account,
+                                                FALSE);
         }
         else
-            gnc_float_txn_to_txn (copied_item.ft, trans, FALSE);
-
+        {
+            if (reg->is_template)
+            {
+                gnc_float_txn_to_template_txn (copied_item.ft, trans,
+                                               template_account, FALSE);
+            }
+            else
+                gnc_float_txn_to_txn (copied_item.ft, trans, FALSE);
+        }
         num_splits = xaccTransCountSplits (trans);
         if (split_index >= num_splits)
             split_index = 0;
@@ -1619,7 +1673,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
                 Split* temp_split;
 
                 temp_split = xaccMallocSplit (gnc_get_current_book ());
-                other_fs = gnc_split_to_float_split (temp_split);
+                other_fs = gnc_split_to_float_split (temp_split, reg->is_template);
                 xaccSplitDestroy (temp_split);
 
                 gnc_float_txn_append_float_split (ft, other_fs);

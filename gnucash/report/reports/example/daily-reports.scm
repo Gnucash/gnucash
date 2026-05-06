@@ -256,10 +256,7 @@
                    chart (list
                           report-title
                           (string-append
-                           (format #f
-                                   (G_ "~a to ~a")
-                                   (qof-print-date from-date)
-                                   (qof-print-date to-date))
+                           (gnc-date-interval-format from-date to-date)
                            (if show-total?
                                (let ((total (apply + daily-totals)))
                                  (format

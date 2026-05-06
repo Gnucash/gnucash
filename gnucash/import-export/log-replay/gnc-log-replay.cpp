@@ -549,14 +549,9 @@ void gnc_file_log_replay (GtkWindow *parent)
     FILE *log_file;
     const char * record_start_str = "===== START";
     /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
-    const char * expected_header_orig = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+    const char * expected_header = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
         "date_entered\tdate_posted\tacc_guid\tacc_name\tnum\tdescription\t"
         "notes\tmemo\taction\treconciled\tamount\tvalue\tdate_reconciled";
-    static char *expected_header = NULL;
-
-    /* Use g_strdup_printf so we don't get accidental tab -> space conversion */
-    if (!expected_header)
-        expected_header = g_strdup(expected_header_orig);
 
     // qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
     ENTER(" ");

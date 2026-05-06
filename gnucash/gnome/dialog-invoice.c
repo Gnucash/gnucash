@@ -3899,8 +3899,8 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
         message = g_strdup_printf
                   (/* Translators: %d is the number of bills/credit notes due. This is a
                          ngettext(3) message. */
-                      ngettext("The following vendor document is due:",
-                               "The following %d vendor documents are due:",
+                      ngettext("The following vendor business item is due:",
+                               "The following %d vendor business items are due:",
                                len),
                       len);
         title = _("Due Bills Reminder");
@@ -3911,8 +3911,8 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
         message = g_strdup_printf
                   (/* Translators: %d is the number of invoices/credit notes due. This is a
                          ngettext(3) message. */
-                      ngettext("The following customer document is due:",
-                               "The following %d customer documents are due:",
+                      ngettext("The following customer business item is due:",
+                               "The following %d customer business items are due:",
                                len),
                       len);
         title = _("Due Invoices Reminder");

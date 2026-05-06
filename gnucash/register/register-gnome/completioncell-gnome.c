@@ -119,8 +119,8 @@ gnc_completion_cell_init (CompletionCell* cell)
     box->sheet = NULL;
     box->item_edit = NULL;
     box->item_list = NULL;
-    box->item_store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
-                                             G_TYPE_INT, G_TYPE_INT);
+    box->item_store = NULL;
+
     box->signals_connected = FALSE;
     box->list_popped = FALSE;
     box->autosize = FALSE;
@@ -261,7 +261,7 @@ unblock_list_signals (CompletionCell* cell)
                                        0, 0, NULL, NULL, cell);
 }
 
-static void
+static gboolean
 key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_data)
 {
     CompletionCell* cell = user_data;
@@ -281,6 +281,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_dat
                           (GdkEvent*) event);
         break;
     }
+    return TRUE;
 }
 
 static void
@@ -326,14 +327,22 @@ gnc_completion_cell_gui_destroy (BasicCell* bcell)
 {
     CompletionCell* cell = (CompletionCell*) bcell;
 
-    if (cell->cell.gui_realize)
+    if (!cell->cell.gui_realize)
     {
         PopBox* box = bcell->gui_private;
-        if (box && box->item_list)
+        if (box)
         {
-            completion_disconnect_signals (cell);
-            g_object_unref (box->item_list);
-            box->item_list = NULL;
+            if (box->item_list)
+            {
+                completion_disconnect_signals (cell);
+                g_object_unref (box->item_list);
+                box->item_list = NULL;
+            }
+            if (box->item_store)
+            {
+                g_object_unref (box->item_store);
+                box->item_store = NULL;
+            }
         }
         /* allow the widget to be shown again */
         cell->cell.gui_realize = gnc_completion_cell_gui_realize;
@@ -415,7 +424,7 @@ item_store_clear (CompletionCell* cell)
     PopBox* box = cell->cell.gui_private;
 
     // disconnect list store from tree view
-    GtkListStore *store = gnc_item_list_disconnect_store (box->item_list);
+    gnc_item_list_disconnect_store (box->item_list);
 
     block_list_signals (cell);
 
@@ -430,7 +439,7 @@ item_store_clear (CompletionCell* cell)
     unblock_list_signals (cell);
 
     // reconect list store to tree view
-    gnc_item_list_connect_store (box->item_list, store);
+    gnc_item_list_connect_store (box->item_list, box->item_store);
 
     hide_popup (box);
 }
@@ -487,6 +496,7 @@ void
 gnc_completion_cell_set_value (CompletionCell* cell, const char* str)
 {
     if (!cell || !str)
+        return;
 
     gnc_basic_cell_set_value (&cell->cell, str);
 }
@@ -635,7 +645,7 @@ populate_list_store (CompletionCell* cell, gchar* str)
     box->newval_len = g_utf8_strlen (str, -1);
 
     // disconnect list store from tree view
-    box->item_store = gnc_item_list_disconnect_store (box->item_list);
+    gnc_item_list_disconnect_store (box->item_list);
 
     block_list_signals (cell);
 
@@ -820,6 +830,8 @@ gnc_completion_cell_gui_realize (BasicCell* bcell, gpointer data)
     /* initialize gui-specific, private data */
     box->sheet = sheet;
     box->item_edit = item_edit;
+    box->item_store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
+                                             G_TYPE_INT, G_TYPE_INT);
     box->item_list = GNC_ITEM_LIST(gnc_item_list_new (box->item_store));
 
     block_list_signals (cell);

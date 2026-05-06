@@ -217,9 +217,9 @@
 
   <menu id="TransPlaceholder4">
     <item>
-      <attribute name="label" translatable="yes">Jump to Invoice</attribute>
+      <attribute name="label" translatable="yes">Jump to Business item</attribute>
       <attribute name="action">GncPluginPageRegisterActions.JumpLinkedInvoiceAction</attribute>
-      <attribute name="tooltip" translatable="yes">Jump to the linked bill, invoice, or voucher.</attribute>
+      <attribute name="tooltip" translatable="yes">Jump to the linked invoice, bill, expense or credit note.</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
@@ -402,9 +402,9 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Jump to Invoice</attribute>
+        <attribute name="label" translatable="yes">Jump to Business item</attribute>
         <attribute name="action">GncPluginPageRegisterActions.JumpLinkedInvoiceAction</attribute>
-        <attribute name="tooltip" translatable="yes">Jump to the linked bill, invoice, or voucher.</attribute>
+        <attribute name="tooltip" translatable="yes">Jump to the linked invoice, bill, expense or credit note.</attribute>
       </item>
     </section>
     <section>
@@ -514,9 +514,9 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Jump to Invoice</attribute>
+        <attribute name="label" translatable="yes">Jump to Business item</attribute>
         <attribute name="action">GncPluginPageRegisterActions.JumpLinkedInvoiceAction</attribute>
-        <attribute name="tooltip" translatable="yes">Jump to the linked bill, invoice, or voucher.</attribute>
+        <attribute name="tooltip" translatable="yes">Jump to the linked invoice, bill, expense or credit note.</attribute>
       </item>
     </section>
     <section>

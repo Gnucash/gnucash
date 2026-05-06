@@ -35,6 +35,17 @@
 
 typedef struct
 {
+    GncGUID      *m_account_guid;
+    const char   *m_credit_formula;
+    const char   *m_debit_formula;
+    gnc_numeric  *m_credit_numeric;
+    gnc_numeric  *m_debit_numeric;
+    const char   *m_shares;
+
+} FloatingTemplateSxData;
+
+typedef struct
+{
     Split       *m_split;
     Account     *m_account;
     Transaction *m_transaction;
@@ -44,6 +55,9 @@ typedef struct
     char         m_reconcile_state;
     gnc_numeric  m_value;
     gnc_numeric  m_amount;
+
+    FloatingTemplateSxData *m_template_sx_data;
+
 } FloatingSplit;
 
 typedef struct
@@ -81,8 +95,8 @@ void gnc_float_split_set_reconcile_date (FloatingSplit *fs, time64 reconcile_dat
 void gnc_float_split_set_amount (FloatingSplit *fs, gnc_numeric amount);
 void gnc_float_split_set_value (FloatingSplit *fs, gnc_numeric value);
 
-FloatingSplit *gnc_split_to_float_split (Split *split);
-void gnc_float_split_to_split (const FloatingSplit *fs, Split *split);
+FloatingSplit *gnc_split_to_float_split (Split *split, gboolean is_template);
+void gnc_float_split_to_split (const FloatingSplit *fs, Split *split, Account *template_account);
 
 void gnc_float_split_free (FloatingSplit *fs);
 
@@ -113,10 +127,17 @@ void gnc_float_txn_set_splits (FloatingTxn *ft, SplitList *splits);
 
 void gnc_float_txn_append_float_split (FloatingTxn *ft, FloatingSplit *fs);
 
-FloatingTxn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics);
+gboolean gnc_float_txn_has_template (const FloatingTxn *ft);
+
+FloatingTxn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics, gboolean is_template);
+
+void gnc_float_txn_to_template_txn (const FloatingTxn *ft, Transaction *txn,
+                                    Account *template_account, gboolean do_commit);
 
 void gnc_float_txn_to_txn (const FloatingTxn *ft, Transaction *txn, gboolean do_commit);
-void gnc_float_txn_to_txn_swap_accounts (const FloatingTxn *ft, Transaction *txn, Account *acct1, Account *acct2, gboolean do_commit);
+void gnc_float_txn_to_txn_swap_accounts (const FloatingTxn *ft, Transaction *txn,
+                                         Account *acct1, Account *acct2,
+                                         gboolean do_commit);
 
 void gnc_float_txn_free (FloatingTxn *ft);
 

@@ -1103,8 +1103,10 @@ write_pricedb (FILE* out, QofBook* book, sixtp_gdv2* gd)
        We do it this way instead of just calling xmlElemDump so that we can
        increment the progress bar as we go. */
 
-    if (fprintf (out, "<%s version=\"%s\">\n", parent->name,
-                 xmlGetProp (parent, BAD_CAST "version")) < 0)
+    auto version_str = xmlGetProp (parent, BAD_CAST "version");
+    auto res = fprintf (out, "<%s version=\"%s\">\n", parent->name, version_str);
+    xmlFree (version_str);
+    if (res < 0)
         return FALSE;
 
     /* We create our own output buffer so we can call xmlNodeDumpOutput to get

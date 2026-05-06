@@ -59,8 +59,8 @@ namespace std {
 
 %enddef
 
-%typemap(in) std::size_t "$1 = scm_to_ulong($input);";
-%typemap(out) std::size_t "$result = scm_from_ulong($1);";
+%typemap(in) std::size_t "$1 = scm_to_ssize_t($input);";
+%typemap(out) std::size_t "$result = scm_from_ssize_t($1);";
 
 %begin
 %{

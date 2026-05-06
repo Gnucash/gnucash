@@ -443,6 +443,14 @@ void gnc_main_window_restore_all_windows(const GKeyFile *keyfile);
  */
 gboolean gnc_main_window_is_restoring_pages (GncMainWindow *window);
 
+/** Check if the main window is quitting.
+ *
+ *  @param window The main window.
+ *
+ *  @return TRUE if window is quitting
+ */
+gboolean gnc_main_window_is_quitting (GncMainWindow *window);
+
 /** Save the persistent state of all windows.
  *
  *  @param keyfile The GKeyFile to contain persistent window state.

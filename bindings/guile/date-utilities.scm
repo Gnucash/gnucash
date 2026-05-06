@@ -167,10 +167,10 @@
   (gnc-print-time64 (gnc-mktime datevec) "%B %Y"))
 
 (define (gnc:date-get-week-year-string datevec)
-  (let* ((beginweekt64 (* (gnc:time64-get-week (gnc-mktime datevec)) 7 86400))
-         (begin-string (qof-print-date (+ beginweekt64 (* 3 86400))))
-         (end-string (qof-print-date (+ beginweekt64 (* 9 86400)))))
-    (format #f (G_ "~a to ~a") begin-string end-string)))
+  (define SECS-PER-DAY 86400)
+  (let ((beginweekt64 (* (gnc:time64-get-week (gnc-mktime datevec)) 7 SECS-PER-DAY)))
+    (gnc-date-interval-format (+ beginweekt64 (* 3 SECS-PER-DAY))
+                              (+ beginweekt64 (* 9 SECS-PER-DAY)))))
 
 ;; is leap year?
 (define (gnc:leap-year? year)

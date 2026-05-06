@@ -79,7 +79,7 @@ test_get_userdatadir ()
     wchar_t path[MAX_PATH+1];
     HRESULT hr;
     LPITEMIDLIST pidl = NULL;
-    BOOL b;
+    BOOL b = FALSE;
 
     hr = SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
     if (hr == S_OK)

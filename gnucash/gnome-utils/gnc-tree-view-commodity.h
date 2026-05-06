@@ -182,6 +182,19 @@ gnc_commodity * gnc_tree_view_commodity_get_cursor_commodity (GncTreeViewCommodi
 gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewCommodity *view);
 
 
+/** This function returns the namespace associated with the selected
+ *  item in the commodity tree view.
+ *
+ *  @note It only makes sense to call this function when the commodity
+ *  tree is set to select a single item.
+ *
+ *  @param view A pointer to an commodity tree view.
+ *
+ *  @return The selected namespace, or NULL if no namespace was selected.
+ */
+gnc_commodity_namespace * gnc_tree_view_commodity_get_selected_namespace (GncTreeViewCommodity *view);
+
+
 /** Select the commodity in the associated commodity tree view.
  *
  *  @param view A pointer to an commodity tree view.

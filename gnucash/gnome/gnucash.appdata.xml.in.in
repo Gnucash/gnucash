@@ -7,10 +7,11 @@
   <description>
     <p>
       GnuCash is a program for personal and small-business financial-accounting.
-    </p>
-    <p>
-      Designed to be easy to use, yet powerful and flexible, GnuCash allows you to track bank accounts, stocks, income and expenses. As quick and intuitive to use as a checkbook register, it is based on professional accounting principles like double-entry
-      accounting to ensure balanced books and accurate reports.
+      Designed to be easy to use, yet powerful and flexible, GnuCash allows you
+      to track bank accounts, stocks, income and expenses. As quick and intuitive
+      to use as a checkbook register, it is based on professional accounting
+      principles like double-entry accounting to ensure balanced books and
+      accurate reports.
     </p>
     <p>With GnuCash you can (but are not limited to):</p>
     <ul>
@@ -19,7 +20,8 @@
       <li>Keep your small business' accounting up to date</li>
       <li>Create accurate reports and graphs from your financial data</li>
       <li>Set up scheduled transactions to avoid repeated data entry</li>
-      <li>Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data including Transaction Matching</li>
+      <li>Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data
+        including Transaction Matching</li>
       <li>Perform financial calculations, such as a loan repayment</li>
     </ul>
   </description>
@@ -30,7 +32,9 @@
   <content_rating type="oars-1.1">
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
-  <developer_name>GnuCash Project</developer_name>
+  <developer id="org.gnucash">
+    <name>The GnuCash Project</name>
+  </developer>
   <launchable type="desktop-id">gnucash.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
@@ -41,12 +45,15 @@ ${REL_INFO}
   <screenshots>
     <screenshot type="default">
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_accounts_lg.png</image>
+      <caption>The account overview page is the starting point for managing your finances</caption>
     </screenshot>
     <screenshot>
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_register_lg.png</image>
+      <caption>The checkbook-style register - used for entering financial transactions</caption>
     </screenshot>
     <screenshot>
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_bar_chart_lg.png</image>
+      <caption>Report sample: a bar chart report showing a breakdown of expenses over time</caption>
     </screenshot>
   </screenshots>
   <update_contact>gnucash-devel@gnucash.org</update_contact>
@@ -57,4 +64,5 @@ ${REL_INFO}
   <url type="help">https://gnucash.org/docs.phtml</url>
   <url type="donation">https://gnucash.org/donate.phtml</url>
   <url type="translate">https://wiki.gnucash.org/wiki/Translation</url>
+  <url type="vcs-browser">https://github.com/Gnucash/gnucash</url>
 </component>

@@ -9,14 +9,15 @@
 # T. E. Kalaycı <tekrei@gmail.com>, 2021.
 # Tur <tur+translate@simplelogin.fr>, 2021.
 # Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024.
+# Arda Yılmaz <fijarom@fijarom.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-08-08 16:09+0000\n"
-"Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
+"PO-Revision-Date: 2026-01-02 14:01+0000\n"
+"Last-Translator: Arda Yılmaz <fijarom@fijarom.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -131,9 +132,8 @@ msgid "Action (register)"
 msgstr ""
 
 #. "Automated teller machine"
-#, fuzzy
 msgid "action: ATM"
-msgstr "action: ATM"
+msgstr "ATM"
 
 #. "Transaction was an auto deposit"
 #, fuzzy
@@ -220,11 +220,11 @@ msgstr "miktar"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
-msgstr ""
+msgstr "ortalama"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr ""
+msgstr "bakiye"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
@@ -236,7 +236,7 @@ msgstr ""
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr ""
+msgstr "bilanço"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
@@ -272,19 +272,19 @@ msgstr "Bütçe"
 
 #. "-"
 msgid "business (adjective)"
-msgstr ""
+msgstr "iş"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr ""
+msgstr "iş"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr ""
+msgstr "sermaye kazançları"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr ""
+msgstr "büyük/küçük harf duyarlı"
 
 #. "Money in coins or notes"
 msgid "cash"
@@ -292,7 +292,7 @@ msgstr "nakit"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr ""
+msgstr "çek"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
@@ -304,7 +304,7 @@ msgstr ""
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr ""
+msgstr "emtia"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -312,11 +312,11 @@ msgstr ""
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr ""
+msgstr "kesir"
 
 #. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
-msgstr ""
+msgstr "Kısaltma"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -336,7 +336,7 @@ msgstr ""
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
-msgstr ""
+msgstr "kredi notu"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -345,11 +345,11 @@ msgstr "para birimi"
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 #, fuzzy
 msgid "Custom"
-msgstr "Özel biçim"
+msgstr "Özel"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "gösterge paneli"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -477,7 +477,7 @@ msgstr ""
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr ""
+msgstr "fatura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"

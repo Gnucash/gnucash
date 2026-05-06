@@ -470,6 +470,10 @@ gnc_split_register_get_split_amount_virt_loc (SplitRegister* reg, Split* split,
  *    created, or NULL if nothing happened. */
 Split* gnc_split_register_duplicate_current (SplitRegister* reg);
 
+/** Return TRUE if copied_item holds a transaction or split.
+ */
+gboolean gnc_split_register_has_copied_item (void);
+
 /** Makes a copy of the current entity, either a split or a
  *    transaction, so that it can be pasted later. */
 void gnc_split_register_copy_current (SplitRegister* reg);
@@ -607,6 +611,7 @@ gboolean gnc_split_register_full_refresh_ok (SplitRegister* reg);
 /** Private function -- outsiders must not use this */
 void gnc_copy_trans_onto_trans (Transaction* from, Transaction* to,
                                 gboolean use_cut_semantics,
+                                Account *template_account,
                                 gboolean do_commit);
 
 #endif

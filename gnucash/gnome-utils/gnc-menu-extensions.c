@@ -275,6 +275,7 @@ gnc_create_extension_info (SCM extension)
     name = gnc_extension_name (extension);
     guid = gnc_extension_guid (extension);
     ext_info->action_label = g_strdup (gettext (name));
+    ext_info->action_label_original = NULL;
     ext_info->action_name = gnc_ext_gen_action_name (guid);
     ext_info->action_tooltip = gnc_extension_documentation (extension);
     g_free (name);
@@ -324,6 +325,7 @@ cleanup_extension_info (gpointer extension_info, gpointer not_used)
     g_free (ext_info->sort_key);
     g_free ((gchar *)ext_info->action_name);
     g_free ((gchar *)ext_info->action_label);
+    g_free ((gchar *)ext_info->action_label_original);
     g_free ((gchar *)ext_info->action_tooltip);
     g_free (ext_info->path);
     g_free (ext_info);

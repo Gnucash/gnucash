@@ -444,19 +444,17 @@ static gchar*
 get_negative_color_str (void)
 {
     GdkRGBA color;
-    GdkRGBA *rgba;
     gchar *color_str;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    g_object_ref_sink (label);
     gtk_style_context_add_class (context, "gnc-class-negative-numbers");
     gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
-    rgba = gdk_rgba_copy (&color);
-
     color_str = g_strdup_printf ("#%02X%02X%02X",
-                              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
-                              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
-                              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
-    gdk_rgba_free (rgba);
+                                 (int)(0.5 + CLAMP (color.red, 0., 1.) * 255.),
+                                 (int)(0.5 + CLAMP (color.green, 0., 1.) * 255.),
+                                 (int)(0.5 + CLAMP (color.blue, 0., 1.) * 255.));
+    g_object_unref (label);
     return color_str;
 }
 
@@ -465,6 +463,7 @@ summarybar_update_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
     GNCMainSummary *summary = user_data;
 
+    g_free(summary->negative_color);
     summary->negative_color = get_negative_color_str();
     summary->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
@@ -498,48 +497,23 @@ prefs_changed_cb (gpointer prefs, gchar *pref, gpointer user_data)
     gnc_main_window_summary_refresh(summary);
 }
 
-static gchar*
-check_string_for_markup (gchar *string)
-{
-    gchar **strings;
-    gchar *ret_string = g_strdup (string);
 
-    if (g_strrstr (ret_string, "&") != NULL)
-    {
-        strings = g_strsplit (ret_string, "&", -1);
-        g_free (ret_string);
-        ret_string = g_strjoinv ("&amp;", strings);
-        g_strfreev (strings);
-    }
-    if (g_strrstr (ret_string, "<") != NULL)
-    {
-        strings = g_strsplit (ret_string, "<", -1);
-        g_free (ret_string);
-        ret_string = g_strjoinv ("&lt;", strings);
-        g_strfreev (strings);
-    }
-    if (g_strrstr (ret_string, ">") != NULL)
-    {
-        strings = g_strsplit (ret_string, ">", -1);
-        g_free (ret_string);
-        ret_string = g_strjoinv ("&gt;", strings);
-        g_strfreev (strings);
-    }
-    if (g_strrstr (ret_string, "\"") != NULL)
-    {
-        strings = g_strsplit (ret_string, "\"", -1);
-        g_free (ret_string);
-        ret_string = g_strjoinv ("&quot;", strings);
-        g_strfreev (strings);
-    }
-    if (g_strrstr (ret_string, "'") != NULL)
-    {
-        strings = g_strsplit (ret_string, "'", -1);
-        g_free (ret_string);
-        ret_string = g_strjoinv ("&apos;", strings);
-        g_strfreev (strings);
-    }
-    return ret_string;
+static gchar *
+make_markup (GtkTreeModel *model, GtkTreeIter *iter,
+             const GNCMainSummary *summary,
+             gint label_col, gint value_col, gint neg_col)
+{
+    gchar *label, *value;
+    gboolean neg;
+    gtk_tree_model_get (model, iter, label_col, &label, value_col, &value, neg_col, &neg,
+                        -1);
+    gchar* markup = summary->show_negative_color && neg
+        ? g_markup_printf_escaped ("%s <span foreground='%s'>%s</span>",
+                                   label, summary->negative_color, value)
+        : g_markup_printf_escaped ("%s %s", label, value);
+    g_free (label);
+    g_free (value);
+    return markup;
 }
 
 static void
@@ -547,8 +521,6 @@ cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model
                           gpointer user_data)
 {
     GNCMainSummary * summary = user_data;
-    gchar *type, *assets, *assets_val, *profits, *profits_val;
-    gboolean assets_neg, profits_neg;
     gint viewcol;
 
     viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "view_column"));
@@ -558,49 +530,31 @@ cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model
     else
         g_object_set (cell, "xalign", 0.5, NULL);
 
-    gtk_tree_model_get (GTK_TREE_MODEL (tree_model), iter,
-                            COLUMN_MNEMONIC_TYPE, &type,
-                            COLUMN_ASSETS, &assets,
-                            COLUMN_ASSETS_VALUE, &assets_val,
-                            COLUMN_PROFITS, &profits,
-                            COLUMN_PROFITS_VALUE, &profits_val,
-                            COLUMN_ASSETS_NEG, &assets_neg,
-                            COLUMN_PROFITS_NEG, &profits_neg, -1);
-
     if (viewcol == 0)
+    {
+        gchar *type;
+        gtk_tree_model_get (GTK_TREE_MODEL (tree_model), iter,
+                            COLUMN_MNEMONIC_TYPE, &type,
+                            -1);
         g_object_set (cell, "text", type, NULL);
+        g_free (type);
+    }
 
     if (viewcol == 2)
     {
-        gchar *a_string, *checked_string = check_string_for_markup (assets_val);
-        if ((summary->show_negative_color == TRUE) && (assets_neg == TRUE))
-            a_string = g_strconcat (assets, " <span foreground='", summary->negative_color, "'>", checked_string, "</span>", NULL);
-        else
-            a_string = g_strconcat (assets, " ", checked_string, NULL);
-
-        g_object_set (cell, "markup", a_string, NULL);
-        g_free (a_string);
-        g_free (checked_string);
+        gchar *markup = make_markup (tree_model, iter, summary,
+                                     COLUMN_ASSETS, COLUMN_ASSETS_VALUE, COLUMN_ASSETS_NEG);
+        g_object_set (cell, "markup", markup, NULL);
+        g_free (markup);
     }
 
     if (viewcol == 4)
     {
-        gchar *p_string, *checked_string = check_string_for_markup (profits_val);
-        if ((summary->show_negative_color == TRUE) && (profits_neg == TRUE))
-            p_string = g_strconcat (profits, " <span foreground='", summary->negative_color, "'>", checked_string, "</span>", NULL);
-        else
-            p_string = g_strconcat (profits, " ", checked_string, NULL);
-
-        g_object_set (cell, "markup", p_string, NULL);
-        g_free (p_string);
-        g_free (checked_string);
+        gchar *markup = make_markup (tree_model, iter, summary,
+                                     COLUMN_PROFITS, COLUMN_PROFITS_VALUE, COLUMN_PROFITS_NEG);
+        g_object_set (cell, "markup", markup, NULL);
+        g_free (markup);
     }
-
-    g_free (type);
-    g_free (assets);
-    g_free (assets_val);
-    g_free (profits);
-    g_free (profits_val);
 }
 
 static void

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="bi_import_dialog">
@@ -371,7 +371,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonOpenAll">
-                    <property name="label" translatable="yes">Open imported documents in tabs</property>
+                    <property name="label" translatable="yes">Open imported business items in tabs</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -389,7 +389,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonOpenNotPosted">
-                    <property name="label" translatable="yes">Open not yet posted documents in tabs</property>
+                    <property name="label" translatable="yes">Open not yet posted business items in tabs</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -407,7 +407,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonOpenNone">
-                    <property name="label" translatable="yes">Don't open imported documents in tabs</property>
+                    <property name="label" translatable="yes">Don't open imported business items in tabs</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>

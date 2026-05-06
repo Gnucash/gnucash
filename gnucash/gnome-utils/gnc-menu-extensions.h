@@ -37,6 +37,7 @@ typedef struct _ExtensionInfo
     SCM extension;
 
     gchar *action_label;
+    gchar *action_label_original;
     gchar *action_name;
     gchar *action_tooltip;
 

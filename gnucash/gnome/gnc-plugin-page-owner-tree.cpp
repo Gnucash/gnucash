@@ -130,6 +130,7 @@ static void gnc_plugin_page_owner_tree_cmd_owners_report (GSimpleAction *simple,
 static void gnc_plugin_page_owner_tree_cmd_owner_report (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_owner_tree_cmd_process_payment (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_owner_tree_cmd_edit_tax (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_owner_tree_cmd_search_invoices (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
 
@@ -159,6 +160,7 @@ static GActionEntry gnc_plugin_page_owner_tree_actions [] =
     { "OTCustomerReportAction", gnc_plugin_page_owner_tree_cmd_owner_report, NULL, NULL, NULL },
     { "OTEmployeeReportAction", gnc_plugin_page_owner_tree_cmd_owner_report, NULL, NULL, NULL },
     { "OTProcessPaymentAction", gnc_plugin_page_owner_tree_cmd_process_payment, NULL, NULL, NULL },
+    { "OTSearchInvoicesAction", gnc_plugin_page_owner_tree_cmd_search_invoices, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS(gnc_plugin_page_owner_tree_actions);
@@ -1007,6 +1009,27 @@ gnc_plugin_page_owner_tree_cmd_edit_owner (GSimpleAction *simple,
 
     LEAVE(" ");
 }
+
+static void
+gnc_plugin_page_owner_tree_cmd_search_invoices (GSimpleAction *simple,
+                                           GVariant *parameter,
+                                           gpointer user_data)
+
+{
+    auto page = GNC_PLUGIN_PAGE_OWNER_TREE (user_data);
+    GtkWindow *parent;
+    GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
+    if (NULL == owner) return;
+
+    ENTER("action %p, page %p", simple, page);
+
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+
+    gnc_invoice_search (parent, NULL, owner, gnc_get_current_book ());
+
+    LEAVE(" ");
+}
+
 
 #if 0 /* Disabled due to crash */
 static void

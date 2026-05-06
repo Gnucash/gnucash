@@ -45,6 +45,8 @@
 
 #include <cinttypes>
 #include <unicode/calendar.h>
+#include "unicode/dtitvfmt.h"
+#include "unicode/smpdtfmt.h"
 
 #include "gnc-date.h"
 #include "gnc-date-p.h"
@@ -239,7 +241,7 @@ gnc_timegm (struct tm* time)
         *time = static_cast<struct tm>(gncdt);
         time->tm_sec -= gncdt.offset();
         normalize_struct_tm(time);
-#ifdef HAVE_STRUcT_TM_GMTOFF
+#ifdef HAVE_STRUCT_TM_GMTOFF
         time->tm_gmtoff = 0;
 #endif
         return static_cast<time64>(gncdt) - gncdt.offset();
@@ -407,7 +409,7 @@ time64CanonicalDayTime (time64 t)
     return gnc_mktime (&tm);
 }
 
-/* NB: month is 1-12, year is 0001 - 9999. */
+/* NB: month is 0-11, year is 0001 - 9999. */
 int gnc_date_get_last_mday (int month, int year)
 {
     static int last_day_of_month[12] =
@@ -611,6 +613,71 @@ qof_print_date (time64 t)
     memset (buff, 0, sizeof (buff));
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
     return g_strdup (buff);
+}
+
+static icu::DateIntervalFormat*
+get_icu_date_interval_formatter ()
+{
+    static std::unique_ptr<icu::DateIntervalFormat> difmt;
+    if (!difmt)
+    {
+        auto locale = icu::Locale::getDefault();
+        UErrorCode status = U_ZERO_ERROR;
+        difmt.reset(icu::DateIntervalFormat::createInstance(UDAT_YEAR_NUM_MONTH_DAY, locale, status));
+        if (U_FAILURE(status))
+        {
+            PWARN ("icu::DateIntervalFormat::createInstance error %d", status);
+            return nullptr;
+        }
+    }
+    return difmt.get();
+}
+
+static gchar*
+icu_date_interval_format (time64 from_date, time64 to_date)
+{
+    auto difmt = get_icu_date_interval_formatter();
+    if (!difmt)
+        return nullptr;
+
+    if (from_date > to_date)
+        std::swap(from_date, to_date);
+
+    icu::DateInterval interval (from_date * 1000.0, to_date * 1000.0);
+    icu::UnicodeString result;
+    icu::FieldPosition fp;
+    UErrorCode status = U_ZERO_ERROR;
+    difmt->format (&interval, result, fp, status);
+    if (U_FAILURE(status))
+    {
+        PWARN("Error formatting interval: %d", status);
+        return nullptr;
+    }
+
+    std::string interval_string;
+    result.toUTF8String(interval_string);
+
+    return g_strdup (interval_string.c_str());
+}
+
+gchar*
+gnc_date_interval_format (time64 from_date, time64 to_date)
+{
+    gchar* rv = nullptr;
+
+    if (qof_date_format_get() == QOF_DATE_FORMAT_LOCALE)
+        rv = icu_date_interval_format (from_date, to_date);
+
+    // not using locale, or icu failure
+    if (!rv)
+    {
+        gchar from_buff[MAX_DATE_LENGTH+1], to_buff[MAX_DATE_LENGTH+1];
+        qof_print_date_buff (from_buff, MAX_DATE_LENGTH, from_date);
+        qof_print_date_buff (to_buff, MAX_DATE_LENGTH, to_date);
+        rv = g_strdup_printf (gettext("%s to %s"), from_buff, to_buff);
+    }
+
+    return rv;
 }
 
 /* ============================================================== */

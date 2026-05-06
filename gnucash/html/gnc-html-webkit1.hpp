@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-webkit.h -- display html with gnc special tags          *
+ * gnc-html-webkit.hpp -- display html with gnc special tags          *
  * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -35,14 +35,9 @@ G_BEGIN_DECLS
 #define GNC_IS_HTML_WEBKIT_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE((k), GNC_TYPE_HTML_WEBKIT))
 #define GNC_HTML_WEBKIT_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitClass))
 
-typedef struct _GncHtmlWebkit GncHtmlWebkit;
-typedef struct _GncHtmlWebkitClass GncHtmlWebkitClass;
-typedef struct _GncHtmlWebkitPrivate GncHtmlWebkitPrivate;
+struct GncHtmlWebkitPrivate;
 
-/** Key for saving the PDF-export directory in the print settings */
-#define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
-
-struct _GncHtmlWebkit
+struct GncHtmlWebkit
 {
     GncHtml parent_instance;
 
@@ -50,15 +45,14 @@ struct _GncHtmlWebkit
     GncHtmlWebkitPrivate* priv;
 };
 
-struct _GncHtmlWebkitClass
+struct GncHtmlWebkitClass
 {
     GncHtmlClass parent_class;
 };
 
 GType gnc_html_webkit_get_type( void );
-
 GncHtml* gnc_html_webkit_new( void );
 
 G_END_DECLS
 
-#endif
+#endif // GNC_HTML_WEBKIT_H

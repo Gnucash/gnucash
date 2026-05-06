@@ -342,13 +342,12 @@ gsltma_proxy_sort_column_changed (GtkTreeSortable *sortable, gpointer user_data)
     g_signal_emit_by_name (user_data, "sort-column-changed");
 }
 
-static gint
-_name_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+static gint 
+_sort_iterators_to_instances (gpointer *user_data, GtkTreeIter *a, GtkTreeIter *b, 
+        gint (*instances_comparator)(GncSxInstances *a, GncSxInstances *b))
 {
-    gint rtn;
     GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
     GncSxInstances *a_inst, *b_inst;
-    gchar *a_caseless, *b_caseless;
 
     a_inst = gsltma_get_sx_instances_from_orig_iter (adapter, a);
     b_inst = gsltma_get_sx_instances_from_orig_iter (adapter, b);
@@ -357,9 +356,20 @@ _name_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer 
     if (a_inst == NULL) return 1;
     if (b_inst == NULL) return -1;
 
+    return instances_comparator (a_inst, b_inst);
+}
+
+static gint
+_name_instances_compare (GncSxInstances *a_inst, GncSxInstances *b_inst)
+{
+    gchar *a_caseless, *b_caseless;
+    gint rtn;
+
     a_caseless = g_utf8_casefold (xaccSchedXactionGetName (a_inst->sx), -1);
     b_caseless = g_utf8_casefold (xaccSchedXactionGetName (b_inst->sx), -1);
+
     rtn = g_strcmp0 (a_caseless, b_caseless);
+
     g_free (a_caseless);
     g_free (b_caseless);
 
@@ -367,83 +377,100 @@ _name_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer 
 }
 
 static gint
+_name_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+    return _sort_iterators_to_instances (user_data, a, b, _name_instances_compare);
+}
+
+static gint
+_freq_instances_compare (GncSxInstances *a_inst, GncSxInstances *b_inst)
+{
+    gint rtn;
+
+    rtn = recurrenceListCmp (gnc_sx_get_schedule (a_inst->sx), gnc_sx_get_schedule (b_inst->sx));
+
+    return rtn ? rtn : _name_instances_compare (a_inst, b_inst);
+}
+
+static gint
 _freq_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
 {
-    GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-    GncSxInstances *a_inst, *b_inst;
-
-    a_inst = gsltma_get_sx_instances_from_orig_iter (adapter, a);
-    b_inst = gsltma_get_sx_instances_from_orig_iter (adapter, b);
-
-    if (a_inst == NULL && b_inst == NULL) return 0;
-    if (a_inst == NULL) return 1;
-    if (b_inst == NULL) return -1;
-
-    return recurrenceListCmp (gnc_sx_get_schedule (a_inst->sx), gnc_sx_get_schedule (b_inst->sx));
+    return _sort_iterators_to_instances (user_data, a, b, _freq_instances_compare);
 }
 
 static gint
 _safe_invalidable_date_compare (const GDate *a, const GDate *b)
 {
-    if (!g_date_valid (a) && !g_date_valid (b))
-    {
-        return 0;
-    }
-    if (!g_date_valid (a))
-    {
-        return 1;
-    }
-    if (!g_date_valid (b))
-    {
-        return -1;
-    }
+    gboolean a_valid, b_valid;
+
+    a_valid = g_date_valid (a);
+    b_valid = g_date_valid (b);
+
+    if (!a_valid && !b_valid) return 0;
+    if (!a_valid) return 1;
+    if (!b_valid) return -1;
+
     return g_date_compare (a, b);
+}
+
+static gint
+_last_occur_instances_compare (GncSxInstances *a_inst, GncSxInstances *b_inst)
+{
+    gint rtn;
+
+    rtn = _safe_invalidable_date_compare (xaccSchedXactionGetLastOccurDate (a_inst->sx),
+                                          xaccSchedXactionGetLastOccurDate (b_inst->sx));
+
+    return rtn ? rtn : _name_instances_compare (a_inst, b_inst);
 }
 
 static gint
 _last_occur_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
 {
-    GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-    GncSxInstances *a_inst, *b_inst;
+    return _sort_iterators_to_instances (user_data, a, b, _last_occur_instances_compare);
+}
 
-    a_inst = gsltma_get_sx_instances_from_orig_iter (adapter, a);
-    b_inst = gsltma_get_sx_instances_from_orig_iter (adapter, b);
+static gint
+_next_occur_instances_compare (GncSxInstances *a_inst, GncSxInstances *b_inst)
+{
+    gint rtn;
 
-    return _safe_invalidable_date_compare (xaccSchedXactionGetLastOccurDate (a_inst->sx),
-                                           xaccSchedXactionGetLastOccurDate (b_inst->sx));
+    rtn = _safe_invalidable_date_compare (&a_inst->next_instance_date,
+                                          &b_inst->next_instance_date);
+
+    return rtn ? rtn : _name_instances_compare (a_inst, b_inst);
 }
 
 static gint
 _next_occur_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
 {
-    GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-    GncSxInstances *a_inst, *b_inst;
+    return _sort_iterators_to_instances (user_data, a, b, _next_occur_instances_compare);
+}
 
-    a_inst = gsltma_get_sx_instances_from_orig_iter (adapter, a);
-    b_inst = gsltma_get_sx_instances_from_orig_iter (adapter, b);
+static gint
+_enabled_instances_compare (GncSxInstances *a_inst, GncSxInstances *b_inst)
+{
+    gboolean a_enabled, b_enabled;
 
-    return _safe_invalidable_date_compare (&a_inst->next_instance_date,
-                                           &b_inst->next_instance_date);
+    a_enabled = xaccSchedXactionGetEnabled (a_inst->sx);
+    b_enabled = xaccSchedXactionGetEnabled (b_inst->sx);
+
+    if (a_enabled && !b_enabled) return 1;
+    if (!a_enabled && b_enabled) return -1;
+
+    return _name_instances_compare (a_inst, b_inst);
 }
 
 static gint
 _enabled_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
 {
-    GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-    GncSxInstances *a_inst, *b_inst;
-
-    a_inst = gsltma_get_sx_instances_from_orig_iter (adapter, a);
-    b_inst = gsltma_get_sx_instances_from_orig_iter (adapter, b);
-
-    if (xaccSchedXactionGetEnabled (a_inst->sx) && !xaccSchedXactionGetEnabled (b_inst->sx)) return 1;
-    if (!xaccSchedXactionGetEnabled (a_inst->sx) && xaccSchedXactionGetEnabled (b_inst->sx)) return -1;
-    return 0;
+    return _sort_iterators_to_instances (user_data, a, b, _enabled_instances_compare);
 }
 
 static void
 gnc_sx_list_tree_model_adapter_init (GncSxListTreeModelAdapter *adapter)
 {
-  adapter->orig = gtk_tree_store_new (6, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING);
+    adapter->orig = gtk_tree_store_new (6, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING);
     adapter->real = GTK_TREE_MODEL_SORT(gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL(adapter->orig)));
 
     // setup sorting

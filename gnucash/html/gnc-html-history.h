@@ -28,8 +28,12 @@ typedef struct _gnc_html_history gnc_html_history;
 
 #include "gnc-html.h"
 
+typedef void (* gnc_html_history_destroy_cb)(gnc_html_history_node * n,
+        gpointer user_data);
+
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 struct _gnc_html_history_node
@@ -39,35 +43,28 @@ struct _gnc_html_history_node
     gchar   * label;
 };
 
-typedef void (* gnc_html_history_destroy_cb)(gnc_html_history_node * n,
-        gpointer user_data);
-
-gnc_html_history      * gnc_html_history_new(void);
-void                    gnc_html_history_destroy(gnc_html_history * hist);
+gnc_html_history      * gnc_html_history_new(void) NOEXCEPT;
+void                    gnc_html_history_destroy(gnc_html_history * hist) NOEXCEPT;
 
 void                    gnc_html_history_append(gnc_html_history * h,
-        gnc_html_history_node * n);
-gnc_html_history_node * gnc_html_history_get_current(gnc_html_history * h);
-gnc_html_history_node * gnc_html_history_forward(gnc_html_history * h);
-gnc_html_history_node * gnc_html_history_back(gnc_html_history * h);
-int                     gnc_html_history_forward_p(gnc_html_history * h);
-int                     gnc_html_history_back_p(gnc_html_history * h);
+        gnc_html_history_node * n) NOEXCEPT;
+gnc_html_history_node * gnc_html_history_get_current(gnc_html_history * h) NOEXCEPT;
+gnc_html_history_node * gnc_html_history_forward(gnc_html_history * h) NOEXCEPT;
+gnc_html_history_node * gnc_html_history_back(gnc_html_history * h) NOEXCEPT;
+int                     gnc_html_history_forward_p(gnc_html_history * h) NOEXCEPT;
+int                     gnc_html_history_back_p(gnc_html_history * h) NOEXCEPT;
 void  gnc_html_history_set_node_destroy_cb(gnc_html_history * h,
         gnc_html_history_destroy_cb cb,
-        gpointer cb_data);
+        gpointer cb_data) NOEXCEPT;
 
 gnc_html_history_node * gnc_html_history_node_new(URLType type,
         const gchar * location,
-        const gchar * label);
+        const gchar *label) NOEXCEPT;
 
-void                    gnc_html_history_node_destroy(gnc_html_history_node *
-        node);
+void gnc_html_history_node_destroy(gnc_html_history_node *node) NOEXCEPT;
 
 #ifdef __cplusplus
 }
 #endif
 
-
-#endif
-
-
+#endif // GNC_HTML_HISTORY_H

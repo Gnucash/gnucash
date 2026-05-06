@@ -325,16 +325,19 @@ join_ab_strings_cb (const gchar *str, gpointer user_data)
     if (!str || !*str)
         return NULL;
 
-    tmp = g_strdup (str);
+    tmp = g_utf8_normalize (str, -1, G_NORMALIZE_NFC);
     g_strstrip (tmp);
     gnc_utf8_strip_invalid_and_controls (tmp);
 
     if (*acc)
     {
-        gchar *join = g_strjoin (" ", *acc, tmp, (gchar*) NULL);
-        g_free (*acc);
+        if (!strstr (*acc, tmp))
+        {
+            gchar *join = g_strjoin (" ", *acc, tmp, (gchar*) NULL);
+            g_free (*acc);
+            *acc = join;
+        }
         g_free (tmp);
-        *acc = join;
     }
     else
     {
@@ -379,7 +382,7 @@ gnc_ab_get_purpose (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
          * hence we put this text in front of the purpose. */
         ab_transactionText = AB_Transaction_GetTransactionText (ab_trans);
         if (ab_transactionText && *ab_transactionText)
-            gnc_description = g_strdup (ab_transactionText);
+            gnc_description = g_utf8_normalize (ab_transactionText, -1, G_NORMALIZE_NFC);
     }
 
     ab_purpose = AB_Transaction_GetPurposeAsStringList (ab_trans);

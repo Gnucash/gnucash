@@ -487,12 +487,11 @@ get_user_data_dir ()
     wchar_t path[MAX_PATH+1];
     HRESULT hr;
     LPITEMIDLIST pidl = NULL;
-    BOOL b;
 
     hr = SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
     if (hr == S_OK)
     {
-        b = SHGetPathFromIDListW (pidl, path);
+        [[maybe_unused]] auto b = SHGetPathFromIDListW (pidl, path);
         CoTaskMemFree (pidl);
     }
     bfs::path retval(path, cvt);

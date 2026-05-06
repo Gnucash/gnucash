@@ -37,6 +37,8 @@
 #endif
 #include <gdk/gdkkeysyms.h>
 
+#include <algorithm>
+
 #include "Account.hpp"
 #include "Scrub.h"
 #include "Scrub3.h"
@@ -44,6 +46,7 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
+#include "gnc-autoclear.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
@@ -82,9 +85,13 @@ struct _RecnWindow
 
     GtkBuilder *builder;         /* The builder object */
     GSimpleActionGroup *simple_action_group; /* The action group for the window */
+    GtkWidget *autoclear_button;
     GtkAccelGroup *accel_group;
 
     GncPluginPage *page;
+
+    SplitsVec autoclear_splits;
+    SplitsVec initially_cleared_splits;
 
     GtkWidget *starting;         /* The starting balance                 */
     GtkWidget *ending;           /* The ending balance                   */
@@ -137,6 +144,7 @@ static void   recn_destroy_cb (GtkWidget *w, gpointer data);
 static void   recn_cancel (RecnWindow *recnData);
 static gboolean recn_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data);
 static gboolean recn_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data);
+static void   recnAutoClearCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnFinishCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnPostponeCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnCancelCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -193,6 +201,74 @@ has_account_different_commodities(const Account *account)
     return result != NULL;
 }
 
+static const char*
+get_autoclear_icon (GError* error)
+{
+    static std::unordered_map<gint,const char*> icon_names =
+    {
+        { Autoclear::ABORT_NONE, "media-playback-start" },
+        { Autoclear::ABORT_NOP, "media-playback-stop" },
+        { Autoclear::ABORT_MULTI, "dialog-information" },
+        { Autoclear::ABORT_TIMEOUT, "dialog-error" },
+        { Autoclear::ABORT_UNREACHABLE, "dialog-error" },
+    };
+    auto it = icon_names.find (error ? error->code : Autoclear::ABORT_NONE);
+    return it == icon_names.end() ? "dialog-information" : it->second;
+}
+
+#define GNC_PREF_ENABLE_AUTOCLEAR "enable-autoclear-in-reconcile"
+
+static void
+calculate_autoclear (RecnWindow *recnData)
+{
+    g_return_if_fail (recnData);
+
+    bool enabled = gnc_prefs_get_bool (GNC_PREFS_GROUP_RECONCILE, GNC_PREF_ENABLE_AUTOCLEAR);
+    auto action = g_action_map_lookup_action (G_ACTION_MAP(recnData->simple_action_group),
+                                              "RecnAutoClearAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), enabled);
+    gtk_widget_set_visible (recnData->autoclear_button, enabled);
+    if (!enabled)
+        return;
+
+    GError* error = nullptr;
+    Account* acct = xaccAccountLookup (&recnData->account, gnc_get_current_book ());
+
+    static const unsigned int MAX_AUTOCLEAR_SECONDS = 1;
+
+    GList *splits_to_clear = gnc_account_get_autoclear_splits
+        (acct, recnData->new_ending, recnData->statement_date, &error, MAX_AUTOCLEAR_SECONDS);
+
+    gtk_widget_set_sensitive (recnData->autoclear_button, error == nullptr);
+
+    gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (recnData->autoclear_button),
+                                   get_autoclear_icon (error));
+
+    recnData->autoclear_splits = recnData->initially_cleared_splits;
+    for (auto n = splits_to_clear; n; n = n->next)
+        recnData->autoclear_splits.push_back (GNC_SPLIT (n->data));
+
+    if (error)
+    {
+        gtk_widget_set_tooltip_text (recnData->autoclear_button, _(error->message));
+        g_error_free (error);
+        return;
+    }
+
+    auto num_splits = g_list_length (splits_to_clear);
+    char date_buff[MAX_DATE_LENGTH+1];
+    qof_print_date_buff (date_buff, MAX_DATE_LENGTH, recnData->statement_date);
+    char* tooltip = g_strdup_printf
+        (ngettext("Automatically select %u transaction up to %s that clears to %s",
+                  "Automatically select %u transactions up to %s that clear to %s",
+                  num_splits),
+         num_splits, date_buff,
+         xaccPrintAmount (recnData->new_ending, gnc_account_print_info (acct, true)));
+    gtk_widget_set_tooltip_text (recnData->autoclear_button, tooltip);
+
+    g_free (tooltip);
+    g_list_free (splits_to_clear);
+}
 
 /********************************************************************\
  * recnRefresh                                                      *
@@ -304,6 +380,8 @@ recnRecalculateBalance (RecnWindow *recnData)
     action = g_action_map_lookup_action (G_ACTION_MAP(recnData->simple_action_group),
                                          "TransBalanceAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !gnc_numeric_zero_p (diff));
+
+    calculate_autoclear (recnData);
 
     return diff;
 }
@@ -1770,6 +1848,7 @@ static GActionEntry recWindow_actions_entries [] =
     { "RecnFinishAction", recnFinishCB, NULL, NULL, NULL },
     { "RecnPostponeAction", recnPostponeCB, NULL, NULL, NULL },
     { "RecnCancelAction", recnCancelCB, NULL, NULL, NULL },
+    { "RecnAutoClearAction", recnAutoClearCB, NULL, NULL, NULL },
 
     { "AccountOpenAccountAction", gnc_recn_open_cb, NULL, NULL, NULL },
     { "AccountEditAccountAction", gnc_recn_edit_account_cb, NULL, NULL, NULL },
@@ -1845,6 +1924,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     recnData->statement_date = statement_date;
     recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     recnData->delete_refresh = FALSE;
+    new (&recnData->autoclear_splits) SplitsVec();
+    new (&recnData->initially_cleared_splits) SplitsVec();
 
     gnc_recn_set_window_name(recnData);
 
@@ -1859,6 +1940,13 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
     gtk_widget_show(dock);
     gtk_box_pack_start(GTK_BOX (vbox), dock, FALSE, TRUE, 0);
+
+    auto init_cleared = [&recnData](Split* s)
+    {
+        if (xaccSplitGetReconcile (s) == CREC)
+            recnData->initially_cleared_splits.push_back (s);
+    };
+    gnc_account_foreach_split_until_date (account, statement_date, init_cleared);
 
     {
         GtkToolbar *tool_bar;
@@ -1882,6 +1970,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             g_free (recnData);
             return NULL;
         }
+
+        recnData->autoclear_button = GTK_WIDGET(gtk_builder_get_object(recnData->builder, "autoclear_button"));
 
         menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
         menu_bar = gtk_menu_bar_new_from_model (menu_model);
@@ -2200,6 +2290,9 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
     if (recnData->accel_group)
         g_object_unref(recnData->accel_group);
 
+    recnData->autoclear_splits.~SplitsVec();
+    recnData->initially_cleared_splits.~SplitsVec();
+
     //Disable the actions, the handlers try to access recnData
     for (gint i = 0; i < num_actions; i++)
     {
@@ -2423,4 +2516,38 @@ recnCancelCB (GSimpleAction *simple,
 {
     auto recnData = static_cast<RecnWindow*>(user_data);
     recn_cancel(recnData);
+}
+
+/********************************************************************\
+ * recnAutoClearCB                                                  *
+ *   handles the auto-clear button click                            *
+ *                                                                  *
+ * Args:   simple     - the action                                  *
+ *         parameter  - unused                                      *
+ *         user_data  - the reconcile window data                   *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+recnAutoClearCB (GSimpleAction *simple,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+    auto recnData = static_cast<RecnWindow*>(user_data);
+
+    if (recnData->autoclear_splits.empty())
+        return;
+
+    gnc_suspend_gui_refresh ();
+    gnc_reconcile_view_unclear_all (GNC_RECONCILE_VIEW(recnData->debit));
+    gnc_reconcile_view_unclear_all (GNC_RECONCILE_VIEW(recnData->credit));
+    std::for_each (recnData->autoclear_splits.begin(),
+                   recnData->autoclear_splits.end(),
+                   [recnData](Split* split)
+                   {
+                       auto view = gnc_numeric_positive_p (xaccSplitGetAmount (split))
+                           ? recnData->debit : recnData->credit;
+                       gnc_reconcile_view_set_cleared (GNC_RECONCILE_VIEW(view), split);
+                   });
+    recnRefresh (recnData);
+    gnc_resume_gui_refresh ();
 }

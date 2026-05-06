@@ -1,0 +1,1956 @@
+2026-01-01 Christopher Lam 
+
+	* Merge branch 'autoclear' into stable
+
+2025-12-26 Christopher Lam 
+
+	* [window-reconcile.cpp] only enable autoclear if preference set
+
+2025-12-28 John Ralls 
+
+	* GncDateTime: New exceptions and a 32-bit time_t problem.
+
+2025-12-28 John Ralls 
+
+	* Bug 799713 - Account Editor changes account color to gray when default selected.
+
+2025-12-17 Christopher Lam 
+
+	* [window-reconcile.cpp] add autoclear toolbar button in reconcile ui
+
+2025-12-22 Christopher Lam 
+
+	* [reconcile-view.c] add helper fns for unclear/clearing splits
+
+2025-12-23 Christopher Lam 
+
+	* [gnc-autoclear.cpp] gettext for abort messages
+
+2025-12-19 Christopher Lam 
+
+	* [gnc-autoclear.cpp] upgrade GError to return code too
+
+2025-12-21 Christopher Lam 
+
+	* [io-gncxml-v2.cpp] xmlGetProp must be xmlFreed
+
+2025-12-20 John Ralls 
+
+	* Fix Asan UB complaint about int64_t alignment.
+
+2025-12-20 John Ralls 
+
+	* Release GnuCash 5.14 (tag: 5.14)
+
+2025-12-20 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-12-20 Anastasios Ikonomou 
+
+	* Translation update  by Anastasios Ikonomou <anastasios.ikonomou@gmail.com> using Weblate
+
+2025-12-20 Milo Ivir 
+
+	* Translation update  by Milo Ivir <mail@milotype.de> using Weblate
+
+2025-12-20 Christian Wehling 
+
+	* Translation update  by Christian Wehling <christian.wehling@web.de> using Weblate
+
+2025-12-20 Pedro Albuquerque 
+
+	* Translation update  by Pedro Albuquerque <pmra@protonmail.com> using Weblate
+
+2025-12-20 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-12-20 Yuri Chornoivan 
+
+	* Translation update  by Yuri Chornoivan <yurchor@ukr.net> using Weblate
+
+2025-12-20 Arve Eriksson 
+
+	* Translation update  by Arve Eriksson <031299870@telia.com> using Weblate
+
+2025-12-19 Christopher Lam 
+
+	* Merge flywire branch 'Subtotal' into stable
+
+2025-12-18 Christopher Lam 
+
+	* [sixtp-dom-parsers.cpp] g_date_free GDate leak
+
+2025-12-10 Robert Fewell 
+
+	* Bug 799701 - SX Editor error When Frequency=Once
+
+2025-12-16 John Ralls 
+
+	* gncTaxTable: chain up to the correct parent function.
+
+2025-12-16 Robert Fewell 
+
+	* Additional change to recent About dialog changes
+
+2025-12-15 John Ralls 
+
+	* Merge Bruce Schuck's 'USBonds' of https://github.com/bpschuck/gnucash into stable
+
+2025-12-14 Bruce Schuck 
+
+	* Added US Bonds (usbonds) to gnc-commodity.cpp New Finance::Quote module to get prices for series E, EE, or I bonds
+
+2025-12-14 John Ralls 
+
+	* Bug 799504 - Description of CAMT 053.001.02 has duplicate text
+
+2025-12-14 John Ralls 
+
+	* Update translations with new gnucash.pot for upcoming 5.14 release.
+
+2025-12-14 John Ralls 
+
+	* Merge latest translations from weblate.
+
+2025-12-14 Marko Bojović 
+
+	* Translation update  by Marko Bojović <bojovicmarko@outlook.com> using Weblate
+
+2025-12-14 acemk 
+
+	* Translation update  by acemk <ace.dimitrievski@gmail.com> using Weblate
+
+2025-12-14 Franko 
+
+	* Translation update  by Franko <web.90947@t.sc-ha.net> using Weblate
+
+2025-12-14 Gurkan Bebek 
+
+	* Translation update  by Gurkan Bebek <gurkanbebek@gmail.com> using Weblate
+
+2025-12-14 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-12-13 John Ralls 
+
+	* Force options text views to be at least 400px wide.
+
+2025-12-13 Christopher Lam 
+
+	* [gnc-main-window.cpp] addendum to ed03e61dab cancel on click+drag
+
+2025-12-08 Christopher Lam 
+
+	* [backend/xml] dom_tree_to_text returns std::optional<std::string>
+
+2025-12-09 Christopher Lam 
+
+	* [backend/xml] use apply_xmlnode_text
+
+2025-12-09 Christopher Lam 
+
+	* [sixtp-dom-parsers.h] add templated functions for node text
+
+2025-12-13 Christopher Lam 
+
+	* Revert "[window-reconcile.cpp] offer auto-clear if combination found"
+
+2025-12-10 flywire 
+
+	* Use trep-engine lowest shown grouping for detail
+
+2023-05-03 flywire 
+
+	* Only show Subtotal Prefix with Transactions
+
+2025-11-28 Robert Fewell 
+
+	* Add CSS to make the About dialog text view background the same as the rest of the dialog. This can be over ridden by the users own CSS file.
+
+2025-11-24 Robert Fewell 
+
+	* Add ability to copy About dialog configuration settings to the clipboard so they can all be pasted in one go.
+
+2025-12-09 Christopher Lam 
+
+	* [gnc-euro.cpp] fix typo for bulgarian lev rate
+
+2025-12-05 Christopher Lam 
+
+	* [guid.cpp] GncGUID* avoids temporary gnc::GUID, and better hash
+
+2025-12-08 John Ralls 
+
+	* Bulgarian Lev (BGN) replaced by Euro 1 Jan 2026.
+
+2025-12-08 Christopher Lam 
+
+	* [sixtp-dom-parsers.cpp] dom_tree_to_gdate: GDate on the stack
+
+2025-12-08 Christopher Lam 
+
+	* [sixtp-utils] string_to_num upgraded to use string_view
+
+2025-12-07 John Ralls 
+
+	* Bug 799699 - Inconsistent column headers in scheduled transaction editor
+
+2025-12-06 John Ralls 
+
+	* SRFI-64 test-equal no longer considers exceptions equal to #f.
+
+2025-12-06 John Ralls 
+
+	* Fix missing or incorrect expected exception test failures.
+
+2025-12-06 John Ralls 
+
+	* Show the full test result alist on failure if expected value isn't defined.
+
+2025-12-06 John Ralls 
+
+	* Bug 799702 - build breaks with guile 3.0.11
+
+2025-12-05 Christopher Lam 
+
+	* [backend/xml] fast string setters for acct/trans/split
+
+2025-12-05 Christopher Lam 
+
+	* [sixtp-dom-parsers.cpp] introduce dom_node_to_text for solo text node
+
+2025-12-07 Christopher Lam 
+
+	* [sixtp-dom-parsers.cpp] Remove unnecessary commodity allocation during XML load
+
+2025-12-02 John Ralls 
+
+	* Add a Postponed column to the Scheduled Transactions list.
+
+2025-12-05 Christopher Lam 
+
+	* [backend/xml] dom_tree_to_guid returns std::optional<GncGUID> instead of GncGUID*
+
+2025-12-01 Christopher Lam 
+
+	* [gnc-autoclear.cpp] restore abort explanation message
+
+2025-11-30 Christopher Lam 
+
+	* [guid.cpp] string->guid should disallow 'g' char
+
+2025-11-30 Christopher Lam 
+
+	* [test-gnc-guid.cpp] use EXPECT_THROW
+
+2025-11-30 Christopher Lam 
+
+	* [guid.cpp] fast_string_to_guid: -1<<4 is UB, fix UB
+
+2025-11-30 Christopher Lam 
+
+	* [guid.cpp] string->guid: parse into uuid data, avoids memcpy
+
+2025-11-29 Christopher Lam 
+
+	* [guid.cpp] Specialise guid<->32-byte string
+
+2025-11-28 Christopher Lam 
+
+	* [guid.cpp] fix guid==nullptr comparison retvals
+
+2025-11-28 John Ralls 
+
+	* Merge Christian Wehling's 'improve_strings' into stable.
+
+2025-11-28 John Ralls 
+
+	* Merge Kaligula's 'SX-action-description' into stable.
+
+2025-11-28 John Ralls 
+
+	* Merge latest translations from Weblate into stable.
+
+2025-11-23 Tgol Mgol 
+
+	* Translation update  by Tgol Mgol <tgolmgol@gmail.com> using Weblate
+
+2025-11-23 DGDS 
+
+	* Translation update  by DGDS <dagrinddontstop@users.noreply.hosted.weblate.org> using Weblate
+
+2025-11-23 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-11-26 Christopher Lam 
+
+	* [gnc-pricedb.cpp] plug leak when fiscal_end_date is null
+
+2025-11-23 Christopher Lam 
+
+	* [qofobject.cpp] check col!=nullptr instead of obj
+
+2025-11-22 Christopher Lam 
+
+	* gnc_ui_namespace_picker_ns must be g_freed
+
+2025-11-23 Christopher Lam 
+
+	* [dialog-commodity.cpp] fix indent
+
+2025-11-22 Christopher Lam 
+
+	* [dialog-account.c] plug gdk_rgba_to_string leak
+
+2025-11-22 Christopher Lam 
+
+	* [gnc-plugin-page-register.cpp] plug a GtkWidget* leak
+
+2025-11-22 Christopher Lam 
+
+	* GncPlugins must chain up the parent class in finalize
+
+2025-11-19 Christopher Lam 
+
+	* [account-quickfill.c] free link and node with g_list_delete_link
+
+2025-11-21 John Ralls 
+
+	* Merge Jaime Marquínez Ferrándiz's 'fix-test-userdata-dir-invalid-home' into stable.
+
+2025-11-20 Jaime Marquínez Ferrándiz 
+
+	* test-userdata-dir-invalid-home: Unset XDG_DATA_HOME
+
+2025-11-19 John Ralls 
+
+	* About dialog: Use the environment variable names for user directory labels.
+
+2025-11-19 John Ralls 
+
+	* Make the About dialog path labels (e.g. GNC_BIN) selectable for copying.
+
+2025-11-19 Christopher Lam 
+
+	* [search-param.c] free GSList
+
+2025-11-19 Christopher Lam 
+
+	* [gnucash-sheet.c] plug some leaks
+
+2025-11-19 Christopher Lam 
+
+	* [gnc-date-edit.c] plug some leaks
+
+2025-11-19 Christopher Lam 
+
+	* g_object_unref to plug some leaks
+
+2025-11-16 Christopher Lam 
+
+	* [gnc-autoclear.cpp] prune search if remaining amounts are too small
+
+2025-11-16 Christopher Lam 
+
+	* [test-autoclear] add some more tests
+
+2025-11-09 Christopher Lam 
+
+	* [window-reconcile.cpp] offer auto-clear if combination found
+
+2025-11-06 Christopher Lam 
+
+	* [gnc-autoclear] upgrade - improve Subset Sum Problem
+
+2025-11-13 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-11-04 Adolfo Jayme Barrientos 
+
+	* Translation update  by Adolfo Jayme Barrientos <fitojb@ubuntu.com> using Weblate
+
+2025-11-04 Jesús Martínez 
+
+	* Translation update  by Jesús Martínez <weblate@jandemor.com> using Weblate
+
+2025-11-04 Deleted User 
+
+	* Translation update  by Deleted User <noreply+48943@weblate.org> using Weblate
+
+2025-11-04 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-11-04 தமிழ்நேரம் 
+
+	* Translation update  by தமிழ்நேரம் <tamilneram247@gmail.com> using Weblate
+
+2025-11-04 Olesya_Gerasimenko 
+
+	* Translation update  by Olesya_Gerasimenko <gammaray@basealt.ru> using Weblate
+
+2025-11-04 Ceaus 
+
+	* Translation update  by Ceaus <github@pohw.nl> using Weblate
+
+2025-11-13 John Ralls 
+
+	* Merge John Ralls's 'gnc-home' into stable
+
+2025-11-06 John Ralls 
+
+	* Protect the special environment file prefix variables.
+
+2025-11-11 John Ralls 
+
+	* Merge Richard Cohen's 'replace-deprecated-glib' into stable.
+
+2025-11-09 John Ralls 
+
+	* Merge Richard Cohen's 'fix-bug799159-options-tests' into stable.
+
+2023-03-28 Richard Cohen 
+
+	* Replace deprecated g_binding_get_target, and increase glib version to 2.68
+
+2025-11-09 Richard Cohen 
+
+	* Make a link in the build directory for options.scm
+
+2025-11-09 Christopher Lam 
+
+	* [gnc-ui-balances.h] remove function decl, forgotten in f813f7cd14
+
+2025-11-07 Christopher Lam 
+
+	* [gnc-plugin-page-report] avoid UAF from 058568eab3
+
+2025-11-02 Christopher Lam 
+
+	* [gnc-date.cpp] gnc_g_date_new_today calls gnc_gdate_set_today
+
+2025-11-02 Christopher Lam 
+
+	* [transaction.cpp] xaccTransSetDate has GDate on stack
+
+2025-11-03 Christopher Lam 
+
+	* [gnc-file.c] non-dbi file dialog filters .gnucash .xac files
+
+2025-11-03 Christopher Lam 
+
+	* [gnc-file.c] move datafile filter to gnc-file.c
+
+2025-11-02 Christopher Lam 
+
+	* [transaction.cpp] comparing identical txns returns 0
+
+2025-11-02 Christopher Lam 
+
+	* [account.cpp] comparing identical accts returns 0
+
+2025-11-02 Christopher Lam 
+
+	* [account.cpp] gnc_account_foreach_split forward loops only
+
+2025-11-01 John Ralls 
+
+	* Remove stray debugging print to stdout.
+
+2025-10-30 John Ralls 
+
+	* Merge Sherlock's 'patch-1' into stable.
+
+2025-10-29 Sherlock 
+
+	* Bug 799682 - Unable to "Save As" (or open) a non-xml data file
+
+2025-10-25 John Ralls 
+
+	* Merge Bruce Schuck's 'rm-cmbchina' into stable.
+
+2025-10-25 Bruce Schuck 
+
+	* Removed China Merchants Bank from quote sources. The Finance::Quote module is no longer working and will be removed in the next release.
+
+2025-10-24 Christopher Lam 
+
+	* [gnc-plugin-page-report] plug char* leaks
+
+2025-10-23 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-10-23 Pedro Albuquerque 
+
+	* Translation update  by Pedro Albuquerque <pmra@protonmail.com> using Weblate
+
+2025-10-23 SIB 
+
+	* Translation update  by SIB <shawndu0820@gmail.com> using Weblate
+
+2025-10-23 Frédéric Mergey 
+
+	* Translation update  by Frédéric Mergey <fmergey@yahoo.com> using Weblate
+
+2025-10-23 Allan Olsen 
+
+	* Translation update  by Allan Olsen <allan@hamann-olsen.dk> using Weblate
+
+2025-10-23 தமிழ்நேரம் 
+
+	* Translation update  by தமிழ்நேரம் <tamilneram247@gmail.com> using Weblate
+
+2025-10-23 DGDS 
+
+	* Translation update  by DGDS <dagrinddontstop@users.noreply.hosted.weblate.org> using Weblate
+
+2025-10-23 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-10-23 Andika Triwidada 
+
+	* Translation update  by Andika Triwidada <andika@gmail.com> using Weblate
+
+2025-10-23 John Ralls 
+
+	* Don't try to find boost::system in boost 1.89.0 and later
+
+2025-10-21 Christopher Lam 
+
+	* Merge Chris Lam 'some-char-leaks' #2140 into stable
+
+2025-10-20 Robert Fewell 
+
+	* Merge Oscar Megia's bug-799538 into stable
+
+2025-10-14 Christopher Lam 
+
+	* [qoflog.cpp] plug a gchar* leak
+
+2025-10-14 Christopher Lam 
+
+	* [translog.cpp] use c++ for better cleanup
+
+2025-10-14 Christopher Lam 
+
+	* [import-main-matcher.cpp] plug GtkWidget* and static char* leaks
+
+2025-10-14 Christopher Lam 
+
+	* [gnc-prefs.cpp] plug gchar* leak
+
+2025-10-14 Christopher Lam 
+
+	* [gnc-prefs.cpp] convert to c++
+
+2025-10-12 John Ralls 
+
+	* Merge Dong Lin's 'stable-stale-import-balance' into stable.
+
+2025-10-12 John Ralls 
+
+	* Mostly revert "Bug 799249 - Crash while switch to recently opened file"
+
+2025-10-12 Dong Lin 
+
+	* Fix stale account balances and grand total during transaction import
+
+2025-10-09 John Ralls 
+
+	* Merge Sherlock's 'reset-gui-components' into stable
+
+2025-10-08 Sherlock 
+
+	* Reset gui component session
+
+2025-10-06 John Ralls 
+
+	* Merge Sherlock's save-account-page into stable.
+
+2025-10-06 Sherlock 
+
+	* Fix saving account page changes
+
+2025-09-28 Christopher Lam 
+
+	* Merge branch 'fix-surface-leak' into stable
+
+2025-09-26 Christopher Lam 
+
+	* [gnucash-header.c] don't draw GncHeader until the register is shown.
+
+2025-09-27 John Ralls 
+
+	* Release GnuCash 5.13 (tag: 5.13)
+
+2025-09-27 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-09-24 Christian Wehling 
+
+	* Translation update  by Christian Wehling <christian.wehling@web.de> using Weblate
+
+2025-09-24 Yuri Chornoivan 
+
+	* Translation update  by Yuri Chornoivan <yurchor@ukr.net> using Weblate
+
+2025-09-24 Yaron Shahrabani 
+
+	* Translation update  by Yaron Shahrabani <sh.yaron@gmail.com> using Weblate
+
+2025-09-24 Frédéric Mergey 
+
+	* Translation update  by Frédéric Mergey <fmergey@yahoo.com> using Weblate
+
+2025-09-24 Hemant More 
+
+	* Translation update  by Hemant More <foil-pastor-omen@duck.com> using Weblate
+
+2025-09-24 Simon Arlott 
+
+	* Translation update  by Simon Arlott <nomis@users.noreply.hosted.weblate.org> using Weblate
+
+2025-09-25 John Ralls 
+
+	* Update mac dependencies tarball.
+
+2025-09-25 John Ralls 
+
+	* Fix python tests on macOS by linking the right Python.
+
+2025-09-23 John Ralls 
+
+	* Fix build errors in 5b0d70.
+
+2025-09-23 John Ralls 
+
+	* Replace deprecated gdk_pixbuf_new_from_xpm_data
+
+2025-09-22 John Ralls 
+
+	* Merge latest translations from Weblate into stable.
+
+2025-09-22 John Ralls 
+
+	* Fix inadvertant insertion in test-trial-balance.scm.
+
+2025-09-22 John Ralls 
+
+	* extract-translators: Use 'open :encoding' instead of utf::encode/decode.
+
+2025-09-22 Yaron Shahrabani 
+
+	* Translation update  by Yaron Shahrabani <sh.yaron@gmail.com> using Weblate
+
+2025-09-22 Simon Arlott 
+
+	* Translation update  by Simon Arlott <nomis@users.noreply.hosted.weblate.org> using Weblate
+
+2025-09-22 Pedro Albuquerque 
+
+	* Translation update  by Pedro Albuquerque <pmra@protonmail.com> using Weblate
+
+2025-09-22 Максим Горпиніч 
+
+	* Translation update  by Максим Горпиніч <gorpinicmaksim0@gmail.com> using Weblate
+
+2025-09-22 Arve Eriksson 
+
+	* Translation update  by Arve Eriksson <031299870@telia.com> using Weblate
+
+2025-09-22 John Ralls 
+
+	* Fix newline disparity in translator-credits
+
+2025-09-21 John Ralls 
+
+	* Translator credits: Separate translators with a newline.
+
+2025-09-21 John Ralls 
+
+	* Merge latest translations from Weblate into stable.
+
+2025-09-22 Simon Arlott 
+
+	* Translation update  by Simon Arlott <nomis@users.noreply.hosted.weblate.org> using Weblate
+
+2025-09-21 John Ralls 
+
+	* Merge potfile for GnuCash 5.13
+
+2025-09-21 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-09-21 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-09-21 Leandro Conca 
+
+	* Translation update  by Leandro Conca <lluccia@gmail.com> using Weblate
+
+2025-09-21 Yurt Page 
+
+	* Translation update  by Yurt Page <yurtpage+weblate@gmail.com> using Weblate
+
+2025-09-21 Warder 
+
+	* Translation update  by Warder <ciksa@seznam.cz> using Weblate
+
+2025-09-20 Christopher Lam 
+
+	* [fin.c] fix encoding to utf8
+
+2025-09-20 John Ralls 
+
+	* Merge John Ralls's 'bug799249' into stable
+
+2025-09-20 John Ralls 
+
+	* Merge Bruce Schuck's 'addswissfundata' into stable.
+
+2025-09-20 John Ralls 
+
+	* Merge Sherlock's branch 'Bug 799662' into stable.
+
+2025-09-17 Sherlock 
+
+	* Bug 799662 - Importing accounts from UTF8 csv file does not work correctly
+
+2025-09-15 Christopher Lam 
+
+	* [new-owner-report.scm] insert job-ID if available
+
+2025-09-13 Christopher Lam 
+
+	* [balsheet-pnl] use gnc:accounts-get-commodities-sorted
+
+2025-09-12 Sherlock 
+
+	* Bug 799661 - Exchange Rate entries displayed in reports in an unstable order
+
+2025-09-12 John Ralls 
+
+	* Fix merge errors from win32-tests.
+
+2025-09-12 John Ralls 
+
+	* Merge John Ralls's 'win32-tests' into stable
+
+2025-09-04 John Ralls 
+
+	* Fix GncDateTime tests on Windows.
+
+2025-09-04 John Ralls 
+
+	* Coerce matching file separators for testing gnc_path_get_pkgsysconfdir
+
+2025-09-04 John Ralls 
+
+	* Always write XML files with Unix line endings.
+
+2025-08-28 John Ralls 
+
+	* Adjust tests to accommodate Win32 special cases.
+
+2025-08-28 John Ralls 
+
+	* Force ISO date format for tests to remove OS and locale differences.
+
+2025-08-26 John Ralls 
+
+	* [Tests] Fix filepath handling and temp directory location on Win32 builds.
+
+2025-08-22 John Ralls 
+
+	* Fix path environment for Guile and GncModule tests on Windows.
+
+2025-08-21 John Ralls 
+
+	* Set policy CMP0177 and follow the documented recommendations regarding DESTINATION paths.
+
+2025-09-12 John Ralls 
+
+	* Merge Sherlock's bug-799657 into stable.
+
+2025-09-02 Sherlock 
+
+	* Bug 799657 - Incorrect trial Balance report with stocks and multiple currencies
+
+2025-09-06 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-09-01 Muhammadyusuf Kurbonov 
+
+	* Translation update  by Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com> using Weblate
+
+2025-09-01 Yurt Page 
+
+	* Translation update  by Yurt Page <yurtpage+weblate@gmail.com> using Weblate
+
+2025-09-01 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-09-01 mid-kid 
+
+	* Translation update  by mid-kid <esteve.varela@gmail.com> using Weblate
+
+2025-09-01 Milo Ivir 
+
+	* Translation update  by Milo Ivir <mail@milotype.de> using Weblate
+
+2025-09-01 Brian Hsu 
+
+	* Translation update  by Brian Hsu <brianhsu.hsu@gmail.com> using Weblate
+
+2025-09-01 Максим Горпиніч 
+
+	* Translation update  by Максим Горпиніч <gorpinicmaksim0@gmail.com> using Weblate
+
+2025-09-01 Warder 
+
+	* Translation update  by Warder <ciksa@seznam.cz> using Weblate
+
+2025-09-06 John Ralls 
+
+	* Merge Sherlock's 'Bug 343711' into stable.
+
+2025-09-06 John Ralls 
+
+	* Merge Sherlock's 'Bug 799656' into stable.
+
+2025-09-06 John Ralls 
+
+	* Merge Sherlock's 'Bug 799652' into stable.
+
+2025-09-06 John Ralls 
+
+	* Merge Sherlock's 'Bug 799654' into stable.
+
+2025-09-04 Sherlock 
+
+	* Bug 343711 - Splits to Imbalance-USD do not disappear when zero-valued.
+
+2025-09-02 Sherlock 
+
+	* Bug 799656 - Invoice and bills still display prices as fractional amounts with "Force Prices to display as decimals"
+
+2025-09-02 Sherlock 
+
+	* Bug 799652 - Invoice price decimal places
+
+2025-08-28 Sherlock 
+
+	* Bug 799654 - Zombie entries in the recently accessed file list.
+
+2025-09-02 Christopher Lam 
+
+	* [balsheet-pnl] ensure the account name cell doesn't wrap
+
+2025-07-22 John Ralls 
+
+	* Bug 799249 - Crash while switch to recently opened file
+
+2025-08-21 Christopher Lam 
+
+	* [trep-engine] link to invoice in trep
+
+2025-08-24 Bruce Schuck 
+
+	* Added Swiss Fund Data AG to single_quote_sources. New F::Q source will be available in v1.67.
+
+2025-08-24 Christopher Lam 
+
+	* [test-engine-extras] add invoice IDs to test invoices
+
+2025-08-18 John Ralls 
+
+	* Specialize get_row_value_from_object for int64_t.
+
+2025-08-18 John Ralls 
+
+	* [WIN32]Fix path problems prevneting test-backend-dbi from working.
+
+2025-07-15 John Ralls 
+
+	* Fix building tests on Win32.
+
+2025-07-25 Christopher Lam 
+
+	* [gnc-plugin-page-report] confirm before overwriting saved report
+
+2025-07-17 Christopher Lam 
+
+	* [gnc-ui.h] gnc_action_dialog to offer Action/Cancel buttons
+
+2025-07-28 John Ralls 
+
+	* Merge latest translations from Weblate into stable.
+
+2025-07-28 John Ralls 
+
+	* Merge Sherlock's 'bug799650' insto stable.
+
+2025-07-26 Sherlock 
+
+	* Bug 799650 - Reconcile Ending Balance Ignored When Statement Date Set
+
+2025-07-27 DGDS 
+
+	* Translation update  by DGDS <dagrinddontstop@users.noreply.hosted.weblate.org> using Weblate
+
+2025-07-27 aba2222 
+
+	* Translation update  by aba2222 <ABCSSS2021@outlook.com> using Weblate
+
+2025-07-27 Angel Ivanov 
+
+	* Translation update  by Angel Ivanov <angel.forcebg@gmail.com> using Weblate
+
+2025-07-27 DGDS 
+
+	* Translation update  by DGDS <dagrinddontstop@users.noreply.hosted.weblate.org> using Weblate
+
+2025-07-27 Warder 
+
+	* Translation update  by Warder <ciksa@seznam.cz> using Weblate
+
+2025-07-27 Frédéric Mergey 
+
+	* Translation update  by Frédéric Mergey <fmergey@yahoo.com> using Weblate
+
+2025-07-27 Allan Olsen 
+
+	* Translation update  by Allan Olsen <allan@hamann-olsen.dk> using Weblate
+
+2025-07-27 தமிழ்நேரம் 
+
+	* Translation update  by தமிழ்நேரம் <anishprabu.t@gmail.com> using Weblate
+
+2025-07-27 Simon Arlott 
+
+	* Translation update  by Simon Arlott <nomis@users.noreply.hosted.weblate.org> using Weblate
+
+2025-07-25 John Ralls 
+
+	* Bug 799649 - Ensure that GnuCash does not crash when it converts a...
+
+2025-07-13 John Ralls 
+
+	* Bug 799638 - error: call to non-'constexpr' function
+
+2025-07-05 Christopher Lam 
+
+	* [chartjs-4] add chartjs-4 files
+
+2025-07-07 Christopher Lam 
+
+	* [chartjs-2] rename chartjs to chartjs-2
+
+2025-07-07 Christopher Lam 
+
+	* [borrowed/CMakeLists.txt] realign whitespace
+
+2025-07-05 Christopher Lam 
+
+	* [charts] use gnc:html-chart-set-xaxis-type!
+
+2025-07-05 Christopher Lam 
+
+	* [html-chart] expose gnc:html-chart-set-x-axis-type!
+
+2025-07-04 Christopher Lam 
+
+	* [gnc-pricedb.cpp] plug leak from gnc_g_date_new_today
+
+2025-06-24 Christopher Lam 
+
+	* [Transaction.cpp] use qof_instance kvp API for GDate
+
+2025-07-04 Christopher Lam 
+
+	* [gtest-xml-contents] test xaccTransGetDatePostedGDate from xml
+
+2025-06-28 Christopher Lam 
+
+	* [Transaction.cpp] use qof_instance kvp API for Time64, with bugfix
+
+2025-06-27 Christopher Lam 
+
+	* [Transaction.cpp] small modification to xaccTransSetNotes
+
+2025-06-23 Christopher Lam 
+
+	* [Transaction.cpp] small modification to xaccTransSetReadOnly
+
+2025-06-22 Christopher Lam 
+
+	* [Transaction.cpp] use qof_instance kvp API for const char*
+
+2025-06-25 Christopher Lam 
+
+	* [utest-Account.cpp] use qof_instance kvp API for const char*
+
+2025-06-25 Christopher Lam 
+
+	* [Split.cpp] use qof_instance kvp API for GncGUID*
+
+2025-06-24 Christopher Lam 
+
+	* [Transaction.cpp] use qof_instance kvp API for GncGUID*
+
+2025-06-24 Christopher Lam 
+
+	* [Transaction.cpp] use qof_instance kvp API for int64_t
+
+2025-06-23 Christopher Lam 
+
+	* [Split.cpp] use qof_instance kvp API for gnc_numeric
+
+2025-06-24 Christopher Lam 
+
+	* [Split.cpp] use qof_instance kvp API for const char*
+
+2025-06-25 Christopher Lam 
+
+	* [gnc-lot.cpp] use qof_instance kvp API for const char*
+
+2025-06-25 Christopher Lam 
+
+	* [gnc-commodity.cpp] use qof_instance kvp API for const char*
+
+2025-07-01 Christopher Lam 
+
+	* [gnc-commodities.cpp] expose auto_quote_control kvp to test them
+
+2025-06-22 Christopher Lam 
+
+	* [Transaction.cpp] use g_list_copy_deep
+
+2025-06-28 Christopher Lam 
+
+	* [gtest-load-and-test-datafile.cpp] add example .gnucash to test contents
+
+2025-06-28 John Ralls 
+
+	* Release GnuCash 5.12 (tag: 5.12)
+
+2025-06-28 John Ralls 
+
+	* Merge latest translation updates from Weblate.
+
+2025-06-28 Christian Wehling 
+
+	* Translation update  by Christian Wehling <christian.wehling@web.de> using Weblate
+
+2025-06-28 Ral Hole 
+
+	* Translation update  by Ral Hole <ral-hole@outlook.com> using Weblate
+
+2025-06-28 Arve Eriksson 
+
+	* Translation update  by Arve Eriksson <031299870@telia.com> using Weblate
+
+2025-06-28 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-06-28 Deleted User 
+
+	* Translation update  by Deleted User <noreply+48943@weblate.org> using Weblate
+
+2025-06-28 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-06-28 Allan Olsen 
+
+	* Translation update  by Allan Olsen <allan@hamann-olsen.dk> using Weblate
+
+2025-06-28 Pedro Albuquerque 
+
+	* Translation update  by Pedro Albuquerque <pmra@protonmail.com> using Weblate
+
+2025-06-28 Christopher Lam 
+
+	* [utest-Transaction.cpp] add test_xaccTransGetDateDue tests
+
+2025-06-28 Christopher Lam 
+
+	* [utest-Transaction.cpp] test actual kvp slots
+
+2025-06-27 Christopher Lam 
+
+	* [utest-Transaction] add trans->notes tests
+
+2025-06-27 Christopher Lam 
+
+	* [utest-Transaction.cpp] xaccTransGetDocLink with NULL doclink is NOP
+
+2025-05-28 Oscar Megía López 
+
+	* Bug 799538 - Clipboard pastes to wrong field in...
+
+2025-06-23 John Ralls 
+
+	* [gnc-locale-name] Use setlocale(LC_MONETARY, NULL) to retrieve name.
+
+2025-06-22 John Ralls 
+
+	* Merge potfile for GnuCash 5.12
+
+2025-06-22 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-06-21 Allan Olsen 
+
+	* Translation update  by Allan Olsen <allan@hamann-olsen.dk> using Weblate
+
+2025-06-22 John Ralls 
+
+	* Merge Roberto Kok's 'auc-tooltips' into stable.
+
+2025-06-22 John Ralls 
+
+	* Merge Bruce Schuck's 'rmfqmodules' into stable.
+
+2025-06-21 John Ralls 
+
+	* Bug 799623 - test-backend-dbi fails after 2038
+
+2025-06-21 John Ralls 
+
+	* [DBI Backend] Preserve int size when recovering from failed save-save.
+
+2025-06-21 John Ralls 
+
+	* [test-dbi-backend] Test 64-bit integer insertion explicitly.
+
+2025-06-21 Bruce Schuck 
+
+	* Modified gnc-commodity.cpp to match F::Q Modules Bloomberg.pm, Tiaacref.pm, Troweprice.pm removed
+
+2024-05-18 Christian Wehling 
+
+	* glade-files: Replace 'italic' formatting with "" or remove it.
+
+2024-05-18 Christian Wehling 
+
+	* glade-files: Replace other inline formattings with stylesheets
+
+2024-05-18 Christian Wehling 
+
+	* glade-files: Separate bold formatted label "Note:" ...
+
+2024-04-20 Christian Wehling 
+
+	* glade-files: Use of stylesheets for labels
+
+2024-03-24 Christian Wehling 
+
+	* Improve translatable strings.
+
+2025-06-18 Roberto Kok 
+
+	* [import-main-matcher.cpp] Add tooltips to transaction action columns
+
+2025-06-14 Christopher Lam 
+
+	* [reports] use ICU for Unicode string comparison
+
+2025-06-15 Christopher Lam 
+
+	* [gnc-unicode] bugfix strings compare equality should return 0
+
+2025-06-14 John Ralls 
+
+	* [gnc-unicode] Use unicode_compare_internal for gnc_unicode_compare_identical
+
+2025-06-14 Christopher Lam 
+
+	* [gnc-unicode.cpp] fix potential segfault
+
+2025-06-11 Christopher Lam 
+
+	* [reports] better gnc_report_id_string_to_report_id with from_chars
+
+2025-06-12 John Ralls 
+
+	* Merge John Ralls's branch 'bug799521' into stable
+
+2025-06-10 John Ralls 
+
+	* Merge branch 'bug797766' into stable
+
+2025-05-22 John Ralls 
+
+	* Bug 797766 - Automatic decimal point doesn't work properly with...
+
+2025-05-31 John Ralls 
+
+	* Bug 799521 - Segmentation fault on Autocomplete of Description with ß
+
+2025-05-31 John Ralls 
+
+	* [Core Utils] Add ICU-based substring search.
+
+2025-06-09 John Ralls 
+
+	* Merge Bruce Schuck's 'AddCMBChina' into stable.
+
+2025-06-09 John Ralls 
+
+	* Merge latest translations from Weblate into stable.
+
+2025-06-09 Bruce Schuck 
+
+	* Added new F::Q source to single_quote_sources. China Merchants Bank - cmbchina
+
+2025-06-02 Ebrahim Nasser 
+
+	* Translation update  by Ebrahim Nasser <ebranas314@gmail.com> using Weblate
+
+2025-06-02 fliukka 
+
+	* Translation update  by fliukka <weblate@fliukka.net> using Weblate
+
+2025-06-02 Mechtilde 
+
+	* Translation update  by Mechtilde <ooo@mechtilde.de> using Weblate
+
+2025-06-02 Frédéric Mergey 
+
+	* Translation update  by Frédéric Mergey <fmergey@yahoo.com> using Weblate
+
+2025-06-02 Cheng R.Zhu 
+
+	* Translation update  by "Cheng R.Zhu" <zcr@users.noreply.hosted.weblate.org> using Weblate
+
+2025-06-02 Usama Khalil 
+
+	* Translation update  by Usama Khalil <usamafoad@gmail.com> using Weblate
+
+2025-06-09 Robert Fewell 
+
+	* Fails to build on Windows error in gnc-report.cpp
+
+2025-06-07 Christopher Lam 
+
+	* [balsheet-pnl.scm] don't generate exchange-fn unnecessarily
+
+2025-06-07 Christopher Lam 
+
+	* [reports] more robust error handling if target report doesn't exist
+
+2025-06-01 Christopher Lam 
+
+	* [reports] delay generation of reports from a report.
+
+2025-06-01 Christopher Lam 
+
+	* [report-core.scm] add report anchor mechanism
+
+2025-06-01 Christopher Lam 
+
+	* [report-core.scm] don't export <report>
+
+2025-06-01 Christopher Lam 
+
+	* [report-core.scm] refactor gnc:make-report
+
+2025-06-01 Christopher Lam 
+
+	* [test/reports] use gnc:make-report instead of <report> record type
+
+2025-05-29 John Ralls 
+
+	* Merge Bruce Schuck's 'commodities' into stable.
+
+2025-05-29 Bruce Schuck 
+
+	* Fixed comment about failover methods/multiple sources
+
+2025-05-28 Bruce Schuck 
+
+	* Modified quote sources to match current F::Q
+
+2025-05-27 John Ralls 
+
+	* [test gnc-quotes] Allow quote time and now time to differ slightly.
+
+2025-05-27 John Ralls 
+
+	* Merge Oscar Megia's 'develop-bug-648768' into stable.
+
+2025-05-26 John Ralls 
+
+	* Bug 799602 - Unit Price on Australian Tax Invoice will NOT display...
+
+2025-05-26 Oscar Megia López 
+
+	* Bug 648768 - Warning "Change Reconciled Split" ...
+
+2025-05-24 Christopher Lam 
+
+	* [html-chart] minor optimisation to nested-alist-set!
+
+2025-05-18 John Ralls 
+
+	* Bug 799572 - Return proper status code when Finance::Quote errors...
+
+2025-05-18 John Ralls 
+
+	* Bug 799593 - macOS: mariadb hardcodes plugin paths to original install directory.
+
+2025-05-17 John Ralls 
+
+	* Bug 799490 - Error on start or opening a gnucash file: Can't parse the URL
+
+2025-05-17 John Ralls 
+
+	* Bug 799506 - reconcile bad date pops to 1969
+
+2025-05-16 John Ralls 
+
+	* Register: Ensure splits belong to transaction.
+
+2025-05-16 John Ralls 
+
+	* Bug 799597 - Crash when deleting all splits in General Journal
+
+2025-05-15 John Ralls 
+
+	* Bug 799580 - Swiss currency symbol is displayed as SFr. instead of CHF
+
+2025-05-15 John Ralls 
+
+	* Merge Bill Summerfeld's 'extensions' into stable.
+
+2025-05-05 Bill Sommerfeld 
+
+	* Drop the definition of __EXTENSIONS__ from three files and instead move it to compiler options if on a platform that needs it.
+
+2025-05-15 John Ralls 
+
+	* Merge Bill Summerfeld's 'have-struct-tm-gmtoff' into stable.
+
+2025-05-11 John Ralls 
+
+	* Bug 799602 - Unit Price on Invoice will NOT display as decimals
+
+2025-05-05 Bill Sommerfeld 
+
+	* Let cmake probe for the existence of HAVE_STRUCT_TM_GMTOFF
+
+2025-05-12 John Ralls 
+
+	* Merge Bill Sommerfeld's 'gnc-vcs-info-echo' into stable.
+
+2025-05-12 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-05-11 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-05-11 Jaime Marquínez Ferrándiz 
+
+	* Translation update  by Jaime Marquínez Ferrándiz <jaime.marquinez.ferrandiz@fastmail.net> using Weblate
+
+2025-05-11 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-05-11 Christian Wehling 
+
+	* Translation update  by Christian Wehling <christian.wehling@web.de> using Weblate
+
+2025-05-11 BlueRains 
+
+	* Translation update  by BlueRains <lu@schoevaars.eu> using Weblate
+
+2025-05-11 Leo Moons 
+
+	* Translation update  by Leo Moons <Leo.Moons@proximus.be> using Weblate
+
+2025-05-11 BlueRains 
+
+	* Translation update  by BlueRains <lu@schoevaars.eu> using Weblate
+
+2025-05-11 Zhaoquan Huang 
+
+	* Translation update  by Zhaoquan Huang <zhaoquan2008@hotmail.com> using Weblate
+
+2025-05-11 Alex Maryson Jr 
+
+	* Translation update  by "Alex Maryson Jr." <akamar87@gmail.com> using Weblate
+
+2025-05-11 Muhammadyusuf Kurbonov 
+
+	* Translation update  by Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com> using Weblate
+
+2025-05-11 TheRealOne78 
+
+	* Translation update  by TheRealOne78 <bajcsielias78@gmail.com> using Weblate
+
+2025-05-12 John Ralls 
+
+	* Database default host: Fix comment.
+
+2025-05-12 Bill Sommerfeld 
+
+	* Avoid non-POSIX "echo -n" behavior in util/gnc-vcs-info
+
+2025-05-11 John Ralls 
+
+	* Bug 799603 - Does not save to mysql on localhost.
+
+2025-05-11 John Ralls 
+
+	* Merge Bill Sommerfeld's 'testbuild' into stable.
+
+2025-05-11 John Ralls 
+
+	* CSV Importer: Fix an old copy-paste error.
+
+2025-05-10 John Ralls 
+
+	* Mortgage Assistant: Handle daily payments
+
+2025-05-10 John Ralls 
+
+	* Mortgage assistant: Avoid crash when returning to the repayment page.
+
+2025-04-20 Christopher Lam 
+
+	* [engine.i] convert gnc_account_accumulate_at_dates to c++
+
+2025-04-20 Christopher Lam 
+
+	* [gnc-engine-guile.cpp] helper gnc_split_to_scm function
+
+2025-05-10 Christopher Lam 
+
+	* [gnc-engine-guile] reduce overhead of gnc_foo_to_scm
+
+2025-05-05 Christopher Lam 
+
+	* [balance-forecast] optimise some loops
+
+2025-05-07 Christopher Lam 
+
+	* [report-utilities.scm] optimise some loops
+
+2025-05-06 John Ralls 
+
+	* Mortgage Assistant: Update the formula displayed on the repayment page
+
+2025-05-06 John Ralls 
+
+	* Mortgage Assistant: Change LoanData.repAmount into a std::string
+
+2025-05-04 John Ralls 
+
+	* Mortgage Assistant: Calculate the payment per year and periods
+
+2025-05-05 Bill Sommerfeld 
+
+	* Add testbuild target which builds tests without running them
+
+2025-05-04 John Ralls 
+
+	* Mortgage Assistant: Interest rate isn't divided on compounded schemes.
+
+2025-05-03 John Ralls 
+
+	* Loan Assistant: Partly fix payments per year.
+
+2025-05-03 John Ralls 
+
+	* Merge Bill Sommerfeld's 'gnc-date-fix' into stable.
+
+2025-05-03 John Ralls 
+
+	* Merge Bill Sommerfeld's 'base-typemaps-unused-fix' into stable.
+
+2025-05-03 John Ralls 
+
+	* Bug 799582 - Mortgage and Loan Assistant - Compounding Formula
+
+2025-05-03 John Ralls 
+
+	* Wrap include of gtest.h and gmock.h with a warning-silencing pragma.
+
+2025-05-03 John Ralls 
+
+	* Change boost version for boost::process changes to 1.86.0
+
+2025-05-02 Bill Sommerfeld 
+
+	* Fix build of test-gnc-date on systems without HAVE_STRUCT_TM_GMTOFF
+
+2025-05-02 Bill Sommerfeld 
+
+	* Avoid unused variable warnings on systems without HAVE_STRUCT_TM_GMTOFF
+
+2025-05-02 John Ralls 
+
+	* Bug 799592 - "No transactions found" when importing CSV transactions
+
+2025-05-02 John Ralls 
+
+	* Remove unused include of libxml2/SAX.h
+
+2025-05-02 John Ralls 
+
+	* Bug 799594 - GnuCash 5.11 fails to build with boost 1.88
+
+2025-04-26 John Ralls 
+
+	* Merge featherfeet's 'fix-get-invoice-from-transaction-python' into stable.
+
+2025-04-26 John Ralls 
+
+	* Merge Marko Kohtala's 'restore-fi' into stable.
+
+2025-04-26 Ral Hole 
+
+	* Translation update  by Ral Hole <ral-hole@outlook.com> using Weblate
+
+2025-04-26 Ivan Kostov 
+
+	* Translation update  by Ivan Kostov <jiveq1@gmail.com> using Weblate
+
+2025-04-26 Pedro Albuquerque 
+
+	* Translation update  by Pedro Albuquerque <pmra@protonmail.com> using Weblate
+
+2025-04-26 Abdulsalam Alshilash 
+
+	* Translation update  by Abdulsalam Alshilash <ashalash@msn.com> using Weblate
+
+2025-04-26 Bora Atıcı 
+
+	* Translation update  by Bora Atıcı <boratici.acc@gmail.com> using Weblate
+
+2025-04-26 Hiago Fontoura 
+
+	* Translation update  by Hiago Fontoura <HIAGOFMENDONCA@gmail.com> using Weblate
+
+2025-04-26 Leo Moons 
+
+	* Translation update  by Leo Moons <Leo.Moons@proximus.be> using Weblate
+
+2025-04-26 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-04-26 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-04-26 mocsa 
+
+	* Translation update  by mocsa <csaba@feltoltve.hu> using Weblate
+
+2025-04-26 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-04-24 Oliver Lok Trevor 
+
+	* Added unit test
+
+2025-04-22 Christopher Lam 
+
+	* [test-report-utilities] more tests for gnc:account-accumulate-at-dates
+
+2025-04-18 Christopher Lam 
+
+	* [sasistant-stock-transaction] remove unused invisible-char property
+
+2025-04-10 Oliver Lok Trevor 
+
+	* Fixed GetInvoiceFromTxn to convert to the right type of Python object for a GncInvoice.
+
+2025-04-15 John Ralls 
+
+	* Merge Sherlock's 'bug799590' into stable.
+
+2025-04-15 Sherlock 
+
+	* Bug 799590 - Pressing enter after changing date on initial reconcile information window does not change ending balance.
+
+2025-03-30 Marko Kohtala 
+
+	* L10N:fi: Restore lost translations
+
+2025-03-29 John Ralls 
+
+	* Release GnuCash 5.11 (tag: 5.11)
+
+2025-03-29 John Ralls 
+
+	* Merge latest translation from Weblate.
+
+2025-03-28 Guille Lopez 
+
+	* Translation update  by Guille Lopez <willelopz@gmail.com> using Weblate
+
+2025-03-27 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-03-25 Guille Lopez 
+
+	* Translation update  by Guille Lopez <willelopz@gmail.com> using Weblate
+
+2025-03-25 Simon Arlott 
+
+	* Translation update  by Simon Arlott <nomis@users.noreply.hosted.weblate.org> using Weblate
+
+2025-03-25 Yuri Chornoivan 
+
+	* Translation update  by Yuri Chornoivan <yurchor@ukr.net> using Weblate
+
+2025-03-25 Максим Горпиніч 
+
+	* Translation update  by Максим Горпиніч <maksimgorpinic2005a@gmail.com> using Weblate
+
+2025-03-25 Arve Eriksson 
+
+	* Translation update  by Arve Eriksson <031299870@telia.com> using Weblate
+
+2025-03-25 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-03-25 John Ralls 
+
+	* gnc_relative_date_to_time64: Have only if statemen for period TODAY.
+
+2025-03-23 John Ralls 
+
+	* Merge Sherlock's 'non-aligned-periods' into stable
+
+2025-03-23 John Ralls 
+
+	* Merge another translation from Weblate.
+
+2025-03-23 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-03-23 John Ralls 
+
+	* Merge potfile for GnuCash 5.11
+
+2025-03-23 John Ralls 
+
+	* Merge latest translations from Weblate.
+
+2025-03-23 John Ralls 
+
+	* Test gnc-option-date variable fy start days.
+
+2025-03-23 Alois Levermann 
+
+	* Translation update  by Alois Levermann <alois@levermann.xyz> using Weblate
+
+2025-03-23 Thomas Kriegel 
+
+	* Translation update  by Thomas Kriegel <thomasMapper@bin-wieder-da.de> using Weblate
+
+2025-03-23 George Petsagourakis 
+
+	* Translation update  by George Petsagourakis <petsagouris@gmail.com> using Weblate
+
+2025-03-23 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-03-22 John Ralls 
+
+	* Add and use a fake preferences backend to set the fiscal year.
+
+2025-03-02 Sherlock 
+
+	* Use the fiscal start day of the month for relative quarter reports
+
+2025-03-17 John Ralls 
+
+	* Bug 799533 - Saved reports configurations are opening with…
+
+2025-03-17 John Ralls 
+
+	* Fix test-gnc-option-scheme-output to match fix for bug 799501.
+
+2025-03-10 John Ralls 
+
+	* Bug 799501 - Gnucash grashes on startup ice-9/read.scm error
+
+2025-03-10 Robert Fewell 
+
+	* Merge Simon Arlott 'jump-multiple-splits' into stable
+
+2025-03-08 Robert Fewell 
+
+	* Bug 799562 - Import Map Editor Non-Bayesian crashes gnucash
+
+2025-03-08 Christopher Lam 
+
+	* Bug 799565 - Reconcile date default doesn't update to reflect previous reconciliation.
+
+2025-03-07 John Ralls 
+
+	* Merge latest translation updates from Weblate into stable.
+
+2025-03-06 Magnus Røkke 
+
+	* Translation update  by Magnus Røkke <mrokke@gmail.com> using Weblate
+
+2025-03-06 leyakid803 
+
+	* Translation update  by leyakid803 <leyakid803@minduls.com> using Weblate
+
+2025-03-06 Stephan Paternotte 
+
+	* Translation update  by Stephan Paternotte <stephan@paternottes.net> using Weblate
+
+2025-03-06 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-03-07 John Ralls 
+
+	* xaccAccountDeleteAllTransactions: Avoid UAF crashes
+
+2025-03-07 John Ralls 
+
+	* Improve GncNumeric(std::string) to handle unicode spaces.
+
+2025-03-07 John Ralls 
+
+	* Fix gnc-numeric test failure on macOS 15.4 beta.
+
+2025-03-07 John Ralls 
+
+	* Bug 799564 - Decimal point confusions when getting stock quotes from aex
+
+2025-03-06 John Ralls 
+
+	* Bug 799565 - Reconcile date default doesn't update to reflect…
+
+2025-03-05 Christopher Lam 
+
+	* [gnc-plugin-page-account-tree.cpp] some memory leaks plugged
+
+2025-03-04 John Ralls 
+
+	* Bug 799528 - Crash on account deletion (edit)
+
+2025-02-25 Sherlock 
+
+	* Bug 798946 - start/end of current/last quarter have off-by-one error
+
+2025-01-09 Sherlock 
+
+	* Bug 799514 - Pie chart hovering shows wrong information in pop-up
+
+2025-02-23 Ron Bessems 
+
+	* Add Customer's invoices to custom list popup
+
+2025-02-07 John Ralls 
+
+	* [I18N] Latest translations from Weblate.
+
+2025-02-08 John Ralls 
+
+	* Translation update  by John Ralls <jralls@ceridwen.us> using Weblate
+
+2025-02-08 Alois Levermann 
+
+	* Translation update  by Alois Levermann <alois@levermann.xyz> using Weblate
+
+2025-02-08 Francisco Serrador 
+
+	* Translation update  by Francisco Serrador <fserrador@gmail.com> using Weblate
+
+2025-02-08 Milo Ivir 
+
+	* Translation update  by Milo Ivir <mail@milotype.de> using Weblate
+
+2025-02-08 Ricky Tigg 
+
+	* Translation update  by Ricky Tigg <ricky.tigg@gmail.com> using Weblate
+
+2025-02-08 gfbdrgng 
+
+	* Translation update  by gfbdrgng <hnaofegnp@hldrive.com> using Weblate
+
+2025-02-08 Pedro Albuquerque 
+
+	* Translation update  by Pedro Albuquerque <pmra@protonmail.com> using Weblate
+
+2025-02-08 Mehrdad Vosoughi 
+
+	* Translation update  by Mehrdad Vosoughi <mohsen.vosoughi@gmail.com> using Weblate
+
+2025-02-08 Priit Jõerüüt 
+
+	* Translation update  by Priit Jõerüüt <hwlate@joeruut.com> using Weblate
+
+2025-02-08 Anastasios Ikonomou 
+
+	* Translation update  by Anastasios Ikonomou <anastasios.ikonomou@gmail.com> using Weblate
+
+2025-02-08 Zhaoquan Huang 
+
+	* Translation update  by Zhaoquan Huang <zhaoquan2008@hotmail.com> using Weblate
+
+2025-02-08 தமிழ்நேரம் 
+
+	* Translation update  by தமிழ்நேரம் <anishprabu.t@gmail.com> using Weblate
+
+2025-02-08 Szia Tomi 
+
+	* Translation update  by Szia Tomi <sziatomi01@gmail.com> using Weblate
+
+2025-02-07 John Ralls 
+
+	* Merge John Ralls's 'bug798958' into stable.
+
+2025-02-06 Alex Aycinena 
+
+	* Correct bug introduced in commit 63deaad. affecting Edit->Tax Report Options and the US Income Tax Report
+
+2025-01-31 Simon Arlott 
+
+	* When using "Jump" with more than two splits, expand the transaction
+
+2025-02-02 John Ralls 
+
+	* Restore cmake_uninstall.cmake.in using file(REMOVE).
+
+2023-06-05 Simon Arlott 
+
+	* Add warnings to the "Jump" operation instead of doing nothing
+
+2023-06-05 Simon Arlott 
+
+	* Allow warning dialogs to be the dismiss-only variant
+
+2023-06-05 Simon Arlott 
+
+	* Fallback register "Jump" operation to the only other account
+
+2023-06-03 Simon Arlott 
+
+	* Register preference "Jump action for multiple splits"
+
+2024-09-21 Simon Arlott 
+
+	* Support for enums as GtkRadioButton preferences
+
+2023-06-05 Simon Arlott 
+
+	* Disallow using "Jump" on an expanded split for the current account
+
+2025-01-30 John Ralls 
+
+	* Change cmake_uninstall file name in the dist list.
+
+2025-01-28 John Ralls 
+
+	* Fix uninstall target for cmake > 3.25
+
+2025-01-28 John Ralls 
+
+	* Merge Jianshi Liu's 'bug797824' into stable.
+
+2025-01-24 Jianshi Liu 
+
+	* Bug 797824 - Inconsistent behavior in Loan Review
+
+2025-01-24 Robert Fewell 
+
+	* Add function to GncQueryView to expand column
+
+2025-01-24 Robert Fewell 
+
+	* Bug 799343 - Dialog boxes won't remain sized and positioned - part2
+
+2025-01-24 Robert Fewell 
+
+	* Bug 799343 - Dialog boxes won't remain sized and positioned - part1
+
+2025-01-24 Robert Fewell 
+
+	* Bug 799334 - GnuCash re-opens to incorrect page
+
+2025-01-24 Robert Fewell 
+
+	* Fix g_object warning for creating schedule from trans
+
+2025-01-20 John Ralls 
+
+	* Bug 798946 - start/end of current/last quarter have off-by-one error
+
+2025-01-19 Christopher Lam 
+
+	* use gnc_account_get_all_parents and std::mismatch
+
+2025-01-19 Christopher Lam 
+
+	* [Account.hpp] gnc_account_get_all_parents returns reversed path vector
+
+2025-01-16 Robert Fewell 
+
+	* Change the text string 'Accounts Selected:' to include number
+
+2025-01-16 Robert Fewell 
+
+	* Bug 799035 - CSV Export: 'Accounts Selected' text has bad formatting
+
+2025-01-16 Robert Fewell 
+
+	* Change a couple of accelerator keys to be the same
+
+2025-01-16 Robert Fewell 
+
+	* Bug 799491 - Add "Clear All" button to register filter
+
+2025-01-16 Robert Fewell 
+
+	* Bug 799465 - Register Filter Today radio buttons don't work correctly
+
+2025-01-12 Alex Aycinena 
+
+	* Update Form/Schedule line references for 2024 for the US Income Tax Report
+
+2025-01-06 Robert Fewell 
+
+	* Bug 799502 - Autocomplete of split only completes description
+
+2025-01-05 John Ralls 
+
+	* Merge Peter Zmanovsky's 'fix_wrong_free' into stable.
+
+2025-01-05 peter15914 
+
+	* Fix incorrect deallocation type
+

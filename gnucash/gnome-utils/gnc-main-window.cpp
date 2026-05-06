@@ -1399,6 +1399,13 @@ gnc_main_window_quit(GncMainWindow *window)
     return FALSE;
 }
 
+gboolean
+gnc_main_window_is_quitting (GncMainWindow *window)
+{
+    g_return_val_if_fail(GNC_IS_MAIN_WINDOW(window), FALSE);
+    return window->window_quitting;
+}
+
 static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
                               GdkEvent *event,
@@ -5287,7 +5294,9 @@ textview_motion_notify_cb (GtkWidget *textview,
                            GdkEventMotion *event,
                            gpointer user_data)
 {
-    if (event->state & GDK_BUTTON1_MASK)
+    if ((event->state & GDK_BUTTON1_MASK) ||
+         gtk_text_buffer_get_has_selection (gtk_text_view_get_buffer
+                                           (GTK_TEXT_VIEW(textview))))
         return false;
 
     GtkTextIter iter;

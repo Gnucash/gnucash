@@ -9,7 +9,6 @@
 #
 
 from gnucash import Session, Account, Transaction, Split
-import gnucash
 
 
 def get_transaction_list(account):
@@ -26,8 +25,6 @@ def get_transaction_list(account):
     split_list=account.GetSplitList()
     transaction_list=[]
     for split in split_list:
-        if type(split) != Split:
-              split = Split(instance=split)
         transaction=split.GetParent()
         if not (transaction in transaction_list):       # this check may not be necessary.
           transaction_list.append(transaction)
@@ -53,8 +50,6 @@ def get_splits_without_lot(account=None,split_list=None):
   
   rlist=[]
   for split in split_list:
-      if type(split).__name__ == 'SwigPyObject':
-          split = Split(instance=split) 
       lot=split.GetLot()
       if lot == None:
           rlist.append(split)
@@ -78,8 +73,6 @@ def find_account(account,name,account_list=None):
     account_list=[]
 
   for child in account.get_children():
-    if type(child) != Account:
-      child=Account(instance=child)
     account_list=find_account(child,name,account_list)
   
   account_name=account.GetName()
@@ -103,8 +96,6 @@ def find_lot(lot_list,search_string):
   
   rlist=[]
   for lot in lot_list:
-    if type(lot).__name__ == 'SwigPyObject':
-        lot = gnucash.GncLot(instance=lot)
     ltitle=lot.get_title()
     if search_string in ltitle: 
       rlist.append(lot)
@@ -153,19 +144,11 @@ def find_split_recursive(account, search_string):
   
   # Get all splits in descendants
   for child in account.get_children():
-      if type(child) != Account:
-          child = Account(instance=child)
       childsplits = find_split_recursive(child, search_string)
-      for split in childsplits:
-          if type(split) != Split:
-              split = Split(instance=split)
       child_account_splits += childsplits
 
   # Get all splits in account
   splits=account.GetSplitList()
-  for split in splits:
-      if type(split) != Split:
-          split = Split(instance=split)
   basic_account_splits=find_split(splits,search_string)
 
   rlist=child_account_splits+basic_account_splits
@@ -206,9 +189,6 @@ def find_transaction(account,name,ignore_case=True,transaction_list=None):
       
       sl=transaction.GetSplitList()
       for split in sl:
-          if type(split) != Split:
-              split=Split(instance=split)
-          
           memo = split.GetMemo()
           if ignore_case:
               memo=memo.lower()

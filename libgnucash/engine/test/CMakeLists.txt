@@ -130,6 +130,9 @@ set(test_qofsession_SOURCES
 gnc_add_test(test-qofsession "${test_qofsession_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+gnc_add_test(test-qofid  test-qofid.cpp
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 gnc_add_test(test-gnc-euro  gtest-gnc-euro.cpp
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
@@ -239,6 +242,7 @@ set(test_engine_SOURCES_DIST
         test-numeric.cpp
         test-object.c
         test-qof.c
+        test-qofid.cpp
         test-qofbook.c
         test-qofinstance.cpp
         test-qofobject.c

@@ -332,7 +332,7 @@ qof_book_destroy (QofBook *book)
 {
     GHashTable* cols;
 
-    if (!book) return;
+    if (!book || !book->hash_of_collections) return;
     ENTER ("book=%p", book);
 
     book->shutting_down = TRUE;

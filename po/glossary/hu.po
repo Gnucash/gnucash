@@ -4,15 +4,15 @@
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
 # Kárász Attila <cult.edie@gmail.com>, 2022.
-# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024.
+# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024, 2025.
 # mocsa <csaba@feltoltve.hu>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-09-25 09:45+0000\n"
+"PO-Revision-Date: 2025-12-28 01:00+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -201,7 +201,7 @@ msgstr "visszavonás"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr "idősödés"
+msgstr "elöregedés"
 
 #. "A sum of money"
 msgid "amount"
@@ -853,7 +853,7 @@ msgstr "típus"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr "egység"
+msgstr "egységek"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"

@@ -27,8 +27,6 @@
 // gnc-html.i file.  The full gnc-html.h file can't be parsed because of the new
 // use of GObject
 
-typedef const char* URLType;
-
 #define URL_TYPE_FILE       "file"
 #define URL_TYPE_JUMP       "jump"
 #define URL_TYPE_HTTP       "http"
@@ -45,8 +43,21 @@ typedef const char* URLType;
 #define URL_TYPE_OTHER      "other"
 #define URL_TYPE_BUDGET     "budget"
 
-gchar* gnc_build_url( URLType type, const gchar* location, const gchar* label );
+typedef const char* URLType;
 
-gboolean gnc_html_engine_supports_css( void );
-
+#ifdef __cplusplus
+#define NOEXCEPT noexcept
+extern "C"
+{
+#else
+#define NOEXCEPT
 #endif
+
+gchar* gnc_build_url( URLType type, const gchar* location, const gchar* label ) NOEXCEPT;
+gboolean gnc_html_engine_supports_css( void ) NOEXCEPT;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // GNC_HTML_EXTRAS_H

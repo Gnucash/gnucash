@@ -555,6 +555,41 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
     return instances;
 }
 
+static GncSxInstances*
+sx_gen_select_instances(gpointer *data, gpointer user_data)
+{
+    GncSxInstances *instances = _gnc_sx_gen_instances(data, user_data);
+    GList *instlist = instances->instance_list;
+    
+    if (instlist == NULL)
+    {
+        SchedXaction *sx = instances->sx;
+        SXTmpStateData *temporal_state = gnc_sx_create_temporal_state(sx);
+        GDate cur_date = xaccSchedXactionGetNextInstance(sx, temporal_state);
+        
+        if (g_date_valid(&cur_date))
+        {
+            int seq_num = gnc_sx_get_instance_count(sx, temporal_state);
+            GncSxInstance *inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER,
+                    &cur_date, temporal_state, seq_num);
+
+            instances->instance_list = g_list_prepend (instlist, inst);
+        }
+
+        gnc_sx_destroy_temporal_state (temporal_state);
+    }
+
+    return instances;
+}
+
+static GncSxInstances*
+sx_instances(GncSxInstanceModel *model, SchedXaction *sx)
+{
+    return model->include_disabled ? 
+        sx_gen_select_instances((gpointer)sx, (gpointer)&model->range_end) :
+        _gnc_sx_gen_instances((gpointer)sx, (gpointer)&model->range_end);
+}
+
 GncSxInstanceModel*
 gnc_sx_get_current_instances(void)
 {
@@ -598,6 +633,24 @@ gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled)
         instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, (gpointer)range_end);
         g_list_free(enabled_sxes);
     }
+
+    return instances;
+}
+
+GncSxInstanceModel*
+gnc_sx_get_select_instances(GList *sel_sxes)
+{
+    GncSxInstanceModel *instances;
+    GDate now;
+
+    g_date_clear(&now, 1);
+    gnc_gdate_set_time64(&now, gnc_time(NULL));
+
+    instances = gnc_sx_instance_model_new();
+    instances->include_disabled = TRUE;
+    instances->range_end = now;
+
+    instances->sx_instance_list = gnc_g_list_map(sel_sxes, (GncGMapFunc)sx_gen_select_instances, (gpointer)&now);
 
     return instances;
 }
@@ -786,9 +839,7 @@ _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer
                 if (g_list_find(all_sxes, sx) && (!instances->include_disabled && xaccSchedXactionGetEnabled(sx)))
                 {
                     /* it's moved from disabled to enabled, add the instances */
-                    instances->sx_instance_list
-                        = g_list_append(instances->sx_instance_list,
-                                        _gnc_sx_gen_instances((gpointer)sx, (gpointer) & instances->range_end));
+                    instances->sx_instance_list = g_list_append(instances->sx_instance_list, sx_instances(instances, sx));
                     g_signal_emit_by_name(instances, "added", (gpointer)sx);
                 }
             }
@@ -817,9 +868,7 @@ _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer
             if (instances->include_disabled || xaccSchedXactionGetEnabled(sx))
             {
                 /* generate instances, add to instance list, emit update. */
-                instances->sx_instance_list
-                    = g_list_append(instances->sx_instance_list,
-                                    _gnc_sx_gen_instances((gpointer)sx, (gpointer) & instances->range_end));
+                instances->sx_instance_list = g_list_append(instances->sx_instance_list, sx_instances(instances, sx));
                 g_signal_emit_by_name(instances, "added", (gpointer)sx);
             }
         }
@@ -861,7 +910,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
 
     // merge the new instance data into the existing structure, mutating as little as possible.
     existing = (GncSxInstances*)link->data;
-    new_instances = _gnc_sx_gen_instances((gpointer)sx, &model->range_end);
+    new_instances = sx_instances(model, sx);
     existing->sx = new_instances->sx;
     existing->next_instance_date = new_instances->next_instance_date;
     {

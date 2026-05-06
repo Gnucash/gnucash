@@ -31,9 +31,9 @@
 #include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include <cstdlib>
+#include <string>
+#include <cerrno>
 #include <fcntl.h>
 #include <unistd.h>
 #include <regex.h>
@@ -45,7 +45,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-engine.h"
 #include "gnc-html.h"
-#include "gnc-html-webkit.h"
+#include "gnc-html-webkit.hpp"
 #include "gnc-html-history.h"
 #include "print-session.h"
 
@@ -56,14 +56,10 @@ static void gnc_html_webkit_finalize( GObject* obj );
 
 #define GNC_HTML_WEBKIT_GET_PRIVATE(o) (GNC_HTML_WEBKIT(o)->priv)
 
-#include "gnc-html-webkit-p.h"
+#include "gnc-html-webkit-p.hpp"
 
 /* indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_HTML;
-
-/* hashes for URLType -> protocol and protocol -> URLType */
-//extern GHashTable* gnc_html_type_to_proto_hash;
-//extern GHashTable* gnc_html_proto_to_type_hash;
 
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
@@ -121,33 +117,29 @@ static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpoint
 static void
 gnc_html_webkit_init( GncHtmlWebkit* self )
 {
-    GncHtmlWebkitPrivate* priv;
-    GncHtmlWebkitPrivate* new_priv;
-    GtkStyleContext *stylecontext;
-    WebKitWebSettings* webkit_settings = NULL;
-    const char* default_font_family = NULL;
-    PangoFontDescription *font_desc;
-    gdouble zoom = 1.0;
+    PangoFontDescription *font_desc = nullptr;
 
-    new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
-    priv = self->priv = new_priv;
-    GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
+    auto new_priv = static_cast<GncHtmlWebkitPrivate*>(
+        g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) )
+    );
+    auto priv = self->priv = new_priv;
+    GNC_HTML(self)->priv = reinterpret_cast<GncHtmlPrivate*>(priv);
 
-    priv->html_string = NULL;
+    priv->html_string = nullptr;
     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
     /* Get the default font family from GtkStyleContext of a GtkWidget(priv->web_view). */
-    stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
+    auto stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
     gtk_style_context_get (stylecontext, gtk_widget_get_state_flags (GTK_WIDGET(priv->web_view)),
-                           "font", &font_desc, NULL);
+                           "font", &font_desc, nullptr);
 
-    default_font_family = pango_font_description_get_family (font_desc);
+    const char *default_font_family = pango_font_description_get_family (font_desc);
     pango_font_description_free (font_desc);
 
     /* Set default webkit settings */
-    webkit_settings = webkit_web_view_get_settings (priv->web_view);
-    g_object_set (G_OBJECT(webkit_settings), "default-encoding", "utf-8", NULL);
-    if (default_font_family == NULL)
+    auto webkit_settings = webkit_web_view_get_settings (priv->web_view);
+    g_object_set (G_OBJECT(webkit_settings), "default-encoding", "utf-8", nullptr);
+    if (default_font_family == nullptr)
     {
         PWARN("webkit_settings: Cannot get default font family.");
     }
@@ -155,11 +147,11 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     {
         g_object_set (G_OBJECT(webkit_settings),
                       "default-font-family", default_font_family,
-                      NULL);
+                      nullptr);
         PINFO("webkit_settings: Set default font to [%s]", default_font_family);
     }
     /* Scale everything up */
-    zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
+    gdouble zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
     webkit_web_view_set_full_content_zoom (priv->web_view, TRUE);
     webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
@@ -209,8 +201,8 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
             GNC_PREF_RPT_DFLT_ZOOM,
-            impl_webkit_default_zoom_changed,
-                           self);
+            reinterpret_cast<gpointer>(impl_webkit_default_zoom_changed),
+            self);
 
     LEAVE("retval %p", self);
 }
@@ -240,23 +232,25 @@ gnc_html_webkit_dispose( GObject* obj )
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(obj);
     GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
-    if ( priv->web_view != NULL )
+    if ( priv->web_view != nullptr )
     {
         gtk_container_remove( GTK_CONTAINER(priv->base.container),
                               GTK_WIDGET(priv->web_view) );
-        priv->web_view = NULL;
+        priv->web_view = nullptr;
     }
 
-    if ( priv->html_string != NULL )
+    if ( priv->html_string != nullptr )
     {
         g_free( priv->html_string );
-        priv->html_string = NULL;
+        priv->html_string = nullptr;
     }
 
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
             GNC_PREF_RPT_DFLT_ZOOM,
-            impl_webkit_default_zoom_changed,
-                                 obj);
+            reinterpret_cast<gpointer>(
+                impl_webkit_default_zoom_changed
+            ),
+            obj);
 
     G_OBJECT_CLASS(gnc_html_webkit_parent_class)->dispose( obj );
 }
@@ -266,10 +260,7 @@ gnc_html_webkit_finalize( GObject* obj )
 {
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(obj);
 
-//	if( self->priv != NULL ) {
-//		g_free( self->priv );
-    self->priv = NULL;
-//	}
+    self->priv = nullptr;
 
     G_OBJECT_CLASS(gnc_html_webkit_parent_class)->finalize( obj );
 }
@@ -279,15 +270,16 @@ gnc_html_webkit_finalize( GObject* obj )
 static char*
 extract_base_name(URLType type, const gchar* path)
 {
-    gchar       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
-    gchar       path_rexp[] = "^/*(.*)/+([^/]*)$";
+    constexpr gchar       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
+    constexpr gchar       path_rexp[] = "^/*(.*)/+([^/]*)$";
     regex_t    compiled_m, compiled_p;
-    regmatch_t match[4];
-    gchar       * machine = NULL, * location = NULL, * base = NULL;
-    gchar       * basename = NULL;
+    constexpr size_t MATCH_LEN = 4;
+    regmatch_t match[MATCH_LEN];
+    gchar       * machine = nullptr, * location = nullptr, * base = nullptr;
+    gchar       * basename = nullptr;
 
     DEBUG(" ");
-    if (!path) return NULL;
+    if (!path) return nullptr;
 
     regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
     regcomp(&compiled_p, path_rexp, REG_EXTENDED);
@@ -299,7 +291,7 @@ extract_base_name(URLType type, const gchar* path)
 
         /* step 1: split the machine name away from the path
          * components */
-        if (!regexec(&compiled_m, path, 4, match, 0))
+        if (!regexec(&compiled_m, path, MATCH_LEN, match, 0))
         {
             /* $1 is the machine name */
             if (match[1].rm_so != -1)
@@ -332,7 +324,7 @@ extract_base_name(URLType type, const gchar* path)
             }
             else
             {
-                base = NULL;
+                base = nullptr;
             }
         }
     }
@@ -344,11 +336,11 @@ extract_base_name(URLType type, const gchar* path)
     {
         if (base && (strlen(base) > 0))
         {
-            basename = g_strconcat(machine, "/", base, "/", NULL);
+            basename = g_strconcat(machine, "/", base, "/", nullptr);
         }
         else
         {
-            basename = g_strconcat(machine, "/", NULL);
+            basename = g_strconcat(machine, "/", nullptr);
         }
     }
     else
@@ -359,7 +351,7 @@ extract_base_name(URLType type, const gchar* path)
         }
         else
         {
-            basename = NULL;
+            basename = nullptr;
         }
     }
 
@@ -391,9 +383,9 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
     gchar* object_tag;
     gchar* end_object_tag;
     gchar* object_contents;
-    gchar* html_str_start = NULL;
+    gchar* html_str_start = nullptr;
     gchar* html_str_middle;
-    gchar* html_str_result = NULL;
+    gchar* html_str_result = nullptr;
     gchar* classid_start;
     gchar* classid_end;
     gchar* classid_str;
@@ -409,7 +401,7 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
         classid_str = g_strndup( classid_start, (classid_end - classid_start) );
 
         end_object_tag = g_strstr_len( object_tag, -1, "</object>" );
-        if ( end_object_tag == NULL )
+        if ( end_object_tag == nullptr )
         {
             /*  Hmmm... no object end tag
                 Return the original html string because we can't properly parse it */
@@ -420,8 +412,9 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
         end_object_tag += strlen( "</object>" );
         object_contents = g_strndup( object_tag, (end_object_tag - object_tag) );
 
-        h = g_hash_table_lookup( gnc_html_object_handlers, classid_str );
-        if ( h != NULL )
+        const gpointer p = g_hash_table_lookup( gnc_html_object_handlers, classid_str );
+        h = reinterpret_cast<GncHTMLObjectCB>(p);
+        if ( h != nullptr )
         {
             (void)h( GNC_HTML(self), object_contents, &html_str_middle );
         }
@@ -433,9 +426,9 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
         html_str_start = html_str_result;
         new_chunk = g_strndup (remainder_str, (object_tag - remainder_str));
         if (!html_str_start)
-            html_str_result = g_strconcat (new_chunk, html_str_middle, NULL);
+            html_str_result = g_strconcat (new_chunk, html_str_middle, nullptr);
         else
-            html_str_result = g_strconcat (html_str_start, new_chunk, html_str_middle, NULL);
+            html_str_result = g_strconcat (html_str_start, new_chunk, html_str_middle, nullptr);
 
         g_free( html_str_start );
         g_free( new_chunk );
@@ -448,7 +441,7 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
     if (html_str_result)
     {
         html_str_start =  html_str_result;
-        html_str_result = g_strconcat (html_str_start, remainder_str, NULL);
+        html_str_result = g_strconcat (html_str_start, remainder_str, nullptr);
         g_free (html_str_start);
     }
     else
@@ -467,61 +460,60 @@ static gboolean
 load_to_stream( GncHtmlWebkit* self, URLType type,
                 const gchar* location, const gchar* label )
 {
-    gchar* fdata = NULL;
+    gchar* fdata = nullptr;
     int fdata_len = 0;
     GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
     DEBUG( "type %s, location %s, label %s", type ? type : "(null)",
            location ? location : "(null)", label ? label : "(null)");
 
-    g_return_val_if_fail( self != NULL, FALSE );
+    g_return_val_if_fail( self != nullptr, FALSE );
 
-    if ( gnc_html_stream_handlers != NULL )
+    if ( gnc_html_stream_handlers != nullptr )
     {
-        GncHTMLStreamCB stream_handler;
-
-        stream_handler = g_hash_table_lookup( gnc_html_stream_handlers, type );
+        const gpointer p = g_hash_table_lookup( gnc_html_stream_handlers, type );
+        GncHTMLStreamCB stream_handler = reinterpret_cast<GncHTMLStreamCB>(p);
         if ( stream_handler )
         {
             GncHtml *weak_html = GNC_HTML(self);
-            gboolean ok;
 
             g_object_add_weak_pointer(G_OBJECT(self), (gpointer *)(&weak_html));
 
-            ok = stream_handler(location, &fdata, &fdata_len);
+            bool ok = stream_handler(location, &fdata, &fdata_len);
 
-              if (!weak_html) // will be NULL if self has been destroyed
-              {
-                  g_free (fdata);
-                  return FALSE;
-              }
-              else
-              {
-                  g_object_remove_weak_pointer(G_OBJECT(self),
-                                               (gpointer*)(&weak_html));
-              }
+            if (!weak_html) // will be nullptr if self has been destroyed
+            {
+                g_free (fdata);
+                return FALSE;
+            }
+            else
+            {
+                g_object_remove_weak_pointer(G_OBJECT(self),
+                                            (gpointer*)(&weak_html));
+            }
 
-            if (ok) {
+            if (ok)
+            {
                 fdata = fdata ? fdata : g_strdup("");
 
-            // Until webkitgtk supports download requests, look for "<object
-            // classid=" indicating the beginning of an embedded graph.  If
-            // found, handle it
-            if (g_strstr_len(fdata, -1, "<object classid=") != NULL) {
-              gchar *new_fdata;
-              new_fdata = handle_embedded_object(self, fdata);
-              g_free(fdata);
-              fdata = new_fdata;
-            }
+                // Until webkitgtk supports download requests, look for "<object
+                // classid=" indicating the beginning of an embedded graph.  If
+                // found, handle it
+                if (g_strstr_len(fdata, -1, "<object classid=") != nullptr)
+                {
+                    gchar *new_fdata;
+                    new_fdata = handle_embedded_object(self, fdata);
+                    g_free(fdata);
+                    fdata = new_fdata;
+                }
 
-            // Save a copy for export purposes
-            if (priv->html_string != NULL) {
-              g_free(priv->html_string);
-            }
-            priv->html_string = g_strdup(fdata);
-            impl_webkit_show_data(GNC_HTML(self), fdata, strlen(fdata));
-            //                webkit_web_view_load_html_string( priv->web_view,
-            //                fdata, BASE_URI_NAME );
+                // Save a copy for export purposes
+                if (priv->html_string != nullptr)
+                {
+                    g_free(priv->html_string);
+                }
+                priv->html_string = g_strdup(fdata);
+                impl_webkit_show_data(GNC_HTML(self), fdata, strlen(fdata));
             }
             else
             {
@@ -590,7 +582,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
         }
 
     }
-    while ( FALSE );
+    while ( false );
     return TRUE;
 }
 
@@ -604,8 +596,8 @@ static void
 gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data )
 {
     URLType type;
-    gchar* location = NULL;
-    gchar* label = NULL;
+    gchar* location = nullptr;
+    gchar* label = nullptr;
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
 
     DEBUG("Clicked %s", url);
@@ -626,9 +618,8 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
                                 WebKitNetworkRequest* request,
                                 gpointer data )
 {
-    URLType type;
-    gchar* location = NULL;
-    gchar* label = NULL;
+    gchar* location = nullptr;
+    gchar* label = nullptr;
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
     const gchar* url = webkit_network_request_get_uri( request );
 
@@ -639,7 +630,7 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
         return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
     }
 
-    type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
+    URLType type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
     if ( strcmp( type, "file" ) == 0 )
     {
         LEAVE("URI type is 'file'");
@@ -684,12 +675,11 @@ gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
                               gpointer data )
 {
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-    GncHTMLObjectCB h;
 
     DEBUG( " " );
     if ( !eb || !(eb->classid) || !gnc_html_object_handlers ) return FALSE;
 
-    h = g_hash_table_lookup( gnc_html_object_handlers, eb->classid );
+    auto h = g_hash_table_lookup( gnc_html_object_handlers, eb->classid );
     if ( h )
     {
         return h( GNC_HTML(self), eb, data );
@@ -731,12 +721,11 @@ gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base,
 {
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
     GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-    URLType type;
-    gchar* location = NULL;
-    gchar* label = NULL;
+    gchar* location = nullptr;
+    gchar* label = nullptr;
 
     DEBUG( "Setting base location to %s", base );
-    type = gnc_html_parse_url( GNC_HTML(self), base, &location, &label );
+    URLType type = gnc_html_parse_url( GNC_HTML(self), base, &location, &label );
 
     g_free( priv->base.base_location );
     g_free( label );
@@ -760,7 +749,7 @@ gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
     GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
     DEBUG( "Button Press" );
-    if ( priv->base.button_cb != NULL )
+    if ( priv->base.button_cb != nullptr )
     {
         (priv->base.button_cb)( GNC_HTML(self), event, priv->base.button_cb_data );
         return TRUE;
@@ -794,32 +783,27 @@ gnc_html_open_scm( GncHtmlWebkit* self, const gchar * location,
 static void
 impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 {
-    GncHtmlWebkitPrivate* priv;
 #define TEMPLATE_REPORT_FILE_NAME "gnc-report-XXXXXX.html"
-    int fd;
-    gchar* uri;
-    gchar *filename;
-
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
     ENTER( "datalen %d, data %20.20s", datalen, data );
 
-    priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+    auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
     /* Export the HTML to a file and load the file URI.   On Linux, this seems to get around some
        security problems (otherwise, it can complain that embedded images aren't permitted to be
        viewed because they are local resources).  On Windows, this allows the embedded images to
        be viewed (maybe for the same reason as on Linux, but I haven't found where it puts those
        messages. */
-    filename = g_build_filename(g_get_tmp_dir(), TEMPLATE_REPORT_FILE_NAME, (gchar *)NULL);
-    fd = g_mkstemp( filename );
+    gchar *filename = g_build_filename(g_get_tmp_dir(), TEMPLATE_REPORT_FILE_NAME, (gchar *)nullptr);
+    int fd = g_mkstemp( filename );
     impl_webkit_export_to_file( self, filename );
     close( fd );
 #ifdef G_OS_WIN32
-    uri = g_strdup_printf( "file:///%s", filename );
+    gchar *uri = g_strdup_printf( "file:///%s", filename );
 #else
-    uri = g_strdup_printf( "file://%s", filename );
+    gchar *uri = g_strdup_printf( "file://%s", filename );
 #endif
     g_free(filename);
     DEBUG("Loading uri '%s'", uri);
@@ -842,16 +826,15 @@ impl_webkit_show_url( GncHtml* self, URLType type,
                       const gchar* location, const gchar* label,
                       gboolean new_window_hint )
 {
-    GncHTMLUrlCB url_handler;
-    gboolean new_window;
-    GncHtmlWebkitPrivate* priv;
-    gboolean stream_loaded = FALSE;
+    GncHTMLUrlCB url_handler = nullptr;
+    bool new_window = false;
+    bool stream_loaded = false;
 
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
-    g_return_if_fail( location != NULL );
+    g_return_if_fail( location != nullptr );
 
-    priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+    auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
     /* make sure it's OK to show this URL type in this window */
     if ( new_window_hint == 0 )
@@ -860,14 +843,10 @@ impl_webkit_show_url( GncHtml* self, URLType type,
         {
             new_window = !((priv->base.urltype_cb)( type ));
         }
-        else
-        {
-            new_window = FALSE;
-        }
     }
     else
     {
-        new_window = TRUE;
+        new_window = true;
     }
 
     if ( !new_window )
@@ -877,28 +856,25 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 
     if ( gnc_html_url_handlers )
     {
-        url_handler = g_hash_table_lookup( gnc_html_url_handlers, type );
-    }
-    else
-    {
-        url_handler = NULL;
+        url_handler = reinterpret_cast<GncHTMLUrlCB>(
+            g_hash_table_lookup( gnc_html_url_handlers, type )
+        );
     }
 
     if ( url_handler )
     {
         GNCURLResult result;
-        gboolean ok;
 
         result.load_to_stream = FALSE;
         result.url_type = type;
-        result.location = NULL;
-        result.label = NULL;
+        result.location = nullptr;
+        result.label = nullptr;
         result.base_type = URL_TYPE_FILE;
-        result.base_location = NULL;
-        result.error_message = NULL;
+        result.base_location = nullptr;
+        result.error_message = nullptr;
         result.parent = GTK_WINDOW (priv->base.parent);
 
-        ok = url_handler( location, label, new_window, &result );
+        bool ok = url_handler( location, label, new_window, &result );
         if ( !ok )
         {
             if ( result.error_message )
@@ -940,7 +916,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
                                             result.url_type,
                                             new_location, new_label );
 
-            if ( stream_loaded && priv->base.load_cb != NULL )
+            if ( stream_loaded && priv->base.load_cb != nullptr )
             {
                 priv->base.load_cb( GNC_HTML(self), result.url_type,
                                     new_location, new_label, priv->base.load_cb_data );
@@ -997,7 +973,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 
             priv->base.base_type = type;
 
-            if ( priv->base.base_location != NULL ) g_free( priv->base.base_location );
+            if ( priv->base.base_location != nullptr ) g_free( priv->base.base_location );
             priv->base.base_location = extract_base_name( type, location );
 
             /* FIXME : handle new_window = 1 */
@@ -1015,7 +991,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
         PERR( "URLType %s not supported.", type );
     }
 
-    if ( stream_loaded && priv->base.load_cb != NULL )
+    if ( stream_loaded && priv->base.load_cb != nullptr )
     {
         (priv->base.load_cb)( GNC_HTML(self), type, location, label, priv->base.load_cb_data );
     }
@@ -1034,7 +1010,7 @@ impl_webkit_reload( GncHtml* self, gboolean force_rebuild )
 {
     GncHtmlWebkitPrivate* priv;
 
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
@@ -1042,7 +1018,7 @@ impl_webkit_reload( GncHtml* self, gboolean force_rebuild )
     if ( force_rebuild )
     {
         gnc_html_history_node *n = gnc_html_history_get_current( priv->base.history );
-        if ( n != NULL )
+        if ( n != nullptr )
             gnc_html_show_url( self, n->type, n->location, n->label, 0 );
     }
     else
@@ -1058,7 +1034,9 @@ impl_webkit_reload( GncHtml* self, gboolean force_rebuild )
 GncHtml*
 gnc_html_webkit_new( void )
 {
-    GncHtmlWebkit* self = g_object_new( GNC_TYPE_HTML_WEBKIT, NULL );
+    GncHtmlWebkit* self = static_cast<GncHtmlWebkit *>(
+        g_object_new( GNC_TYPE_HTML_WEBKIT, nullptr )
+    );
     return GNC_HTML(self);
 }
 
@@ -1080,15 +1058,12 @@ impl_webkit_cancel( GncHtml* self )
 {
     GncHtmlWebkitPrivate* priv;
 
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
-    /* remove our own references to requests */
-    //gnc_http_cancel_requests( priv->http );
-
-    g_hash_table_foreach_remove( priv->base.request_info, webkit_cancel_helper, NULL );
+    g_hash_table_foreach_remove( priv->base.request_info, webkit_cancel_helper, nullptr );
 }
 
 static void
@@ -1096,7 +1071,7 @@ impl_webkit_copy_to_clipboard( GncHtml* self )
 {
     GncHtmlWebkitPrivate* priv;
 
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
@@ -1119,17 +1094,17 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
     FILE *fh;
     GncHtmlWebkitPrivate* priv;
 
-    g_return_val_if_fail( self != NULL, FALSE );
+    g_return_val_if_fail( self != nullptr, FALSE );
     g_return_val_if_fail( GNC_IS_HTML_WEBKIT(self), FALSE );
-    g_return_val_if_fail( filepath != NULL, FALSE );
+    g_return_val_if_fail( filepath != nullptr, FALSE );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-    if ( priv->html_string == NULL )
+    if ( priv->html_string == nullptr )
     {
         return FALSE;
     }
     fh = g_fopen( filepath, "w" );
-    if ( fh != NULL )
+    if ( fh != nullptr )
     {
         gint written;
         gint len = strlen( priv->html_string );
@@ -1165,11 +1140,11 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 static void
 impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
 {
-    gchar *export_filename = NULL;
+    gchar *export_filename = nullptr;
     GncHtmlWebkitPrivate* priv;
     WebKitWebFrame* frame;
     GtkPrintOperation* op = gtk_print_operation_new();
-    GError* error = NULL;
+    GError* error = nullptr;
     GtkPrintSettings *print_settings;
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
@@ -1193,7 +1168,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
     }
     else
     {
-        export_filename = g_strconcat(jobname, ".pdf", NULL);
+        export_filename = g_strconcat(jobname, ".pdf", nullptr);
     }
 
     // Two different modes of operation. Either export to PDF, or run the
@@ -1202,18 +1177,18 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
     {
         GtkWidget *dialog;
         gint result;
-        gchar *export_dirname = NULL;
+        gchar *export_dirname = nullptr;
         gchar* basename;
 
         // Before we save the PDF file, we always ask the user for the export
         // file name. We will store the chosen directory in the gtk print settings
         // as well.
         dialog = gtk_file_chooser_dialog_new (_("Export to PDF File"),
-                                              NULL,
+                                              nullptr,
                                               GTK_FILE_CHOOSER_ACTION_SAVE,
                                               _("_Cancel"), GTK_RESPONSE_CANCEL,
                                               _("_Save"), GTK_RESPONSE_ACCEPT,
-                                              NULL);
+                                              nullptr);
         gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
         // Does the jobname look like a valid full file path?
@@ -1223,12 +1198,15 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             gchar *tmp_basename;
             gchar *tmp_dirname = g_path_get_dirname(jobname);
 
-            if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            if (g_file_test(tmp_dirname,
+                static_cast<GFileTest>(
+                    G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR
+                )))
             {
                 // Yes, the jobname starts with a directory name that actually
                 // exists. Hence we use this as output directory.
                 export_dirname = tmp_dirname;
-                tmp_dirname = NULL;
+                tmp_dirname = nullptr;
 
                 // As the prefix part of the "jobname" is the directory path, we
                 // need to extract the suffix part for the filename.
@@ -1249,7 +1227,10 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             const char* tmp_dirname = gtk_print_settings_get(print_settings,
                                       GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
             // Only use the directory subsequently if it exists.
-            if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            if (g_file_test(tmp_dirname,
+                static_cast<GFileTest>(
+                    G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR
+                )))
             {
                 export_dirname = g_strdup(tmp_dirname);
             }
@@ -1278,7 +1259,10 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
 
             // Store the directory part of the file for later
             dirname = g_path_get_dirname(export_filename);
-            if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            if (g_file_test(dirname,
+                static_cast<GFileTest>(
+                    G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR
+                )))
             {
                 gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
             }
@@ -1312,7 +1296,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             gchar *dirname = g_path_get_dirname(olduri);
             gchar *newuri = (g_strcmp0(dirname, ".") == 0)
                             ? g_strdup(export_filename)
-                            : g_build_filename(dirname, export_filename, NULL);
+                            : g_build_filename(dirname, export_filename, nullptr);
             //g_warning("olduri=%s newuri=%s", olduri, newuri);
 
             // This function expects the full filename including protocol, path, and name
@@ -1331,17 +1315,17 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
     }
 
-    if ( error != NULL )
+    if ( error != nullptr )
     {
         GtkWidget* window = gtk_widget_get_toplevel( GTK_WIDGET(priv->web_view) );
-        GtkWidget* dialog = gtk_message_dialog_new( gtk_widget_is_toplevel(window) ? GTK_WINDOW(window) : NULL,
+        GtkWidget* dialog = gtk_message_dialog_new( gtk_widget_is_toplevel(window) ? GTK_WINDOW(window) : nullptr,
                             GTK_DIALOG_DESTROY_WITH_PARENT,
                             GTK_MESSAGE_ERROR,
                             GTK_BUTTONS_CLOSE,
                             "%s", error->message );
         g_error_free( error );
 
-        g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+        g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), nullptr);
         gtk_widget_show( dialog );
     }
 
@@ -1356,7 +1340,7 @@ impl_webkit_set_parent( GncHtml* self, GtkWindow* parent )
 {
     GncHtmlWebkitPrivate* priv;
 
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
@@ -1370,7 +1354,7 @@ impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
     GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
-    g_return_if_fail(user_data != NULL);
+    g_return_if_fail(user_data != nullptr);
 
     zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
     webkit_web_view_set_zoom_level (priv->web_view, zoom);

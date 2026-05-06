@@ -9,7 +9,7 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Guille Lopez <willelopz@gmail.com>, 2021.
-# Francisco Serrador <fserrador@gmail.com>, 2021, 2022, 2023, 2025.
+# Francisco Serrador <fserrador@gmail.com>, 2021, 2022, 2023, 2025, 2026.
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Pablo Fernandez <pfernandez@theansweris27.com>, 2022.
 # gallegonovato <fran-carro@hotmail.es>, 2023, 2024.
@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-10-30 17:02+0000\n"
+"PO-Revision-Date: 2026-04-15 19:09+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -112,7 +112,7 @@ msgstr "ahorro"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "tipo de cuenta: Acciones"
+msgstr "tipo de cuenta: Albarán"
 
 #. "This account type is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
@@ -120,7 +120,7 @@ msgstr "comercio"
 
 #. "-"
 msgid "account: parent account"
-msgstr "cuenta antecesora"
+msgstr "cuenta precedente"
 
 #. "-"
 msgid "account: subaccount"
@@ -292,7 +292,7 @@ msgstr "efectivo"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr "cheque"
+msgstr "cheque, comprobar"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
@@ -328,7 +328,7 @@ msgstr "Haber (columna en el registro)"
 
 #. "-"
 msgid "Credit Card"
-msgstr "Tarjeta Crediticia"
+msgstr "Tarjeta de crédito"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -408,7 +408,7 @@ msgstr "correo electrónico"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "operador"
+msgstr "empleado"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
@@ -520,7 +520,7 @@ msgstr "marcador"
 
 #. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
-msgstr "Margen de beneficio"
+msgstr "margen"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -636,7 +636,7 @@ msgstr "plazo principal"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr "precio"
+msgstr "precio (en un desglose)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
@@ -652,7 +652,7 @@ msgstr "cotizaciones"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr "ganancia, beneficio"
+msgstr "beneficio"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
@@ -672,7 +672,7 @@ msgstr "conciliar"
 
 #. "-"
 msgid "record keeping"
-msgstr "conservación de registros"
+msgstr "conservación de registro"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -684,7 +684,7 @@ msgstr "transacción desglosada"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "desglose de reserva"
+msgstr "desglose de albarán"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -748,11 +748,11 @@ msgstr "Ventas a corto plazo"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Saldo de las acciones (registro)"
+msgstr "Saldo de acciones (registro)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "acciones"
+msgstr "acciones, comparticiones"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
@@ -764,11 +764,11 @@ msgstr "desglose"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr "provisiones"
+msgstr "[albarán], provisiones, [mercancías], reservas"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 msgid "stock split"
-msgstr "desglose de provisión"
+msgstr "desglose de albarán"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -852,7 +852,7 @@ msgstr "transferir"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr "Balance sumas y saldos"
+msgstr "balance de comprobación (informe)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -876,7 +876,7 @@ msgstr "proveedor"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "comprobante, vale"
+msgstr "comprobante"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

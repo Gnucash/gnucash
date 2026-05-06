@@ -20,6 +20,11 @@
       <summary>Always reconcile to today</summary>
       <description>If active, always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</description>
     </key>
+    <key name="enable-autoclear-in-reconcile" type="b">
+      <default>false</default>
+      <summary>Enable autoclear tools in reconciliation</summary>
+      <description>If active, suggests transactions to clear based on amounts summing to the statement balance</description>
+    </key>
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

@@ -163,7 +163,7 @@ delete_popup (GtkWidget *widget, GdkEvent *event, gpointer data)
     return TRUE;
 }
 
-static gint
+static gboolean
 key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     GNCDateEdit *gde = data;
@@ -782,7 +782,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
     return TRUE;
 }
 
-static gint
+static gboolean
 key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     if (!date_accel_key_press(widget, event, data))

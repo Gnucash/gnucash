@@ -290,7 +290,7 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
     if (gtk_tree_selection_count_selected_rows (selection) == 0)
     {
-        conflict_msg = _("No documents were selected to assign this payment to. This may create an unattached payment.");
+        conflict_msg = _("No business items were selected to assign this payment to. This may create an unattached payment.");
         allow_payment = TRUE;
     }
 

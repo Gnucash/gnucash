@@ -101,9 +101,9 @@ typedef enum _EndTypeEnum
 
 struct _GncSxEditorDialog
 {
-    GtkWidget *dialog;
-    GtkBuilder *builder;
-    GtkNotebook *notebook;
+    GtkWidget    *dialog;
+    GtkBuilder   *builder;
+    GtkNotebook  *notebook;
     SchedXaction *sx;
     /* If this is a new scheduled transaction or not. */
     int newsxP;
@@ -111,34 +111,33 @@ struct _GncSxEditorDialog
     /* The various widgets in the dialog */
     GNCLedgerDisplay *ledger;
 
-    GncFrequency *gncfreq;
+    GncFrequency     *gncfreq;
     GncDenseCalStore *dense_cal_model;
-    GncDenseCal *example_cal;
+    GncDenseCal      *example_cal;
 
-    GtkEntry *nameEntry;
-
-    GtkLabel *lastOccurLabel;
+    GtkEntry        *nameEntry;
+    GtkLabel        *lastOccurLabel;
 
     GtkToggleButton *enabledOpt;
     GtkToggleButton *autocreateOpt;
     GtkToggleButton *notifyOpt;
     GtkToggleButton *advanceOpt;
-    GtkSpinButton *advanceSpin;
+    GtkSpinButton   *advanceSpin;
     GtkToggleButton *remindOpt;
-    GtkSpinButton *remindSpin;
+    GtkSpinButton   *remindSpin;
 
     GtkToggleButton *optEndDate;
     GtkToggleButton *optEndNone;
     GtkToggleButton *optEndCount;
-    EndType end_type;
-    GtkEntry *endCountSpin;
-    GtkEntry *endRemainSpin;
-    GNCDateEdit *endDateEntry;
+    EndType          end_type;
+    GtkEntry        *endCountSpin;
+    GtkEntry        *endRemainSpin;
+    GNCDateEdit     *endDateEntry;
 
-    char *sxGUIDstr;
+    char            *sxGUIDstr;
 
     GncEmbeddedWindow *embed_window;
-    GncPluginPage *plugin_page;
+    GncPluginPage     *plugin_page;
 };
 
 /** Prototypes **********************************************************/
@@ -436,8 +435,11 @@ gnc_sxed_check_changed (GncSxEditorDialog *sxed)
  ****************************************************************************/
 typedef struct _txnCreditDebitSums
 {
-    gnc_numeric creditSum;
-    gnc_numeric debitSum;
+    gnc_numeric    creditSum;
+    gnc_numeric    debitSum;
+    gnc_commodity *base_cmdty;
+    GtkWindow     *window;
+    gboolean       multi_commodity;
 } txnCreditDebitSums;
 
 static txnCreditDebitSums *
@@ -445,6 +447,9 @@ tcds_new (void)
 {
     txnCreditDebitSums *tcds = g_new0 (txnCreditDebitSums, 1);
     tcds->creditSum = tcds->debitSum = gnc_numeric_zero ();
+    tcds->base_cmdty = NULL;
+    tcds->window = NULL;
+    tcds->multi_commodity = FALSE;
     return tcds;
 }
 
@@ -456,6 +461,8 @@ set_sums_to_zero (gpointer key,
     txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
     tcds->creditSum = gnc_numeric_zero ();
     tcds->debitSum  = gnc_numeric_zero ();
+    tcds->base_cmdty = NULL;
+    tcds->multi_commodity = FALSE;
 }
 
 inline static gnc_numeric
@@ -468,6 +475,7 @@ static void
 check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
 {
     txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
+    Transaction *txn = GNC_TRANSACTION(key);
     gboolean *unbalanced = (gboolean*)ud;
     gnc_numeric diff = tcds_difference (tcds);
     const char *result = gnc_numeric_zero_p (diff) ? "true" : "false";
@@ -477,6 +485,21 @@ check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
            gnc_num_dbg_to_string (tcds->debitSum),
            gnc_num_dbg_to_string (tcds->creditSum),
            gnc_num_dbg_to_string (diff));
+
+    if (!gnc_numeric_zero_p (diff) && !tcds->multi_commodity)
+    {
+        char string[32];
+        gchar *msg_text;
+        const gchar *desc = xaccTransGetDescription (txn);
+        GNCPrintAmountInfo print_info = gnc_commodity_print_info (tcds->base_cmdty, TRUE);
+        gnc_numeric abs_diff = gnc_numeric_abs (diff);
+        xaccSPrintAmount (string, abs_diff, print_info);
+        msg_text = g_strdup_printf (_("Transaction with description '%s' can not be balanced.\n"
+                                      "The difference is %s"), desc, string);
+
+        gnc_warning_dialog (tcds->window, "%s", msg_text);
+        g_free (msg_text);
+    }
 }
 
 static gboolean
@@ -623,29 +646,23 @@ gnc_sxed_check_autocreate (GncSxEditorDialog *sxed, int ttVarCount,
 }
 
 static gboolean
-gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s,
-                              gnc_commodity *base_cmdty, gboolean *multi_cmdty)
+gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s, txnCreditDebitSums *tcds)
 {
-    gnc_commodity *split_cmdty = NULL;
-    gnc_numeric split_amount;
-    Account *acct = NULL;
     GncGUID *acct_guid = NULL;
-    qof_instance_get (QOF_INSTANCE (s),
-                      "sx-account", &acct_guid,
-                      NULL);
-    acct = xaccAccountLookup (acct_guid, gnc_get_current_book ());
+    qof_instance_get (QOF_INSTANCE (s), "sx-account", &acct_guid, NULL);
+    Account *acct = xaccAccountLookup (acct_guid, gnc_get_current_book ());
     guid_free (acct_guid);
     // If the split is being destroyed always return TRUE.
     if (acct == NULL && !qof_instance_get_destroying (s))
         return FALSE;
-    split_cmdty = xaccAccountGetCommodity (acct);
-    split_amount = xaccSplitGetAmount (s);
-    if (!gnc_numeric_zero_p (split_amount) && base_cmdty == NULL)
-    {
-        base_cmdty = split_cmdty;
-    }
-    *multi_cmdty |= (!gnc_numeric_zero_p (split_amount) &&
-                    !gnc_commodity_equal (split_cmdty, base_cmdty));
+
+    gnc_commodity *split_cmdty = xaccAccountGetCommodity (acct);
+
+    if (!tcds->base_cmdty)
+        tcds->base_cmdty = split_cmdty;
+
+    tcds->multi_commodity |= !gnc_commodity_equal (split_cmdty, tcds->base_cmdty);
+
     return TRUE;
 }
 
@@ -720,17 +737,16 @@ check_transaction_splits (Transaction *txn, gpointer data)
 
     for (; splitList; splitList = splitList->next)
     {
-        gnc_commodity *base_cmdty = NULL;
         Split *s = (Split*)splitList->data;
 
-        if (sd->tcds == NULL)
+        if (g_hash_table_lookup (sd->txns, (gpointer)txn) == NULL)
         {
             sd->tcds = tcds_new ();
+            sd->tcds->window = GTK_WINDOW(sd->sxed->dialog);
             g_hash_table_insert (sd->txns, (gpointer)txn, (gpointer)(sd->tcds));
         }
 
-        if (!gnc_sxed_split_check_account (sd->sxed, s, base_cmdty,
-                                           &sd->multi_commodity))
+        if (!gnc_sxed_split_check_account (sd->sxed, s, sd->tcds))
         {
             gchar *message = g_strdup_printf
                 (_("Split with memo %s has an invalid account."),
@@ -742,6 +758,8 @@ check_transaction_splits (Transaction *txn, gpointer data)
             sd->err = TRUE;
             return FALSE;
         }
+
+        sd->multi_commodity |= sd->tcds->multi_commodity;
 
         if (!gnc_sxed_split_calculate_formula (sd->sxed, s, sd->vars,
                                                "sx-credit-formula",
@@ -774,7 +792,7 @@ check_transaction_splits (Transaction *txn, gpointer data)
             return FALSE;
         }
     }
-    return TRUE;
+    return FALSE; // return FALSE to continue to next transaction
 }
 
 /*******************************************************************************
@@ -871,8 +889,9 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
     if (unbalanceable)
     {
         const char *msg =
-            _("The Scheduled Transaction Editor cannot automatically "
-              "balance this transaction. Should it still be entered?");
+            _("The Scheduled Transaction Editor cannot automatically balance "
+              "all of the transactions in this this Scheduled Transaction.\n"
+              "Should it still be entered?");
         if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", msg))
             return FALSE;
     }
@@ -1662,9 +1681,21 @@ gnc_sxed_update_cal (GncSxEditorDialog *sxed)
 
     if (!g_date_valid (&first_date))
     {
+        /* Note: There are no recurrences for PERIOD_NONE and on initial setting
+         * of PERIOD_WEEKLY (no days set), so still need to 'do nothing' */
+        gboolean do_nothing = TRUE;
+        if (recurrences)
+        {
+            Recurrence *r = g_list_nth_data (recurrences, 0);
+            if (r && r->ptype == PERIOD_ONCE)
+                do_nothing = FALSE;
+        }
         /* Nothing to do. */
-        gnc_dense_cal_store_clear (sxed->dense_cal_model);
-        goto cleanup;
+        if (do_nothing)
+        {
+            gnc_dense_cal_store_clear (sxed->dense_cal_model);
+            goto cleanup;
+        }
     }
 
     gnc_dense_cal_store_update_name (sxed->dense_cal_model, xaccSchedXactionGetName (sxed->sx));

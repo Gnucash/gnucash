@@ -376,6 +376,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="text" translatable="yes">Gross value</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -489,7 +490,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="text" translatable="yes">Cash</property>
+                <property name="text" translatable="yes">Net value</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -839,7 +840,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="text" translatable="yes">Capital Gain</property>
+                <property name="text" translatable="yes">Capital Gain/Loss</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
