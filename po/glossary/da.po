@@ -5,14 +5,16 @@
 # Joe Hansen <joedalton2@yahoo.dk>, 2009.
 # Aputsiak Niels Janussen <aj@isit.gl>, 2021.
 # Allan Olsen <allan@hamann-olsen.dk>, 2025.
+# Sune Kibsgaard <sune@kibs.dk>, 2026.
+# Cecilie Nielsen <cecilie.nielsen1984@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-06-20 15:01+0000\n"
-"Last-Translator: Allan Olsen <allan@hamann-olsen.dk>\n"
+"PO-Revision-Date: 2026-04-25 13:11+0000\n"
+"Last-Translator: Cecilie Nielsen <cecilie.nielsen1984@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "da/>\n"
 "Language: da\n"
@@ -20,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -32,7 +34,7 @@ msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "Konto"
+msgstr "konto"
 
 #. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
@@ -40,7 +42,7 @@ msgstr "kontonummer"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "kontoplan"
+msgstr "kontohieraki"
 
 #. "-"
 msgid "account name"
@@ -576,7 +578,7 @@ msgstr "åbningssaldo"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
-msgstr "alternativer"
+msgstr "muligheder"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"

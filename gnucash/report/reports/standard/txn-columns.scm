@@ -183,7 +183,7 @@ Select a different subset of transactions, or increase the limit in the options.
                     1 3 "total-label-cell"
                     (gnc:make-html-text
                      (G_ "Total For ")
-                     (format #f "~a to ~a" (qof-print-date from-date) (qof-print-date to-date))))
+                     (gnc-date-interval-format from-date to-date)))
                    (map (lambda (acc total)
                           (gnc:make-html-table-cell/markup
                            "total-number-cell"

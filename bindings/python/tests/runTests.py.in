@@ -16,7 +16,17 @@ from test_business import TestBusiness
 from test_commodity import TestCommodity, TestCommodityNamespace
 from test_numeric import TestGncNumeric
 from test_query import TestQuery
-from test_deprecation import TestDeprecation
+from test_price_and_wrapping import (
+    TestGncPriceWrapping,
+    TestGncLotSplitList,
+    TestSplitGncNumericReturns,
+    TestAccountCurrencyOrParent,
+    TestCommodityObtainTwin,
+    TestCommodityNamespaceDS,
+    TestSwigTypemapCompat,
+    TestGetPriceReturnsGncNumeric,
+    TestDoubleWrapProtection,
+)
 
 if __name__ == '__main__':
     unittest.main()

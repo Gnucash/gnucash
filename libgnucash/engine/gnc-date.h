@@ -482,6 +482,8 @@ size_t qof_print_gdate(char *buf, size_t bufflen, const GDate *gd);
 char * qof_print_date (time64 secs);
 
 
+gchar* gnc_date_interval_format (time64 from_date, time64 to_date);
+
 /* ------------------------------------------------------------------ */
 /* time printing utilities */
 

@@ -31,8 +31,6 @@ def get_all_lots(account):
   ltotal=[]
   descs = account.get_descendants()
   for desc in descs:
-    if type(desc).__name__ == 'SwigPyObject':
-        desc = gnucash.Account(instance=desc)
     ll=desc.GetLotList()
     ltotal+=ll
   return ltotal
@@ -45,9 +43,6 @@ def get_all_invoices_from_lots(account):
   lot_list=get_all_lots(account)
   invoice_list=[]
   for lot in lot_list:
-    if type(lot).__name__ == 'SwigPyObject':
-        lot = gnucash.GncLot(instance=lot)
-
     invoice=gnucash.gnucash_core_c.gncInvoiceGetInvoiceFromLot(lot.instance)
     if invoice:
       invoice_list.append(Invoice(instance=invoice))

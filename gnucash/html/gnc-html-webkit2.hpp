@@ -1,6 +1,5 @@
 /********************************************************************
- * gnc-html_factory.c -- Factory to create HTML component           *
- *                                                                  *
+ * gnc-html-webkit.hpp -- display html with gnc special tags          *
  * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -19,29 +18,44 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- ********************************************************************/
+\********************************************************************/
 
-#include <config.h>
+#ifndef GNC_HTML_WEBKIT_H
+#define GNC_HTML_WEBKIT_H
 
-#include <gtk/gtk.h>
-
+#include <glib-object.h>
 #include "gnc-html.h"
-#include "gnc-html-webkit.h"
-#include "qoflog.h"
-#include "gnc-engine.h"
 
-#include "gnc-html-factory.h"
+G_BEGIN_DECLS
 
-/* indicates the debugging module that this .o belongs to.  */
-G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
+#define GNC_TYPE_HTML_WEBKIT       (gnc_html_webkit_get_type())
+#define GNC_HTML_WEBKIT(o)         (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkit))
+#define GNC_HTML_WEBKIT_CLASS(k)   (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitClass))
+#define GNC_IS_HTML_WEBKIT(o)      (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_HTML_WEBKIT))
+#define GNC_IS_HTML_WEBKIT_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE((k), GNC_TYPE_HTML_WEBKIT))
+#define GNC_HTML_WEBKIT_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitClass))
 
-GncHtml* gnc_html_factory_create_html( void )
+struct GncHtmlWebkitPrivate;
+
+/** Key for saving the PDF-export directory in the print settings */
+#define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
+
+struct GncHtmlWebkit
 {
-    return gnc_html_webkit_new();
-}
+    GncHtml parent_instance;
 
-gboolean
-gnc_html_engine_supports_css( void )
+    /*< private >*/
+    GncHtmlWebkitPrivate* priv;
+};
+
+struct GncHtmlWebkitClass
 {
-    return TRUE;
-}
+    GncHtmlClass parent_class;
+};
+
+GType gnc_html_webkit_get_type( void );
+GncHtml* gnc_html_webkit_new( void ) NOEXCEPT;
+
+G_END_DECLS
+
+#endif // GNC_HTML_WEBKIT_H

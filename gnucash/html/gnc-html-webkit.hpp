@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-webkit.h -- display html with gnc special tags          *
+ * gnc-html-webkit.hpp -- display html with gnc special tags          *
  * Copyright (C) 2017 John Ralls <jralls@ceridwen.us>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,7 +22,7 @@
 
 #include <config.h>
 #ifdef WEBKIT1
-#include "gnc-html-webkit1.h"
+#include "gnc-html-webkit1.hpp"
 #else
-#include "gnc-html-webkit2.h"
+#include "gnc-html-webkit2.hpp"
 #endif

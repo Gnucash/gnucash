@@ -244,7 +244,7 @@ static void qof_instance_class_init(QofInstanceClass *klass)
 
     g_object_class_install_property
     (object_class,
-     PROP_EDITLEVEL,
+     PROP_IDATA,
      g_param_spec_uint ("idata",
                         "Object IData",
                         "Per instance backend private data.",
@@ -1216,7 +1216,6 @@ qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
         if (kvp_match_guid (v, {key}, guid))
         {
             delete inst->kvp_data->set_path({path}, nullptr);
-            delete v;
         }
         break;
     case KvpValue::Type::GLIST:

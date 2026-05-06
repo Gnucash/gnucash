@@ -88,6 +88,82 @@
 
 %include <base-typemaps.i>
 
+/* GNC_ACCEPT_WRAPPER: Generate input typemaps that accept both raw SWIG
+ * pointers and Python wrapper objects (ClassFromFunctions subclasses).
+ *
+ * The Python bindings use a two-layer architecture:
+ *   - gnucash_core_c (SWIG-generated): exposes C functions with raw pointers
+ *   - gnucash_core.py: wraps selected methods to return Python objects
+ *
+ * When gnucash_core.py wraps return types (via methods_return_instance),
+ * the returned Python objects store the raw SWIG pointer in a .instance
+ * attribute.  Without these typemaps, passing such a wrapper object to a
+ * gnucash_core_c function fails because SWIG only recognizes its own
+ * pointer wrappers.
+ *
+ * These typemaps fix that: they try normal SWIG conversion first (zero
+ * overhead for the common case), and fall back to extracting .instance
+ * if needed.
+ */
+%define GNC_ACCEPT_WRAPPER(CType)
+%typemap(in) CType * (void *argp = NULL) {
+    int res = SWIG_ConvertPtr($input, &argp, $1_descriptor, 0);
+    if (SWIG_IsOK(res)) {
+        $1 = %reinterpret_cast(argp, $1_ltype);
+    } else {
+        PyObject *instance = PyObject_GetAttrString($input, "instance");
+        if (instance != NULL) {
+            res = SWIG_ConvertPtr(instance, &argp, $1_descriptor, 0);
+            Py_DECREF(instance);
+            if (SWIG_IsOK(res)) {
+                if (PyErr_WarnEx(PyExc_DeprecationWarning,
+                    "Passing " #CType " wrapper objects directly to "
+                    "gnucash_core_c is deprecated; "
+                    "use the Python API or .instance attribute.", 1) < 0) {
+                    SWIG_fail;
+                }
+                $1 = %reinterpret_cast(argp, $1_ltype);
+            } else {
+                SWIG_exception_fail(SWIG_TypeError,
+                    "in method '$symname', argument $argnum:"
+                    " .instance is not a " #CType " *");
+            }
+        } else {
+            PyErr_Clear();
+            SWIG_exception_fail(SWIG_TypeError,
+                "in method '$symname', argument $argnum:"
+                " expected " #CType " * or wrapper object");
+        }
+    }
+}
+%apply CType * { const CType * };
+%enddef
+
+/* Core engine types */
+GNC_ACCEPT_WRAPPER(Account)
+GNC_ACCEPT_WRAPPER(Split)
+GNC_ACCEPT_WRAPPER(Transaction)
+GNC_ACCEPT_WRAPPER(GNCLot)
+GNC_ACCEPT_WRAPPER(gnc_commodity)
+GNC_ACCEPT_WRAPPER(gnc_commodity_namespace)
+GNC_ACCEPT_WRAPPER(gnc_commodity_table)
+GNC_ACCEPT_WRAPPER(GNCPrice)
+GNC_ACCEPT_WRAPPER(GNCPriceDB)
+GNC_ACCEPT_WRAPPER(QofBook)
+GNC_ACCEPT_WRAPPER(QofSession)
+GNC_ACCEPT_WRAPPER(GncGUID)
+
+/* Business types */
+GNC_ACCEPT_WRAPPER(GncCustomer)
+GNC_ACCEPT_WRAPPER(GncEmployee)
+GNC_ACCEPT_WRAPPER(GncVendor)
+GNC_ACCEPT_WRAPPER(GncJob)
+GNC_ACCEPT_WRAPPER(GncAddress)
+GNC_ACCEPT_WRAPPER(GncBillTerm)
+GNC_ACCEPT_WRAPPER(GncTaxTable)
+GNC_ACCEPT_WRAPPER(GncInvoice)
+GNC_ACCEPT_WRAPPER(GncEntry)
+
 %include <engine-common.i>
 
 %include <qofbackend.h>

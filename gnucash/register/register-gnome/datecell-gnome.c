@@ -286,7 +286,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
     box->in_date_select = FALSE;
 }
 
-static void
+static gboolean
 key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
 {
     DateCell *cell = data;
@@ -303,6 +303,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
         gtk_widget_event(GTK_WIDGET (box->sheet), (GdkEvent *) event);
         break;
     }
+    return TRUE;
 }
 
 static void

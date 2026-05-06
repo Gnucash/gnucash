@@ -626,7 +626,7 @@ gnc_tree_view_commodity_get_selected_commodity (GncTreeViewCommodity *view)
     if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter))
     {
         LEAVE("no commodity, get_selected failed");
-        return FALSE;
+        return NULL;
     }
 
     gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (s_model),
@@ -642,6 +642,46 @@ gnc_tree_view_commodity_get_selected_commodity (GncTreeViewCommodity *view)
     LEAVE("commodity %p (%s)", commodity,
           commodity ? gnc_commodity_get_mnemonic(commodity) : "");
     return commodity;
+}
+
+/*
+ * Retrieve the selected namespace from a commodity tree view. The
+ * commodity tree must be in single selection mode.
+ */
+gnc_commodity_namespace *
+gnc_tree_view_commodity_get_selected_namespace (GncTreeViewCommodity *view)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel *model, *f_model, *s_model;
+    GtkTreeIter iter, f_iter, s_iter;
+    gnc_commodity_namespace *ns;
+
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY(view), NULL);
+
+    ENTER("view %p", view);
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+    if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter))
+    {
+        LEAVE("no namespace, get_selected failed");
+        return NULL;
+    }
+
+    gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (s_model),
+                                                    &f_iter, &s_iter);
+
+    f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(s_model));
+    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+                                                      &iter, &f_iter);
+
+    model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(f_model));
+
+    ns = gnc_tree_model_commodity_get_namespace (GNC_TREE_MODEL_COMMODITY(model),
+                                                 &iter);
+
+    LEAVE("namespace %p (%s)", ns,
+          ns ? gnc_commodity_namespace_get_name(ns) : "");
+    return ns;
 }
 
 /*

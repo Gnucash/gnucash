@@ -1783,7 +1783,7 @@ pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event)
     return result;
 }
 
-static gint
+static gboolean
 gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 {
     Table *table;
@@ -1866,7 +1866,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     return TRUE;
 }
 
-static gint
+static gboolean
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     GnucashSheet *sheet;
@@ -1887,7 +1887,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
     return gnucash_sheet_key_press_event_internal (widget, event);
 }
 
-static gint
+static gboolean
 gnucash_sheet_key_release_event (GtkWidget *widget, GdkEventKey *event)
 {
     g_return_val_if_fail (widget != NULL, TRUE);

@@ -40,11 +40,21 @@ G_BEGIN_DECLS
 #define GNC_IS_HTML_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE((o), GNC_TYPE_HTML))
 #define GNC_HTML_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), GNC_TYPE_HTML, GncHtmlClass))
 
-GType gnc_html_get_type(void);
-
 typedef struct _GncHtml GncHtml;
 typedef struct _GncHtmlClass GncHtmlClass;
 typedef struct _GncHtmlPrivate GncHtmlPrivate;
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+GType gnc_html_get_type(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #include "gnc-html-extras.h"
 
@@ -61,8 +71,8 @@ typedef struct
                             * perform all needed actions itself. */
 
     URLType url_type;        /* Defaults to original */
-    gchar* location;         /* If NULL, use original (NULL is default) */
-    gchar* label;            /* If NULL, use original (NULL is default) */
+    gchar* location;         /* If nullptr, use original (nullptr is default) */
+    gchar* label;            /* If nullptr, use original (nullptr is default) */
 
     URLType base_type;
     gchar* base_location;
@@ -80,49 +90,34 @@ typedef gboolean (* GncHTMLStreamCB)(const gchar* location, gchar** data, int* d
 typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
                                   gboolean new_window, GNCURLResult* result);
 
+#ifdef __cplusplus
+#define NOEXCEPT noexcept
+extern "C"
+{
+#else
+#define NOEXCEPT
+#endif
+
 /**
  * Registers a new URLType.
  * returns TRUE if successful, FALSE if type already exists.
  *
  * @param type New URL type
  * @param prococol Protocol - should be an empty string if there is no corresponding protocol.
- * @return TRUE if successful, FALSE if type already exists or protocol is NULL.
+ * @return TRUE if successful, FALSE if type already exists or protocol is nullptr.
  */
-gboolean gnc_html_register_urltype( URLType type, const gchar* protocol );
+gboolean gnc_html_register_urltype( URLType type, const gchar* protocol ) NOEXCEPT;
 
 /**
  * Initializes the html subsystem
  */
-void gnc_html_initialize( void );
+void gnc_html_initialize( void ) NOEXCEPT;
 
-gchar* gnc_html_encode_string( const gchar* in );
-gchar* gnc_html_decode_string( const gchar* in );
-gchar* gnc_html_escape_newlines( const gchar* in );
-gchar* gnc_html_unescape_newlines( const gchar* in );
-
-/* object handlers deal with <object classid="foo"> objects in HTML.
- * the handlers are looked up at object load time. */
-void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand );
-void gnc_html_unregister_object_handler( const gchar* classid );
-
-/* stream handlers load data for particular URLTypes. */
-void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand );
-void gnc_html_unregister_stream_handler( URLType url_type );
-
-/* handlers for particular URLTypes. */
-void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand );
-void gnc_html_unregister_url_handler( URLType url_type );
+#ifdef __cplusplus
+}
+#endif
 
 #include "gnc-html-history.h"
-
-typedef int  (* GncHTMLUrltypeCB)(URLType ut);
-typedef void (* GncHTMLFlyoverCB)(GncHtml* html, const gchar* url,
-                                  gpointer data);
-typedef void (* GncHTMLLoadCB)(GncHtml* html, URLType type,
-                               const gchar* location, const gchar* label,
-                               gpointer data);
-typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
-                                 gpointer data);
 
 struct _GncHtmlClass
 {
@@ -157,12 +152,26 @@ struct _GncHtml
     GncHtmlPrivate* priv;
 };
 
+typedef int  (* GncHTMLUrltypeCB)(URLType ut);
+typedef void (* GncHTMLFlyoverCB)(GncHtml* html, const gchar* url,
+                                  gpointer data);
+typedef void (* GncHTMLLoadCB)(GncHtml* html, URLType type,
+                               const gchar* location, const gchar* label,
+                               gpointer data);
+typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
+                                 gpointer data);
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**
  * Destroys a GncHtml object.
  *
  * @param html GncHtml object to destroy
  */
-void gnc_html_destroy( GncHtml* html );
+void gnc_html_destroy( GncHtml* html ) NOEXCEPT;
 
 /**
  * Displays a URL in a GncHtml object.
@@ -170,14 +179,14 @@ void gnc_html_destroy( GncHtml* html );
  * @param html GncHtml object
  */
 void gnc_html_show_url( GncHtml* html, URLType type, const gchar* location,
-                        const gchar* label, gboolean new_window_hint );
+                        const gchar* label, gboolean new_window_hint ) NOEXCEPT;
 
 /**
  * Displays an HTML string in a GncHtml object.
  *
  * @param html GncHtml object
  */
-void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen );
+void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen ) NOEXCEPT;
 
 /**
  * Reloads the current GncHtml object.
@@ -185,14 +194,14 @@ void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen );
  * @param html GncHtml object
  * @param view if TRUE, view is reloaded, if FALSE, report is recreated
  */
-void gnc_html_reload( GncHtml* html, gboolean view );
+void gnc_html_reload( GncHtml* html, gboolean view ) NOEXCEPT;
 
 /**
  * Copies the html to the clipboard
  *
  * @param html GncHtml object
  */
-void gnc_html_copy_to_clipboard( GncHtml* html );
+void gnc_html_copy_to_clipboard( GncHtml* html ) NOEXCEPT;
 
 /**
  * Exports the html to an external file.
@@ -201,7 +210,7 @@ void gnc_html_copy_to_clipboard( GncHtml* html );
  * @param filename External file name
  * @param TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
+gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename ) NOEXCEPT;
 
 #ifdef WEBKIT1
 /**
@@ -213,21 +222,21 @@ gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
  * @param export_pdf If TRUE write a PDF file using the jobname for a
  *                   filename; otherwise put up a print dialog.
  */
-void gnc_html_print (GncHtml* html, const char* jobname, gboolean export_pdf);
+void gnc_html_print (GncHtml* html, const char* jobname, gboolean export_pdf) NOEXCEPT;
 #else
 /**
  * Prints the report.
  *
  * @param html GncHtml object
  */
-void gnc_html_print (GncHtml* html, const char* jobname);
+void gnc_html_print (GncHtml* html, const char* jobname) NOEXCEPT;
 #endif
 /**
  * Cancels the current operation
  *
  * @param html GncHtml object
  */
-void gnc_html_cancel( GncHtml* html );
+void gnc_html_cancel( GncHtml* html ) NOEXCEPT;
 
 /**
  * Parses a URL into URI and label
@@ -238,7 +247,7 @@ void gnc_html_cancel( GncHtml* html );
  * @param url_label Pointer where to store address of string containing label
  */
 URLType gnc_html_parse_url( GncHtml* html, const gchar* url,
-                            gchar** url_location, gchar** url_label );
+                            gchar** url_location, gchar** url_label ) NOEXCEPT;
 
 /**
  * Returns the history for this html engine
@@ -246,7 +255,7 @@ URLType gnc_html_parse_url( GncHtml* html, const gchar* url,
  * @param html GncHtml object
  * @return History
  */
-gnc_html_history* gnc_html_get_history( GncHtml* html );
+gnc_html_history* gnc_html_get_history( GncHtml* html ) NOEXCEPT;
 
 /**
  * Returns the main widget for this html engine
@@ -254,7 +263,7 @@ gnc_html_history* gnc_html_get_history( GncHtml* html );
  * @param html GncHtml object
  * @return Main widget
  */
-GtkWidget* gnc_html_get_widget( GncHtml* html );
+GtkWidget* gnc_html_get_widget( GncHtml* html ) NOEXCEPT;
 
 /**
  * Returns the webview widget for this html engine
@@ -262,7 +271,7 @@ GtkWidget* gnc_html_get_widget( GncHtml* html );
  * @param html GncHtml object
  * @return webview widget
  */
-GtkWidget* gnc_html_get_webview( GncHtml* html );
+GtkWidget* gnc_html_get_webview( GncHtml* html ) NOEXCEPT;
 
 
 /**
@@ -271,28 +280,32 @@ GtkWidget* gnc_html_get_webview( GncHtml* html );
  * @param html GncHtml object
  * @param parent Parent window
  */
-void gnc_html_set_parent( GncHtml* html, GtkWindow* parent );
+void gnc_html_set_parent( GncHtml* html, GtkWindow* parent ) NOEXCEPT;
 
 /* setting callbacks */
-void gnc_html_set_urltype_cb( GncHtml* html, GncHTMLUrltypeCB urltype_cb );
-void gnc_html_set_load_cb( GncHtml* html, GncHTMLLoadCB load_cb, gpointer data );
-void gnc_html_set_flyover_cb( GncHtml* html, GncHTMLFlyoverCB newwin_cb, gpointer data );
-void gnc_html_set_button_cb( GncHtml* html, GncHTMLButtonCB button_cb, gpointer data );
+void gnc_html_set_urltype_cb( GncHtml* html, GncHTMLUrltypeCB urltype_cb ) NOEXCEPT;
+void gnc_html_set_load_cb( GncHtml* html, GncHTMLLoadCB load_cb, gpointer data ) NOEXCEPT;
+void gnc_html_set_flyover_cb( GncHtml* html, GncHTMLFlyoverCB newwin_cb, gpointer data ) NOEXCEPT;
+void gnc_html_set_button_cb( GncHtml* html, GncHTMLButtonCB button_cb, gpointer data ) NOEXCEPT;
 
 /* object handlers deal with <object classid="foo"> objects in HTML.
  * the handlers are looked up at object load time. */
-void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand );
-void gnc_html_unregister_object_handler( const gchar* classid );
+void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand ) NOEXCEPT;
+void gnc_html_unregister_object_handler( const gchar* classid ) NOEXCEPT;
 
 /* stream handlers load data for particular URLTypes. */
-void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand );
-void gnc_html_unregister_stream_handler( URLType url_type );
+void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand ) NOEXCEPT;
+void gnc_html_unregister_stream_handler( URLType url_type ) NOEXCEPT;
 
 /* handlers for particular URLTypes. */
-void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand );
-void gnc_html_unregister_url_handler( URLType url_type );
+void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand ) NOEXCEPT;
+void gnc_html_unregister_url_handler( URLType url_type ) NOEXCEPT;
 
-const gchar* gnc_html_get_embedded_param( gpointer eb, const gchar* param_name );
+const gchar* gnc_html_get_embedded_param( gpointer eb, const gchar* param_name ) NOEXCEPT;
+
+#ifdef __cplusplus
+}
+#endif
 
 G_END_DECLS
 #endif

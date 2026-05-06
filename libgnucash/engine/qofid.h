@@ -203,19 +203,6 @@ not in the other.
 gint
 qof_collection_compare (QofCollection *target, QofCollection *merge);
 
-/** \brief Create a secondary collection from a GList
-
-@param type The QofIdType of the QofCollection \b and of
-	\b all entities in the GList.
-@param glist GList of entities of the same QofIdType.
-
-@return NULL if any of the entities fail to match the
-	QofCollection type, else a pointer to the collection
-	on success.
-*/
-QofCollection*
-qof_collection_from_glist (QofIdType type, const GList *glist);
-
 /** @} */
 /** @} */
 

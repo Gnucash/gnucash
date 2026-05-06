@@ -20,6 +20,7 @@
 (define-module (gnucash report report-utilities))
 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-2))
 (use-modules (srfi srfi-13))
 (use-modules (srfi srfi-26))
 (use-modules (ice-9 format))
@@ -378,6 +379,13 @@
              (total (if pair ((cadr pair) 'total #f) 0)))
         (gnc:make-gnc-monetary c (if sign? (- total) total))))
 
+    ;; same as getmonetary, if the commodity doesn't
+    ;; exist in commodity-collector, returns #f
+    (define (getmonetary-strict c sign?)
+      (and-let* ((pair (assoc c commoditylist))
+                 (total ((cadr pair) 'total #f)))
+        (gnc:make-gnc-monetary c (if sign? (- total) total))))
+
     (define (not-zero? l) (not (zero? ((cadr l) 'total #f))))
 
     ;; Dispatch function
@@ -392,6 +400,7 @@
         ((reset) (set! commoditylist '()))
         ((getpair) (getpair commodity amount))
         ((getmonetary) (getmonetary commodity amount))
+        ((getmonetary-strict) (getmonetary-strict commodity amount))
         ((remove-zeros) (set! commoditylist (filter not-zero? commoditylist)))
         ((list) commoditylist) ; this one is only for internal use
         (else (gnc:warn "bad commodity-collector action: " action))))))

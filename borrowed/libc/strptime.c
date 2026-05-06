@@ -38,6 +38,13 @@
 
 #include "strptime.h"
 
+/* Status of lookup: do we use the locale data or the raw data?  */
+enum locale_status { not, loc, raw };
+
+static char *
+strptime_internal (const char *rp, const char *fmt, struct tm *tm,
+                    enum locale_status *decided, int era_cnt);
+
 
 #ifdef OS_WIN32
 /* The localtime_r() definition in pthreads-win32's pthread.h doesn't guard
@@ -370,9 +377,6 @@ const unsigned short int __mon_yday[2][13] =
 };
 #endif
 
-/* Status of lookup: do we use the locale data or the raw data?  */
-enum locale_status { not, loc, raw };
-
 
 #ifndef __isleap
 /* Nonzero if YEAR is a leap year (every 4 years,
@@ -411,19 +415,7 @@ static char *
 #ifdef _LIBC
 internal_function
 #endif
-strptime_internal __P ((const char *rp, const char *fmt, struct tm *tm,
-                        enum locale_status *decided, int era_cnt));
-
-static char *
-#ifdef _LIBC
-internal_function
-#endif
-strptime_internal (rp, fmt, tm, decided, era_cnt)
-const char *rp;
-const char *fmt;
-struct tm *tm;
-enum locale_status *decided;
-int era_cnt;
+strptime_internal (const char *rp,const char *fmt, struct tm *tm, enum locale_status *decided, int era_cnt)
 {
     const char *rp_backup;
     int cnt;
@@ -1372,10 +1364,7 @@ match_year_in_century:
 
 
 char *
-strptime (buf, format, tm)
-const char *buf;
-const char *format;
-struct tm *tm;
+strptime (const char *buf, const char *format, struct tm *tm)
 {
     enum locale_status decided;
 

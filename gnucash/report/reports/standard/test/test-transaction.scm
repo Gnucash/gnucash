@@ -962,10 +962,10 @@
                 "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#612.00" "-#51.00")
           (get-row-col sxml 5 #f))
         (test-equal "summary gbp total-row is correct"
-          (list "Grand Total" "#0.00" "#0.00")
+          (list "Total" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00" "#0.00")
           (get-row-col sxml 6 #f))
         (test-equal "summary total-row is correct"
-          (list "$0.00" "$0.00")
+          (list "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00")
           (get-row-col sxml 7 #f)))
 
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
@@ -981,19 +981,19 @@
           (list "Income" "-$29.00" "-$29.00" "-$9.67")
           (get-row-col sxml 3 #f))
         (test-equal "sparse summary-table - row 4"
-          (list "Grand Total" "$3.00" "$1.00")
+          (list "Total" "$0.00" "$11.00" "-$8.00" "$3.00" "$1.00")
           (get-row-col sxml 4 #f))
         (test-equal "sparse summary-table - col 1"
-          (list "Bank" "Expenses" "Income" "Grand Total")
+          (list "Bank" "Expenses" "Income" "Total")
           (get-row-col sxml #f 1))
         (test-equal "sparse summary-table - col 2"
-          (list "$29.00" "-$29.00")
+          (list "$29.00" "-$29.00" "$0.00")
           (get-row-col sxml #f 2))
         (test-equal "sparse summary-table - col 3"
-          (list "-$5.00" "$16.00")
+          (list "-$5.00" "$16.00" "$11.00")
           (get-row-col sxml #f 3))
         (test-equal "sparse summary-table - col 4"
-          (list "-$23.00" "$15.00")
+          (list "-$23.00" "$15.00" "-$8.00")
           (get-row-col sxml #f 4))
         (test-equal "sparse summary-table - col 5"
           (list "$1.00" "$31.00" "-$29.00" "$3.00")

@@ -166,8 +166,8 @@
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="has-tooltip">True</property>
-            <property name="tooltip-markup">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
-            <property name="tooltip-text" translatable="yes">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
+            <property name="tooltip-markup">At post time, automatically attempt to pay customer items with outstanding pre-payments and counter items. The pre-payments and items obviously have to be against the same customer. Counter items are items with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter items.</property>
+            <property name="tooltip-text" translatable="yes">At post time, automatically attempt to pay customer items with outstanding pre-payments and counter items. The pre-payments and items obviously have to be against the same customer. Counter items are items with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter items.</property>
             <property name="halign">start</property>
             <property name="use-underline">True</property>
             <property name="draw-indicator">True</property>
@@ -246,8 +246,8 @@
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="has-tooltip">True</property>
-            <property name="tooltip-markup">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
-            <property name="tooltip-text" translatable="yes">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
+            <property name="tooltip-markup">At post time, automatically attempt to pay vendor items with outstanding pre-payments and counter items. The pre-payments and items obviously have to be against the same vendor. Counter items are items with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter items.</property>
+            <property name="tooltip-text" translatable="yes">At post time, automatically attempt to pay vendor items with outstanding pre-payments and counter items. The pre-payments and items obviously have to be against the same vendor. Counter items are items with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter items.</property>
             <property name="halign">start</property>
             <property name="use-underline">True</property>
             <property name="draw-indicator">True</property>

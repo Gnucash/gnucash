@@ -56,6 +56,11 @@ struct _GncTreeViewSxList
     GncTreeView gnc_tree_view;
 
     GtkTreeModel *tree_model;
+
+    SchedXaction *sx;
+    GtkAdjustment *adjustment;
+    gdouble position;
+
     gboolean disposed;
 };
 
@@ -105,6 +110,85 @@ gnc_tree_view_sx_list_finalize(GObject *object)
     G_OBJECT_CLASS(gnc_tree_view_sx_list_parent_class)->finalize (object);
 }
 
+/************************************************************
+ *                        Callbacks                         *
+ ************************************************************/
+
+static gboolean
+gnc_tree_view_sx_list_restore (gpointer user_data)
+{
+    GncTreeViewSxList *view = user_data;
+
+    if (view->adjustment)
+    {
+        gtk_adjustment_set_value (view->adjustment, view->position);
+        view->adjustment = NULL;
+    }
+    if (view->sx)
+    {
+        SchedXaction *sx = view->sx;
+        GtkTreePath *path = gtk_tree_path_new_first ();
+
+        while (gnc_tree_view_path_is_valid (GNC_TREE_VIEW(view), path))
+        {
+            if (sx == gnc_tree_view_sx_list_get_sx_from_path (view, path))
+            {
+                GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+
+                gtk_tree_selection_unselect_all (selection);
+                gtk_tree_selection_select_path (selection, path);
+                gtk_tree_view_set_cursor (GTK_TREE_VIEW(view), path, NULL, FALSE);
+                gtk_widget_grab_focus (GTK_WIDGET(view));
+                gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, FALSE, 0.0, 0.0);
+                break;
+            }
+            gtk_tree_path_next (path);
+        }
+        gtk_tree_path_free (path);
+
+        view->sx = NULL;
+    }
+
+    return FALSE;
+}
+
+static void
+gnc_tree_view_sx_list_enabled_toggled (GtkCellRendererToggle *cell,
+                                      const gchar *path_str,
+                                      gpointer user_data)
+{
+    GncTreeViewSxList *view = user_data;
+    GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+    SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path (view, path);
+
+    if (sx)
+    {
+        GtkTreeSortable *sortable = GTK_TREE_SORTABLE(view->tree_model);
+        gint sort_column_id;
+        GtkSortType sort_order;
+
+        if (gtk_tree_sortable_get_sort_column_id (sortable, &sort_column_id, &sort_order) &&
+            sort_column_id == SXLTMA_COL_ENABLED)
+        {
+            view->sx = sx;
+        }
+        else
+        {
+            view->adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(view));
+            view->position = gtk_adjustment_get_value (view->adjustment);
+        }
+
+        gboolean enabled = !gtk_cell_renderer_toggle_get_active (cell);
+
+        xaccSchedXactionSetEnabled (sx, enabled);
+
+        g_idle_add((GSourceFunc)gnc_tree_view_sx_list_restore, user_data);
+    }
+
+    gtk_tree_path_free (path);
+}
+
+
 GtkTreeView*
 gnc_tree_view_sx_list_new (GncSxInstanceModel *sx_instances)
 {
@@ -123,7 +207,7 @@ gnc_tree_view_sx_list_new (GncSxInstanceModel *sx_instances)
                                            C_("Single-character short column-title form of 'Enabled'", "E"),
                                            "enabled", SXLTMA_COL_ENABLED,
                                            GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                           NULL, NULL);
+                                           NULL, gnc_tree_view_sx_list_enabled_toggled);
     g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     col = gnc_tree_view_add_text_column (GNC_TREE_VIEW(view), _("Frequency"), "frequency", NULL,

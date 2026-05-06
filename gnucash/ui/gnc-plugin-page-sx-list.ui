@@ -67,6 +67,12 @@
       <attribute name="tooltip" translatable="yes">Delete the selected scheduled transaction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
+    <item>
+      <attribute name="label" translatable="yes">_Run Schedule</attribute>
+      <attribute name="action">GncPluginPageSxListActions.SxListRunAction</attribute>
+      <attribute name="tooltip" translatable="yes">Run the selected scheduled transaction. If no transactions are scheduled to be entered, the next occurrence is used</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
   </menu>
 
 
@@ -195,6 +201,21 @@
         <property name="tooltip-text" translatable="yes">Delete the selected scheduled transaction</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-account-delete</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Run</property>
+        <property name="action-name">GncPluginPageSxListActions.SxListRunAction</property>
+        <property name="tooltip-text" translatable="yes">Run the selected scheduled transaction. If no transactions are scheduled to be entered, the next occurrence is used</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">system-run</property>
       </object>
       <packing>
         <property name="expand">False</property>

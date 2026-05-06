@@ -59,7 +59,7 @@ TEST(gnc_date_constructors, test_move_constructor)
     GncDate a(2045, 11, 13);
     GncDate b(std::move(a));
     EXPECT_TRUE(a.isnull());
-    EXPECT_TRUE (b.format("%Y-%m-%d") == "2045-11-13");
+    EXPECT_EQ (b.format("%Y-%m-%d"), "2045-11-13");
 }
 
 typedef struct
@@ -289,7 +289,7 @@ TEST(gnc_date_operators, test_move_assignment)
     GncDate b;
     b = std::move(a);
     EXPECT_TRUE(a.isnull());
-    EXPECT_TRUE (b.format("%Y-%m-%d") == "2045-11-13");
+    EXPECT_EQ (b.format("%Y-%m-%d"), "2045-11-13");
 }
 
 TEST(gnc_datetime_constructors, test_default_constructor)
