@@ -85,6 +85,87 @@ class TestGncNumeric(TestCase):
         self.assertEqual(fraction.numerator, 1000)
         self.assertEqual(fraction.denominator, 3)
 
+    def test_richcmp(self):
+        num1 = GncNumeric(5)
+        num2 = GncNumeric(10)
+
+        # Test basic operators using _richcmp directly
+        # _richcmp takes 'other' and an 'op' callable that takes one argument (the other GncNumeric instance)
+        # GncNumeric instances have _eq, _lt, _gt, etc methods for this.
+
+        # Test with GncNumeric
+        self.assertTrue(num1._richcmp(num2, num1._lt))
+        self.assertFalse(num2._richcmp(num1, num2._lt))
+        self.assertTrue(num1._richcmp(num1, num1._eq))
+
+        # Test with int
+        self.assertTrue(num1._richcmp(10, num1._lt))
+        self.assertFalse(num2._richcmp(5, num2._lt))
+        self.assertTrue(num1._richcmp(5, num1._eq))
+
+        # Test with float
+        self.assertTrue(num1._richcmp(10.0, num1._lt))
+        self.assertFalse(num2._richcmp(5.0, num2._lt))
+        self.assertTrue(num1._richcmp(5.0, num1._eq))
+
+        # Test with unsupported type
+        self.assertEqual(num1._richcmp("10", num1._lt), NotImplemented)
+        self.assertEqual(num1._richcmp([], num1._eq), NotImplemented)
+        self.assertEqual(num1._richcmp(None, num1._gt), NotImplemented)
+
+    def test__operator_fallbacks_function(self):
+        def dummy_mono(a, b):
+            return "mono", a, b
+        dummy_mono.__doc__ = "mono doc"
+
+        def dummy_fallback(a, b):
+            pass
+        dummy_fallback.__name__ = "dummy"
+
+        forward, reverse = GncNumeric._operator_fallbacks(dummy_mono, dummy_fallback)
+
+        self.assertEqual(forward.__name__, "__dummy__")
+        self.assertEqual(forward.__doc__, "mono doc")
+        self.assertEqual(reverse.__name__, "__rdummy__")
+        self.assertEqual(reverse.__doc__, "mono doc")
+
+        n1 = GncNumeric(5)
+        n2 = GncNumeric(10)
+
+        # Test forward
+        self.assertEqual(forward(n1, n2), ("mono", n1, n2))
+
+        # Test forward with int/float (wrapped in GncNumeric)
+        res_forward_int = forward(n1, 3)
+        self.assertEqual(res_forward_int[0], "mono")
+        self.assertEqual(res_forward_int[1], n1)
+        self.assertEqual(res_forward_int[2].to_double(), 3.0)
+
+        res_forward_float = forward(n1, 4.5)
+        self.assertEqual(res_forward_float[0], "mono")
+        self.assertEqual(res_forward_float[1], n1)
+        self.assertEqual(res_forward_float[2].to_double(), 4.5)
+
+        # Test forward with unsupported type
+        self.assertEqual(forward(n1, "string"), NotImplemented)
+
+        # Test reverse
+        self.assertEqual(reverse(n1, n2), ("mono", n2, n1))
+
+        # Test reverse with int/float (wrapped in GncNumeric)
+        res_reverse_int = reverse(n1, 3)
+        self.assertEqual(res_reverse_int[0], "mono")
+        self.assertEqual(res_reverse_int[1].to_double(), 3.0)
+        self.assertEqual(res_reverse_int[2], n1)
+
+        res_reverse_float = reverse(n1, 4.5)
+        self.assertEqual(res_reverse_float[0], "mono")
+        self.assertEqual(res_reverse_float[1].to_double(), 4.5)
+        self.assertEqual(res_reverse_float[2], n1)
+
+        # Test reverse with unsupported type
+        self.assertEqual(reverse(n1, "string"), NotImplemented)
+
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)
@@ -97,6 +178,90 @@ class TestGncNumeric(TestCase):
 
         with self.assertRaises(TypeError):
             GncNumeric(complex(1, 1))
+
+    def test_operator_fallbacks_add(self):
+        n1 = GncNumeric(5)
+        n2 = GncNumeric(10)
+
+        self.assertEqual((n1 + n2).to_double(), 15.0)
+        self.assertEqual((n1 + 5).to_double(), 10.0)
+        self.assertEqual((5 + n1).to_double(), 10.0)
+        self.assertEqual((n1 + 5.5).to_double(), 10.5)
+        self.assertEqual((5.5 + n1).to_double(), 10.5)
+
+    def test_operator_fallbacks_sub(self):
+        n1 = GncNumeric(15)
+        n2 = GncNumeric(5)
+
+        self.assertEqual((n1 - n2).to_double(), 10.0)
+        self.assertEqual((n1 - 5).to_double(), 10.0)
+        self.assertEqual((15 - n2).to_double(), 10.0)
+        self.assertEqual((n1 - 5.5).to_double(), 9.5)
+        self.assertEqual((15.5 - n2).to_double(), 10.5)
+
+    def test_operator_fallbacks_mul(self):
+        n1 = GncNumeric(5)
+        n2 = GncNumeric(3)
+
+        self.assertEqual((n1 * n2).to_double(), 15.0)
+        self.assertEqual((n1 * 3).to_double(), 15.0)
+        self.assertEqual((5 * n2).to_double(), 15.0)
+        self.assertEqual((n1 * 3.5).to_double(), 17.5)
+        self.assertEqual((5.5 * n2).to_double(), 16.5)
+
+    def test_operator_fallbacks_truediv(self):
+        n1 = GncNumeric(15)
+        n2 = GncNumeric(3)
+
+        self.assertEqual((n1 / n2).to_double(), 5.0)
+        self.assertEqual((n1 / 3).to_double(), 5.0)
+        self.assertEqual((15 / n2).to_double(), 5.0)
+        self.assertEqual((n1 / 2.5).to_double(), 6.0)
+        self.assertEqual((7.5 / n2).to_double(), 2.5)
+
+    def test_operator_fallbacks_floordiv(self):
+        n1 = GncNumeric(16)
+        n2 = GncNumeric(3)
+
+        self.assertEqual((n1 // n2).to_double(), 5.0)
+        self.assertEqual((n1 // 3).to_double(), 5.0)
+        self.assertEqual((16 // n2).to_double(), 5.0)
+        self.assertEqual((n1 // 2.5).to_double(), 6.0)
+        self.assertEqual((7.5 // n2).to_double(), 2.0)
+
+    def test_operator_fallbacks_unsupported(self):
+        n1 = GncNumeric(5)
+
+        with self.assertRaises(TypeError):
+            n1 + "5"
+
+        with self.assertRaises(TypeError):
+            "5" + n1
+
+        with self.assertRaises(TypeError):
+            n1 - "5"
+
+        with self.assertRaises(TypeError):
+            "5" - n1
+
+        with self.assertRaises(TypeError):
+            n1 * "5"
+
+        with self.assertRaises(TypeError):
+            "5" * n1
+
+        with self.assertRaises(TypeError):
+            n1 / "5"
+
+        with self.assertRaises(TypeError):
+            "5" / n1
+
+        with self.assertRaises(TypeError):
+            n1 // "5"
+
+        with self.assertRaises(TypeError):
+            "5" // n1
+
 
 if __name__ == '__main__':
     main()

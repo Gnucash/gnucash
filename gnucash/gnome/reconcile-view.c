@@ -388,7 +388,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
     if (auto_check)
     {
         time64 statement_date_day_end = gnc_time64_get_day_end (statement_date);
-        for (splits = qof_query_run (query); splits; splits = splits->next)
+        for (splits = qof_query_last_run (query); splits; splits = splits->next)
         {
             Split *split = splits->data;
             char recn = xaccSplitGetReconcile (split);
