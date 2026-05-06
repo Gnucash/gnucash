@@ -85,6 +85,12 @@ run_command_get_return (const char* command)
     return system (command);
 }
 
+static int
+run_command_get_return (const char* command)
+{
+    return system (command);
+}
+
 static char*
 test_file (const char* filename)
 {

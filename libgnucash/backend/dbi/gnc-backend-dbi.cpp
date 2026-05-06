@@ -171,13 +171,7 @@ UriStrings::quote_dbname(DbType t) const noexcept
         return "";
     const char quote = (t == DbType::DBI_MYSQL ? '`' : '"');
     std::string retval(1, quote);
-    for (auto c : m_dbname)
-    {
-        if (c == quote)
-            retval += quote;
-        retval += c;
-    }
-    retval += quote;
+    retval += m_dbname + quote;
     return retval;
 }
 
