@@ -1114,45 +1114,50 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
         }
     }
 
-    if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                           ENTRY_TAXABLE_CELL, TRUE))
     {
         gboolean taxable;
 
         taxable = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXABLE_CELL);
-        if (ledger->is_cust_doc)
-            gncEntrySetInvTaxable (entry, taxable);
-        else
-            gncEntrySetBillTaxable (entry, taxable);
-    }
-
-    /* XXX: Only (re-set) these if taxable is TRUE? */
-    if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                           ENTRY_TAXTABLE_CELL, TRUE))
-    {
-        GncTaxTable *table;
-
-        table = gnc_entry_ledger_get_taxtable (ledger, ENTRY_TAXTABLE_CELL);
-        if (table)
+        if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+                                               ENTRY_TAXABLE_CELL, TRUE))
         {
             if (ledger->is_cust_doc)
-                gncEntrySetInvTaxTable (entry, table);
+                gncEntrySetInvTaxable (entry, taxable);
             else
-                gncEntrySetBillTaxTable (entry, table);
+                gncEntrySetBillTaxable (entry, taxable);
         }
-    }
 
-    if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                           ENTRY_TAXINCLUDED_CELL, TRUE))
-    {
-        gboolean taxincluded;
+        /* Only (re-set) these if taxable is TRUE */
+        if (taxable)
+        {
+            if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+                                                   ENTRY_TAXTABLE_CELL, TRUE))
+            {
+                GncTaxTable *table;
 
-        taxincluded = gnc_entry_ledger_get_checkmark (ledger,
-                      ENTRY_TAXINCLUDED_CELL);
-        if (ledger->is_cust_doc)
-            gncEntrySetInvTaxIncluded (entry, taxincluded);
-        else
-            gncEntrySetBillTaxIncluded (entry, taxincluded);
+                table = gnc_entry_ledger_get_taxtable (ledger, ENTRY_TAXTABLE_CELL);
+                if (table)
+                {
+                    if (ledger->is_cust_doc)
+                        gncEntrySetInvTaxTable (entry, table);
+                    else
+                        gncEntrySetBillTaxTable (entry, table);
+                }
+            }
+
+            if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+                                                   ENTRY_TAXINCLUDED_CELL, TRUE))
+            {
+                gboolean taxincluded;
+
+                taxincluded = gnc_entry_ledger_get_checkmark (ledger,
+                              ENTRY_TAXINCLUDED_CELL);
+                if (ledger->is_cust_doc)
+                    gncEntrySetInvTaxIncluded (entry, taxincluded);
+                else
+                    gncEntrySetBillTaxIncluded (entry, taxincluded);
+            }
+        }
     }
 
     if (ledger->type == GNCENTRY_INVOICE_ENTRY ||
