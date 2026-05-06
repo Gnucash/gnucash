@@ -8,7 +8,7 @@
 # @date 2020-04-03
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
-from unittest import TestCase, main, mock
+from unittest import TestCase, main
 
 from gnucash import (
         Session,
@@ -16,7 +16,6 @@ from gnucash import (
 )
 
 from gnucash.gnucash_core import GnuCashBackendException
-from unittest.mock import patch
 
 class TestSession(TestCase):
     def test_create_empty_session(self):
