@@ -272,7 +272,6 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 {
     QofInstancePrivate *priv;
     QofCollection *col;
-    QofIdType col_type;
 
     g_return_if_fail(QOF_IS_INSTANCE(inst));
     priv = GET_PRIVATE(inst);
@@ -282,16 +281,6 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
     col = qof_book_get_collection (book, type);
     g_return_if_fail(col != nullptr);
 
-    /* XXX We passed redundant info to this routine ... but I think that's
-     * OK, it might eliminate programming errors. */
-
-    col_type = qof_collection_get_type(col);
-    if (g_strcmp0(col_type, type))
-    {
-        PERR ("attempt to insert \"%s\" into \"%s\"", type, col_type);
-        return;
-    }
-    priv = GET_PRIVATE(inst);
     inst->e_type = static_cast<QofIdType>(CACHE_INSERT (type));
 
     do
