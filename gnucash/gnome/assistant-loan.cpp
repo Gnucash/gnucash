@@ -568,14 +568,12 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         for ( i = 0; i < fromLen; i++ )
         {
             paymentFromAccts
-            = g_list_prepend( paymentFromAccts,
-                              GINT_TO_POINTER( paymentFroms[i] ) );
+            = g_list_append( paymentFromAccts,
+                             GINT_TO_POINTER( paymentFroms[i] ) );
             paymentToAccts
-            = g_list_prepend( paymentToAccts,
-                              GINT_TO_POINTER( paymentFroms[i] ) );
+            = g_list_append( paymentToAccts,
+                             GINT_TO_POINTER( paymentFroms[i] ) );
         }
-        paymentFromAccts = g_list_reverse( paymentFromAccts );
-        paymentToAccts = g_list_reverse( paymentToAccts );
 
         for ( i = 0; i < toLen; i++ )
         {
@@ -2056,7 +2054,7 @@ loan_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
     rrr  = g_new0( RevRepaymentRow, 1 );
     rrr->date = *(GDate*)key;
     rrr->numCells = (gnc_numeric*)val;
-    *l = g_list_prepend( *l, (gpointer)rrr );
+    *l = g_list_append( *l, (gpointer)rrr );
 }
 
 

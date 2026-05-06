@@ -59,6 +59,7 @@ public:
         const noexcept override;
     bool add_columns_to_table (const std::string&, const ColVec&)
         const noexcept override;
+    std::string quote_identifier(const std::string& identifier) const;
     std::string quote_string (const std::string&) const noexcept override;
     int dberror() const noexcept override {
         return dbi_conn_error(m_conn, nullptr); }

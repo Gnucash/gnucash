@@ -513,6 +513,12 @@ GncDbiSqlConnection::create_index(const std::string& index_name,
     return true;
 }
 
+std::string
+GncDbiSqlConnection::quote_identifier (const std::string& identifier) const
+{
+    return m_provider->quote_identifier (identifier);
+}
+
 bool
 GncDbiSqlConnection::add_columns_to_table(const std::string& table_name,
                                           const ColVec& info_vec)

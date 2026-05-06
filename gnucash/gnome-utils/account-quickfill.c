@@ -105,7 +105,7 @@ shared_quickfill_find_accounts (GtkTreeModel* model,
         if (tmp->data == account)
         {
             ref = gtk_tree_row_reference_new (model, path);
-            data->refs = g_list_prepend (data->refs, ref);
+            data->refs = g_list_append (data->refs, ref);
             data->accounts = g_list_delete_link (data->accounts, tmp);
             return (data->accounts == NULL);
         }
@@ -286,7 +286,6 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
         data.accounts = g_list_prepend (data.accounts, account);
         gtk_tree_model_foreach (GTK_TREE_MODEL (qfb->list_store),
                                 shared_quickfill_find_accounts, &data);
-        data.refs = g_list_reverse (data.refs);
 
         /* Update the existing items in the list store.  Its possible
          * that the change has caused an existing item to now become
@@ -365,7 +364,6 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
         data.accounts = g_list_append (NULL, account);
         gtk_tree_model_foreach (GTK_TREE_MODEL (qfb->list_store),
                                 shared_quickfill_find_accounts, &data);
-        data.refs = g_list_reverse (data.refs);
 
         /* Remove from list store */
         for (tmp = data.refs; tmp; tmp = g_list_next (tmp))

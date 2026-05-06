@@ -69,7 +69,20 @@ const char* base_env = "C";
 static char*
 gen_new_file_name (const char* filename, const char* env)
 {
-    return g_strdup_printf ("%s-%s", filename, env);
+    char* ret;
+
+    ret = g_new (char, strlen (filename) + strlen (env) + 2);
+    strcpy (ret, filename);
+    strcat (ret, "-");
+    strcat (ret, env);
+
+    return ret;
+}
+
+static int
+run_command_get_return (const char* command)
+{
+    return system (command);
 }
 
 static int
