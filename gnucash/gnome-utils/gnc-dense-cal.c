@@ -1617,7 +1617,6 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
     GDate *startD, *endD;
     GdkRectangle *rect;
     gint startWk, endWk;
-    GList *localList = NULL;
 
     if (monthOfCal > dcal->numMonths)
         return;
@@ -1684,7 +1683,7 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
                   + (weekRow * week_height (dcal));
         rect->width = (7 - start) * day_width (dcal);
         rect->height = week_height (dcal);
-        localList = g_list_prepend (localList, (gpointer)rect);
+        *outList = g_list_append (*outList, (gpointer)rect);
         rect = NULL;
     }
 
@@ -1708,7 +1707,7 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
             rect->width  = week_width (dcal);
             rect->height = week_height (dcal);
 
-            localList = g_list_prepend (localList, (gpointer)rect);
+            *outList = g_list_append (*outList, (gpointer)rect);
             rect = NULL;
         }
     }
@@ -1732,12 +1731,9 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
         rect->width = (((g_date_get_weekday (endD) + 7 - dcal->day_of_week_start) % 7) + 1) * day_width (dcal);
         rect->height = week_height (dcal);
 
-        localList = g_list_prepend (localList, (gpointer)rect);
+        *outList = g_list_append (*outList, (gpointer)rect);
         rect = NULL;
     }
-
-    localList = g_list_reverse (localList);
-    *outList = g_list_concat (*outList, localList);
 
     g_date_free (startD);
     g_date_free (endD);

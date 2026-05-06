@@ -563,28 +563,22 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         paymentFromAccts = NULL;
         paymentToAccts = NULL;
 
-        liabilityAcct = g_list_prepend( liabilityAcct,
+        liabilityAcct = g_list_append( liabilityAcct,
                                        GINT_TO_POINTER( ACCT_TYPE_LIABILITY ) );
         for ( i = 0; i < fromLen; i++ )
         {
             paymentFromAccts
-            = g_list_prepend( paymentFromAccts,
-                              GINT_TO_POINTER( paymentFroms[i] ) );
+            = g_list_append( paymentFromAccts,
+                             GINT_TO_POINTER( paymentFroms[i] ) );
             paymentToAccts
-            = g_list_prepend( paymentToAccts,
-                              GINT_TO_POINTER( paymentFroms[i] ) );
+            = g_list_append( paymentToAccts,
+                             GINT_TO_POINTER( paymentFroms[i] ) );
         }
-        paymentFromAccts = g_list_reverse( paymentFromAccts );
-        paymentToAccts = g_list_reverse( paymentToAccts );
 
+        for ( i = 0; i < toLen; i++ )
         {
-            GList *tempToAccts = NULL;
-            for ( i = 0; i < toLen; i++ )
-            {
-                tempToAccts = g_list_prepend( tempToAccts,
-                                                GINT_TO_POINTER( paymentTos[i] ) );
-            }
-            paymentToAccts = g_list_concat( paymentToAccts, g_list_reverse( tempToAccts ) );
+            paymentToAccts = g_list_append( paymentToAccts,
+                                            GINT_TO_POINTER( paymentTos[i] ) );
         }
 
         /* All of the GncAccountSel[ectors]... */
@@ -923,7 +917,7 @@ loan_assistant_data_init( LoanAssistantData *ldd )
     {
         Recurrence *r = g_new0(Recurrence, 1);
         recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate, WEEKEND_ADJ_NONE);
-        ldd->ld.repayment_schedule = g_list_prepend(ldd->ld.repayment_schedule, r);
+        ldd->ld.repayment_schedule = g_list_append(ldd->ld.repayment_schedule, r);
     }
 
     ldd->ld.repMemo = g_strdup( _("Loan") );
@@ -1668,7 +1662,7 @@ loan_pay_freq_toggle_cb( GtkToggleButton *tb, gpointer user_data )
             Recurrence *r = g_new0(Recurrence, 1);
 
             recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate, WEEKEND_ADJ_NONE);
-            rod->schedule = g_list_prepend(rod->schedule, r);
+            rod->schedule = g_list_append(rod->schedule, r);
         }
         if ( rod->startDate == NULL )
         {
@@ -2060,7 +2054,7 @@ loan_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
     rrr  = g_new0( RevRepaymentRow, 1 );
     rrr->date = *(GDate*)key;
     rrr->numCells = (gnc_numeric*)val;
-    *l = g_list_prepend( *l, (gpointer)rrr );
+    *l = g_list_append( *l, (gpointer)rrr );
 }
 
 
