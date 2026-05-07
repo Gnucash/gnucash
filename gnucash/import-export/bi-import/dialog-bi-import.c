@@ -313,6 +313,18 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
         //  If this is a row for a new invoice id, validate header values.
         if (on_first_row_of_invoice)
         {
+            g_free (id);
+            id = NULL;
+            g_free (date_opened);
+            date_opened = NULL;
+            g_free (date_posted);
+            date_posted = NULL;
+            g_free (due_date);
+            due_date = NULL;
+            g_free (account_posted);
+            account_posted = NULL;
+            g_free (owner_id);
+            owner_id = NULL;
             gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
                                 ID, &id,
                                 DATE_OPENED, &date_opened,
@@ -455,6 +467,14 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
         // Validate and fix item data for each row.
 
         // Get item data.
+        g_free (date);
+        date = NULL;
+        g_free (account);
+        account = NULL;
+        g_free (quantity);
+        quantity = NULL;
+        g_free (price);
+        price = NULL;
         gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
                             DATE, &date,
                             ACCOUNT, &account,
@@ -509,13 +529,16 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
 
         // Get the next row and its id.
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+        g_free (id);
+        id = NULL;
         if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
 
 
         // If the id of the next row is blank, it takes the id of the previous row.
         if (valid && strlen(id) == 0)
         {
-            strcpy( id, running_id->str);
+            g_free (id);
+            id = g_strdup (running_id->str);
             gtk_list_store_set (store, &iter, ID, id, -1);
         }
 
@@ -530,6 +553,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
                 {
                     (*n_rows_ignored)++;
                     valid = gtk_list_store_remove (store, &iter);
+                    g_free (id);
+                    id = NULL;
                     if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
                 }
                 while (valid && (g_strcmp0 (id, running_id->str) == 0));
@@ -558,18 +583,28 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
             invoice_line = 0;
 
             g_free (id);
+            id = NULL;
             g_free (date_opened);
+            date_opened = NULL;
             g_free (date_posted);
+            date_posted = NULL;
             g_free (due_date);
+            due_date = NULL;
             g_free (account_posted);
+            account_posted = NULL;
             g_free (owner_id);
+            owner_id = NULL;
         }
         else on_first_row_of_invoice = FALSE;
 
         g_free (date);
+        date = NULL;
         g_free (account);
+        account = NULL;
         g_free (quantity);
+        quantity = NULL;
         g_free (price);
+        price = NULL;
 
         row++;
     }
