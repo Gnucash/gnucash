@@ -340,6 +340,25 @@
       (test-equal "DMLR 500 shares" 500 ((caadr (assoc DMLR return-alist)) 'total #f))
       (test-equal "DMLR EUR13631.27" 1364127/100 (gnc-numeric-convert ((cdadr (assoc DMLR return-alist)) 'total #f) 100 GNC-HOW-RND-ROUND)))
     (test-end "foreign-DEM>EUR")
+
+    (test-begin "foreign-DEM>EUR-reverse")
+    ;; Old currency->Euro conversion, reversed outer/inner.
+    ;; We use a fresh collector to avoid interference.
+    (let* ((dmlr-dem-col-2 (cons (gnc:make-value-collector) (gnc:make-value-collector)))
+           (dummy (collect dmlr-dem-col-2 2668000/100 500))
+           (sumlist (list (list EUR  (list (list USD eur-usd-col)))
+                          (list DMLR (list (list DEM dmlr-dem-col-2)))))
+           (return-alist  (gnc:resolve-unknown-comm sumlist EUR)))
+      (test-equal "DMLR 500 shares" 500 ((caadr (assoc DMLR return-alist)) 'total #f))
+      (test-equal "DMLR EUR13631.27" 1364127/100 (gnc-numeric-convert ((cdadr (assoc DMLR return-alist)) 'total #f) 100 GNC-HOW-RND-ROUND)))
+    (test-end "foreign-DEM>EUR-reverse")
+
+    (test-begin "check-usd-euro")
+    (test-assert "USD is NOT euro" (not (gnc-is-euro-currency USD)))
+    (test-assert "EUR is euro" (gnc-is-euro-currency EUR))
+    (test-assert "DEM is euro" (gnc-is-euro-currency DEM))
+    (test-end "check-usd-euro")
+
     (test-begin "foreign-3way-gbp->dem->eur->usd")
     ;; Three-way conversion, gbp->dem->eur->usd
     ;; Too many levels for resolve-unknown-comm to resolve.
