@@ -42,6 +42,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <cinttypes>
+#include <unicode/uchar.h>
+#include <unicode/utf8.h>
 #include <unicode/listformatter.h>
 
 #include "qof.h"
@@ -2150,6 +2152,32 @@ gnc_ui_util_remove_registered_prefs (void)
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_AUTO_DECIMAL_PLACES,
                                  (void*)gnc_set_auto_decimal_places, nullptr);
+}
+
+char*
+gnc_filter_text_for_bidi_marks (const char* text)
+{
+    if (!text)
+        return nullptr;
+
+    int32_t len = static_cast<int32_t> (strlen (text));
+    std::string result;
+    result.reserve (len);
+
+    const char* p = text;
+    int32_t i = 0;
+
+    while (i < len)
+    {
+        UChar32 c;
+        int32_t start = i;
+        U8_NEXT (p, i, len, c);
+
+        if (c >= 0 && !u_hasBinaryProperty (c, UCHAR_BIDI_CONTROL))
+            result.append (p + start, i - start);
+    }
+
+    return g_strdup (result.c_str ());
 }
 
 static inline bool
