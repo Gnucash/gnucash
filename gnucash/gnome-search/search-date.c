@@ -31,6 +31,7 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "qof.h"
+#include "gnc-gui-query.h"
 
 #include "search-date.h"
 #include "search-core-utils.h"
@@ -152,7 +153,16 @@ gncs_validate (GNCSearchCoreType *fe)
     g_return_val_if_fail (fi, FALSE);
     g_return_val_if_fail (GNC_IS_SEARCH_DATE (fi), FALSE);
 
-    /* XXX */
+    if (fi->entry)
+    {
+        int day, month, year;
+        const char *text = gtk_entry_get_text (GTK_ENTRY (GNC_DATE_EDIT (fi->entry)->date_entry));
+        if (!qof_scan_date (text, &day, &month, &year))
+        {
+            gnc_error_dialog (fi->parent, "%s", _("The date you entered was invalid. Please try again."));
+            valid = FALSE;
+        }
+    }
 
     return valid;
 }
