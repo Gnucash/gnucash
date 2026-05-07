@@ -330,6 +330,16 @@
                    c)))
       (cons a b)))
 
+  (define (update-rate! unknown-coll un->known-coll known-pair to-be-updated-pair)
+    (let ((coll-target-unknown (caadr to-be-updated-pair))
+          (coll-target-report (cdadr to-be-updated-pair))
+          (known-rate-denom ((caadr known-pair) 'total #f)))
+      (coll-target-unknown 'add (unknown-coll 'total #f))
+      (unless (zero? known-rate-denom)
+        (coll-target-report 'add (/ (* (un->known-coll 'total #f)
+                                       ((cdadr known-pair) 'total #f))
+                                    known-rate-denom)))))
+
   ;; Go through sumlist.
   (let loop ((sumlist sumlist)
              (reportlist (cadr (assoc report-commodity sumlist))))
@@ -398,17 +408,11 @@
               (innerloop (cdr pairs) reportlist))
 
              ((and pair-a pair-b)
-              ;; If both currencies are found then something went
-              ;; wrong inside gnc:get-exchange-totals. FIXME: Find a
-              ;; better thing to do in this case.
-              (unless hide-warnings?
-                (warn "gnc:resolve-unknown-comm:"
-                      "Oops - exchange rate ambiguity error: "
-                      (gnc:monetary->string
-                       (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
-                      " = "
-                      (gnc:monetary->string
-                       (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f)))))
+              ;; If both currencies are found then we use this
+              ;; transaction to update the exchange rate information
+              ;; for both currencies.
+              (update-rate! (caadr pair) (cdadr pair) pair-a pair-b)
+              (update-rate! (cdadr pair) (caadr pair) pair-b pair-a)
               (innerloop (cdr pairs) reportlist))
 
              ;; Usual case: one of pair-{a,b} was found in reportlist,

@@ -313,23 +313,28 @@
       (test-equal "RDSA $49317.91" 4931791/100 (gnc-numeric-convert ((cdadr (assoc RDSA return-alist)) 'total #f) 100 GNC-HOW-RND-ROUND)))
     (test-end "foreign-3way")
     (test-begin "foreign-3way-ambig")
-    ;; Three-way conversion, gbp->eur->usd The equalities are false because
-    ;; there is both a USD price and a GBP price for
-    ;; RDSA. gnc:get-exchange-totals is supposed to resolve this when writing
-    ;; the sumlist, we're testing that gnc:resolve-unknown-comm writes its
-    ;; warning.
-    (collect eur-gbp-col  10000/100 121045/1000)
-    (collect eur-col 10000/100 126399/1000)
-    (collect eur-usd-col 126399/1000 10000/100)
-    (collect rdsa-col 10000/100 1219300/100)
-    (let* ((sumlist (list (list USD  (list (list RDSA rdsa-col)
-                                           (list EUR  eur-col)))
-                          (list EUR  (list (list GBP eur-gbp-col)
-                                           (list USD eur-usd-col)))
-                          (list GBP (list (list RDSA rdsa-gbp-col)))))
-           (return-alist  (gnc:resolve-unknown-comm sumlist USD)))
-      (test-assert "RDSA 600 shares" (not (equal? 600 ((caadr (assoc RDSA return-alist)) 'total #f))))
-      (test-assert "RDSA $61510.91" (not (equal? 6151091/100 (gnc-numeric-convert ((cdadr (assoc RDSA return-alist)) 'total #f) 100 GNC-HOW-RND-ROUND)))))
+    ;; Three-way conversion, gbp->eur->usd.
+    ;; In the ambiguous case, gnc:resolve-unknown-comm should now accumulate
+    ;; exchange rate information from both sides.
+    (let ((eur-gbp-col (cons (gnc:make-value-collector) (gnc:make-value-collector)))
+          (eur-col (cons (gnc:make-value-collector) (gnc:make-value-collector)))
+          (rdsa-col (cons (gnc:make-value-collector) (gnc:make-value-collector)))
+          (rdsa-gbp-col (cons (gnc:make-value-collector) (gnc:make-value-collector))))
+      (collect eur-gbp-col  100 200) ;; 100 GBP = 200 EUR => 1 GBP = 2 EUR
+      (collect eur-col 100 150)    ;; 100 EUR = 150 USD => 1 EUR = 1.5 USD
+      ;; So 1 GBP = 3 USD.
+      (collect rdsa-col 100 1000)   ;; 100 RDSA = 1000 USD => 1 RDSA = 10 USD
+      (collect rdsa-gbp-col 100 400) ;; 100 RDSA = 400 GBP => 1 RDSA = 12 USD (via GBP)
+
+      (let* ((sumlist (list (list USD  (list (list RDSA rdsa-col)
+                                             (list EUR  eur-col)))
+                            (list EUR  (list (list GBP eur-gbp-col)))
+                            (list GBP  (list (list RDSA rdsa-gbp-col)))))
+             (return-alist  (gnc:resolve-unknown-comm sumlist USD)))
+        ;; RDSA total shares = 100 + 100 = 200.
+        ;; RDSA total value = 1000 USD + (400 GBP * 3 USD/GBP) = 1000 + 1200 = 2200 USD.
+        (test-equal "RDSA 200 shares" 200 ((caadr (assoc RDSA return-alist)) 'total #f))
+        (test-equal "RDSA value" 2200 ((cdadr (assoc RDSA return-alist)) 'total #f))))
     (test-end "foreign-3way-ambig")
     (test-begin "foreign-DEM>EUR")
     ;; Old currency->Euro conversion.
