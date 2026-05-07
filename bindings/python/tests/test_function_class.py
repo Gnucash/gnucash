@@ -5,7 +5,13 @@
 
 import sys
 from unittest import TestCase, main
-from gnucash.function_class import ClassFromFunctions, default_arguments_decorator
+from gnucash.function_class import (
+    ClassFromFunctions,
+    default_arguments_decorator,
+    return_instance_if_value_has_it,
+    process_list_convert_to_instance,
+    process_dict_convert_to_instance,
+)
 
 
 class Instance:
@@ -171,6 +177,36 @@ class TestFunctionClass(TestCase):
             self.t.test_function_return_arg_karg(arg2, arg3),
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
+
+    def test_return_instance_if_value_has_it(self):
+        """test return_instance_if_value_has_it()"""
+        t = TestClass()
+        self.assertEqual(return_instance_if_value_has_it(t), t.instance)
+        self.assertEqual(return_instance_if_value_has_it(5), 5)
+        self.assertEqual(return_instance_if_value_has_it("string"), "string")
+        self.assertIsNone(return_instance_if_value_has_it(None))
+
+    def test_process_list_convert_to_instance(self):
+        """test process_list_convert_to_instance()"""
+        t1 = TestClass()
+        t2 = TestClass()
+        input_list = [t1, 5, t2, "string", None]
+        expected_list = [t1.instance, 5, t2.instance, "string", None]
+        self.assertEqual(process_list_convert_to_instance(input_list), expected_list)
+
+    def test_process_dict_convert_to_instance(self):
+        """test process_dict_convert_to_instance()"""
+        t1 = TestClass()
+        t2 = TestClass()
+        input_dict = {"a": t1, "b": 5, "c": t2, "d": "string", "e": None}
+        expected_dict = {
+            "a": t1.instance,
+            "b": 5,
+            "c": t2.instance,
+            "d": "string",
+            "e": None,
+        }
+        self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
 
 
 if __name__ == "__main__":
