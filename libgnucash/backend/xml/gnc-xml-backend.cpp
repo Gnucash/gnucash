@@ -374,21 +374,10 @@ GncXmlBackend::write_to_file (bool make_backup)
     /* if (FALSE == qof_book_session_not_saved (book)) return FALSE; */
 
 
-    auto tmp_name = g_new (char, strlen (m_fullpath.c_str()) + 12);
-    strcpy (tmp_name, m_fullpath.c_str());
-    strcat (tmp_name, ".tmp-XXXXXX");
+    auto tmp_name = g_strdup_printf ("%s.tmp-XXXXXX", m_fullpath.c_str());
 
-    /* Clang static analyzer and GNU ld flag mktemp as a security risk, which is
-     * theoretically true, but we can't use mkstemp because we need to
-     * open the file ourselves because of compression. None of the alternatives
-     * is any more secure.
-     *
-     * Xcode marks mktemp as deprecated
-     */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-    if (!mktemp (tmp_name))
-#pragma GCC diagnostic pop
+    auto fd = g_mkstemp (tmp_name);
+    if (fd == -1)
     {
         g_free (tmp_name);
         set_error(ERR_BACKEND_MISC);
@@ -408,7 +397,7 @@ GncXmlBackend::write_to_file (bool make_backup)
     }
 
     if (gnc_book_write_to_xml_file_v2 (m_book, tmp_name,
-                                       gnc_prefs_get_file_save_compressed ()))
+                                       gnc_prefs_get_file_save_compressed (), fd))
     {
         /* Record the file's permissions before g_unlinking it */
         GStatBuf statbuf;
