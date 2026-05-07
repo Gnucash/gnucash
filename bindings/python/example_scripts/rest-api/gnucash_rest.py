@@ -803,7 +803,7 @@ def getVendors(book):
 
     for result in query.run():
         vendors.append(gnucash_simple.vendorToDict(
-            gnucash.gnucash_business.Vendor(instance=result)))
+            gnucash.gnucash_business.Vendor(instance=result), lazy=True))
 
     query.destroy()
 
