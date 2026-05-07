@@ -168,12 +168,20 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent, const gchar *type)
 
     {
         GtkWidget *radio;
-        if (type && g_ascii_strcasecmp (type, "INVOICE") == 0)
-            radio = GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonInvoice"));
-        else
-            radio = GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonBill"));
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-        gnc_import_gui_type_cb (radio, gui);
+        if (type)
+        {
+            if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                radio = GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonInvoice"));
+            else
+                radio = GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonBill"));
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
+        }
+
+        /* Synchronize internal state from UI defaults */
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "radiobuttonInvoice"))))
+            gnc_import_gui_type_cb (GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonInvoice")), gui);
+        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "radiobuttonBill"))))
+            gnc_import_gui_type_cb (GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonBill")), gui);
 
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "radiobuttonOpenAll"))))
             gnc_bi_import_gui_open_mode_cb (GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonOpenAll")), gui);
