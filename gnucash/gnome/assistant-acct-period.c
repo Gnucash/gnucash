@@ -96,79 +96,59 @@ void     ap_assistant_cancel            (GtkAssistant *gtkassistant, gpointer us
 void     ap_assistant_close             (GtkAssistant *gtkassistant, gpointer user_data);
 
 /* =============================================================== */
-/* Find the earliest date occurring in the book.  Do this by making
- * a query and sorting by date. Since the truncated sort returns
- * only the *last* search results, sort in decreasing order.
+/* Find the earliest date occurring in the book.  Do this by
+ * iterating over all transactions and finding the earliest date.
  */
+typedef struct {
+    time64 earliest;
+} EarliestData;
+
+static void
+get_earliest_cb(QofInstance *inst, gpointer user_data)
+{
+    EarliestData *data = user_data;
+    time64 date = xaccTransRetDatePosted(GNC_TRANS(inst));
+    if (date < data->earliest)
+        data->earliest = date;
+}
+
 static time64
 get_earliest_in_book (QofBook *book)
 {
-    QofQuery *q;
-    GSList *p1, *p2;
-    GList *res;
-    time64 earliest;
+    EarliestData data = { INT64_MAX };
+    qof_object_foreach(GNC_ID_TRANS, book, get_earliest_cb, &data);
 
-    q = qof_query_create_for(GNC_ID_SPLIT);
-    qof_query_set_max_results(q, 1);
-    qof_query_set_book (q, book);
+    if (data.earliest == INT64_MAX)
+        return gnc_time(NULL);
 
-    /* Sort by transaction date */
-    p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    p1 = g_slist_prepend (p1, SPLIT_TRANS);
-    p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
-    qof_query_set_sort_order (q, p1, p2, NULL);
-
-    /* Reverse the sort order */
-    qof_query_set_sort_increasing (q, FALSE, FALSE, FALSE);
-
-    /* Run the query, find the earliest transaction date */
-    res = qof_query_run (q);
-
-    if (res)
-    {
-        earliest = xaccQueryGetEarliestDateFound (q);
-    }
-    else
-    {
-        /* If no results, we don't want to bomb totally */
-        earliest = gnc_time (NULL);
-    }
-
-    qof_query_destroy (q);
-    return earliest;
+    return data.earliest;
 }
 
 /* =============================================================== */
 /* Find the number of transactions occurring before the indicated date.
- * Do this by making a query and counting the results.
+ * Do this by iterating over all transactions and counting.
  */
+
+typedef struct {
+    time64 close_date;
+    int count;
+} CountData;
+
+static void
+count_before_cb(QofInstance *inst, gpointer user_data)
+{
+    CountData *data = user_data;
+    time64 date = xaccTransRetDatePosted(GNC_TRANS(inst));
+    if (date <= data->close_date)
+        data->count++;
+}
 
 static int
 get_num_xactions_before_date(QofBook *book, time64 close_date)
 {
-    QofQuery *q;
-    GSList *param;
-    QofQueryPredData *pred;
-    GList *res, *n;
-    int cnt = 0;
-
-    q = qof_query_create_for(GNC_ID_TRANS);
-    qof_query_set_max_results(q, -1);
-    qof_query_set_book (q, book);
-
-    /* Look for transactions earlier than the closing date */
-    param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    pred = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, close_date);
-    qof_query_add_term (q,  param, pred, QOF_QUERY_FIRST_TERM);
-
-    /* Run the query, find how many transactions there are */
-    res = qof_query_run (q);
-
-    cnt = 0;
-    for (n = res; n; n = n->next) cnt ++;
-
-    qof_query_destroy (q);
-    return cnt;
+    CountData data = { close_date, 0 };
+    qof_object_foreach(GNC_ID_TRANS, book, count_before_cb, &data);
+    return data.count;
 }
 
 /* =============================================================== */
