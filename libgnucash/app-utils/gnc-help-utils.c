@@ -41,13 +41,16 @@ parse_hhmap_file(const gchar *chmfile)
 
     g_return_val_if_fail(chmfile, NULL);
 
-    mapfile = g_new(gchar, strlen(chmfile) + 7);
-    strcpy(mapfile, chmfile);
+    mapfile = g_strdup(chmfile);
     dot = strrchr(mapfile, '.');
     if (dot)
-        strcpy(dot, ".hhmap");
-    else
-        strcat(mapfile, ".hhmap");
+        *dot = '\0';
+
+    {
+        gchar *tmp = mapfile;
+        mapfile = g_strconcat(tmp, ".hhmap", NULL);
+        g_free(tmp);
+    }
 
     keyfile = g_key_file_new();
     if (!g_key_file_load_from_file(keyfile, mapfile, G_KEY_FILE_NONE, &error))
