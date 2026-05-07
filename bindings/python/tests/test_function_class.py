@@ -86,6 +86,52 @@ class TestFunctionClass(TestCase):
         obj, arg = self.t.other_method(arg=self.t)
         self.assertIsInstance(arg, Instance)
 
+    def test_method_function_returns_instance(self):
+        """test method_function_returns_instance()"""
+        from gnucash.function_class import method_function_returns_instance
+
+        def returns_instance_data(self):
+            return Instance()
+
+        def returns_none(self):
+            return None
+
+        decorated_returns_instance = method_function_returns_instance(
+            returns_instance_data, TestClass
+        )
+        decorated_returns_none = method_function_returns_instance(
+            returns_none, TestClass
+        )
+
+        t = TestClass()
+
+        result_instance = decorated_returns_instance(t)
+        self.assertIsInstance(result_instance, TestClass)
+        self.assertIsInstance(result_instance.instance, Instance)
+
+        result_none = decorated_returns_none(t)
+        self.assertIsNone(result_none)
+
+    def test_method_function_returns_instance_list(self):
+        """test method_function_returns_instance_list()"""
+        from gnucash.function_class import method_function_returns_instance_list
+
+        def returns_instance_data_list(self):
+            return [Instance(), Instance()]
+
+        decorated_returns_list = method_function_returns_instance_list(
+            returns_instance_data_list, TestClass
+        )
+
+        t = TestClass()
+
+        result_list = decorated_returns_list(t)
+        self.assertIsInstance(result_list, list)
+        self.assertEqual(len(result_list), 2)
+        for item in result_list:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
+
     def test_default_arguments_decorator(self):
         """test default_arguments_decorator()"""
         TestClass.backup_test_function_return_args = TestClass.test_function_return_args
