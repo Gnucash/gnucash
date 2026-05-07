@@ -67,8 +67,11 @@ class TestClass(ClassFromFunctions):
 
 
 class TestFunctionClass(TestCase):
-    def test_add_constructor_and_methods_with_prefix(self):
+    def setUp(self):
+        # Ensure TestClass is properly set up with a constructor
         TestClass.add_constructor_and_methods_with_prefix("prefix_", "new_function")
+
+    def test_add_constructor_and_methods_with_prefix(self):
         self.TestClass = TestClass
         self.testClass = TestClass()
         self.assertIsInstance(self.testClass.instance, Instance)
@@ -245,6 +248,14 @@ class TestFunctionClass(TestCase):
         self.assertEqual(return_instance_if_value_has_it("string"), "string")
         self.assertIsNone(return_instance_if_value_has_it(None))
 
+        # Object with instance attribute but not ClassFromFunctions
+        class NotFunctionClass:
+            def __init__(self):
+                self.instance = "fake"
+
+        not_fc = NotFunctionClass()
+        self.assertEqual(return_instance_if_value_has_it(not_fc), not_fc)
+
     def test_process_list_convert_to_instance(self):
         """test process_list_convert_to_instance()"""
         t1 = TestClass()
@@ -252,6 +263,19 @@ class TestFunctionClass(TestCase):
         input_list = [t1, 5, t2, "string", None]
         expected_list = [t1.instance, 5, t2.instance, "string", None]
         self.assertEqual(process_list_convert_to_instance(input_list), expected_list)
+
+        # Empty list
+        self.assertEqual(process_list_convert_to_instance([]), [])
+
+        # Non-mutation check
+        original_list = [t1]
+        process_list_convert_to_instance(original_list)
+        self.assertIs(original_list[0], t1)
+
+        # Nested list (not deep converted)
+        nested_list = [[t1]]
+        result = process_list_convert_to_instance(nested_list)
+        self.assertIs(result[0][0], t1)
 
     def test_process_dict_convert_to_instance(self):
         """test process_dict_convert_to_instance()"""
@@ -266,6 +290,19 @@ class TestFunctionClass(TestCase):
             "e": None,
         }
         self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
+
+        # Empty dict
+        self.assertEqual(process_dict_convert_to_instance({}), {})
+
+        # Non-mutation check
+        original_dict = {"a": t1}
+        process_dict_convert_to_instance(original_dict)
+        self.assertIs(original_dict["a"], t1)
+
+        # Nested dict (not deep converted)
+        nested_dict = {"inner": {"a": t1}}
+        result = process_dict_convert_to_instance(nested_dict)
+        self.assertIs(result["inner"]["a"], t1)
 
 
 if __name__ == "__main__":
