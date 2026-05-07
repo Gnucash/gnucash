@@ -326,9 +326,6 @@ time64 gnc_dmy2time64_end (gint day, gint month, gint year);
  *    is 680 milliseconds after 11 o'clock, central daylight time
  *    It is also 680 milliseconds after 16:00:00 hours UTC.
  *    \return The universal time.
- *
- * XXX Caution: this routine does not handle strings that specify
- * times before January 1 1970.
  */
 time64 gnc_iso8601_to_time64_gmt(const gchar *);
 

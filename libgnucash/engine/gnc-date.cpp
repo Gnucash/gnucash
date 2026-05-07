@@ -1113,11 +1113,6 @@ gnc_date_timestamp (void)
 /********************************************************************\
  * iso 8601 datetimes should look like 1998-07-02 11:00:00.68-05
 \********************************************************************/
-/* Unfortunately, not all strptime or struct tm implementations
- * support timezones, so we have to do this with sscanf.
- */
-
-#define ISO_DATE_FORMAT "%d-%d-%d %d:%d:%lf%s"
 time64
 gnc_iso8601_to_time64_gmt(const char *cstr)
 {

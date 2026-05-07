@@ -59,6 +59,9 @@ typedef struct
     time64 t3;
     time64 t4;
     time64 t5;
+    time64 t6;
+    time64 t7;
+    time64 t8;
 } FixtureA;
 
 static void setup (FixtureA *f, gconstpointer pData)
@@ -72,6 +75,9 @@ static void setup (FixtureA *f, gconstpointer pData)
     f->t3 = 1341398864; //2012-07-04 19:27:44 +08:40
     f->t4 = -261104801; //1961-09-22 17:53:19 -05:00
     f->t5 = 2873938879LL; //2061-01-25 23:21:19 -05:00
+    f->t6 = -1LL; // 1969-12-31 23:59:59 Z
+    f->t7 = -2208988800LL; // 1900-01-01 00:00:00 Z
+    f->t8 = 0; // Epoch
 }
 
 typedef struct
@@ -1361,6 +1367,18 @@ test_gnc_iso8601_to_time64_gmt (FixtureA *f, gconstpointer pData)
 
     t = gnc_iso8601_to_time64_gmt ("2061-01-25 23:21:19.0 -05:00");
     g_assert_cmpint (t, ==, f->t5);
+
+    t = gnc_iso8601_to_time64_gmt ("1969-12-31 23:59:59");
+    g_assert_cmpint (t, ==, f->t6);
+
+    t = gnc_iso8601_to_time64_gmt ("1900-01-01 00:00:00");
+    g_assert_cmpint (t, ==, f->t7);
+
+    t = gnc_iso8601_to_time64_gmt ("1969-12-31 18:00:00 -06:00");
+    g_assert_cmpint (t, ==, f->t8);
+
+    t = gnc_iso8601_to_time64_gmt ("1970-01-01 02:00:00 +02:00");
+    g_assert_cmpint (t, ==, f->t8);
 }
 #define ISO8601_SIZE MAX_DATE_LENGTH + 4
 static gchar*
