@@ -11,6 +11,8 @@ from gnucash.function_class import (
     return_instance_if_value_has_it,
     process_list_convert_to_instance,
     process_dict_convert_to_instance,
+    methods_return_instance,
+    methods_return_instance_lists,
 )
 
 
@@ -266,6 +268,35 @@ class TestFunctionClass(TestCase):
             "e": None,
         }
         self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
+
+    def test_methods_return_instance(self):
+        """test methods_return_instance()"""
+
+        class TargetClass:
+            def method1(self):
+                return Instance()
+
+        methods_return_instance(TargetClass, {"method1": ReturnClass})
+        t = TargetClass()
+        result = t.method1()
+        self.assertIsInstance(result, ReturnClass)
+        self.assertIsInstance(result.instance, Instance)
+
+    def test_methods_return_instance_lists(self):
+        """test methods_return_instance_lists()"""
+
+        class TargetClass:
+            def method1(self):
+                return [Instance(), Instance()]
+
+        methods_return_instance_lists(TargetClass, {"method1": ReturnClass})
+        t = TargetClass()
+        result_list = t.method1()
+        self.assertIsInstance(result_list, list)
+        self.assertEqual(len(result_list), 2)
+        for item in result_list:
+            self.assertIsInstance(item, ReturnClass)
+            self.assertIsInstance(item.instance, Instance)
 
 
 if __name__ == "__main__":
