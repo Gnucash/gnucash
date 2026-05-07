@@ -85,9 +85,8 @@
       (N_ "Enable Links") "h"
       (N_ "Enable hyperlinks in reports.")
       #t)
-    ;; FIXME: put this in a more sensible tab like Text or Header/Footer
     (gnc-register-text-option options
-      (N_ "General")
+      (N_ "Text")
       (N_ "Additional Comments") "i"
       (N_ "String for additional report information.")
       "")
@@ -107,7 +106,7 @@
       (N_ "Per default the date/time info will be shown before the report data.")
       #f)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Text")
       (N_ "Show comments at bottom") "m"
       (N_ "Per default the additional comments text will be shown before the report data.")
       #f)
@@ -219,11 +218,11 @@
          (show-preparer-at-bottom? (opt-val "General" "Show preparer info at bottom"))
          (show-receiver-at-bottom? (opt-val "General" "Show receiver info at bottom"))
          (show-date-time-at-bottom? (opt-val "General" "Show date/time at bottom"))
-         (show-comments-at-bottom? (opt-val "General" "Show comments at bottom"))
+         (show-comments-at-bottom? (opt-val "Text" "Show comments at bottom"))
          (show-gnucash-version-at-bottom?
           (opt-val "General" "Show GnuCash version at bottom"))
          (links? (opt-val "General" "Enable Links"))
-         (additional-comments (opt-val "General" "Additional Comments"))
+         (additional-comments (opt-val "Text" "Additional Comments"))
          (bgcolor (color-val "Colors" "Background Color"))
          (textcolor (color-val "Colors" "Text Color"))
          (linkcolor (color-val "Colors" "Link Color"))
