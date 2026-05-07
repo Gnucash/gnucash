@@ -5,7 +5,12 @@
 
 import sys
 from unittest import TestCase, main
-from gnucash.function_class import ClassFromFunctions, default_arguments_decorator
+from gnucash.function_class import (
+    ClassFromFunctions,
+    default_arguments_decorator,
+    process_list_convert_to_instance,
+    process_dict_convert_to_instance,
+)
 
 
 class Instance:
@@ -171,6 +176,29 @@ class TestFunctionClass(TestCase):
             self.t.test_function_return_arg_karg(arg2, arg3),
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
+
+    def test_process_list_convert_to_instance(self):
+        """test process_list_convert_to_instance()"""
+        TestClass.add_constructor_and_methods_with_prefix("prefix_", "new_function")
+        t = TestClass()
+        instance = t.instance
+
+        value_list = [1, "a", t, instance]
+        processed_list = process_list_convert_to_instance(value_list)
+
+        self.assertEqual(processed_list, [1, "a", instance, instance])
+
+    def test_process_dict_convert_to_instance(self):
+        """test process_dict_convert_to_instance()"""
+        TestClass.add_constructor_and_methods_with_prefix("prefix_", "new_function")
+        t = TestClass()
+        instance = t.instance
+
+        value_dict = {"int": 1, "str": "a", "class": t, "instance": instance}
+        processed_dict = process_dict_convert_to_instance(value_dict)
+
+        expected_dict = {"int": 1, "str": "a", "class": instance, "instance": instance}
+        self.assertEqual(processed_dict, expected_dict)
 
 
 if __name__ == "__main__":
