@@ -1016,7 +1016,7 @@ qof_commit_edit_part2(QofInstance *inst,
         errcode = be->get_error();
         if (errcode != ERR_BACKEND_NO_ERR)
         {
-            /* XXX Should perform a rollback here */
+            be->rollback(inst);
             priv->do_free = FALSE;
 
             /* Push error back onto the stack */
