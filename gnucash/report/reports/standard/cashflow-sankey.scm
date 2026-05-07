@@ -29,6 +29,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (gnucash html))
+(use-modules (ice-9 format))
 
 ;; For debugging during development, enable backtraces to get more detailed error information
 ;; in the GnuCash error logs when something goes wrong.
@@ -253,7 +254,7 @@
         ;;   (G_ "~a") js-data)
 
         (gnc:html-markup/format (G_ "
-<div id='sankey_chart' style='width: 100%; height: 1024px; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-sizing: border-box;'></div>
+<div id='sankey_chart' style='width: 100%; height: 700px; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-sizing: border-box;'></div>
 
 <script>
   (function() {
@@ -356,7 +357,7 @@
 
       // 4. VERTICAL ALIGNMENT AND SCALING
       var width = 1000;
-      var height = 900;
+      var height = 500;
       var nodePadding = 18;
       var nodeWidth = 24;
 
