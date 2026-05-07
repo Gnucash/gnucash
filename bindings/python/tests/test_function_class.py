@@ -20,6 +20,11 @@ class Instance:
     pass
 
 
+class ReturnClass(object):
+    def __init__(self, **kargs):
+        self.instance = kargs.get("instance")
+
+
 def prefix_new_function():
     """new function for ClassFromFunction tests
     
@@ -45,6 +50,14 @@ def prefix_test_function_return_arg_karg(self, a, b=b_default):
 
 def other_function(self, arg=None):
     return self, arg
+
+
+def returns_instance_data(self):
+    return "some_data"
+
+
+def returns_instance_data_list(self):
+    return ["data1", "data2"]
 
 
 class TestClass(ClassFromFunctions):
