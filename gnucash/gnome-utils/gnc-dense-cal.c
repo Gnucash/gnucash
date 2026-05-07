@@ -712,15 +712,20 @@ gdc_reconfig (GncDenseCal *dcal)
 {
     GtkWidget *widget;
     GtkAllocation alloc;
+    int scale;
 
     if (dcal->surface)
         cairo_surface_destroy (dcal->surface);
 
     widget = GTK_WIDGET(dcal->cal_drawing_area);
     gtk_widget_get_allocation (widget, &alloc);
+    scale = gtk_widget_get_scale_factor (widget);
+    if (scale < 1)
+        scale = 1;
     dcal->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                alloc.width,
-                                                alloc.height);
+                                                alloc.width * scale,
+                                                alloc.height * scale);
+    cairo_surface_set_device_scale (dcal->surface, scale, scale);
     gnc_dense_cal_draw_to_buffer (dcal);
 }
 
@@ -980,8 +985,8 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
     gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_CALENDAR);
 
     gtk_render_background (stylectxt, cr, 0, 0,
-                           cairo_image_surface_get_width (dcal->surface),
-                           cairo_image_surface_get_height (dcal->surface));
+                           alloc.width,
+                           alloc.height);
 
     gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
 

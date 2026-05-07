@@ -68,6 +68,7 @@ gnc_header_draw_offscreen (GncHeader *header)
     int row_offset;
     CellBlock *cb;
     int i;
+    int scale;
     cairo_t *cr;
 
     virt_loc.vcell_loc.virt_row = 0;
@@ -83,9 +84,13 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     if (header->surface)
         cairo_surface_destroy (header->surface);
+    scale = gtk_widget_get_scale_factor (GTK_WIDGET(header));
+    if (scale < 1)
+        scale = 1;
     header->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                  header->width,
-                                                  header->height);
+                                                  header->width * scale,
+                                                  header->height * scale);
+    cairo_surface_set_device_scale (header->surface, scale, scale);
 
     cr = cairo_create (header->surface);
 
@@ -688,5 +693,4 @@ gnc_header_new (GnucashSheet *sheet)
     sheet->header_item = layout;
     return layout;
 }
-
 
