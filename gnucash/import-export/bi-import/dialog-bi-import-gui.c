@@ -79,7 +79,7 @@ void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data);
 static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 BillImportGui *
-gnc_plugin_bi_import_showGUI (GtkWindow *parent)
+gnc_plugin_bi_import_showGUI (GtkWindow *parent, const gchar *type)
 {
     BillImportGui *gui;
     GtkBuilder *builder;
@@ -103,8 +103,6 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
 
     // create new window
     gui = g_new0 (BillImportGui, 1);
-    gui->type = "BILL"; // Set default type to match gui.  really shouldn't be here TODO change me
-    gui->open_mode = "ALL";
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
@@ -167,6 +165,23 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
 
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+
+    {
+        GtkWidget *radio;
+        if (type && g_ascii_strcasecmp (type, "INVOICE") == 0)
+            radio = GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonInvoice"));
+        else
+            radio = GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonBill"));
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
+        gnc_import_gui_type_cb (radio, gui);
+
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "radiobuttonOpenAll"))))
+            gnc_bi_import_gui_open_mode_cb (GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonOpenAll")), gui);
+        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "radiobuttonOpenNotPosted"))))
+            gnc_bi_import_gui_open_mode_cb (GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonOpenNotPosted")), gui);
+        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "radiobuttonOpenNone"))))
+            gnc_bi_import_gui_open_mode_cb (GTK_WIDGET (gtk_builder_get_object (builder, "radiobuttonOpenNone")), gui);
+    }
 
     gtk_widget_show_all ( gui->dialog );
 
