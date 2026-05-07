@@ -72,6 +72,7 @@ static AB_IMEXPORTER_ACCOUNTINFO *txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO 
                                                       gpointer user_data);
 static AB_IMEXPORTER_ACCOUNTINFO *bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element,
                                                       gpointer user_data);
+static void gnc_ab_set_split_value (Split *split, const AB_TRANSACTION *ab_trans, Account *gnc_acc);
 
 struct _GncABImExContextImport
 {
@@ -491,6 +492,31 @@ gnc_ab_memo_to_gnc (const AB_TRANSACTION *ab_trans)
     return retval;
 }
 
+static void
+gnc_ab_set_split_value (Split *split, const AB_TRANSACTION *ab_trans, Account *gnc_acc)
+{
+    /* Amount into the split */
+    const AB_VALUE *ab_value = AB_Transaction_GetValue (ab_trans);
+    double d_value = ab_value ? AB_Value_GetValueAsDouble (ab_value) : 0.0;
+    AB_TRANSACTION_TYPE ab_type = AB_Transaction_GetType (ab_trans);
+    gnc_numeric gnc_amount;
+
+    /*printf("Transaction with value %f has type %d\n", d_value, ab_type);*/
+    /* If the value is positive, but the transaction type says the
+       money is transferred away from our account (Transfer instead of
+       DebitNote), we switch the value to negative. */
+    if (d_value > 0.0 && ab_type == AB_Transaction_TypeTransfer)
+        d_value = -d_value;
+
+    gnc_amount = double_to_gnc_numeric (
+                     d_value,
+                     xaccAccountGetCommoditySCU (gnc_acc),
+                     GNC_HOW_RND_ROUND_HALF_UP);
+    if (!ab_value)
+        g_warning ("gnc_ab_set_split_value: Oops, value was NULL.  Using 0");
+    xaccSplitSetBaseValue (split, gnc_amount, xaccAccountGetCommodity (gnc_acc));
+}
+
 Transaction *
 gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc)
 {
@@ -529,7 +555,7 @@ gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc)
          post_time = gnc_gwen_date_to_time64 (post_date);
     else
     {
-        g_warning ("transaction_cb: Import had no transaction date");
+        g_warning ("gnc_ab_trans_to_gnc: Import had no transaction date");
         post_time = gnc_time (NULL);
     }
     xaccTransSetDatePostedSecsNormalized (gnc_trans, post_time);
@@ -568,29 +594,7 @@ gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     if (fitid && *fitid)
         gnc_import_set_split_online_id (split, fitid);
 
-    /* FIXME: Extract function */
-    {
-        /* Amount into the split */
-        const AB_VALUE *ab_value = AB_Transaction_GetValue (ab_trans);
-        double d_value = ab_value ? AB_Value_GetValueAsDouble (ab_value) : 0.0;
-        AB_TRANSACTION_TYPE ab_type = AB_Transaction_GetType (ab_trans);
-        gnc_numeric gnc_amount;
-
-        /*printf("Transaction with value %f has type %d\n", d_value, ab_type);*/
-        /* If the value is positive, but the transaction type says the
-           money is transferred away from our account (Transfer instead of
-           DebitNote), we switch the value to negative. */
-        if (d_value > 0.0 && ab_type == AB_Transaction_TypeTransfer)
-            d_value = -d_value;
-
-        gnc_amount = double_to_gnc_numeric (
-                         d_value,
-                         xaccAccountGetCommoditySCU (gnc_acc),
-                         GNC_HOW_RND_ROUND_HALF_UP);
-        if (!ab_value)
-            g_warning ("transaction_cb: Oops, value was NULL.  Using 0");
-        xaccSplitSetBaseValue (split, gnc_amount, xaccAccountGetCommodity (gnc_acc));
-    }
+    gnc_ab_set_split_value (split, ab_trans, gnc_acc);
 
     /* Memo in the Split. */
     memo = gnc_ab_memo_to_gnc (ab_trans);
