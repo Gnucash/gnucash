@@ -86,7 +86,7 @@ def customerToDict(customer):
 
         return simple_customer
 
-def transactionToDict(transaction, entities):
+def transactionToDict(transaction, entities, account_cache=None, gbp=None):
     if transaction is None:
         return None
     else:
@@ -102,7 +102,7 @@ def transactionToDict(transaction, entities):
                 if type(split) != Split:
                     split=Split(instance=split) 
                 simple_transaction['splits'].append(
-                    splitToDict(split, ['account']))
+                    splitToDict(split, ['account'], account_cache=account_cache, gbp=gbp))
 
         simple_transaction['count_splits'] = transaction.CountSplits()
         simple_transaction['has_reconciled_splits'] = \
@@ -127,20 +127,27 @@ def transactionToDict(transaction, entities):
 
         return simple_transaction
 
-def splitToDict(split, entities):
+def splitToDict(split, entities, account_cache=None, gbp=None):
     if split is None:
         return None
     else:
         simple_split = {}
         simple_split['guid'] = split.GetGUID().to_string()
         if 'account' in entities:
-            simple_split['account'] = accountToDict(split.GetAccount())
+            account = split.GetAccount()
+            if account_cache is not None:
+                account_guid = account.GetGUID().to_string()
+                if account_guid not in account_cache:
+                    account_cache[account_guid] = accountToDict(account, gbp=gbp, lazy=True)
+                simple_split['account'] = account_cache[account_guid]
+            else:
+                simple_split['account'] = accountToDict(account, gbp=gbp)
         if 'transaction' in entities:
             simple_split['transaction'] = transactionToDict(
-                split.GetParent(), [])      
+                split.GetParent(), [], account_cache=account_cache, gbp=gbp)
         if 'other_split' in entities:
             simple_split['other_split'] = splitToDict(
-                split.GetOtherSplit(), ['account'])
+                split.GetOtherSplit(), ['account'], account_cache=account_cache, gbp=gbp)
         simple_split['amount'] = split.GetAmount().to_double()
         simple_split['value'] = split.GetValue().to_double()
         simple_split['balance'] = split.GetBalance().to_double()
@@ -278,30 +285,37 @@ def entryToDict(entry):
         return simple_entry
 
 
-def accountToDict(account):
-
-    commod_table = account.get_book().get_table()
-    gbp = commod_table.lookup('CURRENCY', 'GBP')
+def accountToDict(account, gbp=None, lazy=False):
 
     if account is None:
         return None
+
+    if gbp is None:
+        commod_table = account.get_book().get_table()
+        gbp = commod_table.lookup('CURRENCY', 'GBP')
+
+    simple_account = {}
+    simple_account['name'] = account.GetName()
+    simple_account['type_id'] = account.GetType()
+    simple_account['description'] = account.GetDescription()
+    simple_account['guid'] = account.GetGUID().to_string()
+    if account.GetCommodity() == None:
+        simple_account['currency'] = ''
     else:
-        simple_account = {}
-        simple_account['name'] = account.GetName()
-        simple_account['type_id'] = account.GetType()
-        simple_account['description'] = account.GetDescription()
-        simple_account['guid'] = account.GetGUID().to_string()
-        if account.GetCommodity() == None:
-            simple_account['currency'] = ''
-        else:
-            simple_account['currency'] = account.GetCommodity().get_mnemonic()
-        simple_account['subaccounts'] = []
+        simple_account['currency'] = account.GetCommodity().get_mnemonic()
+
+    simple_account['subaccounts'] = []
+    if not lazy:
         for n, subaccount in enumerate(account.get_children_sorted()):
-            simple_account['subaccounts'].append(accountToDict(subaccount))
+            simple_account['subaccounts'].append(accountToDict(subaccount, gbp=gbp, lazy=lazy))
 
         simple_account['balance'] = account.GetBalance().to_double()
         simple_account['balance_gbp'] = account.GetBalanceInCurrency(
             gbp, True).to_double()
-        simple_account['placeholder'] = account.GetPlaceholder()
+    else:
+        simple_account['balance'] = 0.0
+        simple_account['balance_gbp'] = 0.0
 
-        return simple_account
+    simple_account['placeholder'] = account.GetPlaceholder()
+
+    return simple_account
