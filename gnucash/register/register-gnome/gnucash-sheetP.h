@@ -99,9 +99,6 @@ struct _GnucashSheet
     GFunc open_doclink_cb;
     gpointer open_doclink_cb_data;
 
-    guint shift_state;
-    guint keyval_state;
-    gboolean direct_update_cell; /** Indicates that this cell has special operation keys. */
     int pos, bound; /** Corresponds to GtkEditable's current_pos and selection_bound */
 
 };

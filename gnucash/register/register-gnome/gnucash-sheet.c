@@ -82,8 +82,6 @@ static void gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet);
 static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
                                                 gboolean changed_cells);
 static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
-static gboolean gnucash_sheet_check_direct_update_cell (GnucashSheet *sheet,
-                                                        const VirtualLocation virt_loc);
 gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
                                 G_GNUC_UNUSED gpointer data);
 
@@ -275,7 +273,6 @@ gnucash_sheet_stop_editing (GnucashSheet *sheet)
                                      sheet->delete_signal);
     sheet->insert_signal = 0;
     sheet->delete_signal = 0;
-    sheet->direct_update_cell = FALSE;
 
     gnucash_sheet_hide_editing_cursor (sheet);
 
@@ -428,7 +425,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
             }
             gnucash_sheet_set_position (sheet, index + trailing);
         }
-        sheet->direct_update_cell = gnucash_sheet_check_direct_update_cell (sheet, virt_loc);
     }
     // when a gui refresh is called, we end up here so only grab the focus
     // if the sheet is showing on the current plugin_page
@@ -1276,23 +1272,6 @@ gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
     return FALSE;
 }
 
-static gboolean
-gnucash_sheet_check_direct_update_cell (GnucashSheet *sheet,
-                                        const VirtualLocation virt_loc)
-{
-    const gchar *type_name;
-
-    type_name = gnc_table_get_cell_type_name (sheet->table, virt_loc);
-
-    if ( (g_strcmp0 (type_name, DATE_CELL_TYPE_NAME) == 0)
-            || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0)
-            || (g_strcmp0 (type_name, NUM_CELL_TYPE_NAME) == 0)
-            || (g_strcmp0 (type_name, PRICE_CELL_TYPE_NAME) == 0)
-            || (g_strcmp0 (type_name, FORMULA_CELL_TYPE_NAME) == 0)) return TRUE;
-
-    return FALSE;
-}
-
 static void
 gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
 {
@@ -1784,7 +1763,7 @@ pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event)
 }
 
 static gboolean
-gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
+gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     Table *table;
     GnucashSheet *sheet;
@@ -1864,27 +1843,6 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 
     /* return true because we handled the key press */
     return TRUE;
-}
-
-static gboolean
-gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
-{
-    GnucashSheet *sheet;
-
-    g_return_val_if_fail (widget != NULL, TRUE);
-    g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
-    g_return_val_if_fail (event != NULL, TRUE);
-
-    sheet = GNUCASH_SHEET(widget);
-    /* bug#60582 comment#27 2
-           save shift state to enable <shift minus> and <shift equal>
-     */
-
-    sheet->shift_state = event->state & GDK_SHIFT_MASK;
-    sheet->keyval_state =
-        (event->keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
-
-    return gnucash_sheet_key_press_event_internal (widget, event);
 }
 
 static gboolean
@@ -2378,10 +2336,6 @@ gnucash_sheet_init (GnucashSheet *sheet)
                           | GDK_POINTER_MOTION_MASK
                           | GDK_POINTER_MOTION_HINT_MASK));
 
-    /* setup IMContext */
-    sheet->direct_update_cell = FALSE;
-    sheet->shift_state = 0;
-    sheet->keyval_state = 0;
     sheet->bound = sheet->pos = 0;
 }
 
