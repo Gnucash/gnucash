@@ -130,8 +130,6 @@ gncs_validate (GNCSearchCoreType *fe)
     g_return_val_if_fail (fi, FALSE);
     g_return_val_if_fail (GNC_IS_SEARCH_BOOLEAN (fi), FALSE);
 
-    /* XXX */
-
     return valid;
 }
 
