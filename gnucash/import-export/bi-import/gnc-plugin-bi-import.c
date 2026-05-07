@@ -138,7 +138,7 @@ gnc_plugin_bi_import_cmd_test (GSimpleAction *simple,
     ENTER ("action %p, main window data %p", simple, data);
     PINFO ("bi_import");
 
-    gnc_plugin_bi_import_showGUI(GTK_WINDOW(data->window), "BILL");
+    gnc_plugin_bi_import_showGUI(GTK_WINDOW(data->window), NULL);
 
     LEAVE (" ");
 }
