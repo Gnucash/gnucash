@@ -223,13 +223,13 @@ gnc_set_account_separator (const gchar *separator)
     if ((uc == (gunichar) - 2) || (uc == (gunichar) - 1) || g_unichar_isalnum(uc))
     {
         account_uc_separator = ':';
-        strcpy(account_separator, ":");
+        g_strlcpy(account_separator, ":", sizeof(account_separator));
         return;
     }
 
     account_uc_separator = uc;
     count = g_unichar_to_utf8(uc, account_separator);
-    account_separator[count] = '\0';
+    account_separator[std::min(static_cast<size_t>(count), sizeof(account_separator) - 1)] = '\0';
 }
 
 gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names)
