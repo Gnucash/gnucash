@@ -155,14 +155,14 @@ check_date_format(const char * str, regmatch_t *match, GncImportFormat fmts)
     }
 
     /* if we've got a 4-character year, make sure the value is greater
-     * than 1930 and less than 2100.  XXX: be sure to fix this by 2100!
+     * than 1930 and less than 9999.
      */
-    if (len0 == 4 && (val0 < 1930 || val0 > 2100))
+    if (len0 == 4 && (val0 < 1930 || val0 > 9999))
     {
         import_clear_flag(fmts, GNCIF_DATE_YMD);
         import_clear_flag(fmts, GNCIF_DATE_YDM);
     }
-    if (len2 == 4 && (val2 < 1930 || val2 > 2100))
+    if (len2 == 4 && (val2 < 1930 || val2 > 9999))
     {
         import_clear_flag(fmts, GNCIF_DATE_MDY);
         import_clear_flag(fmts, GNCIF_DATE_DMY);

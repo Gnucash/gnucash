@@ -44,14 +44,15 @@ const char* period_numbers_ambig[] = { "  -$1,000 ", "100.277", NULL };
 const char* comma_numbers_ambig[] = { "  -$1.000 ", "100,277", NULL };
 
 /* Make sure the strings and numbers match... */
-const char* dates_ymd[] = { "1999/12/31", "2001-6-17", "20020726",  NULL };
-my_ymd_t dates_ymd_vals[] = { {1999, 12, 31}, {2001, 6, 17}, {2002, 7, 26}, {0, 0, 0} };
-const char* dates_ydm[] = { "1999/31/12", "2001-17-6", "20012311", NULL };
-my_ymd_t dates_ydm_vals[] = { {1999, 12, 31}, {2001, 6, 17}, {2001, 11, 23}, {0, 0, 0} };
-const char* dates_mdy[] = { "1/16/2001", "12-31-1999", "01171983", NULL };
-my_ymd_t dates_mdy_vals[] = { {2001, 1, 16}, {1999, 12, 31}, {1983, 1, 17}, {0, 0, 0} };
-const char* dates_dmy[] = { "16/1/2001", "31-12-1999", "17011976", NULL };
-my_ymd_t dates_dmy_vals[] = { {2001, 1, 16}, {1999, 12, 31}, {1976, 1, 17}, {0, 0, 0} };
+const char* dates_ymd[] = { "1999/12/31", "2001-6-17", "20020726", "2101-12-31", NULL };
+my_ymd_t dates_ymd_vals[] = { {1999, 12, 31}, {2001, 6, 17}, {2002, 7, 26}, {2101, 12, 31}, {0, 0, 0} };
+const char* dates_ydm[] = { "1999/31/12", "2001-17-6", "20012311", "2101-31-12", NULL };
+my_ymd_t dates_ydm_vals[] = { {1999, 12, 31}, {2001, 6, 17}, {2001, 11, 23}, {2101, 12, 31}, {0, 0, 0} };
+const char* dates_ydm_check[] = { "1999/31/12", "2001-17-6", "2101-31-12", NULL };
+const char* dates_mdy[] = { "1/16/2001", "12-31-1999", "01171983", "12/31/2101", NULL };
+my_ymd_t dates_mdy_vals[] = { {2001, 1, 16}, {1999, 12, 31}, {1983, 1, 17}, {2101, 12, 31}, {0, 0, 0} };
+const char* dates_dmy[] = { "16/1/2001", "31-12-1999", "17011976", "31/12/2101", NULL };
+my_ymd_t dates_dmy_vals[] = { {2001, 1, 16}, {1999, 12, 31}, {1976, 1, 17}, {2101, 12, 31}, {0, 0, 0} };
 
 const char* dates_yxx[] = { "99/1/6", "1999-12'10", "20010306", NULL };
 const char* dates_xxy[] = { "1/3/99", "12-10'1999", "03062001", NULL };
@@ -94,7 +95,7 @@ test_check_date(void)
     fmts = GNCIF_DATE_DMY | GNCIF_DATE_MDY | GNCIF_DATE_YMD | GNCIF_DATE_YDM;
 
     run_check(gnc_import_test_date, dates_ymd, fmts, "y/m/d dates", GNCIF_DATE_YMD);
-    run_check(gnc_import_test_date, dates_ydm, fmts, "y/d/m dates", GNCIF_DATE_YDM);
+    run_check(gnc_import_test_date, dates_ydm_check, fmts, "y/d/m dates", GNCIF_DATE_YDM);
     run_check(gnc_import_test_date, dates_mdy, fmts, "m/d/y dates", GNCIF_DATE_MDY);
     run_check(gnc_import_test_date, dates_dmy, fmts, "d/m/y dates", GNCIF_DATE_DMY);
 
