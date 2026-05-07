@@ -116,6 +116,7 @@ set (engine_HEADERS
   qofinstance-p.h
   qofinstance.h
   qoflog.h
+  qof-error-stack.hpp
   qofobject.h
   qofquery.h
   qofquerycore.h
@@ -200,6 +201,7 @@ set (engine_SOURCES
   qofid.cpp
   qofinstance.cpp
   qoflog.cpp
+  qof-error-stack.cpp
   qofobject.cpp
   qofquery.cpp
   qofquerycore.cpp

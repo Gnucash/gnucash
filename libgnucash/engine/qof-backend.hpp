@@ -49,9 +49,11 @@
 #include <gmodule.h>
 
 #include "qofinstance-p.h"
+#include "qof-error-stack.hpp"
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <memory>
 /* NOTE: The following comments were musings by the original developer about how
  * some additional API might work. The compile/free/run_query functions were
  * implemented for the DBI backend but never put into use; the rest were never
@@ -171,12 +173,12 @@ struct QofBackend
 {
 public:
     /* For reasons that aren't a bit clear, using the default constructor
-     * sometimes initializes m_last_err incorrectly with Xcode8 and a 32-bit
+     * sometimes initializes m_err_stack incorrectly with Xcode8 and a 32-bit
      * build unless the initialization is stepped-through in a debugger.
      */
     QofBackend() :
-        m_percentage{nullptr}, m_fullpath{}, m_last_err{ERR_BACKEND_NO_ERR},
-        m_error_msg{} {}
+        m_percentage{nullptr}, m_fullpath{},
+        m_err_stack{std::make_shared<QofErrorStack>()} {}
     QofBackend(const QofBackend&) = delete;
     QofBackend(const QofBackend&&) = delete;
     virtual ~QofBackend() = default;
@@ -263,7 +265,10 @@ public:
     void set_message(std::string&&);
 /** Retrieve and clear the stored error message.
  */
-    const std::string&& get_message();
+    std::string get_message();
+/** Set the error stack to share it with a session.
+ */
+    void set_error_stack(std::shared_ptr<QofErrorStack> stack) { m_err_stack = stack; }
 /** Store and retrieve a backend-specific function for determining the progress
  * in completing a long operation, for use with a progress meter.
  */
@@ -286,8 +291,7 @@ protected:
     std::string m_fullpath;
 private:
     static GModuleVec c_be_registry;
-    QofBackendError m_last_err;
-    std::string m_error_msg;
+    std::shared_ptr<QofErrorStack> m_err_stack;
 };
 
 /* @} */

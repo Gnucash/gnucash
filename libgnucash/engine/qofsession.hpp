@@ -31,8 +31,10 @@
 
 #include "qofbook.h"
 #include "qofsession.h"
+#include "qof-error-stack.hpp"
 #include <utility>
 #include <string>
+#include <memory>
 
 struct QofSessionImpl
 {
@@ -102,13 +104,8 @@ private:
 
     /* If any book subroutine failed, this records the failure reason
      * (file not found, etc).
-     * This is a 'stack' that is one deep.  (Should be deeper ??)
-     * FIXME: Each backend has its own error stack. The session
-     * and the backends should all be using (or making it look like)
-     * there is only one stack.
      */
-    QofBackendError m_last_err;
-    std::string m_error_message;
+    std::shared_ptr<QofErrorStack> m_err_stack;
 
     /* These functions support the old testing infrastructure and should
      * be removed when they are no longer necessary.*/

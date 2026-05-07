@@ -55,36 +55,31 @@ QofBackend::commit(QofInstance* instance)
 void
 QofBackend::set_error(QofBackendError err)
 {
-    /* use stack-push semantics. Only the earliest error counts */
-    if (m_last_err != ERR_BACKEND_NO_ERR) return;
-    m_last_err = err;
+    m_err_stack->set_error(err);
 }
 
 QofBackendError
 QofBackend::get_error()
 {
-    /* use 'stack-pop' semantics */
-    auto err = m_last_err;
-    m_last_err = ERR_BACKEND_NO_ERR;
-    return err;
+    return m_err_stack->fetch_error();
 }
 
 bool
 QofBackend::check_error()
 {
-    return m_last_err != ERR_BACKEND_NO_ERR;
+    return m_err_stack->check_error();
 }
 
 void
 QofBackend::set_message (std::string&& msg)
 {
-    m_error_msg = msg;
+    m_err_stack->set_message(std::move(msg));
 }
 
-const std::string&&
+std::string
 QofBackend::get_message ()
 {
-    return std::move(m_error_msg);
+    return m_err_stack->fetch_message();
 }
 
 bool
