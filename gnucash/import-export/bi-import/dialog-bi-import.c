@@ -190,7 +190,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 
             // fill in the values
             gtk_list_store_append (store, &iter);
-            FILL_IN_HELPER ("id", ID); /* FIXME: Should "id" be translated? I don't think so. */
+            FILL_IN_HELPER ("id", ID);
             FILL_IN_HELPER ("date_opened", DATE_OPENED);
             FILL_IN_HELPER ("owner_id", OWNER_ID);
             FILL_IN_HELPER ("billing_id", BILLING_ID);
