@@ -105,7 +105,6 @@
 (define optname-enddate (N_ "End Date"))
 (define optname-date-source (N_ "Date Filter"))
 (define optname-table-export (N_ "Table for Exporting"))
-(define optname-infobox-display (N_ "Add options summary"))
 
 ;; Currency
 (define pagename-currency (N_ "Currency"))
@@ -581,17 +580,6 @@ in the Options panel."))
     gnc:pagename-general optname-table-export
     "g" (G_ "Formats the table suitable for cut & paste exporting with extra cells.")
     #f)
-
-  (gnc-register-multichoice-option options
-    gnc:pagename-general optname-infobox-display
-    "h" (G_ "Add summary of options.")
-    "no-match"
-    ;; This is an alist of conditions for displaying the infobox
-    ;; 'no-match for empty-report
-    ;; 'match for generated report
-    (list (vector 'no-match (G_ "If no transactions matched"))
-          (vector 'always (G_ "Always"))
-          (vector 'never (G_ "Never"))))
 
   ;; Filtering Options
 
@@ -2305,7 +2293,6 @@ be excluded from periodic reporting.")
                                    primary-subtotal)
                                (memq (opt-val gnc:pagename-display (N_ "Amount"))
                                      '(single double))))
-         (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
     ;; define a preprocessed alist of report parameters.
@@ -2549,12 +2536,7 @@ be excluded from periodic reporting.")
       (when empty-report-message
         (gnc:html-document-add-object!
          document
-         empty-report-message))
-
-      (when (memq infobox-display '(always no-match))
-        (gnc:html-document-add-object!
-         document
-         (gnc:html-render-options-changed options))))
+         empty-report-message)))
 
      (else
       (qof-query-set-book query (gnc-get-current-book))
@@ -2628,12 +2610,7 @@ be excluded from periodic reporting.")
           report-title (gnc:report-id report-obj)
           NO-MATCHING-TRANS-HEADER NO-MATCHING-TRANS-TEXT))
 
-        (gnc:html-document-set-export-error document "No splits found")
-
-        (when (memq infobox-display '(always no-match))
-          (gnc:html-document-add-object!
-           document
-           (gnc:html-render-options-changed options))))
+        (gnc:html-document-set-export-error document "No splits found"))
 
        (else
         (let-values (((table grid csvlist)
@@ -2647,11 +2624,6 @@ be excluded from periodic reporting.")
            (gnc:make-html-text
             (gnc:html-markup-h3
              (gnc-date-interval-format begindate enddate))))
-
-          (when (eq? infobox-display 'always)
-            (gnc:html-document-add-object!
-             document
-             (gnc:html-render-options-changed options)))
 
           (when subtotal-table?
             (gnc:html-document-add-object! document (grid 'get-html)))
