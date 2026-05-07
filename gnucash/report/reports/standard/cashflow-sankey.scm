@@ -112,7 +112,7 @@
   (string-append "["
     (string-join 
       (map (lambda (link)
-            (format #f "['~a', '~a', ~f]" (car link) (cadr link) (caddr link)))
+            (format #f "['~a', '~a', ~,2f]" (car link) (cadr link) (caddr link)))
           links)
       ",")
     "]"))
