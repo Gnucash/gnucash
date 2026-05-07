@@ -45,7 +45,7 @@ def addressToDict(address):
 
         return simple_address
 
-def vendorToDict(vendor):
+def vendorToDict(vendor, lazy=False):
 
     if vendor is None:
         return None
@@ -58,7 +58,8 @@ def vendorToDict(vendor):
         simple_vendor['active'] = vendor.GetActive()
         simple_vendor['currency'] = vendor.GetCurrency().get_mnemonic()
         #simple_vendor['tax_table_override'] = vendor.GetTaxTableOverride()
-        simple_vendor['address'] = addressToDict(vendor.GetAddr())
+        if not lazy:
+            simple_vendor['address'] = addressToDict(vendor.GetAddr())
         simple_vendor['tax_included'] = vendor.GetTaxIncluded()
 
         return simple_vendor
