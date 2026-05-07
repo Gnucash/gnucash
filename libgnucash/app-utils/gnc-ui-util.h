@@ -408,6 +408,20 @@ void gnc_ui_util_init (void);
 
 void gnc_ui_util_remove_registered_prefs (void);
 
+/** Returns the incoming text with Unicode bidi control characters removed.
+ *
+ * Strips directional marks (U+200E, U+200F), embedding/override codes
+ * (U+202A–U+202E), isolate codes (U+2066–U+2069) and the Arabic letter
+ * mark (U+061C) that GnuCash inserts for RTL display, so that values
+ * copied to the clipboard are clean plain text.
+ *
+ * @param incoming_text The text to filter (may be NULL)
+ *
+ * @return A newly-allocated string with bidi marks removed, or NULL when
+ *         incoming_text is NULL.  Must be freed by the caller.
+ */
+char* gnc_filter_text_for_bidi_marks (const char* incoming_text);
+
 /** Returns the incoming text removed of control characters
  *
  * @param incoming_text The text to filter

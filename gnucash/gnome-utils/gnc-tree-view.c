@@ -43,6 +43,7 @@
 #include "gnc-glib-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-cell-renderer-label.h"
 #include "gnc-cell-renderer-text-view.h"
 #include "gnc-state.h"
 #include "gnc-prefs.h"
@@ -2070,12 +2071,13 @@ gnc_tree_view_add_numeric_column (GncTreeView *view,
     GtkCellRenderer *renderer;
     gfloat alignment = 1.0;
 
-    column = gnc_tree_view_add_text_column (view, column_title, pref_name,
-                                            NULL, sizing_text, model_data_column,
-                                            model_visibility_column,
-                                            column_sort_fn);
-
-    renderer = gnc_tree_view_column_get_renderer (column);
+    /* Use GncCellRendererLabel so the user can click a cell and select
+     * its text (e.g. to copy it to the clipboard), without being able
+     * to modify the underlying data. */
+    renderer = gnc_cell_renderer_label_new ();
+    column = add_text_column_variant (view, renderer, column_title, pref_name,
+                                      NULL, sizing_text, model_data_column,
+                                      model_visibility_column, column_sort_fn);
 
     /* Right align the column title and data for both ltr and rtl */
     if (gtk_widget_get_direction (GTK_WIDGET(view)) == GTK_TEXT_DIR_RTL)
