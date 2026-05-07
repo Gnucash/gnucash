@@ -5,7 +5,14 @@
 
 import sys
 from unittest import TestCase, main
-from gnucash.function_class import ClassFromFunctions, default_arguments_decorator
+from gnucash.function_class import (
+    ClassFromFunctions,
+    default_arguments_decorator,
+    method_function_returns_instance,
+    method_function_returns_instance_list,
+    methods_return_instance,
+    methods_return_instance_lists,
+)
 
 
 class Instance:
@@ -39,6 +46,18 @@ def prefix_test_function_return_arg_karg(self, a, b=b_default):
 
 def other_function(self, arg=None):
     return self, arg
+
+
+def returns_instance_data(self):
+    return Instance()
+
+
+def returns_instance_list_data(self):
+    return [Instance(), Instance()]
+
+
+def returns_none_data(self):
+    return None
 
 
 class TestClass(ClassFromFunctions):
@@ -171,6 +190,53 @@ class TestFunctionClass(TestCase):
             self.t.test_function_return_arg_karg(arg2, arg3),
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
+
+    def test_method_function_returns_instance(self):
+        decorated = method_function_returns_instance(returns_instance_data, TestClass)
+        t = TestClass()
+        result = decorated(t)
+        self.assertIsInstance(result, TestClass)
+        self.assertIsInstance(result.instance, Instance)
+
+        decorated_none = method_function_returns_instance(returns_none_data, TestClass)
+        self.assertIsNone(decorated_none(t))
+
+    def test_method_function_returns_instance_list(self):
+        decorated = method_function_returns_instance_list(
+            returns_instance_list_data, TestClass
+        )
+        t = TestClass()
+        result = decorated(t)
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 2)
+        for item in result:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
+
+    def test_methods_return_instance(self):
+        # Attach the raw function to the class first so methods_return_instance can find it
+        setattr(TestClass, "returns_instance_data_raw", returns_instance_data)
+        methods_return_instance(TestClass, {"returns_instance_data_raw": TestClass})
+        t = TestClass()
+        # TestClass.returns_instance_data_raw should now be decorated
+        result = t.returns_instance_data_raw()
+        self.assertIsInstance(result, TestClass)
+        self.assertIsInstance(result.instance, Instance)
+
+    def test_methods_return_instance_lists(self):
+        # Attach the raw function to the class first
+        setattr(TestClass, "returns_instance_list_data_raw", returns_instance_list_data)
+        methods_return_instance_lists(
+            TestClass, {"returns_instance_list_data_raw": TestClass}
+        )
+        t = TestClass()
+        # TestClass.returns_instance_list_data_raw should now be decorated
+        result = t.returns_instance_list_data_raw()
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 2)
+        for item in result:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
 
 
 if __name__ == "__main__":

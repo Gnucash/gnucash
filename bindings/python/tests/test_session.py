@@ -9,6 +9,7 @@
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
 from unittest import TestCase, main
+from unittest.mock import patch
 
 from gnucash import (
         Session,
