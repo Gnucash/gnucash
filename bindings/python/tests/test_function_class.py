@@ -8,6 +8,7 @@ from unittest import TestCase, main
 from gnucash.function_class import (
     ClassFromFunctions,
     default_arguments_decorator,
+    return_instance_if_value_has_it,
     process_list_convert_to_instance,
     process_dict_convert_to_instance,
 )
@@ -17,6 +18,11 @@ class Instance:
     """instance class for ClassFromFunction tests"""
 
     pass
+
+
+class ReturnClass(object):
+    def __init__(self, **kargs):
+        self.instance = kargs.get("instance")
 
 
 def prefix_new_function():
@@ -44,6 +50,14 @@ def prefix_test_function_return_arg_karg(self, a, b=b_default):
 
 def other_function(self, arg=None):
     return self, arg
+
+
+def returns_instance_data(self):
+    return "some_data"
+
+
+def returns_instance_data_list(self):
+    return ["data1", "data2"]
 
 
 class TestClass(ClassFromFunctions):
@@ -84,6 +98,52 @@ class TestFunctionClass(TestCase):
         self.assertIsInstance(arg, Instance)
         obj, arg = self.t.other_method(arg=self.t)
         self.assertIsInstance(arg, Instance)
+
+    def test_method_function_returns_instance(self):
+        """test method_function_returns_instance()"""
+        from gnucash.function_class import method_function_returns_instance
+
+        def returns_instance_data(self):
+            return Instance()
+
+        def returns_none(self):
+            return None
+
+        decorated_returns_instance = method_function_returns_instance(
+            returns_instance_data, TestClass
+        )
+        decorated_returns_none = method_function_returns_instance(
+            returns_none, TestClass
+        )
+
+        t = TestClass()
+
+        result_instance = decorated_returns_instance(t)
+        self.assertIsInstance(result_instance, TestClass)
+        self.assertIsInstance(result_instance.instance, Instance)
+
+        result_none = decorated_returns_none(t)
+        self.assertIsNone(result_none)
+
+    def test_method_function_returns_instance_list(self):
+        """test method_function_returns_instance_list()"""
+        from gnucash.function_class import method_function_returns_instance_list
+
+        def returns_instance_data_list(self):
+            return [Instance(), Instance()]
+
+        decorated_returns_list = method_function_returns_instance_list(
+            returns_instance_data_list, TestClass
+        )
+
+        t = TestClass()
+
+        result_list = decorated_returns_list(t)
+        self.assertIsInstance(result_list, list)
+        self.assertEqual(len(result_list), 2)
+        for item in result_list:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
 
     def test_default_arguments_decorator(self):
         """test default_arguments_decorator()"""
@@ -177,28 +237,35 @@ class TestFunctionClass(TestCase):
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
 
+    def test_return_instance_if_value_has_it(self):
+        """test return_instance_if_value_has_it()"""
+        t = TestClass()
+        self.assertEqual(return_instance_if_value_has_it(t), t.instance)
+        self.assertEqual(return_instance_if_value_has_it(5), 5)
+        self.assertEqual(return_instance_if_value_has_it("string"), "string")
+        self.assertIsNone(return_instance_if_value_has_it(None))
+
     def test_process_list_convert_to_instance(self):
         """test process_list_convert_to_instance()"""
-        TestClass.add_constructor_and_methods_with_prefix("prefix_", "new_function")
-        t = TestClass()
-        instance = t.instance
-
-        value_list = [1, "a", t, instance]
-        processed_list = process_list_convert_to_instance(value_list)
-
-        self.assertEqual(processed_list, [1, "a", instance, instance])
+        t1 = TestClass()
+        t2 = TestClass()
+        input_list = [t1, 5, t2, "string", None]
+        expected_list = [t1.instance, 5, t2.instance, "string", None]
+        self.assertEqual(process_list_convert_to_instance(input_list), expected_list)
 
     def test_process_dict_convert_to_instance(self):
         """test process_dict_convert_to_instance()"""
-        TestClass.add_constructor_and_methods_with_prefix("prefix_", "new_function")
-        t = TestClass()
-        instance = t.instance
-
-        value_dict = {"int": 1, "str": "a", "class": t, "instance": instance}
-        processed_dict = process_dict_convert_to_instance(value_dict)
-
-        expected_dict = {"int": 1, "str": "a", "class": instance, "instance": instance}
-        self.assertEqual(processed_dict, expected_dict)
+        t1 = TestClass()
+        t2 = TestClass()
+        input_dict = {"a": t1, "b": 5, "c": t2, "d": "string", "e": None}
+        expected_dict = {
+            "a": t1.instance,
+            "b": 5,
+            "c": t2.instance,
+            "d": "string",
+            "e": None,
+        }
+        self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
 
 
 if __name__ == "__main__":

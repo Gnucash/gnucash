@@ -635,7 +635,7 @@
 (define (gnc:exchange-by-euro foreign domestic date)
   (and (gnc-is-euro-currency domestic)
        (gnc-is-euro-currency (gnc:gnc-monetary-commodity foreign))
-       ;; FIXME: implement the date check.
+       (or (not date) (>= (gnc:time64-get-year date) 1999))
        (gnc:make-gnc-monetary
         domestic
         (gnc-convert-from-euro
