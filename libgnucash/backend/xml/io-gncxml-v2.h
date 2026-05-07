@@ -88,7 +88,7 @@ gboolean qof_session_load_from_xml_file_v2 (GncXmlBackend*, QofBook*,
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* fh);
 gboolean gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
-                                        gboolean compress);
+                                        gboolean compress, int fd = -1);
 
 /** write just the commodities and accounts to a file */
 gboolean gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* be,
