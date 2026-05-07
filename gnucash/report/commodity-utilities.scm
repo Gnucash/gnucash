@@ -376,9 +376,22 @@
                                       (a 'add (gnc:gnc-monetary-amount euro-monetary))
                                       (list report-commodity
                                             (cons (cdadr pair) a)))))))
-                 ;; Find the pair's currency in reportlist. FIXME:
-                 ;; Also try the Euro here.
-                 (pair-b (assoc (car pair) reportlist)))
+                 ;; Find the pair's currency in reportlist.
+                 ;; Or try whether that's an Euro currency.
+                 (pair-b (or (assoc (car pair) reportlist)
+                             (let ((euro-monetary
+                                    (gnc:exchange-by-euro
+                                     (gnc:make-gnc-monetary
+                                      (car pair)
+                                      ((caadr pair) 'total #f))
+                                     report-commodity #f)))
+                               ;; If this is an Euro currency, create the
+                               ;; pair of appropriately exchanged amounts.
+                               (and euro-monetary
+                                    (let ((a (gnc:make-value-collector)))
+                                      (a 'add (gnc:gnc-monetary-amount euro-monetary))
+                                      (list report-commodity
+                                            (cons (caadr pair) a))))))))
 
             (cond
              ((and (not pair-a) (not pair-b))
