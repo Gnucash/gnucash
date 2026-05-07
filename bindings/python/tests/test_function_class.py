@@ -14,6 +14,11 @@ class Instance:
     pass
 
 
+class ReturnClass(object):
+    def __init__(self, **kargs):
+        self.instance = kargs.get("instance")
+
+
 def prefix_new_function():
     """new function for ClassFromFunction tests
     
@@ -39,6 +44,14 @@ def prefix_test_function_return_arg_karg(self, a, b=b_default):
 
 def other_function(self, arg=None):
     return self, arg
+
+
+def returns_instance_data(self):
+    return "some_data"
+
+
+def returns_instance_data_list(self):
+    return ["data1", "data2"]
 
 
 class TestClass(ClassFromFunctions):
@@ -171,6 +184,34 @@ class TestFunctionClass(TestCase):
             self.t.test_function_return_arg_karg(arg2, arg3),
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
+
+    def test_methods_return_instance(self):
+        from gnucash.function_class import methods_return_instance
+
+        TestClass.add_method("returns_instance_data", "returns_instance_method")
+        methods_return_instance(TestClass, {"returns_instance_method": ReturnClass})
+        self.t = TestClass()
+        result = self.t.returns_instance_method()
+        self.assertIsInstance(result, ReturnClass)
+        self.assertEqual(result.instance, "some_data")
+
+    def test_methods_return_instance_lists(self):
+        from gnucash.function_class import methods_return_instance_lists
+
+        TestClass.add_method(
+            "returns_instance_data_list", "returns_instance_list_method"
+        )
+        methods_return_instance_lists(
+            TestClass, {"returns_instance_list_method": ReturnClass}
+        )
+        self.t = TestClass()
+        result = self.t.returns_instance_list_method()
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 2)
+        self.assertIsInstance(result[0], ReturnClass)
+        self.assertEqual(result[0].instance, "data1")
+        self.assertIsInstance(result[1], ReturnClass)
+        self.assertEqual(result[1].instance, "data2")
 
 
 if __name__ == "__main__":
