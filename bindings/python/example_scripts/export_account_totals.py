@@ -25,14 +25,14 @@ import sys
 from gnucash import GncNumeric, Session, SessionOpenMode
 
 
-def get_all_sub_accounts(account, names=[]):
+def get_all_sub_accounts(account, prefix=''):
     "Iterate over all sub accounts of a given account."
 
     for child in account.get_children_sorted():
-        child_names = names.copy()
-        child_names.append(child.GetName())
-        yield child, '::'.join(child_names)
-        yield from get_all_sub_accounts(child, child_names)
+        name = child.GetName()
+        full_name = f"{prefix}::{name}" if prefix else name
+        yield child, full_name
+        yield from get_all_sub_accounts(child, full_name)
 
 
 def to_string_with_decimal_point_placed(number: GncNumeric):
