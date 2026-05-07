@@ -671,6 +671,7 @@ libgnucash/engine/qof-backend.cpp
 libgnucash/engine/qofbook.cpp
 libgnucash/engine/qofbookslots.h
 libgnucash/engine/qofclass.cpp
+libgnucash/engine/qof-error-stack.cpp
 libgnucash/engine/qofevent.cpp
 libgnucash/engine/qofid.cpp
 libgnucash/engine/qofinstance.cpp
