@@ -45,6 +45,8 @@
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static gboolean gettrans_dates(GtkWidget *parent, Account *gnc_acc, GWEN_TIME **from_date, GWEN_TIME **to_date);
+static void gnc_ab_set_job_date(AB_TRANSACTION *job, const GWEN_TIME *time,
+                                void (*setter)(AB_TRANSACTION *job, const GWEN_DATE *date));
 
 static gboolean
 gettrans_dates(GtkWidget *parent, Account *gnc_acc,
@@ -91,6 +93,20 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
     *to_date = GWEN_Time_fromSeconds(until);
 
     return TRUE;
+}
+
+static void
+gnc_ab_set_job_date(AB_TRANSACTION *job, const GWEN_TIME *time,
+                    void (*setter)(AB_TRANSACTION *job, const GWEN_DATE *date))
+{
+    GWEN_DATE *dt;
+
+    if (!time)
+        return;
+
+    dt = GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(time));
+    setter(job, dt);
+    GWEN_Date_free(dt);
 }
 
 void
@@ -146,23 +162,8 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     AB_Transaction_SetCommand(job, AB_Transaction_CommandGetTransactions);
     AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
 
-    if (from_date) /* TODO: this should be simplified */
-    {
-        GWEN_DATE *dt;
-
-        dt=GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(from_date));
-        AB_Transaction_SetFirstDate(job, dt);
-        GWEN_Date_free(dt);
-    }
-
-    if (to_date)
-    {
-        GWEN_DATE *dt;
-
-        dt=GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(to_date));
-        AB_Transaction_SetLastDate(job, dt);
-        GWEN_Date_free(dt);
-    }
+    gnc_ab_set_job_date(job, from_date, AB_Transaction_SetFirstDate);
+    gnc_ab_set_job_date(job, to_date, AB_Transaction_SetLastDate);
 
     job_list = AB_Transaction_List2_new();
     AB_Transaction_List2_PushBack(job_list, job);
