@@ -13,7 +13,7 @@ if script_dir not in sys.path:
     sys.path.append(script_dir)
 
 # Now we can import the function to be tested
-from export_account_totals import get_all_sub_accounts
+from export_account_totals import get_all_sub_accounts, to_string_with_decimal_point_placed
 
 class TestExportAccountTotals(TestCase):
     def create_mock_account(self, name, children=None):
@@ -83,6 +83,47 @@ class TestExportAccountTotals(TestCase):
         self.assertEqual(len(results), len(expected))
         for i in range(len(expected)):
             self.assertEqual(results[i], expected[i])
+
+    def test_to_string_with_decimal_point_placed(self):
+        """Test the decimal point placement logic."""
+
+        class MockNumeric:
+            def __init__(self, num, denom):
+                self._num = num
+                self._denom = denom
+
+            def num(self):
+                return self._num
+
+            def denom(self):
+                return self._denom
+
+            def to_decimal(self, arg):
+                return True
+
+            def __copy__(self):
+                return MockNumeric(self._num, self._denom)
+
+        def create_mock_numeric(num, denom):
+            return MockNumeric(num, denom)
+
+        # Test cases: (numerator, denominator, expected_output)
+        test_cases = [
+            (100, 1, "100"),
+            (100, 100, "1.00"),
+            (1, 100, "0.01"),
+            (10, 100, "0.10"),
+            (1001, 1000, "1.001"),
+            (0, 100, "0.00"),
+            (-1, 100, "-0.01"),
+            (-100, 100, "-1.00"),
+            (-101, 100, "-1.01"),
+        ]
+
+        for num, denom, expected in test_cases:
+            with self.subTest(num=num, denom=denom):
+                gnc_num = create_mock_numeric(num, denom)
+                self.assertEqual(to_string_with_decimal_point_placed(gnc_num), expected)
 
 if __name__ == "__main__":
     main()
