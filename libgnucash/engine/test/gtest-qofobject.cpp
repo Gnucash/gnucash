@@ -47,7 +47,7 @@ protected:
 
 TEST_F(QofObjectTest, RegistrationAndLookup)
 {
-    QofObject obj{};
+    static QofObject obj{};
     obj.interface_version = QOF_OBJECT_VERSION;
     obj.e_type = (char*)"test-type";
     obj.type_label = "Test Object";
@@ -66,7 +66,7 @@ TEST_F(QofObjectTest, NewInstance)
         return (gpointer)0x1234;
     };
 
-    QofObject obj{};
+    static QofObject obj{};
     obj.interface_version = QOF_OBJECT_VERSION;
     obj.e_type = (char*)"create-type";
     obj.create = mock_create;
@@ -75,6 +75,62 @@ TEST_F(QofObjectTest, NewInstance)
 
     QofBook *book = qof_book_new();
     EXPECT_EQ(qof_object_new_instance("create-type", book), (gpointer)0x1234);
+    qof_book_destroy(book);
+}
+
+TEST_F(QofObjectTest, ForeachSorted)
+{
+    static std::vector<QofInstance*> mock_instances;
+    mock_instances.clear();
+
+    auto mock_foreach = [](const QofCollection *col, QofInstanceForeachCB cb, gpointer data)
+    {
+        for (auto inst : mock_instances)
+            cb(inst, data);
+    };
+
+    static QofObject obj{};
+    obj.interface_version = QOF_OBJECT_VERSION;
+    obj.e_type = (char*)"sorted-type";
+    obj.foreach = mock_foreach;
+
+    qof_object_register(&obj);
+
+    QofBook *book = qof_book_new();
+
+    // Create some instances with unique GUIDs
+    for (int i = 0; i < 3; ++i)
+    {
+        auto inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, nullptr));
+        GncGUID guid = guid_new();
+        qof_instance_set_guid(inst, &guid);
+        mock_instances.push_back(inst);
+    }
+
+    static std::vector<QofInstance*> called_instances;
+    called_instances.clear();
+    auto cb = [](QofInstance* inst, gpointer data) {
+        called_instances.push_back(inst);
+    };
+
+    qof_object_foreach_sorted("sorted-type", book, cb, nullptr);
+
+    EXPECT_EQ(called_instances.size(), 3);
+
+    // Verify sorted order
+    std::vector<QofInstance*> expected_sorted = mock_instances;
+    std::sort(expected_sorted.begin(), expected_sorted.end(), [](QofInstance* a, QofInstance* b) {
+        return qof_instance_guid_compare(a, b) < 0;
+    });
+
+    for (size_t i = 0; i < 3; ++i)
+    {
+        EXPECT_EQ(called_instances[i], expected_sorted[i]);
+    }
+
+    for (auto inst : mock_instances)
+        g_object_unref(inst);
+    mock_instances.clear();
     qof_book_destroy(book);
 }
 
@@ -103,7 +159,7 @@ TEST_F(QofObjectTest, BookLifecycle)
         }
     };
 
-    QofObject obj{};
+    static QofObject obj{};
     obj.interface_version = QOF_OBJECT_VERSION;
     obj.e_type = (char*)"lifecycle-type";
     obj.book_begin = mock_begin;
@@ -124,7 +180,7 @@ TEST_F(QofObjectTest, BookLifecycle)
 
 TEST_F(QofObjectTest, Compliance)
 {
-    QofObject obj{};
+    static QofObject obj{};
     obj.interface_version = QOF_OBJECT_VERSION;
     obj.e_type = (char*)"compliance-type";
 
@@ -155,7 +211,7 @@ TEST_F(QofObjectTest, DirtyAndClean)
         mark_clean_called = true;
     };
 
-    QofObject obj{};
+    static QofObject obj{};
     obj.interface_version = QOF_OBJECT_VERSION;
     obj.e_type = (char*)"dirty-type";
     obj.is_dirty = mock_is_dirty;
@@ -180,7 +236,7 @@ TEST_F(QofObjectTest, DirtyAndClean)
 
 TEST_F(QofObjectTest, ForeachType)
 {
-    QofObject obj1{}, obj2{};
+    static QofObject obj1{}, obj2{};
     obj1.interface_version = QOF_OBJECT_VERSION;
     obj1.e_type = (char*)"type1";
     obj2.interface_version = QOF_OBJECT_VERSION;
@@ -205,7 +261,7 @@ TEST_F(QofObjectTest, Printable)
         return "printed";
     };
 
-    QofObject obj{};
+    static QofObject obj{};
     obj.interface_version = QOF_OBJECT_VERSION;
     obj.e_type = (char*)"printable-type";
     obj.printable = mock_printable;
@@ -213,4 +269,38 @@ TEST_F(QofObjectTest, Printable)
     qof_object_register(&obj);
 
     EXPECT_STREQ(qof_object_printable("printable-type", (gpointer)1), "printed");
+}
+
+TEST_F(QofObjectTest, Foreach)
+{
+    static const QofCollection *expected_col = nullptr;
+    static QofInstanceForeachCB expected_cb = nullptr;
+    static gpointer expected_data = nullptr;
+    static bool foreach_called = false;
+
+    foreach_called = false;
+    auto mock_foreach = [](const QofCollection *col, QofInstanceForeachCB cb, gpointer data)
+    {
+        foreach_called = true;
+        EXPECT_EQ(col, expected_col);
+        EXPECT_EQ(cb, expected_cb);
+        EXPECT_EQ(data, expected_data);
+    };
+
+    static QofObject obj{};
+    obj.interface_version = QOF_OBJECT_VERSION;
+    obj.e_type = (char*)"foreach-type";
+    obj.foreach = mock_foreach;
+
+    qof_object_register(&obj);
+
+    QofBook *book = qof_book_new();
+    expected_col = qof_book_get_collection(book, "foreach-type");
+    expected_cb = [](QofInstance*, gpointer) {};
+    expected_data = (gpointer)0x5678;
+
+    qof_object_foreach("foreach-type", book, expected_cb, expected_data);
+    EXPECT_TRUE(foreach_called);
+
+    qof_book_destroy(book);
 }

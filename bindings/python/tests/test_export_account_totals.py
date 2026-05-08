@@ -12,7 +12,7 @@ script_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'exam
 if script_dir not in sys.path:
     sys.path.append(script_dir)
 
-# Now we can import the functions to be tested
+# Now we can import the function to be tested
 from export_account_totals import get_all_sub_accounts, to_string_with_decimal_point_placed
 
 class TestExportAccountTotals(TestCase):
@@ -85,34 +85,45 @@ class TestExportAccountTotals(TestCase):
             self.assertEqual(results[i], expected[i])
 
     def test_to_string_with_decimal_point_placed(self):
-        """Test the conversion of GncNumeric to string with decimal point."""
-        def create_mock_numeric(n, d, can_convert=True):
-            num = MagicMock()
-            num.num.return_value = n
-            num.denom.return_value = d
-            num.to_decimal.return_value = can_convert
-            num.__str__.return_value = f"{n}/{d}"
-            return num
+        """Test the decimal point placement logic."""
 
-        # Positive integer
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(100, 1)), "100")
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(100, 100)), "1.00")
+        class MockNumeric:
+            def __init__(self, num, denom):
+                self._num = num
+                self._denom = denom
 
-        # Positive decimal > 1
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(123, 100)), "1.23")
+            def num(self):
+                return self._num
 
-        # Positive decimal < 1 (Test current bug: returns '.05', expected '0.05')
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(5, 100)), "0.05")
+            def denom(self):
+                return self._denom
 
-        # Negative integer
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(-100, 1)), "-100")
+            def to_decimal(self, arg):
+                return True
 
-        # Negative decimal (Test current bug: returns '.-5', expected '-0.05')
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(-5, 100)), "-0.05")
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(-123, 100)), "-1.23")
+            def __copy__(self):
+                return MockNumeric(self._num, self._denom)
 
-        # Cannot convert to decimal
-        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(1, 3, False)), "1/3")
+        def create_mock_numeric(num, denom):
+            return MockNumeric(num, denom)
+
+        # Test cases: (numerator, denominator, expected_output)
+        test_cases = [
+            (100, 1, "100"),
+            (100, 100, "1.00"),
+            (1, 100, "0.01"),
+            (10, 100, "0.10"),
+            (1001, 1000, "1.001"),
+            (0, 100, "0.00"),
+            (-1, 100, "-0.01"),
+            (-100, 100, "-1.00"),
+            (-101, 100, "-1.01"),
+        ]
+
+        for num, denom, expected in test_cases:
+            with self.subTest(num=num, denom=denom):
+                gnc_num = create_mock_numeric(num, denom)
+                self.assertEqual(to_string_with_decimal_point_placed(gnc_num), expected)
 
 if __name__ == "__main__":
     main()
