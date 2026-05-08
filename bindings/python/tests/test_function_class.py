@@ -149,6 +149,39 @@ class TestFunctionClass(TestCase):
             self.assertIsInstance(item, TestClass)
             self.assertIsInstance(item.instance, Instance)
 
+    def test_methods_return_instance_lists(self):
+        """test methods_return_instance_lists()"""
+        from gnucash.function_class import methods_return_instance_lists
+
+        def returns_list(self):
+            return [Instance(), Instance()]
+
+        TestClass.returns_list = returns_list
+        methods_return_instance_lists(TestClass, {"returns_list": TestClass})
+
+        t = TestClass()
+        result_list = t.returns_list()
+        self.assertIsInstance(result_list, list)
+        self.assertEqual(len(result_list), 2)
+        for item in result_list:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
+
+    def test_methods_return_instance(self):
+        """test methods_return_instance()"""
+        from gnucash.function_class import methods_return_instance
+
+        def returns_single(self):
+            return Instance()
+
+        TestClass.returns_single = returns_single
+        methods_return_instance(TestClass, {"returns_single": TestClass})
+
+        t = TestClass()
+        result = t.returns_single()
+        self.assertIsInstance(result, TestClass)
+        self.assertIsInstance(result.instance, Instance)
+
     def test_default_arguments_decorator(self):
         """test default_arguments_decorator()"""
         TestClass.backup_test_function_return_args = TestClass.test_function_return_args
