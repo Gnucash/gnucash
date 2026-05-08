@@ -17,8 +17,9 @@ from test_commodity import TestCommodity, TestCommodityNamespace
 from test_numeric import TestGncNumeric
 from test_query import TestQuery
 from test_deprecation import TestDeprecation
-from test_one_arg_default_none_isolated import TestOneArgDefaultNoneIsolated
-from test_one_arg_default_none_integration import TestOneArgDefaultNoneIntegration
+from test_export_account_totals import TestExportAccountTotals
+from test_change_tax_code import TestChangeTaxCode
+from test_latex_invoices import TestLatexInvoices
 
 if __name__ == '__main__':
     unittest.main()
