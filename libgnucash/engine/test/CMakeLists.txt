@@ -38,6 +38,7 @@ set(test_engine_SOURCES
   utest-Budget.c
   utest-Entry.c
   utest-Invoice.c
+  utest-Policy.cpp
   utest-Split.cpp
   utest-Transaction.cpp
   utest-gnc-pricedb.c
@@ -255,6 +256,7 @@ set(test_engine_SOURCES_DIST
         utest-Budget.c
         utest-Entry.c
         utest-Invoice.c
+        utest-Policy.cpp
         utest-Split.cpp
         utest-Transaction.cpp
         utest-gnc-pricedb.c
