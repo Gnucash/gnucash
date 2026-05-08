@@ -46,73 +46,73 @@
   (let ((options (gnc-new-optiondb)))
 
     (gnc-register-string-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Preparer") "a"
       (N_ "Name of person preparing the report.")
       "")
     (gnc-register-string-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Prepared for") "b"
       (N_ "Name of organization or company prepared for.")
       "")
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show preparer info") "c"
       (N_ "Name of organization or company.")
       #t)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show receiver info") "d"
       (N_ "Name of organization or company the report is prepared for.")
       #t)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show date") "e"
       (N_ "The creation date for this report.")
       #t)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show time in addition to date") "f"
       (N_ "The creation time for this report can only be shown if the date is shown.")
       #t)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show GnuCash Version") "g"
       (N_ "Show the currently used GnuCash version.")
       #t)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Enable Links") "h"
       (N_ "Enable hyperlinks in reports.")
       #t)
     (gnc-register-text-option options
-      (N_ "Text")
+      (N_ "Header/Footer")
       (N_ "Additional Comments") "i"
       (N_ "String for additional report information.")
       "")
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show preparer info at bottom") "j"
       (N_ "Per default the preparer info will be shown before the report data.")
       #f)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show receiver info at bottom") "k"
       (N_ "Per default the receiver info will be shown before the report data.")
       #f)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
+      (N_ "Header/Footer")
       (N_ "Show date/time at bottom") "l"
       (N_ "Per default the date/time info will be shown before the report data.")
       #f)
     (gnc-register-simple-boolean-option options
-      (N_ "Text")
+      (N_ "Header/Footer")
       (N_ "Show comments at bottom") "m"
       (N_ "Per default the additional comments text will be shown before the report data.")
       #f)
     (gnc-register-simple-boolean-option options
-      (N_ "General")
-      (N_ "Show GnuCash version at bottom") "m"
+      (N_ "Header/Footer")
+      (N_ "Show GnuCash version at bottom") "n"
       (N_ "Per default the GnuCash version will be shown before the report data.")
       #f)
 
@@ -208,21 +208,21 @@
           (lambda (section name)
             (gnc:color->html
              (gnc-optiondb-lookup-value options section name))))
-         (preparer (opt-val "General" "Preparer"))
-         (prepared-for (opt-val "General" "Prepared for"))
-         (show-preparer? (opt-val "General" "Show preparer info"))
-         (show-receiver? (opt-val "General" "Show receiver info"))
-         (show-date? (opt-val "General" "Show date"))
-         (show-time? (opt-val "General" "Show time in addition to date"))
-         (show-gnucash-version? (opt-val "General" "Show GnuCash Version"))
-         (show-preparer-at-bottom? (opt-val "General" "Show preparer info at bottom"))
-         (show-receiver-at-bottom? (opt-val "General" "Show receiver info at bottom"))
-         (show-date-time-at-bottom? (opt-val "General" "Show date/time at bottom"))
-         (show-comments-at-bottom? (opt-val "Text" "Show comments at bottom"))
+         (preparer (opt-val "Header/Footer" "Preparer"))
+         (prepared-for (opt-val "Header/Footer" "Prepared for"))
+         (show-preparer? (opt-val "Header/Footer" "Show preparer info"))
+         (show-receiver? (opt-val "Header/Footer" "Show receiver info"))
+         (show-date? (opt-val "Header/Footer" "Show date"))
+         (show-time? (opt-val "Header/Footer" "Show time in addition to date"))
+         (show-gnucash-version? (opt-val "Header/Footer" "Show GnuCash Version"))
+         (show-preparer-at-bottom? (opt-val "Header/Footer" "Show preparer info at bottom"))
+         (show-receiver-at-bottom? (opt-val "Header/Footer" "Show receiver info at bottom"))
+         (show-date-time-at-bottom? (opt-val "Header/Footer" "Show date/time at bottom"))
+         (show-comments-at-bottom? (opt-val "Header/Footer" "Show comments at bottom"))
          (show-gnucash-version-at-bottom?
-          (opt-val "General" "Show GnuCash version at bottom"))
-         (links? (opt-val "General" "Enable Links"))
-         (additional-comments (opt-val "Text" "Additional Comments"))
+          (opt-val "Header/Footer" "Show GnuCash version at bottom"))
+         (links? (opt-val "Header/Footer" "Enable Links"))
+         (additional-comments (opt-val "Header/Footer" "Additional Comments"))
          (bgcolor (color-val "Colors" "Background Color"))
          (textcolor (color-val "Colors" "Text Color"))
          (linkcolor (color-val "Colors" "Link Color"))
