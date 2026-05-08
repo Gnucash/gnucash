@@ -560,7 +560,8 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     gtk_list_store_clear (box->tmp_store);
     unblock_list_signals (cell);
 
-    if (strlen (newval) == 0) {
+    if (strlen (newval) == 0)
+    {
         /* Deleting everything in the cell shouldn't provide a search result for
          * "" because that will just be the first MAX_NUM_MATCHES accounts which
          * isn't very useful.
@@ -737,6 +738,27 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     unicode_value = gdk_keyval_to_unicode (event->keyval);
     switch (event->keyval)
     {
+    case GDK_KEY_Escape:
+        if (bcell->changed)
+        {
+            const char *value = gnc_table_get_model_entry (box->sheet->table, bcell->cell_name);
+
+            if (cell->shared_store && gnc_item_list_using_temp (box->item_list))
+            {
+                gnc_item_list_set_temp_store (box->item_list, NULL);
+                gtk_list_store_clear (box->tmp_store);
+            }
+            gnc_basic_cell_set_value_internal (bcell, value);
+            bcell->changed = FALSE;
+            block_list_signals (cell);
+            gnc_item_list_select (box->item_list, value);
+            unblock_list_signals (cell);
+            *cursor_position = -1;
+            *start_selection = 0;
+            *end_selection = -1;
+            return TRUE;
+        }
+        break;
     case GDK_KEY_slash:
         if (! (event->state & GDK_MOD1_MASK))
         {
@@ -757,8 +779,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
             g_free (string);
             return FALSE;
         }
-        if (! (event->state & GDK_CONTROL_MASK) &&
-            !keep_on_going)
+        if (! (event->state & GDK_CONTROL_MASK) && !keep_on_going)
             return FALSE;
 
         match = gnc_quickfill_get_string_len_match

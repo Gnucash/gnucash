@@ -242,59 +242,58 @@ gnc_table_get_header_cell (Table *table)
 }
 
 static const char *
-gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
-                              gboolean *conditionally_changed)
+table_get_model_entry (Table *table, VirtualLocation virt_loc,
+                       gboolean translate, gboolean *conditionally_changed, const char *cell_name)
 {
-    TableGetEntryHandler entry_handler;
-    const char *cell_name;
-    const char *entry;
+    TableGetEntryHandler entry_handler = gnc_table_model_get_entry_handler (
+            table->model, cell_name);
 
-    cell_name = gnc_table_get_cell_name (table, virt_loc);
+    if (entry_handler)
+    {
+        const char *entry = entry_handler (virt_loc, translate, conditionally_changed,
+                                           table->model->handler_user_data);
+        if (entry)
+            return entry;
+    }
 
-    entry_handler = gnc_table_model_get_entry_handler (table->model, cell_name);
-    if (!entry_handler) return "";
+    return "";
+}
 
-    entry = entry_handler (virt_loc, FALSE,
-                           conditionally_changed,
-                           table->model->handler_user_data);
-    if (!entry)
-        entry = "";
+static const char *
+table_get_entry (Table *table, VirtualLocation virt_loc,
+                 gboolean *conditionally_changed)
+{
+    const char *cell_name = gnc_table_get_cell_name (table, virt_loc);
 
-    return entry;
+    return table_get_model_entry (table, virt_loc, FALSE, conditionally_changed,
+                                  cell_name);
 }
 
 const char *
 gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 {
-    TableGetEntryHandler entry_handler;
-    const char *entry;
-    BasicCell *cell;
+    BasicCell *cell = gnc_table_get_cell (table, virt_loc);
 
-    cell = gnc_table_get_cell (table, virt_loc);
     if (!cell || !cell->cell_name)
         return "";
 
     if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
                              virt_loc.vcell_loc))
     {
-        CellIOFlags io_flags;
-
-        io_flags = gnc_table_get_io_flags (table, virt_loc);
+        CellIOFlags io_flags = gnc_table_get_io_flags (table, virt_loc);
 
         if (io_flags & XACC_CELL_ALLOW_INPUT)
             return cell->value;
     }
 
-    entry_handler = gnc_table_model_get_entry_handler (table->model,
-                    cell->cell_name);
-    if (!entry_handler) return "";
+    return table_get_model_entry (table, virt_loc, TRUE, NULL, cell->cell_name);
+}
 
-    entry = entry_handler (virt_loc, TRUE, NULL,
-                           table->model->handler_user_data);
-    if (!entry)
-        entry = "";
-
-    return entry;
+const char *
+gnc_table_get_model_entry (Table *table, const char *cell_name)
+{
+    return table_get_model_entry (table, table->current_cursor_loc, TRUE, NULL,
+                                  cell_name);
 }
 
 char *
@@ -307,8 +306,8 @@ gnc_table_get_tooltip (Table *table, VirtualLocation virt_loc)
     if (!cell || !cell->cell_name)
         return NULL;
 
-    tooltip_handler = gnc_table_model_get_tooltip_handler (table->model,
-                         cell->cell_name);
+    tooltip_handler =
+        gnc_table_model_get_tooltip_handler (table->model, cell->cell_name);
 
     if (!tooltip_handler)
         return NULL;
@@ -328,8 +327,8 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 
     cell_name = gnc_table_get_cell_name (table, virt_loc);
 
-    io_flags_handler = gnc_table_model_get_io_flags_handler (table->model,
-                       cell_name);
+    io_flags_handler =
+        gnc_table_model_get_io_flags_handler (table->model, cell_name);
     if (!io_flags_handler)
         return XACC_CELL_ALLOW_NONE;
 
@@ -366,7 +365,7 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 
 guint32
 gnc_table_get_color (Table *table, VirtualLocation virt_loc,
-                                 gboolean *hatching)
+                     gboolean *hatching)
 {
     TableGetCellColorHandler color_handler;
     const char *handler_name;
@@ -379,8 +378,8 @@ gnc_table_get_color (Table *table, VirtualLocation virt_loc,
 
     handler_name = gnc_table_get_cell_name (table, virt_loc);
 
-    color_handler = gnc_table_model_get_cell_color_handler (table->model,
-                                                            handler_name);
+    color_handler =
+        gnc_table_model_get_cell_color_handler (table->model, handler_name);
 
     if (!color_handler)
         return COLOR_UNDEFINED;
@@ -401,8 +400,8 @@ gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
 
     cell_name = gnc_table_get_cell_name (table, virt_loc);
 
-    cell_border_handler = gnc_table_model_get_cell_border_handler (table->model,
-                          cell_name);
+    cell_border_handler =
+        gnc_table_model_get_cell_border_handler (table->model, cell_name);
     if (!cell_border_handler)
         return;
 
@@ -860,8 +859,8 @@ gnc_table_move_cursor_internal (Table *table,
                     const char *entry;
                     gboolean conditionally_changed = FALSE;
 
-                    entry = gnc_table_get_entry_internal (table, virt_loc,
-                                                          &conditionally_changed);
+                    entry = table_get_entry (table, virt_loc,
+                                             &conditionally_changed);
 
                     gnc_basic_cell_set_value (cell, entry);
 
@@ -1333,16 +1332,21 @@ gnc_table_direct_update (Table *table,
 
     ENTER ("");
 
-    if (cell->direct_update == NULL)
+    gboolean changed = cell->changed;
+    old_value = g_strdup (cell->value);
+
+    CellDirectUpdateFunc du = cell->direct_update;
+
+    if (du == NULL)
+        du = table->gui_handlers.default_direct_update;
+
+    if (du == NULL)
     {
         LEAVE("no direct update");
         return FALSE;
     }
 
-    old_value = g_strdup (cell->value);
-
-    result = cell->direct_update (cell, cursor_position, start_selection,
-                                  end_selection, gui_data);
+    result = du (cell, cursor_position, start_selection, end_selection, gui_data);
 
     if (g_strcmp0 (old_value, cell->value) != 0)
     {
@@ -1354,7 +1358,8 @@ gnc_table_direct_update (Table *table,
         }
         else
         {
-            cell->changed = TRUE;
+            if (!changed)
+                cell->changed = TRUE;
             *newval_ptr = cell->value;
         }
     }
