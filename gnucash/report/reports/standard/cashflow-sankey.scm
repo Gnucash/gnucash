@@ -86,7 +86,7 @@
             (lambda (src-split)
               (let* ((trans (xaccSplitGetParent src-split))
                      (date (gnc:time64-start-day-time (gnc:date-option-absolute-time (xaccTransGetDate trans))))
-                     (amount (gnc-numeric-to-double (xaccSplitGetAmount src-split))))
+                     (amount (xaccSplitGetAmount src-split)))
 
                 ;; Compare dates against the discrete start and end variables
                 (if (and (>= date start-date) (<= date end-date) (< amount 0))
