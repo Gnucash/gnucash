@@ -11,6 +11,7 @@ from gnucash.function_class import (
     return_instance_if_value_has_it,
     process_list_convert_to_instance,
     process_dict_convert_to_instance,
+    extract_attributes_with_prefix,
 )
 
 
@@ -266,6 +267,38 @@ class TestFunctionClass(TestCase):
             "e": None,
         }
         self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
+
+    def test_extract_attributes_with_prefix(self):
+        """test extract_attributes_with_prefix()"""
+
+        class Sample:
+            prefix_a = 1
+            prefix_b = 2
+            other = 3
+            prefix_ = 4
+
+        # Test with class
+        results = list(extract_attributes_with_prefix(Sample, "prefix_"))
+        self.assertEqual(len(results), 3)
+        self.assertIn(("prefix_a", 1, "a"), results)
+        self.assertIn(("prefix_b", 2, "b"), results)
+        self.assertIn(("prefix_", 4, ""), results)
+
+        # Test with instance
+        s = Sample()
+        s.prefix_c = 5
+        results = list(extract_attributes_with_prefix(s, "prefix_"))
+        # Instance __dict__ only contains instance attributes
+        self.assertEqual(len(results), 1)
+        self.assertIn(("prefix_c", 5, "c"), results)
+
+        # Test no matches
+        results = list(extract_attributes_with_prefix(Sample, "nonexistent"))
+        self.assertEqual(len(results), 0)
+
+        # Test empty prefix
+        results = list(extract_attributes_with_prefix(s, ""))
+        self.assertIn(("prefix_c", 5, "prefix_c"), results)
 
 
 if __name__ == "__main__":
