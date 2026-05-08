@@ -11,8 +11,7 @@ from gnucash.function_class import (
     return_instance_if_value_has_it,
     process_list_convert_to_instance,
     process_dict_convert_to_instance,
-    methods_return_instance,
-    methods_return_instance_lists,
+    extract_attributes_with_prefix,
 )
 
 
@@ -269,34 +268,37 @@ class TestFunctionClass(TestCase):
         }
         self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
 
-    def test_methods_return_instance(self):
-        """test methods_return_instance()"""
+    def test_extract_attributes_with_prefix(self):
+        """test extract_attributes_with_prefix()"""
 
-        class TargetClass:
-            def method1(self):
-                return Instance()
+        class Sample:
+            prefix_a = 1
+            prefix_b = 2
+            other = 3
+            prefix_ = 4
 
-        methods_return_instance(TargetClass, {"method1": ReturnClass})
-        t = TargetClass()
-        result = t.method1()
-        self.assertIsInstance(result, ReturnClass)
-        self.assertIsInstance(result.instance, Instance)
+        # Test with class
+        results = list(extract_attributes_with_prefix(Sample, "prefix_"))
+        self.assertEqual(len(results), 3)
+        self.assertIn(("prefix_a", 1, "a"), results)
+        self.assertIn(("prefix_b", 2, "b"), results)
+        self.assertIn(("prefix_", 4, ""), results)
 
-    def test_methods_return_instance_lists(self):
-        """test methods_return_instance_lists()"""
+        # Test with instance
+        s = Sample()
+        s.prefix_c = 5
+        results = list(extract_attributes_with_prefix(s, "prefix_"))
+        # Instance __dict__ only contains instance attributes
+        self.assertEqual(len(results), 1)
+        self.assertIn(("prefix_c", 5, "c"), results)
 
-        class TargetClass:
-            def method1(self):
-                return [Instance(), Instance()]
+        # Test no matches
+        results = list(extract_attributes_with_prefix(Sample, "nonexistent"))
+        self.assertEqual(len(results), 0)
 
-        methods_return_instance_lists(TargetClass, {"method1": ReturnClass})
-        t = TargetClass()
-        result_list = t.method1()
-        self.assertIsInstance(result_list, list)
-        self.assertEqual(len(result_list), 2)
-        for item in result_list:
-            self.assertIsInstance(item, ReturnClass)
-            self.assertIsInstance(item.instance, Instance)
+        # Test empty prefix
+        results = list(extract_attributes_with_prefix(s, ""))
+        self.assertIn(("prefix_c", 5, "prefix_c"), results)
 
 
 if __name__ == "__main__":
