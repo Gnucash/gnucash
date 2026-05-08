@@ -37,6 +37,7 @@
 #include "../gncOrder.h"
 #include "../gncOwner.h"
 #include "../gncTaxTable.h"
+#include "../gncAddress.h"
 
 class CashObjectsTest : public ::testing::Test
 {
@@ -56,14 +57,22 @@ TEST_F(CashObjectsTest, test_registration)
 {
     EXPECT_TRUE(cashobjects_register());
 
-    // Check engine objects
+    // Check core engine objects
     EXPECT_NE(qof_object_lookup(GNC_ID_ACCOUNT), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_TRANS), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_SPLIT), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_COMMODITY), nullptr);
+    EXPECT_NE(qof_object_lookup(GNC_ID_COMMODITY_NAMESPACE), nullptr);
+    EXPECT_NE(qof_object_lookup(GNC_ID_COMMODITY_TABLE), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_LOT), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_PRICE), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_BUDGET), nullptr);
+
+    // Check scheduled transaction objects
+    EXPECT_NE(qof_object_lookup(GNC_ID_SXES), nullptr);
+    EXPECT_NE(qof_object_lookup(GNC_ID_SXTG), nullptr);
+    EXPECT_NE(qof_object_lookup(GNC_ID_SXTT), nullptr);
+    EXPECT_NE(qof_object_lookup(GNC_SX_ID), nullptr);
 
     // Check business objects
     EXPECT_NE(qof_object_lookup(GNC_ID_INVOICE), nullptr);
@@ -75,4 +84,8 @@ TEST_F(CashObjectsTest, test_registration)
     EXPECT_NE(qof_object_lookup(GNC_ID_ENTRY), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_ORDER), nullptr);
     EXPECT_NE(qof_object_lookup(GNC_ID_TAXTABLE), nullptr);
+    EXPECT_NE(qof_object_lookup(GNC_ID_ADDRESS), nullptr);
+
+    // Check objects that are only class-registered
+    EXPECT_TRUE(qof_class_is_registered(GNC_ID_OWNER));
 }
