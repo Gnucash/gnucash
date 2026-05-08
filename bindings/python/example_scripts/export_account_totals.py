@@ -44,15 +44,21 @@ def to_string_with_decimal_point_placed(number: GncNumeric):
     if not number.to_decimal(None):
         return str(number)
 
-    nominator = str(number.num())
-    point_place = str(number.denom()).count('0')  # How many zeros in the denominator?
+    num = number.num()
+    denom = number.denom()
+    sign = '-' if num < 0 else ''
+    nominator = str(abs(num))
+    point_place = str(denom).count('0')  # How many zeros in the denominator?
     if point_place == 0:
-        return nominator
+        return sign + nominator
 
     if len(nominator) <= point_place:  # prepending zeros if the nominator is too short
         nominator = '0' * (point_place - len(nominator)) + nominator
 
-    return '.'.join([nominator[:-point_place], nominator[-point_place:]])
+    whole_part = nominator[:-point_place] or '0'
+    decimal_part = nominator[-point_place:]
+
+    return f"{sign}{whole_part}.{decimal_part}"
 
 
 if __name__ == '__main__':

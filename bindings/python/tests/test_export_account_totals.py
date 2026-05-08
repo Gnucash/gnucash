@@ -12,8 +12,8 @@ script_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'exam
 if script_dir not in sys.path:
     sys.path.append(script_dir)
 
-# Now we can import the function to be tested
-from export_account_totals import get_all_sub_accounts
+# Now we can import the functions to be tested
+from export_account_totals import get_all_sub_accounts, to_string_with_decimal_point_placed
 
 class TestExportAccountTotals(TestCase):
     def create_mock_account(self, name, children=None):
@@ -83,6 +83,36 @@ class TestExportAccountTotals(TestCase):
         self.assertEqual(len(results), len(expected))
         for i in range(len(expected)):
             self.assertEqual(results[i], expected[i])
+
+    def test_to_string_with_decimal_point_placed(self):
+        """Test the conversion of GncNumeric to string with decimal point."""
+        def create_mock_numeric(n, d, can_convert=True):
+            num = MagicMock()
+            num.num.return_value = n
+            num.denom.return_value = d
+            num.to_decimal.return_value = can_convert
+            num.__str__.return_value = f"{n}/{d}"
+            return num
+
+        # Positive integer
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(100, 1)), "100")
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(100, 100)), "1.00")
+
+        # Positive decimal > 1
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(123, 100)), "1.23")
+
+        # Positive decimal < 1 (Test current bug: returns '.05', expected '0.05')
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(5, 100)), "0.05")
+
+        # Negative integer
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(-100, 1)), "-100")
+
+        # Negative decimal (Test current bug: returns '.-5', expected '-0.05')
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(-5, 100)), "-0.05")
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(-123, 100)), "-1.23")
+
+        # Cannot convert to decimal
+        self.assertEqual(to_string_with_decimal_point_placed(create_mock_numeric(1, 3, False)), "1/3")
 
 if __name__ == "__main__":
     main()
