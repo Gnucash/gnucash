@@ -413,9 +413,10 @@ create_query_fragment (QofIdTypeConst search_for, GNCSearchParam *param, QofQuer
 
     if (kind == SEARCH_PARAM_ELEM)
     {
+        GSList *path = gnc_search_param_get_param_path (GNC_SEARCH_PARAM_SIMPLE (param));
         /* The "op" parameter below will be ignored since q has no terms. */
-        qof_query_add_term (q, gnc_search_param_get_param_path (GNC_SEARCH_PARAM_SIMPLE (param)),
-                            pdata, QOF_QUERY_OR);
+        qof_query_add_term (q, path, pdata, QOF_QUERY_OR);
+        g_slist_free (path);
     }
     else
     {
@@ -441,7 +442,7 @@ create_query_fragment (QofIdTypeConst search_for, GNCSearchParam *param, QofQuer
 static void
 search_update_query (GNCSearchWindow *sw)
 {
-    static GSList *active_params = NULL;
+    GSList *active_params = NULL;
     QofQuery *q, *q2, *new_q;
     GList *node;
     QofQueryOp op;
@@ -451,8 +452,7 @@ search_update_query (GNCSearchWindow *sw)
     else
         op = QOF_QUERY_AND;
 
-    if (active_params == NULL)
-        active_params = g_slist_prepend (NULL, QOF_PARAM_ACTIVE);
+    active_params = g_slist_prepend (NULL, (gpointer)QOF_PARAM_ACTIVE);
 
     /* Make sure we supply a book! */
     if (sw->start_q == NULL)
@@ -522,6 +522,7 @@ search_update_query (GNCSearchWindow *sw)
         qof_query_add_boolean_match (new_q, active_params, TRUE, QOF_QUERY_AND);
         active_params = NULL;
     }
+    g_slist_free (active_params);
 
     /* Destroy the old query */
     if (sw->q)
@@ -639,8 +640,9 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
             op = QOF_QUERY_AND;
         }
 
-        qof_query_add_guid_match (sw->q, g_slist_prepend (NULL, QOF_PARAM_GUID),
-                                  guid, op);
+        GSList *path = g_slist_prepend (NULL, (gpointer)QOF_PARAM_GUID);
+        qof_query_add_guid_match (sw->q, path, guid, op);
+        g_slist_free (path);
 
         /* Watch this entity so we'll refresh once it's actually changed */
         gnc_gui_component_watch_entity (sw->component_id, guid, QOF_EVENT_MODIFY);
@@ -664,7 +666,7 @@ static void
 remove_element (GtkWidget *button, GNCSearchWindow *sw)
 {
     GtkWidget *element;
-    struct _elem_data *data;
+    struct _crit_data *data;
 
     if (!sw->crit_list)
         return;
@@ -783,6 +785,14 @@ search_clear_criteria (GNCSearchWindow *sw)
     }
 }
 
+static void
+gnc_search_dialog_free_crit_data (struct _crit_data *data)
+{
+    if (!data) return;
+    g_object_unref (data->element);
+    g_free (data);
+}
+
 static GtkWidget *
 get_comb_box_widget (GNCSearchWindow *sw, struct _crit_data *data)
 {
@@ -839,7 +849,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
     /* only set to automatically clean up the memory */
-    g_object_set_data_full (G_OBJECT (hbox), "data", data, g_free);
+    g_object_set_data_full (G_OBJECT (hbox), "data", data, (GDestroyNotify)gnc_search_dialog_free_crit_data);
 
     p = gnc_search_core_type_get_widget (element);
     data->elemwidget = p;
@@ -1017,10 +1027,10 @@ add_criterion (GtkWidget *button, GNCSearchWindow *sw)
     gnc_search_dialog_add_criterion (sw);
 }
 
-static int
+static void
 gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
 {
-    g_return_val_if_fail (sw, TRUE);
+    g_return_if_fail (sw);
 
     /* Unregister callback on book option changes originally registered
      * if searching for splits */
@@ -1032,6 +1042,10 @@ gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
 
     /* Clear the crit list */
     g_list_free (sw->crit_list);
+
+    /* Clear the param and display lists */
+    g_list_free_full (sw->params_list, g_object_unref);
+    g_list_free_full (sw->display_list, g_object_unref);
 
     /* Clear the button list */
     g_list_free (sw->button_list);
@@ -1046,7 +1060,6 @@ gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
 
     /* Destroy and exit */
     g_free (sw);
-    return FALSE;
 }
 
 static void
@@ -1068,7 +1081,6 @@ close_handler (gpointer data)
 
     g_return_if_fail (sw);
     gtk_widget_destroy (sw->dialog);
-    /* DRH: should sw be freed here? */
 }
 
 static const gchar *
@@ -1312,8 +1324,8 @@ gnc_search_dialog_create (GtkWindow *parent,
         g_return_val_if_fail (display_list, NULL);
 
     sw->search_for = obj_type;
-    sw->params_list = param_list;
-    sw->display_list = display_list;
+    sw->params_list = g_list_copy_deep (param_list, (GCopyFunc)g_object_ref, NULL);
+    sw->display_list = g_list_copy_deep (display_list, (GCopyFunc)g_object_ref, NULL);
     sw->buttons = callbacks;
     sw->result_cb = result_callback;
     sw->new_item_cb = new_item_cb;
@@ -1326,7 +1338,8 @@ gnc_search_dialog_create (GtkWindow *parent,
     sw->get_guid = qof_class_get_parameter (sw->search_for, QOF_PARAM_GUID);
     if (start_query)
         sw->start_q = qof_query_copy (start_query);
-    sw->q = show_start_query;
+    if (show_start_query)
+        sw->q = qof_query_copy (show_start_query);
 
     gnc_search_dialog_init_widgets (sw, title);
     if (sw->prefs_group)
@@ -1481,7 +1494,6 @@ gnc_search_dialog_test (void)
     if (display == NULL)
         display = get_display_list (GNC_ID_SPLIT);
 
-/* FIXME: All this does is leak. */
     gnc_search_dialog_create (NULL, GNC_ID_SPLIT,
                   _("Find Transaction"),
                   params, display,
