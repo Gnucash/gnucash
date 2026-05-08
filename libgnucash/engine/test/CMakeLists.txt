@@ -255,6 +255,7 @@ set(test_engine_SOURCES_DIST
         test-qofobject.c
         test-qofsession.cpp
         test-qof-string-cache.c
+        utest-Query.cpp
         test-query.cpp
         test-querynew.c
         test-recurrence.c
