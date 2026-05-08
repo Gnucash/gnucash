@@ -142,5 +142,43 @@ class TestLatexInvoices(TestCase):
         self.assertNotIn("Owner Name", result)
         self.assertIn("{Only Addr 1}", result)
 
+    def test_invoice_to_lco_multiline_address(self):
+        """Test that newlines in address are replaced with LaTeX line breaks."""
+        self.addr.GetAddr1.return_value = "Line 1\nLine 2"
+        result = invoice_to_lco(self.invoice)
+        self.assertIn("Line 1\\\\Line 2", result)
+
+    def test_invoice_to_lco_multiple_entries(self):
+        """Test with multiple invoice entries."""
+        entry2 = MagicMock()
+        entry2.GetDescription.return_value = "Second Item"
+        price2 = MagicMock()
+        price2.to_double.return_value = 50.0
+        entry2.GetInvPrice.return_value = price2
+        qty2 = MagicMock()
+        qty2.num.return_value = 1
+        qty2.denom.return_value = 1
+        entry2.GetQuantity.return_value = qty2
+
+        self.invoice.GetEntries.return_value = [self.entry_instance, entry2]
+
+        # Make mock_currency return different values
+        # locale.currency is called once per entry in the loop.
+        self.mock_currency.side_effect = ["100,00", "50,00"]
+
+        result = invoice_to_lco(self.invoice)
+        self.assertIn("Item Description", result)
+        self.assertIn("Second Item", result)
+        self.assertIn("\\Artikel{2}{Item Description}{100,00}", result)
+        self.assertIn("\\Artikel{1}{Second Item}{50,00}", result)
+
+    def test_invoice_to_lco_komavar_exclusions(self):
+        """Test that date does not get a \\newkomavar but others do."""
+        result = invoice_to_lco(self.invoice)
+        self.assertNotIn("\\newkomavar{date}", result)
+        self.assertIn("\\setkomavar{date}", result)
+        self.assertIn("\\newkomavar{rechnungsnummer}", result)
+        self.assertIn("\\setkomavar{rechnungsnummer}", result)
+
 if __name__ == "__main__":
     main()

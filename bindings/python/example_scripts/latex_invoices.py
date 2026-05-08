@@ -91,7 +91,7 @@ class Usage(Exception):
 def invoice_to_lco(invoice):
     """returns a string which forms a lco-file for use with LaTeX"""
 
-    lco_out = u"\ProvidesFile{data.lco}[]\n"
+    lco_out = u"\\ProvidesFile{data.lco}[]\n"
 
     def write_variable(ukey, uvalue, replace_linebreak=True):
 
@@ -108,7 +108,8 @@ def invoice_to_lco(invoice):
         outstr += ukey
         outstr += u"}{"
         if replace_linebreak:
-            outstr += uvalue.replace(u"\n", u"\\\\") + "}"
+            uvalue = uvalue.replace(u"\n", u"\\\\")
+        outstr += uvalue + u"}"
         return outstr
 
     # Write owners address
@@ -164,7 +165,7 @@ def invoice_to_lco(invoice):
             int(float(n.num()) / n.denom())
         )  # choose best way to format numbers according to locale
 
-        line_str = u"\Artikel{"
+        line_str = u"\\Artikel{"
         line_str += un
         line_str += u"}{"
         line_str += descr
