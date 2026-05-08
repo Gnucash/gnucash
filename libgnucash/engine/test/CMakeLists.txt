@@ -38,6 +38,7 @@ set(test_engine_SOURCES
   utest-Budget.c
   utest-Entry.c
   utest-Invoice.c
+  utest-Query.cpp
   utest-Split.cpp
   utest-Transaction.cpp
   utest-gnc-pricedb.c
@@ -244,6 +245,7 @@ set(test_engine_SOURCES_DIST
         test-qofobject.c
         test-qofsession.cpp
         test-qof-string-cache.c
+        utest-Query.cpp
         test-query.cpp
         test-querynew.c
         test-recurrence.c
@@ -255,7 +257,7 @@ set(test_engine_SOURCES_DIST
         utest-Budget.c
         utest-Entry.c
         utest-Invoice.c
-        utest-Split.cpp
+  utest-Split.cpp
         utest-Transaction.cpp
         utest-gnc-pricedb.c
 )
