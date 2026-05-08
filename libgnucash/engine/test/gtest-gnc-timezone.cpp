@@ -1,7 +1,7 @@
 
 /********************************************************************
- * Gtest-gnc-int128.cpp -- unit tests for the GncInt128 class       *
- * Copyright (C) 2014 John Ralls <jralls@ceridwen.us>               *
+ * gtest-gnc-timezone.cpp -- unit tests for the TimeZoneProvider    *
+ * Copyright (C) 2014-2024 John Ralls <jralls@ceridwen.us>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,6 +28,7 @@
 #pragma GCC diagnostic pop
 
 #include <string>
+#include <glib.h>
 #include "../gnc-timezone.hpp"
 
 TEST(gnc_timezone_constructors, test_default_constructor)
@@ -315,3 +316,44 @@ TEST(gnc_timezone_constructors, test_bogus_time_constructor)
 	      tzp.get(2006)->std_zone_abbrev());
 #endif
 }
+
+TEST(gnc_timezone_boundaries, test_years)
+{
+    EXPECT_EQ(1400u, TimeZoneProvider::min_year);
+    EXPECT_EQ(9999u, TimeZoneProvider::max_year);
+}
+
+TEST(gnc_timezone_get, test_get_boundaries)
+{
+    TimeZoneProvider tzp("UTC");
+    EXPECT_NO_THROW(tzp.get(TimeZoneProvider::min_year));
+    EXPECT_NO_THROW(tzp.get(TimeZoneProvider::max_year));
+    EXPECT_NO_THROW(tzp.get(0));
+    EXPECT_NO_THROW(tzp.get(10000));
+
+    auto tz_min = tzp.get(TimeZoneProvider::min_year);
+    auto tz_max = tzp.get(TimeZoneProvider::max_year);
+    EXPECT_NE(nullptr, tz_min);
+    EXPECT_NE(nullptr, tz_max);
+}
+
+TEST(gnc_timezone_functions, test_dump)
+{
+    TimeZoneProvider tzp("UTC");
+    // Ensure dump doesn't crash. We avoid internal CaptureStdout.
+    tzp.dump();
+}
+
+#if !PLATFORM(WINDOWS)
+TEST(gnc_timezone_constructors, test_fallback_to_env)
+{
+    // Set TZ to something specific
+    g_setenv("TZ", "America/New_York", TRUE);
+    // Bogus name should cause fallback to TZ env var
+    TimeZoneProvider tzp("Bogus/Timezone");
+
+    // America/New_York: EST is -5, EDT is -4.
+    auto tz = tzp.get(2024);
+    EXPECT_EQ(-5, tz->base_utc_offset().hours());
+}
+#endif
