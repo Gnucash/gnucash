@@ -103,6 +103,65 @@ class TestFunctionClass(TestCase):
         obj, arg = self.t.other_method(arg=self.t)
         self.assertIsInstance(arg, Instance)
 
+    def test_ya_add_classmethod(self):
+        """test if ya_add_classmethod adds classmethod and if in case of FunctionClass
+        Instance instances get returned instead of FunctionClass instances
+        with the exception of self (first) argument"""
+        TestClass.ya_add_classmethod("other_function", "other_classmethod")
+        obj, arg = TestClass.other_classmethod()
+        self.assertIs(obj, TestClass)
+        self.t = TestClass()
+        obj, arg = TestClass.other_classmethod(self.t)
+        self.assertIsInstance(arg, Instance)
+        obj, arg = TestClass.other_classmethod(arg=self.t)
+        self.assertIsInstance(arg, Instance)
+
+    def test_decorate_functions(self):
+        """test decorate_functions()"""
+
+        def simple_decorator(func):
+            def wrapper(*args, **kargs):
+                return "decorated", func(*args, **kargs)
+
+            return wrapper
+
+        TestClass.decorate_functions(
+            simple_decorator, "test_function", "test_function_return_args"
+        )
+        t = TestClass()
+        self.assertEqual(t.test_function()[0], "decorated")
+        self.assertEqual(t.test_function_return_args()[0], "decorated")
+
+    def test_methods_return_instance(self):
+        """test methods_return_instance()"""
+        from gnucash.function_class import methods_return_instance
+
+        # TestClass.returns_instance_data is already defined in module scope
+        # but we need it as a method
+        TestClass.add_method("returns_instance_data", "returns_instance_data")
+
+        methods_return_instance(TestClass, {"returns_instance_data": TestClass})
+        t = TestClass()
+        result = t.returns_instance_data()
+        self.assertIsInstance(result, TestClass)
+        self.assertEqual(result.instance, "some_data")
+
+    def test_methods_return_instance_lists(self):
+        """test methods_return_instance_lists()"""
+        from gnucash.function_class import methods_return_instance_lists
+
+        TestClass.add_method("returns_instance_data_list", "returns_instance_data_list")
+
+        methods_return_instance_lists(
+            TestClass, {"returns_instance_data_list": TestClass}
+        )
+        t = TestClass()
+        result_list = t.returns_instance_data_list()
+        self.assertIsInstance(result_list, list)
+        self.assertEqual(len(result_list), 2)
+        self.assertIsInstance(result_list[0], TestClass)
+        self.assertEqual(result_list[0].instance, "data1")
+
     def test_method_function_returns_instance(self):
         """test method_function_returns_instance()"""
         from gnucash.function_class import method_function_returns_instance
@@ -241,6 +300,21 @@ class TestFunctionClass(TestCase):
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
 
+        # Test positional argument overwriting keyword default (covers line 295)
+        # We need a function where a keyword argument's position is less than the number of positional args
+        def test_func_overlap(self, a, b="default_b"):
+            return a, b
+
+        TestClass.test_func_overlap = test_func_overlap
+        TestClass.decorate_method(
+            default_arguments_decorator,
+            "test_func_overlap",
+            b="default_b",
+            kargs_pos={"b": 2},
+        )
+        # Calling with 2 positional args, the second one should overwrite the keyword default for 'b'
+        self.assertEqual(self.t.test_func_overlap("val_a", "val_b"), ("val_a", "val_b"))
+
     def test_return_instance_if_value_has_it(self):
         """test return_instance_if_value_has_it()"""
         t = TestClass()
@@ -291,6 +365,27 @@ class TestFunctionClass(TestCase):
             "e": None,
         }
         self.assertEqual(process_dict_convert_to_instance(input_dict), expected_dict)
+
+        # Empty dict
+        self.assertEqual(process_dict_convert_to_instance({}), {})
+
+        # Non-mutation check
+        original_dict = {"a": t1}
+        process_dict_convert_to_instance(original_dict)
+        self.assertIs(original_dict["a"], t1)
+
+        # Shallow conversion check (nested dict)
+        nested_dict = {"outer": {"inner": t1}}
+        result = process_dict_convert_to_instance(nested_dict)
+        self.assertIs(result["outer"]["inner"], t1)
+
+        # Object with instance attribute but not ClassFromFunctions
+        class NotFunctionClass:
+            def __init__(self):
+                self.instance = "fake"
+
+        not_fc = NotFunctionClass()
+        self.assertEqual(process_dict_convert_to_instance({"a": not_fc}), {"a": not_fc})
 
     def test_extract_attributes_with_prefix(self):
         """test extract_attributes_with_prefix()"""
