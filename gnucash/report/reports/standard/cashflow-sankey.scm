@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-module (gnucash report standard sankey-report))
+(define-module (gnucash reports standard cashflow-sankey))
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
