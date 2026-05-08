@@ -26,6 +26,9 @@ set(test_python_bindings_DATA
         test_transaction.py
         test_query.py
         test_function_class.py
-        test_deprecation.py)
+        test_deprecation.py
+        gnucash_mock_helper.py
+        test_one_arg_default_none_isolated.py
+        test_one_arg_default_none_integration.py)
 
 set_dist_list(test_python_bindings_DIST CMakeLists.txt ${test_python_bindings_DATA})
