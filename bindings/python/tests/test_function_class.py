@@ -187,10 +187,12 @@ class TestFunctionClass(TestCase):
             arg2,
             arg4=arg4,
         )
-        self.assertEqual(
-            self.t.test_function_return_args(),
-            (self.t.instance, (arg2,), {"arg4": arg4}),
-        )
+        # Verify kargs_pos fix: call multiple times
+        for _ in range(2):
+            self.assertEqual(
+                self.t.test_function_return_args(),
+                (self.t.instance, (arg2,), {"arg4": arg4}),
+            )
         self.assertEqual(
             self.t.test_function_return_args(arg1, arg3, arg4=arg2),
             (self.t.instance, (arg1, arg3), {"arg4": arg2}),
@@ -240,6 +242,21 @@ class TestFunctionClass(TestCase):
             self.t.test_function_return_arg_karg(arg2, arg3),
             {"self": self.t.instance, "a": arg2, "b": arg3},
         )
+
+        # Test docstring generation
+        self.assertIn("positional argument defaults:", self.t.test_function_return_arg_karg.__doc__)
+
+        # Test case where keyword argument is provided at a position already filled by positional args
+        # This triggers line 293 in function_class.py
+        def test_func(a, b):
+            return a, b
+
+        # 'b' is a default keyword argument, but its position 1 can be filled by a positional argument
+        decorated = default_arguments_decorator(test_func, b=2, kargs_pos={'b': 1})
+        # If we call decorated(10, 20), 'b' is in new_kargset (default 2), but position 1
+        # is filled by 20 in new_argset.
+        # So 'b' should be popped from new_kargset to avoid multiple values for 'b'.
+        self.assertEqual(decorated(10, 20), (10, 20))
 
     def test_return_instance_if_value_has_it(self):
         """test return_instance_if_value_has_it()"""
@@ -316,6 +333,13 @@ class TestFunctionClass(TestCase):
         self.assertEqual(len(results), 1)
         self.assertIn(("prefix_c", 5, "c"), results)
 
+        # Test with module
+        import gnucash.function_class as fc
+        results = list(extract_attributes_with_prefix(fc, "process_"))
+        self.assertEqual(len(results), 2)
+        self.assertIn(("process_list_convert_to_instance", fc.process_list_convert_to_instance, "list_convert_to_instance"), results)
+        self.assertIn(("process_dict_convert_to_instance", fc.process_dict_convert_to_instance, "dict_convert_to_instance"), results)
+
         # Test no matches
         results = list(extract_attributes_with_prefix(Sample, "nonexistent"))
         self.assertEqual(len(results), 0)
@@ -323,6 +347,59 @@ class TestFunctionClass(TestCase):
         # Test empty prefix
         results = list(extract_attributes_with_prefix(s, ""))
         self.assertIn(("prefix_c", 5, "prefix_c"), results)
+
+    def test_ya_add_classmethod(self):
+        """test ya_add_classmethod()"""
+        TestClass.ya_add_classmethod("prefix_test_function", "test_classmethod")
+        self.assertEqual(TestClass.test_classmethod(), True)
+
+    def test_decorate_functions(self):
+        """test decorate_functions()"""
+        def simple_decorator(func):
+            def wrapper(*args, **kwargs):
+                return "decorated"
+            return wrapper
+
+        class LocalTestClass(ClassFromFunctions):
+            _module = sys.modules[__name__]
+            def f1(self): return 1
+            def f2(self): return 2
+
+        LocalTestClass.decorate_functions(simple_decorator, "f1", "f2")
+        ltc = LocalTestClass(instance=Instance())
+        self.assertEqual(ltc.f1(), "decorated")
+        self.assertEqual(ltc.f2(), "decorated")
+
+    def test_methods_return_instance(self):
+        """test methods_return_instance()"""
+        from gnucash.function_class import methods_return_instance
+
+        class LocalTestClass(ClassFromFunctions):
+            _module = sys.modules[__name__]
+            def get_data(self): return Instance()
+
+        methods_return_instance(LocalTestClass, {"get_data": TestClass})
+        ltc = LocalTestClass(instance=Instance())
+        result = ltc.get_data()
+        self.assertIsInstance(result, TestClass)
+        self.assertIsInstance(result.instance, Instance)
+
+    def test_methods_return_instance_lists(self):
+        """test methods_return_instance_lists()"""
+        from gnucash.function_class import methods_return_instance_lists
+
+        class LocalTestClass(ClassFromFunctions):
+            _module = sys.modules[__name__]
+            def get_list(self): return [Instance(), Instance()]
+
+        methods_return_instance_lists(LocalTestClass, {"get_list": TestClass})
+        ltc = LocalTestClass(instance=Instance())
+        result = ltc.get_list()
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 2)
+        for item in result:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
 
 
 if __name__ == "__main__":

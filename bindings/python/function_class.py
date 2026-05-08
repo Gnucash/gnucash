@@ -280,30 +280,26 @@ def default_arguments_decorator(function, *args, **kargs):
 
     @return new_function wrapping original function
     """
+    kargs_copy = kargs.copy()
+    kargs_pos = kargs_copy.pop("kargs_pos", {})
 
     def new_function(*function_args, **function_kargs):
-        kargs_pos = {}
-        if "kargs_pos" in kargs:
-            kargs_pos = kargs.pop("kargs_pos")
         new_argset = list(function_args)
         new_argset.extend(args[len(function_args) :])
-        new_kargset = {**kargs, **function_kargs}
-        for karg_pos in kargs_pos:
-            if karg_pos in new_kargset:
-                pos_karg = kargs_pos[karg_pos]
+        new_kargset = {**kargs_copy, **function_kargs}
+        for karg_name, pos_karg in kargs_pos.items():
+            if karg_name in new_kargset:
                 if pos_karg < len(new_argset):
-                    new_kargset.pop(karg_pos)
+                    new_kargset.pop(karg_name)
 
         return function(*new_argset, **new_kargset)
 
-    kargs_pos = {} if "kargs_pos" not in kargs else kargs["kargs_pos"]
-    for karg_pos in kargs_pos:
-        if karg_pos in kargs:
-            pos_karg = kargs_pos[karg_pos]
+    for karg_name, pos_karg in kargs_pos.items():
+        if karg_name in kargs_copy:
             if pos_karg < len(args):
                 raise TypeError(
                     "default_arguments_decorator() got multiple values for argument '%s'"
-                    % karg_pos
+                    % karg_name
                 )
 
     if new_function.__doc__ is None:
@@ -319,18 +315,17 @@ def default_arguments_decorator(function, *args, **kargs):
                 firstarg = False
             new_function.__doc__ += str(arg)
         new_function.__doc__ += "\n"
-    if len(kargs):
+    if len(kargs_copy):
         new_function.__doc__ += "keyword argument defaults:\n"
-        for karg in kargs:
-            if karg != "kargs_pos":
-                new_function.__doc__ += (
-                    "  " + str(karg) + " = " + str(kargs[karg]) + "\n"
-                )
+        for karg in kargs_copy:
+            new_function.__doc__ += (
+                "  " + str(karg) + " = " + str(kargs_copy[karg]) + "\n"
+            )
         if kargs_pos:
             new_function.__doc__ += "keyword argument positions:\n"
-            for karg in kargs_pos:
+            for karg_name, pos_karg in kargs_pos.items():
                 new_function.__doc__ += (
-                    "  " + str(karg) + " is at pos " + str(kargs_pos[karg]) + "\n"
+                    "  " + str(karg_name) + " is at pos " + str(pos_karg) + "\n"
                 )
     if len(args) or len(kargs):
         new_function.__doc__ += (
