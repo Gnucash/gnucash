@@ -54,6 +54,12 @@ enum _bi_import_result
 };
 typedef enum _bi_import_result bi_import_result;
 
+#define GNC_BI_IMPORT_TYPE_BILL      "BILL"
+#define GNC_BI_IMPORT_TYPE_INVOICE   "INVOICE"
+#define GNC_BI_IMPORT_MODE_ALL       "ALL"
+#define GNC_BI_IMPORT_MODE_NOT_POSTED "NOT_POSTED"
+#define GNC_BI_IMPORT_MODE_NONE      "NONE"
+
 struct _bi_import_stats
 {
     int n_imported, n_ignored;
