@@ -26,7 +26,6 @@ set(test_qof_SOURCES
   test-qof.c
   test-qofbook.c
   test-qofinstance.cpp
-  test-qofobject.c
   test-qof-string-cache.c
 )
 
@@ -252,7 +251,6 @@ set(test_engine_SOURCES_DIST
         test-qof.c
         test-qofbook.c
         test-qofinstance.cpp
-        test-qofobject.c
         test-qofsession.cpp
         test-qof-string-cache.c
         utest-Query.cpp
