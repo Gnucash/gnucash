@@ -15,6 +15,7 @@ set(engine_noinst_HEADERS
   gnc-int128.hpp
   gnc-lot.h
   gnc-lot-p.h
+  gnc-timezone-p.hpp
   gnc-option-date.hpp
   gnc-option-impl.hpp
   gnc-option-ui.hpp

@@ -30,6 +30,26 @@
 #include <string>
 #include <glib.h>
 #include "../gnc-timezone.hpp"
+#include "../gnc-timezone-p.hpp"
+
+TEST(gnc_timezone_utilities, test_endian_swap)
+{
+    uint32_t val32 = 0x12345678;
+    endian_swap(&val32);
+#if ! WORDS_BIGENDIAN
+    EXPECT_EQ(0x78563412u, val32);
+#else
+    EXPECT_EQ(0x12345678u, val32);
+#endif
+
+    uint16_t val16 = 0x1234;
+    endian_swap(&val16);
+#if ! WORDS_BIGENDIAN
+    EXPECT_EQ(0x3412u, val16);
+#else
+    EXPECT_EQ(0x1234u, val16);
+#endif
+}
 
 TEST(gnc_timezone_constructors, test_default_constructor)
 {
@@ -317,6 +337,17 @@ TEST(gnc_timezone_constructors, test_bogus_time_constructor)
 #endif
 }
 
+TEST(gnc_timezone_constructors, test_colon_only_constructor)
+{
+#if !PLATFORM(WINDOWS)
+    // Testing the fix for ":" crash
+    EXPECT_NO_THROW(TimeZoneProvider tzp(":"));
+    TimeZoneProvider tzp(":");
+    // Should fallback to machine local time or UTC
+    EXPECT_FALSE(tzp.get(2024)->std_zone_abbrev().empty());
+#endif
+}
+
 TEST(gnc_timezone_boundaries, test_years)
 {
     EXPECT_EQ(1400u, TimeZoneProvider::min_year);
@@ -357,3 +388,27 @@ TEST(gnc_timezone_constructors, test_fallback_to_env)
     EXPECT_EQ(-5, tz->base_utc_offset().hours());
 }
 #endif
+
+TEST(gnc_timezone_iana_parser, test_invalid_magic)
+{
+    std::vector<char> invalid_data(100, 0);
+    EXPECT_THROW(IANAParser::IANAParser parser(invalid_data), std::invalid_argument);
+}
+
+TEST(gnc_timezone_iana_parser, test_truncated_file)
+{
+    std::vector<char> truncated_data = {'T', 'Z', 'i', 'f'};
+    EXPECT_THROW(IANAParser::IANAParser parser(truncated_data), std::invalid_argument);
+}
+
+TEST(gnc_timezone_iana_parser, test_mock_iana_v1)
+{
+    // Minimum valid V1 header
+    std::vector<char> data(sizeof(IANAParser::TZHead), 0);
+    memcpy(data.data(), "TZif", 4);
+    // counts are all 0
+    EXPECT_NO_THROW(IANAParser::IANAParser parser(data));
+    IANAParser::IANAParser parser(data);
+    EXPECT_TRUE(parser.transitions.empty());
+    EXPECT_TRUE(parser.tzinfo.empty());
+}
