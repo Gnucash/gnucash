@@ -208,7 +208,7 @@ class TestFunctionClass(TestCase):
             self.assertIsInstance(item, TestClass)
             self.assertIsInstance(item.instance, Instance)
 
-    def test_methods_return_instance_lists(self):
+    def test_methods_return_instance_lists_with_returns_list(self):
         """test methods_return_instance_lists()"""
         from gnucash.function_class import methods_return_instance_lists
 
@@ -226,7 +226,7 @@ class TestFunctionClass(TestCase):
             self.assertIsInstance(item, TestClass)
             self.assertIsInstance(item.instance, Instance)
 
-    def test_methods_return_instance(self):
+    def test_methods_return_instance_with_returns_single(self):
         """test methods_return_instance()"""
         from gnucash.function_class import methods_return_instance
 
@@ -466,7 +466,7 @@ class TestFunctionClass(TestCase):
         TestClass.ya_add_classmethod("prefix_test_function", "test_classmethod")
         self.assertEqual(TestClass.test_classmethod(), True)
 
-    def test_decorate_functions(self):
+    def test_decorate_functions_with_local_class(self):
         """test decorate_functions()"""
         def simple_decorator(func):
             def wrapper(*args, **kwargs):
@@ -483,7 +483,7 @@ class TestFunctionClass(TestCase):
         self.assertEqual(ltc.f1(), "decorated")
         self.assertEqual(ltc.f2(), "decorated")
 
-    def test_methods_return_instance(self):
+    def test_methods_return_instance_with_local_class(self):
         """test methods_return_instance()"""
         from gnucash.function_class import methods_return_instance
 
@@ -497,7 +497,7 @@ class TestFunctionClass(TestCase):
         self.assertIsInstance(result, TestClass)
         self.assertIsInstance(result.instance, Instance)
 
-    def test_methods_return_instance_lists(self):
+    def test_methods_return_instance_lists_with_local_class(self):
         """test methods_return_instance_lists()"""
         from gnucash.function_class import methods_return_instance_lists
 
