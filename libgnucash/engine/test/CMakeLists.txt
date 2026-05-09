@@ -38,7 +38,7 @@ set(test_engine_SOURCES
   utest-Budget.c
   utest-Entry.c
   utest-Invoice.c
-  utest-Policy.cpp
+  utest-Query.cpp
   utest-Split.cpp
   utest-Transaction.cpp
   utest-gnc-pricedb.c
@@ -216,6 +216,9 @@ set(test_gnc_option_SOURCES
 gnc_add_test(test-gnc-option "${test_gnc_option_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+gnc_add_test(gtest-policy gtest-policy.cpp
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 set(test_engine_SOURCES_DIST
         gtest-gnc-euro.cpp
         gtest-gnc-int128.cpp
@@ -229,6 +232,7 @@ set(test_engine_SOURCES_DIST
         gtest-qofquerycore.cpp
         gtest-qofevent.cpp
         gtest-qofobject.cpp
+        gtest-policy.cpp
         test-account-object.cpp
         test-address.c
         test-business.c
@@ -267,7 +271,6 @@ set(test_engine_SOURCES_DIST
         utest-Budget.c
         utest-Entry.c
         utest-Invoice.c
-        utest-Policy.cpp
         utest-Split.cpp
         utest-Transaction.cpp
         utest-gnc-pricedb.c
