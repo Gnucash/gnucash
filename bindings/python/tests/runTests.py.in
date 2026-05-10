@@ -21,6 +21,7 @@ from test_deprecation import TestDeprecation
 from test_export_account_totals import TestExportAccountTotals
 from test_change_tax_code import TestChangeTaxCode
 from test_latex_invoices import TestLatexInvoices
+from test_one_arg_default_none import TestOneArgDefaultNone
 
 if __name__ == '__main__':
     unittest.main()

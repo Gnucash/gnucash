@@ -26,6 +26,7 @@
 #include <glib.h>
 #include "../qof.h"
 #include "../qofobject-p.h"
+#include "../qofinstance-p.h"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
@@ -102,7 +103,7 @@ TEST_F(QofObjectTest, ForeachSorted)
     for (int i = 0; i < 3; ++i)
     {
         auto inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, nullptr));
-        GncGUID guid = guid_new();
+        GncGUID guid = guid_new_return();
         qof_instance_set_guid(inst, &guid);
         mock_instances.push_back(inst);
     }
@@ -115,7 +116,7 @@ TEST_F(QofObjectTest, ForeachSorted)
 
     qof_object_foreach_sorted("sorted-type", book, cb, nullptr);
 
-    EXPECT_EQ(called_instances.size(), 3);
+    EXPECT_EQ(called_instances.size(), 3u);
 
     // Verify sorted order
     std::vector<QofInstance*> expected_sorted = mock_instances;
