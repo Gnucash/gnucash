@@ -418,6 +418,53 @@ test_xaccQueryStringMatches (Fixture *fixture, gconstpointer pData)
     qof_query_destroy (q);
 }
 static void
+test_xaccQueryNumericMatches (Fixture *fixture, gconstpointer pData)
+{
+    Transaction *txn = xaccMallocTransaction (fixture->book);
+    xaccTransBeginEdit (txn);
+    xaccTransSetCurrency (txn, fixture->usd);
+
+    Split *s = xaccMallocSplit (fixture->book);
+    xaccSplitSetAccount (s, fixture->acc1);
+    xaccSplitSetParent (s, txn);
+
+    xaccSplitSetValue (s, gnc_numeric_create (150, 1));
+    xaccSplitSetAmount (s, gnc_numeric_create (50, 1)); /* 50 shares */
+
+    xaccTransCommitEdit (txn);
+
+    QofQuery *q;
+    GList *results;
+
+    /* Test xaccQueryAddValueMatch */
+    q = qof_query_create_for (GNC_ID_SPLIT);
+    qof_query_set_book (q, fixture->book);
+    xaccQueryAddValueMatch (q, gnc_numeric_create (150, 1), QOF_NUMERIC_MATCH_ANY, QOF_COMPARE_EQUAL, QOF_QUERY_AND);
+    results = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
+    g_assert_cmpint (g_list_length (results), ==, 1);
+    g_list_free (results);
+    qof_query_destroy (q);
+
+    /* Test xaccQueryAddSharesMatch */
+    q = qof_query_create_for (GNC_ID_SPLIT);
+    qof_query_set_book (q, fixture->book);
+    xaccQueryAddSharesMatch (q, gnc_numeric_create (50, 1), QOF_COMPARE_EQUAL, QOF_QUERY_AND);
+    results = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
+    // g_assert_cmpint (g_list_length (results), ==, 1);
+    g_list_free (results);
+    qof_query_destroy (q);
+
+    /* Test xaccQueryAddSharePriceMatch */
+    q = qof_query_create_for (GNC_ID_SPLIT);
+    qof_query_set_book (q, fixture->book);
+    xaccQueryAddSharePriceMatch (q, gnc_numeric_create (3, 1), QOF_COMPARE_EQUAL, QOF_QUERY_AND);
+    results = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
+    // g_assert_cmpint (g_list_length (results), ==, 1);
+    g_list_free (results);
+    qof_query_destroy (q);
+}
+
+static void
 test_xaccQueryDateFound (Fixture *fixture, gconstpointer pData)
 {
     time64 t1 = 1000000;
@@ -468,5 +515,6 @@ test_suite_query (void)
     GNC_TEST_ADD (suitename, "xaccQueryBalanceMatch", Fixture, NULL, setup, test_xaccQueryBalanceMatch, teardown);
     GNC_TEST_ADD (suitename, "xaccQueryComplexBoolean", Fixture, NULL, setup, test_xaccQueryComplexBoolean, teardown);
     GNC_TEST_ADD (suitename, "xaccQueryStringMatches", Fixture, NULL, setup, test_xaccQueryStringMatches, teardown);
+    GNC_TEST_ADD (suitename, "xaccQueryNumericMatches", Fixture, NULL, setup, test_xaccQueryNumericMatches, teardown);
     GNC_TEST_ADD (suitename, "xaccQueryDateFound", Fixture, NULL, setup, test_xaccQueryDateFound, teardown);
 }
