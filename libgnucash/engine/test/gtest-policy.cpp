@@ -20,12 +20,14 @@ protected:
     QofBook *book;
     Account *acc;
     gnc_commodity *usd;
+    gnc_commodity *eur;
 
     void SetUp() override
     {
         book = qof_book_new();
         acc = xaccMallocAccount(book);
         usd = gnc_commodity_new(book, "US Dollar", "CURRENCY", "USD", "0", 100);
+        eur = gnc_commodity_new(book, "Euro", "CURRENCY", "EUR", "0", 100);
         xaccAccountSetCommodity(acc, usd);
     }
 
@@ -34,13 +36,14 @@ protected:
         qof_book_destroy(book);
     }
 
-    Split* create_test_split(gnc_numeric amount, time64 posted)
+    Split* create_test_split(gnc_numeric amount, time64 posted, gnc_commodity* curr = nullptr)
     {
+        if (!curr) curr = usd;
         Transaction *txn = xaccMallocTransaction(book);
         Split *split = xaccMallocSplit(book);
 
         xaccTransBeginEdit(txn);
-        xaccTransSetCurrency(txn, usd);
+        xaccTransSetCurrency(txn, curr);
         xaccTransSetDatePostedSecs(txn, posted);
 
         split->acc = acc;
@@ -96,7 +99,7 @@ TEST_F(PolicyTest, FIFOPolicyGetLot)
     EXPECT_EQ(lot, new_lot);
 }
 
-TEST_F(PolicyTest, FIFOPolicyGetSplit)
+TEST_F(PolicyTest, FIFOPolicyGetSplit_Basic)
 {
     GNCPolicy *pcy = xaccGetFIFOPolicy();
 
@@ -115,6 +118,71 @@ TEST_F(PolicyTest, FIFOPolicyGetSplit)
 
     /* Add an unassigned split to the account (SELL) */
     Split *split2 = create_test_split(gnc_numeric_create(-50, 1), 2000);
+
+    Split *found = pcy->PolicyGetSplit(pcy, lot);
+    ASSERT_NE(found, nullptr);
+    EXPECT_EQ(found, split2);
+}
+
+TEST_F(PolicyTest, FIFOPolicyGetSplit_ClosedLot)
+{
+    GNCPolicy *pcy = xaccGetFIFOPolicy();
+    GNCLot *lot = gnc_lot_new(book);
+    xaccAccountInsertLot(acc, lot);
+
+    Split *split1 = create_test_split(gnc_numeric_create(100, 1), 1000);
+    gnc_lot_add_split(lot, split1);
+
+    Split *split2 = create_test_split(gnc_numeric_create(-100, 1), 2000);
+    gnc_lot_add_split(lot, split2);
+
+    EXPECT_TRUE(gnc_lot_is_closed(lot));
+
+    /* Even if there's another unassigned split, PolicyGetSplit should return nullptr for a closed lot */
+    create_test_split(gnc_numeric_create(-50, 1), 3000);
+
+    EXPECT_EQ(pcy->PolicyGetSplit(pcy, lot), nullptr);
+}
+
+TEST_F(PolicyTest, FIFOPolicyGetSplit_NoUnassignedSplits)
+{
+    GNCPolicy *pcy = xaccGetFIFOPolicy();
+    GNCLot *lot = gnc_lot_new(book);
+    xaccAccountInsertLot(acc, lot);
+
+    Split *split1 = create_test_split(gnc_numeric_create(100, 1), 1000);
+    gnc_lot_add_split(lot, split1);
+
+    EXPECT_EQ(pcy->PolicyGetSplit(pcy, lot), nullptr);
+}
+
+TEST_F(PolicyTest, FIFOPolicyGetSplit_DifferentCurrency)
+{
+    GNCPolicy *pcy = xaccGetFIFOPolicy();
+    GNCLot *lot = gnc_lot_new(book);
+    xaccAccountInsertLot(acc, lot);
+
+    Split *split1 = create_test_split(gnc_numeric_create(100, 1), 1000, usd);
+    gnc_lot_add_split(lot, split1);
+
+    /* Unassigned split with different currency */
+    create_test_split(gnc_numeric_create(-50, 1), 2000, eur);
+
+    EXPECT_EQ(pcy->PolicyGetSplit(pcy, lot), nullptr);
+}
+
+TEST_F(PolicyTest, FIFOPolicyGetSplit_NegativeBalanceLot)
+{
+    GNCPolicy *pcy = xaccGetFIFOPolicy();
+    GNCLot *lot = gnc_lot_new(book);
+    xaccAccountInsertLot(acc, lot);
+
+    /* Lot opened with a SELL */
+    Split *split1 = create_test_split(gnc_numeric_create(-100, 1), 1000);
+    gnc_lot_add_split(lot, split1);
+
+    /* Should find a BUY split to offset the SELL */
+    Split *split2 = create_test_split(gnc_numeric_create(50, 1), 2000);
 
     Split *found = pcy->PolicyGetSplit(pcy, lot);
     ASSERT_NE(found, nullptr);
