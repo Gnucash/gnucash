@@ -226,6 +226,24 @@ class TestFunctionClass(TestCase):
             self.assertIsInstance(item, TestClass)
             self.assertIsInstance(item.instance, Instance)
 
+    def test_methods_return_instance_lists_dict(self):
+        """test methods_return_instance_lists() on line 249"""
+        from gnucash.function_class import methods_return_instance_lists
+
+        class LocalTestClass(ClassFromFunctions):
+            _module = sys.modules[__name__]
+            def returns_list(self): return [Instance(), Instance()]
+
+        methods_return_instance_lists(LocalTestClass, {"returns_list": TestClass})
+
+        ltc = LocalTestClass(instance=Instance())
+        result_list = ltc.returns_list()
+        self.assertIsInstance(result_list, list)
+        self.assertEqual(len(result_list), 2)
+        for item in result_list:
+            self.assertIsInstance(item, TestClass)
+            self.assertIsInstance(item.instance, Instance)
+
     def test_methods_return_instance_with_returns_single(self):
         """test methods_return_instance()"""
         from gnucash.function_class import methods_return_instance
