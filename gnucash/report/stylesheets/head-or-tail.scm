@@ -86,7 +86,7 @@
       (N_ "Enable hyperlinks in reports.")
       #t)
     (gnc-register-text-option options
-      (N_ "Header/Footer")
+      (N_ "Text")
       (N_ "Additional Comments") "i"
       (N_ "String for additional report information.")
       "")
@@ -222,7 +222,7 @@
          (show-gnucash-version-at-bottom?
           (opt-val "Header/Footer" "Show GnuCash version at bottom"))
          (links? (opt-val "Header/Footer" "Enable Links"))
-         (additional-comments (opt-val "Header/Footer" "Additional Comments"))
+         (additional-comments (opt-val "Text" "Additional Comments"))
          (bgcolor (color-val "Colors" "Background Color"))
          (textcolor (color-val "Colors" "Text Color"))
          (linkcolor (color-val "Colors" "Link Color"))
