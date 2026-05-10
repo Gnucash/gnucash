@@ -65,7 +65,7 @@
 (define optnodecolor-asset-default "2980b9") ;; Ice Blue #2980b9
 (define optnodecolor-liability-name (N_ "Liability Node Color"))
 (define optnodecolor-liability-help (N_ "The color used for liability nodes in the Sankey diagram."))
-(define optnodecolor-liability-default "fff700") ;; Lemon #fff700
+(define optnodecolor-liability-default "f6d32d") ;; Golden Yellow #f6d32d
 (define optnodecolor-equity-name (N_ "Equity Node Color"))
 (define optnodecolor-equity-help (N_ "The color used for equity nodes in the Sankey diagram."))
 (define optnodecolor-equity-default "8e44ad") ;; Plum Purple #8e44ad
