@@ -440,6 +440,14 @@ class TestFunctionClass(TestCase):
         not_fc = NotFunctionClass()
         self.assertEqual(process_dict_convert_to_instance({"a": not_fc}), {"a": not_fc})
 
+        # kwargs expansion explicitly (simulating actual function_class.py usage)
+        def dummy_func(**kwargs):
+            return kwargs
+
+        test_kwargs = {"a": t1, "other": "string"}
+        processed_kwargs = process_dict_convert_to_instance(test_kwargs)
+        self.assertEqual(dummy_func(**processed_kwargs), {"a": t1.instance, "other": "string"})
+
     def test_extract_attributes_with_prefix(self):
         """test extract_attributes_with_prefix()"""
 
