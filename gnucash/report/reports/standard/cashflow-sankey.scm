@@ -142,7 +142,7 @@
       optaccountlist-help ;; Help text
       (gnc:filter-accountlist-type
          ;; select, by default, only income and expense accounts
-         (list ACCT-TYPE-EXPENSE ACCT-TYPE-INCOME)
+         (list ACCT-TYPE-BANK ACCT-TYPE-EXPENSE ACCT-TYPE-INCOME ACCT-TYPE-CREDIT)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
 
     (gnc-register-color-option options
