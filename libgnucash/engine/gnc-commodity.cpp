@@ -189,7 +189,6 @@ static QuoteSourceList currency_quote_sources =
 static QuoteSourceList single_quote_sources =
 {
     { false, SOURCE_SINGLE, NC_("FQ Source", "Alphavantage"), "alphavantage" },
-    { false, SOURCE_SINGLE, NC_("FQ Source", "Amsterdam Euronext eXchange, NL"), "aex" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Association of Mutual Funds in India"), "amfiindia" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Athens Exchange Group, GR"), "asegr" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Australian Stock Exchange, AU"), "asx" },
