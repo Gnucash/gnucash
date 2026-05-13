@@ -84,8 +84,6 @@
 
 (define (gnc:make-html-sankey)
   (make-html-sankey
-;  1200                             ;width
-;  800                              ;height
   '()                              ;from-date
   '()                              ;to-date
   '()                              ;income-color'
@@ -97,14 +95,18 @@
   '()                              ;js-data
   ))
 
-(define div-style "style='width: 100%;
+(define chart-div-style "style='width: 100%;
   height: 700px;
   background: #fafafa;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
-  box-sizing: border-box;'"
-  )
+  box-sizing: border-box;'
+  ")
+
+(define message-div-style "style='padding: 10px;
+  font-family: sans-serif;'
+  ")
 
 ;; Dynamic color picker based on GnuCash account type
 (define js-node-color "
@@ -119,12 +121,9 @@ function getNodeColor(nodeName) {
 }
 ")
 
-(define js-sankey "var chartDiv = document.getElementById('sankey_chart');
-
-if (!rawData || rawData.length === 0) {
-    chartDiv.innerHTML = '<div style=\"text-align: center; padding-top: 200px; font-family: sans-serif; color: #555;\"><h3>No cash flow data found.</h3><p>Ensure you have selected correct dates and accounts with transactions in Options.</p></div>';
-    return;
-}
+(define js-sankey "
+var chartDiv = document.getElementById('sankey_chart');
+var messageDiv = document.getElementById('sankey_message');
 
 try {
   // 1. AGGREGATE DUPLICATE ENTRIES
@@ -149,7 +148,8 @@ try {
   }
 
   if (links.length === 0) {
-    chartDiv.innerHTML = '<h3 style=\"text-align: center; padding-top: 200px; font-family: sans-serif;\">No positive flows to display.</h3>';
+    messageDiv.innerHTML = '<h4>No positive flows to display.</h4><p>Ensure you have selected correct dates and accounts with transactions in Options.</p>';
+    messageDiv.style.color = 'black';
     return;
   }
 
@@ -329,14 +329,36 @@ try {
   chartDiv.innerHTML = svgParts.join('\\n');
 
 } catch (err) {
-  chartDiv.innerHTML = '<div style=\"color:red; padding:10px; font-family:sans-serif;\"><h4>Sankey Visualizer Error</h4><pre>' + err.message + '</pre></div>';
+  messageDiv.innerHTML = '<h4>Sankey Visualizer Error</h4><pre>' + err.message + '</pre><p>Try to reduce the date range or the number of accounts selected in Options.</p>';
+  messageDiv.style.color = 'red';
 }")
 
 (define (gnc:html-sankey-render sankey doc)
-  (gnc:format "
+  (let ((js-data (gnc:html-sankey-js-data sankey)))
+    (if (or (string=? js-data "[]")
+        (null? js-data))
+      ;; skip the javascript rendering and just show a message if no data
+      ;; have to duplicate the dates and div in both branches since the JS won't run to populate it if there's no data
+      (gnc:format "
 <p>From Date: <b>${from-date}</b></p>
 <p>To Date: <b>${to-date}</b></p>
-<div id=sankey_chart ${div-style}></div>
+<div id=sankey_chart ${chart-div-style}>
+  <div id=sankey_message ${message-div-style}>
+    <h4>No cash flow data found.</h4>
+    <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>
+  </div>
+</div>"
+      'from-date (gnc:html-sankey-from-date sankey)
+      'to-date (gnc:html-sankey-to-date sankey)
+      'chart-div-style chart-div-style
+      'message-div-style message-div-style)
+      ;; otherwise render the chart
+      (gnc:format "
+<p>From Date: <b>${from-date}</b></p>
+<p>To Date: <b>${to-date}</b></p>
+<div id=sankey_chart ${chart-div-style}>
+  <div id=sankey_message ${message-div-style}></div>
+</div>
 <script>
 (function () {
   var rawData = ${js-data};
@@ -350,15 +372,16 @@ try {
   ${js-sankey}
 })();
 </script>"
-        'div-style div-style
-        'from-date (gnc:html-sankey-from-date sankey)
-        'to-date (gnc:html-sankey-to-date sankey)
-        'income-color (gnc:html-sankey-income-color sankey)
-        'expense-color (gnc:html-sankey-expense-color sankey)
-        'asset-color (gnc:html-sankey-asset-color sankey)
-        'liability-color (gnc:html-sankey-liability-color sankey)
-        'equity-color (gnc:html-sankey-equity-color sankey)
-        'fallback-color (gnc:html-sankey-fallback-color sankey)
-        'js-data (gnc:html-sankey-js-data sankey)
-        'js-node-color js-node-color
-        'js-sankey js-sankey))
+      'from-date (gnc:html-sankey-from-date sankey)
+      'to-date (gnc:html-sankey-to-date sankey)
+      'chart-div-style chart-div-style
+      'message-div-style message-div-style
+      'income-color (gnc:html-sankey-income-color sankey)
+      'expense-color (gnc:html-sankey-expense-color sankey)
+      'asset-color (gnc:html-sankey-asset-color sankey)
+      'liability-color (gnc:html-sankey-liability-color sankey)
+      'equity-color (gnc:html-sankey-equity-color sankey)
+      'fallback-color (gnc:html-sankey-fallback-color sankey)
+      'js-data (gnc:html-sankey-js-data sankey)
+      'js-node-color js-node-color
+      'js-sankey js-sankey))))

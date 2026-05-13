@@ -228,7 +228,6 @@
     ;; then convert to a JavaScript array format for embedding in the HTML/JS
     (data-links (extract-sankey-links accounts from-date-t64 to-date-t64 flow-minimum))
     (js-data (links->js-array data-links))
-    ;;(js-data "[]") ;; Placeholder until we can get the data extraction working
 
     ;; Create the report object that will hold the HTML content
     (report (gnc:make-html-document))
