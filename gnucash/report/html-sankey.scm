@@ -341,63 +341,42 @@ try {
 }")
 
 (define (gnc:html-sankey-render sankey doc)
-  (let ((js-data (gnc:html-sankey-js-data sankey)))
-    (if (or (string=? js-data "[]")
-        (null? js-data))
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval))))
+         (js-data (gnc:html-sankey-js-data sankey)))
+
+    (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
+    (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
+    (push (format #f "<div id=sankey_chart ~a>\n" chart-div-style))
+    (push (format #f "  <div id=sankey_message ~a>\n" message-div-style))
+
+    (if (or (string=? js-data "[]") (null? js-data))
       ;; skip the javascript rendering and just show a message if no data
-      ;; have to duplicate the dates and div in both branches since the JS won't run to populate it if there's no data
-      (gnc:format "
-<p>From Date: <b>${from-date}</b></p>
-<p>To Date: <b>${to-date}</b></p>
-<div id=sankey_chart ${chart-div-style}>
-  <div id=sankey_message ${message-div-style}>
-    <h4>No cash flow data found.</h4>
-    <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>
-  </div>
-</div>"
-      'from-date (gnc:html-sankey-from-date sankey)
-      'to-date (gnc:html-sankey-to-date sankey)
-      'chart-div-style chart-div-style
-      'message-div-style message-div-style)
+      (begin
+        (push "    <h4>No cash flow data found.</h4>\n")
+        (push "    <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>\n")
+        (push "  </div>\n")
+        (push "</div>\n"))
       ;; otherwise render the chart
-      (gnc:format "
-<p>From Date: <b>${from-date}</b></p>
-<p>To Date: <b>${to-date}</b></p>
-<div id=sankey_chart ${chart-div-style}>
-  <div id=sankey_message ${message-div-style}></div>
-</div>
-<script>
-(function () {
-  var rawData = ${js-data};
-
-  // SVG/NODE SIZING CONFIG
-  var width = ${width};
-  var height = ${height};
-  var nodePadding = 18;
-  var nodeWidth = 24;
-
-  var incomeColor = '${income-color}';
-  var expenseColor = '${expense-color}';
-  var assetColor = '${asset-color}';
-  var liabilityColor = '${liability-color}';
-  var equityColor = '${equity-color}';
-  var fallbackColor = '${fallback-color}';
-  ${js-node-color}
-  ${js-sankey}
-})();
-</script>"
-      'from-date (gnc:html-sankey-from-date sankey)
-      'to-date (gnc:html-sankey-to-date sankey)
-      'width (gnc:html-sankey-width sankey)
-      'height (gnc:html-sankey-height sankey)
-      'chart-div-style chart-div-style
-      'message-div-style message-div-style
-      'income-color (gnc:html-sankey-income-color sankey)
-      'expense-color (gnc:html-sankey-expense-color sankey)
-      'asset-color (gnc:html-sankey-asset-color sankey)
-      'liability-color (gnc:html-sankey-liability-color sankey)
-      'equity-color (gnc:html-sankey-equity-color sankey)
-      'fallback-color (gnc:html-sankey-fallback-color sankey)
-      'js-data (gnc:html-sankey-js-data sankey)
-      'js-node-color js-node-color
-      'js-sankey js-sankey))))
+      (begin
+        (push "  </div>\n")
+        (push "</div>\n")
+        (push "<script>\n")
+        (push "(function () {\n")
+        (push (format #f "  var rawData = ~a;\n" (gnc:html-sankey-js-data sankey)))
+        (push "  // SVG/NODE SIZING CONFIG\n")
+        (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
+        (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
+        (push "  var nodePadding = 18;\n")
+        (push "  var nodeWidth = 24;\n")
+        (push (format #f "  var incomeColor = '~a';\n" (gnc:html-sankey-income-color sankey)))
+        (push (format #f "  var expenseColor = '~a';\n" (gnc:html-sankey-expense-color sankey)))
+        (push (format #f "  var assetColor = '~a';\n" (gnc:html-sankey-asset-color sankey)))
+        (push (format #f "  var liabilityColor = '~a';\n" (gnc:html-sankey-liability-color sankey)))
+        (push (format #f "  var equityColor = '~a';\n" (gnc:html-sankey-equity-color sankey)))
+        (push (format #f "  var fallbackColor = '~a';\n" (gnc:html-sankey-fallback-color sankey)))
+        (push (format #f "  ~a;\n" js-node-color))
+        (push (format #f "  ~a;\n" js-sankey))
+        (push "})();")
+        (push "</script>")))
+  retval))
