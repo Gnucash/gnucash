@@ -51,6 +51,14 @@
 (define optminimum-help (N_ "The minimum incoming flow value to include in the report."))
 (define optminimum-default 1.00)
 
+(define optplot-width-name (N_ "Plot Width"))
+(define optplot-width-help (N_ "The width of the Sankey diagram."))
+(define optplot-width-default 2000)
+
+(define optplot-height-name (N_ "Plot Height"))
+(define optplot-height-help (N_ "The height of the Sankey diagram."))
+(define optplot-height-default 1000)
+
 ;; Node colors for different account types, with defaults chosen for good contrast and aesthetics
 ;; Users can customize these in the report options to fit their preferences or color schemes.
 ;; GnuCash expects just the hex digits so we'll add the # back when generating the CSS for the report.
@@ -73,9 +81,9 @@
 (define optnodecolor-fallback-help (N_ "The color used for nodes that do not fit into other categories."))
 (define optnodecolor-fallback-default "7f8c8d") ;; Slate Grey #7f8c8d
 
-(define accounts-page    gnc:pagename-accounts)
-(define general-page     gnc:pagename-general)
-(define colors-page      (N_ "Node Colors"))
+(define accounts-page gnc:pagename-accounts)
+(define general-page  gnc:pagename-general)
+(define display-page  (N_ "Display"))
 
 (define (extract-sankey-links account-list start-date end-date flow-minimum)
   (let ((links '()))
@@ -145,45 +153,54 @@
          (list ACCT-TYPE-BANK ACCT-TYPE-EXPENSE ACCT-TYPE-INCOME ACCT-TYPE-CREDIT)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
 
+    ;; Plot size options
+    (gnc:options-add-plot-size! options
+      display-page            ;; Tab
+      optplot-width-name      ;; Option 1 Name
+      optplot-height-name     ;; Option 2 Name
+      "a"                     ;; Sorting key
+      optplot-width-default optplot-height-default)   ;; Default values
+      ; (cons 'percent 100.0) (cons 'percent 100.0))
+
     (gnc-register-color-option options
-      colors-page                     ;; Tab
+      display-page                    ;; Tab
       optnodecolor-income-name        ;; Option Name
-      "c"                             ;; Sorting key
+      "b"                             ;; Sorting key
       optnodecolor-income-help        ;; Help text
       optnodecolor-income-default)    ;; Default value
 
     (gnc-register-color-option options
-      colors-page                     ;; Tab
+      display-page                    ;; Tab
       optnodecolor-expense-name       ;; Option Name
       "c"                             ;; Sorting key
       optnodecolor-expense-help       ;; Help text
       optnodecolor-expense-default)   ;; Default value
 
     (gnc-register-color-option options
-      colors-page                     ;; Tab
+      display-page                    ;; Tab
       optnodecolor-asset-name         ;; Option Name
-      "c"                             ;; Sorting key
+      "d"                             ;; Sorting key
       optnodecolor-asset-help         ;; Help text
       optnodecolor-asset-default)     ;; Default value
 
     (gnc-register-color-option options
-      colors-page                     ;; Tab
+      display-page                    ;; Tab
       optnodecolor-liability-name     ;; Option Name
-      "c"                             ;; Sorting key
+      "e"                             ;; Sorting key
       optnodecolor-liability-help     ;; Help text
       optnodecolor-liability-default) ;; Default value
 
     (gnc-register-color-option options
-      colors-page                     ;; Tab
+      display-page                    ;; Tab
       optnodecolor-equity-name        ;; Option Name
-      "c"                             ;; Sorting key
+      "f"                             ;; Sorting key
       optnodecolor-equity-help        ;; Help text
       optnodecolor-equity-default)    ;; Default value
 
     (gnc-register-color-option options
-      colors-page                     ;; Tab
+      display-page                    ;; Tab
       optnodecolor-fallback-name      ;; Option Name
-      "c"                             ;; Sorting key
+      "g"                             ;; Sorting key
       optnodecolor-fallback-help      ;; Help text
       optnodecolor-fallback-default)  ;; Default value
 
@@ -209,13 +226,27 @@
       (gnc-account-get-descendants-sorted (gnc-book-get-root-account (gnc-get-current-book)))
         selected-accounts))
 
+    ;; Plot dimensions, concverting from percentage if needed.
+    ;; The Sankey diagram will scale with the SVG, so percentages are relative to the default size.
+    (plot-width-type (car (op-value display-page optplot-width-name)))
+    (plot-width-value (cdr (op-value display-page optplot-width-name)))
+    (plot-width (if (eq? plot-width-type 'percent)
+                    (* plot-width-value optplot-width-default 0.01)
+                    plot-width-value))
+
+    (plot-height-type (car (op-value display-page optplot-height-name)))
+    (plot-height-value (cdr (op-value display-page optplot-height-name)))
+    (plot-height (if (eq? plot-height-type 'percent)
+                    (* plot-height-value optplot-height-default 0.01)
+                    plot-height-value))
+
     ;; Prepare colors, converting from hex strings to CSS format (e.g., "27ae60" -> "#27ae60")
-    (income-color (format #f "#~a" (op-value colors-page optnodecolor-income-name)))
-    (expense-color (format #f "#~a" (op-value colors-page optnodecolor-expense-name)))
-    (asset-color (format #f "#~a" (op-value colors-page optnodecolor-asset-name)))
-    (liability-color (format #f "#~a" (op-value colors-page optnodecolor-liability-name)))
-    (equity-color (format #f "#~a" (op-value colors-page optnodecolor-equity-name)))
-    (fallback-color (format #f "#~a" (op-value colors-page optnodecolor-fallback-name)))
+    (income-color (format #f "#~a" (op-value display-page optnodecolor-income-name)))
+    (expense-color (format #f "#~a" (op-value display-page optnodecolor-expense-name)))
+    (asset-color (format #f "#~a" (op-value display-page optnodecolor-asset-name)))
+    (liability-color (format #f "#~a" (op-value display-page optnodecolor-liability-name)))
+    (equity-color (format #f "#~a" (op-value display-page optnodecolor-equity-name)))
+    (fallback-color (format #f "#~a" (op-value display-page optnodecolor-fallback-name)))
 
     ;; Format the from and to dates as strings for display in the report
     ;; as well as convert them to time64 values for data extraction/comparison
@@ -240,6 +271,8 @@
 
     (gnc:html-sankey-set-from-date! sankey from-date-string)
     (gnc:html-sankey-set-to-date! sankey to-date-string)
+    (gnc:html-sankey-set-width! sankey plot-width)
+    (gnc:html-sankey-set-height! sankey plot-height)
     (gnc:html-sankey-set-income-color! sankey income-color)
     (gnc:html-sankey-set-expense-color! sankey expense-color)
     (gnc:html-sankey-set-asset-color! sankey asset-color)

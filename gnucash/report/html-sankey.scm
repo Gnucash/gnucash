@@ -35,7 +35,8 @@
 (export gnc:html-sankey-set-from-date!)
 (export gnc:html-sankey-set-to-date!)
 
-(export gnc:html-sankey-set-js-data!)
+(export gnc:html-sankey-set-width!)
+(export gnc:html-sankey-set-height!)
 
 (export gnc:html-sankey-set-income-color!)
 (export gnc:html-sankey-set-expense-color!)
@@ -44,13 +45,17 @@
 (export gnc:html-sankey-set-equity-color!)
 (export gnc:html-sankey-set-fallback-color!)
 
+(export gnc:html-sankey-set-js-data!)
+
 (export gnc:html-sankey-render)
 
 (define-record-type <html-sankey>
-  (make-html-sankey from-date to-date income-color expense-color asset-color liability-color equity-color fallback-color js-data)
+  (make-html-sankey from-date to-date width height income-color expense-color asset-color liability-color equity-color fallback-color js-data)
   html-sankey?
   (from-date html-sankey-from-date html-sankey-set-from-date!)
   (to-date html-sankey-to-date html-sankey-set-to-date!)
+  (width html-sankey-width html-sankey-set-width!)
+  (height html-sankey-height html-sankey-set-height!)
   (income-color html-sankey-income-color html-sankey-set-income-color!)
   (expense-color html-sankey-expense-color html-sankey-set-expense-color!)
   (asset-color html-sankey-asset-color html-sankey-set-asset-color!)
@@ -66,8 +71,10 @@
 (define gnc:html-sankey-to-date html-sankey-to-date)
 (define gnc:html-sankey-set-to-date! html-sankey-set-to-date!)
 
-(define gnc:html-sankey-js-data html-sankey-js-data)
-(define gnc:html-sankey-set-js-data! html-sankey-set-js-data!)
+(define gnc:html-sankey-width html-sankey-width)
+(define gnc:html-sankey-set-width! html-sankey-set-width!)
+(define gnc:html-sankey-height html-sankey-height)
+(define gnc:html-sankey-set-height! html-sankey-set-height!)
 
 (define gnc:html-sankey-income-color html-sankey-income-color)
 (define gnc:html-sankey-set-income-color! html-sankey-set-income-color!)
@@ -82,10 +89,15 @@
 (define gnc:html-sankey-fallback-color html-sankey-fallback-color)
 (define gnc:html-sankey-set-fallback-color! html-sankey-set-fallback-color!)
 
+(define gnc:html-sankey-js-data html-sankey-js-data)
+(define gnc:html-sankey-set-js-data! html-sankey-set-js-data!)
+
 (define (gnc:make-html-sankey)
   (make-html-sankey
   '()                              ;from-date
   '()                              ;to-date
+  '()                              ;width
+  '()                              ;height
   '()                              ;income-color'
   '()                              ;expense-color'
   '()                              ;asset-color'
@@ -216,11 +228,6 @@ try {
   var numCols = cols.length;
 
   // 4. VERTICAL ALIGNMENT AND SCALING
-  var width = 1000;
-  var height = 500;
-  var nodePadding = 18;
-  var nodeWidth = 24;
-
   var maxColVal = 0;
   var maxColNodes = 0;
   for (var c = 0; c < cols.length; c++) {
@@ -362,6 +369,13 @@ try {
 <script>
 (function () {
   var rawData = ${js-data};
+
+  // SVG/NODE SIZING CONFIG
+  var width = ${width};
+  var height = ${height};
+  var nodePadding = 18;
+  var nodeWidth = 24;
+
   var incomeColor = '${income-color}';
   var expenseColor = '${expense-color}';
   var assetColor = '${asset-color}';
@@ -374,6 +388,8 @@ try {
 </script>"
       'from-date (gnc:html-sankey-from-date sankey)
       'to-date (gnc:html-sankey-to-date sankey)
+      'width (gnc:html-sankey-width sankey)
+      'height (gnc:html-sankey-height sankey)
       'chart-div-style chart-div-style
       'message-div-style message-div-style
       'income-color (gnc:html-sankey-income-color sankey)
