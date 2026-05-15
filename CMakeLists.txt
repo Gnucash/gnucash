@@ -900,6 +900,7 @@ endif()
 
 # The subdirectories
 add_subdirectory (borrowed)
+add_library(ctre_global ALIAS ctre)
 add_subdirectory (data)
 add_subdirectory (doc)
 # Note: po should be processed before gnucash - it provides LINGUAS, used to generate desktop and appdata files
