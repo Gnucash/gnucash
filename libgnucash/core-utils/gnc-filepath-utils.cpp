@@ -1326,6 +1326,7 @@ backup_regex (".*[.](?:xac|gnucash)[.][0-9]{14}[.](?:xac|gnucash)$");
 
 gboolean gnc_filename_is_backup (const char *filename)
 {
+    g_return_val_if_fail (filename, FALSE);
     return std::regex_match (filename, backup_regex);
 }
 
@@ -1334,6 +1335,7 @@ datafile_regex (".*[.](?:xac|gnucash)$");
 
 gboolean gnc_filename_is_datafile (const char *filename)
 {
+    g_return_val_if_fail (filename, FALSE);
     return !gnc_filename_is_backup (filename) &&
         std::regex_match (filename, datafile_regex);
 }
