@@ -809,6 +809,44 @@ gnc_find_trans_in_reg_by_desc (SplitRegister *reg, const char *description)
     return NULL;
 }
 
+static bool
+gnc_split_register_trans_blank_has_other_changes (const SplitRegister *reg)
+{
+    /* nothing but the date, num, and description should be changed */
+    return (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               XFRM_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               MXFRM_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               PRIC_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               SHRS_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               DEBT_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               CRED_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               NOTES_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               RECN_CELL, TRUE));
+}
+
+static bool
+gnc_split_register_split_blank_has_other_changes (const SplitRegister *reg)
+{
+    /* nothing but the action, memo, and amounts should be changed */
+    return (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               XFRM_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               MXFRM_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               PRIC_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               SHRS_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               RECN_CELL, TRUE));
+}
+
 /* This function determines if auto-completion is appropriate and,
  * if so, performs it. This should only be called by LedgerTraverse. */
 static gboolean
@@ -869,24 +907,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         if (!gnc_cell_name_equal (cell_name, DESC_CELL))
             return FALSE;
 
-        /* nothing but the date, num, and description should be changed */
-        /* FIXME, this should be refactored. */
-        if (gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               XFRM_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               MXFRM_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               PRIC_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               SHRS_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               DEBT_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               CRED_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               NOTES_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               RECN_CELL, TRUE))
+        if (gnc_split_register_trans_blank_has_other_changes (reg))
             return FALSE;
 
         /* and the description should be changed */
@@ -1013,18 +1034,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         if (!gnc_cell_name_equal (cell_name, MEMO_CELL))
             return FALSE;
 
-        /* nothing but the action, memo, and amounts should be changed */
-        /* FIXME. This should be refactored. */
-        if (gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               XFRM_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               MXFRM_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               PRIC_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               SHRS_CELL, TRUE) ||
-            gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               RECN_CELL, TRUE))
+        if (gnc_split_register_split_blank_has_other_changes (reg))
             return FALSE;
 
         /* and the memo should be changed */
