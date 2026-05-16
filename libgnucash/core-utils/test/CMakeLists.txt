@@ -37,6 +37,7 @@ set(gtest_core_utils_LIBS
   PkgConfig::GLIB2
   ${Boost_LIBRARIES}
   ${GTHREAD_LDFLAGS}
+  ctre
   gtest)
 
 set(test_gnc_path_util_SOURCES
