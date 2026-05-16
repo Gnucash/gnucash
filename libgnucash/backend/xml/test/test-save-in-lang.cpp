@@ -69,26 +69,15 @@ const char* base_env = "C";
 static char*
 gen_new_file_name (const char* filename, const char* env)
 {
-    char* ret;
-
-    ret = g_new (char, strlen (filename) + strlen (env) + 2);
-    strcpy (ret, filename);
-    strcat (ret, "-");
-    strcat (ret, env);
-
-    return ret;
+    return g_strdup_printf ("%s-%s", filename, env);
 }
 
 static int
 run_command_get_return (const char* command)
 {
-    return system (command);
-}
-
-static int
-run_command_get_return (const char* command)
-{
-    return system (command);
+    gint exit_status;
+    gboolean success = g_spawn_command_line_sync (command, NULL, NULL, &exit_status, NULL);
+    return success ? exit_status : -1;
 }
 
 static char*
@@ -99,11 +88,10 @@ test_file (const char* filename)
     for (i = 0; possible_envs[i] != NULL; i++)
     {
         QofBackendError err;
-        QofSession* session;
         char* cmd;
         char* new_file = gen_new_file_name (filename, possible_envs[i]);
 
-        auto session = qof_session_new (nullptr);
+        QofSession* session = qof_session_new (nullptr);
 
         qof_session_begin (session, filename, SESSION_READ_ONLY);
         err = qof_session_pop_error (session);
@@ -124,7 +112,7 @@ test_file (const char* filename)
         if (!g_setenv ("LANG", possible_envs[i], TRUE))
             return g_strdup ("setenv for LANG");
 
-        auto new_session = qof_session_new (nullptr);
+        QofSession* new_session = qof_session_new (nullptr);
 
         qof_session_begin (new_session, new_file, SESSION_NORMAL_OPEN);
         err = qof_session_pop_error (new_session);
