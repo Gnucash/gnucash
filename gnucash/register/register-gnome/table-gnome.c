@@ -145,20 +145,36 @@ table_destroy_cb (Table *table)
     table->ui_data = NULL;
 }
 
+static gboolean
+table_default_direct_update (BasicCell *bcell,
+                             int *cursor_position,
+                             int *start_selection,
+                             int *end_selection,
+                             void *gui_data)
+{
+    GdkEventKey *event = gui_data;
 
-/* Um, this function checks that data is not null but never uses it.
-   Weird.  Also, since this function only works with a GnucashRegister
-   widget, maybe some of it should be moved to gnucash-sheet.c. */
-/* Adding to previous note:  Since data doesn't appear do anything and to
-   align the function with save_state() I've removed the check for
-   NULL and changed two calls in dialog_order.c and dialog_invoice.c
-   to pass NULL as second parameter. */
+    if (event->keyval == GDK_KEY_Escape && bcell->changed)
+    {
+        GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
+        const char *value = gnc_table_get_model_entry (sheet->table, bcell->cell_name);
+
+        gnc_basic_cell_set_value_internal (bcell, value);
+        bcell->changed = FALSE;
+        *cursor_position = 0;
+        *start_selection = 0;
+        *end_selection = -1;
+        return TRUE;
+    }
+    return FALSE;
+}
 
 void
 gnc_table_init_gui (Table *table)
 {
     table->gui_handlers.redraw_help = table_ui_redraw_cb;
     table->gui_handlers.destroy = table_destroy_cb;
+    table->gui_handlers.default_direct_update = table_default_direct_update;
 }
 
 void

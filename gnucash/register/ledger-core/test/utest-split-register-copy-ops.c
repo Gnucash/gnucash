@@ -1,6 +1,6 @@
 /********************************************************************
- * utest-split-register-copy-ops.c: GLib g_test test suite for split-register-copy-ops.c.		    *
- * Copyright 2019 Geert Janssens <geert@kobaltwit.be>		    *
+ * utest-split-register-copy-ops.c:                                 *
+ * Copyright 2019 Geert Janssens <geert@kobaltwit.be>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,7 +14,7 @@
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, you can retrieve it from        *
- * https://www.gnu.org/licenses/old-licenses/gpl-2.0.html            *
+ * https://www.gnu.org/licenses/old-licenses/gpl-2.0.html           *
  * or contact:                                                      *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
@@ -28,6 +28,7 @@
 /* Add specific headers for this class */
 #include "split-register-copy-ops.h"
 #include <stdint.h>
+#include "SX-book-p.h"
 
 static const gchar *suitename = "/register/ledger-core/split-register-copy-ops";
 void test_suite_split_register_copy_ops ( void );
@@ -55,9 +56,29 @@ typedef struct
     Account *acc2;
     gnc_commodity *curr;
 
+    Account *template_acct;
+    Account *acc3;
+    Account *acc4;
+
     FloatingTxn ft;
     FloatingSplit fs1, fs2;
 } FlFixture;
+
+typedef struct
+{
+    QofBook *book;
+    Account *acc1;
+    Account *acc2;
+    gnc_commodity *curr;
+
+    Account *template_acct;
+    Account *acc3;
+    Account *acc4;
+
+    Transaction *txn;
+    Transaction *template_txn;
+
+} TemplateFixture;
 
 static void
 setup( Fixture *fixture, gconstpointer pData )
@@ -109,6 +130,130 @@ setup( Fixture *fixture, gconstpointer pData )
 }
 
 static void
+setup_template( TemplateFixture *fixture, gconstpointer pData )
+{
+    fixture->book = qof_book_new();
+
+    Account *templateRoot = xaccMallocAccount(fixture->book);
+    gnc_book_set_template_root (fixture->book, templateRoot);
+    gnc_commodity *template_commodity = gnc_commodity_new(fixture->book, "template",
+                                                          GNC_COMMODITY_NS_TEMPLATE,
+                                                          "template", "template", 1);
+    xaccAccountSetCommodity(templateRoot, template_commodity);
+
+    fixture->template_acct = xaccMallocAccount(fixture->book);
+    gnc_account_append_child (templateRoot, fixture->template_acct);
+
+    // Normal Transaction
+    time64 entered = gnc_dmy2time64 (20, 4, 2012);
+    time64 posted = gnc_dmy2time64 (21, 4, 2012);
+
+    Split *split1 = xaccMallocSplit(fixture->book);
+    Split *split2 = xaccMallocSplit(fixture->book);
+
+    fixture->acc1 = xaccMallocAccount(fixture->book);
+    fixture->acc2 = xaccMallocAccount(fixture->book);
+
+    fixture->curr = gnc_commodity_new(fixture->book, "Gnu Rand", "CURRENCY", "GNR", "", 100);
+    xaccAccountSetCommodity(fixture->acc1, fixture->curr);
+    xaccAccountSetCommodity(fixture->acc2, fixture->curr);
+
+    fixture->txn = xaccMallocTransaction (fixture->book);
+
+    xaccSplitSetMemo (split1, CACHE_INSERT ("foo"));
+    xaccSplitSetAction (split1, CACHE_INSERT ("bar"));
+    xaccSplitSetAmount (split1, gnc_numeric_create (3200, 100));
+    xaccSplitSetValue (split1, gnc_numeric_create (3200, 100));
+    xaccSplitSetAccount (split1, fixture->acc1);
+
+    xaccSplitSetAmount (split2, gnc_numeric_create (-3200, 100));
+    xaccSplitSetValue (split2, gnc_numeric_create (-3200, 100));
+    xaccSplitSetAccount (split2, fixture->acc2);
+
+    xaccTransBeginEdit (fixture->txn);
+    {
+        xaccTransSetNum (fixture->txn, CACHE_INSERT ("123"));
+        xaccTransSetDescription (fixture->txn, CACHE_INSERT ("Waldo Pepper"));
+        xaccTransSetDatePostedSecs (fixture->txn, posted);
+        xaccTransSetDateEnteredSecs (fixture->txn, entered);
+        xaccTransSetCurrency (fixture->txn, fixture->curr);
+        xaccSplitSetParent (split1, fixture->txn);
+        xaccSplitSetParent (split2, fixture->txn);
+        xaccTransSetNotes (fixture->txn, "Salt pork sausage");
+    }
+    xaccTransCommitEdit (fixture->txn);
+    xaccAccountSortSplits(fixture->acc1, FALSE);
+    xaccAccountSortSplits(fixture->acc2, FALSE);
+    xaccAccountRecomputeBalance(fixture->acc1);
+    xaccAccountRecomputeBalance(fixture->acc2);
+
+
+    // Template Transaction
+    Split *split3 = xaccMallocSplit (fixture->book);
+    Split *split4 = xaccMallocSplit (fixture->book);
+
+    fixture->acc3 = xaccMallocAccount(fixture->book);
+    fixture->acc4 = xaccMallocAccount(fixture->book);
+
+    const GncGUID* guid_acc3 = xaccAccountGetGUID(fixture->acc3);
+    const GncGUID* guid_acc4 = xaccAccountGetGUID(fixture->acc4);
+
+    xaccAccountSetCommodity(fixture->template_acct, template_commodity);
+    xaccAccountSetType(fixture->template_acct, ACCT_TYPE_BANK);
+
+    xaccAccountSetCommodity(fixture->acc3, fixture->curr);
+    xaccAccountSetCommodity(fixture->acc4, fixture->curr);
+
+    fixture->template_txn = xaccMallocTransaction (fixture->book);
+
+    xaccSplitSetMemo (split3, CACHE_INSERT ("foo"));
+    xaccSplitSetAction (split3, CACHE_INSERT ("bar"));
+
+    gnc_numeric numeric_zero = gnc_numeric_zero ();
+    gnc_numeric numeric = gnc_numeric_create (41,2);
+
+    qof_begin_edit (QOF_INSTANCE (split3));
+    qof_instance_set (QOF_INSTANCE (split3),
+              "sx-debit-formula", "",
+              "sx-debit-numeric", &numeric_zero,
+              "sx-credit-formula", "20.5",
+              "sx-credit-numeric", &numeric,
+              "sx-account", guid_acc3,
+              "sx-shares", "10",
+              NULL);
+
+    xaccSplitSetMemo (split4, CACHE_INSERT ("zoo"));
+    xaccSplitSetAction (split4, CACHE_INSERT ("tar"));
+
+    qof_begin_edit (QOF_INSTANCE (split4));
+    qof_instance_set (QOF_INSTANCE (split4),
+              "sx-debit-formula", "20.5",
+              "sx-debit-numeric", &numeric,
+              "sx-credit-formula", "",
+              "sx-credit-numeric", &numeric_zero,
+              "sx-account", guid_acc4,
+              "sx-shares", "10",
+              NULL);
+
+    xaccSplitSetAccount (split3, fixture->template_acct);
+    xaccSplitSetAccount (split4, fixture->template_acct);
+
+    xaccTransBeginEdit (fixture->template_txn);
+    {
+        xaccTransSetNum (fixture->template_txn, CACHE_INSERT ("123"));
+        xaccTransSetDescription (fixture->template_txn, CACHE_INSERT ("Waldo Pepper"));
+        xaccTransSetCurrency (fixture->template_txn, fixture->curr);
+
+        xaccSplitSetParent (split3, fixture->template_txn);
+        xaccSplitSetParent (split4, fixture->template_txn);
+        xaccTransSetNotes (fixture->template_txn, "Salt pork sausage");
+    }
+    xaccTransCommitEdit (fixture->template_txn);
+    xaccAccountSortSplits(fixture->acc3, FALSE);
+    xaccAccountSortSplits(fixture->acc4, FALSE);
+
+}
+static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
     xaccTransDestroy (fixture->txn);
@@ -116,6 +261,29 @@ teardown( Fixture *fixture, gconstpointer pData )
     xaccAccountDestroy(fixture->acc1);
     xaccAccountBeginEdit(fixture->acc2);
     xaccAccountDestroy(fixture->acc2);
+    gnc_commodity_destroy(fixture->curr);
+    qof_book_destroy( fixture->book );
+};
+
+static void
+teardown_template( TemplateFixture *fixture, gconstpointer pData )
+{
+    xaccTransDestroy (fixture->txn);
+    xaccTransDestroy (fixture->template_txn);
+
+    xaccAccountBeginEdit(fixture->acc1);
+    xaccAccountDestroy(fixture->acc1);
+    xaccAccountBeginEdit(fixture->acc2);
+    xaccAccountDestroy(fixture->acc2);
+
+    xaccAccountBeginEdit(fixture->acc3);
+    xaccAccountDestroy(fixture->acc3);
+    xaccAccountBeginEdit(fixture->acc4);
+    xaccAccountDestroy(fixture->acc4);
+
+    xaccAccountBeginEdit(fixture->template_acct);
+    xaccAccountDestroy(fixture->template_acct);
+
     gnc_commodity_destroy(fixture->curr);
     qof_book_destroy( fixture->book );
 };
@@ -179,6 +347,8 @@ flteardown( FlFixture *fixture, gconstpointer pData )
     gnc_commodity_destroy(fixture->curr);
     qof_book_destroy( fixture->book );
 };
+
+
 
 // Not Used
 /* gnc_float_split_get_reconcile_state - trivial getter, skipping
@@ -267,7 +437,7 @@ test_gnc_split_to_float_split (Fixture *fixture, gconstpointer pData)
 
     g_assert_nonnull (s);
 
-    fs = gnc_split_to_float_split (s);
+    fs = gnc_split_to_float_split (s, FALSE);
     g_assert_true (fs->m_split == s);
     g_assert_true (fs->m_account == xaccSplitGetAccount (s));
     g_assert_true (fs->m_transaction == xaccSplitGetParent (s));
@@ -289,7 +459,7 @@ test_gnc_float_split_to_split (Fixture *fixture, gconstpointer pData)
     Split *s = xaccMallocSplit(fixture->book);
     Transaction *txn = xaccMallocTransaction (fixture->book);
 
-    gnc_float_split_to_split (&fs, s);
+    gnc_float_split_to_split (&fs, s, NULL);
     g_assert_true (fixture->acc1 == xaccSplitGetAccount (s));
     g_assert_cmpstr ("Memo1", ==, xaccSplitGetMemo (s));
     g_assert_cmpstr ("Action1", ==, xaccSplitGetAction (s));
@@ -366,7 +536,7 @@ test_gnc_txn_to_float_txn (Fixture *fixture, gconstpointer pData)
     FloatingSplit *fs;
     Split *s;
 
-    ft = gnc_txn_to_float_txn (fixture->txn, FALSE);
+    ft = gnc_txn_to_float_txn (fixture->txn, FALSE, FALSE);
 
     /* Check transaction fields */
     g_assert_true (ft->m_txn == fixture->txn);
@@ -423,7 +593,7 @@ test_gnc_txn_to_float_txn_cut_semantics (Fixture *fixture, gconstpointer pData)
     FloatingSplit *fs;
     Split *s;
 
-    ft = gnc_txn_to_float_txn (fixture->txn, TRUE);
+    ft = gnc_txn_to_float_txn (fixture->txn, TRUE, FALSE);
 
     /* Check transaction fields */
     g_assert_true (ft->m_txn == fixture->txn);
@@ -618,6 +788,257 @@ test_gnc_float_txn_to_txn_swap_accounts_swap_nocommit (FlFixture *fixture, gcons
     impl_test_gnc_float_txn_to_txn_swap_accounts(fixture, &prefs);
 }
 
+static void
+test_gnc_template_to_template (TemplateFixture *fixture, gconstpointer pData)
+{
+    FloatingTxn *ft = NULL;
+
+    ft = gnc_txn_to_float_txn (fixture->template_txn, FALSE, TRUE);
+    g_assert_true (ft->m_txn == fixture->template_txn);
+
+    Transaction *new_txn = xaccMallocTransaction (fixture->book);
+    gnc_float_txn_to_template_txn (ft, new_txn, fixture->template_acct, FALSE);
+
+    /* Check transaction fields */
+    g_assert_cmpstr (xaccTransGetDescription (fixture->template_txn), ==, xaccTransGetDescription (new_txn));
+    g_assert_cmpstr (xaccTransGetNotes (fixture->template_txn), ==, xaccTransGetNotes (new_txn));
+
+    SplitList *sl_template_txn = xaccTransGetSplitList (fixture->template_txn), *siter_template_txn;
+    SplitList *sl_new_txn = xaccTransGetSplitList (new_txn), *siter_new_txn;
+
+    /* Check split fields of first split */
+    Split *s_template, *s_new_txn;
+
+    siter_template_txn = sl_template_txn;
+    siter_new_txn = sl_new_txn;
+
+    s_template = siter_template_txn->data;
+    s_new_txn = siter_new_txn->data;
+
+    // First split
+    g_assert_cmpstr (xaccSplitGetMemo (s_template), ==, xaccSplitGetMemo (s_new_txn));
+    g_assert_cmpstr (xaccSplitGetAction (s_template), ==, xaccSplitGetAction (s_new_txn));
+
+    GncGUID* guid = NULL;
+    const gchar *cf, *df, *shares;
+    gnc_numeric *cn, *dn;
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-account", &guid, NULL);
+    const GncGUID* guid_acc3 = xaccAccountGetGUID (fixture->acc3);
+    g_assert_true (guid_equal (guid_acc3, guid));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-formula", &cf, NULL);
+    g_assert_cmpstr ("20.5", ==, cf);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-numeric", &cn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_create (41,2), *cn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-formula", &df, NULL);
+    g_assert_cmpstr ("", ==, df);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-numeric", &dn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_zero(), *dn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-shares", &shares, NULL);
+    g_assert_cmpstr ("10", ==, shares);
+
+    // Second split
+    siter_new_txn = siter_new_txn->next;
+    siter_template_txn = siter_template_txn->next;
+
+    s_template = siter_template_txn->data;
+    s_new_txn = siter_new_txn->data;
+
+    g_assert_cmpstr (xaccSplitGetMemo (s_template), ==, xaccSplitGetMemo (s_new_txn));
+    g_assert_cmpstr (xaccSplitGetAction (s_template), ==, xaccSplitGetAction (s_new_txn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-account", &guid, NULL);
+    const GncGUID* guid_acc4 = xaccAccountGetGUID (fixture->acc4);
+    g_assert_true (guid_equal (guid_acc4, guid));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-formula", &cf, NULL);
+    g_assert_cmpstr ("", ==, cf);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-numeric", &cn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_zero(), *cn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-formula", &df, NULL);
+    g_assert_cmpstr ("20.5", ==, df);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-numeric", &dn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_create (41,2), *dn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-shares", &shares, NULL);
+    g_assert_cmpstr ("10", ==, shares);
+
+    g_assert_null (siter_template_txn->next);
+    g_assert_null (siter_new_txn->next);
+
+    guid_free (guid);
+    g_free (cn);
+    g_free (dn);
+
+    gnc_float_txn_free (ft);
+}
+
+static void
+test_gnc_normal_to_template (TemplateFixture *fixture, gconstpointer pData)
+{
+    FloatingTxn *ft = NULL;
+
+    ft = gnc_txn_to_float_txn (fixture->txn, FALSE, FALSE);
+    g_assert_true (ft->m_txn == fixture->txn);
+
+    Transaction *new_txn = xaccMallocTransaction (fixture->book);
+    gnc_float_txn_to_template_txn (ft, new_txn, fixture->template_acct, FALSE);
+
+    /* Check transaction fields */
+    g_assert_cmpstr (xaccTransGetDescription (fixture->txn), ==, xaccTransGetDescription (new_txn));
+    g_assert_cmpstr (xaccTransGetNotes (fixture->txn), ==, xaccTransGetNotes (new_txn));
+
+    SplitList *sl_txn = xaccTransGetSplitList (fixture->txn), *siter_txn;
+    SplitList *sl_new_txn = xaccTransGetSplitList (new_txn), *siter_new_txn;
+
+    /* Check split fields of first split */
+    Split *s_txn, *s_new_txn;
+
+    siter_txn = sl_txn;
+    siter_new_txn = sl_new_txn;
+
+    s_txn = siter_txn->data;
+    s_new_txn = siter_new_txn->data;
+
+    // First split
+    g_assert_cmpstr (xaccSplitGetMemo (s_new_txn), ==, xaccSplitGetMemo (s_txn));
+    g_assert_cmpstr (xaccSplitGetAction (s_new_txn), ==, xaccSplitGetAction (s_txn));
+
+    GncGUID* guid = NULL;
+    const gchar *cf, *df;
+    gnc_numeric *cn, *dn;
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-account", &guid, NULL);
+    const GncGUID* guid_acc1 = xaccAccountGetGUID (fixture->acc1);
+    g_assert_true (guid_equal (guid_acc1, guid));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-formula", &cf, NULL);
+    g_assert_cmpstr ("", ==, cf);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-numeric", &cn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_zero(), *cn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-formula", &df, NULL);
+    g_assert_cmpstr ("32.", ==, df);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-numeric", &dn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_abs(xaccSplitGetAmount (s_txn)), *dn));
+
+    // Second split
+    siter_new_txn = siter_new_txn->next;
+    siter_txn = siter_txn->next;
+
+    s_txn = siter_txn->data;
+    s_new_txn = siter_new_txn->data;
+
+    g_assert_cmpstr (xaccSplitGetMemo (s_new_txn), ==, xaccSplitGetMemo (s_txn));
+    g_assert_cmpstr (xaccSplitGetAction (s_new_txn), ==, xaccSplitGetAction (s_txn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-account", &guid, NULL);
+    const GncGUID* guid_acc2 = xaccAccountGetGUID (fixture->acc2);
+    g_assert_true (guid_equal (guid_acc2, guid));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-formula", &cf, NULL);
+    g_assert_cmpstr ("32.", ==, cf);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-credit-numeric", &cn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_abs(xaccSplitGetAmount (s_txn)), *cn));
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-formula", &df, NULL);
+    g_assert_cmpstr ("", ==, df);
+
+    qof_instance_get (QOF_INSTANCE (s_new_txn), "sx-debit-numeric", &dn, NULL);
+    g_assert_true (gnc_numeric_equal(gnc_numeric_zero(), *dn));
+
+    g_assert_null (siter_txn->next);
+    g_assert_null (siter_new_txn->next);
+
+    guid_free (guid);
+    g_free (cn);
+    g_free (dn);
+
+    gnc_float_txn_free (ft);
+}
+
+static void
+test_gnc_template_to_normal (TemplateFixture *fixture, gconstpointer pData)
+{
+    FloatingTxn *ft = NULL;
+
+    ft = gnc_txn_to_float_txn (fixture->template_txn, FALSE, TRUE);
+    g_assert_true (ft->m_txn == fixture->template_txn);
+
+    Transaction *new_txn = xaccMallocTransaction (fixture->book);
+    gnc_float_txn_to_txn (ft, new_txn, FALSE);
+
+    /* Check transaction fields */
+    g_assert_cmpstr (xaccTransGetDescription (fixture->template_txn), ==, xaccTransGetDescription (new_txn));
+    g_assert_cmpstr (xaccTransGetNotes (fixture->template_txn), ==, xaccTransGetNotes (new_txn));
+
+    SplitList *sl_template_txn = xaccTransGetSplitList (fixture->template_txn), *siter_template_txn;
+    SplitList *sl_new_txn = xaccTransGetSplitList (new_txn), *siter_new_txn;
+
+    /* Check split fields of first split */
+    Split *s_template_txn, *s_new_txn;
+
+    siter_template_txn = sl_template_txn;
+    siter_new_txn = sl_new_txn;
+
+    s_template_txn = siter_template_txn->data;
+    s_new_txn = siter_new_txn->data;
+
+    // First split
+    g_assert_cmpstr (xaccSplitGetMemo (s_template_txn), ==, xaccSplitGetMemo (s_new_txn));
+    g_assert_cmpstr (xaccSplitGetAction (s_template_txn), ==, xaccSplitGetAction (s_new_txn));
+
+    GncGUID* guid = NULL;
+    Account *template_split_account;
+    gnc_numeric *cn, *dn;
+
+    qof_instance_get (QOF_INSTANCE (s_template_txn), "sx-account", &guid, NULL);
+    template_split_account = xaccAccountLookup (guid, fixture->book);
+    g_assert_true (xaccSplitGetAccount (s_new_txn) == template_split_account);
+
+    qof_instance_get (QOF_INSTANCE (s_template_txn), "sx-credit-numeric", &cn, NULL);
+    g_assert_true (gnc_numeric_equal(xaccSplitGetAmount (s_new_txn), gnc_numeric_neg(*cn)));
+    g_assert_true (gnc_numeric_equal(xaccSplitGetValue  (s_new_txn), gnc_numeric_neg(*cn)));
+
+    // Second split
+    siter_new_txn = siter_new_txn->next;
+    siter_template_txn = siter_template_txn->next;
+
+    s_template_txn = siter_template_txn->data;
+    s_new_txn = siter_new_txn->data;
+
+    g_assert_cmpstr (xaccSplitGetMemo (s_template_txn), ==, xaccSplitGetMemo (s_new_txn));
+    g_assert_cmpstr (xaccSplitGetAction (s_template_txn), ==, xaccSplitGetAction (s_new_txn));
+
+    qof_instance_get (QOF_INSTANCE (s_template_txn), "sx-account", &guid, NULL);
+    template_split_account = xaccAccountLookup (guid, fixture->book);
+    g_assert_true (xaccSplitGetAccount (s_new_txn) == template_split_account);
+
+    qof_instance_get (QOF_INSTANCE (s_template_txn), "sx-debit-numeric", &dn, NULL);
+    g_assert_true (gnc_numeric_equal(xaccSplitGetAmount (s_new_txn), *dn));
+    g_assert_true (gnc_numeric_equal(xaccSplitGetValue  (s_new_txn), *dn));
+
+    g_assert_null (siter_template_txn->next);
+    g_assert_null (siter_new_txn->next);
+
+    guid_free (guid);
+    g_free (cn);
+    g_free (dn);
+
+    gnc_float_txn_free (ft);
+}
+
 void
 test_suite_split_register_copy_ops (void)
 {
@@ -633,4 +1054,7 @@ test_suite_split_register_copy_ops (void)
     GNC_TEST_ADD (suitename, "gnc float txn to txn swap commit", FlFixture, NULL, flsetup, test_gnc_float_txn_to_txn_swap_accounts_swap_commit, flteardown);
     GNC_TEST_ADD (suitename, "gnc float txn to txn swap nocommit", FlFixture, NULL, flsetup, test_gnc_float_txn_to_txn_swap_accounts_swap_nocommit, flteardown);
 
+    GNC_TEST_ADD (suitename, "gnc template transaction to template transaction", TemplateFixture, NULL, setup_template, test_gnc_template_to_template, teardown_template);
+    GNC_TEST_ADD (suitename, "gnc normal transaction to template transaction", TemplateFixture, NULL, setup_template, test_gnc_normal_to_template, teardown_template);
+    GNC_TEST_ADD (suitename, "gnc template transaction to normal transaction", TemplateFixture, NULL, setup_template, test_gnc_template_to_normal, teardown_template);
 }

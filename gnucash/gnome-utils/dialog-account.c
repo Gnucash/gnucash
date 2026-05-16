@@ -506,6 +506,11 @@ gnc_ui_to_account (AccountWindow *aw)
 
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
     char* new_string = gdk_rgba_to_string (&color);
+    if (!g_strcmp0 (new_string, DEFAULT_COLOR))
+    {
+        g_free(new_string);
+        new_string = NULL;
+    }
 
     old_string = xaccAccountGetColor (account);
 

@@ -1,5 +1,6 @@
 /********************************************************************
- * gnc-html-webkit.h -- display html with gnc special tags          *
+ * gnc-html_factory.c -- Factory to create HTML component           *
+ *                                                                  *
  * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -18,44 +19,30 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef GNC_HTML_WEBKIT_H
-#define GNC_HTML_WEBKIT_H
+#include <config.h>
 
-#include <glib-object.h>
+#include <gtk/gtk.h>
+
 #include "gnc-html.h"
+#include "gnc-html-webkit.hpp"
+#include "qoflog.h"
+#include "gnc-engine.h"
 
-G_BEGIN_DECLS
+#include "gnc-html-factory.hpp"
 
-#define GNC_TYPE_HTML_WEBKIT       (gnc_html_webkit_get_type())
-#define GNC_HTML_WEBKIT(o)         (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkit))
-#define GNC_HTML_WEBKIT_CLASS(k)   (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitClass))
-#define GNC_IS_HTML_WEBKIT(o)      (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_HTML_WEBKIT))
-#define GNC_IS_HTML_WEBKIT_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE((k), GNC_TYPE_HTML_WEBKIT))
-#define GNC_HTML_WEBKIT_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitClass))
+/* indicates the debugging module that this .o belongs to.  */
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
 
-typedef struct _GncHtmlWebkit GncHtmlWebkit;
-typedef struct _GncHtmlWebkitClass GncHtmlWebkitClass;
-typedef struct _GncHtmlWebkitPrivate GncHtmlWebkitPrivate;
-
-struct _GncHtmlWebkit
+GncHtml*
+gnc_html_factory_create_html( void ) noexcept
 {
-    GncHtml parent_instance;
+    return gnc_html_webkit_new();
+}
 
-    /*< private >*/
-    GncHtmlWebkitPrivate* priv;
-};
-
-struct _GncHtmlWebkitClass
+gboolean
+gnc_html_engine_supports_css( void ) noexcept
 {
-    GncHtmlClass parent_class;
-};
-
-GType gnc_html_webkit_get_type( void );
-
-GncHtml* gnc_html_webkit_new( void );
-
-G_END_DECLS
-
-#endif
+    return TRUE;
+}

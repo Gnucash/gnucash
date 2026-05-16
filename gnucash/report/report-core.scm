@@ -66,6 +66,7 @@
 (export gnc:menuname-taxes)
 (export gnc:optname-invoice-number)
 (export gnc:optname-reportname)
+(export gnc:optname-options-summary)
 (export gnc:pagename-accounts)
 (export gnc:pagename-display)
 (export gnc:pagename-general)
@@ -165,6 +166,7 @@
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
+(define gnc:optname-options-summary (N_ "Add options summary"))
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
 (define gnc:menuname-business-reports (N_ "_Business"))
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
@@ -323,6 +325,13 @@ not found.")))
             (string->symbol (gnc:html-style-sheet-name ss))
             (gnc:html-style-sheet-name ss)))
          (gnc:get-html-style-sheets))))
+      (or
+       (gnc-lookup-option optiondb gnc:pagename-general gnc:optname-options-summary)
+       (gnc-register-multichoice-option
+        optiondb gnc:pagename-general gnc:optname-options-summary "0c"
+        (G_ "Add summary of options.") "never"
+        (list (vector 'always (G_ "Always"))
+              (vector 'never (G_ "Never")))))
       options))
 
 ;; A <report> represents an instantiation of a particular report type.
@@ -762,6 +771,13 @@ not found.")))
                     (stylesheet (gnc:report-stylesheet report))
                     (_ (report-set-anchors! report (ht:make-hash-table)))
                     (doc (renderer report))
+                    (options (gnc:report-options report))
+                    (opt-summary (gnc-optiondb-lookup-value
+                                  (gnc:optiondb options)
+                                  gnc:pagename-general gnc:optname-options-summary))
+                    (_ (unless (eq? 'never opt-summary)
+                         (gnc:html-document-add-object!
+                          doc (gnc:html-render-options-changed options))))
                     (html (cond
                            ((string? doc) doc)
                            (else

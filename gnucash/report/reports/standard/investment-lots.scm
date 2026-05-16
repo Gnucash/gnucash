@@ -1960,10 +1960,9 @@
     (gnc:html-document-set-title!
       document
       (format #f
-        (G_ "~a, ~a to ~a")
+        (G_ "~a, ~a")
         (get-option gnc:pagename-general gnc:optname-reportname)
-        (qof-print-date from-date)
-        (qof-print-date to-date)))
+        (gnc-date-interval-format from-date to-date)))
 
     (cond
       ((not (null? accounts))
@@ -1986,11 +1985,7 @@
                           (list colname-unrealized-gain))
                         '()))))
             (gnc:html-chart-set-title! chart
-              (list (N_ "Account Lot Gains")
-                (format #f
-                  (G_ "~a to ~a")
-                  (qof-print-date from-date)
-                  (qof-print-date to-date))))
+              (list (N_ "Account Lot Gains") (gnc-date-interval-format from-date to-date)))
             (gnc:html-chart-set-type! chart 'bar)
             (gnc:html-chart-set-width! chart chart-width)
             (gnc:html-chart-set-height! chart chart-height)

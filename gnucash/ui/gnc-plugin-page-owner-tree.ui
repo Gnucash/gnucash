@@ -42,7 +42,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-  
+
   <menu id="EditPlaceholder2-e">
     <item>
       <attribute name="label" translatable="yes">E_dit Employee</attribute>
@@ -161,6 +161,11 @@
         <attribute name="tooltip" translatable="yes">Create a new invoice</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Find Customer Invoices…</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTSearchInvoicesAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Invoice Dialog with the invoices already filtered for this customer</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Customer Report</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerReportAction</attribute>
         <attribute name="tooltip" translatable="yes">Show customer report</attribute>
@@ -195,6 +200,11 @@
         <attribute name="tooltip" translatable="yes">Create a new bill</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Find Vendor Bills…</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTSearchInvoicesAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Bill Dialog with the bills already filtered for this vendor</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Vendor Report</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
         <attribute name="tooltip" translatable="yes">Show vendor report</attribute>
@@ -227,6 +237,11 @@
         <attribute name="label" translatable="yes">New _Voucher…</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVoucherAction</attribute>
         <attribute name="tooltip" translatable="yes">Create a new voucher</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find Employee Vouchers…</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTSearchInvoicesAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Employee Voucher Dialog with the vouchers already filtered for this employee</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Employee Report</attribute>

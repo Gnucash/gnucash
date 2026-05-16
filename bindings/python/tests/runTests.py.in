@@ -17,11 +17,17 @@ from test_commodity import TestCommodity, TestCommodityNamespace
 from test_numeric import TestGncNumeric
 from test_decorate_monetary import TestDecorateMonetaryList
 from test_query import TestQuery
-from test_deprecation import TestDeprecation
-from test_export_account_totals import TestExportAccountTotals
-from test_change_tax_code import TestChangeTaxCode
-from test_latex_invoices import TestLatexInvoices
-from test_one_arg_default_none import TestOneArgDefaultNone
+from test_price_and_wrapping import (
+    TestGncPriceWrapping,
+    TestGncLotSplitList,
+    TestSplitGncNumericReturns,
+    TestAccountCurrencyOrParent,
+    TestCommodityObtainTwin,
+    TestCommodityNamespaceDS,
+    TestSwigTypemapCompat,
+    TestGetPriceReturnsGncNumeric,
+    TestDoubleWrapProtection,
+)
 
 if __name__ == '__main__':
     unittest.main()

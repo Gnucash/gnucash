@@ -372,6 +372,7 @@ class Session(GnuCashCoreClass):
         if not exc_type:
             self.save()
         self.end()
+        self.destroy()
 
     def raise_backend_errors(self, called_function="qof_session function"):
         """Raises a GnuCashBackendException if there are outstanding
@@ -772,12 +773,22 @@ PriceDB_dict =  {
                 'lookup_latest' : GncPrice,
                 'lookup_nearest_in_time64' : GncPrice,
                 'lookup_nearest_before_t64' : GncPrice,
+                'nth_price' : GncPrice,
+                'lookup_day_t64' : GncPrice,
                 'convert_balance_latest_price' : GncNumeric,
                 'convert_balance_nearest_price_t64' : GncNumeric,
+                'convert_balance_nearest_before_price_t64' : GncNumeric,
+                'get_latest_price' : GncNumeric,
+                'get_nearest_price' : GncNumeric,
+                'get_nearest_before_price' : GncNumeric,
                 }
 methods_return_instance(GncPriceDB,PriceDB_dict)
-GncPriceDB.get_prices = method_function_returns_instance_list(
-    GncPriceDB.get_prices, GncPrice )
+methods_return_instance_lists(
+    GncPriceDB, { 'get_prices': GncPrice,
+                  'lookup_latest_any_currency': GncPrice,
+                  'lookup_nearest_before_any_currency_t64': GncPrice,
+                  'lookup_nearest_in_time_any_currency_t64': GncPrice,
+                })
 
 class GncCommodity(GnuCashCoreClass): pass
 
@@ -977,9 +988,21 @@ methods_return_instance(GncNumeric, gncnumeric_dict)
 
 # GncCommodity
 GncCommodity.add_constructor_and_methods_with_prefix('gnc_commodity_', 'new')
-#Functions that return GncCommodity
-GncCommodity.clone = method_function_returns_instance(
-    GncCommodity.clone, GncCommodity )
+gnc_commodity_dict = {
+                        'clone': GncCommodity,
+                        'obtain_twin': GncCommodity,
+                        'get_namespace_ds': GncCommodityNamespace,
+                     }
+methods_return_instance(GncCommodity, gnc_commodity_dict)
+
+# GncPrice (deferred until after GncCommodity is defined)
+gnc_price_dict = {
+                    'get_commodity': GncCommodity,
+                    'get_currency': GncCommodity,
+                    'clone': GncPrice,
+                    'get_value': GncNumeric,
+                 }
+methods_return_instance(GncPrice, gnc_price_dict)
 
 # GncCommodityTable
 GncCommodityTable.add_methods_with_prefix('gnc_commodity_table_')
@@ -1020,6 +1043,9 @@ gnclot_dict =   {
                     'make_default' : GncLot
                 }
 methods_return_instance(GncLot, gnclot_dict)
+methods_return_instance_lists(
+    GncLot, { 'get_split_list': Split,
+            })
 
 # Transaction
 Transaction.add_methods_with_prefix('xaccTrans')
@@ -1071,6 +1097,8 @@ split_dict =    {
                     'GetReconciledBalance': GncNumeric,
                     'VoidFormerAmount': GncNumeric,
                     'VoidFormerValue': GncNumeric,
+                    'GetNoclosingBalance': GncNumeric,
+                    'GetCapGains': GncNumeric,
                     'GetGUID': GUID
                 }
 methods_return_instance(Split, split_dict)
@@ -1111,11 +1139,13 @@ account_dict =  {
                     'GetBalanceAsOfDateInCurrency' : GncNumeric,
                     'GetBalanceChangeForPeriod' : GncNumeric,
                     'GetCommodity' : GncCommodity,
+                    'get_currency_or_parent' : GncCommodity,
                     'GetGUID': GUID
                 }
 methods_return_instance(Account, account_dict)
 methods_return_instance_lists(
     Account, { 'GetSplitList': Split,
+               'GetLotList': GncLot,
                'get_children': Account,
                'get_children_sorted': Account,
                'get_descendants': Account,

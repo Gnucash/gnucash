@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-webkit-p.h -- display html with gnc special tags        *
+ * gnc-html-webkit-p.hpp -- display html with gnc special tags        *
  * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,9 +25,9 @@
 
 #include "gnc-html-p.h"
 
-struct _GncHtmlWebkitPrivate
+struct GncHtmlWebkitPrivate
 {
-    struct _GncHtmlPrivate base;
+    GncHtmlPrivate base;
 
     WebKitWebView* web_view;				/* webkit widget itself */
     gchar* html_string;						/* html string being displayed */

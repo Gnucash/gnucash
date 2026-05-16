@@ -69,7 +69,12 @@ function(find_one_guile_dir _DIRCLASS _DIRCMD _PREFIX)
     set(GUILE_UNIX_${CLASS_UPPER} ${CMD_UNIX_OUTPUT} PARENT_SCOPE)
 
     if (_PREFIX)
-        string(REGEX REPLACE "^${_PREFIX}[\\/]*" "" CMD_REL_OUTPUT ${CMD_OUTPUT})
+      # Paths with backslashes can't be used in regular expressions
+      # because cmake interprets the backslash as an escape. Convert
+      # them to forward slashes on both strings.
+        string(REGEX REPLACE "\\\\" "/" _prefix_re ${_PREFIX})
+        string(REGEX REPLACE "\\\\" "/" _cmd_output ${CMD_OUTPUT})
+        string(REGEX REPLACE "^${_prefix_re}[\\/]*" "" CMD_REL_OUTPUT ${_cmd_output})
         set(GUILE_REL_${CLASS_UPPER} ${CMD_REL_OUTPUT} PARENT_SCOPE)
         set(CMD_REL_UNIX_OUTPUT  ${CMD_REL_OUTPUT})
         make_unix_path(CMD_REL_UNIX_OUTPUT)

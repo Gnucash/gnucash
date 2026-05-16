@@ -36,6 +36,7 @@
 #include <vector>
 
 #include <gnc-commodity.h>
+#include <string>
 
 using CommVec = std::vector<gnc_commodity*>;
 
@@ -50,6 +51,20 @@ using CommVec = std::vector<gnc_commodity*>;
  */
 void gnc_quote_source_set_fq_installed (const char* version_string,
                                         const std::vector<std::string>& sources_list);
+
+/** This function renames a namespace.
+ *
+ *  @param table A pointer to the commodity table
+ *
+ *  @param namespace_name The name of the namespace to rename.
+ *
+ *  @param new_namespace_name The new name for the namespace.
+ *
+ * @return Return true if rename successful.
+ */
+bool gnc_commodity_table_rename_namespace(const gnc_commodity_table * table,
+                                          const char * namespace_name,
+                                          const char * new_namespace_name);
 
 #endif /* GNC_COMMODITY_HPP */
 /** @} */

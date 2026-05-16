@@ -21,6 +21,11 @@
           <attribute name="accel">&lt;Primary&gt;p</attribute>
         </item>
         <item>
+          <attribute name="label" translatable="yes">_Autoclear</attribute>
+          <attribute name="action">recwin.RecnAutoClearAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;c</attribute>
+        </item>
+        <item>
           <attribute name="label" translatable="yes">_Cancel</attribute>
           <attribute name="action">recwin.RecnCancelAction</attribute>
         </item>
@@ -120,6 +125,18 @@
   <object class="GtkToolbar" id="recwin-toolbar">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="autoclear_button">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="no">Automatically clear matching transactions</property>
+        <property name="label" translatable="yes">Auto Clear</property>
+        <property name="use_underline">True</property>
+        <property name="icon_name">media-playback-start</property>
+        <property name="action_name">recwin.RecnAutoClearAction</property>
+      </object>
+    </child>
     <child>
       <object class="GtkToolButton" id="but1">
         <property name="visible">True</property>

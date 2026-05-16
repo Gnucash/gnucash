@@ -591,6 +591,8 @@ To know which lines belong to the same transaction, the importer will compare th
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Date Format</property>
+                            <property name="tooltip-text" translatable="yes">Choose the order of day, month and year, to match the formatting in the imported file.
+Choices are displayed with a Hyphen (-) separator, but will also match Dot (.) and Slash (/) as separator.</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -718,6 +720,8 @@ To know which lines belong to the same transaction, the importer will compare th
                           <object class="GtkBox" id="date_format_container">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">Choose the order of day, month and year, to match the formatting in the imported file.
+Choices are displayed with a Hyphen (-) separator, but will also match Dot (.) and Slash (/) as separator.</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>

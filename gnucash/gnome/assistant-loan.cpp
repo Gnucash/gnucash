@@ -2380,7 +2380,10 @@ std::string to_str_with_prec (const gdouble val)
 				  &numfmt, nullptr, 0);
     wchar_t* buf = static_cast<wchar_t*>(malloc(sizeof(wchar_t) * size));
     GetNumberFormatW(lcid, 0, valstr.str().c_str(), &numfmt, buf, size);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conv;
+#pragma GCC diagnostic pop
     std::string result = conv.to_bytes(buf);
     free(buf);
     return result;

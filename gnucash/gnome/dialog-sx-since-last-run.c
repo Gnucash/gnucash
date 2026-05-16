@@ -808,11 +808,10 @@ gsslrtma_removing_cb (GncSxInstanceModel *inst_model, SchedXaction *to_remove_sx
     GtkTreePath *model_path;
     GtkTreeIter tree_iter;
     GList *iter;
-    int index = 0;
     GncSxInstances *instances;
 
-    // get index, create path, remove
-    for (iter = gnc_sx_instance_model_get_sx_instances_list (inst_model); iter != NULL; iter = iter->next, index++)
+    // get instances, create path, remove
+    for (iter = gnc_sx_instance_model_get_sx_instances_list (inst_model); iter != NULL; iter = iter->next)
     {
         instances = (GncSxInstances*)iter->data;
         if (instances->sx == to_remove_sx)
@@ -899,63 +898,6 @@ gnc_ui_sx_creation_error_dialog (GList **creation_errors)
                               G_CALLBACK(gtk_widget_destroy), dialog);
     gtk_dialog_run (GTK_DIALOG(dialog));
     g_free (message);
-}
-
-void
-gnc_sx_sxsincelast_book_opened (void)
-{
-    GList *auto_created_txns = NULL;
-    GList *creation_errors = NULL;
-    GncSxInstanceModel *inst_model;
-    GncSxSummary summary;
-
-    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_RUN_AT_FOPEN))
-        return;
-
-    if (qof_book_is_readonly (gnc_get_current_book ()))
-    {
-        /* Is the book read-only? Then don't change anything here. */
-        return;
-    }
-
-    inst_model = gnc_sx_get_current_instances ();
-    gnc_sx_instance_model_summarize (inst_model, &summary);
-    gnc_sx_summary_print (&summary);
-    gnc_sx_instance_model_effect_change (inst_model, TRUE, &auto_created_txns,
-                                         &creation_errors);
-
-    if (auto_created_txns)
-        gnc_gui_refresh_all();
-
-    if (summary.need_dialog)
-    {
-        gnc_ui_sx_since_last_run_dialog (gnc_ui_get_main_window (NULL), inst_model, auto_created_txns);
-        /* gnc_ui_sx_since_last_run_dialog now owns this list */
-        auto_created_txns = NULL;
-    }
-    else
-    {
-        g_list_free (auto_created_txns);
-
-        if (summary.num_auto_create_no_notify_instances != 0
-                && gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SHOW_AT_FOPEN))
-        {
-            gnc_info_dialog
-            (gnc_ui_get_main_window (NULL),
-             ngettext
-             ("There are no Scheduled Transactions to be entered at this time. "
-              "(One transaction automatically created)",
-              "There are no Scheduled Transactions to be entered at this time. "
-              "(%d transactions automatically created)",
-              summary.num_auto_create_no_notify_instances),
-              summary.num_auto_create_no_notify_instances);
-        }
-    }
-
-    g_object_unref (G_OBJECT(inst_model));
-
-    if (creation_errors)
-        gnc_ui_sx_creation_error_dialog (&creation_errors);
 }
 
 static GtkTreePath *
@@ -1319,8 +1261,8 @@ sort_column_changed (GtkTreeSortable* self, gpointer user_data)
     g_idle_add ((GSourceFunc)follow_select_tree_path, dialog->instance_view);
 }
 
-GncSxSinceLastRunDialog*
-gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
+static void
+since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
 {
     GncSxSinceLastRunDialog *dialog;
     GtkBuilder *builder;
@@ -1470,8 +1412,76 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     g_object_unref (G_OBJECT(builder));
+}
 
-    return dialog;
+static void
+sx_since_last_run_dialog (GncSxInstanceModel *sx_instances, int book_opened)
+{
+    if (qof_book_is_readonly (gnc_get_current_book ()))
+        return;
+
+    GncSxSummary summary;
+
+    gnc_sx_instance_model_summarize (sx_instances, &summary);
+
+    if (book_opened)
+        gnc_sx_summary_print (&summary);
+
+    GList *auto_created_txns = NULL;
+    GList *creation_errors = NULL;
+
+    gnc_sx_instance_model_effect_change (sx_instances, TRUE, &auto_created_txns, &creation_errors);
+
+    if (auto_created_txns)
+        gnc_gui_refresh_all ();
+
+    if (summary.need_dialog)
+        since_last_run_dialog (gnc_ui_get_main_window (NULL), sx_instances, auto_created_txns);
+    else
+    {
+        if (summary.num_auto_create_no_notify_instances == 0)
+        {
+            if (!book_opened)
+            {
+                const char *nothing_to_do_msg = _( "There are no Scheduled Transactions to be entered at this time." );
+
+                gnc_info_dialog (gnc_ui_get_main_window (NULL), "%s", nothing_to_do_msg);
+            }
+        }
+        else if (!book_opened || gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SHOW_AT_FOPEN))
+        {
+            gnc_info_dialog (gnc_ui_get_main_window (NULL), ngettext
+                    /* Translators: %d is the number of transactions. This is a ngettext(3) message. */
+                    ("There are no Scheduled Transactions to be entered at this time. "
+                     "(%d transaction automatically created)",
+                     "There are no Scheduled Transactions to be entered at this time. "
+                     "(%d transactions automatically created)",
+                     summary.num_auto_create_no_notify_instances),
+                    summary.num_auto_create_no_notify_instances);
+        }
+        g_list_free (auto_created_txns);
+    }
+
+    g_object_unref (G_OBJECT(sx_instances));
+
+    if (creation_errors)
+        gnc_ui_sx_creation_error_dialog (&creation_errors);
+}
+
+void
+gnc_ui_sx_since_last_run_dialog (GncSxInstanceModel *sx_instances)
+{
+    sx_since_last_run_dialog (sx_instances, FALSE);
+}
+
+void
+gnc_sx_sxsincelast_book_opened (void)
+{
+    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_RUN_AT_FOPEN))
+        return;
+
+    sx_since_last_run_dialog (gnc_sx_get_current_instances (), TRUE);
+
 }
 
 static void

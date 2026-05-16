@@ -105,7 +105,11 @@ static GSettings * gnc_gsettings_get_settings_obj (const gchar *schema_str)
     auto full_name_str = normalize_schema_name (schema_str);
     auto full_name = full_name_str.c_str();
     auto schema_source {g_settings_schema_source_get_default()};
+    g_return_val_if_fail(schema_source, nullptr);
+
     auto schema {g_settings_schema_source_lookup(schema_source, full_name, true)};
+    g_return_val_if_fail(schema, nullptr);
+
     auto gset = g_settings_new_full (schema, nullptr, nullptr);
     DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
 
@@ -545,6 +549,8 @@ gnc_settings_dump_schema_paths (void)
     gchar **non_relocatable;
 
     auto schema_source {g_settings_schema_source_get_default()};
+    g_return_if_fail(schema_source);
+
     g_settings_schema_source_list_schemas (schema_source, true,
                                            &non_relocatable, nullptr);
 

@@ -31,6 +31,10 @@
 #include "gnc-sx-instance-model.h"
 #include "gnc-plugin-page-sx-list.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_PREFS_GROUP_STARTUP "dialogs.sxs.since-last-run"
 #define GNC_PREF_RUN_AT_FOPEN   "show-at-file-open"
 #define GNC_PREF_SHOW_AT_FOPEN  "show-notify-window-at-file-open"
@@ -47,10 +51,12 @@ void gnc_sx_sxsincelast_book_opened (void);
 /**
  * Create the since-last-run dialog.
  **/
-GncSxSinceLastRunDialog*  gnc_ui_sx_since_last_run_dialog (GtkWindow *parent,
-                                                           GncSxInstanceModel *sx_instances,
-                                                           GList *auto_created_txn_guids);
+void gnc_ui_sx_since_last_run_dialog (GncSxInstanceModel *sx_instances);
 
 void gnc_ui_sx_creation_error_dialog (GList **creation_errors);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

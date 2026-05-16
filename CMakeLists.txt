@@ -21,7 +21,7 @@ if (POLICY CMP0177)
 endif()
 
 project (gnucash
-    VERSION 5.13
+    VERSION 5.15
 )
 
 enable_testing()
@@ -174,7 +174,7 @@ endif()
 # Distribution tarballs have this file in the source tree
 # Git checkouts or zipfiles downloaded straight from github won't have it
 # and require us to build it.
-if (BUILDING_FROM_VCS OR NOT EXISTS "${CMAKE_SOURCE_DIR}/libgnucash/core-utilsgnc-vcs-info.h")
+if (BUILDING_FROM_VCS OR NOT EXISTS "${CMAKE_SOURCE_DIR}/libgnucash/core-utils/gnc-vcs-info.h")
   set(VCS_INFO_BASE_DIR ${CMAKE_BINARY_DIR})
   set(GENERATE_VCS_INFO "Yes")
 else()
@@ -644,7 +644,7 @@ if (UNIX)
 endif()
 if (MINGW)
   set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
+  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -DWINVER=0x0A00 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
 if (APPLE)
@@ -763,6 +763,7 @@ set(gnucash_DOCS
     ChangeLog.2022
     ChangeLog.2023
     ChangeLog.2024
+    ChangeLog.2025
     DOCUMENTERS
     HACKING
     LICENSE
@@ -799,7 +800,7 @@ check_include_files (wctype.h HAVE_WCTYPE_H)
 
 test_big_endian(IS_BIGENDIAN)
 if (IS_BIGENDIAN)
-  set(WORDS_BIGENDIAN)
+  add_compile_definition (WORDS_BIGENDIAN)
 endif()
 
 if (NOT DISABLE_NLS)
@@ -920,7 +921,7 @@ add_subdirectory(cmake)
 
 if (BUILDING_FROM_VCS)
     add_custom_target(ChangeLog ALL
-        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2025-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2026-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
     install(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
@@ -1058,13 +1059,25 @@ install(CODE
 #For windows, copy in some DLLs from Mingw
 
 if (WIN32)
+if ($ENV{MSYSTEM} STREQUAL "CLANG64")
+  find_file(LIBSTDC++ libc++.dll)
+else()
   find_file(LIBSTDC++ libstdc++-6.dll)
+endif()
   if (NOT LIBSTDC++)
     message(FATAL_ERROR "libstdc++ not found.")
   endif()
-  find_file(LIBDW2 libgcc_s_dw2-1.dll)
-  if (NOT LIBDW2)
-    message(FATAL_ERROR "libgcc_s_dw2-l not found.")
+  if(NOT $ENV{MSYSTEM} STREQUAL "CLANG64")
+    if ($ENV{MSYSTEM} STREQUAL "MINGW32")
+      find_file(LIBDW2 libgcc_s_dw2-1.dll)
+    else()
+      find_file(LIBDW2 libgcc_s_seh-1.dll)
+    endif()
+    if (NOT LIBDW2)
+      message(FATAL_ERROR "GCC exception library not found.")
+    endif()
+  else()
+    set(LIBDW2 "")
   endif()
   set(MINGW_DLLS ${LIBSTDC++} ${LIBDW2})
   install(PROGRAMS ${MINGW_DLLS} DESTINATION ${CMAKE_INSTALL_BINDIR})

@@ -203,9 +203,9 @@ static action_toolbar_labels invoice_action_labels[] =
 
 static action_toolbar_labels invoice_action_layout_labels[] =
 {
-    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Customer Documents"),
+    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Customer Business items"),
       N_("Use the current layout as default for all customer invoices and credit notes")},
-    {"ViewResetLayoutAction", N_("_Reset Default Layout for Customer Documents"),
+    {"ViewResetLayoutAction", N_("_Reset Default Layout for Customer business items"),
       N_("Reset default layout for all customer invoices and credit notes back to built-in defaults and update the current page accordingly")},
     {NULL, NULL, NULL},
 };
@@ -228,9 +228,9 @@ static action_toolbar_labels bill_action_labels[] =
 
 static action_toolbar_labels bill_action_layout_labels[] =
 {
-    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Vendor Documents"),
+    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Vendor Business items"),
       N_("Use the current layout as default for all vendor bills and credit notes")},
-    {"ViewResetLayoutAction", N_("_Reset Default Layout for Vendor Documents"),
+    {"ViewResetLayoutAction", N_("_Reset Default Layout for Vendor Business items"),
       N_("Reset default layout for all vendor bills and credit notes back to built-in defaults and update the current page accordingly")},
     {NULL, NULL, NULL},
 };
@@ -253,9 +253,9 @@ static action_toolbar_labels voucher_action_labels[] =
 
 static action_toolbar_labels voucher_action_layout_labels[] =
 {
-    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Employee Documents"),
+    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Employee Business items"),
       N_("Use the current layout as default for all employee vouchers and credit notes")},
-    {"ViewResetLayoutAction", N_("_Reset Default Layout for Employee Documents"),
+    {"ViewResetLayoutAction", N_("_Reset Default Layout for Employee Business items"),
       N_("Reset default layout for all employee vouchers and credit notes back to built-in defaults and update the current page accordingly")},
     {NULL, NULL, NULL},
 };

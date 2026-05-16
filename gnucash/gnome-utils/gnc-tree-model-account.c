@@ -379,6 +379,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model, int index)
     case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED:
     case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT:
     case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE:
+    case GNC_TREE_MODEL_ACCOUNT_COL_EARLIEST_DATE:
     case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN:
     case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT:
     case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL:
@@ -841,6 +842,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
         g_value_init (value, G_TYPE_STRING);
         if (xaccAccountGetReconcileLastDate (account, &last_date))
             g_value_take_string (value, qof_print_date (last_date));
+        break;
+
+    case GNC_TREE_MODEL_ACCOUNT_COL_EARLIEST_DATE:
+        g_value_init (value, G_TYPE_STRING);
+        time64 earliest = gnc_account_get_earliest_date (account);
+        if (earliest != INT64_MAX)
+            g_value_take_string (value, qof_print_date (earliest));
         break;
 
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED:

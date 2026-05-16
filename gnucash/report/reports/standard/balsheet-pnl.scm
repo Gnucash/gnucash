@@ -65,9 +65,6 @@ reporting."))
 (define optname-disable-amount-indent (N_ "Disable amount indenting"))
 (define opthelp-disable-amount-indent (N_ "Selecting this option will disable amount indenting, and condense amounts into a single column."))
 
-(define optname-options-summary (N_ "Add options summary"))
-(define opthelp-options-summary (N_ "Add summary of options."))
-
 (define optname-account-full-name (N_ "Account full name instead of indenting"))
 (define opthelp-account-full-name (N_ "Selecting this option enables full account name instead, and disables indenting account names."))
 
@@ -186,13 +183,6 @@ also show overall period profit & loss."))
     (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-reverse-chrono
       "c5" opthelp-reverse-chrono #t)
-
-    (gnc-register-multichoice-option options
-      gnc:pagename-general optname-options-summary
-      "d" opthelp-options-summary
-      "never"
-      (list (vector 'always (G_ "Always"))
-            (vector 'never (G_ "Never"))))
 
     ;; accounts to work on
     (gnc-register-account-list-option options
@@ -864,13 +854,8 @@ also show overall period profit & loss."))
              (display report-title)
              (display " ")
              (if (or (not (eq? incr 'disabled)) (eq? report-type 'pnl))
-                 (format #t (G_ "~a to ~a")
-                         (qof-print-date startdate) (qof-print-date enddate))
+                 (display (gnc-date-interval-format startdate enddate))
                  (display (qof-print-date enddate))))))
-
-    (if (eq? (get-option gnc:pagename-general optname-options-summary) 'always)
-        (gnc:html-document-add-object!
-         doc (gnc:html-render-options-changed (gnc:report-options report-obj))))
 
     (cond
      ((null? accounts)

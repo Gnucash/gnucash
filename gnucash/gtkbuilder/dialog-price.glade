@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <object class="GtkTreeModelSort"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name item -->
@@ -135,7 +136,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Nam_espace</property>
+                <property name="label" translatable="yes">_Namespace</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic-widget">namespace_cbwe</property>
@@ -358,6 +359,8 @@
   </object>
   <object class="GtkListStore" id="liststore4">
     <columns>
+      <!-- column-name namespace_name -->
+      <column type="gchararray"/>
       <!-- column-name full_name -->
       <column type="gchararray"/>
       <!-- column-name commodity -->
@@ -386,8 +389,8 @@
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="cancel_button">
-                <property name="label" translatable="yes">_Cancel</property>
+              <object class="GtkButton" id="del_close_button">
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
@@ -401,7 +404,21 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="ok_button">
+              <object class="GtkButton" id="del_apply_button">
+                <property name="label" translatable="yes">_Apply</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="del_ok_button">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -412,7 +429,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -423,7 +440,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=7 -->
+          <!-- n-columns=2 n-rows=8 -->
           <object class="GtkGrid" id="table2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -554,7 +571,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
+                <property name="top-attach">7</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -576,12 +593,23 @@
                           <object class="GtkTreeSelection" id="selection1"/>
                         </child>
                         <child>
+                          <object class="GtkTreeViewColumn" id="namespace_column">
+                            <property name="title" translatable="yes">Namespace</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="namespace_cellr"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkTreeViewColumn" id="name_column">
                             <property name="title" translatable="yes">Commodity</property>
                             <child>
                               <object class="GtkCellRendererText" id="name_cellr"/>
                               <attributes>
-                                <attribute name="text">0</attribute>
+                                <attribute name="text">1</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -592,7 +620,7 @@
                             <child>
                               <object class="GtkCellRendererText" id="date_cellr"/>
                               <attributes>
-                                <attribute name="text">2</attribute>
+                                <attribute name="text">3</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -609,7 +637,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -623,7 +651,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="top-attach">4</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -637,7 +665,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">6</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -705,7 +733,7 @@
                     <property name="can-focus">False</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_app">
-                        <property name="label" translatable="yes">_Added by the application</property>
+                        <property name="label" translatable="yes">Added _by the application</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -779,6 +807,39 @@ These prices were added so that there's always a "nearest in time" price for eve
                 <property name="top-attach">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="namespace_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">_Namespace</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="namespace_combo_we">
+                <property name="width-request">250</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="model">liststore3</property>
+                <property name="has-entry">True</property>
+                <property name="entry-text-column">0</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry4">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -789,8 +850,9 @@ These prices were added so that there's always a "nearest in time" price for eve
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">cancel_button</action-widget>
-      <action-widget response="-5">ok_button</action-widget>
+      <action-widget response="-7">del_close_button</action-widget>
+      <action-widget response="-10">del_apply_button</action-widget>
+      <action-widget response="-5">del_ok_button</action-widget>
     </action-widgets>
   </object>
   <object class="GtkWindow" id="prices_window">

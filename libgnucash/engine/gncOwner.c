@@ -1009,7 +1009,7 @@ gncOwnerReduceSplitTo (Split *split, gnc_numeric target_amount)
 void
 gncOwnerSetLotLinkMemo (Transaction *ll_txn)
 {
-    gchar *memo_prefix = _("Offset between documents: ");
+    gchar *memo_prefix = _("Offset between business items: ");
     gchar *new_memo;
     SplitList *lts_iter;
     SplitList *splits = NULL, *siter;

@@ -29,6 +29,7 @@
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/locale.hpp>
 #include <boost/regex.hpp>
+#include <stdexcept>
 #include <unicode/smpdtfmt.h>
 #include <unicode/locid.h>
 #include <unicode/udat.h>
@@ -36,6 +37,7 @@
 #include <unicode/calendar.h>
 #include <libintl.h>
 #include <locale.h>
+#include<chrono>
 #include <map>
 #include <memory>
 #include <iostream>
@@ -176,6 +178,10 @@ LDT_from_unix_local(const time64 time)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
+    catch(std::out_of_range&)
+    {
+        throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
 }
 /* If a date-time falls in a DST transition the LDT constructor will
  * fail because either the date-time doesn't exist (when starting DST
@@ -227,6 +233,10 @@ LDT_from_date_time(const Date& tdate, const Duration& tdur, const TZ_Ptr tz)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
+    catch(std::out_of_range&)
+    {
+        throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
 
 }
 
@@ -274,6 +284,10 @@ LDT_from_struct_tm(const struct tm tm)
     {
         throw(std::invalid_argument{"Time value is outside the supported year range."});
     }
+    catch(std::out_of_range&)
+    {
+        throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
 }
 
 void
@@ -291,7 +305,10 @@ _reset_tzp()
 class GncDateTimeImpl
 {
 public:
-    GncDateTimeImpl() : m_time(boost::local_time::local_sec_clock::local_time(tzp->get(boost::gregorian::day_clock::local_day().year()))) {}
+  /* Boost::date_time's localtime function relies on the C library's, so it may
+   * suffer from the 2038 failure. std::chrono is supposed to be immune to that.
+   */
+    GncDateTimeImpl() : m_time(LDT_from_unix_local(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count())) {}
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
     GncDateTimeImpl(const GncDateImpl& date, DayPart part = DayPart::neutral);
@@ -364,13 +381,12 @@ static std::optional<PTime>
 fast_iso8601_utc_parse (const char* str)
 {
     int32_t year, month, mday, hour, min, sec;
-
-    // parse the first 4 bytes into year
-    if (!str || !parse_chars_into_num (str, str + 4, year))
-        return {};
+    const size_t len = str ? strnlen (str, 26) : 0;
 
     // parse iso-8601 utc format "YYYY-MM-DD HH:MM:SS +0000"
-    if (str[4] == '-' &&
+    constexpr size_t expanded_iso_string_len = 25;
+    if (len == expanded_iso_string_len &&
+        parse_chars_into_num (str,      str +  4, year)  && str[ 4] == '-' &&
         parse_chars_into_num (str +  5, str +  7, month) && str[ 7] == '-' &&
         parse_chars_into_num (str +  8, str + 10, mday)  && str[10] == ' ' &&
         parse_chars_into_num (str + 11, str + 13, hour)  && str[13] == ':' &&
@@ -383,12 +399,14 @@ fast_iso8601_utc_parse (const char* str)
     }
 
     // parse compressed iso-8601 format "YYYYMMDDHHMMSS"
-    if (parse_chars_into_num (str +  4, str +  6, month) &&
+    constexpr size_t compact_iso_string_len = 14;
+    if (len == compact_iso_string_len &&
+        parse_chars_into_num (str,      str +  4, year)  &&
+        parse_chars_into_num (str +  4, str +  6, month) &&
         parse_chars_into_num (str +  6, str +  8, mday)  &&
         parse_chars_into_num (str +  8, str + 10, hour)  &&
         parse_chars_into_num (str + 10, str + 12, min)   &&
-        parse_chars_into_num (str + 12, str + 14, sec)   &&
-        str[14] == '\0')
+        parse_chars_into_num (str + 12, str + 14, sec))
     {
         return PTime (boost::gregorian::date (year, month, mday),
                       boost::posix_time::time_duration (hour, min, sec));
@@ -448,6 +466,10 @@ GncDateTimeImpl::GncDateTimeImpl(const char* str) :
         m_time = LDT_from_date_time(pdt.date(), pdt.time_of_day(), tzptr);
     }
     catch(boost::gregorian::bad_year&)
+    {
+        throw(std::invalid_argument("The date string was outside of the supported year range."));
+    }
+    catch(std::out_of_range&)
     {
         throw(std::invalid_argument("The date string was outside of the supported year range."));
     }
@@ -514,11 +536,14 @@ constexpr size_t DATEBUFLEN = 100;
 static std::string
 win_date_format(std::string format, struct tm tm)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     wchar_t buf[DATEBUFLEN];
-    memset(buf, 0, DATEBUFLEN);
+    memset(buf, 0, DATEBUFLEN * sizeof(wchar_t));
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conv;
-    auto numchars = wcsftime(buf, DATEBUFLEN - 1, conv.from_bytes(format).c_str(), &tm);
+    [[maybe_unused]] auto numchars = wcsftime(buf, DATEBUFLEN - 1, conv.from_bytes(format).c_str(), &tm);
     return conv.to_bytes(buf);
+#pragma GCC diagnostic pop
 }
 
 /* Microsoft's strftime uses the time zone flags differently from

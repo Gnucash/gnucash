@@ -704,6 +704,97 @@ get_account_info_nbayes (ImapDialog *imap_dialog, GList *accts)
 }
 
 static void
+add_online_entry_to_store (ImapDialog *imap_dialog, GtkTreeIter *toplevel,
+                           const gchar *based_on, GncImapInfo *imapInfo)
+{
+    // Add top level entry and pass iter to add_to_store
+    gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), toplevel, NULL);
+    add_to_store (imap_dialog, toplevel, based_on, imapInfo);
+
+    imapInfo->map_account = NULL;
+}
+
+static void
+check_online_id (ImapDialog *imap_dialog, GtkTreeIter *toplevel, Account *acc, GncImapInfo *imapInfo)
+{
+    // Check for online_id
+    gchar *head = "online_id";
+    gchar *text = gnc_account_get_map_entry (acc, head, NULL);
+
+    if (!text)
+        return;
+
+    // Save source account
+    imapInfo->source_account = acc;
+    imapInfo->head = head;
+
+    if (text && *text)
+        imapInfo->map_account = imapInfo->source_account;
+
+    imapInfo->match_string = text;
+
+    add_online_entry_to_store (imap_dialog, toplevel, _("Online Id"), imapInfo);
+
+    g_free (text);
+}
+
+static void
+check_hbci (ImapDialog *imap_dialog, GtkTreeIter *toplevel, Account *acc, GncImapInfo *imapInfo)
+{
+    // Check for aqbanking hbci
+    gchar *head = "hbci";
+    gchar *hbci_account_id = gnc_account_get_map_entry (acc, head, "account-id");
+    gchar *hbci_bank_code = gnc_account_get_map_entry (acc, head, "bank-code");
+
+    if (!hbci_account_id || !hbci_bank_code)
+        return;
+
+    gchar *text = g_strconcat (hbci_bank_code, ",", hbci_account_id, NULL);
+
+    // Save source account
+    imapInfo->source_account = acc;
+    imapInfo->head = head;
+
+    if (text && *text)
+        imapInfo->map_account = imapInfo->source_account;
+
+    imapInfo->match_string = text;
+
+    add_online_entry_to_store (imap_dialog, toplevel, _("Online HBCI"), imapInfo);
+
+    g_free (hbci_account_id);
+    g_free (hbci_bank_code);
+    g_free (text);
+}
+
+static void
+check_ofx_account (ImapDialog *imap_dialog, GtkTreeIter *toplevel, Account *acc, GncImapInfo *imapInfo)
+{
+    // Check for ofx income account
+    gchar *head = "ofx/associated-income-account";
+    GncGUID *acct_guid = gnc_account_get_map_guid_entry (acc, head, NULL);
+
+    if (!acct_guid)
+        return;
+
+    gchar *text = guid_to_string (acct_guid);
+
+    // Save source account
+    imapInfo->source_account = acc;
+    imapInfo->head = head;
+
+    if (text && *text)
+        imapInfo->map_account = xaccAccountLookup (acct_guid, gnc_get_current_book ());
+
+    imapInfo->match_string = text;
+
+    add_online_entry_to_store (imap_dialog, toplevel, _("OFX Income Account"), imapInfo);
+
+    guid_free (acct_guid);
+    g_free (text);
+}
+
+static void
 get_account_info_online (ImapDialog *imap_dialog, GList *accts)
 {
     GList       *ptr;
@@ -711,65 +802,24 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
 
     GncImapInfo imapInfo;
 
+    imapInfo.map_account = NULL;
+    imapInfo.source_account = NULL;
+    imapInfo.category = " ";
+    imapInfo.count = " ";
+
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
     {
-        gchar  *hbci_account_id = NULL;
-        gchar  *hbci_bank_code = NULL;
-        gchar  *text = NULL;
         Account *acc = ptr->data;
 
         // Check for online_id
-        text = gnc_account_get_map_entry (acc, "online_id", NULL);
-
-        if (text != NULL)
-        {
-            // Save source account
-            imapInfo.source_account = acc;
-            imapInfo.head = "online_id";
-            imapInfo.category = " ";
-
-            if (g_strcmp0 (text, "") == 0)
-                imapInfo.map_account = NULL;
-            else
-                imapInfo.map_account = imapInfo.source_account;
-
-            imapInfo.match_string = text;
-            imapInfo.count = " ";
-
-            // Add top level entry and pass iter to add_to_store
-            gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
-            add_to_store (imap_dialog, &toplevel, _("Online Id"), &imapInfo);
-        }
-        g_free (text);
+        check_online_id (imap_dialog, &toplevel, acc, &imapInfo);
 
         // Check for aqbanking hbci
-        hbci_account_id = gnc_account_get_map_entry (acc, "hbci", "account-id");
-        hbci_bank_code = gnc_account_get_map_entry (acc, "hbci", "bank-code");
-        text = g_strconcat (hbci_bank_code, ",", hbci_account_id, NULL);
+        check_hbci (imap_dialog, &toplevel, acc, &imapInfo);
 
-        if ((hbci_account_id != NULL) || (hbci_bank_code != NULL))
-        {
-            // Save source account
-            imapInfo.source_account = acc;
-            imapInfo.head = "hbci";
-            imapInfo.category = " ";
-
-            if (g_strcmp0 (text, "") == 0)
-                imapInfo.map_account = NULL;
-            else
-                imapInfo.map_account = imapInfo.source_account;
-
-            imapInfo.match_string = text;
-            imapInfo.count = " ";
-
-            // Add top level entry and pass iter to add_to_store
-            gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
-            add_to_store (imap_dialog, &toplevel, _("Online HBCI"), &imapInfo);
-        }
-        g_free (hbci_account_id);
-        g_free (hbci_bank_code);
-        g_free (text);
+        // Check for ofx income account
+        check_ofx_account (imap_dialog, &toplevel, acc, &imapInfo);
     }
 }
 

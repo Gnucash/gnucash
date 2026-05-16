@@ -2773,13 +2773,30 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/enable-autoclear-in-reconcile">
+                    <property name="label" translatable="yes">Enable autoclear tools in reconciliation</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-text" translatable="yes">Provides automatic clearing tools in the reconciliation window. Auto-clear scans unreconciled splits and looks for a unique combination whose cleared balance matches the reconciliation balance entered. The auto-clear tests all combinations of splits, therefore its runtime is potentially high; but limited in reconciliation to 1 second. When a unique match is not available, because the balance cannot be reached, or due to timeout, or multiple combinations are possible, auto-clear is not offered and the icon and its tooltip reflects the outcome.</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">False</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">14</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">14</property>
+                    <property name="top-attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -2792,7 +2809,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">15</property>
+                    <property name="top-attach">16</property>
                   </packing>
                 </child>
                 <child>
@@ -2810,7 +2827,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">16</property>
+                    <property name="top-attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -2828,7 +2845,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">17</property>
+                    <property name="top-attach">18</property>
                   </packing>
                 </child>
                 <child>
@@ -2846,7 +2863,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">18</property>
+                    <property name="top-attach">19</property>
                   </packing>
                 </child>
                 <child>
@@ -2864,7 +2881,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">19</property>
+                    <property name="top-attach">20</property>
                   </packing>
                 </child>
                 <child>
@@ -2874,7 +2891,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">20</property>
+                    <property name="top-attach">21</property>
                   </packing>
                 </child>
                 <child>
@@ -2889,7 +2906,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">21</property>
+                    <property name="top-attach">22</property>
                   </packing>
                 </child>
                 <child>
@@ -2907,7 +2924,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">22</property>
+                    <property name="top-attach">23</property>
                   </packing>
                 </child>
               </object>

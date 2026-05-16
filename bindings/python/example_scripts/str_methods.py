@@ -214,8 +214,6 @@ def __split__str__(self, encoding=None, error=None):
 
     lot=self.GetLot()
     if lot:
-        if type(lot).__name__ == 'SwigPyObject':
-          lot=gnucash.GncLot(instance=lot)
         lot_str=lot.get_title()
     else:
         lot_str='---'

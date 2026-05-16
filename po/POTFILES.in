@@ -100,6 +100,8 @@ gnucash/gnome/gnc-plugin-page-budget.cpp
 gnucash/gnome/gnc-plugin-page-invoice.cpp
 gnucash/gnome/gnc-plugin-page-owner-tree.cpp
 gnucash/gnome/gnc-plugin-page-register.cpp
+gnucash/gnome/gnc-plugin-page-register-filter.cpp
+gnucash/gnome/gnc-plugin-page-register-sort.cpp
 gnucash/gnome/gnc-plugin-page-report.cpp
 gnucash/gnome/gnc-plugin-page-sx-list.cpp
 gnucash/gnome/gnc-plugin-register.c
@@ -290,11 +292,11 @@ gnucash/gtkbuilder/gnc-recurrence.glade
 gnucash/gtkbuilder/gnc-tree-view-owner.glade
 gnucash/gtkbuilder/window-autoclear.glade
 gnucash/gtkbuilder/window-reconcile.glade
-gnucash/html/gnc-html.c
-gnucash/html/gnc-html-factory.c
-gnucash/html/gnc-html-history.c
-gnucash/html/gnc-html-webkit1.c
-gnucash/html/gnc-html-webkit2.c
+gnucash/html/gnc-html.cpp
+gnucash/html/gnc-html-factory.cpp
+gnucash/html/gnc-html-history.cpp
+gnucash/html/gnc-html-webkit1.cpp
+gnucash/html/gnc-html-webkit2.cpp
 gnucash/html/html.scm
 gnucash/import-export/aqb/assistant-ab-initial.c
 gnucash/import-export/aqb/assistant-ab-initial.glade

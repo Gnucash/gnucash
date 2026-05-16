@@ -31,6 +31,7 @@
 #include <gnc-gnome-utils.h>
 #include <gnc-gui-query.h>
 #include <gnc-html.h>
+#include <cstdio>
 %}
 #if defined(SWIGGUILE)
 
@@ -39,7 +40,7 @@
 %{
 #include "guile-mappings.h"
 
-SCM scm_init_sw_gnc_html_module(void);
+extern "C" SCM scm_init_sw_gnc_html_module(void);
 %}
 #endif
 
@@ -50,13 +51,13 @@ SCM scm_init_sw_gnc_html_module(void);
 
 %include "gnc-html-extras.h"
 
-void gnc_html_initialize(void);
+void gnc_html_initialize(void) noexcept;
 
 %init {
   {
     char tmp[100];
 
-#define SET_ENUM(e) snprintf(tmp, 100, "(set! %s (%s))", (e), (e));  \
+#define SET_ENUM(e) std::snprintf(tmp, 100, "(set! %s (%s))", (e), (e));  \
     scm_c_eval_string(tmp);
 
     SET_ENUM("URL-TYPE-FILE");

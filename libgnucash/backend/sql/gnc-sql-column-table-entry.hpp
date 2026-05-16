@@ -367,8 +367,10 @@ GncSqlColumnTableEntry::get_row_value_from_object(QofIdTypeConst obj_name,
     {
         QofAccessFunc getter = get_getter(obj_name);
         if (getter != nullptr)
-            result = reinterpret_cast<T>((getter)(const_cast<void*>(pObject),
-                                                  nullptr));
+        {
+            result = static_cast<T>(reinterpret_cast<intptr_t>((getter)(const_cast<void*>(pObject),
+                                                                         nullptr)));
+        }
     }
     return result;
 }
