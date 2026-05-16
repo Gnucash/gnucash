@@ -46,6 +46,17 @@ using PTZ = boost::local_time::posix_time_zone;
 const unsigned int TimeZoneProvider::min_year = 1400;
 const unsigned int TimeZoneProvider::max_year = 9999;
 
+template<typename T>
+T*
+endian_swap(T* t)
+{
+#ifndef WORDS_BIGENDIAN
+    auto memp = reinterpret_cast<unsigned char*>(t);
+    std::reverse(memp, memp + sizeof(T));
+#endif
+    return t;
+}
+
 #if PLATFORM(WINDOWS)
 /* libstdc++ to_string is broken on MinGW with no real interest in fixing it.
  * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52015
@@ -212,12 +223,12 @@ TimeZoneProvider::load_windows_dynamic_tz (HKEY key, time_zone_names names)
 	}
 	m_zone_vector.push_back (std::make_pair(max_year, tz));
    }
-    catch (std::invalid_argument)
+    catch (const std::invalid_argument& err)
     {
 	RegCloseKey (key);
 	throw;
     }
-    catch (std::bad_alloc)
+    catch (const std::bad_alloc& err)
     {
 	RegCloseKey (key);
 	throw;
@@ -239,7 +250,7 @@ TimeZoneProvider::load_windows_classic_tz (HKEY key, time_zone_names names)
 		std::make_pair(max_year, zone_from_regtzi (regtzi, names)));
 	}
     }
-    catch (std::bad_alloc)
+    catch (const std::bad_alloc& err)
     {
 	RegCloseKey (key);
 	throw;
@@ -425,8 +436,9 @@ namespace IANAParser
 	    {
                 int64_t transition_time;
                 // Ensure correct alignment for ARM.
-                memcpy(&transition_time, &fileblock[fb_index], sizeof(int64_t));
-                endian_swap(&transition_time);
+                memcpy(&transition_time, &fileblock[fb_index],
+                       sizeof(int64_t));
+                transition_time = *(endian_swap(&transition_time));
                 auto info = static_cast<uint8_t>(fileblock[info_index]);
                 transitions.push_back({transition_time, info});
 	    }
@@ -643,6 +655,9 @@ TimeZoneProvider::parse_file(const std::string& tzname)
             }
         }
         catch(const boost::gregorian::bad_year& err)
+        {
+            continue;
+        } catch (std::out_of_range &)
         {
             continue;
         }

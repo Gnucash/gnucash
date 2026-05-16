@@ -536,7 +536,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
     g_assert (info);
 
-    /*   DEBUG ("Begin") */
+    DEBUG ("Begin");
 
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     GtkTreeIter iter;
@@ -596,7 +596,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 
     gnc_gen_trans_list_delete (info);
 
-    /* DEBUG ("End") */
+    DEBUG ("End");
     g_list_free_full (accounts_modified, (GDestroyNotify)xaccAccountCommitEdit);
 
     /* Allow GUI refresh again upon commit completion. */
@@ -2268,7 +2268,7 @@ gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *t
     {
         /* If it does, abort the process for this transaction, since
            it is already in the system. */
-        DEBUG("%s", "Transaction with same online ID exists, destroying current transaction");
+        DEBUG("Transaction with online ID exists, destroying current transaction");
         xaccTransDestroy(trans);
         xaccTransCommitEdit(trans);
         return;

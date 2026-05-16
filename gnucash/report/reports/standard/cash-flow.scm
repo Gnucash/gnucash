@@ -180,8 +180,7 @@
      doc (string-append
           (get-option gnc:pagename-general gnc:optname-reportname)
           " - "
-          (format #f (G_ "~a to ~a")
-                  (qof-print-date from-date-t64) (qof-print-date to-date-t64))))
+          (gnc-date-interval-format from-date-t64 to-date-t64)))
 
     (if (not (null? accounts))
 

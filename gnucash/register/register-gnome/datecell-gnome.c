@@ -286,7 +286,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
     box->in_date_select = FALSE;
 }
 
-static void
+static gboolean
 key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
 {
     DateCell *cell = data;
@@ -303,6 +303,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
         gtk_widget_event(GTK_WIDGET (box->sheet), (GdkEvent *) event);
         break;
     }
+    return TRUE;
 }
 
 static void
@@ -497,6 +498,22 @@ gnc_date_cell_direct_update (BasicCell *bcell,
     PopBox *box = cell->cell.gui_private;
     GdkEventKey *event = gui_data;
     char buff[DATE_BUF];
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        if (bcell->changed)
+        {
+            const char *value = gnc_table_get_model_entry (box->sheet->table, bcell->cell_name);
+
+            gnc_basic_cell_set_value_internal (bcell, value);
+            bcell->changed = FALSE;
+            *cursor_position = 0;
+            *start_selection = 0;
+            *end_selection = -1;
+            return TRUE;
+        }
+        return FALSE;
+    }
 
     if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
         return FALSE;

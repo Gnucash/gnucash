@@ -228,7 +228,7 @@ gnc_taxtable_dispose(GObject *ttp)
 static void
 gnc_taxtable_finalize(GObject* ttp)
 {
-    G_OBJECT_CLASS(gnc_taxtable_parent_class)->dispose(ttp);
+    G_OBJECT_CLASS(gnc_taxtable_parent_class)->finalize(ttp);
 }
 
 static void

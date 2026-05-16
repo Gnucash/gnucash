@@ -533,6 +533,20 @@ gnc_reconcile_view_toggle (GNCReconcileView *view, Split *split)
                    reconcile_view_signals[TOGGLE_RECONCILED], 0, split);
 }
 
+void
+gnc_reconcile_view_unclear_all (GNCReconcileView *view)
+{
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
+    g_hash_table_remove_all (view->reconciled);
+}
+
+void
+gnc_reconcile_view_set_cleared (GNCReconcileView *view, Split *split)
+{
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
+    g_hash_table_add (view->reconciled, split);
+}
+
 static gboolean
 follow_select_tree_path (GNCReconcileView *view)
 {

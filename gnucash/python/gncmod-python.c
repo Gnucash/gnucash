@@ -73,7 +73,7 @@ libgncmod_python_gnc_module_init(int refcount)
     PyStatus status;
     PyConfig config;
     PyConfig_InitPythonConfig(&config);
-    status = PyConfig_SetBytesArgv(&config, 0, &argv);
+    status = PyConfig_SetBytesArgv(&config, 0, (char * const *)&argv);
     if (PyStatus_Exception(status))
     {
         PyConfig_Clear(&config);

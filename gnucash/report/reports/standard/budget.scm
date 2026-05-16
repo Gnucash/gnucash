@@ -465,9 +465,9 @@
               ((eq? (car column-list) 'total)
                (G_ "Total"))
               ((list? (car column-list))
-               (format #f (G_ "~a to ~a")
-                       (period-to-date-string (car (car column-list)))
-                       (period-to-date-string (last (car column-list)))))
+               (gnc-date-interval-format
+                (gnc-budget-get-period-start-date budget (car (car column-list)))
+                (gnc-budget-get-period-start-date budget (last (car column-list)))))
               (else
                (period-to-date-string (car column-list)))))
 

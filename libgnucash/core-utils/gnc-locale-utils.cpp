@@ -95,7 +95,7 @@ gnc_init_boost_locale (const std::string& messages_path)
         }
         catch (const std::runtime_error& err)
         {
-            char* locale = g_strdup(setlocale(LC_ALL, ""));
+            const char* locale = setlocale(LC_ALL, "");
 
             g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
                   "Failed to create C++ default locale from"

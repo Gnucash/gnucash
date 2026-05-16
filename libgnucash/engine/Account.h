@@ -1580,6 +1580,15 @@ typedef enum
     int xaccAccountTreeForEachTransaction(Account *acc,
                                           TransactionCallback proc, void *data);
 
+    /**
+     * Returns the date of the earliest split in the account, or INT64_MAX.
+     *
+     * @param account   The account to retrieve data about.
+     *
+     * @return posted_date of first split in the account, or INT64_MAX
+     */
+    time64 gnc_account_get_earliest_date (const Account* account);
+
     /* Look up an Account in the map non-Baysian
      */
     Account* gnc_account_imap_find_account (Account* acc, const char* category,
@@ -1638,6 +1647,11 @@ typedef enum
      *  the returned text
      */
     gchar *gnc_account_get_map_entry (Account *acc, const char *head, const char *category);
+
+    /** Returns the guid pointed to by head and category for the Account, free
+     *  the returned guid
+     */
+    GncGUID *gnc_account_get_map_guid_entry (Account *acc, const char *head, const char *category);
 
     /** Delete the entry for Account pointed to by head,category and match_string,
      *  if empty is TRUE then use delete if empty

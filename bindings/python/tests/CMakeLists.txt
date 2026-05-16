@@ -25,10 +25,6 @@ set(test_python_bindings_DATA
         test_transaction.py
         test_query.py
         test_function_class.py
-        test_deprecation.py
-        test_export_account_totals.py
-        test_change_tax_code.py
-        test_latex_invoices.py
-        test_one_arg_default_none.py
-        )
+        test_price_and_wrapping.py)
+
 set_dist_list(test_python_bindings_DIST CMakeLists.txt ${test_python_bindings_DATA})

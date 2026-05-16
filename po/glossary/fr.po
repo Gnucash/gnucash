@@ -11,18 +11,18 @@
 # Thomas Jungers <thomasjungers@gmail.com>, 2021.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
-# aleksej0R <omolice@hotmail.fr>, 2022, 2023.
+# aleksej0R <omolice@hotmail.fr>, 2022, 2023, 2025.
 # Vincent Dawans <dawansv@gmail.com>, 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024.
-# Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024.
+# Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-12-30 19:00+0000\n"
-"Last-Translator: Anastasios Ikonomou <anastasios.ikonomou@gmail.com>\n"
+"PO-Revision-Date: 2025-12-21 19:00+0000\n"
+"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -90,7 +90,7 @@ msgstr "type de compte : revenu"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "type de compte : passif"
+msgstr "type de compte : passif"
 
 #. "-"
 msgid "account type: money-market"
@@ -230,11 +230,11 @@ msgstr "solde"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
-msgstr "report"
+msgstr "à nouveaux (début d'année)"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
-msgstr "total à reporter"
+msgstr "à nouveaux (fin d'année)"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -482,7 +482,7 @@ msgstr "facture"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr "tâche (informatique), prestation (facturée)"
+msgstr "prestation"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"

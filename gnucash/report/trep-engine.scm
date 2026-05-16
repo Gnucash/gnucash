@@ -56,6 +56,7 @@
              (gnucash report html-text))
 (use-modules (srfi srfi-11))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-26))
 (use-modules (ice-9 match))
@@ -104,7 +105,6 @@
 (define optname-enddate (N_ "End Date"))
 (define optname-date-source (N_ "Date Filter"))
 (define optname-table-export (N_ "Table for Exporting"))
-(define optname-infobox-display (N_ "Add options summary"))
 
 ;; Currency
 (define pagename-currency (N_ "Currency"))
@@ -137,6 +137,10 @@
 (define def:alternate-row-style "alternate-row")
 (define def:primary-subtotal-style "primary-subheading")
 (define def:secondary-subtotal-style "secondary-subheading")
+
+(define (option-ref opts section name)
+  (let ((opt (gnc:lookup-option opts section name)))
+    (and opt (gnc:option-value opt))))
 
 (define NO-MATCHING-TRANS-HEADER (G_ "No matching transactions found"))
 (define NO-MATCHING-TRANS-TEXT (G_ "No transactions were found that \
@@ -507,6 +511,17 @@ in the Options panel."))
 
 (define gnc:lists->csv lists->csv)
 
+;; returns a list of hash keys
+(define (hash-keys hash)
+  (hash-fold (lambda (k _ p) (cons k p)) '() hash))
+
+;; mimics c++ std::map::operator[] - return the value corresponding to key,
+;; creating a new value if there's no existing one
+(define (hash-ref! hash key constructor)
+  (or (hash-ref hash key)
+      (let ((new-value (constructor)))
+        (hash-set! hash key new-value)
+        new-value)))
 
 ;;
 ;; Default Transaction Report
@@ -565,17 +580,6 @@ in the Options panel."))
     gnc:pagename-general optname-table-export
     "g" (G_ "Formats the table suitable for cut & paste exporting with extra cells.")
     #f)
-
-  (gnc-register-multichoice-option options
-    gnc:pagename-general optname-infobox-display
-    "h" (G_ "Add summary of options.")
-    "no-match"
-    ;; This is an alist of conditions for displaying the infobox
-    ;; 'no-match for empty-report
-    ;; 'match for generated report
-    (list (vector 'no-match (G_ "If no transactions matched"))
-          (vector 'always (G_ "Always"))
-          (vector 'never (G_ "Never"))))
 
   ;; Filtering Options
 
@@ -1062,6 +1066,17 @@ be excluded from periodic reporting.")
 
   (let* ((work-to-do (length splits))
          (table (gnc:make-html-table))
+         (subtotals-only? (option-ref options pagename-sorting optname-show-subtotals-only))
+         (sec-subtotal?   (option-ref options pagename-sorting optname-sec-subtotal))
+         (subtotal-label (lambda (str level)
+                           (let ((show-prefix? (not (and subtotals-only?
+                                                         (case level
+                                                           ((secondary) sec-subtotal?)
+                                                           ((primary) (not sec-subtotal?))
+                                                           (else #f))))))
+                             (if show-prefix?
+                                 (string-append (G_ "Total For ") str)
+                                 str))))
          (account-types-to-reverse
           (keylist-get-info sign-reverse-list
                             (report-uses? 'reversed-signs)
@@ -1613,7 +1628,9 @@ be excluded from periodic reporting.")
             (gnc:html-make-empty-cells left-indent)
             (if (report-uses? 'export-table)
                 (cons
-                 (gnc:make-html-table-cell/markup "total-label-cell" data)
+                 (gnc:make-html-table-cell/markup
+                  (if (summary-style? level) "total-label-cell" "text-cell")
+                  data)
                  (gnc:html-make-empty-cells
                   (+ right-indent width-left-columns -1)))
                 (list
@@ -1660,6 +1677,14 @@ be excluded from periodic reporting.")
       (and (pair? calculated-cells)
            (assq-ref (car calculated-cells) 'merge-dual-column?)))
 
+    (define (summary-style? level)
+      (let ((detail-level
+             (cond ((not (report-uses? 'subtotals-only)) 'transactions)
+                   ((report-uses? 'secondary-key/renderer-fn) 'secondary)
+                   ((report-uses? 'primary-key/renderer-fn) 'primary)
+                   (else 'grand))))
+        (not (eq? level detail-level))))
+
     (define (add-subtotal-row subtotal-string subtotal-collectors
                               subtotal-style level row col)
       (let* ((left-indent (case level
@@ -1681,14 +1706,17 @@ be excluded from periodic reporting.")
                   (gnc-commodity-equal commodity (gnc:gnc-monetary-commodity mon)))
                 list-of-monetary))
 
-        (define (first-column string)
-          (if (report-uses? 'export-table)
-              (cons
-               (gnc:make-html-table-cell/markup "total-label-cell" string)
-               (gnc:html-make-empty-cells (+ right-indent width-left-columns -1)))
-              (list
-               (gnc:make-html-table-cell/size/markup
-                1 (+ right-indent width-left-columns) "total-label-cell" string))))
+        (define (first-column string level)
+          (let ((cell-class (if (summary-style? level)
+                                "total-label-cell"
+                                "text-cell")))
+            (if (report-uses? 'export-table)
+                (cons
+                 (gnc:make-html-table-cell/markup cell-class string)
+                 (gnc:html-make-empty-cells (+ right-indent width-left-columns -1)))
+                (list
+                 (gnc:make-html-table-cell/size/markup
+                  1 (+ right-indent width-left-columns) cell-class string)))))
 
         (define (data-columns commodity)
           (let loop ((merging? #f)
@@ -1716,8 +1744,11 @@ be excluded from periodic reporting.")
                    (merging?
                     (let* ((sum (and (or last-column this-column)
                                      (- (or last-column 0) (or this-column 0))))
+                           (cell-class (if (summary-style? level)
+                                           "total-number-cell"
+                                           "number-cell"))
                            (sum-table-cell (and sum (gnc:make-html-table-cell/markup
-                                                     "total-number-cell"
+                                                     cell-class
                                                      (gnc:make-gnc-monetary
                                                       commodity (abs sum)))))
                            (debit-col (and sum (positive? sum) sum-table-cell))
@@ -1735,7 +1766,10 @@ be excluded from periodic reporting.")
                           (cdr columns)
                           (cdr merge-list)
                           (cons (gnc:make-html-table-cell/markup
-                                 "total-number-cell" mon)
+                                 (if (summary-style? level)
+                                     "total-number-cell"
+                                     "number-cell")
+                                 mon)
                                 result))))))))
 
         (define (get-commodity-grid-amount commodity)
@@ -1746,8 +1780,10 @@ be excluded from periodic reporting.")
             (or (and first-column-merge? (retrieve-commodity (cadr columns) commodity))
                 zero))))
 
-        (set! grid
-          (grid-add grid row col (map get-commodity-grid-amount list-of-commodities)))
+        (let ((amounts (map get-commodity-grid-amount list-of-commodities)))
+          (grid 'add row col amounts)
+          (when (eq? level 'secondary)
+            (grid 'add 'row-total col amounts)))
 
         ;; each commodity subtotal gets a separate line in the html-table
         ;; each line comprises: indenting, first-column, data-columns
@@ -1758,11 +1794,9 @@ be excluded from periodic reporting.")
              table subtotal-style
              (append
               (gnc:html-make-empty-cells left-indent)
-              (first-column first-column-string)
+              (first-column first-column-string level)
               (data-columns (car list-of-commodities))))
             (loop "" (cdr list-of-commodities))))))
-
-    (define (total-string str) (string-append (G_ "Total For ") str))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; renderers
@@ -1958,8 +1992,8 @@ be excluded from periodic reporting.")
                        (not (equal? (primary-subtotal-comparator current)
                                     (primary-subtotal-comparator next)))))
               (when secondary-subtotal-comparator
-                (add-subtotal-row (total-string
-                                   (render-summary current 'secondary #f))
+                (add-subtotal-row (subtotal-label
+                                   (render-summary current 'secondary #f) 'secondary)
                                   secondary-subtotal-collectors
                                   def:secondary-subtotal-style
                                   'secondary
@@ -1971,8 +2005,8 @@ be excluded from periodic reporting.")
                  (lambda (coll)
                    (coll 'reset #f #f))
                  secondary-subtotal-collectors))
-              (add-subtotal-row (total-string
-                                 (render-summary current 'primary #f))
+              (add-subtotal-row (subtotal-label
+                                 (render-summary current 'primary #f) 'primary)
                                 primary-subtotal-collectors
                                 def:primary-subtotal-style
                                 'primary
@@ -2000,8 +2034,8 @@ be excluded from periodic reporting.")
                          (or (not next)
                              (not (equal? (secondary-subtotal-comparator current)
                                           (secondary-subtotal-comparator next)))))
-                (add-subtotal-row (total-string
-                                   (render-summary current 'secondary #f))
+                (add-subtotal-row (subtotal-label
+                                   (render-summary current 'secondary #f) 'secondary)
                                   secondary-subtotal-collectors
                                   def:secondary-subtotal-style
                                   'secondary
@@ -2036,92 +2070,121 @@ be excluded from periodic reporting.")
                       calculated-cells total-collectors)))))
       (values table grid csvlist))))
 
-;; grid data structure
 (define (make-grid)
-  '())
-(define (cell-match? cell row col)
-  (and (or (not row) (equal? row (vector-ref cell 0)))
-       (or (not col) (equal? col (vector-ref cell 1)))))
-(define (grid-get grid row col)
-  ;; grid filter - get all row/col - if #f then retrieve whole row/col
-  (filter
-   (lambda (cell)
-     (cell-match? cell row col))
-   grid))
-(define (grid-rows grid)
-  (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
-(define (grid-cols grid)
-  (delete-duplicates (map (lambda (cell) (vector-ref cell 1)) grid)))
-(define (grid-add grid row col data)
-  ;; we don't need to check for duplicate cells in a row/col because
-  ;; in the trep it should never happen.
-  (cons (vector row col data) grid))
-(define (grid->html-table grid)
-  (define (<? a b)
-    (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
-          ((number? (car a)) (< (car a) (car b)))
-          (else (gnc:error "unknown sortvalue"))))
-  (define list-of-rows (sort (delete 'row-total (grid-rows grid)) <?))
-  (define list-of-cols (sort (delete 'col-total (grid-cols grid)) <?))
-  (define row-average-enabled? (and (pair? list-of-cols) (pair? (cdr list-of-cols))))
-  (define (monetary-div monetary divisor)
-    (and monetary
-         (let* ((amount (gnc:gnc-monetary-amount monetary))
-                (currency (gnc:gnc-monetary-commodity monetary))
-                (scu (gnc-commodity-get-fraction currency)))
-           (gnc:make-gnc-monetary
-            currency (gnc-numeric-convert
-                      (/ amount divisor) scu GNC-HOW-RND-ROUND)))))
-  (define (row->num-of-commodities row)
-    ;; for a row, find the maximum number of commodities being stored
-    (apply max
-           (map (lambda (col)
-                  (let ((cell (grid-get grid row col)))
-                    (if (null? cell) 0
-                        (length (vector-ref (car cell) 2)))))
-                (cons 'col-total list-of-cols))))
-  (define (make-table-cell row col commodity-idx divisor)
-    (let ((cell (grid-get grid row col)))
-      (if (null? cell) ""
-          (gnc:make-html-table-cell/markup
-           "number-cell"
-           (monetary-div
-            (list-ref-safe (vector-ref (car cell) 2) commodity-idx)
-            divisor)))))
-  (define (make-row row commodity-idx)
-    (append
-     (list (cond
-            ((positive? commodity-idx) "")
-            ((eq? row 'row-total) (G_ "Grand Total"))
-            (else (cdr row))))
-     (map (lambda (col) (make-table-cell row col commodity-idx 1))
-          list-of-cols)
-     (list (make-table-cell row 'col-total commodity-idx 1))
-     (if row-average-enabled?
-         (list (make-table-cell
-                row 'col-total commodity-idx (length list-of-cols)))
-         '())))
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-caption! table (G_ optname-grid))
-    (gnc:html-table-set-col-headers!
-     table (append (list "")
-                   (map cdr list-of-cols)
-                   (list (G_ "Total"))
-                   (if row-average-enabled? (list (G_ "Average")) '())))
-    (gnc:html-table-set-style!
-     table "th"
-     'attribute (list "class" "column-heading-right"))
-    (for-each
-     (lambda (row)
-       (for-each
-        (lambda (commodity-idx)
-          (gnc:html-table-append-row!
-           table (make-row row commodity-idx)))
-        (iota (row->num-of-commodities row))))
-     (if (memq 'row-total (grid-rows grid))
-         (append list-of-rows '(row-total))
-         list-of-rows))
-    table))
+
+  ;; cells : row-key → col-key → cell
+  ;; Primary data store. Each cell is a commodity collector.
+  ;;
+  ;; rows  : row-key → commodity → #t
+  ;; Tracks which commodities appear in each row so we know which
+  ;; sub-rows to render (one per commodity).
+  ;;
+  ;; cols  : col-key → #t
+  ;; Set of all columns that have received any data.
+
+  (let ((cells (make-hash-table))
+        (rows (make-hash-table))
+        (cols (make-hash-table)))
+
+    (define (grid-get row col commodity)
+      (and-let* ((row-ht (hash-ref cells row))
+                 (coll (hash-ref row-ht col)))
+        (coll 'getmonetary-strict commodity #f)))
+
+    (define (grid-rows)
+      (hash-keys rows))
+
+    (define (grid-cols)
+      (hash-keys cols))
+
+    ;; Add a list of <gnc:monetary> values into a single grid cell.
+    ;;  - Ensures the row and column exist and have commodity collector
+    ;;  - Merges amounts into the cell’s commodity collector
+    ;;  - Records commodities in this row
+    (define (grid-add row col data)
+      (hash-set! cols col #t)
+      (let* ((cells-row-ht (hash-ref! cells row make-hash-table))
+             (cells-row-col-data (hash-ref! cells-row-ht col gnc:make-commodity-collector))
+             (rows-ht (hash-ref! rows row make-hash-table)))
+        (for-each
+         (lambda (mon)
+           (let ((comm (gnc:gnc-monetary-commodity mon)) (amt (gnc:gnc-monetary-amount mon)))
+             (cells-row-col-data 'add comm amt)
+             (hash-set! rows-ht comm #t)))
+         data)))
+
+    (define (row->commodities row)
+      (sort! (hash-keys (hash-ref rows row (make-hash-table)))
+             (lambda (a b) (< (gnc-commodity-compare a b) 0))))
+
+    (define (grid->html-table)
+      (define (<? a b)
+        (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
+              ((number? (car a)) (< (car a) (car b)))
+              (else (gnc:error "unknown sortvalue"))))
+
+      (define list-of-rows (sort (delete 'row-total (grid-rows)) <?))
+      (define list-of-cols (sort (delete 'col-total (grid-cols)) <?))
+      (define row-average-enabled? (and (pair? list-of-cols) (pair? (cdr list-of-cols))))
+
+      (define (monetary-div monetary divisor)
+        (and monetary
+             (let* ((amount (gnc:gnc-monetary-amount monetary))
+                    (currency (gnc:gnc-monetary-commodity monetary))
+                    (scu (gnc-commodity-get-fraction currency)))
+               (gnc:make-gnc-monetary
+                currency
+                (gnc-numeric-convert
+                 (/ amount divisor) scu GNC-HOW-RND-ROUND)))))
+
+      (define (make-table-cell row col commodity divisor)
+        (and-let* ((cell (grid-get row col commodity)))
+          (gnc:make-html-table-cell/markup "number-cell" (monetary-div cell divisor))))
+
+      (define (make-row row commodity first?)
+        (append
+         (list (cond
+                ((not first?) "")
+                ((eq? row 'row-total) (G_ "Total"))
+                (else (cdr row))))
+         (map (cut make-table-cell row <> commodity 1) list-of-cols)
+         (list (make-table-cell row 'col-total commodity 1))
+         (if row-average-enabled?
+             (list (make-table-cell row 'col-total commodity (length list-of-cols)))
+             '())))
+
+      (let ((table (gnc:make-html-table)))
+        (gnc:html-table-set-caption! table (G_ optname-grid))
+        (gnc:html-table-set-col-headers!
+         table (append (list "")
+                       (map cdr list-of-cols)
+                       (list (G_ "Total"))
+                       (if row-average-enabled? (list (G_ "Average")) '())))
+        (gnc:html-table-set-style!
+         table "th"
+         'attribute (list "class" "column-heading-right"))
+
+        (for-each
+         (lambda (row)
+           (let lp ((commodities (row->commodities row)) (first? #t))
+             (unless (null? commodities)
+               (gnc:html-table-append-row!
+                table (make-row row (car commodities) first?))
+               (lp (cdr commodities) #f))))
+         (if (memq 'row-total (grid-rows))
+             (append list-of-rows '(row-total))
+             list-of-rows))
+        table))
+
+    (lambda (msg . args)
+      (case msg
+        ((add)        (apply grid-add args))
+        ;; ((get)        (apply grid-get args))      ;; (grid 'get row col commodity)
+        ;; ((rows)       (grid-rows))
+        ;; ((cols)       (grid-cols))
+        ;; ((clear)      (for-each hash-clear! (list cells rows cols)))
+        ((get-html)   (grid->html-table))
+        (else (error "Unknown grid operation" msg))))))
 
 (define* (gnc:trep-renderer
           report-obj #:key custom-calculated-cells empty-report-message
@@ -2230,7 +2293,6 @@ be excluded from periodic reporting.")
                                    primary-subtotal)
                                (memq (opt-val gnc:pagename-display (N_ "Amount"))
                                      '(single double))))
-         (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
     ;; define a preprocessed alist of report parameters.
@@ -2474,12 +2536,7 @@ be excluded from periodic reporting.")
       (when empty-report-message
         (gnc:html-document-add-object!
          document
-         empty-report-message))
-
-      (when (memq infobox-display '(always no-match))
-        (gnc:html-document-add-object!
-         document
-         (gnc:html-render-options-changed options))))
+         empty-report-message)))
 
      (else
       (qof-query-set-book query (gnc-get-current-book))
@@ -2553,12 +2610,7 @@ be excluded from periodic reporting.")
           report-title (gnc:report-id report-obj)
           NO-MATCHING-TRANS-HEADER NO-MATCHING-TRANS-TEXT))
 
-        (gnc:html-document-set-export-error document "No splits found")
-
-        (when (memq infobox-display '(always no-match))
-          (gnc:html-document-add-object!
-           document
-           (gnc:html-render-options-changed options))))
+        (gnc:html-document-set-export-error document "No splits found"))
 
        (else
         (let-values (((table grid csvlist)
@@ -2571,19 +2623,10 @@ be excluded from periodic reporting.")
            document
            (gnc:make-html-text
             (gnc:html-markup-h3
-             (format #f
-                     ;; Translators: Both ~a's are dates
-                     (G_ "From ~a to ~a")
-                     (qof-print-date begindate)
-                     (qof-print-date enddate)))))
-
-          (when (eq? infobox-display 'always)
-            (gnc:html-document-add-object!
-             document
-             (gnc:html-render-options-changed options)))
+             (gnc-date-interval-format begindate enddate))))
 
           (when subtotal-table?
-            (gnc:html-document-add-object! document (grid->html-table grid)))
+            (gnc:html-document-add-object! document (grid 'get-html)))
 
           (unless (and subtotal-table?
                        (opt-val pagename-sorting optname-show-subtotals-only))

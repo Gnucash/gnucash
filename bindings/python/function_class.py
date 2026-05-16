@@ -68,7 +68,14 @@ class ClassFromFunctions(object):
         data. (by calling the .instance property)
         """
         if INSTANCE_ARGUMENT in kargs and kargs[INSTANCE_ARGUMENT] is not None:
-            self.__instance = kargs[INSTANCE_ARGUMENT]
+            inst = kargs[INSTANCE_ARGUMENT]
+            # Unwrap if someone passes a wrapper object as instance data,
+            # e.g. GncNumeric(instance=some_GncNumeric).  This can happen
+            # when a method's return type is changed from a raw SWIG proxy
+            # to a wrapper class and callers still re-wrap the result.
+            if isinstance(inst, ClassFromFunctions):
+                inst = inst.instance
+            self.__instance = inst
         else:
             self.__instance = getattr(self._module, self._new_instance)(
                 *process_list_convert_to_instance(args),

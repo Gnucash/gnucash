@@ -1938,15 +1938,15 @@ gnc_split_reg_double_line_cb (GtkWidget *w, gpointer data)
     gnc_ledger_display_refresh( gsr->ledger );
 }
 
-static void
-gnc_split_reg_sort_force( GNCSplitReg *gsr, SortType sort_code, gboolean force )
+void
+gnc_split_reg_sort (GNCSplitReg *gsr, SortType sort_code, ForceSort fs, Refresh ref)
 {
     Query *query = gnc_ledger_display_get_query( gsr->ledger );
     gboolean show_present_divider = FALSE;
     GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
     SplitRegister *reg;
 
-    if ((gsr->sort_type == sort_code) && !force)
+    if ((gsr->sort_type == sort_code) && !fs)
         return;
 
     standard = g_slist_prepend( NULL, QUERY_DEFAULT_SORT );
@@ -2010,88 +2010,82 @@ gnc_split_reg_sort_force( GNCSplitReg *gsr, SortType sort_code, gboolean force )
     reg = gnc_ledger_display_get_split_register( gsr->ledger );
     gnc_split_register_show_present_divider( reg, show_present_divider );
     gsr->sort_type = sort_code;
-    gnc_ledger_display_refresh( gsr->ledger );
-}
-
-static void
-gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
-{
-    gnc_split_reg_sort_force( gsr, sort_code, FALSE );
+    if (ref)
+        gnc_ledger_display_refresh( gsr->ledger );
 }
 
 void
 gnc_split_reg_sort_standard_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_STANDARD);
+    gnc_split_reg_sort(gsr, BY_STANDARD, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_date_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_DATE);
+    gnc_split_reg_sort(gsr, BY_DATE, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_date_entered_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_DATE_ENTERED);
+    gnc_split_reg_sort(gsr, BY_DATE_ENTERED, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_date_reconciled_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_DATE_RECONCILED);
+    gnc_split_reg_sort(gsr, BY_DATE_RECONCILED, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_num_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_NUM);
+    gnc_split_reg_sort(gsr, BY_NUM, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_amount_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_AMOUNT);
+    gnc_split_reg_sort(gsr, BY_AMOUNT, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_memo_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_MEMO);
+    gnc_split_reg_sort(gsr, BY_MEMO, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_desc_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_DESC);
+    gnc_split_reg_sort(gsr, BY_DESC, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_action_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_ACTION);
+    gnc_split_reg_sort(gsr, BY_ACTION, no_force, refresh);
 }
 
 void
 gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
-    gnc_split_reg_sort(gsr, BY_NOTES);
+    gnc_split_reg_sort(gsr, BY_NOTES, no_force, refresh);
 }
 
-
 void
-gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh)
+gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, Refresh ref)
 {
     /* Note: sort_reversed is the boolean opposite of sort_increasing
      *       so when rev == true, we're sorting decreasing
@@ -2106,7 +2100,7 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh
     qof_query_set_sort_increasing (query, !rev, !rev, !rev);
     gsr->sort_rev = rev;
 
-    if (refresh)
+    if (ref)
         gnc_ledger_display_refresh( gsr->ledger );
 }
 
@@ -2555,19 +2549,6 @@ gnc_split_reg_get_sort_type( GNCSplitReg *gsr )
     g_assert( gsr );
     return gsr->sort_type;
 }
-
-void
-gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t )
-{
-    gnc_split_reg_sort( gsr, t );
-}
-
-void
-gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean force )
-{
-    gnc_split_reg_sort_force( gsr, t, force );
-}
-
 
 GtkWidget*
 gnc_split_reg_get_summarybar( GNCSplitReg *gsr )

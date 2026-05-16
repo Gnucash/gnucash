@@ -116,6 +116,9 @@ engine-common.i */
 %newobject xaccTransGetPaymentAcctSplitList;
 %newobject xaccAccountGetSplitList;
 
+%newobject gnc_date_interval_format;
+gchar* gnc_date_interval_format (time64 from_date, time64 to_date);
+
 %include "engine-common.i"
 
 #if defined(SWIGGUILE)

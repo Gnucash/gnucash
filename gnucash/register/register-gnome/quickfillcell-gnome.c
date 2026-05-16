@@ -34,6 +34,9 @@
 
 #include "quickfillcell.h"
 #include "quickfillcell-gnome.h"
+#include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
+#include "table-allgui.h"
 
 
 static gboolean
@@ -54,6 +57,20 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
 
     switch (event->keyval)
     {
+    case GDK_KEY_Escape:
+        if (bcell->changed)
+        {
+            GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
+            const char *value = gnc_table_get_model_entry (sheet->table, bcell->cell_name);
+
+            gnc_basic_cell_set_value_internal (bcell, value);
+            bcell->changed = FALSE;
+            *cursor_position = 0;
+            *start_selection = 0;
+            *end_selection = -1;
+            return TRUE;
+        }
+        return FALSE;
     case GDK_KEY_slash:
         if (!(event->state & GDK_MOD1_MASK))
             return FALSE;

@@ -195,7 +195,7 @@ date point, a projected minimum balance including scheduled transactions."))
               (fold
                (lambda (a b)
                  (if (zero? (xaccAccountGetSplitsSize a)) b
-                     (let ((date (xaccTransGetDate (xaccSplitGetParent (car (xaccAccountGetSplits a))))))
+                     (let ((date (gnc-account-get-earliest-date a)))
                        (if b (min date b) date))))
                #f accounts))
              (sx-hash (if earliest
@@ -273,9 +273,7 @@ date point, a projected minimum balance including scheduled transactions."))
         (gnc:html-chart-set-type! chart 'line)
         ;; Set the chart titles
         (gnc:html-chart-set-title!
-         chart (list report-title
-                     (format #f (G_ "~a to ~a")
-                       (qof-print-date from-date) (qof-print-date to-date))))
+         chart (list report-title (gnc-date-interval-format from-date to-date)))
         ;; Set the chart size
         (gnc:html-chart-set-width! chart plot-width)
         (gnc:html-chart-set-height! chart plot-height)

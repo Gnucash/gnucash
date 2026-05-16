@@ -2583,6 +2583,13 @@ get_kvp_int64_path (const Account *acc, const Path& path)
     return qof_instance_get_path_kvp<int64_t> (QOF_INSTANCE(acc), path);
 }
 
+static GncGUID*
+get_kvp_guid_path (const Account *acc, const Path& path)
+{
+    auto val{qof_instance_get_path_kvp<GncGUID*> (QOF_INSTANCE(acc), path)};
+    return val ? guid_copy(*val) : nullptr;
+}
+
 void
 xaccAccountSetColor (Account *acc, const char *str)
 {
@@ -2952,7 +2959,8 @@ gnc_account_child_index (const Account *parent, const Account *child)
     g_return_val_if_fail(GNC_IS_ACCOUNT(parent), -1);
     g_return_val_if_fail(GNC_IS_ACCOUNT(child), -1);
     auto& children = GET_PRIVATE(parent)->children;
-    return std::distance (children.begin(), std::find (children.begin(), children.end(), child));
+    auto find_it = std::find (children.begin(), children.end(), child);
+    return find_it == children.end() ? -1 : std::distance (children.begin(), find_it);
 }
 
 Account *
@@ -4797,12 +4805,9 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
 const char*
 dxaccAccountGetPriceSrc(const Account *acc)
 {
-    static char *source = nullptr;
     if (!acc) return nullptr;
 
     if (!xaccAccountIsPriced(acc)) return nullptr;
-
-    g_free (source);
 
     return get_kvp_string_path (acc, {"old-price-source"});
 }
@@ -5075,6 +5080,14 @@ gnc_account_tree_staged_transaction_traversal (const Account *acc,
     }
 
     return 0;
+}
+
+time64
+gnc_account_get_earliest_date (const Account* account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(account), INT64_MAX);
+    const auto& splits = xaccAccountGetSplits (account);
+    return splits.empty() ? INT64_MAX : xaccTransGetDate (xaccSplitGetParent (splits.front()));
 }
 
 /********************************************************************\
@@ -5682,6 +5695,13 @@ gnc_account_get_map_entry (Account *acc, const char *head, const char *category)
                      get_kvp_string_path (acc, {head}));
 }
 
+GncGUID *
+gnc_account_get_map_guid_entry (Account *acc, const char *head, const char *category)
+{
+    return category ?
+           get_kvp_guid_path (acc, {head, category}) :
+           get_kvp_guid_path (acc, {head});
+}
 
 void
 gnc_account_delete_map_entry (Account *acc, char *head, char *category,

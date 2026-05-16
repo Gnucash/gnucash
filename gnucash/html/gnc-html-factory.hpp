@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-factory.h -- display html with gnc special tags         *
+ * gnc-html-factory.hpp -- display html with gnc special tags         *
  * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,14 +25,6 @@
 
 #include "gnc-html.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-GncHtml* gnc_html_factory_create_html( void );
-
-#ifdef __cplusplus
-}
-#endif
+GncHtml* gnc_html_factory_create_html( void ) NOEXCEPT;
 
 #endif

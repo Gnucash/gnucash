@@ -32,6 +32,15 @@
 extern "C" {
 #endif
 
+typedef enum
+{
+    ABORT_NONE = 0,
+    ABORT_NOP,
+    ABORT_MULTI,
+    ABORT_TIMEOUT,
+    ABORT_UNREACHABLE,
+} Autoclear;
+
 /** Account splits are analysed; attempts to find a unique combination
  *  of uncleared splits which would set cleared balance to
  *  toclear_value. If this is not possible, GError will be error

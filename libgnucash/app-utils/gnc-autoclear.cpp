@@ -79,7 +79,8 @@ using SplitVec = std::vector<Split*>;
 
 struct Solution
 {
-    std::optional<const char*> abort;
+    const char* abort = nullptr;
+    gint abort_id = Autoclear::ABORT_NONE;
     SplitVec splits;
 };
 
@@ -124,7 +125,11 @@ subset_sum (SplitInfoVec::const_iterator iter,
         DEBUG ("SOLUTION FOUND: %s%s", path_to_str (path),
                solution.splits.empty() ? "" : " ABORT: AMBIGUOUS");
         if (!solution.splits.empty())
-            solution.abort = "Cannot uniquely clear splits. Found multiple possibilities.";
+        {
+            solution.abort_id = Autoclear::ABORT_MULTI;
+            solution.abort = N_("Cannot uniquely clear splits. Found multiple possibilities.");
+            return;
+        }
         else
         {
             solution.splits.resize (path.size());
@@ -134,13 +139,14 @@ subset_sum (SplitInfoVec::const_iterator iter,
         }
     }
 
-    if (solution.abort || iter == end)
+    if (solution.abort_id != Autoclear::ABORT_NONE || iter == end)
         return;
 
     if (monitor.should_abort())
     {
         DEBUG ("ABORT: timeout");
-        solution.abort = "Auto-clear exceeds allocated time";
+        solution.abort_id = Autoclear::ABORT_TIMEOUT;
+        solution.abort = N_("Auto-clear exceeds allocated time");
         return;
     }
 
@@ -195,8 +201,8 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
     static GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
     if (target == 0)
     {
-        g_set_error (error, autoclear_quark, 1, "%s",
-                     "Account is already at Auto-Clear Balance.");
+        g_set_error (error, autoclear_quark, Autoclear::ABORT_NOP, "%s",
+                     N_("Account is already at Auto-Clear Balance."));
         return nullptr;
     }
 
@@ -229,13 +235,14 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
 
     if (solution.splits.empty())
     {
-        g_set_error (error, autoclear_quark, 1, "%s",
-                     "The selected amount cannot be cleared.");
+        g_set_error (error, autoclear_quark, Autoclear::ABORT_UNREACHABLE, "%s",
+                     N_("The selected amount cannot be cleared."));
         return nullptr;
     }
-    else if (solution.abort)
+    else if (solution.abort_id)
     {
-        g_set_error (error, autoclear_quark, 1, "%s", *solution.abort);
+        g_set_error (error, autoclear_quark,
+                     solution.abort_id, "%s", solution.abort);
         return nullptr;
     }
 

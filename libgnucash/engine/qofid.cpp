@@ -50,6 +50,7 @@ qof_collection_new (QofIdType type)
     QofCollection *col;
     col = g_new0(QofCollection, 1);
     col->e_type = static_cast<QofIdType>(CACHE_INSERT (type));
+    col->is_dirty = FALSE;
     col->hash_of_entities = guid_hash_table_new();
     col->data = NULL;
     return col;
@@ -138,7 +139,7 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
     QofCollection *target;
     QofInstance *e;
     const GncGUID *guid;
-    gint value;
+    gint* value;
 
     e = NULL;
     target = (QofCollection*)user_data;
@@ -146,28 +147,25 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
     {
         return;
     }
-    value = *(gint*)qof_collection_get_data(target);
-    if (value != 0)
+    value = (gint*)qof_collection_get_data(target);
+    if (*value != 0)
     {
         return;
     }
     guid = qof_instance_get_guid(ent);
     if (guid_equal(guid, guid_null()))
     {
-        value = -1;
-        qof_collection_set_data(target, &value);
+        *value = -1;
         return;
     }
     g_return_if_fail (target->e_type == ent->e_type);
     e = qof_collection_lookup_entity(target, guid);
     if ( e == NULL )
     {
-        value = 1;
-        qof_collection_set_data(target, &value);
+        *value = 1;
         return;
     }
-    value = 0;
-    qof_collection_set_data(target, &value);
+    *value = 0;
 }
 
 gint
@@ -218,26 +216,6 @@ qof_collection_lookup_entity (const QofCollection *col, const GncGUID * guid)
 							 guid));
     if (ent != NULL && qof_instance_get_destroying(ent)) return NULL;	
     return ent;
-}
-
-QofCollection *
-qof_collection_from_glist (QofIdType type, const GList *glist)
-{
-    QofCollection *coll;
-    QofInstance *ent;
-    const GList *list;
-
-    coll = qof_collection_new(type);
-    for (list = glist; list != NULL; list = list->next)
-    {
-        ent = QOF_INSTANCE(list->data);
-        if (FALSE == qof_collection_add_entity(coll, ent))
-        {
-            qof_collection_destroy(coll);
-            return NULL;
-        }
-    }
-    return coll;
 }
 
 guint

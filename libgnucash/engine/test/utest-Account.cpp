@@ -1367,6 +1367,30 @@ test_gnc_account_get_map_entry (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+test_gnc_account_get_map_guid_entry (Fixture *fixture, gconstpointer pData)
+{
+    Account *account = xaccMallocAccount (gnc_account_get_book (fixture->acct));
+    const GncGUID *account_guid = xaccAccountGetGUID (account);
+
+    xaccAccountBeginEdit (fixture->acct);
+    qof_instance_set (QOF_INSTANCE(fixture->acct), "ofx-income-account", account_guid, nullptr);
+    xaccAccountCommitEdit (fixture->acct);
+
+    GncGUID *guid = gnc_account_get_map_guid_entry (fixture->acct, "ofx/associated-income-account", nullptr);
+    g_assert_true (guid_equal (account_guid, guid));
+    guid_free (guid);
+
+    gnc_account_delete_map_entry (fixture->acct, "ofx/associated-income-account", nullptr, nullptr, false);
+
+    guid = gnc_account_get_map_guid_entry (fixture->acct, "ofx/associated-income-account", nullptr);
+    g_assert_true (!guid);
+    guid_free (guid);
+
+    xaccAccountBeginEdit (account);
+    xaccAccountDestroy (account);
+}
+
+static void
 test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = gnc_account_get_book (fixture->acct);
@@ -1854,6 +1878,21 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
  * gnc_account_child_index
  * gnc_account_nth_child
  */
+
+static void
+test_gnc_account_child_index (Fixture *fixture, gconstpointer pData)
+{
+    auto root{gnc_account_get_root (fixture->acct)};
+    g_assert_cmpint (gnc_account_child_index (root, fixture->acct), == , -1);
+
+    auto book{gnc_account_get_book (fixture->acct)};
+    auto new_acct{xaccMallocAccount(book)};
+    g_assert_cmpint (gnc_account_child_index (root, new_acct), == , -1);
+
+    gnc_account_append_child (root, new_acct);
+    g_assert_cmpint (gnc_account_child_index (root, new_acct), == , 2);
+}
+
 /* gnc_account_n_descendants
 gint
 gnc_account_n_descendants (const Account *account)// C: 12 in 6 */
@@ -2854,12 +2893,14 @@ test_suite_account (void)
 // GNC_TEST_ADD (suitename, "xaccAccountEqual", Fixture, NULL, setup, test_xaccAccountEqual,  teardown );
     GNC_TEST_ADD (suitename, "gnc account kvp getters & setters", Fixture, NULL, setup, test_gnc_account_kvp_setters_getters,  teardown );
     GNC_TEST_ADD (suitename, "test_gnc_account_get_map_entry", Fixture, NULL, setup, test_gnc_account_get_map_entry,  teardown );
+    GNC_TEST_ADD (suitename, "test_gnc_account_get_map_guid_entry", Fixture, NULL, setup, test_gnc_account_get_map_guid_entry,  teardown );
     GNC_TEST_ADD (suitename, "gnc account insert & remove split", Fixture, NULL, setup, test_gnc_account_insert_remove_split,  teardown );
     GNC_TEST_ADD (suitename, "xaccAccount Insert and Remove Lot", Fixture, &good_data, setup, test_xaccAccountInsertRemoveLot,  teardown );
     GNC_TEST_ADD (suitename, "xaccAccountRecomputeBalance", Fixture, &some_data, setup, test_xaccAccountRecomputeBalance,  teardown );
     GNC_TEST_ADD_FUNC (suitename, "xaccAccountOrder", test_xaccAccountOrder );
     GNC_TEST_ADD (suitename, "qofAccountSetParent", Fixture, &some_data, setup, test_qofAccountSetParent,  teardown );
     GNC_TEST_ADD (suitename, "gnc account append/remove child", Fixture, NULL, setup, test_gnc_account_append_remove_child,  teardown );
+    GNC_TEST_ADD (suitename, "test_gnc_account_child_index", Fixture, &some_data, setup, test_gnc_account_child_index,  teardown );
     GNC_TEST_ADD (suitename, "gnc account n descendants", Fixture, &some_data, setup, test_gnc_account_n_descendants,  teardown );
     GNC_TEST_ADD (suitename, "gnc account get current depth", Fixture, &some_data, setup, test_gnc_account_get_current_depth,  teardown );
     GNC_TEST_ADD (suitename, "gnc account get tree depth", Fixture, &complex, setup, test_gnc_account_get_tree_depth,  teardown );

@@ -199,12 +199,9 @@ void GncTxImport::base_account (Account* base_account)
             for (auto line : m_parsed_lines)
                 std::get<PL_PRESPLIT>(line)->set_account (m_settings.m_base_account);
         }
-        else
-        {
-            /* Reparse all of the lines with the new base account's commodity. */
-            tokenize(false);
-        }
 
+    	/* Reparse all of the lines with the new base account's commodity. */
+    	tokenize(false);
     }
 }
 
@@ -219,6 +216,9 @@ void GncTxImport::reset_formatted_column (std::vector<GncTransPropType>& col_typ
         if (col != m_settings.m_column_types.end())
             set_column_type (col - m_settings.m_column_types.begin(), col_type, true);
     }
+
+    /* Reparse all lines */
+    tokenize(false);
 }
 
 void GncTxImport::currency_format (int currency_format)

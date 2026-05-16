@@ -189,7 +189,6 @@ static QuoteSourceList currency_quote_sources =
 static QuoteSourceList single_quote_sources =
 {
     { false, SOURCE_SINGLE, NC_("FQ Source", "Alphavantage"), "alphavantage" },
-    { false, SOURCE_SINGLE, NC_("FQ Source", "Amsterdam Euronext eXchange, NL"), "aex" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Association of Mutual Funds in India"), "amfiindia" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Athens Exchange Group, GR"), "asegr" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Australian Stock Exchange, AU"), "asx" },
@@ -226,6 +225,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, NC_("FQ Source", "Treasury Direct bonds, US"), "treasurydirect" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Twelve Data"), "twelvedata" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Union Investment, DE"), "unionfunds" },
+    { false, SOURCE_SINGLE, NC_("FQ Source", "US Savings Bonds, US"), "usbonds" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "US Govt. Thrift Savings Plan"), "tsp" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "XETRA, DE"), "xetra" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Yahoo as JSON"), "yahoo_json" },
@@ -1501,13 +1501,13 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
     return gnc_commodity_compare(a, b) == 0;
 }
 
-// Used as a sorting callback for deleting old prices, so it needs to be
-// stable but doesn't need to be in any particular order sensible to humans.
 int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b)
 {
     if (a == b) return 0;
     if (a && !b) return 1;
     if (b && !a) return -1;
+    if (auto rv = g_strcmp0 (gnc_commodity_get_unique_name (a), gnc_commodity_get_unique_name (b)))
+        return rv;
     return qof_instance_guid_compare(a, b);
 }
 
@@ -2133,6 +2133,37 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     return ns;
 }
 
+bool
+gnc_commodity_table_rename_namespace(const gnc_commodity_table * table,
+                                     const char * namespace_name,
+                                     const char * new_namespace_name)
+{
+    if (!table || !namespace_name || !new_namespace_name ||
+        (g_strcmp0 (namespace_name, new_namespace_name) == 0) ||
+        (g_strcmp0 (new_namespace_name, GNC_COMMODITY_NS_ISO_GUI) == 0) ||
+        (g_strcmp0 (new_namespace_name, _(GNC_COMMODITY_NS_ISO_GUI)) == 0) ||
+        gnc_commodity_table_find_namespace (table, new_namespace_name))
+        return false;
+
+    auto ns = gnc_commodity_table_find_namespace (table, namespace_name);
+    if (!ns)
+        return false;
+
+    ns->name = CACHE_INSERT(static_cast<const char*>(new_namespace_name));
+
+    g_hash_table_insert (table->ns_table,
+                         (gpointer) ns->name,
+                         (gpointer) ns);
+
+    g_hash_table_remove (table->ns_table,
+                         (gpointer) namespace_name);
+
+    CACHE_REMOVE(namespace_name);
+
+    qof_instance_set_dirty (&ns->inst);
+    qof_event_gen (&ns->inst, QOF_EVENT_MODIFY, nullptr);
+    return true;
+}
 
 gnc_commodity_namespace *
 gnc_commodity_table_find_namespace(const gnc_commodity_table * table,

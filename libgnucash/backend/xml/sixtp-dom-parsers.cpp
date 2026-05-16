@@ -176,7 +176,10 @@ static KvpValue*
 dom_tree_to_gdate_kvp_value (xmlNodePtr node)
 {
     auto date = dom_tree_to_gdate (node);
-    return date ? new KvpValue {*date} : nullptr;
+    if (!date) return nullptr;
+    auto rv{new KvpValue {*date}};
+    g_date_free (date);
+    return rv;
 }
 
 gboolean

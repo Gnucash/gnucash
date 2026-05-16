@@ -34,9 +34,11 @@
 #include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <string_view>
+#include <cerrno>
 #include <fcntl.h>
 #include <unistd.h>
 #include <regex.h>
@@ -51,17 +53,17 @@
 static QofLogModule log_module = GNC_MOD_HTML;
 
 /* hashes for URLType -> protocol and protocol -> URLType */
-static GHashTable * gnc_html_type_to_proto_hash = NULL;
-GHashTable * gnc_html_proto_to_type_hash = NULL;
+static GHashTable * gnc_html_type_to_proto_hash = nullptr;
+GHashTable * gnc_html_proto_to_type_hash = nullptr;
 
 /* hashes an HTML <object classid="ID"> classid to a handler function */
-GHashTable* gnc_html_object_handlers = NULL;
+GHashTable* gnc_html_object_handlers = nullptr;
 
 /* hashes handlers for loading different URLType data */
-GHashTable* gnc_html_stream_handlers = NULL;
+GHashTable* gnc_html_stream_handlers = nullptr;
 
 /* hashes handlers for handling different URLType data */
-GHashTable* gnc_html_url_handlers = NULL;
+GHashTable* gnc_html_url_handlers = nullptr;
 
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
@@ -86,24 +88,23 @@ gnc_html_class_init( GncHtmlClass* klass )
     gobject_class->dispose = gnc_html_dispose;
     gobject_class->finalize = gnc_html_finalize;
 
-    klass->show_url = NULL;
-    klass->show_data = NULL;
-    klass->reload = NULL;
-    klass->copy_to_clipboard = NULL;
-    klass->export_to_file = NULL;
-    klass->print = NULL;
-    klass->cancel = NULL;
-    klass->parse_url = NULL;
-    klass->set_parent = NULL;
+    klass->show_url = nullptr;
+    klass->show_data = nullptr;
+    klass->reload = nullptr;
+    klass->copy_to_clipboard = nullptr;
+    klass->export_to_file = nullptr;
+    klass->print = nullptr;
+    klass->cancel = nullptr;
+    klass->parse_url = nullptr;
+    klass->set_parent = nullptr;
 }
 
 static void
 gnc_html_init( GncHtml* self )
 {
-    GncHtmlPrivate* priv;
-    priv = self->priv = g_new0( GncHtmlPrivate, 1 );
+    GncHtmlPrivate *priv = self->priv = g_new0( GncHtmlPrivate, 1 );
 
-    priv->container = gtk_scrolled_window_new( NULL, NULL );
+    priv->container = gtk_scrolled_window_new( nullptr, nullptr );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(priv->container),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
@@ -118,21 +119,21 @@ gnc_html_dispose( GObject* obj )
     GncHtml* self = GNC_HTML(obj);
     GncHtmlPrivate* priv = GNC_HTML_GET_PRIVATE(self);
 
-    if ( priv->container != NULL )
+    if ( priv->container != nullptr )
     {
         gtk_widget_destroy( GTK_WIDGET(priv->container) );
         g_object_unref( G_OBJECT(priv->container) );
-        priv->container = NULL;
+        priv->container = nullptr;
     }
-    if ( priv->request_info != NULL )
+    if ( priv->request_info != nullptr )
     {
         g_hash_table_destroy( priv->request_info );
-        priv->request_info = NULL;
+        priv->request_info = nullptr;
     }
-    if ( priv->history != NULL )
+    if ( priv->history != nullptr )
     {
         gnc_html_history_destroy( priv->history );
-        priv->history = NULL;
+        priv->history = nullptr;
     }
 
     G_OBJECT_CLASS(gnc_html_parent_class)->dispose( obj );
@@ -143,10 +144,10 @@ gnc_html_finalize( GObject* obj )
 {
     GncHtml* self = GNC_HTML(obj);
 
-    if ( self->priv != NULL )
+    if ( self->priv != nullptr )
     {
         g_free( self->priv );
-        self->priv = NULL;
+        self->priv = nullptr;
     }
 
     G_OBJECT_CLASS(gnc_html_parent_class)->finalize( obj );
@@ -157,18 +158,19 @@ gnc_html_finalize( GObject* obj )
 static char*
 extract_machine_name( const gchar* path )
 {
-    gchar machine_rexp[] = "^(//[^/]*)/*(.*)?$";
+    constexpr gchar machine_rexp[] = "^(//[^/]*)/*(.*)?$";
     regex_t compiled_m;
-    regmatch_t match[4];
-    gchar* machine = NULL;
+    constexpr size_t MATCH_LEN = 4;
+    regmatch_t match[MATCH_LEN];
+    gchar* machine = nullptr;
 
-    if ( path == NULL ) return NULL;
+    if ( path == nullptr ) return nullptr;
 
     regcomp( &compiled_m, machine_rexp, REG_EXTENDED );
 
     /* step 1: split the machine name away from the path
      * components */
-    if ( !regexec( &compiled_m, path, 4, match, 0 ) )
+    if ( !regexec( &compiled_m, path, MATCH_LEN, match, 0 ) )
     {
         /* $1 is the machine name */
         if ( match[1].rm_so != -1 )
@@ -188,22 +190,23 @@ extract_machine_name( const gchar* path )
 
 URLType
 gnc_html_parse_url( GncHtml* self, const gchar* url,
-                    gchar** url_location, gchar** url_label )
+                    gchar** url_location, gchar** url_label ) noexcept
 {
-    gchar uri_rexp[] = "^(([^:][^:]+):)?([^#]+)?(#(.*))?$";
+    constexpr gchar uri_rexp[] = "^(([^:][^:]+):)?([^#]+)?(#(.*))?$";
     regex_t compiled;
-    regmatch_t match[6];
-    gchar* protocol = NULL;
-    gchar* path = NULL;
-    gchar* label = NULL;
-    gboolean found_protocol = FALSE;
-    gboolean found_path = FALSE;
-    gboolean found_label = FALSE;
+    constexpr size_t MATCH_LEN = 6;
+    regmatch_t match[MATCH_LEN];
+    gchar* protocol = nullptr;
+    gchar* path = nullptr;
+    gchar* label = nullptr;
+    bool found_protocol = false;
+    bool found_path = false;
+    bool found_label = false;
     URLType retval;
     GncHtmlPrivate* priv = GNC_HTML_GET_PRIVATE(self);
 
-    g_return_val_if_fail( self != NULL, NULL );
-    g_return_val_if_fail( GNC_IS_HTML(self), NULL );
+    g_return_val_if_fail( self != nullptr, nullptr );
+    g_return_val_if_fail( GNC_IS_HTML(self), nullptr );
 
     DEBUG( "parsing %s, base_location %s",
            url ? url : "(null)",
@@ -213,28 +216,28 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
 
     regcomp( &compiled, uri_rexp, REG_EXTENDED );
 
-    if ( !regexec( &compiled, url, 6, match, 0 ) )
+    if ( !regexec( &compiled, url, MATCH_LEN, match, 0 ) )
     {
         if ( match[2].rm_so != -1 )
         {
             protocol = g_new0( gchar, match[2].rm_eo - match[2].rm_so + 1 );
             strncpy( protocol, url + match[2].rm_so, match[2].rm_eo - match[2].rm_so );
             protocol[match[2].rm_eo - match[2].rm_so] = 0;
-            found_protocol = TRUE;
+            found_protocol = true;
         }
         if ( match[3].rm_so != -1 )
         {
             path = g_new0( gchar, match[3].rm_eo - match[3].rm_so + 1 );
             strncpy( path, url + match[3].rm_so, match[3].rm_eo - match[3].rm_so );
             path[match[3].rm_eo - match[3].rm_so] = 0;
-            found_path = TRUE;
+            found_path = true;
         }
         if ( match[5].rm_so != -1 )
         {
             label = g_new0( gchar, match[5].rm_eo - match[5].rm_so + 1 );
             strncpy( label, url + match[5].rm_so, match[5].rm_eo - match[5].rm_so );
             label[match[5].rm_eo - match[5].rm_so] = 0;
-            found_label = TRUE;
+            found_label = true;
         }
     }
 
@@ -242,8 +245,9 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
 
     if ( found_protocol )
     {
-        retval = g_hash_table_lookup( gnc_html_proto_to_type_hash, protocol );
-        if ( retval == NULL )
+        const gpointer p = g_hash_table_lookup( gnc_html_proto_to_type_hash, protocol );
+        retval = static_cast<const char *>(p);
+        if ( retval == nullptr )
         {
             PWARN( "unhandled URL type for '%s'", url ? url : "(null)" );
             retval = URL_TYPE_OTHER;
@@ -277,7 +281,7 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
             }
             else
             {
-                *url_location = g_build_filename( priv->base_location, path, (gchar*)NULL );
+                *url_location = g_build_filename( priv->base_location, path, nullptr );
             }
             g_free( path );
         }
@@ -290,7 +294,7 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
     }
     else if ( !g_strcmp0( retval, URL_TYPE_JUMP ) )
     {
-        *url_location = NULL;
+        *url_location = nullptr;
         g_free( path );
 
     }
@@ -303,11 +307,11 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
             if ( g_path_is_absolute( path ) )
             {
                 *url_location = g_build_filename( extract_machine_name( priv->base_location ),
-                                                  path, (gchar*)NULL );
+                                                  path, nullptr );
             }
             else
             {
-                *url_location = g_build_filename( priv->base_location, path, (gchar*)NULL );
+                *url_location = g_build_filename( priv->base_location, path, nullptr );
             }
             g_free( path );
         }
@@ -329,12 +333,12 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
  ********************************************************************/
 
 void
-gnc_html_show_data( GncHtml* self, const gchar* data, int datalen )
+gnc_html_show_data( GncHtml* self, const gchar* data, int datalen ) noexcept
 {
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    if ( GNC_HTML_GET_CLASS(self)->show_data != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->show_data != nullptr )
     {
         GNC_HTML_GET_CLASS(self)->show_data( self, data, datalen );
     }
@@ -356,15 +360,14 @@ gnc_html_show_data( GncHtml* self, const gchar* data, int datalen )
 void
 gnc_html_show_url( GncHtml* self, URLType type,
                    const gchar* location, const gchar* label,
-                   gboolean new_window_hint )
+                   gboolean new_window_hint ) noexcept
 {
-    char* lc_type = NULL;
-
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    lc_type = g_ascii_strdown (type, -1);
-    if ( GNC_HTML_GET_CLASS(self)->show_url != NULL )
+    char* lc_type = g_ascii_strdown (type, -1);
+
+    if ( GNC_HTML_GET_CLASS(self)->show_url != nullptr )
     {
         GNC_HTML_GET_CLASS(self)->show_url( self, lc_type, location, label, new_window_hint );
     }
@@ -385,12 +388,12 @@ gnc_html_show_url( GncHtml* self, URLType type,
  ********************************************************************/
 
 void
-gnc_html_reload( GncHtml* self, gboolean force_rebuild )
+gnc_html_reload( GncHtml* self, gboolean force_rebuild ) noexcept
 {
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    if ( GNC_HTML_GET_CLASS(self)->reload != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->reload != nullptr )
     {
         GNC_HTML_GET_CLASS(self)->reload( self, force_rebuild );
     }
@@ -406,12 +409,12 @@ gnc_html_reload( GncHtml* self, gboolean force_rebuild )
  ********************************************************************/
 
 void
-gnc_html_cancel( GncHtml* self )
+gnc_html_cancel( GncHtml* self ) noexcept
 {
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    if ( GNC_HTML_GET_CLASS(self)->cancel != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->cancel != nullptr )
     {
         GNC_HTML_GET_CLASS(self)->cancel( self );
     }
@@ -428,9 +431,9 @@ gnc_html_cancel( GncHtml* self )
  ********************************************************************/
 
 void
-gnc_html_destroy( GncHtml* self )
+gnc_html_destroy( GncHtml* self ) noexcept
 {
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
     if ( g_object_is_floating( G_OBJECT(self) ) )
@@ -442,63 +445,55 @@ gnc_html_destroy( GncHtml* self )
 }
 
 void
-gnc_html_set_urltype_cb( GncHtml* self, GncHTMLUrltypeCB urltype_cb )
+gnc_html_set_urltype_cb( GncHtml* self, GncHTMLUrltypeCB urltype_cb ) noexcept
 {
-    GncHtmlPrivate* priv;
-
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    priv = GNC_HTML_GET_PRIVATE(self);
+    auto priv = GNC_HTML_GET_PRIVATE(self);
     priv->urltype_cb = urltype_cb;
 }
 
 void
-gnc_html_set_load_cb( GncHtml* self, GncHTMLLoadCB load_cb, gpointer data )
+gnc_html_set_load_cb( GncHtml* self, GncHTMLLoadCB load_cb, gpointer data ) noexcept
 {
-    GncHtmlPrivate* priv;
-
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    priv = GNC_HTML_GET_PRIVATE(self);
+    auto priv = GNC_HTML_GET_PRIVATE(self);
     priv->load_cb = load_cb;
     priv->load_cb_data = data;
 }
 
 void
-gnc_html_set_flyover_cb( GncHtml* self, GncHTMLFlyoverCB flyover_cb, gpointer data )
+gnc_html_set_flyover_cb( GncHtml* self, GncHTMLFlyoverCB flyover_cb, gpointer data ) noexcept
 {
-    GncHtmlPrivate* priv;
-
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    priv = GNC_HTML_GET_PRIVATE(self);
+    auto priv = GNC_HTML_GET_PRIVATE(self);
     priv->flyover_cb = flyover_cb;
     priv->flyover_cb_data = data;
 }
 
 void
-gnc_html_set_button_cb( GncHtml* self, GncHTMLButtonCB button_cb, gpointer data )
+gnc_html_set_button_cb( GncHtml* self, GncHTMLButtonCB button_cb, gpointer data ) noexcept
 {
-    GncHtmlPrivate* priv;
-
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    priv = GNC_HTML_GET_PRIVATE(self);
+    auto priv = GNC_HTML_GET_PRIVATE(self);
     priv->button_cb = button_cb;
     priv->button_cb_data = data;
 }
 
 void
-gnc_html_copy_to_clipboard( GncHtml* self )
+gnc_html_copy_to_clipboard( GncHtml* self ) noexcept
 {
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    if ( GNC_HTML_GET_CLASS(self)->copy_to_clipboard != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->copy_to_clipboard != nullptr )
     {
         GNC_HTML_GET_CLASS(self)->copy_to_clipboard( self );
     }
@@ -513,12 +508,12 @@ gnc_html_copy_to_clipboard( GncHtml* self )
  **************************************************************/
 
 gboolean
-gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
+gnc_html_export_to_file( GncHtml* self, const gchar* filepath ) noexcept
 {
-    g_return_val_if_fail( self != NULL, FALSE );
+    g_return_val_if_fail( self != nullptr, FALSE );
     g_return_val_if_fail( GNC_IS_HTML(self), FALSE );
 
-    if ( GNC_HTML_GET_CLASS(self)->export_to_file != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->export_to_file != nullptr )
     {
         return GNC_HTML_GET_CLASS(self)->export_to_file( self, filepath );
     }
@@ -530,20 +525,20 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
 }
 #ifdef WEBKIT1
 void
-gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf)
+gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf) noexcept
 #else
 void
-gnc_html_print (GncHtml* self, const char *jobname)
+gnc_html_print (GncHtml* self, const char *jobname) noexcept
 #endif
 {
-    g_return_if_fail( self != NULL );
-     g_return_if_fail( jobname != NULL );
+    g_return_if_fail( self != nullptr );
+    g_return_if_fail( jobname != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    if ( GNC_HTML_GET_CLASS(self)->print != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->print != nullptr )
     {
 #ifdef WEBKIT1
-      GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
+        GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
 #else
         GNC_HTML_GET_CLASS(self)->print (self, jobname);
 #endif
@@ -555,48 +550,45 @@ gnc_html_print (GncHtml* self, const char *jobname)
 }
 
 gnc_html_history *
-gnc_html_get_history( GncHtml* self )
+gnc_html_get_history( GncHtml* self ) noexcept
 {
-    g_return_val_if_fail( self != NULL, NULL );
-    g_return_val_if_fail( GNC_IS_HTML(self), NULL );
+    g_return_val_if_fail( self != nullptr, nullptr );
+    g_return_val_if_fail( GNC_IS_HTML(self), nullptr );
 
     return GNC_HTML_GET_PRIVATE(self)->history;
 }
 
 
 GtkWidget *
-gnc_html_get_widget( GncHtml* self )
+gnc_html_get_widget( GncHtml* self ) noexcept
 {
-    g_return_val_if_fail( self != NULL, NULL );
-    g_return_val_if_fail( GNC_IS_HTML(self), NULL );
+    g_return_val_if_fail( self != nullptr, nullptr );
+    g_return_val_if_fail( GNC_IS_HTML(self), nullptr );
 
     return GNC_HTML_GET_PRIVATE(self)->container;
 }
 
 
 GtkWidget *
-gnc_html_get_webview( GncHtml* self )
+gnc_html_get_webview( GncHtml* self ) noexcept
 {
-    GncHtmlPrivate* priv;
-    GList *sw_list = NULL;
-    GtkWidget *webview = NULL;
+    g_return_val_if_fail (self != nullptr, nullptr);
+    g_return_val_if_fail (GNC_IS_HTML(self), nullptr);
 
-    g_return_val_if_fail (self != NULL, NULL);
-    g_return_val_if_fail (GNC_IS_HTML(self), NULL);
-
-    priv = GNC_HTML_GET_PRIVATE(self);
-    sw_list = gtk_container_get_children (GTK_CONTAINER(priv->container));
+    auto priv = GNC_HTML_GET_PRIVATE(self);
+    GList *sw_list = gtk_container_get_children (GTK_CONTAINER(priv->container));
+    GtkWidget *webview = nullptr;
 
     if (sw_list) // the scroll window has only one child
     {
 #ifdef WEBKIT1
-        webview = sw_list->data;
+        webview = static_cast<GtkWidget *>(sw_list->data);
 #else
         GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
- 
+
         if (vp_list) // the viewport has only one child
         {
-            webview = vp_list->data;
+            webview = static_cast<GtkWidget *>(vp_list->data);
             g_list_free (vp_list);
         }
 #endif
@@ -607,12 +599,12 @@ gnc_html_get_webview( GncHtml* self )
 
 
 void
-gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
+gnc_html_set_parent( GncHtml* self, GtkWindow* parent ) noexcept
 {
-    g_return_if_fail( self != NULL );
+    g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
-    if ( GNC_HTML_GET_CLASS(self)->set_parent != NULL )
+    if ( GNC_HTML_GET_CLASS(self)->set_parent != nullptr )
     {
         GNC_HTML_GET_CLASS(self)->set_parent( self, parent );
     }
@@ -626,41 +618,38 @@ gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
  * Returns TRUE if successful, FALSE if the type already exists.
  */
 gboolean
-gnc_html_register_urltype( URLType type, const char *protocol )
+gnc_html_register_urltype( URLType type, const char *protocol ) noexcept
 {
-    char*  lc_type  = NULL;
-    char    *lc_proto = NULL;
+    if (!protocol) return FALSE;
 
     if (!gnc_html_type_to_proto_hash)
     {
         gnc_html_type_to_proto_hash = g_hash_table_new (g_str_hash, g_str_equal);
         gnc_html_proto_to_type_hash = g_hash_table_new (g_str_hash, g_str_equal);
     }
-    if (!protocol) return FALSE;
 
-    lc_type = g_ascii_strdown (type, -1);
+    char *lc_type  = g_ascii_strdown (type, -1);
     if (g_hash_table_lookup (gnc_html_type_to_proto_hash, lc_type))
     {
         g_free (lc_type);
         return FALSE;
     }
 
-    lc_proto = g_ascii_strdown (protocol, -1);
-    g_hash_table_insert (gnc_html_type_to_proto_hash, lc_type, (gpointer)lc_proto);
+    char *lc_proto = g_ascii_strdown (protocol, -1);
+    g_hash_table_insert (gnc_html_type_to_proto_hash, lc_type, static_cast<gpointer>(lc_proto));
     if (*lc_proto)
-        g_hash_table_insert (gnc_html_proto_to_type_hash, (gpointer)lc_proto, lc_type);
+        g_hash_table_insert (gnc_html_proto_to_type_hash, static_cast<gpointer>(lc_proto), lc_type);
 
     return TRUE;
 }
 
 void
-gnc_html_initialize( void )
+gnc_html_initialize( void ) noexcept
 {
-    int i;
     static struct
     {
         URLType	type;
-        char *	protocol;
+        const char *protocol;
     } types[] =
     {
         { URL_TYPE_FILE, "file" },
@@ -677,12 +666,13 @@ gnc_html_initialize( void )
         { URL_TYPE_XMLDATA, "gnc-xml" },
         { URL_TYPE_PRICE, "gnc-price" },
         { URL_TYPE_BUDGET, "gnc-budget" },
-        { URL_TYPE_OTHER, "" },
-        { NULL, NULL }
+        { URL_TYPE_OTHER, "" }
     };
 
-    for (i = 0; types[i].type; i++)
-        gnc_html_register_urltype (types[i].type, types[i].protocol);
+    for (const auto& elem : types)
+    {
+        (void) gnc_html_register_urltype (elem.type, elem.protocol);
+    }
 }
 
 /**
@@ -694,15 +684,13 @@ gnc_html_initialize( void )
  * @return Newly created URL.  This string must be freed by the caller.
  */
 gchar*
-gnc_build_url( URLType type, const gchar* location, const gchar* label )
+gnc_build_url( URLType type, const gchar* location, const gchar* label ) noexcept
 {
-    char*  lc_type  = NULL;
-    char * type_name;
-
     DEBUG(" ");
-    lc_type = g_ascii_strdown (type, -1);
-    type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, lc_type);
-    g_free (lc_type);
+    char *lc_type = g_ascii_strdown (type, -1);
+    const gpointer p = g_hash_table_lookup (gnc_html_type_to_proto_hash, lc_type);
+    const char *type_name = static_cast<const char *>(p);
+    g_free (static_cast<gpointer>(lc_type));
     if (!type_name)
         type_name = "";
 
@@ -719,193 +707,37 @@ gnc_build_url( URLType type, const gchar* location, const gchar* label )
     }
 }
 
-/********************************************************************
- * gnc_html_encode_string
- * RFC 1738 encoding of string for submission with an HTML form.
- * GPL code lifted from gtkhtml.  copyright notice:
- *
- * Copyright (C) 1997 Martin Jones (mjones@kde.org)
- * Copyright (C) 1997 Torben Weis (weis@kde.org)
- * Copyright (C) 1999 Helix Code, Inc.
- ********************************************************************/
-
-char *
-gnc_html_encode_string(const char * str)
-{
-    static gchar *safe = "$-._!*(),"; /* RFC 1738 */
-    unsigned pos      = 0;
-    GString *encoded  = g_string_new ("");
-    static const size_t buf_size = 5;
-    gchar buffer[buf_size], *ptr;
-    guchar c;
-
-    if (!str) return NULL;
-
-    while (pos < strlen(str))
-    {
-        c = (unsigned char) str[pos];
-
-        if ((( c >= 'A') && ( c <= 'Z')) ||
-                (( c >= 'a') && ( c <= 'z')) ||
-                (( c >= '0') && ( c <= '9')) ||
-                (strchr(safe, c)))
-        {
-            encoded = g_string_append_c (encoded, c);
-        }
-        else if ( c == ' ' )
-        {
-            encoded = g_string_append_c (encoded, '+');
-        }
-        else if ( c == '\n' )
-        {
-            encoded = g_string_append (encoded, "%0D%0A");
-        }
-        else if ( c != '\r' )
-        {
-            snprintf( buffer, buf_size, "%%%02X", (int)c );
-            encoded = g_string_append (encoded, buffer);
-        }
-        pos++;
-    }
-
-    ptr = g_string_free (encoded, FALSE);
-
-    return (char *)ptr;
-}
-
-
-char *
-gnc_html_decode_string(const char * str)
-{
-    static gchar * safe = "$-._!*(),"; /* RFC 1738 */
-    GString * decoded  = g_string_new ("");
-    const gchar   * ptr;
-    guchar  c;
-    guint   hexval;
-    ptr = str;
-
-    if (!str) return NULL;
-
-    while (*ptr)
-    {
-        c = (unsigned char) * ptr;
-        if ((( c >= 'A') && ( c <= 'Z')) ||
-                (( c >= 'a') && ( c <= 'z')) ||
-                (( c >= '0') && ( c <= '9')) ||
-                (strchr(safe, c)))
-        {
-            decoded = g_string_append_c (decoded, c);
-        }
-        else if ( c == '+' )
-        {
-            decoded = g_string_append_c (decoded, ' ');
-        }
-        else if (!strncmp(ptr, "%0D0A", 5))
-        {
-            decoded = g_string_append (decoded, "\n");
-            ptr += 4;
-        }
-        else if (c == '%')
-        {
-            ptr++;
-            if (1 == sscanf(ptr, "%02X", &hexval))
-                decoded = g_string_append_c(decoded, (char)hexval);
-            else
-                decoded = g_string_append_c(decoded, ' ');
-            ptr++;
-        }
-        ptr++;
-    }
-    ptr = g_string_free (decoded, FALSE);
-
-    return (char *)ptr;
-}
-
-/********************************************************************
- * escape/unescape_newlines : very simple string encoding for GPG
- * ASCII-armored text.
- ********************************************************************/
-
-char *
-gnc_html_unescape_newlines(const gchar * in)
-{
-    const char * ip = in;
-    char    * cstr = NULL;
-    GString * rv = g_string_new("");
-
-    for (ip = in; *ip; ip++)
-    {
-        if ((*ip == '\\') && (*(ip + 1) == 'n'))
-        {
-            g_string_append(rv, "\n");
-            ip++;
-        }
-        else
-        {
-            g_string_append_c(rv, *ip);
-        }
-    }
-
-    g_string_append_c(rv, 0);
-    cstr = g_string_free (rv, FALSE);
-    return cstr;
-}
-
-char *
-gnc_html_escape_newlines(const gchar * in)
-{
-    char *out;
-    const char * ip   = in;
-    GString * escaped = g_string_new("");
-
-    for (ip = in; *ip; ip++)
-    {
-        if (*ip == '\012')
-        {
-            g_string_append(escaped, "\\n");
-        }
-        else
-        {
-            g_string_append_c(escaped, *ip);
-        }
-    }
-    g_string_append_c(escaped, 0);
-    out = g_string_free (escaped, FALSE);
-    return out;
-}
-
 void
 gnc_html_register_object_handler( const char * classid,
-                                  GncHTMLObjectCB hand )
+                                  GncHTMLObjectCB hand ) noexcept
 {
-    g_return_if_fail( classid != NULL );
+    g_return_if_fail( classid != nullptr );
 
-    if ( gnc_html_object_handlers == NULL )
+    if ( gnc_html_object_handlers == nullptr )
     {
         gnc_html_object_handlers = g_hash_table_new( g_str_hash, g_str_equal );
     }
 
     gnc_html_unregister_object_handler( classid );
-    if ( hand != NULL )
+    if ( hand != nullptr )
     {
         gchar *lc_id  = g_ascii_strdown (classid, -1);
-        g_hash_table_insert( gnc_html_object_handlers, lc_id, hand );
+        g_hash_table_insert( gnc_html_object_handlers, lc_id,
+            reinterpret_cast<gpointer>(hand) );
     }
 }
 
 void
-gnc_html_unregister_object_handler( const gchar* classid )
+gnc_html_unregister_object_handler( const gchar* classid ) noexcept
 {
-    gchar* keyptr = NULL;
-    gchar* valptr = NULL;
-    gchar** p_keyptr = &keyptr;
-    gchar** p_valptr = &valptr;
+    gchar* keyptr = nullptr;
+    gchar* valptr = nullptr;
     gchar* lc_id = g_ascii_strdown (classid, -1);
 
     if ( g_hash_table_lookup_extended( gnc_html_object_handlers,
                                        lc_id,
-                                       (gpointer *)p_keyptr,
-                                       (gpointer *)p_valptr) )
+                                       reinterpret_cast<gpointer *>(&keyptr),
+                                       reinterpret_cast<gpointer *>(&valptr) ) )
     {
         g_hash_table_remove( gnc_html_object_handlers, lc_id );
         g_free( keyptr );
@@ -914,25 +746,26 @@ gnc_html_unregister_object_handler( const gchar* classid )
 }
 
 void
-gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand )
+gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand ) noexcept
 {
-    g_return_if_fail( url_type != NULL && *url_type != '\0' );
+    g_return_if_fail( url_type != nullptr && *url_type != '\0' );
 
-    if ( gnc_html_stream_handlers == NULL )
+    if ( gnc_html_stream_handlers == nullptr )
     {
         gnc_html_stream_handlers = g_hash_table_new( g_str_hash, g_str_equal );
     }
 
     gnc_html_unregister_stream_handler( url_type );
-    if ( hand != NULL )
+    if ( hand != nullptr )
     {
         char*  lc_type  = g_ascii_strdown (url_type, -1);
-        g_hash_table_insert( gnc_html_stream_handlers, lc_type, hand );
+        g_hash_table_insert( gnc_html_stream_handlers, lc_type,
+            reinterpret_cast<gpointer>(hand) );
     }
 }
 
 void
-gnc_html_unregister_stream_handler( URLType url_type )
+gnc_html_unregister_stream_handler( URLType url_type ) noexcept
 {
     char*  lc_type = g_ascii_strdown (url_type, -1);
     g_hash_table_remove( gnc_html_stream_handlers, lc_type );
@@ -940,25 +773,26 @@ gnc_html_unregister_stream_handler( URLType url_type )
 }
 
 void
-gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand )
+gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand ) noexcept
 {
-    g_return_if_fail( url_type != NULL && *url_type != '\0' );
+    g_return_if_fail( url_type != nullptr && *url_type != '\0' );
 
-    if ( gnc_html_url_handlers == NULL )
+    if ( gnc_html_url_handlers == nullptr )
     {
         gnc_html_url_handlers = g_hash_table_new( g_str_hash, g_str_equal );
     }
 
     gnc_html_unregister_url_handler( url_type );
-    if ( hand != NULL )
+    if ( hand != nullptr )
     {
         char* lc_type = g_ascii_strdown (url_type, -1);
-        g_hash_table_insert( gnc_html_url_handlers, lc_type, hand );
+        g_hash_table_insert( gnc_html_url_handlers, lc_type,
+            reinterpret_cast<gpointer>(hand) );
     }
 }
 
 void
-gnc_html_unregister_url_handler( URLType url_type )
+gnc_html_unregister_url_handler( URLType url_type ) noexcept
 {
     char* lc_type = g_ascii_strdown (url_type, -1);
     g_hash_table_remove( gnc_html_url_handlers, lc_type );

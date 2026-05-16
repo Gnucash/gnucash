@@ -359,6 +359,11 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     new_label = g_strconcat(start, "_", ptr, (gchar *)NULL);
     g_free(start);
     DEBUG("label '%s' -> '%s'", info->action_label, new_label);
+
+    /* Save the original action_label before adding accelerator */
+    if (info->type == GNC_SUB_MENU_ITEM)
+        info->action_label_original = g_strdup (info->action_label);
+
     g_free((gchar *)info->action_label);
     info->action_label = new_label;
 
@@ -446,6 +451,15 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
     }
     g_hash_table_insert (per_window->build_menu_hash, g_strdup (full_path), gmenu_item);
 
+    /* if the action_label has been changed, we need to add another entry to the table
+       with the original action_label so the gmenu_item can be found */
+    if (ext_info->action_label_original)
+    {
+        gchar *full_path_original = g_strconcat (ext_info->path, "/", ext_info->action_label_original, NULL);
+        g_hash_table_insert (per_window->build_menu_hash, g_strdup (full_path_original), gmenu_item);
+        g_object_ref (gmenu_item);
+        g_free (full_path_original);
+    }
     g_free (full_path);
 }
 

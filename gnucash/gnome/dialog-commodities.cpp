@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 
 #include "dialog-commodity.h"
+#include "gnc-commodity.hpp"
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
@@ -62,6 +63,7 @@ typedef struct
     GtkWidget * edit_button;
     GtkWidget * remove_button;
     gboolean    show_currencies;
+    GtkWidget * rename_namespace_button;
 
     gboolean is_new;
 } CommoditiesDialog;
@@ -74,12 +76,15 @@ void gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data);
+
+void gnc_commodities_dialog_rename_namespace_clicked (GtkWidget *widget, gpointer data);
+
 void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
 }
 
-gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
-                                              GdkEventKey *event,
-                                              gpointer data);
+static gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
+                                                     GdkEventKey *event,
+                                                     gpointer data);
 
 
 void
@@ -270,6 +275,65 @@ gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data)
     gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 }
 
+void
+gnc_commodities_dialog_rename_namespace_clicked (GtkWidget *widget, gpointer data)
+{
+    auto cd = static_cast<CommoditiesDialog*>(data);
+    auto ns = gnc_tree_view_commodity_get_selected_namespace (cd->commodity_tree);
+
+    if (!ns)
+        return;
+
+    const auto ns_name = gnc_commodity_namespace_get_name (ns);
+
+    GtkBuilder *builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "rename_namespace_dialog");
+
+    GtkDialog *dialog = GTK_DIALOG(gtk_builder_get_object (builder, "rename_namespace_dialog"));
+    GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object (builder, "rename_entry"));
+    GtkWidget *label = GTK_WIDGET(gtk_builder_get_object (builder, "rename_label"));
+
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-rename-namespace");
+    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-securities");
+
+    // Entry
+    gtk_entry_set_text (GTK_ENTRY(entry), ns_name);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
+    gtk_entry_set_activates_default (GTK_ENTRY(entry), true);
+
+    // Set our parent
+    gtk_window_set_transient_for (GTK_WINDOW(dialog),
+                                  GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nullptr);
+    g_object_unref (G_OBJECT(builder));
+
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+
+    bool rename_ok = false;
+    while (!rename_ok && gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+    {
+        const auto commodity_table = gnc_get_current_commodities ();
+        const auto new_ns_name = gtk_entry_get_text (GTK_ENTRY(entry));
+
+        if (new_ns_name && *new_ns_name)
+        {
+            rename_ok = gnc_commodity_table_rename_namespace (commodity_table,
+                                                              ns_name,
+                                                              new_ns_name);
+            if (rename_ok)
+                qof_book_mark_session_dirty (gnc_get_current_book());
+            else
+                gtk_label_set_text (GTK_LABEL(label),
+                                    _("Rename failed, possibly new name exists"));
+        }
+        else
+            gtk_label_set_text (GTK_LABEL(label), _("No new name"));
+    }
+    gtk_widget_destroy (GTK_WIDGET(dialog));
+}
+
 static void
 gnc_commodities_dialog_selection_changed (GtkTreeSelection *selection,
         CommoditiesDialog *cd)
@@ -281,6 +345,18 @@ gnc_commodities_dialog_selection_changed (GtkTreeSelection *selection,
     remove_ok = commodity && !gnc_commodity_is_iso(commodity);
     gtk_widget_set_sensitive (cd->edit_button, commodity != NULL);
     gtk_widget_set_sensitive (cd->remove_button, remove_ok);
+
+    gtk_widget_set_sensitive (cd->rename_namespace_button, !commodity);
+
+    if (!commodity)
+    {
+        gnc_commodity_namespace *ns = gnc_tree_view_commodity_get_selected_namespace (cd->commodity_tree);
+        const char *ns_name = gnc_commodity_namespace_get_name (ns);
+
+        gtk_widget_set_sensitive (cd->rename_namespace_button,
+                                  !(g_strcmp0 (ns_name, GNC_COMMODITY_NS_LEGACY) == 0 ||
+                                    g_strcmp0 (ns_name, GNC_COMMODITY_NS_CURRENCY) == 0));
+    }
 }
 
 void
@@ -350,6 +426,9 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     /* buttons */
     cd->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));
     cd->edit_button = GTK_WIDGET(gtk_builder_get_object (builder, "edit_button"));
+
+    cd->rename_namespace_button = GTK_WIDGET(gtk_builder_get_object (builder, "rename_namespace_button"));
+    gtk_widget_set_sensitive (cd->rename_namespace_button, FALSE);
 
     /* commodity tree */
     scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_list_window"));
@@ -429,7 +508,7 @@ show_handler (const char *klass, gint component_id,
     return(TRUE);
 }
 
-gboolean
+static gboolean
 gnc_commodities_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
                                      gpointer data)
 {
