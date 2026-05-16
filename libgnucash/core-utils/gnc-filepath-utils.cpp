@@ -66,7 +66,7 @@
 #include "gnc-locale-utils.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
-#include <regex>
+#include <ctre.hpp>
 #include <iostream>
 
 /* Below cvt and bfs_locale should be used with boost::filesystem::path (bfs)
@@ -1321,23 +1321,22 @@ gnc_list_all_paths ()
     };
 }
 
-static const std::regex
+static constexpr ctll::fixed_string
 backup_regex (".*[.](?:xac|gnucash)[.][0-9]{14}[.](?:xac|gnucash)$");
 
 gboolean gnc_filename_is_backup (const char *filename)
 {
     g_return_val_if_fail (filename, FALSE);
-    return std::regex_match (filename, backup_regex);
+    return ctre::match<backup_regex>(filename);
 }
 
-static const std::regex
+static constexpr ctll::fixed_string
 datafile_regex (".*[.](?:xac|gnucash)$");
 
 gboolean gnc_filename_is_datafile (const char *filename)
 {
     g_return_val_if_fail (filename, FALSE);
-    return !gnc_filename_is_backup (filename) &&
-        std::regex_match (filename, datafile_regex);
+    return !gnc_filename_is_backup (filename) && ctre::match<datafile_regex>(filename);
 }
 
 std::ofstream
