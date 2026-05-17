@@ -57,6 +57,7 @@ target_link_libraries(gnc-core-utils
         ${GOBJECT_LDFLAGS}
         ${GTK_MAC_LDFLAGS}
         ${ICU_LIBRARIES}
+        ctre
         "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")
 
 target_compile_definitions(gnc-core-utils
