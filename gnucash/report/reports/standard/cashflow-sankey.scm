@@ -59,7 +59,7 @@
 (define optsvg-height-help (N_ "The height of the Sankey diagram."))
 (define optsvg-height-default 1000)
 
-(define optsvg-x-axis-style-name (N_ "X-Axis Style"))
+(define optsvg-x-axis-style-name (N_ "Flow X-Axis Style"))
 (define optsvg-x-axis-style-help (N_ "The style for the X-axis in the Sankey diagram."))
 (define optsvg-x-axis-style-default "dynamic")
 
@@ -135,12 +135,21 @@
     (gnc:options-add-date-interval! options
       general-page                              ;; Tab
       optinterval-from-date optinterval-to-date ;; Option Names
-      "b")                                      ;; Sorting key
+      "a")                                      ;; Sorting key
+
+    (gnc-register-multichoice-option options
+      general-page                ;; Tab
+      optsvg-x-axis-style-name    ;; Option Name
+      "b"                         ;; Sorting key
+      optsvg-x-axis-style-help    ;; Help text
+      optsvg-x-axis-style-default ;; Default value
+      (list (vector 'dynamic (N_ "Dynamic"))  ; Position nodes based on their relationships, which is more visually informative but can lead to shifting positions between reports
+            (vector 'fixed (N_ "Fixed")))) ; Position nodes based on their account type, which is more consistent but can be less visually intuitive
 
     (gnc-register-number-range-option options
       general-page        ;; Tab
       optminimum-name     ;; Option Name
-      "a"                 ;; Sorting key
+      "c"                 ;; Sorting key
       optminimum-help     ;; Help text
       optminimum-default  ;; default
       0.0                 ;; lower bound
@@ -164,15 +173,6 @@
       optsvg-height-name      ;; Option 2 Name
       "a"                     ;; Sorting key
       optsvg-width-default optsvg-height-default) ;; Default values
-
-    (gnc-register-multichoice-option options
-      display-page                ;; Tab
-      optsvg-x-axis-style-name    ;; Option Name
-      "b"                         ;; Sorting key
-      optsvg-x-axis-style-help    ;; Help text
-      optsvg-x-axis-style-default ;; Default value
-      (list (vector 'dynamic (N_ "Dynamic"))  ; Position nodes based on their relationships, which is more visually informative but can lead to shifting positions between reports
-            (vector 'fixed (N_ "Fixed")))) ; Position nodes based on their account type, which is more consistent but can be less visually intuitive
 
     (gnc-register-color-option options
       display-page                    ;; Tab
@@ -216,6 +216,8 @@
       optnodecolor-fallback-help      ;; Help text
       optnodecolor-fallback-default)  ;; Default value
 
+    (gnc:options-set-default-section options general-page) ;; Set the default tab to "General" when the user opens the report
+
     options))
 
 (define (sankey-renderer report-obj)
@@ -252,7 +254,7 @@
                     (* svg-height-value optsvg-height-default 0.01)
                     svg-height-value))
 
-    (x-axis-style (symbol->string (op-value display-page optsvg-x-axis-style-name)))
+    (x-axis-style (symbol->string (op-value general-page optsvg-x-axis-style-name)))
 
     ;; Prepare colors, converting from hex strings to CSS format (e.g., "27ae60" -> "#27ae60")
     (income-color (format #f "#~a" (op-value display-page optnodecolor-income-name)))
