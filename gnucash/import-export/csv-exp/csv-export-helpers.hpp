@@ -25,7 +25,6 @@
 
 #include <string>
 #include <cstdio>
-#include <fstream>
 #include <vector>
 
 using StringVec = std::vector<std::string>;

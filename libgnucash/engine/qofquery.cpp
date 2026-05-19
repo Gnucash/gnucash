@@ -26,7 +26,6 @@
 
 #include <sys/types.h>
 #include <time.h>
-#include <regex.h>
 #include <string.h>
 
 #include "qof.h"

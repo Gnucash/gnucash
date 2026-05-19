@@ -60,7 +60,6 @@ static QofLogModule log_module = QOF_MOD_SESSION;
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <vector>
-#include <algorithm>
 #include <string>
 #include <sstream>
 

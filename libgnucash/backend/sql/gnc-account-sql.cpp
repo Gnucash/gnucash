@@ -41,7 +41,6 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

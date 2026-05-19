@@ -43,8 +43,6 @@
 #include "gnc-ui.h" // for DF_MANUAL
 
 #include <any>
-#include <iostream>
-#include <sstream>
 
 #include "gnc-option-gtk-ui.hpp"
 

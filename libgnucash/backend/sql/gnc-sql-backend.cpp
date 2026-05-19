@@ -32,7 +32,6 @@
 #include <gnc-pricedb.h>
 #include <TransLog.h>
 
-#include <algorithm>
 #include <cassert>
 
 #include "gnc-sql-connection.hpp"

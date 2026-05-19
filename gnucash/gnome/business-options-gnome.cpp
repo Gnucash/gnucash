@@ -35,7 +35,6 @@
 
 #include "gnc-report-combo.h"
 
-#include <iostream>
 #include <sstream>
 #include <exception>
 

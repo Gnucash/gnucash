@@ -24,7 +24,6 @@
 #include <config.h>
 #include <qoflog.h>
 
-#include <algorithm>
 #include <stdexcept>
 #include <vector>
 #include <string>

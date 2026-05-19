@@ -29,7 +29,6 @@
 
 #include <memory>
 #include <exception>
-#include <sstream>
 #include <vector>
 #include <qof-backend.hpp>
 

@@ -24,8 +24,6 @@
 
 #include <string>
 #include <cstdint>
-#include <iostream>
-#include <algorithm>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #if PLATFORM(WINDOWS)
 //We'd prefer to use std::codecvt, but it's not supported by gcc until 5.0.

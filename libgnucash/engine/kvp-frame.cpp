@@ -33,7 +33,6 @@
 #include "kvp-frame.hpp"
 #include <typeinfo>
 #include <sstream>
-#include <algorithm>
 #include <vector>
 #include <numeric>
 

@@ -50,7 +50,6 @@
 #include <numeric>
 #include <map>
 #include <unordered_set>
-#include <algorithm>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 

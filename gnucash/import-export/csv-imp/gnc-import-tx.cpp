@@ -42,9 +42,6 @@
 #include <utility>
 #include <vector>
 
-#include <boost/regex.hpp>
-#include <boost/regex/icu.hpp>
-
 #include "gnc-import-tx.hpp"
 #include "gnc-imp-props-tx.hpp"
 #include "gnc-tokenizer-csv.hpp"

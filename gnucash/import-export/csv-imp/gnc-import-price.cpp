@@ -42,9 +42,6 @@
 #include <tuple>
 #include <vector>
 
-#include <boost/regex.hpp>
-#include <boost/regex/icu.hpp>
-
 #include "gnc-import-price.hpp"
 #include "gnc-imp-props-price.hpp"
 #include "gnc-tokenizer-csv.hpp"

@@ -27,7 +27,6 @@
 #include <gnc-locale-utils.h>
 
 #include <string>
-#include <regex>
 #include <sstream>
 
 #include "gnc-dbisqlconnection.hpp"

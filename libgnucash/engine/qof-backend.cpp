@@ -29,7 +29,6 @@
 #include "gncla-dir.h"
 
 #include <string>
-#include <algorithm>
 #include <vector>
 
 #include "qof-backend.hpp"
