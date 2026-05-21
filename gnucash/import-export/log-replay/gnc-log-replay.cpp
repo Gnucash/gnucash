@@ -304,7 +304,7 @@ static void dump_split_record(split_record record)
     }
     if (record.acc_guid_present)
     {
-        guid_to_string_buff(&record.trans_guid, string_buf);
+        guid_to_string_buff(&record.acc_guid, string_buf);
         DEBUG("Account GncGUID: %s", string_buf);
     }
     if (record.acc_name_present)
