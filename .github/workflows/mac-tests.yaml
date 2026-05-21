@@ -20,9 +20,9 @@ jobs:
       uses: carlosperate/download-file-action@v2
       id: dependencies
       with:
-        file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-5.13-mac-dependencies.tar.xz'
+        file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-5.15-mac-dependencies.tar.xz'
         file-name: gnucash-dependencies.tar.xz
-        sha256: '51bae6f0ff384bbcb1547e21553398a0a399ca1f5f2f517b8de5cd2316464760'
+        sha256: '15d14226e93cf18c60eb36d79686171a6b920ed1f72a815b8bad8f8755c76a02'
     - name: download googletest
       uses: carlosperate/download-file-action@v2
 
