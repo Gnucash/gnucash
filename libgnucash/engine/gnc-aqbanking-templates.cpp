@@ -88,7 +88,7 @@ public:
     }
     void set_amount (GncRational amount) { m_amount = amount; }
     void set_purpose (const char* purpose) { m_purpose = purpose; }
-    void set_purpose_continuation (const char* name) { m_name = name; }
+    void set_purpose_continuation (const char* cont) { m_purpose_continuation = cont; }
 private:
     std::string m_name;
     std::string m_recipient_name;
@@ -166,9 +166,9 @@ gnc_ab_trans_templ_free (GncABTransTempl *t)
 void
 gnc_ab_trans_templ_list_free (GList *l)
 {
-    for(GList *node = l; node != NULL; node = g_list_next(node))
-        delete static_cast<_GncABTransTempl*>(node->data);
+    g_list_free_full (l, (GDestroyNotify)gnc_ab_trans_templ_free);
 }
+
 static void*
 copy_list_value(const void* pvalue, void* pdata)
 {
