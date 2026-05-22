@@ -121,17 +121,19 @@ gboolean qof_instance_has_kvp (QofInstance *inst);
 /** Sets a KVP slot to a value from a GValue. Intermediate container
  * frames will be created if necessary. Commits the change to the QofInstance.
  * @param inst: The QofInstance on which to set the value.
- * @param key: The path to the slot.
  * @param value: A GValue containing an item of a type which KvpValue knows
  *           how to store.
+ * @param count: The number of path elements passed in the varargs
+ * @param ...: The path elements as const char*
  */
 void qof_instance_set_kvp (QofInstance *, GValue const * value, unsigned count, ...);
 
 /** Retrieves the contents of a KVP slot into a provided GValue.
  * @param inst: The QofInstance
- * @param key: The path to the slot.
  * @param value: A GValue into which to store the value of the slot. It will be
  *               set to the correct type.
+ * @param count: The number of path elements passed in the varargs
+ * @param ...: The path elements as const char*
  */
 void qof_instance_get_kvp (QofInstance *, GValue * value, unsigned count, ...);
 
