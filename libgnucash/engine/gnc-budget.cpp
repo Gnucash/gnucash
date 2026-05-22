@@ -541,6 +541,9 @@ void
 gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
                                     guint period_num, gnc_numeric val)
 {
+    g_return_if_fail (budget != nullptr);
+    g_return_if_fail (account != nullptr);
+
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods)
@@ -548,9 +551,6 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
         PWARN("Period %i does not exist", period_num);
         return;
     }
-
-    g_return_if_fail (budget != nullptr);
-    g_return_if_fail (account != nullptr);
 
     auto& perioddata = get_perioddata (budget, account, period_num);
     auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
@@ -600,6 +600,9 @@ void
 gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
                                     guint period_num, const gchar *note)
 {
+    g_return_if_fail (budget != nullptr);
+    g_return_if_fail (account != nullptr);
+
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods)
@@ -607,9 +610,6 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
         PWARN("Period %i does not exist", period_num);
         return;
     }
-
-    g_return_if_fail (budget != nullptr);
-    g_return_if_fail (account != nullptr);
 
     auto& perioddata = get_perioddata (budget, account, period_num);
     auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
