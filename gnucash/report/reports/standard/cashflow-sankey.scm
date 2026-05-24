@@ -111,8 +111,10 @@
                                     (let* ((dest-acc (xaccSplitGetAccount dest-split))
                                            (dest-val (gnc-numeric-to-double (xaccSplitGetAmount dest-split)))
                                            (flow-val (* (abs amount) (/ dest-val total-dest-val))))
-                                      (set! links (cons (list (gnc-account-get-full-name account)
-                                                              (gnc-account-get-full-name dest-acc)
+                                      (set! links (cons (list (list (gnc-account-get-full-name account)
+                                                                (xaccAccountTypeGetFundamental (xaccAccountGetType account)))
+                                                              (list (gnc-account-get-full-name dest-acc)
+                                                                (xaccAccountTypeGetFundamental (xaccAccountGetType dest-acc)))
                                                               flow-val)
                                                         links))))
                                   dest-splits))))))
@@ -124,7 +126,12 @@
   (string-append "["
     (string-join 
       (map (lambda (link)
-            (format #f "['~a', '~a', ~,2f]" (car link) (cadr link) (caddr link)))
+            (format #f "['~a', '~d', '~a', '~d', ~,2f]"
+              (car (car link))           ;; Source account name
+              (cadr (car link))          ;; Source account type
+              (car (cadr link))          ;; Destination account name
+              (cadr (cadr link))         ;; Destination account type
+              (caddr link)))             ;; Flow value
           links)
       ",")
     "]"))

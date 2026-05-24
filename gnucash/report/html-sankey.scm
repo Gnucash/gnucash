@@ -128,23 +128,27 @@
 
 ;; Dynamic color picker based on GnuCash account type
 (define js-node-color "
-  function getNodeColor(name) {
-    if (name.startsWith('Equity:')) return equityColor;
-    if (name.startsWith('Income:')) return incomeColor;
-    if (name.startsWith('Assets:')) return assetColor;
-    if (name.startsWith('Liabilities:')) return liabilityColor;
-    if (name.startsWith('Expenses:')) return expenseColor;
+  function getNodeColor(type) {
+    //console.log('Account type: ' + type);
+    if (type == 10) return equityColor;
+    if (type == 8) return incomeColor;
+    if (type == 2) return assetColor;
+    if (type == 4) return liabilityColor;
+    if (type == 9) return expenseColor;
     return fallbackColor;
   }")
 
 (define x-axis-fixed-js "
   function getLevel(name) {
-    if (name.startsWith('Equity:')) levels[name] = 0;
-    else if (name.startsWith('Income:')) levels[name] = 1;
-    else if (name.startsWith('Assets:')) levels[name] = 2;
-    else if (name.startsWith('Liabilities:')) levels[name] = 3;
-    else if (name.startsWith('Expenses:')) levels[name] = 4;
+    if (levels[name] !== undefined) return levels[name];
+    var type = nodes[name].type;
+    if (type == 10) levels[name] = 0;
+    else if (type == 8) levels[name] = 1;
+    else if (type == 2) levels[name] = 2;
+    else if (type == 4) levels[name] = 3;
+    else if (type == 9) levels[name] = 4;
     else levels[name] = 5;
+    return levels[name];
   }")
 
 (define x-axis-dynamic-js "
@@ -153,7 +157,7 @@
     var node = nodes[name];
     if (node.inLinks.length === 0) {
       levels[name] = 0;
-      return 0;
+      return levels[name];
     }
     var maxParentLvl = 0;
     for (var j = 0;
@@ -179,13 +183,15 @@
           i++) {
       var row = rawData[i];
       var s = row[0];
-      var t = row[1];
-      var v = parseFloat(row[2]) || 0;
+      var s_type = row[1];
+      var t = row[2];
+      var t_type = row[3];
+      var v = parseFloat(row[4]) || 0;
       if (v <= 0) continue;
 
       var key = s + ' -> ' + t;
       if (!aggregated[key]) {
-        aggregated[key] = { source: s, target: t, value: 0 };
+        aggregated[key] = { source: s, target: t, value: 0, s_type: s_type, t_type: t_type };
       }
       aggregated[key].value += v;
     }
@@ -208,10 +214,10 @@
           i++) {
       var l = links[i];
       if (!nodes[l.source]) {
-        nodes[l.source] = { name: l.source, inVal: 0, outVal: 0, inLinks: [], outLinks: [] };
+        nodes[l.source] = { name: l.source, type: l.s_type, inVal: 0, outVal: 0, inLinks: [], outLinks: [] };
       }
       if (!nodes[l.target]) {
-        nodes[l.target] = { name: l.target, inVal: 0, outVal: 0, inLinks: [], outLinks: [] };
+        nodes[l.target] = { name: l.target, type: l.t_type, inVal: 0, outVal: 0, inLinks: [], outLinks: [] };
       }
       nodes[l.source].outVal += l.value;
       nodes[l.target].inVal += l.value;
@@ -338,7 +344,7 @@
       var x1 = tNode.x0;
       var dx = (x1 - x0) / 2;
 
-      var color = getNodeColor(l.source);
+      var color = getNodeColor(l.s_type);
       var pathData = 'M' + x0 + ',' + yStart + ' C' + (x0 + dx) + ',' + yStart + ' ' + (x1 - dx) + ',' + yEnd + ' ' + x1 + ',' + yEnd;
 
       svgParts.push('<path d=\"' + pathData + '\" fill=\"none\" stroke=\"' + color + '\" stroke-width=\"' + Math.max(1, linkH) + '\" stroke-opacity=\"0.35\">');
@@ -349,7 +355,7 @@
     // DRAW NODES & LABELS
     for (var name in nodes) {
       var node = nodes[name];
-      var color = getNodeColor(name);
+      var color = getNodeColor(node.type);
       var shortName = name.split(':').pop();
 
       svgParts.push('<g>');
