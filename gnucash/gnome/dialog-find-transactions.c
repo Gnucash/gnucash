@@ -65,13 +65,13 @@ do_find_cb (QofQuery *query, gpointer user_data, gpointer *result)
     else
         gnc_ledger_display_set_query (ledger, query);
 
-    gnc_ledger_display_refresh (ledger);
-
     if (new_ledger)
     {
         page = gnc_plugin_page_register_new_ledger (ledger);
         gnc_main_window_open_page (GNC_MAIN_WINDOW(ftd->parent), page);
     }
+    else
+        gnc_ledger_display_refresh (ledger);
 
     qof_query_destroy (ftd->q);
 
