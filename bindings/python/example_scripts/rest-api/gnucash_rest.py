@@ -87,8 +87,16 @@ def api_accounts():
 
     elif request.method == 'POST':
 
+        name = str(request.form.get('name', ''))
+        currency = str(request.form.get('currency', ''))
+        account_type_id = request.form.get('account_type_id', '')
+        parent_account_guid = str(request.form.get('parent_account_guid', ''))
+        description = str(request.form.get('description', ''))
+        code = str(request.form.get('code', ''))
+
         try:
-            account = addAccount(session.books)
+            account = addAccount(session.book, name, currency,
+                account_type_id, parent_account_guid, description, code)
         except Error as error:
             return Response(json.dumps({'errors': [{'type' : error.type,
                 'message': error.message, 'data': error.data}]}), status=400,
@@ -1664,27 +1672,66 @@ def addBill(book, id, vendor_id, currency_mnumonic, date_opened, notes):
 
     return gnucash_simple.billToDict(bill)
 
-def addAccount(book, name, currency_mnumonic, account_guid):
+def addAccount(book, name, currency_mnumonic, account_type_id,
+    parent_account_guid, description, code):
 
-    from gnucash.gnucash_core_c import \
-    ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE, ACCT_TYPE_INCOME, \
-    GNC_OWNER_CUSTOMER, ACCT_TYPE_LIABILITY
+    from gnucash.gnucash_core_c import ACCT_TYPE_ROOT, ACCT_TYPE_TRADING
 
-    root_account = book.get_root_account()
+    if name == '':
+        raise Error('NoAccountName',
+            'A name must be entered for this account',
+            {'field': 'name'})
+
+    try:
+        account_type_id = int(account_type_id)
+    except (TypeError, ValueError):
+        raise Error('InvalidAccountTypeID',
+            'A valid account type id must be supplied for this account',
+            {'field': 'account_type_id'})
+
+    # account types above TRADING (CHECKING, SAVINGS, MONEYMRKT, CREDITLINE)
+    # are aliases that the engine refuses to set - see Account.h
+    if (account_type_id < 0 or account_type_id > ACCT_TYPE_TRADING
+            or account_type_id == ACCT_TYPE_ROOT):
+        raise Error('InvalidAccountTypeID',
+            'A valid account type id must be supplied for this account',
+            {'field': 'account_type_id'})
 
     commod_table = book.get_table()
     currency = commod_table.lookup('CURRENCY', currency_mnumonic)
 
     if currency is None:
-        raise Error('InvalidCustomerCurrency',
-            'A valid currency must be supplied for this customer',
+        raise Error('InvalidAccountCurrency',
+            'A valid currency must be supplied for this account',
             {'field': 'currency'})
 
+    if parent_account_guid == '':
+        raise Error('NoParentAccount',
+            'A parent account guid must be supplied for this account',
+            {'field': 'parent_account_guid'})
+
+    guid = gnucash.gnucash_core.GUID()
+    gnucash.gnucash_core.GUIDString(parent_account_guid, guid)
+    parent_account = guid.AccountLookup(book)
+
+    if parent_account is None:
+        raise Error('InvalidParentAccount',
+            'A parent account with this guid does not exist',
+            {'field': 'parent_account_guid'})
+
     account = Account(book)
-    root_account.append_child(root_account)
+    parent_account.append_child(account)
     account.SetName(name)
-    account.SetType(ACCT_TYPE_ASSET)
+    account.SetType(account_type_id)
     account.SetCommodity(currency)
+
+    if description != '':
+        account.SetDescription(description)
+
+    if code != '':
+        account.SetCode(code)
+
+    return gnucash_simple.accountToDict(account)
 
 def addTransaction(book, num, description, date_posted, currency_mnumonic, splits):
 
