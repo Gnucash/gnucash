@@ -40,10 +40,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-02-21 22:09+0000\n"
+"PO-Revision-Date: 2026-05-09 22:11+0000\n"
 "Last-Translator: DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 2026.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -2199,13 +2199,11 @@ msgstr "删除(_D)"
 
 #: gnucash/gnome/dialog-commodities.cpp:329
 msgid "Rename failed, possibly new name exists"
-msgstr ""
+msgstr "重命名失败，新的名称可能已存在"
 
 #: gnucash/gnome/dialog-commodities.cpp:332
-#, fuzzy
-#| msgid "<No name>"
 msgid "No new name"
-msgstr "<无名称>"
+msgstr "<无新名称>"
 
 #: gnucash/gnome/dialog-customer.c:314 gnucash/gnome/dialog-vendor.c:205
 msgid ""
@@ -2870,10 +2868,8 @@ msgid "Online HBCI"
 msgstr "在线 HBCI"
 
 #: gnucash/gnome/dialog-imap-editor.c:791
-#, fuzzy
-#| msgid "Income Account"
 msgid "OFX Income Account"
-msgstr "收入科目"
+msgstr "OFX 收入科目"
 
 #. Translators: In this context,
 #. 'Billing information' maps to the
@@ -3272,12 +3268,10 @@ msgstr "金额"
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3902
-#, fuzzy, c-format
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
+#, c-format
 msgid "The following vendor business item is due:"
 msgid_plural "The following %d vendor business items are due:"
-msgstr[0] "%d 份逾期应付"
+msgstr[0] "以下 %d 项供应商的业务项目已到期："
 
 #: gnucash/gnome/dialog-invoice.c:3906
 msgid "Due Bills Reminder"
@@ -30356,10 +30350,9 @@ msgid "%B %e, %Y"
 msgstr "%Y年%b%e日"
 
 #: libgnucash/engine/gnc-date.cpp:677
-#, fuzzy, c-format
-#| msgid " to "
+#, c-format
 msgid "%s to %s"
-msgstr " 到 "
+msgstr "%s到%s"
 
 #: libgnucash/engine/gnc-datetime.cpp:97
 msgid "y-m-d"
