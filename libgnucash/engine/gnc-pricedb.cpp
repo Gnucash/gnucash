@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include "gnc-date.h"
 #include "gnc-datetime.hpp"
+#include "gnc-numeric.h"
 #include "gnc-pricedb-p.h"
 #include <qofinstance-p.h>
 
@@ -2371,33 +2372,34 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices,
     return retval;
 }
 
-
 static gnc_numeric
 convert_price (const gnc_commodity *from, const gnc_commodity *to, PriceTuple tuple)
 {
-    gnc_commodity *from_com = gnc_price_get_commodity (tuple.from);
-    gnc_commodity *from_cur = gnc_price_get_currency (tuple.from);
-    gnc_commodity *to_com = gnc_price_get_commodity (tuple.to);
-    gnc_commodity *to_cur = gnc_price_get_currency (tuple.to);
-    gnc_numeric from_val = gnc_price_get_value (tuple.from);
-    gnc_numeric to_val = gnc_price_get_value (tuple.to);
-    gnc_numeric price;
-    int no_round = GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER;
-
-    price = gnc_numeric_div (to_val, from_val, GNC_DENOM_AUTO, no_round);
+    gnc_commodity *p1_com = gnc_price_get_commodity (tuple.from);
+    gnc_commodity *p1_cur = gnc_price_get_currency (tuple.from);
+    gnc_commodity *p2_com = gnc_price_get_commodity (tuple.to);
+    gnc_commodity *p2_cur = gnc_price_get_currency (tuple.to);
+    gnc_numeric p1_val = gnc_price_get_value (tuple.from);
+    gnc_numeric p2_val = gnc_price_get_value (tuple.to);
 
     gnc_price_unref (tuple.from);
     gnc_price_unref (tuple.to);
 
-    if (from_cur == from && to_cur == to)
-        return price;
+    if ((p1_com == from && p2_com == to) ||
+        (p1_cur == from && p2_cur == to))
+    {
+        auto price = gnc_numeric_div (p2_val, p1_val, GNC_DENOM_AUTO,
+                                      GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
 
-    if (from_com == from && to_com == to)
+        if (p1_cur == from)
+            return price;
+
         return gnc_numeric_invert (price);
+    }
 
-    price = gnc_numeric_mul (from_val, to_val, GNC_DENOM_AUTO, no_round);
-
-    if (from_cur == from)
+    auto price = gnc_numeric_mul (p1_val, p2_val, GNC_DENOM_AUTO,
+                                  GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
+    if (p1_cur == from)
         return gnc_numeric_invert (price);
 
     return price;
