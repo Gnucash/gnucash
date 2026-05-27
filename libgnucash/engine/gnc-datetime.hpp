@@ -33,6 +33,7 @@
 #include <optional>
 
 #include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/regex.hpp>
 
 typedef struct
 {
@@ -187,7 +188,7 @@ public:
      * themselves!
      */
     GncDateFormat (const char* fmt, const char* re) :
-    m_fmt(fmt), m_re(re) {}
+        m_fmt(fmt), m_re(re) {}
     GncDateFormat (const char* fmt, StringToDate str_to_date, const char* re) :
         m_fmt(fmt), m_re(re), m_str_to_date(str_to_date) {}
     GncDateFormat (const char* fmt, StringToDate str_to_date) :
@@ -198,7 +199,7 @@ private:
     /** Regular expression associated with the format string. This is to and
      * only be used internally by the gnc-datetime code.
      */
-    const std::string m_re;
+    boost::regex m_re;
     std::optional<StringToDate> m_str_to_date;
 
     friend class GncDateImpl;

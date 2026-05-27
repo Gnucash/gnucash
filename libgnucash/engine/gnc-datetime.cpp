@@ -725,9 +725,8 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
     if (iter->m_re.empty())
         throw std::invalid_argument ("No regex pattern available");
 
-    boost::regex r(iter->m_re);
     boost::smatch what;
-    if(!boost::regex_search(str, what, r))  // regex didn't find a match
+    if(!boost::regex_search(str, what, iter->m_re))  // regex didn't find a match
         throw std::invalid_argument (N_("Value can't be parsed into a date using the selected date format."));
 
     // Bail out if a year was found with a yearless format specifier
