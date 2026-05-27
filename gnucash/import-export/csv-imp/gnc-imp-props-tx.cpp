@@ -47,6 +47,7 @@
 #include <boost/regex/icu.hpp>
 #include <gnc-locale-utils.hpp>
 #include "gnc-imp-props-tx.hpp"
+#include <ctre.hpp>
 
 namespace bl = boost::locale;
 
@@ -135,7 +136,8 @@ GncNumeric parse_monetary (const std::string &str, int currency_format)
         return GncNumeric{};
 
     /* Strings otherwise containing no digits will be considered invalid */
-    if(!boost::regex_search(str, boost::regex("[0-9]")))
+    static constexpr ctll::fixed_string digit_re{"[0-9]"};
+    if(!ctre::search<digit_re>(str))
         throw std::invalid_argument (_("Value doesn't appear to contain a valid number."));
 
     static const auto expr = boost::make_u32regex("[[:Sc:][:blank:]]|--");
