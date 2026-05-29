@@ -1024,12 +1024,7 @@ loan_info_calc_update_cb( GtkWidget *w, gpointer user_data )
     }
 
     /* Get the correct, current value of the length spin. */
-    {
-        gchar *valueStr = gtk_editable_get_chars( GTK_EDITABLE(ldd->prmLengthSpin),
-                          0, -1 );
-        totalVal = strtol( valueStr, NULL, 10 );
-        g_free( valueStr );
-    }
+    totalVal = gtk_spin_button_get_value_as_int (ldd->prmLengthSpin);
     total = totalVal
             * ( gtk_combo_box_get_active( ldd->prmLengthType )
                 == 1 ? 12 : 1 );
@@ -1437,8 +1432,7 @@ loan_rep_page_save( GtkAssistant *assistant, gpointer user_data )
         gtk_editable_get_chars( GTK_EDITABLE(ldd->repTxnName), 0, -1 );
 
 
-    ldd->ld.repAmount.replace(0, ldd->ld.repAmount.size(),
-                              gtk_editable_get_chars(GTK_EDITABLE(ldd->repAmtEntry), 0, -1));
+    ldd->ld.repAmount = gtk_entry_get_text(ldd->repAmtEntry);
 
     ldd->ld.repFromAcct =
         gnc_account_sel_get_account( ldd->repAssetsFromGAS );
@@ -1766,7 +1760,6 @@ static
 gboolean
 loan_pay_complete( GtkAssistant *assistant, gpointer user_data )
 {
-    gchar *tmpStr;
     LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     RepayOptData *rod;
 
@@ -1774,19 +1767,12 @@ loan_pay_complete( GtkAssistant *assistant, gpointer user_data )
     g_assert( ldd->currentIdx <= ldd->ld.repayOptCount );
     rod = ldd->ld.repayOpts[ ldd->currentIdx ];
 
-    tmpStr = gtk_editable_get_chars( GTK_EDITABLE(ldd->payTxnName),
-                                     0, -1 );
     if ( rod->txnMemo != NULL )
     {
         g_free( rod->txnMemo );
     }
-    rod->txnMemo = tmpStr;
-    tmpStr = NULL;
-
-    tmpStr = gtk_editable_get_chars( GTK_EDITABLE(ldd->payAmtEntry),
-                                     0, -1 );
-    rod->amount = (float)strtod( tmpStr, NULL );
-    g_free( tmpStr );
+    rod->txnMemo = g_strdup (gtk_entry_get_text (GTK_ENTRY(ldd->payTxnName)));
+    rod->amount = (float)strtod (gtk_entry_get_text (GTK_ENTRY(ldd->payAmtEntry)), NULL);
 
     rod->specSrcAcctP =
         gtk_toggle_button_get_active(
