@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-05-24 00:14+0000\n"
+"PO-Revision-Date: 2026-05-30 15:44+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -4464,9 +4464,9 @@ msgid ""
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
-"%s célszámlának nem ugyanaz az a pénzneme, mint ahonnan tranzakciót "
-"mozgatnád.\n"
-"Biztos, hogy ezt akarod csinálni?"
+"A célszámlának (%s) nem ugyanaz az a pénzneme, mint ahonnan a tranzakciót "
+"indítaná.\n"
+"Biztos, hogy ezt akarja csinálni?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1312
 msgid "_Pick another account"
@@ -4546,7 +4546,7 @@ msgstr "Az alszámlán lévő összes tranzakció törölve lesz."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1651
 msgid "Are you sure you want to do this?"
-msgstr "Biztos benne?"
+msgstr "Biztos, hogy ezt akarja tenni?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:179
 #: gnucash/gnome/gnc-plugin-page-report.cpp:236
@@ -5466,7 +5466,7 @@ msgid ""
 "This transaction involves more than one other account. Select a specific "
 "split to jump to that account."
 msgstr ""
-"Ez a tranzakció egynél több másik számlát érint. Válasszon ki egy adott "
+"Ez a tranzakció egynél több ellenszámlát érint. Válasszon ki egy adott "
 "felosztást a számlára való ugráshoz."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5137
@@ -5474,7 +5474,7 @@ msgid ""
 "This transaction only involves the current account so there is no other "
 "account to jump to."
 msgstr ""
-"Ez a tranzakció csak a jelenlegi számlát érinti, így nincs másik számla, "
+"Ez a tranzakció csak a jelenlegi számlát érinti, így nincs ellenszámla, "
 "amelyre át lehetne ugrani."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5291
@@ -16047,7 +16047,7 @@ msgstr "Válassza az első leg_nagyobb értékkel rendelkező felosztást"
 msgid ""
 "Use the first split with the largest value to determine the other account."
 msgstr ""
-"Az első legnagyobb értékkel rendelkező felosztást használja a másik számla "
+"Az első legnagyobb értékkel rendelkező felosztást használja az ellenszámla "
 "meghatározásához."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2677
@@ -16058,7 +16058,7 @@ msgstr "Válassza az első leg_kisebb értékkel rendelkező felosztást"
 msgid ""
 "Use the first split with the smallest value to determine the other account."
 msgstr ""
-"Az első legkisebb értékkel rendelkező felosztást használja a másik számla "
+"Az első legkisebb értékkel rendelkező felosztást használja az ellenszámla "
 "meghatározásához."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2710
@@ -16077,15 +16077,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2741
 msgid "Automatic credit card _payment"
-msgstr "Automatikus hitelkártya-_törlesztés"
+msgstr "Automatikus hitelkártya-_törlesztések"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2747
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr ""
-"Egy hitelkártya-számlakivonat egyeztetése után megkéri a felhasználót egy "
-"hitelkártya-törlesztés megadására."
+"Egy hitelkártyaszámla számlakivonatának egyeztetése után megkéri a "
+"felhasználót a számla törlesztésének a megadására."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2759
 msgid "Always reconcile to t_oday"
@@ -16110,6 +16110,17 @@ msgid ""
 "combinations are possible, auto-clear is not offered and the icon and its "
 "tooltip reflects the outcome."
 msgstr ""
+"Automatikus elszámolási segédeszközt biztosít az egyeztetési ablakban. Az "
+"automatikus elszámolás átvizsgálja a nem egyeztetett tranzakciókat, és olyan "
+"egyértelmű kombinációt keres, amelynek az elszámolási egyenlege megegyezik a "
+"megadott egyeztetési egyenleggel. Az automatikus elszámolás a tranzakciók "
+"összes kombinációját ellenőrzi, ezért a futásideje nagyon hosszú lehet, de "
+"az egyeztetési ablakban ez 1 másodpercre van korlátozva. Ha nincs egyértelmű "
+"egyezés, mert a kombinációk elszámolási egyenlege nem egyezik a megadott "
+"egyeztetési egyenleggel, esetleg időtúllépési hiba történt, vagy több jó "
+"kombináció is lehetséges, akkor az automatikus elszámolás nem kerül "
+"felajánlásra, nem lesz elérhető, és az ikonja valamint a hozzá tartozó "
+"eszköztipp jelzi ezt."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2807
 msgid "<b>Graphics</b>"
@@ -21514,7 +21525,7 @@ msgstr ""
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
-msgstr "Létező felosztást készül felülírni. Biztos benne?"
+msgstr "Létező felosztást készül felülírni. Biztos, hogy ezt akarja tenni?"
 
 #: gnucash/register/ledger-core/split-register.c:999
 msgid ""
@@ -28620,11 +28631,11 @@ msgstr "Számlakód megjelenítése?"
 
 #: gnucash/report/trep-engine.scm:940
 msgid "Display the other account code?"
-msgstr "A másik számla kódjának megjelenítése?"
+msgstr "Jelenítse meg az ellenszámla kódját?"
 
 #: gnucash/report/trep-engine.scm:943
 msgid "Display the transaction linked document"
-msgstr ""
+msgstr "A tranzakcióhoz kapcsolódó dokumentum megjelenítése"
 
 #: gnucash/report/trep-engine.scm:946
 msgid "Display a subtotal summary table."
@@ -28656,8 +28667,8 @@ msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
 msgstr ""
-"A másik számla nevének megjelenítése? Ha ez egy felosztott tranzakció, akkor "
-"a GnuCash megtippeli."
+"Jelenítse meg az ellenszámla nevét? Ha ez egy felosztott tranzakció, akkor a "
+"GnuCash megtippeli."
 
 #: gnucash/report/trep-engine.scm:986
 msgid "Amount of detail to display per transaction."
