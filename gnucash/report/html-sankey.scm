@@ -26,6 +26,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash report html-utilities))
 (use-modules (gnucash report report-utilities))
+(use-modules (ice-9 format))
 (use-modules (srfi srfi-9))
 
 (export gnc:html-sankey?)
@@ -46,12 +47,12 @@
 (export gnc:html-sankey-set-equity-color!)
 (export gnc:html-sankey-set-fallback-color!)
 
-(export gnc:html-sankey-set-js-data!)
+(export gnc:html-sankey-set-links!)
 
 (export gnc:html-sankey-render)
 
 (define-record-type <html-sankey>
-  (make-html-sankey from-date to-date width height x-axis-style income-color expense-color asset-color liability-color equity-color fallback-color js-data)
+  (make-html-sankey from-date to-date width height x-axis-style income-color expense-color asset-color liability-color equity-color fallback-color links)
   html-sankey?
   (from-date html-sankey-from-date html-sankey-set-from-date!)
   (to-date html-sankey-to-date html-sankey-set-to-date!)
@@ -64,7 +65,7 @@
   (liability-color html-sankey-liability-color html-sankey-set-liability-color!)
   (equity-color html-sankey-equity-color html-sankey-set-equity-color!)
   (fallback-color html-sankey-fallback-color html-sankey-set-fallback-color!)
-  (js-data html-sankey-js-data html-sankey-set-js-data!))
+  (links html-sankey-links html-sankey-set-links!))
 
 (define gnc:html-sankey? html-sankey?)
 
@@ -94,8 +95,8 @@
 (define gnc:html-sankey-fallback-color html-sankey-fallback-color)
 (define gnc:html-sankey-set-fallback-color! html-sankey-set-fallback-color!)
 
-(define gnc:html-sankey-js-data html-sankey-js-data)
-(define gnc:html-sankey-set-js-data! html-sankey-set-js-data!)
+(define gnc:html-sankey-links html-sankey-links)
+(define gnc:html-sankey-set-links! html-sankey-set-links!)
 
 (define (gnc:make-html-sankey)
   (make-html-sankey
@@ -110,8 +111,135 @@
   '()                              ;liability-color'
   '()                              ;equity-color'
   '()                              ;fallback-color'
-  '()                              ;js-data
+  '()                              ;links
   ))
+
+(define-record-type <linkrecord>
+  (make-linkrecord source s-type target t-type value)
+  linkrecord?
+  (source linkrecord-source)
+  (s-type linkrecord-s-type)
+  (target linkrecord-target)
+  (t-type linkrecord-t-type)
+  (value linkrecord-value))
+
+(define-record-type <noderecord>
+  (make-noderecord name type in-val out-val in-links out-links
+             x0 x1 y0 h source-offset target-offset)
+  noderecord?
+  (name          noderecord-name)
+  (type          noderecord-type    set-noderecord-type!)
+  (in-val        noderecord-in-val  set-noderecord-in-val!)
+  (out-val       noderecord-out-val set-noderecord-out-val!)
+  (in-links      noderecord-in-links  set-noderecord-in-links!)
+  (out-links     noderecord-out-links set-noderecord-out-links!)
+  (x0            noderecord-x0  set-noderecord-x0!)
+  (x1            noderecord-x1  set-noderecord-x1!)
+  (y0            noderecord-y0  set-noderecord-y0!)
+  (h             noderecord-h   set-noderecord-h!)
+  (source-offset noderecord-source-offset set-noderecord-source-offset!)
+  (target-offset noderecord-target-offset set-noderecord-target-offset!))
+
+(define (make-link src src-type dest dest-type val)
+  (make-linkrecord src src-type dest dest-type val))
+
+(define (make-empty-node name)
+  (make-noderecord name 0 0 0 '() '() 0 0 0 0 0 0))
+
+(define (adjoin-node name nodes)
+  (if (assoc name nodes)
+    (begin
+      ; (display (format #f "Source node already exists: ~a\n" name)) ; troubleshooting output
+      nodes)
+    (begin
+      ; (display (format #f "Adding source node: ~a\n" name)) ; troubleshooting output
+      (append nodes (list (cons name (make-empty-node name)))))))
+
+;; This function processes the list of links to build a unique set of nodes,
+;; while also calculating the total incoming and outgoing values for each node.
+;; It also associates the relevant links with each node for later use in rendering.
+(define (populate-nodes links)
+  (let ((nodes '()))
+    (for-each (lambda (link)
+                (let* ((src (car (car link)))
+                       (src-type (cadr (car link)))
+                       (dest (car (cadr link)))
+                       (dest-type (cadr (cadr link)))
+                       (val (caddr link)))
+                  ; (display (format #f "Processing link: ~a -> ~a = $~a\n" src dest val)) ; troubleshooting output
+                  (set! nodes (adjoin-node src nodes))
+                  (set! nodes (adjoin-node dest nodes))
+                  (let* ((srcnode (assoc-ref nodes src))
+                         (destnode (assoc-ref nodes dest))
+                         (link-ref (make-linkrecord src src-type dest dest-type val)))
+                    (set-noderecord-out-val! srcnode (+ (noderecord-out-val srcnode) val))
+                    (set-noderecord-type! srcnode src-type)
+                    (set-noderecord-out-links! srcnode (append (list link-ref) (noderecord-out-links srcnode)))
+                    ; (display (format #f "Updated source node: ~a (out-val: ~a)\n" src (noderecord-out-val srcnode))) ; troubleshooting output
+                    (set-noderecord-in-val! destnode (+ (noderecord-in-val destnode) val))
+                    (set-noderecord-type! destnode dest-type)
+                    (set-noderecord-in-links! destnode (append (list link-ref) (noderecord-in-links destnode)))
+                    ; (display (format #f "Updated destination node: ~a (in-val: ~a)\n" dest (noderecord-in-val destnode))) ; troubleshooting output
+                    ; (display (format #f "Source node: ~a\n" srcnode)) ; troubleshooting output
+                    ; (display (format #f "Destination node: ~a\n" destnode)) ; troubleshooting output
+                  )))
+      links)
+    nodes))
+
+(define (noderecord-val n)
+  (max (noderecord-in-val n) (noderecord-out-val n)))
+
+;; This function converts the links data structure into a JavaScript array of objects string.
+(define (links->js-array links)
+  (string-append "["
+    (string-join
+      (map (lambda (link)
+            (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
+              (car (car link))           ;; Source account name
+              (cadr (car link))          ;; Source account type
+              (car (cadr link))          ;; Destination account name
+              (cadr (cadr link))         ;; Destination account type
+              (caddr link)))             ;; Flow value
+          links)
+      ",")
+    "]"))
+
+;; This function converts the nodes data structure into a JavaScript object literal string.
+(define (nodes->js-array nodes)
+  (string-append "{"
+    (string-join
+      (map (lambda (n)
+            (let ((name (car n))
+                  (node (cdr n)))
+              (format #f "'~a': {'name': '~a', 'type': ~d, 'val': ~,2f, 'inLinks': [~a], 'outLinks': [~a]}"
+                name                   ;; Account name
+                (noderecord-name node) ;; Account name
+                (noderecord-type node) ;; Account type
+                (noderecord-val node)  ;; Max of in/out value for sizing
+                (string-join
+                  (map (lambda (l)
+                        (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
+                          (linkrecord-source l)  ;; Source account name
+                          (linkrecord-s-type l)  ;; Source account type
+                          (linkrecord-target l)  ;; Destination account name
+                          (linkrecord-t-type l)  ;; Destination account type
+                          (linkrecord-value l))) ;; Flow value
+                    (noderecord-in-links node))  ;; In-links list of records
+                  ",")
+                (string-join
+                  (map (lambda (l)
+                        (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
+                          (linkrecord-source l)  ;; Source account name
+                          (linkrecord-s-type l)  ;; Source account type
+                          (linkrecord-target l)  ;; Destination account name
+                          (linkrecord-t-type l)  ;; Destination account type
+                          (linkrecord-value l))) ;; Flow value
+                    (noderecord-out-links node)) ;; Out-links list of records
+                  ",")
+                )))
+          nodes)
+      ",")
+    "}"))
 
 (define chart-div-style "style='width: 100%;
   height: 700px;
@@ -176,60 +304,6 @@
   var messageDiv = document.getElementById('sankey_message');
 
   try {
-    // 1. AGGREGATE DUPLICATE ENTRIES
-    var aggregated = {};
-    for (var i = 0;
-          i < rawData.length;
-          i++) {
-      var row = rawData[i];
-      var s = row[0];
-      var s_type = row[1];
-      var t = row[2];
-      var t_type = row[3];
-      var v = parseFloat(row[4]) || 0;
-      if (v <= 0) continue;
-
-      var key = s + ' -> ' + t;
-      if (!aggregated[key]) {
-        aggregated[key] = { source: s, target: t, value: 0, s_type: s_type, t_type: t_type };
-      }
-      aggregated[key].value += v;
-    }
-
-    var links = [];
-    for (var k in aggregated) {
-      links.push(aggregated[k]);
-    }
-
-    if (links.length === 0) {
-      messageDiv.innerHTML = '<h4>No positive flows to display.</h4><p>Ensure you have selected correct dates and accounts with transactions in Options.</p>';
-      messageDiv.style.color = 'black';
-      return;
-    }
-
-    // 2. DISCOVER UNIQUE NODES & ACCUMULATE TOTALS
-    var nodes = {};
-    for (var i = 0;
-          i < links.length;
-          i++) {
-      var l = links[i];
-      if (!nodes[l.source]) {
-        nodes[l.source] = { name: l.source, type: l.s_type, inVal: 0, outVal: 0, inLinks: [], outLinks: [] };
-      }
-      if (!nodes[l.target]) {
-        nodes[l.target] = { name: l.target, type: l.t_type, inVal: 0, outVal: 0, inLinks: [], outLinks: [] };
-      }
-      nodes[l.source].outVal += l.value;
-      nodes[l.target].inVal += l.value;
-      nodes[l.source].outLinks.push(l);
-      nodes[l.target].inLinks.push(l);
-    }
-
-    for (var name in nodes) {
-      var n = nodes[name];
-      n.val = Math.max(n.inVal, n.outVal);
-    }
-
     // 3. TOPOLOGICAL LEVELING (X-AXIS COLUMNS)
     for (var name in nodes) {
       getLevel(name);
@@ -386,7 +460,10 @@
 (define (gnc:html-sankey-render sankey doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
-         (js-data (gnc:html-sankey-js-data sankey)))
+         (links (gnc:html-sankey-links sankey))
+         (js-data (links->js-array links))
+         (nodes (populate-nodes links))
+         (js-nodes (nodes->js-array nodes)))
 
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
@@ -404,9 +481,12 @@
       (begin
         (push "  </div>\n")
         (push "</div>\n")
+        ; (push (format #f "<!-- nodes: ~a -->\n" nodes)) ; troubleshooting output
+        ; (push (format #f "<!-- links: ~a -->\n" links)) ; troubleshooting output
         (push "<script>\n")
         (push "(function () {\n")
-        (push (format #f "  var rawData = ~a;\n" (gnc:html-sankey-js-data sankey)))
+        (push (format #f "  var links = ~a;\n" js-data))
+        (push (format #f "  var nodes = ~a;\n" js-nodes))
         (push "  var levels = {};\n\n")
         (push "  // SVG/NODE SIZING CONFIG\n")
         (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
@@ -426,5 +506,5 @@
           (push (format #f "~a;\n" x-axis-fixed-js)))
         (push (format #f "~a;\n" js-sankey))
         (push "})();")
-        (push "</script>")))
+        (push "</script>\n")))
   retval))

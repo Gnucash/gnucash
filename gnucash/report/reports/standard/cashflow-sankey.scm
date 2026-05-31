@@ -30,6 +30,7 @@
 (use-modules (gnucash report))
 (use-modules (gnucash html))
 (use-modules (ice-9 format))
+(use-modules (srfi srfi-1))
 
 ;; For debugging during development, enable backtraces to get more detailed error information
 ;; in the GnuCash error logs when something goes wrong.
@@ -122,19 +123,31 @@
       account-list)
     links))
 
-(define (links->js-array links)
-  (string-append "["
-    (string-join 
-      (map (lambda (link)
-            (format #f "['~a', '~d', '~a', '~d', ~,2f]"
-              (car (car link))           ;; Source account name
-              (cadr (car link))          ;; Source account type
-              (car (cadr link))          ;; Destination account name
-              (cadr (cadr link))         ;; Destination account type
-              (caddr link)))             ;; Flow value
-          links)
-      ",")
-    "]"))
+;; Helper function to remove the first occurrence of an item from a list
+;; Assumes that list is processed sequentially and we want to preserve additional occurrences of the item if they exist
+(define (remove-first-match item lst)
+  (let loop ((rest lst) (acc '()))
+    (cond ((null? rest) (reverse acc))
+          ((equal? (car rest) item)
+           (append (reverse acc) (cdr rest)))
+          (else (loop (cdr rest) (cons (car rest) acc))))))
+
+;; aggregate the values of matching links (same source and destination)
+(define (aggregate-links links)
+  (let ((agg '()))
+    (for-each (lambda (link)
+                (let* ((src (car (car link)))
+                       (src-type (cadr (car link)))
+                       (dest (car (cadr link)))
+                       (dest-type (cadr (cadr link)))
+                       (val (caddr link))
+                       (existing-link (find (lambda (l) (and (string=? src (car (car l))) (string=? dest (car (cadr l))))) agg)))
+                  (if existing-link
+                      (set! agg (cons (list (list src src-type) (list dest dest-type) (+ val (caddr existing-link)))
+                                      (remove-first-match existing-link agg)))
+                      (set! agg (cons link agg)))))
+              links)
+    agg))
 
 (define (sankey-options-generator)
   (let* ((options (gnc-new-optiondb)))
@@ -281,7 +294,7 @@
     ;; Extract the sankey links based on the selected accounts and date range,
     ;; then convert to a JavaScript array format for embedding in the HTML/JS
     (data-links (extract-sankey-links accounts from-date-t64 to-date-t64 flow-minimum))
-    (js-data (links->js-array data-links))
+    (links (aggregate-links data-links))
 
     ;; Create the report object that will hold the HTML content
     (report (gnc:make-html-document))
@@ -303,7 +316,7 @@
     (gnc:html-sankey-set-liability-color! sankey liability-color)
     (gnc:html-sankey-set-equity-color! sankey equity-color)
     (gnc:html-sankey-set-fallback-color! sankey fallback-color)
-    (gnc:html-sankey-set-js-data! sankey js-data)
+    (gnc:html-sankey-set-links! sankey links)
 
     (gnc:html-document-add-object! report sankey)
   report))
