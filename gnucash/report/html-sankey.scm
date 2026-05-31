@@ -241,14 +241,15 @@
       ",")
     "}"))
 
-(define chart-div-style "style='width: 100%;
-  height: 700px;
+(define (chart-div-style height)
+  (format #f "style='width: 100%;
+  height: ~apx;
   background: #fafafa;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
   box-sizing: border-box;'
-  ")
+  " (* 2.5 height)))
 
 (define message-div-style "style='padding: 10px;
   font-family: sans-serif;'
@@ -461,16 +462,14 @@
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (links (gnc:html-sankey-links sankey))
-         (js-data (links->js-array links))
-         (nodes (populate-nodes links))
-         (js-nodes (nodes->js-array nodes)))
+         (js-links (links->js-array links)))
 
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
-    (push (format #f "<div id=sankey_chart ~a>\n" chart-div-style))
+    (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style (gnc:html-sankey-height sankey))))
     (push (format #f "  <div id=sankey_message ~a>\n" message-div-style))
 
-    (if (or (string=? js-data "[]") (null? js-data))
+    (if (or (string=? js-links "[]") (null? js-links))
       ;; skip the javascript rendering and just show a message if no data
       (begin
         (push "    <h4>No cash flow data found.</h4>\n")
@@ -478,33 +477,35 @@
         (push "  </div>\n")
         (push "</div>\n"))
       ;; otherwise render the chart
-      (begin
-        (push "  </div>\n")
-        (push "</div>\n")
-        ; (push (format #f "<!-- nodes: ~a -->\n" nodes)) ; troubleshooting output
-        ; (push (format #f "<!-- links: ~a -->\n" links)) ; troubleshooting output
-        (push "<script>\n")
-        (push "(function () {\n")
-        (push (format #f "  var links = ~a;\n" js-data))
-        (push (format #f "  var nodes = ~a;\n" js-nodes))
-        (push "  var levels = {};\n\n")
-        (push "  // SVG/NODE SIZING CONFIG\n")
-        (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
-        (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
-        (push "  var nodePadding = 18;\n")
-        (push "  var nodeWidth = 24;\n\n")
-        (push "  // SVG/NODE COLOR CONFIG\n")
-        (push (format #f "  var incomeColor = '~a';\n" (gnc:html-sankey-income-color sankey)))
-        (push (format #f "  var expenseColor = '~a';\n" (gnc:html-sankey-expense-color sankey)))
-        (push (format #f "  var assetColor = '~a';\n" (gnc:html-sankey-asset-color sankey)))
-        (push (format #f "  var liabilityColor = '~a';\n" (gnc:html-sankey-liability-color sankey)))
-        (push (format #f "  var equityColor = '~a';\n" (gnc:html-sankey-equity-color sankey)))
-        (push (format #f "  var fallbackColor = '~a';\n" (gnc:html-sankey-fallback-color sankey)))
-        (push (format #f "~a;\n" js-node-color))
-        (if (string=? (gnc:html-sankey-x-axis-style sankey) "dynamic")
-          (push (format #f "~a;\n" x-axis-dynamic-js))
-          (push (format #f "~a;\n" x-axis-fixed-js)))
-        (push (format #f "~a;\n" js-sankey))
-        (push "})();")
-        (push "</script>\n")))
+      (let* ((nodes (populate-nodes links))
+             (js-nodes (nodes->js-array nodes)))
+        (begin
+          (push "  </div>\n")
+          (push "</div>\n")
+          ; (push (format #f "<!-- nodes: ~a -->\n" nodes)) ; troubleshooting output
+          ; (push (format #f "<!-- links: ~a -->\n" links)) ; troubleshooting output
+          (push "<script>\n")
+          (push "(function () {\n")
+          (push (format #f "  var links = ~a;\n" js-links))
+          (push (format #f "  var nodes = ~a;\n" js-nodes))
+          (push "  var levels = {};\n\n")
+          (push "  // SVG/NODE SIZING CONFIG\n")
+          (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
+          (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
+          (push "  var nodePadding = 18;\n")
+          (push "  var nodeWidth = 24;\n\n")
+          (push "  // SVG/NODE COLOR CONFIG\n")
+          (push (format #f "  var incomeColor = '~a';\n" (gnc:html-sankey-income-color sankey)))
+          (push (format #f "  var expenseColor = '~a';\n" (gnc:html-sankey-expense-color sankey)))
+          (push (format #f "  var assetColor = '~a';\n" (gnc:html-sankey-asset-color sankey)))
+          (push (format #f "  var liabilityColor = '~a';\n" (gnc:html-sankey-liability-color sankey)))
+          (push (format #f "  var equityColor = '~a';\n" (gnc:html-sankey-equity-color sankey)))
+          (push (format #f "  var fallbackColor = '~a';\n" (gnc:html-sankey-fallback-color sankey)))
+          (push (format #f "~a;\n" js-node-color))
+          (if (string=? (gnc:html-sankey-x-axis-style sankey) "dynamic")
+            (push (format #f "~a;\n" x-axis-dynamic-js))
+            (push (format #f "~a;\n" x-axis-fixed-js)))
+          (push (format #f "~a;\n" js-sankey))
+          (push "})();")
+          (push "</script>\n"))))
   retval))
