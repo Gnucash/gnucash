@@ -62,7 +62,7 @@
 
 (define optsvg-x-axis-style-name (N_ "Flow X-Axis Style"))
 (define optsvg-x-axis-style-help (N_ "The style for the X-axis in the Sankey diagram."))
-(define optsvg-x-axis-style-default "dynamic")
+(define optsvg-x-axis-style-default "fixed")
 
 ;; Node colors for different account types, with defaults chosen for good contrast and aesthetics
 ;; Users can customize these in the report options to fit their preferences or color schemes.
