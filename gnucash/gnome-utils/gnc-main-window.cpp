@@ -4664,7 +4664,7 @@ gnc_book_options_dialog_apply_helper(GncOptionDB * options)
         qof_book_use_split_action_for_num_field (book);
 
     // mark cached value as invalid so we get new value
-    book->cached_num_days_autoreadonly_isvalid = FALSE;
+    qof_book_reset_num_days_autoreadonly_cache (book);
     use_read_only_threshold_after = qof_book_get_num_days_autoreadonly (book);
 
     if (use_split_action_for_num_before != use_split_action_for_num_after)
