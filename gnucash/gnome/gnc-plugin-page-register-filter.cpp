@@ -491,18 +491,6 @@ gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd)
     LEAVE(" ");
 }
 
-/** This function updates the "cleared match" term of the register
- *  query.  It unconditionally removes any old "cleared match" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
- *
- *  @param plugin_page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
 static void
 ppr_filter_update_status_query (GncPluginPage* plugin_page)
 {
@@ -547,18 +535,6 @@ ppr_filter_update_status_query (GncPluginPage* plugin_page)
     LEAVE (" ");
 }
 
-/** This function updates the "date posted" term of the register
- *  query.  It unconditionally removes any old "date posted" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
- *
- *  @param plugin_page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
 static void
 ppr_filter_update_date_query (GncPluginPage* plugin_page)
 {
@@ -799,16 +775,6 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
     LEAVE(" ");
 }
 
-/** This function computes the starting and ending times for the
- *  filter by examining the dialog widgets to see which ones are
- *  selected, and will pull times out of the data entry boxes if
- *  necessary.  This function must exist to handle the case where the
- *  "show all" button was Selected, and the user clicks on the "select
- *  range" button.  Since it exists, it make sense for the rest of the
- *  callbacks to take advantage of it.
- *
- *  @param rfd A pointer to the filter dialog structure.
- */
 static void
 get_filter_times (RegisterFilterDialog* rfd)
 {
@@ -919,15 +885,6 @@ gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
     LEAVE(" ");
 }
 
-/** This function is called when one of the start date entry widgets
- *  is updated.  It simply calls common routines to determine the
- *  start/end times and update the register query.
- *
- *  @param unused A pointer to a GncDateEntry widgets, but it could be
- *  any widget.
- *
- *  @param rfd A pointer to the filter dialog structure.
- */
 static void
 ppr_filter_gde_changed_cb (GtkWidget* unused,
                            RegisterFilterDialog* rfd)
@@ -1110,14 +1067,6 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     LEAVE(" ");
 }
 
-/** This function is called to create the filter dialog.
- *
- *  @param rfd A pointer to the filter dialog structure.
- *
- *  @param fd The filter data structure for remembering state.
- *
- *  @param query A pointer to the current register query.
- */
 static void
 ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *query)
 {
