@@ -31,7 +31,7 @@
 
 #include "qof.h"
 #include "qof-backend.hpp"
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qofclass-p.h"
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"

@@ -8,7 +8,7 @@
 
 
 #include <qofbook.h>
-#include <qofbook-p.h>
+#include <qofbook-p.hpp>
 #include <Split.h>
 
 #include "gmock-gobject.h"

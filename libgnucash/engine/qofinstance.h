@@ -41,7 +41,7 @@ typedef struct _QofInstanceClass QofInstanceClass;
 typedef struct QofInstance_s QofInstance;
 
 /** \brief QofBook reference */
-typedef struct _QofBook       QofBook;
+typedef struct QofBook       QofBook;
 
 #include "qofid.h"
 #include "guid.h"
