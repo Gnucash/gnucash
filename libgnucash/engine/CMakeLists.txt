@@ -22,7 +22,7 @@ set(engine_noinst_HEADERS
   gnc-optiondb-impl.hpp
   gnc-pricedb-p.h
   policy-p.h
-  qofbook-p.h
+  qofbook-p.hpp
   qofclass-p.h
   qofevent-p.h
   qofobject-p.h

@@ -41,10 +41,92 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance-p.h"
-#ifdef __cplusplus
-extern "C"
+
+
+struct QofBook
 {
-#endif
+    QofInstance   inst;     /* Unique guid for this book. */
+
+    /* Boolean indicates that the session is dirty -- that is, it has
+     * not yet been written out to disk after the last time the
+     * backend ran commit_edit(). This is distinct from the inherited
+     * QofInstance::dirty, which indicates that some persistent
+     * property of the book object itself has been edited and not
+     * committed. Some backends write data out as part of
+     * commit_edit() and so don't use this flag.
+     */
+    gboolean session_dirty;
+
+    /* The time when the book was first dirtied.  This is a secondary
+     * indicator. It should only be used when session_saved is FALSE. */
+    time64 dirty_time;
+
+    /* This callback function is called any time the book dirty flag
+     * changes state. Both clean->dirty and dirty->clean transitions
+     * trigger a callback. */
+    QofBookDirtyCB dirty_cb;
+
+    /* This is the user supplied data that is returned in the dirty
+     * callback function.*/
+    gpointer dirty_data;
+
+    /* The entity table associates the GUIDs of all the objects
+     * belonging to this book, with their pointers to the respective
+     * objects.  This allows a lookup of objects based on their guid.
+     */
+    GHashTable * hash_of_collections;
+
+    /* In order to store arbitrary data, for extensibility, add a table
+     * that will be used to hold arbitrary pointers.
+     */
+    GHashTable *data_tables;
+
+    /* Hash table of destroy callbacks for the data table. */
+    GHashTable *data_table_finalizers;
+
+    /* Boolean indicates whether book is safe to write to (true means
+     * that it isn't). The usual reason will be a database version
+     * mismatch with the running instance of Gnucash.
+     */
+    gboolean read_only;
+
+    /* state flag: 'y' means 'open for editing',
+     * 'n' means 'book is closed'
+     * xxxxx shouldn't this be replaced by the instance editlevel ???
+     */
+    char book_open;
+
+    /* a flag denoting whether the book is closing down, used to
+     * help the QOF objects shut down cleanly without maintaining
+     * internal consistency.
+     * XXX shouldn't this be replaced by instance->do_free ???
+     */
+    gboolean shutting_down;
+
+    /* version number, used for tracking multiuser updates */
+    gint32  version;
+
+    /* To be technically correct, backends belong to sessions and
+     * not books.  So the pointer below "really shouldn't be here",
+     * except that it provides a nice convenience, avoiding a lookup
+     * from the session.  Better solutions welcome ... */
+    QofBackend *backend;
+
+    /* A cached value of the OPTION_NAME_NUM_FIELD_SOURCE option value
+     * because it is queried quite a lot, so we want to avoid a KVP
+     * lookup on each query */
+    gboolean cached_num_field_source;
+    /* Whether the above cached value is valid. */
+    gboolean cached_num_field_source_isvalid;
+
+    /* A cahed value of the "autoreadonly-days" option value because
+     * it is queried quite a lot, so we want to avoid a KVP lookup on
+     * each query */
+    gint cached_num_days_autoreadonly;
+    /* Whether the above cached value is valid. */
+    gboolean cached_num_days_autoreadonly_isvalid;
+};
+
 
 /* Structure for accessing static functions for testing */
 typedef struct
@@ -96,8 +178,5 @@ void qof_book_print_dirty (const QofBook *book);
 /* @} */
 /* @} */
 /* @} */
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* QOF_BOOK_P_H */

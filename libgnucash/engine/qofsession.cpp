@@ -51,7 +51,7 @@
 
 static QofLogModule log_module = QOF_MOD_SESSION;
 
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qof-backend.hpp"
 #include "qofsession.hpp"
 #include "gnc-backend-prov.hpp"

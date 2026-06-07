@@ -36,7 +36,7 @@
 #include <cstdint>
 #include <utility>
 #include "qof.h"
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qofid-p.h"
 #include "kvp-frame.hpp"
 #include "qofinstance-p.h"

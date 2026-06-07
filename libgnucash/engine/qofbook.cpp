@@ -49,7 +49,7 @@
 #include "qof.h"
 #include "qofevent-p.h"
 #include "qofbackend.h"
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qofid-p.h"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
