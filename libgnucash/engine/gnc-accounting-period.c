@@ -188,7 +188,7 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     case GNC_ACCOUNTING_PERIOD_FYEAR:
         if (fy_end == NULL)
         {
-            PINFO ("Request for fisal year value but no fiscal year end value provided.");
+            PINFO ("Request for fiscal year value but no fiscal year end value provided.");
             g_date_free (date);
             return NULL;
         }
@@ -198,7 +198,7 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
         if (fy_end == NULL)
         {
-            PINFO ("Request for fisal year value but no fiscal year end value provided.");
+            PINFO ("Request for fiscal year value but no fiscal year end value provided.");
             g_date_free (date);
             return NULL;
         }
