@@ -576,6 +576,18 @@ void qof_book_mark_closed (QofBook *book)
     book->book_open = 'n';
 }
 
+gboolean qof_book_is_open (const QofBook *book)
+{
+    g_return_val_if_fail (book, FALSE);
+    return book->book_open == 'y';
+}
+
+void qof_book_swap_books_readonly (QofBook *book, QofBook *other)
+{
+    g_return_if_fail (book && other);
+    std::swap (book->read_only, other->read_only);
+}
+
 gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)
 {
@@ -963,6 +975,12 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 {
     g_assert(book);
     return (qof_book_get_num_days_autoreadonly(book) != 0);
+}
+
+void qof_book_reset_num_days_autoreadonly_cache (QofBook *book)
+{
+    g_return_if_fail (book);
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
 }
 
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)

@@ -218,6 +218,10 @@ and once marked closed, books cannot be marked as open.
 */
 void qof_book_mark_closed (QofBook *book);
 
+gboolean qof_book_is_open (const QofBook *book);
+
+void qof_book_swap_books_readonly (QofBook *book, QofBook *other);
+
 /** Return The table of entities of the given type.
  *
  *  When an object's constructor calls qof_instance_init(), a
@@ -269,6 +273,8 @@ gboolean qof_book_empty(const QofBook *book);
 
 /** Returns flag indicating whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book);
+
+void qof_book_reset_num_days_autoreadonly_cache (QofBook *book);
 
 /** Returns TRUE if the auto-read-only feature should be used, otherwise
  * FALSE. This is just a wrapper on qof_book_get_num_days_autoreadonly() == 0. */
