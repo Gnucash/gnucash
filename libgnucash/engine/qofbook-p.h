@@ -46,6 +46,23 @@ extern "C"
 {
 #endif
 
+/* Structure for accessing static functions for testing */
+typedef struct
+{
+    gboolean (*get_session_dirty)(const QofBook*);
+    gboolean (*get_read_only)(const QofBook*);
+    QofBookDirtyCB (*get_dirty_cb)(const QofBook*);
+    void (*set_shutting_down)(QofBook*, gboolean);
+    gpointer (*get_dirty_data)(const QofBook*);
+    GHashTable* (*get_collections)(const QofBook*);
+    GHashTable* (*get_data_tables)(const QofBook*);
+    GHashTable* (*get_data_table_finalizers)(const QofBook*);
+    char (*get_book_open)(const QofBook*);
+    int (*get_version)(const QofBook*);
+} QofBookTestFunctions;
+
+QofBookTestFunctions* _utest_qofbook_fill_functions (void);
+
 /*
  *    qof_book_set_backend() is used by backends to
  *    initialize the pointers in the book structure to
