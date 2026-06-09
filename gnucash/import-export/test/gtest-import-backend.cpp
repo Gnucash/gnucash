@@ -38,10 +38,10 @@
 #include <gnc-ui-util.h>
 
 #include "gmock-gnc-prefs.h"
-#include "gmock-qofbook.h"
+#include "gmock-qofbook.hpp"
 #include "gmock-Account.h"
 #include "gmock-Transaction.h"
-#include "gmock-Split.h"
+#include "gmock-Split.hpp"
 
 
 

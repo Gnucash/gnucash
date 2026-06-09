@@ -3,12 +3,12 @@ set(engine_mocks_SOURCES
     gmock-Account.h
     gmock-gobject.h
     gmock-qofbook.cpp
-    gmock-qofbook.h
+    gmock-qofbook.hpp
     gmock-qofinstance.cpp
     fake-qofquery.cpp
     fake-qofquery.h
     gmock-Split.cpp
-    gmock-Split.h
+    gmock-Split.hpp
     gmock-Transaction.cpp
     gmock-Transaction.h
 )

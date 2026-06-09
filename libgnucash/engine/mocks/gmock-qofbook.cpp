@@ -1,4 +1,4 @@
-#include "gmock-qofbook.h"
+#include "gmock-qofbook.hpp"
 
 struct _QofMockBookClass
 {
