@@ -3,8 +3,8 @@
 #include <Transaction.h>
 #include <Account.h>
 
-#include "gmock-Split.h"
-#include "gmock-qofbook.h"
+#include "gmock-Split.hpp"
+#include "gmock-qofbook.hpp"
 
 
 struct _MockSplitClass

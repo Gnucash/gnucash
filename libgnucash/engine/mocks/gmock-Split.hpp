@@ -10,7 +10,7 @@
 #include <Split.h>
 #include <SplitP.hpp>
 
-#include "gmock-qofbook.h"
+#include "gmock-qofbook.hpp"
 #include "gmock-gobject.h"
 
 
