@@ -96,20 +96,12 @@ QOF_GOBJECT_FINALIZE(qof_book);
 /* ====================================================================== */
 /* constructor / destructor */
 
-static void coll_destroy(gpointer col)
-{
-    qof_collection_destroy((QofCollection *) col);
-}
-
 static void
 qof_book_init (QofBook *book)
 {
     if (!book) return;
 
-    book->hash_of_collections = g_hash_table_new_full(
-                                    g_str_hash, g_str_equal,
-                                    (GDestroyNotify)qof_string_cache_remove,  /* key_destroy_func   */
-                                    coll_destroy);                            /* value_destroy_func */
+    new (&book->hash_of_collections) CollectionMap();
 
     qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
@@ -330,9 +322,7 @@ destroy_lot(QofInstance *inst, [[maybe_unused]]void* data)
 void
 qof_book_destroy (QofBook *book)
 {
-    GHashTable* cols;
-
-    if (!book || !book->hash_of_collections) return;
+    if (!book) return;
     ENTER ("book=%p", book);
 
     book->shutting_down = TRUE;
@@ -362,9 +352,8 @@ qof_book_destroy (QofBook *book)
      * DO remove ourself from the collection but the collection had already
      * been destroyed.
      */
-    cols = book->hash_of_collections;
+    book->hash_of_collections.~CollectionMap();
     g_object_unref (book);
-    g_hash_table_destroy (cols);
 
     LEAVE ("book=%p", book);
 }
@@ -520,49 +509,27 @@ qof_book_empty(const QofBook *book)
 QofCollection *
 qof_book_get_collection (const QofBook *book, QofIdType entity_type)
 {
-    QofCollection *col;
-
     if (!book || !entity_type) return nullptr;
 
-    col = static_cast<QofCollection*>(g_hash_table_lookup (book->hash_of_collections, entity_type));
-    if (!col)
-    {
-        col = qof_collection_new (entity_type);
-        g_hash_table_insert(
-            book->hash_of_collections,
-            (gpointer)qof_string_cache_insert(entity_type), col);
-    }
+    auto& collections = const_cast<QofBook*>(book)->hash_of_collections;
+    auto it = collections.find (entity_type);
+    if (it != collections.end ())
+        return it->second.get ();
+
+    auto col = qof_collection_new (entity_type);
+    collections.emplace (entity_type, QofCollectionPtr{col});
     return col;
-}
-
-struct _iterate
-{
-    QofCollectionForeachCB  fn;
-    gpointer                data;
-};
-
-static void
-foreach_cb (G_GNUC_UNUSED gpointer key, gpointer item, gpointer arg)
-{
-    struct _iterate *iter = static_cast<_iterate*>(arg);
-    QofCollection *col = static_cast<QofCollection*>(item);
-
-    iter->fn (col, iter->data);
 }
 
 void
 qof_book_foreach_collection (const QofBook *book,
                              QofCollectionForeachCB cb, gpointer user_data)
 {
-    struct _iterate iter;
-
     g_return_if_fail (book);
     g_return_if_fail (cb);
 
-    iter.fn = cb;
-    iter.data = user_data;
-
-    g_hash_table_foreach (book->hash_of_collections, foreach_cb, &iter);
+    for (auto& [name, col] : book->hash_of_collections)
+        cb (col.get(), user_data);
 }
 
 /* ====================================================================== */
@@ -1433,7 +1400,6 @@ static gboolean get_read_only(const QofBook *book){ return book->read_only; }
 static QofBookDirtyCB get_dirty_cb(const QofBook *book){ return book->dirty_cb; }
 static void set_shutting_down(QofBook *book, gboolean state){ book->shutting_down = state; }
 static gpointer get_dirty_data(const QofBook *book){ return book->dirty_data; }
-static GHashTable* get_collections(const QofBook *book){ return book->hash_of_collections; }
 static GHashTable* get_data_tables(const QofBook *book){ return book->data_tables; }
 static GHashTable* get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
 static char get_book_open(const QofBook *book){ return book->book_open; }
@@ -1450,7 +1416,6 @@ _utest_qofbook_fill_functions (void)
     func->get_dirty_cb = get_dirty_cb;
     func->set_shutting_down = set_shutting_down;
     func->get_dirty_data = get_dirty_data;
-    func->get_collections = get_collections;
     func->get_data_tables = get_data_tables;
     func->get_data_table_finalizers = get_data_table_finalizers;
     func->get_book_open = get_book_open;

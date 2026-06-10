@@ -43,6 +43,18 @@
 #include "qofinstance-p.h"
 
 
+#include <memory>
+#include <string>
+#include <boost/container/flat_map.hpp>
+
+struct QofCollectionDeleter
+{
+    void operator()(QofCollection* col) const noexcept { qof_collection_destroy (col); }
+};
+
+using QofCollectionPtr = std::unique_ptr<QofCollection, QofCollectionDeleter>;
+using CollectionMap = boost::container::flat_map<std::string, QofCollectionPtr>;
+
 struct QofBook
 {
     QofInstance   inst;     /* Unique guid for this book. */
@@ -74,7 +86,7 @@ struct QofBook
      * belonging to this book, with their pointers to the respective
      * objects.  This allows a lookup of objects based on their guid.
      */
-    GHashTable * hash_of_collections;
+    CollectionMap hash_of_collections;
 
     /* In order to store arbitrary data, for extensibility, add a table
      * that will be used to hold arbitrary pointers.
@@ -136,7 +148,6 @@ typedef struct
     QofBookDirtyCB (*get_dirty_cb)(const QofBook*);
     void (*set_shutting_down)(QofBook*, gboolean);
     gpointer (*get_dirty_data)(const QofBook*);
-    GHashTable* (*get_collections)(const QofBook*);
     GHashTable* (*get_data_tables)(const QofBook*);
     GHashTable* (*get_data_table_finalizers)(const QofBook*);
     char (*get_book_open)(const QofBook*);
