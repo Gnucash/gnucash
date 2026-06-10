@@ -378,9 +378,9 @@ TEST(GNCDate, gnc_date_dateformat_to_string)
 
 TEST(GNCDate, gnc_date_string_to_dateformat)
 {
-    QofDateFormat fmt = QofDateFormat(123);
+    QofDateFormat fmt = QofDateFormat(QOF_DATE_FORMAT_CUSTOM);
     EXPECT_TRUE(gnc_date_string_to_dateformat (nullptr, &fmt));
-    EXPECT_EQ(fmt, 123);
+    EXPECT_EQ(fmt, QOF_DATE_FORMAT_CUSTOM);
     EXPECT_TRUE(!gnc_date_string_to_dateformat ("us", &fmt));
     EXPECT_EQ(fmt, QOF_DATE_FORMAT_US);
     EXPECT_TRUE(!gnc_date_string_to_dateformat ("uk", &fmt));
@@ -397,11 +397,11 @@ TEST(GNCDate, gnc_date_string_to_dateformat)
     EXPECT_EQ(fmt, QOF_DATE_FORMAT_CUSTOM);
     EXPECT_TRUE(!gnc_date_string_to_dateformat ("unset", &fmt));
     EXPECT_EQ(fmt, QOF_DATE_FORMAT_UNSET);
-    fmt = QofDateFormat(123);
+    fmt = QofDateFormat(QOF_DATE_FORMAT_CUSTOM);
     EXPECT_TRUE(gnc_date_string_to_dateformat ("", &fmt));
-    EXPECT_EQ(fmt, 123);
+    EXPECT_EQ(fmt, QOF_DATE_FORMAT_CUSTOM);
     EXPECT_TRUE(gnc_date_string_to_dateformat ("foo", &fmt));
-    EXPECT_EQ(fmt, 123);
+    EXPECT_EQ(fmt, QOF_DATE_FORMAT_CUSTOM);
 
 }
 
@@ -415,20 +415,20 @@ TEST(GNCDate, gnc_date_monthformat_to_string)
 
 TEST(GNCDate, gnc_date_string_to_monthformat)
 {
-    GNCDateMonthFormat fmt = GNCDateMonthFormat(123);
+    GNCDateMonthFormat fmt = GNCDateMonthFormat(GNCDATE_MONTH_NAME);
     EXPECT_TRUE(gnc_date_string_to_monthformat (nullptr, &fmt));
-    EXPECT_EQ(fmt, 123);
+    EXPECT_EQ(fmt, GNCDATE_MONTH_NAME);
     EXPECT_TRUE(!gnc_date_string_to_monthformat ("number", &fmt));
     EXPECT_EQ(fmt, GNCDATE_MONTH_NUMBER);
     EXPECT_TRUE(!gnc_date_string_to_monthformat ("abbrev", &fmt));
     EXPECT_EQ(fmt, GNCDATE_MONTH_ABBREV);
     EXPECT_TRUE(!gnc_date_string_to_monthformat ("name", &fmt));
     EXPECT_EQ(fmt, GNCDATE_MONTH_NAME);
-    fmt = GNCDateMonthFormat(123);
+    fmt = GNCDateMonthFormat(GNCDATE_MONTH_NAME);
     EXPECT_TRUE(gnc_date_string_to_monthformat ("", &fmt));
-    EXPECT_EQ(fmt, 123);
+    EXPECT_EQ(fmt, GNCDATE_MONTH_NAME);
     EXPECT_TRUE(gnc_date_string_to_monthformat ("foo", &fmt));
-    EXPECT_EQ(fmt, 123);
+    EXPECT_EQ(fmt, GNCDATE_MONTH_NAME);
 }
 
 static void
