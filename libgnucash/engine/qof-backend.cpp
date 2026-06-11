@@ -100,16 +100,7 @@ QofBackend::register_backend(const char* directory, const char* module_name)
     auto pkgdir = gnc_path_get_pkglibdir ();
     if (!absdir || !g_path_is_absolute(absdir))
         absdir = pkgdir;
-    auto fullpath = g_module_build_path (absdir, module_name);
-/* Darwin modules can have either .so or .dylib for a suffix */
-    if (!g_file_test (fullpath, G_FILE_TEST_EXISTS) &&
-        g_strcmp0 (G_MODULE_SUFFIX, "so") == 0)
-    {
-        auto modname = g_strdup_printf ("lib%s.dylib", module_name);
-        g_free (fullpath);
-        fullpath = g_build_filename (absdir, modname, nullptr);
-        g_free (modname);
-    }
+    auto fullpath = g_build_filename (absdir, module_name, nullptr);
     auto backend = g_module_open (fullpath, G_MODULE_BIND_LAZY);
     g_free (fullpath);
     g_free (pkgdir);
