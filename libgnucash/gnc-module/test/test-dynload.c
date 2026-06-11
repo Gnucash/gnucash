@@ -49,27 +49,14 @@ main(int argc, char ** argv)
 /* MinGW builds libgnc-module-0.dll */
     if (libdir == NULL)
     {
-        modpath = g_module_build_path ("../.libs", "gnc-module-0");
+      modpath = g_build_filename ("../.libs", "gnc-module-0", nullptr);
     }
     else
     {
-        modpath = g_module_build_path (libdir, "gnc-module");
-    }
-#elif defined(GNC_PLATFORM_OSX)
-/* We build libgnc-module as a shared library for testing, and on OSX
- * that means that g_module_build_path (), which uses ".so", doesn't
- * build the right path name.
- */
-    if (libdir == NULL)
-    {
-        modpath = g_build_filename ("..", ".libs", "libgnc-module.dylib", NULL);
-    }
-    else
-    {
-        modpath = g_build_filename (libdir, "libgnc-module.dylib", NULL);
+      modpath = g_build_filename (libdir, "gnc-module", nullptr);
     }
 #else /* Regular Unix */
-    modpath = g_module_build_path (libdir, "gnc-module");
+    modpath = g_build_filename (libdir, "gnc-module", NULL);
 #endif
     gmodule = g_module_open(modpath, 0);
 
