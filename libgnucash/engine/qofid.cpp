@@ -40,6 +40,17 @@ struct QofCollection_s
 
     GHashTable * hash_of_entities;
     gpointer     data;       /* place where object class can hang arbitrary data */
+    QofCollection_s (QofIdType type)
+        : e_type(static_cast<QofIdType>(CACHE_INSERT(type)))
+        , is_dirty{FALSE}
+        , hash_of_entities{guid_hash_table_new()}
+        , data{NULL}
+    {};
+    ~QofCollection_s ()
+    {
+        CACHE_REMOVE (e_type);
+        g_hash_table_destroy(hash_of_entities);
+    };
 };
 
 /* =============================================================== */
@@ -47,24 +58,13 @@ struct QofCollection_s
 QofCollection *
 qof_collection_new (QofIdType type)
 {
-    QofCollection *col;
-    col = g_new0(QofCollection, 1);
-    col->e_type = static_cast<QofIdType>(CACHE_INSERT (type));
-    col->is_dirty = FALSE;
-    col->hash_of_entities = guid_hash_table_new();
-    col->data = NULL;
-    return col;
+    return new QofCollection (type);
 }
 
 void
 qof_collection_destroy (QofCollection *col)
 {
-    CACHE_REMOVE (col->e_type);
-    g_hash_table_destroy(col->hash_of_entities);
-    col->e_type = NULL;
-    col->hash_of_entities = NULL;
-    col->data = NULL;   /** XXX there should be a destroy notifier for this */
-    g_free (col);
+    delete col;
 }
 
 /* =============================================================== */
