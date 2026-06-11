@@ -54,48 +54,48 @@ Libraries/Deps
   required              Version
   --------              _______
   gcc or clang          8.0 (gcc)/6.0(clang)    C++17 C/C++ compiler
-  cmake                 3.14.5                  Build system manager
-  glib2                 2.68.1
-  gtk+3                 3.22.30
-  guile                 3.0, 2.2 or 2.0.9       Must be built with regex
+  cmake                 4.0.0                   Build system manager
+  glib2                 2.88.0
+  gtk+3                 3.24.52
+  guile                 3.0                     Must be built with regex
                                                 support enabled
-  libxml2               2.9.4
-  gettext               0.20                    Required to build gnucash.pot,
+  libxml2               2.15.0
+  gettext               0.23.2                    Required to build gnucash.pot,
                                                 0.19.6 or later permitted but
                                                 won't generate gnucash.pot.
   libxslt, including xsltproc
-  ICU                                           International Components for
+  ICU                   78.0                        International Components for
                                                 Unicode
-  boost                 1.67.0                  All headers plus date_time,
+  boost                 1.90.0                  All headers plus date_time,
                                                 filesystem, locale,
                                                 program_options, and
                                                 regex libraries.
                                                 locale and regex libs must be
                                                 built with ICU support.
-  swig                  3.0.12                  Makes Guile and Python Bindings.
+  swig                  4.4.0                   Makes Guile and Python Bindings.
   webkit                2.4.11 (Windows,
-                        2.14.1 (Everything Else)
+                        2.32.0 (Everything Else)
   googletest            1.8.0                   Some distros call it gtest.
                                                 Some distros also separate out
                                                 googlemock or gmock; both are
                                                 required.
 
-  libdbi                0.8.3                    SQL backend; also requires at
-                                                 least one of libdbd-sqlite3,
-                                                 libdbd-mysql, or libdbd-pgsql
+  libdbi                0.9.0                   SQL backend; also requires at
+                                                least one of libdbd-sqlite3,
+                                                libdbd-mysql, or libdbd-pgsql
 
   zlib
 
   optional
   --------
-  aqbanking             6.4.0                    online banking and SWIFT
-  gwenhywfar            5.8.0                    file imports.
+  aqbanking             6.9.1                   online banking and SWIFT
+  gwenhywfar            5.14.1                  file imports.
 
-  python                3.8.0                    python bindings; headers
-                                                 required, not just binaries.
-  libofx                0.9.12                   OFX/QFX import
+  python                3.14.0                  python bindings; headers
+                                                required, not just binaries.
+  libofx                0.10.9                  OFX/QFX import
 
-  libsecret             0.18
+  libsecret             0.21
   gtk-mac-integration                            MacOS only, for menus to go
                                                  to the main menu bar instead
                                                  of one on the window.

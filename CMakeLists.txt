@@ -1,6 +1,6 @@
 # CMakeLists.txt for GnuCash
 
-cmake_minimum_required (VERSION 3.14.5)
+cmake_minimum_required (VERSION 4.0.0)
 
 # CMake 3.15+ Python3_FIND_STRATEGY=LOCATION
 if (POLICY CMP0094)
@@ -21,7 +21,7 @@ if (POLICY CMP0177)
 endif()
 
 project (gnucash
-    VERSION 5.15
+    VERSION 5.90
 )
 
 enable_testing()
@@ -231,8 +231,8 @@ if (NOT PKG_CONFIG_FOUND)
  endif()
 
 # glib et al.
-set(GLIB_MIN_VERSION 2.68.1)
-set(GTK_MIN_VERSION 3.22.30)
+set(GLIB_MIN_VERSION 2.88.0)
+set(GTK_MIN_VERSION 3.24.52)
 
 pkg_check_modules (GLIB2 REQUIRED IMPORTED_TARGET glib-2.0>=${GLIB_MIN_VERSION})
 pkg_check_modules (GIO REQUIRED gio-2.0)
@@ -240,14 +240,15 @@ pkg_check_modules (GOBJECT REQUIRED gobject-2.0)
 pkg_check_modules (GMODULE REQUIRED gmodule-2.0)
 pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 
-pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.9.4)
+pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.15.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
   if (WIN32)
     pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
     set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
   else()
-    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.14.0)
+    # Hold at 2.32, the latest version successfully built on macOS.
+    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.32.0)
     if (NOT WEBKIT_FOUND)
       pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.1)
     endif()
@@ -285,15 +286,7 @@ find_library (REGEX_LIBRARY NAMES regex)
 # Potfile generation will only be enabled if building from a git worktree
 set (BUILD_GNUCASH_POT ${BUILDING_FROM_VCS})
 
-find_package (Gettext 0.19.6 REQUIRED)
-if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
-    message (WARNING "Gettext version 0.20 or more recent is required to translate the 'developer_name' tag in gnucash.appdata.xml. All but that tag will be translated in the generated file.")
-    if(BUILD_GNUCASH_POT)
-        # Only emit warning if potfile generation was enabled otherwise
-        message (WARNING "Gettext version 0.20 or more recent is required to extract all translatable strings. Potfile generation will be disabled.")
-    endif()
-    set (BUILD_GNUCASH_POT OFF)
-endif()
+find_package (Gettext 0.23.2 REQUIRED)
 
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
 		  PATHS /usr/include /opt/gnome/include)
@@ -309,7 +302,7 @@ endif()
 # ############################################################
 
 # SWIG
-find_package (SWIG 3.0.12 REQUIRED)
+find_package (SWIG 4.4.0 REQUIRED)
 include (${SWIG_USE_FILE})
 
 # Find Guile and determine which version we are using.
@@ -412,8 +405,8 @@ find_guile_dirs()
 
 # ############################################################
 if (WITH_AQBANKING)
-  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=5.6.0)
-  pkg_check_modules (AQBANKING REQUIRED aqbanking>=6.2.0)
+  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=5.14.1)
+  pkg_check_modules (AQBANKING REQUIRED aqbanking>=6.9.1)
   set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
     "${GWENHYWFAR_INCLUDE_DIRS}")
   set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")
@@ -428,7 +421,7 @@ if (WITH_AQBANKING)
 endif()
 
 if (WITH_OFX)
-  pkg_check_modules (LIBOFX REQUIRED libofx)
+  pkg_check_modules (LIBOFX REQUIRED libofx>=0.10.9)
   include(CheckCXXSourceRuns)
   if (WIN32)
       set(CMAKE_REQUIRED_LIBRARIES "-L ${CMAKE_PREFIX_PATH}/libofx/lib -lofx")
@@ -532,7 +525,7 @@ endif()
 # ############################################################
 
 if (WITH_PYTHON)
-  set (PYTHON_MIN_VERSION 3.8.0)
+  set (PYTHON_MIN_VERSION 3.14.0)
   if (NOT DEFINED Python3_FIND_UNVERSIONED_NAMES)
     set (Python3_FIND_UNVERSIONED_NAMES FIRST)
   endif()
@@ -585,9 +578,9 @@ get_filename_component(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
 find_program(POD2MAN_EXECUTABLE pod2man HINTS ${PERL_DIR})
 
 #ICU
-find_package(ICU 54.0 REQUIRED COMPONENTS uc i18n)
+find_package(ICU 78.0 REQUIRED COMPONENTS uc i18n)
 
-pkg_check_modules (LIBSECRET libsecret-1>=0.18)
+pkg_check_modules (LIBSECRET libsecret-1>=0.21)
 IF (LIBSECRET_FOUND)
   SET (HAVE_LIBSECRET ON)
 ENDIF (LIBSECRET_FOUND)
@@ -599,15 +592,8 @@ set (Boost_FIND_QUIETLY ON)
 if (NOT DEFINED ${BOOST_ROOT})
   set(BOOST_ROOT $ENV{BOOST_ROOT})
 endif()
-find_package (Boost 1.67.0 REQUIRED)
+find_package(Boost 1.90.0  REQUIRED COMPONENTS atomic charconv chrono container date_time filesystem locale program_options regex thread)
 
-if (Boost_FOUND)
- if (Boost_VERSION VERSION_LESS "1.89.0")
-  find_package(Boost 1.67.0  COMPONENTS date_time filesystem locale program_options regex system)
- else()
-  find_package(Boost 1.67.0  COMPONENTS atomic charconv chrono container date_time filesystem locale program_options regex thread)
- endif()
-endif()
 
 if (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
