@@ -365,4 +365,97 @@ void gnc_log_set_handler (guint logdomain, gchar *logdomain, GLogFunc * func, gp
 }
 #endif
 
+
+#ifdef __cplusplus
+
+/** Test helper to suppresses the message regardless of what the error is.
+ *
+ *  This will install a g_log_set_default_handler on creation and remove it on destruction.  All
+ *  messages are suppressed.  Use this only as a last resort.
+ */
+class CLogDefaultNullHandlerScoped
+{
+public:
+    /** Construct the handler that will be active for the scope of this object.
+     */
+    CLogDefaultNullHandlerScoped()
+        {
+            m_hndlr = g_log_set_default_handler((GLogFunc)test_null_handler, this);
+        }
+    /** Remove the handler
+     */
+    ~CLogDefaultNullHandlerScoped()
+        {
+            g_log_set_default_handler(m_hndlr, nullptr);
+        }
+private:
+    static gboolean test_null_handler(const char *log_domain, GLogLevelFlags log_level,
+        const gchar *msg, gpointer user_data)
+        {
+            return FALSE;
+        }
+
+    GLogFunc m_hndlr;
+};
+
+/** Test helper class for counting the number of logs that match the parameters.
+ *
+ * This will install a g_log_set_handler on creation and remove it on destruction. It will count the
+ * number of logs that match the parameters.  That count is accessed through the Hits() member.
+ */
+class CLogHandlerScoped
+{
+public:
+    /** Construct the handler that will be active for the scope of this object.
+     *
+     * @param log_domain: The string representing the domain of the log message
+     * @param log_level: The GLogLevelFlags for the message
+     * @param msg: The exact error message that the logger will emit.  If this is null all messages
+     * are counted.
+     */
+    CLogHandlerScoped(const char *log_domain, GLogLevelFlags log_level, const gchar *msg)
+        : m_hits(0),
+          m_log_domain(log_domain),
+          m_msg(msg)
+        {
+            m_hndlr = g_log_set_handler(log_domain, log_level, (GLogFunc)test_checked_handler, this);
+        }
+    /** Remove the handler
+     */
+    ~CLogHandlerScoped()
+        {
+            g_log_remove_handler(m_log_domain, m_hndlr);
+        }
+
+    /** Update the message that is lookded for.
+     *
+     * @param msg: The exact error message that the logger will emit.  If this is null all messages
+     * are counted.
+     */
+    void SetMsg(const char* msg) { m_msg = msg; }
+
+    /** Return the number of logs that this handler matched.
+     */
+    guint Hits() const { return m_hits; }
+private:
+    static gboolean test_checked_handler(const char *log_domain, GLogLevelFlags log_level,
+        const gchar *msg, gpointer user_data)
+        {
+            static_cast<CLogHandlerScoped*>(user_data)->Check(log_domain, log_level, msg);
+            return FALSE;
+        }
+
+    void Check(const char *log_domain, GLogLevelFlags log_level, const gchar *msg)
+        {
+            if (!m_msg || !g_strcmp0(m_msg, msg))
+                ++m_hits;
+        }
+
+    guint m_hits;
+    const char* m_log_domain;
+    const char* m_msg;
+    guint m_hndlr;
+};
+#endif
+
 #endif /*UNITTEST_SUPPORT_H*/

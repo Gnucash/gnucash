@@ -540,19 +540,15 @@ TEST(GNCDate, gnc_date_get_last_mday)
 
 TEST(GNCDate, qof_date_format_set)
 {
-    gchar msg[] = "[qof_date_format_set()] non-existent date format set attempted. Setting ISO default";
-    auto loglevel = G_LOG_LEVEL_CRITICAL;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, msg, GLogLevelFlags(0)};
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_CRITICAL,
+        "[qof_date_format_set()] non-existent date format set attempted. Setting ISO default");
     qof_date_format_set ((QofDateFormat)((guint)DATE_FORMAT_LAST + 97));
     EXPECT_EQ(qof_date_format_get(),  (int)QOF_DATE_FORMAT_ISO);
-    EXPECT_EQ(check.hits,1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     EXPECT_EQ(qof_date_format_get (), QOF_DATE_FORMAT_UK);
-    EXPECT_EQ(check.hits,1u);
-    g_log_remove_handler (logdomain, hdlr);
+    EXPECT_EQ(check.Hits(), 1u);
 }
 
 #ifdef HAVE_LANGINFO_D_FMT
@@ -1326,12 +1322,7 @@ gnc_dmy2time64 (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
 */
 TEST_F(GNCDateFixBegin, gnc_dmy2time64)
 {
-    gchar msg1[] = "[qof_dmy2time64()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+    CLogDefaultNullHandlerScoped ignore;
     for (size_t i = 0; i < sizeof(m_test)/sizeof(TimeMap); ++i)
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
@@ -1352,7 +1343,6 @@ TEST_F(GNCDateFixBegin, gnc_dmy2time64)
         else
             EXPECT_EQ(r_t, m_test[i].secs - offset);
     }
-    g_log_set_default_handler (hdlr, 0);
 }
 /* gnc_dmy2time64_end
 time64
@@ -1360,12 +1350,7 @@ gnc_dmy2time64_end (int day, int month, int year)// C: 1  Local: 0:0:0
 */
 TEST_F(GNCDateFixEnd, gnc_dmy2time64_end)
 {
-    gchar msg1[] = "[qof_dmy2time64_end()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+    CLogDefaultNullHandlerScoped ignore;
     for (size_t i = 0; i < sizeof(m_test)/sizeof(TimeMap); ++i)
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
@@ -1385,17 +1370,12 @@ TEST_F(GNCDateFixEnd, gnc_dmy2time64_end)
         else
             EXPECT_EQ(r_t, m_test[i].secs - offset);
     }
-    g_log_set_default_handler (hdlr, 0);
 }
 
 /*gnc_dmy2time64_neutral*/
 TEST_F(GNCDateFixNeurtal, gnc_dmy2time64_neutral)
 {
-    gchar msg1[] = "[qof_dmy2time64_neutral()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    CLogDefaultNullHandlerScoped ignore;
     struct tm check_tz;
     gnc_localtime_r(&(m_test[0].secs), &check_tz);
     /* gnc_dmy2time64_neutral returns the time64 for 10:59:00 Z
@@ -1406,7 +1386,6 @@ TEST_F(GNCDateFixNeurtal, gnc_dmy2time64_neutral)
      */
     if (check_tz.tm_mday == m_test[0].day)
     {
-         g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
          for (size_t i = 0; i < sizeof(m_test)/sizeof(TimeMap); ++i)
          {
               time64 r_t = gnc_dmy2time64_neutral (m_test[i].day, m_test[i].mon,
@@ -1415,7 +1394,6 @@ TEST_F(GNCDateFixNeurtal, gnc_dmy2time64_neutral)
               EXPECT_EQ(r_t, m_test[i].secs);
          }
     }
-    g_log_set_default_handler (hdlr, 0);
 }
 
 /* time64_to_gdate
@@ -1470,11 +1448,7 @@ time64 gdate_to_time64 (GDate d)// C: 7 in 6  Local: 0:0:0
 */
 TEST_F(GNCDateFixNeurtal, gdate_to_time64)
 {
-
-    gchar msg[] = "g_date_set_dmy: assertion 'g_date_valid_dmy (day, m, y)' failed";
-    auto loglevel = GLogLevelFlags(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
-    TestErrorStruct check = {loglevel, G_LOG_DOMAIN, msg, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    CLogDefaultNullHandlerScoped ignore;
     struct tm check_tz;
     gnc_localtime_r(&(m_test[0].secs), &check_tz);
     /* gdate_to_time64 returns the time64 for 10:59:00 Z
@@ -1485,7 +1459,6 @@ TEST_F(GNCDateFixNeurtal, gdate_to_time64)
      */
     if (check_tz.tm_mday == m_test[0].day)
     {
-         g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
          for (size_t i = 0; i < sizeof(m_test)/sizeof(TimeMap); ++i)
          {
               GDate gd, gd2;
@@ -1502,7 +1475,6 @@ TEST_F(GNCDateFixNeurtal, gdate_to_time64)
               }
          }
     }
-    g_log_set_default_handler (hdlr, 0);
 }
 
 static void

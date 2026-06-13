@@ -246,67 +246,54 @@ TEST_F(QOFBookFixture, mark_session_saved)
 TEST_F(QOFBookFixture, get_counter)
 {
     const char *counter_name = "Counter name";
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-    gint64 counter;
 
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
-    gchar msg1[] = "[qof_book_get_counter()] No book!!!";
-    check.msg = msg1;
-    counter = qof_book_get_counter( nullptr, counter_name );
+    check.SetMsg("[qof_book_get_counter()] No book!!!");
+    auto counter = qof_book_get_counter( nullptr, counter_name );
     EXPECT_EQ( counter, -1 );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
-    gchar msg2[] = "[qof_book_get_counter()] Invalid counter name." ;
-    check.msg = msg2;
+    check.SetMsg("[qof_book_get_counter()] Invalid counter name.");
     counter = qof_book_get_counter( m_book, nullptr );
     EXPECT_EQ( counter, -1 );
-    EXPECT_EQ(check.hits, 2u);
+    EXPECT_EQ(check.Hits(), 2u);
     counter = qof_book_get_counter( m_book, nullptr );
     EXPECT_EQ( counter, -1 );
-    EXPECT_EQ(check.hits, 3u);
+    EXPECT_EQ(check.Hits(), 3u);
 
     counter = qof_book_get_counter( m_book, counter_name );
     EXPECT_EQ( counter, 0 );
 
-    char *r = qof_book_increment_and_format_counter( m_book, counter_name );
+    auto r = qof_book_increment_and_format_counter( m_book, counter_name );
     counter = qof_book_get_counter( m_book, counter_name );
     EXPECT_EQ( counter, 1 );
     g_free (r);
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, get_counter_format)
 {
     const char *counter_name = "Counter name";
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-    char *r;
 
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing counter format when book is null\n");
-    gchar msg1[] = "[qof_book_get_counter_format()] No book!!!";
-    check.msg = msg1;
-    r = qof_book_get_counter_format( nullptr, counter_name );
+    check.SetMsg("[qof_book_get_counter_format()] No book!!!");
+    auto r = qof_book_get_counter_format( nullptr, counter_name );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     printf("# Testing counter format when counter name is null\n");
-    gchar msg2[] = "[qof_book_get_counter_format()] Invalid counter name.";
-    check.msg = msg2;
+    check.SetMsg("[qof_book_get_counter_format()] Invalid counter name.");
     r = qof_book_get_counter_format( m_book, nullptr );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 2u);
+    EXPECT_EQ(check.Hits(), 2u);
     printf("# Testing counter format when counter name is empty string\n");
     r = qof_book_get_counter_format( m_book, "" );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 3u);
+    EXPECT_EQ(check.Hits(), 3u);
 
     printf("# Testing counter format with existing counter\n");
     r = qof_book_get_counter_format( m_book, counter_name );
@@ -317,47 +304,39 @@ TEST_F(QOFBookFixture, get_counter_format)
     r = qof_book_get_counter_format( m_book, counter_name );
     EXPECT_STREQ( r, "%.6" PRIi64);
     g_free (r);
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, increment_and_format_counter)
 {
     const char *counter_name = "Counter name";
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-    char *r, *format, *format_str;
-    gint64 counter;
 
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing increment and format when book is null\n");
-    gchar msg1[] = "[qof_book_increment_and_format_counter()] No book!!!";
-    check.msg = msg1;
-    r = qof_book_increment_and_format_counter( nullptr, counter_name );
+    check.SetMsg("[qof_book_increment_and_format_counter()] No book!!!");
+    auto r = qof_book_increment_and_format_counter( nullptr, counter_name );
     EXPECT_STREQ( r, nullptr );
     g_free( r );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     printf("# Testing increment and format when counter name is null\n");
-    gchar msg2[] = "[qof_book_increment_and_format_counter()] Invalid counter name.";
-    check.msg = msg2;
+    check.SetMsg("[qof_book_increment_and_format_counter()] Invalid counter name.");
     r = qof_book_increment_and_format_counter( m_book, nullptr );
     EXPECT_STREQ( r, nullptr );
     g_free( r );
-    EXPECT_EQ(check.hits, 2u);
+    EXPECT_EQ(check.Hits(), 2u);
     printf("# Testing increment and format when counter name is empty string\n");
     r = qof_book_increment_and_format_counter( m_book, "" );
     EXPECT_STREQ( r, nullptr );
     g_free( r );
-    EXPECT_EQ(check.hits, 3u);
+    EXPECT_EQ(check.Hits(), 3u);
 
     printf("# Testing increment and format with new counter\n");
     r = qof_book_increment_and_format_counter( m_book, counter_name );
-    counter = qof_book_get_counter( m_book, counter_name );
-    format = qof_book_get_counter_format( m_book, counter_name );
-    format_str = g_strdup_printf (format, counter);
+    auto counter = qof_book_get_counter( m_book, counter_name );
+    auto format = qof_book_get_counter_format( m_book, counter_name );
+    auto format_str = g_strdup_printf (format, counter);
     EXPECT_EQ( counter, 1 );
     EXPECT_TRUE( qof_instance_is_dirty (QOF_INSTANCE (m_book)) );
     EXPECT_STREQ( r, format_str);
@@ -375,114 +354,85 @@ TEST_F(QOFBookFixture, increment_and_format_counter)
     g_free( r );
     g_free (format);
     g_free (format_str);
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, get_default_report_guid)
 {
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-    const char *r;
-
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing default report guid when book is null\n");
-    gchar msg1[] = "[qof_book_get_default_invoice_report_guid()] No book!!!";
-    check.msg = msg1;
-    r = qof_book_get_default_invoice_report_guid ( nullptr );
+    check.SetMsg("[qof_book_get_default_invoice_report_guid()] No book!!!");
+    auto r = qof_book_get_default_invoice_report_guid ( nullptr );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     printf("# Testing default report guid for default value\n");
     r = qof_book_get_default_invoice_report_guid ( m_book );
     EXPECT_STREQ( r, nullptr );
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, get_default_report_name)
 {
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-    const char *r;
-
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing default report name when book is null\n");
-    gchar msg1[] = "[qof_book_get_default_invoice_report_name()] No book!!!";
-    check.msg = msg1;
-    r = qof_book_get_default_invoice_report_name ( nullptr );
+    check.SetMsg("[qof_book_get_default_invoice_report_name()] No book!!!");
+    auto r = qof_book_get_default_invoice_report_name ( nullptr );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     printf("# Testing default report name for default value\n");
     r = qof_book_get_default_invoice_report_name ( m_book );
     EXPECT_STREQ( r, nullptr );
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, get_default_report_timeout)
 {
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-    int r;
-
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing default report timeout when book is null\n");
-    gchar msg1[] = "[qof_book_get_default_invoice_report_timeout()] No book!!!";
-    check.msg = msg1;
-    r = qof_book_get_default_invoice_report_timeout ( nullptr );
+    check.SetMsg("[qof_book_get_default_invoice_report_timeout()] No book!!!");
+    auto r = qof_book_get_default_invoice_report_timeout ( nullptr );
     EXPECT_EQ( r, 0 );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     printf("# Testing default report timeout for default value\n");
     r = qof_book_get_default_invoice_report_timeout ( m_book );
     EXPECT_EQ( r, 0 );
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, set_default_report)
 {
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
     const char *test_guid1 = "5123a759ceb9483abf2182d01c140eff";
     const char *test_guid2 = "5123a759ceb9483abf2182d01c140eee";
     const char *test_name = "My Invoice Report";
-    char *r;
 
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing setting default report when book is null\n");
-    gchar msg1[] = "[qof_book_set_default_invoice_report()] No book!!!";
-    check.msg = msg1;
+    check.SetMsg("[qof_book_set_default_invoice_report()] No book!!!");
     qof_book_set_default_invoice_report ( nullptr, test_guid1, test_name );
-    r = qof_book_get_default_invoice_report_guid ( m_book );
+    auto r = qof_book_get_default_invoice_report_guid ( m_book );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
 
     printf("# Testing setting default report when guid is null\n");
-    gchar msg2[] = "[qof_book_set_default_invoice_report()] No guid!!!";
-    check.msg = msg2;
+    check.SetMsg("[qof_book_set_default_invoice_report()] No guid!!!");
     qof_book_set_default_invoice_report ( m_book, nullptr, test_name );
     r = qof_book_get_default_invoice_report_guid ( m_book );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 2u);
+    EXPECT_EQ(check.Hits(), 2u);
 
     printf("# Testing setting default report when name is null\n");
-    gchar msg3[] = "[qof_book_set_default_invoice_report()] No name!!!";
-    check.msg = msg3;
+    check.SetMsg("[qof_book_set_default_invoice_report()] No name!!!");
     qof_book_set_default_invoice_report ( m_book, test_guid1, nullptr );
     r = qof_book_get_default_invoice_report_guid ( m_book );
     EXPECT_STREQ( r, nullptr );
-    EXPECT_EQ(check.hits, 3u);
+    EXPECT_EQ(check.Hits(), 3u);
 
     printf("# Testing setting default report when name is empty string\n");
     qof_book_set_default_invoice_report ( m_book, test_guid1, "" );
@@ -501,7 +451,6 @@ TEST_F(QOFBookFixture, set_default_report)
     r = qof_book_get_default_invoice_report_name ( m_book );
     EXPECT_STREQ( r, test_name );
     g_free (r);
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, use_trading_accounts)
@@ -647,10 +596,6 @@ TEST_F(QOFBookFixture, get_session_dirty_time)
 
 TEST_F(QOFBookFixture, set_dirty_cb)
 {
-    auto loglevel = G_LOG_LEVEL_WARNING;
-    gchar logdomain[] = "qof.engine";
-    TestErrorStruct check = {loglevel, logdomain, nullptr, GLogLevelFlags(0)};
-
     printf("# Testing when callback is previously not set\n");
     EXPECT_EQ( m_book->dirty_cb, nullptr );
     qof_book_set_dirty_cb( m_book, mock_dirty_cb, (gpointer) (&test_struct) );
@@ -658,15 +603,14 @@ TEST_F(QOFBookFixture, set_dirty_cb)
     EXPECT_EQ( m_book->dirty_data, &test_struct );
 
     /* need this as long as we have fatal warnings enabled */
-    auto hdlr = g_log_set_handler (logdomain, loglevel, (GLogFunc)test_checked_handler, &check);
+    CLogHandlerScoped check("qof.engine", G_LOG_LEVEL_WARNING, nullptr);
 
     printf("# Testing when callback was previously set\n");
     EXPECT_NE( m_book->dirty_cb, nullptr );
     qof_book_set_dirty_cb( m_book, nullptr, nullptr );
-    EXPECT_EQ(check.hits, 1u);
+    EXPECT_EQ(check.Hits(), 1u);
     EXPECT_EQ( m_book->dirty_cb, nullptr );
     EXPECT_EQ( m_book->dirty_data, nullptr );
-    g_log_remove_handler (logdomain, hdlr);
 }
 
 TEST_F(QOFBookFixture, shutting_down)
