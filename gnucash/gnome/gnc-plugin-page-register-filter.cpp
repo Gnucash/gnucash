@@ -414,7 +414,7 @@ ppr_filter_load_filter_parts (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type
         PINFO("Loaded Filter End Date is %s", split_filter[2].c_str());
 
         int ap_trailing_int = get_trailing_int (split_filter[2], "EAP");
-        int days_trailing_int = get_trailing_int (split_filter[1], "EDAY");
+        int days_trailing_int = get_trailing_int (split_filter[2], "EDAY");
 
         update_fd_with_date_filter_parts (fd, split_filter[2], false, ap_trailing_int, days_trailing_int);
     }
@@ -960,6 +960,7 @@ get_filter_times (RegisterFilterDialog* rfd)
     }
     else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_days_check)))
     {
+        fd->start_days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(rfd->start_days));
         fd->start_time = get_time_for_days_ago (fd->start_days, true);
         fd->start_ap = GNC_ACCOUNTING_PERIOD_INVALID;
         print_info_time64_date ("Start date using days is", fd->start_time);
@@ -985,6 +986,7 @@ get_filter_times (RegisterFilterDialog* rfd)
     }
     else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_days_check)))
     {
+        fd->end_days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(rfd->end_days));
         fd->end_time = get_time_for_days_ago (fd->end_days, false);
         fd->end_ap = GNC_ACCOUNTING_PERIOD_INVALID;
         print_info_time64_date ("End date using days is", fd->end_time);
@@ -1027,7 +1029,7 @@ gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
     {
         gtk_widget_set_sensitive (rfd->table, !active);
         gtk_widget_set_sensitive (rfd->num_days, active);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(rfd->num_days), fd->days);
+        fd->days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(rfd->num_days));
     }
     else
     {
