@@ -1844,7 +1844,6 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         g_string_append_printf (gs, " boolean: %s", pdata->val ? "TRUE" : "FALSE");
         return;
     }
-    /** \todo QOF_TYPE_COLLECT */
     return;
 }        /* qof_query_printValueForParam */
 

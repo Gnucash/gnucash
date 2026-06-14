@@ -99,34 +99,6 @@ single reference between two known objects.
 #define QOF_TYPE_KVP       "kvp"
 #define QOF_TYPE_CHAR      "character"
 #define QOF_TYPE_CHOICE    "choice"     /* was moved from (deleted) qofchoice.h */
-#define QOF_TYPE_COLLECT   "collection" /**< secondary collections
-are used for one-to-many references between entities and are
-implemented using ::QofCollection.
-These are \b NOT the same as the main collections in the QofBook.
-
--# Each ::QofCollection contains one or many entities - *all* of a single type.
--# The entity type within the collection can be determined at run time.
--# Easy conversions to GList or whatever in the param_setfcn handler.
--# Each parameter can have its own collection.
--# Each entity can have a different *type* of collection to its siblings,
-provided that it is acceptable to the set function.
--# Each object decides which types are acceptable for which parameter in the
-    set functions. This is then part of the API for that object.
-
-        QOF_TYPE_COLLECT has two functions, both related to one-to-many
-links:
-        - Represent a reference between 2 entities with a list of acceptable types.
-        (one object linked to many types of single entities)
-            - Represent a reference between one entity and many entities of another type.
-            (one object linked to many entities of a single type.)
-
-            If the set function can handle it, it could also be used for true one-to-many
-links: one object linked to many entities of many types.
-
-            n.b. Always subject to each collection holding only one type at runtime.
-            (otherwise use books).
-
-                */
                 /** @} */
                 /** Type of Parameters (String, Date, Numeric, GncGUID, etc.) */
                 typedef const char * QofType;
