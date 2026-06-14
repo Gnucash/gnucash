@@ -82,9 +82,6 @@ static const char * query_boolean_type = QOF_TYPE_BOOLEAN;
 typedef char (*query_char_getter) (gpointer, QofParam *);
 static const char * query_char_type = QOF_TYPE_CHAR;
 
-typedef QofCollection * (*query_collect_getter) (gpointer, QofParam*);
-static const char * query_collect_type = QOF_TYPE_COLLECT;
-
 typedef const GncGUID * (*query_choice_getter) (gpointer, QofParam *);
 static const char * query_choice_type = QOF_TYPE_CHOICE;
 
@@ -1225,184 +1222,6 @@ char_to_string (gpointer object, QofParam *getter)
     return g_strdup_printf ("%c", num);
 }
 
-/* QOF_TYPE_COLLECT =============================================== */
-
-static int
-collect_match_predicate (gpointer object, QofParam *getter,
-                         QofQueryPredData *pd)
-{
-    query_coll_t pdata;
-    GList *node, *node2, *o_list;
-    const GncGUID *guid;
-
-    pdata = (query_coll_t)pd;
-    VERIFY_PREDICATE (query_collect_type);
-    guid = nullptr;
-    switch (pdata->options)
-    {
-    case QOF_GUID_MATCH_ALL :
-    {
-        for (node = pdata->guids; node; node = node->next)
-        {
-            for (o_list = static_cast<GList*>(object); o_list;
-		 o_list = static_cast<GList*>(o_list->next))
-            {
-                guid = ((query_guid_getter)getter->param_getfcn)
-                       (o_list->data, getter);
-                if (guid_equal (static_cast<GncGUID*>(node->data), guid))
-                {
-                    break;
-                }
-            }
-            if (o_list == nullptr)
-            {
-                break;
-            }
-        }
-        break;
-    }
-    case QOF_GUID_MATCH_LIST_ANY :
-    {
-        o_list = ((query_glist_getter)getter->param_getfcn) (object, getter);
-        for (node = o_list; node; node = node->next)
-        {
-            for (node2 = pdata->guids; node2; node2 = node2->next)
-            {
-                if (guid_equal (static_cast<GncGUID*>(node->data),
-				static_cast<GncGUID*>(node2->data)))
-                {
-                    break;
-                }
-            }
-            if (node2 != nullptr)
-            {
-                break;
-            }
-        }
-        g_list_free(o_list);
-        break;
-    }
-    default :
-    {
-        guid = ((query_guid_getter)getter->param_getfcn) (object, getter);
-        for (node = pdata->guids; node; node = node->next)
-        {
-            if (guid_equal (static_cast<GncGUID*>(node->data), guid))
-            {
-                break;
-            }
-        }
-    }
-    switch (pdata->options)
-    {
-    case QOF_GUID_MATCH_ANY :
-    case QOF_GUID_MATCH_LIST_ANY :
-    {
-        return (node != nullptr);
-        break;
-    }
-    case QOF_GUID_MATCH_NONE :
-    case QOF_GUID_MATCH_ALL :
-    {
-        return (node == nullptr);
-        break;
-    }
-    case QOF_GUID_MATCH_NULL :
-    {
-        return ((guid == nullptr) || guid_equal(guid, guid_null()));
-        break;
-    }
-    default :
-    {
-        PWARN ("bad match type");
-        return 0;
-    }
-    }
-    }
-    return 0;
-}
-
-static int
-collect_compare_func (gpointer a, gpointer b, gint options, QofParam *getter)
-{
-    gint result;
-    QofCollection *c1, *c2;
-
-    c1 = ((query_collect_getter)getter->param_getfcn) (a, getter);
-    c2 = ((query_collect_getter)getter->param_getfcn) (b, getter);
-    result = qof_collection_compare(c1, c2);
-    return result;
-}
-
-static void
-collect_free_pdata (QofQueryPredData *pd)
-{
-    query_coll_t pdata;
-    GList *node;
-
-    node = nullptr;
-    pdata = (query_coll_t) pd;
-    VERIFY_PDATA (query_collect_type);
-    for (node = pdata->guids; node; node = node->next)
-    {
-        guid_free (static_cast<GncGUID*>(node->data));
-    }
-    qof_collection_destroy(pdata->coll);
-    g_list_free (pdata->guids);
-    g_free (pdata);
-}
-
-static QofQueryPredData *
-collect_copy_predicate (const QofQueryPredData *pd)
-{
-    const query_coll_t pdata = (const query_coll_t) pd;
-
-    VERIFY_PDATA_R (query_collect_type);
-    return qof_query_collect_predicate (pdata->options, pdata->coll);
-}
-
-static gboolean
-collect_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
-{
-    const query_coll_t pd1 = (const query_coll_t) p1;
-    const query_coll_t pd2 = (const query_coll_t) p2;
-    gint result;
-
-    result = qof_collection_compare(pd1->coll, pd2->coll);
-    if (result == 0)
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-static void
-query_collect_cb(QofInstance* ent, gpointer user_data)
-{
-    query_coll_t pdata;
-    GncGUID *guid;
-
-    guid = (GncGUID*)qof_entity_get_guid(ent);
-    pdata = (query_coll_t)user_data;
-    pdata->guids = g_list_append(pdata->guids, guid);
-}
-
-QofQueryPredData *
-qof_query_collect_predicate (QofGuidMatch options, QofCollection *coll)
-{
-    query_coll_t pdata;
-
-    g_return_val_if_fail (coll, nullptr);
-    pdata = g_new0 (query_coll_def, 1);
-    pdata->pd.type_name = query_collect_type;
-    pdata->options = options;
-    qof_collection_foreach(coll, query_collect_cb, pdata);
-    if (nullptr == pdata->guids)
-    {
-        return nullptr;
-    }
-    return ((QofQueryPredData*)pdata);
-}
 
 /* QOF_TYPE_CHOICE */
 
@@ -1685,11 +1504,6 @@ static void init_tables (void)
             QOF_TYPE_CHAR, char_match_predicate, char_compare_func,
             char_copy_predicate, char_free_pdata, char_to_string,
             char_predicate_equal
-        },
-        {
-            QOF_TYPE_COLLECT, collect_match_predicate, collect_compare_func,
-            collect_copy_predicate, collect_free_pdata, nullptr,
-            collect_predicate_equal
         },
         {
             QOF_TYPE_CHOICE, choice_match_predicate, nullptr,
