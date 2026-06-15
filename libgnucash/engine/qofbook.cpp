@@ -107,7 +107,7 @@ qof_book_init (QofBook *book)
 
     new (&book->data_tables) QofDataMap();
 
-    book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
+    new (&book->data_table_finalizers) QofDataFinMap();
 
     book->book_open = 'y';
     book->read_only = FALSE;
@@ -293,14 +293,11 @@ qof_book_new (void)
 }
 
 static void
-book_final (gpointer key, gpointer value, gpointer booq)
+book_final (const std::string& key, QofBookFinalCB cb, QofBook* book)
 {
-    QofBookFinalCB cb = reinterpret_cast<QofBookFinalCB>(value);
-    QofBook *book = static_cast<QofBook*>(booq);
-
-    auto it = book->data_tables.find (static_cast<const char*>(key));
+    auto it = book->data_tables.find (key);
     gpointer user_data = it == book->data_tables.end() ? nullptr : it->second;
-    (*cb) (book, key, user_data);
+    (*cb) (book, const_cast<char*>(key.c_str()), user_data);
 }
 
 static void
@@ -332,7 +329,8 @@ qof_book_destroy (QofBook *book)
     /* Call the list of finalizers, let them do their thing.
      * Do this before tearing into the rest of the book.
      */
-    g_hash_table_foreach (book->data_table_finalizers, book_final, book);
+    for (auto fin : book->data_table_finalizers)
+        book_final (fin.first, fin.second, book);
 
     /* Lots hold a variety of pointers that need to still exist while
      * cleaning them up so run its book_end before the rest.
@@ -341,8 +339,7 @@ qof_book_destroy (QofBook *book)
     qof_collection_foreach(lots, destroy_lot, nullptr);
     qof_object_book_end (book);
 
-    g_hash_table_destroy (book->data_table_finalizers);
-    book->data_table_finalizers = nullptr;
+    book->data_table_finalizers.~QofDataFinMap();
     book->data_tables.~QofDataMap();
 
     /* qof_instance_release (&book->inst); */
@@ -463,8 +460,7 @@ qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFin
     book->data_tables[key] = data;
 
     if (!cb) return;
-    g_hash_table_insert (book->data_table_finalizers, (gpointer)key,
-             reinterpret_cast<void*>(cb));
+    book->data_table_finalizers[key] = cb;
 }
 
 gpointer
@@ -1392,7 +1388,7 @@ static void set_shutting_down(QofBook *book, gboolean state){ book->shutting_dow
 static gpointer get_dirty_data(const QofBook *book){ return book->dirty_data; }
 static const CollectionMap& get_collections(const QofBook *book){ return book->hash_of_collections; }
 static const QofDataMap& get_data_tables(const QofBook *book){ return book->data_tables; }
-static GHashTable* get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
+static const QofDataFinMap& get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
 static char get_book_open(const QofBook *book){ return book->book_open; }
 static int get_version(const QofBook *book){ return book->version; }
 

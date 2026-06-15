@@ -54,6 +54,7 @@ struct QofCollectionDeleter
 using QofCollectionPtr = std::unique_ptr<QofCollection, QofCollectionDeleter>;
 using CollectionMap = boost::container::flat_map<std::string, QofCollectionPtr>;
 using QofDataMap = boost::container::flat_map<std::string, gpointer>;
+using QofDataFinMap = boost::container::flat_map<std::string, QofBookFinalCB>;
 
 struct QofBook
 {
@@ -94,7 +95,7 @@ struct QofBook
     QofDataMap data_tables;
 
     /* Hash table of destroy callbacks for the data table. */
-    GHashTable *data_table_finalizers;
+    QofDataFinMap data_table_finalizers;
 
     /* Boolean indicates whether book is safe to write to (true means
      * that it isn't). The usual reason will be a database version
@@ -150,7 +151,7 @@ typedef struct
     gpointer (*get_dirty_data)(const QofBook*);
     const CollectionMap& (*get_collections)(const QofBook*);
     const QofDataMap& (*get_data_tables)(const QofBook*);
-    GHashTable* (*get_data_table_finalizers)(const QofBook*);
+    const QofDataFinMap& (*get_data_table_finalizers)(const QofBook*);
     char (*get_book_open)(const QofBook*);
     int (*get_version)(const QofBook*);
 } QofBookTestFunctions;
