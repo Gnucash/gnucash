@@ -780,13 +780,13 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
     g_assert_true( qof_book_get_collection( fixture->book, NULL ) == NULL );
 
     g_test_message( "Testing when collection does not exist" );
-    g_assert_true (test_funcs->get_collections (fixture->book) != NULL );
-    g_assert_true (g_hash_table_lookup (test_funcs->get_collections (fixture->book), my_type ) == NULL);
+    const auto& coll{test_funcs->get_collections (fixture->book)};
+    g_assert_true (coll.find (my_type) == coll.end());
     m_col = qof_book_get_collection( fixture->book, my_type );
     g_assert_true( m_col != NULL );
 
     g_test_message( "Testing with existing collection" );
-    g_assert_true (g_hash_table_lookup (test_funcs->get_collections (fixture->book), my_type ) != NULL);
+    g_assert_true (coll.find (my_type) != coll.end());
     m_col2 = qof_book_get_collection( fixture->book, my_type );
     g_assert_true( m_col2 != NULL );
     g_assert_true( m_col == m_col2 );
@@ -965,11 +965,11 @@ test_book_new_destroy( void )
     g_assert_true( QOF_IS_BOOK( book ) );
 
     g_test_message( "Testing book initial setup" );
-    g_assert_true (test_funcs->get_collections (book) != NULL);
+    const auto& coll{test_funcs->get_collections (book)};
     g_assert_true( test_funcs->get_data_tables (book) );
     g_assert_true( test_funcs->get_data_table_finalizers (book) );
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_collections (book) ), == , 1 );
-    g_assert_true( g_hash_table_lookup (test_funcs->get_collections (book), QOF_ID_BOOK ) != NULL );
+    g_assert_cmpint (coll.size(), == , 1 );
+    g_assert_true (coll.find (QOF_ID_BOOK) != coll.end());
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
     g_assert_true (qof_book_is_open(book));
