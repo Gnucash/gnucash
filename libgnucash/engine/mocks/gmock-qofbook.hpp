@@ -26,7 +26,6 @@ class QofMockBook : public QofBook
 public:
     QofMockBook()
     {
-        data_tables           = nullptr;
         data_table_finalizers = nullptr;
 
         book_open     = 'n';

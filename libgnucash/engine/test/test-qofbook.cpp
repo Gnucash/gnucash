@@ -746,7 +746,6 @@ test_book_set_get_data( Fixture *fixture, gconstpointer pData )
     const char *data = "data";
     QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
-    g_assert_true( test_funcs->get_data_tables (fixture->book) != NULL );
     g_test_message( "Testing when book is null" );
     qof_book_set_data( NULL, key, (gpointer) data );
     g_assert_true( qof_book_get_data( NULL, key ) == NULL );
@@ -899,32 +898,33 @@ test_book_set_data_fin( void )
 
     /* init */
     book = qof_book_new();
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    const auto& data_tables{test_funcs->get_data_tables (book)};
+    g_assert_cmpint (data_tables.size(), == , 0);
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
 
     g_test_message( "Testing when book is null" );
     qof_book_set_data_fin( NULL, key, (gpointer) data, mock_final_cb );
     /* assert nothing was set */
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint (data_tables.size(), == , 0);
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
 
     g_test_message( "Testing when key is null" );
     qof_book_set_data_fin( book, NULL, (gpointer) data, mock_final_cb );
     /* nothing set as well */
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint (data_tables.size(), == , 0);
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
 
     g_test_message( "Testing with book key not null, cb null" );
     qof_book_set_data_fin( book, key, (gpointer) data, NULL );
     /* now data is set cb not set */
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 1 );
+    g_assert_cmpint (data_tables.size(), == , 1);
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
     g_assert_cmpstr( (const char *)qof_book_get_data( book, key ), == , data );
 
     g_test_message( "Testing with all data set" );
     qof_book_set_data_fin( book, key, (gpointer) data, mock_final_cb );
     /* now we have all set */
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 1 );
+    g_assert_cmpint (data_tables.size(), == , 1);
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 1 );
     g_assert_cmpstr( (const char *)qof_book_get_data( book, key ), == , data );
     g_assert_true( g_hash_table_lookup ( test_funcs->get_data_table_finalizers (book), (gpointer)key ) == mock_final_cb );
@@ -966,11 +966,9 @@ test_book_new_destroy( void )
 
     g_test_message( "Testing book initial setup" );
     const auto& coll{test_funcs->get_collections (book)};
-    g_assert_true( test_funcs->get_data_tables (book) );
-    g_assert_true( test_funcs->get_data_table_finalizers (book) );
     g_assert_cmpint (coll.size(), == , 1 );
     g_assert_true (coll.find (QOF_ID_BOOK) != coll.end());
-    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint (test_funcs->get_data_tables (book).size(), == , 0);
     g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
     g_assert_true (qof_book_is_open(book));
     g_assert_true (!qof_book_is_readonly(book));

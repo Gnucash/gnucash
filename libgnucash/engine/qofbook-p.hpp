@@ -53,6 +53,7 @@ struct QofCollectionDeleter
 
 using QofCollectionPtr = std::unique_ptr<QofCollection, QofCollectionDeleter>;
 using CollectionMap = boost::container::flat_map<std::string, QofCollectionPtr>;
+using QofDataMap = boost::container::flat_map<std::string, gpointer>;
 
 struct QofBook
 {
@@ -90,7 +91,7 @@ struct QofBook
     /* In order to store arbitrary data, for extensibility, add a table
      * that will be used to hold arbitrary pointers.
      */
-    GHashTable *data_tables;
+    QofDataMap data_tables;
 
     /* Hash table of destroy callbacks for the data table. */
     GHashTable *data_table_finalizers;
@@ -148,7 +149,7 @@ typedef struct
     void (*set_shutting_down)(QofBook*, gboolean);
     gpointer (*get_dirty_data)(const QofBook*);
     const CollectionMap& (*get_collections)(const QofBook*);
-    GHashTable* (*get_data_tables)(const QofBook*);
+    const QofDataMap& (*get_data_tables)(const QofBook*);
     GHashTable* (*get_data_table_finalizers)(const QofBook*);
     char (*get_book_open)(const QofBook*);
     int (*get_version)(const QofBook*);

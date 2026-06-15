@@ -105,8 +105,8 @@ qof_book_init (QofBook *book)
 
     qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
-    book->data_tables = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                               (GDestroyNotify)qof_string_cache_remove, nullptr);
+    new (&book->data_tables) QofDataMap();
+
     book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
 
     book->book_open = 'y';
@@ -298,7 +298,8 @@ book_final (gpointer key, gpointer value, gpointer booq)
     QofBookFinalCB cb = reinterpret_cast<QofBookFinalCB>(value);
     QofBook *book = static_cast<QofBook*>(booq);
 
-    gpointer user_data = g_hash_table_lookup (book->data_tables, key);
+    auto it = book->data_tables.find (static_cast<const char*>(key));
+    gpointer user_data = it == book->data_tables.end() ? nullptr : it->second;
     (*cb) (book, key, user_data);
 }
 
@@ -342,8 +343,7 @@ qof_book_destroy (QofBook *book)
 
     g_hash_table_destroy (book->data_table_finalizers);
     book->data_table_finalizers = nullptr;
-    g_hash_table_destroy (book->data_tables);
-    book->data_tables = nullptr;
+    book->data_tables.~QofDataMap();
 
     /* qof_instance_release (&book->inst); */
     g_object_unref (book);
@@ -451,16 +451,16 @@ qof_book_set_data (QofBook *book, const char *key, gpointer data)
 {
     if (!book || !key) return;
     if (data)
-        g_hash_table_insert (book->data_tables, (gpointer)CACHE_INSERT(key), data);
+        book->data_tables[key] = data;
     else
-        g_hash_table_remove(book->data_tables, key);
+        book->data_tables.erase (key);
 }
 
 void
 qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB cb)
 {
     if (!book || !key) return;
-    g_hash_table_insert (book->data_tables, (gpointer)key, data);
+    book->data_tables[key] = data;
 
     if (!cb) return;
     g_hash_table_insert (book->data_table_finalizers, (gpointer)key,
@@ -471,7 +471,8 @@ gpointer
 qof_book_get_data (const QofBook *book, const char *key)
 {
     if (!book || !key) return nullptr;
-    return g_hash_table_lookup (book->data_tables, (gpointer)key);
+    auto it = book->data_tables.find (key);
+    return it == book->data_tables.end() ? nullptr : it->second;
 }
 
 /* ====================================================================== */
@@ -1390,7 +1391,7 @@ static QofBookDirtyCB get_dirty_cb(const QofBook *book){ return book->dirty_cb; 
 static void set_shutting_down(QofBook *book, gboolean state){ book->shutting_down = state; }
 static gpointer get_dirty_data(const QofBook *book){ return book->dirty_data; }
 static const CollectionMap& get_collections(const QofBook *book){ return book->hash_of_collections; }
-static GHashTable* get_data_tables(const QofBook *book){ return book->data_tables; }
+static const QofDataMap& get_data_tables(const QofBook *book){ return book->data_tables; }
 static GHashTable* get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
 static char get_book_open(const QofBook *book){ return book->book_open; }
 static int get_version(const QofBook *book){ return book->version; }
