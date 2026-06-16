@@ -300,14 +300,14 @@ gnc_string_to_guid (const GValue *src, GValue *dest)
 static void
 gnc_guid_to_string (const GValue *src, GValue *dest)
 {
-    const gchar *str;
+    gchar *str;
 
     g_return_if_fail (G_VALUE_HOLDS_STRING (dest) &&
                       GNC_VALUE_HOLDS_GUID (src));
 
     str = guid_to_string (gnc_value_get_guid (src));
 
-    g_value_set_string (dest, str);
+    g_value_take_string (dest, str);
 }
 
 G_DEFINE_BOXED_TYPE_WITH_CODE (GncGUID, gnc_guid, guid_copy, guid_free,
