@@ -25,14 +25,14 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
  *   Author: Phil Longstaff (phil.longstaff@yahoo.ca)               *
 \********************************************************************/
-#include <glib.h>
 
-#include <config.h>
-
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdint>
+#include <string>
+#include <unordered_map>
 #include "qof.h"
+
+using StrMap = std::unordered_map<std::string, unsigned>;
+static StrMap cache;
 
 /* Uncomment if you need to log anything.
 static QofLogModule log_module = QOF_MOD_UTIL;
@@ -40,40 +40,19 @@ static QofLogModule log_module = QOF_MOD_UTIL;
 /* =================================================================== */
 /* The QOF string cache                                                */
 /*                                                                     */
-/* The cache is a GHashTable where a copy of the string is the key,    */
+/* The cache is an map where a copy of the string is the key,          */
 /* and a ref count is the value                                        */
 /* =================================================================== */
-
-static GHashTable* qof_string_cache = NULL;
-
-static GHashTable*
-qof_get_string_cache(void)
-{
-    if (!qof_string_cache)
-    {
-        qof_string_cache = g_hash_table_new_full(
-                               g_str_hash,               /* hash_func          */
-                               g_str_equal,              /* key_equal_func     */
-                               g_free,                   /* key_destroy_func   */
-                               g_free);                  /* value_destroy_func */
-    }
-    return qof_string_cache;
-}
 
 void
 qof_string_cache_init(void)
 {
-    (void)qof_get_string_cache();
 }
 
 void
 qof_string_cache_destroy (void)
 {
-    if (qof_string_cache)
-    {
-        g_hash_table_destroy(qof_string_cache);
-    }
-    qof_string_cache = NULL;
+    StrMap().swap(cache);  // releases bucket array immediately
 }
 
 /* If the key exists in the cache, check the refcount.  If 1, just
@@ -81,24 +60,17 @@ qof_string_cache_destroy (void)
 void
 qof_string_cache_remove(const char * key)
 {
-    if (key && key[0] != 0)
-    {
-        GHashTable* cache = qof_get_string_cache();
-        gpointer value;
-        gpointer cache_key;
-        if (g_hash_table_lookup_extended(cache, key, &cache_key, &value))
-        {
-            guint* refcount = (guint*)value;
-            if (*refcount == 1)
-            {
-                g_hash_table_remove(cache, key);
-            }
-            else
-            {
-                --(*refcount);
-            }
-        }
-    }
+    if (!key || key[0] == '\0')
+        return;
+
+    auto it = cache.find(key);
+    if (it == cache.end())
+        return;
+
+    if (it->second == 1)
+        cache.erase(it);
+    else
+        --it->second;
 }
 
 /* If the key exists in the cache, increment the refcount.  Otherwise,
@@ -106,32 +78,16 @@ qof_string_cache_remove(const char * key)
 const char *
 qof_string_cache_insert(const char * key)
 {
-    if (key)
-    {
-        if (key[0] == 0)
-        {
-            return "";
-        }
+    if (!key)
+        return nullptr;
+    if (key[0] == '\0')
+        return "";
 
-        GHashTable* cache = qof_get_string_cache();
-        gpointer value;
-        gpointer cache_key;
-        if (g_hash_table_lookup_extended(cache, key, &cache_key, &value))
-        {
-            guint* refcount = (guint*)value;
-            ++(*refcount);
-            return static_cast <char *> (cache_key);
-        }
-        else
-        {
-            gpointer new_key = g_strdup(static_cast<const char*>(key));
-            guint* refcount = static_cast<unsigned int*>(g_malloc(sizeof(guint)));
-            *refcount = 1;
-            g_hash_table_insert(cache, new_key, refcount);
-            return static_cast <char *> (new_key);
-        }
-    }
-    return NULL;
+    auto [it, inserted] = cache.emplace(key, 1);
+    if (!inserted)
+        ++it->second;
+
+    return it->first.c_str();
 }
 
 const char *
