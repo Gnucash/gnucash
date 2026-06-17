@@ -47,7 +47,13 @@ struct QofCollection_s
 
     QofCollection_s (QofIdType type) : e_type{static_cast<QofIdType>(CACHE_INSERT(type))}
                                      , is_dirty{FALSE}
-                                     , data{NULL} {}
+                                     , data{NULL}
+    {
+        if (!g_strcmp0 (e_type, "Split"))
+            guid_entity_map.reserve (50000);
+        else if (!g_strcmp0 (e_type, "Trans"))
+            guid_entity_map.reserve (10000);
+    }
     ~QofCollection_s ()
     {
         CACHE_REMOVE (e_type);
