@@ -65,15 +65,15 @@ else()
   file(GENERATE OUTPUT ${CMAKE_BINARY_DIR}/collect.sh
     CONTENT
     "#!/bin/bash
-if [ -e $2 ]
-  then rm $2
-fi
-j=\"\"
-for i in $1/*.info
-do j=\"$j -a $i\"
-done
-lcov $j -o $2
-"
+     if [ -e $2 ]
+       then rm $2
+     fi
+     j=\"\"
+     for i in $1/*.info
+       do j=\"$j -a $i\"
+     done
+     lcov $j -o $2
+     "
     FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE WORLD_EXECUTE)
 
   add_custom_target(lcov-collect
@@ -102,10 +102,27 @@ function (add_coverage_target tgt)
   add_dependencies(lcov-initialize lcov-initialize-${tgt})
   add_dependencies(lcov-initialize-${tgt} ${tgt})
 
+  string(REPLACE ";" " " geninfo_flags geninfo_string)
+  string(REPLACE ";" " " generate_flags generate_string)
+
+  set(capture_script "${CMAKE_CURRENT_BINARY_DIR}/capture-${tgt}.sh")
+
+  file(GENERATE OUTPUT "${capture_script}"
+    CONTENT
+    "#!/bin/bash
+     count=$(find \"${target_dir}\" -name '*.gcda' 2>/dev/null | wc -l)
+     if [ \"$count\" -gt 0 ]; then
+       lcov ${geninfo_string} ${generate_string} -c --directory \"${target_dir}\" -o \"${coverage_dir}/${tgt}_result.info\"
+    else #Nothing for lcov to do, make a dummy result.info
+      touch \"${coverage_dir}/${tgt}_result.info\"
+    fi
+    "
+    FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE WORLD_EXECUTE)
+
   add_custom_target(lcov-collect-${tgt}
-    COMMAND lcov ${geninfo_flags} ${generate_flags} -c --directory ${target_dir} -o "${coverage_dir}/${tgt}_result.info"
-    VERBATIM
-    COMMAND_EXPAND_LISTS)
+    COMMAND ${CMAKE_COMMAND} -E env "${capture_script}"
+    DEPENDS "${capture_script}"
+    VERBATIM)
   add_dependencies(lcov-collect lcov-collect-${tgt})
   set_target_properties(${tgt} PROPERTIES ADDITIONAL_CLEAN_FILES "${coverage_dir}/${tgt}_base.info;${coverage_dir}/${tgt}_result.info")
 endFunction()

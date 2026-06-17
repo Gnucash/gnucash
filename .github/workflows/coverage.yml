@@ -3,7 +3,7 @@ on: push
 permissions: {}
 jobs:
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     name: C++ Code coverage analysis
     continue-on-error: true
     env:
@@ -60,7 +60,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Publish
         id: deployment
