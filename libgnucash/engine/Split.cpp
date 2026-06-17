@@ -1860,9 +1860,9 @@ xaccSplitSetParent(Split *s, Transaction *t)
         qof_event_gen(&old_trans->inst, GNC_EVENT_ITEM_REMOVED, &ed);
     }
     s->parent = t;
+    qof_instance_set_dirty(QOF_INSTANCE(s));
 
     xaccTransCommitEdit(old_trans);
-    qof_instance_set_dirty(QOF_INSTANCE(s));
 
     if (t)
     {

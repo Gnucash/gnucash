@@ -438,6 +438,124 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     qof_session_destroy (session_3);
 }
 
+static void
+test_dbi_reparent_split_keeps_slots (Fixture* fixture, gconstpointer pData)
+{
+    const gchar* url = (const gchar*)pData;
+    const char* online_id = "reparent-online-id-1";
+    auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
+    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL);
+    TestErrorStruct* check = test_error_struct_new (nullptr, loglevel, msg);
+    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
+                                                 (GLogFunc)test_checked_handler);
+    if (fixture->filename)
+        url = fixture->filename;
+
+    GncGUID moved_guid, src_guid, dst_guid;
+
+    /* ---- Tag a fixture split with an online_id and add a second txn. ---- */
+    {
+        auto book = qof_session_get_book (fixture->session);
+        auto bank = gnc_account_lookup_by_name (gnc_book_get_root_account (book),
+                                                "Bank 1");
+        g_assert_nonnull (bank);
+
+        /* Grab the transaction the fixture created. */
+        Transaction* src_txn = nullptr;
+        qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
+            [] (QofInstance* inst, gpointer data) {
+                auto found = static_cast<Transaction**> (data);
+                if (*found == nullptr)
+                    *found = GNC_TRANSACTION (inst);
+            }, &src_txn);
+        g_assert_nonnull (src_txn);
+        auto currency = xaccTransGetCurrency (src_txn);
+        auto moved_split = xaccTransGetSplit (src_txn, 0);
+        g_assert_nonnull (moved_split);
+
+        xaccTransBeginEdit (src_txn);
+        xaccSplitSetAccount (moved_split, bank);
+        qof_instance_get_slots (QOF_INSTANCE (moved_split))->set (
+            {"online_id"}, new KvpValue (g_strdup (online_id)));
+        xaccTransCommitEdit (src_txn);
+
+        auto dst_txn = xaccMallocTransaction (book);
+        xaccTransBeginEdit (dst_txn);
+        xaccTransSetCurrency (dst_txn, currency);
+        auto dst_split = xaccMallocSplit (book);
+        xaccSplitSetParent (dst_split, dst_txn);
+        xaccSplitSetAccount (dst_split, bank);
+        xaccTransCommitEdit (dst_txn);
+
+        moved_guid = *qof_instance_get_guid (QOF_INSTANCE (moved_split));
+        src_guid = *qof_instance_get_guid (QOF_INSTANCE (src_txn));
+        dst_guid = *qof_instance_get_guid (QOF_INSTANCE (dst_txn));
+    }
+
+    /* ---- Save the fixture's book to the store. ---- */
+    auto save_book = qof_book_new ();
+    auto session_save = qof_session_new (save_book);
+    qof_session_begin (session_save, url, SESSION_NEW_OVERWRITE);
+    g_assert_cmpint (qof_session_get_error (session_save), ==, ERR_BACKEND_NO_ERR);
+    qof_session_swap_data (fixture->session, session_save);
+    qof_book_mark_session_dirty (qof_session_get_book (session_save));
+    qof_session_save (session_save, NULL);
+    g_assert_cmpint (qof_session_get_error (session_save), ==, ERR_BACKEND_NO_ERR);
+    qof_session_end (session_save);
+    qof_session_destroy (session_save);
+
+    /* ---- Reload, reparent the split, destroy the old transaction, save. ---- */
+    auto edit_book = qof_book_new ();
+    auto session_edit = qof_session_new (edit_book);
+    qof_session_begin (session_edit, url, SESSION_NORMAL_OPEN);
+    g_assert_cmpint (qof_session_get_error (session_edit), ==, ERR_BACKEND_NO_ERR);
+    qof_session_load (session_edit, NULL);
+    g_assert_cmpint (qof_session_get_error (session_edit), ==, ERR_BACKEND_NO_ERR);
+    {
+        auto book = qof_session_get_book (session_edit);
+        auto moved = xaccSplitLookup (&moved_guid, book);
+        auto src_txn = xaccTransLookup (&src_guid, book);
+        auto dst_txn = xaccTransLookup (&dst_guid, book);
+        g_assert_nonnull (moved);
+        g_assert_nonnull (src_txn);
+        g_assert_nonnull (dst_txn);
+        /* Sanity: the slot is present in the loaded book. */
+        g_assert_nonnull (qof_instance_get_slots (QOF_INSTANCE (moved))->get_slot (
+                              {"online_id"}));
+
+        xaccSplitSetParent (moved, dst_txn);      /* move from src_txn to dst_txn */
+        xaccTransBeginEdit (src_txn);
+        xaccTransDestroy (src_txn);               /* destroy the vacated old txn */
+        xaccTransCommitEdit (src_txn);
+    }
+    qof_session_save (session_edit, NULL);
+    g_assert_cmpint (qof_session_get_error (session_edit), ==, ERR_BACKEND_NO_ERR);
+    qof_session_end (session_edit);
+    qof_session_destroy (session_edit);
+
+    /* ---- Reload again and verify the slot followed the split. ---- */
+    auto verify_book = qof_book_new ();
+    auto session_verify = qof_session_new (verify_book);
+    qof_session_begin (session_verify, url, SESSION_READ_ONLY);
+    g_assert_cmpint (qof_session_get_error (session_verify), ==, ERR_BACKEND_NO_ERR);
+    qof_session_load (session_verify, NULL);
+    g_assert_cmpint (qof_session_get_error (session_verify), ==, ERR_BACKEND_NO_ERR);
+    {
+        auto book = qof_session_get_book (session_verify);
+        auto moved = xaccSplitLookup (&moved_guid, book);
+        g_assert_nonnull (moved);                              /* split survived */
+        g_assert_true (xaccSplitGetParent (moved) ==
+                       xaccTransLookup (&dst_guid, book));     /* moved to dst_txn */
+        auto slot = qof_instance_get_slots (QOF_INSTANCE (moved))->get_slot (
+                        {"online_id"});
+        g_assert_nonnull (slot);            /* slot retained through the reparent */
+        g_assert_cmpstr (slot->get<const char*> (), ==, online_id);
+    }
+    qof_session_end (session_verify);
+    qof_session_destroy (session_verify);
+}
+
 /** Test the safe_save mechanism.  Beware that this test used on its
  * own doesn't ensure that the resave is done safely, only that the
  * database is intact and unchanged after the save. To observe the
@@ -659,6 +777,8 @@ create_dbi_test_suite (const char* dbm_name, const char* url)
     auto subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
     GNC_TEST_ADD (subsuite, "store_and_reload", Fixture, url, setup,
                   test_dbi_store_and_reload, teardown);
+    GNC_TEST_ADD (subsuite, "reparent_split_keeps_slots", Fixture, url,
+                  setup_memory, test_dbi_reparent_split_keeps_slots, teardown);
     GNC_TEST_ADD (subsuite, "safe_save", Fixture, url, setup_memory,
                   test_dbi_safe_save, teardown);
     GNC_TEST_ADD (subsuite, "version_control", Fixture, url, setup_memory,
