@@ -1713,34 +1713,22 @@ gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
  * locate a commodity by namespace and printable name
  ********************************************************************/
 
+static std::vector<gnc_commodity*>
+commodity_table_get_commodities (const gnc_commodity_table*, const char*);
+
 gnc_commodity *
 gnc_commodity_table_find_full(const gnc_commodity_table * table,
                               const char * name_space,
                               const char * fullname)
 {
-    gnc_commodity * retval = nullptr;
-    GList         * all;
-    GList         * iterator;
-
     if (!fullname || (fullname[0] == '\0'))
         return nullptr;
 
-    all = gnc_commodity_table_get_commodities(table, name_space);
+    for (auto commodity : commodity_table_get_commodities(table, name_space))
+        if (!g_strcmp0 (fullname, gnc_commodity_get_printname(commodity)))
+            return commodity;
 
-    for (iterator = all; iterator; iterator = iterator->next)
-    {
-        auto commodity = GNC_COMMODITY (iterator->data);
-        if (!strcmp(fullname,
-                    gnc_commodity_get_printname(commodity)))
-        {
-            retval = commodity;
-            break;
-        }
-    }
-
-    g_list_free (all);
-
-    return retval;
+    return nullptr;
 }
 
 
@@ -1925,38 +1913,48 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
  * list commodities in a given namespace
  ********************************************************************/
 
-static CommodityList*
+static std::vector<gnc_commodity*>
 commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table)
 {
-    CommodityList *retval = nullptr;
+    std::vector<gnc_commodity*> rv;
     for (const auto& [ns_name, ns] : table->ns_map)
     {
         if (ns_name == GNC_COMMODITY_NS_CURRENCY ||
             ns_name == GNC_COMMODITY_NS_TEMPLATE)
             continue;
         for (const auto& [mnemonic, comm] : ns->cm_map)
-            retval = g_list_prepend(retval, comm);
+            rv.push_back(comm);
     }
-    return retval;
+    return rv;
 }
+
+static std::vector<gnc_commodity*>
+commodity_table_get_commodities (const gnc_commodity_table * table,
+                                 const char * name_space)
+{
+
+    if (!table)
+        return {};
+    if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONISO_GUI) == 0)
+        return commodity_table_get_all_noncurrency_commodities(table);
+    auto ns = gnc_commodity_table_find_namespace(table, name_space);
+    if (!ns)
+        return {};
+
+    std::vector<gnc_commodity*> rv(ns->cm_map.size());
+    std::transform (ns->cm_map.begin(), ns->cm_map.end(), rv.begin(),
+                    [](auto& pair){ return pair.second; });
+    return rv;
+}
+
 
 CommodityList *
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
                                     const char * name_space)
 {
-    gnc_commodity_namespace * ns = nullptr;
-
-    if (!table)
-        return nullptr;
-    if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONISO_GUI) == 0)
-        return commodity_table_get_all_noncurrency_commodities(table);
-    ns = gnc_commodity_table_find_namespace(table, name_space);
-    if (!ns)
-        return nullptr;
-
-    return std::accumulate (ns->cm_map.rbegin(), ns->cm_map.rend(),
-                            static_cast<GList*>(nullptr), [](auto a, const auto& b)
-                            { return g_list_prepend (a, b.second); });
+    auto comms = commodity_table_get_commodities (table, name_space);
+    return std::accumulate (comms.begin(), comms.end(),
+                            static_cast<GList*>(nullptr), g_list_prepend);
 }
 
 /********************************************************************
