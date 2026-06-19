@@ -301,8 +301,7 @@ get_quote_source_from_type (QuoteSourceType type)
  ********************************************************************/
 gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
-    auto source{get_quote_source_from_type(type)};
-    return std::distance(source.begin(), source.end());
+    return get_quote_source_from_type(type).size();
 }
 
 
