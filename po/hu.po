@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-05-30 15:44+0000\n"
+"PO-Revision-Date: 2026-06-14 21:11+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -7382,7 +7382,7 @@ msgstr "Importálás"
 #: gnucash/ui/gnc-plugin-page-report.ui:105
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:88
 msgid "_Save"
-msgstr "_Mentés"
+msgstr "Menté_s"
 
 #: gnucash/gnome-utils/gnc-file.c:157 gnucash/gnome-utils/gnc-file.c:376
 #: gnucash/gnome-utils/gnc-file.c:1269 gnucash/gnome-utils/gnc-file.c:1541
@@ -7857,7 +7857,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1269
 msgid "Close _Without Saving"
-msgstr "Bezárás _mentés nélkül"
+msgstr "_Bezárás mentés nélkül"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1416
 msgid "This window is closing and will not be restored."
@@ -9643,7 +9643,9 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
-msgstr "Fájl megnyitásakor futtatja „A legutóbbi futás óta” párbeszédpanelt."
+msgstr ""
+"Egy GnuCash adatfájl megnyitásakor futtatja „A legutóbbi futás óta” "
+"segédprogramot."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:18
 msgid ""
@@ -9652,16 +9654,16 @@ msgid ""
 "the initial opening of the data file when GnuCash starts. If this setting is "
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
-"Ez a beállítás határozza meg, hogy az adatfájl megnyitásakor automatikusan "
-"elinduljon-e az ütemezett tranzakciók feldolgozása „A legutóbbi futás óta” "
-"párbeszédpanelen. Ha ez a beállítás aktív, akkor a folyamat elindul, "
-"ellenkező esetben nem."
+"Ez a beállítás határozza meg, hogy egy GnuCash adatfájl megnyitásakor "
+"automatikusan elinduljon-e az ütemezett tranzakciók feldolgozása „A "
+"legutóbbi futás óta” segédprogram ablakában. Ha ez a beállítás aktív, akkor "
+"a folyamat elindul, ellenkező esetben nem."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr ""
-"Fájl megnyitásakor megjeleníti „A legutóbbi futás óta” folyamat értesítő "
-"párbeszédablakát."
+"Egy GnuCash adatfájl megnyitásakor megjeleníti „A legutóbbi futás óta” segéd "
+"értesítő párbeszédablakát."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:23
 msgid ""
@@ -9671,10 +9673,11 @@ msgid ""
 "opening of the data file when GnuCash starts. If this setting is active, "
 "show the dialog, otherwise it is not shown."
 msgstr ""
-"Ez a beállítás határozza meg, hogy az adatfájl megnyitásakor megjelenik-e „A "
-"legutóbbi futás óta” folyamat értesítő párbeszédablaka (ha engedélyezve van "
-"a fájl megnyitásakor „A legutóbbi futás óta” folyamat). Ha ez a beállítás "
-"aktív, akkor megjelenik az értesítő párbeszédablak, ellenkező esetben nem."
+"Ez a beállítás határozza meg, hogy egy GnuCash adatfájl megnyitásakor "
+"megjelenik-e „A legutóbbi futás óta” segédprogram értesítő párbeszédablaka "
+"(ha engedélyezve van a fájl megnyitásakor „A legutóbbi futás óta” segéd). Ha "
+"ez a beállítás aktív, akkor megjelenik az értesítő párbeszédablak, ellenkező "
+"esetben nem."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
@@ -9682,43 +9685,42 @@ msgid ""
 "run\" dialog."
 msgstr ""
 "A „Létrehozott tranzakciók felülvizsgálata” legyen alapértelmezett „A "
-"legutóbbi futás óta” párbeszédpanelen."
+"legutóbbi futás óta” segéd ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
-"Ez a beállítás határozza meg, hogy a „Létrehozott tranzakciók "
-"felülvizsgálata” alapértelmezettként legyen-e beállítva „A legutóbbi futás "
-"óta” párbeszédpanelen."
+"Ez a beállítás határozza meg, hogy a „Létrehozott tranzakciók felülvizsgálata"
+"” alapértelmezettként legyen-e beállítva „A legutóbbi futás óta” segéd "
+"ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
 msgid "Set the sort column in the \"since last run\" dialog."
-msgstr ""
-"A rendezési oszlop beállítása „A legutóbbi futás óta” párbeszédpanelen."
+msgstr "A rendezési oszlop beállítása „A legutóbbi futás óta” segéd ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"Ezzel a rendezési oszlopot állíthatja be „A legutóbbi futás óta” "
-"párbeszédpanelen."
+"Ezzel a rendezési oszlopot állíthatja be „A legutóbbi futás óta” segéd "
+"ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
 msgid "Set the sort direction in the \"since last run\" dialog."
-msgstr "A rendezési irány beállítása „A legutóbbi futás óta” párbeszédpanelen."
+msgstr "A rendezési irány beállítása „A legutóbbi futás óta” segéd ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Ezzel a rendezési irányt állíthatja be „A legutóbbi futás óta” "
-"párbeszédpanelen."
+"Ezzel a rendezési irányt állíthatja be „A legutóbbi futás óta” segéd "
+"ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
 msgid "The depth used in the tree to sort in the \"since last run\" dialog."
 msgstr ""
-"A rendezési fában használt mélység „A legutóbbi futás óta” párbeszédpanelen."
+"A rendezési fában használt mélység „A legutóbbi futás óta” segéd ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
@@ -12575,7 +12577,7 @@ msgstr "A kölcsön összefoglalása"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 msgid "QIF Import Assistant"
-msgstr "QIF-importálási segéd"
+msgstr "QIF importálási segéd"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:26
@@ -12590,15 +12592,15 @@ msgid ""
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process."
 msgstr ""
-"GnuCash képes pénzügyi adatokat importálni QIF (Quicken Interchange Format) "
-"típusú fájlokból, Quicken/QuickBooks, MS Money, Moneydance és sok más "
-"program által létrehozottakból.\n"
+"A GnuCash képes pénzügyi adatokat importálni a Quicken/QuickBooks, MS Money, "
+"Moneydance és sok más program által létrehozott QIF (Quicken Interchange "
+"Format) formátumú fájlokból.\n"
 "\n"
 "Az importálási folyamatnak számos lépése van. Az Ön GnuCash számlái addig "
-"nem változnak, amíg az Alkalmaz gombra nem kattint a folyamat végén.\n"
+"nem változnak meg, amíg nem kattint az Alkalmaz gombra a folyamat végén.\n"
 "\n"
-"Kattintson az Következő gombra a QIF fájl betöltéséhez, vagy a Mégse gombra "
-"a kilépéshez."
+"Kattintson a Következő gombra a QIF fájl betöltéséhez, vagy a Mégse gombra a "
+"kilépéshez."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -12606,7 +12608,6 @@ msgstr "QIF fájl importálása"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:50
-#, fuzzy
 msgid ""
 "Please select a file to load. When you click \"Next\", the file will be "
 "loaded and analyzed. You may need to answer some questions about the "
@@ -12615,12 +12616,12 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files.\n"
 msgstr ""
-"Please select a file to load. When you click \"Forward\", the file will be "
-"loaded and analyzed. You may need to answer some questions about the "
-"account(s) in the file.\n"
+"Kérjük, válasszon ki egy betöltendő fájlt. A Tovább gombra kattintva a fájl "
+"betöltődik és elemzésre kerül. Előfordulhat, hogy néhány kérdésre "
+"válaszolnia kell a fájlban szereplő számlákkal kapcsolatban.\n"
 "\n"
-"You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files.\n"
+"Tetszőleges számú fájlt betölthet, ezért ne aggódjon, ha az adatai több "
+"fájlban vannak.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
 msgid "_Select…"
@@ -12663,6 +12664,8 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-qif-import.glade:395
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
+"Kattintson a Vissza gombra a fájl betöltésének megszakításához, és válasszon "
+"ki egy másik fájlt."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:323
 msgid "Set a date format for this QIF file"
@@ -13622,7 +13625,7 @@ msgstr "Áruérték használata"
 #: gnucash/ui/gnc-main-window.ui:492 gnucash/ui/gnc-reconcile-window.ui:90
 #: gnucash/ui/gnc-reconcile-window.ui:93
 msgid "_Help"
-msgstr "_Súgó"
+msgstr "Súg_ó"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1200
 #: gnucash/gtkbuilder/dialog-customer.glade:206
@@ -14104,7 +14107,7 @@ msgstr "A számlákra nyomtatott fizetési feltétel leírása"
 #: gnucash/ui/gnc-reconcile-window.ui:68 gnucash/ui/gnc-reconcile-window.ui:107
 #: gnucash/ui/gnc-reconcile-window.ui:162
 msgid "_Edit"
-msgstr "Sz_erkesztés"
+msgstr "_Szerkesztés"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:688
 msgid "Edit the current Billing Term"
@@ -16077,15 +16080,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2741
 msgid "Automatic credit card _payment"
-msgstr "Automatikus hitelkártya-_törlesztések"
+msgstr "Automatikus hitelkártya-_törlesztés"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2747
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr ""
-"Egy hitelkártyaszámla számlakivonatának egyeztetése után megkéri a "
-"felhasználót a számla törlesztésének a megadására."
+"A hitelkártya számlakivonatának egyeztetése után megkéri a felhasználót a "
+"törlesztés bevitelére."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2759
 msgid "Always reconcile to t_oday"
@@ -17005,7 +17008,7 @@ msgid ""
 "dialog."
 msgstr ""
 "A „Létrehozott tranzakciók felülvizsgálata” legyen alapértelmezett „A "
-"legutóbbi futás óta” párbeszédpanelen."
+"legutóbbi futás óta” segéd ablakában."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:794
 msgid "Edit Scheduled Transaction"

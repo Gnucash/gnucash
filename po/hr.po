@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-03-21 13:18-0700\n"
-"PO-Revision-Date: 2026-05-08 15:11+0000\n"
+"PO-Revision-Date: 2026-06-10 19:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -2515,7 +2515,7 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Pritisni dvaput na unos u stupcu „Id” za prelaz na poslovnu stavku.\n"
+"Pritisni dvaput na unos u stupcu „Id” za prijelaz na poslovnu stavku.\n"
 "Pritisni dvaput na unos u stupcu „Poveznica” za otvaranje povezanog "
 "dokumenta.\n"
 "Pritisni dvaput na unos u stupcu „Dostupno” za mijenjanje poveznice "
@@ -3606,6 +3606,12 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Ova transakcija sadrži stavke podjele na više poslovnih konta:\n"
+"\n"
+" %s\n"
+"GnuCash može obrađivati samo transakcije koje se knjiže na jedan konto.\n"
+"\n"
+"Ispravi ovo ručno tako da izravno urediš transakciju, a zatim pokušaj ponovo."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:205
@@ -3774,6 +3780,8 @@ msgid ""
 "Transaction with description '%s' can not be balanced.\n"
 "The difference is %s"
 msgstr ""
+"Transakcija s opisom „%s”se ne može saldirati.\n"
+"Razlika iznosi %s"
 
 #: gnucash/gnome/dialog-sx-editor.c:512
 msgid "Please name the Scheduled Transaction."
@@ -5207,12 +5215,16 @@ msgid ""
 "This transaction involves more than one other account. Select a specific "
 "split to jump to that account."
 msgstr ""
+"Ova transakcija uključuje više od jednog konta. Odaberi određenu stavku za "
+"prijelaz na taj konto."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5137
 msgid ""
 "This transaction only involves the current account so there is no other "
 "account to jump to."
 msgstr ""
+"Ova transakcija uključuje samo trenutačni konto, tako da ne postoji jedan "
+"drugi konto na koji bi se moglo prijeći."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5291
 #, c-format
@@ -5329,6 +5341,7 @@ msgstr "_Prepiši"
 #, c-format
 msgid "This will update and overwrite the existing saved report named \"%s\"."
 msgstr ""
+"Ovime će se aktualizirati i prepisati postojeći spremljeni izvještaj „%s”."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1797
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1823
@@ -10161,8 +10174,8 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"Ako je aktivirano, svaki novi registar će biti otvoren u novom prozoru. U "
-"protivnom, svaki novi registar će biti otvoren kao kartica u glavnom prozoru."
+"Ako je aktivirano, svaki novi registar će se otvoriti u novom prozoru. U "
+"protivnom će se svaki novi registar otvoriti kao kartica u glavnom prozoru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:277
 msgid "Color all lines of a transaction the same"
@@ -30416,7 +30429,7 @@ msgstr "Tečajevi valuta zahtijevaju barem dvije valute"
 #: libgnucash/app-utils/gnc-quotes.cpp:779
 #: libgnucash/app-utils/gnc-quotes.cpp:789
 msgid "Failed to parse result returned by Finance::Quote."
-msgstr ""
+msgstr "Neuspjela obrada rezultata koji je vratio modul Finance::Quote."
 
 #. Translators: This labels the return value of a query to Finance::Quote written in an error.
 #: libgnucash/app-utils/gnc-quotes.cpp:782
@@ -30938,7 +30951,7 @@ msgstr "Union Investment, DE"
 #: libgnucash/engine/gnc-commodity.cpp:229
 msgctxt "FQ Source"
 msgid "US Savings Bonds, US"
-msgstr ""
+msgstr "US Savings Bonds, US"
 
 #: libgnucash/engine/gnc-commodity.cpp:230
 msgctxt "FQ Source"
