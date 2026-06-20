@@ -42,6 +42,7 @@
 #include "guid.h"
 #include "qofinstance.h"
 
+#include <boost/container/flat_map.hpp>
 #include <numeric>
 #include <list>
 #include <unordered_map>
@@ -130,7 +131,7 @@ struct gnc_commodity_table_s
     NamespaceVec ns_map;
 };
 
-static const std::unordered_map<std::string,std::string> gnc_new_iso_codes =
+static const boost::container::flat_map<std::string,std::string> gnc_new_iso_codes =
 {
     {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
     {"PLZ", "PLN"}, /* Polish Zloty */
@@ -285,6 +286,15 @@ void vecpair_erase(Vec& v, const Key& key)
     v.erase (std::remove_if (v.begin(), v.end(),
                              [&key](const auto& p){ return p.first == key; }),
              v.end());
+}
+
+static std::optional<const char*>
+find_new_iso_code (gnc_commodity_namespace* nsp, const char* mnemonic)
+{
+    if (nsp->iso4217)
+        if (auto it = gnc_new_iso_codes.find (mnemonic); it != gnc_new_iso_codes.end())
+            return it->second.c_str();
+    return std::nullopt;
 }
 
 /********************************************************************
@@ -1662,12 +1672,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 
     if (nsp)
     {
-        std::string lookup_mnemonic = mnemonic;
-
-        if (nsp->iso4217)
-            if (auto it = gnc_new_iso_codes.find (mnemonic); it != gnc_new_iso_codes.end())
-                lookup_mnemonic = it->second;
-
+        auto lookup_mnemonic = find_new_iso_code (nsp, mnemonic).value_or (mnemonic);
         auto it = vecpair_find (nsp->cm_map, lookup_mnemonic);
         return it == nsp->cm_map.end() ? nullptr : it->second;
     }
@@ -1768,12 +1773,8 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
 
         /* Backward compatibility support for currencies that have
          * recently changed. */
-        if (priv->name_space->iso4217)
-        {
-            auto it = gnc_new_iso_codes.find (priv->mnemonic);
-            if (it != gnc_new_iso_codes.end())
-                gnc_commodity_set_mnemonic(comm, it->second.c_str());
-        }
+        if (auto code = find_new_iso_code (priv->name_space, priv->mnemonic))
+            gnc_commodity_set_mnemonic (comm, *code);
         gnc_commodity_copy (c, comm);
         gnc_commodity_destroy (comm);
         LEAVE("found at %p", c);
