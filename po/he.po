@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
-"enter_bug.cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2026-03-21 13:18-0700\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-03-22 09:45+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -695,12 +695,12 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:11
 msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
-"lists, you can chat to them live on IRC! Join them on #gnucash at irc.gimp."
-"net"
+"lists, you can chat to them live on IRC! Join them on #gnucash at "
+"irc.gimp.net"
 msgstr ""
 "יצירת קשר עם מפתחי גנוקאש היא קלה מאוד. נוסף על מספר לא מבוטל של רשימות־"
-"דיוור, ניתן גם לשוחח באופן מקוון דרך IRC! ההצטרפות דרך ערוץ ‎#gnucash ב־"
-"irc.gimp.net"
+"דיוור, ניתן גם לשוחח באופן מקוון דרך IRC! ההצטרפות דרך ערוץ ‎#gnucash "
+"ב־irc.gimp.net"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -1056,8 +1056,8 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:659
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1204
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1209
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1190
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1195
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
 msgstr "תקופה"
@@ -1121,7 +1121,7 @@ msgstr "שומר מקום"
 #: gnucash/gnome-utils/dialog-account.c:429
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1016
 #: gnucash/gtkbuilder/dialog-account.glade:1957
-#: libgnucash/app-utils/gnc-ui-util.cpp:693
+#: libgnucash/app-utils/gnc-ui-util.cpp:695
 msgid "Opening Balance"
 msgstr "יתרת פתיחה"
 
@@ -1190,12 +1190,12 @@ msgid "Loan"
 msgstr "הלוואה"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: gnucash/gnome/assistant-loan.cpp:1483
+#: gnucash/gnome/assistant-loan.cpp:1477
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
 msgstr "אפשרות פרעון הלוואה: '%s'"
 
-#: gnucash/gnome/assistant-loan.cpp:1885 gnucash/gnome/dialog-lot-viewer.c:985
+#: gnucash/gnome/assistant-loan.cpp:1871 gnucash/gnome/dialog-lot-viewer.c:985
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
 #: gnucash/gnome-utils/gnc-tree-view-price.c:398
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:67
@@ -1203,12 +1203,12 @@ msgstr "אפשרות פרעון הלוואה: '%s'"
 #: gnucash/gtkbuilder/dialog-payment.glade:257
 #: gnucash/gtkbuilder/dialog-payment.glade:381
 #: gnucash/gtkbuilder/dialog-transfer.glade:131
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:368
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:425
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:144
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:364
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:379
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.cpp:1602
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
@@ -1218,8 +1218,8 @@ msgstr "אפשרות פרעון הלוואה: '%s'"
 #: gnucash/register/ledger-core/split-register-model.c:237
 #: gnucash/report/reports/standard/account-summary.scm:77
 #: gnucash/report/reports/standard/advanced-portfolio.scm:68
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1037
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1042
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1023
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1028
 #: gnucash/report/reports/standard/cashflow-barchart.scm:315
 #: gnucash/report/reports/standard/category-barchart.scm:642
 #: gnucash/report/reports/standard/category-barchart.scm:662
@@ -1237,13 +1237,13 @@ msgstr "אפשרות פרעון הלוואה: '%s'"
 #: gnucash/report/reports/standard/register.scm:346
 #: gnucash/report/reports/support/receipt.eguile.scm:143
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:268
-#: gnucash/report/trep-engine.scm:196 gnucash/report/trep-engine.scm:927
-#: gnucash/report/trep-engine.scm:1128 gnucash/report/trep-engine.scm:2334
+#: gnucash/report/trep-engine.scm:195 gnucash/report/trep-engine.scm:915
+#: gnucash/report/trep-engine.scm:1116 gnucash/report/trep-engine.scm:2321
 msgid "Date"
 msgstr "תאריך"
 
-#: gnucash/gnome/assistant-loan.cpp:1891 gnucash/gnome/assistant-loan.cpp:2875
-#: gnucash/gnome/assistant-loan.cpp:2932 gnucash/gnome/assistant-loan.cpp:2944
+#: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/assistant-loan.cpp:2864
+#: gnucash/gnome/assistant-loan.cpp:2921 gnucash/gnome/assistant-loan.cpp:2933
 #: gnucash/gtkbuilder/dialog-payment.glade:445
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2623
@@ -1257,11 +1257,11 @@ msgstr "תאריך"
 msgid "Payment"
 msgstr "תשלום"
 
-#: gnucash/gnome/assistant-loan.cpp:1897 gnucash/gnome/assistant-loan.cpp:2960
+#: gnucash/gnome/assistant-loan.cpp:1883 gnucash/gnome/assistant-loan.cpp:2949
 msgid "Principal"
 msgstr "קרן"
 
-#: gnucash/gnome/assistant-loan.cpp:1903 gnucash/gnome/assistant-loan.cpp:2976
+#: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2965
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
 #: gnucash/register/ledger-core/split-register.c:2618
 #: gnucash/register/ledger-core/split-register.c:2655
@@ -1272,7 +1272,7 @@ msgstr "קרן"
 msgid "Interest"
 msgstr "ריבית"
 
-#: gnucash/gnome/assistant-loan.cpp:2876
+#: gnucash/gnome/assistant-loan.cpp:2865
 msgid "Escrow Payment"
 msgstr "תשלום נאמנות"
 
@@ -1292,7 +1292,7 @@ msgstr "שגיאה בהוספת מחיר."
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:828
 #: gnucash/import-export/aqb/gnc-ab-utils.c:479
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #: gnucash/import-export/import-main-matcher.cpp:1603
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
@@ -1308,7 +1308,7 @@ msgstr "שגיאה בהוספת מחיר."
 #: gnucash/report/reports/standard/register.scm:142
 #: gnucash/report/reports/standard/register.scm:366
 #: gnucash/report/reports/standard/txn-columns.scm:36
-#: gnucash/report/trep-engine.scm:1209
+#: gnucash/report/trep-engine.scm:1197
 msgid "Account"
 msgstr "חשבון"
 
@@ -1330,8 +1330,8 @@ msgstr "סמל"
 #: gnucash/report/reports/standard/general-ledger.scm:98
 #: gnucash/report/reports/standard/register.scm:145
 #: gnucash/report/reports/standard/register.scm:370
-#: gnucash/report/trep-engine.scm:942 gnucash/report/trep-engine.scm:1233
-#: gnucash/report/trep-engine.scm:2345
+#: gnucash/report/trep-engine.scm:930 gnucash/report/trep-engine.scm:1221
+#: gnucash/report/trep-engine.scm:2332
 msgid "Shares"
 msgstr "מניות"
 
@@ -1410,8 +1410,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
 #: gnucash/gnome/assistant-stock-transaction.cpp:210
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:730
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:775
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:731
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:776
 #: gnucash/register/ledger-core/split-register.c:2705
 msgid "Dividend"
 msgstr "דיוידנד"
@@ -1686,7 +1686,7 @@ msgstr "השגיאות הבאות קיימות:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:655
 #: gnucash/gnome/assistant-stock-transaction.cpp:716
-#: gnucash/report/reports/standard/balsheet-pnl.scm:804
+#: gnucash/report/reports/standard/balsheet-pnl.scm:794
 msgid "missing"
 msgstr "חסר"
 
@@ -1837,7 +1837,7 @@ msgstr "הזנת כמות (יחידות) מניות שהיוו רווחים או
 #: gnucash/gtkbuilder/dialog-payment.glade:495
 #: gnucash/gtkbuilder/dialog-transfer.glade:208
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:387
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #: gnucash/import-export/import-main-matcher.cpp:1607
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
@@ -1846,26 +1846,26 @@ msgstr "הזנת כמות (יחידות) מניות שהיוו רווחים או
 #: gnucash/report/reports/standard/general-ledger.scm:91
 #: gnucash/report/reports/standard/register.scm:139
 #: gnucash/report/reports/standard/register.scm:362
-#: gnucash/report/trep-engine.scm:268 gnucash/report/trep-engine.scm:958
-#: gnucash/report/trep-engine.scm:1189 gnucash/report/trep-engine.scm:1190
-#: gnucash/report/trep-engine.scm:2353
+#: gnucash/report/trep-engine.scm:267 gnucash/report/trep-engine.scm:946
+#: gnucash/report/trep-engine.scm:1177 gnucash/report/trep-engine.scm:1178
+#: gnucash/report/trep-engine.scm:2340
 msgid "Memo"
 msgstr "מזכר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2339
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3462
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2023
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2516
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
-#: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1502
+#: gnucash/report/trep-engine.scm:1386 gnucash/report/trep-engine.scm:1490
 #: libgnucash/engine/Account.cpp:165
 msgid "Debit"
 msgstr "חובה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2346
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3458
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2019
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2539
 #: gnucash/register/ledger-core/split-register.c:2634
@@ -1874,7 +1874,7 @@ msgstr "חובה"
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
-#: gnucash/report/trep-engine.scm:1405 gnucash/report/trep-engine.scm:1509
+#: gnucash/report/trep-engine.scm:1393 gnucash/report/trep-engine.scm:1497
 #: libgnucash/engine/Account.cpp:185
 msgid "Credit"
 msgstr "זכות"
@@ -1919,7 +1919,7 @@ msgstr "שובר"
 #: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3767
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:397
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1936
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1937
 #: gnucash/gnome-search/dialog-search.c:1093
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
@@ -1933,8 +1933,8 @@ msgstr "שובר"
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: gnucash/report/trep-engine.scm:965 gnucash/report/trep-engine.scm:1200
-#: gnucash/report/trep-engine.scm:2354 libgnucash/engine/Account.cpp:161
+#: gnucash/report/trep-engine.scm:953 gnucash/report/trep-engine.scm:1188
+#: gnucash/report/trep-engine.scm:2341 libgnucash/engine/Account.cpp:161
 #: libgnucash/engine/gncInvoice.c:1095
 msgid "Invoice"
 msgstr "חשבונית"
@@ -1942,12 +1942,12 @@ msgstr "חשבונית"
 #: gnucash/gnome/business-gnome-utils.c:582 gnucash/gnome/gnc-split-reg.c:648
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:657
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #: gnucash/import-export/import-pending-matches.cpp:189
 #: gnucash/report/reports/standard/register.scm:216
-#: gnucash/report/trep-engine.scm:280 gnucash/report/trep-engine.scm:311
-#: gnucash/report/trep-engine.scm:1020 libgnucash/engine/gncOwner.c:212
+#: gnucash/report/trep-engine.scm:279 gnucash/report/trep-engine.scm:310
+#: gnucash/report/trep-engine.scm:1008 libgnucash/engine/gncOwner.c:212
 #: libgnucash/engine/Recurrence.cpp:502 libgnucash/engine/Recurrence.cpp:691
 msgid "None"
 msgstr "ללא"
@@ -2070,7 +2070,7 @@ msgstr "מחיקת סחורה?"
 #: gnucash/gnome/gnc-plugin-budget.c:321
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1664
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1084
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1885
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1664
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
 #: gnucash/gnome/gnc-split-reg.c:1199 gnucash/gnome/gnc-split-reg.c:1466
 #: gnucash/gnome/gnc-split-reg.c:1506 gnucash/gnome-search/search-account.c:239
@@ -2082,7 +2082,7 @@ msgstr "מחיקת סחורה?"
 #: gnucash/gnome-utils/gnc-gui-query.c:330
 #: gnucash/gnome-utils/gnc-gui-query.c:362
 #: gnucash/gnome-utils/gnc-main-window.cpp:1270
-#: gnucash/gnome-utils/gnc-main-window.cpp:1427
+#: gnucash/gnome-utils/gnc-main-window.cpp:1434
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:181
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:381
@@ -2138,14 +2138,14 @@ msgstr "מחיקת סחורה?"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:253
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:425
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:851
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:31
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:598
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:803
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1141
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:41
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:655
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:860
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1198
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:24
 #: gnucash/gtkbuilder/window-autoclear.glade:22
 #: gnucash/gtkbuilder/window-reconcile.glade:21
-#: gnucash/html/gnc-html-webkit1.c:1214
+#: gnucash/html/gnc-html-webkit1.cpp:1189
 #: gnucash/import-export/aqb/dialog-ab.glade:305
 #: gnucash/import-export/aqb/dialog-ab.glade:586
 #: gnucash/import-export/aqb/dialog-ab.glade:894
@@ -2154,7 +2154,7 @@ msgstr "מחיקת סחורה?"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2102
 #: gnucash/register/ledger-core/gncEntryLedger.c:926
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.cpp:1591
+#: gnucash/register/ledger-core/split-register-control.cpp:1594
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2177,7 +2177,7 @@ msgstr "_ביטול"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:147
 #: gnucash/ui/gnc-plugin-page-invoice.ui:235
 #: gnucash/ui/gnc-plugin-page-invoice.ui:437
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:193
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:199
 #: gnucash/ui/gnc-reconcile-window.ui:83 gnucash/ui/gnc-reconcile-window.ui:119
 #: gnucash/ui/gnc-reconcile-window.ui:210
 msgid "_Delete"
@@ -2330,14 +2330,14 @@ msgid "Select document"
 msgstr "בחירת מסמך"
 
 #: gnucash/gnome/dialog-doclink.c:163 gnucash/gnome/gnc-plugin-budget.c:322
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5109
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5138
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3446
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3475
 #: gnucash/gnome-search/search-account.c:240
 #: gnucash/gnome-utils/dialog-account.c:849
 #: gnucash/gnome-utils/gnc-gui-query.c:327
 #: gnucash/gnome-utils/gnc-gui-query.c:361
 #: gnucash/gnome-utils/gnc-gui-query.c:447
-#: gnucash/gnome-utils/gnc-main-window.cpp:1428
+#: gnucash/gnome-utils/gnc-main-window.cpp:1435
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:196
 #: gnucash/gtkbuilder/dialog-account.glade:35
 #: gnucash/gtkbuilder/dialog-account.glade:838
@@ -2391,10 +2391,10 @@ msgstr "בחירת מסמך"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:268
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:439
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:866
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:46
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:613
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:818
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1156
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:56
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:670
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:875
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1213
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:39
 #: gnucash/gtkbuilder/window-autoclear.glade:38
 #: gnucash/gtkbuilder/window-reconcile.glade:36
@@ -2481,7 +2481,7 @@ msgstr "תנועות"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:367
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: gnucash/import-export/import-main-matcher.cpp:1606
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
@@ -2500,8 +2500,8 @@ msgstr "תנועות"
 #: gnucash/report/reports/standard/register.scm:137
 #: gnucash/report/reports/standard/register.scm:358
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:270
-#: gnucash/report/trep-engine.scm:243 gnucash/report/trep-engine.scm:933
-#: gnucash/report/trep-engine.scm:1178 gnucash/report/trep-engine.scm:2340
+#: gnucash/report/trep-engine.scm:242 gnucash/report/trep-engine.scm:921
+#: gnucash/report/trep-engine.scm:1166 gnucash/report/trep-engine.scm:2327
 msgid "Description"
 msgstr "תיאור"
 
@@ -2566,7 +2566,7 @@ msgstr "שם משתמש"
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:332
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:117
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:201
 #: gnucash/gtkbuilder/assistant-loan.glade:600
 #: gnucash/gtkbuilder/assistant-loan.glade:788
 #: gnucash/gtkbuilder/dialog-customer.glade:237
@@ -2663,7 +2663,7 @@ msgid "Closing Entries"
 msgstr "תנועות סגירה"
 
 #: gnucash/gnome/dialog-find-transactions.c:118
-#: gnucash/gnome/gnc-plugin-page-register.cpp:403
+#: gnucash/gnome/gnc-plugin-page-register.cpp:349
 #: gnucash/gnome/window-reconcile.cpp:1547
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:394
@@ -2676,9 +2676,9 @@ msgstr "מחיר מניה"
 
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:1021
-#: gnucash/gnome/dialog-sx-since-last-run.c:1446
+#: gnucash/gnome/dialog-sx-since-last-run.c:1388
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1055
 #: gnucash/report/reports/standard/portfolio.scm:249
 #: gnucash/report/reports/standard/register.scm:157
@@ -2691,41 +2691,41 @@ msgstr "ערך"
 #: gnucash/gnome/dialog-invoice.c:3632
 #: gnucash/gtkbuilder/dialog-invoice.glade:94
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
-#: gnucash/report/trep-engine.scm:555
+#: gnucash/report/trep-engine.scm:554
 msgid "Date Posted"
 msgstr "תאריך רישום"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
 #: gnucash/report/reports/standard/general-ledger.scm:88
-#: gnucash/report/trep-engine.scm:202 gnucash/report/trep-engine.scm:556
-#: gnucash/report/trep-engine.scm:928 gnucash/report/trep-engine.scm:1148
-#: gnucash/report/trep-engine.scm:2335
+#: gnucash/report/trep-engine.scm:201 gnucash/report/trep-engine.scm:555
+#: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1136
+#: gnucash/report/trep-engine.scm:2322
 msgid "Reconciled Date"
 msgstr "תאריך התאמה"
 
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2350
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4143
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:285
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:502
 #: gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
-#: gnucash/report/trep-engine.scm:250
+#: gnucash/report/trep-engine.scm:249
 msgid "Number/Action"
 msgstr "סימוכין/פעולה"
 
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2355
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:290
 #: gnucash/gnome/gnc-split-reg.c:675 gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:336
 #: gnucash/report/reports/standard/invoice.scm:91
@@ -2736,28 +2736,28 @@ msgstr "פעולה"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2349
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4142
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:284
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:501
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
-#: gnucash/report/trep-engine.scm:262
+#: gnucash/report/trep-engine.scm:261
 msgid "Transaction Number"
 msgstr "מספר תנועה"
 
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2354
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:289
 #: gnucash/gnome/gnc-split-reg.c:663 gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:99
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
-#: gnucash/report/trep-engine.scm:256
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/report/trep-engine.scm:255
 msgid "Number"
 msgstr "מספר"
 
@@ -2782,16 +2782,16 @@ msgstr "תיאור, הערות, או מזכר"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
 #: gnucash/register/ledger-core/split-register-model.c:516
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:69
-#: gnucash/report/trep-engine.scm:274 gnucash/report/trep-engine.scm:917
-#: gnucash/report/trep-engine.scm:934 gnucash/report/trep-engine.scm:1189
-#: gnucash/report/trep-engine.scm:2355
+#: gnucash/report/trep-engine.scm:273 gnucash/report/trep-engine.scm:905
+#: gnucash/report/trep-engine.scm:922 gnucash/report/trep-engine.scm:1177
+#: gnucash/report/trep-engine.scm:2342
 msgid "Notes"
 msgstr "הערות"
 
@@ -3070,7 +3070,7 @@ msgstr "הצגת/עריכת חשבונית"
 #: gnucash/gnome/dialog-invoice.c:3520 gnucash/gnome/dialog-invoice.c:3529
 #: gnucash/gnome/dialog-invoice.c:3540
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:285
-#: gnucash/gnome/gnc-plugin-page-register.cpp:396
+#: gnucash/gnome/gnc-plugin-page-register.cpp:342
 #: gnucash/ui/gnc-embedded-register-window.ui:155
 msgid "Duplicate"
 msgstr "שיכפול"
@@ -3210,8 +3210,8 @@ msgstr "פתוחים"
 #: gnucash/report/reports/standard/general-ledger.scm:89
 #: gnucash/report/reports/standard/register.scm:135
 #: gnucash/report/reports/standard/register.scm:354
-#: gnucash/report/trep-engine.scm:932 gnucash/report/trep-engine.scm:1162
-#: gnucash/report/trep-engine.scm:2339
+#: gnucash/report/trep-engine.scm:920 gnucash/report/trep-engine.scm:1150
+#: gnucash/report/trep-engine.scm:2326
 msgid "Num"
 msgstr "סימוכין"
 
@@ -3240,8 +3240,8 @@ msgstr "חיפוש חשבונית"
 #: gnucash/gtkbuilder/assistant-loan.glade:762
 #: gnucash/gtkbuilder/dialog-payment.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:105
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/import-export/import-main-matcher.cpp:1605
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
@@ -3253,9 +3253,9 @@ msgstr "חיפוש חשבונית"
 #: gnucash/report/reports/standard/new-owner-report.scm:238
 #: gnucash/report/reports/standard/register.scm:382
 #: gnucash/report/reports/standard/register.scm:627
-#: gnucash/report/trep-engine.scm:236 gnucash/report/trep-engine.scm:995
-#: gnucash/report/trep-engine.scm:1388 gnucash/report/trep-engine.scm:1491
-#: gnucash/report/trep-engine.scm:2286 gnucash/report/trep-engine.scm:2306
+#: gnucash/report/trep-engine.scm:235 gnucash/report/trep-engine.scm:983
+#: gnucash/report/trep-engine.scm:1376 gnucash/report/trep-engine.scm:1479
+#: gnucash/report/trep-engine.scm:2274 gnucash/report/trep-engine.scm:2294
 msgid "Amount"
 msgstr "סכום"
 
@@ -3533,20 +3533,20 @@ msgstr ""
 "ביצוע עיבוד תשלומים. האם ליצור חשבונית או חשבונית ספק תחילה?"
 
 #: gnucash/gnome/dialog-payment.c:1593
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3298
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:572
 #: gnucash/gnome-search/search-reconciled.c:211
 #: gnucash/gnome-utils/gnc-tree-view-account.c:873
-#: gnucash/report/trep-engine.scm:163
+#: gnucash/report/trep-engine.scm:162
 msgid "Cleared"
 msgstr "סגורים"
 
 #: gnucash/gnome/dialog-payment.c:1595
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3300
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:574
 #: gnucash/gnome-search/search-reconciled.c:214
 #: gnucash/gnome-utils/gnc-tree-view-account.c:887
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 #: gnucash/import-export/import-match-picker.cpp:357
-#: gnucash/report/trep-engine.scm:164
+#: gnucash/report/trep-engine.scm:163
 msgid "Reconciled"
 msgstr "מותאמים"
 
@@ -3578,7 +3578,7 @@ msgstr "המשך"
 
 #: gnucash/gnome/dialog-payment.c:1653
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:283
-#: gnucash/gnome/gnc-plugin-page-register.cpp:394
+#: gnucash/gnome/gnc-plugin-page-register.cpp:340
 #: gnucash/ui/gnc-embedded-register-window.ui:210
 msgid "Cancel"
 msgstr "ביטול"
@@ -3864,7 +3864,7 @@ msgid ""
 msgstr "התנועה הנוכחית השתנתה. האם לרשום את השינויים?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1905
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:234
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:238
 msgid "Scheduled Transactions"
 msgstr "תנועות מחזוריות"
 
@@ -3894,7 +3894,7 @@ msgid "Ignored"
 msgstr "המערכת התעלמה"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:370
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:134
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:218
 msgid "Postponed"
 msgstr "דחייה"
 
@@ -3913,8 +3913,7 @@ msgstr "נוצר"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:436
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
-#: gnucash/report/reports/standard/balsheet-pnl.scm:195
-#: gnucash/report/trep-engine.scm:594
+#: gnucash/report/report-core.scm:334
 msgid "Never"
 msgstr "אף פעם"
 
@@ -3922,40 +3921,45 @@ msgstr "אף פעם"
 msgid "(Need Value)"
 msgstr "(נדרש ערך)"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:895
+#: gnucash/gnome/dialog-sx-since-last-run.c:894
 msgid "Invalid Transactions"
 msgstr "תנועה לא תקינה"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:946
-#, c-format
-msgid ""
-"There are no Scheduled Transactions to be entered at this time. (One "
-"transaction automatically created)"
-msgid_plural ""
-"There are no Scheduled Transactions to be entered at this time. (%d "
-"transactions automatically created)"
-msgstr[0] "אין תנועות מחזוריות לרישום עתה. (נוצרה תנועה מחזורית אוטומטית אחת)"
-msgstr[1] "אין תנועות מחזוריות לרישום עתה. (נוצרו %d תנועה מחזורית אוטומטית)"
-
-#: gnucash/gnome/dialog-sx-since-last-run.c:1266
+#: gnucash/gnome/dialog-sx-since-last-run.c:1208
 msgid "Highlight a date first to sort by occurrence date."
 msgstr "נא לסמן תאריך תחילה כדי למיין לפי תאריך היקרות."
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1267
+#: gnucash/gnome/dialog-sx-since-last-run.c:1209
 msgid "Highlight a schedule first to sort by schedule name."
 msgstr "נא לסמן זמנן תחילה כדי למיין לפי שם זמנן."
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1379
+#: gnucash/gnome/dialog-sx-since-last-run.c:1321
 #: gnucash/gnome-search/dialog-search.c:1105
 msgid "Transaction"
 msgstr "תנועה"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1402
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:527
+#: gnucash/gnome/dialog-sx-since-last-run.c:1344
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:584
 msgid "Status"
 msgstr "מצב"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1497
+#: gnucash/gnome/dialog-sx-since-last-run.c:1446
+msgid "There are no Scheduled Transactions to be entered at this time."
+msgstr "אין כעת תנועות מחזוריות לרשום."
+
+#. Translators: %d is the number of transactions. This is a ngettext(3) message.
+#: gnucash/gnome/dialog-sx-since-last-run.c:1455
+#, c-format
+msgid ""
+"There are no Scheduled Transactions to be entered at this time. (%d "
+"transaction automatically created)"
+msgid_plural ""
+"There are no Scheduled Transactions to be entered at this time. (%d "
+"transactions automatically created)"
+msgstr[0] "לא קיימת תנועה מחזורית לרישום כעת. (%d נוצרה אוטומטית)"
+msgstr[1] "לא קיימות תנועות מחזוריות לרישום כעת. (%d נוצרו אוטומטית)"
+
+#: gnucash/gnome/dialog-sx-since-last-run.c:1507
 msgid "Created Transactions"
 msgstr "פעולות שנוצרו"
 
@@ -4051,7 +4055,7 @@ msgstr "חיפוש ספק"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2711
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1062
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1215
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1201
 #: gnucash/report/reports/standard/net-charts.scm:329
 #: gnucash/report/reports/standard/net-charts.scm:398
 #: gnucash/report/report-utilities.scm:211 libgnucash/engine/Account.cpp:178
@@ -4069,7 +4073,7 @@ msgid "Expenses"
 msgstr "הוצאות"
 
 #: gnucash/gnome/gnc-budget-view.c:506
-#: gnucash/gnome/gnc-plugin-page-register.cpp:392
+#: gnucash/gnome/gnc-plugin-page-register.cpp:338
 #: gnucash/register/ledger-core/split-register.c:2636
 #: gnucash/register/ledger-core/split-register-layout.c:721
 #: gnucash/register/ledger-core/split-register-model.c:357
@@ -4099,26 +4103,9 @@ msgstr "יתרת תקציב"
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/portfolio.scm:269
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:2160 gnucash/report/trep-engine.scm:2173
+#: gnucash/report/trep-engine.scm:2148 gnucash/report/trep-engine.scm:2161
 msgid "Total"
 msgstr "סך־הכול"
-
-#: gnucash/gnome/gnc-plugin-basic-commands.c:480
-msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "אין כעת תנועות מחזוריות לרשום."
-
-#. Translators: %d is the number of transactions. This is a
-#. ngettext(3) message.
-#: gnucash/gnome/gnc-plugin-basic-commands.c:516
-#, c-format
-msgid ""
-"There are no Scheduled Transactions to be entered at this time. (%d "
-"transaction automatically created)"
-msgid_plural ""
-"There are no Scheduled Transactions to be entered at this time. (%d "
-"transactions automatically created)"
-msgstr[0] "לא קיימת תנועה מחזורית לרישום כעת. (%d נוצרה אוטומטית)"
-msgstr[1] "לא קיימות תנועות מחזוריות לרישום כעת. (%d נוצרו אוטומטית)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:320
 msgid "Select a Budget"
@@ -4149,20 +4136,20 @@ msgstr "חדש"
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:297
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:178
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:284
-#: gnucash/gnome/gnc-plugin-page-register.cpp:395
+#: gnucash/gnome/gnc-plugin-page-register.cpp:341
 #: gnucash/ui/gnc-embedded-register-window.ui:170
 msgid "Delete"
 msgstr "מחיקה"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:332
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1823
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1602
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr "'בדיקה ותיקון’ רצים כרגע, האם לנטוש?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:406
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
 #: gnucash/gtkbuilder/dialog-preferences.glade:1020
-#: gnucash/report/report-core.scm:165
+#: gnucash/report/report-core.scm:166
 #: gnucash/report/reports/example/average-balance.scm:85
 #: gnucash/report/reports/example/average-balance.scm:282
 #: gnucash/report/reports/example/daily-reports.scm:57
@@ -4172,7 +4159,7 @@ msgstr "'בדיקה ותיקון’ רצים כרגע, האם לנטוש?"
 #: gnucash/report/reports/standard/advanced-portfolio.scm:126
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/balance-sheet.scm:80
-#: gnucash/report/reports/standard/balsheet-pnl.scm:74
+#: gnucash/report/reports/standard/balsheet-pnl.scm:71
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:49
 #: gnucash/report/reports/standard/budget-barchart.scm:38
 #: gnucash/report/reports/standard/budget-income-statement.scm:68
@@ -4404,7 +4391,7 @@ msgstr "יצרת חשבונית חדשה עבור נמען זהה לנוכחי"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:288
-#: gnucash/gnome/gnc-plugin-page-register.cpp:402
+#: gnucash/gnome/gnc-plugin-page-register.cpp:348
 #: gnucash/ui/gnc-embedded-register-window.ui:225
 msgid "Blank"
 msgstr "חדשה"
@@ -4443,7 +4430,7 @@ msgstr "פתיחת חלון דוח לקוח עבור נמען חשבונית ז�
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
-#: gnucash/gnome/gnc-plugin-page-register.cpp:272
+#: gnucash/gnome/gnc-plugin-page-register.cpp:218
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
@@ -4457,7 +4444,7 @@ msgstr "_ניהול קישורי מסמכים…"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:250
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
-#: gnucash/gnome/gnc-plugin-page-register.cpp:276
+#: gnucash/gnome/gnc-plugin-page-register.cpp:222
 #: gnucash/ui/gnc-plugin-page-register.ui:211
 #: gnucash/ui/gnc-plugin-page-register.ui:398
 #: gnucash/ui/gnc-plugin-page-register.ui:510
@@ -4744,7 +4731,7 @@ msgid "Manage Document Link…"
 msgstr "ניהול קישורי מסמכים…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
-#: gnucash/gnome/gnc-plugin-page-register.cpp:393
+#: gnucash/gnome/gnc-plugin-page-register.cpp:339
 #: gnucash/ui/gnc-embedded-register-window.ui:195
 msgid "Enter"
 msgstr "רישום"
@@ -4812,22 +4799,22 @@ msgstr ""
 "נמען %s ימחק.\n"
 "האם לבצע?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:264
+#: gnucash/gnome/gnc-plugin-page-register.cpp:210
 #: gnucash/ui/gnc-plugin-page-register.ui:130
 msgid "Cu_t Transaction"
 msgstr "_גזירת תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:265
+#: gnucash/gnome/gnc-plugin-page-register.cpp:211
 #: gnucash/ui/gnc-plugin-page-register.ui:136
 msgid "_Copy Transaction"
 msgstr "_העתקת תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:266
+#: gnucash/gnome/gnc-plugin-page-register.cpp:212
 #: gnucash/ui/gnc-plugin-page-register.ui:142
 msgid "_Paste Transaction"
 msgstr "ה_דבקת תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:267
+#: gnucash/gnome/gnc-plugin-page-register.cpp:213
 #: gnucash/ui/gnc-embedded-register-window.ui:111
 #: gnucash/ui/gnc-plugin-page-register.ui:148
 #: gnucash/ui/gnc-plugin-page-register.ui:364
@@ -4836,7 +4823,7 @@ msgstr "ה_דבקת תנועה"
 msgid "Dup_licate Transaction"
 msgstr "שכ_פול תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:268
+#: gnucash/gnome/gnc-plugin-page-register.cpp:214
 #: gnucash/gnome/gnc-split-reg.c:1507
 #: gnucash/ui/gnc-embedded-register-window.ui:116
 #: gnucash/ui/gnc-plugin-page-register.ui:154
@@ -4848,7 +4835,7 @@ msgstr "_מחיקת תנועה"
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
-#: gnucash/gnome/gnc-plugin-page-register.cpp:279
+#: gnucash/gnome/gnc-plugin-page-register.cpp:225
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
@@ -4857,108 +4844,108 @@ msgstr "_מחיקת תנועה"
 msgid "Jump to Business item"
 msgstr "דילוג לחשבונית"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:280
+#: gnucash/gnome/gnc-plugin-page-register.cpp:226
 msgid "Cu_t Split"
 msgstr "ג_זירת פיצול"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:281
+#: gnucash/gnome/gnc-plugin-page-register.cpp:227
 msgid "_Copy Split"
 msgstr "_העתקת פיצול"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:282
+#: gnucash/gnome/gnc-plugin-page-register.cpp:228
 msgid "_Paste Split"
 msgstr "_הדבקת פיצול"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:283
+#: gnucash/gnome/gnc-plugin-page-register.cpp:229
 #: gnucash/ui/gnc-plugin-page-register.ui:476
 #: gnucash/ui/gnc-plugin-page-register.ui:613
 msgid "Dup_licate Split"
 msgstr "שכ_פול פיצול"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:284
+#: gnucash/gnome/gnc-plugin-page-register.cpp:230
 #: gnucash/gnome/gnc-split-reg.c:1467
 #: gnucash/ui/gnc-plugin-page-register.ui:481
 #: gnucash/ui/gnc-plugin-page-register.ui:618
 msgid "_Delete Split"
 msgstr "מחיקת _פיצול"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:285
+#: gnucash/gnome/gnc-plugin-page-register.cpp:231
 #: gnucash/ui/gnc-embedded-register-window.ui:35
 msgid "Cut the selected transaction into clipboard"
 msgstr "גזירת התנועה שנבחרה לוח הגזירים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:286
+#: gnucash/gnome/gnc-plugin-page-register.cpp:232
 #: gnucash/ui/gnc-embedded-register-window.ui:40
 msgid "Copy the selected transaction into clipboard"
 msgstr "העתקת התנועה שנבחרה אל לוח הגזירים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:287
+#: gnucash/gnome/gnc-plugin-page-register.cpp:233
 #: gnucash/ui/gnc-embedded-register-window.ui:45
 msgid "Paste the transaction from the clipboard"
 msgstr "הדבקת תכולת תא(ים) מלוּחַ גְּזִירִים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:288
+#: gnucash/gnome/gnc-plugin-page-register.cpp:234
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
 msgid "Make a copy of the current transaction"
 msgstr "העתקת התנועה הנוכחית"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:289
+#: gnucash/gnome/gnc-plugin-page-register.cpp:235
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
 msgid "Delete the current transaction"
 msgstr "מחיקת התנועה הנוכחית"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:290
+#: gnucash/gnome/gnc-plugin-page-register.cpp:236
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr "הוספה, שינוי או ביטול קישור לצרופה לתנועה הנוכחית"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:291
+#: gnucash/gnome/gnc-plugin-page-register.cpp:237
 msgid "Open the linked document for the current transaction"
 msgstr "פתיחת הצרופה המקושרת לתנועה הנוכחית"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:292
+#: gnucash/gnome/gnc-plugin-page-register.cpp:238
 #, fuzzy
 #| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked invoice, bill, expense or credit note"
 msgstr "דילוג להודעת החיוב, החשבונית או השובר המקושרים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:293
+#: gnucash/gnome/gnc-plugin-page-register.cpp:239
 msgid "Cut the selected split into clipboard"
 msgstr "גזירת הפיצול שנבחר ללוח הגזירים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:294
+#: gnucash/gnome/gnc-plugin-page-register.cpp:240
 msgid "Copy the selected split into clipboard"
 msgstr "העתקת הפיצול שנבחר ללוח הגזירים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:295
+#: gnucash/gnome/gnc-plugin-page-register.cpp:241
 msgid "Paste the split from the clipboard"
 msgstr "הדבקה מלוּחַ גְּזִירִים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:296
+#: gnucash/gnome/gnc-plugin-page-register.cpp:242
 msgid "Make a copy of the current split"
 msgstr "יצירת עותק של הפיצול הנוכחי"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:297
+#: gnucash/gnome/gnc-plugin-page-register.cpp:243
 msgid "Delete the current split"
 msgstr "מחיקת הפיצול הנוכחי"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
-#: gnucash/gnome/gnc-plugin-page-register.cpp:399
+#: gnucash/gnome/gnc-plugin-page-register.cpp:345
 msgid "Show Splits"
 msgstr "הצגת פיצולים"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:400
+#: gnucash/gnome/gnc-plugin-page-register.cpp:346
 msgid "Jump"
 msgstr "דילוג"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:401
+#: gnucash/gnome/gnc-plugin-page-register.cpp:347
 msgid "Schedule"
 msgstr "זמנן"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:404
+#: gnucash/gnome/gnc-plugin-page-register.cpp:350
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:146
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
@@ -4966,21 +4953,21 @@ msgstr "זמנן"
 msgid "Stock Assistant"
 msgstr "סייען ניירות ערך"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:653
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1940
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3393
+#: gnucash/gnome/gnc-plugin-page-register.cpp:546
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1719
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1954
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "יומן כללי"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1874
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1653
 #, c-format
 msgid "Save changes to %s?"
 msgstr "שמירת שינויים ל %s?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1879
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1658
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -4989,104 +4976,62 @@ msgstr ""
 "קימות ביומן תנועות עם שינויים מושהים. האם לשמור את השינויים לתנועה זו, לבטל "
 "את התנועה, או לבטל את הביצוע?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1882
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1661
 msgid "_Discard Transaction"
 msgstr "_ביטול תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1886
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1665
 msgid "_Save Transaction"
 msgstr "_שמירת תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1919
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1954
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1967
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2024
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2122
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2245
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1698
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1733
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1746
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1769
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:124
 msgid "unknown"
 msgstr "לא ידוע"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1942
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3399
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1721
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1960
 msgid "Portfolio"
 msgstr "תיק השקעות"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1944
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3405
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1723
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1966
 msgid "Search Results"
 msgstr "תוצאות חיפוש"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3271
-msgid "Start Date:"
-msgstr "תאריך התחלה:"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3278
-msgid "Show previous number of days:"
-msgstr "הצגת מספר ימים קודמת:"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3286
-msgid "End Date:"
-msgstr "תאריך סיום:"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3296
-#: gnucash/report/trep-engine.scm:162
-msgid "Unreconciled"
-msgstr "לא הותאם"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3302
-#: gnucash/gnome-search/search-reconciled.c:217
-#: gnucash/report/trep-engine.scm:165
-msgid "Frozen"
-msgstr "מוקפא"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3304
-#: gnucash/gnome-search/search-reconciled.c:220
-#: gnucash/report/trep-engine.scm:166
-msgid "Voided"
-msgstr "שגוי"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3314
-msgid "Show:"
-msgstr "הצגה:"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3322
-msgid "Hide:"
-msgstr "הסתרה:"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3333
-msgid "Filter By:"
-msgstr "סינון לפי:"
-
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3395
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3413
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1956
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1974
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "דוח תנועות"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3401
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1962
 msgid "Portfolio Report"
 msgstr "דוח תיק השקעות"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3407
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1968
 msgid "Search Results Report"
 msgstr "דוח תוצאות חיפוש"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3411
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1972
 #: gnucash/gtkbuilder/dialog-preferences.glade:2940
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "יומן"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3429
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1990
 msgid "and subaccounts"
 msgstr "וחשבונות משנה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3606
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2167
 msgid "Print checks from multiple accounts?"
 msgstr "הדפסת המחאות מחשבונות מרובים?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3608
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2169
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5094,71 +5039,58 @@ msgstr ""
 "תוצאת חיפוש זו מכילה פיצולים מיותר מחשבון אחד. האם להדפיס את ההמחאות למרות "
 "שלא כולן מאותו חשבון?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3618
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2179
 msgid "_Print checks"
 msgstr "_הדפסת המחאות"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3637
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2198
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr "ניתן להדפיס המחאות רק מיומן חשבון בנק או מתוצאות חיפוש."
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3898
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2459
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "לא ניתן לבטל תנועה עם פיצול שהותאם או נסגר."
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3905
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2466
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "תנועה זו מסומנת כתנועה לקריאה בלבד עם ההערה: '%s'"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4006
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2567
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
 msgstr "נוצרה כבר תנועת יומן מתקנת לתנועה זו."
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4007
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2568
 msgid "Jump to the transaction?"
 msgstr "לדלג אל התנועה?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4016
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2577
 msgid "Reverse Transaction"
 msgstr "היפוך תנועת יומן"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4016
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:640
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2577
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:697
 msgid "New Transaction Information"
 msgstr "מידע תנועה חדש"
-
-#. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4107
-#, c-format
-msgid "Sort %s by…"
-msgstr "מיון %s לפי…"
-
-#. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4197
-#: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
-#, c-format
-msgid "Filter %s by…"
-msgstr "סינון %s לפי…"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4724
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3061
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s מאת %s, פורסם ב־%s, סכום %s"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4733
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3070
 #, fuzzy
 #| msgid "Select a Budget"
 msgid "Select Business Item"
 msgstr "בחירת תקציב"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4734
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3071
 #, fuzzy
 #| msgid ""
 #| "Several documents are linked with this transaction. Please choose one:"
@@ -5166,45 +5098,105 @@ msgid ""
 "Several business items are linked with this transaction. Please choose one:"
 msgstr "יותר צרופה אחת מקושרת לתנועה הזו. נא לבחור באחת מהן:"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4735
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3072
 #: gnucash/gnome-search/dialog-search.c:323
 msgid "Select"
 msgstr "בחירה"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4797
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3134
 msgid "Go to Date"
 msgstr "מעבר לתאריך"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5105
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5134
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3442
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3471
 #, fuzzy
 #| msgid "_Jump to the other account"
 msgid "Unable to jump to other account"
 msgstr "_דילוג לחשבון הנגדי"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5108
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3445
 msgid ""
 "This transaction involves more than one other account. Select a specific "
 "split to jump to that account."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5137
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3474
 msgid ""
 "This transaction only involves the current account so there is no other "
 "account to jump to."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5291
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3628
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "בדיקת פיצולים ביומן הנוכחי: %u מ %u"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:544
+msgid "Start Date:"
+msgstr "תאריך התחלה:"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:552
+msgid "Show previous number of days:"
+msgstr "הצגת מספר ימים קודמת:"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:560
+msgid "End Date:"
+msgstr "תאריך סיום:"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:570
+#: gnucash/report/trep-engine.scm:161
+msgid "Unreconciled"
+msgstr "לא הותאם"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:576
+#: gnucash/gnome-search/search-reconciled.c:217
+#: gnucash/report/trep-engine.scm:164
+msgid "Frozen"
+msgstr "מוקפא"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:578
+#: gnucash/gnome-search/search-reconciled.c:220
+#: gnucash/report/trep-engine.scm:165
+msgid "Voided"
+msgstr "שגוי"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:588
+msgid "Show:"
+msgstr "הצגה:"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:596
+msgid "Hide:"
+msgstr "הסתרה:"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:607
+msgid "Filter By:"
+msgstr "סינון לפי:"
+
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1388
+msgid ""
+"The Start date is after the End date.\n"
+"Select Cancel to change dates.\n"
+msgstr ""
+
+#. Translators: The %s is the name of the plugin page
+#: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1475
+#: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
+#, c-format
+msgid "Filter %s by…"
+msgstr "סינון %s לפי…"
+
+#. Translators: The %s is the name of the plugin page
+#: gnucash/gnome/gnc-plugin-page-register-sort.cpp:466
+#, c-format
+msgid "Sort %s by…"
+msgstr "מיון %s לפי…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:234
 msgid "Print"
 msgstr "הדפסה"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:235
-#: gnucash/gnome-utils/dialog-file-access.c:331
+#: gnucash/gnome-utils/dialog-file-access.c:361
 #: gnucash/gnome-utils/gnc-file.c:164 gnucash/gnome-utils/gnc-file.c:384
 msgid "Export"
 msgstr "‮יצוא‬"
@@ -5232,14 +5224,14 @@ msgstr "יצוא‬ כ P_DF…"
 msgid "The numeric ID of the report."
 msgstr "המזהה הנומרי של הדוח."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1265
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1266
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
 msgstr "עדכון תצורת הדוח השמור הנוכחי. תצורת הדוח תישמר בקובץ %s."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1268
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1269
 #, c-format
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
@@ -5248,37 +5240,37 @@ msgstr ""
 "הוספת תצורת־הדוח הנוכחי לתפריט 'דוחות&larr;תצורות־דוחות שמורים'. תצורת־הדוח "
 "תישמר לקובץ %s."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1276
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1277
 #: gnucash/ui/gnc-plugin-page-report.ui:74
 #: gnucash/ui/gnc-plugin-page-report.ui:255
 msgid "Save _Report Configuration"
 msgstr "שמירת _תצורת־דוח"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1277
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1278
 #: gnucash/ui/gnc-plugin-page-report.ui:81
 #: gnucash/ui/gnc-plugin-page-report.ui:270
 msgid "Save Report Configuration As…"
 msgstr "שמירת תצורת־דוח בשם…"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1557
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1590
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1558
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1591
 msgid "HTML"
 msgstr "HTML"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1560
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1561
 msgid "Choose export format"
 msgstr "בחירת תבניות יצוא"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1561
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1562
 msgid "Choose the export format for this report:"
 msgstr "בחירת תבניות יצוא לדוח זה:"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1601
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1602
 #, c-format
 msgid "Save %s To File"
 msgstr "שמירת %s לקובץ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1634
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1635
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -5289,28 +5281,28 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1644
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1645
 msgid "You cannot save to that file."
 msgstr "לא ניתן לשמור לקובץ זה."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1653
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1654
 #: gnucash/gnome-utils/gnc-file.c:1396 gnucash/gnome-utils/gnc-file.c:1647
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:738
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "הקובץ %s כבר קיים. האם לדרוס אותו?"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1732
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 msgid "_Overwrite"
 msgstr "_שכתוב"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1732
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 #, c-format
 msgid "This will update and overwrite the existing saved report named \"%s\"."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1797
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1823
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1798
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1824
 #: gnucash/gnucash-commands.cpp:184 gnucash/gnucash-commands.cpp:214
 msgid ""
 "This report must be upgraded to return a document object with export-string "
@@ -5318,21 +5310,21 @@ msgid ""
 msgstr ""
 "על מנת להחזיר פריט מסמך עם export-string או, export-error, יש לשדרג דוח זה."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1834
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1835
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "לא ניתן לפתוח קובץ %s. השגיאה היא: %s"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1879
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1880
 msgid "GnuCash-Report"
 msgstr "דוח־גנוקאש"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1928
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1929
 #: gnucash/report/reports/standard/invoice.scm:877
 msgid "Printable Invoice"
 msgstr "חשבונית להדפסה"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1929
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1930
 #: gnucash/report/reports/standard/taxinvoice.scm:301
 #: gnucash/report/reports/standard/taxinvoice.scm:303
 #: gnucash/report/reports/standard/taxinvoice.scm:315
@@ -5340,63 +5332,70 @@ msgstr "חשבונית להדפסה"
 msgid "Tax Invoice"
 msgstr "חשבונית מס"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1930
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1931
 #: gnucash/report/reports/standard/invoice.scm:887
 msgid "Easy Invoice"
 msgstr "חשבונית פשוטה"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1931
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1932
 #: gnucash/report/reports/standard/invoice.scm:897
 msgid "Fancy Invoice"
 msgstr "חשבונית מהודרת"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:399
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 msgid "_New Schedule"
 msgstr "_זמנן חדש"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:411
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 msgid "_Edit Schedule"
 msgstr "_עריכת זמנן"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:411
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:417
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:65
 msgid "_Delete Schedule"
 msgstr "_מחיקת זמנן"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:493
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:423
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:71
+#, fuzzy
+#| msgid "_Schedule"
+msgid "_Run Schedule"
+msgstr "_מחזורי"
+
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:505
 #: gnucash/gtkbuilder/dialog-account.glade:556
 msgid "Transactions"
 msgstr "תנועה"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:565
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:581
 msgid "Upcoming Transactions"
 msgstr "תנועות צפויות"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:933
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:1080
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
 msgstr[0] "האם למחוק תנועה מתוזמנת זו?"
 msgstr[1] "האם למחוק %d תנועות מתוזמנות?"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:163
+#: gnucash/gnome/gnc-plugin-report-system.c:143
 #: gnucash/report/reports/standard/view-column.scm:95
 msgid "Report error"
 msgstr "דווח שגיאה"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:164
+#: gnucash/gnome/gnc-plugin-report-system.c:144
 #: gnucash/report/reports/standard/view-column.scm:96
 msgid "An error occurred while running the report."
 msgstr "ארעה שגיאה בעת הרצת הדוח."
 
-#: gnucash/gnome/gnc-plugin-report-system.c:200
-#: gnucash/gnome/gnc-plugin-report-system.c:222
+#: gnucash/gnome/gnc-plugin-report-system.c:179
+#: gnucash/gnome/gnc-plugin-report-system.c:201
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "תצורת אפשרויות מען־URL שגויה: %s"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:210
+#: gnucash/gnome/gnc-plugin-report-system.c:189
 #, c-format
 msgid "Badly-formed report id: %s"
 msgstr "צורת מזהה דוח שגוי: %s"
@@ -5416,14 +5415,14 @@ msgstr "תאריך תדפיס"
 #: gnucash/gnome/gnc-split-reg.c:683
 #: gnucash/report/reports/standard/customer-summary.scm:118
 #: gnucash/report/reports/standard/new-aging.scm:101
-#: gnucash/report/trep-engine.scm:419
+#: gnucash/report/trep-engine.scm:418
 msgid "Descending"
 msgstr "סדר יורד"
 
 #: gnucash/gnome/gnc-split-reg.c:685
 #: gnucash/report/reports/standard/customer-summary.scm:117
 #: gnucash/report/reports/standard/new-aging.scm:100
-#: gnucash/report/trep-engine.scm:417
+#: gnucash/report/trep-engine.scm:416
 msgid "Ascending"
 msgstr "סדר עולה"
 
@@ -5579,48 +5578,48 @@ msgstr ""
 msgid "Balancing entry from reconciliation"
 msgstr "תנועת איזון מהתאמה"
 
-#: gnucash/gnome/gnc-split-reg.c:2309
+#: gnucash/gnome/gnc-split-reg.c:2303
 msgid "Present:"
 msgstr "הווה:"
 
-#: gnucash/gnome/gnc-split-reg.c:2310
+#: gnucash/gnome/gnc-split-reg.c:2304
 msgid "Future:"
 msgstr "עתיד:"
 
-#: gnucash/gnome/gnc-split-reg.c:2311
+#: gnucash/gnome/gnc-split-reg.c:2305
 msgid "Cleared:"
 msgstr "סגורים:"
 
-#: gnucash/gnome/gnc-split-reg.c:2312
+#: gnucash/gnome/gnc-split-reg.c:2306
 msgid "Reconciled:"
 msgstr "מותאם:"
 
-#: gnucash/gnome/gnc-split-reg.c:2313
+#: gnucash/gnome/gnc-split-reg.c:2307
 msgid "Projected Minimum:"
 msgstr "מזערי חזוי:"
 
-#: gnucash/gnome/gnc-split-reg.c:2317
+#: gnucash/gnome/gnc-split-reg.c:2311
 msgid "Shares:"
 msgstr "מניות:"
 
-#: gnucash/gnome/gnc-split-reg.c:2318
+#: gnucash/gnome/gnc-split-reg.c:2312
 msgid "Current Value:"
 msgstr "ערך נוכחי:"
 
-#: gnucash/gnome/gnc-split-reg.c:2324
+#: gnucash/gnome/gnc-split-reg.c:2318
 msgid "Sort By:"
 msgstr "מיון לפי:"
 
-#: gnucash/gnome/gnc-split-reg.c:2400
+#: gnucash/gnome/gnc-split-reg.c:2394
 msgid "This account register is read-only."
 msgstr "יומן חשבון זה מסומן לקריאה בלבד."
 
-#: gnucash/gnome/gnc-split-reg.c:2401
+#: gnucash/gnome/gnc-split-reg.c:2395
 #, c-format
 msgid "The '%s' account register is read-only."
 msgstr "יומן החשבון '%s' הוא לקריאה בלבד."
 
-#: gnucash/gnome/gnc-split-reg.c:2460
+#: gnucash/gnome/gnc-split-reg.c:2454
 msgid ""
 "The transactions of this account may not be edited because its subaccounts "
 "have mismatched commodities or currencies.\n"
@@ -5630,7 +5629,7 @@ msgstr ""
 "המשנה אינם תואמים לאלו של חשבון האב.\n"
 "לעריכה, נא לפתוח כל חשבון משנה בנפרד."
 
-#: gnucash/gnome/gnc-split-reg.c:2475
+#: gnucash/gnome/gnc-split-reg.c:2469
 msgid ""
 "The transactions of this account may not be edited.\n"
 "If you want to edit transactions in this register, please open the account "
@@ -5640,7 +5639,7 @@ msgstr ""
 "לעריכת תנועות ביומן זו, נא לפתוח את אפשרויות החשבון ולהסיר את הסימון בתיבת "
 "הסימון 'שומר מקום'."
 
-#: gnucash/gnome/gnc-split-reg.c:2482
+#: gnucash/gnome/gnc-split-reg.c:2476
 msgid ""
 "The transactions in one of the selected sub-accounts may not be edited.\n"
 "If you want to edit transactions in this register, please open the sub-"
@@ -5663,12 +5662,15 @@ msgid "Manage your finances, accounts, and investments"
 msgstr "ניהול הכספים, החשבונות וההשקעות"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
+#, fuzzy
+#| msgid ""
+#| "Designed to be easy to use, yet powerful and flexible, GnuCash allows you "
+#| "to track bank accounts, stocks, income and expenses. As quick and "
+#| "intuitive to use as a checkbook register, it is based on professional "
+#| "accounting principles like double-entry accounting to ensure balanced "
+#| "books and accurate reports."
 msgid ""
-"GnuCash is a program for personal and small-business financial-accounting."
-msgstr "גנוקאש היא תוכנת הנהלת חשבונות, לשימוש אישי ולעסקים קטנים."
-
-#: gnucash/gnome/gnucash.appdata.xml.in.in:11
-msgid ""
+"GnuCash is a program for personal and small-business financial-accounting. "
 "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to "
 "track bank accounts, stocks, income and expenses. As quick and intuitive to "
 "use as a checkbook register, it is based on professional accounting "
@@ -5680,31 +5682,31 @@ msgstr ""
 "לרישום בפנקס המחאות. היא מבוססת על עקרונות חשבונאיים מקצועיים כמו מערכת "
 "חשבונאות כפולה כדי להבטיח ספרים מאוזנים ודוחות מדויקים."
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:15
+#: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
 msgstr "עם גנוקאש ניתן גם (אך לא רק):"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:17
+#: gnucash/gnome/gnucash.appdata.xml.in.in:18
 msgid "Keep track of your day to day personal income and expenses"
 msgstr "מעקב יומי אחר הכנסות והוצאות אישיות"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:18
+#: gnucash/gnome/gnucash.appdata.xml.in.in:19
 msgid "Manage your stock, bond and mutual fund accounts with ease"
 msgstr "ניהול מניות, אגרות חוב וקרנות נאמנות בקלות"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:19
+#: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Keep your small business' accounting up to date"
 msgstr "שמירה על עדכניות ספרי החשבונות בעסק קטן"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:20
+#: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Create accurate reports and graphs from your financial data"
 msgstr "יצירת דוחות ותרשימים מדויקים מהנתונים הפיננסיים"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:21
+#: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid "Set up scheduled transactions to avoid repeated data entry"
 msgstr "הגדרת תנועה מחזורית למניעת הזנות כפולות"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:22
+#: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
@@ -5712,13 +5714,23 @@ msgstr ""
 "העברות חליפין על־ידי CSV/FinTS (לשעבר HBCI) או ייבוא נתונים מ SWIFT-MT9xx/"
 "QIF/OFX כולל התאמת תנועה"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:23
+#: gnucash/gnome/gnucash.appdata.xml.in.in:25
 msgid "Perform financial calculations, such as a loan repayment"
 msgstr "ביצוע חישובים פיננסיים, כמו פרעון הלוואה"
 
-#: gnucash/gnome/gnucash.appdata.xml.in.in:33
-msgid "GnuCash Project"
-msgstr "מיזם גנוקאש"
+#: gnucash/gnome/gnucash.appdata.xml.in.in:48
+msgid ""
+"The account overview page is the starting point for managing your finances"
+msgstr ""
+
+#: gnucash/gnome/gnucash.appdata.xml.in.in:52
+msgid "The checkbook-style register - used for entering financial transactions"
+msgstr ""
+
+#: gnucash/gnome/gnucash.appdata.xml.in.in:56
+msgid ""
+"Report sample: a bar chart report showing a breakdown of expenses over time"
+msgstr ""
 
 #: gnucash/gnome/gnucash.desktop.in.in:6
 msgid "Finance Management"
@@ -6550,7 +6562,7 @@ msgstr "מט_בע"
 #: gnucash/gtkbuilder/dialog-transfer.glade:421
 #: gnucash/gtkbuilder/dialog-transfer.glade:434
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:111 libgnucash/engine/Account.cpp:4299
+#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4299
 msgid "Currency"
 msgstr "מטבע"
 
@@ -6623,11 +6635,23 @@ msgstr "ניתן להקיש על '+' או '-' להגדלת/הקטנת המספר
 msgid "Action/Number"
 msgstr "פעולה/סימוכין"
 
-#: gnucash/gnome-utils/dialog-file-access.c:315
+#: gnucash/gnome-utils/dialog-file-access.c:224
+#, fuzzy
+#| msgid "Default"
+msgid "Default: 3306"
+msgstr "ברירת מחדל"
+
+#: gnucash/gnome-utils/dialog-file-access.c:224
+#, fuzzy
+#| msgid "Default"
+msgid "Default: 5432"
+msgstr "ברירת מחדל"
+
+#: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
 msgstr "פתיחה…"
 
-#: gnucash/gnome-utils/dialog-file-access.c:316
+#: gnucash/gnome-utils/dialog-file-access.c:346
 #: gnucash/gnome-utils/gnc-file.c:143
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:103
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
@@ -6636,12 +6660,12 @@ msgstr "פתיחה…"
 msgid "_Open"
 msgstr "_פתיחה"
 
-#: gnucash/gnome-utils/dialog-file-access.c:322
+#: gnucash/gnome-utils/dialog-file-access.c:352
 msgid "Save As…"
 msgstr "שמירה בשם…"
 
-#: gnucash/gnome-utils/dialog-file-access.c:323
-#: gnucash/gnome-utils/dialog-file-access.c:332
+#: gnucash/gnome-utils/dialog-file-access.c:353
+#: gnucash/gnome-utils/dialog-file-access.c:362
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
 msgstr "_שמירה בשם"
@@ -6678,7 +6702,7 @@ msgstr "_שמירה בשם"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:592
 #: gnucash/ui/gnc-plugin-page-register.ui:672
 #: gnucash/ui/gnc-plugin-page-report.ui:120
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:103
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:109
 msgid "_Close"
 msgstr "_סגירה"
 
@@ -6710,11 +6734,11 @@ msgid "Path does not exist, "
 msgstr "נתיב לא קיים, "
 
 #: gnucash/gnome-utils/dialog-preferences.c:965
-#: gnucash/gnome-utils/dialog-preferences.c:1462
+#: gnucash/gnome-utils/dialog-preferences.c:1447
 msgid "Select a folder"
 msgstr "בחירת מחיצה"
 
-#: gnucash/gnome-utils/dialog-preferences.c:1465
+#: gnucash/gnome-utils/dialog-preferences.c:1450
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1535
 #: gnucash/gtkbuilder/dialog-fincalc.glade:273
 #: gnucash/gtkbuilder/dialog-fincalc.glade:288
@@ -6783,7 +6807,7 @@ msgid "Show the income and expense accounts"
 msgstr "הצגת חשבונות הכנסות והוצאות"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:673
-#: gnucash/report/trep-engine.scm:2536 gnucash/report/trep-engine.scm:2542
+#: gnucash/report/trep-engine.scm:2523 gnucash/report/trep-engine.scm:2529
 msgid "Error"
 msgstr "שגיאה"
 
@@ -7027,7 +7051,7 @@ msgid "Date: "
 msgstr "תאריך: "
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:393
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:129
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:213
 #: gnucash/gtkbuilder/dialog-fincalc.glade:763
 #: gnucash/gtkbuilder/dialog-fincalc.glade:776
 #: gnucash/gtkbuilder/dialog-sx.glade:246
@@ -7036,7 +7060,7 @@ msgstr "תאריך: "
 msgid "Frequency"
 msgstr "תדירות"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1330
+#: gnucash/gnome-utils/gnc-dense-cal.c:1335
 msgid "(unnamed)"
 msgstr "(ללא שם)"
 
@@ -7066,7 +7090,7 @@ msgstr "יבוא"
 
 #: gnucash/gnome-utils/gnc-file.c:155 gnucash/gnome-utils/gnc-file.c:699
 #: gnucash/gnome-utils/gnc-main-window.cpp:1271
-#: gnucash/html/gnc-html-webkit1.c:1215 gnucash/ui/gnc-main-window.ui:547
+#: gnucash/html/gnc-html-webkit1.cpp:1190 gnucash/ui/gnc-main-window.ui:547
 #: gnucash/ui/gnc-plugin-basic-commands.ui:21
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:307
 #: gnucash/ui/gnc-plugin-page-budget.ui:110
@@ -7076,7 +7100,7 @@ msgstr "יבוא"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:577
 #: gnucash/ui/gnc-plugin-page-register.ui:657
 #: gnucash/ui/gnc-plugin-page-report.ui:105
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:88
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:94
 msgid "_Save"
 msgstr "_שמירה"
 
@@ -7313,8 +7337,8 @@ msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
 "large numbers. This means GnuCash cannot use SQL databases correctly. "
 "Gnucash will not open or save to SQL databases until this is fixed by "
-"installing a different version of \"libdbi\". Please see https://bugs."
-"gnucash.org/show_bug.cgi?id=611936 for more information."
+"installing a different version of \"libdbi\". Please see https://"
+"bugs.gnucash.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 "הספריה 'libdbi' המותקנת במערכת אינה מאחסנת כראוי מספרים גדולים. פירוש הדבר "
 "שגנוקאש לא תוכל להשתמש כראוי במסד נתוני SQL. גנוקאש לא תפתח או תשמור למסד "
@@ -7528,81 +7552,81 @@ msgstr "אם השינויים מ־%d הימים ו־%d הדקות האחרונו
 msgid "Close _Without Saving"
 msgstr "סגירה _ללא שמירה"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1416
+#: gnucash/gnome-utils/gnc-main-window.cpp:1423
 msgid "This window is closing and will not be restored."
 msgstr "חלון זה נסגר והוא לא ישוחזר."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1422
+#: gnucash/gnome-utils/gnc-main-window.cpp:1429
 msgid "Close Window?"
 msgstr "לסגור את החלון?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: gnucash/gnome-utils/gnc-main-window.cpp:1552
+#: gnucash/gnome-utils/gnc-main-window.cpp:1559
 msgid "(read-only)"
 msgstr "(לקריאה בלבד)"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1560
+#: gnucash/gnome-utils/gnc-main-window.cpp:1567
 msgid "Unsaved Book"
 msgstr "ספר חשבונות לא נשמר"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1753
+#: gnucash/gnome-utils/gnc-main-window.cpp:1760
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
 msgstr "שונה לאחרונה ב %a, %b %d, %Y at %I:%M %p"
 
 #. Translators: This message appears in the status bar after opening the file.
-#: gnucash/gnome-utils/gnc-main-window.cpp:1756
+#: gnucash/gnome-utils/gnc-main-window.cpp:1763
 #, c-format
 msgid "File %s opened. %s"
 msgstr "קובץ %s נפתח. %s"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3000
+#: gnucash/gnome-utils/gnc-main-window.cpp:3007
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr "ח"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3087
+#: gnucash/gnome-utils/gnc-main-window.cpp:3094
 msgid "Unable to save to database."
 msgstr "לא ניתן לשמור מסד נתונים."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3089
+#: gnucash/gnome-utils/gnc-main-window.cpp:3096
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "לא ניתן לשמור במסד הנתונים: הספר מסומן לקריאה בלבד."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4749
+#: gnucash/gnome-utils/gnc-main-window.cpp:4756
 #: gnucash/gtkbuilder/assistant-qif-import.glade:949
 msgid "Book Options"
 msgstr "מאפייני ספר חשבונות"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5073
+#: gnucash/gnome-utils/gnc-main-window.cpp:5080
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
 msgstr "כמות הרשומות המרבית לחלון הושגה, לא תתווספנה עוד רשומות."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5503
+#: gnucash/gnome-utils/gnc-main-window.cpp:5510
 #, fuzzy
 #| msgid "(user modifiable)"
 msgid "(User modifiable)"
 msgstr "(זמין לעריכת המשתמש)"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5530
+#: gnucash/gnome-utils/gnc-main-window.cpp:5537
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "זכויות יוצרים © 1997־%s תומכי גנוקאש."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5542
+#: gnucash/gnome-utils/gnc-main-window.cpp:5549
 #: gnucash/gnome-utils/gnc-splash.c:99
 msgid "Version"
 msgstr "גרסה"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5543
+#: gnucash/gnome-utils/gnc-main-window.cpp:5550
 #: gnucash/gnome-utils/gnc-splash.c:100 gnucash/gnucash-core-app.cpp:257
 msgid "Build ID"
 msgstr "מזהה מהדורה"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5550
+#: gnucash/gnome-utils/gnc-main-window.cpp:5557
 msgid "Accounting for personal and small business finance."
 msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 
@@ -7613,13 +7637,13 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #. * sure to include a newline (\\n) after each credit
 #. * so that it displays one per line.
 #.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5560
+#: gnucash/gnome-utils/gnc-main-window.cpp:5567
 msgid "translator-credits\n"
 msgstr ""
 "Avi Markovitz: 2020, 2021, 2022, 2023, 2024.\n"
 "Yaron Shahrabani: 2020, 2021, 2022, 2023, 2024.\n"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5563
+#: gnucash/gnome-utils/gnc-main-window.cpp:5570
 msgid "Visit the GnuCash website."
 msgstr "בקרו באתר גנוקאש."
 
@@ -7724,7 +7748,7 @@ msgid "End of previous accounting period"
 msgstr "סוף התקופה החשבונאית הקודמת"
 
 #: gnucash/gnome-utils/gnc-plugin-menu-additions.c:429
-#: gnucash/report/report-core.scm:163
+#: gnucash/report/report-core.scm:164
 msgid "_Custom"
 msgstr "_מותאם אישית"
 
@@ -7748,7 +7772,7 @@ msgstr "חסר דוח עם GUID '%s'"
 msgid "Loading…"
 msgstr "טוען…"
 
-#: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:482
+#: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:509
 msgid "never"
 msgstr "אף פעם"
 
@@ -7765,8 +7789,8 @@ msgstr "חשבון רמה עליונה חדש"
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
 #: gnucash/report/reports/standard/trial-balance.scm:561
-#: gnucash/report/trep-engine.scm:184 gnucash/report/trep-engine.scm:970
-#: gnucash/report/trep-engine.scm:2341
+#: gnucash/report/trep-engine.scm:183 gnucash/report/trep-engine.scm:958
+#: gnucash/report/trep-engine.scm:2328
 msgid "Account Name"
 msgstr "שם חשבון"
 
@@ -7781,8 +7805,8 @@ msgstr "סחורה"
 #: gnucash/report/reports/standard/account-summary.scm:378
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
-#: gnucash/report/trep-engine.scm:190 gnucash/report/trep-engine.scm:937
-#: gnucash/report/trep-engine.scm:2356
+#: gnucash/report/trep-engine.scm:189 gnucash/report/trep-engine.scm:925
+#: gnucash/report/trep-engine.scm:2343
 msgid "Account Code"
 msgstr "מס' חשבון"
 
@@ -8068,9 +8092,9 @@ msgid "Security"
 msgstr "נייר ערך"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:416
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:390
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:391
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 #: gnucash/register/ledger-core/split-register.c:2702
 #: gnucash/register/ledger-core/split-register-model.c:411
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1050
@@ -8084,28 +8108,28 @@ msgstr "נייר ערך"
 #: gnucash/report/reports/standard/price-scatter.scm:296
 #: gnucash/report/reports/standard/register.scm:149
 #: gnucash/report/reports/standard/register.scm:378
-#: gnucash/report/trep-engine.scm:944 gnucash/report/trep-engine.scm:1257
-#: gnucash/report/trep-engine.scm:2346
+#: gnucash/report/trep-engine.scm:932 gnucash/report/trep-engine.scm:1245
+#: gnucash/report/trep-engine.scm:2333
 msgid "Price"
 msgstr "מחיר"
 
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:122
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:206
 #: gnucash/gtkbuilder/dialog-sx.glade:1094
 #: gnucash/report/html-utilities.scm:312
 msgid "Enabled"
 msgstr "מאופשר"
 
 # ר=מאופשר
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:123
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:207
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
 msgstr "ר"
 
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:141
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:225
 msgid "Last Occur"
 msgstr "חזרה אחרונה"
 
-#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:146
+#: gnucash/gnome-utils/gnc-tree-view-sx-list.c:230
 msgid "Next Occur"
 msgstr "החזרה הבאה"
 
@@ -8335,8 +8359,8 @@ msgstr "אפשור תכונות נוספות/פיתוח/איתור תקלים."
 
 #: gnucash/gnucash-core-app.cpp:286
 msgid ""
-"Log level overrides, of the form \"modulename={debug,info,warn,crit,"
-"error}\"\n"
+"Log level overrides, of the form \"modulename={debug,info,warn,crit,error}"
+"\"\n"
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
@@ -9208,8 +9232,8 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
-"אם האפשרות הופעלה, כל התנועות ביומן שסומנו כמותאמות, יופיעו מסומנות בתיבת "
-"דו־השיח התאמות. אחרת לא ייבחרו כל תנועות מלכתחילה."
+"אם האפשרות הופעלה, כל התנועות ביומן שסומנו כמותאמות, יופיעו מסומנות בתיבת דו־"
+"השיח התאמות. אחרת לא ייבחרו כל תנועות מלכתחילה."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
@@ -9420,8 +9444,8 @@ msgstr "מפתח API אלפא וינטאג'"
 #: gnucash/gtkbuilder/dialog-preferences.glade:3847
 msgid ""
 "Alpha Vantage requires an API key to use their service. You can obtain a key "
-"by registering for a free account at the Alpha Vantage website, https://www."
-"alphavantage.co/support/#api-key."
+"by registering for a free account at the Alpha Vantage website, https://"
+"www.alphavantage.co/support/#api-key."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
@@ -9609,10 +9633,10 @@ msgid ""
 "days'"
 msgstr ""
 "אפשרות זו מגדירה מה ייעשה בקובצי יומני־רישום/גיבויים ישנים. 'לעד' פירושו "
-"לשמור את כל הקבצים הישנים. 'לעולם לא' פירושו שלא נשמרים קובצי "
-"יומן־רישום/גיבוי ישנים. בכל פעם שמתבצעת שמירה, גרסאות ישנות יותר של הקובץ "
-"מוסרות. 'ימים' פירושו מספר הימים שיש לשמור קבצים ישנים. מספר הימים מוגדר "
-"במפתח 'retain-days'"
+"לשמור את כל הקבצים הישנים. 'לעולם לא' פירושו שלא נשמרים קובצי יומן־"
+"רישום/גיבוי ישנים. בכל פעם שמתבצעת שמירה, גרסאות ישנות יותר של הקובץ מוסרות. "
+"'ימים' פירושו מספר הימים שיש לשמור קבצים ישנים. מספר הימים מוגדר במפתח "
+"'retain-days'"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1797
@@ -10298,9 +10322,9 @@ msgid ""
 msgstr ""
 "הגדרה זו קובעת את שם קובץ ה־PDF ליצוא. זוהי מחרוזת מסוג sprintf(3) בעלת "
 "שלושה משתנים: '%1$s' הוא שם הדוח, כגון 'חשבונית'. '%2$s' הוא מספר הדוח. בדוח "
-"חשבוניות, זהו מספר החשבונית. '%3$s' הוא התאריך הדוח, המעוצב לפי הגדרת "
-"מבנה-שם קובץ-תאריך. הערה: תווים אסורים בשמות קבצים, כגון '/', יוחלפו בשם "
-"הקובץ שיווצר, במקפים תחתונים '_'."
+"חשבוניות, זהו מספר החשבונית. '%3$s' הוא התאריך הדוח, המעוצב לפי הגדרת מבנה-"
+"שם קובץ-תאריך. הערה: תווים אסורים בשמות קבצים, כגון '/', יוחלפו בשם הקובץ "
+"שיווצר, במקפים תחתונים '_'."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:390
 msgid "PDF export file name date format choice"
@@ -10773,8 +10797,8 @@ msgid ""
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
-"הגדרה זו שולטת בתאריך ההתחלה שהוגדר בחישובי רווח/הפסד במידה שהוגדר "
-"תאריך־התחלה 'מוחלט'. שדה זה אמור להכיל תאריך המיוצג בשניות מ־1 בינואר, 1970."
+"הגדרה זו שולטת בתאריך ההתחלה שהוגדר בחישובי רווח/הפסד במידה שהוגדר תאריך־"
+"התחלה 'מוחלט'. שדה זה אמור להכיל תאריך המיוצג בשניות מ־1 בינואר, 1970."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
@@ -11060,23 +11084,22 @@ msgstr "טווח תאריכים"
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:259
 #: gnucash/gtkbuilder/dialog-account.glade:896
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:470
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:527
 msgid "_Select All"
 msgstr "_בחירת הכל"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:442
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:151
 msgid "Select _Range"
 msgstr "בחירת _טווח"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:470
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:170
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:190
 msgid "Start"
 msgstr "התחלה"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:479
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:179
 msgid "_Earliest"
 msgstr "_המוקדם ביותר"
 
@@ -11085,12 +11108,10 @@ msgid "Cho_ose Date"
 msgstr "בחי_רת תאריך"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:513
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:211
 msgid "Toda_y"
 msgstr "היו_ם"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:530
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:228
 msgid "_Latest"
 msgstr "_האחרון"
 
@@ -11098,17 +11119,16 @@ msgstr "_האחרון"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:552
 #: gnucash/gtkbuilder/dialog-fincalc.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:422
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:258
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:377
 msgid "End"
 msgstr "סוף"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:561
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:267
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:214
 msgid "C_hoose Date"
 msgstr "ב_חירת תאריך"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:578
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:284
 msgid "_Today"
 msgstr "_היום"
 
@@ -11154,8 +11174,8 @@ msgid ""
 "option. With the fixed width option, double click on the table of rows "
 "displayed to set a column width, then right mouse to change if required.\n"
 "\n"
-"Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-"USD;2016-11-21;1.56;GBP\n"
+"Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and "
+"CURRENCY;USD;2016-11-21;1.56;GBP\n"
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
@@ -11182,8 +11202,8 @@ msgstr ""
 "קבוע, יש להקיש הקשה כפולה על טבלת השורות המוצגות להגדרת רוחב העמודה, ולאחר "
 "מכן לחיצת עכבר ימני כדי לשנות ככל שנדרש.\n"
 "\n"
-"דוגמאות: 'FTSE','RR.L','21/11/2016',5.345,'GBP' ו CURRENCY;"
-"USD;2016-11-21;1.56;GBP\n"
+"דוגמאות: 'FTSE','RR.L','21/11/2016',5.345,'GBP' ו "
+"CURRENCY;USD;2016-11-21;1.56;GBP\n"
 "\n"
 "קיימת אפשרות לקביעת שורת ההתחלה, שורת הסיום ואפשרות לדלג על שורות חלופיות "
 "החל משורת ההתחלה שבה ניתן להשתמש אם הוגדר מלל כותרת כל שהוא. כמו כן ניתן "
@@ -11375,7 +11395,7 @@ msgid "Commodity From"
 msgstr "<b>סחורה מ־</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:898
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:56
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:57
 msgid "Currency To"
 msgstr "מטבע ל־"
 
@@ -12562,8 +12582,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account.glade:1863
 #: gnucash/gtkbuilder/dialog-price.glade:183
 #: gnucash/gtkbuilder/dialog-print-check.glade:700
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:666
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:877
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:723
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:934
 #: gnucash/ui/gnc-plugin-page-invoice.ui:90
 msgid "_Date"
 msgstr "_תאריך"
@@ -12605,23 +12625,23 @@ msgstr ""
 "יש להקיש 'הבא'."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:279
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:463
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:575
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:701
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:813
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:464
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:576
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:702
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:814
 #: gnucash/import-export/aqb/dialog-ab.glade:1204
 msgid "_Amount"
 msgstr "_סכום"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:293
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:365
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:477
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:589
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:715
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:827
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:478
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:590
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:716
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:828
 #: gnucash/gtkbuilder/dialog-import.glade:961
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:972
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1029
 msgid "_Memo"
 msgstr "_מזכר"
 
@@ -12719,15 +12739,21 @@ msgstr "כמות מניות"
 msgid "Enter the value of the shares."
 msgstr "הזנת ערך המניות."
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:404
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:379
+#, fuzzy
+#| msgid "Gross Sales"
+msgid "Gross value"
+msgstr "מכירות"
+
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:405
 msgid "_Stock Value"
 msgstr "_ערך מניות"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:426
 msgid "Stock Value"
 msgstr "ערך מניות"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:442
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:443
 msgid ""
 "In this page, input the asset account, and the monetary amount received/"
 "spent. It may differ from the stock value from the last page, if there are "
@@ -12736,8 +12762,17 @@ msgstr ""
 "נעמוד זה, יש להזין את חשבון הנכס ואת הסכום הכספי שהתקבל/הוצא. זה עשוי להיות "
 "שונה משווי המניה מהעמוד האחרון, אם יש עמלות תיווך הקשורות לעסקה זו."
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:492
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:537
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
+#, fuzzy
+#| msgid "Net Sales"
+msgid "Net value"
+msgstr "מכירות נטו"
+
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
+msgid "Cash Account"
+msgstr "חשבון מזומנים"
+
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:538
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:535
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1095
@@ -12745,11 +12780,7 @@ msgstr ""
 msgid "Cash"
 msgstr "מזומן"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:515
-msgid "Cash Account"
-msgstr "חשבון מזומנים"
-
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:554
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:555
 msgid ""
 "In this page, input any brokerage fees incurred in this transaction. The fee "
 "may be capitalized into the asset account, or expensed into a brokerage fees "
@@ -12762,29 +12793,29 @@ msgstr ""
 "ועמלות על מכירות נרשמות כהוצאה. אם אין עמלות שכרוכות בעסקה זו, ניתן להשאיר "
 "את השדה ריק."
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:604
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:663
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:605
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:664
 msgid "Fees"
 msgstr "דמים"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:627
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:628
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
 msgid "Brokerage Fees"
 msgstr "עמלות ניהול תיקים"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:639
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:640
 msgid "Capitalize brokerage fees into stock account?"
 msgstr "האם להוון עמלות תיווך לחשבון המניה?"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:680
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:681
 msgid "In this page, input any dividend income received in this transaction."
 msgstr "בעמוד זה, נא להזין כל דיבידנד שהתקבל בעסקה זו."
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:753
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:754
 msgid "Dividend Account"
 msgstr "חשבון דיבידנד"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:792
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:793
 msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
@@ -12792,19 +12823,21 @@ msgstr ""
 "בעמוד זה, יש להזין את כל רווחי או הפסדי ההון שנוצרו ואת חשבון ההכנסה המשויך. "
 "רווחי הון חיוביים והפסדי הון שליליים."
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:842
-msgid "Capital Gain"
-msgstr "רווח הון"
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:843
+#, fuzzy
+#| msgid "Capital Gains"
+msgid "Capital Gain/Loss"
+msgstr "רווחי הון"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:865
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:866
 msgid "Capital Gains Account"
 msgstr "חשבון רווחי הון"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:887
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:888
 msgid "Capital Gains"
 msgstr "רווחי הון"
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:904
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:905
 msgid ""
 "A summary of splits is shown as follows. If the summary is correct, and "
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
@@ -12814,7 +12847,7 @@ msgstr ""
 "\"החלה\". ניתן גם ללחוץ על \"הקודם\" כדי לסקור את הבחירה שנעשתה, או "
 "\"ביטול\" כדי לצאת מבלי לבצע שינויים. "
 
-#: gnucash/gtkbuilder/assistant-stock-transaction.glade:952
+#: gnucash/gtkbuilder/assistant-stock-transaction.glade:953
 msgid "Finish"
 msgstr "סיום"
 
@@ -12880,7 +12913,7 @@ msgstr "העדפות"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1436
 #: gnucash/gtkbuilder/dialog-preferences.glade:2079
 #: gnucash/gtkbuilder/dialog-preferences.glade:2137
-#: gnucash/report/report-core.scm:164
+#: gnucash/report/report-core.scm:165
 #: gnucash/report/reports/standard/equity-statement.scm:101
 #: gnucash/report/reports/standard/register.scm:341
 #: gnucash/report/reports/standard/trial-balance.scm:175
@@ -13037,7 +13070,7 @@ msgstr "אפשור מקטעי דֵּרֵג"
 
 #: gnucash/gtkbuilder/dialog-account.glade:200
 #: gnucash/gtkbuilder/dialog-account.glade:1335
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:319
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:321
 #: gnucash/report/stylesheets/plain.scm:218
 msgid "Default"
 msgstr "ברירת מחדל"
@@ -13120,7 +13153,7 @@ msgid "Filter By…"
 msgstr "סינון לפי…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:912
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:498
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:555
 #, fuzzy
 #| msgid "Clear All"
 msgid "Clear _All"
@@ -13411,7 +13444,7 @@ msgid "_Show documentation"
 msgstr "_הצגת תיעוד"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:53
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:406
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:463
 msgid "_Reconciled"
 msgstr "_מותאם"
 
@@ -13610,7 +13643,7 @@ msgstr "מחיקת תנאי התשלום הנוכחי"
 #: gnucash/gtkbuilder/dialog-report.glade:650
 #: gnucash/gtkbuilder/dialog-tax-table.glade:103
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:768
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:153
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:159
 msgid "_New"
 msgstr "_חדש"
 
@@ -13653,7 +13686,7 @@ msgstr "תיאור תנאי התשלום, מודפס על חשבוניות"
 #: gnucash/gtkbuilder/dialog-tax-info.glade:141
 #: gnucash/gtkbuilder/dialog-tax-table.glade:185
 #: gnucash/ui/gnc-embedded-register-window.ui:5
-#: gnucash/ui/gnc-main-window.ui:93 gnucash/ui/gnc-plugin-page-sx-list.ui:168
+#: gnucash/ui/gnc-main-window.ui:93 gnucash/ui/gnc-plugin-page-sx-list.ui:174
 #: gnucash/ui/gnc-reconcile-window.ui:68 gnucash/ui/gnc-reconcile-window.ui:107
 #: gnucash/ui/gnc-reconcile-window.ui:162
 msgid "_Edit"
@@ -13796,8 +13829,8 @@ msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
 msgstr ""
-"נא להזין סמל התצוגה. ניתן בבטחה להישאר ריק, במקרה זה יעשה שימוש בסמל "
-"חַלּוֹן־מִבְזָקִים או קוד ISO המטבע."
+"נא להזין סמל התצוגה. ניתן בבטחה להישאר ריק, במקרה זה יעשה שימוש בסמל חַלּוֹן־"
+"מִבְזָקִים או קוד ISO המטבע."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:338
 msgid "Type of quote source"
@@ -14152,7 +14185,13 @@ msgstr "מסד נתונים"
 msgid "Password"
 msgstr "ססמה"
 
-#: gnucash/gtkbuilder/dialog-file-access.glade:287
+#: gnucash/gtkbuilder/dialog-file-access.glade:286
+#, fuzzy
+#| msgid "Portfolio"
+msgid "Port"
+msgstr "תיק השקעות"
+
+#: gnucash/gtkbuilder/dialog-file-access.glade:313
 #, fuzzy
 #| msgid "<b>Database Connection</b>"
 msgid "Database Connection"
@@ -14175,7 +14214,7 @@ msgstr "תלת שנתי"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:21
 #: gnucash/gtkbuilder/dialog-fincalc.glade:62
-#: gnucash/gtkbuilder/dialog-sx.glade:135 gnucash/report/trep-engine.scm:339
+#: gnucash/gtkbuilder/dialog-sx.glade:135 gnucash/report/trep-engine.scm:338
 msgid "Quarterly"
 msgstr "רבעוני"
 
@@ -14191,7 +14230,7 @@ msgstr "דו חודשי"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1410
 #: gnucash/report/reports/standard/account-piecharts.scm:112
 #: gnucash/report/reports/standard/category-barchart.scm:120
-#: gnucash/report/trep-engine.scm:331 libgnucash/engine/Recurrence.cpp:761
+#: gnucash/report/trep-engine.scm:330 libgnucash/engine/Recurrence.cpp:761
 #: libgnucash/engine/Recurrence.cpp:775
 msgid "Monthly"
 msgstr "חודשי"
@@ -14214,7 +14253,7 @@ msgstr "דו שבועי"
 #: gnucash/gtkbuilder/gnc-frequency.glade:995
 #: gnucash/report/reports/standard/account-piecharts.scm:113
 #: gnucash/report/reports/standard/category-barchart.scm:121
-#: gnucash/report/trep-engine.scm:323 libgnucash/engine/Recurrence.cpp:622
+#: gnucash/report/trep-engine.scm:322 libgnucash/engine/Recurrence.cpp:622
 msgid "Weekly"
 msgstr "שבועי"
 
@@ -14590,7 +14629,7 @@ msgstr "עריכת פרטי תנועה מיובאת"
 #: gnucash/gtkbuilder/dialog-import.glade:947
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
 #: gnucash/gtkbuilder/dialog-print-check.glade:745
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1029
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1086
 msgid "_Notes"
 msgstr "_הערות"
 
@@ -14959,7 +14998,7 @@ msgid "(USD)"
 msgstr "(USD)"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:698
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 msgid "Transfer Account"
 msgstr "חשבון נגדי"
 
@@ -15058,6 +15097,7 @@ msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "שימוש בתאריך ההתחלה המוחלט שנקבע לחישובי רווח והפסד."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:449
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:199
 msgid "Re_lative"
 msgstr "י_חסי"
 
@@ -16480,7 +16520,7 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
 #: gnucash/gtkbuilder/gnc-frequency.glade:760
 #: gnucash/report/reports/standard/category-barchart.scm:122
-#: gnucash/report/trep-engine.scm:317 libgnucash/engine/Recurrence.cpp:744
+#: gnucash/report/trep-engine.scm:316 libgnucash/engine/Recurrence.cpp:744
 msgid "Daily"
 msgstr "יומי"
 
@@ -16490,7 +16530,7 @@ msgstr "דו שבועי"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:138
 #: gnucash/report/reports/standard/account-piecharts.scm:111
-#: gnucash/report/trep-engine.scm:347 libgnucash/engine/Recurrence.cpp:787
+#: gnucash/report/trep-engine.scm:346 libgnucash/engine/Recurrence.cpp:787
 msgid "Yearly"
 msgstr "שנתי"
 
@@ -17439,7 +17479,7 @@ msgstr "תקופת התקציב"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:620
 #: gnucash/report/reports/standard/general-ledger.scm:126
-#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2385
+#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2372
 msgid "Show Account Code"
 msgstr "הצגת קוד חשבון"
 
@@ -17480,20 +17520,24 @@ msgid "Enter Note"
 msgstr "נא להזין הערה"
 
 #. Filter register by… Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:23
 msgid "Filter register by…"
 msgstr "סינון יומן לפי…"
 
 #. Filter By Dialog, Date Tab
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:90
 msgid "Show _All"
 msgstr "הצגת _הכל"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:100
-msgid "Show _number of days"
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:110
+#, fuzzy
+#| msgid "Show _number of days"
+msgid "Show _from days ago"
 msgstr "הצגת _מספר ימים"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:120
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:130
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:272
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:359
 msgid ""
 "Valid range is 0 to 1100 days\n"
 "If 0, all previous days included"
@@ -17501,147 +17545,182 @@ msgstr ""
 "טווח תקין הוא בין 0 ל 1100 ימים\n"
 "אם הוזן 0 כל הימים הקודמים יכללו"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:195
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:229
+#, fuzzy
+#| msgid "Days"
+msgid "_Days ago"
+msgstr "ימים"
+
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
+msgid "0"
+msgstr ""
+
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:286
+#, fuzzy
+#| msgid "Relative"
+msgid "Rela_tive"
+msgstr "יחסי"
+
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:301
 msgid "Choo_se Date"
 msgstr "בחיר_ת תאריך"
 
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:316
+#, fuzzy
+#| msgid "Days"
+msgid "Days a_go"
+msgstr "ימים"
+
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:389
+#, fuzzy
+#| msgid "_Earliest"
+msgid "Earliest"
+msgstr "_המוקדם ביותר"
+
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
+#, fuzzy
+#| msgid "_Latest"
+msgid "Latest"
+msgstr "_האחרון"
+
 #. Filter By Dialog, State Tab
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:390
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:447
 msgid "_Unreconciled"
 msgstr "_לא הותאם"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:422
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:479
 msgid "C_leared"
 msgstr "ס_גורים"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:438
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:495
 msgid "_Voided"
 msgstr "_מבוטל"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:454
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:511
 msgid "_Frozen"
 msgstr "_הוקפא"
 
 #. Filter By Dialog, below tabs
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:548
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:605
 msgid "Sa_ve Filter"
 msgstr "ש_מירת מסנן"
 
 #. Duplicate Transaction Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:581
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:638
 msgid "Duplicate Transaction"
 msgstr "שיכפול תנועה"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:680
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:737
 msgid "_Number"
 msgstr "_סימוכין"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:708
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:765
 msgid "_Transaction Number"
 msgstr "_מספר תנועה"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:738
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:795
 msgid "Keep Linked Document Entry"
 msgstr "להשאיר את רשומת הצרופה"
 
 #. Sort register by Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:785
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:842
 msgid "Sort register by…"
 msgstr "מיון יומן לפי…"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:848
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:905
 msgid "_Standard Order"
 msgstr "_סדר תקני"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:852
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:909
 msgid "Keep normal account order."
 msgstr "סדר חשבונות רגיל."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:881
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:938
 msgid "Sort by date."
 msgstr "מיון לפי תאריך."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:896
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:953
 #: gnucash/ui/gnc-plugin-page-invoice.ui:96
 msgid "Date of _Entry"
 msgstr "תאריך _רישום"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:900
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
 msgid "Sort by the date of entry."
 msgstr "מיון לפי תאריך רישום."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:915
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:972
 msgid "S_tatement Date"
 msgstr "ת_אריך תקני"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr "מיון לפי תאריך תדפיס (וקיבוץ לפי סגורים, פתוחים, מותאמים)."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:934
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:991
 msgid "Num_ber"
 msgstr "מס_פר"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:938
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:995
 msgid "Sort by number."
 msgstr "מיון לפי סימוכין."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:953
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1010
 msgid "Amo_unt"
 msgstr "סכו_ם"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
 msgid "Sort by amount."
 msgstr "מיון לפי סכום."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1033
 msgid "Sort by memo."
 msgstr "מיון לפי מזכר."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:991
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1048
 #: gnucash/ui/gnc-plugin-page-invoice.ui:114
 msgid "Descri_ption"
 msgstr "תי_אור"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:995
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1052
 msgid "Sort by description."
 msgstr "מיון לפי תיאור."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1010
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1067
 #: gnucash/ui/gnc-embedded-register-window.ui:88
 msgid "_Action"
 msgstr "_פעולה"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1071
 msgid "Sort by action field."
 msgstr "מיון לפי שדה פעולה."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1033
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1090
 msgid "Sort by notes field."
 msgstr "מיון לפי שדה הערות."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1064
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1121
 msgid "Sa_ve Sort Order"
 msgstr "שמ_ירת סדר מיון"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1068
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1125
 msgid "Save the sort order for this register."
 msgstr "שמירת סדר מיון ליומן זה."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1084
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1141
 msgid "_Reverse Order"
 msgstr "_הסגת הזמנה"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1088
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1145
 msgid "Sort in descending order."
 msgstr "מיון בסדר יורד."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1124
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1181
 msgid "Void Transaction"
 msgstr "תנועה מבוטלת"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1188
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1245
 msgid "Reason for voiding transaction"
 msgstr "סיבת ביטול תנועה"
 
@@ -17769,36 +17848,36 @@ msgstr ""
 msgid "Statement Date is after today"
 msgstr "תאריך התדפיס מאוחר מ 'היום'"
 
-#: gnucash/html/gnc-html-webkit1.c:78 gnucash/html/gnc-html-webkit2.c:87
+#: gnucash/html/gnc-html-webkit1.cpp:74 gnucash/html/gnc-html-webkit2.cpp:83
 msgid "Not found"
 msgstr "לא נמצא"
 
-#: gnucash/html/gnc-html-webkit1.c:79 gnucash/html/gnc-html-webkit2.c:88
+#: gnucash/html/gnc-html-webkit1.cpp:75 gnucash/html/gnc-html-webkit2.cpp:84
 msgid "The specified URL could not be loaded."
 msgstr "לא ניתן לטעון מען URL שנקבע."
 
-#: gnucash/html/gnc-html-webkit1.c:560 gnucash/html/gnc-html-webkit1.c:979
-#: gnucash/html/gnc-html-webkit2.c:563 gnucash/html/gnc-html-webkit2.c:930
+#: gnucash/html/gnc-html-webkit1.cpp:552 gnucash/html/gnc-html-webkit1.cpp:955
+#: gnucash/html/gnc-html-webkit2.cpp:542 gnucash/html/gnc-html-webkit2.cpp:886
 msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
 "גישה מאובטחת HTTP מושבתת.ניתן להפעיל אותה ממקטע רשת תיבת דו־השיח העדפות."
 
-#: gnucash/html/gnc-html-webkit1.c:570 gnucash/html/gnc-html-webkit1.c:991
-#: gnucash/html/gnc-html-webkit2.c:573 gnucash/html/gnc-html-webkit2.c:942
+#: gnucash/html/gnc-html-webkit1.cpp:562 gnucash/html/gnc-html-webkit1.cpp:967
+#: gnucash/html/gnc-html-webkit2.cpp:552 gnucash/html/gnc-html-webkit2.cpp:898
 msgid ""
 "Network HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
 "גישת רשת HTTP מנוטרלת. ניתן לאפשר גישה באמצעות דו־שיח העדפות, במקטע רשת."
 
-#: gnucash/html/gnc-html-webkit1.c:911 gnucash/html/gnc-html-webkit2.c:862
+#: gnucash/html/gnc-html-webkit1.cpp:887 gnucash/html/gnc-html-webkit2.cpp:822
 #, c-format
 msgid "There was an error accessing %s."
 msgstr "ארעה שגיאה בגישה ל %s."
 
-#: gnucash/html/gnc-html-webkit1.c:1211
+#: gnucash/html/gnc-html-webkit1.cpp:1186
 msgid "Export to PDF File"
 msgstr "יצוא לקובץ PDF"
 
@@ -17870,11 +17949,11 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:65
 msgid ""
-"See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
-"org/wiki/AqBanking</a> for more details"
+"See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://"
+"wiki.gnucash.org/wiki/AqBanking</a> for more details"
 msgstr ""
-"ר׳ <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
-"org/wiki/AqBanking</a> לפרטים נוספים"
+"ר׳ <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://"
+"wiki.gnucash.org/wiki/AqBanking</a> לפרטים נוספים"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
@@ -18404,8 +18483,8 @@ msgid ""
 msgstr ""
 "פרטי חשבון SEPA עדיין לא אוחסנו בחשבון הבנק המקומי. אנו מצטערים, אך בגרסת "
 "פיתוח זו יש צורך בשלב נוסף אשר טרם יושם ישירות בגנוקאש. נא להריץ את התוכנית "
-"'aqhbci-tool' משורת היומן לחשבון, באופן הבא: ‏aqhbci-tool4 getaccsepa -b %s -"
-"a %s"
+"'aqhbci-tool' משורת היומן לחשבון, באופן הבא: ‏aqhbci-tool4 getaccsepa -b %s "
+"-a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:574
 msgid ""
@@ -18833,9 +18912,8 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"הגדרת מבנה הנתונים בה יעשה שימוש בעת יבוא קובצי SWIFT MT940. ספרית "
-"אייקיו־בנקינג מציעה מגוון מבני יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, "
-"לבחור אחת."
+"הגדרת מבנה הנתונים בה יעשה שימוש בעת יבוא קובצי SWIFT MT940. ספרית אייקיו־"
+"בנקינג מציעה מגוון מבני יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, לבחור אחת."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -18847,9 +18925,8 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"הגדרת מבנה נתונים בו יעשה שימוש בעת יבוא קובצי SWIFT MT942. ספריית "
-"אייקיו־בנקינג מציעה מגוון מבני יבוא (נקראים 'פרופילים') מהם, ניתן כאן, לבחור "
-"אחד."
+"הגדרת מבנה נתונים בו יעשה שימוש בעת יבוא קובצי SWIFT MT942. ספריית אייקיו־"
+"בנקינג מציעה מגוון מבני יבוא (נקראים 'פרופילים') מהם, ניתן כאן, לבחור אחד."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:304
 #, c-format
@@ -19228,7 +19305,7 @@ msgid "Rate/Price"
 msgstr "שער/מחיר"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:380
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 msgid "Transaction ID"
 msgstr "מזהה תנועה"
 
@@ -19237,7 +19314,7 @@ msgid "Commodity/Currency"
 msgstr "סחורה/מטבע"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 msgid "Void Reason"
 msgstr "סיבת ביטול"
 
@@ -19247,7 +19324,7 @@ msgid "Full Account Name"
 msgstr "שם חשבון מלא"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:395
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 msgid "Reconcile Date"
 msgstr "תאריך התאמה"
 
@@ -19515,9 +19592,9 @@ msgid ""
 msgstr "נא לבחור את עמודת 'ממרחב שם' או להגדיר סחורה בשדה 'סחורה מ־'."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:480
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:187
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:209
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:287
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:190
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:212
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:290
 msgid "'Commodity From' can not be the same as 'Currency To'."
 msgstr "'סחורה מ־' לא יכול להיות זהה ל 'מטבע ל־'."
 
@@ -19624,184 +19701,184 @@ msgstr "שגיאה"
 msgid "Problem creating preliminary transaction"
 msgstr "בחירת תנועה תואמת קיימת"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
 msgid "From Symbol"
 msgstr "מסמל"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:56
 msgid "From Namespace"
 msgstr "ממרחב שם"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:69
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:139
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:141
 msgid "Value doesn't appear to contain a valid number."
 msgstr "הערך אינו מכיל מספר תקין."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:82
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:87
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:92
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:152
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:157
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:162
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:85
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:90
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:95
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:155
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:160
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:165
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr "לא ניתן לפרוס ערך למספר תוך שימוש במבנה המטבעה שנבחרה."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:124
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:220
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:127
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:223
 msgid "Value can't be parsed into a valid commodity."
 msgstr "לא ניתן לפרוס ערך לסחורה תקינה."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:144
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:147
 msgid "Value can't be parsed into a valid namespace."
 msgstr "לא ניתן לפרוס ערך למרחב שם תקין."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:158
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:161
 msgid "Column value can not be empty."
 msgstr "ערך עמודה לא יכול להיות ריק."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:177
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:180
 msgid "'From Symbol' can not be empty."
 msgstr "'מסמל' לא יכול להשאר ריק."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:197
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:200
 msgid "'From Namespace' can not be empty."
 msgstr "מ'מרחב שם' לא יכול להישאר ריק."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:222
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:225
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr "'מטבע ל־' לא יכול להיות זהה ל 'סחורה מ־'."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:224
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:227
 msgid "Value parsed into an invalid currency for a currency column type."
 msgstr "הערך נפרס למטבע לא חוקי לסוג עמודת מטבע."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:237
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:245
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:291
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:550
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:630
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:240
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:248
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:294
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:553
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:633
 #, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:282
 msgid "No date column."
 msgstr "אין עמודת תאריך."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:281
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:284
 msgid "No amount column."
 msgstr "אין עמודת סכום."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:283
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:286
 msgid "No 'Currency to'."
 msgstr "אין 'מטבע ל־'."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:285
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:288
 msgid "No 'Commodity from'."
 msgstr "אין 'סחורה מ־'."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:355
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:358
 msgid "Failed to create price from selected columns."
 msgstr "יצירת מחיר מהעמודות שנבחרו כשלה."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Transaction Commodity"
 msgstr "סחורת תנועה"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #, fuzzy
 msgid "Amount (Negated)"
 msgstr "סכום (_במילים)"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 msgid "Value (Negated)"
 msgstr "ערך (נשלל)"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Action"
 msgstr "פעולת העברה"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
 #, fuzzy
 msgid "Transfer Amount"
 msgstr "חשבון נגדי"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 #, fuzzy
 msgid "Transfer Amount (Negated)"
 msgstr "חשבון נגדי"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
 msgid "Transfer Memo"
 msgstr "העברת מזכר"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
 msgid "Transfer Reconciled"
 msgstr "העברת מותאמים"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:82
 msgid "Transfer Reconcile Date"
 msgstr "העברת תאריך התאמה"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:182
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:185
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr "לא ניתן לפרוס ערך להתאמה תקינה."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:249
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:265
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:312
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
 msgid "No valid date."
 msgstr "לא תאריך תקין."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:318
 #, fuzzy
 msgid "No valid description."
 msgstr "מיון לפי תיאור."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:448
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:451
 msgid "Account value can't be empty."
 msgstr "ערך חשבון לא יכול להיות ריק."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:453
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:456
 msgid "Account value can't be mapped back to an account."
 msgstr "לא ניתן למפות ערך בחשבון לחשבון."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:459
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:462
 msgid "Transfer account value can't be empty."
 msgstr "הערך בחשבון הנגדי לא יכול להישאר ריק."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:465
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:468
 msgid "Transfer account value can't be mapped back to an account."
 msgstr "לא ניתן למפות ערך בחשבון הנגדי לערך בחשבון."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:642
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:645
 #, fuzzy
 msgid "No amount or negated amount column."
 msgstr "אין עמודת סכום."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:645
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:648
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr "הפיצול הותאם אך עמודת תאריך ההתאמה חסרה או פגומה."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:648
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:651
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
 msgstr "פיצול ההעברה מותאם אך עמודת תאריך ההתאמה חסרה או שגויה."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:663
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:666
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:666
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:669
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer amount column is missing or invalid."
@@ -20402,19 +20479,19 @@ msgstr "רווח הון (קצר)"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2695
 #: gnucash/report/reports/standard/balance-sheet.scm:468
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1055
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1041
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
-#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4302
+#: libgnucash/app-utils/gnc-ui-util.cpp:639 libgnucash/engine/Account.cpp:4302
 msgid "Equity"
 msgstr "הון"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
 #: gnucash/report/reports/standard/balance-sheet.scm:475
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1064
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1079
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1050
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1065
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
-#: libgnucash/app-utils/gnc-ui-util.cpp:554
+#: libgnucash/app-utils/gnc-ui-util.cpp:556
 msgid "Retained Earnings"
 msgstr "רווחים מיועדים"
 
@@ -21210,39 +21287,39 @@ msgstr "התאמת יתרת _פיצול חשבון נגדי"
 msgid "_Rebalance"
 msgstr "_איזון מחדש"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1360
-#: gnucash/register/ledger-core/split-register-control.cpp:1373
+#: gnucash/register/ledger-core/split-register-control.cpp:1363
+#: gnucash/register/ledger-core/split-register-control.cpp:1376
 msgid "This register does not support editing exchange rates."
 msgstr "יומן זה אינו תומך בעריכת שערי מטבע."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1399
+#: gnucash/register/ledger-core/split-register-control.cpp:1402
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr "נא לבחור פיצול כדי לשנות בו את שער החליפין."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1414
-#: gnucash/register/ledger-core/split-register-control.cpp:1489
+#: gnucash/register/ledger-core/split-register-control.cpp:1417
+#: gnucash/register/ledger-core/split-register-control.cpp:1492
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr "יש להרחיב את התנועה כדי לשנות בה את שער החליפין."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1426
+#: gnucash/register/ledger-core/split-register-control.cpp:1429
 msgid "The entered account could not be found."
 msgstr "החשבון שהוזן לא נמצא."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1461
-#: gnucash/register/ledger-core/split-register-control.cpp:1474
+#: gnucash/register/ledger-core/split-register-control.cpp:1464
+#: gnucash/register/ledger-core/split-register-control.cpp:1477
 msgid "The two currencies involved equal each other."
 msgstr "שני המטבעות המעורבים זהים."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1526
+#: gnucash/register/ledger-core/split-register-control.cpp:1529
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr "סכום הפיצול הוא אפס, לכן לא נדרש שער חליפין."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1575
+#: gnucash/register/ledger-core/split-register-control.cpp:1578
 msgid "Save the changed transaction?"
 msgstr "שמירת התנועה ששונתה?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1577
+#: gnucash/register/ledger-core/split-register-control.cpp:1580
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -21251,19 +21328,19 @@ msgstr ""
 "התנועה הנוכחית השתנתה. האם לרשום את השינויים לפני המעבר לתנועה חדשה, לנטוש "
 "את השינויים או לחזור לתנועה שהשתנתה?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1590
+#: gnucash/register/ledger-core/split-register-control.cpp:1593
 msgid "_Discard Changes"
 msgstr "_שמיטת שינויים"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1592
+#: gnucash/register/ledger-core/split-register-control.cpp:1595
 msgid "_Record Changes"
 msgstr "_שמירת שינוים ברשומה"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1880
+#: gnucash/register/ledger-core/split-register-control.cpp:1883
 msgid "Mark split as unreconciled?"
 msgstr "סימון פיצול כלא מותאם?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1882
+#: gnucash/register/ledger-core/split-register-control.cpp:1885
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
@@ -21271,7 +21348,7 @@ msgstr ""
 "פעולה זו תסמן פיצול שהותאם כבלתי מותאם. ביצוע פעולה זו עלול להפוך התאמות "
 "העתידיות לקשה יותר! האם להמשיך בשינוי זה?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1899
+#: gnucash/register/ledger-core/split-register-control.cpp:1902
 msgid "_Unreconcile"
 msgstr "_ביטול התאמה"
 
@@ -21304,7 +21381,7 @@ msgstr "תיאור תנועה"
 #: gnucash/report/reports/standard/new-owner-report.scm:215
 #: gnucash/report/reports/standard/new-owner-report.scm:813
 #: gnucash/report/reports/standard/new-owner-report.scm:854
-#: gnucash/report/trep-engine.scm:1253 gnucash/report/trep-engine.scm:1254
+#: gnucash/report/trep-engine.scm:1241 gnucash/report/trep-engine.scm:1242
 msgctxt "Column header for 'Document Link'"
 msgid "L"
 msgstr "ק"
@@ -21692,29 +21769,29 @@ msgid "Edit report options"
 msgstr "עריכת אפשריות דוח"
 
 #: gnucash/report/html-utilities.scm:312
-#: gnucash/report/reports/standard/balsheet-pnl.scm:143
+#: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/new-owner-report.scm:944
 msgid "Disabled"
 msgstr "מנוטרל"
 
-#: gnucash/report/html-utilities.scm:364
+#: gnucash/report/html-utilities.scm:365
 msgid "This report requires you to specify certain report options."
 msgstr "לדוח זה נדרשות הגדרות מסוימות באפשרויות דוח."
 
-#: gnucash/report/html-utilities.scm:371
+#: gnucash/report/html-utilities.scm:372
 msgid "No accounts selected"
 msgstr "לא נבחרו חשבונות"
 
-#: gnucash/report/html-utilities.scm:372
+#: gnucash/report/html-utilities.scm:373
 msgid "This report requires accounts to be selected in the report options."
 msgstr "דוח זה מחייב בחירת חשבונות מאפשרויות דוח."
 
-#: gnucash/report/html-utilities.scm:379
+#: gnucash/report/html-utilities.scm:380
 #: gnucash/report/reports/standard/price-scatter.scm:246
 msgid "No data"
 msgstr "אין נתונים"
 
-#: gnucash/report/html-utilities.scm:380
+#: gnucash/report/html-utilities.scm:381
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
@@ -21742,32 +21819,32 @@ msgid "One Day"
 msgstr "יום אחד"
 
 #: gnucash/report/options-utilities.scm:69
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
+#: gnucash/report/reports/standard/balsheet-pnl.scm:146
 msgid "One Week"
 msgstr "שבוע אחד"
 
 #: gnucash/report/options-utilities.scm:70
-#: gnucash/report/reports/standard/balsheet-pnl.scm:148
+#: gnucash/report/reports/standard/balsheet-pnl.scm:145
 msgid "Two Weeks"
 msgstr "שני שבועות"
 
 #: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:147
+#: gnucash/report/reports/standard/balsheet-pnl.scm:144
 msgid "One Month"
 msgstr "חודש אחד"
 
 #: gnucash/report/options-utilities.scm:72
-#: gnucash/report/reports/standard/balsheet-pnl.scm:146
+#: gnucash/report/reports/standard/balsheet-pnl.scm:143
 msgid "Quarter Year"
 msgstr "רבע שנה"
 
 #: gnucash/report/options-utilities.scm:73
-#: gnucash/report/reports/standard/balsheet-pnl.scm:145
+#: gnucash/report/reports/standard/balsheet-pnl.scm:142
 msgid "Half Year"
 msgstr "חצי שנה"
 
 #: gnucash/report/options-utilities.scm:74
-#: gnucash/report/reports/standard/balsheet-pnl.scm:144
+#: gnucash/report/reports/standard/balsheet-pnl.scm:141
 msgid "One Year"
 msgstr "שנה אחת"
 
@@ -21787,7 +21864,7 @@ msgstr "עקיפת בחירת־חשבונות והצגת חשבונות־משנ�
 #: gnucash/report/options-utilities.scm:120
 #: gnucash/report/reports/standard/account-summary.scm:81
 #: gnucash/report/reports/standard/balance-sheet.scm:82
-#: gnucash/report/reports/standard/balsheet-pnl.scm:75
+#: gnucash/report/reports/standard/balsheet-pnl.scm:72
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:51
 #: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/income-statement.scm:57
@@ -21909,8 +21986,8 @@ msgstr "לא להציג יתרות של חשבונות אב."
 
 #: gnucash/report/options-utilities.scm:217
 #: gnucash/report/reports/standard/account-summary.scm:112
-#: gnucash/report/trep-engine.scm:947 gnucash/report/trep-engine.scm:1423
-#: gnucash/report/trep-engine.scm:1528
+#: gnucash/report/trep-engine.scm:935 gnucash/report/trep-engine.scm:1411
+#: gnucash/report/trep-engine.scm:1516
 msgid "Account Balance"
 msgstr "יתרת חשבון"
 
@@ -21939,35 +22016,35 @@ msgstr "לא להציג סיכומי ביניים לחשבונות האב."
 msgid "Show subtotals"
 msgstr "הצגת סיכומי ביניים"
 
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 msgid "_Assets & Liabilities"
 msgstr "_נכסים והתחיבויות"
 
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 msgid "_Income & Expense"
 msgstr "_הכנסות והוצאות"
 
-#: gnucash/report/report-core.scm:158 gnucash/ui/gnc-plugin-budget.ui:6
+#: gnucash/report/report-core.scm:159 gnucash/ui/gnc-plugin-budget.ui:6
 msgid "B_udget"
 msgstr "ת_קציב"
 
-#: gnucash/report/report-core.scm:159
+#: gnucash/report/report-core.scm:160
 msgid "_Taxes"
 msgstr "_מיסים"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 msgid "E_xamples"
 msgstr "ד_וגמאות"
 
-#: gnucash/report/report-core.scm:161
+#: gnucash/report/report-core.scm:162
 msgid "_Experimental"
 msgstr "_ניסיוני"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "_Multicolumn"
 msgstr "_ריבוי עמודות"
 
-#: gnucash/report/report-core.scm:166
+#: gnucash/report/report-core.scm:167
 #: gnucash/report/reports/standard/invoice.scm:446
 #: gnucash/report/reports/standard/invoice.scm:450
 #: gnucash/report/reports/standard/invoice.scm:454
@@ -22002,24 +22079,28 @@ msgstr "_ריבוי עמודות"
 msgid "Display"
 msgstr "מַצָּג"
 
-#: gnucash/report/report-core.scm:167
+#: gnucash/report/report-core.scm:168
 msgid "Report name"
 msgstr "שם דוח"
 
-#: gnucash/report/report-core.scm:168
+#: gnucash/report/report-core.scm:169
+msgid "Add options summary"
+msgstr "הוספת תמצית אפשרויות"
+
+#: gnucash/report/report-core.scm:170
 msgid "Stylesheet"
 msgstr "גיליון סגנון"
 
-#: gnucash/report/report-core.scm:169 gnucash/ui/gnc-main-window.ui:357
+#: gnucash/report/report-core.scm:171 gnucash/ui/gnc-main-window.ui:357
 #: gnucash/ui/gnc-plugin-business.ui:159
 msgid "_Business"
 msgstr "_עסקי"
 
-#: gnucash/report/report-core.scm:170
+#: gnucash/report/report-core.scm:172
 msgid "Invoice Number"
 msgstr "מספר חשבונית"
 
-#: gnucash/report/report-core.scm:218
+#: gnucash/report/report-core.scm:220
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
@@ -22028,21 +22109,29 @@ msgstr ""
 "קיימת כפילות באחד מהדוחות. נא לבדוק את מערכת הדוחות, במיוחד את הדוחות "
 "השמורים, לדוח עם מזהה ייחודי אוניברסלי זה: "
 
-#: gnucash/report/report-core.scm:219
+#: gnucash/report/report-core.scm:221
 msgid "Wrong report definition: "
 msgstr "הגדרות דוח שגויות: "
 
-#: gnucash/report/report-core.scm:220
+#: gnucash/report/report-core.scm:222
 msgid " Report is missing a GUID."
 msgstr " חסר בדוח מזהה ייחודי אוניברסלי."
 
-#: gnucash/report/report-core.scm:311
+#: gnucash/report/report-core.scm:313
 msgid "Enter a descriptive name for this report."
 msgstr "נא להזין שם תיאורי לדוח זה."
 
-#: gnucash/report/report-core.scm:318
+#: gnucash/report/report-core.scm:320
 msgid "Select a stylesheet for the report."
 msgstr "נא לבחור גיליון סגנון לדוח."
+
+#: gnucash/report/report-core.scm:332
+msgid "Add summary of options."
+msgstr "הוספת תמצית אפשרויות."
+
+#: gnucash/report/report-core.scm:333
+msgid "Always"
+msgstr "תמיד"
 
 #: gnucash/report/reports/example/average-balance.scm:38
 msgid "Average Balance"
@@ -22064,7 +22153,7 @@ msgstr "גודל צעד"
 #: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:130
 #: gnucash/report/reports/standard/balsheet-eg.scm:178
-#: gnucash/report/reports/standard/balsheet-pnl.scm:112
+#: gnucash/report/reports/standard/balsheet-pnl.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:99
 #: gnucash/report/reports/standard/budget-flow.scm:45
 #: gnucash/report/reports/standard/budget-income-statement.scm:109
@@ -22078,7 +22167,7 @@ msgstr "גודל צעד"
 #: gnucash/report/reports/standard/portfolio.scm:49
 #: gnucash/report/reports/standard/price-scatter.scm:41
 #: gnucash/report/reports/standard/trial-balance.scm:123
-#: gnucash/report/trep-engine.scm:115
+#: gnucash/report/trep-engine.scm:114
 msgid "Report's currency"
 msgstr "מטבע דווח"
 
@@ -22090,7 +22179,7 @@ msgstr "מטבע דווח"
 #: gnucash/report/reports/standard/balance-forecast.scm:46
 #: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/balsheet-eg.scm:179
-#: gnucash/report/reports/standard/balsheet-pnl.scm:114
+#: gnucash/report/reports/standard/balsheet-pnl.scm:111
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:100
 #: gnucash/report/reports/standard/budget-flow.scm:42
 #: gnucash/report/reports/standard/budget-income-statement.scm:110
@@ -22103,7 +22192,7 @@ msgstr "מטבע דווח"
 #: gnucash/report/reports/standard/portfolio.scm:35
 #: gnucash/report/reports/standard/price-scatter.scm:43
 #: gnucash/report/reports/standard/trial-balance.scm:124
-#: gnucash/report/trep-engine.scm:112
+#: gnucash/report/trep-engine.scm:111
 msgid "Price Source"
 msgstr "מקור מחיר"
 
@@ -22193,7 +22282,7 @@ msgstr "סוג התרשים לחילול."
 
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:136
-#: gnucash/report/trep-engine.scm:2174 libgnucash/engine/policy.cpp:59
+#: gnucash/report/trep-engine.scm:2162 libgnucash/engine/policy.cpp:59
 msgid "Average"
 msgstr "ממוצע"
 
@@ -22252,7 +22341,7 @@ msgstr "הצגת תרשים עוגה של סך כל הוצאות לפי כל י�
 #: gnucash/report/reports/standard/account-summary.scm:82
 #: gnucash/report/reports/standard/balance-sheet.scm:83
 #: gnucash/report/reports/standard/balsheet-eg.scm:148
-#: gnucash/report/reports/standard/balsheet-pnl.scm:77
+#: gnucash/report/reports/standard/balsheet-pnl.scm:74
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:46
 #: gnucash/report/reports/standard/budget-income-statement.scm:71
@@ -22938,7 +23027,7 @@ msgstr "ללא ממצוע"
 #: gnucash/report/reports/standard/account-summary.scm:84
 #: gnucash/report/reports/standard/balance-sheet.scm:85
 #: gnucash/report/reports/standard/balsheet-eg.scm:149
-#: gnucash/report/reports/standard/balsheet-pnl.scm:78
+#: gnucash/report/reports/standard/balsheet-pnl.scm:75
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
 #: gnucash/report/reports/standard/budget-barchart.scm:48
 #: gnucash/report/reports/standard/budget-income-statement.scm:73
@@ -23034,7 +23123,7 @@ msgstr "סכומי בינים חשבון אב"
 
 #: gnucash/report/reports/standard/account-summary.scm:97
 #: gnucash/report/reports/standard/balance-sheet.scm:93
-#: gnucash/report/reports/standard/balsheet-pnl.scm:86
+#: gnucash/report/reports/standard/balsheet-pnl.scm:83
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
 #: gnucash/report/reports/standard/budget-income-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:68
@@ -23044,7 +23133,7 @@ msgstr "הכללת חשבונות עם יתרה כוללת אפס"
 
 #: gnucash/report/reports/standard/account-summary.scm:99
 #: gnucash/report/reports/standard/balance-sheet.scm:95
-#: gnucash/report/reports/standard/balsheet-pnl.scm:87
+#: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:64
 #: gnucash/report/reports/standard/budget-income-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:70
@@ -23054,7 +23143,7 @@ msgstr "הכללת חשבונות ביתרת אפס (רקורסיבי) בדוח 
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
-#: gnucash/report/reports/standard/balsheet-pnl.scm:89
+#: gnucash/report/reports/standard/balsheet-pnl.scm:86
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
 #: gnucash/report/reports/standard/budget-income-statement.scm:84
 #: gnucash/report/reports/standard/income-statement.scm:71
@@ -23063,7 +23152,7 @@ msgstr "השמטת סכומים ביתרה אפס"
 
 #: gnucash/report/reports/standard/account-summary.scm:102
 #: gnucash/report/reports/standard/balance-sheet.scm:98
-#: gnucash/report/reports/standard/balsheet-pnl.scm:90
+#: gnucash/report/reports/standard/balsheet-pnl.scm:87
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
 #: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
@@ -23091,7 +23180,7 @@ msgstr "שימוש בקווים מתחת לעמודות מספרים מסוכמ�
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
 #: gnucash/report/reports/standard/balsheet-eg.scm:158
-#: gnucash/report/reports/standard/balsheet-pnl.scm:92
+#: gnucash/report/reports/standard/balsheet-pnl.scm:89
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:73
 #: gnucash/report/reports/standard/budget-income-statement.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:79
@@ -23102,7 +23191,7 @@ msgstr "הצגת חשבונות כהיפר־קישורים"
 #: gnucash/report/reports/standard/account-summary.scm:110
 #: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-eg.scm:159
-#: gnucash/report/reports/standard/balsheet-pnl.scm:93
+#: gnucash/report/reports/standard/balsheet-pnl.scm:90
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
 #: gnucash/report/reports/standard/budget-income-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:80
@@ -23141,7 +23230,7 @@ msgstr "הצגת הערות החשבון."
 #: gnucash/report/reports/standard/account-summary.scm:123
 #: gnucash/report/reports/standard/balance-sheet.scm:129
 #: gnucash/report/reports/standard/balsheet-eg.scm:185
-#: gnucash/report/reports/standard/balsheet-pnl.scm:105
+#: gnucash/report/reports/standard/balsheet-pnl.scm:102
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:98
 #: gnucash/report/reports/standard/budget-income-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:74
@@ -23174,7 +23263,7 @@ msgstr "הצגת כל סכום במטבע זר בחשבון."
 
 #: gnucash/report/reports/standard/account-summary.scm:129
 #: gnucash/report/reports/standard/balance-sheet.scm:135
-#: gnucash/report/reports/standard/balsheet-pnl.scm:123
+#: gnucash/report/reports/standard/balsheet-pnl.scm:120
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
 #: gnucash/report/reports/standard/budget-income-statement.scm:114
 #: gnucash/report/reports/standard/cash-flow.scm:51
@@ -23186,7 +23275,7 @@ msgstr "הצגת שערי חליפין"
 
 #: gnucash/report/reports/standard/account-summary.scm:130
 #: gnucash/report/reports/standard/balance-sheet.scm:136
-#: gnucash/report/reports/standard/balsheet-pnl.scm:124
+#: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:105
 #: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/cash-flow.scm:75
@@ -23407,7 +23496,7 @@ msgstr "תרשים תחזית יתרות"
 #: gnucash/report/reports/standard/income-gst-statement.scm:130
 #: gnucash/report/reports/standard/income-gst-statement.scm:136
 #: gnucash/report/reports/standard/trial-balance.scm:72
-#: gnucash/report/trep-engine.scm:672
+#: gnucash/report/trep-engine.scm:660
 msgid "Report on these accounts."
 msgstr "הפקת דוח עבור חשבונות אלו."
 
@@ -23607,8 +23696,8 @@ msgid "Trading Losses"
 msgstr "הפסדים מחשבון סחר"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:485
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1059
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1074
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1045
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1060
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:725
 #: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
@@ -23801,30 +23890,20 @@ msgid ""
 msgstr "בחירה באפשרות זו מנטרלת יישור סכומים ומצמצמת סכומים לעמודה בודדת."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
-#: gnucash/report/trep-engine.scm:108
-msgid "Add options summary"
-msgstr "הוספת תמצית אפשרויות"
-
-#: gnucash/report/reports/standard/balsheet-pnl.scm:69
-#: gnucash/report/trep-engine.scm:587
-msgid "Add summary of options."
-msgstr "הוספת תמצית אפשרויות."
-
-#: gnucash/report/reports/standard/balsheet-pnl.scm:71
 msgid "Account full name instead of indenting"
 msgstr "שם חשבון מלא במקום יישור"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:72
+#: gnucash/report/reports/standard/balsheet-pnl.scm:69
 msgid ""
 "Selecting this option enables full account name instead, and disables "
 "indenting account names."
 msgstr "בחירה באפשרות זו מאפשרת שם חשבון מלא ומבטלת יישור שמות חשבון."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:80
+#: gnucash/report/reports/standard/balsheet-pnl.scm:77
 msgid "Parent account amounts include children"
 msgstr "סכום חשבונות אב לרבות חשבונות משנה"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:81
+#: gnucash/report/reports/standard/balsheet-pnl.scm:78
 msgid ""
 "If this option is enabled, subtotals are displayed within parent amounts, "
 "and if parent has own amount, it is displayed on the next row as a child "
@@ -23835,107 +23914,102 @@ msgstr ""
 "האב יתרה גם כן, החשבון יוצג כתת חשבון בשורה נפרדת. אם אפשרות זו אינה פעילה, "
 "סיכומי הביניים יוצגו תחת קבוצות חשבונות האב וחשבונות המשנה."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:95
+#: gnucash/report/reports/standard/balsheet-pnl.scm:92
 msgid "Display amounts as hyperlinks"
 msgstr "הצגת סכומים כהיפר־קישורים"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:96
+#: gnucash/report/reports/standard/balsheet-pnl.scm:93
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
 msgstr "הצגת כל סכום בטבלה כהיפר־קישור ליומן או דוח."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:99
+#: gnucash/report/reports/standard/balsheet-pnl.scm:96
 msgid "Label sections"
 msgstr "מקטעי כותרות"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:100
+#: gnucash/report/reports/standard/balsheet-pnl.scm:97
 msgid "Whether or not to include a label for sections."
 msgstr "האם להכליל תווית עבור מקטעים."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:101
+#: gnucash/report/reports/standard/balsheet-pnl.scm:98
 msgid "Include totals"
 msgstr "לכלול סך־הכול"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:102
+#: gnucash/report/reports/standard/balsheet-pnl.scm:99
 msgid "Whether or not to include a line indicating total amounts."
 msgstr "האם לכלול שורת סך־הכול."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:106
+#: gnucash/report/reports/standard/balsheet-pnl.scm:103
 msgid "Enable chart"
 msgstr "אפשור תרשים"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:107
+#: gnucash/report/reports/standard/balsheet-pnl.scm:104
 msgid "Enable link to chart"
 msgstr "אפשור קישור לתרשים"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:109
-#: gnucash/report/trep-engine.scm:113
+#: gnucash/report/reports/standard/balsheet-pnl.scm:106
+#: gnucash/report/trep-engine.scm:112
 msgid "Common Currency"
 msgstr "מטבע משותף"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:110
+#: gnucash/report/reports/standard/balsheet-pnl.scm:107
 msgid "Convert all amounts to a single currency."
 msgstr "המרת כל הסכומים למטבע אחד."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:116
-#: gnucash/report/trep-engine.scm:114
+#: gnucash/report/reports/standard/balsheet-pnl.scm:113
+#: gnucash/report/trep-engine.scm:113
 msgid "Show original currency amount"
 msgstr "הצגת סכום במטבע מקור"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:117
-#: gnucash/report/trep-engine.scm:572
+#: gnucash/report/reports/standard/balsheet-pnl.scm:114
+#: gnucash/report/trep-engine.scm:571
 msgid "Also show original currency amounts"
 msgstr "הצגת סכומים גם במטבע מקור"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:119
+#: gnucash/report/reports/standard/balsheet-pnl.scm:116
 msgid "If more than 1 period column, include overall period?"
 msgstr "כאשר יש יותר מתקופה אחת, האם להכליל סך כל תקופות?"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:120
+#: gnucash/report/reports/standard/balsheet-pnl.scm:117
 msgid ""
 "If several profit & loss period columns are shown, also show overall period "
 "profit & loss."
 msgstr "אם מוצגות מספר תקופות רוח והפסד, להציג גם עמודת סך כל רוח והפסד."
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:194
-#: gnucash/report/trep-engine.scm:593
-msgid "Always"
-msgstr "תמיד"
-
-#: gnucash/report/reports/standard/balsheet-pnl.scm:440
-#: gnucash/report/reports/standard/balsheet-pnl.scm:598
+#: gnucash/report/reports/standard/balsheet-pnl.scm:430
+#: gnucash/report/reports/standard/balsheet-pnl.scm:588
 #: gnucash/report/reports/standard/txn-columns.scm:185
-#: gnucash/report/trep-engine.scm:1090
+#: gnucash/report/trep-engine.scm:1078
 msgid "Total For "
 msgstr "סך־הכול "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1048
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1034
 #: libgnucash/engine/Account.cpp:4294
 msgid "Asset"
 msgstr "נכסים"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1051
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1037
 #: libgnucash/engine/Account.cpp:4296
 msgid "Liability"
 msgstr "התחייבות"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1069
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1055
 msgid "Liability and Equity"
 msgstr "התחייבויות והון"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1087
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1230
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1073
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1216
 msgid "Exchange Rates"
 msgstr "שערי חליפין"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1097
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 msgid "Barchart"
 msgstr "תרשים עמודות"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1160
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1146
 msgid " to "
 msgstr " עד "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1219
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1205
 #: gnucash/report/reports/standard/customer-summary.scm:110
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:350
@@ -23945,16 +24019,16 @@ msgstr " עד "
 msgid "Expense"
 msgstr "הוצאות"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1223
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1209
 #: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Income"
 msgstr "הכנסות נטו"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1256
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1242
 msgid "Balance Sheet (Multicolumn)"
 msgstr "גיליון מאזן (ריבוי עמודות)"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1257
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1243
 msgid "Income Statement (Multicolumn)"
 msgstr "תדפיס הכנסות (ריבוי עמודות)"
 
@@ -24621,7 +24695,7 @@ msgstr "יתרה ב ~a"
 #: gnucash/report/reports/standard/category-barchart.scm:650
 #: gnucash/report/reports/standard/category-barchart.scm:670
 #: gnucash/report/reports/standard/investment-lots.scm:132
-#: gnucash/report/trep-engine.scm:78 gnucash/report/trep-engine.scm:1873
+#: gnucash/report/trep-engine.scm:78 gnucash/report/trep-engine.scm:1861
 msgid "Grand Total"
 msgstr "סכום כולל"
 
@@ -24814,7 +24888,7 @@ msgstr "קיטון הון"
 #: gnucash/report/reports/standard/general-ledger.scm:68
 #: gnucash/report/reports/standard/register.scm:134
 #: gnucash/report/reports/standard/register.scm:351
-#: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:2338
+#: gnucash/report/trep-engine.scm:919 gnucash/report/trep-engine.scm:2325
 msgid "Num/Action"
 msgstr "סימוכין/פעולה"
 
@@ -24822,7 +24896,7 @@ msgstr "סימוכין/פעולה"
 #: gnucash/report/reports/standard/general-ledger.scm:82
 #: gnucash/report/reports/standard/general-ledger.scm:102
 #: gnucash/report/reports/standard/register.scm:394
-#: gnucash/report/trep-engine.scm:1416 gnucash/report/trep-engine.scm:1521
+#: gnucash/report/trep-engine.scm:1404 gnucash/report/trep-engine.scm:1509
 msgid "Running Balance"
 msgstr "יתרה מתגלגלת"
 
@@ -24844,42 +24918,42 @@ msgid "Sorting"
 msgstr "מיון"
 
 #: gnucash/report/reports/standard/general-ledger.scm:69
-#: gnucash/report/trep-engine.scm:952 gnucash/report/trep-engine.scm:2364
+#: gnucash/report/trep-engine.scm:940 gnucash/report/trep-engine.scm:2351
 msgid "Trans Number"
 msgstr "מספר תנועה"
 
 #: gnucash/report/reports/standard/general-ledger.scm:73
 #: gnucash/report/reports/standard/general-ledger.scm:93
-#: gnucash/report/trep-engine.scm:889 gnucash/report/trep-engine.scm:936
-#: gnucash/report/trep-engine.scm:2352
+#: gnucash/report/trep-engine.scm:877 gnucash/report/trep-engine.scm:924
+#: gnucash/report/trep-engine.scm:2339
 msgid "Use Full Account Name"
 msgstr "שימוש בשם חשבון מלא"
 
 #: gnucash/report/reports/standard/general-ledger.scm:75
 #: gnucash/report/reports/standard/general-ledger.scm:95
-#: gnucash/report/trep-engine.scm:224 gnucash/report/trep-engine.scm:893
-#: gnucash/report/trep-engine.scm:978 gnucash/report/trep-engine.scm:2344
+#: gnucash/report/trep-engine.scm:223 gnucash/report/trep-engine.scm:881
+#: gnucash/report/trep-engine.scm:966 gnucash/report/trep-engine.scm:2331
 msgid "Other Account Name"
 msgstr "שם החשבון הנגדי"
 
 #: gnucash/report/reports/standard/general-ledger.scm:76
 #: gnucash/report/reports/standard/general-ledger.scm:96
-#: gnucash/report/trep-engine.scm:909 gnucash/report/trep-engine.scm:939
-#: gnucash/report/trep-engine.scm:2362
+#: gnucash/report/trep-engine.scm:897 gnucash/report/trep-engine.scm:927
+#: gnucash/report/trep-engine.scm:2349
 msgid "Use Full Other Account Name"
 msgstr "שימוש בשם חשבון נגדי מלא"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
-#: gnucash/report/trep-engine.scm:230 gnucash/report/trep-engine.scm:913
-#: gnucash/report/trep-engine.scm:940 gnucash/report/trep-engine.scm:2359
+#: gnucash/report/trep-engine.scm:229 gnucash/report/trep-engine.scm:901
+#: gnucash/report/trep-engine.scm:928 gnucash/report/trep-engine.scm:2346
 msgid "Other Account Code"
 msgstr "קוד חשבון נגדי"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
-#: gnucash/report/trep-engine.scm:897 gnucash/report/trep-engine.scm:1011
-#: gnucash/report/trep-engine.scm:2287
+#: gnucash/report/trep-engine.scm:885 gnucash/report/trep-engine.scm:999
+#: gnucash/report/trep-engine.scm:2275
 msgid "Sign Reverses"
 msgstr "סימן היפוך"
 
@@ -24894,7 +24968,7 @@ msgid "Primary Key"
 msgstr "מפתח ראשי"
 
 #: gnucash/report/reports/standard/general-ledger.scm:125
-#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2387
+#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2374
 msgid "Show Full Account Name"
 msgstr "הצגת שם חשבון מלא"
 
@@ -24938,7 +25012,7 @@ msgid "Income and GST Statement"
 msgstr "תדפיס הכנסות ומס על טובין ושרותים"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:45
-#: gnucash/report/trep-engine.scm:118
+#: gnucash/report/trep-engine.scm:117
 msgid "Filter"
 msgstr "סינון"
 
@@ -24947,8 +25021,8 @@ msgid ""
 "This report is useful to calculate periodic business tax payable/receivable "
 "from authorities. From 'Edit report options', choose your business sales and "
 "purchase accounts. Each transaction may contain, in addition to the asset, "
-"liability, A/Payable or A/Receivable accounts, a split to a tax account, e."
-"g. Income:Sales -$1000, A/Receivable $1100, Liability:GST on Sales -$100."
+"liability, A/Payable or A/Receivable accounts, a split to a tax account, "
+"e.g. Income:Sales -$1000, A/Receivable $1100, Liability:GST on Sales -$100."
 msgstr ""
 "דוח זה משמש לחישוב מס ערך מוסף תקופתי, לתשלום/להחזר, מהרשויות. מתפריט 'עריכת "
 "אפשרויות דוח', נא לבחור בחשבונות מכירה וקניה עסקיים. כל תנועה עשויה להכיל, "
@@ -25771,13 +25845,13 @@ msgstr "הצגת עמודות"
 #: gnucash/report/reports/standard/invoice.scm:411
 #: gnucash/report/reports/standard/register.scm:347
 #: gnucash/report/reports/standard/taxinvoice.scm:124
-#: gnucash/report/trep-engine.scm:927
+#: gnucash/report/trep-engine.scm:915
 msgid "Display the date?"
 msgstr "הצגת תאריך?"
 
 #: gnucash/report/reports/standard/invoice.scm:415
 #: gnucash/report/reports/standard/register.scm:359
-#: gnucash/report/trep-engine.scm:933
+#: gnucash/report/trep-engine.scm:921
 msgid "Display the description?"
 msgstr "הצגת התיאור?"
 
@@ -26325,7 +26399,7 @@ msgid "Partial Amount"
 msgstr "סכום חלקי"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:293
-#: gnucash/report/trep-engine.scm:943 gnucash/report/trep-engine.scm:2347
+#: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:2334
 msgid "Link"
 msgstr "קישור"
 
@@ -26450,7 +26524,7 @@ msgid "No transactions found."
 msgstr "לא נמצאו תנועות."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1090
-#: gnucash/report/trep-engine.scm:146
+#: gnucash/report/trep-engine.scm:145
 msgid "No matching transactions found"
 msgstr "לא נמצאו תנועות תואמות"
 
@@ -26797,12 +26871,12 @@ msgid "Display the check number/action?"
 msgstr "הצגת מספר המחאה/פעולה?"
 
 #: gnucash/report/reports/standard/register.scm:355
-#: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:932
+#: gnucash/report/trep-engine.scm:919 gnucash/report/trep-engine.scm:920
 msgid "Display the check number?"
 msgstr "הצגת מספר המחאה?"
 
 #: gnucash/report/reports/standard/register.scm:363
-#: gnucash/report/trep-engine.scm:959
+#: gnucash/report/trep-engine.scm:947
 msgid "Display the memo?"
 msgstr "הצגת המזכר?"
 
@@ -26811,7 +26885,7 @@ msgid "Display the account?"
 msgstr "הצגת החשבון?"
 
 #: gnucash/report/reports/standard/register.scm:371
-#: gnucash/report/trep-engine.scm:942
+#: gnucash/report/trep-engine.scm:930
 msgid "Display the number of shares?"
 msgstr "הצגת מספר מניות?"
 
@@ -26820,22 +26894,22 @@ msgid "Display the name of lot the shares are in?"
 msgstr "הצגת שם הדבוקה המכילה את המניות?"
 
 #: gnucash/report/reports/standard/register.scm:379
-#: gnucash/report/trep-engine.scm:944
+#: gnucash/report/trep-engine.scm:932
 msgid "Display the shares price?"
 msgstr "הצגת מחיר מניות?"
 
 #: gnucash/report/reports/standard/register.scm:383
-#: gnucash/report/trep-engine.scm:996
+#: gnucash/report/trep-engine.scm:984
 msgid "Display the amount?"
 msgstr "הצגת הסכום?"
 
 #: gnucash/report/reports/standard/register.scm:386
-#: gnucash/report/trep-engine.scm:1000
+#: gnucash/report/trep-engine.scm:988
 msgid "Single Column"
 msgstr "עמודה בודדת"
 
 #: gnucash/report/reports/standard/register.scm:387
-#: gnucash/report/trep-engine.scm:1001
+#: gnucash/report/trep-engine.scm:989
 msgid "Two Columns"
 msgstr "שתי עמודת"
 
@@ -27403,7 +27477,7 @@ msgstr "שם הארגון או החברה."
 
 #: gnucash/report/stylesheets/footer.scm:68
 #: gnucash/report/stylesheets/head-or-tail.scm:85
-#: gnucash/report/stylesheets/plain.scm:50 gnucash/report/trep-engine.scm:1007
+#: gnucash/report/stylesheets/plain.scm:50 gnucash/report/trep-engine.scm:995
 msgid "Enable Links"
 msgstr "אפשור קישורים"
 
@@ -27765,7 +27839,7 @@ msgstr "טבלת סיכום ביניים"
 msgid "Running Totals"
 msgstr "יתרה מתגלגלת"
 
-#: gnucash/report/trep-engine.scm:93 gnucash/report/trep-engine.scm:2389
+#: gnucash/report/trep-engine.scm:93 gnucash/report/trep-engine.scm:2376
 msgid "Show Account Description"
 msgstr "הצגת תיאור חשבון"
 
@@ -27789,157 +27863,153 @@ msgstr "מסנן תאריך"
 msgid "Table for Exporting"
 msgstr "טבלה ליצוא"
 
-#: gnucash/report/trep-engine.scm:119
+#: gnucash/report/trep-engine.scm:118
 msgid "Account Name Filter"
 msgstr "מסנן שם חשבון"
 
-#: gnucash/report/trep-engine.scm:121
+#: gnucash/report/trep-engine.scm:120
 msgid "Use regular expressions for account name filter"
 msgstr "שימוש בביטוי רגיל לסינון לפי שם"
 
-#: gnucash/report/trep-engine.scm:123
+#: gnucash/report/trep-engine.scm:122
 msgid "Account Name Filter excludes matched strings"
 msgstr "מסנן שמות חשבונות מחריג מחרוזות תואמות"
 
-#: gnucash/report/trep-engine.scm:124
+#: gnucash/report/trep-engine.scm:123
 msgid "Transaction Filter"
 msgstr "מסנן תנועות"
 
-#: gnucash/report/trep-engine.scm:126
+#: gnucash/report/trep-engine.scm:125
 msgid "Use regular expressions for transaction filter"
 msgstr "שימוש בביטוי רגיל למסנן תנועות"
 
-#: gnucash/report/trep-engine.scm:128
+#: gnucash/report/trep-engine.scm:127
 msgid "Transaction Filter excludes matched strings"
 msgstr "מסנן תנועות מחריג מחרוזות תואמות"
 
-#: gnucash/report/trep-engine.scm:130
+#: gnucash/report/trep-engine.scm:129
 msgid "Transaction Filter is case insensitive"
 msgstr "מסנן תנועות רגיש לרישיות"
 
-#: gnucash/report/trep-engine.scm:131 gnucash/report/trep-engine.scm:210
+#: gnucash/report/trep-engine.scm:130 gnucash/report/trep-engine.scm:209
 msgid "Reconciled Status"
 msgstr "מצב התאמה"
 
-#: gnucash/report/trep-engine.scm:132
+#: gnucash/report/trep-engine.scm:131
 msgid "Void Transactions"
 msgstr "תנועות שבוטלו"
 
-#: gnucash/report/trep-engine.scm:133
+#: gnucash/report/trep-engine.scm:132
 msgid "Closing transactions"
 msgstr "תנועות סגירה"
 
-#: gnucash/report/trep-engine.scm:147
+#: gnucash/report/trep-engine.scm:146
 msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
 msgstr ""
 "לא נמצאו תנועות התואמות את מחזור הזמן והחשבון שנבחרו בחלונית 'אפשרויות'."
 
-#: gnucash/report/trep-engine.scm:218
+#: gnucash/report/trep-engine.scm:217
 msgid "Register Order"
 msgstr "סדר יומן"
 
-#: gnucash/report/trep-engine.scm:355
+#: gnucash/report/trep-engine.scm:354
 msgid "Do not do any filtering"
 msgstr "ללא סינון"
 
-#: gnucash/report/trep-engine.scm:358
+#: gnucash/report/trep-engine.scm:357
 msgid "Include Transactions to/from Filter Accounts"
 msgstr "הכללת תנועות מ/אל לחשבונות המסוננים בלבד"
 
-#: gnucash/report/trep-engine.scm:361
+#: gnucash/report/trep-engine.scm:360
 msgid "Exclude Transactions to/from Filter Accounts"
 msgstr "החרגת תנועות מ/אל לכל החשבונות המסוננים"
 
-#: gnucash/report/trep-engine.scm:367
+#: gnucash/report/trep-engine.scm:366
 msgid "Non-void only"
 msgstr "לא מבוטלים בלבד"
 
-#: gnucash/report/trep-engine.scm:371
+#: gnucash/report/trep-engine.scm:370
 msgid "Void only"
 msgstr "מבוטלים בלבד"
 
-#: gnucash/report/trep-engine.scm:375
+#: gnucash/report/trep-engine.scm:374
 msgid "Both (and include void transactions in totals)"
 msgstr "שניהם (והכללת סך־הכל של תנועות מבוטלות )"
 
-#: gnucash/report/trep-engine.scm:380
+#: gnucash/report/trep-engine.scm:379
 msgid "Exclude closing transactions"
 msgstr "החרגת תנועות סגירה"
 
-#: gnucash/report/trep-engine.scm:384
+#: gnucash/report/trep-engine.scm:383
 msgid "Show both closing and regular transactions"
 msgstr "הצגת תנועות סגירה ותנועות רגילות"
 
-#: gnucash/report/trep-engine.scm:388
+#: gnucash/report/trep-engine.scm:387
 msgid "Show closing transactions only"
 msgstr "הצגת תנועות סגירה בלבד"
 
-#: gnucash/report/trep-engine.scm:398
+#: gnucash/report/trep-engine.scm:397
 msgid "Show All Transactions"
 msgstr "הצגת כל התנועות"
 
-#: gnucash/report/trep-engine.scm:402
+#: gnucash/report/trep-engine.scm:401
 msgid "Unreconciled only"
 msgstr "פתוחים בלבד"
 
-#: gnucash/report/trep-engine.scm:406
+#: gnucash/report/trep-engine.scm:405
 msgid "Cleared only"
 msgstr "סגורים בלבד"
 
-#: gnucash/report/trep-engine.scm:410
+#: gnucash/report/trep-engine.scm:409
 msgid "Reconciled only"
 msgstr "מותאם בלבד"
 
-#: gnucash/report/trep-engine.scm:424
+#: gnucash/report/trep-engine.scm:423
 msgid "Use Global Preference"
 msgstr "שימוש בהגדרה גלובלית"
 
-#: gnucash/report/trep-engine.scm:427
+#: gnucash/report/trep-engine.scm:426
 msgid "Don't change any displayed amounts"
 msgstr "לא לשנות סכומים מוצגים"
 
-#: gnucash/report/trep-engine.scm:430
+#: gnucash/report/trep-engine.scm:429
 msgid "Income and Expense"
 msgstr "הכנסות והוצאות"
 
-#: gnucash/report/trep-engine.scm:433
+#: gnucash/report/trep-engine.scm:432
 msgid "Credit Accounts"
 msgstr "חשבונות זכות"
 
-#: gnucash/report/trep-engine.scm:553
+#: gnucash/report/trep-engine.scm:552
 msgid "Specify date to filter by…"
 msgstr "הגדרת תאריך לצורך סינון…"
 
-#: gnucash/report/trep-engine.scm:557 gnucash/report/trep-engine.scm:929
-#: gnucash/report/trep-engine.scm:1139 gnucash/report/trep-engine.scm:2336
+#: gnucash/report/trep-engine.scm:556 gnucash/report/trep-engine.scm:917
+#: gnucash/report/trep-engine.scm:1127 gnucash/report/trep-engine.scm:2323
 msgid "Date Entered"
 msgstr "תאריך רישום"
 
-#: gnucash/report/trep-engine.scm:561
+#: gnucash/report/trep-engine.scm:560
 msgid "Convert all transactions into a common currency."
 msgstr "המרת כל התנועות למטבע משותף."
 
-#: gnucash/report/trep-engine.scm:582
+#: gnucash/report/trep-engine.scm:581
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
 msgstr "תבנות הטבלה ‮כך שתאפשר יצוא באמצעות גזירה והדבקה יחד עם תאים נוספים."
 
-#: gnucash/report/trep-engine.scm:592
-msgid "If no transactions matched"
-msgstr "אם לא הותאמו תנועות"
-
-#: gnucash/report/trep-engine.scm:600
+#: gnucash/report/trep-engine.scm:588
 msgid ""
 "Show only accounts whose full name matches this filter e.g. ':Travel' will "
 "match Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left "
 "blank, which will disable the filter."
 msgstr ""
-"הצגת חשבונות ששמם המלא תואם למסנן זה בלבד, לדוגמה ':נסיעות' יתאים ל 'הוצאות:"
-"נסיעות:נופש' וגם ל 'הוצאות:עסקים:נסיעות'. ניתן להשאיר את השדה ריק, דבר "
-"שישבית את המסנן."
+"הצגת חשבונות ששמם המלא תואם למסנן זה בלבד, לדוגמה ':נסיעות' יתאים ל "
+"'הוצאות:נסיעות:נופש' וגם ל 'הוצאות:עסקים:נסיעות'. ניתן להשאיר את השדה ריק, "
+"דבר שישבית את המסנן."
 
-#: gnucash/report/trep-engine.scm:608
+#: gnucash/report/trep-engine.scm:596
 msgid ""
 "By default the account filter will search substring only. Set this to true "
 "to enable full POSIX regular expressions capabilities. 'Car|Flights' will "
@@ -27951,11 +28021,11 @@ msgstr ""
 "'הוצאות: טיסות'. להתאמה לתו בודד יש להשתמש בנקודה (.) לדוגמה ' 20.../. ' "
 "יאחזר רשומה 'נסיעות לונדון 2017/1 '. "
 
-#: gnucash/report/trep-engine.scm:616
+#: gnucash/report/trep-engine.scm:604
 msgid "If this option is selected, accounts matching filter are excluded."
 msgstr "בחירת אפשרות זו, תחריג חשבונות התואמים למסנן."
 
-#: gnucash/report/trep-engine.scm:621
+#: gnucash/report/trep-engine.scm:609
 msgid ""
 "Show only transactions where description, notes, or memo matches this "
 "filter.\n"
@@ -27966,7 +28036,7 @@ msgstr ""
 "לדוגמה ' #מתנה ' תאחזר את כל התנועות הכוללות #מתנה בתיאור, בהערות או במיזכר. "
 "ניתן להשאיר את השדה ריק, דבר שישבית את המסנן."
 
-#: gnucash/report/trep-engine.scm:629
+#: gnucash/report/trep-engine.scm:617
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
@@ -27976,25 +28046,25 @@ msgstr ""
 "ביטוי רגיל POSIX מלאות. '#עבודה|'#משפחה' יאחזרו תוצאות לשני התגים מתוך שדה "
 "התיאור, ההערות או המזכר."
 
-#: gnucash/report/trep-engine.scm:637
+#: gnucash/report/trep-engine.scm:625
 msgid "If this option is selected, transactions matching filter are excluded."
 msgstr "בחירת אפשרות זו, תחריג תנועות התואמות למסנן."
 
-#: gnucash/report/trep-engine.scm:643
+#: gnucash/report/trep-engine.scm:631
 msgid ""
 "If this option is selected, transactions matching filter is not case "
 "sensitive."
 msgstr "בחירה באפשרות זו, תחריג רגישות לרישיות בתנועות התואמות למסנן."
 
-#: gnucash/report/trep-engine.scm:648
+#: gnucash/report/trep-engine.scm:636
 msgid "Filter by reconcile status."
 msgstr "סינון לפי מצב התאמה."
 
-#: gnucash/report/trep-engine.scm:654
+#: gnucash/report/trep-engine.scm:642
 msgid "How to handle void transactions."
 msgstr "הדרך לטפל בתנועות מבוטלות."
 
-#: gnucash/report/trep-engine.scm:660
+#: gnucash/report/trep-engine.scm:648
 msgid ""
 "By default most users should not include closing transactions in a "
 "transaction report. Closing transactions are transfers from income and "
@@ -28005,175 +28075,175 @@ msgstr ""
 "שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי ובדרך כלל, תנועות סגירה "
 "מוחרגות מדוחות תקופתיים."
 
-#: gnucash/report/trep-engine.scm:682
+#: gnucash/report/trep-engine.scm:670
 msgid "Filter on these accounts."
 msgstr "סינון לפי חשבונות אלה."
 
-#: gnucash/report/trep-engine.scm:687
+#: gnucash/report/trep-engine.scm:675
 msgid "Filter account."
 msgstr "סינון חשבון."
 
-#: gnucash/report/trep-engine.scm:778
+#: gnucash/report/trep-engine.scm:766
 msgid "Sort by this criterion first."
 msgstr "מיון לפי תבחין זה תחילה."
 
-#: gnucash/report/trep-engine.scm:788
+#: gnucash/report/trep-engine.scm:776
 msgid "Show the full account name for subtotals and subheadings?"
 msgstr "הצגת שם החשבון המלא לסיכומי ביניים וכותרות משנה?"
 
-#: gnucash/report/trep-engine.scm:794
+#: gnucash/report/trep-engine.scm:782
 msgid "Show the account code for subtotals and subheadings?"
 msgstr "הצגת קוד חשבון בסיכומי ביניים וכותרות משנה?"
 
-#: gnucash/report/trep-engine.scm:800
+#: gnucash/report/trep-engine.scm:788
 msgid "Show the account description for subheadings?"
 msgstr "הצגת תיאור חשבון בכותרות משנה?"
 
-#: gnucash/report/trep-engine.scm:806
+#: gnucash/report/trep-engine.scm:794
 msgid "Show the informal headers for debit/credit accounts?"
 msgstr "הצגת כותרות לא רשמיות לחובה/זכות?"
 
-#: gnucash/report/trep-engine.scm:812
+#: gnucash/report/trep-engine.scm:800
 msgid "Add indenting columns with grouping and subtotals?"
 msgstr "הוספת עמודת יישור עם קיבוצים וסיכומי ביניים?"
 
-#: gnucash/report/trep-engine.scm:818
+#: gnucash/report/trep-engine.scm:806
 msgid "Show subtotals only, hiding transactional detail?"
 msgstr "הצגת סיכומי בינים בלבד, הסתרת פרטי התנועה?"
 
-#: gnucash/report/trep-engine.scm:824
+#: gnucash/report/trep-engine.scm:812
 msgid "Subtotal according to the primary key?"
 msgstr "סיכום ביניים לפי מפתח ראשי?"
 
-#: gnucash/report/trep-engine.scm:831 gnucash/report/trep-engine.scm:865
+#: gnucash/report/trep-engine.scm:819 gnucash/report/trep-engine.scm:853
 msgid "Do a date subtotal."
 msgstr "סכום ביניים לפי תאריך."
 
-#: gnucash/report/trep-engine.scm:840
+#: gnucash/report/trep-engine.scm:828
 msgid "Order of primary sorting."
 msgstr "סדר מיון ראשי."
 
-#: gnucash/report/trep-engine.scm:848
+#: gnucash/report/trep-engine.scm:836
 msgid "Sort by this criterion second."
 msgstr "מיון משני לפי תבחין זה."
 
-#: gnucash/report/trep-engine.scm:858
+#: gnucash/report/trep-engine.scm:846
 msgid "Subtotal according to the secondary key?"
 msgstr "סיכום ביניים לפי מפתח משני?"
 
-#: gnucash/report/trep-engine.scm:874
+#: gnucash/report/trep-engine.scm:862
 msgid "Order of Secondary sorting."
 msgstr "סדר מיון משני."
 
-#: gnucash/report/trep-engine.scm:928
+#: gnucash/report/trep-engine.scm:916
 msgid "Display the reconciled date?"
 msgstr "הצגת תאריך התאמה?"
 
-#: gnucash/report/trep-engine.scm:929
+#: gnucash/report/trep-engine.scm:917
 msgid "Display the entered date?"
 msgstr "להציג את התאריך שהוזן?"
 
-#: gnucash/report/trep-engine.scm:934
+#: gnucash/report/trep-engine.scm:922
 msgid "Display the notes if the memo is unavailable?"
 msgstr "הצגת הערות אם מזכר אינו זמין?"
 
-#: gnucash/report/trep-engine.scm:936 gnucash/report/trep-engine.scm:939
+#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:927
 msgid "Display the full account name?"
 msgstr "הצגת שם חשבון מלא?"
 
-#: gnucash/report/trep-engine.scm:937
+#: gnucash/report/trep-engine.scm:925
 msgid "Display the account code?"
 msgstr "הצגת קוד חשבון?"
 
-#: gnucash/report/trep-engine.scm:940
+#: gnucash/report/trep-engine.scm:928
 msgid "Display the other account code?"
 msgstr "הצגת קוד החשבון הנגדי?"
 
-#: gnucash/report/trep-engine.scm:943
+#: gnucash/report/trep-engine.scm:931
 msgid "Display the transaction linked document"
 msgstr "הצגת הצרופה שמקושרת לתנועה"
 
-#: gnucash/report/trep-engine.scm:946
+#: gnucash/report/trep-engine.scm:934
 msgid "Display a subtotal summary table."
 msgstr "הצגת טבלת סיכומי ביניים."
 
-#: gnucash/report/trep-engine.scm:947
+#: gnucash/report/trep-engine.scm:935
 #, fuzzy
 msgid "Display the balance of the underlying account on each line?"
 msgstr "הצגת קוד החשבון הנגדי?"
 
-#: gnucash/report/trep-engine.scm:948
+#: gnucash/report/trep-engine.scm:936
 #, fuzzy
 msgid "Display a grand total section at the bottom?"
 msgstr "הצגת תאריך תנועה?"
 
-#: gnucash/report/trep-engine.scm:953
+#: gnucash/report/trep-engine.scm:941
 msgid "Display the trans number?"
 msgstr "הצגת סימוכין העברה?"
 
-#: gnucash/report/trep-engine.scm:966
+#: gnucash/report/trep-engine.scm:954
 msgid "Display invoice details"
 msgstr "הצגת פרטי חשבונית"
 
-#: gnucash/report/trep-engine.scm:971
+#: gnucash/report/trep-engine.scm:959
 msgid "Display the account name?"
 msgstr "להציג את שם החשבון?"
 
-#: gnucash/report/trep-engine.scm:979
+#: gnucash/report/trep-engine.scm:967
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
 msgstr ""
 "להציג את שם החשבון הנגדי? (אם זוהי תנועה המכילה פיצולים, יתבצע ניחוש מאפיין)."
 
-#: gnucash/report/trep-engine.scm:986
+#: gnucash/report/trep-engine.scm:974
 msgid "Amount of detail to display per transaction."
 msgstr "כמות הפרטים להצגה לתנועה."
 
-#: gnucash/report/trep-engine.scm:988
+#: gnucash/report/trep-engine.scm:976
 msgid "One split per line"
 msgstr "פתיחת פיצול לכל שורה"
 
-#: gnucash/report/trep-engine.scm:989
+#: gnucash/report/trep-engine.scm:977
 msgid "One transaction per line"
 msgstr "תנועה אחת לשורה"
 
-#: gnucash/report/trep-engine.scm:999
+#: gnucash/report/trep-engine.scm:987
 msgid "Hide"
 msgstr "הסתרה"
 
-#: gnucash/report/trep-engine.scm:1008
+#: gnucash/report/trep-engine.scm:996
 msgid "Enable hyperlinks in amounts."
 msgstr "אפשור היפר־קישורים בסכומים."
 
-#: gnucash/report/trep-engine.scm:1012
+#: gnucash/report/trep-engine.scm:1000
 msgid "Reverse amount display for certain account types."
 msgstr "הצגת סכום שלילי עבור סוגי חשבונות מסוימים."
 
-#: gnucash/report/trep-engine.scm:1018
+#: gnucash/report/trep-engine.scm:1006
 msgid "Display running totals as per report sort order?"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:1021
+#: gnucash/report/trep-engine.scm:1009
 #, fuzzy
 msgid "Grand Total and Subtotals"
 msgstr "צבע תא סכום כולל"
 
-#: gnucash/report/trep-engine.scm:1022
+#: gnucash/report/trep-engine.scm:1010
 #, fuzzy
 msgid "Grand Total Only"
 msgstr "סכום כולל"
 
-#: gnucash/report/trep-engine.scm:1023
+#: gnucash/report/trep-engine.scm:1011
 #, fuzzy
 msgid "Subtotals Only"
 msgstr "סיכום ביניים"
 
-#: gnucash/report/trep-engine.scm:1161
+#: gnucash/report/trep-engine.scm:1149
 msgid "Num/T-Num"
 msgstr "סימוכין/מספר תנועה"
 
-#: gnucash/report/trep-engine.scm:1220
+#: gnucash/report/trep-engine.scm:1208
 msgid "Transfer from/to"
 msgstr "העברה מ/אל"
 
@@ -28181,7 +28251,7 @@ msgstr "העברה מ/אל"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
-#: gnucash/report/trep-engine.scm:1438 gnucash/report/trep-engine.scm:1539
+#: gnucash/report/trep-engine.scm:1426 gnucash/report/trep-engine.scm:1527
 #, fuzzy
 msgid "Running Secondary Subtotal"
 msgstr "סכום ביניים משני"
@@ -28190,7 +28260,7 @@ msgstr "סכום ביניים משני"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
-#: gnucash/report/trep-engine.scm:1454 gnucash/report/trep-engine.scm:1552
+#: gnucash/report/trep-engine.scm:1442 gnucash/report/trep-engine.scm:1540
 #, fuzzy
 msgid "Running Primary Subtotal"
 msgstr "סכום ביניים ראשי"
@@ -28198,7 +28268,7 @@ msgstr "סכום ביניים ראשי"
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
-#: gnucash/report/trep-engine.scm:1458 gnucash/report/trep-engine.scm:1553
+#: gnucash/report/trep-engine.scm:1446 gnucash/report/trep-engine.scm:1541
 #, fuzzy
 msgid "Running Subtotal"
 msgstr "יתרה מתגלגלת"
@@ -28207,7 +28277,7 @@ msgstr "יתרה מתגלגלת"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
-#: gnucash/report/trep-engine.scm:1475 gnucash/report/trep-engine.scm:1567
+#: gnucash/report/trep-engine.scm:1463 gnucash/report/trep-engine.scm:1555
 #, fuzzy
 msgid "Running Grand Total"
 msgstr "סכום כולל"
@@ -28216,22 +28286,22 @@ msgstr "סכום כולל"
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
-#: gnucash/report/trep-engine.scm:1480 gnucash/report/trep-engine.scm:1568
+#: gnucash/report/trep-engine.scm:1468 gnucash/report/trep-engine.scm:1556
 #, fuzzy
 msgid "Running Total"
 msgstr "יתרה מתגלגלת"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
-#: gnucash/report/trep-engine.scm:1626
+#: gnucash/report/trep-engine.scm:1614
 msgid "Balance b/f"
 msgstr "יתרה מועברת"
 
-#: gnucash/report/trep-engine.scm:1822
+#: gnucash/report/trep-engine.scm:1810
 msgid "Split Transaction"
 msgstr "פיצול תנועה"
 
-#: gnucash/report/trep-engine.scm:2075
+#: gnucash/report/trep-engine.scm:2063
 msgid "CSV disabled for double column amounts"
 msgstr "CSV נוטרל לסכומים בעמודות כפולות"
 
@@ -28389,7 +28459,7 @@ msgstr "עריכת המאפיינים של הקובץ הנוכחי"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:439
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:594
 #: gnucash/ui/gnc-plugin-page-report.ui:122
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:105
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:111
 msgid "Close the currently active page"
 msgstr "סגירת העמוד הפעיל הנוכחי"
 
@@ -28555,7 +28625,7 @@ msgstr "על אודות גנוקאש"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:424
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:579
 #: gnucash/ui/gnc-plugin-page-report.ui:107
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:90
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:96
 msgid "Save the current file"
 msgstr "שמירת הקובץ הנוכחי"
 
@@ -28567,7 +28637,7 @@ msgstr "שמירת הקובץ הנוכחי"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:464
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:619
 #: gnucash/ui/gnc-plugin-page-report.ui:147
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:130
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:136
 msgid "Open the New Invoice dialog"
 msgstr "פתיחת דו־שיח חשבונית חדשה"
 
@@ -28582,7 +28652,7 @@ msgstr "פתיחת דו־שיח חשבונית חדשה"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:617
 #: gnucash/ui/gnc-plugin-page-register.ui:697
 #: gnucash/ui/gnc-plugin-page-report.ui:145
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:128
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:134
 msgid "New _Invoice…"
 msgstr "_חשבונית חדשה…"
 
@@ -30044,19 +30114,30 @@ msgid "Save current layout as default"
 msgstr "שמירת תסדיר נוכחי כברירת מחדל"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:155
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:161
 msgid "Create a new scheduled transaction"
 msgstr "יצירת תנועה מחזורית חדשה"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:61
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:170
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:176
 msgid "Edit the selected scheduled transaction"
 msgstr "עריכת התנועה המחזורית שנבחרה"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:67
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:195
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:201
 msgid "Delete the selected scheduled transaction"
 msgstr "מחיקת התנועה המחזורית"
+
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:73
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:216
+msgid ""
+"Run the selected scheduled transaction. If no transactions are scheduled to "
+"be entered, the next occurrence is used"
+msgstr ""
+
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:214
+msgid "_Run"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
@@ -30415,23 +30496,23 @@ msgstr "שגיאת Finance::Quote‏ לא מזוהה: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1028
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1077
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
 msgstr "חשבון לא ידוע למזהה ייחודי אוניברסלי[ %s], ביטול יצירת SX [ %s]."
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1083
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1132
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
 msgstr "שגיאה בניתוח SX [%s] מפתח [%s]=נוסחה [%s] ב [%s]: %s."
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1139
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1814
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1188
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1863
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
 msgstr "שגיאה %d בערך gnc_numeric סופי SX [%s‏]‏, שימוש ב 0 במקום."
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1823
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1872
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr "שערי חליפין לא זמינים ב־SX [%s] עבור %s <- %s, ערך 'אפס'."
@@ -30452,76 +30533,76 @@ msgid "%s balance of %s should be zero."
 msgstr ""
 
 # ל=לא מותאם
-#: libgnucash/app-utils/gnc-ui-util.cpp:472
+#: libgnucash/app-utils/gnc-ui-util.cpp:474
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
 msgstr "ל"
 
 # מ=מותאם
-#: libgnucash/app-utils/gnc-ui-util.cpp:474
+#: libgnucash/app-utils/gnc-ui-util.cpp:476
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
 msgstr "מ"
 
 # מ=מותאם
-#: libgnucash/app-utils/gnc-ui-util.cpp:476
+#: libgnucash/app-utils/gnc-ui-util.cpp:478
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
 msgstr "מ"
 
 # ק=מוקפא
-#: libgnucash/app-utils/gnc-ui-util.cpp:478
+#: libgnucash/app-utils/gnc-ui-util.cpp:480
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
 msgstr "ק"
 
 # ט=מבוטל
-#: libgnucash/app-utils/gnc-ui-util.cpp:480
+#: libgnucash/app-utils/gnc-ui-util.cpp:482
 msgctxt "Reconciled flag 'void'"
 msgid "v"
 msgstr "ט"
 
 # ר=מרשתת
-#: libgnucash/app-utils/gnc-ui-util.cpp:520
+#: libgnucash/app-utils/gnc-ui-util.cpp:522
 msgctxt "Document Link flag for 'web'"
 msgid "w"
 msgstr "ר"
 
 # ק=מוקפא
-#: libgnucash/app-utils/gnc-ui-util.cpp:522
+#: libgnucash/app-utils/gnc-ui-util.cpp:524
 msgctxt "Document Link flag for 'file'"
 msgid "f"
 msgstr "ק"
 
-#: libgnucash/app-utils/gnc-ui-util.cpp:551
+#: libgnucash/app-utils/gnc-ui-util.cpp:553
 msgid "Opening Balances"
 msgstr "יתרת פתיחה"
 
 #. Translators: this string refers to a file name that gets renamed
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:648
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:647
 msgid "Renamed to:"
 msgstr "שם שונה ל:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:673
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:672
 msgid "Notice"
 msgstr "הַתרָאָה"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:678
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:677
 msgid "Your gnucash metadata has been migrated."
 msgstr "מטה נתוני גנוקאש הוסבו."
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:680
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
 msgid "Old location:"
 msgstr "מיקום ישן:"
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:682
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
 msgid "New location:"
 msgstr "מיקום חדש:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:683
 #, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
@@ -30530,29 +30611,29 @@ msgstr ""
 "אם אין בכוונתכם להמשיך ולהשתמש במערכת זו ב {1} ‏2.6.x‏‏ או ישן יותר, ניתן להסיר "
 "בבטחה את הספריה הישנה."
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:691
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:690
 msgid "In addition:"
 msgstr "בנוסף:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:696
 #, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "הקובץ הבא הועתק ל {1} במקום:"
 msgstr[1] "הקבצים הבאים הועתקו ל {1} במקום:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:700
 #, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "שם הקובץ הבא ב {1} השתנה:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:711
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:710
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] "הקובץ הבא התיישן לכן המערכת תתעלם ממנו:"
 msgstr[1] "הקבצים הבאים התיישנו לכן המערכת תתעלם מהם:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:720
 #, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
@@ -30642,258 +30723,253 @@ msgstr "מפתח API אלפא וינטאג'"
 
 #: libgnucash/engine/gnc-commodity.cpp:192
 msgctxt "FQ Source"
-msgid "Amsterdam Euronext eXchange, NL"
+msgid "Association of Mutual Funds in India"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:193
 msgctxt "FQ Source"
-msgid "Association of Mutual Funds in India"
+msgid "Athens Exchange Group, GR"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:194
 msgctxt "FQ Source"
-msgid "Athens Exchange Group, GR"
+msgid "Australian Stock Exchange, AU"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:195
 msgctxt "FQ Source"
-msgid "Australian Stock Exchange, AU"
+msgid "Italian Stock Exchange, IT"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:196
 msgctxt "FQ Source"
-msgid "Italian Stock Exchange, IT"
+msgid "BSE India, IN"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:197
 msgctxt "FQ Source"
-msgid "BSE India, IN"
+msgid "Bucharest Stock Exchange, RO"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:198
 msgctxt "FQ Source"
-msgid "Bucharest Stock Exchange, RO"
+msgid "Colombo Stock Exchange, LK"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:199
 msgctxt "FQ Source"
-msgid "Colombo Stock Exchange, LK"
+msgid "comdirect, DE"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:200
 msgctxt "FQ Source"
-msgid "comdirect, DE"
-msgstr ""
-
-#: libgnucash/engine/gnc-commodity.cpp:201
-msgctxt "FQ Source"
 msgid "Consors Bank, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:202
+#: libgnucash/engine/gnc-commodity.cpp:201
 #, fuzzy
 #| msgid "Investments"
 msgctxt "FQ Source"
 msgid "Deka Investments, DE"
 msgstr "השקעות"
 
-#: libgnucash/engine/gnc-commodity.cpp:203
+#: libgnucash/engine/gnc-commodity.cpp:202
 msgctxt "FQ Source"
 msgid "Financial Times Funds service, GB"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:204
+#: libgnucash/engine/gnc-commodity.cpp:203
 msgctxt "FQ Source"
 msgid "Finanzpartner, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:205
+#: libgnucash/engine/gnc-commodity.cpp:204
 msgctxt "FQ Source"
 msgid "FondsWeb, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:206
+#: libgnucash/engine/gnc-commodity.cpp:205
 msgctxt "FQ Source"
 msgid "GoldMoney precious metals"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:207
+#: libgnucash/engine/gnc-commodity.cpp:206
 msgctxt "FQ Source"
 msgid "Google Web, US Stocks"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:208
+#: libgnucash/engine/gnc-commodity.cpp:207
 msgctxt "FQ Source"
 msgid "Market Watch"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:209
+#: libgnucash/engine/gnc-commodity.cpp:208
 msgctxt "FQ Source"
 msgid "Morningstar, CH"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:210
+#: libgnucash/engine/gnc-commodity.cpp:209
 msgctxt "FQ Source"
 msgid "Morningstar, GB"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:211
+#: libgnucash/engine/gnc-commodity.cpp:210
 msgctxt "FQ Source"
 msgid "Morningstar, JP"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:212
+#: libgnucash/engine/gnc-commodity.cpp:211
 msgctxt "FQ Source"
 msgid "Motley Fool"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:213
+#: libgnucash/engine/gnc-commodity.cpp:212
 msgctxt "FQ Source"
 msgid "New Zealand stock eXchange, NZ"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:214
+#: libgnucash/engine/gnc-commodity.cpp:213
 msgctxt "FQ Source"
 msgid "NSE (National Stock Exchange), IN"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:215
+#: libgnucash/engine/gnc-commodity.cpp:214
 msgctxt "FQ Source"
 msgid "OnVista, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:216
+#: libgnucash/engine/gnc-commodity.cpp:215
 msgctxt "FQ Source"
 msgid "Paris Stock Exchange/Boursorama, FR"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:217
+#: libgnucash/engine/gnc-commodity.cpp:216
 msgctxt "FQ Source"
 msgid "S-Investor, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:218
+#: libgnucash/engine/gnc-commodity.cpp:217
 msgctxt "FQ Source"
 msgid "Sharenet, ZA"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:219
+#: libgnucash/engine/gnc-commodity.cpp:218
 #, fuzzy
 #| msgid "Show Exchange Rates"
 msgctxt "FQ Source"
 msgid "SIX Swiss Exchange shares, CH"
 msgstr "הצגת שערי חליפין"
 
-#: libgnucash/engine/gnc-commodity.cpp:220
+#: libgnucash/engine/gnc-commodity.cpp:219
 #, fuzzy
 #| msgid "Stock"
 msgctxt "FQ Source"
 msgid "StockData"
 msgstr "נייר ערך"
 
-#: libgnucash/engine/gnc-commodity.cpp:221
+#: libgnucash/engine/gnc-commodity.cpp:220
 msgctxt "FQ Source"
 msgid "Stooq, PL"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:222
+#: libgnucash/engine/gnc-commodity.cpp:221
 msgctxt "FQ Source"
 msgid "Swiss Fund Data AG, CH"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:223
+#: libgnucash/engine/gnc-commodity.cpp:222
 msgctxt "FQ Source"
 msgid "Tesouro Direto bonds, BR"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:224
+#: libgnucash/engine/gnc-commodity.cpp:223
 msgctxt "FQ Source"
 msgid "Toronto Stock eXchange, CA"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:225
+#: libgnucash/engine/gnc-commodity.cpp:224
 msgctxt "FQ Source"
 msgid "Tradegate, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:226
+#: libgnucash/engine/gnc-commodity.cpp:225
 msgctxt "FQ Source"
 msgid "Treasury Direct bonds, US"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:227
+#: libgnucash/engine/gnc-commodity.cpp:226
 msgctxt "FQ Source"
 msgid "Twelve Data"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:228
+#: libgnucash/engine/gnc-commodity.cpp:227
 #, fuzzy
 #| msgid "Investments"
 msgctxt "FQ Source"
 msgid "Union Investment, DE"
 msgstr "השקעות"
 
-#: libgnucash/engine/gnc-commodity.cpp:229
+#: libgnucash/engine/gnc-commodity.cpp:228
 msgctxt "FQ Source"
 msgid "US Savings Bonds, US"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:230
+#: libgnucash/engine/gnc-commodity.cpp:229
 msgctxt "FQ Source"
 msgid "US Govt. Thrift Savings Plan"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:231
+#: libgnucash/engine/gnc-commodity.cpp:230
 msgctxt "FQ Source"
 msgid "XETRA, DE"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:232
+#: libgnucash/engine/gnc-commodity.cpp:231
 msgctxt "FQ Source"
 msgid "Yahoo as JSON"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:233
+#: libgnucash/engine/gnc-commodity.cpp:232
 msgctxt "FQ Source"
 msgid "Yahoo Web"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:234
+#: libgnucash/engine/gnc-commodity.cpp:233
 msgctxt "FQ Source"
 msgid "YH Finance (FinanceAPI)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:240
+#: libgnucash/engine/gnc-commodity.cpp:239
 msgctxt "FQ Source"
 msgid "Canada (Alphavantage, TMX)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:241
+#: libgnucash/engine/gnc-commodity.cpp:240
 msgctxt "FQ Source"
 msgid "Europe (ASEGR, Bourso, …)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:242
+#: libgnucash/engine/gnc-commodity.cpp:241
 msgctxt "FQ Source"
 msgid "India (BSEIndia, NSEIndia)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:243
+#: libgnucash/engine/gnc-commodity.cpp:242
 msgctxt "FQ Source"
 msgid "Nasdaq (Alphavantage, FinanceAPI, …)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:244
+#: libgnucash/engine/gnc-commodity.cpp:243
 msgctxt "FQ Source"
 msgid "NYSE (Alphavantage, FinanceAPI, …)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:245
+#: libgnucash/engine/gnc-commodity.cpp:244
 msgctxt "FQ Source"
 msgid "U.K. Funds (FTfunds, MorningstarUK)"
 msgstr ""
 
-#: libgnucash/engine/gnc-commodity.cpp:246
+#: libgnucash/engine/gnc-commodity.cpp:245
 msgctxt "FQ Source"
 msgid "USA (Alphavantage, FinanceAPI, …)"
 msgstr ""
@@ -30946,11 +31022,11 @@ msgstr "m-d"
 msgid "Unknown date format specifier passed as argument."
 msgstr "מבנה תאריך לא ידוע הועברה כמשתנה."
 
-#: libgnucash/engine/gnc-datetime.cpp:731
+#: libgnucash/engine/gnc-datetime.cpp:730
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr "לא ניתן לפרוס ערך לתאריך תוך שימוש במבנה התאריך שנבחרה."
 
-#: libgnucash/engine/gnc-datetime.cpp:736
+#: libgnucash/engine/gnc-datetime.cpp:735
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr "נראה שהערך מכיל שנה בעוד שהמבנה שנבחרה מונעת זאת."
 
