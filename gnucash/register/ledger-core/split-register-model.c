@@ -1284,7 +1284,7 @@ gnc_split_register_get_recn_entry (VirtualLocation virt_loc,
         return NULL;
 
     if (translate)
-        return gnc_get_reconcile_str (xaccSplitGetReconcile (split));
+        return gnc_get_reconcile_str_for_register (xaccSplitGetReconcile (split));
     else
     {
         static char s[2];

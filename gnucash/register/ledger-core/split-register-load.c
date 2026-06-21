@@ -71,7 +71,7 @@ gnc_split_register_load_recn_cells (SplitRegister* reg)
     s = gnc_get_reconcile_valid_flags();
     gnc_recn_cell_set_valid_flags (cell, s, *s);
     gnc_recn_cell_set_flag_order (cell, gnc_get_reconcile_flag_order());
-    gnc_recn_cell_set_string_getter (cell, gnc_get_reconcile_str);
+    gnc_recn_cell_set_string_getter (cell, gnc_get_reconcile_str_for_register);
 }
 
 static void

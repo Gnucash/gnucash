@@ -148,6 +148,12 @@ char* gnc_get_account_name_for_split_register(const Account* account,
  */
 
 const char*  gnc_get_reconcile_str (char reconciled_flag);
+/* Like gnc_get_reconcile_str, but returns an empty string for the
+ * 'not cleared' (NREC) state so that unreconciled transactions show a
+ * blank reconcile column in the register instead of 'n'. Used for
+ * register display only; CSV import/export still rely on
+ * gnc_get_reconcile_str. */
+const char*  gnc_get_reconcile_str_for_register (char reconciled_flag);
 const char*  gnc_get_reconcile_valid_flags (void);
 const char*  gnc_get_reconcile_flag_order (void);
 

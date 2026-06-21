@@ -485,6 +485,23 @@ gnc_get_reconcile_str (char reconciled_flag)
 }
 
 /********************************************************************\
+ * gnc_get_reconcile_str_for_register                               *
+ *   like gnc_get_reconcile_str, but show a blank for the           *
+ *   'not cleared' (NREC) state so unreconciled transactions are    *
+ *   easy to spot in the register                                   *
+ *                                                                  *
+ * Args: reconciled_flag - the flag to convert into a string        *
+ * Returns: the i18n'd reconciled string, or "" for NREC            *
+\********************************************************************/
+const char*
+gnc_get_reconcile_str_for_register (char reconciled_flag)
+{
+    if (reconciled_flag == NREC)
+        return "";
+    return gnc_get_reconcile_str (reconciled_flag);
+}
+
+/********************************************************************\
  * gnc_get_reconcile_valid_flags                                    *
  *   return a string containing the list of reconciled flags        *
  *                                                                  *
