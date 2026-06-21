@@ -2360,7 +2360,7 @@ create_hash_of_potential_matches (GList *candidate_splits,
          candidate = g_list_next (candidate))
     {
         auto split = static_cast<Split*>(candidate->data);
-        if (gnc_import_split_has_online_id (split))
+        if (xaccSplitHasOnlineID (split))
             continue;
         /* In this context an open transaction represents a freshly
          * downloaded one. That can't possibly be a match yet */

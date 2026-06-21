@@ -21,6 +21,19 @@ class TestSplit(SplitSession):
         self.split.SetMemo(MEMO)
         self.assertEqual( MEMO, self.split.GetMemo() )
 
+    def test_online_id(self):
+        FITID = "20240131-0001-1234567890"
+        # Unset online_id reads back as None (no KVP slot present).
+        self.assertEqual( None, self.split.GetOnlineID() )
+        self.assertFalse( self.split.HasOnlineID() )
+        self.split.SetOnlineID(FITID)
+        self.assertEqual( FITID, self.split.GetOnlineID() )
+        self.assertTrue( self.split.HasOnlineID() )
+        # Passing "" (or None) clears it.
+        self.split.SetOnlineID("")
+        self.assertEqual( None, self.split.GetOnlineID() )
+        self.assertFalse( self.split.HasOnlineID() )
+
     def test_account(self):
         ACCT = Account(self.book)
         ACCT.SetCommodity(self.currency)

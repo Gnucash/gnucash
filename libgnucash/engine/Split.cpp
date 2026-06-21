@@ -101,6 +101,7 @@ enum
 
 static const char * split_type_normal = "normal";
 static const char * split_type_stock_split = "stock-split";
+static const char * split_online_id = "online_id";
 
 /* GObject Initialization */
 G_DEFINE_TYPE(Split, gnc_split, QOF_TYPE_INSTANCE)
@@ -1899,6 +1900,35 @@ const char *
 xaccSplitGetMemo (const Split *split)
 {
     return split ? split->memo : nullptr;
+}
+
+void
+xaccSplitSetOnlineID (Split *split, const char *id)
+{
+    if (!split) return;
+    /* No xaccTransBeginEdit/CommitEdit here: the online_id is normally set
+     * while many other parameters of a transaction are being changed, so
+     * the caller wraps this in the parent transaction's edit. */
+    std::optional<const char*> val;
+    if (id && *id)
+        val = g_strdup (id);
+    qof_instance_set_path_kvp<const char*> (QOF_INSTANCE(split), val, {split_online_id});
+    qof_instance_set_dirty (QOF_INSTANCE(split));
+}
+
+const char *
+xaccSplitGetOnlineID (const Split *split)
+{
+    if (!split) return nullptr;
+    auto rv{qof_instance_get_path_kvp<const char*> (QOF_INSTANCE(split), {split_online_id})};
+    return rv ? *rv : nullptr;
+}
+
+gboolean
+xaccSplitHasOnlineID (const Split *split)
+{
+    auto id = xaccSplitGetOnlineID (split);
+    return (id && *id);
 }
 
 const char *
