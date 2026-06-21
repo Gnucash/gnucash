@@ -317,6 +317,14 @@ typedef enum
     /** Set the account's notes */
     void xaccAccountSetNotes (Account *account, const char *notes);
 
+    /** Set the account's online_id, the identifier (e.g. an OFX/HBCI
+     *  BANKID+ACCTID composite) of the online account this GnuCash account
+     *  is mapped to for bank imports.  This is the same value (engine KVP
+     *  slot "online_id") that the desktop OFX/HBCI importer uses to match a
+     *  downloaded statement to its GnuCash account.  Passing NULL or ""
+     *  clears it.  Wraps its own begin/commit edit. */
+    void xaccAccountSetOnlineID (Account *account, const char *id);
+
     /** Set the account's associated account e.g. stock account -> dividend account */
     void xaccAccountSetAssociatedAccount (Account *acc, const char *tag,
                                           const Account *assoc_acct);
@@ -425,6 +433,11 @@ typedef enum
     gboolean xaccAccountGetSortReversed (const Account *account);
     /** Get the account's notes */
     const char * xaccAccountGetNotes (const Account *account);
+
+    /** Get the account's online_id (see xaccAccountSetOnlineID).  The
+     *  returned string is owned by the account and must NOT be freed;
+     *  returns NULL if no online_id is set. */
+    const char * xaccAccountGetOnlineID (const Account *account);
 
     /** Get the account's associated account e.g. stock account -> dividend account */
     Account* xaccAccountGetAssociatedAccount (const Account *acc, const char *tag);

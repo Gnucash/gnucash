@@ -110,6 +110,21 @@ xaccSplitSetMemo (Split *split, const char *memo)
     gnc_mocksplit(split)->set_memo(memo);
 }
 
+const char *
+xaccSplitGetOnlineID (const Split *split)
+{
+    SCOPED_TRACE("");
+    auto mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_online_id() : nullptr;
+}
+
+void
+xaccSplitSetOnlineID (Split *split, const char *id)
+{
+    ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
+    gnc_mocksplit(split)->set_online_id(id);
+}
+
 char
 xaccSplitGetReconcile (const Split *split)
 {
