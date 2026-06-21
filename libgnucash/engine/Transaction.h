@@ -352,7 +352,6 @@ const char *  xaccTransGetDocLink(const Transaction *trans);
  The Notes field is only visible in the register in double-line mode */
 const char *  xaccTransGetNotes (const Transaction *trans);
 
-
 /** Sets whether or not this transaction is a "closing transaction" */
 void          xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing);
 

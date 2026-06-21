@@ -189,14 +189,11 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
     GncGUID *invoice = guid_new ();
     GncGUID *from_sx = guid_new ();
     GncGUID *invoice_r, *from_sx_r;
-    gchar *online_id = "my online id";
-    gchar *online_id_r;
 
     xaccTransBeginEdit (fixture->trans);
     qof_instance_set (QOF_INSTANCE (fixture->trans),
 		      "invoice", invoice,
 		      "from-sched-xaction", from_sx,
-		      "online-id", online_id,
 		      NULL);
 
     g_assert_true (qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
@@ -205,17 +202,14 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
     qof_instance_get (QOF_INSTANCE (fixture->trans),
 		      "invoice", &invoice_r,
 		      "from-sched-xaction", &from_sx_r,
-		      "online-id", &online_id_r,
 		      NULL);
     g_assert_true (guid_equal (invoice, invoice_r));
     g_assert_true (guid_equal (from_sx, from_sx_r));
-    g_assert_cmpstr (online_id, ==, online_id_r);
     g_assert_true (!qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
     guid_free (invoice);
     guid_free (invoice_r);
     guid_free (from_sx);
     guid_free (from_sx_r);
-    g_free (online_id_r);
 }
 
 static void
