@@ -200,7 +200,6 @@ enum
     PROP_DESCRIPTION,	/* Table */
     PROP_INVOICE,	/* KVP */
     PROP_SX_TXN,	/* KVP */
-    PROP_ONLINE_ACCOUNT,/* KVP */
 };
 
 void
@@ -331,9 +330,6 @@ gnc_transaction_get_property(GObject* object,
     case PROP_SX_TXN:
         qof_instance_get_kvp (QOF_INSTANCE (tx), value, 1, GNC_SX_FROM);
         break;
-    case PROP_ONLINE_ACCOUNT:
-        qof_instance_get_kvp (QOF_INSTANCE (tx), value, 1, "online_id");
-        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -378,9 +374,6 @@ gnc_transaction_set_property(GObject* object,
         break;
     case PROP_SX_TXN:
         qof_instance_set_kvp (QOF_INSTANCE (tx), value, 1, GNC_SX_FROM);
-        break;
-    case PROP_ONLINE_ACCOUNT:
-        qof_instance_set_kvp (QOF_INSTANCE (tx), value, 1, "online_id");
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -470,16 +463,6 @@ gnc_transaction_class_init(TransactionClass* klass)
 			   "transactions",
 			   GNC_TYPE_GUID,
 			   G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_ONLINE_ACCOUNT,
-     g_param_spec_string ("online-id",
-                          "Online Account ID",
-                          "The online account which corresponds to this "
-			  "account for OFX/HCBI import",
-                          nullptr,
-                          G_PARAM_READWRITE));
 }
 
 /********************************************************************\
@@ -677,9 +660,6 @@ xaccTransClone (const Transaction *from)
 
     xaccTransBeginEdit (to);
     qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
-
-    /* But not the online-id! */
-    qof_instance_set (QOF_INSTANCE (to), "online-id", nullptr, nullptr);
 
     for (GList* lfrom = from->splits, *lto = to->splits; lfrom && lto;
          lfrom = g_list_next (lfrom), lto = g_list_next (lto))
