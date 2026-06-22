@@ -70,7 +70,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include <gnc-glib-utils.h>
-#include "gnc-uri-utils.h"
+#include "gnc-uri.hpp"
 #include "gnc-version.h"
 #include "gnc-warnings.h"
 #include "gnc-window.h"
@@ -1567,19 +1567,19 @@ gnc_main_window_generate_title (GncMainWindow *window)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
-        if (gnc_uri_targets_local_fs (uri))
+        GncUri parsed { uri };
+        if (parsed.targets_local_fs ())
         {
             /* The filename is a true file.
                The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
-            gchar *path = gnc_uri_get_path ( uri );
-            filename = g_path_get_basename ( path );
-            g_free ( path );
+            filename = g_path_get_basename ( parsed.path ()->c_str () );
         }
         else
         {
             /* The filename is composed of database connection parameters.
                For this we will show access_method://username@database[:port] */
-            filename = gnc_uri_normalize_uri (uri, FALSE);
+            auto normalized = parsed.try_str (false);
+            filename = normalized ? g_strdup (normalized->c_str ()) : nullptr;
         }
     }
 
@@ -1733,11 +1733,12 @@ static gchar *generate_statusbar_lastmodified_message()
         return nullptr;
     else
     {
-        if (gnc_uri_targets_local_fs (uri))
+        GncUri parsed { uri };
+        if (parsed.targets_local_fs ())
         {
             /* The filename is a true file. */
-            gchar *filepath = gnc_uri_get_path ( uri );
-            gchar *filename = g_path_get_basename ( filepath );
+            std::string filepath = parsed.path ().value_or ("");
+            gchar *filename = g_path_get_basename ( filepath.c_str () );
             GFile *file = g_file_new_for_uri (uri);
             GFileInfo *info = g_file_query_info (file,
                                                  G_FILE_ATTRIBUTE_TIME_MODIFIED,
@@ -1748,7 +1749,7 @@ static gchar *generate_statusbar_lastmodified_message()
             {
                 // Access the mtime information through stat(2)
                 struct stat statbuf;
-                int r = stat(filepath, &statbuf);
+                int r = stat(filepath.c_str(), &statbuf);
                 if (r == 0)
                 {
                     /* Translators: This is the date and time that is shown in
@@ -1766,12 +1767,11 @@ static gchar *generate_statusbar_lastmodified_message()
                 }
                 else
                 {
-                    g_warning("Unable to read mtime for file %s\n", filepath);
+                    g_warning("Unable to read mtime for file %s\n", filepath.c_str());
                     // message is still nullptr
                 }
             }
             g_free(filename);
-            g_free(filepath);
             g_object_unref (info);
             g_object_unref (file);
         }
@@ -5480,7 +5480,12 @@ add_about_paths (GtkDialog *dialog)
     for (const auto& ep : ep_vec)
     {
         gchar *env_name = g_strconcat (ep.env_name, ":", nullptr);
-        const gchar *uri = gnc_uri_create_uri ("file", nullptr, 0, nullptr, nullptr, ep.env_path);
+        GncUri file_uri { std::string {"file"}, std::nullopt, 0, std::nullopt,
+                          std::nullopt,
+                          ep.env_path ? std::optional<std::string> { ep.env_path }
+                                      : std::nullopt };
+        auto uri_str = file_uri.try_str ();
+        const gchar *uri = uri_str ? uri_str->c_str () : nullptr;
         gchar *display_uri = gnc_doclink_get_unescaped_just_uri (uri);
 
         gchar *url_tag = g_strdup_printf ("%s%d", "url_tag", row);

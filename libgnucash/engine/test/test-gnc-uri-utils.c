@@ -28,6 +28,7 @@
 #include <glib.h>
 #include "qof.h"
 #include <unittest-support.h>
+#include "gnc-filepath-utils.h"
 #include "gnc-uri-utils.h"
 
 static const gchar *suitename = "/engine/uri-utils";
@@ -272,6 +273,17 @@ test_gnc_uri_create_uri()
         g_assert_cmpstr ( turi, ==, strs[i].created_uri );
         g_free(turi);
     }
+
+    /* A file-type scheme with a non-absolute path exercises the "scheme:///path"
+     * branch that inserts an extra slash. In the test environment no backends
+     * are registered, so an (unknown) file-type scheme leaves the path
+     * unresolved, making the result predictable. */
+    {
+        gchar *turi = gnc_uri_create_uri( "xml", NULL, 0, NULL, NULL,
+                                          "relative/path/file.gnucash" );
+        g_assert_cmpstr ( turi, ==, "xml:///relative/path/file.gnucash" );
+        g_free(turi);
+    }
 }
 
 /* TEST: gnc_uri_normalize_uri */
@@ -319,6 +331,75 @@ test_gnc_uri_is_file_uri()
     }
 }
 
+/* TEST: gnc_uri_targets_local_fs */
+static void
+test_gnc_uri_targets_local_fs()
+{
+    struct test_local_fs_struct
+    {
+        const gchar *uri;
+        gboolean     targets_local_fs;
+    } cases[] =
+    {
+#ifndef G_OS_WIN32
+        { "/test/path/file.gnucash",          TRUE },  /* no scheme   -> local */
+        { "file:///test/path/file.gnucash",   TRUE },  /* file scheme -> local */
+        { "xml:///test/path/file.gnucash",    TRUE },
+        { "sqlite3:///test/path/file.gnucash", TRUE },
+#else
+        { "c:\\test\\path\\file.gnucash",          TRUE },  /* no scheme   -> local */
+        { "file://c:\\test\\path\\file.gnucash",   TRUE },  /* file scheme -> local */
+        { "xml://c:\\test\\path\\file.gnucash",    TRUE },
+        { "sqlite3://c:\\test\\path\\file.gnucash", TRUE },
+#endif
+        { "mysql://www.gnucash.org/gnucash",                  FALSE }, /* db scheme -> not local */
+        { "postgres://dbuser:dbpass@www.gnucash.org/gnucash", FALSE },
+        { NULL, FALSE },
+    };
+
+    int i;
+    for (i = 0; cases[i].uri != NULL; i++)
+        g_assert_true ( gnc_uri_targets_local_fs (cases[i].uri) == cases[i].targets_local_fs );
+}
+
+/* TEST: gnc_uri_add_extension */
+static void
+test_gnc_uri_add_extension()
+{
+    gchar *result;
+
+    /* A NULL uri returns NULL (and logs a critical from g_return_val_if_fail) */
+    if (g_test_undefined ())
+    {
+        g_test_expect_message ("gnc.engine", G_LOG_LEVEL_CRITICAL,
+                               "*assertion 'uri != nullptr' failed*");
+        g_assert_null ( gnc_uri_add_extension (NULL, GNC_DATAFILE_EXT) );
+        g_test_assert_expected_messages ();
+    }
+
+    /* A non-file uri is never modified, only duplicated */
+    result = gnc_uri_add_extension ( "mysql://www.gnucash.org/gnucash", GNC_DATAFILE_EXT );
+    g_assert_cmpstr ( result, ==, "mysql://www.gnucash.org/gnucash" );
+    g_free (result);
+
+#ifndef G_OS_WIN32
+    /* A file uri without the extension gets it appended */
+    result = gnc_uri_add_extension ( "file:///test/path/file", GNC_DATAFILE_EXT );
+    g_assert_cmpstr ( result, ==, "file:///test/path/file" GNC_DATAFILE_EXT );
+    g_free (result);
+
+    /* A file uri that already ends in the extension is left unchanged */
+    result = gnc_uri_add_extension ( "file:///test/path/file" GNC_DATAFILE_EXT, GNC_DATAFILE_EXT );
+    g_assert_cmpstr ( result, ==, "file:///test/path/file" GNC_DATAFILE_EXT );
+    g_free (result);
+
+    /* A NULL extension leaves the uri unchanged, only duplicated */
+    result = gnc_uri_add_extension ( "file:///test/path/file", NULL );
+    g_assert_cmpstr ( result, ==, "file:///test/path/file" );
+    g_free (result);
+#endif
+}
+
 void
 test_suite_gnc_uri_utils(void)
 {
@@ -329,5 +410,6 @@ test_suite_gnc_uri_utils(void)
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_normalize_uri()", test_gnc_uri_normalize_uri);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_scheme()", test_gnc_uri_is_file_scheme);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_uri()", test_gnc_uri_is_file_uri);
-
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_targets_local_fs()", test_gnc_uri_targets_local_fs);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_add_extension()", test_gnc_uri_add_extension);
 }

@@ -36,7 +36,7 @@
 #include <qof.h>
 /* For cleaning up the database */
 #include <dbi/dbi.h>
-#include <gnc-uri-utils.h>
+#include <gnc-uri.hpp>
     /* For setup_business */
 #include "Account.h"
 #include <TransLog.h>
@@ -88,9 +88,9 @@ static char*
 normalize_path(char* path)
 {
     g_return_val_if_fail(path, nullptr);
-    auto rv = gnc_uri_normalize_uri (path, FALSE);
+    auto rv = GncUri { path }.try_str (false);
     g_free (path);
-    return rv;
+    return rv ? g_strdup (rv->c_str ()) : nullptr;
 }
 
 
@@ -276,8 +276,16 @@ destroy_database (gchar* url)
     dbi_result tables;
     StrVec tblnames;
 
-    gnc_uri_get_components (url, &scheme, &host, &portnum,
-                            &username, &password, &dbname);
+    if (url && *url)
+    {
+        GncUri parsed { url };
+        scheme   = parsed.scheme ()   ? g_strdup (parsed.scheme ()->c_str ())   : nullptr;
+        host     = parsed.hostname () ? g_strdup (parsed.hostname ()->c_str ()) : nullptr;
+        username = parsed.username () ? g_strdup (parsed.username ()->c_str ()) : nullptr;
+        password = parsed.password () ? g_strdup (parsed.password ()->c_str ()) : nullptr;
+        dbname   = parsed.path ()     ? g_strdup (parsed.path ()->c_str ())     : nullptr;
+        portnum  = parsed.port ();
+    }
     if (g_strcmp0 (scheme, "postgres") == 0)
 #if HAVE_LIBDBI_R
         conn = dbi_conn_new_r (pgsql, dbi_instance);

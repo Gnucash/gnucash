@@ -37,7 +37,7 @@
 #include <cstdint>
 
 #include "gnc-ui.h"
-#include "gnc-uri-utils.h"
+#include "gnc-uri.hpp"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
 
@@ -738,8 +738,8 @@ CsvImpPriceAssist::check_for_valid_filename ()
         return false;
     }
 
-    auto filepath = gnc_uri_get_path (file_name);
-    auto starting_dir = g_path_get_dirname (filepath);
+    auto filepath = GncUri{file_name}.path().value_or ("");
+    auto starting_dir = g_path_get_dirname (filepath.c_str());
 
     m_fc_file_name = file_name;
     gnc_set_default_directory (GNC_PREFS_GROUP, starting_dir);
@@ -747,7 +747,6 @@ CsvImpPriceAssist::check_for_valid_filename ()
     DEBUG("file_name selected is %s", m_fc_file_name.c_str());
     DEBUG("starting directory is %s", starting_dir);
 
-    g_free (filepath);
     g_free (file_name);
     g_free (starting_dir);
 

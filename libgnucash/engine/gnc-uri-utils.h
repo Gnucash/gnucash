@@ -58,26 +58,11 @@
 #ifndef GNCURIUTILS_H_
 #define GNCURIUTILS_H_
 
-#define GNC_DATAFILE_EXT ".gnucash"
-#define GNC_LOGFILE_EXT  ".log"
-
 #include "platform.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/** Checks if the given uri is a valid uri
- *
- *  A valid uri is defined by having at least a scheme and a path.
- *  If the uri is not referring to a file on the local file system
- *  a hostname should be set as well.
- *
- *  @param uri The uri to check
- *
- *  @return TRUE if the input is a valid uri, FALSE otherwise
- */
-gboolean gnc_uri_is_uri (const gchar *uri);
 
 /** Converts a uri in separate components.
   *
@@ -191,28 +176,6 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
  *  @return The normalized uri.
  */
 gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password);
-
-
-/** Checks if the given uri is a valid uri
- *
- *  A valid uri is defined by having at least a scheme and a path.
- *  If the uri is not referring to a file on the local file system
- *  a hostname should be set as well.
- *
- *  @param uri The uri to check
- *
- *  @return TRUE if the input is a valid uri, FALSE otherwise
- */
-gboolean gnc_uri_is_uri (const gchar *uri);
-
-
-/** Checks if there is a backend that explicitly stated to handle the given scheme.
- *
- *  @param scheme The scheme to check
- *
- *  @return TRUE if at least one backend explicitly handles this scheme, otherwise FALSE
- */
-gboolean gnc_uri_is_known_scheme (const gchar *scheme);
 
 
 /** Checks if the given scheme is used to refer to a file

@@ -130,6 +130,9 @@ set(test_qofsession_SOURCES
 gnc_add_test(test-qofsession "${test_qofsession_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+gnc_add_test(test-gnc-uri  gtest-gnc-uri.cpp
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 gnc_add_test(test-qofid  test-qofid.cpp
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
@@ -211,6 +214,7 @@ gnc_add_test(test-gnc-option "${test_gnc_option_SOURCES}"
 
 set(test_engine_SOURCES_DIST
         gtest-gnc-euro.cpp
+        gtest-gnc-uri.cpp
         gtest-gnc-int128.cpp
         gtest-gnc-rational.cpp
         gtest-gnc-numeric.cpp
@@ -231,7 +235,7 @@ set(test_engine_SOURCES_DIST
         test-engine.c
         test-gnc-date.c
         test-gnc-guid.cpp
-	test-gnc-uri-utils.c
+        test-gnc-uri-utils.c
         test-group-vs-book.cpp
         test-guid.cpp
         test-job.c

@@ -33,7 +33,8 @@
 #endif
 
 #include <gnc-engine.h> //for GNC_MOD_BACKEND
-#include <gnc-uri-utils.h>
+#include <gnc-filepath-utils.h>
+#include <gnc-uri.hpp>
 #include <TransLog.h>
 #include <gnc-prefs.h>
 
@@ -115,9 +116,7 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
                       SessionOpenMode mode)
 {
     /* Make sure the directory is there */
-    auto path_str = gnc_uri_get_path (new_uri);
-    m_fullpath = path_str;
-    g_free (path_str);
+    m_fullpath = GncUri { new_uri }.path().value_or ("");
 
     if (m_fullpath.empty())
     {
