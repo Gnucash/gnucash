@@ -625,8 +625,12 @@ set(CMAKE_C_EXTENSIONS ON)
 
 # -Wno-deprecated-volatile, -Wno-volatile: Guile heavily uses
 # -volatile. Guile is C but we include its headers in C++ swig files.
+# -Wno-character-conversions: Googletest casts char8_t* to char32_t
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang")
   set(volatile_warning "-Wno-deprecated-volatile")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "21")
+    set (character_conversions "-Wno-character-conversion")
+  endif()
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(volatile_warning "-Wno-volatile")
 else()
@@ -634,13 +638,12 @@ else()
 endif()
 if (UNIX)
   set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  # -Wno-character-conversions: Googletest casts char8_t* to char32_t
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-character-conversion  ${volatile_warning} ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations ${character_conversions} ${volatile_warning} ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
   set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-character-conversion ${volatile_warning} -DWINVER=0x0A00 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
+  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations ${character_conversions} ${volatile_warning} -DWINVER=0x0A00 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
 if (APPLE)
