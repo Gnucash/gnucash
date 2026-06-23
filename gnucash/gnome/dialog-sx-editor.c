@@ -1193,19 +1193,19 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
         void     (*fn)();
         gpointer objectData;
     } widgets[] =
-          {
-              { "ok_button",      "clicked",       editor_ok_button_clicked_cb,     NULL },
-              { "cancel_button",  "clicked",       editor_cancel_button_clicked_cb, NULL },
-              { "help_button",    "clicked",       editor_help_button_clicked_cb,   NULL },
-              { "rb_noend",       "toggled",       endgroup_rb_toggled_cb,          GINT_TO_POINTER (END_NEVER_OPTION) },
-              { "rb_enddate",     "toggled",       endgroup_rb_toggled_cb,          GINT_TO_POINTER (END_DATE_OPTION) },
-              { "rb_num_occur",   "toggled",       endgroup_rb_toggled_cb,          GINT_TO_POINTER (NUM_OCCUR_OPTION) },
-              { "remain_spin" ,   "value-changed", sxed_excal_update_adapt_cb,      NULL },
-              { "enabled_opt",    "toggled",       enabled_toggled_cb,              NULL },
-              { "autocreate_opt", "toggled",       autocreate_toggled_cb,           NULL },
-              { "advance_opt",    "toggled",       advance_toggled_cb,              NULL },
-              { "remind_opt",     "toggled",       remind_toggled_cb,               NULL },
-              { NULL,             NULL,            NULL,                            NULL }
+        {
+            { "ok_button",     "clicked",       G_CALLBACK(editor_ok_button_clicked_cb),     NULL },
+            { "cancel_button", "clicked",       G_CALLBACK(editor_cancel_button_clicked_cb), NULL },
+            { "help_button",   "clicked",       G_CALLBACK(editor_help_button_clicked_cb),   NULL },
+            { "rb_noend",      "toggled",       G_CALLBACK(endgroup_rb_toggled_cb),          GINT_TO_POINTER (END_NEVER_OPTION) },
+            { "rb_enddate",    "toggled",       G_CALLBACK(endgroup_rb_toggled_cb),          GINT_TO_POINTER (END_DATE_OPTION) },
+            { "rb_num_occur",  "toggled",       G_CALLBACK(endgroup_rb_toggled_cb),          GINT_TO_POINTER (NUM_OCCUR_OPTION) },
+            { "remain_spin" ,  "value-changed", G_CALLBACK(sxed_excal_update_adapt_cb),      NULL },
+            { "enabled_opt",   "toggled",       G_CALLBACK(enabled_toggled_cb),              NULL },
+            { "autocreate_opt", "toggled",       G_CALLBACK(autocreate_toggled_cb),           NULL },
+            { "advance_opt",   "toggled",       G_CALLBACK(advance_toggled_cb),              NULL },
+            { "remind_opt",    "toggled",       G_CALLBACK(remind_toggled_cb),               NULL },
+            { NULL,             NULL,            NULL,                            NULL }
           };
 
     dlgExists = gnc_find_gui_components (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,

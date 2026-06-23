@@ -471,7 +471,7 @@ std::string ErrorList::str()
     auto err_msg = std::string();
     if (!m_error.empty())
     {
-        auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+        auto add_bullet_item = [](std::string&& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
         err_msg = std::accumulate (m_error.begin(), m_error.end(), std::move (err_msg), add_bullet_item);
         err_msg.erase (0, 1);
     }

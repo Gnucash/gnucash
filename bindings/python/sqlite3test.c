@@ -19,7 +19,9 @@
 \********************************************************************/
 
 #include <config.h>
-#include "qofsession.h"
+#include <unistd.h>
+#include <gnc-engine.h>
+#include <qof.h>
 #define TESTFILE "/tmp/blah.gnucash"
 int main()
 {

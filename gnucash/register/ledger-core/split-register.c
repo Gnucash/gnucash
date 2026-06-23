@@ -883,7 +883,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     }
 
     copied_item.cursor_class = cursor_class;
-    gnc_hook_add_dangler (HOOK_BOOK_CLOSED, clear_copied_item, NULL, NULL);
+    gnc_hook_add_dangler (HOOK_BOOK_CLOSED, (GFunc)clear_copied_item, NULL, NULL);
     LEAVE ("%s %s", use_cut_semantics ? "cut" : "copied",
            cursor_class == CURSOR_CLASS_SPLIT ? "split" : "transaction");
 }

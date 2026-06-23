@@ -152,13 +152,13 @@ gnc_frequency_init(GncFrequency *gf)
         void (*fn)();
     } comboBoxes[] =
     {
-        { "freq_combobox",              freq_combo_changed },
-        { "semimonthly_first",          semimonthly_sel_changed },
-        { "semimonthly_first_weekend",  semimonthly_sel_changed },
-        { "semimonthly_second",         semimonthly_sel_changed },
-        { "semimonthly_second_weekend", semimonthly_sel_changed },
-        { "monthly_day",                monthly_sel_changed },
-        { "monthly_weekend",            monthly_sel_changed },
+        { "freq_combobox",              G_CALLBACK(freq_combo_changed) },
+        { "semimonthly_first",          G_CALLBACK(semimonthly_sel_changed) },
+        { "semimonthly_first_weekend",  G_CALLBACK(semimonthly_sel_changed) },
+        { "semimonthly_second",         G_CALLBACK(semimonthly_sel_changed) },
+        { "semimonthly_second_weekend", G_CALLBACK(semimonthly_sel_changed) },
+        { "monthly_day",                G_CALLBACK(monthly_sel_changed) },
+        { "monthly_weekend",            G_CALLBACK(monthly_sel_changed) },
         { NULL,                         NULL }
     };
 
@@ -168,11 +168,11 @@ gnc_frequency_init(GncFrequency *gf)
         void (*fn)();
     } spinVals[] =
     {
-        { "daily_spin",       spin_changed_helper },
-        { "weekly_spin",      spin_changed_helper },
-        { "semimonthly_spin", spin_changed_helper },
-        { "monthly_spin",     spin_changed_helper },
-        { NULL,               NULL }
+        { "daily_spin",       G_CALLBACK(spin_changed_helper) },
+        { "weekly_spin",      G_CALLBACK(spin_changed_helper) },
+        { "semimonthly_spin", G_CALLBACK(spin_changed_helper) },
+        { "monthly_spin",     G_CALLBACK(spin_changed_helper) },
+      { NULL,               NULL }
     };
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gf), GTK_ORIENTATION_VERTICAL);

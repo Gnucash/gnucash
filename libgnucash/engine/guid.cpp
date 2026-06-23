@@ -430,9 +430,9 @@ bool operator == (GUID const & lhs, GncGUID const & rhs) noexcept
 }
 
 bool
-operator != (GUID const & one, GUID const & two) noexcept
+operator == (GUID const & one, GUID const & two) noexcept
 {
-    return one.implementation != two.implementation;
+    return one.implementation == two.implementation;
 }
 
 GUID & GUID::operator = (GUID && other) noexcept
@@ -453,5 +453,5 @@ GUID::operator GncGUID () const noexcept
 bool
 operator==(const GncGUID& lhs, const GncGUID& rhs)
 {
-    return gnc::GUID{lhs} == gnc::GUID{rhs};
+    return gnc::GUID{lhs} == rhs;
 }

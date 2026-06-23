@@ -67,7 +67,6 @@ static const std::string KEY_INCLUDE_CHILDREN("include-children");
 static const std::string KEY_POSTPONE("postpone");
 static const std::string KEY_LOT_MGMT("lot-mgmt");
 static const std::string KEY_ONLINE_ID("online_id");
-static const std::string KEY_IMP_APPEND_TEXT("import-append-text");
 static const std::string AB_KEY("hbci");
 static const std::string AB_ACCOUNT_ID("account-id");
 static const std::string AB_ACCOUNT_UID("account-uid");

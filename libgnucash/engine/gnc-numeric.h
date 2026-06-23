@@ -140,7 +140,7 @@ typedef struct _gnc_numeric gnc_numeric;
  *
  * Possible rounding instructions are:
  */
-enum
+enum GncNumericRoundDenom
 {
     /** Round toward -infinity */
     GNC_HOW_RND_FLOOR            = 0x01,
@@ -174,12 +174,8 @@ enum
     /** Never round at all, and signal an error if there is a
      *  fractional result in a computation.
      */
-    GNC_HOW_RND_NEVER            = 0x08
-};
-
+    GNC_HOW_RND_NEVER            = 0x08,
 /** How to compute a denominator, or'ed into the "how" field. */
-enum
-{
     /** Use any denominator which gives an exactly correct ratio of
      *  numerator to denominator. Use EXACT when you do not wish to
      *  lose any information in the result but also do not want to

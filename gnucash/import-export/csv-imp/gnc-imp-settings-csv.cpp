@@ -42,7 +42,6 @@
 #include <iostream>
 #include <string>
 
-const std::string csv_group_prefix{"CSV-"};
 const std::string no_settings{N_("No Settings")};
 const std::string gnc_exp{N_("GnuCash Export Format")};
 const std::string gnc_exp_4{N_("GnuCash Export Format (4.x and older)")};

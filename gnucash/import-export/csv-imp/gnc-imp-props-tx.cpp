@@ -332,7 +332,10 @@ std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_
     if (!check.empty())
     {
         auto err_msg = std::string("Not creating transaction because essentials not set properly:");
-        auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+        auto add_bullet_item = [](std::string&& a, std::string& b)->std::string {
+            static const std::string bullet{"\n• "};
+            return std::move(a) + "\n• " + b;
+        };
         err_msg = std::accumulate (check.begin(), check.end(), std::move (err_msg), add_bullet_item);
         PWARN ("%s", err_msg.c_str());
         return nullptr;
@@ -721,7 +724,7 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     if (!check.empty())
     {
         auto err_msg = std::string("Not creating split because essentials not set properly:");
-        auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+        auto add_bullet_item = [](std::string&& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
         err_msg = std::accumulate (check.begin(), check.end(), std::move (err_msg), add_bullet_item);
         PWARN ("%s", err_msg.c_str());
         return;
