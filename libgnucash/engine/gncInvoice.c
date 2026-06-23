@@ -1184,60 +1184,6 @@ GNCPrice * gncInvoiceGetPrice (GncInvoice *invoice, gnc_commodity *commodity)
     return NULL;
 }
 
-static QofCollection*
-qofInvoiceGetEntries (GncInvoice *invoice)
-{
-    QofCollection *entry_coll;
-    GList         *list;
-    QofInstance     *entry;
-
-    entry_coll = qof_collection_new (GNC_ID_ENTRY);
-    for (list = gncInvoiceGetEntries (invoice); list != NULL; list = list->next)
-    {
-        entry = QOF_INSTANCE(list->data);
-        qof_collection_add_entity (entry_coll, entry);
-    }
-    return entry_coll;
-}
-
-static void
-qofInvoiceEntryCB (QofInstance *ent, gpointer user_data)
-{
-    GncInvoice *invoice;
-
-    invoice = (GncInvoice*)user_data;
-    if (!invoice || !ent)
-    {
-        return;
-    }
-    switch (gncInvoiceGetOwnerType (invoice))
-    {
-    case GNC_OWNER_VENDOR:
-    {
-        gncBillAddEntry (invoice, (GncEntry*) ent);
-        break;
-    }
-    default :
-    {
-        gncInvoiceAddEntry (invoice, (GncEntry*)ent);
-        break;
-    }
-    }
-}
-
-static void
-qofInvoiceSetEntries (GncInvoice *invoice, QofCollection *entry_coll)
-{
-    if (!entry_coll)
-    {
-        return;
-    }
-    if (0 == g_strcmp0 (qof_collection_get_type (entry_coll), GNC_ID_ENTRY))
-    {
-        qof_collection_foreach (entry_coll, qofInvoiceEntryCB, invoice);
-    }
-}
-
 static GncJob*
 qofInvoiceGetJob (const GncInvoice *invoice)
 {
@@ -2284,7 +2230,6 @@ gboolean gncInvoiceRegister (void)
         { INVOICE_TYPE_STRING, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetTypeString,    NULL },
         { INVOICE_TERMS,     GNC_ID_BILLTERM,  (QofAccessFunc)gncInvoiceGetTerms,   (QofSetterFunc)gncInvoiceSetTerms },
         { INVOICE_BILLTO,    GNC_ID_OWNER,     (QofAccessFunc)gncInvoiceGetBillTo, NULL  },
-        { INVOICE_ENTRIES,   QOF_TYPE_COLLECT, (QofAccessFunc)qofInvoiceGetEntries, (QofSetterFunc)qofInvoiceSetEntries },
         { INVOICE_JOB,       GNC_ID_JOB,       (QofAccessFunc)qofInvoiceGetJob,     (QofSetterFunc)qofInvoiceSetJob },
         { QOF_PARAM_ACTIVE,  QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, (QofSetterFunc)gncInvoiceSetActive },
         { INVOICE_IS_CN,     QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetIsCreditNote, (QofSetterFunc)gncInvoiceSetIsCreditNote },
@@ -2300,8 +2245,6 @@ gboolean gncInvoiceRegister (void)
     /* Make the compiler happy... */
     if (0)
     {
-        qofInvoiceSetEntries (NULL, NULL);
-        qofInvoiceGetEntries (NULL);
         qofInvoiceSetOwner (NULL, NULL);
         qofInvoiceGetOwner (NULL);
         qofInvoiceSetBillTo (NULL, NULL);

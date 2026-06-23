@@ -303,7 +303,6 @@ gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 #define INVOICE_TYPE        "type"
 #define INVOICE_TYPE_STRING "type_string"
 #define INVOICE_BILLTO      "bill-to"
-#define INVOICE_ENTRIES     "list_of_entries"
 #define INVOICE_JOB         "invoice_job"
 
 #define INVOICE_FROM_LOT    "invoice-from-lot"
