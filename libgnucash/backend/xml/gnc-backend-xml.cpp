@@ -67,7 +67,7 @@
 
 #include "qof.h"
 #include "gnc-engine.h"
-#include <gnc-uri-utils.h>
+#include <gnc-uri.hpp>
 #include "gnc-prefs.h"
 
 #ifndef HAVE_STRPTIME
@@ -117,7 +117,6 @@ QofXmlBackendProvider::type_check (const char *uri)
     GStatBuf sbuf;
     int rc;
     FILE* t;
-    gchar* filename;
     QofBookFileType xml_type;
     gboolean result;
 
@@ -126,8 +125,8 @@ QofXmlBackendProvider::type_check (const char *uri)
         return FALSE;
     }
 
-    filename = gnc_uri_get_path (uri);
-    t = g_fopen (filename, "r");
+    std::string filename = GncUri{uri}.path().value_or ("");
+    t = g_fopen (filename.c_str(), "r");
     if (!t)
     {
         PINFO (" new file");
@@ -135,7 +134,7 @@ QofXmlBackendProvider::type_check (const char *uri)
         goto det_exit;
     }
     fclose (t);
-    rc = g_stat (filename, &sbuf);
+    rc = g_stat (filename.c_str(), &sbuf);
     if (rc < 0)
     {
         result = FALSE;
@@ -147,7 +146,7 @@ QofXmlBackendProvider::type_check (const char *uri)
         result = TRUE;
         goto det_exit;
     }
-    xml_type = gnc_is_xml_data_file_v2 (filename, NULL);
+    xml_type = gnc_is_xml_data_file_v2 (filename.c_str(), NULL);
     if ((xml_type == GNC_BOOK_XML2_FILE) ||
         (xml_type == GNC_BOOK_XML1_FILE) ||
         (xml_type == GNC_BOOK_POST_XML2_0_0_FILE))
@@ -155,11 +154,10 @@ QofXmlBackendProvider::type_check (const char *uri)
         result = TRUE;
         goto det_exit;
     }
-    PINFO (" %s is not a gnc XML file", filename);
+    PINFO (" %s is not a gnc XML file", filename.c_str());
     result = FALSE;
 
 det_exit:
-    g_free (filename);
     return result;
 }
 

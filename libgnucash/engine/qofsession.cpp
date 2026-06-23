@@ -55,7 +55,7 @@ static QofLogModule log_module = QOF_MOD_SESSION;
 #include "qof-backend.hpp"
 #include "qofsession.hpp"
 #include "gnc-backend-prov.hpp"
-#include "gnc-uri-utils.h"
+#include "gnc-uri.hpp"
 
 #include <vector>
 #include <boost/algorithm/string.hpp>
@@ -275,7 +275,10 @@ QofSessionImpl::begin (const char* new_uri, SessionOpenMode mode) noexcept
     char * scheme {g_uri_parse_scheme (new_uri)};
     char * filename {nullptr};
     if (g_strcmp0 (scheme, "file") == 0)
-        filename = gnc_uri_get_path(new_uri);
+    {
+        if (auto path = GncUri{new_uri}.path())
+            filename = g_strdup (path->c_str());
+    }
     else if (!scheme)
         filename = g_strdup (new_uri);
 

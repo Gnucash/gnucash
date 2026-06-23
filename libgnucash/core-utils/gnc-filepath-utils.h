@@ -29,6 +29,9 @@
 #ifndef GNC_FILEPATH_UTILS_H
 #define GNC_FILEPATH_UTILS_H
 
+#define GNC_DATAFILE_EXT ".gnucash"
+#define GNC_LOGFILE_EXT  ".log" /* GnuCash transaction-log file extension */
+
 #include <glib.h>
 
 #ifdef __cplusplus

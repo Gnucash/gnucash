@@ -40,7 +40,6 @@
 #include "gnucash-register.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
-#include "gnc-uri-utils.h"
 #include "gnc-window.h"
 #include "dialog-utils.h"
 #include "dialog-doclink.h"

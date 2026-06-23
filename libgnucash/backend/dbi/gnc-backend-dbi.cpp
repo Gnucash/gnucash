@@ -47,7 +47,7 @@
 #include "SX-book.h"
 #include "Recurrence.h"
 #include <gnc-features.h>
-#include "gnc-uri-utils.h"
+#include "gnc-uri.hpp"
 #include "gnc-filepath-utils.h"
 #include <gnc-path.h>
 #include "gnc-locale-utils.h"
@@ -132,24 +132,13 @@ struct UriStrings
 
 UriStrings::UriStrings(const std::string& uri)
 {
-    gchar *scheme, *host, *username, *password, *dbname;
-    int portnum;
-    gnc_uri_get_components(uri.c_str(), &scheme, &host, &portnum, &username,
-                           &password, &dbname);
-    m_protocol = std::string{scheme};
-    m_host = std::string{host};
-    if (dbname)
-	m_dbname = std::string{dbname};
-    if (username)
-        m_username = std::string{username};
-    if (password)
-        m_password = std::string{password};
-    m_portnum = portnum;
-    g_free(scheme);
-    g_free(host);
-    g_free(username);
-    g_free(password);
-    g_free(dbname);
+    GncUri parsed { uri };
+    m_protocol = parsed.scheme().value_or("");
+    m_host     = parsed.hostname().value_or("");
+    m_dbname   = parsed.path().value_or("");
+    m_username = parsed.username().value_or("");
+    m_password = parsed.password().value_or("");
+    m_portnum  = parsed.port();
 }
 
 std::string
@@ -366,9 +355,7 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
     ENTER (" ");
 
     /* Remove uri type if present */
-    auto path = gnc_uri_get_path (new_uri);
-    std::string filepath{path};
-    g_free(path);
+    std::string filepath = GncUri{new_uri}.path().value_or("");
     GFileTest ftest = static_cast<decltype (ftest)> (
         G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS) ;
     file_exists = g_file_test (filepath.c_str(), ftest);
@@ -1033,14 +1020,12 @@ QofDbiBackendProvider<DbType::DBI_SQLITE>::type_check(const char *uri)
     gchar buf[51]{};
     G_GNUC_UNUSED size_t chars_read;
     gint status;
-    gchar* filename;
 
     // BAD if the path is null
     g_return_val_if_fail (uri != nullptr, FALSE);
 
-    filename = gnc_uri_get_path (uri);
-    f = g_fopen (filename, "r");
-    g_free (filename);
+    std::string filename = GncUri{uri}.path().value_or("");
+    f = g_fopen (filename.c_str(), "r");
 
     // OK if the file doesn't exist - new file
     if (f == nullptr)

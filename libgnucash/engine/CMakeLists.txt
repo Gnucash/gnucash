@@ -74,6 +74,7 @@ set (engine_HEADERS
   gnc-session.h
   gnc-timezone.hpp
   gnc-uri-utils.h
+  gnc-uri.hpp
   gncAddress.h
   gncAddressP.h
   gncBillTerm.h
@@ -174,7 +175,7 @@ set (engine_SOURCES
   gnc-rational.cpp
   gnc-session.c
   gnc-timezone.cpp
-  gnc-uri-utils.c
+  gnc-uri.cpp
   engine-helpers.c
   guid.cpp
   policy.cpp
