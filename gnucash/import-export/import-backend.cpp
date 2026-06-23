@@ -861,11 +861,9 @@ process_reconcile(Account *base_acc,
 
     /* Copy the online id to the reconciled transaction, so
      *      the match will be remembered */
-    auto online_id = gnc_import_get_split_online_id(trans_info->first_split);
+    auto online_id = xaccSplitGetOnlineID(trans_info->first_split);
     if (online_id && *online_id)
-        gnc_import_set_split_online_id(selected_match->split, online_id);
-
-    g_free (online_id);
+        xaccSplitSetOnlineID(selected_match->split, online_id);
 
     /* Done editing. */
     /*DEBUG("CommitEdit selected_match")*/
@@ -1040,9 +1038,9 @@ hash_account_online_ids (Account *account)
           (g_str_hash, g_str_equal, g_free, nullptr);
      for (auto split : xaccAccountGetSplits (account))
      {
-        auto id = gnc_import_get_split_online_id (split);
+        auto id = xaccSplitGetOnlineID (split);
         if (id && *id)
-            g_hash_table_insert (acct_hash, (void*) id, GINT_TO_POINTER (1));
+            g_hash_table_insert (acct_hash, (void*) g_strdup (id), GINT_TO_POINTER (1));
      }
      return acct_hash;
 }
@@ -1056,7 +1054,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     auto source_split = xaccTransGetSplit(trans, 0);
     g_assert(source_split);
 
-    auto source_online_id = gnc_import_get_split_online_id (source_split);
+    auto source_online_id = xaccSplitGetOnlineID (source_split);
 
     // No online id, no point in continuing. We'd crash if we tried.
     if (!source_online_id)
@@ -1081,7 +1079,6 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
         DEBUG("Transaction with online ID %s already exists, date: %s", source_online_id, date_str);
         g_free (date_str);
     }
-    g_free (source_online_id);
     return online_id_exists;
 }
 

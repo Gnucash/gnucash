@@ -2638,6 +2638,13 @@ xaccAccountSetNotes (Account *acc, const char *str)
     set_kvp_string_path (acc, {"notes"}, str);
 }
 
+void
+xaccAccountSetOnlineID (Account *acc, const char *id)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+    set_kvp_string_path (acc, {KEY_ONLINE_ID}, id);
+}
+
 
 void
 xaccAccountSetAssociatedAccount (Account *acc, const char *tag, const Account* assoc_acct)
@@ -3348,6 +3355,13 @@ const char *
 xaccAccountGetNotes (const Account *acc)
 {
     return get_kvp_string_path (acc, {"notes"});
+}
+
+const char *
+xaccAccountGetOnlineID (const Account *acc)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), nullptr);
+    return get_kvp_string_path (acc, {KEY_ONLINE_ID});
 }
 
 Account*

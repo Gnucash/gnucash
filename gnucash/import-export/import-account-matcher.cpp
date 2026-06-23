@@ -34,7 +34,6 @@
 #include <glib/gi18n.h>
 
 #include "import-account-matcher.h"
-#include "import-utilities.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
 
@@ -70,15 +69,11 @@ typedef struct
 static gpointer test_acct_online_id_match(Account *acct, gpointer data)
 {
     AccountOnlineMatch *match = (AccountOnlineMatch*)data;
-    char *acct_online_id = gnc_import_get_acc_online_id(acct);
+    const char *acct_online_id = xaccAccountGetOnlineID(acct);
     int acct_len, match_len;
 
     if (acct_online_id == NULL || match->online_id == NULL)
-    {
-        if (acct_online_id)
-            g_free (acct_online_id);
         return NULL;
-    }
 
     acct_len = strlen(acct_online_id);
     match_len = strlen(match->online_id);
@@ -91,10 +86,7 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
     if (strncmp (acct_online_id, match->online_id, acct_len) == 0)
     {
         if (strncmp(acct_online_id, match->online_id, match_len) == 0)
-        {
-            g_free (acct_online_id);
             return (gpointer *) acct;
-        }
         if (match->partial_match == NULL)
         {
             match->partial_match = acct;
@@ -102,8 +94,8 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
         }
         else
         {
-            char *partial_online_id =
-                gnc_import_get_acc_online_id(match->partial_match);
+            const char *partial_online_id =
+                xaccAccountGetOnlineID(match->partial_match);
             int partial_len = strlen(partial_online_id);
             if (partial_online_id[partial_len - 1] == ' ')
                 --partial_len;
@@ -133,11 +125,9 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
                 g_free (name1);
                 g_free (name2);
             }
-            g_free (partial_online_id);
         }
     }
 
-    g_free (acct_online_id);
     return NULL;
 }
 
@@ -469,7 +459,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
                 if (account_online_id_value)
                 {
-                    gnc_import_set_acc_online_id(retval, account_online_id_value);
+                    xaccAccountSetOnlineID(retval, account_online_id_value);
                 }
                 ok_pressed_retval = TRUE;
                 break;

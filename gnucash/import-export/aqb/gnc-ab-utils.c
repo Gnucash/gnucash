@@ -49,7 +49,6 @@
 #include "gnc-ui.h"
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
-#include "import-utilities.h"
 #include "qof.h"
 #include "engine-helpers.h"
 #include <aqbanking/gui/abgui.h>
@@ -569,7 +568,7 @@ gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc)
 
     /* Set OFX unique transaction ID */
     if (fitid && *fitid)
-        gnc_import_set_split_online_id (split, fitid);
+        xaccSplitSetOnlineID (split, fitid);
 
     /* FIXME: Extract function */
     {

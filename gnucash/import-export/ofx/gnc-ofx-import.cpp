@@ -592,8 +592,7 @@ process_bank_transaction(Transaction *transaction, Account *import_account,
     }
     if (data->fi_id_valid)
     {
-        gnc_import_set_split_online_id(split,
-                                       sanitize_string (data->fi_id));
+        xaccSplitSetOnlineID(split, sanitize_string (data->fi_id));
     }
 }
 
@@ -618,7 +617,7 @@ create_investment_subaccount(GtkWindow *parent, Account* parent_acct,
                             ACCT_TYPE_STOCK);
     if (investment_account)
     {
-        gnc_import_set_acc_online_id(investment_account, inv_data->online_id);
+        xaccAccountSetOnlineID(investment_account, inv_data->online_id);
         inv_data->choosing = FALSE;
         ofx_parent_account = parent_acct;
     }
@@ -644,7 +643,7 @@ continue_account_selection(GtkWidget* parent, Account* account,
             gnc_commodity_get_fullname(commodity),
             gnc_commodity_get_fullname(xaccAccountGetCommodity(account)));
     // We must also delete the online_id that was set in gnc_import_select_account()
-    gnc_import_set_acc_online_id(account, "");
+    xaccAccountSetOnlineID(account, "");
     return keep_going;
 }
 
@@ -815,8 +814,7 @@ add_investment_split(Transaction* transaction, Account* account,
         xaccAccountTypesCompatible(xaccAccountGetType(account),
                                    ACCT_TYPE_ASSET))
     {
-        gnc_import_set_split_online_id(split,
-                                       sanitize_string (data->fi_id));
+        xaccSplitSetOnlineID(split, sanitize_string (data->fi_id));
     }
 }
 
@@ -837,7 +835,7 @@ add_currency_split(Transaction *transaction, Account* account,
     // Set split memo from ofx transaction name or memo
     gnc_ofx_set_split_memo(data, split);
     if (data->fi_id_valid)
-        gnc_import_set_split_online_id (split, sanitize_string (data->fi_id));
+        xaccSplitSetOnlineID (split, sanitize_string (data->fi_id));
 }
 
 /* ******** Process an investment transaction **********/
