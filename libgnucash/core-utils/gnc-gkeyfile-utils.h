@@ -37,6 +37,9 @@
 #ifndef GNC_GKEYFILE_UTILS_H
 #define GNC_GKEYFILE_UTILS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** Open and read a key/value file from disk into memory.
  *
@@ -73,6 +76,10 @@ GKeyFile *gnc_key_file_load_from_file (const gchar *file,
 gboolean gnc_key_file_save_to_file (const gchar *file,
                                     GKeyFile *key_file,
                                     GError **error);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_GKEYFILE_UTILS_H */
 /** @} */
