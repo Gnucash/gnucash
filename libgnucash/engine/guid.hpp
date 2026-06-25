@@ -22,6 +22,7 @@
 #ifndef GUID_HPP_HEADER
 #define GUID_HPP_HEADER
 
+#include <boost/functional/hash.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <stdexcept>
 #include <string>
@@ -68,4 +69,19 @@ bool operator == (GUID const &, GncGUID const &) noexcept;
 } // namespace gnc
 
 bool operator== (const GncGUID&, const GncGUID&);
+
+template <typename T>
+T
+gnc_guid_hash (const GncGUID& g)
+{
+    static_assert(std::is_integral_v<T>);
+    return static_cast<T>(boost::hash_range(g.reserved, g.reserved + sizeof (g.reserved)));
+};
+
+
+template<> struct std::hash<GncGUID>
+{
+    std::size_t operator()(const GncGUID& g) const{ return gnc_guid_hash<size_t> (g); }
+};
+
 #endif

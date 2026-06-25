@@ -27,9 +27,13 @@
 #include <config.h>
 #include <string.h>
 
+#include <guid.hpp>
 #include "qof.h"
 #include "qofid-p.h"
 #include "qofinstance-p.h"
+
+#include <boost/unordered/unordered_flat_map.hpp>
+using GuidEntityMap = boost::unordered_flat_map<GncGUID, QofInstance*, std::hash<GncGUID>>;
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
@@ -38,17 +42,22 @@ struct QofCollection_s
     QofIdType    e_type;
     gboolean     is_dirty;
 
-    GHashTable * hash_of_entities;
+    GuidEntityMap guid_entity_map;
     gpointer     data;       /* place where object class can hang arbitrary data */
 
     QofCollection_s (QofIdType type) : e_type{static_cast<QofIdType>(CACHE_INSERT(type))}
                                      , is_dirty{FALSE}
-                                     , hash_of_entities{guid_hash_table_new()}
-                                     , data{NULL} {}
+                                     , data{NULL}
+    {
+        if (!g_strcmp0 (e_type, "Split"))
+            guid_entity_map.reserve (50000);
+        else if (!g_strcmp0 (e_type, "Trans"))
+            guid_entity_map.reserve (10000);
+    }
+
     ~QofCollection_s ()
     {
         CACHE_REMOVE (e_type);
-        g_hash_table_destroy (hash_of_entities);
     }
 };
 
@@ -87,48 +96,30 @@ qof_collection_remove_entity (QofInstance *ent)
     col = qof_instance_get_collection(ent);
     if (!col) return;
     guid = qof_instance_get_guid(ent);
-    g_hash_table_remove (col->hash_of_entities, guid);
+    col->guid_entity_map.erase(*guid);
     qof_instance_set_collection(ent, NULL);
 }
 
 void
 qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
 {
-    const GncGUID *guid;
-
     if (!col || !ent) return;
-    guid = qof_instance_get_guid(ent);
+    const GncGUID *guid = qof_instance_get_guid(ent);
     if (guid_equal(guid, guid_null())) return;
     g_return_if_fail (col->e_type == ent->e_type);
     qof_collection_remove_entity (ent);
-    g_hash_table_insert (col->hash_of_entities, (gpointer)guid, ent);
+    col->guid_entity_map[*guid] = ent;
     qof_instance_set_collection(ent, col);
 }
 
 gboolean
 qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
 {
-    QofInstance *e;
-    const GncGUID *guid;
-
-    e = NULL;
-    if (!coll || !ent)
-    {
-        return FALSE;
-    }
-    guid = qof_instance_get_guid(ent);
-    if (guid_equal(guid, guid_null()))
-    {
-        return FALSE;
-    }
+    if (!coll || !ent) return FALSE;
+    const GncGUID *guid = qof_instance_get_guid(ent);
+    if (guid_equal(guid, guid_null())) return FALSE;
     g_return_val_if_fail (coll->e_type == ent->e_type, FALSE);
-    e = qof_collection_lookup_entity(coll, guid);
-    if ( e != NULL )
-    {
-        return FALSE;
-    }
-    g_hash_table_insert (coll->hash_of_entities, (gpointer)guid, ent);
-    return TRUE;
+    return coll->guid_entity_map.try_emplace (*guid, ent).second;
 }
 
 
@@ -208,22 +199,18 @@ qof_collection_compare (QofCollection *target, QofCollection *merge)
 QofInstance *
 qof_collection_lookup_entity (const QofCollection *col, const GncGUID * guid)
 {
-    QofInstance *ent;
     g_return_val_if_fail (col, NULL);
     if (guid == NULL) return NULL;
-    ent = static_cast<QofInstance*>(g_hash_table_lookup (col->hash_of_entities,
-							 guid));
-    if (ent != NULL && qof_instance_get_destroying(ent)) return NULL;	
-    return ent;
+    auto it = col->guid_entity_map.find(*guid);
+    if (it == col->guid_entity_map.end() || qof_instance_get_destroying(it->second))
+        return nullptr;
+    return it->second;
 }
 
 guint
 qof_collection_count (const QofCollection *col)
 {
-    guint c;
-
-    c = g_hash_table_size(col->hash_of_entities);
-    return c;
+    return col->guid_entity_map.size();
 }
 
 /* =============================================================== */
@@ -283,20 +270,21 @@ void
 qof_collection_foreach_sorted (const QofCollection *col, QofInstanceForeachCB cb_func,
                                gpointer user_data, GCompareFunc sort_fn)
 {
-    GList *entries;
-
     g_return_if_fail (col);
     g_return_if_fail (cb_func);
 
-    PINFO("Hash Table size of %s before is %d", col->e_type, g_hash_table_size(col->hash_of_entities));
+    PINFO("Hash Table size of %s before is %ld", col->e_type, col->guid_entity_map.size());
 
-    entries = g_hash_table_get_values (col->hash_of_entities);
+    std::vector<QofInstance*> entries (col->guid_entity_map.size());
+    std::transform (col->guid_entity_map.cbegin(), col->guid_entity_map.cend(),
+                    entries.begin(), [](const auto& kv) { return kv.second; });
     if (sort_fn)
-        entries = g_list_sort (entries, sort_fn);
-    g_list_foreach (entries, (GFunc)cb_func, user_data);
-    g_list_free (entries);
+        std::sort (entries.begin(), entries.end(),
+                   [sort_fn](auto a, auto b) { return sort_fn (a, b) < 0; });
+    std::for_each (entries.cbegin(), entries.cend(),
+                   [&](auto ent) { cb_func (ent, user_data); });
 
-    PINFO("Hash Table size of %s after is %d", col->e_type, g_hash_table_size(col->hash_of_entities));
+    PINFO("Hash Table size of %s after is %ld", col->e_type, col->guid_entity_map.size());
 }
 
 void

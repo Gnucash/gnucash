@@ -254,15 +254,8 @@ guid_compare (const GncGUID *guid_1, const GncGUID *guid_2)
 guint
 guid_hash_to_guint (gconstpointer ptr)
 {
-    if (!ptr)
-    {
-        PERR ("received nullptr guid pointer.");
-        return 0;
-    }
-    const GncGUID* g = static_cast<const GncGUID*>(ptr);
-    guint rv;
-    memcpy (&rv, &g->reserved[12], sizeof (guint));
-    return rv;
+    g_return_val_if_fail (ptr, 0);
+    return gnc_guid_hash<guint> (*static_cast<const GncGUID*>(ptr));
 }
 
 gint
