@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <cstdint>
+#include <format>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -239,8 +240,8 @@ GncUri::try_str (bool allow_password) const
          */
         bool absolute = !abs_path.empty() &&
                         (abs_path.front() == '/' || abs_path.front() == '\\');
-        return absolute ? scheme + "://" + abs_path
-                        : scheme + ":///" + abs_path; // extra "/" for windows
+        return absolute ? std::format ("{}://{}", scheme, abs_path)
+                        : std::format ("{}:///{}", scheme, abs_path); // extra "/" for windows
     }
 
     std::string userpass;
@@ -257,9 +258,9 @@ GncUri::try_str (bool allow_password) const
 
     std::string portstr;
     if (m_port != 0)
-        portstr = ":" + std::to_string (m_port);
+        portstr = std::format (":{}", m_port);
 
-    return *m_scheme + "://" + userpass + *m_hostname + portstr + "/" + path;
+    return std::format ("{}://{}{}{}/{}", *m_scheme, userpass, *m_hostname, portstr, path);
 }
 
 std::string
