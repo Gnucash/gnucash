@@ -270,9 +270,7 @@ gnc_period_select_set_fy_end (GncPeriodSelect *period, const GDate *fy_end)
 
     if (fy_end)
     {
-        period->fy_end = g_date_new_dmy(g_date_get_day(fy_end),
-                                      g_date_get_month(fy_end),
-                                      G_DATE_BAD_YEAR);
+        period->fy_end = g_date_copy (fy_end);
     }
     else
     {

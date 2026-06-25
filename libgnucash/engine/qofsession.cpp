@@ -51,7 +51,7 @@
 
 static QofLogModule log_module = QOF_MOD_SESSION;
 
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qof-backend.hpp"
 #include "qofsession.hpp"
 #include "gnc-backend-prov.hpp"
@@ -404,7 +404,7 @@ QofBook *
 QofSessionImpl::get_book () const noexcept
 {
     if (!m_book) return nullptr;
-    if ('y' == m_book->book_open)
+    if (qof_book_is_open (m_book))
         return m_book;
     return nullptr;
 }
@@ -511,7 +511,7 @@ QofSessionImpl::swap_books (QofSessionImpl & other) noexcept
     ENTER ("sess1=%p sess2=%p", this, &other);
     // don't swap (that is, double-swap) read_only flags
     if (m_book && other.m_book)
-        std::swap (m_book->read_only, other.m_book->read_only);
+        qof_book_swap_books_readonly (m_book, other.m_book);
     std::swap (m_book, other.m_book);
     auto mybackend = qof_book_get_backend (m_book);
     qof_book_set_backend (m_book, qof_book_get_backend (other.m_book));

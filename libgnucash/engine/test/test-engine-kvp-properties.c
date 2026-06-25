@@ -189,14 +189,11 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
     GncGUID *invoice = guid_new ();
     GncGUID *from_sx = guid_new ();
     GncGUID *invoice_r, *from_sx_r;
-    gchar *online_id = "my online id";
-    gchar *online_id_r;
 
     xaccTransBeginEdit (fixture->trans);
     qof_instance_set (QOF_INSTANCE (fixture->trans),
 		      "invoice", invoice,
 		      "from-sched-xaction", from_sx,
-		      "online-id", online_id,
 		      NULL);
 
     g_assert_true (qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
@@ -205,17 +202,14 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
     qof_instance_get (QOF_INSTANCE (fixture->trans),
 		      "invoice", &invoice_r,
 		      "from-sched-xaction", &from_sx_r,
-		      "online-id", &online_id_r,
 		      NULL);
     g_assert_true (guid_equal (invoice, invoice_r));
     g_assert_true (guid_equal (from_sx, from_sx_r));
-    g_assert_cmpstr (online_id, ==, online_id_r);
     g_assert_true (!qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
     guid_free (invoice);
     guid_free (invoice_r);
     guid_free (from_sx);
     guid_free (from_sx_r);
-    g_free (online_id_r);
 }
 
 static void
@@ -448,11 +442,67 @@ test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
 
 }
 
+static void
+test_split_online_id_accessors (Fixture *fixture, gconstpointer pData)
+{
+    Split *split = fixture->split;
+    const char *fitid = "20240131-0001-1234567890";
+    gchar *raw = NULL;
+
+    /* Initially unset. */
+    g_assert_true (xaccSplitGetOnlineID (split) == NULL);
+    g_assert_true (!xaccSplitHasOnlineID (split));
+
+    /* Round-trip via the new accessors. */
+    xaccSplitSetOnlineID (split, fitid);
+    g_assert_cmpstr (xaccSplitGetOnlineID (split), ==, fitid);
+    g_assert_true (xaccSplitHasOnlineID (split));
+
+    /* GUI parity: the value is stored in the engine KVP slot "online_id",
+     * readable via the "online-id" GObject property used by the importer. */
+    qof_instance_get (QOF_INSTANCE (split), "online-id", &raw, NULL);
+    g_assert_cmpstr (raw, ==, fitid);
+    g_free (raw);
+
+    /* "" clears it. */
+    xaccSplitSetOnlineID (split, "");
+    g_assert_true (xaccSplitGetOnlineID (split) == NULL);
+    g_assert_true (!xaccSplitHasOnlineID (split));
+
+    /* NULL clears it too. */
+    xaccSplitSetOnlineID (split, fitid);
+    xaccSplitSetOnlineID (split, NULL);
+    g_assert_true (xaccSplitGetOnlineID (split) == NULL);
+}
+
+static void
+test_account_online_id_accessors (Fixture *fixture, gconstpointer pData)
+{
+    Account *acct = fixture->acct;
+    const char *acct_online_id = "061000104:0123456789:CHECKING";
+    gchar *raw = NULL;
+
+    g_assert_true (xaccAccountGetOnlineID (acct) == NULL);
+
+    xaccAccountSetOnlineID (acct, acct_online_id);
+    g_assert_cmpstr (xaccAccountGetOnlineID (acct), ==, acct_online_id);
+
+    /* GUI parity: stored in the "online_id" KVP slot. */
+    qof_instance_get (QOF_INSTANCE (acct), "online-id", &raw, NULL);
+    g_assert_cmpstr (raw, ==, acct_online_id);
+    g_free (raw);
+
+    xaccAccountSetOnlineID (acct, NULL);
+    g_assert_true (xaccAccountGetOnlineID (acct) == NULL);
+}
+
 void test_suite_engine_kvp_properties (void)
 {
     GNC_TEST_ADD (suitename, "Account", Fixture, NULL, setup_account, test_account_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Transaction", Fixture, NULL, setup_trans, test_trans_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Split", Fixture, NULL, setup_split, test_split_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Split online_id accessors", Fixture, NULL, setup_split, test_split_online_id_accessors, teardown);
+    GNC_TEST_ADD (suitename, "Account online_id accessors", Fixture, NULL, setup_account, test_account_online_id_accessors, teardown);
     GNC_TEST_ADD (suitename, "Lot", Fixture, NULL, setup_lot, test_lot_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Customer", Fixture, NULL, setup_customer, test_customer_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Employee", Fixture, NULL, setup_employee, test_employee_kvp_properties, teardown);

@@ -27,13 +27,13 @@
 
 #include "../qof.h"
 #include "../gnc-features.h"
-#include "../qofbook-p.h"
+#include "../qofbook-p.hpp"
 #include "../qofbookslots.h"
 /* For gnc_account_create_root() */
 #include "../Account.h"
 
 static const gchar *suitename = "/qof/qofbook";
-void test_suite_qofbook ( void );
+extern "C" void test_suite_qofbook ( void );
 
 typedef struct
 {
@@ -633,6 +633,7 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     QofBook *_empty = NULL;
     time64 before, after;
     guint param = (guint) g_test_rand_int();
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
     g_test_message( "Testing when book is NULL" );
     qof_book_mark_session_dirty( _empty );
@@ -640,7 +641,7 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Testing when book is not dirty and dirty_cb is null" );
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
-    g_assert_true( fixture->book->dirty_cb == NULL );
+    g_assert_true( test_funcs->get_dirty_cb (fixture->book) == NULL );
     g_assert_true( qof_book_session_not_saved( fixture->book ) == FALSE );
     before = gnc_time (NULL);
     gnc_account_create_root (fixture->book);
@@ -656,7 +657,7 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     qof_book_set_dirty_cb( fixture->book, mock_dirty_cb, (gpointer) (&param) );
     test_struct.data = (gpointer) (&param);
     test_struct.called = FALSE;
-    g_assert_true( fixture->book->dirty_cb != NULL );
+    g_assert_true( test_funcs->get_dirty_cb (fixture->book) != NULL );
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
     g_assert_true( qof_book_session_not_saved( fixture->book ) == FALSE );
     /* run FUT */
@@ -676,6 +677,8 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     g_assert_true( qof_book_session_not_saved( fixture->book ) == TRUE );
     after = qof_book_get_session_dirty_time( fixture->book );
     g_assert_cmpint( before, == , after );
+
+    g_free (test_funcs);
 }
 
 static void
@@ -700,36 +703,40 @@ static void
 test_book_set_dirty_cb( Fixture *fixture, gconstpointer pData )
 {
     const char * error_msg = "Already existing callback";
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
     g_test_message( "Testing when callback is previously not set" );
-    g_assert_true( fixture->book->dirty_cb == NULL );
+    g_assert_true( test_funcs->get_dirty_cb (fixture->book) == NULL );
     qof_book_set_dirty_cb( fixture->book, mock_dirty_cb, (gpointer) (&test_struct) );
-    g_assert_true( fixture->book->dirty_cb == mock_dirty_cb );
-    g_assert_true( fixture->book->dirty_data == &test_struct );
+    g_assert_true( test_funcs->get_dirty_cb (fixture->book) == mock_dirty_cb );
+    g_assert_true( test_funcs->get_dirty_data (fixture->book) == &test_struct );
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
 
     g_test_message( "Testing when callback was previously set" );
-    g_assert_true( fixture->book->dirty_cb != NULL );
+    g_assert_true( test_funcs->get_dirty_cb (fixture->book) != NULL );
     qof_book_set_dirty_cb( fixture->book, NULL, NULL );
     g_assert_true( g_strrstr( test_struct.msg, error_msg ) != NULL );
-    g_assert_true( fixture->book->dirty_cb == NULL );
-    g_assert_true( fixture->book->dirty_data == NULL );
+    g_assert_true( test_funcs->get_dirty_cb (fixture->book) == NULL );
+    g_assert_true( test_funcs->get_dirty_data (fixture->book) == NULL );
     g_free( test_struct.msg );
+    g_free (test_funcs);
 }
 
 static void
 test_book_shutting_down( Fixture *fixture, gconstpointer pData )
 {
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
     g_test_message( "Testing when book is null" );
     g_assert_true( qof_book_shutting_down( NULL ) == FALSE );
     g_test_message( "Testing when shutting down is true" );
-    fixture->book->shutting_down = TRUE;
+    test_funcs->set_shutting_down (fixture->book, TRUE);
     g_assert_true( qof_book_shutting_down( fixture->book ) == TRUE );
     g_test_message( "Testing when shutting down is false" );
-    fixture->book->shutting_down = FALSE;
+    test_funcs->set_shutting_down (fixture->book, FALSE);
     g_assert_true( qof_book_shutting_down( fixture->book ) == FALSE );
+    g_free (test_funcs);
 }
 
 static void
@@ -737,8 +744,9 @@ test_book_set_get_data( Fixture *fixture, gconstpointer pData )
 {
     const char *key = "key";
     const char *data = "data";
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
-    g_assert_true( fixture->book->data_tables != NULL );
+    g_assert_true( test_funcs->get_data_tables (fixture->book) != NULL );
     g_test_message( "Testing when book is null" );
     qof_book_set_data( NULL, key, (gpointer) data );
     g_assert_true( qof_book_get_data( NULL, key ) == NULL );
@@ -754,6 +762,8 @@ test_book_set_get_data( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with book key data not null" );
     qof_book_set_data( fixture->book, key, (gpointer) data );
     g_assert_cmpstr( (const char *)qof_book_get_data( fixture->book, key ), == , data );
+
+    g_free (test_funcs);
 }
 
 static void
@@ -761,6 +771,7 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
 {
     QofIdType my_type = "my type";
     QofCollection *m_col, *m_col2;
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
     g_test_message( "Testing when book is null" );
     g_assert_true( qof_book_get_collection( NULL, my_type ) == NULL );
@@ -769,16 +780,18 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
     g_assert_true( qof_book_get_collection( fixture->book, NULL ) == NULL );
 
     g_test_message( "Testing when collection does not exist" );
-    g_assert_true( fixture->book->hash_of_collections != NULL );
-    g_assert_true( g_hash_table_lookup ( fixture->book->hash_of_collections, my_type ) == NULL );
+    g_assert_true (test_funcs->get_collections (fixture->book) != NULL );
+    g_assert_true (g_hash_table_lookup (test_funcs->get_collections (fixture->book), my_type ) == NULL);
     m_col = qof_book_get_collection( fixture->book, my_type );
     g_assert_true( m_col != NULL );
 
     g_test_message( "Testing with existing collection" );
-    g_assert_true( g_hash_table_lookup ( fixture->book->hash_of_collections, my_type ) != NULL );
+    g_assert_true (g_hash_table_lookup (test_funcs->get_collections (fixture->book), my_type ) != NULL);
     m_col2 = qof_book_get_collection( fixture->book, my_type );
     g_assert_true( m_col2 != NULL );
     g_assert_true( m_col == m_col2 );
+
+    g_free (test_funcs);
 }
 
 
@@ -829,15 +842,15 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
 #define _func "void qof_book_foreach_collection(const QofBook *, QofCollectionForeachCB, gpointer)"
 #else
 #define _func "void qof_book_foreach_collection(const QofBook*, QofCollectionForeachCB, gpointer)"
-//#define _func "qof_book_foreach_collection"
 #endif
-    gchar *msg1 = _func ": assertion 'book' failed";
-    gchar *msg2 = _func ": assertion 'cb' failed";
+    const char* msg1 = _func ": assertion 'book' failed";
+    const char* msg2 = _func ": assertion 'cb' failed";
 #undef _func
-    gchar *log_domain = "qof";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
-    TestErrorStruct check1 = { loglevel, log_domain, msg1 };
-    TestErrorStruct check2 = { loglevel, log_domain, msg2 };
+    const gchar *log_domain = "qof";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    guint hdlr;
+    TestErrorStruct check1 = { loglevel, const_cast<char*>(log_domain), const_cast<char*>(msg1) };
+    TestErrorStruct check2 = { loglevel, const_cast<char*>(log_domain), const_cast<char*>(msg2) };
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -882,56 +895,60 @@ test_book_set_data_fin( void )
     QofBook *book;
     const char *key = "key";
     const char *data = "data";
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
     /* init */
     book = qof_book_new();
-    g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 0 );
-    g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
 
     g_test_message( "Testing when book is null" );
     qof_book_set_data_fin( NULL, key, (gpointer) data, mock_final_cb );
     /* assert nothing was set */
-    g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 0 );
-    g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
 
     g_test_message( "Testing when key is null" );
     qof_book_set_data_fin( book, NULL, (gpointer) data, mock_final_cb );
     /* nothing set as well */
-    g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 0 );
-    g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
 
     g_test_message( "Testing with book key not null, cb null" );
     qof_book_set_data_fin( book, key, (gpointer) data, NULL );
     /* now data is set cb not set */
-    g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 1 );
-    g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 1 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
     g_assert_cmpstr( (const char *)qof_book_get_data( book, key ), == , data );
 
     g_test_message( "Testing with all data set" );
     qof_book_set_data_fin( book, key, (gpointer) data, mock_final_cb );
     /* now we have all set */
-    g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 1 );
-    g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 1 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 1 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 1 );
     g_assert_cmpstr( (const char *)qof_book_get_data( book, key ), == , data );
-    g_assert_true( g_hash_table_lookup ( book->data_table_finalizers, (gpointer)key ) == mock_final_cb );
+    g_assert_true( g_hash_table_lookup ( test_funcs->get_data_table_finalizers (book), (gpointer)key ) == mock_final_cb );
 
     /* get rid of book make sure final cb is called */
     test_struct.called = FALSE;
     qof_book_destroy( book );
     g_assert_true( test_struct.called );
+    g_free (test_funcs);
 }
 
 static void
 test_book_mark_closed( Fixture *fixture, gconstpointer pData )
 {
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
     g_test_message( "Testing when book is null" );
-    g_assert_cmpstr( &fixture->book->book_open, == , "y" );
+    g_assert_true (qof_book_is_open (fixture->book));
     qof_book_mark_closed( NULL );
-    g_assert_cmpstr( &fixture->book->book_open, == , "y" );
+    g_assert_cmpint (test_funcs->get_book_open (fixture->book), == , 'y' );
 
     g_test_message( "Testing when book is not null" );
     qof_book_mark_closed( fixture->book );
-    g_assert_cmpstr( &fixture->book->book_open, == , "n" );
+    g_assert_false (qof_book_is_open (fixture->book));
+    g_free (test_funcs);
 }
 
 static void
@@ -940,6 +957,7 @@ test_book_new_destroy( void )
     QofBook *book;
     const char *key = "key";
     const char *data = "data";
+    QofBookTestFunctions* test_funcs = _utest_qofbook_fill_functions ();
 
     g_test_message( "Testing book creation and initial setup" );
     book = qof_book_new();
@@ -947,25 +965,27 @@ test_book_new_destroy( void )
     g_assert_true( QOF_IS_BOOK( book ) );
 
     g_test_message( "Testing book initial setup" );
-    g_assert_true( book->hash_of_collections );
-    g_assert_true( book->data_tables );
-    g_assert_true( book->data_table_finalizers );
-    g_assert_cmpint( g_hash_table_size( book->hash_of_collections ), == , 1 );
-    g_assert_true( g_hash_table_lookup ( book->hash_of_collections, QOF_ID_BOOK ) != NULL );
-    g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 0 );
-    g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 0 );
-    g_assert_cmpstr( &book->book_open, == , "y");
-    g_assert_true( !book->read_only );
-    g_assert_cmpint( book->version, == , 0 );
+    g_assert_true (test_funcs->get_collections (book) != NULL);
+    g_assert_true( test_funcs->get_data_tables (book) );
+    g_assert_true( test_funcs->get_data_table_finalizers (book) );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_collections (book) ), == , 1 );
+    g_assert_true( g_hash_table_lookup (test_funcs->get_collections (book), QOF_ID_BOOK ) != NULL );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_tables (book) ), == , 0 );
+    g_assert_cmpint( g_hash_table_size( test_funcs->get_data_table_finalizers (book) ), == , 0 );
+    g_assert_true (qof_book_is_open(book));
+    g_assert_true (!qof_book_is_readonly(book));
+    g_assert_cmpint (test_funcs->get_version (book), == , 0);
 
     /* set finalizer */
     qof_book_set_data_fin( book, key, (gpointer) data, mock_final_cb );
     test_struct.called = FALSE;
 
     qof_book_destroy( book );
+
+    g_free (test_funcs);
 }
 
-void
+extern "C" void
 test_suite_qofbook ( void )
 {
     GNC_TEST_ADD( suitename, "readonly", Fixture, NULL, setup, test_book_readonly, teardown );

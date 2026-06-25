@@ -19,6 +19,19 @@ GET request to /accounts/<guid> - returns an individual account
 GET request to /accounts/<guid>/splits - returns splits for an individual
 account
 
+POST request to /accounts - creates a new account
+
+POST variables:
+name - required - the name of the account
+currency - required - a gnucash currency code e.g. GBP
+account_type_id - required - the numeric account type id (e.g. 0 for BANK,
+2 for ASSET, 8 for INCOME, 9 for EXPENSE - see ACCT_TYPE_* in
+libgnucash/engine/Account.h)
+parent_account_guid - required - the GUID of the parent account (the root
+account's GUID can be obtained from /accounts)
+description - optional - a description for the account
+code - optional - an account code
+
 POST request to /transactions - creates a new transaction (currently with only
 two splits)
 

@@ -160,6 +160,25 @@ void          xaccSplitSetMemo (Split *split, const char *memo);
 /** Returns the memo string. */
 const char *  xaccSplitGetMemo (const Split *split);
 
+/** The online_id is the OFX/HBCI "FITID" recorded on a split when it is
+ * imported.  It is used to recognise the split on re-import so that
+ * overlapping or re-downloaded statements don't create duplicates.  This
+ * is the same value (engine KVP slot "online_id") that the desktop
+ * OFX/HBCI importer reads and writes.
+ *
+ * The setter only changes engine data: call it inside the parent
+ * transaction's edit (xaccTransBeginEdit()/xaccTransCommitEdit()), and a
+ * session save persists it.  Passing NULL or "" clears the online_id. */
+void          xaccSplitSetOnlineID (Split *split, const char *id);
+
+/** Returns the split's online_id.  The returned string is owned by the
+ * split and must NOT be freed; it is valid until the online_id is changed
+ * or the split is destroyed.  Returns NULL if no online_id is set. */
+const char *  xaccSplitGetOnlineID (const Split *split);
+
+/** Returns TRUE if the split has a non-empty online_id. */
+gboolean      xaccSplitHasOnlineID (const Split *split);
+
 /** The Action is an arbitrary user-assigned string.
  * The action field is an arbitrary user-assigned value.
  * It is meant to be a very short (one to ten character) string that

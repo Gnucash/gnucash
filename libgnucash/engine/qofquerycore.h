@@ -172,8 +172,6 @@ QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
         const gchar *chars);
-QofQueryPredData *qof_query_collect_predicate (QofGuidMatch options,
-        QofCollection *coll);
 QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guids);
 
 /** Copy a predicate. */

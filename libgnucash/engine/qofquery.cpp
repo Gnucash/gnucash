@@ -31,7 +31,7 @@
 
 #include "qof.h"
 #include "qof-backend.hpp"
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qofclass-p.h"
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
@@ -1844,7 +1844,6 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         g_string_append_printf (gs, " boolean: %s", pdata->val ? "TRUE" : "FALSE");
         return;
     }
-    /** \todo QOF_TYPE_COLLECT */
     return;
 }        /* qof_query_printValueForParam */
 

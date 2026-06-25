@@ -17,6 +17,15 @@ class TestAccount(AccountSession):
         self.account.SetName(NAME)
         self.assertEqual( NAME, self.account.GetName() )
 
+    def test_online_id(self):
+        ONLINE_ID = "061000104:0123456789:CHECKING"
+        self.assertEqual( None, self.account.GetOnlineID() )
+        self.account.SetOnlineID(ONLINE_ID)
+        self.assertEqual( ONLINE_ID, self.account.GetOnlineID() )
+        # Passing None (or "") clears it.
+        self.account.SetOnlineID(None)
+        self.assertEqual( None, self.account.GetOnlineID() )
+
     def test_split(self):
         SPLIT = Split(self.book)
         self.assertTrue(self.account.insert_split(SPLIT))

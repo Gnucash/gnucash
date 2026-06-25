@@ -36,7 +36,7 @@
 #include <cstdint>
 #include <utility>
 #include "qof.h"
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qofid-p.h"
 #include "kvp-frame.hpp"
 #include "qofinstance-p.h"
@@ -146,17 +146,6 @@ static void qof_instance_class_init(QofInstanceClass *klass)
                          "The object Globally Unique ID.",
                          GNC_TYPE_GUID,
                          G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (object_class,
-     PROP_COLLECTION,
-     g_param_spec_pointer ("collection",
-                           "Object Collection",
-                           "A collection of like objects of which this "
-                           "particular object is amember.  E.g.. A "
-                           "collection of accounts, or a collection of "
-                           "splits.",
-                           G_PARAM_READWRITE));
 
     g_object_class_install_property
     (object_class,

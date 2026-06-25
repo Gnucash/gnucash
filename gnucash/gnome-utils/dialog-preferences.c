@@ -1349,8 +1349,6 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     GtkTreeIter iter;
     gnc_commodity *locale_currency;
     const gchar *currency_name;
-    GDate fy_end;
-    gboolean date_is_valid = FALSE;
 
     ENTER("");
     DEBUG("Opening dialog-preferences.glade:");
@@ -1406,30 +1404,17 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     g_object_set_data_full (G_OBJECT(dialog), PREFS_WIDGET_HASH,
                             prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
-
-    if (gnc_current_session_exist())
-    {
-        QofBook *book = gnc_get_current_book ();
-        g_date_clear (&fy_end, 1);
-        qof_instance_get (QOF_INSTANCE(book),
-                          "fy-end", &fy_end,
-                          NULL);
-    }
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new (TRUE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
-    if (date_is_valid)
-        gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_PERIOD));
     period = gnc_period_select_new (FALSE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
-    if (date_is_valid)
-        gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_DATE));

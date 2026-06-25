@@ -38,7 +38,9 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-glib-utils.h"
+#include "gnc-ui.h"
 #include "gnc-state.h"
+#include "gnc-period-select.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
@@ -70,21 +72,35 @@ struct RegisterFilterDialog
     GncPluginPage* plugin_page;
     GtkWidget*     dialog;
     GtkWidget*     table;
-    GtkWidget*     start_date_choose;
-    GtkWidget*     start_date_today;
-    GtkWidget*     start_date;
-    GtkWidget*     end_date_choose;
-    GtkWidget*     end_date_today;
+    GtkWidget*     start_earliest;       //label
+    GtkWidget*     start_relative_check; //checkbutton
+    GtkWidget*     start_relative;       //account period
+    GtkWidget*     start_date_check;     //checkbutton
+    GtkWidget*     start_date;           //date
+    GtkWidget*     start_days_check;     //checkbutton
+    GtkWidget*     start_days;           //spin
+
+    GtkWidget*     end_latest;
+    GtkWidget*     end_relative_check;
+    GtkWidget*     end_relative;
+    GtkWidget*     end_date_check;
     GtkWidget*     end_date;
+    GtkWidget*     end_days_check;
+    GtkWidget*     end_days;
+
     GtkWidget*     num_days;
 
-    cleared_match_t original_cleared_match;
-    time64          original_start_time;
-    time64          original_end_time;
-    int             original_days;
-    bool            original_save_filter;
+    cleared_match_t     original_cleared_match;
+    GncAccountingPeriod original_start_ap;
+    time64              original_start_time;
+    int                 original_start_days;
+    GncAccountingPeriod original_end_ap;
+    time64              original_end_time;
+    int                 original_end_days;
+    int                 original_days;
+    bool                original_save_filter;
 
-    bool            show_save_button;
+    bool                show_save_button;
 };
 
 extern "C"
@@ -119,6 +135,15 @@ gnc_ppr_filter_save_cb (GtkToggleButton* button,
 void
 gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
                                 RegisterFilterDialog* rfd);
+void
+gnc_ppr_filter_start_toggle_cb (GtkToggleButton* button,
+                                RegisterFilterDialog* rfd);
+void
+gnc_ppr_filter_end_toggle_cb (GtkToggleButton* button,
+                              RegisterFilterDialog* rfd);
+void
+gnc_ppr_filter_start_end_days_changed_cb (GtkSpinButton* button,
+                                          RegisterFilterDialog* rfd);
 }
 
 struct status_action
@@ -160,7 +185,7 @@ get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
 
 /* This function converts a time64 value date to a string */
 static std::string
-gnc_ppr_filter_time2dmy (time64 raw_time)
+ppr_filter_time2dmy (time64 raw_time)
 {
     struct tm* timeinfo;
     char date_string[11];
@@ -175,7 +200,7 @@ gnc_ppr_filter_time2dmy (time64 raw_time)
 
 /* This function converts a string date to a time64 value */
 static time64
-gnc_ppr_filter_dmy2time (std::string date_string)
+ppr_filter_dmy2time (std::string date_string)
 {
     struct tm when;
 
@@ -189,6 +214,25 @@ gnc_ppr_filter_dmy2time (std::string date_string)
     when.tm_year -= 1900;
 
     return gnc_mktime (&when);
+}
+
+/* This function subtracts a number of days from now to a time64 value */
+static time64
+get_time_for_days_ago (int days, bool use_day_start)
+{
+    time64 time_val = 0;
+
+    if (days > 0)
+    {
+        struct tm tm;
+        if (use_day_start)
+            gnc_tm_get_today_start (&tm);
+        else
+            gnc_tm_get_today_end (&tm);
+        tm.tm_mday = tm.tm_mday - days;
+        time_val = gnc_mktime (&tm);
+    }
+    return time_val;
 }
 
 static std::vector<std::string>
@@ -206,8 +250,8 @@ split_filter_by_delimiter (std::string str, char delimiter)
 }
 
 static void
-gnc_ppr_check_for_empty_group (GKeyFile *state_file,
-                               const gchar *state_section)
+ppr_check_for_empty_group (GKeyFile *state_file,
+                           const gchar *state_section)
 {
     gsize num_keys;
     gchar **keys = g_key_file_get_keys (state_file, state_section, &num_keys, nullptr);
@@ -219,7 +263,7 @@ gnc_ppr_check_for_empty_group (GKeyFile *state_file,
 }
 
 static std::string
-gnc_ppr_filter_load_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
+ppr_filter_load_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 {
     // get the filter from the .gcm file
     GKeyFile* state_file = gnc_state_get_current();
@@ -245,25 +289,102 @@ gnc_ppr_filter_load_filter (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type)
 }
 
 static void
-set_filterdata_to_defaults (FilterData *fd)
+set_filterdata_to_defaults (FilterData *fd, bool date_parts_only)
 {
-    fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
+    if (!date_parts_only)
+    {
+        fd->cleared_match = (cleared_match_t)std::stol (DEFAULT_FILTER, nullptr, 16);
+        fd->save_filter = false;
+    }
+    fd->start_ap = GNC_ACCOUNTING_PERIOD_INVALID;
     fd->start_time = 0;
+    fd->start_days = 0;
+    fd->end_ap = GNC_ACCOUNTING_PERIOD_INVALID;
     fd->end_time = 0;
+    fd->end_days = 0;
     fd->days = 0;
-    fd->save_filter = false;
+}
+
+static int
+get_trailing_int (const std::string split_filter, const std::string find_text)
+{
+    int ret_int = -1;
+    std::size_t found = split_filter.find (find_text);
+
+    if (found != std::string::npos)
+    {
+        std::string found_str = split_filter.substr (found + find_text.length(), std::string::npos);
+        ret_int = std::stol (found_str, nullptr, 10);
+    }
+    return ret_int;
 }
 
 static void
-gnc_ppr_filter_load_filter_parts (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type, FilterData *fd)
+update_fd_with_date_filter_parts (FilterData *fd, const std::string filter_part,
+                                  bool start_filter, int ap_trailing_int, int days_trailing_int)
 {
-    set_filterdata_to_defaults (fd);
+    if (ap_trailing_int != -1)
+    {
+        GDate *tmp_date = nullptr;
+
+        if (start_filter)
+        {
+            fd->start_ap = (GncAccountingPeriod)ap_trailing_int;
+            tmp_date = gnc_accounting_period_start_gdate (fd->start_ap, nullptr, nullptr);
+        }
+        else
+        {
+            fd->end_ap = (GncAccountingPeriod)ap_trailing_int;
+            tmp_date = gnc_accounting_period_end_gdate (fd->end_ap, nullptr, nullptr);
+        }
+
+        if (tmp_date)
+        {
+            if (start_filter)
+                fd->start_time = gnc_time64_get_day_start_gdate (tmp_date);
+            else
+                fd->end_time = gnc_time64_get_day_end_gdate (tmp_date);
+
+            g_date_free (tmp_date);
+        }
+    }
+    else
+    {
+        if (days_trailing_int != -1)
+        {
+            if (start_filter)
+            {
+                fd->start_days = days_trailing_int;
+                fd->start_time = get_time_for_days_ago (fd->start_days, true);
+            }
+            else
+            {
+                fd->end_days = days_trailing_int;
+                fd->end_time = get_time_for_days_ago (fd->end_days, false);
+            }
+        }
+        else
+        {
+            time64 tmp_time = ppr_filter_dmy2time (filter_part);
+            if (start_filter)
+                fd->start_time = gnc_time64_get_day_start (tmp_time);
+            else
+                fd->end_time = gnc_time64_get_day_end (tmp_time);
+        }
+    }
+    fd->save_filter = true;
+}
+
+static void
+ppr_filter_load_filter_parts (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_type, FilterData *fd)
+{
+    set_filterdata_to_defaults (fd, false);
     fd->dialog = nullptr;
 
     if (!gsr)
         return;
 
-    std::string filter_str = gnc_ppr_filter_load_filter (gsr, ledger_type);
+    std::string filter_str = ppr_filter_load_filter (gsr, ledger_type);
 
     PINFO("Loaded Filter String is %s", filter_str.c_str());
 
@@ -282,18 +403,20 @@ gnc_ppr_filter_load_filter_parts (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_
     {
         PINFO("Loaded Filter Start Date is %s", split_filter[1].c_str());
 
-        fd->start_time = gnc_ppr_filter_dmy2time (split_filter[1]);
-        fd->start_time = gnc_time64_get_day_start (fd->start_time);
-        fd->save_filter = true;
+        int ap_trailing_int = get_trailing_int (split_filter[1], "SAP");
+        int days_trailing_int = get_trailing_int (split_filter[1], "SDAY");
+
+        update_fd_with_date_filter_parts (fd, split_filter[1], true, ap_trailing_int, days_trailing_int);
     }
 
     if (split_filter_size > 2 && (split_filter[2].compare (std::string ("0"))) != 0)
     {
         PINFO("Loaded Filter End Date is %s", split_filter[2].c_str());
 
-        fd->end_time = gnc_ppr_filter_dmy2time (split_filter[2]);
-        fd->end_time = gnc_time64_get_day_end (fd->end_time);
-        fd->save_filter = true;
+        int ap_trailing_int = get_trailing_int (split_filter[2], "EAP");
+        int days_trailing_int = get_trailing_int (split_filter[2], "EDAY");
+
+        update_fd_with_date_filter_parts (fd, split_filter[2], false, ap_trailing_int, days_trailing_int);
     }
 
     // set the default for the number of days
@@ -310,7 +433,7 @@ gnc_ppr_filter_load_filter_parts (GNCSplitReg *gsr, GNCLedgerDisplayType ledger_
 }
 
 static void
-gnc_ppr_filter_save_filter (GNCSplitReg *gsr, std::string filter)
+ppr_filter_save_filter (GNCSplitReg *gsr, std::string filter)
 
 {
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
@@ -327,7 +450,7 @@ gnc_ppr_filter_save_filter (GNCSplitReg *gsr, std::string filter)
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_FILTER, nullptr))
             g_key_file_remove_key (state_file, state_section, KEY_PAGE_FILTER, nullptr);
 
-        gnc_ppr_check_for_empty_group (state_file, state_section);
+        ppr_check_for_empty_group (state_file, state_section);
     }
     else
     {
@@ -339,7 +462,7 @@ gnc_ppr_filter_save_filter (GNCSplitReg *gsr, std::string filter)
 }
 
 static void
-gnc_ppr_filter_save_filter_parts (GNCSplitReg *gsr, FilterData *fd)
+ppr_filter_save_filter_parts (GNCSplitReg *gsr, FilterData *fd)
 {
     if (!gsr)
         return;
@@ -356,18 +479,22 @@ gnc_ppr_filter_save_filter_parts (GNCSplitReg *gsr, FilterData *fd)
         save_filter_str.append (buffer);
 
         // start time
-        if (fd->start_time != 0)
-        {
-            save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->start_time));
-        }
+        if (fd->start_ap != GNC_ACCOUNTING_PERIOD_INVALID)
+            save_filter_str.append (";SAP" + std::to_string (fd->start_ap));
+        else if (fd->start_days > 0)
+            save_filter_str.append (";SDAY" + std::to_string (fd->start_days));
+        else if (fd->start_time != 0)
+            save_filter_str.append (";" + ppr_filter_time2dmy (fd->start_time));
         else
             save_filter_str.append (";0");
 
         // end time
-        if (fd->end_time != 0)
-        {
-            save_filter_str.append (";" + gnc_ppr_filter_time2dmy (fd->end_time));
-        }
+        if (fd->end_ap != GNC_ACCOUNTING_PERIOD_INVALID)
+            save_filter_str.append (";EAP" + std::to_string (fd->end_ap));
+        else if (fd->end_days > 0)
+            save_filter_str.append (";EDAY" + std::to_string (fd->end_days));
+        else if (fd->end_time != 0)
+            save_filter_str.append (";" + ppr_filter_time2dmy (fd->end_time));
         else
             save_filter_str.append (";0");
 
@@ -379,12 +506,12 @@ gnc_ppr_filter_save_filter_parts (GNCSplitReg *gsr, FilterData *fd)
         else
              save_filter_str.append (";0");
     }
-    gnc_ppr_filter_save_filter (gsr, save_filter_str);
+    ppr_filter_save_filter (gsr, save_filter_str);
 }
 
 static void
-gpp_update_match_filter_text (cleared_match_t match, const guint mask,
-                              const gchar* filter_name, GList **show, GList **hide)
+update_match_filter_text (cleared_match_t match, const guint mask,
+                          const gchar* filter_name, GList **show, GList **hide)
 {
     if ((match & mask) == mask)
         *show = g_list_prepend (*show, g_strdup (filter_name));
@@ -397,7 +524,7 @@ gpp_update_match_filter_text (cleared_match_t match, const guint mask,
  *
  *  @param page A pointer to the GncPluginPageRegister that is
  *  associated with this filter dialog.
- * 
+ *
  *  @param fd A pointer to the filter data used for filter state.
  */
 void
@@ -440,16 +567,16 @@ gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd)
         GList *show = nullptr;
         GList *hide = nullptr;
 
-        gpp_update_match_filter_text (fd->cleared_match, 0x01, _("Unreconciled"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (fd->cleared_match, 0x02, _("Cleared"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (fd->cleared_match, 0x04, _("Reconciled"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (fd->cleared_match, 0x08, _("Frozen"),
-                                      &show, &hide);
-        gpp_update_match_filter_text (fd->cleared_match, 0x10, _("Voided"),
-                                      &show, &hide);
+        update_match_filter_text (fd->cleared_match, 0x01, _("Unreconciled"),
+                                  &show, &hide);
+        update_match_filter_text (fd->cleared_match, 0x02, _("Cleared"),
+                                  &show, &hide);
+        update_match_filter_text (fd->cleared_match, 0x04, _("Reconciled"),
+                                  &show, &hide);
+        update_match_filter_text (fd->cleared_match, 0x08, _("Frozen"),
+                                  &show, &hide);
+        update_match_filter_text (fd->cleared_match, 0x10, _("Voided"),
+                                  &show, &hide);
 
         show = g_list_reverse (show);
         hide = g_list_reverse (hide);
@@ -491,20 +618,8 @@ gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, FilterData *fd)
     LEAVE(" ");
 }
 
-/** This function updates the "cleared match" term of the register
- *  query.  It unconditionally removes any old "cleared match" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
- *
- *  @param plugin_page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
 static void
-gnc_ppr_filter_update_status_query (GncPluginPage* plugin_page)
+ppr_filter_update_status_query (GncPluginPage* plugin_page)
 {
     ENTER(" ");
 
@@ -547,20 +662,8 @@ gnc_ppr_filter_update_status_query (GncPluginPage* plugin_page)
     LEAVE (" ");
 }
 
-/** This function updates the "date posted" term of the register
- *  query.  It unconditionally removes any old "date posted" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
- *
- *  @param plugin_page A pointer to the GncPluginPageRegister that is
- *  associated with this filter dialog.
- */
 static void
-gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page)
+ppr_filter_update_date_query (GncPluginPage* plugin_page)
 {
     ENTER(" ");
 
@@ -604,13 +707,7 @@ gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page)
 
     if (fd->days > 0)
     {
-        time64 start;
-        struct tm tm;
-
-        gnc_tm_get_today_start (&tm);
-
-        tm.tm_mday = tm.tm_mday - fd->days;
-        start = gnc_mktime (&tm);
+        time64 start = get_time_for_days_ago (fd->days, true);
         xaccQueryAddDateMatchTT (query, TRUE, start, FALSE, 0, QOF_QUERY_AND);
     }
 
@@ -621,7 +718,7 @@ gnc_ppr_filter_update_date_query (GncPluginPage* plugin_page)
     LEAVE(" ");
 }
 
-/** This function is used to clear the current filter so that a 
+/** This function is used to clear the current filter so that a
  *  specific split can be shown in the register.
  *
  *  @param page A pointer to the GncPluginPageRegister that is
@@ -634,9 +731,9 @@ gnc_ppr_filter_clear_current_filter (GncPluginPage* plugin_page)
 
     auto fd = gnc_plugin_page_register_get_filter_data (plugin_page);
 
-    set_filterdata_to_defaults (fd);
+    set_filterdata_to_defaults (fd, false);
 
-    gnc_ppr_filter_update_date_query (plugin_page);
+    ppr_filter_update_date_query (plugin_page);
 }
 
 /** This function is called to update the register.
@@ -660,18 +757,18 @@ gnc_ppr_filter_update_register (GncPluginPage* plugin_page)
     /* Set the filter for the split register and status of save filter button */
     fd->save_filter = false;
 
-    gnc_ppr_filter_load_filter_parts (gsr, ledger_type, fd);
+    ppr_filter_load_filter_parts (gsr, ledger_type, fd);
 
     if (ledger_type == LD_GL)
     {
         SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
         if (reg->type != GENERAL_JOURNAL) // search ledger and the like
-            set_filterdata_to_defaults (fd);
+            set_filterdata_to_defaults (fd, false);
     }
     /* Update Query with Filter Status and Dates */
-    gnc_ppr_filter_update_status_query (plugin_page);
-    gnc_ppr_filter_update_date_query (plugin_page);
+    ppr_filter_update_status_query (plugin_page);
+    ppr_filter_update_date_query (plugin_page);
 }
 
 /** This function is called whenever one of the status entries is
@@ -713,24 +810,55 @@ gnc_ppr_filter_status_one_cb (GtkToggleButton* button,
     else
         fd->cleared_match = (cleared_match_t)(fd->cleared_match & ~value);
 
-    gnc_ppr_filter_update_status_query (rfd->plugin_page);
+    ppr_filter_update_status_query (rfd->plugin_page);
 
     LEAVE(" ");
 }
 
 static void
-set_checkbutton_with_blocking (GtkWidget *widget,
+set_sensitive_start_widget (RegisterFilterDialog *rfd, GtkWidget *enable_widget, gboolean active)
+{
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->start_earliest), !active);
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->start_relative), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->start_date), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->start_days), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(enable_widget), active);
+}
+
+static void
+set_sensitive_end_widget (RegisterFilterDialog *rfd, GtkWidget *enable_widget, gboolean active)
+{
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->end_latest), !active);
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->end_relative), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->end_date), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(rfd->end_days), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(enable_widget), active);
+}
+
+static void
+set_checkbutton_with_blocking (GtkWidget *widget1, GtkWidget *widget2,
                                GFunc function,
                                RegisterFilterDialog *rfd,
                                gboolean active)
 {
     PINFO("Block GtkToggleButton %p for setting active %s",
-           widget, active ? "TRUE" : "FALSE");
-    g_signal_handlers_block_by_func (widget,
+           widget1, active ? "TRUE" : "FALSE");
+    g_signal_handlers_block_by_func (widget1,
                                      (gpointer)function, rfd);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), active);
-    g_signal_handlers_unblock_by_func (widget,
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget1), active);
+    g_signal_handlers_unblock_by_func (widget1,
                                        (gpointer)function, rfd);
+
+    if (widget2)
+    {
+        PINFO("Block GtkToggleButton %p for setting active %s",
+               widget2, active ? "TRUE" : "FALSE");
+        g_signal_handlers_block_by_func (widget2,
+                                         (gpointer)function, rfd);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget2), active);
+        g_signal_handlers_unblock_by_func (widget2,
+                                           (gpointer)function, rfd);
+    }
 }
 
 /** This function is called whenever the "select all" status button is
@@ -755,14 +883,14 @@ gnc_ppr_filter_status_select_all_cb (GtkButton* button,
     /* Turn on all the check menu items */
     for (const auto& action : status_actions)
     {
-        set_checkbutton_with_blocking (action.widget,
+        set_checkbutton_with_blocking (action.widget, nullptr,
                                        (GFunc)gnc_ppr_filter_status_one_cb,
                                        rfd, TRUE);
     }
 
     /* Set the requested status */
     fd->cleared_match = CLEARED_ALL;
-    gnc_ppr_filter_update_status_query (rfd->plugin_page);
+    ppr_filter_update_status_query (rfd->plugin_page);
     LEAVE(" ");
 }
 
@@ -788,27 +916,25 @@ gnc_ppr_filter_status_clear_all_cb (GtkButton* button,
     /* Turn off all the check menu items */
     for (const auto& action : status_actions)
     {
-        set_checkbutton_with_blocking (action.widget,
+        set_checkbutton_with_blocking (action.widget, nullptr,
                                        (GFunc)gnc_ppr_filter_status_one_cb,
                                        rfd, FALSE);
     }
 
     /* Set the requested status */
     fd->cleared_match = CLEARED_NONE;
-    gnc_ppr_filter_update_status_query (rfd->plugin_page);
+    ppr_filter_update_status_query (rfd->plugin_page);
     LEAVE(" ");
 }
 
-/** This function computes the starting and ending times for the
- *  filter by examining the dialog widgets to see which ones are
- *  selected, and will pull times out of the data entry boxes if
- *  necessary.  This function must exist to handle the case where the
- *  "show all" button was Selected, and the user clicks on the "select
- *  range" button.  Since it exists, it make sense for the rest of the
- *  callbacks to take advantage of it.
- *
- *  @param rfd A pointer to the filter dialog structure.
- */
+static void
+print_info_time64_date (const gchar *text, time64 date)
+{
+   gchar *date_txt = qof_print_date (date);
+   PINFO("%s, %s", text, date_txt);
+   g_free (date_txt);
+}
+
 static void
 get_filter_times (RegisterFilterDialog* rfd)
 {
@@ -816,33 +942,57 @@ get_filter_times (RegisterFilterDialog* rfd)
 
     auto fd = gnc_plugin_page_register_get_filter_data (rfd->plugin_page);
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_date_choose)))
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_date_check)))
     {
         time_val = gnc_date_edit_get_date (GNC_DATE_EDIT(rfd->start_date));
         time_val = gnc_time64_get_day_start (time_val);
         fd->start_time = time_val;
+        fd->start_ap = GNC_ACCOUNTING_PERIOD_INVALID;
+        print_info_time64_date ("Start date is", fd->start_time);
+    }
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_relative_check)))
+    {
+        auto *sdate = gnc_period_select_get_date (GNC_PERIOD_SELECT(rfd->start_relative));
+        fd->start_time = gnc_time64_get_day_start_gdate (sdate);
+        fd->start_ap = gnc_period_select_get_active (GNC_PERIOD_SELECT(rfd->start_relative));
+        print_info_time64_date ("Start date relative is", fd->start_time);
+        g_date_free (sdate);
+    }
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_days_check)))
+    {
+        fd->start_days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(rfd->start_days));
+        fd->start_time = get_time_for_days_ago (fd->start_days, true);
+        fd->start_ap = GNC_ACCOUNTING_PERIOD_INVALID;
+        print_info_time64_date ("Start date using days is", fd->start_time);
     }
     else
-    {
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->start_date_today)))
-            fd->start_time = gnc_time64_get_today_start();
-        else
-            fd->start_time = 0;
-    }
+        fd->start_time = 0;
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_date_choose)))
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_date_check)))
     {
         time_val = gnc_date_edit_get_date (GNC_DATE_EDIT(rfd->end_date));
         time_val = gnc_time64_get_day_end (time_val);
         fd->end_time = time_val;
+        fd->end_ap = GNC_ACCOUNTING_PERIOD_INVALID;
+        print_info_time64_date ("End date is", fd->end_time);
+    }
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_relative_check)))
+    {
+        auto *edate = gnc_period_select_get_date (GNC_PERIOD_SELECT(rfd->end_relative));
+        fd->end_time = gnc_time64_get_day_end_gdate (edate);
+        fd->end_ap = gnc_period_select_get_active (GNC_PERIOD_SELECT(rfd->end_relative));
+        print_info_time64_date ("End date relative is", fd->end_time);
+        g_date_free (edate);
+    }
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_days_check)))
+    {
+        fd->end_days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(rfd->end_days));
+        fd->end_time = get_time_for_days_ago (fd->end_days, false);
+        fd->end_ap = GNC_ACCOUNTING_PERIOD_INVALID;
+        print_info_time64_date ("End date using days is", fd->end_time);
     }
     else
-    {
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rfd->end_date_today)))
-            fd->end_time = gnc_time64_get_today_end();
-        else
-            fd->end_time = 0;
-    }
+        fd->end_time = 0;
 }
 
 /** This function is called when the radio buttons changes state. This
@@ -879,17 +1029,15 @@ gnc_ppr_filter_select_range_cb (GtkRadioButton* button,
     {
         gtk_widget_set_sensitive (rfd->table, !active);
         gtk_widget_set_sensitive (rfd->num_days, active);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(rfd->num_days), fd->days);
+        fd->days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(rfd->num_days));
     }
     else
     {
         gtk_widget_set_sensitive (rfd->table, FALSE);
         gtk_widget_set_sensitive (rfd->num_days, FALSE);
-        fd->start_time = 0;
-        fd->end_time = 0;
-        fd->days = 0;
+        set_filterdata_to_defaults (fd, true);
     }
-    gnc_ppr_filter_update_date_query (rfd->plugin_page);
+    ppr_filter_update_date_query (rfd->plugin_page);
     LEAVE(" ");
 }
 
@@ -914,23 +1062,14 @@ gnc_ppr_filter_days_changed_cb (GtkSpinButton* button,
     auto fd = gnc_plugin_page_register_get_filter_data (rfd->plugin_page);
 
     fd->days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(button));
-    gnc_ppr_filter_update_date_query (rfd->plugin_page);
+    ppr_filter_update_date_query (rfd->plugin_page);
 
     LEAVE(" ");
 }
 
-/** This function is called when one of the start date entry widgets
- *  is updated.  It simply calls common routines to determine the
- *  start/end times and update the register query.
- *
- *  @param unused A pointer to a GncDateEntry widgets, but it could be
- *  any widget.
- *
- *  @param rfd A pointer to the filter dialog structure.
- */
 static void
-gnc_ppr_filter_gde_changed_cb (GtkWidget* unused,
-                               RegisterFilterDialog* rfd)
+ppr_filter_gde_changed_cb (GtkWidget* unused,
+                           RegisterFilterDialog* rfd)
 {
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
 
@@ -938,7 +1077,7 @@ gnc_ppr_filter_gde_changed_cb (GtkWidget* unused,
            gtk_buildable_get_name (GTK_BUILDABLE(unused)), unused, rfd->plugin_page);
 
     get_filter_times (rfd);
-    gnc_ppr_filter_update_date_query (rfd->plugin_page);
+    ppr_filter_update_date_query (rfd->plugin_page);
 
     LEAVE(" ");
 }
@@ -981,7 +1120,7 @@ gnc_ppr_filter_start_cb (GtkWidget* radio,
     gboolean active = !g_strcmp0 (name, "start_date_choose");
     gtk_widget_set_sensitive (rfd->start_date, active);
     get_filter_times (rfd);
-    gnc_ppr_filter_update_date_query (rfd->plugin_page);
+    ppr_filter_update_date_query (rfd->plugin_page);
 
     LEAVE(" ");
 }
@@ -1024,7 +1163,170 @@ gnc_ppr_filter_end_cb (GtkWidget* radio,
     gboolean active = !g_strcmp0 (name, "end_date_choose");
     gtk_widget_set_sensitive (rfd->end_date, active);
     get_filter_times (rfd);
-    gnc_ppr_filter_update_date_query (rfd->plugin_page);
+    ppr_filter_update_date_query (rfd->plugin_page);
+
+    LEAVE(" ");
+}
+
+static void
+ppr_filter_relative_changed_cb (GtkWidget *widget,
+                                RegisterFilterDialog* rfd)
+{
+    g_return_if_fail (GNC_IS_PERIOD_SELECT(widget));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
+
+    ENTER("Period Select (%p), active_id %d, plugin_page %p",
+           widget, gnc_period_select_get_active (GNC_PERIOD_SELECT(widget)),
+           rfd->plugin_page);
+
+    get_filter_times (rfd);
+    ppr_filter_update_date_query (rfd->plugin_page);
+
+    LEAVE("  ");
+}
+
+/** This function is called when the "days ago" spin button is
+ *  changed which is then saved and updates the time limitation on
+ *  the register query. This is handled by a helper function as
+ *  potentially all widgets will need to be examined.
+ *
+ *  @param button A pointer to the "days ago" spin button.
+ *
+ *  @param rfd A pointer to the filter dialog structure.
+ */
+void
+gnc_ppr_filter_start_end_days_changed_cb (GtkSpinButton* button,
+                                          RegisterFilterDialog* rfd)
+{
+    g_return_if_fail (GTK_IS_SPIN_BUTTON(button));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
+
+    ENTER("(button %p, page %p)", button, rfd->plugin_page);
+
+    auto fd = gnc_plugin_page_register_get_filter_data (rfd->plugin_page);
+
+    auto name = gtk_buildable_get_name (GTK_BUILDABLE(button));
+
+    if (g_strcmp0 (name, "start_days_spin") == 0)
+        fd->start_days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(button));
+
+    if (g_strcmp0 (name, "end_days_spin") == 0)
+        fd->end_days = gtk_spin_button_get_value (GTK_SPIN_BUTTON(button));
+
+    get_filter_times (rfd);
+    ppr_filter_update_date_query (rfd->plugin_page);
+
+    LEAVE(" ");
+}
+
+/** This function is called when one of the check buttons for start
+ *  relative or start date is changed. It activates the associated
+ *  widget and deactivates the other.
+ *
+ *  @param button A pointer to a GtkToggleButton widget.
+ *
+ *  @param rfd A pointer to the filter dialog structure.
+ */
+void
+gnc_ppr_filter_start_toggle_cb (GtkToggleButton* button,
+                                RegisterFilterDialog* rfd)
+{
+    g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
+
+    ENTER("Start toggle button (%p), plugin_page %p", button, rfd->plugin_page);
+
+    auto name = gtk_buildable_get_name (GTK_BUILDABLE(button));
+
+    gboolean active = gtk_toggle_button_get_active (button);
+
+    gtk_widget_set_sensitive (rfd->start_earliest, !active);
+
+    if (g_strcmp0 (name, "start_date_check") == 0)
+    {
+        set_sensitive_start_widget (rfd, rfd->start_date, active);
+
+        set_checkbutton_with_blocking (rfd->start_relative_check,
+                                       rfd->start_days_check,
+                                       (GFunc)gnc_ppr_filter_start_toggle_cb,
+                                       rfd, FALSE);
+    }
+    if (g_strcmp0 (name, "start_relative_check") == 0)
+    {
+        set_sensitive_start_widget (rfd, rfd->start_relative, active);
+
+        set_checkbutton_with_blocking (rfd->start_date_check,
+                                       rfd->start_days_check,
+                                       (GFunc)gnc_ppr_filter_start_toggle_cb,
+                                       rfd, FALSE);
+    }
+    if (g_strcmp0 (name, "start_days_check") == 0)
+    {
+        set_sensitive_start_widget (rfd, rfd->start_days, active);
+
+        set_checkbutton_with_blocking (rfd->start_date_check,
+                                       rfd->start_relative_check,
+                                       (GFunc)gnc_ppr_filter_start_toggle_cb,
+                                       rfd, FALSE);
+    }
+    get_filter_times (rfd);
+    ppr_filter_update_date_query (rfd->plugin_page);
+
+    LEAVE(" ");
+}
+
+/** This function is called when one of the check buttons for end
+ *  relative or end date is changed. It activates the associated
+ *  widget and deactivates the other.
+ *
+ *  @param button A pointer to a GtkToggleButton widget.
+ *
+ *  @param rfd A pointer to the filter dialog structure.
+ */
+void
+gnc_ppr_filter_end_toggle_cb (GtkToggleButton* button,
+                              RegisterFilterDialog* rfd)
+{
+    g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
+
+    ENTER("End toggle button (%p), plugin_page %p", button, rfd->plugin_page);
+
+    auto name = gtk_buildable_get_name (GTK_BUILDABLE(button));
+
+    gboolean active = gtk_toggle_button_get_active (button);
+
+    gtk_widget_set_sensitive (rfd->end_latest, !active);
+
+    if (g_strcmp0 (name, "end_date_check") == 0)
+    {
+        set_sensitive_end_widget (rfd, rfd->end_date, active);
+
+        set_checkbutton_with_blocking (rfd->end_relative_check,
+                                       rfd->end_days_check,
+                                       (GFunc)gnc_ppr_filter_end_toggle_cb,
+                                       rfd, FALSE);
+    }
+    if (g_strcmp0 (name, "end_relative_check") == 0)
+    {
+        set_sensitive_end_widget (rfd, rfd->end_relative, active);
+
+        set_checkbutton_with_blocking (rfd->end_date_check,
+                                       rfd->end_days_check,
+                                       (GFunc)gnc_ppr_filter_end_toggle_cb,
+                                       rfd, FALSE);
+    }
+    if (g_strcmp0 (name, "end_days_check") == 0)
+    {
+        set_sensitive_end_widget (rfd, rfd->end_days, active);
+
+        set_checkbutton_with_blocking (rfd->end_date_check,
+                                       rfd->end_relative_check,
+                                       (GFunc)gnc_ppr_filter_end_toggle_cb,
+                                       rfd, FALSE);
+    }
+    get_filter_times (rfd);
+    ppr_filter_update_date_query (rfd->plugin_page);
 
     LEAVE(" ");
 }
@@ -1079,29 +1381,45 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     auto fd = gnc_plugin_page_register_get_filter_data (rfd->plugin_page);
     auto gsr = gnc_plugin_page_register_get_gsr (rfd->plugin_page);
 
+    if ((fd->start_time > 0 && fd->end_time > 0) && (fd->start_time > fd->end_time))
+    {
+        auto response = gnc_ok_cancel_dialog (GTK_WINDOW(rfd->dialog),
+                                              GTK_RESPONSE_CANCEL,
+                                              _("The Start date is after the End date.\n"
+                                                "Select Cancel to change dates.\n"));
+        if (response == GTK_RESPONSE_CANCEL)
+            return;
+    }
+
     if (response != GTK_RESPONSE_OK)
     {
         /* Remove the old status match */
         fd->cleared_match = rfd->original_cleared_match;
         gnc_plugin_register_set_enable_refresh (GNC_PLUGIN_PAGE_REGISTER(rfd->plugin_page), FALSE);
-        gnc_ppr_filter_update_status_query (rfd->plugin_page);
+        ppr_filter_update_status_query (rfd->plugin_page);
         gnc_plugin_register_set_enable_refresh (GNC_PLUGIN_PAGE_REGISTER(rfd->plugin_page), TRUE);
+
+        fd->start_ap = rfd->original_start_ap;
         fd->start_time = rfd->original_start_time;
+        fd->start_days = rfd->original_start_days;
+        fd->end_ap = rfd->original_end_ap;
         fd->end_time = rfd->original_end_time;
+        fd->end_days = rfd->original_end_days;
+
         fd->days = rfd->original_days;
         fd->save_filter = rfd->original_save_filter;
-        gnc_ppr_filter_update_date_query (rfd->plugin_page);
+        ppr_filter_update_date_query (rfd->plugin_page);
     }
     else
     {
         // clear the filter when unticking the save option
         if (!fd->save_filter && rfd->original_save_filter)
-            gnc_ppr_filter_save_filter (gsr, "");
+            ppr_filter_save_filter (gsr, "");
 
         rfd->original_save_filter = fd->save_filter;
 
         if (fd->save_filter)
-            gnc_ppr_filter_save_filter_parts (gsr, fd);
+            ppr_filter_save_filter_parts (gsr, fd);
     }
     rfd->dialog = nullptr;
     fd->dialog = nullptr;
@@ -1110,25 +1428,41 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     LEAVE(" ");
 }
 
-/** This function is called to create the filter dialog.
- *
- *  @param rfd A pointer to the filter dialog structure.
- * 
- *  @param fd The filter data structure for remembering state.
- *
- *  @param query A pointer to the current register query.
- */
+static GtkWidget *
+setup_period_select (GtkBuilder *builder, gboolean start_type, const gchar *hbox_txt)
+{
+    GtkWidget *period_select = GTK_WIDGET(gnc_period_select_new (start_type));
+
+    auto hbox = GTK_WIDGET(gtk_builder_get_object (builder, hbox_txt));
+    gtk_box_pack_start (GTK_BOX(hbox), period_select, TRUE, TRUE, 0);
+    gtk_widget_show (period_select);
+    gnc_period_select_set_active (GNC_PERIOD_SELECT(period_select), GNC_ACCOUNTING_PERIOD_TODAY);
+    gtk_widget_set_sensitive (GTK_WIDGET(period_select), FALSE);
+    return period_select;
+}
+
+static GtkWidget *
+setup_date_edit (GtkBuilder *builder, const gchar *hbox_txt)
+{
+    GtkWidget *date_widget = gnc_date_edit_new (gnc_time (nullptr), FALSE, FALSE);
+    auto hbox = GTK_WIDGET(gtk_builder_get_object (builder, hbox_txt));
+    gtk_box_pack_start (GTK_BOX(hbox), date_widget, TRUE, TRUE, 0);
+    gtk_widget_show (date_widget);
+    gtk_widget_set_sensitive (GTK_WIDGET(date_widget), FALSE);
+    return date_widget;
+}
+
 static void
-gnc_ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *query)
+ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *query)
 {
     time64 start_time, end_time, time_val;
 
     /* Create the dialog */
     auto builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
-                               "days_adjustment");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
-                               "filter_by_dialog");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "days_adjustment");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "start_days_adjustment");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "end_days_adjustment");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "filter_by_dialog");
     auto dialog = GTK_WIDGET(gtk_builder_get_object (builder, "filter_by_dialog"));
     rfd->dialog = dialog;
     fd->dialog = rfd->dialog;
@@ -1200,78 +1534,103 @@ gnc_ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *
     rfd->table = table;
     gtk_widget_set_sensitive (GTK_WIDGET(table), start_time || end_time);
 
-    rfd->start_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_choose"));
-    rfd->start_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_today"));
-    rfd->end_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_choose"));
-    rfd->end_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_today"));
+    rfd->start_earliest = GTK_WIDGET(gtk_builder_get_object (builder, "earliest_label"));
+    rfd->start_date_check = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_check"));
+    rfd->start_relative_check = GTK_WIDGET(gtk_builder_get_object (builder, "start_relative_check"));
+    rfd->start_days_check = GTK_WIDGET(gtk_builder_get_object (builder, "start_days_check"));
 
-    bool sensitive;
     {
+        rfd->start_relative = setup_period_select (builder, TRUE, "start_relative_hbox");
+        rfd->start_date = setup_date_edit (builder, "start_date_hbox");
+        rfd->start_days = GTK_WIDGET(gtk_builder_get_object (builder, "start_days_spin"));
+
         /* Start date info */
         if (start_time == 0)
         {
-            button = GTK_WIDGET(gtk_builder_get_object(builder, "start_date_earliest"));
+            set_sensitive_start_widget (rfd, rfd->start_earliest, TRUE);
             time_val = xaccQueryGetEarliestDateFound (query);
-            sensitive = false;
         }
         else
         {
-            time_val = start_time;
-            if ((start_time >= gnc_time64_get_today_start()) &&
-                (start_time <= gnc_time64_get_today_end()))
+            rfd->original_start_ap = fd->start_ap;
+            if (fd->start_ap != GNC_ACCOUNTING_PERIOD_INVALID)
             {
-                button = rfd->start_date_today;
-                sensitive = false;
+                set_sensitive_start_widget (rfd, rfd->start_relative, TRUE);
+                gnc_period_select_set_active (GNC_PERIOD_SELECT(rfd->start_relative), fd->start_ap);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(rfd->start_relative_check), TRUE);
+            }
+            else if (fd->start_days != 0)
+            {
+                set_sensitive_start_widget (rfd, rfd->start_days, TRUE);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(rfd->start_days_check), TRUE);
+                gtk_spin_button_set_value (GTK_SPIN_BUTTON(rfd->start_days), fd->start_days);
+                rfd->original_start_days = fd->start_days;
+
             }
             else
             {
-                button = rfd->start_date_choose;
-                sensitive = true;
+                set_sensitive_start_widget (rfd, rfd->start_date, TRUE);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(rfd->start_date_check), TRUE);
             }
+            time_val = start_time;
         }
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
-        rfd->start_date = gnc_date_edit_new (gnc_time (nullptr), FALSE, FALSE);
-        auto hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
-        gtk_box_pack_start (GTK_BOX(hbox), rfd->start_date, TRUE, TRUE, 0);
-        gtk_widget_show (rfd->start_date);
-        gtk_widget_set_sensitive (GTK_WIDGET(rfd->start_date), bool_to_gboolean (sensitive));
+        g_signal_connect (G_OBJECT(rfd->start_relative), "changed",
+                          G_CALLBACK(ppr_filter_relative_changed_cb), rfd);
+
+        if (time_val == 0)
+            time_val = gnc_time64_get_today_start();
         gnc_date_edit_set_time (GNC_DATE_EDIT(rfd->start_date), time_val);
         g_signal_connect (G_OBJECT(rfd->start_date), "date-changed",
-                          G_CALLBACK(gnc_ppr_filter_gde_changed_cb), rfd);
+                          G_CALLBACK(ppr_filter_gde_changed_cb), rfd);
     }
 
+    rfd->end_latest = GTK_WIDGET(gtk_builder_get_object (builder, "latest_label"));
+    rfd->end_date_check = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_check"));
+    rfd->end_relative_check = GTK_WIDGET(gtk_builder_get_object (builder, "end_relative_check"));
+    rfd->end_days_check = GTK_WIDGET(gtk_builder_get_object (builder, "end_days_check"));
+
     {
+        rfd->end_relative = setup_period_select (builder, FALSE, "end_relative_hbox");
+        rfd->end_date = setup_date_edit (builder, "end_date_hbox");
+        rfd->end_days = GTK_WIDGET(gtk_builder_get_object (builder, "end_days_spin"));
+
         /* End date info */
         if (end_time == 0)
         {
-            button = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_latest"));
+            set_sensitive_end_widget (rfd, rfd->end_latest, TRUE);
             time_val = xaccQueryGetLatestDateFound (query);
-            sensitive = false;
         }
         else
         {
-            time_val = end_time;
-            if ((end_time >= gnc_time64_get_today_start()) &&
-                (end_time <= gnc_time64_get_today_end()))
+            rfd->original_end_ap = fd->end_ap;
+            if (fd->end_ap != GNC_ACCOUNTING_PERIOD_INVALID)
             {
-                button = rfd->end_date_today;
-                sensitive = false;
+                set_sensitive_end_widget (rfd, rfd->end_relative, TRUE);
+                gnc_period_select_set_active (GNC_PERIOD_SELECT(rfd->end_relative), fd->end_ap);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(rfd->end_relative_check), TRUE);
+            }
+            else if (fd->end_days != 0)
+            {
+                set_sensitive_end_widget (rfd, rfd->end_days, TRUE);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(rfd->end_days_check), TRUE);
+                gtk_spin_button_set_value (GTK_SPIN_BUTTON(rfd->end_days), fd->end_days);
+                rfd->original_end_days = fd->end_days;
             }
             else
             {
-                button = rfd->end_date_choose;
-                sensitive = true;
+                set_sensitive_end_widget (rfd, rfd->end_date, TRUE);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(rfd->end_date_check), TRUE);
             }
+            time_val = end_time;
         }
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
-        rfd->end_date = gnc_date_edit_new (gnc_time (nullptr), FALSE, FALSE);
-        auto hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
-        gtk_box_pack_start (GTK_BOX(hbox), rfd->end_date, TRUE, TRUE, 0);
-        gtk_widget_show (rfd->end_date);
-        gtk_widget_set_sensitive (GTK_WIDGET(rfd->end_date), bool_to_gboolean (sensitive));
+        g_signal_connect (G_OBJECT(rfd->end_relative), "changed",
+                          G_CALLBACK(ppr_filter_relative_changed_cb), rfd);
+
+        if (time_val == 0)
+            time_val = gnc_time64_get_today_end();
         gnc_date_edit_set_time (GNC_DATE_EDIT(rfd->end_date), time_val);
         g_signal_connect (G_OBJECT(rfd->end_date), "date-changed",
-                          G_CALLBACK(gnc_ppr_filter_gde_changed_cb), rfd);
+                          G_CALLBACK(ppr_filter_gde_changed_cb), rfd);
     }
 
     /* Wire it up */
@@ -1287,9 +1646,9 @@ gnc_ppr_filter_dialog_create (RegisterFilterDialog* rfd, FilterData *fd, Query *
  *
  *  @param plugin_page  A pointer to the GncPluginPageRegister that is
  *  associated with this filter dialog.
- * 
+ *
  *  @param query A pointer to the current register query.
- * 
+ *
  *  @param fd A pointer to the filter data structure for remembering state.
  *
  *  @param show_save_button Set to True to show save button.
@@ -1307,7 +1666,7 @@ gnc_ppr_filter_by (GncPluginPage *plugin_page, Query *query,
     rfd->plugin_page = plugin_page;
     rfd->show_save_button = show_save_button;
 
-    gnc_ppr_filter_dialog_create (rfd, fd, query);
+    ppr_filter_dialog_create (rfd, fd, query);
 
     LEAVE(" ");
 }

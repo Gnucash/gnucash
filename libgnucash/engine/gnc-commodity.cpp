@@ -201,6 +201,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, NC_("FQ Source", "Deka Investments, DE"), "deka" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Financial Times Funds service, GB"), "ftfunds" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Finanzpartner, DE"), "finanzpartner" },
+    { false, SOURCE_SINGLE, NC_("FQ Source", "Finnhub, US"), "finnhub" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "FondsWeb, DE"), "fondsweb" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "GoldMoney precious metals"), "goldmoney" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Google Web, US Stocks"), "googleweb" },
@@ -301,8 +302,7 @@ get_quote_source_from_type (QuoteSourceType type)
  ********************************************************************/
 gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
-    auto source{get_quote_source_from_type(type)};
-    return std::distance(source.begin(), source.end());
+    return get_quote_source_from_type(type).size();
 }
 
 

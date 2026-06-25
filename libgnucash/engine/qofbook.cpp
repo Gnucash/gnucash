@@ -49,7 +49,7 @@
 #include "qof.h"
 #include "qofevent-p.h"
 #include "qofbackend.h"
-#include "qofbook-p.h"
+#include "qofbook-p.hpp"
 #include "qofid-p.h"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
@@ -576,6 +576,18 @@ void qof_book_mark_closed (QofBook *book)
     book->book_open = 'n';
 }
 
+gboolean qof_book_is_open (const QofBook *book)
+{
+    g_return_val_if_fail (book, FALSE);
+    return book->book_open == 'y';
+}
+
+void qof_book_swap_books_readonly (QofBook *book, QofBook *other)
+{
+    g_return_if_fail (book && other);
+    std::swap (book->read_only, other->read_only);
+}
+
 gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)
 {
@@ -963,6 +975,12 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 {
     g_assert(book);
     return (qof_book_get_num_days_autoreadonly(book) != 0);
+}
+
+void qof_book_reset_num_days_autoreadonly_cache (QofBook *book)
+{
+    g_return_if_fail (book);
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
 }
 
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
@@ -1407,5 +1425,38 @@ gboolean qof_book_register (void)
 
     return TRUE;
 }
+
+
+
+static gboolean get_session_dirty(const QofBook *book){ return book->session_dirty; }
+static gboolean get_read_only(const QofBook *book){ return book->read_only; }
+static QofBookDirtyCB get_dirty_cb(const QofBook *book){ return book->dirty_cb; }
+static void set_shutting_down(QofBook *book, gboolean state){ book->shutting_down = state; }
+static gpointer get_dirty_data(const QofBook *book){ return book->dirty_data; }
+static GHashTable* get_collections(const QofBook *book){ return book->hash_of_collections; }
+static GHashTable* get_data_tables(const QofBook *book){ return book->data_tables; }
+static GHashTable* get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
+static char get_book_open(const QofBook *book){ return book->book_open; }
+static int get_version(const QofBook *book){ return book->version; }
+
+
+QofBookTestFunctions*
+_utest_qofbook_fill_functions (void)
+{
+    QofBookTestFunctions *func = g_new (QofBookTestFunctions, 1);
+
+    func->get_session_dirty = get_session_dirty;
+    func->get_read_only = get_read_only;
+    func->get_dirty_cb = get_dirty_cb;
+    func->set_shutting_down = set_shutting_down;
+    func->get_dirty_data = get_dirty_data;
+    func->get_collections = get_collections;
+    func->get_data_tables = get_data_tables;
+    func->get_data_table_finalizers = get_data_table_finalizers;
+    func->get_book_open = get_book_open;
+    func->get_version = get_version;
+    return func;
+}
+
 
 /* ========================== END OF FILE =============================== */

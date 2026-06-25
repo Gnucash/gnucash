@@ -34,18 +34,22 @@
 #define __GNC_PLUGIN_PAGE_REGISTER_FILTER_HPP
 
 #include <gtk/gtk.h>
-#include "gnc-split-reg.h"
+#include "gnc-accounting-period.h"
 #include "gnc-plugin-page.h"
 #include <stdbool.h>
 
 struct FilterData
 {
-    GtkWidget*      dialog;
-    cleared_match_t cleared_match;
-    time64          start_time;
-    time64          end_time;
-    int             days;
-    bool            save_filter;
+    GtkWidget*          dialog;
+    cleared_match_t     cleared_match;
+    GncAccountingPeriod start_ap;
+    time64              start_time;
+    int                 start_days;
+    GncAccountingPeriod end_ap;
+    time64              end_time;
+    int                 end_days;
+    int                 days;
+    bool                save_filter;
 };
 
 void gnc_ppr_filter_set_tooltip (GncPluginPage* plugin_page, struct FilterData *fd);

@@ -24,7 +24,7 @@ add_engine_test(test-commodities test-commodities.cpp)
 set(test_qof_SOURCES
   test-gnc-date.c
   test-qof.c
-  test-qofbook.c
+  test-qofbook.cpp
   test-qofinstance.cpp
   test-qofobject.c
   test-qof-string-cache.c
@@ -247,7 +247,7 @@ set(test_engine_SOURCES_DIST
         test-object.c
         test-qof.c
         test-qofid.cpp
-        test-qofbook.c
+        test-qofbook.cpp
         test-qofinstance.cpp
         test-qofobject.c
         test-qofsession.cpp
