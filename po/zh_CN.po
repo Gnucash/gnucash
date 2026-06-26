@@ -41,6 +41,7 @@
 # Deleted User <noreply+62046@weblate.org>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 # John Ralls <jralls@ceridwen.us>, 2026.
+# laole <lovedebushiu@qq.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -48,7 +49,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:43+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: laole <lovedebushiu@qq.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
