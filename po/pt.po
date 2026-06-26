@@ -5,6 +5,7 @@
 # Pedro Albuquerque <pmra@gmx.com>, 2021, 2022, 2023, 2024.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2023.
 # Hiago Fontoura <HIAGOFMENDONCA@gmail.com>, 2025.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -12,7 +13,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:44+0000\n"
-"Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
 "Language: pt\n"
