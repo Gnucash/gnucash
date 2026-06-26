@@ -9,6 +9,7 @@
 # mocsa <csaba@feltoltve.hu>, 2022, 2023, 2024, 2025, 2026.
 # ovari <ovari123@zoho.com>, 2022, 2023, 2026.
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -16,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:52+0000\n"
-"Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
