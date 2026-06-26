@@ -7,6 +7,7 @@
 # Bojan Topalovski <3dcncinfo@gmail.com>, 2024, 2026.
 # acemk <ace.dimitrievski@gmail.com>, 2025, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -14,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:11+0000\n"
-"Last-Translator: Bojan Topalovski <3dcncinfo@gmail.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
 "Language: mk\n"
