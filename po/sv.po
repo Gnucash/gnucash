@@ -11,7 +11,7 @@
 # Erik Johansson <erik@ejohansson.se>, 2014, 2016.
 # Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023, 2024, 2025, 2026.
 # Luna Jernberg <droidbittin@gmail.com>, 2022, 2023.
-# bittin1ddc447d824349b2 <bittin@reimu.nl>, 2023, 2024.
+# bittin1ddc447d824349b2 <bittin@reimu.nl>, 2023, 2024, 2026.
 # Arve Eriksson <arve.eriksson@startmail.com>, 2026.
 msgid ""
 msgstr ""
@@ -20,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:03+0000\n"
-"Last-Translator: Arve Eriksson <arve.eriksson@startmail.com>\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -5449,8 +5449,7 @@ msgstr "Kommande transaktioner"
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:1080
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] ""
-"Är du säker på att du vill ta bort den här schemalagda transaktionen?"
+msgstr[0] "Är du säker på att du vill ta bort den här schemalagda transaktionen?"
 msgstr[1] "Vill du verkligen ta bort dessa schemalagda transaktioner?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:143
