@@ -2,7 +2,7 @@
 # Copyright (C) 2001 Free Software Foundation.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
 # THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020, 2021.
-# giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
+# giorgos georgopoulakis <huskyaek@gmail.com>, 2021, 2026.
 # Katerina <katerina.gakou@hotmail.com>, 2021, 2026.
 # Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
 # Gregory-K <lifeturn@gmail.com>, 2022.
@@ -14,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
+"Last-Translator: giorgos georgopoulakis <huskyaek@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
 "Language: el\n"
