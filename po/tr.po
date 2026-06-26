@@ -11,6 +11,7 @@
 # Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024, 2025.
 # Gurkan Bebek <gurkanbebek@gmail.com>, 2025.
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
+# Oğuz Ersen <oguz@ersen.moe>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -18,7 +19,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:40+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
