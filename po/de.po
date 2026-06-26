@@ -33,6 +33,7 @@
 # Alois Levermann <alois@levermann.xyz>, 2025, 2026.
 # Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025.
 # Franko <web.90947@t.sc-ha.net>, 2025.
+# Alexej <alexejkirsch@outlook.de>, 2026.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -45,7 +46,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:28+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"Last-Translator: Alexej <alexejkirsch@outlook.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
