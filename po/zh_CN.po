@@ -9,7 +9,7 @@
 # Aron Xu <happyaron.xu@gmail.com>, 2010
 # Tao Wang <dancefire@gmail.com>, 2010
 # Monson Shao <holymonson@gmail.com>, 2018
-# Boyuan Yang <073plan@gmail.com>, 2018, 2019, 2021.
+# Boyuan Yang <073plan@gmail.com>, 2018, 2019, 2021, 2026.
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 # Sean Guan <guanshangkang@gmail.com>, 2021, 2026.
 # 峡州仙士 <c@cjh0613.com>, 2021, 2026.
@@ -47,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
