@@ -7,7 +7,7 @@
 # gnu-ewm <gnu.ewm@protonmail.com>, 2022, 2023.
 # Kaligula <kaligula.dev@gmail.com>, 2022, 2023, 2024, 2026.
 # vim <dev.getport@slmail.me>, 2023, 2026.
-# Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
+# Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024, 2026.
 # Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
 # наб <nabijaczleweli@nabijaczleweli.xyz>, 2024.
 # Eryk Michalak <gnu.ewm@protonmail.com>, 2026.
@@ -18,7 +18,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:21+0000\n"
-"Last-Translator: vim <dev.getport@slmail.me>\n"
+"Last-Translator: Rcvrvugyvgvb <xzdfrlhz@duck.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -983,8 +983,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie (Edycja-"
-">Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
+"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie (Edycja->"
+"Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
 "wyszukiwanie do jednego konta, rozpocznij wyszukiwanie z rejestru konta."
 
 #: doc/tip_of_the_day.list.c:125
