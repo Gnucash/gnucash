@@ -14,6 +14,7 @@
 # Oğuz Ersen <oguz@ersen.moe>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 # Deleted User <noreply+136605@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -21,7 +22,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:41+0000\n"
-"Last-Translator: Gurkan Bebek <gurkanbebek@gmail.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
