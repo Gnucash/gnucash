@@ -3,7 +3,7 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # Mikel Olasagasti Uranga, 2005
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
-# Enrique Ayesta Perojo <eayesta@gmail.com>, 2022.
+# Enrique Ayesta Perojo <eayesta@gmail.com>, 2022, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:51+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: Enrique Ayesta Perojo <eayesta@gmail.com>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "eu/>\n"
 "Language: eu\n"
