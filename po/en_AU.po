@@ -7,7 +7,7 @@
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 # Adithya K <adithyak04@gmail.com>, 2021.
 # Simon Arlott <weblate.simon@arlott.org>, 2022, 2023, 2024.
-# John Ralls <jralls@ceridwen.us>, 2023.
+# John Ralls <jralls@ceridwen.us>, 2023, 2026.
 # Simon Arlott <nomis@users.noreply.hosted.weblate.org>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:07+0000\n"
-"Last-Translator: Simon Arlott <nomis@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_AU/>\n"
 "Language: en_AU\n"
