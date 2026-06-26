@@ -1,6 +1,7 @@
 # Francisco Serrador <fserrador@gmail.com>, 2022.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 # Deleted User <noreply+36847@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -8,7 +9,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:38+0000\n"
-"Last-Translator: Deleted User <noreply+36847@weblate.org>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Spanish (Nicaragua) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/es_NI/>\n"
 "Language: es_NI\n"
