@@ -13,7 +13,7 @@
 # Val Saven <val.saven@gmail.com>, 2021.
 # Artem <KovalevArtem.ru@gmail.com>, 2021.
 # МАН69К <weblate@mah69k.net>, 2022.
-# Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
+# Nikita Samoilov <n.p.samoilov@gmail.com>, 2022, 2026.
 # Vik <xasertop@gmail.com>, 2022.
 # Vin <k3kelm4vw@mozmail.com>, 2023.
 # hades <dev@hades.name>, 2023.
@@ -32,7 +32,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:25+0000\n"
-"Last-Translator: Yurt Page <yurtpage+weblate@gmail.com>\n"
+"Last-Translator: Nikita Samoilov <n.p.samoilov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
