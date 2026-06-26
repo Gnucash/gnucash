@@ -14,7 +14,7 @@
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Christopher Lam, 2018
 # K. Herbert <herbert.ka@mailo.com>, 2020.
-# Christopher Lam <christopher.lck@gmail.com>, 2020, 2021, 2023.
+# Christopher Lam <christopher.lck@gmail.com>, 2020, 2021, 2023, 2026.
 # Laurent DÉRÉDEC <images-ld@gmx.fr>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2021.
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
@@ -51,7 +51,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Sébastien Ray <sebastien.ray@normalesup.org>\n"
+"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
