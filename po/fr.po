@@ -33,7 +33,7 @@
 # Vincent Dawans <dawansv@gmail.com>, 2023, 2026.
 # Xavier Gandillot (aka xavier268), 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024, 2025, 2026.
-# aleksej0R <omolice@hotmail.fr>, 2024.
+# aleksej0R <omolice@hotmail.fr>, 2024, 2026.
 # Over_score <wablate@lorang.net>, 2024.
 # Martin LORANG <wablate@lorang.net>, 2024, 2026.
 # Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
@@ -49,7 +49,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Bernard Giroud <bgiroud33@gmail.com>\n"
+"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
