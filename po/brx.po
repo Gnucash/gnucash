@@ -1,7 +1,7 @@
 # Localization for Bodo language.
 # Copyright (C) 2003, C-DAC, GIST, Pune, India.
 # Ritu Panwar <ritup@cdac.in>, 2014.
-# Adithya K <adithyak04@gmail.com>, 2021.
+# Adithya K <adithyak04@gmail.com>, 2021, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
@@ -10,7 +10,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:27+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: Adithya K <adithyak04@gmail.com>\n"
 "Language-Team: Bodo <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "brx/>\n"
 "Language: brx\n"
