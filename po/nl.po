@@ -21,21 +21,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-04-13 22:11+0000\n"
-"Last-Translator: hamaryns <hendrik@hendrikmaryns.name>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
-">\n"
+"PO-Revision-Date: 2026-06-26 04:19+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"X-Generator: Weblate 2026.7.dev0\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -109,8 +109,7 @@ msgstr "Einde van de verslagperiode"
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Laatste dag van de in de programmavoorkeuren ingestelde verslagperiode."
+msgstr "Laatste dag van de in de programmavoorkeuren ingestelde verslagperiode."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -871,8 +870,8 @@ msgid ""
 msgstr ""
 "Wilt u de boekingen van alle subrekeningen op één grootboekkaart weergeven? "
 "Dat kan door de betreffende hoofdrekening te selecteren in tabblad "
-"Rekeningen van het hoofdvenster en te kiezen voor menuoptie "
-"‘Bewerken‣Subrekeningen openen’."
+"Rekeningen van het hoofdvenster en te kiezen voor menuoptie ‘Bewerken‣"
+"Subrekeningen openen’."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -933,8 +932,8 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
-"U kunt meerdere rapporten in één venster samenvoegen via menukeuze "
-"‘Voorbeeld & Aangepast‣Aangepast multi-kolom rapport’, zodat u alle gewenste "
+"U kunt meerdere rapporten in één venster samenvoegen via menukeuze ‘"
+"Voorbeeld & Aangepast‣Aangepast multi-kolom rapport’, zodat u alle gewenste "
 "financiële gegevens in één oogopslag kunt raadplegen."
 
 #: doc/tip_of_the_day.list.c:101
@@ -944,8 +943,8 @@ msgid ""
 "style sheets."
 msgstr ""
 "Opmaaksjablonen bepalen de weergave van uw rapporten. U kunt per rapport een "
-"opmaaksjabloon toekennen via de rapportopties. Via menukeuze "
-"‘Bewerken‣Opmaaksjablonen’ kunt u deze sjablonen aanpassen."
+"opmaaksjabloon toekennen via de rapportopties. Via menukeuze ‘Bewerken‣"
+"Opmaaksjablonen’ kunt u deze sjablonen aanpassen."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
@@ -1008,9 +1007,8 @@ msgid ""
 "new window."
 msgstr ""
 "Om de inhoud van twee tabbladen op het scherm met elkaar te kunnen "
-"vergelijken kiest u, vanuit een van beide tabbladen, menukeuze "
-"‘Vensters‣Nieuw venster met pagina’ om dat tabblad in een nieuw venster te "
-"openen."
+"vergelijken kiest u, vanuit een van beide tabbladen, menukeuze ‘Vensters‣"
+"Nieuw venster met pagina’ om dat tabblad in een nieuw venster te openen."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
@@ -2972,8 +2970,7 @@ msgstr "Weet u zeker dat u de geselecteerde regel wilt verwijderen?"
 #: gnucash/gnome/dialog-invoice.c:729
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
-msgstr ""
-"Deze regel is gekoppeld aan een order en wordt daar ook uit verwijderd!"
+msgstr "Deze regel is gekoppeld aan een order en wordt daar ook uit verwijderd!"
 
 #: gnucash/gnome/dialog-invoice.c:924
 msgid "Choose a different report template or Printable Invoice will be used"
@@ -6601,8 +6598,8 @@ msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr ""
-"U moet ofwel een tegenrekening, ofwel de eigen vermogen-rekening "
-"‘Beginsaldi’ selecteren."
+"U moet ofwel een tegenrekening, ofwel de eigen vermogen-rekening ‘Beginsaldi"
+"’ selecteren."
 
 #: gnucash/gnome-utils/dialog-account.c:1485
 msgid ""
@@ -7043,8 +7040,8 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"U kunt niet boeken vanaf een niet-monetaire rekening. Probeer de ‘van’- en "
-"‘naar’-rekeningen om te draaien en het ‘aantal’ negatief te maken."
+"U kunt niet boeken vanaf een niet-monetaire rekening. Probeer de ‘van’- en ‘"
+"naar’-rekeningen om te draaien en het ‘aantal’ negatief te maken."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1452
 msgid "You must enter a valid price."
@@ -8624,8 +8621,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Log niveau configuraties, volgens formaat "
-"\"modulenaam={debug,info,warn,crit,error}\"\n"
+"Log niveau configuraties, volgens formaat \"modulenaam="
+"{debug,info,warn,crit,error}\"\n"
 "Voorbeelden: \"--log qof=debug\" of \"-log gnc.backend.file.sx=info\"\n"
 "Dit kan meermaals opgegeven worden."
 
@@ -8638,8 +8635,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Bestand voor logmeldingen; standaard is “/tmp/gnucash.trace”; mag ook "
-"“stderr” of “stdout” zijn."
+"Bestand voor logmeldingen; standaard is “/tmp/gnucash.trace”; mag ook “stderr"
+"” of “stdout” zijn."
 
 #: gnucash/gnucash-core-app.cpp:292
 msgid "Hidden Options"
@@ -8863,8 +8860,8 @@ msgid ""
 msgstr ""
 "Door activering van deze optie wordt tijdens het opstarten van GnuCash "
 "gecontroleerd of er binnenkort te betalen verkoopfacturen vervallen. Zo ja, "
-"dan krijgt de gebruiker een betalingsherinnering te zien. De definitie van "
-"‘binnenkort’ wordt bepaald door de instelling ‘Dagen van tevoren’. Zonder "
+"dan krijgt de gebruiker een betalingsherinnering te zien. De definitie van ‘"
+"binnenkort’ wordt bepaald door de instelling ‘Dagen van tevoren’. Zonder "
 "deze optie controleert GnuCash niet op het vervallen van facturen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
@@ -8966,8 +8963,8 @@ msgid ""
 msgstr ""
 "Door activering van deze optie wordt tijdens het opstarten van GnuCash "
 "gecontroleerd of er binnenkort te betalen aankoopfacturen vervallen. Zo ja, "
-"dan krijgt de gebruiker een betalingsherinnering te zien. De definitie van "
-"‘binnenkort’ wordt bepaald door de instelling ‘Dagen van tevoren’. Zonder "
+"dan krijgt de gebruiker een betalingsherinnering te zien. De definitie van ‘"
+"binnenkort’ wordt bepaald door de instelling ‘Dagen van tevoren’. Zonder "
 "deze optie controleert GnuCash niet op het vervallen van facturen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
@@ -8981,8 +8978,8 @@ msgid ""
 "active."
 msgstr ""
 "Dit veld definieert het aantal dagen vooruit dat GnuCash de vervaldatum van "
-"rekeningen controleert. Deze waarde wordt uitsluitend gebruikt als "
-"‘Herinneren aan vervaldatum’ is ingesteld."
+"rekeningen controleert. Deze waarde wordt uitsluitend gebruikt als ‘"
+"Herinneren aan vervaldatum’ is ingesteld."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
@@ -9021,8 +9018,7 @@ msgstr "Te gebruiken datumopmaak"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:21
 msgid "This is the numerical identifier of the predefined date format to use."
-msgstr ""
-"Dit is het volgnummer van de te hanteren voorgedefinieerde datumopmaak."
+msgstr "Dit is het volgnummer van de te hanteren voorgedefinieerde datumopmaak."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:25
 msgid "Custom date format"
@@ -9552,8 +9548,8 @@ msgid ""
 msgstr ""
 "De gebruiker vóór afstemming van een rentedragende rekening vragen of hij "
 "een boeking wil maken voor te ontvangen of te betalen rente. Dit werkt "
-"alleen met de bank-, creditcard-, beleggingsfonds-, activa-, vreemd "
-"vermogen-, debiteuren- en crediteurenrekeningen."
+"alleen met de bank-, creditcard-, beleggingsfonds-, activa-, vreemd vermogen-"
+", debiteuren- en crediteurenrekeningen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
@@ -9884,8 +9880,8 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
-"Door activering van deze optie zal GnuCash na het weergeven van de "
-"‘Wijzigingen opslaan bij afsluiten’-vraag maar een beperkt aantal secondes "
+"Door activering van deze optie zal GnuCash na het weergeven van de ‘"
+"Wijzigingen opslaan bij afsluiten’-vraag maar een beperkt aantal secondes "
 "wachten. Als de gebruiker niet binnen die tijd reageert, wordt het "
 "dialoogvenster afgesloten en worden de wijzigingen automatisch opgeslagen."
 
@@ -10009,8 +10005,8 @@ msgid ""
 "balances."
 msgstr ""
 "Deze instelling bepaalt of bij welke rekeningsoorten het saldo van teken "
-"wordt gewisseld (van positief naar negatief - of omgekeerd). De waarde "
-"“income-expense” is voor gebruikers die graag positieve opbrengsten en "
+"wordt gewisseld (van positief naar negatief - of omgekeerd). De waarde “"
+"income-expense” is voor gebruikers die graag positieve opbrengsten en "
 "negatieve kosten zien. De waarde “credit” is voor gebruikers die graag zien "
 "dat de saldi de intrinsieke debet- of creditstatus van een rekening in "
 "ogenschouw nemen. De waarde “none” schakelt alle tekenomkering uit."
@@ -10021,9 +10017,8 @@ msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
 msgstr ""
-"Alle creditposten van teken laten wisselen (m.a.w. aanwezige "
-"(creditcard-)schulden, crediteuren, eigen vermogen en opbrengsten positief "
-"weergeven)."
+"Alle creditposten van teken laten wisselen (m.a.w. aanwezige (creditcard-)"
+"schulden, crediteuren, eigen vermogen en opbrengsten positief weergeven)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:105
 #: gnucash/gtkbuilder/dialog-preferences.glade:706
@@ -10070,8 +10065,8 @@ msgid ""
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr ""
-"Door activering van deze optie worden de boekhoudkundige termen ‘Debet’ en "
-"‘Credit’ als label gebruikt. Zonder deze optie wordt in plaats hiervan "
+"Door activering van deze optie worden de boekhoudkundige termen ‘Debet’ en ‘"
+"Credit’ als label gebruikt. Zonder deze optie wordt in plaats hiervan "
 "gebruik gemaakt van informele beschrijvingen (Opname/Storting, Verhogen/"
 "Verlagen, enzovoorts)."
 
@@ -10088,8 +10083,8 @@ msgid ""
 msgstr ""
 "Door activering van deze optie zal een sluitknop worden toegevoegd aan elk "
 "tabblad dat kan worden afgesloten. Zonder deze optie ontbreken deze knoppen. "
-"Onafhankelijk hiervan kan een tabblad altijd worden afgesloten via de knop "
-"‘Sluiten’ in de werkbalk of de menukeuze ‘Bestand‣Sluiten’."
+"Onafhankelijk hiervan kan een tabblad altijd worden afgesloten via de knop ‘"
+"Sluiten’ in de werkbalk of de menukeuze ‘Bestand‣Sluiten’."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
@@ -10137,8 +10132,8 @@ msgstr ""
 "Deze instelling bepaalt de bron van de munteenheid die standaard bij nieuwe "
 "rekeningen wordt gehanteerd. Indien deze is ingesteld op “locale” neemt "
 "GnuCash de munteenheid-waarde uit de landinstelling van uw systeem over. "
-"Indien deze is ingesteld op “other” neemt GnuCash de waarde uit de sleutel "
-"‘currency-other’ over."
+"Indien deze is ingesteld op “other” neemt GnuCash de waarde uit de sleutel ‘"
+"currency-other’ over."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -10321,8 +10316,7 @@ msgstr "De samenvattingsbalk aan de onderzijde van de pagina weergeven."
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3499
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr ""
-"Bij het afsluiten van een tabblad de voorlaatst bezochte tab activeren."
+msgstr "Bij het afsluiten van een tabblad de voorlaatst bezochte tab activeren."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
@@ -10330,8 +10324,8 @@ msgid ""
 "closing a tab moves one tab to the left."
 msgstr ""
 "Door activering van deze optie wordt na het afsluiten van een tab de laatst "
-"bezochte tab actief (in plaats van de tab meteen links van de afgesloten "
-"tab)."
+"bezochte tab actief (in plaats van de tab meteen links van de afgesloten tab)"
+"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:230
 #: gnucash/gtkbuilder/dialog-preferences.glade:1466
@@ -10713,11 +10707,11 @@ msgid ""
 "not allowed in filenames, such as '/', will be replaced with underscores '_' "
 "in the resulting file name."
 msgstr ""
-"Deze instelling bepaalt de bestandsnaam voor PDF-export. Dit is een "
-"sprintf(3)-tekenreeks met 3 argumenten: “%1$s” is de rapportnaam (zoals "
-"“Factuur”). “%2$s” is het nummer van het rapport (voor een factuur is dat "
-"het factuurnummer). “%3$s” is de datum van het rapport, opgemaakt volgens de "
-"‘filename-date-format’-instelling. Merk op: Alle karakters die niet zijn "
+"Deze instelling bepaalt de bestandsnaam voor PDF-export. Dit is een sprintf"
+"(3)-tekenreeks met 3 argumenten: “%1$s” is de rapportnaam (zoals “Factuur”). "
+"“%2$s” is het nummer van het rapport (voor een factuur is dat het "
+"factuurnummer). “%3$s” is de datum van het rapport, opgemaakt volgens de ‘"
+"filename-date-format’-instelling. Merk op: Alle karakters die niet zijn "
 "toegestaan in bestandsnamen (bijvoorbeeld ‘/’) worden vervangen door "
 "liggende streepjes ( ‘_’)."
 
@@ -15800,8 +15794,8 @@ msgid ""
 msgstr ""
 "Het teken dat gebruikt wordt tussen de componenten van een (volledige) "
 "rekeningnaam. U kunt hier een willekeurig individueel karakter (mits geen "
-"cijfer of letter) of een van de tekenreeksen “colon”, “slash”, “backslash”, "
-"“dash” en “period” invoeren."
+"cijfer of letter) of een van de tekenreeksen “colon”, “slash”, “backslash”, “"
+"dash” en “period” invoeren."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:934
 #: gnucash/gtkbuilder/dialog-preferences.glade:3338
@@ -18431,8 +18425,8 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"De ‘dag van de week’ én de ‘week van de maand’ koppelen? (bijvoorbeeld: de "
-"“tweede dinsdag” van elke maand)"
+"De ‘dag van de week’ én de ‘week van de maand’ koppelen? (bijvoorbeeld: de “"
+"tweede dinsdag” van elke maand)"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:62
 msgid "Only show _active owners"
@@ -19070,8 +19064,8 @@ msgid ""
 "this option, the transaction text is used for the transaction description "
 "too."
 msgstr ""
-"Sommige banken zetten een deel van de boekingsomschrijving als "
-"‘transactietekst’ in het MT940 bestand. Normaal negeert GnuCash deze tekst. "
+"Sommige banken zetten een deel van de boekingsomschrijving als ‘"
+"transactietekst’ in het MT940 bestand. Normaal negeert GnuCash deze tekst. "
 "Door deze optie te activeren wordt het ‘transactietekst’-veld ook in de "
 "omschrijving van de boeking gebruikt."
 
@@ -19170,8 +19164,8 @@ msgstr ""
 "Voor uw eigen bankrekening zijn nog geen SEPA-gegevens opgeslagen. Helaas is "
 "het in deze versie van GnuCash niet mogelijk om de benodigde extra stap "
 "vanuit het programma uit te voeren. Gebruik hiervoor het programma “aqhbci-"
-"tool” voor uw rekening vanaf de commandoregel: aqhbci-tool4 getaccsepa -b %s "
-"-a %s"
+"tool” voor uw rekening vanaf de commandoregel: aqhbci-tool4 getaccsepa -b "
+"%s -a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:574
 msgid ""
@@ -21891,8 +21885,8 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
-"De opgegeven datum van deze gedupliceerde boeking ligt vóór de “alleen-"
-"lezen”-drempel die is ingesteld voor deze boekhouding. Deze instelling kan "
+"De opgegeven datum van deze gedupliceerde boeking ligt vóór de “alleen-lezen"
+"”-drempel die is ingesteld voor deze boekhouding. Deze instelling kan "
 "gewijzigd worden onder menukeuze ‘Bestand‣Eigenschappen‣Rekeningen’."
 
 #: gnucash/register/ledger-core/split-register.c:997
@@ -22335,8 +22329,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:1116
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
-msgstr ""
-"Een boekingsverwijzing die betrekking heeft op alle boekregels invoeren"
+msgstr "Een boekingsverwijzing die betrekking heeft op alle boekregels invoeren"
 
 #: gnucash/register/ledger-core/split-register-model.c:1152
 msgid "Enter the name of the Customer"
@@ -22692,8 +22685,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/income-statement.scm:57
 msgid "Report on these accounts, if display depth allows."
-msgstr ""
-"Over deze rekeningen rapporteren, mits het weergaveniveau dit toestaat."
+msgstr "Over deze rekeningen rapporteren, mits het weergaveniveau dit toestaat."
 
 #: gnucash/report/options-utilities.scm:129
 msgid "Select the currency to display the values of this report in."
@@ -24005,8 +23997,7 @@ msgstr "Nulsaldi weglaten"
 #: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Show blank space in place of any zero balances which would be shown."
-msgstr ""
-"Alle plekken waar anders nulsaldi zouden worden weergegeven leeg laten."
+msgstr "Alle plekken waar anders nulsaldi zouden worden weergegeven leeg laten."
 
 #: gnucash/report/reports/standard/account-summary.scm:104
 #: gnucash/report/reports/standard/balance-sheet.scm:100
@@ -24470,8 +24461,7 @@ msgstr "Activagedeelte labellen"
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:78
 msgid "Whether or not to include a label for the assets section."
-msgstr ""
-"Of al dan niet een label moet worden opgenomen voor het activagedeelte."
+msgstr "Of al dan niet een label moet worden opgenomen voor het activagedeelte."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:110
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:79
@@ -25169,8 +25159,7 @@ msgstr "Kostengedeelte labellen"
 #: gnucash/report/reports/standard/budget-income-statement.scm:103
 #: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the expense section."
-msgstr ""
-"Of al dan niet een label moet worden opgenomen voor het kostengedeelte."
+msgstr "Of al dan niet een label moet worden opgenomen voor het kostengedeelte."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:97
@@ -25467,8 +25456,7 @@ msgstr "Volledige rekeningnamen weergeven"
 
 #: gnucash/report/reports/standard/cash-flow.scm:79
 msgid "Show full account names (including parent accounts)."
-msgstr ""
-"Volledige rekeningnamen (inclusief bovenliggende rekeningen) weergeven."
+msgstr "Volledige rekeningnamen (inclusief bovenliggende rekeningen) weergeven."
 
 #: gnucash/report/reports/standard/cash-flow.scm:197
 #, scheme-format
@@ -26815,8 +26803,7 @@ msgstr "Begunstigderegel"
 
 #: gnucash/report/reports/standard/invoice.scm:462
 msgid "The phrase for specifying to whom payments should be made."
-msgstr ""
-"Het tekstfragment dat aangeeft aan wie betalingen moeten worden gedaan."
+msgstr "Het tekstfragment dat aangeeft aan wie betalingen moeten worden gedaan."
 
 #: gnucash/report/reports/standard/invoice.scm:463
 msgid "Please make all checks payable to"
@@ -27185,8 +27172,7 @@ msgstr "Sorteervolgorde."
 
 #: gnucash/report/reports/standard/new-aging.scm:105
 msgid "Show all vendors/customers even if they have a zero balance."
-msgstr ""
-"Alle leveranciers/klanten weergeven, zelfs als er geen saldo openstaat."
+msgstr "Alle leveranciers/klanten weergeven, zelfs als er geen saldo openstaat."
 
 #: gnucash/report/reports/standard/new-aging.scm:109
 #: gnucash/report/reports/standard/new-owner-report.scm:954

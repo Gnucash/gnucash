@@ -14,11 +14,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-03-30 11:10+0000\n"
-"Last-Translator: Kevin Unhammer <unhammer+dill@mm.st>\n"
+"PO-Revision-Date: 2026-06-26 04:15+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -3979,8 +3979,7 @@ msgstr "(aldri)"
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
-msgstr ""
-"Den valgte transaksjonsmalen har blitt endret. Vil du lagre endringene?"
+msgstr "Den valgte transaksjonsmalen har blitt endret. Vil du lagre endringene?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1905
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:238
@@ -27769,8 +27768,7 @@ msgstr ""
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
-msgstr ""
-"Det er ingen priser tilgjengelig for den valgte varen i valgte tidsrom."
+msgstr "Det er ingen priser tilgjengelig for den valgte varen i valgte tidsrom."
 
 #: gnucash/report/reports/standard/price-scatter.scm:252
 msgid "Only one price"
@@ -28428,8 +28426,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr ""
-"Mønster for justeringsoppføringer skiller mellom små og store bokstaver"
+msgstr "Mønster for justeringsoppføringer skiller mellom små og store bokstaver"
 
 #: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
