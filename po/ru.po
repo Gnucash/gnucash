@@ -23,16 +23,16 @@
 # "Alex Maryson Jr." <akamar87@gmail.com>, 2025.
 # Yurt Page <yurtpage+weblate@gmail.com>, 2025, 2026.
 # Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com>, 2025.
-# Olesya_Gerasimenko <gammaray@basealt.ru>, 2025.
+# Olesya_Gerasimenko <gammaray@basealt.ru>, 2025, 2026.
 # Yegor Derevenets <yegor.derevenets@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-02-12 21:09+0000\n"
-"Last-Translator: Yegor Derevenets <yegor.derevenets@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:24+0000\n"
+"Last-Translator: Olesya_Gerasimenko <gammaray@basealt.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -116,8 +116,7 @@ msgstr "Конец учётного периода"
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Последний день учётного периода, установленный в глобальных настройках."
+msgstr "Последний день учётного периода, установленный в глобальных настройках."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -932,8 +931,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Вы можете помещать несколько отчётов в одно окно, чтобы получать всю "
-"необходимую финансовую информацию сразу. Чтобы это сделать, выберите в меню "
-"«Отчёты->Примеры и настроенные->Настраиваемый отчёт в несколько колонок»."
+"необходимую финансовую информацию сразу. Чтобы это сделать, выберите в меню «"
+"Отчёты->Примеры и настроенные->Настраиваемый отчёт в несколько колонок»."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -973,8 +972,8 @@ msgstr ""
 "Чтобы запланировать проводку раз в каждые три недели, можно выбрать базовую "
 "частоту «Еженедельно», а затем установить «Каждые 3 недели».\n"
 "\n"
-"Чтобы запланировать ежегодную проводку, можно выбрать базовую частоту "
-"«Месяц», а затем установить «Каждые 12 месяцев»."
+"Чтобы запланировать ежегодную проводку, можно выбрать базовую частоту «Месяц"
+"», а затем установить «Каждые 12 месяцев»."
 
 #: doc/tip_of_the_day.list.c:117
 msgid ""
@@ -1084,8 +1083,8 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
-"Книга будет создана с названием %s, когда вы нажмёте «Применить». Нажмите "
-"«Назад» для внесения изменений или «Отмена» для отмены создания книги."
+"Книга будет создана с названием %s, когда вы нажмёте «Применить». Нажмите «"
+"Назад» для внесения изменений или «Отмена» для отмены создания книги."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -4263,8 +4262,7 @@ msgstr "Удалить"
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:332
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1602
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
-"Выполняется «Проверить и восстановить», следует ли прервать выполнение?"
+msgstr "Выполняется «Проверить и восстановить», следует ли прервать выполнение?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:406
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
@@ -5641,8 +5639,8 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "Дата этой проводки выходит за границу изменяемых проводок, установленную в "
-"настройках для этой книги. Эта настройка может быть изменена в меню Файл-"
-">Свойства->Счета."
+"настройках для этой книги. Эта настройка может быть изменена в меню Файл->"
+"Свойства->Счета."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -7168,8 +7166,8 @@ msgstr[0] ""
 "имеет возможность сохранять файл автоматически (раз в %d мин.), причём так "
 "же, как будто была нажата кнопка «Сохранить».\n"
 "\n"
-"Вы можете изменить период времени или выключить эту возможность: «Правка» — "
-"«Настройки» — «Основные» — «Периодичность автосохранения».\n"
+"Вы можете изменить период времени или выключить эту возможность: «Правка» — «"
+"Настройки» — «Основные» — «Периодичность автосохранения».\n"
 "\n"
 "Должен ли файл быть сохранён автоматически?"
 msgstr[1] ""
@@ -7177,8 +7175,8 @@ msgstr[1] ""
 "имеет возможность сохранять файл автоматически (раз в %d мин.), причём так "
 "же, как будто была нажата кнопка «Сохранить».\n"
 "\n"
-"Вы можете изменить период времени или выключить эту возможность: «Правка» — "
-"«Настройки» — «Основные» — «Периодичность автосохранения».\n"
+"Вы можете изменить период времени или выключить эту возможность: «Правка» — «"
+"Настройки» — «Основные» — «Периодичность автосохранения».\n"
 "\n"
 "Должен ли файл быть сохранён автоматически?"
 msgstr[2] ""
@@ -7186,8 +7184,8 @@ msgstr[2] ""
 "имеет возможность сохранять файл автоматически (раз в %d мин.), причём так "
 "же, как будто была нажата кнопка «Сохранить».\n"
 "\n"
-"Вы можете изменить период времени или выключить эту возможность: «Правка» — "
-"«Настройки» — «Основные» — «Периодичность автосохранения».\n"
+"Вы можете изменить период времени или выключить эту возможность: «Правка» — «"
+"Настройки» — «Основные» — «Периодичность автосохранения».\n"
 "\n"
 "Должен ли файл быть сохранён автоматически?"
 
@@ -7556,8 +7554,8 @@ msgstr ""
 "Библиотека «libdbi», установленная в вашей системе, некорректно хранит "
 "большие числа. Это означает, что GnuCash не может корректно использовать "
 "базы данных SQL. Gnucash не будет открывать или сохранять данные в базах "
-"данных SQL, пока это не будет исправлено путем установки другой версии "
-"«libdbi». Дополнительную информацию см. на сайте https://bugs.gnucash.org/"
+"данных SQL, пока это не будет исправлено путем установки другой версии «"
+"libdbi». Дополнительную информацию см. на сайте https://bugs.gnucash.org/"
 "show_bug.cgi?id=611936."
 
 #: gnucash/gnome-utils/gnc-file.c:560
@@ -10162,8 +10160,8 @@ msgid ""
 msgstr ""
 "Этот параметр определяет вид отображения даты в GnuCash. Возможные значения: "
 "«locale» — используются настройки системной локали, «ce» — стиль даты "
-"континентальной Европы, «iso» — стиль, соответствующий стандарту ISO 8601, "
-"«uk» — стиль, применяемый в Соединённом Королевстве, и «us» — стиль, "
+"континентальной Европы, «iso» — стиль, соответствующий стандарту ISO 8601, «"
+"uk» — стиль, применяемый в Соединённом Королевстве, и «us» — стиль, "
 "применяемый в Соединённых Штатах Америки."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
@@ -10256,8 +10254,8 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Этот параметр определяет расположение закладок переключения страниц. "
-"Возможные значения — «сверху», «слева», «снизу» и «справа». По умолчанию — "
-"«сверху»."
+"Возможные значения — «сверху», «слева», «снизу» и «справа». По умолчанию — «"
+"сверху»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3563
@@ -10286,8 +10284,8 @@ msgid ""
 "is drawn. Possible values are \"top\" and \"bottom\". It defaults to "
 "\"bottom\"."
 msgstr ""
-"Этот параметр определяет расположение строки итогов. Возможные значения — "
-"«сверху» и «снизу». По умолчанию — «снизу»."
+"Этот параметр определяет расположение строки итогов. Возможные значения — «"
+"сверху» и «снизу». По умолчанию — «снизу»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3655
@@ -10702,8 +10700,8 @@ msgstr ""
 "Этот параметр определяет способ использования дат в имени файла при экспорте "
 "PDF. Возможные значения: «locale» — используются настройки системной локали, "
 "«ce» — стиль даты континентальной Европы, «iso» — стиль, соответствующий "
-"стандарту ISO 8601, «uk» — стиль, применяемый в Соединённом Королевстве, и "
-"«us» — стиль, применяемый в Соединённых Штатах Америки."
+"стандарту ISO 8601, «uk» — стиль, применяемый в Соединённом Королевстве, и «"
+"us» — стиль, применяемый в Соединённых Штатах Америки."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "Allow file incompatibility with older versions."
@@ -12767,8 +12765,8 @@ msgstr ""
 "параметров книги. Эти настройки могут повлиять на то, как GnuCash "
 "импортирует проводки. Если вернуться на эту страницу, не отменяя импорт и "
 "начиная заново, этот диалог настройки не будет показан во второй раз при "
-"переходе на следующий шаг. Этот диалог доступен напрямую через «Файл-"
-">Свойства»."
+"переходе на следующий шаг. Этот диалог доступен напрямую через «Файл->"
+"Свойства»."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2776
@@ -13036,8 +13034,8 @@ msgid ""
 "without making any changes."
 msgstr ""
 "Если вы закончили создание дробления или слияния акций, нажмите «Применить». "
-"Вы также можете нажать «Назад», чтобы просмотреть выбранные варианты, или "
-"«Отмена», чтобы выйти из системы, не внося никаких изменений."
+"Вы также можете нажать «Назад», чтобы просмотреть выбранные варианты, или «"
+"Отмена», чтобы выйти из системы, не внося никаких изменений."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
 msgid "Stock Split Finish"
@@ -15657,8 +15655,8 @@ msgstr "_Настраивать список счетов при создани�
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"Показывать диалог создания нового списка счетов при выборе пункта меню «Файл-"
-">Новый файл»."
+"Показывать диалог создания нового списка счетов при выборе пункта меню «"
+"Файл->Новый файл»."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1485
 msgid "Display \"_tip of the day\" dialog"
@@ -16190,8 +16188,8 @@ msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
-"Показывать вторую строку с полями «Действие», «Заметки» и «Связанный "
-"документ» для каждой проводки"
+"Показывать вторую строку с полями «Действие», «Заметки» и «Связанный документ"
+"» для каждой проводки"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3110
 msgid "Register opens in a new _window"
@@ -16521,9 +16519,9 @@ msgstr ""
 "Если включено, будут включены добавленные приложением цены.\n"
 "\n"
 "Эти цены были добавлены, чтобы для каждой проводки с несколькими товарами "
-"всегда имелась «ближайшая по времени» цена. Таким образом, на странице "
-"«Счета» и в отчётах будут показаны правильные значения. Поэтому удаление "
-"этих цен может сделать соответствующие данные менее надёжными."
+"всегда имелась «ближайшая по времени» цена. Таким образом, на странице «Счета"
+"» и в отчётах будут показаны правильные значения. Поэтому удаление этих цен "
+"может сделать соответствующие данные менее надёжными."
 
 #: gnucash/gtkbuilder/dialog-price.glade:786
 msgid "Before _Date"
@@ -18250,8 +18248,8 @@ msgid ""
 "Network HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
-"Доступ по HTTP отключён. Вы можете включить его в разделе «Сеть» меню "
-"«Настройки»."
+"Доступ по HTTP отключён. Вы можете включить его в разделе «Сеть» меню «"
+"Настройки»."
 
 #: gnucash/html/gnc-html-webkit1.cpp:887 gnucash/html/gnc-html-webkit2.cpp:822
 #, c-format
@@ -18338,8 +18336,8 @@ msgid ""
 "See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://"
 "wiki.gnucash.org/wiki/AqBanking</a> for more details"
 msgstr ""
-"Дополнительные сведения: <a href=\"https://wiki.gnucash.org/wiki/"
-"AqBanking\">https://wiki.gnucash.org/wiki/AqBanking</a>"
+"Дополнительные сведения: <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">"
+"https://wiki.gnucash.org/wiki/AqBanking</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
@@ -18382,8 +18380,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -19368,8 +19366,7 @@ msgstr "Строка %d, счёт-фактура %s/%u: клиент %s не с�
 #: gnucash/import-export/bi-import/dialog-bi-import.c:379
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr ""
-"Строка %d, счёт-фактура %s/%u: %s не является корректной датой ввода.\n"
+msgstr "Строка %d, счёт-фактура %s/%u: %s не является корректной датой ввода.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:387
 #, c-format
@@ -19393,8 +19390,8 @@ msgstr ""
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
 msgstr ""
-"Строка %d, счёт-фактура %s/%u: тип счёта %s отличается от «Счета к "
-"получению».\n"
+"Строка %d, счёт-фактура %s/%u: тип счёта %s отличается от «Счета к получению"
+"».\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:471
 #, c-format
@@ -19649,8 +19646,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Нажмите кнопку «Применить», чтобы экспортировать иерархию счетов в файл "
-"«%s».\n"
+"Нажмите кнопку «Применить», чтобы экспортировать иерархию счетов в файл «%s"
+"».\n"
 "\n"
 "Также можно вернуться назад и проверить параметры, нажав кнопку «Назад», или "
 "отменить экспорт, нажав кнопку «Отмена».\n"
@@ -19797,8 +19794,8 @@ msgstr ""
 "Если это первый импорт счетов в новый файл, сначала вы увидите диалог "
 "настроек книги, так как эти настройки могут повлиять на то, как "
 "импортируемые данные будут преобразованы в проводки GnuCash.\n"
-"Примечание: после импорта может потребоваться воспользоваться пунктом меню "
-"«Вид / Фильтр по / Другое» и выбрать просмотр неиспользуемых счетов.\n"
+"Примечание: после импорта может потребоваться воспользоваться пунктом меню «"
+"Вид / Фильтр по / Другое» и выбрать просмотр неиспользуемых счетов.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
 #, c-format
@@ -20036,8 +20033,8 @@ msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
-"Выберите столбец «Исходное пространство имён» или укажите товар в поле "
-"«Исходный товар»."
+"Выберите столбец «Исходное пространство имён» или укажите товар в поле «"
+"Исходный товар»."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:480
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:190
@@ -20275,8 +20272,7 @@ msgstr "Поле «Дата» не может быть пустым, если ф
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:265
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
-msgstr ""
-"Поле «Описание» не может быть пустым, если флажок «Мультисплит» снят.\n"
+msgstr "Поле «Описание» не может быть пустым, если флажок «Мультисплит» снят.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
 msgid "No valid date."
@@ -22809,8 +22805,7 @@ msgstr "Расходы по дням недели"
 
 #: gnucash/report/reports/example/daily-reports.scm:42
 msgid "Shows a piechart with the total income for each day of the week"
-msgstr ""
-"Показывает круговую диаграмму с итоговым доходом для каждого дня недели"
+msgstr "Показывает круговую диаграмму с итоговым доходом для каждого дня недели"
 
 #: gnucash/report/reports/example/daily-reports.scm:44
 msgid "Shows a piechart with the total expenses for each day of the week"
@@ -24829,8 +24824,7 @@ msgstr "Отображать в стандартном порядке (снач�
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
-msgstr ""
-"Отчёт выводится в стандартном виде — доходы помещаются перед расходами."
+msgstr "Отчёт выводится в стандартном виде — доходы помещаются перед расходами."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:403
 msgid "Reporting range end period cannot be less than start period."
@@ -25551,9 +25545,9 @@ msgstr ""
 "Этот отчёт позволяет рассчитать периодические подлежащие уплате/получению от "
 "налоговых органов налоги на предпринимательскую деятельность. Выберите свои "
 "счета покупок и продаж в разделе «Изменить параметры отчёта». Помимо актива, "
-"каждая проводка может содержать пассив, счета «С/К оплате» или «С/К "
-"получению», сплит на налоговый счёт, например Доход:Продажи -$1000, С/К "
-"получению $1100, Пассив:GST на продажи -$100."
+"каждая проводка может содержать пассив, счета «С/К оплате» или «С/К получению"
+"», сплит на налоговый счёт, например Доход:Продажи -$1000, С/К получению "
+"$1100, Пассив:GST на продажи -$100."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
 msgid ""
@@ -26052,8 +26046,7 @@ msgstr "Показывать столбцы таблицы с суммой и з
 
 #: gnucash/report/reports/standard/investment-lots.scm:249
 msgid "Show realized gain table column(s) for sold shares"
-msgstr ""
-"Показывать столбцы таблицы с реализованной прибылью по проданным акциям"
+msgstr "Показывать столбцы таблицы с реализованной прибылью по проданным акциям"
 
 #: gnucash/report/reports/standard/investment-lots.scm:256
 msgid "Show unrealized gain table column(s) for unsold shares"
@@ -26197,8 +26190,8 @@ msgid ""
 "Warning: Above lot's computed gain ~a is not equal to the \"Realized Gain/"
 "Loss\" split(s) sum ~a. Difference: ~a"
 msgstr ""
-"Внимание: вычисленная прибыль лота выше ~a не равна сумме сплитов "
-"«Реализованная прибыль/убыток» ~a. Разница: ~a"
+"Внимание: вычисленная прибыль лота выше ~a не равна сумме сплитов «"
+"Реализованная прибыль/убыток» ~a. Разница: ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1403
 #, scheme-format
@@ -26305,8 +26298,7 @@ msgstr "Настраиваемый заголовок"
 
 #: gnucash/report/reports/standard/invoice.scm:397
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
-msgstr ""
-"Особая строка, заменяющая «Счёт-фактура», «Счёт» или «Авансовый отчёт»."
+msgstr "Особая строка, заменяющая «Счёт-фактура», «Счёт» или «Авансовый отчёт»."
 
 #: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/stylesheets/css.scm:118
@@ -27335,9 +27327,9 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
-"Ширина логотипа в нижнем колонтитуле в формате CSS (например, 10% или 32 "
-"пкс). Пустое поле — исходная ширина логотипа. Высота логотипа масштабируется "
-"в соответствии с выбранным значением."
+"Ширина логотипа в нижнем колонтитуле в формате CSS (например, 10% или 32 пкс)"
+". Пустое поле — исходная ширина логотипа. Высота логотипа масштабируется в "
+"соответствии с выбранным значением."
 
 #: gnucash/report/reports/standard/receipt.scm:104
 msgid "The format for the date->string conversion for today's date."
@@ -28564,9 +28556,9 @@ msgid ""
 "blank, which will disable the filter."
 msgstr ""
 "Показывать только те счета, полное название которых соответствует этому "
-"фильтру. Например: «:Поездка» будет соответствовать "
-"«Расходы:Поездка:Выходные» и «Расходы:Работа:Поездка». Поле можно оставить "
-"пустым, в этом случае фильтр будет отключён."
+"фильтру. Например: «:Поездка» будет соответствовать «Расходы:Поездка:Выходные"
+"» и «Расходы:Работа:Поездка». Поле можно оставить пустым, в этом случае "
+"фильтр будет отключён."
 
 #: gnucash/report/trep-engine.scm:596
 msgid ""
@@ -28576,9 +28568,9 @@ msgid ""
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
 "По умолчанию фильтр счетов будет выполнять только поиск подстрок. Включите "
-"эту опцию, чтобы использовать все возможности регулярных выражений POSIX. "
-"«Автомобиль|Перелёты» позволит найти как «Расходы:Автомобиль», так и "
-"«Расходы:Перелёты». Используйте точку (.) для поиска одиночного символа; "
+"эту опцию, чтобы использовать все возможности регулярных выражений POSIX. «"
+"Автомобиль|Перелёты» позволит найти как «Расходы:Автомобиль», так и «"
+"Расходы:Перелёты». Используйте точку (.) для поиска одиночного символа; "
 "например, «20../.» позволит найти «Поездка 2017/1 Лондон». "
 
 #: gnucash/report/trep-engine.scm:604
