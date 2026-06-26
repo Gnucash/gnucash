@@ -6,7 +6,7 @@
 # Maxim V. Dziumanenko <dziumanenko@gmail.com>, 2007.
 # Yuri Chornoivan <yurchor@ukr.net>, 2011, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
-# Artem <artem@molotov.work>, 2022.
+# Artem <artem@molotov.work>, 2022, 2026.
 # Dan <denqwerta@gmail.com>, 2023.
 # Максим Горпиніч <mgorpinic2005@gmail.com>, 2024.
 # Максим Горпиніч <maksimgorpinic2005a@gmail.com>, 2025.
@@ -20,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:05+0000\n"
-"Last-Translator: User2068 <user603849745775@proton.me>\n"
+"Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
 "Language: uk\n"
