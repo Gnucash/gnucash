@@ -2,7 +2,7 @@
 # Copyright (C) 2015.
 # This file is distributed under the same license as the GnuCash package.
 # Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>, 2015.
-#
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -10,7 +10,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:12+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Manipuri <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "mni@bengali/>\n"
 "Language: mni@bengali\n"
@@ -5858,11 +5858,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"সিজিন্নবদা লায়বা, অদুবু অকনবা ওইবা অমসুং হোংদোক-হোংজিন য়াবা মওংদা সেম্লবা, "
-"GnuCashনা নহাকপু বেঙ্ক একাউন্তসিং, স্তোকসিং, ইনকম অমসুং চাদিংসিং ত্রেক তৌবা "
-"য়াহল্লি। য়াংনা অমসুং খুদক্তা পাংথোকপা ঙম্বা মরম্না চেকবুক রেজিস্তর অমগুম্না সিজিন্নবা "
-"য়ারবা, মসিনা বেলেন্স ওইরবা বুকসিং অমসুং চপ চাবা রিপোর্তসিং ফংহন্নবগীদমক মসি "
-"সিনফমগী ওইবা একাউন্তিং প্রিন্সিপলসিং হায়বদি দবল-এন্ত্রি একাউন্তিংগুম্বদা য়ুম্ফম ওইবনি।"
+"সিজিন্নবদা লায়বা, অদুবু অকনবা ওইবা অমসুং হোংদোক-হোংজিন য়াবা মওংদা সেম্লবা, GnuCashনা নহাকপু "
+"বেঙ্ক একাউন্তসিং, স্তোকসিং, ইনকম অমসুং চাদিংসিং ত্রেক তৌবা য়াহল্লি। য়াংনা অমসুং খুদক্তা "
+"পাংথোকপা ঙম্বা মরম্না চেকবুক রেজিস্তর অমগুম্না সিজিন্নবা য়ারবা, মসিনা বেলেন্স ওইরবা বুকসিং অমসুং "
+"চপ চাবা রিপোর্তসিং ফংহন্নবগীদমক মসি সিনফমগী ওইবা একাউন্তিং প্রিন্সিপলসিং হায়বদি দবল-"
+"এন্ত্রি একাউন্তিংগুম্বদা য়ুম্ফম ওইবনি।"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
