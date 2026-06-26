@@ -7,6 +7,7 @@
 # Dullus <dullus@gmail.com>, 2022.
 # Zdenko Podobný <zdenop@gmail.com>, 2023.
 # Warder <ciksa@seznam.cz>, 2025.
+# Deleted User <noreply+113042@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -14,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Deleted User <noreply+113042@weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sk/>\n"
 "Language: sk\n"
