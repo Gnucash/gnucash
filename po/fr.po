@@ -25,7 +25,7 @@
 # Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022, 2026.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022, 2026.
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
-# Laurent Bigonville <bigon@bigon.be>, 2022.
+# Laurent Bigonville <bigon@bigon.be>, 2022, 2026.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
 # Philippe Lamare <ph.lamare@free.fr>, 2022, 2023, 2026.
 # Dyf_Tfh <n.zhao@hotmail.fr>, 2023, 2026.
@@ -53,7 +53,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Simon Arlott <nomis@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Laurent Bigonville <bigon@bigon.be>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
