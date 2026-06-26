@@ -8,7 +8,7 @@
 # udo pton <udopton@gmail.com>, 2021, 2026.
 # T. E. Kalaycı <tekrei@gmail.com>, 2021.
 # Tur <tur+translate@simplelogin.fr>, 2021, 2026.
-# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024, 2026.
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
 # Deleted User <noreply+136605@weblate.org>, 2026.
 msgid ""
@@ -18,7 +18,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:39+0000\n"
-"Last-Translator: udo pton <udopton@gmail.com>\n"
+"Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
