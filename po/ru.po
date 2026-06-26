@@ -20,7 +20,7 @@
 # Xangel2Net <xangel1@mail.ru>, 2023, 2026.
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025, 2026.
 # hitmman <hitmman@gmail.com>, 2024.
-# "Alex Maryson Jr." <akamar87@gmail.com>, 2025.
+# "Alex Maryson Jr." <akamar87@gmail.com>, 2025, 2026.
 # Yurt Page <yurtpage+weblate@gmail.com>, 2025, 2026.
 # Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com>, 2025.
 # Olesya_Gerasimenko <gammaray@basealt.ru>, 2025, 2026.
@@ -35,7 +35,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:25+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: \"Alex Maryson Jr.\" <akamar87@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
