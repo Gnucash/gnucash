@@ -12,7 +12,7 @@
 # Boyuan Yang <073plan@gmail.com>, 2018, 2019, 2021.
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 # Sean Guan <guanshangkang@gmail.com>, 2021.
-# 峡州仙士 <c@cjh0613.com>, 2021.
+# 峡州仙士 <c@cjh0613.com>, 2021, 2026.
 # chokore <byt2ooo@163.com>, 2021.
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
 # cjh <cjh@cjh0613.com>, 2021, 2023.
@@ -40,11 +40,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-05-09 22:11+0000\n"
-"Last-Translator: DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-06-26 04:41+0000\n"
+"Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -5286,8 +5286,7 @@ msgstr "这将更新并覆盖已保存的名为“%s”的报表。"
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
-msgstr ""
-"这个报告必须升级，以返回一个带有export-string或export-error的文件对象。"
+msgstr "这个报告必须升级，以返回一个带有export-string或export-error的文件对象。"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1835
 #, c-format
@@ -5417,8 +5416,7 @@ msgstr "是否从交易事项“%s”中删除分录“%s”？"
 msgid ""
 "You would be removing a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
-msgstr ""
-"您将要删除已对账的分录！不推荐这样做，因为这会导致已对账的余额不再准确。"
+msgstr "您将要删除已对账的分录！不推荐这样做，因为这会导致已对账的余额不再准确。"
 
 #: gnucash/gnome/gnc-split-reg.c:881
 msgid "You cannot cut this split."
@@ -5455,8 +5453,7 @@ msgstr "编辑当前交易？"
 msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
-msgstr ""
-"您要删除一笔已对账的交易事项！这不是一个好主意，因为这会导致您的对账不平衡。"
+msgstr "您要删除一笔已对账的交易事项！这不是一个好主意，因为这会导致您的对账不平衡。"
 
 #: gnucash/gnome/gnc-split-reg.c:978
 msgid "_Cut Transaction"
@@ -7215,8 +7212,7 @@ msgstr "无法为文件 %s 进行备份"
 msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
-msgstr ""
-"无法写入文件 %s。请检查您对该文件拥有写权限，并且磁盘有足够的空间来创建它。"
+msgstr "无法写入文件 %s。请检查您对该文件拥有写权限，并且磁盘有足够的空间来创建它。"
 
 #: gnucash/gnome-utils/gnc-file.c:506
 #, c-format
@@ -7299,8 +7295,8 @@ msgid ""
 "you wish to preserve the old version, exit without saving."
 msgstr ""
 "在此版本中保存此版本的Gnucash时，此文件将升级。无法从旧版本的Gnucash中读取保"
-"存的文件（“文件分析期间存在错误”）。如果要维护旧版本，请在不保存的情况下退"
-"出。"
+"存的文件（“文件分析期间存在错误”）。如果要维护旧版本，请在不保存的情况下退出"
+"。"
 
 #: gnucash/gnome-utils/gnc-file.c:581
 #, c-format
@@ -8759,8 +8755,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
-"这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
 msgid "Position of notes line"
@@ -8771,8 +8766,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
-"这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
@@ -8794,8 +8788,7 @@ msgstr "完全检查的偏移量"
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
-msgstr ""
-"这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:75
 msgid "Rotation angle"
@@ -8814,8 +8807,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
-"这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:85
 msgid "Position of split's memo line"
@@ -8826,8 +8818,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
-"这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
 msgid "Position of split's account line"
@@ -8838,8 +8829,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
-"这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:95
 msgid "Print the date format below the date."
@@ -9210,8 +9200,8 @@ msgid ""
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
 "此配置指定了，当打开一个数据文件的时候，是否会自动显示计划交易“自从上次运行”"
-"对话框。这包括在 GnuCash 启动时对数据文件进行的打开操作。如果选中，显示对话"
-"框；否则不会显示。"
+"对话框。这包括在 GnuCash 启动时对数据文件进行的打开操作。如果选中，显示对话框"
+"；否则不会显示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
@@ -9226,8 +9216,8 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 "此配置指定了，当打开一个数据文件的时候，是否会自动显示计划交易“自从上次运行”"
-"对话框。这包括在 GnuCash 启动时对数据文件进行的打开操作。如果选中，显示对话"
-"框；否则不会显示。"
+"对话框。这包括在 GnuCash 启动时对数据文件进行的打开操作。如果选中，显示对话框"
+"；否则不会显示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
@@ -9304,8 +9294,8 @@ msgid ""
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
 "如果选中，任何新创建的计划交易将会默认将“notify”设置为激活。用户可以在交易事"
-"项创建期间修改这个标志，或者之后编辑计划的交易时进行修改。这个设置只有"
-"在“create_auto”设置激活时才有效。"
+"项创建期间修改这个标志，或者之后编辑计划的交易时进行修改。这个设置只有在“"
+"create_auto”设置激活时才有效。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:81
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:82
@@ -9869,8 +9859,8 @@ msgid ""
 "can be found in the gnucash FAQ."
 msgstr ""
 "启用后，寄存器将使用特定于GnuCash的颜色主题（绿色/黄色）。否则，它将使用系统"
-"颜色主题。无论此设置如何，用户始终可以通过特定于gnucash的css文件覆盖颜色主"
-"题，该文件存储在gnucash使用的配置目录中。可以在gnucash FAQ中找到更多信息。"
+"颜色主题。无论此设置如何，用户始终可以通过特定于gnucash的css文件覆盖颜色主题"
+"，该文件存储在gnucash使用的配置目录中。可以在gnucash FAQ中找到更多信息。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:252
 msgid "\"Enter\" key moves to bottom of register"
@@ -10169,10 +10159,10 @@ msgid ""
 "not allowed in filenames, such as '/', will be replaced with underscores '_' "
 "in the resulting file name."
 msgstr ""
-"这个设置选择了用于导出PDF的文件名。这是一个有三个参数的sprintf(3)字符串。"
-"\"%1$s\"是报告的名称，如 \"发票\"。\"%2$s\"是报告的编号，对于发票报告来说是发"
-"票编号。\"%3$s\"是报告的日期，根据文件名-日期-格式的设置进行格式化。注意：任"
-"何在文件名中不允许的字符，如'/'，将在生成的文件名中用下划线'_'代替。"
+"这个设置选择了用于导出PDF的文件名。这是一个有三个参数的sprintf(3)字符串"
+"。\"%1$s\"是报告的名称，如 \"发票\"。\"%2$s\"是报告的编号，对于发票报告来说是"
+"发票编号。\"%3$s\"是报告的日期，根据文件名-日期-格式的设置进行格式化。注意："
+"任何在文件名中不允许的字符，如'/'，将在生成的文件名中用下划线'_'代替。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:390
 msgid "PDF export file name date format choice"
@@ -12011,8 +12001,8 @@ msgid ""
 "accounting program, you should use the same account name that was used in "
 "that program.\n"
 msgstr ""
-"您刚刚导入的 QIF 文件似乎只包含一个科目，但是这个文件没有为这个科目指定名"
-"称。\n"
+"您刚刚导入的 QIF 文件似乎只包含一个科目，但是这个文件没有为这个科目指定名称"
+"。\n"
 "\n"
 "请为这个科目输入一个名称。如果这个文件是从另一个会计软件中导出的，您应该使用"
 "和在那个软件中相同的科目名称。\n"
@@ -12174,8 +12164,8 @@ msgid ""
 "You can access it directly from the menu via File->Properties."
 msgstr ""
 "由于它是一种新方法中间的文件，因此将显示“图书”选项的下一个屏幕。此选项会影响"
-"Gnucash如何导入事务。如果返回此页面，除了再次又称又一次地取消，则下一步进入"
-"“图书”选项的下一步对话框。您可以直接从菜单文件 - >属性访问该对话框。"
+"Gnucash如何导入事务。如果返回此页面，除了再次又称又一次地取消，则下一步进入“"
+"图书”选项的下一步对话框。您可以直接从菜单文件 - >属性访问该对话框。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2776
@@ -12291,8 +12281,8 @@ msgid ""
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
 "从临时区域导入数据并更新您的 GnuCash 科目，请点击“应用”。您所输入的科目和类别"
-"匹配信息将会被保存，并在下一次您使用 QIF 导入过程中使用这些配置作为默认设"
-"置。\n"
+"匹配信息将会被保存，并在下一次您使用 QIF 导入过程中使用这些配置作为默认设置"
+"。\n"
 "\n"
 "要修改您的账户和类别匹配，修改货币和新科目安全设置，或是添加更多的文件到临时"
 "区域，请点击“后退”。\n"
@@ -12379,8 +12369,7 @@ msgstr "股票拆分详情"
 msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click \"Next\"."
-msgstr ""
-"如果您收到的股票拆分结果是现金支出，在此输入付款的详情。否则请按“前进”。"
+msgstr "如果您收到的股票拆分结果是现金支出，在此输入付款的详情。否则请按“前进”。"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:279
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:464
@@ -14235,8 +14224,8 @@ msgid ""
 "checked can be added to a selection."
 msgstr ""
 "您可以分配多个事务行以将资金帐户分配给所有所选行。Ctrl + Left Click或Shift "
-"+单击多个行，右键单击，然后选择GuildMovable帐户帐户。您只能在“添加”中选中的"
-"行。"
+"+单击多个行，右键单击，然后选择GuildMovable帐户帐户。您只能在“添加”中选中的行"
+"。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:456
 msgid ""
@@ -15755,8 +15744,7 @@ msgstr "期末(_P)"
 msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
-msgstr ""
-"留下日期之前的每个会计期间的最后价格 会计期间从会计期间的结束日期开始计算。"
+msgstr "留下日期之前的每个会计期间的最后价格 会计期间从会计期间的结束日期开始计算。"
 
 #: gnucash/gtkbuilder/dialog-price.glade:556
 msgid "_Scaled"
@@ -15866,8 +15854,8 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"输入此自定义格式的标题。这个标题会显示在“打印支票”对话框的“支票格式”选择框"
-"中。如果使用现有支票自定义格式的标题，会导致其被覆盖。"
+"输入此自定义格式的标题。这个标题会显示在“打印支票”对话框的“支票格式”选择框中"
+"。如果使用现有支票自定义格式的标题，会导致其被覆盖。"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:241
 msgid "Inches"
@@ -18797,8 +18785,8 @@ msgid ""
 msgstr ""
 "这个助手将帮助你把账户树导出到一个文件，并在下面指定了分隔符。\n"
 "\n"
-"选择你需要的文件设置，然后点击 \"下一步 \"继续，或者点击 \"取消 \"中止导"
-"出。\n"
+"选择你需要的文件设置，然后点击 \"下一步 \"继续，或者点击 \"取消 \"中止导出"
+"。\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
@@ -18993,8 +18981,8 @@ msgstr ""
 "\n"
 "如果这是你首次导入一个新文件，你将首先看到一个设置账簿选项的对话框，因为这些"
 "选项会影响到导入的数据如何转换为GnuCash交易。\n"
-"注意：导入后，你可能需要使用'查看/过滤/其他'菜单选项，选择显示未使用的账"
-"户。\n"
+"注意：导入后，你可能需要使用'查看/过滤/其他'菜单选项，选择显示未使用的账户"
+"。\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
 #, c-format
@@ -21215,8 +21203,7 @@ msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
 "reconciliation difficult! Continue with this change?"
-msgstr ""
-"您要修改已对账的分录。这么做会使将来的对账变得困难！您确定要继续这个改变么？"
+msgstr "您要修改已对账的分录。这么做会使将来的对账变得困难！您确定要继续这个改变么？"
 
 #: gnucash/register/ledger-core/split-register-model.c:2263
 msgid "Chan_ge Split"
@@ -21822,8 +21809,7 @@ msgstr "包括所有选定账户的子账户。"
 msgid ""
 "Exclude transactions that only involve two accounts, both of which are "
 "selected below. This only affects the profit and loss columns of the table."
-msgstr ""
-"除了只涉及两个科目的交易事项，下面的都选择了。这只会对表中损益栏有影响。"
+msgstr "除了只涉及两个科目的交易事项，下面的都选择了。这只会对表中损益栏有影响。"
 
 #: gnucash/report/reports/example/average-balance.scm:86
 msgid "Do transaction report on this account."
@@ -23147,8 +23133,7 @@ msgstr "单列"
 msgid ""
 "Print liability/equity section in the same column under the assets section "
 "as opposed to a second column right of the assets section."
-msgstr ""
-"在资产部分下在同一列打印负债/所有者权益部分，而不是在资产部分第二列的右侧。"
+msgstr "在资产部分下在同一列打印负债/所有者权益部分，而不是在资产部分第二列的右侧。"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:86
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
@@ -23360,8 +23345,8 @@ msgid ""
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"在本报表中使用的 CSS 样式表的文件名。如果指定了，这个文件应当存储于您"
-"的 .gnucash 目录，否则在 GnuCash 安装目录内的合适的地方。"
+"在本报表中使用的 CSS 样式表的文件名。如果指定了，这个文件应当存储于您的 "
+".gnucash 目录，否则在 GnuCash 安装目录内的合适的地方。"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
 #: gnucash/report/reports/standard/invoice.scm:514
@@ -24039,8 +24024,7 @@ msgstr "汇总所选期间之后的预算。"
 msgid ""
 "Include in report further periods as single collapsed column (one for all "
 "periods after ending and to the end of budget range)"
-msgstr ""
-"在表格中的单列中包括后来的时期（晚于期末的时期和直到预算期结束的所有时期）"
+msgstr "在表格中的单列中包括后来的时期（晚于期末的时期和直到预算期结束的所有时期）"
 
 #. Translators: Abbreviation for "Budget" amount
 #: gnucash/report/reports/standard/budget.scm:492
@@ -24582,9 +24566,9 @@ msgid ""
 "e.g. Income:Sales -$1000, A/Receivable $1100, Liability:GST on Sales -$100."
 msgstr ""
 "该报告对于计算定期的商业税应缴/应收当局的税款很有用。从 \"编辑报告选项 \"中，"
-"选择你的企业销售和采购账户。每笔交易除了资产、负债、A/应付款或A/应收款账户"
-"外，还可以包含对税务账户的拆分，例如，收入：销售额-1000美元，A/应收款1100美"
-"元，负债：销售额的消费税-100美元。"
+"选择你的企业销售和采购账户。每笔交易除了资产、负债、A/应付款或A/应收款账户外"
+"，还可以包含对税务账户的拆分，例如，收入：销售额-1000美元，A/应收款1100美元，"
+"负债：销售额的消费税-100美元。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
 msgid ""
@@ -24605,8 +24589,8 @@ msgid ""
 "sales."
 msgstr ""
 "在报告选项中，你需要选择保存已收或已付GST/VAT税的账户。这些账户必须包含记录在"
-"定期GST/VAT报表中全部发送或从税务机关索取的款项的分项。这些账户必须是资产类"
-"型，用于支付费用的税款，以及负债类型，用于销售所得的税款。"
+"定期GST/VAT报表中全部发送或从税务机关索取的款项的分项。这些账户必须是资产类型"
+"，用于支付费用的税款，以及负债类型，用于销售所得的税款。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:70
 msgid ""
@@ -24714,8 +24698,8 @@ msgid ""
 "used. Denote EU VAT accounts *EUVAT* in account description, and denote EU "
 "goods sales and purchases accounts with *EUGOODS* in the account description."
 msgstr ""
-"英国增值税申报。指定销售、采购和税务账户。可使用欧盟规则。在账户描述中用"
-"*EUVAT*表示欧盟增值税账户，在账户描述中用*EUGOODS*表示欧盟货物销售和采购账"
+"英国增值税申报。指定销售、采购和税务账户。可使用欧盟规则。在账户描述中"
+"用*EUVAT*表示欧盟增值税账户，在账户描述中用*EUGOODS*表示欧盟货物销售和采购账"
 "户。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:166
@@ -25309,8 +25293,8 @@ msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
-"CSS代码。 在这个字段中指定发票样式的CSS代码；关于CSS类的名称，请看导出的表"
-"格。"
+"CSS代码。 在这个字段中指定发票样式的CSS代码；关于CSS类的名称，请看导出的表格"
+"。"
 
 #: gnucash/report/reports/standard/invoice.scm:406
 msgid "Picture Location"
@@ -30058,8 +30042,7 @@ msgstr "新文件位置："
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
-msgstr ""
-"如果你在这个系统上不再运行{1}2.6.x或旧版本，你可以安全地删除这个旧目录。"
+msgstr "如果你在这个系统上不再运行{1}2.6.x或旧版本，你可以安全地删除这个旧目录。"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:690
 msgid "In addition:"
