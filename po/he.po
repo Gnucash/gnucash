@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-03-22 09:45+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 03:46+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -856,8 +856,8 @@ msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
-"למעבר בין לשוניות מרובות בחלון הראשי, יש להקיש על המקשים קונטרול+עמוד "
-"מעלה/מטה."
+"למעבר בין לשוניות מרובות בחלון הראשי, יש להקיש על המקשים קונטרול+עמוד מעלה/"
+"מטה."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -9996,8 +9996,8 @@ msgstr ""
 "אם האפשרות נבחרה, ספר חשבונות ברירת המחדל לקבצים חדשים יוגדר כך שבמצב שורה "
 "כפולה, ששדה 'סימוכין' ביומן יציג/יעדכן את השדה 'פעולה' בפיצול והשדה "
 "'סימוכין' של התנועה יוצג בשורה השניה (לא גלוי במצב שורה בודדת). אחרת, אפשרות "
-"ספר חשבונות ברירת מחדל עבור קבצים חדשים תוגדר כך שתא 'סימוכין' ביומן "
-"יציג/יעדכן את שדה התנועה 'סימוכין'."
+"ספר חשבונות ברירת מחדל עבור קבצים חדשים תוגדר כך שתא 'סימוכין' ביומן יציג/"
+"יעדכן את שדה התנועה 'סימוכין'."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid "Color the register using a gnucash specific color theme"
@@ -14847,8 +14847,8 @@ msgid ""
 "displayed again next time you start GnuCash. If you press the \"No\" button, "
 "it will not be displayed again."
 msgstr ""
-"הקשה על <i>כן</i>, חלון <i>ברוכים הבאים לגנוקאש</i> יוצג שנית. הקשה על "
-"<i>לא</i>, החלון לא יוצג שוב."
+"הקשה על <i>כן</i>, חלון <i>ברוכים הבאים לגנוקאש</i> יוצג שנית. הקשה על <i>"
+"לא</i>, החלון לא יוצג שוב."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
 #, fuzzy
@@ -15734,8 +15734,7 @@ msgstr "מצב _צבעים כפול משתנה עם התנועות"
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
-msgstr ""
-"החלפת הצבעים הראשוניים והמשניים על פי תנועה במקום על פי שורות לסירוגין."
+msgstr "החלפת הצבעים הראשוניים והמשניים על פי תנועה במקום על פי שורות לסירוגין."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2853
 msgid "Draw hori_zontal lines between rows"
@@ -18483,8 +18482,8 @@ msgid ""
 msgstr ""
 "פרטי חשבון SEPA עדיין לא אוחסנו בחשבון הבנק המקומי. אנו מצטערים, אך בגרסת "
 "פיתוח זו יש צורך בשלב נוסף אשר טרם יושם ישירות בגנוקאש. נא להריץ את התוכנית "
-"'aqhbci-tool' משורת היומן לחשבון, באופן הבא: ‏aqhbci-tool4 getaccsepa -b %s "
-"-a %s"
+"'aqhbci-tool' משורת היומן לחשבון, באופן הבא: ‏aqhbci-tool4 getaccsepa -b %s -"
+"a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:574
 msgid ""
@@ -18835,8 +18834,7 @@ msgstr "הוצאת חיוב _ישיר SEPA…"
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr ""
-"יצירת הודעת חיוב ישירה, בינלאומית אירופאית (SEPA) באמצעות בנקאות מקוונת"
+msgstr "יצירת הודעת חיוב ישירה, בינלאומית אירופאית (SEPA) באמצעות בנקאות מקוונת"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:53
 msgid "Show _log window"
@@ -19576,8 +19574,7 @@ msgstr "נא לבחור עמודת סכום."
 msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
-msgstr ""
-"לא נמצאו נתונים תקפים בקובץ שנבחר. יתכן שהוא ריק או שהקידוד שנבחר שגוי."
+msgstr "לא נמצאו נתונים תקפים בקובץ שנבחר. יתכן שהוא ריק או שהקידוד שנבחר שגוי."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:464
 msgid ""
@@ -22901,8 +22898,7 @@ msgstr "דוח זמנן מס ויצוא TXF"
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
-msgstr ""
-"הכנסה חייבת במס / הוצאות ניתנות לניכוי עם פירוט תנועה / ייצוא לקובץ.TXT"
+msgstr "הכנסה חייבת במס / הוצאות ניתנות לניכוי עם פירוט תנועה / ייצוא לקובץ.TXT"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3316
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
@@ -24712,8 +24708,7 @@ msgstr "חשבונות הכנסות הם חשבונות בהם נרשמות המ
 msgid ""
 "The expense accounts where the expenses are recorded which are subtracted "
 "from the sales to give the profit."
-msgstr ""
-"חשבונות הוצאות, בהם נרשמות ההוצאות, המופחתים מהמכירות לקבלת שורת הרווח."
+msgstr "חשבונות הוצאות, בהם נרשמות ההוצאות, המופחתים מהמכירות לקבלת שורת הרווח."
 
 #: gnucash/report/reports/standard/customer-summary.scm:63
 msgid "Show Expense Column"
@@ -26235,8 +26230,7 @@ msgstr "הצגת מצב פעיל."
 msgid ""
 "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR "
 "account exists."
-msgstr ""
-"לא נמצא חשבון חייבים/זכאים תקין. נא לוודא קיום חשבון חייבים/זכאים תקין."
+msgstr "לא נמצא חשבון חייבים/זכאים תקין. נא לוודא קיום חשבון חייבים/זכאים תקין."
 
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
