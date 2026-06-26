@@ -27,7 +27,7 @@
 # 帅是我2 <a1173522112@163.com>, 2022.
 # Carlson Mak <hbmaak@gmail.com>, 2023.
 # Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2024, 2025.
-# yu0A <yuhongbo@member.fsf.org>, 2023.
+# yu0A <yuhongbo@member.fsf.org>, 2023, 2026.
 # yuht <yuht@qq.com>, 2023.
 # Ral Hole <ral-hole@outlook.com>, 2023, 2025.
 # derxi <happycxin@163.com>, 2023.
@@ -45,8 +45,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: Deleted User "
-"<hamburger1024@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: yu0A <yuhongbo@member.fsf.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8139,8 +8138,7 @@ msgstr "正则表达式决定了在使用get命令时，哪个命名空间的商
 msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
-msgstr ""
-"在使用dump命令时将列出Finance::Quote的所有参数，返回不是Gnucash需要的符号。"
+msgstr "在使用dump命令时将列出Finance::Quote的所有参数，返回不是Gnucash需要的符号。"
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -9830,8 +9828,8 @@ msgstr ""
 "如果选中，那么新文件的默认账簿在注册时将被设为‘Num’单元格内的内容；如果是双行"
 "显示，那么第一行在显示/更新子交易时将被设为‘action’单元格内的内容，第二行在显"
 "示/更新交易时将被设为‘num’单元格内的内容（不设置双行显示则不可见）。反之，默"
-"认的账簿选项在注册时将被设为‘Num’单元格内的内容，在显示/更新子交易时将被设"
-"为‘num’单元格内的内容。"
+"认的账簿选项在注册时将被设为‘Num’单元格内的内容，在显示/更新子交易时将被设为‘"
+"num’单元格内的内容。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid "Color the register using a gnucash specific color theme"
@@ -9972,11 +9970,11 @@ msgid ""
 "the current transaction to show all splits. The \"Transaction journal\" "
 "setting shows all transactions in expanded form."
 msgstr ""
-"这个字段指定了在打开账簿窗口时的默认的查看风格。可以出现的值为“Basic "
-"ledger”、“Auto-split ledger”和“Transaction journal”。“Basic ledger”设定是指每"
-"笔交易事项显示一或两行，取决于是否设置双行显示的选项；“Auto-split ledger”基本"
-"与前者相同，除了对当前交易事项显示所有分录条目。“Transaction journal”则对所有"
-"交易事项展开显示所有分录。"
+"这个字段指定了在打开账簿窗口时的默认的查看风格。可以出现的值为“Basic ledger”"
+"、“Auto-split ledger”和“Transaction journal”。“Basic ledger”设定是指每笔交易"
+"事项显示一或两行，取决于是否设置双行显示的选项；“Auto-split ledger”基本与前者"
+"相同，除了对当前交易事项显示所有分录条目。“Transaction journal”则对所有交易事"
+"项展开显示所有分录。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
@@ -13051,9 +13049,9 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
-"当今日科目余额超出本处指定的值时，科目表中会给出提示。例如：今日科目余额"
-"为-90，而余额上限为-100，则会显示提示图标；今日科目余额为100，而余额上限为"
-"90，也会显示提示图标。此项留空则不显示相关警告提示。"
+"当今日科目余额超出本处指定的值时，科目表中会给出提示。例如：今日科目余额为-90"
+"，而余额上限为-100，则会显示提示图标；今日科目余额为100，而余额上限为90，也会"
+"显示提示图标。此项留空则不显示相关警告提示。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1676
 msgid ""
@@ -13066,9 +13064,9 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
-"当今日科目余额低于本处指定的值时，科目表中会给出提示。例如：今日科目余额"
-"为-100，而余额下限为-90，则会显示提示图标；今日科目余额为90，而余额下限为"
-"100，也会显示提示图标。此项留空则不显示相应警告提示。"
+"当今日科目余额低于本处指定的值时，科目表中会给出提示。例如：今日科目余额为-"
+"100，而余额下限为-90，则会显示提示图标；今日科目余额为90，而余额下限为100，也"
+"会显示提示图标。此项留空则不显示相应警告提示。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1698
 msgid "_Lower Balance Limit"
@@ -15433,8 +15431,8 @@ msgid ""
 "transactions unless in reverse sort order when it will be at the top."
 msgstr ""
 "如果勾选此项，则具有未来日期的交易会显示在账簿底部，位于空白交易后；倒序排列"
-"时，则显示在账簿顶部，位于空白交易前。如果取消勾选，则空白交易显示在账簿底"
-"部，位于所有交易之后；倒序排列时，则显示在账簿顶部，位于所有交易之前。"
+"时，则显示在账簿顶部，位于空白交易前。如果取消勾选，则空白交易显示在账簿底部"
+"，位于所有交易之后；倒序排列时，则显示在账簿顶部，位于所有交易之前。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2960
 #, fuzzy
@@ -17939,8 +17937,8 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
-"列表列出了一个或多个专业化的模板，用于调整不同的银行使用的不同字段的导入格"
-"式。"
+"列表列出了一个或多个专业化的模板，用于调整不同的银行使用的不同字段的导入格式"
+"。"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1790
 msgid "Profiles"
@@ -22106,8 +22104,8 @@ msgid ""
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"这是 GnuCash 的 ~a 范例报表。想知道关于写出自己的报表或扩充现有报表的详细数"
-"据，请查看在 scm/report 目录的 guile (scheme) 源代码，或扩写已有的报表。"
+"这是 GnuCash 的 ~a 范例报表。想知道关于写出自己的报表或扩充现有报表的详细数据"
+"，请查看在 scm/report 目录的 guile (scheme) 源代码，或扩写已有的报表。"
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -25081,8 +25079,7 @@ msgstr "只显示含有警告的科目。这对快速找到潜在的批次错误
 msgid ""
 "Lots with more than one purchase split are not well formed. It may make "
 "ambiguous the capital gains age"
-msgstr ""
-"一个或多个子交易的批次不会被很好地格式化。它有可能在资本收益年龄上造成混淆"
+msgstr "一个或多个子交易的批次不会被很好地格式化。它有可能在资本收益年龄上造成混淆"
 
 #: gnucash/report/reports/standard/investment-lots.scm:361
 msgid "Lots with a negative balance are not well formed."
@@ -25098,8 +25095,7 @@ msgstr "批次标题可选。这个警告适用于空的或空白符的批次标
 msgid ""
 "Detect possible errors in 'Realized Gain/Loss' splits that are created when "
 "adding a sale split to a lot"
-msgstr ""
-"在增加一个售出子交易到一个批次中生成的‘已实现收益/损失’中检测可能的错误"
+msgstr "在增加一个售出子交易到一个批次中生成的‘已实现收益/损失’中检测可能的错误"
 
 #: gnucash/report/reports/standard/investment-lots.scm:381
 msgid "Detect splits that have not been assigned to a lot."
@@ -25139,8 +25135,7 @@ msgstr "警告：在批次上有~a个买入子交易。请考虑将它们分开�
 msgid ""
 "Warning: Above lot's balance is negative on ~a. Consider removing the "
 "responsible sale split from the lot and then scrubbing."
-msgstr ""
-"警告：批次的余额在~a上为负数。请考虑先从批次上移除责任销售分割，再取消。"
+msgstr "警告：批次的余额在~a上为负数。请考虑先从批次上移除责任销售分割，再取消。"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1369
 msgid "Warning: Above lot's title is blank."
@@ -25152,8 +25147,8 @@ msgid ""
 "Warning: Above lot's computed gain ~a is not equal to the \"Realized Gain/"
 "Loss\" split(s) sum ~a. Difference: ~a"
 msgstr ""
-"警告：上面的批次算得的收益~a和“已实现收益/支出”的子交易的总数~a不相等。差距"
-"为：~a"
+"警告：上面的批次算得的收益~a和“已实现收益/支出”的子交易的总数~a不相等。差距为"
+"：~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1403
 #, scheme-format
