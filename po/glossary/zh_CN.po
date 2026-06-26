@@ -5,7 +5,7 @@
 # jane <allfortestingwork@outlook.com>, 2021.
 # TianXing Yi <duguqiubailee@gmail.com>, 2021.
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
-# 峡州仙士 <c@cjh0613.com>, 2021.
+# 峡州仙士 <c@cjh0613.com>, 2021, 2026.
 # Eric <spice2wolf@gmail.com>, 2021.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # YTX <ytx.cash@gmail.com>, 2022, 2026.
@@ -22,7 +22,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:37+0000\n"
-"Last-Translator: Deleted User <noreply+62046@weblate.org>\n"
+"Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
