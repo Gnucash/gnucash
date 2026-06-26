@@ -7,7 +7,7 @@
 # Kárász Attila <cult.edie@gmail.com>, 2022, 2023.
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024, 2025, 2026.
 # mocsa <csaba@feltoltve.hu>, 2022, 2023, 2024, 2025, 2026.
-# ovari <ovari123@zoho.com>, 2022, 2023.
+# ovari <ovari123@zoho.com>, 2022, 2023, 2026.
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:52+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"Last-Translator: ovari <ovari123@zoho.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
