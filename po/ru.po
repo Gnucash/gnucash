@@ -17,7 +17,7 @@
 # Vik <xasertop@gmail.com>, 2022.
 # Vin <k3kelm4vw@mozmail.com>, 2023.
 # hades <dev@hades.name>, 2023.
-# Xangel2Net <xangel1@mail.ru>, 2023.
+# Xangel2Net <xangel1@mail.ru>, 2023, 2026.
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025, 2026.
 # hitmman <hitmman@gmail.com>, 2024.
 # "Alex Maryson Jr." <akamar87@gmail.com>, 2025.
@@ -32,7 +32,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:25+0000\n"
-"Last-Translator: МАН69К <weblate@mah69k.net>\n"
+"Last-Translator: Xangel2Net <xangel1@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
