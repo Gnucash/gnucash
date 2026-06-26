@@ -9,7 +9,7 @@
 # vim <dev.getport@slmail.me>, 2023, 2026.
 # Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024, 2026.
 # Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024, 2026.
-# наб <nabijaczleweli@nabijaczleweli.xyz>, 2024.
+# наб <nabijaczleweli@nabijaczleweli.xyz>, 2024, 2026.
 # Eryk Michalak <gnu.ewm@protonmail.com>, 2026.
 # MJH <ovehis@riseup.net>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
@@ -20,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:21+0000\n"
-"Last-Translator: Maciej Błędkowski <mble@tuta.io>\n"
+"Last-Translator: наб <nabijaczleweli@nabijaczleweli.xyz>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
