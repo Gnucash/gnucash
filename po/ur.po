@@ -6,6 +6,7 @@
 # Adil Ishaq <adilishaq.cc@hotmail.com>, 2024.
 # Adil Ishaq <ishaqadil@aol.com>, 2024, 2026.
 # "Abdul Quddos (AQN)" <yousufi81@gmail.com>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -13,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:30+0000\n"
-"Last-Translator: Adil Ishaq <ishaqadil@aol.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/>"
 "\n"
 "Language: ur\n"
@@ -5821,11 +5822,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"ایسا ڈیزائن كیا گیا ہے كہ استعمال کرنا آسان ہے، ابھی تک طاقتور اور لچکدار "
-"ہے ، GnuCash آپ کے بینک اکاؤنٹس، اسٹاکس، آمدنی اور اخراجات پر نظر رکھنے کے "
-"لئے اجازت دیتا ہے. چیك بُك رجسٹر كے طور پر استعمال كرنے كے لئے كوئك اور "
-"انشیوٹیو ہے یہ پیشہ ورانہ اکاؤنٹنگ اصولوں پر مبنی ہے. جیسے ڈبل انٹری "
-"اکاؤنٹنگ بیلنس بُكس اور اكیورٹ رپورٹس یقینی بنانے كےلیے۔"
+"ایسا ڈیزائن كیا گیا ہے كہ استعمال کرنا آسان ہے، ابھی تک طاقتور اور لچکدار ہے "
+"، GnuCash آپ کے بینک اکاؤنٹس، اسٹاکس، آمدنی اور اخراجات پر نظر رکھنے کے لئے "
+"اجازت دیتا ہے. چیك بُك رجسٹر كے طور پر استعمال كرنے كے لئے كوئك اور انشیوٹیو "
+"ہے یہ پیشہ ورانہ اکاؤنٹنگ اصولوں پر مبنی ہے. جیسے ڈبل انٹری اکاؤنٹنگ بیلنس "
+"بُكس اور اكیورٹ رپورٹس یقینی بنانے كےلیے۔"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
