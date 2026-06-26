@@ -7,6 +7,7 @@
 # Stephan Paternotte <stephan@paternottes.net>, 2023, 2024.
 # Paul Oranje <por@oranjevos.nl>, 2024.
 # BlueRains <lu@schoevaars.eu>, 2025.
+# Ceaus <github@pohw.nl>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -14,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -70,7 +71,7 @@ msgstr "rekening type: Valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "rekening type: Eigen kapitaal"
+msgstr "rekening type: Eigen vermogen"
 
 #. "-"
 msgid "account type: Expense"
