@@ -44,7 +44,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: YTX <ytx.cash@gmail.com>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3409,8 +3409,7 @@ msgstr "订单必须至少含有一个条目。"
 msgid ""
 "This order contains entries that have not been invoiced. Are you sure you "
 "want to close it out before you invoice all the entries?"
-msgstr ""
-"这个订单中包含了尚未开具发票的交易。您确定不为所有的交易开具发票就关闭它么？"
+msgstr "这个订单中包含了尚未开具发票的交易。您确定不为所有的交易开具发票就关闭它么？"
 
 #: gnucash/gnome/dialog-order.c:308
 msgid "Do you really want to close the order?"
@@ -3878,8 +3877,7 @@ msgstr "计划交易不平衡。强烈建议您纠正这种情况。"
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
-msgstr ""
-"无法从正在编辑的交易事项中创建一笔计划交易。请在编辑交易事项后再进行计划。"
+msgstr "无法从正在编辑的交易事项中创建一笔计划交易。请在编辑交易事项后再进行计划。"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:369
 msgid "Ignored"
@@ -5466,8 +5464,8 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
-"此交易的日期早于为本账簿的“只读阈值”。可以在 文件->属性->科目 中更改此项设"
-"置。"
+"此交易的日期早于为本账簿的“只读阈值”。可以在 文件->属性->科目 中更改此项设置"
+"。"
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -5499,8 +5497,7 @@ msgstr "是否从交易事项“%s”中删除分录“%s”？"
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
-msgstr ""
-"您要删除一个已对账的分录！这不是一个好主意，因为这会导致您的对账不平衡。"
+msgstr "您要删除一个已对账的分录！这不是一个好主意，因为这会导致您的对账不平衡。"
 
 #: gnucash/gnome/gnc-split-reg.c:1407
 msgid "You cannot delete this split."
@@ -5525,8 +5522,7 @@ msgstr "删除当前交易？"
 msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
-msgstr ""
-"您要删除一笔已对账的交易事项！这不是一个好主意，因为这会导致您的对账不平衡。"
+msgstr "您要删除一笔已对账的交易事项！这不是一个好主意，因为这会导致您的对账不平衡。"
 
 #: gnucash/gnome/gnc-split-reg.c:1679
 #, c-format
@@ -8315,8 +8311,7 @@ msgstr "显示路径"
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
-msgstr ""
-"日志文件输出；默认为“/tmp/gnucash.trace”；可以修改为“stderr”或“stdout”。"
+msgstr "日志文件输出；默认为“/tmp/gnucash.trace”；可以修改为“stderr”或“stdout”。"
 
 #: gnucash/gnucash-core-app.cpp:292
 msgid "Hidden Options"
@@ -8492,8 +8487,7 @@ msgstr "这类公司交易含税么？"
 msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
-msgstr ""
-"如果选中，那么这类交易中默认是含税的。这个设置是继承自新客户和供应商的。"
+msgstr "如果选中，那么这类交易中默认是含税的。这个设置是继承自新客户和供应商的。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
@@ -8587,8 +8581,8 @@ msgid ""
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
-"如果此字段被激活，那么转到相同科目的发票中的多笔分录将会被累积成一笔单独交"
-"易。这个字段可以被每个发票的入账对话框中的设置无视。"
+"如果此字段被激活，那么转到相同科目的发票中的多笔分录将会被累积成一笔单独交易"
+"。这个字段可以被每个发票的入账对话框中的设置无视。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:250
@@ -8656,8 +8650,8 @@ msgid ""
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
 msgstr ""
-"在包含一页多张支票的预打印支票中，这个设置指定了支票要打印的位置。值可以"
-"为“0”、“1”和“2”，既页面中支票顶部、中部和底部。"
+"在包含一页多张支票的预打印支票中，这个设置指定了支票要打印的位置。值可以为“0”"
+"、“1”和“2”，既页面中支票顶部、中部和底部。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:16
@@ -8704,8 +8698,7 @@ msgstr "收款人姓名的位置"
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr ""
-"这个值包含了支票上收款人开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上收款人开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
@@ -8716,8 +8709,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
-"这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:45
 msgid "Position of check amount in words"
@@ -8728,8 +8720,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
-"这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:50
 msgid "Position of check amount in numbers"
@@ -8741,8 +8732,8 @@ msgid ""
 "amount line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"这个值包含了支票上数值金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算"
-"起。"
+"这个值包含了支票上数值金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:55
 msgid "Position of payee address"
@@ -8775,8 +8766,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
-"这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
+msgstr "这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:70
 msgid "Offset for complete check"
@@ -8837,8 +8827,7 @@ msgstr "在日期下打印日期格式。"
 msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
-msgstr ""
-"每次日期打印后，在其 8 point 位置下，跟着打印用Y、M和D来表示的日期格式。"
+msgstr "每次日期打印后，在其 8 point 位置下，跟着打印用Y、M和D来表示的日期格式。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:100
 msgid "The default check printing font"
@@ -8848,8 +8837,7 @@ msgstr "默认支票打印字体"
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
-msgstr ""
-"当打印支票时默认使用的字体。在支票描述文件中任何指定的字体将会无视该值。"
+msgstr "当打印支票时默认使用的字体。在支票描述文件中任何指定的字体将会无视该值。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:106
@@ -8954,8 +8942,8 @@ msgid ""
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
 "but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
-"在交易事项匹配中启用“跳过”操作。如果启用，一个拥有在黄色区域(高于自动添加阈"
-"值，但是低于自动结清阈值)最佳匹配得分的交易事项将会被默认跳过。"
+"在交易事项匹配中启用“跳过”操作。如果启用，一个拥有在黄色区域(高于自动添加阈值"
+"，但是低于自动结清阈值)最佳匹配得分的交易事项将会被默认跳过。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 msgid "Enable UPDATE match action"
@@ -9159,8 +9147,8 @@ msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
-"如果选中，在信用卡科目对账后，提示用户输入信用卡付款；否则不会向用户提示这"
-"些。"
+"如果选中，在信用卡科目对账后，提示用户输入信用卡付款；否则不会向用户提示这些"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
@@ -9170,8 +9158,7 @@ msgstr "总是对账到今天"
 msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
-msgstr ""
-"如果选中，总是使用今天的日期作为报表日期来打开对账对话框，而不管之前的对账。"
+msgstr "如果选中，总是使用今天的日期作为报表日期来打开对账对话框，而不管之前的对账。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
 #: gnucash/gtkbuilder/dialog-preferences.glade:2777
@@ -9772,8 +9759,8 @@ msgid ""
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
 "\"right\". It defaults to \"top\"."
 msgstr ""
-"这个设置决定了在科目页中哪一个用于交换的页面的标签的边框会被显示。可能的值"
-"为“top”、“left”、“bottom”和“right”。默认为“top”。"
+"这个设置决定了在科目页中哪一个用于交换的页面的标签的边框会被显示。可能的值为“"
+"top”、“left”、“bottom”和“right”。默认为“top”。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3563
@@ -9869,8 +9856,8 @@ msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
 msgstr ""
-"选择此项时，在用户按下“Enter”后会移至底部的空白交易事项。否则，则会往下移一"
-"列。"
+"选择此项时，在用户按下“Enter”后会移至底部的空白交易事项。否则，则会往下移一列"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:258
@@ -10285,8 +10272,8 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
 msgstr ""
-"当您试图复制一个已修改的发票条目时就会显示这个对话框。已修改的数据必须被保"
-"存，或取消复制。"
+"当您试图复制一个已修改的发票条目时就会显示这个对话框。已修改的数据必须被保存"
+"，或取消复制。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:162
@@ -10530,8 +10517,8 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
-"当您试图复制一笔已修改的交易事项时就会显示这个对话框。已修改的数据必须被保"
-"存，或取消复制。"
+"当您试图复制一笔已修改的交易事项时就会显示这个对话框。已修改的数据必须被保存"
+"，或取消复制。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:124
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:257
@@ -12145,8 +12132,7 @@ msgstr "匹配收款人/备注至 GnuCash 科目"
 msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
 "accounts you are importing must be denominated in the same currency.\n"
-msgstr ""
-"QIF 导入程序目前不能支持多种货币。您导入的所有的科目必须用同种货币计价。\n"
+msgstr "QIF 导入程序目前不能支持多种货币。您导入的所有的科目必须用同种货币计价。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:921
 msgid "_Select the currency to use for all imported transactions:"
@@ -13514,8 +13500,7 @@ msgstr "输入用来标识此商品的独特代码。或者，您可以让此栏
 msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
-msgstr ""
-"输入此商品能买卖的最小单位。以股票为例，只能以全部数量买卖时，输入 1 。"
+msgstr "输入此商品能买卖的最小单位。以股票为例，只能以全部数量买卖时，输入 1 。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:215
 #, fuzzy
@@ -15169,8 +15154,7 @@ msgstr ""
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr ""
-"其最高匹配得分在绿色区(高于或等于自动结清阈值)的交易事项会默认为已结清。"
+msgstr "其最高匹配得分在绿色区(高于或等于自动结清阈值)的交易事项会默认为已结清。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2199
 msgid ""
@@ -17945,8 +17929,8 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
-"列表包含了AQBanking可导入的文件格式。资料表包含了在表中的专业化的、常用的格"
-"式。"
+"列表包含了AQBanking可导入的文件格式。资料表包含了在表中的专业化的、常用的格式"
+"。"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1782
 msgid ""
@@ -18201,8 +18185,8 @@ msgid ""
 "You have changed the list of online transfer templates, but you cancelled "
 "the transfer dialog. Do you nevertheless want to store the changes?"
 msgstr ""
-"您已经修改了网上转账模板的列表，但是您取消了转账对话框。您仍想保存那些改变"
-"么？"
+"您已经修改了网上转账模板的列表，但是您取消了转账对话框。您仍想保存那些改变么"
+"？"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:116
 msgid "No reference accounts found."
@@ -18302,8 +18286,8 @@ msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
 msgstr ""
-"没有找到这个 GnuCash 科目对应的网上银行账户。这笔交易事项不会通过网上银行执"
-"行。"
+"没有找到这个 GnuCash 科目对应的网上银行账户。这笔交易事项不会通过网上银行执行"
+"。"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:916
 msgid ""
@@ -26107,8 +26091,7 @@ msgstr "只有一个价格"
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
-msgstr ""
-"所选定的商品在指定的时间期间内仅能找到一个价格。这并不能成为一张有用的图。"
+msgstr "所选定的商品在指定的时间期间内仅能找到一个价格。这并不能成为一张有用的图。"
 
 #: gnucash/report/reports/standard/price-scatter.scm:259
 msgid "All Prices equal"
@@ -26680,8 +26663,7 @@ msgid ""
 "Adjustments made to these accounts are gross adjusted (see above) in the "
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
 "useful for merchandising businesses."
-msgstr ""
-"在“调整”、“调整后试算表”和“收入表”中，对这些科目的调整为总调整后的(见上)。"
+msgstr "在“调整”、“调整后试算表”和“收入表”中，对这些科目的调整为总调整后的(见上)。"
 
 #: gnucash/report/reports/standard/trial-balance.scm:86
 msgid "Adjusting Entries pattern"
