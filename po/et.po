@@ -2,7 +2,7 @@
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
 # Siim Sellis <siim.sellis@gmail.com>, 2020.
-# Rauno Ots <rots00@gmail.com>, 2023.
+# Rauno Ots <rots00@gmail.com>, 2023, 2026.
 # Priit Jõerüüt <hwlate@joeruut.com>, 2025.
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:39+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Rauno Ots <rots00@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "et/>\n"
 "Language: et\n"
