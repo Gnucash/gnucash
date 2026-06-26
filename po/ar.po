@@ -9,7 +9,7 @@
 # ashalash1409 <ashalash1409@hotmail.com>, 2013
 # khadiramd <khadird@yahoo.com>, 2013
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
-# ltai0001 <yltaief@gmail.com>, 2022.
+# ltai0001 <yltaief@gmail.com>, 2022, 2026.
 # Sherif ElGamal <selgamal0@gmail.com>, 2022.
 # BL <ghostzeko@gmail.com>, 2023.
 # Abdulla Alhosani <ama1029@nyu.edu>, 2024.
@@ -24,7 +24,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:46+0000\n"
-"Last-Translator: Tgol Mgol <tgolmgol@gmail.com>\n"
+"Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
 "Language: ar\n"
