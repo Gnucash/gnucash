@@ -13,7 +13,7 @@
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 # Sean Guan <guanshangkang@gmail.com>, 2021.
 # 峡州仙士 <c@cjh0613.com>, 2021, 2026.
-# chokore <byt2ooo@163.com>, 2021.
+# chokore <byt2ooo@163.com>, 2021, 2026.
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
 # cjh <cjh@cjh0613.com>, 2021, 2023.
 # Eric <spice2wolf@gmail.com>, 2021.
@@ -44,7 +44,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:41+0000\n"
-"Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
+"Last-Translator: chokore <byt2ooo@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3996,8 +3996,7 @@ msgstr "应用(_A)"
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
-msgstr ""
-"警告：如果您设置了 TXF 类别，并且之后改变“类型”，您需要逐个手动重置这些类别"
+msgstr "警告：如果您设置了 TXF 类别，并且之后改变“类型”，您需要逐个手动重置这些类别"
 
 #: gnucash/gnome/dialog-tax-info.c:1392
 msgid "Form"
@@ -7272,9 +7271,9 @@ msgid ""
 "bugs.gnucash.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 "系统上安装的库“ libdbi”没有正确存储大量数字。 这意味着GnuCash无法正确使用SQL"
-"数据库。 Gnucash将不会打开或保存到SQL数据库，除非通过安装其他版本的“ "
-"libdbi”将其修复。 有关更多信息，请参见https://bugs.gnucash.org/show_bug.cgi?"
-"id=611936。"
+"数据库。 Gnucash将不会打开或保存到SQL数据库，除非通过安装其他版本的“ libdbi”"
+"将其修复。 有关更多信息，请参见https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936。"
 
 #: gnucash/gnome-utils/gnc-file.c:560
 msgid ""
