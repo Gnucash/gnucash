@@ -22,6 +22,7 @@
 # apemay <aperezmayol@gmail.com>, 2026.
 # apemay <apemay.dev@gmail.com>, 2026.
 # Deleted User <noreply+36847@weblate.org>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 #
 #
 # ###############################################################################
@@ -92,7 +93,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:36+0000\n"
-"Last-Translator: Deleted User <noreply+36847@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
