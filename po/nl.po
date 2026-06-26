@@ -19,6 +19,7 @@
 # Ceaus <github@pohw.nl>, 2025, 2026.
 # hamaryns <hendrik@hendrikmaryns.name>, 2026.
 # BlueRains <83722494+BlueRains@users.noreply.github.com>, 2026.
+# Jaimie85 <alsemgeest@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -26,7 +27,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: BlueRains <83722494+BlueRains@users.noreply.github.com>\n"
+"Last-Translator: Jaimie85 <alsemgeest@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
