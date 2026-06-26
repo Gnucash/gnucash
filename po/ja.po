@@ -16,7 +16,7 @@
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2009-2017.
 # YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021, 2022, 2023, 2024, 2026.
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020, 2021.
-# TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021.
+# TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021, 2026.
 # soramikan <sora_yana@icloud.com>, 2024.
 msgid ""
 msgstr ""
@@ -25,7 +25,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:39+0000\n"
-"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
+"Last-Translator: TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -5346,8 +5346,8 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
-"このレポートは、export-string または export-error を含むドキュメントオブジェ"
-"クトを返すようにアップグレードする必要があります。"
+"このレポートは、export-string または export-error を含む"
+"ドキュメントオブジェクトを返すようにアップグレードする必要があります。"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1835
 #, c-format
@@ -7161,8 +7161,7 @@ msgstr "URL %s の解析ができません"
 #: gnucash/gnome-utils/gnc-file.c:328
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
-msgstr ""
-"%s に接続できません。ホスト名、ユーザー名、またはパスワードが違います。"
+msgstr "%s に接続できません。ホスト名、ユーザー名、またはパスワードが違います。"
 
 #: gnucash/gnome-utils/gnc-file.c:334
 #, c-format
@@ -7189,9 +7188,9 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースを開くべきではありま"
-"せん。このままデータベースを開きますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースを開くべきではあ"
+"りません。このままデータベースを開きますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:369
 #, c-format
@@ -7200,9 +7199,9 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースをインポートするべき"
-"ではありません。このままデータベースをインポートしますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースをインポートする"
+"べきではありません。このままデータベースをインポートしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -7211,9 +7210,9 @@ msgid ""
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースを保存するべきではあ"
-"りません。このままデータベースを保存しますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースを保存するべきで"
+"はありません。このままデータベースを保存しますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -7222,9 +7221,9 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースをエクスポートするべ"
-"きではありません。このままデータベースをエクスポートしますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースをエクスポートす"
+"るべきではありません。このままデータベースをエクスポートしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:410
 #, c-format
@@ -7356,8 +7355,8 @@ msgid ""
 "the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "SQL データベースが他のユーザーに利用されており、彼らがログオフするまで更新は"
-"実行できません。もし現在他にユーザーがいないとすれば、邪魔なログインセッショ"
-"ンの消去方法についてドキュメントを調べてください。"
+"実行できません。もし現在他にユーザーがいないとすれば、邪魔な"
+"ログインセッションの消去方法についてドキュメントを調べてください。"
 
 #: gnucash/gnome-utils/gnc-file.c:548
 msgid ""
@@ -7442,8 +7441,8 @@ msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
-"このデータベースは別のユーザーに使用されている可能性があり、その場合は、デー"
-"タベースを開くべきではありません。どうしますか?"
+"このデータベースは別のユーザーに使用されている可能性があり、その場合は、"
+"データベースを開くべきではありません。どうしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:916
 msgid ""
@@ -30881,8 +30880,7 @@ msgstr "実現損益"
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
-msgstr ""
-"どこにも記録されていない商品勘定科目または通貨取引勘定科目からの実現損益。"
+msgstr "どこにも記録されていない商品勘定科目または通貨取引勘定科目からの実現損益。"
 
 #: libgnucash/engine/gnc-commodity.cpp:191
 #, fuzzy
