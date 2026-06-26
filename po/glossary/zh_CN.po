@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Theresa Zhang <theresa7qing@sina.com>, 2021.
+# Theresa Zhang <theresa7qing@sina.com>, 2021, 2026.
 # 小高 <2926295173@qq.com>, 2021.
 # jane <allfortestingwork@outlook.com>, 2021.
 # TianXing Yi <duguqiubailee@gmail.com>, 2021.
@@ -21,8 +21,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:37+0000\n"
-"Last-Translator: Deleted User "
-"<hamburger1024@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Theresa Zhang <theresa7qing@sina.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
