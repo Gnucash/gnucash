@@ -14,7 +14,7 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025, 2026.
 # Rene Lambers <jbh.lambers@gmail.com>, 2023, 2026.
-# Leo Moons <Leo.Moons@proximus.be>, 2025.
+# Leo Moons <Leo.Moons@proximus.be>, 2025, 2026.
 # BlueRains <lu@schoevaars.eu>, 2025.
 # Ceaus <github@pohw.nl>, 2025, 2026.
 # hamaryns <hendrik@hendrikmaryns.name>, 2026.
@@ -29,7 +29,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: Rene Lambers <jbh.lambers@gmail.com>\n"
+"Last-Translator: Leo Moons <Leo.Moons@proximus.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
