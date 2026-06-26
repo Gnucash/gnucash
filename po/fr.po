@@ -41,6 +41,7 @@
 # Bernard Giroud <bgiroud33@gmail.com>, 2026.
 # John Ralls <jralls@ceridwen.us>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# "J. Lavoie" <j.lavoie@net-c.ca>, 2026.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -51,7 +52,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
