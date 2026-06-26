@@ -12,11 +12,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-08-11 05:01+0000\n"
-"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:32+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -5535,8 +5535,7 @@ msgstr "是否將分割 '%s' 從交易 '%s' 中刪除?"
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
-msgstr ""
-"您想要刪除已對帳的分割！這並不是一個好主意，因為那會使您已對帳的結餘不平衡。"
+msgstr "您想要刪除已對帳的分割！這並不是一個好主意，因為那會使您已對帳的結餘不平衡。"
 
 #: gnucash/gnome/gnc-split-reg.c:1407
 msgid "You cannot delete this split."
@@ -6752,8 +6751,7 @@ msgstr "您必須提供這個稅金表格的名稱。"
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
-msgstr ""
-"您必須為這個稅金表格提供一個獨一無二的名稱。您的選擇「%s」已經被使用了。"
+msgstr "您必須為這個稅金表格提供一個獨一無二的名稱。您的選擇「%s」已經被使用了。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -6837,8 +6835,8 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"您不能從一個非貨幣科目轉帳。試試看把「從」和「到」兩個科目對調，並且把「總"
-"額」設為負數。"
+"您不能從一個非貨幣科目轉帳。試試看把「從」和「到」兩個科目對調，並且把「總額"
+"」設為負數。"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1452
 msgid "You must enter a valid price."
@@ -7149,8 +7147,8 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該開啟"
-"它。您是否要繼續開啟此資料庫？"
+"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該開啟它"
+"。您是否要繼續開啟此資料庫？"
 
 #: gnucash/gnome-utils/gnc-file.c:369
 #, c-format
@@ -7159,8 +7157,8 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該匯入"
-"它。您是否要繼續匯入此資料庫？"
+"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該匯入它"
+"。您是否要繼續匯入此資料庫？"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -7169,8 +7167,8 @@ msgid ""
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該儲存"
-"它。您是否要繼續儲存此資料庫？"
+"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該儲存它"
+"。您是否要繼續儲存此資料庫？"
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -7179,8 +7177,8 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該匯出"
-"它。您是否要繼續匯出此資料庫？"
+"GnuCash 無法鎖定 %s。可能有其他使用者在使用此資料庫，在此情形下您不應該匯出它"
+"。您是否要繼續匯出此資料庫？"
 
 #: gnucash/gnome-utils/gnc-file.c:410
 #, c-format
@@ -7394,8 +7392,7 @@ msgstr "GnuCash 無法鎖定 %s。"
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
-msgstr ""
-"可能有其他使用者在使用此資料庫，在此情形下您不應該開啟它。您想要怎麼做？"
+msgstr "可能有其他使用者在使用此資料庫，在此情形下您不應該開啟它。您想要怎麼做？"
 
 #: gnucash/gnome-utils/gnc-file.c:916
 msgid ""
@@ -9216,8 +9213,7 @@ msgstr "提示信用卡付款"
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
-msgstr ""
-"若勾選，在信用卡科目對帳後，提醒使用者輸入繳款記錄。否則不會提醒使用者。"
+msgstr "若勾選，在信用卡科目對帳後，提醒使用者輸入繳款記錄。否則不會提醒使用者。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
@@ -9285,8 +9281,7 @@ msgstr "在「自上次執行後」對話盒中，預設勾選「核對已建立
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
-msgstr ""
-"此設定控制了「自從上次執行」對話盒中，是否預設勾選「檢查已建立的交易」。"
+msgstr "此設定控制了「自從上次執行」對話盒中，是否預設勾選「檢查已建立的交易」。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
 #, fuzzy
@@ -9318,8 +9313,7 @@ msgstr "在「自上次執行後」對話盒中，預設勾選「核對已建立
 #| "This setting controls whether as default the \"review created "
 #| "transactions\" is set for the \"since last run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
-msgstr ""
-"此設定控制了「自從上次執行」對話盒中，是否預設勾選「檢查已建立的交易」。"
+msgstr "此設定控制了「自從上次執行」對話盒中，是否預設勾選「檢查已建立的交易」。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
@@ -9961,8 +9955,8 @@ msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
 msgstr ""
-"選擇此項時，在使用者按下「Enter」後會移至底部的空白交易。否則，則會往下移一"
-"列。"
+"選擇此項時，在使用者按下「Enter」後會移至底部的空白交易。否則，則會往下移一列"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:258
@@ -11424,9 +11418,9 @@ msgstr ""
 "\n"
 "此匯入精靈可以處理將單筆交以單行表示，每行代表一個交易分割的檔案。\n"
 "\n"
-"最後，對於重複匯入，在預覽頁有載入和儲存設定的按鈕。您可以將您修改的設定儲"
-"存，並在之後的匯入中重復使用他們。在載入設定後，您也可以針對相似的匯入微調設"
-"定，並以不同的名稱儲存這些設定。"
+"最後，對於重複匯入，在預覽頁有載入和儲存設定的按鈕。您可以將您修改的設定儲存"
+"，並在之後的匯入中重復使用他們。在載入設定後，您也可以針對相似的匯入微調設定"
+"，並以不同的名稱儲存這些設定。"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:62
 msgid "Transaction Import Assistant"
@@ -11709,11 +11703,11 @@ msgstr ""
 "有些科目被標記為「佔位符號」，這種科目只是為了建立科目樹用的，通常不會有交易"
 "或起始餘額。如果您想讓一個科目如此，點選該科目的核取方塊。\n"
 "\n"
-"如果您希望一個科目有起始餘額，點選該科目再點起始餘額那欄就能輸入一開始的餘"
-"額。\n"
+"如果您希望一個科目有起始餘額，點選該科目再點起始餘額那欄就能輸入一開始的餘額"
+"。\n"
 "\n"
-"<b>注意</b>: 除了財產淨值（股東權益）跟佔位符號之外，所有科目都可以有起始餘"
-"額。"
+"<b>注意</b>: 除了財產淨值（股東權益）跟佔位符號之外，所有科目都可以有起始餘額"
+"。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:559
 #, fuzzy
@@ -11892,8 +11886,7 @@ msgstr "貸款科目"
 msgid ""
 "Enter the number of months still to be paid off. This determines both the "
 "remaining principal and the duration of the scheduled transaction."
-msgstr ""
-"請輸入剩餘待支付的期（月）數。這會用來計算剩餘的本金和排程交易的持續時間。"
+msgstr "請輸入剩餘待支付的期（月）數。這會用來計算剩餘的本金和排程交易的持續時間。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:291
 msgid "Months Remaining"
@@ -13668,9 +13661,9 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case)."
 msgstr ""
-"輸入此商品/股票的代碼 (例如台積電可輸入 2330.TW 或元大台灣 50 可輸入 "
-"0050.TW)。如果您使用線上取價功能（譯註：台灣股市可使用 Yahoo as JSON 做為報價"
-"來源），則此欄位必須與使用的來源所用的代碼完全一致(包括大小寫)。"
+"輸入此商品/股票的代碼 (例如台積電可輸入 2330.TW 或元大台灣 50 可輸入 0050.TW)"
+"。如果您使用線上取價功能（譯註：台灣股市可使用 Yahoo as JSON 做為報價來源），"
+"則此欄位必須與使用的來源所用的代碼完全一致(包括大小寫)。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
@@ -13682,8 +13675,7 @@ msgstr "輸入用來識別此商品的獨特代碼。或者，您可以讓此欄
 msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
-msgstr ""
-"輸入此商品能買賣的最小單位。以股票為例，只能以全部數量買賣時，輸入 1 。"
+msgstr "輸入此商品能買賣的最小單位。以股票為例，只能以全部數量買賣時，輸入 1 。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:215
 #, fuzzy
@@ -13729,8 +13721,7 @@ msgid ""
 "These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
-msgstr ""
-"這是新加入 F::Q 的報價源，GnuCash 不知道它們是從單一還是多個網站截取報價。"
+msgstr "這是新加入 F::Q 的報價源，GnuCash 不知道它們是從單一還是多個網站截取報價。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:398
 msgid "_Multiple"
@@ -13754,8 +13745,7 @@ msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
 "the internet. If that site is unavailable, you will not be able to retrieve "
 "quotes."
-msgstr ""
-"這是指 F::Q 報價只從一個網站截取。如果那個網站連不到，那就無法取得報價。"
+msgstr "這是指 F::Q 報價只從一個網站截取。如果那個網站連不到，那就無法取得報價。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:440
 msgid "_Get Online Quotes"
@@ -26337,8 +26327,7 @@ msgstr "只有一個價格"
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
-msgstr ""
-"所選定的商品在指定的時間週期中僅能找到一個價格。這並不能成為一張有用的圖。"
+msgstr "所選定的商品在指定的時間週期中僅能找到一個價格。這並不能成為一張有用的圖。"
 
 #: gnucash/report/reports/standard/price-scatter.scm:259
 msgid "All Prices equal"
