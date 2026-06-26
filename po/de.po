@@ -34,6 +34,7 @@
 # Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025.
 # Franko <web.90947@t.sc-ha.net>, 2025.
 # Alexej <alexejkirsch@outlook.de>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -46,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
