@@ -18,7 +18,7 @@
 # Vin <k3kelm4vw@mozmail.com>, 2023.
 # hades <dev@hades.name>, 2023.
 # Xangel2Net <xangel1@mail.ru>, 2023.
-# gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025.
+# gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025, 2026.
 # hitmman <hitmman@gmail.com>, 2024.
 # "Alex Maryson Jr." <akamar87@gmail.com>, 2025.
 # Yurt Page <yurtpage+weblate@gmail.com>, 2025, 2026.
@@ -31,8 +31,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 04:24+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-06-26 04:25+0000\n"
+"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -6802,8 +6802,7 @@ msgstr "Заголовок пути не существует,"
 #: gnucash/gnome-utils/dialog-doclink-utils.c:242
 #, c-format
 msgid "Path head not set, using '%s' for relative paths"
-msgstr ""
-"Заголовок пути не установлен, используется '%s' для относительных путей"
+msgstr "Заголовок пути не установлен, используется '%s' для относительных путей"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:425
 msgid "Existing"
@@ -8610,8 +8609,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Переопределение уровня журнала, в форме "
-"\"modulename={debug,info,warn,crit,error}\".\n"
+"Переопределение уровня журнала, в форме \"modulename="
+"{debug,info,warn,crit,error}\".\n"
 "Примеры: \"--log qof=debug\" или \"--log gnc.backend.file.sx=info\".\n"
 "Этот параметр может быть вызван несколько раз."
 
@@ -13701,8 +13700,8 @@ msgstr ""
 "сегодняшний баланс превышает это значение.\n"
 "\n"
 "Например.\n"
-"Сегодняшний баланс -90 будет отображаться значком, если лимит установлен на "
-"-100\n"
+"Сегодняшний баланс -90 будет отображаться значком, если лимит установлен на -"
+"100\n"
 "Сегодняшний баланс 100 покажет значок, если лимит установлен на 90\n"
 "\n"
 "Очистите запись, чтобы не было предупреждения."
@@ -13722,8 +13721,8 @@ msgstr ""
 "сегодняшний баланс меньше этого значения.\n"
 "\n"
 "Например.\n"
-"Сегодняшний баланс -100 будет отображаться значком, если лимит установлен на "
-"-90\n"
+"Сегодняшний баланс -100 будет отображаться значком, если лимит установлен "
+"на -90\n"
 "Сегодняшний баланс 90 будет отображаться значком, если лимит установлен на "
 "100\n"
 "\n"
