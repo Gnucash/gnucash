@@ -20,6 +20,7 @@
 # delvani <del.cidrak@users.noreply.hosted.weblate.org>, 2026.
 # Jonathan Santos Fernandes <jonathansantosfernandes@gmail.com>, 2026.
 # Willian Bruno <willianramos373@gmail.com>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -27,7 +28,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:23+0000\n"
-"Last-Translator: delvani <del.cidrak@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
