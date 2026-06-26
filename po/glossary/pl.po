@@ -5,7 +5,7 @@
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021, 2026.
 # 154pinkchairs <ovehis@riseup.net>, 2022.
 # Kaligula <kaligula.dev@gmail.com>, 2022, 2026.
-# vim <dev.getport@slmail.me>, 2023.
+# vim <dev.getport@slmail.me>, 2023, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -13,7 +13,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
+"Last-Translator: vim <dev.getport@slmail.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "pl/>\n"
 "Language: pl\n"
