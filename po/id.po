@@ -5,7 +5,7 @@
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
 # Ferdinand Tampubolon <dnandz@gmail.com>, 2021, 2026.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021, 2026.
-# Syahmin Sukhairi <syahmin@gmail.com>, 2021.
+# Syahmin Sukhairi <syahmin@gmail.com>, 2021, 2026.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022, 2026.
 # Sarekashi <sarekashi@tuta.io>, 2022, 2026.
 # Sucipto <sucipto@pm.me>, 2023, 2026.
@@ -19,7 +19,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:54+0000\n"
-"Last-Translator: Azhar Pusparadhian <pazhar@rocketmail.com>\n"
+"Last-Translator: Syahmin Sukhairi <syahmin@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
