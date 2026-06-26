@@ -2,7 +2,7 @@
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Shanmugam R. <shanfaace@yahoo.co.in>, 2014.
 # தமிழ்நேரம் <anishprabu.t@gmail.com>, 2024, 2025.
-# John Ralls <jralls@ceridwen.us>, 2025.
+# John Ralls <jralls@ceridwen.us>, 2025, 2026.
 # தமிழ்நேரம் <tamilneram247@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:27+0000\n"
-"Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ta/>\n"
 "Language: ta\n"
