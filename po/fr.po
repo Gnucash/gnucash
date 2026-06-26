@@ -20,7 +20,7 @@
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
 # Thomas Jungers <thomasjungers@gmail.com>, 2021, 2026.
 # Diego Marin <alterne@gmail.com>, 2021.
-# Pascal HUE <pascal.hue35@gmail.com>, 2021.
+# Pascal HUE <pascal.hue35@gmail.com>, 2021, 2026.
 # Alexandre <nasmi3+weblate@gmail.com>, 2021, 2026.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022, 2026.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022, 2026.
@@ -52,7 +52,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
+"Last-Translator: Pascal HUE <pascal.hue35@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
