@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the gnucash package.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015—2017.
 # Marko Bojović <bojovicmarko@outlook.com>, 2025.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -10,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:58+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sr/>\n"
 "Language: sr\n"
