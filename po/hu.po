@@ -6,7 +6,7 @@
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Kárász Attila <cult.edie@gmail.com>, 2022, 2023.
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024, 2025, 2026.
-# mocsa <csaba@feltoltve.hu>, 2022, 2023, 2024, 2025.
+# mocsa <csaba@feltoltve.hu>, 2022, 2023, 2024, 2025, 2026.
 # ovari <ovari123@zoho.com>, 2022, 2023.
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:51+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -98,8 +98,7 @@ msgstr "Könyvelési időszak vége"
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Könyvelési időszak utolsó napja, a globális beállításoknak megfelelően."
+msgstr "Könyvelési időszak utolsó napja, a globális beállításoknak megfelelően."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -15052,8 +15051,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-import.glade:721
 msgid "Select neither to skip the transaction (it won't be imported at all)."
 msgstr ""
-"A tranzakció kihagyásához egyiket se válassza (ekkor nem történik "
-"importálás)."
+"A tranzakció kihagyásához egyiket se válassza (ekkor nem történik importálás)"
+"."
 
 #: gnucash/gtkbuilder/dialog-import.glade:779
 msgid "Red"
@@ -22113,8 +22112,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:2227
 msgid "Change transaction containing a reconciled split?"
-msgstr ""
-"Biztos megváltoztatja az egyeztetett felosztást tartalmazó tranzakciót?"
+msgstr "Biztos megváltoztatja az egyeztetett felosztást tartalmazó tranzakciót?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2229
 #, c-format
@@ -25372,8 +25370,7 @@ msgstr "Záró tételek azonosítója"
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
-msgstr ""
-"Tetszőleges szöveg a Leírás oszlopban, ami azonosítja a záró tételeket."
+msgstr "Tetszőleges szöveg a Leírás oszlopban, ami azonosítja a záró tételeket."
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -29072,8 +29069,7 @@ msgstr "Figyelmeztetések _visszaállítása…"
 
 #: gnucash/ui/gnc-main-window.ui:346
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr ""
-"Minden figyelmeztető üzenet visszaállítása úgy, hogy újra megjelenjenek"
+msgstr "Minden figyelmeztető üzenet visszaállítása úgy, hogy újra megjelenjenek"
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
