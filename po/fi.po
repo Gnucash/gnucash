@@ -1,7 +1,7 @@
 # Finnish translation of GnuCash.
 # This file is distributed under the same license as the gnucash package.
 # Copyright (C) 2008 gnucash project
-# Marko Kohtala <marko.kohtala@gmail.com>, 2020, 2023.
+# Marko Kohtala <marko.kohtala@gmail.com>, 2020, 2023, 2026.
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
@@ -15,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:41+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
