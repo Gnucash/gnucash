@@ -30,7 +30,7 @@
 # yu0A <yuhongbo@member.fsf.org>, 2023, 2026.
 # yuht <yuht@qq.com>, 2023, 2026.
 # Ral Hole <ral-hole@outlook.com>, 2023, 2025.
-# derxi <happycxin@163.com>, 2023.
+# derxi <happycxin@163.com>, 2023, 2026.
 # fleefar <825272947@qq.com>, 2024.
 # "Cheng R.Zhu" <zcr@users.noreply.hosted.weblate.org>, 2025.
 # fliukka <weblate@fliukka.net>, 2025.
@@ -47,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: Carlson Mak <hbmaak@gmail.com>\n"
+"Last-Translator: derxi <happycxin@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -19251,8 +19251,7 @@ msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
-msgstr ""
-"当前的科目将生成多币交易。请选择一列：价格、（负的）值、（负的）转账金额。"
+msgstr "当前的科目将生成多币交易。请选择一列：价格、（负的）值、（负的）转账金额。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:678
 msgid ""
@@ -19448,8 +19447,7 @@ msgstr "资金目的地拆分已经匹配，但这不是资金目的地融合日
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
-msgstr ""
-"账户的选择令其成为一个多货币的交易，但价格或（负的）价格的值的列丢失或无效。"
+msgstr "账户的选择令其成为一个多货币的交易，但价格或（负的）价格的值的列丢失或无效。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:669
 msgid ""
