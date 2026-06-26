@@ -7,7 +7,7 @@
 # Claus Hindsgaul <claus_h@image.dk>, 2001.
 # Ole Laursen <olau@hardworking.dk>, 2001.
 # Joe Hansen <joedalton2@yahoo.dk>, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2018.
-# Allan Olsen <allan@hamann-olsen.dk>, 2025.
+# Allan Olsen <allan@hamann-olsen.dk>, 2025, 2026.
 # Sune Kibsgaard <sune@kibs.dk>, 2026.
 # Cecilie Nielsen <cecilie.nielsen1984@gmail.com>, 2026.
 #
@@ -112,7 +112,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:49+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Allan Olsen <allan@hamann-olsen.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "da/>\n"
 "Language: da\n"
@@ -1069,9 +1069,9 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"For at søge igennem alle dine transaktioner, start en søgning (Rediger-"
-">Søg…) fra hovedkontoens hierarkiside. For at begrænse din søgning til en "
-"enkel konto, start søgningen fra den kontos kasseklade."
+"For at søge igennem alle dine transaktioner, start en søgning (Rediger->Søg"
+"…) fra hovedkontoens hierarkiside. For at begrænse din søgning til en enkel "
+"konto, start søgningen fra den kontos kasseklade."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -7265,8 +7265,8 @@ msgstr[0] ""
 "har en funktion til automatisk at gemme filen hvert %d minut, ligesom hvis "
 "du havde trykket på knappen \"Gem\" hver gang.\n"
 "\n"
-"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger-"
-">Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
+"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger->"
+"Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
 "\n"
 "Skal din fil gemmes automatisk?"
 msgstr[1] ""
@@ -7274,8 +7274,8 @@ msgstr[1] ""
 "GnuCash har en funktion til automatisk at gemmer filerne hvert %d minut, "
 "ligesom hvis du havde trykket på knappen \"Gem\" hver gang.\n"
 "\n"
-"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger-"
-">Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
+"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger->"
+"Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
 "\n"
 "Skal dine filer gemmes automatisk?"
 
@@ -8681,8 +8681,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Logniveau-tilsidesættelser, af formen "
-"\"modulename={debug,info,warn,crit,error}\"\n"
+"Logniveau-tilsidesættelser, af formen \"modulename="
+"{debug,info,warn,crit,error}\"\n"
 "Eksempler: \"--log qof=debug\" eller \"--log gnc.backend.file.sx=info\"\n"
 "Dette kan gøres flere gange."
 
@@ -9612,9 +9612,9 @@ msgid ""
 "Liability accounts."
 msgstr ""
 "Før afstemning af en konto, der opkræver eller betaler renter, skal brugeren "
-"blive bedt om at indtaste en transaktion for renteopkrævningen eller "
-"-betalingen. I øjeblikket kun aktiveret for bank-, kredit-, gensidig-, "
-"aktiv-, tilgodehavende-, gælds- og passivkonti."
+"blive bedt om at indtaste en transaktion for renteopkrævningen eller -"
+"betalingen. I øjeblikket kun aktiveret for bank-, kredit-, gensidig-, aktiv-"
+", tilgodehavende-, gælds- og passivkonti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
@@ -12919,9 +12919,9 @@ msgid ""
 "appropriate, you can enter a new one."
 msgstr ""
 "Nedenfor bliver du bedt om at give oplysninger om aktier, "
-"investeringsforeninger og andre investeringer, der vises i den/de QIF-"
-"fil(er), du importerer. GnuCash har brug for nogle yderligere oplysninger om "
-"disse investeringer, som QIF-formatet ikke leverer.\n"
+"investeringsforeninger og andre investeringer, der vises i den/de QIF-fil(er)"
+", du importerer. GnuCash har brug for nogle yderligere oplysninger om disse "
+"investeringer, som QIF-formatet ikke leverer.\n"
 "\n"
 "Hver aktie, investeringsforening eller anden investering skal have et navn "
 "og en forkortelse, f.eks. et aktiesymbol. Da nogle uafhængige investeringer "
@@ -13167,8 +13167,8 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Tryk \"Afslut\", hvis du er færdig med at oprette aktieopdeling eller "
-"-sammenlægning. Du kan også trykke \"Tilbage\" for at tjekke dine valg eller "
+"Tryk \"Afslut\", hvis du er færdig med at oprette aktieopdeling eller -"
+"sammenlægning. Du kan også trykke \"Tilbage\" for at tjekke dine valg eller "
 "\"Annuller\" for at afslutte uden at udføre nogen ændringer."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
@@ -15642,8 +15642,7 @@ msgstr "_Relativ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr ""
-"Brug den angivne relative startdato til beregninger af fortjeneste/tab."
+msgstr "Brug den angivne relative startdato til beregninger af fortjeneste/tab."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 msgid "_Absolute"
@@ -16065,8 +16064,8 @@ msgid ""
 "default."
 msgstr ""
 "En transaktion, hvis bedste match-score er i den røde zone (over "
-"visningstærsklen, men under eller lig med tærsklen for automatisk "
-"tilføjelse), vil som standard blive tilføjet."
+"visningstærsklen, men under eller lig med tærsklen for automatisk tilføjelse)"
+", vil som standard blive tilføjet."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
@@ -18606,8 +18605,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -22366,8 +22365,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "Den indtastede transaktionsdato er ældre end den \"Skrivebeskyttede "
-"tærskel\", der er angivet for denne bog. Denne indstilling kan ændres i Fil-"
-">Egenskaber->Konti, hvorved tærsklen nulstilles."
+"tærskel\", der er angivet for denne bog. Denne indstilling kan ændres i Fil->"
+"Egenskaber->Konti, hvorved tærsklen nulstilles."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -25371,13 +25370,11 @@ msgstr "Passivdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:53
 msgid "Shows a chart with the Income per interval developing over time"
-msgstr ""
-"Viser et diagram med indkomsten pr. interval, der udvikler sig over tid"
+msgstr "Viser et diagram med indkomsten pr. interval, der udvikler sig over tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:56
 msgid "Shows a chart with the Expenses per interval developing over time"
-msgstr ""
-"Viser et diagram med udgifterne pr. interval, der udvikler sig over tid"
+msgstr "Viser et diagram med udgifterne pr. interval, der udvikler sig over tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:59
 msgid "Shows a chart with the Assets developing over time"
@@ -31817,8 +31814,7 @@ msgstr "Ukendt datoformatspecifikation sendt som argument."
 
 #: libgnucash/engine/gnc-datetime.cpp:730
 msgid "Value can't be parsed into a date using the selected date format."
-msgstr ""
-"Værdien kan ikke parses til en dato ved hjælp af det valgte datoformat."
+msgstr "Værdien kan ikke parses til en dato ved hjælp af det valgte datoformat."
 
 #: libgnucash/engine/gnc-datetime.cpp:735
 msgid "Value appears to contain a year while the selected format forbids this."
