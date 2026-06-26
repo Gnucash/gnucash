@@ -28,7 +28,7 @@
 # Carlson Mak <hbmaak@gmail.com>, 2023.
 # Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2024, 2025.
 # yu0A <yuhongbo@member.fsf.org>, 2023, 2026.
-# yuht <yuht@qq.com>, 2023.
+# yuht <yuht@qq.com>, 2023, 2026.
 # Ral Hole <ral-hole@outlook.com>, 2023, 2025.
 # derxi <happycxin@163.com>, 2023.
 # fleefar <825272947@qq.com>, 2024.
@@ -45,7 +45,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: yuht <yuht@qq.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
