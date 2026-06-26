@@ -7,7 +7,7 @@
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
-# Sarekashi <sarekashi@tuta.io>, 2022.
+# Sarekashi <sarekashi@tuta.io>, 2022, 2026.
 # Sucipto <sucipto@pm.me>, 2023.
 # Andika Triwidada <andika@gmail.com>, 2023, 2025.
 msgid ""
@@ -17,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:53+0000\n"
-"Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
+"Last-Translator: Sarekashi <sarekashi@tuta.io>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
