@@ -58,7 +58,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:55+0000\n"
-"Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
 "Language: it\n"
@@ -9905,8 +9905,8 @@ msgstr ""
 #| "transactions\" is set for the \"since last run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Questa impostazione controlla se è impostato «Controlla le transazioni "
-"create» nella finestra «dall'ultimo avvio»."
+"Questa impostazione controlla se è impostato «Controlla le transazioni create"
+"» nella finestra «dall'ultimo avvio»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
@@ -15833,8 +15833,8 @@ msgid ""
 "it will not be displayed again."
 msgstr ""
 "Premendo il pulsante <i>«Sì»</i>, la finestra di <i>Benvenuto in GnuCash</i> "
-"sarà visualizzata di nuovo al prossimo avvio di GnuCash. Premendo invece "
-"<i>«No»</i>, non verrà più visualizzata."
+"sarà visualizzata di nuovo al prossimo avvio di GnuCash. Premendo invece <i>«"
+"No»</i>, non verrà più visualizzata."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
 #, fuzzy
