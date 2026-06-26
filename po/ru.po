@@ -32,7 +32,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:24+0000\n"
-"Last-Translator: Olesya_Gerasimenko <gammaray@basealt.ru>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -4677,8 +4677,7 @@ msgstr "Открыть окно отчёта о поставщике для вл
 #, fuzzy
 #| msgid "_Use as Default Layout for Vendor Documents"
 msgid "_Use as Default Layout for Vendor Business items"
-msgstr ""
-"_Использовать в качестве макета по умолчанию для документов поставщиков"
+msgstr "_Использовать в качестве макета по умолчанию для документов поставщиков"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -5232,8 +5231,7 @@ msgstr "Выбрать бюджет"
 #| "Several documents are linked with this transaction. Please choose one:"
 msgid ""
 "Several business items are linked with this transaction. Please choose one:"
-msgstr ""
-"С этой сделкой связано несколько документов. Пожалуйста, выберите один:"
+msgstr "С этой сделкой связано несколько документов. Пожалуйста, выберите один:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3072
 #: gnucash/gnome-search/dialog-search.c:323
@@ -7601,8 +7599,7 @@ msgstr[0] ""
 "Если вы не сохранитесь, изменения за последнюю %d минуту будут потеряны."
 msgstr[1] ""
 "Если вы не сохранитесь, изменения за последние %d минуты будут потеряны."
-msgstr[2] ""
-"Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
+msgstr[2] "Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -9288,8 +9285,8 @@ msgstr "Диалог создания новых пользователей"
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
 msgstr ""
-"Если включено, будет отображаться диалог создания новых пользователей. Иначе "
-"- не будет."
+"Если включено, будет отображаться диалог создания новых пользователей. "
+"Иначе - не будет."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:264
 msgid "New hierarchy window on \"New File\""
@@ -9307,8 +9304,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:272
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:273
 msgid "Default to 'new search' if fewer than this number of items is returned"
-msgstr ""
-"Новый поиск по умолчанию, если найдено меньше этого количества значений"
+msgstr "Новый поиск по умолчанию, если найдено меньше этого количества значений"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:5
 msgid "Enable SKIP transaction action"
@@ -18914,8 +18910,7 @@ msgstr ""
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
-msgstr ""
-"Вы не ввели назначение платежа. Оно необходимо для интернет-перевода.\n"
+msgstr "Вы не ввели назначение платежа. Оно необходимо для интернет-перевода.\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1028
 msgid ""
@@ -19113,8 +19108,8 @@ msgstr ""
 "\n"
 "Либо это правильный баланс, либо ваш банк не поддерживает загрузку баланса в "
 "этой версии онлайн-банкинга. В последнем случае вы должны выбрать другой "
-"номер версии онлайн-банкинга в настройке Online Banking (AqBanking или "
-"HBCI). После этого попробуйте ещё раз загрузить баланс онлайн-банкинга."
+"номер версии онлайн-банкинга в настройке Online Banking (AqBanking или HBCI)"
+". После этого попробуйте ещё раз загрузить баланс онлайн-банкинга."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1026
 #, c-format
@@ -19319,8 +19314,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Этот параметр определяет формат данных при импорте файлов SWIFT MT940. "
-"Библиотека AqBanking предлагает выбрать различные форматы импорта "
-"(«профили»)."
+"Библиотека AqBanking предлагает выбрать различные форматы импорта («профили»)"
+"."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -19333,8 +19328,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Этот параметр определяет формат данных при импорте файлов SWIFT MT942. "
-"Библиотека AqBanking предлагает выбрать из различных форматов импорта "
-"(«профилей»)."
+"Библиотека AqBanking предлагает выбрать из различных форматов импорта («"
+"профилей»)."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:304
 #, c-format
@@ -21976,8 +21971,7 @@ msgstr "Введите идентификатор, например номер �
 #: gnucash/register/ledger-core/split-register-model.c:1091
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
-msgstr ""
-"Введите идентификатор, например номер чека, уникальный для каждой части"
+msgstr "Введите идентификатор, например номер чека, уникальный для каждой части"
 
 #: gnucash/register/ledger-core/split-register-model.c:1112
 msgid ""
@@ -24296,9 +24290,8 @@ msgid ""
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"Имя файла CSS стилей этого отчёта. Этот файл должен быть или в "
-"каталоге .gnucash, или подходящем каталоге из тех, куда был установлен "
-"GnuCash."
+"Имя файла CSS стилей этого отчёта. Этот файл должен быть или в каталоге "
+".gnucash, или подходящем каталоге из тех, куда был установлен GnuCash."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
 #: gnucash/report/reports/standard/invoice.scm:514
@@ -27285,9 +27278,8 @@ msgid ""
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"Имя файла CSS стилей этого отчёта. Этот файл должен быть или в "
-"каталоге .gnucash, или подходящем каталоге из тех, куда был установлен "
-"GnuCash."
+"Имя файла CSS стилей этого отчёта. Этот файл должен быть или в каталоге "
+".gnucash, или подходящем каталоге из тех, куда был установлен GnuCash."
 
 #: gnucash/report/reports/standard/receipt.scm:85
 #: gnucash/report/reports/standard/taxinvoice.scm:157
@@ -27757,8 +27749,7 @@ msgstr "Образец корректировочных записей"
 
 #: gnucash/report/reports/standard/trial-balance.scm:88
 msgid "Any text in the Description column which identifies adjusting entries."
-msgstr ""
-"Любой текст в столбце \"Описание\", определяющий корректирующие записи."
+msgstr "Любой текст в столбце \"Описание\", определяющий корректирующие записи."
 
 #: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
@@ -29355,8 +29346,7 @@ msgstr "_Калькулятор выплат по займу"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:116
 msgid "Use the loan/mortgage repayment calculator"
-msgstr ""
-"Использовать калькулятор для расчёта платежей по займу/залогу (ипотеке)"
+msgstr "Использовать калькулятор для расчёта платежей по займу/залогу (ипотеке)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
 msgid "_Close Book…"
