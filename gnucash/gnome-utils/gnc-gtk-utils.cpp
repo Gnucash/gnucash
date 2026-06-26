@@ -24,6 +24,13 @@
 #include <config.h>
 
 #include "gnc-gtk-utils.h"
+#include <gnc-engine.h>
+#include <qoflog.h>
+
+#include <memory>
+#include <string>
+
+static QofLogModule log_module = GNC_MOD_GUI;
 
 #define LAST_INDEX "last_index"
 #define CHANGED_ID "changed_id"
@@ -1121,4 +1128,53 @@ gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
                       statusbar);
 
     g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
+}
+
+struct GFree         { void operator()(gchar           *p) const { g_free (p); } };
+struct GObjectUnref  { void operator()(GDBusConnection *p) const { g_object_unref (p); } };
+struct GVariantUnref { void operator()(GVariant        *p) const { g_variant_unref (p); } };
+
+gboolean
+gnc_file_reveal (const char *uri)
+{
+    g_return_val_if_fail (uri != nullptr, FALSE);
+
+    GError *err = nullptr;
+
+#if defined(G_OS_WIN32)
+    std::unique_ptr<char,GFree> path{g_filename_from_uri (uri, nullptr, nullptr)};
+    std::string cmd = std::string{"explorer /select,\""} + path.get() + '"';
+    if (!g_spawn_command_line_async (cmd.c_str (), &err))
+        PWARN ("Could not reveal file: %s", err->message);
+
+#elif defined(__APPLE__)
+    std::unique_ptr<char,GFree> path{g_filename_from_uri (uri, nullptr, nullptr)};
+    const gchar *argv[] = {"open", "-R", path.get(), nullptr};
+    if (!g_spawn_async (nullptr, (gchar **)argv, nullptr,
+                        G_SPAWN_SEARCH_PATH, nullptr, nullptr, nullptr, &err))
+        PWARN ("Could not reveal file: %s", err->message);
+
+#else
+    std::unique_ptr<GDBusConnection, GObjectUnref> bus {g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, &err)};
+    if (!bus)
+        PWARN ("D-Bus unavailable: %s", err->message);
+    else
+    {
+        const gchar *uris[] = {uri, nullptr};
+        std::unique_ptr<GVariant, GVariantUnref> result
+            {g_dbus_connection_call_sync (bus.get (),
+                                          "org.freedesktop.FileManager1",
+                                          "/org/freedesktop/FileManager1",
+                                          "org.freedesktop.FileManager1",
+                                          "ShowItems",
+                                          g_variant_new ("(^ass)", uris, ""),
+                                          nullptr, G_DBUS_CALL_FLAGS_NONE,
+                                          -1, nullptr, &err)};
+        if (!result)
+            PWARN ("FileManager1 unavailable (%s)", err->message);
+    }
+#endif
+    auto rv{err == nullptr};
+    g_clear_error (&err);
+    return rv;
 }
