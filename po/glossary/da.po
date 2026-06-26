@@ -4,7 +4,7 @@
 # Christian Rose <menthos@menthos.com>, 2001.
 # Joe Hansen <joedalton2@yahoo.dk>, 2009.
 # Aputsiak Niels Janussen <aj@isit.gl>, 2021.
-# Allan Olsen <allan@hamann-olsen.dk>, 2025.
+# Allan Olsen <allan@hamann-olsen.dk>, 2025, 2026.
 # Sune Kibsgaard <sune@kibs.dk>, 2026.
 # Cecilie Nielsen <cecilie.nielsen1984@gmail.com>, 2026.
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Allan Olsen <allan@hamann-olsen.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "da/>\n"
 "Language: da\n"
