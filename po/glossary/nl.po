@@ -2,7 +2,7 @@
 # Copyright (C) 2006 Free Software Foundation, Inc.
 # Bernard Meens <meensb@xs4all.nl>, 2006.
 # Geert Janssens <geert@kobaltwit.be>, 2020, 2021.
-# eol <joshua.de.clercq@gmail.com>, 2021.
+# eol <joshua.de.clercq@gmail.com>, 2021, 2026.
 # Jaimie85 <alsemgeest@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023, 2024.
 # Paul Oranje <por@oranjevos.nl>, 2024.
@@ -15,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: Ceaus <github@pohw.nl>\n"
+"Last-Translator: eol <joshua.de.clercq@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
