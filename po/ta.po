@@ -4,6 +4,7 @@
 # தமிழ்நேரம் <anishprabu.t@gmail.com>, 2024, 2025.
 # John Ralls <jralls@ceridwen.us>, 2025, 2026.
 # தமிழ்நேரம் <tamilneram247@gmail.com>, 2025, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -11,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:27+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ta/>\n"
 "Language: ta\n"
@@ -5772,11 +5773,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"பயன்படுத்த எளிதாக இருந்தும், ஆற்றல் வாய்ந்ததாக மற்றும் சாதகமானதாக வடிவமைக்கப்பட்டுள்ளதால், "
-"GnuCash நீங்கள் வங்கி கணக்குகள், பங்குகள், வருமானம் மற்றும் செலவுகளை கண்காணிக்க "
-"அனுமதிக்கிறது. ஒரு காசோலை பதிவேட்டாக பயன்படுத்த விரைவானதாக மற்றும் உள்ளுணர்வுடன் "
-"இருப்பதால், இது சரியான இருப்பு புத்தகங்கள் மற்றும் துல்லியமான அறிக்கைகளை உறுதி செய்ய "
-"இரட்டை-பதிவு கணக்கியல் போன்ற தொழில்முறை கணக்கியல் கொள்கைகளை அடிப்படையாக கொண்டுள்ளது."
+"பயன்படுத்த எளிதாக இருந்தும், ஆற்றல் வாய்ந்ததாக மற்றும் சாதகமானதாக வடிவமைக்கப்பட்டுள்ளதால், GnuCash "
+"நீங்கள் வங்கி கணக்குகள், பங்குகள், வருமானம் மற்றும் செலவுகளை கண்காணிக்க அனுமதிக்கிறது. ஒரு "
+"காசோலை பதிவேட்டாக பயன்படுத்த விரைவானதாக மற்றும் உள்ளுணர்வுடன் இருப்பதால், இது சரியான இருப்பு "
+"புத்தகங்கள் மற்றும் துல்லியமான அறிக்கைகளை உறுதி செய்ய இரட்டை-பதிவு கணக்கியல் போன்ற "
+"தொழில்முறை கணக்கியல் கொள்கைகளை அடிப்படையாக கொண்டுள்ளது."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
