@@ -18,7 +18,7 @@
 # cjh <cjh@cjh0613.com>, 2021, 2023.
 # Eric <spice2wolf@gmail.com>, 2021.
 # J0kWang <lianjiefly@gmail.com>, 2021, 2022, 2023.
-# YTX <ytx.cash@gmail.com>, 2021, 2022, 2023.
+# YTX <ytx.cash@gmail.com>, 2021, 2022, 2023, 2026.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # Yu Hongbo <linuxbckp@gmail.com>, 2022.
@@ -43,8 +43,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 04:41+0000\n"
-"Last-Translator: chokore <byt2ooo@163.com>\n"
+"PO-Revision-Date: 2026-06-26 04:42+0000\n"
+"Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3529,8 +3529,7 @@ msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type "
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
-msgstr ""
-"尚无有效的“入账”科目，请先创建一个、类型为“%s”；也许应先创建一个发票或账单？"
+msgstr "尚无有效的“入账”科目，请先创建一个、类型为“%s”；也许应先创建一个发票或账单？"
 
 #: gnucash/gnome/dialog-payment.c:1593
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:572
@@ -11020,16 +11019,16 @@ msgstr ""
 "多种选项用于指定分隔符及宽度；固定宽度下，双击行表设置列宽，若需要，亦可右键"
 "调整。\n"
 "\n"
-"例：\"FTSE\", \"RR.L\", \"21/11/2016\",5.345, \"GBP \"和"
-"CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"例：\"FTSE\", \"RR.L\", \"21/11/2016\",5.345, \"GBP \"和CURRENCY;USD;2016-11-"
+"21;1.56;GBP\n"
 "\n"
 "有一个选项可以指定开始行、结束行，还有一个选项可以跳过从开始行开始的备用行，"
 "如果你有一些标题文本，可以使用这个选项。此外，如果需要，还有一个选项可以覆盖"
 "当天的现有价格。\n"
 "\n"
-"最后，对于重复输入，预览页面有加载和保存设置的按钮。你可以保存你调整过的设"
-"置，以便在以后的导入中重复使用。在加载你的设置后，你也可以为类似的导入再次调"
-"整它们，并以另一个名字保存它们。注意你不能保存到内置的预设中。\n"
+"最后，对于重复输入，预览页面有加载和保存设置的按钮。你可以保存你调整过的设置"
+"，以便在以后的导入中重复使用。在加载你的设置后，你也可以为类似的导入再次调整"
+"它们，并以另一个名字保存它们。注意你不能保存到内置的预设中。\n"
 "\n"
 "此操作不可逆，请提前做好备份。\n"
 "\n"
@@ -11518,8 +11517,7 @@ msgstr "“%s”中的科目"
 msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
-msgstr ""
-"如果对现有模板不满意，请阅读下方列出的维基页面，分享新的模板或改进现有模板。"
+msgstr "如果对现有模板不满意，请阅读下方列出的维基页面，分享新的模板或改进现有模板。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:489
 msgid ""
@@ -11696,8 +11694,8 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"创建定期还贷交易，输入贷款与还款详情，程序会根据此信息、创建适当的计划交"
-"易。\n"
+"创建定期还贷交易，输入贷款与还款详情，程序会根据此信息、创建适当的计划交易"
+"。\n"
 "\n"
 "若输入有误亦或修改，稍后直接编辑创建好的计划交易。"
 
@@ -11923,8 +11921,8 @@ msgstr ""
 "GnuCash 可以从 Quicken/QuickBooks、MS Money、Moneydance以及其它程序生成的 "
 "QIF (Quicken Interchange Format) 中导入财务数据。\n"
 "\n"
-"导入过程有几个步骤。在您最后一步点击“应用”前，您的 GnuCash 科目将不会被改"
-"动。\n"
+"导入过程有几个步骤。在您最后一步点击“应用”前，您的 GnuCash 科目将不会被改动"
+"。\n"
 "\n"
 "开始加载 QIF 数据请点击“前进”，退出过程请点击“取消”。"
 
@@ -12131,9 +12129,9 @@ msgstr ""
 "从银行或其他金融机构下载的 QIF 文件可能没有关于科目、类别的信息，这类信息可以"
 "帮助将这些交易事项正确的分配到相应的 GnuCash 科目。\n"
 "\n"
-"在下一页，您将会看到在交易收款人和备注字段显示的文字，但是没有 QIF 科目或类"
-"别。默认情况下，这些交易事项将会在 GnuCash 中分配到“未指定”科目下。如果您选择"
-"了不同的科目，这回被记住，并在将来导入 QIF 文件的时候帮您选择它们。"
+"在下一页，您将会看到在交易收款人和备注字段显示的文字，但是没有 QIF 科目或类别"
+"。默认情况下，这些交易事项将会在 GnuCash 中分配到“未指定”科目下。如果您选择了"
+"不同的科目，这回被记住，并在将来导入 QIF 文件的时候帮您选择它们。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:790
 msgid "Payees and memos"
@@ -13037,8 +13035,7 @@ msgstr "期初余额"
 msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
-msgstr ""
-"表明此科目包含期初余额交易。每种商品只能有一个科目可设定为包含期初余额交易。"
+msgstr "表明此科目包含期初余额交易。每种商品只能有一个科目可设定为包含期初余额交易。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1583
 msgid "Ta_x related"
@@ -14896,9 +14893,9 @@ msgid ""
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
 msgstr ""
-"父科目、子科目间的分隔符号：除字母和数字外的任何单个字符，或以下任意一种："
-"\"colon [冒号]\"、\"slash [斜线]\"、\"backslash [反斜线]\"、\"period [破折号]"
-"\"和 \"period [句号]\"。"
+"父科目、子科目间的分隔符号：除字母和数字外的任何单个字符，或以下任意一种"
+"：\"colon [冒号]\"、\"slash [斜线]\"、\"backslash [反斜线]\"、\"period [破折"
+"号]\"和 \"period [句号]\"。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:934
 #: gnucash/gtkbuilder/dialog-preferences.glade:3338
@@ -15396,8 +15393,8 @@ msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
 msgstr ""
-"在账簿窗口中使用GnuCash内置的黄绿配色。若要使用系统配色方案，则取消勾选此选"
-"项。"
+"在账簿窗口中使用GnuCash内置的黄绿配色。若要使用系统配色方案，则取消勾选此选项"
+"。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2835
 msgid "Double _mode colors alternate with transactions"
@@ -15503,8 +15500,7 @@ msgstr "在新窗口打开账簿(_W)"
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
-msgstr ""
-"若勾选，则在新的顶级窗口中打开账簿；若取消勾选，则在当前窗口中打开账簿。"
+msgstr "若勾选，则在新的顶级窗口中打开账簿；若取消勾选，则在当前窗口中打开账簿。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3128
 msgid "_Only display leaf account names"
@@ -15516,8 +15512,7 @@ msgid ""
 "register and in the account selection popup. The default behaviour is to "
 "display the full name, including the path in the account tree. Checking this "
 "option implies that you use unique leaf names."
-msgstr ""
-"转账字段只显示末级科目；默认显示科目路径；此选项意味着末级科目必需唯一。"
+msgstr "转账字段只显示末级科目；默认显示科目路径；此选项意味着末级科目必需唯一。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3211
 msgid "Register Defaults"
@@ -15543,8 +15538,7 @@ msgstr "在新窗口中打开报表(_W)"
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
-msgstr ""
-"若勾选，则在新的顶级窗口中打开报表；若取消勾选，则在当前窗口中打开报表。"
+msgstr "若勾选，则在新的顶级窗口中打开报表；若取消勾选，则在当前窗口中打开报表。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3316
 #: gnucash/gtkbuilder/dialog-preferences.glade:3396
@@ -15629,8 +15623,7 @@ msgstr "标签页、科目名右侧显示 [ X ] 按钮，同工具栏“关闭�
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
-msgstr ""
-"若科目名字数多于此值（测试是近似的），则标签页中会用省略号代替部分科目名。"
+msgstr "若科目名字数多于此值（测试是近似的），则标签页中会用省略号代替部分科目名。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3741
 msgid "characters"
@@ -18102,8 +18095,7 @@ msgstr "贷方科目银行代码"
 msgid ""
 "The internal check of the destination IBAN '%s' failed. This means the "
 "account number might contain an error."
-msgstr ""
-"'%s'的 IBAN 内部检查失败，意味着该科目的国际银行账户号码可能包含一个错误。"
+msgstr "'%s'的 IBAN 内部检查失败，意味着该科目的国际银行账户号码可能包含一个错误。"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:559
 #, c-format
@@ -30607,8 +30599,7 @@ msgid ""
 "cannot be edited anymore. This threshold is marked by a red line in the "
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
-msgstr ""
-"可编辑距今多少天内的交易，之前均被锁定，红线分隔；零值，无锁定、均可编辑。"
+msgstr "可编辑距今多少天内的交易，之前均被锁定，红线分隔；零值，无锁定、均可编辑。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1214
 msgid ""
