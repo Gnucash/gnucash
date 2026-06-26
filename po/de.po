@@ -29,7 +29,7 @@
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
 # Steffen Möller <steffen_moeller@gmx.de>, 2022.
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023, 2026.
-# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024.
+# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024, 2026.
 # Alois Levermann <alois@levermann.xyz>, 2025, 2026.
 # Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025.
 # Franko <web.90947@t.sc-ha.net>, 2025.
@@ -46,7 +46,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: Alois Levermann <alois@levermann.xyz>\n"
+"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
