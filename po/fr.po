@@ -29,7 +29,7 @@
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
 # Philippe Lamare <ph.lamare@free.fr>, 2022, 2023, 2026.
 # Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
-# Gaël CATLLA <gcatlla@free.fr>, 2023.
+# Gaël CATLLA <gcatlla@free.fr>, 2023, 2026.
 # Vincent Dawans <dawansv@gmail.com>, 2023, 2026.
 # Xavier Gandillot (aka xavier268), 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024, 2025, 2026.
@@ -49,7 +49,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Frédéric Mergey <fmergey@yahoo.com>\n"
+"Last-Translator: Gaël CATLLA <gcatlla@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -33047,8 +33047,7 @@ msgstr "Éditer les options de ce budget"
 # messages-i18n.c:80
 #: gnucash/ui/gnc-plugin-page-budget.ui:242
 msgid "Edit budget for all periods for the selected accounts"
-msgstr ""
-"Modifier le budget de toutes les périodes pour les comptes sélectionnés"
+msgstr "Modifier le budget de toutes les périodes pour les comptes sélectionnés"
 
 # messages-i18n.c:160
 #: gnucash/ui/gnc-plugin-page-invoice.ui:79
