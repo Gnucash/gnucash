@@ -9,7 +9,7 @@
 # Vik <k3kelm4vw@mozmail.com>, 2022.
 # Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com>, 2023, 2025, 2026.
 # hades <dev@hades.name>, 2023, 2026.
-# gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025.
+# gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025, 2026.
 # "Alex Maryson Jr." <akamar87@gmail.com>, 2025.
 # Yurt Page <yurtpage+weblate@gmail.com>, 2026.
 msgid ""
@@ -19,7 +19,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: hades <dev@hades.name>\n"
+"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
 "Language: ru\n"
