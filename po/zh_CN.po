@@ -39,6 +39,7 @@
 # SIB <shawndu0820@gmail.com>, 2025.
 # Deleted User <hamburger1024@users.noreply.hosted.weblate.org>, 2026.
 # Deleted User <noreply+62046@weblate.org>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -46,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: Deleted User <noreply+62046@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
