@@ -27,6 +27,7 @@
 # Yegor Derevenets <yegor.derevenets@gmail.com>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 # Localizer <Localizer_in_Russian@protonmail.com>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -34,7 +35,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:25+0000\n"
-"Last-Translator: Localizer <Localizer_in_Russian@protonmail.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
