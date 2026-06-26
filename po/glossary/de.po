@@ -9,7 +9,7 @@
 # SebastianL <Sebastian.Lueck@gmail.com>, 2020.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2021, 2026.
 # Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021, 2026.
-# Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021.
+# Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021, 2026.
 # Christian Wehling <christian.wehling@web.de>, 2022, 2023, 2026.
 # Joachim Wetzig <jo.wetzig@web.de>, 2023, 2026.
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024, 2026.
@@ -20,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Joachim Wetzig <jo.wetzig@web.de>\n"
+"Last-Translator: Tobias Mohr <tobias_mohr_1991@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
