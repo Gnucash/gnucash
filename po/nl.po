@@ -12,7 +12,7 @@
 # Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
 # Geert Janssens <info@kobaltwit.be>, 2021.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
-# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025.
+# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025, 2026.
 # Rene Lambers <jbh.lambers@gmail.com>, 2023.
 # Leo Moons <Leo.Moons@proximus.be>, 2025.
 # BlueRains <lu@schoevaars.eu>, 2025.
@@ -25,7 +25,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
@@ -995,8 +995,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Om al uw boekingen te doorzoeken start u een zoekopdracht (menukeuze "
-"‘Bewerken‣Zoeken.…’) vanuit de rekeningschema-pagina. Om de zoekopdracht te "
+"Om al uw boekingen te doorzoeken start u een zoekopdracht (menukeuze ‘"
+"Bewerken‣Zoeken.…’) vanuit de rekeningschema-pagina. Om de zoekopdracht te "
 "beperken tot één rekening kunt u de zoekopdracht starten vanuit de "
 "grootboekkaart van die rekening."
 
@@ -1899,8 +1899,7 @@ msgstr "Voer het nieuwe aandelensaldo in na de beleggingsdeling."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1930
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr ""
-"Voer het aantal aandelen in dat bij de transactie is toe- of afgenomen."
+msgstr "Voer het aantal aandelen in dat bij de transactie is toe- of afgenomen."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2331
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -4784,8 +4783,8 @@ msgstr "Als standaardweergave voor werknemersdocumenten _instellen"
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
-"De huidige weergave als standaard voor alle werknemersdeclaraties en "
-"-creditnota's gebruiken"
+"De huidige weergave als standaard voor alle werknemersdeclaraties en -"
+"creditnota's gebruiken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 #, fuzzy
@@ -7463,8 +7462,8 @@ msgid ""
 msgstr ""
 "Het bestand/URI %s werd niet gevonden.\n"
 "\n"
-"Het bestand staat in de bestandsgeschiedenis, wilt u het hieruit "
-"verwijderen ?"
+"Het bestand staat in de bestandsgeschiedenis, wilt u het hieruit verwijderen "
+"?"
 
 #: gnucash/gnome-utils/gnc-file.c:473
 #, c-format
@@ -7535,9 +7534,9 @@ msgid ""
 msgstr ""
 "Deze databank is afkomstig van een nieuwere versie van GnuCash. De huidige "
 "versie kan de databank wel lezen, maar er niet veilig in opslaan. De "
-"databank wordt gemarkeerd als alleen-lezen tot u de opdracht "
-"‘Bestand‣Opslaan als…’ uitvoert, maar mogelijk raken er gegevens verloren "
-"tijdens het opslaan naar de oude versie."
+"databank wordt gemarkeerd als alleen-lezen tot u de opdracht ‘Bestand‣"
+"Opslaan als…’ uitvoert, maar mogelijk raken er gegevens verloren tijdens het "
+"opslaan naar de oude versie."
 
 #: gnucash/gnome-utils/gnc-file.c:538
 msgid ""
@@ -10506,12 +10505,12 @@ msgid ""
 msgstr ""
 "Dit veld bepaalt de standaard weergavestijl wanneer een grootboekkaart wordt "
 "geopend. De mogelijke waarden zijn “Basic ledger” (eenvoudig dagboek), “Auto-"
-"split ledger” (automatisch dagboek) en “Transaction journal” "
-"(journaalposten). De optie “Basic ledger” toont elke boeking in een of twee "
-"regels, afhankelijk van of de dubbele regelweergave is ingesteld. De optie "
-"“Auto-split ledger” doet hetzelfde, maar klapt de geselecteerde regel uit "
-"tot de volledige boeking. Bij de optie “Transaction journal” worden alle "
-"regels automatisch uitgeklapt."
+"split ledger” (automatisch dagboek) en “Transaction journal” (journaalposten)"
+". De optie “Basic ledger” toont elke boeking in een of twee regels, "
+"afhankelijk van of de dubbele regelweergave is ingesteld. De optie “Auto-"
+"split ledger” doet hetzelfde, maar klapt de geselecteerde regel uit tot de "
+"volledige boeking. Bij de optie “Transaction journal” worden alle regels "
+"automatisch uitgeklapt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
@@ -10544,8 +10543,8 @@ msgid ""
 "register is first opened. The setting can be changed at any time via the "
 "\"View->Double Line\" menu item."
 msgstr ""
-"Per boeking twee regels weergeven op het dagboek. De tweede regel bevat "
-"“Actie”, “Toelichting” en “Gekoppelde documenten”. Dit is de standaard "
+"Per boeking twee regels weergeven op het dagboek. De tweede regel bevat “"
+"Actie”, “Toelichting” en “Gekoppelde documenten”. Dit is de standaard "
 "instelling wanneer een dagboek voor het eerst wordt geopend. Deze instelling "
 "kan worden aangepast via menukeuze “Beeld‣Tweeregelig”."
 
@@ -18659,8 +18658,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -24146,8 +24145,7 @@ msgstr "Rekeningen weglaten"
 #: gnucash/report/reports/standard/income-statement.scm:370
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr ""
-"${company-name} ${report-title} voor de periode van ${start} t/m ${end}"
+msgstr "${company-name} ${report-title} voor de periode van ${start} t/m ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
