@@ -1,6 +1,6 @@
 # Finnish messages for gnucash-glossary.
 # Copyright (C) 2020 Free Software Foundation, Inc.
-# Marko Kohtala <marko.kohtala@gmail.com>, 2020.
+# Marko Kohtala <marko.kohtala@gmail.com>, 2020, 2026.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021, 2026.
 # Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021, 2026.
 # Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021, 2026.
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
+"Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
