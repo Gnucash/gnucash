@@ -4,7 +4,7 @@
 # An's Page <anspage@outlook.com>, 2020.
 # Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022, 2026.
 # Ivan Kostov <jiveq1@gmail.com>, 2025.
-# Angel Ivanov <angel.forcebg@gmail.com>, 2025.
+# Angel Ivanov <angel.forcebg@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>\n"
+"Last-Translator: Angel Ivanov <angel.forcebg@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/bg/>\n"
 "Language: bg\n"
