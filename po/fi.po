@@ -8,6 +8,7 @@
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2021, 2026.
 # Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2025.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -15,7 +16,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:41+0000\n"
-"Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
