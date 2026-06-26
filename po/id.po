@@ -4,7 +4,7 @@
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
 # Ferdinand Tampubolon <dnandz@gmail.com>, 2021, 2026.
-# Reza Almanda <rezaalmanda27@gmail.com>, 2021.
+# Reza Almanda <rezaalmanda27@gmail.com>, 2021, 2026.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
 # Sarekashi <sarekashi@tuta.io>, 2022, 2026.
@@ -18,7 +18,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:53+0000\n"
-"Last-Translator: Sucipto <sucipto@pm.me>\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
