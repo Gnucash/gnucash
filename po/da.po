@@ -11,6 +11,7 @@
 # Sune Kibsgaard <sune@kibs.dk>, 2026.
 # Cecilie Nielsen <cecilie.nielsen1984@gmail.com>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 #
 # konventioner:
 # account code -> kontonummer (ikke kontokode)
@@ -113,7 +114,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:49+0000\n"
-"Last-Translator: Sune Kibsgaard <sune@kibs.dk>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "da/>\n"
 "Language: da\n"
