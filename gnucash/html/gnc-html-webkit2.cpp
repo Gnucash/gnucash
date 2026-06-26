@@ -48,6 +48,7 @@
 
 #include <webkit2/webkit2.h>
 
+#include <gnc-gtk-utils.h>
 #include "Account.h"
 #include "gnc-prefs.h"
 #include "gnc-gui-query.h"
@@ -1079,6 +1080,9 @@ impl_webkit_print (GncHtml* self,const gchar* jobname)
           // Get the newly updated print settings
           g_object_unref(print_settings);
           print_settings = g_object_ref(webkit_print_operation_get_print_settings(op));
+          const char* output_uri = gtk_print_settings_get (print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
+          if (output_uri)
+              gnc_file_reveal (output_uri);
      }
      g_free(export_filename);
      g_object_unref (op);
