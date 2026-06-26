@@ -6,7 +6,7 @@
 # BL <ghostzeko@gmail.com>, 2023.
 # Abdulsalam Alshilash <ashalash@msn.com>, 2025.
 # Usama Khalil <usamafoad@gmail.com>, 2025.
-# Tgol Mgol <tgolmgol@gmail.com>, 2025.
+# Tgol Mgol <tgolmgol@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -14,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: ltai0001 <yltaief@gmail.com>\n"
+"Last-Translator: Tgol Mgol <tgolmgol@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ar/>\n"
 "Language: ar\n"
