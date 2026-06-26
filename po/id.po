@@ -3,7 +3,7 @@
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
-# Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
+# Ferdinand Tampubolon <dnandz@gmail.com>, 2021, 2026.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
@@ -17,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:53+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
