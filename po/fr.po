@@ -30,7 +30,7 @@
 # Philippe Lamare <ph.lamare@free.fr>, 2022, 2023, 2026.
 # Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
 # Gaël CATLLA <gcatlla@free.fr>, 2023.
-# Vincent Dawans <dawansv@gmail.com>, 2023.
+# Vincent Dawans <dawansv@gmail.com>, 2023, 2026.
 # Xavier Gandillot (aka xavier268), 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024, 2025.
 # aleksej0R <omolice@hotmail.fr>, 2024.
@@ -47,8 +47,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 03:42+0000\n"
-"Last-Translator: Philippe Lamare <ph.lamare@free.fr>\n"
+"PO-Revision-Date: 2026-06-26 03:43+0000\n"
+"Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -1036,8 +1036,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Pour chercher toutes vos transactions, lancez une recherche (Édition-"
-">Chercher…) depuis la page principale des comptes. Pour limiter votre "
+"Pour chercher toutes vos transactions, lancez une recherche (Édition->"
+"Chercher…) depuis la page principale des comptes. Pour limiter votre "
 "recherche à un compte, lancez votre recherche depuis le registre du compte."
 
 #: doc/tip_of_the_day.list.c:125
@@ -1851,8 +1851,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:503
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
-"Aucune erreur trouvée. Cliquez sur Appliquer pour créer la transaction."
+msgstr "Aucune erreur trouvée. Cliquez sur Appliquer pour créer la transaction."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:508
 msgid "The following errors must be fixed:"
@@ -11237,11 +11236,11 @@ msgstr ""
 "Si cette option est cochée, l’option de livre par défaut pour les nouveaux "
 "fichiers sera telle que la cellule « Num » des registres affiche ou met à "
 "jour le champ « Action » des répartitions, et que le champ « Num » de la "
-"transaction soit affiché à la deuxième ligne en vue « affichage ligne "
-"double » (et ne soit pas visible si cette option d'affiichage n'est pas "
-"active). Autrement, l’option de livre par défaut pour les nouveaux fichiers "
-"est telle que la cellule « Num » des registres affiche ou met à jour le "
-"champ « Num » de la transaction."
+"transaction soit affiché à la deuxième ligne en vue « affichage ligne double "
+"» (et ne soit pas visible si cette option d'affiichage n'est pas active). "
+"Autrement, l’option de livre par défaut pour les nouveaux fichiers est telle "
+"que la cellule « Num » des registres affiche ou met à jour le champ « Num » "
+"de la transaction."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid "Color the register using a gnucash specific color theme"
@@ -11415,8 +11414,8 @@ msgstr ""
 "livre de base » affiche les transactions sur une ou deux lignes selon que "
 "l'option « Affichage Double ligne » est activée ou non. La valeur « Grand "
 "livre avec répartition automatique » fait de même mais affiche les "
-"répartitions de la transaction active. La valeur « Journal des "
-"transactions » affiche les répartitions de toutes les transactions."
+"répartitions de la transaction active. La valeur « Journal des transactions "
+"» affiche les répartitions de toutes les transactions."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
@@ -14951,8 +14950,8 @@ msgstr ""
 "comptable lorsque le solde du jour est supérieur à cette valeur.\n"
 "\n"
 "Par exemple :\n"
-"Un solde de -90 aujourd'hui affichera une icône si la limite est fixée à "
-"-100\n"
+"Un solde de -90 aujourd'hui affichera une icône si la limite est fixée à -"
+"100\n"
 "Un solde de 100 aujourd'hui affichera une icône si la limite est fixée à "
 "90.\n"
 "\n"
@@ -14973,8 +14972,8 @@ msgstr ""
 "comptable lorsque le solde du jour est inférieur à cette valeur.\n"
 "\n"
 "Par exemple :\n"
-"Un solde de -100 aujourd'hui affichera une icône si la limite est fixée à "
-"-90\n"
+"Un solde de -100 aujourd'hui affichera une icône si la limite est fixée à -"
+"90\n"
 "Un solde de 90 aujourd'hui affichera une icône si la limite est fixée à "
 "100.\n"
 "\n"
@@ -21895,8 +21894,8 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Aucune colonne « Espace de noms/Symbole d'origine » sélectionnée et aucun "
-"« Produit d'origine » renseigné non plus.\n"
+"Aucune colonne « Espace de noms/Symbole d'origine » sélectionnée et aucun « "
+"Produit d'origine » renseigné non plus.\n"
 "Ceci ne devrait pas se produire. Merci de nous signaler ce problème."
 
 # src/gnome/dialog-qif-import.c:310
@@ -21936,8 +21935,8 @@ msgid ""
 "(negated) transfer amount."
 msgstr ""
 "Les sélections de compte en cours généreront des transactions multidevises. "
-"Veuillez sélectionner l'une des colonnes suivantes : prix, valeur "
-"(négativé), montant du transfert (négativé)."
+"Veuillez sélectionner l'une des colonnes suivantes : prix, valeur (négativé)"
+", montant du transfert (négativé)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:678
 msgid ""
@@ -22017,8 +22016,8 @@ msgstr "« Espace de noms d'origine » ne peut pas être vide."
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:225
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr ""
-"La « Devise de destination » ne peut être la même que le « Produit "
-"d'origine »."
+"La « Devise de destination » ne peut être la même que le « Produit d'origine "
+"»."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:227
 msgid "Value parsed into an invalid currency for a currency column type."
@@ -22116,8 +22115,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:265
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
-"Le champ de description ne peut pas être vide si l'option « Multi-"
-"répartition » n'est pas sélectionnée.\n"
+"Le champ de description ne peut pas être vide si l'option « Multi-répartition"
+" » n'est pas sélectionnée.\n"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
@@ -22411,8 +22410,8 @@ msgstr "Nouveau, virer %s vers (auto) \"%s\""
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr ""
-"Nouveau, NON BALANCÉ (besoin d'un prix pour transférer %s vers le compte "
-"%s) !"
+"Nouveau, NON BALANCÉ (besoin d'un prix pour transférer %s vers le compte %s) "
+"!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.cpp:2082
@@ -27474,8 +27473,7 @@ msgstr "Afficher le tableau"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:92
 #: gnucash/report/reports/standard/cash-flow.scm:96
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr ""
-"Inclure les transactions de/vers les comptes de change dans le rapport."
+msgstr "Inclure les transactions de/vers les comptes de change dans le rapport."
 
 # messages-i18n.c:215
 #: gnucash/report/reports/standard/cashflow-barchart.scm:97
@@ -28772,8 +28770,8 @@ msgid ""
 "Warning: The following ~a split(s) are not assigned to a lot. Do lots need "
 "to be scrubbed?"
 msgstr ""
-"Attention : Le(s) répartition(s) suivante(s) ~a n'est (ne sont) pas "
-"attribué(s) à un lot. Les lots doivent-ils être nettoyés ?"
+"Attention : Le(s) répartition(s) suivante(s) ~a n'est (ne sont) pas attribué"
+"(s) à un lot. Les lots doivent-ils être nettoyés ?"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #: gnucash/report/reports/standard/investment-lots.scm:1425
