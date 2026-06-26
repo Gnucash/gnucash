@@ -2,6 +2,7 @@
 # This file is distributed under the same license as the GnuCash package.
 #
 # Sangeeta Kumari<gistlrc@gmail.com>, 2015.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -9,7 +10,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:09+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Maithili <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "mai/>\n"
 "Language: mai\n"

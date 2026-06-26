@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the gnucash package.
 # Valdis Vītoliņš <valdis.vitolins@odo.lv>, 2017.
 # Rihards Priedītis <rprieditis@gmail.com>, 2010
-#
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -11,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:07+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "lv/>\n"
 "Language: lv\n"
