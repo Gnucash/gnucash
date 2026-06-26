@@ -47,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: Thomas Kriegel <thomasMapper@bin-wieder-da.de>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -21809,8 +21809,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Scheduled transactions can only be pasted to the General Journal"
-msgstr ""
-"Geplante Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
+msgstr "Geplante Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
 
 #: gnucash/register/ledger-core/split-register.c:2159
 msgid "Recalculate Transaction"
