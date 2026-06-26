@@ -4,6 +4,7 @@
 # Automatically generated, 2023.
 #
 # Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>, 2024.
+# Itsmechinmoy <167056923+itsmechinmoy@users.noreply.github.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -11,7 +12,8 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 05:11+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Itsmechinmoy "
+"<167056923+itsmechinmoy@users.noreply.github.com>\n"
 "Language-Team: Assamese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/as/>\n"
 "Language: as\n"
