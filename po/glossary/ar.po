@@ -3,7 +3,7 @@
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2013
 # ltai0001 <yltaief@gmail.com>, 2022, 2026.
 # Sherif ElGamal <selgamal0@gmail.com>, 2022, 2026.
-# BL <ghostzeko@gmail.com>, 2023.
+# BL <ghostzeko@gmail.com>, 2023, 2026.
 # Abdulsalam Alshilash <ashalash@msn.com>, 2025, 2026.
 # Usama Khalil <usamafoad@gmail.com>, 2025, 2026.
 # Tgol Mgol <tgolmgol@gmail.com>, 2025, 2026.
@@ -14,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Abdulsalam Alshilash <ashalash@msn.com>\n"
+"Last-Translator: BL <ghostzeko@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ar/>\n"
 "Language: ar\n"
