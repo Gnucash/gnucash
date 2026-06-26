@@ -7,6 +7,7 @@
 # Walter Garcia-Fontes <walter.garcia@upf.edu>, 2015,2021.
 # mid-kid <esteve.varela@gmail.com>, 2025, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# Deleted User <noreply+36847@weblate.org>, 2026.
 #
 # Vocabulari de comptabilitat: http://www.ub.es/slc/termens/Comptab.pdf
 #
@@ -50,7 +51,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:00+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: Deleted User <noreply+36847@weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ca/>\n"
 "Language: ca\n"
