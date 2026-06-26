@@ -10,7 +10,7 @@
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # YTX <ytx.cash@gmail.com>, 2022, 2026.
 # J0kWang <lianjiefly@gmail.com>, 2023.
-# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023.
+# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2026.
 # Ral Hole <ral-hole@outlook.com>, 2025.
 # DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>, 2025, 2026.
 # Deleted User <hamburger1024@users.noreply.hosted.weblate.org>, 2026.
@@ -21,7 +21,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:37+0000\n"
-"Last-Translator: Theresa Zhang <theresa7qing@sina.com>\n"
+"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
