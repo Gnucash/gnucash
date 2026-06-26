@@ -2,7 +2,7 @@
 # Copyright (C) 2011 Free Software Foundation, Inc.
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011.
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
-# Tadas Masiulionis <tadzikaz@gmail.com>, 2023.
+# Tadas Masiulionis <tadzikaz@gmail.com>, 2023, 2026.
 # Kornelijus Tvarijanavičius <kornelijus@tvaria.com>, 2026.
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: Kornelijus Tvarijanavičius <kornelijus@tvaria.com>\n"
+"Last-Translator: Tadas Masiulionis <tadzikaz@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/lt/>\n"
 "Language: lt\n"
