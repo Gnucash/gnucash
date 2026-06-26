@@ -9,6 +9,7 @@
 # Simon Arlott <weblate.simon@arlott.org>, 2022, 2023, 2024.
 # Andi Chandler <andi@gowling.com>, 2023, 2024, 2026.
 # Simon Arlott <nomis@users.noreply.hosted.weblate.org>, 2024, 2025, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -16,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:34+0000\n"
-"Last-Translator: Adithya K <adithyak04@gmail.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
 "Language: en_GB\n"
