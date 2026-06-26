@@ -36,7 +36,7 @@
 # aleksej0R <omolice@hotmail.fr>, 2024.
 # Over_score <wablate@lorang.net>, 2024.
 # Martin LORANG <wablate@lorang.net>, 2024.
-# Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025.
+# Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
 # Frédéric Mergey <fmergey@yahoo.com>, 2025.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
@@ -48,7 +48,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Laurent Aufrere <lecture@cbol.org>\n"
+"Last-Translator: Anastasios Ikonomou <anastasios.ikonomou@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -900,9 +900,9 @@ msgid ""
 msgstr ""
 "Saisissez la ou les première(s) lettre(s) d'un nom de compte existant dans "
 "la colonne virement du registre, et GnuCash complétera le nom à partir de "
-"votre liste de comptes. Pour les sous-comptes, saisissez la ou les "
-"première(s) lettre(s) du compte parent, suivie(s) par \":\" et la ou les "
-"première(s) lettre(s) du sous-compte (par exemple A:E pour Actifs:Espèces)."
+"votre liste de comptes. Pour les sous-comptes, saisissez la ou les première"
+"(s) lettre(s) du compte parent, suivie(s) par \":\" et la ou les première(s) "
+"lettre(s) du sous-compte (par exemple A:E pour Actifs:Espèces)."
 
 #: doc/tip_of_the_day.list.c:71
 msgid ""
@@ -5184,8 +5184,7 @@ msgstr "Nou_veau bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "Create a new voucher for the same owner as the current one"
-msgstr ""
-"Créer une nouvelle note de frais pour le même bénéficiaire que l'actuel"
+msgstr "Créer une nouvelle note de frais pour le même bénéficiaire que l'actuel"
 
 # messages-i18n.c:71
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
