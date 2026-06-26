@@ -2,7 +2,7 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Christian Stimming <stimming@tuhh.de>, 2001
 # An's Page <anspage@outlook.com>, 2020.
-# Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022.
+# Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022, 2026.
 # Ivan Kostov <jiveq1@gmail.com>, 2025.
 # Angel Ivanov <angel.forcebg@gmail.com>, 2025.
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/bg/>\n"
 "Language: bg\n"
