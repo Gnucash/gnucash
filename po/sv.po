@@ -12,6 +12,7 @@
 # Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023, 2024, 2025, 2026.
 # Luna Jernberg <droidbittin@gmail.com>, 2022, 2023.
 # bittin1ddc447d824349b2 <bittin@reimu.nl>, 2023, 2024.
+# Arve Eriksson <arve.eriksson@startmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -19,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:03+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Arve Eriksson <arve.eriksson@startmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -718,8 +719,8 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Du kan lätt importera dina nuvarande finansiella data från Quicken, MS Money "
-"eller andra program som exporterar QIF-filer eller OFX-filer. Klicka på "
-"”Importera” i ”Arkiv”-menyn och välj QIF- eller OFX-fil. Följ sedan "
+"eller andra program som exporterar QIF-filer eller OFX-filer. Klicka på ”"
+"Importera” i ”Arkiv”-menyn och välj QIF- eller OFX-fil. Följ sedan "
 "instruktionerna."
 
 #: doc/tip_of_the_day.list.c:20
@@ -910,8 +911,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Du kan förena flera rapporter i ett enda fönster, för att få all information "
-"du vill ha snabbt tillgänglig. Använd rapporten Exempel & anpassade-"
-">”Anpassad flerkolumnsrapport”."
+"du vill ha snabbt tillgänglig. Använd rapporten Exempel & anpassade->”"
+"Anpassad flerkolumnsrapport”."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -3907,8 +3908,7 @@ msgstr "Formel som inte kan tolkas i delning"
 #: gnucash/gnome/dialog-sx-editor.c:785
 #, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
-msgstr ""
-"Delning med minnesanteckning %s har en debetformel som inte kan tolkas."
+msgstr "Delning med minnesanteckning %s har en debetformel som inte kan tolkas."
 
 #: gnucash/gnome/dialog-sx-editor.c:892
 msgid ""
@@ -5246,6 +5246,8 @@ msgid ""
 "The Start date is after the End date.\n"
 "Select Cancel to change dates.\n"
 msgstr ""
+"Startdatum infaller efter slutdatum.\n"
+"Välj Avbryt för att ändra datum.\n"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1475
@@ -5432,10 +5434,8 @@ msgstr "_Ta bort schema"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:423
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:71
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Run Schedule"
-msgstr "_Schemalägg"
+msgstr "Kö_r schemalagda transaktioner"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:505
 #: gnucash/gtkbuilder/dialog-account.glade:556
@@ -5461,7 +5461,7 @@ msgstr "Rapportfel"
 #: gnucash/gnome/gnc-plugin-report-system.c:144
 #: gnucash/report/reports/standard/view-column.scm:96
 msgid "An error occurred while running the report."
-msgstr "Ett fel inträffade när rapporten kördes."
+msgstr "Ett fel inträffade när rapporten utfördes."
 
 #: gnucash/gnome/gnc-plugin-report-system.c:179
 #: gnucash/gnome/gnc-plugin-report-system.c:201
@@ -5742,13 +5742,6 @@ msgid "Manage your finances, accounts, and investments"
 msgstr "Hantera dina finanser, konton och investeringar"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
-#, fuzzy
-#| msgid ""
-#| "Designed to be easy to use, yet powerful and flexible, GnuCash allows you "
-#| "to track bank accounts, stocks, income and expenses. As quick and "
-#| "intuitive to use as a checkbook register, it is based on professional "
-#| "accounting principles like double-entry accounting to ensure balanced "
-#| "books and accurate reports."
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting. "
 "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to "
@@ -5757,11 +5750,12 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"Utformat för att vara lätt att använda, men ändå kraftfullt och flexibelt, "
-"ger GnuCash dig möjligheten att spåra bankkonton, aktier, inkomster och "
-"utgifter. Så snabbt och intuitivt att använda som en checkbok, och bygger på "
-"professionella bokföringsprinciper som dubbel bokföring för att säkerställa "
-"balanserade böcker och tillförlitliga rapporter."
+"GnuCash är ett program för privat och småföretagsbokföring. Utformat för att "
+"vara lätt att använda, men ändå kraftfullt och flexibelt, ger GnuCash dig "
+"möjligheten att spåra bankkonton, aktier, inkomster och utgifter. Så snabbt "
+"och intuitivt att använda som en checkbok, och bygger på professionella "
+"bokföringsprinciper som dubbel bokföring för att säkerställa balanserade "
+"böcker och tillförlitliga rapporter."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
@@ -5802,16 +5796,18 @@ msgstr "Utför finansiella uträkningar, som återbetalning av lån"
 #: gnucash/gnome/gnucash.appdata.xml.in.in:48
 msgid ""
 "The account overview page is the starting point for managing your finances"
-msgstr ""
+msgstr "Sidan för kontoöversikt är startpunkten för att hantera dina finanser"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:52
 msgid "The checkbook-style register - used for entering financial transactions"
-msgstr ""
+msgstr "Registret i checkbokstil - används för att mata in transaktioner"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:56
 msgid ""
 "Report sample: a bar chart report showing a breakdown of expenses over time"
 msgstr ""
+"Rapportexempel: en rapport som visar ett stapeldiagram över utgifter under "
+"en viss period"
 
 #: gnucash/gnome/gnucash.desktop.in.in:6
 msgid "Finance Management"
@@ -6729,16 +6725,12 @@ msgid "Action/Number"
 msgstr "Åtgärd/Nummer"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 3306"
-msgstr "Standard"
+msgstr "Standard: 3306"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 5432"
-msgstr "Standard"
+msgstr "Standard: 5432"
 
 #: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
@@ -6941,8 +6933,8 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"Du kan inte överföra från ett icke-valutakonto. Försök att byta plats på "
-"”från”- och ”till”-konton och göra ”belopp” negativt."
+"Du kan inte överföra från ett icke-valutakonto. Försök att byta plats på ”"
+"från”- och ”till”-konton och göra ”belopp” negativt."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1452
 msgid "You must enter a valid price."
@@ -7074,8 +7066,8 @@ msgstr[0] ""
 "GnuCash har en funktion för att spara filen automatiskt var %d:a minut, som "
 "om du trycker på ”Spara”-knappen varje gång.\n"
 "\n"
-"Du kan ändra tidsintervallet eller stänga av funktionen under Redigera-"
-">Inställningar->Allmänt->Tidsintervall för autospara.\n"
+"Du kan ändra tidsintervallet eller stänga av funktionen under Redigera->"
+"Inställningar->Allmänt->Tidsintervall för autospara.\n"
 "\n"
 "Ska din fil sparas automatiskt?"
 msgstr[1] ""
@@ -7083,8 +7075,8 @@ msgstr[1] ""
 "GnuCash har en funktion för att spara filen automatiskt var %d:e minut, "
 "precis som om du tryckte på ”Spara”-knappen varje gång.\n"
 "\n"
-"Du kan ändra tidsintervallet eller stänga av funktionen under Redigera-"
-">Inställningar->Allmänt->Tidsintervall för autospara.\n"
+"Du kan ändra tidsintervallet eller stänga av funktionen under Redigera->"
+"Inställningar->Allmänt->Tidsintervall för autospara.\n"
 "\n"
 "Ska din fil sparas automatiskt?"
 
@@ -7451,8 +7443,8 @@ msgstr ""
 "Biblioteket ”libdbi” som är installerat på ditt system lagrar inte på ett "
 "korrekt sätt stora tal. Det innebär att GnuCash inte kan använda SQL-"
 "databaser korrekt. GnuCash kommer inte att öppna eller spara till SQL-"
-"databaser tills detta åtgärdas genom att installera en annan version av "
-"”libdbi”. Se https://bugs.gnucash.org/show_bug.cgi?id=611936 för vidare "
+"databaser tills detta åtgärdas genom att installera en annan version av ”"
+"libdbi”. Se https://bugs.gnucash.org/show_bug.cgi?id=611936 för vidare "
 "information."
 
 #: gnucash/gnome-utils/gnc-file.c:560
@@ -8491,8 +8483,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Åsidosättningar för loggnivå, i formen "
-"”modulename={debug,info,warn,crit,error}”\n"
+"Åsidosättningar för loggnivå, i formen ”modulename="
+"{debug,info,warn,crit,error}”\n"
 "Exempel: ”--log qof=debug” eller ”--log gnc.backend.file.sx=info”\n"
 "Detta kan anropas flera gånger."
 
@@ -8736,8 +8728,8 @@ msgid ""
 "active."
 msgstr ""
 "Detta fält styr antalet dagar i förväg som GnuCash kommer att kontrollera om "
-"det finns förfallande fakturor. Värdet används bara om inställningen "
-"”Avisera vid förfallodatum” är aktiv."
+"det finns förfallande fakturor. Värdet används bara om inställningen ”"
+"Avisera vid förfallodatum” är aktiv."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
@@ -8831,8 +8823,8 @@ msgid ""
 "active."
 msgstr ""
 "Fältet definierar antal dagar innan som GnuCash kommer att kontrollera om "
-"det finns förfallande räkningar. Dess värde används endast om inställningen "
-"”Avisera vid förfallodatum” är aktiv."
+"det finns förfallande räkningar. Dess värde används endast om inställningen ”"
+"Avisera vid förfallodatum” är aktiv."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
@@ -9461,7 +9453,7 @@ msgid ""
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
 "Den här inställningen styr huruvida behandling av de schemalagda "
-"transaktionerna ”sedan senaste körningen” utförs automatiskt när en datafil "
+"transaktionerna ”sedan senaste körningen” körs automatiskt när en datafil "
 "öppnas. Detta inkluderar när datafilen öppnas när GnuCash först startas. Om "
 "inställningen är aktiv körs processen ”sedan senaste körningen”, annars körs "
 "den inte."
@@ -9479,8 +9471,8 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 "Inställningen styr huruvida dialogrutan som endast aviserar schemalagda "
-"transaktioner ”sedan senaste körningen” visas när en datafil öppnas (om "
-"”sedan senaste körningen”-behandling är aktiverat vid öppning av filer). "
+"transaktioner ”sedan senaste körningen” visas när en datafil öppnas (om ”"
+"sedan senaste körningen”-behandling är aktiverat vid öppning av filer). "
 "Detta inkluderar öppning av datafiler när GnuCash först startas. Om "
 "inställningen är aktiv visas dialogen, annars visas den inte."
 
@@ -9670,8 +9662,8 @@ msgid ""
 msgstr ""
 "Inställningen bestämmer vilket tecken som används mellan element i ett "
 "kontonamn. Möjliga värden är ett enstaka godtyckligt icke-alfanumeriskt "
-"unicode-tecken, eller en av följande strängar: ”colon”, ”slash”, "
-"”backslash”, ”dash” och ”period”."
+"unicode-tecken, eller en av följande strängar: ”colon”, ”slash”, ”backslash"
+"”, ”dash” och ”period”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
@@ -9787,7 +9779,7 @@ msgid ""
 "cannot be exactly represented as a decimal."
 msgstr ""
 "Om det är aktivt kommer GnuCash att avrunda priser när det behövs för att "
-"visa dem som decimaler istället för att visa den exakta andelen om den inte "
+"visa dem som decimaler istället för att visa den exakta andelen, om den inte "
 "kan representeras exakt som en decimal."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
@@ -9909,8 +9901,8 @@ msgid ""
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr ""
-"Om det är aktivt kommer de formella bokföringsetiketterna ”Kredit” och "
-"”Debet” användas när fält designeras på skärmen. Annars kommer informella "
+"Om det är aktivt kommer de formella bokföringsetiketterna ”Kredit” och ”Debet"
+"” användas när fält designeras på skärmen. Annars kommer informella "
 "etiketter som Öka/Minska, ”Pengar in”/”Pengar ut”, osv. att användas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
@@ -9926,8 +9918,8 @@ msgid ""
 msgstr ""
 "Om det är aktivt kommer en ”stäng”-knapp att visas på alla "
 "anteckningsblocksflikar som kan stängas. Annars visas ingen sådan knapp på "
-"fliken. Oavsett inställning kan sidor alltid stängas via menyobjektet "
-"”stäng” eller ”stäng”-knappen på verktygsfältet."
+"fliken. Oavsett inställning kan sidor alltid stängas via menyobjektet ”stäng"
+"” eller ”stäng”-knappen på verktygsfältet."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
@@ -9991,8 +9983,8 @@ msgid ""
 msgstr ""
 "Inställningen specificerar standardvalutan som ska användas för nya konton "
 "om inställningen för val av valuta är satt till ”annat”. Fältet måste "
-"innehålla en tre bokstäver lång ISO 4217-kod för valuta (t.ex. SEK, GBP, "
-"RUB)."
+"innehålla en tre bokstäver lång ISO 4217-kod för valuta (t.ex. SEK, GBP, RUB)"
+"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
@@ -10017,9 +10009,9 @@ msgid ""
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
 "Inställningen väljer hur datum visas i GnuCash. Möjliga värden för "
-"inställningen är ”Lokal” för att använda systemets lokalinställning, "
-"”Europa” för kontinentaleuropeisk stil, ”ISO” för ISO 8601-standard, "
-"”Storbritannien” för brittisk stil, och ”USA” för amerikansk stil."
+"inställningen är ”Lokal” för att använda systemets lokalinställning, ”Europa"
+"” för kontinentaleuropeisk stil, ”ISO” för ISO 8601-standard, ”Storbritannien"
+"” för brittisk stil, och ”USA” för amerikansk stil."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1149
@@ -10166,8 +10158,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Sätt bokalternativ för nya filer till att använda delningsåtgärdsfält för "
-"”Nr”-fält i register/rapporter"
+"Sätt bokalternativ för nya filer till att använda delningsåtgärdsfält för ”Nr"
+"”-fält i register/rapporter"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1472
@@ -10335,13 +10327,13 @@ msgid ""
 "setting shows all transactions in expanded form."
 msgstr ""
 "Detta fält specificerar standardstil för visning när ett nytt "
-"registerfönster öppnas. Möjliga värden är ”Standardliggare”, "
-"”Autodelningsliggare” och ”Transaktionsjournal”. Inställningen "
-"”Standardliggare” gör att varje transaktion visas på en eller två rader "
-"beroende på om dubbelbokföringsvyn är aktiverad. Inställningen "
-"”Autodelningsliggare” gör detsamma, men expanderar endast aktuell "
-"transaktion för att visa alla delar. Inställningen ”Transaktionsjournal” "
-"visar alla transaktioner i expanderad form."
+"registerfönster öppnas. Möjliga värden är ”Standardliggare”, ”"
+"Autodelningsliggare” och ”Transaktionsjournal”. Inställningen ”"
+"Standardliggare” gör att varje transaktion visas på en eller två rader "
+"beroende på om dubbelbokföringsvyn är aktiverad. Inställningen ”"
+"Autodelningsliggare” gör detsamma, men expanderar endast aktuell transaktion "
+"för att visa alla delar. Inställningen ”Transaktionsjournal” visar alla "
+"transaktioner i expanderad form."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
@@ -11092,8 +11084,8 @@ msgid ""
 "should contain a value between 0 and 8."
 msgstr ""
 "Den här inställningen styr vilket slutdatum som används i förtjänst-/"
-"förlustberäkningar om inställningen ’end-choice’ sätts till något annat än "
-"”absolut”. Fältet bör innehålla ett värde mellan 0 och 8."
+"förlustberäkningar om inställningen ’end-choice’ sätts till något annat än ”"
+"absolut”. Fältet bör innehålla ett värde mellan 0 och 8."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
@@ -11445,8 +11437,8 @@ msgstr ""
 "som visas för att ange kolumnbredd, högerklicka sedan för att ändra vid "
 "behov.\n"
 "\n"
-"Exempel är ”FTSE”,”RR.L”,”21/11/2016”,5.345,”GBP” och "
-"CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"Exempel är ”FTSE”,”RR.L”,”21/11/2016”,5.345,”GBP” och CURRENCY;USD;2016-11-"
+"21;1.56;GBP\n"
 "\n"
 "Det finns ett alternativ för att specificera startrad, slutrad, och ett "
 "alternativ för att hoppa över alternerande rader från startraden vilket kan "
@@ -12363,8 +12355,8 @@ msgstr ""
 "Importprocessen består av flera steg. Dina GnuCash-konton kommer inte att "
 "ändras förrän du klickar på ”Verkställ” i slutet av processen.\n"
 "\n"
-"Klicka på ”Nästa” för att starta inläsningen av dina QIF-data, eller "
-"”Avbryt” för att avbryta processen."
+"Klicka på ”Nästa” för att starta inläsningen av dina QIF-data, eller ”Avbryt"
+"” för att avbryta processen."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -12891,9 +12883,9 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Om du är klar med aktiespliten eller -sammanslagningen, klicka på "
-"”Verkställ”. Du kan också klicka på ”Bakåt” för att kontrollera dina val, "
-"eller ”Avbryt” för att avbryta utan att göra några ändringar."
+"Om du är klar med aktiespliten eller -sammanslagningen, klicka på ”Verkställ"
+"”. Du kan också klicka på ”Bakåt” för att kontrollera dina val, eller ”Avbryt"
+"” för att avbryta utan att göra några ändringar."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
 msgid "Stock Split Finish"
@@ -12959,10 +12951,8 @@ msgid "Enter the value of the shares."
 msgstr "Ange andelarnas värde."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:379
-#, fuzzy
-#| msgid "Gross Sales"
 msgid "Gross value"
-msgstr "Bruttoförsäljning"
+msgstr "Bruttovärde"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:405
 msgid "_Stock Value"
@@ -12983,10 +12973,8 @@ msgstr ""
 "föregående sida, om det finns courtageavgifter associerade med transaktionen."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
-#, fuzzy
-#| msgid "Net Sales"
 msgid "Net value"
-msgstr "Nettoförsäljning"
+msgstr "Nettovärde"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
 msgid "Cash Account"
@@ -13047,10 +13035,8 @@ msgstr ""
 "realisationsförluster är negativa."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:843
-#, fuzzy
-#| msgid "Capital Gains"
 msgid "Capital Gain/Loss"
-msgstr "Realisationsvinster"
+msgstr "Realisationsvinster/-förluster"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:866
 msgid "Capital Gains Account"
@@ -13987,8 +13973,8 @@ msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
-"Ange det fullständiga namnet för varan. Exempel: ”Cisco Systems Inc.” eller "
-"”Apple Computer, Inc.”."
+"Ange det fullständiga namnet för varan. Exempel: ”Cisco Systems Inc.” eller ”"
+"Apple Computer, Inc.”."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -14394,10 +14380,8 @@ msgid "Password"
 msgstr "Lösenord"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:286
-#, fuzzy
-#| msgid "Portfolio"
 msgid "Port"
-msgstr "Portfölj"
+msgstr "Port"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:313
 msgid "Database Connection"
@@ -17690,10 +17674,8 @@ msgid "Show _All"
 msgstr "Visa _alla"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:110
-#, fuzzy
-#| msgid "Show _number of days"
 msgid "Show _from days ago"
-msgstr "Visa a_ntal dagar"
+msgstr "Visa _från x dagar sedan"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:130
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:272
@@ -17706,43 +17688,33 @@ msgstr ""
 "Om 0 inkluderas alla föregående dagar"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:229
-#, fuzzy
-#| msgid "Days"
 msgid "_Days ago"
-msgstr "Dagar"
+msgstr "_Dagar sedan"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:286
-#, fuzzy
-#| msgid "Relative"
 msgid "Rela_tive"
-msgstr "Relativt"
+msgstr "Rela_tivt"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:301
 msgid "Choo_se Date"
 msgstr "V_älj datum"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:316
-#, fuzzy
-#| msgid "Days"
 msgid "Days a_go"
-msgstr "Dagar"
+msgstr "Dagar s_edan"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:389
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest"
-msgstr "_Tidigast"
+msgstr "Tidigast"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
-#, fuzzy
-#| msgid "_Latest"
 msgid "Latest"
-msgstr "_Senaste"
+msgstr "Senast"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:447
@@ -18026,8 +17998,8 @@ msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
-"Säker HTTP-åtkomst är inte aktiverad. Du kan aktivera den under fliken "
-"”Nätverk” i dialogrutan för inställningar."
+"Säker HTTP-åtkomst är inte aktiverad. Du kan aktivera den under fliken ”"
+"Nätverk” i dialogrutan för inställningar."
 
 #: gnucash/html/gnc-html-webkit1.cpp:562 gnucash/html/gnc-html-webkit1.cpp:967
 #: gnucash/html/gnc-html-webkit2.cpp:552 gnucash/html/gnc-html-webkit2.cpp:898
@@ -18154,8 +18126,8 @@ msgid ""
 "* To report issues read"
 msgstr ""
 "Detta innebär:\n"
-"* Det ignorerar GnuCash:s inställningar som ”Stäng loggfönstret när "
-"slutförd”.\n"
+"* Det ignorerar GnuCash:s inställningar som ”Stäng loggfönstret när slutförd"
+"”.\n"
 "* För att rapportera fel, se"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:141
@@ -18163,8 +18135,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -18997,8 +18969,7 @@ msgstr "Skicka SEPA i_ntern transaktion…"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"Skicka en ny intern europeisk (SEPA) transaktion online via online-bank"
+msgstr "Skicka en ny intern europeisk (SEPA) transaktion online via online-bank"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 msgid "_Internal Transaction…"
@@ -19067,8 +19038,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Den här inställningen anger vilket dataformat som ska användas vid import av "
-"DTAUS-filer. AqBanking-biblioteket erbjuder diverse importformat (kallas "
-"”profiler”) att välja bland här."
+"DTAUS-filer. AqBanking-biblioteket erbjuder diverse importformat (kallas ”"
+"profiler”) att välja bland här."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
@@ -19081,8 +19052,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Den här inställningen anger vilket dataformat som ska användas vid import av "
-"CSV-filer. AqBanking-biblioteket erbjuder diverse importformat (kallas "
-"”profiler”) som du kan välja bland här."
+"CSV-filer. AqBanking-biblioteket erbjuder diverse importformat (kallas ”"
+"profiler”) som du kan välja bland här."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:45
 msgid "SWIFT MT940 import data format"
@@ -19409,8 +19380,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Kontoträdet kommer att exporteras till filen ’%s’ när du klickar "
-"”Verkställ”.\n"
+"Kontoträdet kommer att exporteras till filen ’%s’ när du klickar ”Verkställ"
+"”.\n"
 "\n"
 "Du kan också verifiera dina val genom att klicka på ”Bakåt” eller ”Avbryt” "
 "för att avbryta exporten.\n"
@@ -21312,9 +21283,9 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
-"Angivet datum för den duplicerade transaktionen är äldre än den "
-"”skrivskyddströskel” som satts för boken. Inställningen kan ändras i Arkiv-"
-">Egenskaper->Konton."
+"Angivet datum för den duplicerade transaktionen är äldre än den ”"
+"skrivskyddströskel” som satts för boken. Inställningen kan ändras i Arkiv->"
+"Egenskaper->Konton."
 
 #: gnucash/register/ledger-core/split-register.c:997
 msgid ""
@@ -21892,8 +21863,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "Det angivna datumet för transaktionen är äldre än ”Skrivskyddströskeln” som "
-"har satts för den här boken. Inställningen kan ändras i Arkiv->Egenskaper-"
-">Konton, återställer till tröskeln."
+"har satts för den här boken. Inställningen kan ändras i Arkiv->Egenskaper->"
+"Konton, återställer till tröskeln."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -28294,8 +28265,8 @@ msgid ""
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
 "Som standard kommer kontofiltret endast söka på substrängar. Sätt detta till "
-"true för att aktivera fullständig funktionalitet för POSIX-regeluttryck. "
-"”Bil|Flyg” kommer att matcha både Utgifter:Bil och Utgifter:Flyg. Använd en "
+"true för att aktivera fullständig funktionalitet för POSIX-regeluttryck. ”"
+"Bil|Flyg” kommer att matcha både Utgifter:Bil och Utgifter:Flyg. Använd en "
 "punkt (.) för att matcha ett enstaka tecken t.ex. ”20../.” kommer att matcha "
 "”Resa 2017/1 London”. "
 
@@ -30414,10 +30385,12 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Kör markerad schemalagd transaktion. Om ingen transaktion har schemalagts "
+"för registrering används nästa förekomst"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
-msgstr ""
+msgstr "Kö_r"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
