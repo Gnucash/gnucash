@@ -18,7 +18,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:05+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
 "Language: uk\n"
@@ -3932,8 +3932,7 @@ msgstr "Непридатна до обробки формула у розділ�
 #: gnucash/gnome/dialog-sx-editor.c:785
 #, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
-msgstr ""
-"Розділення із нотаткою %s містить непридатну до обробки формулу дебету."
+msgstr "Розділення із нотаткою %s містить непридатну до обробки формулу дебету."
 
 #: gnucash/gnome/dialog-sx-editor.c:892
 msgid ""
@@ -5280,6 +5279,8 @@ msgid ""
 "The Start date is after the End date.\n"
 "Select Cancel to change dates.\n"
 msgstr ""
+"Початкова дата є пізнішою за Кінцеву дату.\n"
+"Виберіть «Скасувати», щоб змінити дати.\n"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1475
@@ -5463,10 +5464,8 @@ msgstr "Ви_лучити розклад"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:423
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:71
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Run Schedule"
-msgstr "_Запланувати"
+msgstr "_Запустити розклад"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:505
 #: gnucash/gtkbuilder/dialog-account.glade:556
@@ -5773,13 +5772,6 @@ msgid "Manage your finances, accounts, and investments"
 msgstr "Керування вашими фінансами, рахунками та інвестиціями"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
-#, fuzzy
-#| msgid ""
-#| "Designed to be easy to use, yet powerful and flexible, GnuCash allows you "
-#| "to track bank accounts, stocks, income and expenses. As quick and "
-#| "intuitive to use as a checkbook register, it is based on professional "
-#| "accounting principles like double-entry accounting to ensure balanced "
-#| "books and accurate reports."
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting. "
 "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to "
@@ -5788,12 +5780,13 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"Програму створено простою у користуванні або потужною і гнучкою. Тому "
-"GnuCash надає вам змогу стежити за станом банківських рахунків, курсом "
-"акцій, прибутками і витратами. Швидка та інтуїтивно зрозуміла як чекова "
-"книжка, програма заснована на принципах професійного обліку, вона веде "
-"подвійний запис для забезпечення балансу у книгах та здатна формувати точні "
-"звіти."
+"GnuCash — програма для фінансового обліку на особистому рівні та на рівні "
+"малого бізнесу. Програму створено простою у користуванні або потужною і "
+"гнучкою. Тому GnuCash надає вам змогу стежити за станом банківських "
+"рахунків, курсом акцій, прибутками і витратами. Швидка та інтуїтивно "
+"зрозуміла, як чекова книжка, програма заснована на принципах професійного "
+"обліку, веде подвійний запис для забезпечення балансу у книгах та здатна "
+"формувати точні звіти."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
@@ -5838,15 +5831,20 @@ msgstr "Виконувати фінансові обчислення, зокре
 msgid ""
 "The account overview page is the starting point for managing your finances"
 msgstr ""
+"Сторінка огляду рахунку є початковою точкою для керування вашими фінансами"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:52
 msgid "The checkbook-style register - used for entering financial transactions"
 msgstr ""
+"Облікова книга з позначками — використовується для введення записів "
+"фінансових операцій"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:56
 msgid ""
 "Report sample: a bar chart report showing a breakdown of expenses over time"
 msgstr ""
+"Зразок звіту: звіт з стовпчиковою діаграмою, у якому показано розподіл "
+"витрат за часом"
 
 #: gnucash/gnome/gnucash.desktop.in.in:6
 msgid "Finance Management"
@@ -6780,16 +6778,12 @@ msgid "Action/Number"
 msgstr "Дія/Номер"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 3306"
-msgstr "Типовий"
+msgstr "Типове значення: 3306"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 5432"
-msgstr "Типовий"
+msgstr "Типове значення: 5432"
 
 #: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
@@ -9904,11 +9898,11 @@ msgid ""
 "days'"
 msgstr ""
 "Цей параметр визначає дії із застарілими файлами журналів або резервних "
-"копій. «forever» означає «зберігати усі застарілі файли». «never» означає "
-"«не зберігати жодних застарілих файлів журналів або резервних копій». "
-"Кожного разу, коли ви зберігатимете дані, застарілі версії файлів "
-"вилучатимуться. «days» означає «зберігати застарілі файли вказану кількість "
-"днів». Кількість днів можна визначити за допомогою ключа «retain-days»"
+"копій. «forever» означає «зберігати усі застарілі файли». «never» означає «"
+"не зберігати жодних застарілих файлів журналів або резервних копій». Кожного "
+"разу, коли ви зберігатимете дані, застарілі версії файлів вилучатимуться. «"
+"days» означає «зберігати застарілі файли вказану кількість днів». Кількість "
+"днів можна визначити за допомогою ключа «retain-days»"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1797
@@ -12446,8 +12440,8 @@ msgid ""
 "Review the details below and if correct press \"Apply\" to create the "
 "schedule."
 msgstr ""
-"Перегляньте наведені нижче подробиці. Якщо усе правильно, натисніть кнопку "
-"«Застосувати», щоб створити розклад."
+"Перегляньте наведені нижче подробиці. Якщо усе правильно, натисніть кнопку «"
+"Застосувати», щоб створити розклад."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
 msgid "Range"
@@ -12742,8 +12736,8 @@ msgstr ""
 "\n"
 "На наступній сторінці вам буде показано текст, який було виявлено у полях "
 "платника і примітки транзакцій і який не вдалося пов'язати із рахунком або "
-"категорією QIF. Типово, такі транзакції буде пов'язано у GnuCash з рахунком "
-"«Не вказано». Якщо ви виберете інший рахунок, його буде збережено для усіх "
+"категорією QIF. Типово, такі транзакції буде пов'язано у GnuCash з рахунком «"
+"Не вказано». Якщо ви виберете інший рахунок, його буде збережено для усіх "
 "наступних файлів QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:790
@@ -13117,10 +13111,8 @@ msgid "Enter the value of the shares."
 msgstr "Введіть ціну цінних паперів."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:379
-#, fuzzy
-#| msgid "Gross Sales"
 msgid "Gross value"
-msgstr "Валові продажі"
+msgstr "Валове значення"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:405
 msgid "_Stock Value"
@@ -13141,10 +13133,8 @@ msgstr ""
 "якщо наявні куртажні сплати, які пов'язано із цією операцією."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
-#, fuzzy
-#| msgid "Net Sales"
 msgid "Net value"
-msgstr "Чисті продажі"
+msgstr "Чисте значення"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
 msgid "Cash Account"
@@ -13204,10 +13194,8 @@ msgstr ""
 "від'ємними."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:843
-#, fuzzy
-#| msgid "Capital Gains"
 msgid "Capital Gain/Loss"
-msgstr "Збільшення капіталу"
+msgstr "Збільшення/Зменшення капіталу"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:866
 msgid "Capital Gains Account"
@@ -14557,10 +14545,8 @@ msgid "Password"
 msgstr "Пароль"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:286
-#, fuzzy
-#| msgid "Portfolio"
 msgid "Port"
-msgstr "Портфель"
+msgstr "Порт"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:313
 msgid "Database Connection"
@@ -16199,8 +16185,8 @@ msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
-"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язані "
-"документи» для усіх транзакцій."
+"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язані документи"
+"» для усіх транзакцій."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3110
 msgid "Register opens in a new _window"
@@ -17876,10 +17862,8 @@ msgid "Show _All"
 msgstr "Показати _все"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:110
-#, fuzzy
-#| msgid "Show _number of days"
 msgid "Show _from days ago"
-msgstr "Показувати _кількість днів"
+msgstr "Показувати з_а кількість днів"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:130
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:272
@@ -17892,43 +17876,33 @@ msgstr ""
 "Якщо 0, буде включено усі попередні дні"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:229
-#, fuzzy
-#| msgid "Days"
 msgid "_Days ago"
-msgstr "Днів"
+msgstr "_Днів"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:286
-#, fuzzy
-#| msgid "Relative"
 msgid "Rela_tive"
-msgstr "Відносно"
+msgstr "Від_носно"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:301
 msgid "Choo_se Date"
 msgstr "В_иберіть дату"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:316
-#, fuzzy
-#| msgid "Days"
 msgid "Days a_go"
-msgstr "Днів"
+msgstr "Д_нів"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:389
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest"
-msgstr "_Найбільш ранні"
+msgstr "Найбільш ранні"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
-#, fuzzy
-#| msgid "_Latest"
 msgid "Latest"
-msgstr "_Останні"
+msgstr "Останні"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:447
@@ -18356,8 +18330,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -22053,8 +22027,8 @@ msgstr ""
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Ця транзакція розділена на кілька частин. Натисніть кнопку «Показати "
-"частини», щоб побачити усі частини транзакції"
+"Ця транзакція розділена на кілька частин. Натисніть кнопку «Показати частини"
+"», щоб побачити усі частини транзакції"
 
 #: gnucash/register/ledger-core/split-register-model.c:1592
 msgid ""
@@ -25649,8 +25623,7 @@ msgstr "Сплачуваний податок"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:122
 msgid "Display the tax payable (tax on sales - tax on purchases)"
-msgstr ""
-"Показувати сплачуваний податок (податок на продаж — податок на купівлю)"
+msgstr "Показувати сплачуваний податок (податок на продаж — податок на купівлю)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:136
 msgid "Purchases"
@@ -30694,10 +30667,12 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Виконати позначену заплановану операцію. Якщо немає потреби у введенні "
+"запланованих операцій, буде використано наступне повторення"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
-msgstr ""
+msgstr "В_иконати"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
