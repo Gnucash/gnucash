@@ -4,6 +4,7 @@
 # Siim Sellis <siim.sellis@gmail.com>, 2020.
 # Rauno Ots <rots00@gmail.com>, 2023, 2026.
 # Priit Jõerüüt <hwlate@joeruut.com>, 2025.
+# Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -11,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:39+0000\n"
-"Last-Translator: Rauno Ots <rots00@gmail.com>\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "et/>\n"
 "Language: et\n"
