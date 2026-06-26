@@ -5,7 +5,7 @@
 # 154pinkchairs <ovehis@riseup.net>, 2022.
 # WaldiS <sto@tutanota.de>, 2022.
 # gnu-ewm <gnu.ewm@protonmail.com>, 2022, 2023.
-# Kaligula <kaligula.dev@gmail.com>, 2022, 2023, 2024.
+# Kaligula <kaligula.dev@gmail.com>, 2022, 2023, 2024, 2026.
 # vim <dev.getport@slmail.me>, 2023.
 # Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
 # Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
@@ -17,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:21+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -91,8 +91,7 @@ msgstr "Początek okresu obrachunkowego"
 #: bindings/guile/date-utilities.scm:746
 #: libgnucash/engine/gnc-option-date.cpp:313
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr ""
-"Pierwszy dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi."
+msgstr "Pierwszy dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi."
 
 #: bindings/guile/date-utilities.scm:750
 #: libgnucash/engine/gnc-option-date.cpp:320
@@ -4772,8 +4771,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr ""
-"Użyj bieżącego układu domyślnie dla wszystkich kwitów i not kredytowych"
+msgstr "Użyj bieżącego układu domyślnie dla wszystkich kwitów i not kredytowych"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Business items"
@@ -9780,9 +9778,9 @@ msgid ""
 "\"backslash\", \"dash\" and \"period\"."
 msgstr ""
 "Ustawienie określa znak separujący nazwy kont. Możliwe wartości to "
-"niealfanumeryczne znaki Unicode lub dowolny z tekstów: \"colon\" "
-"(dwukropek), \"slash\" (ukośnik), \"backslash\" (ukośnik wsteczny), \"dash\" "
-"(myślnik) i \"period\" (kropka)."
+"niealfanumeryczne znaki Unicode lub dowolny z tekstów: \"colon\" (dwukropek)"
+", \"slash\" (ukośnik), \"backslash\" (ukośnik wsteczny), \"dash\" (myślnik) "
+"i \"period\" (kropka)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -13857,8 +13855,7 @@ msgstr "Liczba cyfr"
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr ""
-"Operacja zamieni kod każdego konta podrzędnego na nowo wygenerowany kod"
+msgstr "Operacja zamieni kod każdego konta podrzędnego na nowo wygenerowany kod"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -15599,8 +15596,7 @@ msgstr "Używaj _formalnych etykiet kont"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:624
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
-msgstr ""
-"Używaj tylko pojęć \"Winien\" i \"Ma\" zamiast nieformalnych synonimów."
+msgstr "Używaj tylko pojęć \"Winien\" i \"Ma\" zamiast nieformalnych synonimów."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:639
 #, fuzzy
