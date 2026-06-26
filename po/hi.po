@@ -1,7 +1,7 @@
 # Localization for Hindi language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Parimal Khade <parimal.khade@gmail.com>, 2014.
-# Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>, 2021.
+# Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>, 2021, 2026.
 # Hemanshu Kumar <hemanshusubs@gmail.com>, 2022, 2026.
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:48+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hi/>\n"
 "Language: hi\n"
