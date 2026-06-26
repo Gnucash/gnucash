@@ -7,7 +7,7 @@
 # Dullus <dullus@gmail.com>, 2022, 2026.
 # Zdenko Podobný <zdenop@gmail.com>, 2022, 2023, 2024, 2026.
 # ZdPo Ster <zdposter@gmail.com>, 2023, 2026.
-# Milan Šalka <salka.milan@googlemail.com>, 2023.
+# Milan Šalka <salka.milan@googlemail.com>, 2023, 2026.
 # Robert Zelnik <rzelnik@tvorivo.sk>, 2024, 2026.
 # Warder <ciksa@seznam.cz>, 2025.
 # Deleted User <noreply+113042@weblate.org>, 2026.
@@ -20,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:56+0000\n"
-"Last-Translator: Robert Zelnik <rzelnik@tvorivo.sk>\n"
+"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"
