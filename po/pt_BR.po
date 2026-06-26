@@ -15,7 +15,7 @@
 # Daniel Conrado <dbconrado@gmail.com>, 2024.
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
 # leyakid803 <leyakid803@minduls.com>, 2025, 2026.
-# Leandro Conca <lluccia@gmail.com>, 2025.
+# Leandro Conca <lluccia@gmail.com>, 2025, 2026.
 # David <davidgmartins98@gmail.com>, 2026.
 # delvani <del.cidrak@users.noreply.hosted.weblate.org>, 2026.
 # Jonathan Santos Fernandes <jonathansantosfernandes@gmail.com>, 2026.
@@ -28,7 +28,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:23+0000\n"
-"Last-Translator: David <davidgmartins98@gmail.com>\n"
+"Last-Translator: Leandro Conca <lluccia@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
