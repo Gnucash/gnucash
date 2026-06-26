@@ -28,7 +28,7 @@
 # Laurent Bigonville <bigon@bigon.be>, 2022.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
 # Philippe Lamare <ph.lamare@free.fr>, 2022, 2023, 2026.
-# Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
+# Dyf_Tfh <n.zhao@hotmail.fr>, 2023, 2026.
 # Gaël CATLLA <gcatlla@free.fr>, 2023, 2026.
 # Vincent Dawans <dawansv@gmail.com>, 2023, 2026.
 # Xavier Gandillot (aka xavier268), 2023.
@@ -52,7 +52,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Pascal HUE <pascal.hue35@gmail.com>\n"
+"Last-Translator: Dyf_Tfh <n.zhao@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
