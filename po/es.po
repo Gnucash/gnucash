@@ -17,7 +17,7 @@
 # gallegonovato <fran-carro@hotmail.es>, 2023, 2024.
 # Jaime Marquínez Ferrándiz <jaime.marquinez.ferrandiz@fastmail.net>, 2023, 2025.
 # Francisco <fhiegom@outlook.es>, 2023.
-# Deleted User <noreply+48943@weblate.org>, 2025.
+# Deleted User <noreply+48943@weblate.org>, 2025, 2026.
 # Jesús Martínez <weblate@jandemor.com>, 2025.
 # apemay <aperezmayol@gmail.com>, 2026.
 # apemay <apemay.dev@gmail.com>, 2026.
@@ -93,7 +93,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:36+0000\n"
-"Last-Translator: apemay <apemay.dev@gmail.com>\n"
+"Last-Translator: Deleted User <noreply+48943@weblate.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
