@@ -9,23 +9,22 @@
 # ashalash1409 <ashalash1409@hotmail.com>, 2013
 # khadiramd <khadird@yahoo.com>, 2013
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
-# ltai0001 <yltaief@gmail.com>, 2022, 2026.
-# Sherif ElGamal <selgamal0@gmail.com>, 2022, 2026.
-# BL <ghostzeko@gmail.com>, 2023, 2026.
-# Abdulla Alhosani <ama1029@nyu.edu>, 2024, 2026.
-# Abdulsalam Alshilash <ashalash@msn.com>, 2025, 2026.
+# ltai0001 <yltaief@gmail.com>, 2022.
+# Sherif ElGamal <selgamal0@gmail.com>, 2022.
+# BL <ghostzeko@gmail.com>, 2023.
+# Abdulla Alhosani <ama1029@nyu.edu>, 2024, 2026
+# Abdulsalam Alshilash <ashalash@msn.com>, 2025.
 # Usama Khalil <usamafoad@gmail.com>, 2025.
 # Ebrahim Nasser <ebranas314@gmail.com>, 2025.
-# Tgol Mgol <tgolmgol@gmail.com>, 2025, 2026.
-# ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>, 2026.
+# Tgol Mgol <tgolmgol@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 19:01+0000\n"
-"Last-Translator: Abdulsalam Alshilash <ashalash@msn.com>\n"
+"Last-Translator: Abdulla Alhosani <ama1029@nyu.edu>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
 "Language: ar\n"

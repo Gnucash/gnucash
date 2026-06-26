@@ -5,24 +5,20 @@
 # Mesutcan Kurt <mesutcank@gmail.com>, 2017.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
-# Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021, 2026.
-# udo pton <udopton@gmail.com>, 2021, 2026.
+# Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
+# udo pton <udopton@gmail.com>, 2021.
 # Bora <boratici@gmail.com>, 2021, 2022.
-# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024, 2025, 2026.
-# Gurkan Bebek <gurkanbebek@gmail.com>, 2025, 2026.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024, 2025.
+# Gurkan Bebek <gurkanbebek@gmail.com>, 2025.
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
-# Oğuz Ersen <oguz@ersen.moe>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# Deleted User <noreply+136605@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:41+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Arda Yılmaz <fijarom@fijarom.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"

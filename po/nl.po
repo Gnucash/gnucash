@@ -2,7 +2,7 @@
 # Nederlandse vertalingen voor het pakket GnuCash.
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
-# Geert Janssens <geert@kobaltwit.be>, 2020, 2021, 2026.
+# Geert Janssens <geert@kobaltwit.be>, 2020, 2021.
 # Mark Haanen <i18n@haanen.net>, 2009-2017.
 # Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.
 # Erwin Poeze <erwin.poeze@gmail.com>, 2009.
@@ -10,27 +10,22 @@
 # Jeroen ten Berge <twinbit@home.nl>, 2004.
 # Hendrik-Jan Heins <hjh@passys.nl>, 2003.
 # Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
-# Geert Janssens <info@kobaltwit.be>, 2021, 2026.
+# Geert Janssens <info@kobaltwit.be>, 2021.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
-# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025, 2026.
-# Rene Lambers <jbh.lambers@gmail.com>, 2023, 2026.
-# Leo Moons <Leo.Moons@proximus.be>, 2025, 2026.
+# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025.
+# Rene Lambers <jbh.lambers@gmail.com>, 2023.
+# Leo Moons <Leo.Moons@proximus.be>, 2025.
 # BlueRains <lu@schoevaars.eu>, 2025.
 # Ceaus <github@pohw.nl>, 2025, 2026.
 # hamaryns <hendrik@hendrikmaryns.name>, 2026.
-# BlueRains <83722494+BlueRains@users.noreply.github.com>, 2026.
-# Jaimie85 <alsemgeest@gmail.com>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# insensitiveclod <contact@sociallife.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: hamaryns <hendrik@hendrikmaryns.name>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"

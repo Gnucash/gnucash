@@ -5,19 +5,18 @@
 # Mike Evans <mikee@saxicola.idps.co.uk>, 2010, 2013.
 # Nigel Titley <nigel@titley.com>, 2002 - 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
-# Adithya K <adithyak04@gmail.com>, 2021, 2026.
+# Adithya K <adithyak04@gmail.com>, 2021.
 # Simon Arlott <weblate.simon@arlott.org>, 2022, 2023, 2024.
-# Andi Chandler <andi@gowling.com>, 2023, 2024, 2026.
+# Andi Chandler <andi@gowling.com>, 2023, 2024.
 # Simon Arlott <nomis@users.noreply.hosted.weblate.org>, 2024, 2025, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:34+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Simon Arlott <nomis@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
 "Language: en_GB\n"

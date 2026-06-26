@@ -31,11 +31,8 @@
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023, 2026.
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024, 2026.
 # Alois Levermann <alois@levermann.xyz>, 2025, 2026.
-# Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025, 2026.
-# Franko <web.90947@t.sc-ha.net>, 2025, 2026.
-# Alexej <alexejkirsch@outlook.de>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025.
+# Franko <web.90947@t.sc-ha.net>, 2025.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -43,12 +40,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"

@@ -1,16 +1,14 @@
 # Localization for Konkani language using Devnagari Script.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Rahul Borade <rahulborade01@gmail.com>, 2014.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:00+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Rahul Borade <rahulborade01@gmail.com>\n"
 "Language-Team: Konkani <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "kok/>\n"
 "Language: kok\n"

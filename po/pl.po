@@ -1,27 +1,23 @@
 # Michał Ciołek <michalciolek@gmail.com>, 2020
 # Adithya K <adithyak04@gmail.com>, 2021.
-# Maciej Błędkowski <mble@tuta.io>, 2021, 2026.
-# Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021, 2026.
+# Maciej Błędkowski <mble@tuta.io>, 2021.
+# Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 # 154pinkchairs <ovehis@riseup.net>, 2022.
-# WaldiS <sto@tutanota.de>, 2022, 2026.
+# WaldiS <sto@tutanota.de>, 2022.
 # gnu-ewm <gnu.ewm@protonmail.com>, 2022, 2023.
-# Kaligula <kaligula.dev@gmail.com>, 2022, 2023, 2024, 2026.
-# vim <dev.getport@slmail.me>, 2023, 2026.
-# Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024, 2026.
-# Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024, 2026.
-# наб <nabijaczleweli@nabijaczleweli.xyz>, 2024, 2026.
-# Eryk Michalak <gnu.ewm@protonmail.com>, 2026.
-# MJH <ovehis@riseup.net>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# Kaligula <kaligula.dev@gmail.com>, 2022, 2023, 2024.
+# vim <dev.getport@slmail.me>, 2023.
+# Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
+# Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
+# наб <nabijaczleweli@nabijaczleweli.xyz>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:21+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"

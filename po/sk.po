@@ -4,23 +4,20 @@
 # Zdenko Podobny <zdpo@mailbox.sk>, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008.
 # Juraj Korec <euro777@gmail.com>, 2008.
 # Zdenko Podobny <zdenop@gmail.com>, 2009, 2010, 2011, 2018
-# Dullus <dullus@gmail.com>, 2022, 2026.
-# Zdenko Podobný <zdenop@gmail.com>, 2022, 2023, 2024, 2026.
-# ZdPo Ster <zdposter@gmail.com>, 2023, 2026.
-# Milan Šalka <salka.milan@googlemail.com>, 2023, 2026.
-# Robert Zelnik <rzelnik@tvorivo.sk>, 2024, 2026.
+# Dullus <dullus@gmail.com>, 2022.
+# Zdenko Podobný <zdenop@gmail.com>, 2022, 2023, 2024.
+# ZdPo Ster <zdposter@gmail.com>, 2023.
+# Milan Šalka <salka.milan@googlemail.com>, 2023.
+# Robert Zelnik <rzelnik@tvorivo.sk>, 2024.
 # Warder <ciksa@seznam.cz>, 2025.
-# Deleted User <noreply+113042@weblate.org>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:56+0000\n"
-"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
+"Last-Translator: Warder <ciksa@seznam.cz>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"

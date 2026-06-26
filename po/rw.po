@@ -11,16 +11,14 @@
 # Augustin KIBERWA  <akiberwa@yahoo.co.uk>, 2005.
 # Donatien NSENGIYUMVA <ndonatienuk@yahoo.co.uk>, 2005.
 # Antoine Bigirimana <antoine@e-tools.com>, 2005.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:55+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Antoine Bigirimana <antoine@e-tools.com>\n"
 "Language-Team: Kinyarwanda <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/rw/>\n"
 "Language: rw\n"

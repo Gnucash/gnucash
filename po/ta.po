@@ -2,17 +2,15 @@
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Shanmugam R. <shanfaace@yahoo.co.in>, 2014.
 # தமிழ்நேரம் <anishprabu.t@gmail.com>, 2024, 2025.
-# John Ralls <jralls@ceridwen.us>, 2025, 2026.
 # தமிழ்நேரம் <tamilneram247@gmail.com>, 2025, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:27+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ta/>\n"
 "Language: ta\n"
@@ -7784,7 +7782,6 @@ msgstr "தனிப்பட்ட மற்றும் சிறு வணி
 #: gnucash/gnome-utils/gnc-main-window.cpp:5567
 msgid "translator-credits\n"
 msgstr ""
-"John Ralls: 2025.\n"
 "Shanmugam R.: 2014.\n"
 "தமிழ்நேரம்: 2024, 2025.\n"
 

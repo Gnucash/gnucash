@@ -1,23 +1,21 @@
 # Finnish translation of GnuCash.
 # This file is distributed under the same license as the gnucash package.
 # Copyright (C) 2008 gnucash project
-# Marko Kohtala <marko.kohtala@gmail.com>, 2020, 2023, 2026.
+# Marko Kohtala <marko.kohtala@gmail.com>, 2020, 2023.
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
-# Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021, 2026.
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021, 2026.
+# Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021.
 # Sampo Harjula <sahtor.weblate@sahtor.net>, 2022, 2026.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2025, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:41+0000\n"
-"Last-Translator: Sampo Harjula <sahtor.weblate@sahtor.net>\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"

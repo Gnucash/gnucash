@@ -6,20 +6,17 @@
 # Andrei Cipu <andrei@cipu.ro>, 2008.
 # Nicolae Turcan <nicturcan@gmail.com>, 2008.
 # Daniel Șerbănescu <daniel@serbanescu.dk>, 2020.
-# Dan Purice <dan.purice@outlook.com>, 2021, 2026.
+# Dan Purice <dan.purice@outlook.com>, 2021.
 # Andrea Andre <andrea.tsg19@slmail.me>, 2023.
-# TheRealOne78 <bajcsielias78@gmail.com>, 2025, 2026.
-# Andrea Andrei <andrea.tsg19@slmail.me>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# TheRealOne78 <bajcsielias78@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:02+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: TheRealOne78 <bajcsielias78@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
 "Language: ro\n"

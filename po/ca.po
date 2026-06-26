@@ -5,10 +5,7 @@
 # Joan <calbasi@pangea.org>, 2007.
 # David Planella Molas <david.planella@gmail.com>, 2007.
 # Walter Garcia-Fontes <walter.garcia@upf.edu>, 2015,2021.
-# mid-kid <esteve.varela@gmail.com>, 2025, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# Deleted User <noreply+36847@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# mid-kid <esteve.varela@gmail.com>, 2025.
 #
 # Vocabulari de comptabilitat: http://www.ub.es/slc/termens/Comptab.pdf
 #
@@ -47,12 +44,12 @@
 # Voucher -             comprovant
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:00+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: mid-kid <esteve.varela@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ca/>\n"
 "Language: ca\n"
