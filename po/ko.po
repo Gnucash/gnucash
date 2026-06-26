@@ -1,4 +1,4 @@
-# Taehun Yun <yooontehoon@naver.com>, 2022.
+# Taehun Yun <yooontehoon@naver.com>, 2022, 2026.
 # 이정희 <daemul72@gmail.com>, 2022, 2026.
 # Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>, 2022.
 # Subin Song <subin@subinsong.com>, 2026.
@@ -9,7 +9,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:59+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -678,8 +678,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
-"GnuCash 온라인 설명서에는 유용한 정보가 많이 있습니다. 도움말 메뉴에서 설명서"
-"에 액세스할 수 있습니다."
+"GnuCash 온라인 설명서에는 유용한 정보가 많이 있습니다. 도움말 메뉴에서 "
+"설명서에 액세스할 수 있습니다."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:7
@@ -688,8 +688,8 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"메일링 리스트는 GnuCash 커뮤니티에서 선호하는 커뮤니케이션 형식입니다. 새 릴"
-"리스, 사용자 그룹 등의 발표는 다음 위치에서 표를 참조하세요: https://"
+"메일링 리스트는 GnuCash 커뮤니티에서 선호하는 커뮤니케이션 형식입니다. 새 "
+"릴리스, 사용자 그룹 등의 발표는 다음 위치에서 표를 참조하세요: https://"
 "wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
@@ -720,8 +720,8 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
-"최근 GnuCash 파일이 저장된 디렉토리를 확인하려면, 히스토리 메뉴의 항목 중 하"
-"나에 마우스를 가져갑니다\n"
+"최근 GnuCash 파일이 저장된 디렉토리를 확인하려면, 히스토리 메뉴의 항목 중 "
+"하나에 마우스를 가져갑니다\n"
 "(파일 [->가장 최근에 사용 된 목록]).\n"
 "전체 경로가 상태 표시줄에 표시됩니다."
 
@@ -5197,8 +5197,8 @@ msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
 msgstr ""
-"현재 보고서의 저장된 구성을 업데이트합니다. 보고서 구성은 %s 파일에 저장됩니"
-"다."
+"현재 보고서의 저장된 구성을 업데이트합니다. 보고서 구성은 %s 파일에 "
+"저장됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1269
 #, c-format
@@ -7320,10 +7320,10 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"GnuCash는 \"libdbi\" 라이브러리에 버그가 있는지에 대한 중요한 테스트를 완료"
-"할 수 없습니다. 이는 SQL 데이터베이스의 잘못된 권한 구성으로 인해 발생할 수 "
-"있습니다. 자세한 내용은 https://bugs.gnucash.org/show_bug.cgi?id=645216을 참"
-"조하십시오."
+"GnuCash는 \"libdbi\" 라이브러리에 버그가 있는지에 대한 중요한 테스트를 "
+"완료할 수 없습니다. 이는 SQL 데이터베이스의 잘못된 권한 구성으로 인해 발생할 "
+"수 있습니다. 자세한 내용은 https://bugs.gnucash.org/show_bug.cgi?id=645216을 "
+"참조하십시오."
 
 #: gnucash/gnome-utils/gnc-file.c:570
 msgid ""
@@ -9856,9 +9856,9 @@ msgid ""
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
 "\"right\". It defaults to \"top\"."
 msgstr ""
-"이 설정은 창에서 페이지를 전환하기 위한 탭이 그려지는 모서리를 결정합니다. 가"
-"능한 값은 \"상단\", \"왼쪽\", \"하단 및 \"오른쪽\"입니다. 기본값은 \"상단\"입"
-"니다."
+"이 설정은 창에서 페이지를 전환하기 위한 탭이 그려지는 모서리를 결정합니다. "
+"가능한 값은 \"상단\", \"왼쪽\", \"하단 및 \"오른쪽\"입니다. 기본값은 "
+"\"상단\"입니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3563
@@ -15680,8 +15680,7 @@ msgstr "탭에서 닫기 버튼 보이기(_N)"
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
-msgstr ""
-"각 탭에 닫기 버튼을 표시합니다. 이 기능은 '닫기' 메뉴 항목과 동일합니다."
+msgstr "각 탭에 닫기 버튼을 표시합니다. 이 기능은 '닫기' 메뉴 항목과 동일합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3721
 msgid ""
