@@ -11,6 +11,7 @@
 # Marco <marcxosm@gmail.com>, 2023.
 # Nathan Hadley <nathanhadley.pigeon@gmail.com>, 2024.
 # Flynn <cirilla@tuta.io>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 #
 # Common translations other than those of the glossary:
 #
@@ -59,7 +60,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:55+0000\n"
-"Last-Translator: Flynn <cirilla@tuta.io>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
 "Language: it\n"
