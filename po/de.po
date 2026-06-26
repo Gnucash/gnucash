@@ -28,7 +28,7 @@
 # S <t0kie@mailbox.org>, 2022.
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
 # Steffen Möller <steffen_moeller@gmx.de>, 2022.
-# Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
+# Carsten Hütter <Carsten.Huetter@gmx.de>, 2023, 2026.
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024.
 # Alois Levermann <alois@levermann.xyz>, 2025, 2026.
 # Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025.
@@ -46,7 +46,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
+"Last-Translator: Carsten Hütter <Carsten.Huetter@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -13355,9 +13355,9 @@ msgid ""
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
 "Hier ist die Zusammenfassung aller Buchungsteile zu sehen. Falls diese "
-"korrekt ist und ohne Fehler, klicken Sie »Anwenden«. Sie können auch "
-"»Zurück« klicken, um Ihre Eingaben zu überprüfen oder »Abbrechen«, um diesen "
-"Dialog zu beenden, ohne die Änderungen zu speichern. "
+"korrekt ist und ohne Fehler, klicken Sie »Anwenden«. Sie können auch »Zurück"
+"« klicken, um Ihre Eingaben zu überprüfen oder »Abbrechen«, um diesen Dialog "
+"zu beenden, ohne die Änderungen zu speichern. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:953
 msgid "Finish"
