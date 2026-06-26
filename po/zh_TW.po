@@ -9,6 +9,7 @@
 # Ricky From Hong Kong <lamricky11@hotmail.com>, 2024.
 # toddchou <toddchou@gmail.com>, 2024.
 # hanyang cheng <cinxiafortis@tutanota.de>, 2024.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -16,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:33+0000\n"
-"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
