@@ -7,7 +7,7 @@
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2022, 2026.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
-# Sucipto <sucipto@pm.me>, 2023.
+# Sucipto <sucipto@pm.me>, 2023, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -15,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Syahmin Sukhairi <syahmin@gmail.com>\n"
+"Last-Translator: Sucipto <sucipto@pm.me>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/id/>\n"
 "Language: id\n"
