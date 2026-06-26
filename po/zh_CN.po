@@ -33,7 +33,7 @@
 # derxi <happycxin@163.com>, 2023, 2026.
 # fleefar <825272947@qq.com>, 2024.
 # "Cheng R.Zhu" <zcr@users.noreply.hosted.weblate.org>, 2025.
-# fliukka <weblate@fliukka.net>, 2025.
+# fliukka <weblate@fliukka.net>, 2025, 2026.
 # DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>, 2025, 2026.
 # aba2222 <ABCSSS2021@outlook.com>, 2025, 2026.
 # SIB <shawndu0820@gmail.com>, 2025.
@@ -47,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: derxi <happycxin@163.com>\n"
+"Last-Translator: fliukka <weblate@fliukka.net>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
