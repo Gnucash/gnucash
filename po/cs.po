@@ -4,7 +4,7 @@
 # Miloslav Trmac <mitr@volny.cz>, 2002, 2003, 2004, 2007.
 # Petr Pisar <petr.pisar@atlas.cz>, 2012.
 # Tomáš Václavík <t3vaclavik@gmail.com>, 2022.
-# Kryštof Černý <cleverline1mc@gmail.com>, 2023.
+# Kryštof Černý <cleverline1mc@gmail.com>, 2023, 2026.
 # Mirek Špaňko <mirekspanko@hotmail.cz>, 2026.
 # Jerry <nezbeda@protonmail.com>, 2026.
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:48+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "cs/>\n"
 "Language: cs\n"
@@ -10535,8 +10535,7 @@ msgstr "Další naposledy otevřený soubor"
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
-msgstr ""
-"Toto pole obsahuje úplnou cestu k dalšímu naposledy otevřenému souboru."
+msgstr "Toto pole obsahuje úplnou cestu k dalšímu naposledy otevřenému souboru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
