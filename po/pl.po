@@ -6,7 +6,7 @@
 # WaldiS <sto@tutanota.de>, 2022.
 # gnu-ewm <gnu.ewm@protonmail.com>, 2022, 2023.
 # Kaligula <kaligula.dev@gmail.com>, 2022, 2023, 2024, 2026.
-# vim <dev.getport@slmail.me>, 2023.
+# vim <dev.getport@slmail.me>, 2023, 2026.
 # Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
 # Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
 # наб <nabijaczleweli@nabijaczleweli.xyz>, 2024.
@@ -18,7 +18,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:21+0000\n"
-"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
+"Last-Translator: vim <dev.getport@slmail.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
