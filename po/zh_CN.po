@@ -21,7 +21,7 @@
 # YTX <ytx.cash@gmail.com>, 2021, 2022, 2023, 2026.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
-# Yu Hongbo <linuxbckp@gmail.com>, 2022.
+# Yu Hongbo <linuxbckp@gmail.com>, 2022, 2026.
 # Eric <hamburger1024@firemail.cc>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
 # 帅是我2 <a1173522112@163.com>, 2022, 2026.
@@ -47,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: 帅是我2 <a1173522112@163.com>\n"
+"Last-Translator: Yu Hongbo <linuxbckp@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
