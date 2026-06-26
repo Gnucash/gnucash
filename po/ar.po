@@ -24,8 +24,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 04:46+0000\n"
-"Last-Translator: Abdulla Alhosani <ama1029@nyu.edu>\n"
+"PO-Revision-Date: 2026-06-26 19:01+0000\n"
+"Last-Translator: Abdulsalam Alshilash <ashalash@msn.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
 "Language: ar\n"
@@ -223,35 +223,35 @@ msgstr "الأعمال"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1301
 msgid "Company Name"
-msgstr "اسم الشركة"
+msgstr "اسم المنشأة"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1304
 msgid "Company Address"
-msgstr "عنوان الشركة"
+msgstr "عنوان المنشأة"
 
 #: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1327
 msgid "Company ID"
-msgstr "معرّف الشركة"
+msgstr "معرّف المنشأة"
 
 #: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1312
 msgid "Company Phone Number"
-msgstr "رقم هاتف الشركة"
+msgstr "رقم هاتف المنشأة"
 
 #: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1316
 msgid "Company Fax Number"
-msgstr "رقم فاكس الشركة"
+msgstr "رقم فاكس المنشأة"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1324
 msgid "Company Website URL"
-msgstr "رابط موقع الشركة على الإنترنت"
+msgstr "رابط موقع المنشأة على الإنترنت"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1320
 msgid "Company Email Address"
-msgstr "عنوان البريد الإلكتروني للشركة"
+msgstr "عنوان البريد الإلكتروني للمنشأة"
 
 #: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1308
 msgid "Company Contact Person"
-msgstr "الشخص المسؤول في الشركة"
+msgstr "الشخص المسؤول في المنشأة"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1039
@@ -1445,7 +1445,7 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
-"تُصدِر الشركة توزيعات أرباح نقدية للمساهم.\n"
+"تُصدِر المنشأة توزيعات أرباح نقدية للمساهم.\n"
 "\n"
 "وأيّ توزيع أرباح يُعاد استثماره يجب تسجيله لاحقاً كعملية شراء أسهم عادية."
 
@@ -1458,7 +1458,7 @@ msgstr "ردّ رأس المال"
 #: gnucash/gnome/assistant-stock-transaction.cpp:223
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
-msgstr "تُعيد الشركة رأس المال، فيقلّ أساس التكلفة دون التأثير في عدد الوحدات."
+msgstr "تُعيد المنشأة رأس المال، فيقلّ أساس التكلفة دون التأثير في عدد الوحدات."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
@@ -1472,7 +1472,7 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
-"تُعيد الشركة رأس المال، فيقلّ أساس التكلفة دون التأثير في عدد الوحدات. ويُعاد "
+"تُعيد المنشأة رأس المال، فيقلّ أساس التكلفة دون التأثير في عدد الوحدات. ويُعاد "
 "تصنيف توزيع سُجِّل سابقاً كتوزيع أرباح ليصبح ردّاً لرأس المال، وغالباً ما يكون ذلك "
 "بسبب المعلومات الضريبية لنهاية العام."
 
@@ -1487,7 +1487,7 @@ msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"تُصدِر الشركة توزيعاً افتراضياً، يُسجَّل كدخل توزيعات أرباح ويزيد أساس التكلفة دون "
+"تُصدِر المنشأة توزيعاً افتراضياً، يُسجَّل كدخل توزيعات أرباح ويزيد أساس التكلفة دون "
 "التأثير في عدد الوحدات."
 
 #. Translators: this is a stock transaction describing a
@@ -1501,7 +1501,7 @@ msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"تُصدِر الشركة توزيعاً افتراضياً، يُسجَّل كمكسب رأسمالي ويزيد أساس التكلفة دون "
+"تُصدِر المنشأة توزيعاً افتراضياً، يُسجَّل كمكسب رأسمالي ويزيد أساس التكلفة دون "
 "التأثير في عدد الوحدات."
 
 #. Translators: this is a stock transaction describing a stock
@@ -1522,7 +1522,7 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"تُصدِر الشركة وحدات إضافية، فينخفض سعر السهم بمقدار قاسم، مع بقاء القيمة "
+"تُصدِر المنشأة وحدات إضافية، فينخفض سعر السهم بمقدار قاسم، مع بقاء القيمة "
 "النقدية الإجمالية للاستثمار بأكمله ثابتة.\n"
 "\n"
 "وإذا نتج عن التجزئة مبلغ نقدي بدلاً من الوحدات المتبقية، فسجّل البيع باستخدام "
@@ -1545,7 +1545,7 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
-"تستردّ الشركة وحدات، فيرتفع سعر السهم بمقدار مضاعِف، مع بقاء القيمة النقدية "
+"تستردّ المنشأة وحدات، فيرتفع سعر السهم بمقدار مضاعِف، مع بقاء القيمة النقدية "
 "الإجمالية للاستثمار بأكمله ثابتة.\n"
 "\n"
 "وإذا نتج عن التجزئة العكسية مبلغ نقدي بدلاً من الوحدات المتبقية، فسجّل البيع "
@@ -1590,7 +1590,7 @@ msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
-"تُصدِر الشركة توزيعات أرباح، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة "
+"تُصدِر المنشأة توزيعات أرباح، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة "
 "تعويضية عنها."
 
 #. Translators: this is a stock transaction describing return
@@ -1605,7 +1605,7 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
-"تُعيد الشركة رأس المال، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة تعويضية "
+"تُعيد المنشأة رأس المال، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة تعويضية "
 "عن رأس المال المُعاد، فيقلّ أساس التكلفة (أقلّ سلبية، باتجاه القيمة 0.00) دون "
 "التأثير في عدد الوحدات."
 
@@ -1624,7 +1624,7 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
-"تُعيد الشركة رأس المال، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة تعويضية "
+"تُعيد المنشأة رأس المال، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة تعويضية "
 "عن رأس المال المُعاد. وهذا يخفّض أساس التكلفة (أقلّ سلبيةً، باتجاه القيمة 0.00) "
 "دون أن يؤثّر في عدد الوحدات. ويُعاد تصنيف توزيعٍ سُجِّل سابقاً توزيعَ أرباحٍ تعويضياً "
 "ليصبح ردّاً تعويضياً لرأس المال، وغالباً ما يكون ذلك بسبب المعلومات الضريبية "
@@ -1644,7 +1644,7 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
-"تُصدِر الشركة توزيعاً افتراضياً، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة "
+"تُصدِر المنشأة توزيعاً افتراضياً، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة "
 "تعويضية عنه. ويُسجَّل هذا مبلغَ خسارة/دخلِ توزيعات أرباح سالباً، ويزيد أساس "
 "التكلفة (أكثر سلبيةً، بعيداً عن القيمة 0.00) دون أن يؤثّر في عدد الوحدات."
 
@@ -1662,7 +1662,7 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
-"تُصدِر الشركة توزيعاً افتراضياً، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة "
+"تُصدِر المنشأة توزيعاً افتراضياً، وعلى صاحب المركز المكشوف في الأسهم سداد دفعة "
 "تعويضية عنه. ويُسجَّل هذا مبلغَ خسارة رأسمالية، ويزيد أساس التكلفة (أكثر سلبيةً، "
 "بعيداً عن القيمة 0.00) دون أن يؤثّر في عدد الوحدات."
 
@@ -1676,8 +1676,8 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
-"تُصدِر الشركة وحدات إضافية، فيهبط سعر السهم بمقدار قاسمٍ مع بقاء القيمة النقدية "
-"الإجمالية للاستثمار كلّه ثابتةً.\n"
+"تُصدِر المنشأة وحدات إضافية، فيهبط سعر السهم بمقدار قاسمٍ مع بقاء القيمة "
+"النقدية الإجمالية للاستثمار كلّه ثابتةً.\n"
 "\n"
 "وإن نتج عن التجزئة مبلغ نقدي بديل عن الوحدات المتبقية، فسجّل شراء التغطية "
 "بمساعد معاملات الأسهم أولاً، ثم سجّل التجزئة."
@@ -1691,7 +1691,7 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
-"تستردّ الشركة وحدات، فيرتفع سعر السهم بمقدار مضاعِفٍ مع بقاء القيمة النقدية "
+"تستردّ المنشأة وحدات، فيرتفع سعر السهم بمقدار مضاعِفٍ مع بقاء القيمة النقدية "
 "الإجمالية للاستثمار كلّه ثابتةً.\n"
 "\n"
 "وإن نتج عن التجزئة العكسية مبلغ نقدي بديل عن الوحدات المتبقية، فسجّل شراء "
@@ -2218,7 +2218,7 @@ msgstr "لا يوجد اسم جديد"
 msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
-msgstr "لا يمكن ترك حقل اسم الشركة فارغاً، فأدخل اسم شركة أو اسم شخص."
+msgstr "لا يمكن ترك حقل اسم المنشأة فارغاً، فأدخل اسم منشأة أو اسم شخص."
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -2293,7 +2293,7 @@ msgstr "جهة الاتصال"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:124
 #: gnucash/report/reports/standard/new-aging.scm:176
 msgid "Company"
-msgstr "الشركة"
+msgstr "المنشأة"
 
 #: gnucash/gnome/dialog-customer.c:905 gnucash/gnome/dialog-employee.c:692
 #: gnucash/gnome/dialog-job.c:585 gnucash/gnome/dialog-vendor.c:705
@@ -2888,7 +2888,7 @@ msgstr "حقل البيان"
 
 #: gnucash/gnome/dialog-imap-editor.c:702
 msgid "CSV Account Map"
-msgstr "خريطة حسابات CSV"
+msgstr "ربط حسابات CSV"
 
 #: gnucash/gnome/dialog-imap-editor.c:736
 msgid "Online Id"
@@ -3496,7 +3496,7 @@ msgstr "لا بد من إدخال اسم حساب صالح للترحيل."
 
 #: gnucash/gnome/dialog-payment.c:247
 msgid "You must select a company for payment processing."
-msgstr "لا بد من اختيار شركة لمعالجة الدفع."
+msgstr "لا بد من اختيار منشأة لمعالجة الدفع."
 
 #: gnucash/gnome/dialog-payment.c:261
 msgid "There is a problem with the Payment or Refund amount."
@@ -3864,7 +3864,7 @@ msgstr "يتعذّر الإنشاء التلقائي للمعاملات المج
 #: gnucash/gnome/dialog-sx-editor.c:687
 #, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr "تعذّر تحليل %s للطرف قيد \"%s\"."
+msgstr "تعذّر تحليل %s لطرف القيد \"%s\"."
 
 #: gnucash/gnome/dialog-sx-editor.c:752
 #, c-format
@@ -4086,7 +4086,7 @@ msgstr "فواتير المورّد"
 
 #: gnucash/gnome/dialog-vendor.c:680
 msgid "Pay Bill"
-msgstr "دفع الفاتورة"
+msgstr "دفع فاتورة المورّد"
 
 #: gnucash/gnome/dialog-vendor.c:692
 msgid "Vendor ID"
@@ -4466,7 +4466,7 @@ msgstr "إدخال دفعة لمالك هذه الفاتورة"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 #: gnucash/ui/gnc-plugin-page-invoice.ui:207
 msgid "_Company Report"
-msgstr "تقرير الشركة (_C)"
+msgstr "تقرير المنشأة (_C)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
 msgid "Open a customer report window for the owner of this invoice"
@@ -4763,7 +4763,7 @@ msgstr "إدخال دفعة لمالك هذا الإشعار الدائن"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 msgid "Open a company report window for the owner of this credit note"
-msgstr "فتح نافذة تقرير شركة لمالك هذا الإشعار الدائن"
+msgstr "فتح نافذة تقرير منشأة لمالك هذا الإشعار الدائن"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
 msgid "Manage Document Link…"
@@ -4969,7 +4969,7 @@ msgstr "حذف طرف القيد الحالي"
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:345
 msgid "Show Splits"
-msgstr "إظهار البنود"
+msgstr "إظهار أطراف القيد"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:346
 msgid "Jump"
@@ -5323,7 +5323,7 @@ msgstr "الملف %s موجود بالفعل. هل تريد الكتابة فو
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 msgid "_Overwrite"
-msgstr "استبدال (_O)"
+msgstr "الكتابة فوقه (_O)"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 #, c-format
@@ -5742,7 +5742,7 @@ msgstr "إجراء العمليات الحسابية المالية، مثل س�
 #: gnucash/gnome/gnucash.appdata.xml.in.in:48
 msgid ""
 "The account overview page is the starting point for managing your finances"
-msgstr "صفحة نظرة عامة على الحسابات هي نقطة البداية لإدارة أموالك"
+msgstr "صفحة نظرة عامة على الحسابات هي نقطة البداية لإدارة شؤونك المالية"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:52
 msgid "The checkbook-style register - used for entering financial transactions"
@@ -6158,15 +6158,15 @@ msgstr "أكبر من أو يساوي"
 
 #: gnucash/gnome-search/search-numeric.c:236
 msgid "has credits or debits"
-msgstr "له أرصدة مدينة أو دائنة"
+msgstr "له مبالغ دائنة أو مدينة"
 
 #: gnucash/gnome-search/search-numeric.c:237
 msgid "has debits"
-msgstr "له أرصدة مدينة"
+msgstr "له مبالغ مدينة"
 
 #: gnucash/gnome-search/search-numeric.c:238
 msgid "has credits"
-msgstr "له أرصدة دائنة"
+msgstr "له مبالغ دائنة"
 
 #: gnucash/gnome-search/search-reconciled.c:208
 msgid "Not Cleared"
@@ -7702,7 +7702,7 @@ msgid "translator-credits\n"
 msgstr ""
 "Abdorhman Ayman: 2019\n"
 " Abdulla Alhosani: 2024.\n"
-"Abdulsalam Alshilash: 2025.\n"
+"Abdulsalam Alshilash: 2025, 2026.\n"
 " Aziz2013: 2013\n"
 " BL: 2023.\n"
 "ButterflyOfFire: 2022.\n"
@@ -8372,7 +8372,7 @@ msgstr "جارٍ تحميل امتدادات Guile الخاصة بالمستخد
 
 #: gnucash/gnucash-core-app.cpp:206
 msgid "- GnuCash, accounting for personal and small business finance"
-msgstr "- GnuCash، برنامج محاسبة للأموال الشخصية وأعمال المنشآت الصغيرة"
+msgstr "- GnuCash، محاسبة المالية الشخصية ومالية الأعمال الصغيرة"
 
 #: gnucash/gnucash-core-app.cpp:208
 #, c++-format
@@ -10021,7 +10021,7 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"تعيين خيار الدفتر في الملفات الجديدة لاستخدام حقل \"الإجراء\" للطرف قيد مكان "
+"تعيين خيار الدفتر في الملفات الجديدة لاستخدام حقل \"الإجراء\" لطرف القيد مكان "
 "حقل \"الرقم\" في السجلات/التقارير"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
@@ -10035,7 +10035,7 @@ msgid ""
 "'num' field."
 msgstr ""
 "إذا حُدِّد، ضُبط خيار الدفتر الافتراضي للملفات الجديدة بحيث تعرض خلية «الرقم» في "
-"السجلات حقل «الإجراء» للطرف قيد وتحدّثه، ويظهر حقل «الرقم» للمعاملة في السطر "
+"السجلات حقل «الإجراء» لطرف القيد وتحدّثه، ويظهر حقل «الرقم» للمعاملة في السطر "
 "الثاني في عرض السطر المزدوج (ولا يظهر إن لم يُضبط ذلك). وإلا فيُضبط الخيار "
 "الافتراضي بحيث تعرض خلية «الرقم» في السجلات حقل «الرقم» للمعاملة وتحدّثه."
 
@@ -11859,19 +11859,19 @@ msgstr "معدل ثابت"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:78
 msgid "3/1 Year ARM"
-msgstr "معدل فائدة ثابت لأول 3 سنوات ومتغير لكل سنة لاحقة"
+msgstr "‏ARM بمعدل ثابت لأول 3 سنوات ثم متغير سنوياً (3/1)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:81
 msgid "5/1 Year ARM"
-msgstr "معدل فائدة ثابت لأول 5 سنوات ومتغير لكل سنة لاحقة"
+msgstr "‏ARM بمعدل ثابت لأول 5 سنوات ثم متغير سنوياً (5/1)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:84
 msgid "7/1 Year ARM"
-msgstr "معدل فائدة ثابت لأول 7 سنوات ومتغير لكل سنة لاحقة"
+msgstr "‏ARM بمعدل ثابت لأول 7 سنوات ثم متغير سنوياً (7/1)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:87
 msgid "10/1 Year ARM"
-msgstr "معدل فائدة ثابت لأول 10 سنوات ومتغير لكل سنة لاحقة"
+msgstr "‏ARM بمعدل ثابت لأول 10 سنوات ثم متغير سنوياً (10/1)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:107
 msgid ""
@@ -12687,7 +12687,7 @@ msgstr "قيمة الأسهم (_S)"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:426
 msgid "Stock Value"
-msgstr "قيمة السهم"
+msgstr "قيمة الأسهم"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:443
 msgid ""
@@ -13677,8 +13677,7 @@ msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
-"أدخل الاسم الكامل للسلعة. مثال: شركة Cisco Systems Inc.، أو Apple Computer, "
-"Inc."
+"أدخل الاسم الكامل للسلعة. مثال: Cisco Systems Inc.، أو Apple Computer, Inc."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -14094,7 +14093,7 @@ msgstr "نصف سنوي"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:18
 #: gnucash/gtkbuilder/dialog-fincalc.glade:59
 msgid "Tri-annual"
-msgstr "ثلث سنوي"
+msgstr "ثلاث مرات سنوياً"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:21
 #: gnucash/gtkbuilder/dialog-fincalc.glade:62
@@ -14275,7 +14274,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
-msgstr "محرّر خرائط الاستيراد"
+msgstr "محرّر ربط الاستيراد"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:52
 msgid "_Remove Invalid Mappings"
@@ -14383,7 +14382,7 @@ msgstr "أول طرف قيد للمعاملة المستوردة"
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:408
 msgid "Potential splits matching the selected transaction"
-msgstr "البنود المحتملة المطابقة للمعاملة المحددة"
+msgstr "أطراف القيد المحتملة المطابقة للمعاملة المحددة"
 
 #: gnucash/gtkbuilder/dialog-import.glade:453
 msgid ""
@@ -14678,11 +14677,11 @@ msgstr "إظهار الدفعات المفتوحة فقط"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:310
 msgid "Splits _free"
-msgstr "البنود الحرة (_f)"
+msgstr "أطراف القيد الحرة (_f)"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:368
 msgid "Splits _in lot"
-msgstr "البنود في الدفعة (_i)"
+msgstr "أطراف القيد في الدفعة (_i)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 msgid "_No"
@@ -14788,7 +14787,7 @@ msgstr "رقم تعريف الطلب. إن تركته فارغاً اختير ل
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
 msgid "The company associated with this payment."
-msgstr "الشركة المرتبطة بهذا الدفع."
+msgstr "المنشأة المرتبطة بهذا الدفع."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:169
 msgid "Partner"
@@ -14826,7 +14825,7 @@ msgstr ""
 "هذا المبلغ لإنشاء دفعة جزئية أو دفعة بزيادة.\n"
 "\n"
 "وفي حالة الدفع بزيادة أو إن لم تُحدَّد أي فاتورة، يعيّن GnuCash المبلغ المتبقي "
-"تلقائياً لأول فاتورة غير مدفوعة لهذه الشركة."
+"تلقائياً لأول فاتورة غير مدفوعة لهذه المنشأة."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/report/reports/standard/new-owner-report.scm:292
@@ -18351,7 +18350,7 @@ msgstr "إشعار خصم مباشر عبر الخدمات المصرفية عب
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:207
 msgid "Online Banking Bank-Internal Transfer"
-msgstr "تحويل داخلي بين البنوك عبر الخدمات المصرفية عبر الإنترنت"
+msgstr "تحويل داخلي في البنك عبر الخدمات المصرفية عبر الإنترنت"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:212
 msgid "Online Banking European (SEPA) Transfer"
@@ -19724,8 +19723,8 @@ msgid ""
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
 msgstr ""
-"اختر سلعة تطابق رمز التداول المحدد التالي. لاحظ أن رمز التداول للسلعة التي "
-"تختارها سيُستبدَل."
+"اختر سلعة تطابق الرمز الخاص بسوق التداول التالي. لاحظ أن رمز التداول للسلعة "
+"التي تختارها ستُكتب فوقه."
 
 #: gnucash/import-export/import-format-dialog.cpp:78
 msgid "m/d/y"
@@ -20146,7 +20145,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3538
 msgid "GnuCash was unable to save your mapping preferences."
-msgstr "تعذّر على GnuCash حفظ تفضيلات المطابقة الخاصة بك."
+msgstr "تعذّر على GnuCash حفظ تفضيلات الربط الخاصة بك."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3567
 msgid "There was a problem with the import."
@@ -21289,7 +21288,7 @@ msgstr "أدخل رقماً مرجعياً، كرقم الشيك التالي، 
 
 #: gnucash/register/ledger-core/split-register-model.c:1350
 msgid "Enter a description of the split"
-msgstr "أدخل وصفاً للطرف قيد"
+msgstr "أدخل وصفاً لطرف القيد"
 
 #: gnucash/register/ledger-core/split-register-model.c:1424
 msgid "Enter the effective share price"
@@ -23030,7 +23029,7 @@ msgstr "حذف الحسابات"
 #: gnucash/report/reports/standard/income-statement.scm:370
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr "${company-name} ${report-title} للفترة من {start} إلى {end}"
+msgstr "${company-name} ${report-title} للفترة من ${start} إلى ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
@@ -23057,7 +23056,7 @@ msgstr "إظهار رموز الأسهم"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
-msgstr "إظهار القوائم"
+msgstr "إظهار قوائم الإدراج"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
@@ -23117,15 +23116,15 @@ msgstr "استبعاد من التقرير"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:101
 msgid "Display the ticker symbols."
-msgstr "إظهار رموز الأسهم."
+msgstr "عرض الرموز المختصرة."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:106
 msgid "Display exchange listings."
-msgstr "عرض الأسهم المدرجة في البورصة."
+msgstr "عرض قوائم إدراج البورصة."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display numbers of shares in accounts."
-msgstr "عرض عدد الأسهم في الحسابات."
+msgstr "عرض أعداد الأسهم في الحسابات."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:116
 #: gnucash/report/reports/standard/portfolio.scm:57
@@ -23151,7 +23150,7 @@ msgstr "تضمين الحسابات التي رصيد أسهمها صفر."
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1042
 #: gnucash/report/reports/standard/portfolio.scm:246
 msgid "Listing"
-msgstr "إدراج"
+msgstr "الإدراج"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1054
 msgid "Basis"
@@ -23451,7 +23450,7 @@ msgstr "إجمالي الالتزامات وحقوق الملكية"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:136
 msgid "Balance Sheet (eguile)"
-msgstr "قائمة المركز المالي (باستخدام قالب eguile)"
+msgstr "قائمة المركز المالي (eguile)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:144
 msgid "Report format"
@@ -23485,7 +23484,7 @@ msgstr "التنسيق المستخدم للمبالغ السالبة: بإشا�
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:165
 msgid "Font family"
-msgstr "نوع الخط"
+msgstr "عائلة الخط"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:166
 msgid "Font definition in CSS font-family format."
@@ -23671,11 +23670,11 @@ msgstr "تحديد إدراج سطر يشير إلى المبالغ الإجما
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:103
 msgid "Enable chart"
-msgstr "تمكين الرسم البياني"
+msgstr "تمكين المخطط البياني"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:104
 msgid "Enable link to chart"
-msgstr "تمكين الرابط إلى الرسم البياني"
+msgstr "تمكين الرابط إلى المخطط البياني"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
 #: gnucash/report/trep-engine.scm:112
@@ -24460,11 +24459,11 @@ msgstr "عرض عمود مصروفات كل عميل."
 
 #: gnucash/report/reports/standard/customer-summary.scm:65
 msgid "Show Company Address"
-msgstr "إظهار عنوان الشركة"
+msgstr "إظهار عنوان المنشأة"
 
 #: gnucash/report/reports/standard/customer-summary.scm:66
 msgid "Show your own company's address and the date of printing."
-msgstr "عرض عنوان شركتك وتاريخ الطباعة."
+msgstr "عرض عنوان منشأتك وتاريخ الطباعة."
 
 #: gnucash/report/reports/standard/customer-summary.scm:70
 msgid "Show Lines with All Zeros"
@@ -25474,7 +25473,7 @@ msgstr "اسم العميل أو المورّد وعنوانه ومعرّفه"
 
 #: gnucash/report/reports/standard/invoice.scm:321
 msgid "Company name, address and tax-ID"
-msgstr "اسم الشركة وعنوانها ورقمها الضريبي"
+msgstr "اسم المنشأة وعنوانها ورقمها الضريبي"
 
 #: gnucash/report/reports/standard/invoice.scm:325
 msgid "Invoice date, due date, billing ID, terms, job details"
@@ -25618,19 +25617,19 @@ msgstr "اكتب جميع الشيكات لأمر"
 
 #: gnucash/report/reports/standard/invoice.scm:466
 msgid "Company contact"
-msgstr "جهة الاتصال بالشركة"
+msgstr "جهة الاتصال بالمنشأة"
 
 #: gnucash/report/reports/standard/invoice.scm:467
 msgid "Display the Company contact information."
-msgstr "عرض معلومات جهة الاتصال بالشركة."
+msgstr "عرض معلومات جهة الاتصال بالمنشأة."
 
 #: gnucash/report/reports/standard/invoice.scm:472
 msgid "Company contact string"
-msgstr "نص جهة الاتصال بالشركة"
+msgstr "نص جهة الاتصال بالمنشأة"
 
 #: gnucash/report/reports/standard/invoice.scm:473
 msgid "The phrase used to introduce the company contact."
-msgstr "العبارة التي تُعرِّف بجهة الاتصال بالشركة."
+msgstr "العبارة التي تُعرِّف بجهة الاتصال بالمنشأة."
 
 #: gnucash/report/reports/standard/invoice.scm:474
 msgid "Please direct all enquiries to"
@@ -25947,15 +25946,15 @@ msgstr "توجد حسابات ذمم دائنة أو مدينة لكن لا مع
 
 #: gnucash/report/reports/standard/new-aging.scm:89
 msgid "Sort companies by."
-msgstr "فرز الشركات حسب."
+msgstr "فرز المنشآت حسب."
 
 #: gnucash/report/reports/standard/new-aging.scm:92
 msgid "Name of the company"
-msgstr "اسم الشركة"
+msgstr "اسم المنشأة"
 
 #: gnucash/report/reports/standard/new-aging.scm:93
 msgid "Total amount owed to/from Company"
-msgstr "إجمالي المبلغ المستحق للشركة/منها"
+msgstr "إجمالي المبلغ المستحق للمنشأة/منها"
 
 #: gnucash/report/reports/standard/new-aging.scm:94
 msgid "Bracket Total Owed"
@@ -26135,7 +26134,7 @@ msgstr "إجمالي المستحق"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:877
 msgid "The company for this report."
-msgstr "الشركة المعنية بهذا التقرير."
+msgstr "المنشأة المعنية بهذا التقرير."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:890
 msgid "Display the transaction date?"
@@ -26681,7 +26680,7 @@ msgstr "الصف: رقم الفاتورة"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:79
 msgid "row: Company Name"
-msgstr "الصف: اسم الشركة"
+msgstr "الصف: اسم المنشأة"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:80
 msgid "Invoice number text"
@@ -26765,7 +26764,7 @@ msgstr "عرض رقم الفاتورة؟"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:136
 msgid "Display the Company Name?"
-msgstr "عرض اسم الشركة؟"
+msgstr "عرض اسم المنشأة؟"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:138
 msgid "Invoice Number next to title?"
@@ -26867,7 +26866,7 @@ msgstr "ميزان المراجعة"
 
 #: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Start of Adjusting/Closing"
-msgstr "بداية التعديل/الإغلاق"
+msgstr "بداية التعديل/الإقفال"
 
 #: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Date of Report"
@@ -26941,7 +26940,7 @@ msgstr "أرصدة دفتر اليومية العام الدقيقة"
 
 #: gnucash/report/reports/standard/trial-balance.scm:189
 msgid "No adjusting/closing entries"
-msgstr "بلا قيود ضبط/إقفال"
+msgstr "بلا قيود تعديل/إقفال"
 
 #: gnucash/report/reports/standard/trial-balance.scm:190
 msgid "Full end-of-period work sheet"
@@ -27160,7 +27159,7 @@ msgstr "أُعِدّ لأجل"
 #: gnucash/report/stylesheets/footer.scm:57
 #: gnucash/report/stylesheets/head-or-tail.scm:56
 msgid "Name of organization or company prepared for."
-msgstr "اسم المؤسسة أو الشركة التي أُعِدّ التقرير لأجلها."
+msgstr "اسم المؤسسة أو المنشأة التي أُعِدّ التقرير لأجلها."
 
 #: gnucash/report/stylesheets/footer.scm:62
 #: gnucash/report/stylesheets/head-or-tail.scm:60
@@ -27170,7 +27169,7 @@ msgstr "إظهار معلومات المُعِدّ"
 #: gnucash/report/stylesheets/footer.scm:63
 #: gnucash/report/stylesheets/head-or-tail.scm:61
 msgid "Name of organization or company."
-msgstr "اسم المؤسسة أو الشركة."
+msgstr "اسم المؤسسة أو المنشأة."
 
 #: gnucash/report/stylesheets/footer.scm:68
 #: gnucash/report/stylesheets/head-or-tail.scm:85
@@ -27257,7 +27256,7 @@ msgstr "شعار"
 #: gnucash/report/stylesheets/footer.scm:99
 #: gnucash/report/stylesheets/head-or-tail.scm:138
 msgid "Company logo image."
-msgstr "صورة شعار الشركة."
+msgstr "صورة شعار المنشأة."
 
 #: gnucash/report/stylesheets/footer.scm:104
 #: gnucash/report/stylesheets/head-or-tail.scm:143
@@ -27318,7 +27317,7 @@ msgstr "اللون الافتراضي لصفوف المجموع الفرعي."
 #: gnucash/report/stylesheets/footer.scm:136
 #: gnucash/report/stylesheets/head-or-tail.scm:175
 msgid "Sub-subheading/total Cell Color"
-msgstr "لون خلية العنوان الفرعي/المجموع"
+msgstr "لون خلية العنوان الفرعي الثانوي/المجموع"
 
 #: gnucash/report/stylesheets/footer.scm:137
 #: gnucash/report/stylesheets/head-or-tail.scm:176
@@ -27414,7 +27413,7 @@ msgstr "إظهار معلومات المستلِم"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:66
 msgid "Name of organization or company the report is prepared for."
-msgstr "اسم المنشأة أو الشركة التي أُعدّ التقرير لأجلها."
+msgstr "اسم المؤسسة أو المنشأة التي أُعدّ التقرير لأجلها."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:70
 msgid "Show date"
@@ -28503,7 +28502,7 @@ msgstr "إغلاق الدفتر في نهاية الفترة"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:124
 msgid "_Import Map Editor"
-msgstr "محرر خريطة الاستيراد (_I)"
+msgstr "محرر ربط الاستيراد (_I)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:126
 msgid "View and Delete Bayesian and non-Bayesian information"
@@ -28607,7 +28606,7 @@ msgstr "فتح مربع الحوار \"البحث عن فاتورة\""
 
 #: gnucash/ui/gnc-plugin-business.ui:34 gnucash/ui/gnc-plugin-business.ui:83
 msgid "New _Job…"
-msgstr "وظيفة جديدة… (_J)"
+msgstr "مهمة جديدة… (_J)"
 
 #: gnucash/ui/gnc-plugin-business.ui:36 gnucash/ui/gnc-plugin-business.ui:85
 msgid "Open the New Job dialog"
@@ -28615,7 +28614,7 @@ msgstr "فتح مربع الحوار \"مهمة جديدة\""
 
 #: gnucash/ui/gnc-plugin-business.ui:39 gnucash/ui/gnc-plugin-business.ui:88
 msgid "Find Jo_b…"
-msgstr "البحث عن وظيفة… (_b)"
+msgstr "البحث عن مهمة… (_b)"
 
 #: gnucash/ui/gnc-plugin-business.ui:41 gnucash/ui/gnc-plugin-business.ui:90
 msgid "Open the Find Job dialog"
@@ -28743,7 +28742,7 @@ msgstr "فتح مربع الحوار \"البحث عن سند صرف\""
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
-msgstr "المستندات التجارية المرتبطة"
+msgstr "مستندات الأعمال المرتبطة"
 
 #: gnucash/ui/gnc-plugin-business.ui:140
 msgid "View all Linked Business Documents"
@@ -29222,7 +29221,7 @@ msgstr "فتح المستند المرتبط"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
 msgid "Open a company report window for the owner of this invoice"
-msgstr "فتح نافذة تقرير شركة لمالك هذه الفاتورة"
+msgstr "فتح نافذة تقرير منشأة لمالك هذه الفاتورة"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
@@ -30373,7 +30372,7 @@ msgstr "الجذر"
 
 #: libgnucash/engine/Account.cpp:4745
 msgid "Orphaned Gains"
-msgstr "مكاسب بلا مصدر"
+msgstr "مكاسب يتيمة"
 
 #: libgnucash/engine/Account.cpp:4759 libgnucash/engine/cap-gains.cpp:804
 #: libgnucash/engine/cap-gains.cpp:809 libgnucash/engine/cap-gains.cpp:810
@@ -30439,7 +30438,7 @@ msgstr "Consors Bank، ألمانيا"
 #: libgnucash/engine/gnc-commodity.cpp:201
 msgctxt "FQ Source"
 msgid "Deka Investments, DE"
-msgstr "Deka Investments, DE"
+msgstr "Deka Investments، ألمانيا"
 
 #: libgnucash/engine/gnc-commodity.cpp:202
 msgctxt "FQ Source"
@@ -30524,7 +30523,7 @@ msgstr "Sharenet، جنوب أفريقيا"
 #: libgnucash/engine/gnc-commodity.cpp:218
 msgctxt "FQ Source"
 msgid "SIX Swiss Exchange shares, CH"
-msgstr "SIX Swiss Exchange shares, CH"
+msgstr "أسهم SIX Swiss Exchange، سويسرا"
 
 #: libgnucash/engine/gnc-commodity.cpp:219
 msgctxt "FQ Source"
@@ -30569,7 +30568,7 @@ msgstr "Twelve Data"
 #: libgnucash/engine/gnc-commodity.cpp:227
 msgctxt "FQ Source"
 msgid "Union Investment, DE"
-msgstr "Union Investment, DE"
+msgstr "Union Investment، ألمانيا"
 
 #: libgnucash/engine/gnc-commodity.cpp:228
 msgctxt "FQ Source"
@@ -31072,7 +31071,7 @@ msgstr "عنوان URL لموقعك على الويب."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1328
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "معرّف شركتك (مثال: 'معرّف الضريبة: 00-000000')."
+msgstr "معرّف منشأتك (مثال: 'معرّف الضريبة: 00-000000')."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1336
 msgid ""
@@ -31227,7 +31226,7 @@ msgstr "فحص دفعات الأعمال في الحساب %s: %u من %u"
 #: libgnucash/engine/ScrubBusiness.c:680
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
-msgstr "فحص بنود الأعمال في الحساب %s: %u من %u"
+msgstr "فحص أطراف قيد الأعمال في الحساب %s: %u من %u"
 
 #: libgnucash/engine/Scrub.cpp:146
 #, c-format
