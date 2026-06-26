@@ -38,6 +38,7 @@
 # Martin LORANG <wablate@lorang.net>, 2024, 2026.
 # Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
 # Frédéric Mergey <fmergey@yahoo.com>, 2025.
+# Bernard Giroud <bgiroud33@gmail.com>, 2026.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -48,7 +49,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Martin LORANG <wablate@lorang.net>\n"
+"Last-Translator: Bernard Giroud <bgiroud33@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -2412,8 +2413,9 @@ msgid "_Delete"
 msgstr "_Supprimer"
 
 #: gnucash/gnome/dialog-commodities.cpp:329
+#, fuzzy
 msgid "Rename failed, possibly new name exists"
-msgstr ""
+msgstr "Le renommage a échoué, il est possible que le nouveau nom existe"
 
 # po/guile_strings.txt:188
 #: gnucash/gnome/dialog-commodities.cpp:332
@@ -4198,11 +4200,13 @@ msgstr ""
 "Cette transaction récurrente a été modifiée. Voulez-vous vraiment l'annuler ?"
 
 #: gnucash/gnome/dialog-sx-editor.c:497
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Transaction with description '%s' can not be balanced.\n"
 "The difference is %s"
 msgstr ""
+"La transaction avec la description '%s' ne peut pas être balancée.\n"
+"La différence est de %s"
 
 # messages-i18n.c:26
 #: gnucash/gnome/dialog-sx-editor.c:512
@@ -4304,7 +4308,8 @@ msgid ""
 "Should it still be entered?"
 msgstr ""
 "L'éditeur de transaction récurrente ne peut pas automatiquement équilibrer "
-"cette transaction. Doit-elle tout de même être créée ?"
+"toutes les transactions.\n"
+"Doit-elle tout de même être créée ?"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
@@ -5831,10 +5836,13 @@ msgid "Filter By:"
 msgstr "Filtrer par :"
 
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1388
+#, fuzzy
 msgid ""
 "The Start date is after the End date.\n"
 "Select Cancel to change dates.\n"
 msgstr ""
+"La date de début est après la date de fin.\n"
+"Choisir Annuler pour changer de dates.\n"
 
 # po/guile_strings.txt:227
 #. Translators: The %s is the name of the plugin page
@@ -6450,6 +6458,7 @@ msgstr "Effectuer des calculs financiers, comme le remboursement d'un prêt"
 msgid ""
 "The account overview page is the starting point for managing your finances"
 msgstr ""
+"La page de résumé des comptes est le point de départ pour gérer vos finances"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:52
 msgid "The checkbook-style register - used for entering financial transactions"
@@ -18470,7 +18479,7 @@ msgstr "Depuis la dernière exécution"
 # messages-i18n.c:346
 #: gnucash/gtkbuilder/dialog-sx.glade:534
 msgid "Transaction Editor Defaults"
-msgstr "Défauts de l'édteur de transactions"
+msgstr "Défauts de l'éditeur de transaction"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:547
 msgid "_Run when data file opened"
@@ -28053,7 +28062,7 @@ msgstr ""
 "Ces comptes comprenant la TVA peuvent être remplis en utilisant le registre "
 "standard, ou en utilisant les factures qui nécessitent une bonne "
 "configuration des tables de taxes. Veuillez consulter la documentation pour "
-"ne savoir plus."
+"en savoir plus."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:64
 msgid ""
@@ -28083,7 +28092,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:75
 msgid "This message will be removed when tax accounts are specified."
-msgstr "Ce message disparaitra quand les comptes avec TVA seront spécifiés."
+msgstr "Ce message disparaîtra quand les comptes avec TVA seront spécifiés."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
 msgid "Individual sales columns"
@@ -28788,10 +28797,9 @@ msgstr ""
 "compte ~a. Différence : ~a. Les lots doivent-ils être nettoyés ?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
-#, fuzzy, scheme-format
-#| msgid "~a, ~a to ~a"
+#, scheme-format
 msgid "~a, ~a"
-msgstr "~a, ~a à ~a"
+msgstr "~a, ~a"
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: gnucash/report/reports/standard/investment-lots.scm:1988
@@ -33255,10 +33263,13 @@ msgid "Find Customer Invoices…"
 msgstr "Factures au client"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:166
+#, fuzzy
 msgid ""
 "Open the Find Invoice Dialog with the invoices already filtered for this "
 "customer"
 msgstr ""
+"Ouvre le dialogue de Recherche de facture avec les factures déjà filtrées "
+"pour ce client"
 
 # messages-i18n.c:93
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:200
@@ -33829,14 +33840,18 @@ msgstr "Supprime la transaction récurrente sélectionnée"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:73
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:216
+#, fuzzy
 msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Exécutez la transaction planifiée choisie. Si aucune transaction n'est "
+"prévue, le prochain événement est utilisé"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
+#, fuzzy
 msgid "_Run"
-msgstr ""
+msgstr "_Exécuter"
 
 # messages-i18n.c:185
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
@@ -33974,12 +33989,16 @@ msgid "Cancel the reconciliation of this account"
 msgstr "Annule le rapprochement de ce compte"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:130
+#, fuzzy
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
+"Les répartitions ne peuvent pas être nettoyées. Plusieurs possibilités "
+"trouvées."
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:149
+#, fuzzy
 msgid "Auto-clear exceeds allocated time"
-msgstr ""
+msgstr "Le nettoyage automatique dépasse le temps alloué"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:205
 msgid "Account is already at Auto-Clear Balance."
@@ -34504,7 +34523,7 @@ msgstr "Bourse italienne, IT"
 #: libgnucash/engine/gnc-commodity.cpp:196
 msgctxt "FQ Source"
 msgid "BSE India, IN"
-msgstr ""
+msgstr "BSE India, IN"
 
 #: libgnucash/engine/gnc-commodity.cpp:197
 msgctxt "FQ Source"
@@ -34543,9 +34562,10 @@ msgid "Finanzpartner, DE"
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.cpp:204
+#, fuzzy
 msgctxt "FQ Source"
 msgid "FondsWeb, DE"
-msgstr ""
+msgstr "FondsWeb, DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:205
 msgctxt "FQ Source"
@@ -34558,29 +34578,33 @@ msgid "Google Web, US Stocks"
 msgstr "Google Web, actions américaines"
 
 #: libgnucash/engine/gnc-commodity.cpp:207
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Market Watch"
-msgstr ""
+msgstr "Market Watch"
 
 #: libgnucash/engine/gnc-commodity.cpp:208
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Morningstar, CH"
-msgstr ""
+msgstr "Morningstar, CH"
 
 #: libgnucash/engine/gnc-commodity.cpp:209
 msgctxt "FQ Source"
 msgid "Morningstar, GB"
-msgstr ""
+msgstr "Morningstar, GB"
 
 #: libgnucash/engine/gnc-commodity.cpp:210
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Morningstar, JP"
-msgstr ""
+msgstr "Morningstar, JP"
 
 #: libgnucash/engine/gnc-commodity.cpp:211
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Motley Fool"
-msgstr ""
+msgstr "Motley Fool"
 
 #: libgnucash/engine/gnc-commodity.cpp:212
 msgctxt "FQ Source"
@@ -34588,14 +34612,16 @@ msgid "New Zealand stock eXchange, NZ"
 msgstr "Bourse de Nouvelle-Zélande, NZ"
 
 #: libgnucash/engine/gnc-commodity.cpp:213
+#, fuzzy
 msgctxt "FQ Source"
 msgid "NSE (National Stock Exchange), IN"
-msgstr ""
+msgstr "NSE (National Stock Exchange), IN"
 
 #: libgnucash/engine/gnc-commodity.cpp:214
+#, fuzzy
 msgctxt "FQ Source"
 msgid "OnVista, DE"
-msgstr ""
+msgstr "OnVista, DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:215
 msgctxt "FQ Source"
@@ -34603,20 +34629,23 @@ msgid "Paris Stock Exchange/Boursorama, FR"
 msgstr "Bourse de Paris/Boursorama, FR"
 
 #: libgnucash/engine/gnc-commodity.cpp:216
+#, fuzzy
 msgctxt "FQ Source"
 msgid "S-Investor, DE"
-msgstr ""
+msgstr "S-Investor, DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:217
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Sharenet, ZA"
-msgstr ""
+msgstr "Sharenet, ZA"
 
 # messages-i18n.c:180
 #: libgnucash/engine/gnc-commodity.cpp:218
+#, fuzzy
 msgctxt "FQ Source"
 msgid "SIX Swiss Exchange shares, CH"
-msgstr ""
+msgstr "SIX Swiss Exchange actions, CH"
 
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
@@ -34628,19 +34657,22 @@ msgid "StockData"
 msgstr "Actions"
 
 #: libgnucash/engine/gnc-commodity.cpp:220
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Stooq, PL"
-msgstr ""
+msgstr "Stooq, PL"
 
 #: libgnucash/engine/gnc-commodity.cpp:221
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Swiss Fund Data AG, CH"
-msgstr ""
+msgstr "Swiss Fund Data AG, CH"
 
 #: libgnucash/engine/gnc-commodity.cpp:222
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Tesouro Direto bonds, BR"
-msgstr ""
+msgstr "Tesouro Direto, BR"
 
 #: libgnucash/engine/gnc-commodity.cpp:223
 msgctxt "FQ Source"
@@ -34648,14 +34680,16 @@ msgid "Toronto Stock eXchange, CA"
 msgstr "Bourse de Toronto, CA"
 
 #: libgnucash/engine/gnc-commodity.cpp:224
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Tradegate, DE"
-msgstr ""
+msgstr "Tradegate, DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:225
+#, fuzzy
 msgctxt "FQ Source"
 msgid "Treasury Direct bonds, US"
-msgstr ""
+msgstr "Trésor Direct obligations, États-Unis"
 
 #: libgnucash/engine/gnc-commodity.cpp:226
 msgctxt "FQ Source"
@@ -34755,10 +34789,9 @@ msgid "%B %e, %Y"
 msgstr "%B %e, %Y"
 
 #: libgnucash/engine/gnc-date.cpp:677
-#, fuzzy, c-format
-#| msgid " to "
+#, c-format
 msgid "%s to %s"
-msgstr " à "
+msgstr "%s à %s"
 
 #: libgnucash/engine/gnc-datetime.cpp:97
 msgid "y-m-d"
