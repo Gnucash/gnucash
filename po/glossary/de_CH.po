@@ -3,6 +3,7 @@
 # Christian Stimming <stimming@tuhh.de>, 2001
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021, 2026.
+# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -10,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
+"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German (Switzerland) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/de_CH/>\n"
 "Language: de_CH\n"
