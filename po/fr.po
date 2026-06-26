@@ -14,46 +14,41 @@
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Christopher Lam, 2018
 # K. Herbert <herbert.ka@mailo.com>, 2020.
-# Christopher Lam <christopher.lck@gmail.com>, 2020, 2021, 2023, 2026.
+# Christopher Lam <christopher.lck@gmail.com>, 2020, 2021, 2023.
 # Laurent DÉRÉDEC <images-ld@gmx.fr>, 2021.
-# Julien Humbert <julroy67@gmail.com>, 2021, 2026.
+# Julien Humbert <julroy67@gmail.com>, 2021.
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
-# Thomas Jungers <thomasjungers@gmail.com>, 2021, 2026.
+# Thomas Jungers <thomasjungers@gmail.com>, 2021.
 # Diego Marin <alterne@gmail.com>, 2021.
-# Pascal HUE <pascal.hue35@gmail.com>, 2021, 2026.
-# Alexandre <nasmi3+weblate@gmail.com>, 2021, 2026.
-# Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022, 2026.
-# Sébastien Ray <sebastien.ray@normalesup.org>, 2022, 2026.
+# Pascal HUE <pascal.hue35@gmail.com>, 2021.
+# Alexandre <nasmi3+weblate@gmail.com>, 2021.
+# Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022.
+# Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
-# Laurent Bigonville <bigon@bigon.be>, 2022, 2026.
+# Laurent Bigonville <bigon@bigon.be>, 2022.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
 # Philippe Lamare <ph.lamare@free.fr>, 2022, 2023, 2026.
-# Dyf_Tfh <n.zhao@hotmail.fr>, 2023, 2026.
-# Gaël CATLLA <gcatlla@free.fr>, 2023, 2026.
-# Vincent Dawans <dawansv@gmail.com>, 2023, 2026.
+# Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
+# Gaël CATLLA <gcatlla@free.fr>, 2023.
+# Vincent Dawans <dawansv@gmail.com>, 2023.
 # Xavier Gandillot (aka xavier268), 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024, 2025, 2026.
-# aleksej0R <omolice@hotmail.fr>, 2024, 2026.
+# aleksej0R <omolice@hotmail.fr>, 2024.
 # Over_score <wablate@lorang.net>, 2024.
-# Martin LORANG <wablate@lorang.net>, 2024, 2026.
+# Martin LORANG <wablate@lorang.net>, 2024.
 # Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
 # Frédéric Mergey <fmergey@yahoo.com>, 2025, 2026.
-# Bernard Giroud <bgiroud33@gmail.com>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# "J. Lavoie" <j.lavoie@net-c.ca>, 2026.
-# Simon Arlott <nomis@users.noreply.hosted.weblate.org>, 2026.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:43+0000\n"
-"Last-Translator: Laurent Bigonville <bigon@bigon.be>\n"
+"Last-Translator: Philippe Lamare <ph.lamare@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"

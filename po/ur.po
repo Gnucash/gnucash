@@ -4,19 +4,15 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 # Abdul Quddos (AQN) <yousufi81@gmail.com>, 2022.
 # Adil Ishaq <adilishaq.cc@hotmail.com>, 2024.
-# Adil Ishaq <ishaqadil@aol.com>, 2024, 2026.
-# "Abdul Quddos (AQN)" <yousufi81@gmail.com>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# Adil Ishaq <ishaqadil@aol.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:30+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Adil Ishaq <ishaqadil@aol.com>\n"
 "Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/>"
 "\n"
 "Language: ur\n"

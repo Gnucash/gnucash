@@ -2,10 +2,9 @@
 # 이정희 <daemul72@gmail.com>, 2022, 2026.
 # Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>, 2022.
 # Subin Song <subin@subinsong.com>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"

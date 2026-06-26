@@ -2,16 +2,14 @@
 # This file is distributed under the same license as the GnuCash package.
 #
 # Sangeeta Kumari<gistlrc@gmail.com>, 2015.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:09+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Sangeeta Kumari<gistlrc@gmail.com>\n"
 "Language-Team: Maithili <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "mai/>\n"
 "Language: mai\n"

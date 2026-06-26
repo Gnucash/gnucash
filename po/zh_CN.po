@@ -9,47 +9,42 @@
 # Aron Xu <happyaron.xu@gmail.com>, 2010
 # Tao Wang <dancefire@gmail.com>, 2010
 # Monson Shao <holymonson@gmail.com>, 2018
-# Boyuan Yang <073plan@gmail.com>, 2018, 2019, 2021, 2026.
+# Boyuan Yang <073plan@gmail.com>, 2018, 2019, 2021.
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
-# Sean Guan <guanshangkang@gmail.com>, 2021, 2026.
-# 峡州仙士 <c@cjh0613.com>, 2021, 2026.
-# chokore <byt2ooo@163.com>, 2021, 2026.
+# Sean Guan <guanshangkang@gmail.com>, 2021.
+# 峡州仙士 <c@cjh0613.com>, 2021.
+# chokore <byt2ooo@163.com>, 2021.
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
-# cjh <cjh@cjh0613.com>, 2021, 2023, 2026.
+# cjh <cjh@cjh0613.com>, 2021, 2023.
 # Eric <spice2wolf@gmail.com>, 2021.
-# J0kWang <lianjiefly@gmail.com>, 2021, 2022, 2023, 2026.
-# YTX <ytx.cash@gmail.com>, 2021, 2022, 2023, 2026.
+# J0kWang <lianjiefly@gmail.com>, 2021, 2022, 2023.
+# YTX <ytx.cash@gmail.com>, 2021, 2022, 2023.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
-# Yu Hongbo <linuxbckp@gmail.com>, 2022, 2026.
+# Yu Hongbo <linuxbckp@gmail.com>, 2022.
 # Eric <hamburger1024@firemail.cc>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
-# 帅是我2 <a1173522112@163.com>, 2022, 2026.
-# Carlson Mak <hbmaak@gmail.com>, 2023, 2026.
-# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2024, 2025, 2026.
-# yu0A <yuhongbo@member.fsf.org>, 2023, 2026.
-# yuht <yuht@qq.com>, 2023, 2026.
+# 帅是我2 <a1173522112@163.com>, 2022.
+# Carlson Mak <hbmaak@gmail.com>, 2023.
+# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2024, 2025.
+# yu0A <yuhongbo@member.fsf.org>, 2023.
+# yuht <yuht@qq.com>, 2023.
 # Ral Hole <ral-hole@outlook.com>, 2023, 2025.
-# derxi <happycxin@163.com>, 2023, 2026.
+# derxi <happycxin@163.com>, 2023.
 # fleefar <825272947@qq.com>, 2024.
 # "Cheng R.Zhu" <zcr@users.noreply.hosted.weblate.org>, 2025.
 # fliukka <weblate@fliukka.net>, 2025, 2026.
 # DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>, 2025, 2026.
-# aba2222 <ABCSSS2021@outlook.com>, 2025, 2026.
-# SIB <shawndu0820@gmail.com>, 2025, 2026.
-# Deleted User <hamburger1024@users.noreply.hosted.weblate.org>, 2026.
-# Deleted User <noreply+62046@weblate.org>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
-# laole <lovedebushiu@qq.com>, 2026.
+# aba2222 <ABCSSS2021@outlook.com>, 2025.
+# SIB <shawndu0820@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:43+0000\n"
-"Last-Translator: laole <lovedebushiu@qq.com>\n"
+"Last-Translator: DGDS <dagrinddontstop@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"

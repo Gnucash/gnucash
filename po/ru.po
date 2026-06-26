@@ -10,32 +10,29 @@
 # Dmitry Pavlov <zeldigas@gmail.com>, 2014.
 # ashed <craysy@gmail.com>, 2017
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017, 2018
-# Val Saven <val.saven@gmail.com>, 2021, 2026.
+# Val Saven <val.saven@gmail.com>, 2021.
 # Artem <KovalevArtem.ru@gmail.com>, 2021.
-# МАН69К <weblate@mah69k.net>, 2022, 2026.
-# Nikita Samoilov <n.p.samoilov@gmail.com>, 2022, 2026.
+# МАН69К <weblate@mah69k.net>, 2022.
+# Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 # Vik <xasertop@gmail.com>, 2022.
-# Vin <k3kelm4vw@mozmail.com>, 2023, 2026.
-# hades <dev@hades.name>, 2023, 2026.
-# Xangel2Net <xangel1@mail.ru>, 2023, 2026.
-# gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025, 2026.
-# hitmman <hitmman@gmail.com>, 2024, 2026.
-# "Alex Maryson Jr." <akamar87@gmail.com>, 2025, 2026.
+# Vin <k3kelm4vw@mozmail.com>, 2023.
+# hades <dev@hades.name>, 2023.
+# Xangel2Net <xangel1@mail.ru>, 2023.
+# gfbdrgng <hnaofegnp@hldrive.com>, 2024, 2025.
+# hitmman <hitmman@gmail.com>, 2024.
+# "Alex Maryson Jr." <akamar87@gmail.com>, 2025.
 # Yurt Page <yurtpage+weblate@gmail.com>, 2025, 2026.
 # Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com>, 2025.
-# Olesya_Gerasimenko <gammaray@basealt.ru>, 2025, 2026.
+# Olesya_Gerasimenko <gammaray@basealt.ru>, 2025.
 # Yegor Derevenets <yegor.derevenets@gmail.com>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# Localizer <Localizer_in_Russian@protonmail.com>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:25+0000\n"
-"Last-Translator: hitmman <hitmman@gmail.com>\n"
+"Last-Translator: Yegor Derevenets <yegor.derevenets@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"

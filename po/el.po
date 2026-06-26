@@ -29,25 +29,23 @@
 #
 # Nikos Charonitakis <nikosx@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2010.
 # ta_panta_rei, 2003, 2006.
-# giorgos georgopoulakis <huskyaek@gmail.com>, 2021, 2026.
-# Michalis <michalisntovas@yahoo.gr>, 2021, 2026.
+# giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
+# Michalis <michalisntovas@yahoo.gr>, 2021.
 # Ζωή Καίσα <kaisazoe@gmail.com>, 2021.
-# Katerina <katerina.gakou@hotmail.com>, 2021, 2026.
-# Eugenia Russell <eugenia.russell2019@gmail.com>, 2021, 2026.
-# Gregory-K <lifeturn@gmail.com>, 2022, 2026.
-# ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>, 2023, 2026.
-# Dimitris Mandalidis <dimitris.mandalidis@gmail.com>, 2023, 2026.
-# George Petsagourakis <petsagouris@gmail.com>, 2025, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# Katerina <katerina.gakou@hotmail.com>, 2021.
+# Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
+# Gregory-K <lifeturn@gmail.com>, 2022.
+# ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>, 2023.
+# Dimitris Mandalidis <dimitris.mandalidis@gmail.com>, 2023.
+# George Petsagourakis <petsagouris@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:32+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: George Petsagourakis <petsagouris@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "el/>\n"
 "Language: el\n"

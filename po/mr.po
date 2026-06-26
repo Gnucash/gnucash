@@ -1,14 +1,12 @@
 # Localization for Marathi language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>, 2014.
-# Hemant More <hemantrmore@tutanota.com>, 2022, 2026.
-# Rahul Shirke <sabretou@gmail.com>, 2023, 2026.
-# Hemant More <foil-pastor-omen@duck.com>, 2025, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# Hemant More <hemantrmore@tutanota.com>, 2022.
+# Rahul Shirke <sabretou@gmail.com>, 2023.
+# Hemant More <foil-pastor-omen@duck.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"

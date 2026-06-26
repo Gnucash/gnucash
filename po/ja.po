@@ -14,20 +14,18 @@
 # Hiroto Kagotani <hiroto.kagotani@gmail.com>, 2007.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2008-2009.
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2009-2017.
-# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021, 2022, 2023, 2024, 2026.
+# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021, 2022, 2023, 2024.
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020, 2021.
-# TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021, 2026.
-# soramikan <sora_yana@icloud.com>, 2024, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021.
+# soramikan <sora_yana@icloud.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:39+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"

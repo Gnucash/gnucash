@@ -3,20 +3,18 @@
 # This file is distributed under the same license as the gnucash package.
 # Miloslav Trmac <mitr@volny.cz>, 2002, 2003, 2004, 2007.
 # Petr Pisar <petr.pisar@atlas.cz>, 2012.
-# Tomáš Václavík <t3vaclavik@gmail.com>, 2022, 2026.
+# Tomáš Václavík <t3vaclavik@gmail.com>, 2022.
 # Kryštof Černý <cleverline1mc@gmail.com>, 2023, 2026.
 # Mirek Špaňko <mirekspanko@hotmail.cz>, 2026.
 # Jerry <nezbeda@protonmail.com>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:48+0000\n"
-"Last-Translator: Tomáš Václavík <t3vaclavik@gmail.com>\n"
+"Last-Translator: Jerry <nezbeda@protonmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "cs/>\n"
 "Language: cs\n"

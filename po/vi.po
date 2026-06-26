@@ -1,17 +1,15 @@
 # Vietnamese translation for GNUCash.
 # Copyright © 2007 Free Software Foundation, Inc.
 # Clytie Siddall <clytie@riverland.net.au>, 2007
-# bruh <quangtrung02hn16@gmail.com>, 2021, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
+# bruh <quangtrung02hn16@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:32+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/vi/>\n"
 "Language: vi\n"

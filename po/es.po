@@ -17,13 +17,8 @@
 # gallegonovato <fran-carro@hotmail.es>, 2023, 2024.
 # Jaime Marquínez Ferrándiz <jaime.marquinez.ferrandiz@fastmail.net>, 2023, 2025.
 # Francisco <fhiegom@outlook.es>, 2023.
-# Deleted User <noreply+48943@weblate.org>, 2025, 2026.
 # Jesús Martínez <weblate@jandemor.com>, 2025.
-# apemay <aperezmayol@gmail.com>, 2026.
 # apemay <apemay.dev@gmail.com>, 2026.
-# Deleted User <noreply+36847@weblate.org>, 2026.
-# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
-# John Ralls <jralls@ceridwen.us>, 2026.
 #
 #
 # ###############################################################################
@@ -89,12 +84,12 @@
 # Comentarios extraídos:
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
+"Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:36+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
