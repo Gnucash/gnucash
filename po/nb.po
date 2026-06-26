@@ -9,7 +9,7 @@
 # Rune Osnes <osnes.rune@gmail.com>, 2023, 2026.
 # Tor Berg <tob@samfundet.no>, 2024.
 # Morten Cools <morten@cools.no>, 2024, 2026.
-# Magnus Røkke <mrokke@gmail.com>, 2025.
+# Magnus Røkke <mrokke@gmail.com>, 2025, 2026.
 # Kevin Unhammer <unhammer+dill@mm.st>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
@@ -19,7 +19,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:16+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: Magnus Røkke <mrokke@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
