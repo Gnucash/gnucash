@@ -11,7 +11,7 @@
 # Thomas Jungers <thomasjungers@gmail.com>, 2021.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
-# aleksej0R <omolice@hotmail.fr>, 2022, 2023, 2025.
+# aleksej0R <omolice@hotmail.fr>, 2022, 2023, 2025, 2026.
 # Vincent Dawans <dawansv@gmail.com>, 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024.
 # Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
@@ -22,7 +22,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Anastasios Ikonomou <anastasios.ikonomou@gmail.com>\n"
+"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
