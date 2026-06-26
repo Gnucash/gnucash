@@ -1,6 +1,6 @@
 # Michał Ciołek <michalciolek@gmail.com>, 2020
 # Adithya K <adithyak04@gmail.com>, 2021.
-# Maciej Błędkowski <mble@tuta.io>, 2021.
+# Maciej Błędkowski <mble@tuta.io>, 2021, 2026.
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 # 154pinkchairs <ovehis@riseup.net>, 2022.
 # WaldiS <sto@tutanota.de>, 2022.
@@ -20,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:21+0000\n"
-"Last-Translator: Jacek Baszkiewicz <j.baszkiewicz@gmail.com>\n"
+"Last-Translator: Maciej Błędkowski <mble@tuta.io>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
