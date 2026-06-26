@@ -6,14 +6,15 @@
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021, 2022, 2023, 2024, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 03:46+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"PO-Revision-Date: 2026-06-26 03:47+0000\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
