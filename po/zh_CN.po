@@ -26,7 +26,7 @@
 # Eric <hamburger1024@mailbox.org>, 2022.
 # 帅是我2 <a1173522112@163.com>, 2022.
 # Carlson Mak <hbmaak@gmail.com>, 2023.
-# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2024, 2025.
+# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023, 2024, 2025, 2026.
 # yu0A <yuhongbo@member.fsf.org>, 2023, 2026.
 # yuht <yuht@qq.com>, 2023, 2026.
 # Ral Hole <ral-hole@outlook.com>, 2023, 2025.
@@ -45,7 +45,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:42+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1459,8 +1459,7 @@ msgstr "名义分配（股利）"
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
-msgstr ""
-"公司作出一个名义分配，把它记作股利收入并增加成本而不对股份数量产生影响。"
+msgstr "公司作出一个名义分配，把它记作股利收入并增加成本而不对股份数量产生影响。"
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
@@ -1472,8 +1471,7 @@ msgstr "名义分配（资本收益）"
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
-msgstr ""
-"公司发行名义分配，记录为资本收益，并在不影响股份数量的情况下增加成本基础。"
+msgstr "公司发行名义分配，记录为资本收益，并在不影响股份数量的情况下增加成本基础。"
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -9330,8 +9328,8 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
-"需要使用API密钥来使用YH Finance的FinanceAPI服务。你可以在YH Finance网站上"
-"（https://financeapi.net/pricing）注册一个免费账户来获得密钥。"
+"需要使用API密钥来使用YH Finance的FinanceAPI服务。你可以在YH Finance网站上（"
+"https://financeapi.net/pricing）注册一个免费账户来获得密钥。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -11276,9 +11274,9 @@ msgstr ""
 "易ID、日期、编号、说明、备注、交易货币和无效原因）与上一个非空值不同时，导入"
 "器会将其视作一个新的交易。\n"
 "\n"
-"最后，对于重复导入，预览页面有加载和保存设置的按钮。你可以保存你调整过的设"
-"置，以便在以后的导入中重复使用它们。在加载你的设置后，你也可以为类似的导入再"
-"次调整它们，并用另一个名称保存。"
+"最后，对于重复导入，预览页面有加载和保存设置的按钮。你可以保存你调整过的设置"
+"，以便在以后的导入中重复使用它们。在加载你的设置后，你也可以为类似的导入再次"
+"调整它们，并用另一个名称保存。"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:62
 msgid "Transaction Import Assistant"
@@ -12540,8 +12538,7 @@ msgstr "股利科目"
 msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
-msgstr ""
-"在本页中，输入资本收益或亏损以及相关的科目。资本收益为正，资本亏损为负。"
+msgstr "在本页中，输入资本收益或亏损以及相关的科目。资本收益为正，资本亏损为负。"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:843
 #, fuzzy
