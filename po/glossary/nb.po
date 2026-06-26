@@ -4,7 +4,7 @@
 # Tor Harald Thorland <tortho@strigen.com>, 2005.
 # Kjartan Maraas <kmaraas@gnome.org>, 2005.
 # John Erling Blad <jeblad@gmail.com>, 2018
-# Allan Nordhøy <epost@anotheragency.no>, 2021.
+# Allan Nordhøy <epost@anotheragency.no>, 2021, 2026.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2026.
 # Magnus Røkke <mrokke@gmail.com>, 2025, 2026.
 # Rune Osnes <osnes.rune@gmail.com>, 2026.
@@ -15,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:36+0000\n"
-"Last-Translator: Magnus Røkke <mrokke@gmail.com>\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "glossary/nb_NO/>\n"
 "Language: nb\n"
