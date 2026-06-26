@@ -12,6 +12,7 @@
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
 # Deleted User <noreply+136605@weblate.org>, 2026.
 # Muha Aliss <muhaaliss@users.noreply.hosted.weblate.org>, 2026.
+# Oğuz Ersen <oguz@ersen.moe>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -19,7 +20,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:39+0000\n"
-"Last-Translator: Muha Aliss <muhaaliss@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
