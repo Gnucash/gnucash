@@ -32,7 +32,7 @@
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024, 2026.
 # Alois Levermann <alois@levermann.xyz>, 2025, 2026.
 # Thomas Kriegel <thomasMapper@bin-wieder-da.de>, 2025, 2026.
-# Franko <web.90947@t.sc-ha.net>, 2025.
+# Franko <web.90947@t.sc-ha.net>, 2025, 2026.
 # Alexej <alexejkirsch@outlook.de>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 #
@@ -47,7 +47,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Franko <web.90947@t.sc-ha.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -22348,8 +22348,7 @@ msgstr "Geben Sie die Formel zur Soll-Berechnung der tatsächlichen Buchung ein"
 
 #: gnucash/register/ledger-core/split-register-model.c:2403
 msgid "Enter credit formula for real transaction"
-msgstr ""
-"Geben Sie die Formel zur Haben-Berechnung der tatsächlichen Buchung ein"
+msgstr "Geben Sie die Formel zur Haben-Berechnung der tatsächlichen Buchung ein"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:76
 msgid "Don't autocomplete"
