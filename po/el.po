@@ -33,7 +33,7 @@
 # Michalis <michalisntovas@yahoo.gr>, 2021, 2026.
 # Ζωή Καίσα <kaisazoe@gmail.com>, 2021.
 # Katerina <katerina.gakou@hotmail.com>, 2021.
-# Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
+# Eugenia Russell <eugenia.russell2019@gmail.com>, 2021, 2026.
 # Gregory-K <lifeturn@gmail.com>, 2022.
 # ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>, 2023, 2026.
 # Dimitris Mandalidis <dimitris.mandalidis@gmail.com>, 2023.
@@ -45,7 +45,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:32+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "el/>\n"
 "Language: el\n"
