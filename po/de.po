@@ -8,7 +8,7 @@
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019, 2022.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
-# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018, 2025.
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018, 2025, 2026.
 # quazgar <quazgar@posteo.de> 2017.
 # Rolf Leggewie, 2008.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
@@ -46,7 +46,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:29+0000\n"
-"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
+"Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
