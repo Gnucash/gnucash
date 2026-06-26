@@ -7,6 +7,7 @@
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 # Kornelijus Tvarijanavičius <kornelijus@tvaria.com>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -14,7 +15,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:06+0000\n"
-"Last-Translator: Kornelijus Tvarijanavičius <kornelijus@tvaria.com>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/lt/>\n"
 "Language: lt\n"
