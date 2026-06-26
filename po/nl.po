@@ -10,7 +10,7 @@
 # Jeroen ten Berge <twinbit@home.nl>, 2004.
 # Hendrik-Jan Heins <hjh@passys.nl>, 2003.
 # Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
-# Geert Janssens <info@kobaltwit.be>, 2021.
+# Geert Janssens <info@kobaltwit.be>, 2021, 2026.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025, 2026.
 # Rene Lambers <jbh.lambers@gmail.com>, 2023.
@@ -25,7 +25,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"Last-Translator: Geert Janssens <info@kobaltwit.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
@@ -8847,8 +8847,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
-msgstr ""
-"Betalingsherinneringen voor verkoopfacturen weergeven bij het opstarten"
+msgstr "Betalingsherinneringen voor verkoopfacturen weergeven bij het opstarten"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
 msgid ""
@@ -10900,8 +10899,7 @@ msgstr "Bestaande koersen vervangen"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:178
 msgid ""
 "This dialog is presented before allowing you to replace an existing price."
-msgstr ""
-"Dit venster wordt getoond alvorens u een bestaande koers kan vervangen."
+msgstr "Dit venster wordt getoond alvorens u een bestaande koers kan vervangen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
@@ -19958,8 +19956,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Als u op [Toepassen] klikt, worden de boekingen geëxporteerd naar bestand "
-"‘%s’. Het aantal geëxporteerde rekeningen bedraagt %u.\n"
+"Als u op [Toepassen] klikt, worden de boekingen geëxporteerd naar bestand ‘%s"
+"’. Het aantal geëxporteerde rekeningen bedraagt %u.\n"
 "\n"
 "Klik op [Terug] om uw keuzes te herzien of op [Annuleren] om de export af te "
 "breken.\n"
@@ -19974,8 +19972,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Als u op [Toepassen] klikt, worden de boekingen geëxporteerd naar bestand "
-"‘%s’.\n"
+"Als u op [Toepassen] klikt, worden de boekingen geëxporteerd naar bestand ‘%s"
+"’.\n"
 "\n"
 "Klik op [Terug] om uw keuzes te herzien of op [Annuleren] om de export af te "
 "breken.\n"
@@ -25927,8 +25925,8 @@ msgstr ""
 "kan u uw bedrijfsrekeningen voor aankopen en verkopen kiezen. Elke boeking "
 "kan naast een deel in asset-, schulden-, te betalen- of te "
 "ontvangenrekeningen ook een deel hebben in een belastingsrekening. "
-"Bijvoorbeeld Inkomsten:Verkopen -€1000, Te ontvangen € 1100, Schulden:BTW -"
-"€100."
+"Bijvoorbeeld Inkomsten:Verkopen -€1000, Te ontvangen € 1100, Schulden:BTW -€"
+"100."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
 msgid ""
