@@ -12,11 +12,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-14 21:11+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 03:51+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -2436,8 +2436,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
-"Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell hagyni."
+msgstr "Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell hagyni."
 
 #: gnucash/gnome/dialog-customer.c:334
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -4143,8 +4142,7 @@ msgstr ""
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
-msgstr ""
-"Az ütemezett tranzakció kiegyenlítetlen. Erősen ajánlott a korrigálása."
+msgstr "Az ütemezett tranzakció kiegyenlítetlen. Erősen ajánlott a korrigálása."
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:774
 msgid ""
