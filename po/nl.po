@@ -2,7 +2,7 @@
 # Nederlandse vertalingen voor het pakket GnuCash.
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
-# Geert Janssens <geert@kobaltwit.be>, 2020, 2021.
+# Geert Janssens <geert@kobaltwit.be>, 2020, 2021, 2026.
 # Mark Haanen <i18n@haanen.net>, 2009-2017.
 # Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.
 # Erwin Poeze <erwin.poeze@gmail.com>, 2009.
@@ -25,7 +25,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
