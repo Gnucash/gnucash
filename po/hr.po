@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the GnuCash package.
 # Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -10,7 +11,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:50+0000\n"
-"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
 "Language: hr\n"
