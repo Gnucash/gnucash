@@ -13,7 +13,7 @@
 # Geert Janssens <info@kobaltwit.be>, 2021, 2026.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2025, 2026.
-# Rene Lambers <jbh.lambers@gmail.com>, 2023.
+# Rene Lambers <jbh.lambers@gmail.com>, 2023, 2026.
 # Leo Moons <Leo.Moons@proximus.be>, 2025.
 # BlueRains <lu@schoevaars.eu>, 2025.
 # Ceaus <github@pohw.nl>, 2025, 2026.
@@ -29,7 +29,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: insensitiveclod <contact@sociallife.org>\n"
+"Last-Translator: Rene Lambers <jbh.lambers@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
