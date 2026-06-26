@@ -2,6 +2,7 @@
 # 이정희 <daemul72@gmail.com>, 2022, 2026.
 # Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>, 2022.
 # Subin Song <subin@subinsong.com>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -9,7 +10,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:59+0000\n"
-"Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -5648,9 +5649,9 @@ msgid ""
 "accurate reports."
 msgstr ""
 "사용하기 쉬우면서도 강력하고 유연하게 설계된, GnuCash를 사용하면 은행 계좌, "
-"주식, 수익 및 비용을 추적할 수 있습니다. 수표장부 기입장처럼 빠르고 직관적으"
-"로 사용할 수 있는, 복식부기 회계와 같은 전문 회계 원칙을 기반으로 균형 있는 "
-"장부와 정확한 보고서를 보장합니다."
+"주식, 수익 및 비용을 추적할 수 있습니다. 수표장부 기입장처럼 빠르고 "
+"직관적으로 사용할 수 있는, 복식부기 회계와 같은 전문 회계 원칙을 기반으로 "
+"균형 있는 장부와 정확한 보고서를 보장합니다."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"

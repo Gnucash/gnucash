@@ -1,7 +1,7 @@
 # Localization for Konkani(Roman Script) language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Ravikumar Ragam <ragamrravi@gmail.com>, 2014.
-#
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -9,7 +9,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:02+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Konkani <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "kok@latin/>\n"
 "Language: kok@latin\n"
