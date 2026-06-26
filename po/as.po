@@ -2,6 +2,7 @@
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Parimal Khade <parimalk@cdac.in>, 2014.
 # Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>, 2024.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -9,7 +10,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:22+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Assamese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "as/>\n"
 "Language: as\n"
@@ -5816,11 +5817,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"ব্যৱহাৰৰ সুবিধাৰ্থে আৰ্হি কৰিছে, এতিয়াও শক্তিশালী আৰু সংকুচিত-প্ৰসাৰিত, GnuCash য়ে "
-"আপোনাক বেংক একাউন্টবোৰ, ষ্টকবোৰ, আয় আৰু ব্যয়বোৰৰ হিচাপ ৰাখিবলৈ অনুমতি দিয়ে. এটা "
-"পৰীক্ষা বহীৰ পঞ্জীয়নৰ দৰে ব্যৱহাৰ কৰিবলৈ ক্ষিপ্ৰ আৰু সহজে বুজি পোৱা, এইটো পৰিমাণৰ "
-"কিতাপবোৰ আৰু সঠিক ৰিপোৰ্টবোৰ নিশ্চিত কৰিবলৈ দ্বিগুণ-প্ৰৱিষ্টি গণনাটোৰ দৰে দক্ষ গণনাৰ "
-"নীতিবোৰৰ ওপৰত আধাৰিত."
+"ব্যৱহাৰৰ সুবিধাৰ্থে আৰ্হি কৰিছে, এতিয়াও শক্তিশালী আৰু সংকুচিত-প্ৰসাৰিত, GnuCash য়ে আপোনাক "
+"বেংক একাউন্টবোৰ, ষ্টকবোৰ, আয় আৰু ব্যয়বোৰৰ হিচাপ ৰাখিবলৈ অনুমতি দিয়ে. এটা পৰীক্ষা বহীৰ "
+"পঞ্জীয়নৰ দৰে ব্যৱহাৰ কৰিবলৈ ক্ষিপ্ৰ আৰু সহজে বুজি পোৱা, এইটো পৰিমাণৰ কিতাপবোৰ আৰু সঠিক "
+"ৰিপোৰ্টবোৰ নিশ্চিত কৰিবলৈ দ্বিগুণ-প্ৰৱিষ্টি গণনাটোৰ দৰে দক্ষ গণনাৰ নীতিবোৰৰ ওপৰত "
+"আধাৰিত."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
