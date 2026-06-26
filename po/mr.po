@@ -4,6 +4,7 @@
 # Hemant More <hemantrmore@tutanota.com>, 2022, 2026.
 # Rahul Shirke <sabretou@gmail.com>, 2023, 2026.
 # Hemant More <foil-pastor-omen@duck.com>, 2025.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -11,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:14+0000\n"
-"Last-Translator: Hemant More <hemantrmore@tutanota.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Marathi <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "mr/>\n"
 "Language: mr\n"
