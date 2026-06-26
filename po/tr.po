@@ -9,7 +9,7 @@
 # udo pton <udopton@gmail.com>, 2021, 2026.
 # Bora <boratici@gmail.com>, 2021, 2022.
 # Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024, 2025, 2026.
-# Gurkan Bebek <gurkanbebek@gmail.com>, 2025.
+# Gurkan Bebek <gurkanbebek@gmail.com>, 2025, 2026.
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
 # Oğuz Ersen <oguz@ersen.moe>, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
@@ -21,7 +21,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:41+0000\n"
-"Last-Translator: Deleted User <noreply+136605@weblate.org>\n"
+"Last-Translator: Gurkan Bebek <gurkanbebek@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
