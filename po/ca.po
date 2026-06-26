@@ -5,7 +5,7 @@
 # Joan <calbasi@pangea.org>, 2007.
 # David Planella Molas <david.planella@gmail.com>, 2007.
 # Walter Garcia-Fontes <walter.garcia@upf.edu>, 2015,2021.
-# mid-kid <esteve.varela@gmail.com>, 2025.
+# mid-kid <esteve.varela@gmail.com>, 2025, 2026.
 #
 # Vocabulari de comptabilitat: http://www.ub.es/slc/termens/Comptab.pdf
 #
@@ -49,7 +49,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 05:00+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: mid-kid <esteve.varela@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ca/>\n"
 "Language: ca\n"
@@ -825,8 +825,8 @@ msgstr ""
 "Cada assentament té un camp de «Notes» on podeu afegir informació útil.\n"
 "\n"
 "Per fer-lo visible\n"
-"Trieu «Visualitza» a la barra de menú i cliqueu «Línia doble» o marqueu "
-"«Vista a doble línea» a Preferències:Valors per defecte del registre."
+"Trieu «Visualitza» a la barra de menú i cliqueu «Línia doble» o marqueu «"
+"Vista a doble línea» a Preferències:Valors per defecte del registre."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
