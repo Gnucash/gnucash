@@ -3,14 +3,15 @@
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011.
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 # Tadas Masiulionis <tadzikaz@gmail.com>, 2023.
+# Kornelijus Tvarijanavičius <kornelijus@tvaria.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-06-26 04:36+0000\n"
+"Last-Translator: Kornelijus Tvarijanavičius <kornelijus@tvaria.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/lt/>\n"
 "Language: lt\n"
