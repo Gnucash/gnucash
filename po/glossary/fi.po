@@ -2,7 +2,7 @@
 # Copyright (C) 2020 Free Software Foundation, Inc.
 # Marko Kohtala <marko.kohtala@gmail.com>, 2020.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
-# Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021.
+# Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021, 2026.
 # Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
 # Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Metroseksuaali <timmy.kinnunen@elisanet.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
