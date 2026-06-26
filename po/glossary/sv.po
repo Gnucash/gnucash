@@ -4,7 +4,7 @@
 # Jonas Norling <norling@lysator.liu.se>, 2006.
 # Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2026.
 # Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023, 2026.
-# bittin1ddc447d824349b2 <bittin@reimu.nl>, 2024.
+# bittin1ddc447d824349b2 <bittin@reimu.nl>, 2024, 2026.
 # Arve Eriksson <arve.eriksson@startmail.com>, 2026.
 #
 # $Id$
@@ -16,7 +16,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:37+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
 "Language: sv\n"
