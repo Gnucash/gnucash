@@ -6,6 +6,7 @@
 # Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>, 2006.
 # Shiva Prasad Pokharel <pokharelshiva@hotmail.com>, 2006.
 # Diggaj Upadhyay <dcozupadhyay@duck.com>, 2022, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -13,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 04:18+0000\n"
-"Last-Translator: Diggaj Upadhyay <dcozupadhyay@duck.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Nepali <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ne/>\n"
 "Language: ne\n"
