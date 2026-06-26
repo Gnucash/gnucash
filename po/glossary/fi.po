@@ -4,7 +4,7 @@
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
 # Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021, 2026.
 # Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
-# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
+# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
@@ -12,7 +12,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Metroseksuaali <timmy.kinnunen@elisanet.fi>\n"
+"Last-Translator: Sampo Harjula <sahtor.weblate@sahtor.net>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
