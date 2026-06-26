@@ -4,7 +4,7 @@
 # ltai0001 <yltaief@gmail.com>, 2022, 2026.
 # Sherif ElGamal <selgamal0@gmail.com>, 2022, 2026.
 # BL <ghostzeko@gmail.com>, 2023.
-# Abdulsalam Alshilash <ashalash@msn.com>, 2025.
+# Abdulsalam Alshilash <ashalash@msn.com>, 2025, 2026.
 # Usama Khalil <usamafoad@gmail.com>, 2025, 2026.
 # Tgol Mgol <tgolmgol@gmail.com>, 2025, 2026.
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Usama Khalil <usamafoad@gmail.com>\n"
+"Last-Translator: Abdulsalam Alshilash <ashalash@msn.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ar/>\n"
 "Language: ar\n"
@@ -264,7 +264,7 @@ msgstr "إقفال الدفاتر"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr "الميزانية"
+msgstr "الموازنة"
 
 #. "-"
 msgid "business (adjective)"
@@ -339,9 +339,8 @@ msgid "currency"
 msgstr "عملة"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
-#, fuzzy
 msgid "Custom"
-msgstr "مخصص"
+msgstr "مخصّص"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -505,7 +504,7 @@ msgstr "حسابات مفقودة"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "مجموعة"
+msgstr "دفعة"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -525,7 +524,7 @@ msgstr "واجهة متعددة الاوثائق"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "مذكرة"
+msgstr "بيان"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -713,7 +712,7 @@ msgstr "أفقي"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "الأرباح المحتجزة"
+msgstr "الأرباح المُبقاة"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -757,7 +756,7 @@ msgstr "مصدر"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "تقسيم"
+msgstr "طرف القيد"
 
 #. "Alias of 'shares'"
 msgid "stocks"
