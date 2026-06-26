@@ -1,7 +1,7 @@
 # Localization for Kannada language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Ritu Panwar <ritup@cdac.in>, 2014.
-#
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
@@ -9,7 +9,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:57+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Kannada <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "kn/>\n"
 "Language: kn\n"
@@ -5813,12 +5813,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"ಬಳಕೆಗೆ ಸುಲಭವಾದ, ಆದರೆ ಅಷ್ಟೇ ಸಶಕ್ತ ಮತ್ತು ಸುಲಭವಾಗಿ ಹೊಂದಿಕೆಯಾಗುವಂತೆ ವಿನ್ಯಾಸಗೊಳಿಸಲಾದ "
-"ಗ್ನುಕ್ಯಾಶ್ ಬಳಸಿಕೊಂಡು ನೀವು ಬ್ಯಾಂಕ್ ಖಾತೆಗಳನ್ನು, ಸ್ಟಾಕ್‌ಗಳನ್ನು, ಆದಾಯ ಮತ್ತು ವೆಚ್ಚಗಳ "
-"ಮೇಲ್ವಿಚಾರಣೆ ನಡೆಸಲು ಅವಕಾಶವಿರುತ್ತದೆ. ಬ್ಯಾಲೆನ್ಸ್ ಆದ ಪುಸ್ತಕಗಳು ಮತ್ತು ನಿಖರವಾದ ವರದಿಗಳು "
-"ದೊರೆಯುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಒಂದು ಚೆಕ್‌ಬುಕ್ ರಿಜಿಸ್ಟರ್‌ನಂತೆ ಚುರುಕಾಗಿ ಮತ್ತು ಸುಲಭವಾಗಿ "
-"ಬಳಸಬಹುದಾಗಿರುವ ಇದು ಡಬಲ್-ಎಂಟ್ರಿ ಅಕೌಂಟಿಂಗ್‌ನಂತರ ವೃತ್ತಿಪರ ಅಕೌಂಟಿಗ್ ನಿಯಮಗಳ ಮೇಲೆ "
-"ಆಧರಿತವಾಗಿರುತ್ತದೆ."
+"ಬಳಕೆಗೆ ಸುಲಭವಾದ, ಆದರೆ ಅಷ್ಟೇ ಸಶಕ್ತ ಮತ್ತು ಸುಲಭವಾಗಿ ಹೊಂದಿಕೆಯಾಗುವಂತೆ ವಿನ್ಯಾಸಗೊಳಿಸಲಾದ ಗ್ನುಕ್ಯಾಶ್ "
+"ಬಳಸಿಕೊಂಡು ನೀವು ಬ್ಯಾಂಕ್ ಖಾತೆಗಳನ್ನು, ಸ್ಟಾಕ್‌ಗಳನ್ನು, ಆದಾಯ ಮತ್ತು ವೆಚ್ಚಗಳ ಮೇಲ್ವಿಚಾರಣೆ ನಡೆಸಲು "
+"ಅವಕಾಶವಿರುತ್ತದೆ. ಬ್ಯಾಲೆನ್ಸ್ ಆದ ಪುಸ್ತಕಗಳು ಮತ್ತು ನಿಖರವಾದ ವರದಿಗಳು ದೊರೆಯುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು "
+"ಒಂದು ಚೆಕ್‌ಬುಕ್ ರಿಜಿಸ್ಟರ್‌ನಂತೆ ಚುರುಕಾಗಿ ಮತ್ತು ಸುಲಭವಾಗಿ ಬಳಸಬಹುದಾಗಿರುವ ಇದು ಡಬಲ್-ಎಂಟ್ರಿ "
+"ಅಕೌಂಟಿಂಗ್‌ನಂತರ ವೃತ್ತಿಪರ ಅಕೌಂಟಿಗ್ ನಿಯಮಗಳ ಮೇಲೆ ಆಧರಿತವಾಗಿರುತ್ತದೆ."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
