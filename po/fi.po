@@ -6,7 +6,7 @@
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021, 2026.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2021, 2026.
-# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
+# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022, 2026.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2025, 2026.
 # GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 # John Ralls <jralls@ceridwen.us>, 2026.
@@ -17,7 +17,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
 "PO-Revision-Date: 2026-06-26 03:41+0000\n"
-"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
+"Last-Translator: Sampo Harjula <sahtor.weblate@sahtor.net>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
