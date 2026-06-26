@@ -261,6 +261,37 @@ GNC_ACCEPT_WRAPPER(GncEntry)
     }
 }
 
+/* SWIG type converter for functions that take lists as arguments so that a Python list can be passed and automatically converted into a GList*. */
+%typemap(in) GList * {
+    $1 = NULL;
+    /* Check if is a list */
+    if (PyList_Check($input)) {
+        int i;
+        int size = PyList_Size($input);
+        for (i = size - 1; i >= 0; i--) {
+            // Get the high-level Python object from bindings/python/gnucash_core.py.
+            PyObject *python_object_wrapper = PyList_GetItem($input, i);
+            // Get the .instance attribute of the Python object, which is the raw SWIG handle.
+            PyObject *python_object = PyObject_GetAttrString(python_object_wrapper, "instance");
+            // Get the pointer to the actual C object.
+            SwigPyObject *swig_object = SWIG_Python_GetSwigThis(python_object);
+            void *c_object;
+            if (SWIG_ConvertPtr(python_object, &c_object, swig_object->ty, SWIG_POINTER_EXCEPTION) == 0) { // Convert to whatever type Python says it is. Unfortunately do not have a way to figure out what type we should be converting to, since many Gnucash C functions take a generic GList.
+                $1 = g_list_prepend($1, c_object);
+            }
+            else {
+                PyErr_SetString(PyExc_TypeError, "list must contain object of known type with .instance attribute, see gnucash_core.i in SWIG Python bindings.");
+                g_list_free($1);
+                return NULL;
+            }
+        }
+    }
+    else {
+        PyErr_SetString(PyExc_TypeError, "not a Python list, cannot convert to GList");
+        return NULL;
+    }
+}
+
 %typemap(freearg) GncOwner * {
     gncOwnerFree($1);
 }
