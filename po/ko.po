@@ -8,8 +8,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 03:58+0000\n"
-"Last-Translator: 이정희 <daemul72@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 03:59+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -3863,8 +3863,8 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
-"자동 이체 편집기가 자동으로 이 거래 수지를 맞출 수 없습니다. 그것을 계속 입력"
-"합니까?"
+"자동 이체 편집기가 자동으로 이 거래 수지를 맞출 수 없습니다. 그것을 계속 "
+"입력합니까?"
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:549
 msgid ""
@@ -5476,8 +5476,8 @@ msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"이 거래가 통장정리된 스플릿을 포함하고 있습니다. 이것을 수정하는 것은 통장정"
-"리 수지가 맞지 않을 수 있기 때문에 좋은 생각이 아닙니다."
+"이 거래가 통장정리된 스플릿을 포함하고 있습니다. 이것을 수정하는 것은 "
+"통장정리 수지가 맞지 않을 수 있기 때문에 좋은 생각이 아닙니다."
 
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1202
@@ -6574,8 +6574,8 @@ msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and "
 "\"Type\" for the commodity."
 msgstr ""
-"상품의 공백이 없는 \"전체 이름\", \"심볼/약어\", 그리고 \"형태\"를 입력하여"
-"야 합니다."
+"상품의 공백이 없는 \"전체 이름\", \"심볼/약어\", 그리고 \"형태\"를 "
+"입력하여야 합니다."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
@@ -6797,8 +6797,8 @@ msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
-"이 거래에서 양쪽 방향으로 이체하기 위한 계정을 지정하여야 합니다. 그렇지 않으"
-"면 기록되지 않을 것입니다."
+"이 거래에서 양쪽 방향으로 이체하기 위한 계정을 지정하여야 합니다. 그렇지 "
+"않으면 기록되지 않을 것입니다."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1407
 msgid "You can't transfer from and to the same account!"
@@ -12980,8 +12980,7 @@ msgstr ""
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
-msgstr ""
-"하나 또는 그 이상의 하위 계정은 삭제되지 않는 읽기속성의 거래를 포함합니다."
+msgstr "하나 또는 그 이상의 하위 계정은 삭제되지 않는 읽기속성의 거래를 포함합니다."
 
 #: gnucash/gtkbuilder/dialog-account.glade:807
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
@@ -13666,8 +13665,8 @@ msgid ""
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
-"이들은 최근 F::Q에 더해진 인용 소스입니다. GnuCash는 이들 소스가 인터넷의 단"
-"일 사이트 또는 복수 사이트로부터 정보를 복구하는지의 여부를 알 수 없습니다."
+"이들은 최근 F::Q에 더해진 인용 소스입니다. GnuCash는 이들 소스가 인터넷의 "
+"단일 사이트 또는 복수 사이트로부터 정보를 복구하는지의 여부를 알 수 없습니다."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:398
 msgid "_Multiple"
@@ -13679,9 +13678,9 @@ msgid ""
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
 "retrieve the information from another site."
 msgstr ""
-"이들은 인터넷의 복수 사이트에서 정보를 복구시키는 F::Q 인용 소스입니다. 사이"
-"트의 사나를 사용할 수 없으면, F::Q는 다른 사이트에서 정보를 복구하려고 시도"
-"할 것입니다."
+"이들은 인터넷의 복수 사이트에서 정보를 복구시키는 F::Q 인용 소스입니다. "
+"사이트의 사나를 사용할 수 없으면, F::Q는 다른 사이트에서 정보를 복구하려고 "
+"시도할 것입니다."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:419
 msgid "Si_ngle"
@@ -20741,8 +20740,7 @@ msgstr "이 항목에 어떻게 지불하겠습니까?"
 msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
-msgstr ""
-"이 거래는 다른 등록에서 이미 편집 중입니다. 그것의 편집을 우선 끝내세요."
+msgstr "이 거래는 다른 등록에서 이미 편집 중입니다. 그것의 편집을 우선 끝내세요."
 
 #: gnucash/register/ledger-core/split-register.c:500
 msgid "Save transaction before duplicating?"
@@ -21011,8 +21009,8 @@ msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
 msgstr ""
-"통장정리되지 않은 것으로 통장정리 분리를 표시합니다. 이 작업은 미래 통장정리"
-"와 다를 수 있습니다! 이것으로 변경하겠습니까?"
+"통장정리되지 않은 것으로 통장정리 분리를 표시합니다. 이 작업은 미래 "
+"통장정리와 다를 수 있습니다! 이것으로 변경하겠습니까?"
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1902
 msgid "_Unreconcile"
@@ -21247,8 +21245,7 @@ msgstr "이체할 계정 입력하거나, 목록에서 하나 고르기"
 #: gnucash/register/ledger-core/split-register-model.c:1589
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
-msgstr ""
-"이 거래는 복수 스플릿을 가짐; 그들 전체를 보기 위하여 스플릿 단추를 누름"
+msgstr "이 거래는 복수 스플릿을 가짐; 그들 전체를 보기 위하여 스플릿 단추를 누름"
 
 #: gnucash/register/ledger-core/split-register-model.c:1592
 msgid ""
@@ -22444,8 +22441,8 @@ msgid ""
 "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
 "codes with payer sources may be repeated."
 msgstr ""
-"주의: 몇몇 계정에 할당된 TXF 코드를 중복할 수 있습니다. 지불자 소스의 TXF 코"
-"드만을 반복할 수 있습니다."
+"주의: 몇몇 계정에 할당된 TXF 코드를 중복할 수 있습니다. 지불자 소스의 TXF "
+"코드만을 반복할 수 있습니다."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:800
 #, scheme-format
@@ -27526,8 +27523,8 @@ msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
 msgstr ""
-"설정 패널에서 지정한 시간 간격과 계정 선택과 일치하는 거래를 찾을 수 없습니"
-"다."
+"설정 패널에서 지정한 시간 간격과 계정 선택과 일치하는 거래를 찾을 수 "
+"없습니다."
 
 #: gnucash/report/trep-engine.scm:217
 msgid "Register Order"
@@ -28954,8 +28951,7 @@ msgstr "하위 계정 검사 및 정정(_B)"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
-msgstr ""
-"이 계정과 그 하위계정에서 잔액이 맞지 않는 거래 및 오르판 스플릿 검사 및 정정"
+msgstr "이 계정과 그 하위계정에서 잔액이 맞지 않는 거래 및 오르판 스플릿 검사 및 정정"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
