@@ -7,7 +7,7 @@
 # Julien Humbert <julroy67@gmail.com>, 2021, 2026.
 # Un Anonyme <vehrzafk1@gmail.com>, 2021, 2026.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
-# ayiniho <ayiniho@tedomum.net>, 2021.
+# ayiniho <ayiniho@tedomum.net>, 2021, 2026.
 # Thomas Jungers <thomasjungers@gmail.com>, 2021, 2026.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022, 2026.
@@ -22,7 +22,7 @@ msgstr ""
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"Last-Translator: ayiniho <ayiniho@tedomum.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
