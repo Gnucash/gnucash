@@ -3,24 +3,24 @@
 #
 # Christian Stimming <stimming@tuhh.de>, 2001 - 2013.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013 - 2017, 2020.
-# Manuel Bichler <felseninsel@hotmail.com>, 2020.
+# Manuel Bichler <felseninsel@hotmail.com>, 2020, 2026.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # SebastianL <Sebastian.Lueck@gmail.com>, 2020.
-# Marco Zietzling <marco.zietzling@gmail.com>, 2021.
-# Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021.
-# Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2022, 2023.
-# Joachim Wetzig <jo.wetzig@web.de>, 2023.
-# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024.
+# Marco Zietzling <marco.zietzling@gmail.com>, 2021, 2026.
+# Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021, 2026.
+# Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021, 2026.
+# Christian Wehling <christian.wehling@web.de>, 2022, 2023, 2026.
+# Joachim Wetzig <jo.wetzig@web.de>, 2023, 2026.
+# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-06-22 21:57+0000\n"
-"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:34+0000\n"
+"Last-Translator: Tobias Mohr <tobias_mohr_1991@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

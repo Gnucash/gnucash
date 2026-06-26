@@ -1,20 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2013 by the GnuCash developers and the translators:
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2013
-# ltai0001 <yltaief@gmail.com>, 2022.
-# Sherif ElGamal <selgamal0@gmail.com>, 2022.
-# BL <ghostzeko@gmail.com>, 2023.
-# Abdulsalam Alshilash <ashalash@msn.com>, 2025.
-# Usama Khalil <usamafoad@gmail.com>, 2025.
-# Tgol Mgol <tgolmgol@gmail.com>, 2025.
+# ltai0001 <yltaief@gmail.com>, 2022, 2026.
+# Sherif ElGamal <selgamal0@gmail.com>, 2022, 2026.
+# BL <ghostzeko@gmail.com>, 2023, 2026.
+# Abdulsalam Alshilash <ashalash@msn.com>, 2025, 2026.
+# Usama Khalil <usamafoad@gmail.com>, 2025, 2026.
+# Tgol Mgol <tgolmgol@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-11-21 14:52+0000\n"
-"Last-Translator: Tgol Mgol <tgolmgol@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:34+0000\n"
+"Last-Translator: BL <ghostzeko@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ar/>\n"
 "Language: ar\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -264,7 +264,7 @@ msgstr "إقفال الدفاتر"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr "الميزانية"
+msgstr "الموازنة"
 
 #. "-"
 msgid "business (adjective)"
@@ -339,9 +339,8 @@ msgid "currency"
 msgstr "عملة"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
-#, fuzzy
 msgid "Custom"
-msgstr "مخصص"
+msgstr "مخصّص"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -505,7 +504,7 @@ msgstr "حسابات مفقودة"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "مجموعة"
+msgstr "دفعة"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -525,7 +524,7 @@ msgstr "واجهة متعددة الاوثائق"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "مذكرة"
+msgstr "بيان"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -713,7 +712,7 @@ msgstr "أفقي"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "الأرباح المحتجزة"
+msgstr "الأرباح المُبقاة"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -757,7 +756,7 @@ msgstr "مصدر"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "تقسيم"
+msgstr "طرف القيد"
 
 #. "Alias of 'shares'"
 msgid "stocks"

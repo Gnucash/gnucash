@@ -2,9 +2,10 @@
 # Copyright (C) 2001, 2002, 2003, 2006 Free Software Foundation, Inc.
 # Christian Rose <menthos@menthos.com>, 2001, 2002, 2003.
 # Jonas Norling <norling@lysator.liu.se>, 2006.
-# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021.
+# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2026.
 # Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023, 2026.
-# bittin1ddc447d824349b2 <bittin@reimu.nl>, 2024.
+# bittin1ddc447d824349b2 <bittin@reimu.nl>, 2024, 2026.
+# Arve Eriksson <arve.eriksson@startmail.com>, 2026.
 #
 # $Id$
 #
@@ -14,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2026-03-22 04:09+0000\n"
-"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
+"PO-Revision-Date: 2026-06-26 04:37+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
 "Language: sv\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

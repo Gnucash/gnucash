@@ -5,19 +5,22 @@
 #
 # Muha Aliss <muhaaliss@pm.me>, 2021.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
-# udo pton <udopton@gmail.com>, 2021.
+# udo pton <udopton@gmail.com>, 2021, 2026.
 # T. E. Kalaycı <tekrei@gmail.com>, 2021.
-# Tur <tur+translate@simplelogin.fr>, 2021.
-# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024.
+# Tur <tur+translate@simplelogin.fr>, 2021, 2026.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024, 2026.
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
+# Deleted User <noreply+136605@weblate.org>, 2026.
+# Muha Aliss <muhaaliss@users.noreply.hosted.weblate.org>, 2026.
+# Oğuz Ersen <oguz@ersen.moe>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2026-01-02 14:01+0000\n"
-"Last-Translator: Arda Yılmaz <fijarom@fijarom.com>\n"
+"PO-Revision-Date: 2026-06-26 04:39+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -25,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

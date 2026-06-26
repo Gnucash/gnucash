@@ -3,15 +3,17 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # Mikel Olasagasti Uranga, 2005
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
-# Enrique Ayesta Perojo <eayesta@gmail.com>, 2022.
+# Enrique Ayesta Perojo <eayesta@gmail.com>, 2022, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2022-08-05 14:15+0000\n"
-"Last-Translator: Enrique Ayesta Perojo <eayesta@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:51+0000\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "eu/>\n"
 "Language: eu\n"
@@ -19,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -6642,8 +6644,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1106
 msgid "You must enter a valid opening balance or leave it blank."
-msgstr ""
-"Baliozko hasierako saldo bat sartu behar duzu, edo hutsik utzi bestela."
+msgstr "Baliozko hasierako saldo bat sartu behar duzu, edo hutsik utzi bestela."
 
 #: gnucash/gnome-utils/dialog-account.c:1130
 #, fuzzy
@@ -9554,8 +9555,7 @@ msgstr "QIF dokumentazio xehatua"
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
 #, fuzzy
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr ""
-"Erakutsi dokumentazio soileko orrialde batzuk QIF inportatzeko morroian"
+msgstr "Erakutsi dokumentazio soileko orrialde batzuk QIF inportatzeko morroian"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 #, fuzzy
@@ -22013,8 +22013,7 @@ msgstr "Adierazi zein kontutatik transferitu, edo aukeratu zerrendan"
 #: gnucash/register/ledger-core/split-register-model.c:1589
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
-msgstr ""
-"Transakzio honek hainbat zati ditu; sakatu zatien botoia denak ikusteko"
+msgstr "Transakzio honek hainbat zati ditu; sakatu zatien botoia denak ikusteko"
 
 #: gnucash/register/ledger-core/split-register-model.c:1592
 msgid ""

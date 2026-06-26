@@ -4,21 +4,23 @@
 # Tor Harald Thorland <linux@strigen.com>, 2005-2006.
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
 # John Erling Blad <jeblad@gmail.com>, 2018, 2020
-# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022, 2024.
-# Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2023.
-# Rune Osnes <osnes.rune@gmail.com>, 2023.
-# Tor Berg <tob@samfundet.no>, 2024.
-# Morten Cools <morten@cools.no>, 2024.
-# Magnus Røkke <mrokke@gmail.com>, 2025.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022, 2024, 2026.
+# Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2023, 2026.
+# Rune Osnes <osnes.rune@gmail.com>, 2023, 2026.
+# Tor Berg <tob@samfundet.no>, 2024, 2026.
+# Morten Cools <morten@cools.no>, 2024, 2026.
+# Magnus Røkke <mrokke@gmail.com>, 2025, 2026.
 # Kevin Unhammer <unhammer+dill@mm.st>, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
+# John Ralls <jralls@ceridwen.us>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-03-30 11:10+0000\n"
-"Last-Translator: Kevin Unhammer <unhammer+dill@mm.st>\n"
+"PO-Revision-Date: 2026-06-26 04:16+0000\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -26,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -3979,8 +3981,7 @@ msgstr "(aldri)"
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
-msgstr ""
-"Den valgte transaksjonsmalen har blitt endret. Vil du lagre endringene?"
+msgstr "Den valgte transaksjonsmalen har blitt endret. Vil du lagre endringene?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1905
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:238
@@ -4779,8 +4780,7 @@ msgstr "Bruk som standardoppsett for ansattdokumenter"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr ""
-"Bruk gjeldende layout som standard for alle ansattbilag og kreditnotaer"
+msgstr "Bruk gjeldende layout som standard for alle ansattbilag og kreditnotaer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 #, fuzzy
@@ -5653,8 +5653,8 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "Datoen for denne transaksjonen er eldre enn \"Skrivebeskyttet terskelen\" "
-"som er angitt for denne boken. Denne innstillingen kan endres i Fil-"
-">Egenskaper->Kontoer."
+"som er angitt for denne boken. Denne innstillingen kan endres i Fil->"
+"Egenskaper->Kontoer."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -7167,8 +7167,8 @@ msgstr[0] ""
 "funksjon for å lagre filen automatisk hvert %d minutt, akkurat som om du "
 "hadde trykket på \"Lagre\"-knappen hver gang.\n"
 "\n"
-"Du kan endre tidsintervallet eller slå av denne funksjonen under Rediger-"
-">Preferanser->Generelt->Automatisk lagre tidsintervall.\n"
+"Du kan endre tidsintervallet eller slå av denne funksjonen under Rediger->"
+"Preferanser->Generelt->Automatisk lagre tidsintervall.\n"
 "\n"
 "Bør filen din lagres automatisk?"
 msgstr[1] ""
@@ -7176,8 +7176,8 @@ msgstr[1] ""
 "funksjon for å lagre filen automatisk hvert %d minutt, akkurat som om du "
 "hadde trykket på \"Lagre\"-knappen hver gang.\n"
 "\n"
-"Du kan endre tidsintervallet eller slå av denne funksjonen under Rediger-"
-">Preferanser->Generelt->Automatisk lagre tidsintervall.\n"
+"Du kan endre tidsintervallet eller slå av denne funksjonen under Rediger->"
+"Preferanser->Generelt->Automatisk lagre tidsintervall.\n"
 "\n"
 "Bør filen din lagres automatisk?"
 
@@ -7541,8 +7541,8 @@ msgstr ""
 "Biblioteket \"libdbi\" installert på systemet ditt lagrer ikke store tall "
 "riktig Dette betyr at GnuCash ikke kan bruke SQL-databaser riktig. Gnucash "
 "vil ikke åpne eller lagre SQL-databaser før dette er fikset ved å installere "
-"en annen versjon av \"libdbi\". Se https://bugs.gnucash.org/show_bug.cgi?"
-"id=611936 for mer informasjon."
+"en annen versjon av \"libdbi\". Se https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936 for mer informasjon."
 
 #: gnucash/gnome-utils/gnc-file.c:560
 msgid ""
@@ -7553,8 +7553,8 @@ msgid ""
 msgstr ""
 "GnuCash kunne ikke fullføre en kritisk test for tilstedeværelsen av en feil "
 "i \"libdbi\"-biblioteket. Dette kan være forårsaket av en feilkonfigurasjon "
-"av tillatelser i SQL-databasen. Se https://bugs.gnucash.org/show_bug.cgi?"
-"id=645216 for mer informasjon."
+"av tillatelser i SQL-databasen. Se https://bugs.gnucash.org/"
+"show_bug.cgi?id=645216 for mer informasjon."
 
 #: gnucash/gnome-utils/gnc-file.c:570
 msgid ""
@@ -7679,8 +7679,7 @@ msgstr ""
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
-msgstr ""
-"Databasen ble åpnet skrivebeskyttet. Vil du lagre den på et annet sted?"
+msgstr "Databasen ble åpnet skrivebeskyttet. Vil du lagre den på et annet sted?"
 
 #: gnucash/gnome-utils/gnc-file.c:1773
 #, c-format
@@ -7804,8 +7803,7 @@ msgstr "Klarte ikke å lagre database."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:3096
 msgid "Unable to save to database: Book is marked read-only."
-msgstr ""
-"Kan ikke lagre i databasen: Periodeboken er merket som skrivebeskyttet."
+msgstr "Kan ikke lagre i databasen: Periodeboken er merket som skrivebeskyttet."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:4756
 #: gnucash/gtkbuilder/assistant-qif-import.glade:949
@@ -13272,9 +13270,9 @@ msgid ""
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"Hvis du er ferdig med opprettelsen av aksjesplitten eller -fusjonen, trykk "
-"«Bruk». Du kan også velge «Tilbake» for å se gjennom dine endringer, eller "
-"«Avbryt» for å avslutte uten å registrere endringene. "
+"Hvis du er ferdig med opprettelsen av aksjesplitten eller -fusjonen, trykk «"
+"Bruk». Du kan også velge «Tilbake» for å se gjennom dine endringer, eller «"
+"Avbryt» for å avslutte uten å registrere endringene. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:953
 msgid "Finish"
@@ -14513,8 +14511,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
-msgstr ""
-"Merk: Kun dokumentkoblinger som ikke er skrivebeskyttet vil bli endret."
+msgstr "Merk: Kun dokumentkoblinger som ikke er skrivebeskyttet vil bli endret."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:276
 msgid "Linked _File"
@@ -15971,8 +15968,8 @@ msgstr ""
 "som en separat transaksjon eller månedlig gebyr. For eksempel, hvis du tar "
 "ut 100 kr, trekker den kommersielle minibanken 101,50. Hvis du skrev inn "
 "disse 100 kr manuelt, ville ikke beløpene stemme overens. Du bør sette dette "
-"til hva som enn er maksimalt slikt gebyr i ditt område (i din lokale "
-"valuta), slik at transaksjonen vil gjenkjennes som et treff."
+"til hva som enn er maksimalt slikt gebyr i ditt område (i din lokale valuta)"
+", slik at transaksjonen vil gjenkjennes som et treff."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2177
 msgid ""
@@ -18544,8 +18541,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -20086,8 +20083,7 @@ msgstr "Noen transaksjoner kan bli forkastet."
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:977
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:955
 msgid "There was a problem saving the settings, please try again."
-msgstr ""
-"Det oppsto et problem med å lagre innstillingene, vennligst prøv igjen."
+msgstr "Det oppsto et problem med å lagre innstillingene, vennligst prøv igjen."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1148
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1129
@@ -20204,8 +20200,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2146
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr ""
-"Dobbeltklikk på rader for å endre, og klikk deretter på Bruk for import"
+msgstr "Dobbeltklikk på rader for å endre, og klikk deretter på Bruk for import"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2216
@@ -22481,8 +22476,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "Den angitte datoen for transaksjonen er eldre enn \"Skrivebeskyttet "
-"terskelen\" satt for denne boken. Denne innstillingen kan endres i Fil-"
-">Egenskaper->Kontoer, tilbakestille til terskelen."
+"terskelen\" satt for denne boken. Denne innstillingen kan endres i Fil->"
+"Egenskaper->Kontoer, tilbakestille til terskelen."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -23978,8 +23973,8 @@ msgstr "Oppførsel for dybdegrense"
 #: gnucash/report/reports/standard/account-summary.scm:89
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr ""
-"Hvordan behandle kontoer som overskrider den angitte dybdegrensen (hvis "
-"noen)."
+"Hvordan behandle kontoer som overskrider den angitte dybdegrensen (hvis noen)"
+"."
 
 #: gnucash/report/reports/standard/account-summary.scm:90
 msgid ""
@@ -24031,8 +24026,7 @@ msgstr "Inkluder kontoer med nullsaldo"
 #: gnucash/report/reports/standard/income-statement.scm:70
 #: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr ""
-"Inkluder kontoer med null i total (rekursiv) saldoer i denne rapporten."
+msgstr "Inkluder kontoer med null i total (rekursiv) saldoer i denne rapporten."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -24705,8 +24699,8 @@ msgid ""
 "in your .gnucash directory, or else in its proper place within the GnuCash "
 "installation directories."
 msgstr ""
-"Filnavnet til eguile-maldelen av denne rapporten. Denne filen må være "
-"i .gnucash-katalogen din, ellers på riktig plass i GnuCash-"
+"Filnavnet til eguile-maldelen av denne rapporten. Denne filen må være i "
+".gnucash-katalogen din, ellers på riktig plass i GnuCash-"
 "installasjonskatalogene."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:172
@@ -24741,8 +24735,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr ""
-"Juster oppsettet slik at det passer til bredden på skjermen eller siden"
+msgstr "Juster oppsettet slik at det passer til bredden på skjermen eller siden"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
 msgid "Display liabilities and equity below assets"
@@ -25685,8 +25678,7 @@ msgstr "Nettoformue-diagram"
 msgid ""
 "Display account contributions as a percentage of the total value for the "
 "period."
-msgstr ""
-"Vis kontobidrag som en prosentandel av den totale verdien for perioden."
+msgstr "Vis kontobidrag som en prosentandel av den totale verdien for perioden."
 
 #: gnucash/report/reports/standard/category-barchart.scm:275
 #, fuzzy
@@ -27769,8 +27761,7 @@ msgstr ""
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
-msgstr ""
-"Det er ingen priser tilgjengelig for den valgte varen i valgte tidsrom."
+msgstr "Det er ingen priser tilgjengelig for den valgte varen i valgte tidsrom."
 
 #: gnucash/report/reports/standard/price-scatter.scm:252
 msgid "Only one price"
@@ -28428,8 +28419,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr ""
-"Mønster for justeringsoppføringer skiller mellom små og store bokstaver"
+msgstr "Mønster for justeringsoppføringer skiller mellom små og store bokstaver"
 
 #: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
@@ -29303,9 +29293,9 @@ msgid ""
 "will match both tags within description, notes or memo."
 msgstr ""
 "Som standard vil transaksjonsfilteret kun søke i understreng. Sett denne til "
-"sann for å aktivere fulle funksjoner for POSIX regulære uttrykk. '#arbeid|"
-"#familie' vil samsvare med begge taggene i beskrivelse, merknader eller "
-"notat."
+"sann for å aktivere fulle funksjoner for POSIX regulære uttrykk. "
+"'#arbeid|#familie' vil samsvare med begge taggene i beskrivelse, merknader "
+"eller notat."
 
 #: gnucash/report/trep-engine.scm:625
 msgid "If this option is selected, transactions matching filter are excluded."

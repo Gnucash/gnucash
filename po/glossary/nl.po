@@ -1,20 +1,23 @@
 # Dutch translation of GNUCash glossary.
 # Copyright (C) 2006 Free Software Foundation, Inc.
 # Bernard Meens <meensb@xs4all.nl>, 2006.
-# Geert Janssens <geert@kobaltwit.be>, 2020, 2021.
-# eol <joshua.de.clercq@gmail.com>, 2021.
-# Jaimie85 <alsemgeest@gmail.com>, 2022.
-# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024.
+# Geert Janssens <geert@kobaltwit.be>, 2020, 2021, 2026.
+# eol <joshua.de.clercq@gmail.com>, 2021, 2026.
+# Jaimie85 <alsemgeest@gmail.com>, 2022, 2026.
+# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024, 2026.
 # Paul Oranje <por@oranjevos.nl>, 2024.
 # BlueRains <lu@schoevaars.eu>, 2025.
+# Ceaus <github@pohw.nl>, 2026.
+# Geert Janssens <info@kobaltwit.be>, 2026.
+# BlueRains <83722494+BlueRains@users.noreply.github.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-05-05 12:13+0000\n"
-"Last-Translator: BlueRains <lu@schoevaars.eu>\n"
+"PO-Revision-Date: 2026-06-26 04:36+0000\n"
+"Last-Translator: Jaimie85 <alsemgeest@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -22,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -70,7 +73,7 @@ msgstr "rekening type: Valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "rekening type: Eigen kapitaal"
+msgstr "rekening type: Eigen vermogen"
 
 #. "-"
 msgid "account type: Expense"

@@ -3,14 +3,14 @@
 # Copyright (C) 2023 by the GnuCash developers and the translators:
 # Automatically generated, 2023.
 #
-# TheRealOne78 <bajcsielias78@gmail.com>, 2025.
+# TheRealOne78 <bajcsielias78@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-04-27 13:01+0000\n"
+"PO-Revision-Date: 2026-06-26 05:13+0000\n"
 "Last-Translator: TheRealOne78 <bajcsielias78@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/ro/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
