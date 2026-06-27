@@ -525,34 +525,13 @@
 ;; are returned in a commodity collector.
 (define (gnc:account-get-comm-value-interval account start-date end-date
                                              include-children?)
-  (let ((value-collector (gnc:make-commodity-collector))
-        (query (qof-query-create-for-splits))
-        (accounts (cons account
-                        (if include-children?
-                            (gnc-account-get-descendants account)
-                            '()))))
-
-    ;; Build a query to find all splits between the indicated dates.
-    (qof-query-set-book query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch query accounts
-                              QOF-GUID-MATCH-ANY
-                              QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT query
-                             (and start-date #t) (or start-date 0)
-                             (and end-date #t) (or end-date 0)
-                             QOF-QUERY-AND)
-
-    ;; Get the query results.
-    (let ((splits (qof-query-run query)))
-      (qof-query-destroy query)
-      ;; Add the "value" of each split returned (which is measured
-      ;; in the transaction currency).
-      (for-each
-       (lambda (split)
-         (value-collector 'add
-                          (xaccTransGetCurrency (xaccSplitGetParent split))
-                          (xaccSplitGetValue split)))
-       splits))
+  (let ((value-collector (gnc:make-commodity-collector)))
+    (gnc-account-foreach-split-between-dates
+     account start-date end-date include-children?
+     (lambda (split)
+       (value-collector 'add
+                        (xaccTransGetCurrency (xaccSplitGetParent split))
+                        (xaccSplitGetValue split))))
     value-collector))
 
 ;; Calculate the balance of the account in terms of "value" (rather
