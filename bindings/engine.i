@@ -84,6 +84,10 @@ SCM gnc_account_accumulate_to_dates (const Account *acc, SCM dates,
 
 AccountVec gnc_accounts_and_all_descendants (AccountVec accounts);
 
+void gnc_account_foreach_split_between_dates (const Account* account,
+                                              SCM start_date, SCM end_date,
+                                              bool include_children, SCM scm_cb);
+
 extern "C"
 {
 SCM scm_init_sw_engine_module (void);
@@ -238,6 +242,31 @@ gnc_accounts_and_all_descendants (AccountVec accounts)
     for (auto a : accounts)
         maybe_add_descendants (a, &accset);
     return AccountVec (accset.begin(), accset.end());
+}
+
+void
+gnc_account_foreach_split_between_dates (const Account* account,
+                                         SCM start_date, SCM end_date,
+                                         bool include_children, SCM scm_cb)
+{
+    std::optional<time64> start, end;
+    if (scm_is_exact_integer (start_date)) start = scm_to_int64 (start_date);
+    if (scm_is_exact_integer (end_date))   end = scm_to_int64 (end_date);
+    auto maybe_call = [&](const Split* s)
+    {
+        if (!start || *start <= xaccTransGetDate (xaccSplitGetParent (s)))
+            scm_call_1 (scm_cb, gnc_split_to_scm (s));
+    };
+    std::function<void(const Account*)> scan_account;
+    if (end)
+        scan_account = [end, maybe_call](auto acc)
+            { gnc_account_foreach_split_until_date (acc, *end, maybe_call); };
+    else
+        scan_account = [maybe_call](auto acc)
+            { gnc_account_foreach_split (acc, maybe_call); };
+    scan_account (account);
+    if (include_children)
+        gnc_account_foreach_descendant (account, scan_account);
 }
 
 %}
