@@ -878,20 +878,15 @@ Returns #t if held >= long-term-years, #f otherwise."
     ;; before from-date are also included (needed to calculate running
     ;; balance and basis during the report date window).
     (define (get-all-splits account)
-      (let ((query (qof-query-create-for-splits)))
-        (qof-query-set-book query (gnc-get-current-book))
-        (xaccQueryAddClearedMatch query
-          (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
-        (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-        (xaccQueryAddDateMatchTT query
-            #f ; use_start.
-            0  ; start. Note: Intentionally not using from-date.
-            #t ; use-end
-            to-date QOF-QUERY-AND)
-        (let ((result (qof-query-run query)))
-          (qof-query-destroy query)
-          (gnc:debug (format #f "Found ~a splits." (length result)))
-          result)))
+      (let ((splits '()) (len 0))
+        (gnc-account-foreach-split-between-dates
+         account #f to-date #f
+         (lambda (split)
+           (unless (xaccTransGetVoidStatus (xaccSplitGetParent split))
+             (set! len (1+ len))
+             (set! splits (cons split splits)))))
+        (gnc:debug "Found " len " splits.")
+        (reverse! splits)))
 
     ;; Returns a pair where the first item is a list of lots for the given
     ;; splits. The second item is the number of splits that are not assigned
