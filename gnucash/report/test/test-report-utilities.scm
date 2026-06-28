@@ -18,6 +18,7 @@
   (test-gnc:monetary->string)
   (test-commodity-collector)
   (test-get-account-balances)
+  (test-get-account-balances-at-date-boundary)
   (test-monetary-adders)
   (test-utility-functions)
   (test-get-account-at-dates)
@@ -492,6 +493,64 @@
           '(("GBP" . 603) ("USD" . 2286))
           (collector->list
            (gnc:get-assoc-account-balances-total account-balances)))))
+    (teardown)))
+
+
+(define (create-test-date-boundary-data)
+  (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
+         (account-alist (env-create-account-structure-alist env (structure)))
+         (bank (assoc-ref account-alist "Bank"))
+         (expense (assoc-ref account-alist "Expenses"))
+         (curr (xaccAccountGetCommodity bank)))
+
+    (define (create-txn date amt)
+      (define txn (xaccMallocTransaction book))
+      (xaccTransBeginEdit txn)
+      (xaccTransSetDescription txn "desc")
+      (xaccTransSetCurrency txn curr)
+      (xaccTransSetDatePostedSecs txn date)
+      (for-each
+       (lambda (acc amt)
+         (define newsplit (xaccMallocSplit book))
+         (xaccSplitSetParent newsplit txn)
+         (xaccSplitSetAccount newsplit acc)
+         (xaccSplitSetValue newsplit amt)
+         (xaccSplitSetAmount newsplit amt))
+       (list bank expense)
+       (list (- amt) amt))
+      (xaccTransCommitEdit txn))
+
+    (create-txn 1000 1000)              ;$10 transfered at date 1000
+    (create-txn 2000 2000)
+    (create-txn 4000 4000)
+    (create-txn 8000 8000)))
+
+(define (test-get-account-balances-at-date-boundary)
+  (define (account-lookup str)
+    (gnc-account-lookup-by-name
+     (gnc-book-get-root-account (gnc-get-current-book))
+     str))
+
+  (create-test-date-boundary-data)
+  (test-group-with-cleanup
+   "test-get-account-balances-at-date-boundary"
+   (let ((expense (account-lookup "Expenses"))
+         (bank (account-lookup "Bank")))
+
+
+     ;; these tests the change balances at date boundary. between
+     ;; time64 1000 and 2000 inclusive, there are two transactions $10
+     ;; and $20, summing $30.
+     (test-equal "gnc:account-get-comm-value-interval exact dates"
+                 '(("USD" . 3000))
+                 (collector->list
+                  (gnc:account-get-comm-value-interval expense 1000 2000 #f)))
+
+     (test-equal "gnc:account-get-comm-value-interval exact dates"
+                 '(("USD" . 14000))
+                 (collector->list
+                  (gnc:account-get-comm-value-interval expense 2000 8000 #f))))
     (teardown)))
 
 (define (test-utility-functions)
