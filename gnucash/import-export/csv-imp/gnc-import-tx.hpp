@@ -136,6 +136,9 @@ public:
     void separators (std::string separators);
     std::string separators ();
 
+    void enable_escape (bool enable);
+    bool enable_escape ();
+
     void settings (const CsvTransImpSettings& settings);
     bool save_settings ();
 

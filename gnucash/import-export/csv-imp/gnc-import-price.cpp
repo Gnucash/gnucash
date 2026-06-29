@@ -114,9 +114,12 @@ void GncPriceImport::file_format(GncImpFileFormat format)
     load_file(new_imp_file);
 
     // Restore potentially previously set separators or column_widths
-    if ((file_format() == GncImpFileFormat::CSV)
-        && !m_settings.m_separators.empty())
-        separators (m_settings.m_separators);
+    if (file_format() == GncImpFileFormat::CSV)
+    {
+        if (!m_settings.m_separators.empty())
+            separators (m_settings.m_separators);
+        enable_escape (m_settings.m_enable_escape);
+    }
     else if ((file_format() == GncImpFileFormat::FIXED_WIDTH)
         && !m_settings.m_column_widths.empty())
     {
@@ -286,6 +289,16 @@ void GncPriceImport::separators (std::string separators)
 
 }
 std::string GncPriceImport::separators () { return m_settings.m_separators; }
+
+void GncPriceImport::enable_escape(bool enable)
+{
+    if (file_format() != GncImpFileFormat::CSV)
+        return;
+    m_settings.m_enable_escape = enable;
+    auto csvtok = dynamic_cast<GncCsvTokenizer*>(m_tokenizer.get());
+    csvtok->set_enable_escape (enable);
+}
+bool GncPriceImport::enable_escape() { return m_settings.m_enable_escape; }
 
 void GncPriceImport::settings (const CsvPriceImpSettings& settings)
 {
