@@ -43,6 +43,12 @@ GncCsvTokenizer::set_separators(const std::string& separators)
     m_sep_str = separators;
 }
 
+void
+GncCsvTokenizer::set_enable_escape(const bool enable)
+{
+    m_enable_escape = enable;
+}
+
 
 int GncCsvTokenizer::tokenize()
 {
@@ -71,7 +77,7 @@ int GncCsvTokenizer::tokenize()
             {
                 if (last_quote == 0) // Test separately because last_quote - 1 would be out of range
                     inside_quotes = !inside_quotes;
-                else if (buffer[ last_quote - 1 ] != '\\')
+                else if (!m_enable_escape || buffer[ last_quote - 1 ] != '\\')
                     inside_quotes = !inside_quotes;
 
                 last_quote = buffer.find_first_of('"',last_quote+1);
@@ -91,10 +97,21 @@ int GncCsvTokenizer::tokenize()
             auto bs_pos = line.find ('\\');
             while (bs_pos != std::string::npos)
             {
-                if ((bs_pos == line.size()) ||                                 // got trailing single backslash
-                    (line.find_first_of ("\"\\n", bs_pos + 1) != bs_pos + 1))  // backslash is not part of known escapes \\, \" or \n
-                    line = line.substr(0, bs_pos) + "\\\\" + line.substr(bs_pos + 1);
-                bs_pos += 2;
+                if (! m_enable_escape)
+                {
+                    // Put an escape before this escape and look for the next
+                    line.insert (bs_pos, 1, '\\');
+                    bs_pos += 2;
+                }
+                else
+                {
+                    // Process as before
+                    if ((bs_pos == line.size()) ||                                 // got trailing single backslash
+                        (line.find_first_of ("\"\\n", bs_pos + 1) != bs_pos + 1))  // backslash is not part of known escapes \\, \" or \n
+                        line = line.substr(0, bs_pos) + "\\\\" + line.substr(bs_pos + 1);
+                    bs_pos += 2;
+                }
+
                 bs_pos = line.find ('\\', bs_pos);
             }
 
