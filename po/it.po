@@ -58,7 +58,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-30 13:01+0000\n"
+"PO-Revision-Date: 2026-06-30 15:01+0000\n"
 "Last-Translator: ales-ro <bianaless6@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -21160,16 +21160,13 @@ msgid "U+C"
 msgstr "A+L"
 
 #: gnucash/import-export/import-main-matcher.cpp:1616
-#, fuzzy
-#| msgid ""
-#| "Select \"U+C\" to update a matching transaction and mark it as cleared "
-#| "(c)."
 msgid ""
 "Update + Clear Transaction\n"
 "Update existing transaction with the imported data and mark it as cleared"
 msgstr ""
-"Scegliere «A+C» per Aggiornare una transazione corrispondente e marcarla "
-"come Compensata (C)."
+"Aggiorna e compensa transazione\n"
+"Aggiorna la transazione esistente con i dati importati e la segna come "
+"compensata"
 
 # Intestazione colonna del colore del conto nella struttura dei conti
 #: gnucash/import-export/import-main-matcher.cpp:1618
@@ -21340,10 +21337,8 @@ msgid "Unknown OFX investment account"
 msgstr "Conto investimento OFX sconosciuto"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1308
-#, fuzzy
-#| msgid "Finding duplicate transactions"
 msgid "Removing duplicate transactions…"
-msgstr "Ricerca delle transazioni doppie"
+msgstr "Rimozione delle transazioni duplicate…"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1362
 #, c-format
@@ -21829,10 +21824,9 @@ msgid "Missing transaction date."
 msgstr "Manca la data della transazione."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:745
-#, fuzzy, scheme-format
-#| msgid "Missing transaction date."
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Manca la data della transazione."
+msgstr "Manca l'operazione di investimento QIF per la transazione con data ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1430
 msgid "Invalid transaction date."
@@ -22265,12 +22259,9 @@ msgid ""
 msgstr "Stai per sovrascrivere una transazione esistente. Proseguire?"
 
 #: gnucash/register/ledger-core/split-register.c:1081
-#, fuzzy
-#| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Scheduled transactions can only be pasted to the General Journal"
 msgstr ""
-"Impostare delle transazioni pianificate per evitare l'immissione ripetitiva "
-"di dati"
+"Le transazioni pianificate possono essere incollate solo nel libro giornale"
 
 #: gnucash/register/ledger-core/split-register.c:2159
 msgid "Recalculate Transaction"
@@ -22397,6 +22388,8 @@ msgid ""
 "This transaction cannot be balanced: The imbalance is a fraction smaller "
 "than the commodity allows."
 msgstr ""
+"Questa transazione non può essere bilanciata: lo sbilancio è una frazione "
+"più piccola di quanto permesso dalla commodity."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:98
 msgid "Rebalance Transaction"
@@ -26045,10 +26038,9 @@ msgid "Daily Average"
 msgstr "Media giornaliera"
 
 #: gnucash/report/reports/standard/category-barchart.scm:521
-#, fuzzy, scheme-format
-#| msgid "Balance at ~a"
+#, scheme-format
 msgid "Balances ~a"
-msgstr "Saldo al ~a"
+msgstr "Saldi ~a"
 
 #: gnucash/report/reports/standard/category-barchart.scm:650
 #: gnucash/report/reports/standard/category-barchart.scm:670
@@ -27098,10 +27090,9 @@ msgstr ""
 "conto. Differenza: ~a. È necessario ripulire i lotti?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
-#, fuzzy, scheme-format
-#| msgid "~a, ~a to ~a"
+#, scheme-format
 msgid "~a, ~a"
-msgstr "~a, ~a a ~a"
+msgstr "~a, ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1988
 msgid "Account Lot Gains"
@@ -31584,15 +31575,13 @@ msgstr "_Pianifica…"
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
 #: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
 msgstr ""
 "Crea una transazione pianificata utilizzando come modello la transazione "
-"selezionata"
+"attuale oppure modifica la transazione pianificata che ha creato la "
+"transazione attuale."
 
 #. Translators: This is a menu item that will open a register tab for the
 #. account of the first other account in the current transaction's split list
@@ -31655,17 +31644,13 @@ msgstr "Elimina la suddivisione corrente."
 
 # Tooltip
 #: gnucash/ui/gnc-plugin-page-register.ui:659
-#, fuzzy
-#| msgid "Save the current file"
 msgid "Save the current file."
-msgstr "Salva il file corrente"
+msgstr "Salva il file attuale."
 
 # Tooltip
 #: gnucash/ui/gnc-plugin-page-register.ui:674
-#, fuzzy
-#| msgid "Close the currently active page"
 msgid "Close the currently active page."
-msgstr "Chiudi la pagina attiva"
+msgstr "Chiudi la pagina attualmente attiva."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:699
 #, fuzzy
@@ -31798,7 +31783,7 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
-msgstr ""
+msgstr "_Esegui"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
@@ -31837,10 +31822,8 @@ msgid "_Postpone"
 msgstr "_Posticipa"
 
 #: gnucash/ui/gnc-reconcile-window.ui:24
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "_Autoclear"
-msgstr "Auto-compensa"
+msgstr "_Auto-compensa"
 
 #: gnucash/ui/gnc-reconcile-window.ui:38
 msgid "_Open Account"
@@ -31848,11 +31831,9 @@ msgstr "_Apri conto"
 
 #: gnucash/ui/gnc-reconcile-window.ui:63 gnucash/ui/gnc-reconcile-window.ui:103
 #: gnucash/ui/gnc-reconcile-window.ui:146
-#, fuzzy
-#| msgid "_Balance"
 msgctxt "reconcile menu"
 msgid "_Balance"
-msgstr "_Saldo"
+msgstr "_Bilancia"
 
 #: gnucash/ui/gnc-reconcile-window.ui:73 gnucash/ui/gnc-reconcile-window.ui:111
 msgid "_Reconcile Selection"
@@ -32417,7 +32398,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.cpp:195
 msgctxt "FQ Source"
 msgid "Italian Stock Exchange, IT"
-msgstr ""
+msgstr "Borsa Italiana, IT"
 
 #: libgnucash/engine/gnc-commodity.cpp:196
 msgctxt "FQ Source"
