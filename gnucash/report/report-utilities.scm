@@ -34,6 +34,7 @@
 (use-modules (gnucash report html-acct-table))
 (use-modules (gnucash gnome-utils))
 
+(export gnc:hash-ref!)
 (export list-ref-safe)
 (export list-set-safe!)
 (export gnc:monetary->string)
@@ -106,6 +107,15 @@
 (export gnc:dump-book)
 (export gnc:dump-invoices)
 (export gnc:dump-lot)
+
+
+;; mimics c++ std::unordered_map::operator[] - return the value corresponding to key,
+;; constructing a new value in the map if key does not exist yet
+(define (gnc:hash-ref! hash key constructor)
+  (or (hash-ref hash key)
+      (let ((new-value (constructor)))
+        (hash-set! hash key new-value)
+        new-value)))
 
 (define (list-ref-safe list elt)
   (and (pair? list)
