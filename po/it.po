@@ -58,7 +58,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-30 15:01+0000\n"
+"PO-Revision-Date: 2026-06-30 22:01+0000\n"
 "Last-Translator: ales-ro <bianaless6@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -17310,16 +17310,12 @@ msgid "Working…"
 msgstr "Elaborazione in corso…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
-#, fuzzy
-#| msgid "<b>A_vailable reports</b>"
 msgid "A_vailable reports"
-msgstr "<b>Report _disponibili</b>"
+msgstr "R_eport disponibili"
 
 #: gnucash/gtkbuilder/dialog-report.glade:74
-#, fuzzy
-#| msgid "<b>_Selected Reports</b>"
 msgid "_Selected Reports"
-msgstr "<b>Report _selezionati</b>"
+msgstr "_Report selezionati"
 
 #: gnucash/gtkbuilder/dialog-report.glade:107
 msgid "A_dd >>"
@@ -17346,16 +17342,12 @@ msgid "HTML Style Sheets"
 msgstr "Fogli stile HTML"
 
 #: gnucash/gtkbuilder/dialog-report.glade:308
-#, fuzzy
-#| msgid "<b>Available style sheets</b>"
 msgid "Available style sheets"
-msgstr "<b>Fogli di stile disponibili</b>"
+msgstr "Fogli di stile disponibili"
 
 #: gnucash/gtkbuilder/dialog-report.glade:391
-#, fuzzy
-#| msgid "<b>Style sheet options</b>"
 msgid "Style sheet options"
-msgstr "<b>Opzioni del foglio di stile</b>"
+msgstr "Opzioni del foglio di stile"
 
 #: gnucash/gtkbuilder/dialog-report.glade:445
 msgid "Report Size"
@@ -17382,10 +17374,8 @@ msgid "New Style Sheet"
 msgstr "Nuovo foglio di stile"
 
 #: gnucash/gtkbuilder/dialog-report.glade:771
-#, fuzzy
-#| msgid "<b>New style sheet info</b>"
 msgid "New style sheet info"
-msgstr "<b>Informazioni sul nuovo foglio di stile</b>"
+msgstr "Informazioni sul nuovo foglio di stile"
 
 #: gnucash/gtkbuilder/dialog-report.glade:810
 msgid "_Template"
@@ -17438,10 +17428,8 @@ msgid "Search for items where"
 msgstr "Cerca elementi che"
 
 #: gnucash/gtkbuilder/dialog-search.glade:228
-#, fuzzy
-#| msgid "<b>Match all entries</b>"
 msgid "Match all entries"
-msgstr "<b>Fai corrispondere tutti gli elementi</b>"
+msgstr "Fai corrispondere tutti gli elementi"
 
 #: gnucash/gtkbuilder/dialog-search.glade:284
 msgid "Search Criteria"
@@ -17525,10 +17513,8 @@ msgid "Number of Occurrences"
 msgstr "Numero di occorrenze"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:508
-#, fuzzy
-#| msgid "Since Last Run…"
 msgid "Since Last Run"
-msgstr "Dall'ultimo avvio…"
+msgstr "Dall'ultimo avvio"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:534
 msgid "Transaction Editor Defaults"
@@ -18540,13 +18526,11 @@ msgstr "Giorni"
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:286
-#, fuzzy
-#| msgid "Relative"
 msgid "Rela_tive"
-msgstr "Relativo"
+msgstr "Rela_tivo"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:301
 msgid "Choo_se Date"
@@ -19804,16 +19788,12 @@ msgstr ""
 "annullare?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
-#, fuzzy
-#| msgid "Import using AQBanking"
 msgid "Import using AqBanking"
-msgstr "Importa utilizzando AQBanking"
+msgstr "Importa utilizzando AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
-#| msgid "Import into GnuCash any file format supported by AQBanking"
 msgid "Import into GnuCash any file format supported by AqBanking"
-msgstr "Importa in GnuCash ogni file supportato da AQBanking"
+msgstr "Importa in GnuCash ogni formato di file supportato da AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -28775,13 +28755,11 @@ msgstr "Numero di colonne"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
-msgstr ""
+msgstr "Imposta il numero massimo di colonne"
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
-#, fuzzy
-#| msgid "Income summary accounts"
 msgid "Too many accounts"
-msgstr "Riepilogo dei conti delle entrate"
+msgstr "Troppi conti"
 
 #: gnucash/report/reports/standard/txn-columns.scm:155
 msgid ""
@@ -28789,6 +28767,9 @@ msgid ""
 "Select a different subset of transactions, or increase the limit in the "
 "options."
 msgstr ""
+"Il numero di conti collegati alle transazioni trovate eccede il limite. "
+"Seleziona un differente sottoinsieme di transazioni o aumenta il limite "
+"nelle opzioni."
 
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
@@ -29745,10 +29726,8 @@ msgstr "Visualizzare il numero di transazione?"
 
 # tooltip
 #: gnucash/report/trep-engine.scm:954
-#, fuzzy
-#| msgid "Display the invoice notes?"
 msgid "Display invoice details"
-msgstr "Visualizzare le note del documento di vendita?"
+msgstr "Visualizza i dettagli del documento di vendita"
 
 # Tooltip
 #: gnucash/report/trep-engine.scm:959
@@ -31753,11 +31732,11 @@ msgstr "Esporta _report"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:37
 msgid "_Save layout as default"
-msgstr ""
+msgstr "_Salva il layout come predefinito"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:39
 msgid "Save current layout as default"
-msgstr ""
+msgstr "Salva il layout attuale come predefinito"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:161
@@ -31780,6 +31759,8 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Esegue la transazione pianificata selezionata. Se nessuna transazione "
+"pianificata deve essere inserita, viene usata la ricorrenza successiva"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
@@ -32374,11 +32355,9 @@ msgstr ""
 "state registrate da altre parti."
 
 #: libgnucash/engine/gnc-commodity.cpp:191
-#, fuzzy
-#| msgid "Alpha Vantage API key"
 msgctxt "FQ Source"
 msgid "Alphavantage"
-msgstr "Chiave API Alpha Vantage"
+msgstr "Alphavantage"
 
 #: libgnucash/engine/gnc-commodity.cpp:192
 msgctxt "FQ Source"
