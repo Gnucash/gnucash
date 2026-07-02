@@ -480,6 +480,7 @@
 
 (define-module (gnucash report html-acct-table))
 
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
 (use-modules (gnucash core-utils))
@@ -637,7 +638,7 @@
          (lambda (acc)
            (gnc-account-foreach-split-between-dates
             acc start-date end-date #f (lambda (s) (merge-split s #f))))
-         accts)
+         (delete-duplicates accts))
 
         (case balance-mode
           ((post-closing) #f)
