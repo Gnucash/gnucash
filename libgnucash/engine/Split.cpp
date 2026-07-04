@@ -128,6 +128,8 @@ gnc_split_init(Split* split)
     split->reconciled_balance  = gnc_numeric_zero();
     split->noclosing_balance   = gnc_numeric_zero();
 
+    split->adjusted_amount     = gnc_numeric_zero();
+
     split->gains = GAINS_STATUS_UNKNOWN;
     split->gains_split = nullptr;
 }
@@ -520,6 +522,8 @@ xaccSplitReinit(Split * split)
     split->reconciled_balance  = gnc_numeric_zero();
     split->noclosing_balance   = gnc_numeric_zero();
 
+    split->adjusted_amount     = gnc_numeric_zero();
+
     qof_instance_set_idata(split, 0);
 
     split->gains = GAINS_STATUS_UNKNOWN;
@@ -604,6 +608,7 @@ xaccSplitCloneNoKvp (const Split *s)
     split->cleared_balance     = s->cleared_balance;
     split->reconciled_balance  = s->reconciled_balance;
     split->noclosing_balance   = s->noclosing_balance;
+    split->adjusted_amount     = s->adjusted_amount;
 
     split->gains = GAINS_STATUS_UNKNOWN;
     split->gains_split = nullptr;
@@ -689,6 +694,7 @@ xaccSplitDump (const Split *split, const char *tag)
     printf("    RBalance: %s\n",
            gnc_numeric_to_string(split->reconciled_balance));
     printf("    NoClose:  %s\n", gnc_numeric_to_string(split->noclosing_balance));
+    printf("    AdjAmt:   %s\n", gnc_numeric_to_string(split->adjusted_amount));
     printf("    idata:    %x\n", qof_instance_get_idata(split));
 }
 #endif
@@ -748,6 +754,8 @@ xaccFreeSplit (Split *split)
     split->lot         = nullptr;
     split->acc         = nullptr;
     split->orig_acc    = nullptr;
+
+    split->adjusted_amount    = gnc_numeric_zero();
 
     split->date_reconciled = 0;
     G_OBJECT_CLASS (QOF_INSTANCE_GET_CLASS (&split->inst))->dispose(G_OBJECT (split));
@@ -914,6 +922,9 @@ xaccSplitEqual(const Split *sa, const Split *sb,
             return FALSE;
         if (!xaccSplitEqualCheckBal ("noclosing ", sa->noclosing_balance,
                                      sb->noclosing_balance))
+            return FALSE;
+        if (!xaccSplitEqualCheckBal ("adjusted ", sa->adjusted_amount,
+                                     sb->adjusted_amount))
             return FALSE;
     }
 
@@ -1238,6 +1249,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
     }
     else
         s->amount = amt;
+    s->adjusted_amount = s->amount;
 
     SET_GAINS_ADIRTY(s);
     mark_split (s);
@@ -1314,6 +1326,21 @@ gnc_numeric
 xaccSplitGetReconciledBalance (const Split *s)
 {
     return s ? s->reconciled_balance : gnc_numeric_zero();
+}
+
+gnc_numeric
+xaccSplitGetAdjustedAmount (const Split *s)
+{
+    return s ? s->adjusted_amount : gnc_numeric_zero();
+}
+
+void
+xaccSplitSetAdjustedAmount (Split *s, gnc_numeric amt)
+{
+    if  (!s) return;
+    if (gnc_numeric_check (amt)) return;
+
+    s->adjusted_amount = amt;
 }
 
 void
