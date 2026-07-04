@@ -128,6 +128,9 @@ struct split_s
     gnc_numeric  noclosing_balance;
     gnc_numeric  cleared_balance;
     gnc_numeric  reconciled_balance;
+
+    /* The stock-split adjusted amount */
+    gnc_numeric  adjusted_amount;
 };
 
 struct _SplitClass
