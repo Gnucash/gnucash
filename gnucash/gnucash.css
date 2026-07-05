@@ -29,6 +29,7 @@ gnc-id-cursor button {
 @define-color register_split_bg_color #EDE7D3;
 @define-color register_cursor_bg_color #FFEF98;
 @define-color register_fg_color black;
+@define-color register_border_color alpha(black, 0.18);
 
 *.gnc-class-register-foreground {
   color: @register_fg_color;
@@ -70,6 +71,63 @@ gnc-id-cursor button {
   background-color: mix(@register_cursor_bg_color, grey, 0.2);
 }
 
+*.gnc-class-register-header,
+*.gnc-class-register-primary,
+*.gnc-class-register-secondary,
+*.gnc-class-register-split,
+*.gnc-class-register-cursor {
+  border-color: @register_border_color;
+}
+
+/* Register colors used when GnuCash is running in dark appearance mode. */
+*.gnc-class-register-dark-foreground {
+  color: #ECEFF4;
+}
+
+*.gnc-class-register-dark-header {
+  background-color: #30443C;
+}
+
+*.gnc-class-register-dark-primary {
+  background-color: #1F2926;
+}
+
+*.gnc-class-register-dark-primary:disabled {
+  background-color: mix(#1F2926, #3A3A3A, 0.35);
+}
+
+*.gnc-class-register-dark-secondary {
+  background-color: #25312D;
+}
+
+*.gnc-class-register-dark-secondary:disabled {
+  background-color: mix(#25312D, #3A3A3A, 0.35);
+}
+
+*.gnc-class-register-dark-split {
+  background-color: #302C25;
+}
+
+*.gnc-class-register-dark-split:disabled {
+  background-color: mix(#302C25, #3A3A3A, 0.35);
+}
+
+*.gnc-class-register-dark-cursor {
+  background-color: #6D5D2B;
+}
+
+*.gnc-class-register-dark-cursor:disabled {
+  background-color: mix(#6D5D2B, #3A3A3A, 0.35);
+}
+
+*.gnc-class-register-dark-header,
+*.gnc-class-register-dark-primary,
+*.gnc-class-register-dark-secondary,
+*.gnc-class-register-dark-split,
+*.gnc-class-register-dark-cursor {
+  border-color: alpha(white, 0.12);
+}
+
 /* Change font color by mixing with grey */
 .gnc-class-lighter-grey-mix {
   color: mix(currentColor, grey, 0.8);
@@ -81,7 +139,7 @@ gnc-id-cursor button {
 
 /* Highlight some text */
 .gnc-class-highlight {
-  color: blue;
+  color: @theme_selected_bg_color;
 }
 
 /* Some tweaks for the about dialog */

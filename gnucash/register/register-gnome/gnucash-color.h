@@ -23,7 +23,7 @@
 #ifndef GNUCASH_COLOR_H
 #define GNUCASH_COLOR_H
 
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 /** @ingroup Register
  * @addtogroup Gnome
@@ -36,6 +36,9 @@ void      gnucash_color_init        (void);
 
 /** Return the pixel value for the given red, green and blue */
 GdkRGBA  *gnucash_color_argb_to_gdk (guint32 argb);
+
+/** Return whether register-owned colors should use their dark palette. */
+gboolean  gnucash_register_theme_is_dark (GtkWidget *widget);
 
 extern GdkRGBA gn_white, gn_light_gray, gn_dark_gray;
 extern GdkRGBA gn_black, gn_blue, gn_red, gn_yellow;

@@ -881,7 +881,10 @@ gnc_item_edit_new (GnucashSheet *sheet)
 
     // Get the CSS space settings for the entry
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
-    gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
+    gtk_style_context_add_class (stylectxt,
+                                 gnucash_register_theme_is_dark (GTK_WIDGET(sheet)) ?
+                                 "gnc-class-register-dark-foreground" :
+                                 "gnc-class-register-foreground");
     gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
     gtk_style_context_get_margin (stylectxt, GTK_STATE_FLAG_NORMAL, &margin);
     gtk_style_context_get_border (stylectxt, GTK_STATE_FLAG_NORMAL, &border);

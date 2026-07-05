@@ -38,7 +38,8 @@
 #include <config.h>
 #endif
 
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <gnc-prefs.h>
 #include "gnucash-color.h"
 
 static int color_inited;
@@ -67,6 +68,25 @@ color_equal (gconstpointer v, gconstpointer w)
     return (*c1 == *c2);
 }
 
+
+gboolean
+gnucash_register_theme_is_dark (G_GNUC_UNUSED GtkWidget *widget)
+{
+    gint theme = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL,
+                                    GNC_PREF_APPEARANCE_THEME);
+    gboolean prefer_dark = FALSE;
+
+    if (theme == GNC_PREF_APPEARANCE_THEME_DARK)
+        return TRUE;
+
+    if (theme == GNC_PREF_APPEARANCE_THEME_LIGHT)
+        return FALSE;
+
+    g_object_get (gtk_settings_get_default (),
+                  "gtk-application-prefer-dark-theme", &prefer_dark, NULL);
+
+    return prefer_dark;
+}
 
 /* This function takes an argb spec for a color and returns an
  *  allocated GdkRGBA.  We take care of allocating and managing

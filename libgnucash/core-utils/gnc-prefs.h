@@ -64,6 +64,7 @@
 #define GNC_PREF_ACCOUNTING_LABELS   "use-accounting-labels"
 #define GNC_PREF_ACCOUNT_SEPARATOR   "account-separator"
 #define GNC_PREF_NEGATIVE_IN_RED     "negative-in-red"
+#define GNC_PREF_APPEARANCE_THEME    "appearance-theme"
 #define GNC_PREF_NUM_SOURCE          "num-source"
 #define GNC_PREF_DATE_FORMAT         "date-format"
 #define GNC_PREF_DATE_COMPL_THISYEAR "date-completion-thisyear"
@@ -93,6 +94,11 @@
 #define GNC_PREF_CURRENCY_OTHER      "currency-other"
 #define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
 #define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
+
+/* Appearance theme preference values */
+#define GNC_PREF_APPEARANCE_THEME_SYSTEM 0
+#define GNC_PREF_APPEARANCE_THEME_LIGHT  1
+#define GNC_PREF_APPEARANCE_THEME_DARK   2
 
 #ifdef __cplusplus
 extern "C" {

@@ -55,6 +55,11 @@
       <summary>Display negative amounts in red</summary>
       <description>Display negative amounts in red</description>
     </key>
+    <key name="appearance-theme" type="i">
+      <default>0</default>
+      <summary>Application appearance theme</summary>
+      <description>Controls whether GnuCash follows the system appearance theme, uses a light theme, or uses a dark theme.</description>
+    </key>
     <key name="auto-decimal-point" type="b">
       <default>false</default>
       <summary>Automatically insert a decimal point</summary>

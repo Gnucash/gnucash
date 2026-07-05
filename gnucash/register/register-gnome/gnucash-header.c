@@ -97,7 +97,9 @@ gnc_header_draw_offscreen (GncHeader *header)
     // Fill background color of header
     gtk_render_background (stylectxt, cr, 0, 0, header->width, header->height);
 
-    gdk_rgba_parse (&color, "black");
+    gnc_style_context_get_border_color (stylectxt,
+                                        gtk_style_context_get_state (stylectxt),
+                                        &color);
     cairo_set_source_rgb (cr, color.red, color.green, color.blue);
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
     cairo_set_line_width (cr, 1.0);

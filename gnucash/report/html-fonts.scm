@@ -164,7 +164,14 @@
      (string-append
       ;; Note: any changes in the default CSS *should* be duplicated in
       ;; stylesheet-css.scm
-      "@media (prefers-color-scheme: dark) {body {color: #000; background-color: #fff;}}\n"
+      "@media (prefers-color-scheme: dark) {\n"
+      "  body { color: #E6E8EB !important; background-color: #1E1F22 !important; }\n"
+      "  a { color: #8AB4F8 !important; }\n"
+      "  tr.alternate-row { background: #292B2F !important; }\n"
+      "  td, th { border-color: #555B64 !important; }\n"
+      "  td.highlight { background-color: #373A40 !important; }\n"
+      "  td.neg { color: #FF6B6B !important; }\n"
+      "}\n"
       "h3 { " title-info " }\n"
       "a { " account-link-info " }\n"
       "body, p, table, tr, td { vertical-align: top; " text-cell-info " }\n"

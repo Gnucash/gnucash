@@ -25,6 +25,7 @@
 
 #include <glib/gi18n.h>
 #include <libxml/xmlIO.h>
+#include <gdk/gdk.h>
 
 #include "gnc-prefs-utils.h"
 #include "gnc-prefs.h"
@@ -50,6 +51,13 @@
 #ifdef G_OS_WIN32
 #include <windows.h>
 #include "gnc-help-utils.h"
+#endif
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/gdkwin32.h>
+#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
+#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#endif
+#define DWMWA_USE_IMMERSIVE_DARK_MODE_LEGACY 19
 #endif
 #ifdef MAC_INTEGRATION
 #import <Cocoa/Cocoa.h>
@@ -105,6 +113,319 @@ gnc_configure_date_format (void)
     }
 
     qof_date_format_set(df);
+}
+
+static gboolean
+gnc_string_indicates_dark_appearance (const gchar *value)
+{
+    gchar *lower_value;
+    gboolean prefers_dark;
+
+    if (!value)
+        return FALSE;
+
+    lower_value = g_ascii_strdown (value, -1);
+    prefers_dark = g_strrstr (lower_value, "dark") != NULL;
+    g_free (lower_value);
+
+    return prefers_dark;
+}
+
+static gboolean
+gnc_gtk_settings_prefers_dark (GtkSettings *settings)
+{
+    gboolean prefer_dark = FALSE;
+    gchar *theme_name = NULL;
+
+    if (!settings)
+        return FALSE;
+
+    g_object_get (settings,
+                  "gtk-application-prefer-dark-theme", &prefer_dark,
+                  "gtk-theme-name", &theme_name,
+                  NULL);
+
+    prefer_dark = prefer_dark ||
+                  gnc_string_indicates_dark_appearance (theme_name);
+    g_free (theme_name);
+
+    return prefer_dark;
+}
+
+static gboolean
+gnc_gsettings_color_scheme_prefers_dark (void)
+{
+    GSettingsSchemaSource *schema_source;
+    GSettingsSchema *schema;
+    GSettings *settings;
+    gchar *color_scheme;
+    gboolean prefers_dark = FALSE;
+
+    schema_source = g_settings_schema_source_get_default ();
+    if (!schema_source)
+        return FALSE;
+
+    schema = g_settings_schema_source_lookup (schema_source,
+                                              "org.gnome.desktop.interface",
+                                              TRUE);
+    if (!schema)
+        return FALSE;
+
+    if (!g_settings_schema_has_key (schema, "color-scheme"))
+    {
+        g_settings_schema_unref (schema);
+        return FALSE;
+    }
+
+    settings = g_settings_new_full (schema, NULL, NULL);
+    color_scheme = g_settings_get_string (settings, "color-scheme");
+    prefers_dark = gnc_string_indicates_dark_appearance (color_scheme);
+
+    g_free (color_scheme);
+    g_object_unref (settings);
+    g_settings_schema_unref (schema);
+
+    return prefers_dark;
+}
+
+#ifdef MAC_INTEGRATION
+static gboolean
+gnc_macos_appearance_prefers_dark (void)
+{
+    if (@available(macOS 10.14, *))
+    {
+        NSAppearance *appearance = NSApp ? [NSApp effectiveAppearance] :
+                                           [NSAppearance currentAppearance];
+        NSString *match = [appearance bestMatchFromAppearancesWithNames:
+            @[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]];
+
+        return [match isEqualToString:NSAppearanceNameDarkAqua];
+    }
+
+    return FALSE;
+}
+#endif
+
+static gboolean
+gnc_system_appearance_prefers_dark (GtkSettings *settings)
+{
+#ifdef G_OS_WIN32
+    HKEY key;
+    DWORD apps_use_light_theme = 1;
+    DWORD value_type = REG_DWORD;
+    DWORD value_size = sizeof (apps_use_light_theme);
+
+    if (RegOpenKeyExW (HKEY_CURRENT_USER,
+                       L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                       0, KEY_READ, &key) == ERROR_SUCCESS)
+    {
+        LSTATUS status = RegQueryValueExW (key, L"AppsUseLightTheme", NULL,
+                                           &value_type,
+                                           (LPBYTE)&apps_use_light_theme,
+                                           &value_size);
+        RegCloseKey (key);
+
+        if (status == ERROR_SUCCESS && value_type == REG_DWORD)
+            return apps_use_light_theme == 0;
+    }
+#endif
+
+#ifdef MAC_INTEGRATION
+    if (gnc_macos_appearance_prefers_dark ())
+        return TRUE;
+#endif
+
+    if (gnc_gsettings_color_scheme_prefers_dark ())
+        return TRUE;
+
+    return gnc_gtk_settings_prefers_dark (settings);
+}
+
+static gboolean
+gnc_appearance_theme_prefers_dark (GtkSettings *settings)
+{
+    gint theme = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL,
+                                    GNC_PREF_APPEARANCE_THEME);
+
+    if (theme == GNC_PREF_APPEARANCE_THEME_DARK)
+        return TRUE;
+
+    if (theme == GNC_PREF_APPEARANCE_THEME_LIGHT)
+        return FALSE;
+
+    return gnc_system_appearance_prefers_dark (settings);
+}
+
+#ifdef GDK_WINDOWING_WIN32
+typedef HRESULT (WINAPI *GncDwmSetWindowAttributeFunc) (HWND, DWORD, LPCVOID,
+                                                        DWORD);
+
+static GncDwmSetWindowAttributeFunc
+gnc_get_dwm_set_window_attribute (void)
+{
+    static gboolean lookup_done = FALSE;
+    static GncDwmSetWindowAttributeFunc set_window_attribute = NULL;
+
+    if (!lookup_done)
+    {
+        HMODULE dwmapi_module = LoadLibraryW (L"dwmapi.dll");
+        lookup_done = TRUE;
+
+        if (dwmapi_module)
+            set_window_attribute = (GncDwmSetWindowAttributeFunc)
+                GetProcAddress (dwmapi_module, "DwmSetWindowAttribute");
+    }
+
+    return set_window_attribute;
+}
+
+static void
+gnc_apply_win32_titlebar_theme (GtkWindow *window, gboolean prefer_dark)
+{
+    GncDwmSetWindowAttributeFunc set_window_attribute =
+        gnc_get_dwm_set_window_attribute ();
+    GdkWindow *gdk_window;
+    HWND hwnd;
+    BOOL use_dark_titlebar = prefer_dark;
+
+    if (!set_window_attribute)
+        return;
+
+    if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+        return;
+
+    gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+    if (!gdk_window)
+        return;
+
+    hwnd = (HWND)gdk_win32_window_get_handle (gdk_window);
+    if (!hwnd)
+        return;
+
+    if (set_window_attribute (hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE,
+                              &use_dark_titlebar,
+                              sizeof (use_dark_titlebar)) < 0)
+    {
+        set_window_attribute (hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_LEGACY,
+                              &use_dark_titlebar,
+                              sizeof (use_dark_titlebar));
+    }
+
+    SetWindowPos (hwnd, NULL, 0, 0, 0, 0,
+                  SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
+                  SWP_NOACTIVATE | SWP_FRAMECHANGED);
+}
+#else
+static void
+gnc_apply_win32_titlebar_theme (G_GNUC_UNUSED GtkWindow *window,
+                                G_GNUC_UNUSED gboolean prefer_dark)
+{
+}
+#endif
+
+static void
+gnc_queue_widget_redraw (GtkWidget *widget, G_GNUC_UNUSED gpointer user_data)
+{
+    gtk_widget_queue_draw (widget);
+
+    if (GTK_IS_CONTAINER (widget))
+        gtk_container_forall (GTK_CONTAINER (widget), gnc_queue_widget_redraw, NULL);
+}
+
+static void
+gnc_apply_appearance_theme_to_window (GtkWindow *window, gboolean prefer_dark)
+{
+    gtk_widget_queue_draw (GTK_WIDGET (window));
+    gnc_queue_widget_redraw (GTK_WIDGET (window), NULL);
+    gnc_apply_win32_titlebar_theme (window, prefer_dark);
+}
+
+static gboolean
+gnc_apply_appearance_theme_to_window_idle (gpointer user_data)
+{
+    GtkWindow *window = GTK_WINDOW (user_data);
+
+    gnc_apply_appearance_theme_to_window (
+        window, gnc_appearance_theme_prefers_dark (gtk_settings_get_default ()));
+    g_object_unref (window);
+
+    return G_SOURCE_REMOVE;
+}
+
+static gboolean
+gnc_appearance_window_realize_hook (G_GNUC_UNUSED GSignalInvocationHint *ihint,
+                                    guint n_param_values,
+                                    const GValue *param_values,
+                                    G_GNUC_UNUSED gpointer user_data)
+{
+    GObject *instance;
+
+    if (n_param_values == 0)
+        return TRUE;
+
+    instance = g_value_get_object (&param_values[0]);
+    if (GTK_IS_WINDOW (instance))
+    {
+        g_object_ref (instance);
+        g_idle_add (gnc_apply_appearance_theme_to_window_idle, instance);
+    }
+
+    return TRUE;
+}
+
+static void
+gnc_install_appearance_window_realize_hook (void)
+{
+    static gboolean hook_installed = FALSE;
+    guint realize_signal_id;
+
+    if (hook_installed)
+        return;
+
+    realize_signal_id = g_signal_lookup ("realize", GTK_TYPE_WIDGET);
+    if (realize_signal_id)
+        g_signal_add_emission_hook (realize_signal_id, 0,
+                                    gnc_appearance_window_realize_hook,
+                                    NULL, NULL);
+
+    hook_installed = TRUE;
+}
+
+static void
+gnc_apply_appearance_theme (void)
+{
+    GtkSettings *settings = gtk_settings_get_default ();
+    gboolean prefer_dark = gnc_appearance_theme_prefers_dark (settings);
+    GdkDisplay *display = gdk_display_get_default ();
+    GList *toplevels, *node;
+
+    if (settings)
+        g_object_set (settings, "gtk-application-prefer-dark-theme",
+                      prefer_dark, NULL);
+
+    if (display)
+    {
+        GdkScreen *screen = gdk_display_get_default_screen (display);
+        if (screen)
+            gtk_style_context_reset_widgets (screen);
+    }
+
+    toplevels = gtk_window_list_toplevels ();
+    for (node = toplevels; node; node = g_list_next (node))
+    {
+        if (GTK_IS_WINDOW (node->data))
+            gnc_apply_appearance_theme_to_window (GTK_WINDOW (node->data),
+                                                  prefer_dark);
+    }
+    g_list_free (toplevels);
+}
+
+static void
+gnc_appearance_theme_changed_cb (G_GNUC_UNUSED GSettings *settings,
+                                 G_GNUC_UNUSED gchar *key,
+                                 G_GNUC_UNUSED gpointer user_data)
+{
+    gnc_apply_appearance_theme ();
 }
 
 /* gnc_configure_date_completion
@@ -164,6 +485,13 @@ gnc_add_css_file (void)
         gtk_css_provider_load_from_path (provider_user, str, &error);
         g_free (str);
     }
+
+    gnc_install_appearance_window_realize_hook ();
+
+    gnc_apply_appearance_theme ();
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_APPEARANCE_THEME,
+                           gnc_appearance_theme_changed_cb, NULL);
+
     g_object_unref (provider_user);
     g_object_unref (provider_app);
     g_object_unref (provider_fallback);

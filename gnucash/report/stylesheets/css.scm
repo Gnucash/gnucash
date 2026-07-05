@@ -31,7 +31,27 @@
 (define default-css "/* default style */
 @media (prefers-color-scheme: dark) {
     body {
-        color: #000; background-color: #fff;
+        color: #E6E8EB !important; background-color: #1E1F22 !important;
+    }
+
+    a {
+        color: #8AB4F8 !important;
+    }
+
+    tr.alternate-row {
+        background: #292B2F !important;
+    }
+
+    td, th {
+        border-color: #555B64 !important;
+    }
+
+    td.highlight {
+        background-color: #373A40 !important;
+    }
+
+    td.neg {
+        color: #FF6B6B !important;
     }
 }
 

@@ -2221,7 +2221,10 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
     else
     {
         if (sheet->use_gnc_color_theme) // only add this class if builtin colors used
-            gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
+            gtk_style_context_add_class (stylectxt,
+                                         gnucash_register_theme_is_dark (GTK_WIDGET(sheet)) ?
+                                         "gnc-class-register-dark-foreground" :
+                                         "gnc-class-register-foreground");
     }
 
     switch (field_type)
@@ -2256,7 +2259,10 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
     }
 
     if (sheet->use_gnc_color_theme)
-        full_class = g_strconcat ("gnc-class-register-", style_class, NULL);
+        full_class = g_strconcat (gnucash_register_theme_is_dark (GTK_WIDGET(sheet)) ?
+                                  "gnc-class-register-dark-" :
+                                  "gnc-class-register-",
+                                  style_class, NULL);
     else
     {
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);

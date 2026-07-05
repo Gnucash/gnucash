@@ -397,16 +397,49 @@ Chart.pluginService.register({
   }
 })
 
-// copy font info from css into chartjs.
+// copy font and color info from css into chartjs.
 bodyStyle = window.getComputedStyle (document.querySelector ('body'));
 Chart.defaults.global.defaultFontSize = parseInt (bodyStyle.fontSize);
 Chart.defaults.global.defaultFontFamily = bodyStyle.fontFamily;
 Chart.defaults.global.defaultFontStyle = bodyStyle.fontStyle;
+Chart.defaults.global.defaultFontColor = bodyStyle.color;
 
 titleStyle = window.getComputedStyle (document.querySelector ('h3'));
+if (!chartjsoptions.options.title) {
+  chartjsoptions.options.title = {};
+}
 chartjsoptions.options.title.fontSize = parseInt (titleStyle.fontSize);
 chartjsoptions.options.title.fontFamily = titleStyle.fontFamily;
 chartjsoptions.options.title.fontStyle = titleStyle.fontStyle;
+chartjsoptions.options.title.fontColor = bodyStyle.color;
+
+if (!chartjsoptions.options.chartArea) {
+  chartjsoptions.options.chartArea = {};
+}
+chartjsoptions.options.chartArea.backgroundColor = bodyStyle.backgroundColor;
+
+if (chartjsoptions.options.legend && chartjsoptions.options.legend.labels) {
+  chartjsoptions.options.legend.labels.fontColor = bodyStyle.color;
+}
+
+function applyAxisTheme(axis) {
+  if (!axis) return;
+  if (!axis.ticks) axis.ticks = {};
+  if (!axis.gridLines) axis.gridLines = {};
+  if (!axis.scaleLabel) axis.scaleLabel = {};
+  axis.ticks.fontColor = bodyStyle.color;
+  axis.gridLines.color = 'rgba(128, 128, 128, 0.35)';
+  axis.scaleLabel.fontColor = bodyStyle.color;
+}
+
+if (chartjsoptions.options.scales) {
+  if (chartjsoptions.options.scales.xAxes) {
+    chartjsoptions.options.scales.xAxes.forEach(applyAxisTheme);
+  }
+  if (chartjsoptions.options.scales.yAxes) {
+    chartjsoptions.options.scales.yAxes.forEach(applyAxisTheme);
+  }
+}
 
 document.getElementById(chartid).onclick = function(evt) {
   var activepoints = myChart.getElementAtEvent(evt);
