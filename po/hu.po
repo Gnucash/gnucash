@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-07-06 01:01+0000\n"
+"PO-Revision-Date: 2026-07-06 06:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -13583,26 +13583,24 @@ msgstr "Számlatípus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:974
 msgid "Show _hidden accounts"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "_Rejtett számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:992
-#, fuzzy
 msgid "Show _unused accounts"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "_Nem használt számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:996
 msgid "Show accounts which do not have any transactions."
 msgstr ""
-"Azoknak a számláknak a megtekintése, amelyek nem tartalmaznak tranzakciókat."
+"Azoknak a számláknak a megjelenítése, melyek nem tartalmaznak tranzakciókat."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1010
 msgid "Show _zero total accounts"
 msgstr "Nulla öss_zegű számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1014
-#, fuzzy
 msgid "Show accounts which have a zero total value."
-msgstr "A nulla egyenlegű számlák elrejtése."
+msgstr "A nulla egyenlegű számlák megjelenítése."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1073
 msgid "Use Commodity Value"
@@ -13671,7 +13669,7 @@ msgstr "Me_gjegyzések"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1431
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "Az áru legkisebb egysége, amit használni lehet."
+msgstr "Az áru legkisebb használható egysége."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1457
 #: gnucash/gtkbuilder/dialog-tax-info.glade:644
@@ -13713,9 +13711,9 @@ msgid ""
 msgstr ""
 "Ez a számla és az alszámlái nem fognak megjelenni a számlafában és a "
 "regiszterben felugró számlalistában. Ezt a beállítást csak úgy törölheti, ha "
-"először megnyitja a számlafában a \"Szűrés…\" párbeszédpanelt, majd bejelöli "
-"a \"Rejtett fiókok megjelenítése\" lehetőséget. Így már ki tudja választani "
-"a számlát, és újra megnyithatja ezt a párbeszédpanelt."
+"először megnyitja a számlafában a „Szűrés…” ablakot, majd az „Egyéb” lapon "
+"bejelöli a „Rejtett számlák megjelenítése” lehetőséget. Így már ki tudja "
+"választani a számlát, és újra megnyithatja ezt a párbeszédablakot."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1568
 msgid "Opening balance"
