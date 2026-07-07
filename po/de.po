@@ -18917,19 +18917,38 @@ msgstr ""
 "werden."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
-msgid "_Verbose debug messages"
-msgstr "Ausführliche _Fehlermeldungen"
+msgid "Import noted or _pending transactions"
+msgstr "Vorgemerkte oder _ausstehende Buchungen importieren"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
+msgid ""
+"If active, GnuCash will import AqBanking noted or pending transactions. "
+"These transactions are not final and may later appear again as booked "
+"transactions."
+msgstr ""
+"Wenn aktiviert, importiert GnuCash von AqBanking gelieferte vorgemerkte oder "
+"ausstehende Buchungen. Diese Buchungen sind noch nicht endgültig und können "
+"später erneut als gebuchte Buchungen erscheinen."
+
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
+msgid "Import noted or pending transactions"
+msgstr "Vorgemerkte oder ausstehende Buchungen importieren"
+
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:88
+msgid "_Verbose debug messages"
+msgstr "Ausführliche _Fehlermeldungen"
+
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:94
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:36
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr "Ausführliche Fehlermeldungen für FinTS/AqBanking aktivieren."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:88
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:106
 msgid "Use Non-SWIFT _transaction text"
 msgstr "Verwende _Nicht-SWIFT Buchungstext"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:94
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:112
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:26
 msgid ""
 "Some banks place part of transaction description as \"transaction text\" in "
