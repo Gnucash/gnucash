@@ -795,13 +795,44 @@ gnc_AB_JOB_ID_to_string (gulong job_id)
     return g_strdup_printf ("job_%lu", job_id);
 }
 
+static const AB_TRANSACTION *
+get_first_importable_transaction (AB_IMEXPORTER_ACCOUNTINFO *element,
+                                  gboolean import_noted_txns)
+{
+    const AB_TRANSACTION *trans;
 
+    trans = AB_ImExporterAccountInfo_GetFirstTransaction (
+                element, AB_Transaction_TypeStatement, 0);
+    if (trans)
+        return trans;
+
+    if (!import_noted_txns)
+        return NULL;
+
+    return AB_ImExporterAccountInfo_GetFirstTransaction (
+               element, AB_Transaction_TypeNotedStatement, 0);
+}
+
+static void
+import_account_transactions (AB_TRANSACTION_LIST *ab_trans_list,
+                             GncABImExContextImport *data,
+                             gboolean import_noted_txns)
+{
+    AB_Transaction_List_ForEachByType (ab_trans_list, txn_transaction_cb, data,
+                                       AB_Transaction_TypeStatement, 0);
+
+    if (import_noted_txns)
+        AB_Transaction_List_ForEachByType (ab_trans_list, txn_transaction_cb,
+                                           data,
+                                           AB_Transaction_TypeNotedStatement, 0);
+}
 
 static AB_IMEXPORTER_ACCOUNTINFO *
 txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
     Account *gnc_acc;
+    gboolean import_noted_txns;
 
     g_return_val_if_fail (element && data, NULL);
 
@@ -809,8 +840,11 @@ txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
         /* Ignore them */
         return NULL;
 
-    if (!AB_ImExporterAccountInfo_GetFirstTransaction (element, AB_Transaction_TypeStatement, 0))
-/* No transaction found */
+    import_noted_txns = gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING,
+                                            GNC_PREF_IMPORT_NOTED_TXNS);
+
+    if (!get_first_importable_transaction (element, import_noted_txns))
+        /* No transaction found */
         return NULL;
     else
         data->awaiting |= FOUND_TRANSACTIONS;
@@ -870,9 +904,7 @@ txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     {
         AB_TRANSACTION_LIST *ab_trans_list = AB_ImExporterAccountInfo_GetTransactionList (element);
         if (ab_trans_list)
-            AB_Transaction_List_ForEachByType (ab_trans_list,
-                                               txn_transaction_cb, data,
-                                               AB_Transaction_TypeStatement, 0);
+            import_account_transactions (ab_trans_list, data, import_noted_txns);
     }
     return NULL;
 }
