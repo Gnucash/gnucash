@@ -104,7 +104,7 @@ GKeyFile *gnc_state_get_current (void);
  *
  * @return The number of successfully dropped sections.
  */
-gint gnc_state_drop_sections_for (const gchar *partial_name);
+int gnc_state_drop_sections_for (const char *partial_name);
 
 #ifdef __cplusplus
 }
