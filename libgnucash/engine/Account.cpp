@@ -2139,30 +2139,26 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
-    AccountPrivate *priv, *opriv;
-    Account * old_acc = nullptr;
-    Account* lot_account;
-
     /* errors */
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
     g_return_if_fail(GNC_IS_LOT(lot));
 
     /* optimizations */
-    lot_account = gnc_lot_get_account(lot);
-    if (lot_account == acc)
+    auto lot_acc = gnc_lot_get_account(lot);
+    if (lot_acc == acc)
         return;
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
 
     /* pull it out of the old account */
-    if (lot_account)
+    if (lot_acc)
     {
-        old_acc = lot_account;
-        opriv = GET_PRIVATE(old_acc);
-        opriv->lots = g_list_remove(opriv->lots, lot);
+        auto priv = GET_PRIVATE(lot_acc);
+        priv->lots = g_list_remove(priv->lots, lot);
+        qof_event_gen (&lot_acc->inst, QOF_EVENT_MODIFY, nullptr);
     }
 
-    priv = GET_PRIVATE(acc);
+    auto priv = GET_PRIVATE(acc);
     priv->lots = g_list_prepend(priv->lots, lot);
     gnc_lot_set_account(lot, acc);
 

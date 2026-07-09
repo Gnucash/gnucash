@@ -91,6 +91,7 @@ setup (Fixture *fixture, gconstpointer pData)
     fixture->split->balance = amount;
     fixture->split->cleared_balance = amount;
     fixture->split->reconciled_balance = amount;
+    fixture->split->adjusted_amount = amount;
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split));
     qof_instance_mark_clean (QOF_INSTANCE (acc));
     qof_instance_mark_clean (QOF_INSTANCE (txn));
