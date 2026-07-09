@@ -46,8 +46,10 @@
 #include "dialog-utils.h"
 #include "dialog-lot-viewer.h"
 #include "gnc-component-manager.h"
+#include "gnc-event.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include "gnc-window.h"
 #include "misc-gnome-utils.h"
 #include "tree-view-utils.h"
@@ -120,6 +122,8 @@ struct _GNCLotViewer
 
     Account         * account;
     GNCLot          * selected_lot;
+    gint              component_id;
+    GncGUID           account_id;
 };
 
 static void gnc_lot_viewer_fill (GNCLotViewer *lv);
@@ -633,6 +637,17 @@ static void
 lv_refresh_handler (GHashTable *changes, gpointer user_data)
 {
     GNCLotViewer *lv = user_data;
+
+    if (changes)
+    {
+        const EventInfo *info = gnc_gui_get_entity_events (changes, &lv->account_id);
+        if (info && (info->event_mask & QOF_EVENT_DESTROY))
+        {
+            gnc_close_gui_component (lv->component_id);
+            return;
+        }
+    }
+
     lv_refresh (lv);
 }
 
@@ -698,7 +713,9 @@ void
 lv_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     GNCLotViewer *lv = user_data;
-    gnc_unregister_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
+
+    gnc_unregister_gui_component (lv->component_id);
+
     g_free (lv);
 }
 
@@ -1175,7 +1192,6 @@ GNCLotViewer *
 gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
 {
     GNCLotViewer *lv;
-    gint component_id;
 
     if (!account) return NULL;
 
@@ -1184,14 +1200,14 @@ gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
     lv_create (lv, parent);
     lv_refresh (lv);
 
-    component_id = gnc_register_gui_component (LOT_VIEWER_CM_CLASS,
-                   lv_refresh_handler,
-                   lv_close_handler,
-                   lv);
+    lv->component_id = gnc_register_gui_component (LOT_VIEWER_CM_CLASS, lv_refresh_handler, lv_close_handler, lv);
+    lv->account_id = *xaccAccountGetGUID (account);
 
-    gnc_gui_component_watch_entity_type (component_id,
-                                         GNC_ID_LOT,
-                                         QOF_EVENT_CREATE | QOF_EVENT_ADD | QOF_EVENT_REMOVE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+    gnc_gui_component_set_session (lv->component_id, gnc_get_current_session ());
+    gnc_gui_component_watch_entity_type (lv->component_id, GNC_ID_LOT,
+            QOF_EVENT_CREATE | QOF_EVENT_ADD | QOF_EVENT_REMOVE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+    gnc_gui_component_watch_entity (lv->component_id, &lv->account_id,
+            QOF_EVENT_MODIFY | QOF_EVENT_DESTROY | GNC_EVENT_ITEM_CHANGED);
 
 
     return lv;
