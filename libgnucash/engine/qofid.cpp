@@ -266,7 +266,7 @@ qof_collection_foreach_sorted (const QofCollection *col, QofInstanceForeachCB cb
     g_return_if_fail (col);
     g_return_if_fail (cb_func);
 
-    PINFO("Hash Table size of %s before is %" PRIi64, col->e_type, col->guid_entity_map.size());
+    PINFO("Hash Table size of %s before is %zu", col->e_type, col->guid_entity_map.size());
 
     std::vector<QofInstance*> entries (col->guid_entity_map.size());
     std::transform (col->guid_entity_map.cbegin(), col->guid_entity_map.cend(),
@@ -277,7 +277,7 @@ qof_collection_foreach_sorted (const QofCollection *col, QofInstanceForeachCB cb
     std::for_each (entries.cbegin(), entries.cend(),
                    [&](auto ent) { cb_func (ent, user_data); });
 
-    PINFO("Hash Table size of %s after is %" PRIi64, col->e_type, col->guid_entity_map.size());
+    PINFO("Hash Table size of %s after is %zu", col->e_type, col->guid_entity_map.size());
 }
 
 void
