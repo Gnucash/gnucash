@@ -42,6 +42,7 @@
 
 struct tokenize_csv_test_data
 {
+    bool        enable_escape;
     const char *csv_line;
     uint        num_fields;
     const char *fields [8];
@@ -160,7 +161,9 @@ GncTokenizerTest::test_gnc_tokenize_helper (const std::string& separators,
     {
 
         tokenize_csv_test_data cur_line = test_data[i];
+
         set_utf8_contents (csv_tok, std::string(cur_line.csv_line));
+        csvtok->set_enable_escape (cur_line.enable_escape);
         csv_tok->tokenize();
 
         // The tests only come with one line, so get the first row only
@@ -176,15 +179,25 @@ GncTokenizerTest::test_gnc_tokenize_helper (const std::string& separators,
 }
 
 static tokenize_csv_test_data comma_separated [] = {
-        { "Date,Num,Description,Notes,Account,Deposit,Withdrawal,Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
-        { "05/01/15,45,Typical csv import line - including quoted empty field,,Miscellaneous,\"\",\"1,100.00\",", 8, { "05/01/15","45","Typical csv import line - including quoted empty field","","Miscellaneous","","1,100.00","" } },
-        { "05/01/15,45,Acme Inc.,,Miscellaneous,", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
-        { "Test\\ with backslash,nextfield", 2, { "Test\\ with backslash","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
-        { "Test with \\\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
-        { "Test with \"\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
-        { "\"Test (quoted) with \"\" escaped quote\",\"nextfield\"", 2, { "Test (quoted) with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
-        { "\"Unescaped quote test\",nextfield", 2, { "Unescaped quote test","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
-        { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
+    { true, "Date,Num,Description,Notes,Account,Deposit,Withdrawal,Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
+    { false, "Date,Num,Description,Notes,Account,Deposit,Withdrawal,Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
+    { true, "05/01/15,45,Typical csv import line - including quoted empty field,,Miscellaneous,\"\",\"1,100.00\",", 8, { "05/01/15","45","Typical csv import line - including quoted empty field","","Miscellaneous","","1,100.00","" } },
+    { false, "05/01/15,45,Typical csv import line - including quoted empty field,,Miscellaneous,\"\",\"1,100.00\",", 8, { "05/01/15","45","Typical csv import line - including quoted empty field","","Miscellaneous","","1,100.00","" } },
+    { true, "05/01/15,45,Acme Inc.,,Miscellaneous,", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
+    { false, "05/01/15,45,Acme Inc.,,Miscellaneous,", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
+    { true, "Test\\ with backslash,nextfield", 2, { "Test\\ with backslash","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    { false, "Test\\ with backslash,nextfield", 2, { "Test\\ with backslash","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    // This test string is invalid without escape characters because there is only one quote
+    { true, "Test with \\\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    { true, "Test with \"\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    { false, "Test with \"\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    { true,"\"Test (quoted) with \"\" escaped quote\",\"nextfield\"", 2, { "Test (quoted) with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    { true, "\"Unescaped quote test\",nextfield", 2, { "Unescaped quote test","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    { false, "\"Unescaped quote test\",nextfield", 2, { "Unescaped quote test","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+    // The following has a parse error with escape processing true
+    { false, "\"Unescaped quote test with trailing backslash and escape off\\\",nextfield", 2, { "Unescaped quote test with trailing backslash and escape off\\","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+
+    {true, NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
 };
 
 TEST_F (GncTokenizerTest, tokenize_comma_sep)
@@ -193,10 +206,10 @@ TEST_F (GncTokenizerTest, tokenize_comma_sep)
 }
 
 static tokenize_csv_test_data semicolon_separated [] = {
-        { "Date;Num;Description;Notes;Account;Deposit;Withdrawal;Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
-        { "05/01/15;45;Typical csv import line - including quoted empty field;;Miscellaneous;\"\";\"1,100.00\";", 8, { "05/01/15","45","Typical csv import line - including quoted empty field","","Miscellaneous","","1,100.00","" } },
-        { "05/01/15;45;Acme Inc.;;Miscellaneous;", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
-        { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
+    { true, "Date;Num;Description;Notes;Account;Deposit;Withdrawal;Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
+    { true, "05/01/15;45;Typical csv import line - including quoted empty field;;Miscellaneous;\"\";\"1,100.00\";", 8, { "05/01/15","45","Typical csv import line - including quoted empty field","","Miscellaneous","","1,100.00","" } },
+    { true, "05/01/15;45;Acme Inc.;;Miscellaneous;", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
+    { true, NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
 };
 TEST_F (GncTokenizerTest, tokenize_semicolon_sep)
 {
