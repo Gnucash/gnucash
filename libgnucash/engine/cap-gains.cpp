@@ -893,6 +893,148 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 /* ============================================================== */
 
 gnc_numeric
+xaccLotFreeSplitCapGain(Split *split, GNCLot *lot)
+{
+    g_return_val_if_fail (split && lot && !split->lot, gnc_numeric_zero());
+
+    ENTER ("(split=%p lot=%s)", split, gnc_lot_get_title(lot));
+
+    auto pcy = gnc_account_get_policy (gnc_lot_get_account (lot));
+    auto currency = split->parent->common_currency;
+
+    /* Not possible to have gains if the transaction currency and
+     * account commodity are identical. */
+    if (gnc_commodity_equal (currency,
+                             xaccAccountGetCommodity(split->acc)))
+    {
+        LEAVE ("Currency transfer, gains not possible, returning.");
+        return gnc_numeric_zero();
+    }
+
+    auto *esplit = gnc_lot_get_earliest_split (lot);
+    if (!esplit)
+    {
+        LEAVE ("Lot is empty, returning.");
+        return gnc_numeric_zero();
+    }
+
+    if (xaccTransGetDate (xaccSplitGetParent (esplit)) >= xaccTransGetDate (xaccSplitGetParent (split))) 
+    {
+        LEAVE ("Split is too early, returning.");
+        return gnc_numeric_zero();
+    }
+
+    if (xaccSplitIsStockSplit (split))
+    {
+        LEAVE ("Stock split split, returning.");
+        return gnc_numeric_zero();
+    }
+
+    /* If amount is zero, there's nothing to do! Amount-zero splits
+     * may exist if users attempted to manually record gains. */
+    if (gnc_numeric_zero_p (split->amount)) return gnc_numeric_zero();
+
+    /* If we got to here, then the gains really do need to be recomputed.
+     * So start working things. */
+
+    /* Get the amount and value in this lot at the time of this transaction. */
+    gnc_numeric lot_amount, lot_value;
+    gnc_lot_get_balance_before (lot, split, &lot_amount, &lot_value);
+
+    gnc_numeric opening_amount, opening_value;
+    gnc_commodity *opening_currency;
+    pcy->PolicyGetLotOpening (pcy, lot, &opening_amount, &opening_value,
+                              &opening_currency);
+
+    /* Check to make sure the lot-opening currency and this split
+     * use the same currency */
+    if (FALSE == gnc_commodity_equiv (currency, opening_currency))
+    {
+        /* OK, the purchase and the sale were made in different currencies.
+         * I don't know how to compute cap gains for that.  This is not
+         * an error. Just punt, silently.
+         */
+        LEAVE ("Can't compute gains, mismatched commodities!");
+        return gnc_numeric_zero();
+    }
+
+    /* Opening amount should be larger (or equal) to current split,
+     * and it should be of the opposite sign.
+     * XXX This should really be a part of a scrub routine that
+     * cleans up the lot, before we get at it!
+     */
+    if (0 > gnc_numeric_compare (gnc_numeric_abs(lot_amount),
+                                 gnc_numeric_abs(xaccSplitGetAdjustedAmount (split))))
+    {
+        for (auto *n = gnc_lot_get_split_list(lot); n; n = n->next)
+        {
+            auto *s = GNC_SPLIT(n->data);
+            PINFO ("split adj amt=%s", gnc_num_dbg_to_string(xaccSplitGetAdjustedAmount (s)));
+        }
+        return gnc_numeric_zero();
+    }
+    if ( (gnc_numeric_negative_p(lot_amount) ||
+            gnc_numeric_positive_p(xaccSplitGetAdjustedAmount (split))) &&
+            (gnc_numeric_positive_p(lot_amount) ||
+             gnc_numeric_negative_p(xaccSplitGetAdjustedAmount (split))))
+    {
+        for (auto *n = gnc_lot_get_split_list(lot); n; n = n->next)
+        {
+            auto *s = GNC_SPLIT(n->data);
+            PINFO ("split adj amt=%s", gnc_num_dbg_to_string(xaccSplitGetAdjustedAmount (s)));
+        }
+        return gnc_numeric_zero();
+    }
+
+    /* The cap gains is the difference between the basis prior to the
+     * current split, and the current split, pro-rated for an equal
+     * amount of shares.
+     * i.e. purchase_price = lot_value / lot_amount
+     * cost_basis = purchase_price * current_split_amount
+     * cap_gain = current_split_value - cost_basis
+     */
+    /* Fraction of the lot that this split represents: */
+    auto frac = gnc_numeric_div (xaccSplitGetAdjustedAmount (split), lot_amount,
+                            GNC_DENOM_AUTO,
+                            GNC_HOW_DENOM_REDUCE);
+    /* Basis for this split: */
+    auto value = gnc_numeric_mul (frac, lot_value,
+                             gnc_numeric_denom(opening_value),
+                             GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
+    /* Capital gain for this split: */
+    value = gnc_numeric_sub (value, split->value,
+                             GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+
+    PINFO ("Open amt=%s val=%s;  split adj amt=%s val=%s; gains=%s\n",
+           gnc_num_dbg_to_string (lot_amount),
+           gnc_num_dbg_to_string (lot_value),
+           gnc_num_dbg_to_string (xaccSplitGetAdjustedAmount (split)),
+           gnc_num_dbg_to_string (split->value),
+           gnc_num_dbg_to_string (value));
+
+    if (gnc_numeric_check (value))
+    {
+        PERR ("Numeric overflow during gains calculation\n"
+              "Acct=%s Txn=%s\n"
+              "\tOpen amt=%s val=%s\n\tsplit amt=%s val=%s\n\tgains=%s\n",
+              xaccAccountGetName(split->acc),
+              xaccTransGetDescription(split->parent),
+              gnc_num_dbg_to_string (lot_amount),
+              gnc_num_dbg_to_string (lot_value),
+              gnc_num_dbg_to_string (xaccSplitGetAdjustedAmount (split)),
+              gnc_num_dbg_to_string (split->value),
+              gnc_num_dbg_to_string (value));
+        return gnc_numeric_zero();
+    }
+
+    LEAVE ("(lot=%s)", gnc_lot_get_title(lot));
+
+    return value;
+}
+
+/* ============================================================== */
+
+gnc_numeric
 xaccSplitGetCapGains(Split * split)
 {
     if (!split) return gnc_numeric_zero();

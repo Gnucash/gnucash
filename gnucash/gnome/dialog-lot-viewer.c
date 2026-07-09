@@ -201,15 +201,6 @@ lv_show_splits_in_lot (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* Remove all splits from the split list view */
-
-static void
-lv_clear_splits_in_lot (GNCLotViewer *lv)
-{
-    gtk_list_store_clear (lv->split_in_lot_store);
-}
-
-/* ======================================================================== */
 /* Populate the free split list view */
 
 static void
@@ -217,9 +208,6 @@ lv_show_splits_free (GNCLotViewer *lv)
 {
     SplitList *split_list, *node;
     SplitList *filtered_list = NULL;
-
-    /* cleanup */
-    gtk_list_store_clear (lv->split_free_store);
 
     /* get splits */
     split_list = xaccAccountGetSplitList (lv->account);
@@ -286,7 +274,7 @@ lv_unset_lot (GNCLotViewer *lv)
     gtk_text_view_set_editable (lv->lot_notes, FALSE);
 
     /* Erase the mini-view area */
-    lv_clear_splits_in_lot (lv);
+    gtk_list_store_clear (lv->split_in_lot_store);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
     gtk_widget_set_sensitive (GTK_WIDGET(lv->regview_button), FALSE);
@@ -505,7 +493,8 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
     gboolean show_adjusted_amounts = gtk_toggle_button_get_active (lv->show_adjusted_amounts_checkbutton);
     gnc_numeric baln = gnc_numeric_zero ();
 
-    gtk_list_store_clear (lv->split_in_lot_store);
+    gtk_list_store_clear (store);
+
     for (SplitList *node = split_list; node; node = node->next)
     {
         Split *split = node->data;
@@ -516,7 +505,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gnc_commodity *currency;
         Transaction *trans = xaccSplitGetParent (split);
         time64 date = xaccTransGetDate (trans);
-        gnc_numeric amnt, value, gains;
+        gnc_numeric amnt, value, gain;
         GtkTreeIter iter;
 
         /* Do not show gains splits, however do show empty business splits */
@@ -556,20 +545,21 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gtk_list_store_set (store, &iter, SPLIT_COL_VALUE_DOUBLE, gnc_numeric_to_double (value), -1);
 
         /* Gains. Blank if none. */
-        gains = xaccSplitGetCapGains (split);
-        if (gnc_numeric_zero_p (gains))
+        gain = (store == lv->split_in_lot_store) ?
+            xaccSplitGetCapGains (split) : xaccLotFreeSplitCapGain (split, lv->selected_lot);
+        if (gnc_numeric_zero_p (gain))
         {
             gainbuff[0] = 0;
         }
         else
         {
-            xaccSPrintAmount (gainbuff, gains,
+            xaccSPrintAmount (gainbuff, gain,
                               gnc_commodity_print_info (currency, TRUE));
         }
         gtk_list_store_set (store, &iter, SPLIT_COL_GAIN_LOSS, gainbuff, -1);
-        gtk_list_store_set (store, &iter, SPLIT_COL_GAIN_LOSS_DOUBLE, gnc_numeric_to_double (gains), -1);
+        gtk_list_store_set (store, &iter, SPLIT_COL_GAIN_LOSS_DOUBLE, gnc_numeric_to_double (gain), -1);
 
-        /* Balance of Gains */
+        /* Balance of Amounts */
         baln = gnc_numeric_add_fixed (baln, amnt);
         if (gnc_numeric_zero_p (baln))
         {

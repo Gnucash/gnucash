@@ -187,6 +187,20 @@ gboolean xaccSplitAssign (Split *split);
  */
 Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
 
+/** The xaccLotFreeSplitCapGain() method returns the value of capital gain
+ *  (if any) associated with the indicated split against the indicated
+ *  lot. In order for there to be any capital gain, a few things must
+ *  hold true about this split:
+ *    (1) It must have been involved in trading (for example,
+ *        by belonging to a stock or trading account)
+ *    (2) It must not be assigned to a lot.
+ *    (3) It cannot be the opening split of a lot; that
+ *        is, it must be a matching sale of an earlier purchase
+ *        (or vice versa).
+ */
+gnc_numeric xaccLotFreeSplitCapGain(Split *split, GNCLot *lot);
+
+
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into
  *  the 'gains_acct'.  If the gains_acct is NULL, then the appropriate

@@ -345,14 +345,14 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
+/** Sets the stock split adjusted amount of a split.  
+ * @note The adjusted amount will be reset when the account is rebalanced.
+ */
+void xaccSplitSetAdjustedAmount (Split *split, gnc_numeric amount);
+
 /** Returns the stock-split adjusted amount of the split in the account's commodity.
  */
 gnc_numeric xaccSplitGetAdjustedAmount (const Split *split);
-
-/** Sets the stock split adjusted amount of a split.  Note: The adjusted amount
- *  will be reset when the account is rebalanced.
- */
-void xaccSplitSetAdjustedAmount (Split *split, gnc_numeric amount);
 
 
 /** @} */
@@ -420,14 +420,8 @@ void xaccSplitMergePeerSplits (Split *split, const Split *other_split);
  */
 Split * xaccSplitGetOtherSplit (const Split *split);
 
-/** The xaccIsPeerSplit() is a convenience routine that returns TRUE
- * (a non-zero value) if the two splits share a common parent
- * transaction, else it returns FALSE (zero).
- *
-gboolean xaccIsPeerSplit (const Split *split_1, const Split *split_2);
-*/
 /** Returns the split type, which is either the string "normal", or
- * "stock-split" for a split from a stock split (pun intended? :-).  */
+ * "stock-split" for a split from a stock split.  */
 const char *xaccSplitGetType(Split *s);
 
 /** Mark a split to be of type stock split - after this, you shouldn't
