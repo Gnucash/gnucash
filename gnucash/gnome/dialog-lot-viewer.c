@@ -347,6 +347,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
     GtkTreeIter iter;
     GtkTreeSelection *selection;
     gboolean found = FALSE;
+    gboolean is_business_lot = xaccAccountIsAPARType (xaccAccountGetType (lv->account));
 
     lot_list = xaccAccountGetLotList (lv->account);
 
@@ -414,7 +415,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 
         /* Amount */
         xaccSPrintAmount (baln_buff, amt_baln,
-                          gnc_account_print_info (lv->account, TRUE));
+                          gnc_account_print_info (lv->account, is_business_lot));
         gtk_list_store_set (store, &iter, LOT_COL_BALN, baln_buff, -1);
         gtk_list_store_set (store, &iter, LOT_COL_BALN_DOUBLE, gnc_numeric_to_double (amt_baln), -1);
 
@@ -500,12 +501,9 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
 {
     SplitList *node;
     GtkTreeIter iter;
-    gboolean is_business_lot = FALSE;
+    gboolean is_business_lot = xaccAccountIsAPARType (xaccAccountGetType (lv->account));
     gboolean show_adjusted_amounts = gtk_toggle_button_get_active (lv->show_adjusted_amounts_checkbutton);
     gnc_numeric baln = gnc_numeric_zero ();
-
-    if (lv->selected_lot)
-        is_business_lot = xaccAccountIsAPARType (xaccAccountGetType (gnc_lot_get_account (lv->selected_lot)));
 
     gtk_list_store_clear (lv->split_in_lot_store);
     for (node = split_list; node; node = node->next)
@@ -540,7 +538,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         /* Amount */
         amnt = xaccSplitGetAdjustedAmount (split);
         xaccSPrintAmount (amtbuff, show_adjusted_amounts ? amnt : xaccSplitGetAmount (split),
-                          gnc_account_print_info (lv->account, TRUE));
+                          gnc_account_print_info (lv->account, is_business_lot));
         gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
         gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT_DOUBLE, gnc_numeric_to_double (amnt), -1);
 
@@ -579,7 +577,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         else
         {
             xaccSPrintAmount (balnbuff, baln,
-                              gnc_account_print_info (lv->account, TRUE));
+                              gnc_account_print_info (lv->account, is_business_lot));
         }
         gtk_list_store_set (store, &iter, SPLIT_COL_BALANCE, balnbuff, -1);
         gtk_list_store_set (store, &iter, SPLIT_COL_BALANCE_DOUBLE, gnc_numeric_to_double (baln), -1);
