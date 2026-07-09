@@ -119,7 +119,7 @@ static GNCLot *
 FIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
     if (!split) return nullptr;
-    return xaccAccountFindEarliestOpenLot (split->acc, split->amount,
+    return xaccAccountFindEarliestOpenLot (split->acc, xaccSplitGetAdjustedAmount (split),
                                            split->parent->common_currency);
 }
 
@@ -138,7 +138,7 @@ FIFOPolicyGetLotOpening (GNCPolicy *pcy,
     Split *opening_split;
     opening_split = gnc_lot_get_earliest_split(lot);
 
-    if (ret_amount) *ret_amount = opening_split->amount;
+    if (ret_amount) *ret_amount = xaccSplitGetAdjustedAmount (opening_split);
     if (ret_value) *ret_value = opening_split->value;
     if (ret_currency) *ret_currency = opening_split->parent->common_currency;
 }
