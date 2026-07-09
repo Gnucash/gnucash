@@ -613,6 +613,12 @@ lv_update_split_buttons (GNCLotViewer *lv)
     }
 }
 
+static void set_window_title (GNCLotViewer *lv)
+{
+    gchar *win_title = g_strdup_printf (_("Lots in Account %s"), xaccAccountGetName (lv->account));
+    gtk_window_set_title (GTK_WINDOW (lv->window), win_title);
+    g_free (win_title);
+}
 
 static void set_adjusted_ammounts_checkbutton_visibility (GNCLotViewer *lv)
 {
@@ -628,7 +634,8 @@ static void lv_refresh (GNCLotViewer *lv)
     gnc_lot_viewer_fill (lv);
     lv_show_splits_free (lv);
     lv_show_splits_in_lot (lv);
-    set_adjusted_ammounts_checkbutton_visibility (lv);    
+    set_window_title (lv);
+    set_adjusted_ammounts_checkbutton_visibility (lv);
 }
 
 /* ======================================================================== */
@@ -1103,7 +1110,6 @@ window_realize_set_split_paned_position_cb (GtkWidget *widget, gpointer user_dat
 static void
 lv_create (GNCLotViewer *lv, GtkWindow *parent)
 {
-    gchar *win_title;
     GtkBuilder *builder;
 
     builder = gtk_builder_new ();
@@ -1115,11 +1121,6 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(lv->window), "gnc-id-lot-viewer");
-
-    win_title = g_strdup_printf (_("Lots in Account %s"),
-                                 xaccAccountGetName (lv->account));
-    gtk_window_set_title (GTK_WINDOW (lv->window), win_title);
-    g_free (win_title);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
     lv->regview_button = GTK_BUTTON(glade_xml_get_widget (builder, "regview_button"));
