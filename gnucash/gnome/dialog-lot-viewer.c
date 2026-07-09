@@ -344,25 +344,23 @@ lv_unselect_row (GNCLotViewer *lv)
 static void
 gnc_lot_viewer_fill (GNCLotViewer *lv)
 {
-    LotList *lot_list, *node;
+    LotList *lot_list = xaccAccountGetLotList (lv->account);
     GNCLot *this_lot, *selected_lot = NULL;
     GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GtkTreeSelection *selection;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (lv->lot_view);
     gboolean found = FALSE;
     gboolean is_business_lot = xaccAccountIsAPARType (xaccAccountGetType (lv->account));
+    gboolean show_only_open_lots = gtk_toggle_button_get_active (lv->only_show_open_lots_checkbutton);
 
-    lot_list = xaccAccountGetLotList (lv->account);
-
-    selection = gtk_tree_view_get_selection (lv->lot_view);
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
         gtk_tree_model_get (model, &iter, LOT_COL_PNTR, &selected_lot, -1);
 
     /* Crazy. Should update in place if possible. */
     gtk_list_store_clear (lv->lot_store);
 
-    for (node = lot_list; node; node = node->next)
+    for (LotList *node = lot_list; node; node = node->next)
     {
         char type_buff[200];
         char baln_buff[200];
@@ -374,7 +372,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         gnc_numeric gains_baln = get_realized_gains (lot, currency);
 
         /* Skip closed lots when only open should be shown */
-        if (TRUE == gtk_toggle_button_get_active (lv->only_show_open_lots_checkbutton) && gnc_lot_is_closed (lot))
+        if (show_only_open_lots && gnc_lot_is_closed (lot))
         {
             continue;
         }
@@ -503,14 +501,12 @@ lv_can_remove_split_from_lot (Split * split, GNCLot * lot)
 static void
 gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_list)
 {
-    SplitList *node;
-    GtkTreeIter iter;
     gboolean is_business_lot = xaccAccountIsAPARType (xaccAccountGetType (lv->account));
     gboolean show_adjusted_amounts = gtk_toggle_button_get_active (lv->show_adjusted_amounts_checkbutton);
     gnc_numeric baln = gnc_numeric_zero ();
 
     gtk_list_store_clear (lv->split_in_lot_store);
-    for (node = split_list; node; node = node->next)
+    for (SplitList *node = split_list; node; node = node->next)
     {
         Split *split = node->data;
         char amtbuff[200];
@@ -521,6 +517,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         Transaction *trans = xaccSplitGetParent (split);
         time64 date = xaccTransGetDate (trans);
         gnc_numeric amnt, value, gains;
+        GtkTreeIter iter;
 
         /* Do not show gains splits, however do show empty business splits */
         if (!is_business_lot && gnc_numeric_zero_p (xaccSplitGetAmount (split))) continue;
