@@ -811,9 +811,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
         else
             xaccAccountScrubLots (lv->account);
         gnc_resume_gui_refresh ();
-        gnc_lot_viewer_fill (lv);
-        lv_show_splits_free (lv);
-        lv_show_splits_in_lot (lv);
+        lv_refresh (lv);
         break;
 
     case RESPONSE_NEW_LOT:
@@ -1184,8 +1182,7 @@ gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
     lv = g_new0 (GNCLotViewer, 1);
     lv->account = account;
     lv_create (lv, parent);
-    gnc_lot_viewer_fill (lv);
-    lv_show_splits_free (lv);
+    lv_refresh (lv);
 
     component_id = gnc_register_gui_component (LOT_VIEWER_CM_CLASS,
                    lv_refresh_handler,
