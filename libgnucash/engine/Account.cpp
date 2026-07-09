@@ -328,6 +328,7 @@ gnc_account_init(Account* acc)
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
+    priv->has_stock_split = false;
 
     new (&priv->children) AccountVec ();
     new (&priv->splits) SplitsVec ();
@@ -1456,6 +1457,7 @@ xaccFreeAccount (Account *acc)
     priv->commodity = nullptr;
 
     priv->balance_dirty = FALSE;
+    priv->has_stock_split = false;
     priv->sort_dirty = FALSE;
     priv->splits.~SplitsVec();
     priv->children.~AccountVec();
@@ -2288,6 +2290,7 @@ xaccAccountRecomputeBalance (Account * acc)
     auto noclosing_balance  = priv->starting_noclosing_balance;
     auto cleared_balance    = priv->starting_cleared_balance;
     auto reconciled_balance = priv->starting_reconciled_balance;
+    auto has_stock_split    = false;
 
     PINFO ("acct=%s starting baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
            priv->accountName, balance.num, balance.denom);
@@ -2314,6 +2317,7 @@ xaccAccountRecomputeBalance (Account * acc)
                                                    GNC_HOW_RND_ROUND_HALF_UP));
             }
             balance = new_balance;
+            has_stock_split = true;
         }
         else
         {
@@ -2348,6 +2352,7 @@ xaccAccountRecomputeBalance (Account * acc)
     priv->cleared_balance = cleared_balance;
     priv->reconciled_balance = reconciled_balance;
     priv->balance_dirty = FALSE;
+    priv->has_stock_split = has_stock_split;
 }
 
 /********************************************************************\
@@ -3500,6 +3505,13 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
     // minimum balance
     [[maybe_unused]] auto todays_split = gnc_account_find_split (acc, before_today_end, true);
     return minimum ? *minimum : gnc_numeric_zero();
+}
+
+gboolean
+xaccAccountHasStockSplit (const Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), false);
+    return GET_PRIVATE(acc)->has_stock_split;
 }
 
 
