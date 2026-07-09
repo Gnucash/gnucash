@@ -68,6 +68,9 @@ restart_loop:
     {
         /* If already in lot, then no-op */
         if (split->lot) continue;
+        
+        /* Skip stock splits */
+        if (xaccSplitIsStockSplit(split)) continue;
 
         /* Skip voided transactions */
         if (gnc_numeric_zero_p (split->amount) &&
@@ -114,6 +117,14 @@ xaccLotFill (GNCLot *lot)
 	LEAVE ("No Split (lot=%s, acc=%s)", gnc_lot_get_title(lot),
 	       xaccAccountGetName(acc));
 	return;   /* Handle the common case */
+    }
+
+    /* Reject stock split transactions */
+    if (xaccSplitIsStockSplit(split))
+    {
+        LEAVE ("Stock split transaction (lot=%s, acc=%s)",
+           gnc_lot_get_title(lot), xaccAccountGetName(acc));
+        return;
     }
 
     /* Reject voided transactions */
