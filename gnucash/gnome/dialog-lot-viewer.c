@@ -524,6 +524,8 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         /* Do not show gains splits, however do show empty business splits */
         if (!is_business_lot && gnc_numeric_zero_p (xaccSplitGetAmount (split))) continue;
 
+        if (xaccSplitIsStockSplit (split)) continue;
+
         gtk_list_store_append (store, &iter);
 
         /* Date */
