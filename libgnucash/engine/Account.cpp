@@ -2276,32 +2276,50 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 void
 xaccAccountRecomputeBalance (Account * acc)
 {
-    AccountPrivate *priv;
-    gnc_numeric  balance;
-    gnc_numeric  noclosing_balance;
-    gnc_numeric  cleared_balance;
-    gnc_numeric  reconciled_balance;
-
     if (nullptr == acc) return;
 
-    priv = GET_PRIVATE(acc);
+    auto priv = GET_PRIVATE(acc);
     if (qof_instance_get_editlevel(acc) > 0) return;
     if (!priv->balance_dirty || priv->defer_bal_computation) return;
     if (qof_instance_get_destroying(acc)) return;
     if (qof_book_shutting_down(qof_instance_get_book(acc))) return;
 
-    balance            = priv->starting_balance;
-    noclosing_balance  = priv->starting_noclosing_balance;
-    cleared_balance    = priv->starting_cleared_balance;
-    reconciled_balance = priv->starting_reconciled_balance;
+    auto balance            = priv->starting_balance;
+    auto noclosing_balance  = priv->starting_noclosing_balance;
+    auto cleared_balance    = priv->starting_cleared_balance;
+    auto reconciled_balance = priv->starting_reconciled_balance;
 
     PINFO ("acct=%s starting baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
            priv->accountName, balance.num, balance.denom);
     for (auto split : priv->splits)
     {
-        gnc_numeric amt = xaccSplitGetAmount (split);
+        auto amt = xaccSplitGetAmount (split);
 
-        balance = gnc_numeric_add_fixed(balance, amt);
+        if (xaccSplitIsStockSplit(split))
+        {
+            if (gnc_numeric_zero_p(balance))
+                continue;
+            auto new_balance = gnc_numeric_add_fixed(balance, amt);
+            if (gnc_numeric_zero_p(new_balance))
+                continue;
+            auto ratio = gnc_numeric_div(new_balance, balance, GNC_DENOM_AUTO,
+                                         GNC_HOW_DENOM_REDUCE);
+            auto denom = xaccAccountGetCommoditySCU(acc);
+            for (auto psplit : priv->splits)
+            {
+                if (psplit == split)
+                    break;
+                xaccSplitSetAdjustedAmount(psplit,
+                                           gnc_numeric_mul(xaccSplitGetAdjustedAmount(psplit), ratio, denom,
+                                                   GNC_HOW_RND_ROUND_HALF_UP));
+            }
+            balance = new_balance;
+        }
+        else
+        {
+            split->adjusted_amount = amt;
+            balance = gnc_numeric_add_fixed(balance, amt);
+        }
 
         if (NREC != split->reconciled)
         {
