@@ -748,7 +748,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
     /* Are the cap gains zero?  If not, add a balancing transaction.
      * As per design doc lots.txt: the transaction has two splits,
-     * with equal & opposite values.  The amt of one iz zero (so as
+     * with equal & opposite values.  The amt of one is zero (so as
      * not to upset the lot balance), the amt of the other is the same
      * as its value (its the realized gain/loss).
      */

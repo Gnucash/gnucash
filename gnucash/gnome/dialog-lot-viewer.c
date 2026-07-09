@@ -505,11 +505,12 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gnc_commodity *currency;
         Transaction *trans = xaccSplitGetParent (split);
         time64 date = xaccTransGetDate (trans);
-        gnc_numeric amnt, value, gain;
+        gnc_numeric amnt = xaccSplitGetAdjustedAmount (split);
+        gnc_numeric value, gain;
         GtkTreeIter iter;
 
         /* Do not show gains splits, however do show empty business splits */
-        if (!is_business_lot && gnc_numeric_zero_p (xaccSplitGetAmount (split))) continue;
+        if (!is_business_lot && gnc_numeric_zero_p (amnt)) continue;
 
         if (xaccSplitIsStockSplit (split)) continue;
 
@@ -526,7 +527,6 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);
 
         /* Amount */
-        amnt = xaccSplitGetAdjustedAmount (split);
         xaccSPrintAmount (amtbuff, show_adjusted_amounts ? amnt : xaccSplitGetAmount (split),
                           gnc_account_print_info (lv->account, is_business_lot));
         gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
@@ -977,7 +977,7 @@ lv_init_lot_view (GNCLotViewer *lv)
     /* Set up signals */
     selection = gtk_tree_view_get_selection (view);
     g_signal_connect (selection, "changed",
-                     G_CALLBACK(lv_selection_changed_cb), lv);
+                      G_CALLBACK(lv_selection_changed_cb), lv);
 }
 
 /* ======================================================================== */

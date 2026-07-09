@@ -3961,7 +3961,8 @@ xaccAccountGetSplitsSize (const Account *account)
     return GNC_IS_ACCOUNT(account) ? GET_PRIVATE(account)->splits.size() : 0;
 }
 
-gboolean gnc_account_and_descendants_empty (Account *acc)
+gboolean
+gnc_account_and_descendants_empty (Account *acc)
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
     auto priv = GET_PRIVATE (acc);
