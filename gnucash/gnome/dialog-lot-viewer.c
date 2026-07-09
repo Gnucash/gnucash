@@ -539,8 +539,8 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);
 
         /* Amount */
-        amnt = xaccSplitGetAmount (split);
-        xaccSPrintAmount (amtbuff, amnt,
+        amnt = xaccSplitGetAdjustedAmount (split);
+        xaccSPrintAmount (amtbuff, show_adjusted_amounts ? amnt : xaccSplitGetAmount (split),
                           gnc_account_print_info (lv->account, TRUE));
         gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
         gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT_DOUBLE, gnc_numeric_to_double (amnt), -1);
@@ -742,6 +742,12 @@ lv_remove_split_from_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
 
 static void
 lv_only_show_open_lots_changed_cb (GtkWidget *widget, GNCLotViewer * lv)
+{
+    lv_refresh (lv);
+}
+
+static void
+lv_show_adjusted_amounts_changed_cb (GtkWidget *widget, GNCLotViewer * lv)
 {
     lv_refresh (lv);
 }
@@ -954,10 +960,7 @@ lv_init_lot_view (GNCLotViewer *lv)
     /* Set up signals */
     selection = gtk_tree_view_get_selection (view);
     g_signal_connect (selection, "changed",
-                      G_CALLBACK(lv_selection_changed_cb), lv);
-    g_signal_connect (lv->only_show_open_lots_checkbutton, "toggled",
-                      G_CALLBACK(lv_only_show_open_lots_changed_cb), lv);
-
+                     G_CALLBACK(lv_selection_changed_cb), lv);
 }
 
 /* ======================================================================== */
@@ -1102,8 +1105,13 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     lv->scrub_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "scrub_lot_button"));
     lv->new_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "new_lot_button"));
 
-    lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot_view"));
     lv->only_show_open_lots_checkbutton = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "only_show_open_lots_checkbutton"));
+    g_signal_connect (lv->only_show_open_lots_checkbutton, "toggled", G_CALLBACK(lv_only_show_open_lots_changed_cb), lv);
+
+    lv->show_adjusted_amounts_checkbutton = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "show_adjusted_amounts_checkbutton"));
+    g_signal_connect (lv->show_adjusted_amounts_checkbutton, "toggled", G_CALLBACK(lv_show_adjusted_amounts_changed_cb), lv);
+
+    lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot_view"));
     lv_init_lot_view (lv);
     lv->lot_notes = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "lot_notes_text"));
     lv->title_entry = GTK_ENTRY (gtk_builder_get_object (builder, "lot_title_entry"));
@@ -1150,6 +1158,8 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     lv_update_split_buttons (lv);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(lv->window), parent);
+    gtk_widget_show_all (lv->window);
+    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
 }
 
 /* ======================================================================== */
@@ -1177,8 +1187,6 @@ gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
                                          GNC_ID_LOT,
                                          QOF_EVENT_CREATE | QOF_EVENT_ADD | QOF_EVENT_REMOVE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (lv->window);
-    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
 
     return lv;
 }
