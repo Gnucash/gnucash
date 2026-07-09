@@ -116,6 +116,7 @@ struct _GNCLotViewer
     GtkButton       * add_split_to_lot_button;
     GtkButton       * remove_split_from_lot_button;
     GtkToggleButton * only_show_open_lots_checkbutton;
+    GtkToggleButton * show_adjusted_amounts_checkbutton;
 
     Account         * account;
     GNCLot          * selected_lot;
@@ -503,6 +504,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
     SplitList *node;
     GtkTreeIter iter;
     gboolean is_business_lot = FALSE;
+    gboolean show_adjusted_amounts = gtk_toggle_button_get_active (lv->show_adjusted_amounts_checkbutton);
     gnc_numeric baln = gnc_numeric_zero ();
 
     if (lv->selected_lot)
@@ -612,11 +614,22 @@ lv_update_split_buttons (GNCLotViewer *lv)
     }
 }
 
-static void lv_refresh (GNCLotViewer * lv)
+
+static void set_adjusted_ammounts_checkbutton_visibility (GNCLotViewer *lv)
+{
+    GtkWidget *widget = GTK_WIDGET(lv->show_adjusted_amounts_checkbutton);
+    gboolean has_stock_split =  xaccAccountHasStockSplit (lv->account);
+
+    gtk_widget_set_visible (widget, has_stock_split);
+    gtk_widget_set_no_show_all (widget, !has_stock_split);
+}
+
+static void lv_refresh (GNCLotViewer *lv)
 {
     gnc_lot_viewer_fill (lv);
     lv_show_splits_free (lv);
     lv_show_splits_in_lot (lv);
+    set_adjusted_ammounts_checkbutton_visibility (lv);    
 }
 
 /* ======================================================================== */
@@ -1110,6 +1123,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
 
     lv->show_adjusted_amounts_checkbutton = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "show_adjusted_amounts_checkbutton"));
     g_signal_connect (lv->show_adjusted_amounts_checkbutton, "toggled", G_CALLBACK(lv_show_adjusted_amounts_changed_cb), lv);
+    set_adjusted_ammounts_checkbutton_visibility (lv);
 
     lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot_view"));
     lv_init_lot_view (lv);

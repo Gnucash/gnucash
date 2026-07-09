@@ -648,6 +648,10 @@ typedef enum
     gnc_numeric xaccAccountGetBalanceChangeForPeriod (
         Account *acc, time64 date1, time64 date2, gboolean recurse);
 
+    /** Returns true if the account has a stock split,
+     * otherwise false. */
+    gboolean xaccAccountHasStockSplit (const Account *acc);
+
     /** @} */
 
     /** @name Account Children and Parents.
