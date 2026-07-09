@@ -131,9 +131,6 @@ static void gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitL
 void lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data);
 void lv_response_cb (GtkDialog *dialog, gint response, gpointer data);
 void lv_window_destroy_cb (GtkWidget *object, gpointer user_data);
-void lv_paned_notify_cb (GObject *gobject,
-                         GParamSpec *pspec,
-                         gpointer user_data);
 
 /* ======================================================================== */
 /* Get the realized gains for this lot.  This routine or a variant of it
