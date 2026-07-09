@@ -486,48 +486,34 @@ xaccSplitAssign (Split *split)
 
 /* ============================================================== */
 
-Split *
-xaccSplitGetCapGainsSplit (const Split *split)
+static Split *
+find_split_by_type (const gchar *type, const Split *split)
 {
-    GncGUID *gains_guid;
-    Split *gains_split;
+    GncGUID *type_guid = nullptr;
 
     if (!split) return nullptr;
 
-    qof_instance_get (QOF_INSTANCE (split),
-                      "gains-split", &gains_guid,
-                      nullptr);
-    if (!gains_guid) return nullptr;
+    qof_instance_get (QOF_INSTANCE (split), type, &type_guid, nullptr);
+    if (!type_guid) return nullptr;
 
     /* Both splits will be in the same collection, so search there. */
-    gains_split = (Split*) qof_collection_lookup_entity (
-                      qof_instance_get_collection(split), gains_guid);
-    PINFO ("split=%p has gains-split=%p", split, gains_split);
-    guid_free (gains_guid);
-    return gains_split;
+    auto *guid_split = (Split *) qof_collection_lookup_entity (qof_instance_get_collection (split), type_guid);
+    PINFO ("split=%p has %s=%p", split, type, guid_split);
+    guid_free (type_guid);
+    return guid_split;
 }
 
-/* ============================================================== */
+
+Split *
+xaccSplitGetCapGainsSplit (const Split *split)
+{
+    return find_split_by_type ("gains-split", split);
+}
 
 Split *
 xaccSplitGetGainsSourceSplit (const Split *split)
 {
-    GncGUID *source_guid;
-    Split *source_split;
-
-    if (!split) return nullptr;
-
-    qof_instance_get (QOF_INSTANCE (split),
-                      "gains-source", &source_guid,
-                      nullptr);
-    if (!source_guid) return nullptr;
-
-    /* Both splits will be in the same collection, so search there. */
-    source_split = (Split*) qof_collection_lookup_entity(
-                       qof_instance_get_collection(split), source_guid);
-    PINFO ("split=%p has source-split=%p", split, source_split);
-    guid_free (source_guid);
-    return source_split;
+    return find_split_by_type ("gains-source", split);
 }
 
 /* ============================================================== */
