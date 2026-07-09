@@ -135,14 +135,12 @@ void gnc_float_split_set_reconcile_date (FloatingSplit *fs, time64 reconcile_dat
 void gnc_float_split_set_amount (FloatingSplit *fs, const gnc_numeric amount)
 {
     g_return_if_fail (fs);
-
     fs->m_amount = amount;
 }
 
 void gnc_float_split_set_value (FloatingSplit *fs, const gnc_numeric value)
 {
     g_return_if_fail (fs);
-
     fs->m_value = value;
 }
 

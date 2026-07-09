@@ -759,6 +759,10 @@ xaccFreeSplit (Split *split)
     split->acc         = nullptr;
     split->orig_acc    = nullptr;
 
+    split->balance            = gnc_numeric_zero();
+    split->cleared_balance    = gnc_numeric_zero();
+    split->reconciled_balance = gnc_numeric_zero();
+    split->noclosing_balance  = gnc_numeric_zero();
     split->adjusted_amount    = gnc_numeric_zero();
     split->split_type         = nullptr;
 
@@ -779,12 +783,11 @@ xaccFreeSplit (Split *split)
 void mark_split (Split *s)
 {
     if (s->acc)
-    {
         g_object_set(s->acc, "sort-dirty", TRUE, "balance-dirty", TRUE, nullptr);
-    }
 
     /* set dirty flag on lot too. */
-    if (s->lot) gnc_lot_set_closed_unknown(s->lot);
+    if (s->lot)
+        gnc_lot_set_closed_unknown(s->lot);
 }
 
 /*
