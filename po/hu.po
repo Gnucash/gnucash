@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 03:52+0000\n"
+"PO-Revision-Date: 2026-07-09 15:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -879,10 +879,11 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Meglévő pénzügyi adatait könnyedén importálhatja a Quicken-ből, az MS Money-"
-"ból vagy más programból, ami QIF vagy OFX fájlt exportál. A fájlmenüben "
-"kattintson az importálási almenüre majd a QIF vagy OFX fájl menüpontra. "
-"Ezután kövesse az utasításokat."
+"Meglévő pénzügyi adatait könnyedén importálhatja Quicken, MS Money vagy más "
+"pénzügyi programból, amely képes QIF, OFX vagy QFX fájlba exportálni. A "
+"fájlmenüben kattintson az importálási almenüre majd válassza a „QIF fájl "
+"importálása…” vagy az „OFX/QFX fájl importálása…” menüpontot. Ezután kövesse "
+"az utasításokat."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -915,9 +916,11 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"Megváltoztathatja, hogy a számlatükörben, mely oszlopok jelenjenek meg. Csak "
-"keresse meg a háromszöget az oszlop tetejének jobb oldalán, és rákattintva "
-"láthatja az elérhető különböző oszlopokat."
+"Testreszabható, hogy a számlafában mely oszlopok jelenjenek meg. Az oszlopok "
+"címsorában az ablak jobb oldalán található kis háromszögre kattintva "
+"felugrik a megjeleníthető oszlopok listája. Ebben kijelölhetők a "
+"megjeleníteni kívánt oszlopok, és törölhetők azoknak az oszlopoknak a "
+"kijelölései melyeket nem kíván megjeleníteni."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -7928,7 +7931,7 @@ msgstr "(A felhasználó módosíthatja.)"
 #: gnucash/gnome-utils/gnc-main-window.cpp:5537
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr "Szerzői jog: © 1997-%s A GnuCash közreműködői."
+msgstr "Szerzői jog © 1997 – %s A GnuCash közreműködői."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5549
 #: gnucash/gnome-utils/gnc-splash.c:99
@@ -11930,13 +11933,14 @@ msgstr ""
 "fájl oszlopai lehetnek fix szélességűek vagy tagoltak (például vesszővel "
 "vagy pontosvesszővel elválasztottak).\n"
 "\n"
-"A sikeres importáláshoz a fájlnak három oszlopot kell tartalmaznia:\n"
-"• Dátum oszlopa.\n"
-"• Leírás oszlopa.\n"
-"• Összeg vagy negált összeg oszlopa.\n"
+"A sikeres importáláshoz a fájlnak legalább a következő három oszlopot "
+"tartalmaznia kell:\n"
+"• A dátum oszlopa.\n"
+"• A leírás oszlopa.\n"
+"• Az összeg vagy negált összeg oszlopa.\n"
 "\n"
-"Ha a fájl nem tartalmazza a tranzakciók számláját, kiválaszthatja, melyik "
-"számlára importálódjon az összes tranzakció.\n"
+"Ha a fájl nem tartalmazza a tranzakciók számláját, kiválaszthatja, hogy "
+"melyik számlára importálódjon az összes tranzakció.\n"
 "\n"
 "Az elválasztójeleken kívül egyéb beállításokat is megváltoztathat. Például "
 "átugorhat sorokat a fájl elején vagy végén, vagy akár minden második sort. "
@@ -12653,10 +12657,10 @@ msgid ""
 "software are likely to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
-"A QIF formátum nem határozza meg, milyen formában kell egy dátum évét, "
-"hónapját és napját nyomtatni. Legtöbb esetben automatikusan meg lehet "
-"állapítani, hogy egy adott fájl milyen formátumot használ. A most importált "
-"fájlban azonban több formátum is alkalmazható az adatokra.\n"
+"A QIF formátum nem határozza meg, milyen sorrendben kell egy dátum évét, "
+"hónapját és napját nyomtatni. A legtöbb esetben automatikusan meg lehet "
+"állapítani, hogy egy adott fájl milyen formátumot használ. Azonban a most "
+"importált fájlban az adatokra több dátumformátum is alkalmazható.\n"
 "\n"
 "Válasszon egy dátumformátumot a fájlnak. Az európai szoftverek által "
 "készített QIF fájlok „n-h-é” nap-hónap-év formátumban vannak. A „US” "
@@ -12889,7 +12893,7 @@ msgstr "Adja meg az információkat…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1040
 msgid "All fields must be complete to continue…"
-msgstr ""
+msgstr "A folytatáshoz minden mezőnek érvényes értékeket kell tartalmazni…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1057
 msgid "Tradable commodities"
@@ -13158,9 +13162,8 @@ msgid "Enter the value of the shares."
 msgstr "Adja meg a részvények összértékét."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:379
-#, fuzzy
 msgid "Gross value"
-msgstr "Eladások"
+msgstr "Bruttó érték"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:405
 msgid "_Stock Value"
@@ -13181,9 +13184,8 @@ msgstr ""
 "tranzakciót közvetítői díj is terheli."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
-#, fuzzy
 msgid "Net value"
-msgstr "Eladások"
+msgstr "Nettó érték"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
 msgid "Cash Account"
@@ -13582,26 +13584,24 @@ msgstr "Számlatípus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:974
 msgid "Show _hidden accounts"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "_Rejtett számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:992
-#, fuzzy
 msgid "Show _unused accounts"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "_Nem használt számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:996
 msgid "Show accounts which do not have any transactions."
 msgstr ""
-"Azoknak a számláknak a megtekintése, amelyek nem tartalmaznak tranzakciókat."
+"Azoknak a számláknak a megjelenítése, melyek nem tartalmaznak tranzakciókat."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1010
 msgid "Show _zero total accounts"
 msgstr "Nulla öss_zegű számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1014
-#, fuzzy
 msgid "Show accounts which have a zero total value."
-msgstr "A nulla egyenlegű számlák elrejtése."
+msgstr "A nulla egyenlegű számlák megjelenítése."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1073
 msgid "Use Commodity Value"
@@ -13670,7 +13670,7 @@ msgstr "Me_gjegyzések"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1431
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "Az áru legkisebb egysége, amit használni lehet."
+msgstr "Az áru legkisebb használható egysége."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1457
 #: gnucash/gtkbuilder/dialog-tax-info.glade:644
@@ -13712,9 +13712,9 @@ msgid ""
 msgstr ""
 "Ez a számla és az alszámlái nem fognak megjelenni a számlafában és a "
 "regiszterben felugró számlalistában. Ezt a beállítást csak úgy törölheti, ha "
-"először megnyitja a számlafában a \"Szűrés…\" párbeszédpanelt, majd bejelöli "
-"a \"Rejtett fiókok megjelenítése\" lehetőséget. Így már ki tudja választani "
-"a számlát, és újra megnyithatja ezt a párbeszédpanelt."
+"először megnyitja a számlafában a „Szűrés…” ablakot, majd az „Egyéb” lapon "
+"bejelöli a „Rejtett számlák megjelenítése” lehetőséget. Így már ki tudja "
+"választani a számlát, és újra megnyithatja ezt a párbeszédablakot."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1568
 msgid "Opening balance"
@@ -17928,10 +17928,8 @@ msgstr ""
 "Ha 0, akkor az összes korábbi nap is beletartozik"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:229
-#, fuzzy
-#| msgid "Days"
 msgid "_Days ago"
-msgstr "Napok"
+msgstr "_Nappal ezelőtt"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
@@ -17947,22 +17945,16 @@ msgid "Choo_se Date"
 msgstr "Dátum_választás"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:316
-#, fuzzy
-#| msgid "Days"
 msgid "Days a_go"
-msgstr "Napok"
+msgstr "Nappal ez_előtt"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:389
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest"
-msgstr "L_egelső dátum"
+msgstr "A legkorábbi"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
-#, fuzzy
-#| msgid "_Latest"
 msgid "Latest"
-msgstr "Uto_lsó dátum"
+msgstr "A legutóbbi"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:447
@@ -19812,7 +19804,7 @@ msgstr ""
 "Ha üres fájlba importálja a számlákat, akkor meg fog nyílni a Könyv "
 "beállításai ablak, mert az ottani beállítások befolyásolják, hogyan jönnek "
 "létre GnuCash tranzakciók az importált adatokból.\n"
-"Figyelem: Importálás után lehet, hogy a „Nézet -> Szűrés… -> egyéb” lapon be "
+"Figyelem: Importálás után lehet, hogy a „Nézet → Szűrés… → Egyéb” lapon be "
 "kell kapcsolnia a rejtett számlák megjelenítését.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458

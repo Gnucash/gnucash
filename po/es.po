@@ -19,6 +19,7 @@
 # Francisco <fhiegom@outlook.es>, 2023.
 # Jesús Martínez <weblate@jandemor.com>, 2025.
 # apemay <apemay.dev@gmail.com>, 2026.
+# Alonso González Chaves <algonza@live.com>, 2026.
 #
 #
 # ###############################################################################
@@ -88,8 +89,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 03:36+0000\n"
-"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2026-07-08 07:08+0000\n"
+"Last-Translator: Alonso González Chaves <algonza@live.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -97,7 +98,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
@@ -5429,6 +5430,8 @@ msgid ""
 "The Start date is after the End date.\n"
 "Select Cancel to change dates.\n"
 msgstr ""
+"La fecha de inicio es posterior a la fecha de finalización.\n"
+"Selecciona Cancelar para cambiar las fechas.\n"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1475
@@ -5925,13 +5928,6 @@ msgid "Manage your finances, accounts, and investments"
 msgstr "Gestione sus finanzas, cuentas e inversiones"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
-#, fuzzy
-#| msgid ""
-#| "Designed to be easy to use, yet powerful and flexible, GnuCash allows you "
-#| "to track bank accounts, stocks, income and expenses. As quick and "
-#| "intuitive to use as a checkbook register, it is based on professional "
-#| "accounting principles like double-entry accounting to ensure balanced "
-#| "books and accurate reports."
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting. "
 "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to "
@@ -5940,11 +5936,13 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"Diseñado para ser fácil de emplear, pero potente y flexible, GnuCash permite "
-"rastrear cuentas bancarias, albaranes, ingresos y gastos. Tan rápido e "
-"intuitivo para emplear como un registro de comprobación, está basado en los "
-"principios profesionales de contabilidad como asiento-doble para asegurar "
-"los balances de libros e informe detallados."
+"GnuCash es un programa de contabilidad financiera para particulares y "
+"pequeñas empresas. Diseñado para ser fácil de usar, a la vez que potente y "
+"flexible, GnuCash te permite llevar un control de cuentas bancarias, "
+"acciones, ingresos y gastos. Tan rápido e intuitivo de usar como un "
+"talonario de cheques, se basa en principios contables profesionales, como la "
+"contabilidad por partida doble, para garantizar que los libros estén "
+"equilibrados y que los informes sean precisos."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
@@ -5993,15 +5991,21 @@ msgstr "Proporciona cálculos financieros, como una amortización de un préstam
 msgid ""
 "The account overview page is the starting point for managing your finances"
 msgstr ""
+"La página de resumen de la cuenta es el punto de partida para gestionar tus "
+"finanzas"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:52
 msgid "The checkbook-style register - used for entering financial transactions"
 msgstr ""
+"El libro de contabilidad tipo talonario, que se utiliza para anotar las "
+"transacciones financieras"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:56
 msgid ""
 "Report sample: a bar chart report showing a breakdown of expenses over time"
 msgstr ""
+"Ejemplo de informe: un informe con un gráfico de barras que muestra el "
+"desglose de los gastos a lo largo del tiempo"
 
 #: gnucash/gnome/gnucash.desktop.in.in:6
 msgid "Finance Management"
@@ -6933,16 +6937,12 @@ msgid "Action/Number"
 msgstr "Operación/Número"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 3306"
-msgstr "Por omisión"
+msgstr "Por defecto: 3306"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 5432"
-msgstr "Por omisión"
+msgstr "Por defecto: 5432"
 
 #: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
@@ -13257,10 +13257,8 @@ msgid "Enter the value of the shares."
 msgstr "Introduzca el valor de las acciones."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:379
-#, fuzzy
-#| msgid "Gross Sales"
 msgid "Gross value"
-msgstr "Ventas En Bruto"
+msgstr "Valor bruto"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:405
 msgid "_Stock Value"
@@ -13281,10 +13279,8 @@ msgstr ""
 "página anterior, si hay tarifas de corretaje asociadas a esta transacción."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
-#, fuzzy
-#| msgid "Net Sales"
 msgid "Net value"
-msgstr "Ventas Netas"
+msgstr "Valor neto"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
 msgid "Cash Account"
@@ -13347,10 +13343,8 @@ msgstr ""
 "capital son positivas, y las pérdidas de capital negativas."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:843
-#, fuzzy
-#| msgid "Capital Gains"
 msgid "Capital Gain/Loss"
-msgstr "Ganancias de capital"
+msgstr "Ganancias/Pérdidas patrimoniales"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:866
 msgid "Capital Gains Account"
@@ -18131,7 +18125,7 @@ msgstr "Días"
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:286
 #, fuzzy
@@ -31029,10 +31023,12 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Ejecuta la transacción programada seleccionada. Si no hay ninguna "
+"transacción programada para su introducción, se utiliza la siguiente ocasión"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
-msgstr ""
+msgstr "_Ejecutar"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
