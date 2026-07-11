@@ -701,6 +701,10 @@ load( state *s, char *testfile)
   }
 
   while (fgets(buf, BUFSIZE, f) && (buf[0] != '.')) {
+    if (!strchr(buf, '\n') && !feof(f)) {
+      printf("jenny: -o, input line too long\n");
+      goto failure;
+    }
     ub4   curr = 0;                               /* current offset into buf */
     ub4   value;                                              /* token value */
     ub4   i;
