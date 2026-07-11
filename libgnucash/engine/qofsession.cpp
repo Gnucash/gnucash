@@ -335,9 +335,8 @@ void
 QofSessionImpl::end () noexcept
 {
     ENTER ("sess=%p uri=%s", this, m_uri.c_str ());
-    auto backend = qof_book_get_backend (m_book);
-    if (backend != nullptr)
-        backend->session_end();
+    if (m_backend != nullptr)
+        m_backend->session_end();
     clear_error ();
     m_uri.clear();
     LEAVE ("sess=%p uri=%s", this, m_uri.c_str ());
