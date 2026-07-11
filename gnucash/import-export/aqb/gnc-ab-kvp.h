@@ -36,6 +36,7 @@
 #include <glib.h>
 
 #include "Account.h"
+#include "SchedXaction.h"
 
 G_BEGIN_DECLS
 
@@ -111,5 +112,20 @@ time64 gnc_ab_get_account_trans_retrieval(const Account *a);
 void gnc_ab_set_account_trans_retrieval(Account *a, time64 time);
 
 /** @} */
+
+/** Return the AqBanking standing-order identifier stored on @a sx.
+ * The caller owns the returned string.
+ */
+gchar *gnc_ab_get_standing_order_id (const SchedXaction *sx);
+
+/** Return the source-account GUID stored on an imported standing order.
+ * The caller owns the returned string.
+ */
+gchar *gnc_ab_get_standing_order_account_guid (const SchedXaction *sx);
+
+/** Store the AqBanking identity and account metadata for @a sx. */
+void gnc_ab_set_standing_order_metadata (SchedXaction *sx,
+                                         const gchar *id,
+                                         const gchar *account_guid);
 
 #endif /* GNC_AB_KVP_H */

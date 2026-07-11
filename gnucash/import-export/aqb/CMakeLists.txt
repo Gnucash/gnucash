@@ -9,6 +9,7 @@ set (aqbanking_SOURCES
   dialog-ab-select-imexporter.c
   assistant-ab-initial.c
   gnc-ab-getbalance.c
+  gnc-ab-standing-orders.c
   gnc-ab-gettrans.c
   gnc-ab-kvp.c
   gnc-ab-transfer.c
@@ -29,6 +30,7 @@ set (aqbanking_noinst_HEADERS
   dialog-ab-select-imexporter.h
   assistant-ab-initial.h
   gnc-ab-getbalance.h
+  gnc-ab-standing-orders.h
   gnc-ab-gettrans.h
   gnc-ab-kvp.h
   gnc-ab-transfer.h

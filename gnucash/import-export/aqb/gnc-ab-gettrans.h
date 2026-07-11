@@ -34,16 +34,26 @@
 #define GNC_AB_GETTRANS_H
 
 #include <glib.h>
+#include <gtk/gtk.h>
+#include "Account.h"
 
 G_BEGIN_DECLS
 
 /**
  * Execute a GetTransactions job.
  *
- * @param parent Widget to use as parent, may be NULL
+ * @param parent Widget to use as parent
  * @param gnc_acc GnuCash account to fetch transactions for
  */
 void gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc);
+
+/**
+ * Execute a SepaGetStandingOrders job.
+ *
+ * @param parent Widget to use as parent
+ * @param gnc_acc GnuCash account to fetch standing orders for
+ */
+void gnc_ab_getstandingorders(GtkWidget *parent, Account *gnc_acc);
 
 G_END_DECLS
 

@@ -24,6 +24,11 @@
           <attribute name="action">gnc-plugin-aqbanking-actions.ABGetTransAction</attribute>
           <attribute name="tooltip" translatable="yes">Get the transactions online through Online Banking</attribute>
         </item>
+        <item>
+          <attribute name="label" translatable="yes">Get Standing _Orders…</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetStandingOrdersAction</attribute>
+          <attribute name="tooltip" translatable="yes">Get standing orders online through Online Banking</attribute>
+        </item>
       </section>
       <section>
         <item>
