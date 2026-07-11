@@ -54,6 +54,7 @@ set(app_utils_ALL_LIBRARIES
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}
     ${STANDARD_MATH_LIBRARY}
+    -lm
 )
 
 set(app_utils_ALL_INCLUDES
