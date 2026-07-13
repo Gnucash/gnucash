@@ -56,7 +56,7 @@ convert_uri_to_abs_path (const gchar *path_head, const gchar *uri,
         gchar *file_path = gnc_file_path_absolute (path, uri);
 
         if (return_uri)
-            ret_value = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, file_path);
+            ret_value = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, file_path, NULL);
         else
             ret_value = g_strdup (file_path);
 
@@ -179,9 +179,9 @@ doclink_get_path_head_and_set (gboolean *path_head_set)
         const gchar *doc = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
 
         if (doc)
-            ret_path = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, doc);
+            ret_path = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, doc, NULL);
         else
-            ret_path = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, gnc_userdata_dir ());
+            ret_path = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, gnc_userdata_dir (), NULL);
     }
     // make sure there is a trailing '/'
     if (!g_str_has_suffix (ret_path, "/"))

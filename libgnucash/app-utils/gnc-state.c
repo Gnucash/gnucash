@@ -114,7 +114,7 @@ gnc_state_set_base (const QofSession *session)
         gchar* password = NULL;
         gint portnum = 0;
         gnc_uri_get_components (uri, &scheme, &host, &portnum,
-                                &username, &password, &dbname);
+                                &username, &password, &dbname, NULL);
 
         basename = g_strjoin ("_", scheme, host, username, dbname, NULL);
         g_free (scheme);
