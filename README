@@ -158,7 +158,7 @@ Supported Platforms
 
 GnuCash 5.x is known to work with the following operating systems:
 
-GNU/Linux             -- x86, Sparc, PPC
+GNU/Linux             -- x86, Sparc, PPC, s390x
 FreeBSD               -- x86
 OpenBSD               -- x86
 MacOS		      -- Intel, Versions 10.9 and later
