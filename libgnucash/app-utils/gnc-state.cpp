@@ -1,8 +1,9 @@
 /********************************************************************\
- * file-utils.c -- simple file utilities                            *
+ * gnc-state.cpp -- functions to manage gui state                   *
  * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
  * Copyright (C) 1998 Rob Browning                                  *
  * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 2026 Brent McBride <mcbridebt@hotmail.com>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,14 +23,19 @@
 #include <config.h>
 
 #include <glib.h>
-//#include <glib/gstdio.h>
-//#include <errno.h>
+#include <filesystem>
+#include <format>
+#include <memory>
+#include <optional>
+#include <span>
+#include <string>
+#include <string_view>
 
 #include "gnc-state.h"
-//#include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
-#include "gnc-uri-utils.h"
+#include "gnc-uri.hpp"
+#include <guid.hpp>
 #include "qof.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -42,10 +48,10 @@ static QofLogModule log_module = G_LOG_DOMAIN;
  * name here as well. The old style state file will then be
  * converted into a new style one the next time state is saved.
  */
-static gchar* state_file_name = NULL;
-static gchar* state_file_name_pre_241 = NULL;
+static std::optional<std::string> s_state_file_name;
+static std::optional<std::string> s_state_file_name_pre_241;
 /* State file data for current book */
-static GKeyFile *state_file = NULL;
+static GKeyFile *s_state_file = nullptr;
 
 /* Determine which file name to use for the state file. This name is based
  * the current book's uri and guid.
@@ -69,162 +75,161 @@ static GKeyFile *state_file = NULL;
 static void
 gnc_state_set_base (const QofSession *session)
 {
-    gchar *basename, *original = NULL, *filename, *file_guid;
-    gchar *sf_extension = NULL;
-    const gchar *uri;
-    gchar guid_string[GUID_ENCODING_LENGTH+1];
-    QofBook *book;
-    const GncGUID *guid;
-    GKeyFile *key_file = NULL;
-    gint i;
-
     /* Reset filenames possibly found in a previous run */
-    g_free (state_file_name);
-    g_free (state_file_name_pre_241);
-    state_file_name = NULL;
-    state_file_name_pre_241 = NULL;
+    s_state_file_name.reset ();
+    s_state_file_name_pre_241.reset ();
 
-    uri = qof_session_get_url (session);
+    const char *uri = qof_session_get_url (session);
     ENTER("session %p (%s)", session, uri ? uri : "(null)");
-    if (!strlen (uri))
+    if (!uri || !*uri)
     {
         LEAVE("no uri, nothing to do");
         return;
     }
 
     /* Get the book GncGUID */
-    book = qof_session_get_book(session);
-    guid = qof_entity_get_guid(QOF_INSTANCE(book));
-    guid_to_string_buff(guid, guid_string);
+    QofBook *book = qof_session_get_book (session);
+    const GncGUID *guid = qof_entity_get_guid (QOF_INSTANCE (book));
 
-    if (gnc_uri_targets_local_fs (uri))
+    std::string basename;
+    GncUri parsed_uri {uri};
+    if (parsed_uri.targets_local_fs ())
     {
         /* The book_uri is a true file, use its basename. */
-        gchar *path = gnc_uri_get_path (uri);
-        basename = g_path_get_basename (path);
-        g_free (path);
+        basename = std::filesystem::path {*parsed_uri.path ()}
+                       .filename ().string ();
     }
     else
     {
-        /* The book_uri is composed of database connection parameters. */
-        gchar* scheme = NULL;
-        gchar* host = NULL;
-        gchar* dbname = NULL;
-        gchar* username = NULL;
-        gchar* password = NULL;
-        gint portnum = 0;
-        gnc_uri_get_components (uri, &scheme, &host, &portnum,
-                                &username, &password, &dbname);
-
-        basename = g_strjoin ("_", scheme, host, username, dbname, NULL);
-        g_free (scheme);
-        g_free (host);
-        g_free (username);
-        g_free (password);
-        g_free (dbname);
+        /* The book_uri is composed of database connection parameters.
+         * Join the scheme, host, username and dbname with underscores. As
+         * with the historical g_strjoin, an absent component terminates the
+         * name, so anything following a missing component is dropped. */
+        for (const auto& component : {parsed_uri.scheme (),
+                                      parsed_uri.hostname (),
+                                      parsed_uri.username (),
+                                      parsed_uri.path ()})
+        {
+            if (!component)
+                break;
+            if (!basename.empty ())
+                basename += '_';
+            basename += *component;
+        }
     }
 
-    DEBUG ("Basename %s", basename);
-    original = gnc_build_book_path (basename);
-    g_free (basename);
-    DEBUG ("Original %s", original);
+    DEBUG ("Basename %s", basename.c_str ());
+    std::unique_ptr<char, decltype (&g_free)> raw_original {
+        gnc_build_book_path (basename.c_str ()), g_free};
+    std::string original {raw_original.get ()};
+    DEBUG ("Original %s", original.c_str ());
 
-    sf_extension = g_strdup (STATE_FILE_EXT);
-    i = 1;
-    while (1)
+    std::string sf_extension {STATE_FILE_EXT};
+    std::unique_ptr<GKeyFile, decltype (&g_key_file_free)> key_file {
+        nullptr, g_key_file_free};
+    int i = 1;
+    while (true)
     {
+        std::string filename;
         if (i == 1)
-            filename = g_strconcat (original, sf_extension, NULL);
+            filename = original + sf_extension;
         else
-            filename = g_strdup_printf ("%s_%d%s", original, i, sf_extension);
-        DEBUG ("Trying %s", filename);
-        key_file = gnc_key_file_load_from_file (filename, TRUE, FALSE, NULL);
-        DEBUG ("Result %p", key_file);
+            filename = std::format ("{}_{}{}", original, i, sf_extension);
+        DEBUG ("Trying %s", filename.c_str ());
+        key_file.reset (gnc_key_file_load_from_file (filename.c_str (), true,
+                                                     false, nullptr));
+        DEBUG ("Result %p", key_file.get ());
 
         if (!key_file)
         {
             DEBUG ("No key file by that name");
-            if (g_strcmp0 (sf_extension, STATE_FILE_EXT) == 0)
+            if (sf_extension == STATE_FILE_EXT)
             {
                 DEBUG ("Trying old state file names for compatibility");
                 i = 1;
-                g_free (sf_extension);
-                sf_extension = g_strdup ("");
+                sf_extension.clear ();
 
                 /* Regardless of whether or not an old state file is found,
                  * the currently tested name should be used for the future
                  * state file.
                  */
-                state_file_name = filename;
+                s_state_file_name = filename;
                 continue;
             }
 
             /* No old style file found. We'll return with the new file name
              * we set earlier, and no existing key file. */
-            g_free (filename);
             break;
         }
 
-        file_guid = g_key_file_get_string (key_file,
-                                           STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
-                                           NULL);
-        DEBUG ("File GncGUID is %s", file_guid ? file_guid : "<not found>");
-        if (g_strcmp0 (guid_string, file_guid) == 0)
+        std::unique_ptr<char, decltype (&g_free)> raw_file_guid {
+            g_key_file_get_string (key_file.get (), STATE_FILE_TOP,
+                                   STATE_FILE_BOOK_GUID, nullptr),
+            g_free};
+        DEBUG ("File GncGUID is %s",
+               raw_file_guid ? raw_file_guid.get () : "<not found>");
+        bool matched = false;
+        if (raw_file_guid)
+        {
+            try
+            {
+                gnc::GUID file_guid =
+                    gnc::GUID::from_string (raw_file_guid.get ());
+                matched = file_guid == *guid;
+            }
+            catch (const gnc::guid_syntax_exception&)
+            {
+                /* Malformed guid in the state file; treat as no match. */
+            }
+        }
+        if (matched)
         {
             DEBUG ("Matched !!!");
             /* Save the found file for later use. Which name to save to
              * depends on whether it was an old or new style file name
              */
-            if (g_strcmp0 (sf_extension, STATE_FILE_EXT) == 0)
-                state_file_name = filename;
+            if (sf_extension == STATE_FILE_EXT)
+                s_state_file_name = filename;
             else
-                state_file_name_pre_241 = filename;
+                s_state_file_name_pre_241 = filename;
 
-            g_free (file_guid);
             break;
         }
-        DEBUG ("Clean up this pass");
-        g_free (file_guid);
-        g_key_file_free (key_file);
-        g_free (filename);
         i++;
     }
-
-    DEBUG("Clean up");
-    g_free(sf_extension);
-    g_free(original);
-    if (key_file != NULL)
-        g_key_file_free (key_file);
 
     LEAVE ();
 }
 
-GKeyFile *gnc_state_load (const QofSession *session)
+GKeyFile *
+gnc_state_load (const QofSession *session)
 {
     /* Drop possible previous state_file first */
-    if (state_file)
+    if (s_state_file)
     {
-        g_key_file_free (state_file);
-        state_file = NULL;
+        g_key_file_free (s_state_file);
+        s_state_file = nullptr;
     }
 
     gnc_state_set_base (session);
 
-    if (state_file_name_pre_241)
-        state_file = gnc_key_file_load_from_file (state_file_name_pre_241,
-                     TRUE, TRUE, NULL);
-    else if (state_file_name)
-        state_file = gnc_key_file_load_from_file (state_file_name,
-                     TRUE, TRUE, NULL);
+    if (s_state_file_name_pre_241)
+        s_state_file = gnc_key_file_load_from_file (
+            s_state_file_name_pre_241->c_str (), true, true, nullptr);
+    else if (s_state_file_name)
+        s_state_file = gnc_key_file_load_from_file (
+            s_state_file_name->c_str (), true, true, nullptr);
 
     return gnc_state_get_current ();
 }
 
-void gnc_state_save (const QofSession *session)
+void
+gnc_state_save (const QofSession *session)
 {
-    GError *error = NULL;
+    GError *error = nullptr;
 
-    if (!strlen (qof_session_get_url(session)))
+    const char *uri = qof_session_get_url (session);
+    if (!uri || !*uri)
     {
         DEBUG("No file associated with session - skip state saving");
         return;
@@ -233,8 +238,9 @@ void gnc_state_save (const QofSession *session)
     gnc_state_set_base (session);
 
     /* Write it all out to disk */
-    if (state_file_name)
-        gnc_key_file_save_to_file(state_file_name, state_file, &error);
+    if (s_state_file_name)
+        gnc_key_file_save_to_file (s_state_file_name->c_str (), s_state_file,
+                                   &error);
     else
         PWARN ("No state file name set, can't save state");
 
@@ -245,26 +251,23 @@ void gnc_state_save (const QofSession *session)
     }
 }
 
-GKeyFile *gnc_state_get_current (void)
+GKeyFile *
+gnc_state_get_current (void)
 {
-    if (!state_file)
+    if (!s_state_file)
     {
         PINFO ("No pre-existing state found, creating new one");
-        state_file = g_key_file_new ();
+        s_state_file = g_key_file_new ();
     }
 
-    return state_file;
+    return s_state_file;
 
 }
 
-gint gnc_state_drop_sections_for (const gchar *partial_name)
+int
+gnc_state_drop_sections_for (const char *partial_name)
 {
-    gchar **groups;
-    gint found_count = 0, dropped_count = 0;
-    gsize i, num_groups;
-    GError *error = NULL;
-
-    if (!state_file)
+    if (!s_state_file)
     {
         PWARN ("No pre-existing state found, ignoring drop request");
         return 0;
@@ -272,17 +275,23 @@ gint gnc_state_drop_sections_for (const gchar *partial_name)
 
     ENTER("");
 
-    groups = g_key_file_get_groups (state_file, &num_groups);
-    for (i = 0; i < num_groups; i++)
+    int found_count = 0, dropped_count = 0;
+    gsize num_groups;
+    std::unique_ptr<char *, decltype (&g_strfreev)> groups {
+        g_key_file_get_groups (s_state_file, &num_groups), g_strfreev};
+    for (char *group : std::span {groups.get (), num_groups})
     {
-        if (g_strstr_len (groups[i], -1, partial_name))
+        if (std::string_view {group}.find (partial_name)
+            != std::string_view::npos)
         {
-            DEBUG ("Section \"%s\" matches \"%s\", removing", groups[i], partial_name);
+            DEBUG ("Section \"%s\" matches \"%s\", removing", group,
+                   partial_name);
             found_count++;
-            if (!g_key_file_remove_group (state_file, groups[i], &error))
+            GError *error = nullptr;
+            if (!g_key_file_remove_group (s_state_file, group, &error))
             {
                 PWARN ("Warning: unable to remove section %s.\n  %s",
-                        groups[i],
+                        group,
                         error->message);
                 g_error_free (error);
             }
@@ -291,7 +300,6 @@ gint gnc_state_drop_sections_for (const gchar *partial_name)
 
         }
     }
-    g_strfreev (groups);
 
     LEAVE("Found %i sections matching \"%s\", successfully removed %i",
             found_count, partial_name, dropped_count);

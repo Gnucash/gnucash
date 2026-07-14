@@ -32,7 +32,7 @@ set (app_utils_SOURCES
   gnc-gsettings.cpp
   gnc-prefs-utils.c
   gnc-quotes.cpp
-  gnc-state.c
+  gnc-state.cpp
   gnc-ui-util.cpp
   gnc-ui-balances.cpp
   )
