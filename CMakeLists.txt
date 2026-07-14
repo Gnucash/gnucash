@@ -800,7 +800,7 @@ check_include_files (wctype.h HAVE_WCTYPE_H)
 
 test_big_endian(IS_BIGENDIAN)
 if (IS_BIGENDIAN)
-  add_compile_definition (WORDS_BIGENDIAN)
+  add_compile_definitions (WORDS_BIGENDIAN)
 endif()
 
 if (NOT DISABLE_NLS)
