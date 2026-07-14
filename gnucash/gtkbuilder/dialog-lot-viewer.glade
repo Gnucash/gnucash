@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="lot_viewer_dialog">
@@ -108,6 +108,22 @@
           </packing>
         </child>
         <child>
+          <object class="GtkCheckButton" id="show_adjusted_amounts_checkbutton">
+            <property name="label" translatable="yes">Show stock split adjusted amounts</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="halign">start</property>
+            <property name="draw-indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkPaned" id="lot_vpaned">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -191,13 +207,13 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">_Title</property>
-                        <style>
-                          <class name="gnc-class-strong"/>
-                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic-widget">lot_title_entry</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -224,12 +240,12 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">_Lots in This Account</property>
-                        <style>
-                          <class name="gnc-class-strong"/>
-                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">lot_view</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -242,8 +258,6 @@
                         <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="hscrollbar-policy">always</property>
-                        <property name="vscrollbar-policy">always</property>
                         <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="lot_view">
@@ -308,12 +322,12 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Splits _free</property>
-                        <style>
-                          <class name="gnc-class-strong"/>
-                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">split_free_view</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -366,12 +380,12 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Splits _in lot</property>
-                        <style>
-                          <class name="gnc-class-strong"/>
-                        </style>
                         <property name="use-markup">True</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">split_in_lot_view</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>

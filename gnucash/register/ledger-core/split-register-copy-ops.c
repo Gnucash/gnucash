@@ -82,6 +82,12 @@ gnc_numeric gnc_float_split_get_value (const FloatingSplit *fs)
     return fs->m_value;
 }
 
+gboolean gnc_float_split_get_stock_split (const FloatingSplit *fs)
+{
+    g_return_val_if_fail (fs, FALSE);
+    return fs->m_stock_split;
+}
+
 
 /* modifiers */
 void gnc_float_split_set_split(FloatingSplit *fs, Split *split)
@@ -129,15 +135,19 @@ void gnc_float_split_set_reconcile_date (FloatingSplit *fs, time64 reconcile_dat
 void gnc_float_split_set_amount (FloatingSplit *fs, const gnc_numeric amount)
 {
     g_return_if_fail (fs);
-
     fs->m_amount = amount;
 }
 
 void gnc_float_split_set_value (FloatingSplit *fs, const gnc_numeric value)
 {
     g_return_if_fail (fs);
-
     fs->m_value = value;
+}
+
+void gnc_float_split_set_stock_split (FloatingSplit *fs, gboolean stock_split)
+{
+    g_return_if_fail (fs);
+    fs->m_stock_split = stock_split;
 }
 
 static void
@@ -247,6 +257,7 @@ FloatingSplit *gnc_split_to_float_split (Split *split, gboolean is_template)
     fs->m_reconcile_date = xaccSplitGetDateReconciled (split);
     fs->m_amount = xaccSplitGetAmount (split);
     fs->m_value = xaccSplitGetValue (split);
+    fs->m_stock_split = xaccSplitIsStockSplit (split);
 
     if (is_template)
         fs->m_template_sx_data = gnc_split_to_float_template_sx_data (split);
@@ -336,6 +347,8 @@ gnc_float_split_to_split (const FloatingSplit *fs, Split *split, Account *templa
     {
         xaccSplitSetAmount (split, fs->m_amount);
         xaccSplitSetValue (split, fs->m_value);
+        if (fs->m_stock_split)
+            xaccSplitMakeStockSplit(split);
     }
 
     if (split_account)

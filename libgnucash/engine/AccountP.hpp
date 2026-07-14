@@ -114,6 +114,7 @@ typedef struct AccountPrivate
     gnc_numeric reconciled_balance;
  
     gboolean balance_dirty;     /* balances in splits incorrect */
+    gboolean has_stock_split;   /* account includes a stock split */
 
     std::vector<Split*> splits;              /* list of split pointers */
     GHashTable* splits_hash;

@@ -1546,7 +1546,7 @@ gnc_split_register_get_mxfrm_entry (VirtualLocation virt_loc,
 
         if (s)
             name = g_strdup (SPLIT_TRANS_STR);
-        else if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
+        else if (xaccSplitIsStockSplit (split))
             name = g_strdup (STOCK_SPLIT_STR);
         else
             name = g_strdup ("");
@@ -1588,7 +1588,7 @@ gnc_split_register_get_mxfrm_help (VirtualLocation virt_loc,
         if (s)
             help = _ ("This transaction has multiple splits; "
                       "press the Split button to see them all");
-        else if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
+        else if (xaccSplitIsStockSplit (split))
             help = _ ("This transaction is a stock split; "
                       "press the Split button to see details");
         else
@@ -2080,7 +2080,7 @@ gnc_split_register_get_debcred_io_flags (VirtualLocation virt_loc,
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-    if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
+    if (xaccSplitIsStockSplit (split))
         return XACC_CELL_ALLOW_NONE;
 
     return XACC_CELL_ALLOW_ALL;

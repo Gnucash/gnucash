@@ -115,7 +115,7 @@ struct split_s
     gnc_numeric  value;
     gnc_numeric  amount;
 
-    const gchar * split_type;
+    const char *split_type;
 
     /* -------------------------------------------------------------- */
     /* Below follow some 'temporary' fields */
@@ -128,6 +128,9 @@ struct split_s
     gnc_numeric  noclosing_balance;
     gnc_numeric  cleared_balance;
     gnc_numeric  reconciled_balance;
+
+    /* The stock-split adjusted amount */
+    gnc_numeric  adjusted_amount;
 };
 
 struct _SplitClass

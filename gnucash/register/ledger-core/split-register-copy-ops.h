@@ -55,6 +55,7 @@ typedef struct
     char         m_reconcile_state;
     gnc_numeric  m_value;
     gnc_numeric  m_amount;
+    gboolean     m_stock_split;
 
     FloatingTemplateSxData *m_template_sx_data;
 
@@ -83,6 +84,7 @@ char gnc_float_split_get_reconcile_state (const FloatingSplit *fs);
 time64 gnc_float_split_get_reconcile_date (const FloatingSplit *fs);
 gnc_numeric gnc_float_split_get_amount (const FloatingSplit *fs);
 gnc_numeric gnc_float_split_get_value (const FloatingSplit *fs);
+gboolean gnc_float_split_get_stock_split (const FloatingSplit *fs);
 
 /* modifiers */
 void gnc_float_split_set_split (FloatingSplit *fs, Split *split);
@@ -94,6 +96,7 @@ void gnc_float_split_set_reconcile_state (FloatingSplit *fs, char reconcile_stat
 void gnc_float_split_set_reconcile_date (FloatingSplit *fs, time64 reconcile_date);
 void gnc_float_split_set_amount (FloatingSplit *fs, gnc_numeric amount);
 void gnc_float_split_set_value (FloatingSplit *fs, gnc_numeric value);
+void gnc_float_split_set_stock_split (FloatingSplit *fs, gboolean stock_split);
 
 FloatingSplit *gnc_split_to_float_split (Split *split, gboolean is_template);
 void gnc_float_split_to_split (const FloatingSplit *fs, Split *split, Account *template_account);
