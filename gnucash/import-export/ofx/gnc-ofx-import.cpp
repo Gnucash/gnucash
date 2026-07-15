@@ -46,7 +46,7 @@
 #include "gnc-file.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"

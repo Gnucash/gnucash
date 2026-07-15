@@ -37,7 +37,7 @@
 #include "dialog-utils.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-ui.h"
 #include "gnc-state.h"
 #include "gnc-period-select.h"

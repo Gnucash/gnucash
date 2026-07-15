@@ -43,7 +43,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "Query.h"
 #include "qof.h"
 #include "gnc-ledger-display.h"

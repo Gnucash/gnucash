@@ -48,7 +48,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-warnings.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"

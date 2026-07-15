@@ -49,7 +49,7 @@
 #include "Account.hpp"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"

@@ -36,7 +36,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-date.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"

@@ -50,7 +50,7 @@
 #include "gncOwner.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 
 #include "gncEntryLedger.h"
 

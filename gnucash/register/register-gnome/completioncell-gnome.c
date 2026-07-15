@@ -43,7 +43,7 @@
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
 #include "table-allgui.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include <gnc-unicode.h>
 
 typedef struct _PopBox

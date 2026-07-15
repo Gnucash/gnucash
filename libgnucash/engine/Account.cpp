@@ -39,7 +39,7 @@
 #include "Transaction.h"
 #include "TransactionP.hpp"
 #include "gnc-event.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-lot.h"
 #include "gnc-pricedb.h"
 #include "qofevent.h"

@@ -28,7 +28,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 
 #ifdef G_OS_WIN32
 #include <windows.h>

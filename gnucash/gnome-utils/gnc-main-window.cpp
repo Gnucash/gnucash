@@ -69,7 +69,7 @@
 #include "gnc-state.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include "gnc-uri.hpp"
 #include "gnc-version.h"
 #include "gnc-warnings.h"

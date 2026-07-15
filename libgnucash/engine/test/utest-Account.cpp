@@ -28,7 +28,7 @@
 #include <gnc-event.h>
 #include <gnc-date.h>
 /* Add specific headers for this class */
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "../Account.h"
 #include "../AccountP.hpp"
 #include "../Split.h"

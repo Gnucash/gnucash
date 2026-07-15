@@ -24,7 +24,7 @@
 #include <config.h>
 #include <string.h>
 #include <glib.h>
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include <unittest-support.h>
 
 static void

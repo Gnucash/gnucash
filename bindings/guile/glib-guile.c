@@ -45,7 +45,7 @@
 #include <libguile.h>
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-guile-utils.h"
 #include "glib-guile.h"
 

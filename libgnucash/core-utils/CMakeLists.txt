@@ -10,7 +10,7 @@ set (core_utils_SOURCES
   gnc-environment.c
   gnc-filepath-utils.cpp
   gnc-gkeyfile-utils.c
-  gnc-glib-utils.c
+  gnc-string-utils.cpp
   gnc-unicode.cpp
   gnc-locale-utils.c
   gnc-locale-utils.cpp
@@ -28,7 +28,7 @@ set(core_utils_noinst_HEADERS
   gnc-environment.h
   gnc-filepath-utils.h
   gnc-gkeyfile-utils.h
-  gnc-glib-utils.h
+  gnc-string-utils.h
   gnc-unicode.h
   gnc-locale-utils.h
   gnc-locale-utils.hpp
