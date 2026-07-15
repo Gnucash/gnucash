@@ -1,6 +1,7 @@
 /********************************************************************\
  * gnc-locale-utils.cpp -- provide a default locale for C++         *
  * Copyright (C) 2019 John Ralls <jralls@ceridwen.us                *
+ * Copyright (C) 2026 Brent McBride <mcbridebt@hotmail.com>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -71,39 +72,54 @@ gnc_get_locale()
 
 
 static std::locale boost_cached;
-static bool tried_boost_already = false;
+static bool boost_locale_created = false;
+static bool boost_messages_loaded = false;
+
+/* Build a boost::locale from the environment.  Message catalogs are loaded
+ * only when a path is supplied; the collation, character-set and other
+ * facets are always present so that gnc_get_boost_locale() is usable even
+ * before translations have been set up. */
+static std::locale
+create_boost_locale (const std::string& messages_path)
+{
+    try
+    {
+        boost::locale::generator gen;
+        if (!messages_path.empty())
+            gen.add_messages_path(messages_path);
+        gen.add_messages_domain(PROJECT_NAME);
+        return gen ("");
+    }
+    catch (const std::runtime_error& err)
+    {
+        const char* locale = setlocale(LC_ALL, "");
+
+        g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+              "Failed to create C++ default locale from "
+              "%s because %s. Using the 'C' locale for C++.",
+              locale, err.what());
+        return std::locale::classic();
+    }
+}
 
 void
 gnc_init_boost_locale (const std::string& messages_path)
 {
-    if (!tried_boost_already)
-    {
-        tried_boost_already = true;
+    /* Once message catalogs are loaded there is nothing more to do; a locale
+     * that was created lazily (without catalogs) is still replaced here. */
+    if (boost_messages_loaded)
+        return;
 
-        try
-        {
-            boost::locale::generator gen;
-            if (!messages_path.empty())
-                gen.add_messages_path(messages_path);
-            else
-                g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
-                      "Attempt to initialize boost_locale without a message_path. "
-                      "If message catalogs are not installed in the system's default locations "
-                      "user interface strings will not be translated.");
-            gen.add_messages_domain(PROJECT_NAME);
-            boost_cached = gen ("");
-        }
-        catch (const std::runtime_error& err)
-        {
-            const char* locale = setlocale(LC_ALL, "");
+    if (messages_path.empty())
+        g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+              "Attempt to initialize boost_locale without a message_path. "
+              "If message catalogs are not installed in the system's default locations "
+              "user interface strings will not be translated.");
 
-            g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
-                  "Failed to create C++ default locale from"
-                  "%s because %s. Using the 'C' locale for C++.",
-                  locale, err.what());
-            boost_cached = std::locale::classic();
-        }
-    }
+    boost_cached = create_boost_locale (messages_path);
+    boost_locale_created = true;
+    if (!messages_path.empty())
+        boost_messages_loaded = true;
 }
 
 
@@ -111,6 +127,16 @@ gnc_init_boost_locale (const std::string& messages_path)
 const std::locale&
 gnc_get_boost_locale()
 {
+    if (!boost_locale_created)
+    {
+        /* A consumer needs boost::locale facets before the application
+         * initialized them -- e.g. the Python bindings, a unit test, or
+         * engine code such as xaccAccountOrder().  Create a usable locale
+         * now; message catalogs, which require a path, are installed later
+         * by gnc_init_boost_locale(). */
+        boost_cached = create_boost_locale ("");
+        boost_locale_created = true;
+    }
     return boost_cached;
 }
 

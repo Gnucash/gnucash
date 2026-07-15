@@ -24,10 +24,9 @@
 
 /** @addtogroup GLib
     @{ */
-/** @addtogroup Helpers GLib Helpers
+/** @addtogroup Helpers String Helpers
 
-    The API in this file is designed to provide support functions that
-    wrap the base glib functions and make them easier to use.
+    The API in this file provides string and list utility functions.
 
     @{ */
 /** @file gnc-string-utils.h

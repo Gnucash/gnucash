@@ -15,7 +15,15 @@ macro(add_core_utils_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" CORE_UTILS_TEST_INCLUDE_DIRS CORE_UTILS_TEST_LIBS)
 endmacro()
 
-add_core_utils_test(test-gnc-string-utils gtest-gnc-string-utils.cpp)
+set(gtest_string_utils_INCLUDES
+  ${CMAKE_BINARY_DIR}/common # for config.h
+  ${MODULEPATH}
+  ${CMAKE_SOURCE_DIR}/common/test-core)
+
+set(gtest_string_utils_LIBS gnc-core-utils test-core gtest)
+
+gnc_add_test(test-gnc-string-utils gtest-gnc-string-utils.cpp
+  gtest_string_utils_INCLUDES gtest_string_utils_LIBS)
 add_core_utils_test(test-resolve-file-path test-resolve-file-path.c)
 add_core_utils_test(test-userdata-dir test-userdata-dir.c)
 if (NOT MAC_INTEGRATION AND NOT WIN32)
