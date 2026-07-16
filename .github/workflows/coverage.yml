@@ -41,30 +41,17 @@ jobs:
         if: success()
         run: |
           mkdir build/github-pages
-          mv build/Coverage-HTML build/github-pages/
+          mv build/Coverage-HTML build/github-pages/Coverage
           chmod -v -R +rX "build/github-pages" | while read line; do
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
       - name: Upload pages
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success()
         with:
-          path: ${{ github.workspace }}/build/github-pages
+          name: coverage-build
+          path: ${{ github.workspace }}/build/github-pages/Coverage
 
-  deploy-coverage:
-    needs: coverage
-    if: github.repository == 'gnucash/gnucash'
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish
-        id: deployment
-        uses: actions/deploy-pages@v5
 
   programming-docs:
     runs-on: ubuntu-latest
@@ -101,13 +88,17 @@ jobs:
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
       - name: Upload pages
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success()
         with:
-          path: ${{ github.workspace }}/build/github-pages
+          name: documentation-build
+          path: ${{ github.workspace }}/build/github-pages/Documentation
 
   deploy-docs:
-    needs: programming-docs
+    needs: [
+           coverage,
+           programming-docs
+           ]
     if: github.repository == 'gnucash/gnucash'
     permissions:
       pages: write
@@ -117,6 +108,21 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/configure-pages@v6
+      - name: download-coverage
+        uses: actions/download-artifact@v8
+        with:
+           name: coverage-build
+           path: github-pages/Coverage
+      - name: download-documentation
+        uses: actions/download-artifact@v8
+        with:
+           name: documentation-build
+           path: github-pages/Documentation
+      - name: upload pages
+        uses: actions/upload-pages-artifact@v5
+        with:
+           path: github-pages
       - name: Publish
         id: deployment
         uses: actions/deploy-pages@v5
