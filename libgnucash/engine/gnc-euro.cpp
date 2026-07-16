@@ -26,6 +26,7 @@
 #include "gnc-euro.h"
 #include "gnc-session.h"
 #include <gnc-numeric.hpp>
+#include <gnc-rational-rounding.hpp>
 
 /* The rates are per EURO and are denoted in GncNumeric  */
 static const boost::container::flat_map <std::string, GncNumeric> gnc_euro_rates =
@@ -87,7 +88,7 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
     /* EC Regulation 1103/97 states we should use "Round half away from zero"
      * See https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31997R1103&qid=1662917247821
      */
-    return gnc_numeric_convert (value / *euro_rate, 100, GNC_HOW_RND_ROUND_HALF_UP);
+    return (value / *euro_rate).convert<RoundType::half_up>(100);
 }
 
 /* ------------------------------------------------------ */
@@ -101,8 +102,7 @@ gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
 
     /* EC Regulation 1103/97 states we should use "Round half away from zero"
      * See http://europa.eu/legislation_summaries/economic_and_monetary_affairs/institutional_and_economic_framework/l25025_en.htm */
-    return gnc_numeric_convert (value * *euro_rate, gnc_commodity_get_fraction (currency),
-                                GNC_HOW_RND_ROUND_HALF_UP);
+    return (value * *euro_rate).convert<RoundType::half_up>(gnc_commodity_get_fraction (currency));
 }
 
 /* ------------------------------------------------------ */
