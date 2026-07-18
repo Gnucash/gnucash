@@ -1421,6 +1421,11 @@ many months before the current month</property>
               </packing>
             </child>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <child>
               <!-- n-columns=3 n-rows=25 -->
               <object class="GtkGrid" id="table2">
                 <property name="visible">True</property>
@@ -2065,6 +2070,8 @@ many months before the current month</property>
                 </child>
                 <child>
                   <placeholder/>
+                </child>
+              </object>
                 </child>
               </object>
               <packing>
