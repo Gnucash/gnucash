@@ -22,7 +22,7 @@
 **********************************************************************/
 
 #include "gncIDSearch.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 
 typedef enum
 {   UNDEFINED,

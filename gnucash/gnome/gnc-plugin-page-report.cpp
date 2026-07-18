@@ -47,7 +47,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include "gfec.h"
 #include "dialog-custom-report.h"
 #include "dialog-utils.h"

@@ -37,7 +37,7 @@
 #include "gnc-ledger-display.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include "split-register-control.h"
 #include "split-register-model.h"
 

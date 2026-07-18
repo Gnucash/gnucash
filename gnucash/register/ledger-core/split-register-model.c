@@ -32,7 +32,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-warnings.h"
 #include "doclinkcell.h"

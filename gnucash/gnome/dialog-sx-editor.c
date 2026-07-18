@@ -64,7 +64,7 @@
 #include "gnc-ui-util.h"
 #include "gnucash-sheet.h"
 #include "gnc-session.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 
 #include "gnc-split-reg.h"
 

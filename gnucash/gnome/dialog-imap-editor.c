@@ -33,7 +33,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include "Account.h"
 
 #define DIALOG_IMAP_CM_CLASS    "dialog-imap-edit"

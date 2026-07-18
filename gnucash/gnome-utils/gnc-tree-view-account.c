@@ -39,7 +39,7 @@
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-hooks.h"

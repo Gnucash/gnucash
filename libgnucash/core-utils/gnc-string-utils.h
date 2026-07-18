@@ -1,6 +1,7 @@
 /********************************************************************\
- * gnc-glib-utils.c -- utility functions based on glib functions    *
+ * gnc-string-utils.h -- string and list utility functions         *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2026 Brent McBride <mcbridebt@hotmail.com>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,19 +24,18 @@
 
 /** @addtogroup GLib
     @{ */
-/** @addtogroup Helpers GLib Helpers
+/** @addtogroup Helpers String Helpers
 
-    The API in this file is designed to provide support functions that
-    wrap the base glib functions and make them easier to use.
+    The API in this file provides string and list utility functions.
 
     @{ */
-/** @file gnc-glib-utils.h
- *  @brief GLib helper routines
+/** @file gnc-string-utils.h
+ *  @brief String and list utility routines
  *  @author Copyright (C) 2006 David Hampton <hampton@employees.org>
  */
 
-#ifndef GNC_GLIB_UTILS_H
-#define GNC_GLIB_UTILS_H
+#ifndef GNC_STRING_UTILS_H
+#define GNC_STRING_UTILS_H
 
 #include <glib.h>
 
@@ -216,6 +216,6 @@ gint gnc_list_length_cmp (const GList *list, size_t len);
 } /* extern "C" */
 #endif
 
-#endif /* GNC_GLIB_UTILS_H */
+#endif /* GNC_STRING_UTILS_H */
 /** @} */
 /** @} */

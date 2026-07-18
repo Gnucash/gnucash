@@ -43,7 +43,7 @@
 #include "Transaction.h"
 #include "dialog-ab-trans.h"
 #include "gnc-ab-kvp.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"

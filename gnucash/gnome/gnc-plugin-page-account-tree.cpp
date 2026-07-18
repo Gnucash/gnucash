@@ -73,7 +73,7 @@
 #include "window-main-summarybar.h"
 #include "dialog-object-references.h"
 #include "dialog-find-account.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

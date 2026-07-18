@@ -35,7 +35,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"

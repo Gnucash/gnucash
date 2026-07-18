@@ -47,7 +47,7 @@
 #include "gnucash-sheetP.h"
 #include "table-allgui.h"
 #include "Account.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 
 #define GNC_PREF_AUTO_RAISE_LISTS "auto-raise-lists"
 

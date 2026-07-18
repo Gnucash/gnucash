@@ -31,7 +31,7 @@
 #include "gnc-date.h"
 #include "Account.h"
 #include <stdint.h>
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 
 #define LOG_MOD "gnc.engine.recurrence"
 static QofLogModule log_module = LOG_MOD;

@@ -1,6 +1,7 @@
 /********************************************************************\
- * gnc-glib-utils.c -- utility functions based on glib functions    *
+ * gnc-string-utils.cpp -- string and list utility functions        *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2026 Brent McBride <mcbridebt@hotmail.com>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,13 +23,17 @@
 \********************************************************************/
 
 #include <config.h>
-#include <errno.h>
-#include <stdio.h>
-#include <signal.h>
-#include <string.h>
-#include <stdbool.h>
 
-#include "gnc-glib-utils.h"
+#include <cstring>
+#include <string_view>
+
+#include <boost/locale/collator.hpp>
+#include <boost/locale/conversion.hpp>
+#include <boost/locale/encoding.hpp>
+#include <boost/locale/info.hpp>
+
+#include "gnc-locale-utils.hpp"
+#include "gnc-string-utils.h"
 
 #ifdef G_OS_WIN32
 #include <windows.h>
@@ -38,12 +43,16 @@ int
 safe_utf8_collate (const char * da, const char * db)
 {
     if (da && !(*da))
-        da = NULL;
+        da = nullptr;
     if (db && !(*db))
-        db = NULL;
+        db = nullptr;
 
     if (da && db)
-        return g_utf8_collate(da, db);
+    {
+        auto const& coll{std::use_facet<boost::locale::collator<char>>(
+            gnc_get_boost_locale())};
+        return coll.compare(boost::locale::collate_level::quaternary, da, db);
+    }
     if (da)
         return 1;
     if (db)
@@ -126,20 +135,18 @@ gnc_utf8_validate(const gchar  *str,
                   const gchar **end)
 {
 
-    const gchar *p;
-
-    g_return_val_if_fail (str != NULL, FALSE);
+    g_return_val_if_fail (str != nullptr, false);
 
     if (end)
         *end = str;
 
-    p = str;
+    const gchar *p = str;
 
     while ((max_len < 0 || (p - str) < max_len) && *p)
     {
         int i, mask = 0, len;
         gunichar result;
-        unsigned char c = (unsigned char) * p;
+        unsigned char c = static_cast<unsigned char>(*p);
 
         UTF8_COMPUTE (c, mask, len);
 
@@ -156,7 +163,7 @@ gnc_utf8_validate(const gchar  *str,
         if (UTF8_LENGTH (result) != len) /* Check for overlong UTF-8 */
             break;
 
-        if (result == (gunichar) - 1)
+        if (result == static_cast<gunichar>(-1))
             break;
 
         if (!UNICODE_VALID (result))
@@ -173,32 +180,31 @@ gnc_utf8_validate(const gchar  *str,
      */
     if (max_len >= 0 &&
             p != (str + max_len))
-        return FALSE;
+        return false;
     else if (max_len < 0 &&
              *p != '\0')
-        return FALSE;
+        return false;
     else
-        return TRUE;
+        return true;
 }
 
 void
 gnc_utf8_strip_invalid (gchar *str)
 {
     gchar *end;
-    gint len;
 
     g_return_if_fail(str);
 
-    if (gnc_utf8_validate(str, -1, (const gchar **)&end))
+    if (gnc_utf8_validate(str, -1, const_cast<const gchar **>(&end)))
         return;
 
     g_warning("Invalid utf8 string: %s", str);
     do
     {
-        len = strlen(end);
+        int len = strlen(end);
         memmove(end, end + 1, len);	/* shuffle the remainder one byte */
     }
-    while (!gnc_utf8_validate(str, -1, (const gchar **)&end));
+    while (!gnc_utf8_validate(str, -1, const_cast<const gchar **>(&end)));
 }
 
 gchar *
@@ -212,14 +218,13 @@ gnc_utf8_strip_invalid_strdup(const gchar* str)
 void
 gnc_utf8_strip_invalid_and_controls (gchar *str)
 {
-    gchar *c = NULL;
-    const gchar *controls = "\b\f\n\r\t\v";
-    g_return_if_fail (str != NULL && strlen (str) > 0);
+    const char *controls = "\b\f\n\r\t\v";
+    g_return_if_fail (str != nullptr && strlen (str) > 0);
     gnc_utf8_strip_invalid (str); /* First fix the UTF-8 */
-    for(c = str + strlen (str) - 1; c != str; --c)
+    for (gchar *c = str + strlen (str) - 1; c != str; --c)
     {
-        gboolean line_control = ((unsigned char)(*c) < 0x20);
-        if (line_control || strchr(controls, *c) != NULL)
+        bool line_control = (static_cast<unsigned char>(*c) < 0x20);
+        if (line_control || strchr(controls, *c) != nullptr)
             *c = ' '; /*replace controls with a single space. */
     }
 }
@@ -227,44 +232,54 @@ gnc_utf8_strip_invalid_and_controls (gchar *str)
 gchar *
 gnc_locale_from_utf8(const gchar* str)
 {
-    gchar *   locale_str;
-    gsize     bytes_written = 0;
-    GError *  err = NULL;
+    g_return_val_if_fail (str != nullptr, nullptr);
 
-    /* Convert from UTF-8 to the encoding used in the current locale. */
-    locale_str = g_locale_from_utf8(str, -1, NULL, &bytes_written, &err);
-    if (err)
+    // Convert from UTF-8 to the encoding used in the current locale.
+    auto const& info{std::use_facet<boost::locale::info> (
+        gnc_get_boost_locale ())};
+    if (info.utf8 ())
+        return g_strdup (str);
+    try
     {
-        g_warning("g_locale_from_utf8 failed: %s", err->message);
-        g_error_free(err);
+        auto locale_str = boost::locale::conv::from_utf<char> (
+            str, info.encoding (), boost::locale::conv::stop);
+        return g_strdup (locale_str.c_str ());
     }
-
-    return locale_str;
+    catch (const std::exception& err)
+    {
+        g_warning ("gnc_locale_from_utf8 failed: %s", err.what ());
+        return nullptr;
+    }
 }
 
 gchar *
 gnc_locale_to_utf8(const gchar* str)
 {
-    gchar *   utf8_str;
-    gsize     bytes_written = 0;
-    GError *  err = NULL;
+    g_return_val_if_fail (str != nullptr, nullptr);
 
-    /* Convert to UTF-8 from the encoding used in the current locale. */
-    utf8_str = g_locale_to_utf8(str, -1, NULL, &bytes_written, &err);
-    if (err)
+    // Convert to UTF-8 from the encoding used in the current locale.
+    auto const& info{std::use_facet<boost::locale::info> (
+        gnc_get_boost_locale ())};
+    if (info.utf8 ())
+        return g_strdup (str);
+    try
     {
-        g_warning("g_locale_to_utf8 failed: %s", err->message);
-        g_error_free(err);
+        auto utf8_str = boost::locale::conv::to_utf<char> (
+            str, info.encoding (), boost::locale::conv::stop);
+        return g_strdup (utf8_str.c_str ());
     }
-
-    return utf8_str;
+    catch (const std::exception& err)
+    {
+        g_warning ("gnc_locale_to_utf8 failed: %s", err.what ());
+        return nullptr;
+    }
 }
 
 GList*
 gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
 {
-    GList *rtn = NULL;
-    for (; list != NULL; list = list->next)
+    GList *rtn = nullptr;
+    for (; list != nullptr; list = list->next)
     {
         rtn = g_list_prepend (rtn, (*fn)(list->data, user_data));
     }
@@ -274,58 +289,54 @@ gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
 void
 gnc_g_list_cut(GList **list, GList *cut_point)
 {
-    if (list == NULL || *list == NULL)
+    if (list == nullptr || *list == nullptr)
         return;
 
     // if it's the first element.
-    if (cut_point->prev == NULL)
+    if (cut_point->prev == nullptr)
     {
-        *list = NULL;
+        *list = nullptr;
         return;
     }
 
-    cut_point->prev->next = NULL;
-    cut_point->prev = NULL;
+    cut_point->prev->next = nullptr;
+    cut_point->prev = nullptr;
 }
 
 static bool
 utf8_strstr(char **needle, char *haystack)
 {
-    char *tmp = g_utf8_normalize (*needle, -1, G_NORMALIZE_NFC);
-    if (haystack && *haystack)
-    {
-        char *place = strstr(haystack, tmp);
-        if (place)
-        {
-            g_free (tmp);
-            return false;
-        }
-    }
-    *needle = tmp; //so that haystack is already normalized
+    auto tmp{boost::locale::normalize (*needle, boost::locale::norm_nfc,
+                                       gnc_get_boost_locale ())};
+    if (haystack && *haystack &&
+        std::string_view{haystack}.find (tmp) != std::string_view::npos)
+        return false;
+
+    *needle = g_strdup (tmp.c_str ()); //so that haystack is already normalized
     return true;
 }
 
 static gchar *
-gnc_g_list_stringjoin_internal (GList *list_of_strings, const gchar *sep, bool testdups)
+stringjoin_internal (GList *list_of_strings, const gchar *sep, bool testdups)
 {
-    gint seplen = sep ? strlen(sep) : 0;
+    gint seplen = sep ? strlen (sep) : 0;
     gint length = -seplen;
     gchar *retval, *p;
 
     for (GList *n = list_of_strings; n; n = n->next)
     {
-        gchar *str = n->data;
+        gchar *str = static_cast<gchar*>(n->data);
         if (str && *str)
             length += strlen (str) + seplen;
     }
 
     if (length <= 0)
-        return NULL;
+        return nullptr;
 
-    p = retval = (gchar*) g_malloc0 (length * sizeof (gchar) + 1);
+    p = retval = static_cast<gchar*>(g_malloc0 (length * sizeof (gchar) + 1));
     for (GList *n = list_of_strings; n; n = n->next)
     {
-        gchar *str = n->data;
+        gchar *str = static_cast<gchar*>(n->data);
         if (!str || !str[0])
             continue;
         if (!testdups || utf8_strstr (&str, retval))
@@ -344,19 +355,20 @@ gnc_g_list_stringjoin_internal (GList *list_of_strings, const gchar *sep, bool t
 gchar *
 gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep)
 {
-    return gnc_g_list_stringjoin_internal (list_of_strings, sep, false);
+    return stringjoin_internal (list_of_strings, sep, false);
 }
 
 gchar *
 gnc_g_list_stringjoin_nodups (GList *list_of_strings, const gchar *sep)
 {
-    return gnc_g_list_stringjoin_internal (list_of_strings, sep, true);
+    return stringjoin_internal (list_of_strings, sep, true);
 }
 
 gint
 gnc_list_length_cmp (const GList *list, size_t len)
 {
-    for (GList *lst = (GList*) list;; lst = g_list_next (lst), len--)
+    for (GList *lst = const_cast<GList*>(list);;
+         lst = g_list_next (lst), len--)
     {
         if (!lst) return (len ? -1 : 0);
         if (!len) return 1;

@@ -60,7 +60,7 @@
 #include "gnc-dense-cal.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-icons.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin.h"

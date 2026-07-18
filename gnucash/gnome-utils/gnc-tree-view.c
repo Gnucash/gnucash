@@ -40,7 +40,7 @@
 
 #include "gnc-tree-view.h"
 #include "gnc-engine.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-label.h"

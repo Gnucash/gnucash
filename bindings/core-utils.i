@@ -22,7 +22,7 @@
 %{
 #include <config.h>
 #include <gnc-environment.h>
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include <gnc-prefs.h>
 #include <gnc-path.h>
 #include <gnc-filepath-utils.h>

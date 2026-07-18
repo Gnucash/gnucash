@@ -32,7 +32,7 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include <gnc-glib-utils.h>
+#include <gnc-string-utils.h>
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"

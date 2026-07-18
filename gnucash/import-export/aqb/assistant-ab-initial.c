@@ -58,7 +58,7 @@
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-session.h"

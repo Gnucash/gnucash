@@ -36,7 +36,7 @@
 #include "gnc-file.h"
 #include "gnc-features.h"
 #include "gnc-filepath-utils.h"
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
 #include "gnc-keyring.h"
