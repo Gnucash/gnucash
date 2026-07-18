@@ -1,11 +1,11 @@
 /*
  * gnc-ab-standing-orders.h -- AqBanking standing-order synchronization
- * Copyright 2026 copystring
+ * The original author places this work in the public domain, free
+ * for anyone to use as they please.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
 #ifndef GNC_AB_STANDING_ORDERS_H
