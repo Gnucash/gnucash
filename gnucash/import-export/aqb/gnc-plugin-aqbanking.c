@@ -68,6 +68,9 @@ static Account *main_window_to_account(GncMainWindow *window);
 static void gnc_plugin_ab_cmd_setup (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_ab_cmd_get_balance (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_ab_cmd_get_transactions (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_ab_cmd_get_standing_orders (GSimpleAction *simple,
+                                                   GVariant *parameter,
+                                                   gpointer user_data);
 static void gnc_plugin_ab_cmd_issue_sepatransaction (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_ab_cmd_issue_sepainternaltransaction (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_ab_cmd_issue_inttransaction (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -86,6 +89,7 @@ static GActionEntry gnc_plugin_actions [] =
     { "ABSetupAction", gnc_plugin_ab_cmd_setup, NULL, NULL, NULL },
     { "ABGetBalanceAction", gnc_plugin_ab_cmd_get_balance, NULL, NULL, NULL },
     { "ABGetTransAction", gnc_plugin_ab_cmd_get_transactions, NULL, NULL, NULL },
+    { "ABGetStandingOrdersAction", gnc_plugin_ab_cmd_get_standing_orders, NULL, NULL, NULL },
     { "ABIssueSepaTransAction", gnc_plugin_ab_cmd_issue_sepatransaction, NULL, NULL, NULL },
     { "ABIssueSepaIntTransAction", gnc_plugin_ab_cmd_issue_sepainternaltransaction, NULL, NULL, NULL },
     { "ABIssueIntTransAction", gnc_plugin_ab_cmd_issue_inttransaction, NULL, NULL, NULL },
@@ -109,6 +113,7 @@ static const gchar *need_account_actions[] =
 {
     "ABGetBalanceAction",
     "ABGetTransAction",
+    "ABGetStandingOrdersAction",
     "ABIssueSepaTransAction",
 #if (AQBANKING_VERSION_INT >= 60400)
     "ABIssueSepaIntTransAction",
@@ -484,6 +489,27 @@ gnc_plugin_ab_cmd_get_transactions (GSimpleAction *simple,
 
     gnc_main_window = data->window;
     gnc_ab_gettrans(GTK_WIDGET(data->window), account);
+
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_ab_cmd_get_standing_orders (GSimpleAction *simple,
+                                       GVariant *parameter,
+                                       gpointer user_data)
+{
+    GncMainWindowActionData *data = user_data;
+    Account *account;
+
+    ENTER("action %p, main window data %p", simple, data);
+    account = main_window_to_account(data->window);
+    if (account == NULL)
+    {
+        PINFO("No AqBanking account selected");
+        LEAVE("no account");
+        return;
+    }
+    gnc_ab_getstandingorders(GTK_WIDGET(data->window), account);
 
     LEAVE(" ");
 }

@@ -31,6 +31,11 @@
 #include "gnc-ui-util.h"
 
 #include "gnc-ab-kvp.h"
+#include "qofinstance-p.h"
+
+#define AB_STANDING_ORDER_KVP_ROOT "aqbanking-standing-order"
+#define AB_STANDING_ORDER_KVP_ID "id"
+#define AB_STANDING_ORDER_KVP_ACCOUNT_GUID "account-guid"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
@@ -114,4 +119,62 @@ gnc_ab_set_account_trans_retrieval(Account *a, time64 time)
 		      "ab-trans-retrieval", &t,
 		      NULL);
     xaccAccountCommitEdit(a);
+}
+
+static gchar *
+get_standing_order_string (const SchedXaction *sx, const gchar *slot)
+{
+    GValue value = G_VALUE_INIT;
+    gchar *result = NULL;
+
+    g_return_val_if_fail (GNC_IS_SX (sx), NULL);
+
+    qof_instance_get_kvp (QOF_INSTANCE (sx), &value, 2,
+                          AB_STANDING_ORDER_KVP_ROOT, slot);
+    if (G_VALUE_HOLDS_STRING (&value))
+        result = g_value_dup_string (&value);
+    if (G_IS_VALUE (&value))
+        g_value_unset (&value);
+
+    return result;
+}
+
+static void
+set_standing_order_string (SchedXaction *sx, const gchar *slot,
+                           const gchar *string)
+{
+    GValue value = G_VALUE_INIT;
+
+    g_value_init (&value, G_TYPE_STRING);
+    g_value_set_string (&value, string ? string : "");
+    qof_instance_set_kvp (QOF_INSTANCE (sx), &value, 2,
+                          AB_STANDING_ORDER_KVP_ROOT, slot);
+    g_value_unset (&value);
+}
+
+gchar *
+gnc_ab_get_standing_order_id (const SchedXaction *sx)
+{
+    return get_standing_order_string (sx, AB_STANDING_ORDER_KVP_ID);
+}
+
+gchar *
+gnc_ab_get_standing_order_account_guid (const SchedXaction *sx)
+{
+    return get_standing_order_string (sx, AB_STANDING_ORDER_KVP_ACCOUNT_GUID);
+}
+
+void
+gnc_ab_set_standing_order_metadata (SchedXaction *sx,
+                                    const gchar *id,
+                                    const gchar *account_guid)
+{
+    g_return_if_fail (GNC_IS_SX (sx));
+
+    gnc_sx_begin_edit (sx);
+    set_standing_order_string (sx, AB_STANDING_ORDER_KVP_ID, id);
+    set_standing_order_string (sx, AB_STANDING_ORDER_KVP_ACCOUNT_GUID,
+                               account_guid);
+    qof_instance_set_dirty (QOF_INSTANCE (sx));
+    gnc_sx_commit_edit (sx);
 }

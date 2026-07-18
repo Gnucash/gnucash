@@ -33,11 +33,15 @@
 
 #include <glib/gi18n.h>
 #include <aqbanking/banking.h>
-# include <aqbanking/types/transaction.h>
+#include <aqbanking/types/transaction.h>
+#include <aqbanking/types/imexporter_accountinfo.h>
+#include <aqbanking/types/imexporter_context.h>
 #include "Account.h"
 #include "dialog-ab-daterange.h"
+#include "dialog-sx-editor.h"
 #include "gnc-ab-gettrans.h"
 #include "gnc-ab-kvp.h"
+#include "gnc-ab-standing-orders.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-ui.h"
 
@@ -233,5 +237,112 @@ cleanup:
         GWEN_Time_free(to_date);
     if (from_date)
         GWEN_Time_free(from_date);
+    gnc_AB_BANKING_fini(api);
+}
+
+void
+gnc_ab_getstandingorders(GtkWidget *parent, Account *gnc_acc)
+{
+    AB_BANKING *api;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
+    GNC_AB_JOB *job = NULL;
+    GNC_AB_JOB_LIST2 *job_list = NULL;
+    GncGWENGui *gui = NULL;
+    AB_IMEXPORTER_CONTEXT *context = NULL;
+    GNC_AB_JOB_STATUS job_status;
+    GList *node;
+    GncABStandingOrderSyncResult sync_result;
+    const gchar *summary_heading;
+    g_return_if_fail(parent && gnc_acc);
+
+    api = gnc_AB_BANKING_new();
+    if (!api)
+    {
+        g_warning("gnc_ab_getstandingorders: Couldn't get AqBanking API");
+        return;
+    }
+
+    ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
+    if (!ab_acc)
+    {
+        g_warning("gnc_ab_getstandingorders: No AqBanking account found");
+        gnc_error_dialog (GTK_WINDOW (parent), _("No valid online banking account assigned."));
+        goto cleanup;
+    }
+
+    if (!AB_AccountSpec_GetTransactionLimitsForCommand(
+            ab_acc, AB_Transaction_CommandSepaGetStandingOrders))
+    {
+        g_warning("gnc_ab_getstandingorders: JobSepaGetStandingOrders not available for this account");
+        gnc_error_dialog (
+            GTK_WINDOW (parent),
+            _("Online action \"Get Standing Orders\" not available for this account."));
+        goto cleanup;
+    }
+
+    job = AB_Transaction_new();
+    AB_Transaction_SetCommand(job, AB_Transaction_CommandSepaGetStandingOrders);
+    AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
+
+    job_list = AB_Transaction_List2_new();
+    AB_Transaction_List2_PushBack(job_list, job);
+
+    gui = gnc_GWEN_Gui_get(parent);
+    if (!gui)
+    {
+        g_warning("gnc_ab_getstandingorders: Couldn't initialize Gwenhywfar GUI");
+        gnc_error_dialog (GTK_WINDOW (parent),
+                          _("Could not initialize the online banking user interface."));
+        goto cleanup;
+    }
+
+    context = AB_ImExporterContext_new();
+    AB_Banking_SendCommands(api, job_list, context);
+
+    job_status = AB_Transaction_GetStatus(job);
+    if (job_status != AB_Transaction_StatusAccepted
+            && job_status != AB_Transaction_StatusPending)
+    {
+        g_warning("gnc_ab_getstandingorders: Error on executing job");
+        gnc_error_dialog (GTK_WINDOW (parent),
+                          _("Error on executing job.\n\nStatus: %s (%d)"),
+                          AB_Transaction_Status_toString(job_status),
+                          job_status);
+        goto cleanup;
+    }
+
+    sync_result = gnc_ab_import_standing_orders (context, gnc_acc);
+    summary_heading = sync_result.received == 0
+        ? _("The bank returned no standing orders.")
+        : _("Standing order retrieval completed.");
+    gnc_info_dialog (
+        GTK_WINDOW (parent),
+        _("%s\n\n"
+          "Received: %u\n"
+          "Created: %u\n"
+          "Updated: %u\n"
+          "Disabled: %u\n"
+          "Skipped: %u"),
+        summary_heading,
+        sync_result.received,
+        sync_result.created,
+        sync_result.updated,
+        sync_result.disabled,
+        sync_result.skipped);
+
+    for (node = sync_result.to_edit; node; node = node->next)
+        gnc_ui_scheduled_xaction_editor_dialog_create (
+            GTK_WINDOW (parent), GNC_SCHEDXACTION (node->data), FALSE);
+    g_list_free (sync_result.to_edit);
+
+cleanup:
+    if (context)
+        AB_ImExporterContext_free(context);
+    if (gui)
+        gnc_GWEN_Gui_release(gui);
+    if (job_list)
+        AB_Transaction_List2_free(job_list);
+    if (job)
+        AB_Transaction_free(job);
     gnc_AB_BANKING_fini(api);
 }

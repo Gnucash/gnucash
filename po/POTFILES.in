@@ -309,6 +309,7 @@ gnucash/import-export/aqb/dialog-ab-trans.c
 gnucash/import-export/aqb/gnc-ab-getbalance.c
 gnucash/import-export/aqb/gnc-ab-gettrans.c
 gnucash/import-export/aqb/gnc-ab-kvp.c
+gnucash/import-export/aqb/gnc-ab-standing-orders.c
 gnucash/import-export/aqb/gnc-ab-transfer.c
 gnucash/import-export/aqb/gnc-ab-utils.c
 gnucash/import-export/aqb/gnc-file-aqb-import.c

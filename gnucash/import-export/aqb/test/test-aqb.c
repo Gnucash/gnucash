@@ -30,6 +30,7 @@
 #include <TransLog.h>
 
 extern void test_qofsession_aqb_kvp( void );
+extern void test_suite_aqb_standing_orders (void);
 
 int
 main (int   argc,
@@ -52,6 +53,7 @@ main (int   argc,
      * details. Unfortunately, GLib-Testing doesn't provide the automatic
      * registration features of more sophisticated frameworks. */
     g_test_add_func ("/import-export/aqb/kvp", test_qofsession_aqb_kvp);
+    test_suite_aqb_standing_orders ();
 
     return g_test_run();
 }

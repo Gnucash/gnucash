@@ -1,8 +1,9 @@
-set(test_aqb_SOURCES test-aqb.c test-kvp.c)
+set(test_aqb_SOURCES test-aqb.c test-kvp.c test-standing-orders.c)
 
 set(test_aqb_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/aqb
+  ${CMAKE_SOURCE_DIR}/common/test-core
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_SOURCE_DIR}/gnucash/import-export
   ${CMAKE_SOURCE_DIR}/gnucash/gnome
