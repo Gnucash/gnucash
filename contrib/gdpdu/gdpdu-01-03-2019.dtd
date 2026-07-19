@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Versions available:
+1.1 (August-01-2002)
+
+1.2 (June-01-2003)
+  New Element Alias
+
+1.3 (November-01-2003)
+  New Element Extension
+
+1.4 (May-01-2004)
+  New Element AcceptNoTables
+  <Table> is now optional
+
+1.5 (September-01-2004)
+  Updated the ForeignKey and Alias elements so they allow
+  multiple Alias elements per ForeignKey. This allows one to use alias
+  elements for a Composite key.
+
+  Example:
+
+  <ForeignKey>
+    <Name>Order</Name>
+    <Name>Customer</Name>
+    <References>Orders</References>
+    <Alias>
+      <From>Order</From>
+      <To>OrderId</To>
+    </Alias>
+    <Alias>
+      <From>Customer</From>
+      <To>CustomerId</To>
+    </Alias>
+
+1.6 (March-03-2019)
+  Updated the Map and From/To elements descriptions so they allow
+  importing an Alphanumeric column as Time column.
+  This allows defining that an Alphanumeric column contains 
+  data of type Time and allows you to specify which is the time format used.
+
+  Example:
+
+  <Map>
+    <From>HHMMSS</From>
+    <To>HHMMSS</To>
+  </Map>
+-->
+
+<!-- Start Simple Types -->
+
+<!-- Supplementary Vocabulary -->
+<!ELEMENT Version (#PCDATA)>
+<!ELEMENT Location (#PCDATA)>
+<!ELEMENT Comment (#PCDATA)>
+<!ELEMENT Length (#PCDATA)>
+<!ELEMENT References (#PCDATA)>
+<!ELEMENT From (#PCDATA)>
+<!ELEMENT To (#PCDATA)>
+
+<!-- Sometimes, it is desirable to have a <Media> with
+     no tables.
+
+     Example:
+       An extension might provide metadata
+       that describes all tax-relevant data.
+
+     This option is turned off by default. -->
+<!ELEMENT AcceptNoTables (#PCDATA)>
+
+<!-- Use Alias to reference columns with different names in
+     a ForeignKey element. These Alias elements are optional.
+
+     The following rules apply to the Alias element:
+       - One Alias can be used per ForeignKey.
+       - Alias elements can appear in any order.
+
+     Example:
+       Table Orders has a primary key OrderId
+       Table Accounts has a foreign key Order.
+
+       You can use the Alias element to specify Order references OrderId.
+
+       <ForeignKey>
+          <Name>Order</Name>
+          <Name>Customer</Name>
+          <References>Orders</References>
+          <Alias>
+            <From>Order</From>
+            <To>OrderId</To>
+          </Alias>
+        </ForeignKey> -->
+<!ELEMENT Alias (From, To)>
+
+<!-- Specifying a maximum length for a VariableLength column can
+     reduce a VariableLength tables' import time. If MaxLength
+	 is not specified then we parse URL to determine the MaxLength
+	 for each column.
+
+	 * Only applies to VariableLength tables. -->
+<!ELEMENT MaxLength (#PCDATA)>
+
+<!-- Specifies which character (if any) encapsulates a
+     VariableLength AlphaNumeric column.
+
+	 Doublequote is the default TextEncapsulator "
+
+	 * Only applies to VariableLength tables. (Optional) -->
+<!ELEMENT TextEncapsulator (#PCDATA)>
+
+<!-- Specifies how many	digits appear to the right of the decimal symbol.
+
+	 CAUTION: Results are undefined when importing numeric data with
+	          greater Accuracy than the Accuracy defined in index.xml
+
+			  For example trying to import the value 1000,25 with an
+			  accuracy of 0 might result in 1000 or an error. This
+			  behavior is specific to the implementation.
+
+	 Zero is the default Accuracy '0' (Optional)
+-->
+<!ELEMENT Accuracy (#PCDATA)>
+
+<!-- The decimal place is not always stored with numbers. If each number
+     is supposed to have decimal places use ImpliedAccuracy -->
+<!ELEMENT ImpliedAccuracy (#PCDATA)>
+
+<!-- Enables you to change how GDPdU displays dates.
+	 DD.MM.YYYY is the default Format -->
+<!ELEMENT Format (#PCDATA)>
+
+<!-- Specifies the symbol that indicates decimal values.
+     Comma is the default DecimalSymbol. ','
+	 Specified once per Table. -->
+<!ELEMENT DecimalSymbol (#PCDATA)>
+
+<!-- Specifies the symbol that groups the digits in large numbers.
+     Dot is the default DigitGroupingSymbol or ThousandsSeperator. '.'
+	 Specified once per Table -->
+<!ELEMENT DigitGroupingSymbol (#PCDATA)>
+
+<!-- Command(s) are executed in the following manner
+      * before the import process
+	  * after the import process
+	  * before a Media is imported
+	  * after a Media is imported
+-->
+<!ELEMENT Command (#PCDATA)>
+
+<!-- Only the file protocol is supported at this time.
+
+     * The standard uses relative URLs.
+
+	 Absolute URLs are not allowed. The following are all invalid:
+	 * http://www.somewhere.com/data/Accounts.dat
+	 * ftp://ftp.somewhere.com/data/Accounts.dat
+	 * file://localhost/Accounts.dat
+     * file:///Accounts.dat
+
+	 The following are valid examples
+	  * Accounts.dat
+      * data/Accounts.dat
+      * data/january/Accounts.dat
+      * ../Accounts.dat
+-->
+<!ELEMENT URL (#PCDATA)>
+
+<!-- Textual description of specified element (Optional) -->
+<!ELEMENT Description (#PCDATA)>
+
+<!-- The logical name of specified element.
+     Sometimes referred to business name.
+
+	 If missing, URL will be used in place of Name. -->
+<!ELEMENT Name (#PCDATA)>
+
+<!-- Y2K Window Any year before Epoch is 2000+
+     Default value 30.  -->
+<!ELEMENT Epoch (#PCDATA)>
+
+<!-- Element(s) that separate columns or records.
+     Semicolon is the default ColumnDelimiter. ';'
+	 CRLF or &#13;&#10; is the default RecordDelimiter. -->
+<!ELEMENT ColumnDelimiter (#PCDATA)>
+<!ELEMENT RecordDelimiter (#PCDATA)>
+
+<!-- The number of bytes skipped before reading of URL commences.
+     Zero is the default when not specified. '0'
+-->
+<!ELEMENT SkipNumBytes (#PCDATA)>
+
+<!-- End Simple Types -->
+<!-- Start Complex Types -->
+
+<!-- Use Extension when you want to add application
+     specific functionality to the existing standard.
+
+     Name - the extension name or identifier.
+     URL  - the supplementary .xml file that corresponds to the
+            extension.
+
+     An application that extends the standard should scan the
+     Dataset element for the presence of zero or more Extension
+     elements. The application can use the Name element to identify
+     the extension.
+
+     When choosing a name for your extension, do not choose a common
+     name. This will reduce undefined results for name conflicts.
+
+     It is possible that future extensions will be ratified as
+     mandatory to meet GDPdU guidelines. -->
+<!ELEMENT Extension (Name, URL)>
+
+<!-- Self-explanatory -->
+<!ELEMENT Range (From, (To | Length)?)>
+<!ELEMENT FixedRange (From, (To | Length))>
+
+<!-- The document element -->
+<!ELEMENT DataSet (Extension*, Version, DataSupplier?, Command*, Media+, Command*)>
+
+<!-- Supported datatypes (mandatory) -->
+<!ELEMENT AlphaNumeric EMPTY>
+<!ELEMENT Date (Format?)>
+<!ELEMENT Numeric ((ImpliedAccuracy | Accuracy)?)>
+
+<!-- Supported codepages:
+     Be careful to explicitly define RecordDelimiter when using
+	 a non-default codepage.
+
+     ANSI is the default codepage when not specified -->
+<!ELEMENT ANSI EMPTY>
+<!ELEMENT Macintosh EMPTY>
+<!ELEMENT OEM EMPTY>
+<!ELEMENT UTF16 EMPTY>
+<!ELEMENT UTF7 EMPTY>
+<!ELEMENT UTF8 EMPTY>
+
+<!-- Supported file formats:
+     FixedLength
+	 VariableLength -->
+<!ELEMENT FixedLength ((Length | RecordDelimiter)?, ((FixedPrimaryKey+, FixedColumn*) | (FixedColumn+)), ForeignKey*)>
+<!ELEMENT FixedColumn (Name, Description?, (Numeric | AlphaNumeric | Date), Map*, FixedRange)>
+<!ELEMENT FixedPrimaryKey (Name, Description?, (Numeric | AlphaNumeric | Date), Map*, FixedRange)>
+<!ELEMENT VariableLength (ColumnDelimiter?, RecordDelimiter?, TextEncapsulator?, ((VariablePrimaryKey+, VariableColumn*) | (VariableColumn+)), ForeignKey*)>
+<!ELEMENT VariableColumn (Name, Description?, (Numeric | (AlphaNumeric, MaxLength?) | Date), Map*)>
+<!ELEMENT VariablePrimaryKey (Name, Description?, (Numeric | (AlphaNumeric, MaxLength?) | Date), Map*)>
+
+<!-- Description of the entity supplying the data. (Optional) -->
+<!ELEMENT DataSupplier (Name, Location, Comment)>
+
+<!-- The first Media will contain index.xml. Importing will process each media listed -->
+<!ELEMENT Media (Name, Command*, Table*, Command*, AcceptNoTables?)>
+
+<!-- Elements common to FixedLength & VariableLength are propagated to Table. -->
+<!ELEMENT Table (URL, Name?, Description?, Validity?, (ANSI | Macintosh | OEM | UTF16 | UTF7 | UTF8)?, (DecimalSymbol, DigitGroupingSymbol)?, SkipNumBytes?, Range?, Epoch?, (VariableLength | FixedLength))>
+
+<!-- ForeignKeys denote joins or relationships between tables.
+     To successfully join two tables make sure both the PrimaryKey
+	 and the referenced column (ForeignKey) are of the same datatype.
+	 Results are undefined when joining two tables with different
+	 key datatypes. Most likely an error will occur.
+
+     see line 35 for information about Alias -->
+<!ELEMENT ForeignKey (Name+, References, Alias*)>
+
+<!-- Maps AlphaNumeric columns from 'From' to 'To'
+     ie. From         To
+	     ============ =============
+		 True         1
+		 True         -1
+		 False        0
+
+	 Basically, a map is an associative container.
+
+	 The standard implementation only supports
+	 AlphaNumeric datatypes. The following
+	 conversions are NOT supported.
+
+	 Numeric      -> AlphaNumeric
+	 Date         -> AlphaNumeric
+	 AplhaNumeric -> Date
+	 AlphaNumeric -> Numeric
+	 
+	In order to keep the backward compatibility and because the Time 
+	data type was not defined yet we allow specifying that an Alphanumeric 
+	column contains data of type Time like:
+
+	<Map>
+	  <From>HHMMSS</From>
+	  <To>HHMMSS</To>
+	</Map>
+
+	If the application which interprets the xml and the target application
+	to import into are able to deal with time data type this column data could 
+	be imported as Time data type
+
+	The value of the From element has to be equal with the value of the To 
+	element, in order to not be interpreted as an actual Alphanumeric data mapping
+	in which the intention is to replace a certain text with a different text at 
+	import time, and be a valid Time format.
+	The following formats are recognized as valid Time formats:
+	HH as symbols for hours
+	MM as symbols for minutes
+	SS as symbols for seconds
+	TT as symbols for AM/PM
+	SS and TT are optional when defining the format.
+	A time format separator can also be supplied if needed.
+
+	Examples of valid formats:
+	HHMM, HH:MM, HHMMSS, HHMMTT, HH:MMTT, HH:MM:SS, HHMMSSTT, 
+	HH:MM:SSTT, HHMM TT, HH:MM TT, HHMMSS TT, HH:MM:SS TT
+-->
+<!ELEMENT Map (Description?, From, To)>
+
+<!-- Documentation for table validity. -->
+<!ELEMENT Validity (Range, Format?)>
+
+<!-- End Complex Types -->

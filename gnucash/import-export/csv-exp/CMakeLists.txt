@@ -7,6 +7,7 @@ set(csv_export_SOURCES
   assistant-csv-export.c
   csv-tree-export.cpp
   csv-transactions-export.cpp
+  csv-transaction-export-line.cpp
 )
 
 # Add dependency on config.h
@@ -18,6 +19,7 @@ set(csv_export_noinst_HEADERS
   csv-export-helpers.hpp
   csv-tree-export.h
   csv-transactions-export.h
+  csv-transaction-export-line.hpp
 )
 
 add_library(gnc-csv-export ${csv_export_noinst_HEADERS} ${csv_export_SOURCES})

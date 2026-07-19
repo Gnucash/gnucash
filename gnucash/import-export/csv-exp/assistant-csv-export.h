@@ -74,6 +74,7 @@ typedef struct
 
     Query          *query;
 
+    GtkBuilder     *builder;
     GtkWidget      *start_page;
     GtkWidget      *account_page;
     GtkWidget      *file_page;
@@ -81,6 +82,13 @@ typedef struct
     GtkWidget      *assistant;
     GtkWidget      *start_label;
     GtkWidget      *custom_entry;
+    GtkWidget      *comma_radio;
+    GtkWidget      *colon_radio;
+    GtkWidget      *semicolon_radio;
+    GtkWidget      *custom_radio;
+    GtkWidget      *simple_layout_check;
+    GtkWidget      *gdpdu_layout_check;
+
 
     GtkWidget      *file_chooser;
     GtkWidget      *finish_label;
@@ -92,6 +100,7 @@ typedef struct
     char           *separator_str;
     gboolean        use_quotes;
     gboolean        simple_layout;
+    gboolean        gdpdu_layout;
     gboolean        use_custom;
     gboolean        failed;
 
