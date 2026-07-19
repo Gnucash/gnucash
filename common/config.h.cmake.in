@@ -316,4 +316,5 @@
 /* Definitions for what WEBKIT version we're compiling against: */
 #cmakedefine WEBKIT2 1
 #cmakedefine WEBKIT1 1
+#cmakedefine WEBVIEW2 1
 

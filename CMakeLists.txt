@@ -244,8 +244,17 @@ pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.15.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
   if (WIN32)
-    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
-    set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
+    # The MSYS2 mingw-w64-ucrt-x86_64-webview2-loader package ships
+    # only WebView2Loader.dll and WebView2.h, no pkg-config file so we
+    # must check for the header file instead.
+    find_path (WEBVIEW2_INCLUDE_DIR NAMES WebView2.h)
+    if (NOT WEBVIEW2_INCLUDE_DIR)
+      message (SEND_ERROR "WebView2.h not found. Install the MSYS2 "
+        "mingw-w64-ucrt-x86_64-webview2-loader package (or set "
+        "WEBVIEW2_INCLUDE_DIR manually).")
+    endif()
+    set (WEBVIEW2_INCLUDE_DIRS ${WEBVIEW2_INCLUDE_DIR})
+    set(WEBVIEW2 1 CACHE INTERNAL "WebView2")
   else()
     # Hold at 2.32, the latest version successfully built on macOS.
     pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.32.0)

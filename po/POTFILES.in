@@ -298,6 +298,7 @@ gnucash/html/gnc-html-factory.cpp
 gnucash/html/gnc-html-history.cpp
 gnucash/html/gnc-html-webkit1.cpp
 gnucash/html/gnc-html-webkit2.cpp
+gnucash/html/gnc-html-webview2.cpp
 gnucash/html/html.scm
 gnucash/import-export/aqb/assistant-ab-initial.c
 gnucash/import-export/aqb/assistant-ab-initial.glade
