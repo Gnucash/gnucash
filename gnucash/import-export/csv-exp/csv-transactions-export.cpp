@@ -296,20 +296,11 @@ export_query_splits (CsvExportInfo *info, bool is_trading_acct,
             continue;
         }
 
-        // Write complex Transaction Line.
-        auto line = make_complex_trans_line (trans, split);
-        info->failed = !gnc_csv_add_line (ss, line, info->use_quotes,
-                                          info->separator_str);
-
         /* Loop through the list of splits for the Transaction */
         for (auto node = xaccTransGetSplitList (trans); !info->failed && node;
              node = node->next)
         {
             auto t_split{static_cast<Split*>(node->data)};
-
-            // base split is already written on the trans_line
-            if (split == t_split)
-                continue;
 
             // Only export trading splits if exporting a trading account
             Account *tsplit_acc = xaccSplitGetAccount (t_split);
