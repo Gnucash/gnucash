@@ -46,7 +46,6 @@ static void
 rectify_iso(const char* envvar, const char* locale,
             const char* dot, const char* rest)
 {
-
   char *eefn = strstr (dot, "8859");
 
   if (!(eefn && *eefn))
@@ -76,6 +75,8 @@ rectify_environment_charset(const char* envvar)
     return;
   char* saveptr;
   char* varval = getenv (envvar);
+  if (!varval || !*varval)
+    return;
   char* locale = strtok_r (varval, ".", &saveptr);
   char* dot = strtok_r (NULL, "@", &saveptr);
 
