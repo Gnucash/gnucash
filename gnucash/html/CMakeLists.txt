@@ -27,15 +27,11 @@ set (html_SOURCES
 if (WEBVIEW2)
   list(APPEND html_HEADERS gnc-html-webview2.hpp)
   list(APPEND html_SOURCES gnc-html-webview2.cpp)
-  set(html_EXTRA_DIST gnc-html-webkit1.hpp gnc-html-webkit1.cpp gnc-html-webkit2.hpp gnc-html-webkit2.cpp)
-elseif (WEBKIT1)
-  list(APPEND html_HEADERS gnc-html-webkit1.hpp)
-  list(APPEND html_SOURCES gnc-html-webkit1.cpp)
-  set(html_EXTRA_DIST gnc-html-webkit2.hpp gnc-html-webkit2.cpp gnc-html-webview2.hpp gnc-html-webview2.cpp)
+  set(html_EXTRA_DIST gnc-html-webkit2.hpp gnc-html-webkit2.cpp)
 else ()
   list(APPEND html_HEADERS gnc-html-webkit2.hpp)
   list(APPEND html_SOURCES gnc-html-webkit2.cpp)
-  set(html_EXTRA_DIST gnc-html-webkit1.hpp gnc-html-webkit1.cpp gnc-html-webview2.hpp gnc-html-webview2.cpp)
+  set(html_EXTRA_DIST gnc-html-webview2.hpp gnc-html-webview2.cpp)
 endif()
 
 

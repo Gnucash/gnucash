@@ -22,8 +22,8 @@
 
 /* GncHtml backend that hosts Microsoft Edge WebView2 as a native child
  * window parented to a plain GTK widget's own natively-backed HWND
- * (see gdk_window_ensure_native()). Windows-only; selected instead of
- * gnc-html-webkit1/2 when the WEBVIEW2 build option is set. */
+ * (see gdk_window_ensure_native()). Windows-only;
+ */
 
 #ifndef GNC_HTML_WEBVIEW2_H
 #define GNC_HTML_WEBVIEW2_H

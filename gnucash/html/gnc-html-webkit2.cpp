@@ -1040,16 +1040,7 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
      }
 }
 
-/* The webkit1 comment was
- * If printing on WIN32, in order to prevent the font from being tiny, (see bug
- * #591177), A GtkPrintOperation object needs to be created so that the unit can
- * be set, and then webkit_web_frame_print_full() needs to be called to use that
- * GtkPrintOperation.  On other platforms (specifically linux - not sure about
- * MacOSX), the version of webkit may not contain the function
- * webkit_web_frame_print_full(), so webkit_web_frame_print() is called instead
- * (the font size problem doesn't show up on linux).
- *
- * Webkit2 exposes only a very simple WebKitPrintOperation API. In order to
+/* Webkit2 exposes only a very simple WebKitPrintOperation API. In order to
  * implement the above if it proves still to be necessary we'll have to use
  * GtkPrintOperation instead, passing it the results of
  * webkit_web_view_get_snapshot for each page.
