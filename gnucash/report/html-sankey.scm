@@ -189,6 +189,60 @@
 (define (noderecord-val n)
   (max (noderecord-in-val n) (noderecord-out-val n)))
 
+(define (adjoin-levels name level levels)
+  (if (assoc name levels)
+    levels
+    (append levels (list (cons name level)))))
+
+(define (get-level name nodes levels)
+  (let ((lvl (assoc-ref levels name)))
+    (if (number? lvl)
+      (begin
+        (display (format #f "Found node: ~a, level: ~a\n" name lvl)) ; troubleshooting output
+        lvl)
+      (let* ((node (assoc-ref nodes name))
+             (parents (noderecord-in-links node)))
+        (display (format #f "Processing node: ~a\n" name)) ; troubleshooting output
+        (if (= (length parents) 0)
+          0
+          (+ 1 (max-parent-level parents nodes levels)))))))
+
+(define (max-parent-level parents nodes levels)
+  (let ((max-parent-lvl 0))
+    (for-each (lambda (parent)
+                (let* ((pname (linkrecord-source parent))
+                       (plvl (get-level pname nodes levels)))
+                  (display (format #f "Processing parent: ~a, parent level: ~a\n" pname plvl)) ; troubleshooting output
+                  (if (number? plvl)
+                    (begin
+                      (if (> plvl max-parent-lvl)
+                        (set! max-parent-lvl plvl))))))
+              parents)
+    max-parent-lvl))
+
+(define (populate-levels nodes style)
+  (let ((levels '()))
+    (for-each (lambda (n)
+                (let* ((name (car n))
+                       (type (noderecord-type (cdr n))))
+                  (if (string=? style "dynamic")
+                    ;; dynamic leveling based on longest path from root nodes (those with no in-links)
+                    (set! levels (adjoin-levels name (get-level name nodes levels) levels))
+                    ;; fixed leveling based on GnuCash account types
+                    (set! levels (adjoin-levels name (case type
+                                                        ((10) 0) ; equity
+                                                        ((8) 1)  ; income
+                                                        ((2) 2)  ; asset
+                                                        ((4) 3)  ; liability
+                                                        ((9) 4)  ; expense
+                                                        (else 5)) levels))))) ; other/unknown types
+      nodes)
+  levels))
+
+;;
+;; Scheme->JS functions are temporary until we migrate everything to Scheme only rendering
+;;
+
 ;; This function converts the links data structure into a JavaScript array of objects string.
 (define (links->js-array links)
   (string-append "["
@@ -241,6 +295,17 @@
       ",")
     "}"))
 
+;; This function converts the levels data structure into a JavaScript object literal string.
+(define (levels->js-array levels)
+  (string-append "{"
+    (string-join
+      (map (lambda (lvl)
+            (format #f "'~a': ~d" (car lvl) (cdr lvl)))
+          levels)
+      ",")
+    "}"))
+
+;; This function generates the inline CSS style string for the chart container div, based on the specified height.
 (define (chart-div-style height)
   (format #f "style='width: 100%;
   height: ~apx;
@@ -251,6 +316,7 @@
   box-sizing: border-box;'
   " (* 2.5 height)))
 
+;; This is the inline CSS style string for the message div that displays errors or no-data messages.
 (define message-div-style "style='padding: 10px;
   font-family: sans-serif;'
   ")
@@ -267,6 +333,7 @@
     return fallbackColor;
   }")
 
+;; These function determines the x-axis level for each node, fixed based on GnuCash account types
 (define x-axis-fixed-js "
   function getLevel(name) {
     if (levels[name] !== undefined) return levels[name];
@@ -280,6 +347,7 @@
     return levels[name];
   }")
 
+;; These function determines the x-axis level for each node, dynamically based on longest path from root nodes
 (define x-axis-dynamic-js "
   function getLevel(name) {
     if (levels[name] !== undefined) return levels[name];
@@ -306,10 +374,10 @@
 
   try {
     // 3. TOPOLOGICAL LEVELING (X-AXIS COLUMNS)
-    for (var name in nodes) {
-      getLevel(name);
-      //console.log(name + ': ' + levels[name]);
-    }
+    //for (var name in nodes) {
+    //  getLevel(name);
+    //  //console.log(name + ': ' + levels[name]);
+    //}
 
     // Group nodes by levels
     var maxLevel = 0;
@@ -478,6 +546,9 @@
         (push "</div>\n"))
       ;; otherwise render the chart
       (let* ((nodes (populate-nodes links))
+             (style (gnc:html-sankey-x-axis-style sankey))
+             (levels (populate-levels nodes style))
+             (js-levels (levels->js-array levels))
              (js-nodes (nodes->js-array nodes)))
         (begin
           (push "  </div>\n")
@@ -486,9 +557,10 @@
           ; (push (format #f "<!-- links: ~a -->\n" links)) ; troubleshooting output
           (push "<script>\n")
           (push "(function () {\n")
+          (push "  // JS DATA\n")
           (push (format #f "  var links = ~a;\n" js-links))
           (push (format #f "  var nodes = ~a;\n" js-nodes))
-          (push "  var levels = {};\n\n")
+          (push (format #f "  var levels = ~a;\n\n" js-levels))
           (push "  // SVG/NODE SIZING CONFIG\n")
           (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
           (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
@@ -502,9 +574,9 @@
           (push (format #f "  var equityColor = '~a';\n" (gnc:html-sankey-equity-color sankey)))
           (push (format #f "  var fallbackColor = '~a';\n" (gnc:html-sankey-fallback-color sankey)))
           (push (format #f "~a;\n" js-node-color))
-          (if (string=? (gnc:html-sankey-x-axis-style sankey) "dynamic")
-            (push (format #f "~a;\n" x-axis-dynamic-js))
-            (push (format #f "~a;\n" x-axis-fixed-js)))
+          ; (if (string=? style "dynamic")
+          ;   (push (format #f "~a;\n" x-axis-dynamic-js))
+          ;   (push (format #f "~a;\n" x-axis-fixed-js)))
           (push (format #f "~a;\n" js-sankey))
           (push "})();")
           (push "</script>\n"))))
