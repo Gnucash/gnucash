@@ -194,50 +194,55 @@
     levels
     (append levels (list (cons name level)))))
 
-(define (get-level name nodes levels)
-  (let ((lvl (assoc-ref levels name)))
+;; levels-cell is a mutable (list <alist>) so the cache is shared across all recursive calls.
+;; visiting is the set of nodes currently on the call stack, used to detect cycles.
+(define (get-level name nodes levels-cell visiting)
+  (let ((lvl (assoc-ref (car levels-cell) name)))
+    ; (display (format #f "Processing node: ~a\n" name)) ; troubleshooting output
     (if (number? lvl)
-      (begin
-        (display (format #f "Found node: ~a, level: ~a\n" name lvl)) ; troubleshooting output
-        lvl)
-      (let* ((node (assoc-ref nodes name))
-             (parents (noderecord-in-links node)))
-        (display (format #f "Processing node: ~a\n" name)) ; troubleshooting output
-        (if (= (length parents) 0)
-          0
-          (+ 1 (max-parent-level parents nodes levels)))))))
+      lvl
+      (if (member name visiting)
+        0  ; cycle detected — treat node as a root
+        (let* ((node (assoc-ref nodes name))
+               (parents (noderecord-in-links node))
+               (computed (if (= (length parents) 0)
+                           0
+                           (+ 1 (max-parent-level parents nodes levels-cell (cons name visiting))))))
+          (set-car! levels-cell (adjoin-levels name computed (car levels-cell)))
+          computed)))))
 
-(define (max-parent-level parents nodes levels)
+(define (max-parent-level parents nodes levels-cell visiting)
   (let ((max-parent-lvl 0))
     (for-each (lambda (parent)
                 (let* ((pname (linkrecord-source parent))
-                       (plvl (get-level pname nodes levels)))
-                  (display (format #f "Processing parent: ~a, parent level: ~a\n" pname plvl)) ; troubleshooting output
-                  (if (number? plvl)
-                    (begin
-                      (if (> plvl max-parent-lvl)
-                        (set! max-parent-lvl plvl))))))
+                       (plvl (get-level pname nodes levels-cell visiting)))
+                  ; (display (format #f "Processing parent: ~a, parent level: ~a\n" pname plvl)) ; troubleshooting output
+                  (if (and (number? plvl) (> plvl max-parent-lvl))
+                    (set! max-parent-lvl plvl))))
               parents)
     max-parent-lvl))
 
 (define (populate-levels nodes style)
-  (let ((levels '()))
+  (let ((levels-cell (list '())))
     (for-each (lambda (n)
                 (let* ((name (car n))
                        (type (noderecord-type (cdr n))))
                   (if (string=? style "dynamic")
                     ;; dynamic leveling based on longest path from root nodes (those with no in-links)
-                    (set! levels (adjoin-levels name (get-level name nodes levels) levels))
+                    (get-level name nodes levels-cell '())
                     ;; fixed leveling based on GnuCash account types
-                    (set! levels (adjoin-levels name (case type
-                                                        ((10) 0) ; equity
-                                                        ((8) 1)  ; income
-                                                        ((2) 2)  ; asset
-                                                        ((4) 3)  ; liability
-                                                        ((9) 4)  ; expense
-                                                        (else 5)) levels))))) ; other/unknown types
+                    (set-car! levels-cell
+                      (adjoin-levels name
+                        (case type
+                          ((10) 0) ; equity
+                          ((8) 1)  ; income
+                          ((2) 2)  ; asset
+                          ((4) 3)  ; liability
+                          ((9) 4)  ; expense
+                          (else 5)) ; other/unknown types
+                        (car levels-cell))))))
       nodes)
-  levels))
+    (car levels-cell)))
 
 ;;
 ;; Scheme->JS functions are temporary until we migrate everything to Scheme only rendering
