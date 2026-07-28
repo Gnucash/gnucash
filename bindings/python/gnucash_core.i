@@ -198,7 +198,7 @@ GNC_ACCEPT_WRAPPER(GncEntry)
 %typemap(out) GncOwner * {
     GncOwnerType owner_type = gncOwnerGetType($1);
     PyObject * owner_tuple = PyTuple_New(2);
-    PyTuple_SetItem(owner_tuple, 0, PyInt_FromLong( (long) owner_type ) );
+    PyTuple_SetItem(owner_tuple, 0, PyLong_FromLong( (long) owner_type ) );
     PyObject * swig_wrapper_object;
     if (owner_type == GNC_OWNER_CUSTOMER ){
         swig_wrapper_object = SWIG_NewPointerObj(
