@@ -29,11 +29,12 @@ if (WITH_SQL)
     ${backend_dbi_noinst_HEADERS}
   )
 
-  set(WINSOCK_LIB "")
-  if(MINGW64)
-    set(WINSOCK_LIB "-lws2_32")
+  target_link_libraries(gncmod-backend-dbi
+    PUBLIC gnc-backend-sql gnc-engine
+    PRIVATE ${LIBDBI_LIBRARY})
+  if(WIN32)
+    target_link_libraries(gncmod-backend-dbi PRIVATE ws2_32)
   endif()
-  target_link_libraries(gncmod-backend-dbi gnc-backend-sql gnc-engine ${LIBDBI_LIBRARY} ${WINSOCK_LIB})
 
   target_compile_definitions(gncmod-backend-dbi PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.dbi\")
 
