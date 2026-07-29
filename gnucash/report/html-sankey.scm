@@ -198,7 +198,7 @@
 ;; visiting is the set of nodes currently on the call stack, used to detect cycles.
 (define (get-level name nodes levels-cell visiting)
   (let ((lvl (assoc-ref (car levels-cell) name)))
-    ; (display (format #f "Processing node: ~a\n" name)) ; troubleshooting output
+    ; (display (format #f "Processing levels for node: ~a\n" name)) ; troubleshooting output
     (if (number? lvl)
       lvl
       (if (member name visiting)
@@ -243,6 +243,26 @@
                         (car levels-cell))))))
       nodes)
     (car levels-cell)))
+
+(define (max-level levels)
+  (let ((max-lvl 0))
+    (for-each (lambda (lvl)
+                (if (> (cdr lvl) max-lvl)
+                  (set! max-lvl (cdr lvl))))
+              levels)
+    max-lvl))
+
+(define (populate-cols max-level nodes levels)
+  (let ((cols (make-vector (+ max-level 1) '())))
+    (for-each (lambda (n)
+                (let* ((name (car n))
+                       (level (assoc-ref levels name)))
+                  ; (display (format #f "Populating columns with node: ~a, level: ~a\n" name level)) ; troubleshooting output
+                  (vector-set! cols level
+                    (append (vector-ref cols level) (list n)))))
+              nodes)
+    (filter (lambda (col) (not (null? col)))
+            (vector->list cols))))
 
 ;;
 ;; Scheme->JS functions are temporary until we migrate everything to Scheme only rendering
@@ -310,6 +330,24 @@
       ",")
     "}"))
 
+;; This function converts the cols data structure into a JavaScript array of arrays string.
+;; Each element emits nodes['name'] so that col entries are live references to the nodes dict,
+;; ensuring mutations (x0, y0, h, sourceOffset, targetOffset) are reflected in both structures.
+(define (cols->js-array cols)
+  (string-append "["
+    (string-join
+      (map (lambda (col)
+            (string-append "["
+              (string-join
+                (map (lambda (n)
+                      (format #f "nodes['~a']" (car n)))
+                    col)
+                ",")
+              "]"))
+          cols)
+      ",")
+    "]"))
+
 ;; This function generates the inline CSS style string for the chart container div, based on the specified height.
 (define (chart-div-style height)
   (format #f "style='width: 100%;
@@ -338,74 +376,11 @@
     return fallbackColor;
   }")
 
-;; These function determines the x-axis level for each node, fixed based on GnuCash account types
-(define x-axis-fixed-js "
-  function getLevel(name) {
-    if (levels[name] !== undefined) return levels[name];
-    var type = nodes[name].type;
-    if (type == 10) levels[name] = 0;
-    else if (type == 8) levels[name] = 1;
-    else if (type == 2) levels[name] = 2;
-    else if (type == 4) levels[name] = 3;
-    else if (type == 9) levels[name] = 4;
-    else levels[name] = 5;
-    return levels[name];
-  }")
-
-;; These function determines the x-axis level for each node, dynamically based on longest path from root nodes
-(define x-axis-dynamic-js "
-  function getLevel(name) {
-    if (levels[name] !== undefined) return levels[name];
-    var node = nodes[name];
-    if (node.inLinks.length === 0) {
-      levels[name] = 0;
-      return levels[name];
-    }
-    var maxParentLvl = 0;
-    for (var j = 0;
-          j < node.inLinks.length;
-          j++) {
-      var pName = node.inLinks[j].source;
-      var pLvl = getLevel(pName);
-      if (pLvl > maxParentLvl) maxParentLvl = pLvl;
-    }
-    levels[name] = maxParentLvl + 1;
-    return levels[name];
-  }")
-
 (define js-sankey "
   var chartDiv = document.getElementById('sankey_chart');
   var messageDiv = document.getElementById('sankey_message');
 
   try {
-    // 3. TOPOLOGICAL LEVELING (X-AXIS COLUMNS)
-    //for (var name in nodes) {
-    //  getLevel(name);
-    //  //console.log(name + ': ' + levels[name]);
-    //}
-
-    // Group nodes by levels
-    var maxLevel = 0;
-    for (var name in levels) {
-      if (levels[name] > maxLevel) maxLevel = levels[name];
-    }
-
-    var cols = [];
-    for (var l = 0;
-          l <= maxLevel;
-          l++) {
-      cols.push([]);
-    }
-    for (var name in nodes) {
-      var lvl = levels[name];
-      cols[lvl].push(nodes[name]);
-    }
-
-    cols = cols.filter(function(col) {
-      return col.length > 0;
-      });
-    var numCols = cols.length;
-
     // 4. VERTICAL ALIGNMENT AND SCALING
     var maxColVal = 0;
     var maxColNodes = 0;
@@ -551,10 +526,14 @@
         (push "</div>\n"))
       ;; otherwise render the chart
       (let* ((nodes (populate-nodes links))
+             (js-nodes (nodes->js-array nodes))
              (style (gnc:html-sankey-x-axis-style sankey))
              (levels (populate-levels nodes style))
              (js-levels (levels->js-array levels))
-             (js-nodes (nodes->js-array nodes)))
+             (max-lvl (max-level levels))
+             (js-nodes (nodes->js-array nodes))
+             (cols (populate-cols max-lvl nodes levels))
+             (js-cols (cols->js-array cols)))
         (begin
           (push "  </div>\n")
           (push "</div>\n")
@@ -562,10 +541,15 @@
           ; (push (format #f "<!-- links: ~a -->\n" links)) ; troubleshooting output
           (push "<script>\n")
           (push "(function () {\n")
-          (push "  // JS DATA\n")
-          (push (format #f "  var links = ~a;\n" js-links))
-          (push (format #f "  var nodes = ~a;\n" js-nodes))
-          (push (format #f "  var levels = ~a;\n\n" js-levels))
+          (push "  // AGGREGATE LINKS DATA\n")
+          (push (format #f "  var links = ~a;\n\n" js-links))
+          (push "  // DISCOVER UNIQUE NODES & ACCUMULATE TOTALS\n")
+          (push (format #f "  var nodes = ~a;\n\n" js-nodes))
+          (push "  // TOPOLOGICAL LEVELING (X-AXIS COLUMNS) \n")
+          (push (format #f "  var levels = ~a;\n" js-levels))
+          (push (format #f "  var maxLevel = ~a;\n" max-lvl))
+          (push (format #f "  var cols = ~a;\n" js-cols))
+          (push "  var numCols = cols.length;\n\n")
           (push "  // SVG/NODE SIZING CONFIG\n")
           (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
           (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
@@ -579,9 +563,6 @@
           (push (format #f "  var equityColor = '~a';\n" (gnc:html-sankey-equity-color sankey)))
           (push (format #f "  var fallbackColor = '~a';\n" (gnc:html-sankey-fallback-color sankey)))
           (push (format #f "~a;\n" js-node-color))
-          ; (if (string=? style "dynamic")
-          ;   (push (format #f "~a;\n" x-axis-dynamic-js))
-          ;   (push (format #f "~a;\n" x-axis-fixed-js)))
           (push (format #f "~a;\n" js-sankey))
           (push "})();")
           (push "</script>\n"))))
