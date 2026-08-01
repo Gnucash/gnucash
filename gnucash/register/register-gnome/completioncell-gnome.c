@@ -620,7 +620,7 @@ select_first_entry_in_list (PopBox* box)
 
     gtk_tree_model_get (model, &iter, TEXT_COL, &string, -1);
 
-    gnc_item_list_select (box->item_list, string);
+    gnc_item_list_select (box->item_list, DONT_TEXT);
 
     GtkTreePath* path = gtk_tree_path_new_first ();
     gtk_tree_view_scroll_to_cell (box->item_list->tree_view,
