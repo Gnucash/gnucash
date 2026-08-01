@@ -82,6 +82,7 @@ developing over time"))
 (define optname-fullname (N_ "Show long account names"))
 
 (define optname-chart-type (N_ "Chart Type"))
+(define optname-tooltip-indexed (N_ "Show indexed tooltip"))
 
 (define optname-stacked (N_ "Use Stacked Charts"))
 (define optname-slices (N_ "Maximum Bars"))
@@ -182,6 +183,12 @@ developing over time"))
      options gnc:pagename-display
      optname-sort-method "g" 'amount)
 
+    (gnc-register-simple-boolean-option options
+     gnc:pagename-display optname-tooltip-indexed
+     "h" (N_ "INDEX-ed tooltip presents all data from a selected date. NON-indexed - only a single one that is the closest to the coursor")
+     #t)
+
+
     (gnc:options-set-default-section options gnc:pagename-general)
 
     options))
@@ -237,6 +244,7 @@ developing over time"))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
          (sort-method (get-option gnc:pagename-display optname-sort-method))
+         (tooltip-indexed (get-option gnc:pagename-display optname-tooltip-indexed))
 
          (work-done 0)
          (work-to-do 0)
@@ -523,6 +531,8 @@ Please deselect the accounts with negative balances."))
 
             (gnc:html-chart-set-width! chart width)
             (gnc:html-chart-set-height! chart height)
+
+            (gnc:html-chart-set-tooltip-indexed?! chart tooltip-indexed)
 
             (gnc:html-chart-set-data-labels! chart date-string-list)
             (gnc:html-chart-set-y-axis-label!

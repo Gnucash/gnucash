@@ -57,6 +57,7 @@
 (define opthelp-line-width (N_ "Set line width in pixels."))
 
 (define optname-markers (N_ "Data markers?"))
+(define optname-tooltip-indexed (N_ "Show indexed tooltip?"))
 
 ;;(define optname-x-grid (N_ "X grid"))
 (define optname-y-grid (N_ "Grid"))
@@ -147,6 +148,12 @@
             #t)
           ))
 
+          (gnc-register-simple-boolean-option options
+            gnc:pagename-display optname-tooltip-indexed
+            "h" (N_ "INDEX-ed tooltip presents all data from a selected date. NON-indexed - only the one that is the closest to the coursor.")
+            #t)
+
+
     (gnc:options-set-default-section options gnc:pagename-general)
 
     options))
@@ -182,6 +189,7 @@
          (show-net? (get-option gnc:pagename-display (if inc-exp?
                                                          optname-show-profit
                                                          optname-net-bars)))
+         (tooltip-indexed (get-option gnc:pagename-display optname-tooltip-indexed))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
          (markers (and linechart?
@@ -313,6 +321,7 @@
        (gnc:html-chart-set-height! chart height)
        (gnc:html-chart-set-title!
         chart (list report-title (gnc-date-interval-format from-date-t64 to-date-t64)))
+       (gnc:html-chart-set-tooltip-indexed?! chart tooltip-indexed)
        (gnc:html-chart-set-y-axis-label!
         chart (gnc-commodity-get-mnemonic report-currency))
        (gnc:html-chart-set-grid?! chart y-grid)
