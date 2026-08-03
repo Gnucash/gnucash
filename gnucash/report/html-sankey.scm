@@ -264,6 +264,161 @@
     (filter (lambda (col) (not (null? col)))
             (vector->list cols))))
 
+;; Calculate the sum of node values in a single column
+(define (calculate-col-value col)
+  (let ((sum 0))
+    (for-each (lambda (node-pair)
+                (set! sum (+ sum (noderecord-val (cdr node-pair)))))
+              col)
+    sum))
+
+;; Calculate maximum column value and maximum nodes count from cols
+;; Returns a pair (max-col-val . max-col-nodes)
+(define (calculate-col-stats cols)
+  (let ((max-col-val 0)
+        (max-col-nodes 0))
+    (for-each (lambda (col)
+                (let ((col-val (calculate-col-value col)))
+                  (if (> col-val max-col-val)
+                    (set! max-col-val col-val))
+                  (if (> (length col) max-col-nodes)
+                    (set! max-col-nodes (length col)))))
+              cols)
+    (cons max-col-val max-col-nodes)))
+
+;; Minimal list sorter to avoid depending on modules not present in older Guile builds.
+(define (list-sort pred lst)
+  (define (insert x sorted)
+    (if (null? sorted)
+      (list x)
+      (if (pred x (car sorted))
+        (cons x sorted)
+        (cons (car sorted) (insert x (cdr sorted))))))
+  (let loop ((rest lst)
+             (acc '()))
+    (if (null? rest)
+      acc
+      (loop (cdr rest) (insert (car rest) acc)))))
+
+;; Sort nodes in a column descending by rendered node value.
+(define (sort-col-by-node-val col)
+  (list-sort
+    (lambda (a b)
+      (> (noderecord-val (cdr a))
+         (noderecord-val (cdr b))))
+    col))
+
+;; Mutate nodes in one column with x/y/height and reset link offsets.
+(define (layout-col! col col-index col-width node-width node-padding scale start-y)
+  (let loop ((remaining col)
+             (current-y start-y))
+    (if (null? remaining)
+      #t
+      (let* ((node (cdar remaining))
+             (x0 (* col-index col-width))
+             (h (* (noderecord-val node) scale)))
+        (set-noderecord-x0! node x0)
+        (set-noderecord-x1! node (+ x0 node-width))
+        (set-noderecord-y0! node current-y)
+        (set-noderecord-h! node h)
+        (set-noderecord-source-offset! node 0)
+        (set-noderecord-target-offset! node 0)
+        (loop (cdr remaining)
+              (+ current-y h node-padding))))))
+
+;; Compute node geometry by column and return sorted/positioned columns.
+(define (populate-node-layout! cols width height node-width node-padding scale)
+  (let* ((num-cols (length cols))
+         (col-width (if (> num-cols 1)
+                      (/ (- width node-width) (- num-cols 1))
+                      width)))
+    (let loop ((col-index 0)
+               (remaining cols)
+               (positioned-cols '()))
+      (if (null? remaining)
+        (reverse positioned-cols)
+        (let* ((col (sort-col-by-node-val (car remaining)))
+               (total-col-val (calculate-col-value col))
+               (total-col-height (+ (* total-col-val scale)
+                                    (* (- (length col) 1) node-padding)))
+               (start-y (/ (- height total-col-height) 2)))
+          (layout-col! col col-index col-width node-width node-padding scale start-y)
+          (loop (+ col-index 1)
+                (cdr remaining)
+                (cons col positioned-cols)))))))
+
+;; Raw link helpers for readability.
+(define (raw-link-source-name link)
+  (car (car link)))
+
+(define (raw-link-source-type link)
+  (cadr (car link)))
+
+(define (raw-link-target-name link)
+  (car (cadr link)))
+
+(define (raw-link-target-type link)
+  (cadr (cadr link)))
+
+(define (raw-link-value link)
+  (caddr link))
+
+(define (reset-node-offsets! nodes)
+  (for-each (lambda (n)
+              (let ((node (cdr n)))
+                (set-noderecord-source-offset! node 0)
+                (set-noderecord-target-offset! node 0)))
+            nodes))
+
+(define (link-routing< a b nodes)
+  (let* ((a-src (assoc-ref nodes (raw-link-source-name a)))
+         (b-src (assoc-ref nodes (raw-link-source-name b)))
+         (a-src-y (noderecord-y0 a-src))
+         (b-src-y (noderecord-y0 b-src)))
+    (if (< a-src-y b-src-y)
+      #t
+      (if (> a-src-y b-src-y)
+        #f
+        (let* ((a-dst (assoc-ref nodes (raw-link-target-name a)))
+               (b-dst (assoc-ref nodes (raw-link-target-name b)))
+               (a-dst-y (noderecord-y0 a-dst))
+               (b-dst-y (noderecord-y0 b-dst)))
+          (< a-dst-y b-dst-y))))))
+
+;; Route links in Scheme so JS only needs to emit SVG path and text elements.
+;; Output tuple format:
+;; (source s-type target t-type value x0 x1 y-start y-end dx link-h)
+(define (route-links! links nodes scale)
+  (let ((sorted-links (list-sort (lambda (a b) (link-routing< a b nodes)) links)))
+    (reset-node-offsets! nodes)
+    (let loop ((remaining sorted-links)
+               (acc '()))
+      (if (null? remaining)
+        (reverse acc)
+        (let* ((l (car remaining))
+               (src-name (raw-link-source-name l))
+               (src-type (raw-link-source-type l))
+               (dst-name (raw-link-target-name l))
+               (dst-type (raw-link-target-type l))
+               (val (raw-link-value l))
+               (snode (assoc-ref nodes src-name))
+               (tnode (assoc-ref nodes dst-name))
+               (link-h (* val scale))
+               (y-start (+ (noderecord-y0 snode)
+                           (noderecord-source-offset snode)
+                           (/ link-h 2)))
+               (y-end (+ (noderecord-y0 tnode)
+                         (noderecord-target-offset tnode)
+                         (/ link-h 2)))
+               (x0 (noderecord-x1 snode))
+               (x1 (noderecord-x0 tnode))
+               (dx (/ (- x1 x0) 2)))
+          (set-noderecord-source-offset! snode (+ (noderecord-source-offset snode) link-h))
+          (set-noderecord-target-offset! tnode (+ (noderecord-target-offset tnode) link-h))
+          (loop (cdr remaining)
+                (cons (list src-name src-type dst-name dst-type val x0 x1 y-start y-end dx link-h)
+                      acc)))))))
+
 ;;
 ;; Scheme->JS functions are temporary until we migrate everything to Scheme only rendering
 ;;
@@ -300,6 +455,27 @@
       ",")
     "]"))
 
+;; Convert pre-routed links generated by route-links! into JS objects.
+(define (routed-links->js-array routed-links)
+  (string-append "["
+    (string-join
+      (map (lambda (l)
+            (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f, x0: ~,4f, x1: ~,4f, yStart: ~,4f, yEnd: ~,4f, dx: ~,4f, linkH: ~,4f}"
+              (js-escape (list-ref l 0))
+              (list-ref l 1)
+              (js-escape (list-ref l 2))
+              (list-ref l 3)
+              (list-ref l 4)
+              (list-ref l 5)
+              (list-ref l 6)
+              (list-ref l 7)
+              (list-ref l 8)
+              (list-ref l 9)
+              (list-ref l 10)))
+          routed-links)
+      ",")
+    "]"))
+
 ;; This function converts the nodes data structure into a JavaScript object literal string.
 (define (nodes->js-array nodes)
   (string-append "{"
@@ -307,7 +483,7 @@
       (map (lambda (n)
             (let ((name (car n))
                   (node (cdr n)))
-              (format #f "'~a': {'name': '~a', 'type': ~d, 'val': ~,2f, 'inLinks': [~a], 'outLinks': [~a]}"
+              (format #f "'~a': {'name': '~a', 'type': ~d, 'val': ~,2f, 'inLinks': [~a], 'outLinks': [~a], 'x0': ~,4f, 'x1': ~,4f, 'y0': ~,4f, 'h': ~,4f, 'sourceOffset': ~,4f, 'targetOffset': ~,4f}"
                 (js-escape name)          ;; Account name
                 (js-escape (noderecord-name node)) ;; Account name
                 (noderecord-type node) ;; Account type
@@ -332,6 +508,12 @@
                           (linkrecord-value l))) ;; Flow value
                     (noderecord-out-links node)) ;; Out-links list of records
                   ",")
+                (noderecord-x0 node)      ;; left x
+                (noderecord-x1 node)      ;; right x
+                (noderecord-y0 node)      ;; top y
+                (noderecord-h node)       ;; height
+                (noderecord-source-offset node) ;; source offset
+                (noderecord-target-offset node) ;; target offset
                 )))
           nodes)
       ",")
@@ -411,71 +593,6 @@
   }
 
   try {
-    // 4. VERTICAL ALIGNMENT AND SCALING
-    var maxColVal = 0;
-    var maxColNodes = 0;
-    for (var c = 0;
-          c < cols.length;
-          c++) {
-      var col = cols[c];
-      var colVal = 0;
-      for (var n = 0;
-            n < col.length;
-            n++) {
-        colVal += col[n].val;
-      }
-      if (colVal > maxColVal) maxColVal = colVal;
-      if (col.length > maxColNodes) maxColNodes = col.length;
-    }
-
-    var usableHeight = height - (maxColNodes + 1) * nodePadding;
-    var scale = maxColVal > 0 ? (usableHeight / maxColVal) : 1;
-
-    // Position nodes inside columns (dynamically centered)
-    var colWidth = numCols > 1 ? ((width - nodeWidth) / (numCols - 1)) : width;
-
-    for (var c = 0;
-          c < cols.length;
-          c++) {
-      var col = cols[c];
-      col.sort(function(a, b) {
-        return b.val - a.val;
-      });
-
-      var totalColVal = 0;
-      for (var n = 0;
-            n < col.length;
-            n++) {
-        totalColVal += col[n].val;
-      }
-      var totalColHeight = (totalColVal * scale) + (col.length - 1) * nodePadding;
-      var currentY = (height - totalColHeight) / 2;
-
-      for (var n = 0;
-            n < col.length;
-            n++) {
-        var node = col[n];
-        node.x0 = c * colWidth;
-        node.x1 = node.x0 + nodeWidth;
-        node.y0 = currentY;
-        node.h = node.val * scale;
-        node.y1 = currentY + node.h;
-
-        node.sourceOffset = 0;
-        node.targetOffset = 0;
-
-        currentY += node.h + nodePadding;
-      }
-    }
-
-    // Sort links to minimize crossings
-    links.sort(function(a, b) {
-      var ya = nodes[a.source].y0;
-      var yb = nodes[b.source].y0;
-      if (ya !== yb) return ya - yb;
-      return nodes[a.target].y0 - nodes[b.target].y0;
-    });
-
     // 5. GENERATE SVG
     var svgParts = [];
     svgParts.push('<svg viewBox=\"0 0 ' + width + ' ' + height + '\" style=\"width: 100%; height: auto; font-family: sans-serif;\">');
@@ -483,19 +600,12 @@
     // DRAW LINKS (Bezier S-Curves)
     for (var i = 0; i < links.length; i++) {
       var l = links[i];
-      var sNode = nodes[l.source];
-      var tNode = nodes[l.target];
-
-      var linkH = l.value * scale;
-      var yStart = sNode.y0 + sNode.sourceOffset + (linkH / 2);
-      var yEnd = tNode.y0 + tNode.targetOffset + (linkH / 2);
-
-      sNode.sourceOffset += linkH;
-      tNode.targetOffset += linkH;
-
-      var x0 = sNode.x1;
-      var x1 = tNode.x0;
-      var dx = (x1 - x0) / 2;
+      var linkH = l.linkH;
+      var yStart = l.yStart;
+      var yEnd = l.yEnd;
+      var x0 = l.x0;
+      var x1 = l.x1;
+      var dx = l.dx;
 
       var color = getNodeColor(l.s_type);
       var pathData = 'M' + x0 + ',' + yStart + ' C' + (x0 + dx) + ',' + yStart + ' ' + (x1 - dx) + ',' + yEnd + ' ' + x1 + ',' + yEnd;
@@ -540,14 +650,14 @@
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (links (gnc:html-sankey-links sankey))
-         (js-links (links->js-array links)))
+         (js-links-raw (links->js-array links)))
 
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
     (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style (gnc:html-sankey-height sankey))))
     (push (format #f "  <div id=sankey_message ~a>\n" message-div-style))
 
-    (if (or (string=? js-links "[]") (null? js-links))
+    (if (or (string=? js-links-raw "[]") (null? js-links-raw))
       ;; skip the javascript rendering and just show a message if no data
       (begin
         (push "    <h4>No cash flow data found.</h4>\n")
@@ -556,13 +666,27 @@
         (push "</div>\n"))
       ;; otherwise render the chart
       (let* ((nodes (populate-nodes links))
-             (js-nodes (nodes->js-array nodes))
              (style (gnc:html-sankey-x-axis-style sankey))
              (levels (populate-levels nodes style))
              (js-levels (levels->js-array levels))
              (max-lvl (max-level levels))
              (cols (populate-cols max-lvl nodes levels))
-             (js-cols (cols->js-array cols)))
+             (col-stats (calculate-col-stats cols))
+             (max-col-val (car col-stats))
+             (max-col-nodes (cdr col-stats))
+             (width (gnc:html-sankey-width sankey))
+             (height (gnc:html-sankey-height sankey))
+             (node-padding 18)
+             (node-width 24)
+             (usable-height (- height (* (+ max-col-nodes 1) node-padding)))
+             (scale (if (> max-col-val 0)
+              (/ usable-height max-col-val)
+              1))
+             (positioned-cols (populate-node-layout! cols width height node-width node-padding scale))
+             (routed-links (route-links! links nodes scale))
+             (js-links (routed-links->js-array routed-links))
+             (js-nodes (nodes->js-array nodes))
+             (js-cols (cols->js-array positioned-cols)))
         (begin
           (push "  </div>\n")
           (push "</div>\n")
@@ -582,8 +706,15 @@
           (push "  // SVG/NODE SIZING CONFIG\n")
           (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
           (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
-          (push "  var nodePadding = 18;\n")
-          (push "  var nodeWidth = 24;\n\n")
+          (push (format #f "  var nodePadding = ~a;\n" node-padding))
+          (push (format #f "  var nodeWidth = ~a;\n\n" node-width))
+          (push "  // SCALING (NODE POSITIONS PRECOMPUTED IN SCHEME)\n")
+          (push (format #f "  var maxColVal = ~a;\n" max-col-val))
+          (push (format #f "  var maxColNodes = ~a;\n\n" max-col-nodes))
+          (push "  var usableHeight = height - (maxColNodes + 1) * nodePadding;\n")
+          (push "  var scale = maxColVal > 0 ? (usableHeight / maxColVal) : 1;\n")
+          (push "  // Kept for link thickness and future layout parity checks\n")
+          (push "  var colWidth = numCols > 1 ? ((width - nodeWidth) / (numCols - 1)) : width;\n")
           (push "  // SVG/NODE COLOR CONFIG\n")
           (push (format #f "  var incomeColor = '~a';\n" (gnc:html-sankey-income-color sankey)))
           (push (format #f "  var expenseColor = '~a';\n" (gnc:html-sankey-expense-color sankey)))
