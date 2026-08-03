@@ -268,15 +268,32 @@
 ;; Scheme->JS functions are temporary until we migrate everything to Scheme only rendering
 ;;
 
+;; Escape arbitrary strings so they are safe inside single-quoted JavaScript strings.
+(define (js-escape str)
+  (let ((s (if (string? str) str (format #f "~a" str))))
+    (apply string-append
+      (map (lambda (ch)
+            (cond
+              ((char=? ch #\\) "\\\\")
+              ((char=? ch #\') "\\'")
+              ((char=? ch #\newline) "\\n")
+              ((char=? ch #\return) "\\r")
+              ((char=? ch #\tab) "\\t")
+              ((char=? ch #\<) "\\u003C")
+              ((char=? ch #\>) "\\u003E")
+              ((char=? ch #\&) "\\u0026")
+              (else (string ch))))
+        (string->list s)))))
+
 ;; This function converts the links data structure into a JavaScript array of objects string.
 (define (links->js-array links)
   (string-append "["
     (string-join
       (map (lambda (link)
             (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
-              (car (car link))           ;; Source account name
+              (js-escape (car (car link))) ;; Source account name
               (cadr (car link))          ;; Source account type
-              (car (cadr link))          ;; Destination account name
+              (js-escape (car (cadr link))) ;; Destination account name
               (cadr (cadr link))         ;; Destination account type
               (caddr link)))             ;; Flow value
           links)
@@ -291,16 +308,16 @@
             (let ((name (car n))
                   (node (cdr n)))
               (format #f "'~a': {'name': '~a', 'type': ~d, 'val': ~,2f, 'inLinks': [~a], 'outLinks': [~a]}"
-                name                   ;; Account name
-                (noderecord-name node) ;; Account name
+                (js-escape name)          ;; Account name
+                (js-escape (noderecord-name node)) ;; Account name
                 (noderecord-type node) ;; Account type
                 (noderecord-val node)  ;; Max of in/out value for sizing
                 (string-join
                   (map (lambda (l)
                         (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
-                          (linkrecord-source l)  ;; Source account name
+                          (js-escape (linkrecord-source l))  ;; Source account name
                           (linkrecord-s-type l)  ;; Source account type
-                          (linkrecord-target l)  ;; Destination account name
+                          (js-escape (linkrecord-target l))  ;; Destination account name
                           (linkrecord-t-type l)  ;; Destination account type
                           (linkrecord-value l))) ;; Flow value
                     (noderecord-in-links node))  ;; In-links list of records
@@ -308,9 +325,9 @@
                 (string-join
                   (map (lambda (l)
                         (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
-                          (linkrecord-source l)  ;; Source account name
+                          (js-escape (linkrecord-source l))  ;; Source account name
                           (linkrecord-s-type l)  ;; Source account type
-                          (linkrecord-target l)  ;; Destination account name
+                          (js-escape (linkrecord-target l))  ;; Destination account name
                           (linkrecord-t-type l)  ;; Destination account type
                           (linkrecord-value l))) ;; Flow value
                     (noderecord-out-links node)) ;; Out-links list of records
@@ -325,7 +342,7 @@
   (string-append "{"
     (string-join
       (map (lambda (lvl)
-            (format #f "'~a': ~d" (car lvl) (cdr lvl)))
+            (format #f "'~a': ~d" (js-escape (car lvl)) (cdr lvl)))
           levels)
       ",")
     "}"))
@@ -340,13 +357,17 @@
             (string-append "["
               (string-join
                 (map (lambda (n)
-                      (format #f "nodes['~a']" (car n)))
+                      (format #f "nodes['~a']" (js-escape (car n))))
                     col)
                 ",")
               "]"))
           cols)
       ",")
     "]"))
+
+;;
+;; Inline CSS and JavaScript for rendering the Sankey chart
+;;
 
 ;; This function generates the inline CSS style string for the chart container div, based on the specified height.
 (define (chart-div-style height)
@@ -379,6 +400,15 @@
 (define js-sankey "
   var chartDiv = document.getElementById('sankey_chart');
   var messageDiv = document.getElementById('sankey_message');
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   try {
     // 4. VERTICAL ALIGNMENT AND SCALING
@@ -471,7 +501,7 @@
       var pathData = 'M' + x0 + ',' + yStart + ' C' + (x0 + dx) + ',' + yStart + ' ' + (x1 - dx) + ',' + yEnd + ' ' + x1 + ',' + yEnd;
 
       svgParts.push('<path d=\"' + pathData + '\" fill=\"none\" stroke=\"' + color + '\" stroke-width=\"' + Math.max(1, linkH) + '\" stroke-opacity=\"0.35\">');
-      svgParts.push('  <title>' + l.source + ' &rarr; ' + l.target + ': $' + l.value.toFixed(2) + '</title>');
+      svgParts.push('  <title>' + escapeHtml(l.source) + ' &rarr; ' + escapeHtml(l.target) + ': $' + l.value.toFixed(2) + '</title>');
       svgParts.push('</path>');
     }
 
@@ -483,7 +513,7 @@
 
       svgParts.push('<g>');
       svgParts.push('  <rect x=\"' + node.x0 + '\" y=\"' + node.y0 + '\" width=\"' + nodeWidth + '\" height=\"' + Math.max(2, node.h) + '\" fill=\"' + color + '\" stroke=\"#2c3e50\" stroke-width=\"1\" rx=\"2\" ry=\"2\">');
-      svgParts.push('    <title>' + name + ': $' + node.val.toFixed(2) + '</title>');
+      svgParts.push('    <title>' + escapeHtml(name) + ': $' + node.val.toFixed(2) + '</title>');
       svgParts.push('  </rect>');
 
       // Dynamic label placement (Left aligned on left side of chart, right aligned on right side)
@@ -493,7 +523,7 @@
       var textY = node.y0 + (node.h / 2) + 4;
 
       svgParts.push('  <text x=\"' + textX + '\" y=\"' + textY + '\" text-anchor=\"' + textAnchor + '\" font-size=\"8\" fill=\"#2c3e50\" font-weight=\"bold\">');
-      svgParts.push(     shortName + ' ($' + node.val.toFixed(0) + ')');
+      svgParts.push(     escapeHtml(shortName) + ' ($' + node.val.toFixed(0) + ')');
       svgParts.push('  </text>');
       svgParts.push('</g>');
     }
@@ -531,7 +561,6 @@
              (levels (populate-levels nodes style))
              (js-levels (levels->js-array levels))
              (max-lvl (max-level levels))
-             (js-nodes (nodes->js-array nodes))
              (cols (populate-cols max-lvl nodes levels))
              (js-cols (cols->js-array cols)))
         (begin

@@ -98,11 +98,13 @@
           (for-each 
             (lambda (src-split)
               (let* ((trans (xaccSplitGetParent src-split))
-                     (date (gnc:time64-start-day-time (gnc:date-option-absolute-time (xaccTransGetDate trans))))
-                     (amount (xaccSplitGetAmount src-split)))
+                     ;; Transaction dates are already time64 values.
+                     (date (xaccTransGetDate trans))
+                     ;; Normalize split amount to inexact numeric for arithmetic below.
+                     (amount (gnc-numeric-to-double (xaccSplitGetAmount src-split))))
 
                 ;; Compare dates against the discrete start and end variables
-                (if (and (>= date start-date) (<= date end-date) (< amount 0))
+                (if (and (>= date start-date) (<= date end-date) (< amount 0.0))
                     (let* ((all-splits (xaccTransGetSplitList trans))
                            (dest-splits (filter (lambda (s) (> (gnc-numeric-to-double (xaccSplitGetAmount s)) 0)) all-splits))
                            (total-dest-val (apply + (map (lambda (s) (gnc-numeric-to-double (xaccSplitGetAmount s))) dest-splits))))
