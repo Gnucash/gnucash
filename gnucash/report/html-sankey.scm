@@ -27,6 +27,7 @@
 (use-modules (gnucash report html-utilities))
 (use-modules (gnucash report report-utilities))
 (use-modules (ice-9 format))
+(use-modules (ice-9 hash-table))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
 
@@ -144,20 +145,28 @@
 (define (make-empty-node name)
   (make-noderecord name 0 0 0 '() '() 0 0 0 0 0 0))
 
-(define (adjoin-node name nodes)
-  (if (assoc name nodes)
-    (begin
-      ; (display (format #f "Source node already exists: ~a\n" name)) ; troubleshooting output
-      nodes)
-    (begin
-      ; (display (format #f "Adding source node: ~a\n" name)) ; troubleshooting output
-      (cons (cons name (make-empty-node name)) nodes))))
+(define (index-nodes-by-name nodes)
+  (let ((table (make-hash-table)))
+    (for-each (lambda (n)
+                (hash-set! table (car n) (cdr n)))
+              nodes)
+    table))
 
 ;; This function processes the list of links to build a unique set of nodes,
 ;; while also calculating the total incoming and outgoing values for each node.
 ;; It also associates the relevant links with each node for later use in rendering.
 (define (populate-nodes links)
-  (let ((nodes '()))
+  (let ((nodes '())
+        (nodes-by-name (make-hash-table)))
+    (define (ensure-node! name)
+      (let ((node (hash-ref nodes-by-name name #f)))
+        (if node
+          node
+          (let ((new-node (make-empty-node name)))
+            ; (display (format #f "Adding source node: ~a\n" name)) ; troubleshooting output
+            (set! nodes (cons (cons name new-node) nodes))
+            (hash-set! nodes-by-name name new-node)
+            new-node))))
     (for-each (lambda (link)
                 (let* ((src (car (car link)))
                        (src-type (cadr (car link)))
@@ -165,10 +174,8 @@
                        (dest-type (cadr (cadr link)))
                        (val (caddr link)))
                   ; (display (format #f "Processing link: ~a -> ~a = $~a\n" src dest val)) ; troubleshooting output
-                  (set! nodes (adjoin-node src nodes))
-                  (set! nodes (adjoin-node dest nodes))
-                  (let* ((srcnode (assoc-ref nodes src))
-                         (destnode (assoc-ref nodes dest))
+                  (let* ((srcnode (ensure-node! src))
+                         (destnode (ensure-node! dest))
                          (link-ref (make-linkrecord src src-type dest dest-type val)))
                     (set-noderecord-out-val! srcnode (+ (noderecord-out-val srcnode) val))
                     (set-noderecord-type! srcnode src-type)
@@ -182,39 +189,34 @@
                     ; (display (format #f "Destination node: ~a\n" destnode)) ; troubleshooting output
                   )))
       links)
-    ;; Restore first-seen order after O(1) front insertions in adjoin-node.
+    ;; Restore first-seen order after O(1) front insertions.
     (reverse nodes)))
 
 (define (noderecord-val n)
   (max (noderecord-in-val n) (noderecord-out-val n)))
 
-(define (adjoin-levels name level levels)
-  (if (assoc name levels)
-    levels
-    (append levels (list (cons name level)))))
-
-;; levels-cell is a mutable (list <alist>) so the cache is shared across all recursive calls.
+;; levels is a mutable hash table so the cache is shared across all recursive calls.
 ;; visiting is the set of nodes currently on the call stack, used to detect cycles.
-(define (get-level name nodes levels-cell visiting)
-  (let ((lvl (assoc-ref (car levels-cell) name)))
+(define (get-level name nodes-by-name levels visiting)
+  (let ((lvl (hash-ref levels name #f)))
     ; (display (format #f "Processing levels for node: ~a\n" name)) ; troubleshooting output
     (if (number? lvl)
       lvl
       (if (member name visiting)
         0  ; cycle detected — treat node as a root
-        (let* ((node (assoc-ref nodes name))
+        (let* ((node (hash-ref nodes-by-name name #f))
                (parents (noderecord-in-links node))
                (computed (if (= (length parents) 0)
                            0
-                           (+ 1 (max-parent-level parents nodes levels-cell (cons name visiting))))))
-          (set-car! levels-cell (adjoin-levels name computed (car levels-cell)))
+                           (+ 1 (max-parent-level parents nodes-by-name levels (cons name visiting))))))
+          (hash-set! levels name computed)
           computed)))))
 
-(define (max-parent-level parents nodes levels-cell visiting)
+(define (max-parent-level parents nodes-by-name levels visiting)
   (let ((max-parent-lvl 0))
     (for-each (lambda (parent)
                 (let* ((pname (linkrecord-source parent))
-                       (plvl (get-level pname nodes levels-cell visiting)))
+                       (plvl (get-level pname nodes-by-name levels visiting)))
                   ; (display (format #f "Processing parent: ~a, parent level: ~a\n" pname plvl)) ; troubleshooting output
                   (if (and (number? plvl) (> plvl max-parent-lvl))
                     (set! max-parent-lvl plvl))))
@@ -222,40 +224,40 @@
     max-parent-lvl))
 
 (define (populate-levels nodes style)
-  (let ((levels-cell (list '())))
+  (let ((levels (make-hash-table))
+        (nodes-by-name (index-nodes-by-name nodes)))
     (for-each (lambda (n)
                 (let* ((name (car n))
                        (type (noderecord-type (cdr n))))
                   (if (string=? style "dynamic")
                     ;; dynamic leveling based on longest path from root nodes (those with no in-links)
-                    (get-level name nodes levels-cell '())
+                    (get-level name nodes-by-name levels '())
                     ;; fixed leveling based on GnuCash account types
-                    (set-car! levels-cell
-                      (adjoin-levels name
-                        (case type
-                          ((10) 0) ; equity
-                          ((8) 1)  ; income
-                          ((2) 2)  ; asset
-                          ((4) 3)  ; liability
-                          ((9) 4)  ; expense
-                          (else 5)) ; other/unknown types
-                        (car levels-cell))))))
+                    (hash-set! levels name
+                      (case type
+                        ((10) 0) ; equity
+                        ((8) 1)  ; income
+                        ((2) 2)  ; asset
+                        ((4) 3)  ; liability
+                        ((9) 4)  ; expense
+                        (else 5)))))) ; other/unknown types
       nodes)
-    (car levels-cell)))
+    levels))
 
-(define (max-level levels)
+(define (max-level nodes levels)
   (let ((max-lvl 0))
-    (for-each (lambda (lvl)
-                (if (> (cdr lvl) max-lvl)
-                  (set! max-lvl (cdr lvl))))
-              levels)
+    (for-each (lambda (n)
+                (let ((lvl (hash-ref levels (car n) 0)))
+                  (if (> lvl max-lvl)
+                    (set! max-lvl lvl))))
+              nodes)
     max-lvl))
 
 (define (populate-cols max-level nodes levels)
   (let ((cols (make-vector (+ max-level 1) '())))
     (for-each (lambda (n)
                 (let* ((name (car n))
-                       (level (assoc-ref levels name)))
+                       (level (hash-ref levels name 0)))
                   ; (display (format #f "Populating columns with node: ~a, level: ~a\n" name level)) ; troubleshooting output
                   (vector-set! cols level
                     (cons n (vector-ref cols level)))))
@@ -477,17 +479,17 @@
                 (set-noderecord-target-offset! node 0)))
             nodes))
 
-(define (link-routing< a b nodes)
-  (let* ((a-src (assoc-ref nodes (raw-link-source-name a)))
-         (b-src (assoc-ref nodes (raw-link-source-name b)))
+(define (link-routing< a b nodes-by-name)
+  (let* ((a-src (hash-ref nodes-by-name (raw-link-source-name a) #f))
+         (b-src (hash-ref nodes-by-name (raw-link-source-name b) #f))
          (a-src-y (noderecord-y0 a-src))
          (b-src-y (noderecord-y0 b-src)))
     (if (< a-src-y b-src-y)
       #t
       (if (> a-src-y b-src-y)
         #f
-        (let* ((a-dst (assoc-ref nodes (raw-link-target-name a)))
-               (b-dst (assoc-ref nodes (raw-link-target-name b)))
+        (let* ((a-dst (hash-ref nodes-by-name (raw-link-target-name a) #f))
+               (b-dst (hash-ref nodes-by-name (raw-link-target-name b) #f))
                (a-dst-y (noderecord-y0 a-dst))
                (b-dst-y (noderecord-y0 b-dst)))
           (< a-dst-y b-dst-y))))))
@@ -496,7 +498,8 @@
 ;; Output tuple format:
 ;; (source s-type target t-type value x0 x1 y-start y-end dx link-h)
 (define (route-links! links nodes scale)
-  (let ((sorted-links (sort links (lambda (a b) (link-routing< a b nodes)))))
+  (let* ((nodes-by-name (index-nodes-by-name nodes))
+         (sorted-links (sort links (lambda (a b) (link-routing< a b nodes-by-name)))))
     (reset-node-offsets! nodes)
     (let loop ((remaining sorted-links)
                (acc '()))
@@ -508,8 +511,8 @@
                (dst-name (raw-link-target-name l))
                (dst-type (raw-link-target-type l))
                (val (raw-link-value l))
-               (snode (assoc-ref nodes src-name))
-               (tnode (assoc-ref nodes dst-name))
+               (snode (hash-ref nodes-by-name src-name #f))
+               (tnode (hash-ref nodes-by-name dst-name #f))
                (link-h (* val scale))
                (y-start (+ (noderecord-y0 snode)
                            (noderecord-source-offset snode)
@@ -565,7 +568,7 @@
       (let* ((nodes (populate-nodes links))
              (style (gnc:html-sankey-x-axis-style sankey))
              (levels (populate-levels nodes style))
-             (max-lvl (max-level levels))
+             (max-lvl (max-level nodes levels))
              (cols (populate-cols max-lvl nodes levels))
              (col-stats (calculate-col-stats cols))
              (max-col-val (car col-stats))
