@@ -412,6 +412,77 @@
                      (xml-escape title-text))))
          routed-links)))
 
+(define (last-char-index str ch)
+  (let loop ((i (- (string-length str) 1)))
+    (if (< i 0)
+      #f
+      (if (char=? (string-ref str i) ch)
+        i
+        (loop (- i 1))))))
+
+(define (short-account-name name)
+  (let ((idx (last-char-index name #\:)))
+    (if idx
+      (substring name (+ idx 1) (string-length name))
+      name)))
+
+;; Convert nodes into SVG <g>, <rect>, <title>, and <text> elements.
+(define (nodes->svg-elements nodes width node-width income-color expense-color asset-color liability-color equity-color fallback-color)
+  (apply string-append
+    (map (lambda (n)
+           (let* ((name (car n))
+                  (node (cdr n))
+                  (color (account-type->color
+                           (noderecord-type node)
+                           income-color expense-color asset-color liability-color equity-color fallback-color))
+                  (rect-h (if (> (noderecord-h node) 2) (noderecord-h node) 2))
+                  (is-left-half (< (noderecord-x0 node) (/ width 2)))
+                  (text-x (if is-left-half
+                            (+ (noderecord-x1 node) 8)
+                            (- (noderecord-x0 node) 8)))
+                  (text-anchor (if is-left-half "start" "end"))
+                  (text-y (+ (noderecord-y0 node) (/ (noderecord-h node) 2) 4))
+                  (title-text (format #f "~a: $~,2f" name (noderecord-val node)))
+                  (label-text (format #f "~a ($~,0f)" (short-account-name name) (noderecord-val node))))
+             (format #f "<g><rect x=\"~,4f\" y=\"~,4f\" width=\"~,4f\" height=\"~,4f\" fill=\"~a\" stroke=\"#2c3e50\" stroke-width=\"1\" rx=\"2\" ry=\"2\"><title>~a</title></rect><text x=\"~,4f\" y=\"~,4f\" text-anchor=\"~a\" font-size=\"8\" fill=\"#2c3e50\" font-weight=\"bold\">~a</text></g>"
+                     (noderecord-x0 node)
+                     (noderecord-y0 node)
+                     node-width
+                     rect-h
+                     (xml-escape color)
+                     (xml-escape title-text)
+                     text-x
+                     text-y
+                     text-anchor
+                     (xml-escape label-text))))
+         nodes)))
+
+;; Build a complete SVG element string with links and nodes.
+(define (svg-node-elements width height routed-links nodes node-width income-color expense-color asset-color liability-color equity-color fallback-color)
+  (let ((svg-link-paths (routed-links->svg-paths
+                          routed-links
+                          income-color
+                          expense-color
+                          asset-color
+                          liability-color
+                          equity-color
+                          fallback-color))
+        (svg-node-markup (nodes->svg-elements
+                           nodes
+                           width
+                           node-width
+                           income-color
+                           expense-color
+                           asset-color
+                           liability-color
+                           equity-color
+                           fallback-color)))
+    (format #f "<svg viewBox=\"0 0 ~a ~a\" style=\"width: 100%; height: auto; font-family: sans-serif;\">~a~a</svg>"
+            width
+            height
+            svg-link-paths
+            svg-node-markup)))
+
 (define (reset-node-offsets! nodes)
   (for-each (lambda (n)
               (let ((node (cdr n)))
@@ -434,7 +505,7 @@
                (b-dst-y (noderecord-y0 b-dst)))
           (< a-dst-y b-dst-y))))))
 
-;; Route links in Scheme so JS only needs to emit SVG path and text elements.
+;; Route links in Scheme; SVG elements are rendered in Scheme.
 ;; Output tuple format:
 ;; (source s-type target t-type value x0 x1 y-start y-end dx link-h)
 (define (route-links! links nodes scale)
@@ -469,135 +540,7 @@
                       acc)))))))
 
 ;;
-;; Scheme->JS functions are temporary until we migrate everything to Scheme only rendering
-;;
-
-;; Escape arbitrary strings so they are safe inside single-quoted JavaScript strings.
-(define (js-escape str)
-  (let ((s (if (string? str) str (format #f "~a" str))))
-    (apply string-append
-      (map (lambda (ch)
-            (cond
-              ((char=? ch #\\) "\\\\")
-              ((char=? ch #\') "\\'")
-              ((char=? ch #\newline) "\\n")
-              ((char=? ch #\return) "\\r")
-              ((char=? ch #\tab) "\\t")
-              ((char=? ch #\<) "\\u003C")
-              ((char=? ch #\>) "\\u003E")
-              ((char=? ch #\&) "\\u0026")
-              (else (string ch))))
-        (string->list s)))))
-
-;; This function converts the links data structure into a JavaScript array of objects string.
-(define (links->js-array links)
-  (string-append "["
-    (string-join
-      (map (lambda (link)
-            (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
-              (js-escape (car (car link))) ;; Source account name
-              (cadr (car link))          ;; Source account type
-              (js-escape (car (cadr link))) ;; Destination account name
-              (cadr (cadr link))         ;; Destination account type
-              (caddr link)))             ;; Flow value
-          links)
-      ",")
-    "]"))
-
-;; Convert pre-routed links generated by route-links! into JS objects.
-(define (routed-links->js-array routed-links)
-  (string-append "["
-    (string-join
-      (map (lambda (l)
-            (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f, x0: ~,4f, x1: ~,4f, yStart: ~,4f, yEnd: ~,4f, dx: ~,4f, linkH: ~,4f}"
-              (js-escape (list-ref l 0))
-              (list-ref l 1)
-              (js-escape (list-ref l 2))
-              (list-ref l 3)
-              (list-ref l 4)
-              (list-ref l 5)
-              (list-ref l 6)
-              (list-ref l 7)
-              (list-ref l 8)
-              (list-ref l 9)
-              (list-ref l 10)))
-          routed-links)
-      ",")
-    "]"))
-
-;; This function converts the nodes data structure into a JavaScript object literal string.
-(define (nodes->js-array nodes)
-  (string-append "{"
-    (string-join
-      (map (lambda (n)
-            (let ((name (car n))
-                  (node (cdr n)))
-              (format #f "'~a': {'name': '~a', 'type': ~d, 'val': ~,2f, 'inLinks': [~a], 'outLinks': [~a], 'x0': ~,4f, 'x1': ~,4f, 'y0': ~,4f, 'h': ~,4f, 'sourceOffset': ~,4f, 'targetOffset': ~,4f}"
-                (js-escape name)          ;; Account name
-                (js-escape (noderecord-name node)) ;; Account name
-                (noderecord-type node) ;; Account type
-                (noderecord-val node)  ;; Max of in/out value for sizing
-                (string-join
-                  (map (lambda (l)
-                        (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
-                          (js-escape (linkrecord-source l))  ;; Source account name
-                          (linkrecord-s-type l)  ;; Source account type
-                          (js-escape (linkrecord-target l))  ;; Destination account name
-                          (linkrecord-t-type l)  ;; Destination account type
-                          (linkrecord-value l))) ;; Flow value
-                    (noderecord-in-links node))  ;; In-links list of records
-                  ",")
-                (string-join
-                  (map (lambda (l)
-                        (format #f "{source: '~a', s_type: ~d, target: '~a', t_type: ~d, value: ~,2f}"
-                          (js-escape (linkrecord-source l))  ;; Source account name
-                          (linkrecord-s-type l)  ;; Source account type
-                          (js-escape (linkrecord-target l))  ;; Destination account name
-                          (linkrecord-t-type l)  ;; Destination account type
-                          (linkrecord-value l))) ;; Flow value
-                    (noderecord-out-links node)) ;; Out-links list of records
-                  ",")
-                (noderecord-x0 node)      ;; left x
-                (noderecord-x1 node)      ;; right x
-                (noderecord-y0 node)      ;; top y
-                (noderecord-h node)       ;; height
-                (noderecord-source-offset node) ;; source offset
-                (noderecord-target-offset node) ;; target offset
-                )))
-          nodes)
-      ",")
-    "}"))
-
-;; This function converts the levels data structure into a JavaScript object literal string.
-(define (levels->js-array levels)
-  (string-append "{"
-    (string-join
-      (map (lambda (lvl)
-            (format #f "'~a': ~d" (js-escape (car lvl)) (cdr lvl)))
-          levels)
-      ",")
-    "}"))
-
-;; This function converts the cols data structure into a JavaScript array of arrays string.
-;; Each element emits nodes['name'] so that col entries are live references to the nodes dict,
-;; ensuring mutations (x0, y0, h, sourceOffset, targetOffset) are reflected in both structures.
-(define (cols->js-array cols)
-  (string-append "["
-    (string-join
-      (map (lambda (col)
-            (string-append "["
-              (string-join
-                (map (lambda (n)
-                      (format #f "nodes['~a']" (js-escape (car n))))
-                    col)
-                ",")
-              "]"))
-          cols)
-      ",")
-    "]"))
-
-;;
-;; Inline CSS and JavaScript for rendering the Sankey chart
+;; Inline CSS for rendering the Sankey chart container
 ;;
 
 ;; This function generates the inline CSS style string for the chart container div, based on the specified height.
@@ -616,61 +559,10 @@
   font-family: sans-serif;'
   ")
 
-;; Dynamic color picker based on GnuCash account type
-(define js-node-color "
-  function getNodeColor(type) {
-    //console.log('Account type: ' + type);
-    if (type == 10) return equityColor;
-    if (type == 8) return incomeColor;
-    if (type == 2) return assetColor;
-    if (type == 4) return liabilityColor;
-    if (type == 9) return expenseColor;
-    return fallbackColor;
-  }")
-
-(define js-sankey "
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  try {
-    // DRAW NODES & LABELS
-    for (var name in nodes) {
-      var node = nodes[name];
-      var color = getNodeColor(node.type);
-      var shortName = name.split(':').pop();
-
-      svgParts.push('<g>');
-      svgParts.push('  <rect x=\"' + node.x0 + '\" y=\"' + node.y0 + '\" width=\"' + nodeWidth + '\" height=\"' + Math.max(2, node.h) + '\" fill=\"' + color + '\" stroke=\"#2c3e50\" stroke-width=\"1\" rx=\"2\" ry=\"2\">');
-      svgParts.push('    <title>' + escapeHtml(name) + ': $' + node.val.toFixed(2) + '</title>');
-      svgParts.push('  </rect>');
-
-      // Dynamic label placement (Left aligned on left side of chart, right aligned on right side)
-      var isLeftHalf = node.x0 < (width / 2);
-      var textX = isLeftHalf ? (node.x1 + 8) : (node.x0 - 8);
-      var textAnchor = isLeftHalf ? 'start' : 'end';
-      var textY = node.y0 + (node.h / 2) + 4;
-
-      svgParts.push('  <text x=\"' + textX + '\" y=\"' + textY + '\" text-anchor=\"' + textAnchor + '\" font-size=\"8\" fill=\"#2c3e50\" font-weight=\"bold\">');
-      svgParts.push(     escapeHtml(shortName) + ' ($' + node.val.toFixed(0) + ')');
-      svgParts.push('  </text>');
-      svgParts.push('</g>');
-    }
-  } catch (err) {
-    messageDiv.innerHTML = '<h4>Sankey Visualizer Error</h4><pre>' + err.message + '</pre><p>Try to reduce the date range or the number of accounts selected in Options.</p>';
-    messageDiv.style.color = 'red';
-  }")
-
 (define (gnc:html-sankey-render sankey doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (links (gnc:html-sankey-links sankey))
-         (js-links-raw (links->js-array links))
          (width (gnc:html-sankey-width sankey))
          (height (gnc:html-sankey-height sankey))
          (node-padding 18)
@@ -679,10 +571,10 @@
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
     (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style height)))
-    (push (format #f "  <div id=sankey_message ~a>\n" message-div-style))
+    ; (push (format #f "  <div id=sankey_message ~a>\n" message-div-style))
 
-    (if (or (string=? js-links-raw "[]") (null? js-links-raw))
-      ;; skip the javascript rendering and just show a message if no data
+    (if (null? links)
+      ;; skip SVG output and just show a message if no data
       (begin
         (push "    <h4>No cash flow data found.</h4>\n")
         (push "    <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>\n")
@@ -692,7 +584,6 @@
       (let* ((nodes (populate-nodes links))
              (style (gnc:html-sankey-x-axis-style sankey))
              (levels (populate-levels nodes style))
-             (js-levels (levels->js-array levels))
              (max-lvl (max-level levels))
              (cols (populate-cols max-lvl nodes levels))
              (col-stats (calculate-col-stats cols))
@@ -704,75 +595,21 @@
               1))
              (positioned-cols (populate-node-layout! cols width height node-width node-padding scale))
              (routed-links (route-links! links nodes scale))
-             (svg-link-paths (routed-links->svg-paths
-                               routed-links
-                               (gnc:html-sankey-income-color sankey)
-                               (gnc:html-sankey-expense-color sankey)
-                               (gnc:html-sankey-asset-color sankey)
-                               (gnc:html-sankey-liability-color sankey)
-                               (gnc:html-sankey-equity-color sankey)
-                               (gnc:html-sankey-fallback-color sankey)))
-             (js-links (routed-links->js-array routed-links))
-             (js-nodes (nodes->js-array nodes))
-             (js-cols (cols->js-array positioned-cols)))
+             (svg-markup (svg-node-elements
+                          width
+                          height
+                          routed-links
+                          nodes
+                          node-width
+                          (gnc:html-sankey-income-color sankey)
+                          (gnc:html-sankey-expense-color sankey)
+                          (gnc:html-sankey-asset-color sankey)
+                          (gnc:html-sankey-liability-color sankey)
+                          (gnc:html-sankey-equity-color sankey)
+                          (gnc:html-sankey-fallback-color sankey))))
         (begin
-          (push "  </div>\n")
+          (push svg-markup)
+          ; (push "  </div>\n")
           (push "</div>\n")
-          ; (push (format #f "<!-- nodes: ~a -->\n" nodes)) ; troubleshooting output
-          ; (push (format #f "<!-- links: ~a -->\n" links)) ; troubleshooting output
-          (push "<script>\n")
-          (push "(function () {\n")
-          ; (push "  // AGGREGATE LINKS DATA\n")
-          ; (push (format #f "  var links = ~a;\n" js-links))
-          ; (push "\n")
-          (push "  // DISCOVER UNIQUE NODES & ACCUMULATE TOTALS\n")
-          (push (format #f "  var nodes = ~a;\n" js-nodes))
-          (push "\n")
-          ; (push "  // TOPOLOGICAL LEVELING (X-AXIS COLUMNS) \n")
-          ; (push (format #f "  var levels = ~a;\n" js-levels))
-          ; (push (format #f "  var maxLevel = ~a;\n" max-lvl))
-          ; (push (format #f "  var cols = ~a;\n" js-cols))
-          ; (push "  var numCols = cols.length;\n")
-          ; (push "\n")
-          (push "  // SVG/NODE SIZING CONFIG\n")
-          (push (format #f "  var width = ~a;\n" (gnc:html-sankey-width sankey)))
-          (push (format #f "  var height = ~a;\n" (gnc:html-sankey-height sankey)))
-          (push (format #f "  var nodePadding = ~a;\n" node-padding))
-          (push (format #f "  var nodeWidth = ~a;\n" node-width))
-          (push "\n")
-          (push "  // SCALING (NODE POSITIONS PRECOMPUTED IN SCHEME)\n")
-          (push (format #f "  var maxColVal = ~a;\n" max-col-val))
-          (push (format #f "  var maxColNodes = ~a;\n" max-col-nodes))
-          (push "\n")
-          (push "  var usableHeight = height - (maxColNodes + 1) * nodePadding;\n")
-          (push "  var scale = maxColVal > 0 ? (usableHeight / maxColVal) : 1;\n")
-          ; (push "  // Kept for link thickness and future layout parity checks\n")
-          ; (push "  var colWidth = numCols > 1 ? ((width - nodeWidth) / (numCols - 1)) : width;\n")
-          (push "\n")
-          (push "  // SVG/NODE COLOR CONFIG\n")
-          (push (format #f "  var incomeColor = '~a';\n" (gnc:html-sankey-income-color sankey)))
-          (push (format #f "  var expenseColor = '~a';\n" (gnc:html-sankey-expense-color sankey)))
-          (push (format #f "  var assetColor = '~a';\n" (gnc:html-sankey-asset-color sankey)))
-          (push (format #f "  var liabilityColor = '~a';\n" (gnc:html-sankey-liability-color sankey)))
-          (push (format #f "  var equityColor = '~a';\n" (gnc:html-sankey-equity-color sankey)))
-          (push (format #f "  var fallbackColor = '~a';\n" (gnc:html-sankey-fallback-color sankey)))
-          ; (push "\n")
-          (push (format #f "~a;\n" js-node-color))
-          (push "\n")
-          (push "  var chartDiv = document.getElementById('sankey_chart');\n")
-          (push "  var messageDiv = document.getElementById('sankey_message');\n")
-          (push "\n")
-          (push "  // GENERATE SVG\n")
-          (push "  var svgParts = [];\n")
-          (push "  svgParts.push('<svg viewBox=\"0 0 ' + width + ' ' + height + '\" style=\"width: 100%; height: auto; font-family: sans-serif;\">');\n")
-          (push "\n")
-          (push "  // DRAW LINKS (pre-rendered in Scheme)\n")
-          (push (format #f "  svgParts.push('~a');\n" (js-escape svg-link-paths)))
-          ; (push "\n")
-          (push (format #f "~a;\n" js-sankey))
-          (push "\n")
-          (push "  svgParts.push('</svg>');\n")
-          (push "  chartDiv.innerHTML = svgParts.join('\\n');\n")
-          (push "})();")
-          (push "</script>\n"))))
+          (push "\n"))))
   retval))
