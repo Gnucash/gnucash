@@ -282,26 +282,34 @@
               col)
     sum))
 
-;; Calculate maximum column value and maximum nodes count from cols
-;; Returns a pair (max-col-val . max-col-nodes)
-(define (calculate-col-stats cols)
-  (let ((max-col-val 0)
-        (max-col-nodes 0))
-    (for-each (lambda (col)
-                (let ((col-val (calculate-col-value col)))
-                  (if (> col-val max-col-val)
-                    (set! max-col-val col-val))
-                  (if (> (length col) max-col-nodes)
-                    (set! max-col-nodes (length col)))))
-              cols)
-    (cons max-col-val max-col-nodes)))
-
 ;; Sort nodes in a column descending by rendered node value.
 (define (sort-col-by-node-val col)
   (sort col
         (lambda (a b)
           (> (noderecord-val (cdr a))
              (noderecord-val (cdr b))))))
+
+;; Build sorted columns and compute global layout stats in one pass.
+;; Returns (prepared-cols max-col-val max-col-nodes), where each prepared
+;; column is (sorted-col total-col-val col-size).
+(define (prepare-cols-for-layout cols)
+  (let ((max-col-val 0)
+        (max-col-nodes 0)
+        (prepared-cols '()))
+    (for-each (lambda (col)
+                (let* ((sorted-col (sort-col-by-node-val col))
+                       (col-size (length sorted-col))
+                       (col-val (calculate-col-value sorted-col))
+                       (prepared-col (list sorted-col col-val col-size)))
+                  (if (> col-val max-col-val)
+                    (set! max-col-val col-val))
+                  (if (> col-size max-col-nodes)
+                    (set! max-col-nodes col-size))
+                  (set! prepared-cols (cons prepared-col prepared-cols))))
+              cols)
+    (list (reverse prepared-cols)
+          max-col-val
+          max-col-nodes)))
 
 ;; Mutate nodes in one column with x/y/height and reset link offsets.
 (define (layout-col! col col-index col-width node-width node-padding scale start-y)
@@ -322,25 +330,25 @@
               (+ current-y h node-padding))))))
 
 ;; Compute node geometry by column and return sorted/positioned columns.
-(define (populate-node-layout! cols width height node-width node-padding scale)
-  (let* ((num-cols (length cols))
+(define (populate-node-layout! prepared-cols width height node-width node-padding scale)
+  (let* ((num-cols (length prepared-cols))
          (col-width (if (> num-cols 1)
                       (/ (- width node-width) (- num-cols 1))
                       width)))
     (let loop ((col-index 0)
-               (remaining cols)
+               (remaining prepared-cols)
                (positioned-cols '()))
       (if (null? remaining)
         (reverse positioned-cols)
-        (let* ((col (sort-col-by-node-val (car remaining)))
-               (total-col-val (calculate-col-value col))
-               (total-col-height (+ (* total-col-val scale)
-                                    (* (- (length col) 1) node-padding)))
-               (start-y (/ (- height total-col-height) 2)))
-          (layout-col! col col-index col-width node-width node-padding scale start-y)
-          (loop (+ col-index 1)
-                (cdr remaining)
-                (cons col positioned-cols)))))))
+        (apply (lambda (col total-col-val col-size)
+                 (let* ((total-col-height (+ (* total-col-val scale)
+                                             (* (- col-size 1) node-padding)))
+                        (start-y (/ (- height total-col-height) 2)))
+                   (layout-col! col col-index col-width node-width node-padding scale start-y)
+                   (loop (+ col-index 1)
+                         (cdr remaining)
+                         (cons col positioned-cols))))
+               (car remaining))))))
 
 ;; Raw link helpers for readability.
 (define (raw-link-source-name link)
@@ -385,26 +393,18 @@
 (define (routed-links->svg-paths routed-links income-color expense-color asset-color liability-color equity-color fallback-color)
   (apply string-append
     (map (lambda (l)
-           (let* ((src (list-ref l 0))
-                  (src-type (list-ref l 1))
-                  (dst (list-ref l 2))
-                  (val (list-ref l 4))
-                  (x0 (list-ref l 5))
-                  (x1 (list-ref l 6))
-                  (y-start (list-ref l 7))
-                  (y-end (list-ref l 8))
-                  (dx (list-ref l 9))
-                  (link-h (list-ref l 10))
-                  (color (account-type->color src-type income-color expense-color asset-color liability-color equity-color fallback-color))
-                  (stroke-width (if (> link-h 1) link-h 1))
-                  (path-data (format #f "M~,4f,~,4f C~,4f,~,4f ~,4f,~,4f ~,4f,~,4f"
-                                     x0 y-start (+ x0 dx) y-start (- x1 dx) y-end x1 y-end))
-                  (title-text (format #f "~a -> ~a: $~,2f" src dst val)))
-             (format #f "<path d=\"~a\" fill=\"none\" stroke=\"~a\" stroke-width=\"~,4f\" stroke-opacity=\"0.35\"><title>~a</title></path>"
-                     (xml-escape path-data)
-                     (xml-escape color)
-                     stroke-width
-                     (xml-escape title-text))))
+      (apply (lambda (src src-type dst dst-type val x0 x1 y-start y-end dx link-h)
+          (let* ((color (account-type->color src-type income-color expense-color asset-color liability-color equity-color fallback-color))
+            (stroke-width (if (> link-h 1) link-h 1))
+            (path-data (format #f "M~,4f,~,4f C~,4f,~,4f ~,4f,~,4f ~,4f,~,4f"
+                x0 y-start (+ x0 dx) y-start (- x1 dx) y-end x1 y-end))
+            (title-text (format #f "~a -> ~a: $~,2f" src dst val)))
+       (format #f "<path d=\"~a\" fill=\"none\" stroke=\"~a\" stroke-width=\"~,4f\" stroke-opacity=\"0.35\"><title>~a</title></path>"
+          (xml-escape path-data)
+          (xml-escape color)
+          stroke-width
+          (xml-escape title-text))))
+        l))
          routed-links)))
 
 (define (last-char-index str ch)
@@ -485,55 +485,65 @@
                 (set-noderecord-target-offset! node 0)))
             nodes))
 
-(define (link-routing< a b nodes-by-name)
-  (let* ((a-src (hash-ref nodes-by-name (raw-link-source-name a) #f))
-         (b-src (hash-ref nodes-by-name (raw-link-source-name b) #f))
-         (a-src-y (noderecord-y0 a-src))
-         (b-src-y (noderecord-y0 b-src)))
-    (if (< a-src-y b-src-y)
-      #t
-      (if (> a-src-y b-src-y)
-        #f
-        (let* ((a-dst (hash-ref nodes-by-name (raw-link-target-name a) #f))
-               (b-dst (hash-ref nodes-by-name (raw-link-target-name b) #f))
-               (a-dst-y (noderecord-y0 a-dst))
-               (b-dst-y (noderecord-y0 b-dst)))
-          (< a-dst-y b-dst-y))))))
+;; Decorate raw links with precomputed routing keys and node references to
+;; avoid repeated hash lookups inside sort comparisons and routing loop.
+;; Output tuple format:
+;; (src-y dst-y src-name src-type dst-name dst-type val snode tnode)
+(define (decorate-link-for-routing link nodes-by-name)
+  (let* ((src-name (raw-link-source-name link))
+      (src-type (raw-link-source-type link))
+      (dst-name (raw-link-target-name link))
+      (dst-type (raw-link-target-type link))
+      (val (raw-link-value link))
+      (snode (hash-ref nodes-by-name src-name #f))
+      (tnode (hash-ref nodes-by-name dst-name #f)))
+    (list (noderecord-y0 snode)
+    (noderecord-y0 tnode)
+    src-name
+    src-type
+    dst-name
+    dst-type
+    val
+    snode
+    tnode)))
 
 ;; Route links in Scheme; SVG elements are rendered in Scheme.
 ;; Output tuple format:
 ;; (source s-type target t-type value x0 x1 y-start y-end dx link-h)
 (define (route-links! links nodes scale)
   (let* ((nodes-by-name (index-nodes-by-name nodes))
-         (sorted-links (sort links (lambda (a b) (link-routing< a b nodes-by-name)))))
+         (decorated-links (map (lambda (l) (decorate-link-for-routing l nodes-by-name)) links))
+         (sorted-links (sort decorated-links
+                             (lambda (a b)
+                               (let ((a-src-y (car a))
+                                     (b-src-y (car b)))
+                                 (if (< a-src-y b-src-y)
+                                   #t
+                                   (if (> a-src-y b-src-y)
+                                     #f
+                                     (< (cadr a) (cadr b)))))))))
     (reset-node-offsets! nodes)
     (let loop ((remaining sorted-links)
                (acc '()))
       (if (null? remaining)
         (reverse acc)
-        (let* ((l (car remaining))
-               (src-name (raw-link-source-name l))
-               (src-type (raw-link-source-type l))
-               (dst-name (raw-link-target-name l))
-               (dst-type (raw-link-target-type l))
-               (val (raw-link-value l))
-               (snode (hash-ref nodes-by-name src-name #f))
-               (tnode (hash-ref nodes-by-name dst-name #f))
-               (link-h (* val scale))
-               (y-start (+ (noderecord-y0 snode)
-                           (noderecord-source-offset snode)
-                           (/ link-h 2)))
-               (y-end (+ (noderecord-y0 tnode)
-                         (noderecord-target-offset tnode)
-                         (/ link-h 2)))
-               (x0 (noderecord-x1 snode))
-               (x1 (noderecord-x0 tnode))
-               (dx (/ (- x1 x0) 2)))
-          (set-noderecord-source-offset! snode (+ (noderecord-source-offset snode) link-h))
-          (set-noderecord-target-offset! tnode (+ (noderecord-target-offset tnode) link-h))
-          (loop (cdr remaining)
-                (cons (list src-name src-type dst-name dst-type val x0 x1 y-start y-end dx link-h)
-                      acc)))))))
+        (apply (lambda (src-y dst-y src-name src-type dst-name dst-type val snode tnode)
+                 (let* ((link-h (* val scale))
+                        (y-start (+ (noderecord-y0 snode)
+                                    (noderecord-source-offset snode)
+                                    (/ link-h 2)))
+                        (y-end (+ (noderecord-y0 tnode)
+                                  (noderecord-target-offset tnode)
+                                  (/ link-h 2)))
+                        (x0 (noderecord-x1 snode))
+                        (x1 (noderecord-x0 tnode))
+                        (dx (/ (- x1 x0) 2)))
+                   (set-noderecord-source-offset! snode (+ (noderecord-source-offset snode) link-h))
+                   (set-noderecord-target-offset! tnode (+ (noderecord-target-offset tnode) link-h))
+                   (loop (cdr remaining)
+                         (cons (list src-name src-type dst-name dst-type val x0 x1 y-start y-end dx link-h)
+                               acc))))
+               (car remaining))))))
 
 (define (gnc:html-sankey-render sankey doc)
   (let* ((retval '())
@@ -561,15 +571,16 @@
              (levels (populate-levels nodes style))
              (max-lvl (max-level nodes levels))
              (cols (populate-cols max-lvl nodes levels))
-             (col-stats (calculate-col-stats cols))
-             (max-col-val (car col-stats))
-             (max-col-nodes (cdr col-stats))
+             (layout-prep (prepare-cols-for-layout cols))
+             (prepared-cols (car layout-prep))
+             (max-col-val (cadr layout-prep))
+             (max-col-nodes (caddr layout-prep))
              (usable-height (- height (* (+ max-col-nodes 1) node-padding)))
              (scale (if (> max-col-val 0)
               (/ usable-height max-col-val)
               1))
              (routed-links (begin
-                             (populate-node-layout! cols width height node-width node-padding scale)
+                             (populate-node-layout! prepared-cols width height node-width node-padding scale)
                              (route-links! links nodes scale)))
              (svg-markup (svg-node-elements
                           width

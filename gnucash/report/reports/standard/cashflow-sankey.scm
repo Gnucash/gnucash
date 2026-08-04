@@ -30,6 +30,7 @@
 (use-modules (gnucash report))
 (use-modules (gnucash html))
 (use-modules (ice-9 format))
+(use-modules (ice-9 hash-table))
 (use-modules (srfi srfi-1))
 
 ;; For debugging during development, enable backtraces to get more detailed error information
@@ -91,7 +92,29 @@
 (define display-page  (N_ "Display"))
 
 (define (extract-sankey-links account-list start-date end-date flow-minimum)
-  (let ((links '()))
+  (let ((links '())
+        (transaction-cache (make-hash-table)))
+    ;; Cache positive destination split decomposition per transaction so we
+    ;; avoid rescanning the same transaction when encountered multiple times.
+    (define (get-positive-destinations trans)
+      (let ((cached (hash-ref transaction-cache trans #f)))
+        (if cached
+            cached
+            (let loop ((remaining (xaccTransGetSplitList trans))
+                       (dest-splits '())
+                       (dest-total 0.0))
+              (if (null? remaining)
+                  (let ((result (cons (reverse dest-splits) dest-total)))
+                    (hash-set! transaction-cache trans result)
+                    result)
+                  (let* ((split (car remaining))
+                         (split-val (gnc-numeric-to-double (xaccSplitGetAmount split))))
+                    (if (> split-val 0.0)
+                        (loop (cdr remaining)
+                              (cons (cons split split-val) dest-splits)
+                              (+ dest-total split-val))
+                        (loop (cdr remaining) dest-splits dest-total))))))))
+
     (for-each 
       (lambda (account)
         (let ((splits (xaccAccountGetSplitList account)))
@@ -105,14 +128,15 @@
 
                 ;; Compare dates against the discrete start and end variables
                 (if (and (>= date start-date) (<= date end-date) (< amount 0.0))
-                    (let* ((all-splits (xaccTransGetSplitList trans))
-                           (dest-splits (filter (lambda (s) (> (gnc-numeric-to-double (xaccSplitGetAmount s)) 0)) all-splits))
-                           (total-dest-val (apply + (map (lambda (s) (gnc-numeric-to-double (xaccSplitGetAmount s))) dest-splits))))
+                    (let* ((dest-info (get-positive-destinations trans))
+                           (dest-splits (car dest-info))
+                           (total-dest-val (cdr dest-info)))
 
                       (if (>= total-dest-val flow-minimum)
-                        (for-each (lambda (dest-split)
-                                    (let* ((dest-acc (xaccSplitGetAccount dest-split))
-                                           (dest-val (gnc-numeric-to-double (xaccSplitGetAmount dest-split)))
+                        (for-each (lambda (dest-entry)
+                                    (let* ((dest-split (car dest-entry))
+                                           (dest-val (cdr dest-entry))
+                                           (dest-acc (xaccSplitGetAccount dest-split))
                                            (flow-val (* (abs amount) (/ dest-val total-dest-val))))
                                       (set! links (cons (list (list (gnc-account-get-full-name account)
                                                                 (xaccAccountTypeGetFundamental (xaccAccountGetType account)))
@@ -125,31 +149,31 @@
       account-list)
     links))
 
-;; Helper function to remove the first occurrence of an item from a list
-;; Assumes that list is processed sequentially and we want to preserve additional occurrences of the item if they exist
-(define (remove-first-match item lst)
-  (let loop ((rest lst) (acc '()))
-    (cond ((null? rest) (reverse acc))
-          ((equal? (car rest) item)
-           (append (reverse acc) (cdr rest)))
-          (else (loop (cdr rest) (cons (car rest) acc))))))
-
 ;; aggregate the values of matching links (same source and destination)
 (define (aggregate-links links)
-  (let ((agg '()))
+  (let ((agg-by-pair (make-hash-table))
+        (pair-order '()))
     (for-each (lambda (link)
                 (let* ((src (car (car link)))
                        (src-type (cadr (car link)))
                        (dest (car (cadr link)))
                        (dest-type (cadr (cadr link)))
                        (val (caddr link))
-                       (existing-link (find (lambda (l) (and (string=? src (car (car l))) (string=? dest (car (cadr l))))) agg)))
+                       (pair-key (format #f "~a\x1f~a" src dest))
+                       (existing-link (hash-ref agg-by-pair pair-key #f)))
                   (if existing-link
-                      (set! agg (cons (list (list src src-type) (list dest dest-type) (+ val (caddr existing-link)))
-                                      (remove-first-match existing-link agg)))
-                      (set! agg (cons link agg)))))
+                      (hash-set! agg-by-pair
+                                 pair-key
+                                 (list (list src src-type)
+                                       (list dest dest-type)
+                                       (+ val (caddr existing-link))))
+                      (begin
+                        (hash-set! agg-by-pair pair-key link)
+                        (set! pair-order (cons pair-key pair-order))))))
               links)
-    agg))
+    (map (lambda (pair-key)
+           (hash-ref agg-by-pair pair-key))
+         (reverse pair-order))))
 
 (define (sankey-options-generator)
   (let* ((options (gnc-new-optiondb)))
