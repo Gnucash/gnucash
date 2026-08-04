@@ -35,7 +35,7 @@
 
 ;; For debugging during development, enable backtraces to get more detailed error information
 ;; in the GnuCash error logs when something goes wrong.
-(debug-enable 'backtrace)
+; (debug-enable 'backtrace)
 
 (define report-title (N_ "Cash Flow Sankey"))
 
