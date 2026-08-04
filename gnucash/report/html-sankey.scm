@@ -286,27 +286,12 @@
               cols)
     (cons max-col-val max-col-nodes)))
 
-;; Minimal list sorter to avoid depending on modules not present in older Guile builds.
-(define (list-sort pred lst)
-  (define (insert x sorted)
-    (if (null? sorted)
-      (list x)
-      (if (pred x (car sorted))
-        (cons x sorted)
-        (cons (car sorted) (insert x (cdr sorted))))))
-  (let loop ((rest lst)
-             (acc '()))
-    (if (null? rest)
-      acc
-      (loop (cdr rest) (insert (car rest) acc)))))
-
 ;; Sort nodes in a column descending by rendered node value.
 (define (sort-col-by-node-val col)
-  (list-sort
-    (lambda (a b)
-      (> (noderecord-val (cdr a))
-         (noderecord-val (cdr b))))
-    col))
+  (sort col
+        (lambda (a b)
+          (> (noderecord-val (cdr a))
+             (noderecord-val (cdr b))))))
 
 ;; Mutate nodes in one column with x/y/height and reset link offsets.
 (define (layout-col! col col-index col-width node-width node-padding scale start-y)
@@ -509,7 +494,7 @@
 ;; Output tuple format:
 ;; (source s-type target t-type value x0 x1 y-start y-end dx link-h)
 (define (route-links! links nodes scale)
-  (let ((sorted-links (list-sort (lambda (a b) (link-routing< a b nodes)) links)))
+  (let ((sorted-links (sort links (lambda (a b) (link-routing< a b nodes)))))
     (reset-node-offsets! nodes)
     (let loop ((remaining sorted-links)
                (acc '()))
