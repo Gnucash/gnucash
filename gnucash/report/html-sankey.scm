@@ -179,16 +179,22 @@
                          (link-ref (make-linkrecord src src-type dest dest-type val)))
                     (set-noderecord-out-val! srcnode (+ (noderecord-out-val srcnode) val))
                     (set-noderecord-type! srcnode src-type)
-                    (set-noderecord-out-links! srcnode (append (list link-ref) (noderecord-out-links srcnode)))
+                    (set-noderecord-out-links! srcnode (cons link-ref (noderecord-out-links srcnode)))
                     ; (display (format #f "Updated source node: ~a (out-val: ~a)\n" src (noderecord-out-val srcnode))) ; troubleshooting output
                     (set-noderecord-in-val! destnode (+ (noderecord-in-val destnode) val))
                     (set-noderecord-type! destnode dest-type)
-                    (set-noderecord-in-links! destnode (append (list link-ref) (noderecord-in-links destnode)))
+                    (set-noderecord-in-links! destnode (cons link-ref (noderecord-in-links destnode)))
                     ; (display (format #f "Updated destination node: ~a (in-val: ~a)\n" dest (noderecord-in-val destnode))) ; troubleshooting output
                     ; (display (format #f "Source node: ~a\n" srcnode)) ; troubleshooting output
                     ; (display (format #f "Destination node: ~a\n" destnode)) ; troubleshooting output
                   )))
       links)
+    ;; Reverse per-node link buffers once after accumulation to preserve first-seen link order
+    (for-each (lambda (n)
+                (let ((node (cdr n)))
+                  (set-noderecord-in-links! node (reverse (noderecord-in-links node)))
+                  (set-noderecord-out-links! node (reverse (noderecord-out-links node)))))
+              nodes)
     ;; Restore first-seen order after O(1) front insertions.
     (reverse nodes)))
 
@@ -555,7 +561,8 @@
 
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
-    (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style height)))
+    ; (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style height)))
+    (push (format #f "style='width: 100%; height: auto; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-sizing: border-box;'"))
 
     (if (null? links)
       ;; skip SVG output and just show a message if no data
@@ -594,7 +601,6 @@
                           (gnc:html-sankey-fallback-color sankey))))
         (begin
           (push svg-markup)
-          ; (push "  </div>\n")
           (push "</div>\n")
           (push "\n"))))
   retval))
