@@ -55,6 +55,7 @@
 (export gnc:html-chart-format-style)
 (export gnc:html-chart-set-format-style!)
 (export gnc:html-chart-render)
+(export gnc:html-chart-set-tooltip-indexed?!)
 (export gnc:html-chart-set-custom-x-axis-ticks?!)
 (export gnc:html-chart-set-title!)
 (export gnc:html-chart-set-data-labels!)
@@ -289,6 +290,9 @@
 
 (define (gnc:html-chart-set-x-axis-type! chart type)
   (gnc:html-chart-set! chart '(options scales xAxes (0) type) type))
+
+(define (gnc:html-chart-set-tooltip-indexed?! chart indexed?)
+  (gnc:html-chart-set! chart '(options tooltips mode) (if indexed? 'index 'nearest)))
 
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
