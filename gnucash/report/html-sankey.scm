@@ -535,21 +535,6 @@
                 (cons (list src-name src-type dst-name dst-type val x0 x1 y-start y-end dx link-h)
                       acc)))))))
 
-;;
-;; Inline CSS for rendering the Sankey chart container
-;;
-
-;; This function generates the inline CSS style string for the chart container div, based on the specified height.
-(define (chart-div-style height)
-  (format #f "style='width: 100%;
-  height: ~apx;
-  background: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;'
-  " (* 2.5 height)))
-
 (define (gnc:html-sankey-render sankey doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
@@ -561,7 +546,6 @@
 
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
-    ; (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style height)))
     (push (format #f "<div id=sankey_chart style='width: 100%; height: auto; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-sizing: border-box;'>"))
 
     (if (null? links)
