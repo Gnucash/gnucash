@@ -561,9 +561,8 @@
     (if (null? links)
       ;; skip SVG output and just show a message if no data
       (begin
-        (push "    <h4>No cash flow data found.</h4>\n")
-        (push "    <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>\n")
-        (push "  </div>\n")
+        (push "  <h4>No cash flow data found.</h4>\n")
+        (push "  <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>\n")
         (push "</div>\n"))
       ;; otherwise render the chart
       (let* ((nodes (populate-nodes links))
@@ -596,6 +595,5 @@
                           (gnc:html-sankey-fallback-color sankey))))
         (begin
           (push svg-markup)
-          (push "</div>\n")
-          (push "\n"))))
+          (push "</div>\n"))))
   retval))
