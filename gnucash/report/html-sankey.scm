@@ -27,6 +27,7 @@
 (use-modules (gnucash report html-utilities))
 (use-modules (gnucash report report-utilities))
 (use-modules (ice-9 format))
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
 
 (export gnc:html-sankey?)
@@ -140,9 +141,6 @@
   (source-offset noderecord-source-offset set-noderecord-source-offset!)
   (target-offset noderecord-target-offset set-noderecord-target-offset!))
 
-(define (make-link src src-type dest dest-type val)
-  (make-linkrecord src src-type dest dest-type val))
-
 (define (make-empty-node name)
   (make-noderecord name 0 0 0 '() '() 0 0 0 0 0 0))
 
@@ -153,7 +151,7 @@
       nodes)
     (begin
       ; (display (format #f "Adding source node: ~a\n" name)) ; troubleshooting output
-      (append nodes (list (cons name (make-empty-node name)))))))
+      (cons (cons name (make-empty-node name)) nodes))))
 
 ;; This function processes the list of links to build a unique set of nodes,
 ;; while also calculating the total incoming and outgoing values for each node.
@@ -184,7 +182,8 @@
                     ; (display (format #f "Destination node: ~a\n" destnode)) ; troubleshooting output
                   )))
       links)
-    nodes))
+    ;; Restore first-seen order after O(1) front insertions in adjoin-node.
+    (reverse nodes)))
 
 (define (noderecord-val n)
   (max (noderecord-in-val n) (noderecord-out-val n)))
@@ -259,10 +258,13 @@
                        (level (assoc-ref levels name)))
                   ; (display (format #f "Populating columns with node: ~a, level: ~a\n" name level)) ; troubleshooting output
                   (vector-set! cols level
-                    (append (vector-ref cols level) (list n)))))
+                    (cons n (vector-ref cols level)))))
               nodes)
-    (filter (lambda (col) (not (null? col)))
-            (vector->list cols))))
+    (filter-map (lambda (col)
+                  (if (null? col)
+                    #f
+                    (reverse col)))
+                (vector->list cols))))
 
 ;; Calculate the sum of node values in a single column
 (define (calculate-col-value col)
@@ -539,11 +541,6 @@
   box-sizing: border-box;'
   " (* 2.5 height)))
 
-;; This is the inline CSS style string for the message div that displays errors or no-data messages.
-(define message-div-style "style='padding: 10px;
-  font-family: sans-serif;'
-  ")
-
 (define (gnc:html-sankey-render sankey doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
@@ -556,7 +553,6 @@
     (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
     (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
     (push (format #f "<div id=sankey_chart ~a>\n" (chart-div-style height)))
-    ; (push (format #f "  <div id=sankey_message ~a>\n" message-div-style))
 
     (if (null? links)
       ;; skip SVG output and just show a message if no data
@@ -578,8 +574,9 @@
              (scale (if (> max-col-val 0)
               (/ usable-height max-col-val)
               1))
-             (positioned-cols (populate-node-layout! cols width height node-width node-padding scale))
-             (routed-links (route-links! links nodes scale))
+             (routed-links (begin
+                             (populate-node-layout! cols width height node-width node-padding scale)
+                             (route-links! links nodes scale)))
              (svg-markup (svg-node-elements
                           width
                           height
