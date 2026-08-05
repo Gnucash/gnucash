@@ -150,7 +150,7 @@
 
           (gnc-register-simple-boolean-option options
             gnc:pagename-display optname-tooltip-indexed
-            "h" (N_ "INDEX-ed tooltip presents all data from a selected date. NON-indexed - only the one that is the closest to the coursor.")
+            "h" (N_ "Show all viable entries per time unit (indexed). Otherwise - only a single entry, as per coursor's exact position.")
             #t)
 
 
