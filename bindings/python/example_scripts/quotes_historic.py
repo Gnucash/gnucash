@@ -17,8 +17,7 @@
 #   https://wiki.gnucash.org/wiki/Stocks/get_prices
 #
 
-from gnucash import Session, Account, Split
-import gnucash
+from gnucash import Session, GncNumeric
 import datetime
 from fractions import Fraction
 from gnc_convenience import find_account
@@ -76,13 +75,11 @@ for i in range(1,len(pl)):
 
 for i in range(0,len(stock_date)):
   p_new = pl0.clone(book)
-  p_new = gnucash.GncPrice(instance=p_new)
   print('Adding',i,stock_date[i],stock_price[i])
   p_new.set_time64(stock_date[i])
-  v = p_new.get_value()
-  v.num = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).numerator)
-  v.denom = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).denominator)
-  p_new.set_value(v)
+  num = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).numerator)
+  denom = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).denominator)
+  p_new.set_value(GncNumeric(num, denom))
   p_new.set_source("Finance::Quotes::Historic")
   pdb.add_price(p_new)
 
