@@ -374,7 +374,7 @@ function tooltipLabel(tooltipItem,data) {
   var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
   switch (typeof(label)) {
     case 'number':
-      return datasetLabel + ': ' + numformat(label);
+      return '  ' + datasetLabel + ' :   ' + numformat(label);
     default:
       return '';
   }
