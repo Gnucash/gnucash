@@ -1324,8 +1324,9 @@ split_set_new_value(Split* split, gnc_commodity *curr, gnc_commodity *old_curr,
 void
 xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 {
-    gnc_commodity *old_curr = trans->common_currency;
     if (!trans || !curr || trans->common_currency == curr) return;
+
+    gnc_commodity *old_curr = trans->common_currency;
     xaccTransBeginEdit(trans);
 
     trans->common_currency = curr;
