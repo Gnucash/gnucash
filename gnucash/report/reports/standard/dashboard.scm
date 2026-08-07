@@ -138,7 +138,7 @@
 )
 
 (define (setup-transactions option-db)
-    (set-option! option-db "General" "Report name" "<hr style=\"border: 1px solid orange; margin-top: 100px;\"> Transaction Report")
+    (set-option! option-db "General" "Report name" "<hr style=\"border: 1px solid orange; margin-top: 75px;\"> Transaction Report")
     (set-option! option-db "General" "Table for Exporting" #t)
     (set-option! option-db "Display" "Num" #f)
     (set-option! option-db "Display" "Account Balance" #t)
