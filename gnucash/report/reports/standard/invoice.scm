@@ -840,10 +840,12 @@ for styling the invoice. Please see the exported report for the CSS class names.
                   (if (and name (not (string-null? name)))
                       (gnc:html-table-append-row!
                        main-table
-                       (gnc:make-html-div/markup
-                        "invoice-footer-payable-to"
-                        (multiline-to-html-text
-                         (string-append name-str ": " name)))))))
+		       (gnc:make-html-table-cell/size
+			1 2
+                        (gnc:make-html-div/markup
+                         "invoice-footer-payable-to"
+                         (multiline-to-html-text
+                          (string-append name-str ": " name))))))))
 
             (if (opt-val "Display" "Company contact")
                 (let* ((contact (gnc:company-info book gnc:*company-contact*))
