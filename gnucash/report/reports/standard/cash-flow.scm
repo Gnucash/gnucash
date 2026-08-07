@@ -50,6 +50,7 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define optname-show-full-names (N_ "Show Full Account Names"))
+(define optname-show-selected-acct (N_ "Show Selected Accounts"))
 (define optname-include-trading-accounts (N_ "Include Trading Accounts in report"))
 
 ;; options generator
@@ -77,6 +78,10 @@
     (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-show-full-names
       "e" (N_ "Show full account names (including parent accounts).") #t)
+
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-general optname-show-selected-acct
+      "f" (N_ "Show the list of selected accounts on the top of this report.") #t)
 
     ;; accounts to work on
     (gnc:options-add-account-selection!
@@ -129,6 +134,8 @@
                                   optname-show-rates))
          (show-full-names? (get-option gnc:pagename-general
                                        optname-show-full-names))
+         (show-sel-acct-list? (get-option gnc:pagename-general
+                                       optname-show-selected-acct))
          (from-date-t64 (gnc:time64-start-day-time
                          (gnc:date-option-absolute-time
                           (get-option gnc:pagename-general
@@ -243,6 +250,7 @@
                   (money-out-alist (cdr (assq 'money-out-alist result)))
                   (money-out-collector (cdr (assq 'money-out-collector result))))
 
+            (when show-sel-acct-list?
               (gnc:html-document-add-object!
                doc
                (gnc:make-html-text (G_ "Selected Accounts")))
@@ -252,8 +260,8 @@
                (gnc:make-html-text
                 (gnc:html-markup-ul
                  account-disp-list)))
-
-              (gnc:html-table-append-ruler! table 2)
+                 (gnc:html-table-append-ruler! table 2)
+            )
 
               (gnc:html-table-append-row/markup!
                table
