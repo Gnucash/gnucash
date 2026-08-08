@@ -31,65 +31,66 @@
 (use-modules (gnucash html))
 (use-modules (ice-9 format))
 (use-modules (ice-9 hash-table))
+(use-modules (ice-9 i18n))
 (use-modules (srfi srfi-1))
 
 ;; For debugging during development, enable backtraces to get more detailed error information
 ;; in the GnuCash error logs when something goes wrong.
 ; (debug-enable 'backtrace)
 
-(define report-title (N_ "Cash Flow Sankey"))
+(define report-title (G_ "Cash Flow Sankey"))
 
-(define optinterval-name (N_ "Date Interval"))
-(define optinterval-help (N_ "The date interval for the report."))
-(define optinterval-from-date (N_ "Start Date"))
-(define optinterval-to-date (N_ "End Date"))
+(define optinterval-name (G_ "Date Interval"))
+(define optinterval-help (G_ "The date interval for the report."))
+(define optinterval-from-date (G_ "Start Date"))
+(define optinterval-to-date (G_ "End Date"))
 
-(define optaccountlist-name (N_ "Account List"))
-(define optaccountlist-help (N_ "The accounts to include in the report."))
+(define optaccountlist-name (G_ "Account List"))
+(define optaccountlist-help (G_ "The accounts to include in the report."))
 
 ;; Minimum incoming flow value to include in the Sankey diagram
 ;; i.e., show whole dollars only, ignore tiny flows that add noise
-(define optminimum-name (N_ "Minimum Flow Value"))
-(define optminimum-help (N_ "The minimum incoming flow value to include in the report."))
+(define optminimum-name (G_ "Minimum Flow Value"))
+(define optminimum-help (G_ "The minimum incoming flow value to include in the report."))
 (define optminimum-default 1.00)
 
-(define optsvg-width-name (N_ "Plot Width"))
-(define optsvg-width-help (N_ "The width of the Sankey diagram."))
+(define optsvg-width-name (G_ "Plot Width"))
+(define optsvg-width-help (G_ "The width of the Sankey diagram."))
 (define optsvg-width-default 2000)
 
-(define optsvg-height-name (N_ "Plot Height"))
-(define optsvg-height-help (N_ "The height of the Sankey diagram."))
+(define optsvg-height-name (G_ "Plot Height"))
+(define optsvg-height-help (G_ "The height of the Sankey diagram."))
 (define optsvg-height-default 1000)
 
-(define optsvg-x-axis-style-name (N_ "Flow X-Axis Style"))
-(define optsvg-x-axis-style-help (N_ "The style for the X-axis in the Sankey diagram."))
+(define optsvg-x-axis-style-name (G_ "Flow X-Axis Style"))
+(define optsvg-x-axis-style-help (G_ "The style for the X-axis in the Sankey diagram."))
 (define optsvg-x-axis-style-default "fixed")
 
 ;; Node colors for different account types, with defaults chosen for good contrast and aesthetics
 ;; Users can customize these in the report options to fit their preferences or color schemes.
 ;; GnuCash expects just the hex digits so we'll add the # back when generating the CSS for the report.
-(define optnodecolor-income-name (N_ "Income Node Color"))
-(define optnodecolor-income-help (N_ "The color used for income nodes in the Sankey diagram."))
+(define optnodecolor-income-name (G_ "Income Node Color"))
+(define optnodecolor-income-help (G_ "The color used for income nodes in the Sankey diagram."))
 (define optnodecolor-income-default "27ae60") ;; Forest Green #27ae60
-(define optnodecolor-expense-name (N_ "Expense Node Color"))
-(define optnodecolor-expense-help (N_ "The color used for expense nodes in the Sankey diagram."))
+(define optnodecolor-expense-name (G_ "Expense Node Color"))
+(define optnodecolor-expense-help (G_ "The color used for expense nodes in the Sankey diagram."))
 (define optnodecolor-expense-default "c0392b") ;; Rich Red #c0392b
-(define optnodecolor-asset-name (N_ "Asset Node Color"))
-(define optnodecolor-asset-help (N_ "The color used for asset nodes in the Sankey diagram."))
+(define optnodecolor-asset-name (G_ "Asset Node Color"))
+(define optnodecolor-asset-help (G_ "The color used for asset nodes in the Sankey diagram."))
 (define optnodecolor-asset-default "2980b9") ;; Ice Blue #2980b9
-(define optnodecolor-liability-name (N_ "Liability Node Color"))
-(define optnodecolor-liability-help (N_ "The color used for liability nodes in the Sankey diagram."))
+(define optnodecolor-liability-name (G_ "Liability Node Color"))
+(define optnodecolor-liability-help (G_ "The color used for liability nodes in the Sankey diagram."))
 (define optnodecolor-liability-default "f6d32d") ;; Golden Yellow #f6d32d
-(define optnodecolor-equity-name (N_ "Equity Node Color"))
-(define optnodecolor-equity-help (N_ "The color used for equity nodes in the Sankey diagram."))
+(define optnodecolor-equity-name (G_ "Equity Node Color"))
+(define optnodecolor-equity-help (G_ "The color used for equity nodes in the Sankey diagram."))
 (define optnodecolor-equity-default "8e44ad") ;; Plum Purple #8e44ad
-(define optnodecolor-fallback-name (N_ "Fallback Node Color"))
-(define optnodecolor-fallback-help (N_ "The color used for nodes that do not fit into other categories."))
+(define optnodecolor-fallback-name (G_ "Fallback Node Color"))
+(define optnodecolor-fallback-help (G_ "The color used for nodes that do not fit into other categories."))
 (define optnodecolor-fallback-default "7f8c8d") ;; Slate Grey #7f8c8d
 
 (define accounts-page gnc:pagename-accounts)
 (define general-page  gnc:pagename-general)
-(define display-page  (N_ "Display"))
+(define display-page  (G_ "Display"))
 
 (define (extract-sankey-links account-list start-date end-date flow-minimum)
   (let ((links '())
@@ -189,8 +190,8 @@
       "b"                         ;; Sorting key
       optsvg-x-axis-style-help    ;; Help text
       optsvg-x-axis-style-default ;; Default value
-      (list (vector 'dynamic (N_ "Dynamic"))  ; Position nodes based on their relationships, which is more visually informative but can lead to shifting positions between reports
-            (vector 'fixed (N_ "Fixed")))) ; Position nodes based on their account type, which is more consistent but can be less visually intuitive
+      (list (vector 'dynamic (G_ "Dynamic"))  ; Position nodes based on their relationships, which is more visually informative but can lead to shifting positions between reports
+            (vector 'fixed (G_ "Fixed")))) ; Position nodes based on their account type, which is more consistent but can be less visually intuitive
 
     (gnc-register-number-range-option options
       general-page        ;; Tab
