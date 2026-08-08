@@ -28,6 +28,7 @@
 (use-modules (gnucash report report-utilities))
 (use-modules (ice-9 format))
 (use-modules (ice-9 hash-table))
+(use-modules (ice-9 i18n))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
 
@@ -52,6 +53,12 @@
 (export gnc:html-sankey-set-links!)
 
 (export gnc:html-sankey-render)
+
+(define from-date-string (G_ "From Date"))
+(define to-date-string (G_ "To Date"))
+
+(define flow-message (G_ "No cash flow data found."))
+(define flow-message-detail (G_ "Ensure you have selected correct dates and accounts with transactions in Options."))
 
 (define-record-type <html-sankey>
   (make-html-sankey from-date to-date width height x-axis-style income-color expense-color asset-color liability-color equity-color fallback-color links)
@@ -554,15 +561,15 @@
          (node-padding 18)
          (node-width 24))
 
-    (push (format #f "<p>From Date: <b>~a</b></p>\n" (gnc:html-sankey-from-date sankey)))
-    (push (format #f "<p>To Date: <b>~a</b></p>\n" (gnc:html-sankey-to-date sankey)))
+    (push (format #f "<p>~a: <b>~a</b></p>\n" from-date-string (gnc:html-sankey-from-date sankey)))
+    (push (format #f "<p>~a: <b>~a</b></p>\n" to-date-string (gnc:html-sankey-to-date sankey)))
     (push (format #f "<div id=sankey_chart style='width: 100%; height: auto; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-sizing: border-box;'>"))
 
     (if (null? links)
       ;; skip SVG output and just show a message if no data
       (begin
-        (push "  <h4>No cash flow data found.</h4>\n")
-        (push "  <p>Ensure you have selected correct dates and accounts with transactions in Options.</p>\n")
+        (push (format #f "  <h4>~a</h4>\n" flow-message))
+        (push (format #f "  <p>~a</p>\n" flow-message-detail))
         (push "</div>\n"))
       ;; otherwise render the chart
       (let* ((nodes (populate-nodes links))
