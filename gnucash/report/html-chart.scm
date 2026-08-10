@@ -348,33 +348,34 @@
     (nested-alist-set! options path val)
     (gnc:html-chart-set-options-internal! chart options)))
 
-(define JS-Number-to-String "
-// The following snippet from MDN
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
-var toLocaleStringSupportsOptions = (typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
+(define (JS-Number-to-String chartId)
+    (format #f "// The following snippet from MDN
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
+        var toLocaleStringSupportsOptions = (typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
 
-// format a number e.g. 2.5 into monetary e.g. \"$2.50\" or other style formsty
-function numformat(amount) {
-  if (toLocaleStringSupportsOptions) {
-      return amount.toLocaleString(undefined, {style:formsty, currency:curriso});
-  } else if (formsty == 'percent') {
-      return (100 * amount).toLocaleString() + '%';
-  } else if (formsty == 'currency') {
-      return currsym + amount.toLocaleString();
-  } else {
-      return amount.toLocaleString();
-  }
-}
-")
+        // format a number e.g. 2.5 into monetary e.g. \"$2.50\" or other style formsty
+        function numformat_~a(amount) {
+          if (toLocaleStringSupportsOptions) {
+          return amount.toLocaleString(undefined, {style:formsty_~a, currency:curriso_~a});
+      } else if (formsty_~a == 'percent') {
+          return (100 * amount).toLocaleString() + '%';
+      } else if (formsty_~a == 'currency') {
+          return currsym_~a + amount.toLocaleString();
+      } else {
+          return amount.toLocaleString();
+      }
+    }
+    " chartId chartId chartId chartId chartId chartId)
+)
 
 
-(define JS-setup "
-function tooltipLabel(tooltipItem,data) {
+(define (JS-setup chartId) (format #f "
+function tooltipLabel_~a(tooltipItem,data) {
   var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || 'Other';
   var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
   switch (typeof(label)) {
     case 'number':
-      return '  ' + datasetLabel + ' :   ' + numformat(label);
+      return '  ' + datasetLabel + ' :   ' + numformat_~a(label);
     default:
       return '';
   }
@@ -404,13 +405,13 @@ Chart.defaults.global.defaultFontFamily = bodyStyle.fontFamily;
 Chart.defaults.global.defaultFontStyle = bodyStyle.fontStyle;
 
 titleStyle = window.getComputedStyle (document.querySelector ('h3'));
-chartjsoptions.options.title.fontSize = parseInt (titleStyle.fontSize);
-chartjsoptions.options.title.fontFamily = titleStyle.fontFamily;
-chartjsoptions.options.title.fontStyle = titleStyle.fontStyle;
+chartjsoptions_~a.options.title.fontSize = parseInt (titleStyle.fontSize);
+chartjsoptions_~a.options.title.fontFamily = titleStyle.fontFamily;
+chartjsoptions_~a.options.title.fontStyle = titleStyle.fontStyle;
 
-document.getElementById(chartid).onclick = function(evt) {
-  var activepoints = myChart.getElementAtEvent(evt);
-  var anchor = document.getElementById(jumpid);
+document.getElementById(~s).onclick = function(evt) {
+  var activepoints = myChart_~a.getElementAtEvent(evt);
+  var anchor = document.getElementById(jumpid_~a);
   switch (activepoints.length)  {
     case 0:
       anchor.href = '';
@@ -420,7 +421,7 @@ document.getElementById(chartid).onclick = function(evt) {
     default:
       var index = activepoints[0]['_index'];
       var datasetIndex = activepoints[0]['_datasetIndex'];
-      var datasetURLs = myChart.data.datasets[datasetIndex].urls;
+      var datasetURLs = myChart_~a.data.datasets[datasetIndex].urls;
       // console.log('index=',index,'datasetIndex=',datasetIndex);
       anchor.style = 'position:absolute; top:' + (evt.clientY - 30) + 'px; left:' + (evt.clientX - 20) + 'px; display: block; padding: 5px; border-radius: 5px; background: #4E9CAF; text-align:center; color:white; z-index: 999;';
       switch (typeof(datasetURLs)) {
@@ -438,7 +439,7 @@ document.getElementById(chartid).onclick = function(evt) {
           anchor.style = 'display: none';
       }
   }
-}\n\n")
+}\n\n" chartId chartId chartId chartId chartId chartId chartId chartId chartId))
 
 (define (get-options-string chart)
   (scm->json-string
@@ -471,28 +472,35 @@ document.getElementById(chartid).onclick = function(evt) {
     (push (format #f "<canvas id=~s></canvas>\n" id))
     (push "</div>\n")
     (push (format #f "<script id='script-~a'>\n" id))
-    (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
-    (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
-    (push (format #f "var formsty = ~s;\n" (gnc:html-chart-format-style chart)))
-    (push (format #f "var chartid = ~s;\n" id))
-    (push (format #f "var jumpid = 'jump-~a';\n" id))
+    (push (format #f "var curriso_~a = ~s;\n" id (gnc:html-chart-currency-iso chart)))
+    (push (format #f "var currsym_~a = ~s;\n" id (gnc:html-chart-currency-symbol chart)))
+    (push (format #f "var formsty_~a = ~s;\n" id (gnc:html-chart-format-style chart)))
+    (push (format #f "var chartid_~a = ~s;\n" id id))
+    (push (format #f "var jumpid_~a = 'jump-~a';\n" id id))
     (push (format #f "var loadstring = ~s;\n" (G_ "Load")))
-    (push (format #f "var chartjsoptions = ~a;\n\n"
+    (push (format #f "var chartjsoptions_~a = ~a;\n\n"
+                  id (get-options-string chart)))
+
+        (push (format #f "var chartjsoptions_~a = ~a;\n\n"
+                  id
                   (get-options-string chart)))
 
-    (push JS-Number-to-String)
+    (push (JS-Number-to-String id))
     (when (gnc:html-chart-custom-y-axis-ticks? chart)
-      (push "chartjsoptions.options.scales.yAxes[0].ticks.callback = yAxisDisplay;\n")
-      (push "function yAxisDisplay(value,index,values) { return numformat(value); };\n"))
+      (push (format #f "chartjsoptions_~a.options.scales.yAxes[0].ticks.callback = yAxisDisplay;\n" id))
+      (push (format #f "function yAxisDisplay(value,index,values) { return numformat_~a(value); };\n\n" id))
+    )
     (when (gnc:html-chart-custom-x-axis-ticks? chart)
-      (push "chartjsoptions.options.scales.xAxes[0].ticks.callback = xAxisDisplay;\n")
-      (push "function xAxisDisplay(value,index,values) { return chartjsoptions.data.labels[index]; };\n"))
+      (push (format #f "chartjsoptions_~a.options.scales.xAxes[0].ticks.callback = xAxisDisplay;\n" id))
+      (push (format #f "function xAxisDisplay(value,index,values) { return chartjsoptions_~a.data.labels[index]; };\n\n" id))
+    )
 
-    (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
-    (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
-    (push JS-setup)
+    (push (format #f "chartjsoptions_~a.options.tooltips.callbacks.label = tooltipLabel_~a;\n" id id))
+    (push (format #f "chartjsoptions_~a.options.tooltips.callbacks.title = tooltipTitle;\n" id))
 
-    (push "var myChart = new Chart(chartid, chartjsoptions);\n")
+    (push (JS-setup id))
+
+    (push (format #f "var myChart_~a = new Chart(~s, chartjsoptions_~a);\n" id id id))
     (push "</script>")
 
     retval))
