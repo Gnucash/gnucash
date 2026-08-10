@@ -349,23 +349,25 @@
     (gnc:html-chart-set-options-internal! chart options)))
 
 (define (JS-Number-to-String chartId)
-    (format #f "// The following snippet from MDN
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
-        var toLocaleStringSupportsOptions = (typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
+    (format #f "
+// The following snippet from MDN
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
+var toLocaleStringSupportsOptions = (typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
 
-        // format a number e.g. 2.5 into monetary e.g. \"$2.50\" or other style formsty
-        function numformat_~a(amount) {
-          if (toLocaleStringSupportsOptions) {
-          return amount.toLocaleString(undefined, {style:formsty_~a, currency:curriso_~a});
-      } else if (formsty_~a == 'percent') {
-          return (100 * amount).toLocaleString() + '%';
-      } else if (formsty_~a == 'currency') {
-          return currsym_~a + amount.toLocaleString();
-      } else {
-          return amount.toLocaleString();
-      }
-    }
-    " chartId chartId chartId chartId chartId chartId)
+// format a number e.g. 2.5 into monetary e.g. \"$2.50\" or other style formsty
+function numformat_~a(amount) {
+  if (toLocaleStringSupportsOptions) {
+      return amount.toLocaleString(undefined, {style:formsty_~a, currency:curriso_~a});
+  } else if (formsty_~a == 'percent') {
+      return (100 * amount).toLocaleString() + '%';
+  } else if (formsty_~a == 'currency') {
+      return currsym_~a + amount.toLocaleString();
+  } else {
+      return amount.toLocaleString();
+  }
+}
+
+" chartId chartId chartId chartId chartId chartId)
 )
 
 
@@ -478,12 +480,7 @@ document.getElementById(~s).onclick = function(evt) {
     (push (format #f "var chartid_~a = ~s;\n" id id))
     (push (format #f "var jumpid_~a = 'jump-~a';\n" id id))
     (push (format #f "var loadstring = ~s;\n" (G_ "Load")))
-    (push (format #f "var chartjsoptions_~a = ~a;\n\n"
-                  id (get-options-string chart)))
-
-        (push (format #f "var chartjsoptions_~a = ~a;\n\n"
-                  id
-                  (get-options-string chart)))
+    (push (format #f "var chartjsoptions_~a = ~a;\n\n" id (get-options-string chart)))
 
     (push (JS-Number-to-String id))
     (when (gnc:html-chart-custom-y-axis-ticks? chart)
