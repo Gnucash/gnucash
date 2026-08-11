@@ -6,14 +6,15 @@
 # Kryštof Černý <cleverline1mc@gmail.com>, 2023, 2026.
 # Deleted User <noreply+100824@weblate.org>, 2024, 2026.
 # Mirek Špaňko <mirekspanko@hotmail.cz>, 2026.
+# Miroslav Kure <kurem@upcase.inf.upol.cz>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2026-06-26 05:11+0000\n"
-"Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
+"PO-Revision-Date: 2026-07-28 17:01+0000\n"
+"Last-Translator: Miroslav Kure <kurem@upcase.inf.upol.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/glossary/"
 "cs/>\n"
 "Language: cs\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -81,7 +82,7 @@ msgstr "typ účtu: Příjmy"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "typ účtu: Odpovědnost"
+msgstr "typ účtu: Závazky"
 
 #. "-"
 msgid "account type: money-market"
@@ -241,7 +242,7 @@ msgstr ""
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr ""
+msgstr "účetní doklad"
 
 #. "see invoice owner"
 msgid "bill owner"
@@ -249,7 +250,7 @@ msgstr ""
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr ""
+msgstr "platební podmínky"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
@@ -281,11 +282,11 @@ msgstr ""
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr ""
+msgstr "hotovost"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr ""
+msgstr "šek"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
@@ -297,7 +298,7 @@ msgstr ""
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr ""
+msgstr "komodita"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -313,7 +314,7 @@ msgstr ""
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
-msgstr ""
+msgstr "složené úročení"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -329,11 +330,11 @@ msgstr ""
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
-msgstr ""
+msgstr "dobropis"
 
 #. "The system of money used in a country"
 msgid "currency"
-msgstr ""
+msgstr "měna"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
@@ -345,7 +346,7 @@ msgstr ""
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr ""
+msgstr "databáze"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -353,7 +354,7 @@ msgstr "Datum"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
-msgstr ""
+msgstr "formát data"
 
 #. "A range in time that is delimited by two distinct dates."
 msgid "date range"
@@ -365,7 +366,7 @@ msgstr ""
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr ""
+msgstr "výchozí"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
@@ -373,7 +374,7 @@ msgstr ""
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr ""
+msgstr "odpisy"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
@@ -381,7 +382,7 @@ msgstr ""
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
-msgstr ""
+msgstr "sleva"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -389,19 +390,19 @@ msgstr ""
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "odkaz na dokument"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "datum splatnosti"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "e-mail"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr ""
+msgstr "zaměstnanec"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
@@ -417,7 +418,7 @@ msgstr ""
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
-msgstr ""
+msgstr "směnný kurz"
 
 #. "in the account creation dialog??"
 msgid "field"
@@ -425,11 +426,11 @@ msgstr ""
 
 #. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
 msgid "file"
-msgstr ""
+msgstr "soubor"
 
 #. "-"
 msgid "file type"
-msgstr ""
+msgstr "typ souboru"
 
 #. "-"
 msgid "financial calculator: interest rate"
@@ -445,11 +446,11 @@ msgstr ""
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "svobodný software"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
-msgstr ""
+msgstr "zisk"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
@@ -465,11 +466,11 @@ msgstr ""
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
-msgstr ""
+msgstr "úrok"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr ""
+msgstr "faktura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -485,7 +486,7 @@ msgstr ""
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
-msgstr ""
+msgstr "půjčka"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
@@ -493,7 +494,7 @@ msgstr ""
 
 #. "The money lost in business activity"
 msgid "loss"
-msgstr ""
+msgstr "ztráta"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
@@ -525,7 +526,7 @@ msgstr "Poznámka"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr ""
+msgstr "Hypotéka"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
@@ -537,7 +538,7 @@ msgstr ""
 
 #. "e.g. USD, EUR, see Currency."
 msgid "national currency"
-msgstr ""
+msgstr "národní měna"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
@@ -549,7 +550,7 @@ msgstr ""
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr ""
+msgstr "čistý zisk"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
@@ -569,7 +570,7 @@ msgstr ""
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr ""
+msgstr "počáteční zůstatek"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
@@ -577,35 +578,35 @@ msgstr ""
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr ""
+msgstr "objednávka"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr ""
+msgstr "sirotek"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "vlastník"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr ""
+msgstr "heslo"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr ""
+msgstr "Závazky/Pohledávky"
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr ""
+msgstr "příjemce platby"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr ""
+msgstr "plátce"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr ""
+msgstr "platba"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
@@ -621,7 +622,7 @@ msgstr ""
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
-msgstr ""
+msgstr "předvolby"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
@@ -645,7 +646,7 @@ msgstr ""
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr ""
+msgstr "zisk"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 #, fuzzy
