@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-07-09 15:01+0000\n"
+"PO-Revision-Date: 2026-07-13 05:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3098,6 +3098,7 @@ msgid "Online Id"
 msgstr "Online azonosító"
 
 #: gnucash/gnome/dialog-imap-editor.c:763
+#, fuzzy
 msgid "Online HBCI"
 msgstr "Online HBCI"
 
@@ -4223,7 +4224,7 @@ msgid_plural ""
 "transactions automatically created)"
 msgstr[0] ""
 "Jelenleg nincsenek rögzítendő ütemezett tranzakciók. (%d tranzakció lett "
-"automatikusan létrehozva)"
+"automatikusan létrehozva.)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1507
 msgid "Created Transactions"
@@ -8921,8 +8922,8 @@ msgstr ""
 "Ha aktiválva van, akkor a GNUCash az elindításakor ellenőrzi van-e hamarosan "
 "esedékessé váló kimenőszámla. Ha igen, megjelenít egy emlékeztető "
 "párbeszédablakot. Az esedékesség előtti napok számát az „Ennyi nappal előtte"
-"” beállítás határozza meg. Ellenkező esetben a GnuCash nem ellenőrzi a "
-"kimenőszámlák fizetési határidejét."
+"” beállítás határozza meg. Ha nincs bejelölve, akkor a GnuCash nem ellenőrzi "
+"a kimenőszámlák fizetési határidejét."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 msgid "Show invoices due within this many days"
@@ -9016,7 +9017,7 @@ msgstr ""
 "Ha aktiválva van, akkor a GNUCash az elindításakor ellenőrzi van-e hamarosan "
 "esedékessé váló bejövőszámla. Ha igen, megjelenít egy emlékeztető "
 "párbeszédablakot. Az esedékesség előtti napok számát a „Ennyi nappal előtte” "
-"beállítás határozza meg. Ellenkező esetben a GnuCash nem ellenőrzi a "
+"beállítás határozza meg. Ha nincs bejelölve, akkor a GnuCash nem ellenőrzi a "
 "bejövőszámlák fizetési határidejét."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
@@ -9695,7 +9696,7 @@ msgid ""
 "run\" dialog."
 msgstr ""
 "A „Létrehozott tranzakciók felülvizsgálata” legyen alapértelmezett „A "
-"legutóbbi futás óta” segéd ablakában."
+"legutóbbi futás óta” segédprogram ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
@@ -9703,8 +9704,8 @@ msgid ""
 "is set for the \"since last run\" dialog."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a „Létrehozott tranzakciók felülvizsgálata"
-"” alapértelmezettként legyen-e beállítva „A legutóbbi futás óta” segéd "
-"ablakában."
+"” alapértelmezettként legyen-e beállítva „A legutóbbi futás óta” "
+"segédprogram ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
 msgid "Set the sort column in the \"since last run\" dialog."
@@ -16951,19 +16952,21 @@ msgstr "Ütemezések száma"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:508
 msgid "Since Last Run"
-msgstr "A legutóbbi futás óta"
+msgstr "A legutóbbi futás óta segédprogram"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:534
 msgid "Transaction Editor Defaults"
-msgstr "Tranzakciószerkesztő alapbeállításai"
+msgstr "A tranzakciószerkesztő alapbeállításai"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:547
 msgid "_Run when data file opened"
-msgstr "Futtatás adatfájl megnyitásako_r"
+msgstr "_Futtatás adatfájl vagy adatbázis megnyitásakor"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:551
 msgid "Run the \"since last run\" process when a file is opened."
-msgstr "Lefuttatja „A legutóbbi futás óta” folyamatot egy fájl megnyitásakor."
+msgstr ""
+"Egy adatfájl vagy adatbázis megnyitásakor (pl. a GnuCash indításakor) "
+"futtatja „A legutóbbi futás óta” segédprogramot."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:564
 msgid "_Show notification window"
@@ -16974,8 +16977,8 @@ msgid ""
 "Show the notification window for the \"since last run\" process when a file "
 "is opened."
 msgstr ""
-"„A legutóbbi futás óta” folyamat értesítési ablakának megjelenítése egy fájl "
-"megnyitásakor."
+"„A legutóbbi futás óta” segédprogram értesítési ablakának megjelenítése egy "
+"adatfájl vagy adatbázis megnyitásakor."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:581
 msgid "_Auto-create new transactions"
@@ -16989,7 +16992,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:605
 msgid "Begin notifications this many days before the transaction is created."
-msgstr "Ennyi nappal korábban értesítsen a tranzakció létrehozása előtt."
+msgstr "Értesítsen a tranzakció létrehozásának dátuma előtt ennyi nappal."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:644
 msgid "Create the transaction this many days before its effective date."
@@ -17022,7 +17025,7 @@ msgid ""
 "dialog."
 msgstr ""
 "A „Létrehozott tranzakciók felülvizsgálata” legyen alapértelmezett „A "
-"legutóbbi futás óta” segéd ablakában."
+"legutóbbi futás óta” segédprogram ablakában."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:794
 msgid "Edit Scheduled Transaction"
@@ -19007,9 +19010,9 @@ msgstr ""
 "A háttérrendszer hibát talált a feladat előkészítésekor. Nem lehetséges a "
 "feladat végrehajtása.\n"
 "\n"
-"Valószínűleg a bank nem támogatja a kiválasztott feladatot, vagy a HBCI "
-"számlán nincs engedélyezve a feladat végrehajtása. További hibaüzeneteket "
-"talál a konzolnaplóban.\n"
+"Valószínűleg a bank nem támogatja a kiválasztott feladatot, vagy az "
+"internetbanki számlán nincs engedélyezve a feladat végrehajtása. További "
+"hibaüzeneteket talál a konzolnaplóban.\n"
 "\n"
 "Szeretné újra megadni a feladatot?"
 
@@ -19073,9 +19076,9 @@ msgstr ""
 "A háttérrendszer hibát talált a feladat előkészítésekor. Nem lehetséges a "
 "feladat végrehajtása.\n"
 "\n"
-"Valószínűleg a bank nem támogatja a kiválasztott feladatot, vagy a HBCI "
-"számlán nincs engedélyezve a feladat végrehajtása. További hibaüzeneteket "
-"talál a konzolnaplóban.\n"
+"Valószínűleg a bank nem támogatja a kiválasztott feladatot, vagy az "
+"internetbanki számlán nincs engedélyezve a feladat végrehajtása. További "
+"hibaüzeneteket talál a konzolnaplóban.\n"
 "\n"
 "Szeretné újra megadni a feladatot?"
 
@@ -29269,7 +29272,7 @@ msgstr "A _legutóbbi futás óta…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "A legutóbbi futás óta esedékes ütemezett tranzakciók létrehozása"
+msgstr "A legutóbbi futás óta esedékessé vált ütemezett tranzakciók létrehozása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
 msgid "_Mortgage & Loan Repayment…"
