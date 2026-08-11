@@ -11,14 +11,15 @@
 # Morten Cools <morten@cools.no>, 2024.
 # Magnus Røkke <mrokke@gmail.com>, 2025.
 # Kevin Unhammer <unhammer+dill@mm.st>, 2026.
+# Kraksen <kraks@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 04:16+0000\n"
-"Last-Translator: Kevin Unhammer <unhammer+dill@mm.st>\n"
+"PO-Revision-Date: 2026-07-11 14:01+0000\n"
+"Last-Translator: Kraksen <kraks@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -1772,10 +1773,9 @@ msgstr "Beløp for %s må være positivt."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:705
 #: gnucash/gnome/assistant-stock-transaction.cpp:1055
-#, fuzzy, c-format
-#| msgid "Include sub-accounts of all selected accounts."
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "Ta med underkontoer til alle valgte kontoer."
+msgstr "Beløpet %s har ingen tilknyttet konto."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:771
@@ -1783,9 +1783,8 @@ msgid "N/A"
 msgstr "N/A"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:863
-#, fuzzy
 msgid "Amount for stock value is missing."
-msgstr "Beløp for %s mangler."
+msgstr "Beløp for aksjeverdi mangler."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:875
 msgid "Invalid stock new balance."
@@ -2124,16 +2123,11 @@ msgstr ""
 "nedenfor."
 
 #: gnucash/gnome/dialog-commodities.cpp:188
-#, fuzzy
-#| msgid ""
-#| "That commodity is currently used by at least one of your accounts. You "
-#| "may not delete it."
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
 msgstr ""
-"Den valgte varen er i bruk av minst en av dine kontoer. Du kan ikke slette "
-"den."
+"Den valgte varen er i bruk av de følgende kontoene. Du kan ikke slette den.\n"
 
 #: gnucash/gnome/dialog-commodities.cpp:206
 msgid ""
@@ -2272,7 +2266,7 @@ msgstr "S_lett"
 
 #: gnucash/gnome/dialog-commodities.cpp:329
 msgid "Rename failed, possibly new name exists"
-msgstr ""
+msgstr "Kunne ikke døpe om, det nye navnet finnes kanskje allerede"
 
 #: gnucash/gnome/dialog-commodities.cpp:332
 #, fuzzy
@@ -4110,10 +4104,9 @@ msgstr "nå"
 
 #: gnucash/gnome/dialog-tax-info.c:871
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:401
-#, fuzzy, c-format
-#| msgid "Accounts Selected:"
+#, c-format
 msgid "Accounts Selected: %d"
-msgstr "Valgte kontoer:"
+msgstr "Valgte kontoer: %d"
 
 #: gnucash/gnome/dialog-tax-info.c:1184
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
@@ -5249,22 +5242,24 @@ msgstr "Gå til dato"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3442
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3471
-#, fuzzy
-#| msgid "_Jump to the other account"
 msgid "Unable to jump to other account"
-msgstr "H_opp til den andre kontoen"
+msgstr "Kan ikke gå til den andre kontoen"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3445
 msgid ""
 "This transaction involves more than one other account. Select a specific "
 "split to jump to that account."
 msgstr ""
+"Denne transaksjonen involverer mer enn én annen konto. Velg en spesifikk "
+"splitt for å gå til den kontoen."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3474
 msgid ""
 "This transaction only involves the current account so there is no other "
 "account to jump to."
 msgstr ""
+"Denne transaksjonen involverer bare den nåværende kontoen, så det er ingen "
+"annen konto å gå til."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3628
 #, c-format
@@ -5354,10 +5349,8 @@ msgid "Save Config As…"
 msgstr "Lagre konfig som …"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:243
-#, fuzzy
-#| msgid "Export as P_DF…"
 msgid "Export as PDF"
-msgstr "Importer _QIF …"
+msgstr "Eksporter som PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:377
 #: gnucash/gnome/gnc-plugin-page-report.cpp:378
@@ -5525,13 +5518,10 @@ msgid "Upcoming Transactions"
 msgstr "Kommende transaksjoner"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:1080
-#, fuzzy
-#| msgid "Do you really want to delete this scheduled transaction?"
-#| msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] "Er du sikker på at du vil slette den valgte transaksjonen?"
-msgstr[1] "Er du sikker på at du vil slette %d valgte transaksjoner?"
+msgstr[0] "Er du sikker på at du vil slette denne planlagte transaksjonen?"
+msgstr[1] "Er du sikker på at du vil slette disse planlagte transaksjonene?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:143
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -6819,16 +6809,12 @@ msgid "Action/Number"
 msgstr "Handling/nummer"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 3306"
-msgstr "Forvalg"
+msgstr "Forvalg: 3306"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 5432"
-msgstr "Forvalg"
+msgstr "Forvalg: 5432"
 
 #: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
@@ -7817,10 +7803,8 @@ msgstr ""
 "bli lagt til."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5510
-#, fuzzy
-#| msgid "(user modifiable)"
 msgid "(User modifiable)"
-msgstr "(kan endres av brukeren)"
+msgstr "(Kan endres av brukeren)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.cpp:5537
@@ -8059,10 +8043,8 @@ msgid "Reconciled (Report)"
 msgstr "Avstemt (rapport)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:901
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest Date"
-msgstr "_Første"
+msgstr "Tidligste dato"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:907
 msgid "Last Reconcile Date"
