@@ -43,7 +43,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-08-10 14:51+0000\n"
+"PO-Revision-Date: 2026-08-11 15:51+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
@@ -13051,22 +13051,16 @@ msgid "4. Preview"
 msgstr "预览"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
-#, fuzzy
-#| msgid "Open imported documents in tabs"
 msgid "Open imported business items in tabs"
-msgstr "标签页打开导入的文档"
+msgstr "在标签页中打开导入的业务项"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs"
 msgid "Open not yet posted business items in tabs"
-msgstr "标签页打开尚未入账的文档"
+msgstr "在标签页中打开尚未入账的业务项"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
-#, fuzzy
-#| msgid "Don't open imported documents in tabs"
 msgid "Don't open imported business items in tabs"
-msgstr "不打开导入的文档"
+msgstr "不打开导入的业务项"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:432
 msgid "5. Afterwards"
@@ -15893,8 +15887,6 @@ msgid "Number of Occurrences"
 msgstr "执行次数"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:508
-#, fuzzy
-#| msgid "Since Last Run…"
 msgid "Since Last Run"
 msgstr "待执行的计划交易"
 
@@ -18051,10 +18043,8 @@ msgid "Import using AqBanking"
 msgstr "用AqBanking导入"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
-#| msgid "Import into GnuCash any file format supported by AQBanking"
 msgid "Import into GnuCash any file format supported by AqBanking"
-msgstr "将任意支持AQBanking的文件格式导入GnuCash。"
+msgstr "将 AqBanking 支持的任意文件格式导入 GnuCash"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -28740,10 +28730,8 @@ msgid "Create a new voucher"
 msgstr "新建一张报销"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:242
-#, fuzzy
-#| msgid "Find Expense _Voucher…"
 msgid "Find Employee Vouchers…"
-msgstr "查找费用凭证(_V)…"
+msgstr "查找员工凭证…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:244
 msgid ""
