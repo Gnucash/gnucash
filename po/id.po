@@ -9,15 +9,15 @@
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
 # Sarekashi <sarekashi@tuta.io>, 2022.
 # Sucipto <sucipto@pm.me>, 2023.
-# Andika Triwidada <andika@gmail.com>, 2023, 2025.
+# Triwidada <andika@gmail.com>, 2023, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-09-28 04:02+0000\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 03:54+0000\n"
+"Last-Translator: Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -99,8 +99,7 @@ msgstr "Akhir periode akuntansi"
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Hari terakhir periode akuntansi, seperti diatur pada preferensi global."
+msgstr "Hari terakhir periode akuntansi, seperti diatur pada preferensi global."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -928,8 +927,8 @@ msgid ""
 "style sheets."
 msgstr ""
 "Lembar Gaya mempengaruhi bagaimana laporan ditampilkan. Pilih sebuah lembar "
-"gaya untuk laporan Anda sebagai opsi laporan, dan gunakan menu Sunting-"
-">Lembar Gaya untuk menyesuaikan lembar gaya."
+"gaya untuk laporan Anda sebagai opsi laporan, dan gunakan menu Sunting->"
+"Lembar Gaya untuk menyesuaikan lembar gaya."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
@@ -3845,8 +3844,7 @@ msgstr "Nama Lembar Gaya"
 #: gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
-msgstr ""
-"Transaksi Terjadwal ini telah diubah; apakah Anda ingin membatalkannya?"
+msgstr "Transaksi Terjadwal ini telah diubah; apakah Anda ingin membatalkannya?"
 
 #: gnucash/gnome/dialog-sx-editor.c:497
 #, c-format
@@ -5642,8 +5640,8 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "Data pada transaksi ini lebih lama daripada \"Ambang Batas Hanya-Baca\" yang "
-"disetel untuk buku ini. Pengaturan ini dapat diubah di Berkas->Properti-"
-">Akun."
+"disetel untuk buku ini. Pengaturan ini dapat diubah di Berkas->Properti->"
+"Akun."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -5856,8 +5854,7 @@ msgstr "Membuat laporan dan grafik yang akurat dari data keuangan Anda"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr ""
-"Mengatur transaksi terjadwal untuk menghindari entri data yang berulang"
+msgstr "Mengatur transaksi terjadwal untuk menghindari entri data yang berulang"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid ""
@@ -5999,10 +5996,8 @@ msgstr[1] "Tanggal Pernyataan adalah %d hari setelah hari ini."
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] ""
-"Tanggal pernyataan yang telah Anda pilih adalah %d hari di masa depan."
-msgstr[1] ""
-"Tanggal pernyataan yang telah Anda pilih adalah %d hari di masa depan."
+msgstr[0] "Tanggal pernyataan yang telah Anda pilih adalah %d hari di masa depan."
+msgstr[1] "Tanggal pernyataan yang telah Anda pilih adalah %d hari di masa depan."
 
 #: gnucash/gnome/window-reconcile.cpp:486
 msgid ""
@@ -7176,8 +7171,8 @@ msgstr[0] ""
 "GnuCash memiliki fitur untuk menyimpan berkas secara otomatis setiap %d "
 "menit, seperti jika Anda menekan tombol \"Simpan\" setiap waktu.\n"
 "\n"
-"Anda bisa mengubah interval waktunya atau mematikan fitur ini pada Sunting-"
-">Preferensi->Umum->Interval waktu simpan-otomatis.\n"
+"Anda bisa mengubah interval waktunya atau mematikan fitur ini pada Sunting->"
+"Preferensi->Umum->Interval waktu simpan-otomatis.\n"
 "\n"
 "Apakah Anda ingin berkas disimpan secara otomatis?"
 msgstr[1] ""
@@ -7185,8 +7180,8 @@ msgstr[1] ""
 "GnuCash memiliki fitur untuk menyimpan berkas secara otomatis setiap %d "
 "menit, seperti jika Anda menekan tombol \"Simpan\" setiap waktu.\n"
 "\n"
-"Anda bisa mengubah interval waktunya atau mematikan fitur ini pada Sunting-"
-">Preferensi->Umum->Interval waktu simpan-otomatis.\n"
+"Anda bisa mengubah interval waktunya atau mematikan fitur ini pada Sunting->"
+"Preferensi->Umum->Interval waktu simpan-otomatis.\n"
 "\n"
 "Apakah Anda ingin berkas disimpan secara otomatis?"
 
@@ -9832,8 +9827,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1827
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr ""
-"Aktifkan waktu habis pada pertanyaan \"Simpan perubahaan saat menutup\""
+msgstr "Aktifkan waktu habis pada pertanyaan \"Simpan perubahaan saat menutup\""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1831
@@ -10266,8 +10260,7 @@ msgstr "Tampilkan bilah ikhtisar pada bagian bawah halaman."
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3499
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr ""
-"Menutup sebuah tab memindahkannya ke tab yang baru-baru ini dikunjungi."
+msgstr "Menutup sebuah tab memindahkannya ke tab yang baru-baru ini dikunjungi."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
@@ -10551,8 +10544,7 @@ msgstr "Tampilkan tanggal dimasukkan dan direkonsiliasi pada pilihan"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:328
 msgid "Show the entered date and reconciled date on transaction selection."
-msgstr ""
-"Tampilkan tanggal dimasukkan dan direkonsiliasi pada pilihan transaksi."
+msgstr "Tampilkan tanggal dimasukkan dan direkonsiliasi pada pilihan transaksi."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:332
 msgid "Show the calendar buttons"
@@ -12549,8 +12541,8 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
-"Masukkan tingkat bunga tahunan dalam persen. Nilai yang diterima dari 0,001 "
-"- 100. Asisten Hipotek tidak mendukung pinjaman tanpa bunga."
+"Masukkan tingkat bunga tahunan dalam persen. Nilai yang diterima dari "
+"0,001 - 100. Asisten Hipotek tidak mendukung pinjaman tanpa bunga."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:362
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -16272,8 +16264,8 @@ msgstr ""
 "dalam biaya perbankan bulanan Anda. Misalnya, Anda menarik $100, dan Anda "
 "dikenakan biaya $101,50 ditambah biaya Interac. Jika Anda memasukkan $100 "
 "tersebut secara manual, jumlah tersebut tidak akan cocok. Anda harus "
-"menetapkan biaya maksimum di daerah Anda (dalam satuan mata uang lokal "
-"Anda), sehingga transaksi akan dikenali sebagai transaksi yang cocok."
+"menetapkan biaya maksimum di daerah Anda (dalam satuan mata uang lokal Anda)"
+", sehingga transaksi akan dikenali sebagai transaksi yang cocok."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2177
 msgid ""
@@ -16383,8 +16375,7 @@ msgstr "Cetak karakter pem_blokir"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2482
 msgid "Print '***' before and after each text field on the check."
-msgstr ""
-"Cetak '***' sebelum dan sesudah masing-masing bidang teks di dalam cek."
+msgstr "Cetak '***' sebelum dan sesudah masing-masing bidang teks di dalam cek."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2497
 msgid "Default _font"
@@ -16422,8 +16413,7 @@ msgstr "Urutan tab ter_masuk Transfer pada Transaksi yang Diingat"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2601
 msgid "Move to Transfer field when memorised transaction auto filled."
-msgstr ""
-"Pindah ke bidang Transfer ketika transaksi yang diingat diisi otomatis."
+msgstr "Pindah ke bidang Transfer ketika transaksi yang diingat diisi otomatis."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2626
 msgid "<b>Jump action for multiple splits</b>"
@@ -22175,8 +22165,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Scheduled transactions can only be pasted to the General Journal"
-msgstr ""
-"Mengatur transaksi terjadwal untuk menghindari entri data yang berulang"
+msgstr "Mengatur transaksi terjadwal untuk menghindari entri data yang berulang"
 
 #: gnucash/register/ledger-core/split-register.c:2159
 msgid "Recalculate Transaction"
@@ -23925,8 +23914,8 @@ msgstr "Laporan Pajak & Ekspor XML"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:839
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr ""
-"Penghasilan Kena Pajak / Pengeluaran Dapat Dikurangkan / Ekspor ke "
-"berkas .XML"
+"Penghasilan Kena Pajak / Pengeluaran Dapat Dikurangkan / Ekspor ke berkas "
+".XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:843
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:851
@@ -25465,8 +25454,7 @@ msgstr "Laporkan untuk rentang periode anggaran"
 #: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:72
 msgid "Create report for a budget period range instead of the entire budget."
-msgstr ""
-"Buat laporan untuk rentang periode anggaran, bukannya seluruh anggaran."
+msgstr "Buat laporan untuk rentang periode anggaran, bukannya seluruh anggaran."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:62
 msgid "Select a budget period that begins the reporting range."
@@ -26288,8 +26276,8 @@ msgstr ""
 "dari pihak berwenang. Dari 'Sunting opsi laporan', pilih akun penjualan dan "
 "pembelian dari bisnis Anda. Setiap transaksi bisa berisi, selain akun aset, "
 "liabilitas, A/Utang atau A/Piutang, split ke akun pajak, misalnya "
-"Penghasilan:Penjualan -$1000, A/Piutang $1100, Liabilitas:GST pada Penjualan "
-"-$100."
+"Penghasilan:Penjualan -$1000, A/Piutang $1100, Liabilitas:GST pada "
+"Penjualan -$100."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
 msgid ""
@@ -33390,8 +33378,7 @@ msgstr "Tipe pajak %s: kode tidak valid %s untuk tipe akun"
 #: libgnucash/tax/gnc-locale-tax.c:165
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
-msgstr ""
-"Bukan terkait-pajak; tipe pajak %s: kode tidak valid %s untuk tipe akun"
+msgstr "Bukan terkait-pajak; tipe pajak %s: kode tidak valid %s untuk tipe akun"
 
 #: libgnucash/tax/gnc-locale-tax.c:178
 #, c-format

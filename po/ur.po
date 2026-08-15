@@ -7,20 +7,20 @@
 # Adil Ishaq <ishaqadil@aol.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2024-06-23 08:09+0000\n"
+"PO-Revision-Date: 2026-06-26 04:30+0000\n"
 "Last-Translator: Adil Ishaq <ishaqadil@aol.com>\n"
-"Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/"
-">\n"
+"Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/>"
+"\n"
 "Language: ur\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -798,9 +798,9 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"متعدد ۔ اختلاف والے لین دینوں جیسے كہ متعدد كٹوتی والے ایك ادائیگی چیك كو "
-"درج كرنے كے لیے، ٹول بار میں اسپلٹ بٹن پر كلك كریں۔ متبادل صورت میں ویو مینو "
-"میں، آپ رجسٹر اسٹائل آٹو۔اسپلٹ لیجر یا ٹرانزیكشن جنرل كو منتخب كرسكتے ہیں۔ "
+"متعدد ۔ اختلاف والے لین دینوں جیسے كہ متعدد كٹوتی والے ایك ادائیگی چیك كو درج "
+"كرنے كے لیے، ٹول بار میں اسپلٹ بٹن پر كلك كریں۔ متبادل صورت میں ویو مینو میں"
+"، آپ رجسٹر اسٹائل آٹو۔اسپلٹ لیجر یا ٹرانزیكشن جنرل كو منتخب كرسكتے ہیں۔ "
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -855,8 +855,8 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"تاریخوں كو درج كرتے وقت، آپ منتخبہ تاریخ كو بڑھانے یا گھٹانے كے لیے '+' یا "
-"'-' ٹائپ كر سكتے ہیں۔ چیك نمبر كو بڑھانے یا گھٹانے كے لیے بھی آپ '+' اور '-' "
+"تاریخوں كو درج كرتے وقت، آپ منتخبہ تاریخ كو بڑھانے یا گھٹانے كے لیے '+' یا '-"
+"' ٹائپ كر سكتے ہیں۔ چیك نمبر كو بڑھانے یا گھٹانے كے لیے بھی آپ '+' اور '-' "
 "كا استعمال كرسكتے ہیں۔ "
 
 #: doc/tip_of_the_day.list.c:79
@@ -969,9 +969,9 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"اپنے تمام لین دین کے ذریعے تلاش کرنے کے لئے، اہم اكاؤنٹ كے ہیراچی صفحہ سے "
-"تلاش شروع كریں (مرتب->تلاش ...). ایک اکاؤنٹ کے لئے آپ کی تلاش کو محدود كرنے "
-"اکاؤنٹ کے رجسٹر سے تلاش شروع كریں۔"
+"اپنے تمام لین دین کے ذریعے تلاش کرنے کے لئے، اہم اكاؤنٹ كے ہیراچی صفحہ سے تلاش "
+"شروع كریں (مرتب->تلاش ...). ایک اکاؤنٹ کے لئے آپ کی تلاش کو محدود كرنے اکاؤنٹ "
+"کے رجسٹر سے تلاش شروع كریں۔"
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -1018,11 +1018,11 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"اس کتاب میں قدیم ترین لین دین کی %s تاریخ ہے. اوپر کیے گئے انتخاب کی بنیاد "
-"پر، یہ کتاب%d میں تقسیم کی جائے گی."
+"اس کتاب میں قدیم ترین لین دین کی %s تاریخ ہے. اوپر کیے گئے انتخاب کی بنیاد پر"
+"، یہ کتاب%d میں تقسیم کی جائے گی."
 msgstr[1] ""
-"اس کتاب میں قدیم ترین لین دین کی%s تاریخ ہے. اوپر کیے گئے انتخاب کی بنیاد "
-"پر، یہ کتابیں%d میں تقسیم کی جائے گی."
+"اس کتاب میں قدیم ترین لین دین کی%s تاریخ ہے. اوپر کیے گئے انتخاب کی بنیاد پر"
+"، یہ کتابیں%d میں تقسیم کی جائے گی."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -1052,8 +1052,8 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
-"کتاب عنوان%s کے ساتھ تخلیق کی جائے گی. جب آپ 'لاگو کریں' پر کلک کرینگے "
-"ایڈجسٹ كرنے،'بیك' یا 'منسوخ کریں' کوئی کتاب نہیں تخلیق کرنے کے لئے 'کلک کریں."
+"کتاب عنوان%s کے ساتھ تخلیق کی جائے گی. جب آپ 'لاگو کریں' پر کلک کرینگے ایڈجسٹ "
+"كرنے،'بیك' یا 'منسوخ کریں' کوئی کتاب نہیں تخلیق کرنے کے لئے 'کلک کریں."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -3729,8 +3729,7 @@ msgstr "وہاں چیك فارمیٹ فائل كی ایك نقل ہے۔"
 msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
-msgstr ""
-"%s چیك فارمیٹ فائل '%s' اور %sچیك فارمیٹ فائل '%s' میں GUIDs میل كھاتے۔"
+msgstr "%s چیك فارمیٹ فائل '%s' اور %sچیك فارمیٹ فائل '%s' میں GUIDs میل كھاتے۔"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3917,8 +3916,8 @@ msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
-"حالیہ لین دین ٹیمپلیٹ تبدیل ہوچكا ہے۔ كیا آپ تبدیلی كو ریكارڈ كرنا پسند "
-"كروگے؟"
+"حالیہ لین دین ٹیمپلیٹ تبدیل ہوچكا ہے۔ كیا آپ تبدیلی كو ریكارڈ كرنا پسند كروگے"
+"؟"
 
 #: gnucash/gnome/dialog-sx-editor.c:1905
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:238
@@ -4071,8 +4070,8 @@ msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
-"ہدایت : اگر آپ TXF كیٹگریوں سیٹ كرتا ہے، اور بعد میں 'ٹائپ' كو تبدیل كرتا "
-"ہے، تو آپ كو اُن كیٹیگریوں كو مینول طریقہ سے ایك وقت میں دوبارہ سیٹ كرو"
+"ہدایت : اگر آپ TXF كیٹگریوں سیٹ كرتا ہے، اور بعد میں 'ٹائپ' كو تبدیل كرتا ہے"
+"، تو آپ كو اُن كیٹیگریوں كو مینول طریقہ سے ایك وقت میں دوبارہ سیٹ كرو"
 
 #: gnucash/gnome/dialog-tax-info.c:1392
 msgid "Form"
@@ -5821,11 +5820,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"ایسا ڈیزائن كیا گیا ہے كہ استعمال کرنا آسان ہے، ابھی تک طاقتور اور لچکدار "
-"ہے ، GnuCash آپ کے بینک اکاؤنٹس، اسٹاکس، آمدنی اور اخراجات پر نظر رکھنے کے "
-"لئے اجازت دیتا ہے. چیك بُك رجسٹر كے طور پر استعمال كرنے كے لئے كوئك اور "
-"انشیوٹیو ہے یہ پیشہ ورانہ اکاؤنٹنگ اصولوں پر مبنی ہے. جیسے ڈبل انٹری "
-"اکاؤنٹنگ بیلنس بُكس اور اكیورٹ رپورٹس یقینی بنانے كےلیے۔"
+"ایسا ڈیزائن كیا گیا ہے كہ استعمال کرنا آسان ہے، ابھی تک طاقتور اور لچکدار ہے "
+"، GnuCash آپ کے بینک اکاؤنٹس، اسٹاکس، آمدنی اور اخراجات پر نظر رکھنے کے لئے "
+"اجازت دیتا ہے. چیك بُك رجسٹر كے طور پر استعمال كرنے كے لئے كوئك اور انشیوٹیو "
+"ہے یہ پیشہ ورانہ اکاؤنٹنگ اصولوں پر مبنی ہے. جیسے ڈبل انٹری اکاؤنٹنگ بیلنس "
+"بُكس اور اكیورٹ رپورٹس یقینی بنانے كےلیے۔"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
@@ -7327,8 +7326,8 @@ msgstr "%s سے رابطہ نہیں كیا جاسكتا ہے۔ ہوسٹ، صار
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
-"%s سے رابطہ نہیں كیا جاسكتا ہے۔ رابطہ ٹوٹ گیا تھا ، ڈاٹا بھیجنے میں ناقابل "
-"ہے۔"
+"%s سے رابطہ نہیں كیا جاسكتا ہے۔ رابطہ ٹوٹ گیا تھا ، ڈاٹا بھیجنے میں ناقابل ہے"
+"۔"
 
 #: gnucash/gnome-utils/gnc-file.c:340
 msgid ""
@@ -7351,9 +7350,9 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا "
-"استعمال كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس كو كھولنا نہیں چاہیے۔ كیا آپ "
-"ڈاٹا بیس كو كھولنے كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
+"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا استعمال "
+"كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس كو كھولنا نہیں چاہیے۔ كیا آپ ڈاٹا بیس كو "
+"كھولنے كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
 
 #: gnucash/gnome-utils/gnc-file.c:369
 #, c-format
@@ -7362,9 +7361,9 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا "
-"استعمال كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس درآمد نہیں كرنا چاہیے۔ كیا آپ "
-"ڈاٹا بیس كو درآمد كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
+"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا استعمال "
+"كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس درآمد نہیں كرنا چاہیے۔ كیا آپ ڈاٹا بیس "
+"كو درآمد كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -7373,9 +7372,9 @@ msgid ""
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا "
-"استعمال كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس كو محفوظ نہیں كرنا چاہیے۔ كیا آپ "
-"ڈاٹا بیس كومحفوظ كرنے كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
+"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا استعمال "
+"كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس كو محفوظ نہیں كرنا چاہیے۔ كیا آپ ڈاٹا "
+"بیس كومحفوظ كرنے كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -7384,9 +7383,9 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا "
-"استعمال كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس كو برآمد نہیں كرنا چاہیے۔ كیا آپ "
-"ڈاٹا بیس كو برآمد كرنے كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
+"%s كے لیے GnuCash لاك كو حاصل نہیں كر پائے۔ دوسرے صارف اس ڈاٹا بیس كا استعمال "
+"كرسكتاہے، جس حال میں آپ كے ڈاٹا بیس كو برآمد نہیں كرنا چاہیے۔ كیا آپ ڈاٹا "
+"بیس كو برآمد كرنے كے طریقہ كو آگے بڑھانا چاہتے ہے؟"
 
 #: gnucash/gnome-utils/gnc-file.c:410
 #, fuzzy, c-format
@@ -7578,8 +7577,8 @@ msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] ""
-"اگر آپ نہیں محفوظ نہیں كرتے ہے، تو پچھلے %d منٹ كی تبدیلوں كو ہٹا دیا جائے "
-"گا۔"
+"اگر آپ نہیں محفوظ نہیں كرتے ہے، تو پچھلے %d منٹ كی تبدیلوں كو ہٹا دیا جائے گا"
+"۔"
 msgstr[1] ""
 "اگر آپ نہیں محفوظ نہیں كرتے ہے، تو پچھلے %d منٹوں كی تبدیلوں كو ہٹا دیا جائے "
 "گا۔"
@@ -8806,9 +8805,9 @@ msgid ""
 msgstr ""
 "پوسٹ وقت پر ، خود کار طریقے سے آوٹ اسٹانڈینگ پری پے مینٹس اور كاؤنٹر "
 "دستاویزات کے ساتھ گاہک دستاویزات ادا کرنے کی کوشش کریں. پری پے مینٹ اور "
-"دستاویزات ظاہر ہے ایک ہی گاہک کے خلاف ہونا ہے. انسداد دستاویزات مخالف علامت "
-"کے ساتھ دستاویزات ہیں. مثال کے طور پر ایک اِنوائس کے لئے، کسٹمر کریڈٹ نوٹس "
-"اور منفی انوائسس كو انسداد دستاویزات تصور کیا جاتا ہے."
+"دستاویزات ظاہر ہے ایک ہی گاہک کے خلاف ہونا ہے. انسداد دستاویزات مخالف علامت کے "
+"ساتھ دستاویزات ہیں. مثال کے طور پر ایک اِنوائس کے لئے، کسٹمر کریڈٹ نوٹس اور "
+"منفی انوائسس كو انسداد دستاویزات تصور کیا جاتا ہے."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 #, fuzzy
@@ -8889,8 +8888,8 @@ msgid ""
 "overridden per invoice in the Posting dialog."
 msgstr ""
 "اگر یہ فیلڈ كارگر ہے تو ایك اِنوائس میں متعدد داخلے جو ایك ہی اكاؤنٹ میں "
-"منتقل ہوتے ہے وہ ایك واحد سپلیٹ میں جمع ہوجائے گا۔ یہ فیلڈ كو پوسٹینگ "
-"ڈائیلاگ میں ہر چالان اووررائیڈ كیا جاسكتا ہے۔"
+"منتقل ہوتے ہے وہ ایك واحد سپلیٹ میں جمع ہوجائے گا۔ یہ فیلڈ كو پوسٹینگ ڈائیلاگ "
+"میں ہر چالان اووررائیڈ كیا جاسكتا ہے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:250
@@ -8995,8 +8994,8 @@ msgid ""
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
-"اگر تاریخ فارمیٹ كسٹم تاریخ فارمیٹ کی نشاندہی کرنے کے لئے مقرر کیا جاتا ہے "
-"تو، اس قیمت كو پرنٹ کرنے کے لئے تاریخ کو پیدا کرنے کے strftime کے لئے ایک "
+"اگر تاریخ فارمیٹ كسٹم تاریخ فارمیٹ کی نشاندہی کرنے کے لئے مقرر کیا جاتا ہے تو"
+"، اس قیمت كو پرنٹ کرنے کے لئے تاریخ کو پیدا کرنے کے strftime کے لئے ایک "
 "ارگیومنٹ کے طور پر استعمال کیا جاتا ہے. یہ كوئی بھی درست strftime اسٹرینگ ہو "
 "سکتا ہے؛ اس فارمیٹ کے بارے میں مزید معلومات کے لئے، \"man 3 strftime\" کے "
 "ذریعے سے strftime مینول صفحہ پڑھیں۔"
@@ -9010,8 +9009,7 @@ msgstr "اکائیاں جس میں كسٹم كوارڈنیٹس كا اظہار �
 #| msgid ""
 #| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
-msgstr ""
-"یونٹس جس میں اپنی مرضی کے نقاط كا اظہار كیا گیا ہے (انچ، ملی میٹر، ...)"
+msgstr "یونٹس جس میں اپنی مرضی کے نقاط كا اظہار كیا گیا ہے (انچ، ملی میٹر، ...)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -9021,8 +9019,7 @@ msgstr "وصول كُنندہ كے نام كی حالت"
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr ""
-"یہ قیمت میں چیك پروصول كنندہ لائن شروع كرنے كے لیے X,Y مربوط مشتمل ہے۔ "
+msgstr "یہ قیمت میں چیك پروصول كنندہ لائن شروع كرنے كے لیے X,Y مربوط مشتمل ہے۔ "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
@@ -9034,8 +9031,8 @@ msgid ""
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"یہ قیمت میں چیك پر تاریخ لائن شروع كرنے كے لیے X,Y مربوط مشتمل ہے۔ مربوط "
-"مختص سے چیك كی پوزیشن نچلے بائیں كونے سے كی گئی ہے۔ "
+"یہ قیمت میں چیك پر تاریخ لائن شروع كرنے كے لیے X,Y مربوط مشتمل ہے۔ مربوط مختص "
+"سے چیك كی پوزیشن نچلے بائیں كونے سے كی گئی ہے۔ "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:45
 msgid "Position of check amount in words"
@@ -9145,8 +9142,8 @@ msgid ""
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"اس ویلیو میں چیک پر اسپلیٹس میمو لائن کے آغاز کے لئے X,Y كوارڈنینٹس مشتمل "
-"ہے. كوارڈنینٹس مخصوص چیک پوزیشن کے لور بائیں کونے سے ہیں."
+"اس ویلیو میں چیک پر اسپلیٹس میمو لائن کے آغاز کے لئے X,Y كوارڈنینٹس مشتمل ہے. "
+"كوارڈنینٹس مخصوص چیک پوزیشن کے لور بائیں کونے سے ہیں."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
 msgid "Position of split's account line"
@@ -9182,8 +9179,8 @@ msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
-"چیكس پرنٹ كے وقت استعمال كیے جانے والا ڈیفالٹ فانٹ۔ یہ قیمت چیك كی وضاحت "
-"فائل میں اوور رائیڈ كے ذریعہ فانٹ كو مختص كیا گیا ۔"
+"چیكس پرنٹ كے وقت استعمال كیے جانے والا ڈیفالٹ فانٹ۔ یہ قیمت چیك كی وضاحت فائل "
+"میں اوور رائیڈ كے ذریعہ فانٹ كو مختص كیا گیا ۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:106
@@ -9244,8 +9241,8 @@ msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
 msgstr ""
-"یہ سیٹینگ ظاہر كرتی ہے كہ كیا جاری كلاس میں سبھی آئٹمس میں تلاش كرو ، یا "
-"جاری كلاس كے صرف 'كارگر' آئٹمس ہے۔ "
+"یہ سیٹینگ ظاہر كرتی ہے كہ كیا جاری كلاس میں سبھی آئٹمس میں تلاش كرو ، یا جاری "
+"كلاس كے صرف 'كارگر' آئٹمس ہے۔ "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:234
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:235
@@ -9498,8 +9495,8 @@ msgid ""
 "initially selected."
 msgstr ""
 "اگر كارگر ہے ، تو رجسٹر میں منظور كے جیسے نشاندہی سبھی لین دین كو موافق "
-"ڈائیلاگ میں پہلے سے منتخب كیا گیا ظاہر ہوگا۔ ورنہ شروع میں كسی بھی لین دین "
-"كو منتخب نہیں كیا گیا۔"
+"ڈائیلاگ میں پہلے سے منتخب كیا گیا ظاہر ہوگا۔ ورنہ شروع میں كسی بھی لین دین كو "
+"منتخب نہیں كیا گیا۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
@@ -9774,9 +9771,9 @@ msgid ""
 "\"backslash\", \"dash\" and \"period\"."
 msgstr ""
 "یہ سیٹینگ اس حرف كا تعین كرتا ہے جس كا استعمال ایك اكاؤنٹ نام كے جزوی كے "
-"درمیان میں كیا جائے گا۔ ممكن قیمتیں ہیں كوئی واحد غیر الفابیٹیكل یونی كوڈ "
-"حرف، یا مندرجہ ذیل میں سے كوئی بھی اسٹرینگ: \"كالن \" \"سلیش\", \"بلیك "
-"سلیش\", \"ڈیش\" اور \"پریڈ\"۔"
+"درمیان میں كیا جائے گا۔ ممكن قیمتیں ہیں كوئی واحد غیر الفابیٹیكل یونی كوڈ حرف"
+"، یا مندرجہ ذیل میں سے كوئی بھی اسٹرینگ: \"كالن \" \"سلیش\", \"بلیك سلیش\", "
+"\"ڈیش\" اور \"پریڈ\"۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -9921,8 +9918,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:1797
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
-"یہ کئی دنوں (0 = کبھی نہیں) کے بعد پرانے لاگ ان / بیک اپ فائلوں کو ڈیلیٹ "
-"كریں."
+"یہ کئی دنوں (0 = کبھی نہیں) کے بعد پرانے لاگ ان / بیک اپ فائلوں کو ڈیلیٹ كریں."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1815
@@ -10031,9 +10027,9 @@ msgid ""
 "\"close\" button on toolbar."
 msgstr ""
 "اگر كارگر ہے، تو بند كیے گئے كسی بھی نوٹ بُك ٹیب پر ایك \"بند كرو\" بٹن ظاہر "
-"كیا جائے گا۔ ورنہ، ٹیب پر ایسا كوئی بٹن نہیں دكھایا گیا۔ یہ سیٹینگ كے "
-"باوجود، صفحات كو ہمیشہ ٹول بار پر \"بند كرو\" مینو آئٹم یا \"بند كرو\" بٹن "
-"كے ذریعہ بند كیا جاسكتا ہے۔"
+"كیا جائے گا۔ ورنہ، ٹیب پر ایسا كوئی بٹن نہیں دكھایا گیا۔ یہ سیٹینگ كے باوجود"
+"، صفحات كو ہمیشہ ٹول بار پر \"بند كرو\" مینو آئٹم یا \"بند كرو\" بٹن كے "
+"ذریعہ بند كیا جاسكتا ہے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
@@ -10160,8 +10156,8 @@ msgid ""
 "the maximum number of months to go backwards in time when completing dates."
 msgstr ""
 "تاریخوں كو اس طرح مكمل كیا جائے كہ وہ جاری تاریخ كے قریب رہے۔ تاریخوں كو "
-"مكمل كرتے وقت پیچھے كی طرف جانے كے لیے مہینوں كی زیادہ سے زیادہ تعداد درج "
-"كرو۔ "
+"مكمل كرتے وقت پیچھے كی طرف جانے كے لیے مہینوں كی زیادہ سے زیادہ تعداد درج كرو"
+"۔ "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
 #, fuzzy
@@ -10248,9 +10244,8 @@ msgid ""
 "is drawn. Possible values are \"top\" and \"bottom\". It defaults to "
 "\"bottom\"."
 msgstr ""
-"یہ سیٹینگ اس كنارے كا تعین كرتا ہے جس پر مختلف صفحوں كے لیے خلاصہ بار "
-"كوكشیدہ كیا جاتا ہے۔ ممكن قیمت ہے \"اوپری\" اور \"نیچلا\"۔ یہ \"نچلا\" "
-"ڈیفالٹ سے ہے۔ "
+"یہ سیٹینگ اس كنارے كا تعین كرتا ہے جس پر مختلف صفحوں كے لیے خلاصہ بار كوكشیدہ "
+"كیا جاتا ہے۔ ممكن قیمت ہے \"اوپری\" اور \"نیچلا\"۔ یہ \"نچلا\" ڈیفالٹ سے ہے۔ "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3655
@@ -10298,10 +10293,10 @@ msgid ""
 "'num' field."
 msgstr ""
 "ااگر منتخب ہو تو، نئے فائلوں كے لیے ڈیفالٹ بُك آپشن سیٹ ہے تاكہ اسپلیٹ ایكشن "
-"فیلڈ رجسٹر پر 'Num' سیل دكھاتا/اپ ڈیٹ كرتا ہے اور ڈبل لائن موڈ (سنگل لائن "
-"موڈ میں مرئی نہیں ہے) میں دوسری لائن پر فیلڈ 'Num' ٹرانسیكشن دكھاتا ہے ۔"
-"دوسری صورت میں ، نئے فائلوں كے لیے ڈیفالٹ بُك آپشن سیٹ ہے تاكہ 'Num' سیل "
-"رجسٹر پر ٹرانسیكشن ''num'فیلڈ دكھاتا/ اپ ڈیٹ كرتا ہے ۔"
+"فیلڈ رجسٹر پر 'Num' سیل دكھاتا/اپ ڈیٹ كرتا ہے اور ڈبل لائن موڈ (سنگل لائن موڈ "
+"میں مرئی نہیں ہے) میں دوسری لائن پر فیلڈ 'Num' ٹرانسیكشن دكھاتا ہے ۔دوسری "
+"صورت میں ، نئے فائلوں كے لیے ڈیفالٹ بُك آپشن سیٹ ہے تاكہ 'Num' سیل رجسٹر پر "
+"ٹرانسیكشن ''num'فیلڈ دكھاتا/ اپ ڈیٹ كرتا ہے ۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 #, fuzzy
@@ -10345,8 +10340,8 @@ msgid ""
 "value field."
 msgstr ""
 "اگر كارگر ہے تو ایك میمورائز لین دین كو خود كار طریقہ سے بھرے جانے كے بعد "
-"كرسر منتقل فیلڈ میں چلا جائےگا۔ اگر كارگر نہیں ہے تویہ قیمت فیلڈ میں چلا "
-"جاتا ہے۔"
+"كرسر منتقل فیلڈ میں چلا جائےگا۔ اگر كارگر نہیں ہے تویہ قیمت فیلڈ میں چلا جاتا "
+"ہے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:267
 msgid "\"Jump\" behaviour when there are multiple splits"
@@ -10367,8 +10362,8 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"اگر كار گار ہے، تو ہرنئے رجسٹر كو ایك نئے ونڈو میں كھولا جائے گا۔ ورنہ ہر "
-"نیا رجسٹراہم ونڈو میں ایك ٹیب كی طرح كھولا جائے گا۔"
+"اگر كار گار ہے، تو ہرنئے رجسٹر كو ایك نئے ونڈو میں كھولا جائے گا۔ ورنہ ہر نیا "
+"رجسٹراہم ونڈو میں ایك ٹیب كی طرح كھولا جائے گا۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:277
 msgid "Color all lines of a transaction the same"
@@ -10492,8 +10487,8 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "رجسٹر میں ہر ٹرانزیکشن کے لئے دو لائنوں كی معلومات دکھائیں. جب رجسٹر پہلے "
-"كھولا جاتا ہے تو یہ ایک ڈیفالٹ ترتیب ہے ۔ ترتیب \"View-&gt;Double Line\" "
-"مینو آئٹم کے ذریعے کسی بھی وقت تبدیل کی جا سکتی ہے."
+"كھولا جاتا ہے تو یہ ایک ڈیفالٹ ترتیب ہے ۔ ترتیب \"View-&gt;Double Line\" مینو "
+"آئٹم کے ذریعے کسی بھی وقت تبدیل کی جا سکتی ہے."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
 msgid "Only display leaf account names."
@@ -10661,10 +10656,10 @@ msgid ""
 msgstr ""
 "یہ ترتیب فائل نام كے پی ڈی ایف بر آمد كے فائل نام میں تاریخوں كو كس طرح "
 "استعمال كیا جاتا ہے انتخاب كرتی ہے ۔ اس ترتیب کے لئے ممکن ویلیو برطانیہ "
-"اسٹائل تاریخوں کے لئے \"locale\" سسٹم لوكیل ترتیب كا استعمال "
-"كرنے ،كانٹینینٹل یورپ اسٹائل تاریخوں کے لئے \"ce\"، آئی ایس او 8601 معیار "
-"تاریخوں کے لئے \"iso\" یونائٹیڈ كینگ ڈم اسٹائل تاریخوںكے لیے \"uk\"، اور "
-"یونائٹیڈ اسٹیٹس تاریخوں كے لیے \"us\""
+"اسٹائل تاریخوں کے لئے \"locale\" سسٹم لوكیل ترتیب كا استعمال كرنے ،"
+"كانٹینینٹل یورپ اسٹائل تاریخوں کے لئے \"ce\"، آئی ایس او 8601 معیار تاریخوں "
+"کے لئے \"iso\" یونائٹیڈ كینگ ڈم اسٹائل تاریخوںكے لیے \"uk\"، اور یونائٹیڈ "
+"اسٹیٹس تاریخوں كے لیے \"us\""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "Allow file incompatibility with older versions."
@@ -10727,8 +10722,7 @@ msgstr "اگلی سب سے حال ہی میں كھولی گئی فائل"
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
-msgstr ""
-"اس فیلڈ میں اگلی سب سے حال ہی میں كھولی گئی فائل كا پورا پاتھ مشتمل ہے۔"
+msgstr "اس فیلڈ میں اگلی سب سے حال ہی میں كھولی گئی فائل كا پورا پاتھ مشتمل ہے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
@@ -10767,9 +10761,8 @@ msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
 msgstr ""
-"یہ ڈائیلاگ اس وقت پیش كیا جاتا ہے جب آپ ایك ترمیم كیے گئے چالان داخلے سے "
-"باہر نكالنے كی كوشش كرتے ہیں ۔ تبدیل كیا گیا ڈاٹا كو محفوظ یا ہٹا دیا جانا "
-"چاہیے۔"
+"یہ ڈائیلاگ اس وقت پیش كیا جاتا ہے جب آپ ایك ترمیم كیے گئے چالان داخلے سے باہر "
+"نكالنے كی كوشش كرتے ہیں ۔ تبدیل كیا گیا ڈاٹا كو محفوظ یا ہٹا دیا جانا چاہیے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
@@ -10795,8 +10788,8 @@ msgstr "ایك كمیوڈیٹی كو خارج كرو"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:163
 msgid "This dialog is presented before allowing you to delete a commodity."
 msgstr ""
-"یہ ڈائیلاگ آپ كو ایك كمیوڈیٹی كو خارج كرنے كی اجازت دینے سے پہلے پیش كیا "
-"جاتا ہے ۔"
+"یہ ڈائیلاگ آپ كو ایك كمیوڈیٹی كو خارج كرنے كی اجازت دینے سے پہلے پیش كیا جاتا "
+"ہے ۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:167
@@ -11082,9 +11075,9 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
-"یہ ڈائیلاگ اس وقت پیش كیا جاتا ہے جب آپ ایك ترمیم كیے گئے لین دین كی نقل "
-"تیار كرنے كی كوشش كرتے ہیں۔ تبدیل كیا گیا ڈاٹا كو محفوظ كر لینا چاہیے یا نقل "
-"كے عمل كو منسوخ كردینا چاہیے۔"
+"یہ ڈائیلاگ اس وقت پیش كیا جاتا ہے جب آپ ایك ترمیم كیے گئے لین دین كی نقل تیار "
+"كرنے كی كوشش كرتے ہیں۔ تبدیل كیا گیا ڈاٹا كو محفوظ كر لینا چاہیے یا نقل كے "
+"عمل كو منسوخ كردینا چاہیے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:124
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:257
@@ -11132,9 +11125,9 @@ msgid ""
 "This dialog is presented when you are unable to jump on a transaction "
 "because it only has splits for the current account."
 msgstr ""
-"یہ ڈائیلاگ اس وقت پیش كیا جاتا ہے جب آپ ایك ترمیم كیے گئے لین دین كی نقل "
-"تیار كرنے كی كوشش كرتے ہیں۔ تبدیل كیا گیا ڈاٹا كو محفوظ كر لینا چاہیے یا نقل "
-"كے عمل كو منسوخ كردینا چاہیے۔"
+"یہ ڈائیلاگ اس وقت پیش كیا جاتا ہے جب آپ ایك ترمیم كیے گئے لین دین كی نقل تیار "
+"كرنے كی كوشش كرتے ہیں۔ تبدیل كیا گیا ڈاٹا كو محفوظ كر لینا چاہیے یا نقل كے "
+"عمل كو منسوخ كردینا چاہیے۔"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
@@ -12212,9 +12205,9 @@ msgid ""
 "created Scheduled Transactions directly."
 msgstr ""
 "یہ GnuCash کے اندر اندر ایک قرض کی واپسی تخلیق كرنے کے لئے ایک قدم بہ قدم "
-"طریقہ ہے. اس اسسٹنٹ میں، آپ ، آپ كےقرض كی تفصیلات اور اس کی ادائیگی کی "
-"تفصیلات کے ساتھ ساتھ اس کی واپسی کی تفصیلات اِن پٹ كرسكتے ہیں کر سکتے ہیں. اس "
-"معلومات کا استعمال کرتے ہوئے، مناسب ;یڈیولڈ ٹرانسیكشن تخلیق كیاجائے گا.\n"
+"طریقہ ہے. اس اسسٹنٹ میں، آپ ، آپ كےقرض كی تفصیلات اور اس کی ادائیگی کی تفصیلات "
+"کے ساتھ ساتھ اس کی واپسی کی تفصیلات اِن پٹ كرسكتے ہیں کر سکتے ہیں. اس معلومات "
+"کا استعمال کرتے ہوئے، مناسب ;یڈیولڈ ٹرانسیكشن تخلیق كیاجائے گا.\n"
 "\n"
 "آپ نے كوئی غلطی كی یا بعد میں تبدیلیاں کرنا چاہتے ہیں تو، آپ براہ راست تخلیق "
 "شدہ شیڈیولڈ ٹرانسیكشنس ترمیم کر سکتے ہیں."
@@ -12464,8 +12457,8 @@ msgid ""
 "process."
 msgstr ""
 "GnuCash كوئیكن/ كوئیك بُكس، MS منی، منی ڈانس اور كئی دیگر پروگراموں كے ذریعہ "
-"لكھی ہوئیQIF (كوئیكن انٹرچینج فارمیٹ) فائلوں سے مالگزاری ڈاٹا درآمد كرسكتے "
-"ہے۔\n"
+"لكھی ہوئیQIF (كوئیكن انٹرچینج فارمیٹ) فائلوں سے مالگزاری ڈاٹا درآمد كرسكتے ہے"
+"۔\n"
 "\n"
 "درآمد پروسیس كی كئی اسٹیپس ہے۔ آپ كے GnuCash اكاؤنٹس كو تبدیل نہیں كیا جائے "
 "گا جب تك كہ آپ پروسیس كے آخر میں \"اپلائے\"پر كلك نہیں كرتے ہے۔\n"
@@ -12528,8 +12521,8 @@ msgstr ""
 "QIF فائل فارمیٹ دن، مہینے ، اور تاریخ كے سال كے اجزاء كس آرڈر میں پرنٹ كیے "
 "گئے وضاحت نہیں كرتا ہیں ۔ زیادہ تر مقدمات میں، یہ خود کار طریقے كونسا فارمیٹ "
 "ایک مخصوص فائل میں استعمال كیا گیا ہے اس بات کا تعین ممکن ہے. تاہم، آپ کو "
-"صرف درآمد ہے فائل میں ڈاٹا فٹ بیٹھتا ہے کہ ایک سے زیادہ ممکن فارمیٹ موجود "
-"ہے .\n"
+"صرف درآمد ہے فائل میں ڈاٹا فٹ بیٹھتا ہے کہ ایک سے زیادہ ممکن فارمیٹ موجود ہے "
+".\n"
 "\n"
 "فائل کے لئے ایک تاریخ فارمیٹ کو منتخب کریں. یورپی سافٹ ویئر کی طرف سے تخلیق "
 "QIF فائلیں \"d-m-y\" میں ہے یا دن۔ مہینہ ۔سال فارمیٹ ، جہاں امریکی QIF "
@@ -12628,8 +12621,8 @@ msgstr ""
 "اكاؤنٹ، بروكیج كمیشنز كےلیے الگ ۔ الگ اكاؤنٹس، خاص طور پر\"اكویٹی\" اكاؤنٹس "
 "(قائم ركھی گئی آمدنی كے سب اكاؤنٹس، دیفالٹ طور پر)، جو آپ كے شروعاتی بقایا "
 "كا ماخذ، وغیرہ شامل ہے۔ یہ سبھی اكاؤنٹس اگلے صفحہ پر ظاہر ہوں گے تاكہ اگر آپ "
-"اسے تبدیل كرنا چاہتے ہے تو تبدیل كرسكے، لیكن اُنھیں اكیلا چھوڑنا دینا ہی "
-"محفوظ ہے۔\n"
+"اسے تبدیل كرنا چاہتے ہے تو تبدیل كرسكے، لیكن اُنھیں اكیلا چھوڑنا دینا ہی محفوظ "
+"ہے۔\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:530
 msgid "Accounts and stock holdings"
@@ -12748,8 +12741,8 @@ msgstr ""
 "ایک ڈائیلاگ کو نظر آئے گا. یہ GnuCash لین دین درآمد کس طرح كرتا ہے پر متاثر "
 "کر سکتا ہے. اگر آپ منسوخ اور ختم شروع کرنے کے بغیر واپس اس صفحے پر آتے تو "
 "دوسرے آپشن كے لیے ڈائیلاگ دوسری بار نہیں دكھایا جائے گا جب، کتاب کے اختیارات "
-"قائم کرنے کے لئے ڈائیلاگ ایک دوسرے وقت نہیں دکھایا جائے گا. آپ فائل> "
-"پراپرٹیز کے ذریعے مینو سے براہ راست اس تک رسائی حاصل کر سکتے ہیں."
+"قائم کرنے کے لئے ڈائیلاگ ایک دوسرے وقت نہیں دکھایا جائے گا. آپ فائل> پراپرٹیز "
+"کے ذریعے مینو سے براہ راست اس تک رسائی حاصل کر سکتے ہیں."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2776
@@ -12781,10 +12774,10 @@ msgstr ""
 "\n"
 "ہر ایك اسٹاك، میچول فنڈ، یا دیگر سرمایہ كاری میں ایك نام اور ایك خلاصہ ہونا "
 "چاہئے، جیسے كہ اسٹاك نشان ہے۔ كیونكہ كچھ بے رابطہ سرمایہ كاروں كا ایك جیسا "
-"خلاصہ ہوتا ہے، تو آپ كو یہ بھی ظاہركرنا ضروری ہے كہ آپ نے كس قسم كا خلاصہ "
-"داخل كیا ہے۔ مثال كے طور پرآپ ایك ایسا ایكسچینج منتخب كرسكتے ہیں "
-"جوكہ(NASDAQ, NYSE,وغیرہ۔) نشان منتقل كیا ہے، یا آپ ایك سرمایہ كاری كی قسم كو "
-"منتخب كر سكتے ہے۔\n"
+"خلاصہ ہوتا ہے، تو آپ كو یہ بھی ظاہركرنا ضروری ہے كہ آپ نے كس قسم كا خلاصہ داخل "
+"كیا ہے۔ مثال كے طور پرآپ ایك ایسا ایكسچینج منتخب كرسكتے ہیں جوكہ(NASDAQ, "
+"NYSE,وغیرہ۔) نشان منتقل كیا ہے، یا آپ ایك سرمایہ كاری كی قسم كو منتخب كر "
+"سكتے ہے۔\n"
 "\n"
 "اگر آپ اپنی ایكسچینج كی فہرست كو نہیں دیكھتے ہیں ، یا كوئی بھی مخصوص "
 "انتخابات دستیاب نہیں ہیں، تو آپ ایك نئے انتخاب كو درج كرسكتے ہے۔ "
@@ -13033,9 +13026,9 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"اگر آپ نے اسٹاك علیحدہ یا ملاپ كی تخلیق مكمل كرلی ہے تو 'اپلائے' دباؤ۔ آپ "
-"اپنے انتخابات كو دوبارہ دیكھنے كے لیے 'بیك' یا كوئی تبدیلی كیے بغیر باہر "
-"نكلنے كے لیے ' منسوخ' بھی دبا سكتے ہے۔"
+"اگر آپ نے اسٹاك علیحدہ یا ملاپ كی تخلیق مكمل كرلی ہے تو 'اپلائے' دباؤ۔ آپ اپنے "
+"انتخابات كو دوبارہ دیكھنے كے لیے 'بیك' یا كوئی تبدیلی كیے بغیر باہر نكلنے كے "
+"لیے ' منسوخ' بھی دبا سكتے ہے۔"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
 msgid "Stock Split Finish"
@@ -13206,9 +13199,9 @@ msgid ""
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"اگر آپ نے اسٹاك علیحدہ یا ملاپ كی تخلیق مكمل كرلی ہے تو 'اپلائے' دباؤ۔ آپ "
-"اپنے انتخابات كو دوبارہ دیكھنے كے لیے 'بیك' یا كوئی تبدیلی كیے بغیر باہر "
-"نكلنے كے لیے ' منسوخ' بھی دبا سكتے ہے۔"
+"اگر آپ نے اسٹاك علیحدہ یا ملاپ كی تخلیق مكمل كرلی ہے تو 'اپلائے' دباؤ۔ آپ اپنے "
+"انتخابات كو دوبارہ دیكھنے كے لیے 'بیك' یا كوئی تبدیلی كیے بغیر باہر نكلنے كے "
+"لیے ' منسوخ' بھی دبا سكتے ہے۔"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:953
 #, fuzzy
@@ -13885,8 +13878,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account-picker.glade:113
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
-msgstr ""
-"ڈیفالٹ لین دین اسٹیٹس (QIF فائل کی طرف سے دی گئی حیثیت کی طرف سے منسوخ)"
+msgstr "ڈیفالٹ لین دین اسٹیٹس (QIF فائل کی طرف سے دی گئی حیثیت کی طرف سے منسوخ)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
@@ -14213,9 +14205,9 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case)."
 msgstr ""
-"كموڈیٹی (مثال کے طور CSCO یا AAPL) کے لئے ٹکر کی علامت درج کریں.اگر آپ آن "
-"لائن كوٹس درج کرنے کی بازیافت کر رہے ہیں، یہ فیلڈ بالکل (کیس بھی شامل ہے) "
-"كوٹ سورس کے ذریعہ استعمال ٹکر کی علامت سے مطابقت ضروری ہے."
+"كموڈیٹی (مثال کے طور CSCO یا AAPL) کے لئے ٹکر کی علامت درج کریں.اگر آپ آن لائن "
+"كوٹس درج کرنے کی بازیافت کر رہے ہیں، یہ فیلڈ بالکل (کیس بھی شامل ہے) كوٹ "
+"سورس کے ذریعہ استعمال ٹکر کی علامت سے مطابقت ضروری ہے."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
@@ -15359,9 +15351,9 @@ msgid ""
 "perform any of them."
 msgstr ""
 "كچھ پہلے سے واضح كارگردگیاں دستیاب ہے جو زیادہ تر نئے صارف GnuCash كے ساتھ "
-"شروع كرنے كو ترجیح دیں گے۔ نیچے سے ان كاركردگیوں میں سے ایك منتخب كرو اور "
-"<i>اوكے</i> بٹن پر كلك كرو یا اگر آپ ان میں سے كچھ نہیں كرنا چاہتے ہے تو "
-"<i>منسوخ </i> بٹن دباؤ۔"
+"شروع كرنے كو ترجیح دیں گے۔ نیچے سے ان كاركردگیوں میں سے ایك منتخب كرو اور <i>"
+"اوكے</i> بٹن پر كلك كرو یا اگر آپ ان میں سے كچھ نہیں كرنا چاہتے ہے تو <i>"
+"منسوخ </i> بٹن دباؤ۔"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
 msgid "C_reate a new set of accounts"
@@ -15791,8 +15783,8 @@ msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr ""
-"خود كار طریقہ سے قیمتوں میں ایك ڈیسیمل پوائنٹ داخل كرو جواس كے بغیر كی گئی "
-"ہے۔"
+"خود كار طریقہ سے قیمتوں میں ایك ڈیسیمل پوائنٹ داخل كرو جواس كے بغیر كی گئی ہے"
+"۔"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1309
 #, fuzzy
@@ -15814,8 +15806,7 @@ msgstr "نئی فائل پر اكاؤنٹ فہرست سیٹ اپ عمل درآم
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"جب آپ فائل->نئی فائل كا انتخاب کرتے ہیں تب نئے اکاؤنٹ فہرست ڈائیلاگ پیش "
-"کریں ."
+"جب آپ فائل->نئی فائل كا انتخاب کرتے ہیں تب نئے اکاؤنٹ فہرست ڈائیلاگ پیش کریں ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1485
 msgid "Display \"_tip of the day\" dialog"
@@ -15868,8 +15859,7 @@ msgstr "نئی تلاش كی حد"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1653
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr ""
-"اگر'نئی تلاش' كو ڈیفالٹ كرئے توبہت كم آئٹموں كی تعداد كی واپسی ہوتی ہے."
+msgstr "اگر'نئی تلاش' كو ڈیفالٹ كرئے توبہت كم آئٹموں كی تعداد كی واپسی ہوتی ہے."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1669
 msgid "Show splash scree_n"
@@ -15995,10 +15985,10 @@ msgstr ""
 "سہولت اسٹورز جیسی جگہوں پر انسٹال كیے گئے ہیں یہ اے ٹی ایم ان كی فی برائے "
 "راست رقم میں شامل كرتے ہے علیحدہ لین دین دیكھانے كی بجائے کی بجائے یا آپ كی "
 "ماہانہ بینكینگ فیس میں مثال کے طور پر، آپ نے 100 ڈالر واپس لیے، اور آپ كو "
-"Interac فیس کے علاوہ $ 101،50 چارج کر رہے ہیں. آپ کو دستی طور $ 100، رقم "
-"ملنے نہیں جائے گا کہ داخل ہو تو. آپ کو آپ کے علاقے (آپ کی مقامی کرنسی کی "
-"اکائیوں میں) میں زیادہ سے زیادہ اس طرح کی فیس ہے جو کچھ بھی کرنے کے لئے یہ "
-"قائم کرنا چاہئے، تو لین دین کے ایک میچ کے طور پر تسلیم کیا جائے گا."
+"Interac فیس کے علاوہ $ 101،50 چارج کر رہے ہیں. آپ کو دستی طور $ 100، رقم ملنے "
+"نہیں جائے گا کہ داخل ہو تو. آپ کو آپ کے علاقے (آپ کی مقامی کرنسی کی اکائیوں "
+"میں) میں زیادہ سے زیادہ اس طرح کی فیس ہے جو کچھ بھی کرنے کے لئے یہ قائم کرنا "
+"چاہئے، تو لین دین کے ایک میچ کے طور پر تسلیم کیا جائے گا."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2177
 msgid ""
@@ -16358,8 +16348,8 @@ msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
 msgstr ""
-"اگر چیكڈ ہے، تو ہر ایک رجسٹر اس کی اپنی سب سے اوپر کی سطح ونڈو میں کھولا "
-"جائے گا. اگر واضح تو، رجسٹر موجودہ ونڈو میں کھول دیا جائے گا."
+"اگر چیكڈ ہے، تو ہر ایک رجسٹر اس کی اپنی سب سے اوپر کی سطح ونڈو میں کھولا جائے "
+"گا. اگر واضح تو، رجسٹر موجودہ ونڈو میں کھول دیا جائے گا."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3128
 msgid "_Only display leaf account names"
@@ -16967,9 +16957,9 @@ msgid ""
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
-"آپ نے مندرجہ ذیل انتباہ ڈائیلاگ پیش نہیں کیا جائے کی درخواست کی ہے. ان میں "
-"سے كوئی بھی ڈائیلاگ دوبارہ فعال كرنے، ڈائیلاگ كے اگلے چیک باکس كو منتخب "
-"کریں، پھر ٹھیک ہے پر کلک کریں."
+"آپ نے مندرجہ ذیل انتباہ ڈائیلاگ پیش نہیں کیا جائے کی درخواست کی ہے. ان میں سے "
+"كوئی بھی ڈائیلاگ دوبارہ فعال كرنے، ڈائیلاگ كے اگلے چیک باکس كو منتخب کریں، پھر "
+"ٹھیک ہے پر کلک کریں."
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
@@ -18438,8 +18428,8 @@ msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
-"محفوظ HTTP پہنچ ناممكن ہے۔ آپ اسے ترجیحات ڈائیلاگ كے نیٹورك سیكشن میں قابل "
-"كر سكتے ہے۔"
+"محفوظ HTTP پہنچ ناممكن ہے۔ آپ اسے ترجیحات ڈائیلاگ كے نیٹورك سیكشن میں قابل كر "
+"سكتے ہے۔"
 
 #: gnucash/html/gnc-html-webkit1.cpp:562 gnucash/html/gnc-html-webkit1.cpp:967
 #: gnucash/html/gnc-html-webkit2.cpp:552 gnucash/html/gnc-html-webkit2.cpp:898
@@ -18963,8 +18953,8 @@ msgstr "_وربوس ڈی بگ پیغامات"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr ""
-"HBCI/AqBanking آن لائن بینكنگ كے لیے كثیر الفاظی ڈی بگ پیغامات كو قابل كرتا "
-"ہے۔"
+"HBCI/AqBanking آن لائن بینكنگ كے لیے كثیر الفاظی ڈی بگ پیغامات كو قابل كرتا ہے"
+"۔"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:88
 #, fuzzy
@@ -19077,9 +19067,9 @@ msgid ""
 msgstr ""
 "آپ کے مقامی بینک اکاؤنٹ میں ابھی تک SEPA اکاؤنٹ کی معلومات ذخیرہ نہیں ہے. "
 "ہمیں افسوس ہے، لیکن اس کی ترقی کے ورژن میں ایک اضافی قدم كی ضرورت ہے جو ابھی "
-"تک gnucash میں براہ راست لاگو نہیں کیا گیا ہے. آپ کے اکاؤنٹ کے لئے کمانڈ "
-"لائن پروگرام \"aqhbci-tool\" ایكزیكیوٹ کریں: مندرجہ ذیل كی طرح : aqhbci-"
-"tool4 getaccsepa -b %s -a %s"
+"تک gnucash میں براہ راست لاگو نہیں کیا گیا ہے. آپ کے اکاؤنٹ کے لئے کمانڈ لائن "
+"پروگرام \"aqhbci-tool\" ایكزیكیوٹ کریں: مندرجہ ذیل كی طرح : aqhbci-tool4 "
+"getaccsepa -b %s -a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:574
 msgid ""
@@ -19112,8 +19102,8 @@ msgid ""
 "settings. This does not result in a valid online transfer job."
 msgstr ""
 "رقم صفر ہے یا رقم فیلڈ درست طریقے سے تشریح نہیں کی جا سکتی. آپ نے اپنے مقامی "
-"ترتیبات کے مقابلے میں، دشملو نقطہ اور کوما كو مكس كیا ہے ۔یہ ایک درست آن "
-"لائن منتقلی جاب كا نتیجہ نہیں ہوسكتا ہے ۔"
+"ترتیبات کے مقابلے میں، دشملو نقطہ اور کوما كو مكس كیا ہے ۔یہ ایک درست آن لائن "
+"منتقلی جاب كا نتیجہ نہیں ہوسكتا ہے ۔"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:645
 msgid ""
@@ -19204,8 +19194,8 @@ msgstr ""
 "نہیں ہے۔\n"
 "\n"
 "بہت زیادہ ممكن ہے كہ بینك آپ كے منتخب جاب كو سپورٹ نہیں كرتا ہے یا آپ كے آن "
-"لائن بینكنگ اكاؤنٹ كو اس جاب كے تكمیل كی اجازت نہیں ہے۔ آپ كے كنسول لاگ پر "
-"اور مزید خامی پیغامات دكھائی دیں سكتے ہیں۔\n"
+"لائن بینكنگ اكاؤنٹ كو اس جاب كے تكمیل كی اجازت نہیں ہے۔ آپ كے كنسول لاگ پر اور "
+"مزید خامی پیغامات دكھائی دیں سكتے ہیں۔\n"
 "\n"
 "كیا آپ اس جاب میں دوبارہ داخل ہوناچاہتے ہے؟"
 
@@ -19272,8 +19262,8 @@ msgstr ""
 "نہیں ہے۔\n"
 "\n"
 "بہت زیادہ ممكن ہے كہ بینك آپ كے منتخب جاب كو سپورٹ نہیں كرتا ہے یا آپ كے آن "
-"لائن بینكنگ اكاؤنٹ كو اس جاب كے تكمیل كی اجازت نہیں ہے۔ آپ كے كنسول لاگ پر "
-"اور مزید خامی پیغامات دكھائی دیں سكتے ہیں۔\n"
+"لائن بینكنگ اكاؤنٹ كو اس جاب كے تكمیل كی اجازت نہیں ہے۔ آپ كے كنسول لاگ پر اور "
+"مزید خامی پیغامات دكھائی دیں سكتے ہیں۔\n"
 "\n"
 "كیا آپ اس جاب میں دوبارہ داخل ہوناچاہتے ہے؟"
 
@@ -19290,8 +19280,8 @@ msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
 msgstr ""
-"یہ gnucash اكاؤنٹ كے لیے آن لائن بینكنگ اكاؤنٹ نہیں ملا۔ ان لین دینوں كا "
-"تكمیل كی گئی بینكنگ كے ذریعہ نہیں كیا جائے گا۔"
+"یہ gnucash اكاؤنٹ كے لیے آن لائن بینكنگ اكاؤنٹ نہیں ملا۔ ان لین دینوں كا تكمیل "
+"كی گئی بینكنگ كے ذریعہ نہیں كیا جائے گا۔"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:916
 msgid ""
@@ -19322,8 +19312,8 @@ msgstr ""
 "\n"
 "یہ ایك صحیح بیلنس ہے یا آپ كی بینك اس آن لائن بینكنگ ورژن میں بیلنس ڈاؤن لوڈ "
 "كو سپورٹ نہیں كرتا ہے۔ بعد كی حالت میں آپ كو آن لائن بینكنگ (AqBanking or "
-"HBCI) سیٹ اپ میں ایك الگ آن لائن بینكنگ ورژن كی تعداد منتخب كرنا چاہیے۔ اس "
-"كے بعد آن لائن بینكنگ بیلنس كو پھر سے ڈاؤن لوڈ كرنے كی كوشش كرو۔"
+"HBCI) سیٹ اپ میں ایك الگ آن لائن بینكنگ ورژن كی تعداد منتخب كرنا چاہیے۔ اس كے "
+"بعد آن لائن بینكنگ بیلنس كو پھر سے ڈاؤن لوڈ كرنے كی كوشش كرو۔"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1026
 #, c-format
@@ -19422,8 +19412,8 @@ msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"آن لائن بینکنگ کے ذریعے ایک نئے بین الاقوامی یورپی (SEPA) لین دین آن لائن "
-"جاری كریں"
+"آن لائن بینکنگ کے ذریعے ایک نئے بین الاقوامی یورپی (SEPA) لین دین آن لائن جاری "
+"كریں"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
@@ -19439,8 +19429,8 @@ msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"آن لائن بینکنگ کے ذریعے ایک نئے بین الاقوامی یورپی (SEPA) لین دین آن لائن "
-"جاری كریں"
+"آن لائن بینکنگ کے ذریعے ایک نئے بین الاقوامی یورپی (SEPA) لین دین آن لائن جاری "
+"كریں"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
@@ -19462,8 +19452,8 @@ msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
 msgstr ""
-"آن لائن بینکنگ کے ذریعے ایک نئے بین الاقوامی یورپی (SEPA) براہ راست ڈیبیٹ "
-"نوٹ آن لائن جاری كریں"
+"آن لائن بینکنگ کے ذریعے ایک نئے بین الاقوامی یورپی (SEPA) براہ راست ڈیبیٹ نوٹ "
+"آن لائن جاری كریں"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:53
 msgid "Show _log window"
@@ -19515,8 +19505,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "یہ سیٹینگ DTAUS فائلوں كو درآمد كرتے وقت ڈاٹا فارمیٹ مختص كرتا ہے۔ AqBanking "
-"لائبریری مختلف قسم كے درآمد فارمیٹس (\"پروفائلس\" كہا جاتا ہے) پیش كرتا ہے "
-"جو آپ یہاں كسی ایك كا انتخاب كرسكتے ہے۔ "
+"لائبریری مختلف قسم كے درآمد فارمیٹس (\"پروفائلس\" كہا جاتا ہے) پیش كرتا ہے جو "
+"آپ یہاں كسی ایك كا انتخاب كرسكتے ہے۔ "
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
@@ -19529,8 +19519,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "یہ سیٹینگ CSV فائلوں كو درآمد كرتے وقت ڈاٹا فارمیٹ مختص كرتا ہے۔ AqBanking "
-"لائبریری مختلف قسم كے درآمد فارمیٹس (\"پروفائلس\" كہا جاتا ہے) پیش كرتا ہے "
-"جو آپ یہاں كسی ایك كا انتخاب كرسكتے ہے۔ "
+"لائبریری مختلف قسم كے درآمد فارمیٹس (\"پروفائلس\" كہا جاتا ہے) پیش كرتا ہے جو "
+"آپ یہاں كسی ایك كا انتخاب كرسكتے ہے۔ "
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:45
 msgid "SWIFT MT940 import data format"
@@ -19843,8 +19833,7 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"اکاؤنٹ ٹری، فائل '%s' کو برآمد کی جائے گی جب ' آپ لاگو كریں ' پر كلك "
-"كرینگے.\n"
+"اکاؤنٹ ٹری، فائل '%s' کو برآمد کی جائے گی جب ' آپ لاگو كریں ' پر كلك كرینگے.\n"
 "\n"
 "آپ ' بیك' یا برآمد ابارٹ كرنے كے لیے 'منسوخ كریں ' پر كلك كركے واپس جاسكتے "
 "ہے اور آپ كے انتخاب كی تصدیق كرسكتے ہیں.\n"
@@ -19889,8 +19878,7 @@ msgid ""
 "You may need to enable debugging.\n"
 msgstr ""
 "برآمد کے ساتھ ایک مسئلہ تھا، یہ جگہ كی كمی، اجازت یا فولڈر تک رسائی حاصل "
-"کرنے میں نا قابل کی وجہ سے ہو سکتا ہے. مزید لاگنگ کے لئے ٹریس فائل چیک "
-"کریں!\n"
+"کرنے میں نا قابل کی وجہ سے ہو سکتا ہے. مزید لاگنگ کے لئے ٹریس فائل چیک کریں!\n"
 "آپ كو ڈی بگینگ كو قابل كرنے ضرورت ہو سکتی ہے.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:763
@@ -22242,8 +22230,8 @@ msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr ""
-"ٹرانسیكشن حوالہ، درج کریں جیسے اِنوائس یا چیك نمبر ، تمام اندراج لائنز "
-"(تقسیم) کے لئے عام "
+"ٹرانسیكشن حوالہ، درج کریں جیسے اِنوائس یا چیك نمبر ، تمام اندراج لائنز (تقسیم) "
+"کے لئے عام "
 
 #: gnucash/register/ledger-core/split-register-model.c:1116
 msgid ""
@@ -22993,8 +22981,8 @@ msgid ""
 "Exclude transactions that only involve two accounts, both of which are "
 "selected below. This only affects the profit and loss columns of the table."
 msgstr ""
-"صرف دو اكاؤنٹس شامل كررہے لین دین خارج كریں، دونوں ذیل میں منتخب کیے گئے "
-"ہیں . یہ صرف ٹیبل کے فائدہ اور نقصان کے کالم کو متاثر کرتی ہے."
+"صرف دو اكاؤنٹس شامل كررہے لین دین خارج كریں، دونوں ذیل میں منتخب کیے گئے ہیں "
+". یہ صرف ٹیبل کے فائدہ اور نقصان کے کالم کو متاثر کرتی ہے."
 
 #: gnucash/report/reports/example/average-balance.scm:86
 msgid "Do transaction report on this account."
@@ -23341,8 +23329,7 @@ msgstr ""
 msgid ""
 " For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
-msgstr ""
-"وہ فہرست سب كرائیبنگ پر تفصیلات كے لیے، دیكھے<http://www.gnucash.org/>."
+msgstr "وہ فہرست سب كرائیبنگ پر تفصیلات كے لیے، دیكھے<http://www.gnucash.org/>."
 
 #: gnucash/report/reports/example/sample-report.scm:298
 #, fuzzy
@@ -28262,8 +28249,8 @@ msgid ""
 "Merchandising businesses will normally select their inventory accounts here."
 msgstr ""
 "اصل نہیں كرو، لیكن ان اكاؤنٹس میں كُل ڈیبٹ/كریڈیٹ ترتیب پذیریوں كو دكھائیں۔ "
-"تجارت كاروبار اپنی فہرست تیار كیے گئے اكاؤنٹس كو حسب معمول یہاں منتخب كریں "
-"گا۔"
+"تجارت كاروبار اپنی فہرست تیار كیے گئے اكاؤنٹس كو حسب معمول یہاں منتخب كریں گا"
+"۔"
 
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Income summary accounts"
@@ -28448,9 +28435,9 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
-"یہ رپورٹ صرف (فروخت) چالانوں كے لیے ڈیزائن كیا گیا ہے۔ براہ كرم ایك "
-"<em>چالان</em> كو منتخب كرنے كے لیے آپشنس مینو كا استعمال كرو، نہ كہ بِل یا "
-"خرچے كی رسید كا۔"
+"یہ رپورٹ صرف (فروخت) چالانوں كے لیے ڈیزائن كیا گیا ہے۔ براہ كرم ایك <em>چالان</"
+"em> كو منتخب كرنے كے لیے آپشنس مینو كا استعمال كرو، نہ كہ بِل یا خرچے كی رسید "
+"كا۔"
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -30581,8 +30568,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
-"یہ اكاؤنٹ میں غیر متوازن لین دینوں اور لاوارث علیحدگی كے لیے جانچ اور مرمت "
-"كرو"
+"یہ اكاؤنٹ میں غیر متوازن لین دینوں اور لاوارث علیحدگی كے لیے جانچ اور مرمت كرو"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:286
@@ -30595,8 +30581,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"یہ اكاؤنٹ میں اس كے سب اكاؤنٹس غیر متوازن لین دینوں اور لاوارث علیحدگی كے "
-"لیے جانچ اور مرمت كرو"
+"یہ اكاؤنٹ میں اس كے سب اكاؤنٹس غیر متوازن لین دینوں اور لاوارث علیحدگی كے لیے "
+"جانچ اور مرمت كرو"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
@@ -30609,8 +30595,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
 msgstr ""
-"سبھی اكاؤنٹس میں غیر متوازن لین دینوں اور لاوارث علیحدگی كے لیے جانچ اور "
-"مرمت كریں"
+"سبھی اكاؤنٹس میں غیر متوازن لین دینوں اور لاوارث علیحدگی كے لیے جانچ اور مرمت "
+"كریں"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
 #, fuzzy
@@ -32639,8 +32625,8 @@ msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
 msgstr ""
-"پچھلےملازم كی تعداد ایجاد كرلی گئی۔ یہ تعداد كو اگلے ملازم تعداد ایجاد كرنے "
-"كے لیے بڑھایا جائے گا۔ "
+"پچھلےملازم كی تعداد ایجاد كرلی گئی۔ یہ تعداد كو اگلے ملازم تعداد ایجاد كرنے كے "
+"لیے بڑھایا جائے گا۔ "
 
 #: libgnucash/engine/gnc-optiondb.cpp:1244
 msgid "Employee number format"
@@ -32723,8 +32709,8 @@ msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"خرچ رسید تعداد ایجاد كرنے كے لیے فارمیٹ اسٹرینگ كا استعمال كرو۔ یہ ایك "
-"پرنٹف ۔ اسٹائل فارمیٹ اسٹرینگ ہے۔"
+"خرچ رسید تعداد ایجاد كرنے كے لیے فارمیٹ اسٹرینگ كا استعمال كرو۔ یہ ایك پرنٹف "
+"۔ اسٹائل فارمیٹ اسٹرینگ ہے۔"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1275
 msgid "Job number"

@@ -40,20 +40,20 @@
 # George Petsagourakis <petsagouris@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-03-16 09:53+0000\n"
+"PO-Revision-Date: 2026-06-26 03:32+0000\n"
 "Last-Translator: George Petsagourakis <petsagouris@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
-">\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -3657,8 +3657,7 @@ msgstr "Εύρεση παραγγελίας"
 #: gnucash/gnome/dialog-payment.c:238
 #, fuzzy
 msgid "You must enter a valid account name for posting."
-msgstr ""
-"Πρέπει να εισάγετε ένα όνομα για το λογαριασμό για να γίνει καταχώρηση."
+msgstr "Πρέπει να εισάγετε ένα όνομα για το λογαριασμό για να γίνει καταχώρηση."
 
 #: gnucash/gnome/dialog-payment.c:247
 msgid "You must select a company for payment processing."
@@ -3673,8 +3672,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:282
 msgid "You must select a transfer account from the account tree."
-msgstr ""
-"Πρέπει να επιλέξετε ένα λογαριασμό μεταφοράς από το δένδρο λογαριασμών."
+msgstr "Πρέπει να επιλέξετε ένα λογαριασμό μεταφοράς από το δένδρο λογαριασμών."
 
 #: gnucash/gnome/dialog-payment.c:293
 msgid ""
@@ -4167,8 +4165,7 @@ msgstr "Κατάσταση"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1446
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr ""
-"Αυτή την στιγμή δεν υπάρχουν προγραμματισμένες συναλλαγές για εισαγωγή."
+msgstr "Αυτή την στιγμή δεν υπάρχουν προγραμματισμένες συναλλαγές για εισαγωγή."
 
 #. Translators: %d is the number of transactions. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-sx-since-last-run.c:1455
@@ -5359,8 +5356,7 @@ msgstr "Αυτή η συναλλαγή έχει σημειωθεί μόνο γι
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2567
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
-msgstr ""
-"Μια αντίστροφη καταχώρηση έχει ήδη δημιουργηθεί για αυτή την συναλλαγή."
+msgstr "Μια αντίστροφη καταχώρηση έχει ήδη δημιουργηθεί για αυτή την συναλλαγή."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2568
 #, fuzzy
@@ -7460,8 +7456,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:334
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
-msgstr ""
-"Απέτυχε ή σύνδεση στο %s. Χάθηκε η επαφή, αδύνατη η αποστολή δεδομένων."
+msgstr "Απέτυχε ή σύνδεση στο %s. Χάθηκε η επαφή, αδύνατη η αποστολή δεδομένων."
 
 #: gnucash/gnome-utils/gnc-file.c:340
 msgid ""
@@ -12173,8 +12168,8 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
-"Εισάγετε ένα ετήσιο επιτόκιο ως ποσοστό. Δεκτές είναι τιμές μεταξύ 0.001 "
-"-100. Ο βοηθός δανείου δεν υποστηρίζει δάνεια μηδενικού επιτοκίου."
+"Εισάγετε ένα ετήσιο επιτόκιο ως ποσοστό. Δεκτές είναι τιμές μεταξύ 0.001 -"
+"100. Ο βοηθός δανείου δεν υποστηρίζει δάνεια μηδενικού επιτοκίου."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:362
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -13277,8 +13272,7 @@ msgstr "Διαγραφή όλων των _συναλλαγών"
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr ""
-"Αυτός ο λογαριασμός περιέχει συναλλαγές. Τι θέλετε να τις κάνετε αυτές;"
+msgstr "Αυτός ο λογαριασμός περιέχει συναλλαγές. Τι θέλετε να τις κάνετε αυτές;"
 
 #: gnucash/gtkbuilder/dialog-account.glade:628
 msgid "This account contains read-only transactions which may not be deleted."
@@ -15319,8 +15313,7 @@ msgstr "Χρήση _τυπικών λογιστικών ετικετών"
 #: gnucash/gtkbuilder/dialog-preferences.glade:624
 #, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
-msgstr ""
-"Χρήση των όρων 'χρέωση' και 'πίστωση' αντί των επεξηγηματικών συνωνύμων"
+msgstr "Χρήση των όρων 'χρέωση' και 'πίστωση' αντί των επεξηγηματικών συνωνύμων"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:639
 #, fuzzy
@@ -19017,8 +19010,7 @@ msgstr "Λήψη _συναλλαγών…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
-msgstr ""
-"Λήψη online των συναλλαγών του λογαριασμού δια μέσου του Online Banking"
+msgstr "Λήψη online των συναλλαγών του λογαριασμού δια μέσου του Online Banking"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
@@ -24260,8 +24252,7 @@ msgstr "Προβολή παθητικού και καθαρής θέσης κά�
 #: gnucash/report/reports/standard/balsheet-eg.scm:221
 #, fuzzy
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr ""
-"Προβολή ενεργητικού στα αριστερά, παθητικού και καθαρής θέσης στα δεξιά"
+msgstr "Προβολή ενεργητικού στα αριστερά, παθητικού και καθαρής θέσης στα δεξιά"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Sign: -$10.00"
@@ -25176,8 +25167,8 @@ msgstr "Μέγιστες ακίδες"
 #, fuzzy
 msgid "Show charts as stacked charts?"
 msgstr ""
-"Εμφάνιση ακιδωτού διαγράμματος με στιβαγμένες ακίδες; (απαιτεί Guppi "
-"έκδοσης>= 0.35.4)"
+"Εμφάνιση ακιδωτού διαγράμματος με στιβαγμένες ακίδες; (απαιτεί Guppi έκδοσης>"
+"= 0.35.4)"
 
 #: gnucash/report/reports/standard/category-barchart.scm:160
 #, fuzzy
@@ -30090,8 +30081,7 @@ msgstr "_Νέα αρίθμηση υπολογαριασμών…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:45
 msgid "Renumber the children of the selected account"
-msgstr ""
-"Νέα αρίθμηση στους θυγατρικούς λογαριασμούς του επιλεγμένου λογαριασμού"
+msgstr "Νέα αρίθμηση στους θυγατρικούς λογαριασμούς του επιλεγμένου λογαριασμού"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:52
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:207

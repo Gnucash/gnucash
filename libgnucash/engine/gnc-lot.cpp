@@ -505,7 +505,7 @@ gnc_lot_get_balance (GNCLot *lot)
     for (node = priv->splits; node; node = node->next)
     {
         Split *s = GNC_SPLIT(node->data);
-        gnc_numeric amt = xaccSplitGetAmount (s);
+        gnc_numeric amt = xaccSplitGetAdjustedAmount (s);
         baln = gnc_numeric_add_fixed (baln, amt);
         g_assert (gnc_numeric_check (baln) == GNC_ERROR_OK);
     }
@@ -561,7 +561,7 @@ gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
             if ((ta == tb && source != target) ||
                     xaccTransOrder (ta, tb) < 0)
             {
-                gnc_numeric tmpval = xaccSplitGetAmount (s);
+                gnc_numeric tmpval = xaccSplitGetAdjustedAmount (s);
                 amt = gnc_numeric_add_fixed (amt, tmpval);
                 tmpval = xaccSplitGetValue (s);
                 val = gnc_numeric_add_fixed (val, tmpval);

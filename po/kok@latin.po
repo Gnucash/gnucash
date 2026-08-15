@@ -1,22 +1,22 @@
 # Localization for Konkani(Roman Script) language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Ravikumar Ragam <ragamrravi@gmail.com>, 2014.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2014-10-19 16:48-0500\n"
+"PO-Revision-Date: 2026-06-26 04:02+0000\n"
 "Last-Translator: Ravikumar Ragam <ragamrravi@gmail.com>\n"
-"Language-Team: NONE\n"
+"Language-Team: Konkani <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"kok@latin/>\n"
 "Language: kok@latin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -4010,10 +4010,8 @@ msgid ""
 msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
-msgstr[0] ""
-"Hea vellar tharavik vevhar nond kopache nant (%d vevhar apoap rochla)"
-msgstr[1] ""
-"Hea velli thorayil'le vevhar bhorunk nant. (%d vevhar svocholit rochla)"
+msgstr[0] "Hea vellar tharavik vevhar nond kopache nant (%d vevhar apoap rochla)"
+msgstr[1] "Hea velli thorayil'le vevhar bhorunk nant. (%d vevhar svocholit rochla)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1507
 msgid "Created Transactions"
@@ -5829,8 +5827,7 @@ msgstr "Tujea dispott'ttea khasgi zodd ani khorchacho hixob dhor"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
 msgid "Manage your stock, bond and mutual fund accounts with ease"
-msgstr ""
-"Tuje santthe, homipotram ani mutual nidhichim khatim sompeponnim hatall"
+msgstr "Tuje santthe, homipotram ani mutual nidhichim khatim sompeponnim hatall"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Keep your small business' accounting up to date"
@@ -6632,15 +6629,13 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
-msgstr ""
-"Fokt voddilanchea khateachi urleli rok'kom dakho, upkhateanchi vogllavn"
+msgstr "Fokt voddilanchea khateachi urleli rok'kom dakho, upkhateanchi vogllavn"
 
 #: gnucash/gnome-utils/dialog-account.c:2506
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr ""
-"Fokt voddilanchea khateachi urleli rok'kom dakho, upkhateanchi vogllavn"
+msgstr "Fokt voddilanchea khateachi urleli rok'kom dakho, upkhateanchi vogllavn"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -7162,8 +7157,8 @@ msgstr[0] ""
 "gorjechem. GnuCash hantunt ek sobhavgunn asa apoap fail samballunk dor %d "
 "minttak, zoxe porim tuvem dor vella \"Samball\" butanv damlea bhaxen\n"
 "\n"
-"Tujean vellachi ontor bodlum ieta vo ho sobhavgunn Sudar->Posonti->Sadharonn-"
-">Apoap vellachem ontor samballop bond korum ieta.\n"
+"Tujean vellachi ontor bodlum ieta vo ho sobhavgunn Sudar->Posonti->"
+"Sadharonn->Apoap vellachem ontor samballop bond korum ieta.\n"
 "\n"
 "Tuji fail apoap samballpachi?"
 msgstr[1] ""
@@ -7171,8 +7166,8 @@ msgstr[1] ""
 "gorjechem. GnuCash hantunt ek sobhavgunn asa apoap fail samballunk dor %d "
 "minttak, zoxe porim tuvem dor vella \"Samball\" butanv damlea bhaxen\n"
 "\n"
-"Tujean vellachi ontor bodlum ieta vo ho sobhavgunn Sudar->Posonti->Sadharonn-"
-">Apoap vellachem ontor samballop bond korum ieta.\n"
+"Tujean vellachi ontor bodlum ieta vo ho sobhavgunn Sudar->Posonti->"
+"Sadharonn->Apoap vellachem ontor samballop bond korum ieta.\n"
 "\n"
 "Tuji fail apoap samballpachi?"
 
@@ -9825,8 +9820,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1827
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr ""
-"Vellantlo bhair sorop xokio \"bond korpant bodol samball\" prosnant kor"
+msgstr "Vellantlo bhair sorop xokio \"bond korpant bodol samball\" prosnant kor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1831
@@ -9954,8 +9948,8 @@ msgstr ""
 "porvangi dita hoikari savn nhoikari hantunt vo urfattem. \"zodd-"
 "khorch\"bosovp vaporpeank asa zankam nhoikari khorch ani hoikari zodd "
 "pollovnk zai. \"zomo rok'kom\" bosovp vaporpeank zankam urleli rok'kom "
-"khateacho khorchachi rok'kom/zomo rok'komachi sthiti pollovnk zai."
-"\"khoinchench na\"bosovp khoincheach urlelea rok'komechi nixanni urfatti "
+"khateacho khorchachi rok'kom/zomo rok'komachi sthiti pollovnk "
+"zai.\"khoinchench na\"bosovp khoincheach urlelea rok'komechi nixanni urfatti "
 "korna"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
@@ -10561,8 +10555,7 @@ msgstr "Eka nondpott'ttent vevharache ankdde dakhoi"
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
-msgstr ""
-"Itle vevhar nondpott'ttent dahkoi.Xunio mol mhullear sorv vevhar dahkoi"
+msgstr "Itle vevhar nondpott'ttent dahkoi.Xunio mol mhullear sorv vevhar dahkoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:347
 msgid "Number of characters for auto complete."
@@ -10988,8 +10981,8 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"vevhara thavn sorv futall (thoddea zulloilelea futalleacho somavex "
-"asun)kaddche adim ho sonvad bhettovpant ieta.Hem kelear zulloilelem mol "
+"vevhara thavn sorv futall (thoddea zulloilelea futalleacho somavex asun)"
+"kaddche adim ho sonvad bhettovpant ieta.Hem kelear zulloilelem mol "
 "nondpott'ttentlem sarkem dischem na ani fuddlea zullovnneo korpak kotthin "
 "zatlem"
 
@@ -15559,8 +15552,7 @@ msgstr "Sombondit"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr ""
-"faido/luskonn gonnita khatir tharavik sombondit survatechi tarikh vapor"
+msgstr "faido/luskonn gonnita khatir tharavik sombondit survatechi tarikh vapor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 #, fuzzy
@@ -19411,8 +19403,7 @@ msgstr "SEPA vevhar sador kor"
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"Ek novo ontraxttrik European (SEPA)vevhar online Online Bankinga vorvim"
+msgstr "Ek novo ontraxttrik European (SEPA)vevhar online Online Bankinga vorvim"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
@@ -19427,8 +19418,7 @@ msgstr "SEPA vevhar sador kor"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"Ek novo ontraxttrik European (SEPA)vevhar online Online Bankinga vorvim"
+msgstr "Ek novo ontraxttrik European (SEPA)vevhar online Online Bankinga vorvim"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
@@ -20160,8 +20150,7 @@ msgstr "'%s'failintlean vevhar aiat korpant aileat."
 #: gnucash/import-export/csv-imp/csv-account-import.c:267
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
-msgstr ""
-"Rank %u,khateak vatt %ssmpddunk na, voili patlli koxi zoddpant aileal\n"
+msgstr "Rank %u,khateak vatt %ssmpddunk na, voili patlli koxi zoddpant aileal\n"
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:319
 #, c-format
@@ -23324,8 +23313,8 @@ msgid ""
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Ho GnuCash vakeacho ek nomuno. scm/vakeachi margdorxika guile "
-"(pod'dot)hanchem mull polle tuje khas vage boroitana bariksanne khatir, vo "
+"Ho GnuCash vakeacho ek nomuno. scm/vakeachi margdorxika guile (pod'dot)"
+"hanchem mull polle tuje khas vage boroitana bariksanne khatir, vo "
 "protiokxant aslel vake vistarit korunk"
 
 #: gnucash/report/reports/example/sample-report.scm:292
@@ -23714,8 +23703,7 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr ""
-"Hem pan vevharachi bariksann sombondit zoddi korachea khateank dakhoita"
+msgstr "Hem pan vevharachi bariksann sombondit zoddi korachea khateank dakhoita"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
@@ -23951,8 +23939,7 @@ msgstr "xunio urleli rok'kom aslelim khatim somavex kor"
 #: gnucash/report/reports/standard/income-statement.scm:70
 #: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr ""
-"Hea vakeant xunio beriz aslelea urlelea rok'komechim khatim somavex kor"
+msgstr "Hea vakeant xunio beriz aslelea urlelea rok'komechim khatim somavex kor"
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -24619,9 +24606,9 @@ msgid ""
 "in your .gnucash directory, or else in its proper place within the GnuCash "
 "installation directories."
 msgstr ""
-"Hea vakeachea eguile prarupachea bhagachea failichem nanv. Fail "
-"tujea .gnucash margdorxikent asunk zai, na zalear tichea favo tea zagear "
-"punn GnuCashachea sthapnnechea margdorxikent"
+"Hea vakeachea eguile prarupachea bhagachea failichem nanv. Fail tujea "
+".gnucash margdorxikent asunk zai, na zalear tichea favo tea zagear punn "
+"GnuCashachea sthapnnechea margdorxikent"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:172
 #: gnucash/report/reports/standard/receipt.scm:45
@@ -25187,8 +25174,7 @@ msgstr "don khonnacho vako koso dakhol kor"
 #: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/income-statement.scm:125
 msgid "Divides the report into an income column and an expense column."
-msgstr ""
-"Vakeacho bhagakar eka zoddichea khonnant ani khorchachea khonnant korta"
+msgstr "Vakeacho bhagakar eka zoddichea khonnant ani khorchachea khonnant korta"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/income-statement.scm:127
@@ -30520,8 +30506,7 @@ msgstr "novea khateachi kromporompora…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
-msgstr ""
-"chalont pustokacho vistarit kor novea khateachea vorgonnant vilin korun"
+msgstr "chalont pustokacho vistarit kor novea khateachea vorgonnant vilin korun"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:132
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234

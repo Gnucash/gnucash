@@ -20,39 +20,41 @@
 \********************************************************************/
 
 #include <string>
-#include <map>
+#include <boost/container/flat_map.hpp>
 #include <optional>
 
 #include "gnc-euro.h"
 #include "gnc-session.h"
+#include <gnc-numeric.hpp>
+#include <gnc-rational-rounding.hpp>
 
-/* The rates are per EURO and are converted to GncNumeric  */
-static const std::map<std::string,double> gnc_euro_rates =
+/* The rates are per EURO and are denoted in GncNumeric  */
+static const boost::container::flat_map <std::string, GncNumeric> gnc_euro_rates =
 {
-    { "ATS",  13.7603 },  /* austrian schilling */
-    { "BEF",  40.3399 },  /* belgian franc */
-    { "BGN",  1.95583 },  /* Bulgarian lev */
-    { "CYP",  .585274 },  /* cyprus pound */
-    { "DEM",  1.95583 },  /* german mark */
-    { "EEK",  15.6466 },  /* Estonian Kroon */
-    { "ESP",  166.386 },  /* spanish peseta */
-    { "EUR",  1.00000 },  /* euro */
-    { "FIM",  5.94573 },  /* finnmark */
-    { "FRF",  6.55957 },  /* french franc */
-    { "GRD",  340.750 },  /* greek drachma */
-    { "HRK",  7.53450 },  /* Croatian kuna */
-    { "IEP",  .787564 },  /* irish pound */
-    { "ITL",  1936.27 },  /* italian lira */
-    { "LUF",  40.3399 },  /* luxembourg franc */
-    { "LVL",  .702804 },  /* latvian lats */
-    { "MTL",  .429300 },  /* maltese lira */
-    { "NLG",  2.20371 },  /* netherland gulden */
-    { "PTE",  200.482 },  /* portuguese escudo */
-    { "SIT",  239.640 },  /* slovenian tolar */
-    { "SKK",  30.1260 }   /* slovak koruna */
+    { "ATS", {137603,   10000} }, /* austrian schilling */
+    { "BEF", {403399,   10000} }, /* belgian franc */
+    { "BGN", {195583,  100000} }, /* Bulgarian lev */
+    { "CYP", {585274, 1000000} }, /* cyprus pound */
+    { "DEM", {195583,  100000} }, /* german mark */
+    { "EEK", {156466,   10000} }, /* Estonian Kroon */
+    { "ESP", {166386,    1000} }, /* spanish peseta */
+    { "EUR", {     1,       1} }, /* euro */
+    { "FIM", {594573,  100000} }, /* finnmark */
+    { "FRF", {655957,  100000} }, /* french franc */
+    { "GRD", {340750,    1000} }, /* greek drachma */
+    { "HRK", {753450,  100000} }, /* Croatian kuna */
+    { "IEP", {787564, 1000000} }, /* irish pound */
+    { "ITL", {193627,     100} }, /* italian lira */
+    { "LUF", {403399,   10000} }, /* luxembourg franc */
+    { "LVL", {702804, 1000000} }, /* latvian lats */
+    { "MTL", {429300, 1000000} }, /* maltese lira */
+    { "NLG", {220371,  100000} }, /* netherland gulden */
+    { "PTE", {200482,    1000} }, /* portuguese escudo */
+    { "SIT", {239640,    1000} }, /* slovenian tolar */
+    { "SKK", {301260,   10000} }  /* slovak koruna */
 };
 
-static std::optional<double>
+static std::optional<GncNumeric>
 get_euro_rate (const gnc_commodity * currency)
 {
     if (!currency || !gnc_commodity_is_iso(currency))
@@ -82,13 +84,11 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
     if (!euro_rate)
         return gnc_numeric_zero();
 
-    auto rate = double_to_gnc_numeric (*euro_rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
-
     /* round to 2 decimal places */
     /* EC Regulation 1103/97 states we should use "Round half away from zero"
      * See https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31997R1103&qid=1662917247821
      */
-    return gnc_numeric_div (value, rate, 100, GNC_HOW_RND_ROUND_HALF_UP);
+    return (value / *euro_rate).convert<RoundType::half_up>(100);
 }
 
 /* ------------------------------------------------------ */
@@ -100,12 +100,9 @@ gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
     if (!euro_rate)
         return gnc_numeric_zero();
 
-    auto rate = double_to_gnc_numeric (*euro_rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
-
     /* EC Regulation 1103/97 states we should use "Round half away from zero"
      * See http://europa.eu/legislation_summaries/economic_and_monetary_affairs/institutional_and_economic_framework/l25025_en.htm */
-    return gnc_numeric_mul (value, rate, gnc_commodity_get_fraction (currency),
-                            GNC_HOW_RND_ROUND_HALF_UP);
+    return (value * *euro_rate).convert<RoundType::half_up>(gnc_commodity_get_fraction (currency));
 }
 
 /* ------------------------------------------------------ */
@@ -117,7 +114,7 @@ gnc_euro_currency_get_rate (const gnc_commodity *currency)
     if (!euro_rate)
         return gnc_numeric_zero();
 
-    return double_to_gnc_numeric (*euro_rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+    return static_cast<gnc_numeric>(*euro_rate);
 }
 
 /* ------------------------------------------------------ */

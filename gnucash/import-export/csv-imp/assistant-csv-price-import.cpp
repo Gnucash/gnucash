@@ -167,6 +167,7 @@ private:
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
     GtkWidget       *separator_table;               /**< Container for the separator checkboxes */
     GtkCheckButton  *sep_button[SEP_NUM_OF_TYPES];  /**< Checkbuttons for common separators */
+    GtkCheckButton  *escape_cbutton;                /**< The checkbutton for escape processing */
     GtkWidget       *fw_instructions_hbox;          /**< Container for fixed-width instructions */
     GtkCheckButton  *custom_cbutton;                /**< The checkbutton for a custom separator */
     GtkEntry        *custom_entry;                  /**< The entry for custom separators */
@@ -613,16 +614,21 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
             };
         for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
             sep_button[i]
-                = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, sep_button_names[i]));
+                = GTK_CHECK_BUTTON(gtk_builder_get_object (builder, sep_button_names[i]));
 
         /* Load and connect the custom separator checkbutton in the same way
          * as the other separator buttons. */
         custom_cbutton
-            = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_cbutton"));
+            = GTK_CHECK_BUTTON(gtk_builder_get_object (builder, "custom_cbutton"));
 
         /* Load the entry for the custom separator entry. Connect it to the
          * sep_button_clicked event handler as well. */
-        custom_entry = (GtkEntry*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_entry"));
+        custom_entry = GTK_ENTRY(gtk_builder_get_object (builder, "custom_entry"));
+
+        /* Load and connect the escape checkbutton in the same way
+         * as the other separator buttons. */
+        escape_cbutton
+            = GTK_CHECK_BUTTON(gtk_builder_get_object (builder, "escape_cbutton"));
 
         /* Create the encoding selector widget and add it to the assistant */
         encselector = GO_CHARMAP_SEL(go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8));
@@ -689,7 +695,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         fixed_button = GTK_WIDGET(gtk_builder_get_object (builder, "fixed_button"));
 
         /* Load the data treeview and connect it to its resizing event handler. */
-        treeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
+        treeview = GTK_TREE_VIEW(gtk_builder_get_object (builder, "treeview"));
         gtk_tree_view_set_headers_clickable (treeview, true);
 
         /* This is true only after encoding_selected is called, so we must
@@ -1007,8 +1013,8 @@ void CsvImpPriceAssist::preview_over_write (bool over)
 
 /** Event handler for separator changes. This function is called
  * whenever one of the widgets for configuring the separators (the
- * separator checkbuttons or the custom separator entry) is
- * changed.
+ * separator checkbuttons, the escape checkbutton or the custom
+ * separator entry) is changed.
  * @param widget The widget that was changed
  * @param info The data that is being configured
  */
@@ -1039,7 +1045,8 @@ void CsvImpPriceAssist::preview_update_separators (GtkWidget* widget)
 
     /* Set the parse options using the checked_separators list. */
     price_imp->separators (checked_separators);
-
+    price_imp->enable_escape (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(escape_cbutton)));
+                                                                    
     /* if there are no separators, there will only be one column
      * so make sure column header is NONE */
     if (checked_separators.empty())
@@ -1779,6 +1786,7 @@ CsvImpPriceAssist::preview_refresh ()
     if (price_imp->file_format() == GncImpFileFormat::CSV)
     {
         auto separators = price_imp->separators();
+        auto escape = price_imp->enable_escape();
         const auto stock_sep_chars = std::string (" \t,:;-");
 
         for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
@@ -1797,6 +1805,11 @@ CsvImpPriceAssist::preview_refresh ()
             separators.erase(pos);
             pos = separators.find_first_of (stock_sep_chars);
         }
+        g_signal_handlers_block_by_func (escape_cbutton, (gpointer) csv_price_imp_preview_sep_button_cb, this);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(escape_cbutton),
+                                      escape);
+        g_signal_handlers_unblock_by_func (escape_cbutton, (gpointer) csv_price_imp_preview_sep_button_cb, this);
+
         g_signal_handlers_block_by_func (custom_cbutton, (gpointer) csv_price_imp_preview_sep_button_cb, this);
         g_signal_handlers_block_by_func (custom_entry, (gpointer) csv_price_imp_preview_sep_button_cb, this);
 
@@ -1893,7 +1906,8 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
         {
             /* Parsing failed ... */
             gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", _(e.what()));
-            go_back = true;
+            /* Stay in this step so user can override */
+            go_back = false;
         }
     }
 

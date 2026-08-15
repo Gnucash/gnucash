@@ -2,17 +2,17 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Christian Stimming <stimming@tuhh.de>, 2001
 # An's Page <anspage@outlook.com>, 2020.
-# Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022.
-# Ivan Kostov <jiveq1@gmail.com>, 2025.
-# Angel Ivanov <angel.forcebg@gmail.com>, 2025.
+# Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022, 2026.
+# Ivan Kostov <jiveq1@gmail.com>, 2025, 2026.
+# Angel Ivanov <angel.forcebg@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-07-21 17:03+0000\n"
-"Last-Translator: Angel Ivanov <angel.forcebg@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:34+0000\n"
+"Last-Translator: Ivan Kostov <jiveq1@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/bg/>\n"
 "Language: bg\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-SourceCharset: utf-8\n"

@@ -3,26 +3,27 @@
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006
 # Sébastien Villemot <sebastien@debian.org>, 2013
 # La Boussole <yoann@laboussole.coop>, 2018.
-# Q <qualaelay@gmail.com>, 2021.
-# Julien Humbert <julroy67@gmail.com>, 2021.
-# Un Anonyme <vehrzafk1@gmail.com>, 2021.
+# Q <qualaelay@gmail.com>, 2021, 2026.
+# Julien Humbert <julroy67@gmail.com>, 2021, 2026.
+# Un Anonyme <vehrzafk1@gmail.com>, 2021, 2026.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
-# ayiniho <ayiniho@tedomum.net>, 2021.
-# Thomas Jungers <thomasjungers@gmail.com>, 2021.
+# ayiniho <ayiniho@tedomum.net>, 2021, 2026.
+# Thomas Jungers <thomasjungers@gmail.com>, 2021, 2026.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021.
-# Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
-# aleksej0R <omolice@hotmail.fr>, 2022, 2023, 2025.
-# Vincent Dawans <dawansv@gmail.com>, 2023.
-# Laurent Aufrere <lecture@cbol.org>, 2024.
-# Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025.
+# Sébastien Ray <sebastien.ray@normalesup.org>, 2022, 2026.
+# aleksej0R <omolice@hotmail.fr>, 2022, 2023, 2025, 2026.
+# Vincent Dawans <dawansv@gmail.com>, 2023, 2026.
+# Laurent Aufrere <lecture@cbol.org>, 2024, 2026.
+# Anastasios Ikonomou <anastasios.ikonomou@gmail.com>, 2024, 2025, 2026.
+# "K. Herbert" <herbert.ka@mailo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2025-12-21 19:00+0000\n"
-"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
+"PO-Revision-Date: 2026-06-26 04:35+0000\n"
+"Last-Translator: \"K. Herbert\" <herbert.ka@mailo.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -30,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

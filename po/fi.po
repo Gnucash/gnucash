@@ -5,16 +5,16 @@
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021, 2026.
-# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021.
+# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022, 2026.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-04-04 16:09+0000\n"
+"PO-Revision-Date: 2026-06-26 03:41+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -6765,8 +6765,8 @@ msgstr[0] ""
 "GnuCash voi tallentaa tiedoston automaattisesti joka minuutti, aivan kuin "
 "olisit painanut Tallenna-painiketta joka kerta.\n"
 "\n"
-"Voit muuttaa aikaväliä tai laittaa ominaisuuden pois päältä Muokkaa-"
-">Asetukset->Yleistä->Automaattitallennuksen aikaväli.\n"
+"Voit muuttaa aikaväliä tai laittaa ominaisuuden pois päältä Muokkaa->"
+"Asetukset->Yleistä->Automaattitallennuksen aikaväli.\n"
 "\n"
 "Tulisiko tiedostosi tallentaa automaattisesti?"
 msgstr[1] ""
@@ -6774,8 +6774,8 @@ msgstr[1] ""
 "GnuCash voi tallentaa tiedoston automaattisesti joka %d. minuutti, aivan "
 "kuin olisit painanut Tallenna-painiketta joka kerta.\n"
 "\n"
-"Voit muuttaa aikaväliä tai laittaa ominaisuuden pois päältä Muokkaa-"
-">Asetukset->Yleistä->Automaattitallennuksen aikaväli.\n"
+"Voit muuttaa aikaväliä tai laittaa ominaisuuden pois päältä Muokkaa->"
+"Asetukset->Yleistä->Automaattitallennuksen aikaväli.\n"
 "\n"
 "Tulisiko tiedostosi tallentaa automaattisesti?"
 
@@ -8969,8 +8969,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
 msgid "Set the sort column in the \"since last run\" dialog."
 msgstr ""
-"Aseta järjestyksen määräävä sarake \"edellisen ajon jälkeen\" "
-"-valintaikkunaa varten."
+"Aseta järjestyksen määräävä sarake \"edellisen ajon jälkeen\" -"
+"valintaikkunaa varten."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
 msgid "This settings sets the sort column in the \"since last run\" dialog."
@@ -9241,8 +9241,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:1797
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
-"Poista vanhat loki-/varmuuskopiotiedostot tämän ajan jälkeen (0 = ei "
-"koskaan)."
+"Poista vanhat loki-/varmuuskopiotiedostot tämän ajan jälkeen (0 = ei koskaan)"
+"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1815
@@ -13951,8 +13951,8 @@ msgid ""
 "perform any of them."
 msgstr ""
 "Tarjolla on esimääriteltyjä toimintoja, jotka soveltuvat useimmille uusille "
-"GnuCash-käyttäjille. Valitse haluamasi toiminto alapuolelta ja napsauta "
-"<i>OK</i>, tai napsauta <i>Peru</i> jos et halua käyttää mitään näistä "
+"GnuCash-käyttäjille. Valitse haluamasi toiminto alapuolelta ja napsauta <i>"
+"OK</i>, tai napsauta <i>Peru</i> jos et halua käyttää mitään näistä "
 "toiminnoista."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
@@ -14167,8 +14167,7 @@ msgstr "_Suhteellinen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr ""
-"Käytä määritettyä suhteellista aloituspäivää voitto-/tappiolaskelmille."
+msgstr "Käytä määritettyä suhteellista aloituspäivää voitto-/tappiolaskelmille."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 msgid "_Absolute"
@@ -21672,8 +21671,7 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr ""
-"Tämä sivu näyttää liittyvien tuloverotilien tositteiden yksityiskohdat."
+msgstr "Tämä sivu näyttää liittyvien tuloverotilien tositteiden yksityiskohdat."
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"

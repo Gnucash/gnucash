@@ -3,19 +3,19 @@
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
-# Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
-# Reza Almanda <rezaalmanda27@gmail.com>, 2021.
-# Syahmin Sukhairi <syahmin@gmail.com>, 2022.
-# Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
-# Sucipto <sucipto@pm.me>, 2023.
+# Ferdinand Tampubolon <dnandz@gmail.com>, 2021, 2026.
+# Reza Almanda <rezaalmanda27@gmail.com>, 2021, 2026.
+# Syahmin Sukhairi <syahmin@gmail.com>, 2022, 2026.
+# Azhar Pusparadhian <pazhar@rocketmail.com>, 2022, 2026.
+# Sucipto <sucipto@pm.me>, 2023, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-06-27 14:52+0000\n"
-"Last-Translator: Sucipto <sucipto@pm.me>\n"
+"PO-Revision-Date: 2026-06-26 04:35+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/id/>\n"
 "Language: id\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

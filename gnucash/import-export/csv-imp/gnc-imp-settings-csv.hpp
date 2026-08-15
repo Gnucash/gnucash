@@ -53,7 +53,7 @@ struct CsvImportSettings
     CsvImportSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
             m_date_format {0}, m_currency_format {0},
             m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
-            m_separators {","}, m_load_error {false} { }
+            m_separators {","}, m_enable_escape {true}, m_load_error {false} { }
     virtual ~CsvImportSettings() = default;
 
 /** Save the gathered widget properties to a key File.
@@ -82,6 +82,7 @@ uint32_t      m_skip_start_lines;             // Number of header rows to skip
 uint32_t      m_skip_end_lines;               // Number of footer rows to skip
 bool          m_skip_alt_lines;               // Skip alternate rows
 std::string   m_separators;                   // Separators for csv format
+bool          m_enable_escape;                // Process escapes in quoted csv entries
 bool          m_load_error;                   // Was there an error while parsing the state file ?
 std::vector<uint32_t> m_column_widths;        // The Column widths
 

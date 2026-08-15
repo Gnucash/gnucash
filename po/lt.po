@@ -1,28 +1,27 @@
 # translation of GnuCash to lithuanian
 # Translation of gnucash messages to Lithuanian.
 # Copyright (C) 2009 Free Software Foundation, Inc.
-# Tadas Masiulionis <tadzikaz@gmail.com>, 2009, 2023.
+# Tadas Masiulionis <tadzikaz@gmail.com>, 2009, 2023, 2026.
 # Mantas Kriaučiūnas <mantas@akl.lt>, 2011.
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011, 2012, 2013.
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2023-06-06 21:50+0000\n"
-"Last-Translator: Tadas Masiulionis <tadzikaz@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:06+0000\n"
+"Last-Translator: Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 4.18-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -844,8 +843,8 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"Parašykite pirmąsias egzistuojančios sąskaitos pavadinimo raides registro "
-"„pervedimo“ stulpelyje ir GnuCash užbaigs sąskaitos pavadinimą iš sąskaitų "
+"Parašykite pirmąsias egzistuojančios sąskaitos pavadinimo raides registro „"
+"pervedimo“ stulpelyje ir GnuCash užbaigs sąskaitos pavadinimą iš sąskaitų "
 "sąrašo. Norėdami įvesti antrinę sąskaitą, parašykite pirmąsias pirminės "
 "sąskaitos raides, tada „:“ ir pirmąsias antrinės sąskaitos raides (pvz., T:G "
 "– Turtas: Grynieji)."
@@ -3059,8 +3058,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:1304
 msgid "The post action was canceled because not all exchange rates were given."
-msgstr ""
-"Registravimo veiksmas atšauktas, nes duoti ne visi konvertavimo kursai."
+msgstr "Registravimo veiksmas atšauktas, nes duoti ne visi konvertavimo kursai."
 
 #: gnucash/gnome/dialog-invoice.c:1589
 msgid "Total:"
@@ -6161,8 +6159,7 @@ msgstr "Skirtumas"
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
-msgstr ""
-"Padarėte pakeitimų šiame suderinimo lange. Ar tikrai norite atsisakyti?"
+msgstr "Padarėte pakeitimų šiame suderinimo lange. Ar tikrai norite atsisakyti?"
 
 #: gnucash/gnome/window-reconcile.cpp:2429
 msgid "The account is not balanced. Are you sure you want to finish?"
@@ -6438,8 +6435,8 @@ msgstr ""
 "\n"
 "GnuCash pamėgins atspėti teisingą failo koduotę. Kitame puslapyje GnuCash "
 "parodys gautus tekstus naudojant šį spėjimą. Turite patikrinti, ar žodžiai "
-"atrodo taip, kaip tikėjotės. Arba viskas atrodo teisingai ir galite spausti "
-"„Pirmyn“, arba žodžiuose yra netikėtų ženklų. Tokiu atveju turėtumėte "
+"atrodo taip, kaip tikėjotės. Arba viskas atrodo teisingai ir galite spausti „"
+"Pirmyn“, arba žodžiuose yra netikėtų ženklų. Tokiu atveju turėtumėte "
 "pasirinkti kitą koduotę skirtingam rezultatui pamatyti. Gali reikėti "
 "redaguoti koduočių sąrašą spaudžiant atitinkamą mygtuką.\n"
 "\n"
@@ -6852,8 +6849,8 @@ msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and "
 "\"Type\" for the commodity."
 msgstr ""
-"Prekei privalote įvesti netuščią „visą pavadinimą“, „simbolį/trumpinį“ ir "
-"„tipą“."
+"Prekei privalote įvesti netuščią „visą pavadinimą“, „simbolį/trumpinį“ ir „"
+"tipą“."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 #, fuzzy
@@ -7239,8 +7236,8 @@ msgstr[0] ""
 "GnuCash turi funkciją išsaugoti failą automatiškai kas %d minutę tarsi "
 "paspaudėte mygtuką „Išsaugoti“ kiekvieną kartą.\n"
 "\n"
-"Galite pakeisti laiko intervalą ar išjungti šią funkciją per Taisa-"
-">Nustatymai->Bendros->Automatinio išsaugojimo intervalas.\n"
+"Galite pakeisti laiko intervalą ar išjungti šią funkciją per Taisa->"
+"Nustatymai->Bendros->Automatinio išsaugojimo intervalas.\n"
 "\n"
 "Ar išsaugoti jūsų failą automatiškai?"
 msgstr[1] ""
@@ -7248,8 +7245,8 @@ msgstr[1] ""
 "GnuCash turi funkciją išsaugoti failą automatiškai kas %d minutes tarsi "
 "paspaudėte mygtuką „Išsaugoti“ kiekvieną kartą.\n"
 "\n"
-"Galite pakeisti laiko intervalą ar išjungti šią funkciją per Taisa-"
-">Nustatymai->Bendros->Automatinio išsaugojimo intervalas.\n"
+"Galite pakeisti laiko intervalą ar išjungti šią funkciją per Taisa->"
+"Nustatymai->Bendros->Automatinio išsaugojimo intervalas.\n"
 "\n"
 "Ar išsaugoti jūsų failą automatiškai?"
 msgstr[2] ""
@@ -7257,8 +7254,8 @@ msgstr[2] ""
 "GnuCash turi funkciją išsaugoti failą automatiškai kas %d minučių tarsi "
 "paspaudėte mygtuką „Išsaugoti“ kiekvieną kartą.\n"
 "\n"
-"Galite pakeisti laiko intervalą ar išjungti šią funkciją per Taisa-"
-">Nustatymai->Bendros->Automatinio išsaugojimo intervalas.\n"
+"Galite pakeisti laiko intervalą ar išjungti šią funkciją per Taisa->"
+"Nustatymai->Bendros->Automatinio išsaugojimo intervalas.\n"
 "\n"
 "Ar išsaugoti jūsų failą automatiškai?"
 
@@ -7623,8 +7620,8 @@ msgstr ""
 "Biblioteka „libdbi“ įdiegta sistemoje teisingai neišsaugo didelių skaičių. "
 "Tai reiškia, kad GnuCash negali naudoti SQL duomenų bazių teisingai. GnuCash "
 "neatvers ir nesaugos į SQL duomenų bazes, kol tai nebus pataisyta įdiegiant "
-"kitą „libdbi“ versiją. Adresu https://bugs.gnucash.org/show_bug.cgi?"
-"id=611936 rasite daugiau informacijos."
+"kitą „libdbi“ versiją. Adresu https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936 rasite daugiau informacijos."
 
 #: gnucash/gnome-utils/gnc-file.c:560
 msgid ""
@@ -8911,8 +8908,8 @@ msgid ""
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
 "Jei aktyvu, paleidimo metu GnuCash patikrins, ar nereikės netrukus apmokėti "
-"gautų sąskaitų. Jei reikės, parodys naudotojui priminimo dialogo langą. "
-"„Netrukus“ apibrėžimas kontroliuojamas nustatymo „Prieš kiek dienų“. Kitu "
+"gautų sąskaitų. Jei reikės, parodys naudotojui priminimo dialogo langą. „"
+"Netrukus“ apibrėžimas kontroliuojamas nustatymo „Prieš kiek dienų“. Kitu "
 "atveju GnuCash netikrina gautų sąskaitų apmokėjimo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
@@ -9014,8 +9011,8 @@ msgid ""
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
 "Jei aktyvu, paleidimo metu GnuCash patikrins, ar nereikės netrukus apmokėti "
-"gautų sąskaitų. Jei reikės, parodys naudotojui priminimo dialogo langą. "
-"„Netrukus“ apibrėžimas kontroliuojamas nustatymo „Prieš kiek dienų“. Kitu "
+"gautų sąskaitų. Jei reikės, parodys naudotojui priminimo dialogo langą. „"
+"Netrukus“ apibrėžimas kontroliuojamas nustatymo „Prieš kiek dienų“. Kitu "
 "atveju GnuCash netikrina gautų sąskaitų apmokėjimo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
@@ -9092,8 +9089,7 @@ msgstr "Vienetai, kuriais išreikštos pritaikytos koordinatės"
 #| msgid ""
 #| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
-msgstr ""
-"Vienetai, kuriais išreikštos pritaikytos koordinatės (coliai, mm, ...)."
+msgstr "Vienetai, kuriais išreikštos pritaikytos koordinatės (coliai, mm, ...)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -9352,8 +9348,8 @@ msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New "
 "File\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
-"Jei aktyvus, langas „Nauja hierarchija“ bus rodomas, kai meniu pasirinktas "
-"„Naujas failas“. Kitu atveju nebus rodomas."
+"Jei aktyvus, langas „Nauja hierarchija“ bus rodomas, kai meniu pasirinktas „"
+"Naujas failas“. Kitu atveju nebus rodomas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:272
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:273
@@ -9988,8 +9984,8 @@ msgid ""
 msgstr ""
 "Šis nustatymas leidžia tam tikroms sąskaitoms pakeisti jų likučio ženklą iš "
 "teigiamo į neigiamą ar atvirkščiai. Nustatymas „income-expense“ naudotojams, "
-"kurie mėgsta matyti neigiamas sąnaudas ir teigiamas pajamas. Nustatymas "
-"„credit“ naudotojams, kurie nori, kad likučiai atvaizduotų sąskaitos debeto/"
+"kurie mėgsta matyti neigiamas sąnaudas ir teigiamas pajamas. Nustatymas „"
+"credit“ naudotojams, kurie nori, kad likučiai atvaizduotų sąskaitos debeto/"
 "kredito būseną. Nustatymas „none“ nepakeičia jokio likučio ženklo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
@@ -10289,8 +10285,8 @@ msgid ""
 "'num' field."
 msgstr ""
 "Jei pasirinkta, numatytasis knygos nustatymas naujiems failams yra "
-"nustatomas taip, kad „numerio“ langelis registruose rodo/atnaujina skaidymo "
-"„veiksmo“ lauką, o operacijos „numerio“ laukas yra rodomas antroje eilutėje "
+"nustatomas taip, kad „numerio“ langelis registruose rodo/atnaujina skaidymo „"
+"veiksmo“ lauką, o operacijos „numerio“ laukas yra rodomas antroje eilutėje "
 "dvigubos eilutės veiksenoje (nematomas vienos eilutės veiksenoje). Kitu "
 "atveju numatytasis knygos nustatymas naujiems failams yra nustatomas taip, "
 "kad „numerio“ langelis registruose rodo/atnaujina operacijos „numerio“ lauką."
@@ -10563,10 +10559,9 @@ msgid ""
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
-"Ši nuostata kontroliuoja numatytąją ataskaitų valiutą. Jei nustatyta "
-"„locale“, tada GnuCash gaus numatytąją valiutą iš naudotojo lokalės "
-"nuostatos. Jei nustatyta „other“, GnuCash naudos nuostatą, nurodytą raktu "
-"„currency-other“."
+"Ši nuostata kontroliuoja numatytąją ataskaitų valiutą. Jei nustatyta „locale"
+"“, tada GnuCash gaus numatytąją valiutą iš naudotojo lokalės nuostatos. Jei "
+"nustatyta „other“, GnuCash naudos nuostatą, nurodytą raktu „currency-other“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
 #: gnucash/gtkbuilder/dialog-preferences.glade:3344
@@ -11097,9 +11092,9 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 "Ši nuostata kontroliuoja pradžios datos tipą, naudojamą pelno/nuostolio "
-"skaičiavimams. Jei nustatyta „absolute“, GnuCash ims pradžios datą nurodytą "
-"„start-date“ raktu. Jei nustatyta kitaip, GnuCash ims pradžios datą nurodytą "
-"„start-period“ raktu."
+"skaičiavimams. Jei nustatyta „absolute“, GnuCash ims pradžios datą nurodytą „"
+"start-date“ raktu. Jei nustatyta kitaip, GnuCash ims pradžios datą nurodytą „"
+"start-period“ raktu."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
@@ -11146,9 +11141,9 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 "Ši nuostata kontroliuoja pabaigos datos tipą, naudojamą pelno/nuostolio "
-"skaičiavimams. Jei nustatyta „absolute“, GnuCash ims pabaigos datą nurodytą "
-"„end-date“ raktu. Jei nustatyta kitaip, GnuCash ims pabaigos datą nurodytą "
-"„end-period“ raktu."
+"skaičiavimams. Jei nustatyta „absolute“, GnuCash ims pabaigos datą nurodytą „"
+"end-date“ raktu. Jei nustatyta kitaip, GnuCash ims pabaigos datą nurodytą „"
+"end-period“ raktu."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
 msgid "Use absolute profit/loss ending date"
@@ -11852,8 +11847,7 @@ msgstr "Keisti GnuCash _sąskaitą…"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1060
 #, fuzzy
 msgid "Match Import and GnuCash accounts"
-msgstr ""
-"Sutapdinti internetinės bankininkystės sąskaitas su GnuCash sąskaitomis"
+msgstr "Sutapdinti internetinės bankininkystės sąskaitas su GnuCash sąskaitomis"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1076
 #, fuzzy
@@ -13746,8 +13740,7 @@ msgstr "_Apmokėta"
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
-msgstr ""
-"Kai būsena nenurodyta QIF faile, operacijos pažymėtos kaip neapmokėtos."
+msgstr "Kai būsena nenurodyta QIF faile, operacijos pažymėtos kaip neapmokėtos."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
@@ -14919,8 +14912,7 @@ msgstr "Pasirinkite „S“ atitinkančiai operacijai suderinti."
 
 #: gnucash/gtkbuilder/dialog-import.glade:721
 msgid "Select neither to skip the transaction (it won't be imported at all)."
-msgstr ""
-"Nieko nepasirinkite operacijai praleisti (ji nebus importuota iš viso)."
+msgstr "Nieko nepasirinkite operacijai praleisti (ji nebus importuota iš viso)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:779
 msgid "Red"
@@ -15176,8 +15168,8 @@ msgid ""
 "it will not be displayed again."
 msgstr ""
 "Jei paspausite mygtuką <i>Taip</i>, <i>GnuCash sveikinimo</i> langas bus "
-"parodytas kitą kartą, kai paleisite GnuCash. Jei paspausite mygtuką <i>Ne</"
-"i>, jis nebebus rodomas."
+"parodytas kitą kartą, kai paleisite GnuCash. Jei paspausite mygtuką <i>Ne</i>"
+", jis nebebus rodomas."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
 #, fuzzy
@@ -15200,8 +15192,8 @@ msgid ""
 msgstr ""
 "Yra keletas iš anksto apibrėžtų veiksmų, kuriems daugelis naujų naudotojų "
 "teikia pirmenybę, kad pradėtų naudoti GnuCash. Pasirinkite vieną iš šių "
-"veiksmų žemiau ir spauskite mygtuką <i>Gerai</i> arba spauskite "
-"<i>Atsisakyti</i>, jei nenorite nė vieno veiksmo atlikti."
+"veiksmų žemiau ir spauskite mygtuką <i>Gerai</i> arba spauskite <i>"
+"Atsisakyti</i>, jei nenorite nė vieno veiksmo atlikti."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
 msgid "C_reate a new set of accounts"
@@ -15424,8 +15416,7 @@ msgstr "_Santykinė"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr ""
-"Naudoti nurodytą santykinę pradžios datą pelno/nuostolio skaičiavimams."
+msgstr "Naudoti nurodytą santykinę pradžios datą pelno/nuostolio skaičiavimams."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 msgid "_Absolute"
@@ -15651,8 +15642,8 @@ msgstr "Vykdyti sąskaitų sąrašo _nustatymą naujam failui"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"Parodyti naujo sąskaitų sąrašo dialogo langą, kai pasirenkate „Failas“-"
-">„Naujas failas“."
+"Parodyti naujo sąskaitų sąrašo dialogo langą, kai pasirenkate „Failas“->„"
+"Naujas failas“."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1485
 msgid "Display \"_tip of the day\" dialog"
@@ -15705,8 +15696,7 @@ msgstr "Naujos paieškos _limitas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1653
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr ""
-"Nustatyti „nauja paieška“, jei rasta elementų mažiau negu šis skaičius."
+msgstr "Nustatyti „nauja paieška“, jei rasta elementų mažiau negu šis skaičius."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1669
 msgid "Show splash scree_n"
@@ -16876,8 +16866,8 @@ msgstr "Ieškoti tik aktyvių duomenų"
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
 msgstr ""
-"Pasirinkite, ar ieškoti visuose jūsų duomenyse ar tik pažymėtuose kaip "
-"„aktyvūs“."
+"Pasirinkite, ar ieškoti visuose jūsų duomenyse ar tik pažymėtuose kaip „"
+"aktyvūs“."
 
 #: gnucash/gtkbuilder/dialog-search.glade:420
 msgid "Type of search"
@@ -18374,8 +18364,8 @@ msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
 msgstr ""
-"Internetinės bankininkystės konfigūracija yra apdorojama išorinės programos "
-"„AqBanking konfigūracijos vediklis“. Spauskite žemiau esantį mygtuką "
+"Internetinės bankininkystės konfigūracija yra apdorojama išorinės programos „"
+"AqBanking konfigūracijos vediklis“. Spauskite žemiau esantį mygtuką "
 "programai paleisti."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
@@ -18402,8 +18392,8 @@ msgid ""
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"Internetinės bankininkystės konfigūracija yra apdorojama išorinės programos "
-"„AqBanking konfigūracijos vediklis“. Spauskite žemiau esantį mygtuką "
+"Internetinės bankininkystės konfigūracija yra apdorojama išorinės programos „"
+"AqBanking konfigūracijos vediklis“. Spauskite žemiau esantį mygtuką "
 "programai paleisti."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
@@ -18436,8 +18426,7 @@ msgstr "Pašalinti pasirinktą sąskaitą"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:265
 msgid "Match Online accounts with GnuCash accounts"
-msgstr ""
-"Sutapdinti internetinės bankininkystės sąskaitas su GnuCash sąskaitomis"
+msgstr "Sutapdinti internetinės bankininkystės sąskaitas su GnuCash sąskaitomis"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:280
 msgid ""
@@ -19605,11 +19594,11 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Sąskaitų hierarchija bus išeksportuota į failą „%s“, kai paspausite "
-"„Pritaikyti“.\n"
+"Sąskaitų hierarchija bus išeksportuota į failą „%s“, kai paspausite „"
+"Pritaikyti“.\n"
 "\n"
-"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba "
-"„Atsisakyti“ eksportui nutraukti.\n"
+"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba „"
+"Atsisakyti“ eksportui nutraukti.\n"
 
 #. Translators: %s is the file name and %u the number of accounts.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:114
@@ -19624,8 +19613,8 @@ msgstr ""
 "Kai paspausite „Pritaikyti“, operacijos bus išeksportuotos į failą „%s“; "
 "išeksportuojamų sąskaitų skaičius yra %u.\n"
 "\n"
-"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba "
-"„Atsisakyti“ eksportui nutraukti.\n"
+"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba „"
+"Atsisakyti“ eksportui nutraukti.\n"
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:120
@@ -19640,8 +19629,8 @@ msgstr ""
 "Kai paspausite „Pritaikyti“, operacijos bus išeksportuotos į failą „%s“; "
 "išeksportuojamų sąskaitų skaičius yra %u.\n"
 "\n"
-"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba "
-"„Atsisakyti“ eksportui nutraukti.\n"
+"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba „"
+"Atsisakyti“ eksportui nutraukti.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:759
 msgid ""
@@ -19737,8 +19726,8 @@ msgid ""
 msgstr ""
 "Sąskaitos bus importuotos iš failo „%s“, kai paspausite „Pritaikyti“.\n"
 "\n"
-"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba "
-"„Atsisakyti“ importui nutraukti.\n"
+"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba „"
+"Atsisakyti“ importui nutraukti.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:73
 #, fuzzy, c-format
@@ -19756,8 +19745,8 @@ msgid ""
 msgstr ""
 "Sąskaitos bus importuotos iš failo „%s“, kai paspausite „Pritaikyti“.\n"
 "\n"
-"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba "
-"„Atsisakyti“ importui nutraukti.\n"
+"Taip pat galite grįžti ir patikrinti pasirinkimus spausdami „Atgal“ arba „"
+"Atsisakyti“ importui nutraukti.\n"
 "\n"
 "Jei tai yra pradinis importas į naują failą, iš pradžių pamatysite knygos "
 "nustatymų dialogo langą, nes šie nustatymai gali įtakoti, kaip importuojami "
@@ -20604,8 +20593,7 @@ msgstr "Žurnalo failas, kurį pasirinkote, tuščias."
 #: gnucash/import-export/log-replay/gnc-log-replay.cpp:622
 msgid ""
 "The log file you selected cannot be read. The file header was not recognized."
-msgstr ""
-"Pasirinktas žurnalo failas neperskaitomas. Failo antraštė neatpažinta. "
+msgstr "Pasirinktas žurnalo failas neperskaitomas. Failo antraštė neatpažinta. "
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:717
 #, c-format
@@ -21561,8 +21549,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 "Dubliuojamos operacijos įvesta data yra ankstesnė už „tik skaitymo ribą“ "
-"nustatytą šiai knygai. Ši nuostata gali būti pakeista per Failas->Savybės-"
-">Sąskaitos."
+"nustatytą šiai knygai. Ši nuostata gali būti pakeista per Failas->Savybės->"
+"Sąskaitos."
 
 #: gnucash/register/ledger-core/split-register.c:997
 msgid ""
@@ -22156,8 +22144,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "Dubliuojamos operacijos įvesta data yra ankstesnė už „tik skaitymo ribą“ "
-"nustatytą šiai knygai. Ši nuostata gali būti pakeista per Failas->Savybės-"
-">Sąskaitos."
+"nustatytą šiai knygai. Ši nuostata gali būti pakeista per Failas->Savybės->"
+"Sąskaitos."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -22892,8 +22880,7 @@ msgstr "Rodyti sumas"
 #: gnucash/report/reports/standard/category-barchart.scm:129
 #: gnucash/report/reports/standard/net-charts.scm:87
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
-"Ataskaita apie šias sąskaitas, jei leidžia pasirinktas sąskaitos lygis."
+msgstr "Ataskaita apie šias sąskaitas, jei leidžia pasirinktas sąskaitos lygis."
 
 #: gnucash/report/reports/example/daily-reports.scm:97
 #: gnucash/report/reports/standard/account-piecharts.scm:140
@@ -23766,8 +23753,7 @@ msgstr "Rodyti buhalterinio stiliaus brūkšnius"
 #: gnucash/report/reports/standard/equity-statement.scm:72
 #: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Use rules beneath columns of added numbers like accountants do."
-msgstr ""
-"Naudoti brūkšnius po sudėtų skaičių stulpeliais, kaip daro buhalteriai."
+msgstr "Naudoti brūkšnius po sudėtų skaičių stulpeliais, kaip daro buhalteriai."
 
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
@@ -29662,8 +29648,7 @@ msgstr "_Grįžti"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:35
 msgid "Reload the current database, reverting all unsaved changes"
-msgstr ""
-"Įkelti dabartinę duomenų bazę iš naujo atmetant neišsaugotus pakeitimus"
+msgstr "Įkelti dabartinę duomenų bazę iš naujo atmetant neišsaugotus pakeitimus"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:44
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:9
@@ -30422,8 +30407,7 @@ msgstr "_Redaguoti sąskaitą"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:241
 msgid "Automatically clear individual transactions, given a cleared amount"
-msgstr ""
-"Automatiškai apmokėti individualias operacijas, kai duota apmokėta suma"
+msgstr "Automatiškai apmokėti individualias operacijas, kai duota apmokėta suma"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427

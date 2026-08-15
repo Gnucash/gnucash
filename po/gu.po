@@ -4,11 +4,11 @@
 # KULDIP PIPALIYA <kuldipem@gmail.com>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2023-10-04 19:10+0000\n"
+"PO-Revision-Date: 2026-06-26 03:45+0000\n"
 "Last-Translator: KULDIP PIPALIYA <kuldipem@gmail.com>\n"
 "Language-Team: Gujarati <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "gu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -874,7 +874,8 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr "મુખ્ય વિન્ડોમાં વિભિન્ન ટેબોની વચ્ચે અદલ-બદલ કરવા માટે, કંટ્રોલ+પેજ અપ/ડાઉન દબાવો."
+msgstr ""
+"મુખ્ય વિન્ડોમાં વિભિન્ન ટેબોની વચ્ચે અદલ-બદલ કરવા માટે, કંટ્રોલ+પેજ અપ/ડાઉન દબાવો."
 
 #: doc/tip_of_the_day.list.c:82
 #, fuzzy
@@ -2025,14 +2026,16 @@ msgstr "શું ખરેખર તમે \"%s\" કાઢી નાંખવ�
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr "આ લેવડદેવડ એક ગ્રાહકને ફાળવવી જોઈએ. કૃપા કરીને નીચે ગ્રાહકની પસંદગી કરો."
+msgstr ""
+"આ લેવડદેવડ એક ગ્રાહકને ફાળવવી જોઈએ. કૃપા કરીને નીચે ગ્રાહકની પસંદગી કરો."
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 #, fuzzy
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr "આ લેવડદેવડ એક વિક્રેતાને ફાળવવી જોઈએ. કૃપા કરીને નીચે વિક્રેતાની પસંદગી કરો."
+msgstr ""
+"આ લેવડદેવડ એક વિક્રેતાને ફાળવવી જોઈએ. કૃપા કરીને નીચે વિક્રેતાની પસંદગી કરો."
 
 #: gnucash/gnome/dialog-commodities.cpp:188
 #, fuzzy
@@ -2199,7 +2202,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr "વળતરની ટકાવારી 0-100 વચ્ચે હોવી જોઈએ અથવા તમારે તેને ખાલી છોડી દેવું જોઈએ."
+msgstr ""
+"વળતરની ટકાવારી 0-100 વચ્ચે હોવી જોઈએ અથવા તમારે તેને ખાલી છોડી દેવું જોઈએ."
 
 #: gnucash/gnome/dialog-customer.c:334
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -2306,7 +2310,8 @@ msgstr ""
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "આપવામાં આવેલા નામ સાથે એક ટેમ્પલેટ પહેલેથી હાજર છે. કૃપા કરી બીજું નામ દાખલ કરો."
+msgstr ""
+"આપવામાં આવેલા નામ સાથે એક ટેમ્પલેટ પહેલેથી હાજર છે. કૃપા કરી બીજું નામ દાખલ કરો."
 
 #: gnucash/gnome/dialog-custom-report.c:520
 #, fuzzy
@@ -2910,7 +2915,8 @@ msgstr "તમે ખરેખર પસંદ કરેલી એન્ટ્�
 #: gnucash/gnome/dialog-invoice.c:729
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
-msgstr "આ એન્ટ્રી એક ઓર્ડર સાથે જોડાયેલી છે અને તેને ત્યાંથી પણ કાઢી નાંખવામાં આવશે!"
+msgstr ""
+"આ એન્ટ્રી એક ઓર્ડર સાથે જોડાયેલી છે અને તેને ત્યાંથી પણ કાઢી નાંખવામાં આવશે!"
 
 #: gnucash/gnome/dialog-invoice.c:924
 msgid "Choose a different report template or Printable Invoice will be used"
@@ -3724,7 +3730,8 @@ msgstr "ચેક ફોર્મેટ ફાઈલની એક નકલ ઉ�
 msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
-msgstr "%s ચેક ફોર્મેટ ફાઈલ '%s' અને %s ચેક ફોર્મેટ ફાઈલ '%s'માં GUIDsનો મેળ બેસતો નથી."
+msgstr ""
+"%s ચેક ફોર્મેટ ફાઈલ '%s' અને %s ચેક ફોર્મેટ ફાઈલ '%s'માં GUIDsનો મેળ બેસતો નથી."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3836,7 +3843,8 @@ msgstr "ઘટનાઓની કેટલીક સંખ્યા હોવી
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
-msgstr "બાકીની ઘટનાઓની સંખ્યા (%d) કુલ ઘટનાઓની સંખ્યા (%d) કરતાં વધારે હોવી જોઈએ."
+msgstr ""
+"બાકીની ઘટનાઓની સંખ્યા (%d) કુલ ઘટનાઓની સંખ્યા (%d) કરતાં વધારે હોવી જોઈએ."
 
 #: gnucash/gnome/dialog-sx-editor.c:608
 msgid ""
@@ -3857,7 +3865,8 @@ msgstr "વેરિએબલ્સ સાથે શીડ્યુલ્ડ ટ
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
-msgstr "એક ટેમ્પ્લેટ ટ્રાન્ઝેક્શન વિના શીડ્યુલ્ડ ટ્રાન્ઝેક્શન ઓટોમેટિક બનાવી ન શકાય."
+msgstr ""
+"એક ટેમ્પ્લેટ ટ્રાન્ઝેક્શન વિના શીડ્યુલ્ડ ટ્રાન્ઝેક્શન ઓટોમેટિક બનાવી ન શકાય."
 
 #: gnucash/gnome/dialog-sx-editor.c:687
 #, fuzzy, c-format
@@ -3909,7 +3918,8 @@ msgstr "(ક્યારેય નહીં)"
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
-msgstr "હાલના ટેમ્પલેટમાં ફેરફાર કરવામાં આવ્યો છે. તમે આ ફેરફારને રેકોર્ડ કરવા માંગો છો?"
+msgstr ""
+"હાલના ટેમ્પલેટમાં ફેરફાર કરવામાં આવ્યો છે. તમે આ ફેરફારને રેકોર્ડ કરવા માંગો છો?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1905
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:238
@@ -4237,7 +4247,8 @@ msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
-msgstr "તમે એક વર્તમાન લેવડદેવડ ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો?"
+msgstr ""
+"તમે એક વર્તમાન લેવડદેવડ ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1312
 #, fuzzy
@@ -5172,7 +5183,8 @@ msgstr "તમે મેળવેલા કે ક્લીઅર કરેલ�
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr "આ લેવડદેવડને આ ટીપ્પણી સાથે વાંચી શકાય તેવી રીતે અંકિત કરવામાં આવી છે: '%s'"
+msgstr ""
+"આ લેવડદેવડને આ ટીપ્પણી સાથે વાંચી શકાય તેવી રીતે અંકિત કરવામાં આવી છે: '%s'"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2567
 #: gnucash/gnome/gnc-split-reg.c:1095
@@ -5416,7 +5428,8 @@ msgstr "તમે તે ફાઈલમાં સેવ નહીં કરી 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:738
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
-msgstr "ફાઈલ %s થી પહેલા અસ્તિત્ત્વમાં છે. શું તમે ખરેખર આને દૂર કરીને લખવા માગો છો?"
+msgstr ""
+"ફાઈલ %s થી પહેલા અસ્તિત્ત્વમાં છે. શું તમે ખરેખર આને દૂર કરીને લખવા માગો છો?"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 #, fuzzy
@@ -6071,7 +6084,8 @@ msgstr "તફાવત"
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
-msgstr "તમે આ મેળવણીની વિન્ડોમાં ફેરફાર કર્યો છે. શું તમે ખરેખર તેને રદ કરવા માગો છો?"
+msgstr ""
+"તમે આ મેળવણીની વિન્ડોમાં ફેરફાર કર્યો છે. શું તમે ખરેખર તેને રદ કરવા માગો છો?"
 
 #: gnucash/gnome/window-reconcile.cpp:2429
 msgid "The account is not balanced. Are you sure you want to finish?"
@@ -6083,7 +6097,8 @@ msgstr "શું તમે આ મેળવણીને મુલતવી ર�
 
 #: gnucash/gnome/window-report.cpp:109
 msgid "Set the report options you want using this dialog."
-msgstr "તે અહેવાલ વિકલ્પને સેટ કરો જેને તમે આ સંવાદ સાથે ઉપયોગમાં લાવવા માંગો છો."
+msgstr ""
+"તે અહેવાલ વિકલ્પને સેટ કરો જેને તમે આ સંવાદ સાથે ઉપયોગમાં લાવવા માંગો છો."
 
 #: gnucash/gnome/window-report.cpp:214
 msgid "There are no options for this report."
@@ -6453,7 +6468,8 @@ msgstr ""
 #: gnucash/gnome-utils/assistant-xml-encoding.c:688
 #, c-format
 msgid "There are %d unassigned words. Please decide on them or add encodings."
-msgstr "તેમાં%d બિન-સોંપેલો શબ્દ છે. કૃપા કરીને તેના પર નિર્ણય લો અથવા અનકોડિંગ ઉમેરો."
+msgstr ""
+"તેમાં%d બિન-સોંપેલો શબ્દ છે. કૃપા કરીને તેના પર નિર્ણય લો અથવા અનકોડિંગ ઉમેરો."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:699
 #, c-format
@@ -6556,7 +6572,8 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1106
 msgid "You must enter a valid opening balance or leave it blank."
-msgstr "તમારે માન્ય પ્રારંભિક બેલેન્સ દાખલ કરવું જોઇએ અથવા તેને ખાલી છોડી દેવું જોઇએ."
+msgstr ""
+"તમારે માન્ય પ્રારંભિક બેલેન્સ દાખલ કરવું જોઇએ અથવા તેને ખાલી છોડી દેવું જોઇએ."
 
 #: gnucash/gnome-utils/dialog-account.c:1130
 msgid ""
@@ -7328,7 +7345,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:347
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
-msgstr "એવું લાગે છે કે ડેટાબેઝ %s અસ્તિત્ત્વમાં નથી. શું તમે તેને બનાવવા માગો છો?"
+msgstr ""
+"એવું લાગે છે કે ડેટાબેઝ %s અસ્તિત્ત્વમાં નથી. શું તમે તેને બનાવવા માગો છો?"
 
 #: gnucash/gnome-utils/gnc-file.c:361
 #, c-format
@@ -7393,7 +7411,8 @@ msgstr "ફાઈલ /URL %sમાં GnuCash ડેટા સામેલ ન�
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
-msgstr "URL %sમાં સર્વરમાં એક ત્રુટિ પેદા થઈ છે અથવા ખરાબ અથવા ખામીયુક્ત ડેટા મળ્યા છે."
+msgstr ""
+"URL %sમાં સર્વરમાં એક ત્રુટિ પેદા થઈ છે અથવા ખરાબ અથવા ખામીયુક્ત ડેટા મળ્યા છે."
 
 #: gnucash/gnome-utils/gnc-file.c:430
 #, c-format
@@ -7434,7 +7453,8 @@ msgstr "ફાઈલ %s શોધી શકાતી નથી."
 
 #: gnucash/gnome-utils/gnc-file.c:480
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr "આ ફાઈલ GnuCashની એક જૂની આવૃત્તિ સાથે સંબંધિત છે. શું તમે આગળ વધવા માગો છો?"
+msgstr ""
+"આ ફાઈલ GnuCashની એક જૂની આવૃત્તિ સાથે સંબંધિત છે. શું તમે આગળ વધવા માગો છો?"
 
 #: gnucash/gnome-utils/gnc-file.c:489
 #, c-format
@@ -7650,14 +7670,16 @@ msgstr ""
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
-msgstr "એવું લાગે છે કે ડેટાબેઝ %s અસ્તિત્ત્વમાં નથી. શું તમે તેને બનાવવા માગો છો?"
+msgstr ""
+"એવું લાગે છે કે ડેટાબેઝ %s અસ્તિત્ત્વમાં નથી. શું તમે તેને બનાવવા માગો છો?"
 
 #: gnucash/gnome-utils/gnc-file.c:1773
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
-msgstr "ફાઈલ %s થી પહેલા અસ્તિત્ત્વમાં છે. શું તમે ખરેખર આને દૂર કરીને લખવા માગો છો?"
+msgstr ""
+"ફાઈલ %s થી પહેલા અસ્તિત્ત્વમાં છે. શું તમે ખરેખર આને દૂર કરીને લખવા માગો છો?"
 
 #: gnucash/gnome-utils/gnc-file.c:1781
 #: gnucash/gnome-utils/gnc-main-window.cpp:1232
@@ -8388,7 +8410,8 @@ msgstr ""
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for when using the get command"
-msgstr "જે નામ ધરાવતી ચીજવસ્તુઓ પાછી મેળવવામાં આવશે તે નક્કી કરતી નિયમિત અભિવ્યક્તિ"
+msgstr ""
+"જે નામ ધરાવતી ચીજવસ્તુઓ પાછી મેળવવામાં આવશે તે નક્કી કરતી નિયમિત અભિવ્યક્તિ"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
@@ -8926,7 +8949,8 @@ msgstr "ઉપયોગ માટે તારીખ ફોર્મેટ"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:21
 msgid "This is the numerical identifier of the predefined date format to use."
-msgstr "આ ઉપયોગ કરવામાં આવતા અગાઉથી નિર્ધારિત ડેટ ફોર્મેટના આંકડાકીય ઓળખકર્તા છે."
+msgstr ""
+"આ ઉપયોગ કરવામાં આવતા અગાઉથી નિર્ધારિત ડેટ ફોર્મેટના આંકડાકીય ઓળખકર્તા છે."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:25
 msgid "Custom date format"
@@ -9196,8 +9220,8 @@ msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
 msgstr ""
-"આ સેટીંગ જણાવે છે કે શું વર્તમાન શ્રેણીમાં તમામ ચીજવસ્તુઓ શોધીએ, કે વર્તમાન શ્રેણીમાં ફક્ત "
-"‘સક્રિય’ ચીજવસ્તુઓમાં શોધીએ."
+"આ સેટીંગ જણાવે છે કે શું વર્તમાન શ્રેણીમાં તમામ ચીજવસ્તુઓ શોધીએ, કે વર્તમાન શ્રેણીમાં ફક્ત ‘"
+"સક્રિય’ ચીજવસ્તુઓમાં શોધીએ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:234
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:235
@@ -9212,7 +9236,8 @@ msgstr "નવી યુઝર વિન્ડો દેખાડો"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:250
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
-msgstr "સક્રિય હોય. તો નવી યુઝર વિન્ડો દેખાશે. નહીં તો તેને દેખાડવામાં નહીં આવે."
+msgstr ""
+"સક્રિય હોય. તો નવી યુઝર વિન્ડો દેખાશે. નહીં તો તેને દેખાડવામાં નહીં આવે."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:264
 msgid "New hierarchy window on \"New File\""
@@ -9229,7 +9254,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:272
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:273
 msgid "Default to 'new search' if fewer than this number of items is returned"
-msgstr "ચીજવસ્તુઓની આ સંખ્યા કરતાં ઓછી સંખ્યા મળે તો ‘ન્યૂ સર્ચ’માં ડિફોલ્ટ જાવ."
+msgstr ""
+"ચીજવસ્તુઓની આ સંખ્યા કરતાં ઓછી સંખ્યા મળે તો ‘ન્યૂ સર્ચ’માં ડિફોલ્ટ જાવ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:5
 msgid "Enable SKIP transaction action"
@@ -9915,7 +9941,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
 #, fuzzy
 msgid "Use account colors in the tabs of open account registers"
-msgstr "કોષ્ટકમાં દરેક ખાતાને તેના રજિસ્ટર વિન્ડોના એક હાઇપરલિંકના રૂપમાં દર્શાવે છે"
+msgstr ""
+"કોષ્ટકમાં દરેક ખાતાને તેના રજિસ્ટર વિન્ડોના એક હાઇપરલિંકના રૂપમાં દર્શાવે છે"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:116
 msgid ""
@@ -10237,7 +10264,8 @@ msgstr "ઇનપુટ દરમિયાન ખાતાઓ કે કામ�
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
 msgid "Move to Transfer field when memorised transaction auto filled"
-msgstr "જ્યારે જૂની લેવડદેવડ ઓટોમેટિક ભરવામાં આવશે ત્યારે ટ્રાન્સફર ફિલ્ડમાં જાવ"
+msgstr ""
+"જ્યારે જૂની લેવડદેવડ ઓટોમેટિક ભરવામાં આવશે ત્યારે ટ્રાન્સફર ફિલ્ડમાં જાવ"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:263
 msgid ""
@@ -11003,7 +11031,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
-msgstr "ડિફોલ્ટ રિપોર્ટ કરન્સીમાં રૂપાંતરિત કરેલા તમામ ખાતાના કુલ સરવાળાને દર્શાવો"
+msgstr ""
+"ડિફોલ્ટ રિપોર્ટ કરન્સીમાં રૂપાંતરિત કરેલા તમામ ખાતાના કુલ સરવાળાને દર્શાવો"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:10
 msgid "Show non currency commodities"
@@ -12350,7 +12379,8 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-qif-import.glade:310
 #: gnucash/gtkbuilder/assistant-qif-import.glade:395
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
-msgstr "આ ફાઈલની લોડિંગ રદ કરવા માટે \"બેક\" પર ક્લિક કરો અને બીજાની પસંદગી કરો."
+msgstr ""
+"આ ફાઈલની લોડિંગ રદ કરવા માટે \"બેક\" પર ક્લિક કરો અને બીજાની પસંદગી કરો."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:323
 msgid "Set a date format for this QIF file"
@@ -12699,7 +12729,8 @@ msgstr "આ તમને શેરના વિભાજન કે શેરન�
 #: gnucash/gtkbuilder/assistant-stock-split.glade:44
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr "તમે શેરનું વિભાજન કે વિલિનીકરણ રેકોર્ડ રેકોર્ડ કરવા માંગતા હોય તે ખાતું પસંદ કરો."
+msgstr ""
+"તમે શેરનું વિભાજન કે વિલિનીકરણ રેકોર્ડ રેકોર્ડ કરવા માંગતા હોય તે ખાતું પસંદ કરો."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:77
 #, fuzzy
@@ -13263,7 +13294,8 @@ msgstr "<b>પેટાખાતા</b>"
 #: gnucash/gtkbuilder/dialog-account.glade:472
 #, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "આ ખાતામાં પેટાખાતા સામેલ છે. તમે આ પેટાખાતાની સાથે શું કરવાનું પસંદ કરશો?"
+msgstr ""
+"આ ખાતામાં પેટાખાતા સામેલ છે. તમે આ પેટાખાતાની સાથે શું કરવાનું પસંદ કરશો?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:483
 #, fuzzy
@@ -13289,7 +13321,8 @@ msgstr "તમામ લેવડદેવડ_દૂર કરો"
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr "આ ખાતામાં લેવડદેવડ સામેલ છે. તમે આ લેવડદેવડની સાથે શું કરવાનું પસંદ કરશો?"
+msgstr ""
+"આ ખાતામાં લેવડદેવડ સામેલ છે. તમે આ લેવડદેવડની સાથે શું કરવાનું પસંદ કરશો?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:628
 msgid "This account contains read-only transactions which may not be deleted."
@@ -13306,13 +13339,15 @@ msgstr "<b>પેટાખાતાની લેવડદેવડ </b>"
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
-msgstr "એક કે વધુ પેટાખાતામાં લેવડદેવડ સામેલ છે. આ લેવડદેવડો સાથે તમે શું કરવા માંગો છો?"
+msgstr ""
+"એક કે વધુ પેટાખાતામાં લેવડદેવડ સામેલ છે. આ લેવડદેવડો સાથે તમે શું કરવા માંગો છો?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:750
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
-msgstr "એક કે વધારે પેટાખાતામાં ફક્ત વાંચી શકાય તેવી લેવડદેવડ સામેલ છે જેને દૂર ન કરી શકાય."
+msgstr ""
+"એક કે વધારે પેટાખાતામાં ફક્ત વાંચી શકાય તેવી લેવડદેવડ સામેલ છે જેને દૂર ન કરી શકાય."
 
 #: gnucash/gtkbuilder/dialog-account.glade:807
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
@@ -13658,7 +13693,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
-msgstr "ડિફોલ્ટ લેવડદેવડની સ્થિતિ (QIF ફાઈલ દ્વારા આપવામાં આવેલી સ્થિતિથી અધિરોહિત):"
+msgstr ""
+"ડિફોલ્ટ લેવડદેવડની સ્થિતિ (QIF ફાઈલ દ્વારા આપવામાં આવેલી સ્થિતિથી અધિરોહિત):"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
@@ -13767,7 +13803,8 @@ msgstr "અગાઉથી ચુકવણી કરવા લાગુ વળ�
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
-msgstr "મોકલવાની તારીખ પછી અગાઉથી ચુકવણી કરવા માટે લાગુ વળતર માટેની દિવસોની સંખ્યા"
+msgstr ""
+"મોકલવાની તારીખ પછી અગાઉથી ચુકવણી કરવા માટે લાગુ વળતર માટેની દિવસોની સંખ્યા"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:155
 msgid "The number of days to pay the bill after the post date."
@@ -14764,7 +14801,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:462
 msgid "This transaction requires your intervention or it will NOT be imported."
-msgstr "આ લેવડદેવડમાં આપના હસ્તક્ષેપની આવશ્યકતા છે અથવા તેને આયાત કરવામાં નહીં આવે."
+msgstr ""
+"આ લેવડદેવડમાં આપના હસ્તક્ષેપની આવશ્યકતા છે અથવા તેને આયાત કરવામાં નહીં આવે."
 
 #: gnucash/gtkbuilder/dialog-import.glade:465
 #, fuzzy
@@ -15503,12 +15541,14 @@ msgstr "<b>પૂર્ણ થયા તારીખ</b>"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1139
 #, fuzzy
 msgid "When a date is entered without year, it should be taken"
-msgstr "જ્યારે વર્ષ વિના કોઇ તારીખ દાખલ કરવામાં આવે ત્યારે તેને આ પ્રકારે લખવી જોઇએઃ"
+msgstr ""
+"જ્યારે વર્ષ વિના કોઇ તારીખ દાખલ કરવામાં આવે ત્યારે તેને આ પ્રકારે લખવી જોઇએઃ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1155
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr "તારીખોને આ રીતે પૂરી કરવામાં આવશે, જેથી તે વર્તમાન કેલેન્ડર વર્ષની અંદર રહે."
+msgstr ""
+"તારીખોને આ રીતે પૂરી કરવામાં આવશે, જેથી તે વર્તમાન કેલેન્ડર વર્ષની અંદર રહે."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1168
 #, fuzzy
@@ -15554,7 +15594,8 @@ msgstr "_સ્વયંસંચાલિત દશાંશ બિંદુ"
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
-msgstr "જેને દશાંશ વિના દાખલ કરવામાં આવ્યા છે તે મૂલ્યોમાં આપમેળે એક દશાંશ બિંદુ ઉમેરો."
+msgstr ""
+"જેને દશાંશ વિના દાખલ કરવામાં આવ્યા છે તે મૂલ્યોમાં આપમેળે એક દશાંશ બિંદુ ઉમેરો."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1309
 #, fuzzy
@@ -15815,7 +15856,8 @@ msgstr "બાયેશિયન મેચિંગનો _ઉપયોગ ક�
 #: gnucash/gtkbuilder/dialog-preferences.glade:2301
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
-msgstr "વર્તમાન ખાતા સાથે નવી લેવડદેવડ સરખાવવા માટે બાયેશિયન એલ્ગોરિધમ્સનો ઉપયોગ કરો."
+msgstr ""
+"વર્તમાન ખાતા સાથે નવી લેવડદેવડ સરખાવવા માટે બાયેશિયન એલ્ગોરિધમ્સનો ઉપયોગ કરો."
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2335
@@ -15860,7 +15902,8 @@ msgstr "તારીખ ફોર્મેટ_પ્રિન્ટ કરો"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2464
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr "વાસ્તવિક તારીખની નીચે, 8 પોઇન્ટ ટાઇપમાં તે તારીખના ફોર્મેટને પ્રિન્ટ કરો."
+msgstr ""
+"વાસ્તવિક તારીખની નીચે, 8 પોઇન્ટ ટાઇપમાં તે તારીખના ફોર્મેટને પ્રિન્ટ કરો."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2476
 msgid "Print _blocking chars"
@@ -16246,7 +16289,8 @@ msgstr "નોટબુક ટેબો_પર બંધ બટનને દર�
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
-msgstr "પ્રત્યેક નોટબુક ટેબ પર એક બંધ બટન બતાવો. આ 'બંધ' મેન્યુ આઇટમની જેમ કાર્ય કરે છે."
+msgstr ""
+"પ્રત્યેક નોટબુક ટેબ પર એક બંધ બટન બતાવો. આ 'બંધ' મેન્યુ આઇટમની જેમ કાર્ય કરે છે."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3721
 #, fuzzy
@@ -16809,7 +16853,8 @@ msgstr "માત્ર સક્રિય ડેટા શોધો"
 #, fuzzy
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
-msgstr "શું તમારા તમામ ડેટાને શોધે અથવા માત્ર \"સક્રિય\" ના પ્રકારમાં ચિહ્નને શોધો"
+msgstr ""
+"શું તમારા તમામ ડેટાને શોધે અથવા માત્ર \"સક્રિય\" ના પ્રકારમાં ચિહ્નને શોધો"
 
 #: gnucash/gtkbuilder/dialog-search.glade:420
 msgid "Type of search"
@@ -17814,7 +17859,8 @@ msgstr ""
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
-msgstr "GnuCash છેલ્લી લેવડદેવડોમાંથી પસંદ થયેલા ખાતાઓ માટે બજેટ મૂલ્યોનું અનુમાન લગાવશે."
+msgstr ""
+"GnuCash છેલ્લી લેવડદેવડોમાંથી પસંદ થયેલા ખાતાઓ માટે બજેટ મૂલ્યોનું અનુમાન લગાવશે."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:410
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
@@ -18944,7 +18990,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "A template with the given name already exists. Please enter another name."
-msgstr "આપવામાં આવેલા નામ સાથે એક ટેમ્પલેટ પહેલેથી હાજર છે. કૃપા કરી બીજું નામ દાખલ કરો."
+msgstr ""
+"આપવામાં આવેલા નામ સાથે એક ટેમ્પલેટ પહેલેથી હાજર છે. કૃપા કરી બીજું નામ દાખલ કરો."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1164
 #, c-format
@@ -19238,7 +19285,8 @@ msgstr "_લેવડદેવડ જારી કરો…"
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr "ઓનલાઈન બેન્કિન્ગના માધ્યમથી એક નવું બેન્ક આંતરીક લેવડદેવડ ઓનલાઈન જારી કરો."
+msgstr ""
+"ઓનલાઈન બેન્કિન્ગના માધ્યમથી એક નવું બેન્ક આંતરીક લેવડદેવડ ઓનલાઈન જારી કરો."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
@@ -19250,7 +19298,8 @@ msgstr "_લેવડદેવડ જારી કરો…"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "ઓનલાઈન બેન્કિન્ગના માધ્યમથી એક નવું બેન્ક આંતરીક લેવડદેવડ ઓનલાઈન જારી કરો."
+msgstr ""
+"ઓનલાઈન બેન્કિન્ગના માધ્યમથી એક નવું બેન્ક આંતરીક લેવડદેવડ ઓનલાઈન જારી કરો."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
@@ -19259,7 +19308,8 @@ msgstr "આં_તરીક લેવડદેવડ…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "ઓનલાઈન બેન્કિન્ગના માધ્યમથી એક નવું બેન્ક આંતરીક લેવડદેવડ ઓનલાઈન જારી કરો."
+msgstr ""
+"ઓનલાઈન બેન્કિન્ગના માધ્યમથી એક નવું બેન્ક આંતરીક લેવડદેવડ ઓનલાઈન જારી કરો."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 #, fuzzy
@@ -21207,7 +21257,8 @@ msgstr "_રેકોર્ડ"
 msgid ""
 "Invalid Entry: You need to supply an account in the right currency for this "
 "position."
-msgstr "અમાન્ય એન્ટ્રી: તમારે આ સ્થિતિ માટે યોગ્ય ચલણમાં એક ખાતું પુરું પાડવું જરૂરી છે."
+msgstr ""
+"અમાન્ય એન્ટ્રી: તમારે આ સ્થિતિ માટે યોગ્ય ચલણમાં એક ખાતું પુરું પાડવું જરૂરી છે."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
@@ -21570,7 +21621,8 @@ msgstr ""
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
-msgstr "તમે એક વર્તમાન વિભાજન ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો?"
+msgstr ""
+"તમે એક વર્તમાન વિભાજન ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો?"
 
 #: gnucash/register/ledger-core/split-register.c:999
 #, fuzzy
@@ -21587,7 +21639,8 @@ msgstr ""
 msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
-msgstr "તમે એક વર્તમાન લેવડદેવડ ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો?"
+msgstr ""
+"તમે એક વર્તમાન લેવડદેવડ ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો?"
 
 #: gnucash/register/ledger-core/split-register.c:1081
 #, fuzzy
@@ -21755,7 +21808,8 @@ msgstr "આ રજિસ્ટર વિનિમય દરોના સંપ�
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1402
 msgid "You need to select a split in order to modify its exchange rate."
-msgstr "તેના વિનિમયદરમાં ફેરફાર કરવા માટે તમારે એક વિભાજનની પસંદગી કરવાની રહેશે."
+msgstr ""
+"તેના વિનિમયદરમાં ફેરફાર કરવા માટે તમારે એક વિભાજનની પસંદગી કરવાની રહેશે."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1417
 #: gnucash/register/ledger-core/split-register-control.cpp:1492
@@ -22050,7 +22104,8 @@ msgstr "વેચાયેલા અથવા ખરીદાયેલા શે
 #: gnucash/register/ledger-core/split-register-model.c:1512
 #: gnucash/register/ledger-core/split-register-model.c:1579
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "એ ખાતું દાખલ કરો જેમાંથી ટ્રાન્સફર કરવું છે અથવા યાદીમાંથી એક ખાતું પસંદ કરો"
+msgstr ""
+"એ ખાતું દાખલ કરો જેમાંથી ટ્રાન્સફર કરવું છે અથવા યાદીમાંથી એક ખાતું પસંદ કરો"
 
 #: gnucash/register/ledger-core/split-register-model.c:1589
 msgid ""
@@ -23766,7 +23821,8 @@ msgstr "લેખાંકન શૈલીના નિયમોને દર્
 #: gnucash/report/reports/standard/income-statement.scm:77
 #, fuzzy
 msgid "Use rules beneath columns of added numbers like accountants do."
-msgstr "જોડવામાં આવેલી સંખ્યાની કોલમ નીચે નિયમોનો ઉપયોગ કરો જેમ કે હિસાબનીશો કરે છે."
+msgstr ""
+"જોડવામાં આવેલી સંખ્યાની કોલમ નીચે નિયમોનો ઉપયોગ કરો જેમ કે હિસાબનીશો કરે છે."
 
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
@@ -23789,7 +23845,8 @@ msgstr "ખાતાને હાઇપરલિંકના સ્વરૂપ�
 #: gnucash/report/reports/standard/trial-balance.scm:120
 #, fuzzy
 msgid "Shows each account in the table as a hyperlink to its register window."
-msgstr "કોષ્ટકમાં દરેક ખાતાને તેના રજિસ્ટર વિન્ડોના એક હાઇપરલિંકના રૂપમાં દર્શાવે છે"
+msgstr ""
+"કોષ્ટકમાં દરેક ખાતાને તેના રજિસ્ટર વિન્ડોના એક હાઇપરલિંકના રૂપમાં દર્શાવે છે"
 
 #: gnucash/report/reports/standard/account-summary.scm:113
 #, fuzzy
@@ -23970,7 +24027,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:88
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr "જ્યાં લાગુ થાય ત્યાં લેવડદેવડ પર પ્રાઇસ એડિટર પ્રાઇસિંગના ઉપયોગને પ્રાથમિકતા આપો."
+msgstr ""
+"જ્યાં લાગુ થાય ત્યાં લેવડદેવડ પર પ્રાઇસ એડિટર પ્રાઇસિંગના ઉપયોગને પ્રાથમિકતા આપો."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "How to report commissions and other brokerage fees."
@@ -24446,7 +24504,8 @@ msgstr "વધારાની નોંધ"
 #: gnucash/report/reports/standard/taxinvoice.scm:221
 #, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup."
-msgstr "ચલણના અંતમાં જોડવામાં આવેલી ટિપ્પણીઓ- તેમાં HTML માર્ક અપ સામેલ થઇ શકે છે."
+msgstr ""
+"ચલણના અંતમાં જોડવામાં આવેલી ટિપ્પણીઓ- તેમાં HTML માર્ક અપ સામેલ થઇ શકે છે."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
 #, fuzzy
@@ -24564,7 +24623,8 @@ msgstr "ખાતાને હાઇપરલિંકના સ્વરૂપ�
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #, fuzzy
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
-msgstr "કોષ્ટકમાં દરેક ખાતાને તેના રજિસ્ટર વિન્ડોના એક હાઇપરલિંકના રૂપમાં દર્શાવે છે"
+msgstr ""
+"કોષ્ટકમાં દરેક ખાતાને તેના રજિસ્ટર વિન્ડોના એક હાઇપરલિંકના રૂપમાં દર્શાવે છે"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #, fuzzy
@@ -24704,7 +24764,8 @@ msgstr "નવા/વર્તમાન કુલ સરવાળાને સ�
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
-msgstr "બજેટ દ્વારા રજૂ કરાયેલ કુલ સંખ્યામાં બદલાવ નિર્દેશિત કરતી પંક્તિઓને સામેલ કરવી કે નહીં"
+msgstr ""
+"બજેટ દ્વારા રજૂ કરાયેલ કુલ સંખ્યામાં બદલાવ નિર્દેશિત કરતી પંક્તિઓને સામેલ કરવી કે નહીં"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-barchart.scm:84
@@ -24993,7 +25054,8 @@ msgstr "ધોરણ, પહેલા આવકના ક્રમમાં દ�
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
-msgstr "તેના કારણે અહેવાલને એક ધોરણ ક્રમમાં, ખર્ચ અગાઉ આવકને રાખીને દર્શાવવામાં આવે છે."
+msgstr ""
+"તેના કારણે અહેવાલને એક ધોરણ ક્રમમાં, ખર્ચ અગાઉ આવકને રાખીને દર્શાવવામાં આવે છે."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:403
 msgid "Reporting range end period cannot be less than start period."
@@ -25150,7 +25212,8 @@ msgstr "શૂન્ય કુલ બેલેન્સ અને બજેટ �
 msgid ""
 "Include accounts with zero total (recursive) balances and budget values in "
 "this report."
-msgstr "શૂન્ય કુલ (પુનરાવર્તી) બેલેન્સ અને બજેટ મૂલ્યોવાળા ખાતાઓને આ અહેવાલમાં સમાવિષ્ટ કરો"
+msgstr ""
+"શૂન્ય કુલ (પુનરાવર્તી) બેલેન્સ અને બજેટ મૂલ્યોવાળા ખાતાઓને આ અહેવાલમાં સમાવિષ્ટ કરો"
 
 #: gnucash/report/reports/standard/budget.scm:88
 msgid "Include collapsed periods before selected."
@@ -25573,7 +25636,8 @@ msgstr "સમાપન એન્ટ્રીઓની પદ્ધતિ નિ
 #, fuzzy
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
-msgstr "તેના કારણે સમાપન એન્ટ્રીઓની પદ્ધતિઓને એક નિયમિત અભિવ્યક્તિના રૂપમાં દેખી શકાય છે"
+msgstr ""
+"તેના કારણે સમાપન એન્ટ્રીઓની પદ્ધતિઓને એક નિયમિત અભિવ્યક્તિના રૂપમાં દેખી શકાય છે"
 
 #: gnucash/report/reports/standard/equity-statement.scm:402
 #: gnucash/report/reports/standard/income-statement.scm:442
@@ -25946,7 +26010,8 @@ msgstr "ટ્રેંડિગ ખાતાના કુલ સરવાળા
 #, fuzzy
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
-msgstr "ટ્રેડિંગ ખાતાના કુલ બેલેન્સને નિર્દેશિત કરવાવાળી લાઈનને સમાવિષ્ટ કરવી કે ન કરવી"
+msgstr ""
+"ટ્રેડિંગ ખાતાના કુલ બેલેન્સને નિર્દેશિત કરવાવાળી લાઈનને સમાવિષ્ટ કરવી કે ન કરવી"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
 #: libgnucash/engine/Account.cpp:4306 libgnucash/engine/Scrub.cpp:532
@@ -27631,9 +27696,9 @@ msgid ""
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"આ અહેવાલ સાથે ઉપયોગ કરવા માટે CSS સ્ટાઇલ શીટનું ફાઈલ નામ. આ ફાઈલ કાં તો "
-"આપની .gnucash ડિરેક્ટરીમાં, અથવા તો GnuCash ઇન્સ્ટોલેશન ડિરેક્ટરીમાં પોતાના યોગ્ય સ્થાન "
-"પર ક્યાંક હોવી જોઇએ."
+"આ અહેવાલ સાથે ઉપયોગ કરવા માટે CSS સ્ટાઇલ શીટનું ફાઈલ નામ. આ ફાઈલ કાં તો આપની "
+".gnucash ડિરેક્ટરીમાં, અથવા તો GnuCash ઇન્સ્ટોલેશન ડિરેક્ટરીમાં પોતાના યોગ્ય સ્થાન પર "
+"ક્યાંક હોવી જોઇએ."
 
 #: gnucash/report/reports/standard/receipt.scm:85
 #: gnucash/report/reports/standard/taxinvoice.scm:157
@@ -27697,12 +27762,14 @@ msgstr "ચુકવણી પ્રાપ્ત થઇ, આભાર"
 #: gnucash/report/reports/standard/receipt.scm:141
 #, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup"
-msgstr "ચલણના અંતમાં જોડવામાં આવેલી ટિપ્પણીઓ- તેમાં HTML માર્ક અપ સામેલ થઇ શકે છે."
+msgstr ""
+"ચલણના અંતમાં જોડવામાં આવેલી ટિપ્પણીઓ- તેમાં HTML માર્ક અપ સામેલ થઇ શકે છે."
 
 #: gnucash/report/reports/standard/receipt.scm:204
 #, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr "ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
+msgstr ""
+"ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:62
 msgid ""
@@ -28037,7 +28104,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:304
 msgid "Display a customer invoice with tax columns (using eguile template)"
-msgstr "ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
+msgstr ""
+"ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:316
 #, fuzzy
@@ -28080,7 +28148,8 @@ msgstr "કર ચલણ"
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
 "template)"
-msgstr "ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
+msgstr ""
+"ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
 
 #: gnucash/report/reports/standard/trial-balance.scm:58
 #: gnucash/report/reports/standard/trial-balance.scm:532
@@ -28297,7 +28366,8 @@ msgstr ""
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
-msgstr "કોઇ ચલણ ચૂંટવામાં આવેલ નથી--કૃપા કરી એક ચલણ ચૂંટવા માટે વિકલ્પ બટનનો ઉપયોગ કરો"
+msgstr ""
+"કોઇ ચલણ ચૂંટવામાં આવેલ નથી--કૃપા કરી એક ચલણ ચૂંટવા માટે વિકલ્પ બટનનો ઉપયોગ કરો"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:284
 msgid ""
@@ -29569,7 +29639,8 @@ msgstr "ચેતવણીઓને રિસેટ કરો"
 #, fuzzy
 #| msgid "Reset the state of all warning messages so they will be shown again."
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr "તમામ ચેતવણીના સંદેશાની સ્થિતિને રિસેટ કરો, જેથી તેમને ફરીથી બતાવવામાં આવશે."
+msgstr ""
+"તમામ ચેતવણીના સંદેશાની સ્થિતિને રિસેટ કરો, જેથી તેમને ફરીથી બતાવવામાં આવશે."
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
@@ -30259,7 +30330,8 @@ msgstr "_GnuCash .log ફાઈલ ફરી ચલાવો."
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
-msgstr "દુર્ઘટના બાદ GnuCash લોગ ફાઈલ ફરી ચલાવો. તેને પૂર્વ સ્થિતિમાં નહીં લાવી શકાય."
+msgstr ""
+"દુર્ઘટના બાદ GnuCash લોગ ફાઈલ ફરી ચલાવો. તેને પૂર્વ સ્થિતિમાં નહીં લાવી શકાય."
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-register.ui:32
@@ -30536,7 +30608,8 @@ msgstr "સમયગાળો"
 #, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "અગાઉની લેવડદેવડોમાંથી પસંદગી કરેલા ખાતા માટે એક બજેટ મૂલ્યનું અનુમાન કરો"
+msgstr ""
+"અગાઉની લેવડદેવડોમાંથી પસંદગી કરેલા ખાતા માટે એક બજેટ મૂલ્યનું અનુમાન કરો"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
@@ -32507,7 +32580,8 @@ msgstr ""
 #: libgnucash/engine/gnc-optiondb.cpp:1225
 #, fuzzy
 msgid "Budget to be used when none has been otherwise specified."
-msgstr "ઉપયોગમાં કરવામાં આવતું બજેટ, જ્યારે કોઇને તે સિવાયની સૂચના આપવામાં આવી ન હોય."
+msgstr ""
+"ઉપયોગમાં કરવામાં આવતું બજેટ, જ્યારે કોઇને તે સિવાયની સૂચના આપવામાં આવી ન હોય."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1231
 msgid "Customer number"
@@ -32946,7 +33020,8 @@ msgstr "કરવેરાનો પ્રકાર %s: ખાતાનાં �
 #: libgnucash/tax/gnc-locale-tax.c:165
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
-msgstr "કરવેરા સાથે સંબંધિત નથી; કરવેરાનો પ્રકાર %s: ખાતાના પ્રકાર માટે અમાન્ય કોડ %s"
+msgstr ""
+"કરવેરા સાથે સંબંધિત નથી; કરવેરાનો પ્રકાર %s: ખાતાના પ્રકાર માટે અમાન્ય કોડ %s"
 
 #: libgnucash/tax/gnc-locale-tax.c:178
 #, c-format
@@ -32976,7 +33051,8 @@ msgstr "કોઈ વિગત નથી: સ્વરૂપ %s, કોડ %s, �
 #: libgnucash/tax/gnc-locale-tax.c:225 libgnucash/tax/gnc-locale-tax.c:240
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
-msgstr "કરવેરા સાથે સંબંધિત નથી; કોઈ વિગત નથી: સ્વરૂપ %s, કોડ %s, કરવેરાનો પ્રકાર %s"
+msgstr ""
+"કરવેરા સાથે સંબંધિત નથી; કોઈ વિગત નથી: સ્વરૂપ %s, કોડ %s, કરવેરાનો પ્રકાર %s"
 
 #: libgnucash/tax/gnc-locale-tax.c:263
 #, c-format

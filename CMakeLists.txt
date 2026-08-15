@@ -799,7 +799,7 @@ check_include_files (wctype.h HAVE_WCTYPE_H)
 
 test_big_endian(IS_BIGENDIAN)
 if (IS_BIGENDIAN)
-  add_compile_definition (WORDS_BIGENDIAN)
+  add_compile_definitions (WORDS_BIGENDIAN)
 endif()
 
 if (NOT DISABLE_NLS)
@@ -893,6 +893,15 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H}
 # The doxygen developer documentation
 find_program(DOXYGEN doxygen)
 if (NOT ${DOXYGEN} STREQUAL "DOXYGEN-NOTFOUND")
+  if (BUILDING_FROM_VCS)
+    execute_process(
+      COMMAND ${SHELL} "${CMAKE_SOURCE_DIR}/util/gnc-vcs-info" -r "${CMAKE_SOURCE_DIR}"
+      OUTPUT_VARIABLE VERSION
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+  else()
+    set(VERSION ${PROJECT_VERSION})
+  endif()
   configure_file(doxygen.cfg.in doxygen.cfg)
   add_custom_target(doc ${DOXYGEN} doxygen.cfg)
 endif()

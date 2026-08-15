@@ -4,20 +4,20 @@
 # Adithya K <adithyak04@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2021-02-20 14:50+0000\n"
+"PO-Revision-Date: 2026-06-26 03:27+0000\n"
 "Last-Translator: Adithya K <adithyak04@gmail.com>\n"
-"Language-Team: Bodo <https://hosted.weblate.org/projects/gnucash/gnucash/brx/"
-">\n"
+"Language-Team: Bodo <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"brx/>\n"
 "Language: brx\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -830,10 +830,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"जायगा सोलायहोनाय रेजिस्टार खाम्फायाव थानाय मोनसे थाखानाय एकाउन्ट मुंनि गिबि "
-"हांखो(फोर)खौ टाइप खालाम आरो GnuCash आ नोंथांनि एकाउन्टनि लिस्ट निफ्राय मुंखौ आबुं "
-"खालामगोन। दालाइ-एकाउन्टफोरनि थाखाय, पेरेन्ट एकाउन्टनि गिबि हांखो(फोर) बेनि उनाव ':' "
-"आरो दालाइ-एकाउन्टनि गिबि हांखो(फोर) (जेरै धोन:नगदनि थाखाय A:C) खौ टाइप खालाम"
+"जायगा सोलायहोनाय रेजिस्टार खाम्फायाव थानाय मोनसे थाखानाय एकाउन्ट मुंनि गिबि हांखो"
+"(फोर)खौ टाइप खालाम आरो GnuCash आ नोंथांनि एकाउन्टनि लिस्ट निफ्राय मुंखौ आबुं खालामगोन"
+"। दालाइ-एकाउन्टफोरनि थाखाय, पेरेन्ट एकाउन्टनि गिबि हांखो(फोर) बेनि उनाव ':' आरो "
+"दालाइ-एकाउन्टनि गिबि हांखो(फोर) (जेरै धोन:नगदनि थाखाय A:C) खौ टाइप खालाम"
 
 #: doc/tip_of_the_day.list.c:71
 #, fuzzy
@@ -2038,13 +2038,15 @@ msgstr "नोंथाङा थारैनो \"%s\" खौ खोमोर�
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr "बे लेनदेनखौ बायग्रानो रानना होनांगौ जायो। अननानै गाहायाव बायग्राखौ बासिख।"
+msgstr ""
+"बे लेनदेनखौ बायग्रानो रानना होनांगौ जायो। अननानै गाहायाव बायग्राखौ बासिख।"
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr "बे लेनदेनखौ फानग्रानो रानना होनांगौ जायो। अननानै गाहायाव फानग्राखौ बासिख।"
+msgstr ""
+"बे लेनदेनखौ फानग्रानो रानना होनांगौ जायो। अननानै गाहायाव फानग्राखौ बासिख।"
 
 #: gnucash/gnome/dialog-commodities.cpp:188
 #, fuzzy
@@ -2216,7 +2218,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:334
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "क्रेडिटआ मोनसे नुंगुबै बिबां जाथार नांगोन एबा नोंथाङा बेखौ लांदां दोननांगौ।"
+msgstr ""
+"क्रेडिटआ मोनसे नुंगुबै बिबां जाथार नांगोन एबा नोंथाङा बेखौ लांदां दोननांगौ।"
 
 #: gnucash/gnome/dialog-customer.c:408
 msgid "Edit Customer"
@@ -2316,7 +2319,8 @@ msgstr "रिपर्ट बाइजोमहर मुं सोलायन
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "बे मुंनि मोनसे थिखानाय रिपर्ट बाइजोमहरआ दंखायो, अननानै गुबुन मोनसे मुं बासिख।"
+msgstr ""
+"बे मुंनि मोनसे थिखानाय रिपर्ट बाइजोमहरआ दंखायो, अननानै गुबुन मोनसे मुं बासिख।"
 
 #: gnucash/gnome/dialog-custom-report.c:520
 msgid "Load report configuration"
@@ -2916,7 +2920,8 @@ msgstr "थारैनो नोंथाङा सायखखानाय ह
 #: gnucash/gnome/dialog-invoice.c:729
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
-msgstr "बे हाबहोनाया मोनसे फारियाव नांजाबदेरनाय आरो बैखौ बेनिफ्रायबो खोमोरनाय जागोन!"
+msgstr ""
+"बे हाबहोनाया मोनसे फारियाव नांजाबदेरनाय आरो बैखौ बेनिफ्रायबो खोमोरनाय जागोन!"
 
 #: gnucash/gnome/dialog-invoice.c:924
 msgid "Choose a different report template or Printable Invoice will be used"
@@ -3339,7 +3344,8 @@ msgstr "नोंथां बे खामानिनि थाखाय स�
 #, fuzzy
 #| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "क्रेडिटआ मोनसे नुंगुबै बिबां जाथार नांगोन एबा नोंथाङा बेखौ लांदां दोननांगौ।"
+msgstr ""
+"क्रेडिटआ मोनसे नुंगुबै बिबां जाथार नांगोन एबा नोंथाङा बेखौ लांदां दोननांगौ।"
 
 #: gnucash/gnome/dialog-job.c:245
 msgid "Edit Job"
@@ -3719,7 +3725,8 @@ msgstr "बेयो डुप्लिकेट आनजाद फरमेट
 msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
-msgstr "%s आनजाद फरमेट फाइल '%s' आरो %s आनजाद फरमेट फाइल '%s' आव GUIDs आ गोरोबो।"
+msgstr ""
+"%s आनजाद फरमेट फाइल '%s' आरो %s आनजाद फरमेट फाइल '%s' आव GUIDs आ गोरोबो।"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3831,8 +3838,8 @@ msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
 msgstr ""
-"(%d) थाबावनाय नुजाथिनायफोरनि अनजिमाया (%d) गासै नुजाथिनायनि अनजिमा निख्रुइ "
-"गेदेरसिन। "
+"(%d) थाबावनाय नुजाथिनायफोरनि अनजिमाया (%d) गासै नुजाथिनायनि अनजिमा निख्रुइ गेदेरसिन"
+"। "
 
 #: gnucash/gnome/dialog-sx-editor.c:608
 msgid ""
@@ -3853,7 +3860,8 @@ msgstr "सोलायस्लुजों थि लेनदेनफोर�
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
-msgstr "मोनसे टेमप्लेट लेनदेन गैयागारा थि लेनदेनफोरखौ गावनो गाव महरै सोरजिनो हाया।"
+msgstr ""
+"मोनसे टेमप्लेट लेनदेन गैयागारा थि लेनदेनफोरखौ गावनो गाव महरै सोरजिनो हाया।"
 
 #: gnucash/gnome/dialog-sx-editor.c:687
 #, fuzzy, c-format
@@ -3925,7 +3933,8 @@ msgstr ""
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
-msgstr "थि लेनदेनआ समानथायनङै। बे थासारिखौ सुस्रांनो नोंथांखौ गोरायै थुलुंगा होबाय।"
+msgstr ""
+"थि लेनदेनआ समानथायनङै। बे थासारिखौ सुस्रांनो नोंथांखौ गोरायै थुलुंगा होबाय।"
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:774
 msgid ""
@@ -5163,7 +5172,8 @@ msgstr ""
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr "बे लेनदेनखौ बिबुंथिजों लोगोसे खालि-फरायनो हाथाव महरै दाग होनाय जायो: '%s'"
+msgstr ""
+"बे लेनदेनखौ बिबुंथिजों लोगोसे खालि-फरायनो हाथाव महरै दाग होनाय जायो: '%s'"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2567
 #: gnucash/gnome/gnc-split-reg.c:1095
@@ -5405,7 +5415,8 @@ msgstr "नोंथाङा बै फाइलखौ थिना दोन�
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:738
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
-msgstr "%s फाइलआ सिगाङावनो दं। थारैनो नोंथाङा बेखौ अभारराइट खालामनो लुबैयो नामा?"
+msgstr ""
+"%s फाइलआ सिगाङावनो दं। थारैनो नोंथाङा बेखौ अभारराइट खालामनो लुबैयो नामा?"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 #, fuzzy
@@ -6333,12 +6344,12 @@ msgid ""
 "file.\n"
 msgstr ""
 "\n"
-"नोंथाङा ल'ड खालामनो नाजाबाय थानाय फाइलआ GnuCash नि गोजामसिन बिसान निफ्राय "
-"फैनाय। गोजामसिम बिसानआव फाइल फरमेटआ गोमानायमोन, हांखो एनक'डिंनि गुवारै थि "
-"खालामनायखौ बाहायगासिनो दं। बेनि ओंथिया नोंथांनि डाटा फाइलनि फराखौ गोबां "
-"रोखानङै(ओंथिगोनां) राहायाव फरायनो हायो। बे रोखानङै(मोननै ओंथि)खौ गावनो गाव महरै "
-"सुस्रांनो हाया, नाथाय GnuCash 2.0.0 फाइल फरमेटआ गासै गोनांथि थि खालामनायखौ "
-"सोफादेरगोन, जाहाते नोंथाङा बे स्टेपखौ आरोबाव फुरा खालामनाङा।\n"
+"नोंथाङा ल'ड खालामनो नाजाबाय थानाय फाइलआ GnuCash नि गोजामसिन बिसान निफ्राय फैनाय"
+"। गोजामसिम बिसानआव फाइल फरमेटआ गोमानायमोन, हांखो एनक'डिंनि गुवारै थि खालामनायखौ "
+"बाहायगासिनो दं। बेनि ओंथिया नोंथांनि डाटा फाइलनि फराखौ गोबां रोखानङै(ओंथिगोनां) "
+"राहायाव फरायनो हायो। बे रोखानङै(मोननै ओंथि)खौ गावनो गाव महरै सुस्रांनो हाया, नाथाय "
+"GnuCash 2.0.0 फाइल फरमेटआ गासै गोनांथि थि खालामनायखौ सोफादेरगोन, जाहाते नोंथाङा बे "
+"स्टेपखौ आरोबाव फुरा खालामनाङा।\n"
 "\n"
 "GnuCash आ नोंथांनि डाटा फाइलनि थाखाय गेबें हांखो एनक'डिंखौ अनुमान खालामनो नाजागोन। "
 "उननि बिलाइआव, बे अनुमानखौ बाहायनाय समाव GnuCash आ फिथाइगोनां फराखौ दिन्थिगोन। "
@@ -6619,13 +6630,15 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
-msgstr "जायखि जाया दालाय-एकाउन्टखौ बाद होनानै, पेरेन्ट एकाउन्टआव बेलेन्सखौल' दिन्थि।"
+msgstr ""
+"जायखि जाया दालाय-एकाउन्टखौ बाद होनानै, पेरेन्ट एकाउन्टआव बेलेन्सखौल' दिन्थि।"
 
 #: gnucash/gnome-utils/dialog-account.c:2506
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr "जायखि जाया दालाय-एकाउन्टखौ बाद होनानै, पेरेन्ट एकाउन्टआव बेलेन्सखौल' दिन्थि।"
+msgstr ""
+"जायखि जाया दालाय-एकाउन्टखौ बाद होनानै, पेरेन्ट एकाउन्टआव बेलेन्सखौल' दिन्थि।"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -6980,7 +6993,8 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1295
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "राङारि::बे बुथामखौ हाहोनाय खालामनो कट(दैखांना होनाय)खौ इनष्टल खालामनांगोन।"
+msgstr ""
+"राङारि::बे बुथामखौ हाहोनाय खालामनो कट(दैखांना होनाय)खौ इनष्टल खालामनांगोन।"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1397
 msgid ""
@@ -7301,12 +7315,14 @@ msgstr "URL %s खौ पार्स खालामनो हाया।"
 #: gnucash/gnome-utils/gnc-file.c:328
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
-msgstr "%s जों फोनांजाब खालामनो हाया। हस्ट, बाहायग्रामुं एबा पासवार्डआ गोरोन्थि।"
+msgstr ""
+"%s जों फोनांजाब खालामनो हाया। हस्ट, बाहायग्रामुं एबा पासवार्डआ गोरोन्थि।"
 
 #: gnucash/gnome-utils/gnc-file.c:334
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
-msgstr "%s जों फोनांजाब खालामनो हाया। फोनांजाबआ गोमाबाय, डाटा दैथाय हरनो हायाखै।"
+msgstr ""
+"%s जों फोनांजाब खालामनो हाया। फोनांजाबआ गोमाबाय, डाटा दैथाय हरनो हायाखै।"
 
 #: gnucash/gnome-utils/gnc-file.c:340
 msgid ""
@@ -7400,7 +7416,8 @@ msgstr "%s खौ प्रसेस खालामनाय समाव म�
 
 #: gnucash/gnome-utils/gnc-file.c:440
 msgid "There was an error reading the file. Do you want to continue?"
-msgstr "फाइल फरायनायाव मोनसे गोरोन्थि जादों। नोंथाङा बेखौ सालाय लांनो लुबैयो नामा?"
+msgstr ""
+"फाइल फरायनायाव मोनसे गोरोन्थि जादों। नोंथाङा बेखौ सालाय लांनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:449
 #, c-format
@@ -7557,10 +7574,8 @@ msgstr "सोलायनायफोरखौ फाइलाव थिना 
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] ""
-"नोंथाङा थिना दोनाब्ला, सिगांनि %d मिनिटनि सोलायनायफोरखौ नागारनाय जागोन।"
-msgstr[1] ""
-"नोंथाङा थिना दोनाब्ला, सिगांनि %d मिनिटनि सोलायनायफोरखौ नागारनाय जागोन।"
+msgstr[0] "नोंथाङा थिना दोनाब्ला, सिगांनि %d मिनिटनि सोलायनायफोरखौ नागारनाय जागोन।"
+msgstr[1] "नोंथाङा थिना दोनाब्ला, सिगांनि %d मिनिटनि सोलायनायफोरखौ नागारनाय जागोन।"
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -7664,7 +7679,8 @@ msgstr ""
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
-msgstr "%s फाइलआ सिगाङावनो दं। थारैनो नोंथाङा बेखौ अभारराइट खालामनो लुबैयो नामा?"
+msgstr ""
+"%s फाइलआ सिगाङावनो दं। थारैनो नोंथाङा बेखौ अभारराइट खालामनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:1781
 #: gnucash/gnome-utils/gnc-main-window.cpp:1232
@@ -7731,8 +7747,8 @@ msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
 msgstr ""
-"नोंथाङा थिना दोनाब्ला, सिगां %d घन्टा आरो %d मिनिटनि सोलायनायफोरखौ नागारनाय "
-"जागोन।"
+"नोंथाङा थिना दोनाब्ला, सिगां %d घन्टा आरो %d मिनिटनि सोलायनायफोरखौ नागारनाय जागोन"
+"।"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1220
 #, c-format
@@ -7788,7 +7804,8 @@ msgstr "डाटाबेसाव थिना दोननो हायाख
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:3096
 msgid "Unable to save to database: Book is marked read-only."
-msgstr "डाटाबेसाव थिना दोननो हायाखै: बिजाबखौ खालि-फरायनाय बादिल' दाग होनाय जायो।"
+msgstr ""
+"डाटाबेसाव थिना दोननो हायाखै: बिजाबखौ खालि-फरायनाय बादिल' दाग होनाय जायो।"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:4756
 #: gnucash/gtkbuilder/assistant-qif-import.glade:949
@@ -8490,7 +8507,8 @@ msgstr ""
 #: gnucash/gnucash-core-app.cpp:82
 #, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
-msgstr "जोथा दिदोम बिसानखौ नागिरना दिहुन, अननानै http://www.gnucash.org खौ नायदेर"
+msgstr ""
+"जोथा दिदोम बिसानखौ नागिरना दिहुन, अननानै http://www.gnucash.org खौ नायदेर"
 
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:92
@@ -8717,8 +8735,8 @@ msgid ""
 "the window followed by the width and height of the window."
 msgstr ""
 "बे सेटिंआ उइन्ड'नि महर आरो जायगाखौ बेखेवयो जेब्ला बेखौ जोबथा बन्द खालामदोंमोन। उइन्ड'नि "
-"गुवार आरो गोजौनि उनाव अनजिमा(नाम्बार)आ उइन्ड'नि बिजौ आगसि खनानि X आरो Y "
-"क'अर्डिनेट।"
+"गुवार आरो गोजौनि उनाव अनजिमा(नाम्बार)आ उइन्ड'नि बिजौ आगसि खनानि X आरो Y क'अर्डिनेट"
+"।"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:39
@@ -8829,8 +8847,8 @@ msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
 msgstr ""
-"मावथिब्ला, सरासनस्रा फालागि खामानिनि थाखाय बाद्राय टुलबाट बुथामखौबो दिन्थिनाय "
-"जायो। नङाब्ला, बिफोरखौ दिन्थिनाय जाया। "
+"मावथिब्ला, सरासनस्रा फालागि खामानिनि थाखाय बाद्राय टुलबाट बुथामखौबो दिन्थिनाय जायो"
+"। नङाब्ला, बिफोरखौ दिन्थिनाय जाया। "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
 #: libgnucash/engine/gnc-optiondb.cpp:1332
@@ -8993,7 +9011,8 @@ msgstr "रां मोनग्रा मुंनि जायगा"
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr "आनजादाव रां मोनग्रा सारिनि जागायनायनि थाखाय X,Y क'अर्डिनेटआ बे बेसेनाव दं।"
+msgstr ""
+"आनजादाव रां मोनग्रा सारिनि जागायनायनि थाखाय X,Y क'अर्डिनेटआ बे बेसेनाव दं।"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
@@ -9891,7 +9910,8 @@ msgstr "लग/बेकआप फाइलखौ खोमोरनो ना�
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr "एसेबां साननि (0 = माब्लाबो नङा) उनाव गोजाम लग/बेकआप फाइलफोरखौ बन्द खालाम।"
+msgstr ""
+"एसेबां साननि (0 = माब्लाबो नङा) उनाव गोजाम लग/बेकआप फाइलफोरखौ बन्द खालाम।"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:91
 msgid ""
@@ -9948,9 +9968,8 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
-"मावथिब्ला, एकाउन्ट हायारआर्किआ एकाउन्टनि कास्टम गाबनि हेफाजाबजों एकाउन्टखौ गाब "
-"होगोन। एकाउन्टखौ गोख्रैयै सिनायथि खालामनो थाखाय बेयो नुथाव हेफाजाब महरै खामानि मावनो "
-"हायो।"
+"मावथिब्ला, एकाउन्ट हायारआर्किआ एकाउन्टनि कास्टम गाबनि हेफाजाबजों एकाउन्टखौ गाब होगोन"
+"। एकाउन्टखौ गोख्रैयै सिनायथि खालामनो थाखाय बेयो नुथाव हेफाजाब महरै खामानि मावनो हायो।"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
 msgid "Use account colors in the tabs of open account registers"
@@ -10035,9 +10054,9 @@ msgid ""
 "specified by the currency-other key."
 msgstr ""
 "बे सेटिंआ गोदान एकाउन्टनि थाखाय डिफल्ट सोलिनाय रांनि फुंखाखौ दबथायो। \"जायगानि\"आव "
-"फजयोब्ला GnuCash आ बाहायग्रानि जायगानि सेटिं निफ्राय डिफल्ट सोलिनाय रांखौ "
-"मोनफिनगोन। \"गुबुन\"आव फजयोब्ला GnuCash आ सोलिनाय रां-गुबुन साबिजों थि खालामजााय "
-"सेटिंखौ बाहागोन।"
+"फजयोब्ला GnuCash आ बाहायग्रानि जायगानि सेटिं निफ्राय डिफल्ट सोलिनाय रांखौ मोनफिनगोन"
+"। \"गुबुन\"आव फजयोब्ला GnuCash आ सोलिनाय रां-गुबुन साबिजों थि खालामजााय सेटिंखौ "
+"बाहागोन।"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -10288,11 +10307,13 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:258
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "इनपुट खालामनाय समाव एकाउन्टफोर एबा हाबाफोरनि लिस्टखौ गावनो गाव महरै दैखां"
+msgstr ""
+"इनपुट खालामनाय समाव एकाउन्टफोर एबा हाबाफोरनि लिस्टखौ गावनो गाव महरै दैखां"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
 msgid "Move to Transfer field when memorised transaction auto filled"
-msgstr "गोसोखांनाय लेनदेनखौ हार्सिं आबुं खालामनाय समाव जायगा सोलायहोनाय फोथाराव थां"
+msgstr ""
+"गोसोखांनाय लेनदेनखौ हार्सिं आबुं खालामनाय समाव जायगा सोलायहोनाय फोथाराव थां"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:263
 msgid ""
@@ -10554,9 +10575,9 @@ msgid ""
 "by the currency-other key."
 msgstr ""
 "बे सेटिंआ रिपर्टनि थाखाय बाहायखानाय डिफल्ट सोलिनाय रांखौ दबथायो। \"जायगानि\" आव "
-"फजयोब्ला GnuCash आ डिफल्ट सोलिनाय रांखौ बाहायग्रानि जायगानि सेटिं निफ्राय "
-"मोनफिनगोन। \"गुबुन\"आव फजयोब्ला, GnuCash आ सोलिनाय रां-गुबुन साबिजों थि खालामजानाय "
-"सेटिंखौ बाहायगोन।"
+"फजयोब्ला GnuCash आ डिफल्ट सोलिनाय रांखौ बाहायग्रानि जायगानि सेटिं निफ्राय मोनफिनगोन"
+"। \"गुबुन\"आव फजयोब्ला, GnuCash आ सोलिनाय रां-गुबुन साबिजों थि खालामजानाय सेटिंखौ "
+"बाहायगोन।"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
 #: gnucash/gtkbuilder/dialog-preferences.glade:3344
@@ -10593,10 +10614,10 @@ msgid ""
 "not allowed in filenames, such as '/', will be replaced with underscores '_' "
 "in the resulting file name."
 msgstr ""
-"बे सेटिंआ PDF दैथायनायनि थाखाय फाइल मुंखौ बासिखयो। बेयो मोनथाम बाथ्राबानजों "
-"sprintf(3) स्ट्रिं: \"%1$s\" आ रिपर्ट मुं, जेरै- \"इनभइस\"। \"%2$s\" आ रिपर्टनि "
-"अनजिमा, जायनि थाखाय इनभइस रिपर्टआ इनभइस नाम्बार जायो। \"%3$s\" आ रिपर्टनि अक्ट', "
-"बेखौ फाइलमुं-अक्ट'-फरमेट सेटिं मथे फरमेट खालामनाय जायो। नायनो गोनां: जायखि जाया हांखोखौ "
+"बे सेटिंआ PDF दैथायनायनि थाखाय फाइल मुंखौ बासिखयो। बेयो मोनथाम बाथ्राबानजों sprintf"
+"(3) स्ट्रिं: \"%1$s\" आ रिपर्ट मुं, जेरै- \"इनभइस\"। \"%2$s\" आ रिपर्टनि अनजिमा, "
+"जायनि थाखाय इनभइस रिपर्टआ इनभइस नाम्बार जायो। \"%3$s\" आ रिपर्टनि अक्ट', बेखौ "
+"फाइलमुं-अक्ट'-फरमेट सेटिं मथे फरमेट खालामनाय जायो। नायनो गोनां: जायखि जाया हांखोखौ "
 "फाइलमुंआव गनायथि होनाय जाया, जेरै- '/', खौ फाइल मुंआव आन्डारस्कर '_' जों सोलायना "
 "फजफिनगोन।"
 
@@ -11238,8 +11259,8 @@ msgid ""
 "Books will be closed at midnight on the selected date."
 msgstr ""
 "\n"
-"मोनसे एकाउन्टिं समफारि आरो बन्द अक्ट'खौ सायख जाय इयुनाव थानाङा आरो बेयो आगोलनि "
-"बुक(बिजाब)नि बन्द अक्ट' निख्रुइ गेदेरसिन।\n"
+"मोनसे एकाउन्टिं समफारि आरो बन्द अक्ट'खौ सायख जाय इयुनाव थानाङा आरो बेयो आगोलनि बुक"
+"(बिजाब)नि बन्द अक्ट' निख्रुइ गेदेरसिन।\n"
 "\n"
 "बुक(बिजाब)आ सायखखानाय अक्ट'नि हरगेजेराव बन्द जागोन।"
 
@@ -11291,8 +11312,8 @@ msgstr ""
 "\n"
 "फाइलआ बै दैथाय हरखानाय महरै एखे फरमेटआव जाथारनांगोन, बेयो मोनसे गलाय-मोन्देर फरमेट "
 "लाबोनाय जायो। एकाउन्टआ गोमानायब्ला, आबुं एकाउन्ट मुंआव सोनारनानै बेखौ दाजाबदेरगोन जेसे "
-"गोबाव थि रैखाथि / सोलिनाय राङा थायो। एकाउन्टआ दङब्ला मोनब्रै फोथारखौ आपडेट "
-"खालामगोन। बेफोरो क'ड, बेखेवथि, लिरसुंथाइ आरो गाब।\n"
+"गोबाव थि रैखाथि / सोलिनाय राङा थायो। एकाउन्टआ दङब्ला मोनब्रै फोथारखौ आपडेट खालामगोन"
+"। बेफोरो क'ड, बेखेवथि, लिरसुंथाइ आरो गाब।\n"
 "\n"
 "दावगालांनो 'फर्‌वार्ड'खौ क्लिक खालाम एबा लाबोनायखौ नागारनो 'बातिल'खौ क्लिक खालाम।\n"
 
@@ -11912,9 +11933,9 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"बे हेफाजाबआ नोंथांनि धोन (जेरै- रां खामानिआव फोनांनाय, हिसाब एबा थिनना दोननाय "
-"एकाउन्ट), दाहार (जेरै- लन) आरो नोंथांनाव थानाय गुबुन गुबुन रोखोमनि आय आरो खरसानि "
-"थाखाय GnuCash एकाउन्टनि सेट(जथाय) सोरजिनो मदद खालामगोन।\n"
+"बे हेफाजाबआ नोंथांनि धोन (जेरै- रां खामानिआव फोनांनाय, हिसाब एबा थिनना दोननाय एकाउन्ट)"
+", दाहार (जेरै- लन) आरो नोंथांनाव थानाय गुबुन गुबुन रोखोमनि आय आरो खरसानि थाखाय "
+"GnuCash एकाउन्टनि सेट(जथाय) सोरजिनो मदद खालामगोन।\n"
 "\n"
 "नोंथाङा दानो जायखि जाया गोदान एकाउन्ट सोरजिनो लुबैयाब्ला 'बातिल'खौ क्लिक खालाम।"
 
@@ -11971,8 +11992,8 @@ msgid ""
 msgstr ""
 "\n"
 "थाखोखौ सायख जाय राहायै नोंथाङा GnuCash खौ बाहायगोन बेजों जगाजग खालामलायो। नोंथाङा "
-"सायखनाय मोनफ्रोम थाखोआ गोबां एकाउन्ट सोरजिगोन। नोंथांजों सोमोन्दो थानाय थाखोखौ "
-"सायख। नोंथाङा इयुनाव बांद्राय एकाउन्टखौ अरायबो आखायजों सोरजिनो हायो।"
+"सायखनाय मोनफ्रोम थाखोआ गोबां एकाउन्ट सोरजिगोन। नोंथांजों सोमोन्दो थानाय थाखोखौ सायख"
+"। नोंथाङा इयुनाव बांद्राय एकाउन्टखौ अरायबो आखायजों सोरजिनो हायो।"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:506
 #, fuzzy
@@ -12003,8 +12024,8 @@ msgstr ""
 "एकाउन्ट मुंखौ क्लिक खालाम आरो बेखौ सोलाय।\n"
 "\n"
 "माखासे एकाउन्टखौ \"प्लेसह'ल्डार\" महरै दाग होनाय जायो। प्लेसह'ल्डार एकाउन्टखौ एकाउन्टनि "
-"हायारआर्कि सोरजिनो बाहायनाय जायो आरो सरासनस्रायै लेनदेन एबा अपेनिं (गेवनाय) बेलेन्स "
-"गैया। नोंथाङा मोनसे एकाउन्टखौ प्लेसह'ल्डार एकाउन्ट बानायनो लुबैयोब्ला बै एकाउन्टनि आनजाद-"
+"हायारआर्कि सोरजिनो बाहायनाय जायो आरो सरासनस्रायै लेनदेन एबा अपेनिं (गेवनाय) बेलेन्स गैया"
+"। नोंथाङा मोनसे एकाउन्टखौ प्लेसह'ल्डार एकाउन्ट बानायनो लुबैयोब्ला बै एकाउन्टनि आनजाद-"
 "बाक्सुखौ क्लिक खालाम।\n"
 "\n"
 "नोंथाङा मोनसे एकाउन्टआव अपेनिं (गेवनाय) बेलेन्स थाजानो लुबैयोब्ला एकाउन्ट गोनां सारिखौ "
@@ -12459,8 +12480,8 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-qif-import.glade:395
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
-"बे फाइल ल'ड खालामनायखौ बातिल खालामनो \"उनथिं\" खौ क्लिक खालाम आरो गुबुन मोनसे "
-"बासिख।"
+"बे फाइल ल'ड खालामनायखौ बातिल खालामनो \"उनथिं\" खौ क्लिक खालाम आरो गुबुन मोनसे बासिख"
+"।"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:323
 msgid "Set a date format for this QIF file"
@@ -12500,8 +12521,8 @@ msgid ""
 "import process."
 msgstr ""
 "नोंथांहा बे समाव गोबां डाटा लाबोनांगौ दङब्ला \"गुबुन मोनसे फाइलखौ ल'ड खालाम\" खौ क्लिक "
-"खालाम। बेखौ माव जेब्ला नोंथाङा नोंथांनि एकाउन्टफोरखौ आलादा QIF फाइलफोराव थिना "
-"दोनबाय।\n"
+"खालाम। बेखौ माव जेब्ला नोंथाङा नोंथांनि एकाउन्टफोरखौ आलादा QIF फाइलफोराव थिना दोनबाय"
+"।\n"
 "\n"
 "फाइलफोर लड खालामनायखौ फोजोबनो \"सिगांथिं\" खौ क्लिक खालाम आरो QIF लाबोनाय "
 "खान्थिनि उननि स्टेपाव थां।"
@@ -12584,8 +12605,8 @@ msgid ""
 "safely within GnuCash."
 msgstr ""
 "GnuCash आ नोंथांनि लेनदेनफोरखौ थाखो खालामनो थाखोफोरनि बादैबो आलादा आय आरो खरसाखौ "
-"बाहायो। नोंथांनि QIF फाइलनि मोनफ्रोम थाखोखौ GnuCash एकाउन्टाव सोलाय होनाय "
-"जागोन।\n"
+"बाहायो। नोंथांनि QIF फाइलनि मोनफ्रोम थाखोखौ GnuCash एकाउन्टाव सोलाय होनाय जागोन"
+"।\n"
 "\n"
 "उननि बिलाइयाव, QIF थाखोफोर आरो GnuCash एकाउन्टफोरनि गेजेराव थानाय बोसोनहोनाय "
 "गोरोबनायफोरखौ नाइनो नोंथांखौ मोनसे सुबिधा होयो। नोंथाङा मोजांमोनै गोरोबनायफोरखौ "
@@ -13387,7 +13408,8 @@ msgstr "<b>लेङाइ-एकाउन्टफोर</b>"
 #: gnucash/gtkbuilder/dialog-account.glade:472
 #, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "बे एकाउन्टआव दालाय-एकाउन्ट दं। बेफोर दालाय-एकाउन्टजो नोंथाङा मा खालामनो लुबैयो?"
+msgstr ""
+"बे एकाउन्टआव दालाय-एकाउन्ट दं। बेफोर दालाय-एकाउन्टजो नोंथाङा मा खालामनो लुबैयो?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:483
 msgid "_Move to"
@@ -13429,7 +13451,8 @@ msgstr "<b>लेङाइ-एकाउन्ट लेनदेनफोर</b>
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
-msgstr "मोनसे एबा बांसिन लेङाइ-एकाउन्टाव लेनदेनफोर दं। बेफोर लेनदेनजों मा खालामनो लुबैयो?"
+msgstr ""
+"मोनसे एबा बांसिन लेङाइ-एकाउन्टाव लेनदेनफोर दं। बेफोर लेनदेनजों मा खालामनो लुबैयो?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:750
 msgid ""
@@ -14098,7 +14121,8 @@ msgstr "दानि बेसादखौ सुजु"
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
-msgstr "बेसादनि आबुं मुं हाबहो। बिदिन्थि: सिस्क' सिस्टेम Inc., एबा एप्पल कम्पुटार, Inc."
+msgstr ""
+"बेसादनि आबुं मुं हाबहो। बिदिन्थि: सिस्क' सिस्टेम Inc., एबा एप्पल कम्पुटार, Inc."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -14198,8 +14222,8 @@ msgid ""
 "quotes."
 msgstr ""
 "बेफोरो F::Q कट(दैखांना होनाय) फुंखा जाय इन्टारनेटआव मोनसेल' साइट निफ्राय "
-"फोरमायथिहोग्राखौ मोनफिनो। बै साइटआ मोननो हाथाव नङाब्ला नोंथाङा कट्स(दैखांना "
-"होनाय)खौ मोनफिननो हानाय नङा।"
+"फोरमायथिहोग्राखौ मोनफिनो। बै साइटआ मोननो हाथाव नङाब्ला नोंथाङा कट्स(दैखांना होनाय)"
+"खौ मोनफिननो हानाय नङा।"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:440
 msgid "_Get Online Quotes"
@@ -14889,7 +14913,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:462
 msgid "This transaction requires your intervention or it will NOT be imported."
-msgstr "बे लेनदेनखौ नोंथांनि आखाइ होनायनि गोनांथि जायो एबा बेखौ लाबोनाय जानाय नङा।"
+msgstr ""
+"बे लेनदेनखौ नोंथांनि आखाइ होनायनि गोनांथि जायो एबा बेखौ लाबोनाय जानाय नङा।"
 
 #: gnucash/gtkbuilder/dialog-import.glade:465
 #, fuzzy
@@ -15625,7 +15650,8 @@ msgstr "बोसोर गैयाबालानो मोनसे खाल
 #: gnucash/gtkbuilder/dialog-preferences.glade:1155
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr "खालारखौ फोजोबनाय जागोन जाहाते बेफोरो बोहैथि केलेन्दार बोसोरनि सिङाव थायो।"
+msgstr ""
+"खालारखौ फोजोबनाय जागोन जाहाते बेफोरो बोहैथि केलेन्दार बोसोरनि सिङाव थायो।"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1168
 #, fuzzy
@@ -15892,8 +15918,8 @@ msgid ""
 "default."
 msgstr ""
 "मोनसे लेनदेन जायनि गोजा जायगायाव (दिन्थिफुंनाय थ्रेसह'ल्डनि गोजौयाव नाथाय हार्सिं-ADD "
-"थ्रेसह'ल्डनि गाहायाव एबा समान) थानाय साबसिन गोरोबनायनि स्करखौ डिफल्टजों ADDed "
-"जागोन।"
+"थ्रेसह'ल्डनि गाहायाव एबा समान) थानाय साबसिन गोरोबनायनि स्करखौ डिफल्टजों ADDed जागोन"
+"।"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
@@ -16074,7 +16100,8 @@ msgstr "साफा खालामनाय लेनदेनफोरखौ 
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2729
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr "मोनसे गोरोबहोनाय बिबुं सोरजिनाय समाव साफा खालामनाय लेनदेनखौ आगु-आनजाद खालाम"
+msgstr ""
+"मोनसे गोरोबहोनाय बिबुं सोरजिनाय समाव साफा खालामनाय लेनदेनखौ आगु-आनजाद खालाम"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2741
 msgid "Automatic credit card _payment"
@@ -16358,7 +16385,8 @@ msgstr "बन्द बुथामखौ नटबुक टेबाव द�
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
-msgstr "बन्द बुथामखौ मोनफ्रोम नटबुक टेबआव दिन्थि। बेफोर खामानिआ 'बन्द' मेनु आइटेमजों एखे।"
+msgstr ""
+"बन्द बुथामखौ मोनफ्रोम नटबुक टेबआव दिन्थि। बेफोर खामानिआ 'बन्द' मेनु आइटेमजों एखे।"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3721
 msgid ""
@@ -16440,7 +16468,8 @@ msgstr "गोजामखौ गैया खालाम"
 #: gnucash/gtkbuilder/dialog-price.glade:454
 #, fuzzy
 msgid "Delete prices that meet the following criteria:"
-msgstr "गाहायनि मानदान्दायाव सोनारनानै गाहायनि अक्ट'नि सिगां गासै स्टक दामखौ खोमोर:"
+msgstr ""
+"गाहायनि मानदान्दायाव सोनारनानै गाहायनि अक्ट'नि सिगां गासै स्टक दामखौ खोमोर:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:474
 #, fuzzy
@@ -18939,8 +18968,8 @@ msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
 msgstr ""
-"नोंथाङा मोनसे मोनग्रा मुं हाबहोआखै। मोनसे अनलाइन ट्रेन्सफारनि थाखाय मोनसे मोनग्रा मुं "
-"नांगौ।\n"
+"नोंथाङा मोनसे मोनग्रा मुं हाबहोआखै। मोनसे अनलाइन ट्रेन्सफारनि थाखाय मोनसे मोनग्रा मुं नांगौ"
+"।\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:594
 msgid ""
@@ -18973,8 +19002,8 @@ msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
 msgstr ""
-"नोथाङा जायखि जाया लेनदेन थांखिखौ हाबहोआखै। अनलाइन ट्रेन्सफारनि थाखाय मोनसे थांखि "
-"नांगौ।\n"
+"नोथाङा जायखि जाया लेनदेन थांखिखौ हाबहोआखै। अनलाइन ट्रेन्सफारनि थाखाय मोनसे थांखि नांगौ"
+"।\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1028
 msgid ""
@@ -19026,7 +19055,8 @@ msgstr ""
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
-msgstr "सायखखानाय सम फारिनि थाखाय अनलाइन बेंकिं लाबोनाया जेबो लेनदेनखौ हरफिनाखै।"
+msgstr ""
+"सायखखानाय सम फारिनि थाखाय अनलाइन बेंकिं लाबोनाया जेबो लेनदेनखौ हरफिनाखै।"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:60
 msgid ""
@@ -19190,7 +19220,8 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1032
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
-msgstr "नोंथांनि फोरमायथिहोग्रानि थाखाय: बे एकाउन्टहाबो %s नि मोनसे मख'नाय बेलेन्स दं\n"
+msgstr ""
+"नोंथांनि फोरमायथिहोग्रानि थाखाय: बे एकाउन्टहाबो %s नि मोनसे मख'नाय बेलेन्स दं\n"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1039
 msgid ""
@@ -19275,7 +19306,8 @@ msgstr "SEPA लेनदेनखौ दिहुन…"
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr "अनलाइन बेंकिंनि गेजेरजों मोनसे गोदान हादरगेजेरारि इउर'पियान (SEPA) लेनदेन दिहुन"
+msgstr ""
+"अनलाइन बेंकिंनि गेजेरजों मोनसे गोदान हादरगेजेरारि इउर'पियान (SEPA) लेनदेन दिहुन"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
@@ -19290,7 +19322,8 @@ msgstr "SEPA लेनदेनखौ दिहुन…"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "अनलाइन बेंकिंनि गेजेरजों मोनसे गोदान हादरगेजेरारि इउर'पियान (SEPA) लेनदेन दिहुन"
+msgstr ""
+"अनलाइन बेंकिंनि गेजेरजों मोनसे गोदान हादरगेजेरारि इउर'पियान (SEPA) लेनदेन दिहुन"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
@@ -19299,7 +19332,8 @@ msgstr "इसिं लेनदेन…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "अनलाइन बेंकिंनि गेजेरजों मोनसे गोदान बेंकनि इसिं लेनदेन अनलाइनखौ जारि खालाम"
+msgstr ""
+"अनलाइन बेंकिंनि गेजेरजों मोनसे गोदान बेंकनि इसिं लेनदेन अनलाइनखौ जारि खालाम"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 #, fuzzy
@@ -20890,7 +20924,8 @@ msgstr "QIF फाइल सोलिनाय रांखौ बासिख"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2996
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "नोंथाङा मोनसे थाखानाय माहारिआरि रां एबा मोनसे गुबुन रोखोम हाबहो थारनांगोन।"
+msgstr ""
+"नोंथाङा मोनसे थाखानाय माहारिआरि रां एबा मोनसे गुबुन रोखोम हाबहो थारनांगोन।"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3208
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3212
@@ -22143,7 +22178,8 @@ msgstr "..निफ्राय जायगा सोलायहोनो ए�
 #: gnucash/register/ledger-core/split-register-model.c:1589
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
-msgstr "बे लेनदेनहा गोबां बोखावनाय दं; बेफोर गासैखौबो नाइनो बोखावनाय बुथामखौ नारसिन"
+msgstr ""
+"बे लेनदेनहा गोबां बोखावनाय दं; बेफोर गासैखौबो नाइनो बोखावनाय बुथामखौ नारसिन"
 
 #: gnucash/register/ledger-core/split-register-model.c:1592
 msgid ""
@@ -22429,7 +22465,8 @@ msgstr "गासै"
 
 #: gnucash/report/options-utilities.scm:103
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "एकाउन्टखौ गोथौसिनाव दिन्थि, जायखिजाया गुबुन उफ्राखौ अभारराइड खालाम गासिनो दं"
+msgstr ""
+"एकाउन्टखौ गोथौसिनाव दिन्थि, जायखिजाया गुबुन उफ्राखौ अभारराइड खालाम गासिनो दं"
 
 #: gnucash/report/options-utilities.scm:109
 msgid ""
@@ -22566,7 +22603,8 @@ msgstr "पेरेन्ट एकाउन्टनि बेलेन्स�
 #| msgid ""
 #| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "जायखि जाया दालाय-एकाउन्टखौ बाद होनानै, पेरेन्ट एकाउन्टआव बेलेन्सखौल' दिन्थि।"
+msgstr ""
+"जायखि जाया दालाय-एकाउन्टखौ बाद होनानै, पेरेन्ट एकाउन्टआव बेलेन्सखौल' दिन्थि।"
 
 #: gnucash/report/options-utilities.scm:214
 msgid "Do not show any balances of parent accounts."
@@ -22596,7 +22634,8 @@ msgstr "पेरेन्ट एकाउन्टनि थाखाय एक
 
 #: gnucash/report/options-utilities.scm:229
 msgid "Show subtotals for selected parent accounts which have subaccounts."
-msgstr "सायखखानाय पेरेन्ट एकाउन्टनि थाखाय दाजाबगासैखौ दिन्थि जायहा दालाय-एकाउन्ट दं।"
+msgstr ""
+"सायखखानाय पेरेन्ट एकाउन्टनि थाखाय दाजाबगासैखौ दिन्थि जायहा दालाय-एकाउन्ट दं।"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "Do not show any subtotals for parent accounts."
@@ -22956,7 +22995,8 @@ msgstr "गासैखौ दिन्थि"
 #: gnucash/report/reports/standard/category-barchart.scm:129
 #: gnucash/report/reports/standard/net-charts.scm:87
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "बासिखखानाय एकाउन्ट लेभेलखौ गनायथि होयोब्ला, बेफोर एकाउन्टाव रिपर्ट खालाम"
+msgstr ""
+"बासिखखानाय एकाउन्ट लेभेलखौ गनायथि होयोब्ला, बेफोर एकाउन्टाव रिपर्ट खालाम"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
 #: gnucash/report/reports/standard/account-piecharts.scm:140
@@ -23472,7 +23512,8 @@ msgstr "TXF दैथायनाय पेरामिटारफोरखौ 
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
 msgid "Show TXF export parameters for each TXF code/account on report."
-msgstr "रिपर्टआव मोनफ्रोम TXF क'ड/एकाउन्टनि थाखाय TXF दैथायनाय पेरामिटारखौ दिन्थि।"
+msgstr ""
+"रिपर्टआव मोनफ्रोम TXF क'ड/एकाउन्टनि थाखाय TXF दैथायनाय पेरामिटारखौ दिन्थि।"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:220
 msgid "Do not print T-Num:Memo data"
@@ -23552,7 +23593,8 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr "बे रिपर्टआ आय खाजोना एकाउन्टजों सोमोन्दोथानायनि थाखाय लेनदेनखौ गुवारै दिन्थियो।"
+msgstr ""
+"बे रिपर्टआ आय खाजोना एकाउन्टजों सोमोन्दोथानायनि थाखाय लेनदेनखौ गुवारै दिन्थियो।"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
@@ -23577,7 +23619,8 @@ msgstr "दाहार पाइचार्ट"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "होखानाय मोनफा समनि गेजेराव थाद'नायाव आयजों लोगोसे मोनसे पाइचार्ट दिन्थियो"
+msgstr ""
+"होखानाय मोनफा समनि गेजेराव थाद'नायाव आयजों लोगोसे मोनसे पाइचार्ट दिन्थियो"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
@@ -23726,7 +23769,8 @@ msgstr "गोथौनि सिमा बेबहार"
 
 #: gnucash/report/reports/standard/account-summary.scm:89
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
-msgstr "थि गोथौ सिमाखौ बारनाय एकाउन्टखौ माबोरै सानना लानांगौ (जायखि जाया दंब्ला)"
+msgstr ""
+"थि गोथौ सिमाखौ बारनाय एकाउन्टखौ माबोरै सानना लानांगौ (जायखि जाया दंब्ला)"
 
 #: gnucash/report/reports/standard/account-summary.scm:90
 msgid ""
@@ -23842,7 +23886,8 @@ msgstr "एकाउन्टफोरखौ हाइपारलिंक ब�
 #: gnucash/report/reports/standard/income-statement.scm:80
 #: gnucash/report/reports/standard/trial-balance.scm:120
 msgid "Shows each account in the table as a hyperlink to its register window."
-msgstr "बेनि रेजिस्टार उइन्ड'आव हाइपारलिंक महरै फारिलाइआव मोनफ्रोम एकाउन्टखौ दिन्थियो।"
+msgstr ""
+"बेनि रेजिस्टार उइन्ड'आव हाइपारलिंक महरै फारिलाइआव मोनफ्रोम एकाउन्टखौ दिन्थियो।"
 
 #: gnucash/report/reports/standard/account-summary.scm:113
 msgid "Show an account's balance."
@@ -24132,7 +24177,8 @@ msgstr ""
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1167
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
-msgstr "नोंथाङा मोनसे गोबां-रां थासारियाव दङब्ला, सोलाय सोल'आ गेबें नङाबो जानो हागौ।"
+msgstr ""
+"नोंथाङा मोनसे गोबां-रां थासारियाव दङब्ला, सोलाय सोल'आ गेबें नङाबो जानो हागौ।"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1172
 msgid "** this commodity has no price and a price of 1 has been used."
@@ -24458,9 +24504,9 @@ msgid ""
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"बे रिपर्टजों बाहायनो थाखाय CSS स्टाइलसिटनि फाइल मुं। थि खालामोब्ला, बे फाइलआ "
-"नोंथांनि .gnucash डिरेक्टरिआव एबा GnuCash इनष्टलेसन डिरेक्टरिनि सिङाव बेनि मोजां "
-"जायगायाव थाथारनांगोन।"
+"बे रिपर्टजों बाहायनो थाखाय CSS स्टाइलसिटनि फाइल मुं। थि खालामोब्ला, बे फाइलआ नोंथांनि "
+".gnucash डिरेक्टरिआव एबा GnuCash इनष्टलेसन डिरेक्टरिनि सिङाव बेनि मोजां जायगायाव "
+"थाथारनांगोन।"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
 #: gnucash/report/reports/standard/invoice.scm:514
@@ -24594,7 +24640,8 @@ msgstr "एकाउन्टफोरखौ हाइपारलिंक ब�
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #, fuzzy
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
-msgstr "बेनि रेजिस्टार उइन्ड'आव हाइपारलिंक महरै फारिलाइआव मोनफ्रोम एकाउन्टखौ दिन्थियो।"
+msgstr ""
+"बेनि रेजिस्टार उइन्ड'आव हाइपारलिंक महरै फारिलाइआव मोनफ्रोम एकाउन्टखौ दिन्थियो।"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #, fuzzy
@@ -25519,7 +25566,8 @@ msgstr "बायग्रानि मुं"
 #, fuzzy
 #| msgid "Sort by markup (which is profit amount divided by sales)."
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "मार्कआप मथे थख' साजाय (बेयो मुलाम्फा बिबां जायखौ फाननायजों बोखावनाय जायो)।"
+msgstr ""
+"मार्कआप मथे थख' साजाय (बेयो मुलाम्फा बिबां जायखौ फाननायजों बोखावनाय जायो)।"
 
 #: gnucash/report/reports/standard/customer-summary.scm:109
 #: gnucash/report/reports/standard/customer-summary.scm:284
@@ -25568,7 +25616,8 @@ msgstr "हाबहोनाय नमुनाखौ बन्द खाला
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
-msgstr "बेखेवथि खाम्फायाव जायखि जाया फरा जाय बन्द जानाय हाबहोनायखौ सिनायथि खालामो।"
+msgstr ""
+"बेखेवथि खाम्फायाव जायखि जाया फरा जाय बन्द जानाय हाबहोनायखौ सिनायथि खालामो।"
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -25962,7 +26011,8 @@ msgstr "ट्रेडिं एकाउन्ट गासैखौ सोफ
 #: gnucash/report/reports/standard/income-statement.scm:93
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
-msgstr "सारि दिन्थिनाय गासै फालांगि एकाउन्ट बेलेन्सखौ सोफादेरनांगौ ना सोफादेरनाङा।"
+msgstr ""
+"सारि दिन्थिनाय गासै फालांगि एकाउन्ट बेलेन्सखौ सोफादेरनांगौ ना सोफादेरनाङा।"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
 #: libgnucash/engine/Account.cpp:4306 libgnucash/engine/Scrub.cpp:532
@@ -28840,8 +28890,8 @@ msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
 msgstr ""
-"उफ्रायारि पेनेलाव थि सम गेजेराव थाद'नाय आरो एकाउन्ट सायखनाय गोरोबनाय जेबो लेनदेन "
-"मोनाखै।"
+"उफ्रायारि पेनेलाव थि सम गेजेराव थाद'नाय आरो एकाउन्ट सायखनाय गोरोबनाय जेबो लेनदेन मोनाखै"
+"।"
 
 #: gnucash/report/trep-engine.scm:217
 msgid "Register Order"
@@ -30403,7 +30453,8 @@ msgstr "एकाउन्टखौ आनजाद खालाम आरो �
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
-msgstr "बे एकाउन्टनि आनबेलेन्स लेनदेन आरो अर्पेन बोखावनायफोरखौ आनजाद खालाम आरो फाहाम"
+msgstr ""
+"बे एकाउन्टनि आनबेलेन्स लेनदेन आरो अर्पेन बोखावनायफोरखौ आनजाद खालाम आरो फाहाम"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:286
@@ -30429,7 +30480,8 @@ msgstr "गासैखौबो आनजाद खालाम आरो फ�
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
-msgstr "गासै एकाउन्टफोराव आनबेलेन्स लेनदेन आरो अर्पेन बोखावनायखौ आनजाद खालाम आरो फाहाम"
+msgstr ""
+"गासै एकाउन्टफोराव आनबेलेन्स लेनदेन आरो अर्पेन बोखावनायखौ आनजाद खालाम आरो फाहाम"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
 #, fuzzy
@@ -32577,8 +32629,8 @@ msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
 msgstr ""
-"आवगयनि फारि नाम्बार दिहुनबाय। उननि फारि नाम्बार दिहुननो बे नाम्बारखौ बांहोनाय "
-"जागोन। "
+"आवगयनि फारि नाम्बार दिहुनबाय। उननि फारि नाम्बार दिहुननो बे नाम्बारखौ बांहोनाय जागोन"
+"। "
 
 #: libgnucash/engine/gnc-optiondb.cpp:1287
 msgid "Order number format"

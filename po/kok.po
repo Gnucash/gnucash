@@ -1,22 +1,22 @@
 # Localization for Konkani language using Devnagari Script.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Rahul Borade <rahulborade01@gmail.com>, 2014.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2014-09-26 19:47-0500\n"
+"PO-Revision-Date: 2026-06-26 04:00+0000\n"
 "Last-Translator: Rahul Borade <rahulborade01@gmail.com>\n"
-"Language-Team: NONE\n"
+"Language-Team: Konkani <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"kok/>\n"
 "Language: kok\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -813,9 +813,9 @@ msgid ""
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
 msgstr ""
-"क्विक-फिल्स समान व्यवहार एंटर करप सोपे करता. जेन्ना तुमी समान व्यवहार विवरणाचे पयले "
-"अक्षर(रां) टायप करता, मागीर टॅब की दामात, GnuCash निमणे दिल्ल्या भशेन आपसूक "
-"व्यवहाराचो फुडलो भाग पुराय करता."
+"क्विक-फिल्स समान व्यवहार एंटर करप सोपे करता. जेन्ना तुमी समान व्यवहार विवरणाचे पयले अक्षर"
+"(रां) टायप करता, मागीर टॅब की दामात, GnuCash निमणे दिल्ल्या भशेन आपसूक व्यवहाराचो "
+"फुडलो भाग पुराय करता."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -2302,7 +2302,8 @@ msgstr "अहवाल संरचनाय नाव बदलुपाक �
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "ह्या नावाची जतनाय केल्ली अहवाल संरचनाय पयलीच आसा, मात्शे हेर नाव निवडात."
+msgstr ""
+"ह्या नावाची जतनाय केल्ली अहवाल संरचनाय पयलीच आसा, मात्शे हेर नाव निवडात."
 
 #: gnucash/gnome/dialog-custom-report.c:520
 msgid "Load report configuration"
@@ -2609,7 +2610,8 @@ msgstr ""
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
-msgstr "हातल्या एका क्षेत्रान GnuCash मोल ठरोवपाक शकना. तुमी वैध एक्सप्रेशन दिवपाक जाय."
+msgstr ""
+"हातल्या एका क्षेत्रान GnuCash मोल ठरोवपाक शकना. तुमी वैध एक्सप्रेशन दिवपाक जाय."
 
 #: gnucash/gnome/dialog-fincalc.c:383
 msgid "The interest rate cannot be zero."
@@ -3981,7 +3983,8 @@ msgid ""
 msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
-msgstr[0] "ह्या वेळार कायच शेड्यूल्ड व्यवहार एंटर करपाचे ना. (%d व्यवहार आपसूंक तयार जाला)"
+msgstr[0] ""
+"ह्या वेळार कायच शेड्यूल्ड व्यवहार एंटर करपाचे ना. (%d व्यवहार आपसूंक तयार जाला)"
 msgstr[1] ""
 "ह्या वेळार कायच शेड्यूल्ड व्यवहार एंटर करपाचे ना. (%d व्यवहार आपसूंक तयार जाल्यात)"
 
@@ -5127,7 +5130,8 @@ msgstr "तुमी फकत बँक खाते नोंदवहेत�
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2459
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "परतून मेळयिल्ल्या वो साफ केल्ल्या विभागणेंनी तुमी व्यवहार शून्य करपाक शकना."
+msgstr ""
+"परतून मेळयिल्ल्या वो साफ केल्ल्या विभागणेंनी तुमी व्यवहार शून्य करपाक शकना."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2466
 #: gnucash/gnome/gnc-split-reg.c:1124
@@ -6028,7 +6032,8 @@ msgstr "फरक"
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
-msgstr "तुमी ह्या परतून मेळोवपाच्या विंडोंत बदल केल्यात. तुमी ते रद्द करपाक सोदता?"
+msgstr ""
+"तुमी ह्या परतून मेळोवपाच्या विंडोंत बदल केल्यात. तुमी ते रद्द करपाक सोदता?"
 
 #: gnucash/gnome/window-reconcile.cpp:2429
 msgid "The account is not balanced. Are you sure you want to finish?"
@@ -7497,8 +7502,10 @@ msgstr "फायलींतले बदल जतनाय करूया?"
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] "तुमी जतनाय करू ना जाल्यार, फाटल्या %d मिनीटांसावन केल्ले बदल काडून उडयले वतले."
-msgstr[1] "तुमी जतनाय करू ना जाल्यार, फाटल्या %d मिनीटांसावन केल्ले बदल काडून उडयले वतले."
+msgstr[0] ""
+"तुमी जतनाय करू ना जाल्यार, फाटल्या %d मिनीटांसावन केल्ले बदल काडून उडयले वतले."
+msgstr[1] ""
+"तुमी जतनाय करू ना जाल्यार, फाटल्या %d मिनीटांसावन केल्ले बदल काडून उडयले वतले."
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -7665,7 +7672,8 @@ msgstr "बंद करचे पयली %s फायलींत बदल �
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
-msgstr "तुमी जर जतनाय करीना, निमण्या %d वरां आणि %d मिनटांतले बदल काडून उडयले वतले."
+msgstr ""
+"तुमी जर जतनाय करीना, निमण्या %d वरां आणि %d मिनटांतले बदल काडून उडयले वतले."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1220
 #, c-format
@@ -8420,7 +8428,8 @@ msgstr ""
 #: gnucash/gnucash-core-app.cpp:82
 #, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
-msgstr "निमणी स्थिर आवृत्ती सोदपाक, मात्शे http://www.gnucash.org चो संदर्भ घेयात"
+msgstr ""
+"निमणी स्थिर आवृत्ती सोदपाक, मात्शे http://www.gnucash.org चो संदर्भ घेयात"
 
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:92
@@ -9150,7 +9159,8 @@ msgstr "नवो वापरपी विंडो दाखयात"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:250
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
-msgstr "सक्रिय आसल्यार, नवो वापरपी विंडो दाखयलो वतलो. नाजाल्यार तो दाखयलो वचचो ना."
+msgstr ""
+"सक्रिय आसल्यार, नवो वापरपी विंडो दाखयलो वतलो. नाजाल्यार तो दाखयलो वचचो ना."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:264
 msgid "New hierarchy window on \"New File\""
@@ -9789,7 +9799,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1797
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr "इतल्या दिंसामागीर (0 = केन्नाच ना) पोन्न्यो लॉग/बॅकअप फायलीं काडून उडयात."
+msgstr ""
+"इतल्या दिंसामागीर (0 = केन्नाच ना) पोन्न्यो लॉग/बॅकअप फायलीं काडून उडयात."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1815
@@ -9835,7 +9846,8 @@ msgstr ""
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
-msgstr "मुखार रिव्हर्स शिल्लक सायन करात: क्रेडिट कार्ड, पेयेबल, देणी, समभाग आणि प्राप्ती."
+msgstr ""
+"मुखार रिव्हर्स शिल्लक सायन करात: क्रेडिट कार्ड, पेयेबल, देणी, समभाग आणि प्राप्ती."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:105
 #: gnucash/gtkbuilder/dialog-preferences.glade:706
@@ -9964,7 +9976,8 @@ msgstr "24 वरां वेळ स्वरूप वापरात"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:156
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "सक्रिय आसल्यार, 24 वरा वेळ स्वरूप वापरात. नाजाल्यार 12 वरा वेळ स्वरूप वापरात."
+msgstr ""
+"सक्रिय आसल्यार, 24 वरा वेळ स्वरूप वापरात. नाजाल्यार 12 वरा वेळ स्वरूप वापरात."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:160
 msgid "Date format choice"
@@ -10393,7 +10406,8 @@ msgstr "वाडयतकेर निवड रिकाम्या विभ
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
-msgstr "अशे केल्यार व्यवहाराचो विस्तार करतकेर निवड रिकाम्या विभागणेन हालयली वतली."
+msgstr ""
+"अशे केल्यार व्यवहाराचो विस्तार करतकेर निवड रिकाम्या विभागणेन हालयली वतली."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
 msgid "Number of transactions to show in a register."
@@ -10502,9 +10516,9 @@ msgid ""
 msgstr ""
 "हे स्थापित PDF निर्यातातल्या फायलनावान तारकों कश्यो वापल्लो वातात तो प्रकार निवडटा. "
 "ह्या स्थापिताखातीर शक्य मोलां आसात, \"लोकेल\" व्यवस्था लोकेल स्थापित वापरपाखातीर, "
-"\"ce\" कॉन्टिनेंटल यूरोप शैलीच्या तारकांखातीर, \"iso\" ISO 8601 प्रमाणित "
-"तारकांखातीर , \"uk\" यूनायटेड किंगडम शैलीच्या तारकांखातीर, आणि \"us\" यूनायटेड स्टेट्स "
-"शैलीच्या तारकांखातीर."
+"\"ce\" कॉन्टिनेंटल यूरोप शैलीच्या तारकांखातीर, \"iso\" ISO 8601 प्रमाणित तारकांखातीर "
+", \"uk\" यूनायटेड किंगडम शैलीच्या तारकांखातीर, आणि \"us\" यूनायटेड स्टेट्स शैलीच्या "
+"तारकांखातीर."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "Allow file incompatibility with older versions."
@@ -10654,7 +10668,8 @@ msgstr "भौ दर कोट्स काडून उडयात"
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
-msgstr "हो संवाद तुमका एका वेळार खूप दर कोट्स काडून उडोवपाक दिवच्या पयली सादर करतले."
+msgstr ""
+"हो संवाद तुमका एका वेळार खूप दर कोट्स काडून उडोवपाक दिवच्या पयली सादर करतले."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:44
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
@@ -10741,7 +10756,8 @@ msgstr "व्यवहारातल्यान विभागणी का�
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
-msgstr "हो संवाद तुमका व्यवहारातल्यान विभागणी काडून उडोवपाक दिवच्या पयली सादर करतले."
+msgstr ""
+"हो संवाद तुमका व्यवहारातल्यान विभागणी काडून उडोवपाक दिवच्या पयली सादर करतले."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
@@ -10776,7 +10792,8 @@ msgstr "व्यवहारातल्यान विभागणी का�
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
-msgstr "हो संवाद तुमका व्यवहारातल्यान विभागणी काडून उडोवपाक दिवच्या पयली सादर करतले."
+msgstr ""
+"हो संवाद तुमका व्यवहारातल्यान विभागणी काडून उडोवपाक दिवच्या पयली सादर करतले."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:217
@@ -13272,7 +13289,8 @@ msgstr "<b>उप-खातीं व्यवहार</b>"
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
-msgstr "एक वो अदिक उप-खात्यानी व्यवहार आसात. तुमका ह्या व्यवहारांसंयत किदे करपाचे आसा?"
+msgstr ""
+"एक वो अदिक उप-खात्यानी व्यवहार आसात. तुमका ह्या व्यवहारांसंयत किदे करपाचे आसा?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:750
 msgid ""
@@ -13606,7 +13624,8 @@ msgstr "साफ केले"
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
-msgstr "QIF फआलींनी स्पश्ट केल्ली स्थिती ना, तेन्ना व्यवहार साफ जालो म्हण खऊण केली वता."
+msgstr ""
+"QIF फआलींनी स्पश्ट केल्ली स्थिती ना, तेन्ना व्यवहार साफ जालो म्हण खऊण केली वता."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
@@ -13616,7 +13635,8 @@ msgstr "साफ केल्ले ना"
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
-msgstr "QIF फायलीन स्पश्ट केल्ली स्थिती ना, तेन्ना व्यवहार साफ जाव ना म्हण खूण केली वता."
+msgstr ""
+"QIF फायलीन स्पश्ट केल्ली स्थिती ना, तेन्ना व्यवहार साफ जाव ना म्हण खूण केली वता."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:113
 msgid ""
@@ -13732,7 +13752,8 @@ msgstr "बेगिन भरिल्ल्या रकमेखातीर 
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
-msgstr "पोस्ट करपाच्या तारकेउपरांतचो दिस जेन्ना बेगीन रक्कम दिल्ल्याबद्दल सवलत लागू जातली."
+msgstr ""
+"पोस्ट करपाच्या तारकेउपरांतचो दिस जेन्ना बेगीन रक्कम दिल्ल्याबद्दल सवलत लागू जातली."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:155
 msgid "The number of days to pay the bill after the post date."
@@ -13934,7 +13955,8 @@ msgstr "सद्याची वस्त संपादित करात."
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
-msgstr "वस्तीचे पुराय नाव दियात. देखिक: सिस्को व्यवस्था इंक., वो एपल संगणक, इंक."
+msgstr ""
+"वस्तीचे पुराय नाव दियात. देखिक: सिस्को व्यवस्था इंक., वो एपल संगणक, इंक."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -14908,7 +14930,8 @@ msgstr "ह्या अहवालाखातीर निर्यात स
 msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
-msgstr "इनव्हॉयस ID क्रमांक. रिकामो सोडल्यार तुमचेखातीर योग्य क्रमांक निवडलो वतलो"
+msgstr ""
+"इनव्हॉयस ID क्रमांक. रिकामो सोडल्यार तुमचेखातीर योग्य क्रमांक निवडलो वतलो"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1381
 msgid ""
@@ -15129,7 +15152,8 @@ msgstr "मागणी नोंदी"
 #: gnucash/gtkbuilder/dialog-order.glade:531
 msgid ""
 "The order ID number. If left blank a reasonable number will be chosen for you"
-msgstr "ऑर्डर ID क्रमांक. जर रिकामो दवल्लो जाल्यार योग्य क्रमांक तुमचेखातीर निवडलो वतलो."
+msgstr ""
+"ऑर्डर ID क्रमांक. जर रिकामो दवल्लो जाल्यार योग्य क्रमांक तुमचेखातीर निवडलो वतलो."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
@@ -15939,7 +15963,8 @@ msgstr "व्यवहारावांगडा दुहेरी स्थ�
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
-msgstr "ओळींनी विकल्प करचेबदलाक व्यवहारानी प्राथमिक आणि माध्यमिक रंग विकल्प करात"
+msgstr ""
+"ओळींनी विकल्प करचेबदलाक व्यवहारानी प्राथमिक आणि माध्यमिक रंग विकल्प करात"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2853
 msgid "Draw hori_zontal lines between rows"
@@ -16163,7 +16188,8 @@ msgstr "वही टॅब्जांचेर बंद बटण दाख�
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
-msgstr "प्रत्येक नोंदवही टॅबाचेर बंद बटन दाखयात. हे वैशिश्ट्य 'बंद' मेन्यू वस्तीप्रमाणूच आसा."
+msgstr ""
+"प्रत्येक नोंदवही टॅबाचेर बंद बटन दाखयात. हे वैशिश्ट्य 'बंद' मेन्यू वस्तीप्रमाणूच आसा."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3721
 msgid ""
@@ -16245,7 +16271,8 @@ msgstr " पोन्ने काडात"
 #: gnucash/gtkbuilder/dialog-price.glade:454
 #, fuzzy
 msgid "Delete prices that meet the following criteria:"
-msgstr "मुखावयल्या निकशार आधारित सकयल दिल्ल्या तारकेपयली सगळी स्टॉक मूल्यां काडून उडयात:"
+msgstr ""
+"मुखावयल्या निकशार आधारित सकयल दिल्ल्या तारकेपयली सगळी स्टॉक मूल्यां काडून उडयात:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:474
 #, fuzzy
@@ -16800,7 +16827,8 @@ msgstr "नवे व्हवहार आपसूंक तयार कर�
 
 #: gnucash/gtkbuilder/dialog-sx.glade:585
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
-msgstr "नव्या तयार केल्ल्या शेड्यूल्ड व्यवहारांचेर 'आपसूंक तयार करात' बावटो थारायात."
+msgstr ""
+"नव्या तयार केल्ल्या शेड्यूल्ड व्यवहारांचेर 'आपसूंक तयार करात' बावटो थारायात."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:605
 msgid "Begin notifications this many days before the transaction is created."
@@ -17093,7 +17121,8 @@ msgstr "पासवर्ड"
 msgid ""
 "The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
-msgstr "विक्रेतो ID क्रमांक. रिकामो सोडल्यार तुमचेखातीर योग्य क्रमांक निवडलो वतलो"
+msgstr ""
+"विक्रेतो ID क्रमांक. रिकामो सोडल्यार तुमचेखातीर योग्य क्रमांक निवडलो वतलो"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:12
 msgid "US (12/31/2001)"
@@ -17688,7 +17717,8 @@ msgstr ""
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
-msgstr "GnuCash फाटल्या व्यवहारातल्यान निवडील्ल्या खात्यांखातीर बजेट मोलांचो अदमास घेतले."
+msgstr ""
+"GnuCash फाटल्या व्यवहारातल्यान निवडील्ल्या खात्यांखातीर बजेट मोलांचो अदमास घेतले."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:410
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
@@ -18768,7 +18798,8 @@ msgstr ""
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
-msgstr "तुमी व्यवहाराचो उद्देश दिव ना. ऑनलायन हस्तांतराखातीर उद्देशाची गरज आसा.\n"
+msgstr ""
+"तुमी व्यवहाराचो उद्देश दिव ना. ऑनलायन हस्तांतराखातीर उद्देशाची गरज आसा.\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1028
 msgid ""
@@ -19060,7 +19091,8 @@ msgstr "SEPA व्यवहार दियात…"
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr "ऑनलायन बँकिंगवरवीं नवो आंतरराष्ट्रीय युरोपीयन (SEPA) व्यवहार ऑनलायन जारी करात."
+msgstr ""
+"ऑनलायन बँकिंगवरवीं नवो आंतरराष्ट्रीय युरोपीयन (SEPA) व्यवहार ऑनलायन जारी करात."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
@@ -19075,7 +19107,8 @@ msgstr "SEPA व्यवहार दियात…"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "ऑनलायन बँकिंगवरवीं नवो आंतरराष्ट्रीय युरोपीयन (SEPA) व्यवहार ऑनलायन जारी करात."
+msgstr ""
+"ऑनलायन बँकिंगवरवीं नवो आंतरराष्ट्रीय युरोपीयन (SEPA) व्यवहार ऑनलायन जारी करात."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
@@ -19781,7 +19814,8 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2146
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr "बदलुपाक ओळींचेर दोनदा क्लीक करात, मागीर आयात करपाक लागू करात चेर क्लीक करात"
+msgstr ""
+"बदलुपाक ओळींचेर दोनदा क्लीक करात, मागीर आयात करपाक लागू करात चेर क्लीक करात"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2216
@@ -20239,7 +20273,8 @@ msgstr ""
 msgid ""
 "The account '%s' is a placeholder account and does not allow transactions. "
 "Please choose a different account."
-msgstr "%s खाते प्लेसहोल्डर खाते आसा आणि व्यवहार करपाक दिना. मात्शे वेगळे खाते निवडात."
+msgstr ""
+"%s खाते प्लेसहोल्डर खाते आसा आणि व्यवहार करपाक दिना. मात्शे वेगळे खाते निवडात."
 
 #: gnucash/import-export/import-account-matcher.cpp:419
 msgid "(Full account ID: "
@@ -20735,7 +20770,8 @@ msgstr "खात्याखातीर नाव दियात"
 msgid ""
 "The account %s is a placeholder account and does not allow transactions. "
 "Please choose a different account."
-msgstr "%s खाते प्लेसहोल्डर खाते आसा आणि व्यवहार करपाक दिना. मात्शे वेगळे खाते निवडात."
+msgstr ""
+"%s खाते प्लेसहोल्डर खाते आसा आणि व्यवहार करपाक दिना. मात्शे वेगळे खाते निवडात."
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:443
 #, fuzzy
@@ -21057,7 +21093,8 @@ msgstr "रेकॉर्ड"
 msgid ""
 "Invalid Entry: You need to supply an account in the right currency for this "
 "position."
-msgstr "अवैध नोंद:ह्या स्थितीखातीर तुमी योग्य चलनांत खात्याक पुरवण करपाची गरज आसा."
+msgstr ""
+"अवैध नोंद:ह्या स्थितीखातीर तुमी योग्य चलनांत खात्याक पुरवण करपाची गरज आसा."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
@@ -21415,7 +21452,8 @@ msgstr ""
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
-msgstr "तुमी सद्याच्या विभागणेच्या वयर बरोवपाचे आसाता. तुमका खरेच अशे करपाचे आसा?"
+msgstr ""
+"तुमी सद्याच्या विभागणेच्या वयर बरोवपाचे आसाता. तुमका खरेच अशे करपाचे आसा?"
 
 #: gnucash/register/ledger-core/split-register.c:999
 #, fuzzy
@@ -21448,7 +21486,8 @@ msgstr "व्यवहाराची परत गणना करात"
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
-msgstr "ह्या व्यवहाराखातीर दिल्ली मोलां असुसंगत आसा. तुमका खंयचे मोल परत मेजपाचे आसा?"
+msgstr ""
+"ह्या व्यवहाराखातीर दिल्ली मोलां असुसंगत आसा. तुमका खंयचे मोल परत मेजपाचे आसा?"
 
 #: gnucash/register/ledger-core/split-register.c:2167
 #: gnucash/register/ledger-core/split-register.c:2174
@@ -21818,7 +21857,8 @@ msgstr ""
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
-msgstr "संदर्भ दियात, देखीक ईनव्हॉयस वो चेक क्रमांक, दरेक नोंद ओळीखातीर यूनिक (विभागण्यो)"
+msgstr ""
+"संदर्भ दियात, देखीक ईनव्हॉयस वो चेक क्रमांक, दरेक नोंद ओळीखातीर यूनिक (विभागण्यो)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1089
 msgid ""
@@ -21871,7 +21911,8 @@ msgstr "कारवाय प्रकार दियात, वो वळे�
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
-msgstr "संदर्भ क्रमांक दियात, देखीक फुडलो चेक क्रमांक, वो वळेरेतल्यान कारवाय प्रकार निवडात"
+msgstr ""
+"संदर्भ क्रमांक दियात, देखीक फुडलो चेक क्रमांक, वो वळेरेतल्यान कारवाय प्रकार निवडात"
 
 #: gnucash/register/ledger-core/split-register-model.c:1350
 msgid "Enter a description of the split"
@@ -22117,7 +22158,8 @@ msgstr "डेटा"
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
-msgstr "निवडील्ल्या खात्यांनी निवडील्ल्या वेळेखातीर डेटा/व्यवहार ना (वो फकत शून्या)"
+msgstr ""
+"निवडील्ल्या खात्यांनी निवडील्ल्या वेळेखातीर डेटा/व्यवहार ना (वो फकत शून्या)"
 
 #: gnucash/report/options-utilities.scm:51
 msgid "Select a date to report on."
@@ -23279,7 +23321,8 @@ msgstr "कर शेड्यूल अहवाल & TXF निर्यात
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
-msgstr "करपात्र प्राप्ती/वजा खर्च व्यवहार तपशिलासंयत/ .TXF फायलींत निर्यात करात."
+msgstr ""
+"करपात्र प्राप्ती/वजा खर्च व्यवहार तपशिलासंयत/ .TXF फायलींत निर्यात करात."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3316
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
@@ -23396,7 +23439,8 @@ msgstr "सरासरी दाखयात"
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
-msgstr "पुराय वेळाखातीर संख्या दाखोवपाचे काय ना वो सरासरी ते निवडात देख दरेक म्हयन्यान."
+msgstr ""
+"पुराय वेळाखातीर संख्या दाखोवपाचे काय ना वो सरासरी ते निवडात देख दरेक म्हयन्यान."
 
 #: gnucash/report/reports/standard/account-piecharts.scm:110
 #: gnucash/report/reports/standard/category-barchart.scm:119
@@ -23468,13 +23512,15 @@ msgstr "खोलाय मर्यादा वागणूक"
 
 #: gnucash/report/reports/standard/account-summary.scm:89
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
-msgstr "स्पश्ट केल्ल्या खालोयेपरस चड आशिल्ल्या खात्यांक कशे वागोवपाचे (आसल्यार)."
+msgstr ""
+"स्पश्ट केल्ल्या खालोयेपरस चड आशिल्ल्या खात्यांक कशे वागोवपाचे (आसल्यार)."
 
 #: gnucash/report/reports/standard/account-summary.scm:90
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
-msgstr "खोलायेच्या मर्यादेतल्या खात्यातली उपखात्यातल्या शिल्लकेसंयत, एकूण शिल्लक दाखयात."
+msgstr ""
+"खोलायेच्या मर्यादेतल्या खात्यातली उपखात्यातल्या शिल्लकेसंयत, एकूण शिल्लक दाखयात."
 
 #: gnucash/report/reports/standard/account-summary.scm:91
 #, fuzzy
@@ -24192,9 +24238,9 @@ msgid ""
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"ह्या अहवालासंयत वापरपाचे CSS शैलीशीटाचे फायलनाव. स्पश्ट केल्यार, ही फायल "
-"तुमच्या .gnucash निदेशिकेन आसपाक जाय, वो GnuCash प्रतिष्ठापन निदेशिकेंनी योग्य जाग्यार "
-"आसपाक जाय."
+"ह्या अहवालासंयत वापरपाचे CSS शैलीशीटाचे फायलनाव. स्पश्ट केल्यार, ही फायल तुमच्या "
+".gnucash निदेशिकेन आसपाक जाय, वो GnuCash प्रतिष्ठापन निदेशिकेंनी योग्य जाग्यार आसपाक "
+"जाय."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
 #: gnucash/report/reports/standard/invoice.scm:514
@@ -24242,8 +24288,8 @@ msgid ""
 "double-checking them.<br>Change the 'Extra Notes' option to get rid of this "
 "message)"
 msgstr ""
-"(उदरगत आवृत्ती -- दोनदा तपाशीनास्तना ह्या अहवातल्या आकड्यांचेर अवलंबून राउ नाकात."
-"<br>ह्या संदेशापासून मुक्त दावपाक 'अदिक टिपों' पर्याय बदलात)"
+"(उदरगत आवृत्ती -- दोनदा तपाशीनास्तना ह्या अहवातल्या आकड्यांचेर अवलंबून राउ नाकात.<br>"
+"ह्या संदेशापासून मुक्त दावपाक 'अदिक टिपों' पर्याय बदलात)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:376
 #: libgnucash/engine/Scrub.cpp:464
@@ -26600,7 +26646,8 @@ msgstr "दिवपाची रक्कम"
 msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
-msgstr "वैध इनव्हॉयस निवडू ना. विकल्प बटणार क्लीक करात आणि वापरपाक इनव्हॉयस निवडात."
+msgstr ""
+"वैध इनव्हॉयस निवडू ना. विकल्प बटणार क्लीक करात आणि वापरपाक इनव्हॉयस निवडात."
 
 #. Translators: This is the format of the invoice
 #. title.  The first ~a is one of "Invoice", "Credit
@@ -27986,8 +28033,8 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
-"हे अहवाल फकत गिरायकाच्या (विक्री) इनव्हॉयसांकूच डिझायन केला. विकल्प मेनू फकत "
-"<em>इनव्हॉयस</em>निवडुपाकूच वापरात, बिल वो खर्चाचे व्हाऊचर करपाक न्ही"
+"हे अहवाल फकत गिरायकाच्या (विक्री) इनव्हॉयसांकूच डिझायन केला. विकल्प मेनू फकत <em>"
+"इनव्हॉयस</em>निवडुपाकूच वापरात, बिल वो खर्चाचे व्हाऊचर करपाक न्ही"
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -28554,7 +28601,8 @@ msgstr "पार्सिंग व्यवहार"
 msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
-msgstr "पर्याय पॅनलान स्पश्ट केल्ल्या वेळ मध्यांतर आणि खाते निवडीकडेन जुळपी व्यवहार मेळूं ना."
+msgstr ""
+"पर्याय पॅनलान स्पश्ट केल्ल्या वेळ मध्यांतर आणि खाते निवडीकडेन जुळपी व्यवहार मेळूं ना."
 
 #: gnucash/report/trep-engine.scm:217
 msgid "Register Order"
@@ -31615,7 +31663,8 @@ msgstr "मेळिल्लो नफो / तोटो"
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
-msgstr "वस्तीतल्यान वो व्यापार खात्यातल्यान मेळिल्लो नफो वो तोटो जाची आणीक खंय नोंद ना."
+msgstr ""
+"वस्तीतल्यान वो व्यापार खात्यातल्यान मेळिल्लो नफो वो तोटो जाची आणीक खंय नोंद ना."
 
 #: libgnucash/engine/gnc-commodity.cpp:191
 msgctxt "FQ Source"

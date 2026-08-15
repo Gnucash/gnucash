@@ -1,21 +1,22 @@
 # Localization for Kashmiri language using Devnagari Script.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Neha Aphale <kulkarnineha1208@gmail.com>, 2014.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2014-06-24 09:34+0530\n"
+"PO-Revision-Date: 2026-06-26 04:04+0000\n"
 "Last-Translator: Neha Aphale <kulkarnineha1208@gmail.com>\n"
-"Language-Team: NONE\n"
+"Language-Team: Kashmiri <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"ks/>\n"
 "Language: ks\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -901,8 +902,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "तुहयो हयीकीव पिक कॊरीथ वारयाह रीपूट एिकीस कुनीय वीनडू मंज़, अगर तुहयो तमाम फायनानशल "
-"जानकॊरी एकसीय नज़री मंज़ ज़रूरत छॊ. यॊ करनॊ बापत, कॊरीव ईसतिमाल सिमपो ल तॊ कसटम-"
-">\" कसटम मलटी कालम रीपूट\" रीपूट."
+"जानकॊरी एकसीय नज़री मंज़ ज़रूरत छॊ. यॊ करनॊ बापत, कॊरीव ईसतिमाल सिमपो ल तॊ कसटम->"
+"\" कसटम मलटी कालम रीपूट\" रीपूट."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -967,8 +968,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"पननॊन सारनिय टरानज़ेकशनन मनज़ तलाश करनॊ बापत, शरो कॊरिव अख तलाश (एडिट-"
-">छ़ॊनडिव...) मेन एकावुनट हायरआरकी पेज पयॊठ. पनॊन तलाश एकिस सिनगल एकावुनटस कुन मेहदूद "
+"पननॊन सारनिय टरानज़ेकशनन मनज़ तलाश करनॊ बापत, शरो कॊरिव अख तलाश (एडिट->"
+"छ़ॊनडिव...) मेन एकावुनट हायरआरकी पेज पयॊठ. पनॊन तलाश एकिस सिनगल एकावुनटस कुन मेहदूद "
 "करनॊ बापत, कॊरिव शरो तलाश एकावुनट रजसटर पयॊठ."
 
 #: doc/tip_of_the_day.list.c:125
@@ -1032,8 +1033,8 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
-"तोहयॊ छॊव यछ़ान अख बुक बनावॊन. अथ बुकॊ मनज़ आसन तमाम टरानज़ेकशन नॊसॊब रॊच़ %s "
-"ताम(कुल %d टरानज़ेकशनन बापत यिम फॊलिथ छॊ %d एकावनटन ताम).\n"
+"तोहयॊ छॊव यछ़ान अख बुक बनावॊन. अथ बुकॊ मनज़ आसन तमाम टरानज़ेकशन नॊसॊब रॊच़ %s ताम"
+"(कुल %d टरानज़ेकशनन बापत यिम फॊलिथ छॊ %d एकावनटन ताम).\n"
 "\n"
 "ऊनवान तॊ नोट कॊरिव तबदील या किलिक कॊरिव 'फारवॊड' अस पयॊठ बरुनह पकनॊ बापत.\n"
 "किलिक कॊरिव 'बेक' डेट एडजसटॊ करनॊ बापत या कॊरिव 'केनसल'."
@@ -2040,13 +2041,15 @@ msgstr "कयाह तुहयो छॊव पॊज़ पॊठ \"%s\" ड
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr "यथ टरानज़ेकशनस छॊ ज़रूरत एसायिन करनॊच कसटमरस. पिलीज़ च़ॊरिव कसटमर बोनॊ कॊन."
+msgstr ""
+"यथ टरानज़ेकशनस छॊ ज़रूरत एसायिन करनॊच कसटमरस. पिलीज़ च़ॊरिव कसटमर बोनॊ कॊन."
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr "यथ टरानज़ेकशनस छॊ ज़रूरत एसायिन करनॊच वेनडरस. पिलीज़ च़ॊरिव वेनडर बोनॊ कॊन."
+msgstr ""
+"यथ टरानज़ेकशनस छॊ ज़रूरत एसायिन करनॊच वेनडरस. पिलीज़ च़ॊरिव वेनडर बोनॊ कॊन."
 
 #: gnucash/gnome/dialog-commodities.cpp:188
 #, fuzzy
@@ -3808,7 +3811,8 @@ msgstr "सेटायील शीट नाव"
 #: gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
-msgstr "यो मुकरर करनो आमुत टरांज़ीकशन छु बदलयूमुत, कयाह तुहयो छॊव पॊज़ पॊठ रद यछ़ान करुन?"
+msgstr ""
+"यो मुकरर करनो आमुत टरांज़ीकशन छु बदलयूमुत, कयाह तुहयो छॊव पॊज़ पॊठ रद यछ़ान करुन?"
 
 #: gnucash/gnome/dialog-sx-editor.c:497
 #, c-format
@@ -5847,7 +5851,8 @@ msgstr "बनॊयिव सही रिपोट तॊ गराफ पन�
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "सेट अप कॊरिव शडूलॊड टरानज़ेकशन यक तरफ तरावनॊ बापत दोहरावनॊ आमॊच़ डाटा एनटरी"
+msgstr ""
+"सेट अप कॊरिव शडूलॊड टरानज़ेकशन यक तरफ तरावनॊ बापत दोहरावनॊ आमॊच़ डाटा एनटरी"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid ""
@@ -7013,7 +7018,8 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1407
 msgid "You can't transfer from and to the same account!"
-msgstr "तुहयो हयोकोव नॊ अकॊय एिकावंटो पयॊठ या एिकसाय एिकावंटस कुन टरानसफर कॊरीथ!"
+msgstr ""
+"तुहयो हयोकोव नॊ अकॊय एिकावंटो पयॊठ या एिकसाय एिकावंटस कुन टरानसफर कॊरीथ!"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1418
 #: gnucash/register/ledger-core/gncEntryLedger.c:85
@@ -7166,16 +7172,16 @@ msgstr[0] ""
 "तोहिनज़ॊ डाटा फायॊल छॊ ज़रूरत मोहफूज़ करॊन तोहिनज़ॊ हाड डिसकॊ मनज़ तोहॊनज़ॊ तबदीली "
 "मोहफूज़ करनॊ बापत.GnuCashस छु अख फीचर मोहफूज़ करनॊच फायिल परॊथ %d मिनट पतॊ, ज़न तॊ "
 "तोहयॊ परेस आसवॊ कोरमुत \"मोहफूज़ कॊरिव\"बोटुन परॊथ विज़ि.\n"
-"तोहयॊ हेकिव तबदील कॊरिथ टायिम ईनटरवल या यि फीचर बनद कॊरिथ एडिट कॊरिव "
-"->तरजीहात->आमl->आटो-सेव टायिम ईनटरवलस तहतl.\n"
+"तोहयॊ हेकिव तबदील कॊरिथ टायिम ईनटरवल या यि फीचर बनद कॊरिथ एडिट कॊरिव ->"
+"तरजीहात->आमl->आटो-सेव टायिम ईनटरवलस तहतl.\n"
 "\n"
 "वाहिदः  कयाह तोहॊनज़ फायिल गछ़याह पॊन पानय मोहफूज़ गछ़ॊन?"
 msgstr[1] ""
 "तोहिनज़ॊ डाटा फायॊल छॊ ज़रूरत मोहफूज़ करॊन तोहिनज़ॊ हाड डिसकॊ मनज़ तोहॊनज़ॊ तबदीली "
 "मोहफूज़ करनॊ बापत.GnuCashस छु अख फीचर मोहफूज़ करनॊच फायिल परॊथ %d मिनट पतॊ, ज़न तॊ "
 "तोहयॊ परेस आसवॊ कोरमुत \"मोहफूज़ कॊरिव\"बोटुन परॊथ विज़ि.\n"
-"तोहयॊ हेकिव तबदील कॊरिथ टायिम ईनटरवल या यि फीचर बनद कॊरिथ एडिट कॊरिव "
-"->तरजीहात -> आमl->आटो-सेव टायिम ईनटरवलस तहतl.\n"
+"तोहयॊ हेकिव तबदील कॊरिथ टायिम ईनटरवल या यि फीचर बनद कॊरिथ एडिट कॊरिव ->"
+"तरजीहात -> आमl->आटो-सेव टायिम ईनटरवलस तहतl.\n"
 "\n"
 "जमाहः कयाह तोहॊनज़ फायिल गछ़याह पॊन पानय मोहफूज़ गछ़ॊन?"
 
@@ -7808,7 +7814,8 @@ msgstr "हयुक नॊ डाटा बिसस मंज़ मोहफ�
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:3096
 msgid "Unable to save to database: Book is marked read-only."
-msgstr "हयुक नॊ डाटा बिसस मंज़ मोहफूज़ कॊरीथ. कोताब छॊ मारोक करनो आमोच़ रिड आनली."
+msgstr ""
+"हयुक नॊ डाटा बिसस मंज़ मोहफूज़ कॊरीथ. कोताब छॊ मारोक करनो आमोच़ रिड आनली."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:4756
 #: gnucash/gtkbuilder/assistant-qif-import.glade:949
@@ -9014,7 +9021,8 @@ msgstr "पियी नावोच जाय"
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr "यथ विलयुहस मंज़ छॊ शिमोल X,Y काडनिट पियी लायनॆ हॊंदीस शरूहस बापत चॆकी पयॊठ."
+msgstr ""
+"यथ विलयुहस मंज़ छॊ शिमोल X,Y काडनिट पियी लायनॆ हॊंदीस शरूहस बापत चॆकी पयॊठ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
@@ -9235,8 +9243,8 @@ msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
 msgstr ""
-"यॊ सीटींग छॊ हावान को तलाश छाह सारनीय आयटमन मंज़ करॊन मूजूद कलासस मंज़,या सोरोफ "
-"‘एिकटोव’ आयटमन मंज़ मूजूद कलासस मंज़."
+"यॊ सीटींग छॊ हावान को तलाश छाह सारनीय आयटमन मंज़ करॊन मूजूद कलासस मंज़,या सोरोफ ‘"
+"एिकटोव’ आयटमन मंज़ मूजूद कलासस मंज़."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:234
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:235
@@ -9455,7 +9463,8 @@ msgstr "डोफालटे QIF टरांज़ीकसन सेटिट
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:11
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
-msgstr "डोफालटे सेटिटस QIF टरांज़ीकशनन बापत यॊली नी QIF फायलो मंज़ मखसूस आसो कॊरीथ."
+msgstr ""
+"डोफालटे सेटिटस QIF टरांज़ीकशनन बापत यॊली नी QIF फायलो मंज़ मखसूस आसो कॊरीथ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
 #: gnucash/gtkbuilder/dialog-account-picker.glade:59
@@ -9808,7 +9817,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1827
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr "एनेबॊल कॊरिव टायिमआवुट \"मोहफूज़ कॊरिव तबदिली बनद करनस पयॊठ\" सवालस पयॊठ"
+msgstr ""
+"एनेबॊल कॊरिव टायिमआवुट \"मोहफूज़ कॊरिव तबदिली बनद करनस पयॊठ\" सवालस पयॊठ"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1831
@@ -10502,7 +10512,8 @@ msgstr "हॊयिव एनटर करनॊ आमुत तॊ रिक�
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:328
 msgid "Show the entered date and reconciled date on transaction selection."
-msgstr "हॊयिव एनटर करनॊ आमित डेट तॊ रिकनसायिल करनॊ आमित डेट टरानज़ेकशन च़ारॊ पयॊठ."
+msgstr ""
+"हॊयिव एनटर करनॊ आमित डेट तॊ रिकनसायिल करनॊ आमित डेट टरानज़ेकशन च़ारॊ पयॊठ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:332
 msgid "Show the calendar buttons"
@@ -10531,7 +10542,8 @@ msgstr "तेदाद टरानज़ेकशनन हूनद यिम
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
-msgstr "यॊत टरांज़ीकशन हॊयीव रजसटरस पयॊठ. ज़िरू विलोव मतलब गुव तमाम टरांज़ीकशन हॊयीव."
+msgstr ""
+"यॊत टरांज़ीकशन हॊयीव रजसटरस पयॊठ. ज़िरू विलोव मतलब गुव तमाम टरांज़ीकशन हॊयीव."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:347
 msgid "Number of characters for auto complete."
@@ -10762,7 +10774,8 @@ msgstr "अख कामूडोटी कॊरीव डोलिट"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:30
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:163
 msgid "This dialog is presented before allowing you to delete a commodity."
-msgstr "यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख कामूडीटी डोलिट करनुक ईजाज़त दॊनी बरुंह."
+msgstr ""
+"यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख कामूडीटी डोलिट करनुक ईजाज़त दॊनी बरुंह."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:167
@@ -10802,7 +10815,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "This dialog is presented before allowing you to replace an existing price."
-msgstr "यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख टरांज़ीकशन डोलिट करनुक ईजाज़त दॊनी बरुंह."
+msgstr ""
+"यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख टरांज़ीकशन डोलिट करनुक ईजाज़त दॊनी बरुंह."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
@@ -10975,7 +10989,8 @@ msgstr "टरांज़ीकशन कॊरीव कट"
 #| msgid ""
 #| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख टरांज़ीकशन डोलिट करनुक ईजाज़त दॊनी बरुंह."
+msgstr ""
+"यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख टरांज़ीकशन डोलिट करनुक ईजाज़त दॊनी बरुंह."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
@@ -11008,7 +11023,8 @@ msgstr "अख टरांज़ोकशन कॊरीव डोलिट"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:110
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:243
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr "यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख टरांज़ीकशन डोलिट करनुक ईजाज़त दॊनी बरुंह."
+msgstr ""
+"यॊ डायलाग छु पिश यीवान करनॊ तुहयो अख टरांज़ीकशन डोलिट करनुक ईजाज़त दॊनी बरुंह."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
@@ -13451,7 +13467,8 @@ msgstr "तमाम टरांज़ीकशन कॊरीव डीलि
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr "यथ एिकावंटस मंज़ छॊ सबएिकावुंट. तुहयो कयाह यॊछ़ोव यीमन एिकावंटन सॊत करुन?"
+msgstr ""
+"यथ एिकावंटस मंज़ छॊ सबएिकावुंट. तुहयो कयाह यॊछ़ोव यीमन एिकावंटन सॊत करुन?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:628
 msgid "This account contains read-only transactions which may not be deleted."
@@ -13948,7 +13965,8 @@ msgstr "शरह छूट छॊ गूडय पिमींटस बाप�
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
-msgstr "पूसट तॊरिख पतॊ दुहन हूंद तिदाद यीमन दूरान छूट लागू रूज़ी गूडय पिमींट बापत."
+msgstr ""
+"पूसट तॊरिख पतॊ दुहन हूंद तिदाद यीमन दूरान छूट लागू रूज़ी गूडय पिमींट बापत."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:155
 msgid "The number of days to pay the bill after the post date."
@@ -14956,7 +14974,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:462
 msgid "This transaction requires your intervention or it will NOT be imported."
-msgstr "यथ टरांज़ीकशनस छॊ ज़रूरत तुहॊंज़ मुदाखलत नतॊ योयो नतो योयो नॊ यो ईमपूट करनो."
+msgstr ""
+"यथ टरांज़ीकशनस छॊ ज़रूरत तुहॊंज़ मुदाखलत नतॊ योयो नतो योयो नॊ यो ईमपूट करनो."
 
 #: gnucash/gtkbuilder/dialog-import.glade:465
 #, fuzzy
@@ -15060,7 +15079,8 @@ msgstr "नौट"
 #, fuzzy
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
-msgstr "डावुन लूड करनी आमतॊन टरांज़ीकशनन हूंद लीसटो (माकज़ सुपलेट छु हावनी आम्त)"
+msgstr ""
+"डावुन लूड करनी आमतॊन टरांज़ीकशनन हूंद लीसटो (माकज़ सुपलेट छु हावनी आम्त)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1103
 #, fuzzy
@@ -15533,7 +15553,8 @@ msgstr "मुकाबलस मंज़"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr "ईसतिमाल कॊरीव मखसूस करनॊ आमोत रीलिटोव शरू तॊरिख नफाह/ नुकसान शुमारन बापत."
+msgstr ""
+"ईसतिमाल कॊरीव मखसूस करनॊ आमोत रीलिटोव शरू तॊरिख नफाह/ नुकसान शुमारन बापत."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 #, fuzzy
@@ -15762,7 +15783,8 @@ msgstr "एिकावुंट लीसटे सीटअप कॊरीव
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Present the new account list dialog when you choose File->New File."
-msgstr "परेज़ेनट कॊरिव नोव एकावुनट लिसटॊ डायलाग येलि तोहयॊ फायिल च़ॊरिव-> नॊव फायिल."
+msgstr ""
+"परेज़ेनट कॊरिव नोव एकावुनट लिसटॊ डायलाग येलि तोहयॊ फायिल च़ॊरिव-> नॊव फायिल."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1485
 msgid "Display \"_tip of the day\" dialog"
@@ -17088,7 +17110,8 @@ msgstr "नॊवीन बनामती आमोतोन शडूल ट�
 
 #: gnucash/gtkbuilder/dialog-sx.glade:605
 msgid "Begin notifications this many days before the transaction is created."
-msgstr "नूटिफोकिशन कॊरीव शरू यॊमव वारयाहव दुहव बरुंह टरांज़ीकशन पॊदी करनॊ बरुंह."
+msgstr ""
+"नूटिफोकिशन कॊरीव शरू यॊमव वारयाहव दुहव बरुंह टरांज़ीकशन पॊदी करनॊ बरुंह."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:644
 msgid "Create the transaction this many days before its effective date."
@@ -19115,7 +19138,8 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:142
 msgid "Online action \"Get Transactions\" not available for this account."
-msgstr "आनलायीन कॊम \" टरांज़ीकशन कॊरीव हॊसील \" छॊ नॊ दसतीयाब यथ एिकावंटस बापत."
+msgstr ""
+"आनलायीन कॊम \" टरांज़ीकशन कॊरीव हॊसील \" छॊ नॊ दसतीयाब यथ एिकावंटस बापत."
 
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:194
 #, fuzzy, c-format
@@ -19332,7 +19356,8 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1638
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
-msgstr "आनलायोन बिंकींग जाब छॊ वॊनी चलान ; कयाह तुहयॊ छॊव पॊज़ पॊठ कीनसल यछ़ान करुन?"
+msgstr ""
+"आनलायोन बिंकींग जाब छॊ वॊनी चलान ; कयाह तुहयॊ छॊव पॊज़ पॊठ कीनसल यछ़ान करुन?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AqBanking"
@@ -20928,7 +20953,8 @@ msgstr "मोहरबिनी कॊरीथ च़ॊरीव अख फ�
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1713
 msgid "File not found or read permission denied. Please select another file."
-msgstr "फायोल आयो नॊ लबनी या परनो. ईजाज़त छु नॊ. मोहरबिनी कॊरीथ च़ॊरीव बदल फायोल."
+msgstr ""
+"फायोल आयो नॊ लबनी या परनो. ईजाज़त छु नॊ. मोहरबिनी कॊरीथ च़ॊरीव बदल फायोल."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1724
 msgid "That QIF file is already loaded. Please select another file."
@@ -21000,7 +21026,8 @@ msgstr "च़ॊरिव अख QIF फायिल करनसी"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2996
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "तुहयो छु ज़रूरी दॊखील करुन अख मूजूद कूमी करनसी या छु दॊखील करुन अख मुखतलोफ कोसोम."
+msgstr ""
+"तुहयो छु ज़रूरी दॊखील करुन अख मूजूद कूमी करनसी या छु दॊखील करुन अख मुखतलोफ कोसोम."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3208
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3212
@@ -21395,7 +21422,8 @@ msgstr "रीकाड"
 msgid ""
 "Invalid Entry: You need to supply an account in the right currency for this "
 "position."
-msgstr "गलत एिंटरीः योमी जायी बापत छु तुहयो फराहम करुन अख एिकावुंट सहि करनसी मंज़."
+msgstr ""
+"गलत एिंटरीः योमी जायी बापत छु तुहयो फराहम करुन अख एिकावुंट सहि करनसी मंज़."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
@@ -21783,7 +21811,8 @@ msgstr ""
 #, fuzzy
 #| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Scheduled transactions can only be pasted to the General Journal"
-msgstr "सेट अप कॊरिव शडूलॊड टरानज़ेकशन यक तरफ तरावनॊ बापत दोहरावनॊ आमॊच़ डाटा एनटरी"
+msgstr ""
+"सेट अप कॊरिव शडूलॊड टरानज़ेकशन यक तरफ तरावनॊ बापत दोहरावनॊ आमॊच़ डाटा एनटरी"
 
 #: gnucash/register/ledger-core/split-register.c:2159
 msgid "Recalculate Transaction"
@@ -21953,7 +21982,8 @@ msgstr "तुहयो छु ज़रूरत अख सुपलोट च�
 #: gnucash/register/ledger-core/split-register-control.cpp:1492
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
-msgstr "तुहयो छॊव ज़रूरत टरांज़ीकशन फिलावनुक अमोच एिकोसचिंड रिट तबदिल करनो बापत."
+msgstr ""
+"तुहयो छॊव ज़रूरत टरांज़ीकशन फिलावनुक अमोच एिकोसचिंड रिट तबदिल करनो बापत."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1429
 msgid "The entered account could not be found."
@@ -22176,7 +22206,8 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:1089
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
-msgstr "एनटर कॊरिव अख हवाल, मसलन चक नमबर, युस कामन छु तमाम एनटरी लायनन (सुपलिटन)"
+msgstr ""
+"एनटर कॊरिव अख हवाल, मसलन चक नमबर, युस कामन छु तमाम एनटरी लायनन (सुपलिटन)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1091
 msgid ""
@@ -22254,7 +22285,8 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:1592
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
-msgstr "यॊ टरांज़ीकशन छु अख सेटाक सुपलीट, परीस कॊरीव सुपलोट बुटन तफसिल वॊछनी बापत "
+msgstr ""
+"यॊ टरांज़ीकशन छु अख सेटाक सुपलीट, परीस कॊरीव सुपलोट बुटन तफसिल वॊछनी बापत "
 
 #: gnucash/register/ledger-core/split-register-model.c:2110
 #, c-format
@@ -23064,7 +23096,8 @@ msgstr "टूटल हॊयीव"
 #: gnucash/report/reports/standard/category-barchart.scm:129
 #: gnucash/report/reports/standard/net-charts.scm:87
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "यॊमन एिकावंटन पयॊठ दीयीव रीफूट, अगर च़ारनी आमोच़ एिकावुंट लीवल ईजाज़त दॊयी."
+msgstr ""
+"यॊमन एिकावंटन पयॊठ दीयीव रीफूट, अगर च़ारनी आमोच़ एिकावुंट लीवल ईजाज़त दॊयी."
 
 #: gnucash/report/reports/example/daily-reports.scm:97
 #: gnucash/report/reports/standard/account-piecharts.scm:140
@@ -23891,7 +23924,8 @@ msgstr "शॊमील कॊरीव एिकावुंट यॊमन �
 #: gnucash/report/reports/standard/income-statement.scm:70
 #: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr "शॊमिल कॊरिव एकावुनट यिमन ज़ीरो कुल (रिकॊरसिव) बेलेनिस छॊ यथ रिपोटस मनज़."
+msgstr ""
+"शॊमिल कॊरिव एकावुनट यिमन ज़ीरो कुल (रिकॊरसिव) बेलेनिस छॊ यथ रिपोटस मनज़."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -23951,7 +23985,8 @@ msgstr "एिकावुंट कॊरीव डोसपेली बतू
 #: gnucash/report/reports/standard/income-statement.scm:80
 #: gnucash/report/reports/standard/trial-balance.scm:120
 msgid "Shows each account in the table as a hyperlink to its register window."
-msgstr "हॊयिव परॊथ एकावुनट जदूलस मनज़ बतोर अख हायपरलिनक अमिकिस रजसटर विनडोहस कुन."
+msgstr ""
+"हॊयिव परॊथ एकावुनट जदूलस मनज़ बतोर अख हायपरलिनक अमिकिस रजसटर विनडोहस कुन."
 
 #: gnucash/report/reports/standard/account-summary.scm:113
 msgid "Show an account's balance."
@@ -24239,7 +24274,8 @@ msgstr ""
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1167
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
-msgstr "अगर तुहयो एिकोस मलटी करनसी हालतो मंज़ छॊव, एिकोसचिंज मा आसो नॊ शायद सही."
+msgstr ""
+"अगर तुहयो एिकोस मलटी करनसी हालतो मंज़ छॊव, एिकोसचिंज मा आसो नॊ शायद सही."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1172
 msgid "** this commodity has no price and a price of 1 has been used."
@@ -24702,7 +24738,8 @@ msgstr "एिकावुंट कॊरीव डोसपेली बतू
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #, fuzzy
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
-msgstr "हॊयिव परॊथ एकावुनट जदूलस मनज़ बतोर अख हायपरलिनक अमिकिस रजसटर विनडोहस कुन."
+msgstr ""
+"हॊयिव परॊथ एकावुनट जदूलस मनज़ बतोर अख हायपरलिनक अमिकिस रजसटर विनडोहस कुन."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #, fuzzy
@@ -25699,7 +25736,8 @@ msgstr "बंद करवॊन एिनटरी पिटरन  छु र
 #: gnucash/report/reports/standard/trial-balance.scm:108
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
-msgstr "छु बनावन कुलोज़ुनग एनटरीज़ पेटरनस तयुथ युथ ज़न सु माननॊ यियि अख रेगयुलर एकॊसपरेशन."
+msgstr ""
+"छु बनावन कुलोज़ुनग एनटरीज़ पेटरनस तयुथ युथ ज़न सु माननॊ यियि अख रेगयुलर एकॊसपरेशन."
 
 #: gnucash/report/reports/standard/equity-statement.scm:402
 #: gnucash/report/reports/standard/income-statement.scm:442
@@ -27745,7 +27783,8 @@ msgstr "फानट युस ईसतेमाल करुन छु बद�
 #: gnucash/report/reports/standard/receipt.scm:91
 #, fuzzy
 msgid "Name of a file containing a logo to be used on the header of the report"
-msgstr "नाव फायलॊ हुनद यथ मनज़ शॊमिल अख लोगो छॊ युस रिपोटस पयॊठ ईसतेमाल करॊन छॊ."
+msgstr ""
+"नाव फायलॊ हुनद यथ मनज़ शॊमिल अख लोगो छॊ युस रिपोटस पयॊठ ईसतेमाल करॊन छॊ."
 
 #: gnucash/report/reports/standard/receipt.scm:94
 #, fuzzy
@@ -27760,7 +27799,8 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:97
 #, fuzzy
 msgid "Name of a file containing a logo to be used on the footer of the report"
-msgstr "नाव फायलॊ हुनद यथ मनज़ शॊमिल अख लोगो छॊ युस रिपोटस पयॊठ ईसतेमाल करॊन छॊ."
+msgstr ""
+"नाव फायलॊ हुनद यथ मनज़ शॊमिल अख लोगो छॊ युस रिपोटस पयॊठ ईसतेमाल करॊन छॊ."
 
 #: gnucash/report/reports/standard/receipt.scm:100
 #, fuzzy
@@ -28067,7 +28107,8 @@ msgstr "किमत हॊयीव"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:163
 msgid "Name of a file containing a logo to be used on the report."
-msgstr "नाव फायलॊ हुनद यथ मनज़ शॊमिल अख लोगो छॊ युस रिपोटस पयॊठ ईसतेमाल करॊन छॊ."
+msgstr ""
+"नाव फायलॊ हुनद यथ मनज़ शॊमिल अख लोगो छॊ युस रिपोटस पयॊठ ईसतेमाल करॊन छॊ."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:166
 msgid ""
@@ -28232,7 +28273,8 @@ msgstr "बराबरी एिनटरी पिटीरोन छु अ�
 #: gnucash/report/reports/standard/trial-balance.scm:96
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
-msgstr "छु बनावन एडजसटिनग एनटरी पेटॊरिनस तयुथ ज़न तॊ यि अख रिगयुलर एकिसपरेशन छु."
+msgstr ""
+"छु बनावन एडजसटिनग एनटरी पेटॊरिनस तयुथ ज़न तॊ यि अख रिगयुलर एकिसपरेशन छु."
 
 #: gnucash/report/reports/standard/trial-balance.scm:188
 #, fuzzy
@@ -29049,7 +29091,8 @@ msgstr "तमाम टरानज़ेकशन कॊरिव तबदी
 
 #: gnucash/report/trep-engine.scm:581
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
-msgstr "फारमेट करान जदूल योस मुवॊफिक छु ईज़ॊफी सेलन सॊत कट तॊ पेसटॊ एकॊसपोट करनस मनज़."
+msgstr ""
+"फारमेट करान जदूल योस मुवॊफिक छु ईज़ॊफी सेलन सॊत कट तॊ पेसटॊ एकॊसपोट करनस मनज़."
 
 #: gnucash/report/trep-engine.scm:588
 msgid ""
@@ -29807,7 +29850,8 @@ msgstr "एिकोसपूट खातॊ"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:53
 msgid "Export the account hierarchy to a new GnuCash datafile"
-msgstr "एिकावुंट हायरआरकी कॊरीव एिकोसफूट एिकोस नॊवी जि एिन यू किश डाटा फायलो कुन."
+msgstr ""
+"एिकावुंट हायरआरकी कॊरीव एिकोसफूट एिकोस नॊवी जि एिन यू किश डाटा फायलो कुन."
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:59
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:67
@@ -30501,7 +30545,8 @@ msgstr "जांच तॊ ठिक कॊरीव एिकावुंट"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
-msgstr "जांच तॊ ठिक कॊरीव गॊर मुतवाज़ीन टरांज़ीकशन तॊ आरफन सुपलोट यथ एिकावंटस मंज़"
+msgstr ""
+"जांच तॊ ठिक कॊरीव गॊर मुतवाज़ीन टरांज़ीकशन तॊ आरफन सुपलोट यथ एिकावंटस मंज़"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:286
@@ -30527,7 +30572,8 @@ msgstr "जांच तॊ ठिक कॊरीव तमाम"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
-msgstr "जांच तॊ ठिक कॊरीव गॊर मुतवाज़ीन टरांज़ीकशन तॊ आरफन सुपलोट तमाम एिकावंटन मंज़"
+msgstr ""
+"जांच तॊ ठिक कॊरीव गॊर मुतवाज़ीन टरांज़ीकशन तॊ आरफन सुपलोट तमाम एिकावंटन मंज़"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
 #, fuzzy
@@ -31196,7 +31242,8 @@ msgstr "शडूल"
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
-msgstr "अख शडूल करनो आमोच़ टरांज़ोकशन बनॊयीव मूजूद टरांज़ोकशनस सॊत बतूर अख टोमपलिट."
+msgstr ""
+"अख शडूल करनो आमोच़ टरांज़ोकशन बनॊयीव मूजूद टरांज़ोकशनस सॊत बतूर अख टोमपलिट."
 
 #. Translators: This is a menu item that will open a register tab for the
 #. account of the first other account in the current transaction's split list
@@ -32954,7 +33001,8 @@ msgstr "टोकीस कोसीम %s : नाकार कूड %s एि
 #: libgnucash/tax/gnc-locale-tax.c:165
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
-msgstr "टीकसस सॊत छु नॊ वाबसतॊ; टोकीस कीसीम %s : नाकार कूड %s एिकावुंट टायीप बापत."
+msgstr ""
+"टीकसस सॊत छु नॊ वाबसतॊ; टोकीस कीसीम %s : नाकार कूड %s एिकावुंट टायीप बापत."
 
 #: libgnucash/tax/gnc-locale-tax.c:178
 #, c-format
@@ -32964,7 +33012,8 @@ msgstr "नाकार कूड %s टोकीस टायपी वाप�
 #: libgnucash/tax/gnc-locale-tax.c:182
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
-msgstr "टीकसस सॊत छु नॊ वाबसतॊ; टोकीस कीसीम %s: नाकार कूड %s एिकावुंट टायीप बापत."
+msgstr ""
+"टीकसस सॊत छु नॊ वाबसतॊ; टोकीस कीसीम %s: नाकार कूड %s एिकावुंट टायीप बापत."
 
 #: libgnucash/tax/gnc-locale-tax.c:200
 #, c-format
@@ -32984,7 +33033,8 @@ msgstr "कांह बयान छु नॊः फारम %s, कूड%s,
 #: libgnucash/tax/gnc-locale-tax.c:225 libgnucash/tax/gnc-locale-tax.c:240
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
-msgstr "टीकसस सॊत छु नॊ वाबसतॊ; कांह बयान छु नॊः फारम %s, कूड %s, टोकीस कीसीम %s"
+msgstr ""
+"टीकसस सॊत छु नॊ वाबसतॊ; कांह बयान छु नॊः फारम %s, कूड %s, टोकीस कीसीम %s"
 
 #: libgnucash/tax/gnc-locale-tax.c:263
 #, c-format

@@ -44,11 +44,11 @@
 # Voucher -             comprovant
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-08-17 01:02+0000\n"
+"PO-Revision-Date: 2026-06-26 05:00+0000\n"
 "Last-Translator: mid-kid <esteve.varela@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ca/>\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -825,8 +825,8 @@ msgstr ""
 "Cada assentament té un camp de «Notes» on podeu afegir informació útil.\n"
 "\n"
 "Per fer-lo visible\n"
-"Trieu «Visualitza» a la barra de menú i cliqueu «Línia doble» o marqueu "
-"«Vista a doble línea» a Preferències:Valors per defecte del registre."
+"Trieu «Visualitza» a la barra de menú i cliqueu «Línia doble» o marqueu «"
+"Vista a doble línea» a Preferències:Valors per defecte del registre."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -872,8 +872,8 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"Escriviu les primeres lletres d'un nom de compte existent a la columna "
-"«Transferència» del registre, i el GnuCash completarà el nom a partir de la "
+"Escriviu les primeres lletres d'un nom de compte existent a la columna «"
+"Transferència» del registre, i el GnuCash completarà el nom a partir de la "
 "llista de comptes existents. En quant als subcomptes, escriviu les primeres "
 "lletres del compte pare, seguides de «:» i les primeres lletres del "
 "subcompte (p.ex. A:E per Actius:Efectiu)."
@@ -3723,8 +3723,7 @@ msgstr ""
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
 msgstr[0] "Teniu seguretat de voler esborrar la cotització seleccionada?"
-msgstr[1] ""
-"Teniu seguretat de voler esborrar les %d cotitzacions seleccionades?"
+msgstr[1] "Teniu seguretat de voler esborrar les %d cotitzacions seleccionades?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:213
 msgid "Delete prices?"
@@ -4374,8 +4373,7 @@ msgstr "Se suprimirà el compte %s."
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1612
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr ""
-"Es traslladaran tots els assentaments d'aquest compte cap al compte %s."
+msgstr "Es traslladaran tots els assentaments d'aquest compte cap al compte %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1619
 msgid "All transactions in this account will be deleted."
@@ -4393,8 +4391,7 @@ msgstr "El seu subcompte s'eliminarà."
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1638
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr ""
-"Es traslladaran tots els assentaments dels subcomptes cap al compte %s."
+msgstr "Es traslladaran tots els assentaments dels subcomptes cap al compte %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1645
 msgid "All sub-account transactions will be deleted."
@@ -5690,8 +5687,8 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "La data per a aquest assentament és més antic que el «Límit de sols lectura» "
-"per a aquest llibre. Aquest paràmetre es pot canviar a Fitxer->Propietats-"
-">Comptes."
+"per a aquest llibre. Aquest paràmetre es pot canviar a Fitxer->Propietats->"
+"Comptes."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -7013,8 +7010,8 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Heu de donar un nom únic a aquesta taula d'impostos. El que heu escollit, "
-"«%s», ja està sent utilitzat."
+"Heu de donar un nom únic a aquesta taula d'impostos. El que heu escollit, «%s"
+"», ja està sent utilitzat."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -8619,8 +8616,7 @@ msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:206
 msgid "- GnuCash, accounting for personal and small business finance"
-msgstr ""
-"- GnuCash, comptabilitat per a finances personals i de petites empreses"
+msgstr "- GnuCash, comptabilitat per a finances personals i de petites empreses"
 
 #: gnucash/gnucash-core-app.cpp:208
 #, c++-format
@@ -8679,8 +8675,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Anul·lacions del nivell de registre, de la forma "
-"«modulename={debug,info,warn,crit,error}». \n"
+"Anul·lacions del nivell de registre, de la forma «modulename="
+"{debug,info,warn,crit,error}». \n"
 "Exemples: «--log qof=debug» o «--log gnc.backend.file.sx=info»\n"
 "Això pot ser invocat molts cops."
 
@@ -8695,8 +8691,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Fitxer de registre, per defecte és /tmp/gnucash.trace. També pot ser "
-"«stderr» o «stdout»."
+"Fitxer de registre, per defecte és /tmp/gnucash.trace. També pot ser «stderr"
+"» o «stdout»."
 
 #: gnucash/gnucash-core-app.cpp:292
 msgid "Hidden Options"
@@ -9685,11 +9681,11 @@ msgid ""
 "the initial opening of the data file when GnuCash starts. If this setting is "
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
-"Aquest paràmetre controla si les transaccions programades del processament "
-"«des de l'última execució» s'executen automàticament quan s'obre un fitxer "
-"de dades. Això inclou l'obertura inicial del fitxer de dades quan s'inicia "
-"el GnuCash. Si aquest paràmetre està actiu, executeu el procés «des de "
-"l'última execució», en cas contrari no s'executarà."
+"Aquest paràmetre controla si les transaccions programades del processament «"
+"des de l'última execució» s'executen automàticament quan s'obre un fitxer de "
+"dades. Això inclou l'obertura inicial del fitxer de dades quan s'inicia el "
+"GnuCash. Si aquest paràmetre està actiu, executeu el procés «des de l'última "
+"execució», en cas contrari no s'executarà."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
@@ -9896,8 +9892,8 @@ msgid ""
 msgstr ""
 "Aquest paràmetre determina el caràcter que s'usarà entre components d'un nom "
 "de compte. Els valors possibles són qualsevol unicode alfanumèric, o "
-"qualsevol de les cadenes següents: «colon» «slash», «backslash», «dash» i "
-"«period»."
+"qualsevol de les cadenes següents: «colon» «slash», «backslash», «dash» i «"
+"period»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
@@ -10209,8 +10205,8 @@ msgid ""
 msgstr ""
 "Aquest paràmetre controla l'origen de la divisa predeterminada per als "
 "comptes nous. Si s'estableix a «locale» el GnuCash agafarà el divisa "
-"predeterminada de la configuració local de l'usuari. Si s'estableix a "
-"«altre», el GnuCash usarà el paràmetre especificat a la clau altra-divisa."
+"predeterminada de la configuració local de l'usuari. Si s'estableix a «altre"
+"», el GnuCash usarà el paràmetre especificat a la clau altra-divisa."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -10257,8 +10253,8 @@ msgstr ""
 "Aquest paràmetre escull la manera com es mostren les dates al GnuCash. El "
 "valors possibles d'aquest paràmetre són «locale» per usar la configuració "
 "local del sistema, «ce» per dates a l'estil d'Europa Continental, «iso» per "
-"a dates estàndard ISO 8601, «uk» per a dates a l'estil del Regne Unit, i "
-"«us» per a dates a l'estil dels Estats Units."
+"a dates estàndard ISO 8601, «uk» per a dates a l'estil del Regne Unit, i «us"
+"» per a dates a l'estil dels Estats Units."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1149
@@ -10351,8 +10347,8 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Aquest paràmetre determina la vora a la qual es dibuixen les pestanya per a "
-"pàgines que canvien a les llibretes. Els valors possibles són «superior», "
-"«esquerra«, «inferior» i «dreta». El valor predeterminat és «superior»."
+"pàgines que canvien a les llibretes. Els valors possibles són «superior», «"
+"esquerra«, «inferior» i «dreta». El valor predeterminat és «superior»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3563
@@ -10410,8 +10406,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Estableix l'opció de llibre als fitxers nous perquè usi el camp desglossat "
-"«acció» per al camp «Num» als registres/informes."
+"Estableix l'opció de llibre als fitxers nous perquè usi el camp desglossat «"
+"acció» per al camp «Num» als registres/informes."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1472
@@ -11175,8 +11171,7 @@ msgstr "_Retalla l'assentament"
 #| msgid ""
 #| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr ""
-"Aquest diàleg es presenta abans de permetre-us esborrar un assentament."
+msgstr "Aquest diàleg es presenta abans de permetre-us esborrar un assentament."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
@@ -11209,8 +11204,7 @@ msgstr "Supressió d'un assentament"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:110
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:243
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr ""
-"Aquest diàleg es presenta abans de permetre-us esborrar un assentament."
+msgstr "Aquest diàleg es presenta abans de permetre-us esborrar un assentament."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
@@ -11819,8 +11813,8 @@ msgstr ""
 "de files mostrada per establir una amplada de columna, després useu el botó "
 "dret del ratolí per canviar-ho si cal.\n"
 "\n"
-"Exemples: \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" i "
-"CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"Exemples: \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" i CURRENCY;USD;2016-"
+"11-21;1.56;GBP\n"
 "\n"
 "Hi ha una opció per especificar la fila inicial, la fila final i una opció "
 "per saltar les files alternatives començant de la fila d'inici que es pot "
@@ -12875,8 +12869,8 @@ msgstr ""
 "El procés d'importació té molts passos. No es canviaran els vostres comptes "
 "GnuCash fin que no cliqueu «Aplica» al final del procés.\n"
 "\n"
-"Cliqueu «Següent» per començar a carregar les vostres dades QIF, o "
-"«Cancel·la» per avortar el procés."
+"Cliqueu «Següent» per començar a carregar les vostres dades QIF, o «Cancel·la"
+"» per avortar el procés."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -13433,9 +13427,9 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Si heu acabat amb la creació del fraccionament o fusió d'accions, premeu "
-"«Aplica». També podeu clicar «Endarrere» per revisar les vostres eleccions, "
-"o «Cancel·la» per sortir sense fer cap canvi."
+"Si heu acabat amb la creació del fraccionament o fusió d'accions, premeu «"
+"Aplica». També podeu clicar «Endarrere» per revisar les vostres eleccions, o "
+"«Cancel·la» per sortir sense fer cap canvi."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
 msgid "Stock Split Finish"
@@ -13616,9 +13610,9 @@ msgid ""
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"Si heu acabat amb la creació del fraccionament o fusió d'accions, premeu "
-"«Aplica». També podeu clicar «Endarrere» per revisar les vostres eleccions, "
-"o «Cancel·la» per sortir sense fer cap canvi."
+"Si heu acabat amb la creació del fraccionament o fusió d'accions, premeu «"
+"Aplica». També podeu clicar «Endarrere» per revisar les vostres eleccions, o "
+"«Cancel·la» per sortir sense fer cap canvi."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:953
 #, fuzzy
@@ -15739,8 +15733,8 @@ msgid ""
 msgstr ""
 "Hi ha algunes acciones predeterminades que la major part dels usuaris "
 "prefereixen que s'iniciïn quan s'inicia el GnuCash. Seleccioneu una "
-"d'aquestes accions de sota i premeu el botó <i>D'acord</i> o premeu "
-"<i>Cancel·la</i> si no voleu realitzar cap d'elles."
+"d'aquestes accions de sota i premeu el botó <i>D'acord</i> o premeu <i>"
+"Cancel·la</i> si no voleu realitzar cap d'elles."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
 msgid "C_reate a new set of accounts"
@@ -16145,8 +16139,7 @@ msgstr "Entreu el nombre de mesos."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1213
 msgid "Use the date format specified by the system locale."
-msgstr ""
-"Utilitza el format de data especificat per la localització del sistema."
+msgstr "Utilitza el format de data especificat per la localització del sistema."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1239
 #, fuzzy
@@ -18756,8 +18749,8 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"Concordança amb el «dia de la setmana» i la «setmana del mes»? (p.ex. el "
-"«segon dimarts» de cada mes)"
+"Concordança amb el «dia de la setmana» i la «setmana del mes»? (p.ex. el «"
+"segon dimarts» de cada mes)"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:62
 msgid "Only show _active owners"
@@ -19005,8 +18998,8 @@ msgid ""
 msgstr ""
 "Feu un doble clic sobre la línia el nom del compte la banca en línia si "
 "voleu fer-lo concordar amb el compte GnuCash o trieu concordances "
-"incorrectes i cliqueu «Elimina les concordances seleccionades». Cliqueu "
-"«Següent» quan s'han concordat tots els comptes desitjats."
+"incorrectes i cliqueu «Elimina les concordances seleccionades». Cliqueu «"
+"Següent» quan s'han concordat tots els comptes desitjats."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
 msgid "_Delete selected matches"
@@ -19859,8 +19852,7 @@ msgstr "Transacció _interna…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr ""
-"Tramet una transacció interna (del banc) en línia per banca electrònica"
+msgstr "Tramet una transacció interna (del banc) en línia per banca electrònica"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 msgid "Issue SEPA Direct _Debit…"
@@ -20215,8 +20207,8 @@ msgstr ""
 "Aquest assistent us ajudarà a exportar l'arbre de comptes a un fitxer amb "
 "els separador que s'especifica a sota.\n"
 "\n"
-"Seleccioneu els paràmetres que requeriu per al fitxer i després cliqueu "
-"«Següent» per procedir o «Cancel·la» per avortar l'exportació.\n"
+"Seleccioneu els paràmetres que requeriu per al fitxer i després cliqueu «"
+"Següent» per procedir o «Cancel·la» per avortar l'exportació.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
@@ -20291,8 +20283,8 @@ msgid ""
 msgstr ""
 "S'exportarà l'arbre de comptes al fitxer «%s» quan cliqueu «Aplica».\n"
 "\n"
-"Podeu també verificar les vostres seleccions clicant sobre «Enrere» o "
-"«Cancel·la» per avortar l'exportació.\n"
+"Podeu també verificar les vostres seleccions clicant sobre «Enrere» o «"
+"Cancel·la» per avortar l'exportació.\n"
 "\n"
 
 #. Translators: %s is the file name and %u the number of accounts.
@@ -20308,8 +20300,8 @@ msgstr ""
 "Quan cliqueu «Aplica», s'exportaran els assentament al fitxer «%s» el nombre "
 "de comptes exportats és %u.\n"
 "\n"
-"Podeu també verificar les vostres seleccions clicant sobre «Enrere» o "
-"«Cancel·la» per avortar l'exportació.\n"
+"Podeu també verificar les vostres seleccions clicant sobre «Enrere» o «"
+"Cancel·la» per avortar l'exportació.\n"
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:120
@@ -20323,8 +20315,8 @@ msgid ""
 msgstr ""
 "Quan cliqueu «Aplica», s'exportaran els assentaments al fitxer «%s».\n"
 "\n"
-"Podeu també verificar les vostres seleccions clicant sobre «Enrere» o "
-"«Cancel·la» per avortar l'exportació.\n"
+"Podeu també verificar les vostres seleccions clicant sobre «Enrere» o «"
+"Cancel·la» per avortar l'exportació.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:759
 msgid ""
@@ -20435,15 +20427,15 @@ msgid ""
 msgstr ""
 "S'importaran els comptes des del fitxer «%s» quan cliqeu «Aplica».\n"
 "\n"
-"També podeu anar enrere i verificar les vostres selecciones clicant sobre "
-"«Enrere» o «Cancel·la» per avortar la importació.\n"
+"També podeu anar enrere i verificar les vostres selecciones clicant sobre «"
+"Enrere» o «Cancel·la» per avortar la importació.\n"
 "\n"
 "Si aquesta és la vostra importació inicial a un nou fitxer, primer veureu un "
 "diàleg per establir els paràmetres d'opcions del llibre, ja que aquests "
 "paràmetres poden afectar la manera com les dades importades es converteixen "
 "en assentament del GnuCash. \n"
-"Nota: després de la importació, potser heu d'usar l'opció de menú  "
-"«Visualitza / Filtra per / Altre» y triar mostrar els comptes no usats.\n"
+"Nota: després de la importació, potser heu d'usar l'opció de menú  «"
+"Visualitza / Filtra per / Altre» y triar mostrar els comptes no usats.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
 #, fuzzy, c-format
@@ -20672,8 +20664,8 @@ msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
 msgstr ""
-"Si us plau trieu una columna «Divisa a» o establiu una divisa al camp "
-"«Divisa a»."
+"Si us plau trieu una columna «Divisa a» o establiu una divisa al camp «"
+"Divisa a»."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:464
 msgid ""
@@ -21467,8 +21459,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1724
 msgid "That QIF file is already loaded. Please select another file."
-msgstr ""
-"Aquest fitxer QIF ja està carregat. Hauríeu de seleccionar-ne un altre."
+msgstr "Aquest fitxer QIF ja està carregat. Hauríeu de seleccionar-ne un altre."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1788
 msgid "Select QIF File"
@@ -25233,8 +25224,7 @@ msgstr "Habilita les columnes duals"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:62
 msgid "Selecting this option will enable double-column reporting."
-msgstr ""
-"Si se selecciona aquesta opció s'habilitarà informar amb columna doble."
+msgstr "Si se selecciona aquesta opció s'habilitarà informar amb columna doble."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 msgid "Disable amount indenting"
@@ -25282,8 +25272,7 @@ msgstr "Mostra les quantitats com a enllaços"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
-msgstr ""
-"Mostra cada compte a la taula com un enllaç a un registre o un informe."
+msgstr "Mostra cada compte a la taula com un enllaç a un registre o un informe."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 msgid "Label sections"
@@ -25844,8 +25833,7 @@ msgstr "Mostra una columna amb els totals de la fila."
 
 #: gnucash/report/reports/standard/budget.scm:65
 msgid "Include accounts with zero total balances and budget values"
-msgstr ""
-"Inclou els comptes amb balanços totals zero i els valors del pressupost"
+msgstr "Inclou els comptes amb balanços totals zero i els valors del pressupost"
 
 #: gnucash/report/reports/standard/budget.scm:66
 msgid ""
@@ -26111,8 +26099,7 @@ msgstr "No hi ha dades exportables"
 
 #: gnucash/report/reports/standard/customer-summary.scm:51
 msgid "The income accounts where the sales and income was recorded."
-msgstr ""
-"Els comptes d'ingressos con les vendes i els ingressos s'han registrat."
+msgstr "Els comptes d'ingressos con les vendes i els ingressos s'han registrat."
 
 #: gnucash/report/reports/standard/customer-summary.scm:61
 msgid ""
@@ -29603,8 +29590,8 @@ msgid ""
 "match Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left "
 "blank, which will disable the filter."
 msgstr ""
-"Mostra sols els comptes els noms dels qual concordin totalment, per exemple "
-"«Viatges» concordarà amb Despeses:Viatges:Vacances i "
+"Mostra sols els comptes els noms dels qual concordin totalment, per exemple «"
+"Viatges» concordarà amb Despeses:Viatges:Vacances i "
 "Despeses:Empresa:Viatges. Es pot deixar en blanc, cosa que desactivarà el "
 "filtre."
 
@@ -30474,8 +30461,7 @@ msgstr "Editor de _valors"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr ""
-"Visualitza i edita els valors corresponents a accions i fons d'inversió"
+msgstr "Visualitza i edita els valors corresponents a accions i fons d'inversió"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:114
 msgid "_Loan Repayment Calculator"
@@ -30998,8 +30984,7 @@ msgstr "A_rbre de comptes nou…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
-msgstr ""
-"Amplia l'arbre de comptes actual inserint-hi categories de compte noves"
+msgstr "Amplia l'arbre de comptes actual inserint-hi categories de compte noves"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:132
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
@@ -32944,8 +32929,7 @@ msgstr "m-d"
 
 #: libgnucash/engine/gnc-datetime.cpp:713
 msgid "Unknown date format specifier passed as argument."
-msgstr ""
-"S'ha passat com argument un especificador desconegut de format de data."
+msgstr "S'ha passat com argument un especificador desconegut de format de data."
 
 #: libgnucash/engine/gnc-datetime.cpp:730
 msgid "Value can't be parsed into a date using the selected date format."
@@ -33532,8 +33516,7 @@ msgstr "S'estan verificant els paquets d'empreses al comptes %s: %u de %u"
 #: libgnucash/engine/ScrubBusiness.c:680
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
-msgstr ""
-"S'estan verificant els desglossaments d'empreses al compte %s: %u de %u"
+msgstr "S'estan verificant els desglossaments d'empreses al compte %s: %u de %u"
 
 #: libgnucash/engine/Scrub.cpp:146
 #, fuzzy, c-format

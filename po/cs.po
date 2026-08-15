@@ -4,25 +4,25 @@
 # Miloslav Trmac <mitr@volny.cz>, 2002, 2003, 2004, 2007.
 # Petr Pisar <petr.pisar@atlas.cz>, 2012.
 # Tomáš Václavík <t3vaclavik@gmail.com>, 2022.
-# Kryštof Černý <cleverline1mc@gmail.com>, 2023.
+# Kryštof Černý <cleverline1mc@gmail.com>, 2023, 2026.
 # Mirek Špaňko <mirekspanko@hotmail.cz>, 2026.
 # Jerry <nezbeda@protonmail.com>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-03-23 21:09+0000\n"
+"PO-Revision-Date: 2026-06-26 04:48+0000\n"
 "Last-Translator: Jerry <nezbeda@protonmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/gnucash/cs/"
-">\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -804,9 +804,9 @@ msgid ""
 "Transaction Journal."
 msgstr ""
 "Účetní položky s více částmi, např. výplatní pásku s více srážkami, zadáte "
-"kliknutím na tlačítko Rozdělit v liště nástrojů. Nebo můžete v menu Zobrazit "
-"-> Styl zvolit styl účetní knihy Automaticky-rozdělená účetní kniha nebo "
-"Záznam účetních položek."
+"kliknutím na tlačítko Rozdělit v liště nástrojů. Nebo můžete v menu "
+"Zobrazit -> Styl zvolit styl účetní knihy Automaticky-rozdělená účetní kniha "
+"nebo Záznam účetních položek."
 
 #: doc/tip_of_the_day.list.c:55
 #, fuzzy
@@ -1030,9 +1030,9 @@ msgid ""
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "Požádali jste o vytvoření účetní knihy. Tato účetní kniha bude obsahovat "
-"všechny účetní položky do půlnoci %s (celkem %d účetních položek v %d "
-"účtech). Vytvořte tuto účetní knihu kliknutím na 'Vpřed'. Upravte data "
-"kliknutím na 'Zpět'."
+"všechny účetní položky do půlnoci %s (celkem %d účetních položek v %d účtech)"
+". Vytvořte tuto účetní knihu kliknutím na 'Vpřed'. Upravte data kliknutím na "
+"'Zpět'."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
@@ -7181,10 +7181,10 @@ msgstr[0] ""
 "GnuCash má funkci pro automatické ukládání soubour každých %d minut. Tato "
 "funkce se právě teď poprvé aktivovala.\n"
 "\n"
-"Pokud chcete změnit časový interval, můžete to udělat v Upravit -> Možnosti "
-"-> Obecné -> Interval automatického ukládání. Pokud chcete tuto funkci "
-"zakázat, nastavte časový interval na nulu a nebude se provádět automatické "
-"ukládání.\n"
+"Pokud chcete změnit časový interval, můžete to udělat v Upravit -> "
+"Možnosti -> Obecné -> Interval automatického ukládání. Pokud chcete tuto "
+"funkci zakázat, nastavte časový interval na nulu a nebude se provádět "
+"automatické ukládání.\n"
 "\n"
 "Nyní stiskněte \"Zavřít\", aby byl váš soubor uložen."
 msgstr[1] ""
@@ -7192,10 +7192,10 @@ msgstr[1] ""
 "GnuCash má funkci pro automatické ukládání soubour každých %d minut. Tato "
 "funkce se právě teď poprvé aktivovala.\n"
 "\n"
-"Pokud chcete změnit časový interval, můžete to udělat v Upravit -> Možnosti "
-"-> Obecné -> Interval automatického ukládání. Pokud chcete tuto funkci "
-"zakázat, nastavte časový interval na nulu a nebude se provádět automatické "
-"ukládání.\n"
+"Pokud chcete změnit časový interval, můžete to udělat v Upravit -> "
+"Možnosti -> Obecné -> Interval automatického ukládání. Pokud chcete tuto "
+"funkci zakázat, nastavte časový interval na nulu a nebude se provádět "
+"automatické ukládání.\n"
 "\n"
 "Nyní stiskněte \"Zavřít\", aby byl váš soubor uložen."
 msgstr[2] ""
@@ -7203,10 +7203,10 @@ msgstr[2] ""
 "GnuCash má funkci pro automatické ukládání soubour každých %d minut. Tato "
 "funkce se právě teď poprvé aktivovala.\n"
 "\n"
-"Pokud chcete změnit časový interval, můžete to udělat v Upravit -> Možnosti "
-"-> Obecné -> Interval automatického ukládání. Pokud chcete tuto funkci "
-"zakázat, nastavte časový interval na nulu a nebude se provádět automatické "
-"ukládání.\n"
+"Pokud chcete změnit časový interval, můžete to udělat v Upravit -> "
+"Možnosti -> Obecné -> Interval automatického ukládání. Pokud chcete tuto "
+"funkci zakázat, nastavte časový interval na nulu a nebude se provádět "
+"automatické ukládání.\n"
 "\n"
 "Nyní stiskněte \"Zavřít\", aby byl váš soubor uložen."
 
@@ -9447,8 +9447,7 @@ msgstr "Zobrazovat _dokumentaci"
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
 #, fuzzy
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr ""
-"Zobrazovat v druidovi pro import QIF některé stránky jen s dokumentací."
+msgstr "Zobrazovat v druidovi pro import QIF některé stránky jen s dokumentací."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
@@ -10536,8 +10535,7 @@ msgstr "Další naposledy otevřený soubor"
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
-msgstr ""
-"Toto pole obsahuje úplnou cestu k dalšímu naposledy otevřenému souboru."
+msgstr "Toto pole obsahuje úplnou cestu k dalšímu naposledy otevřenému souboru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
@@ -10877,8 +10875,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
-msgstr ""
-"Zobrazovat úplný součet všech účtů převedený na implicitní měnu sestavy"
+msgstr "Zobrazovat úplný součet všech účtů převedený na implicitní měnu sestavy"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:10
 msgid "Show non currency commodities"
@@ -12542,8 +12539,7 @@ msgstr "Tento druid vám pomůže zaznamenat rozdělení nebo sloučení akcií.
 #: gnucash/gtkbuilder/assistant-stock-split.glade:44
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr ""
-"Zvolte účet, pro který chcete zaznamenat rozdělení nebo sloučení akcií."
+msgstr "Zvolte účet, pro který chcete zaznamenat rozdělení nebo sloučení akcií."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:77
 #, fuzzy
@@ -15124,8 +15120,7 @@ msgstr "Včetně _úplného součtu"
 #: gnucash/gtkbuilder/dialog-preferences.glade:351
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
-msgstr ""
-"Zobrazovat úplný součet všech účtů převedený na implicitní měnu sestavy"
+msgstr "Zobrazovat úplný součet všech účtů převedený na implicitní měnu sestavy"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:363
 msgid "Include _non-currency totals"
@@ -18520,8 +18515,7 @@ msgstr "_Podrobné ladicí zprávy"
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr ""
-"Povoluje podrobné ladicí zprávy pro Online bankovnictví HBCI/AqBanking."
+msgstr "Povoluje podrobné ladicí zprávy pro Online bankovnictví HBCI/AqBanking."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:88
 #, fuzzy
@@ -18895,8 +18889,7 @@ msgstr "Pro vaši informaci: tento účet má také zaznamenán zůstatek %s\n"
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
-msgstr ""
-"Zaznamenaný zůstatek se rovná současnému odsouhlastenému zůstatku účtu."
+msgstr "Zaznamenaný zůstatek se rovná současnému odsouhlastenému zůstatku účtu."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1054
 msgid "Reconcile account now?"
@@ -22619,8 +22612,7 @@ msgstr "Zobrazovat součty"
 #: gnucash/report/reports/standard/category-barchart.scm:129
 #: gnucash/report/reports/standard/net-charts.scm:87
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
-"Vytvořit sestavu o těchto účtech, pokud to dovolí zvolená hloubka účtů."
+msgstr "Vytvořit sestavu o těchto účtech, pokud to dovolí zvolená hloubka účtů."
 
 #: gnucash/report/reports/example/daily-reports.scm:97
 #: gnucash/report/reports/standard/account-piecharts.scm:140
@@ -27935,8 +27927,7 @@ msgstr "Vzor položek úprav rozlišuje velikost písmen"
 #: gnucash/report/reports/standard/trial-balance.scm:92
 #, fuzzy
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
-msgstr ""
-"Způsobí, že hledání vzoru položek úprav bude rozlišovat velikost písmen"
+msgstr "Způsobí, že hledání vzoru položek úprav bude rozlišovat velikost písmen"
 
 #: gnucash/report/reports/standard/trial-balance.scm:94
 msgid "Adjusting Entries Pattern is regular expression"

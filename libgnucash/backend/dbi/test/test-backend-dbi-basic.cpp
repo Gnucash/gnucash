@@ -447,6 +447,41 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
 }
 
 static void
+test_dbi_new_store_end_releases_lock (Fixture* fixture, gconstpointer pData)
+{
+    const gchar* url = (const gchar*)pData;
+    auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
+    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL);
+    TestErrorStruct* check = test_error_struct_new (nullptr, loglevel, msg);
+    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
+                                                 (GLogFunc)test_checked_handler);
+    if (fixture->filename)
+        url = fixture->filename;
+
+    /* Create a new store and end the session without a data-changing save (an
+     * empty book's save() is a no-op that never attaches the backend to the
+     * book). */
+    auto book1{qof_book_new()};
+    auto session_1 = qof_session_new (book1);
+    qof_session_begin (session_1, url, SESSION_NEW_OVERWRITE);
+    g_assert_cmpint (qof_session_get_error (session_1), ==, ERR_BACKEND_NO_ERR);
+    qof_session_end (session_1);
+    g_assert_cmpint (qof_session_get_error (session_1), ==, ERR_BACKEND_NO_ERR);
+
+    /* end() must have released the lock: reopening the store must not fail with
+     * ERR_BACKEND_LOCKED. */
+    auto book2{qof_book_new()};
+    auto session_2 = qof_session_new (book2);
+    qof_session_begin (session_2, url, SESSION_NORMAL_OPEN);
+    g_assert_cmpint (qof_session_get_error (session_2), !=, ERR_BACKEND_LOCKED);
+
+    qof_session_end (session_2);
+    qof_session_destroy (session_2);
+    qof_session_destroy (session_1);
+}
+
+static void
 test_dbi_reparent_split_keeps_slots (Fixture* fixture, gconstpointer pData)
 {
     const gchar* url = (const gchar*)pData;
@@ -785,6 +820,8 @@ create_dbi_test_suite (const char* dbm_name, const char* url)
     auto subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
     GNC_TEST_ADD (subsuite, "store_and_reload", Fixture, url, setup,
                   test_dbi_store_and_reload, teardown);
+    GNC_TEST_ADD (subsuite, "new_store_end_releases_lock", Fixture, url,
+                  setup_memory, test_dbi_new_store_end_releases_lock, teardown);
     GNC_TEST_ADD (subsuite, "reparent_split_keeps_slots", Fixture, url,
                   setup_memory, test_dbi_reparent_split_keeps_slots, teardown);
     GNC_TEST_ADD (subsuite, "safe_save", Fixture, url, setup_memory,

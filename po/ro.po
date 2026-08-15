@@ -11,11 +11,11 @@
 # TheRealOne78 <bajcsielias78@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-04-27 13:01+0000\n"
+"PO-Revision-Date: 2026-06-26 05:02+0000\n"
 "Last-Translator: TheRealOne78 <bajcsielias78@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -2275,8 +2275,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
-"Procentajul reducerii trebuie să fie între 0-100 sau trebuie lăsat gol."
+msgstr "Procentajul reducerii trebuie să fie între 0-100 sau trebuie lăsat gol."
 
 #: gnucash/gnome/dialog-customer.c:334
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -2972,8 +2971,7 @@ msgstr "Esti sigur că vrei să ștergi intrarea selectată?"
 #: gnucash/gnome/dialog-invoice.c:729
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
-msgstr ""
-"Această intrare este atașată unei comenzi și va fi ștearsă și de acolo!"
+msgstr "Această intrare este atașată unei comenzi și va fi ștearsă și de acolo!"
 
 #: gnucash/gnome/dialog-invoice.c:924
 msgid "Choose a different report template or Printable Invoice will be used"
@@ -5198,15 +5196,13 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2459
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr ""
-"Nu poți goli o tranacție care conține părți reconciliate sau decontate."
+msgstr "Nu poți goli o tranacție care conține părți reconciliate sau decontate."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2466
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr ""
-"Această tranzacție este marcată cu doar-citire, având comentariul: '%s'"
+msgstr "Această tranzacție este marcată cu doar-citire, având comentariul: '%s'"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2567
 #: gnucash/gnome/gnc-split-reg.c:1095
@@ -7033,8 +7029,8 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"Nu poți transfera dintr-un cont non-valutar. Încearcă să schimbi conturile "
-"„de la” și „la” și să faci „suma” negativă."
+"Nu poți transfera dintr-un cont non-valutar. Încearcă să schimbi conturile „"
+"de la” și „la” și să faci „suma” negativă."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1452
 msgid "You must enter a valid price."
@@ -9941,8 +9937,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:105
 #: gnucash/gtkbuilder/dialog-preferences.glade:706
 msgid "Sign reverse balances on income and expense accounts."
-msgstr ""
-"Semnul inversează balanțele pentru conturile de venituri și cheltuieli."
+msgstr "Semnul inversează balanțele pentru conturile de venituri și cheltuieli."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
 msgid "Use account colors in the account hierarchy"
@@ -9980,8 +9975,8 @@ msgid ""
 msgstr ""
 "Dacă este activă, etichetele contabile formale „Credit” și „Debit” vor fi "
 "utilizate pentru rubricile de pe ecran. În caz contrar, se vor folosi "
-"etichete informale, cum ar fi Creștere/Descreștere, „Fonduri intrate”/"
-"„Fonduri ieșite”, etc."
+"etichete informale, cum ar fi Creștere/Descreștere, „Fonduri intrate”/„"
+"Fonduri ieșite”, etc."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
@@ -10941,8 +10936,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
 #, fuzzy
 msgid "Cut a transaction with reconciled splits"
-msgstr ""
-"Nu poți goli o tranacție care conține părți reconciliate sau decontate."
+msgstr "Nu poți goli o tranacție care conține părți reconciliate sau decontate."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:238
@@ -10976,8 +10970,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
 #, fuzzy
 msgid "Delete a transaction with reconciled splits"
-msgstr ""
-"Nu poți goli o tranacție care conține părți reconciliate sau decontate."
+msgstr "Nu poți goli o tranacție care conține părți reconciliate sau decontate."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:115
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:248
@@ -11531,8 +11524,8 @@ msgstr ""
 "clic cu butonul din dreapta al șoricelului pentru a o modifica, dacă este "
 "necesar.\n"
 "\n"
-"Exemplele sunt „FTSE”, „RR.L”, „21/11/2016”,5.345, „GBP” și "
-"VALUTA;USD;2016-11-21;1.56;GBP\n"
+"Exemplele sunt „FTSE”, „RR.L”, „21/11/2016”,5.345, „GBP” și VALUTA;USD;2016-"
+"11-21;1.56;GBP\n"
 "\n"
 "Există o opțiune pentru specificarea rândului de început, a rândului de "
 "sfârșit și o opțiune pentru a sări peste rândurile alternative începând de "
@@ -15301,8 +15294,8 @@ msgid ""
 "it will not be displayed again."
 msgstr ""
 "Dacă apeși butonul <i>Da</i>, dialogul <i>Bun venit în GnuCash</i> va fi "
-"afișat din nou data viitoare când vei porni GnuCash. Dacă apeși butonul "
-"<i>Nu</i>, nu va fi afișat din nou."
+"afișat din nou data viitoare când vei porni GnuCash. Dacă apeși butonul <i>"
+"Nu</i>, nu va fi afișat din nou."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
 #, fuzzy
@@ -15320,8 +15313,8 @@ msgid ""
 msgstr ""
 "Există câteva acțiuni predefinite valabile, pe care cei mai mulți "
 "utilizatori noi preferă să le folosească în GnuCash. Selectează una dintre "
-"aceste acțiuni de mai jos și apasă butonul <i>OK</i> sau apasă butonul "
-"<i>Renunță</i> dacă nu vrei să folosești niciuna dintre ele."
+"aceste acțiuni de mai jos și apasă butonul <i>OK</i> sau apasă butonul <i>"
+"Renunță</i> dacă nu vrei să folosești niciuna dintre ele."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
 msgid "C_reate a new set of accounts"
@@ -25341,8 +25334,7 @@ msgstr "Include totalul veniturilor"
 #: gnucash/report/reports/standard/income-statement.scm:87
 #, fuzzy
 msgid "Whether or not to include a line indicating total revenue."
-msgstr ""
-"Când se include și când nu se include o linie care indică venitul total"
+msgstr "Când se include și când nu se include o linie care indică venitul total"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:101
 #: gnucash/report/reports/standard/income-statement.scm:94
@@ -26359,8 +26351,7 @@ msgstr "Include totalul _mare"
 #, fuzzy
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
-msgstr ""
-"Când se include și când nu se include o linie care indică venitul total"
+msgstr "Când se include și când nu se include o linie care indică venitul total"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
 #: libgnucash/engine/Account.cpp:4306 libgnucash/engine/Scrub.cpp:532
@@ -33088,8 +33079,7 @@ msgstr "Tabelul implicit de taxe care trebuie aplicat vânzătorilor."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1349
 msgid "The default date format used for fancy printed dates."
-msgstr ""
-"Formatul implicit de dată folosit pentru tipărirea datelor prietenoase."
+msgstr "Formatul implicit de dată folosit pentru tipărirea datelor prietenoase."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1355
 msgid "The electronic tax number of your business"

@@ -4,15 +4,16 @@
 # Automatically generated, 2023.
 #
 # Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>, 2024.
+# Itsmechinmoy <167056923+itsmechinmoy@users.noreply.github.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-09-08 15:09+0000\n"
-"Last-Translator: Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-06-26 05:11+0000\n"
+"Last-Translator: Itsmechinmoy "
+"<167056923+itsmechinmoy@users.noreply.github.com>\n"
 "Language-Team: Assamese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/as/>\n"
 "Language: as\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

@@ -412,7 +412,7 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
         return;
     }
 
-    if (!conn_test_dbi_library(conn))
+    if (mode != SESSION_READ_ONLY && !conn_test_dbi_library(conn))
     {
         if (create && !file_exists)
         {
@@ -664,7 +664,7 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
     {
         if (Type == DbType::DBI_MYSQL)
             adjust_sql_options (conn);
-        if(!conn_test_dbi_library(conn))
+        if (mode != SESSION_READ_ONLY && !conn_test_dbi_library(conn))
         {
             dbi_conn_close(conn);
             LEAVE("Error");

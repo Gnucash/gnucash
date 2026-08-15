@@ -4,11 +4,11 @@
 # bruh <quangtrung02hn16@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2021-03-05 11:50+0000\n"
+"PO-Revision-Date: 2026-06-26 04:32+0000\n"
 "Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/vi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -798,9 +798,9 @@ msgid ""
 "Transaction Journal."
 msgstr ""
 "Để nhập giao dịch đa phân tách như một séc phát lương có nhiều mục khấu đi, "
-"nhấn vào cái nút « Phân tách » trên thanh công cụ. Hoặc, trong trình đơn "
-"« Xem », bạn có thể chọn kiểu dáng sổ cái « Sổ cái tự động phân tách » hay "
-"« Nhật ký giao dịch »."
+"nhấn vào cái nút « Phân tách » trên thanh công cụ. Hoặc, trong trình đơn « "
+"Xem », bạn có thể chọn kiểu dáng sổ cái « Sổ cái tự động phân tách » hay « "
+"Nhật ký giao dịch »."
 
 #: doc/tip_of_the_day.list.c:55
 #, fuzzy
@@ -835,11 +835,11 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"Gõ vài chữ thứ nhất của một tên tài khoản đã tồn tại vào cột sổ cái "
-"« Chuyển », rồi GnuCash sẽ gõ xong tên tùy theo danh sách các tài khoản. Đối "
-"với tài khoản con, gõ vài chữ thứ nhất của tài khoản cha, rồi dấu hai chấm "
-"« : » và vài chữ thứ nhất của tài khoản con (v.d. Tà:Ti cho « Tài sản:Tiền "
-"mật », chọn tên đúng khi nó xuất hiện)."
+"Gõ vài chữ thứ nhất của một tên tài khoản đã tồn tại vào cột sổ cái « Chuyển "
+"», rồi GnuCash sẽ gõ xong tên tùy theo danh sách các tài khoản. Đối với tài "
+"khoản con, gõ vài chữ thứ nhất của tài khoản cha, rồi dấu hai chấm « : » và "
+"vài chữ thứ nhất của tài khoản con (v.d. Tà:Ti cho « Tài sản:Tiền mật », "
+"chọn tên đúng khi nó xuất hiện)."
 
 #: doc/tip_of_the_day.list.c:71
 #, fuzzy
@@ -887,9 +887,9 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Để chuyển tiền giữa hai tài khoản có tiền tệ khác nhau, nhấn vào cái nút "
-"« Chuyển » trên thanh công cụ của sổ cái, chọn hai tài khoản. Cũng có thể "
-"đặt các tùy chọn về « Chuyển tiền tệ » để gõ tỷ lệ hội suất hay số tiền theo "
+"Để chuyển tiền giữa hai tài khoản có tiền tệ khác nhau, nhấn vào cái nút « "
+"Chuyển » trên thanh công cụ của sổ cái, chọn hai tài khoản. Cũng có thể đặt "
+"các tùy chọn về « Chuyển tiền tệ » để gõ tỷ lệ hội suất hay số tiền theo "
 "tiền tệ khác."
 
 #: doc/tip_of_the_day.list.c:91
@@ -5161,8 +5161,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2459
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr ""
-"Không thể bãi bỏ một giao dịch có sự phân tách đã chỉnh hợp hay chuyển."
+msgstr "Không thể bãi bỏ một giao dịch có sự phân tách đã chỉnh hợp hay chuyển."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2466
 #: gnucash/gnome/gnc-split-reg.c:1124
@@ -6360,8 +6359,8 @@ msgstr ""
 "nạp lại vào ứng dụng chính. Bằng cách đó, bạn có một tập tin hoạt động làm "
 "bản sao lưu tron cùng thư mục.\n"
 "\n"
-"Bạn cũng có thể lùi lại và thẩm tra các vùng chọn bằng cách nhấn vào nút "
-"« Lùi »."
+"Bạn cũng có thể lùi lại và thẩm tra các vùng chọn bằng cách nhấn vào nút « "
+"Lùi »."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:226
 msgid "European"
@@ -8766,9 +8765,9 @@ msgid ""
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
 "Bật thì khi khởi chạy, GnuCash sẽ kiểm tra có hoá đơn sớm đến hạn không. Có "
-"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định "
-"« sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá "
-"đơn đến hạn."
+"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định « "
+"sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá đơn "
+"đến hạn."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 #, fuzzy
@@ -8855,9 +8854,9 @@ msgid ""
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
 "Bật thì khi khởi chạy, GnuCash sẽ kiểm tra có hoá đơn sớm đến hạn không. Có "
-"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định "
-"« sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá "
-"đơn đến hạn."
+"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định « "
+"sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá đơn "
+"đến hạn."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
@@ -8931,8 +8930,8 @@ msgstr ""
 "Nếu « date_format » (định dạng ngày tháng) được đặt thành định dạng ngày "
 "tháng riêng. giá trị nảy được dùng như đối số với strftime để xuất ngày "
 "tháng cần in. Nó có thể là bất cứ chuỗi strftime hợp lệ nào ; để tìm thêm "
-"thông tin về định dạng này, đọc trang hướng dẫn về hàm strftime, dùng lệnh "
-"« man 3 strftime »."
+"thông tin về định dạng này, đọc trang hướng dẫn về hàm strftime, dùng lệnh « "
+"man 3 strftime »."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
@@ -9220,8 +9219,8 @@ msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New "
 "File\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
-"Bật thì hiển thị hộp thoại phân cấp mới khi nào mục trình đơn « Tập tin "
-"mới » được chọn. Không thì không hiển thị."
+"Bật thì hiển thị hộp thoại phân cấp mới khi nào mục trình đơn « Tập tin mới "
+"» được chọn. Không thì không hiển thị."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:272
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:273
@@ -9375,8 +9374,8 @@ msgstr ""
 "số tiền, thay vào hiển thị dạng giao dịch riêng hoặc trong phí hàng tháng "
 "của ngân hàng. Chẳng hạn, bạn rút ₫100, cũng phải trả ₫101,50 cộng với phí "
 "Interac. Nếu bạn đã tự gõ ₫100 đó, hai số tiền sẽ không trùng. Bạn nên đặt "
-"giá trị này thành phí tối đa như vậy ở chỗ của bạn (theo tiền tệ địa "
-"phương), để giao dịch được thấy là trùng. "
+"giá trị này thành phí tối đa như vậy ở chỗ của bạn (theo tiền tệ địa phương)"
+", để giao dịch được thấy là trùng. "
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
@@ -10671,8 +10670,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
 #, fuzzy
 msgid "Commit changes to a invoice entry"
-msgstr ""
-"Ghi chép các thay đổi vào một « invoice_entry » (mục nhập đơn hàng gửi)"
+msgstr "Ghi chép các thay đổi vào một « invoice_entry » (mục nhập đơn hàng gửi)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
@@ -10687,8 +10685,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
 #, fuzzy
 msgid "Duplicating a changed invoice entry"
-msgstr ""
-"Đang nhân đôi một « invoice_entry » (mục nhập đơn hàng gửi) bị thay đổi"
+msgstr "Đang nhân đôi một « invoice_entry » (mục nhập đơn hàng gửi) bị thay đổi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
@@ -10928,8 +10925,7 @@ msgstr "Hộp thoại này được hiển thị trước khi cho phép bạn xo
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
 #, fuzzy
 msgid "Cut a transaction with reconciled splits"
-msgstr ""
-"Không thể bãi bỏ một giao dịch có sự phân tách đã chỉnh hợp hay chuyển."
+msgstr "Không thể bãi bỏ một giao dịch có sự phân tách đã chỉnh hợp hay chuyển."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:238
@@ -10961,8 +10957,7 @@ msgstr "Hộp thoại này được hiển thị trước khi cho phép bạn xo
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
 #, fuzzy
 msgid "Delete a transaction with reconciled splits"
-msgstr ""
-"Không thể bãi bỏ một giao dịch có sự phân tách đã chỉnh hợp hay chuyển."
+msgstr "Không thể bãi bỏ một giao dịch có sự phân tách đã chỉnh hợp hay chuyển."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:115
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:248
@@ -15762,8 +15757,8 @@ msgstr ""
 "Ở một số nơi nào đó, máy ATM (máy gửi và rút tiền tự động) thương mại (không "
 "thuộc về ngân hàng) được cài đặt vào cửa hàng tạp phẩm hay tương tự. Máy ATM "
 "kiểu này cộng phí một cách trực tiếp với số tiền, thay vào hiển thị dạng "
-"giao dịch riêng hoặc trong phí hàng tháng của ngân hàng. Chẳng hạn, bạn rút "
-"₫100, cũng phải trả ₫101,50 cộng với phí Interac. Nếu bạn đã tự gõ ₫100 đó, "
+"giao dịch riêng hoặc trong phí hàng tháng của ngân hàng. Chẳng hạn, bạn rút ₫"
+"100, cũng phải trả ₫101,50 cộng với phí Interac. Nếu bạn đã tự gõ ₫100 đó, "
 "hai số tiền sẽ không trùng. Bạn nên đặt giá trị này thành phí tối đa như vậy "
 "ở chỗ của bạn (theo tiền tệ địa phương), để giao dịch được thấy là trùng. "
 
@@ -16483,8 +16478,8 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"Hãy gõ tên cho định dạng riêng này. Tên này sẽ xuất hiện trong hộp chọn "
-"« Định dạng séc » của hộp thoại « In Séc ». Dùng tên của định dạng riêng đã "
+"Hãy gõ tên cho định dạng riêng này. Tên này sẽ xuất hiện trong hộp chọn « "
+"Định dạng séc » của hộp thoại « In Séc ». Dùng tên của định dạng riêng đã "
 "tồn tại thì ghi đè lên định dạng đó."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:241
@@ -19141,8 +19136,7 @@ msgstr "Thông báo cùng bạn: tài khoản này cũng có số dư đã ghi l
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
-msgstr ""
-"Sai ngạch sổ sách trùng với số dư đã chỉnh hợp hiện thời của tài khoản."
+msgstr "Sai ngạch sổ sách trùng với số dư đã chỉnh hợp hiện thời của tài khoản."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1054
 msgid "Reconcile account now?"
@@ -19293,8 +19287,7 @@ msgstr "Giữ số PIN trong bộ nhớ"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 #, fuzzy
 msgid "Put the transaction text in front of the purpose of a transaction."
-msgstr ""
-"Hiển thị giao dịch trên một hay hai dòng và mở rộng giao dịch hiện thời"
+msgstr "Hiển thị giao dịch trên một hay hai dòng và mở rộng giao dịch hiện thời"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
 msgid "Verbose HBCI debug messages"
@@ -20706,8 +20699,7 @@ msgstr "Hãy chọn tập tin cần nạp."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1713
 msgid "File not found or read permission denied. Please select another file."
-msgstr ""
-"Không tìm thấy tập tin, hoặc không có quyền đọc. Hãy chọn tập tin khác."
+msgstr "Không tìm thấy tập tin, hoặc không có quyền đọc. Hãy chọn tập tin khác."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1724
 msgid "That QIF file is already loaded. Please select another file."
@@ -21986,45 +21978,39 @@ msgstr "Lập lịch"
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
-msgstr ""
-"Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
+msgstr "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
 #: gnucash/register/ledger-core/split-register-model.c:1084
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
-msgstr ""
-"Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
+msgstr "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
 #: gnucash/register/ledger-core/split-register-model.c:1089
 #, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
-msgstr ""
-"Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
+msgstr "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
 #: gnucash/register/ledger-core/split-register-model.c:1091
 #, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
-msgstr ""
-"Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
+msgstr "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
 #: gnucash/register/ledger-core/split-register-model.c:1112
 #, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
-msgstr ""
-"Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
+msgstr "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
 #: gnucash/register/ledger-core/split-register-model.c:1116
 #, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
-msgstr ""
-"Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
+msgstr "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
 #: gnucash/register/ledger-core/split-register-model.c:1152
 msgid "Enter the name of the Customer"
@@ -23579,13 +23565,11 @@ msgstr "Hiển thị một đồ thị bánh có số dư Tài sản trong mỗi
 #: gnucash/report/reports/standard/account-piecharts.scm:51
 #, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
-msgstr ""
-"Hiển thị một đồ thị bánh có số dư Tài sản nợ trong mỗi khoảng thời gian"
+msgstr "Hiển thị một đồ thị bánh có số dư Tài sản nợ trong mỗi khoảng thời gian"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr ""
-"Hiển thị một đồ thị bánh có số dư Tài sản nợ trong mỗi khoảng thời gian"
+msgstr "Hiển thị một đồ thị bánh có số dư Tài sản nợ trong mỗi khoảng thời gian"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:48
@@ -27185,8 +27169,7 @@ msgstr "Thứ tự sắp xếp"
 
 #: gnucash/report/reports/standard/new-aging.scm:105
 msgid "Show all vendors/customers even if they have a zero balance."
-msgstr ""
-"Hiển thị mọi nhà sản xuất/khách hàng thậm chí nếu họ có số dư số không."
+msgstr "Hiển thị mọi nhà sản xuất/khách hàng thậm chí nếu họ có số dư số không."
 
 #: gnucash/report/reports/standard/new-aging.scm:109
 #: gnucash/report/reports/standard/new-owner-report.scm:954
@@ -28242,8 +28225,7 @@ msgstr "Mẫu hiệu chỉnh mục nhập"
 #: gnucash/report/reports/standard/trial-balance.scm:88
 #, fuzzy
 msgid "Any text in the Description column which identifies adjusting entries."
-msgstr ""
-"Bất cứ văn bản nào trong cột « Mô tả » mà nhận diện mục nhập hiệu chỉnh"
+msgstr "Bất cứ văn bản nào trong cột « Mô tả » mà nhận diện mục nhập hiệu chỉnh"
 
 #: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
@@ -31036,8 +31018,7 @@ msgstr "_Tự động phân tách sổ cái"
 #| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
-msgstr ""
-"Hiển thị giao dịch trên một hay hai dòng và mở rộng giao dịch hiện thời"
+msgstr "Hiển thị giao dịch trên một hay hai dòng và mở rộng giao dịch hiện thời"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
 #, fuzzy

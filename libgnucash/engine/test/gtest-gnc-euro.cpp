@@ -67,7 +67,7 @@ TEST_F(Currencies, is_euro_currency)
 TEST_F(Currencies, convert_to_euro)
 {
     gnc_numeric value{314159, 100};
-    gnc_numeric cyp_eur_amount{536776, 100}; // calc gets 5367.76
+    gnc_numeric cyp_eur_amount{536773, 100};
     auto cyp{gnc_commodity_table_lookup(m_table, currency, "CYP")};
     ASSERT_NE(cyp, nullptr);
     auto amount{gnc_convert_to_euro(cyp, value)};
@@ -111,8 +111,8 @@ TEST_F(Currencies, convert_to_euro)
 
 TEST_F(Currencies, convert_from_euro)
 {
-    gnc_numeric value{314159, 100}; //.787564 * 3141.59 = 2472.20
-    gnc_numeric eur_iep_amount{247419, 100};
+    gnc_numeric value{314159, 100};
+    gnc_numeric eur_iep_amount{247420, 100};
     auto iep{gnc_commodity_table_lookup(m_table, currency, "IEP")};
     ASSERT_NE(iep, nullptr);
     auto amount{gnc_convert_from_euro(iep, value)};

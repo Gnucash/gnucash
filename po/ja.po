@@ -20,11 +20,11 @@
 # soramikan <sora_yana@icloud.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2024-12-14 21:00+0000\n"
+"PO-Revision-Date: 2026-06-26 04:39+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-rc\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -42,8 +42,8 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
-"未定義の日付シンボル '~a' を探そうとしました。この帳票はおそらく新しいバー"
-"ジョンの GnuCash で保存されたものです。デフォルト値の今日を使います。"
+"未定義の日付シンボル '~a' を探そうとしました。この帳票はおそらく新しい"
+"バージョンの GnuCash で保存されたものです。デフォルト値の今日を使います。"
 
 #: bindings/guile/date-utilities.scm:715
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -723,10 +723,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Quicken、MS Money、あるいはその他の QIF や OFX ファイルをエクスポート可能なプ"
-"ログラムから、あなたの既存の財務データを簡単に読み込むことができます。ファイ"
-"ルメニュー内で、インポートサブメニューをクリックし、QIF あるいは OFX ファイル"
-"をクリックしてください。そして指示に従ってください。"
+"Quicken、MS Money、あるいはその他の QIF や OFX ファイルをエクスポート可能な"
+"プログラムから、あなたの既存の財務データを簡単に読み込むことができます。"
+"ファイルメニュー内で、インポートサブメニューをクリックし、QIF あるいは OFX "
+"ファイルをクリックしてください。そして指示に従ってください。"
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -758,8 +758,8 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"勘定科目表に表示する列を変更することができます。列見出しの右端にある三角をク"
-"リックすると利用できる様々な列を見ることができます。"
+"勘定科目表に表示する列を変更することができます。列見出しの右端にある三角を"
+"クリックすると利用できる様々な列を見ることができます。"
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -782,8 +782,8 @@ msgid ""
 msgstr ""
 "メインウィンドウのツールバーで新規ボタンをクリックすれば新しい勘定科目を作成"
 "できます。これによりダイアログが開き、勘定科目の詳細を入力できます。勘定科目"
-"タイプの選択や勘定科目のグラフの設定については、GnuCash のオンラインマニュア"
-"ルをご覧ください。"
+"タイプの選択や勘定科目のグラフの設定については、GnuCash の"
+"オンラインマニュアルをご覧ください。"
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -869,8 +869,7 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr ""
-"メインウィンドウのタブ間を移動するには、Control+Page Up/Down を押します。"
+msgstr "メインウィンドウのタブ間を移動するには、Control+Page Up/Down を押します。"
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -899,9 +898,9 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"証券エディター画面で証券の相場表情報源を表示するように設定できます。どのオン"
-"ライン情報源を証券が使っているかを簡単に見られます。列見出しの右端にある三角"
-"をクリックすると表示を変更できます。"
+"証券エディター画面で証券の相場表情報源を表示するように設定できます。どの"
+"オンライン情報源を証券が使っているかを簡単に見られます。列見出しの右端にある"
+"三角をクリックすると表示を変更できます。"
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -919,9 +918,9 @@ msgid ""
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
-"スタイルシートにより帳票の表示され方が変わります。帳票オプションで帳票用のス"
-"タイルシートを選び、編集->スタイルシート メニューを使ってスタイルシートをカス"
-"タマイズしてください。"
+"スタイルシートにより帳票の表示され方が変わります。帳票オプションで帳票用の"
+"スタイルシートを選び、編集->スタイルシート メニューを使ってスタイルシートを"
+"カスタマイズしてください。"
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
@@ -2062,15 +2061,13 @@ msgstr "\"%s\" を本当に削除しますか?"
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr ""
-"この取引は得意先に割り当てる必要があります。以下の得意先を選択してください。"
+msgstr "この取引は得意先に割り当てる必要があります。以下の得意先を選択してください。"
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr ""
-"この取引は仕入先に割り当てる必要があります。以下の仕入先を選択してください。"
+msgstr "この取引は仕入先に割り当てる必要があります。以下の仕入先を選択してください。"
 
 #: gnucash/gnome/dialog-commodities.cpp:188
 #, fuzzy
@@ -2080,8 +2077,7 @@ msgstr ""
 msgid ""
 "This commodity is currently used by the following accounts. You may not "
 "delete it.\n"
-msgstr ""
-"その商品は少なくとも1つ以上の勘定科目で使用されています。削除できません"
+msgstr "その商品は少なくとも1つ以上の勘定科目で使用されています。削除できません"
 
 #: gnucash/gnome/dialog-commodities.cpp:206
 msgid ""
@@ -2636,8 +2632,7 @@ msgstr ""
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
-msgstr ""
-"フィールドの値が決定できないものがあります。有効な式を入力してください。"
+msgstr "フィールドの値が決定できないものがあります。有効な式を入力してください。"
 
 #: gnucash/gnome/dialog-fincalc.c:383
 msgid "The interest rate cannot be zero."
@@ -3717,8 +3712,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"%sの小切手書式ファイル '%s' と%sの小切手書式ファイル '%s' の GUID が同じに"
-"なっています。"
+"%sの小切手書式ファイル '%s' と%sの小切手書式ファイル '%s' の GUID が同じにな"
+"っています。"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3920,8 +3915,7 @@ msgstr ""
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
-msgstr ""
-"予定取引の貸借が一致しません。この状況を訂正することを強くお勧めします。"
+msgstr "予定取引の貸借が一致しません。この状況を訂正することを強くお勧めします。"
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:774
 msgid ""
@@ -3999,8 +3993,8 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"現在のところ入力が必要な予定取引はありません(%d個の取引は自動作成されまし"
-"た)。"
+"現在のところ入力が必要な予定取引はありません(%d個の取引は自動作成されました)"
+"。"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1507
 msgid "Created Transactions"
@@ -4687,8 +4681,7 @@ msgstr "従業員向け文書のデフォルト配置として使う(_U)"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr ""
-"現在の配置を全従業員の立替払請求書および貸方票のデフォルトとして使います。"
+msgstr "現在の配置を全従業員の立替払請求書および貸方票のデフォルトとして使います。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 #, fuzzy
@@ -4952,8 +4945,7 @@ msgstr "現在の取引にリンクされた文書を開きます。"
 #, fuzzy
 #| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked invoice, bill, expense or credit note"
-msgstr ""
-"リンクされた仕入先請求書、得意先請求書、または立替払請求書へジャンプします。"
+msgstr "リンクされた仕入先請求書、得意先請求書、または立替払請求書へジャンプします。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:239
 msgid "Cut the selected split into clipboard"
@@ -5099,8 +5091,7 @@ msgstr "照合済あるいは清算済の取引を無効にすることはでき
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr ""
-"この取引は読出し専用とマークされており、次のコメントがついています: '%s'"
+msgstr "この取引は読出し専用とマークされており、次のコメントがついています: '%s'"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2567
 #: gnucash/gnome/gnc-split-reg.c:1095
@@ -5273,8 +5264,7 @@ msgstr "帳票の数値ID"
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
-msgstr ""
-"現在の保存済み帳票設定を更新します。帳票設定はファイル %s 内に保存されます。"
+msgstr "現在の保存済み帳票設定を更新します。帳票設定はファイル %s 内に保存されます。"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1269
 #, c-format
@@ -5356,8 +5346,8 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
-"このレポートは、export-string または export-error を含むドキュメントオブジェ"
-"クトを返すようにアップグレードする必要があります。"
+"このレポートは、export-string または export-error を含む"
+"ドキュメントオブジェクトを返すようにアップグレードする必要があります。"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1835
 #, c-format
@@ -5504,10 +5494,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and remove the split from that register."
 msgstr ""
-"これはこの取引をこの記録簿に関連付けているスプリットなので、この記録簿ウィン"
-"ドウからは除去できません。この取引全部をこのウィンドウから除去することはでき"
-"ます。または、この取引の相手勘定科目の記録簿を表示して、その記録簿からこのス"
-"プリットを除去することはできます。"
+"これはこの取引をこの記録簿に関連付けているスプリットなので、この記録簿"
+"ウィンドウからは除去できません。この取引全部をこのウィンドウから除去すること"
+"はできます。または、この取引の相手勘定科目の記録簿を表示して、その記録簿から"
+"このスプリットを除去することはできます。"
 
 #: gnucash/gnome/gnc-split-reg.c:912 gnucash/gnome/gnc-split-reg.c:1439
 msgid "(no memo)"
@@ -5594,10 +5584,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
-"これはこの取引をこの記録簿に関連付けているスプリットなので、この記録簿ウィン"
-"ドウからは削除できません。この取引全部をこのウィンドウから削除することはでき"
-"ます。または、この取引の相手勘定科目の記録簿を表示して、その記録簿からこのス"
-"プリットを削除することはできます。"
+"これはこの取引をこの記録簿に関連付けているスプリットなので、この記録簿"
+"ウィンドウからは削除できません。この取引全部をこのウィンドウから削除すること"
+"はできます。または、この取引の相手勘定科目の記録簿を表示して、その記録簿から"
+"このスプリットを削除することはできます。"
 
 #: gnucash/gnome/gnc-split-reg.c:1483
 msgid "Delete the current transaction?"
@@ -5681,8 +5671,8 @@ msgid ""
 "options and turn off the placeholder checkbox."
 msgstr ""
 "この勘定科目の取引は編集できません。\n"
-"この記録簿の取引を編集したい場合は、勘定科目のオプションを開き、プレースホル"
-"ダーのチェックボックスをオフにしてください。"
+"この記録簿の取引を編集したい場合は、勘定科目のオプションを開き、"
+"プレースホルダーのチェックボックスをオフにしてください。"
 
 #: gnucash/gnome/gnc-split-reg.c:2476
 msgid ""
@@ -5692,8 +5682,8 @@ msgid ""
 "You may also open an individual account instead of a set of accounts."
 msgstr ""
 "選択された子勘定科目の一つにある取引が編集できません。\n"
-"この記録簿の取引を編集したい場合は、子勘定科目のオプションを開き、プレースホ"
-"ルダーのチェックボックスをオフにしてください。\n"
+"この記録簿の取引を編集したい場合は、子勘定科目のオプションを開き、"
+"プレースホルダーのチェックボックスをオフにしてください。\n"
 "勘定科目をまとめて開くかわりに個別の勘定科目を開くこともできます。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
@@ -6233,10 +6223,10 @@ msgstr ""
 "\n"
 "GnuCash はデータファイルに含まれる正しい文字コードを推測しようとします。次の"
 "ページではこの推測を使用した結果のテキストが表示されます。テキストが予期した"
-"とおりに表示されることを確認してください。すべて正しく表示されていれば \"進む"
-"\" を単に押してください。予期しない文字がテキストに含まれている場合、異なった"
-"文字コードを選択すると異なった結果が表示されます。各ボタンをクリックすること"
-"によって文字コード一覧を編集しなければならないかもしれません。\n"
+"とおりに表示されることを確認してください。すべて正しく表示されていれば \"進"
+"む\" を単に押してください。予期しない文字がテキストに含まれている場合、異なっ"
+"た文字コードを選択すると異なった結果が表示されます。各ボタンをクリックするこ"
+"とによって文字コード一覧を編集しなければならないかもしれません。\n"
 "\n"
 "では、\"進む\" を押してデータファイルの正しい文字コードを選択してください。\n"
 
@@ -6252,9 +6242,9 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on \"Back\"."
 msgstr ""
-"ファイルは正しく読み込まれました。\"適用\" をクリックするとファイルが保存さ"
-"れ、メインウィンドウに再読込されます。この方法によって作業ファイルがバック"
-"アップファイルとして同じディレクトリに保持されます。\n"
+"ファイルは正しく読み込まれました。\"適用\" をクリックするとファイルが保存され"
+"、メインウィンドウに再読込されます。この方法によって作業ファイルが"
+"バックアップファイルとして同じディレクトリに保持されます。\n"
 "\n"
 "\"戻る\" をクリックすることによって、前に戻り行った選択を確認することもできま"
 "す。"
@@ -6335,8 +6325,8 @@ msgstr "KOI8-U (ウクライナ語)"
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
 msgstr ""
-"アサインされない単語が%d個、デコードできない単語が %d 個あります。エンコー"
-"ディングを加えてください。"
+"アサインされない単語が%d個、デコードできない単語が %d 個あります。"
+"エンコーディングを加えてください。"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:688
 #, c-format
@@ -6348,8 +6338,7 @@ msgstr ""
 #: gnucash/gnome-utils/assistant-xml-encoding.c:699
 #, c-format
 msgid "There are %d undecodable words. Please add encodings."
-msgstr ""
-"デコードできない単語が %d 個あります。エンコーディングを加えてください。"
+msgstr "デコードできない単語が %d 個あります。エンコーディングを加えてください。"
 
 #. Translators: Please insert encodings here that are typically used in your
 #. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
@@ -6505,8 +6494,8 @@ msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
-"勘定科目 '%s' と子勘定科目すべての勘定科目色をまとめて選択した色に設定しま"
-"す。"
+"勘定科目 '%s' と子勘定科目すべての勘定科目色をまとめて選択した色に設定します"
+"。"
 
 #: gnucash/gnome-utils/dialog-account.c:2492
 #, c-format
@@ -6941,8 +6930,8 @@ msgid ""
 "The entered date is out of the range 01/01/1400 - 31/12/9999, resetting to "
 "this year"
 msgstr ""
-"入力された日付は 1400/01/01 - 9999/12/31 の範囲外です。今年に再設定を行いま"
-"す。"
+"入力された日付は 1400/01/01 - 9999/12/31 の範囲外です。今年に再設定を行います"
+"。"
 
 #: gnucash/gnome-utils/dialog-utils.c:437
 msgid "Date out of range"
@@ -7172,14 +7161,12 @@ msgstr "URL %s の解析ができません"
 #: gnucash/gnome-utils/gnc-file.c:328
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
-msgstr ""
-"%s に接続できません。ホスト名、ユーザー名、またはパスワードが違います。"
+msgstr "%s に接続できません。ホスト名、ユーザー名、またはパスワードが違います。"
 
 #: gnucash/gnome-utils/gnc-file.c:334
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
-msgstr ""
-"%s に接続できません。接続が切断されたため、データを送ることができません。"
+msgstr "%s に接続できません。接続が切断されたため、データを送ることができません。"
 
 #: gnucash/gnome-utils/gnc-file.c:340
 msgid ""
@@ -7201,9 +7188,9 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースを開くべきではありま"
-"せん。このままデータベースを開きますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースを開くべきではあ"
+"りません。このままデータベースを開きますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:369
 #, c-format
@@ -7212,9 +7199,9 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースをインポートするべき"
-"ではありません。このままデータベースをインポートしますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースをインポートする"
+"べきではありません。このままデータベースをインポートしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -7223,9 +7210,9 @@ msgid ""
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースを保存するべきではあ"
-"りません。このままデータベースを保存しますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースを保存するべきで"
+"はありません。このままデータベースを保存しますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -7234,9 +7221,9 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユー"
-"ザーに使用されている可能性があり、その場合、データベースをエクスポートするべ"
-"きではありません。このままデータベースをエクスポートしますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別の"
+"ユーザーに使用されている可能性があり、その場合、データベースをエクスポートす"
+"るべきではありません。このままデータベースをエクスポートしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:410
 #, c-format
@@ -7245,9 +7232,9 @@ msgid ""
 "system, you may not have write permission for the directory or your anti-"
 "virus software is preventing this action."
 msgstr ""
-"GnuCash は %s に書き込めませんでした。このデータベースは読出し専用のファイル"
-"システムにあるかディレクトリへの書込み権限をもっていない、もしくはウイルス対"
-"策ソフトウェアがこの操作をブロックしている可能性があります。"
+"GnuCash は %s に書き込めませんでした。このデータベースは読出し専用の"
+"ファイルシステムにあるかディレクトリへの書込み権限をもっていない、もしくは"
+"ウイルス対策ソフトウェアがこの操作をブロックしている可能性があります。"
 
 #: gnucash/gnome-utils/gnc-file.c:418
 #, c-format
@@ -7258,8 +7245,7 @@ msgstr "ファイル/URL %s はGnuCashのデータを含んでいないか、壊
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
-msgstr ""
-"URL %s にあるサーバでエラーがあったか、不正あるいは壊れたデータがありました。"
+msgstr "URL %s にあるサーバでエラーがあったか、不正あるいは壊れたデータがありました。"
 
 #: gnucash/gnome-utils/gnc-file.c:430
 #, c-format
@@ -7347,9 +7333,9 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"このデータベースは GnuCash の古いバージョン用です。OK を選択するとデータベー"
-"スを現在のバージョン用に更新します。キャンセルを選択すると読み取り専用にしま"
-"す。"
+"このデータベースは GnuCash の古いバージョン用です。OK を選択すると"
+"データベースを現在のバージョン用に更新します。キャンセルを選択すると読み取り"
+"専用にします。"
 
 #: gnucash/gnome-utils/gnc-file.c:529
 msgid ""
@@ -7369,8 +7355,8 @@ msgid ""
 "the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "SQL データベースが他のユーザーに利用されており、彼らがログオフするまで更新は"
-"実行できません。もし現在他にユーザーがいないとすれば、邪魔なログインセッショ"
-"ンの消去方法についてドキュメントを調べてください。"
+"実行できません。もし現在他にユーザーがいないとすれば、邪魔な"
+"ログインセッションの消去方法についてドキュメントを調べてください。"
 
 #: gnucash/gnome-utils/gnc-file.c:548
 msgid ""
@@ -7395,8 +7381,8 @@ msgid ""
 msgstr ""
 "GnuCash は \"libdbi\" ライブラリにバグがあるかどうか重要なテストを行いました"
 "が、完了できませんでした。これは SQL データベースのパーミッションが正しく設定"
-"されていないからかもしれません。詳細は https://bugs.gnucash.org/show_bug.cgi?"
-"id=645216 をご覧ください。"
+"されていないからかもしれません。詳細は https://bugs.gnucash.org/"
+"show_bug.cgi?id=645216 をご覧ください。"
 
 #: gnucash/gnome-utils/gnc-file.c:570
 msgid ""
@@ -7455,8 +7441,8 @@ msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
-"このデータベースは別のユーザーに使用されている可能性があり、その場合は、デー"
-"タベースを開くべきではありません。どうしますか?"
+"このデータベースは別のユーザーに使用されている可能性があり、その場合は、"
+"データベースを開くべきではありません。どうしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:916
 msgid ""
@@ -8231,8 +8217,8 @@ msgid ""
 msgstr ""
 "相場価格関連のコマンドを実行する。 次のコマンドをサポートする。\n"
 "\n"
-"  info: \tFinance::Quote のバージョンと 公開されている相場表情報源を 表示す"
-"る。\n"
+"  info: \tFinance::Quote のバージョンと 公開されている相場表情報源を 表示する"
+"。\n"
 "   get: \t現在の相場表を指定の GnuCash データファイル内の全海外通貨 および株"
 "式に対して取得する。\n"
 "  dump: \t現在の相場表を指定された通貨や 株式に対して 指定された名前空間から"
@@ -8245,8 +8231,7 @@ msgstr ""
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for when using the get command"
-msgstr ""
-"get コマンド使用時に どの名前空間の商品を取得するかを 決定するための正規表現"
+msgstr "get コマンド使用時に どの名前空間の商品を取得するかを 決定するための正規表現"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
@@ -8272,8 +8257,8 @@ msgstr ""
 "帳票関連のコマンドを実行する。 次のコマンドをサポート。\n"
 "\n"
 "  list: \t利用可能な帳票を一覧出力する。\n"
-"  show: \t指定の名前の帳票の中で 変更されるオプションを 詳細表示する。データ"
-"ファイルを 指定すると 保存された オプションを 詳細表示可能。\n"
+"  show: \t指定の名前の帳票の中で 変更されるオプションを 詳細表示する。"
+"データファイルを 指定すると 保存された オプションを 詳細表示可能。\n"
 "  run: \t指定の GnuCash データファイルで 指定の名前の帳票を作成する。\n"
 
 #: gnucash/gnucash-cli.cpp:119
@@ -8595,8 +8580,8 @@ msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
 msgstr ""
-"選択した場合、現在「アクティブ」な項目のみを検索対象にします。選択しない場"
-"合、すべての項目を検索対象にします。"
+"選択した場合、現在「アクティブ」な項目のみを検索対象にします。選択しない場合"
+"、すべての項目を検索対象にします。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:107
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:149
@@ -8817,8 +8802,8 @@ msgid ""
 msgstr ""
 "'date_format' がカスタム日付書式を示すように設定されている場合、印刷される日"
 "付を生成する際、この値がstrftimeの引数として用いられます。有効なstrftime文字"
-"列であればどのようなものでもかまいません。この書式に関する詳細な情報は、"
-"\"man 3 strftime\" によりstrftimeのマニュアルを読んでください。"
+"列であればどのようなものでもかまいません。この書式に関する詳細な情報は"
+"、\"man 3 strftime\" によりstrftimeのマニュアルを読んでください。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
@@ -9101,8 +9086,8 @@ msgid ""
 "but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
 "取引の一致処理でスキップ動作を有効にします。選択した場合、一致処理のスコアが"
-"黄色ゾーン (自動追加の閾値より上だが、自動清算の閾値より下) の取引はデフォル"
-"トでスキップされます。"
+"黄色ゾーン (自動追加の閾値より上だが、自動清算の閾値より下) の取引は"
+"デフォルトでスキップされます。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 #, fuzzy
@@ -9117,9 +9102,9 @@ msgid ""
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
 msgstr ""
-"取引の一致処理で更新および照合動作を有効にします。選択した場合、一致処理のス"
-"コアが自動清算の閾値より上で、日付または金額が異なる既存の取引はデフォルトで"
-"更新および清算されます。"
+"取引の一致処理で更新および照合動作を有効にします。選択した場合、一致処理の"
+"スコアが自動清算の閾値より上で、日付または金額が異なる既存の取引はデフォルト"
+"で更新および清算されます。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
@@ -9221,9 +9206,9 @@ msgstr ""
 "所に設置されています。これらのATMは利用料金を別の取引として表示したり毎月の銀"
 "行利用料金としたりせず、金額に直接加算します。例えば、10,000円を引き出すと、"
 "10,105円+相互利用手数料が口座から引かれます。もしこれを手動で10,000円として入"
-"力したとすると、金額が一致しません。このような取引を一致できるようにするた"
-"め、この値をあなたの地域での最大限の利用料金に（あなたの地域の通貨で）設定し"
-"てください。"
+"力したとすると、金額が一致しません。このような取引を一致できるようにするため"
+"、この値をあなたの地域での最大限の利用料金に（あなたの地域の通貨で）設定して"
+"ください。"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
@@ -9268,8 +9253,7 @@ msgstr ""
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
-msgstr ""
-"QIFファイルで状態が指定されていない時、取引を照合済としてマークします。"
+msgstr "QIFファイルで状態が指定されていない時、取引を照合済としてマークします。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
@@ -9319,8 +9303,9 @@ msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
-"選択した場合、クレジットカード勘定科目を照合した後にユーザーにクレジットカー"
-"ド支払を入力するように求めます。選択しない場合、入力は求められません。"
+"選択した場合、クレジットカード勘定科目を照合した後にユーザーに"
+"クレジットカード支払を入力するように求めます。選択しない場合、入力は求められ"
+"ません。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
@@ -9351,8 +9336,8 @@ msgstr ""
 #, fuzzy
 msgid "Run \"since last run\" dialog when a file is opened."
 msgstr ""
-"ファイルを開くときに「前回起動時以降」の処理を実行するダイアログを表示しま"
-"す。"
+"ファイルを開くときに「前回起動時以降」の処理を実行するダイアログを表示します"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:18
 #, fuzzy
@@ -9550,9 +9535,9 @@ msgid ""
 "obtain a key by registering for a free account at the YH Finance website, "
 "https://financeapi.net/pricing."
 msgstr ""
-"YH Finance の FinanceAPI サービスを使うには API キーが必要です。無料アカウン"
-"トを YH Finance のウェブサイト、https://financeapi.net/pricing で登録すると"
-"キーを取得できます。"
+"YH Finance の FinanceAPI サービスを使うには API キーが必要です。無料"
+"アカウントを YH Finance のウェブサイト、https://financeapi.net/pricing で登録"
+"するとキーを取得できます。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -9574,9 +9559,9 @@ msgid ""
 "is closed. The sizes and locations of content windows will be remembered "
 "when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr ""
-"選択した場合、各ダイアログウィンドウを閉じたときのサイズと位置が保存されま"
-"す。サイズと位置はGnuCashを終了した時にも記憶されます。選択しない場合、サイズ"
-"と位置は保存されません。"
+"選択した場合、各ダイアログウィンドウを閉じたときのサイズと位置が保存されます"
+"。サイズと位置はGnuCashを終了した時にも記憶されます。選択しない場合、サイズと"
+"位置は保存されません。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:20
 msgid "Character to use as separator between account names"
@@ -9590,9 +9575,9 @@ msgid ""
 "character, or any of the following strings: \"colon\", \"slash\", "
 "\"backslash\", \"dash\" and \"period\"."
 msgstr ""
-"勘定科目の要素間を区切るために用いる文字です。英数字以外の単一の文字か、"
-"\"colon\" \"slash\", \"backslash\", \"dash\", \"period\" のいずれかの文字列で"
-"指定します。"
+"勘定科目の要素間を区切るために用いる文字です。英数字以外の単一の文字か"
+"、\"colon\" \"slash\", \"backslash\", \"dash\", \"period\" のいずれかの文字列"
+"で指定します。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -9622,8 +9607,8 @@ msgid ""
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
 "選択した場合、GnuCashは最初に自動保存が実行される際に自動保存機能について説明"
-"するダイアログを表示します。選択しない場合、説明のダイアログは表示されませ"
-"ん。"
+"するダイアログを表示します。選択しない場合、説明のダイアログは表示されません"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
 msgid "Auto-save time interval"
@@ -9641,8 +9626,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1827
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr ""
-"ファイルを閉じる時に保存するかどうかの質問に対するタイムアウトを有効にする"
+msgstr "ファイルを閉じる時に保存するかどうかの質問に対するタイムアウトを有効にする"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1831
@@ -9894,8 +9878,7 @@ msgstr "24時間形式を使う"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:156
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr ""
-"選択した場合、24時間形式を使います。選択しない場合、12時間形式を使います。"
+msgstr "選択した場合、24時間形式を使います。選択しない場合、12時間形式を使います。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:160
 msgid "Date format choice"
@@ -9908,10 +9891,10 @@ msgid ""
 "Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" "
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
-"この設定では GnuCash でどのように日付を表示するかを選択します。選択肢は、シス"
-"テムのロケール設定形式を使用する「ロケール」、ヨーロッパ形式の「ヨーロッ"
-"パ」、ISO 8601標準形式の「ISO」、英国形式の「英国」、および米国形式の「米国」"
-"です。"
+"この設定では GnuCash でどのように日付を表示するかを選択します。選択肢は、"
+"システムのロケール設定形式を使用する「ロケール」、ヨーロッパ形式の「"
+"ヨーロッパ」、ISO 8601標準形式の「ISO」、英国形式の「英国」、および米国形式の"
+"「米国」です。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1149
@@ -9942,8 +9925,8 @@ msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
 msgstr ""
-"日付は、現在の日付に近いものとして、年が補完されます。日付を補完するときに"
-"遡ってほしい最大の月数を入力してください。"
+"日付は、現在の日付に近いものとして、年が補完されます。日付を補完するときに遡"
+"ってほしい最大の月数を入力してください。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
 #, fuzzy
@@ -10052,8 +10035,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"ファイルの新規作成時に、記録簿・帳票でスプリットの \"アクション\" 欄を \"番号"
-"\" 欄の代わりとして使う帳簿オプションを設定する"
+"ファイルの新規作成時に、記録簿・帳票でスプリットの \"アクション\" 欄を \"番"
+"号\" 欄の代わりとして使う帳簿オプションを設定する"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1472
@@ -10103,8 +10086,8 @@ msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
 msgstr ""
-"選択した場合、'Enter'を押した際に記録簿の最下行に移動します。選択しない場"
-"合、'Enter'を押した際に一つ下の取引行に移動します。"
+"選択した場合、'Enter'を押した際に記録簿の最下行に移動します。選択しない場合"
+"、'Enter'を押した際に一つ下の取引行に移動します。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:258
@@ -10257,8 +10240,8 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "記録簿で各取引の情報を 2 行で表示します。この設定は記録簿を最初に開いたときの"
-"デフォルトです。設定はいつでも「表示->2 行」メニュー項目を通して変更できま"
-"す。"
+"デフォルトです。設定はいつでも「表示->2 行」メニュー項目を通して変更できます"
+"。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
 msgid "Only display leaf account names."
@@ -10416,10 +10399,10 @@ msgid ""
 "standard dates , \"uk\" for United Kingdom style dates, and \"us\" for "
 "United States style dates."
 msgstr ""
-"この設定では GnuCash でどのように日付を表示するかを選択します。選択肢は、シス"
-"テムのロケール設定形式を使用する「ロケール」、ヨーロッパ形式の「ヨーロッ"
-"パ」、ISO 8601標準形式の「ISO」、英国形式の「英国」、および米国形式の「米国」"
-"です。"
+"この設定では GnuCash でどのように日付を表示するかを選択します。選択肢は、"
+"システムのロケール設定形式を使用する「ロケール」、ヨーロッパ形式の「"
+"ヨーロッパ」、ISO 8601標準形式の「ISO」、英国形式の「英国」、および米国形式の"
+"「米国」です。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "Allow file incompatibility with older versions."
@@ -10432,10 +10415,10 @@ msgid ""
 "read by an older version again. Otherwise gnucash will write data files only "
 "in formats that can be read by older versions as well."
 msgstr ""
-"選択した場合、GnuCashは古いバージョンのファイルと互換性を保ちません。そのた"
-"め、このバージョンで保存したデータファイルは古いバージョンで開くことができな"
-"くなります。選択しない場合、GnuCashは古いバージョンでも読み込むことができる形"
-"式でファイルを保存します。"
+"選択した場合、GnuCashは古いバージョンのファイルと互換性を保ちません。そのため"
+"、このバージョンで保存したデータファイルは古いバージョンで開くことができなく"
+"なります。選択しない場合、GnuCashは古いバージョンでも読み込むことができる形式"
+"でファイルを保存します。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:5
 msgid "Number of files in history"
@@ -10930,8 +10913,8 @@ msgid ""
 msgstr ""
 "このアシスタントは会計期間を設定し利用するお手伝いをします。\n"
 "\n"
-"危険: この機能はまだ開発中であるため現時点では正しく動きません。あなたのデー"
-"タに修復不可能なダメージを与える可能性があります!"
+"危険: この機能はまだ開発中であるため現時点では正しく動きません。あなたの"
+"データに修復不可能なダメージを与える可能性があります!"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:24
 msgid "Setup Account Period"
@@ -10993,12 +10976,12 @@ msgstr ""
 "このアシスタントは勘定科目をファイルからインポートするお手伝いをします。\n"
 "\n"
 "ファイルはエクスポート時と同じ書式でなければなりません。これは \"勘定科目階層"
-"を CSV にエクスポート\" エクスポートメニューオプションを使って作成されたファ"
-"イルの書式固定のインポート機能です。\n"
+"を CSV にエクスポート\" エクスポートメニューオプションを使って作成された"
+"ファイルの書式固定のインポート機能です。\n"
 "\n"
 "勘定科目がないときは、その勘定科目のフルネームに基づいて、それの指定する証券"
-"もしくは通貨が存在していれば追加されます。勘定科目があるときは、4 つのフィー"
-"ルドが更新されます: コード、説明、備考、色。\n"
+"もしくは通貨が存在していれば追加されます。勘定科目があるときは、4 つの"
+"フィールドが更新されます: コード、説明、備考、色。\n"
 "\n"
 "処理を行う場合は \"進む\" をクリックしてください。インポートを中止する場合は "
 "\"キャンセル\" をクリックしてください。\n"
@@ -11239,16 +11222,16 @@ msgstr ""
 "元記号、交換先通貨です。すべての項目が同一の商品もしくは通貨に対する価格の場"
 "合は、それらを選択してから、列には日付と金額があればインポートできます。\n"
 "\n"
-"区切り文字の指定や固定幅オプションなど、様々なオプションがあります。固定幅オ"
-"プションを使うと、行が表示された表の中でダブルクリックすると列幅を設定でき、"
-"その後で必要であれば右クリックすると変更できます。\n"
+"区切り文字の指定や固定幅オプションなど、様々なオプションがあります。固定幅"
+"オプションを使うと、行が表示された表の中でダブルクリックすると列幅を設定でき"
+"、その後で必要であれば右クリックすると変更できます。\n"
 "\n"
-"例: \"TSE\",\"9432\",\"2016/11/21\",4282,\"JPY\" や "
-"CURRENCY;USD;2016-11-21;110.79;JPY\n"
+"例: \"TSE\",\"9432\",\"2016/11/21\",4282,\"JPY\" や CURRENCY;USD;2016-11-"
+"21;110.79;JPY\n"
 "\n"
-"先頭行、末尾行を指定するオプションや、先頭行から一行おきにスキップするオプ"
-"ションがあり、ヘッダー行のあるファイルに使えます。また、必要に応じて、既存の"
-"価格を今だけ上書きするオプションもあります。\n"
+"先頭行、末尾行を指定するオプションや、先頭行から一行おきにスキップする"
+"オプションがあり、ヘッダー行のあるファイルに使えます。また、必要に応じて、既"
+"存の価格を今だけ上書きするオプションもあります。\n"
 "\n"
 "最後に、繰り返しインポートしやすいように、プレビューページには設定の読み込み"
 "と保存ができるボタンがあります。調整した設定を保存すると後のインポート時に再"
@@ -11506,8 +11489,8 @@ msgid ""
 "similar imports and save them under another name."
 msgstr ""
 "このアシスタントは取引のリストを含む区切られたファイルをインポートするお手伝"
-"いをします。（カンマ区切りやセミコロン区切りなど）トークンで区切られたファイ"
-"ルと固定幅データの両方をサポートします。\n"
+"いをします。（カンマ区切りやセミコロン区切りなど）トークンで区切られた"
+"ファイルと固定幅データの両方をサポートします。\n"
 "\n"
 "うまくインポートするために、インポートするデータには 3 つの列が必要となりま"
 "す:\n"
@@ -11515,13 +11498,13 @@ msgstr ""
 "• 説明の列\n"
 "• 金額もしくは金額 (符号反転) の列\n"
 "\n"
-"勘定科目の情報がない場合は、基本とする勘定科目を指定すればそこに全データをイ"
-"ンポートできます。\n"
+"勘定科目の情報がない場合は、基本とする勘定科目を指定すればそこに全データを"
+"インポートできます。\n"
 "\n"
 "区切り文字を選べるほか、このインポート機能ではいくつかのオプションを設定でき"
 "ます。例えば、データの先頭、末尾や奇数行を何行もスキップできます。様々な日付"
-"や数値の書式をサポートしています。ファイルのエンコーディングを指定できま"
-"す。\n"
+"や数値の書式をサポートしています。ファイルのエンコーディングを指定できます"
+"。\n"
 "\n"
 "このインポート機能は、各行が一つのスプリットを表す、複数行にまたがった取引を"
 "含むファイルを扱えます。新たな取引は、取引関連列の値が一つ前の空でない行と異"
@@ -11679,10 +11662,10 @@ msgstr ""
 "\n"
 "次のページで、各取引をカテゴリーに関連付けることができます。\n"
 "\n"
-"これが<i>新規作成中のファイルへの初回インポート</i>であれば、先に帳簿オプショ"
-"ン設定ダイアログが表示されます。この設定によってインポートされたデータを "
-"GnuCash の取引にどう変換するかが影響を受けるためです。既存のファイルへのイン"
-"ポート中であればこのダイアログは表示されません。\n"
+"これが<i>新規作成中のファイルへの初回インポート</i>であれば、先に帳簿"
+"オプション設定ダイアログが表示されます。この設定によってインポートされた"
+"データを GnuCash の取引にどう変換するかが影響を受けるためです。既存のファイル"
+"へのインポート中であればこのダイアログは表示されません。\n"
 "\n"
 "今回が<i>初めてのインポート</i>であれば、すべての行を関連付けする必要があるで"
 "しょう。その後のインポートでは、このインポート機能は前回のインポート結果に基"
@@ -11715,16 +11698,16 @@ msgid ""
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "このアシスタントは GnuCash の勘定科目集を作成するお手伝いをします。勘定科目に"
-"は、資産（投資や預貯金など）、負債（ローンなど）、各種の収益や費用がありま"
-"す。\n"
+"は、資産（投資や預貯金など）、負債（ローンなど）、各種の収益や費用があります"
+"。\n"
 "\n"
-"あなたのニーズに近いと思われる勘定科目集をここで選ぶことができます。アシスタ"
-"ント完了後は、勘定科目の追加や名前変更、変更、削除がいつでもできます。子勘定"
-"科目も追加できますし、勘定科目を（子勘定科目も一緒に）別の親勘定科目へ移動す"
-"ることもできます。\n"
+"あなたのニーズに近いと思われる勘定科目集をここで選ぶことができます。"
+"アシスタント完了後は、勘定科目の追加や名前変更、変更、削除がいつでもできます"
+"。子勘定科目も追加できますし、勘定科目を（子勘定科目も一緒に）別の親勘定科目"
+"へ移動することもできます。\n"
 "\n"
-"すぐに新しい勘定科目を作らないのであれば、'キャンセル' をクリックしてくださ"
-"い。"
+"すぐに新しい勘定科目を作らないのであれば、'キャンセル' をクリックしてください"
+"。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid "New Account Hierarchy Setup"
@@ -11822,13 +11805,13 @@ msgstr ""
 "勘定科目名を変更したい場合は、勘定科目名が含まれる行をクリックしてから次に勘"
 "定科目名をクリックし、名前を変更してください。\n"
 "\n"
-"いくつかの勘定科目は \"プレースホルダー\" として設定されています。プレースホ"
-"ルダー勘定科目は勘定科目階層を作成するためにのみ使用され、取引および開始残高"
-"は通常含まれません。勘定科目をプレースホルダー勘定科目にしたい場合は勘定科目"
-"のチェックボックスにチェックを入れてください。\n"
+"いくつかの勘定科目は \"プレースホルダー\" として設定されています。"
+"プレースホルダー勘定科目は勘定科目階層を作成するためにのみ使用され、取引およ"
+"び開始残高は通常含まれません。勘定科目をプレースホルダー勘定科目にしたい場合"
+"は勘定科目のチェックボックスにチェックを入れてください。\n"
 "\n"
-"勘定科目が開始残高を持つ場合、勘定科目を含む行をクリックし、開始残高列をク"
-"リックして入力してください。\n"
+"勘定科目が開始残高を持つ場合、勘定科目を含む行をクリックし、開始残高列を"
+"クリックして入力してください。\n"
 "\n"
 "<b>備考:</b> 純資産勘定科目およびプレースホルダー勘定科目を除く全ての勘定科目"
 "に開始残高を設定できます。"
@@ -12028,8 +12011,8 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
-"利率を年利でパーセント指定してください。値は 0.001 - 100 の範囲で入力できま"
-"す。このローンアシスタントは利率 0 のローンに対応していません。"
+"利率を年利でパーセント指定してください。値は 0.001 - 100 の範囲で入力できます"
+"。このローンアシスタントは利率 0 のローンに対応していません。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:362
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -12133,8 +12116,7 @@ msgstr "ローン支払"
 msgid ""
 "Review the details below and if correct press \"Apply\" to create the "
 "schedule."
-msgstr ""
-"以下の詳細を確認して、正しければ \"適用\" を押すと予定取引が作成されます。"
+msgstr "以下の詳細を確認して、正しければ \"適用\" を押すと予定取引が作成されます。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
 msgid "Range"
@@ -12196,11 +12178,11 @@ msgstr ""
 "のプログラムで書き込まれた QIF (Quicken Interchange Format) からインポートす"
 "ることができます。\n"
 "\n"
-"インポート処理はいくつかのステップからなります。GnuCash の勘定科目は最後のス"
-"テップで \"完了\" をクリックするまで変更されません。\n"
+"インポート処理はいくつかのステップからなります。GnuCash の勘定科目は最後の"
+"ステップで \"完了\" をクリックするまで変更されません。\n"
 "\n"
-"QIF データをインポートするには \"進む\" を、中止するには \"キャンセル\" をク"
-"リックしてください。"
+"QIF データをインポートするには \"進む\" を、中止するには \"キャンセル\" を"
+"クリックしてください。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -12257,9 +12239,9 @@ msgstr ""
 "る日付の形式が 2 種類以上あります。\n"
 "\n"
 "ファイルの日付形式を指定してください。ヨーロッパ製のソフトウェアで作成された "
-"QIF ファイルでは \"日-月-年\" の形式が使用されていることが多いです。一方、ア"
-"メリカ製のソフトウェアで作成された QIF ファイルは \"月-日-年\" が使用されてい"
-"ることが多いです。\n"
+"QIF ファイルでは \"日-月-年\" の形式が使用されていることが多いです。一方、"
+"アメリカ製のソフトウェアで作成された QIF ファイルは \"月-日-年\" が使用されて"
+"いることが多いです。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:310
 #: gnucash/gtkbuilder/assistant-qif-import.glade:395
@@ -12284,9 +12266,9 @@ msgstr ""
 "読み込もうとしている QIF ファイルにはたった一つの勘定科目に対する取引しか存在"
 "しないように見受けられます。しかし、その科目の名前を指定していません。\n"
 "\n"
-"科目の名前を入力してください。このファイルが別の会計プログラムからエクスポー"
-"トされたファイルの場合は、そのプログラム内で使っていたのと同じ名前を使用する"
-"べきです。\n"
+"科目の名前を入力してください。このファイルが別の会計プログラムから"
+"エクスポートされたファイルの場合は、そのプログラム内で使っていたのと同じ名前"
+"を使用するべきです。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:358
 msgid "Account name"
@@ -12348,11 +12330,11 @@ msgstr ""
 "合には、ダブルクリックして変更してください。\n"
 "\n"
 "GnuCash はあなたが使用していた個人資産管理プログラムに存在しなかった勘定科目"
-"を作成することに注意してください。これには、所有するそれぞれの株式に対する"
-"別々の勘定科目、仲介手数料に対する個別の勘定科目、開始時の残高調整の元となる"
-"特別な持ち分勘定科目 (デフォルトでは繰越利益剰余金の子勘定科目) などが含まれ"
-"ます。これらの勘定科目はすべて次ページに表示されます。必要ならば修正すること"
-"もできますが、通常そのままでも問題ありあせん。\n"
+"を作成することに注意してください。これには、所有するそれぞれの株式に対する別"
+"々の勘定科目、仲介手数料に対する個別の勘定科目、開始時の残高調整の元となる特"
+"別な持ち分勘定科目 (デフォルトでは繰越利益剰余金の子勘定科目) などが含まれま"
+"す。これらの勘定科目はすべて次ページに表示されます。必要ならば修正することも"
+"できますが、通常そのままでも問題ありあせん。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:530
 msgid "Accounts and stock holdings"
@@ -12396,8 +12378,8 @@ msgstr ""
 "のを表示します。カテゴリー名を含む行をダブルクリックすることにより、対応付け"
 "を変更することができます。\n"
 "\n"
-"後で気が変わっても、GnuCash の中で安全に勘定科目の再構成をすることができま"
-"す。"
+"後で気が変わっても、GnuCash の中で安全に勘定科目の再構成をすることができます"
+"。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:661
 msgid "Income and Expense categories"
@@ -12459,8 +12441,8 @@ msgstr ""
 "新規作成途中のファイルなので、次へ進むと帳簿オプションの設定ダイアログが表示"
 "されます。このオプションは GnuCash が取引をどのようにインポートするかに影響を"
 "与えます。もしキャンセルしてもう一度やり直す以外でこのページに戻ってくると、"
-"次へ進んでも二度と帳簿オプションの設定ダイアログは表示されません。そのダイア"
-"ログへはメニューの ファイル->プロパティー から直接アクセスできます。"
+"次へ進んでも二度と帳簿オプションの設定ダイアログは表示されません。その"
+"ダイアログへはメニューの ファイル->プロパティー から直接アクセスできます。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2776
@@ -12490,8 +12472,8 @@ msgstr ""
 "\n"
 "それぞれの株式、投資信託、その他の投資には、名前および銘柄記号などの記号/略号"
 "を設定しなければいけません。異なる投資が同じ記号/略号となる場合、記号/略号の"
-"種類を指定する必要があります。例えば、取引所 (NASDAQ、NYSE など) を選択する"
-"か、投資のタイプを選択します。\n"
+"種類を指定する必要があります。例えば、取引所 (NASDAQ、NYSE など) を選択するか"
+"、投資のタイプを選択します。\n"
 "\n"
 "取引所が一覧に無い場合、または選択を適切にできない場合、新規に作成することも"
 "できます。"
@@ -12539,8 +12521,8 @@ msgid ""
 "Click \"Next\" to review the possible matches."
 msgstr ""
 "銀行、その他の金融機関から入手した QIF ファイルをインポートする場合、GnuCash "
-"勘定科目には、いくつかの取引がすでに存在する場合があります。重複を避けるた"
-"め、GnuCash は一致している取引を識別し、それをレビューできるようにします。\n"
+"勘定科目には、いくつかの取引がすでに存在する場合があります。重複を避けるため"
+"、GnuCash は一致している取引を識別し、それをレビューできるようにします。\n"
 "\n"
 "次のページではインポートされる取引が表示されます。どれか一つを選択すると、一"
 "致している可能性がある取引が下部に表示されます。正しく一致している場合は、そ"
@@ -12586,8 +12568,8 @@ msgstr ""
 "更、一時作業エリアへのファイルの追加などを行うには、\"戻る\" をクリックしてく"
 "ださい。\n"
 "\n"
-"QIF ファイルのインポートを中止するには、\"キャンセル\" をクリックしてくださ"
-"い。"
+"QIF ファイルのインポートを中止するには、\"キャンセル\" をクリックしてください"
+"。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1356
 msgid "Update your GnuCash accounts"
@@ -12608,8 +12590,7 @@ msgstr "株式分割アシスタント"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:22
 msgid "This assistant will help you record a stock split or stock merger.\n"
-msgstr ""
-"このアシスタントは株式分割または株式併合を記録するためのお手伝いをします。\n"
+msgstr "このアシスタントは株式分割または株式併合を記録するためのお手伝いをします。\n"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:44
 msgid ""
@@ -12749,11 +12730,11 @@ msgid ""
 "transaction currency will be offered for cash, capital gains, dividends, and "
 "fees."
 msgstr ""
-"このアシスタントは株式取引を記録するお手伝いをします。取引の種類 (購入、売"
-"却、配当、資本の払戻し、株式分割) によってその取引に関連する取引スプリットを"
-"決定します。なお取引の通貨はその株式勘定科目の通貨になり、複数通貨の取引には"
-"対応していません: 現金、資本利得、配当、および手数料については、取引の通貨の"
-"勘定科目のみが提案されます。"
+"このアシスタントは株式取引を記録するお手伝いをします。取引の種類 (購入、売却"
+"、配当、資本の払戻し、株式分割) によってその取引に関連する取引スプリットを決"
+"定します。なお取引の通貨はその株式勘定科目の通貨になり、複数通貨の取引には対"
+"応していません: 現金、資本利得、配当、および手数料については、取引の通貨の勘"
+"定科目のみが提案されます。"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
 msgid "Select the date and description for your records."
@@ -12810,9 +12791,9 @@ msgid ""
 "spent. It may differ from the stock value from the last page, if there are "
 "brokerage fees associated with this transaction."
 msgstr ""
-"このページでは、資産勘定科目、そして受け取った・使った金額を入力してくださ"
-"い。この取引に関する取引手数料があるときは、前のページの株式価値と異なってい"
-"て構いません。"
+"このページでは、資産勘定科目、そして受け取った・使った金額を入力してください"
+"。この取引に関する取引手数料があるときは、前のページの株式価値と異なっていて"
+"構いません。"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
 #, fuzzy
@@ -12894,10 +12875,10 @@ msgid ""
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"スプリットの要約を以下に表示します。要約が正しければ、またエラーがなければ、"
-"\"適用\" をクリックしてください。\"戻る\" をクリックすると、今までの選択項目"
-"を確認できます。\"キャンセル\" をクリックするとすべての変更を破棄して終了しま"
-"す。 "
+"スプリットの要約を以下に表示します。要約が正しければ、またエラーがなければ"
+"、\"適用\" をクリックしてください。\"戻る\" をクリックすると、今までの選択項"
+"目を確認できます。\"キャンセル\" をクリックするとすべての変更を破棄して終了し"
+"ます。 "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:953
 msgid "Finish"
@@ -13025,8 +13006,8 @@ msgid ""
 "should be accumulated into a single split by default. This setting can be "
 "changed in the Post dialog."
 msgstr ""
-"得意先請求書の複数の項目を同じ勘定科目に振り替える時、デフォルトで一つのスプ"
-"リットに累計するかどうかです。この設定は記帳ダイアログに反映されます。"
+"得意先請求書の複数の項目を同じ勘定科目に振り替える時、デフォルトで一つの"
+"スプリットに累計するかどうかです。この設定は記帳ダイアログに反映されます。"
 
 #: gnucash/gtkbuilder/business-prefs.glade:115
 #, fuzzy
@@ -13134,8 +13115,7 @@ msgstr "デフォルト"
 msgid ""
 "If any account has an existing color it will not be replaced unless the "
 "following is ticked."
-msgstr ""
-"設定済みの色がある勘定科目は、下にチェックを入れない限り置き換えません。"
+msgstr "設定済みの色がある勘定科目は、下にチェックを入れない限り置き換えません。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:233
 msgid "Replace any existing account colors"
@@ -13352,11 +13332,11 @@ msgid ""
 "account tree and check the \"show hidden accounts\" option. Doing so will "
 "allow you to select the account and reopen this dialog."
 msgstr ""
-"この勘定科目(と子の勘定科目)は勘定科目ツリーで隠れるようになり、記録簿でポッ"
-"プアップされる勘定科目リストに現われなくなります。このオプションをリセットす"
-"るには、勘定科目ツリーの「フィルター…」ダイアログを開き、「隠し勘定科目を表示"
-"する」オプションにチェックを入れます。そうすることでこの勘定科目を選択し、こ"
-"のダイアログを再度開くことができます。"
+"この勘定科目(と子の勘定科目)は勘定科目ツリーで隠れるようになり、記録簿で"
+"ポップアップされる勘定科目リストに現われなくなります。このオプションを"
+"リセットするには、勘定科目ツリーの「フィルター…」ダイアログを開き、「隠し勘定"
+"科目を表示する」オプションにチェックを入れます。そうすることでこの勘定科目を"
+"選択し、このダイアログを再度開くことができます。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1568
 msgid "Opening balance"
@@ -13493,8 +13473,7 @@ msgstr "数字の桁数"
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr ""
-"これは各子勘定科目の勘定科目コードを新しく生成したコードに置き替えます。"
+msgstr "これは各子勘定科目の勘定科目コードを新しく生成したコードに置き替えます。"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -13513,8 +13492,7 @@ msgstr "清算済(_C)"
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
-msgstr ""
-"QIFファイルで状態が指定されていない時、取引を清算済としてマークします。"
+msgstr "QIFファイルで状態が指定されていない時、取引を清算済としてマークします。"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
@@ -13524,8 +13502,7 @@ msgstr "未清算(_N)"
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
-msgstr ""
-"QIFファイルで状態が指定されていない時、取引を未照合としてマークします。"
+msgstr "QIFファイルで状態が指定されていない時、取引を未照合としてマークします。"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:113
 msgid ""
@@ -13884,8 +13861,8 @@ msgid ""
 "and LSE."
 msgstr ""
 "商品のカテゴリーを選択するか新しいものを入力してください。株式「STOCKS」債券"
-"「BONDS」のような投資カテゴリーや「NASDAQ」「LSE」のような取引所名も使えま"
-"す。"
+"「BONDS」のような投資カテゴリーや「NASDAQ」「LSE」のような取引所名も使えます"
+"。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:322
 msgid ""
@@ -14596,8 +14573,8 @@ msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
 msgstr ""
-"この取引にはおそらくあなたの介入が必要です。そうでなければ貸借不一致のままイ"
-"ンポートされます。"
+"この取引にはおそらくあなたの介入が必要です。そうでなければ貸借不一致のまま"
+"インポートされます。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:459
 msgid ""
@@ -14609,8 +14586,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:462
 msgid "This transaction requires your intervention or it will NOT be imported."
-msgstr ""
-"この取引にはあなたの介入が必要です。そうでなければインポートされません。"
+msgstr "この取引にはあなたの介入が必要です。そうでなければインポートされません。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:465
 msgid ""
@@ -14678,8 +14654,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:709
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
-msgstr ""
-"一致した取引を清算済 (清) とマークするには \"清算\" を選択してください。"
+msgstr "一致した取引を清算済 (清) とマークするには \"清算\" を選択してください。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:721
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -14711,8 +14686,7 @@ msgstr "備考(_N)"
 #: gnucash/gtkbuilder/dialog-import.glade:1061
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
-msgstr ""
-"ダウンロードされた取引一覧 (ソースのスプリットと一致した情報を表示します)"
+msgstr "ダウンロードされた取引一覧 (ソースのスプリットと一致した情報を表示します)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1103
 msgid "Show _Account column"
@@ -14799,8 +14773,7 @@ msgstr "この帳票のエクスポート形式を選択:"
 msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
-msgstr ""
-"得意先請求書のID番号です。空白の場合は適切な番号が自動的に選択されます。"
+msgstr "得意先請求書のID番号です。空白の場合は適切な番号が自動的に選択されます。"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1381
 msgid ""
@@ -14829,8 +14802,7 @@ msgstr "請求のまとめダイアログ"
 #: gnucash/gtkbuilder/dialog-job.glade:130
 msgid ""
 "The job ID number. If left blank a reasonable number will be chosen for you"
-msgstr ""
-"請求のまとめのID番号です。空白の場合は適切な番号が自動的に選択されます。"
+msgstr "請求のまとめのID番号です。空白の場合は適切な番号が自動的に選択されます。"
 
 #: gnucash/gtkbuilder/dialog-job.glade:164
 msgid "Job Information"
@@ -14953,9 +14925,10 @@ msgid ""
 "the \"OK\" button or press the \"Cancel\" button if you don't want to "
 "perform any of them."
 msgstr ""
-"ほとんどの新規ユーザーが GnuCash を使い始めるときに実行したいと思われるアク"
-"ションをいくつか用意しました。以下からアクションを一つ選んで <i>OK</i> ボタン"
-"を押すか、どれも実行したくなければ<i>キャンセル</i>ボタンを押してください。"
+"ほとんどの新規ユーザーが GnuCash を使い始めるときに実行したいと思われる"
+"アクションをいくつか用意しました。以下からアクションを一つ選んで <i>OK</i> "
+"ボタンを押すか、どれも実行したくなければ<i>キャンセル</i>ボタンを押してくださ"
+"い。"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
 msgid "C_reate a new set of accounts"
@@ -15289,9 +15262,9 @@ msgid ""
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
 msgstr ""
-"勘定科目の要素間を区切るために用いる文字です。英数字以外の単一の文字か、"
-"\"colon\" \"slash\", \"backslash\", \"dash\", \"period\" のいずれかの文字列で"
-"指定します。"
+"勘定科目の要素間を区切るために用いる文字です。英数字以外の単一の文字か"
+"、\"colon\" \"slash\", \"backslash\", \"dash\", \"period\" のいずれかの文字列"
+"で指定します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:934
 #: gnucash/gtkbuilder/dialog-preferences.glade:3338
@@ -15551,8 +15524,8 @@ msgid ""
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
 "取引の一致処理で「更新および清算」動作を有効にします。選択した場合、一致処理"
-"のスコアが自動清算の閾値より上で、日付または金額が異なる既存の取引はデフォル"
-"トで更新および清算されます。"
+"のスコアが自動清算の閾値より上で、日付または金額が異なる既存の取引は"
+"デフォルトで更新および清算されます。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2154
 msgid ""
@@ -15587,8 +15560,8 @@ msgid ""
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
 "default."
 msgstr ""
-"最善の一致スコアが赤色ゾーン（表示閾値より上で自動追加閾値以下）の取引はデ"
-"フォルトで追加されます。"
+"最善の一致スコアが赤色ゾーン（表示閾値より上で自動追加閾値以下）の取引は"
+"デフォルトで追加されます。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
@@ -15625,8 +15598,8 @@ msgstr "ベイズ理論の一致処理を使用する(_B)"
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
-"既存の勘定科目へ新しい取引をインポートする時の一致処理でベイズ理論のアルゴリ"
-"ズムを使用します。"
+"既存の勘定科目へ新しい取引をインポートする時の一致処理でベイズ理論の"
+"アルゴリズムを使用します。"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2335
@@ -15643,8 +15616,8 @@ msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
 msgstr ""
-"日付がこの閾値以内の取引はおそらく一致するものとします。デフォルトは 4 日で"
-"す。"
+"日付がこの閾値以内の取引はおそらく一致するものとします。デフォルトは 4 日です"
+"。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2384
 msgid ""
@@ -15698,8 +15671,8 @@ msgid ""
 "transaction in the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
-"選択した場合、'Enter' キーを押すと空白の取引行へ移動します。選択しない場"
-"合、'Enter' キーを押すと 1 行下へ移動します。"
+"選択した場合、'Enter' キーを押すと空白の取引行へ移動します。選択しない場合"
+"、'Enter' キーを押すと 1 行下へ移動します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2577
 msgid "_Auto-raise lists"
@@ -15917,8 +15890,7 @@ msgstr "2 行表示(_D)"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
-msgstr ""
-"各取引のアクション、備考、およびリンクされた文書欄を 2 行目に表示します。"
+msgstr "各取引のアクション、備考、およびリンクされた文書欄を 2 行目に表示します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3110
 msgid "Register opens in a new _window"
@@ -15945,8 +15917,8 @@ msgid ""
 msgstr ""
 "選択した場合、記録簿および勘定科目を選択するポップアップでは末端の勘定科目名"
 "のみ表示されます。デフォルトの設定は勘定科目ツリーのパスを含むフルネームを表"
-"示します。このオプションを選択する場合は末端の勘定科目名を一意にしてくださ"
-"い。"
+"示します。このオプションを選択する場合は末端の勘定科目名を一意にしてください"
+"。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3211
 msgid "Register Defaults"
@@ -16054,8 +16026,8 @@ msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
-"各タブに「閉じる」ボタンを表示します。この機能はメニュー項目の「閉じる」と"
-"まったく同じです。"
+"各タブに「閉じる」ボタンを表示します。この機能はメニュー項目の「閉じる」とま"
+"ったく同じです。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3721
 msgid ""
@@ -16290,9 +16262,9 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"カスタム書式のタイトルを入力してください。このタイトルは小切手を印刷ダイアロ"
-"グの \"小切手の書式\" 選択肢に表示されます。既存のカスタム書式と同じ名前を使"
-"用した場合は上書きされます。"
+"カスタム書式のタイトルを入力してください。このタイトルは小切手を印刷"
+"ダイアログの \"小切手の書式\" 選択肢に表示されます。既存のカスタム書式と同じ"
+"名前を使用した場合は上書きされます。"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:241
 msgid "Inches"
@@ -16613,8 +16585,8 @@ msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
 "now be corrected. Press OK to edit them."
 msgstr ""
-"以下の予定取引は削除された勘定科目を参照しているため修正しなければなりませ"
-"ん。編集するにはOKをクリックしてください。"
+"以下の予定取引は削除された勘定科目を参照しているため修正しなければなりません"
+"。編集するにはOKをクリックしてください。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:123
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -16678,8 +16650,7 @@ msgstr "通知ウィンドウを表示する(_S)"
 msgid ""
 "Show the notification window for the \"since last run\" process when a file "
 "is opened."
-msgstr ""
-"ファイルを開いたときに \"前回起動時以降\" 処理の通知ウィンドウを表示します。"
+msgstr "ファイルを開いたときに \"前回起動時以降\" 処理の通知ウィンドウを表示します。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:581
 msgid "_Auto-create new transactions"
@@ -18041,9 +18012,9 @@ msgid ""
 msgstr ""
 "インターネットバンキングに必要なものは各種サポートする AqBanking バックエンド"
 "により異なりますが、通常は以下が必要です:\n"
-"* あなたがご利用の銀行にインターネットアクセスを許可してもらう必要がありま"
-"す。入手方法は銀行のウェブサイトを見るかカスタマーサービスへお問い合わせくだ"
-"さい。\n"
+"* あなたがご利用の銀行にインターネットアクセスを許可してもらう必要があります"
+"。入手方法は銀行のウェブサイトを見るかカスタマーサービスへお問い合わせくださ"
+"い。\n"
 "銀行は以下の情報も教えてくれるはずです:\n"
 "* 銀行サーバであなたと識別するためのあなたのユーザー ID、たいていは基本口座番"
 "号、\n"
@@ -18075,8 +18046,8 @@ msgid ""
 msgstr ""
 "注意: ★★一切、無保証です★★ 銀行によってはインターネットバンキングのサーバの運"
 "用が貧弱です。時間的にギリギリの振込等をインターネットバンキング経由では実行"
-"しないでください。時折、銀行が振込等を拒絶時に正しく応答しないことがありま"
-"す。"
+"しないでください。時折、銀行が振込等を拒絶時に正しく応答しないことがあります"
+"。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"
@@ -18087,8 +18058,8 @@ msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
 msgstr ""
-"インターネットバンキングの接続設定は \"AqBanking 設定\" という外部のプログラ"
-"ムで実行されます。"
+"インターネットバンキングの接続設定は \"AqBanking 設定\" という外部の"
+"プログラムで実行されます。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -18130,10 +18101,10 @@ msgid ""
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"インターネットバンキングと GnuCash の勘定科目を対応付けるにはインターネットバ"
-"ンキングの勘定科目の行をダブルクリック、もしくは正しくない対応付けを選択して"
-"「選択した対応付けを削除」をクリックしてください。対応付けたい科目すべてを設"
-"定したら、「進む」をクリックしてください。"
+"インターネットバンキングと GnuCash の勘定科目を対応付けるには"
+"インターネットバンキングの勘定科目の行をダブルクリック、もしくは正しくない対"
+"応付けを選択して「選択した対応付けを削除」をクリックしてください。対応付けた"
+"い科目すべてを設定したら、「進む」をクリックしてください。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
 msgid "_Delete selected matches"
@@ -18846,8 +18817,7 @@ msgstr "AQBanking を使ってインポート"
 #, fuzzy
 #| msgid "Import into GnuCash any file format supported by AQBanking"
 msgid "Import into GnuCash any file format supported by AqBanking"
-msgstr ""
-"AQBanking のサポートするあらゆるファイル書式を GnuCash にインポートします。"
+msgstr "AQBanking のサポートするあらゆるファイル書式を GnuCash にインポートします。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -18891,8 +18861,7 @@ msgstr "SEPA 内取引を作成(_N)…"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"インターネットバンキングを通してヨーロッパ (SEPA) 内の取引を新規作成します。"
+msgstr "インターネットバンキングを通してヨーロッパ (SEPA) 内の取引を新規作成します。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 msgid "_Internal Transaction…"
@@ -19059,8 +19028,7 @@ msgstr "請求書 %s でエラーがありました、この請求書の全行�
 #: gnucash/import-export/bi-import/dialog-bi-import.c:546
 #, c-format
 msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
-msgstr ""
-"ID のない請求書でエラーがありました、この請求書の全行は無視されます。\n"
+msgstr "ID のない請求書でエラーがありました、この請求書の全行は無視されます。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:652
 msgid "Processing…"
@@ -19292,8 +19260,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"\"適用\" をクリックすると勘定科目階層はファイル '%s' にエクスポートされま"
-"す。\n"
+"\"適用\" をクリックすると勘定科目階層はファイル '%s' にエクスポートされます"
+"。\n"
 "\n"
 "\"戻る\" ボタンをクリックして選択を確認することもできます。エクスポートを中止"
 "する場合は \"キャンセル\" をクリックしてください。\n"
@@ -19308,8 +19276,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"\"適用\" をクリックすると取引はファイル '%s' にエクスポートされます。エクス"
-"ポートされる勘定科目は %u 個になります。\n"
+"\"適用\" をクリックすると取引はファイル '%s' にエクスポートされます。"
+"エクスポートされる勘定科目は %u 個になります。\n"
 "\n"
 "\"戻る\" ボタンをクリックして選択を確認することもできます。エクスポートを中止"
 "する場合は \"キャンセル\" をクリックしてください。\n"
@@ -19441,9 +19409,9 @@ msgstr ""
 "'戻る' ボタンをクリックして選択を確認することができます。インポートを中止する"
 "場合は 'キャンセル' をクリックしてください。\n"
 "\n"
-"新規作成中のファイルへの初回インポートであれば、先に帳簿オプション設定ダイア"
-"ログが表示されます。この設定によってインポートされたデータを GnuCash の取引に"
-"どう変換するかが影響を受けるためです。\n"
+"新規作成中のファイルへの初回インポートであれば、先に帳簿オプション設定"
+"ダイアログが表示されます。この設定によってインポートされたデータを GnuCash の"
+"取引にどう変換するかが影響を受けるためです。\n"
 "備考: インポートした後に '表示 / フィルター / その他' メニューのオプションで "
 "未使用の勘定科目を表示する を選択する必要があるかもしれません。\n"
 
@@ -19608,8 +19576,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2146
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr ""
-"行をダブルクリックすると変更できます。適用をクリックするとインポートします。"
+msgstr "行をダブルクリックすると変更できます。適用をクリックするとインポートします。"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2216
@@ -19620,8 +19587,7 @@ msgstr "取引はファイル '{1}' からインポートされました。"
 #: gnucash/import-export/csv-imp/csv-account-import.c:267
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
-msgstr ""
-"行 %u、勘定科目 %s へのパスが見つからないため、最上位に追加されます。\n"
+msgstr "行 %u、勘定科目 %s へのパスが見つからないため、最上位に追加されます。\n"
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:319
 #, c-format
@@ -19658,22 +19624,19 @@ msgstr "金額の列を選択してください。"
 msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
-msgstr ""
-"'交換先通貨' の列を選択するか、通貨を '交換先通貨' 欄に指定してください。"
+msgstr "'交換先通貨' の列を選択するか、通貨を '交換先通貨' 欄に指定してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:464
 msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
-msgstr ""
-"'交換元記号' の列を選択するか、商品を '交換元商品' 欄に指定してください。"
+msgstr "'交換元記号' の列を選択するか、商品を '交換元商品' 欄に指定してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:472
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
-msgstr ""
-"'交換元名前空間' の列を選択するか、商品を '交換元商品' 欄に指定してください。"
+msgstr "'交換元名前空間' の列を選択するか、商品を '交換元商品' 欄に指定してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:480
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:190
@@ -19734,8 +19697,7 @@ msgstr "勘定科目の列を選択してください。"
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:503
 msgid ""
 "Please select an account column or set a base account in the Account field."
-msgstr ""
-"勘定科目の列を選択するか、勘定科目欄に基本とする勘定科目を設定してください。"
+msgstr "勘定科目の列を選択するか、勘定科目欄に基本とする勘定科目を設定してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:509
 msgid "Please select a description column."
@@ -19908,13 +19870,11 @@ msgstr "値を有効な照合済状態に解析できませんでした。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:249
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
-msgstr ""
-"'複数スプリット' オプションを指定していないときは日付の列を空にできません。\n"
+msgstr "'複数スプリット' オプションを指定していないときは日付の列を空にできません。\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:265
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
-msgstr ""
-"'複数スプリット' オプションを指定していないときは説明の列を空にできません。\n"
+msgstr "'複数スプリット' オプションを指定していないときは説明の列を空にできません。\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
 msgid "No valid date."
@@ -19938,8 +19898,7 @@ msgstr "資金移動先勘定科目の値は空にできません。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:468
 msgid "Transfer account value can't be mapped back to an account."
-msgstr ""
-"資金移動先勘定科目の値から勘定科目にマッピングし直すことができませんでした。"
+msgstr "資金移動先勘定科目の値から勘定科目にマッピングし直すことができませんでした。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:645
 msgid "No amount or negated amount column."
@@ -19947,8 +19906,7 @@ msgstr "金額または符号反転金額の列がありません。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:648
 msgid "Split is reconciled but reconcile date column is missing or invalid."
-msgstr ""
-"スプリットは照合済となっていますが、照合日の列がないか有効ではありません。"
+msgstr "スプリットは照合済となっていますが、照合日の列がないか有効ではありません。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:651
 msgid ""
@@ -20273,8 +20231,8 @@ msgstr "選択したログファイルは空です。"
 msgid ""
 "The log file you selected cannot be read. The file header was not recognized."
 msgstr ""
-"選択したログファイルが読み込めませんでした。ファイルヘッダーが認識できませ"
-"ん。"
+"選択したログファイルが読み込めませんでした。ファイルヘッダーが認識できません"
+"。"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:717
 #, c-format
@@ -20355,16 +20313,15 @@ msgstr "GnuCash 勘定科目名"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:880
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr ""
-"商品の名前または短い説明を入力してください。例えば、\"レッドハット株\"。"
+msgstr "商品の名前または短い説明を入力してください。例えば、\"レッドハット株\"。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:882
 msgid ""
 "Enter the ticker symbol or other well known abbreviation, such as \"RHT\". "
 "If there isn't one, or you don't know it, create your own."
 msgstr ""
-"銘柄記号またはほかのよく知られた略号を入力してください。たとえば \"RHT\" で"
-"す。もしよく知らなければ自分で適切なものを作成し、入力してください。"
+"銘柄記号またはほかのよく知られた略号を入力してください。たとえば \"RHT\" です"
+"。もしよく知らなければ自分で適切なものを作成し、入力してください。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:885
 msgid ""
@@ -20409,8 +20366,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1724
 msgid "That QIF file is already loaded. Please select another file."
-msgstr ""
-"その QIF ファイルはすでにロード済です。別のファイルを選択してください。"
+msgstr "その QIF ファイルはすでにロード済です。別のファイルを選択してください。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1788
 msgid "Select QIF File"
@@ -21234,9 +21190,9 @@ msgid ""
 "overwrite it from this register window. You may overwrite it if you navigate "
 "to a register that shows another side of this same transaction."
 msgstr ""
-"これはこの取引をこの記録簿に関連付けているスプリットなので、この記録簿ウィン"
-"ドウからは上書きできません。この取引の相手勘定科目の記録簿を表示したらそこで"
-"上書きできます。"
+"これはこの取引をこの記録簿に関連付けているスプリットなので、この記録簿"
+"ウィンドウからは上書きできません。この取引の相手勘定科目の記録簿を表示したら"
+"そこで上書きできます。"
 
 #: gnucash/register/ledger-core/split-register.c:1056
 msgid ""
@@ -21628,15 +21584,14 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:1089
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
-msgstr ""
-"入力行 (スプリット) すべてに共通の参照情報 (小切手番号など) を入力します。"
+msgstr "入力行 (スプリット) すべてに共通の参照情報 (小切手番号など) を入力します。"
 
 #: gnucash/register/ledger-core/split-register-model.c:1091
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
-"入力行 (スプリット) のそれぞれに固有の参照情報 (小切手番号など) を入力しま"
-"す。"
+"入力行 (スプリット) のそれぞれに固有の参照情報 (小切手番号など) を入力します"
+"。"
 
 #: gnucash/register/ledger-core/split-register-model.c:1112
 msgid ""
@@ -21704,14 +21659,13 @@ msgstr "移動元の勘定科目を入力するか、一覧から選択します
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"この取引には複数のスプリットがあります。それらをすべて見るにはスプリットボタ"
-"ンを押してください。"
+"この取引には複数のスプリットがあります。それらをすべて見るには"
+"スプリットボタンを押してください。"
 
 #: gnucash/register/ledger-core/split-register-model.c:1592
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
-msgstr ""
-"この取引は株式の分割です。詳細を見るにはスプリットボタンを押してください。"
+msgstr "この取引は株式の分割です。詳細を見るにはスプリットボタンを押してください。"
 
 #: gnucash/register/ledger-core/split-register-model.c:2110
 #, c-format
@@ -21913,8 +21867,7 @@ msgstr "勘定科目が選択されていません"
 
 #: gnucash/report/html-utilities.scm:373
 msgid "This report requires accounts to be selected in the report options."
-msgstr ""
-"この帳票を出力するには帳票オプションで勘定科目を選択する必要があります。"
+msgstr "この帳票を出力するには帳票オプションで勘定科目を選択する必要があります。"
 
 #: gnucash/report/html-utilities.scm:380
 #: gnucash/report/reports/standard/price-scatter.scm:246
@@ -22141,8 +22094,7 @@ msgstr "親勘定科目の勘定科目小計の表示方法です。"
 
 #: gnucash/report/options-utilities.scm:229
 msgid "Show subtotals for selected parent accounts which have subaccounts."
-msgstr ""
-"小計を表示する - 子勘定科目をもつ選択した親勘定科目の小計を表示します。"
+msgstr "小計を表示する - 子勘定科目をもつ選択した親勘定科目の小計を表示します。"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "Do not show any subtotals for parent accounts."
@@ -22497,8 +22449,7 @@ msgstr "合計を表示する"
 #: gnucash/report/reports/standard/category-barchart.scm:129
 #: gnucash/report/reports/standard/net-charts.scm:87
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
-"指定した勘定科目の階層までであれば、これらの勘定科目を帳票の対象とします。"
+msgstr "指定した勘定科目の階層までであれば、これらの勘定科目を帳票の対象とします。"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
 #: gnucash/report/reports/standard/account-piecharts.scm:140
@@ -22977,8 +22928,8 @@ msgstr "TXFエクスポートパラメーターを印刷する"
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
-"帳票の各 TXFコード/勘定科目に対して TXF エクスポートパラメーターを表示しま"
-"す。"
+"帳票の各 TXFコード/勘定科目に対して TXF エクスポートパラメーターを表示します"
+"。"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:220
 msgid "Do not print T-Num:Memo data"
@@ -23151,8 +23102,7 @@ msgstr "平均の表示"
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
-msgstr ""
-"全期間の合計を表示するか、(月ごとなどの) 平均を表示するかを選択します。"
+msgstr "全期間の合計を表示するか、(月ごとなどの) 平均を表示するかを選択します。"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:110
 #: gnucash/report/reports/standard/category-barchart.scm:119
@@ -23224,8 +23174,8 @@ msgstr "深さ限界の動作"
 #: gnucash/report/reports/standard/account-summary.scm:89
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr ""
-"指定した深さ限界を超える勘定科目（があれば、それら）をどう扱うかを指定しま"
-"す。"
+"指定した深さ限界を超える勘定科目（があれば、それら）をどう扱うかを指定します"
+"。"
 
 #: gnucash/report/reports/standard/account-summary.scm:90
 msgid ""
@@ -23507,8 +23457,7 @@ msgstr "後入先出"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:88
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr ""
-"価格エディターのデータを利用可能な場合には、取引データの代わりに使用します。"
+msgstr "価格エディターのデータを利用可能な場合には、取引データの代わりに使用します。"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "How to report commissions and other brokerage fees."
@@ -23887,8 +23836,7 @@ msgstr "負の金額の書式"
 msgid ""
 "The formatting to use for negative amounts: with a leading sign, or "
 "enclosing brackets."
-msgstr ""
-"負の金額の書式を指定します。前に符号をつけるか括弧でくくるかのいずれかです。"
+msgstr "負の金額の書式を指定します。前に符号をつけるか括弧でくくるかのいずれかです。"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:165
 msgid "Font family"
@@ -24612,8 +24560,7 @@ msgstr "貸借残高および予算高がゼロの勘定科目を含める"
 msgid ""
 "Include accounts with zero total (recursive) balances and budget values in "
 "this report."
-msgstr ""
-"帳票に合計の貸借残高・予算が (子勘定科目も含めて) 0 の勘定科目を含めます。"
+msgstr "帳票に合計の貸借残高・予算が (子勘定科目も含めて) 0 の勘定科目を含めます。"
 
 #: gnucash/report/reports/standard/budget.scm:88
 msgid "Include collapsed periods before selected."
@@ -24623,8 +24570,7 @@ msgstr "選択より前の期間をまとめた列を含める。"
 msgid ""
 "Include in report previous periods as single collapsed column (one for all "
 "periods before starting)"
-msgstr ""
-"帳票に前の期間を一つの列 (開始期間より前の全期間の列) にまとめて含めます。"
+msgstr "帳票に前の期間を一つの列 (開始期間より前の全期間の列) にまとめて含めます。"
 
 #: gnucash/report/reports/standard/budget.scm:90
 msgid "Include collapsed periods after selected."
@@ -24868,8 +24814,7 @@ msgstr "売上と収益が記録されている収益勘定科目です。"
 msgid ""
 "The expense accounts where the expenses are recorded which are subtracted "
 "from the sales to give the profit."
-msgstr ""
-"売上から利益になるまでに差し引かれる費用が記録されている費用勘定科目です。"
+msgstr "売上から利益になるまでに差し引かれる費用が記録されている費用勘定科目です。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:63
 msgid "Show Expense Column"
@@ -25973,8 +25918,8 @@ msgstr "タイトルの変更"
 #: gnucash/report/reports/standard/invoice.scm:397
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
 msgstr ""
-"請求書、仕入先請求書または立替払請求書の代わりにタイトルに表示する文字列で"
-"す。"
+"請求書、仕入先請求書または立替払請求書の代わりにタイトルに表示する文字列です"
+"。"
 
 #: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/stylesheets/css.scm:118
@@ -26689,8 +26634,7 @@ msgstr "請求書では支払済かどうかを表示し、支払では請求書
 #: gnucash/report/reports/standard/new-owner-report.scm:941
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
-msgstr ""
-"請求書では支払一覧を表示し、支払では請求書番号と金額の一覧を表示します。"
+msgstr "請求書では支払一覧を表示し、支払では請求書番号と金額の一覧を表示します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:945
 msgid "Simple"
@@ -26710,8 +26654,7 @@ msgstr "有効な勘定科目がありません"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1066
 msgid "This report requires a valid AP/AR account to be available."
-msgstr ""
-"この帳票を出力するには利用できる有効な買掛金・売掛金勘定科目が必要です。"
+msgstr "この帳票を出力するには利用できる有効な買掛金・売掛金勘定科目が必要です。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1089
 msgid "No transactions found."
@@ -26809,8 +26752,8 @@ msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
 msgstr ""
-"商品と帳票の通貨が同一です。同一の商品の価格を表示することは意味がありませ"
-"ん。"
+"商品と帳票の通貨が同一です。同一の商品の価格を表示することは意味がありません"
+"。"
 
 #: gnucash/report/reports/standard/price-scatter.scm:247
 msgid ""
@@ -26851,8 +26794,8 @@ msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
-"すべての価格が同じ日付になっています。これによりグラフは一本の直線になりま"
-"す。残念なことにグラフツールが正しく扱えません。"
+"すべての価格が同じ日付になっています。これによりグラフは一本の直線になります"
+"。残念なことにグラフツールが正しく扱えません。"
 
 #: gnucash/report/reports/standard/price-scatter.scm:299
 msgid "Price Scatterplot"
@@ -27569,8 +27512,7 @@ msgstr "説明"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
-msgstr ""
-"請求書が選択されていません -- オプションメニューから一つを選択してください。"
+msgstr "請求書が選択されていません -- オプションメニューから一つを選択してください。"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:284
 msgid ""
@@ -27997,8 +27939,7 @@ msgstr "GnuCash のバージョンを下に表示する"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:117
 msgid "Per default the GnuCash version will be shown before the report data."
-msgstr ""
-"デフォルトでは、GnuCash のバージョンは帳票データよりも前に表示されます。"
+msgstr "デフォルトでは、GnuCash のバージョンは帳票データよりも前に表示されます。"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:402
 #: gnucash/report/stylesheets/head-or-tail.scm:409
@@ -28220,8 +28161,8 @@ msgid ""
 "blank, which will disable the filter."
 msgstr ""
 "フルネームがこのフィルターに合致する勘定科目のみを表示します、例えば "
-"':Travel' は Expenses:Travel:Holiday や Expenses:Business:Travel に合致しま"
-"す。空にするとこのフィルターを無効化できます。"
+"':Travel' は Expenses:Travel:Holiday や Expenses:Business:Travel に合致します"
+"。空にするとこのフィルターを無効化できます。"
 
 #: gnucash/report/trep-engine.scm:596
 msgid ""
@@ -28231,15 +28172,14 @@ msgid ""
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
 "デフォルトではこの勘定科目フィルターは文字列の部分一致のみで検索します。これ"
-"を設定すると、完全な POSIX 正規表現の機能が使えるようになります。'Car|"
-"Flights' は Expenses:Car や Expenses:Flights の両方に合致します。ピリオド "
-"(.) を使うと単一文字に合致します、例えば '20../.' は 'Travel 2017/1 London' "
-"に合致します。 "
+"を設定すると、完全な POSIX 正規表現の機能が使えるようになります"
+"。'Car|Flights' は Expenses:Car や Expenses:Flights の両方に合致します。"
+"ピリオド (.) を使うと単一文字に合致します、例えば '20../.' は 'Travel 2017/1 "
+"London' に合致します。 "
 
 #: gnucash/report/trep-engine.scm:604
 msgid "If this option is selected, accounts matching filter are excluded."
-msgstr ""
-"このオプションを選択すると、フィルターに一致する勘定科目は除外されます。"
+msgstr "このオプションを選択すると、フィルターに一致する勘定科目は除外されます。"
 
 #: gnucash/report/trep-engine.scm:609
 msgid ""
@@ -28260,8 +28200,8 @@ msgid ""
 msgstr ""
 "デフォルトではこの取引フィルターは文字列の部分一致のみで検索します。これを設"
 "定すると、完全な POSIX 正規表現の機能が使えるようになります。'#work|#family' "
-"はこのどちらのタグを説明、備考または摘要に含んでいても合致するようになりま"
-"す。"
+"はこのどちらのタグを説明、備考または摘要に含んでいても合致するようになります"
+"。"
 
 #: gnucash/report/trep-engine.scm:625
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -28271,8 +28211,7 @@ msgstr "このオプションを選択すると、フィルターに一致する
 msgid ""
 "If this option is selected, transactions matching filter is not case "
 "sensitive."
-msgstr ""
-"このオプションを選択すると、取引一致フィルターは大文字小文字を区別しません。"
+msgstr "このオプションを選択すると、取引一致フィルターは大文字小文字を区別しません。"
 
 #: gnucash/report/trep-engine.scm:636
 msgid "Filter by reconcile status."
@@ -28764,8 +28703,7 @@ msgstr "警告をリセット(_W)…"
 
 #: gnucash/ui/gnc-main-window.ui:346
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr ""
-"すべての警告メッセージの状態をリセットし、もう一度表示されるようにします。"
+msgstr "すべての警告メッセージの状態をリセットし、もう一度表示されるようにします。"
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
@@ -29581,8 +29519,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"この勘定科目と子勘定科目で、貸借が一致しない取引およびどの取引にも属さないス"
-"プリットを検査し、修復します。"
+"この勘定科目と子勘定科目で、貸借が一致しない取引およびどの取引にも属さない"
+"スプリットを検査し、修復します。"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
@@ -30083,8 +30021,7 @@ msgstr "現在の取引にリンクされた文書を開きます。"
 #, fuzzy
 #| msgid "Jump to the linked bill, invoice, or voucher."
 msgid "Jump to the linked invoice, bill, expense or credit note."
-msgstr ""
-"リンクされた仕入先請求書、得意先請求書、または立替払請求書へジャンプします。"
+msgstr "リンクされた仕入先請求書、得意先請求書、または立替払請求書へジャンプします。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
@@ -30733,14 +30670,12 @@ msgstr "未知の Finance::Quote エラー: "
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1077
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
-msgstr ""
-"guid [%s] の不明な勘定科目です。予定取引 [%s] の作成をキャンセルしています。"
+msgstr "guid [%s] の不明な勘定科目です。予定取引 [%s] の作成をキャンセルしています。"
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1132
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
-msgstr ""
-"予定取引 [%s] の解析エラーがありました。キー [%s]=数式 [%s] 場所 [%s]: %s"
+msgstr "予定取引 [%s] の解析エラーがありました。キー [%s]=数式 [%s] 場所 [%s]: %s"
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1188
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1863
@@ -30945,8 +30880,7 @@ msgstr "実現損益"
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
-msgstr ""
-"どこにも記録されていない商品勘定科目または通貨取引勘定科目からの実現損益。"
+msgstr "どこにも記録されていない商品勘定科目または通貨取引勘定科目からの実現損益。"
 
 #: libgnucash/engine/gnc-commodity.cpp:191
 #, fuzzy
@@ -31263,8 +31197,7 @@ msgstr "選択された日付書式で値を日付に解析できませんでし
 
 #: libgnucash/engine/gnc-datetime.cpp:735
 msgid "Value appears to contain a year while the selected format forbids this."
-msgstr ""
-"選択された書式では年が含まれてはいけませんが、値には含まれているようです。"
+msgstr "選択された書式では年が含まれてはいけませんが、値には含まれているようです。"
 
 #: libgnucash/engine/gnc-features.cpp:72
 msgid ""
@@ -31282,8 +31215,8 @@ msgstr "クレジットカードへの追加支払"
 #: libgnucash/engine/gncInvoice.c:1767
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr ""
-"得意先請求書によって作成されています。得意先請求書の記帳を取り消してくださ"
-"い。"
+"得意先請求書によって作成されています。得意先請求書の記帳を取り消してください"
+"。"
 
 #: libgnucash/engine/gncInvoice.c:2197
 msgid " (posted)"
@@ -31440,9 +31373,9 @@ msgid ""
 "imports/exports."
 msgstr ""
 "スプリットのアクション欄を記録簿内で '番号' 欄として取引番号の代わりに使う場"
-"合に選択してください。取引番号は記録簿 2 行目に '取引番号' として表示されま"
-"す。ビジネスの機能や帳票、インポート・エクスポートの対応する部分に影響を与え"
-"ます。"
+"合に選択してください。取引番号は記録簿 2 行目に '取引番号' として表示されます"
+"。ビジネスの機能や帳票、インポート・エクスポートの対応する部分に影響を与えま"
+"す。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1218
 msgid ""
@@ -31464,8 +31397,7 @@ msgstr "得意先番号"
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
-msgstr ""
-"前に生成した得意先番号です。次の得意先番号を生成した時に値が 1 増加します。"
+msgstr "前に生成した得意先番号です。次の得意先番号を生成した時に値が 1 増加します。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1235
 msgid "Customer number format"
@@ -31487,8 +31419,7 @@ msgstr "従業員番号"
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
-msgstr ""
-"前に生成した従業員番号です。次の従業員番号を生成した時に値が 1 増加します。"
+msgstr "前に生成した従業員番号です。次の従業員番号を生成した時に値が 1 増加します。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1244
 msgid "Employee number format"
@@ -31606,8 +31537,7 @@ msgstr "注文番号"
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
-msgstr ""
-"前に生成した注文番号です。次の注文番号を生成した時に値が 1 増加します。"
+msgstr "前に生成した注文番号です。次の注文番号を生成した時に値が 1 増加します。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1287
 msgid "Order number format"
@@ -31618,8 +31548,8 @@ msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
-"注文番号を生成するために使用される書式文字列です。printf 形式の書式文字列で"
-"す。"
+"注文番号を生成するために使用される書式文字列です。printf 形式の書式文字列です"
+"。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1291
 msgid "Vendor number"
@@ -31629,8 +31559,7 @@ msgstr "仕入先番号"
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
-msgstr ""
-"前に生成した仕入先番号です。次の仕入先番号を生成した時に値が 1 増加します。"
+msgstr "前に生成した仕入先番号です。次の仕入先番号を生成した時に値が 1 増加します。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1295
 msgid "Vendor number format"
@@ -31885,8 +31814,7 @@ msgstr "税金の種類 %s: この勘定科目タイプには無効なコード 
 #: libgnucash/tax/gnc-locale-tax.c:165
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
-msgstr ""
-"税金関連ではありません。税金の種類 %s: この勘定科目タイプには無効なコード %s"
+msgstr "税金関連ではありません。税金の種類 %s: この勘定科目タイプには無効なコード %s"
 
 #: libgnucash/tax/gnc-locale-tax.c:178
 #, c-format

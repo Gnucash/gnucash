@@ -1324,8 +1324,9 @@ split_set_new_value(Split* split, gnc_commodity *curr, gnc_commodity *old_curr,
 void
 xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 {
-    gnc_commodity *old_curr = trans->common_currency;
     if (!trans || !curr || trans->common_currency == curr) return;
+
+    gnc_commodity *old_curr = trans->common_currency;
     xaccTransBeginEdit(trans);
 
     trans->common_currency = curr;
@@ -2546,8 +2547,8 @@ xaccTransVoid(Transaction *trans, const char *reason)
 gboolean
 xaccTransGetVoidStatus(const Transaction *trans)
 {
-    const char *s = xaccTransGetVoidReason (trans);
-    return (s && *s);
+    auto t = xaccTransGetVoidTime (trans);
+    return t != INT64_MAX;
 }
 
 const char *
@@ -2560,7 +2561,7 @@ time64
 xaccTransGetVoidTime(const Transaction *tr)
 {
     auto void_str{get_kvp_string_path (tr, {void_time_str})};
-    return void_str ? gnc_iso8601_to_time64_gmt (void_str) : 0;
+    return void_str ? gnc_iso8601_to_time64_gmt (void_str) : INT64_MAX;
 }
 
 void
@@ -2568,7 +2569,7 @@ xaccTransUnvoid (Transaction *trans)
 {
     g_return_if_fail(trans);
 
-    if (xaccTransGetVoidReason (trans) == nullptr)
+    if (!xaccTransGetVoidStatus (trans))
         return; /* Transaction isn't voided. Bail. */
 
     xaccTransBeginEdit(trans);

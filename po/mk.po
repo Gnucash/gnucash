@@ -8,11 +8,11 @@
 # acemk <ace.dimitrievski@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-12-03 11:11+0000\n"
+"PO-Revision-Date: 2026-06-26 05:11+0000\n"
 "Last-Translator: acemk <ace.dimitrievski@gmail.com>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -978,8 +978,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"За да пребарувате низ сите ваши трансакции, започнете пребарување (Уреди-"
-">Најди…) од главната страница за хиерархија на сметките. За да го ограничите "
+"За да пребарувате низ сите ваши трансакции, започнете пребарување (Уреди->"
+"Најди…) од главната страница за хиерархија на сметките. За да го ограничите "
 "вашето пребарување на една сметка, започнете го пребарувањето од регистарот "
 "на таа сметка."
 
@@ -2991,8 +2991,7 @@ msgstr "Овој запис е прикачен на нарачка и ќе би
 
 #: gnucash/gnome/dialog-invoice.c:924
 msgid "Choose a different report template or Printable Invoice will be used"
-msgstr ""
-"Изберете друг образец за извештај или ќе се користи фактура за печатење"
+msgstr "Изберете друг образец за извештај или ќе се користи фактура за печатење"
 
 #: gnucash/gnome/dialog-invoice.c:1038 gnucash/gnome/dialog-invoice.c:3573
 #: gnucash/gnome/dialog-invoice.c:3607 gnucash/gnome/dialog-invoice.c:3641
@@ -3643,9 +3642,9 @@ msgid ""
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
-"Немате валидни „Прокнижи на“ сметки . Ве молиме креирајте сметка од типот "
-"„%s“ пред да продолжите да ја обработувате оваа исплата. Можеби прво сакате "
-"да креирате влезна или излезна фактура?"
+"Немате валидни „Прокнижи на“ сметки . Ве молиме креирајте сметка од типот „%s"
+"“ пред да продолжите да ја обработувате оваа исплата. Можеби прво сакате да "
+"креирате влезна или излезна фактура?"
 
 #: gnucash/gnome/dialog-payment.c:1593
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:572
@@ -4559,8 +4558,7 @@ msgstr "_Извештај на компанијата"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
 msgid "Open a customer report window for the owner of this invoice"
-msgstr ""
-"Отворете прозорец за извештај за клиент за сопственикот на оваа фактура"
+msgstr "Отворете прозорец за извештај за клиент за сопственикот на оваа фактура"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or

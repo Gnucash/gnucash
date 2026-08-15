@@ -480,6 +480,7 @@
 
 (define-module (gnucash report html-acct-table))
 
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
 (use-modules (gnucash core-utils))
@@ -625,31 +626,28 @@
          accts))
 
       (define (calculate-balances-simple)
-        (define (merge-splits splits subtract?)
-          (for-each
-           (lambda (split)
-             (let* ((acct (xaccSplitGetAccount split))
-                    (guid (gncAccountGetGUID acct))
-                    (acct-comm (xaccAccountGetCommodity acct))
-                    (shares (xaccSplitGetAmount split))
-                    (hash (hash-ref ret-hash guid)))
-               (unless hash
-                 (set! hash (gnc:make-commodity-collector))
-                 (hash-set! ret-hash guid hash))
-               (hash 'add acct-comm (if subtract? (- shares) shares))))
-           splits))
 
-        (merge-splits (gnc:account-get-trans-type-splits-interval
-                       accts #f start-date end-date)
-                      #f)
+        (define (merge-split split minus?)
+          (let* ((acct (xaccSplitGetAccount split))
+                 (amt (xaccSplitGetAmount split))
+                 (coll (gnc:hash-ref! ret-hash (gncAccountGetGUID acct)
+                                      gnc:make-commodity-collector)))
+            (coll 'add (xaccAccountGetCommodity acct) (if minus? (- amt) amt))))
+
+        (for-each
+         (lambda (acc)
+           (gnc-account-foreach-split-between-dates
+            acc start-date end-date #f (lambda (s) (merge-split s #f))))
+         (delete-duplicates accts))
 
         (case balance-mode
           ((post-closing) #f)
 
           ;; remove closing entries
           ((pre-closing)
-           (merge-splits (gnc:account-get-trans-type-splits-interval
-                          accts closing-pattern start-date end-date) #t))
+           (for-each (lambda (s) (merge-split s #t))
+                     (gnc:account-get-trans-type-splits-interval
+                      accts closing-pattern start-date end-date)))
 
           (else
            (display "you fail it\n"))))

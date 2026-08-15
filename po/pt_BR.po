@@ -22,11 +22,11 @@
 # Willian Bruno <willianramos373@gmail.com>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-03-24 05:09+0000\n"
+"PO-Revision-Date: 2026-06-26 04:23+0000\n"
 "Last-Translator: Willian Bruno <willianramos373@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -993,8 +993,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Para pesquisar ao longo de todas as transações, inicie uma pesquisa (Editar-"
-">Pesquisar...) a partir da conta principal na página de contas. Para limitar "
+"Para pesquisar ao longo de todas as transações, inicie uma pesquisa (Editar->"
+"Pesquisar...) a partir da conta principal na página de contas. Para limitar "
 "a sua pesquisa numa única conta, inicie a sua pesquisa a partir do cadastro "
 "da conta."
 
@@ -4448,8 +4448,7 @@ msgstr "Excluir o %s?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1037
 msgid "You must select at least one account to estimate."
-msgstr ""
-"Você precisa selecionar pelo menos uma conta para fazer uma estimativa."
+msgstr "Você precisa selecionar pelo menos uma conta para fazer uma estimativa."
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1168
 msgid "You must select at least one account to edit."
@@ -5654,8 +5653,8 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "A data desta transação é anterior ao \"Limite somente leitura\" definido "
-"para este livro. Esse ajuste pode ser alterado em Arquivo->Propriedades-"
-">Contas."
+"para este livro. Esse ajuste pode ser alterado em Arquivo->Propriedades->"
+"Contas."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -5865,8 +5864,7 @@ msgstr "Manter a contabilidade da sua pequena empresa atualizada"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Create accurate reports and graphs from your financial data"
-msgstr ""
-"Criar relatórios e gráficos precisos a partir de seus dados financeiros"
+msgstr "Criar relatórios e gráficos precisos a partir de seus dados financeiros"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid "Set up scheduled transactions to avoid repeated data entry"
@@ -6591,8 +6589,7 @@ msgstr "Você precisa selecionar uma commodity."
 
 #: gnucash/gnome-utils/dialog-account.c:1043
 msgid "Balance limits must be different unless they are both zero."
-msgstr ""
-"Os limites de saldo devem ser diferentes, a menos que ambos sejam zero."
+msgstr "Os limites de saldo devem ser diferentes, a menos que ambos sejam zero."
 
 #: gnucash/gnome-utils/dialog-account.c:1050
 msgid "The lower balance limit must be less than the higher limit."
@@ -7569,8 +7566,8 @@ msgstr ""
 "números grandes corretamente. Isso significa que o GnuCash não pode usar "
 "corretamente os bancos de dados SQL. O Gnucash não vai abrir ou salvar nos "
 "bancos de dados SQL até que isso seja corrigido, instale uma versão "
-"diferente do \"libdbi\". Consulte https://bugs.gnucash.org/show_bug.cgi?"
-"id=611936 para obter mais informações."
+"diferente do \"libdbi\". Consulte https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936 para obter mais informações."
 
 #: gnucash/gnome-utils/gnc-file.c:560
 msgid ""
@@ -7612,8 +7609,7 @@ msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] "Caso não salve, a alteração a partir do %d minuto será descartada."
-msgstr[1] ""
-"Caso não salve, as alterações dos últimos %d minutos serão descartadas."
+msgstr[1] "Caso não salve, as alterações dos últimos %d minutos serão descartadas."
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -7730,8 +7726,7 @@ msgstr "Ver…"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
 msgid "GnuCash could not find the files of the help documentation."
-msgstr ""
-"O GnuCash não conseguiu encontrar os arquivos da documentação de ajuda."
+msgstr "O GnuCash não conseguiu encontrar os arquivos da documentação de ajuda."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:71
 msgid ""
@@ -9534,8 +9529,7 @@ msgstr "Mostre a documentação"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:33
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr ""
-"Mostra algumas páginas da documentação no assistente de Importação QIF."
+msgstr "Mostra algumas páginas da documentação no assistente de Importação QIF."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
@@ -10722,8 +10716,8 @@ msgstr ""
 "como \"Fatura\". \"%2$s\" é o número do relatório, que para o relatório de "
 "uma fatura seja o número da fatura. \"%3$s\" é a data do relatório, "
 "formatado de acordo com a configuração do formato da data do arquivo. "
-"Observação: todos os caracteres não permitidos nos nomes do arquivo, como "
-"'/', serão substituídos por sublinhados '_' no nome do arquivo."
+"Observação: todos os caracteres não permitidos nos nomes do arquivo, como '/"
+"', serão substituídos por sublinhados '_' no nome do arquivo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:390
 msgid "PDF export file name date format choice"
@@ -10943,8 +10937,7 @@ msgstr "Cadastro somente-leitura"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:55
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
 msgid "This dialog is presented when a read-only register is opened."
-msgstr ""
-"Este diálogo é apresentado quando um cadastro somente-leitura é aberto."
+msgstr "Este diálogo é apresentado quando um cadastro somente-leitura é aberto."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
@@ -13857,8 +13850,8 @@ msgstr ""
 "contas quando o saldo atual for superior a esse valor.\n"
 "\n"
 "ou seja:\n"
-"O saldo atual de -90 mostrará o ícone se o limite estiver definido como "
-"-100\n"
+"O saldo atual de -90 mostrará o ícone se o limite estiver definido como -"
+"100\n"
 "O saldo atual de 100 mostrará o ícone se o limite estiver definido como 90\n"
 "\n"
 "Limpe a entrada para não receber nenhum aviso."
@@ -13878,8 +13871,8 @@ msgstr ""
 "contas quando o saldo atual for menor que esse valor.\n"
 "\n"
 "ou seja\n"
-"O saldo atual de -100 mostrará o ícone se o limite estiver definido como "
-"-90\n"
+"O saldo atual de -100 mostrará o ícone se o limite estiver definido como -"
+"90\n"
 "O saldo atual de 90 mostrará o ícone se o limite estiver definido como 100\n"
 "\n"
 "Limpe a entrada para não receber nenhum aviso."
@@ -16656,8 +16649,7 @@ msgstr "Último de _Mês"
 
 #: gnucash/gtkbuilder/dialog-price.glade:509
 msgid "Keep the last price of each month if present before date."
-msgstr ""
-"Mantenha o último preço de cada mês caso esteja presente antes da data."
+msgstr "Mantenha o último preço de cada mês caso esteja presente antes da data."
 
 #: gnucash/gtkbuilder/dialog-price.glade:522
 msgid "Last of _Quarter"
@@ -18627,8 +18619,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -18781,8 +18773,7 @@ msgstr "_Largura da barra"
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:669
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
-"Configurando a largura da barra adaptando-se ao tamanho do gerador TAN."
+msgstr "Configurando a largura da barra adaptando-se ao tamanho do gerador TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:684
 msgid "_Delay"
@@ -19606,8 +19597,7 @@ msgstr "Validação…\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:334
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
-msgstr ""
-"Linha %d: no ID da fatura na primeira linha do arquivo de importação.\n"
+msgstr "Linha %d: no ID da fatura na primeira linha do arquivo de importação.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:342
 #, c-format
@@ -21737,8 +21727,7 @@ msgstr "Impostos calculados após a aplicação do desconto"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:658
 msgid "Discount and tax both applied on pretax value"
-msgstr ""
-"Tanto desconto quanto impostos são incidentes sobre o valor pré-imposto"
+msgstr "Tanto desconto quanto impostos são incidentes sobre o valor pré-imposto"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:661
 msgid "Discount computed after tax is applied"
@@ -21841,8 +21830,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 "A data inserida da transação duplicada é anterior ao \"Limite somente "
-"leitura\" definido para este livro. Esse ajuste pode ser alterado em Arquivo-"
-">Propriedades->Contas."
+"leitura\" definido para este livro. Esse ajuste pode ser alterado em "
+"Arquivo->Propriedades->Contas."
 
 #: gnucash/register/ledger-core/split-register.c:997
 msgid ""
@@ -22426,8 +22415,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "A data desta transação é anterior ao \"Limite somente leitura\" definido "
-"para este livro. Esta configuração pode ser alterada em Arquivo-"
-">Propriedades->Contas."
+"para este livro. Esta configuração pode ser alterada em Arquivo->"
+"Propriedades->Contas."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -24584,8 +24573,7 @@ msgstr "Tamanho da fonte"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
-msgstr ""
-"O tamanho da fonte no formato CSS (por exemplo, \"médio\" ou \"10pt\")."
+msgstr "O tamanho da fonte no formato CSS (por exemplo, \"médio\" ou \"10pt\")."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
@@ -25565,8 +25553,7 @@ msgstr "Sem dados exportáveis"
 
 #: gnucash/report/reports/standard/customer-summary.scm:51
 msgid "The income accounts where the sales and income was recorded."
-msgstr ""
-"As contas de receitas são onde as vendas e as receitas são registradas."
+msgstr "As contas de receitas são onde as vendas e as receitas são registradas."
 
 #: gnucash/report/reports/standard/customer-summary.scm:61
 msgid ""
@@ -28116,8 +28103,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr ""
-"O padrão das entradas de ajuste diferencie as maiúsculas das minúsculas"
+msgstr "O padrão das entradas de ajuste diferencie as maiúsculas das minúsculas"
 
 #: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
@@ -30770,8 +30756,7 @@ msgstr "Adicionar uma transação de estorno."
 #: gnucash/ui/gnc-plugin-page-register.ui:507
 msgid ""
 "Add, change, or unlink the document linked with the current transaction."
-msgstr ""
-"Adicione, altere ou desvincule o documento vinculado à transação atual."
+msgstr "Adicione, altere ou desvincule o documento vinculado à transação atual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
@@ -30998,8 +30983,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
-"Adicione a configuração do relatório atual ao menu 'Relatórios-"
-">Configurações dos relatórios salvos'"
+"Adicione a configuração do relatório atual ao menu 'Relatórios->"
+"Configurações dos relatórios salvos'"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
@@ -32370,8 +32355,8 @@ msgstr "O endereço URL do seu site."
 #: libgnucash/engine/gnc-optiondb.cpp:1328
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr ""
-"O número de identificação da sua empresa (por exemplo, 'ID fiscal: "
-"00-000000)."
+"O número de identificação da sua empresa (por exemplo, 'ID fiscal: 00-000000)"
+"."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1336
 msgid ""

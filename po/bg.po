@@ -9,11 +9,11 @@
 # Ivan Kostov <jiveq1@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-04-21 20:05+0000\n"
+"PO-Revision-Date: 2026-06-26 03:25+0000\n"
 "Last-Translator: Ivan Kostov <jiveq1@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/bg/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -103,8 +103,7 @@ msgstr "Край на отчетния период"
 #: libgnucash/engine/gnc-option-date.cpp:321
 #, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Последен ден на отчетния период, както е указано в общите предпочитания"
+msgstr "Последен ден на отчетния период, както е указано в общите предпочитания"
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -2226,8 +2225,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
-"Процентът на отстъпката трябва да бъде между 0 и 100 или не се попълва."
+msgstr "Процентът на отстъпката трябва да бъде между 0 и 100 или не се попълва."
 
 #: gnucash/gnome/dialog-customer.c:334
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -5462,8 +5460,7 @@ msgstr "Не можете да записвате във файла."
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:738
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
-msgstr ""
-"Файлът %s вече съществува. Сигурни ли сте, че искате да го презапишете?"
+msgstr "Файлът %s вече съществува. Сигурни ли сте, че искате да го презапишете?"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1733
 #, fuzzy
@@ -6596,8 +6593,7 @@ msgstr "Трябва да изберете вид сметка."
 msgid ""
 "The selected account type is incompatible with the one of the selected "
 "parent."
-msgstr ""
-"Избраният вид сметка е несъвместим с някоя от избраните основни сметки."
+msgstr "Избраният вид сметка е несъвместим с някоя от избраните основни сметки."
 
 #: gnucash/gnome-utils/dialog-account.c:1023
 msgid "You must choose a commodity."
@@ -7207,8 +7203,8 @@ msgstr[0] ""
 "промените. GnuCash притежава свойството да съхранява файла автоматично на "
 "всеки %d минути, равносилно на натискането на бутона \"Запазване\".\n"
 "\n"
-"Можете да промените интервала или да изключите свойството от Редактиране-"
-">Предпочитания->Основни->Интервал за автоматичен запис.\n"
+"Можете да промените интервала или да изключите свойството от Редактиране->"
+"Предпочитания->Основни->Интервал за автоматичен запис.\n"
 "\n"
 "Да се запазва ли автоматично файлът?"
 msgstr[1] ""
@@ -7216,8 +7212,8 @@ msgstr[1] ""
 "промените. GnuCash притежава свойството да съхранява файла автоматично на "
 "всеки %d минути, равносилно на натискането на бутона \"Запазване\".\n"
 "\n"
-"Можете да промените интервала или да изключите свойството от Редактиране-"
-">Предпочитания->Основни->Интервал за автоматичен запис.\n"
+"Можете да промените интервала или да изключите свойството от Редактиране->"
+"Предпочитания->Основни->Интервал за автоматичен запис.\n"
 "\n"
 "Да се запазва ли автоматично файлът?"
 
@@ -7618,10 +7614,8 @@ msgstr "Да се запазят ли промените във файла?"
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] ""
-"Ако не запазите, промените от последните %d минути ще бъдат отменени."
-msgstr[1] ""
-"Ако не запазите, промените от последните %d минути ще бъдат отменени."
+msgstr[0] "Ако не запазите, промените от последните %d минути ще бъдат отменени."
+msgstr[1] "Ако не запазите, промените от последните %d минути ще бъдат отменени."
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -7724,8 +7718,7 @@ msgstr "Изглежда базата от данни %s не съществув
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
-msgstr ""
-"Файлът %s вече съществува. Сигурни ли сте, че искате да го презапишете?"
+msgstr "Файлът %s вече съществува. Сигурни ли сте, че искате да го презапишете?"
 
 #: gnucash/gnome-utils/gnc-file.c:1781
 #: gnucash/gnome-utils/gnc-main-window.cpp:1232
@@ -9450,8 +9443,8 @@ msgid ""
 msgstr ""
 "Полето определя горната граница на съвпадаща транзакция, отвъд която "
 "стандартно ще се потвърди. Транзакцията, чиято най-висока степен на "
-"съвпадение е в зелената зона (по-голяма или равна на границата за "
-"изравяване), стандартно ще се изравни. "
+"съвпадение е в зелената зона (по-голяма или равна на границата за изравяване)"
+", стандартно ще се изравни. "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
@@ -12456,8 +12449,8 @@ msgid ""
 "worry if your data is in multiple files.\n"
 msgstr ""
 "Изберете файл за зареждане. Когато натиснете \"Напред\", файлът ще се зареди "
-"и анализира. Може да се наложи да отговорите на няколко въпроса за "
-"сметката(ите) във файла.\n"
+"и анализира. Може да се наложи да отговорите на няколко въпроса за сметката"
+"(ите) във файла.\n"
 "\n"
 "Ще можете да заредите толкова файла, колкото желаете. Затова не се "
 "притеснявайте, ако данните са в много файлове.\n"
@@ -15145,8 +15138,7 @@ msgstr "Избор на формат за транспортиране за от
 msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
-msgstr ""
-"ID-номер на фактурата. Ако е непопълнен, ще бъде избран подходящ номер."
+msgstr "ID-номер на фактурата. Ако е непопълнен, ще бъде избран подходящ номер."
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1381
 msgid ""
@@ -15370,8 +15362,7 @@ msgstr "Записи в поръчка"
 #: gnucash/gtkbuilder/dialog-order.glade:531
 msgid ""
 "The order ID number. If left blank a reasonable number will be chosen for you"
-msgstr ""
-"Номер на ID на поръчка. Ако е непопълнен, ще бъде избран подходящ номер"
+msgstr "Номер на ID на поръчка. Ако е непопълнен, ще бъде избран подходящ номер"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
@@ -18325,8 +18316,7 @@ msgstr "последен от месеца"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:148
 msgid "Always use the last day (or day of week) in the month?"
-msgstr ""
-"Да използва ли винаги последния ден (или ден от седмицата) през месеца?"
+msgstr "Да използва ли винаги последния ден (или ден от седмицата) през месеца?"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:160
 msgid "same week & day"
@@ -19189,8 +19179,7 @@ msgstr ""
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
-msgstr ""
-"Внасянето чрез онлайн-банкиране не върна транзакции за избрания период."
+msgstr "Внасянето чрез онлайн-банкиране не върна транзакции за избрания период."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:60
 msgid ""
@@ -24702,8 +24691,7 @@ msgstr "Показване на пасиви и собствен капитал 
 #: gnucash/report/reports/standard/balsheet-eg.scm:221
 #, fuzzy
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr ""
-"Показване на активите отляво, а пасивите и собствения капитал - отдясно"
+msgstr "Показване на активите отляво, а пасивите и собствения капитал - отдясно"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Sign: -$10.00"
@@ -25162,8 +25150,7 @@ msgstr "Отчет за група от бюджетни периоди"
 #: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:72
 msgid "Create report for a budget period range instead of the entire budget."
-msgstr ""
-"Създаване на отчет за група от бюджетни периоди вместо за целия бюджет."
+msgstr "Създаване на отчет за група от бюджетни периоди вместо за целия бюджет."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:62
 msgid "Select a budget period that begins the reporting range."
@@ -25749,8 +25736,7 @@ msgstr "Име на клиент"
 #: gnucash/report/reports/standard/customer-summary.scm:108
 #, fuzzy
 msgid "Markup (which is profit amount divided by sales)"
-msgstr ""
-"Подреждане по надбавка (която е сума на печалба, разделена по продажби)"
+msgstr "Подреждане по надбавка (която е сума на печалба, разделена по продажби)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:109
 #: gnucash/report/reports/standard/customer-summary.scm:284

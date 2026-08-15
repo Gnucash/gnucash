@@ -206,8 +206,6 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, NC_("FQ Source", "GoldMoney precious metals"), "goldmoney" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Google Web, US Stocks"), "googleweb" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Market Watch"), "marketwatch" },
-    { false, SOURCE_SINGLE, NC_("FQ Source", "Morningstar, CH"), "morningstarch" },
-    { false, SOURCE_SINGLE, NC_("FQ Source", "Morningstar, GB"), "morningstaruk" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Morningstar, JP"), "morningstarjp" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Motley Fool"), "fool" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "New Zealand stock eXchange, NZ"), "nzx" },
@@ -242,7 +240,7 @@ static QuoteSourceList multiple_quote_sources =
     { false, SOURCE_MULTI, NC_("FQ Source", "India (BSEIndia, NSEIndia)"), "india"},
     { false, SOURCE_MULTI, NC_("FQ Source", "Nasdaq (Alphavantage, FinanceAPI, …)"), "nasdaq" },
     { false, SOURCE_MULTI, NC_("FQ Source", "NYSE (Alphavantage, FinanceAPI, …)"), "nyse" },
-    { false, SOURCE_MULTI, NC_("FQ Source", "U.K. Funds (FTfunds, MorningstarUK)"), "ukfunds" },
+    { false, SOURCE_MULTI, NC_("FQ Source", "U.K. Funds (FTfunds)"), "ukfunds" },
     { false, SOURCE_MULTI, NC_("FQ Source", "USA (Alphavantage, FinanceAPI, …)"), "usa" },
 };
 

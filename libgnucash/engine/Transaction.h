@@ -740,7 +740,7 @@ const char *xaccTransGetVoidReason(const Transaction *transaction);
  *  @param tr The transaction in question.
  *
  *  @return A time64 containing the time that this transaction was
- *  voided. Returns a time of zero upon error.
+ *  voided. Returns INT64_MAX if there is no voided date.
  */
 time64 xaccTransGetVoidTime(const Transaction *tr);
 /** @} */

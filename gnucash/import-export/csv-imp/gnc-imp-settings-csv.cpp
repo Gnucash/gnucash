@@ -53,6 +53,7 @@ const std::string gnc_exp_4{N_("GnuCash Export Format (4.x and older)")};
 #define CSV_SKIP_END     "SkipEndLines"
 
 #define CSV_SEP          "Separators"
+#define CSV_ESC          "EnableEscape"
 
 #define CSV_CUSTOM       "Custom"
 #define CSV_CUSTOM_ENTRY "CustomEntry"
@@ -149,6 +150,14 @@ CsvImportSettings::load (void)
     if (key_char)
         g_free (key_char);
 
+    m_enable_escape = g_key_file_get_boolean (keyfile, group.c_str(), CSV_ESC, &key_error);
+    // Older import settings will not have a value for escape processing
+    // so set it to true if no value is found in the file format settings
+    if (key_error && key_error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)
+        m_enable_escape = true;
+    else
+        m_load_error |= handle_load_error (&key_error, group);
+
     m_date_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
     m_load_error |= handle_load_error (&key_error, group);
 
@@ -202,6 +211,7 @@ CsvImportSettings::save (void)
         (m_file_format == GncImpFileFormat::CSV) ? true : false);
 
     g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, m_separators.c_str());
+    g_key_file_set_boolean (keyfile, group.c_str(), CSV_ESC, m_enable_escape);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, m_date_format);
     std::ostringstream cmt_ss;
     cmt_ss << "Supported date formats: ";

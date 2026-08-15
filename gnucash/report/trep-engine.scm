@@ -515,14 +515,6 @@ in the Options panel."))
 (define (hash-keys hash)
   (hash-fold (lambda (k _ p) (cons k p)) '() hash))
 
-;; mimics c++ std::map::operator[] - return the value corresponding to key,
-;; creating a new value if there's no existing one
-(define (hash-ref! hash key constructor)
-  (or (hash-ref hash key)
-      (let ((new-value (constructor)))
-        (hash-set! hash key new-value)
-        new-value)))
-
 ;;
 ;; Default Transaction Report
 ;;
@@ -2103,9 +2095,9 @@ be excluded from periodic reporting.")
     ;;  - Records commodities in this row
     (define (grid-add row col data)
       (hash-set! cols col #t)
-      (let* ((cells-row-ht (hash-ref! cells row make-hash-table))
-             (cells-row-col-data (hash-ref! cells-row-ht col gnc:make-commodity-collector))
-             (rows-ht (hash-ref! rows row make-hash-table)))
+      (let* ((cells-row-ht (gnc:hash-ref! cells row make-hash-table))
+             (cells-row-col-data (gnc:hash-ref! cells-row-ht col gnc:make-commodity-collector))
+             (rows-ht (gnc:hash-ref! rows row make-hash-table)))
         (for-each
          (lambda (mon)
            (let ((comm (gnc:gnc-monetary-commodity mon)) (amt (gnc:gnc-monetary-amount mon)))

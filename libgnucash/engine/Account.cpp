@@ -327,6 +327,7 @@ gnc_account_init(Account* acc)
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
+    priv->has_stock_split = false;
 
     new (&priv->children) AccountVec ();
     new (&priv->splits) SplitsVec ();
@@ -1455,6 +1456,7 @@ xaccFreeAccount (Account *acc)
     priv->commodity = nullptr;
 
     priv->balance_dirty = FALSE;
+    priv->has_stock_split = false;
     priv->sort_dirty = FALSE;
     priv->splits.~SplitsVec();
     priv->children.~AccountVec();
@@ -2136,30 +2138,26 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
-    AccountPrivate *priv, *opriv;
-    Account * old_acc = nullptr;
-    Account* lot_account;
-
     /* errors */
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
     g_return_if_fail(GNC_IS_LOT(lot));
 
     /* optimizations */
-    lot_account = gnc_lot_get_account(lot);
-    if (lot_account == acc)
+    auto lot_acc = gnc_lot_get_account(lot);
+    if (lot_acc == acc)
         return;
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
 
     /* pull it out of the old account */
-    if (lot_account)
+    if (lot_acc)
     {
-        old_acc = lot_account;
-        opriv = GET_PRIVATE(old_acc);
-        opriv->lots = g_list_remove(opriv->lots, lot);
+        auto priv = GET_PRIVATE(lot_acc);
+        priv->lots = g_list_remove(priv->lots, lot);
+        qof_event_gen (&lot_acc->inst, QOF_EVENT_MODIFY, nullptr);
     }
 
-    priv = GET_PRIVATE(acc);
+    auto priv = GET_PRIVATE(acc);
     priv->lots = g_list_prepend(priv->lots, lot);
     gnc_lot_set_account(lot, acc);
 
@@ -2275,32 +2273,52 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 void
 xaccAccountRecomputeBalance (Account * acc)
 {
-    AccountPrivate *priv;
-    gnc_numeric  balance;
-    gnc_numeric  noclosing_balance;
-    gnc_numeric  cleared_balance;
-    gnc_numeric  reconciled_balance;
-
     if (nullptr == acc) return;
 
-    priv = GET_PRIVATE(acc);
+    auto priv = GET_PRIVATE(acc);
     if (qof_instance_get_editlevel(acc) > 0) return;
     if (!priv->balance_dirty || priv->defer_bal_computation) return;
     if (qof_instance_get_destroying(acc)) return;
     if (qof_book_shutting_down(qof_instance_get_book(acc))) return;
 
-    balance            = priv->starting_balance;
-    noclosing_balance  = priv->starting_noclosing_balance;
-    cleared_balance    = priv->starting_cleared_balance;
-    reconciled_balance = priv->starting_reconciled_balance;
+    auto balance            = priv->starting_balance;
+    auto noclosing_balance  = priv->starting_noclosing_balance;
+    auto cleared_balance    = priv->starting_cleared_balance;
+    auto reconciled_balance = priv->starting_reconciled_balance;
+    auto has_stock_split    = false;
 
     PINFO ("acct=%s starting baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
            priv->accountName, balance.num, balance.denom);
     for (auto split : priv->splits)
     {
-        gnc_numeric amt = xaccSplitGetAmount (split);
+        auto amt = xaccSplitGetAmount (split);
 
-        balance = gnc_numeric_add_fixed(balance, amt);
+        if (xaccSplitIsStockSplit(split))
+        {
+            if (gnc_numeric_zero_p(balance))
+                continue;
+            auto new_balance = gnc_numeric_add_fixed(balance, amt);
+            if (gnc_numeric_zero_p(new_balance))
+                continue;
+            auto ratio = gnc_numeric_div(new_balance, balance, GNC_DENOM_AUTO,
+                                         GNC_HOW_DENOM_REDUCE);
+            auto denom = xaccAccountGetCommoditySCU(acc);
+            for (auto psplit : priv->splits)
+            {
+                if (psplit == split)
+                    break;
+                xaccSplitSetAdjustedAmount(psplit,
+                                           gnc_numeric_mul(xaccSplitGetAdjustedAmount(psplit), ratio, denom,
+                                                   GNC_HOW_RND_ROUND_HALF_UP));
+            }
+            balance = new_balance;
+            has_stock_split = true;
+        }
+        else
+        {
+            split->adjusted_amount = amt;
+            balance = gnc_numeric_add_fixed(balance, amt);
+        }
 
         if (NREC != split->reconciled)
         {
@@ -2329,6 +2347,7 @@ xaccAccountRecomputeBalance (Account * acc)
     priv->cleared_balance = cleared_balance;
     priv->reconciled_balance = reconciled_balance;
     priv->balance_dirty = FALSE;
+    priv->has_stock_split = has_stock_split;
 }
 
 /********************************************************************\
@@ -3483,6 +3502,13 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
     return minimum ? *minimum : gnc_numeric_zero();
 }
 
+gboolean
+xaccAccountHasStockSplit (const Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), false);
+    return GET_PRIVATE(acc)->has_stock_split;
+}
+
 
 /********************************************************************\
 \********************************************************************/
@@ -3934,7 +3960,8 @@ xaccAccountGetSplitsSize (const Account *account)
     return GNC_IS_ACCOUNT(account) ? GET_PRIVATE(account)->splits.size() : 0;
 }
 
-gboolean gnc_account_and_descendants_empty (Account *acc)
+gboolean
+gnc_account_and_descendants_empty (Account *acc)
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
     auto priv = GET_PRIVATE (acc);

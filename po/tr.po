@@ -13,11 +13,11 @@
 # Arda Yılmaz <fijarom@fijarom.com>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-01-02 14:01+0000\n"
+"PO-Revision-Date: 2026-06-26 04:41+0000\n"
 "Last-Translator: Arda Yılmaz <fijarom@fijarom.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -862,8 +862,8 @@ msgid ""
 "Edit->Open Subaccounts from the menu."
 msgstr ""
 "Alt hesap işlemlerinin tümünü tek bir kayıtta görmek ister misiniz? Ana "
-"penceredeki Hesaplar sekmesinden, üst hesabı vurgulayın ve menüden Düzenle-"
-">Alt Hesapları Aç'ı seçin."
+"penceredeki Hesaplar sekmesinden, üst hesabı vurgulayın ve menüden Düzenle->"
+"Alt Hesapları Aç'ı seçin."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -1002,8 +1002,8 @@ msgid ""
 "new window."
 msgstr ""
 "Ekrandaki görsel olarak 2 sekmenin içeriğini karşılaştırmak için, "
-"sekmelerden birinde, o sekmeyi yeni bir pencerede çoğaltmak için Pencere-"
-">Yeni Pencere Menüsü'nü menüden seçin."
+"sekmelerden birinde, o sekmeyi yeni bir pencerede çoğaltmak için Pencere->"
+"Yeni Pencere Menüsü'nü menüden seçin."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
@@ -3323,7 +3323,6 @@ msgstr "Tutar"
 msgid "The following vendor business item is due:"
 msgid_plural "The following %d vendor business items are due:"
 msgstr[0] "Aşağıdaki faturanın teslim tarihi gelmiş:"
-msgstr[1] "Aşağıdaki %d faturanın teslim tarihi gelmiş:"
 
 #: gnucash/gnome/dialog-invoice.c:3906
 msgid "Due Bills Reminder"
@@ -3336,7 +3335,6 @@ msgstr "Vadesi Gelen Fatura Hatırlatıcı"
 msgid "The following customer business item is due:"
 msgid_plural "The following %d customer business items are due:"
 msgstr[0] "Aşağıdaki faturanın teslim tarihi gelmiş:"
-msgstr[1] "Aşağıdaki %d faturanın teslim tarihi gelmiş:"
 
 #: gnucash/gnome/dialog-invoice.c:3918
 #, fuzzy
@@ -7138,8 +7136,8 @@ msgstr[0] ""
 "basmış gibi, dosyayı otomatik olarak her %d dakikada kaydetme özelliğine "
 "sahiptir.\n"
 "\n"
-"Zaman aralığını değiştirebilir veya bu özelliği Düzenle->Tercihler->Genel-"
-">Otomatik-kayıt zaman aralığını altından kapatabilirsiniz.\n"
+"Zaman aralığını değiştirebilir veya bu özelliği Düzenle->Tercihler->Genel->"
+"Otomatik-kayıt zaman aralığını altından kapatabilirsiniz.\n"
 "\n"
 "Dosyanız otomatik olarak kaydedilmeli mi?"
 
@@ -7718,8 +7716,7 @@ msgstr "Kapatmadan önce %s dosyasına değişiklikler kaydedilsin mi?"
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
-msgstr ""
-"Kaydetmezseniz, son %d saat %d dakikada yapılan işlemler kaybolacaktır."
+msgstr "Kaydetmezseniz, son %d saat %d dakikada yapılan işlemler kaybolacaktır."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1220
 #, c-format
@@ -8462,8 +8459,7 @@ msgstr "Bu bir geliştirme sürümüdür. Çalışmayabilir."
 
 #: gnucash/gnucash-core-app.cpp:78
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
-msgstr ""
-"Hatalar ve diğer sorunları gnucash-devel@gnucash.org adresine bildirin."
+msgstr "Hatalar ve diğer sorunları gnucash-devel@gnucash.org adresine bildirin."
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
@@ -14385,8 +14381,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
-msgstr ""
-"Not: Yalnızca salt okunur olmayan Belge Bağlantıları değiştirilecektir."
+msgstr "Not: Yalnızca salt okunur olmayan Belge Bağlantıları değiştirilecektir."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:276
 #, fuzzy
@@ -16006,8 +16001,7 @@ msgstr "_Oto-arttırma listeleri"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2583
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-"Girdi sırasında hesap listerini veya eylemleri otomatik olarak yükselt."
+msgstr "Girdi sırasında hesap listerini veya eylemleri otomatik olarak yükselt."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2595
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
@@ -19344,8 +19338,7 @@ msgstr "PIN'i bellekte tut"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 #, fuzzy
 msgid "Put the transaction text in front of the purpose of a transaction."
-msgstr ""
-"İşlemleri bir veya iki satırda göster ve cari işlemi bileşenlerine ayır"
+msgstr "İşlemleri bir veya iki satırda göster ve cari işlemi bileşenlerine ayır"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
 msgid "Verbose HBCI debug messages"
@@ -22416,8 +22409,7 @@ msgstr "Tümü"
 
 #: gnucash/report/options-utilities.scm:103
 msgid "Show accounts to this depth, overriding any other option."
-msgstr ""
-"Hesapları bu derinliğe gösterin, diğer seçenekleri geçersiz kılacaktır."
+msgstr "Hesapları bu derinliğe gösterin, diğer seçenekleri geçersiz kılacaktır."
 
 #: gnucash/report/options-utilities.scm:109
 msgid ""
@@ -25544,8 +25536,7 @@ msgstr "Kapanış Girdileri deseni"
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
-msgstr ""
-"Kapanış girişlerini tanımlayan Açıklama sütunundaki herhangi bir metin."
+msgstr "Kapanış girişlerini tanımlayan Açıklama sütunundaki herhangi bir metin."
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -27590,9 +27581,8 @@ msgid ""
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"Bu raporla birlikte kullanılacak CSS stil sayfasının dosya adı. Bu dosya "
-"ya .gnucash dizininizde ya da GnuCash kurulum dizinindeki uygun yerde "
-"olmalıdır."
+"Bu raporla birlikte kullanılacak CSS stil sayfasının dosya adı. Bu dosya ya "
+".gnucash dizininizde ya da GnuCash kurulum dizinindeki uygun yerde olmalıdır."
 
 #: gnucash/report/reports/standard/receipt.scm:85
 #: gnucash/report/reports/standard/taxinvoice.scm:157
@@ -30720,8 +30710,7 @@ msgstr "B_ileşenli Defter"
 #| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
-msgstr ""
-"İşlemleri bir veya iki satırda göster ve cari işlemi bileşenlerine ayır"
+msgstr "İşlemleri bir veya iki satırda göster ve cari işlemi bileşenlerine ayır"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
 #, fuzzy

@@ -114,9 +114,12 @@ void GncTxImport::file_format(GncImpFileFormat format)
     load_file(new_imp_file);
 
     // Restore potentially previously set separators or column_widths
-    if ((file_format() == GncImpFileFormat::CSV)
-        && !m_settings.m_separators.empty())
-        separators (m_settings.m_separators);
+    if (file_format() == GncImpFileFormat::CSV)
+    {
+        if (!m_settings.m_separators.empty())
+            separators (m_settings.m_separators);
+        enable_escape (m_settings.m_enable_escape);
+    }
     else if ((file_format() == GncImpFileFormat::FIXED_WIDTH)
         && !m_settings.m_column_widths.empty())
     {
@@ -313,6 +316,16 @@ void GncTxImport::separators (std::string separators)
 }
 std::string GncTxImport::separators () { return m_settings.m_separators; }
 
+void GncTxImport::enable_escape(bool enable)
+{
+    if (file_format() != GncImpFileFormat::CSV)
+        return;
+    m_settings.m_enable_escape = enable;
+    auto csvtok = dynamic_cast<GncCsvTokenizer*>(m_tokenizer.get());
+    csvtok->set_enable_escape (enable);
+}
+bool GncTxImport::enable_escape() { return m_settings.m_enable_escape; }
+
 void GncTxImport::settings (const CsvTransImpSettings& settings)
 {
     /* First apply file format as this may recreate the tokenizer */
@@ -324,7 +337,10 @@ void GncTxImport::settings (const CsvTransImpSettings& settings)
     encoding (m_settings.m_encoding);
 
     if (file_format() == GncImpFileFormat::CSV)
+    {
         separators (m_settings.m_separators);
+        enable_escape (m_settings.m_enable_escape);
+    }
     else if (file_format() == GncImpFileFormat::FIXED_WIDTH)
     {
         auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());

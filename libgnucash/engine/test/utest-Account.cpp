@@ -1565,7 +1565,7 @@ test_xaccAccountInsertRemoveLot (Fixture *fixture, gconstpointer pData)
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 1);
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig4, 1);
-    test_signal_assert_hits (sig2, 1);
+    test_signal_assert_hits (sig2, 2);
     /* Check that removing the lot works */
     xaccAccountRemoveLot (parent, lot);
     /* The following test should fail, but it doesn't because of an
@@ -1576,7 +1576,7 @@ test_xaccAccountInsertRemoveLot (Fixture *fixture, gconstpointer pData)
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 0);
     test_signal_assert_hits (sig3, 1);
     test_signal_assert_hits (sig4, 2);
-    test_signal_assert_hits (sig2, 1);
+    test_signal_assert_hits (sig2, 2);
     /* Check that destroying the lot removes its reference */
     /* Because the lot's account pointer doesn't get nulled when the lot
      * is removed, we have to do that for the next test to work: */
@@ -1635,7 +1635,7 @@ test_xaccAccountRecomputeBalance (Fixture *fixture, gconstpointer pData)
             rec_bal = gnc_numeric_add_fixed (rec_bal, p.amount);
     }
     g_assert_true (gnc_numeric_zero_p (priv->starting_balance));
-    g_assert_true (gnc_numeric_zero_p (priv->balance));
+    priv->cleared_balance = gnc_numeric_zero ();
     priv->balance_dirty = TRUE;
     xaccAccountRecomputeBalance (fixture->acct);
     g_assert_true (gnc_numeric_zero_p (priv->starting_balance));
@@ -2375,6 +2375,7 @@ test_xaccAccountFindOpenLots (Fixture *fixture, gconstpointer pData)
     LotList* lots;
 
     g_assert_true (acct);
+    xaccAccountRecomputeBalance (acct);
     lots = xaccAccountFindOpenLots (acct, NULL, NULL, NULL);
     g_assert_true (g_list_length (lots) == 2);
     if (lots) g_list_free (lots);

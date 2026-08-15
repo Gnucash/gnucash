@@ -4,11 +4,11 @@
 # Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-10 19:01+0000\n"
+"PO-Revision-Date: 2026-06-26 03:50+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -711,9 +711,9 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Bez problema možeš uvesti postojeće financijske podatke iz Quicken, MS Money "
-"ili drugih programa koji izvoze QIF ili OFX datoteke. U izborniku "
-"„Datoteka”, pritisni pod-izbornik „Uvezi” i pritisni na QIF ili OFX "
-"datoteku. Zatim slijedi upute."
+"ili drugih programa koji izvoze QIF ili OFX datoteke. U izborniku „Datoteka"
+"”, pritisni pod-izbornik „Uvezi” i pritisni na QIF ili OFX datoteku. Zatim "
+"slijedi upute."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -797,8 +797,8 @@ msgid ""
 msgstr ""
 "Za upis višedjelne transakcije poput plaće s višestrukim odbicima, pritisni "
 "gumb „Podjela” u traci alata. Alternativno, u izborniku „Prikaz” možeš "
-"odabrati stil registra „Podjela aktivne transakcije” ili „Dnevnik "
-"transakcija”."
+"odabrati stil registra „Podjela aktivne transakcije” ili „Dnevnik transakcija"
+"”."
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -862,8 +862,8 @@ msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
-"Za prebacivanje između više kartica u glavnom prozoru, pritisni tipke "
-"„Ctrl+Page gore/dolje”."
+"Za prebacivanje između više kartica u glavnom prozoru, pritisni tipke „"
+"Ctrl+Page gore/dolje”."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -882,8 +882,8 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Za prijenos sredstva između konta s različitim valutama, pritisni na gumb "
-"„Prenesi” u traci alata registra, zatim odaberi konta i opcije za prijenos "
+"Za prijenos sredstva između konta s različitim valutama, pritisni na gumb „"
+"Prenesi” u traci alata registra, zatim odaberi konta i opcije za prijenos "
 "valuta za upisivanje tečaja ili će iznos druge valute biti dostupan."
 
 #: doc/tip_of_the_day.list.c:91
@@ -905,8 +905,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Možeš prikazati višestruke izvještaje u jednom prozoru, prikazujući sve "
-"financijske podatke koje želiš najednom. U tom slučaju koristi izvještaj "
-"„Uzorak i prilagođeno”→„Prilagođen višestupčani izvještaj”."
+"financijske podatke koje želiš najednom. U tom slučaju koristi izvještaj „"
+"Uzorak i prilagođeno”→„Prilagođen višestupčani izvještaj”."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -915,8 +915,8 @@ msgid ""
 "style sheets."
 msgstr ""
 "Stilski predložak utječe na način prikazivanja izvještaja. Odaberi stilski "
-"predložak za tvoj izvještaj kao opciju za izvještaj, te koristi izbornik "
-"„Uredi→Stilski predlošci” za prilagođivanje stilskih predložaka."
+"predložak za tvoj izvještaj kao opciju za izvještaj, te koristi izbornik „"
+"Uredi→Stilski predlošci” za prilagođivanje stilskih predložaka."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
@@ -1057,8 +1057,8 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
-"Kad pritisneš „Primijeni”, izradit će se knjiga s naslovom „%s”. Pritisni "
-"„Natrag” za podešavanje ili „Prekini”, kako se knjiga ne bi izradila."
+"Kad pritisneš „Primijeni”, izradit će se knjiga s naslovom „%s”. Pritisni „"
+"Natrag” za podešavanje ili „Prekini”, kako se knjiga ne bi izradila."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -2034,8 +2034,7 @@ msgstr "Ova transakcija mora biti dodijeljena kupcu. Odaberi jednog kupca."
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr ""
-"Ova transakcija mora biti dodijeljena dobavljaču. Odaberi jednog ispod."
+msgstr "Ova transakcija mora biti dodijeljena dobavljaču. Odaberi jednog ispod."
 
 #: gnucash/gnome/dialog-commodities.cpp:188
 msgid ""
@@ -4750,8 +4749,7 @@ msgstr "Upiši plaćanje za vlasnika ovog knjižnog odobrenja"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 msgid "Open a company report window for the owner of this credit note"
-msgstr ""
-"Otvori prozor izvještaja o poduzeću za vlasnika ovog knjižnog odobrenja"
+msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog knjižnog odobrenja"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
 msgid "Manage Document Link…"
@@ -5262,9 +5260,9 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"Dodaj konfiguraciju trenutačnog izvještaja u izbornik "
-"„Izvještaji→Konfiguracije spremljenih izvještaja”. Konfiguracija izvještaja "
-"će se spremiti u datoteku %s."
+"Dodaj konfiguraciju trenutačnog izvještaja u izbornik „Izvještaji→"
+"Konfiguracije spremljenih izvještaja”. Konfiguracija izvještaja će se "
+"spremiti u datoteku %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1277
 #: gnucash/ui/gnc-plugin-page-report.ui:74
@@ -5526,8 +5524,8 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "Datum ove transakcije je stariji od „Prag samo-za-čitanje” postavljenog za "
-"ovu knjigu. Ovu postavku možeš izmijeniti u izborniku "
-"„Datoteka→Svojstva→Konta”."
+"ovu knjigu. Ovu postavku možeš izmijeniti u izborniku „Datoteka→Svojstva→"
+"Konta”."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 msgid "Remove the splits from this transaction?"
@@ -5726,8 +5724,7 @@ msgstr "Prati dnevne prihode i rashode"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
 msgid "Manage your stock, bond and mutual fund accounts with ease"
-msgstr ""
-"Upravljaj kontima dionica, obveznica i investicijskih fondova s lakoćom"
+msgstr "Upravljaj kontima dionica, obveznica i investicijskih fondova s lakoćom"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Keep your small business' accounting up to date"
@@ -5735,8 +5732,7 @@ msgstr "Održi računovodstvo tvog malog poduzeća aktualnim"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Create accurate reports and graphs from your financial data"
-msgstr ""
-"Stvori točne izvještaje i dijagrame pomoću tvojih financijskih podataka"
+msgstr "Stvori točne izvještaje i dijagrame pomoću tvojih financijskih podataka"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid "Set up scheduled transactions to avoid repeated data entry"
@@ -5792,8 +5788,7 @@ msgstr "Konfiguracije spremljenih izvještaja"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
-msgstr ""
-"Upravljaj spremljenim konfiguracijama izvještaja, te pokreni izvještaje"
+msgstr "Upravljaj spremljenim konfiguracijama izvještaja, te pokreni izvještaje"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:51
@@ -6349,8 +6344,7 @@ msgstr "KOI8‑U (ukrajinski)"
 #: gnucash/gnome-utils/assistant-xml-encoding.c:680
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
-msgstr ""
-"Ima (%d) nedodijeljenih i (%d) nedekodirajućih riječi. Dodaj kodiranja."
+msgstr "Ima (%d) nedodijeljenih i (%d) nedekodirajućih riječi. Dodaj kodiranja."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:688
 #, c-format
@@ -7035,8 +7029,8 @@ msgstr[0] ""
 "tvrdom disku. GnuCash ima funkciju za automatsko spremanje datoteke svake %d "
 "minute, baš kao da svaki put pritisneš gumb „Spremi”.\n"
 "\n"
-"Promijeni vremenski interval ili isključiti ovu funkciju u izborniku "
-"„Uredi→Postavke→Opće→Interval za automatsko spremanje”.\n"
+"Promijeni vremenski interval ili isključiti ovu funkciju u izborniku „Uredi→"
+"Postavke→Opće→Interval za automatsko spremanje”.\n"
 "\n"
 "Želiš li automatski spremiti datoteku?"
 msgstr[1] ""
@@ -7044,8 +7038,8 @@ msgstr[1] ""
 "tvrdom disku. GnuCash ima funkciju za automatsko spremanje datoteke svake %d "
 "minute, baš kao da svaki put pritisneš gumb „Spremi”.\n"
 "\n"
-"Promijeni vremenski interval ili isključiti ovu funkciju u izborniku "
-"„Uredi→Postavke→Opće→Interval za automatsko spremanje”.\n"
+"Promijeni vremenski interval ili isključiti ovu funkciju u izborniku „Uredi→"
+"Postavke→Opće→Interval za automatsko spremanje”.\n"
 "\n"
 "Želiš li automatski spremiti datoteku?"
 msgstr[2] ""
@@ -7053,8 +7047,8 @@ msgstr[2] ""
 "tvrdom disku. GnuCash ima funkciju za automatsko spremanje datoteke svakih "
 "%d minuta, baš kao da svaki put pritisneš gumb „Spremi”.\n"
 "\n"
-"Promijeni vremenski interval ili isključiti ovu funkciju u izborniku "
-"„Uredi→Postavke→Opće→Interval za automatsko spremanje”.\n"
+"Promijeni vremenski interval ili isključiti ovu funkciju u izborniku „Uredi→"
+"Postavke→Opće→Interval za automatsko spremanje”.\n"
 "\n"
 "Želiš li automatski spremiti datoteku?"
 
@@ -7462,11 +7456,9 @@ msgstr "Spremiti izmjene u datoteku?"
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] ""
-"Ako ne spremiš, uklonit će se promjene učinjene u zadnjoj %d minuti."
+msgstr[0] "Ako ne spremiš, uklonit će se promjene učinjene u zadnjoj %d minuti."
 msgstr[1] "Ako ne spremiš, uklonit će se promjene učinjene u zadnje %d minute."
-msgstr[2] ""
-"Ako ne spremiš, uklonit će se promjene učinjene u zadnjih %d minuta."
+msgstr[2] "Ako ne spremiš, uklonit će se promjene učinjene u zadnjih %d minuta."
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -8437,8 +8429,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Nadvladavanja na razini log podataka, u obliku "
-"„modulename={debug,info,warn,crit,error}\"\n"
+"Nadvladavanja na razini log podataka, u obliku „modulename="
+"{debug,info,warn,crit,error}\"\n"
 "Primjeri: \"--log qof=debug\" ili \"--log gnc.backend.file.sx=info\"\n"
 "Ovo se može pozvati više puta."
 
@@ -8667,8 +8659,8 @@ msgid ""
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
 "Ako je aktivirano, prilikom pokretanja GnuCash-a provjerit će se dospijeća "
-"izlaznih računa. Ako postoje, prikazat će dijalog podsjetnika. Definicija "
-"„uskoro” određuje se postavkom „Dana unaprijed”. U protivnom, GnuCash neće "
+"izlaznih računa. Ako postoje, prikazat će dijalog podsjetnika. Definicija „"
+"uskoro” određuje se postavkom „Dana unaprijed”. U protivnom, GnuCash neće "
 "provjeravati dospijeća izlaznih računa."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
@@ -8761,8 +8753,8 @@ msgid ""
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
 "Ako je aktivirano, prilikom pokretanja GnuCash-a provjerit će se dospijeća "
-"ulaznih računa. Ako postoje, prikazat će dijalog podsjetnika. Definicija "
-"„uskoro” određuje se postavkom „Dana unaprijed”. U protivnom, GnuCash neće "
+"ulaznih računa. Ako postoje, prikazat će dijalog podsjetnika. Definicija „"
+"uskoro” određuje se postavkom „Dana unaprijed”. U protivnom, GnuCash neće "
 "provjeravati dospijeća ulaznih računa."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
@@ -9291,8 +9283,7 @@ msgstr "Standardno stanje QIF transakcije"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:11
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
-msgstr ""
-"Standardno stanje za QIF transakciju, kad nije određeno u QIF datoteci."
+msgstr "Standardno stanje za QIF transakciju, kad nije određeno u QIF datoteci."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
 #: gnucash/gtkbuilder/dialog-account-picker.glade:59
@@ -9409,9 +9400,9 @@ msgid ""
 "opening of the data file when GnuCash starts. If this setting is active, "
 "show the dialog, otherwise it is not shown."
 msgstr ""
-"Ova postavka određuje, hoće li se obavijestni dijalog „Od zadnjeg "
-"pokretanja” za terminirane transakcije prikazati prilikom otvaranja datoteke "
-"(ako je uključena obrada podataka „Od zadnjeg pokretanja” prilikom otvaranja "
+"Ova postavka određuje, hoće li se obavijestni dijalog „Od zadnjeg pokretanja"
+"” za terminirane transakcije prikazati prilikom otvaranja datoteke (ako je "
+"uključena obrada podataka „Od zadnjeg pokretanja” prilikom otvaranja "
 "datoteke). Ovo uključuje početno otvaranje datoteke prilikom pokretanja "
 "GnuCasha. Ako je ova postavka uključena, prikazuje se dijalog, u protivnom "
 "ne."
@@ -9782,8 +9773,8 @@ msgid ""
 msgstr ""
 "Ova postavka omogućava određenim kontima mijenjanje predznaka svojih salda "
 "iz pozitivnog u negativno ili obrnuto. Postavka „prihod-rashod” je za "
-"korisnike koji vole vidjeti negativne rashode i pozitvine prihode. Postavka "
-"„Potražuje” je za one korisnike koji žele vidjeti da salda odražavaju stanja "
+"korisnike koji vole vidjeti negativne rashode i pozitvine prihode. Postavka „"
+"Potražuje” je za one korisnike koji žele vidjeti da salda odražavaju stanja "
 "dugovanja/potraživanja konta. Postavka „ništa” ne preokreće znak nijednog "
 "salda."
 
@@ -10070,8 +10061,8 @@ msgid ""
 "\"bottom\"."
 msgstr ""
 "Ova postavka određuje rub pri kojem se iscrtava traka sažetka za razne "
-"stranice. Moguće vrijednosti su „gore” i „dolje”. Standardna vrijednost je "
-"„dolje”."
+"stranice. Moguće vrijednosti su „gore” i „dolje”. Standardna vrijednost je „"
+"dolje”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3655
@@ -10112,8 +10103,8 @@ msgid ""
 "'num' field."
 msgstr ""
 "Ako je odabrano, standardna opcija knjige za nove datoteke je postavljena "
-"tako da u registrima, polje „Broj” prikazuje/aktualizira polje stavke "
-"„Radnja” te se polje transakcije „Broj” prikazuje u drugom retku u dvorednom "
+"tako da u registrima, polje „Broj” prikazuje/aktualizira polje stavke „Radnja"
+"” te se polje transakcije „Broj” prikazuje u drugom retku u dvorednom "
 "prikazu (i nije vidljivo ako nije postavljeno). U protivnom je standardna "
 "opcija knjige za nove datoteke postavljena tako da polje „Broj” u registrima "
 "prikazuje/aktualizira polje transakcije „Broj”."
@@ -10308,8 +10299,8 @@ msgid ""
 msgstr ""
 "Prikaži drugi redak s podacima „Radnja”, „Napomene” i „Povezani dokumenti” "
 "za svaku transakciju u registru. Ovo je standardna postavka pri prvom "
-"otvaranju registra. Postavka se može promijeniti u izborniku putem "
-"„Prikaz→Dvoredno”."
+"otvaranju registra. Postavka se može promijeniti u izborniku putem „Prikaz→"
+"Dvoredno”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
 msgid "Only display leaf account names."
@@ -10362,8 +10353,7 @@ msgstr "U rasklopljenom prikazu premjesti odabir na praznu stavku"
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
-msgstr ""
-"Ovo će premjestiti odabir na praznu stavku kad se transakcija rasklopi."
+msgstr "Ovo će premjestiti odabir na praznu stavku kad se transakcija rasklopi."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
 msgid "Number of transactions to show in a register."
@@ -11019,8 +11009,8 @@ msgid ""
 "should contain a value between 0 and 8."
 msgstr ""
 "Ova postavka upravlja završnim datumom u kalkulacijama dobiti/gubitka, ako "
-"je postavka za izbora završetka postavljena na bilo što drugo od "
-"„absolutno”. Ovo polje mora sadržati vrijednost između 0 i 8."
+"je postavka za izbora završetka postavljena na bilo što drugo od „absolutno"
+"”. Ovo polje mora sadržati vrijednost između 0 i 8."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
@@ -11367,8 +11357,8 @@ msgstr ""
 "željenu fiksnu širinu, pritisni dvaput na prikazanu tablicu i ako treba, "
 "podesi širinu desnim gumbom miša.\n"
 "\n"
-"Npr. \"RR.L\",\"21/11/2016\",5.345,\"HRK\" i \"EUR\","
-"\"2016-11-21\",1.56,\"HRK\"\n"
+"Npr. \"RR.L\",\"21/11/2016\",5.345,\"HRK\" i \"EUR\",\"2016-11-"
+"21\",1.56,\"HRK\"\n"
 "\n"
 "Postoji opcija za određivanje početnog retka, kao i opcija za preskakanje "
 "redaka, počevši od početnog retka. To se može koristiti, ako imaš tekstove u "
@@ -14113,8 +14103,8 @@ msgstr ""
 "Konfiguracije spremljenih izvještaja se stvaraju:\n"
 "1. otvaranjem izvještaja putem izbornika „Izvještaji”,\n"
 "2. mijenjanjem opcija izvještaja prema vlastitim potrebama,\n"
-"3. odabirom „Spremi konfiguraciju izvještaja [kao …]” putem izbornika "
-"„Izvještaji”\n"
+"3. odabirom „Spremi konfiguraciju izvještaja [kao …]” putem izbornika „"
+"Izvještaji”\n"
 " ili pritiskom gumba „Spremi konfiguraciju [kao …]” u alatnoj traci."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
@@ -14796,8 +14786,7 @@ msgstr "Koristi predložak za izvještaje"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:715
 msgid "Choose a different report template before timeout"
-msgstr ""
-"Odaberi jedan drugi predložak za izvještaj prije vremenskog ograničenja"
+msgstr "Odaberi jedan drugi predložak za izvještaj prije vremenskog ograničenja"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:907
 msgid ""
@@ -15562,8 +15551,8 @@ msgid ""
 "default."
 msgstr ""
 "Transakcija, čiji se najbolji rezultat poklapanja nalazi je u crvenoj zoni "
-"(iznad praga prikaza, ali ispod ili jednako pragu za „automatsko "
-"dodavanje”), će standardno biti dodana."
+"(iznad praga prikaza, ali ispod ili jednako pragu za „automatsko dodavanje”)"
+", će standardno biti dodana."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
@@ -17468,8 +17457,7 @@ msgstr "Značajne brojke"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:209
 msgid "Use a fixed value or apply transformation for all periods."
-msgstr ""
-"Koristi fiksnu vrijednost ili primijeni transformaciju za sva razdolja."
+msgstr "Koristi fiksnu vrijednost ili primijeni transformaciju za sva razdolja."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:238
 msgid "Estimate Budget Values"
@@ -18018,8 +18006,8 @@ msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
 msgstr ""
-"Postavljanjem veze tvog internet bankarstva upravlja vanjski program "
-"„Postavljanje AqBanking”."
+"Postavljanjem veze tvog internet bankarstva upravlja vanjski program „"
+"Postavljanje AqBanking”."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -18028,8 +18016,8 @@ msgid ""
 "* To report issues read"
 msgstr ""
 "To znači:\n"
-"* Zanemaruje GnuCashove postavke poput „Zatvori log-prozor nakon "
-"završetka”.\n"
+"* Zanemaruje GnuCashove postavke poput „Zatvori log-prozor nakon završetka"
+"”.\n"
 "* Za prijavljivanje problema, pročitaj"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:141
@@ -18037,8 +18025,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -18065,8 +18053,8 @@ msgid ""
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
 "Pritisni dvaput na redak s imenom konta internetsk bankarstva, ako ga želiš "
-"poklopiti s GnuCash kontom ili odaberi netočna poklapanja i pritisni "
-"„Izbriši odabrana poklapanja”. Pritisni „Dalje” kad se sva željena konta "
+"poklopiti s GnuCash kontom ili odaberi netočna poklapanja i pritisni „"
+"Izbriši odabrana poklapanja”. Pritisni „Dalje” kad se sva željena konta "
 "poklapaju."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
@@ -18189,8 +18177,7 @@ msgstr "Širina _stupca"
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:669
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
-"Postavljanje širine stupca, prilagođavajući ga veličini TAN generatora."
+msgstr "Postavljanje širine stupca, prilagođavajući ga veličini TAN generatora."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:684
 msgid "_Delay"
@@ -18865,8 +18852,7 @@ msgstr "Izdaj i_nternu SEPA transakciju …"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"Izdaj novu internu europsku SEPA transakciju, putem internet bankarstva"
+msgstr "Izdaj novu internu europsku SEPA transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 msgid "_Internal Transaction…"
@@ -19664,8 +19650,8 @@ msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
-"Odaberi stupac „Iz imenskog prostora” ili postavi jednu robu u polje „Roba "
-"iz”."
+"Odaberi stupac „Iz imenskog prostora” ili postavi jednu robu u polje „Roba iz"
+"”."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:480
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:190
@@ -21185,8 +21171,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 "Upisani datum duplicirane transakcije je stariji od „Prag samo-za-čitanje”, "
-"postavljenog za ovu knjigu. Ovu postavku možeš promijeniti u izborniku "
-"„Datoteka→Svojstva→Konta”."
+"postavljenog za ovu knjigu. Ovu postavku možeš promijeniti u izborniku „"
+"Datoteka→Svojstva→Konta”."
 
 #: gnucash/register/ledger-core/split-register.c:997
 msgid ""
@@ -21753,8 +21739,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "Upisani datum transakcije je stariji od „Prag samo-za-čitanje”, postavljenog "
-"za ovu knjigu. Ovu postavku možeš izmijeniti u izborniku "
-"„Datoteka→Svojstva→Konta”."
+"za ovu knjigu. Ovu postavku možeš izmijeniti u izborniku „Datoteka→Svojstva→"
+"Konta”."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -22684,8 +22670,7 @@ msgstr ""
 msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
-msgstr ""
-" Sazanj više o pisanju sheme na &lt;https://www.scheme.com/tspl2d/&gt;."
+msgstr " Sazanj više o pisanju sheme na &lt;https://www.scheme.com/tspl2d/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:302
 #, scheme-format
@@ -22824,14 +22809,12 @@ msgstr "Prošla godina"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr ""
-"Procijenjeni porez 1. kvartala prošle godine (1. siječnja – 31. ožujka)"
+msgstr "Procijenjeni porez 1. kvartala prošle godine (1. siječnja – 31. ožujka)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr ""
-"Procijenjeni porez 2. kvartala prošle godine (1. travnja – 31. svibnja)"
+msgstr "Procijenjeni porez 2. kvartala prošle godine (1. travnja – 31. svibnja)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -22839,8 +22822,7 @@ msgstr ""
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:195
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr ""
-"Procijenjeni porez 3. kvartala prošle godine (1. lipnja – 31. kolovoza)"
+msgstr "Procijenjeni porez 3. kvartala prošle godine (1. lipnja – 31. kolovoza)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:196
@@ -23248,8 +23230,7 @@ msgstr "Uključi konta, čija su ukupna salda nula"
 #: gnucash/report/reports/standard/income-statement.scm:70
 #: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr ""
-"U ovaj izvještaj uključi konta, čija su ukupna (rekurzivna) salda nula."
+msgstr "U ovaj izvještaj uključi konta, čija su ukupna (rekurzivna) salda nula."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -25175,8 +25156,8 @@ msgstr ""
 "potraživanja. U odjeljku „Uredi opcije izvještaja” odaberi poslovne račune "
 "prodaje i kupnje. Svaka transakcija može osim konta imovine, obveza, "
 "dugovanja ili potraživanja, sadržavati i podjelu na porezni račun, npr. "
-"Prihod:Prodaja −1.000 €, Konto potraživanja 1.100 €, Obveze:PDV na promet "
-"−100 €."
+"Prihod:Prodaja −1.000 €, Konto potraživanja 1.100 €, Obveze:PDV na promet −"
+"100 €."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
 msgid ""
@@ -28131,9 +28112,9 @@ msgid ""
 "match Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left "
 "blank, which will disable the filter."
 msgstr ""
-"Prikaži samo konta, čija se potpuna imena poklapaju s filtrom, npr. "
-"„Putovanje” će se poklopiti s „Rashod:Putovanje:Praznici” i s "
-"„Rashod:Poslovanje:Putovanje”. Može se ostaviti praznim, čime se rad filtra "
+"Prikaži samo konta, čija se potpuna imena poklapaju s filtrom, npr. „"
+"Putovanje” će se poklopiti s „Rashod:Putovanje:Praznici” i s „"
+"Rashod:Poslovanje:Putovanje”. Može se ostaviti praznim, čime se rad filtra "
 "onemogućuje."
 
 #: gnucash/report/trep-engine.scm:596
@@ -29960,8 +29941,7 @@ msgstr "Dodaj storno transakciju."
 #: gnucash/ui/gnc-plugin-page-register.ui:507
 msgid ""
 "Add, change, or unlink the document linked with the current transaction."
-msgstr ""
-"Dodaj, promijeni ili prekini vezu dokumenta s trenutačnom transakcijom."
+msgstr "Dodaj, promijeni ili prekini vezu dokumenta s trenutačnom transakcijom."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
@@ -30189,8 +30169,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
-"Dodaj konfiguraciju trenutačnog izvještaja u izbornik "
-"„Izvještaji→Konfiguracije spremljenih izvještaja”"
+"Dodaj konfiguraciju trenutačnog izvještaja u izbornik „Izvještaji→"
+"Konfiguracije spremljenih izvještaja”"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
@@ -31138,8 +31118,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-datetime.cpp:735
 msgid "Value appears to contain a year while the selected format forbids this."
-msgstr ""
-"Čini se da vrijednost sardži godinu, dok odabrani format to zabranjuje."
+msgstr "Čini se da vrijednost sardži godinu, dok odabrani format to zabranjuje."
 
 #: libgnucash/engine/gnc-features.cpp:72
 msgid ""
@@ -31792,8 +31771,8 @@ msgstr "Nema opisa: obrazac „%s”, šifra %s, vrsta poreza „%s”"
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
 msgstr ""
-"Ne odnosi se na porez; nema opisa: obrazac „%s”, šifra „%s”, vrsta poreza "
-"„%s”"
+"Ne odnosi se na porez; nema opisa: obrazac „%s”, šifra „%s”, vrsta poreza „%s"
+"”"
 
 #: libgnucash/tax/gnc-locale-tax.c:263
 #, c-format

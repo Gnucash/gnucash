@@ -12,11 +12,11 @@
 # наб <nabijaczleweli@nabijaczleweli.xyz>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2024-05-31 22:09+0000\n"
+"PO-Revision-Date: 2026-06-26 04:21+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -91,8 +91,7 @@ msgstr "Początek okresu obrachunkowego"
 #: bindings/guile/date-utilities.scm:746
 #: libgnucash/engine/gnc-option-date.cpp:313
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr ""
-"Pierwszy dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi."
+msgstr "Pierwszy dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi."
 
 #: bindings/guile/date-utilities.scm:750
 #: libgnucash/engine/gnc-option-date.cpp:320
@@ -983,8 +982,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie (Edycja-"
-">Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
+"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie (Edycja->"
+"Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
 "wyszukiwanie do jednego konta, rozpocznij wyszukiwanie z rejestru konta."
 
 #: doc/tip_of_the_day.list.c:125
@@ -3033,8 +3032,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:1304
 msgid "The post action was canceled because not all exchange rates were given."
-msgstr ""
-"Akcja została anulowana, ponieważ nie podano wszystkich kursów wymiany."
+msgstr "Akcja została anulowana, ponieważ nie podano wszystkich kursów wymiany."
 
 #: gnucash/gnome/dialog-invoice.c:1589
 msgid "Total:"
@@ -3862,8 +3860,7 @@ msgstr "Nazwa arkusza stylów"
 #: gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
-msgstr ""
-"Transakcja zaplanowana została zmieniona. Czy na pewno chcesz anulować?"
+msgstr "Transakcja zaplanowana została zmieniona. Czy na pewno chcesz anulować?"
 
 #: gnucash/gnome/dialog-sx-editor.c:497
 #, c-format
@@ -4774,8 +4771,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr ""
-"Użyj bieżącego układu domyślnie dla wszystkich kwitów i not kredytowych"
+msgstr "Użyj bieżącego układu domyślnie dla wszystkich kwitów i not kredytowych"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Business items"
@@ -9782,9 +9778,9 @@ msgid ""
 "\"backslash\", \"dash\" and \"period\"."
 msgstr ""
 "Ustawienie określa znak separujący nazwy kont. Możliwe wartości to "
-"niealfanumeryczne znaki Unicode lub dowolny z tekstów: \"colon\" "
-"(dwukropek), \"slash\" (ukośnik), \"backslash\" (ukośnik wsteczny), \"dash\" "
-"(myślnik) i \"period\" (kropka)."
+"niealfanumeryczne znaki Unicode lub dowolny z tekstów: \"colon\" (dwukropek)"
+", \"slash\" (ukośnik), \"backslash\" (ukośnik wsteczny), \"dash\" (myślnik) "
+"i \"period\" (kropka)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -10247,8 +10243,7 @@ msgstr "Wyświetlaj pasek podsumowań na dole strony."
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3499
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr ""
-"Zamknięcie zakładki spowoduje przejście do ostatnio widocznej zakładki."
+msgstr "Zamknięcie zakładki spowoduje przejście do ostatnio widocznej zakładki."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
@@ -11582,8 +11577,8 @@ msgid ""
 "Select location and file name for the Import, then click \"Next\"…\n"
 msgstr ""
 "\n"
-"Wybierz lokalizację i nazwę pliku do zaimportowania, a następnie kliknij "
-"„OK” ...\n"
+"Wybierz lokalizację i nazwę pliku do zaimportowania, a następnie kliknij „OK"
+"” ...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:100
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:90
@@ -13554,8 +13549,7 @@ msgstr "To konto zawiera transakcje. Co chcesz z nimi zrobić?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:628
 msgid "This account contains read-only transactions which may not be deleted."
-msgstr ""
-"To konto zawiera transakcje tylko do odczytu, których nie można usunąć."
+msgstr "To konto zawiera transakcje tylko do odczytu, których nie można usunąć."
 
 #: gnucash/gtkbuilder/dialog-account.glade:677
 #, fuzzy
@@ -13568,8 +13562,7 @@ msgstr "<b>Transakcje kont podrzędnych</b>"
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
-msgstr ""
-"Niektóre konta podrzędne zawierają transakcje. Co chcesz z nimi zrobić?"
+msgstr "Niektóre konta podrzędne zawierają transakcje. Co chcesz z nimi zrobić?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:750
 msgid ""
@@ -13862,8 +13855,7 @@ msgstr "Liczba cyfr"
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr ""
-"Operacja zamieni kod każdego konta podrzędnego na nowo wygenerowany kod"
+msgstr "Operacja zamieni kod każdego konta podrzędnego na nowo wygenerowany kod"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -15311,8 +15303,8 @@ msgid ""
 "it will not be displayed again."
 msgstr ""
 "Jeśli naciśniesz przycisk <i>Tak</i>, to okno <i>Witamy w GnuCash</i> będzie "
-"wyświetlone ponownie, kiedy uruchomisz GnuCash. Jeśli naciśniesz przycisk "
-"<i>Nie</i>, nie zobaczysz go znowu."
+"wyświetlone ponownie, kiedy uruchomisz GnuCash. Jeśli naciśniesz przycisk <i>"
+"Nie</i>, nie zobaczysz go znowu."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
 #, fuzzy
@@ -15604,8 +15596,7 @@ msgstr "Używaj _formalnych etykiet kont"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:624
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
-msgstr ""
-"Używaj tylko pojęć \"Winien\" i \"Ma\" zamiast nieformalnych synonimów."
+msgstr "Używaj tylko pojęć \"Winien\" i \"Ma\" zamiast nieformalnych synonimów."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:639
 #, fuzzy
@@ -17966,8 +17957,7 @@ msgstr "Cyfry znaczące"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:209
 msgid "Use a fixed value or apply transformation for all periods."
-msgstr ""
-"Użyj stałej wartości lub zastosuj transformację dla wszystkich okresów."
+msgstr "Użyj stałej wartości lub zastosuj transformację dla wszystkich okresów."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:238
 msgid "Estimate Budget Values"
@@ -18456,8 +18446,7 @@ msgstr ""
 msgid ""
 "This assistant helps you setting up your Online Banking connection with your "
 "bank."
-msgstr ""
-"Ten asystent pomaga skonfigurować połączenie z bankowością internetową."
+msgstr "Ten asystent pomaga skonfigurować połączenie z bankowością internetową."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:39
 msgid ""
@@ -21660,8 +21649,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 "Wprowadzona data zduplikowanej transakcji jest starsza niż „Próg tylko do "
-"odczytu” ustawiony dla tej książki. To ustawienie można zmienić w Plik-"
-">Właściwości->Konta."
+"odczytu” ustawiony dla tej książki. To ustawienie można zmienić w Plik->"
+"Właściwości->Konta."
 
 #: gnucash/register/ledger-core/split-register.c:997
 msgid ""
@@ -21875,8 +21864,7 @@ msgstr "Dwie wybrane waluty mają równą wartość."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1529
 msgid "The split's amount is zero, so no exchange rate is needed."
-msgstr ""
-"Kwota podziału wynosi zero, więc żaden kurs wymiany nie jest potrzebny."
+msgstr "Kwota podziału wynosi zero, więc żaden kurs wymiany nie jest potrzebny."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1578
 msgid "Save the changed transaction?"
@@ -23414,8 +23402,8 @@ msgstr "Raport podatkowy i Eksport XML"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:839
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr ""
-"Przychód podlegający opodatkowaniu / Spodziewane wydatki / Eksport do "
-"pliku .XML"
+"Przychód podlegający opodatkowaniu / Spodziewane wydatki / Eksport do pliku "
+".XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:843
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:851
@@ -24455,8 +24443,7 @@ msgstr "Rozmiar czcionki"
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #, fuzzy
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
-msgstr ""
-"Rozmiar czcionki w formacie CSS font-size (np. \"medium\" lub \"10pt\")"
+msgstr "Rozmiar czcionki w formacie CSS font-size (np. \"medium\" lub \"10pt\")"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
@@ -29657,8 +29644,7 @@ msgstr "Opcje raportu poda_tkowego"
 #: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr ""
-"Ustaw odpowiednie konta do zeznań podatkowych, PL - niezaimplementowane"
+msgstr "Ustaw odpowiednie konta do zeznań podatkowych, PL - niezaimplementowane"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:80
 msgid "_Scheduled Transactions"
@@ -30675,8 +30661,7 @@ msgstr "Wyszukuje transakcje na podstawie kryteriów"
 #, fuzzy
 #| msgid "Setup relevant accounts for tax reports, e.g. US income tax"
 msgid "Setup relevant accounts for tax reports, e.g. US income tax."
-msgstr ""
-"Ustaw odpowiednie konta do zeznań podatkowych, PL - niezaimplementowane"
+msgstr "Ustaw odpowiednie konta do zeznań podatkowych, PL - niezaimplementowane"
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71

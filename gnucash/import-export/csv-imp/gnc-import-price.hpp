@@ -117,6 +117,9 @@ public:
     void separators (std::string separators);
     std::string separators ();
 
+    void enable_escape (bool enable);
+    bool enable_escape ();
+
     void settings (const CsvPriceImpSettings& settings);
     bool save_settings ();
 

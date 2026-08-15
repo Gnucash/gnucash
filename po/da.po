@@ -107,11 +107,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-04-25 13:11+0000\n"
+"PO-Revision-Date: 2026-06-26 04:49+0000\n"
 "Last-Translator: Cecilie Nielsen <cecilie.nielsen1984@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "da/>\n"
@@ -120,7 +120,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -1069,9 +1069,9 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"For at søge igennem alle dine transaktioner, start en søgning (Rediger-"
-">Søg…) fra hovedkontoens hierarkiside. For at begrænse din søgning til en "
-"enkel konto, start søgningen fra den kontos kasseklade."
+"For at søge igennem alle dine transaktioner, start en søgning (Rediger->Søg"
+"…) fra hovedkontoens hierarkiside. For at begrænse din søgning til en enkel "
+"konto, start søgningen fra den kontos kasseklade."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -1158,8 +1158,8 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
-"Bogen vil blive oprettet med titlen %s når du klikker på »Anvend«. Klik på "
-"»Tilbage« for at justere, eller »Annuller« for ikke at oprette en bog."
+"Bogen vil blive oprettet med titlen %s når du klikker på »Anvend«. Klik på »"
+"Tilbage« for at justere, eller »Annuller« for ikke at oprette en bog."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -3734,8 +3734,8 @@ msgid ""
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
-"Du har ingen gyldige »Bogfør på«-konti. Opret venligst en konto af typen "
-"»%s« før du fortsætter med at behandle denne betaling. Måske du først skal "
+"Du har ingen gyldige »Bogfør på«-konti. Opret venligst en konto af typen »%s"
+"« før du fortsætter med at behandle denne betaling. Måske du først skal "
 "oprette en faktura eller regning?"
 
 #: gnucash/gnome/dialog-payment.c:1593
@@ -7265,8 +7265,8 @@ msgstr[0] ""
 "har en funktion til automatisk at gemme filen hvert %d minut, ligesom hvis "
 "du havde trykket på knappen \"Gem\" hver gang.\n"
 "\n"
-"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger-"
-">Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
+"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger->"
+"Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
 "\n"
 "Skal din fil gemmes automatisk?"
 msgstr[1] ""
@@ -7274,8 +7274,8 @@ msgstr[1] ""
 "GnuCash har en funktion til automatisk at gemmer filerne hvert %d minut, "
 "ligesom hvis du havde trykket på knappen \"Gem\" hver gang.\n"
 "\n"
-"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger-"
-">Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
+"Du kan ændre tidsintervallet eller slå denne funktion fra under Rediger->"
+"Indstillinger->Generelt->Tidsinterval for automatisk lagring.\n"
 "\n"
 "Skal dine filer gemmes automatisk?"
 
@@ -7505,8 +7505,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:418
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
-msgstr ""
-"Filen/URL'en %s indeholder ikke GnuCash-data eller dataene er ødelagte."
+msgstr "Filen/URL'en %s indeholder ikke GnuCash-data eller dataene er ødelagte."
 
 #: gnucash/gnome-utils/gnc-file.c:424
 #, c-format
@@ -7687,8 +7686,7 @@ msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] "Hvis du ikke gemmer, vil ændringer fra det sidste %d minut gå tabt."
-msgstr[1] ""
-"Hvis du ikke gemmer, vil ændringer fra de sidste %d minutter gå tabt."
+msgstr[1] "Hvis du ikke gemmer, vil ændringer fra de sidste %d minutter gå tabt."
 
 #: gnucash/gnome-utils/gnc-file.c:693
 msgid "Continue _Without Saving"
@@ -8683,8 +8681,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Logniveau-tilsidesættelser, af formen "
-"\"modulename={debug,info,warn,crit,error}\"\n"
+"Logniveau-tilsidesættelser, af formen \"modulename="
+"{debug,info,warn,crit,error}\"\n"
 "Eksempler: \"--log qof=debug\" eller \"--log gnc.backend.file.sx=info\"\n"
 "Dette kan gøres flere gange."
 
@@ -9614,9 +9612,9 @@ msgid ""
 "Liability accounts."
 msgstr ""
 "Før afstemning af en konto, der opkræver eller betaler renter, skal brugeren "
-"blive bedt om at indtaste en transaktion for renteopkrævningen eller "
-"-betalingen. I øjeblikket kun aktiveret for bank-, kredit-, gensidig-, "
-"aktiv-, tilgodehavende-, gælds- og passivkonti."
+"blive bedt om at indtaste en transaktion for renteopkrævningen eller -"
+"betalingen. I øjeblikket kun aktiveret for bank-, kredit-, gensidig-, aktiv-"
+", tilgodehavende-, gælds- og passivkonti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
@@ -10374,8 +10372,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Sæt bogtilvalg på nye filer til at bruge opdelt »handlingsfelt« for »Num-"
-"felt« på klassekladder/rapporter"
+"Sæt bogtilvalg på nye filer til at bruge opdelt »handlingsfelt« for »Num-felt"
+"« på klassekladder/rapporter"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1472
@@ -12921,9 +12919,9 @@ msgid ""
 "appropriate, you can enter a new one."
 msgstr ""
 "Nedenfor bliver du bedt om at give oplysninger om aktier, "
-"investeringsforeninger og andre investeringer, der vises i den/de QIF-"
-"fil(er), du importerer. GnuCash har brug for nogle yderligere oplysninger om "
-"disse investeringer, som QIF-formatet ikke leverer.\n"
+"investeringsforeninger og andre investeringer, der vises i den/de QIF-fil(er)"
+", du importerer. GnuCash har brug for nogle yderligere oplysninger om disse "
+"investeringer, som QIF-formatet ikke leverer.\n"
 "\n"
 "Hver aktie, investeringsforening eller anden investering skal have et navn "
 "og en forkortelse, f.eks. et aktiesymbol. Da nogle uafhængige investeringer "
@@ -13047,15 +13045,15 @@ msgstr "Aktieopdelingsassistent"
 #: gnucash/gtkbuilder/assistant-stock-split.glade:22
 msgid "This assistant will help you record a stock split or stock merger.\n"
 msgstr ""
-"Denne assistent vil hjælpe dig med at registrere en aktieopsplitning eller "
-"-sammenlægning.\n"
+"Denne assistent vil hjælpe dig med at registrere en aktieopsplitning eller -"
+"sammenlægning.\n"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:44
 msgid ""
 "Select the account for which you want to record a stock split or merger."
 msgstr ""
-"Vælg den konto, du ønsker at registrere en aktieopsplitning eller "
-"-sammenlægning."
+"Vælg den konto, du ønsker at registrere en aktieopsplitning eller -"
+"sammenlægning."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:77
 msgid "Stock Split Account"
@@ -13169,8 +13167,8 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Tryk \"Afslut\", hvis du er færdig med at oprette aktieopdeling eller "
-"-sammenlægning. Du kan også trykke \"Tilbage\" for at tjekke dine valg eller "
+"Tryk \"Afslut\", hvis du er færdig med at oprette aktieopdeling eller -"
+"sammenlægning. Du kan også trykke \"Tilbage\" for at tjekke dine valg eller "
 "\"Annuller\" for at afslutte uden at udføre nogen ændringer."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
@@ -15267,8 +15265,7 @@ msgstr "Vælg en anden rapport skabelon før timeout"
 msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
-msgstr ""
-"Fakturaens id-nummer. Hvis tom vil et egnet nummer blive valgt for dig."
+msgstr "Fakturaens id-nummer. Hvis tom vil et egnet nummer blive valgt for dig."
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1381
 msgid ""
@@ -15645,8 +15642,7 @@ msgstr "_Relativ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:417
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr ""
-"Brug den angivne relative startdato til beregninger af fortjeneste/tab."
+msgstr "Brug den angivne relative startdato til beregninger af fortjeneste/tab."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:430
 msgid "_Absolute"
@@ -16068,8 +16064,8 @@ msgid ""
 "default."
 msgstr ""
 "En transaktion, hvis bedste match-score er i den røde zone (over "
-"visningstærsklen, men under eller lig med tærsklen for automatisk "
-"tilføjelse), vil som standard blive tilføjet."
+"visningstærsklen, men under eller lig med tærsklen for automatisk tilføjelse)"
+", vil som standard blive tilføjet."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
@@ -16783,9 +16779,9 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"Indtast en titel for dette eget format. Denne titel vil fremgå i "
-"»Checkformat«-vælgeren i dialogen Udskriv check. Brug af en eksisterende "
-"titel vil gøre at formatet bliver overskrevet."
+"Indtast en titel for dette eget format. Denne titel vil fremgå i »Checkformat"
+"«-vælgeren i dialogen Udskriv check. Brug af en eksisterende titel vil gøre "
+"at formatet bliver overskrevet."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:241
 msgid "Inches"
@@ -17183,8 +17179,7 @@ msgstr "_Autoopret nye transaktioner"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:585
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
-msgstr ""
-"Sæt flaget »auto-create« på de netop oprettede planlagte transaktioner."
+msgstr "Sæt flaget »auto-create« på de netop oprettede planlagte transaktioner."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:605
 msgid "Begin notifications this many days before the transaction is created."
@@ -18610,8 +18605,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -19403,8 +19398,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1638
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
-msgstr ""
-"Netbankjobbet kører stadig; er du sikker på, at du ønsker at annullere?"
+msgstr "Netbankjobbet kører stadig; er du sikker på, at du ønsker at annullere?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 #, fuzzy
@@ -21791,8 +21785,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 "Den indtastede dato for den kopierede transaktion er ældre end »tærskel for "
-"skrivebeskyttet« angivet for denne bog. Denne indstilling kan ændres i Fil-"
-">Egenskaber->Konti."
+"skrivebeskyttet« angivet for denne bog. Denne indstilling kan ændres i Fil->"
+"Egenskaber->Konti."
 
 #: gnucash/register/ledger-core/split-register.c:997
 msgid ""
@@ -22371,8 +22365,8 @@ msgid ""
 ">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "Den indtastede transaktionsdato er ældre end den \"Skrivebeskyttede "
-"tærskel\", der er angivet for denne bog. Denne indstilling kan ændres i Fil-"
-">Egenskaber->Konti, hvorved tærsklen nulstilles."
+"tærskel\", der er angivet for denne bog. Denne indstilling kan ændres i Fil->"
+"Egenskaber->Konti, hvorved tærsklen nulstilles."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -24502,8 +24496,8 @@ msgstr "Skriftstørrelse"
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
 msgstr ""
-"Skriftstørrelse i CSS-skriftstørrelsesformatet (f.eks. »medium« eller "
-"»10pt«)."
+"Skriftstørrelse i CSS-skriftstørrelsesformatet (f.eks. »medium« eller »10pt«)"
+"."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
@@ -25376,13 +25370,11 @@ msgstr "Passivdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:53
 msgid "Shows a chart with the Income per interval developing over time"
-msgstr ""
-"Viser et diagram med indkomsten pr. interval, der udvikler sig over tid"
+msgstr "Viser et diagram med indkomsten pr. interval, der udvikler sig over tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:56
 msgid "Shows a chart with the Expenses per interval developing over time"
-msgstr ""
-"Viser et diagram med udgifterne pr. interval, der udvikler sig over tid"
+msgstr "Viser et diagram med udgifterne pr. interval, der udvikler sig over tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:59
 msgid "Shows a chart with the Assets developing over time"
@@ -28160,8 +28152,7 @@ msgstr "Beskriv."
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
-msgstr ""
-"Ingen faktura valgt - brug venligst indstillingsmenuen til at vælge en."
+msgstr "Ingen faktura valgt - brug venligst indstillingsmenuen til at vælge en."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:284
 msgid ""
@@ -31823,8 +31814,7 @@ msgstr "Ukendt datoformatspecifikation sendt som argument."
 
 #: libgnucash/engine/gnc-datetime.cpp:730
 msgid "Value can't be parsed into a date using the selected date format."
-msgstr ""
-"Værdien kan ikke parses til en dato ved hjælp af det valgte datoformat."
+msgstr "Værdien kan ikke parses til en dato ved hjælp af det valgte datoformat."
 
 #: libgnucash/engine/gnc-datetime.cpp:735
 msgid "Value appears to contain a year while the selected format forbids this."
@@ -32005,8 +31995,8 @@ msgid ""
 "imports/exports."
 msgstr ""
 "Afkryds for at have del handling-feltet brugt i kassekladder for »Num«-"
-"feltet i stedet for transaktionsnummeret; transaktionsnummer vises som »T-"
-"Num« på den anden linje af kladden. Har tilsvarende effekt på "
+"feltet i stedet for transaktionsnummeret; transaktionsnummer vises som »T-Num"
+"« på den anden linje af kladden. Har tilsvarende effekt på "
 "forrentingsfunktioner, rapportering og import/eksport."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1218

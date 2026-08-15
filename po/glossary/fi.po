@@ -1,18 +1,18 @@
 # Finnish messages for gnucash-glossary.
 # Copyright (C) 2020 Free Software Foundation, Inc.
-# Marko Kohtala <marko.kohtala@gmail.com>, 2020.
-# Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
-# Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021.
-# Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
-# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
+# Marko Kohtala <marko.kohtala@gmail.com>, 2020, 2026.
+# Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021, 2026.
+# Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021, 2026.
+# Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021, 2026.
+# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2022-01-09 19:54+0000\n"
-"Last-Translator: Sampo Harjula <sahtor.weblate@sahtor.net>\n"
+"PO-Revision-Date: 2026-06-26 04:35+0000\n"
+"Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

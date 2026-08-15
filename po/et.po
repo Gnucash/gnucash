@@ -6,11 +6,11 @@
 # Priit Jõerüüt <hwlate@joeruut.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2025-01-06 10:58+0000\n"
+"PO-Revision-Date: 2026-06-26 03:39+0000\n"
 "Last-Translator: Priit Jõerüüt <hwlate@joeruut.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "et/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -1899,8 +1899,7 @@ msgstr "See tehing peab olema määratud Kliendile. Palun vali Klient alt poolt.
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr ""
-"See tehing peab olema määratud Hankijale. Palun vali Hankija alt poolt."
+msgstr "See tehing peab olema määratud Hankijale. Palun vali Hankija alt poolt."
 
 #: gnucash/gnome/dialog-commodities.cpp:188
 msgid ""

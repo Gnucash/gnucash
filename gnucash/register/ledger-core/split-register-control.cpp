@@ -1355,12 +1355,19 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         return FALSE;
     }
 
-    /* Make sure we NEED this for this type of register */
+    /* Registers have either a visible PRIC_CELL (price cell) or a
+     * hidden RATE_CELL. We need launch the Transfer Dialog to collect
+     * an exchange rate only when the RATE_CELL is provided. The first
+     * check looks at the register type to see which kind it's
+     * supposed to use, the second looks at what's actually in the
+     * register layout but doesn't always look at the right
+     * register.
+     */
     if (!gnc_split_reg_has_rate_cell (reg->type))
     {
         if (force_dialog)
         {
-            message = _("This register does not support editing exchange rates.");
+            message = _("Edit prices/exchange rates directly in the split line.");
             gnc_error_dialog (GTK_WINDOW(gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("no rate cell");
@@ -1373,7 +1380,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     {
         if (force_dialog)
         {
-            message = _("This register does not support editing exchange rates.");
+            message = _("Edit prices/exchange rates directly in the split line.");
             gnc_error_dialog (GTK_WINDOW(gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("null rate cell");

@@ -146,7 +146,7 @@ run_test (void)
     time = xaccTransGetVoidTime (transaction);
 
     /* figure at most 2 seconds difference */
-    if ((time != 0))
+    if ((time != INT64_MAX))
     {
         failure("void time not zero after restore");
     }

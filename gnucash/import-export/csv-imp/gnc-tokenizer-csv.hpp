@@ -53,10 +53,13 @@ public:
     ~GncCsvTokenizer() = default;                                 // destructor
 
     void set_separators(const std::string& separators);
+    void set_enable_escape(const bool enable);
     int  tokenize() override;
 
 private:
     std::string m_sep_str = ",";
+
+    bool m_enable_escape = true;
 };
 
 #endif

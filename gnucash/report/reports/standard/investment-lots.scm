@@ -60,12 +60,14 @@
 (define optname-show-sold-columns (N_ "Show sold columns"))
 (define optname-show-end-columns (N_ "Show end columns"))
 (define optname-show-realized-gain-columns
-    (N_ "Show realized gain column(s)"))
+    (N_ "Show realized gain columns"))
 (define optname-show-unrealized-gain-columns
-    (N_ "Show unrealized gain column(s)"))
+    (N_ "Show unrealized gain columns"))
 (define optname-group-gains-by-age
     (N_ "Group gains by age (short term and long term)"))
 (define optname-long-term-years (N_ "Long term gains age (years)"))
+(define optname-show-roi-columns (N_ "Show ROI columns"))
+(define optname-show-cagr-columns (N_ "Show CAGR columns"))
 
 ;; Display
 (define optname-show-long-account-names (N_ "Show long account names"))
@@ -123,10 +125,12 @@
 (define colname-short-term-realized-gain (N_ "ST Realized Gain"))
 (define colname-long-term-realized-gain (N_ "LT Realized Gain"))
 (define colname-realized-roi (N_ "Realized ROI"))
+(define colname-realized-cagr (N_ "Realized CAGR"))
 (define colname-unrealized-gain (N_ "Unrealized Gain"))
 (define colname-short-term-unrealized-gain (N_ "ST Unrealized Gain"))
 (define colname-long-term-unrealized-gain (N_ "LT Unrealized Gain"))
 (define colname-unrealized-roi (N_ "Unrealized ROI"))
+(define colname-unrealized-cagr (N_ "Unrealized CAGR"))
 
 (define label-account-total (N_ "Account Lots Total"))
 (define label-grand-total (N_ "Grand Total"))
@@ -135,7 +139,18 @@
 ;; will use to display a dialog where the user can select
 ;; values for the report's parameters.
 (define (options-generator)
-  (let* ((options (gnc-new-optiondb)))
+  (let ((options (gnc-new-optiondb)))
+
+    ;; When both realized and unrealized gain columns are hidden, the gain
+    ;; percentage columns (ROI and CAGR) won't be visible anyways, so disable
+    ;; their corresponding options.
+    (define (update-gain-percentage-columns-enabled enabled)
+      (for-each
+        (lambda (name)
+          (gnc-optiondb-set-option-selectable-by-name options
+              pagename-columns name enabled))
+        (list optname-show-roi-columns
+              optname-show-cagr-columns)))
 
     ;; Accounts tab
     (gnc-register-account-list-limited-option options
@@ -207,7 +222,7 @@
       (cons 'percent 50.0))
 
     ;; Columns tab
-    (gnc-register-simple-boolean-option options
+  (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-lot-guid-column
         "a"
@@ -242,19 +257,29 @@
         (N_ "Show end date amount and value table columns")
         #t)
 
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
         pagename-columns
         optname-show-realized-gain-columns
         "f"
         (N_ "Show realized gain table column(s) for sold shares")
-        #t)
+        #t
+        (lambda (x)
+            (update-gain-percentage-columns-enabled
+              (or x (gnc-optiondb-lookup-value options
+                      pagename-columns
+                      optname-show-unrealized-gain-columns)))))
 
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
         pagename-columns
         optname-show-unrealized-gain-columns
         "g"
         (N_ "Show unrealized gain table column(s) for unsold shares")
-        #t)
+        #t
+        (lambda (x)
+            (update-gain-percentage-columns-enabled
+              (or x (gnc-optiondb-lookup-value options
+                      pagename-columns
+                      optname-show-realized-gain-columns)))))
 
     (gnc-register-multichoice-callback-option options
         pagename-columns
@@ -284,6 +309,20 @@
       0 ;; lower-bound
       10E9 ;; upper-bound
       1) ;; step-size
+
+    (gnc-register-simple-boolean-option options
+        pagename-columns
+        optname-show-roi-columns
+        "j"
+        (N_ "Show Return On Investment (ROI) columns")
+        #f)
+
+    (gnc-register-simple-boolean-option options
+        pagename-columns
+        optname-show-cagr-columns
+        "k"
+        (N_ "Show Compound Annual Growth Rate (CAGR) columns")
+        #t)
 
     ;; Display tab
     (gnc-register-simple-boolean-option options
@@ -324,6 +363,14 @@
     ;; General tab
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-from-date optname-to-date "a")
+
+    ;; Use a default report date of 'today'. Otherwise,
+    ;; 'end of accounting period' would be the default. A future date
+    ;; makes a poor default because they may result in misleading/non-sensical
+    ;; unrealized CAGR percentages.
+    (GncOption-set-default-value
+      (gnc-lookup-option options gnc:pagename-general optname-to-date)
+      'today)
 
     (gnc:options-add-currency!
       options
@@ -392,6 +439,165 @@
 
     options))
 
+;; Calculate Compound Annual Growth Rate (CAGR)
+;; basis: starting value (numeric or false)
+;; end-value: ending value (numeric)
+;; years: holding period in years (numeric or false)
+;; Returns: decimal (0.0 = 0% gain, 1.0 = 100% gain), or #f if undefined
+(define (calculate-cagr basis end-value years)
+  "Calculate compound annual growth rate.
+Returns #f if calculation is not possible, otherwise returns decimal CAGR."
+  (if (or (eq? basis #f)
+          (gnc-numeric-zero-p basis)
+          (gnc-numeric-negative-p basis)
+          (gnc-numeric-negative-p end-value)
+          (eq? years #f)
+          (zero? years))
+    #f
+    (- (expt (/ (gnc-numeric-to-double end-value)
+               (gnc-numeric-to-double basis))
+             (/ 1 years))
+       1)))
+
+;; Calculate simple gain or loss
+;; basis: cost basis (numeric)
+;; end-value: current or sale value (numeric)
+;; Returns: gain/loss as gnc-numeric
+(define (calculate-gain basis end-value)
+  "Calculate gain or loss.
+Returns gnc-numeric value of gain or loss."
+  (gnc-numeric-sub-fixed end-value basis))
+
+;; Calculate return on investment (ROI) percentage
+;; basis: cost basis (numeric)
+;; gain: realized or unrealized gain (numeric)
+;; Returns: decimal (0.0 = 0%, 1.0 = 100%), or #f if undefined
+(define (calculate-roi basis gain)
+  "Calculate return on investment percentage.
+Returns decimal percentage (0.0 = 0%, 1.0 = 100%), or #f if zero basis."
+  (if (gnc-numeric-zero-p basis)
+    #f
+    (/ (gnc-numeric-to-double gain)
+       (gnc-numeric-to-double basis))))
+
+;; Determine if a holding qualifies as long-term based on holding period
+;; buy-date: acquisition date (time64)
+;; sell-date: sale or valuation date (time64)
+;; long-term-years: threshold in years
+;; Returns: #t if held >= long-term-years, #f otherwise
+(define (is-long-term? buy-date sell-date long-term-years)
+  "Determine if holding period qualifies as long-term.
+Returns #t if held >= long-term-years, #f otherwise."
+  (let* ((seconds-per-day 86400)
+         (days-per-year 365.25)
+         (days-held (/ (- sell-date buy-date) seconds-per-day))
+         (years-held (/ days-held days-per-year)))
+    (>= years-held long-term-years)))
+
+;; Compute aggregate gain metrics used by renderer formatting.
+;; Returns list: (total-gain roi-percent cagr-percent)
+(define (compute-gain-metrics basis short-gain long-gain cagr-value)
+  (let* ((total-gain (gnc-numeric-add-fixed short-gain long-gain))
+         (roi-decimal
+           (cond
+             ((or (not basis)
+                  (not total-gain))
+               #f)
+             ((gnc-numeric-zero-p basis)
+               0)
+             (else (calculate-roi basis total-gain))))
+         (roi-percent (and roi-decimal (* 100 roi-decimal)))
+         (cagr-percent (and cagr-value (* 100 cagr-value))))
+    (list total-gain roi-percent cagr-percent)))
+
+;; True when split metadata indicates a stock split event.
+(define (stock-split-event? split-type split-action)
+  (or (and split-type (string=? split-type "stock-split"))
+      (and split-action (string-ci=? split-action "split"))))
+
+;; True for reverse stock split style share reductions: negative amount,
+;; zero value, and stock split metadata. These are non-realizing events and
+;; should not affect realized gains or basis.
+(define (non-realizing-share-reduction?
+          split-type split-action amount value)
+  (and (stock-split-event? split-type split-action)
+       (gnc-numeric-negative-p amount)
+       (gnc-numeric-zero-p value)))
+
+;; Classify a split event for lot processing.
+(define (classify-lot-split split-type split-action amount value)
+  (cond
+    ((non-realizing-share-reduction?
+       split-type split-action amount value)
+      'non-realizing-share-reduction)
+    ((gnc-numeric-positive-p amount) 'purchase)
+    ((gnc-numeric-negative-p amount) 'sale)
+    ((gnc-numeric-zero-p amount) 'realized-gain-split)
+    (else 'other)))
+
+;; Returns a pair-like list: (lots unassigned-splits)
+;; where lots are unique lots referenced by splits.
+(define (collect-lots-and-unassigned-splits splits)
+  (define lots-seen (make-hash-table))
+  (let loop ((remaining splits)
+             (lots '())
+             (unassigned-splits '()))
+    (match remaining
+      (()
+        (list (reverse lots) unassigned-splits))
+      ((split . rest)
+        (let ((lot (xaccSplitGetLot split)))
+          (loop rest
+                (cond
+                  ((or (null? lot)
+                       (hash-ref lots-seen lot))
+                    lots)
+                  (else
+                    (hash-set! lots-seen lot #t)
+                    (cons lot lots)))
+                (cond
+                  ((null? lot)
+                    (cons split unassigned-splits))
+                  (else unassigned-splits))))))))
+
+;; Returns #t when s1 should sort before s2 for lot processing:
+;; first by transaction date, then purchases before sales on same date.
+(define (split-sort<=? s1 s2)
+  (let* ((t1 (xaccSplitGetParent s1))
+         (t2 (xaccSplitGetParent s2))
+         (date1 (xaccTransGetDate t1))
+         (date2 (xaccTransGetDate t2))
+         (date-order (cond
+                       ((< date1 date2) -1)
+                       ((> date1 date2) 1)
+                       (else 0))))
+    (if (= date-order 0)
+      (let ((is-purchase-s1
+              (gnc-numeric-positive-p (xaccSplitGetAmount s1)))
+            (is-purchase-s2
+              (gnc-numeric-positive-p (xaccSplitGetAmount s2))))
+        (cond
+          ((and is-purchase-s1 is-purchase-s2)
+            ;; Same-day purchases: defer to transaction ordering as tiebreak.
+            (<= (xaccTransOrder t1 t2) 0))
+          (else is-purchase-s1)))
+      (<= date-order 0))))
+
+;; Returns lot splits up to and including to-date, sorted consistently.
+(define (lot-splits-up-to-date lot to-date)
+  (sort-list!
+    (let loop ((remaining (gnc-lot-get-split-list lot))
+               (result '()))
+      (match remaining
+        (() result)
+        ((split . rest)
+          (let ((split-date (xaccTransGetDate (xaccSplitGetParent split))))
+            (loop rest
+                  (if (<= split-date to-date)
+                    (cons split result)
+                    result))))))
+    split-sort<=?))
+
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
 ;; report-html.txt for documentation; the file report-html.scm
@@ -402,8 +608,7 @@
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-      (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   ;; Given a price list and a currency find the price for that currency on the
   ;; list. If there is none for the requested currency, return the first one.
@@ -434,7 +639,7 @@
          ;; Chart options
          (show-chart (get-option pagename-chart optname-show-chart))
          (chart-type (get-option pagename-chart optname-chart-type))
-         (chart-location (get-option pagename-chart optname-chart-location))         
+         (chart-location (get-option pagename-chart optname-chart-location))
          (chart-height (get-option pagename-chart optname-plot-height))
          (chart-width (get-option pagename-chart optname-plot-width))
 
@@ -458,6 +663,10 @@
             (get-option pagename-columns optname-group-gains-by-age))
          (long-term-years
             (get-option pagename-columns optname-long-term-years))
+         (show-roi-columns
+            (get-option pagename-columns optname-show-roi-columns))
+         (show-cagr-columns
+            (get-option pagename-columns optname-show-cagr-columns))
 
          ;; Display options
          (include-closed-lots
@@ -578,6 +787,11 @@
           (> years-held long-term-years))
         #f))
 
+    ;; Returns the Compound Annual Growth Rate (CAGR). Returns false if basis
+    ;; and/or years are zero or false.
+    (define (get-cagr basis end-value years)
+      (calculate-cagr basis end-value years))
+
     ;; Gets the account name.
     (define (account->name account)
       (if show-long-account-names
@@ -664,96 +878,32 @@
     ;; before from-date are also included (needed to calculate running
     ;; balance and basis during the report date window).
     (define (get-all-splits account)
-      (let ((query (qof-query-create-for-splits)))
-        (qof-query-set-book query (gnc-get-current-book))
-        (xaccQueryAddClearedMatch query
-          (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
-        (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-        (xaccQueryAddDateMatchTT query
-            #f ; use_start.
-            0  ; start. Note: Intentionally not using from-date.
-            #t ; use-end
-            to-date QOF-QUERY-AND)
-        (let ((result (qof-query-run query)))
-          (qof-query-destroy query)
-          (gnc:debug (format #f "Found ~a splits." (length result)))
-          result)))
+      (let ((splits '()) (len 0))
+        (gnc-account-foreach-split-between-dates
+         account #f to-date #f
+         (lambda (split)
+           (unless (xaccTransGetVoidStatus (xaccSplitGetParent split))
+             (set! len (1+ len))
+             (set! splits (cons split splits)))))
+        (gnc:debug "Found " len " splits.")
+        (reverse! splits)))
 
     ;; Returns a pair where the first item is a list of lots for the given
     ;; splits. The second item is the number of splits that are not assigned
     ;; to a lot.
     (define (get-all-lots splits)
-      (define lots-seen (make-hash-table))
-      (let loop ((splits splits)
-                 (lots '())
-                 (unassigned-splits '()))
-        (match splits
-          (()
-            (gnc:debug (format #f "Found ~a lots and ~a unassigned splits"
-                                  (length lots)
-                                  (length unassigned-splits)))
-            (list (reverse lots) unassigned-splits))
-          ((split . rest)
-            (let ((lot (xaccSplitGetLot split)))
-              (loop rest
-                  (cond
-                    ((or (null? lot)
-                         (hash-ref lots-seen lot))
-                      lots)
-                    (else
-                      (hash-set! lots-seen lot #t)
-                      (cons lot lots)))
-                  (cond
-                    ((null? lot)
-                      (cons split unassigned-splits))
-                    (else unassigned-splits))))))))
+      (let* ((result (collect-lots-and-unassigned-splits splits))
+             (lots (car result))
+             (unassigned-splits (cadr result)))
+        (gnc:debug (format #f "Found ~a lots and ~a unassigned splits"
+                           (length lots)
+                           (length unassigned-splits)))
+        result))
 
     ;; Returns the lot splits, ordered first by transaction date and then
     ;; ordering purchases before sales.
     (define (lot->splits lot)
-      (sort-list!
-        ;; Prune out splits that are after to-date.
-        (let loop ((splits (gnc-lot-get-split-list lot))
-                   (result '()))
-          (match splits
-            (() result)
-            ((split . rest)
-              (loop rest
-                (if (<= (split->date split) to-date)
-                  (cons split result)
-                  result)))))
-        (lambda (s1 s2)
-          (let* ((t1 (xaccSplitGetParent s1))
-                  (t2 (xaccSplitGetParent s2))
-                  (date1 (xaccTransGetDate t1))
-                  (date2 (xaccTransGetDate t2))
-                  ;; Do not call xaccTransOrder to set t-order. It not only
-                  ;; sorts by date posted, but by other fields that we don't
-                  ;; care about here (i.e. num, date entered, description, and
-                  ;; guid). When two transactions have the same date, we want
-                  ;; t-order to be zero, regardless of those other fields, so
-                  ;; that the secondary sorting logic (purchase or sale) takes
-                  ;; effect.
-                  ;;   (t-order (xaccTransOrder t1 t2))
-                  (t-order (cond
-                              ((< date1 date2) -1)
-                              ((> date1 date2) 1)
-                              (else 0))))
-            (if (= t-order 0)
-              ;; The two splits share the same transaction date. Order
-              ;; purchases before sales.
-              (let ((is-purchase-s1
-                        (gnc-numeric-positive-p (xaccSplitGetAmount s1)))
-                    (is-purchase-s2
-                        (gnc-numeric-positive-p (xaccSplitGetAmount s2))))
-                (cond
-                  ((and is-purchase-s1 is-purchase-s2)
-                    ;; They are both purchases and on the same date. So go
-                    ;; ahead and let xaccTransOrder be the tiebreaker (not
-                    ;; that it matters much).
-                    (<= (xaccTransOrder t1 t2) 0))
-                  (else is-purchase-s1)))
-              (<= t-order 0))))))
+      (lot-splits-up-to-date lot to-date))
 
       ;; Gets the price's time.
       (define (price->time price)
@@ -830,6 +980,28 @@
     ;; accounts may have different commodities, so combining their amounts
     ;; would not make sense).
     (define (get-column-header-list is-grand-total)
+
+      ;; Helper function for getting the list of gains-related column names.
+      (define (get-gains-column-header-list
+                  colname-short-term-gain
+                  colname-long-term-gain
+                  colname-gain
+                  colname-roi
+                  colname-cagr)
+          (append
+            (if group-gains-by-age
+              (list
+                colname-short-term-gain
+                colname-long-term-gain)
+              (list
+                colname-gain))
+            (if show-roi-columns
+              (list colname-roi)
+              '())
+            (if show-cagr-columns
+              (list
+                (if is-grand-total #f colname-cagr))
+              '())))
       (append
         (list (if is-grand-total #f colname-lot-title))
         (if show-lot-guid-column
@@ -871,24 +1043,20 @@
             colname-end-value)
           '())
         (if show-realized-gain-columns
-          (if group-gains-by-age
-            (list
-              colname-short-term-realized-gain
-              colname-long-term-realized-gain
-              colname-realized-roi)
-            (list
-              colname-realized-gain
-              colname-realized-roi))
+          (get-gains-column-header-list
+                  colname-short-term-realized-gain
+                  colname-long-term-realized-gain
+                  colname-realized-gain
+                  colname-realized-roi
+                  colname-realized-cagr)
           '())
         (if show-unrealized-gain-columns
-          (if group-gains-by-age
-            (list
-              colname-short-term-unrealized-gain
-              colname-long-term-unrealized-gain
-              colname-unrealized-roi)
-            (list
-              colname-unrealized-gain
-              colname-unrealized-roi))
+          (get-gains-column-header-list
+                  colname-short-term-unrealized-gain
+                  colname-long-term-unrealized-gain
+                  colname-unrealized-gain
+                  colname-unrealized-roi
+                  colname-unrealized-cagr)
           '())))
 
     ;; The number of table columns.
@@ -965,8 +1133,10 @@
               end-value
               short-term-realized-gain
               long-term-realized-gain
+              realized-cagr
               short-term-unrealized-gain
-              long-term-unrealized-gain)
+              long-term-unrealized-gain
+              unrealized-cagr)
       ;; Helper function for converting a numeric value to an html table cell.
       (define (to-cell val format-val-fn)
         (if (or (not val)
@@ -1022,29 +1192,33 @@
             (value->monetary value))))
 
       ;; Helper function for adding capital gains columns
-      (define (get-gains-fn show-columns basis short-gain long-gain)
+      (define (get-gains-fn show-columns basis short-gain long-gain cagr-value)
         (append
           (if show-columns
-            (let* ((total-gain (gnc-numeric-add-fixed
-                                    short-gain
-                                    long-gain))
-                    (roi (percentage->cell
-                            (cond
-                              ((or (not basis)
-                                   (not total-gain))
-                                 #f)
-                              ((gnc-numeric-zero-p basis)
-                                0)
-                              (else
-                                (* 100 (/ total-gain basis)))))))
-              (if group-gains-by-age
-                (list
-                  (value->cell short-gain)
-                  (value->cell long-gain)
-                  roi)
-                (list
-                  (value->cell total-gain)
-                  roi)))
+            (let* ((gain-metrics
+                     (compute-gain-metrics
+                       basis
+                       short-gain
+                       long-gain
+                       cagr-value))
+                   (total-gain (car gain-metrics))
+                   (roi-percent (cadr gain-metrics))
+                   (cagr-percent (caddr gain-metrics))
+                   (roi (percentage->cell roi-percent))
+                   (cagr (percentage->cell cagr-percent)))
+              (append
+                (if group-gains-by-age
+                  (list
+                    (value->cell short-gain)
+                    (value->cell long-gain))
+                  (list
+                    (value->cell total-gain)))
+                (if show-roi-columns
+                  (list roi)
+                  '())
+                (if show-cagr-columns
+                  (list cagr)
+                  '())))
             '())))
 
       (if is-bold
@@ -1113,12 +1287,14 @@
             show-realized-gain-columns
             sold-basis
             short-term-realized-gain
-            long-term-realized-gain)
+            long-term-realized-gain
+            realized-cagr)
           (get-gains-fn
             show-unrealized-gain-columns
             end-basis
             short-term-unrealized-gain
-            long-term-unrealized-gain))))
+            long-term-unrealized-gain
+            unrealized-cagr))))
       (gnc:html-table-append-row/markup!
         table
         (if is-bold "grand-total" (get-row-style is-odd-row))
@@ -1163,12 +1339,14 @@
              (long-term-sold-basis (get-report-value-zero))
              (long-term-sold-value (get-report-value-zero))
              (long-term-realized-gain (get-report-value-zero))
+             (weighted-realized-cagr 0.0)
              (end-amount (get-amount-zero))
              (end-basis (get-report-value-zero))
              (end-value (get-report-value-zero))
              (unrealized-gain (get-report-value-zero))
              (short-term-unrealized-gain (get-report-value-zero))
              (long-term-unrealized-gain (get-report-value-zero))
+             (weighted-unrealized-cagr 0.0)
              (has-warnings #f)
              (is-active-in-window #f)
              (currency '())
@@ -1221,7 +1399,8 @@
                   sold-basis
                   sold-value
                   sold-gain
-                  is-long-term)
+                  is-long-term
+                  cagr)
           (if show-split-rows
             (let ((date-cell
                     (to-split-cell (qof-print-date trans-date) split))
@@ -1260,8 +1439,10 @@
                 (if (and is-long-term sold-gain) 0 sold-gain)
                 ;; long-term-realized-gain
                 (if (and is-long-term sold-gain) sold-gain 0)
+                cagr ;; realized-cagr
                 #f ;; short-term-unrealized-gain
-                #f)))) ;; long-term-unrealized-gain
+                #f ;; long-term-unrealized-gain
+                #f)))) ;; unrealized-cagr
 
         ;; Adds the stats to the given html table.
         (define (add-to-table table is-odd-row)
@@ -1287,7 +1468,32 @@
                     (cond
                       (is-lot-row (lot->title lot))
                       (is-account-row label-account-total)
-                      (is-grand-total-row label-grand-total))))
+                      (is-grand-total-row label-grand-total)))
+                  (years-held
+                    (cond
+                      (is-lot-row
+                        (gnc:date-year-delta
+                          latest-bought-split-date
+                          to-date))
+                      (else #f)))
+                  (unrealized-cagr
+                      (cond
+                        (is-lot-row (get-cagr end-basis end-value years-held))
+                        (is-account-row
+                          (if (gnc-numeric-zero-p end-amount)
+                            0
+                            (/ weighted-unrealized-cagr end-amount)))
+                        (is-grand-total-row #f)))
+                  (sold-amount (gnc-numeric-add-fixed
+                                    long-term-sold-amount
+                                    short-term-sold-amount))
+                  (realized-cagr
+                    (cond
+                      ((or is-lot-row is-account-row)
+                        (if (gnc-numeric-zero-p sold-amount)
+                          0
+                          (/ weighted-realized-cagr sold-amount)))
+                      (is-grand-total-row #f))))
             (add-data-row
               table
               (if (not is-grand-total-row) currency #f)
@@ -1311,11 +1517,18 @@
               end-value
               short-term-realized-gain
               long-term-realized-gain
+              (if (not is-grand-total-row) realized-cagr #f)
               short-term-unrealized-gain
-              long-term-unrealized-gain)
+              long-term-unrealized-gain
+              (if (not is-grand-total-row) unrealized-cagr #f))
 
             (if is-lot-row
-              (copy-table-rows splits-table table (get-row-style is-odd-row)))
+              (begin
+                (if unrealized-cagr
+                  (set! weighted-unrealized-cagr
+                      (+ weighted-unrealized-cagr
+                        (* unrealized-cagr end-amount))))
+                (copy-table-rows splits-table table (get-row-style is-odd-row))))
 
             (add-warnings-to-table table)
 
@@ -1513,28 +1726,99 @@
                       (xaccSplitGetValue split)
                       trans-currency))
                  (amount (xaccSplitGetAmount split))
-                 (is-purchase (gnc-numeric-positive-p amount))
-                 (is-sale (gnc-numeric-negative-p amount))
-                 (is-realized-gain (gnc-numeric-zero-p amount)))
+                 (split-type (xaccSplitGetType split))
+                 (split-action (xaccSplitGetAction split))
+                 (split-kind
+                   (classify-lot-split split-type split-action amount value)))
 
-            (cond
-              (is-purchase
+            (case split-kind
+              ((purchase)
                 (merge-purchase-split split trans-date amount value))
 
-              (is-sale
+              ;; Reverse stock splits (or equivalent metadata-tagged share
+              ;; reductions) are non-realizing events: shares decrease with no
+              ;; proceeds, so basis and realized gain must remain unchanged.
+              ((non-realizing-share-reduction)
+                (merge-non-realizing-share-reduction-split
+                  split
+                  trans-date
+                  ;; Convert to positive share reduction.
+                  (gnc-numeric-neg amount)))
+
+              ((sale)
                 (merge-sale-split
                   split
                   trans-date
-                  ;; Covert amount and value to positive numbers.
+                  ;; Convert amount and value to positive numbers.
                   (gnc-numeric-neg amount)
                   (gnc-numeric-neg value)))
 
               ;; A "Realized Gain/Loss" split has zero amount. Sum its value
               ;; to validate against the report-computed gain value.
-              ((and is-realized-gain
-                    (>= trans-date from-date))
+              ((realized-gain-split)
+                (if (>= trans-date from-date)
                 (set! splits-realized-gain
-                    (gnc-numeric-add-fixed splits-realized-gain value))))))
+                    (gnc-numeric-add-fixed splits-realized-gain value))))
+
+              (else #f))))
+
+            ;; Merges in a non-realizing share reduction (e.g. reverse stock
+            ;; split). Shares are reduced, but basis and realized gains are not.
+            (define (merge-non-realizing-share-reduction-split
+                  split trans-date amount)
+              (set! end-amount (gnc-numeric-sub-fixed end-amount amount))
+              (if (and (>= trans-date from-date)
+                   (null? first-negative-split)
+                   (gnc-numeric-negative-p end-amount))
+              (set! first-negative-split split)))
+
+            ;; Adds sale metrics into either the long-term or short-term
+            ;; accumulator buckets.
+            (define (accumulate-sale-term! is-long-term amount basis value gain)
+              (if is-long-term
+                (begin
+                  (set! long-term-sold-amount
+                    (gnc-numeric-add-fixed long-term-sold-amount amount))
+                  (set! long-term-sold-basis
+                    (gnc-numeric-add-fixed long-term-sold-basis basis))
+                  (set! long-term-sold-value
+                    (gnc-numeric-add-fixed long-term-sold-value value))
+                  (set! long-term-realized-gain
+                    (gnc-numeric-add-fixed long-term-realized-gain gain)))
+                (begin
+                  (set! short-term-sold-amount
+                    (gnc-numeric-add-fixed short-term-sold-amount amount))
+                  (set! short-term-sold-basis
+                    (gnc-numeric-add-fixed short-term-sold-basis basis))
+                  (set! short-term-sold-value
+                    (gnc-numeric-add-fixed short-term-sold-value value))
+                  (set! short-term-realized-gain
+                    (gnc-numeric-add-fixed short-term-realized-gain gain)))))
+
+            ;; Adds purchase metrics into current-window or pre-window buckets.
+            (define (accumulate-purchase! trans-date amount value)
+              (if (>= trans-date from-date)
+                (begin
+                  (set! bought-amount
+                    (gnc-numeric-add-fixed bought-amount amount))
+                  (set! bought-value
+                    (gnc-numeric-add-fixed bought-value value)))
+                (begin
+                  (set! old-bought-value
+                    (gnc-numeric-add-fixed old-bought-value value))
+                  (set! old-bought-amount
+                    (gnc-numeric-add-fixed old-bought-amount amount)))))
+
+            ;; Generic field merge helpers used by merge-stats.
+            (define (merge-fixed-field! stats get-current set-current stats-key)
+              (set-current
+                (gnc-numeric-add-fixed (get-current) (stats stats-key))))
+
+            (define (merge-double-field! stats get-current set-current stats-key)
+              (set-current (+ (get-current) (stats stats-key))))
+
+            (define (merge-boolean-or-field! stats get-current set-current stats-key)
+              (set-current (or (get-current) (stats stats-key))))
 
         ;; Merges in the sale split info.
         (define (merge-sale-split split trans-date amount value)
@@ -1572,45 +1856,40 @@
 
           (cond
             ((>= trans-date from-date)
-              ;; Remember if a sale within the report window causes the
-              ;; lot's balance to go negative.
-              (if (and (null? first-negative-split)
-                      (gnc-numeric-negative-p end-amount))
-              (set! first-negative-split split))
+              (let* ((years-held
+                        (gnc:date-year-delta
+                            latest-bought-split-date
+                            trans-date))
+                     (cagr (get-cagr basis value years-held)))
+                ;; Remember if a sale within the report window causes the
+                ;; lot's balance to go negative.
+                (if (and (null? first-negative-split)
+                        (gnc-numeric-negative-p end-amount))
+                  (set! first-negative-split split))
 
-              (cond
-                (is-long-term
-                  (set! long-term-sold-amount
-                    (gnc-numeric-add-fixed long-term-sold-amount amount))
-                  (set! long-term-sold-basis
-                    (gnc-numeric-add-fixed long-term-sold-basis basis))
-                  (set! long-term-sold-value
-                    (gnc-numeric-add-fixed long-term-sold-value value))
-                  (set! long-term-realized-gain
-                    (gnc-numeric-add-fixed long-term-realized-gain gain)))
-                (else
-                  (set! short-term-sold-amount
-                    (gnc-numeric-add-fixed short-term-sold-amount amount))
-                  (set! short-term-sold-basis
-                    (gnc-numeric-add-fixed short-term-sold-basis basis))
-                  (set! short-term-sold-value
-                    (gnc-numeric-add-fixed short-term-sold-value value))
-                  (set! short-term-realized-gain
-                    (gnc-numeric-add-fixed short-term-realized-gain gain))))
+                ;; if CAGR could not be computed because the basis and/or the
+                ;; years held are zero (like if a security was bought and sold
+                ;; on the same day), then do not include it in the total.
+                (if cagr
+                  (set! weighted-realized-cagr
+                    (+ weighted-realized-cagr (* cagr amount))))
 
-              (add-split-row
-                split
-                trans-date
-                #f      ;; bought-amount
-                #f      ;; bought-value
-                amount  ;; sold-amount
-                basis   ;; sold-basis
-                value   ;; sold-value
-                gain    ;; sold-gain
-                is-long-term)
+                (accumulate-sale-term! is-long-term amount basis value gain)
 
-              (set! sold-split-count (+ sold-split-count 1))
-              (set! last-sold-split split)))))
+                (add-split-row
+                  split
+                  trans-date
+                  #f      ;; bought-amount
+                  #f      ;; bought-value
+                  amount  ;; sold-amount
+                  basis   ;; sold-basis
+                  value   ;; sold-value
+                  gain    ;; sold-gain
+                  is-long-term
+                  cagr)
+
+                (set! sold-split-count (+ sold-split-count 1))
+                (set! last-sold-split split))))))
 
         ;; Merges in the purchase split info.
         (define (merge-purchase-split split trans-date amount value)
@@ -1631,12 +1910,13 @@
             (set! latest-bought-split-date trans-date))
           (set! end-basis (gnc-numeric-add-fixed end-basis value))
           (set! end-amount (gnc-numeric-add-fixed end-amount amount))
+
+          ;; Always accumulate purchase totals; row rendering still depends on
+          ;; whether the purchase occurred inside the report window.
+          (accumulate-purchase! trans-date amount value)
+
           (cond
             ((>= trans-date from-date)
-              (set! bought-amount
-                (gnc-numeric-add-fixed bought-amount amount))
-              (set! bought-value
-                (gnc-numeric-add-fixed bought-value value))
               (add-split-row
                 split
                 trans-date
@@ -1646,16 +1926,13 @@
                 #f      ;; sold-basis
                 #f      ;; sold-value
                 #f      ;; sold-gain
-                #f))    ;; is-long-term
+                #f      ;; is-long-term
+                #f))    ;; cagr
 
             ;; The split is from before the report's start date.
             ;; So we won't include it in the report table, but
             ;; we still need to count it for basis calculations.
-            (else
-              (set! old-bought-value
-                (gnc-numeric-add-fixed old-bought-value value))
-              (set! old-bought-amount
-                (gnc-numeric-add-fixed old-bought-amount amount))))
+            (else #f))
 
           ;; Note that this also counts purchases before the report
           ;; start date.
@@ -1675,83 +1952,101 @@
                     (else #f))))
             (set! bought-split-count
               (+ bought-split-count (stats 'get-bought-split-count)))
-            (set! old-bought-value
-              (gnc-numeric-add-fixed
-                old-bought-value
-                (stats 'get-old-bought-value)))
-            (set! bought-value
-              (gnc-numeric-add-fixed bought-value (stats 'get-bought-value)))
-            (set! sold-split-count
-              (gnc-numeric-add-fixed
-                sold-split-count
-                (stats 'get-sold-split-count)))
-            (set! short-term-sold-basis
-              (gnc-numeric-add-fixed
-                short-term-sold-basis
-                (stats 'get-short-term-sold-basis)))
-            (set! short-term-sold-value
-              (gnc-numeric-add-fixed
-                short-term-sold-value
-                (stats 'get-short-term-sold-value)))
-            (set! short-term-realized-gain
-              (gnc-numeric-add-fixed
-                short-term-realized-gain
-                (stats 'get-short-term-realized-gain)))
-            (set! long-term-sold-basis
-              (gnc-numeric-add-fixed
-                long-term-sold-basis
-                (stats 'get-long-term-sold-basis)))
-            (set! long-term-sold-value
-              (gnc-numeric-add-fixed
-                long-term-sold-value
-                (stats 'get-long-term-sold-value)))
-            (set! long-term-realized-gain
-              (gnc-numeric-add-fixed
-                long-term-realized-gain
-                (stats 'get-long-term-realized-gain)))
-            (set! end-basis
-              (gnc-numeric-add-fixed end-basis (stats 'get-end-basis)))
-            (set! end-value
-              (gnc-numeric-add-fixed end-value (stats 'get-end-value)))
-            (set! unrealized-gain
-              (gnc-numeric-add-fixed
-                unrealized-gain
-                (stats 'get-unrealized-gain)))
-            (set! short-term-unrealized-gain
-              (gnc-numeric-add-fixed
-                short-term-unrealized-gain
-                (stats 'get-short-term-unrealized-gain)))
-            (set! long-term-unrealized-gain
-              (gnc-numeric-add-fixed
-                long-term-unrealized-gain
-                (stats 'get-long-term-unrealized-gain)))
-            (set! has-warnings
-              (or has-warnings
-                  (stats 'get-has-warnings)))
-            (set! is-active-in-window
-              (or is-active-in-window
-                  (stats 'get-is-active-in-window)))
+            (merge-fixed-field! stats
+              (lambda () old-bought-value)
+              (lambda (v) (set! old-bought-value v))
+              'get-old-bought-value)
+            (merge-fixed-field! stats
+              (lambda () bought-value)
+              (lambda (v) (set! bought-value v))
+              'get-bought-value)
+            (merge-fixed-field! stats
+              (lambda () sold-split-count)
+              (lambda (v) (set! sold-split-count v))
+              'get-sold-split-count)
+            (merge-fixed-field! stats
+              (lambda () short-term-sold-basis)
+              (lambda (v) (set! short-term-sold-basis v))
+              'get-short-term-sold-basis)
+            (merge-fixed-field! stats
+              (lambda () short-term-sold-value)
+              (lambda (v) (set! short-term-sold-value v))
+              'get-short-term-sold-value)
+            (merge-fixed-field! stats
+              (lambda () short-term-realized-gain)
+              (lambda (v) (set! short-term-realized-gain v))
+              'get-short-term-realized-gain)
+            (merge-fixed-field! stats
+              (lambda () long-term-sold-basis)
+              (lambda (v) (set! long-term-sold-basis v))
+              'get-long-term-sold-basis)
+            (merge-fixed-field! stats
+              (lambda () long-term-sold-value)
+              (lambda (v) (set! long-term-sold-value v))
+              'get-long-term-sold-value)
+            (merge-fixed-field! stats
+              (lambda () long-term-realized-gain)
+              (lambda (v) (set! long-term-realized-gain v))
+              'get-long-term-realized-gain)
+            (merge-double-field! stats
+              (lambda () weighted-realized-cagr)
+              (lambda (v) (set! weighted-realized-cagr v))
+              'get-weighted-realized-cagr)
+            (merge-fixed-field! stats
+              (lambda () end-basis)
+              (lambda (v) (set! end-basis v))
+              'get-end-basis)
+            (merge-fixed-field! stats
+              (lambda () end-value)
+              (lambda (v) (set! end-value v))
+              'get-end-value)
+            (merge-fixed-field! stats
+              (lambda () unrealized-gain)
+              (lambda (v) (set! unrealized-gain v))
+              'get-unrealized-gain)
+            (merge-fixed-field! stats
+              (lambda () short-term-unrealized-gain)
+              (lambda (v) (set! short-term-unrealized-gain v))
+              'get-short-term-unrealized-gain)
+            (merge-fixed-field! stats
+              (lambda () long-term-unrealized-gain)
+              (lambda (v) (set! long-term-unrealized-gain v))
+              'get-long-term-unrealized-gain)
+            (merge-double-field! stats
+              (lambda () weighted-unrealized-cagr)
+              (lambda (v) (set! weighted-unrealized-cagr v))
+              'get-weighted-unrealized-cagr)
+            (merge-boolean-or-field! stats
+              (lambda () has-warnings)
+              (lambda (v) (set! has-warnings v))
+              'get-has-warnings)
+            (merge-boolean-or-field! stats
+              (lambda () is-active-in-window)
+              (lambda (v) (set! is-active-in-window v))
+              'get-is-active-in-window)
 
             (if include-amounts
               (begin
-                (set! old-bought-amount
-                  (gnc-numeric-add-fixed
-                    old-bought-amount
-                    (stats 'get-old-bought-amount)))
-                (set! bought-amount
-                  (gnc-numeric-add-fixed
-                    bought-amount
-                    (stats 'get-bought-amount)))
-                (set! short-term-sold-amount
-                  (gnc-numeric-add-fixed
-                    short-term-sold-amount
-                    (stats 'get-short-term-sold-amount)))
-                (set! long-term-sold-amount
-                  (gnc-numeric-add-fixed
-                    long-term-sold-amount
-                    (stats 'get-long-term-sold-amount)))
-                (set! end-amount
-                  (gnc-numeric-add-fixed end-amount (stats 'get-end-amount)))
+                (merge-fixed-field! stats
+                  (lambda () old-bought-amount)
+                  (lambda (v) (set! old-bought-amount v))
+                  'get-old-bought-amount)
+                (merge-fixed-field! stats
+                  (lambda () bought-amount)
+                  (lambda (v) (set! bought-amount v))
+                  'get-bought-amount)
+                (merge-fixed-field! stats
+                  (lambda () short-term-sold-amount)
+                  (lambda (v) (set! short-term-sold-amount v))
+                  'get-short-term-sold-amount)
+                (merge-fixed-field! stats
+                  (lambda () long-term-sold-amount)
+                  (lambda (v) (set! long-term-sold-amount v))
+                  'get-long-term-sold-amount)
+                (merge-fixed-field! stats
+                  (lambda () end-amount)
+                  (lambda (v) (set! end-amount v))
+                  'get-end-amount)
                 ;; The amounts are being combined, so they must all pertain to
                 ;; the same currency. Copy it, if not already set.
                 (if (null? currency)
@@ -1781,6 +2076,7 @@
               ((get-short-term-realized-gain)
                   (lambda () short-term-realized-gain))
               ((get-long-term-realized-gain) (lambda () long-term-realized-gain))
+              ((get-weighted-realized-cagr) (lambda () weighted-realized-cagr))
               ((get-end-amount) (lambda () end-amount))
               ((get-end-basis) (lambda () end-basis))
               ((get-end-value) (lambda () end-value))
@@ -1789,6 +2085,7 @@
                   (lambda () short-term-unrealized-gain))
               ((get-long-term-unrealized-gain)
                   (lambda () long-term-unrealized-gain))
+              ((get-weighted-unrealized-cagr) (lambda () weighted-unrealized-cagr))
               ((get-has-warnings) (lambda () has-warnings))
               ((get-is-active-in-window) (lambda () is-active-in-window))
               ((get-currency) (lambda () currency))

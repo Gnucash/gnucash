@@ -11,11 +11,11 @@
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-14 21:11+0000\n"
+"PO-Revision-Date: 2026-07-09 15:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -98,8 +98,7 @@ msgstr "Könyvelési időszak vége"
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Könyvelési időszak utolsó napja, a globális beállításoknak megfelelően."
+msgstr "Könyvelési időszak utolsó napja, a globális beállításoknak megfelelően."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -834,8 +833,7 @@ msgstr "Konverziós irány"
 
 #: borrowed/goffice/go-charmap-sel.c:471
 msgid "This value determines which iconv test to perform."
-msgstr ""
-"Ez az érték határozza meg, hogy melyik iconv tesztet kell végrehajtani."
+msgstr "Ez az érték határozza meg, hogy melyik iconv tesztet kell végrehajtani."
 
 #: borrowed/goffice/go-optionmenu.c:347
 msgid "Menu"
@@ -881,10 +879,11 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Meglévő pénzügyi adatait könnyedén importálhatja a Quicken-ből, az MS Money-"
-"ból vagy más programból, ami QIF vagy OFX fájlt exportál. A fájlmenüben "
-"kattintson az importálási almenüre majd a QIF vagy OFX fájl menüpontra. "
-"Ezután kövesse az utasításokat."
+"Meglévő pénzügyi adatait könnyedén importálhatja Quicken, MS Money vagy más "
+"pénzügyi programból, amely képes QIF, OFX vagy QFX fájlba exportálni. A "
+"fájlmenüben kattintson az importálási almenüre majd válassza a „QIF fájl "
+"importálása…” vagy az „OFX/QFX fájl importálása…” menüpontot. Ezután kövesse "
+"az utasításokat."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -917,9 +916,11 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"Megváltoztathatja, hogy a számlatükörben, mely oszlopok jelenjenek meg. Csak "
-"keresse meg a háromszöget az oszlop tetejének jobb oldalán, és rákattintva "
-"láthatja az elérhető különböző oszlopokat."
+"Testreszabható, hogy a számlafában mely oszlopok jelenjenek meg. Az oszlopok "
+"címsorában az ablak jobb oldalán található kis háromszögre kattintva "
+"felugrik a megjeleníthető oszlopok listája. Ebben kijelölhetők a "
+"megjeleníteni kívánt oszlopok, és törölhetők azoknak az oszlopoknak a "
+"kijelölései melyeket nem kíván megjeleníteni."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -1035,8 +1036,7 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr ""
-"A főablak lapjai között a Control + Page Up/Down billentyűkkel válthat."
+msgstr "A főablak lapjai között a Control + Page Up/Down billentyűkkel válthat."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -2436,8 +2436,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
-"Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell hagyni."
+msgstr "Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell hagyni."
 
 #: gnucash/gnome/dialog-customer.c:334
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -4045,8 +4044,8 @@ msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
 msgstr ""
-"A hátralevő ismétlések száma (%d) nagyobb, mint az összes ismétlés száma "
-"(%d)."
+"A hátralevő ismétlések száma (%d) nagyobb, mint az összes ismétlés száma (%d)"
+"."
 
 #: gnucash/gnome/dialog-sx-editor.c:608
 msgid ""
@@ -4143,8 +4142,7 @@ msgstr ""
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
-msgstr ""
-"Az ütemezett tranzakció kiegyenlítetlen. Erősen ajánlott a korrigálása."
+msgstr "Az ütemezett tranzakció kiegyenlítetlen. Erősen ajánlott a korrigálása."
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:774
 msgid ""
@@ -4743,8 +4741,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
 msgid "_Reset Default Layout for Customer business items"
-msgstr ""
-"Az ügyfél üzleti tételei alapértelmezett elrendezésének _visszaállítása"
+msgstr "Az ügyfél üzleti tételei alapértelmezett elrendezésének _visszaállítása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:209
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -5931,8 +5928,9 @@ msgid ""
 msgstr ""
 "A kiválasztott alszámlák egyike nem szerkeszthető.\n"
 "Ha szerkeszteni kívánja a tranzakciókat e regiszterben, nyissa meg az "
-"alszámlabeállításokat és kapcsolja ki az 'Elválasztó'-t.\n"
-"Különben a számlát megnyithatja önmagában is és nem csak számlakészletként."
+"alszámlabeállításokat és törölje a jelölést a helyőrző (töltelék) "
+"jelölőnégyzetből.\n"
+"Egyébként a számlát önmagában is megnyithatja, nem csak számlacsoportban."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:5
@@ -5945,13 +5943,6 @@ msgid "Manage your finances, accounts, and investments"
 msgstr "Kezelje a pénzügyeit, számláit és befektetéseit"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
-#, fuzzy
-#| msgid ""
-#| "Designed to be easy to use, yet powerful and flexible, GnuCash allows you "
-#| "to track bank accounts, stocks, income and expenses. As quick and "
-#| "intuitive to use as a checkbook register, it is based on professional "
-#| "accounting principles like double-entry accounting to ensure balanced "
-#| "books and accurate reports."
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting. "
 "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to "
@@ -5960,9 +5951,10 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"A könnyen használható, ugyanakkor nagy tudású és rugalmas GnuCash lehetővé "
-"teszi a bankszámlák, részvények, bevételek és kiadások nyomon követését. "
-"Ugyanolyan gyors és egyszerű, mintha füzetben vezetnénk a "
+"A GnuCash egy magánszemélyek és kisvállalkozások számára készült pénzügyi, "
+"számviteli program. Könnyen használható, ugyanakkor nagy tudású és rugalmas, "
+"lehetővé teszi a bankszámlák, részvények, bevételek és kiadások nyomon "
+"követését. Ugyanolyan gyors és egyszerű, mintha füzetben vezetnénk a "
 "nyilvántartásunkat, mégis professzionális számviteli elveken alapul, "
 "biztosítva ezzel a kiegyensúlyozott könyvelést és a jelentések pontosságát."
 
@@ -6941,16 +6933,12 @@ msgid "Action/Number"
 msgstr "Művelet/Szám"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 3306"
-msgstr "Alapértelmezett"
+msgstr "Alapértelmezett: 3306"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 5432"
-msgstr "Alapértelmezett"
+msgstr "Alapértelmezett: 5432"
 
 #: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
@@ -7063,8 +7051,8 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Egyedi nevet kell adjon ennek az adótáblázatnak. Az Ön által választott "
-"„%s”, már használatban van."
+"Egyedi nevet kell adjon ennek az adótáblázatnak. Az Ön által választott „%s"
+"”, már használatban van."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -7943,7 +7931,7 @@ msgstr "(A felhasználó módosíthatja.)"
 #: gnucash/gnome-utils/gnc-main-window.cpp:5537
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr "Szerzői jog: © 1997-%s A GnuCash közreműködői."
+msgstr "Szerzői jog © 1997 – %s A GnuCash közreműködői."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5549
 #: gnucash/gnome-utils/gnc-splash.c:99
@@ -8701,8 +8689,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"A napló részleteinek, formátumának módosítása "
-"\"modulename={debug,info,warn,crit,error}\"\n"
+"A napló részleteinek, formátumának módosítása \"modulename="
+"{debug,info,warn,crit,error}\"\n"
 "Például: \"--log qof=debug\" vagy \"--log gnc.backend.file.sx=info\"\n"
 "Ez többször is megismételhető."
 
@@ -8715,8 +8703,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Naplófájl beállítása. Alapértelmezett a „/tmp/gnucash.trace”; lehet az "
-"„stderr” vagy az „stdout” is."
+"Naplófájl beállítása. Alapértelmezett a „/tmp/gnucash.trace”; lehet az „"
+"stderr” vagy az „stdout” is."
 
 #: gnucash/gnucash-core-app.cpp:292
 msgid "Hidden Options"
@@ -8932,8 +8920,8 @@ msgid ""
 msgstr ""
 "Ha aktiválva van, akkor a GNUCash az elindításakor ellenőrzi van-e hamarosan "
 "esedékessé váló kimenőszámla. Ha igen, megjelenít egy emlékeztető "
-"párbeszédablakot. Az esedékesség előtti napok számát az „Ennyi nappal "
-"előtte” beállítás határozza meg. Ellenkező esetben a GnuCash nem ellenőrzi a "
+"párbeszédablakot. Az esedékesség előtti napok számát az „Ennyi nappal előtte"
+"” beállítás határozza meg. Ellenkező esetben a GnuCash nem ellenőrzi a "
 "kimenőszámlák fizetési határidejét."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
@@ -8947,8 +8935,8 @@ msgid ""
 "active."
 msgstr ""
 "Ez a mező határozza meg, hogy a GnuCash hány nappal előre ellenőrizze az "
-"esedékes kimenőszámlákat. Az értéke csak akkor lesz használva, ha az "
-"„Értesítés az esedékes számlákról” beállítás aktív."
+"esedékes kimenőszámlákat. Az értéke csak akkor lesz használva, ha az „"
+"Értesítés az esedékes számlákról” beállítás aktív."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
@@ -9042,8 +9030,8 @@ msgid ""
 "active."
 msgstr ""
 "Ez a mező határozza meg, hogy a GnuCash hány nappal előre ellenőrizze az "
-"esedékes bejövőszámlákat. Az értéke csak akkor lesz használva, ha az "
-"„Értesítés az esedékes számlákról” beállítás aktív."
+"esedékes bejövőszámlákat. Az értéke csak akkor lesz használva, ha az „"
+"Értesítés az esedékes számlákról” beállítás aktív."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
@@ -9714,9 +9702,9 @@ msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
-"Ez a beállítás határozza meg, hogy a „Létrehozott tranzakciók "
-"felülvizsgálata” alapértelmezettként legyen-e beállítva „A legutóbbi futás "
-"óta” segéd ablakában."
+"Ez a beállítás határozza meg, hogy a „Létrehozott tranzakciók felülvizsgálata"
+"” alapértelmezettként legyen-e beállítva „A legutóbbi futás óta” segéd "
+"ablakában."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
 msgid "Set the sort column in the \"since last run\" dialog."
@@ -10037,8 +10025,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1797
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr ""
-"A régi naplók és biztonsági mentések törlése ennyi nap után (0 = soha)."
+msgstr "A régi naplók és biztonsági mentések törlése ennyi nap után (0 = soha)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1815
@@ -10163,8 +10150,8 @@ msgid ""
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
 "Ez az érték határozza meg a lapok füleinek maximális szélességét. Ha a lap "
-"fülén megjelenő szöveg hosszabb ennél az értéknél (a teszt közelítő "
-"jellegű), akkor a szöveg közepét kivágja, és három ponttal helyettesíti."
+"fülén megjelenő szöveg hosszabb ennél az értéknél (a teszt közelítő jellegű)"
+", akkor a szöveg közepét kivágja, és három ponttal helyettesíti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
@@ -10239,10 +10226,10 @@ msgid ""
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
 "Ez a beállítás határozza meg a dátumok megjelenítésének formátumát. A "
-"lehetséges értékek: „helyi” (a rendszer nyelvi beállításának "
-"dátumformátuma), „ce” (az európai kontinens dátumformátuma), „iso” (ISO 8601 "
-"szabvány szerinti dátumformátum), „uk” (az Egyesült Királyság "
-"dátumformátuma) és „us” (az Egyesült Államok dátumformátuma)."
+"lehetséges értékek: „helyi” (a rendszer nyelvi beállításának dátumformátuma)"
+", „ce” (az európai kontinens dátumformátuma), „iso” (ISO 8601 szabvány "
+"szerinti dátumformátum), „uk” (az Egyesült Királyság dátumformátuma) és „us” "
+"(az Egyesült Államok dátumformátuma)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1149
@@ -10565,8 +10552,8 @@ msgid ""
 "setting shows all transactions in expanded form."
 msgstr ""
 "Ez a beállítás határozza meg az új regiszterablak megnyitásakor "
-"alapértelmezett nézetstílust. A lehetséges értékek: „Felosztások bezárva”, "
-"„Szerkesztett felosztás kinyitva” és „Felosztások kinyitva”. A „Felosztások "
+"alapértelmezett nézetstílust. A lehetséges értékek: „Felosztások bezárva”, „"
+"Szerkesztett felosztás kinyitva” és „Felosztások kinyitva”. A „Felosztások "
 "bezárva” beállítás azt jelenti, hogy minden tranzakciót egy vagy két sorban "
 "jelenít meg, attól függően, hogy be van-e kapcsolva a kétsoros nézet "
 "lehetőség. A „Szerkesztett felosztás kinyitva” beállítás ugyanezt teszi, de "
@@ -11251,8 +11238,8 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
-"számításokhoz milyen kezdő dátumot használjon a program. Ha az értéke "
-"„abszolút”, akkor a GnuCash a „start-date” kulcsban megadott kezdő dátumot "
+"számításokhoz milyen kezdő dátumot használjon a program. Ha az értéke „"
+"abszolút”, akkor a GnuCash a „start-date” kulcsban megadott kezdő dátumot "
 "veszi alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash a „start-"
 "period” kulcsban megadott kezdő dátumot veszi alapul."
 
@@ -11271,8 +11258,8 @@ msgid ""
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke "
-"„abszolút”. A mező az 1970. január 1-jétől számított másodpercekben "
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke „"
+"abszolút”. A mező az 1970. január 1-jétől számított másodpercekben "
 "kifejezett dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
@@ -11286,8 +11273,8 @@ msgid ""
 "field should contain a value between 0 and 8."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke nem "
-"„abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
+"használt kezdő dátumot, amennyiben a „start-choice” beállítás értéke nem „"
+"abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 msgid "Use relative profit/loss ending date"
@@ -11302,8 +11289,8 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 "Ez a beállítás határozza meg, hogy a nyereség/veszteség (eredmény) "
-"számításokhoz milyen záró dátumot használjon a program. Ha az értéke "
-"„abszolút”, akkor a GnuCash az „end-date” kulcsban megadott záró dátumot "
+"számításokhoz milyen záró dátumot használjon a program. Ha az értéke „"
+"abszolút”, akkor a GnuCash az „end-date” kulcsban megadott záró dátumot "
 "veszi alapul. Ha más értékre (relatív) van állítva, akkor a GnuCash az „end-"
 "period” kulcsban megadott záró dátumot veszi alapul."
 
@@ -11322,9 +11309,9 @@ msgid ""
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt záró dátumot, amennyiben az „end-choice” beállítás értéke "
-"„abszolút”. A mező az 1970. január 1-jétől számított másodpercekben "
-"kifejezett dátumot kell tartalmazza."
+"használt záró dátumot, amennyiben az „end-choice” beállítás értéke „abszolút"
+"”. A mező az 1970. január 1-jétől számított másodpercekben kifejezett "
+"dátumot kell tartalmazza."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
@@ -11337,8 +11324,8 @@ msgid ""
 "should contain a value between 0 and 8."
 msgstr ""
 "Ez a beállítás határozza meg a nyereség/veszteség (eredmény) számításokhoz "
-"használt záró dátumot, amennyiben az „end-choice” beállítás értéke nem "
-"„abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
+"használt záró dátumot, amennyiben az „end-choice” beállítás értéke nem „"
+"abszolút”. A mező 0 és 8 közötti értéket kell tartalmazzon."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
@@ -11438,8 +11425,8 @@ msgstr ""
 "Amelyik számla még nem létezik, az a teljes számlanév által megadott helyen "
 "és névvel létre fog jönni, feltéve, hogy a hozzá tartozó értékpapír vagy "
 "pénznem is létezik. Amelyik számla már létezik, annak négy mezője megkapja a "
-"fájlban szereplő értékeket: ezek a „Számlaszám”, a „Leírás”, a "
-"„Megjegyzések” és a „Szín”.\n"
+"fájlban szereplő értékeket: ezek a „Számlaszám”, a „Leírás”, a „Megjegyzések"
+"” és a „Szín”.\n"
 "\n"
 "A folytatáshoz kattintson a „Következő” gombra, az importálás "
 "megszakításához pedig a „Mégse” gombra.\n"
@@ -11687,8 +11674,8 @@ msgstr ""
 "határolójelet is beállíthat. Fix szélesség beállításához kattintson duplán a "
 "sorokra. A megadott szélességet a jobb gombbal kattintva megváltoztathatja.\n"
 "\n"
-"A fájl egy sora kinézhet például így: \"BUX\",\"OTP\","
-"\"2017-09-14\",10435,\"HUF\" vagy CURRENCY;USD;2016-11-21;0.0028;HUF\n"
+"A fájl egy sora kinézhet például így: \"BUX\",\"OTP\",\"2017-09-"
+"14\",10435,\"HUF\" vagy CURRENCY;USD;2016-11-21;0.0028;HUF\n"
 "\n"
 "Beállíthatja, melyik legyen az első és az utolsó importált sor, illetve "
 "kihagyhat minden második sort, ha a fájl pl. feljécszövegeket tartalmaz. "
@@ -11946,13 +11933,14 @@ msgstr ""
 "fájl oszlopai lehetnek fix szélességűek vagy tagoltak (például vesszővel "
 "vagy pontosvesszővel elválasztottak).\n"
 "\n"
-"A sikeres importáláshoz a fájlnak három oszlopot kell tartalmaznia:\n"
-"• Dátum oszlopa.\n"
-"• Leírás oszlopa.\n"
-"• Összeg vagy negált összeg oszlopa.\n"
+"A sikeres importáláshoz a fájlnak legalább a következő három oszlopot "
+"tartalmaznia kell:\n"
+"• A dátum oszlopa.\n"
+"• A leírás oszlopa.\n"
+"• Az összeg vagy negált összeg oszlopa.\n"
 "\n"
-"Ha a fájl nem tartalmazza a tranzakciók számláját, kiválaszthatja, melyik "
-"számlára importálódjon az összes tranzakció.\n"
+"Ha a fájl nem tartalmazza a tranzakciók számláját, kiválaszthatja, hogy "
+"melyik számlára importálódjon az összes tranzakció.\n"
 "\n"
 "Az elválasztójeleken kívül egyéb beállításokat is megváltoztathat. Például "
 "átugorhat sorokat a fájl elején vagy végén, vagy akár minden második sort. "
@@ -12669,10 +12657,10 @@ msgid ""
 "software are likely to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
-"A QIF formátum nem határozza meg, milyen formában kell egy dátum évét, "
-"hónapját és napját nyomtatni. Legtöbb esetben automatikusan meg lehet "
-"állapítani, hogy egy adott fájl milyen formátumot használ. A most importált "
-"fájlban azonban több formátum is alkalmazható az adatokra.\n"
+"A QIF formátum nem határozza meg, milyen sorrendben kell egy dátum évét, "
+"hónapját és napját nyomtatni. A legtöbb esetben automatikusan meg lehet "
+"állapítani, hogy egy adott fájl milyen formátumot használ. Azonban a most "
+"importált fájlban az adatokra több dátumformátum is alkalmazható.\n"
 "\n"
 "Válasszon egy dátumformátumot a fájlnak. Az európai szoftverek által "
 "készített QIF fájlok „n-h-é” nap-hónap-év formátumban vannak. A „US” "
@@ -12905,7 +12893,7 @@ msgstr "Adja meg az információkat…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1040
 msgid "All fields must be complete to continue…"
-msgstr ""
+msgstr "A folytatáshoz minden mezőnek érvényes értékeket kell tartalmazni…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1057
 msgid "Tradable commodities"
@@ -13174,9 +13162,8 @@ msgid "Enter the value of the shares."
 msgstr "Adja meg a részvények összértékét."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:379
-#, fuzzy
 msgid "Gross value"
-msgstr "Eladások"
+msgstr "Bruttó érték"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:405
 msgid "_Stock Value"
@@ -13197,9 +13184,8 @@ msgstr ""
 "tranzakciót közvetítői díj is terheli."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
-#, fuzzy
 msgid "Net value"
-msgstr "Eladások"
+msgstr "Nettó érték"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
 msgid "Cash Account"
@@ -13259,10 +13245,8 @@ msgstr ""
 "veszteségek pedig negatívak."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:843
-#, fuzzy
-#| msgid "Capital Gains"
 msgid "Capital Gain/Loss"
-msgstr "Tőkenyereség"
+msgstr "Tőkenyereség/veszteség"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:866
 msgid "Capital Gains Account"
@@ -13466,13 +13450,11 @@ msgstr "Ennyi nappal _előtte"
 
 #: gnucash/gtkbuilder/business-prefs.glade:279
 msgid "How many days in the future to warn about Bills coming due."
-msgstr ""
-"Hány nappal előtte figyelmeztessen az esedékessé váló bejövőszámlákról."
+msgstr "Hány nappal előtte figyelmeztessen az esedékessé váló bejövőszámlákról."
 
 #: gnucash/gtkbuilder/business-prefs.glade:294
 msgid "How many days in the future to warn about Invoices coming due."
-msgstr ""
-"Hány nappal előtte figyelmeztessen az esedékessé váló kimenőszámlákról."
+msgstr "Hány nappal előtte figyelmeztessen az esedékessé váló kimenőszámlákról."
 
 #: gnucash/gtkbuilder/business-prefs.glade:306
 msgid "_Days in advance"
@@ -13602,26 +13584,24 @@ msgstr "Számlatípus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:974
 msgid "Show _hidden accounts"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "_Rejtett számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:992
-#, fuzzy
 msgid "Show _unused accounts"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "_Nem használt számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:996
 msgid "Show accounts which do not have any transactions."
 msgstr ""
-"Azoknak a számláknak a megtekintése, amelyek nem tartalmaznak tranzakciókat."
+"Azoknak a számláknak a megjelenítése, melyek nem tartalmaznak tranzakciókat."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1010
 msgid "Show _zero total accounts"
 msgstr "Nulla öss_zegű számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1014
-#, fuzzy
 msgid "Show accounts which have a zero total value."
-msgstr "A nulla egyenlegű számlák elrejtése."
+msgstr "A nulla egyenlegű számlák megjelenítése."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1073
 msgid "Use Commodity Value"
@@ -13690,7 +13670,7 @@ msgstr "Me_gjegyzések"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1431
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "Az áru legkisebb egysége, amit használni lehet."
+msgstr "Az áru legkisebb használható egysége."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1457
 #: gnucash/gtkbuilder/dialog-tax-info.glade:644
@@ -13732,9 +13712,9 @@ msgid ""
 msgstr ""
 "Ez a számla és az alszámlái nem fognak megjelenni a számlafában és a "
 "regiszterben felugró számlalistában. Ezt a beállítást csak úgy törölheti, ha "
-"először megnyitja a számlafában a \"Szűrés…\" párbeszédpanelt, majd bejelöli "
-"a \"Rejtett fiókok megjelenítése\" lehetőséget. Így már ki tudja választani "
-"a számlát, és újra megnyithatja ezt a párbeszédpanelt."
+"először megnyitja a számlafában a „Szűrés…” ablakot, majd az „Egyéb” lapon "
+"bejelöli a „Rejtett számlák megjelenítése” lehetőséget. Így már ki tudja "
+"választani a számlát, és újra megnyithatja ezt a párbeszédablakot."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1568
 msgid "Opening balance"
@@ -13758,8 +13738,8 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Az adórelevancia bekapcsolása és az adónem számlához rendelése a Szerkesztés "
-"-> Adójelentés beállítások menüpontban végezhető el."
+"Az adórelevancia bekapcsolása és az adónem számlához rendelése a "
+"Szerkesztés -> Adójelentés beállítások menüpontban végezhető el."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1642
 msgid "_Higher Balance Limit"
@@ -14633,10 +14613,8 @@ msgid "Password"
 msgstr "Jelszó"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:286
-#, fuzzy
-#| msgid "Portfolio"
 msgid "Port"
-msgstr "Portfólió"
+msgstr "Port"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:313
 msgid "Database Connection"
@@ -14883,8 +14861,8 @@ msgid ""
 "Filter will be applied to 'Match String' and 'Mapped to Account Name' "
 "fields, case sensitive."
 msgstr ""
-"Kis- és nagybetűérzékeny szűrés alkalmazása az „Egyező karakterláncok” és a "
-"„Számla nevének megfelelő” mezőkön."
+"Kis- és nagybetűérzékeny szűrés alkalmazása az „Egyező karakterláncok” és a „"
+"Számla nevének megfelelő” mezőkön."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:338
 msgid "_Filter"
@@ -15054,8 +15032,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-import.glade:721
 msgid "Select neither to skip the transaction (it won't be imported at all)."
 msgstr ""
-"A tranzakció kihagyásához egyiket se válassza (ekkor nem történik "
-"importálás)."
+"A tranzakció kihagyásához egyiket se válassza (ekkor nem történik importálás)"
+"."
 
 #: gnucash/gtkbuilder/dialog-import.glade:779
 msgid "Red"
@@ -15298,8 +15276,8 @@ msgid ""
 "perform any of them."
 msgstr ""
 "Az új felhasználók rendszerint az alábbi műveletek egyikével kezdik el a "
-"GnuCash használatát. Válassza ki a kívánt műveletet majd kattintson a "
-"„Rendben” gombra. Ha egyiket sem akarja választani, kattintson a „Mégse” "
+"GnuCash használatát. Válassza ki a kívánt műveletet majd kattintson a „"
+"Rendben” gombra. Ha egyiket sem akarja választani, kattintson a „Mégse” "
 "gombra."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:250
@@ -15909,8 +15887,8 @@ msgstr ""
 "tranzakcióként vagy a havi banki díjakban jelennének meg. Például kivesz "
 "1000 Ft-ot, és 1015 Ft plusz számlaközi díjat kell fizetnie. Ha manuálisan "
 "adta meg ezt az 1000 forintot, az összegek nem fognak egyezni. Az Ön "
-"területén fizetendő maximális összeget kell beállítania (a helyi "
-"pénznemben), így a tranzakció egyezőként kerül felismerésre."
+"területén fizetendő maximális összeget kell beállítania (a helyi pénznemben)"
+", így a tranzakció egyezőként kerül felismerésre."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2177
 msgid ""
@@ -16220,8 +16198,7 @@ msgstr "Elrendezés"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2914
 msgid "_Placement of future transactions"
-msgstr ""
-"A jövőbeli dátumú tranzakciók legalul _helyezkedjenek el a regiszterben"
+msgstr "A jövőbeli dátumú tranzakciók legalul _helyezkedjenek el a regiszterben"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2920
 msgid ""
@@ -17951,19 +17928,15 @@ msgstr ""
 "Ha 0, akkor az összes korábbi nap is beletartozik"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:229
-#, fuzzy
-#| msgid "Days"
 msgid "_Days ago"
-msgstr "Napok"
+msgstr "_Nappal ezelőtt"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:274
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:361
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:286
-#, fuzzy
-#| msgid "Relative"
 msgid "Rela_tive"
 msgstr "_Relatív"
 
@@ -17972,22 +17945,16 @@ msgid "Choo_se Date"
 msgstr "Dátum_választás"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:316
-#, fuzzy
-#| msgid "Days"
 msgid "Days a_go"
-msgstr "Napok"
+msgstr "Nappal ez_előtt"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:389
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest"
-msgstr "L_egelső dátum"
+msgstr "A legkorábbi"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
-#, fuzzy
-#| msgid "_Latest"
 msgid "Latest"
-msgstr "Uto_lsó dátum"
+msgstr "A legutóbbi"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:447
@@ -18416,8 +18383,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\">"
+"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -18468,8 +18435,8 @@ msgid ""
 msgstr ""
 "Az internetbanki számlák beállítása és ezeknek a megfelelő GnuCash "
 "számlákhoz hozzárendelése befejeződött. Most már végre tud hajtani internet "
-"banki műveleteket ezeken a számlákon (Műveletek -> Internetbanki "
-"műveletek).\n"
+"banki műveleteket ezeken a számlákon (Műveletek -> Internetbanki műveletek)"
+".\n"
 "\n"
 "Bármikor újra elindíthatja ezt a segédet, ha egy újabb bankot, felhasználót "
 "vagy számlát szeretne felvenni.\n"
@@ -18690,8 +18657,7 @@ msgstr "Jelenlegi _hozzáadása"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1492
 msgid "Add the current online transaction as a new transaction template"
-msgstr ""
-"A jelenlegi internetbanki tranzakció hozzáadása új tranzakciósablonként"
+msgstr "A jelenlegi internetbanki tranzakció hozzáadása új tranzakciósablonként"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1504
 msgid "_Up"
@@ -19239,8 +19205,7 @@ msgstr "_Tranzakciók lekérése…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
-msgstr ""
-"A számla tranzakcióinak lekérése internetbanki szolgáltatáson keresztül"
+msgstr "A számla tranzakcióinak lekérése internetbanki szolgáltatáson keresztül"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
@@ -19497,8 +19462,7 @@ msgstr "A számla (%s) nem lett könyvelve, mert a pénznemek nem egyeznek.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:899
 #, c-format
 msgid "Invoice %s NOT posted because it requires currency conversion.\n"
-msgstr ""
-"A számla (%s) nem lett könyvelve, mert a pénznem átváltása szükséges.\n"
+msgstr "A számla (%s) nem lett könyvelve, mert a pénznem átváltása szükséges.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:923
 #, c-format
@@ -19676,9 +19640,8 @@ msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
-"A fájlban minden tranzakció egy sort fog elfoglalni, hasonlóan a regiszter "
-"„Felosztások bezárva” nézetéhez. Emiatt a többszörös felosztások "
-"elveszhetnek."
+"A fájlban minden tranzakció egy sort fog elfoglalni, hasonlóan a regiszter „"
+"Felosztások bezárva” nézetéhez. Emiatt a többszörös felosztások elveszhetnek."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -19841,7 +19804,7 @@ msgstr ""
 "Ha üres fájlba importálja a számlákat, akkor meg fog nyílni a Könyv "
 "beállításai ablak, mert az ottani beállítások befolyásolják, hogyan jönnek "
 "létre GnuCash tranzakciók az importált adatokból.\n"
-"Figyelem: Importálás után lehet, hogy a „Nézet -> Szűrés… -> egyéb” lapon be "
+"Figyelem: Importálás után lehet, hogy a „Nézet → Szűrés… → Egyéb” lapon be "
 "kell kapcsolnia a rejtett számlák megjelenítését.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
@@ -21018,8 +20981,7 @@ msgstr "Átalakítva: "
 
 #: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Some characters have been converted according to your locale."
-msgstr ""
-"Néhány karakter a területi beállításoknak megfelelően át lett alakítva."
+msgstr "Néhány karakter a területi beállításoknak megfelelően át lett alakítva."
 
 #: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
@@ -22115,8 +22077,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:2227
 msgid "Change transaction containing a reconciled split?"
-msgstr ""
-"Biztos megváltoztatja az egyeztetett felosztást tartalmazó tranzakciót?"
+msgstr "Biztos megváltoztatja az egyeztetett felosztást tartalmazó tranzakciót?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2229
 #, c-format
@@ -22275,8 +22236,7 @@ msgstr[0] "Árfolyam"
 
 #: gnucash/report/html-utilities.scm:279
 msgid "No budgets exist. You must create at least one budget."
-msgstr ""
-"Nincsenek költségvetések. Legalább egy költségvetést létre kell hoznia."
+msgstr "Nincsenek költségvetések. Legalább egy költségvetést létre kell hoznia."
 
 #: gnucash/report/html-utilities.scm:296
 #: gnucash/ui/gnc-plugin-page-report.ui:242
@@ -25374,8 +25334,7 @@ msgstr "Záró tételek azonosítója"
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
-msgstr ""
-"Tetszőleges szöveg a Leírás oszlopban, ami azonosítja a záró tételeket."
+msgstr "Tetszőleges szöveg a Leírás oszlopban, ami azonosítja a záró tételeket."
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -26266,8 +26225,7 @@ msgstr "Cég neve, címe és adószáma"
 
 #: gnucash/report/reports/standard/invoice.scm:325
 msgid "Invoice date, due date, billing ID, terms, job details"
-msgstr ""
-"Számla dátuma, esedékesség, számlaszám, fizetési módok, megbízás adatai"
+msgstr "Számla dátuma, esedékesség, számlaszám, fizetési módok, megbízás adatai"
 
 #: gnucash/report/reports/standard/invoice.scm:329
 msgid "Today's date"
@@ -29074,8 +29032,7 @@ msgstr "Figyelmeztetések _visszaállítása…"
 
 #: gnucash/ui/gnc-main-window.ui:346
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr ""
-"Minden figyelmeztető üzenet visszaállítása úgy, hogy újra megjelenjenek"
+msgstr "Minden figyelmeztető üzenet visszaállítása úgy, hogy újra megjelenjenek"
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200

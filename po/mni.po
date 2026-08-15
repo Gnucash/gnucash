@@ -1,22 +1,23 @@
-# GNUCash translations for Manipuri language using Meetei Mayek Script"
+# GNUCash translations for Manipuri language using Meetei Mayek Script
 # Copyright (C) 2015
 # This file is distributed under the same license as the GnuCash package.
 # Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>, 2015.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.15\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.16\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2014-10-10 22:22+0530\n"
+"PO-Revision-Date: 2026-06-26 04:11+0000\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
-"Language-Team: Manipuri (MM) <gistlrc@gmail.com>\n"
+"Language-Team: Manipuri <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"mni/>\n"
 "Language: mni\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,3744,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -78,7 +79,8 @@ msgstr "ꯑꯦꯀꯥꯎꯟꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯑꯍꯧꯕ"
 #: bindings/guile/date-utilities.scm:746
 #: libgnucash/engine/gnc-option-date.cpp:313
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "ꯒ꯭ꯂꯣꯕꯦꯜ ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯁꯤꯡꯗ ꯁꯦꯠ ꯇꯧꯔꯤꯕ ꯑꯁꯤꯒꯨꯝꯅ ꯑꯦꯀꯥꯎꯟꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯑꯍꯥꯟꯕ ꯅꯨꯃꯤꯠ꯫"
+msgstr ""
+"ꯒ꯭ꯂꯣꯕꯦꯜ ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯁꯤꯡꯗ ꯁꯦꯠ ꯇꯧꯔꯤꯕ ꯑꯁꯤꯒꯨꯝꯅ ꯑꯦꯀꯥꯎꯟꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯑꯍꯥꯟꯕ ꯅꯨꯃꯤꯠ꯫"
 
 #: bindings/guile/date-utilities.scm:750
 #: libgnucash/engine/gnc-option-date.cpp:320
@@ -88,7 +90,8 @@ msgstr "ꯑꯦꯀꯥꯎꯟꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯑꯔꯣꯏꯕ"
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:321
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "ꯒ꯭ꯂꯣꯕꯦꯜ ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯁꯤꯡꯗ ꯁꯦꯠ ꯇꯧꯔꯤꯕ ꯑꯁꯤꯒꯨꯝꯅ ꯑꯦꯀꯥꯎꯟꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯑꯔꯣꯏꯕ ꯅꯨꯃꯤꯠ꯫"
+msgstr ""
+"ꯒ꯭ꯂꯣꯕꯦꯜ ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯁꯤꯡꯗ ꯁꯦꯠ ꯇꯧꯔꯤꯕ ꯑꯁꯤꯒꯨꯝꯅ ꯑꯦꯀꯥꯎꯟꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯑꯔꯣꯏꯕ ꯅꯨꯃꯤꯠ꯫"
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -807,9 +810,9 @@ msgid ""
 "calculated amount."
 msgstr ""
 "ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯑꯃꯥꯎꯟꯠꯁꯤꯡ ꯆꯪꯁꯤꯟꯕꯒ, ꯇꯤꯟꯁꯤꯟꯕ, ꯈꯥꯏꯗꯣꯛꯄ, ꯄꯨꯔꯤꯕ, ꯌꯦꯟꯅꯕ ꯇꯧꯅꯕ ꯑꯗꯣꯝꯅ "
-"GnuCash ꯀꯥꯜꯀꯨꯂꯦꯇꯔ ꯁꯤꯖꯤꯟꯅꯕ ꯌꯥꯏ꯫ ꯑꯍꯥꯟꯕ ꯚꯦꯂ꯭ꯌꯨ ꯑꯗꯨ ꯇꯥꯏꯞ ꯇꯧꯕꯤꯌꯨ ꯑꯗꯨꯒ '+', '-','*', ꯅꯇ꯭ꯔꯒ "
-"'/' ꯈꯟꯕꯤꯌꯨ꯫ ꯃꯁꯤꯡ ꯍꯣꯠꯂꯕ ꯑꯃꯥꯎꯟꯠ ꯑꯗꯨ ꯔꯦꯀꯣꯔꯗ ꯇꯧꯅꯕ ꯑꯅꯤꯁꯨꯕ ꯚꯦꯂ꯭ꯌꯨ ꯇꯥꯏꯞ ꯇꯧꯕꯤꯌꯨ ꯑꯗꯨꯒ ꯑꯦꯟꯇꯔ "
-"ꯅꯝꯕꯤꯌꯨ꯫"
+"GnuCash ꯀꯥꯜꯀꯨꯂꯦꯇꯔ ꯁꯤꯖꯤꯟꯅꯕ ꯌꯥꯏ꯫ ꯑꯍꯥꯟꯕ ꯚꯦꯂ꯭ꯌꯨ ꯑꯗꯨ ꯇꯥꯏꯞ ꯇꯧꯕꯤꯌꯨ ꯑꯗꯨꯒ '+', '-','*', ꯅꯇ꯭ꯔꯒ '/"
+"' ꯈꯟꯕꯤꯌꯨ꯫ ꯃꯁꯤꯡ ꯍꯣꯠꯂꯕ ꯑꯃꯥꯎꯟꯠ ꯑꯗꯨ ꯔꯦꯀꯣꯔꯗ ꯇꯧꯅꯕ ꯑꯅꯤꯁꯨꯕ ꯚꯦꯂ꯭ꯌꯨ ꯇꯥꯏꯞ ꯇꯧꯕꯤꯌꯨ ꯑꯗꯨꯒ ꯑꯦꯟꯇꯔ ꯅꯝꯕꯤꯌꯨ"
+"꯫"
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -2618,7 +2621,8 @@ msgstr ""
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
-msgstr "GnuCash ꯅ ꯐꯤꯜꯗ ꯑꯃꯗ ꯚꯦꯂꯨ ꯑꯗꯨ ꯂꯦꯞꯊꯣꯛꯄ ꯉꯝꯗꯦ. ꯑꯗꯣꯝꯅ ꯑꯆꯨꯝꯕ ꯋꯥꯔꯣꯜ ꯑꯃ ꯆꯪꯁꯤꯟꯒꯗꯕꯅꯤ."
+msgstr ""
+"GnuCash ꯅ ꯐꯤꯜꯗ ꯑꯃꯗ ꯚꯦꯂꯨ ꯑꯗꯨ ꯂꯦꯞꯊꯣꯛꯄ ꯉꯝꯗꯦ. ꯑꯗꯣꯝꯅ ꯑꯆꯨꯝꯕ ꯋꯥꯔꯣꯜ ꯑꯃ ꯆꯪꯁꯤꯟꯒꯗꯕꯅꯤ."
 
 #: gnucash/gnome/dialog-fincalc.c:383
 msgid "The interest rate cannot be zero."
@@ -3518,7 +3522,8 @@ msgstr "ꯍꯥꯟꯅ ꯄꯤꯕ ꯄꯦꯃꯦꯟꯠ"
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
-msgstr "ꯇ꯭ꯔꯥꯟꯁꯐꯔ ꯑꯃꯁꯨꯡ ꯄꯣꯁꯠ ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯇꯣꯉꯥꯟꯕ ꯀꯔꯦꯟꯁꯤꯁꯤꯡꯒ ꯂꯣꯏꯅꯩ꯫ ꯀꯟꯚꯔꯁꯟ ꯔꯦꯠ ꯄꯤꯕꯤꯌꯨ꯫"
+msgstr ""
+"ꯇ꯭ꯔꯥꯟꯁꯐꯔ ꯑꯃꯁꯨꯡ ꯄꯣꯁꯠ ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯇꯣꯉꯥꯟꯕ ꯀꯔꯦꯟꯁꯤꯁꯤꯡꯒ ꯂꯣꯏꯅꯩ꯫ ꯀꯟꯚꯔꯁꯟ ꯔꯦꯠ ꯄꯤꯕꯤꯌꯨ꯫"
 
 #: gnucash/gnome/dialog-payment.c:1303 gnucash/gnome/search-owner.c:196
 #: gnucash/gnome-search/dialog-search.c:1081
@@ -3786,7 +3791,8 @@ msgstr "ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠꯀꯤ ꯃꯃꯤꯡ"
 #: gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
-msgstr "ꯁꯦꯗꯤꯎꯜ ꯇꯧꯔꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯍꯣꯡꯗꯣꯛꯈ꯭ꯔꯦ; ꯑꯗꯣꯝꯅ ꯀꯛꯊꯠꯄ ꯄꯥꯝꯃꯤ ꯍꯥꯌꯕꯁꯤ ꯁꯣꯌꯗ꯭ꯔꯕ꯭ꯔꯥ?"
+msgstr ""
+"ꯁꯦꯗꯤꯎꯜ ꯇꯧꯔꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯍꯣꯡꯗꯣꯛꯈ꯭ꯔꯦ; ꯑꯗꯣꯝꯅ ꯀꯛꯊꯠꯄ ꯄꯥꯝꯃꯤ ꯍꯥꯌꯕꯁꯤ ꯁꯣꯌꯗ꯭ꯔꯕ꯭ꯔꯥ?"
 
 #: gnucash/gnome/dialog-sx-editor.c:497
 #, c-format
@@ -5141,7 +5147,8 @@ msgstr "ꯆꯦꯛꯁꯤꯡ _ꯅꯝꯊꯣꯛꯄ"
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2198
 msgid ""
 "You can only print checks from a bank account register or search results."
-msgstr "ꯕꯦꯡꯛ ꯑꯦꯀꯥꯎꯟꯠ ꯔꯦꯖꯤꯁꯇꯔ ꯑꯃ ꯅꯇ꯭ꯔꯒ ꯊꯤꯕꯒꯤ ꯐꯜꯁꯤꯡꯗꯒꯤ ꯑꯗꯣꯝꯅ ꯆꯦꯛꯁꯤꯡꯇꯃꯛ ꯅꯝꯊꯣꯛꯄ ꯌꯥꯏ."
+msgstr ""
+"ꯕꯦꯡꯛ ꯑꯦꯀꯥꯎꯟꯠ ꯔꯦꯖꯤꯁꯇꯔ ꯑꯃ ꯅꯇ꯭ꯔꯒ ꯊꯤꯕꯒꯤ ꯐꯜꯁꯤꯡꯗꯒꯤ ꯑꯗꯣꯝꯅ ꯆꯦꯛꯁꯤꯡꯇꯃꯛ ꯅꯝꯊꯣꯛꯄ ꯌꯥꯏ."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2459
 msgid "You cannot void a transaction with reconciled or cleared splits."
@@ -5340,8 +5347,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"ꯍꯧꯖꯤꯛꯀꯤ ꯔꯤꯄꯣꯔꯠꯀꯤ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟ ꯑꯁꯤ 'ꯁꯦꯚ ꯇꯧꯔꯕ ꯔꯤꯄꯣꯔꯠ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟꯁꯤꯡ' ꯃꯦꯅꯨꯗ "
-"ꯍꯥꯞꯆꯤꯜꯂꯣ꯫ ꯔꯤꯄꯣꯔꯠ ꯑꯁꯤ ꯐꯥꯏꯜ %s ꯗ ꯁꯦꯚ ꯇꯧꯒꯅꯤ꯫"
+"ꯍꯧꯖꯤꯛꯀꯤ ꯔꯤꯄꯣꯔꯠꯀꯤ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟ ꯑꯁꯤ 'ꯁꯦꯚ ꯇꯧꯔꯕ ꯔꯤꯄꯣꯔꯠ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟꯁꯤꯡ' ꯃꯦꯅꯨꯗ ꯍꯥꯞꯆꯤꯜꯂꯣ"
+"꯫ ꯔꯤꯄꯣꯔꯠ ꯑꯁꯤ ꯐꯥꯏꯜ %s ꯗ ꯁꯦꯚ ꯇꯧꯒꯅꯤ꯫"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1277
 #: gnucash/ui/gnc-plugin-page-report.ui:74
@@ -5568,10 +5575,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and remove the split from that register."
 msgstr ""
-"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯑꯦꯀꯔꯤꯡ ꯇꯧꯏ꯫ ꯑꯗꯣꯝꯅ ꯃꯁꯤ ꯔꯦꯖꯤꯁꯇꯔ ꯋꯤꯟꯗꯣꯗꯒꯤ ꯃꯨꯠꯊꯠꯄ "
-"ꯌꯥꯔꯣꯏ꯫ ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯁꯤꯗꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯕ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ, ꯅꯇ꯭ꯔꯒ ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯆꯞ ꯃꯥꯟꯅꯕ "
-"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯁꯥꯏꯗ ꯑꯃ ꯎꯠꯂꯤꯕ ꯑꯗꯨꯗ ꯅꯦꯚꯤꯒꯦꯠ ꯇꯧꯕ ꯌꯥꯏ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯃꯨꯠꯊꯠꯄ "
-"ꯌꯥꯏ꯫"
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯑꯦꯀꯔꯤꯡ ꯇꯧꯏ꯫ ꯑꯗꯣꯝꯅ ꯃꯁꯤ ꯔꯦꯖꯤꯁꯇꯔ ꯋꯤꯟꯗꯣꯗꯒꯤ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯔꯣꯏ"
+"꯫ ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯁꯤꯗꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯕ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ, ꯅꯇ꯭ꯔꯒ ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯆꯞ ꯃꯥꯟꯅꯕ "
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯁꯥꯏꯗ ꯑꯃ ꯎꯠꯂꯤꯕ ꯑꯗꯨꯗ ꯅꯦꯚꯤꯒꯦꯠ ꯇꯧꯕ ꯌꯥꯏ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ"
+"꯫"
 
 #: gnucash/gnome/gnc-split-reg.c:912 gnucash/gnome/gnc-split-reg.c:1439
 msgid "(no memo)"
@@ -5663,10 +5670,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
-"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯑꯦꯀꯔꯤꯡ ꯇꯧꯏ꯫ ꯑꯗꯣꯝꯅ ꯃꯁꯤ ꯔꯦꯖꯤꯁꯇꯔ ꯋꯤꯟꯗꯣꯗꯒꯤ ꯃꯨꯠꯊꯠꯄ "
-"ꯌꯥꯔꯣꯏ꯫ ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯁꯤꯗꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯕ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ, ꯅꯇ꯭ꯔꯒ ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯆꯞ ꯃꯥꯟꯅꯕ "
-"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯁꯥꯏꯗ ꯑꯃ ꯎꯠꯂꯤꯕ ꯑꯗꯨꯗ ꯅꯦꯚꯤꯒꯦꯠ ꯇꯧꯕ ꯌꯥꯏ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯃꯨꯠꯊꯠꯄ "
-"ꯌꯥꯏ꯫"
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯑꯦꯀꯔꯤꯡ ꯇꯧꯏ꯫ ꯑꯗꯣꯝꯅ ꯃꯁꯤ ꯔꯦꯖꯤꯁꯇꯔ ꯋꯤꯟꯗꯣꯗꯒꯤ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯔꯣꯏ"
+"꯫ ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯁꯤꯗꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯕ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ, ꯅꯇ꯭ꯔꯒ ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯆꯞ ꯃꯥꯟꯅꯕ "
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯁꯥꯏꯗ ꯑꯃ ꯎꯠꯂꯤꯕ ꯑꯗꯨꯗ ꯅꯦꯚꯤꯒꯦꯠ ꯇꯧꯕ ꯌꯥꯏ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ"
+"꯫"
 
 #: gnucash/gnome/gnc-split-reg.c:1483
 msgid "Delete the current transaction?"
@@ -6425,7 +6432,8 @@ msgstr "KOI8-U (ꯌꯨꯀ꯭ꯔꯦꯅꯤꯌꯟ)"
 #: gnucash/gnome-utils/assistant-xml-encoding.c:680
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
-msgstr "%d ꯑꯦꯁꯥꯏꯟ ꯇꯧꯗꯕ ꯑꯃꯁꯨꯡ %d ꯗꯤꯀꯣꯗ ꯇꯧꯕ ꯌꯥꯗꯕ ꯋꯥꯍꯩꯁꯤꯡ ꯂꯩ. ꯑꯦꯟꯀꯣꯗꯤꯡꯁꯤꯡ ꯍꯥꯄꯆꯤꯟꯕꯤꯌꯨ."
+msgstr ""
+"%d ꯑꯦꯁꯥꯏꯟ ꯇꯧꯗꯕ ꯑꯃꯁꯨꯡ %d ꯗꯤꯀꯣꯗ ꯇꯧꯕ ꯌꯥꯗꯕ ꯋꯥꯍꯩꯁꯤꯡ ꯂꯩ. ꯑꯦꯟꯀꯣꯗꯤꯡꯁꯤꯡ ꯍꯥꯄꯆꯤꯟꯕꯤꯌꯨ."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:688
 #, c-format
@@ -6538,7 +6546,8 @@ msgstr "ꯑꯗꯣꯝꯅ ꯑꯆꯨꯝꯕ ꯑꯣꯄꯅꯤꯡ ꯕꯦꯂꯦꯟꯁ �
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
-msgstr "ꯑꯗꯣꯝꯅ ꯇ꯭ꯔꯥꯟꯁꯐꯔ ꯑꯦꯀꯥꯎꯟꯠ ꯈꯟꯒꯗꯕꯅꯤ ꯅꯇ꯭ꯔꯒ ꯑꯣꯄꯅꯤꯡ ꯕꯦꯂꯦꯟꯁꯦꯁ ꯏꯀꯨꯏꯇꯤ ꯑꯦꯀꯥꯎꯟꯠ ꯈꯟꯒꯗꯕꯅꯤ."
+msgstr ""
+"ꯑꯗꯣꯝꯅ ꯇ꯭ꯔꯥꯟꯁꯐꯔ ꯑꯦꯀꯥꯎꯟꯠ ꯈꯟꯒꯗꯕꯅꯤ ꯅꯇ꯭ꯔꯒ ꯑꯣꯄꯅꯤꯡ ꯕꯦꯂꯦꯟꯁꯦꯁ ꯏꯀꯨꯏꯇꯤ ꯑꯦꯀꯥꯎꯟꯠ ꯈꯟꯒꯗꯕꯅꯤ."
 
 #: gnucash/gnome-utils/dialog-account.c:1485
 msgid ""
@@ -7479,11 +7488,10 @@ msgid ""
 "installing a different version of \"libdbi\". Please see https://"
 "bugs.gnucash.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
-"ꯑꯗꯣꯝꯒꯤ ꯁꯤꯁꯇꯦꯝꯗ ꯏꯟꯁꯇꯣꯜ ꯇꯧꯕ ꯂꯥꯏꯕ꯭ꯔꯦꯔꯤ \"libdbi\" ꯑꯁꯤ ꯑꯆꯧꯕ ꯅꯝꯕꯔ ꯀꯌꯥ ꯆꯨꯝꯅ ꯁ꯭ꯇꯣꯔ "
-"ꯇꯧꯗ꯭ꯔꯦ꯫ ꯃꯁꯤꯅ ꯍꯥꯏꯔꯤꯕꯗꯤ GnuCash ꯅ SQL ꯗꯥꯇꯥꯕꯦꯖꯁꯤꯡ ꯆꯨꯝꯅ ꯁꯤꯖꯤꯟꯅꯕ ꯉꯝꯃꯣꯏ꯫ \"libdbi\" ꯒꯤ "
-"ꯇꯣꯉꯥꯟꯕ ꯚꯔꯁꯟ ꯑꯃ ꯏꯟꯁꯇꯣꯜ ꯇꯧꯗꯨꯅ ꯐꯍꯟꯗ꯭ꯔꯤꯕ ꯐꯥꯎꯕ Gnucash ꯑꯁꯤ SQL ꯗꯥꯇꯥꯕꯦꯖꯗ ꯍꯥꯡꯗꯣꯛꯂꯣꯏ ꯅꯇ꯭ꯔꯒ "
-"ꯁꯦꯚ ꯇꯧꯔ꯫ ꯑꯀꯨꯞꯄ ꯃꯔꯣꯜꯒꯤꯗꯃꯛ https://bugs.gnucash.org/show_bug.cgi?id=611936 ꯗ "
-"ꯌꯦꯡꯕꯤꯌꯨ꯫"
+"ꯑꯗꯣꯝꯒꯤ ꯁꯤꯁꯇꯦꯝꯗ ꯏꯟꯁꯇꯣꯜ ꯇꯧꯕ ꯂꯥꯏꯕ꯭ꯔꯦꯔꯤ \"libdbi\" ꯑꯁꯤ ꯑꯆꯧꯕ ꯅꯝꯕꯔ ꯀꯌꯥ ꯆꯨꯝꯅ ꯁ꯭ꯇꯣꯔ ꯇꯧꯗ꯭ꯔꯦ"
+"꯫ ꯃꯁꯤꯅ ꯍꯥꯏꯔꯤꯕꯗꯤ GnuCash ꯅ SQL ꯗꯥꯇꯥꯕꯦꯖꯁꯤꯡ ꯆꯨꯝꯅ ꯁꯤꯖꯤꯟꯅꯕ ꯉꯝꯃꯣꯏ꯫ \"libdbi\" ꯒꯤ ꯇꯣꯉꯥꯟꯕ "
+"ꯚꯔꯁꯟ ꯑꯃ ꯏꯟꯁꯇꯣꯜ ꯇꯧꯗꯨꯅ ꯐꯍꯟꯗ꯭ꯔꯤꯕ ꯐꯥꯎꯕ Gnucash ꯑꯁꯤ SQL ꯗꯥꯇꯥꯕꯦꯖꯗ ꯍꯥꯡꯗꯣꯛꯂꯣꯏ ꯅꯇ꯭ꯔꯒ ꯁꯦꯚ ꯇꯧꯔ"
+"꯫ ꯑꯀꯨꯞꯄ ꯃꯔꯣꯜꯒꯤꯗꯃꯛ https://bugs.gnucash.org/show_bug.cgi?id=611936 ꯗ ꯌꯦꯡꯕꯤꯌꯨ꯫"
 
 #: gnucash/gnome-utils/gnc-file.c:560
 msgid ""
@@ -7619,7 +7627,8 @@ msgstr ""
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
-msgstr "ꯗꯥꯇꯥꯕꯦꯖ ꯑꯗꯨ ꯄꯥꯕꯈꯛꯇꯒꯤ ꯑꯣꯏꯅ ꯍꯥꯡꯗꯣꯛꯂꯦ꯫ ꯑꯗꯣꯝꯅ ꯝꯁꯤ ꯑꯇꯣꯞꯄ ꯃꯐꯝꯗ ꯁꯦꯚ ꯇꯧꯕ ꯄꯥꯝꯕ꯭ꯔꯥ?"
+msgstr ""
+"ꯗꯥꯇꯥꯕꯦꯖ ꯑꯗꯨ ꯄꯥꯕꯈꯛꯇꯒꯤ ꯑꯣꯏꯅ ꯍꯥꯡꯗꯣꯛꯂꯦ꯫ ꯑꯗꯣꯝꯅ ꯝꯁꯤ ꯑꯇꯣꯞꯄ ꯃꯐꯝꯗ ꯁꯦꯚ ꯇꯧꯕ ꯄꯥꯝꯕ꯭ꯔꯥ?"
 
 #: gnucash/gnome-utils/gnc-file.c:1773
 #, fuzzy, c-format
@@ -8348,7 +8357,8 @@ msgstr ""
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for when using the get command"
-msgstr "ꯀꯔꯝꯕ ꯅꯦꯝꯁ꯭ꯄꯦꯁ ꯀꯃꯣꯗꯤꯇꯤꯁꯤꯡ ꯔꯤꯇ꯭ꯔꯤꯚ ꯇꯧꯒꯗꯒꯦ ꯍꯥꯌꯅ ꯂꯦꯞꯊꯣꯛꯂꯤꯕ ꯔꯤꯒꯨꯂꯔ ꯑꯦꯛꯁꯄ꯭ꯔꯦꯁꯟ"
+msgstr ""
+"ꯀꯔꯝꯕ ꯅꯦꯝꯁ꯭ꯄꯦꯁ ꯀꯃꯣꯗꯤꯇꯤꯁꯤꯡ ꯔꯤꯇ꯭ꯔꯤꯚ ꯇꯧꯒꯗꯒꯦ ꯍꯥꯌꯅ ꯂꯦꯞꯊꯣꯛꯂꯤꯕ ꯔꯤꯒꯨꯂꯔ ꯑꯦꯛꯁꯄ꯭ꯔꯦꯁꯟ"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
@@ -8447,7 +8457,8 @@ msgstr "ꯑꯗꯣꯝꯁꯨ https://bugs.gnucash.org ꯇ ꯕꯒ ꯔꯤꯄꯣꯔ�
 #: gnucash/gnucash-core-app.cpp:82
 #, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
-msgstr "ꯈ꯭ꯋꯥꯏꯗꯒꯤ ꯑꯔꯣꯏꯕ ꯁ꯭ꯇꯦꯕꯜ ꯚꯔꯁꯟ ꯐꯪꯅꯕ http://www.gnucash.org ꯒꯤ ꯃꯇꯨꯡ ꯏꯟꯅ ꯇꯧꯕꯤꯌꯨ"
+msgstr ""
+"ꯈ꯭ꯋꯥꯏꯗꯒꯤ ꯑꯔꯣꯏꯕ ꯁ꯭ꯇꯦꯕꯜ ꯚꯔꯁꯟ ꯐꯪꯅꯕ http://www.gnucash.org ꯒꯤ ꯃꯇꯨꯡ ꯏꯟꯅ ꯇꯧꯕꯤꯌꯨ"
 
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:92
@@ -9395,7 +9406,8 @@ msgstr "QIF ꯐꯥꯏꯜꯗ ꯄꯤꯗꯕ ꯃꯇꯝꯗ ꯑꯣꯏꯕ QIF ꯇ꯭ꯔ
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
-msgstr "ꯁ꯭ꯇꯦꯇꯁ ꯑꯁꯤ QIF ꯐꯥꯏꯜ ꯑꯃꯗ ꯄꯤꯗꯕ ꯃꯇꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯔꯤꯀꯟꯁꯥꯏꯜ ꯇꯧꯔꯦ ꯍꯥꯌꯅ ꯃꯥꯔꯛ ꯇꯧꯏ."
+msgstr ""
+"ꯁ꯭ꯇꯦꯇꯁ ꯑꯁꯤ QIF ꯐꯥꯏꯜ ꯑꯃꯗ ꯄꯤꯗꯕ ꯃꯇꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯔꯤꯀꯟꯁꯥꯏꯜ ꯇꯧꯔꯦ ꯍꯥꯌꯅ ꯃꯥꯔꯛ ꯇꯧꯏ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
@@ -9746,8 +9758,8 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
-"ꯉꯝꯍꯜꯂꯕꯗꯤ \"Save changes on closing\" ꯋꯥꯍꯪꯅ ꯑꯀꯛꯅꯕ ꯁꯦꯀꯦꯟꯗ ꯈꯔꯇꯃꯛ ꯄꯥꯎꯈꯨꯝꯒꯤꯗꯃꯛ "
-"ꯉꯥꯏꯒꯅꯤ꯫ ꯁꯤꯖꯤꯟꯅꯔꯤꯕꯅ ꯃꯇꯝ ꯑꯗꯨꯒꯤ ꯃꯅꯨꯡꯗ ꯄꯥꯎꯈꯨꯝ ꯄꯤꯗ꯭ꯔꯕꯗꯤ ꯑꯍꯣꯡꯕꯁꯤꯡꯗꯨ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯔꯒꯅꯤ ꯑꯃꯁꯨꯡ "
+"ꯉꯝꯍꯜꯂꯕꯗꯤ \"Save changes on closing\" ꯋꯥꯍꯪꯅ ꯑꯀꯛꯅꯕ ꯁꯦꯀꯦꯟꯗ ꯈꯔꯇꯃꯛ ꯄꯥꯎꯈꯨꯝꯒꯤꯗꯃꯛ ꯉꯥꯏꯒꯅꯤ"
+"꯫ ꯁꯤꯖꯤꯟꯅꯔꯤꯕꯅ ꯃꯇꯝ ꯑꯗꯨꯒꯤ ꯃꯅꯨꯡꯗ ꯄꯥꯎꯈꯨꯝ ꯄꯤꯗ꯭ꯔꯕꯗꯤ ꯑꯍꯣꯡꯕꯁꯤꯡꯗꯨ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯔꯒꯅꯤ ꯑꯃꯁꯨꯡ "
 "ꯋꯥꯍꯪꯒꯤ ꯋꯤꯟꯗꯣ ꯂꯣꯏꯁꯤꯜꯂꯒꯅꯤ꯫"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:50
@@ -10713,7 +10725,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "This dialog is presented before allowing you to replace an existing price."
-msgstr "ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯗꯣꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯄꯒꯤ ꯑꯌꯥꯕ ꯄꯤꯗ꯭ꯔꯤꯉꯩꯒꯤ ꯃꯃꯥꯡꯗ ꯐꯣꯡꯗꯣꯛꯂꯤ. "
+msgstr ""
+"ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯗꯣꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯄꯒꯤ ꯑꯌꯥꯕ ꯄꯤꯗ꯭ꯔꯤꯉꯩꯒꯤ ꯃꯃꯥꯡꯗ ꯐꯣꯡꯗꯣꯛꯂꯤ. "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
@@ -10885,7 +10898,8 @@ msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯀ_ꯛꯎ"
 #| msgid ""
 #| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯗꯣꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯄꯒꯤ ꯑꯌꯥꯕ ꯄꯤꯗ꯭ꯔꯤꯉꯩꯒꯤ ꯃꯃꯥꯡꯗ ꯐꯣꯡꯗꯣꯛꯂꯤ. "
+msgstr ""
+"ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯗꯣꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯄꯒꯤ ꯑꯌꯥꯕ ꯄꯤꯗ꯭ꯔꯤꯉꯩꯒꯤ ꯃꯃꯥꯡꯗ ꯐꯣꯡꯗꯣꯛꯂꯤ. "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
@@ -10918,7 +10932,8 @@ msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯂꯣ"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:110
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:243
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr "ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯗꯣꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯄꯒꯤ ꯑꯌꯥꯕ ꯄꯤꯗ꯭ꯔꯤꯉꯩꯒꯤ ꯃꯃꯥꯡꯗ ꯐꯣꯡꯗꯣꯛꯂꯤ. "
+msgstr ""
+"ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯗꯣꯝꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯃ ꯃꯨꯠꯊꯠꯄꯒꯤ ꯑꯌꯥꯕ ꯄꯤꯗ꯭ꯔꯤꯉꯩꯒꯤ ꯃꯃꯥꯡꯗ ꯐꯣꯡꯗꯣꯛꯂꯤ. "
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
@@ -11140,8 +11155,8 @@ msgid ""
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
-"ꯃꯁꯤꯒꯤ ꯇꯦꯡꯕꯥꯡꯕ ꯑꯁꯤꯅ ꯑꯗꯣꯝꯕꯨ ꯁꯦꯠꯑꯞ ꯇꯧꯕꯗ ꯑꯃꯁꯨꯡ ꯑꯦꯀꯥꯎꯟꯠꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗ ꯁꯤꯖꯤꯟꯕꯗ ꯃꯇꯦꯡ "
-"ꯄꯥꯡꯒꯅꯤ꯫\n"
+"ꯃꯁꯤꯒꯤ ꯇꯦꯡꯕꯥꯡꯕ ꯑꯁꯤꯅ ꯑꯗꯣꯝꯕꯨ ꯁꯦꯠꯑꯞ ꯇꯧꯕꯗ ꯑꯃꯁꯨꯡ ꯑꯦꯀꯥꯎꯟꯠꯇꯤꯡ ꯄꯦꯔꯤꯑꯣꯗ ꯁꯤꯖꯤꯟꯕꯗ ꯃꯇꯦꯡ ꯄꯥꯡꯒꯅꯤ"
+"꯫\n"
 "\n"
 "ꯈꯨꯗꯣꯡꯊꯤꯕ: ꯐꯤꯆꯔ ꯑꯁꯤ ꯃꯇꯝ ꯑꯁꯤꯗ ꯆꯨꯝꯅ ꯊꯕꯛ ꯇꯧꯗꯦ; ꯃꯁꯤ ꯍꯧꯖꯤꯛꯁꯨ ꯁꯦꯝꯒꯠ-ꯁꯥꯒꯠꯂꯤ꯫ ꯃꯁꯤꯅ ꯑꯗꯣꯝꯒꯤ "
 "ꯇꯥꯗꯥ ꯁꯦꯝꯒꯠ-ꯁꯥꯒꯠꯄ ꯌꯥꯔꯔꯣꯏꯗꯕ ꯃꯑꯣꯡꯗ ꯃꯥꯡ-ꯇꯥꯛꯍꯟꯕ ꯌꯥꯏ꯫!"
@@ -11216,10 +11231,10 @@ msgstr ""
 "\n"
 "ꯃꯁꯤꯒꯤ ꯇꯦꯡꯕꯥꯡꯕ ꯑꯁꯤꯅ ꯐꯥꯏꯜ ꯑꯃꯗꯒꯤ ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯄꯨꯁꯤꯜꯂꯛꯄꯗ ꯃꯇꯦꯡ ꯄꯥꯡꯒꯅꯤ꯫\n"
 "\n"
-"ꯃꯁꯤ ꯑꯀꯛꯅꯕ ꯐꯣꯔꯃꯦꯠ ꯄꯨꯁꯤꯜꯂꯛꯄ ꯑꯗꯨꯒꯨꯝꯅ ꯑꯦꯛꯁꯄꯣꯔꯠ ꯇꯧꯕꯅ ꯐꯥꯏꯜ ꯑꯗꯨ ꯆꯞ ꯃꯥꯟꯅꯕ ꯐꯣꯔꯃꯦꯠꯇ "
-"ꯑꯣꯏꯒꯗꯕꯅꯤ꯫ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤ ꯌꯥꯎꯗ꯭ꯔꯕꯗꯤ, ꯃꯄꯨꯡ ꯐꯥꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯃꯃꯤꯡꯗ ꯌꯨꯝꯐꯝ ꯑꯣꯏꯗꯨꯅ ꯄꯤꯔꯤꯕ "
-"ꯁꯦꯀ꯭ꯌꯨꯔꯤꯇꯤ / ꯀꯔꯦꯟꯁꯤ ꯍꯦꯛ ꯂꯩꯔꯤꯕꯃꯈꯩ ꯃꯁꯤ ꯍꯥꯞꯆꯤꯟꯒꯅꯤ꯫ ꯑꯦꯀꯥꯎꯟꯠ ꯂꯩꯔꯕꯗꯤ ꯐꯤꯜꯗ ꯃꯔꯤ ꯑꯞꯗꯦꯠ "
-"ꯇꯧꯒꯅꯤ꯫ ꯃꯈꯣꯏꯁꯤꯡ ꯑꯗꯨꯗꯤ ꯀꯣꯗ, ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ, ꯃꯔꯨꯑꯣꯏꯕ ꯋꯥꯔꯣꯜꯁꯤꯡ ꯑꯃꯁꯨꯡ ꯃꯆꯨ꯫\n"
+"ꯃꯁꯤ ꯑꯀꯛꯅꯕ ꯐꯣꯔꯃꯦꯠ ꯄꯨꯁꯤꯜꯂꯛꯄ ꯑꯗꯨꯒꯨꯝꯅ ꯑꯦꯛꯁꯄꯣꯔꯠ ꯇꯧꯕꯅ ꯐꯥꯏꯜ ꯑꯗꯨ ꯆꯞ ꯃꯥꯟꯅꯕ ꯐꯣꯔꯃꯦꯠꯇ ꯑꯣꯏꯒꯗꯕꯅꯤ"
+"꯫ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤ ꯌꯥꯎꯗ꯭ꯔꯕꯗꯤ, ꯃꯄꯨꯡ ꯐꯥꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯃꯃꯤꯡꯗ ꯌꯨꯝꯐꯝ ꯑꯣꯏꯗꯨꯅ ꯄꯤꯔꯤꯕ ꯁꯦꯀ꯭ꯌꯨꯔꯤꯇꯤ / ꯀꯔꯦꯟꯁꯤ "
+"ꯍꯦꯛ ꯂꯩꯔꯤꯕꯃꯈꯩ ꯃꯁꯤ ꯍꯥꯞꯆꯤꯟꯒꯅꯤ꯫ ꯑꯦꯀꯥꯎꯟꯠ ꯂꯩꯔꯕꯗꯤ ꯐꯤꯜꯗ ꯃꯔꯤ ꯑꯞꯗꯦꯠ ꯇꯧꯒꯅꯤ꯫ ꯃꯈꯣꯏꯁꯤꯡ ꯑꯗꯨꯗꯤ "
+"ꯀꯣꯗ, ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ, ꯃꯔꯨꯑꯣꯏꯕ ꯋꯥꯔꯣꯜꯁꯤꯡ ꯑꯃꯁꯨꯡ ꯃꯆꯨ꯫\n"
 "\n"
 "ꯃꯈꯥ ꯆꯠꯊꯅꯕ 'ꯐꯣꯔꯋꯥꯔꯗ' ꯅꯝꯕꯤꯌꯨ ꯅꯇ꯭ꯔꯒ ꯄꯨꯁꯤꯜꯂꯛꯄ ꯇꯧꯛꯊꯣꯛꯅꯕ 'ꯀꯛꯊꯠꯄ' ꯅꯝꯕꯤꯌꯨ꯫\n"
 
@@ -11931,8 +11946,8 @@ msgstr ""
 "\n"
 "ꯑꯦꯀꯥꯎꯟꯠ ꯈꯔꯗꯤ \"Placeholder\" ꯑꯣꯏꯅ ꯃꯥꯔꯛ ꯇꯧꯏ꯫ ꯄ꯭ꯂꯦꯁꯍꯣꯜꯗꯔ ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡꯁꯤ ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡꯒꯤ "
 "ꯍꯥꯏꯔꯥꯔꯀꯤ ꯑꯃ ꯁꯦꯝꯒꯠꯅꯕ ꯁꯤꯖꯤꯟꯅꯩ ꯑꯃꯁꯨꯡ ꯃꯍꯧꯁꯥꯅ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯅꯇ꯭ꯔꯒ ꯑꯣꯄꯅꯤꯡ ꯕꯦꯂꯦꯟꯁꯁꯤꯡ ꯂꯩꯇꯦ꯫ "
-"ꯑꯗꯣꯝꯅ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃ ꯄ꯭ꯂꯦꯁꯍꯣꯜꯗꯔ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯣꯏꯕ ꯄꯥꯝꯂꯕꯗꯤ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯗꯨꯒꯤ ꯆꯦꯛꯕꯣꯛꯁ ꯀ꯭ꯂꯤꯛ "
-"ꯇꯧꯕꯤꯌꯨ꯫\n"
+"ꯑꯗꯣꯝꯅ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃ ꯄ꯭ꯂꯦꯁꯍꯣꯜꯗꯔ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯣꯏꯕ ꯄꯥꯝꯂꯕꯗꯤ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯗꯨꯒꯤ ꯆꯦꯛꯕꯣꯛꯁ ꯀ꯭ꯂꯤꯛ ꯇꯧꯕꯤꯌꯨ"
+"꯫\n"
 "\n"
 "ꯑꯗꯣꯝꯅ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃꯒꯤ ꯑꯣꯄꯅꯤꯡ ꯕꯦꯂꯦꯟꯁ ꯂꯩꯕ ꯄꯥꯝꯂꯕꯗꯤ, ꯑꯦꯀꯥꯎꯟꯠ ꯌꯥꯎꯕ ꯔꯣ ꯑꯗꯨ ꯀ꯭ꯂꯤꯛ ꯇꯧꯕꯤꯔꯣ ꯑꯗꯨꯒ "
 "ꯑꯣꯄꯅꯤꯡ ꯕꯦꯂꯦꯟꯁ ꯐꯤꯜꯗ ꯀ꯭ꯂꯤꯛ ꯇꯧꯕꯤꯌꯨ ꯑꯃꯁꯨꯡ ꯑꯍꯧꯕ ꯕꯦꯂꯦꯟꯁ ꯑꯗꯨ ꯆꯪꯁꯤꯟꯕꯌꯨ꯫\n"
@@ -12582,8 +12597,8 @@ msgstr ""
 "ꯑꯗꯣꯝꯅ ꯑꯅꯧꯕ ꯐꯥꯏꯜ ꯑꯃ ꯁꯦꯝꯒꯠꯂꯕꯅ ꯃꯊꯪꯗ ꯕꯨꯛ ꯑꯣꯞꯁꯟ ꯁꯦꯠꯇꯤꯡꯒꯤ ꯗꯥꯏꯂꯣꯒ ꯑꯃ ꯎꯒꯅꯤ꯫ ꯃꯁꯤꯅ "
 "GnuCash ꯅ ꯀꯔꯝꯅ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯁꯤꯜꯂꯛꯄꯒꯦ ꯍꯥꯏꯕꯗꯨꯗ ꯑꯍꯣꯡꯕ ꯄꯤꯒꯅꯤ꯫ ꯑꯗꯣꯝꯅ ꯂꯥꯃꯥꯏ ꯑꯁꯤꯗ ꯀꯛꯊꯠꯇꯅ "
 "ꯑꯃꯁꯨꯡ ꯍꯧꯗꯨꯅ ꯍꯜꯂꯛꯂꯕꯗꯤ ꯑꯗꯣꯝꯅ ꯃꯥꯡꯂꯣꯝꯗ ꯆꯪꯁꯤꯟꯕ ꯃꯇꯝꯗ ꯕꯨꯛ ꯑꯣꯞꯁꯟ ꯁꯦꯠꯇꯤꯡꯒꯤ ꯗꯥꯏꯂꯣꯒ ꯑꯗꯨ "
-"ꯑꯅꯤꯔꯛꯁꯨꯅ ꯎꯠꯂꯣꯏ꯫ ꯑꯗꯣꯝꯅ You can access it directly from the menu via ꯐꯥꯏꯜ-"
-">ꯄ꯭ꯔꯣꯄꯔꯇꯤꯖ ꯇꯧꯗꯨꯅ ꯃꯦꯅꯨꯗꯒꯤ ꯍꯛꯊꯦꯡꯅꯅ ꯑꯦꯛꯁꯦꯁ ꯇꯧꯕ ꯌꯥꯒꯅꯤ꯫"
+"ꯑꯅꯤꯔꯛꯁꯨꯅ ꯎꯠꯂꯣꯏ꯫ ꯑꯗꯣꯝꯅ You can access it directly from the menu via ꯐꯥꯏꯜ->"
+"ꯄ꯭ꯔꯣꯄꯔꯇꯤꯖ ꯇꯧꯗꯨꯅ ꯃꯦꯅꯨꯗꯒꯤ ꯍꯛꯊꯦꯡꯅꯅ ꯑꯦꯛꯁꯦꯁ ꯇꯧꯕ ꯌꯥꯒꯅꯤ꯫"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2776
@@ -13294,7 +13309,8 @@ msgstr "<b>ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁ</b>"
 #: gnucash/gtkbuilder/dialog-account.glade:472
 #, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤꯗ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯌꯥꯎꯏ꯫ ꯑꯗꯣꯝꯅ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯑꯁꯤꯅ ꯀꯔꯤ ꯇꯧꯕ ꯄꯥꯝꯕꯒꯦ?"
+msgstr ""
+"ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤꯗ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯌꯥꯎꯏ꯫ ꯑꯗꯣꯝꯅ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯑꯁꯤꯅ ꯀꯔꯤ ꯇꯧꯕ ꯄꯥꯝꯕꯒꯦ?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:483
 msgid "_Move to"
@@ -13319,7 +13335,8 @@ msgstr "_ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯅꯃꯛ ꯃꯨꯠꯊꯠꯂꯣ
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr "ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯌꯥꯎꯏ. ꯑꯗꯣꯝꯅ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯑꯁꯤꯅ ꯀꯔꯤ ꯇꯧꯕ ꯄꯥꯝꯕꯤꯕꯒꯦ?"
+msgstr ""
+"ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯌꯥꯎꯏ. ꯑꯗꯣꯝꯅ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯑꯁꯤꯅ ꯀꯔꯤ ꯇꯧꯕ ꯄꯥꯝꯕꯤꯕꯒꯦ?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:628
 msgid "This account contains read-only transactions which may not be deleted."
@@ -13512,8 +13529,8 @@ msgid ""
 msgstr ""
 "ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤ (ꯑꯃꯁꯨꯡ ꯁꯕ-ꯑꯦꯀꯥꯎꯟ ꯑꯃ ꯍꯦꯛꯇ) ꯑꯦꯀꯥꯎꯟꯠ ꯇ꯭ꯔꯤꯗ ꯂꯣꯠꯂꯒꯅꯤ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯄꯣꯞꯑꯞ "
 "ꯑꯦꯀꯥꯎꯟꯠ ꯄꯔꯤꯡꯗ ꯎꯕ ꯐꯪꯂꯔꯣꯏ꯫ ꯑꯣꯞꯁꯟ ꯑꯁꯤ ꯔꯤꯁꯦꯠ ꯇꯧꯅꯕ, ꯑꯗꯣꯝꯅ ꯑꯍꯥꯟꯕꯗ ꯑꯦꯀꯥꯎꯟꯠ ꯇ꯭ꯔꯤꯒꯤ "
-"\"Filter By...\" ꯗꯥꯏꯂꯣꯒ ꯍꯥꯡꯗꯣꯛꯄ ꯇꯥꯏ ꯑꯗꯨꯒ \"show hidden accounts\" ꯑꯣꯞꯁꯟ ꯆꯦꯛ "
-"ꯇꯧꯕꯤꯌꯨ꯫ ꯑꯁꯨꯝꯅ ꯇꯧꯕꯅ ꯑꯗꯣꯝꯅ ꯑꯦꯀꯥꯎꯟ ꯈꯟꯕ ꯑꯃꯁꯨꯡ ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯃꯨꯛ ꯍꯟꯅ ꯍꯥꯡꯗꯣꯛꯄ ꯌꯥꯍꯟꯒꯅꯤ꯫"
+"\"Filter By...\" ꯗꯥꯏꯂꯣꯒ ꯍꯥꯡꯗꯣꯛꯄ ꯇꯥꯏ ꯑꯗꯨꯒ \"show hidden accounts\" ꯑꯣꯞꯁꯟ ꯆꯦꯛ ꯇꯧꯕꯤꯌꯨ"
+"꯫ ꯑꯁꯨꯝꯅ ꯇꯧꯕꯅ ꯑꯗꯣꯝꯅ ꯑꯦꯀꯥꯎꯟ ꯈꯟꯕ ꯑꯃꯁꯨꯡ ꯗꯥꯏꯂꯣꯒ ꯑꯁꯤ ꯑꯃꯨꯛ ꯍꯟꯅ ꯍꯥꯡꯗꯣꯛꯄ ꯌꯥꯍꯟꯒꯅꯤ꯫"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1568
 #, fuzzy
@@ -16788,7 +16805,8 @@ msgstr "ꯑꯦꯛꯇꯤꯚ ꯑꯣꯏꯕ ꯗꯥꯇꯥꯗꯃꯛ ꯊꯤꯔꯣ"
 #: gnucash/gtkbuilder/dialog-search.glade:402
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
-msgstr "ꯑꯗꯣꯝꯒꯤ ꯗꯥꯇꯥ ꯄꯨꯝꯅꯃꯛ ꯊꯤꯒꯗ꯭ꯔꯥ ꯅꯇ꯭ꯔꯒꯥ \"active\" ꯍꯥꯏꯅ ꯃꯥꯔꯛ ꯇꯧꯕ ꯑꯗꯨꯇ ꯊꯤꯒꯗ꯭ꯔꯥ ꯍꯥꯏꯕꯗꯨ ꯈꯜꯂꯣ꯫"
+msgstr ""
+"ꯑꯗꯣꯝꯒꯤ ꯗꯥꯇꯥ ꯄꯨꯝꯅꯃꯛ ꯊꯤꯒꯗ꯭ꯔꯥ ꯅꯇ꯭ꯔꯒꯥ \"active\" ꯍꯥꯏꯅ ꯃꯥꯔꯛ ꯇꯧꯕ ꯑꯗꯨꯇ ꯊꯤꯒꯗ꯭ꯔꯥ ꯍꯥꯏꯕꯗꯨ ꯈꯜꯂꯣ꯫"
 
 #: gnucash/gtkbuilder/dialog-search.glade:420
 msgid "Type of search"
@@ -19099,7 +19117,8 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1638
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
-msgstr "ꯑꯣꯟꯂꯥꯏꯟ ꯕꯦꯡꯀꯤꯡꯒꯤ ꯊꯕꯛ ꯑꯁꯤ ꯍꯧꯖꯤꯛꯁꯨ ꯆꯠꯊꯔꯤ; ꯑꯗꯣꯝꯅ ꯀꯛꯊꯠꯄ ꯄꯥꯝꯃꯤ ꯍꯥꯌꯕꯁꯤ ꯁꯣꯌꯗ꯭ꯔꯕ꯭ꯔꯥ?"
+msgstr ""
+"ꯑꯣꯟꯂꯥꯏꯟ ꯕꯦꯡꯀꯤꯡꯒꯤ ꯊꯕꯛ ꯑꯁꯤ ꯍꯧꯖꯤꯛꯁꯨ ꯆꯠꯊꯔꯤ; ꯑꯗꯣꯝꯅ ꯀꯛꯊꯠꯄ ꯄꯥꯝꯃꯤ ꯍꯥꯌꯕꯁꯤ ꯁꯣꯌꯗ꯭ꯔꯕ꯭ꯔꯥ?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AqBanking"
@@ -19108,7 +19127,8 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 #, fuzzy
 msgid "Import into GnuCash any file format supported by AqBanking"
-msgstr "GnuCash ꯇ DTAUS ꯐꯥꯏꯜ ꯄꯨꯁꯤꯜꯂꯛꯎ ꯑꯗꯨꯒ ꯑꯣꯟꯂꯥꯏꯟ ꯕꯦꯡꯀꯤꯡꯗ ꯇ꯭ꯔꯥꯟꯁꯐꯔꯁ ꯑꯣꯟꯂꯥꯏꯟ ꯊꯥꯔꯣ"
+msgstr ""
+"GnuCash ꯇ DTAUS ꯐꯥꯏꯜ ꯄꯨꯁꯤꯜꯂꯛꯎ ꯑꯗꯨꯒ ꯑꯣꯟꯂꯥꯏꯟ ꯕꯦꯡꯀꯤꯡꯗ ꯇ꯭ꯔꯥꯟꯁꯐꯔꯁ ꯑꯣꯟꯂꯥꯏꯟ ꯊꯥꯔꯣ"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -19214,7 +19234,8 @@ msgstr "ꯃꯦꯃꯣꯔꯤꯗ PIN ꯅꯤꯡꯁꯤꯡꯕꯤꯌꯨ"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 #, fuzzy
 msgid "Put the transaction text in front of the purpose of a transaction."
-msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯄꯔꯦꯡ ꯑꯃ ꯅꯇ꯭ꯔꯒ ꯑꯅꯤꯗ ꯎꯠꯂꯣ ꯑꯃꯁꯨꯡ ꯍꯧꯖꯤꯛꯀꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯥꯛꯊꯣꯛ ꯆꯥꯎꯊꯣꯛꯎ"
+msgstr ""
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯄꯔꯦꯡ ꯑꯃ ꯅꯇ꯭ꯔꯒ ꯑꯅꯤꯗ ꯎꯠꯂꯣ ꯑꯃꯁꯨꯡ ꯍꯧꯖꯤꯛꯀꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯥꯛꯊꯣꯛ ꯆꯥꯎꯊꯣꯛꯎ"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
 msgid "Verbose HBCI debug messages"
@@ -19866,7 +19887,8 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2146
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr "ꯔꯣꯁꯤꯡꯗ ꯍꯣꯡꯗꯣꯛꯅꯕ ꯗꯕꯜ ꯀ꯭ꯂꯤꯛ ꯇꯧꯔꯣ ꯑꯗꯨꯒ 'ꯄꯨꯁꯤꯜꯂꯛꯅꯕ ꯑꯦꯄ꯭ꯂꯥꯏ ꯇꯧꯕ' ꯗ ꯀ꯭ꯂꯤꯛ ꯇꯧꯔꯣ"
+msgstr ""
+"ꯔꯣꯁꯤꯡꯗ ꯍꯣꯡꯗꯣꯛꯅꯕ ꯗꯕꯜ ꯀ꯭ꯂꯤꯛ ꯇꯧꯔꯣ ꯑꯗꯨꯒ 'ꯄꯨꯁꯤꯜꯂꯛꯅꯕ ꯑꯦꯄ꯭ꯂꯥꯏ ꯇꯧꯕ' ꯗ ꯀ꯭ꯂꯤꯛ ꯇꯧꯔꯣ"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2216
@@ -21516,10 +21538,10 @@ msgid ""
 "overwrite it from this register window. You may overwrite it if you navigate "
 "to a register that shows another side of this same transaction."
 msgstr ""
-"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯑꯦꯀꯔꯤꯡ ꯇꯧꯏ꯫ ꯑꯗꯣꯝꯅ ꯃꯁꯤ ꯔꯦꯖꯤꯁꯇꯔ ꯋꯤꯟꯗꯣꯗꯒꯤ ꯃꯨꯠꯊꯠꯄ "
-"ꯌꯥꯔꯣꯏ꯫ ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯁꯤꯗꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯕ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ, ꯅꯇ꯭ꯔꯒ ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯆꯞ ꯃꯥꯟꯅꯕ "
-"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯁꯥꯏꯗ ꯑꯃ ꯎꯠꯂꯤꯕ ꯑꯗꯨꯗ ꯅꯦꯚꯤꯒꯦꯠ ꯇꯧꯕ ꯌꯥꯏ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯃꯨꯠꯊꯠꯄ "
-"ꯌꯥꯏ꯫"
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯔꯦꯖꯤꯁꯇꯔꯗ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯑꯦꯀꯔꯤꯡ ꯇꯧꯏ꯫ ꯑꯗꯣꯝꯅ ꯃꯁꯤ ꯔꯦꯖꯤꯁꯇꯔ ꯋꯤꯟꯗꯣꯗꯒꯤ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯔꯣꯏ"
+"꯫ ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯁꯤꯗꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯕ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ, ꯅꯇ꯭ꯔꯒ ꯑꯗꯣꯝꯅ ꯔꯦꯖꯤꯁꯇꯔꯒꯤ ꯆꯞ ꯃꯥꯟꯅꯕ "
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯁꯥꯏꯗ ꯑꯃ ꯎꯠꯂꯤꯕ ꯑꯗꯨꯗ ꯅꯦꯚꯤꯒꯦꯠ ꯇꯧꯕ ꯌꯥꯏ ꯑꯃꯁꯨꯡ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ"
+"꯫"
 
 #: gnucash/register/ledger-core/split-register.c:1056
 msgid ""
@@ -22289,7 +22311,8 @@ msgstr "ꯑꯇꯣꯞꯄ ꯑꯣꯞꯁꯟ ꯄꯨꯝꯅꯃꯛꯀꯤ ꯃꯊꯛꯇ �
 #: gnucash/report/options-utilities.scm:109
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
-msgstr "ꯑꯦꯀꯥꯎꯟꯠ-ꯑꯈꯟꯕ ꯁꯤꯟꯗꯣꯛꯀꯗ꯭ꯔꯥ ꯑꯃꯁꯨꯡ ꯈꯜꯂꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯄꯨꯝꯅꯃꯛꯀꯤ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯎꯠꯀꯗ꯭ꯔꯥ?"
+msgstr ""
+"ꯑꯦꯀꯥꯎꯟꯠ-ꯑꯈꯟꯕ ꯁꯤꯟꯗꯣꯛꯀꯗ꯭ꯔꯥ ꯑꯃꯁꯨꯡ ꯈꯜꯂꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯄꯨꯝꯅꯃꯛꯀꯤ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯎꯠꯀꯗ꯭ꯔꯥ?"
 
 #: gnucash/report/options-utilities.scm:120
 #: gnucash/report/reports/standard/account-summary.scm:81
@@ -23586,8 +23609,8 @@ msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
 msgstr ""
-"ꯑꯔꯨꯕꯒꯤ ꯄꯪꯈꯩꯗ ꯂꯩꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃ ꯍꯦꯛꯇꯒꯤ ꯁꯕꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡꯒꯤ ꯕꯦꯂꯦꯟꯁꯁꯤꯡ ꯌꯥꯎꯅ ꯑꯄꯨꯟꯕ ꯕꯦꯂꯦꯟꯁ "
-"ꯎꯠꯂꯣ꯫"
+"ꯑꯔꯨꯕꯒꯤ ꯄꯪꯈꯩꯗ ꯂꯩꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃ ꯍꯦꯛꯇꯒꯤ ꯁꯕꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡꯒꯤ ꯕꯦꯂꯦꯟꯁꯁꯤꯡ ꯌꯥꯎꯅ ꯑꯄꯨꯟꯕ ꯕꯦꯂꯦꯟꯁ ꯎꯠꯂꯣ"
+"꯫"
 
 #: gnucash/report/reports/standard/account-summary.scm:91
 #, fuzzy
@@ -24283,8 +24306,8 @@ msgstr "ꯐꯣꯟꯠꯒꯤ ꯃꯆꯥꯎ-ꯃꯔꯥꯛ"
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
 msgstr ""
-"CSS ꯐꯣꯟꯠ-ꯃꯆꯥꯎ-ꯃꯔꯥꯛꯀꯤ ꯐꯣꯔꯃꯦꯠꯇ ꯐꯣꯟꯠꯀꯤ ꯃꯆꯥꯎ-ꯃꯔꯛ (ꯈꯨꯗꯝ ꯑꯣꯏꯅ \"medium\" ꯅꯇ꯭ꯔꯒ "
-"\"10pt\")꯫"
+"CSS ꯐꯣꯟꯠ-ꯃꯆꯥꯎ-ꯃꯔꯥꯛꯀꯤ ꯐꯣꯔꯃꯦꯠꯇ ꯐꯣꯟꯠꯀꯤ ꯃꯆꯥꯎ-ꯃꯔꯛ (ꯈꯨꯗꯝ ꯑꯣꯏꯅ \"medium\" ꯅꯇ꯭ꯔꯒ \"10pt\")"
+"꯫"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
@@ -24364,8 +24387,8 @@ msgid ""
 "double-checking them.<br>Change the 'Extra Notes' option to get rid of this "
 "message)"
 msgstr ""
-"(ꯍꯦꯟꯅ ꯐꯒꯠꯂꯕ ꯚꯔꯁꯟ -- ꯔꯤꯄꯣꯔꯠ ꯑꯁꯤꯗ ꯑꯅꯤꯔꯛ ꯍꯟꯅ ꯌꯦꯡꯁꯤꯟꯗꯅ ꯅꯝꯕꯔ ꯑꯁꯤꯗ ꯊꯥꯖꯕꯤꯒꯅꯨ."
-"<br>ꯃꯁꯤꯒꯤ ꯄꯥꯎꯖꯦꯜ ꯑꯁꯤ ꯇꯣꯛꯊꯣꯛꯅꯕ 'ꯑꯦꯛꯁꯇ꯭ꯔꯥ ꯅꯣꯠ' ꯑꯣꯞꯁꯟ ꯍꯣꯡꯗꯣꯛꯄꯤꯌꯨ)"
+"(ꯍꯦꯟꯅ ꯐꯒꯠꯂꯕ ꯚꯔꯁꯟ -- ꯔꯤꯄꯣꯔꯠ ꯑꯁꯤꯗ ꯑꯅꯤꯔꯛ ꯍꯟꯅ ꯌꯦꯡꯁꯤꯟꯗꯅ ꯅꯝꯕꯔ ꯑꯁꯤꯗ ꯊꯥꯖꯕꯤꯒꯅꯨ.<br>"
+"ꯃꯁꯤꯒꯤ ꯄꯥꯎꯖꯦꯜ ꯑꯁꯤ ꯇꯣꯛꯊꯣꯛꯅꯕ 'ꯑꯦꯛꯁꯇ꯭ꯔꯥ ꯅꯣꯠ' ꯑꯣꯞꯁꯟ ꯍꯣꯡꯗꯣꯛꯄꯤꯌꯨ)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:376
 #: libgnucash/engine/Scrub.cpp:464
@@ -27540,7 +27563,8 @@ msgstr "ꯏꯟꯚꯣꯏꯁꯀꯤ ꯑꯔꯣꯏꯕꯗ ꯃꯔꯨꯑꯣꯏꯕ ꯋꯥ
 #: gnucash/report/reports/standard/receipt.scm:204
 #, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr "ꯇꯦꯛꯁ ꯀꯂꯝꯁꯤꯡꯒ ꯂꯣꯌꯅꯅ ꯀꯁꯇꯃꯔ ꯑꯃꯒꯤ ꯏꯟꯚꯣꯏꯁ ꯐꯣꯡꯗꯣꯛꯎ (ꯑꯦꯒꯥꯏꯜ ꯇꯦꯝꯄ꯭ꯂꯦꯠ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
+msgstr ""
+"ꯇꯦꯛꯁ ꯀꯂꯝꯁꯤꯡꯒ ꯂꯣꯌꯅꯅ ꯀꯁꯇꯃꯔ ꯑꯃꯒꯤ ꯏꯟꯚꯣꯏꯁ ꯐꯣꯡꯗꯣꯛꯎ (ꯑꯦꯒꯥꯏꯜ ꯇꯦꯝꯄ꯭ꯂꯦꯠ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:62
 msgid ""
@@ -27853,7 +27877,8 @@ msgstr "ꯏꯝꯕꯦꯗꯦꯗ CSS"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:304
 msgid "Display a customer invoice with tax columns (using eguile template)"
-msgstr "ꯇꯦꯛꯁ ꯀꯂꯝꯁꯤꯡꯒ ꯂꯣꯌꯅꯅ ꯀꯁꯇꯃꯔ ꯑꯃꯒꯤ ꯏꯟꯚꯣꯏꯁ ꯐꯣꯡꯗꯣꯛꯎ (ꯑꯦꯒꯥꯏꯜ ꯇꯦꯝꯄ꯭ꯂꯦꯠ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
+msgstr ""
+"ꯇꯦꯛꯁ ꯀꯂꯝꯁꯤꯡꯒ ꯂꯣꯌꯅꯅ ꯀꯁꯇꯃꯔ ꯑꯃꯒꯤ ꯏꯟꯚꯣꯏꯁ ꯐꯣꯡꯗꯣꯛꯎ (ꯑꯦꯒꯥꯏꯜ ꯇꯦꯝꯄ꯭ꯂꯦꯠ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:316
 #, fuzzy
@@ -27896,7 +27921,8 @@ msgstr "ꯇꯦꯛꯁꯀꯤ ꯏꯟꯚꯣꯏꯁ"
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
 "template)"
-msgstr "ꯇꯦꯛꯁ ꯀꯂꯝꯁꯤꯡꯒ ꯂꯣꯌꯅꯅ ꯀꯁꯇꯃꯔ ꯑꯃꯒꯤ ꯏꯟꯚꯣꯏꯁ ꯐꯣꯡꯗꯣꯛꯎ (ꯑꯦꯒꯥꯏꯜ ꯇꯦꯝꯄ꯭ꯂꯦꯠ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
+msgstr ""
+"ꯇꯦꯛꯁ ꯀꯂꯝꯁꯤꯡꯒ ꯂꯣꯌꯅꯅ ꯀꯁꯇꯃꯔ ꯑꯃꯒꯤ ꯏꯟꯚꯣꯏꯁ ꯐꯣꯡꯗꯣꯛꯎ (ꯑꯦꯒꯥꯏꯜ ꯇꯦꯝꯄ꯭ꯂꯦꯠ ꯁꯤꯖꯤꯟꯅꯗꯨꯅ)"
 
 #: gnucash/report/reports/standard/trial-balance.scm:58
 #: gnucash/report/reports/standard/trial-balance.scm:532
@@ -30282,7 +30308,8 @@ msgstr "_ꯑꯦꯀꯥꯎꯟꯠ ꯁꯦꯝꯗꯣꯛꯄ"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:241
 msgid "Automatically clear individual transactions, given a cleared amount"
-msgstr "ꯀꯅꯥꯒꯨꯝꯕ ꯑꯃꯒꯤ ꯃꯁꯥꯒꯤ ꯑꯣꯏꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯃꯊꯟꯇꯅ ꯁꯦꯡꯗꯣꯛꯂꯦ, ꯁꯦꯡꯗꯣꯛꯂꯕ ꯑꯃꯥꯎꯟꯠ ꯑꯗꯨ ꯄꯤꯔꯦ"
+msgstr ""
+"ꯀꯅꯥꯒꯨꯝꯕ ꯑꯃꯒꯤ ꯃꯁꯥꯒꯤ ꯑꯣꯏꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯃꯊꯟꯇꯅ ꯁꯦꯡꯗꯣꯛꯂꯦ, ꯁꯦꯡꯗꯣꯛꯂꯕ ꯑꯃꯥꯎꯟꯠ ꯑꯗꯨ ꯄꯤꯔꯦ"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
@@ -30680,7 +30707,8 @@ msgstr "_ꯃꯊꯟꯇꯅ ꯈꯥꯌꯗꯣꯛꯆꯕ ꯂꯦꯖꯔ"
 #| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
-msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯄꯔꯦꯡ ꯑꯃ ꯅꯇ꯭ꯔꯒ ꯑꯅꯤꯗ ꯎꯠꯂꯣ ꯑꯃꯁꯨꯡ ꯍꯧꯖꯤꯛꯀꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯥꯛꯊꯣꯛ ꯆꯥꯎꯊꯣꯛꯎ"
+msgstr ""
+"ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯄꯔꯦꯡ ꯑꯃ ꯅꯇ꯭ꯔꯒ ꯑꯅꯤꯗ ꯎꯠꯂꯣ ꯑꯃꯁꯨꯡ ꯍꯧꯖꯤꯛꯀꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯥꯛꯊꯣꯛ ꯆꯥꯎꯊꯣꯛꯎ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
 #, fuzzy
@@ -31088,8 +31116,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
-"ꯍꯧꯖꯤꯛꯀꯤ ꯔꯤꯄꯣꯔꯠꯀꯤ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟ ꯑꯁꯤ 'ꯁꯦꯚ ꯇꯧꯔꯕ ꯔꯤꯄꯣꯔꯠ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟꯁꯤꯡ' ꯃꯦꯅꯨꯗ "
-"ꯍꯥꯞꯆꯤꯜꯂꯣ꯫ ꯔꯤꯄꯣꯔꯠ ꯑꯁꯤ ꯐꯥꯏꯜ %s ꯗ ꯁꯦꯚ ꯇꯧꯒꯅꯤ꯫"
+"ꯍꯧꯖꯤꯛꯀꯤ ꯔꯤꯄꯣꯔꯠꯀꯤ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟ ꯑꯁꯤ 'ꯁꯦꯚ ꯇꯧꯔꯕ ꯔꯤꯄꯣꯔꯠ ꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟꯁꯤꯡ' ꯃꯦꯅꯨꯗ ꯍꯥꯞꯆꯤꯜꯂꯣ"
+"꯫ ꯔꯤꯄꯣꯔꯠ ꯑꯁꯤ ꯐꯥꯏꯜ %s ꯗ ꯁꯦꯚ ꯇꯧꯒꯅꯤ꯫"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"

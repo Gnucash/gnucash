@@ -508,6 +508,7 @@ actions on this account. Please double-check this is the date you intended."));
     /* update the amount edit with the amount */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value),
                                 new_balance);
+    data->original_value = new_balance;
 }
 
 

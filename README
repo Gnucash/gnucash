@@ -158,26 +158,30 @@ Supported Platforms
 
 GnuCash 5.x is known to work with the following operating systems:
 
-GNU/Linux             -- x86, Sparc, PPC
-FreeBSD               -- x86
-OpenBSD               -- x86
-MacOS		      -- Intel, Versions 10.9 and later
+GNU/Linux             -- x86_64, arm64
+FreeBSD               -- x86_64
+OpenBSD               -- x86_64
+MacOS                 -- x86_64, Versions 10.13 and later and Apple Silicon
+Windows               -- x86, Windows 11
 
-
-GnuCash can probably be made to work on any platform for which Gtk+ can
-and for which there is a C++11 compiler available, given sufficient expertise
-and effort. If you try and encounter difficulty, please subscribe to the
-developer's mailing list, gnucash-devel@gnucash.org and we'll try to help you.
+GnuCash can probably be made to work on any platform for which Gtk+
+can and for which there is a C++11 compiler available, given
+sufficient expertise and effort. We have heard of Linux builds on
+Sparc, PowerPC, and IBM s390x hardware. If you try and encounter
+difficulty, please subscribe to the developer's mailing list,
+gnucash-devel@gnucash.org and we'll try to help you.
 
 #########################
 Downloads
 -------------------------
 
-GnuCash sources and Mac and Windows binaries are hosted at
-SourceForge and Github. Links for the current version are provided at
-https://www.gnucash.org. We depend upon distribution packagers for
-GNU/Linux and *BSD binaries, so if you want a more recent version than
-your distribution provides you'll have to build from source.
+GnuCash sources and Mac and Windows binaries are hosted at SourceForge
+and Github. Links for the current version are provided at
+https://www.gnucash.org. Linux flatpaks for x86_64 and arm64 can be
+installed fromhttps://flathub.org/en/apps/org.gnucash.GnuCash. We
+depend upon distribution packagers for GNU/Linux and *BSD binaries, so
+if you want a more recent version than your distribution provides
+and you can't or won't use a flatpak then you'll have to build from source.
 
 ##############################
 Getting Source with Git

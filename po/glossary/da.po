@@ -3,8 +3,8 @@
 # Keld Simonsen <keld@dkuug.dk>, 2001-2003.
 # Christian Rose <menthos@menthos.com>, 2001.
 # Joe Hansen <joedalton2@yahoo.dk>, 2009.
-# Aputsiak Niels Janussen <aj@isit.gl>, 2021.
-# Allan Olsen <allan@hamann-olsen.dk>, 2025.
+# Aputsiak Niels Janussen <aj@isit.gl>, 2021, 2026.
+# Allan Olsen <allan@hamann-olsen.dk>, 2025, 2026.
 # Sune Kibsgaard <sune@kibs.dk>, 2026.
 # Cecilie Nielsen <cecilie.nielsen1984@gmail.com>, 2026.
 msgid ""
@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2026-04-25 13:11+0000\n"
-"Last-Translator: Cecilie Nielsen <cecilie.nielsen1984@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 04:34+0000\n"
+"Last-Translator: Aputsiak Niels Janussen <aj@isit.gl>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "da/>\n"
 "Language: da\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"

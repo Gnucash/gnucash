@@ -3,15 +3,15 @@
 # Copyright (C) 2023 by the GnuCash developers and the translators:
 # Automatically generated, 2023.
 #
-# soramikan <sora_yana@icloud.com>, 2024.
-# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2024.
+# soramikan <sora_yana@icloud.com>, 2024, 2026.
+# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-12-12 17:00+0000\n"
+"PO-Revision-Date: 2026-06-26 05:12+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/ja/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
