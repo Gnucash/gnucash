@@ -52,6 +52,15 @@ struct GncHtmlWebview2Private
     ICoreWebView2* webview;
     EventRegistrationToken nav_starting_token;
     gboolean has_nav_starting_token;
+    EventRegistrationToken new_window_token;
+    gboolean has_new_window_token;
+
+    /* Only available on newer WebView2 runtimes (ICoreWebView2_11);
+     * nullptr if the QueryInterface for it failed, in which case the
+     * context menu is simply never customized. */
+    ICoreWebView2_11* webview11;
+    EventRegistrationToken context_menu_token;
+    gboolean has_context_menu_token;
 
     gboolean environment_creating;
 

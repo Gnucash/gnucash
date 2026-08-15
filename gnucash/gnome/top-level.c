@@ -209,6 +209,8 @@ gnc_html_register_url_cb (const char *location, const char *label,
     }
 
     page = gnc_plugin_page_register_new (account, FALSE);
+    if (new_window)
+        gnc_plugin_page_set_use_new_window (page, TRUE);
     gnc_main_window_open_page (GNC_MAIN_WINDOW (result->parent), page);
     if (split)
     {

@@ -2096,13 +2096,26 @@ void
 gnc_main_window_open_report_url(const char * url, GncMainWindow *window)
 {
     GncPluginPage *reportPage;
+    gint report_id;
 
     DEBUG( "report url: [%s]\n", url );
 
     if (window)
         g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
 
-    reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
+    /* Duplicating report pages copies an uncopiable reference leading
+     * to crashes so don't allow multicolumn subreports to open in new
+     * GncMainWindows.
+     */
+    if (strncmp (url, "id=", 3) != 0 ||
+        (report_id = gnc_report_id_string_to_report_id (url + 3)) < 0)
+    {
+        PWARN ("gnc_main_window_open_report_url: badly formed report url '%s'", url);
+        return;
+    }
+
+    reportPage = gnc_plugin_page_report_new( report_id );
+    gnc_plugin_page_set_use_new_window (reportPage, TRUE);
     gnc_main_window_open_page( window, reportPage );
 }
 

@@ -191,6 +191,26 @@ public:
                                       ICoreWebView2NavigationStartingEventArgs* args) override;
 };
 
+class GncWebView2NewWindowHandler final
+    : public GncWebView2Sink<ICoreWebView2NewWindowRequestedEventHandler>
+{
+public:
+    using GncWebView2Sink::GncWebView2Sink;
+
+    HRESULT STDMETHODCALLTYPE Invoke (ICoreWebView2* sender,
+                                      ICoreWebView2NewWindowRequestedEventArgs* args) override;
+};
+
+class GncWebView2ContextMenuHandler final
+    : public GncWebView2Sink<ICoreWebView2ContextMenuRequestedEventHandler>
+{
+public:
+    using GncWebView2Sink::GncWebView2Sink;
+
+    HRESULT STDMETHODCALLTYPE Invoke (ICoreWebView2* sender,
+                                      ICoreWebView2ContextMenuRequestedEventArgs* args) override;
+};
+
 /* Minimal hand-rolled implementation of
  * ICoreWebView2EnvironmentOptions (verified against WebView2.h
  * provided by MSYS2 mingw-w64-webview2-loader package version
@@ -473,6 +493,25 @@ controller_created (GncHtmlWebview2* self, HRESULT result,
         priv->webview->add_NavigationStarting (nav_handler, &priv->nav_starting_token);
         priv->has_nav_starting_token = TRUE;
         nav_handler->Release ();
+
+        auto new_window_handler = new GncWebView2NewWindowHandler (self);
+        priv->webview->add_NewWindowRequested (new_window_handler, &priv->new_window_token);
+        priv->has_new_window_token = TRUE;
+        new_window_handler->Release ();
+
+        /* Only available on newer WebView2 runtimes; if the QI fails,
+         * the context menu is simply never customized (see
+         * context_menu_requested() below). */
+        HRESULT hr11 = priv->webview->QueryInterface (
+            IID_ICoreWebView2_11, reinterpret_cast<void**> (&priv->webview11));
+        if (SUCCEEDED (hr11) && priv->webview11)
+        {
+            auto menu_handler = new GncWebView2ContextMenuHandler (self);
+            HRESULT hr_add = priv->webview11->add_ContextMenuRequested (
+                menu_handler, &priv->context_menu_token);
+            priv->has_context_menu_token = SUCCEEDED (hr_add);
+            menu_handler->Release ();
+        }
     }
 
     flush_pending (self);
@@ -532,6 +571,151 @@ GncWebView2NavStartingHandler::Invoke (ICoreWebView2* /*sender*/,
                                        ICoreWebView2NavigationStartingEventArgs* args)
 {
     navigation_starting (m_html, args);
+    return S_OK;
+}
+
+/* Fires when the user picks "Open link in new window" from the context
+ * menu (or a page navigates with a new-window target). Left unhandled,
+ * WebView2's default action is to pop up a bare native WebView2 window
+ * that can't do anything useful with our gnc-register:/gnc-report:/etc.
+ * links. Always claim the event and decode the URI the same way a
+ * plain click does, but with new_window forced on so link types that
+ * can safely honor it (e.g. account/register links) open a genuine
+ * separate GnuCash window as the user asked. Report-type links can't
+ * safely honor it -- see show_url()'s handling of URL_TYPE_REPORT --
+ * so they just navigate in place, same as a plain click; the context
+ * menu item is greyed out for those anyway, see
+ * context_menu_requested() below. -- Claude Code, 2026 */
+static void
+new_window_requested (GncHtmlWebview2* self,
+                                    ICoreWebView2NewWindowRequestedEventArgs* args)
+{
+    args->put_Handled (TRUE);
+
+    LPWSTR wuri = nullptr;
+    if (FAILED (args->get_Uri (&wuri)) || !wuri)
+        return;
+
+    gchar* uri = g_utf16_to_utf8 (reinterpret_cast<const gunichar2*> (wuri), -1,
+                                  nullptr, nullptr, nullptr);
+    CoTaskMemFree (wuri);
+    if (!uri)
+        return;
+
+    gchar* location = nullptr;
+    gchar* label = nullptr;
+    URLType scheme = gnc_html_parse_url (GNC_HTML (self), uri, &location, &label);
+
+    show_url (GNC_HTML (self), scheme, location, label, TRUE);
+
+    g_free (location);
+    g_free (label);
+    g_free (uri);
+}
+
+HRESULT STDMETHODCALLTYPE
+GncWebView2NewWindowHandler::Invoke (ICoreWebView2* /*sender*/,
+                                     ICoreWebView2NewWindowRequestedEventArgs* args)
+{
+    new_window_requested (m_html, args);
+    return S_OK;
+}
+
+/* "Open link in new window" can't be honored for report-type links
+ * (see show_url()'s handling of URL_TYPE_REPORT and
+ * new_window_requested() above), so remove that item from the context
+ * menu when it's raised on one, rather than offering an action that
+ * silently does nothing when picked. -- Claude Code, 2026 */
+static void
+context_menu_requested (GncHtmlWebview2* self,
+                                      ICoreWebView2ContextMenuRequestedEventArgs* args)
+{
+    ICoreWebView2ContextMenuTarget* target = nullptr;
+    if (FAILED (args->get_ContextMenuTarget (&target)) || !target)
+        return;
+
+    BOOL has_link = FALSE;
+    LPWSTR wuri = nullptr;
+    HRESULT hr = target->get_HasLinkUri (&has_link);
+    if (FAILED (hr) || !has_link || FAILED (target->get_LinkUri (&wuri)) || !wuri)
+    {
+        target->Release ();
+        return;
+    }
+    target->Release ();
+
+    gchar* uri = g_utf16_to_utf8 (reinterpret_cast<const gunichar2*> (wuri), -1,
+                                  nullptr, nullptr, nullptr);
+    CoTaskMemFree (wuri);
+    if (!uri)
+        return;
+
+    gchar* location = nullptr;
+    gchar* label = nullptr;
+    URLType scheme = gnc_html_parse_url (GNC_HTML (self), uri, &location, &label);
+    g_free (uri);
+    g_free (location);
+    g_free (label);
+
+    if (g_strcmp0 (scheme, URL_TYPE_REPORT) != 0)
+        return;
+
+    ICoreWebView2ContextMenuItemCollection* items = nullptr;
+    if (FAILED (args->get_MenuItems (&items)) || !items)
+        return;
+
+    UINT32 count = 0;
+    items->get_Count (&count);
+    /* Loop index only advances when the current item is kept --
+     * RemoveValueAtIndex() shifts everything after it down by one, so
+     * re-examining the same index picks up what used to be next. */
+    for (UINT32 i = 0; i < count; )
+    {
+        ICoreWebView2ContextMenuItem* item = nullptr;
+        if (FAILED (items->GetValueAtIndex (i, &item)) || !item)
+        {
+            ++i;
+            continue;
+        }
+
+        bool removed = false;
+        LPWSTR wname = nullptr;
+        if (SUCCEEDED (item->get_Name (&wname)) && wname)
+        {
+            gchar* name = g_utf16_to_utf8 (reinterpret_cast<const gunichar2*> (wname), -1,
+                                           nullptr, nullptr, nullptr);
+            CoTaskMemFree (wname);
+            /* "openLinkInNewWindow" is the documented stable Name for
+             * this default item; also remove "openLinkInNewTab" in
+             * case a future WebView2 runtime offers it here too.
+             * Disabling via put_IsEnabled(FALSE) is the documented way
+             * to grey out an item, and the SDK reports it succeeding
+             * (verified: get_IsEnabled() reads back FALSE afterward),
+             * but this WebView2 build doesn't actually reflect that in
+             * the rendered menu for this particular built-in command --
+             * removing the item outright is more fundamental and does
+             * take effect (verified). */
+            if (!g_strcmp0 (name, "openLinkInNewWindow") ||
+                !g_strcmp0 (name, "openLinkInNewTab"))
+            {
+                items->RemoveValueAtIndex (i);
+                --count;
+                removed = true;
+            }
+            g_free (name);
+        }
+        item->Release ();
+        if (!removed)
+            ++i;
+    }
+    items->Release ();
+}
+
+HRESULT STDMETHODCALLTYPE
+GncWebView2ContextMenuHandler::Invoke (ICoreWebView2* /*sender*/,
+                                       ICoreWebView2ContextMenuRequestedEventArgs* args)
+{
+    context_menu_requested (m_html, args);
     return S_OK;
 }
 
@@ -667,6 +851,11 @@ gnc_html_webview2_init (GncHtmlWebview2* self)
      priv->webview = nullptr;
      priv->nav_starting_token = EventRegistrationToken {};
      priv->has_nav_starting_token = FALSE;
+     priv->new_window_token = EventRegistrationToken {};
+     priv->has_new_window_token = FALSE;
+     priv->webview11 = nullptr;
+     priv->context_menu_token = EventRegistrationToken {};
+     priv->has_context_menu_token = FALSE;
      priv->environment_creating = FALSE;
      priv->navigating_internally = FALSE;
      priv->disposed = FALSE;
@@ -735,6 +924,24 @@ gnc_html_webview2_dispose (GObject* obj)
      {
           priv->webview->remove_NavigationStarting (priv->nav_starting_token);
           priv->has_nav_starting_token = FALSE;
+     }
+
+     if (priv->webview != nullptr && priv->has_new_window_token)
+     {
+          priv->webview->remove_NewWindowRequested (priv->new_window_token);
+          priv->has_new_window_token = FALSE;
+     }
+
+     if (priv->webview11 != nullptr && priv->has_context_menu_token)
+     {
+          priv->webview11->remove_ContextMenuRequested (priv->context_menu_token);
+          priv->has_context_menu_token = FALSE;
+     }
+
+     if (priv->webview11 != nullptr)
+     {
+          priv->webview11->Release();
+          priv->webview11 = nullptr;
      }
 
      if (priv->controller != nullptr)
