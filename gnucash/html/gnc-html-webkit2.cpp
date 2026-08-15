@@ -107,7 +107,7 @@ static void webkit_resource_load_started_cb (WebKitWebView *web_view,
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
-                                  gboolean new_window_hint );
+                                  gboolean new_window );
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
@@ -760,10 +760,9 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 static void
 impl_webkit_show_url( GncHtml* self, URLType type,
                       const gchar* location, const gchar* label,
-                      gboolean new_window_hint )
+                      gboolean new_window )
 {
      GncHTMLUrlCB url_handler = nullptr;
-     bool new_window = false;
      bool stream_loaded = false;
 
      g_return_if_fail( self != nullptr );
@@ -772,23 +771,8 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 
      auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
-     /* make sure it's OK to show this URL type in this window */
-     if ( new_window_hint == 0 )
-     {
-          if ( priv->base.urltype_cb )
-          {
-               new_window = !((priv->base.urltype_cb)( type ));
-          }
-     }
-     else
-     {
-          new_window = true;
-     }
-
-     if ( !new_window )
-     {
+     if ( priv->base.urltype_cb && priv->base.urltype_cb( type ) )
           gnc_html_cancel( GNC_HTML(self) );
-     }
 
      if ( gnc_html_url_handlers )
      {

@@ -360,7 +360,7 @@ gnc_html_show_data( GncHtml* self, const gchar* data, int datalen ) noexcept
 void
 gnc_html_show_url( GncHtml* self, URLType type,
                    const gchar* location, const gchar* label,
-                   gboolean new_window_hint ) noexcept
+                   gboolean new_window ) noexcept
 {
     g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
@@ -369,7 +369,7 @@ gnc_html_show_url( GncHtml* self, URLType type,
 
     if ( GNC_HTML_GET_CLASS(self)->show_url != nullptr )
     {
-        GNC_HTML_GET_CLASS(self)->show_url( self, lc_type, location, label, new_window_hint );
+        GNC_HTML_GET_CLASS(self)->show_url( self, lc_type, location, label, new_window );
     }
     else
     {
