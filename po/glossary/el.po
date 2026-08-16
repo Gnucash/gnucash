@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
-"enter_bug.cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-06-26 04:35+0000\n"
 "Last-Translator: ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>\n"
@@ -269,7 +269,6 @@ msgstr "Προϋπολογισμός"
 msgid "business (adjective)"
 msgstr "επαγγελματικός"
 
-#
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
 msgstr "επιχείρηση"
@@ -282,12 +281,10 @@ msgstr "κεφαλαιακά κέρδη"
 msgid "case sensitive"
 msgstr "διαφοροποίηση κεφαλαίων / πεζών"
 
-#
 #. "Money in coins or notes"
 msgid "cash"
 msgstr "μετρητά"
 
-#
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
 msgstr "επιταγή"
@@ -300,7 +297,6 @@ msgstr "έλεγχος και επισκευή, για να"
 msgid "close, to"
 msgstr "Κλείσιμο καταγραφών"
 
-#
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
 msgstr "προϊόν"
@@ -354,7 +350,6 @@ msgstr "πίνακας αποτελεσμάτων"
 msgid "database"
 msgstr "βάση δεδομένων"
 
-#
 #. "A specific numbered day of the month"
 msgid "Date"
 msgstr "Ημερομηνία"
@@ -463,7 +458,6 @@ msgstr "κέρδος"
 msgid "imbalance"
 msgstr "Χωρίς ισοζύγιο"
 
-#
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
 msgid "import"
 msgstr "εισαγωγή"
@@ -484,7 +478,6 @@ msgstr "τιμολόγιο"
 msgid "job"
 msgstr "εργασία"
 
-#
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
 msgstr "Λογιστικό βιβλίο"
@@ -501,7 +494,6 @@ msgstr "δάνειο"
 msgid "loan: APR"
 msgstr "δάνειο: ΣΕΠΕ"
 
-#
 #. "The money lost in business activity"
 msgid "loss"
 msgstr "χασούρα"
@@ -510,12 +502,10 @@ msgstr "χασούρα"
 msgid "Lost Accounts"
 msgstr "Χαμένοι λογαριασμοί"
 
-#
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
 msgstr "παρτίδα"
 
-#
 #. "Combine two books into one (see book)."
 msgid "merge, to"
 msgstr "συγχώνευση"
@@ -528,7 +518,6 @@ msgstr "δείκτης"
 msgid "markup"
 msgstr "σήμανση"
 
-#
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
 msgstr "Λειτουργία MDI"
@@ -561,7 +550,6 @@ msgstr "καθαρά"
 msgid "net assets"
 msgstr "καθαρό ενεργητικό"
 
-#
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
 msgstr "καθαρό κέρδος"
@@ -634,7 +622,6 @@ msgstr "χαρτοφυλάκιο"
 msgid "post, to"
 msgstr "δημοσίευση, σε"
 
-#
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "προτιμήσεις"
@@ -671,7 +658,6 @@ msgstr "Κέρδος & Ζημία"
 msgid "quick-fill"
 msgstr "γρήγορη πλήρωση"
 
-#
 #. "-"
 msgid "rebalance, to (a transaction)"
 msgstr "επανεξισορρόπηση, σε (συναλλαγή)"
@@ -688,7 +674,6 @@ msgstr "τήρηση αρχείων"
 msgid "register"
 msgstr "μητρώο"
 
-#
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
 msgstr "καταχώρηση μητρώου: διαχωρισμός συναλλαγής"
@@ -709,12 +694,10 @@ msgstr "μητρώο: βασικό καθολικό"
 msgid "register: general ledger"
 msgstr "μητρώο: γενικό καθολικό"
 
-#
 #. "another form of register"
 msgid "register: transaction journal"
 msgstr "μητρώο: ημερολόγιο συναλλαγών"
 
-#
 #. "reload the current document"
 msgid "reload, to"
 msgstr "επαναφόρτωση, για να"
@@ -739,7 +722,6 @@ msgstr "αντίστροφη συναλλαγή, προς (ενέργεια στ
 msgid "sales"
 msgstr "πωλήσεις"
 
-#
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
 msgstr "αποθήκευση (σε αρχείο)"
@@ -824,7 +806,6 @@ msgstr "πρότυπο"
 msgid "time period"
 msgstr "χρονική περίοδος"
 
-#
 #. "as abbreviation for Total"
 msgid "Tot"
 msgstr "Σύνολο"
@@ -837,27 +818,22 @@ msgstr "σύνολο"
 msgid "transaction"
 msgstr "συναλλαγή"
 
-#
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
 msgstr "κατάσταση συναλλαγής: εκκαθαρισμένο"
 
-#
 #. "-"
 msgid "transaction state: frozen"
 msgstr "κατάσταση συναλλαγής: παγωμένη"
 
-#
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
 msgstr "κατάσταση συναλλαγής: συμφωνημένη"
 
-#
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
 msgstr "κατάσταση συναλλαγής: ακυρωμένη"
 
-#
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
 msgstr "μεταφορά"
@@ -874,7 +850,6 @@ msgstr "μεταφορά, σε (γραμμή εργαλείων καταχώρη
 msgid "trial balance (report)"
 msgstr "δοκιμαστικό ισοζύγιο (έκθεση)"
 
-#
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
 msgstr "είδος"
