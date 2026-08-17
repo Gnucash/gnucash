@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-07-13 05:01+0000\n"
+"PO-Revision-Date: 2026-08-17 00:51+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -1045,7 +1045,7 @@ msgid ""
 "and withdrawals."
 msgstr ""
 "Az egyeztető ablakban a szóközbillentyű megnyomásával a tranzakciók "
-"egyeztetettnek jelölhetők. A Tab illetve a Shift-Tab megnyomásával a "
+"egyeztetettnek jelölhetők. A Tab illetve a Shift+Tab billentyűkkel a "
 "jóváírások és a terhelések között mozoghat."
 
 #: doc/tip_of_the_day.list.c:86
@@ -1098,7 +1098,7 @@ msgid ""
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
 "A regiszteroldal átutalásmezőjében a számlamenü megnyitásához nyomja meg a "
-"menügombot vagy a Ctrl-Le billentyűkombinációt."
+"menügombot vagy a Ctrl+Le billentyűkombinációt."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -12157,7 +12157,7 @@ msgstr ""
 "létrehozott számlákat. Új számlákat vagy alszámlákat is hozzáadhat, valamint "
 "áthelyezhet számlákat (az alszámláikkal együtt) egy másik főszámla alá.\n"
 "\n"
-"Ha most mégsem akar létrehozni új számlakészletet, akkor kattintson a Mégse "
+"Ha most mégsem akar új számlakészletet létrehozni, akkor kattintson a Mégse "
 "gombra."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
@@ -12632,7 +12632,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
 msgid "_Select…"
-msgstr "Ki_jelölés…"
+msgstr "Ki_választás…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -12714,8 +12714,8 @@ msgstr ""
 "szeretne importálni. Tegye ezt akkor, ha számláit különálló QIF fájlokba "
 "mentette.\n"
 "\n"
-"Kattintson a „Tovább” gombra a fájlok betöltésének befejezéséhez, és lépjen "
-"a QIF importálási folyamat következő lépésére."
+"Kattintson a »Következő« gombra a fájlok betöltésének befejezéséhez, és "
+"lépjen a QIF importálási folyamat következő lépésére."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:464
 msgid "_Unload selected file"
@@ -12757,10 +12757,10 @@ msgstr ""
 "Vegye figyelembe, hogy a GnuCash sok olyan számlát fog létrehozni, amelyek "
 "nem léteztek az Ön másik személyi pénzügyi programjában, beleértve egy külön "
 "számlát minden egyes tulajdonában lévő részvényhez, külön számlákat a "
-"közvetítői jutalékokhoz, speciális részvény számlákat (alapértelmezés "
-"szerint a felhalmozott nyereség alszámlái), amelyek a nyitó egyenlegek "
-"forrásai stb.. Ezek a számlák mindegyike megjelenik a következő oldalon, így "
-"ha akarja, módosíthatja őket, de nyugodtan így hagyhatja őket.\n"
+"közvetítői jutalékokhoz, speciális részvényszámlákat (alapértelmezés szerint "
+"a felhalmozott nyereség alszámlái), amelyek a nyitó egyenlegek forrásai "
+"stb.. Ezeknek a számláknak mindegyike megjelenik a következő oldalon, ahol "
+"módosíthatja a kívánt számlákat, de nyugodtan így is hagyhatja ezeket.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:530
 msgid "Accounts and stock holdings"
@@ -14745,7 +14745,7 @@ msgstr "Az egyetlen üres beviteli mező értékének kiszámítása."
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:517
 msgid "Payment Options"
-msgstr "Kamat és törlesztés beállítása"
+msgstr "A kamat és a törlesztés beállítása"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:541
 msgid "Payment Total"
@@ -15362,10 +15362,8 @@ msgid "Post To"
 msgstr "Könyvelés ide"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:335
-#, fuzzy
-#| msgid "Business"
 msgid "Business items"
-msgstr "Vállalkozás"
+msgstr "Üzleti tételek"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:412
 #: gnucash/gtkbuilder/dialog-payment.glade:439
@@ -17206,7 +17204,7 @@ msgstr "A nap tippje"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:148
 msgid "_Show tips at startup"
-msgstr "_Tippek mutatása induláskor"
+msgstr "_Tippek megjelenítése a GnuCash indításakor"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
@@ -22024,7 +22022,8 @@ msgstr "Tranzakció érvénytelenítésének oka"
 #: gnucash/register/ledger-core/split-register-model.c:1321
 #, fuzzy
 msgid "Enter an action type, or choose one from the list"
-msgstr "Tranzakciótípus megadása, vagy kiválasztása listából"
+msgstr ""
+"Adja meg a művelet típusát, vagy válasszon ki egy művelettípust a listából"
 
 #: gnucash/register/ledger-core/split-register-model.c:1322
 msgid ""
