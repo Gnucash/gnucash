@@ -2374,7 +2374,19 @@ std::string to_str_with_prec (const gdouble val)
     free(buf);
     return result;
 #else
-    auto loc = std::locale(gnc_get_locale(), new cust_prec_punct<prec>(""));
+    auto app_loc{gnc_get_locale()};
+    if (std::use_facet<std::moneypunct<wchar_t>>(app_loc).curr_symbol().empty())
+    {
+    /* put_money in this locale will probably return an empty
+     * string. Use floating point manipulators instead.
+     */
+        std::stringstream valstr;
+        valstr << std::fixed << std::showpoint << std::setprecision(prec)
+	       << val;
+        return valstr.str();
+    }
+
+    auto loc = std::locale(app_loc, new cust_prec_punct<prec>(""));
     std::wstringstream valstr;
     valstr.imbue(loc);
     valstr << std::put_money(val * pow(10, prec));
