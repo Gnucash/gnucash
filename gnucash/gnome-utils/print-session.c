@@ -55,7 +55,12 @@ gnc_print_operation_init(GtkPrintOperation *op, const gchar* jobname)
     /* Restore print settings */
     G_LOCK(print_settings);
     if (print_settings)
+    {
+        // Clear page range to prevent carryover from previous print jobs
+        gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_PAGE_RANGES, NULL);
+        gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_PAGE_SET, NULL);
         gtk_print_operation_set_print_settings(op, print_settings);
+    }
     G_UNLOCK(print_settings);
 
     /* Restore page setup */
