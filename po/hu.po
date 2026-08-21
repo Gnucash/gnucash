@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-08-17 00:51+0000\n"
+"PO-Revision-Date: 2026-08-21 11:12+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -12371,7 +12371,7 @@ msgstr ""
 "segédben megadhatja a kölcsön és a törlesztés részleteit. Az információkat "
 "felhasználva a megfelelő ütemezett tranzakciók elkészülnek.\n"
 "\n"
-"Ha rontott vagy később változtatni kíván, közvetlenül szerkesztheti a "
+"Ha rontott, vagy később változtatni kíván, közvetlenül szerkesztheti a "
 "létrehozott ütemezett tranzakciókat."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:114
@@ -12382,8 +12382,8 @@ msgstr "Kölcsön és jelzálogkölcsön visszafizetésének beállítása"
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
 msgstr ""
-"Adja meg a kölcsön részleteit, legalább egy érvényes kölcsönszámlát és az "
-"összeget.\n"
+"Adja meg a kölcsön alapvető adatait. Legalább egy érvényes kölcsönszámlát, "
+"az összeget és a kamatlábat.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:168
 #: gnucash/gtkbuilder/assistant-loan.glade:1176
@@ -12451,13 +12451,13 @@ msgstr "Kamatlábváltozás időköze"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:439
 msgid "Loan Details"
-msgstr "A kölcsön alapvető részletei"
+msgstr "A kölcsön alapvető adatai"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:454
 msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr ""
-"Kölcsönhöz kapcsolódó költségek. Ha letéti számlát használ, akkor meg kell "
-"adnia egy számlát…"
+"A kölcsönhöz tartozó költségek kiválasztása. Ha a fizetésükhöz letéti "
+"számlát kell használni, akkor meg kell adnia egy számlát…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:473
 msgid "… utilize an escrow account for payments?"
@@ -12533,7 +12533,7 @@ msgstr "Következő beállítás"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1071
 msgid "Loan Payment"
-msgstr "Kapcsolódó költségek fizetése"
+msgstr "A kölcsönhöz tartozó költségek fizetése"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1084
 msgid ""
@@ -12623,8 +12623,8 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files.\n"
 msgstr ""
-"Kérjük, válasszon ki egy betöltendő fájlt. A Tovább gombra kattintva a fájl "
-"betöltődik és elemzésre kerül. Előfordulhat, hogy néhány kérdésre "
+"Kérjük, válasszon ki egy betöltendő fájlt. A »Következő« gombra kattintva a "
+"fájl betöltődik és elemzésre kerül. Előfordulhat, hogy néhány kérdésre "
 "válaszolnia kell a fájlban szereplő számlákkal kapcsolatban.\n"
 "\n"
 "Tetszőleges számú fájlt betölthet, ezért ne aggódjon, ha az adatai több "
@@ -12710,16 +12710,15 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step of the QIF "
 "import process."
 msgstr ""
-"Kattintson a \"Másik fájl betöltése\" gombra, ha jelenleg több adatot "
-"szeretne importálni. Tegye ezt akkor, ha számláit különálló QIF fájlokba "
-"mentette.\n"
+"Kattintson a »Másik fájl betöltése« gombra, ha jelenleg több adatot szeretne "
+"importálni. Tegye ezt akkor, ha számláit különálló QIF fájlokba mentette.\n"
 "\n"
 "Kattintson a »Következő« gombra a fájlok betöltésének befejezéséhez, és "
 "lépjen a QIF importálási folyamat következő lépésére."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:464
 msgid "_Unload selected file"
-msgstr "_A kiválasztott fájl kihagyása"
+msgstr "A kiválasztott fájl el_távolítása"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:479
 msgid "_Load another file"
@@ -13701,7 +13700,7 @@ msgstr "Automat_ikus kamatátutalás"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1552
 msgid "H_idden"
-msgstr "Re_jtett"
+msgstr "_Rejtett"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1556
 msgid ""
@@ -15894,9 +15893,9 @@ msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
-"Az a tranzakció, amelynek a legjobb egyezéspontszáma a zöld sávba esik (az "
-"automatikus elszámoltnak jelölési küszöbérték felett, vagy azzal szintben) "
-"alapértelmezésént elszámoltnak lesz jelölve."
+"Az a tranzakció, amelynek a legjobb egyezési pontszáma a zöld sávba esik (az "
+"automatikusan elszámoltnak jelölés küszöbértéke felett, vagy azzal "
+"egyszintben) alapértelmezetten elszámoltnak lesz jelölve."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2199
 msgid ""
@@ -18413,7 +18412,7 @@ msgid ""
 msgstr ""
 "Kattintson duplán az internetbanki számla sorára, hogy hozzárendelje azt egy "
 "GnuCash számlához, vagy válassza ki a hibás hozzárendeléseket, és kattintson "
-"a „Kiválasztott hozzárendelések törlése” gombra. Kattintson a „Tovább” "
+"a „Kiválasztott hozzárendelések törlése” gombra. Kattintson a »Következő« "
 "gombra, ha minden kívánt számla hozzárendelésre került."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
@@ -22020,7 +22019,6 @@ msgid "Reason the transaction was voided"
 msgstr "Tranzakció érvénytelenítésének oka"
 
 #: gnucash/register/ledger-core/split-register-model.c:1321
-#, fuzzy
 msgid "Enter an action type, or choose one from the list"
 msgstr ""
 "Adja meg a művelet típusát, vagy válasszon ki egy művelettípust a listából"
