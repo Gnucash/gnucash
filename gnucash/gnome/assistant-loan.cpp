@@ -2254,7 +2254,7 @@ loan_rev_update_view( LoanAssistantData *ldd, GDate *start, GDate *end )
     for ( l = ldd->ld.revSchedule; l != NULL; l = l->next )
     {
         int i;
-        gchar tmpBuf[50];
+        gchar tmpBuf[64];
         RevRepaymentRow *rrr = (RevRepaymentRow*)l->data;
 
         if ( g_date_compare( &rrr->date, start ) < 0 )
