@@ -42,18 +42,17 @@
 void
 gnc_locale_tax_init(void)
 {
-    /* This is a very simple hack that loads the (new, special) German
-       tax definition file in a German locale, or (default) loads the
-       US tax file. */
+    /* Load the country-specific tax definition for German and Canadian
+       locales, and use the US definition as the default. */
 # ifdef G_OS_WIN32
     gchar *thislocale = g_win32_getlocale();
     gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
-    gboolean is_ca = (strncmp(thislocale, "ca", 2) == 0);
+    gboolean is_ca = (strstr(thislocale, "_CA") != NULL);
     g_free(thislocale);
 # else /* !G_OS_WIN32 */
     const char *thislocale = gnc_locale_name();
     gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
-    gboolean is_ca = (strncmp(thislocale, "ca", 2) == 0);
+    gboolean is_ca = (strstr(thislocale, "_CA") != NULL);
 # endif /* G_OS_WIN32 */
     if (is_de_DE)
         scm_c_use_module("gnucash locale de_DE tax");

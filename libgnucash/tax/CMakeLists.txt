@@ -76,13 +76,13 @@ gnc_add_scheme_targets(scm-tax-ca-1
 gnc_add_scheme_targets(scm-tax-ca-2
     SOURCES "${gncmod_tax_ca_SCHEME_2}"
     OUTPUT_DIR "gnucash/locale/ca/tax"
-    DEPENDS "scm-tax-us-1;${GUILE_DEPENDS}"
+    DEPENDS "scm-tax-ca-1;${GUILE_DEPENDS}"
     MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-tax-ca-3
     SOURCES "${gncmod_tax_ca_SCHEME_3}"
     OUTPUT_DIR "gnucash/locale/ca"
-    DEPENDS "scm-tax-us-2;${GUILE_DEPENDS}"
+    DEPENDS "scm-tax-ca-2;${GUILE_DEPENDS}"
     MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-tax-de_DE-1

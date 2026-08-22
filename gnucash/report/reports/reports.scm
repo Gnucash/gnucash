@@ -44,7 +44,11 @@
 (export gnc:receivables-report-create)
 (export gnc:owner-report-create-with-enddate)
 
-(let ((loc-spec (if (string-prefix? "de_DE" (gnc-locale-name)) 'de_DE 'us)))
+(let* ((locale (gnc-locale-name))
+       (loc-spec (cond
+                  ((string-prefix? "de_DE" locale) 'de_DE)
+                  ((string-contains locale "_CA") 'ca)
+                  (else 'us))))
   (report-module-loader
    (list
     '(gnucash reports standard) ; prefix for standard reports included in gnucash
