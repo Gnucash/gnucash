@@ -1,89 +1,6 @@
 ;; -*-scheme-*-
-;; Tax report, country specific
-;; US version by Richard -Gilligan- Uschold,
-;; updated by J. Alex Aycinena, July 2008, October 2009
-;;
-;; This report prints transaction details and account totals for accounts
-;; relevant to whatever tax scheme is defined and activated by locale settings,
-;; sorted by form/schedule, copy, line and tax code,
-;; and exports TXF, XML or other files for import into tax software.
-;;
-;; This version is for United States taxes and
-;; exports TXF files for use by TaxCut, TurboTax, etc.
-;;
-;; For this to work, the user has to segregate taxable and not taxable
-;; income to different accounts, as well as deductible and non-
-;; deductible expenses and the accounts need to be referenced to the tax codes.
-;; However, there is no need to limit tax codes to just one account.
-;;
-;; Tax codes can have contributions from more than one account -- called a 'payer'
-;; (like N286 (Dividend, Ordinary) that can have the "payer" printed on
-;; Schedule B on separate lines).
-;; In order to have amounts from different accounts summarized together for one
-;; "payer" line, the accounts referenced to the same tax code for a given "payer"
-;; need to be adjacent to each other in the account hierarchy.
-;;
-;; The user selects the accounts(s) to be printed; if none are specified, all
-;; are selected. Includes all sub-account levels below selected account, that
-;; are coded for taxes.
-;;
-;; Optionally, does NOT print tax codes and accounts with $0.00 values.
-;; Prints data between the From and To dates, inclusive.
-;; Optional alternate periods:
-;; "Last Year", "1st Est Tax Quarter", ... "4th Est Tax Quarter"
-;; "Last Yr Est Tax Qtr", ... "Last Yr Est Tax Qtr"
-;; Estimated Tax Quarters: Dec 31, Mar 31, Jun 30, Aug 31
-;; Optionally prints brief or full account names
-;; Optionally prints multi-split details for transactions
-;; Optionally prints TXF export parameters for codes and accounts
-;; Optionally prints Action/Memo data for a transaction split
-;; Optionally prints transaction detail
-;; Optionally uses special date processing for selected accounts (see
-;;   definition for 'txf-special-split?' in the code below)
-;; Optionally shades alternate transactions for ease of reading
-;; Converts non-CAD transaction amounts based on transaction data or, if
-;;   transaction data is not applicable, on pricedb and user specified date:
-;;   nearest transaction date or nearest report end date. Converts to zero
-;;   if there is no entry in pricedb and provides comment accordingly.
-;;
-;; November, 2009 Update:
-;;
-;; Add support for multiple copies of Forms/Schedules
-;; Add support for Format 6
-;; Use Form/Schedule line #'s to sort report.
-;; Update from "V037" to "V041"
-;; Add support for taxpayer types other than F1040
-;;
-;; September, 2010 Update:
-;;
-;; Add support for code N673, Format 4
-;;
-;; September, 2012 Update:
-;;
-;; Add support of book option for num-source; use function gnc-get-num-action in
-;; place of xaccTransGetNum and function gnc-get-action-num in place of
-;; xaccSplitGetAction and modify report headings accordingly
-;;
-;; February, 2013 Update:
-;;
-;; Fix beginning balance sign and signs for Transfer From/To amounts for
-;; liability/equity accounts
-;;
-;; January, 2019 Update:
-;;
-;; Update from "V041" to "V042", although added codes are not implemented
-;;   because cost/gain data not reliably available
-;; The format for code 673 can be 4 or 5, per spec, so leave as 4
-;; Fix beginning balance off-by-one-day error for B/S accounts
-;;
-;; From prior version:
-;; NOTE: setting of specific dates is squirly! and seems
-;; to be current-date dependent!  Actually, time of day dependent!  Just
-;; after midnight gives different dates than just before!  Referencing
-;; all times to noon seems to fix this.  Subtracting 1 year sometimes
-;; subtracts 2!  see "(to-value"
-;;
-;; Based on prior taxtxf.scm and with references to transaction.scm.
+;; Canadian tax report based on locale-specific/us/taxtxf.scm.
+;; It uses Canadian GIFI definitions and reports values in CAD.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -117,13 +34,6 @@
 (use-modules (gnucash html))
 
 (define reportname (N_ "Tax Schedule Report/TXF Export"))
-
-;(define CAD-currency (gnc-commodity-table-lookup
-;                        (gnc-commodity-table-get-table (gnc-get-current-book))
-;                        "CURRENCY"
-;                        "CAD"))
-;; this comes back as PEN??? rather than CAD; need to define further down to get
-;; to work - weird
 
 (define selected-accounts-sorted-by-form-line-acct (list))
 
@@ -162,8 +72,7 @@
                       item))
    (else (gnc:warn warn-msg item " is the wrong type."))))
 
-;; IRS asked congress to make the tax quarters the same as real quarters
-;;   This is the year it is effective.  THIS IS A Y10K BUG!
+;; Legacy cutoff used by the inherited alternate-period calculations.
 (define tax-qtr-real-qtr-year 10000)
 
 (define (tax-options-generator)
@@ -181,17 +90,15 @@
     (list (vector 'from-to (N_ "Use From - To"))
           (vector '1st-est (N_ "1st Est Tax Quarter (Jan 1 - Mar 31)"))
           (vector '2nd-est (N_ "2nd Est Tax Quarter (Apr 1 - May 31)"))
-          ;; Translators: The US tax quarters are different from
-          ;; actual year's quarters! See the definition of
-          ;; tax-qtr-real-qtr-year variable above.
+          ;; Translators: These inherited estimated-tax periods differ from
+          ;; calendar quarters. See tax-qtr-real-qtr-year above.
           (vector '3rd-est (N_ "3rd Est Tax Quarter (Jun 1 - Aug 31)"))
           (vector '4th-est (N_ "4th Est Tax Quarter (Sep 1 - Dec 31)"))
           (vector 'last-year (N_ "Last Year"))
           (vector '1st-last (N_ "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"))
           (vector '2nd-last (N_ "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"))
-          ;; Translators: The US tax quarters are different from
-          ;; actual year's quarters! See the definition of
-          ;; tax-qtr-real-qtr-year variable above.
+          ;; Translators: These inherited estimated-tax periods differ from
+          ;; calendar quarters. See tax-qtr-real-qtr-year above.
           (vector '3rd-last (N_ "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"))
           (vector '4th-last (N_ "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"))))
 
@@ -248,7 +155,7 @@
   options)
 
 ;; Render txf information
-(define crlf (string #\return #\newline)) ; TurboTax seems to want these
+(define crlf (string #\return #\newline)) ; TXF records use CRLF delimiters
 
 (define txf-last-payer "") ; if same as current, inc txf-l-count
                            ; this only works if different
@@ -510,37 +417,12 @@
                                                           (gnc-numeric-neg
                                                             account-value)))))
           )
-          ;; Based on TXF Spec of 11/30/11, V 042, and Quicken 98 output, the
-          ;; fields by format are as follows, for F1040:
-          ;; Format Type Fields                       Comments/Status
-          ;; 0      D    T, N, C, L, X                Spec unclear, unverified
-          ;; 0      S    T, N, C, L                   Spec unclear, unverified
-          ;; 1      D    T, N, C, L, $, X             Spec clear & verified Q98
-          ;; 1      S    T, N, C, L, $                Spec clear & verified Q98
-          ;; 2      D    T, N, C, L, P, X             Spec unclear, unverified
-          ;; 2      S    T, N, C, L, P                Spec unclear, unverified
-          ;; 3      D    T, N, C, L, $, X             Spec clear & verified Q98
-          ;; 3      S    T, N, C, L, $, P             Spec clear & verified Q98
-          ;; 4      D    T, N, C, L, P, D, D, $, $, X Spec clear, unverified
-          ;; 4      S    T, N, C, L, $, $             Spec unclear, unverified
-          ;; 5      D    T, N, C, L, P, D, D, $, $, $ Spec unclear, unverified
-          ;; 5      S    T, N, C, L, $, $, $          Spec unclear, unverified
-          ;; 6      D    T, N, C, L, D, $, P, X       Spec unclear, verified Q98
-          ;; 6      S    T, N, C, L, $                Spec unclear, verified Q98
-          ;;
-          ;; For F1040, support only formats 1, 3 and 6 (based on Q98) and
-          ;;    for 4 (guessed at) for code 673 only (no date acquired or basis)
-          ;; For F1065, F1120 and F1120S, support only format 1
-          ;;
+          ;; Emit the legacy TXF fields selected by format type.
           (list (if x? "TD" "TS") crlf
                 (symbol->string code) crlf
                 (string-append "C" copy) crlf
-                ;; not to be confused with Form/Sched line number: so for
-                ;; example, Schedule B line 5 for 2008 has separate lines for
-                ;; individual payers of ordinary dividends so these are like
-                ;; sub-lines of line 5 starting with 1 for first reported payer
-                ;; these apply if pns is either 'current or 'parent', but not
-                ;; otherwise
+                ;; This is a repeated-code subline number, not a form line.
+                ;; It applies when pns is 'current or 'parent.
                 "L" (number->string txf-l-count) crlf
                 (if (= format_type 4)
                     (if x?
@@ -1253,7 +1135,7 @@
         (map (lambda (split)
            (let* ((parent (xaccSplitGetParent split))
                   (trans-date (xaccTransGetDate parent))
-                  ;; TurboTax 1999 and 2000 ignore dates after Dec 31
+                  ;; Clamp full-year output to the selected report end date.
                   (fudge-date (if splits-period
                                   (if (and full-year?
                                            (< to-value trans-date))

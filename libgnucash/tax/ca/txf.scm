@@ -1,25 +1,8 @@
 ;; -*-scheme-*-
-;; 
-;;  Richard -Gilligan- Uschold
-;; These are TXF codes and a brief description of each. See taxtxf.scm
-;; and txf-export-help.scm
-;;
-;; See also https://www.turbotax.com/txf/ [DEAD LINK]
-;;
-;; Updated Jan 2019 to include codes for version 42, although new codes not
-;;   implemented yet because data not available
-;; Updated Feb 2013, Jan 2014 & Jan 2019 . J. Alex Aycinena
-;; Added updated tax line info
-;; Updated Oct 2009. J. Alex Aycinena
-;; Added 'txf-tax-entity-types' and related getter functions
-;; Added 'tax-entity-type' argument to tax code getter functions
-;; Updated txf data for individual tax returns to version 041 (from 039) and
-;;    added tax-line year-effectivity data and code last-year data
-;; Added asset and liability/equity tax code categories
-;; Added version 041 txf data for Partnership, Corporation, S Corporation,
-;;    tax entity types
-;; Added 'None' type for no income tax options
-;;
+;; Canadian GIFI definitions for T2 corporations.
+;; The data structure and accessors follow ../us/txf.scm.
+;; See CRA Guide RC4088, Appendix A:
+;; https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4088/general-index-financial-information-gifi.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as

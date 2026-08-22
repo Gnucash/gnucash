@@ -1,12 +1,6 @@
 ;; -*-scheme-*-
-;;
-;;  Richard -Gilligan- Uschold
-;; These are help strings for each TXF code. See taxtxf.scm and
-;; txf-export.scm
-;;
-;; (n <- TurboTax      (N <- IRS
-;;
-;; Changes in this file should also be applied on gnucash-docs/help/C/Help_txf-categories.xml
+;; Canadian GIFI help strings. Detailed descriptions are available in
+;; CRA Guide RC4088, Appendix A.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
