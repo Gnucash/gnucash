@@ -48,7 +48,7 @@ if (WITH_SQL)
     file(MAKE_DIRECTORY ${temp_dir})
   endif()
 
-  if (MINGW64)
+  if (MINGW)
     string(REGEX REPLACE "\\\\" "/" temp_dir ${temp_dir})
   endif()
 

@@ -84,8 +84,12 @@ void gnc_plugin_page_report_reload (GncPluginPageReport *report);
 
 // entry-point from scm menu-extension callback [gnc:menu-extension].
 void       gnc_main_window_open_report (int report_id, GncMainWindow *window);
-// directly called through from above
-void       gnc_main_window_open_report_url (const char * url, GncMainWindow *window);
+/**
+ * Open a report url in a new GncMainWindow.
+ * @param url: The url for the object to open.
+ * @param window: The GncMainWindow holding the calling report
+ */
+void gnc_main_window_open_report_url (const char * url, GncMainWindow *window);
 
 #ifdef __cplusplus
 }

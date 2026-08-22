@@ -204,28 +204,17 @@ gnc_report_system_options_url_cb (const char *location, const char *label,
     }
 }
 
+/* Loads a subreport from a multicolumn report. Subreports must be
+ * loaded in the same tab as the multicolumn report, they can't stand
+ * on their own.
+ */
 static gboolean
 gnc_report_system_report_url_cb (const char *location, const char *label,
                         gboolean new_window, GNCURLResult *result)
 {
     g_return_val_if_fail (location != NULL, FALSE);
     g_return_val_if_fail (result != NULL, FALSE);
-
-    /* make a new window if necessary */
-    if (new_window)
-    {
-        char *url;
-
-        url = gnc_build_url (URL_TYPE_REPORT, location, label);
-        gnc_main_window_open_report_url (url, GNC_MAIN_WINDOW(result->parent));
-        g_free (url);
-
-        result->load_to_stream = FALSE;
-    }
-    else
-    {
-        result->load_to_stream = TRUE;
-    }
+    result->load_to_stream = TRUE;
 
     return TRUE;
 }
