@@ -313,7 +313,7 @@
 /* Define to 1 if you need to in order for `stat' and other things to work. */
 #cmakedefine _POSIX_SOURCE 1
 
-/* Definitions for what WEBKIT version we're compiling against: */
+/* Definitions for what WebView type we're building: */
 #cmakedefine WEBKIT2 1
-#cmakedefine WEBKIT1 1
+#cmakedefine WEBVIEW2 1
 

@@ -6,6 +6,7 @@ set (html_HEADERS
   gnc-html-factory.hpp
   gnc-html-extras.h
   gnc-html-webkit-p.hpp
+  gnc-html-webview2-p.hpp
   gnc-html-webkit.hpp
 )
 
@@ -23,14 +24,14 @@ set (html_SOURCES
   gnc-html-factory.cpp
 )
 
-if (WEBKIT1)
-  list(APPEND html_HEADERS gnc-html-webkit1.hpp)
-  list(APPEND html_SOURCES gnc-html-webkit1.cpp)
+if (WEBVIEW2)
+  list(APPEND html_HEADERS gnc-html-webview2.hpp)
+  list(APPEND html_SOURCES gnc-html-webview2.cpp)
   set(html_EXTRA_DIST gnc-html-webkit2.hpp gnc-html-webkit2.cpp)
 else ()
   list(APPEND html_HEADERS gnc-html-webkit2.hpp)
   list(APPEND html_SOURCES gnc-html-webkit2.cpp)
-  set(html_EXTRA_DIST gnc-html-webkit1.hpp gnc-html-webkit1.cpp)
+  set(html_EXTRA_DIST gnc-html-webview2.hpp gnc-html-webview2.cpp)
 endif()
 
 
@@ -59,8 +60,16 @@ target_link_libraries(gnc-html
         gnc-engine
         gnc-gnome-utils
         PkgConfig::GTK3
-        PkgConfig::WEBKIT
         ${GUILE_LDFLAGS})
+
+if (WEBVIEW2)
+# The MSYS2 webview2-loader package doesn't include a link (.dll.a)
+# library so we have to dlopen the library at runtime. We just need to
+# include the header here.
+  target_include_directories(gnc-html PRIVATE ${WEBVIEW2_INCLUDE_DIRS})
+else()
+  target_link_libraries(gnc-html PRIVATE PkgConfig::WEBKIT)
+endif()
 
 target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 

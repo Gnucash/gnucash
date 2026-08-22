@@ -127,7 +127,6 @@ typedef struct GncPluginPageReportPrivate
     /// the gnc_html abstraction this PluginPage contains
 //        gnc_html *html;
     GncHtml *html;
-    gboolean webkit2;
 
     /// the container the above HTML widget is in.
     GtkContainer *container;
@@ -518,11 +517,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-
-#ifndef WEBKIT1
-    /* Hide the ExportPdf action for Webkit2 */
-    priv->webkit2 = TRUE;
-#endif
 
     topLvl = gnc_ui_get_main_window (nullptr);
 //        priv->html = gnc_html_new( topLvl );
@@ -1255,8 +1249,6 @@ gnc_plugin_page_report_menu_update (GncPluginPage *plugin_page,
 static void
 gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
 {
-    GncPluginPageReportPrivate *priv;
-    GncPluginPageReport *report;
     GncMainWindow *window;
     action_toolbar_labels tooltip_list[3];
     GAction *action;
@@ -1268,9 +1260,6 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     gchar *report_saveas_str = g_strdup_printf (
         _("Add the current report's configuration to the 'Reports->Saved Report Configurations' menu. "
           "The report configuration will be saved in the file %s."), saved_reports_path);
-
-    report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
     window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page));
 
@@ -1284,11 +1273,8 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     action = gnc_main_window_find_action (window, "FilePrintAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
 
-    if (priv->webkit2)
-    {
-        GtkWidget *pdf_item = gnc_main_window_menu_find_menu_item (window, "FilePrintPDFAction");
-        gtk_widget_hide (pdf_item);
-    }
+    GtkWidget *pdf_item = gnc_main_window_menu_find_menu_item (window, "FilePrintPDFAction");
+    gtk_widget_hide (pdf_item);
     g_free (saved_reports_path);
     g_free (report_save_str);
     g_free (report_saveas_str);
@@ -1305,7 +1291,6 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
     DEBUG("property reportId=%d", reportId);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
     priv->reportId = reportId;
-    priv->webkit2 = FALSE;
 
     gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page));
 
@@ -2008,11 +1993,7 @@ gnc_plugin_page_report_print_cb (GSimpleAction *simple,
 
     //g_warning("Setting job name=%s", job_name);
 
-#ifdef WEBKIT1
-    gnc_html_print (priv->html, job_name, FALSE);
-#else
     gnc_html_print (priv->html, job_name);
-#endif
 
     g_free (job_name);
 }
@@ -2054,11 +2035,7 @@ gnc_plugin_page_report_exportpdf_cb (GSimpleAction *simple,
 
     //g_warning("Setting job name=%s", job_name);
 
-#ifdef WEBKIT1
-    gnc_html_print (priv->html, job_name, TRUE);
-#else
     gnc_html_print (priv->html, job_name);
-#endif
 
     if (owner)
     {
@@ -2119,13 +2096,26 @@ void
 gnc_main_window_open_report_url(const char * url, GncMainWindow *window)
 {
     GncPluginPage *reportPage;
+    gint report_id;
 
     DEBUG( "report url: [%s]\n", url );
 
     if (window)
         g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
 
-    reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
+    /* Duplicating report pages copies an uncopiable reference leading
+     * to crashes so don't allow multicolumn subreports to open in new
+     * GncMainWindows.
+     */
+    if (strncmp (url, "id=", 3) != 0 ||
+        (report_id = gnc_report_id_string_to_report_id (url + 3)) < 0)
+    {
+        PWARN ("gnc_main_window_open_report_url: badly formed report url '%s'", url);
+        return;
+    }
+
+    reportPage = gnc_plugin_page_report_new( report_id );
+    gnc_plugin_page_set_use_new_window (reportPage, TRUE);
     gnc_main_window_open_page( window, reportPage );
 }
 

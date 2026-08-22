@@ -107,7 +107,7 @@ static void webkit_resource_load_started_cb (WebKitWebView *web_view,
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
-                                  gboolean new_window_hint );
+                                  gboolean new_window );
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
@@ -760,10 +760,9 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 static void
 impl_webkit_show_url( GncHtml* self, URLType type,
                       const gchar* location, const gchar* label,
-                      gboolean new_window_hint )
+                      gboolean new_window )
 {
      GncHTMLUrlCB url_handler = nullptr;
-     bool new_window = false;
      bool stream_loaded = false;
 
      g_return_if_fail( self != nullptr );
@@ -772,23 +771,8 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 
      auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
-     /* make sure it's OK to show this URL type in this window */
-     if ( new_window_hint == 0 )
-     {
-          if ( priv->base.urltype_cb )
-          {
-               new_window = !((priv->base.urltype_cb)( type ));
-          }
-     }
-     else
-     {
-          new_window = true;
-     }
-
-     if ( !new_window )
-     {
+     if ( priv->base.urltype_cb && priv->base.urltype_cb( type ) )
           gnc_html_cancel( GNC_HTML(self) );
-     }
 
      if ( gnc_html_url_handlers )
      {
@@ -1040,16 +1024,7 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
      }
 }
 
-/* The webkit1 comment was
- * If printing on WIN32, in order to prevent the font from being tiny, (see bug
- * #591177), A GtkPrintOperation object needs to be created so that the unit can
- * be set, and then webkit_web_frame_print_full() needs to be called to use that
- * GtkPrintOperation.  On other platforms (specifically linux - not sure about
- * MacOSX), the version of webkit may not contain the function
- * webkit_web_frame_print_full(), so webkit_web_frame_print() is called instead
- * (the font size problem doesn't show up on linux).
- *
- * Webkit2 exposes only a very simple WebKitPrintOperation API. In order to
+/* Webkit2 exposes only a very simple WebKitPrintOperation API. In order to
  * implement the above if it proves still to be necessary we'll have to use
  * GtkPrintOperation instead, passing it the results of
  * webkit_web_view_get_snapshot for each page.

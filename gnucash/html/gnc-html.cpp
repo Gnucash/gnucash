@@ -360,7 +360,7 @@ gnc_html_show_data( GncHtml* self, const gchar* data, int datalen ) noexcept
 void
 gnc_html_show_url( GncHtml* self, URLType type,
                    const gchar* location, const gchar* label,
-                   gboolean new_window_hint ) noexcept
+                   gboolean new_window ) noexcept
 {
     g_return_if_fail( self != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
@@ -369,7 +369,7 @@ gnc_html_show_url( GncHtml* self, URLType type,
 
     if ( GNC_HTML_GET_CLASS(self)->show_url != nullptr )
     {
-        GNC_HTML_GET_CLASS(self)->show_url( self, lc_type, location, label, new_window_hint );
+        GNC_HTML_GET_CLASS(self)->show_url( self, lc_type, location, label, new_window );
     }
     else
     {
@@ -523,13 +523,8 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath ) noexcept
         return FALSE;
     }
 }
-#ifdef WEBKIT1
-void
-gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf) noexcept
-#else
 void
 gnc_html_print (GncHtml* self, const char *jobname) noexcept
-#endif
 {
     g_return_if_fail( self != nullptr );
     g_return_if_fail( jobname != nullptr );
@@ -537,11 +532,7 @@ gnc_html_print (GncHtml* self, const char *jobname) noexcept
 
     if ( GNC_HTML_GET_CLASS(self)->print != nullptr )
     {
-#ifdef WEBKIT1
-        GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
-#else
         GNC_HTML_GET_CLASS(self)->print (self, jobname);
-#endif
     }
     else
     {
@@ -581,9 +572,6 @@ gnc_html_get_webview( GncHtml* self ) noexcept
 
     if (sw_list) // the scroll window has only one child
     {
-#ifdef WEBKIT1
-        webview = static_cast<GtkWidget *>(sw_list->data);
-#else
         GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
 
         if (vp_list) // the viewport has only one child
@@ -591,7 +579,6 @@ gnc_html_get_webview( GncHtml* self ) noexcept
             webview = static_cast<GtkWidget *>(vp_list->data);
             g_list_free (vp_list);
         }
-#endif
     }
     g_list_free (sw_list);
     return webview;
