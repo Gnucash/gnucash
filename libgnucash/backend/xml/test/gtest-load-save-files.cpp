@@ -32,6 +32,8 @@
 
 #include <cstdlib>
 #include <functional>
+#include <iostream>
+#include <iomanip>
 #include <memory>
 #include <string>
 #include <vector>
@@ -73,14 +75,30 @@ static std::vector<unsigned char> read_file (std::string filename)
     }
 }
 
+#ifdef _WIN32
+static inline void
+fix_line_endings(std::vector<uint8_t>& contents)
+{
+    // On some systems (github actions runners in particular)
+    // something is changing some line endings to Windows,
+    // i.e. 0xODOA. Change them back to 0x0A.
+    auto new_end{std::remove(contents.begin(), contents.end(), 0x0D)};
+    contents.erase(new_end, contents.end());
+}
+#endif
+
 static bool
 compare_files (std::string filename1, std::string filename2)
 {
     auto contents1 = read_file (filename1);
     auto contents2 = read_file (filename2);
 
+#ifdef _WIN32
+    fix_line_endings(contents1);
+#endif
+
     if (contents1.size () > 0 && contents1.size () == contents2.size ()
-            && !memcmp(contents1.data (), contents2.data (), contents1.size ())) {
+        && !memcmp(contents1.data (), contents2.data (), contents1.size ())) {
         return true;
     } else {
         ADD_FAILURE() << "compare_files: " << filename1 << " and " << filename2 << " are different";
@@ -115,7 +133,7 @@ decompress_file (std::string filename, const std::vector<unsigned char> &in, std
         return false;
     }
 
-    ret = inflate (&stream, Z_NO_FLUSH);
+    ret = inflate (&stream, Z_FINISH);
     if (ret != Z_STREAM_END)
     {
         ADD_FAILURE() << "decompress_file: " << filename << " could not be uncompressed (inflate "
@@ -138,7 +156,7 @@ decompress_file (std::string filename, const std::vector<unsigned char> &in, std
         return false;
     }
 
-    out.resize (stream.avail_out);
+    out.resize (stream.total_out);
 
     return true;
 }
@@ -148,12 +166,14 @@ compare_compressed_files (std::string uncompressed_filename1, std::string compre
 {
     auto uncompressed_contents1 = read_file (uncompressed_filename1);
     auto compressed_contents2 = read_file (compressed_filename2);
+#ifdef _WIN32
+    fix_line_endings(uncompressed_contents1);
+#endif
     /* Allow some space to grow beyond the expected size */
     std::vector<unsigned char> uncompressed_contents2(uncompressed_contents1.size () * 2);
 
     if (!decompress_file (compressed_filename2, compressed_contents2, uncompressed_contents2))
         return false;
-
     if (uncompressed_contents1.size () > 0
         && uncompressed_contents1.size () != uncompressed_contents2.size ())
     {
