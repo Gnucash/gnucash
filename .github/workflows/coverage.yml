@@ -54,7 +54,7 @@ jobs:
 
 
   programming-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     name: Build Programming Documentation
     steps:
       - name: Checkout
