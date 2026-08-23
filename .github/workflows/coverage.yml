@@ -99,7 +99,7 @@ jobs:
            coverage,
            programming-docs
            ]
-    if: github.repository == 'gnucash/gnucash'
+    if: github.repository == 'gnucash/gnucash'  && github.ref == 'refs/heads/stable'
     permissions:
       pages: write
       id-token: write
