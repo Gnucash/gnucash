@@ -935,8 +935,8 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-    if (!priv || !priv->cur_report || scm_is_null(priv->cur_report) ||
-            SCM_UNBNDP(priv->cur_report) || SCM_BOOL_F == priv->cur_report)
+    if (!priv || !priv->initial_report || scm_is_null (priv->initial_report) ||
+        SCM_UNBNDP (priv->initial_report) || scm_is_false (priv->initial_report))
     {
         LEAVE("not saving invalid report");
         return;
@@ -945,7 +945,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     gen_save_text = scm_c_eval_string("gnc:report-serialize");
     get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
     get_options    = scm_c_eval_string("gnc:report-options");
-    embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->cur_report));
+    embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->initial_report));
     count = scm_ilength(embedded);
     while (count-- > 0)
     {
@@ -969,7 +969,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         g_free(key_name);
     }
 
-    scm_text = scm_call_1(gen_save_text, priv->cur_report);
+    scm_text = scm_call_1 (gen_save_text, priv->initial_report);
     if (!scm_is_string (scm_text))
     {
         LEAVE("nothing to save");

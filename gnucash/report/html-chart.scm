@@ -462,6 +462,7 @@ document.getElementById(chartid).onclick = function(evt) {
     (push (format #f "<canvas id=~s></canvas>\n" id))
     (push "</div>\n")
     (push (format #f "<script id='script-~a'>\n" id))
+    (push "(function () {\n")
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
     (push (format #f "var formsty = ~s;\n" (gnc:html-chart-format-style chart)))
@@ -484,6 +485,7 @@ document.getElementById(chartid).onclick = function(evt) {
     (push JS-setup)
 
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")
+    (push "})();\n")
     (push "</script>")
 
     retval))

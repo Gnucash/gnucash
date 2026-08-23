@@ -24,8 +24,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 04:19+0000\n"
-"Last-Translator: hamaryns <hendrik@hendrikmaryns.name>\n"
+"PO-Revision-Date: 2026-08-11 09:45+0000\n"
+"Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
 "Language: nl\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Bugs: Report translation errors to https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 
@@ -2525,7 +2525,7 @@ msgstr "Alle items"
 
 #: gnucash/gnome/dialog-doclink.c:659
 msgid "Business item can not be modified."
-msgstr "MKB element kan niet gewijzigd worden."
+msgstr "Bedrijfsdocument kan niet gewijzigd worden."
 
 #: gnucash/gnome/dialog-doclink.c:668 gnucash/gnome/dialog-doclink.c:769
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
@@ -2597,7 +2597,7 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Op een waarde in de Id kolom dubbelklikken om naar het MKB object te "
+"Op een waarde in de Id kolom dubbelklikken om naar het bedrijfsdocument te "
 "springen.\n"
 "Op een waarde in de Koppelingskolom dubbelklikken om het gekoppelde bestand "
 "te openen.\n"
@@ -2606,7 +2606,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:1106
 msgid "Business Document Links"
-msgstr "MKB bestandskoppelingen"
+msgstr "Bedrijfsdocument koppelingen"
 
 #: gnucash/gnome/dialog-employee.c:203
 msgid "You must enter a Payment-Address Name."
@@ -3354,13 +3354,11 @@ msgstr "Bedrag"
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3902
-#, fuzzy, c-format
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
+#, c-format
 msgid "The following vendor business item is due:"
 msgid_plural "The following %d vendor business items are due:"
-msgstr[0] "Het volgende leveranciersdocument is verschuldigd:"
-msgstr[1] "De volgende %d leveranciersdocumenten zijn verschuldigd:"
+msgstr[0] "De volgende leverancier nota verloopt:"
+msgstr[1] "De volgende %d leverancier nota's verlopen:"
 
 #: gnucash/gnome/dialog-invoice.c:3906
 msgid "Due Bills Reminder"
@@ -3369,13 +3367,11 @@ msgstr "Herinnering verschuldigde facturen"
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3914
-#, fuzzy, c-format
-#| msgid "The following customer document is due:"
-#| msgid_plural "The following %d customer documents are due:"
+#, c-format
 msgid "The following customer business item is due:"
 msgid_plural "The following %d customer business items are due:"
-msgstr[0] "De volgende inkoopfactuur/creditnota is verschuldigd:"
-msgstr[1] "De volgende %d inkoopfacturen/creditnota's zijn verschuldigd:"
+msgstr[0] "De volgende klant nota verloopt:"
+msgstr[1] "De volgende %d klant nota's verlopen:"
 
 #: gnucash/gnome/dialog-invoice.c:3918
 msgid "Due Invoices Reminder"
@@ -3557,16 +3553,12 @@ msgid "You must select a transfer account from the account tree."
 msgstr "U moet een tegenrekening uit het rekeningschema selecteren."
 
 #: gnucash/gnome/dialog-payment.c:293
-#, fuzzy
-#| msgid ""
-#| "No documents were selected to assign this payment to. This may create an "
-#| "unattached payment."
 msgid ""
 "No business items were selected to assign this payment to. This may create "
 "an unattached payment."
 msgstr ""
-"Geen documenten geselecteerd om deze betaling aan toe te wijzen. Dit kan een "
-"niet-gekoppelde betaling creëren."
+"Geen onderdeel geselecteerd om deze betaling aan toe te wijzen. Dit kan een "
+"zwevende betaling creëren."
 
 #: gnucash/gnome/dialog-payment.c:543 gnucash/gnome/dialog-payment.c:1368
 #: gnucash/report/reports/standard/new-aging.scm:177
@@ -3954,17 +3946,14 @@ msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr "Boekregel met notitie %s heeft geen geldige debet-formule."
 
 #: gnucash/gnome/dialog-sx-editor.c:892
-#, fuzzy
-#| msgid ""
-#| "The Scheduled Transaction Editor cannot automatically balance this "
-#| "transaction. Should it still be entered?"
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance all of the "
 "transactions in this this Scheduled Transaction.\n"
 "Should it still be entered?"
 msgstr ""
-"Het programma kan deze boeking niet automatisch in balans brengen. Moet de "
-"boeking toch worden aangemaakt?"
+"De Geplande Transacties Editor kan niet alle transacties van deze geplande "
+"transactie boeking automatisch in balans brengen. Moet hij toch worden "
+"ingevoerd?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1454
 msgid "(never)"
@@ -4589,10 +4578,8 @@ msgid "Open Linked Document"
 msgstr "Gekoppelde document openen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
-#, fuzzy
-#| msgid "_Use as Default Layout for Customer Documents"
 msgid "_Use as Default Layout for Customer Business items"
-msgstr "Als standaardweergave voor klantendocumenten _instellen"
+msgstr "Als standaardweergave voor klant documenten _instellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:207
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
@@ -4603,10 +4590,8 @@ msgstr ""
 "gebruiken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
-#, fuzzy
-#| msgid "_Reset Default Layout for Customer Documents"
 msgid "_Reset Default Layout for Customer business items"
-msgstr "Standaardweergave voor klantendocumenten _herstellen"
+msgstr "Standaardweergave voor klant documenten _herstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:209
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4685,8 +4670,6 @@ msgid "Open a vendor report window for the owner of this bill"
 msgstr "Een leveranciersrapport over de eigenaar van deze inkoopfactuur openen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
-#, fuzzy
-#| msgid "_Use as Default Layout for Vendor Documents"
 msgid "_Use as Default Layout for Vendor Business items"
 msgstr "Als standaardweergave voor leveranciersdocumenten _instellen"
 
@@ -4697,8 +4680,6 @@ msgstr ""
 "gebruiken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
-#, fuzzy
-#| msgid "_Reset Default Layout for Vendor Documents"
 msgid "_Reset Default Layout for Vendor Business items"
 msgstr "Standaardweergave voor leveranciersdocumenten _herstellen"
 
@@ -4776,8 +4757,6 @@ msgid "Open a employee report window for the owner of this voucher"
 msgstr "Een werknemersrapport over de eigenaar van deze declaratie openen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
-#, fuzzy
-#| msgid "_Use as Default Layout for Employee Documents"
 msgid "_Use as Default Layout for Employee Business items"
 msgstr "Als standaardweergave voor werknemersdocumenten _instellen"
 
@@ -4789,8 +4768,6 @@ msgstr ""
 "creditnota's gebruiken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
-#, fuzzy
-#| msgid "_Reset Default Layout for Employee Documents"
 msgid "_Reset Default Layout for Employee Business items"
 msgstr "Standaardweergave voor werknemersdocumenten _herstellen"
 
@@ -4981,10 +4958,8 @@ msgstr "Boeking _verwijderen"
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
-#, fuzzy
-#| msgid "Jump to Invoice"
 msgid "Jump to Business item"
-msgstr "Naar verkoopfactuur gaan"
+msgstr "Naar verkoopnota gaan"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:226
 msgid "Cu_t Split"
@@ -5051,10 +5026,8 @@ msgid "Open the linked document for the current transaction"
 msgstr "Het gekoppelde bestand voor de huidige boeking openen"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:238
-#, fuzzy
-#| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked invoice, bill, expense or credit note"
-msgstr "Naar betreffende aankoopfactuur, verkoopfactuur of declaratie gaan"
+msgstr "Naar betreffende nota gaan"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:239
 msgid "Cut the selected split into clipboard"
@@ -5234,15 +5207,10 @@ msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s van %s, geboekt op %s, bedrag %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3070
-#, fuzzy
-#| msgid "Select a Budget"
 msgid "Select Business Item"
-msgstr "Een budget selecteren"
+msgstr "Kies nota"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3071
-#, fuzzy
-#| msgid ""
-#| "Several documents are linked with this transaction. Please choose one:"
 msgid ""
 "Several business items are linked with this transaction. Please choose one:"
 msgstr ""
@@ -5488,7 +5456,7 @@ msgstr "Afdrukbare factuur"
 #: gnucash/report/reports/standard/taxinvoice.scm:315
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:423
 msgid "Tax Invoice"
-msgstr "Verkoopfactuur incl. BTW"
+msgstr "Belastingfactuur"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1931
 #: gnucash/report/reports/standard/invoice.scm:887
@@ -5517,10 +5485,8 @@ msgstr "Planning verwij_deren"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:423
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:71
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Run Schedule"
-msgstr "_Plannen"
+msgstr "_Planning Uitvoeren"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:505
 #: gnucash/gtkbuilder/dialog-account.glade:556
@@ -5826,13 +5792,6 @@ msgid "Manage your finances, accounts, and investments"
 msgstr "Om uw financiën, rekeningen en investeringen te beheren"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
-#, fuzzy
-#| msgid ""
-#| "Designed to be easy to use, yet powerful and flexible, GnuCash allows you "
-#| "to track bank accounts, stocks, income and expenses. As quick and "
-#| "intuitive to use as a checkbook register, it is based on professional "
-#| "accounting principles like double-entry accounting to ensure balanced "
-#| "books and accurate reports."
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting. "
 "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to "
@@ -5841,11 +5800,12 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"GnuCash stelt u in staat om heel eenvoudig bankrekeningen, beleggingen, "
-"inkomsten en uitgaven bij te houden, zonder in te leveren op kracht of "
-"flexibiliteit. Net zo snel en intuïtief te gebruiken als een dagboek, maar "
-"gestoeld op boekhoudkundige principes om te zorgen voor een sluitende "
-"boekhouding en accurate rapporten."
+"GnuCash is een programma voor de financiële administratie van uw "
+"persoonlijke situatie of het MKB. GnuCash stelt u in staat om l eenvoudig "
+"bankrekeningen, beleggingen, inkomsten en uitgaven bij te houden. Net zo "
+"snel en intuïtief te gebruiken als een inkomsten en uitgaven boekje. Het is "
+"gebaseerd op boekhoudkundige principes zoals Dubbel Boekhouden om te zorgen "
+"voor een sluitende boekhouding en accurate rapportages."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:16
 msgid "With GnuCash you can (but are not limited to):"
@@ -5992,18 +5952,15 @@ msgid "Cleared Transactions"
 msgstr "Verwerkte boekingen"
 
 #: gnucash/gnome/window-reconcile.cpp:262
-#, fuzzy, c-format
-#| msgid ""
-#| "Automatically clear individual transactions, so as to reach a certain "
-#| "cleared amount"
+#, c-format
 msgid "Automatically select %u transaction up to %s that clears to %s"
 msgid_plural "Automatically select %u transactions up to %s that clear to %s"
 msgstr[0] ""
-"Automatisch individuele boekregels bevestigen teneinde een bepaald te "
-"bevestigen bedrag te bereiken"
+"Automatisch %u transactie selecteren tot aan %s dat het bedrag tot %s "
+"bevestigd"
 msgstr[1] ""
-"Automatisch individuele boekregels bevestigen teneinde een bepaald te "
-"bevestigen bedrag te bereiken"
+"Automatisch %u transacties selecteren tot aan %s die het bedrag tot %s "
+"bevestigen"
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.cpp:474
@@ -7902,6 +7859,7 @@ msgstr ""
 "Rene Lambers: 2023.\n"
 " Stephan Paternotte: 2023, 2024, 2025.\n"
 "Tom van Braeckel: 2010.\n"
+"Koos Pol: 2026\n"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5570
 msgid "Visit the GnuCash website."
@@ -8215,7 +8173,7 @@ msgstr "%s filteren op…"
 #: gnucash/gtkbuilder/dialog-price.glade:597
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Namespace"
-msgstr "Naamruimte"
+msgstr "Categorie"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:363
 msgid "Print Name"
@@ -11161,6 +11119,9 @@ msgid ""
 "because it has splits for multiple other accounts. A specific split must be "
 "selected to jump to the other account."
 msgstr ""
+"Deze dialoog wordt getoond als je niet naar een transactie kunt springen "
+"omdat er boekregels voor meerdere andere rekeningen zijn. Een specifieke "
+"boekregel moet gekozen worden om naar de andere rekening te kunnen springen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:134
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:267
@@ -12211,22 +12172,6 @@ msgid "Choose accounts to create"
 msgstr "Aan te maken rekeningen selecteren"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:536
-#, fuzzy
-#| msgid ""
-#| "If you would like to change an account's name, click on the row "
-#| "containing the account, then click on the account name and change it.\n"
-#| "\n"
-#| "Some accounts are marked as \"Placeholder\". Placeholder accounts are "
-#| "used to create a hierarchy of accounts and normally do not have "
-#| "transactions or opening balances. If you would like an account to be a "
-#| "placeholder account, click the checkbox for that account.\n"
-#| "\n"
-#| "If you would like an account to have an opening balance, click on the row "
-#| "containing the account, then click on the opening balance field and enter "
-#| "the starting balance.\n"
-#| "\n"
-#| "<b>Note:</b> all accounts except Equity and placeholder accounts may have "
-#| "an opening balance."
 msgid ""
 "If you would like to change an account's name, click on the row containing "
 "the account, then click on the account name and change it.\n"
@@ -12240,27 +12185,21 @@ msgid ""
 "containing the account, then click on the opening balance field and enter "
 "the starting balance."
 msgstr ""
-"Als u de naam van een rekening wilt aanpassen klikt u eerst op de rij van de "
-"betreffende rekening en daarna op de rekeningnaam, waarna u deze kunt "
-"aanpassen.\n"
+"Als je de naam van een rekening wilt aanpassen, klik op de rij van de "
+"rekening en daarna op de rekeningnaam en pas hem aan.\n"
 "\n"
 "Sommige rekeningen zijn aangemerkt als ‘Aggregatie’. Aggregaties worden "
 "gebruikt om hiërarchie binnen een rekeningschema aan te brengen. Meestal "
 "wordt er niet rechtstreeks op geboekt en kennen ze geen beginsaldo. Om een "
-"rekening als aggregatie aan te merken klikt u op het relevante keuzevakje.\n"
+"rekening als aggregatie aan te merken klikt dan op het keuzevakje.\n"
 "\n"
-"Als u aan een rekening een beginsaldo wilt toekennen klikt u op de rij van "
-"de betreffende rekening, vervolgens op het beginsaldo-veld en voert u het "
-"beginsaldo in.\n"
-"\n"
-"<b>Nota:</b> met uitzondering van eigen vermogen-rekeningen en aggregaties "
-"kunnen alle rekeningen een beginsaldo hebben."
+"Als je wilt dat een rekening een beginsaldo heeft, klikt dan op de rij van "
+"de betreffende rekening, vervolgens op het veld van het beginsaldo en voert "
+"beginsaldo in."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:559
-#, fuzzy
-#| msgid "Note"
 msgid "Note:"
-msgstr "Toelichting"
+msgstr "Toelichting:"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:577
 msgid ""
@@ -15386,10 +15325,8 @@ msgstr ""
 "klikt, zal deze niet meer verschijnen."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
-#, fuzzy
-#| msgid "Welcome to GnuCash"
 msgid "Welcome to GnuCash!"
-msgstr "Welkom bij GnuCash"
+msgstr "Welkom bij GnuCash!"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:236
 #, fuzzy
@@ -17113,10 +17050,8 @@ msgid "Number of Occurrences"
 msgstr "Aantal keren"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:508
-#, fuzzy
-#| msgid "Since Last Run…"
 msgid "Since Last Run"
-msgstr "Vaste journaalposten uitvoeren…"
+msgstr "Sinds de laatste run"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:534
 #, fuzzy
@@ -18386,10 +18321,8 @@ msgstr ""
 "Deze optie kiezen om een dagboek te openen met nieuwe, verwerkte boekregels."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
-#, fuzzy
-#| msgid "_Reconcile Information…"
 msgid "Reconcile Information"
-msgstr "_Afstemmingsgegevens…"
+msgstr "Gegevens afstemmen"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:96
 msgid "Statement _Date"
@@ -19908,7 +19841,7 @@ msgstr "Bestand succesvol geëxporteerd!\n"
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.cpp:1610 libgnucash/engine/Split.cpp:1627
 msgid "-- Split Transaction --"
-msgstr "-- Meerdere tegenrekeningen --"
+msgstr "-- Meerdere boekregels --"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
 msgid "Full Category Path"
@@ -20708,10 +20641,8 @@ msgid "A"
 msgstr "T"
 
 #: gnucash/import-export/import-main-matcher.cpp:1611
-#, fuzzy
-#| msgid "Add a reversing transaction."
 msgid "Add as a new transaction"
-msgstr "Stornoboeking toevoegen."
+msgstr "Nieuwe boeking toevoegen"
 
 #: gnucash/import-export/import-main-matcher.cpp:1613
 msgctxt "Column header for 'Updating plus Clearing transaction'"
@@ -20719,16 +20650,13 @@ msgid "U+C"
 msgstr "B+B"
 
 #: gnucash/import-export/import-main-matcher.cpp:1616
-#, fuzzy
-#| msgid ""
-#| "Select \"U+C\" to update a matching transaction and mark it as cleared "
-#| "(c)."
 msgid ""
 "Update + Clear Transaction\n"
 "Update existing transaction with the imported data and mark it as cleared"
 msgstr ""
-"Kies ‘B+B’ om een overeenkomende (bestaande) boeking bij te werken en te "
-"bevestigen."
+"Transactie bijwerken en bevestigen.\n"
+"Werk bestaande transactie bij met de geïmporteerde data en markeer hem als "
+"bevestigd"
 
 # brontekst: een-letter afkorting voor kleur
 #: gnucash/import-export/import-main-matcher.cpp:1618
@@ -25149,7 +25077,7 @@ msgstr "voor budget ~a, periodes ~d - ~d"
 #: gnucash/report/reports/standard/income-statement.scm:515
 #: gnucash/report/reports/standard/income-statement.scm:529
 msgid "Net income"
-msgstr "Netto-opbrengst"
+msgstr "Netto opbrengst"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:537
 #: gnucash/report/reports/standard/equity-statement.scm:435
@@ -26520,10 +26448,9 @@ msgstr ""
 "Verschil: ~a. Moeten er posten worden opgeschoond?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
-#, fuzzy, scheme-format
-#| msgid "~a, ~a to ~a"
+#, scheme-format
 msgid "~a, ~a"
-msgstr "~a, ~a – ~a"
+msgstr "~a, ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1988
 msgid "Account Lot Gains"
@@ -27985,16 +27912,12 @@ msgid "Amount Due (inc GST)"
 msgstr "Verschuldigd bedrag (inclusief BTW)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:320
-#, fuzzy
-#| msgid "Invoice #: "
 msgid "Invoice #:"
-msgstr "Factuurnr: "
+msgstr "Factuurnr:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:322
-#, fuzzy
-#| msgid "Engagement: "
 msgid "Engagement:"
-msgstr "Opdracht: "
+msgstr "Opdracht:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
@@ -29062,10 +28985,8 @@ msgid "Display the trans number?"
 msgstr "Het transactienummer weergeven?"
 
 #: gnucash/report/trep-engine.scm:954
-#, fuzzy
-#| msgid "Display the invoice notes?"
 msgid "Display invoice details"
-msgstr "De toelichting op de factuur weergeven?"
+msgstr "Toelichting factuur weergeven"
 
 #: gnucash/report/trep-engine.scm:959
 msgid "Display the account name?"
@@ -30520,10 +30441,8 @@ msgid "Create a new invoice"
 msgstr "Een nieuwe verkoopfactuur aanmaken"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:164
-#, fuzzy
-#| msgid "Customer's Invoices"
 msgid "Find Customer Invoices…"
-msgstr "Verkoopfacturen voor klant"
+msgstr "Zoek klantfacturen…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:166
 msgid ""
@@ -30904,22 +30823,16 @@ msgid "Delete the current split."
 msgstr "De huidige regel verwijderen."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:659
-#, fuzzy
-#| msgid "Save the current file"
 msgid "Save the current file."
-msgstr "Het huidige GnuCash-bestand opslaan"
+msgstr "Het huidige bestand opslaan."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:674
-#, fuzzy
-#| msgid "Close the currently active page"
 msgid "Close the currently active page."
-msgstr "De actieve pagina sluiten"
+msgstr "De actieve pagina sluiten."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:699
-#, fuzzy
-#| msgid "Open the New Invoice dialog"
 msgid "Open the New Invoice dialog."
-msgstr "Dialoogvenster ‘Nieuwe verkoopfactuur’ openen"
+msgstr "Venster Nieuwe factuur openen."
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -31160,6 +31073,7 @@ msgstr "De afstemming van deze rekening annuleren"
 #: libgnucash/app-utils/gnc-autoclear.cpp:130
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
+"Kan de boekregels niet eenduidig goedkeuren. Meerder mogelijkheden gevonden."
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:149
 msgid "Auto-clear exceeds allocated time"
@@ -31167,7 +31081,7 @@ msgstr "Automatisch wissen overschrijdt de toegestane tijd"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:205
 msgid "Account is already at Auto-Clear Balance."
-msgstr ""
+msgstr "Rekening staat al op Automatisch Goedkeuren."
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:239
 #, fuzzy
@@ -31892,10 +31806,9 @@ msgid "%B %e, %Y"
 msgstr "%e %B %Y"
 
 #: libgnucash/engine/gnc-date.cpp:677
-#, fuzzy, c-format
-#| msgid " to "
+#, c-format
 msgid "%s to %s"
-msgstr " tot "
+msgstr "%s naar %s"
 
 #: libgnucash/engine/gnc-datetime.cpp:97
 msgid "y-m-d"

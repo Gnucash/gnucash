@@ -372,7 +372,7 @@
 
       (gnc:html-table-set-cell!
        t 3 headcolumn
-       (gnc:make-html-text footer-text)))
+       (gnc:make-html-div/markup "stylesheet-footer" (gnc:make-html-text footer-text))))
     ssdoc))
 
 (gnc:define-html-style-sheet
