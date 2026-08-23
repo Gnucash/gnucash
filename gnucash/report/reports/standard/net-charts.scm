@@ -210,9 +210,6 @@
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart)))
 
-    ;; apply default settings from preferences
-    (gnc:html-chart-apply-preferences-report! chart)
-
     ;; This exchanges the commodity-collector 'c' to one single
     ;; 'report-currency' according to the exchange-fn. Returns an
     ;; amount.
@@ -315,6 +312,8 @@
             (date-string-list (map qof-print-date dates-list)))
 
        (gnc:report-percent-done 90)
+       ;; apply default settings from preferences
+       (gnc:html-chart-apply-preferences-report! chart)
 
        (gnc:html-chart-set-type! chart (if linechart? 'line 'bar))
        (gnc:html-chart-set-width! chart width)

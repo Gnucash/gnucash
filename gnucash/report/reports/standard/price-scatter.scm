@@ -155,9 +155,6 @@
          (int-secs (cadr (assq-ref intervals interval)))
          (data '()))
 
-        ;; apply default settings from preferences
-        (gnc:html-chart-apply-preferences-report! chart)
-
     ;; Short helper for all the warnings below
     (define (make-warning title text)
       (gnc:html-document-add-object! 
@@ -165,6 +162,9 @@
        (gnc:make-html-text 
         (gnc:html-markup-h3 title)
         (gnc:html-markup-p text))))
+
+    ;; apply default settings from preferences
+    (gnc:html-chart-apply-preferences-report! chart)
 
     (gnc:html-chart-set-type! chart 'line)
 

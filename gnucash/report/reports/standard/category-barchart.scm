@@ -263,9 +263,6 @@ developing over time"))
                          (gnc-account-get-children-sorted
                           (gnc-get-current-root-account)))))
 
-    ;; apply default settings from preferences
-    (gnc:html-chart-apply-preferences-report! chart)
-
     ;; Returns true if the account a was selected in the account
     ;; selection option.
     (define (show-acct? a)
@@ -527,6 +524,9 @@ Please deselect the accounts with negative balances."))
                  (date-string-list (map qof-print-date dates-list))
                  (list-of-rows #f)
                  (row-totals #f))
+
+            ;; apply default settings from preferences
+            (gnc:html-chart-apply-preferences-report! chart)
 
             ;; Set chart title, subtitle etc.
             (gnc:html-chart-set-type!
