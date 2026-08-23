@@ -339,6 +339,9 @@ balance at a given time"))
                         (gnc-account-get-children-sorted
                          (gnc-get-current-root-account)))))
 
+    ;; apply default settings from preferences
+    (gnc:html-chart-apply-preferences-report! chart)
+
     ;; Returns true if the account a was selected in the account
     ;; selection option.
     (define (show-acct? a)

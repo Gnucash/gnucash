@@ -69,6 +69,7 @@
 (export gnc:html-chart-set-grid?!)
 (export gnc:html-chart-set-y-axis-label!)
 (export gnc:html-chart-add-data-series!)
+(export gnc:html-chart-apply-preferences-report!)
 
 (define gnc:showTooltipNonZerOnly #f)
 
@@ -214,7 +215,9 @@
                                      (cons 'line (list
                                                   (cons 'tension 0)))
                                      (cons 'point (list
-                                                   (cons 'pointStyle #f)))))
+                                                   (cons 'pointStyle #f)
+                                                   (cons 'hoverBorderColor 'black)
+                                                   (cons 'hoverBorderWidth 1)))))
                     (cons 'tooltips (list
                                      (cons 'mode 'index)
                                      (cons 'intersect #f)
@@ -302,6 +305,30 @@
 
 (define (gnc:html-chart-set-tooltip-non-zero-only! chart nonZeroOnly)
   (gnc:html-chart-set! chart '(options tooltips showNonZeroOnly) nonZeroOnly))
+
+(define (gnc:html-chart-apply-preferences-report! chart)
+         (gnc:html-chart-set! chart '(options elements point pointStyle)
+                 (case (gnc-prefs-get-int "general.report" "chart-point-style")
+                     ((0) "circle")       ((1) "cross")     ((2) "crossRot")
+                     ((3) "dash")         ((4) "line")      ((5) "rect")
+                     ((6) "rectRounded")  ((7) "rectRot")   ((8) "star")
+                     ((9) "triangle")     (else "circle")))
+
+         (gnc:html-chart-set! chart '(options elements point radius)
+                (gnc-prefs-get-int "general.report" "chart-point-size"))
+
+         (gnc:html-chart-set! chart '(options elements point hoverRadius)
+                (gnc-prefs-get-int "general.report" "chart-point-size-hover"))
+
+         (gnc:html-chart-set! chart '(options elements point hitRadius)
+                (gnc-prefs-get-int "general.report" "chart-tooltip-engage-radius"))
+
+         (gnc:html-chart-set! chart '(options tooltips caretSize)
+                (gnc-prefs-get-int "general.report" "chart-tooltip-caret-size"))
+
+         (gnc:html-chart-set! chart '(options tooltips position)
+                (gnc-prefs-get-string "general.report" "chart-tooltip-position"))
+)
 
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
