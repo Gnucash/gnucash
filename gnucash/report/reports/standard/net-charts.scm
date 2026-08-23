@@ -57,7 +57,7 @@
 (define opthelp-line-width (N_ "Set line width in pixels."))
 
 (define optname-markers (N_ "Data markers?"))
-(define optname-tooltip-indexed (N_ "Show indexed tooltip?"))
+(define optname-tooltip-indexed (N_ "Show a grouped (indexed) tooltip"))
 
 ;;(define optname-x-grid (N_ "X grid"))
 (define optname-y-grid (N_ "Grid"))
@@ -150,7 +150,7 @@
 
           (gnc-register-simple-boolean-option options
             gnc:pagename-display optname-tooltip-indexed
-            "h" (N_ "Show all viable entries per time unit (indexed). Otherwise - only a single entry, as per coursor's exact position.")
+            "t1" (N_ "Show all items, along the x-axis, in a grouped tooltip. Otherwise - only a single entry, as per coursor's nearest proximity.")
             #t)
 
 

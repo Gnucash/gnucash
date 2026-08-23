@@ -82,7 +82,7 @@ developing over time"))
 (define optname-fullname (N_ "Show long account names"))
 
 (define optname-chart-type (N_ "Chart Type"))
-(define optname-tooltip-indexed (N_ "Show indexed tooltip"))
+(define optname-tooltip-indexed (N_ "Show a grouped (indexed) tooltip"))
 
 (define optname-stacked (N_ "Use Stacked Charts"))
 (define optname-slices (N_ "Maximum Bars"))
@@ -185,9 +185,8 @@ developing over time"))
 
     (gnc-register-simple-boolean-option options
      gnc:pagename-display optname-tooltip-indexed
-     "h" (N_ "INDEX-ed tooltip presents all data from a selected date. NON-indexed - only a single one that is the closest to the coursor")
-     #t)
-
+     "t1" (N_ "Show all items, along the x-axis, in a grouped tooltip. Otherwise - only a single entry, as per coursor's nearest proximity.")
+     #f)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 

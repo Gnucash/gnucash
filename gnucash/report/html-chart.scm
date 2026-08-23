@@ -292,7 +292,10 @@
   (gnc:html-chart-set! chart '(options scales xAxes (0) type) type))
 
 (define (gnc:html-chart-set-tooltip-indexed?! chart indexed?)
-  (gnc:html-chart-set! chart '(options tooltips mode) (if indexed? 'index 'nearest)))
+  (if indexed?
+      (gnc:html-chart-set! chart '(options tooltips mode) 'index)
+      (gnc:html-chart-set! chart '(options tooltips mode) 'point)
+))
 
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
