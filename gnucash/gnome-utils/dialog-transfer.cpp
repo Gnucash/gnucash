@@ -1702,21 +1702,40 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
             return;
         to_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
+
+        /* A directly entered rate is preferred over one calculated from the
+         * two amounts. Set this here instead of relying on a focus-out event
+         * so that clicking OK directly from either field records the correct
+         * source. */
+        xferData->price_source = gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON(xferData->price_radio)) ?
+            PRICE_SOURCE_USER_PRICE : PRICE_SOURCE_XFER_DLG_VAL;
+        xferData->price_type = PRICE_TYPE_TRN;
     }
 
     gnc_suspend_gui_refresh ();
 
     if (xferData->exch_rate)
     {
+        gnc_numeric price_value;
+
         /* If we've got the price-button set, then make sure we update the
          * to-amount before we use it.
          */
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(xferData->price_radio)))
+        {
             gnc_xfer_update_to_amount(xferData);
-
-        auto price_value = gnc_xfer_dialog_compute_price_value(xferData);
-        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
-                                   price_value);
+            /* Preserve the explicitly entered rate. Computing it again from
+             * the rounded commodity amounts can change it. */
+            price_value = gnc_amount_edit_get_amount
+                (GNC_AMOUNT_EDIT(xferData->price_edit));
+        }
+        else
+        {
+            price_value = gnc_xfer_dialog_compute_price_value(xferData);
+            gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
+                                       price_value);
+        }
         *(xferData->exch_rate) = gnc_numeric_abs(price_value);
     }
     else
@@ -1965,8 +1984,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         xferData->curr_xfer_table = table;
 
         edit = gnc_amount_edit_new();
-        gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
-                                       gnc_default_print_info (FALSE));
+        auto print_info = gnc_default_price_print_info (nullptr);
+        gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT(edit), print_info);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "price_hbox"));
         gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
         xferData->price_edit = edit;
