@@ -83,6 +83,7 @@ developing over time"))
 
 (define optname-chart-type (N_ "Chart Type"))
 (define optname-tooltip-indexed (N_ "Show a grouped (indexed) tooltip"))
+(define optname-tooltip-non-zero-only (N_ "Show only non-zero values in a tooltip"))
 
 (define optname-stacked (N_ "Use Stacked Charts"))
 (define optname-slices (N_ "Maximum Bars"))
@@ -187,6 +188,11 @@ developing over time"))
      gnc:pagename-display optname-tooltip-indexed
      "t1" (N_ "Show all items, along the x-axis, in a grouped tooltip. Otherwise - only a single entry, as per coursor's nearest proximity.")
      #f)
+
+    (gnc-register-simple-boolean-option options
+     gnc:pagename-display optname-tooltip-non-zero-only
+     "t2" (N_ "Show only non-zero values in a tooltip.")
+     #t)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -532,6 +538,7 @@ Please deselect the accounts with negative balances."))
             (gnc:html-chart-set-height! chart height)
 
             (gnc:html-chart-set-tooltip-indexed?! chart tooltip-indexed)
+            (gnc:html-chart-set-tooltip-non-zero-only! chart (get-option gnc:pagename-display optname-tooltip-non-zero-only))
 
             (gnc:html-chart-set-data-labels! chart date-string-list)
             (gnc:html-chart-set-y-axis-label!

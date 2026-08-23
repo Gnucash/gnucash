@@ -56,6 +56,7 @@
 (export gnc:html-chart-set-format-style!)
 (export gnc:html-chart-render)
 (export gnc:html-chart-set-tooltip-indexed?!)
+(export gnc:html-chart-set-tooltip-non-zero-only!)
 (export gnc:html-chart-set-custom-x-axis-ticks?!)
 (export gnc:html-chart-set-title!)
 (export gnc:html-chart-set-data-labels!)
@@ -68,6 +69,8 @@
 (export gnc:html-chart-set-grid?!)
 (export gnc:html-chart-set-y-axis-label!)
 (export gnc:html-chart-add-data-series!)
+
+(define gnc:showTooltipNonZerOnly #f)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -297,6 +300,9 @@
       (gnc:html-chart-set! chart '(options tooltips mode) 'point)
 ))
 
+(define (gnc:html-chart-set-tooltip-non-zero-only! chart nonZeroOnly)
+  (gnc:html-chart-set! chart '(options tooltips showNonZeroOnly) nonZeroOnly))
+
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
 ;;  'fill #t
@@ -388,7 +394,15 @@ function tooltipLabel(tooltipItem,data) {
 }
 
 function tooltipTitle(array,data) {
-  return data.labels[array[0].index]; }
+  if (!data || array.length === 0) {
+    return '';
+  }
+  return data.labels[array[0].index];
+}
+
+function tooltipFilter(tooltipItem, data) {
+    return tooltipItem.yLabel != 0;
+}
 
 // draw the background color
 Chart.pluginService.register({
@@ -498,6 +512,7 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
     (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
+    (push "if (chartjsoptions.options.tooltips.showNonZeroOnly) { chartjsoptions.options.tooltips.filter = tooltipFilter; }\n")
     (push JS-setup)
 
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")

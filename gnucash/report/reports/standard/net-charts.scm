@@ -57,7 +57,9 @@
 (define opthelp-line-width (N_ "Set line width in pixels."))
 
 (define optname-markers (N_ "Data markers?"))
+
 (define optname-tooltip-indexed (N_ "Show a grouped (indexed) tooltip"))
+(define optname-tooltip-non-zero-only (N_ "Show only non-zero values in a tooltip"))
 
 ;;(define optname-x-grid (N_ "X grid"))
 (define optname-y-grid (N_ "Grid"))
@@ -153,6 +155,10 @@
             "t1" (N_ "Show all items, along the x-axis, in a grouped tooltip. Otherwise - only a single entry, as per coursor's nearest proximity.")
             #t)
 
+          (gnc-register-simple-boolean-option options
+            gnc:pagename-display optname-tooltip-non-zero-only
+            "t2" (N_ "Show only non-zero values in a tooltip.")
+            #t)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -322,6 +328,8 @@
        (gnc:html-chart-set-title!
         chart (list report-title (gnc-date-interval-format from-date-t64 to-date-t64)))
        (gnc:html-chart-set-tooltip-indexed?! chart tooltip-indexed)
+       (gnc:html-chart-set-tooltip-non-zero-only! chart (get-option gnc:pagename-display optname-tooltip-non-zero-only))
+
        (gnc:html-chart-set-y-axis-label!
         chart (gnc-commodity-get-mnemonic report-currency))
        (gnc:html-chart-set-grid?! chart y-grid)
