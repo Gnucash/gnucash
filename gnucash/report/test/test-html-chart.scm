@@ -43,18 +43,18 @@
     ;; another list of pairs, or another simple list
 
     ;; (list (cons 'maintainAspectRatio #f)
-    ;;       (cons 'chartArea (list (cons 'backgroundColor "white")))
-    ;;       (cons 'scales (list (cons 'xAxes (list
-    ;;                                         (list (cons 'display #t)
-    ;;                                               (cons 'gridlines (list (cons 'display #t)
-    ;;                                                                      (cons 'lineWidth 1.5)))
-    ;;                                               (cons 'ticks (list (cons 'fontSize 12)))))))))
+    ;;       (cons 'plugins (list (cons 'legend (list (cons 'position 'right)))))
+    ;;       (cons 'scales (list (cons 'x (list
+    ;;                                     (cons 'display #t)
+    ;;                                     (cons 'grid (list (cons 'display #t)
+    ;;                                                       (cons 'lineWidth 1.5)))
+    ;;                                     (cons 'ticks (list (cons 'maxRotation 30))))))))
 
     ;; traversal is accomplished as a list of symbols or numbers
-    ;; e.g. '(maintainAspectRatio), '(chartArea backgroundColor),
-    ;; '(scales xAxes (0) display). NOTE: xAxes specifies a number to
-    ;; identify the kth element in the list. this is required as per
-    ;; chartjs specification.
+    ;; e.g. '(maintainAspectRatio), '(plugins legend position),
+    ;; '(scales x display). a number in a single-element list
+    ;; identifies the kth element of a vector, e.g. '(data datasets (0)
+    ;; data).
     ;;
     ;; syntax is: (gnc:html-chart-set! chart path newval) or
     ;; (gnc:html-chart-get chart path)
@@ -66,23 +66,23 @@
 
     (test-error "path doesn't exist"
       #t
-      (gnc:html-chart-get chart '(options scales xAxes (0) time)))
+      (gnc:html-chart-get chart '(options scales x time)))
 
-    (gnc:html-chart-set! chart '(options scales xAxes (0) time) a-list-of-pairs)
+    (gnc:html-chart-set! chart '(options scales x time) a-list-of-pairs)
 
     (test-equal "path exists and the list-of-pairs is intact"
       a-list-of-pairs
-      (gnc:html-chart-get chart '(options scales xAxes (0) time)))
+      (gnc:html-chart-get chart '(options scales x time)))
 
-    (gnc:html-chart-set! chart '(options legend position) 'de)
+    (gnc:html-chart-set! chart '(options plugins legend position) 'de)
     (test-equal "1st level option setter & getter"
       'de
-      (gnc:html-chart-get chart '(options legend position)))
+      (gnc:html-chart-get chart '(options plugins legend position)))
 
     (test-error
      "1st level option fails - cannot traverse through existing path"
      'wrong-type-arg
-     (gnc:html-chart-set! chart '(options legend position invalid) 'de))
+     (gnc:html-chart-set! chart '(options plugins legend position invalid) 'de))
 
     (test-error "deep nested new path - nonexistent"
       'invalid-path
@@ -150,10 +150,10 @@
     (gnc:html-chart-set-type! chart 'pie)
     (test-equal "set-type! pie" 'pie (gnc:html-chart-type chart))
     (test-equal "set-type! pie requires intersect"
-      #t (gnc:html-chart-get chart '(options tooltips intersect)))
+      #t (gnc:html-chart-get chart '(options interaction intersect)))
     (gnc:html-chart-set-type! chart 'line)
     (test-equal "set-type! line does not require intersect"
-      #f (gnc:html-chart-get chart '(options tooltips intersect)))
+      #f (gnc:html-chart-get chart '(options interaction intersect)))
 
     ;; title - a string, or a list of strings for a multi-line title
     (gnc:html-chart-set-title! chart "single line")
@@ -162,7 +162,7 @@
     (test-equal "set-title! list becomes a vector"
       #("first line" "second line") (gnc:html-chart-title chart))
     (test-equal "set-title! writes into the chart options"
-      #("first line" "second line") (gnc:html-chart-get chart '(options title text)))
+      #("first line" "second line") (gnc:html-chart-get chart '(options plugins title text)))
 
     (gnc:html-chart-set-data-labels! chart '("a" "b" "c"))
     (test-equal "set-data-labels! becomes a vector"
@@ -171,32 +171,32 @@
     ;; axes
     (gnc:html-chart-set-axes-display! chart #f)
     (test-equal "set-axes-display! x-axis"
-      #f (gnc:html-chart-get chart '(options scales xAxes (0) display)))
+      #f (gnc:html-chart-get chart '(options scales x display)))
     (test-equal "set-axes-display! y-axis"
-      #f (gnc:html-chart-get chart '(options scales yAxes (0) display)))
+      #f (gnc:html-chart-get chart '(options scales y display)))
 
     (gnc:html-chart-set-x-axis-type! chart 'linear)
     (test-equal "set-x-axis-type!"
-      'linear (gnc:html-chart-get chart '(options scales xAxes (0) type)))
+      'linear (gnc:html-chart-get chart '(options scales x type)))
 
     (gnc:html-chart-set-x-axis-label! chart "x-label")
     (test-equal "set-x-axis-label!"
-      "x-label" (gnc:html-chart-get chart '(options scales xAxes (0) scaleLabel labelString)))
+      "x-label" (gnc:html-chart-get chart '(options scales x title text)))
     (gnc:html-chart-set-y-axis-label! chart "y-label")
     (test-equal "set-y-axis-label!"
-      "y-label" (gnc:html-chart-get chart '(options scales yAxes (0) scaleLabel labelString)))
+      "y-label" (gnc:html-chart-get chart '(options scales y title text)))
 
     (gnc:html-chart-set-stacking?! chart #t)
     (test-equal "set-stacking?! x-axis"
-      #t (gnc:html-chart-get chart '(options scales xAxes (0) stacked)))
+      #t (gnc:html-chart-get chart '(options scales x stacked)))
     (test-equal "set-stacking?! y-axis"
-      #t (gnc:html-chart-get chart '(options scales yAxes (0) stacked)))
+      #t (gnc:html-chart-get chart '(options scales y stacked)))
 
     (gnc:html-chart-set-grid?! chart #f)
     (test-equal "set-grid?! x-axis"
-      #f (gnc:html-chart-get chart '(options scales xAxes (0) gridLines display)))
+      #f (gnc:html-chart-get chart '(options scales x grid display)))
     (test-equal "set-grid?! y-axis"
-      #f (gnc:html-chart-get chart '(options scales yAxes (0) gridLines display))))
+      #f (gnc:html-chart-get chart '(options scales y grid display))))
 
   ;; data series
   (let ((chart (gnc:make-html-chart)))
@@ -252,6 +252,10 @@
         (string-contains html "<canvas id="))
       (test-assert "creates the chart"
         (string-contains html "new Chart(chartid, chartjsoptions)"))
+      (test-assert "wraps the script in an IIFE, so that several charts
+may share a page without sharing their variables"
+        (and (string-contains html "(function () {")
+             (string-contains html "})();")))
       (test-assert "passes the currency to the number formatter"
         (string-contains html "var curriso = \"USD\""))
       (test-assert "renders the options as json"
@@ -259,22 +263,22 @@
       (test-assert "renders the data series"
         (string-contains html "\"label\" : \"series\""))
       (test-assert "sets the tooltip label callback"
-        (string-contains html "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;"))
+        (string-contains html "chartjsoptions.options.plugins.tooltip.callbacks.label = tooltipLabel;"))
       (test-assert "sets the tooltip title callback"
-        (string-contains html "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;"))
+        (string-contains html "chartjsoptions.options.plugins.tooltip.callbacks.title = tooltipTitle;"))
       (test-assert "formats the x-axis ticks by default"
-        (string-contains html "chartjsoptions.options.scales.xAxes[0].ticks.callback"))
+        (string-contains html "chartjsoptions.options.scales.x.ticks.callback"))
       (test-assert "formats the y-axis ticks by default"
-        (string-contains html "chartjsoptions.options.scales.yAxes[0].ticks.callback")))
+        (string-contains html "chartjsoptions.options.scales.y.ticks.callback")))
 
     ;; a report may want the axis ticks left alone, see price-scatter
     (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
     (gnc:html-chart-set-custom-y-axis-ticks?! chart #f)
     (let ((html (render-chart chart)))
       (test-assert "custom x-axis ticks can be disabled"
-        (not (string-contains html "chartjsoptions.options.scales.xAxes[0].ticks.callback")))
+        (not (string-contains html "chartjsoptions.options.scales.x.ticks.callback")))
       (test-assert "custom y-axis ticks can be disabled"
-        (not (string-contains html "chartjsoptions.options.scales.yAxes[0].ticks.callback")))))
+        (not (string-contains html "chartjsoptions.options.scales.y.ticks.callback")))))
 
   ;; a multicolumn report renders several charts into the same page
   (let* ((html-1 (render-chart (gnc:make-html-chart)))
