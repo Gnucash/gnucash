@@ -102,7 +102,8 @@
 )
 
 (define (setup-cash-flow option-db)
-    (set-option! option-db "General" "Show Full Account Names" #f)
+    (set-option! option-db "General" "Show Full Account Names" #t)
+    (set-option! option-db "General" "Show Selected Accounts" #f)
 )
 
 (define (setup-inc-exp-chart option-db name)
@@ -111,7 +112,7 @@
     (set-option! option-db "Display" "Show table" #t)
     (set-option! option-db "Display" "Plot Width" '(pixels . 500))
     (set-option! option-db "Display" "Plot Height" '(pixels . 360))
-
+    (set-option! option-db "tooltips" "mode" 'index)
 )
 
 (define (setup-pie-chart option-db name cashOnly)
@@ -138,7 +139,7 @@
 )
 
 (define (setup-transactions option-db)
-    (set-option! option-db "General" "Report name" "<hr style=\"border: 1px solid orange; margin-top: 100px;\"> Transaction Report")
+    (set-option! option-db "General" "Report name" "<hr style=\"border: 1px solid orange; margin-top: 75px;\"> Transaction Report")
     (set-option! option-db "General" "Table for Exporting" #t)
     (set-option! option-db "Display" "Num" #f)
     (set-option! option-db "Display" "Account Balance" #t)
