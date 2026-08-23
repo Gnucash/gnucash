@@ -221,6 +221,13 @@
                     (cons 'tooltips (list
                                      (cons 'mode 'index)
                                      (cons 'intersect #f)
+                                     (cons 'cornerRadius 5)
+                                     (cons 'backgroundColor "rgba(33, 33, 33, 0.95)")
+                                     (cons 'titleMarginBottom 14)
+                                     (cons 'titleAlign 'left)
+                                     (cons 'xPadding 8)
+                                     (cons 'yPadding 8)
+                                     (cons 'bodySpacing 3)
                                      (cons 'callbacks (list
                                                        (cons 'label #f)))))
 
@@ -414,7 +421,7 @@ function tooltipLabel(tooltipItem,data) {
   var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
   switch (typeof(label)) {
     case 'number':
-      return '  ' + datasetLabel + ' :   ' + numformat(label);
+      return ' ' + datasetLabel + ' :   ' + numformat(label) + '  ';
     default:
       return '';
   }
@@ -424,7 +431,7 @@ function tooltipTitle(array,data) {
   if (!data || array.length === 0) {
     return '';
   }
-  return data.labels[array[0].index];
+  return data.labels[array[0].index] + '  ';
 }
 
 function tooltipFilter(tooltipItem, data) {
