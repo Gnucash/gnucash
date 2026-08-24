@@ -13,9 +13,9 @@ FEDORA_VERSION=${FEDORA_VERSION:-41}
 ACTION=${1:-run}
 
 case "$ACTION" in
-  run|rebuild|valgrind|shell) ;;
+  run|check|rebuild|valgrind|shell) ;;
   *)
-    echo "usage: $0 [run|rebuild|valgrind|shell]" >&2
+    echo "usage: $0 [run|check|rebuild|valgrind|shell]" >&2
     exit 1
     ;;
 esac
@@ -26,13 +26,11 @@ command -v podman >/dev/null 2>&1 || { echo "podman is required but not found in
 podman build -t "$IMAGE_NAME" --build-arg "FEDORA_VERSION=$FEDORA_VERSION" -f - <<'EOF'
 ARG FEDORA_VERSION
 FROM fedora:${FEDORA_VERSION}
-RUN dnf -y install \
-      gcc gcc-c++ make automake autoconf libtool cmake ninja-build git \
-      guile30{,-devel} pkg-config gtk3{,-devel} webkit2gtk4.0{,-devel} \
-      libdbi{,-devel} libdbi-dbd-sqlite boost-devel gtest-devel gmock-devel \
-      libxml2-devel libxslt-devel swig gettext{,-devel} glib2-devel \
-      python3{,-devel} valgrind perl-podlators \
-    && dnf clean all
+RUN dnf builddep -y gnucash
+RUN dnf -y install perl-podlators ninja-build git webkit2gtk4.1{,-devel} \
+    glibc-langpack-en glibc-langpack-fr
+RUN dnf -y install gdk-pixbuf2-modules-extra # for Gdk to generate image from XPM
+RUN dnf clean all
 WORKDIR /app
 EOF
 
@@ -60,13 +58,17 @@ podman run -it --rm \
         rm -rf ./*
     fi
     echo "Configuring CMake with install prefix..."
-    cmake -GNinja .. -DCMAKE_BUILD_TYPE=Debug -DWITH_OFX=OFF \
-          -DWITH_AQBANKING=OFF -DCMAKE_INSTALL_PREFIX=/usr/local
+    cmake -GNinja .. -DCMAKE_BUILD_TYPE=Debug -DWITH_PYTHON=ON \
+          -DCMAKE_INSTALL_PREFIX=/usr/local
     echo "Building with Ninja..."
     ninja
     echo "Installing to /usr/local..."
     ninja install > /dev/null
     case "$ACTION" in
+      check)
+        echo "Checking installed GnuCash..."
+        ninja check
+        ;;
       run|rebuild)
         echo "Running installed GnuCash..."
         /usr/local/bin/gnucash
