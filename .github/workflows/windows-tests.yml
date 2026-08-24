@@ -22,11 +22,12 @@ jobs:
         - name: Add our repo
           shell: msys2 {0}
           run: |
-            sed -i "/^# SigLevel = Never/a [gnc-ucrt64]\nSigLevel = Optional TrustAll\nServer = https://github.com/jralls/gnucash-on-windows/releases/download/gnc-ucrt64-repo/" /etc/pacman.conf
+            sed -i "/^# SigLevel = Never/a [gnc-ucrt64]\nSigLevel = Optional TrustAll\nServer = https://github.com/gnucash/gnucash-on-windows/releases/download/gnc-ucrt64-repo/" /etc/pacman.conf
             sed -i "s/^# ParallelDownloads/ParallelDownloads/" /etc/pacman.conf
 
             pacman -Syv
             pacboy --noconfirm -S swig:p appstream-glib:p aqbanking:p boost:p docbook-xsl:p gettext-tools:p gtest:p guile3:p icu:p pdcurses:p libdbi-drivers:p libofx:p webview2-loader zlib:p
+            ls -l $MSYSTEM_PREFIX/lib/dbd
 
         - name: Checkout
           uses: actions/checkout@v7
@@ -37,12 +38,11 @@ jobs:
             GUILE_LOAD_COMPILED_PATH: "${{ env.MSYSTEM_PREFIX }}/lib/guile/3.0/ccache"
           run: |
             mkdir build && cd build
-            cmake -G Ninja -DCMAKE_PREFIX_PATH=$MSYSTEM_PREFIX -DSWIG_DIR=$MSYSTEM_PREFIX/share/swig/4.4.1 -DGNC_DBD_DIR=$MSYSTEM_PREFIX/lib/dbd ..
+            cmake -G Ninja ..
         - name: Build and Test GnuCash
           env:
             GUILE_LOAD_PATH: "${{ env.MSYSTEM_PREFIX }}/share/guile/3.0/"
             GUILE_LOAD_COMPILED_PATH: "${{ env.MSYSTEM_PREFIX }}/lib/guile/3.0/ccache"
-            GNC_DBD_DIR: "${{ env.MSYSTEM_PREFIX }}/lib/dbd"
             CTEST_OUTPUT_ON_FAILURE: On
           run: |
             cd build
