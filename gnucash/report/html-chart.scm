@@ -71,8 +71,6 @@
 (export gnc:html-chart-add-data-series!)
 (export gnc:html-chart-apply-preferences-report!)
 
-(define gnc:showTooltipNonZerOnly #f)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; utility functions for nested list handling
@@ -221,12 +219,10 @@
                     (cons 'tooltips (list
                                      (cons 'mode 'index)
                                      (cons 'intersect #f)
-                                     (cons 'cornerRadius 5)
-                                     (cons 'backgroundColor "rgba(33, 33, 33, 0.95)")
+                                     (cons 'backgroundColor "rgba(36, 36, 36, 0.94)")
                                      (cons 'titleMarginBottom 14)
-                                     (cons 'titleAlign 'left)
                                      (cons 'xPadding 8)
-                                     (cons 'yPadding 8)
+                                     (cons 'yPadding 9)
                                      (cons 'bodySpacing 3)
                                      (cons 'callbacks (list
                                                        (cons 'label #f)))))
@@ -305,10 +301,8 @@
   (gnc:html-chart-set! chart '(options scales xAxes (0) type) type))
 
 (define (gnc:html-chart-set-tooltip-indexed?! chart indexed?)
-  (if indexed?
-      (gnc:html-chart-set! chart '(options tooltips mode) 'index)
-      (gnc:html-chart-set! chart '(options tooltips mode) 'point)
-))
+      (gnc:html-chart-set! chart '(options tooltips mode) (if indexed? 'index 'point))
+)
 
 (define (gnc:html-chart-set-tooltip-non-zero-only! chart nonZeroOnly)
   (gnc:html-chart-set! chart '(options tooltips showNonZeroOnly) nonZeroOnly))
@@ -421,7 +415,7 @@ function tooltipLabel(tooltipItem,data) {
   var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
   switch (typeof(label)) {
     case 'number':
-      return ' ' + datasetLabel + ' :   ' + numformat(label) + '  ';
+      return ' \u200A' + datasetLabel + ' :   ' + numformat(label) + '  ';
     default:
       return '';
   }
