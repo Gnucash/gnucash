@@ -29,6 +29,7 @@
 #include <stdio.h>
 
 #include <stdarg.h>
+#include <vector>
 #include "gnc-engine.h"
 
 #include "gnc-xml-helper.h"
@@ -190,10 +191,12 @@ struct _sixtp_child_result
     sixtp_result_handler fail_handler;
 };
 
+typedef struct sixtp_stack_frame sixtp_stack_frame;
+
 typedef struct sixtp_sax_data
 {
     gboolean parsing_ok;
-    GSList* stack;
+    std::vector<sixtp_stack_frame*> stack; /* back() is the current frame */
     gpointer global_data;
     xmlParserCtxtPtr saxParserCtxt;
     sixtp* bad_xml_parser;

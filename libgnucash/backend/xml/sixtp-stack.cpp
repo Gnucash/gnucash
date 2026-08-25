@@ -84,33 +84,25 @@ sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f)
     g_free (is);
 }
 
-GSList*
-sixtp_pop_and_destroy_frame (GSList* frame_stack)
+void
+sixtp_pop_and_destroy_frame (std::vector<sixtp_stack_frame*>& frame_stack)
 {
-    sixtp_stack_frame* dead_frame = (sixtp_stack_frame*) frame_stack->data;
-    GSList* result;
-
-    result = g_slist_next (frame_stack);
-    sixtp_stack_frame_destroy (dead_frame);
-    g_slist_free_1 (frame_stack);
-    return (result);
+    sixtp_stack_frame_destroy (frame_stack.back ());
+    frame_stack.pop_back ();
 }
 
 void
-sixtp_print_frame_stack (GSList* stack, FILE* f)
+sixtp_print_frame_stack (const std::vector<sixtp_stack_frame*>& stack, FILE* f)
 {
-    /* first, some debugging output */
-    GSList* printcopy = g_slist_reverse (g_slist_copy (stack));
-    GSList* lp;
+    /* stack.back() is the innermost frame, so walk it front-to-back for
+       outermost-to-innermost debugging output. */
     int indent = 0;
 
-    for (lp = printcopy; lp; lp = lp->next)
+    for (auto it = stack.rbegin (); it != stack.rend (); ++it)
     {
-        sixtp_stack_frame* frame = (sixtp_stack_frame*) lp->data;
-        sixtp_stack_frame_print (frame, indent, f);
+        sixtp_stack_frame_print (*it, indent, f);
         indent += 2;
     }
-
 }
 
 
@@ -121,7 +113,7 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
 {
     sixtp_parser_context* ret;
 
-    ret = g_new0 (sixtp_parser_context, 1);
+    ret = new sixtp_parser_context ();
 
     ret->handler.startElement = sixtp_sax_start_handler;
     ret->handler.endElement = sixtp_sax_end_handler;
@@ -129,15 +121,16 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
     ret->handler.getEntity = sixtp_sax_get_entity_handler;
 
     ret->data.parsing_ok = TRUE;
-    ret->data.stack = NULL;
     ret->data.global_data = global_data;
 
     ret->top_frame = sixtp_stack_frame_new (initial_parser, NULL);
 
     ret->top_frame_data = top_level_data;
 
-    ret->data.stack = g_slist_prepend (ret->data.stack,
-                                       (gpointer) ret->top_frame);
+    /* reserve some headroom so early pushes (account tree, transaction
+       lists, ...) don't force repeated reallocations */
+    ret->data.stack.reserve (32);
+    ret->data.stack.push_back (ret->top_frame);
 
     if (initial_parser->start_handler)
     {
@@ -178,10 +171,10 @@ void
 sixtp_context_destroy (sixtp_parser_context* context)
 {
     sixtp_stack_frame_destroy (context->top_frame);
-    g_slist_free (context->data.stack);
+    context->data.stack.clear ();
     context->data.saxParserCtxt->userData = NULL;
     context->data.saxParserCtxt->sax = NULL;
     xmlFreeParserCtxt (context->data.saxParserCtxt);
     context->data.saxParserCtxt = NULL;
-    g_free (context);
+    delete context;
 }

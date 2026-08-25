@@ -53,9 +53,9 @@ void sixtp_stack_frame_destroy (sixtp_stack_frame* sf);
 
 void sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f);
 
-GSList* sixtp_pop_and_destroy_frame (GSList* frame_stack);
+void sixtp_pop_and_destroy_frame (std::vector<sixtp_stack_frame*>& frame_stack);
 
-void sixtp_print_frame_stack (GSList* stack, FILE* f);
+void sixtp_print_frame_stack (const std::vector<sixtp_stack_frame*>& stack, FILE* f);
 
 sixtp_stack_frame* sixtp_stack_frame_new (sixtp* next_parser, char* tag);
 
