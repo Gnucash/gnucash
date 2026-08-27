@@ -32,7 +32,7 @@ typedef struct sixtp_stack_frame
     sixtp* parser;
     gchar* tag;
     gpointer data_for_children;
-    GSList* data_from_children; /* in reverse chronological order */
+    sixtp_child_result_list data_from_children; /* in document order */
     gpointer frame_data;
 
     /* Line and column [of the start tag]; set during parsing. */
@@ -44,20 +44,18 @@ struct _sixtp_parser_context_struct
 {
     xmlSAXHandler handler;
     sixtp_sax_data data;
-    sixtp_stack_frame* top_frame;
+    sixtp_stack_frame* top_frame; /* observer; owned by data.stack */
     gpointer top_frame_data;
 };
 typedef struct _sixtp_parser_context_struct sixtp_parser_context;
 
-void sixtp_stack_frame_destroy (sixtp_stack_frame* sf);
-
 void sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f);
 
-void sixtp_pop_and_destroy_frame (std::vector<sixtp_stack_frame*>& frame_stack);
+void sixtp_print_frame_stack (
+    const std::vector<std::unique_ptr<sixtp_stack_frame>>& stack, FILE* f);
 
-void sixtp_print_frame_stack (const std::vector<sixtp_stack_frame*>& stack, FILE* f);
-
-sixtp_stack_frame* sixtp_stack_frame_new (sixtp* next_parser, char* tag);
+std::unique_ptr<sixtp_stack_frame> sixtp_stack_frame_new (sixtp* next_parser,
+                                                           char* tag);
 
 sixtp_parser_context* sixtp_context_new (sixtp* initial_parser,
                                          gpointer global_data,

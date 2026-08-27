@@ -173,7 +173,7 @@ gnc_parser_configure_for_input_version (GNCParseStatus* status, gint64 version)
 
 static gboolean
 gnc_version_end_handler (gpointer data_for_children,
-                         GSList*  data_from_children, GSList* sibling_data,
+                         const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                          gpointer parent_data, gpointer global_data,
                          gpointer* result, const gchar* tag)
 {
@@ -231,8 +231,8 @@ gnc_version_parser_new (void)
 
 static gboolean
 gnc_parser_before_child_handler (gpointer data_for_children,
-                                 GSList* data_from_children,
-                                 GSList* sibling_data,
+                                 const sixtp_child_result_list& data_from_children,
+                                 const sixtp_child_result_list& sibling_data,
                                  gpointer parent_data,
                                  gpointer global_data,
                                  gpointer* result,
@@ -257,8 +257,8 @@ gnc_parser_before_child_handler (gpointer data_for_children,
 
 static gboolean
 gnc_parser_after_child_handler (gpointer data_for_children,
-                                GSList* data_from_children,
-                                GSList* sibling_data,
+                                const sixtp_child_result_list& data_from_children,
+                                const sixtp_child_result_list& sibling_data,
                                 gpointer parent_data,
                                 gpointer global_data,
                                 gpointer* result,
@@ -505,8 +505,8 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
 
 static gboolean
 gint64_kvp_value_end_handler (gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children,
+                              const sixtp_child_result_list& sibling_data,
                               gpointer parent_data,
                               gpointer global_data,
                               gpointer* result,
@@ -524,8 +524,8 @@ gint64_kvp_value_parser_new (void)
 
 static gboolean
 double_kvp_value_end_handler (gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children,
+                              const sixtp_child_result_list& sibling_data,
                               gpointer parent_data,
                               gpointer global_data,
                               gpointer* result,
@@ -542,8 +542,8 @@ double_kvp_value_parser_new (void)
 
 static gboolean
 gnc_numeric_kvp_value_end_handler (gpointer data_for_children,
-                                   GSList* data_from_children,
-                                   GSList* sibling_data,
+                                   const sixtp_child_result_list& data_from_children,
+                                   const sixtp_child_result_list& sibling_data,
                                    gpointer parent_data,
                                    gpointer global_data,
                                    gpointer* result,
@@ -560,8 +560,8 @@ gnc_numeric_kvp_value_parser_new (void)
 
 static gboolean
 string_kvp_value_end_handler (gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children,
+                              const sixtp_child_result_list& sibling_data,
                               gpointer parent_data,
                               gpointer global_data,
                               gpointer* result,
@@ -591,8 +591,8 @@ string_kvp_value_parser_new (void)
  * inconsistent type handling */
 static gboolean
 guid_kvp_value_end_handler (gpointer data_for_children,
-                            GSList* data_from_children,
-                            GSList* sibling_data,
+                            const sixtp_child_result_list& data_from_children,
+                            const sixtp_child_result_list& sibling_data,
                             gpointer parent_data,
                             gpointer global_data,
                             gpointer* result,
@@ -647,23 +647,23 @@ guid_kvp_value_parser_new (void)
 
 static gboolean
 glist_kvp_value_end_handler (gpointer data_for_children,
-                             GSList*  data_from_children, GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                              gpointer parent_data, gpointer global_data,
                              gpointer* result, const gchar* tag)
 {
-    GSList* lp;
     GList* result_glist;
     KvpValue* kvp_result;
 
     result_glist = NULL;
-    for (lp = data_from_children; lp; lp = lp->next)
+    /* data_from_children is in document order; walk it back to front and
+       prepend so the resulting glist ends up in document order too. */
+    for (auto it = data_from_children.rbegin (); it != data_from_children.rend (); ++it)
     {
-        sixtp_child_result* cr = (sixtp_child_result*) lp->data;
-        KvpValue* kvp = (KvpValue*) cr->data;
+        auto& cr = *it;
+        KvpValue* kvp = (KvpValue*) cr.data;
 
-        /* children are in reverse chron order, so this fixes it. */
         result_glist = g_list_prepend (result_glist, kvp);
-        cr->should_cleanup = FALSE;
+        cr.should_cleanup = FALSE;
     }
 
     kvp_result = new KvpValue {result_glist};
@@ -763,7 +763,7 @@ glist_kvp_value_parser_new (sixtp* kvp_frame_parser)
 
 static gboolean
 kvp_frame_slot_end_handler (gpointer data_for_children,
-                            GSList*  data_from_children, GSList* sibling_data,
+                            const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                             gpointer parent_data, gpointer global_data,
                             gpointer* result, const gchar* tag)
 {
@@ -771,12 +771,12 @@ kvp_frame_slot_end_handler (gpointer data_for_children,
     gchar* key = NULL;
     KvpValue* value = NULL;
     gboolean delete_value = FALSE;
-    sixtp_child_result *cr1 = NULL, *cr2 = NULL, *cr = NULL;
+    const sixtp_child_result *cr1 = NULL, *cr2 = NULL, *cr = NULL;
     g_return_val_if_fail (f, FALSE);
 
-    if (g_slist_length (data_from_children) != 2) return (FALSE);
-    cr1 = (sixtp_child_result*)data_from_children->data;
-    cr2 = (sixtp_child_result*)data_from_children->next->data;
+    if (data_from_children.size () != 2) return (FALSE);
+    cr1 = &data_from_children[0];
+    cr2 = &data_from_children[1];
     
     if (is_child_result_from_node_named(cr1, "k"))
     {
@@ -872,7 +872,7 @@ kvp_frame_slot_parser_new (sixtp* kvp_frame_parser)
  */
 
 static gboolean
-kvp_frame_start_handler (GSList* sibling_data, gpointer parent_data,
+kvp_frame_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                          gpointer global_data, gpointer* data_for_children,
                          gpointer* result, const gchar* tag, gchar** attrs)
 {
@@ -883,7 +883,7 @@ kvp_frame_start_handler (GSList* sibling_data, gpointer parent_data,
 
 static gboolean
 kvp_frame_end_handler (gpointer data_for_children,
-                       GSList*  data_from_children, GSList* sibling_data,
+                       const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                        gpointer parent_data, gpointer global_data,
                        gpointer* result, const gchar* tag)
 {
@@ -894,8 +894,8 @@ kvp_frame_end_handler (gpointer data_for_children,
 
 static void
 kvp_frame_fail_handler (gpointer data_for_children,
-                        GSList* data_from_children,
-                        GSList* sibling_data,
+                        const sixtp_child_result_list& data_from_children,
+                        const sixtp_child_result_list& sibling_data,
                         gpointer parent_data,
                         gpointer global_data,
                         gpointer* result,
@@ -965,7 +965,7 @@ kvp_frame_parser_new (void)
 
 
 static gboolean
-ledger_data_start_handler (GSList* sibling_data, gpointer parent_data,
+ledger_data_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                            gpointer global_data, gpointer* data_for_children,
                            gpointer* result, const gchar* tag, gchar** attrs)
 {
@@ -984,8 +984,8 @@ ledger_data_start_handler (GSList* sibling_data, gpointer parent_data,
 
 static gboolean
 ledger_data_after_child_handler (gpointer data_for_children,
-                                 GSList* data_from_children,
-                                 GSList* sibling_data,
+                                 const sixtp_child_result_list& data_from_children,
+                                 const sixtp_child_result_list& sibling_data,
                                  gpointer parent_data,
                                  gpointer global_data,
                                  gpointer* result,
@@ -1018,7 +1018,7 @@ ledger_data_after_child_handler (gpointer data_for_children,
 
 static gboolean
 ledger_data_end_handler (gpointer data_for_children,
-                         GSList*  data_from_children, GSList* sibling_data,
+                         const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                          gpointer parent_data, gpointer global_data,
                          gpointer* result, const gchar* tag)
 {
@@ -1043,8 +1043,8 @@ ledger_data_end_handler (gpointer data_for_children,
 
 static void
 ledger_data_fail_handler (gpointer data_for_children,
-                          GSList* data_from_children,
-                          GSList* sibling_data,
+                          const sixtp_child_result_list& data_from_children,
+                          const sixtp_child_result_list& sibling_data,
                           gpointer parent_data,
                           gpointer global_data,
                           gpointer* result,
@@ -1137,7 +1137,7 @@ ledger_data_parser_new (void)
  */
 
 static gboolean
-account_start_handler (GSList* sibling_data,
+account_start_handler (const sixtp_child_result_list& sibling_data,
                        gpointer parent_data,
                        gpointer global_data,
                        gpointer* data_for_children,
@@ -1172,7 +1172,7 @@ account_start_handler (GSList* sibling_data,
  */
 
 static gboolean
-account_restore_start_handler (GSList* sibling_data,
+account_restore_start_handler (const sixtp_child_result_list& sibling_data,
                                gpointer parent_data,
                                gpointer global_data,
                                gpointer* data_for_children,
@@ -1194,7 +1194,7 @@ account_restore_start_handler (GSList* sibling_data,
 
 static gboolean
 account_restore_end_handler (gpointer data_for_children,
-                             GSList*  data_from_children, GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                              gpointer parent_data, gpointer global_data,
                              gpointer* result, const gchar* tag)
 {
@@ -1223,8 +1223,8 @@ account_restore_end_handler (gpointer data_for_children,
 
 static gboolean
 account_restore_after_child_handler (gpointer data_for_children,
-                                     GSList* data_from_children,
-                                     GSList* sibling_data,
+                                     const sixtp_child_result_list& data_from_children,
+                                     const sixtp_child_result_list& sibling_data,
                                      gpointer parent_data,
                                      gpointer global_data,
                                      gpointer* result,
@@ -1269,8 +1269,8 @@ account_restore_after_child_handler (gpointer data_for_children,
 
 static void
 account_restore_fail_handler (gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children,
+                              const sixtp_child_result_list& sibling_data,
                               gpointer parent_data,
                               gpointer global_data,
                               gpointer* result,
@@ -1304,7 +1304,7 @@ account_restore_fail_handler (gpointer data_for_children,
  */
 static gboolean
 acc_restore_name_end_handler (gpointer data_for_children,
-                              GSList*  data_from_children, GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                               gpointer parent_data, gpointer global_data,
                               gpointer* result, const gchar* tag)
 {
@@ -1342,7 +1342,7 @@ acc_restore_name_end_handler (gpointer data_for_children,
 
 static gboolean
 acc_restore_guid_end_handler (gpointer data_for_children,
-                              GSList*  data_from_children, GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                               gpointer parent_data, gpointer global_data,
                               gpointer* result, const gchar* tag)
 {
@@ -1392,7 +1392,7 @@ acc_restore_guid_end_handler (gpointer data_for_children,
 
 static gboolean
 acc_restore_type_end_handler (gpointer data_for_children,
-                              GSList*  data_from_children, GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                               gpointer parent_data, gpointer global_data,
                               gpointer* result, const gchar* tag)
 {
@@ -1436,7 +1436,7 @@ acc_restore_type_end_handler (gpointer data_for_children,
 
 static gboolean
 acc_restore_code_end_handler (gpointer data_for_children,
-                              GSList*  data_from_children, GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                               gpointer parent_data, gpointer global_data,
                               gpointer* result, const gchar* tag)
 {
@@ -1475,7 +1475,7 @@ acc_restore_code_end_handler (gpointer data_for_children,
 
 static gboolean
 acc_restore_description_end_handler (gpointer data_for_children,
-                                     GSList*  data_from_children, GSList* sibling_data,
+                                     const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                      gpointer parent_data, gpointer global_data,
                                      gpointer* result, const gchar* tag)
 {
@@ -1513,7 +1513,7 @@ acc_restore_description_end_handler (gpointer data_for_children,
 
 static gboolean
 acc_restore_notes_end_handler (gpointer data_for_children,
-                               GSList*  data_from_children, GSList* sibling_data,
+                               const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                gpointer parent_data, gpointer global_data,
                                gpointer* result, const gchar* tag)
 {
@@ -1554,22 +1554,22 @@ acc_restore_notes_end_handler (gpointer data_for_children,
 
 static gboolean
 acc_restore_parent_end_handler (gpointer data_for_children,
-                                GSList*  data_from_children, GSList* sibling_data,
+                                const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                 gpointer parent_data, gpointer global_data,
                                 gpointer* result, const gchar* tag)
 {
     GNCParseStatus* pstatus = (GNCParseStatus*) global_data;
     Account* acc = (Account*) parent_data;
     Account* parent;
-    sixtp_child_result* child_result;
+    const sixtp_child_result* child_result;
     GncGUID gid;
 
     g_return_val_if_fail (acc, FALSE);
 
-    if (g_slist_length (data_from_children) != 1)
+    if (data_from_children.size () != 1)
         return (FALSE);
 
-    child_result = (sixtp_child_result*) data_from_children->data;
+    child_result = &data_from_children[0];
 
     if (!is_child_result_from_node_named (child_result, "guid"))
         return (FALSE);
@@ -1716,7 +1716,7 @@ typedef struct
 } CommodityParseInfo;
 
 static gboolean
-commodity_restore_start_handler (GSList* sibling_data, gpointer parent_data,
+commodity_restore_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                                  gpointer global_data,
                                  gpointer* data_for_children, gpointer* result,
                                  const gchar* tag, gchar** attrs)
@@ -1742,8 +1742,8 @@ commodity_restore_start_handler (GSList* sibling_data, gpointer parent_data,
 
 static gboolean
 commodity_restore_after_child_handler (gpointer data_for_children,
-                                       GSList* data_from_children,
-                                       GSList* sibling_data,
+                                       const sixtp_child_result_list& data_from_children,
+                                       const sixtp_child_result_list& sibling_data,
                                        gpointer parent_data,
                                        gpointer global_data,
                                        gpointer* result,
@@ -1781,7 +1781,7 @@ commodity_restore_after_child_handler (gpointer data_for_children,
 
 static gboolean
 commodity_restore_end_handler (gpointer data_for_children,
-                               GSList*  data_from_children, GSList* sibling_data,
+                               const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                gpointer parent_data, gpointer global_data,
                                gpointer* result, const gchar* tag)
 {
@@ -1915,7 +1915,7 @@ typedef struct
 
 static gboolean
 generic_gnc_commodity_lookup_start_handler (
-    GSList* sibling_data, gpointer parent_data, gpointer global_data,
+    const sixtp_child_result_list& sibling_data, gpointer parent_data, gpointer global_data,
     gpointer* data_for_children, gpointer* result, const gchar* tag,
     gchar** attrs)
 {
@@ -1927,8 +1927,8 @@ generic_gnc_commodity_lookup_start_handler (
 
 static gboolean
 generic_gnc_commodity_lookup_after_child_handler (gpointer data_for_children,
-                                                  GSList* data_from_children,
-                                                  GSList* sibling_data,
+                                                  const sixtp_child_result_list& data_from_children,
+                                                  const sixtp_child_result_list& sibling_data,
                                                   gpointer parent_data,
                                                   gpointer global_data,
                                                   gpointer* result,
@@ -1966,7 +1966,7 @@ generic_gnc_commodity_lookup_after_child_handler (gpointer data_for_children,
 
 static gboolean
 generic_gnc_commodity_lookup_end_handler (gpointer data_for_children,
-                                          GSList*  data_from_children, GSList* sibling_data,
+                                          const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                           gpointer parent_data, gpointer global_data,
                                           gpointer* result, const gchar* tag)
 {
@@ -2063,7 +2063,7 @@ generic_gnc_commodity_lookup_parser_new (void)
  */
 
 static gboolean
-transaction_start_handler (GSList* sibling_data, gpointer parent_data,
+transaction_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                            gpointer global_data, gpointer* data_for_children,
                            gpointer* result, const gchar* tag, gchar** attrs)
 {
@@ -2107,7 +2107,7 @@ transaction_start_handler (GSList* sibling_data, gpointer parent_data,
  */
 
 static gboolean
-txn_restore_start_handler (GSList* sibling_data, gpointer parent_data,
+txn_restore_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                            gpointer global_data, gpointer* data_for_children,
                            gpointer* result, const gchar* tag, gchar** attrs)
 {
@@ -2124,7 +2124,7 @@ txn_restore_start_handler (GSList* sibling_data, gpointer parent_data,
 
 static gboolean
 txn_restore_end_handler (gpointer data_for_children,
-                         GSList*  data_from_children, GSList* sibling_data,
+                         const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                          gpointer parent_data, gpointer global_data,
                          gpointer* result, const gchar* tag)
 {
@@ -2155,8 +2155,8 @@ txn_restore_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_after_child_handler (gpointer data_for_children,
-                                 GSList* data_from_children,
-                                 GSList* sibling_data,
+                                 const sixtp_child_result_list& data_from_children,
+                                 const sixtp_child_result_list& sibling_data,
                                  gpointer parent_data,
                                  gpointer global_data,
                                  gpointer* result,
@@ -2180,8 +2180,8 @@ txn_restore_after_child_handler (gpointer data_for_children,
 
 static void
 txn_restore_fail_handler (gpointer data_for_children,
-                          GSList* data_from_children,
-                          GSList* sibling_data,
+                          const sixtp_child_result_list& data_from_children,
+                          const sixtp_child_result_list& sibling_data,
                           gpointer parent_data,
                           gpointer global_data,
                           gpointer* result,
@@ -2218,7 +2218,7 @@ txn_restore_fail_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_guid_end_handler (gpointer data_for_children,
-                              GSList*  data_from_children, GSList* sibling_data,
+                              const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                               gpointer parent_data, gpointer global_data,
                               gpointer* result, const gchar* tag)
 {
@@ -2270,7 +2270,7 @@ txn_restore_guid_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_num_end_handler (gpointer data_for_children,
-                             GSList*  data_from_children, GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                              gpointer parent_data, gpointer global_data,
                              gpointer* result, const gchar* tag)
 {
@@ -2310,7 +2310,7 @@ txn_restore_num_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_description_end_handler (gpointer data_for_children,
-                                     GSList*  data_from_children, GSList* sibling_data,
+                                     const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                      gpointer parent_data, gpointer global_data,
                                      gpointer* result, const gchar* tag)
 {
@@ -2340,7 +2340,7 @@ txn_restore_description_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_rest_date_posted_end_handler (gpointer data_for_children,
-                                  GSList*  data_from_children, GSList* sibling_data,
+                                  const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                   gpointer parent_data, gpointer global_data,
                                   gpointer* result, const gchar* tag)
 {
@@ -2372,7 +2372,7 @@ txn_rest_date_posted_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_rest_date_entered_end_handler (gpointer data_for_children,
-                                   GSList*  data_from_children, GSList* sibling_data,
+                                   const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                    gpointer parent_data, gpointer global_data,
                                    gpointer* result, const gchar* tag)
 {
@@ -2418,7 +2418,7 @@ txn_rest_date_entered_end_handler (gpointer data_for_children,
  */
 
 static gboolean
-txn_restore_split_start_handler (GSList* sibling_data, gpointer parent_data,
+txn_restore_split_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                                  gpointer global_data,
                                  gpointer* data_for_children, gpointer* result,
                                  const gchar* tag, gchar** attrs)
@@ -2432,7 +2432,7 @@ txn_restore_split_start_handler (GSList* sibling_data, gpointer parent_data,
 
 static gboolean
 txn_restore_split_end_handler (gpointer data_for_children,
-                               GSList*  data_from_children, GSList* sibling_data,
+                               const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                gpointer parent_data, gpointer global_data,
                                gpointer* result, const gchar* tag)
 {
@@ -2459,8 +2459,8 @@ txn_restore_split_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_after_child_handler (gpointer data_for_children,
-                                       GSList* data_from_children,
-                                       GSList* sibling_data,
+                                       const sixtp_child_result_list& data_from_children,
+                                       const sixtp_child_result_list& sibling_data,
                                        gpointer parent_data,
                                        gpointer global_data,
                                        gpointer* result,
@@ -2501,8 +2501,8 @@ txn_restore_split_after_child_handler (gpointer data_for_children,
 
 static void
 txn_restore_split_fail_handler (gpointer data_for_children,
-                                GSList* data_from_children,
-                                GSList* sibling_data,
+                                const sixtp_child_result_list& data_from_children,
+                                const sixtp_child_result_list& sibling_data,
                                 gpointer parent_data,
                                 gpointer global_data,
                                 gpointer* result,
@@ -2535,7 +2535,7 @@ txn_restore_split_fail_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_guid_end_handler (gpointer data_for_children,
-                                    GSList*  data_from_children, GSList* sibling_data,
+                                    const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                     gpointer parent_data, gpointer global_data,
                                     gpointer* result, const gchar* tag)
 {
@@ -2587,7 +2587,7 @@ txn_restore_split_guid_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_memo_end_handler (gpointer data_for_children,
-                                    GSList*  data_from_children, GSList* sibling_data,
+                                    const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                     gpointer parent_data, gpointer global_data,
                                     gpointer* result, const gchar* tag)
 {
@@ -2627,7 +2627,7 @@ txn_restore_split_memo_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_action_end_handler (gpointer data_for_children,
-                                      GSList*  data_from_children, GSList* sibling_data,
+                                      const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                       gpointer parent_data, gpointer global_data,
                                       gpointer* result, const gchar* tag)
 {
@@ -2667,7 +2667,7 @@ txn_restore_split_action_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_reconcile_state_end_handler (gpointer data_for_children,
-                                               GSList*  data_from_children, GSList* sibling_data,
+                                               const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                                gpointer parent_data, gpointer global_data,
                                                gpointer* result, const gchar* tag)
 {
@@ -2703,7 +2703,7 @@ txn_restore_split_reconcile_state_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_reconcile_date_end_handler (gpointer data_for_children,
-                                              GSList*  data_from_children, GSList* sibling_data,
+                                              const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                               gpointer parent_data, gpointer global_data,
                                               gpointer* result, const gchar* tag)
 {
@@ -2745,7 +2745,7 @@ txn_restore_split_reconcile_date_end_handler (gpointer data_for_children,
 
 static gboolean
 txn_restore_split_account_end_handler (gpointer data_for_children,
-                                       GSList*  data_from_children, GSList* sibling_data,
+                                       const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                        gpointer parent_data, gpointer global_data,
                                        gpointer* result, const gchar* tag)
 {
@@ -2977,8 +2977,8 @@ price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
 
 static gboolean
 price_parse_xml_end_handler (gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children,
+                             const sixtp_child_result_list& sibling_data,
                              gpointer parent_data,
                              gpointer global_data,
                              gpointer* result,
@@ -3088,7 +3088,7 @@ gnc_price_parser_new (void)
 */
 
 static gboolean
-pricedb_start_handler (GSList* sibling_data,
+pricedb_start_handler (const sixtp_child_result_list& sibling_data,
                        gpointer parent_data,
                        gpointer global_data,
                        gpointer* data_for_children,
@@ -3105,8 +3105,8 @@ pricedb_start_handler (GSList* sibling_data,
 
 static gboolean
 pricedb_after_child_handler (gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children,
+                             const sixtp_child_result_list& sibling_data,
                              gpointer parent_data,
                              gpointer global_data,
                              gpointer* result,

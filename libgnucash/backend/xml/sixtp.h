@@ -29,6 +29,7 @@
 #include <stdio.h>
 
 #include <stdarg.h>
+#include <memory>
 #include <vector>
 #include "gnc-engine.h"
 
@@ -72,7 +73,11 @@ struct sixtp_gdv2
 };
 typedef struct _sixtp_child_result sixtp_child_result;
 
-typedef gboolean (*sixtp_start_handler) (GSList* sibling_data,
+/* A node's already-parsed children, in document order. Owned by the
+   sixtp_stack_frame they belong to; handlers only ever observe them. */
+typedef std::vector<sixtp_child_result> sixtp_child_result_list;
+
+typedef gboolean (*sixtp_start_handler) (const sixtp_child_result_list& sibling_data,
                                          gpointer parent_data,
                                          gpointer global_data,
                                          gpointer* data_for_children,
@@ -81,8 +86,8 @@ typedef gboolean (*sixtp_start_handler) (GSList* sibling_data,
                                          gchar** attrs);
 
 typedef gboolean (*sixtp_before_child_handler) (gpointer data_for_children,
-                                                GSList* data_from_children,
-                                                GSList* sibling_data,
+                                                const sixtp_child_result_list& data_from_children,
+                                                const sixtp_child_result_list& sibling_data,
                                                 gpointer parent_data,
                                                 gpointer global_data,
                                                 gpointer* result,
@@ -90,8 +95,8 @@ typedef gboolean (*sixtp_before_child_handler) (gpointer data_for_children,
                                                 const gchar* child_tag);
 
 typedef gboolean (*sixtp_after_child_handler) (gpointer data_for_children,
-                                               GSList* data_from_children,
-                                               GSList* sibling_data,
+                                               const sixtp_child_result_list& data_from_children,
+                                               const sixtp_child_result_list& sibling_data,
                                                gpointer parent_data,
                                                gpointer global_data,
                                                gpointer* result,
@@ -100,14 +105,14 @@ typedef gboolean (*sixtp_after_child_handler) (gpointer data_for_children,
                                                sixtp_child_result* child_result);
 
 typedef gboolean (*sixtp_end_handler) (gpointer data_for_children,
-                                       GSList* data_from_children,
-                                       GSList* sibling_data,
+                                       const sixtp_child_result_list& data_from_children,
+                                       const sixtp_child_result_list& sibling_data,
                                        gpointer parent_data,
                                        gpointer global_data,
                                        gpointer* result,
                                        const gchar* tag);
 
-typedef gboolean (*sixtp_characters_handler) (GSList* sibling_data,
+typedef gboolean (*sixtp_characters_handler) (const sixtp_child_result_list& sibling_data,
                                               gpointer parent_data,
                                               gpointer global_data,
                                               gpointer* result,
@@ -117,8 +122,8 @@ typedef gboolean (*sixtp_characters_handler) (GSList* sibling_data,
 typedef void (*sixtp_result_handler) (sixtp_child_result* result);
 
 typedef void (*sixtp_fail_handler) (gpointer data_for_children,
-                                    GSList* data_from_children,
-                                    GSList* sibling_data,
+                                    const sixtp_child_result_list& data_from_children,
+                                    const sixtp_child_result_list& sibling_data,
                                     gpointer parent_data,
                                     gpointer global_data,
                                     gpointer* result,
@@ -186,27 +191,40 @@ struct _sixtp_child_result
     sixtp_child_result_type type;
     gchar* tag; /* NULL for a CHARS node. */
     gpointer data;
-    gboolean should_cleanup;
+    /* mutable: handlers observing this result through a `const
+       sixtp_child_result_list&` (sibling/parent data) can still take
+       ownership of `data` away from us by clearing this flag. */
+    mutable gboolean should_cleanup;
     sixtp_result_handler cleanup_handler;
     sixtp_result_handler fail_handler;
+
+    _sixtp_child_result () = default;
+    _sixtp_child_result (const _sixtp_child_result&) = delete;
+    _sixtp_child_result& operator= (const _sixtp_child_result&) = delete;
+    _sixtp_child_result (_sixtp_child_result&& other) noexcept;
+    _sixtp_child_result& operator= (_sixtp_child_result&& other) noexcept;
+    ~_sixtp_child_result ();
 };
+
+/* Returns a shared, empty child-result list; used where a handler needs
+   a sibling/parent list but there isn't one (e.g. the document root). */
+const sixtp_child_result_list& sixtp_no_children ();
 
 typedef struct sixtp_stack_frame sixtp_stack_frame;
 
 typedef struct sixtp_sax_data
 {
     gboolean parsing_ok;
-    std::vector<sixtp_stack_frame*> stack; /* back() is the current frame */
+    std::vector<std::unique_ptr<sixtp_stack_frame>> stack; /* back() is the current frame */
     gpointer global_data;
     xmlParserCtxtPtr saxParserCtxt;
     sixtp* bad_xml_parser;
 } sixtp_sax_data;
 
-gboolean is_child_result_from_node_named (sixtp_child_result* cr,
+gboolean is_child_result_from_node_named (const sixtp_child_result* cr,
                                           const char* tag);
 void sixtp_child_free_data (sixtp_child_result* result);
-void sixtp_child_result_destroy (sixtp_child_result* r);
-void sixtp_child_result_print (sixtp_child_result* cr, FILE* f);
+void sixtp_child_result_print (const sixtp_child_result* cr, FILE* f);
 
 void sixtp_sax_start_handler (void* user_data, const xmlChar* name,
                               const xmlChar** attrs);

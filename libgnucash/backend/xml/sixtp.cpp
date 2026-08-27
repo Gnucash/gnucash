@@ -47,7 +47,7 @@ extern const gchar* gnc_v2_xml_version_string;        /* see io-gncxml-v2.c */
 
 /************************************************************************/
 gboolean
-is_child_result_from_node_named (sixtp_child_result* cr, const char* tag)
+is_child_result_from_node_named (const sixtp_child_result* cr, const char* tag)
 {
     return ((cr->type == SIXTP_CHILD_RESULT_NODE)
             &&
@@ -60,23 +60,60 @@ sixtp_child_free_data (sixtp_child_result* result)
     if (result->data) g_free (result->data);
 }
 
-void
-sixtp_child_result_destroy (sixtp_child_result* r)
+_sixtp_child_result::_sixtp_child_result (_sixtp_child_result&& other) noexcept
+    : type (other.type), tag (other.tag), data (other.data),
+      should_cleanup (other.should_cleanup),
+      cleanup_handler (other.cleanup_handler),
+      fail_handler (other.fail_handler)
 {
-    if (r->should_cleanup && r->cleanup_handler)
+    /* leave a harmless husk behind: no tag to free, nothing to clean up */
+    other.tag = nullptr;
+    other.should_cleanup = FALSE;
+}
+
+_sixtp_child_result&
+_sixtp_child_result::operator= (_sixtp_child_result&& other) noexcept
+{
+    if (this == &other) return *this;
+
+    if (should_cleanup && cleanup_handler) cleanup_handler (this);
+    if (type == SIXTP_CHILD_RESULT_NODE) g_free (tag);
+
+    type = other.type;
+    tag = other.tag;
+    data = other.data;
+    should_cleanup = other.should_cleanup;
+    cleanup_handler = other.cleanup_handler;
+    fail_handler = other.fail_handler;
+
+    other.tag = nullptr;
+    other.should_cleanup = FALSE;
+
+    return *this;
+}
+
+_sixtp_child_result::~_sixtp_child_result ()
+{
+    if (should_cleanup && cleanup_handler)
     {
-        r->cleanup_handler (r);
+        cleanup_handler (this);
     }
-    if (r->type == SIXTP_CHILD_RESULT_NODE) g_free (r->tag);
-    g_free (r);
+    if (type == SIXTP_CHILD_RESULT_NODE) g_free (tag);
 }
 
 void
-sixtp_child_result_print (sixtp_child_result* cr, FILE* f)
+sixtp_child_result_print (const sixtp_child_result* cr, FILE* f)
 {
     fprintf (f, "((tag %s) (data %p))",
              cr->tag ? cr->tag : "(null)",
              cr->data);
+}
+
+const sixtp_child_result_list&
+sixtp_no_children ()
+{
+    static const sixtp_child_result_list empty;
+    return empty;
 }
 
 /************************************************************************/
@@ -395,7 +432,7 @@ sixtp_sax_start_handler (void* user_data,
     gboolean lookup_success = FALSE;
     sixtp_stack_frame* new_frame = NULL;
 
-    current_frame = pdata->stack.back ();
+    current_frame = pdata->stack.back ().get ();
     current_parser = current_frame->parser;
 
     /* Use an extended lookup so we can get *our* copy of the key.
@@ -425,21 +462,20 @@ sixtp_sax_start_handler (void* user_data,
 
     if (current_frame->parser->before_child)
     {
-        GSList* parent_data_from_children = NULL;
+        const sixtp_child_result_list* parent_data_from_children = &sixtp_no_children ();
         gpointer parent_data_for_children = NULL;
 
         if (pdata->stack.size () > 1)
         {
             /* we're not in the top level node */
-            sixtp_stack_frame* parent_frame = pdata->stack[pdata->stack.size () - 2];
-            parent_data_from_children = static_cast<decltype (parent_data_from_children)>
-                                        (parent_frame->data_from_children);
+            sixtp_stack_frame* parent_frame = pdata->stack[pdata->stack.size () - 2].get ();
+            parent_data_from_children = &parent_frame->data_from_children;
         }
 
         pdata->parsing_ok &=
             current_frame->parser->before_child (current_frame->data_for_children,
                                                  current_frame->data_from_children,
-                                                 parent_data_from_children,
+                                                 *parent_data_from_children,
                                                  parent_data_for_children,
                                                  pdata->global_data,
                                                  & (current_frame->frame_data),
@@ -448,12 +484,11 @@ sixtp_sax_start_handler (void* user_data,
     }
 
     /* now allocate the new stack frame and shift to it */
-    new_frame = sixtp_stack_frame_new (next_parser, g_strdup ((char*) name));
+    pdata->stack.push_back (sixtp_stack_frame_new (next_parser, g_strdup ((char*) name)));
+    new_frame = pdata->stack.back ().get ();
 
     new_frame->line = xmlSAX2GetLineNumber (pdata->saxParserCtxt);
     new_frame->col  = xmlSAX2GetColumnNumber (pdata->saxParserCtxt);
-
-    pdata->stack.push_back (new_frame);
 
     if (next_parser->start_handler)
     {
@@ -474,7 +509,7 @@ sixtp_sax_characters_handler (void* user_data, const xmlChar* text, int len)
     sixtp_sax_data* pdata = (sixtp_sax_data*) user_data;
     sixtp_stack_frame* frame;
 
-    frame = pdata->stack.back ();
+    frame = pdata->stack.back ().get ();
     if (frame->parser->characters_handler)
     {
         gpointer result = NULL;
@@ -489,16 +524,15 @@ sixtp_sax_characters_handler (void* user_data, const xmlChar* text, int len)
         if (pdata->parsing_ok && result)
         {
             /* push the result onto the current "child" list. */
-            sixtp_child_result* child_data = g_new0 (sixtp_child_result, 1);
+            sixtp_child_result child_data;
 
-            child_data->type = SIXTP_CHILD_RESULT_CHARS;
-            child_data->tag = NULL;
-            child_data->data = result;
-            child_data->should_cleanup = TRUE;
-            child_data->cleanup_handler = frame->parser->cleanup_chars;
-            child_data->fail_handler = frame->parser->chars_fail_handler;
-            frame->data_from_children = g_slist_prepend (frame->data_from_children,
-                                                         child_data);
+            child_data.type = SIXTP_CHILD_RESULT_CHARS;
+            child_data.tag = NULL;
+            child_data.data = result;
+            child_data.should_cleanup = TRUE;
+            child_data.cleanup_handler = frame->parser->cleanup_chars;
+            child_data.fail_handler = frame->parser->chars_fail_handler;
+            frame->data_from_children.push_back (std::move (child_data));
         }
     }
 }
@@ -512,8 +546,8 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
     sixtp_child_result* child_result_data = NULL;
     gchar* end_tag = NULL;
 
-    current_frame = pdata->stack.back ();
-    parent_frame = pdata->stack[pdata->stack.size () - 2];
+    current_frame = pdata->stack.back ().get ();
+    parent_frame = pdata->stack[pdata->stack.size () - 2].get ();
 
     /* time to make sure we got the right closing tag.  Is this really
        necessary? */
@@ -525,9 +559,9 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
         /* See if we're just off by one and try to recover */
         if (g_strcmp0 (parent_frame->tag, (gchar*) name) == 0)
         {
-            sixtp_pop_and_destroy_frame (pdata->stack);
-            current_frame = pdata->stack.back ();
-            parent_frame = pdata->stack[pdata->stack.size () - 2];
+            pdata->stack.pop_back ();
+            current_frame = pdata->stack.back ().get ();
+            parent_frame = pdata->stack[pdata->stack.size () - 2].get ();
             PWARN ("found matching start <%s> tag up one level", name);
         }
     }
@@ -547,18 +581,20 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
 
     if (current_frame->frame_data)
     {
-        /* push the result onto the parent's child result list. */
-        child_result_data = g_new (sixtp_child_result, 1);
+        /* push the result onto the parent's child result list. Fetch the
+           pointer only *after* the push: push_back may reallocate the
+           vector and move every element (including this one) to a new
+           buffer, so a pointer taken beforehand could dangle. */
+        sixtp_child_result cr;
 
-        child_result_data->type = SIXTP_CHILD_RESULT_NODE;
-        child_result_data->tag = g_strdup (current_frame->tag);
-        child_result_data->data = current_frame->frame_data;
-        child_result_data->should_cleanup = TRUE;
-        child_result_data->cleanup_handler = current_frame->parser->cleanup_result;
-        child_result_data->fail_handler =
-            current_frame->parser->result_fail_handler;
-        parent_frame->data_from_children =
-            g_slist_prepend (parent_frame->data_from_children, child_result_data);
+        cr.type = SIXTP_CHILD_RESULT_NODE;
+        cr.tag = g_strdup (current_frame->tag);
+        cr.data = current_frame->frame_data;
+        cr.should_cleanup = TRUE;
+        cr.cleanup_handler = current_frame->parser->cleanup_result;
+        cr.fail_handler = current_frame->parser->result_fail_handler;
+        parent_frame->data_from_children.push_back (std::move (cr));
+        child_result_data = &parent_frame->data_from_children.back ();
     }
 
     /* grab it before it goes away - we own the reference */
@@ -568,31 +604,30 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
 
     /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
-    sixtp_pop_and_destroy_frame (pdata->stack);
+    pdata->stack.pop_back ();
 
     /* reset pointer after stack pop */
-    current_frame = pdata->stack.back ();
+    current_frame = pdata->stack.back ().get ();
     /* reset the parent, checking to see if we're at the top level node */
     parent_frame = (pdata->stack.size () > 1) ?
-                   pdata->stack[pdata->stack.size () - 2] : NULL;
+                   pdata->stack[pdata->stack.size () - 2].get () : NULL;
 
     if (current_frame->parser->after_child)
     {
         /* reset pointer after stack pop */
-        GSList* parent_data_from_children = NULL;
+        const sixtp_child_result_list* parent_data_from_children = &sixtp_no_children ();
         gpointer parent_data_for_children = NULL;
 
         if (parent_frame)
         {
             /* we're not in the top level node */
-            parent_data_from_children = static_cast<decltype (parent_data_from_children)>
-                                        (parent_frame->data_for_children);
+            parent_data_from_children = &parent_frame->data_from_children;
         }
 
         pdata->parsing_ok &=
             current_frame->parser->after_child (current_frame->data_for_children,
                                                 current_frame->data_from_children,
-                                                parent_data_from_children,
+                                                *parent_data_from_children,
                                                 parent_data_for_children,
                                                 pdata->global_data,
                                                 & (current_frame->frame_data),
@@ -622,7 +657,6 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
        frames are cleaned up in their order on the stack which will be
        youngest to oldest.  */
 
-    GSList* lp;
     auto& stack = sax_data->stack;
 
     g_critical ("parse failed at:");
@@ -630,31 +664,25 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
 
     while (!stack.empty ())
     {
-        sixtp_stack_frame* current_frame = stack.back ();
+        sixtp_stack_frame* current_frame = stack.back ().get ();
         bool at_top = stack.size () == 1;
 
         /* cleanup the current frame */
         if (current_frame->parser->fail_handler)
         {
-            GSList* sibling_data;
-            gpointer parent_data;
+            const sixtp_child_result_list* sibling_data = &sixtp_no_children ();
+            gpointer parent_data = NULL;
 
-            if (at_top)
+            if (!at_top)
             {
-                /* This is the top of the stack... */
-                parent_data = NULL;
-                sibling_data = NULL;
-            }
-            else
-            {
-                sixtp_stack_frame* parent_frame = stack[stack.size () - 2];
+                sixtp_stack_frame* parent_frame = stack[stack.size () - 2].get ();
                 parent_data = parent_frame->data_for_children;
-                sibling_data = parent_frame->data_from_children;
+                sibling_data = &parent_frame->data_from_children;
             }
 
             current_frame->parser->fail_handler (current_frame->data_for_children,
                                                  current_frame->data_from_children,
-                                                 sibling_data,
+                                                 *sibling_data,
                                                  parent_data,
                                                  sax_data->global_data,
                                                  &current_frame->frame_data,
@@ -662,12 +690,11 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
         }
 
         /* now cleanup any children's results */
-        for (lp = current_frame->data_from_children; lp; lp = lp->next)
+        for (auto& cresult : current_frame->data_from_children)
         {
-            sixtp_child_result* cresult = (sixtp_child_result*) lp->data;
-            if (cresult->fail_handler)
+            if (cresult.fail_handler)
             {
-                cresult->fail_handler (cresult);
+                cresult.fail_handler (&cresult);
             }
         }
 
@@ -678,13 +705,14 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
             break;
         }
 
-        sixtp_pop_and_destroy_frame (stack);
+        stack.pop_back ();
     }
 }
 
 static gboolean
 gnc_bad_xml_end_handler (gpointer data_for_children,
-                         GSList* data_from_children, GSList* sibling_data,
+                         const sixtp_child_result_list& data_from_children,
+                         const sixtp_child_result_list& sibling_data,
                          gpointer parent_data, gpointer global_data,
                          gpointer* result, const gchar* tag)
 {
