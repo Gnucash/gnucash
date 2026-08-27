@@ -44,18 +44,20 @@ struct _sixtp_parser_context_struct
 {
     xmlSAXHandler handler;
     sixtp_sax_data data;
-    sixtp_stack_frame* top_frame; /* observer; owned by data.stack */
+    /* No top_frame pointer here: the top frame is always data.stack.front(),
+       and a cached pointer to it would dangle once anything grows
+       data.stack (e.g. deeply nested kvp-frames), since data.stack now
+       stores frames by value. */
     gpointer top_frame_data;
 };
 typedef struct _sixtp_parser_context_struct sixtp_parser_context;
 
-void sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f);
+void sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f);
 
-void sixtp_print_frame_stack (
-    const std::vector<std::unique_ptr<sixtp_stack_frame>>& stack, FILE* f);
+void sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack,
+                              FILE* f);
 
-std::unique_ptr<sixtp_stack_frame> sixtp_stack_frame_new (sixtp* next_parser,
-                                                           char* tag);
+sixtp_stack_frame sixtp_stack_frame_new (sixtp* next_parser, char* tag);
 
 sixtp_parser_context* sixtp_context_new (sixtp* initial_parser,
                                          gpointer global_data,

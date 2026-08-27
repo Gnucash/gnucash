@@ -29,7 +29,6 @@
 #include <stdio.h>
 
 #include <stdarg.h>
-#include <memory>
 #include <vector>
 #include "gnc-engine.h"
 
@@ -215,7 +214,7 @@ typedef struct sixtp_stack_frame sixtp_stack_frame;
 typedef struct sixtp_sax_data
 {
     gboolean parsing_ok;
-    std::vector<std::unique_ptr<sixtp_stack_frame>> stack; /* back() is the current frame */
+    std::vector<sixtp_stack_frame> stack; /* back() is the current frame */
     gpointer global_data;
     xmlParserCtxtPtr saxParserCtxt;
     sixtp* bad_xml_parser;

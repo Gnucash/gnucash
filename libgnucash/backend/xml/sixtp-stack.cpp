@@ -24,26 +24,29 @@
 #include "sixtp.h"
 #include "sixtp-stack.h"
 
-/* sixtp_stack_frame has no custom destructor: data_from_children (a
-   vector of unique_ptr) cleans itself up, and tag/data_for_children/
+/* sixtp_stack_frame has no custom destructor and no user-declared
+   special member functions: data_from_children (a vector of
+   sixtp_child_result) cleans itself up, and tag/data_for_children/
    frame_data are either not owned by the frame or have their
-   ownership transferred out before the frame is destroyed. */
+   ownership transferred out before the frame is destroyed. That
+   makes it implicitly movable, which is all sixtp_stack_frame_new
+   and vector<sixtp_stack_frame> need. */
 
-std::unique_ptr<sixtp_stack_frame>
+sixtp_stack_frame
 sixtp_stack_frame_new (sixtp* next_parser, char* tag)
 {
-    auto new_frame = std::make_unique<sixtp_stack_frame> ();
-    new_frame->parser = next_parser;
-    new_frame->tag = tag;
-    new_frame->data_for_children = NULL;
-    new_frame->frame_data = NULL;
-    new_frame->line = new_frame->col = -1;
+    sixtp_stack_frame new_frame;
+    new_frame.parser = next_parser;
+    new_frame.tag = tag;
+    new_frame.data_for_children = NULL;
+    new_frame.frame_data = NULL;
+    new_frame.line = new_frame.col = -1;
 
     return new_frame;
 }
 
 void
-sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f)
+sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f)
 {
     gchar* is = g_strnfill (indent, ' ');
 
@@ -70,8 +73,7 @@ sixtp_stack_frame_print (sixtp_stack_frame* sf, gint indent, FILE* f)
 }
 
 void
-sixtp_print_frame_stack (
-    const std::vector<std::unique_ptr<sixtp_stack_frame>>& stack, FILE* f)
+sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack, FILE* f)
 {
     /* stack.back() is the innermost frame, so walk it front-to-back for
        outermost-to-innermost debugging output. */
@@ -79,7 +81,7 @@ sixtp_print_frame_stack (
 
     for (auto it = stack.rbegin (); it != stack.rend (); ++it)
     {
-        sixtp_stack_frame_print (it->get (), indent, f);
+        sixtp_stack_frame_print (&*it, indent, f);
         indent += 2;
     }
 }
@@ -108,15 +110,19 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
        lists, ...) don't force repeated reallocations */
     ret->data.stack.reserve (32);
     ret->data.stack.push_back (sixtp_stack_frame_new (initial_parser, NULL));
-    ret->top_frame = ret->data.stack.back ().get ();
+
+    /* top is only ever used here, before any further push can move it -
+       every later reference to the top frame goes through
+       data.stack.front() instead of a cached pointer. */
+    sixtp_stack_frame& top = ret->data.stack.back ();
 
     if (initial_parser->start_handler)
     {
         if (!initial_parser->start_handler (sixtp_no_children (),
                                             &ret->top_frame_data,
                                             &ret->data.global_data,
-                                            &ret->top_frame->data_for_children,
-                                            &ret->top_frame->frame_data,
+                                            &top.data_for_children,
+                                            &top.frame_data,
                                             NULL, NULL))
         {
             sixtp_handle_catastrophe (&ret->data);
@@ -131,16 +137,18 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
 void
 sixtp_context_run_end_handler (sixtp_parser_context* ctxt)
 {
-    if (ctxt->top_frame->parser->end_handler)
+    sixtp_stack_frame& top = ctxt->data.stack.front ();
+
+    if (top.parser->end_handler)
     {
         ctxt->data.parsing_ok &=
-            ctxt->top_frame->parser->end_handler (
-                ctxt->top_frame->data_for_children,
-                ctxt->top_frame->data_from_children,
+            top.parser->end_handler (
+                top.data_for_children,
+                top.data_from_children,
                 sixtp_no_children (),
                 ctxt->top_frame_data,
                 ctxt->data.global_data,
-                &ctxt->top_frame->frame_data,
+                &top.frame_data,
                 NULL);
     }
 }
@@ -148,8 +156,9 @@ sixtp_context_run_end_handler (sixtp_parser_context* ctxt)
 void
 sixtp_context_destroy (sixtp_parser_context* context)
 {
-    /* top_frame is owned by data.stack; clearing it destroys the frame
-       (and, transitively, any child results still attached to it). */
+    /* Destroying the vector destroys every remaining frame (and,
+       transitively, any child results still attached to them),
+       including the top frame at index 0. */
     context->data.stack.clear ();
     context->data.saxParserCtxt->userData = NULL;
     context->data.saxParserCtxt->sax = NULL;

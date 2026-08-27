@@ -432,7 +432,11 @@ sixtp_sax_start_handler (void* user_data,
     gboolean lookup_success = FALSE;
     sixtp_stack_frame* new_frame = NULL;
 
-    current_frame = pdata->stack.back ().get ();
+    /* Index, not pointer: the push_back below can reallocate pdata->stack
+       and move every frame (including this one) to a new buffer, so any
+       pointer into it taken beforehand would dangle. */
+    std::size_t current_idx = pdata->stack.size () - 1;
+    current_frame = &pdata->stack[current_idx];
     current_parser = current_frame->parser;
 
     /* Use an extended lookup so we can get *our* copy of the key.
@@ -465,10 +469,10 @@ sixtp_sax_start_handler (void* user_data,
         const sixtp_child_result_list* parent_data_from_children = &sixtp_no_children ();
         gpointer parent_data_for_children = NULL;
 
-        if (pdata->stack.size () > 1)
+        if (current_idx > 0)
         {
             /* we're not in the top level node */
-            sixtp_stack_frame* parent_frame = pdata->stack[pdata->stack.size () - 2].get ();
+            sixtp_stack_frame* parent_frame = &pdata->stack[current_idx - 1];
             parent_data_from_children = &parent_frame->data_from_children;
         }
 
@@ -483,9 +487,12 @@ sixtp_sax_start_handler (void* user_data,
                                                  (gchar*) name);
     }
 
-    /* now allocate the new stack frame and shift to it */
+    /* now allocate the new stack frame and shift to it. This may
+       reallocate pdata->stack, so re-derive both frame pointers from
+       their indices afterward rather than trusting `current_frame`. */
     pdata->stack.push_back (sixtp_stack_frame_new (next_parser, g_strdup ((char*) name)));
-    new_frame = pdata->stack.back ().get ();
+    new_frame = &pdata->stack.back ();
+    current_frame = &pdata->stack[current_idx];
 
     new_frame->line = xmlSAX2GetLineNumber (pdata->saxParserCtxt);
     new_frame->col  = xmlSAX2GetColumnNumber (pdata->saxParserCtxt);
@@ -509,7 +516,7 @@ sixtp_sax_characters_handler (void* user_data, const xmlChar* text, int len)
     sixtp_sax_data* pdata = (sixtp_sax_data*) user_data;
     sixtp_stack_frame* frame;
 
-    frame = pdata->stack.back ().get ();
+    frame = &pdata->stack.back ();
     if (frame->parser->characters_handler)
     {
         gpointer result = NULL;
@@ -546,8 +553,8 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
     sixtp_child_result* child_result_data = NULL;
     gchar* end_tag = NULL;
 
-    current_frame = pdata->stack.back ().get ();
-    parent_frame = pdata->stack[pdata->stack.size () - 2].get ();
+    current_frame = &pdata->stack.back ();
+    parent_frame = &pdata->stack[pdata->stack.size () - 2];
 
     /* time to make sure we got the right closing tag.  Is this really
        necessary? */
@@ -560,8 +567,8 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
         if (g_strcmp0 (parent_frame->tag, (gchar*) name) == 0)
         {
             pdata->stack.pop_back ();
-            current_frame = pdata->stack.back ().get ();
-            parent_frame = pdata->stack[pdata->stack.size () - 2].get ();
+            current_frame = &pdata->stack.back ();
+            parent_frame = &pdata->stack[pdata->stack.size () - 2];
             PWARN ("found matching start <%s> tag up one level", name);
         }
     }
@@ -607,10 +614,10 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
     pdata->stack.pop_back ();
 
     /* reset pointer after stack pop */
-    current_frame = pdata->stack.back ().get ();
+    current_frame = &pdata->stack.back ();
     /* reset the parent, checking to see if we're at the top level node */
     parent_frame = (pdata->stack.size () > 1) ?
-                   pdata->stack[pdata->stack.size () - 2].get () : NULL;
+                   &pdata->stack[pdata->stack.size () - 2] : NULL;
 
     if (current_frame->parser->after_child)
     {
@@ -664,7 +671,7 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
 
     while (!stack.empty ())
     {
-        sixtp_stack_frame* current_frame = stack.back ().get ();
+        sixtp_stack_frame* current_frame = &stack.back ();
         bool at_top = stack.size () == 1;
 
         /* cleanup the current frame */
@@ -675,7 +682,7 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
 
             if (!at_top)
             {
-                sixtp_stack_frame* parent_frame = stack[stack.size () - 2].get ();
+                sixtp_stack_frame* parent_frame = &stack[stack.size () - 2];
                 parent_data = parent_frame->data_for_children;
                 sibling_data = &parent_frame->data_from_children;
             }
@@ -748,7 +755,7 @@ sixtp_parse_file_common (sixtp* sixtp,
     if (parse_ret == 0 && ctxt->data.parsing_ok)
     {
         if (parse_result)
-            *parse_result = ctxt->top_frame->frame_data;
+            *parse_result = ctxt->data.stack.front ().frame_data;
         sixtp_context_destroy (ctxt);
         return TRUE;
     }
@@ -871,7 +878,7 @@ sixtp_parse_push (sixtp* sixtp,
     if (ctxt->data.parsing_ok)
     {
         if (parse_result)
-            *parse_result = ctxt->top_frame->frame_data;
+            *parse_result = ctxt->data.stack.front ().frame_data;
         sixtp_context_destroy (ctxt);
         return TRUE;
     }
