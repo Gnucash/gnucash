@@ -479,14 +479,14 @@ sixtp_sax_start_handler (void* user_data,
                                                  parent_data_for_children,
                                                  pdata->global_data,
                                                  & (current_frame->frame_data),
-                                                 current_frame->tag,
+                                                 current_frame->tag.c_str (),
                                                  (gchar*) name);
     }
 
     /* now allocate the new stack frame and shift to it. This may
        reallocate pdata->stack, so re-derive both frame pointers from
        their indices afterward rather than trusting `current_frame`. */
-    pdata->stack.emplace_back (next_parser, g_strdup ((char*) name));
+    pdata->stack.emplace_back (next_parser, (const char*) name);
     new_frame = &pdata->stack.back ();
     current_frame = &pdata->stack[current_idx];
 
@@ -541,20 +541,21 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
     sixtp_stack_frame* current_frame;
     sixtp_stack_frame* parent_frame;
     sixtp_child_result* child_result_data = NULL;
-    gchar* end_tag = NULL;
+    std::string end_tag;
 
     current_frame = &pdata->stack.back ();
     parent_frame = &pdata->stack[pdata->stack.size () - 2];
 
     /* time to make sure we got the right closing tag.  Is this really
        necessary? */
-    if (g_strcmp0 (current_frame->tag, (gchar*) name) != 0)
+    if (current_frame->tag != (const char*) name)
     {
-        PWARN ("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
+        PWARN ("bad closing tag (start <%s>, end <%s>)",
+              current_frame->tag.c_str (), name);
         pdata->parsing_ok = FALSE;
 
         /* See if we're just off by one and try to recover */
-        if (g_strcmp0 (parent_frame->tag, (gchar*) name) == 0)
+        if (parent_frame->tag == (const char*) name)
         {
             pdata->stack.pop_back ();
             current_frame = &pdata->stack.back ();
@@ -573,7 +574,7 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
                                                 parent_frame->data_for_children,
                                                 pdata->global_data,
                                                 &current_frame->frame_data,
-                                                current_frame->tag);
+                                                current_frame->tag.c_str ());
     }
 
     if (current_frame->frame_data)
@@ -584,16 +585,19 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
            is to the already-constructed element at its final address, so
            there's no dangling pointer to worry about here. */
         auto& cr = parent_frame->data_from_children.emplace_back (
-            SIXTP_CHILD_RESULT_NODE, current_frame->tag ? current_frame->tag : "",
+            SIXTP_CHILD_RESULT_NODE, current_frame->tag,
             current_frame->frame_data, current_frame->parser->cleanup_result,
             current_frame->parser->result_fail_handler);
         child_result_data = &cr;
     }
 
-    /* grab it before it goes away - we own the reference */
-    end_tag = current_frame->tag;
+    /* grab it before it goes away - we own the reference. Move rather
+       than copy: current_frame (and its tag) is about to be destroyed by
+       the pop_back() below, and nothing else reads current_frame->tag
+       between here and there. */
+    end_tag = std::move (current_frame->tag);
 
-    DEBUG ("Finished with end of <%s>", end_tag ? end_tag : "(null)");
+    DEBUG ("Finished with end of <%s>", end_tag.empty () ? "(null)" : end_tag.c_str ());
 
     /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
@@ -624,12 +628,10 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
                                                 parent_data_for_children,
                                                 pdata->global_data,
                                                 & (current_frame->frame_data),
-                                                current_frame->tag,
-                                                end_tag,
+                                                current_frame->tag.c_str (),
+                                                end_tag.c_str (),
                                                 child_result_data);
     }
-
-    g_free (end_tag);
 }
 
 xmlEntityPtr
@@ -679,7 +681,7 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
                                                  parent_data,
                                                  sax_data->global_data,
                                                  &current_frame->frame_data,
-                                                 current_frame->tag);
+                                                 current_frame->tag.c_str ());
         }
 
         /* now cleanup any children's results */

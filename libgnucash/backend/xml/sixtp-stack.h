@@ -30,7 +30,7 @@
 typedef struct sixtp_stack_frame
 {
     sixtp* parser;
-    gchar* tag;
+    std::string tag; /* empty for the top frame. */
     gpointer data_for_children;
     sixtp_child_result_list data_from_children; /* in document order */
     gpointer frame_data;
@@ -39,10 +39,8 @@ typedef struct sixtp_stack_frame
     int line;
     int col;
 
-    /* tag is owned by the caller until the frame closes (see
-       sixtp_sax_end_handler); the frame never frees it itself. */
-    sixtp_stack_frame (sixtp* parser_, gchar* tag_)
-        : parser (parser_), tag (tag_), data_for_children (nullptr),
+    sixtp_stack_frame (sixtp* parser_, std::string tag_)
+        : parser (parser_), tag (std::move (tag_)), data_for_children (nullptr),
           frame_data (nullptr), line (-1), col (-1)
     {}
     sixtp_stack_frame (const sixtp_stack_frame&) = delete;

@@ -32,7 +32,8 @@ sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f)
     fprintf (f, "%s(stack-frame %p\n", is, sf);
     fprintf (f, "%s             (line %d) (col %d)\n", is, sf->line, sf->col);
     fprintf (f, "%s             (parser %p)\n", is, sf->parser);
-    fprintf (f, "%s             (tag %s)\n", is, sf->tag ? sf->tag : "(null)");
+    fprintf (f, "%s             (tag %s)\n", is,
+             sf->tag.empty () ? "(null)" : sf->tag.c_str ());
     fprintf (f, "%s             (data-for-children %p)\n", is,
              sf->data_for_children);
 
@@ -82,7 +83,7 @@ _sixtp_parser_context_struct::_sixtp_parser_context_struct (
     /* reserve some headroom so early pushes (account tree, transaction
        lists, ...) don't force repeated reallocations */
     data.stack.reserve (32);
-    data.stack.emplace_back (initial_parser, nullptr);
+    data.stack.emplace_back (initial_parser, std::string ());
 }
 
 _sixtp_parser_context_struct::~_sixtp_parser_context_struct ()
