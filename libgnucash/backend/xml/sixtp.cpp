@@ -486,7 +486,7 @@ sixtp_sax_start_handler (void* user_data,
     /* now allocate the new stack frame and shift to it. This may
        reallocate pdata->stack, so re-derive both frame pointers from
        their indices afterward rather than trusting `current_frame`. */
-    pdata->stack.push_back (sixtp_stack_frame_new (next_parser, g_strdup ((char*) name)));
+    pdata->stack.emplace_back (next_parser, g_strdup ((char*) name));
     new_frame = &pdata->stack.back ();
     current_frame = &pdata->stack[current_idx];
 

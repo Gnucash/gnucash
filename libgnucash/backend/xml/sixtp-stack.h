@@ -38,6 +38,18 @@ typedef struct sixtp_stack_frame
     /* Line and column [of the start tag]; set during parsing. */
     int line;
     int col;
+
+    /* tag is owned by the caller until the frame closes (see
+       sixtp_sax_end_handler); the frame never frees it itself. */
+    sixtp_stack_frame (sixtp* parser_, gchar* tag_)
+        : parser (parser_), tag (tag_), data_for_children (nullptr),
+          frame_data (nullptr), line (-1), col (-1)
+    {}
+    sixtp_stack_frame (const sixtp_stack_frame&) = delete;
+    sixtp_stack_frame& operator= (const sixtp_stack_frame&) = delete;
+    sixtp_stack_frame (sixtp_stack_frame&&) = default;
+    sixtp_stack_frame& operator= (sixtp_stack_frame&&) = default;
+    ~sixtp_stack_frame () = default;
 } sixtp_stack_frame;
 
 struct _sixtp_parser_context_struct
@@ -56,8 +68,6 @@ void sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f)
 
 void sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack,
                               FILE* f);
-
-sixtp_stack_frame sixtp_stack_frame_new (sixtp* next_parser, char* tag);
 
 sixtp_parser_context* sixtp_context_new (sixtp* initial_parser,
                                          gpointer global_data,

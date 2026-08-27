@@ -24,27 +24,6 @@
 #include "sixtp.h"
 #include "sixtp-stack.h"
 
-/* sixtp_stack_frame has no custom destructor and no user-declared
-   special member functions: data_from_children (a vector of
-   sixtp_child_result) cleans itself up, and tag/data_for_children/
-   frame_data are either not owned by the frame or have their
-   ownership transferred out before the frame is destroyed. That
-   makes it implicitly movable, which is all sixtp_stack_frame_new
-   and vector<sixtp_stack_frame> need. */
-
-sixtp_stack_frame
-sixtp_stack_frame_new (sixtp* next_parser, char* tag)
-{
-    sixtp_stack_frame new_frame;
-    new_frame.parser = next_parser;
-    new_frame.tag = tag;
-    new_frame.data_for_children = NULL;
-    new_frame.frame_data = NULL;
-    new_frame.line = new_frame.col = -1;
-
-    return new_frame;
-}
-
 void
 sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f)
 {
@@ -109,7 +88,7 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
     /* reserve some headroom so early pushes (account tree, transaction
        lists, ...) don't force repeated reallocations */
     ret->data.stack.reserve (32);
-    ret->data.stack.push_back (sixtp_stack_frame_new (initial_parser, NULL));
+    ret->data.stack.emplace_back (initial_parser, nullptr);
 
     /* top is only ever used here, before any further push can move it -
        every later reference to the top frame goes through
