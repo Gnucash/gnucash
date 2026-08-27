@@ -721,10 +721,10 @@ sixtp_parse_file_common (sixtp* sixtp,
                          gpointer global_data,
                          gpointer* parse_result)
 {
-    sixtp_parser_context* ctxt;
     int parse_ret;
 
-    if (! (ctxt = sixtp_context_new (sixtp, global_data, data_for_top_level)))
+    auto ctxt = sixtp_context_new (sixtp, global_data, data_for_top_level);
+    if (!ctxt)
     {
         g_critical ("sixtp_context_new returned null");
         return FALSE;
@@ -738,13 +738,12 @@ sixtp_parse_file_common (sixtp* sixtp,
     parse_ret = xmlParseDocument (ctxt->data.saxParserCtxt);
     //xmlSAXUserParseFile(&ctxt->handler, &ctxt->data, filename);
 
-    sixtp_context_run_end_handler (ctxt);
+    sixtp_context_run_end_handler (ctxt.get ());
 
     if (parse_ret == 0 && ctxt->data.parsing_ok)
     {
         if (parse_result)
             *parse_result = ctxt->data.stack.front ().frame_data;
-        delete ctxt;
         return TRUE;
     }
     else
@@ -753,7 +752,6 @@ sixtp_parse_file_common (sixtp* sixtp,
             *parse_result = NULL;
         if (ctxt->data.stack.size () > 1)
             sixtp_handle_catastrophe (&ctxt->data);
-        delete ctxt;
         return FALSE;
     }
 }
@@ -838,7 +836,6 @@ sixtp_parse_push (sixtp* sixtp,
                   gpointer global_data,
                   gpointer* parse_result)
 {
-    sixtp_parser_context* ctxt;
     xmlParserCtxtPtr xml_context;
 
     if (!push_handler)
@@ -847,7 +844,8 @@ sixtp_parse_push (sixtp* sixtp,
         return FALSE;
     }
 
-    if (! (ctxt = sixtp_context_new (sixtp, global_data, data_for_top_level)))
+    auto ctxt = sixtp_context_new (sixtp, global_data, data_for_top_level);
+    if (!ctxt)
     {
         g_critical ("sixtp_context_new returned null");
         return FALSE;
@@ -861,13 +859,12 @@ sixtp_parse_push (sixtp* sixtp,
 
     (*push_handler) (xml_context, push_user_data);
 
-    sixtp_context_run_end_handler (ctxt);
+    sixtp_context_run_end_handler (ctxt.get ());
 
     if (ctxt->data.parsing_ok)
     {
         if (parse_result)
             *parse_result = ctxt->data.stack.front ().frame_data;
-        delete ctxt;
         return TRUE;
     }
     else
@@ -876,7 +873,6 @@ sixtp_parse_push (sixtp* sixtp,
             *parse_result = NULL;
         if (ctxt->data.stack.size () > 1)
             sixtp_handle_catastrophe (&ctxt->data);
-        delete ctxt;
         return FALSE;
     }
 }

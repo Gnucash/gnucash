@@ -25,6 +25,8 @@
 #define SIXTP_STACK_H
 #include <glib.h>
 
+#include <memory>
+
 #include "sixtp.h"
 
 typedef struct sixtp_stack_frame
@@ -64,8 +66,9 @@ struct _sixtp_parser_context_struct
        pushes the top stack frame. Doesn't run initial_parser's
        start_handler - that can fail, and a constructor has no way to
        report that back to sixtp_context_new, which needs to unwind via
-       sixtp_handle_catastrophe/delete rather than leave a half-built
-       object for the caller to somehow clean up itself. */
+       sixtp_handle_catastrophe and let the unique_ptr it's holding clean
+       up, rather than leave a half-built object for the caller to
+       somehow clean up itself. */
     _sixtp_parser_context_struct (sixtp* initial_parser, gpointer global_data,
                                   gpointer top_level_data);
     _sixtp_parser_context_struct (const _sixtp_parser_context_struct&) = delete;
@@ -80,9 +83,8 @@ void sixtp_stack_frame_print (const sixtp_stack_frame* sf, gint indent, FILE* f)
 void sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack,
                               FILE* f);
 
-sixtp_parser_context* sixtp_context_new (sixtp* initial_parser,
-                                         gpointer global_data,
-                                         gpointer top_level_data);
+std::unique_ptr<sixtp_parser_context> sixtp_context_new (
+    sixtp* initial_parser, gpointer global_data, gpointer top_level_data);
 void sixtp_context_run_end_handler (sixtp_parser_context* ctxt);
 
 #endif /* _SIXTP_STACK_H_ */

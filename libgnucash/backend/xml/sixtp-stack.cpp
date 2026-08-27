@@ -98,12 +98,13 @@ _sixtp_parser_context_struct::~_sixtp_parser_context_struct ()
     data.saxParserCtxt = NULL;
 }
 
-sixtp_parser_context*
+std::unique_ptr<sixtp_parser_context>
 sixtp_context_new (sixtp* initial_parser, gpointer global_data,
                    gpointer top_level_data)
 {
-    auto* ret = new sixtp_parser_context (initial_parser, global_data,
-                                          top_level_data);
+    auto ret = std::make_unique<sixtp_parser_context> (initial_parser,
+                                                        global_data,
+                                                        top_level_data);
 
     /* top is only ever used here, before any further push can move it -
        every later reference to the top frame goes through
@@ -120,8 +121,7 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
                                             NULL, NULL))
         {
             sixtp_handle_catastrophe (&ret->data);
-            delete ret;
-            return NULL;
+            return nullptr; /* ret's destructor runs the teardown */
         }
     }
 
