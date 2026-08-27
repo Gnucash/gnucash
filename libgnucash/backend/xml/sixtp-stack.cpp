@@ -67,28 +67,42 @@ sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack, FILE* f)
 
 
 /* Parser context */
+_sixtp_parser_context_struct::_sixtp_parser_context_struct (
+    sixtp* initial_parser, gpointer global_data, gpointer top_level_data)
+    : handler (), data (), top_frame_data (top_level_data)
+{
+    handler.startElement = sixtp_sax_start_handler;
+    handler.endElement = sixtp_sax_end_handler;
+    handler.characters = sixtp_sax_characters_handler;
+    handler.getEntity = sixtp_sax_get_entity_handler;
+
+    data.parsing_ok = TRUE;
+    data.global_data = global_data;
+
+    /* reserve some headroom so early pushes (account tree, transaction
+       lists, ...) don't force repeated reallocations */
+    data.stack.reserve (32);
+    data.stack.emplace_back (initial_parser, nullptr);
+}
+
+_sixtp_parser_context_struct::~_sixtp_parser_context_struct ()
+{
+    /* Destroying the vector destroys every remaining frame (and,
+       transitively, any child results still attached to them),
+       including the top frame at index 0. */
+    data.stack.clear ();
+    data.saxParserCtxt->userData = NULL;
+    data.saxParserCtxt->sax = NULL;
+    xmlFreeParserCtxt (data.saxParserCtxt);
+    data.saxParserCtxt = NULL;
+}
+
 sixtp_parser_context*
 sixtp_context_new (sixtp* initial_parser, gpointer global_data,
                    gpointer top_level_data)
 {
-    sixtp_parser_context* ret;
-
-    ret = new sixtp_parser_context ();
-
-    ret->handler.startElement = sixtp_sax_start_handler;
-    ret->handler.endElement = sixtp_sax_end_handler;
-    ret->handler.characters = sixtp_sax_characters_handler;
-    ret->handler.getEntity = sixtp_sax_get_entity_handler;
-
-    ret->data.parsing_ok = TRUE;
-    ret->data.global_data = global_data;
-
-    ret->top_frame_data = top_level_data;
-
-    /* reserve some headroom so early pushes (account tree, transaction
-       lists, ...) don't force repeated reallocations */
-    ret->data.stack.reserve (32);
-    ret->data.stack.emplace_back (initial_parser, nullptr);
+    auto* ret = new sixtp_parser_context (initial_parser, global_data,
+                                          top_level_data);
 
     /* top is only ever used here, before any further push can move it -
        every later reference to the top frame goes through
@@ -105,7 +119,7 @@ sixtp_context_new (sixtp* initial_parser, gpointer global_data,
                                             NULL, NULL))
         {
             sixtp_handle_catastrophe (&ret->data);
-            sixtp_context_destroy (ret);
+            delete ret;
             return NULL;
         }
     }
@@ -130,18 +144,4 @@ sixtp_context_run_end_handler (sixtp_parser_context* ctxt)
                 &top.frame_data,
                 NULL);
     }
-}
-
-void
-sixtp_context_destroy (sixtp_parser_context* context)
-{
-    /* Destroying the vector destroys every remaining frame (and,
-       transitively, any child results still attached to them),
-       including the top frame at index 0. */
-    context->data.stack.clear ();
-    context->data.saxParserCtxt->userData = NULL;
-    context->data.saxParserCtxt->sax = NULL;
-    xmlFreeParserCtxt (context->data.saxParserCtxt);
-    context->data.saxParserCtxt = NULL;
-    delete context;
 }

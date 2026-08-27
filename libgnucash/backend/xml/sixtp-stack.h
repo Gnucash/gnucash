@@ -61,6 +61,19 @@ struct _sixtp_parser_context_struct
        data.stack (e.g. deeply nested kvp-frames), since data.stack now
        stores frames by value. */
     gpointer top_frame_data;
+
+    /* Wires up the SAX handler vtable, marks the parse as ok so far, and
+       pushes the top stack frame. Doesn't run initial_parser's
+       start_handler - that can fail, and a constructor has no way to
+       report that back to sixtp_context_new, which needs to unwind via
+       sixtp_handle_catastrophe/delete rather than leave a half-built
+       object for the caller to somehow clean up itself. */
+    _sixtp_parser_context_struct (sixtp* initial_parser, gpointer global_data,
+                                  gpointer top_level_data);
+    _sixtp_parser_context_struct (const _sixtp_parser_context_struct&) = delete;
+    _sixtp_parser_context_struct&
+        operator= (const _sixtp_parser_context_struct&) = delete;
+    ~_sixtp_parser_context_struct ();
 };
 typedef struct _sixtp_parser_context_struct sixtp_parser_context;
 
@@ -72,7 +85,6 @@ void sixtp_print_frame_stack (const std::vector<sixtp_stack_frame>& stack,
 sixtp_parser_context* sixtp_context_new (sixtp* initial_parser,
                                          gpointer global_data,
                                          gpointer top_level_data);
-void sixtp_context_destroy (sixtp_parser_context* context);
 void sixtp_context_run_end_handler (sixtp_parser_context* ctxt);
 
 #endif /* _SIXTP_STACK_H_ */

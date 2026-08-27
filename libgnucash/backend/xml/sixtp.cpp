@@ -693,8 +693,8 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
 
         if (at_top)
         {
-            /* This is the top of the stack. The top frame seems to want to
-             * be destroyed by sixtp_context_destroy. */
+            /* This is the top of the stack. The top frame is destroyed
+             * along with the rest of the context, via ~sixtp_parser_context. */
             break;
         }
 
@@ -742,7 +742,7 @@ sixtp_parse_file_common (sixtp* sixtp,
     {
         if (parse_result)
             *parse_result = ctxt->data.stack.front ().frame_data;
-        sixtp_context_destroy (ctxt);
+        delete ctxt;
         return TRUE;
     }
     else
@@ -751,7 +751,7 @@ sixtp_parse_file_common (sixtp* sixtp,
             *parse_result = NULL;
         if (ctxt->data.stack.size () > 1)
             sixtp_handle_catastrophe (&ctxt->data);
-        sixtp_context_destroy (ctxt);
+        delete ctxt;
         return FALSE;
     }
 }
@@ -865,7 +865,7 @@ sixtp_parse_push (sixtp* sixtp,
     {
         if (parse_result)
             *parse_result = ctxt->data.stack.front ().frame_data;
-        sixtp_context_destroy (ctxt);
+        delete ctxt;
         return TRUE;
     }
     else
@@ -874,7 +874,7 @@ sixtp_parse_push (sixtp* sixtp,
             *parse_result = NULL;
         if (ctxt->data.stack.size () > 1)
             sixtp_handle_catastrophe (&ctxt->data);
-        sixtp_context_destroy (ctxt);
+        delete ctxt;
         return FALSE;
     }
 }
