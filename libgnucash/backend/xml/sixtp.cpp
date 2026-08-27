@@ -51,7 +51,7 @@ is_child_result_from_node_named (const sixtp_child_result* cr, const char* tag)
 {
     return ((cr->type == SIXTP_CHILD_RESULT_NODE)
             &&
-            (g_strcmp0 (cr->tag, tag) == 0));
+            (cr->tag == tag));
 }
 
 void
@@ -61,13 +61,12 @@ sixtp_child_free_data (sixtp_child_result* result)
 }
 
 _sixtp_child_result::_sixtp_child_result (_sixtp_child_result&& other) noexcept
-    : type (other.type), tag (other.tag), data (other.data),
+    : type (other.type), tag (std::move (other.tag)), data (other.data),
       should_cleanup (other.should_cleanup),
       cleanup_handler (other.cleanup_handler),
       fail_handler (other.fail_handler)
 {
-    /* leave a harmless husk behind: no tag to free, nothing to clean up */
-    other.tag = nullptr;
+    /* leave a harmless husk behind: nothing left to clean up */
     other.should_cleanup = FALSE;
 }
 
@@ -77,16 +76,14 @@ _sixtp_child_result::operator= (_sixtp_child_result&& other) noexcept
     if (this == &other) return *this;
 
     if (should_cleanup && cleanup_handler) cleanup_handler (this);
-    if (type == SIXTP_CHILD_RESULT_NODE) g_free (tag);
 
     type = other.type;
-    tag = other.tag;
+    tag = std::move (other.tag);
     data = other.data;
     should_cleanup = other.should_cleanup;
     cleanup_handler = other.cleanup_handler;
     fail_handler = other.fail_handler;
 
-    other.tag = nullptr;
     other.should_cleanup = FALSE;
 
     return *this;
@@ -98,14 +95,13 @@ _sixtp_child_result::~_sixtp_child_result ()
     {
         cleanup_handler (this);
     }
-    if (type == SIXTP_CHILD_RESULT_NODE) g_free (tag);
 }
 
 void
 sixtp_child_result_print (const sixtp_child_result* cr, FILE* f)
 {
     fprintf (f, "((tag %s) (data %p))",
-             cr->tag ? cr->tag : "(null)",
+             cr->tag.empty () ? "(null)" : cr->tag.c_str (),
              cr->data);
 }
 
@@ -531,15 +527,9 @@ sixtp_sax_characters_handler (void* user_data, const xmlChar* text, int len)
         if (pdata->parsing_ok && result)
         {
             /* push the result onto the current "child" list. */
-            sixtp_child_result child_data;
-
-            child_data.type = SIXTP_CHILD_RESULT_CHARS;
-            child_data.tag = NULL;
-            child_data.data = result;
-            child_data.should_cleanup = TRUE;
-            child_data.cleanup_handler = frame->parser->cleanup_chars;
-            child_data.fail_handler = frame->parser->chars_fail_handler;
-            frame->data_from_children.push_back (std::move (child_data));
+            frame->data_from_children.emplace_back (
+                SIXTP_CHILD_RESULT_CHARS, std::string (), result,
+                frame->parser->cleanup_chars, frame->parser->chars_fail_handler);
         }
     }
 }
@@ -588,20 +578,16 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
 
     if (current_frame->frame_data)
     {
-        /* push the result onto the parent's child result list. Fetch the
-           pointer only *after* the push: push_back may reallocate the
-           vector and move every element (including this one) to a new
-           buffer, so a pointer taken beforehand could dangle. */
-        sixtp_child_result cr;
-
-        cr.type = SIXTP_CHILD_RESULT_NODE;
-        cr.tag = g_strdup (current_frame->tag);
-        cr.data = current_frame->frame_data;
-        cr.should_cleanup = TRUE;
-        cr.cleanup_handler = current_frame->parser->cleanup_result;
-        cr.fail_handler = current_frame->parser->result_fail_handler;
-        parent_frame->data_from_children.push_back (std::move (cr));
-        child_result_data = &parent_frame->data_from_children.back ();
+        /* push the result onto the parent's child result list and build it
+           in place: emplace_back may reallocate the vector and move every
+           existing element to a new buffer, but the reference it returns
+           is to the already-constructed element at its final address, so
+           there's no dangling pointer to worry about here. */
+        auto& cr = parent_frame->data_from_children.emplace_back (
+            SIXTP_CHILD_RESULT_NODE, current_frame->tag ? current_frame->tag : "",
+            current_frame->frame_data, current_frame->parser->cleanup_result,
+            current_frame->parser->result_fail_handler);
+        child_result_data = &cr;
     }
 
     /* grab it before it goes away - we own the reference */

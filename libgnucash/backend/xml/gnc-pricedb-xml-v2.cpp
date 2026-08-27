@@ -283,7 +283,7 @@ pricedb_after_child_handler (gpointer data_for_children,
     if (!child_result) return (FALSE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (FALSE);
 
-    if (strcmp (child_result->tag, "price") == 0)
+    if (child_result->tag == "price")
     {
         GNCPrice* p = (GNCPrice*) child_result->data;
 
@@ -295,7 +295,7 @@ pricedb_after_child_handler (gpointer data_for_children,
     }
     else
     {
-        PERR ("unexpected tag %s\n", child_result->tag);
+        PERR ("unexpected tag %s\n", child_result->tag.c_str ());
         return FALSE;
     }
     return FALSE;

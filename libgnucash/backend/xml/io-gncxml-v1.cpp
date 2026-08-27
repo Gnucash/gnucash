@@ -997,7 +997,7 @@ ledger_data_after_child_handler (gpointer data_for_children,
 
     /* if we see the pricedb, deal with it */
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (TRUE);
-    if (strcmp (child_result->tag, "pricedb") == 0)
+    if (child_result->tag == "pricedb")
     {
         GNCPriceDB* pdb = (GNCPriceDB*) child_result->data;
         GNCParseStatus* status = (GNCParseStatus*) global_data;
@@ -1239,7 +1239,7 @@ account_restore_after_child_handler (gpointer data_for_children,
 
     if (!child_result) return (TRUE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (TRUE);
-    if (strcmp (child_result->tag, "slots") == 0)
+    if (child_result->tag == "slots")
     {
         auto f = static_cast<KvpFrame*> (child_result->data);
         g_return_val_if_fail (f, FALSE);
@@ -1247,7 +1247,7 @@ account_restore_after_child_handler (gpointer data_for_children,
         a->inst.kvp_data = f;
         child_result->should_cleanup = FALSE;
     }
-    else if (strcmp (child_result->tag, "currency") == 0)
+    else if (child_result->tag == "currency")
     {
         gnc_commodity* com = (gnc_commodity*) child_result->data;
         g_return_val_if_fail (com, FALSE);
@@ -1255,7 +1255,7 @@ account_restore_after_child_handler (gpointer data_for_children,
         DxaccAccountSetCurrency (a, com);
         /* let the normal child_result handler clean up com */
     }
-    else if (strcmp (child_result->tag, "security") == 0)
+    else if (child_result->tag == "security")
     {
         gnc_commodity* com = (gnc_commodity*) child_result->data;
         g_return_val_if_fail (com, FALSE);
@@ -1732,7 +1732,7 @@ commodity_restore_start_handler (const sixtp_child_result_list& sibling_data, gp
 
 /* ----------------------------------------------------*/
 #define COMMOD_TOKEN(NAME)              \
-  if(strcmp(child_result->tag, #NAME) == 0) {       \
+  if(child_result->tag == #NAME) {       \
     if(cpi->NAME) return(FALSE);            \
     cpi->NAME = (gchar *) child_result->data;       \
     child_result->should_cleanup = FALSE;       \
@@ -1760,7 +1760,7 @@ commodity_restore_after_child_handler (gpointer data_for_children,
     COMMOD_TOKEN (id)
     COMMOD_TOKEN (name)
     COMMOD_TOKEN (xcode)
-    if (strcmp (child_result->tag, "fraction") == 0)
+    if (child_result->tag == "fraction")
     {
         gint64 frac;
 
@@ -1943,13 +1943,13 @@ generic_gnc_commodity_lookup_after_child_handler (gpointer data_for_children,
     g_return_val_if_fail (child_result, FALSE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (FALSE);
 
-    if (strcmp (child_result->tag, "space") == 0)
+    if (child_result->tag == "space")
     {
         if (cpi->name_space) return (FALSE);
         cpi->name_space = (gchar*) child_result->data;
         child_result->should_cleanup = FALSE;
     }
-    else if (strcmp (child_result->tag, "id") == 0)
+    else if (child_result->tag == "id")
     {
         if (cpi->id) return (FALSE);
         cpi->id = (gchar*) child_result->data;
@@ -2168,7 +2168,7 @@ txn_restore_after_child_handler (gpointer data_for_children,
     g_return_val_if_fail (trans, FALSE);
     if (!child_result) return (TRUE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (TRUE);
-    if (strcmp (child_result->tag, "slots") == 0)
+    if (child_result->tag == "slots")
     {
         KvpFrame* f = (KvpFrame*) child_result->data;
         g_return_val_if_fail (f, FALSE);
@@ -2473,7 +2473,7 @@ txn_restore_split_after_child_handler (gpointer data_for_children,
     if (!child_result) return (TRUE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (TRUE);
 
-    if (strcmp (child_result->tag, "slots") == 0)
+    if (child_result->tag == "slots")
     {
         KvpFrame* f = static_cast<KvpFrame*> (child_result->data);
         g_return_val_if_fail (f, FALSE);
@@ -2481,14 +2481,14 @@ txn_restore_split_after_child_handler (gpointer data_for_children,
         s->inst.kvp_data = f;
         child_result->should_cleanup = FALSE;
     }
-    else if (strcmp (child_result->tag, "quantity") == 0)
+    else if (child_result->tag == "quantity")
     {
         gnc_numeric* n = (gnc_numeric*) child_result->data;
         g_return_val_if_fail (n, FALSE);
         xaccSplitSetAmount (s, *n);
         /* let the normal child_result handler clean up n */
     }
-    else if (strcmp (child_result->tag, "value") == 0)
+    else if (child_result->tag == "value")
     {
         gnc_numeric* n = (gnc_numeric*) child_result->data;
         g_return_val_if_fail (n, FALSE);
@@ -3122,7 +3122,7 @@ pricedb_after_child_handler (gpointer data_for_children,
     if (!child_result) return (FALSE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (FALSE);
 
-    if (strcmp (child_result->tag, "price") == 0)
+    if (child_result->tag == "price")
     {
         GNCPrice* p = (GNCPrice*) child_result->data;
 

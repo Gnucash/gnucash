@@ -29,6 +29,7 @@
 #include <stdio.h>
 
 #include <stdarg.h>
+#include <string>
 #include <vector>
 #include "gnc-engine.h"
 
@@ -188,7 +189,7 @@ typedef enum
 struct _sixtp_child_result
 {
     sixtp_child_result_type type;
-    gchar* tag; /* NULL for a CHARS node. */
+    std::string tag; /* empty for a CHARS node. */
     gpointer data;
     /* mutable: handlers observing this result through a `const
        sixtp_child_result_list&` (sibling/parent data) can still take
@@ -197,7 +198,15 @@ struct _sixtp_child_result
     sixtp_result_handler cleanup_handler;
     sixtp_result_handler fail_handler;
 
-    _sixtp_child_result () = default;
+    /* should_cleanup always starts TRUE: a result is born owning `data`,
+       and only gives that up later if some handler clears the flag. */
+    _sixtp_child_result (sixtp_child_result_type type_, std::string tag_,
+                         gpointer data_, sixtp_result_handler cleanup_handler_,
+                         sixtp_result_handler fail_handler_)
+        : type (type_), tag (std::move (tag_)), data (data_),
+          should_cleanup (TRUE), cleanup_handler (cleanup_handler_),
+          fail_handler (fail_handler_)
+    {}
     _sixtp_child_result (const _sixtp_child_result&) = delete;
     _sixtp_child_result& operator= (const _sixtp_child_result&) = delete;
     _sixtp_child_result (_sixtp_child_result&& other) noexcept;
