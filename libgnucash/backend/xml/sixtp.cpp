@@ -29,6 +29,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <string_view>
+#include <unordered_set>
 #include <qoflog.h>
 #ifdef _MSC_VER
     typedef int ssize_t;
@@ -179,18 +181,7 @@ sixtp_set_chars_fail (sixtp* parser, sixtp_result_handler handler)
 sixtp*
 sixtp_new (void)
 {
-    sixtp* s = g_new0 (sixtp, 1);
-
-    if (s)
-    {
-        s->child_parsers = g_hash_table_new (g_str_hash, g_str_equal);
-        if (!s->child_parsers)
-        {
-            g_free (s);
-            s = NULL;
-        }
-    }
-    return (s);
+    return new sixtp ();
 }
 
 sixtp*
@@ -277,50 +268,35 @@ sixtp_set_any (sixtp* tochange, int cleanup, ...)
     return tochange;
 }
 
-static void sixtp_destroy_child (gpointer key, gpointer value,
-                                 gpointer user_data);
+static void sixtp_destroy_child (const std::string& tag, sixtp* child,
+                                 std::unordered_set<sixtp*>& corpses);
 
 static void
-sixtp_destroy_node (sixtp* sp, GHashTable* corpses)
+sixtp_destroy_node (sixtp* sp, std::unordered_set<sixtp*>& corpses)
 {
     g_return_if_fail (sp);
-    g_return_if_fail (corpses);
-    g_hash_table_foreach (sp->child_parsers, sixtp_destroy_child, corpses);
-    g_hash_table_destroy (sp->child_parsers);
-    g_free (sp);
+    for (auto& [tag, child] : sp->child_parsers)
+        sixtp_destroy_child (tag, child, corpses);
+    delete sp;
 }
 
 static void
-sixtp_destroy_child (gpointer key, gpointer value, gpointer user_data)
+sixtp_destroy_child (const std::string& tag, sixtp* child,
+                     std::unordered_set<sixtp*>& corpses)
 {
-    GHashTable* corpses = (GHashTable*) user_data;
-    sixtp* child = (sixtp*) value;
-    gpointer lookup_key;
-    gpointer lookup_value;
+    DEBUG ("Killing sixtp child under key <%s>", tag.c_str ());
 
-    DEBUG ("Killing sixtp child under key <%s>", key ? (char*) key : "(null)");
-
-    if (!corpses)
-    {
-        g_critical ("no corpses in sixtp_destroy_child <%s>",
-                    key ? (char*) key : "(null)");
-        g_free (key);
-        return;
-    }
     if (!child)
     {
-        g_critical ("no child in sixtp_destroy_child <%s>",
-                    key ? (char*) key : "");
-        g_free (key);
+        g_critical ("no child in sixtp_destroy_child <%s>", tag.c_str ());
         return;
     }
-    g_free (key);
 
-    if (!g_hash_table_lookup_extended (corpses, (gconstpointer) child,
-                                       &lookup_key, &lookup_value))
+    /* insert() returns false in .second if child was already a member,
+       i.e. already killed (or in the process of being killed - this is
+       also what stops cyclic parser graphs from recursing forever). */
+    if (corpses.insert (child).second)
     {
-        /* haven't killed this one yet. */
-        g_hash_table_insert (corpses, child, (gpointer) 1);
         sixtp_destroy_node (child, corpses);
     }
 }
@@ -328,11 +304,9 @@ sixtp_destroy_child (gpointer key, gpointer value, gpointer user_data)
 void
 sixtp_destroy (sixtp* sp)
 {
-    GHashTable* corpses;
     g_return_if_fail (sp);
-    corpses = g_hash_table_new (g_direct_hash, g_direct_equal);
+    std::unordered_set<sixtp*> corpses;
     sixtp_destroy_node (sp, corpses);
-    g_hash_table_destroy (corpses);
 }
 
 
@@ -345,8 +319,7 @@ sixtp_add_sub_parser (sixtp* parser, const gchar* tag, sixtp* sub_parser)
     g_return_val_if_fail (tag, FALSE);
     g_return_val_if_fail (sub_parser, FALSE);
 
-    g_hash_table_insert (parser->child_parsers,
-                         g_strdup (tag), (gpointer) sub_parser);
+    parser->child_parsers[tag] = sub_parser;
     return (TRUE);
 }
 
@@ -424,8 +397,6 @@ sixtp_sax_start_handler (void* user_data,
     sixtp_stack_frame* current_frame = NULL;
     sixtp* current_parser = NULL;
     sixtp* next_parser = NULL;
-    gchar* next_parser_tag = NULL;
-    gboolean lookup_success = FALSE;
     sixtp_stack_frame* new_frame = NULL;
 
     /* Index, not pointer: the push_back below can reallocate pdata->stack
@@ -435,23 +406,25 @@ sixtp_sax_start_handler (void* user_data,
     current_frame = &pdata->stack[current_idx];
     current_parser = current_frame->parser;
 
-    /* Use an extended lookup so we can get *our* copy of the key.
-       Since we've strduped it, we know its lifetime... */
-    lookup_success =
-        g_hash_table_lookup_extended (current_parser->child_parsers,
-                                      name,
-                                      reinterpret_cast<void**> (&next_parser_tag),
-                                      reinterpret_cast<void**> (&next_parser));
+    /* child_parsers has a transparent comparator, so this looks the tag
+       up directly against the SAX-provided name - no std::string built
+       just to search. */
+    auto it = current_parser->child_parsers.find (
+        std::string_view (reinterpret_cast<const char*> (name)));
 
-
-    if (!lookup_success)
+    if (it != current_parser->child_parsers.end ())
+    {
+        next_parser = it->second;
+    }
+    else
     {
         /* magic catch all value */
-        lookup_success = g_hash_table_lookup_extended (
-                             current_parser->child_parsers, SIXTP_MAGIC_CATCHER,
-                             reinterpret_cast<void**> (&next_parser_tag),
-                             reinterpret_cast<void**> (&next_parser));
-        if (!lookup_success)
+        auto catch_it = current_parser->child_parsers.find (SIXTP_MAGIC_CATCHER);
+        if (catch_it != current_parser->child_parsers.end ())
+        {
+            next_parser = catch_it->second;
+        }
+        else
         {
             g_critical ("Tag <%s> not allowed in current context.",
                         name ? (char*) name : "(null)");

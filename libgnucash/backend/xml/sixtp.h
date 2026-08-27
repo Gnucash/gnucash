@@ -29,8 +29,10 @@
 #include <stdio.h>
 
 #include <stdarg.h>
+#include <functional>
 #include <string>
 #include <vector>
+#include <boost/container/flat_map.hpp>
 #include "gnc-engine.h"
 
 #include "gnc-xml-helper.h"
@@ -154,7 +156,13 @@ typedef struct sixtp
     /* called to cleanup character results when cleaning up this node's
        children. */
 
-    GHashTable* child_parsers;
+    /* Small, built once per node while the parser tree is set up, then
+       looked up once per XML element for the rest of the document's
+       life - a sorted flat array beats a hash table for both patterns
+       at these sizes. Transparent (std::less<>) so a lookup can compare
+       against the SAX-provided tag directly, without constructing a
+       std::string first. */
+    boost::container::flat_map<std::string, sixtp*, std::less<>> child_parsers;
 } sixtp;
 
 typedef enum
