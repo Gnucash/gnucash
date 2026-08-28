@@ -115,17 +115,8 @@ handle_load_error (GError **key_error, const std::string& group)
  * back to index 0, with a warning, rather than reading out of
  * bounds.
  **************************************************/
-static int
-find_mnemonic_index (const std::string& mnemonic, const std::vector<std::string>& mnemonics)
-{
-    auto iter = std::find (mnemonics.cbegin(), mnemonics.cend(), mnemonic);
-    if (iter == mnemonics.cend())
-        return -1;
-    return static_cast<int>(std::distance (mnemonics.cbegin(), iter));
-}
-
 static std::string
-index_to_mnemonic (int index, const std::vector<std::string>& mnemonics, const char* what)
+format_to_mnemonic (int index, const std::vector<std::string>& mnemonics, const char* what)
 {
     if (index < 0 || static_cast<size_t>(index) >= mnemonics.size())
     {
@@ -136,12 +127,12 @@ index_to_mnemonic (int index, const std::vector<std::string>& mnemonics, const c
 }
 
 static int
-mnemonic_to_index (const std::string& mnemonic, const std::vector<std::string>& mnemonics,
-                    const std::vector<std::string>& legacy_order, const char* what)
+mnemonic_to_format (const std::string& mnemonic, const std::vector<std::string>& mnemonics,
+                     const std::vector<std::string>& legacy_order, const char* what)
 {
-    auto idx = find_mnemonic_index (mnemonic, mnemonics);
-    if (idx >= 0)
-        return idx;
+    auto iter = std::find (mnemonics.cbegin(), mnemonics.cend(), mnemonic);
+    if (iter != mnemonics.cend())
+        return static_cast<int>(std::distance (mnemonics.cbegin(), iter));
 
     // Not a recognized mnemonic. Fall back to interpreting the value as a
     // legacy numeric index for settings files saved by older GnuCash
@@ -155,10 +146,10 @@ mnemonic_to_index (const std::string& mnemonic, const std::vector<std::string>& 
             legacy_index >= 0 &&
             static_cast<size_t>(legacy_index) < legacy_order.size())
         {
-            auto legacy_idx = find_mnemonic_index (
-                legacy_order[static_cast<size_t>(legacy_index)], mnemonics);
-            if (legacy_idx >= 0)
-                return legacy_idx;
+            iter = std::find (mnemonics.cbegin(), mnemonics.cend(),
+                               legacy_order[static_cast<size_t>(legacy_index)]);
+            if (iter != mnemonics.cend())
+                return static_cast<int>(std::distance (mnemonics.cbegin(), iter));
         }
     }
     catch (const std::exception&)
@@ -198,31 +189,6 @@ date_format_mnemonics ()
     std::transform (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(), std::back_inserter (mnemonics),
                      [](const GncDateFormat& fmt) { return fmt.m_fmt; });
     return mnemonics;
-}
-
-static std::string
-date_format_to_mnemonic (int date_format)
-{
-    return index_to_mnemonic (date_format, date_format_mnemonics(), "date format");
-}
-
-static int
-mnemonic_to_date_format (const std::string& mnemonic)
-{
-    return mnemonic_to_index (mnemonic, date_format_mnemonics(), c_legacy_date_format_order, "date format");
-}
-
-static std::string
-currency_format_to_mnemonic (int currency_format)
-{
-    return index_to_mnemonic (currency_format, c_currency_format_mnemonics, "currency format");
-}
-
-static int
-mnemonic_to_currency_format (const std::string& mnemonic)
-{
-    return mnemonic_to_index (mnemonic, c_currency_format_mnemonics, c_currency_format_mnemonics,
-                               "currency format");
 }
 
 bool preset_is_reserved_name (const std::string& name)
@@ -295,7 +261,8 @@ CsvImportSettings::load (void)
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_DATE, &key_error);
     if (key_char && *key_char != '\0')
-        m_date_format = mnemonic_to_date_format (key_char);
+        m_date_format = mnemonic_to_format (key_char, date_format_mnemonics(),
+                                             c_legacy_date_format_order, "date format");
     else
         m_date_format = 0;
     m_load_error |= handle_load_error (&key_error, group);
@@ -304,7 +271,8 @@ CsvImportSettings::load (void)
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
     if (key_char && *key_char != '\0')
-        m_currency_format = mnemonic_to_currency_format (key_char);
+        m_currency_format = mnemonic_to_format (key_char, c_currency_format_mnemonics,
+                                                 c_currency_format_mnemonics, "currency format");
     else
         m_currency_format = 0;
     m_load_error |= handle_load_error (&key_error, group);
@@ -360,7 +328,7 @@ CsvImportSettings::save (void)
     g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, m_separators.c_str());
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_ESC, m_enable_escape);
     g_key_file_set_string (keyfile, group.c_str(), CSV_DATE,
-                            date_format_to_mnemonic (m_date_format).c_str());
+                            format_to_mnemonic (m_date_format, date_format_mnemonics(), "date format").c_str());
     std::ostringstream cmt_ss;
     cmt_ss << "Supported date formats: ";
     std::for_each (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
@@ -369,7 +337,8 @@ CsvImportSettings::save (void)
     auto cmt = cmt_ss.str().substr(0, static_cast<long>(cmt_ss.tellp()) - 2);
     g_key_file_set_comment (keyfile, group.c_str(), CSV_DATE, cmt.c_str(), nullptr);
     g_key_file_set_string (keyfile, group.c_str(), CSV_CURRENCY,
-                            currency_format_to_mnemonic (m_currency_format).c_str());
+                            format_to_mnemonic (m_currency_format, c_currency_format_mnemonics,
+                                                "currency format").c_str());
     std::ostringstream curr_cmt_ss;
     curr_cmt_ss << "Supported currency formats: ";
     std::for_each (c_currency_format_mnemonics.cbegin(), c_currency_format_mnemonics.cend(),
