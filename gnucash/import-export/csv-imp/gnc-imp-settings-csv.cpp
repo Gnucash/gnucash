@@ -39,6 +39,7 @@
 #include "gnc-ui-util.h"
 
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -93,75 +94,71 @@ handle_load_error (GError **key_error, const std::string& group)
 }
 
 /**************************************************
- * date_format_to_mnemonic / mnemonic_to_date_format
+ * Mnemonic-based persistence for the date and currency formats
  *
- * The date format used to be stored as a plain index into
- * GncDate::c_formats. That's fragile: if the vector's order or
- * length ever changes, previously saved settings would silently
- * start pointing at the wrong (or a nonexistent) format. Instead
- * we now persist the format's own mnemonic string (e.g. "y-m-d"),
- * which is stable regardless of how c_formats is reordered.
+ * Both used to be stored as a plain index into a format list.
+ * That's fragile: if a list's order or length ever changes,
+ * previously saved settings would silently start pointing at the
+ * wrong (or a nonexistent) format. Instead both are now persisted
+ * as the format's own mnemonic string (e.g. "y-m-d", "period"),
+ * which is stable regardless of how the underlying list is
+ * reordered.
  *
  * For backward compatibility, a value that isn't a recognized
  * mnemonic is also tried as a legacy numeric index, translated
- * through a fixed table reflecting the c_formats order that was
+ * through a fixed table reflecting the list order that was
  * actually in effect when settings were saved as plain indices.
- * That table must never be changed, even if c_formats itself is
+ * That table must never be changed, even if the live list is
  * later reordered or extended, so old numeric indices keep
  * resolving to the format they originally meant. Anything that
  * still doesn't resolve to a valid, currently-known format falls
  * back to index 0, with a warning, rather than reading out of
  * bounds.
  **************************************************/
-static const std::vector<std::string> c_legacy_date_format_order
-{
-    "y-m-d", "d-m-y", "m-d-y", "d-m", "m-d", "Locale"
-};
+using MnemonicLookup = std::function<std::string(size_t)>;
 
 static int
-find_format_index (const std::string& mnemonic)
+find_mnemonic_index (const std::string& mnemonic, size_t count, const MnemonicLookup& get_mnemonic)
 {
-    auto iter = std::find_if (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
-                               [&mnemonic](const GncDateFormat& fmt)
-                                   { return fmt.m_fmt == mnemonic; });
-    if (iter == GncDate::c_formats.cend())
-        return -1;
-    return static_cast<int>(std::distance (GncDate::c_formats.cbegin(), iter));
+    for (size_t i = 0; i < count; ++i)
+        if (get_mnemonic (i) == mnemonic)
+            return static_cast<int>(i);
+    return -1;
 }
 
 static std::string
-date_format_to_mnemonic (int date_format)
+index_to_mnemonic (int index, size_t count, const MnemonicLookup& get_mnemonic, const char* what)
 {
-    if (date_format < 0 ||
-        static_cast<size_t>(date_format) >= GncDate::c_formats.size())
+    if (index < 0 || static_cast<size_t>(index) >= count)
     {
-        g_warning ("Invalid date format index %d, defaulting to 0", date_format);
-        date_format = 0;
+        g_warning ("Invalid %s index %d, defaulting to 0", what, index);
+        index = 0;
     }
-    return GncDate::c_formats[static_cast<size_t>(date_format)].m_fmt;
+    return get_mnemonic (static_cast<size_t>(index));
 }
 
 static int
-mnemonic_to_date_format (const std::string& mnemonic)
+mnemonic_to_index (const std::string& mnemonic, size_t count, const MnemonicLookup& get_mnemonic,
+                    const std::vector<std::string>& legacy_order, const char* what)
 {
-    auto idx = find_format_index (mnemonic);
+    auto idx = find_mnemonic_index (mnemonic, count, get_mnemonic);
     if (idx >= 0)
         return idx;
 
     // Not a recognized mnemonic. Fall back to interpreting the value as a
     // legacy numeric index for settings files saved by older GnuCash
-    // versions, mapped through the fixed historical order above rather
-    // than the (possibly since rearranged) live c_formats order.
+    // versions, mapped through the fixed historical order rather than
+    // the (possibly since rearranged) live list.
     try
     {
         size_t pos = 0;
         auto legacy_index = std::stoi (mnemonic, &pos);
         if (pos == mnemonic.size() &&
             legacy_index >= 0 &&
-            static_cast<size_t>(legacy_index) < c_legacy_date_format_order.size())
+            static_cast<size_t>(legacy_index) < legacy_order.size())
         {
-            auto legacy_idx = find_format_index (
-                c_legacy_date_format_order[static_cast<size_t>(legacy_index)]);
+            auto legacy_idx = find_mnemonic_index (
+                legacy_order[static_cast<size_t>(legacy_index)], count, get_mnemonic);
             if (legacy_idx >= 0)
                 return legacy_idx;
         }
@@ -171,79 +168,55 @@ mnemonic_to_date_format (const std::string& mnemonic)
         // not a number either, fall through to the default below
     }
 
-    g_warning ("Unrecognized date format '%s', defaulting to 0", mnemonic.c_str());
+    g_warning ("Unrecognized %s '%s', defaulting to 0", what, mnemonic.c_str());
     return 0;
 }
 
-/**************************************************
- * currency_format_to_mnemonic / mnemonic_to_currency_format
- *
- * Same rationale and pattern as the date format above: persist a
- * stable mnemonic ("locale", "period", "comma") instead of the raw
- * index consumed by parse_monetary()/parse_amount_price(), so a
- * settings file survives a future reordering or extension of the
- * currency format list.
- *
- * c_currency_format_mnemonics doubles as the legacy-index table:
- * unlike c_formats, this list has always lived here, next to its
- * one and only consumer, so its current order and its historical
- * order are the same thing. It must stay append-only (new formats
- * added at the end) for that to keep holding.
- **************************************************/
+// The c_formats order that was actually in effect when date formats were
+// saved as plain indices. Must never be edited, even if c_formats itself
+// is later reordered or extended.
+static const std::vector<std::string> c_legacy_date_format_order
+{
+    "y-m-d", "d-m-y", "m-d-y", "d-m", "m-d", "Locale"
+};
+
+// Unlike c_formats, this list has always lived here, next to its one and
+// only consumer (parse_monetary()/parse_amount_price()), so it doubles as
+// its own legacy-index table. It must stay append-only (new formats added
+// at the end) for that to keep holding.
 static const std::vector<std::string> c_currency_format_mnemonics
 {
     "locale", "period", "comma"
 };
 
-static int
-find_currency_format_index (const std::string& mnemonic)
+static std::string
+date_format_to_mnemonic (int date_format)
 {
-    auto iter = std::find (c_currency_format_mnemonics.cbegin(), c_currency_format_mnemonics.cend(),
-                            mnemonic);
-    if (iter == c_currency_format_mnemonics.cend())
-        return -1;
-    return static_cast<int>(std::distance (c_currency_format_mnemonics.cbegin(), iter));
+    return index_to_mnemonic (date_format, GncDate::c_formats.size(),
+        [](size_t i) { return GncDate::c_formats[i].m_fmt; }, "date format");
+}
+
+static int
+mnemonic_to_date_format (const std::string& mnemonic)
+{
+    return mnemonic_to_index (mnemonic, GncDate::c_formats.size(),
+        [](size_t i) { return GncDate::c_formats[i].m_fmt; },
+        c_legacy_date_format_order, "date format");
 }
 
 static std::string
 currency_format_to_mnemonic (int currency_format)
 {
-    if (currency_format < 0 ||
-        static_cast<size_t>(currency_format) >= c_currency_format_mnemonics.size())
-    {
-        g_warning ("Invalid currency format index %d, defaulting to 0", currency_format);
-        currency_format = 0;
-    }
-    return c_currency_format_mnemonics[static_cast<size_t>(currency_format)];
+    return index_to_mnemonic (currency_format, c_currency_format_mnemonics.size(),
+        [](size_t i) { return c_currency_format_mnemonics[i]; }, "currency format");
 }
 
 static int
 mnemonic_to_currency_format (const std::string& mnemonic)
 {
-    auto idx = find_currency_format_index (mnemonic);
-    if (idx >= 0)
-        return idx;
-
-    // Not a recognized mnemonic. Fall back to interpreting the value as a
-    // legacy numeric index for settings files saved by older GnuCash
-    // versions (or by a newer version that stored an index for a
-    // currency format this build doesn't have a mnemonic for).
-    try
-    {
-        size_t pos = 0;
-        auto legacy_index = std::stoi (mnemonic, &pos);
-        if (pos == mnemonic.size() &&
-            legacy_index >= 0 &&
-            static_cast<size_t>(legacy_index) < c_currency_format_mnemonics.size())
-            return legacy_index;
-    }
-    catch (const std::exception&)
-    {
-        // not a number either, fall through to the default below
-    }
-
-    g_warning ("Unrecognized currency format '%s', defaulting to 0", mnemonic.c_str());
-    return 0;
+    return mnemonic_to_index (mnemonic, c_currency_format_mnemonics.size(),
+        [](size_t i) { return c_currency_format_mnemonics[i]; },
+        c_currency_format_mnemonics, "currency format");
 }
 
 bool preset_is_reserved_name (const std::string& name)
