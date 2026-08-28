@@ -195,11 +195,27 @@ td.highlight {
      'tag "td"
      'attribute (list "class" "centered-label-cell"))
 
-    (gnc:html-document-set-style! ssdoc "normal-row" 'tag "tr")
-    (gnc:html-document-set-style! ssdoc "alternate-row" 'tag "tr")
-    (gnc:html-document-set-style! ssdoc "primary-subheading" 'tag "tr")
-    (gnc:html-document-set-style! ssdoc "secondary-subheading" 'tag "tr")
-    (gnc:html-document-set-style! ssdoc "grand-total" 'tag "tr")
+    (gnc:html-document-set-style!
+     ssdoc "normal-row"
+     'tag "tr"
+     'attribute (list "class" "normal-row"))
+
+    (gnc:html-document-set-style!
+     ssdoc "alternate-row"
+     'tag "tr"
+     'attribute (list "class" "alternate-row"))
+
+    (gnc:html-document-set-style!
+     ssdoc "primary-subheading"
+     'tag "tr"  'attribute (list "class" "primary-subheading"))
+
+    (gnc:html-document-set-style!
+     ssdoc "secondary-subheading"
+     'tag "tr" 'attribute (list "class" "secondary-subheading"))
+
+    (gnc:html-document-set-style!
+     ssdoc "grand-total"
+     'tag "tr" 'attribute (list "class" "grand-total"))
 
     (cond
      ((string-contains-ci all-css "</style")
