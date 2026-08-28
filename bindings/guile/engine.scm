@@ -29,3 +29,20 @@
 (load-and-reexport (sw_engine)
                    (gnucash engine business-core)
                    (gnucash engine gnc-numeric))
+
+
+(export gnc:price-ref)
+
+(define price-guardian (make-guardian))
+
+(define (reclaim-prices)
+  (let ((price (price-guardian)))
+    (when price
+      (gnc-price-unref price)
+      (reclaim-prices))))
+
+(add-hook! after-gc-hook reclaim-prices)
+
+(define (gnc:price-ref price)
+  (gnc-price-ref price)
+  (price-guardian price))
