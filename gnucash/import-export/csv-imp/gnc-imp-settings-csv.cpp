@@ -103,10 +103,32 @@ handle_load_error (GError **key_error, const std::string& group)
  * which is stable regardless of how c_formats is reordered.
  *
  * For backward compatibility, a value that isn't a recognized
- * mnemonic is also tried as a legacy numeric index. Anything that
- * still doesn't resolve to a valid format falls back to index 0,
- * with a warning, rather than reading out of bounds.
+ * mnemonic is also tried as a legacy numeric index, translated
+ * through a fixed table reflecting the c_formats order that was
+ * actually in effect when settings were saved as plain indices.
+ * That table must never be changed, even if c_formats itself is
+ * later reordered or extended, so old numeric indices keep
+ * resolving to the format they originally meant. Anything that
+ * still doesn't resolve to a valid, currently-known format falls
+ * back to index 0, with a warning, rather than reading out of
+ * bounds.
  **************************************************/
+static const std::vector<std::string> c_legacy_date_format_order
+{
+    "y-m-d", "d-m-y", "m-d-y", "d-m", "m-d", "Locale"
+};
+
+static int
+find_format_index (const std::string& mnemonic)
+{
+    auto iter = std::find_if (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
+                               [&mnemonic](const GncDateFormat& fmt)
+                                   { return fmt.m_fmt == mnemonic; });
+    if (iter == GncDate::c_formats.cend())
+        return -1;
+    return static_cast<int>(std::distance (GncDate::c_formats.cbegin(), iter));
+}
+
 static std::string
 date_format_to_mnemonic (int date_format)
 {
@@ -122,22 +144,27 @@ date_format_to_mnemonic (int date_format)
 static int
 mnemonic_to_date_format (const std::string& mnemonic)
 {
-    auto iter = std::find_if (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
-                               [&mnemonic](const GncDateFormat& fmt)
-                                   { return fmt.m_fmt == mnemonic; });
-    if (iter != GncDate::c_formats.cend())
-        return static_cast<int>(std::distance (GncDate::c_formats.cbegin(), iter));
+    auto idx = find_format_index (mnemonic);
+    if (idx >= 0)
+        return idx;
 
     // Not a recognized mnemonic. Fall back to interpreting the value as a
-    // legacy numeric index for settings files saved by older GnuCash versions.
+    // legacy numeric index for settings files saved by older GnuCash
+    // versions, mapped through the fixed historical order above rather
+    // than the (possibly since rearranged) live c_formats order.
     try
     {
         size_t pos = 0;
         auto legacy_index = std::stoi (mnemonic, &pos);
         if (pos == mnemonic.size() &&
             legacy_index >= 0 &&
-            static_cast<size_t>(legacy_index) < GncDate::c_formats.size())
-            return legacy_index;
+            static_cast<size_t>(legacy_index) < c_legacy_date_format_order.size())
+        {
+            auto legacy_idx = find_format_index (
+                c_legacy_date_format_order[static_cast<size_t>(legacy_index)]);
+            if (legacy_idx >= 0)
+                return legacy_idx;
+        }
     }
     catch (const std::exception&)
     {
