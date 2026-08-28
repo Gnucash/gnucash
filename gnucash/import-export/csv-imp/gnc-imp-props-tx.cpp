@@ -164,6 +164,8 @@ GncNumeric parse_monetary (const std::string &str, int currency_format)
         if (!(xaccParseAmountExtImport (str_no_symbols.c_str(), TRUE, '-', ',', '.', "$+", &val, &endptr)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
+    default:
+        throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
     }
 
     return GncNumeric(val);

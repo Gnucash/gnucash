@@ -175,6 +175,77 @@ mnemonic_to_date_format (const std::string& mnemonic)
     return 0;
 }
 
+/**************************************************
+ * currency_format_to_mnemonic / mnemonic_to_currency_format
+ *
+ * Same rationale and pattern as the date format above: persist a
+ * stable mnemonic ("locale", "period", "comma") instead of the raw
+ * index consumed by parse_monetary()/parse_amount_price(), so a
+ * settings file survives a future reordering or extension of the
+ * currency format list.
+ *
+ * c_currency_format_mnemonics doubles as the legacy-index table:
+ * unlike c_formats, this list has always lived here, next to its
+ * one and only consumer, so its current order and its historical
+ * order are the same thing. It must stay append-only (new formats
+ * added at the end) for that to keep holding.
+ **************************************************/
+static const std::vector<std::string> c_currency_format_mnemonics
+{
+    "locale", "period", "comma"
+};
+
+static int
+find_currency_format_index (const std::string& mnemonic)
+{
+    auto iter = std::find (c_currency_format_mnemonics.cbegin(), c_currency_format_mnemonics.cend(),
+                            mnemonic);
+    if (iter == c_currency_format_mnemonics.cend())
+        return -1;
+    return static_cast<int>(std::distance (c_currency_format_mnemonics.cbegin(), iter));
+}
+
+static std::string
+currency_format_to_mnemonic (int currency_format)
+{
+    if (currency_format < 0 ||
+        static_cast<size_t>(currency_format) >= c_currency_format_mnemonics.size())
+    {
+        g_warning ("Invalid currency format index %d, defaulting to 0", currency_format);
+        currency_format = 0;
+    }
+    return c_currency_format_mnemonics[static_cast<size_t>(currency_format)];
+}
+
+static int
+mnemonic_to_currency_format (const std::string& mnemonic)
+{
+    auto idx = find_currency_format_index (mnemonic);
+    if (idx >= 0)
+        return idx;
+
+    // Not a recognized mnemonic. Fall back to interpreting the value as a
+    // legacy numeric index for settings files saved by older GnuCash
+    // versions (or by a newer version that stored an index for a
+    // currency format this build doesn't have a mnemonic for).
+    try
+    {
+        size_t pos = 0;
+        auto legacy_index = std::stoi (mnemonic, &pos);
+        if (pos == mnemonic.size() &&
+            legacy_index >= 0 &&
+            static_cast<size_t>(legacy_index) < c_currency_format_mnemonics.size())
+            return legacy_index;
+    }
+    catch (const std::exception&)
+    {
+        // not a number either, fall through to the default below
+    }
+
+    g_warning ("Unrecognized currency format '%s', defaulting to 0", mnemonic.c_str());
+    return 0;
+}
+
 bool preset_is_reserved_name (const std::string& name)
 {
     return ((name == no_settings) ||
@@ -252,8 +323,14 @@ CsvImportSettings::load (void)
     if (key_char)
         g_free (key_char);
 
-    m_currency_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
+    if (key_char && *key_char != '\0')
+        m_currency_format = mnemonic_to_currency_format (key_char);
+    else
+        m_currency_format = 0;
     m_load_error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
     if (key_char && *key_char != '\0')
@@ -312,7 +389,15 @@ CsvImportSettings::save (void)
                         { cmt_ss << "'" << fmt.m_fmt << "', "; });
     auto cmt = cmt_ss.str().substr(0, static_cast<long>(cmt_ss.tellp()) - 2);
     g_key_file_set_comment (keyfile, group.c_str(), CSV_DATE, cmt.c_str(), nullptr);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, m_currency_format);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_CURRENCY,
+                            currency_format_to_mnemonic (m_currency_format).c_str());
+    std::ostringstream curr_cmt_ss;
+    curr_cmt_ss << "Supported currency formats: ";
+    std::for_each (c_currency_format_mnemonics.cbegin(), c_currency_format_mnemonics.cend(),
+                    [&curr_cmt_ss](const std::string& mnemonic)
+                        { curr_cmt_ss << "'" << mnemonic << "', "; });
+    auto curr_cmt = curr_cmt_ss.str().substr(0, static_cast<long>(curr_cmt_ss.tellp()) - 2);
+    g_key_file_set_comment (keyfile, group.c_str(), CSV_CURRENCY, curr_cmt.c_str(), nullptr);
     g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, m_encoding.c_str());
 
     if (!m_column_widths.empty())
