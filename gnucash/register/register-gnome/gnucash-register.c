@@ -317,47 +317,6 @@ gnucash_register_goto_next_matching_row (GnucashRegister *reg,
     gnucash_sheet_goto_virt_loc (sheet, virt_loc);
 }
 
-static gboolean
-gnucash_register_sheet_resize (GnucashRegister *reg)
-{
-    // Sometimes the space left by the horizontal scrollbar does
-    // not get filled on load, this makes sure it does
-    if (!reg->hscrollbar_visible)
-        gtk_widget_queue_resize (GTK_WIDGET (reg->sheet));
-
-    return FALSE;
-}
-
-static void
-gnucash_register_update_hadjustment (GtkAdjustment *adj,
-                                     GnucashRegister *reg)
-{
-    g_return_if_fail (reg != NULL);
-    g_return_if_fail (GNUCASH_IS_REGISTER(reg));
-
-    if (gtk_adjustment_get_upper (adj) - gtk_adjustment_get_lower (adj)
-        > gtk_adjustment_get_page_size (adj))
-    {
-        if (!reg->hscrollbar_visible)
-        {
-            gtk_widget_show(reg->hscrollbar);
-            reg->hscrollbar_visible = TRUE;
-        }
-    }
-    else
-    {
-        if (reg->hscrollbar_visible)
-        {
-            gtk_widget_hide(reg->hscrollbar);
-            reg->hscrollbar_visible = FALSE;
-            // When sheet first loaded and the scrollbar is hidden, the space left
-            // is not always automatically taken up by the sheet so queue a resize
-            // when all is idle
-            g_idle_add ((GSourceFunc) gnucash_register_sheet_resize, reg);
-        }
-    }
-}
-
 /*************************************************************/
 
 
@@ -521,12 +480,18 @@ gnucash_register_create_widget (Table *table)
     GtkWidget *header;
     GtkWidget *widget;
     GtkWidget *sheet;
-    GtkWidget *scrollbar;
 
     reg = g_object_new (GNUCASH_TYPE_REGISTER, NULL);
     widget = GTK_WIDGET(reg);
 
-    sheet = gnucash_sheet_new (table);
+    GtkWidget* swin = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC);
+
+    sheet = gnucash_sheet_new (table,
+        gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(swin)),
+        gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(swin)));
     reg->sheet = sheet;
     GNUCASH_SHEET(sheet)->reg = widget;
 
@@ -538,40 +503,17 @@ gnucash_register_create_widget (Table *table)
     gtk_widget_set_vexpand (header, FALSE);
     gtk_widget_set_valign (header, GTK_ALIGN_FILL);
     g_object_set (header, "margin", 0, NULL);
-    gtk_widget_show (header);
 
-    gtk_grid_attach (GTK_GRID(widget), sheet, 0, 1, 1, 1);
-    gtk_widget_set_hexpand (sheet, TRUE);
-    gtk_widget_set_halign (sheet, GTK_ALIGN_FILL);
-    gtk_widget_set_vexpand (sheet, TRUE);
-    gtk_widget_set_valign (sheet, GTK_ALIGN_FILL);
-    g_object_set (sheet, "margin", 0, NULL);
-    gtk_widget_show (sheet);
+    gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(sheet));
 
-    scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, GNUCASH_SHEET(sheet)->vadj);
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 1, 0, 1, 2);
-    gtk_widget_set_hexpand (GTK_WIDGET(scrollbar), FALSE);
-    gtk_widget_set_halign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
-    gtk_widget_set_vexpand (GTK_WIDGET(scrollbar), TRUE);
-    gtk_widget_set_valign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
-    g_object_set (GTK_WIDGET(scrollbar), "margin", 0, NULL);
-    gtk_widget_show (scrollbar);
-    GNUCASH_SHEET(sheet)->vscrollbar = scrollbar;
+    gtk_grid_attach (GTK_GRID(widget), swin, 0, 1, 1, 1);
+    gtk_widget_set_hexpand (swin, TRUE);
+    gtk_widget_set_halign (swin, GTK_ALIGN_FILL);
+    gtk_widget_set_vexpand (swin, TRUE);
+    gtk_widget_set_valign (swin, GTK_ALIGN_FILL);
+    g_object_set (swin, "margin", 0, NULL);
 
-    scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GNUCASH_SHEET(sheet)->hadj);
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 0, 2, 1, 1);
-    gtk_widget_set_hexpand (GTK_WIDGET(scrollbar), TRUE);
-    gtk_widget_set_halign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
-    gtk_widget_set_vexpand (GTK_WIDGET(scrollbar), FALSE);
-    gtk_widget_set_valign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
-    g_object_set (GTK_WIDGET(scrollbar), "margin", 0, NULL);
-    reg->hscrollbar = scrollbar;
-    gtk_widget_show (reg->hscrollbar);
-    reg->hscrollbar_visible = TRUE;
-    GNUCASH_SHEET(sheet)->hscrollbar = scrollbar;
-
-    g_signal_connect (GNUCASH_SHEET(sheet)->hadj, "changed",
-                      G_CALLBACK (gnucash_register_update_hadjustment), reg);
+    gtk_widget_show_all (widget);
 
     return widget;
 }

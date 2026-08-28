@@ -91,7 +91,6 @@ struct _GnucashSheet
     guint delete_signal;
 
     GtkAdjustment *hadj, *vadj;
-    GtkWidget *hscrollbar, *vscrollbar;
 
     GFunc moved_cb;
     gpointer moved_cb_data;
