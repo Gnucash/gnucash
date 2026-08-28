@@ -64,7 +64,7 @@ td, th {
 }
 
 tr.alternate-row {
-    background: #ffffff
+    background: #ececec;
 }
 
 tr {
@@ -108,6 +108,13 @@ td.highlight {
     html, body {
         height: unset;
     }
+}
+
+tr.primary-subheading > td, tr:has(> td.total-number-cell) > td {
+     background-color: #ececec;
+}
+ tr.grand-total td {
+     background: #ececec !important;
 }
 ")
 
