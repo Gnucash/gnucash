@@ -26,10 +26,6 @@ class QofMockBook : public QofBook
 public:
     QofMockBook()
     {
-        hash_of_collections   = nullptr;
-        data_tables           = nullptr;
-        data_table_finalizers = nullptr;
-
         book_open     = 'n';
         read_only     = TRUE;
         session_dirty = FALSE;

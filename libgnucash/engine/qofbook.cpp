@@ -96,26 +96,18 @@ QOF_GOBJECT_FINALIZE(qof_book);
 /* ====================================================================== */
 /* constructor / destructor */
 
-static void coll_destroy(gpointer col)
-{
-    qof_collection_destroy((QofCollection *) col);
-}
-
 static void
 qof_book_init (QofBook *book)
 {
     if (!book) return;
 
-    book->hash_of_collections = g_hash_table_new_full(
-                                    g_str_hash, g_str_equal,
-                                    (GDestroyNotify)qof_string_cache_remove,  /* key_destroy_func   */
-                                    coll_destroy);                            /* value_destroy_func */
+    new (&book->hash_of_collections) CollectionMap();
 
     qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
-    book->data_tables = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                               (GDestroyNotify)qof_string_cache_remove, nullptr);
-    book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
+    new (&book->data_tables) QofDataMap();
+
+    new (&book->data_table_finalizers) QofDataFinMap();
 
     book->book_open = 'y';
     book->read_only = FALSE;
@@ -301,13 +293,11 @@ qof_book_new (void)
 }
 
 static void
-book_final (gpointer key, gpointer value, gpointer booq)
+book_final (const std::string& key, QofBookFinalCB cb, QofBook* book)
 {
-    QofBookFinalCB cb = reinterpret_cast<QofBookFinalCB>(value);
-    QofBook *book = static_cast<QofBook*>(booq);
-
-    gpointer user_data = g_hash_table_lookup (book->data_tables, key);
-    (*cb) (book, key, user_data);
+    auto it = book->data_tables.find (key);
+    gpointer user_data = it == book->data_tables.end() ? nullptr : it->second;
+    (*cb) (book, const_cast<char*>(key.c_str()), user_data);
 }
 
 static void
@@ -330,9 +320,7 @@ destroy_lot(QofInstance *inst, [[maybe_unused]]void* data)
 void
 qof_book_destroy (QofBook *book)
 {
-    GHashTable* cols;
-
-    if (!book || !book->hash_of_collections) return;
+    if (!book) return;
     ENTER ("book=%p", book);
 
     book->shutting_down = TRUE;
@@ -341,7 +329,8 @@ qof_book_destroy (QofBook *book)
     /* Call the list of finalizers, let them do their thing.
      * Do this before tearing into the rest of the book.
      */
-    g_hash_table_foreach (book->data_table_finalizers, book_final, book);
+    for (auto fin : book->data_table_finalizers)
+        book_final (fin.first, fin.second, book);
 
     /* Lots hold a variety of pointers that need to still exist while
      * cleaning them up so run its book_end before the rest.
@@ -350,21 +339,11 @@ qof_book_destroy (QofBook *book)
     qof_collection_foreach(lots, destroy_lot, nullptr);
     qof_object_book_end (book);
 
-    g_hash_table_destroy (book->data_table_finalizers);
-    book->data_table_finalizers = nullptr;
-    g_hash_table_destroy (book->data_tables);
-    book->data_tables = nullptr;
+    book->data_table_finalizers.~QofDataFinMap();
+    book->data_tables.~QofDataMap();
 
     /* qof_instance_release (&book->inst); */
-
-    /* Note: we need to save this hashtable until after we remove ourself
-     * from it, otherwise we'll crash in our dispose() function when we
-     * DO remove ourself from the collection but the collection had already
-     * been destroyed.
-     */
-    cols = book->hash_of_collections;
     g_object_unref (book);
-    g_hash_table_destroy (cols);
 
     LEAVE ("book=%p", book);
 }
@@ -469,27 +448,27 @@ qof_book_set_data (QofBook *book, const char *key, gpointer data)
 {
     if (!book || !key) return;
     if (data)
-        g_hash_table_insert (book->data_tables, (gpointer)CACHE_INSERT(key), data);
+        book->data_tables[key] = data;
     else
-        g_hash_table_remove(book->data_tables, key);
+        book->data_tables.erase (key);
 }
 
 void
 qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB cb)
 {
     if (!book || !key) return;
-    g_hash_table_insert (book->data_tables, (gpointer)key, data);
+    book->data_tables[key] = data;
 
     if (!cb) return;
-    g_hash_table_insert (book->data_table_finalizers, (gpointer)key,
-             reinterpret_cast<void*>(cb));
+    book->data_table_finalizers[key] = cb;
 }
 
 gpointer
 qof_book_get_data (const QofBook *book, const char *key)
 {
     if (!book || !key) return nullptr;
-    return g_hash_table_lookup (book->data_tables, (gpointer)key);
+    auto it = book->data_tables.find (key);
+    return it == book->data_tables.end() ? nullptr : it->second;
 }
 
 /* ====================================================================== */
@@ -520,49 +499,23 @@ qof_book_empty(const QofBook *book)
 QofCollection *
 qof_book_get_collection (const QofBook *book, QofIdType entity_type)
 {
-    QofCollection *col;
-
     if (!book || !entity_type) return nullptr;
 
-    col = static_cast<QofCollection*>(g_hash_table_lookup (book->hash_of_collections, entity_type));
-    if (!col)
-    {
-        col = qof_collection_new (entity_type);
-        g_hash_table_insert(
-            book->hash_of_collections,
-            (gpointer)qof_string_cache_insert(entity_type), col);
-    }
-    return col;
-}
-
-struct _iterate
-{
-    QofCollectionForeachCB  fn;
-    gpointer                data;
-};
-
-static void
-foreach_cb (G_GNUC_UNUSED gpointer key, gpointer item, gpointer arg)
-{
-    struct _iterate *iter = static_cast<_iterate*>(arg);
-    QofCollection *col = static_cast<QofCollection*>(item);
-
-    iter->fn (col, iter->data);
+    auto& ptr = const_cast<QofBook*>(book)->hash_of_collections[entity_type];
+    if (!ptr)
+        ptr.reset (qof_collection_new (entity_type));
+    return ptr.get ();
 }
 
 void
 qof_book_foreach_collection (const QofBook *book,
                              QofCollectionForeachCB cb, gpointer user_data)
 {
-    struct _iterate iter;
-
     g_return_if_fail (book);
     g_return_if_fail (cb);
 
-    iter.fn = cb;
-    iter.data = user_data;
-
-    g_hash_table_foreach (book->hash_of_collections, foreach_cb, &iter);
+    for (auto& [name, col] : book->hash_of_collections)
+        cb (col.get(), user_data);
 }
 
 /* ====================================================================== */
@@ -1433,9 +1386,9 @@ static gboolean get_read_only(const QofBook *book){ return book->read_only; }
 static QofBookDirtyCB get_dirty_cb(const QofBook *book){ return book->dirty_cb; }
 static void set_shutting_down(QofBook *book, gboolean state){ book->shutting_down = state; }
 static gpointer get_dirty_data(const QofBook *book){ return book->dirty_data; }
-static GHashTable* get_collections(const QofBook *book){ return book->hash_of_collections; }
-static GHashTable* get_data_tables(const QofBook *book){ return book->data_tables; }
-static GHashTable* get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
+static const CollectionMap& get_collections(const QofBook *book){ return book->hash_of_collections; }
+static const QofDataMap& get_data_tables(const QofBook *book){ return book->data_tables; }
+static const QofDataFinMap& get_data_table_finalizers(const QofBook *book){ return book->data_table_finalizers; }
 static char get_book_open(const QofBook *book){ return book->book_open; }
 static int get_version(const QofBook *book){ return book->version; }
 
