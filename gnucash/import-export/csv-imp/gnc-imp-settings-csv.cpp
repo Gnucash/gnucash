@@ -40,6 +40,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 const std::string csv_group_prefix{"CSV-"};
@@ -89,6 +90,62 @@ handle_load_error (GError **key_error, const std::string& group)
     g_warning ("Error reading group '%s' : %s", group.c_str(), (*key_error)->message);
     g_clear_error (key_error);
     return true;
+}
+
+/**************************************************
+ * date_format_to_mnemonic / mnemonic_to_date_format
+ *
+ * The date format used to be stored as a plain index into
+ * GncDate::c_formats. That's fragile: if the vector's order or
+ * length ever changes, previously saved settings would silently
+ * start pointing at the wrong (or a nonexistent) format. Instead
+ * we now persist the format's own mnemonic string (e.g. "y-m-d"),
+ * which is stable regardless of how c_formats is reordered.
+ *
+ * For backward compatibility, a value that isn't a recognized
+ * mnemonic is also tried as a legacy numeric index. Anything that
+ * still doesn't resolve to a valid format falls back to index 0,
+ * with a warning, rather than reading out of bounds.
+ **************************************************/
+static std::string
+date_format_to_mnemonic (int date_format)
+{
+    if (date_format < 0 ||
+        static_cast<size_t>(date_format) >= GncDate::c_formats.size())
+    {
+        g_warning ("Invalid date format index %d, defaulting to 0", date_format);
+        date_format = 0;
+    }
+    return GncDate::c_formats[static_cast<size_t>(date_format)].m_fmt;
+}
+
+static int
+mnemonic_to_date_format (const std::string& mnemonic)
+{
+    auto iter = std::find_if (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
+                               [&mnemonic](const GncDateFormat& fmt)
+                                   { return fmt.m_fmt == mnemonic; });
+    if (iter != GncDate::c_formats.cend())
+        return static_cast<int>(std::distance (GncDate::c_formats.cbegin(), iter));
+
+    // Not a recognized mnemonic. Fall back to interpreting the value as a
+    // legacy numeric index for settings files saved by older GnuCash versions.
+    try
+    {
+        size_t pos = 0;
+        auto legacy_index = std::stoi (mnemonic, &pos);
+        if (pos == mnemonic.size() &&
+            legacy_index >= 0 &&
+            static_cast<size_t>(legacy_index) < GncDate::c_formats.size())
+            return legacy_index;
+    }
+    catch (const std::exception&)
+    {
+        // not a number either, fall through to the default below
+    }
+
+    g_warning ("Unrecognized date format '%s', defaulting to 0", mnemonic.c_str());
+    return 0;
 }
 
 bool preset_is_reserved_name (const std::string& name)
@@ -159,8 +216,14 @@ CsvImportSettings::load (void)
     else
         m_load_error |= handle_load_error (&key_error, group);
 
-    m_date_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_DATE, &key_error);
+    if (key_char && *key_char != '\0')
+        m_date_format = mnemonic_to_date_format (key_char);
+    else
+        m_date_format = 0;
     m_load_error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
 
     m_currency_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
     m_load_error |= handle_load_error (&key_error, group);
@@ -213,13 +276,13 @@ CsvImportSettings::save (void)
 
     g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, m_separators.c_str());
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_ESC, m_enable_escape);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, m_date_format);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_DATE,
+                            date_format_to_mnemonic (m_date_format).c_str());
     std::ostringstream cmt_ss;
     cmt_ss << "Supported date formats: ";
-    int fmt_num = 0;
     std::for_each (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
-                    [&cmt_ss, &fmt_num](const GncDateFormat& fmt)
-                        { cmt_ss << fmt_num++ << ": '" << fmt.m_fmt << "', "; });
+                    [&cmt_ss](const GncDateFormat& fmt)
+                        { cmt_ss << "'" << fmt.m_fmt << "', "; });
     auto cmt = cmt_ss.str().substr(0, static_cast<long>(cmt_ss.tellp()) - 2);
     g_key_file_set_comment (keyfile, group.c_str(), CSV_DATE, cmt.c_str(), nullptr);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, m_currency_format);
