@@ -224,6 +224,11 @@ tr.grand-total td {
          height: unset;
     }
 }
+
+/* fixing standalone charts (all center-aligned ones are squashed)*/
+ html > body > div > canvas.chartjs-render-monitor {
+     width: 100vw !important;
+}
 ")
 
 (define (css-options css-param)
