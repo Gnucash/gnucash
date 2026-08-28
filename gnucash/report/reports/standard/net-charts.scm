@@ -315,6 +315,7 @@
         chart (list report-title (gnc-date-interval-format from-date-t64 to-date-t64)))
        (gnc:html-chart-set-y-axis-label!
         chart (gnc-commodity-get-mnemonic report-currency))
+       (gnc:html-chart-set-y-axis-begin-at-zero! chart (not linechart?))
        (gnc:html-chart-set-grid?! chart y-grid)
        (gnc:html-chart-set-currency-iso!
         chart (gnc-commodity-get-mnemonic report-currency))
