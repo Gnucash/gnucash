@@ -39,8 +39,8 @@
 #include "gnc-ui-util.h"
 
 #include <algorithm>
-#include <functional>
 #include <iostream>
+#include <iterator>
 #include <stdexcept>
 #include <string>
 
@@ -115,33 +115,31 @@ handle_load_error (GError **key_error, const std::string& group)
  * back to index 0, with a warning, rather than reading out of
  * bounds.
  **************************************************/
-using MnemonicLookup = std::function<std::string(size_t)>;
-
 static int
-find_mnemonic_index (const std::string& mnemonic, size_t count, const MnemonicLookup& get_mnemonic)
+find_mnemonic_index (const std::string& mnemonic, const std::vector<std::string>& mnemonics)
 {
-    for (size_t i = 0; i < count; ++i)
-        if (get_mnemonic (i) == mnemonic)
-            return static_cast<int>(i);
-    return -1;
+    auto iter = std::find (mnemonics.cbegin(), mnemonics.cend(), mnemonic);
+    if (iter == mnemonics.cend())
+        return -1;
+    return static_cast<int>(std::distance (mnemonics.cbegin(), iter));
 }
 
 static std::string
-index_to_mnemonic (int index, size_t count, const MnemonicLookup& get_mnemonic, const char* what)
+index_to_mnemonic (int index, const std::vector<std::string>& mnemonics, const char* what)
 {
-    if (index < 0 || static_cast<size_t>(index) >= count)
+    if (index < 0 || static_cast<size_t>(index) >= mnemonics.size())
     {
         g_warning ("Invalid %s index %d, defaulting to 0", what, index);
         index = 0;
     }
-    return get_mnemonic (static_cast<size_t>(index));
+    return mnemonics[static_cast<size_t>(index)];
 }
 
 static int
-mnemonic_to_index (const std::string& mnemonic, size_t count, const MnemonicLookup& get_mnemonic,
+mnemonic_to_index (const std::string& mnemonic, const std::vector<std::string>& mnemonics,
                     const std::vector<std::string>& legacy_order, const char* what)
 {
-    auto idx = find_mnemonic_index (mnemonic, count, get_mnemonic);
+    auto idx = find_mnemonic_index (mnemonic, mnemonics);
     if (idx >= 0)
         return idx;
 
@@ -158,7 +156,7 @@ mnemonic_to_index (const std::string& mnemonic, size_t count, const MnemonicLook
             static_cast<size_t>(legacy_index) < legacy_order.size())
         {
             auto legacy_idx = find_mnemonic_index (
-                legacy_order[static_cast<size_t>(legacy_index)], count, get_mnemonic);
+                legacy_order[static_cast<size_t>(legacy_index)], mnemonics);
             if (legacy_idx >= 0)
                 return legacy_idx;
         }
@@ -189,34 +187,42 @@ static const std::vector<std::string> c_currency_format_mnemonics
     "locale", "period", "comma"
 };
 
+// GncDate::c_formats lives in another module and holds more than just a
+// mnemonic per entry, so pull its mnemonics into a plain vector<string>
+// each time rather than exposing a reference into it.
+static std::vector<std::string>
+date_format_mnemonics ()
+{
+    std::vector<std::string> mnemonics;
+    mnemonics.reserve (GncDate::c_formats.size());
+    std::transform (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(), std::back_inserter (mnemonics),
+                     [](const GncDateFormat& fmt) { return fmt.m_fmt; });
+    return mnemonics;
+}
+
 static std::string
 date_format_to_mnemonic (int date_format)
 {
-    return index_to_mnemonic (date_format, GncDate::c_formats.size(),
-        [](size_t i) { return GncDate::c_formats[i].m_fmt; }, "date format");
+    return index_to_mnemonic (date_format, date_format_mnemonics(), "date format");
 }
 
 static int
 mnemonic_to_date_format (const std::string& mnemonic)
 {
-    return mnemonic_to_index (mnemonic, GncDate::c_formats.size(),
-        [](size_t i) { return GncDate::c_formats[i].m_fmt; },
-        c_legacy_date_format_order, "date format");
+    return mnemonic_to_index (mnemonic, date_format_mnemonics(), c_legacy_date_format_order, "date format");
 }
 
 static std::string
 currency_format_to_mnemonic (int currency_format)
 {
-    return index_to_mnemonic (currency_format, c_currency_format_mnemonics.size(),
-        [](size_t i) { return c_currency_format_mnemonics[i]; }, "currency format");
+    return index_to_mnemonic (currency_format, c_currency_format_mnemonics, "currency format");
 }
 
 static int
 mnemonic_to_currency_format (const std::string& mnemonic)
 {
-    return mnemonic_to_index (mnemonic, c_currency_format_mnemonics.size(),
-        [](size_t i) { return c_currency_format_mnemonics[i]; },
-        c_currency_format_mnemonics, "currency format");
+    return mnemonic_to_index (mnemonic, c_currency_format_mnemonics, c_currency_format_mnemonics,
+                               "currency format");
 }
 
 bool preset_is_reserved_name (const std::string& name)
