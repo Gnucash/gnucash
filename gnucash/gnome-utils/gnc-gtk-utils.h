@@ -102,6 +102,11 @@ void gnc_menubar_model_remove_items_with_attrib (GMenuModel *menu_model, const g
 
 /** @} */
 
+/**
+ * Reveal @path in the system file manager with the file selected.
+ */
+gboolean gnc_file_reveal (const char *path);
+
 #ifdef __cplusplus
 }
 #endif
