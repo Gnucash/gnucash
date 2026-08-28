@@ -123,7 +123,7 @@
       (N_ "Colors")
       (N_ "Alternate Table Cell Color") "d"
       (N_ "Default alternate background for table cells.")
-      "ffffff")
+      "eaeaea")
 
     (gnc-register-color-option options
       (N_ "Colors")
@@ -141,12 +141,12 @@
       (N_ "Colors")
       (N_ "Grand Total Cell Color") "g"
       (N_ "Color for grand totals.")
-      "ffff00")
+      "f9f88b")
 
     (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
-      1 0 20 1)
+      2 0 20 1)
 
     (gnc-register-number-range-option options
       (N_ "Tables")
