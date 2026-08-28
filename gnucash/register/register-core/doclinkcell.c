@@ -287,6 +287,8 @@ gnc_doclink_cell_set_use_glyphs (Doclinkcell *cell)
 
     g_object_unref (test_layout);
     g_free (test_text);
+    g_object_ref_sink (label);
+    g_object_unref (label);
 
     cell->use_glyphs = use_glyphs;
 #endif
