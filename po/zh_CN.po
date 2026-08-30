@@ -43,7 +43,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-08-17 06:51+0000\n"
+"PO-Revision-Date: 2026-08-30 13:51+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
@@ -729,8 +729,8 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at "
 "irc.gimp.net"
 msgstr ""
-"GnuCash 开发者团队便于联系。除了各种邮件列表外，您还可通过 IRC 实时与他们聊天"
-"！请加入 irc.gimp.net 服务器上的 #gnucash 频道参与讨论。"
+"联系 GnuCash 开发者是很容易的。除了各种邮件列表外，您还可通过 IRC 实时与他们"
+"聊天！请加入 irc.gimp.net 服务器上的 #gnucash 频道参与讨论。"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -14284,7 +14284,7 @@ msgstr "否(_N)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:40
 msgid "_Yes"
-msgstr "是(_y)"
+msgstr "是(_Y)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:87
 msgid "Display Welcome Dialog Again?"
@@ -14296,8 +14296,8 @@ msgid ""
 "displayed again next time you start GnuCash. If you press the \"No\" button, "
 "it will not be displayed again."
 msgstr ""
-"如果您按“是”按钮，“欢迎使用 GnuCash ！”会在您下次启动 GnuCash 时再次显示。如"
-"果您按“否” 按钮，它就不会再显示。"
+"如果您按“是”按钮，“欢迎使用 GnuCash”对话框会在您下次启动 GnuCash 时再次显示。"
+"如果您按“否” 按钮，它就不会再显示。"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:213
 msgid "Welcome to GnuCash!"
@@ -25383,7 +25383,7 @@ msgstr "正在装入数据..."
 #: gnucash/report/reports/standard/new-aging.scm:145
 msgctxt "One-letter indication for 'yes'"
 msgid "Y"
-msgstr "Y"
+msgstr "是"
 
 #: gnucash/report/reports/standard/new-aging.scm:145
 msgctxt "One-letter indication for 'no'"
