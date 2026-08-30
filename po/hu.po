@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-08-21 11:12+0000\n"
+"PO-Revision-Date: 2026-08-30 22:03+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1067,10 +1067,10 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Az értékpapír-szerkesztő ablakban külön oszlopban megjelenítheti az "
-"árfolyamforrásokat, így könnyedén áttekintheti, az egyes értékpapírok "
-"árfolyama mely internetes forrásból lesz letöltve. Ezt az oszlopot az "
-"oszlopfejlécek jobb szélén található háromszögre kattintva adhatja hozzá."
+"Az értékpapír-szerkesztő ablakban külön oszlopban jelenítheti meg az "
+"árfolyamforrásokat, és így könnyen áttekintheti, hogy az egyes értékpapírok "
+"árfolyama melyik internetes forrásból lesz letöltve. Ezt az oszlopot az "
+"oszlopfejlécek jobb szélén található háromszögre kattintva tudja hozzáadni."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -12315,27 +12315,27 @@ msgstr "Kamatláb"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr "THM (összevont napi)"
+msgstr "THM (folyamatos kamatos kamat)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr "THM (összevont heti)"
+msgstr "THM (heti kamatos kamat)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr "THM (összevont havi)"
+msgstr "THM (havi kamatos kamat)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr "THM (összevont negyedéves)"
+msgstr "THM (negyedéves kamatos kamat)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
 msgid "APR (Compounded Semi-annually)"
-msgstr "THM (összevont féléves)"
+msgstr "THM (féléves kamatos kamat)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:64
 msgid "APR (Compounded Annually)"
-msgstr "THM (összevont éves)"
+msgstr "THM (éves kamatos kamat)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:75
 msgid "Fixed Rate"
@@ -12367,9 +12367,10 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"Ez egy lépésről lépésre módszer egy kölcsön-visszafizetés létrehozásához. A "
-"segédben megadhatja a kölcsön és a törlesztés részleteit. Az információkat "
-"felhasználva a megfelelő ütemezett tranzakciók elkészülnek.\n"
+"Ezzel a segéddel kölcsön-visszafizetési ütemezett tranzakciót hozhat létre. "
+"A segédben lépésről lépésre haladva meg tudja adni a kölcsön és a törlesztés "
+"adatait. A megadott információkat felhasználva a segéd elkészíti az Ön "
+"szándékainak megfelelő kölcsön-visszafizetési ütemezett tranzakciót.\n"
 "\n"
 "Ha rontott, vagy később változtatni kíván, közvetlenül szerkesztheti a "
 "létrehozott ütemezett tranzakciókat."
@@ -12413,7 +12414,7 @@ msgstr "Kezdő dátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:181
 msgid "Length"
-msgstr "Időtartam"
+msgstr "Futamidő"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:207
 msgid "Loan Account"
@@ -12456,8 +12457,8 @@ msgstr "A kölcsön alapvető adatai"
 #: gnucash/gtkbuilder/assistant-loan.glade:454
 msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr ""
-"A kölcsönhöz tartozó költségek kiválasztása. Ha a fizetésükhöz letéti "
-"számlát kell használni, akkor meg kell adnia egy számlát…"
+"A kölcsönhöz tartozó költségek kiválasztása. Ha valamelyik fizetéséhez "
+"letéti számlát kell használni, akkor meg kell adja a számlát…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:473
 msgid "… utilize an escrow account for payments?"
@@ -12474,8 +12475,7 @@ msgstr "A kölcsön további részletei"
 #: gnucash/gtkbuilder/assistant-loan.glade:547
 msgid "All accounts must have valid entries to continue."
 msgstr ""
-"A folytatáshoz minden számlabeállító mezőnek érvényes bejegyzést kell "
-"tartalmazni."
+"A folytatáshoz minden beállító mezőnek érvényes bejegyzést kell tartalmazni."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:587
 msgid "Principal To"
@@ -12496,8 +12496,8 @@ msgstr "A törlesztés részletei"
 #: gnucash/gtkbuilder/assistant-loan.glade:730
 msgid "All enabled option pages must contain valid entries to continue."
 msgstr ""
-"A folytatáshoz a kiválasztott beállító oldalak érvényes bejegyzéseket kell "
-"tartalmazzanak."
+"A folytatáshoz minden kiválasztott költség beállítási lépésénél a beállító "
+"mezőknek érvényes bejegyzéseket kell tartalmazni."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:801
 msgid "Payment To (Escrow)"
@@ -12576,11 +12576,13 @@ msgstr "A kölcsön áttekintése"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1255
 msgid "Schedule added successfully."
-msgstr "Az ütemezett tranzakciók létrehozása sikeresen megtörtént."
+msgstr ""
+"A kölcsön-visszafizetési ütemezett tranzakció létrehozása sikeresen "
+"megtörtént."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1261
 msgid "Loan Summary"
-msgstr "A kölcsön összefoglalása"
+msgstr "Összefoglalás"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 msgid "QIF Import Assistant"
@@ -17756,7 +17758,7 @@ msgstr "Az első napja"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1188
 #: gnucash/gtkbuilder/gnc-frequency.glade:1358
 msgid "except on weekends"
-msgstr "Ha hétvégére esik akkor"
+msgstr "Ha hétvégére esik, akkor"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1155
 msgid "then on the"
