@@ -545,6 +545,16 @@ class GncNumeric(GnuCashCoreClass):
             kargs['instance'] = GncNumeric.__args_to_instance(args)
         GnuCashCoreClass.__init__(self, [], **kargs)
 
+    def __setattr__(self, name, value):
+        # num and denom are read-only accessor methods, not writable fields.
+        if name in ('num', 'denom'):
+            raise AttributeError(
+                "Cannot assign to '%s': it is a read-only accessor method on "
+                "GncNumeric, not a writable field, so the assignment would not "
+                "change the value. Construct a new value instead, e.g. "
+                "GncNumeric(numerator, denominator)." % name)
+        super().__setattr__(name, value)
+
     @staticmethod
     def __args_to_instance(args):
         if len(args) == 0:

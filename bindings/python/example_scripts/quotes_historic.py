@@ -17,10 +17,9 @@
 #   https://wiki.gnucash.org/wiki/Stocks/get_prices
 #
 
-from gnucash import Session, Account, Split
-import gnucash
+from gnucash import Session, GncNumeric, GNC_HOW_DENOM_FIXED, GNC_HOW_RND_ROUND_HALF_UP
+from gnucash.gnucash_core_c import COMMODITY_DENOM_MULT
 import datetime
-from fractions import Fraction
 from gnc_convenience import find_account
 
 FILE = "./test.gnucash"
@@ -74,15 +73,17 @@ pl0 = pl[0]
 for i in range(1,len(pl)):
   pdb.remove_price(pl[i])
 
+# Store the price the way GnuCash does internally: a commodity's price in a
+# currency uses a fixed denominator of (pricing currency's SCU * 10000). See
+# the "Price policy" note and COMMODITY_DENOM_MULT in gnc-pricedb.h. For a
+# USD-priced stock this is 100 * 10000 = 1000000, i.e. six decimal places.
+price_denom = cur.get_fraction() * COMMODITY_DENOM_MULT
 for i in range(0,len(stock_date)):
   p_new = pl0.clone(book)
-  p_new = gnucash.GncPrice(instance=p_new)
   print('Adding',i,stock_date[i],stock_price[i])
   p_new.set_time64(stock_date[i])
-  v = p_new.get_value()
-  v.num = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).numerator)
-  v.denom = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).denominator)
-  p_new.set_value(v)
+  p_new.set_value(GncNumeric(stock_price[i], price_denom,
+                             GNC_HOW_DENOM_FIXED | GNC_HOW_RND_ROUND_HALF_UP))
   p_new.set_source("Finance::Quotes::Historic")
   pdb.add_price(p_new)
 
