@@ -43,7 +43,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-08-30 13:51+0000\n"
+"PO-Revision-Date: 2026-08-31 13:52+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
@@ -9435,9 +9435,9 @@ msgid ""
 "status of the account. The setting \"none\" doesn't reverse the sign on any "
 "balances."
 msgstr ""
-"此设置允许某些科目将其余额的符号从正反转为负，反之亦然。若想看到负数支出和正"
-"数收入的话设置“收入-支出”；想查看余额反映帐户借方/贷方状态的设置“credit”；不"
-"想改变任何余额符号，设置“无”。"
+"此设置允许反转某些科目的余额符号。若想看到负数支出和正数收入，请选择“收入与支"
+"出”；若想令余额反映账户的借、贷性质，请选择“贷方科目”；若不想改变任何余额符号"
+"，请选择“无”。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:687
@@ -14578,7 +14578,7 @@ msgstr "贷方科目(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:700
 msgid "_Income & expense"
-msgstr "收入与费用(_I)"
+msgstr "收入与支出(_I)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:722
 msgid "Reverse Balanced Accounts"
