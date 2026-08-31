@@ -59,6 +59,7 @@ target_link_libraries(gnc-html
     PRIVATE
         gnc-engine
         gnc-gnome-utils
+        ctre
         PkgConfig::GTK3
         PkgConfig::WEBKIT
         ${GUILE_LDFLAGS})
