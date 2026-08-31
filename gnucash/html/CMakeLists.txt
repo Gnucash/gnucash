@@ -31,6 +31,7 @@ else ()
   list(APPEND html_HEADERS gnc-html-webkit2.hpp)
   list(APPEND html_SOURCES gnc-html-webkit2.cpp)
   set(html_EXTRA_DIST gnc-html-webkit1.hpp gnc-html-webkit1.cpp)
+  add_subdirectory(test)
 endif()
 
 
