@@ -58,6 +58,7 @@
 #include "gnc-locale-utils.h"
 
 #define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
+#define GNC_PREF_CURRENCY_CHOICE_ROOT   "currency-choice-root"
 #define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
 #define GNC_PREF_CURRENCY_OTHER         "currency-other"
 #define GNC_PREF_REVERSED_ACCTS_NONE    "reversed-accounts-none"
@@ -754,6 +755,9 @@ gnc_default_currency_common (char* requested_currency,
         return gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                           GNC_COMMODITY_NS_CURRENCY,
                                           requested_currency);
+
+    if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_ROOT))
+        currency = xaccAccountGetCommodity (gnc_get_current_root_account ());
 
     if (gnc_current_session_exist() &&
         gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
@@ -2100,6 +2104,8 @@ gnc_ui_util_init (void)
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_OTHER,
                           (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_CHOICE_LOCALE,
+                          (void*)gnc_currency_changed_cb, nullptr);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_CHOICE_ROOT,
                           (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_CHOICE_OTHER,
                           (void*)gnc_currency_changed_cb, nullptr);
