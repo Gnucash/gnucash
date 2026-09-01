@@ -1359,6 +1359,12 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "save_on_close_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_backmonth_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "default_zoom_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "default_chart_point_style_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "default_chart_point_size_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "default_chart_point_size_hover_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "default_chart_tooltip_engage_radius_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "default_chart_caret_size_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "chart_point_style_list");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "max_transactions_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "key_length_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "new_search_limit_adj");

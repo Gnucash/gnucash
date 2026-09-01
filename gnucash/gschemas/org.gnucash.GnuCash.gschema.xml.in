@@ -349,6 +349,11 @@
     </key>
   </schema>
 
+  <enum id="org.gnucash.GnuCash.general.report.TooltipPosition">
+    <value nick="average" value="0"/>
+    <value nick="nearest" value="1"/>
+  </enum>
+
   <schema id="org.gnucash.GnuCash.general.report" path="/org/gnucash/GnuCash/general/report/">
     <key name="use-new-window" type="b">
       <default>false</default>
@@ -376,6 +381,36 @@
       <description>On high resolution screens reports tend to be hard to read.
 This option allows you to scale reports up by the set factor.
 For example setting this to 2.0 will display reports at twice their typical size.</description>
+    </key>
+    <key name="chart-point-style" type="i">
+      <default>7</default>
+      <summary>A chart's point style.</summary>
+      <description>This setting specifies what kind of a point style should charts use. In previous versions it was always the circle, as of now it is confiugrable to chose among varius rectangles, triangles, and such. Only applicable to line charts.</description>
+    </key>
+    <key name="chart-point-size" type="i">
+      <default>4</default>
+      <summary>A chart's point size.</summary>
+      <description>This setting specifies the default point's size (in pixels) displayed in charts. Only applicable to line charts.</description>
+    </key>
+    <key name="chart-point-size-hover" type="i">
+      <default>9</default>
+      <summary>A chart's hovered-point size.</summary>
+      <description>This setting specifies the hovered point's size (in pixels) displayed in charts. It tends to be bigger than the default (i.e. not hovered over) size.  Only applicable to line charts.</description>
+    </key>
+    <key name="chart-tooltip-engage-radius" type="i">
+      <default>7</default>
+      <summary>A hover radius that would engage a tooltip.</summary>
+      <description>This setting specifies the point's hover radius (in pixels) which translates into the proximity of which the point / tooltip will be engaged. If set to zero, the user must precisely aim at that point.</description>
+    </key>
+    <key name="chart-tooltip-caret-size" type="i">
+      <default>10</default>
+      <summary>An arrow size (caret) coming out of a tooltip's body.</summary>
+      <description>This setting specifies the size (in pixels) of an arrow (caret) that extends from a tooltip's body toward the data point. On a regular basis, a very small value - this setting's default has increased it significantly.</description>
+    </key>
+      <key name="chart-tooltip-position" enum="org.gnucash.GnuCash.general.report.TooltipPosition">
+      <default>'nearest'</default>
+      <summary>"Jump" behaviour when there are multiple splits</summary>
+      <description>Select how the "Jump" operation should behave when a transaction has multiple splits.</description>
     </key>
     <child name="pdf-export" schema="org.gnucash.GnuCash.general.report.pdf-export"/>
   </schema>

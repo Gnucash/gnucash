@@ -56,7 +56,8 @@
 (define optname-line-width (N_ "Line Width"))
 (define opthelp-line-width (N_ "Set line width in pixels."))
 
-(define optname-markers (N_ "Data markers?"))
+(define optname-tooltip-indexed (N_ "Show a grouped (indexed) tooltip"))
+(define optname-tooltip-non-zero-only (N_ "Show only non-zero values in a tooltip"))
 
 ;;(define optname-x-grid (N_ "X grid"))
 (define optname-y-grid (N_ "Grid"))
@@ -140,12 +141,17 @@
           ;;  gnc:pagename-display optname-x-grid
           ;;  "g" (N_ "Add vertical grid lines.")
           ;;  #f))
+    ))
 
           (gnc-register-simple-boolean-option options
-            gnc:pagename-display optname-markers
-            "g" (N_ "Display a mark for each data point.")
+            gnc:pagename-display optname-tooltip-indexed
+            "t1" (N_ "Show all items, along the x-axis, in a grouped tooltip. Otherwise - only a single entry, as per coursor's nearest proximity.")
             #t)
-          ))
+
+          (gnc-register-simple-boolean-option options
+            gnc:pagename-display optname-tooltip-non-zero-only
+            "t2" (N_ "Show only non-zero values in a tooltip.")
+            #t)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -182,10 +188,9 @@
          (show-net? (get-option gnc:pagename-display (if inc-exp?
                                                          optname-show-profit
                                                          optname-net-bars)))
+         (tooltip-indexed (get-option gnc:pagename-display optname-tooltip-indexed))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
-         (markers (and linechart?
-                       (if (get-option gnc:pagename-display optname-markers) 3 0)))
          (line-width (and linechart?
                           (get-option gnc:pagename-display optname-line-width)))
          (y-grid (or (not linechart?) (get-option gnc:pagename-display optname-y-grid)))
@@ -307,12 +312,29 @@
             (date-string-list (map qof-print-date dates-list)))
 
        (gnc:report-percent-done 90)
+       ;; apply default settings from preferences
+       (gnc:html-chart-apply-preferences-report! chart)
 
        (gnc:html-chart-set-type! chart (if linechart? 'line 'bar))
        (gnc:html-chart-set-width! chart width)
        (gnc:html-chart-set-height! chart height)
        (gnc:html-chart-set-title!
         chart (list report-title (gnc-date-interval-format from-date-t64 to-date-t64)))
+       (gnc:html-chart-set-tooltip-indexed?! chart tooltip-indexed)
+       (gnc:html-chart-set-tooltip-non-zero-only! chart (get-option gnc:pagename-display optname-tooltip-non-zero-only))
+
+       ;; tailor applied GC's preferences toward this particular chart
+       (let ((isAverage  (string=? (gnc-prefs-get-string "general.report" "chart-tooltip-position") "average"))
+             (pointSize  (gnc-prefs-get-int "general.report" "chart-point-size"))
+             (pointSizeH (gnc-prefs-get-int "general.report" "chart-point-size-hover"))
+            )(
+               if (or (not linechart?) (and tooltip-indexed isAverage linechart?))
+                    (gnc:html-chart-set! chart '(options tooltips caretPadding) 0)
+                    (if tooltip-indexed
+                      (gnc:html-chart-set! chart '(options tooltips caretPadding) (+ pointSize 2))
+                      (gnc:html-chart-set! chart '(options tooltips caretPadding) (+ pointSizeH 2))
+        )))
+
        (gnc:html-chart-set-y-axis-label!
         chart (gnc-commodity-get-mnemonic report-currency))
        (gnc:html-chart-set-grid?! chart y-grid)
@@ -330,7 +352,6 @@
           minuend-balances
           "#0074D9"
           'fill (not linechart?)
-          'pointRadius markers
           'borderWidth line-width
           'urls (gnc:make-report-anchor
                  (if inc-exp?
@@ -351,7 +372,6 @@
           (map - subtrahend-balances)
           "#FF4136"
           'fill (not linechart?)
-          'pointRadius markers
           'borderWidth line-width
           'urls (gnc:make-report-anchor
                  (if inc-exp?
@@ -373,7 +393,6 @@
           difference-balances
           "#2ECC40"
           'fill (not linechart?)
-          'pointRadius markers
           'borderWidth line-width))
 
        ;; Test for all-zero data here.

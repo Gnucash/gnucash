@@ -499,6 +499,9 @@ balance at a given time"))
                (define (round-scu amt)
                  (gnc-numeric-convert amt scu GNC-HOW-RND-ROUND))
 
+               ;; apply default settings from preferences
+               (gnc:html-chart-apply-preferences-report! chart)
+
                (gnc:html-chart-set-type! chart 'pie)
 
                (gnc:html-chart-set-currency-iso!
