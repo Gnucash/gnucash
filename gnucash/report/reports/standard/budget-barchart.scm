@@ -179,9 +179,10 @@
 
       ;; disable animation; with multiple accounts selected this report
       ;; will create several charts, all will want to animate. Initial
-      ;; animation is already disabled globally.
-      (gnc:html-chart-set! chart '(options hover animationDuration) 0)
-      (gnc:html-chart-set! chart '(options responsiveAnimationDuration) 0)
+      ;; animation is already disabled globally; the following disables
+      ;; the hover/active transitions too.
+      (gnc:html-chart-set! chart '(options transitions active animation duration) 0)
+      (gnc:html-chart-set! chart '(options transitions resize animation duration) 0)
       (gnc:html-chart-set-title!
        chart (if running-sum
                  (list (xaccAccountGetName acct)
