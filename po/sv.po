@@ -12,14 +12,15 @@
 # Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023, 2024, 2025.
 # Luna Jernberg <droidbittin@gmail.com>, 2022, 2023.
 # bittin1ddc447d824349b2 <bittin@reimu.nl>, 2023, 2024.
+# Arve Eriksson <arve.eriksson@startmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.16\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 05:03+0000\n"
-"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
+"PO-Revision-Date: 2026-09-01 04:51+0000\n"
+"Last-Translator: Arve Eriksson <arve.eriksson@startmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -27,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -812,10 +813,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"När du skriver in belopp i registret, kan du använda GnuCash-kalkylatorn för "
-"att addera, subtrahera, multiplicera och dividera. Skriva bara första "
-"värdet, sen +, -, * eller /. Skriv in det andra värdet och tryck ”Enter” för "
-"att spara det kalkylerade värdet."
+"När du skriver in belopp i registret kan du använda GnuCash-kalkylatorn för "
+"att addera, subtrahera, multiplicera och dividera. Skriva bara det första "
+"värdet, sedan +, -, * eller /. Skriv in det andra värdet och tryck ”Enter” "
+"för att spara det kalkylerade värdet."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -8320,7 +8321,7 @@ msgid ""
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
 "När du använder kommandot ”dump” listas alla parametrar som Finance::Quote "
-"returnerar för symbolen istället för de som Gnucash kräver."
+"returnerar för symbolen istället för dem som Gnucash kräver."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
