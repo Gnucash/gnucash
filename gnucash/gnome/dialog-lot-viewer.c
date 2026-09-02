@@ -446,23 +446,30 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* Get selected split in a split list view */
+/* Get selected splits in a split list view. The caller owns the returned
+ * list, but not the splits it contains. */
 
-static Split *
-lv_get_selected_split (GNCLotViewer *lv, GtkTreeView *view)
+static GList *
+lv_get_selected_splits (GtkTreeView *view)
 {
-    Split *split = NULL;
-    GtkTreeModel *model;
-    GtkTreeSelection *selection;
-    GtkTreeIter iter;
+    GtkTreeModel *model = NULL;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (view);
+    GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    GList *selected_splits = NULL;
 
-    selection = gtk_tree_view_get_selection (view);
-    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    for (GList *node = selected_rows; node; node = node->next)
     {
-        gtk_tree_model_get (model, &iter, SPLIT_COL_PNTR, &split, -1);
+        GtkTreeIter iter;
+        Split *split = NULL;
+
+        if (gtk_tree_model_get_iter (model, &iter, node->data))
+            gtk_tree_model_get (model, &iter, SPLIT_COL_PNTR, &split, -1);
+        if (split)
+            selected_splits = g_list_prepend (selected_splits, split);
     }
 
-    return split;
+    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
+    return g_list_reverse (selected_splits);
 }
 
 /* ======================================================================== */
@@ -583,20 +590,30 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
 static void
 lv_update_split_buttons (GNCLotViewer *lv)
 {
-    Split *split;
+    GList *selected_splits;
+    gboolean can_remove_all = TRUE;
+
     gtk_widget_set_sensitive (GTK_WIDGET(lv->add_split_to_lot_button), FALSE);
     gtk_widget_set_sensitive (GTK_WIDGET(lv->remove_split_from_lot_button), FALSE);
     if (NULL != lv->selected_lot)
     {
-        if (NULL != lv_get_selected_split (lv, lv->split_free_view) )
-        {
+        selected_splits = lv_get_selected_splits (lv->split_free_view);
+        if (selected_splits)
             gtk_widget_set_sensitive (GTK_WIDGET(lv->add_split_to_lot_button), TRUE);
-        }
-        split = lv_get_selected_split (lv, lv->split_in_lot_view);
-        if (NULL != split && TRUE == lv_can_remove_split_from_lot (split, lv->selected_lot))
+        g_list_free (selected_splits);
+
+        selected_splits = lv_get_selected_splits (lv->split_in_lot_view);
+        for (GList *node = selected_splits; node; node = node->next)
         {
-            gtk_widget_set_sensitive (GTK_WIDGET(lv->remove_split_from_lot_button), TRUE);
+            if (!lv_can_remove_split_from_lot (node->data, lv->selected_lot))
+            {
+                can_remove_all = FALSE;
+                break;
+            }
         }
+        if (selected_splits && can_remove_all)
+            gtk_widget_set_sensitive (GTK_WIDGET(lv->remove_split_from_lot_button), TRUE);
+        g_list_free (selected_splits);
     }
 }
 
@@ -723,39 +740,49 @@ lv_split_selection_changed_cb (GtkTreeSelection *selection,
 static void
 lv_add_split_to_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
 {
-    Split *split;
+    GList *selected_splits;
 
     if ( NULL == lv->selected_lot ) return;
-    split = lv_get_selected_split (lv, lv->split_free_view);
-    if ( NULL == split ) return;
+    selected_splits = lv_get_selected_splits (lv->split_free_view);
+    if ( NULL == selected_splits ) return;
 
     gnc_suspend_gui_refresh ();
     xaccAccountBeginEdit (lv->account);
-    gnc_lot_add_split (lv->selected_lot, split);
+    for (GList *node = selected_splits; node; node = node->next)
+        gnc_lot_add_split (lv->selected_lot, node->data);
     xaccAccountCommitEdit (lv->account);
     gnc_resume_gui_refresh ();
 
+    g_list_free (selected_splits);
     lv_refresh (lv);
 }
 
 static void
 lv_remove_split_from_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
 {
-    Split *split;
+    GList *selected_splits;
 
     if ( NULL == lv->selected_lot ) return;
-    split = lv_get_selected_split (lv, lv->split_in_lot_view);
-    if ( NULL == split ) return;
+    selected_splits = lv_get_selected_splits (lv->split_in_lot_view);
+    if ( NULL == selected_splits ) return;
 
-    if ( FALSE == lv_can_remove_split_from_lot (split, lv->selected_lot) )
-        return;
+    for (GList *node = selected_splits; node; node = node->next)
+    {
+        if (!lv_can_remove_split_from_lot (node->data, lv->selected_lot))
+        {
+            g_list_free (selected_splits);
+            return;
+        }
+    }
 
     gnc_suspend_gui_refresh ();
     xaccAccountBeginEdit (lv->account);
-    gnc_lot_remove_split (lv->selected_lot, split);
+    for (GList *node = selected_splits; node; node = node->next)
+        gnc_lot_remove_split (lv->selected_lot, node->data);
     xaccAccountCommitEdit (lv->account);
     gnc_resume_gui_refresh ();
 
+    g_list_free (selected_splits);
     lv_refresh (lv);
 }
 
@@ -1059,6 +1086,7 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
 
     /* Set up the selection callbacks */
     selection = gtk_tree_view_get_selection (view);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
     g_signal_connect (selection, "changed",
                       G_CALLBACK(lv_split_selection_changed_cb), lv);
 
