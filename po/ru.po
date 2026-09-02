@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-06-20 15:18-0700\n"
-"PO-Revision-Date: 2026-06-26 04:25+0000\n"
+"PO-Revision-Date: 2026-09-02 23:51+0000\n"
 "Last-Translator: Yegor Derevenets <yegor.derevenets@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -13544,7 +13544,7 @@ msgstr "Показать счета, имеющие нулевой остато�
 
 #: gnucash/gtkbuilder/dialog-account.glade:1073
 msgid "Use Commodity Value"
-msgstr "Использовать стоимость товара"
+msgstr "Взять из описания товара"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1127
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
