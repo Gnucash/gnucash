@@ -48,6 +48,7 @@
                    (gnucash report html-document)
                    (gnucash report html-table)
                    (gnucash report html-acct-table)
+                   (gnucash report html-sankey)
                    (gnucash report html-style-info)
                    (gnucash report trep-engine)
                    (gnucash report report-core))
