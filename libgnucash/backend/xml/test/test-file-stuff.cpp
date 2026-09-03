@@ -104,8 +104,8 @@ write_dom_node_to_file (xmlNodePtr node, int fd)
 }
 
 gboolean
-print_dom_tree (gpointer data_for_children, GSList* data_from_children,
-                GSList* sibling_data, gpointer parent_data,
+print_dom_tree (gpointer data_for_children, const sixtp_child_result_list& data_from_children,
+                const sixtp_child_result_list& sibling_data, gpointer parent_data,
                 gpointer global_data, gpointer* result, const gchar* tag)
 {
     if (parent_data == NULL)
@@ -269,7 +269,7 @@ equals_node_val_vs_date (xmlNodePtr node, time64 time)
 
 static gboolean
 just_dom_tree_end_handler (gpointer data_for_children,
-                           GSList* data_from_children, GSList* sibling_data,
+                           const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                            gpointer parent_data, gpointer global_data,
                            gpointer* result, const gchar* tag)
 {
