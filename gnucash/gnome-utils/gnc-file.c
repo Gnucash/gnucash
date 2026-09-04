@@ -805,6 +805,7 @@ gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readon
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path = NULL;
+    gchar *query = NULL;
     gint32 port = 0;
 
 
@@ -824,7 +825,7 @@ RESTART:
     }
 
     gnc_uri_get_components (newfile, &scheme, &hostname,
-                            &port, &username, &password, &path);
+                            &port, &username, &password, &path, &query);
 
     /* If the file to open is a database, and no password was given,
      * attempt to look it up in a keyring. If that fails the keyring
@@ -845,7 +846,7 @@ RESTART:
         /* Got password. Recreate the uri to use internally. */
         g_free ( newfile );
         newfile = gnc_uri_create_uri ( scheme, hostname, port,
-                                       username, password, path);
+                                       username, password, path, query);
     }
 
     /* For file based uri's, remember the directory as the default. */
@@ -1137,6 +1138,7 @@ RESTART:
     g_free (username);
     g_free (password);
     g_free (path);
+    g_free (query);
 
     gnc_unset_busy_cursor (NULL);
 
@@ -1341,7 +1343,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
     newfile = gnc_uri_add_extension (norm_file, GNC_DATAFILE_EXT);
     g_free (norm_file);
     gnc_uri_get_components (newfile, &scheme, &hostname,
-                            &port, &username, &password, &path);
+                            &port, &username, &password, &path, NULL);
 
     /* Save As can't use the generic 'file' protocol. If the user didn't set
      * a specific protocol, assume the default 'xml'.
@@ -1351,7 +1353,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         g_free (scheme);
         scheme = g_strdup ("xml");
         norm_file = gnc_uri_create_uri (scheme, hostname, port,
-                                        username, password, path);
+                                        username, password, path, NULL);
         g_free (newfile);
         newfile = norm_file;
     }
@@ -1584,7 +1586,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     newfile = gnc_uri_add_extension (norm_file, GNC_DATAFILE_EXT);
     g_free (norm_file);
     gnc_uri_get_components (newfile, &scheme, &hostname,
-                            &port, &username, &password, &path);
+                            &port, &username, &password, &path, NULL);
 
     /* Save As can't use the generic 'file' protocol. If the user didn't set
      * a specific protocol, assume the default 'xml'.
@@ -1594,7 +1596,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
         g_free (scheme);
         scheme = g_strdup ("xml");
         norm_file = gnc_uri_create_uri (scheme, hostname, port,
-                                        username, password, path);
+                                        username, password, path, NULL);
         g_free (newfile);
         newfile = norm_file;
     }

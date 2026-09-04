@@ -57,6 +57,7 @@ typedef struct FileAccessWindow
     GtkWidget           *frame_file;
     GtkWidget           *frame_database;
     GtkWidget           *readonly_checkbutton;
+    GtkWidget           *compress_checkbutton;
     GtkFileChooser      *fileChooser;
     gchar               *starting_dir;
     GtkComboBoxText     *cb_uri_type;
@@ -87,6 +88,7 @@ geturl( FileAccessWindow* faw )
     gchar* path = NULL;
     gint32 port = 0;
     const gchar* port_text = NULL;
+    const gchar* query = NULL;
 
     type = gtk_combo_box_text_get_active_text (faw->cb_uri_type);
     if (gnc_uri_is_file_scheme (type))
@@ -111,7 +113,14 @@ geturl( FileAccessWindow* faw )
     if (port_text && *port_text)
         port = atoi (port_text) & 0xffff;
 
-    url = gnc_uri_create_uri (type, host, port, username, password, path);
+    /* Opt-in client/server connection compression. Only MySQL supports it
+     * (see gnc-backend-dbi.c); it is carried in the uri query string. */
+    if (faw->compress_checkbutton
+            && g_strcmp0 (type, "mysql") == 0
+            && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (faw->compress_checkbutton)))
+        query = "compress=true";
+
+    url = gnc_uri_create_uri (type, host, port, username, password, path, query);
 
     g_free (type);
     g_free (path);
@@ -227,6 +236,12 @@ set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_typ
     {
         g_assert( FALSE );
     }
+
+    /* The "Compress Connection" option only applies to MySQL (libdbi's
+     * PostgreSQL driver has no equivalent), so only show it for mysql. */
+    if ( faw->compress_checkbutton )
+        gtk_widget_set_visible( faw->compress_checkbutton,
+                                strcmp( uri_type, "mysql" ) == 0 );
 }
 
 static void
@@ -327,6 +342,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     faw->frame_file = GTK_WIDGET(gtk_builder_get_object (builder, "frame_file" ));
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
     faw->readonly_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "readonly_checkbutton"));
+    faw->compress_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "compress_checkbutton"));
     faw->tf_host = GTK_ENTRY(gtk_builder_get_object (builder, "tf_host" ));
     gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
     faw->tf_database = GTK_ENTRY(gtk_builder_get_object (builder, "tf_database" ));
@@ -355,6 +371,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
         gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
+        gtk_widget_destroy(faw->compress_checkbutton);
+        faw->compress_checkbutton = NULL;
         break;
 
     case FILE_ACCESS_EXPORT:
@@ -364,6 +382,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
         settings_section = GNC_PREFS_GROUP_EXPORT;
         gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
+        gtk_widget_destroy(faw->compress_checkbutton);
+        faw->compress_checkbutton = NULL;
         break;
     }
 
