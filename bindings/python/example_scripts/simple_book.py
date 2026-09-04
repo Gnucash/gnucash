@@ -14,12 +14,12 @@ print("uri:", uri)
 with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
     book = ses.get_book()
 
-    #Call some methods that produce output to show that Book works
+    # Create root account to mark the book as "needs saving".
     book.get_root_account().SetDescription("hello, book")
     print("Book is saved:", not book.session_not_saved())
 
-    #As long as there's no exceptions, book is automatically saved
-    #when session ends.
+    # As long as there's no exception, book is automatically saved
+    # when session ends.
     print("saving...")
 
 print("Book is saved:", not book.session_not_saved())

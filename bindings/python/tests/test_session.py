@@ -8,6 +8,9 @@
 # @date 2020-04-03
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
+import os
+from tempfile import TemporaryDirectory
+from urllib.parse import urlunparse
 from unittest import TestCase, main
 
 from gnucash import (
@@ -31,8 +34,6 @@ class TestSession(TestCase):
 
     def test_session_with_new_file(self):
         """create Session with new xml file"""
-        from tempfile import TemporaryDirectory
-        from urllib.parse import urlunparse
         with TemporaryDirectory() as tempdir:
             uri = urlunparse(("xml", tempdir, "tempfile", "", "", ""))
             with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
@@ -60,6 +61,20 @@ class TestSession(TestCase):
             with Session() as ses:
                 ses.begin(uri, is_new=True)
 
+    def test_minimal_new_sqlite(self):
+        """Test if a minimal new sqlite file is correctly written.
+        """
+        with TemporaryDirectory() as tempdir:
+            targetpath = os.path.join(tempdir, "test.gnucash")
+            targetfile = f"sqlite3://{targetpath}"
+
+            with Session(targetfile, SessionOpenMode.SESSION_NEW_STORE) as session:
+                session.book.get_root_account()  # Seems necessary to trigger creation of tables.
+            print("test.gnucash created")
+
+            with Session(targetfile, SessionOpenMode.SESSION_NORMAL_OPEN) as session:
+                print("Opened again")
+            print("Closed again.")
 
     def test_app_utils_get_current_session(self):
         from gnucash import _sw_app_utils
