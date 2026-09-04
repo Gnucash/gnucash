@@ -118,4 +118,15 @@
     (G_ "A basic dashboard for your accounting data")
     (list gnc:menuname-reports gnc:menuname-multicolumn)
     (lambda (window)
-      (gnc-main-window-open-report (gnc:make-dashboard) window)))))
+      (gnc-main-window-open-report (gnc:make-dashboard) window))))
+
+   ;; the dashboard v2 report
+   (gnc-add-scm-extension
+   (gnc:make-menu-item
+    (N_ "Dashboard 2.0  (revamped)")
+    "e7d6f9d35cd045b8820a5983c4a40c27"
+    (G_ "An improved version of the basic dashboard for your accounting data")
+    (list gnc:menuname-reports gnc:menuname-multicolumn)
+    (lambda (window)
+      (gnc-main-window-open-report (gnc:make-dashboard-v2) window))))
+    )
