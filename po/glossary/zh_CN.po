@@ -18,8 +18,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
-"enter_bug.cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2026-08-06 14:01+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
@@ -35,10 +35,12 @@ msgstr ""
 # 翻译人员好，这个是不会被最终用户所见的。这是为了您，也就是翻译人员所提供的一个工具。GnuCash 是一个个人或小型企业理财的软件，是一个会计专业性比较强的软件，其中包含了很多的术语。而这里就是针对很多术语的解释。
 # 请大家务必在翻译前先浏览此文件，否则很容易出现翻译不一致的地方。如果有必须修正的术语错误，也请先修改这个文件，然后再修改软件的 po，这样后来的翻译人员就不会犯同样的出错了。请大家在翻译术语的时候，尽量参考国内会计行业术语，以方便专业人士使用。谢谢！
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-msgid "Term"
+msgctxt "sample context"
+msgid "sample term"
 msgstr "术语"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+msgctxt "quoting convention"
 msgid "\"\""
 msgstr "“”"
 
@@ -61,175 +63,213 @@ msgstr "科目名"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
-msgid "account type: Active"
+msgctxt "account type"
+msgid "active"
 msgstr "科目类型：活跃"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
-msgid "account type: Asset"
+msgctxt "account type"
+msgid "asset"
 msgstr "科目类型：资产"
 
 # 债务，财政义务
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-msgid "account type: Assets & Liabilities"
+msgctxt "account type"
+msgid "assets & liabilities"
 msgstr "科目类型：资产和负债"
 
 # 英国称为 current account 即，现金流账户。是指一个可以随意从银行取款而不需要事先通知的银行账户
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
-msgid "account type: checking"
+msgctxt "account type"
+msgid "checking"
 msgstr "科目类型：活期存款"
 
 #. "-"
-msgid "account type: currency"
+msgctxt "account type"
+msgid "currency"
 msgstr "科目类型：货币"
 
 # 见：所有者权益
 #. "see: Equity, but see also 'account type: Passive'"
-msgid "account type: Equity"
+msgctxt "account type"
+msgid "equity"
 msgstr "科目类型：所有者权益"
 
 #. "-"
-msgid "account type: Expense"
+msgctxt "account type"
+msgid "expense"
 msgstr "科目类型：支出"
 
 #. "-"
-msgid "account type: Income"
+msgctxt "account type"
+msgid "income"
 msgstr "科目类型：收入"
 
 # 债务，财政义务
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
-msgid "account type: Liability"
+msgctxt "account type"
+msgid "liability"
 msgstr "科目类型：负债"
 
 #. "-"
-msgid "account type: money-market"
+msgctxt "account type"
+msgid "money-market"
 msgstr "科目类型：货币市场"
 
 #. "-"
-msgid "account type: Mutual fund"
+msgctxt "account type"
+msgid "mutual fund"
 msgstr "科目类型：投资基金"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-msgid "account type: Passive"
+msgctxt "account type"
+msgid "passive"
 msgstr "科目类型：固定"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-msgid "account type: Profit & Loss"
+msgctxt "account type"
+msgid "profit & loss"
 msgstr "科目类型：损益"
 
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
-msgid "account type: saving"
+msgctxt "account type"
+msgid "saving"
 msgstr "科目类型：定期储蓄"
 
 #. "-"
-msgid "account type: Stock"
+msgctxt "account type"
+msgid "stock"
 msgstr "科目类型：股票"
 
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
 #. "This account type is used when exchanging or trading amounts from one currency into another"
-msgid "account type: trading"
+msgctxt "account type"
+msgid "trading"
 msgstr "科目类型：交易"
 
 #. "-"
-msgid "account: parent account"
+msgctxt "account"
+msgid "parent account"
 msgstr "科目：父科目"
 
 #. "-"
-msgid "account: subaccount"
+msgctxt "account"
+msgid "subaccount"
 msgstr "科目：子科目"
 
 #. "-"
-msgid "account: top level account"
+msgctxt "account"
+msgid "top level account"
 msgstr "科目：顶级科目"
 
 # 导致一笔交易发生的事情的过程
 #. "The process of doing something that caused a transaction to happen"
-msgid "Action (register)"
+msgctxt "register"
+msgid "action"
 msgstr "操作（交易）"
 
 #. "Automated teller machine"
-msgid "action: ATM"
+msgctxt "action"
+msgid "ATM"
 msgstr "操作：自动取款机"
 
 # 这笔交易是一个自动存款
 #. "Transaction was an auto deposit"
-msgid "action: autoDep"
+msgctxt "action"
+msgid "autoDep"
 msgstr "操作：自动存款"
 
 #. "-"
-msgid "action: buy"
+msgctxt "action"
+msgid "buy"
 msgstr "操作：购买"
 
 #. "-"
-msgid "action: deposit"
+msgctxt "action"
+msgid "deposit"
 msgstr "操作：存款"
 
 # 当别人直接从你的账户自动扣钱的行为。反义词是直接存款。
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
-msgid "action: direct debit"
+msgctxt "action"
+msgid "direct debit"
 msgstr "操作：直接借记"
 
 # 交易是一个资金的分配
 #. "transaction is a distribution (???)"
-msgid "action: dist"
+msgctxt "action"
+msgid "dist"
 msgstr "操作：分配"
 
 # 交易是一个股息
 #. "transaction is a dividend"
-msgid "action: div"
+msgctxt "action"
+msgid "div"
 msgstr "操作：股息"
 
 #. "-"
-msgid "action: fee"
+msgctxt "action"
+msgid "fee"
 msgstr "操作：费用"
 
 # 交易是来自利息
 #. "transaction comes from interest"
-msgid "action: int"
+msgctxt "action"
+msgid "int"
 msgstr "操作：利息"
 
 # 交易是贷款
 #. "-"
-msgid "action: loan"
+msgctxt "action"
+msgid "loan"
 msgstr "操作：贷款"
 
 # 见：支付一
 #. "see: payment 1."
-msgid "action: payment"
+msgctxt "action"
+msgid "payment"
 msgstr "操作：支付"
 
 #. "Point of sale"
-msgid "action: POS"
+msgctxt "action"
+msgid "POS"
 msgstr "操作：POS"
 
 #. "-"
-msgid "action: rebate"
+msgctxt "action"
+msgid "rebate"
 msgstr "操作：回扣"
 
 #. "-"
-msgid "action: sell"
+msgctxt "action"
+msgid "sell"
 msgstr "操作：销售"
 
 #. "-"
-msgid "action: Teller"
+msgctxt "action"
+msgid "teller"
 msgstr "操作：出纳"
 
 # 见转帐2
 #. "see: transfer 2. (=credit transfer)"
-msgid "action: transfer"
+msgctxt "action"
+msgid "transfer"
 msgstr "操作：转账"
 
 #. "-"
-msgid "action: wire"
+msgctxt "action"
+msgid "wire"
 msgstr "操作：电汇"
 
 #. "-"
-msgid "action: withdraw"
+msgctxt "action"
+msgid "withdraw"
 msgstr "操作：提现"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
@@ -250,7 +290,8 @@ msgstr "平均"
 
 # 某一个科目下的资金的数额
 #. "The amount of money that is in one's account"
-msgid "balance (noun)"
+msgctxt "noun"
+msgid "balance"
 msgstr "余额（名词）"
 
 # 安排收入与支出相等
@@ -270,7 +311,8 @@ msgstr "资产负债表"
 
 # 安排收入与支出相等
 #. "To arrange for income and spending to be equal"
-msgid "balance, to"
+msgctxt "verb"
+msgid "balance"
 msgstr "平衡"
 
 #. "-"
@@ -310,12 +352,14 @@ msgid "Budget"
 msgstr "预算"
 
 #. "-"
-msgid "business (adjective)"
+msgctxt "adjective"
+msgid "business"
 msgstr "商业（形容词）"
 
 # 比如在菜单上：关于小型企业财会功能的标题。
 #. "as Menu Item: Headline for features that are related to small business accounting"
-msgid "business (noun)"
+msgctxt "noun"
+msgid "business"
 msgstr "企业（名词）"
 
 # 从投资或者财产销售得到的收益
@@ -341,12 +385,14 @@ msgstr "支票"
 # 在一个科目树中修复不平衡的交易和孤立的子交易。任何借方不等于贷方的交易，会添加一个用于平衡的拆分(指向一个特殊的新科目，名为“不平衡”)。任何子交易如果没有所属科目都会被放进另一个特殊的科目，名为“孤立的”。
 # 之前称为“清理”
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
-msgid "check and repair, to"
+msgctxt "verb"
+msgid "check and repair"
 msgstr "检查并修复"
 
 # 结束应用程序与一个打开文件的关系，这样应用程序除非再次打开它，否则将不能够访问文件内容。
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
-msgid "close, to"
+msgctxt "verb"
+msgid "close"
 msgstr "关闭"
 
 # 一种是购买和出售的物品。是关于账上一直跟踪的东西的最常用的词语。比如货币或股票。
@@ -360,12 +406,14 @@ msgstr "商品列表"
 
 # 交易的最小量(如1/100美元，又如对大多数股票而言的一股)
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
-msgid "commodity option: fraction"
+msgctxt "commodity option"
+msgid "fraction"
 msgstr "商品选项：分数"
 
 # 如，USD、DEM
 #. "e.g. USD, EUR"
-msgid "commodity option: Symbol"
+msgctxt "commodity option"
+msgid "symbol"
 msgstr "商品选项：符号"
 
 # 借钱的费用，或者对某人的投资所支付的费用
@@ -377,7 +425,8 @@ msgstr "复利"
 # (b) 这种支付的记录
 # (c) 向一个银行账户存钱的状态
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
-msgid "Credit (column in register)"
+msgctxt "column in register"
+msgid "credit"
 msgstr "贷方（交易界面的一栏）"
 
 #. "-"
@@ -431,7 +480,8 @@ msgstr "日期范围"
 # (a) 在一个科目中的欠款或支付金额的书面声明。
 # (b) 从一个科目取款的和
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
-msgid "Debit (column in register)"
+msgctxt "column in register"
+msgid "debit"
 msgstr "借方（交易界面的一栏）"
 
 # 软件安装后，每个选项都会有一个默认值，直到用户修改配置。
@@ -441,7 +491,8 @@ msgstr "默认"
 
 # 见存款
 #. "see credit"
-msgid "deposit (in the reconcile dialog)"
+msgctxt "reconcile dialog"
+msgid "deposit"
 msgstr "存款（在对账对话框）"
 
 # 某物价值逐渐降低的过程
@@ -452,7 +503,8 @@ msgstr "折旧"
 # 1. 每笔交易一个文本区域。其内的文本应描述这笔交易是关于什么的。是一个短描述行的句子(最多40个字)。
 # 2. 每个科目的一个文本区域。这个稍微长一些，一般是要用1-5句话来描述这个科目是关于什么的。
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
-msgid "Description (column in register)"
+msgctxt "column in register"
+msgid "description"
 msgstr "描述（交易界面的一栏）"
 
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
@@ -493,7 +545,8 @@ msgstr "所有者权益表"
 
 # 在交易结束前持有付款或存款的可信任的第三方。在美国，许多抵押贷款公司会在您取得贷款时设立一个中介账户。您每月支付给这个账户，然后他们从这个账户支付灾害保险和财产税。所以，他们“在托管账户”中持有资金以完成交易(支付保险和税)。托管账户[银行及金融机构的，所以account是账户，而不是会计科目。
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
-msgid "escrow (account)"
+msgctxt "account"
+msgid "escrow"
 msgstr "托管账户"
 
 # 不同国家货币之间的价值关系
@@ -516,12 +569,14 @@ msgid "file type"
 msgstr "文件类型"
 
 #. "-"
-msgid "financial calculator: interest rate"
+msgctxt "financial calculator"
+msgid "interest rate"
 msgstr "金融计算器：利率"
 
 # 见：支付
 #. "see: payment"
-msgid "financial calculator: payments"
+msgctxt "financial calculator"
+msgid "payments"
 msgstr "金融计算器：支付"
 
 # 这个报表曾经称为“损益”，但是在2004-07-13重命名了。
@@ -588,7 +643,8 @@ msgstr "贷款"
 
 # 从银行借的钱的数额。
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-msgid "loan: APR"
+msgctxt "loan"
+msgid "APR"
 msgstr "年利率"
 
 # 在商业活动中损失的资金
@@ -609,7 +665,8 @@ msgstr "批次"
 
 # 将两个账簿合成一个(见账簿)
 #. "Combine two books into one (see book)."
-msgid "merge, to"
+msgctxt "verb"
+msgid "merge"
 msgstr "合并"
 
 # 散点图用于标记每一个数据点的东西
@@ -641,13 +698,15 @@ msgstr "抵押贷款"
 # (a) 从银行借钱用于买房或其它的财产，并且财产被抵押的协议。
 # (b) 用此种方式借钱的数额
 #. "Adjustable Rate Mortgage"
-msgid "mortgage: ARM"
+msgctxt "mortgage"
+msgid "ARM"
 msgstr "抵押贷款：浮动利率"
 
 # (a) 从银行借钱用于买房或其它的财产，并且财产被抵押的协议。
 # (b) 用此种方式借钱的数额
 #. "Fixed Rate Mortgage"
-msgid "mortgage: FRM"
+msgctxt "mortgage"
+msgid "FRM"
 msgstr "抵押贷款：固定利率"
 
 # 如 USD, DEM, CNY, 见货币
@@ -677,17 +736,20 @@ msgstr "资产净值"
 
 # 每个记录都有的一个文本字段，用以放说明交易的信息。
 #. "One textfield per transaction that can hold explanatory text about the transaction."
-msgid "notes (register)"
+msgctxt "column in register"
+msgid "notes"
 msgstr "说明（交易界面的一栏）"
 
 # 编号；交易中的一个字段。如果这笔交易是通过支票的，那么支票编号应该记在这个区域里。
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
-msgid "Num (column in register)"
+msgctxt "column in register"
+msgid "num"
 msgstr "编号（交易界面的一栏）"
 
 # 进行访问
 #. "to make accessible"
-msgid "open, to"
+msgctxt "verb"
+msgid "open"
 msgstr "打开"
 
 # 如果一个科目在开始时的余额不为零，那么这个余额就被称为期初余额。
@@ -752,7 +814,8 @@ msgstr "投资组合"
 
 # 结束应用程序与一个打开文件的关系，这样应用程序除非再次打开它，否则将不能够访问文件内容。
 #. "Register invoice, voucher in account register"
-msgid "post, to"
+msgctxt "verb"
+msgid "post"
 msgstr "入账"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
@@ -766,22 +829,26 @@ msgstr "本金偿还"
 
 # 用以购买或出售某物的金额
 #. "An amount of money for which sth may be bought or sold"
-msgid "price (in a split)"
+msgctxt "split property"
+msgid "price"
 msgstr "拆分金额"
 
 # 开价是对要出售的物品报出价格，既你希望销售的价位
 #. "An ask is an offer to sell, and the price you want to sell at."
-msgid "price type: ask"
+msgctxt "price type"
+msgid "ask"
 msgstr "价格类型：问价"
 
 # 出价是对要购买的物品报出价格，既你希望购买的价位
 #. "A bid is an offer to buy, and the price you want to buy at."
-msgid "price type: bid"
+msgctxt "price type"
+msgid "bid"
 msgstr "价格类型：投标"
 
 # 网上报价。既一个关于股票、商品的当前价格的表
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
-msgid "price: quotes"
+msgctxt "price"
+msgid "quotes"
 msgstr "价格：报价"
 
 # 公司收入的资金。特别是挣的金额减去支出的金额
@@ -798,12 +865,14 @@ msgid "quick-fill"
 msgstr "快速填充"
 
 #. "-"
-msgid "rebalance, to (a transaction)"
+msgctxt "verb, on a transaction"
+msgid "rebalance"
 msgstr "再次平衡"
 
 # 对一个科目对帐，已对帐的子交易。使银行账户清单和用户在某个科目所记录的交易匹配。
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
-msgid "reconcile, to"
+msgctxt "verb"
+msgid "reconcile"
 msgstr "对账"
 
 #. "-"
@@ -817,44 +886,53 @@ msgstr "账簿"
 
 # 将交易拆分成两个或多个部分
 #. "A transaction that is divided into two or more parts"
-msgid "register entry: split transaction"
+msgctxt "register entry"
+msgid "split transaction"
 msgstr "记账：拆分交易"
 
 #. "-"
-msgid "register entry: stock split"
+msgctxt "register entry"
+msgid "stock split"
 msgstr "记账：拆分股票"
 
 # 账簿的一种形式
 #. "one form of register"
-msgid "register: auto-split ledger"
+msgctxt "register"
+msgid "auto-split ledger"
 msgstr "账簿：自动拆分分类账"
 
 # 账簿的另一种形式
 #. "another form of register"
-msgid "register: basic ledger"
+msgctxt "register"
+msgid "basic ledger"
 msgstr "账簿：基本分类账"
 
 # 账簿的另一种形式
 #. "another form of register"
-msgid "register: general ledger"
+msgctxt "register"
+msgid "general ledger"
 msgstr "账簿：总分类账"
 
 # 账簿的另一种形式
 #. "another form of register"
-msgid "register: transaction journal"
+msgctxt "register"
+msgid "transaction journal"
 msgstr "账簿：交易日记账"
 
 # 重新加载当前文档
 #. "reload the current document"
-msgid "reload, to"
+msgctxt "verb"
+msgid "reload"
 msgstr "重新加载"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
-msgid "report form: T Account Form"
+msgctxt "report form"
+msgid "T account form"
 msgstr "报表：双栏报表"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
-msgid "report form: Vertical Form"
+msgctxt "report form"
+msgid "vertical form"
 msgstr "报表：单栏报表"
 
 # 一个所有者权益科目的名字，以区别开期初余额。“留存收益包括盈余公积和未分配利润 ” -- http://www.hudong.com/wiki/%E7%95%99%E5%AD%98%E6%94%B6%E7%9B%8A
@@ -865,7 +943,8 @@ msgstr "留存收益"
 
 # 创建一个新交易，它与老的交易正好相反。当您把两个交易加在一起的时候，它们会完全抵消。账目中这么使用，而不是使交易无效，通常是因为前一个月已经结帐了，不能够再进行任何修改了，或者会计系统为“只可写入，不可修改”类型。
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
-msgid "reverse transaction, to (Action in the register)"
+msgctxt "action in the register, verb"
+msgid "reverse transaction"
 msgstr "冲销"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
@@ -874,7 +953,8 @@ msgstr "营业额"
 
 # 写入数据(通常是一个文件)到存储介质，比如磁盘或磁带。
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
-msgid "save, to (to a file)"
+msgctxt "verb, to a file"
+msgid "save"
 msgstr "保存"
 
 # 在某个特定的时间可以自动执行的一笔交易或一笔交易的提醒。它可以执行一次、或者按照固定间隔执行多次。
@@ -885,7 +965,8 @@ msgstr "计划交易"
 # 【已废弃】在一个科目树中修复不平衡的交易和孤立的子交易。任何借方不等于贷方的交易，会得到一个用于平衡的子交易(指向一个特殊的新科目，名为“不平衡”)。任何子交易如果没有所属科目都会被放进另一个特殊的科目，名为“孤立的”。
 # 现已废弃，使用术语“检查和修复”。
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
-msgid "scrub, to"
+msgctxt "verb"
+msgid "scrub"
 msgstr "清理"
 
 # 显示谁拥有股份的文档或证明
@@ -898,7 +979,8 @@ msgid "Sell short"
 msgstr "卖空"
 
 #. "-"
-msgid "Share Balance (register)"
+msgctxt "register"
+msgid "share balance"
 msgstr "股份结余（账簿）"
 
 # 一个商业公司的资金被分割为多个等份，任何这一部分会赋予持有者获得利益的一部分。
@@ -946,19 +1028,23 @@ msgid "tax info"
 msgstr "税务信息"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-msgid "tax type: income tax"
+msgctxt "tax type"
+msgid "income tax"
 msgstr "税种：所得税"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
-msgid "tax type: sales tax"
+msgctxt "tax type"
+msgid "sales tax"
 msgstr "税种：营业税"
 
 #. "'Goods and Service Tax' is one form of sales tax."
-msgid "tax type: GST"
+msgctxt "tax type"
+msgid "GST"
 msgstr "税种：商品及服务税"
 
 #. "'Value Added Tax' is the other form of sales tax."
-msgid "tax type: VAT"
+msgctxt "tax type"
+msgid "VAT"
 msgstr "税种：增值税"
 
 # 如果您创建一个新样式表，您可以从模板开始。
@@ -988,27 +1074,32 @@ msgstr "交易"
 
 # 一个金额已经被移动的交易。这个词汇来自于支票：一张支票开出了，但是在银行账户实际收到钱之前，还必须做一些事情。银行收到钱的时刻，就被称为交易(支票)已结清了。
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
-msgid "transaction state: cleared"
+msgctxt "transaction state"
+msgid "cleared"
 msgstr "交易状态：结算"
 
 #. "-"
-msgid "transaction state: frozen"
+msgctxt "transaction state"
+msgid "frozen"
 msgstr "交易状态：冻结"
 
 # 交易已经和银行账单对上帐了。
 #. "A transaction that was reconciled with the bank's statement."
-msgid "transaction state: reconciled"
+msgctxt "transaction state"
+msgid "reconciled"
 msgstr "交易状态：对账"
 
 # 交易是无效的，既不在有效了。
 #. "A transaction that is void i.e. not valid (anymore)."
-msgid "transaction state: voided"
+msgctxt "transaction state"
+msgid "voided"
 msgstr "交易状态：作废"
 
 # 1. 传输某种东西
 # 2. 见：银行转帐
 #. "1. The action of transferring sth. 2. see: credit transfer"
-msgid "transfer (noun)"
+msgctxt "noun"
+msgid "transfer"
 msgstr "转账（名词）"
 
 # 转帐金额接收的科目
@@ -1018,12 +1109,14 @@ msgstr "收款帐户"
 
 # 将资金从一个科目转到另一个科目。将会创建一个交易。
 #. "To move money from one account to another. Will create a transaction."
-msgid "transfer, to (register toolbar)"
+msgctxt "register toolbar, verb"
+msgid "transfer"
 msgstr "转账 (交易事项表)"
 
 # 试算表是一个工作表，在上面您列出所有您的总分类账科目与它们的借、贷余额。这是一个用于对您账簿中的错误报警的工具。它的总借方必须等于总贷方。如果它们不等，您知道您有一个错误必须追踪修正。
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
-msgid "trial balance (report)"
+msgctxt "report"
+msgid "trial balance"
 msgstr "试算表"
 
 # 具有共同特征的一类事物。科目类型、商业类型等。
@@ -1042,7 +1135,8 @@ msgstr "网址"
 
 # 以资金或其它商品方式体现的某物的价值，因此它可以进行交换。
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
-msgid "value (in a split)"
+msgctxt "split property"
+msgid "value"
 msgstr "拆分金额"
 
 # 在小型公司会计中：一个销售物品并提供货物的人或公司
@@ -1056,5 +1150,6 @@ msgid "voucher"
 msgstr "凭证"
 
 #. "see debit"
-msgid "withdraw (in the reconcile dialog)"
+msgctxt "reconcile dialog"
+msgid "withdraw"
 msgstr "撤回（在对账对话框）"

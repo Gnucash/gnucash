@@ -49,5 +49,5 @@ msgstr ""
 !
 
 #Yes this is the most simple awk script you've ever seen :)
-awk -F'\t' '{if ($2 != "") print "#. "$2; print "msgid "$1; print "msgstr \"\"\n"}' \
+awk -F'\t' '{if ($3 != "") print "#. "$3; if ($1 != "") print "msgctxt "$1; print "msgid "$2; print "msgstr \"\"\n"}' \
 $GLOSSARY_CSV
