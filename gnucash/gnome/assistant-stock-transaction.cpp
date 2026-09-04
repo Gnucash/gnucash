@@ -54,6 +54,9 @@
 #include "gnc-date-edit.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui-util.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page-register.h"
+#include "gnc-split-reg.h"
 
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
@@ -2659,8 +2662,25 @@ StockAssistantController::finish()
     g_return_if_fail (m_model->txn_type_valid());
 
     gnc_suspend_gui_refresh ();
-    [[maybe_unused]] auto [success, trans] = m_model->create_transaction();
+    auto [success, trans] = m_model->create_transaction();
     gnc_resume_gui_refresh ();
+
+    if (success && trans)
+    {
+        auto split = xaccTransFindSplitByAccount (trans, m_model->account());
+        if (split)
+        {
+            auto page = gnc_plugin_page_register_new (m_model->account(), FALSE);
+            gnc_main_window_open_page (nullptr, page);
+            auto gsr = gnc_plugin_page_register_get_gsr (page);
+            gnc_split_reg_raise (gsr);
+
+            if (gnc_split_reg_clear_filter_for_split (gsr, split))
+                gnc_plugin_page_register_clear_current_filter (page);
+
+            gnc_split_reg_jump_to_split (gsr, split);
+        }
+    }
 
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
 }

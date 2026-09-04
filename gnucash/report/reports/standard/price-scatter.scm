@@ -43,7 +43,6 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-invert (N_ "Invert prices"))
 
-(define optname-marker (N_ "Marker"))
 (define optname-markercolor (N_ "Marker Color"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
@@ -85,10 +84,6 @@
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
      optname-plot-width optname-plot-height "c" (cons 'percent 100.0) (cons 'percent 100.0))
-    
-    (gnc:options-add-marker-choice!
-     options gnc:pagename-display 
-     optname-marker "a" 'filledsquare)
 
     (gnc-register-color-option options
       gnc:pagename-display optname-markercolor
@@ -131,7 +126,6 @@
 
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
-         (marker (get-option gnc:pagename-display optname-marker))
          (mcolor 
           (gnc:color-option->hex-string
            (gnc:lookup-option (gnc:report-options report-obj)
@@ -169,6 +163,9 @@
         (gnc:html-markup-h3 title)
         (gnc:html-markup-p text))))
 
+    ;; apply default settings from preferences
+    (gnc:html-chart-apply-preferences-report! chart)
+
     (gnc:html-chart-set-type! chart 'line)
 
     (gnc:html-chart-set-currency-iso!
@@ -185,22 +182,15 @@
             (gnc-date-interval-format from-date to-date))))
     (gnc:html-chart-set-width! chart width)
     (gnc:html-chart-set-height! chart height)
-    (gnc:html-chart-set! chart
-                         '(options elements point pointStyle)
-                         (case marker
-                           ((filleddiamond diamond) "rectRot")
-                           ((filledcircle circle) "circle")
-                           ((filledsquare square) "rect")
-                           ((cross) "crossRot")
-                           ((plus) "cross")
-                           ((dash) "line")))
-
     (gnc:html-chart-set-y-axis-label!
      chart (gnc-commodity-get-mnemonic amount-commodity))
 
     (gnc:html-chart-set-x-axis-label! chart int-label)
     (gnc:html-chart-set-x-axis-type! chart 'linear)
     (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
+
+    ;; tailor applied GC's preferences toward this particular chart
+    (gnc:html-chart-set! chart '(options tooltips caretPadding) (+ (gnc-prefs-get-int "general.report" "chart-point-size") 2))
 
     (cond
      ((gnc-commodity-equiv report-currency price-commodity)
@@ -273,7 +263,7 @@ Unfortunately, the plotting tool can't handle that.")))
          chart (map
                 (match-lambda
                   ((x y)
-                   (format #f "~2,2f ~a = ~a"
+                   (format #f "~2,2F ~a  =  ~a"
                            x int-label (gnc:monetary->string
                                         (gnc:make-gnc-monetary amount-commodity y)))))
                 data))
@@ -281,10 +271,9 @@ Unfortunately, the plotting tool can't handle that.")))
         (gnc:html-chart-add-data-series!
          chart (G_ "Price")
          (map (match-lambda ((x y) (list (cons 'x x) (cons 'y y)))) data)
-         mcolor
-         'pointBorderColor mcolor 'fill #f 'borderColor "#4bb2c5"
-         'pointBackgroundColor
-         (if (memq marker '(filledcircle filledsquare filleddiamond)) mcolor "white"))
+         (string-append "#" mcolor)
+         'pointBorderColor (string-append "#" mcolor) 'fill #f 'borderColor "#4bb2c5"
+         'pointBackgroundColor (string-append "#" mcolor))
 
         (gnc:html-document-add-object! document chart)))))
 
@@ -293,7 +282,7 @@ Unfortunately, the plotting tool can't handle that.")))
 ;; Here we define the actual report
 (gnc:define-report
  'version 1
- 'name (N_ "Price")
+ 'name (N_ "Price Scatterplot")
  'report-guid "1d241609fd4644caad765c95be20ff4c"
  'menu-path (list gnc:menuname-asset-liability)
  'menu-name (N_ "Price Scatterplot")

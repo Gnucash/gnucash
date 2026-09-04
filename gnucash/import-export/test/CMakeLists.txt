@@ -18,6 +18,11 @@ gnc_add_test(test-import-pending-matches test-import-pending-matches.cpp
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
 
+set(GTEST_IMPORT_PARSE_LIBS gnc-generic-import gnc-test-engine test-core gtest)
+gnc_add_test(test-gnc-import-parse gtest-import-parse.cpp
+  GENERIC_IMPORT_TEST_INCLUDE_DIRS GTEST_IMPORT_PARSE_LIBS
+)
+
 set(IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/gnucash/import-export
@@ -87,6 +92,7 @@ gnc_add_test(test-import-backend "${gtest_import_backend_SOURCES}"
 set_dist_list(test_generic_import_DIST
     CMakeLists.txt
     test-import-parse.c
+    gtest-import-parse.cpp
     test-import-pending-matches.cpp
     gtest-import-account-matcher.cpp
     gtest-import-backend.cpp)

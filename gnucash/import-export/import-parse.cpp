@@ -306,6 +306,9 @@ gnc_import_parse_date(const char *str, GncImportFormat fmt, time64 *val)
     int v0 = 0, v1 = 0, v2 = 0;
     int m = 0, d = 0, y = 0;
 
+    if (!regex_compiled)
+        compile_regex();
+
     g_return_val_if_fail(str, FALSE);
     g_return_val_if_fail(val, FALSE);
     g_return_val_if_fail(fmt, FALSE);
