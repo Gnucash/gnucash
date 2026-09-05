@@ -31924,3 +31924,228 @@ msgstr "(Skatterelaterade underkonton: %d)"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Ingen hjälp tillgänglig."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "<b>SIE4 export options</b>"
+msgstr "<b>Inställningar för SIE4-export</b>"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Company name:"
+msgstr "_Företagsnamn:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "File/company _number:"
+msgstr "Fil-/företags_nummer:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Organization number:"
+msgstr "_Organisationsnummer:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Contact:"
+msgstr "_Kontakt:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Street address:"
+msgstr "_Gatuadress:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Postal address:"
+msgstr "_Postadress:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Phone:"
+msgstr "_Telefon:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Account _plan:"
+msgstr "_Kontoplan:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Accounting _currency:"
+msgstr "Redovisnings_valuta:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "_Voucher series:"
+msgstr "_Verifikationsserie:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Current year _start:"
+msgstr "_Start för innevarande räkenskapsår:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Current year _end:"
+msgstr "_Slut för innevarande räkenskapsår:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Previous year s_tart:"
+msgstr "Start för fö_regående räkenskapsår:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Previous year e_nd:"
+msgstr "Slut för föregåe_nde räkenskapsår:"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Include customer, vendor and invoice _dimensions"
+msgstr "Inkludera _dimensioner för kunder, leverantörer och fakturor"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Include accounts with _zero values"
+msgstr "Inkludera konton med _nollvärden"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Use GnuCash transaction _numbers as voucher numbers"
+msgstr "Använd GnuCash-transaktions_nummer som verifikationsnummer"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Please choose a file for the SIE4 export."
+msgstr "Välj en fil för SIE4-exporten."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Company name is required for SIE4 export."
+msgstr "Företagsnamn krävs för SIE4-export."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "The current financial year start date must be before the end date."
+msgstr "Startdatum för innevarande räkenskapsår måste vara före slutdatumet."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "The previous financial year start date must be before the end date."
+msgstr "Startdatum för föregående räkenskapsår måste vara före slutdatumet."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "Voucher series is required for SIE4 export."
+msgstr "Verifikationsserie krävs för SIE4-export."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "Voucher series must not contain spaces or quote marks for SIE4 export."
+msgstr "Verifikationsserie får inte innehålla mellanslag eller citattecken för SIE4-export."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "The SIE account plan must be BAS95, BAS96, EUBAS97, NE2007, or BAS2xxx."
+msgstr "SIE-kontoplanen måste vara BAS95, BAS96, EUBAS97, NE2007 eller BAS2xxx."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "The SIE accounting currency must be a three-letter ISO 4217 code."
+msgstr "SIE-redovisningsvalutan måste vara en trebokstavs ISO 4217-kod."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "Export SIE4"
+msgstr "Exportera SIE4"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+msgid "SIE4 files (*.SE, *.se)"
+msgstr "SIE4-filer (*.SE, *.se)"
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#, c-format
+msgid "The SIE4 file has been exported to '%s'."
+msgstr "SIE4-filen har exporterats till \"%s\"."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#, c-format
+msgid ""
+"The SIE4 file has been exported to '%s'.\n"
+"\n"
+"%u transaction had an empty GnuCash transaction number, so a voucher number was generated for it."
+msgid_plural ""
+"The SIE4 file has been exported to '%s'.\n"
+"\n"
+"%u transactions had empty GnuCash transaction numbers, so voucher numbers were generated for them."
+msgstr[0] ""
+"SIE4-filen har exporterats till \"%s\".\n"
+"\n"
+"%u transaktion saknade GnuCash-transaktionsnummer, så ett verifikationsnummer genererades för den."
+msgstr[1] ""
+"SIE4-filen har exporterats till \"%s\".\n"
+"\n"
+"%u transaktioner saknade GnuCash-transaktionsnummer, så verifikationsnummer genererades för dem."
+
+#: gnucash/import-export/sie4/dialog-sie4-export.c
+#, c-format
+msgid "SIE4 export failed: %s"
+msgstr "SIE4-export misslyckades: %s"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "Unable to round an amount to two decimal places."
+msgstr "Det gick inte att avrunda ett belopp till två decimaler."
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "Unable to accumulate SIE4 amounts exactly."
+msgstr "Det gick inte att summera SIE4-beloppen exakt."
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "Transaction has a split without an account."
+msgstr "Transaktionen har en delpost utan konto."
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "Transaction uses an account without a numeric account code: %s"
+msgstr "Transaktionen använder ett konto utan numerisk kontokod: %s"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "%s; set Account Code to the BAS account number"
+msgstr "%s; ange Kontokod till BAS-kontonumret"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "Account has a non-numeric SIE4 account code: %s (%s)"
+msgstr "Kontot har en icke-numerisk SIE4-kontokod: %s (%s)"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "Duplicate account code in SIE4 export: %s (%s, %s)"
+msgstr "Duplicerad kontokod i SIE4-exporten: %s (%s, %s)"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "SIE4 export requires numeric account codes for these accounts:"
+msgstr "SIE4-exporten kräver numeriska kontokoder för dessa konton:"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "SIE4 export requires a single accounting currency. Transaction currency %s does not match export currency %s."
+msgstr "SIE4-exporten kräver en enda redovisningsvaluta. Transaktionsvalutan %s matchar inte exportvalutan %s."
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "%s (transaction number: %s)"
+msgstr "%s (transaktionsnummer: %s)"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "Transaction number %s is used by both %s and %s."
+msgstr "Transaktionsnumret %s används av både %s och %s."
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "SIE4 export is set to use GnuCash transaction numbers, but these transaction numbers are not positive integers:"
+msgstr "SIE4-exporten är inställd på att använda GnuCash-transaktionsnummer, men dessa transaktionsnummer är inte positiva heltal:"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "SIE4 export is set to use GnuCash transaction numbers, but these transaction numbers are duplicated:"
+msgstr "SIE4-exporten är inställd på att använda GnuCash-transaktionsnummer, men dessa transaktionsnummer är duplicerade:"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "Unable to test transaction balance for SIE4 export."
+msgstr "Det gick inte att kontrollera transaktionsbalansen för SIE4-exporten."
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+#, c-format
+msgid "Imbalanced transaction in SIE4 export: %s %s"
+msgstr "Obalanserad transaktion i SIE4-exporten: %s %s"
+
+#: gnucash/import-export/sie4/sie4-export.cpp
+msgid "No accounts with numeric account codes were found."
+msgstr "Inga konton med numeriska kontokoder hittades."
+
+#: gnucash/ui/gnc-plugin-sie4-export.ui:6
+msgid "Export _SIE4…"
+msgstr "Exportera _SIE4…"
+
+#: gnucash/ui/gnc-plugin-sie4-export.ui:8
+msgid "Export the book to a Swedish SIE4 file"
+msgstr "Exportera boken till en svensk SIE4-fil"

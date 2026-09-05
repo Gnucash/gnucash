@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte">
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">ada6a465052a4eddaa3eef079dadb4a6</book:id>
+<book:slots>
+  <slot><slot:key>options</slot:key><slot:value type="frame">
+    <slot><slot:key>Business</slot:key><slot:value type="frame">
+      <slot><slot:key>Company Name</slot:key><slot:value type="string">Göteborgs Åkeri AB</slot:value></slot>
+      <slot><slot:key>Company Address</slot:key><slot:value type="string">Åsa Andersson
+Östra vägen 1
+123 45 Göteborg</slot:value></slot>
+      <slot><slot:key>Company ID</slot:key><slot:value type="string">556677-8899</slot:value></slot>
+    </slot:value></slot>
+  </slot:value></slot>
+</book:slots>
+<gnc:count-data cd:type="commodity">1</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>SEK</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:count-data cd:type="account">9</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">63232b8d25174566b94194006bbc03bf</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kundfordringar</act:name>
+  <act:id type="guid">c7bdd15996104095b385699ae42d76bf</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1510</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bank</act:name>
+  <act:id type="guid">ec4071ca94bd4029b3714a7db4e2d132</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1930</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Eget kapital</act:name>
+  <act:id type="guid">7f720dc101b64fc4a55e003ec064c6ae</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2010</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Leverantörsskulder</act:name>
+  <act:id type="guid">adbd00da28664dfdbdd94b7aded132c3</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2440</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Utgående moms</act:name>
+  <act:id type="guid">fd433d4dc72b4fd2b991e3eed2d22a41</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2611</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingående moms</act:name>
+  <act:id type="guid">514e067dc94f4250a39fac2c1092546f</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2641</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Försäljning</act:name>
+  <act:id type="guid">e4c0f7c3a273454c9a00bc803c38f4e6</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3010</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inköp</act:name>
+  <act:id type="guid">0361311dfe42470d933d4836db532a73</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4010</act:code>
+  <act:parent type="guid">63232b8d25174566b94194006bbc03bf</act:parent>
+</gnc:account>
+<gnc:count-data cd:type="transaction">6</gnc:count-data>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">c64391fd24804a6c99657b1c3b7b48a2</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>2022-12-31 12:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2022-12-31 12:00:00 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Initial Balance</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">e44af4bab497414ba47b30773a780071</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>500000/100</split:value>
+      <split:quantity>500000/100</split:quantity>
+      <split:account type="guid">ec4071ca94bd4029b3714a7db4e2d132</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">35d1db897f5e4e109a7626b204960c3c</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-500000/100</split:value>
+      <split:quantity>-500000/100</split:quantity>
+      <split:account type="guid">7f720dc101b64fc4a55e003ec064c6ae</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">3e3ee2cf83844e0892907e6318cdc1e0</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>2023-06-01 12:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2023-06-01 12:00:00 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>2023 activity</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">fbed09e4ffcb4a6a8d89a9de7894aa8c</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>125000/100</split:value>
+      <split:quantity>125000/100</split:quantity>
+      <split:account type="guid">ec4071ca94bd4029b3714a7db4e2d132</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">534d4632429447faa8b4e98982ebc4bd</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-25000/100</split:value>
+      <split:quantity>-25000/100</split:quantity>
+      <split:account type="guid">adbd00da28664dfdbdd94b7aded132c3</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">c17934d8d8c340e982b4d63983b60c2b</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-25000/100</split:value>
+      <split:quantity>-25000/100</split:quantity>
+      <split:account type="guid">fd433d4dc72b4fd2b991e3eed2d22a41</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">e3a265aa168a4a66b607d269fee0d361</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>5000/100</split:value>
+      <split:quantity>5000/100</split:quantity>
+      <split:account type="guid">514e067dc94f4250a39fac2c1092546f</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">9d74e0fb81044dccbd1e0c8942a2777f</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-100000/100</split:value>
+      <split:quantity>-100000/100</split:quantity>
+      <split:account type="guid">e4c0f7c3a273454c9a00bc803c38f4e6</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">b8d3b496c002406abd2ffec9a0175250</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>20000/100</split:value>
+      <split:quantity>20000/100</split:quantity>
+      <split:account type="guid">0361311dfe42470d933d4836db532a73</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">22eed280b10e43558646297c6a5c268a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </trn:currency>
+  <trn:num>1</trn:num>
+  <trn:date-posted>
+    <ts:date>2024-03-15 12:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2024-03-15 12:00:00 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Försäljning</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">e77b430cd47f40e0adc57937b2ce16fe</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>kundfaktura</split:memo>
+      <split:value>125000/100</split:value>
+      <split:quantity>125000/100</split:quantity>
+      <split:account type="guid">c7bdd15996104095b385699ae42d76bf</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">8d5a1e9fcd0e429c95ea1e04121c6c2d</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>utgående moms 25%</split:memo>
+      <split:value>-25000/100</split:value>
+      <split:quantity>-25000/100</split:quantity>
+      <split:account type="guid">fd433d4dc72b4fd2b991e3eed2d22a41</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">53ce9b2463c547588a2cf78eb0ea6f93</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>försäljning netto</split:memo>
+      <split:value>-100000/100</split:value>
+      <split:quantity>-100000/100</split:quantity>
+      <split:account type="guid">e4c0f7c3a273454c9a00bc803c38f4e6</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">4e9470714d29437998dcd80ec202028e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </trn:currency>
+  <trn:num>2</trn:num>
+  <trn:date-posted>
+    <ts:date>2024-04-10 12:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2024-04-10 12:00:00 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Inköp</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">1edd17bd0e9646feabb978e839787868</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>leverantörsfaktura</split:memo>
+      <split:value>-50000/100</split:value>
+      <split:quantity>-50000/100</split:quantity>
+      <split:account type="guid">adbd00da28664dfdbdd94b7aded132c3</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">e84eb62e09aa435b8a1a784a4d5c8f09</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>ingående moms 25%</split:memo>
+      <split:value>10000/100</split:value>
+      <split:quantity>10000/100</split:quantity>
+      <split:account type="guid">514e067dc94f4250a39fac2c1092546f</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">c7224dd80e71428686733f04835bd797</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>inköp netto</split:memo>
+      <split:value>40000/100</split:value>
+      <split:quantity>40000/100</split:quantity>
+      <split:account type="guid">0361311dfe42470d933d4836db532a73</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">69fcbbf8a8ae4c619778c192fc7f1f26</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </trn:currency>
+  <trn:num>3</trn:num>
+  <trn:date-posted>
+    <ts:date>2024-05-01 12:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2024-05-01 12:00:00 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Kundbetalning</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">071108c75c1942d58aca0a7f49e4e4d9</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>kundbetalning</split:memo>
+      <split:value>-125000/100</split:value>
+      <split:quantity>-125000/100</split:quantity>
+      <split:account type="guid">c7bdd15996104095b385699ae42d76bf</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">b8a5db2f5004480a9d68abded9bb3037</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>bankinbetalning</split:memo>
+      <split:value>125000/100</split:value>
+      <split:quantity>125000/100</split:quantity>
+      <split:account type="guid">ec4071ca94bd4029b3714a7db4e2d132</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">b9e6684d92d848cca5fc579f7d7afa85</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </trn:currency>
+  <trn:num>4</trn:num>
+  <trn:date-posted>
+    <ts:date>2024-05-15 12:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2024-05-15 12:00:00 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Leverantörsbetalning</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">1e70fb668a824059a068942e0c25a30c</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>bankutbetalning</split:memo>
+      <split:value>-50000/100</split:value>
+      <split:quantity>-50000/100</split:quantity>
+      <split:account type="guid">ec4071ca94bd4029b3714a7db4e2d132</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">97925f558fd44226b6e34af91b742153</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:memo>leverantörsbetalning</split:memo>
+      <split:value>50000/100</split:value>
+      <split:quantity>50000/100</split:quantity>
+      <split:account type="guid">adbd00da28664dfdbdd94b7aded132c3</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+</gnc:book>
+</gnc-v2>

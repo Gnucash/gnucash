@@ -50,6 +50,7 @@
 #include <gnc-plugin-log-replay.h>
 #include <gnc-plugin-qif-import.h>
 #include <gnc-plugin-report-system.h>
+#include <gnc-plugin-sie4-export.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-session.h>
@@ -78,6 +79,7 @@ load_gnucash_plugins()
 {
     gnc_plugin_bi_import_create_plugin ();
     gnc_plugin_csv_export_create_plugin ();
+    gnc_plugin_sie4_export_create_plugin ();
     gnc_plugin_csv_import_create_plugin();
     gnc_plugin_customer_import_create_plugin ();
     gnc_plugin_qif_import_create_plugin ();
