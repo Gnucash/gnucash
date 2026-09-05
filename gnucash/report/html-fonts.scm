@@ -188,5 +188,8 @@
       "td.centered-label-cell { text-align: center; " centered-label-cell-info " }\n"
       "sub { top: 0.4em; }\n"
       "sub, sup { vertical-align: baseline; position: relative; top: -0.4em; }\n"
+
+      ;; Fix for squashed charts (standalone, center-aligned)
+      "body > table[style*=\"margin-left:auto\"][style*=\"margin-right:auto\"] > tbody > tr > td > div > canvas.chartjs-render-monitor { height: 96vh; width: 98vw; \n"
       "@media print { html, body { height: unset; }}\n"
       (or (gnc:html-document-style-text doc) "")))))
