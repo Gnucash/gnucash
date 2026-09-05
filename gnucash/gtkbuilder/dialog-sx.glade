@@ -1515,6 +1515,21 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="postpone_all_button">
+                <property name="label" translatable="yes">_Postpone all</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <property name="tooltip-text" translatable="yes">Postpone all scheduled transactions for manual review</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="cancelbutton2">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
@@ -1527,7 +1542,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -1542,7 +1557,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
@@ -1586,17 +1601,6 @@
               <object class="GtkBox" id="hbox179">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkFixed" id="fixed1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkCheckButton" id="review_txn_toggle">
                     <property name="label" translatable="yes">_Review created transactions</property>
