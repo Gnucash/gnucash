@@ -473,7 +473,9 @@ if(APPLE)
       OUTPUT_VARIABLE TARGET_RESULT
       OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  if(TARGET_RESULT STREQUAL "quartz")
+  # gdk-3.0 may list several backends here, e.g. "broadway quartz"
+  separate_arguments(GDK_TARGETS UNIX_COMMAND "${TARGET_RESULT}")
+  if("quartz" IN_LIST GDK_TARGETS)
     set(GNC_PLATFORM_COCOA 1)
     set(GDK_QUARTZ 1)
     pkg_check_modules(GTK_MAC IMPORTED_TARGET gtk-mac-integration-gtk3)
