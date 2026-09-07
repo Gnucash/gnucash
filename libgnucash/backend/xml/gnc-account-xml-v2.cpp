@@ -172,7 +172,7 @@ struct account_pdata
 };
 
 static gboolean
-account_name_handler (xmlNodePtr node, gpointer act_pdata)
+account_name_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
@@ -180,7 +180,7 @@ account_name_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_id_handler (xmlNodePtr node, gpointer act_pdata)
+account_id_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
@@ -193,15 +193,15 @@ account_id_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_type_handler (xmlNodePtr node, gpointer act_pdata)
+account_type_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     GNCAccountType type = ACCT_TYPE_INVALID;
     char* string;
 
-    string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
+    string = gnc_xml_node_list_get_string (node->xmlChildrenNode);
     xaccAccountStringToType (string, &type);
-    xmlFree (string);
+    g_free (string);
 
     xaccAccountSetType (pdata->account, type);
 
@@ -209,7 +209,7 @@ account_type_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
+account_commodity_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gnc_commodity* ref;
@@ -222,7 +222,7 @@ account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
+account_commodity_scu_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gint64 val;
@@ -234,7 +234,7 @@ account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_hidden_handler (xmlNodePtr node, gpointer act_pdata)
+account_hidden_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gboolean val;
@@ -246,7 +246,7 @@ account_hidden_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_placeholder_handler (xmlNodePtr node, gpointer act_pdata)
+account_placeholder_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gboolean val;
@@ -258,7 +258,7 @@ account_placeholder_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_non_standard_scu_handler (xmlNodePtr node, gpointer act_pdata)
+account_non_standard_scu_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
@@ -272,7 +272,7 @@ account_non_standard_scu_handler (xmlNodePtr node, gpointer act_pdata)
  * older XML files. */
 
 static gboolean
-deprecated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_currency_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gnc_commodity* ref;
@@ -286,7 +286,7 @@ deprecated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-deprecated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_currency_scu_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     PWARN ("Account %s: Obsolete xml tag 'act:currency-scu' will not be preserved.",
@@ -295,7 +295,7 @@ deprecated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_security_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gnc_commodity* ref, *orig = xaccAccountGetCommodity (pdata->account);
@@ -320,7 +320,7 @@ deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-deprecated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_security_scu_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gint64 val;
@@ -339,14 +339,14 @@ deprecated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 /* ============================================================== */
 
 static gboolean
-account_slots_handler (xmlNodePtr node, gpointer act_pdata)
+account_slots_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->account));
 }
 
 static gboolean
-account_parent_handler (xmlNodePtr node, gpointer act_pdata)
+account_parent_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     Account* parent;
@@ -366,7 +366,7 @@ account_parent_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_code_handler (xmlNodePtr node, gpointer act_pdata)
+account_code_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
@@ -374,7 +374,7 @@ account_code_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_description_handler (xmlNodePtr node, gpointer act_pdata)
+account_description_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
@@ -382,10 +382,10 @@ account_description_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_lots_handler (xmlNodePtr node, gpointer act_pdata)
+account_lots_handler (GncXmlNode* node, gpointer act_pdata)
 {
     struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (node->xmlChildrenNode, FALSE);
@@ -444,7 +444,7 @@ gnc_account_end_handler (gpointer data_for_children,
                          gpointer* result, const gchar* tag)
 {
     Account* acc, *parent, *root;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
     int type;
@@ -494,13 +494,13 @@ gnc_account_end_handler (gpointer data_for_children,
         }
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return acc != NULL;
 }
 
 Account*
-dom_tree_to_account (xmlNodePtr node, QofBook* book)
+dom_tree_to_account (GncXmlNode* node, QofBook* book)
 {
     struct account_pdata act_pdata;
     Account* accToRet;

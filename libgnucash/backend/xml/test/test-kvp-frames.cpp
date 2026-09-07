@@ -15,7 +15,7 @@
 
 #define GNC_V2_STRING "gnc-v2"
 const gchar* gnc_v2_xml_version_string = GNC_V2_STRING;
-extern KvpFrame* dom_tree_to_kvp_frame (xmlNodePtr node);
+extern KvpFrame* dom_tree_to_kvp_frame (GncXmlNode* node);
 
 static void
 test_kvp_get_slot (int run,
@@ -153,7 +153,8 @@ test_kvp_xml_stuff (void)
         }
         else
         {
-            test_frame2 = dom_tree_to_kvp_frame (test_node);
+            auto conv_node = gnc_xml_node_from_libxml (test_node);
+            test_frame2 = dom_tree_to_kvp_frame (conv_node);
 
             if (compare (inst->kvp_data, test_frame2) == 0)
             {
@@ -165,11 +166,12 @@ test_kvp_xml_stuff (void)
                 printf ("  With KvpFrame 1:\n%s\n",
                         inst->kvp_data->to_string ().c_str ());
                 printf ("  and XML:\n");
-                xmlElemDump (stdout, NULL, test_node);
+                gnc_xml_node_dump (stdout, conv_node);
                 printf ("\n   and kvp_frame 2:\n%s\n",
                         test_frame2->to_string ().c_str ());
             }
             delete test_frame2;
+            gnc_xml_node_free (conv_node);
             xmlFreeNode (test_node);
         }
         g_object_unref (inst);

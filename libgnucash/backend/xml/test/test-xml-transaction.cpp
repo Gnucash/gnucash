@@ -55,16 +55,16 @@ static QofBook* book;
 
 extern gboolean gnc_transaction_xml_v2_testing;
 
-static xmlNodePtr
-find_appropriate_node (xmlNodePtr node, Split* spl)
+static GncXmlNode*
+find_appropriate_node (GncXmlNode* node, Split* spl)
 {
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
         gboolean account_guid_good = FALSE;
         gboolean amount_good = FALSE;
-        xmlNodePtr mark2;
+        GncXmlNode* mark2;
 
         for (mark2 = mark->xmlChildrenNode; mark2; mark2 = mark2->next)
         {
@@ -99,9 +99,9 @@ find_appropriate_node (xmlNodePtr node, Split* spl)
 }
 
 static const char*
-equals_node_val_vs_split_internal (xmlNodePtr node, Split* spl)
+equals_node_val_vs_split_internal (GncXmlNode* node, Split* spl)
 {
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     for (mark = node->children; mark != NULL; mark = mark->next)
     {
@@ -184,9 +184,9 @@ equals_node_val_vs_split_internal (xmlNodePtr node, Split* spl)
 }
 
 static const char*
-equals_node_val_vs_splits (xmlNodePtr node, const Transaction* trn)
+equals_node_val_vs_splits (GncXmlNode* node, const Transaction* trn)
 {
-    xmlNodePtr spl_node;
+    GncXmlNode* spl_node;
     Split* spl_mark;
     int i;
 
@@ -218,9 +218,9 @@ equals_node_val_vs_splits (xmlNodePtr node, const Transaction* trn)
 }
 
 static const char*
-node_and_transaction_equal (xmlNodePtr node, Transaction* trn)
+node_and_transaction_equal (GncXmlNode* node, Transaction* trn)
 {
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     while (g_strcmp0 ((char*)node->name, "text") == 0)
         node = node->next;
@@ -317,6 +317,8 @@ node_and_transaction_equal (xmlNodePtr node, Transaction* trn)
 static void
 really_get_rid_of_transaction (Transaction* trn)
 {
+    if (!trn)
+        return;
     xaccTransBeginEdit (trn);
     xaccTransDestroy (trn);
     xaccTransCommitEdit (trn);
@@ -406,7 +408,9 @@ test_transaction (void)
             really_get_rid_of_transaction (ran_trn);
             continue;
         }
-        auto compare_msg = node_and_transaction_equal (test_node, ran_trn);
+        auto conv_node = gnc_xml_node_from_libxml (test_node);
+        auto compare_msg = node_and_transaction_equal (conv_node, ran_trn);
+        gnc_xml_node_free (conv_node);
         if (compare_msg != nullptr)
         {
             failure_args ("transaction_xml", __FILE__, __LINE__,
@@ -449,7 +453,7 @@ test_transaction (void)
 
         {
             sixtp* parser;
-            tran_data data;
+            tran_data data = {};
 
             const char* msg =
                 "[xaccAccountScrubCommodity()] Account \"\" does not have a commodity!";
@@ -491,7 +495,7 @@ test_real_transaction (const char* tag, gpointer global_data, gpointer data)
 {
     const char* msg;
 
-    msg = node_and_transaction_equal ((xmlNodePtr)global_data,
+    msg = node_and_transaction_equal ((GncXmlNode*)global_data,
                                       (Transaction*)data);
     do_test_args (msg == NULL, "test_real_transaction",
                   __FILE__, __LINE__, msg);

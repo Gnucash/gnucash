@@ -48,9 +48,9 @@
 static QofBook* sixbook;
 
 static gchar*
-node_and_account_equal (xmlNodePtr node, Account* act)
+node_and_account_equal (GncXmlNode* node, Account* act)
 {
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     while (g_strcmp0 ((char*)node->name, "text") == 0)
     {
@@ -247,7 +247,12 @@ test_account (int i, Account* test_act)
         return;
     }
 
-    if ((compare_msg = node_and_account_equal (test_node, test_act)) != NULL)
+    {
+        auto conv_node = gnc_xml_node_from_libxml (test_node);
+        compare_msg = node_and_account_equal (conv_node, test_act);
+        gnc_xml_node_free (conv_node);
+    }
+    if (compare_msg != NULL)
     {
         failure_args ("account_xml", __FILE__, __LINE__,
                       "node and account were not equal: %s", compare_msg);
@@ -367,7 +372,7 @@ test_real_account (const char* tag, gpointer global_data, gpointer data)
         gnc_account_append_child (gnc_book_get_root_account (sixbook), act);
     }
 
-    msg = node_and_account_equal ((xmlNodePtr)global_data, act);
+    msg = node_and_account_equal ((GncXmlNode*)global_data, act);
     do_test_args (msg == NULL, "test_real_account",
                   __FILE__, __LINE__, msg);
 
