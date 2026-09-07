@@ -59,6 +59,9 @@ typedef struct
 
     int budgets_total;
     int budgets_loaded;
+
+    int reconciled_balances_total;
+    int reconciled_balances_loaded;
 } load_counter;
 
 struct sixtp_gdv2

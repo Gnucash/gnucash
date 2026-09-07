@@ -15,6 +15,7 @@
      xmlns:bgt="http://www.gnucash.org/XML/bgt"
      xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
      xmlns:lot="http://www.gnucash.org/XML/lot"
+     xmlns:recbal="http://www.gnucash.org/XML/recbal"
      xmlns:addr="http://www.gnucash.org/XML/addr"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"

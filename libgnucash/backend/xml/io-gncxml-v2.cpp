@@ -422,6 +422,10 @@ gnc_counter_end_handler (gpointer data_for_children,
     {
         sixdata->counter.budgets_total = val;
     }
+    else if (g_strcmp0 (type, "reconciled-balance") == 0)
+    {
+        sixdata->counter.reconciled_balances_total = val;
+    }
     else if (g_strcmp0 (type, "price") == 0)
     {
         sixdata->counter.prices_total = val;
@@ -474,6 +478,8 @@ debug_print_counter_data (load_counter* data)
            data->schedXactions_total, data->schedXactions_loaded);
     DEBUG ("Budgets: Total: %d, Loaded: %d",
            data->budgets_total, data->budgets_loaded);
+    DEBUG ("Reconciled Balances: Total: %d, Loaded: %d",
+           data->reconciled_balances_total, data->reconciled_balances_loaded);
 }
 
 static void
@@ -490,11 +496,11 @@ file_rw_feedback (sixtp_gdv2* gd, const char* type)
     loaded = counter->transactions_loaded + counter->accounts_loaded +
              counter->books_loaded + counter->commodities_loaded +
              counter->schedXactions_loaded + counter->budgets_loaded +
-             counter->prices_loaded;
+             counter->reconciled_balances_loaded + counter->prices_loaded;
     total = counter->transactions_total + counter->accounts_total +
             counter->books_total + counter->commodities_total +
             counter->schedXactions_total + counter->budgets_total +
-            counter->prices_total;
+            counter->reconciled_balances_total + counter->prices_total;
     if (total == 0)
         total = 1;
 
@@ -530,6 +536,7 @@ static const char* TRANSACTION_TAG = "gnc:transaction";
 static const char* SCHEDXACTION_TAG = "gnc:schedxaction";
 static const char* TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
 static const char* BUDGET_TAG = "gnc:budget";
+static const char* RECONCILED_BALANCE_TAG = "gnc:reconciled-balance";
 
 static void
 add_item (const GncXmlDataType_t& data, struct file_backend* be_data)
@@ -578,6 +585,10 @@ book_callback (const char* tag, gpointer globaldata, gpointer data)
         add_template_transaction_local (gd, (gnc_template_xaction_data*)data);
     }
     else if (g_strcmp0 (tag, BUDGET_TAG) == 0)
+    {
+        // Nothing needed here.
+    }
+    else if (g_strcmp0 (tag, RECONCILED_BALANCE_TAG) == 0)
     {
         // Nothing needed here.
     }
@@ -670,6 +681,8 @@ gnc_sixtp_gdv2_new (
     gd->counter.schedXactions_total = 0;
     gd->counter.budgets_loaded = 0;
     gd->counter.budgets_total = 0;
+    gd->counter.reconciled_balances_loaded = 0;
+    gd->counter.reconciled_balances_total = 0;
     gd->exporting = exporting;
     gd->countCallback = countcallback;
     gd->gui_display_fn = gui_display_fn;
@@ -741,6 +754,7 @@ qof_session_load_from_xml_file_v2_full (
             COMMODITY_TAG, gnc_commodity_sixtp_parser_create (),
             ACCOUNT_TAG, gnc_account_sixtp_parser_create (),
             BUDGET_TAG, gnc_budget_sixtp_parser_create (),
+            RECONCILED_BALANCE_TAG, gnc_reconciled_balance_sixtp_parser_create (),
             TRANSACTION_TAG, gnc_transaction_sixtp_parser_create (),
             SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create (),
             TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create (),
@@ -950,6 +964,7 @@ static gboolean write_template_transaction_data (FILE* out, QofBook* book,
                                                  sixtp_gdv2* gd);
 static gboolean write_schedXactions (FILE* out, QofBook* book, sixtp_gdv2* gd);
 static void write_budget (QofInstance* ent, gpointer data);
+static void write_reconciled_balance (QofInstance* ent, gpointer data);
 
 static void
 write_counts(const GncXmlDataType_t& data, struct file_backend* be_data)
@@ -1000,6 +1015,8 @@ write_book (FILE* out, QofBook* book, sixtp_gdv2* gd)
                        g_list_length (gnc_book_get_schedxactions (book)->sx_list),
                        "budget", qof_collection_count (
                            qof_book_get_collection (book, GNC_ID_BUDGET)),
+                       "reconciled-balance", qof_collection_count (
+                           qof_book_get_collection (book, GNC_ID_RECONCILED_BALANCE)),
                        "price", gnc_pricedb_get_num_prices (gnc_pricedb_get_db (book)),
                        NULL))
         return FALSE;
@@ -1019,6 +1036,11 @@ write_book (FILE* out, QofBook* book, sixtp_gdv2* gd)
 
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
                             write_budget, &be_data);
+    if (ferror (out))
+        return FALSE;
+
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_RECONCILED_BALANCE),
+                            write_reconciled_balance, &be_data);
     if (ferror (out))
         return FALSE;
 
@@ -1247,6 +1269,27 @@ write_budget (QofInstance* ent, gpointer data)
     sixtp_run_callback (file_be->gd, "budgets");
 }
 
+static void
+write_reconciled_balance (QofInstance* ent, gpointer data)
+{
+    xmlNodePtr node;
+    struct file_backend* file_be = static_cast<decltype (file_be)> (data);
+
+    GncReconciledBalance* ba = GNC_RECONCILED_BALANCE (ent);
+
+    if (ferror (file_be->out))
+        return;
+
+    node = gnc_reconciled_balance_dom_tree_create (ba);
+    xmlElemDump (file_be->out, NULL, node);
+    xmlFreeNode (node);
+    if (ferror (file_be->out) || fprintf (file_be->out, "\n") < 0)
+        return;
+
+    file_be->gd->counter.reconciled_balances_loaded++;
+    sixtp_run_callback (file_be->gd, "reconciled balances");
+}
+
 gboolean
 gnc_xml2_write_namespace_decl (FILE* out, const char* name_space)
 {
@@ -1284,7 +1327,8 @@ write_v2_header (FILE* out)
         || !gnc_xml2_write_namespace_decl (out, "fs")
         || !gnc_xml2_write_namespace_decl (out, "bgt")
         || !gnc_xml2_write_namespace_decl (out, "recurrence")
-        || !gnc_xml2_write_namespace_decl (out, "lot"))
+        || !gnc_xml2_write_namespace_decl (out, "lot")
+        || !gnc_xml2_write_namespace_decl (out, "recbal"))
 
         return FALSE;
 
@@ -1323,6 +1367,8 @@ gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* out)
         g_list_length (gnc_book_get_schedxactions (book)->sx_list);
     gd->counter.budgets_total = qof_collection_count (
                                     qof_book_get_collection (book, GNC_ID_BUDGET));
+    gd->counter.reconciled_balances_total = qof_collection_count (
+        qof_book_get_collection (book, GNC_ID_RECONCILED_BALANCE));
     gd->counter.prices_total = gnc_pricedb_get_num_prices (gnc_pricedb_get_db (
                                                                book));
 

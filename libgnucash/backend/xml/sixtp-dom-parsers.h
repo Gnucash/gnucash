@@ -28,6 +28,7 @@
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "gnc-budget.h"
+#include "gnc-reconciled-balance.h"
 #include <optional>
 
 #include "gnc-xml-helper.h"
@@ -62,6 +63,7 @@ QofBook* dom_tree_to_book (xmlNodePtr node, QofBook* book);
 GNCLot*  dom_tree_to_lot (xmlNodePtr node, QofBook* book);
 Transaction* dom_tree_to_transaction (xmlNodePtr node, QofBook* book);
 GncBudget* dom_tree_to_budget (xmlNodePtr node, QofBook* book);
+GncReconciledBalance* dom_tree_to_reconciled_balance (xmlNodePtr node, QofBook* book);
 
 struct dom_tree_handler
 {

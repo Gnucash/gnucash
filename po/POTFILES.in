@@ -568,6 +568,7 @@ libgnucash/backend/sql/gnc-lots-sql.cpp
 libgnucash/backend/sql/gnc-order-sql.cpp
 libgnucash/backend/sql/gnc-owner-sql.cpp
 libgnucash/backend/sql/gnc-price-sql.cpp
+libgnucash/backend/sql/gnc-reconciled-balance-sql.cpp
 libgnucash/backend/sql/gnc-recurrence-sql.cpp
 libgnucash/backend/sql/gnc-schedxaction-sql.cpp
 libgnucash/backend/sql/gnc-slots-sql.cpp
@@ -595,6 +596,7 @@ libgnucash/backend/xml/gnc-lot-xml-v2.cpp
 libgnucash/backend/xml/gnc-order-xml-v2.cpp
 libgnucash/backend/xml/gnc-owner-xml-v2.cpp
 libgnucash/backend/xml/gnc-pricedb-xml-v2.cpp
+libgnucash/backend/xml/gnc-reconciled-balance-xml-v2.cpp
 libgnucash/backend/xml/gnc-recurrence-xml-v2.cpp
 libgnucash/backend/xml/gnc-schedxaction-xml-v2.cpp
 libgnucash/backend/xml/gnc-tax-table-xml-v2.cpp

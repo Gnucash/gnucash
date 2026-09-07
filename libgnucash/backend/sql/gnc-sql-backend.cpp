@@ -43,6 +43,7 @@
 
 #include "gnc-account-sql.h"
 #include "gnc-book-sql.h"
+#include "gnc-reconciled-balance-sql.h"
 #include "gnc-budget-sql.h"
 #include "gnc-commodity-sql.h"
 #include "gnc-lots-sql.h"
@@ -1000,6 +1001,7 @@ GncSqlBackend::ObjectBackendRegistry::ObjectBackendRegistry()
     register_backend(std::make_shared<GncSqlRecurrenceBackend>());
     register_backend(std::make_shared<GncSqlSchedXactionBackend>());
     register_backend(std::make_shared<GncSqlLotsBackend>());
+    register_backend(std::make_shared<GncSqlReconciledBalanceBackend>());
     register_backend(std::make_shared<GncSqlBillTermBackend>());
     register_backend(std::make_shared<GncSqlCustomerBackend>());
     register_backend(std::make_shared<GncSqlEmployeeBackend>());

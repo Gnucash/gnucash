@@ -38,6 +38,7 @@ set (backend_xml_utils_SOURCES
   gnc-address-xml-v2.cpp
   gnc-bill-term-xml-v2.cpp
   gnc-book-xml-v2.cpp
+  gnc-reconciled-balance-xml-v2.cpp
   gnc-budget-xml-v2.cpp
   gnc-commodity-xml-v2.cpp
   gnc-customer-xml-v2.cpp
