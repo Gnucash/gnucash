@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.22"/>
+  <object class="GtkListStore" id="reconciled_balance_liststore">
+    <columns>
+      <!-- column-name date_string -->
+      <column type="gchararray"/>
+      <!-- column-name date_int64 (sort key) -->
+      <column type="gint64"/>
+      <!-- column-name recorded -->
+      <column type="gchararray"/>
+      <!-- column-name recorded_num (sort key) -->
+      <column type="gdouble"/>
+      <!-- column-name actual -->
+      <column type="gchararray"/>
+      <!-- column-name actual_num (sort key) -->
+      <column type="gdouble"/>
+      <!-- column-name difference -->
+      <column type="gchararray"/>
+      <!-- column-name difference_num (sort key) -->
+      <column type="gdouble"/>
+      <!-- column-name status_icon -->
+      <column type="gchararray"/>
+      <!-- column-name notes -->
+      <column type="gchararray"/>
+      <!-- column-name record pointer -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkDialog" id="reconciled_balance_dialog">
+    <property name="can-focus">False</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <property name="type-hint">dialog</property>
+    <signal name="response" handler="gnc_reconciled_balance_dialog_response_cb" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="rb_close_button">
+                <property name="label" translatable="yes">_Close</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="rb_account_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="rb_scrolled_window">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTreeView" id="rb_treeview">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="model">reconciled_balance_liststore</property>
+                <property name="enable-search">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="rb_treeview_selection"/>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="rb_entry_grid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="rb_date_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">_Date</property>
+                <property name="use-underline">True</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="rb_date_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="rb_amount_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">_Book balance</property>
+                <property name="use-underline">True</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="rb_amount_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="rb_notes_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">_Notes</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">rb_notes_entry</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="rb_notes_entry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="placeholder-text" translatable="yes">e.g. statement number</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButtonBox" id="rb_button_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">6</property>
+                <property name="layout-style">end</property>
+                <child>
+                  <object class="GtkButton" id="rb_remove_button">
+                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip-text" translatable="yes">Remove the selected record</property>
+                    <signal name="clicked" handler="gnc_reconciled_balance_dialog_remove_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="rb_reseal_button">
+                    <property name="label" translatable="yes">Re_-seal</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip-text" translatable="yes">Accept the changes to this account's history: every record that no longer holds is re-recorded at the balance the book has now.</property>
+                    <signal name="clicked" handler="gnc_reconciled_balance_dialog_reseal_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="rb_update_button">
+                    <property name="label" translatable="yes">_Update</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip-text" translatable="yes">Apply the date, balance and notes above to the selected record</property>
+                    <signal name="clicked" handler="gnc_reconciled_balance_dialog_update_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="rb_add_button">
+                    <property name="label" translatable="yes">_Add</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="tooltip-text" translatable="yes">Record a further date on which the account reconciled to a balance</property>
+                    <signal name="clicked" handler="gnc_reconciled_balance_dialog_add_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+                <property name="width">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-7">rb_close_button</action-widget>
+    </action-widgets>
+  </object>
+</interface>

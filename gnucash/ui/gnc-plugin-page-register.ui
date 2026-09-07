@@ -262,6 +262,12 @@
       <attribute name="tooltip" translatable="yes">Bring up the lot viewer/editor window.</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
+    <item>
+      <attribute name="label" translatable="yes">_Reconciled Balances…</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsReconciledBalancesAction</attribute>
+      <attribute name="tooltip" translatable="yes">Review the balances this account's reconciliations agreed, and whether they still hold</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
   </menu>
 
   <menu id="ActionsPlaceholder5">

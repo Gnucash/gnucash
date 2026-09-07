@@ -83,6 +83,7 @@ gnucash/gnome/dialog-price-edit-db.cpp
 gnucash/gnome/dialog-price-editor.c
 gnucash/gnome/dialog-print-check.c
 gnucash/gnome/dialog-progress.c
+gnucash/gnome/dialog-reconciled-balance.cpp
 gnucash/gnome/dialog-report-column-view.cpp
 gnucash/gnome/dialog-report-style-sheet.cpp
 gnucash/gnome/dialog-sx-editor.c
@@ -275,6 +276,7 @@ gnucash/gtkbuilder/dialog-price.glade
 gnucash/gtkbuilder/dialog-print-check.glade
 gnucash/gtkbuilder/dialog-progress.glade
 gnucash/gtkbuilder/dialog-query-view.glade
+gnucash/gtkbuilder/dialog-reconciled-balance.glade
 gnucash/gtkbuilder/dialog-report.glade
 gnucash/gtkbuilder/dialog-reset-warnings.glade
 gnucash/gtkbuilder/dialog-search.glade
