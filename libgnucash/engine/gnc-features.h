@@ -62,6 +62,7 @@ extern "C" {
 #define GNC_FEATURE_BUDGET_UNREVERSED "Use natural signs in budget amounts"
 #define GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS "Show extra account columns in the Budget View"
 #define GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE "Use a dedicated opening balance account identified by an 'equity-type' slot"
+#define GNC_FEATURE_RECONCILED_BALANCES "Reconciled balances"
 
 /** @} */
 

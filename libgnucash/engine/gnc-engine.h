@@ -94,6 +94,7 @@ extern "C" {
 #define GNC_ID_NULL           QOF_ID_NULL
 
 #define GNC_ID_ACCOUNT        "Account"
+#define GNC_ID_RECONCILED_BALANCE "ReconciledBalance"
 #define GNC_ID_COMMODITY      "Commodity"
 #define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
