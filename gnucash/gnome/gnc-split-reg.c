@@ -50,6 +50,8 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-pricedb.h"
+#include "gnc-ui-balances.h"
+#include "gnc-reconciled-balance.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
@@ -71,6 +73,7 @@ void gnc_split_reg_raise( GNCSplitReg *gsr );
 static GtkWidget* add_summary_label( GtkWidget *summarybar, gboolean pack_start,
                                      const char *label_str, GtkWidget *extra );
 
+static void gsr_update_reconciled_balance_warning (GNCSplitReg *gsr, Account *leader);
 static void gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr);
 
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog );
@@ -634,6 +637,8 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
                                   xaccAccountGetProjectedMinimumBalance,
                                   leader, print_info, commodity, reverse, euro );
     }
+
+    gsr_update_reconciled_balance_warning (gsr, leader);
 
     // Sort label
     if (gsr->sort_label != NULL)
@@ -2266,6 +2271,75 @@ add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label
     return secondary_label;
 }
 
+/* A quiet note in the summary bar when one of this account's recorded
+ * recorded balances no longer holds. It is deliberately passive: no
+ * dialog, nothing blocked. Someone working in the register is the
+ * person most likely to have just caused it, and the most able to say
+ * whether it was on purpose. */
+static void
+add_reconciled_balance_warning (GNCSplitReg *gsr, GtkWidget *summarybar)
+{
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+    GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning",
+                                                     GTK_ICON_SIZE_MENU);
+
+    gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
+    gtk_box_pack_start (GTK_BOX(hbox), image, FALSE, FALSE, 0);
+
+    gsr->reconciled_balance_warning_label = gtk_label_new ("");
+    gnc_label_set_alignment (gsr->reconciled_balance_warning_label, 0.0, 0.5);
+    gtk_label_set_ellipsize (GTK_LABEL(gsr->reconciled_balance_warning_label),
+                             PANGO_ELLIPSIZE_END);
+    gtk_box_pack_start (GTK_BOX(hbox), gsr->reconciled_balance_warning_label,
+                        FALSE, FALSE, 0);
+
+    /* Kept out of gtk_widget_show_all's reach: gsr_redraw_all_cb decides
+     * whether it is visible. */
+    gtk_widget_show_all (hbox);
+    gtk_widget_set_no_show_all (hbox, TRUE);
+    gtk_widget_hide (hbox);
+
+    gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+    gsr->reconciled_balance_warning = hbox;
+}
+
+static void
+gsr_update_reconciled_balance_warning (GNCSplitReg *gsr, Account *leader)
+{
+    guint broken;
+    char *explanation;
+    char *text;
+
+    if (gsr->reconciled_balance_warning == NULL)
+        return;
+
+    if (leader == NULL)
+    {
+        gtk_widget_hide (gsr->reconciled_balance_warning);
+        return;
+    }
+
+    broken = gnc_reconciled_balance_count_broken_for_account (leader);
+    if (broken == 0)
+    {
+        gtk_widget_hide (gsr->reconciled_balance_warning);
+        return;
+    }
+
+    text = g_strdup_printf (ngettext ("%d recorded balance no longer holds",
+                                      "%d recorded balances no longer hold",
+                                      broken),
+                            broken);
+    gtk_label_set_text (GTK_LABEL(gsr->reconciled_balance_warning_label), text);
+    g_free (text);
+
+    explanation = gnc_ui_account_get_reconciled_balance_status_explanation (leader);
+    gtk_widget_set_tooltip_text (gsr->reconciled_balance_warning, explanation);
+    g_free (explanation);
+
+    gtk_widget_show (gsr->reconciled_balance_warning);
+}
+
 static void
 gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr)
 {
@@ -2290,6 +2364,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     gsr->reconciled_label = NULL;
     gsr->future_label     = NULL;
     gsr->projectedminimum_label  = NULL;
+    gsr->reconciled_balance_warning = NULL;
+    gsr->reconciled_balance_warning_label = NULL;
     gsr->sort_label       = NULL;
     gsr->sort_arrow       = NULL;
     gsr->filter_label     = NULL;
@@ -2311,6 +2387,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
             gsr->shares_label     = add_summary_label (summarybar, TRUE, _("Shares:"), NULL);
             gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"), NULL);
         }
+
+        add_reconciled_balance_warning (gsr, summarybar);
     }
 
     gsr->filter_label = add_summary_label (summarybar, FALSE, "", NULL);

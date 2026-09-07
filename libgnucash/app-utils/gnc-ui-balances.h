@@ -31,6 +31,7 @@
 #include <glib.h>
 
 #include "Account.h"
+#include "gnc-reconciled-balance.h"
 #include "gncOwner.h"
 #include "qof.h"
 
@@ -191,6 +192,70 @@ gchar * gnc_ui_account_get_balance_limit_icon_name (const Account *account);
  *  are no limits, or balance is within limits.
  */
 gchar * gnc_ui_account_get_balance_limit_explanation (const Account *account);
+
+/** Summarise the state of the account's reconciled balances as an icon
+ *  name for the account tree.
+ *
+ *  @param account A pointer to the account.
+ *
+ *  @return A newly allocated icon name: a warning if any record on the
+ *  account is broken, a tick if the account has records and they all
+ *  hold, and the empty string if it has none.  Never NULL.
+ */
+gchar * gnc_ui_account_get_reconciled_balance_status_icon (const Account *account);
+
+/** Explain the state of the account's reconciled balances, for use as a
+ *  tooltip.  Amounts are presented with the sign convention the user
+ *  sees in the register, i.e. reversed where gnc_reverse_balance()
+ *  says so.
+ *
+ *  @param account A pointer to the account.
+ *
+ *  @return A newly allocated explanation, or NULL if the account has no
+ *  reconciled balances.
+ */
+gchar * gnc_ui_account_get_reconciled_balance_status_explanation (const Account *account);
+
+/** Format one record for display, e.g. for a list in a dialog.
+ *
+ *  @param ba The record.
+ *
+ *  @return A newly allocated one-line description of what the record
+ *  claims and what the book actually holds.
+ */
+gchar * gnc_ui_reconciled_balance_get_description (const GncReconciledBalance *ba);
+
+/** Re-seal every broken record on @a account at the balance the book
+ *  now has, appending the figure each one used to hold to its notes.
+ *  For when the change that broke them was legitimate -- a transaction
+ *  entered late, most often.
+ *
+ *  @return The number of records re-sealed.
+ */
+guint gnc_ui_account_reseal_reconciled_balances (Account *account);
+
+/** Whether every broken record on @a account is out by the same amount,
+ *  and if so by how much.  Equal deltas are the signature of one
+ *  back-dated transaction; differing ones mean something else happened
+ *  and is worth looking at before re-sealing.
+ *
+ *  @param account The account.
+ *  @param delta Set to the shared difference when TRUE is returned.
+ *
+ *  @return TRUE if two or more records are broken and all share a delta.
+ */
+gboolean gnc_ui_account_broken_balances_share_delta (const Account *account,
+                                                     gnc_numeric *delta);
+
+/** The recorded amount with the user-facing sign convention applied, so
+ *  that it can be shown in, or read out of, an entry field alongside
+ *  register balances. */
+gnc_numeric gnc_ui_reconciled_balance_get_display_amount (const GncReconciledBalance *ba);
+
+/** The inverse of gnc_ui_reconciled_balance_get_display_amount(): store
+ *  an amount the user typed, undoing the display sign convention. */
+void gnc_ui_reconciled_balance_set_display_amount (GncReconciledBalance *ba,
+                                                  gnc_numeric amount);
 
 #ifdef __cplusplus
 }

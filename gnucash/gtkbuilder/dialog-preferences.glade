@@ -2855,13 +2855,30 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/record-reconciled-balance">
+                    <property name="label" translatable="yes">_Record a reconciled balance</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-text" translatable="yes">When a reconciliation is finished, record its statement date and ending balance as a reconciled balance. Later editing or deleting of a reconciled transaction is then reported in the account tree and the register. Recording never prevents a change; it only reports one.</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">15</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">15</property>
+                    <property name="top-attach">16</property>
                   </packing>
                 </child>
                 <child>

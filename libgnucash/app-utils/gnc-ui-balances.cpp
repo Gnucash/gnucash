@@ -25,6 +25,8 @@
 
 #include <config.h>
 
+#include <string>
+
 #include "gnc-ui-balances.h"
 #include "gnc-ui-util.h"
 
@@ -403,6 +405,233 @@ gchar *
 gnc_ui_account_get_balance_limit_explanation (const Account *account)
 {
     return get_balance_limit_info (account, FALSE);
+}
+
+/********************************************************************
+ * Reconciled balances
+ ********************************************************************/
+
+/* Assertions are stored with the engine's internal sign; the user
+ * entered, and expects to read back, whatever the register shows. */
+gnc_numeric
+gnc_ui_reconciled_balance_get_display_amount (const GncReconciledBalance *ba)
+{
+    g_return_val_if_fail (GNC_IS_RECONCILED_BALANCE (ba), gnc_numeric_zero ());
+
+    gnc_numeric amount = gnc_reconciled_balance_get_amount (ba);
+    Account *acc = gnc_reconciled_balance_get_account (ba);
+
+    return (acc && gnc_reverse_balance (acc)) ? gnc_numeric_neg (amount) : amount;
+}
+
+void
+gnc_ui_reconciled_balance_set_display_amount (GncReconciledBalance *ba,
+                                             gnc_numeric amount)
+{
+    g_return_if_fail (GNC_IS_RECONCILED_BALANCE (ba));
+
+    Account *acc = gnc_reconciled_balance_get_account (ba);
+    if (acc && gnc_reverse_balance (acc))
+        amount = gnc_numeric_neg (amount);
+
+    gnc_reconciled_balance_set_amount (ba, amount);
+}
+
+static gnc_numeric
+record_display_actual (const GncReconciledBalance *ba)
+{
+    gnc_numeric actual = gnc_reconciled_balance_get_actual (ba);
+    Account *acc = gnc_reconciled_balance_get_account (ba);
+
+    return (acc && gnc_reverse_balance (acc)) ? gnc_numeric_neg (actual) : actual;
+}
+
+gchar *
+gnc_ui_reconciled_balance_get_description (const GncReconciledBalance *ba)
+{
+    g_return_val_if_fail (GNC_IS_RECONCILED_BALANCE (ba), nullptr);
+
+    Account *acc = gnc_reconciled_balance_get_account (ba);
+    if (!acc)
+        return g_strdup (_("This reconciled balance refers to an account that "
+                           "no longer exists."));
+
+    GNCPrintAmountInfo pinfo =
+        gnc_commodity_print_info (xaccAccountGetCommodity (acc), TRUE);
+    char datebuf[MAX_DATE_LENGTH + 1];
+    qof_print_date_buff (datebuf, MAX_DATE_LENGTH,
+                         gnc_reconciled_balance_get_date (ba));
+
+    char *recorded = g_strdup (xaccPrintAmount
+                               (gnc_ui_reconciled_balance_get_display_amount (ba),
+                                pinfo));
+    char *rv;
+
+        if (gnc_reconciled_balance_get_status (ba) == GNC_RECONCILED_BALANCE_HOLDS)
+        rv = g_strdup_printf (_("Balance on %s is still %s, as recorded."),
+                              datebuf, recorded);
+    else
+    {
+        char *actual = g_strdup (xaccPrintAmount (record_display_actual (ba),
+                                                  pinfo));
+        rv = g_strdup_printf (_("Balance on %s was recorded as %s but is now "
+                                "%s: something dated on or before then has "
+                                "changed since."), datebuf, recorded, actual);
+        g_free (actual);
+    }
+
+    g_free (recorded);
+    return rv;
+}
+
+guint
+gnc_ui_account_reseal_reconciled_balances (Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), 0);
+
+    auto records = gnc_reconciled_balance_get_for_account (account);
+    GNCPrintAmountInfo pinfo =
+        gnc_commodity_print_info (xaccAccountGetCommodity (account), TRUE);
+    guint resealed = 0;
+
+    for (auto n = records; n; n = n->next)
+    {
+        auto rb = GNC_RECONCILED_BALANCE (n->data);
+
+        if (!gnc_reconciled_balance_is_broken (rb))
+            continue;
+
+        auto was = gnc_reconciled_balance_reseal (rb);
+        ++resealed;
+
+        /* Quietly: the number moves, and the figure it used to hold goes
+         * into the notes rather than leaving a superseded row behind. */
+        if (gnc_reverse_balance (account))
+            was = gnc_numeric_neg (was);
+
+        auto old_str = g_strdup (xaccPrintAmount (was, pinfo));
+        auto notes = gnc_reconciled_balance_get_notes (rb);
+        auto updated = g_strdup_printf (_("%s%swas %s"),
+                                        notes ? notes : "",
+                                        (notes && *notes) ? "; " : "",
+                                        old_str);
+        gnc_reconciled_balance_set_notes (rb, updated);
+        g_free (updated);
+        g_free (old_str);
+    }
+
+    g_list_free (records);
+    return resealed;
+}
+
+gboolean
+gnc_ui_account_broken_balances_share_delta (const Account *account,
+                                            gnc_numeric *delta)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
+
+    auto records = gnc_reconciled_balance_get_for_account (account);
+    gnc_numeric shared = gnc_numeric_zero ();
+    guint broken = 0;
+    gboolean same = TRUE;
+
+    for (auto n = records; n; n = n->next)
+    {
+        auto rb = GNC_RECONCILED_BALANCE (n->data);
+
+        if (!gnc_reconciled_balance_is_broken (rb))
+            continue;
+
+        auto d = gnc_reconciled_balance_get_delta (rb);
+
+        if (broken++ == 0)
+            shared = d;
+        else if (!gnc_numeric_equal (shared, d))
+            same = FALSE;
+    }
+
+    g_list_free (records);
+
+    if (broken < 2 || !same)
+        return FALSE;
+
+    if (delta)
+        *delta = gnc_reverse_balance (account) ? gnc_numeric_neg (shared) : shared;
+
+    return TRUE;
+}
+
+gchar *
+gnc_ui_account_get_reconciled_balance_status_icon (const Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), g_strdup (""));
+
+    GList *all = gnc_reconciled_balance_get_for_account (account);
+    if (!all)
+        return g_strdup ("");
+
+    gboolean broken = FALSE;
+    for (GList *n = all; n && !broken; n = n->next)
+        broken = gnc_reconciled_balance_is_broken (GNC_RECONCILED_BALANCE (n->data));
+
+    g_list_free (all);
+
+    /* A broken record is worth a warning triangle; an intact one is
+     * worth the reassurance of a tick, and nothing more. Neither
+     * prevents the user from doing anything. */
+    return g_strdup (broken ? "dialog-warning" : "emblem-default");
+}
+
+gchar *
+gnc_ui_account_get_reconciled_balance_status_explanation (const Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), nullptr);
+
+    auto all = gnc_reconciled_balance_get_for_account (account);
+    if (!all)
+        return nullptr;
+
+    /* Newest first: the most recent statement is the one the user is
+     * most likely to be looking for. */
+    all = g_list_reverse (all);
+
+    auto describe = [](GncReconciledBalance *ba)
+    {
+        auto line = gnc_ui_reconciled_balance_get_description (ba);
+        std::string rv {line ? line : ""};
+        g_free (line);
+        return rv;
+    };
+
+    static constexpr unsigned max_listed = 3;
+    std::string text;
+    unsigned broken = 0;
+
+    for (auto n = all; n; n = n->next)
+    {
+        auto ba = GNC_RECONCILED_BALANCE (n->data);
+
+        if (!gnc_reconciled_balance_is_broken (ba))
+            continue;
+
+        if (broken++ == max_listed)
+        {
+            text += "\n…";
+            break;
+        }
+
+        if (!text.empty())
+            text += '\n';
+        text += describe (ba);
+    }
+
+    /* Nothing is broken: say so for the most recent record, so the tick
+     * in the account tree has something to explain it. */
+    if (!broken)
+        text = describe (GNC_RECONCILED_BALANCE (all->data));
+
+    g_list_free (all);
+    return g_strdup (text.c_str());
 }
 
 /********************************************************************
