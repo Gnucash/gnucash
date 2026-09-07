@@ -209,6 +209,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, NC_("FQ Source", "Morningstar, JP"), "morningstarjp" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "Motley Fool"), "fool" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "New Zealand stock eXchange, NZ"), "nzx" },
+    { false, SOURCE_SINGLE, NC_("FQ Source", "NPS (National Pension Scheme), IN"), "npsnav" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "NSE (National Stock Exchange), IN"), "nseindia" },
     { false, SOURCE_SINGLE, NC_("FQ Source", "OnVista, DE"), "onvista"},
     { false, SOURCE_SINGLE, NC_("FQ Source", "Paris Stock Exchange/Boursorama, FR"), "bourso" },
