@@ -90,8 +90,9 @@
 #define GNC_PREF_END_DATE            "end-date"
 #define GNC_PREF_END_PERIOD          "end-period"
 /* Currency preferences */
-#define GNC_PREF_CURRENCY_OTHER      "currency-other"
+#define GNC_PREF_CURRENCY_OTHER         "currency-other"
 #define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
+#define GNC_PREF_CURRENCY_CHOICE_ROOT   "currency-choice-root"
 #define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
 /* Chart preferences */
 #define GNC_CHART_POINT_STYLE        "chart-point-style"
