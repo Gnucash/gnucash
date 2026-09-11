@@ -238,6 +238,8 @@ init_table (void)
 {
     gnc_search_core_register_type (QOF_TYPE_STRING,
                                    (GNCSearchCoreNew) gnc_search_string_new);
+    gnc_search_core_register_type (QOF_TYPE_NATURAL,
+                                   (GNCSearchCoreNew) gnc_search_string_new);
     gnc_search_core_register_type (QOF_TYPE_DATE,
                                    (GNCSearchCoreNew) gnc_search_date_new);
     gnc_search_core_register_type (QOF_TYPE_INT64,
