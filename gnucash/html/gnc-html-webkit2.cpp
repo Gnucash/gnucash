@@ -44,7 +44,7 @@
 #include <cerrno>
 #include <fcntl.h>
 #include <unistd.h>
-#include <regex.h>
+#include <ctre.hpp>
 
 #include <webkit2/webkit2.h>
 
@@ -269,86 +269,26 @@ gnc_html_webkit_finalize( GObject* obj )
 static char*
 extract_base_name(URLType type, const gchar* path)
 {
-     constexpr gchar       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
-     constexpr gchar       path_rexp[] = "^/*(.*)/+([^/]*)$";
-     regex_t     compiled_m, compiled_p;
-     constexpr size_t MATCH_LEN = 4;
-     regmatch_t  match[MATCH_LEN];
-     gchar       * machine = nullptr, * location = nullptr, * base = nullptr;
-     gchar       * basename = nullptr;
+    if (!path) return nullptr;
+    ENTER ("type=%s path=%s", type, path);
 
-     DEBUG(" ");
-     if (!path) return nullptr;
+    std::string basename;
 
-     regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
-     regcomp(&compiled_p, path_rexp, REG_EXTENDED);
+    static constexpr ctll::fixed_string re1 = "^(//[^/]*)/*(?:.*/)?";
+    static constexpr ctll::fixed_string re2 = "^(?:.*/)?";
 
-     if (!g_strcmp0 (type, URL_TYPE_HTTP) ||
-         !g_strcmp0 (type, URL_TYPE_SECURE) ||
-         !g_strcmp0 (type, URL_TYPE_FTP))
-     {
+    if (!g_strcmp0 (type, URL_TYPE_HTTP) ||
+        !g_strcmp0 (type, URL_TYPE_SECURE) ||
+        !g_strcmp0 (type, URL_TYPE_FTP))
+    {
+        if (auto m = ctre::search<re1>(path))
+            basename = m.get<0>().to_string();
+    }
+    else if (auto m = ctre::search<re2>(path))
+        basename = m.get<0>().to_string();
 
-          /* step 1: split the machine name away from the path
-           * components */
-          if (!regexec(&compiled_m, path, MATCH_LEN, match, 0))
-          {
-               /* $1 is the machine name */
-               if (match[1].rm_so != -1)
-               {
-                    machine = g_strndup(path + match[1].rm_so,
-                                        match[1].rm_eo - match[1].rm_so);
-               }
-               /* $2 is the path */
-               if (match[2].rm_so != -1)
-               {
-                    location = g_strndup(path + match[2].rm_so,
-                                         match[2].rm_eo - match[2].rm_so);
-               }
-          }
-     }
-     else
-     {
-          location = g_strdup(path);
-     }
-     /* step 2: split up the path into prefix and file components */
-     if (location)
-     {
-          if (!regexec(&compiled_p, location, 4, match, 0))
-          {
-               if (match[1].rm_so != -1)
-               {
-                    base = g_strndup(location + match[1].rm_so,
-                                     match[1].rm_eo - match[1].rm_so);
-               }
-          }
-     }
-
-     regfree(&compiled_m);
-     regfree(&compiled_p);
-
-     if (machine)
-     {
-          if (base && (strlen(base) > 0))
-          {
-               basename = g_strconcat(machine, "/", base, "/", nullptr);
-          }
-          else
-          {
-               basename = g_strconcat(machine, "/", nullptr);
-          }
-     }
-     else
-     {
-          if (base && (strlen(base) > 0))
-          {
-               basename = g_strdup(base);
-          }
-     }
-
-     g_free(machine);
-     g_free(base);
-     g_free(location);
-     return basename;
+    LEAVE ("basename = %s", basename.empty() ? "" : basename.c_str());
+    return basename.empty() ? nullptr : g_strdup(basename.c_str());
 }
 
 static gboolean
