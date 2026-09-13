@@ -1,0 +1,4 @@
+#include <windows.h>
+// CREATEPROCESS_MANIFEST_RESOURCE_ID = 1
+// RT_MANIFEST is the resource type
+1 RT_MANIFEST "gnucash-utf8.manifest"
