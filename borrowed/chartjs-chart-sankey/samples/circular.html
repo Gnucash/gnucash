@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Circular Sankey diagram</title>
+	<script src="utils.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	</link>
+</head>
+
+<body>
+	<div class="canvas-holder">
+		<canvas id="chart-area"></canvas>
+	</div>
+
+	<script>
+		Utils.load(() => {
+			Chart.defaults.font.size = 9;
+			const ctx = document.getElementById('chart-area').getContext('2d');
+			window.chart = new Chart(ctx, {
+				type: 'sankey',
+				data: {
+					datasets: [{
+						data: [
+							{from: 'a', to: 'b', flow: 10},
+							{from: 'b', to: 'c', flow: 10},
+							{from: 'c', to: 'a', flow: 10},
+						],
+					}],
+				},
+				options: {
+					animation: false,
+					responsive: false
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>

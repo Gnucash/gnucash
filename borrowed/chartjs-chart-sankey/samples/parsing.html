@@ -1,0 +1,43 @@
+
+<!doctype html>
+<html>
+
+<head>
+	<title>Sankey diagram</title>
+	<script src="utils.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	</link>
+</head>
+
+<body>
+	<div class="canvas-holder">
+		<canvas id="chart-area"></canvas>
+	</div>
+
+	<script>
+		Utils.load(() => {
+			Chart.defaults.font.size = 9;
+			const ctx = document.getElementById('chart-area').getContext('2d');
+			window.chart = new Chart(ctx, {
+				type: 'sankey',
+				data: {
+					datasets: [{
+						data: [
+							{source: 'a', dest: 'b', value: 20},
+							{source: 'c', dest: 'd', value: 10},
+							{source: 'c', dest: 'e', value: 5},
+						],
+						parsing: { from: 'source', to: 'dest', flow: 'value' }
+					}],
+				},
+				options: {
+					animation: false,
+					responsive: false
+				}
+			});
+
+		});
+	</script>
+</body>
+
+</html>
