@@ -68,7 +68,7 @@ set (gnome_utils_SOURCES
   gnc-general-select.c
   gnc-gnome-utils.c
   gnc-gobject-utils.c
-  gnc-gtk-utils.c
+  gnc-gtk-utils.cpp
   gnc-gui-query.c
   gnc-icons.c
   gnc-keyring.c
