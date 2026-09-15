@@ -12,6 +12,7 @@
   (test-qif-parse:parse-cleared-field)
   (test-qif-parse:parse-action-field)
   (test-qif-parse:check-date-format)
+  (test-qif-parse:check-iso-date-format)
   (test-qif-parse:parse-date/format)
   (test-qif-parse:check-number-format)
   (test-qif-parse:parse-number/format)
@@ -151,10 +152,26 @@
      '(d-m-y y-m-d y-d-m m-d-y)))
 
   (test-equal "qif-parse:check-date-format 1979/03/03"
-    '(y-m-d y-d-m)
+    '(y-m-d)
     (qif-parse:check-date-format
      "1979/03/03"
      '(d-m-y y-m-d m-d-y y-d-m)))
+
+  (for-each
+   (lambda (delimiter)
+     (test-equal
+      (string-append "qif-parse:check-date-format 2024" delimiter "01" delimiter "02")
+      '(y-m-d)
+      (qif-parse:check-date-format
+       (string-append "2024" delimiter "01" delimiter "02")
+       '(m-d-y d-m-y y-m-d y-d-m))))
+   '("-" "/" "." "'"))
+
+  (test-equal "qif-parse:check-date-format rejects leading-year y-d-m"
+    '()
+    (qif-parse:check-date-format
+     "2024-13-01"
+     '(m-d-y d-m-y y-m-d y-d-m)))
 
   (test-equal "qif-parse:check-date-format 03/03/79"
     '(d-m-y m-d-y)
@@ -185,7 +202,53 @@
 
   (test-equal "qif-parse:parse-date/format error"
     #f
-    (qif-parse:parse-date/format "31/01/81" 'm-d-y)))
+    (qif-parse:parse-date/format "31/01/81" 'm-d-y))
+
+  (test-equal "qif-parse:parse-date/format ISO"
+    (list 2 1 2024)
+    (qif-parse:parse-date/format "2024-01-02" 'y-m-d)))
+
+
+(define (test-qif-parse:check-iso-date-format)
+  (define (pad-two-digits number)
+    (let ((text (number->string number)))
+      (if (= 1 (string-length text))
+          (string-append "0" text)
+          text)))
+
+  (define (check date expected)
+    (test-equal (string-append "ISO date detected: " date)
+      expected
+      (qif-parse:check-date-format date '(m-d-y d-m-y y-m-d y-d-m))))
+
+  ;; Exercise the month/day boundaries for every delimiter accepted by
+  ;; qif-date-compiled-rexp. The parser deliberately does not check leap years
+  ;; or the number of days in a particular month.
+  (for-each
+   (lambda (delimiter)
+     (for-each
+      (lambda (month)
+        (for-each
+         (lambda (day)
+           (let ((date (string-append "2024" delimiter
+                                      (pad-two-digits month) delimiter
+                                      (pad-two-digits day))))
+             (check date
+                    (if (and (<= 1 month 12) (<= 1 day 31))
+                        '(y-m-d)
+                        '()))))
+         '(0 1 30 31 32)))
+      '(0 1 11 12 13)))
+   '("-" "/" "." "'"))
+
+  (for-each
+   (lambda (date) (check date '(y-m-d)))
+   '("1931-02-28" "1970/07/15" "2000.11.30" "2024'12'31"
+     "2099-02-30"))
+
+  (for-each
+   (lambda (date) (check date '()))
+   '("2024-00-15" "2024/13/01" "2099.00.15" "2100'12'32")))
 
 
 

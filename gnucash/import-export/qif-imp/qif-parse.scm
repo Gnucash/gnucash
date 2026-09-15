@@ -319,7 +319,15 @@
        (let ((rmatch (regexp-exec qif-date-compiled-rexp date-string)))
          (if rmatch
              (if (match:substring rmatch 1)
-                 (parse-check-date-format rmatch possible-formats)
+                 ;; Treat a four-digit leading component as ISO y-m-d.
+                 ;; Leading-year y-d-m cannot also be supported without a way of differntiating to the importer
+                 ;; Without a fix only 1 can be supported and y-m-d is a widely accepted standard.
+		 ;; This change is to resolve Case 799815
+                 (parse-check-date-format
+                  rmatch
+                  (if (= 4 (string-length (match:substring rmatch 1)))
+                      '(y-m-d)
+                      possible-formats))
                  ;; Uh oh -- this is a string XXXXXXXX; we don't know which
                  ;; way to test..  So test both YYYYxxxx and xxxxYYYY,
                  ;; and let the parser verify the year is valid.
