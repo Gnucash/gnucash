@@ -316,4 +316,5 @@
 /* Definitions for what WebView type we're building: */
 #cmakedefine WEBKIT2 1
 #cmakedefine WEBVIEW2 1
+#cmakedefine WKWEBVIEW 1
 
