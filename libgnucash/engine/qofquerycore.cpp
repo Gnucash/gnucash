@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
+#include "gnc-glib-utils.h"
 #include "qof.h"
 #include "qofquerycore-p.h"
 
@@ -203,6 +204,22 @@ string_compare_func (gpointer a, gpointer b, gint options,
         return safe_strcasecmp (s1, s2);
 
     return g_strcmp0 (s1, s2);
+}
+
+static int
+natural_compare_func (gpointer a, gpointer b, gint options,
+                     QofParam *getter)
+{
+    const char *s1, *s2;
+    g_return_val_if_fail (a && b && getter && getter->param_getfcn, COMPARE_ERROR);
+
+    s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
+    s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
+
+    if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
+        return safe_strcasecmp (s1, s2);
+
+    return safe_utf8_collate_natural(s1, s2);
 }
 
 int
@@ -1457,6 +1474,11 @@ static void init_tables (void)
     {
         {
             QOF_TYPE_STRING, string_match_predicate, string_compare_func,
+            string_copy_predicate, string_free_pdata, string_to_string,
+            string_predicate_equal
+        },
+        {
+            QOF_TYPE_NATURAL, string_match_predicate, natural_compare_func,
             string_copy_predicate, string_free_pdata, string_to_string,
             string_predicate_equal
         },
