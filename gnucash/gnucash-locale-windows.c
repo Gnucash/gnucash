@@ -154,6 +154,7 @@ set_platform_locale(void)
 void
 set_platform_ctype_to_acp (void)
 {
-    // The C locale is always aligned with ACP.
-    setlocale (LC_CTYPE, "C");
+    // The C locale is always aligned with ACP. Use _wsetlocale because
+    // libintl's setlocale replacement refuses "C" when the ACP is UTF-8.
+    _wsetlocale (LC_CTYPE, L"C");
 }
