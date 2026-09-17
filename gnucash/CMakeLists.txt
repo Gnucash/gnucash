@@ -72,6 +72,7 @@ set(gnucash_GRESOURCES
   ui/gnc-plugin-page-account-tree.ui
   ui/gnc-plugin-page-budget.ui
   ui/gnc-plugin-page-invoice.ui
+  ui/gnc-plugin-page-invoices-overview.ui
   ui/gnc-plugin-page-owner-tree.ui
   ui/gnc-plugin-page-register.ui
   ui/gnc-plugin-page-report.ui

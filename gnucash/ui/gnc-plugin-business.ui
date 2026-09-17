@@ -11,6 +11,11 @@
         <attribute name="tooltip" translatable="yes">Open a Customer overview page</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Invoices Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerInvoicesOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open Invoices overview page</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_New Customer…</attribute>
         <attribute name="action">gnc-plugin-business-actions.CustomerNewCustomerOpenAction</attribute>
         <attribute name="tooltip" translatable="yes">Open the New Customer dialog</attribute>
