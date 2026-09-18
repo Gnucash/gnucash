@@ -66,7 +66,7 @@ set(test_autoclear_INCLUDE_DIRS
 
 set(test_autoclear_LIBS
   gnc-engine
-  gnc-gnome-utils
+  gnc-app-utils
   gtest
 )
 
