@@ -130,6 +130,54 @@ struct UriStrings
     int m_portnum;
 };
 
+static std::string
+uri_query_unescape(const std::string& value)
+{
+    auto unescaped = g_uri_unescape_string(value.c_str(), nullptr);
+    if (unescaped == nullptr)
+        return value;
+
+    std::string result{unescaped};
+    g_free(unescaped);
+    return result;
+}
+
+PairVec
+gnc_dbi_extract_uri_query_options(std::string& dbname, DbType type)
+{
+    PairVec options;
+    auto query_pos = dbname.find('?');
+    if (query_pos == std::string::npos)
+        return options;
+
+    auto query = dbname.substr(query_pos + 1);
+    dbname.erase(query_pos);
+
+    if (type != DbType::DBI_PGSQL)
+        return options;
+
+    auto item_start = std::string::size_type{0};
+    while (item_start <= query.length())
+    {
+        auto item_end = query.find('&', item_start);
+        auto item = query.substr(item_start, item_end - item_start);
+        auto value_pos = item.find('=');
+        if (value_pos != std::string::npos)
+        {
+            auto key = uri_query_unescape(item.substr(0, value_pos));
+            auto value = uri_query_unescape(item.substr(value_pos + 1));
+            if (key == "sslmode" && value == "require")
+                options.emplace_back("pgsql_sslmode", value);
+        }
+
+        if (item_end == std::string::npos)
+            break;
+        item_start = item_end + 1;
+    }
+
+    return options;
+}
+
 UriStrings::UriStrings(const std::string& uri)
 {
     gchar *scheme, *host, *username, *password, *dbname;
@@ -651,6 +699,8 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
 
     if (Type == DbType::DBI_PGSQL)
     {
+        auto uri_options = gnc_dbi_extract_uri_query_options(uri.m_dbname, Type);
+        options.insert(options.end(), uri_options.begin(), uri_options.end());
         if (uri.m_portnum == 0)
             uri.m_portnum = PGSQL_DEFAULT_PORT;
         /* Postgres's SQL interface coerces identifiers to lower case, but the

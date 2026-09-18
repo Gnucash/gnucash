@@ -65,6 +65,7 @@ typedef struct FileAccessWindow
     GtkEntry            *tf_username;
     GtkEntry            *tf_password;
     GtkEntry            *tf_port;
+    GtkWidget           *sslmode_require_checkbutton;
 } FileAccessWindow;
 
 void gnc_ui_file_access_file_activated_cb( GtkFileChooser *chooser,
@@ -112,6 +113,13 @@ geturl( FileAccessWindow* faw )
         port = atoi (port_text) & 0xffff;
 
     url = gnc_uri_create_uri (type, host, port, username, password, path);
+    if (g_strcmp0 (type, "postgres") == 0 &&
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(faw->sslmode_require_checkbutton)))
+    {
+        gchar *ssl_url = g_strconcat (url, "?sslmode=require", NULL);
+        g_free (url);
+        url = ssl_url;
+    }
 
     g_free (type);
     g_free (path);
@@ -222,6 +230,8 @@ set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_typ
         set_widget_sensitivity( faw, /* is_file_based_uri */ FALSE );
         gtk_entry_set_placeholder_text( faw->tf_port,
             strcmp( uri_type, "mysql" ) == 0 ? _("Default: 3306") : _("Default: 5432") );
+        gtk_widget_set_visible( faw->sslmode_require_checkbutton,
+                                strcmp( uri_type, "postgres" ) == 0 );
     }
     else
     {
@@ -335,6 +345,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     faw->tf_username = GTK_ENTRY(gtk_builder_get_object (builder, "tf_username" ));
     faw->tf_password = GTK_ENTRY(gtk_builder_get_object (builder, "tf_password" ));
     faw->tf_port = GTK_ENTRY(gtk_builder_get_object (builder, "tf_port" ));
+    faw->sslmode_require_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "sslmode_require_checkbutton" ));
     g_signal_connect( G_OBJECT(faw->tf_port), "insert-text",
                       G_CALLBACK(port_insert_text_cb), NULL );
     gtk_entry_set_max_length( faw->tf_port, 5 );

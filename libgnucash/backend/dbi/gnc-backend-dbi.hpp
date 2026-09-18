@@ -134,6 +134,7 @@ gnc_pop_locale(const int category, std::string locale)
 
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);
+PairVec gnc_dbi_extract_uri_query_options(std::string&, DbType);
 
 
 

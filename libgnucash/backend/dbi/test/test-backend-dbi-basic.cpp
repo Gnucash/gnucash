@@ -807,6 +807,48 @@ test_adjust_sql_options_string (void)
 }
 
 static void
+test_postgres_uri_query_options (void)
+{
+    const gchar *url =
+        "postgres://testuser:testpass@dummy.example.invalid:5432/"
+        "JobRunner?sslmode=require";
+    gchar *scheme = nullptr;
+    gchar *host = nullptr;
+    gchar *username = nullptr;
+    gchar *password = nullptr;
+    gchar *path = nullptr;
+    gint32 port = 0;
+
+    gnc_uri_get_components (url, &scheme, &host, &port, &username,
+                            &password, &path);
+
+    std::string dbname{path};
+    auto options = gnc_dbi_extract_uri_query_options (dbname,
+                                                      DbType::DBI_PGSQL);
+
+    g_assert_cmpstr (scheme, ==, "postgres");
+    g_assert_cmpstr (host, ==, "dummy.example.invalid");
+    g_assert_cmpint (port, ==, 5432);
+    g_assert_cmpstr (username, ==, "testuser");
+    g_assert_cmpstr (password, ==, "testpass");
+    g_assert_cmpstr (dbname.c_str(), ==, "JobRunner");
+    g_assert_cmpuint (options.size(), ==, 1);
+    g_assert_cmpstr (options[0].first.c_str(), ==, "pgsql_sslmode");
+    g_assert_cmpstr (options[0].second.c_str(), ==, "require");
+
+    g_free (scheme);
+    g_free (host);
+    g_free (username);
+    g_free (password);
+    g_free (path);
+
+    dbname = "TestDb?sslmode=prefer&connect_timeout=10";
+    options = gnc_dbi_extract_uri_query_options (dbname, DbType::DBI_PGSQL);
+    g_assert_cmpstr (dbname.c_str(), ==, "TestDb");
+    g_assert_cmpuint (options.size(), ==, 0);
+}
+
+static void
 create_dbi_test_suite (const char* dbm_name, const char* url)
 {
     auto subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
@@ -862,4 +904,6 @@ test_suite_gnc_backend_dbi (void)
 
     GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime",
         test_adjust_sql_options_string );
+    GNC_TEST_ADD_FUNC( suitename, "postgres uri query options",
+        test_postgres_uri_query_options );
 }
