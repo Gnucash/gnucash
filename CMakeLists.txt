@@ -72,6 +72,7 @@ option (COVERAGE "Instrument a Debug or Asan build for coverage reporting" OFF)
 option (GUILE_COVERAGE "Compute testing coverage of Scheme code. WARNING: 15X slowdown!" OFF)
 option (LEAKS "Report leaks for tests in a non-Apple Asan build." OFF)
 option (ODR "Report One Definition Rule violations in tests in a non-Apple Asan build." OFF)
+option (WITH_WKWEBVIEW "On macOS, render reports with the system WKWebView instead of WebKitGTK. Requires a GTK built against the Quartz GDK backend." OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -227,6 +228,21 @@ if (WITH_GNUCASH)
     endif()
     set (WEBVIEW2_INCLUDE_DIRS ${WEBVIEW2_INCLUDE_DIR})
     set(WEBVIEW2 1 CACHE INTERNAL "WebView2")
+  elseif (APPLE AND WITH_WKWEBVIEW)
+    # WKWebView comes from the system WebKit framework; there is no
+    # pkg-config file and nothing to install, but CMAKE_FIND_FRAMEWORK
+    # is set to LAST above, so ask for the framework by name.
+    find_library (WEBKIT_FRAMEWORK WebKit)
+    if (NOT WEBKIT_FRAMEWORK)
+      message (SEND_ERROR "The WebKit framework was not found. It is part of "
+        "macOS, so this usually means the command line tools or Xcode are "
+        "incomplete. Configure with -DWITH_WKWEBVIEW=OFF to use WebKitGTK "
+        "instead.")
+    endif()
+    # AppKit, for the NSView the WKWebView is parented to. Also found
+    # by the gtk-mac-integration block below, but that one is optional.
+    find_library (COCOA_LIBRARY Cocoa)
+    set(WKWEBVIEW 1 CACHE INTERNAL "WKWebView")
   else()
     # Hold at 2.32, the latest version successfully built on macOS.
     pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.32.0)
@@ -460,6 +476,16 @@ if(APPLE)
       set(OSX_EXTRA_LIBRARIES objc ${COCOA_LIBRARY} ${SECURITY_LIBRARY} ${CARBON_LIBRARY})
     endif()
   endif()
+endif()
+
+# The WKWebView backend parents an NSView to the GdkWindow's own
+# GdkQuartzView, which only exists when GDK targets Quartz. This is
+# checked here rather than where WKWEBVIEW is set because GDK_QUARTZ is
+# not determined until the block above has run.
+if (WKWEBVIEW AND NOT GDK_QUARTZ)
+  message (SEND_ERROR "WITH_WKWEBVIEW needs a GTK built against the Quartz GDK "
+    "backend, but gdk-3.0 reports its target as '${TARGET_RESULT}'. Configure "
+    "with -DWITH_WKWEBVIEW=OFF to use WebKitGTK instead.")
 endif()
 
 # find_package(LibXslt) eats PKG_CONFIG_EXECUTABLE, so preserve it.
