@@ -34,6 +34,7 @@ typedef struct _invoice_window InvoiceWindow;
 #include "gncOwner.h"
 #include "dialog-search.h"
 #include "dialog-query-view.h"
+#include "gnc-plugin-page.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -126,6 +127,8 @@ void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_payment_cb (GtkWindow *parent, gpointer data);
 void gnc_invoice_window_report_owner_cb (GtkWindow *parent, gpointer data);
+GncPluginPage *gnc_invoice_window_print_invoice (GtkWindow *parent, GncInvoice *invoice, const gchar *report_guid);
+char *use_default_report_template_or_change (GtkWindow *parent);
 
 void gnc_invoice_window_save_document_layout_to_user_state (InvoiceWindow *iw);
 void gnc_invoice_window_reset_document_layout_and_clear_user_state (InvoiceWindow *iw);

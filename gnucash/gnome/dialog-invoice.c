@@ -841,7 +841,7 @@ combo_changed_cb (GtkComboBox *widget, gpointer user_data)
  *
  * If cancel is pressed then it will return NULL
  */
-static char*
+char*
 use_default_report_template_or_change (GtkWindow *parent)
 {
     QofBook     *book = gnc_get_current_book ();
@@ -940,7 +940,7 @@ use_default_report_template_or_change (GtkWindow *parent)
     return ret_guid;
 }
 
-static GncPluginPage *
+GncPluginPage *
 gnc_invoice_window_print_invoice (GtkWindow *parent, GncInvoice *invoice,
                                   const gchar *report_guid)
 {
