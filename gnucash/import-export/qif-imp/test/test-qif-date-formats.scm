@@ -10,6 +10,8 @@
   (test-unambiguous-year-first)
   (test-price-date-selection)
   (test-multirecord-iso-dates)
+  (test-inconsistent-per-record-formats)
+  (test-year-leading-alternative-selection)
   (test-end "test-qif-date-formats"))
 
 (define all-date-formats '(m-d-y d-m-y y-m-d y-d-m))
@@ -93,12 +95,13 @@
      ("year-first-equal-parts.qif" (3 3 2024)))))
 
 (define (test-price-date-selection)
-  ;; Characterize the two warnings and the exact value given to the picker.
-  ;; The failed postcondition captures what remains unresolved when the
-  ;; assistant marks the date page complete after selecting MDY.
+  ;; A real year-first ambiguity is never offered to the user: the price and
+  ;; transaction warnings share the 'date key, add-error prepends, and
+  ;; parse-fields-results returns only the first match, so the later-recorded
+  ;; year-last transaction warning shadows the year-first price warning.
   (let* ((name "mixed-price-ymd-transaction-mdy.qif")
          (file (read-date-fixture name)))
-    (test-group name
+    (test-group "year-first ambiguity shadowed out of the picker: mixed-price-ymd-transaction-mdy.qif"
       (test-equal "price detector returns year-first candidates"
         '(y-m-d y-d-m)
         (qif-parse:check-date-format (car (price-dates file)) all-date-formats))
@@ -109,7 +112,13 @@
         (test-equal "both warnings survive, transaction warning first"
           '(#t (date m-d-y d-m-y) (date y-m-d y-d-m)) results)
         (test-equal "picker receives only the year-last candidates"
-          '(m-d-y d-m-y) (picker-formats results)))
+          '(m-d-y d-m-y) (picker-formats results))
+        ;; The user is only ever asked to choose between MDY and DMY, so the
+        ;; offered list cannot express any reading of the price date.
+        (test-assert "some offered candidate can interpret the ambiguous price date"
+          (any (lambda (format)
+                 (qif-parse:parse-date/format (car (price-dates file)) format))
+               (picker-formats results))))
       (test-assert "selecting MDY reports success"
         (qif-file:reparse-dates file 'm-d-y))
       (test-equal "transaction is parsed as February 3"
@@ -196,3 +205,76 @@
      ("iso-multi-prices-day31.qif" #f
       ((2 1 2023) (3 2 2023) (11 12 2023) (31 12 2022))
       ((2 1 2023) (3 2 2023) (11 12 2023) (31 12 2022))))))
+
+;; check-and-parse-field intersects the candidate formats across every record
+;; in a group, so two individually unambiguous dates in incompatible formats
+;; empty the list and take the "Unrecognized or inconsistent format." path.
+;; That path is not gated by the ambiguity policy: it is a hard failure, not
+;; the #t warning the rest of this suite exercises.
+(define (test-inconsistent-per-record-formats)
+  (let* ((name "inconsistent-per-record-formats.qif")
+         (file (read-date-fixture name))
+         (raw-transactions (transaction-dates file)))
+    (test-group name
+      (test-equal "both records were read"
+        2 (length raw-transactions))
+      (test-equal "first record is only valid as YMD"
+        '(y-m-d)
+        (qif-parse:check-date-format (car raw-transactions) all-date-formats))
+      (test-equal "second record is only valid as MDY"
+        '(m-d-y)
+        (qif-parse:check-date-format (cadr raw-transactions) all-date-formats))
+      (let ((results (qif-file:parse-fields file #f)))
+        (test-assert "parse-fields reports a hard failure, not a warning"
+          (eq? (car results) #f))
+        (test-assert "the failure carries a date entry"
+          (string? (qif-file:parse-fields-results (cdr results) 'date)))
+        ;; The picker must never be offered a candidate list here: no single
+        ;; format can interpret both records.
+        (test-equal "no candidates reach the picker"
+          #f (picker-formats results)))
+      (test-equal "neither transaction date was parsed under either format"
+        raw-transactions (transaction-dates file))
+      (test-assert "every transaction date is still a raw string"
+        (every string? (transaction-dates file))))))
+
+;; The "no day over 12" files offer YMD and YDM. test-multirecord-iso-dates
+;; already covers selecting YMD; these groups select the other offered
+;; candidate on freshly read files, so that the two together show that neither
+;; year-leading choice completes a correct import of the same file.
+(define (test-year-leading-alternative-selection)
+  ;; Every date here is also a valid YDM calendar date, so the conversion has
+  ;; no calendar reason to refuse the selection.
+  (let* ((name "iso-multi-days-at-most12.qif")
+         (file (read-date-fixture name))
+         (raw-transactions (transaction-dates file)))
+    (test-group "YDM selection on transactions only: iso-multi-days-at-most12.qif"
+      (test-equal "picker offers both year-leading candidates"
+        '(y-m-d y-d-m) (picker-formats (qif-file:parse-fields file #f)))
+      (test-assert "selecting YDM reports success for the entire file"
+        (qif-file:reparse-dates file 'y-d-m))
+      (test-equal "YDM selection parses every transaction as day-before-month"
+        '((12 11 2022) (1 2 2023) (2 3 2023) (4 5 2024))
+        (transaction-dates file))
+      (test-equal "refused YDM selection leaves every transaction date raw"
+        raw-transactions (transaction-dates file))))
+
+  (let* ((name "iso-multi-prices-ambiguous.qif")
+         (file (read-date-fixture name))
+         (raw-transactions (transaction-dates file))
+         (raw-prices (price-dates file)))
+    (test-group "YDM selection with prices: iso-multi-prices-ambiguous.qif"
+      (test-equal "picker offers both year-leading candidates"
+        '(y-m-d y-d-m) (picker-formats (qif-file:parse-fields file #f)))
+      (test-assert "selecting YDM reports success for the entire file"
+        (qif-file:reparse-dates file 'y-d-m))
+      (test-equal "YDM selection parses every transaction as day-before-month"
+        '((12 11 2022) (1 2 2023) (2 3 2023) (4 5 2024))
+        (transaction-dates file))
+      (test-equal "YDM selection parses every price as day-before-month"
+        (reverse '((12 11 2022) (1 2 2023) (2 3 2023) (4 5 2024)))
+        (price-dates file))
+      (test-equal "refused YDM selection leaves every transaction date raw"
+        raw-transactions (transaction-dates file))
+      (test-equal "refused YDM selection leaves every price date raw"
+        raw-prices (price-dates file)))))

@@ -47,4 +47,5 @@ set_dist_list(test_qif_import_DIST CMakeLists.txt
   date-formats/year-first-equal-parts.qif
   date-formats/mixed-price-ymd-transaction-mdy.qif
   date-formats/price-ymd-transaction-unambiguous.qif
-  date-formats/price-and-transaction-ymd.qif)
+  date-formats/price-and-transaction-ymd.qif
+  date-formats/inconsistent-per-record-formats.qif)
