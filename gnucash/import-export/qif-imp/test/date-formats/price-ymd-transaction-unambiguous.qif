@@ -1,0 +1,14 @@
+!Type:Security
+NQIF Date Test
+SABC
+TStock
+^
+!Type:Bank
+D01/13/2024
+T10.00
+PDate format test
+LTest Income
+^
+!Type:Prices
+"ABC",12.50,"2024/01/02"
+^

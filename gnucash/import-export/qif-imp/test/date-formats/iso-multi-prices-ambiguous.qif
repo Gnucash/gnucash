@@ -1,0 +1,32 @@
+!Type:Security
+NQIF Date Test
+SABC
+TStock
+^
+!Type:Bank
+D2022-12-11
+T10.00
+PISO date test 1
+LTest Income
+^
+D2023-01-02
+T20.00
+PISO date test 2
+LTest Income
+^
+D2023-02-03
+T30.00
+PISO date test 3
+LTest Income
+^
+D2024-04-05
+T40.00
+PISO date test 4
+LTest Income
+^
+!Type:Prices
+"ABC",10.00,"2022-12-11"
+"ABC",20.00,"2023-01-02"
+"ABC",30.00,"2023-02-03"
+"ABC",40.00,"2024-04-05"
+^

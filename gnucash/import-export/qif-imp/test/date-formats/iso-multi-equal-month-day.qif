@@ -1,0 +1,21 @@
+!Type:Bank
+D2022-12-12
+T10.00
+PISO date test 1
+LTest Income
+^
+D2023-01-01
+T20.00
+PISO date test 2
+LTest Income
+^
+D2023-02-02
+T30.00
+PISO date test 3
+LTest Income
+^
+D2024-03-03
+T40.00
+PISO date test 4
+LTest Income
+^
