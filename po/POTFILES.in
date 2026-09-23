@@ -98,6 +98,7 @@ gnucash/gnome/gnc-plugin-business.c
 gnucash/gnome/gnc-plugin-page-account-tree.cpp
 gnucash/gnome/gnc-plugin-page-budget.cpp
 gnucash/gnome/gnc-plugin-page-invoice.cpp
+gnucash/gnome/gnc-plugin-page-invoices-owner.cpp
 gnucash/gnome/gnc-plugin-page-owner-tree.cpp
 gnucash/gnome/gnc-plugin-page-register.cpp
 gnucash/gnome/gnc-plugin-page-register-filter.cpp
@@ -523,6 +524,7 @@ gnucash/ui/gnc-plugin-file-history.ui
 gnucash/ui/gnc-plugin-log-replay.ui
 gnucash/ui/gnc-plugin-page-account-tree.ui
 gnucash/ui/gnc-plugin-page-budget.ui
+gnucash/ui/gnc-plugin-page-invoices-owner.ui
 gnucash/ui/gnc-plugin-page-invoice.ui
 gnucash/ui/gnc-plugin-page-owner-tree.ui
 gnucash/ui/gnc-plugin-page-register.ui
