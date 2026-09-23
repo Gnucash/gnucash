@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<interface>
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.NewInvoice</property>
+        <property name="tooltip-text" translatable="yes">Create a new invoice</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Edit</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.EditInvoice</property>
+        <property name="tooltip-text" translatable="yes">Edit the selected invoice</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-edit</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Duplicate</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.DuplicateInvoice</property>
+        <property name="tooltip-text" translatable="yes">Duplicate the selected invoice</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-duplicate</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Print</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.PrintInvoice</property>
+        <property name="tooltip-text" translatable="yes">Print the selected invoice</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-print</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>
