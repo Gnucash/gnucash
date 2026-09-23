@@ -836,13 +836,8 @@ combo_changed_cb (GtkComboBox *widget, gpointer user_data)
     g_source_remove_by_user_data (user_data);
 }
 
-/* This function will return the selected invoice report guid if
- * the countdown times out or a selection is made and OK pressed.
- *
- * If cancel is pressed then it will return NULL
- */
-static char*
-use_default_report_template_or_change (GtkWindow *parent)
+char*
+gnc_invoice_window_use_default_report_template_or_change (GtkWindow *parent)
 {
     QofBook     *book = gnc_get_current_book ();
     GtkWidget   *combo;
@@ -940,7 +935,7 @@ use_default_report_template_or_change (GtkWindow *parent)
     return ret_guid;
 }
 
-static GncPluginPage *
+GncPluginPage *
 gnc_invoice_window_print_invoice (GtkWindow *parent, GncInvoice *invoice,
                                   const gchar *report_guid)
 {
@@ -1006,7 +1001,7 @@ gnc_invoice_window_printCB (GtkWindow* parent, gpointer data)
         gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (iw->reportPage));
     else
     {
-        gchar *report_guid = use_default_report_template_or_change (parent);
+        gchar *report_guid = gnc_invoice_window_use_default_report_template_or_change (parent);
 
         if (!report_guid)
             return;
@@ -3466,7 +3461,7 @@ multi_print_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_da
     if (!gnc_list_length_cmp (invoice_list, 0))
         return;
 
-    report_guid = use_default_report_template_or_change (dialog);
+    report_guid = gnc_invoice_window_use_default_report_template_or_change (dialog);
 
     if (!report_guid)
         return;

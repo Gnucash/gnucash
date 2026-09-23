@@ -46,6 +46,7 @@ set (gnome_utils_SOURCES
   dialog-transfer.cpp
   dialog-userpass.c
   dialog-utils.c
+  dialog-filter-invoices.cpp
   gnc-account-sel.c
   gnc-amount-edit.c
   gnc-autosave.c
@@ -133,6 +134,7 @@ set (gnome_utils_HEADERS
   dialog-totd.h
   dialog-transfer.h
   dialog-utils.h
+  dialog-filter-invoices.h
   gnc-account-sel.h
   gnc-amount-edit.h
   gnc-cell-renderer-label.h
