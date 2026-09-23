@@ -21,6 +21,11 @@
         <attribute name="tooltip" translatable="yes">Open the Find Customer dialog</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Invoices Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerInvoicesOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open Invoices overview page</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">New _Invoice…</attribute>
         <attribute name="action">gnc-plugin-business-actions.CustomerNewInvoiceOpenAction</attribute>
         <attribute name="tooltip" translatable="yes">Open the New Invoice dialog</attribute>
@@ -70,6 +75,11 @@
         <attribute name="tooltip" translatable="yes">Open the Find Vendor dialog</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Bills Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorBillsOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open Bills overview page</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">New _Bill…</attribute>
         <attribute name="action">gnc-plugin-business-actions.VendorNewBillOpenAction</attribute>
         <attribute name="tooltip" translatable="yes">Open the New Bill dialog</attribute>
@@ -117,6 +127,11 @@
         <attribute name="label" translatable="yes">_Find Employee…</attribute>
         <attribute name="action">gnc-plugin-business-actions.EmployeeFindEmployeeOpenAction</attribute>
         <attribute name="tooltip" translatable="yes">Open the Find Employee dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Expense vouchers Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeExpensesOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open Expense vouchers overview page</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">New _Expense Voucher…</attribute>
