@@ -138,7 +138,7 @@ struct billterm_pdata
 };
 
 static gboolean
-set_int (xmlNodePtr node, GncBillTerm* term,
+set_int (GncXmlNode* node, GncBillTerm* term,
          void (*func) (GncBillTerm*, gint))
 {
     gint64 val;
@@ -148,7 +148,7 @@ set_int (xmlNodePtr node, GncBillTerm* term,
 }
 
 static gboolean
-set_numeric (xmlNodePtr node, GncBillTerm* term,
+set_numeric (GncXmlNode* node, GncBillTerm* term,
              void (*func) (GncBillTerm*, gnc_numeric))
 {
     func (term, dom_tree_to_gnc_numeric (node));
@@ -158,21 +158,21 @@ set_numeric (xmlNodePtr node, GncBillTerm* term,
 /***********************************************************************/
 
 static gboolean
-days_duedays_handler (xmlNodePtr node, gpointer billterm_pdata)
+days_duedays_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDueDays);
 }
 
 static gboolean
-days_discdays_handler (xmlNodePtr node, gpointer billterm_pdata)
+days_discdays_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDiscountDays);
 }
 
 static gboolean
-days_discount_handler (xmlNodePtr node, gpointer billterm_pdata)
+days_discount_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_numeric (node, pdata->term, gncBillTermSetDiscount);
@@ -187,7 +187,7 @@ static struct dom_tree_handler days_data_handlers_v2[] =
 };
 
 static gboolean
-dom_tree_to_days_data (xmlNodePtr node, struct billterm_pdata* pdata)
+dom_tree_to_days_data (GncXmlNode* node, struct billterm_pdata* pdata)
 {
     gboolean successful;
 
@@ -202,28 +202,28 @@ dom_tree_to_days_data (xmlNodePtr node, struct billterm_pdata* pdata)
 /***********************************************************************/
 
 static gboolean
-prox_dueday_handler (xmlNodePtr node, gpointer billterm_pdata)
+prox_dueday_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDueDays);
 }
 
 static gboolean
-prox_discday_handler (xmlNodePtr node, gpointer billterm_pdata)
+prox_discday_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDiscountDays);
 }
 
 static gboolean
-prox_discount_handler (xmlNodePtr node, gpointer billterm_pdata)
+prox_discount_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_numeric (node, pdata->term, gncBillTermSetDiscount);
 }
 
 static gboolean
-prox_cutoff_handler (xmlNodePtr node, gpointer billterm_pdata)
+prox_cutoff_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetCutoff);
@@ -239,7 +239,7 @@ static struct dom_tree_handler prox_data_handlers_v2[] =
 };
 
 static gboolean
-dom_tree_to_prox_data (xmlNodePtr node, struct billterm_pdata* pdata)
+dom_tree_to_prox_data (GncXmlNode* node, struct billterm_pdata* pdata)
 {
     gboolean successful;
 
@@ -254,7 +254,7 @@ dom_tree_to_prox_data (xmlNodePtr node, struct billterm_pdata* pdata)
 /***********************************************************************/
 
 static gboolean
-set_parent_child (xmlNodePtr node, struct billterm_pdata* pdata,
+set_parent_child (GncXmlNode* node, struct billterm_pdata* pdata,
                   void (*func) (GncBillTerm*, GncBillTerm*))
 {
     GncBillTerm* term;
@@ -276,7 +276,7 @@ set_parent_child (xmlNodePtr node, struct billterm_pdata* pdata,
 }
 
 static gboolean
-billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_guid_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     GncBillTerm* term;
@@ -299,21 +299,21 @@ billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
 }
 
 static gboolean
-billterm_name_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_name_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return apply_xmlnode_text (gncBillTermSetName, pdata->term, node);
 }
 
 static gboolean
-billterm_desc_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_desc_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return apply_xmlnode_text (gncBillTermSetDescription, pdata->term, node);
 }
 
 static gboolean
-billterm_refcount_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_refcount_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     gint64 val;
@@ -324,7 +324,7 @@ billterm_refcount_handler (xmlNodePtr node, gpointer billterm_pdata)
 }
 
 static gboolean
-billterm_invisible_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_invisible_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     gint64 val;
@@ -336,21 +336,21 @@ billterm_invisible_handler (xmlNodePtr node, gpointer billterm_pdata)
 }
 
 static gboolean
-billterm_parent_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_parent_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_parent_child (node, pdata, gncBillTermSetParent);
 }
 
 static gboolean
-billterm_child_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_child_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_parent_child (node, pdata, gncBillTermSetChild);
 }
 
 static gboolean
-billterm_days_data_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_days_data_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
 
@@ -362,7 +362,7 @@ billterm_days_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 }
 
 static gboolean
-billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_prox_data_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
 
@@ -374,7 +374,7 @@ billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 }
 
 static gboolean
-billterm_slots_handler (xmlNodePtr node, gpointer billterm_pdata)
+billterm_slots_handler (GncXmlNode* node, gpointer billterm_pdata)
 {
     struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->term));
@@ -396,7 +396,7 @@ static struct dom_tree_handler billterm_handlers_v2[] =
 };
 
 static GncBillTerm*
-dom_tree_to_billterm (xmlNodePtr node, QofBook* book)
+dom_tree_to_billterm (GncXmlNode* node, QofBook* book)
 {
     struct billterm_pdata billterm_pdata;
     gboolean successful;
@@ -429,7 +429,7 @@ gnc_billterm_end_handler (gpointer data_for_children,
                           gpointer* result, const gchar* tag)
 {
     GncBillTerm* term;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -454,7 +454,7 @@ gnc_billterm_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, term);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return term != NULL;
 }

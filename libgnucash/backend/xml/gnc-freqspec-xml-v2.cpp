@@ -127,11 +127,11 @@ fspd_init (fsParseData* fspd)
 
 static
 gboolean
-gnc_fs_handler (xmlNodePtr node, gpointer d);
+gnc_fs_handler (GncXmlNode* node, gpointer d);
 
 static
 gboolean
-fs_uift_handler (xmlNodePtr node, gpointer data)
+fs_uift_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     int            i;
@@ -152,7 +152,7 @@ fs_uift_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_date_handler (xmlNodePtr node, gpointer data)
+fs_date_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate*                foo;
@@ -166,7 +166,7 @@ fs_date_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_interval_handler (xmlNodePtr node, gpointer data)
+fs_interval_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
@@ -183,7 +183,7 @@ fs_interval_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_offset_handler (xmlNodePtr node, gpointer data)
+fs_offset_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
@@ -198,7 +198,7 @@ fs_offset_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_day_handler (xmlNodePtr node, gpointer data)
+fs_day_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
@@ -213,7 +213,7 @@ fs_day_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_weekday_handler (xmlNodePtr node, gpointer data)
+fs_weekday_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
@@ -227,7 +227,7 @@ fs_weekday_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_occurrence_handler (xmlNodePtr node, gpointer data)
+fs_occurrence_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
@@ -241,7 +241,7 @@ fs_occurrence_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_weekend_adj_handler (xmlNodePtr node, gpointer data)
+fs_weekend_adj_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
@@ -255,7 +255,7 @@ fs_weekend_adj_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_subelement_handler (xmlNodePtr node, gpointer data)
+fs_subelement_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GList* recurrences;
@@ -297,7 +297,7 @@ struct dom_tree_handler fs_union_dom_handlers[] =
 };
 
 static gboolean
-fs_none_handler (xmlNodePtr node, gpointer data)
+fs_none_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean    successful;
@@ -309,7 +309,7 @@ fs_none_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_once_handler (xmlNodePtr node, gpointer data)
+fs_once_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        successful;
@@ -326,7 +326,7 @@ fs_once_handler (xmlNodePtr node, gpointer data)
 }
 
 static gboolean
-fs_daily_handler (xmlNodePtr node, gpointer data)
+fs_daily_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate offset_date;
@@ -345,7 +345,7 @@ fs_daily_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_weekly_handler (xmlNodePtr node, gpointer data)
+fs_weekly_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate offset_date;
@@ -366,7 +366,7 @@ fs_weekly_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_monthly_handler (xmlNodePtr node, gpointer data)
+fs_monthly_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate offset_date;
@@ -400,7 +400,7 @@ fs_monthly_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_month_relative_handler (xmlNodePtr node, gpointer data)
+fs_month_relative_handler (GncXmlNode* node, gpointer data)
 {
     g_critical ("this was never supported, how is it in the datafile?");
     return FALSE;
@@ -408,14 +408,14 @@ fs_month_relative_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_guid_handler (xmlNodePtr node, gpointer data)
+fs_guid_handler (GncXmlNode* node, gpointer data)
 {
     return TRUE;
 }
 
 static
 gboolean
-fs_composite_handler (xmlNodePtr node, gpointer data)
+fs_composite_handler (GncXmlNode* node, gpointer data)
 {
     fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        successful;
@@ -442,7 +442,7 @@ static struct dom_tree_handler fs_dom_handlers[] =
 
 static
 gboolean
-gnc_fs_handler (xmlNodePtr node, gpointer d)
+gnc_fs_handler (GncXmlNode* node, gpointer d)
 {
     return dom_tree_generic_parse (node, fs_dom_handlers, d);
 }
@@ -456,7 +456,7 @@ gnc_freqSpec_end_handler (gpointer data_for_children,
 {
     fsParseData                fspd;
     gboolean                successful = FALSE;
-    xmlNodePtr                tree = (xmlNodePtr)data_for_children;
+    GncXmlNode*                tree = (GncXmlNode*)data_for_children;
     sixtp_gdv2*                globaldata = (sixtp_gdv2*)global_data;
 
     fspd_init (&fspd);
@@ -475,10 +475,10 @@ gnc_freqSpec_end_handler (gpointer data_for_children,
     successful = dom_tree_generic_parse (tree, fs_dom_handlers, &fspd);
     if (!successful)
     {
-        xmlElemDump (stdout, NULL, tree);
+        gnc_xml_node_dump (stdout, tree);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return successful;
 }
@@ -490,7 +490,7 @@ gnc_freqSpec_sixtp_parser_create (void)
 }
 
 static void
-common_parse (fsParseData* fspd, xmlNodePtr node, QofBook* book)
+common_parse (fsParseData* fspd, GncXmlNode* node, QofBook* book)
 {
     gboolean        successful;
 
@@ -498,12 +498,12 @@ common_parse (fsParseData* fspd, xmlNodePtr node, QofBook* book)
     successful = dom_tree_generic_parse (node, fs_dom_handlers, fspd);
     if (!successful)
     {
-        xmlElemDump (stdout, NULL, node);
+        gnc_xml_node_dump (stdout, node);
     }
 }
 
 GList*
-dom_tree_freqSpec_to_recurrences (xmlNodePtr node, QofBook* book)
+dom_tree_freqSpec_to_recurrences (GncXmlNode* node, QofBook* book)
 {
     fsParseData        fspd;
     fspd_init (&fspd);

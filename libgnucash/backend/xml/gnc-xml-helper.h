@@ -37,12 +37,6 @@
 #  ifndef xmlChildrenNode
 #    define xmlChildrenNode children
 #  endif /* ifndef xmlChildrenNode */
-#  ifndef xmlRootNode
-#    define xmlRootNode children
-#  endif /* ifndef xmlRootNode */
-#  ifndef xmlAttrPropertyValue
-#    define xmlAttrPropertyValue children
-#  endif /* ifndef xmlAttrPropertyValue */
 
 xmlChar* checked_char_cast (gchar* val);
 

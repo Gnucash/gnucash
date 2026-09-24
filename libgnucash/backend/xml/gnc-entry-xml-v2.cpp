@@ -225,7 +225,7 @@ struct entry_pdata
 };
 
 static inline gboolean
-set_time64 (xmlNodePtr node, GncEntry* entry,
+set_time64 (GncXmlNode* node, GncEntry* entry,
               void (*func) (GncEntry* entry, time64 ts))
 {
     time64 time = dom_tree_to_time64 (node);
@@ -235,7 +235,7 @@ set_time64 (xmlNodePtr node, GncEntry* entry,
 }
 
 static inline gboolean
-set_numeric (xmlNodePtr node, GncEntry* entry,
+set_numeric (GncXmlNode* node, GncEntry* entry,
              void (*func) (GncEntry* entry, gnc_numeric num))
 {
     func (entry, dom_tree_to_gnc_numeric (node));
@@ -243,7 +243,7 @@ set_numeric (xmlNodePtr node, GncEntry* entry,
 }
 
 static inline gboolean
-set_boolean (xmlNodePtr node, GncEntry* entry,
+set_boolean (GncXmlNode* node, GncEntry* entry,
              void (*func) (GncEntry* entry, gboolean val))
 {
     gint64 val;
@@ -255,7 +255,7 @@ set_boolean (xmlNodePtr node, GncEntry* entry,
 }
 
 static inline gboolean
-set_account (xmlNodePtr node, struct entry_pdata* pdata,
+set_account (GncXmlNode* node, struct entry_pdata* pdata,
              void (*func) (GncEntry* entry, Account* acc))
 {
     Account* acc;
@@ -273,7 +273,7 @@ set_account (xmlNodePtr node, struct entry_pdata* pdata,
 }
 
 static inline gboolean
-set_taxtable (xmlNodePtr node, struct entry_pdata* pdata,
+set_taxtable (GncXmlNode* node, struct entry_pdata* pdata,
               void (*func) (GncEntry* entry, GncTaxTable* taxtable))
 {
     GncTaxTable* taxtable;
@@ -296,7 +296,7 @@ set_taxtable (xmlNodePtr node, struct entry_pdata* pdata,
 }
 
 static gboolean
-entry_guid_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_guid_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     GncEntry* entry;
@@ -319,21 +319,21 @@ entry_guid_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_date_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_date_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_time64 (node, pdata->entry, gncEntrySetDate);
 }
 
 static gboolean
-entry_dateentered_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_dateentered_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_time64 (node, pdata->entry, gncEntrySetDateEntered);
 }
 
 static gboolean
-entry_description_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_description_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -341,7 +341,7 @@ entry_description_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_action_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_action_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -349,7 +349,7 @@ entry_action_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_notes_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_notes_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -357,7 +357,7 @@ entry_notes_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_qty_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_qty_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -367,14 +367,14 @@ entry_qty_handler (xmlNodePtr node, gpointer entry_pdata)
 /* Cust invoice */
 
 static gboolean
-entry_invacct_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_invacct_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_account (node, pdata, gncEntrySetInvAccount);
 }
 
 static gboolean
-entry_iprice_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_iprice_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -382,7 +382,7 @@ entry_iprice_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_idiscount_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_idiscount_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -390,7 +390,7 @@ entry_idiscount_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_idisctype_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_idisctype_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     auto entry = pdata->entry;
@@ -405,7 +405,7 @@ entry_idisctype_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_idischow_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_idischow_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     auto entry = pdata->entry;
@@ -420,21 +420,21 @@ entry_idischow_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_itaxable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_itaxable_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_boolean (node, pdata->entry, gncEntrySetInvTaxable);
 }
 
 static gboolean
-entry_itaxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_itaxincluded_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_boolean (node, pdata->entry, gncEntrySetInvTaxIncluded);
 }
 
 static gboolean
-entry_itaxtable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_itaxtable_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_taxtable (node, pdata, gncEntrySetInvTaxTable);
@@ -443,14 +443,14 @@ entry_itaxtable_handler (xmlNodePtr node, gpointer entry_pdata)
 /* vendor bills */
 
 static gboolean
-entry_billacct_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_billacct_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_account (node, pdata, gncEntrySetBillAccount);
 }
 
 static gboolean
-entry_bprice_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_bprice_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -458,35 +458,35 @@ entry_bprice_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_btaxable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_btaxable_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_boolean (node, pdata->entry, gncEntrySetBillTaxable);
 }
 
 static gboolean
-entry_btaxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_btaxincluded_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_boolean (node, pdata->entry, gncEntrySetBillTaxIncluded);
 }
 
 static gboolean
-entry_btaxtable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_btaxtable_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_taxtable (node, pdata, gncEntrySetBillTaxTable);
 }
 
 static gboolean
-entry_billable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_billable_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     return set_boolean (node, pdata->entry, gncEntrySetBillable);
 }
 
 static gboolean
-entry_billto_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_billto_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     GncOwner billto;
@@ -501,7 +501,7 @@ entry_billto_handler (xmlNodePtr node, gpointer entry_pdata)
 
 /* employee bills */
 static gboolean
-entry_billpayment_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_billpayment_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     auto entry = pdata->entry;
@@ -518,7 +518,7 @@ entry_billpayment_handler (xmlNodePtr node, gpointer entry_pdata)
 /* The rest of the stuff */
 
 static gboolean
-entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_order_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     GncOrder* order;
@@ -541,7 +541,7 @@ entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_invoice_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     GncInvoice* invoice;
@@ -564,7 +564,7 @@ entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_bill_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     GncInvoice* invoice;
@@ -589,7 +589,7 @@ entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
 /* Support for older XML versions */
 
 static gboolean
-entry_acct_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_acct_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     /* XXX: try to figure out if this is an 'invoice' or a 'bill' --
@@ -600,7 +600,7 @@ entry_acct_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_price_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
     gboolean res;
@@ -613,7 +613,7 @@ entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_slots_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_slots_handler (GncXmlNode* node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
 
@@ -671,7 +671,7 @@ static struct dom_tree_handler entry_handlers_v2[] =
 };
 
 static GncEntry*
-dom_tree_to_entry (xmlNodePtr node, QofBook* book)
+dom_tree_to_entry (GncXmlNode* node, QofBook* book)
 {
     struct entry_pdata entry_pdata;
     gboolean successful;
@@ -710,7 +710,7 @@ gnc_entry_end_handler (gpointer data_for_children,
                        gpointer* result, const gchar* tag)
 {
     GncEntry* entry;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -735,7 +735,7 @@ gnc_entry_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, entry);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return entry != NULL;
 }

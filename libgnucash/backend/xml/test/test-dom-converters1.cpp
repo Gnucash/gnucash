@@ -57,6 +57,7 @@ test_dom_tree_to_commodity_ref (void)
         gchar* test_str2;
         gnc_commodity* test_com2;
         xmlNodePtr test_node;
+        GncXmlNode* conv_node;
         QofBook* book;
 
         book = qof_book_new ();
@@ -66,12 +67,14 @@ test_dom_tree_to_commodity_ref (void)
 
         test_com1 = gnc_commodity_new (book, NULL, test_str1, test_str2, NULL, 0);
         test_node = commodity_ref_to_dom_tree ("test-com", test_com1);
+        conv_node = gnc_xml_node_from_libxml (test_node);
 
-        test_com2 = dom_tree_to_commodity_ref_no_engine (test_node, book);
+        test_com2 = dom_tree_to_commodity_ref_no_engine (conv_node, book);
 
         do_test (gnc_commodity_equiv (test_com1, test_com2),
                  "dom_tree_to_commodity_ref_no_engine");
 
+        gnc_xml_node_free (conv_node);
         xmlFreeNode (test_node);
         gnc_commodity_destroy (test_com1);
         gnc_commodity_destroy (test_com2);
@@ -90,12 +93,12 @@ test_dom_tree_to_text (void)
     for (i = 0; i < 20; i++)
     {
         gchar* test_string1;
-        xmlNodePtr test_node;
+        GncXmlNode* test_node;
 
-        test_node = xmlNewNode (NULL, BAD_CAST "test-node");
+        test_node = gnc_xml_node_new_element ("test-node");
         test_string1 = get_random_string ();
 
-        xmlNodeAddContent (test_node, BAD_CAST test_string1);
+        gnc_xml_node_add_content (test_node, test_string1, strlen (test_string1));
 
         auto test_string2 = dom_tree_to_text (test_node);
 
@@ -103,7 +106,7 @@ test_dom_tree_to_text (void)
         {
             failure_args ("dom_tree_to_text", __FILE__, __LINE__,
                           "null return from dom_tree_to_text");
-            xmlElemDump (stdout, NULL, test_node);
+            gnc_xml_node_dump (stdout, test_node);
         }
         else if (g_strcmp0 (test_string1, test_string2->c_str()) == 0)
         {
@@ -116,7 +119,7 @@ test_dom_tree_to_text (void)
                           "with string %s", test_string1);
         }
 
-        xmlFreeNode (test_node);
+        gnc_xml_node_free (test_node);
         g_free (test_string1);
     }
 }
@@ -129,15 +132,17 @@ test_dom_tree_to_time64 (void)
     for (i = 0; i < 20; i++)
     {
         xmlNodePtr test_node;
+        GncXmlNode* conv_node;
         time64 test_spec1 = get_random_time ();
         test_node = time64_to_dom_tree ("test-spec", test_spec1);
-        time64 test_spec2 = dom_tree_to_time64 (test_node);
-        if (!dom_tree_valid_time64 (test_spec2, (const xmlChar*)"test-spec"))
+        conv_node = gnc_xml_node_from_libxml (test_node);
+        time64 test_spec2 = dom_tree_to_time64 (conv_node);
+        if (!dom_tree_valid_time64 (test_spec2, "test-spec"))
         {
             failure_args ("dom_tree_to_time64",
                           __FILE__, __LINE__, "NULL return");
             printf ("Node looks like:\n");
-            xmlElemDump (stdout, NULL, test_node);
+            gnc_xml_node_dump (stdout, conv_node);
             printf ("\n");
         }
         else if (test_spec1 == test_spec2)
@@ -148,11 +153,12 @@ test_dom_tree_to_time64 (void)
         {
             failure ("dom_tree_to_time64");
             printf ("Node looks like:\n");
-            xmlElemDump (stdout, NULL, test_node);
+            gnc_xml_node_dump (stdout, conv_node);
             printf ("\n");
             printf ("passed: %" G_GUINT64_FORMAT "  got: %" G_GUINT64_FORMAT ".\n",
                     test_spec1, test_spec2);
         }
+        gnc_xml_node_free (conv_node);
         xmlFreeNode (test_node);
     }
 }
@@ -170,11 +176,13 @@ test_gnc_nums_internal (gnc_numeric to_test)
     }
     else
     {
-        gnc_numeric to_compare = dom_tree_to_gnc_numeric (to_gen);
+        auto conv_node = gnc_xml_node_from_libxml (to_gen);
+        gnc_numeric to_compare = dom_tree_to_gnc_numeric (conv_node);
         if (!gnc_numeric_equal (to_test, to_compare))
         {
             ret = "numerics compared different";
         }
+        gnc_xml_node_free (conv_node);
     }
 
     if (to_gen)
@@ -227,11 +235,13 @@ test_dom_tree_to_guid (void)
                           "conversion to dom tree failed");
         }
 
-        auto test_guid2 = dom_tree_to_guid (test_node);
+        auto conv_node = gnc_xml_node_from_libxml (test_node);
+        auto test_guid2 = dom_tree_to_guid (conv_node);
 
         do_test (guid_equal (test_guid1, &*test_guid2),
                  "dom_tree_to_guid");
 
+        gnc_xml_node_free (conv_node);
         xmlFreeNode (test_node);
         guid_free (test_guid1);
     }

@@ -25,11 +25,10 @@
 
 #include <glib.h>
 
+#include "gnc-xml-sax-node.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 #include "sixtp.h"
-
-static xmlNsPtr global_namespace = NULL;
 
 /* Don't pass anything in the data_for_children value to this
    function.  It'll cause a segfault */
@@ -38,21 +37,18 @@ static gboolean dom_start_handler (
     gpointer* data_for_children, gpointer* result, const gchar* tag,
     gchar** attrs)
 {
-    xmlNodePtr thing;
+    GncXmlNode* thing;
     gchar** atptr = attrs;
 
     if (parent_data == NULL)
     {
-        thing = xmlNewNode (global_namespace, BAD_CAST tag);
+        thing = gnc_xml_node_new_element (tag);
         /* only publish the result if we're the parent */
         *result = thing;
     }
     else
     {
-        thing = xmlNewChild ((xmlNodePtr) parent_data,
-                             global_namespace,
-                             BAD_CAST tag,
-                             NULL);
+        thing = gnc_xml_node_new_child ((GncXmlNode*) parent_data, tag);
         *result = NULL;
     }
     *data_for_children = thing;
@@ -61,12 +57,7 @@ static gboolean dom_start_handler (
     {
         while (*atptr != 0)
         {
-            gchar* attr0 = g_strdup (atptr[0]);
-            gchar* attr1 = g_strdup (atptr[1]);
-            xmlSetProp (thing, checked_char_cast (attr0),
-                        checked_char_cast (attr1));
-            g_free (attr0);
-            g_free (attr1);
+            gnc_xml_node_set_prop (thing, atptr[0], atptr[1]);
             atptr += 2;
         }
     }
@@ -82,20 +73,14 @@ dom_fail_handler (gpointer data_for_children,
                   gpointer* result,
                   const gchar* tag)
 {
-    if (*result) xmlFreeNode (static_cast<xmlNodePtr> (*result));
+    if (*result) gnc_xml_node_free (static_cast<GncXmlNode*> (*result));
 }
 
 static gboolean dom_chars_handler (
     GSList* sibling_data, gpointer parent_data, gpointer global_data,
     gpointer* result, const char* text, int length)
 {
-    if (length > 0)
-    {
-        gchar* newtext = g_strndup (text,length);
-        xmlNodeAddContentLen ((xmlNodePtr)parent_data,
-                              checked_char_cast (newtext), length);
-        g_free (newtext);
-    }
+    gnc_xml_node_add_content ((GncXmlNode*)parent_data, text, length);
     return TRUE;
 }
 
