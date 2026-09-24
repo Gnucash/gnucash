@@ -275,6 +275,25 @@ class SessionOpenMode(IntEnum):
     Open the session, taking over any existing lock."""
 
 
+class PriceSource(IntEnum):
+    """Price source, mirroring the C PriceSource enum in gnc-pricedb.h.
+
+    Pass a member to GncPrice.set_source().
+    """
+
+    EDIT_DLG          = gnucash_core_c.PRICE_SOURCE_EDIT_DLG
+    FINANCE_QUOTE     = gnucash_core_c.PRICE_SOURCE_FQ
+    USER_PRICE        = gnucash_core_c.PRICE_SOURCE_USER_PRICE
+    XFER_DLG_VAL      = gnucash_core_c.PRICE_SOURCE_XFER_DLG_VAL
+    SPLIT_REG         = gnucash_core_c.PRICE_SOURCE_SPLIT_REG
+    SPLIT_IMPORT      = gnucash_core_c.PRICE_SOURCE_SPLIT_IMPORT
+    STOCK_SPLIT       = gnucash_core_c.PRICE_SOURCE_STOCK_SPLIT
+    STOCK_TRANSACTION = gnucash_core_c.PRICE_SOURCE_STOCK_TRANSACTION
+    INVOICE           = gnucash_core_c.PRICE_SOURCE_INVOICE
+    TEMP              = gnucash_core_c.PRICE_SOURCE_TEMP
+    INVALID           = gnucash_core_c.PRICE_SOURCE_INVALID
+
+
 class Session(GnuCashCoreClass):
     """A GnuCash book editing session
 

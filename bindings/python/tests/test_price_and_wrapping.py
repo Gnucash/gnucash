@@ -14,6 +14,7 @@ from gnucash import (
     GncCommodity,
     GncNumeric,
     GncPrice,
+    PriceSource,
     Session,
     Split,
     Transaction,
@@ -451,6 +452,40 @@ class TestDoubleWrapProtection(TestCase):
         val = GncNumeric(instance=raw)
         self.assertEqual(val.num(), 5)
         self.assertEqual(val.denom(), 2)
+
+
+# ---------------------------------------------------------------------------
+# Test: PriceSource enum stays in sync with the C PRICE_SOURCE_* enum
+# ---------------------------------------------------------------------------
+class TestPriceSourceEnum(TestCase):
+    """PriceSource must cover the C PRICE_SOURCE_* enum exactly, so it can't
+    drift if a value is added, removed, or renumbered on the C side. Member
+    names are a Python-side choice (e.g. FINANCE_QUOTE spells out FQ), so the
+    check is on the set of values, which come straight from the C enum."""
+
+    def test_values_match_c_enum(self):
+        from gnucash import gnucash_core_c as c
+        c_values = sorted(getattr(c, n) for n in dir(c)
+                          if n.startswith("PRICE_SOURCE_"))
+        py_values = sorted(m.value for m in PriceSource)
+        self.assertEqual(py_values, c_values,
+                         "PriceSource is out of sync with the C PRICE_SOURCE_* "
+                         "enum -- add/remove members to match.")
+
+    def test_set_source_accepts_enum(self):
+        ses = Session()
+        book = ses.get_book()
+        table = book.get_table()
+        usd = table.lookup("CURRENCY", "USD")
+        stock = GncCommodity(book, "Test Stock", "NASDAQ", "TSTK", "TSTK", 10000)
+        table.insert(stock)
+        price = GncPrice(book)
+        price.set_commodity(stock)
+        price.set_currency(usd)
+        price.set_source(PriceSource.FINANCE_QUOTE)
+        self.assertEqual(price.get_source(), PriceSource.FINANCE_QUOTE)
+        self.assertEqual(price.get_source_string(), "Finance::Quote")
+        ses.end()
 
 
 if __name__ == '__main__':
