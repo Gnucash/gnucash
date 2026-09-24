@@ -112,18 +112,8 @@
 ;; function to sanitize strings. the resulting string can be safely
 ;; added to html.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define (gnc:html-string-sanitize str)
-  (with-output-to-string
-    (lambda ()
-      (string-for-each
-       (lambda (c)
-         (display
-          (case c
-            ((#\&) "&amp;")
-            ((#\<) "&lt;")
-            ((#\>) "&gt;")
-            (else c))))
-       str))))
+(define gnc:html-string-sanitize
+  gnc-html-string-sanitize)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; avoid using strftime, still broken in guile-2.2. see explanation at
