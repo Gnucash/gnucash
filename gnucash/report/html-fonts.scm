@@ -188,5 +188,7 @@
       "td.centered-label-cell { text-align: center; " centered-label-cell-info " }\n"
       "sub { top: 0.4em; }\n"
       "sub, sup { vertical-align: baseline; position: relative; top: -0.4em; }\n"
+      ".qr-code-error { color: white; background-color: red }\n"
+      "@media print { .qr-code-error { display:none; }}\n"
       "@media print { html, body { height: unset; }}\n"
       (or (gnc:html-document-style-text doc) "")))))
