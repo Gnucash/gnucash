@@ -409,8 +409,8 @@ For example setting this to 2.0 will display reports at twice their typical size
     </key>
       <key name="chart-tooltip-position" enum="org.gnucash.GnuCash.general.report.TooltipPosition">
       <default>'nearest'</default>
-      <summary>"Jump" behaviour when there are multiple splits</summary>
-      <description>Select how the "Jump" operation should behave when a transaction has multiple splits.</description>
+      <summary>A choice of two locations for a grouped tooltip. </summary>
+      <description>Some line- and barcharts display a tooltip showing numeric values of the points on a particular date. The tooltip can be a grouped one showing all of the points on that particular day or not-grouped, showing only the value at the nearest point. This preference controls the position of grouped tooltips. The average setting places it in the middle of the values on the day, nearest places it at the point nearest to the cursor position. </description>
     </key>
     <child name="pdf-export" schema="org.gnucash.GnuCash.general.report.pdf-export"/>
   </schema>
