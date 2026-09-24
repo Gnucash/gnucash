@@ -116,6 +116,8 @@ set_quote_source_name (gpointer pObject, gpointer pValue)
 
     pCommodity = GNC_COMMODITY (pObject);
     quote_source = gnc_quote_source_lookup_by_internal (quote_source_name);
+    if (!quote_source)
+        quote_source = gnc_quote_source_add_new (quote_source_name, FALSE);
     gnc_commodity_set_quote_source (pCommodity, quote_source);
 }
 

@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2026-06-26 05:13+0000\n"
+"PO-Revision-Date: 2026-09-13 22:51+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -21,13 +21,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
-
-#. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-msgid "Term"
-msgstr "Kifejezés"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+#, fuzzy
+#| msgid "\"\""
+msgctxt "quoting convention"
 msgid "\"\""
 msgstr "„”"
 
@@ -48,155 +47,269 @@ msgid "account name"
 msgstr "számlanév"
 
 #. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
-msgid "account type: Active"
+#, fuzzy
+#| msgid "account type: Active"
+msgctxt "account type"
+msgid "active"
 msgstr "Aktív"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
-msgid "account type: Asset"
+#, fuzzy
+#| msgid "account type: Asset"
+msgctxt "account type"
+msgid "asset"
 msgstr "Eszköz"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-msgid "account type: Assets & Liabilities"
+#, fuzzy
+#| msgid "account type: Assets & Liabilities"
+msgctxt "account type"
+msgid "assets & liabilities"
 msgstr "Eszközök és Kötelezettségek"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
-msgid "account type: checking"
+#, fuzzy
+#| msgid "account type: checking"
+msgctxt "account type"
+msgid "checking"
 msgstr "ellenőrzés"
 
 #. "-"
-msgid "account type: currency"
+#, fuzzy
+#| msgid "account type: currency"
+msgctxt "account type"
+msgid "currency"
 msgstr "valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
-msgid "account type: Equity"
+#, fuzzy
+#| msgid "account type: Equity"
+msgctxt "account type"
+msgid "equity"
 msgstr "Tőke"
 
 #. "-"
-msgid "account type: Expense"
+#, fuzzy
+#| msgid "account type: Expense"
+msgctxt "account type"
+msgid "expense"
 msgstr "Költség"
 
 #. "-"
-msgid "account type: Income"
+#, fuzzy
+#| msgid "account type: Income"
+msgctxt "account type"
+msgid "income"
 msgstr "Bevétel"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
-msgid "account type: Liability"
+#, fuzzy
+#| msgid "account type: Liability"
+msgctxt "account type"
+msgid "liability"
 msgstr "Kötelezettség"
 
 #. "-"
-msgid "account type: money-market"
+#, fuzzy
+#| msgid "account type: money-market"
+msgctxt "account type"
+msgid "money-market"
 msgstr "pénzpiac"
 
 #. "-"
-msgid "account type: Mutual fund"
+#, fuzzy
+#| msgid "account type: Mutual fund"
+msgctxt "account type"
+msgid "mutual fund"
 msgstr "Befektetési alap"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-msgid "account type: Passive"
+#, fuzzy
+#| msgid "account type: Passive"
+msgctxt "account type"
+msgid "passive"
 msgstr "Passzív"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-msgid "account type: Profit & Loss"
+#, fuzzy
+#| msgid "account type: Profit & Loss"
+msgctxt "account type"
+msgid "profit & loss"
 msgstr "Nyereség és Veszteség"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
-msgid "account type: saving"
+#, fuzzy
+#| msgid "account type: saving"
+msgctxt "account type"
+msgid "saving"
 msgstr "megtakarítás"
 
 #. "-"
-msgid "account type: Stock"
+#, fuzzy
+#| msgid "account type: Stock"
+msgctxt "account type"
+msgid "stock"
 msgstr "Részvény"
 
 #. "This account type is used when exchanging or trading amounts from one currency into another"
-msgid "account type: trading"
+#, fuzzy
+#| msgid "account type: trading"
+msgctxt "account type"
+msgid "trading"
 msgstr "kereskedés"
 
 #. "-"
-msgid "account: parent account"
+#, fuzzy
+#| msgid "account: parent account"
+msgctxt "account"
+msgid "parent account"
 msgstr "főszámla"
 
 #. "-"
-msgid "account: subaccount"
+#, fuzzy
+#| msgid "account: subaccount"
+msgctxt "account"
+msgid "subaccount"
 msgstr "alszámla"
 
 #. "-"
-msgid "account: top level account"
+#, fuzzy
+#| msgid "account: top level account"
+msgctxt "account"
+msgid "top level account"
 msgstr "legfelső szintű számla"
 
 #. "The process of doing something that caused a transaction to happen"
-msgid "Action (register)"
+#, fuzzy
+#| msgid "Action (register)"
+msgctxt "register"
+msgid "action"
 msgstr "Művelet (számlaregiszter)"
 
 #. "Automated teller machine"
-msgid "action: ATM"
+#, fuzzy
+#| msgid "action: ATM"
+msgctxt "action"
+msgid "ATM"
 msgstr "ATM (pénzkiadó automata)"
 
 #. "Transaction was an auto deposit"
-msgid "action: autoDep"
+#, fuzzy
+#| msgid "action: autoDep"
+msgctxt "action"
+msgid "autoDep"
 msgstr "automatikus befizetés"
 
 #. "-"
-msgid "action: buy"
+#, fuzzy
+#| msgid "action: buy"
+msgctxt "action"
+msgid "buy"
 msgstr "vétel"
 
 #. "-"
-msgid "action: deposit"
+#, fuzzy
+#| msgid "action: deposit"
+msgctxt "action"
+msgid "deposit"
 msgstr "befizetés"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
-msgid "action: direct debit"
+#, fuzzy
+#| msgid "action: direct debit"
+msgctxt "action"
+msgid "direct debit"
 msgstr "fizetési megbízás (közvetlen terhelés)"
 
 #. "transaction is a distribution (???)"
-msgid "action: dist"
+#, fuzzy
+#| msgid "action: dist"
+msgctxt "action"
+msgid "dist"
 msgstr "elosztás"
 
 #. "transaction is a dividend"
-msgid "action: div"
+#, fuzzy
+#| msgid "action: div"
+msgctxt "action"
+msgid "div"
 msgstr "osztalék"
 
 #. "-"
-msgid "action: fee"
+#, fuzzy
+#| msgid "action: fee"
+msgctxt "action"
+msgid "fee"
 msgstr "díj"
 
 #. "transaction comes from interest"
-msgid "action: int"
+#, fuzzy
+#| msgid "action: int"
+msgctxt "action"
+msgid "int"
 msgstr "kamat"
 
 #. "-"
-msgid "action: loan"
+#, fuzzy
+#| msgid "action: loan"
+msgctxt "action"
+msgid "loan"
 msgstr "kölcsön"
 
 #. "see: payment 1."
-msgid "action: payment"
+#, fuzzy
+#| msgid "action: payment"
+msgctxt "action"
+msgid "payment"
 msgstr "kifizetés"
 
 #. "Point of sale"
-msgid "action: POS"
+#, fuzzy
+#| msgid "action: POS"
+msgctxt "action"
+msgid "POS"
 msgstr "Kártyaolvasó"
 
 #. "-"
-msgid "action: rebate"
+#, fuzzy
+#| msgid "action: rebate"
+msgctxt "action"
+msgid "rebate"
 msgstr "engedmény"
 
 #. "-"
-msgid "action: sell"
+#, fuzzy
+#| msgid "action: sell"
+msgctxt "action"
+msgid "sell"
 msgstr "eladás"
 
 #. "-"
-msgid "action: Teller"
+#, fuzzy
+#| msgid "action: Teller"
+msgctxt "action"
+msgid "teller"
 msgstr "Pénztár"
 
 #. "see: transfer 2. (=credit transfer)"
-msgid "action: transfer"
+#, fuzzy
+#| msgid "action: transfer"
+msgctxt "action"
+msgid "transfer"
 msgstr "átutalás"
 
 #. "-"
-msgid "action: wire"
+#, fuzzy
+#| msgid "action: wire"
+msgctxt "action"
+msgid "wire"
 msgstr "átruházás"
 
 #. "-"
-msgid "action: withdraw"
+#, fuzzy
+#| msgid "action: withdraw"
+msgctxt "action"
+msgid "withdraw"
 msgstr "visszavonás"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
@@ -216,7 +329,10 @@ msgid "average"
 msgstr "átlag"
 
 #. "The amount of money that is in one's account"
-msgid "balance (noun)"
+#, fuzzy
+#| msgid "balance (noun)"
+msgctxt "noun"
+msgid "balance"
 msgstr "egyenleg (főnév)"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
@@ -232,7 +348,10 @@ msgid "balance sheet"
 msgstr "mérleg"
 
 #. "To arrange for income and spending to be equal"
-msgid "balance, to"
+#, fuzzy
+#| msgid "balance, to"
+msgctxt "verb"
+msgid "balance"
 msgstr "kiegyensúlyozás"
 
 #. "-"
@@ -264,11 +383,17 @@ msgid "Budget"
 msgstr "Költségvetés"
 
 #. "-"
-msgid "business (adjective)"
+#, fuzzy
+#| msgid "business (adjective)"
+msgctxt "adjective"
+msgid "business"
 msgstr "üzleti (melléknév)"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
-msgid "business (noun)"
+#, fuzzy
+#| msgid "business (noun)"
+msgctxt "noun"
+msgid "business"
 msgstr "üzlet (főnév)"
 
 #. "Profits made from the sale of investments or property"
@@ -288,12 +413,18 @@ msgid "check"
 msgstr "csekk"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
-msgid "check and repair, to"
+#, fuzzy
+#| msgid "check and repair, to"
+msgctxt "verb"
+msgid "check and repair"
 msgstr "ellenőrzése és javítása"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
-msgid "close, to"
-msgstr "bezárása"
+#, fuzzy
+#| msgid "close, to"
+msgctxt "verb"
+msgid "close"
+msgstr "bezárás"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
@@ -304,11 +435,17 @@ msgid "commodity listing"
 msgstr "árutőzsde"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
-msgid "commodity option: fraction"
+#, fuzzy
+#| msgid "commodity option: fraction"
+msgctxt "commodity option"
+msgid "fraction"
 msgstr "címlet"
 
 #. "e.g. USD, EUR"
-msgid "commodity option: Symbol"
+#, fuzzy
+#| msgid "commodity option: Symbol"
+msgctxt "commodity option"
+msgid "symbol"
 msgstr "Szimbólum"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
@@ -316,7 +453,10 @@ msgid "compound interests"
 msgstr "kamatos kamatok"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
-msgid "Credit (column in register)"
+#, fuzzy
+#| msgid "Credit (column in register)"
+msgctxt "column in register"
+msgid "credit"
 msgstr "Rendelkezésre álló összeg (a számlaregiszter oszlopa)"
 
 #. "-"
@@ -360,7 +500,10 @@ msgid "date range"
 msgstr "időszak"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
-msgid "Debit (column in register)"
+#, fuzzy
+#| msgid "Debit (column in register)"
+msgctxt "column in register"
+msgid "debit"
 msgstr "Terhelés (a számlaregiszter oszlopa)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
@@ -368,7 +511,10 @@ msgid "default"
 msgstr "alapértelmezett"
 
 #. "see credit"
-msgid "deposit (in the reconcile dialog)"
+#, fuzzy
+#| msgid "deposit (in the reconcile dialog)"
+msgctxt "reconcile dialog"
+msgid "deposit"
 msgstr "jóváírás (az egyeztetési párbeszédpanelen)"
 
 #. "The process of something becoming less valuable"
@@ -376,7 +522,10 @@ msgid "depreciation"
 msgstr "értékcsökkenés"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
-msgid "Description (column in register)"
+#, fuzzy
+#| msgid "Description (column in register)"
+msgctxt "column in register"
+msgid "description"
 msgstr "Leírás (a számlaregiszter oszlopa)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
@@ -412,7 +561,10 @@ msgid "equity statement"
 msgstr "tőkekimutatás"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
-msgid "escrow (account)"
+#, fuzzy
+#| msgid "escrow (account)"
+msgctxt "account"
+msgid "escrow"
 msgstr "letét (számla)"
 
 #. "The relation in value between the money used in different countries"
@@ -432,11 +584,17 @@ msgid "file type"
 msgstr "fájltípus"
 
 #. "-"
-msgid "financial calculator: interest rate"
+#, fuzzy
+#| msgid "financial calculator: interest rate"
+msgctxt "financial calculator"
+msgid "interest rate"
 msgstr "kamatláb"
 
 #. "see: payment"
-msgid "financial calculator: payments"
+#, fuzzy
+#| msgid "financial calculator: payments"
+msgctxt "financial calculator"
+msgid "payments"
 msgstr "kifizetés"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
@@ -488,7 +646,10 @@ msgid "loan"
 msgstr "kölcsön"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-msgid "loan: APR"
+#, fuzzy
+#| msgid "loan: APR"
+msgctxt "loan"
+msgid "APR"
 msgstr "THM"
 
 #. "The money lost in business activity"
@@ -504,7 +665,10 @@ msgid "Lot"
 msgstr "Kötési tétel (darabszám)"
 
 #. "Combine two books into one (see book)."
-msgid "merge, to"
+#, fuzzy
+#| msgid "merge, to"
+msgctxt "verb"
+msgid "merge"
 msgstr "egyesítés (összevonás)"
 
 #. "The thing that the scatter plot uses to mark each data point"
@@ -528,11 +692,17 @@ msgid "Mortgage"
 msgstr "Jelzálogkölcsön"
 
 #. "Adjustable Rate Mortgage"
-msgid "mortgage: ARM"
+#, fuzzy
+#| msgid "mortgage: ARM"
+msgctxt "mortgage"
+msgid "ARM"
 msgstr "változó kamatlábú"
 
 #. "Fixed Rate Mortgage"
-msgid "mortgage: FRM"
+#, fuzzy
+#| msgid "mortgage: FRM"
+msgctxt "mortgage"
+msgid "FRM"
 msgstr "fix kamatlábú"
 
 #. "e.g. USD, EUR, see Currency."
@@ -556,15 +726,24 @@ msgid "net worth"
 msgstr "nettó vagyon"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
-msgid "notes (register)"
+#, fuzzy
+#| msgid "notes (register)"
+msgctxt "column in register"
+msgid "notes"
 msgstr "megjegyzések"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
-msgid "Num (column in register)"
+#, fuzzy
+#| msgid "Num (column in register)"
+msgctxt "column in register"
+msgid "num"
 msgstr "Szám (a regiszter oszlopa)"
 
 #. "to make accessible"
-msgid "open, to"
+#, fuzzy
+#| msgid "open, to"
+msgctxt "verb"
+msgid "open"
 msgstr "megnyitás"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
@@ -616,7 +795,10 @@ msgid "portfolio"
 msgstr "portfólió"
 
 #. "Register invoice, voucher in account register"
-msgid "post, to"
+#, fuzzy
+#| msgid "post, to"
+msgctxt "verb"
+msgid "post"
 msgstr "könyvelés, oda"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
@@ -628,19 +810,31 @@ msgid "principal payment"
 msgstr "tőkefizetés"
 
 #. "An amount of money for which sth may be bought or sold"
-msgid "price (in a split)"
+#, fuzzy
+#| msgid "price (in a split)"
+msgctxt "split property"
+msgid "price"
 msgstr "ár (egy felosztásban)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
-msgid "price type: ask"
+#, fuzzy
+#| msgid "price type: ask"
+msgctxt "price type"
+msgid "ask"
 msgstr "eladási ajánlat"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
-msgid "price type: bid"
+#, fuzzy
+#| msgid "price type: bid"
+msgctxt "price type"
+msgid "bid"
 msgstr "vételi ajánlat"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
-msgid "price: quotes"
+#, fuzzy
+#| msgid "price: quotes"
+msgctxt "price"
+msgid "quotes"
 msgstr "árfolyam"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
@@ -656,11 +850,17 @@ msgid "quick-fill"
 msgstr "gyorskitöltés"
 
 #. "-"
-msgid "rebalance, to (a transaction)"
+#, fuzzy
+#| msgid "rebalance, to (a transaction)"
+msgctxt "verb, on a transaction"
+msgid "rebalance"
 msgstr "újra kiegyensúlyoz (egy tranzakciót)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
-msgid "reconcile, to"
+#, fuzzy
+#| msgid "reconcile, to"
+msgctxt "verb"
+msgid "reconcile"
 msgstr "egyeztetés"
 
 #. "-"
@@ -672,39 +872,66 @@ msgid "register"
 msgstr "regiszter"
 
 #. "A transaction that is divided into two or more parts"
-msgid "register entry: split transaction"
+#, fuzzy
+#| msgid "register entry: split transaction"
+msgctxt "register entry"
+msgid "split transaction"
 msgstr "felosztott tranzakció"
 
 #. "-"
-msgid "register entry: stock split"
+#, fuzzy
+#| msgid "register entry: stock split"
+msgctxt "register entry"
+msgid "stock split"
 msgstr "részvényfelosztás"
 
 #. "one form of register"
-msgid "register: auto-split ledger"
+#, fuzzy
+#| msgid "register: auto-split ledger"
+msgctxt "register"
+msgid "auto-split ledger"
 msgstr "automatikusan osztott főkönyv"
 
 #. "another form of register"
-msgid "register: basic ledger"
+#, fuzzy
+#| msgid "register: basic ledger"
+msgctxt "register"
+msgid "basic ledger"
 msgstr "alap főkönyv"
 
 #. "another form of register"
-msgid "register: general ledger"
+#, fuzzy
+#| msgid "register: general ledger"
+msgctxt "register"
+msgid "general ledger"
 msgstr "általános főkönyv"
 
 #. "another form of register"
-msgid "register: transaction journal"
+#, fuzzy
+#| msgid "register: transaction journal"
+msgctxt "register"
+msgid "transaction journal"
 msgstr "tranzakciós napló"
 
 #. "reload the current document"
-msgid "reload, to"
+#, fuzzy
+#| msgid "reload, to"
+msgctxt "verb"
+msgid "reload"
 msgstr "újra betölt"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
-msgid "report form: T Account Form"
+#, fuzzy
+#| msgid "report form: T Account Form"
+msgctxt "report form"
+msgid "T account form"
 msgstr "T számlaűrlap"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
-msgid "report form: Vertical Form"
+#, fuzzy
+#| msgid "report form: Vertical Form"
+msgctxt "report form"
+msgid "vertical form"
 msgstr "vízszintes elrendezés"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
@@ -712,7 +939,10 @@ msgid "Retained Earnings"
 msgstr "Eredménytartalék"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
-msgid "reverse transaction, to (Action in the register)"
+#, fuzzy
+#| msgid "reverse transaction, to (Action in the register)"
+msgctxt "action in the register, verb"
+msgid "reverse transaction"
 msgstr "fordított tranzakció létrehozása (művelet a számlaregiszterben)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
@@ -720,7 +950,10 @@ msgid "sales"
 msgstr "értékesítés"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
-msgid "save, to (to a file)"
+#, fuzzy
+#| msgid "save, to (to a file)"
+msgctxt "verb, to a file"
+msgid "save"
 msgstr "mentés (fájlba)"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
@@ -728,7 +961,10 @@ msgid "Scheduled Transaction"
 msgstr "Ütemezett tranzakció"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
-msgid "scrub, to"
+#, fuzzy
+#| msgid "scrub, to"
+msgctxt "verb"
+msgid "scrub"
 msgstr "ellenőrzés és javítás"
 
 #. "A document or certificate showing who owns shares"
@@ -740,7 +976,10 @@ msgid "Sell short"
 msgstr "Shortolás"
 
 #. "-"
-msgid "Share Balance (register)"
+#, fuzzy
+#| msgid "Share Balance (register)"
+msgctxt "register"
+msgid "share balance"
 msgstr "Részvényegyenleg (számlaregiszter)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
@@ -780,19 +1019,31 @@ msgid "tax info"
 msgstr "adóinformáció"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-msgid "tax type: income tax"
+#, fuzzy
+#| msgid "tax type: income tax"
+msgctxt "tax type"
+msgid "income tax"
 msgstr "jövedelemadó"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
-msgid "tax type: sales tax"
+#, fuzzy
+#| msgid "tax type: sales tax"
+msgctxt "tax type"
+msgid "sales tax"
 msgstr "forgalmi adó"
 
 #. "'Goods and Service Tax' is one form of sales tax."
-msgid "tax type: GST"
+#, fuzzy
+#| msgid "tax type: GST"
+msgctxt "tax type"
+msgid "GST"
 msgstr "áruk és szolgáltatások adója"
 
 #. "'Value Added Tax' is the other form of sales tax."
-msgid "tax type: VAT"
+#, fuzzy
+#| msgid "tax type: VAT"
+msgctxt "tax type"
+msgid "VAT"
 msgstr "áfa"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
@@ -816,23 +1067,38 @@ msgid "transaction"
 msgstr "tranzakció"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
-msgid "transaction state: cleared"
+#, fuzzy
+#| msgid "transaction state: cleared"
+msgctxt "transaction state"
+msgid "cleared"
 msgstr "kiegyenlített (elszámolt)"
 
 #. "-"
-msgid "transaction state: frozen"
+#, fuzzy
+#| msgid "transaction state: frozen"
+msgctxt "transaction state"
+msgid "frozen"
 msgstr "befagyasztott"
 
 #. "A transaction that was reconciled with the bank's statement."
-msgid "transaction state: reconciled"
+#, fuzzy
+#| msgid "transaction state: reconciled"
+msgctxt "transaction state"
+msgid "reconciled"
 msgstr "egyeztetve"
 
 #. "A transaction that is void i.e. not valid (anymore)."
-msgid "transaction state: voided"
+#, fuzzy
+#| msgid "transaction state: voided"
+msgctxt "transaction state"
+msgid "voided"
 msgstr "törölt (egy fordított tranzakcióval visszavont)"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
-msgid "transfer (noun)"
+#, fuzzy
+#| msgid "transfer (noun)"
+msgctxt "noun"
+msgid "transfer"
 msgstr "átutalás (főnév)"
 
 #. "The account where an amount is transferred to"
@@ -840,11 +1106,17 @@ msgid "transfer account"
 msgstr "célszámla"
 
 #. "To move money from one account to another. Will create a transaction."
-msgid "transfer, to (register toolbar)"
+#, fuzzy
+#| msgid "transfer, to (register toolbar)"
+msgctxt "register toolbar, verb"
+msgid "transfer"
 msgstr "átutal (számlaregiszter eszköztár)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
-msgid "trial balance (report)"
+#, fuzzy
+#| msgid "trial balance (report)"
+msgctxt "report"
+msgid "trial balance"
 msgstr "próba egyenleg (jelentés)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
@@ -860,7 +1132,10 @@ msgid "URL"
 msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
-msgid "value (in a split)"
+#, fuzzy
+#| msgid "value (in a split)"
+msgctxt "split property"
+msgid "value"
 msgstr "érték (egy felosztásban)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
@@ -872,5 +1147,11 @@ msgid "voucher"
 msgstr "költségbizonylat"
 
 #. "see debit"
-msgid "withdraw (in the reconcile dialog)"
+#, fuzzy
+#| msgid "withdraw (in the reconcile dialog)"
+msgctxt "reconcile dialog"
+msgid "withdraw"
 msgstr "terhelés (az egyeztetési párbeszédpanelen)"
+
+#~ msgid "Term"
+#~ msgstr "Kifejezés"

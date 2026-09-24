@@ -63,6 +63,8 @@
 using SplitsVec = std::vector<Split*>;
 using AccountVec = std::vector<Account*>;
 
+gchar* gnc_html_string_sanitize (const char* str);
+
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort);
 
@@ -153,6 +155,13 @@ static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
+
+
+gchar*
+gnc_html_string_sanitize (const char* str)
+{
+    return g_markup_escape_text (str, -1);
+}
 
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort)

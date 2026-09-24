@@ -31,6 +31,15 @@ extern "C" {
 
 char *set_platform_locale(void);
 
+#ifdef __MINGW32__
+/** Align the CRT's LC_CTYPE with the process's active code page.
+ *
+ * Call after anything that may have called setlocale (LC_ALL, ...),
+ * in particular gtk_init.
+ */
+void set_platform_ctype_to_acp(void);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

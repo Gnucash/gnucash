@@ -179,6 +179,9 @@ Gnucash::CoreApp::CoreApp (const char* app_name) : m_app_name {app_name}
     #if defined MAC_INTEGRATION || defined __MINGW32__
     sys_locale = set_platform_locale();
     #endif
+    #ifdef __MINGW32__
+    set_platform_ctype_to_acp();
+    #endif
     #if ! defined MAC_INTEGRATION && ! defined __MINGW32__/* setlocale already done */
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
     if (!sys_locale)

@@ -65,15 +65,15 @@
               (gnc:html-string-sanitize "🎃"))
 
   (test-equal "complex string"
-              "Smiley:\"🙂\" something"
+              "Smiley:&quot;🙂&quot; something"
               (gnc:html-string-sanitize "Smiley:\"🙂\" something"))
 
   (test-equal "sanitize <b>bold tags</b>"
               "&lt;b&gt;bold tags&lt;/b&gt;"
               (gnc:html-string-sanitize "<b>bold tags</b>"))
 
-  (test-equal "quotes are unchanged for html"
-              "\""
+  (test-equal "quotes are sanitized too"
+              "&quot;"
               (gnc:html-string-sanitize "\""))
 
   (test-equal "backslash is unchanged for html"

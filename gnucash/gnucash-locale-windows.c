@@ -24,6 +24,7 @@
 
 #include <Windows.h>
 #include <fcntl.h>
+#include <locale.h>
 #include <glib/gi18n.h>
 #include "gnucash-locale-platform.h"
 
@@ -149,4 +150,12 @@ set_platform_locale(void)
         return locale;
     }
     return g_strdup("C");
+}
+
+void
+set_platform_ctype_to_acp (void)
+{
+    // The C locale is always aligned with ACP. Use _wsetlocale because
+    // libintl's setlocale replacement refuses "C" when the ACP is UTF-8.
+    _wsetlocale (LC_CTYPE, L"C");
 }
