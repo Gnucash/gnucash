@@ -277,7 +277,7 @@ destroy_database (gchar* url)
     StrVec tblnames;
 
     gnc_uri_get_components (url, &scheme, &host, &portnum,
-                            &username, &password, &dbname);
+                            &username, &password, &dbname, NULL);
     if (g_strcmp0 (scheme, "postgres") == 0)
 #if HAVE_LIBDBI_R
         conn = dbi_conn_new_r (pgsql, dbi_instance);
