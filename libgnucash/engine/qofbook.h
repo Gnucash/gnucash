@@ -247,9 +247,6 @@ gboolean qof_book_shutting_down (const QofBook *book);
  */
 gboolean qof_book_session_not_saved (const QofBook *book);
 
-/* The following functions are not useful in scripting languages */
-#ifndef SWIG
-
 /** The qof_book_mark_saved() routine marks the book as having been
  *    saved (to a file, to a database). Used by backends to mark the
  *    notsaved flag as FALSE just after loading.  Can also be used
@@ -265,6 +262,9 @@ void qof_book_mark_session_dirty(QofBook *book);
 
 /** Retrieve the earliest modification time on the book. */
 time64 qof_book_get_session_dirty_time(const QofBook *book);
+
+/* The following functions are not useful in scripting languages */
+#ifndef SWIG
 
 /** Set the function to call when a book transitions from clean to
  *    dirty, or vice versa.
