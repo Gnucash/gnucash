@@ -67,13 +67,11 @@ struct GNCReconcileView
     GNCReconcileView    *sibling;
     GNCReconcileViewType view_type;
     gboolean             no_toggle;
-
-    GtkTreeRowReference *rowref;
 };
 
 typedef struct
 {
-    GtkTreeViewClass parent_class;
+    GNCQueryViewClass parent_class;
 
     void (*toggle_reconciled)  (GNCReconcileView *view, Split *split);
     void (*line_selected)      (GNCReconcileView *view, gpointer item);

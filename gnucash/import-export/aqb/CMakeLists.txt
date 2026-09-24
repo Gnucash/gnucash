@@ -66,9 +66,9 @@ if(WITH_AQBANKING)
 
   target_link_libraries(gncmod-aqbanking gnc-gnome gnc-gnome-utils
          gnc-generic-import gnc-register-core gnc-module
-         gnc-register-gnome gnc-ledger-core gnc-engine gwengui-gtk3
+         gnc-register-gnome gnc-ledger-core gnc-engine gwengui-gtk4
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
-         ${GWENHYWFAR_LDFLAGS} ${GWEN_GTK3_LDFLAGS}
+         ${GWENHYWFAR_LDFLAGS} ${GWEN_GTK4_LDFLAGS}
          ${AQB_LIBSTDCXX})
 
   target_compile_definitions(gncmod-aqbanking PRIVATE G_LOG_DOMAIN=\"gnc.import.aqbanking\")
@@ -77,7 +77,7 @@ if(WITH_AQBANKING)
   target_include_directories(gncmod-aqbanking PRIVATE
     ${AQBANKING_INCLUDE_DIRS}
     ${GWENHYWFAR_INCLUDE_DIRS}
-    ${GWEN_GTK3_INCLUDE_DIRS})
+    ${GWEN_GTK4_INCLUDE_DIRS})
 
   if (APPLE)
     set_target_properties (gncmod-aqbanking PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")

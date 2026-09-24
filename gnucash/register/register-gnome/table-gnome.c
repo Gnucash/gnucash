@@ -150,11 +150,10 @@ table_default_direct_update (BasicCell *bcell,
                              int *cursor_position,
                              int *start_selection,
                              int *end_selection,
-                             void *gui_data)
+                             const GncRegisterInput *input)
 {
-    GdkEventKey *event = gui_data;
 
-    if (event->keyval == GDK_KEY_Escape && bcell->changed)
+    if (input->key == GNC_REGISTER_KEY_ESCAPE && bcell->changed)
     {
         GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
         const char *value = gnc_table_get_model_entry (sheet->table, bcell->cell_name);
@@ -172,6 +171,7 @@ table_default_direct_update (BasicCell *bcell,
 void
 gnc_table_init_gui (Table *table)
 {
+    table->gui_handlers.refresh = gnc_table_refresh_gui;
     table->gui_handlers.redraw_help = table_ui_redraw_cb;
     table->gui_handlers.destroy = table_destroy_cb;
     table->gui_handlers.default_direct_update = table_default_direct_update;

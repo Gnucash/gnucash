@@ -44,9 +44,12 @@ typedef void (* GncOptionsDialogCallback)(GncOptionsDialog*, void* data);
 class GncOptionsDialog
 {
     GtkWidget  * m_window;
+    GtkEventController * m_key_controller{nullptr};
     GtkWidget  * m_notebook;
     GtkWidget  * m_page_list_view;
     GtkWidget  * m_page_list;
+    GtkStringList * m_page_list_model{nullptr};
+    GtkSingleSelection * m_page_list_selection{nullptr};
     GtkButton  * m_help_button;
     GtkButton  * m_cancel_button;
     GtkButton  * m_apply_button;
@@ -69,6 +72,7 @@ class GncOptionsDialog
 
     /* widget being destroyed */
     bool m_destroying{false};
+    bool m_closing{false};
 
 public:
     GncOptionsDialog(const char* title, GtkWindow* parent) :
@@ -82,6 +86,7 @@ public:
     GtkWidget* get_widget() const noexcept { return m_window; }
     GtkWidget* get_page_list() const noexcept { return m_page_list; }
     GtkWidget* get_page_list_view() const noexcept { return m_page_list_view; }
+    GtkStringList* get_page_list_model() const noexcept { return m_page_list_model; }
     GtkWidget* get_notebook() const noexcept { return m_notebook; }
     GncOptionDB* get_option_db() noexcept { return m_option_db; }
     inline void build_contents(GncOptionDB* odb){

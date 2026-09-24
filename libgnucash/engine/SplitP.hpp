@@ -223,6 +223,10 @@ void         DxaccSplitSetShareAmount (Split *split, double amount);
 #define SET_GAINS_A_VDIRTY(s) SET_GAINS_DIRTY(s,GAINS_STATUS_A_VDIRTY);
 #define SET_GAINS_VDIRTY(s)  SET_GAINS_DIRTY(s,GAINS_STATUS_VDIRTY);
 
+/* Invalidate transaction, account and lot collectors that read this split or
+ * one of its gains relationships. */
+void gnc_split_bump_scrub_generations (Split *split);
+
 /* Structure for accessing static functions for testing */
 typedef struct
 {

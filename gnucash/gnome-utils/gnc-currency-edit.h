@@ -34,7 +34,7 @@
  *  @author Dave Peticolas <dave@krondo.com>
  *  @author David Hampton <hampton@employees.org>
  *
- *  This widget is a GtkComboBox that is wrapped with support
+ *  This widget is a GTK4 composite selector that is wrapped with support
  *  functions for building/selecting from a list of ISO4217 currency
  *  names.  All data is maintained within the widget itself, which
  *  makes the name/item lookup functions somewhat complicated.  The
@@ -42,14 +42,9 @@
  *  attacked to the widget for lookup purposes, but that would be 100%
  *  redundant information.
  *
- *  When the GtkComboCellEntry widget supports completion, this Gnucash
- *  widget should be modified so that it is based upon that widget.
- *  That would give users the capability to select a currency by typing
- *  its ISO 4217 code (e.g. USD, GBP, etc).  Moving to that widget
- *  today, however, would cause more problems that its worth.  There is
- *  currently no way to get access to the embedded GtkEntry widget, and
- *  therefore no way to implement completion in gnucash or prevent the
- *  user from typing in random data.
+ *  Users can select a currency from the drop-down list or enter its
+ *  ISO 4217 mnemonic directly. Invalid text never becomes a currency
+ *  selection.
  */
 
 #ifndef GNC_CURRENCY_EDIT_H
@@ -65,7 +60,7 @@ extern "C" {
 /** @{ */
 
 #define GNC_TYPE_CURRENCY_EDIT	    (gnc_currency_edit_get_type())
-G_DECLARE_FINAL_TYPE (GNCCurrencyEdit, gnc_currency_edit, GNC, CURRENCY_EDIT, GtkComboBox)
+G_DECLARE_FINAL_TYPE (GNCCurrencyEdit, gnc_currency_edit, GNC, CURRENCY_EDIT, GtkBox)
 
 /** Create a new GNCCurrencyEdit widget which can be used to provide
  *  an easy way to enter ISO currency codes.
@@ -119,4 +114,3 @@ void gnc_currency_edit_clear_display (GNCCurrencyEdit *gce);
 
 /** @} */
 /** @} */
-

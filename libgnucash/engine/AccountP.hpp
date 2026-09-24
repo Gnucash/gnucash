@@ -44,6 +44,26 @@
 
 #include "Account.h"
 
+typedef struct GncScrubContext GncScrubContext;
+
+typedef struct GncAccountLotCursor GncAccountLotCursor;
+typedef enum
+{
+    GNC_ACCOUNT_LOT_CURSOR_NEXT,
+    GNC_ACCOUNT_LOT_CURSOR_DONE,
+    GNC_ACCOUNT_LOT_CURSOR_CANCELLED,
+    GNC_ACCOUNT_LOT_CURSOR_STALE,
+} GncAccountLotCursorState;
+
+/* Engine-private because a raw lot link may not outlive its scrub authority.
+ * The cursor retains @a context and validates the context, book, account and
+ * lot-list generation before returning each GUID. */
+GncAccountLotCursor *gnc_account_lot_cursor_begin (
+    const Account *account, GncScrubContext *context);
+GncAccountLotCursorState gnc_account_lot_cursor_next (
+    GncAccountLotCursor *cursor, GncGUID *guid);
+void gnc_account_lot_cursor_free (GncAccountLotCursor *cursor);
+
 #define GNC_ID_ROOT_ACCOUNT        "RootAccount"
 
 /** STRUCTS *********************************************************/
@@ -100,6 +120,10 @@ typedef struct AccountPrivate
      */
     Account *parent;    /* back-pointer to parent */
     std::vector<Account*> children;    /* list of sub-accounts */
+    guint64 children_generation; /* invalidates bounded tree cursors */
+    guint64 splits_generation;   /* invalidates bounded split collectors */
+    guint64 lots_generation;     /* invalidates bounded lot collectors */
+    guint64 scrub_generation;    /* invalidates amount/value collectors */
 
     /* protected data - should only be set by backends */
     gnc_numeric starting_balance;

@@ -117,9 +117,40 @@ extern "C"
 gboolean gnc_html_register_urltype( URLType type, const gchar* protocol ) NOEXCEPT;
 
 /**
+ * Returns whether @type identifies an action handled by GnuCash rather than
+ * a resource that a renderer may load directly. Report backends must route
+ * user-initiated links of this kind through gnc_html_show_url().
+ */
+gboolean gnc_html_urltype_is_internal (URLType type) NOEXCEPT;
+
+/**
+ * Parses @url and, if it identifies a GnuCash action, dispatches it through
+ * gnc_html_show_url(). Report renderers must use this function for every
+ * navigation that leaves the active temporary report document.
+ *
+ * @return %TRUE if @url was a handled GnuCash action; %FALSE if it is not an
+ *         allowed internal URL.
+ * @param new_window Open the target in a new GncMainWindow if %TRUE.
+ */
+gboolean gnc_html_handle_internal_url (GncHtml *html, const gchar *url,
+                                       gboolean new_window) NOEXCEPT;
+
+/**
  * Initializes the html subsystem
  */
 void gnc_html_initialize( void ) NOEXCEPT;
+
+/**
+ * Returns the private directory used exclusively for generated report
+ * documents. Renderers must not use the process-wide temporary directory.
+ */
+const gchar* gnc_html_get_report_document_root (void) NOEXCEPT;
+
+/**
+ * Creates an empty report document inside the private report directory.
+ * The caller owns the returned filename and must remove it after use.
+ */
+gchar* gnc_html_create_report_document (GError **error) NOEXCEPT;
 
 #ifdef __cplusplus
 }
@@ -129,7 +160,7 @@ void gnc_html_initialize( void ) NOEXCEPT;
 
 struct _GncHtmlClass
 {
-    GtkBinClass parent_class;
+    GObjectClass parent_class;
 
     /* Methods */
     void (*show_url)( GncHtml* html,
@@ -141,7 +172,7 @@ struct _GncHtmlClass
     void (*reload)( GncHtml* html, gboolean force_rebuild );
     void (*copy_to_clipboard)( GncHtml* html );
     gboolean (*export_to_file)( GncHtml* html, const gchar* file );
-    void (*print) (GncHtml* html, const gchar* jobname);
+    void (*print) (GncHtml* html, const gchar* jobname, gboolean export_pdf);
     void (*cancel)( GncHtml* html );
     URLType (*parse_url)( GncHtml* html, const gchar* url,
                           gchar** url_location, gchar** url_label );
@@ -150,7 +181,7 @@ struct _GncHtmlClass
 
 struct _GncHtml
 {
-    GtkBin parent_instance;
+    GObject parent_instance;
 
     /*< private >*/
     GncHtmlPrivate* priv;
@@ -162,7 +193,7 @@ typedef void (* GncHTMLFlyoverCB)(GncHtml* html, const gchar* url,
 typedef void (* GncHTMLLoadCB)(GncHtml* html, URLType type,
                                const gchar* location, const gchar* label,
                                gpointer data);
-typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
+typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEvent* event,
                                  gpointer data);
 
 #ifdef __cplusplus
@@ -217,12 +248,14 @@ void gnc_html_copy_to_clipboard( GncHtml* html ) NOEXCEPT;
 gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename ) NOEXCEPT;
 
 /**
- * Prints the report.
+ * Prints the report or writes it to a PDF file.
  *
  * @param html GncHtml object
+ * @param jobname A job name for the print dialog or local PDF output path.
+ * @param export_pdf If %TRUE, writes a PDF at @jobname; otherwise opens the
+ *                   native print dialog.
  */
-void gnc_html_print (GncHtml* html, const char* jobname) NOEXCEPT;
-
+void gnc_html_print (GncHtml* html, const char* jobname, gboolean export_pdf) NOEXCEPT;
 /**
  * Cancels the current operation
  *

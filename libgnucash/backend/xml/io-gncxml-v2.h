@@ -36,6 +36,7 @@
 #include "gnc-engine.h"
 
 #ifdef __cplusplus
+#include "qof-backend.hpp"
 #include "gnc-backend-xml.h"
 #include "sixtp.h"
 #include <vector>
@@ -84,6 +85,25 @@ typedef struct
 /** read in an account group from a file */
 gboolean qof_session_load_from_xml_file_v2 (GncXmlBackend*, QofBook*,
                                             QofBookFileType);
+
+typedef struct GncXmlV2LoadPlan GncXmlV2LoadPlan;
+typedef enum
+{
+    GNC_XML_V2_LOAD_ACTIVE,
+    GNC_XML_V2_LOAD_FINISHED,
+    GNC_XML_V2_LOAD_CANCELLED,
+    GNC_XML_V2_LOAD_ERROR
+} GncXmlV2LoadStatus;
+
+/* The plan owns the parser, input stream, and book-scoped scrub suspension.
+ * Every step reads at most one chunk and calls exactly one sixtp push API. */
+GncXmlV2LoadPlan *gnc_xml_v2_load_plan_new (GncXmlBackend*, QofBook*,
+                                            QofBookFileType);
+GncXmlV2LoadStatus gnc_xml_v2_load_plan_step (GncXmlV2LoadPlan*,
+                                              QofBackendLoadAsyncGuard,
+                                              gpointer);
+void gnc_xml_v2_load_plan_cancel (GncXmlV2LoadPlan*);
+void gnc_xml_v2_load_plan_free (GncXmlV2LoadPlan*);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* fh);

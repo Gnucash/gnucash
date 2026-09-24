@@ -39,7 +39,7 @@ GType    gnc_header_get_type (void);
 
 typedef struct
 {
-    GtkLayout parent;
+    GtkWidget parent;
 
     GnucashSheet *sheet;
     SheetBlockStyle *style;
@@ -57,14 +57,13 @@ typedef struct
     int width;
 
     cairo_surface_t *surface;
-    GdkCursor *normal_cursor;
-    GdkCursor *resize_cursor;
+    gulong hadjustment_handler;
 } GncHeader;
 
 
 typedef struct
 {
-    GtkLayoutClass parent_class;
+    GtkWidgetClass parent_class;
 } GncHeaderClass;
 
 

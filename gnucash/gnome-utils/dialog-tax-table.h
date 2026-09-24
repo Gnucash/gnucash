@@ -28,8 +28,15 @@ typedef struct _taxtable_window TaxTableWindow;
 
 #include "gncTaxTable.h"
 
-/* Create a new tax-table by name */
-GncTaxTable * gnc_ui_tax_table_new_from_name (GtkWindow *parent, QofBook *book, const char *name);
+typedef void (*GncTaxTableCreatedCB) (GncTaxTable *table, gboolean accepted,
+                                      gpointer user_data);
+
+/** Create a tax table without entering a nested event loop. The callback is
+ * invoked exactly once after creation or cancellation. */
+void gnc_ui_tax_table_new_from_name_async (GtkWindow *parent, QofBook *book,
+                                           const char *name,
+                                           GncTaxTableCreatedCB callback,
+                                           gpointer user_data);
 
 /* Create a tax-table window */
 TaxTableWindow * gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book);

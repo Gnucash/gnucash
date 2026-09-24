@@ -17,16 +17,19 @@
         <item>
           <attribute name="label" translatable="yes">Get _Balance</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABGetBalanceAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">The list of Scheduled Transactions</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Get _Transactions…</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABGetTransAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">Get the transactions online through Online Banking</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Get Standing _Orders…</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABGetStandingOrdersAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">Get standing orders online through Online Banking</attribute>
         </item>
       </section>
@@ -35,21 +38,25 @@
 <!-- Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area -->
           <attribute name="label" translatable="yes">Issue _SEPA Transaction…</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaTransAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">Issue a new international European (SEPA) transaction online through Online Banking</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Issue SEPA I_nternal Transaction…</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaIntTransAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">Issue a new internal European (SEPA) transaction online through Online Banking</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">_Internal Transaction…</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueIntTransAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">Issue a new bank-internal transaction online through Online Banking</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Issue SEPA Direct _Debit…</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaDirectDebitAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
           <attribute name="tooltip" translatable="yes">Issue a new international European (SEPA) direct debit note online through Online Banking</attribute>
         </item>
       </section>

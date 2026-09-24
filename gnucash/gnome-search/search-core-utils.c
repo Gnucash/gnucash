@@ -26,117 +26,113 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <glib/gi18n.h>
 
 #include "search-core-utils.h"
+#include "gnc-gtk-utils.h"
 
+#define SEARCH_VALUE_DATA "gnc-search-value"
+
+static guint
+search_drop_down_value_for_item (GObject *item)
+{
+    return GPOINTER_TO_UINT (g_object_get_data (item, SEARCH_VALUE_DATA));
+}
 
 static void
-search_combo_changed (GtkWidget *widget, gint *value)
+search_drop_down_selection_changed (GtkDropDown *drop_down, GParamSpec *pspec,
+                                    gpointer user_data)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
+    GObject *item;
+    guint *value = user_data;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX(widget));
-    g_return_if_fail(value);
-
-    model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-    if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget), &iter))
-        return;
-
-    gtk_tree_model_get(model, &iter,
-                       GNC_COMBO_SEARCH_COL_VALUE, value,
-                       -1);
+    g_return_if_fail (value);
+    item = gtk_drop_down_get_selected_item (drop_down);
+    if (item)
+    {
+        *value = search_drop_down_value_for_item (item);
+    }
+    (void)pspec;
 }
 
 GtkWidget *
-gnc_combo_box_new_search (void)
+gnc_search_drop_down_new (void)
 {
-    GtkWidget *combo;
-    GtkListStore *store;
-    GtkCellRenderer *renderer;
+    GtkStringList *model = gtk_string_list_new (NULL);
+    GtkDropDown *drop_down = GTK_DROP_DOWN (
+        gnc_gtk_drop_down_new (G_LIST_MODEL (model), NULL));
 
-    store = gtk_list_store_new(NUM_GNC_COMBO_SEARCH_COLS, G_TYPE_STRING, G_TYPE_UINT);
-    combo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
-    g_object_unref(store);
-
-    renderer = gtk_cell_renderer_text_new ();
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                    "text", GNC_COMBO_SEARCH_COL_TEXT,
-                                    NULL);
-    return combo;
+    return GTK_WIDGET (drop_down);
 }
 
 void
-gnc_combo_box_search_add (GtkComboBox *combo, const gchar *text, guint value)
+gnc_search_drop_down_add (GtkDropDown *drop_down, const gchar *text,
+                          guint value)
 {
-    GtkListStore *store;
-    GtkTreeIter iter;
+    GtkStringList *model;
+    GObject *item;
+    guint position;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX(combo));
-    g_return_if_fail(text);
+    g_return_if_fail (GTK_IS_DROP_DOWN (drop_down));
+    g_return_if_fail (text);
 
-    store = GTK_LIST_STORE(gtk_combo_box_get_model(combo));
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       GNC_COMBO_SEARCH_COL_TEXT, text,
-                       GNC_COMBO_SEARCH_COL_VALUE, value,
-                       -1);
+    model = GTK_STRING_LIST (gtk_drop_down_get_model (drop_down));
+    g_return_if_fail (GTK_IS_STRING_LIST (model));
+    gtk_string_list_append (model, text);
+    position = g_list_model_get_n_items (G_LIST_MODEL (model)) - 1;
+    item = g_list_model_get_item (G_LIST_MODEL (model), position);
+    g_object_set_data (item, SEARCH_VALUE_DATA, GUINT_TO_POINTER (value));
+    g_object_unref (item);
 }
 
 guint
-gnc_combo_box_search_get_active (GtkComboBox *combo)
+gnc_search_drop_down_get_active (GtkDropDown *drop_down)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    guint value;
+    GObject *item;
+    guint value = 0;
 
-    g_return_val_if_fail(GTK_IS_COMBO_BOX(combo), 0);
+    g_return_val_if_fail (GTK_IS_DROP_DOWN (drop_down), 0);
 
-    model = gtk_combo_box_get_model(combo);
-    if (!gtk_combo_box_get_active_iter(combo, &iter))
-        return 0;
-
-    gtk_tree_model_get(model, &iter,
-                       GNC_COMBO_SEARCH_COL_VALUE, &value,
-                       -1);
+    item = gtk_drop_down_get_selected_item (drop_down);
+    if (item)
+    {
+        value = search_drop_down_value_for_item (item);
+    }
     return value;
 }
 
 void
-gnc_combo_box_search_set_active (GtkComboBox *combo, guint value)
+gnc_search_drop_down_set_active (GtkDropDown *drop_down, guint value)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    guint row_value = 0;
+    GListModel *model;
+    guint count;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX(combo));
+    g_return_if_fail (GTK_IS_DROP_DOWN (drop_down));
 
-    model = gtk_combo_box_get_model(combo);
-    if (!gtk_tree_model_get_iter_first(model, &iter))
-        return;
-
-    do
+    model = gtk_drop_down_get_model (drop_down);
+    count = g_list_model_get_n_items (model);
+    for (guint position = 0; position < count; position++)
     {
-        gtk_tree_model_get(model, &iter,
-                           GNC_COMBO_SEARCH_COL_VALUE, &row_value,
-                           -1);
-        if (value == row_value)
+        GObject *item = g_list_model_get_item (model, position);
+        gboolean matches = search_drop_down_value_for_item (item) == value;
+
+        g_object_unref (item);
+        if (matches)
         {
-            gtk_combo_box_set_active_iter(combo, &iter);
+            gtk_drop_down_set_selected (drop_down, position);
             return;
         }
     }
-    while (gtk_tree_model_iter_next(model, &iter));
 
-    /* No match found. Select the first item. */
-    gtk_combo_box_set_active(combo, 0);
+    gtk_drop_down_set_selected (drop_down,
+                                count ? 0 : GTK_INVALID_LIST_POSITION);
 }
 
 void
-gnc_combo_box_search_changed(GtkComboBox *combo, guint *value)
+gnc_search_drop_down_changed (GtkDropDown *drop_down, guint *value)
 {
-    g_signal_connect (combo, "changed",
-                      G_CALLBACK (search_combo_changed), value);
+    g_return_if_fail (GTK_IS_DROP_DOWN (drop_down));
+    g_return_if_fail (value);
+
+    g_signal_connect (drop_down, "notify::selected",
+                      G_CALLBACK (search_drop_down_selection_changed), value);
 }

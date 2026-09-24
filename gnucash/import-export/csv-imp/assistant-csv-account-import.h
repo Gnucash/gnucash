@@ -41,9 +41,9 @@ typedef struct
 {
     GtkWidget    *assistant;
 
-    GtkWidget    *file_chooser;
-    GtkWidget    *tree_view;
-    GtkListStore *store;
+    GtkWidget    *file_button;
+    GtkColumnView *preview_view;
+    GListStore    *store;
     GString      *regexp;
     GtkWidget    *header_row_spin;
     GtkWidget    *finish_label;
@@ -62,6 +62,10 @@ typedef struct
     int           num_updates;
     gboolean      new_book; /**< Are we importing into a new book?; if yes, call book options */
 } CsvImportInfo;
+
+GObject *csv_import_row_new (void);
+const gchar *csv_import_row_get (GObject *row, guint column);
+void csv_import_row_set (GObject *row, guint column, const gchar *value);
 
 
 /** The gnc_file_csv_account_import() will let the user import

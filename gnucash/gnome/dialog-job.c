@@ -29,6 +29,7 @@
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "qof.h"
@@ -54,6 +55,8 @@ void gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_job_name_changed_cb (GtkWidget *widget, gpointer data);
+
+static void gnc_job_window_request_close (JobWindow *jw);
 
 typedef enum
 {
@@ -105,12 +108,12 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
 
     qof_event_gen(QOF_INSTANCE(job), QOF_EVENT_ADD, NULL);
 
-    gncJobSetID (job, gtk_entry_get_text (GTK_ENTRY (jw->id_entry)));
-    gncJobSetName (job, gtk_entry_get_text (GTK_ENTRY (jw->name_entry)));
-    gncJobSetReference (job, gtk_entry_get_text (GTK_ENTRY (jw->desc_entry)));
+    gncJobSetID (job, gnc_entry_get_text (GTK_ENTRY (jw->id_entry)));
+    gncJobSetName (job, gnc_entry_get_text (GTK_ENTRY (jw->name_entry)));
+    gncJobSetReference (job, gnc_entry_get_text (GTK_ENTRY (jw->desc_entry)));
     gncJobSetRate (job, gnc_amount_edit_get_amount
                         (GNC_AMOUNT_EDIT (jw->rate_entry)));
-    gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
+    gncJobSetActive (job, gtk_check_button_get_active (GTK_CHECK_BUTTON
                      (jw->active_check)));
     {
         GncOwner * old = gncJobGetOwner (job);
@@ -130,7 +133,7 @@ gnc_job_verify_ok (JobWindow *jw)
     gchar *string;
 
     /* Check for valid name */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (jw->name_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         const char *message = _("The Job must be given a name.");
@@ -157,11 +160,11 @@ gnc_job_verify_ok (JobWindow *jw)
     }
 
     /* Set a valid id if one was not created */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (jw->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         string = gncJobNextID(jw->book);
-        gtk_entry_set_text (GTK_ENTRY (jw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (jw->id_entry), string);
         g_free(string);
     }
 
@@ -180,28 +183,35 @@ gnc_job_verify_ok (JobWindow *jw)
     return TRUE;
 }
 
-void
-gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
+static void
+gnc_job_window_request_close (JobWindow *jw)
 {
-    JobWindow *jw = data;
-
-    /* Make sure this is ok */
-    if (!gnc_job_verify_ok (jw))
+    if (!jw)
         return;
 
-    /* Now save off the job so we can return it */
-    jw->created_job = jw_get_job (jw);
-    jw->job_guid = *guid_null ();
-
-    gnc_close_gui_component (jw->component_id);
+    if (jw->component_id != NO_COMPONENT)
+        gnc_close_gui_component (jw->component_id);
+    else if (jw->dialog)
+        gtk_window_destroy (GTK_WINDOW (jw->dialog));
 }
 
 void
-gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data)
+gnc_job_window_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     JobWindow *jw = data;
 
-    gnc_close_gui_component (jw->component_id);
+    if (!jw || !gnc_job_verify_ok (jw))
+        return;
+
+    jw->created_job = jw_get_job (jw);
+    jw->job_guid = *guid_null ();
+    gnc_job_window_request_close (jw);
+}
+
+void
+gnc_job_window_cancel_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
+{
+    gnc_job_window_request_close (data);
 }
 
 void
@@ -227,9 +237,14 @@ gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data)
         jw->job_guid = *guid_null ();
     }
 
-    gnc_unregister_gui_component (jw->component_id);
+    if (jw->component_id != NO_COMPONENT)
+    {
+        gnc_unregister_gui_component (jw->component_id);
+        jw->component_id = NO_COMPONENT;
+    }
     gnc_resume_gui_refresh ();
 
+    jw->dialog = NULL;
     g_free (jw);
 }
 
@@ -246,14 +261,38 @@ gnc_job_name_changed_cb (GtkWidget *widget, gpointer data)
                                 jw->name_entry, jw->id_entry);
 }
 
+static gboolean
+gnc_job_window_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    JobWindow *jw = user_data;
+
+    if (!jw || jw->dialog != GTK_WIDGET (window))
+        return FALSE;
+
+    gnc_job_window_request_close (jw);
+    return TRUE;
+}
+
+static gboolean
+gnc_job_window_key_pressed_cb (G_GNUC_UNUSED GtkEventControllerKey *key,
+                                guint keyval, G_GNUC_UNUSED guint keycode,
+                                G_GNUC_UNUSED GdkModifierType state,
+                                gpointer user_data)
+{
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+
+    gnc_job_window_request_close (user_data);
+    return TRUE;
+}
+
 static void
 gnc_job_window_close_handler (gpointer user_data)
 {
     JobWindow *jw = user_data;
 
-    gtk_widget_destroy (jw->dialog);
-    /* jw is already freed at this point
-    jw->dialog = NULL; */
+    if (jw && jw->dialog)
+        gtk_window_destroy (GTK_WINDOW (jw->dialog));
 }
 
 static void
@@ -296,7 +335,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
 {
     JobWindow *jw;
     GtkBuilder *builder;
-    GtkWidget *owner_box, *owner_label, *edit, *hbox;
+    GtkWidget *owner_box, *owner_label, *edit, *hbox, *ok_button;
 
     /*
      * Find an existing window for this job.  If found, bring it to
@@ -321,6 +360,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
      * No existing job window found.  Build a new one.
      */
     jw = g_new0 (JobWindow, 1);
+    jw->component_id = NO_COMPONENT;
     jw->book = bookp;
     gncOwnerCopy (owner, &(jw->owner)); /* save it off now, we know it's valid */
 
@@ -349,13 +389,23 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
 
     jw->rate_entry = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_entry"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
-    /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
+    /* Setup Builder callbacks and GTK4 window lifecycle. */
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
+    g_signal_connect (jw->dialog, "close-request",
+                      G_CALLBACK (gnc_job_window_close_request_cb), jw);
+
+    GtkEventController *key_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (jw->dialog, key_controller);
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_job_window_key_pressed_cb), jw);
+
+    ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
+    gtk_window_set_default_widget (GTK_WINDOW (jw->dialog), ok_button);
 
 
     /* Set initial entries */
@@ -367,12 +417,12 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
         jw->cust_edit = gnc_owner_edit_create (owner_label, owner_box,
                                                bookp, owner);
 
-        gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
-        gtk_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
-        gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
         gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (jw->rate_entry),
                                       gncJobGetRate (job));
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (jw->active_check),
                                       gncJobGetActive (job));
 
         jw->component_id = gnc_register_gui_component (DIALOG_EDIT_JOB_CM_CLASS,
@@ -406,12 +456,14 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
                            jw);
     }
 
+    gnc_gui_component_set_session (jw->component_id, gnc_get_current_session ());
+
     gnc_job_name_changed_cb (NULL, jw);
     gnc_gui_component_watch_entity_type (jw->component_id,
                                          GNC_JOB_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (jw->dialog);
+    gtk_window_present (GTK_WINDOW (jw->dialog));
 
     // The job name should have keyboard focus
     gtk_widget_grab_focus(jw->name_entry);

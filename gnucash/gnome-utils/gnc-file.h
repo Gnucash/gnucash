@@ -60,25 +60,21 @@
  *    filename, locking out other users.  This new session remains
  *    open for further editing.
  *
- * The gnc_file_query_save() routine will display a popup dialog asking
- *    the user if they wish to save their current work. If they answer
- *    "yes", their work will be saved (using the gncFileSave function),
- *    otherwise no action will be performed. If there is no currently
- *    locked session, a popup will query the user for a filename
- *    (using the gnc_file_save_as() routine). The routine will return
- *    TRUE if the user hits "Yes" or "No" and FALSE if the user
- *    hits "Cancel". If nothing needed to be saved, the routine
- *    will return TRUE.
+ * The gnc_file_query_save_async() routine displays a native asynchronous
+ *    dialog asking whether current work should be saved. Its continuation is
+ *    called only after saving, discarding, or cancelling has completed. If
+ *    saving needs a new filename, the continuation waits for that native
+ *    chooser and its resulting save operation as well.
  *
  * The gnc_file_new() routine will check for an existing edit session.
  *    If one exists, it will ask the user if they want to save it,
- *    (using the gnc_file_query_save_as() dialogue).  Then the current
+ *    (using the gnc_file_query_save_async() dialogue). Then the current
  *    session will be destroyed, file locks will be removed, and
  *    account group structures will be set up for a new session.
  *
  * The gnc_file_open() routine check for an existing edit session.
  *    If one exists, it will ask the user if they want to save it.
- *    (using the gnc_file_query_save() dialogue).  Next, the user will
+ *    (using the gnc_file_query_save_async() dialogue). Next, the user will
  *    be prompted with a GUI standard file-selection dialogue to
  *    to pick a new file.  If no file is picked, this routine returns.
  *    If a new file was picked, then the current session will be
@@ -131,6 +127,85 @@ typedef enum
     GNC_FILE_DIALOG_EXPORT
 } GNCFileDialogType;
 
+#define GNC_TYPE_FILE_DIALOG_REQUEST (gnc_file_dialog_request_get_type ())
+G_DECLARE_FINAL_TYPE (GncFileDialogRequest, gnc_file_dialog_request, GNC,
+                      FILE_DIALOG_REQUEST, GObject)
+
+/**
+ * gnc_file_dialog_request_new:
+ * @parent: (nullable): transient parent for the native chooser
+ * @title: (nullable): chooser title; the dialog type supplies the default
+ * @filters: (transfer full) (nullable): #GtkFileFilter list to offer
+ * @starting_dir: (nullable): local directory to show initially
+ * @type: the requested GnuCash file operation
+ *
+ * Creates an immutable description of a GTK4 file chooser.  The request
+ * consumes both the list and its filter references.  A caller may unref the
+ * request after starting an operation; it stays alive through its completion
+ * callback.
+ *
+ * The operation must match @type: use open or open_multiple for OPEN and
+ * IMPORT, and save for SAVE and EXPORT.
+ */
+GncFileDialogRequest *gnc_file_dialog_request_new (GtkWindow *parent,
+                                                    const gchar *title,
+                                                    GList *filters,
+                                                    const gchar *starting_dir,
+                                                    GNCFileDialogType type);
+
+/**
+ * gnc_file_dialog_request_new_for_folder:
+ * @parent: (nullable): transient parent for the native chooser
+ * @title: (nullable): chooser title; the dialog type supplies the default
+ * @filters: (transfer full) (nullable): #GtkFileFilter list to offer
+ * @initial_folder: (transfer none) (nullable): local or URI-based folder
+ * @type: the requested GnuCash file operation
+ *
+ * Creates the same immutable request as gnc_file_dialog_request_new(), but
+ * preserves a #GFile start folder for callers that need URI semantics.
+ */
+GncFileDialogRequest *gnc_file_dialog_request_new_for_folder (
+    GtkWindow *parent, const gchar *title, GList *filters,
+    GFile *initial_folder, GNCFileDialogType type);
+
+/**
+ * gnc_file_dialog_request_new_for_file:
+ * @parent: (nullable): transient parent for the native chooser
+ * @title: (nullable): chooser title; the dialog type supplies the default
+ * @filters: (transfer full) (nullable): #GtkFileFilter list to offer
+ * @initial_file: (transfer none) (nullable): initial file name for a save request
+ * @type: the requested GnuCash file operation
+ *
+ * Creates the same immutable request as gnc_file_dialog_request_new(), but
+ * preserves a #GFile initial name for native GTK4 save dialogs.
+ */
+GncFileDialogRequest *gnc_file_dialog_request_new_for_file (
+    GtkWindow *parent, const gchar *title, GList *filters,
+    GFile *initial_file, GNCFileDialogType type);
+
+void gnc_file_dialog_request_open_async (GncFileDialogRequest *request,
+                                         GCancellable *cancellable,
+                                         GAsyncReadyCallback callback,
+                                         gpointer user_data);
+
+void gnc_file_dialog_request_save_async (GncFileDialogRequest *request,
+                                         GCancellable *cancellable,
+                                         GAsyncReadyCallback callback,
+                                         gpointer user_data);
+
+void gnc_file_dialog_request_open_multiple_async (GncFileDialogRequest *request,
+                                                  GCancellable *cancellable,
+                                                  GAsyncReadyCallback callback,
+                                                  gpointer user_data);
+
+GFile *gnc_file_dialog_request_finish (GncFileDialogRequest *request,
+                                       GAsyncResult *result,
+                                       GError **error);
+
+GListModel *gnc_file_dialog_request_finish_multiple (GncFileDialogRequest *request,
+                                                      GAsyncResult *result,
+                                                      GError **error);
+
 void gnc_file_new (GtkWindow *parent);
 gboolean gnc_file_open (GtkWindow *parent);
 void gnc_file_export(GtkWindow *parent);
@@ -140,35 +215,44 @@ void gnc_file_do_export(GtkWindow *parent, const char* filename);
 void gnc_file_do_save_as(GtkWindow *parent, const char* filename);
 void gnc_file_revert (GtkWindow *parent);
 
-GList* gnc_file_chooser_get_datafile_filters (void);
+GList *gnc_file_dialog_get_datafile_filters (void);
 
-void gnc_file_chooser_add_filters (GtkFileChooser* file_box, GList *filters);
 
-/** Tell the user about errors in the backends
 
-*/
-gboolean show_session_error (GtkWindow *parent,
-                             QofBackendError io_error,
-                             const char *newfile,
-                             GNCFileDialogType type);
+typedef enum
+{
+    GNC_FILE_OPEN_REJECTED,
+    GNC_FILE_OPEN_STARTED,
+    GNC_FILE_OPEN_QUEUED
+} GncFileOpenResult;
 
-char * gnc_file_dialog (GtkWindow *parent,
-                        const char * title,
-                        GList * filters,
-                        const char * starting_dir,
-                        GNCFileDialogType type);
+GncFileOpenResult gnc_file_open_file (GtkWindow *parent,
+                                      const char *filename,
+                                      gboolean open_readonly);
 
-GSList * gnc_file_dialog_multi (GtkWindow *parent,
-                                const char * title,
-                                GList * filters,
-                                const char * starting_dir,
-                                GNCFileDialogType type);
+/**
+ * GncFileQuerySaveCallback:
+ * @parent: (nullable): window that owned the decision
+ * @can_continue: whether saving completed or discarding was explicitly chosen
+ * @user_data: caller supplied continuation data
+ *
+ * Receives the asynchronous result of the save-before-close decision. The
+ * callback owns no reference to @parent; it can be %NULL if its window was
+ * destroyed while a native dialog was active.
+ */
+typedef void (*GncFileQuerySaveCallback) (GtkWindow *parent,
+                                          gboolean can_continue,
+                                          gpointer user_data);
+/**
+ * Save the current session and invoke @completed once the save or a possible
+ * native Save As flow has either completed or been cancelled.
+ */
+void gnc_file_save_async (GtkWindow *parent, GncFileQuerySaveCallback completed,
+                          gpointer user_data);
 
-gboolean gnc_file_open_file (GtkWindow *parent,
-                             const char *filename,
-                             gboolean open_readonly);
-
-gboolean gnc_file_query_save (GtkWindow *parent, gboolean can_cancel);
+void gnc_file_query_save_async (GtkWindow *parent, gboolean can_cancel,
+                                GncFileQuerySaveCallback completed,
+                                gpointer user_data);
 
 void gnc_file_quit (void);
 

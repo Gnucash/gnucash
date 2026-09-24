@@ -44,7 +44,7 @@
 extern "C" {
 #endif
 
-#include <glib.h>
+#include <gio/gio.h>
 
 #include "basiccell.h"
 #include "QuickFill.h"
@@ -52,7 +52,7 @@ extern "C" {
 typedef struct
 {
     BasicCell cell;
-    gpointer shared_store;
+    GListModel *shared_model;
 } ComboCell;
 
 
@@ -106,7 +106,8 @@ void         gnc_combo_cell_set_autosize (ComboCell* cell, gboolean autosize);
  */
 void gnc_combo_cell_use_quickfill_cache (ComboCell* cell,
                                          QuickFill* shared_qf);
-void gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data);
+/* The cell keeps a reference while its legacy view bridge is alive. */
+void gnc_combo_cell_use_model_cache (ComboCell *cell, GListModel *model);
 
 #ifdef __cplusplus
 }

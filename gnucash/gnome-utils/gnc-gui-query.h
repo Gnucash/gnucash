@@ -23,6 +23,8 @@
 #ifndef QUERY_USER_H
 #define QUERY_USER_H
 
+#include <gtk/gtk.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

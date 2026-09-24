@@ -120,9 +120,9 @@
  *                       Set the end to -1 to make the selection
  *                       go to the end of the text.
  *
- * The direct_update() callback is called to pass raw gui data
- *    to the cell. The exact format of the data is determined
- *    by the gui. The callback should return TRUE if the event
+ * The direct_update() callback receives a GTK-neutral register input
+ *    value. The GUI translates native events before calling the table.
+ *    The callback should return TRUE if the input
  *    was handled, i.e., there is no need to call the modify
  *    update. If the value needs to be changed, the cell should
  *    go ahead and change it.
@@ -161,11 +161,10 @@
 extern "C" {
 #endif
 
-#include <gdk/gdk.h>
 #include <glib.h>
-#include <gtk/gtk.h>
 
 #include "gnc-ui-util.h"
+#include "gnc-register-input.h"
 
 typedef struct basic_cell BasicCell;
 
@@ -192,7 +191,7 @@ typedef gboolean (*CellDirectUpdateFunc) (BasicCell *cell,
         int *cursor_position,
         int *start_selection,
         int *end_selection,
-        gpointer gui_data);
+        const GncRegisterInput *input);
 
 typedef void (*CellLeaveFunc) (BasicCell *cell);
 

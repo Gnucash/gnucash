@@ -30,7 +30,7 @@
 #include <config.h>
 
 #include <string.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 
 #include "quickfillcell.h"
 #include "quickfillcell-gnome.h"
@@ -44,20 +44,19 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
                                   int *cursor_position,
                                   int *start_selection,
                                   int *end_selection,
-                                  void *gui_data)
+                                  const GncRegisterInput *input)
 {
     QuickFillCell *cell = (QuickFillCell *) bcell;
-    GdkEventKey *event = gui_data;
     const char *match_str;
     QuickFill *match;
     int prefix_len;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (!input->pressed)
         return FALSE;
 
-    switch (event->keyval)
+    switch (input->key)
     {
-    case GDK_KEY_Escape:
+    case GNC_REGISTER_KEY_ESCAPE:
         if (bcell->changed)
         {
             GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
@@ -71,13 +70,13 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
             return TRUE;
         }
         return FALSE;
-    case GDK_KEY_slash:
-        if (!(event->state & GDK_MOD1_MASK))
+    case GNC_REGISTER_KEY_SLASH:
+        if (!(input->modifiers & GNC_REGISTER_MODIFIER_ALT))
             return FALSE;
         break;
-    case GDK_KEY_Tab:
-    case GDK_KEY_ISO_Left_Tab:
-        if (!(event->state & GDK_CONTROL_MASK))
+    case GNC_REGISTER_KEY_TAB:
+    case GNC_REGISTER_KEY_LEFT_TAB:
+        if (!(input->modifiers & GNC_REGISTER_MODIFIER_CONTROL))
             return FALSE;
         break;
     default:

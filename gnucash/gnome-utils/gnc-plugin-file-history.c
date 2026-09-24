@@ -663,40 +663,55 @@ gnc_plugin_file_history_remove_from_window (GncPlugin *plugin,
  *  that had a menu selected.  That's not really important for this
  *  function and we're about to close all the windows anyway.
  */
+typedef struct
+{
+    GWeakRef window;
+    gchar *filename;
+} GncFileHistoryOpenRequest;
+
+static void
+gnc_plugin_file_history_open_finished (GncMainWindow *window, gboolean accepted,
+                                       gpointer user_data)
+{
+    GncFileHistoryOpenRequest *request = user_data;
+
+    if (accepted && window)
+    {
+        gnc_window_set_progressbar_window (GNC_WINDOW (window));
+        gnc_file_open_file (GTK_WINDOW (window), request->filename, FALSE);
+        gnc_window_set_progressbar_window (NULL);
+    }
+    g_weak_ref_clear (&request->window);
+    g_free (request->filename);
+    g_free (request);
+}
+
 static void
 gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
                                        GVariant      *parameter,
                                        gpointer       user_data)
-
 {
     GncMainWindowActionData *data = user_data;
-    gchar *filename, *pref, *index;
+    GncFileHistoryOpenRequest *request;
+    gchar *pref, *index;
     const gchar *action_name;
 
+    (void)parameter;
     g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_finish_pending(data->window))
-      return;
-    // action name will be of the form 'RecentFile1Action'
-    action_name =  g_action_get_name (G_ACTION(simple));
-
+    action_name = g_action_get_name (G_ACTION(simple));
     index = g_utf8_substring (action_name, 10, 11);
-
     pref = gnc_history_index_to_pref_name (atoi (index));
-    filename = gnc_prefs_get_string (GNC_PREFS_GROUP_HISTORY, pref);
-
-    PINFO("File to open is '%s' on action '%s'", filename, action_name);
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    /* also opens new account page */
-    gnc_file_open_file (GTK_WINDOW (data->window),
-                        filename, /*open_readonly*/ FALSE);
-    gnc_window_set_progressbar_window (NULL);
+    request = g_new0 (GncFileHistoryOpenRequest, 1);
+    request->filename = gnc_prefs_get_string (GNC_PREFS_GROUP_HISTORY, pref);
+    g_weak_ref_init (&request->window, data->window);
+    PINFO("File to open is '%s' on action '%s'", request->filename, action_name);
 
     g_free (pref);
-    g_free (filename);
     g_free (index);
+    gnc_main_window_finish_pending_async
+        (data->window, NULL, gnc_plugin_file_history_open_finished, request);
 }
 
 /** @} */

@@ -1,675 +1,485 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="tax_included_store">
-    <columns>
-      <!-- column-name tax_included_name -->
-      <column type="gchararray"/>
-      <!-- column-name tax_included_value -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="taxtable_store">
-    <columns>
-      <!-- column-name taxtable_name -->
-      <column type="gchararray"/>
-      <!-- column-name taxtable_value -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="terms_store">
-    <columns>
-      <!-- column-name terms_name -->
-      <column type="gchararray"/>
-      <!-- column-name terms_value -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkDialog" id="vendor_dialog">
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">New Vendor</property>
-    <property name="type-hint">dialog</property>
-    <signal name="destroy" handler="gnc_vendor_window_destroy_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+  <requires lib="gtk" version="4.0" />
+
+<object class="GtkWindow" id="vendor_dialog">
+    <property name="title" translatable="1">New Vendor</property>
+<signal name="destroy" handler="gnc_vendor_window_destroy_cb" swapped="no" />
+    <child>
+      <object class="GtkBox" id="vendor_window_root">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="helpbutton">
-                <property name="label" translatable="yes">_Help</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="has-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_vendor_window_help_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_vendor_window_cancel_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="has-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_vendor_window_ok_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkNotebook" id="notebook1">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focusable">1</property>
             <child>
-              <object class="GtkBox" id="vbox2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkFrame" id="frame1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">3</property>
-                    <property name="label-xalign">0</property>
+              <object class="GtkNotebookPage">
+                <property name="child">
+                  <object class="GtkBox" id="vbox2">
+                    <property name="orientation">vertical</property>
                     <child>
-                      <!-- n-columns=2 n-rows=3 -->
-                      <object class="GtkGrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <property name="margin-bottom">3</property>
-                        <property name="row-spacing">3</property>
-                        <property name="column-spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label1">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Vendor Number</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label19">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Company Name</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="id_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">The vendor ID number. If left blank a reasonable number will be chosen for you</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                            <signal name="changed" handler="gnc_vendor_name_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="company_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="has-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                            <signal name="changed" handler="gnc_vendor_name_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="active_check">
-                            <property name="label" translatable="yes">Active</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="halign">start</property>
-                            <property name="use-underline">True</property>
-                            <property name="active">True</property>
-                            <property name="draw-indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Identification</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkFrame" id="frame2">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">3</property>
-                    <property name="label-xalign">0</property>
-                    <child>
-                      <!-- n-columns=2 n-rows=8 -->
-                      <object class="GtkGrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <property name="margin-bottom">3</property>
-                        <property name="row-spacing">3</property>
-                        <property name="column-spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label3">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Name</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label4">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Address</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label5">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Phone</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label6">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Fax</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label7">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Email</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">7</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="email_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">7</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="fax_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="phone_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="addr4_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="addr3_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="addr2_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="addr1_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="name_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label27">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Payment Address</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkFrame" id="frame4">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label-xalign">0</property>
-                    <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow1">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <property name="margin-top">3</property>
-                        <property name="margin-bottom">3</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTextView" id="notes_text">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="margin-start">3</property>
-                            <property name="margin-end">3</property>
-                            <property name="wrap-mode">word</property>
-                            <property name="accepts-tab">False</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label28">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Notes</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label9">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Vendor</property>
-                <property name="justify">center</property>
-              </object>
-              <packing>
-                <property name="tab-fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="vbox13">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkFrame" id="frame3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">3</property>
-                    <property name="label-xalign">0</property>
-                    <child>
-                      <!-- n-columns=2 n-rows=4 -->
-                      <object class="GtkGrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <property name="margin-bottom">3</property>
-                        <property name="row-spacing">3</property>
-                        <property name="column-spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label36">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Currency</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label8">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Terms</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label34">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Tax Included</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="terms_menu">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="model">terms_store</property>
-                            <signal name="changed" handler="gnc_vendor_terms_changed_cb" swapped="no"/>
-                            <child>
-                              <object class="GtkCellRendererText" id="terms_cell_renderer_text"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="tax_included_menu">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="model">tax_included_store</property>
-                            <signal name="changed" handler="gnc_vendor_taxincluded_changed_cb" swapped="no"/>
-                            <child>
-                              <object class="GtkCellRendererText" id="taxincluded_cell_renderer_text"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="currency_box">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="taxtable_button">
-                            <property name="label" translatable="yes">Tax Table</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="tooltip-text" translatable="yes">Override the global Tax Table?</property>
-                            <property name="halign">start</property>
+                      <object class="GtkFrame" id="frame1">
+                        <property name="valign">center</property>
+<property name="child">
+                          <object class="GtkGrid">
+                            <property name="margin-start">6</property>
                             <property name="margin-end">6</property>
-                            <property name="use-underline">True</property>
-                            <property name="draw-indicator">True</property>
-                            <signal name="toggled" handler="gnc_vendor_taxtable_check_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="taxtable_menu">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="model">taxtable_store</property>
-                            <signal name="changed" handler="gnc_vendor_taxtable_changed_cb" swapped="no"/>
+                            <property name="margin-bottom">3</property>
+                            <property name="row-spacing">3</property>
+                            <property name="column-spacing">6</property>
                             <child>
-                              <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
+                              <object class="GtkLabel" id="label1">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Vendor Number</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label19">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Company Name</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="id_entry">
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="1">The vendor ID number. If left blank a reasonable number will be chosen for you</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <signal name="changed" handler="gnc_vendor_name_changed_cb" swapped="no" />
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="company_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <signal name="changed" handler="gnc_vendor_name_changed_cb" swapped="no" />
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="active_check">
+                                <property name="label" translatable="1">Active</property>
+                                <property name="focusable">1</property>
+                                <property name="halign">start</property>
+                                <property name="use-underline">1</property>
+                                <property name="active">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">2</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <placeholder />
                             </child>
                           </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
-                          </packing>
+                        </property>
+                        <child type="label">
+                          <object class="GtkLabel" id="label2">
+                            <property name="label" translatable="1">Identification</property>
+                          </object>
                         </child>
                       </object>
                     </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label29">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Payment Information</property>
+                    <child>
+                      <object class="GtkFrame" id="frame2">
+                        <property name="valign">center</property>
+<property name="child">
+                          <object class="GtkGrid">
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
+                            <property name="margin-bottom">3</property>
+                            <property name="row-spacing">3</property>
+                            <property name="column-spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label3">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Name</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label4">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Address</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label5">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Phone</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">5</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label6">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Fax</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">6</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label7">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Email</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">7</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="email_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">7</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="fax_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">6</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="phone_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">5</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="addr4_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">4</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="addr3_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">3</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="addr2_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">2</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="addr1_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="name_entry">
+                                <property name="focusable">1</property>
+                                <property name="hexpand">1</property>
+                                <property name="activates-default">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <placeholder />
+                            </child>
+                            <child>
+                              <placeholder />
+                            </child>
+                            <child>
+                              <placeholder />
+                            </child>
+                          </object>
+                        </property>
+                        <child type="label">
+                          <object class="GtkLabel" id="label27">
+                            <property name="label" translatable="1">Payment Address</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="frame4">
+                        <property name="vexpand">1</property>
+                        <property name="child">
+                          <object class="GtkScrolledWindow" id="scrolledwindow1">
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
+                            <property name="margin-top">3</property>
+                            <property name="margin-bottom">3</property>
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
+                            <property name="hscrollbar-policy">never</property>
+<property name="child">
+                              <object class="GtkTextView" id="notes_text">
+                                <property name="focusable">1</property>
+                                <property name="margin-start">3</property>
+                                <property name="margin-end">3</property>
+                                <property name="wrap-mode">word</property>
+                                <property name="accepts-tab">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <child type="label">
+                          <object class="GtkLabel" id="label28">
+                            <property name="label" translatable="1">Notes</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
+                </property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label9">
+                    <property name="label" translatable="1">Vendor</property>
+                    <property name="justify">center</property>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label33">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Payment Information</property>
-                <property name="justify">center</property>
-              </object>
-              <packing>
+            <child>
+              <object class="GtkNotebookPage">
                 <property name="position">1</property>
-                <property name="tab-fill">False</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkBox" id="vbox13">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkFrame" id="frame3">
+<property name="child">
+                          <object class="GtkGrid">
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
+                            <property name="margin-bottom">3</property>
+                            <property name="row-spacing">3</property>
+                            <property name="column-spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label36">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Currency</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label8">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Terms</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label34">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="1">Tax Included</property>
+                                <property name="justify">right</property>
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">2</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="terms_menu">
+                                <property name="hexpand">1</property>
+                                <signal name="notify::selected" handler="gnc_vendor_terms_changed_cb" swapped="no" />
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="tax_included_menu">
+                                <property name="hexpand">1</property>
+                                <signal name="notify::selected" handler="gnc_vendor_taxincluded_changed_cb" swapped="no" />
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">2</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="currency_box">
+                                <property name="hexpand">1</property>
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">0</property>
+                                </layout>
+                                <child>
+                                  <placeholder />
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="taxtable_button">
+                                <property name="label" translatable="1">Tax Table</property>
+                                <property name="focusable">1</property>
+                                <property name="tooltip-text" translatable="1">Override the global Tax Table?</property>
+                                <property name="halign">start</property>
+                                <property name="margin-end">6</property>
+                                <property name="use-underline">1</property>
+                                <signal name="toggled" handler="gnc_vendor_taxtable_check_cb" swapped="no" />
+                                <layout>
+                                  <property name="column">0</property>
+                                  <property name="row">3</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="taxtable_menu">
+                                <signal name="notify::selected" handler="gnc_vendor_taxtable_changed_cb" swapped="no" />
+                                <layout>
+                                  <property name="column">1</property>
+                                  <property name="row">3</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                        <child type="label">
+                          <object class="GtkLabel" id="label29">
+                            <property name="label" translatable="1">Payment Information</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <placeholder />
+                    </child>
+                  </object>
+                </property>
+                <property name="tab">
+                  <object class="GtkLabel" id="label33">
+                    <property name="label" translatable="1">Payment Information</property>
+                    <property name="justify">center</property>
+                  </object>
+                </property>
+              </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-11">helpbutton</action-widget>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
+        <child>
+      <object class="GtkBox" id="dialog-action_area1">
+        <property name="hexpand">1</property>
+        <property name="spacing">6</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkButton" id="helpbutton">
+            <property name="hexpand">1</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="1">_Help</property>
+            <property name="focusable">1</property>
+            <property name="use-underline">1</property>
+            <signal name="clicked" handler="gnc_vendor_window_help_cb" swapped="no" />
+          </object>
+
+        </child>
+        <child>
+          <object class="GtkButton" id="cancelbutton">
+            <property name="label" translatable="1">_Cancel</property>
+            <property name="focusable">1</property>
+<property name="use-underline">1</property>
+            <signal name="clicked" handler="gnc_vendor_window_cancel_cb" swapped="no" />
+          </object>
+
+        </child>
+        <child>
+          <object class="GtkButton" id="okbutton">
+            <property name="label" translatable="1">_OK</property>
+            <property name="focusable">1</property>
+            <property name="use-underline">1</property>
+            <signal name="clicked" handler="gnc_vendor_window_ok_cb" swapped="no" />
+          </object>
+
+        </child>
+      </object>
+        </child>
+      </object>
+    </child>
   </object>
 </interface>

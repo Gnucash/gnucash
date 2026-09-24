@@ -47,6 +47,7 @@
 #include "gnc-gwen-gui.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
 #include "qof.h"
@@ -72,18 +73,37 @@ static AB_IMEXPORTER_ACCOUNTINFO *txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO 
 static AB_IMEXPORTER_ACCOUNTINFO *bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element,
                                                       gpointer user_data);
 
+typedef struct
+{
+    GncGUID account_guid;
+    gnc_numeric balance;
+    time64 balance_date;
+    gchar *message;
+} GncABReconcileRequest;
+
 struct _GncABImExContextImport
 {
+    gint ref_count;
     guint awaiting;
-    gboolean txn_found;
     Account *gnc_acc;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
     gboolean execute_txns;
     AB_BANKING *api;
-    GtkWidget *parent;
+    AB_IMEXPORTER_CONTEXT *context;
+    GWeakRef parent;
+    gboolean has_parent;
+    QofBook *book;
+    GncGUID book_guid;
+    GCancellable *cancellable;
+    GncABImportContextDoneCB done_cb;
+    gpointer user_data;
     GNC_AB_JOB_LIST2 *job_list;
     GNCImportMainMatcher *generic_importer;
     GData *tmp_job_list;
+    GQueue *job_errors;
+    GQueue *reconcile_requests;
+    gboolean has_importable_balance;
+    gboolean finished;
 };
 
 static inline gboolean is_leap_year (int year)
@@ -106,54 +126,6 @@ gnc_gwen_date_to_time64 (const GNC_GWEN_DATE* date)
     while (month == 2 && day <= 30 && day > (is_leap_year (year) ? 29 : 28))
         --day;
     return gnc_dmy2time64_neutral (day, month, year);
-}
-
-void
-gnc_GWEN_Init (void)
-{
-    gchar* gwen_logging = g_strdup (g_getenv ("GWEN_LOGLEVEL"));
-    gchar* aqb_logging = g_strdup (g_getenv ("AQBANKING_LOGLEVEL"));
-
-    /* Initialize gwen library */
-    GWEN_Init();
-
-    /* Initialize gwen logging */
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING, GNC_PREF_VERBOSE_DEBUG))
-    {
-        if (!gwen_logging)
-        {
-            GWEN_Logger_SetLevel (NULL, GWEN_LoggerLevel_Info);
-            GWEN_Logger_SetLevel (GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
-        }
-        if (!aqb_logging)
-            GWEN_Logger_SetLevel (AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
-    }
-    else
-    {
-        if (!gwen_logging)
-        {
-            GWEN_Logger_SetLevel (NULL, GWEN_LoggerLevel_Error);
-            GWEN_Logger_SetLevel (GWEN_LOGDOMAIN, GWEN_LoggerLevel_Error);
-        }
-        if (!aqb_logging)
-            GWEN_Logger_SetLevel (AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
-    }
-    g_free (gwen_logging);
-    g_free (aqb_logging);
-    gnc_GWEN_Gui_log_init();
-}
-
-void
-gnc_GWEN_Fini (void)
-{
-    /* Shutdown the GWEN_GUIs */
-    gnc_GWEN_Gui_shutdown();
-    GWEN_Logger_SetLevel (NULL, GWEN_LoggerLevel_Error);
-    GWEN_Logger_SetLevel (GWEN_LOGDOMAIN, GWEN_LoggerLevel_Warning);
-    GWEN_Logger_SetLevel (AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
-
-    /* Finalize gwen library */
-    GWEN_Fini();
 }
 
 static GWEN_GUI *gnc_gwengui_extended_by_ABBanking;
@@ -674,18 +646,146 @@ gnc_ab_txn_to_gnc_acc (GtkWidget *parent, const AB_TRANSACTION *transaction)
     return gnc_acc;
 }
 
+static GncABImExContextImport *
+gnc_ab_ieci_ref (GncABImExContextImport *ieci)
+{
+    g_return_val_if_fail (ieci, NULL);
+    g_atomic_int_inc (&ieci->ref_count);
+    return ieci;
+}
+
+static void
+free_tmp_job_cb (GQuark key_id, gpointer job, gpointer user_data)
+{
+    (void)key_id;
+    (void)user_data;
+    AB_Transaction_free (job);
+}
+
+static void
+free_reconcile_request (GncABReconcileRequest *request)
+{
+    if (!request)
+        return;
+    g_free (request->message);
+    g_free (request);
+}
+
+static void
+free_import_context (GncABImExContextImport *ieci)
+{
+    if (!ieci)
+        return;
+
+    if (ieci->context)
+        AB_ImExporterContext_free (ieci->context);
+    if (ieci->job_list)
+        AB_Transaction_List2_free (ieci->job_list);
+    g_datalist_foreach (&ieci->tmp_job_list, free_tmp_job_cb, NULL);
+    g_datalist_clear (&ieci->tmp_job_list);
+    if (ieci->job_errors)
+        g_queue_free (ieci->job_errors);
+    if (ieci->reconcile_requests)
+    {
+        while (!g_queue_is_empty (ieci->reconcile_requests))
+            free_reconcile_request (g_queue_pop_head (ieci->reconcile_requests));
+        g_queue_free (ieci->reconcile_requests);
+    }
+    g_clear_object (&ieci->cancellable);
+    g_weak_ref_clear (&ieci->parent);
+    g_free (ieci);
+}
+
+static void
+gnc_ab_ieci_unref (GncABImExContextImport *ieci)
+{
+    if (ieci && g_atomic_int_dec_and_test (&ieci->ref_count))
+        free_import_context (ieci);
+}
+
+static GtkWindow *
+gnc_ab_ieci_get_parent (GncABImExContextImport *ieci)
+{
+    GtkWidget *widget;
+    GtkRoot *root;
+    GtkWindow *window = NULL;
+
+    widget = g_weak_ref_get (&ieci->parent);
+    if (!widget)
+        return NULL;
+    if (GTK_IS_WINDOW (widget))
+        return GTK_WINDOW (widget);
+
+    root = gtk_widget_get_root (widget);
+    if (root && GTK_IS_WINDOW (root))
+        window = GTK_WINDOW (g_object_ref (root));
+    g_object_unref (widget);
+    return window;
+}
+
+static gboolean
+gnc_ab_ieci_is_current (GncABImExContextImport *ieci)
+{
+    QofBook *book;
+
+    if (!ieci || ieci->finished ||
+        (ieci->cancellable && g_cancellable_is_cancelled (ieci->cancellable)))
+        return FALSE;
+
+    book = gnc_get_current_book ();
+    return book && book == ieci->book &&
+           guid_equal (qof_instance_get_guid (QOF_INSTANCE (book)), &ieci->book_guid);
+}
+
+static gboolean
+gnc_ab_ieci_parent_is_available (GncABImExContextImport *ieci,
+                                 GtkWindow **parent)
+{
+    *parent = gnc_ab_ieci_get_parent (ieci);
+    return !ieci->has_parent || *parent != NULL;
+}
+
+static GtkWindow *
+gnc_ab_ieci_get_balance_parent (GncABImExContextImport *ieci)
+{
+    GtkWidget *widget;
+    GtkRoot *root;
+    GtkWindow *window = NULL;
+
+    if (!ieci->generic_importer)
+        return gnc_ab_ieci_get_parent (ieci);
+
+    widget = gnc_gen_trans_list_widget (ieci->generic_importer);
+    if (!widget)
+        return gnc_ab_ieci_get_parent (ieci);
+    if (GTK_IS_WINDOW (widget))
+        return GTK_WINDOW (g_object_ref (widget));
+    root = gtk_widget_get_root (widget);
+    if (root && GTK_IS_WINDOW (root))
+        window = GTK_WINDOW (g_object_ref (root));
+    return window;
+}
+
+static void gnc_ab_ieci_finish (GncABImExContextImport *ieci, gboolean completed);
+static void gnc_ab_ieci_begin_balances (GncABImExContextImport *ieci);
+static void gnc_ab_ieci_show_next_job_error (GncABImExContextImport *ieci);
+static void gnc_ab_ieci_show_next_reconcile_request (GncABImExContextImport *ieci);
+
 static const AB_TRANSACTION *
 txn_transaction_cb (const AB_TRANSACTION *element, gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
     Transaction *gnc_trans;
     GncABTransType trans_type;
-    Account* txnacc;
+    Account *txnacc;
+    GtkWindow *parent;
 
     g_return_val_if_fail (element && data, NULL);
+    if (!gnc_ab_ieci_is_current (data) ||
+        !gnc_ab_ieci_parent_is_available (data, &parent))
+        return NULL;
 
-    /* Create a GnuCash transaction from ab_trans */
-    txnacc = gnc_ab_txn_to_gnc_acc (GTK_WIDGET(data->parent), element);
+    txnacc = gnc_ab_txn_to_gnc_acc (GTK_WIDGET (parent), element);
     gnc_trans = gnc_ab_trans_to_gnc (element, txnacc ? txnacc : data->gnc_acc);
 
     if (data->execute_txns && data->ab_acc)
@@ -693,14 +793,11 @@ txn_transaction_cb (const AB_TRANSACTION *element, gpointer user_data)
         AB_TRANSACTION *ab_trans = AB_Transaction_dup (element);
         GNC_AB_JOB *job;
 
-        /* NEW: The imported transaction has been imported into gnucash.
-         * Now also add it as a job to aqbanking */
         AB_Transaction_SetLocalBankCode (
             ab_trans, AB_AccountSpec_GetBankCode (data->ab_acc));
         AB_Transaction_SetLocalAccountNumber (
             ab_trans, AB_AccountSpec_GetAccountNumber (data->ab_acc));
         AB_Transaction_SetLocalCountry (ab_trans, "DE");
-
 
         switch (AB_Transaction_GetType (ab_trans))
         {
@@ -714,87 +811,107 @@ txn_transaction_cb (const AB_TRANSACTION *element, gpointer user_data)
         default:
             trans_type = SEPA_TRANSFER;
             break;
-        } /* switch */
+        }
 
         job = gnc_ab_get_trans_job (data->ab_acc, ab_trans, trans_type);
-
-        /* Check whether we really got a job */
-        if (!job || AB_AccountSpec_GetTransactionLimitsForCommand (data->ab_acc, AB_Transaction_GetCommand (job)) == NULL)
+        if (!job || AB_AccountSpec_GetTransactionLimitsForCommand (
+                        data->ab_acc, AB_Transaction_GetCommand (job)) == NULL)
         {
-            /* Oops, no job, probably not supported by bank */
-            if (gnc_verify_dialog (
-                        GTK_WINDOW(data->parent), FALSE, "%s",
-                        _("The backend found an error during the preparation "
-                          "of the job. It is not possible to execute this job.\n"
-                          "\n"
-                          "Most probably the bank does not support your chosen "
-                          "job or your Online Banking account does not have the permission "
-                          "to execute this job. More error messages might be "
-                          "visible on your console log.\n"
-                          "\n"
-                          "Do you want to enter the job again?")))
-            {
-                gnc_error_dialog (GTK_WINDOW(data->parent),
-                                  "Sorry, not implemented yet. Please check the console or trace file logs to see which job was rejected.");
-            }
+            if (job)
+                AB_Transaction_free (job);
+            g_queue_push_tail (data->job_errors, GINT_TO_POINTER (1));
         }
         else
         {
             gnc_gen_trans_list_add_trans_with_ref_id (data->generic_importer,
                                                       gnc_trans,
                                                       AB_Transaction_GetUniqueId (job));
-            /* AB_Job_List2_PushBack(data->job_list, job); -> delayed until trans is successfully imported */
-            g_datalist_set_data (&data->tmp_job_list, gnc_AB_JOB_to_readable_string (job), job);
+            g_datalist_set_data (&data->tmp_job_list,
+                                gnc_AB_JOB_to_readable_string (job), job);
         }
         AB_Transaction_free (ab_trans);
     }
     else
     {
-        /* Instead of xaccTransCommitEdit(gnc_trans)  */
         gnc_gen_trans_list_add_trans (data->generic_importer, gnc_trans);
     }
 
+    g_clear_object (&parent);
     return NULL;
 }
 
-static void gnc_ab_trans_processed_cb (GNCImportTransInfo *trans_info,
-                                       gboolean imported,
-                                       gpointer user_data)
+static void
+gnc_ab_trans_processed_cb (GNCImportTransInfo *trans_info, gboolean imported,
+                           gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
-    gchar *jobname = gnc_AB_JOB_ID_to_string (gnc_import_TransInfo_get_ref_id (trans_info));
-    GNC_AB_JOB *job = g_datalist_get_data (&data->tmp_job_list, jobname);
+    gchar *jobname;
+    GNC_AB_JOB *job;
 
-    if (imported)
+    if (!data || !trans_info)
+        return;
+
+    jobname = gnc_AB_JOB_ID_to_string (gnc_import_TransInfo_get_ref_id (trans_info));
+    job = g_datalist_get_data (&data->tmp_job_list, jobname);
+    if (!job)
     {
+        g_free (jobname);
+        return;
+    }
+
+    if (imported && gnc_ab_ieci_is_current (data))
         AB_Transaction_List2_PushBack (data->job_list, job);
-    }
     else
-    {
         AB_Transaction_free (job);
-    }
 
     g_datalist_remove_data (&data->tmp_job_list, jobname);
+    g_free (jobname);
 }
 
 gchar *
 gnc_AB_JOB_to_readable_string (const GNC_AB_JOB *job)
 {
-    if (job)
-    {
-        return gnc_AB_JOB_ID_to_string (AB_Transaction_GetUniqueId (job));
-    }
-    else
-    {
-        return gnc_AB_JOB_ID_to_string (0);
-    }
+    return gnc_AB_JOB_ID_to_string (job ? AB_Transaction_GetUniqueId (job) : 0);
 }
+
 gchar *
 gnc_AB_JOB_ID_to_string (gulong job_id)
 {
     return g_strdup_printf ("job_%lu", job_id);
 }
 
+static const AB_TRANSACTION *
+get_first_importable_transaction (AB_IMEXPORTER_ACCOUNTINFO *element,
+                                  gboolean import_noted_txns);
+static AB_IMEXPORTER_ACCOUNTINFO *
+find_transactions_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
+{
+    GncABImExContextImport *data = user_data;
+    const gboolean import_noted_txns =
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING,
+                            GNC_PREF_IMPORT_NOTED_TXNS);
+
+    if (get_first_importable_transaction (element, import_noted_txns))
+        data->awaiting |= FOUND_TRANSACTIONS;
+    return NULL;
+}
+
+static AB_IMEXPORTER_ACCOUNTINFO *
+find_balances_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
+{
+    GncABImExContextImport *data = user_data;
+    const AB_BALANCE *booked_balance;
+
+    if (!AB_ImExporterAccountInfo_GetFirstBalance (element))
+        return NULL;
+
+    data->awaiting |= FOUND_BALANCES;
+    booked_balance = AB_Balance_List_GetLatestByType (
+        AB_ImExporterAccountInfo_GetBalanceList (element), AB_Balance_TypeBooked);
+    if (booked_balance && !AB_Value_IsZero (AB_Balance_GetValue (booked_balance)))
+        data->has_importable_balance = TRUE;
+    return NULL;
+}
 static const AB_TRANSACTION *
 get_first_importable_transaction (AB_IMEXPORTER_ACCOUNTINFO *element,
                                   gboolean import_noted_txns)
@@ -832,57 +949,35 @@ txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
     Account *gnc_acc;
+    GtkWindow *parent;
     gboolean import_noted_txns;
 
     g_return_val_if_fail (element && data, NULL);
 
-    if (data->awaiting & IGNORE_TRANSACTIONS)
-        /* Ignore them */
-        return NULL;
-
     import_noted_txns = gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING,
                                             GNC_PREF_IMPORT_NOTED_TXNS);
-
-    if (!get_first_importable_transaction (element, import_noted_txns))
-        /* No transaction found */
+    if (data->awaiting & IGNORE_TRANSACTIONS ||
+        !get_first_importable_transaction (element, import_noted_txns) ||
+        !gnc_ab_ieci_is_current (data) ||
+        !gnc_ab_ieci_parent_is_available (data, &parent))
         return NULL;
-    else
-        data->awaiting |= FOUND_TRANSACTIONS;
 
-    if (!(data->awaiting & AWAIT_TRANSACTIONS))
+    gnc_acc = gnc_ab_accinfo_to_gnc_acc (GTK_WIDGET (parent), element);
+    if (!gnc_acc)
     {
-        if (gnc_verify_dialog (GTK_WINDOW(data->parent), TRUE, "%s",
-                              _("The bank has sent transaction information "
-                                "in its response."
-                                "\n"
-                                "Do you want to import it?")))
-        {
-            data->awaiting |= AWAIT_TRANSACTIONS;
-        }
-        else
-        {
-            data->awaiting |= IGNORE_TRANSACTIONS;
-            return NULL;
-        }
+        g_clear_object (&parent);
+        return NULL;
     }
-
-    /* Lookup the corresponding gnucash account */
-    gnc_acc = gnc_ab_accinfo_to_gnc_acc (GTK_WIDGET(data->parent), element);
-    if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
     if (data->execute_txns)
     {
-        /* Retrieve the aqbanking account that belongs to this gnucash
-         * account */
         data->ab_acc = gnc_ab_get_ab_account (data->api, gnc_acc);
         if (!data->ab_acc)
-        {
-            gnc_error_dialog (GTK_WINDOW(data->parent), "%s",
+            gnc_error_dialog (parent, "%s",
                               _("No Online Banking account found for this "
-                                "gnucash account. These transactions will "
+                                "GnuCash account. These transactions will "
                                 "not be executed by Online Banking."));
-        }
     }
     else
     {
@@ -891,21 +986,20 @@ txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     if (!data->generic_importer)
     {
-        data->generic_importer = gnc_gen_trans_list_new (data->parent, NULL,
+        data->generic_importer = gnc_gen_trans_list_new (GTK_WIDGET (parent), NULL,
                                                          TRUE, 14, TRUE);
         if (data->execute_txns)
-        {
             gnc_gen_trans_list_add_tp_cb (data->generic_importer,
                                           gnc_ab_trans_processed_cb, data);
-        }
     }
 
-    /* Iterate through all transactions */
     {
-        AB_TRANSACTION_LIST *ab_trans_list = AB_ImExporterAccountInfo_GetTransactionList (element);
+        AB_TRANSACTION_LIST *ab_trans_list =
+            AB_ImExporterAccountInfo_GetTransactionList (element);
         if (ab_trans_list)
             import_account_transactions (ab_trans_list, data, import_noted_txns);
     }
+    g_clear_object (&parent);
     return NULL;
 }
 
@@ -919,263 +1013,456 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     gdouble booked_value, noted_value;
     gnc_numeric value;
     time64 booked_tt = 0;
-    GtkWidget *dialog;
-    gboolean show_recn_window = FALSE;
+    GtkAlertDialog *dialog;
+    GtkWindow *parent;
 
     g_return_val_if_fail (element && data, NULL);
-
-    if (data->awaiting & IGNORE_BALANCES)
-        /* Ignore them */
+    if (data->awaiting & IGNORE_BALANCES ||
+        !AB_ImExporterAccountInfo_GetFirstBalance (element) ||
+        !gnc_ab_ieci_is_current (data) ||
+        !gnc_ab_ieci_parent_is_available (data, &parent))
         return NULL;
 
-    if (!AB_ImExporterAccountInfo_GetFirstBalance (element))
-        /* No balance found */
-        return NULL;
-    else
-        data->awaiting |= FOUND_BALANCES;
-
-    /* Lookup the most recent BALANCE available */
-    booked_bal = AB_Balance_List_GetLatestByType (AB_ImExporterAccountInfo_GetBalanceList (element),
-                                                  AB_Balance_TypeBooked);
-
-    if (!(data->awaiting & AWAIT_BALANCES))
+    booked_bal = AB_Balance_List_GetLatestByType (
+        AB_ImExporterAccountInfo_GetBalanceList (element), AB_Balance_TypeBooked);
+    gnc_acc = gnc_ab_accinfo_to_gnc_acc (GTK_WIDGET (parent), element);
+    if (!gnc_acc)
     {
-         GtkWindow *parent = data->generic_importer ?
-              GTK_WINDOW(gnc_gen_trans_list_widget (data->generic_importer)) :
-              GTK_WINDOW(data->parent);
-         const char* balance_msg =
-              _("The bank has sent balance information in its response.\n"
-                "Do you want to import it?");
-        /* Ignore zero balances if we don't await a balance */
-        if (!booked_bal || AB_Value_IsZero (AB_Balance_GetValue (booked_bal)))
-            return NULL;
-
-        /* Ask the user whether to import unawaited non-zero balance */
-        if (gnc_verify_dialog (parent, TRUE, "%s", balance_msg))
-        {
-            data->awaiting |= AWAIT_BALANCES;
-        }
-        else
-        {
-            data->awaiting |= IGNORE_BALANCES;
-            return NULL;
-        }
+        g_clear_object (&parent);
+        return NULL;
     }
-
-    /* Lookup the corresponding gnucash account */
-    gnc_acc = gnc_ab_accinfo_to_gnc_acc (GTK_WIDGET(data->parent), element);
-    if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
-    /* Lookup booked balance and time */
     if (booked_bal)
     {
-        const GWEN_DATE *ti = AB_Balance_GetDate (booked_bal);
-        if (ti)
-        {
-            booked_tt = gnc_gwen_date_to_time64 (ti);
-        }
-        else
-        {
-            /* No time found? Use today because the HBCI query asked for today's
-             * balance. */
-            booked_tt = gnc_time64_get_day_neutral (gnc_time (NULL));
-        }
+        const GWEN_DATE *date = AB_Balance_GetDate (booked_bal);
+        booked_tt = date ? gnc_gwen_date_to_time64 (date) :
+                           gnc_time64_get_day_neutral (gnc_time (NULL));
         booked_val = AB_Balance_GetValue (booked_bal);
-        if (booked_val)
-        {
-            booked_value = AB_Value_GetValueAsDouble (booked_val);
-        }
-        else
-        {
-            g_warning ("bal_accountinfo_cb: booked_val == NULL.  Assuming 0");
-            booked_value = 0.0;
-        }
+        booked_value = booked_val ? AB_Value_GetValueAsDouble (booked_val) : 0.0;
+        if (!booked_val)
+            g_warning ("bal_accountinfo_cb: booked_val == NULL. Assuming 0");
     }
     else
     {
-        g_warning ("bal_accountinfo_cb: booked_bal == NULL.  Assuming 0");
-        booked_tt = 0;
+        g_warning ("bal_accountinfo_cb: booked_bal == NULL. Assuming 0");
         booked_value = 0.0;
     }
 
-    /* Lookup noted balance */
-    noted_bal = AB_Balance_List_GetLatestByType (AB_ImExporterAccountInfo_GetBalanceList (element),
-                                                 AB_Balance_TypeNoted);
-    if (noted_bal)
-    {
-        noted_val = AB_Balance_GetValue (noted_bal);
-        if (noted_val)
-            noted_value = AB_Value_GetValueAsDouble (noted_val);
-        else
-        {
-            g_warning ("bal_accountinfo_cb: noted_val == NULL.  Assuming 0");
-            noted_value = 0.0;
-        }
-    }
-    else
-    {
-        g_warning ("bal_accountinfo_cb: noted_bal == NULL.  Assuming 0");
-        noted_value = 0.0;
-    }
+    noted_bal = AB_Balance_List_GetLatestByType (
+        AB_ImExporterAccountInfo_GetBalanceList (element), AB_Balance_TypeNoted);
+    noted_val = noted_bal ? AB_Balance_GetValue (noted_bal) : NULL;
+    noted_value = noted_val ? AB_Value_GetValueAsDouble (noted_val) : 0.0;
+    if (noted_bal && !noted_val)
+        g_warning ("bal_accountinfo_cb: noted_val == NULL. Assuming 0");
 
     value = double_to_gnc_numeric (booked_value,
                                    xaccAccountGetCommoditySCU (gnc_acc),
                                    GNC_HOW_RND_ROUND_HALF_UP);
     if (noted_value == 0.0 && booked_value == 0.0)
     {
-        dialog = gtk_message_dialog_new (
-                     GTK_WINDOW(data->parent),
-                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                     GTK_MESSAGE_INFO,
-                     GTK_BUTTONS_OK,
-                     "%s",
-                     /* Translators: Strings from this file are needed only in
-                        countries that have one of aqbanking's Online Banking
-                        techniques available. This is 'OFX DirectConnect'
-                        (U.S. and others), 'FinTS' (in Germany), or 'YellowNet'
-                        (Switzerland). If none of these techniques are available
-                        in your country, you may safely ignore strings from the
-                        import-export/hbci subdirectory. */
-                     _("The downloaded Online Banking Balance was zero.\n\n"
-                       "Either this is the correct balance, or your bank does not "
-                       "support Balance download with the parameters you have "
-                       "selected. "
-                       "In the latter case you should check the details of "
-                       "your connection like Server URL in the Online Banking "
-                       "(AqBanking) Setup. After that, try again to "
-                       "download the Online Banking Balance."));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-
+        dialog = gtk_alert_dialog_new (
+            "%s",
+            _("The downloaded Online Banking Balance was zero.\n\n"
+              "Either this is the correct balance, or your bank does not "
+              "support Balance download with the parameters you have selected. "
+              "In the latter case you should check the details of your connection "
+              "like Server URL in the Online Banking (AqBanking) Setup. After "
+              "that, try again to download the Online Banking Balance."));
+        gtk_alert_dialog_show (dialog, parent);
+        g_object_unref (dialog);
     }
     else
     {
-        gnc_numeric reconc_balance = xaccAccountGetReconciledBalance (gnc_acc);
-
+        gnc_numeric reconciled = xaccAccountGetReconciledBalance (gnc_acc);
         gchar *booked_str = gnc_AB_VALUE_to_readable_string (booked_val);
         gchar *message1 = g_strdup_printf (
-                              _("Result of Online Banking job:\n"
-                                "Account booked balance is %s"),
-                              booked_str);
-        gchar *message2 =
-            (noted_value == 0.0) ?
-            g_strdup ("") :
-            g_strdup_printf (_("For your information: This account also "
-                               "has a noted balance of %s\n"),
+            _("Result of Online Banking job:\nAccount booked balance is %s"),
+            booked_str);
+        gchar *message2 = noted_value == 0.0 ? g_strdup ("") :
+            g_strdup_printf (_("For your information: This account also has a "
+                               "noted balance of %s\n"),
                              gnc_AB_VALUE_to_readable_string (noted_val));
 
-        if (gnc_numeric_equal (value, reconc_balance))
+        if (gnc_numeric_equal (value, reconciled))
         {
-            const gchar *message3 =
-                _("The booked balance is identical to the current "
-                  "reconciled balance of the account.");
-            dialog = gtk_message_dialog_new (
-                         GTK_WINDOW(data->parent),
-                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                         GTK_MESSAGE_INFO,
-                         GTK_BUTTONS_OK,
-                         "%s\n%s\n%s",
-                         message1, message2, message3);
-            gtk_dialog_run (GTK_DIALOG(dialog));
-            gtk_widget_destroy (GTK_WIDGET(dialog));
-
+            const gchar *message3 = _("The booked balance is identical to the "
+                                      "current reconciled balance of the account.");
+            gchar *detail = g_strdup_printf ("%s\n%s", message2, message3);
+            dialog = gtk_alert_dialog_new ("%s", message1);
+            gtk_alert_dialog_set_detail (dialog, detail);
+            gtk_alert_dialog_show (dialog, parent);
+            g_object_unref (dialog);
+            g_free (detail);
         }
         else
         {
-            const char *message3 = _("Reconcile account now?");
-
-            show_recn_window = gnc_verify_dialog (GTK_WINDOW(data->parent), TRUE, "%s\n%s\n%s",
-                                                  message1, message2, message3);
+            GncABReconcileRequest *request = g_new0 (GncABReconcileRequest, 1);
+            request->account_guid = *xaccAccountGetGUID (gnc_acc);
+            request->balance = value;
+            request->balance_date = booked_tt;
+            request->message = g_strdup_printf ("%s\n%s\n%s", message1, message2,
+                                                _("Reconcile account now?"));
+            g_queue_push_tail (data->reconcile_requests, request);
         }
         g_free (booked_str);
         g_free (message1);
         g_free (message2);
     }
 
-    /* Show reconciliation window */
-    if (show_recn_window)
-        recnWindowWithBalance (GTK_WIDGET(data->parent), gnc_acc, value, booked_tt);
-
+    g_clear_object (&parent);
     return NULL;
 }
 
-GncABImExContextImport *
-gnc_ab_import_context (AB_IMEXPORTER_CONTEXT *context,
-                       guint awaiting, gboolean execute_txns,
-                       AB_BANKING *api, GtkWidget *parent)
+static void
+job_error_finished (GtkWindow *parent, gint response, gpointer user_data)
 {
-    GncABImExContextImport *data = g_new (GncABImExContextImport, 1);
-    AB_IMEXPORTER_ACCOUNTINFO_LIST *ab_ail;
-    g_return_val_if_fail (context, NULL);
-    /* Do not await and ignore at the same time */
-    g_return_val_if_fail (!(awaiting & AWAIT_BALANCES)
-                          || !(awaiting & IGNORE_BALANCES),
-                          NULL);
-    g_return_val_if_fail (!(awaiting & AWAIT_TRANSACTIONS)
-                          || !(awaiting & IGNORE_TRANSACTIONS),
-                          NULL);
-    /* execute_txns must be FALSE if txns are not awaited */
-    g_return_val_if_fail (awaiting & AWAIT_TRANSACTIONS || !execute_txns, NULL);
-    /* An api is needed for the jobs */
-    g_return_val_if_fail (!execute_txns || api, NULL);
+    GncABImExContextImport *ieci = user_data;
 
-    data->awaiting = awaiting;
-    data->txn_found = FALSE;
-    data->execute_txns = execute_txns;
-    data->api = api;
-    data->parent = parent;
-    data->job_list = AB_Transaction_List2_new ();
-    data->tmp_job_list = NULL;
-    data->generic_importer = NULL;
-
-    g_datalist_init (&data->tmp_job_list);
-
-    /* Import transactions */
-    ab_ail = AB_ImExporterContext_GetAccountInfoList (context);
-    if (ab_ail && AB_ImExporterAccountInfo_List_GetCount (ab_ail))
+    if (!gnc_ab_ieci_is_current (ieci) || (ieci->has_parent && !parent))
+        gnc_ab_ieci_finish (ieci, FALSE);
+    else
     {
-        if (!(awaiting & IGNORE_TRANSACTIONS))
-            AB_ImExporterAccountInfo_List_ForEach (ab_ail, 
-                                                   txn_accountinfo_cb,
-                                                   data);
+        if (response == GTK_RESPONSE_YES)
+            gnc_error_dialog (parent, "%s",
+                              _("Sorry, not implemented yet. Please check the "
+                                "console or trace file logs to see which job was "
+                                "rejected."));
+        gnc_ab_ieci_show_next_job_error (ieci);
+    }
+    gnc_ab_ieci_unref (ieci);
+}
 
-        /* populate and display the matching window */
-        if (data->generic_importer)
-            gnc_gen_trans_list_show_all (data->generic_importer);
+static void
+gnc_ab_ieci_after_transactions (GncABImExContextImport *ieci)
+{
+    if (!gnc_ab_ieci_is_current (ieci))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return;
+    }
+    if (ieci->generic_importer)
+        gnc_gen_trans_list_show_all (ieci->generic_importer);
+    gnc_ab_ieci_begin_balances (ieci);
+}
 
-        /* Check balances */
-        if (!(awaiting & IGNORE_BALANCES))
-            AB_ImExporterAccountInfo_List_ForEach (ab_ail,
-                                                   bal_accountinfo_cb,
-                                                   data);
+static void
+gnc_ab_ieci_show_next_job_error (GncABImExContextImport *ieci)
+{
+    GtkWindow *parent;
+
+    if (g_queue_is_empty (ieci->job_errors))
+    {
+        gnc_ab_ieci_after_transactions (ieci);
+        return;
+    }
+    if (!gnc_ab_ieci_is_current (ieci) ||
+        !gnc_ab_ieci_parent_is_available (ieci, &parent))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return;
     }
 
-    /* Check bank-messages */
+    g_queue_pop_head (ieci->job_errors);
+    gnc_ab_ieci_ref (ieci);
+    gnc_verify_dialog_async (
+        parent, FALSE, job_error_finished, ieci, "%s",
+        _("The backend found an error during the preparation of the job. "
+          "It is not possible to execute this job.\n\n"
+          "Most probably the bank does not support your chosen job or your "
+          "Online Banking account does not have the permission to execute this "
+          "job. More error messages might be visible on your console log.\n\n"
+          "Do you want to enter the job again?"));
+    g_clear_object (&parent);
+}
+
+static void
+transaction_choice_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    GncABImExContextImport *ieci = user_data;
+
+    if (!gnc_ab_ieci_is_current (ieci) || (ieci->has_parent && !parent))
+        gnc_ab_ieci_finish (ieci, FALSE);
+    else if (response == GTK_RESPONSE_YES)
     {
-        AB_MESSAGE * bankmsg = AB_ImExporterContext_GetFirstMessage (context);
-        while (bankmsg)
+        AB_IMEXPORTER_ACCOUNTINFO_LIST *accounts =
+            AB_ImExporterContext_GetAccountInfoList (ieci->context);
+        ieci->awaiting |= AWAIT_TRANSACTIONS;
+        if (accounts)
+            AB_ImExporterAccountInfo_List_ForEach (accounts, txn_accountinfo_cb, ieci);
+        gnc_ab_ieci_show_next_job_error (ieci);
+    }
+    else
+    {
+        ieci->awaiting |= IGNORE_TRANSACTIONS;
+        gnc_ab_ieci_after_transactions (ieci);
+    }
+    gnc_ab_ieci_unref (ieci);
+}
+
+static void
+gnc_ab_ieci_begin_transactions (GncABImExContextImport *ieci)
+{
+    AB_IMEXPORTER_ACCOUNTINFO_LIST *accounts;
+    GtkWindow *parent;
+
+    if (!gnc_ab_ieci_is_current (ieci))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return;
+    }
+    accounts = AB_ImExporterContext_GetAccountInfoList (ieci->context);
+    if (!accounts || !AB_ImExporterAccountInfo_List_GetCount (accounts) ||
+        (ieci->awaiting & IGNORE_TRANSACTIONS))
+    {
+        gnc_ab_ieci_after_transactions (ieci);
+        return;
+    }
+
+    if (!(ieci->awaiting & AWAIT_TRANSACTIONS) &&
+        (ieci->awaiting & FOUND_TRANSACTIONS))
+    {
+        if (!gnc_ab_ieci_parent_is_available (ieci, &parent))
         {
-            const char* subject = AB_Message_GetSubject (bankmsg);
-            const char* text = AB_Message_GetText (bankmsg);
-            gnc_info_dialog (GTK_WINDOW(data->parent), "%s\n%s %s\n%s",
-                             _("The bank has sent a message in its response."),
-                             _("Subject:"),
-                             subject,
-                             text);
-
-            bankmsg = AB_Message_List_Next (bankmsg);
+            gnc_ab_ieci_finish (ieci, FALSE);
+            return;
         }
+        gnc_ab_ieci_ref (ieci);
+        gnc_verify_dialog_async (
+            parent, TRUE, transaction_choice_finished, ieci, "%s",
+            _("The bank has sent transaction information in its response.\n"
+              "Do you want to import it?"));
+        g_clear_object (&parent);
+        return;
     }
 
-    return data;
+    AB_ImExporterAccountInfo_List_ForEach (accounts, txn_accountinfo_cb, ieci);
+    gnc_ab_ieci_show_next_job_error (ieci);
+}
+
+static void
+reconcile_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    GncABImExContextImport *ieci = user_data;
+    GncABReconcileRequest *request;
+
+    if (!gnc_ab_ieci_is_current (ieci) || (ieci->has_parent && !parent))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        gnc_ab_ieci_unref (ieci);
+        return;
+    }
+
+    request = g_queue_pop_head (ieci->reconcile_requests);
+    if (response == GTK_RESPONSE_YES && request)
+    {
+        Account *account = xaccAccountLookup (&request->account_guid, ieci->book);
+        if (account && !qof_instance_get_destroying (QOF_INSTANCE (account)))
+            recnWindowWithBalance (GTK_WIDGET (parent), account, request->balance,
+                                   request->balance_date);
+    }
+    free_reconcile_request (request);
+    gnc_ab_ieci_show_next_reconcile_request (ieci);
+    gnc_ab_ieci_unref (ieci);
+}
+
+static void
+gnc_ab_ieci_show_messages (GncABImExContextImport *ieci)
+{
+    AB_MESSAGE *message;
+    GtkWindow *parent;
+
+    if (!gnc_ab_ieci_is_current (ieci) ||
+        !gnc_ab_ieci_parent_is_available (ieci, &parent))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return;
+    }
+
+    message = AB_ImExporterContext_GetFirstMessage (ieci->context);
+    while (message)
+    {
+        gnc_info_dialog (parent, "%s\n%s %s\n%s",
+                         _("The bank has sent a message in its response."),
+                         _("Subject:"), AB_Message_GetSubject (message),
+                         AB_Message_GetText (message));
+        message = AB_Message_List_Next (message);
+    }
+    g_clear_object (&parent);
+    gnc_ab_ieci_finish (ieci, TRUE);
+}
+
+static void
+gnc_ab_ieci_show_next_reconcile_request (GncABImExContextImport *ieci)
+{
+    GncABReconcileRequest *request;
+    GtkWindow *parent;
+
+    if (g_queue_is_empty (ieci->reconcile_requests))
+    {
+        gnc_ab_ieci_show_messages (ieci);
+        return;
+    }
+    if (!gnc_ab_ieci_is_current (ieci) ||
+        !gnc_ab_ieci_parent_is_available (ieci, &parent))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return;
+    }
+
+    request = g_queue_peek_head (ieci->reconcile_requests);
+    gnc_ab_ieci_ref (ieci);
+    gnc_verify_dialog_async (parent, TRUE, reconcile_finished, ieci, "%s",
+                             request->message);
+    g_clear_object (&parent);
+}
+
+static void
+balance_choice_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    GncABImExContextImport *ieci = user_data;
+    AB_IMEXPORTER_ACCOUNTINFO_LIST *accounts;
+
+    if (!gnc_ab_ieci_is_current (ieci) || (ieci->has_parent && !parent))
+        gnc_ab_ieci_finish (ieci, FALSE);
+    else if (response == GTK_RESPONSE_YES)
+    {
+        ieci->awaiting |= AWAIT_BALANCES;
+        accounts = AB_ImExporterContext_GetAccountInfoList (ieci->context);
+        if (accounts)
+            AB_ImExporterAccountInfo_List_ForEach (accounts, bal_accountinfo_cb, ieci);
+        gnc_ab_ieci_show_next_reconcile_request (ieci);
+    }
+    else
+    {
+        ieci->awaiting |= IGNORE_BALANCES;
+        gnc_ab_ieci_show_messages (ieci);
+    }
+    gnc_ab_ieci_unref (ieci);
+}
+
+static void
+gnc_ab_ieci_begin_balances (GncABImExContextImport *ieci)
+{
+    AB_IMEXPORTER_ACCOUNTINFO_LIST *accounts;
+    GtkWindow *parent;
+
+    if (!gnc_ab_ieci_is_current (ieci))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return;
+    }
+    accounts = AB_ImExporterContext_GetAccountInfoList (ieci->context);
+    if (!accounts || !AB_ImExporterAccountInfo_List_GetCount (accounts) ||
+        (ieci->awaiting & IGNORE_BALANCES))
+    {
+        gnc_ab_ieci_show_messages (ieci);
+        return;
+    }
+
+    if (!(ieci->awaiting & AWAIT_BALANCES))
+    {
+        if (!ieci->has_importable_balance)
+        {
+            gnc_ab_ieci_show_messages (ieci);
+            return;
+        }
+        parent = gnc_ab_ieci_get_balance_parent (ieci);
+        if (!parent && ieci->has_parent)
+        {
+            gnc_ab_ieci_finish (ieci, FALSE);
+            return;
+        }
+        gnc_ab_ieci_ref (ieci);
+        gnc_verify_dialog_async (
+            parent, TRUE, balance_choice_finished, ieci, "%s",
+            _("The bank has sent balance information in its response.\n"
+              "Do you want to import it?"));
+        g_clear_object (&parent);
+        return;
+    }
+
+    AB_ImExporterAccountInfo_List_ForEach (accounts, bal_accountinfo_cb, ieci);
+    gnc_ab_ieci_show_next_reconcile_request (ieci);
+}
+
+static void
+gnc_ab_ieci_finish (GncABImExContextImport *ieci, gboolean completed)
+{
+    if (!ieci || ieci->finished)
+        return;
+
+    ieci->finished = TRUE;
+    if (ieci->done_cb)
+        ieci->done_cb (ieci, completed, ieci->user_data);
+    gnc_ab_ieci_unref (ieci);
+}
+
+static gboolean
+gnc_ab_ieci_start (gpointer user_data)
+{
+    GncABImExContextImport *ieci = user_data;
+    AB_IMEXPORTER_ACCOUNTINFO_LIST *accounts;
+
+    if (!gnc_ab_ieci_is_current (ieci))
+    {
+        gnc_ab_ieci_finish (ieci, FALSE);
+        return G_SOURCE_REMOVE;
+    }
+
+    accounts = AB_ImExporterContext_GetAccountInfoList (ieci->context);
+    if (accounts && AB_ImExporterAccountInfo_List_GetCount (accounts))
+    {
+        AB_ImExporterAccountInfo_List_ForEach (accounts, find_transactions_cb, ieci);
+        AB_ImExporterAccountInfo_List_ForEach (accounts, find_balances_cb, ieci);
+    }
+    gnc_ab_ieci_begin_transactions (ieci);
+    return G_SOURCE_REMOVE;
+}
+
+void
+gnc_ab_import_context_async (AB_IMEXPORTER_CONTEXT *context, guint awaiting,
+                             gboolean execute_txns, AB_BANKING *api,
+                             GtkWidget *parent, GCancellable *cancellable,
+                             GncABImportContextDoneCB done_cb,
+                             gpointer user_data)
+{
+    GncABImExContextImport *ieci;
+
+    g_return_if_fail (context);
+    g_return_if_fail (!(awaiting & AWAIT_BALANCES) ||
+                      !(awaiting & IGNORE_BALANCES));
+    g_return_if_fail (!(awaiting & AWAIT_TRANSACTIONS) ||
+                      !(awaiting & IGNORE_TRANSACTIONS));
+    g_return_if_fail (awaiting & AWAIT_TRANSACTIONS || !execute_txns);
+    g_return_if_fail (!execute_txns || api);
+
+    ieci = g_new0 (GncABImExContextImport, 1);
+    ieci->ref_count = 1;
+    ieci->awaiting = awaiting;
+    ieci->execute_txns = execute_txns;
+    ieci->api = api;
+    ieci->context = context;
+    ieci->has_parent = parent != NULL;
+    g_weak_ref_init (&ieci->parent, parent);
+    ieci->book = gnc_get_current_book ();
+    if (ieci->book)
+        ieci->book_guid = *qof_instance_get_guid (QOF_INSTANCE (ieci->book));
+    ieci->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+    ieci->done_cb = done_cb;
+    ieci->user_data = user_data;
+    ieci->job_list = AB_Transaction_List2_new ();
+    ieci->job_errors = g_queue_new ();
+    ieci->reconcile_requests = g_queue_new ();
+    g_datalist_init (&ieci->tmp_job_list);
+
+    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, gnc_ab_ieci_start, ieci, NULL);
 }
 
 guint
 gnc_ab_ieci_get_found (GncABImExContextImport *ieci)
 {
     g_return_val_if_fail (ieci, 0);
-
     return ieci->awaiting;
 }
 
@@ -1183,18 +1470,50 @@ GNC_AB_JOB_LIST2 *
 gnc_ab_ieci_get_job_list (GncABImExContextImport *ieci)
 {
     g_return_val_if_fail (ieci, NULL);
-
     return ieci->job_list;
 }
 
-gboolean
-gnc_ab_ieci_run_matcher (GncABImExContextImport *ieci)
+typedef struct
 {
-    g_return_val_if_fail (ieci, FALSE);
+    GncABImExContextImport *ieci;
+    GncABMatcherDoneCB done_cb;
+    gpointer user_data;
+} GncABMatcherRun;
 
-    return gnc_gen_trans_list_run (ieci->generic_importer);
+static void
+gnc_ab_matcher_finished_cb (gboolean accepted, gpointer user_data)
+{
+    GncABMatcherRun *run = user_data;
+
+    run->ieci->generic_importer = NULL;
+    if (run->done_cb)
+        run->done_cb (run->ieci, accepted, run->user_data);
+    gnc_ab_ieci_unref (run->ieci);
+    g_free (run);
 }
 
+void
+gnc_ab_ieci_run_matcher_async (GncABImExContextImport *ieci,
+                               GncABMatcherDoneCB done_cb,
+                               gpointer user_data)
+{
+    GncABMatcherRun *run;
+
+    g_return_if_fail (ieci);
+    if (!ieci->generic_importer)
+    {
+        if (done_cb)
+            done_cb (ieci, FALSE, user_data);
+        return;
+    }
+
+    run = g_new0 (GncABMatcherRun, 1);
+    run->ieci = gnc_ab_ieci_ref (ieci);
+    run->done_cb = done_cb;
+    run->user_data = user_data;
+    gnc_gen_trans_list_present (ieci->generic_importer,
+                                gnc_ab_matcher_finished_cb, run);
+}
 GWEN_DB_NODE *
 gnc_ab_get_permanent_certs (void)
 {

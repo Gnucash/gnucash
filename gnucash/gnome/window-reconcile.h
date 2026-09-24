@@ -45,10 +45,10 @@ typedef struct _RecnWindow RecnWindow;
  * Args:   parent  - the parent of this window                      *
  *         account - the account to reconcile                       *
  *
- * Return: recnData - the instance of this RecnWindow, or NULL if the
- * user pressed Cancel in the initial date query.
+ * The initial information dialog is non-blocking. If reconciliation is already
+ * open or pending for the account, that existing window or dialog is raised.
 \********************************************************************/
-RecnWindow *recnWindow (GtkWidget *parent, Account *account);
+void recnWindow (GtkWidget *parent, Account *account);
 
 /********************************************************************\
  * recnWindowWithBalance

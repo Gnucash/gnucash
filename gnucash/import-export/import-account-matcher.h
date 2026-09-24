@@ -31,26 +31,16 @@
 #define IMPORT_ACCOUNT_MATCHER_H
 
 #include "Account.h"
+#include "gnc-session.h"
 #include <gtk/gtk.h>
-
-#include "gnc-tree-view-account.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct
-{
-    GtkWidget           *dialog;                         /* Dialog Widget */
-    GtkWidget           *ok_button;                      /* ok button Widget */
-    GncTreeViewAccount  *account_tree;                   /* Account tree */
-    GtkWidget           *account_tree_sw;                /* Scroll Window for Account tree */
-    const gchar         *account_human_description;      /* description for on line id, incoming */
-    const gnc_commodity *new_account_default_commodity;  /* new account default commodity, incoming */
-    GNCAccountType       new_account_default_type;       /* new account default type, incoming */
-    GtkWidget           *whbox;                          /* Warning HBox */
-    GtkWidget           *warning;                        /* Warning Label */
-} AccountPickerDialog;
+typedef void (*GncImportAccountSelectedCB) (Account *account,
+                                            gboolean accepted,
+                                            gpointer user_data);
 
 /**  Must be called with a string containing a unique identifier for the
   account.  If an account with a matching online_id is
@@ -122,6 +112,45 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                     gboolean * ok_pressed
                                    );
 
+/** Present the account picker without entering a nested event loop.
+ * The callback receives the chosen account and whether the user accepted it.
+ * A previously mapped online ID completes immediately through the callback.
+ */
+void gnc_import_select_account_async (GtkWidget *parent,
+                                      const gchar *account_online_id_value,
+                                      gboolean prompt_on_no_match,
+                                      const gchar *account_human_description,
+                                      const gnc_commodity *new_account_default_commodity,
+                                      GNCAccountType new_account_default_type,
+                                      Account *default_selection,
+                                      GncImportAccountSelectedCB callback,
+                                      gpointer user_data);
+
+/** Present the asynchronous account picker without applying import-specific
+ * mutations to the selected account. Account creation keeps its ordinary
+ * user-confirmed workflow, while assignments such as online IDs remain for
+ * the caller's later apply pass. The callback has the same ownership and
+ * acceptance contract as gnc_import_select_account_async().
+ */
+void gnc_import_select_account_async_no_mutation (GtkWidget *parent,
+                                                  const gchar *account_online_id_value,
+                                                  gboolean prompt_on_no_match,
+                                                  const gchar *account_human_description,
+                                                  const gnc_commodity *new_account_default_commodity,
+                                                  GNCAccountType new_account_default_type,
+                                                  Account *default_selection,
+                                                  GncImportAccountSelectedCB callback,
+                                                  gpointer user_data);
+
+/** No-mutation account selection whose optional account-creation dialog uses
+ * short sections from @a context for every book mutation. */
+void gnc_import_select_account_async_no_mutation_with_operation_context (
+    GtkWidget *parent, const gchar *account_online_id_value,
+    gboolean prompt_on_no_match, const gchar *account_human_description,
+    const gnc_commodity *new_account_default_commodity,
+    GNCAccountType new_account_default_type, Account *default_selection,
+    GncSessionOperationContext *context,
+    GncImportAccountSelectedCB callback, gpointer user_data);
 #ifdef __cplusplus
 }
 #endif

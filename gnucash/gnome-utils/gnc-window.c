@@ -29,6 +29,7 @@
 
 #include "gnc-engine.h"
 #include "gnc-plugin-page.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-window.h"
 #include "gnc-splash.h"
 
@@ -115,7 +116,7 @@ gnc_window_get_menubar_model (GncWindow *window)
     return GNC_WINDOW_GET_IFACE(window)->get_menubar_model (window);
 }
 
-GtkAccelGroup *
+GtkEventController *
 gnc_window_get_accel_group (GncWindow *window)
 {
     g_return_val_if_fail (GNC_WINDOW(window), NULL);
@@ -140,8 +141,8 @@ gnc_window_update_status (GncWindow *window, GncPluginPage *page)
 
     statusbar = gnc_window_get_statusbar (window);
     message = gnc_plugin_page_get_statusbar_text(page);
-    gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0);
-    gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, message ? message : " ");
+    gnc_statusbar_pop (statusbar, 0);
+    gnc_statusbar_push (statusbar, 0, message);
 }
 
 void
@@ -240,7 +241,11 @@ gnc_window_show_progress (const char *message, double percentage)
         }
     }
 
-    /* make sure new text is up */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+    /*
+     * Progress is reported from synchronous QOF save/load/export and scrub
+     * callbacks. Do not iterate the default main context here: it would
+     * re-enter arbitrary UI actions while the model operation is in progress.
+     * Port the caller to an asynchronous continuation before requiring a
+     * progress update to be painted.
+     */
 }

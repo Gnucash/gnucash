@@ -100,7 +100,6 @@ struct _GNCSplitReg
 
     guint    sort_type;
     gboolean sort_rev;
-    gulong   sort_arrow_handler_id;
     gchar   *filter_text;
 
     gboolean read_only;
@@ -252,16 +251,36 @@ void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
 void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
 
-/** Check if the split is visible and ask if register filter should
- *  be cleared if split is not visible.
+/** Result of revealing a split in a filtered register. */
+typedef enum
+{
+    GNC_SPLIT_REG_REVEAL_ALREADY_VISIBLE,
+    GNC_SPLIT_REG_REVEAL_FILTER_CLEARED,
+} GncSplitRegRevealResult;
+
+/** Called when a split has been safely revealed in a register.
  *
- *  @param gsr A pointer to GNCSplitReg
- * 
- *  @param split A pointer to the split to check visibility on
- * 
- *  @return TRUE if the register filter should be cleared
- **/
-gboolean gnc_split_reg_clear_filter_for_split (GNCSplitReg *gsr, Split *split);
+ * The callback receives a freshly revalidated split. It is not called when
+ * the request is cancelled, rejected, or its register context is destroyed.
+ */
+typedef void (*GncSplitRegRevealCallback) (GNCSplitReg *gsr, Split *split,
+                                           GncSplitRegRevealResult result,
+                                           gpointer user_data);
+
+/** Reveal a split in a register, asking asynchronously to clear a filter.
+ *
+ * The request binds the register, parent window, current book, and split GUID
+ * before it shows the question. On a later response all of those are
+ * revalidated before @a completed is called. @a destroy_notify is called
+ * exactly once, after @a completed when it is called, otherwise after
+ * cancellation or rejection. The callback may run synchronously when the
+ * split is already visible, so callers must not access @a user_data after this
+ * function returns.
+ */
+void gnc_split_reg_reveal_split_async (GNCSplitReg *gsr, Split *split,
+                                       GncSplitRegRevealCallback completed,
+                                       gpointer user_data,
+                                       GDestroyNotify destroy_notify);
 
 /**
  * Set the focus of the register to the sheet

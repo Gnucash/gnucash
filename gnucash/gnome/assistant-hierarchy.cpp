@@ -27,6 +27,7 @@
 #include <glib/gstdio.h>
 #include <dialog-options.hpp>
 #include <gnc-optiondb.h>
+#include <gnc-optiondb-impl.hpp>
 #include <libguile.h>
 
 #include <config.h>
@@ -57,7 +58,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-path.h"
 #include "gnc-gui-query.h"
-#include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "io-example-account.h"
@@ -73,111 +73,163 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 #define GNC_PREF_SHOW_ON_NEW_FILE "show-on-new-file"
 #define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
+typedef struct _HierarchyCategoryRow HierarchyCategoryRow;
+typedef struct _HierarchyCategoryRowClass HierarchyCategoryRowClass;
+typedef struct _HierarchyAccountRow HierarchyAccountRow;
+typedef struct _HierarchyAccountRowClass HierarchyAccountRowClass;
+typedef struct _HierarchyAccountRef HierarchyAccountRef;
+typedef struct _HierarchyLocale HierarchyLocale;
+typedef struct hierarchy_data hierarchy_data;
+
+struct _HierarchyCategoryRow
+{
+    GObject parent_instance;
+    GncExampleAccount *account_set;
+    gboolean checked;
+};
+
+struct _HierarchyCategoryRowClass
+{
+    GObjectClass parent_class;
+};
+
+struct _HierarchyAccountRow
+{
+    GObject parent_instance;
+    QofBook *book;
+    GncGUID guid;
+};
+
+struct _HierarchyAccountRowClass
+{
+    GObjectClass parent_class;
+};
+
+struct _HierarchyAccountRef
+{
+    hierarchy_data *data;
+    QofBook *book;
+    GncGUID guid;
+    guint column;
+};
+
+struct _HierarchyLocale
+{
+    gchar *language;
+    gchar *region;
+    gchar *name;
+};
+
+GType hierarchy_category_row_get_type ();
+GType hierarchy_account_row_get_type ();
+
+G_DEFINE_FINAL_TYPE (HierarchyCategoryRow, hierarchy_category_row, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (HierarchyAccountRow, hierarchy_account_row, G_TYPE_OBJECT)
+
 typedef enum
 {
-    COL_CHECKED,
-    COL_TITLE,
-    COL_SHORT_DESCRIPTION,
-    COL_LONG_DESCRIPTION,
-    COL_ACCOUNT,
-    NUM_COLUMNS
-} ColumnNames;
+    HIERARCHY_ACCOUNT_COLUMN_NAME,
+    HIERARCHY_ACCOUNT_COLUMN_CODE,
+    HIERARCHY_ACCOUNT_COLUMN_DESCRIPTION,
+    HIERARCHY_ACCOUNT_COLUMN_NOTES,
+    HIERARCHY_ACCOUNT_COLUMN_TYPE,
+    HIERARCHY_ACCOUNT_COLUMN_PLACEHOLDER,
+    HIERARCHY_ACCOUNT_COLUMN_BALANCE,
+    HIERARCHY_ACCOUNT_COLUMN_USE_EXISTING
+} HierarchyAccountColumn;
 
-
-typedef struct
+struct hierarchy_data
 {
-    GtkWidget *dialog;
-    GtkWidget *assistant;
-    gboolean next_ok;
+    GtkWindow *dialog;
+    GtkStack *stack;
+    GtkWidget *pages[6];
+    guint page_count;
+    guint current_page;
+    guint currency_page;
+    guint categories_page;
+    guint final_page;
+    GtkWidget *back_button;
+    GtkWidget *next_button;
+    GtkWidget *apply_button;
+    GtkWidget *book_options_page;
+    /* Keep the reparented notebook alive until its option UI items are released. */
+    GtkWidget *book_options_notebook;
 
     GtkWidget *currency_selector;
     GtkWidget *currency_selector_label;
 
-    GtkWidget   *language_combo;
-    GtkWidget   *region_combo;
-    GtkWidget   *region_label;
+    GtkDropDown *language_combo;
+    GtkDropDown *region_combo;
+    GtkWidget *region_label;
+    GtkStringList *language_model;
+    GtkStringList *region_model;
+    GPtrArray *locales;
+    GPtrArray *visible_locales;
 
     gchar *gnc_accounts_dir;
 
-    GtkTreeView *categories_tree;
-    GtkTreeRowReference *initial_category;
+    GtkColumnView *categories_view;
+    GListStore *category_rows;
+    GtkSortListModel *sorted_category_rows;
+    GtkSingleSelection *category_selection;
+    GtkColumnViewColumn *categories_title_column;
+    guint initial_category_position;
     GtkTextView *category_description;
-    GtkWidget *category_accounts_container;
     GtkLabel *category_accounts_label;
-    GtkTreeView *category_accounts_tree;
+    GtkColumnView *category_accounts_view;
+    GListStore *category_account_roots;
+    GtkTreeListModel *category_account_tree;
+    GtkNoSelection *category_account_selection;
+    GSList *example_account_list;
     gboolean category_set_changed;
 
-    GncTreeViewAccount *final_account_tree;
-    GtkWidget *final_account_tree_container;
-    Account *selected_account;
-    /** Map<Account*,gnc_numeric*> **/
+    GtkColumnView *final_account_view;
+    GListStore *final_account_roots;
+    GtkTreeListModel *final_account_tree;
+    GtkSingleSelection *final_account_selection;
     GHashTable *balance_hash;
 
     Account *our_account_tree;
-    QofBook *temporary;
 
     gboolean account_list_added;
+    gboolean next_ok;
     gboolean use_defaults;
-    gboolean new_book;  /* presumably only used for new book creation but we check*/
+    gboolean new_book;
+    gboolean closing;
+    gboolean updating_locale;
 
     GncOptionDB *options;
     GncOptionsDialog *optionwin;
 
     GncHierarchyAssistantFinishedCallback when_completed;
 
-} hierarchy_data;
+};
+
+static void hierarchy_update_navigation (hierarchy_data *data);
+static void hierarchy_show_page (hierarchy_data *data, guint page);
+static void hierarchy_cancel (hierarchy_data *data);
+static void hierarchy_finish (hierarchy_data *data);
+static void hierarchy_reload_categories (hierarchy_data *data,
+                                         const gchar *locale_name);
+static void on_choose_account_categories_prepare (hierarchy_data *data);
+static void on_final_account_prepare (hierarchy_data *data);
+static void on_select_currency_prepare (hierarchy_data *data);
 
 extern "C"
 {
-void on_prepare (GtkAssistant *assistant, GtkWidget *page,
-                 hierarchy_data *data);
-
-void on_cancel (GtkAssistant *gtkassistant, hierarchy_data *data);
-void on_finish (GtkAssistant *gtkassistant, hierarchy_data *data);
-
-void select_all_clicked (GtkButton *button,
-                         hierarchy_data *data);
-void clear_all_clicked (GtkButton *button,
-                        hierarchy_data *data);
+void select_all_clicked (GtkButton *button, hierarchy_data *data);
+void clear_all_clicked (GtkButton *button, hierarchy_data *data);
 }
-
-void on_choose_account_categories_prepare (hierarchy_data  *data);
-void on_final_account_prepare (hierarchy_data  *data);
-void on_select_currency_prepare (hierarchy_data  *data);
-
-static void add_one_category (GncExampleAccount *acc, hierarchy_data *data);
-static void categories_page_enable_next (hierarchy_data *data);
-static void categories_tree_selection_changed (GtkTreeSelection *selection, hierarchy_data *data);
 // ------------------------------------------------------------
-
-static void
-delete_hierarchy_dialog (hierarchy_data *data)
-{
-    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(data->dialog));
-    gtk_widget_destroy (data->dialog);
-}
 
 static void
 destroy_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
     auto balance{static_cast<gnc_numeric*>(value)};
+
     g_free (balance);
-}
-
-static void
-gnc_hierarchy_destroy_cb (GtkWidget *obj,   hierarchy_data *data)
-{
-    GHashTable *hash;
-
-    hash = data->balance_hash;
-    if (hash)
-    {
-        g_hash_table_foreach (hash, destroy_hash_helper, nullptr);
-        g_hash_table_destroy (hash);
-        data->balance_hash = nullptr;
-    }
-
-    g_free (data->gnc_accounts_dir);
+    (void)key;
+    (void)user_data;
 }
 
 static gnc_numeric
@@ -301,645 +353,984 @@ gnc_get_ea_locale_dir(const char *top_dir)
     return ret;
 }
 
-typedef enum
-{
-    LANGUAGE_STRING,
-    REGION_STRING,
-    LANG_REG_STRING,
-    REGION_FILTER
-}GncLanguageRegionCombos;
-
 static void
-region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
+hierarchy_category_row_class_init (HierarchyCategoryRowClass *klass)
 {
-    GtkTreeModel *filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->region_combo));
-    GtkTreeModel *region_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter_model));
-    GtkTreeIter filter_iter, region_iter;
-    gchar *lang_reg = nullptr;
-    gchar *account_path = nullptr;
-
-    if (gtk_combo_box_get_active_iter (widget, &filter_iter))
-    {
-        GtkListStore *cat_list = GTK_LIST_STORE(gtk_tree_view_get_model (data->categories_tree));
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(data->categories_tree));
-        GSList *list;
-        GtkTreePath *path;
-
-        gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                          &region_iter,
-                                                          &filter_iter);
-
-        gtk_tree_model_get (region_model, &region_iter, LANG_REG_STRING, &lang_reg, -1);
-
-        gnc_suspend_gui_refresh ();
-
-        /* Remove the old account tree */
-        if (data->category_accounts_tree)
-            gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
-        data->category_accounts_tree = nullptr;
-
-        // clear the categories list store in prep for new load
-        if (cat_list)
-            gtk_list_store_clear (cat_list);
-
-        account_path = g_build_filename (data->gnc_accounts_dir, lang_reg, nullptr);
-
-        qof_event_suspend ();
-        list = gnc_load_example_account_list (account_path);
-        qof_event_resume ();
-
-        if (data->initial_category)
-        {
-            gtk_tree_row_reference_free (data->initial_category);
-            data->initial_category = nullptr;
-        }
-
-        // repopulate the category list
-        g_slist_foreach (list, (GFunc)add_one_category, data);
-
-        if (data->initial_category)
-        {
-            path = gtk_tree_row_reference_get_path (data->initial_category);
-            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(data->categories_tree),
-                                          path, nullptr, TRUE, 0.5, 0.5);
-        }
-        else
-            path = gtk_tree_path_new_first ();
-
-        gtk_tree_selection_select_path (selection, path);
-        gtk_tree_path_free (path);
-
-        // now load the account tree
-        categories_tree_selection_changed (selection, data);
-
-        gnc_resume_gui_refresh ();
-
-        g_slist_free (list);
-    }
-    g_free (account_path);
-    g_free (lang_reg);
+    (void)klass;
 }
 
-
 static void
-region_combo_change_filter_cb (GtkComboBox *widget, hierarchy_data  *data)
+hierarchy_category_row_init (HierarchyCategoryRow *row)
 {
-    GtkTreeModel *filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->region_combo));
-    GtkTreeModel *region_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter_model));
-    GtkTreeIter language_iter, region_iter, sorted_iter;
-    gboolean have_one_region = FALSE;
-
-    if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX(data->language_combo), &sorted_iter))
-    {
-        GtkTreeModel *sort_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->language_combo));
-        GtkTreeModel *language_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(sort_model));
-        GtkTreeIter *iter = nullptr;
-        gchar *language = nullptr;
-        gint count = 0;
-        gboolean valid;
-
-        gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(sort_model),
-                                                        &language_iter,
-                                                        &sorted_iter);
-
-        gtk_tree_model_get (language_model, &language_iter, LANGUAGE_STRING, &language, -1);
-        valid = gtk_tree_model_get_iter_first (region_model, &region_iter);
-
-        // loop through the regions and filter any out that are not linked to language setting
-        while (valid)
-        {
-            gchar *region_test = nullptr;
-
-            gtk_tree_model_get (region_model, &region_iter,
-                                LANGUAGE_STRING, &region_test, -1);
-
-            if (g_strcmp0 (language, region_test) == 0)
-            {
-                gtk_list_store_set (GTK_LIST_STORE(region_model),
-                                    &region_iter, REGION_FILTER, TRUE, -1);
-                if (count == 0)
-                    iter = gtk_tree_iter_copy (&region_iter);
-                count++;
-            }
-            else
-                gtk_list_store_set (GTK_LIST_STORE(region_model),
-                                    &region_iter, REGION_FILTER, FALSE, -1);
-
-            g_free (region_test);
-
-            valid = gtk_tree_model_iter_next (region_model, &region_iter);
-        }
-
-        // if we only have a language or just one region activate it
-        if (count == 1)
-        {
-            gchar *region_label = nullptr;
-            GtkTreeIter filter_iter;
-            gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                              &filter_iter,
-                                                              iter);
-
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
-
-            have_one_region = TRUE;
-
-            gtk_tree_model_get (region_model, iter, REGION_STRING, &region_label, -1);
-
-            gtk_label_set_text (GTK_LABEL(data->region_label), region_label);
-            g_free (region_label);
-        }
-        else
-        {
-            // if the combo is not already active, set it to first on in filtered list
-            if (gtk_combo_box_get_active (GTK_COMBO_BOX(data->region_combo)) == -1)
-            {
-                GtkTreeIter filter_iter;
-
-                gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                                  &filter_iter,
-                                                                  iter);
-
-                gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
-            }
-        }
-        gtk_widget_set_visible (GTK_WIDGET(data->region_label), have_one_region);
-        gtk_widget_set_visible (GTK_WIDGET(data->region_combo), !have_one_region);
-
-        gtk_tree_iter_free (iter);
-        g_free (language);
-    }
+    (void)row;
 }
 
+static HierarchyCategoryRow *
+hierarchy_category_row_new (GncExampleAccount *account_set, gboolean checked)
+{
+    auto row = static_cast<HierarchyCategoryRow*>(g_object_new
+        (hierarchy_category_row_get_type (), nullptr));
+
+    row->account_set = account_set;
+    row->checked = checked;
+    return row;
+}
+
+static void
+hierarchy_account_row_class_init (HierarchyAccountRowClass *klass)
+{
+    (void)klass;
+}
+
+static void
+hierarchy_account_row_init (HierarchyAccountRow *row)
+{
+    (void)row;
+}
+
+static HierarchyAccountRow *
+hierarchy_account_row_new (Account *account, QofBook *book)
+{
+    auto row = static_cast<HierarchyAccountRow*>(g_object_new
+        (hierarchy_account_row_get_type (), nullptr));
+
+    row->book = book;
+    row->guid = *xaccAccountGetGUID (account);
+    return row;
+}
+
+static Account *
+hierarchy_account_row_get_account (const HierarchyAccountRow *row)
+{
+    if (!row || !row->book)
+        return nullptr;
+
+    return xaccAccountLookup (&row->guid, row->book);
+}
+
+static void
+hierarchy_account_ref_free (gpointer data)
+{
+    g_free (data);
+}
+
+static HierarchyAccountRef *
+hierarchy_account_ref_new (hierarchy_data *data, Account *account,
+                           HierarchyAccountColumn column)
+{
+    auto ref = g_new0 (HierarchyAccountRef, 1);
+
+    ref->data = data;
+    ref->book = qof_instance_get_book (QOF_INSTANCE (account));
+    ref->guid = *xaccAccountGetGUID (account);
+    ref->column = column;
+    return ref;
+}
+
+static Account *
+hierarchy_account_ref_get_account (const HierarchyAccountRef *ref)
+{
+    if (!ref || !ref->book)
+        return nullptr;
+
+    return xaccAccountLookup (&ref->guid, ref->book);
+}
+
+static void
+hierarchy_locale_free (gpointer data)
+{
+    auto locale = static_cast<HierarchyLocale*>(data);
+
+    if (!locale)
+        return;
+    g_free (locale->language);
+    g_free (locale->region);
+    g_free (locale->name);
+    g_free (locale);
+}
+
+static gint
+hierarchy_locale_compare (gconstpointer a, gconstpointer b)
+{
+    auto locale_a = *static_cast<HierarchyLocale * const *>(a);
+    auto locale_b = *static_cast<HierarchyLocale * const *>(b);
+
+    return g_strcmp0 (locale_a->name, locale_b->name);
+}
+
+static void
+hierarchy_load_locales (hierarchy_data *data)
+{
+    GHashTable *languages;
+    GDir *directory;
+    const gchar *name;
+
+    data->locales = g_ptr_array_new_with_free_func (hierarchy_locale_free);
+    data->visible_locales = g_ptr_array_new ();
+    languages = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
+    directory = g_dir_open (data->gnc_accounts_dir, 0, nullptr);
+    if (!directory)
+    {
+        g_hash_table_destroy (languages);
+        return;
+    }
+
+    while ((name = g_dir_read_name (directory)) != nullptr)
+    {
+        gchar **parts;
+        auto locale = g_new0 (HierarchyLocale, 1);
+
+        parts = g_strsplit (name, "_", 2);
+        locale->name = g_strdup (name);
+        locale->language = g_strdup (g_strcmp0 (name, "C") == 0
+                                    ? "en" : parts[0]);
+        locale->region = g_strdup (g_strcmp0 (name, "C") == 0
+                                  ? "US" : parts[1] ? parts[1] : "--");
+        g_ptr_array_add (data->locales, locale);
+        g_hash_table_add (languages, g_strdup (locale->language));
+        g_strfreev (parts);
+    }
+    g_dir_close (directory);
+
+    g_ptr_array_sort (data->locales, hierarchy_locale_compare);
+    data->language_model = gtk_string_list_new (nullptr);
+    {
+        GList *names = g_hash_table_get_keys (languages);
+        names = g_list_sort (names, (GCompareFunc)g_strcmp0);
+        for (auto item = names; item; item = item->next)
+            gtk_string_list_append (data->language_model,
+                                    static_cast<const gchar*>(item->data));
+        g_list_free (names);
+    }
+    g_hash_table_destroy (languages);
+    gtk_drop_down_set_model (data->language_combo,
+                             G_LIST_MODEL (data->language_model));
+}
+
+static const HierarchyLocale *
+hierarchy_selected_locale (const hierarchy_data *data)
+{
+    const guint position = gtk_drop_down_get_selected (data->region_combo);
+
+    if (position == GTK_INVALID_LIST_POSITION ||
+        position >= data->visible_locales->len)
+        return nullptr;
+    return static_cast<const HierarchyLocale*>(g_ptr_array_index
+        (data->visible_locales, position));
+}
+
+static void
+hierarchy_rebuild_regions (hierarchy_data *data, const gchar *language,
+                           const gchar *preferred_name)
+{
+    guint selected = GTK_INVALID_LIST_POSITION;
+
+    data->updating_locale = TRUE;
+    g_clear_object (&data->region_model);
+    data->region_model = gtk_string_list_new (nullptr);
+    g_ptr_array_set_size (data->visible_locales, 0);
+
+    for (guint i = 0; i < data->locales->len; i++)
+    {
+        auto locale = static_cast<HierarchyLocale*>(g_ptr_array_index
+            (data->locales, i));
+
+        if (g_strcmp0 (locale->language, language) != 0)
+            continue;
+        if (preferred_name && g_strcmp0 (locale->name, preferred_name) == 0)
+            selected = data->visible_locales->len;
+        gtk_string_list_append (data->region_model, locale->region);
+        g_ptr_array_add (data->visible_locales, locale);
+    }
+
+    gtk_drop_down_set_model (data->region_combo, G_LIST_MODEL (data->region_model));
+    if (data->visible_locales->len > 0)
+    {
+        if (selected == GTK_INVALID_LIST_POSITION)
+            selected = 0;
+        gtk_drop_down_set_selected (data->region_combo, selected);
+    }
+    gtk_widget_set_visible (data->region_label, data->visible_locales->len == 1);
+    gtk_widget_set_visible (GTK_WIDGET (data->region_combo),
+                            data->visible_locales->len != 1);
+    if (data->visible_locales->len == 1)
+    {
+        auto locale = static_cast<HierarchyLocale*>(g_ptr_array_index
+            (data->visible_locales, 0));
+        gtk_label_set_text (GTK_LABEL (data->region_label), locale->region);
+    }
+    data->updating_locale = FALSE;
+}
+
+static void
+hierarchy_region_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec,
+                             hierarchy_data *data)
+{
+    auto locale = hierarchy_selected_locale (data);
+
+    if (!data->updating_locale && locale && data->account_list_added)
+        hierarchy_reload_categories (data, locale->name);
+    (void)dropdown;
+    (void)pspec;
+}
+
+static void
+hierarchy_language_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec,
+                               hierarchy_data *data)
+{
+    const guint position = gtk_drop_down_get_selected (dropdown);
+    const gchar *language;
+    auto locale = hierarchy_selected_locale (data);
+
+    if (data->updating_locale || position == GTK_INVALID_LIST_POSITION)
+        return;
+    language = gtk_string_list_get_string (data->language_model, position);
+    hierarchy_rebuild_regions (data, language, locale ? locale->name : nullptr);
+    locale = hierarchy_selected_locale (data);
+    if (locale && data->account_list_added)
+        hierarchy_reload_categories (data, locale->name);
+    (void)pspec;
+}
 
 static void
 update_language_region_combos (hierarchy_data *data, const gchar *locale_dir)
 {
-    GtkListStore *language_store = gtk_list_store_new (1, G_TYPE_STRING);
-    GtkListStore *region_store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
-    GtkTreeModel *filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL(region_store), nullptr);
-    GtkTreeModel *sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL(language_store));
-    GtkTreeIter language_iter, region_iter;
-    gchar *start_region = nullptr;
-    gboolean valid;
+    gchar *default_name;
+    const gchar *default_language = nullptr;
 
-    // set sort order
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model), LANGUAGE_STRING, GTK_SORT_ASCENDING);
+    hierarchy_load_locales (data);
+    if (g_list_model_get_n_items (G_LIST_MODEL (data->language_model)) == 0)
+        return;
 
-    gtk_combo_box_set_model (GTK_COMBO_BOX(data->language_combo), GTK_TREE_MODEL(sort_model));
-    gtk_combo_box_set_model (GTK_COMBO_BOX(data->region_combo), GTK_TREE_MODEL(filter_model));
-
-    gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter_model), REGION_FILTER);
-
-    g_signal_connect (data->language_combo, "changed",
-                      G_CALLBACK(region_combo_change_filter_cb), (gpointer)data);
-
-    if (g_file_test (data->gnc_accounts_dir, G_FILE_TEST_IS_DIR))
+    default_name = g_path_get_basename (locale_dir);
+    for (guint i = 0; i < data->locales->len; i++)
     {
-        GHashTable *testhash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
-        GDir *acct_dir = g_dir_open (data->gnc_accounts_dir, 0, nullptr);
-        const gchar *name = "a";
-
-        while (name != nullptr)
+        auto locale = static_cast<HierarchyLocale*>(g_ptr_array_index
+            (data->locales, i));
+        if (g_strcmp0 (locale->name, default_name) == 0)
         {
-            name = g_dir_read_name (acct_dir);
-
-            if (name)
-            {
-                gchar **parts = g_strsplit (name, "_", -1);
-                gchar *lang_name;
-
-                gtk_list_store_append (region_store, &region_iter);
-                gtk_list_store_set (region_store, &region_iter, LANG_REG_STRING, name,
-                                    LANGUAGE_STRING, parts[0], REGION_FILTER, TRUE, -1);
-
-                // set the region combo to the default region
-                if (g_str_has_suffix (locale_dir, name))
-                {
-                    GtkTreeIter filter_iter;
-                    gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                                      &filter_iter,
-                                                                      &region_iter);
-
-                    gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
-                    start_region = g_strdup (parts[0]);
-                }
-                // add the region part to the region model store
-                if (parts[1] != nullptr)
-                    gtk_list_store_set (region_store, &region_iter, REGION_STRING, parts[1], -1);
-                else
-                    gtk_list_store_set (region_store, &region_iter, REGION_STRING, "--", -1);
-
-                // to make it less confusing to non-programmers, change C to en_US
-                if (g_strcmp0 (name, "C") == 0)
-                {
-                    gtk_list_store_set (region_store, &region_iter, LANGUAGE_STRING, "en", REGION_STRING, "US", -1);
-                    lang_name = g_strdup ("en");
-
-                    if (g_str_has_suffix (locale_dir, name))
-                    {
-                        g_free (start_region);
-                        start_region = g_strdup (lang_name);
-                    }
-                }
-                else
-                    lang_name = g_strdup (parts[0]);
-
-                // see if language is in hash table so we only add it once.
-                if (g_hash_table_lookup (testhash, lang_name) == nullptr)
-                {
-                    static const char* t_str{"test"};
-                    gtk_list_store_append (language_store, &language_iter);
-                    gtk_list_store_set (language_store, &language_iter, LANGUAGE_STRING, lang_name, -1);
-
-                    g_hash_table_insert (testhash, g_strdup (lang_name), &t_str);
-                }
-                g_strfreev (parts);
-                g_free (lang_name);
-            }
+            default_language = locale->language;
+            break;
         }
-        g_hash_table_destroy (testhash);
-        g_dir_close (acct_dir);
     }
+    if (!default_language)
+        default_language = static_cast<HierarchyLocale*>(g_ptr_array_index
+            (data->locales, 0))->language;
 
-    // now try and set the language combo to the default language
-    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(language_store), &language_iter);
-    while (valid)
+    for (guint i = 0; i < g_list_model_get_n_items
+             (G_LIST_MODEL (data->language_model)); i++)
     {
-        gchar *language_test = nullptr;
-
-        gtk_tree_model_get (GTK_TREE_MODEL(language_store), &language_iter, LANGUAGE_STRING, &language_test, -1);
-
-        if (g_strcmp0 (language_test, start_region) == 0)
+        const gchar *language = gtk_string_list_get_string (data->language_model, i);
+        if (g_strcmp0 (language, default_language) == 0)
         {
-            GtkTreeIter sort_iter;
-            gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(sort_model),
-                                                            &sort_iter,
-                                                            &language_iter);
-
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->language_combo), &sort_iter);
+            gtk_drop_down_set_selected (data->language_combo, i);
+            break;
         }
-        g_free (language_test);
-
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(language_store), &language_iter);
     }
-    g_signal_connect (data->region_combo, "changed",
-                      G_CALLBACK(region_combo_changed_cb), (gpointer)data);
-
-    g_object_unref (language_store);
-    g_object_unref (region_store);
-    g_free (start_region);
+    hierarchy_rebuild_regions (data, default_language, default_name);
+    g_signal_connect (data->language_combo, "notify::selected",
+                      G_CALLBACK (hierarchy_language_changed_cb), data);
+    g_signal_connect (data->region_combo, "notify::selected",
+                      G_CALLBACK (hierarchy_region_changed_cb), data);
+    g_free (default_name);
 }
-
 /************************************************************
  *                  Choose Categories Page                  *
  ************************************************************/
 
-/** This is a helper function called on each item in the GtkTreeStore
- *  by categories_page_enable_next.  The purpose is to determine if an
- *  account set has been selected.
- *
- *  @param store The GtkListStore containing one line per account set.
- *
- *  @param path A GtkTreePath for the entry in question.
- *
- *  @param iter A GtkTreeIter for the entry in question.
- *
- *  @param result A pointer to the result value passed to/from the
- *  caller.  This function sets the result value to TRUE if the entry
- *  in question is checked.
- *
- *  @return TRUE if the entry in question is checked to cancel the
- *  tree walk.  FALSE if unchecked to that the rest of the tree will
- *  be tested. */
-static gboolean
-account_set_checked_helper (GtkListStore *store,
-                            GtkTreePath  *path,
-                            GtkTreeIter  *iter,
-                            gboolean     *result)
+typedef struct
 {
-    gboolean checked;
+    hierarchy_data *data;
+    HierarchyAccountColumn column;
+    gboolean editable;
+} HierarchyAccountFactoryData;
 
-    g_return_val_if_fail(GTK_IS_LIST_STORE(store), FALSE);
+static GListModel *
+hierarchy_account_children_model (gpointer item, gpointer user_data)
+{
+    auto row = static_cast<HierarchyAccountRow*>(item);
+    auto account = hierarchy_account_row_get_account (row);
+    auto children = g_list_store_new (hierarchy_account_row_get_type ());
 
-    gtk_tree_model_get (GTK_TREE_MODEL(store), iter, COL_CHECKED, &checked, -1);
-    if (checked)
+    if (account)
     {
-        *result = TRUE;
-        return TRUE; /* Stop tree walk. */
+        auto account_children = gnc_account_get_children_sorted (account);
+        for (auto node = account_children; node; node = node->next)
+        {
+            auto child = hierarchy_account_row_new (static_cast<Account*>(node->data),
+                                                    row->book);
+            g_list_store_append (children, child);
+            g_object_unref (child);
+        }
+        g_list_free (account_children);
     }
-
-    return FALSE;
+    (void)user_data;
+    return G_LIST_MODEL (children);
 }
 
-/** This function determines if the "Next" button on the account set
- *  selection page should be sensitive.  The button should only be
- *  sensitive if one or more account sets has been selected.
- *
- *  @param data A pointer to the data structure describing the
- *  hierarchy assistant. */
+static GListStore *
+hierarchy_account_roots_new (Account *root, QofBook *book)
+{
+    auto roots = g_list_store_new (hierarchy_account_row_get_type ());
+
+    if (!root)
+        return roots;
+
+    auto account_children = gnc_account_get_children_sorted (root);
+    for (auto node = account_children; node; node = node->next)
+    {
+        auto row = hierarchy_account_row_new (static_cast<Account*>(node->data), book);
+        g_list_store_append (roots, row);
+        g_object_unref (row);
+    }
+    g_list_free (account_children);
+    return roots;
+}
+
+static HierarchyAccountRow *
+hierarchy_list_item_get_account_row (GtkListItem *list_item,
+                                     GtkTreeListRow **tree_row)
+{
+    auto item = gtk_list_item_get_item (list_item);
+
+    if (!item || !GTK_IS_TREE_LIST_ROW (item))
+        return nullptr;
+    if (tree_row)
+        *tree_row = GTK_TREE_LIST_ROW (item);
+    return static_cast<HierarchyAccountRow*>(gtk_tree_list_row_get_item
+        (GTK_TREE_LIST_ROW (item)));
+}
+
+static const gchar *
+hierarchy_account_column_text (Account *account, HierarchyAccountColumn column)
+{
+    const gchar *text = "";
+
+    if (!account)
+        return text;
+
+    switch (column)
+    {
+    case HIERARCHY_ACCOUNT_COLUMN_NAME:
+        text = xaccAccountGetName (account);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_CODE:
+        text = xaccAccountGetCode (account);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_DESCRIPTION:
+        text = xaccAccountGetDescription (account);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_NOTES:
+        text = xaccAccountGetNotes (account);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_TYPE:
+        text = xaccAccountGetTypeStr (xaccAccountGetType (account));
+        break;
+    default:
+        break;
+    }
+
+    return text ? text : "";
+}
+
+static gboolean
+hierarchy_account_balance_is_editable (Account *account)
+{
+    GncAccountMergeDisposition disposition;
+
+    if (!account || xaccAccountGetPlaceholder (account) ||
+        xaccAccountGetType (account) == ACCT_TYPE_EQUITY ||
+        xaccAccountGetType (account) == ACCT_TYPE_TRADING)
+        return FALSE;
+    disposition = determine_merge_disposition
+        (gnc_book_get_root_account (gnc_get_current_book ()), account);
+    return disposition == GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW;
+}
+
+static const gchar *
+hierarchy_account_balance_text (Account *account, hierarchy_data *data)
+{
+    auto balance = get_final_balance (data->balance_hash, account);
+
+    if (!account || gnc_numeric_zero_p (balance))
+        return "";
+    return xaccPrintAmount (balance, gnc_account_print_info (account, FALSE));
+}
+
+static const gchar *
+hierarchy_account_use_existing_text (Account *account)
+{
+    if (!account)
+        return "";
+    return determine_merge_disposition (gnc_book_get_root_account
+        (gnc_get_current_book ()), account) ==
+        GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING ? _("Yes") : _("No");
+}
+
+static void
+hierarchy_account_entry_commit (GtkEditable *editable, gpointer user_data)
+{
+    auto ref = static_cast<HierarchyAccountRef*>(g_object_get_data
+        (G_OBJECT (editable), "hierarchy-account-ref"));
+    auto account = hierarchy_account_ref_get_account (ref);
+    const gchar *text;
+
+    (void)user_data;
+    if (!ref || !ref->data || ref->data->closing || !account)
+        return;
+    text = gtk_editable_get_text (editable);
+    switch (ref->column)
+    {
+    case HIERARCHY_ACCOUNT_COLUMN_NAME:
+    {
+        auto parent = gnc_account_get_parent (account);
+        auto existing = parent ? gnc_account_lookup_by_name (parent, text) : nullptr;
+        if (!existing || existing == account)
+            xaccAccountSetName (account, text);
+        break;
+    }
+    case HIERARCHY_ACCOUNT_COLUMN_CODE:
+        xaccAccountSetCode (account, text);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_DESCRIPTION:
+        xaccAccountSetDescription (account, text);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_NOTES:
+        xaccAccountSetNotes (account, text);
+        break;
+    case HIERARCHY_ACCOUNT_COLUMN_BALANCE:
+    {
+        char *error_loc = nullptr;
+        auto amount = gnc_numeric_zero ();
+
+        if (gnc_exp_parser_parse (text, &amount, &error_loc))
+        {
+            amount = gnc_numeric_convert (amount,
+                                          xaccAccountGetCommoditySCU (account),
+                                          GNC_HOW_RND_ROUND_HALF_UP);
+            set_final_balance (ref->data->balance_hash, account, amount);
+            qof_event_gen (QOF_INSTANCE (account), QOF_EVENT_MODIFY, nullptr);
+        }
+        else
+            gtk_editable_set_text (editable, "");
+        g_free (error_loc);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void
+hierarchy_account_entry_focus_leave (GtkEventControllerFocus *controller,
+                                     gpointer user_data)
+{
+    auto widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller));
+
+    if (widget)
+        hierarchy_account_entry_commit (GTK_EDITABLE (widget), user_data);
+}
+
+static void
+hierarchy_account_placeholder_toggled (GtkCheckButton *button, gpointer user_data)
+{
+    auto ref = static_cast<HierarchyAccountRef*>(g_object_get_data
+        (G_OBJECT (button), "hierarchy-account-ref"));
+    auto account = hierarchy_account_ref_get_account (ref);
+
+    if (!ref || !ref->data || ref->data->closing || !account)
+        return;
+    xaccAccountSetPlaceholder (account, gtk_check_button_get_active (button));
+    if (xaccAccountGetPlaceholder (account))
+        set_final_balance (ref->data->balance_hash, account, gnc_numeric_zero ());
+    qof_event_gen (QOF_INSTANCE (account), QOF_EVENT_MODIFY, nullptr);
+    gtk_widget_queue_draw (GTK_WIDGET (ref->data->final_account_view));
+    (void)user_data;
+}
+
+static void
+hierarchy_account_cell_setup (GtkListItemFactory *factory, GtkListItem *list_item,
+                              gpointer user_data)
+{
+    auto factory_data = static_cast<HierarchyAccountFactoryData*>(user_data);
+    GtkWidget *child;
+
+    switch (factory_data->column)
+    {
+    case HIERARCHY_ACCOUNT_COLUMN_NAME:
+    {
+        auto entry = gtk_entry_new ();
+        auto expander = gtk_tree_expander_new ();
+        auto controller = gtk_event_controller_focus_new ();
+
+        gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
+        gtk_editable_set_editable (GTK_EDITABLE (entry), factory_data->editable);
+        gtk_widget_set_hexpand (entry, TRUE);
+        gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), entry);
+        g_signal_connect (entry, "activate",
+                          G_CALLBACK (hierarchy_account_entry_commit), nullptr);
+        g_signal_connect (controller, "leave",
+                          G_CALLBACK (hierarchy_account_entry_focus_leave), nullptr);
+        gtk_widget_add_controller (entry, controller);
+        child = expander;
+        break;
+    }
+    case HIERARCHY_ACCOUNT_COLUMN_CODE:
+    case HIERARCHY_ACCOUNT_COLUMN_DESCRIPTION:
+    case HIERARCHY_ACCOUNT_COLUMN_NOTES:
+    case HIERARCHY_ACCOUNT_COLUMN_BALANCE:
+    {
+        auto entry = gtk_entry_new ();
+        auto controller = gtk_event_controller_focus_new ();
+
+        gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
+        gtk_editable_set_editable (GTK_EDITABLE (entry), factory_data->editable);
+        if (factory_data->column == HIERARCHY_ACCOUNT_COLUMN_BALANCE)
+            gtk_editable_set_alignment (GTK_EDITABLE (entry), 1.0);
+        g_signal_connect (entry, "activate",
+                          G_CALLBACK (hierarchy_account_entry_commit), nullptr);
+        g_signal_connect (controller, "leave",
+                          G_CALLBACK (hierarchy_account_entry_focus_leave), nullptr);
+        gtk_widget_add_controller (entry, controller);
+        child = entry;
+        break;
+    }
+    case HIERARCHY_ACCOUNT_COLUMN_PLACEHOLDER:
+        child = gtk_check_button_new ();
+        g_signal_connect (child, "toggled",
+                          G_CALLBACK (hierarchy_account_placeholder_toggled), nullptr);
+        break;
+    default:
+        child = gtk_label_new (nullptr);
+        gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
+        break;
+    }
+    gtk_list_item_set_child (list_item, child);
+    (void)factory;
+}
+
+static void
+hierarchy_account_cell_bind (GtkListItemFactory *factory, GtkListItem *list_item,
+                             gpointer user_data)
+{
+    auto factory_data = static_cast<HierarchyAccountFactoryData*>(user_data);
+    GtkTreeListRow *tree_row = nullptr;
+    g_autoptr(GObject) row_object = G_OBJECT
+        (hierarchy_list_item_get_account_row (list_item, &tree_row));
+    auto row = reinterpret_cast<HierarchyAccountRow*>(row_object);
+    auto account = hierarchy_account_row_get_account (row);
+    auto child = gtk_list_item_get_child (list_item);
+    GtkWidget *editable = child;
+
+    if (factory_data->column == HIERARCHY_ACCOUNT_COLUMN_NAME)
+    {
+        gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (child), tree_row);
+        editable = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (child));
+    }
+
+    if (!account)
+    {
+        if (GTK_IS_EDITABLE (editable))
+            gtk_editable_set_text (GTK_EDITABLE (editable), "");
+        else if (GTK_IS_LABEL (child))
+            gtk_label_set_text (GTK_LABEL (child), "");
+        return;
+    }
+
+    if (factory_data->column == HIERARCHY_ACCOUNT_COLUMN_PLACEHOLDER)
+    {
+        g_signal_handlers_block_by_func (child,
+                                         (gpointer)hierarchy_account_placeholder_toggled,
+                                         nullptr);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
+                                     xaccAccountGetPlaceholder (account));
+        g_signal_handlers_unblock_by_func (child,
+                                           (gpointer)hierarchy_account_placeholder_toggled,
+                                           nullptr);
+        g_object_set_data_full (G_OBJECT (child), "hierarchy-account-ref",
+                                hierarchy_account_ref_new (factory_data->data,
+                                                           account,
+                                                           factory_data->column),
+                                hierarchy_account_ref_free);
+    }
+    else if (factory_data->column == HIERARCHY_ACCOUNT_COLUMN_BALANCE)
+    {
+        gtk_editable_set_text (GTK_EDITABLE (editable),
+                               hierarchy_account_balance_text (account,
+                                                               factory_data->data));
+        gtk_widget_set_sensitive (editable, hierarchy_account_balance_is_editable
+                                  (account));
+        g_object_set_data_full (G_OBJECT (editable), "hierarchy-account-ref",
+                                hierarchy_account_ref_new (factory_data->data,
+                                                           account,
+                                                           factory_data->column),
+                                hierarchy_account_ref_free);
+    }
+    else if (factory_data->column == HIERARCHY_ACCOUNT_COLUMN_USE_EXISTING)
+        gtk_label_set_text (GTK_LABEL (child), hierarchy_account_use_existing_text (account));
+    else if (factory_data->column == HIERARCHY_ACCOUNT_COLUMN_TYPE)
+        gtk_label_set_text (GTK_LABEL (child), hierarchy_account_column_text
+                            (account, factory_data->column));
+    else
+    {
+        gtk_editable_set_text (GTK_EDITABLE (editable), hierarchy_account_column_text
+                               (account, factory_data->column));
+        g_object_set_data_full (G_OBJECT (editable), "hierarchy-account-ref",
+                                hierarchy_account_ref_new (factory_data->data,
+                                                           account,
+                                                           factory_data->column),
+                                hierarchy_account_ref_free);
+    }
+    (void)factory;
+}
+
+static void
+hierarchy_append_account_column (hierarchy_data *data, GtkColumnView *view,
+                                 const gchar *title, HierarchyAccountColumn column,
+                                 gboolean expand, gboolean editable)
+{
+    auto factory_data = g_new0 (HierarchyAccountFactoryData, 1);
+    auto factory = gtk_signal_list_item_factory_new ();
+    auto view_column = gtk_column_view_column_new (title, factory);
+
+    factory_data->data = data;
+    factory_data->column = column;
+    factory_data->editable = editable;
+    g_object_set_data_full (G_OBJECT (factory), "hierarchy-factory-data",
+                            factory_data, g_free);
+    g_signal_connect (factory, "setup", G_CALLBACK (hierarchy_account_cell_setup),
+                      factory_data);
+    g_signal_connect (factory, "bind", G_CALLBACK (hierarchy_account_cell_bind),
+                      factory_data);
+    gtk_column_view_column_set_resizable (view_column, TRUE);
+    gtk_column_view_column_set_expand (view_column, expand);
+    gtk_column_view_append_column (view, view_column);
+    g_object_unref (view_column);
+}
+
+static void hierarchy_category_toggled (GtkCheckButton *button, gpointer user_data);
+
+static gint
+hierarchy_category_sort (gconstpointer first, gconstpointer second,
+                         gpointer user_data)
+{
+    auto first_row = static_cast<const HierarchyCategoryRow*>(first);
+    auto second_row = static_cast<const HierarchyCategoryRow*>(second);
+    const guint column = GPOINTER_TO_UINT (user_data);
+    gint comparison;
+
+    if (column == 0)
+        comparison = first_row->checked == second_row->checked ? 0
+            : first_row->checked ? -1 : 1;
+    else
+        comparison = g_utf8_collate (first_row->account_set->title,
+                                     second_row->account_set->title);
+    return comparison;
+}
+
+static void
+hierarchy_category_cell_setup (GtkListItemFactory *factory, GtkListItem *list_item,
+                               gpointer user_data)
+{
+    GtkWidget *child;
+
+    if (GPOINTER_TO_UINT (user_data) == 0)
+    {
+        child = gtk_check_button_new ();
+        g_signal_connect (child, "toggled",
+                          G_CALLBACK (hierarchy_category_toggled), nullptr);
+    }
+    else
+    {
+        child = gtk_label_new (nullptr);
+        gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+        gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
+    }
+    gtk_list_item_set_child (list_item, child);
+    (void)factory;
+}
+
+static void
+hierarchy_category_toggled (GtkCheckButton *button, gpointer user_data)
+{
+    auto row = static_cast<HierarchyCategoryRow*>(g_object_get_data
+        (G_OBJECT (button), "hierarchy-category-row"));
+    auto data = static_cast<hierarchy_data*>(g_object_get_data
+        (G_OBJECT (button), "hierarchy-data"));
+
+    (void)user_data;
+    if (!row || !data || data->closing)
+        return;
+    row->checked = gtk_check_button_get_active (button);
+    data->category_set_changed = TRUE;
+    hierarchy_update_navigation (data);
+}
+
+static void
+hierarchy_category_cell_bind (GtkListItemFactory *factory, GtkListItem *list_item,
+                              gpointer user_data)
+{
+    auto row = static_cast<HierarchyCategoryRow*>(gtk_list_item_get_item (list_item));
+    auto child = gtk_list_item_get_child (list_item);
+    auto data = static_cast<hierarchy_data*>(g_object_get_data
+        (G_OBJECT (factory), "hierarchy-data"));
+
+    if (GPOINTER_TO_UINT (user_data) == 0)
+    {
+        g_signal_handlers_block_by_func (child, (gpointer)hierarchy_category_toggled,
+                                         nullptr);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (child), row && row->checked);
+        g_signal_handlers_unblock_by_func (child,
+                                           (gpointer)hierarchy_category_toggled,
+                                           nullptr);
+        g_object_set_data (G_OBJECT (child), "hierarchy-category-row", row);
+        g_object_set_data (G_OBJECT (child), "hierarchy-data", data);
+    }
+    else
+        gtk_label_set_text (GTK_LABEL (child), row && row->account_set
+                            ? row->account_set->title : "");
+}
+
+static void
+hierarchy_append_category_column (hierarchy_data *data, const gchar *title,
+                                  guint column, gboolean expand)
+{
+    auto factory = gtk_signal_list_item_factory_new ();
+    auto view_column = gtk_column_view_column_new (title, factory);
+    auto sorter = gtk_custom_sorter_new (hierarchy_category_sort,
+                                         GUINT_TO_POINTER (column), nullptr);
+
+    g_object_set_data (G_OBJECT (factory), "hierarchy-data", data);
+    g_signal_connect (factory, "setup", G_CALLBACK (hierarchy_category_cell_setup),
+                      GUINT_TO_POINTER (column));
+    g_signal_connect (factory, "bind", G_CALLBACK (hierarchy_category_cell_bind),
+                      GUINT_TO_POINTER (column));
+    gtk_column_view_column_set_expand (view_column, expand);
+    gtk_column_view_column_set_resizable (view_column, TRUE);
+    gtk_column_view_column_set_sorter (view_column, GTK_SORTER (sorter));
+    gtk_column_view_append_column (data->categories_view, view_column);
+    if (column == 1)
+        data->categories_title_column = view_column;
+    g_object_unref (sorter);
+    g_object_unref (view_column);
+}
+
+static void
+hierarchy_clear_preview (hierarchy_data *data)
+{
+    gtk_column_view_set_model (data->category_accounts_view, nullptr);
+    g_clear_object (&data->category_account_selection);
+    g_clear_object (&data->category_account_tree);
+    g_clear_object (&data->category_account_roots);
+}
+
+static void
+hierarchy_set_preview (hierarchy_data *data, GncExampleAccount *account_set)
+{
+    gchar *title;
+    gchar *markup;
+    GtkTextBuffer *buffer;
+
+    hierarchy_clear_preview (data);
+    buffer = gtk_text_view_get_buffer (data->category_description);
+    if (!account_set)
+    {
+        gtk_label_set_markup (data->category_accounts_label,
+                              "<b>Accounts in Category</b>");
+        gtk_text_buffer_set_text (buffer, "", -1);
+        return;
+    }
+
+    title = g_strdup_printf (_("Accounts in '%s'"), account_set->title);
+    markup = g_strdup_printf ("<b>%s</b>", title);
+    gtk_label_set_markup (data->category_accounts_label, markup);
+    gtk_text_buffer_set_text (buffer, account_set->long_description
+                              ? account_set->long_description
+                              : _("No description provided."), -1);
+    g_free (markup);
+    g_free (title);
+
+    data->category_account_roots = hierarchy_account_roots_new (account_set->root,
+                                                                  account_set->book);
+    data->category_account_tree = gtk_tree_list_model_new
+        (G_LIST_MODEL (g_object_ref (data->category_account_roots)), FALSE, TRUE,
+         hierarchy_account_children_model, nullptr, nullptr);
+    data->category_account_selection = gtk_no_selection_new
+        (G_LIST_MODEL (g_object_ref (data->category_account_tree)));
+    gtk_column_view_set_model (data->category_accounts_view,
+                               GTK_SELECTION_MODEL (data->category_account_selection));
+}
+
+static void
+hierarchy_category_selection_changed (GtkSelectionModel *selection, guint position,
+                                      guint n_items, hierarchy_data *data)
+{
+    auto item = gtk_single_selection_get_selected_item (data->category_selection);
+    auto row = item ? static_cast<HierarchyCategoryRow*>(item) : nullptr;
+
+    hierarchy_set_preview (data, row ? row->account_set : nullptr);
+    (void)selection;
+    (void)position;
+    (void)n_items;
+}
+
 static void
 categories_page_enable_next (hierarchy_data *data)
 {
-    gint currentpagenum;
-    GtkWidget *currentpage;
-    GtkAssistant *assistant = GTK_ASSISTANT(data->dialog);
-
     data->next_ok = FALSE;
-    gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
-                            (GtkTreeModelForeachFunc)account_set_checked_helper,
-                            &data->next_ok);
-
-    currentpagenum = gtk_assistant_get_current_page(assistant);
-    currentpage = gtk_assistant_get_nth_page(assistant, currentpagenum);
-
-    gtk_assistant_set_page_complete(assistant, currentpage, data->next_ok);
-}
-
-
-static void
-categories_selection_changed (GtkTreeModel *treemodel,
-                              GtkTreePath *arg1,
-                              GtkTreeIter *arg2,
-                              hierarchy_data *data)
-{
-    data->category_set_changed = TRUE;
-    categories_page_enable_next(data);
-}
-
-
-static void
-add_one_category (GncExampleAccount *acc,
-                  hierarchy_data *data)
-{
-    GtkTreeView *view;
-    GtkListStore *store;
-    GtkTreeIter iter;
-    GtkTreePath* path;
-    gboolean use_defaults;
-
-    g_return_if_fail(acc != nullptr);
-    g_return_if_fail(data != nullptr);
-
-    view = data->categories_tree;
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
-    use_defaults = data->use_defaults && acc->start_selected;
-
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       COL_CHECKED, use_defaults,
-                       COL_TITLE, acc->title,
-                       COL_SHORT_DESCRIPTION, acc->short_description,
-                       COL_LONG_DESCRIPTION, acc->long_description,
-                       COL_ACCOUNT, acc,
-                       -1);
-
-    if (use_defaults)
+    for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (data->category_rows)); i++)
     {
-        data->category_set_changed = TRUE;
-        path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-        data->initial_category = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
-        gtk_tree_path_free(path);
+        auto item = g_list_model_get_item (G_LIST_MODEL (data->category_rows), i);
+        auto row = static_cast<HierarchyCategoryRow*>(item);
+        data->next_ok = row->checked;
+        g_object_unref (item);
+        if (data->next_ok)
+            break;
+    }
+    hierarchy_update_navigation (data);
+}
+
+static void
+hierarchy_clear_categories (hierarchy_data *data)
+{
+    hierarchy_clear_preview (data);
+    gtk_single_selection_set_selected (data->category_selection,
+                                       GTK_INVALID_LIST_POSITION);
+    g_list_store_remove_all (data->category_rows);
+    if (data->example_account_list)
+    {
+        gnc_free_example_account_list (data->example_account_list);
+        data->example_account_list = nullptr;
     }
 }
 
 static void
-category_checkbox_toggled (GtkCellRendererToggle *toggle,
-                           gchar                 *path,
-                           GtkListStore          *store)
+hierarchy_reload_categories (hierarchy_data *data, const gchar *locale_name)
 {
-    GtkTreeIter iter;
-    gboolean active;
+    gchar *account_path;
+    guint selected = GTK_INVALID_LIST_POSITION;
+    guint position = 0;
+    HierarchyCategoryRow *selected_row = nullptr;
 
-    if (!gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store),
-            &iter, path))
+    if (!locale_name)
         return;
+    gnc_suspend_gui_refresh ();
+    hierarchy_clear_categories (data);
+    account_path = g_build_filename (data->gnc_accounts_dir, locale_name, nullptr);
+    qof_event_suspend ();
+    data->example_account_list = gnc_load_example_account_list (account_path);
+    qof_event_resume ();
 
-    /* Get current state of the category */
-    active = gtk_cell_renderer_toggle_get_active(toggle);
-    gtk_list_store_set(store, &iter, COL_CHECKED, !active, -1);
+    for (auto node = data->example_account_list; node; node = node->next, position++)
+    {
+        auto account_set = static_cast<GncExampleAccount*>(node->data);
+        const gboolean checked = data->use_defaults && account_set->start_selected;
+        auto row = hierarchy_category_row_new (account_set, checked);
+
+        g_list_store_append (data->category_rows, row);
+        g_object_unref (row);
+        if (checked && !selected_row)
+            selected_row = row;
+    }
+    if (selected_row)
+    {
+        for (guint i = 0; i < g_list_model_get_n_items
+                 (G_LIST_MODEL (data->sorted_category_rows)); i++)
+        {
+            auto item = g_list_model_get_item
+                (G_LIST_MODEL (data->sorted_category_rows), i);
+            if (item == G_OBJECT (selected_row))
+                selected = i;
+            g_object_unref (item);
+            if (selected != GTK_INVALID_LIST_POSITION)
+                break;
+        }
+    }
+    if (selected == GTK_INVALID_LIST_POSITION && position > 0)
+        selected = 0;
+    data->initial_category_position = selected;
+    gtk_single_selection_set_selected (data->category_selection, selected);
+    if (selected != GTK_INVALID_LIST_POSITION)
+        gtk_column_view_scroll_to (data->categories_view, selected, nullptr,
+                                   GTK_LIST_SCROLL_FOCUS, nullptr);
+    data->category_set_changed = position > 0;
+    categories_page_enable_next (data);
+    gnc_resume_gui_refresh ();
+    g_free (account_path);
 }
 
 static void
-account_categories_tree_view_prepare (hierarchy_data  *data)
+account_categories_tree_view_prepare (hierarchy_data *data)
 {
-    GSList *list;
     gchar *locale_dir;
-    GtkTreeView *tree_view;
-    GtkListStore *model;
-    GtkTreeViewColumn *column;
-    GtkCellRenderer *renderer;
-    GtkTreeSelection *selection;
-    GtkTreePath *path;
+    auto locale = static_cast<const HierarchyLocale*>(nullptr);
 
     data->gnc_accounts_dir = gnc_path_get_accountsdir ();
     locale_dir = gnc_get_ea_locale_dir (data->gnc_accounts_dir);
-
-    qof_event_suspend ();
-    list = gnc_load_example_account_list (locale_dir);
-    qof_event_resume ();
-
     update_language_region_combos (data, locale_dir);
-
+    locale = hierarchy_selected_locale (data);
+    if (locale)
+        hierarchy_reload_categories (data, locale->name);
     g_free (locale_dir);
-
-    /* Prepare the account_categories GtkTreeView with a model and with some columns */
-    tree_view = data->categories_tree;
-    model = gtk_list_store_new(NUM_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_STRING, G_TYPE_POINTER);
-    gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL(model));
-    g_object_unref (model);
-
-    g_slist_foreach(list, (GFunc)add_one_category, data);
-
-    g_signal_connect (G_OBJECT (model), "row_changed",
-                      G_CALLBACK (categories_selection_changed),
-                      data);
-
-    renderer = gtk_cell_renderer_toggle_new ();
-    g_object_set (G_OBJECT (renderer), "activatable", TRUE, nullptr);
-    column = gtk_tree_view_column_new_with_attributes (_("Selected"),
-             renderer,
-             "active", COL_CHECKED,
-             nullptr);
-    gtk_tree_view_append_column (tree_view, column);
-    gtk_tree_view_column_set_sort_column_id (column, COL_CHECKED);
-    g_signal_connect (G_OBJECT (renderer), "toggled",
-                      G_CALLBACK (category_checkbox_toggled),
-                      model);
-
-
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Account Types"),
-             renderer,
-             "text", COL_TITLE,
-             nullptr);
-    gtk_tree_view_append_column (tree_view, column);
-    gtk_tree_view_column_set_sort_column_id (column, COL_TITLE);
-
-//	renderer = gtk_cell_renderer_text_new ();
-//	column = gtk_tree_view_column_new_with_attributes (_("Description"),
-//							   renderer,
-//							   "text", COL_SHORT_DESCRIPTION,
-//							   nullptr);
-//	gtk_tree_view_append_column (tree_view, column);
-//	gtk_tree_view_column_set_sort_column_id (column, COL_SHORT_DESCRIPTION);
-
-    gtk_tree_view_set_headers_clickable(tree_view, TRUE);
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(model),
-                                          COL_TITLE,
-                                          GTK_SORT_ASCENDING);
-
-    selection = gtk_tree_view_get_selection (tree_view);
-
-    if (data->initial_category)
-    {
-        path = gtk_tree_row_reference_get_path (data->initial_category);
-        gtk_tree_view_scroll_to_cell (tree_view, path, nullptr, TRUE, 0.5, 0.5);
-    }
-    else
-        path = gtk_tree_path_new_first ();
-
-    gtk_tree_selection_select_path (selection, path);
-    gtk_tree_path_free (path);
-
-    g_slist_free (list);
-}
-
-void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                 hierarchy_data  *data)
-{
-    const int currency_page = data->new_book ? 2 : 1;
-    const int selection_page = data->new_book ? 3 : 2;
-    const int final_page = data->new_book ? 4 : 3;
-    const int current_page = gtk_assistant_get_current_page (assistant);
-
-    if (current_page == currency_page)
-        on_select_currency_prepare (data);
-
-    if (current_page == selection_page)
-        on_choose_account_categories_prepare (data);
-
-    if (current_page == final_page)
-        on_final_account_prepare (data);
 }
 
 void
-on_choose_account_categories_prepare (hierarchy_data  *data)
+on_choose_account_categories_prepare (hierarchy_data *data)
 {
-    GtkTextBuffer* buffer;
-
     if (!data->account_list_added)
     {
-        /* clear out the description/tree */
-        if (data->category_accounts_tree)
-            gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
-        data->category_accounts_tree = nullptr;
-        buffer = gtk_text_view_get_buffer(data->category_description);
-        gtk_text_buffer_set_text(buffer, "", -1);
-
         data->account_list_added = TRUE;
-
-        /* Build the categories tree if necessary */
-        gnc_suspend_gui_refresh ();
         account_categories_tree_view_prepare (data);
-        gnc_resume_gui_refresh ();
     }
-    categories_page_enable_next(data);
+    categories_page_enable_next (data);
 }
 
 static void
-categories_tree_selection_changed (GtkTreeSelection *selection,
-                                   hierarchy_data *data)
+hierarchy_category_row_changed (hierarchy_data *data, guint position,
+                                HierarchyCategoryRow *row)
 {
-    GtkTreeView *tree_view;
-    GtkTreeModel *model;
-    GtkTreeViewColumn *column;
-    GtkTreeIter iter;
-    GncExampleAccount *gea;
-    GtkTextBuffer* buffer;
-    gchar *text;
+    gpointer items[] = { row };
 
-    /* Remove the old account tree */
-    if (data->category_accounts_tree)
-        gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
-    data->category_accounts_tree = nullptr;
-
-    /* Add a new one if something selected */
-    if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    {
-        gchar *text2;
-        gtk_tree_model_get (model, &iter, COL_ACCOUNT, &gea, -1);
-        /* Translators: '%s' is the name of the selected account hierarchy template. */
-        text2 = g_strdup_printf(_("Accounts in '%s'"), gea->title);
-        text = g_strdup_printf("<b>%s</b>", text2);
-        gtk_label_set_markup(data->category_accounts_label, text);
-        g_free(text2);
-        g_free(text);
-        buffer = gtk_text_view_get_buffer(data->category_description);
-        gtk_text_buffer_set_text(buffer, gea->long_description ?
-                                 gea->long_description :
-                                 _("No description provided."), -1);
-
-        tree_view = gnc_tree_view_account_new_with_root (gea->root, FALSE);
-        /* Override the normal fixed (user settable) sizing */
-        column = gtk_tree_view_get_column(GTK_TREE_VIEW(tree_view), 0);
-        gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-
-        data->category_accounts_tree = tree_view;
-        gtk_tree_view_expand_all (tree_view);
-        gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
-        gtk_widget_show(GTK_WIDGET(tree_view));
-    }
-    else
-    {
-        gchar *text;
-        text = g_strdup_printf ("<b>%s</b>", _("Accounts in Category"));
-        gtk_label_set_markup(data->category_accounts_label, text);
-        g_free (text);
-        buffer = gtk_text_view_get_buffer(data->category_description);
-        gtk_text_buffer_set_text(buffer, "", -1);
-    }
-}
-
-static gboolean
-select_helper (GtkListStore *store,
-               GtkTreePath  *path,
-               GtkTreeIter  *iter,
-               gpointer      data)
-{
-    GncExampleAccount *gea;
-
-    g_return_val_if_fail(GTK_IS_LIST_STORE(store), FALSE);
-
-    gtk_tree_model_get (GTK_TREE_MODEL(store), iter, COL_ACCOUNT, &gea, -1);
-    if ((gea != nullptr) && !gea->exclude_from_select_all)
-    {
-        gtk_list_store_set(store, iter,
-                           COL_CHECKED, GPOINTER_TO_INT(data),
-                           -1);
-    }
-
-    return FALSE;  /* Run entire tree */
+    g_list_store_splice (data->category_rows, position, 1, items, 1);
 }
 
 void
-select_all_clicked (GtkButton       *button,
-                    hierarchy_data  *data)
+select_all_clicked (GtkButton *button, hierarchy_data *data)
 {
-    gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
-                            (GtkTreeModelForeachFunc)select_helper,
-                            GINT_TO_POINTER(TRUE));
+    for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (data->category_rows)); i++)
+    {
+        auto item = g_list_model_get_item (G_LIST_MODEL (data->category_rows), i);
+        auto row = static_cast<HierarchyCategoryRow*>(item);
+
+        if (row->account_set && !row->account_set->exclude_from_select_all)
+            row->checked = TRUE;
+        hierarchy_category_row_changed (data, i, row);
+        g_object_unref (item);
+    }
+    data->category_set_changed = TRUE;
+    gtk_widget_queue_draw (GTK_WIDGET (data->categories_view));
+    categories_page_enable_next (data);
+    (void)button;
 }
 
 void
-clear_all_clicked (GtkButton       *button,
-                   hierarchy_data  *data)
+clear_all_clicked (GtkButton *button, hierarchy_data *data)
 {
-    gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
-                            (GtkTreeModelForeachFunc)select_helper,
-                            GINT_TO_POINTER(FALSE));
-}
+    for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (data->category_rows)); i++)
+    {
+        auto item = g_list_model_get_item (G_LIST_MODEL (data->category_rows), i);
+        auto row = static_cast<HierarchyCategoryRow*>(item);
 
+        if (row->account_set && !row->account_set->exclude_from_select_all)
+            row->checked = FALSE;
+        hierarchy_category_row_changed (data, i, row);
+        g_object_unref (item);
+    }
+    data->category_set_changed = TRUE;
+    gtk_widget_queue_draw (GTK_WIDGET (data->categories_view));
+    categories_page_enable_next (data);
+    (void)button;
+}
 /************************************************************
  *                  Opening Balances Page                   *
  ************************************************************/
@@ -1038,612 +1429,458 @@ hierarchy_merge_accounts (GSList *dalist, gnc_commodity *com)
     return ret;
 }
 
-static gboolean
-accumulate_accounts (GtkListStore *store,
-                     GtkTreePath *path,
-                     GtkTreeIter *iter,
-                     GSList **list)
-{
-    GncExampleAccount *gea;
-    gboolean active;
-
-    g_return_val_if_fail(GTK_IS_LIST_STORE(store), FALSE);
-
-    gtk_tree_model_get (GTK_TREE_MODEL(store), iter,
-                        COL_CHECKED, &active,
-                        COL_ACCOUNT, &gea,
-                        -1);
-    if (active && gea)
-        *list = g_slist_prepend(*list, gea);
-
-    return FALSE;  /* Run entire list */
-}
-
-
 static GSList *
-get_selected_account_list (GtkTreeView *tree_view)
+get_selected_account_list (hierarchy_data *data)
 {
-    GSList *actlist = nullptr;
-    GtkTreeModel *model;
+    GSList *account_sets = nullptr;
 
-    model = gtk_tree_view_get_model (tree_view);
-    gtk_tree_model_foreach (model,
-                            (GtkTreeModelForeachFunc)accumulate_accounts,
-                            &actlist);
-    return actlist;
+    for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (data->category_rows)); i++)
+    {
+        auto item = g_list_model_get_item (G_LIST_MODEL (data->category_rows), i);
+        auto row = static_cast<HierarchyCategoryRow*>(item);
+
+        if (row->checked && row->account_set)
+            account_sets = g_slist_prepend (account_sets, row->account_set);
+        g_object_unref (item);
+    }
+    return account_sets;
 }
 
 static void
-balance_cell_data_func (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer *cell,
-                        GtkTreeModel *model,
-                        GtkTreeIter *iter,
-                        gpointer user_data)
+hierarchy_clear_final_accounts (hierarchy_data *data)
 {
-    Account *account;
-    gnc_numeric balance;
-    const gchar *string;
-    GNCPrintAmountInfo print_info;
-    hierarchy_data *data = (hierarchy_data *)user_data;
-    gboolean allow_value;
-
-    g_return_if_fail (GTK_TREE_MODEL (model));
-    account = gnc_tree_view_account_get_account_from_iter (model, iter);
-
-    balance = get_final_balance (data->balance_hash, account);
-    if (gnc_numeric_zero_p (balance))
-    {
-        string = "";
-    }
-    else
-    {
-        print_info = gnc_account_print_info (account, FALSE);
-        string = xaccPrintAmount (balance, print_info);
-    }
-
-    if (xaccAccountGetType(account) == ACCT_TYPE_EQUITY ||
-            xaccAccountGetType(account) == ACCT_TYPE_TRADING)
-    {
-        allow_value = FALSE;
-        string = _("zero");
-    }
-    else
-    {
-        GncAccountMergeDisposition disp;
-        disp = determine_merge_disposition(gnc_book_get_root_account(gnc_get_current_book()), account);
-        if (disp == GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW)
-        {
-            allow_value = !xaccAccountGetPlaceholder(account);
-        }
-        else
-        {
-            allow_value = FALSE;
-            string = _("existing account");
-        }
-    }
-    g_object_set (G_OBJECT (cell),
-                  "text", string,
-                  "editable", allow_value,
-                  "sensitive", allow_value,
-                  nullptr);
+    gtk_column_view_set_model (data->final_account_view, nullptr);
+    g_clear_object (&data->final_account_selection);
+    g_clear_object (&data->final_account_tree);
+    g_clear_object (&data->final_account_roots);
 }
 
 static void
-balance_cell_edited (GtkCellRendererText *cell,
-                     gchar               *path,
-                     gchar               *new_text,
-                     gpointer             user_data)
+hierarchy_set_final_accounts (hierarchy_data *data)
 {
-    Account *account;
-    char *error_loc;
-    gnc_numeric amount;
-    hierarchy_data *data = (hierarchy_data *)user_data;
-
-    g_return_if_fail(data != nullptr);
-
-    account = gnc_tree_view_account_get_selected_account(data->final_account_tree);
-    if (account == nullptr)
-    {
-        g_critical("account is null");
-        return;
-    }
-
-    error_loc = nullptr;
-    if (!gnc_exp_parser_parse (new_text, &amount, &error_loc))
-    {
-        amount = gnc_numeric_zero();
-        g_object_set (G_OBJECT(cell), "text", "", nullptr);
-    }
-    /* Bug#348364: Emulating price-cell, we need to ensure the denominator of
-     * the amount is in the SCU of the account's commodity (so
-     * gnc-ui-util.c:is_decimal_fraction() on the remainder denom for
-     * fractional values will be a "decimal").
-     */
-    {
-        int account_cmdty_fraction = xaccAccountGetCommoditySCU(account);
-        amount = gnc_numeric_convert(amount, account_cmdty_fraction, GNC_HOW_RND_ROUND_HALF_UP);
-    }
-    set_final_balance (data->balance_hash, account, amount);
-    qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, nullptr);
-}
-
-static void
-placeholder_cell_data_func (GtkTreeViewColumn *tree_column,
-                            GtkCellRenderer *cell,
-                            GtkTreeModel *model,
-                            GtkTreeIter *iter,
-                            gpointer user_data)
-{
-    Account *account, *root;
-    gboolean willbe_placeholder = FALSE;
-    GncAccountMergeDisposition disp;
-
-    g_return_if_fail (GTK_TREE_MODEL (model));
-    account = gnc_tree_view_account_get_account_from_iter (model, iter);
-    root = gnc_book_get_root_account(gnc_get_current_book());
-    disp = determine_merge_disposition(root, account);
-    switch (disp)
-    {
-    case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
-    {
-        /* find the existing account, do whatever it is. */
-        gchar *full_name;
-        Account *existing_acct;
-        full_name = gnc_account_get_full_name(account);
-        existing_acct = gnc_account_lookup_by_full_name(root, full_name);
-        willbe_placeholder = xaccAccountGetPlaceholder(existing_acct);
-        g_free(full_name);
-    }
-    break;
-    case GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW:
-        willbe_placeholder = xaccAccountGetPlaceholder(account);
-        break;
-    }
-
-    gtk_cell_renderer_toggle_set_active(GTK_CELL_RENDERER_TOGGLE(cell), willbe_placeholder);
-}
-
-static void
-placeholder_cell_toggled (GtkCellRendererToggle *cell_renderer,
-                          gchar *path, gpointer user_data)
-{
-    gboolean state;
-    Account *account;
-    GtkTreePath  *treepath;
-    hierarchy_data *data = (hierarchy_data *)user_data;
-
-    g_return_if_fail(data != nullptr);
-
-    treepath = gtk_tree_path_new_from_string (path);
-
-    account = gnc_tree_view_account_get_account_from_path (data->final_account_tree, treepath);
-
-    state = gtk_cell_renderer_toggle_get_active (cell_renderer);
-
-    if (account)
-        xaccAccountSetPlaceholder (account, !state);
-
-    // if placeholder set, set balance to zero
-    if (!state)
-    {
-        set_final_balance (data->balance_hash, account, gnc_numeric_zero());
-        qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, nullptr);
-    }
-    gtk_tree_path_free (treepath);
-}
-
-static void
-use_existing_account_data_func(GtkTreeViewColumn *tree_column,
-                               GtkCellRenderer *cell,
-                               GtkTreeModel *tree_model,
-                               GtkTreeIter *iter,
-                               gpointer user_data)
-{
-    Account *real_root;
-    GncAccountMergeDisposition disposition;
-    auto to_user{"(error; unknown condition)"};
-
-    g_return_if_fail (GTK_TREE_MODEL (tree_model));
-    auto new_acct{static_cast<Account*>(gnc_tree_view_account_get_account_from_iter(tree_model, iter))};
-    if (!new_acct)
-    {
-        g_object_set (G_OBJECT(cell), "text", "(null account)", nullptr);
-        return;
-    }
-
-    real_root = gnc_book_get_root_account(gnc_get_current_book());
-    disposition = determine_merge_disposition(real_root, new_acct);
-    switch (disposition)
-    {
-    case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
-        to_user = _("Yes");
-        break;
-    case GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW:
-        to_user = _("No");
-        break;
-    }
-
-    g_object_set(G_OBJECT(cell), "text", to_user, nullptr);
+    data->final_account_roots = hierarchy_account_roots_new
+        (data->our_account_tree, gnc_get_current_book ());
+    data->final_account_tree = gtk_tree_list_model_new
+        (G_LIST_MODEL (g_object_ref (data->final_account_roots)), FALSE, TRUE,
+         hierarchy_account_children_model, nullptr, nullptr);
+    data->final_account_selection = gtk_single_selection_new
+        (G_LIST_MODEL (g_object_ref (data->final_account_tree)));
+    gtk_single_selection_set_autoselect (data->final_account_selection, FALSE);
+    gtk_column_view_set_model (data->final_account_view,
+                               GTK_SELECTION_MODEL (data->final_account_selection));
 }
 
 void
-on_final_account_prepare (hierarchy_data  *data)
+on_final_account_prepare (hierarchy_data *data)
 {
-    GSList *actlist;
-    GtkTreeView *tree_view;
-    GtkTreeSelection *selection;
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
-    gnc_commodity *com;
+    GSList *account_sets;
+    gnc_commodity *commodity;
 
-    /* Anything to do? */
     if (!data->category_set_changed)
         return;
     data->category_set_changed = FALSE;
 
     gnc_suspend_gui_refresh ();
-
-    /* Delete any existing account tree */
-    if (data->final_account_tree)
-    {
-        gtk_widget_destroy(GTK_WIDGET(data->final_account_tree));
-        data->final_account_tree = nullptr;
-    }
+    hierarchy_clear_final_accounts (data);
     delete_our_account_tree (data);
 
-
-    /* Build a new account list */
-    actlist = get_selected_account_list (data->categories_tree);
-    com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
-    data->our_account_tree = hierarchy_merge_accounts (actlist, com);
-
-
-    /* Now build a new account tree */
-    data->final_account_tree
-        = GNC_TREE_VIEW_ACCOUNT(gnc_tree_view_account_new_with_root (data->our_account_tree, FALSE));
-    tree_view = GTK_TREE_VIEW(data->final_account_tree);
-    gnc_tree_view_account_set_name_edited(data->final_account_tree,
-                                          gnc_tree_view_account_name_edited_cb);
-    gnc_tree_view_account_set_code_edited(data->final_account_tree,
-                                          gnc_tree_view_account_code_edited_cb);
-    gnc_tree_view_account_set_description_edited(data->final_account_tree,
-            gnc_tree_view_account_description_edited_cb);
-    gnc_tree_view_account_set_notes_edited(data->final_account_tree,
-                                           gnc_tree_view_account_notes_edited_cb);
-
-    gtk_tree_view_set_headers_visible (tree_view, TRUE);
-    column = gnc_tree_view_find_column_by_name (
-                 GNC_TREE_VIEW(data->final_account_tree), "type");
-    g_object_set_data(G_OBJECT(column), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-    gnc_tree_view_configure_columns (GNC_TREE_VIEW(data->final_account_tree));
-    gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW(data->final_account_tree),
-                                        FALSE);
-
-    selection = gtk_tree_view_get_selection (tree_view);
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-
-    // This is a re-definition of the placeholder that the account-tree model
-    // provides, reflecting the to-be-created state of the account tree
-    // post-merge.
-    {
-        renderer = gtk_cell_renderer_toggle_new();
-        g_object_set(G_OBJECT (renderer),
-                     "activatable", TRUE,
-                     "sensitive", TRUE,
-                     nullptr);
-
-        g_signal_connect (G_OBJECT (renderer), "toggled",
-                          G_CALLBACK (placeholder_cell_toggled),
-                          data);
-
-        column = gtk_tree_view_column_new_with_attributes(_("Placeholder"),
-                 renderer, nullptr);
-        gtk_tree_view_column_set_cell_data_func (column, renderer,
-                placeholder_cell_data_func,
-                (gpointer)data, nullptr);
-        gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
-    }
-
-
-    {
-        renderer = gtk_cell_renderer_text_new ();
-        g_object_set (G_OBJECT (renderer),
-                      "xalign", 1.0,
-                      (char *)nullptr);
-        g_signal_connect (G_OBJECT (renderer), "edited",
-                          G_CALLBACK (balance_cell_edited),
-                          data);
-        column = gtk_tree_view_column_new_with_attributes (_("Opening Balance"),
-                 renderer,
-                 nullptr);
-        gtk_tree_view_column_set_cell_data_func (column, renderer,
-                balance_cell_data_func,
-                (gpointer)data, nullptr);
-        gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
-    }
-
-    // only in the case where there *are* existing accounts...
-    if (gnc_account_n_descendants(gnc_book_get_root_account(gnc_get_current_book())) > 0)
-    {
-        GList *renderers;
-        column = gnc_tree_view_add_text_column(GNC_TREE_VIEW(tree_view),
-                                               _("Use Existing"),
-                                               nullptr,
-                                               nullptr,
-                                               "yes",
-                                               GNC_TREE_VIEW_COLUMN_DATA_NONE,
-                                               GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                               nullptr);
-        renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
-        g_object_set(G_OBJECT(renderer), "xalign", 1.0, (char*)nullptr);
-        gtk_tree_view_column_set_cell_data_func(column, GTK_CELL_RENDERER(renderers->data),
-                                                use_existing_account_data_func, (gpointer)data, nullptr);
-        g_list_free(renderers);
-    }
-
-    gtk_container_add(GTK_CONTAINER(data->final_account_tree_container),
-                      GTK_WIDGET(data->final_account_tree));
-
-    /* Expand the entire tree */
-    gtk_tree_view_expand_all (tree_view);
-    gtk_widget_show(GTK_WIDGET(data->final_account_tree));
+    account_sets = get_selected_account_list (data);
+    commodity = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT (data->currency_selector));
+    data->our_account_tree = hierarchy_merge_accounts (account_sets, commodity);
+    g_slist_free (account_sets);
+    hierarchy_set_final_accounts (data);
     gnc_resume_gui_refresh ();
 }
-
-void
-on_cancel (GtkAssistant      *gtkassistant,
-           hierarchy_data  *data)
+static void
+hierarchy_release_models (hierarchy_data *data)
 {
-    gnc_suspend_gui_refresh ();
-    if (data->new_book)
-        delete data->optionwin;
+    g_clear_object (&data->category_selection);
+    g_clear_object (&data->sorted_category_rows);
+    g_clear_object (&data->category_rows);
+    g_clear_object (&data->category_account_selection);
+    g_clear_object (&data->category_account_tree);
+    g_clear_object (&data->category_account_roots);
+    g_clear_object (&data->final_account_selection);
+    g_clear_object (&data->final_account_tree);
+    g_clear_object (&data->final_account_roots);
+    g_clear_object (&data->language_model);
+    g_clear_object (&data->region_model);
+    g_clear_pointer (&data->locales, g_ptr_array_unref);
+    g_clear_pointer (&data->visible_locales, g_ptr_array_unref);
+}
 
-    delete_hierarchy_dialog (data);
+static void
+hierarchy_destroy_book_options (hierarchy_data *data)
+{
+    auto optionwin = data->optionwin;
+    auto options = data->options;
+    auto notebook = data->book_options_notebook;
+
+    data->optionwin = nullptr;
+    data->options = nullptr;
+    data->book_options_notebook = nullptr;
+    delete optionwin;
+    if (notebook)
+    {
+        auto parent = gtk_widget_get_parent (notebook);
+
+        if (parent)
+            gtk_box_remove (GTK_BOX (parent), notebook);
+        g_object_unref (notebook);
+    }
+    if (options)
+        delete options;
+}
+
+static void
+gnc_hierarchy_destroy_cb (GtkWidget *widget, hierarchy_data *data)
+{
+    if (data->balance_hash)
+    {
+        g_hash_table_foreach (data->balance_hash, destroy_hash_helper, nullptr);
+        g_hash_table_destroy (data->balance_hash);
+        data->balance_hash = nullptr;
+    }
+    if (data->example_account_list)
+    {
+        gnc_free_example_account_list (data->example_account_list);
+        data->example_account_list = nullptr;
+    }
+    if (data->optionwin || data->options)
+        hierarchy_destroy_book_options (data);
+    hierarchy_release_models (data);
+    g_free (data->gnc_accounts_dir);
+    g_free (data);
+    (void)widget;
+}
+
+static void
+hierarchy_destroy_window (hierarchy_data *data)
+{
+    gnc_save_window_size (GNC_PREFS_GROUP, data->dialog);
+    gtk_window_destroy (data->dialog);
+}
+
+static void
+hierarchy_cancel (hierarchy_data *data)
+{
+    if (!data || data->closing)
+        return;
+
+    data->closing = TRUE;
+    gnc_suspend_gui_refresh ();
+    hierarchy_clear_final_accounts (data);
     delete_our_account_tree (data);
-    g_free(data);
+    hierarchy_destroy_window (data);
     gnc_resume_gui_refresh ();
 }
 
 static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
-    gnc_numeric balance;
+    auto balance = get_final_balance (data->balance_hash, account);
 
-    balance = get_final_balance (data->balance_hash, account);
-    if (gnc_reverse_balance(account))
-        balance = gnc_numeric_neg(balance);
+    if (gnc_reverse_balance (account))
+        balance = gnc_numeric_neg (balance);
     if (!gnc_numeric_zero_p (balance) &&
         gnc_commodity_is_currency (xaccAccountGetCommodity (account)))
-        gnc_account_create_opening_balance (account, balance,
-                                            gnc_time (nullptr),
+        gnc_account_create_opening_balance (account, balance, gnc_time (nullptr),
                                             gnc_get_current_book ());
 }
 
-void
-on_finish (GtkAssistant  *gtkassistant,
-           hierarchy_data  *data)
+static void
+hierarchy_finish (hierarchy_data *data)
 {
     GncHierarchyAssistantFinishedCallback when_completed;
-    gnc_commodity *com;
-    Account * root;
+    gnc_commodity *commodity;
+    Account *root;
+
+    if (!data || data->closing)
+        return;
+    data->closing = TRUE;
+    when_completed = data->when_completed;
+    commodity = gnc_currency_edit_get_currency
+        (GNC_CURRENCY_EDIT (data->currency_selector));
+    root = gnc_get_current_root_account ();
     ENTER (" ");
-    com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
 
-    if (!gnc_using_equity_type_opening_balance_account (gnc_get_current_book()))
-        gnc_set_use_equity_type_opening_balance_account (gnc_get_current_book());
-
+    if (!gnc_using_equity_type_opening_balance_account (gnc_get_current_book ()))
+        gnc_set_use_equity_type_opening_balance_account (gnc_get_current_book ());
     if (data->our_account_tree)
-    {
         gnc_account_foreach_descendant (data->our_account_tree,
-                                        (AccountCb)starting_balance_helper,
-                                        data);
-    }
-
-    // delete before we suspend GUI events, and then muck with the model,
-    // because the model doesn't seem to handle this correctly.
-    if (data->initial_category)
-        gtk_tree_row_reference_free(data->initial_category);
-    delete_hierarchy_dialog (data);
+                                        (AccountCb)starting_balance_helper, data);
 
     gnc_suspend_gui_refresh ();
-    if (data->new_book)
-        delete data->optionwin;
-
-    account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
-
+    if (data->new_book && (data->optionwin || data->options))
+        hierarchy_destroy_book_options (data);
+    account_trees_merge (gnc_get_current_root_account (), data->our_account_tree);
+    hierarchy_clear_final_accounts (data);
     delete_our_account_tree (data);
-
-    when_completed = data->when_completed;
-    g_free(data);
-
-    root = gnc_get_current_root_account();
-    xaccAccountSetCommodity(root, com);
-
+    xaccAccountSetCommodity (root, commodity);
+    hierarchy_destroy_window (data);
     gnc_resume_gui_refresh ();
 
     if (when_completed)
-    {
-        (*when_completed)();
-    }
-
+        (*when_completed) ();
     LEAVE (" ");
 }
 
-/* If a book currency is selected in prior page, set the currency_selector to
- * the book currency, make insensitive and modify text. Otherwise, restore the
- * selector to original condition
-  */
 void
-on_select_currency_prepare (hierarchy_data  *data)
+on_select_currency_prepare (hierarchy_data *data)
 {
-    /* Set book options based on the user's choices */
-    if (data->new_book)
-    {
-        gnc_book_options_dialog_apply_helper(data->options);
+    if (!data->new_book)
+        return;
 
-        gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
-                                        gnc_default_currency());
-        gtk_label_set_text (GTK_LABEL(data->currency_selector_label),
-                            ( _("Please choose the currency to use for new accounts.") ));
-        gtk_widget_set_sensitive(data->currency_selector, TRUE);
-    }
-}
-
-/********************************************************
- * For a new book the assistant will also allow the user
- * to set default book options, because this impacts how
- * transactions are created.
- * Ideally, the book options code can cleanly provide us
- * with a page to insert in the assistant and be done with
- * it. Unfortunately this is not possible without a serious
- * rewrite of the options dialog code.
- * So instead the following hack is used:
- * we create the complete dialog, but only use the notebook
- * part of it to create a new page.
- * To make sure this dialog is cleaned up properly
- * when the assistant closes, the close callback is set up anyway
- * and at the finish we'll send a "close" response signal to the
- * dialog to make it clean up after itself.
- */
-static void
-book_options_dialog_close_cb(GncOptionsDialog *optionwin,
-                             gpointer user_data)
-{
-    auto options{static_cast<GncOptionDB*>(user_data)};
-
-    delete optionwin;
-    gnc_option_db_destroy(options);
+    gnc_book_options_dialog_apply_helper (data->options);
+    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT (data->currency_selector),
+                                    gnc_default_currency ());
+    gtk_label_set_text (GTK_LABEL (data->currency_selector_label),
+                        _("Please choose the currency to use for new accounts."));
+    gtk_widget_set_sensitive (data->currency_selector, TRUE);
 }
 
 static void
 assistant_insert_book_options_page (hierarchy_data *data)
 {
-    GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+    GtkWidget *options;
+    GtkWidget *parent;
 
-    data->options = gnc_option_db_new();
-    gnc_option_db_book_options(data->options);
-    qof_book_load_options (gnc_get_current_book (),
-			   gnc_option_db_load, data->options);
+    data->options = gnc_option_db_new ();
+    gnc_option_db_book_options (data->options);
+    qof_book_load_options (gnc_get_current_book (), gnc_option_db_load, data->options);
     gnc_option_db_clean (data->options);
 
-    /* The options dialog gets added to the notebook so it doesn't need a parent.*/
-    data->optionwin = new GncOptionsDialog(true, _("New Book Options"),
-                                           DIALOG_BOOK_OPTIONS_CM_CLASS,
-                                           nullptr);
-    data->optionwin->build_contents(data->options, false);
-
-    data->optionwin->set_close_cb(book_options_dialog_close_cb,
-                                  (gpointer)data->options);
+    data->optionwin = new GncOptionsDialog (true, _("New Book Options"),
+                                             DIALOG_BOOK_OPTIONS_CM_CLASS, nullptr);
+    data->optionwin->build_contents (data->options, false);
     gnc_options_dialog_set_new_book_option_values (data->options);
 
-    auto options = data->optionwin->get_notebook();
-    auto parent = gtk_widget_get_parent (options);
+    options = data->optionwin->get_notebook ();
+    parent = gtk_widget_get_parent (options);
+    data->book_options_notebook = GTK_WIDGET (g_object_ref (options));
+    if (parent)
+        gtk_box_remove (GTK_BOX (parent), options);
+    gtk_box_append (GTK_BOX (data->book_options_page), options);
+    gtk_widget_set_visible (options, TRUE);
+}
 
-    g_object_ref (options);
-    gtk_container_remove (GTK_CONTAINER(parent), options);
-    gtk_container_add (GTK_CONTAINER(vbox), options);
-    g_object_unref (options);
+static gboolean
+hierarchy_page_is_complete (hierarchy_data *data, guint page)
+{
+    return page != data->categories_page || data->next_ok;
+}
 
-    gtk_widget_show_all (vbox);
-    gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 1);
-    gtk_assistant_set_page_title (GTK_ASSISTANT(data->dialog), vbox, _("New Book Options"));
-    gtk_assistant_set_page_complete (GTK_ASSISTANT(data->dialog), vbox, TRUE);
+static void
+hierarchy_update_navigation (hierarchy_data *data)
+{
+    const gboolean is_last = data->current_page + 1 == data->page_count;
+    GtkWidget *default_widget = nullptr;
+    auto stack_page = gtk_stack_get_page (data->stack, data->pages[data->current_page]);
 
+    gtk_widget_set_sensitive (data->back_button, data->current_page != 0);
+    gtk_widget_set_visible (data->next_button, !is_last);
+    gtk_widget_set_sensitive (data->next_button,
+                              hierarchy_page_is_complete (data, data->current_page));
+    gtk_widget_set_visible (data->apply_button, is_last);
+    gtk_widget_set_sensitive (data->apply_button, is_last);
+    if (is_last)
+        default_widget = data->apply_button;
+    else if (gtk_widget_get_sensitive (data->next_button))
+        default_widget = data->next_button;
+    gtk_window_set_default_widget (data->dialog, default_widget);
+    if (stack_page)
+        gtk_window_set_title (data->dialog, gtk_stack_page_get_title (stack_page));
+}
+
+static void
+hierarchy_show_page (hierarchy_data *data, guint page)
+{
+    g_return_if_fail (page < data->page_count);
+
+    if (page == data->currency_page)
+        on_select_currency_prepare (data);
+    else if (page == data->categories_page)
+        on_choose_account_categories_prepare (data);
+    else if (page == data->final_page)
+        on_final_account_prepare (data);
+
+    data->current_page = page;
+    gtk_stack_set_visible_child (data->stack, data->pages[page]);
+    hierarchy_update_navigation (data);
+}
+
+static void
+hierarchy_back_clicked_cb (GtkButton *button, hierarchy_data *data)
+{
+    if (data->current_page > 0)
+        hierarchy_show_page (data, data->current_page - 1);
+    (void)button;
+}
+
+static void
+hierarchy_next_clicked_cb (GtkButton *button, hierarchy_data *data)
+{
+    if (data->current_page + 1 < data->page_count &&
+        hierarchy_page_is_complete (data, data->current_page))
+        hierarchy_show_page (data, data->current_page + 1);
+    (void)button;
+}
+
+static void
+hierarchy_apply_clicked_cb (GtkButton *button, hierarchy_data *data)
+{
+    hierarchy_finish (data);
+    (void)button;
+}
+
+static void
+hierarchy_cancel_clicked_cb (GtkButton *button, hierarchy_data *data)
+{
+    hierarchy_cancel (data);
+    (void)button;
+}
+
+static gboolean
+hierarchy_close_request_cb (GtkWindow *window, hierarchy_data *data)
+{
+    hierarchy_cancel (data);
+    (void)window;
+    return TRUE;
 }
 
 static GtkWidget *
-gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFinishedCallback when_completed)
+gnc_create_hierarchy_assistant (gboolean use_defaults,
+                                GncHierarchyAssistantFinishedCallback when_completed)
 {
-    hierarchy_data *data;
-    GtkWidget *dialog;
-    GtkTreeView *tree_view;
+    auto data = g_new0 (hierarchy_data, 1);
+    auto builder = gtk_builder_new ();
     GtkWidget *box;
-    GtkBuilder *builder;
 
-    data = g_new0 (hierarchy_data, 1);
-
-    /* Presumably this assistant is only used to create a new book but we check.
-     * When gnucash is started with --nofile, there is initially no session (and
-     * no book), but by the time we get here, one could have been created (for
-     * example, if an empty account tree tab is opened, a session is created
-     * which creates a new, but empty, book). */
-    data->new_book = gnc_is_new_book();
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "hierarchy_assistant");
-
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
-    data->dialog = dialog;
-
-    // Set the name for this assistant so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-assistant-account-hierarchy");
-
-    /* Enable buttons on first and last page. */
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "currency_book_option_page_vbox")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "final_account_vbox")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "finish_page_label")),
-                                     TRUE);
-
-    /* Currency Page */
-    data->currency_selector = gnc_currency_edit_new();
-    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
-            gnc_default_currency());
-    gtk_widget_show (data->currency_selector);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_hbox"));
-    data->currency_selector_label = GTK_WIDGET(gtk_builder_get_object (builder,
-                                           "choose_currency_label"));
-    gtk_box_pack_start(GTK_BOX(box), data->currency_selector, TRUE, TRUE, 0);
-
-    /* Categories Page */
-    tree_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_categories_tree_view"));
-    g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (tree_view)), "changed",
-                      G_CALLBACK (categories_tree_selection_changed), data);
-    gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
-    data->categories_tree = tree_view;
-
-    data->language_combo = GTK_WIDGET(gtk_builder_get_object (builder, "language_combo"));
-    data->region_combo = GTK_WIDGET(gtk_builder_get_object (builder, "region_combo"));
-    data->region_label = GTK_WIDGET(gtk_builder_get_object (builder, "region_label"));
-
-    data->category_accounts_label = GTK_LABEL(gtk_builder_get_object (builder, "accounts_in_category_label"));
-    data->category_accounts_container = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_in_category"));
-    data->category_description = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "account_types_description"));
-    data->account_list_added = FALSE;
-
-    /* Book options page - only on new books */
-    if (data->new_book)
-        assistant_insert_book_options_page (data);
-
-    /* Final Accounts Page */
-    data->final_account_tree_container = GTK_WIDGET(gtk_builder_get_object (builder, "final_account_tree_box"));
-    data->final_account_tree = nullptr;
-
-    data->balance_hash = g_hash_table_new(nullptr, nullptr);
-
-    gnc_restore_window_size (GNC_PREFS_GROUP,
-                             GTK_WINDOW(data->dialog), gnc_ui_get_main_window(nullptr));
-
-    g_signal_connect (G_OBJECT(dialog), "destroy",
-                      G_CALLBACK (gnc_hierarchy_destroy_cb), data);
-
-    gtk_builder_connect_signals(builder, data);
-    g_object_unref(G_OBJECT(builder));
-
-    data->when_completed = when_completed;
+    data->new_book = gnc_is_new_book ();
     data->use_defaults = use_defaults;
-    gtk_widget_show_all (dialog);
-    return dialog;
-}
+    data->when_completed = when_completed;
+    data->initial_category_position = GTK_INVALID_LIST_POSITION;
 
+    gnc_builder_add_from_file (builder, "assistant-hierarchy.glade",
+                               "hierarchy_assistant");
+    data->dialog = GTK_WINDOW (gtk_builder_get_object (builder, "hierarchy_assistant"));
+    data->stack = GTK_STACK (gtk_builder_get_object (builder, "hierarchy_stack"));
+    data->book_options_page = GTK_WIDGET (gtk_builder_get_object
+                                           (builder, "book_options_page"));
+    gtk_widget_set_name (GTK_WIDGET (data->dialog),
+                         "gnc-id-assistant-account-hierarchy");
+
+    data->pages[data->page_count++] = GTK_WIDGET (gtk_builder_get_object
+                                                   (builder, "intro_page_label"));
+    if (data->new_book)
+    {
+        data->pages[data->page_count++] = data->book_options_page;
+        assistant_insert_book_options_page (data);
+    }
+    else
+        gtk_stack_remove (data->stack, data->book_options_page);
+    data->currency_page = data->page_count;
+    data->pages[data->page_count++] = GTK_WIDGET (gtk_builder_get_object
+                                                   (builder,
+                                                    "currency_book_option_page_vbox"));
+    data->categories_page = data->page_count;
+    data->pages[data->page_count++] = GTK_WIDGET (gtk_builder_get_object
+                                                   (builder,
+                                                    "choose_account_types_vbox"));
+    data->final_page = data->page_count;
+    data->pages[data->page_count++] = GTK_WIDGET (gtk_builder_get_object
+                                                   (builder, "final_account_vbox"));
+    data->pages[data->page_count++] = GTK_WIDGET (gtk_builder_get_object
+                                                   (builder, "finish_page_label"));
+    data->back_button = GTK_WIDGET (gtk_builder_get_object (builder, "hierarchy_back"));
+    data->next_button = GTK_WIDGET (gtk_builder_get_object (builder, "hierarchy_next"));
+    data->apply_button = GTK_WIDGET (gtk_builder_get_object (builder, "hierarchy_apply"));
+
+    data->currency_selector = gnc_currency_edit_new ();
+    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT (data->currency_selector),
+                                    gnc_default_currency ());
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "currency_chooser_hbox"));
+    gtk_box_append (GTK_BOX (box), data->currency_selector);
+    data->currency_selector_label = GTK_WIDGET (gtk_builder_get_object
+                                                 (builder, "choose_currency_label"));
+
+    data->language_combo = GTK_DROP_DOWN (gtk_builder_get_object (builder,
+                                                                    "language_combo"));
+    data->region_combo = GTK_DROP_DOWN (gtk_builder_get_object (builder,
+                                                                  "region_combo"));
+    data->region_label = GTK_WIDGET (gtk_builder_get_object (builder, "region_label"));
+    data->categories_view = GTK_COLUMN_VIEW (gtk_builder_get_object
+                                              (builder, "account_categories_view"));
+    data->category_rows = g_list_store_new (hierarchy_category_row_get_type ());
+    data->sorted_category_rows = gtk_sort_list_model_new
+        (G_LIST_MODEL (g_object_ref (data->category_rows)), nullptr);
+    hierarchy_append_category_column (data, _("Selected"), 0, FALSE);
+    hierarchy_append_category_column (data, _("Account Types"), 1, TRUE);
+    gtk_sort_list_model_set_sorter (data->sorted_category_rows,
+                                    gtk_column_view_get_sorter (data->categories_view));
+    gtk_column_view_sort_by_column (data->categories_view,
+                                    data->categories_title_column,
+                                    GTK_SORT_ASCENDING);
+    data->category_selection = gtk_single_selection_new
+        (G_LIST_MODEL (g_object_ref (data->sorted_category_rows)));
+    gtk_single_selection_set_autoselect (data->category_selection, FALSE);
+    gtk_column_view_set_model (data->categories_view,
+                               GTK_SELECTION_MODEL (data->category_selection));
+    g_signal_connect (data->category_selection, "selection-changed",
+                      G_CALLBACK (hierarchy_category_selection_changed), data);
+    data->category_description = GTK_TEXT_VIEW (gtk_builder_get_object
+                                                 (builder, "account_types_description"));
+    data->category_accounts_label = GTK_LABEL (gtk_builder_get_object
+                                                (builder, "accounts_in_category_label"));
+    data->category_accounts_view = GTK_COLUMN_VIEW (gtk_builder_get_object
+                                                     (builder, "account_preview_view"));
+    hierarchy_append_account_column (data, data->category_accounts_view, _("Account"),
+                                     HIERARCHY_ACCOUNT_COLUMN_NAME, TRUE, FALSE);
+
+    data->final_account_view = GTK_COLUMN_VIEW (gtk_builder_get_object
+                                                 (builder, "final_account_view"));
+    hierarchy_append_account_column (data, data->final_account_view, _("Account"),
+                                     HIERARCHY_ACCOUNT_COLUMN_NAME, TRUE, TRUE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Code"),
+                                     HIERARCHY_ACCOUNT_COLUMN_CODE, FALSE, TRUE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Description"),
+                                     HIERARCHY_ACCOUNT_COLUMN_DESCRIPTION, TRUE, TRUE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Notes"),
+                                     HIERARCHY_ACCOUNT_COLUMN_NOTES, TRUE, TRUE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Type"),
+                                     HIERARCHY_ACCOUNT_COLUMN_TYPE, FALSE, FALSE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Placeholder"),
+                                     HIERARCHY_ACCOUNT_COLUMN_PLACEHOLDER, FALSE, TRUE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Opening Balance"),
+                                     HIERARCHY_ACCOUNT_COLUMN_BALANCE, FALSE, TRUE);
+    hierarchy_append_account_column (data, data->final_account_view, _("Use Existing"),
+                                     HIERARCHY_ACCOUNT_COLUMN_USE_EXISTING, FALSE, FALSE);
+
+    data->balance_hash = g_hash_table_new (nullptr, nullptr);
+    gnc_restore_window_size (GNC_PREFS_GROUP, data->dialog,
+                             gnc_ui_get_main_window (nullptr));
+    g_signal_connect (data->dialog, "destroy", G_CALLBACK (gnc_hierarchy_destroy_cb),
+                      data);
+    g_signal_connect (data->dialog, "close-request",
+                      G_CALLBACK (hierarchy_close_request_cb), data);
+    g_signal_connect (data->back_button, "clicked",
+                      G_CALLBACK (hierarchy_back_clicked_cb), data);
+    g_signal_connect (data->next_button, "clicked",
+                      G_CALLBACK (hierarchy_next_clicked_cb), data);
+    g_signal_connect (data->apply_button, "clicked",
+                      G_CALLBACK (hierarchy_apply_clicked_cb), data);
+    g_signal_connect (gtk_builder_get_object (builder, "select_all_button"), "clicked",
+                      G_CALLBACK (select_all_clicked), data);
+    g_signal_connect (gtk_builder_get_object (builder, "clear_all_button"), "clicked",
+                      G_CALLBACK (clear_all_clicked), data);
+    g_signal_connect (gtk_builder_get_object (builder, "hierarchy_cancel"), "clicked",
+                      G_CALLBACK (hierarchy_cancel_clicked_cb), data);
+    g_object_unref (builder);
+
+    hierarchy_show_page (data, 0);
+    gtk_window_present (data->dialog);
+    return GTK_WIDGET (data->dialog);
+}
 GtkWidget*
 gnc_ui_hierarchy_assistant(gboolean use_defaults)
 {

@@ -26,46 +26,12 @@
 #include "gnc-ui.h"
 
 
-typedef enum
-{
-    GNC_CURSOR_NORMAL = -1,
-    GNC_CURSOR_BUSY   = GDK_WATCH
-} GNCCursorType;
-
-
-/********************************************************************\
- * gnc_ui_set_cursor                                                *
- *   sets the cursor to the specified type                          *
- *                                                                  *
- * Args: w    - the widget over which to change the cursor          *
- *       type - the type of cursor to make                          *
- * Return: none                                                     *
-\********************************************************************/
 static void
-gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
+gnc_ui_set_cursor (GtkWidget *widget, const char *cursor_name)
 {
-    GdkCursor *cursor = NULL;
-
-    if (win == NULL)
-        return;
-
-    if (type != GNC_CURSOR_NORMAL)
-        cursor = gdk_cursor_new_for_display (gdk_window_get_display (win),
-                                             (GdkCursorType)type);
-
-    gdk_window_set_cursor (win, cursor);
-
-    if (update_now && type != GNC_CURSOR_NORMAL)
-    {
-        while (gtk_events_pending ())
-            gtk_main_iteration ();
-    }
-
-    if (type != GNC_CURSOR_NORMAL)
-        g_object_unref (cursor);
+    if (widget != NULL && GTK_IS_WIDGET (widget))
+        gtk_widget_set_cursor_from_name (widget, cursor_name);
 }
-
-
 /********************************************************************\
  * gnc_set_busy_cursor                                              *
  *   sets the cursor to the busy watch for the given window.        *
@@ -79,29 +45,18 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
 void
 gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 {
+    (void)update_now;
+
     if (w != NULL)
-        gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
+        gnc_ui_set_cursor (w, "wait");
     else
     {
-        /* gnc_ui_set_cursor runs the event loop and if there's an
-         * idle waiting that destroys a toplevel further down the list
-         * then we'll get a use after free crash unless we have our
-         * own reference, so take a reference to all of the toplevels
-         * and release them all after the loop finishes.
-         */
-        GList *containerstop = gtk_window_list_toplevels (), *node;
-        g_list_foreach (containerstop, (GFunc)g_object_ref, NULL);
+        GList *toplevels = gtk_window_list_toplevels ();
 
-        for (node = containerstop; node; node = node->next)
-        {
-            w = node->data;
+        for (GList *node = toplevels; node != NULL; node = node->next)
+            gnc_ui_set_cursor (GTK_WIDGET (node->data), "wait");
 
-            if (!w || !GTK_IS_WIDGET (w) || (!gtk_widget_get_has_window(w)))
-                continue;
-
-            gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
-        }
-        g_list_free_full (containerstop, (GDestroyNotify)g_object_unref);
+        g_list_free (toplevels);
     }
 }
 
@@ -118,21 +73,15 @@ void
 gnc_unset_busy_cursor (GtkWidget *w)
 {
     if (w != NULL)
-        gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_NORMAL, FALSE);
+        gnc_ui_set_cursor (w, NULL);
     else
     {
-        GList *containerstop, *node;
+        GList *toplevels = gtk_window_list_toplevels ();
 
-        for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
-        {
-            w = GTK_WIDGET (node->data);
+        for (GList *node = toplevels; node != NULL; node = node->next)
+            gnc_ui_set_cursor (GTK_WIDGET (node->data), NULL);
 
-            if (!w || !GTK_IS_WIDGET (w) || (!gtk_widget_get_has_window(w)))
-                continue;
-
-            gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_NORMAL, FALSE);
-        }
-        g_list_free (containerstop);
+        g_list_free (toplevels);
     }
 }
 

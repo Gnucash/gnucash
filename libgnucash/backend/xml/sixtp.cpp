@@ -298,6 +298,7 @@ sixtp_destroy (sixtp* sp)
     GHashTable* corpses;
     g_return_if_fail (sp);
     corpses = g_hash_table_new (g_direct_hash, g_direct_equal);
+    g_hash_table_insert (corpses, sp, (gpointer) 1);
     sixtp_destroy_node (sp, corpses);
     g_hash_table_destroy (corpses);
 }
@@ -614,8 +615,8 @@ sixtp_sax_get_entity_handler (void* user_data, const xmlChar* name)
 }
 
 
-void
-sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
+static void
+sixtp_cleanup_failed_parse (sixtp_sax_data* sax_data, gboolean report_error)
 {
     /* Something has gone wrong.  To handle it, we have to traverse the
        stack, calling, at each level, the frame failure handler (the
@@ -628,8 +629,11 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
     GSList* lp;
     GSList** stack = & (sax_data->stack);
 
-    g_critical ("parse failed at:");
-    sixtp_print_frame_stack (sax_data->stack, stderr);
+    if (report_error)
+    {
+        g_critical ("parse failed at:");
+        sixtp_print_frame_stack (sax_data->stack, stderr);
+    }
 
     while (*stack)
     {
@@ -683,6 +687,12 @@ sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
 
         *stack = sixtp_pop_and_destroy_frame (*stack);
     }
+}
+
+void
+sixtp_handle_catastrophe (sixtp_sax_data* sax_data)
+{
+    sixtp_cleanup_failed_parse (sax_data, TRUE);
 }
 
 static gboolean
@@ -859,6 +869,219 @@ sixtp_parse_push (sixtp* sixtp,
         sixtp_context_destroy (ctxt);
         return FALSE;
     }
+}
+
+struct sixtp_push_plan
+{
+    sixtp* parser;
+    sixtp_parser_context* context;
+    sixtp_push_plan_status status;
+    gboolean end_handler_ran;
+    gboolean catastrophe_ran;
+    guint in_callback;
+    gboolean cancel_pending;
+    gboolean free_pending;
+    gboolean terminalizing;
+};
+
+static void
+sixtp_push_plan_callback_begin (sixtp_push_plan* plan)
+{
+    ++plan->in_callback;
+}
+
+static void
+sixtp_push_plan_callback_end (sixtp_push_plan* plan)
+{
+    g_assert (plan->in_callback);
+    --plan->in_callback;
+}
+
+static void
+sixtp_push_plan_release_context (sixtp_push_plan* plan, gboolean catastrophe)
+{
+    if (!plan || !plan->context || plan->in_callback || plan->terminalizing)
+        return;
+
+    plan->terminalizing = TRUE;
+    if (catastrophe && !plan->catastrophe_ran && plan->context->data.stack)
+    {
+        plan->catastrophe_ran = TRUE;
+        sixtp_push_plan_callback_begin (plan);
+        if (plan->status == SIXTP_PUSH_PLAN_CANCELLED)
+            sixtp_cleanup_failed_parse (&plan->context->data, FALSE);
+        else
+            sixtp_handle_catastrophe (&plan->context->data);
+        sixtp_push_plan_callback_end (plan);
+    }
+    auto context = plan->context;
+    plan->context = NULL;
+    sixtp_context_destroy (context);
+    plan->terminalizing = FALSE;
+}
+
+static void
+sixtp_push_plan_destroy (sixtp_push_plan* plan)
+{
+    auto parser = plan->parser;
+    plan->parser = NULL;
+    sixtp_destroy (parser);
+    g_free (plan);
+}
+
+static void
+sixtp_push_plan_terminalize (sixtp_push_plan* plan)
+{
+    if (!plan || plan->in_callback || plan->terminalizing)
+        return;
+    if (plan->status == SIXTP_PUSH_PLAN_ACTIVE && plan->cancel_pending)
+        plan->status = SIXTP_PUSH_PLAN_CANCELLED;
+    if (plan->status == SIXTP_PUSH_PLAN_ACTIVE)
+        return;
+    sixtp_push_plan_release_context (
+        plan, plan->status != SIXTP_PUSH_PLAN_FINISHED);
+}
+
+static sixtp_push_plan_status
+sixtp_push_plan_complete_api_call (sixtp_push_plan* plan)
+{
+    auto status = plan->status;
+    sixtp_push_plan_terminalize (plan);
+    if (plan->free_pending && !plan->in_callback && !plan->terminalizing)
+        sixtp_push_plan_destroy (plan);
+    return status;
+}
+
+static sixtp_push_plan_status
+sixtp_push_plan_fail (sixtp_push_plan* plan)
+{
+    if (plan->status == SIXTP_PUSH_PLAN_ACTIVE)
+        plan->status = SIXTP_PUSH_PLAN_ERROR;
+    return sixtp_push_plan_complete_api_call (plan);
+}
+
+static sixtp_push_plan_status
+sixtp_push_plan_request_cancel (sixtp_push_plan* plan)
+{
+    if (plan->status == SIXTP_PUSH_PLAN_ACTIVE)
+    {
+        plan->cancel_pending = TRUE;
+        plan->status = SIXTP_PUSH_PLAN_CANCELLED;
+    }
+    return plan->status;
+}
+
+sixtp_push_plan*
+sixtp_push_plan_new (sixtp* parser, gpointer data_for_top_level,
+                     gpointer global_data)
+{
+    xmlParserCtxtPtr xml_context;
+    if (!parser)
+        return NULL;
+
+    auto plan = g_new0 (sixtp_push_plan, 1);
+    plan->parser = parser;
+    plan->status = SIXTP_PUSH_PLAN_ERROR;
+    plan->context = sixtp_context_new (parser, global_data, data_for_top_level);
+    if (!plan->context)
+        goto failed;
+
+    xml_context = xmlCreatePushParserCtxt (&plan->context->handler,
+                                           &plan->context->data, NULL, 0, NULL);
+    if (!xml_context)
+        goto failed;
+    plan->context->data.saxParserCtxt = xml_context;
+    plan->context->data.bad_xml_parser =
+        sixtp_dom_parser_new (gnc_bad_xml_end_handler, NULL, NULL);
+    if (!plan->context->data.bad_xml_parser)
+        goto failed;
+
+    plan->status = SIXTP_PUSH_PLAN_ACTIVE;
+    return plan;
+
+failed:
+    sixtp_push_plan_release_context (plan, TRUE);
+    sixtp_destroy (plan->parser);
+    g_free (plan);
+    return NULL;
+}
+
+sixtp_push_plan_status
+sixtp_push_plan_feed (sixtp_push_plan* plan, const gchar* bytes, gsize len)
+{
+    int parse_ret;
+    if (!plan)
+        return SIXTP_PUSH_PLAN_ERROR;
+    if (plan->status != SIXTP_PUSH_PLAN_ACTIVE)
+        return plan->status;
+    if ((!bytes && len) || len > G_MAXINT)
+        return sixtp_push_plan_fail (plan);
+
+    sixtp_push_plan_callback_begin (plan);
+    parse_ret = xmlParseChunk (plan->context->data.saxParserCtxt,
+                               bytes ? bytes : "", static_cast<int> (len), 0);
+    sixtp_push_plan_callback_end (plan);
+    if (plan->status != SIXTP_PUSH_PLAN_ACTIVE)
+        return sixtp_push_plan_complete_api_call (plan);
+    if (parse_ret != 0 || !plan->context->data.parsing_ok)
+        return sixtp_push_plan_fail (plan);
+    return sixtp_push_plan_complete_api_call (plan);
+}
+
+sixtp_push_plan_status
+sixtp_push_plan_finish (sixtp_push_plan* plan, gpointer* parse_result)
+{
+    int parse_ret;
+    if (parse_result)
+        *parse_result = NULL;
+    if (!plan)
+        return SIXTP_PUSH_PLAN_ERROR;
+    if (plan->status != SIXTP_PUSH_PLAN_ACTIVE)
+        return plan->status;
+
+    sixtp_push_plan_callback_begin (plan);
+    parse_ret = xmlParseChunk (plan->context->data.saxParserCtxt, "", 0, 1);
+    if (!plan->end_handler_ran)
+    {
+        plan->end_handler_ran = TRUE;
+        sixtp_context_run_end_handler (plan->context);
+    }
+    sixtp_push_plan_callback_end (plan);
+    if (plan->status != SIXTP_PUSH_PLAN_ACTIVE)
+        return sixtp_push_plan_complete_api_call (plan);
+    if (parse_ret != 0 || !plan->context->data.parsing_ok)
+        return sixtp_push_plan_fail (plan);
+
+    if (parse_result)
+        *parse_result = plan->context->top_frame->frame_data;
+    plan->status = SIXTP_PUSH_PLAN_FINISHED;
+    sixtp_push_plan_release_context (plan, FALSE);
+    return sixtp_push_plan_complete_api_call (plan);
+}
+
+sixtp_push_plan_status
+sixtp_push_plan_cancel (sixtp_push_plan* plan)
+{
+    if (!plan)
+        return SIXTP_PUSH_PLAN_ERROR;
+    if (plan->status != SIXTP_PUSH_PLAN_ACTIVE)
+        return plan->status;
+    sixtp_push_plan_request_cancel (plan);
+    return sixtp_push_plan_complete_api_call (plan);
+}
+
+void
+sixtp_push_plan_free (sixtp_push_plan* plan)
+{
+    if (!plan)
+        return;
+    plan->free_pending = TRUE;
+    if (plan->status == SIXTP_PUSH_PLAN_ACTIVE)
+        sixtp_push_plan_request_cancel (plan);
+    if (plan->in_callback || plan->terminalizing)
+        return;
+    sixtp_push_plan_terminalize (plan);
+    sixtp_push_plan_destroy (plan);
 }
 
 /***********************************************************************/

@@ -104,13 +104,21 @@
     (let ((sxml (gnc:options->sxml uuid income-options "test-standard-category-report"
                                    "single-txn-test" #:strip-tag "script")))
       (test-begin "single-txn-test")
-      (test-assert "day=value"
-        (every =
-               (map
-                (lambda (s)
-                  (str->num (cadr (string-split s #\/))))
-                (sxml->table-row-col sxml 1 #f 1))
-               (map str->num (sxml->table-row-col sxml 1 #f 2))))
+      (let ((dates (drop-right
+                    (gnc:make-date-list
+                     (gnc:time64-start-day-time (gnc:get-start-this-month))
+                     (gnc:time64-end-day-time (gnc:get-end-this-month))
+                     DayDelta)
+                    1)))
+        (test-equal "dates"
+          (map qof-print-date dates)
+          (sxml->table-row-col sxml 1 #f 1))
+        (test-assert "day=value"
+          (every =
+                 (map (lambda (date)
+                        (gnc:date-get-month-day (gnc-localtime date)))
+                      dates)
+                 (map str->num (sxml->table-row-col sxml 1 #f 2)))))
       (test-end "single-txn-test"))
     (teardown)))
 

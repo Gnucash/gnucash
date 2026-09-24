@@ -65,10 +65,40 @@ GHashTable* gnc_html_stream_handlers = nullptr;
 /* hashes handlers for handling different URLType data */
 GHashTable* gnc_html_url_handlers = nullptr;
 
+static GMutex report_document_root_lock;
+static gchar *report_document_root = nullptr;
+
+static const gchar *
+ensure_report_document_root (GError **error)
+{
+    GError *local_error = nullptr;
+    const gchar *root;
+
+    g_mutex_lock (&report_document_root_lock);
+    if (!report_document_root)
+        report_document_root = g_dir_make_tmp ("gnucash-report-XXXXXX",
+                                               &local_error);
+    root = report_document_root;
+    g_mutex_unlock (&report_document_root_lock);
+
+    if (root)
+        return root;
+
+    if (!local_error)
+        g_set_error_literal (&local_error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                             "Unable to create private report directory.");
+
+    if (error)
+        g_propagate_error (error, local_error);
+    else
+        g_clear_error (&local_error);
+    return nullptr;
+}
+
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
 
-G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
+G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, G_TYPE_OBJECT)
 
 static void gnc_html_dispose( GObject* obj );
 static void gnc_html_finalize( GObject* obj );
@@ -104,10 +134,11 @@ gnc_html_init( GncHtml* self )
 {
     GncHtmlPrivate *priv = self->priv = g_new0( GncHtmlPrivate, 1 );
 
-    priv->container = gtk_scrolled_window_new( nullptr, nullptr );
-    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(priv->container),
-                                    GTK_POLICY_AUTOMATIC,
-                                    GTK_POLICY_AUTOMATIC );
+    /* GncHtml is a controller. A backend must provide the visible widget it
+     * owns; creating a default GTK container here would keep the obsolete
+     * single-child widget ownership model alive and makes the controller need a
+     * display even when only its URL contract is used. */
+    priv->container = nullptr;
 
     priv->request_info = g_hash_table_new( g_str_hash, g_str_equal );
     priv->history = gnc_html_history_new();
@@ -121,9 +152,7 @@ gnc_html_dispose( GObject* obj )
 
     if ( priv->container != nullptr )
     {
-        gtk_widget_destroy( GTK_WIDGET(priv->container) );
-        g_object_unref( G_OBJECT(priv->container) );
-        priv->container = nullptr;
+        g_clear_object (&priv->container);
     }
     if ( priv->request_info != nullptr )
     {
@@ -524,16 +553,14 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath ) noexcept
     }
 }
 void
-gnc_html_print (GncHtml* self, const char *jobname) noexcept
+gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf) noexcept
 {
     g_return_if_fail( self != nullptr );
     g_return_if_fail( jobname != nullptr );
     g_return_if_fail( GNC_IS_HTML(self) );
 
     if ( GNC_HTML_GET_CLASS(self)->print != nullptr )
-    {
-        GNC_HTML_GET_CLASS(self)->print (self, jobname);
-    }
+        GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
     else
     {
         DEBUG( "'print' not implemented" );
@@ -566,22 +593,9 @@ gnc_html_get_webview( GncHtml* self ) noexcept
     g_return_val_if_fail (self != nullptr, nullptr);
     g_return_val_if_fail (GNC_IS_HTML(self), nullptr);
 
-    auto priv = GNC_HTML_GET_PRIVATE(self);
-    GList *sw_list = gtk_container_get_children (GTK_CONTAINER(priv->container));
-    GtkWidget *webview = nullptr;
-
-    if (sw_list) // the scroll window has only one child
-    {
-        GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
-
-        if (vp_list) // the viewport has only one child
-        {
-            webview = static_cast<GtkWidget *>(vp_list->data);
-            g_list_free (vp_list);
-        }
-    }
-    g_list_free (sw_list);
-    return webview;
+    /* GncHtml is a controller. Backends own and expose their visible widget
+     * directly, so there is no longer a mandatory GtkScrolledWindow layer. */
+    return GNC_HTML_GET_PRIVATE(self)->container;
 }
 
 
@@ -630,9 +644,100 @@ gnc_html_register_urltype( URLType type, const char *protocol ) noexcept
     return TRUE;
 }
 
-void
-gnc_html_initialize( void ) noexcept
+gboolean
+gnc_html_urltype_is_internal (URLType type) noexcept
 {
+    return !g_strcmp0 (type, URL_TYPE_REGISTER) ||
+           !g_strcmp0 (type, URL_TYPE_ACCTTREE) ||
+           !g_strcmp0 (type, URL_TYPE_REPORT) ||
+           !g_strcmp0 (type, URL_TYPE_OPTIONS) ||
+           !g_strcmp0 (type, URL_TYPE_SCHEME) ||
+           !g_strcmp0 (type, URL_TYPE_HELP) ||
+           !g_strcmp0 (type, URL_TYPE_XMLDATA) ||
+           !g_strcmp0 (type, URL_TYPE_PRICE) ||
+           !g_strcmp0 (type, URL_TYPE_BUDGET);
+}
+
+gboolean
+gnc_html_handle_internal_url (GncHtml *html, const gchar *url,
+                              gboolean new_window) noexcept
+{
+    gchar *location = nullptr;
+    gchar *label = nullptr;
+
+    g_return_val_if_fail (html != nullptr, FALSE);
+    g_return_val_if_fail (GNC_IS_HTML (html), FALSE);
+    g_return_val_if_fail (url != nullptr, FALSE);
+
+    const auto type = gnc_html_parse_url (html, url, &location, &label);
+    /* An internal action without a target is malformed. Do not report it as
+     * handled because that would silently consume a navigation decision while
+     * the backend's show_url implementation rejects the null location. */
+    const auto handled = gnc_html_urltype_is_internal (type) && location;
+    if (handled)
+        gnc_html_show_url (html, type, location, label, new_window);
+
+    g_free (location);
+    g_free (label);
+    return handled;
+}
+
+const gchar *
+gnc_html_get_report_document_root (void) noexcept
+{
+    GError *error = nullptr;
+    const gchar *root = ensure_report_document_root (&error);
+
+    if (!root)
+    {
+        PERR ("Unable to create private report directory: %s",
+              error ? error->message : "unknown error");
+        g_clear_error (&error);
+    }
+    return root;
+}
+
+gchar *
+gnc_html_create_report_document (GError **error) noexcept
+{
+    const gchar *root = ensure_report_document_root (error);
+    gchar *filename;
+    gint descriptor;
+
+    if (!root)
+        return nullptr;
+
+    filename = g_build_filename (root, "report-XXXXXX", nullptr);
+    descriptor = g_mkstemp (filename);
+    if (descriptor == -1)
+    {
+        if (error)
+            g_set_error (error, G_FILE_ERROR,
+                         g_file_error_from_errno (errno),
+                         "Unable to create temporary report document: %s",
+                         g_strerror (errno));
+        g_free (filename);
+        return nullptr;
+    }
+
+    if (close (descriptor) == -1)
+    {
+        const auto saved_errno = errno;
+
+        g_remove (filename);
+        if (error)
+            g_set_error (error, G_FILE_ERROR,
+                         g_file_error_from_errno (saved_errno),
+                         "Unable to close temporary report document: %s",
+                         g_strerror (saved_errno));
+        g_free (filename);
+        return nullptr;
+    }
+    return filename;
+}
+
+void
+gnc_html_initialize( void ) noexcept{
     static struct
     {
         URLType	type;

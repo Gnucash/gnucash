@@ -29,6 +29,7 @@
 #include <config.h>
 
 #include <string.h>
+#include <pango/pangocairo.h>
 
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
@@ -47,23 +48,18 @@ enum
     PROP_CURSOR_NAME, /* the name of the current cursor */
 };
 
-G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_LAYOUT)
+G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_WIDGET)
 
 static void
 gnc_header_draw_offscreen (GncHeader *header)
 {
     g_return_if_fail (GTK_IS_WIDGET(header));
 
-    if (!gtk_widget_get_realized (GTK_WIDGET(header)))
-        return;
-
     SheetBlockStyle *style = header->style;
     GncItemEdit *item_edit = GNC_ITEM_EDIT(header->sheet->item_editor);
     Table *table = header->sheet->table;
     VirtualLocation virt_loc;
     VirtualCell *vcell;
-    guint32 color_type;
-    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(header));
     GdkRGBA color;
     int row_offset;
     CellBlock *cb;
@@ -76,11 +72,7 @@ gnc_header_draw_offscreen (GncHeader *header)
     virt_loc.phys_row_offset = 0;
     virt_loc.phys_col_offset = 0;
 
-    gtk_style_context_save (stylectxt);
-
-    // Get the color type and apply the css class
-    color_type = gnc_table_get_color (table, virt_loc, NULL);
-    gnucash_get_style_classes (header->sheet, stylectxt, color_type, FALSE);
+    gtk_widget_get_color (GTK_WIDGET (header), &color);
 
     if (header->surface)
         cairo_surface_destroy (header->surface);
@@ -93,12 +85,17 @@ gnc_header_draw_offscreen (GncHeader *header)
     cairo_surface_set_device_scale (header->surface, scale, scale);
 
     cr = cairo_create (header->surface);
+    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+    cairo_paint (cr);
+    cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-    // Fill background color of header
-    gtk_render_background (stylectxt, cr, 0, 0, header->width, header->height);
+    GdkRGBA bg_color;
+    gdk_rgba_parse (&bg_color, "#96B183");
+    cairo_set_source_rgba (cr, bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha);
+    cairo_rectangle (cr, 0, 0, header->width, header->height);
+    cairo_fill (cr);
 
-    gdk_rgba_parse (&color, "black");
-    cairo_set_source_rgb (cr, color.red, color.green, color.blue);
+    cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
@@ -181,8 +178,10 @@ gnc_header_draw_offscreen (GncHeader *header)
             x_offset = gnucash_sheet_get_text_offset (header->sheet, virt_loc,
                                                       rect.width, logical_rect.width);
 
-            gtk_render_layout (stylectxt, cr, rect.x + x_offset,
-                               rect.y + gnc_item_edit_get_padding_border (item_edit, top), layout);
+            cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
+            cairo_move_to (cr, rect.x + x_offset,
+                           rect.y + gnc_item_edit_get_padding_border (item_edit, top));
+            pango_cairo_show_layout (cr, layout);
 
             cairo_restore (cr);
             g_object_unref (layout);
@@ -191,8 +190,6 @@ gnc_header_draw_offscreen (GncHeader *header)
         }
         row_offset += height;
     }
-    gtk_style_context_restore (stylectxt);
-
     cairo_destroy (cr);
 }
 
@@ -222,27 +219,31 @@ gnc_header_get_cell_offset (GncHeader *header, gint col, gint *cell_width)
 }
 
 
-static gboolean
-gnc_header_draw (GtkWidget *header, cairo_t *cr)
+static void
+gnc_header_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
 {
-    GnucashSheet *sheet = GNC_HEADER(header)->sheet;
-    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
-    gint x, y;
+    GncHeader *header = GNC_HEADER (widget);
+    graphene_rect_t bounds;
+    cairo_t *cr;
+    double x_offset = 0;
 
-    // use this to get the scroll x value to align the header
-    gdk_window_get_position (sheet_layout_win, &x, &y);
+    GTK_WIDGET_CLASS (gnc_header_parent_class)->snapshot (widget, snapshot);
 
-    // if the register page is moved to another window, the surface is
-    // not created so test for a surface and create one if null
-    if (GNC_HEADER(header)->surface == NULL)
-        gnc_header_draw_offscreen (GNC_HEADER(header));
+    if (!header->surface)
+        gnc_header_draw_offscreen (header);
+    if (!header->surface)
+        return;
 
-    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, x, 0);
+    if (header->sheet && header->sheet->hadj)
+        x_offset = -gtk_adjustment_get_value (header->sheet->hadj);
+
+    graphene_rect_init (&bounds, 0, 0, gtk_widget_get_width (widget),
+                        gtk_widget_get_height (widget));
+    cr = gtk_snapshot_append_cairo (snapshot, &bounds);
+    cairo_set_source_surface (cr, header->surface, x_offset, 0);
     cairo_paint (cr);
-
-    return TRUE;
+    cairo_destroy (cr);
 }
-
 
 void
 gnc_header_request_redraw (GncHeader *header)
@@ -256,32 +257,18 @@ gnc_header_request_redraw (GncHeader *header)
 
 
 static void
-gnc_header_unrealize (GtkWidget *widget)
-{
-    GncHeader *header = GNC_HEADER(widget);
-    if (header->surface)
-        cairo_surface_destroy (header->surface);
-    header->surface = NULL;
-
-    if (header->resize_cursor)
-        g_object_unref (header->resize_cursor);
-    header->resize_cursor = NULL;
-
-    if (header->normal_cursor)
-        g_object_unref (header->normal_cursor);
-    header->normal_cursor = NULL;
-
-    if (GTK_WIDGET_CLASS(gnc_header_parent_class)->unrealize)
-        GTK_WIDGET_CLASS(gnc_header_parent_class)->unrealize (GTK_WIDGET(header));
-}
-
-
-static void
 gnc_header_finalize (GObject *object)
 {
     GncHeader *header;
 
     header = GNC_HEADER(object);
+
+    if (header->sheet && header->sheet->hadj &&
+        header->hadjustment_handler)
+        g_signal_handler_disconnect (header->sheet->hadj,
+                                     header->hadjustment_handler);
+    header->hadjustment_handler = 0;
+    g_clear_object (&header->sheet);
 
     g_free (header->cursor_name);
     header->cursor_name = NULL;
@@ -323,8 +310,8 @@ gnc_header_reconfigure (GncHeader *header)
     {
         header->height = h;
         header->width = w;
-        gtk_layout_set_size (GTK_LAYOUT(header), w, h);
-        gtk_widget_set_size_request (GTK_WIDGET(header), -1, h);
+        gtk_widget_set_size_request (GTK_WIDGET (header), -1, h);
+        gtk_widget_queue_resize (GTK_WIDGET (header));
         gnc_header_request_redraw (header);
     }
 }
@@ -429,139 +416,140 @@ gnc_header_auto_resize_column (GncHeader *header, gint col)
     gnc_header_resize_column (header, col, width);
 }
 
-static gint
-gnc_header_event (GtkWidget *widget, GdkEvent *event)
+static void
+gnc_header_motion_cb (GtkEventControllerMotion *controller,
+                      double x,
+                      G_GNUC_UNUSED double y,
+                      GncHeader *header)
 {
-    GncHeader *header = GNC_HEADER(widget);
-    GdkWindow *window = gtk_widget_get_window (widget);
-    int x, y;
     int col;
 
-    if (!header->resize_cursor)
-        header->resize_cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
-                                                            GDK_SB_H_DOUBLE_ARROW);
+    if (!header->style)
+        return;
 
-    switch (event->type)
+    if (header->in_resize)
     {
-    case GDK_MOTION_NOTIFY:
-        x = event->motion.x;
-        y = event->motion.y;
+        int change = (int) x - header->resize_x;
+        int new_width = header->resize_col_width + change;
 
-        if (header->in_resize)
+        if (new_width >= 0)
         {
-            int change = x - header->resize_x;
-            int new_width = header->resize_col_width + change;
-
-            if (new_width >= 0)
-            {
-                header->resize_x = x;
-                header->resize_col_width = new_width;
-                gnc_header_request_redraw (header);
-            }
-
-            break;
-        }
-
-        if (pointer_on_resize_line (header, x, y, &col) &&
-                gnucash_style_col_is_resizable (header->style, col))
-            gdk_window_set_cursor (window, header->resize_cursor);
-        else
-            gdk_window_set_cursor (window, header->normal_cursor);
-        break;
-
-    case GDK_BUTTON_PRESS:
-    {
-        int col;
-
-        if (event->button.button != 1)
-            break;
-
-        x = event->button.x;
-        y = event->button.y;
-
-        if (pointer_on_resize_line (header, x, y, &col))
-            col = find_resize_col (header, col);
-        else
-            col = -1;
-
-        if (col > -1)
-        {
-            CellDimensions *cd;
-
-            cd = gnucash_style_get_cell_dimensions
-                 (header->style, 0, col);
-            if (!cd) break;
-
-            header->in_resize = TRUE;
-            header->resize_col = col;
-            header->resize_col_width = cd->pixel_width;
-            header->resize_x = x;
-        }
-        break;
-    }
-    case GDK_BUTTON_RELEASE:
-    {
-        if (event->button.button != 1)
-            break;
-
-        if (header->in_resize)
-        {
-            if (header->resize_col_width == 0)
-                header->resize_col_width = 1;
-
-            gnc_header_resize_column
-                (header,
-                 header->resize_col,
-                 header->resize_col_width);
-            header->in_resize = FALSE;
-            header->resize_col = -1;
+            header->resize_x = (int) x;
+            header->resize_col_width = new_width;
             gnc_header_request_redraw (header);
         }
-        break;
+        return;
     }
 
-    case GDK_2BUTTON_PRESS:
-    {
-        gboolean on_line;
-        int ptr_col;
-        int resize_col;
-
-        if (event->button.button != 1)
-            break;
-
-        x = event->button.x;
-        y = event->button.y;
-
-        on_line = pointer_on_resize_line (header, x, y, &ptr_col);
-
-        /* If we're on a resize line and the column to the right is zero
-           width, resize that one. */
-        if (on_line)
-            resize_col = find_resize_col (header, ptr_col);
-        else
-            resize_col = ptr_col;
-
-        if (resize_col > -1)
-        {
-            header->in_resize = FALSE;
-            header->resize_col = -1;
-            gnc_header_auto_resize_column (header, resize_col);
-        }
-    }
-    break;
-
-    default:
-        break;
-    }
-    return FALSE;
+    if (pointer_on_resize_line (header, (int) x, 0, &col) &&
+        gnucash_style_col_is_resizable (header->style, col))
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (header), "col-resize");
+    else
+        gtk_widget_set_cursor (GTK_WIDGET (header), NULL);
 }
 
+static void
+gnc_header_leave_cb (G_GNUC_UNUSED GtkEventControllerMotion *controller,
+                     GncHeader *header)
+{
+    if (!header->in_resize)
+        gtk_widget_set_cursor (GTK_WIDGET (header), NULL);
+}
 
-/* Note that g_value_set_object() refs the object, as does
- * g_object_get(). But g_object_get() only unrefs once when it disgorges
- * the object, leaving an unbalanced ref, which leaks. So instead of
- * using g_value_set_object(), use g_value_take_object() which doesn't
- * ref the object when used in get_property().
+static void
+gnc_header_pressed_cb (GtkGestureClick *gesture,
+                       gint n_press,
+                       double x,
+                       G_GNUC_UNUSED double y,
+                       GncHeader *header)
+{
+    int col;
+    int resize_col;
+
+    if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) !=
+        GDK_BUTTON_PRIMARY || !header->style)
+        return;
+
+    if (pointer_on_resize_line (header, (int) x, 0, &col))
+        resize_col = find_resize_col (header, col);
+    else
+        resize_col = n_press == 2 ? col : -1;
+
+    if (n_press == 2)
+    {
+        if (resize_col > -1)
+            gnc_header_auto_resize_column (header, resize_col);
+        return;
+    }
+
+    if (resize_col > -1)
+    {
+        CellDimensions *dimensions =
+            gnucash_style_get_cell_dimensions (header->style, 0, resize_col);
+
+        if (!dimensions)
+            return;
+
+        header->in_resize = TRUE;
+        header->resize_col = resize_col;
+        header->resize_col_width = dimensions->pixel_width;
+        header->resize_x = (int) x;
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
+}
+
+static void
+gnc_header_released_cb (GtkGestureClick *gesture,
+                        G_GNUC_UNUSED gint n_press,
+                        G_GNUC_UNUSED double x,
+                        G_GNUC_UNUSED double y,
+                        GncHeader *header)
+{
+    if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) !=
+        GDK_BUTTON_PRIMARY || !header->in_resize)
+        return;
+
+    if (header->resize_col_width == 0)
+        header->resize_col_width = 1;
+
+    gnc_header_resize_column (header, header->resize_col,
+                              header->resize_col_width);
+    header->in_resize = FALSE;
+    header->resize_col = -1;
+    gnc_header_request_redraw (header);
+}
+
+static void
+gnc_header_hadjustment_changed_cb (GtkAdjustment *adjustment,
+                                   GncHeader *header)
+{
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+    gtk_widget_queue_draw (GTK_WIDGET (header));
+}
+
+static void
+gnc_header_measure (GtkWidget *widget,
+                    GtkOrientation orientation,
+                    G_GNUC_UNUSED int for_size,
+                    int *minimum,
+                    int *natural,
+                    int *minimum_baseline,
+                    int *natural_baseline)
+{
+    GncHeader *header = GNC_HEADER (widget);
+    int size = orientation == GTK_ORIENTATION_VERTICAL ? header->height :
+                                                         header->width;
+
+    *minimum = size;
+    *natural = size;
+    if (minimum_baseline)
+        *minimum_baseline = -1;
+    if (natural_baseline)
+        *natural_baseline = -1;
+}
+
+/* g_value_set_object() supplies the referenced object through this
+ * GObject property getter.
  */
 static void
 gnc_header_get_property (GObject *object,
@@ -574,7 +562,7 @@ gnc_header_get_property (GObject *object,
     switch (param_id)
     {
     case PROP_SHEET:
-        g_value_take_object (value, header->sheet);
+        g_value_set_object (value, header->sheet);
         break;
     case PROP_CURSOR_NAME:
         g_value_set_string (value, header->cursor_name);
@@ -592,15 +580,23 @@ gnc_header_set_property (GObject *object,
                          GParamSpec *pspec)
 {
     GncHeader *header = GNC_HEADER(object);
-    GtkLayout *layout = GTK_LAYOUT(header);
     gboolean needs_update = FALSE;
     gchar *old_name;
 
     switch (param_id)
     {
     case PROP_SHEET:
-        header->sheet = GNUCASH_SHEET(g_value_get_object (value));
-        gtk_scrollable_set_hadjustment (GTK_SCROLLABLE(layout), header->sheet->hadj);
+        if (header->sheet && header->sheet->hadj &&
+            header->hadjustment_handler)
+            g_signal_handler_disconnect (header->sheet->hadj,
+                                         header->hadjustment_handler);
+        header->hadjustment_handler = 0;
+        g_set_object (&header->sheet, GNUCASH_SHEET (g_value_get_object (value)));
+        if (header->sheet && header->sheet->hadj)
+            header->hadjustment_handler =
+                g_signal_connect (header->sheet->hadj, "value-changed",
+                                  G_CALLBACK (gnc_header_hadjustment_changed_cb),
+                                  header);
         needs_update = TRUE;
         break;
     case PROP_CURSOR_NAME:
@@ -624,28 +620,29 @@ gnc_header_set_property (GObject *object,
 static void
 gnc_header_init (GncHeader *header)
 {
+    GtkEventController *motion;
+    GtkGesture *click;
+
     header->sheet = NULL;
     header->cursor_name = NULL;
     header->in_resize = FALSE;
     header->resize_col = -1;
-    header->resize_cursor = NULL;
-    header->normal_cursor = NULL;
     header->height = 20;
     header->width = 400;
     header->style = NULL;
+    header->surface = NULL;
+    header->hadjustment_handler = 0;
 
-    gtk_widget_add_events (GTK_WIDGET(header),
-                          (GDK_EXPOSURE_MASK
-                          | GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_POINTER_MOTION_MASK
-                          | GDK_POINTER_MOTION_HINT_MASK));
+    motion = gtk_event_controller_motion_new ();
+    g_signal_connect (motion, "motion", G_CALLBACK (gnc_header_motion_cb), header);
+    g_signal_connect (motion, "leave", G_CALLBACK (gnc_header_leave_cb), header);
+    gtk_widget_add_controller (GTK_WIDGET (header), motion);
 
-    g_signal_connect (G_OBJECT(header), "configure_event",
-                      G_CALLBACK(gnc_header_reconfigure), NULL);
-    gtk_widget_show_all (GTK_WIDGET(header));
+    click = gtk_gesture_click_new ();
+    g_signal_connect (click, "pressed", G_CALLBACK (gnc_header_pressed_cb), header);
+    g_signal_connect (click, "released", G_CALLBACK (gnc_header_released_cb), header);
+    gtk_widget_add_controller (GTK_WIDGET (header), GTK_EVENT_CONTROLLER (click));
 }
-
 
 static void
 gnc_header_class_init (GncHeaderClass *header_class)
@@ -675,9 +672,8 @@ gnc_header_class_init (GncHeaderClass *header_class)
                                              G_PARAM_READWRITE));
 
 
-    item_class->unrealize = gnc_header_unrealize;
-    item_class->draw      = gnc_header_draw;
-    item_class->event     = gnc_header_event;
+    item_class->measure = gnc_header_measure;
+    item_class->snapshot = gnc_header_snapshot;
 }
 
 GtkWidget *
@@ -693,4 +689,3 @@ gnc_header_new (GnucashSheet *sheet)
     sheet->header_item = layout;
     return layout;
 }
-

@@ -29,6 +29,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-date-edit.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -62,6 +63,8 @@ void gnc_order_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data);
+
+static void gnc_order_window_request_close (OrderWindow *ow);
 
 typedef enum
 {
@@ -104,7 +107,9 @@ struct _order_window
     gint		component_id;
     QofBook *	book;
     GncOrder *	created_order;
-    GncOwner	owner;
+    GncOwner        owner;
+    gboolean        save_pending;
+    gboolean        close_pending;
 
 };
 
@@ -133,21 +138,21 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     gnc_suspend_gui_refresh ();
     gncOrderBeginEdit (order);
 
-    gncOrderSetID (order, gtk_entry_get_text (GTK_ENTRY (ow->id_entry)));
+    gncOrderSetID (order, gnc_entry_get_text (GTK_ENTRY (ow->id_entry)));
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
     gncOrderSetNotes (order, text);
 
-    gncOrderSetReference (order, gtk_entry_get_text (GTK_ENTRY (ow->ref_entry)));
+    gncOrderSetReference (order, gnc_entry_get_text (GTK_ENTRY (ow->ref_entry)));
 
     tt = gnc_date_edit_get_date (GNC_DATE_EDIT (ow->opened_date));
     gncOrderSetDateOpened (order, tt);
 
     if (ow->active_check)
-        gncOrderSetActive (order, gtk_toggle_button_get_active
-                           (GTK_TOGGLE_BUTTON (ow->active_check)));
+        gncOrderSetActive (order, gtk_check_button_get_active
+                           (GTK_CHECK_BUTTON (ow->active_check)));
 
     gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
     gncOrderSetOwner (order, &(ow->owner));
@@ -163,7 +168,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     const char *res;
 
     /* Check the ID */
-    res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (ow->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
@@ -187,9 +192,6 @@ gnc_order_window_verify_ok (OrderWindow *ow)
 static gboolean
 gnc_order_window_ok_save (OrderWindow *ow)
 {
-    if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
-        return FALSE;
-
     if (!gnc_order_window_verify_ok (ow))
         return FALSE;
 
@@ -206,26 +208,107 @@ gnc_order_window_ok_save (OrderWindow *ow)
     return TRUE;
 }
 
-void
-gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
+typedef struct
 {
-    OrderWindow *ow = data;
+    OrderWindow *ow;
+    GWeakRef window;
+    gulong destroy_handler;
+    QofBook *book;
+    GncGUID order_guid;
+} OrderSaveRequest;
 
-    if (!gnc_order_window_ok_save (ow))
-        return;
+static void
+order_save_request_destroyed (GtkWidget *widget, OrderSaveRequest *request)
+{
+    (void)widget;
+    request->ow = NULL;
+    request->destroy_handler = 0;
+}
 
-    /* Ok, we don't need this anymore */
-    ow->order_guid = *guid_null ();
+static void
+order_save_request_free (gpointer user_data)
+{
+    OrderSaveRequest *request = user_data;
+    GtkWidget *window = g_weak_ref_get (&request->window);
 
-    gnc_close_gui_component (ow->component_id);
+    if (window && request->destroy_handler)
+        g_signal_handler_disconnect (window, request->destroy_handler);
+    g_clear_object (&window);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static OrderSaveRequest *
+order_save_request_new (OrderWindow *ow)
+{
+    OrderSaveRequest *request;
+
+    if (!ow || !ow->ledger || !ow->dialog || !ow_get_order (ow))
+        return NULL;
+
+    request = g_new0 (OrderSaveRequest, 1);
+    request->ow = ow;
+    request->book = ow->book;
+    request->order_guid = ow->order_guid;
+    g_weak_ref_init (&request->window, ow->dialog);
+    request->destroy_handler = g_signal_connect (
+        ow->dialog, "destroy", G_CALLBACK (order_save_request_destroyed), request);
+    return request;
+}
+
+static gboolean
+order_save_request_is_current (const OrderSaveRequest *request)
+{
+    GncOrder *order;
+
+    if (!request->ow || qof_book_shutting_down (request->book))
+        return FALSE;
+
+    order = gncOrderLookup (request->book, &request->order_guid);
+    return order && ow_get_order (request->ow) == order;
+}
+
+static void
+gnc_order_window_ok_ledger_finished (GncEntryLedger *ledger,
+                                     gboolean completed, gpointer user_data)
+{
+    OrderSaveRequest *request = user_data;
+    OrderWindow *ow = request->ow;
+
+    (void)ledger;
+    if (ow)
+        ow->save_pending = FALSE;
+
+    if (completed && order_save_request_is_current (request) &&
+        gnc_order_window_ok_save (ow))
+    {
+        ow->order_guid = *guid_null ();
+        gnc_order_window_request_close (ow);
+    }
 }
 
 void
-gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
+gnc_order_window_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
+    OrderSaveRequest *request;
 
-    gnc_close_gui_component (ow->component_id);
+    if (!ow || !ow->ledger || ow->save_pending || ow->close_pending)
+        return;
+
+    request = order_save_request_new (ow);
+    if (!request)
+        return;
+
+    ow->save_pending = TRUE;
+    gnc_entry_ledger_check_close_async_full (
+        ow->dialog, ow->ledger, gnc_order_window_ok_ledger_finished, request,
+        order_save_request_free);
+}
+void
+gnc_order_window_cancel_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
+{
+    gnc_order_window_request_close (data);
 }
 
 void
@@ -251,26 +334,142 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
     gnc_order_update_window (ow);
 }
 
+typedef struct
+{
+    OrderWindow *ow;
+    GWeakRef window;
+    gulong destroy_handler;
+    GncGUID order_guid;
+    QofBook *book;
+    gboolean restore_close_button;
+} OrderCloseRequest;
+
+static void
+order_close_request_destroyed (GtkWidget *widget, OrderCloseRequest *request)
+{
+    (void)widget;
+    request->ow = NULL;
+    request->destroy_handler = 0;
+}
+
+static void
+order_close_request_free (gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+    GtkWidget *window = g_weak_ref_get (&request->window);
+
+    if (window && request->destroy_handler)
+        g_signal_handler_disconnect (window, request->destroy_handler);
+    if (request->ow)
+        request->ow->close_pending = FALSE;
+    if (request->ow && request->restore_close_button &&
+        request->ow->close_order_button)
+        gtk_widget_set_sensitive (request->ow->close_order_button, TRUE);
+    g_clear_object (&window);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+order_close_ledger_finished (GncEntryLedger *ledger, gboolean completed,
+                             gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+    GncOrder *order;
+
+    (void)ledger;
+    if (completed && request->ow && !qof_book_shutting_down (request->book))
+    {
+        order = gncOrderLookup (request->book, &request->order_guid);
+        if (order && gnc_order_window_ok_save (request->ow))
+        {
+            request->ow->dialog_type = VIEW_ORDER;
+            gnc_entry_ledger_set_readonly (request->ow->ledger, TRUE);
+            gnc_order_update_window (request->ow);
+            request->restore_close_button = FALSE;
+        }
+    }
+}
+
+static void
+order_close_date_finished (GObject *source, GAsyncResult *result,
+                           gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+    GError *error = NULL;
+    GncOrder *order;
+    time64 date;
+
+    (void)source;
+    if (request->ow && !qof_book_shutting_down (request->book) &&
+        gnc_dialog_date_close_parented_finish (result, &date, &error))
+    {
+        order = gncOrderLookup (request->book, &request->order_guid);
+        if (order)
+        {
+            gncOrderSetDateClosed (order, date);
+            gnc_entry_ledger_check_close_async_full (
+                request->ow->dialog, request->ow->ledger,
+                order_close_ledger_finished, request, order_close_request_free);
+            g_clear_error (&error);
+            return;
+        }
+    }
+
+    g_clear_error (&error);
+    order_close_request_free (request);
+}
+
+static void
+order_close_start_date_dialog (OrderCloseRequest *request)
+{
+    GtkWidget *window = g_weak_ref_get (&request->window);
+
+    if (!window || !request->ow || qof_book_shutting_down (request->book))
+    {
+        g_clear_object (&window);
+        order_close_request_free (request);
+        return;
+    }
+
+    gnc_dialog_date_close_parented_async (
+        window, _("Do you really want to close the order?"), _("Close Date"),
+        TRUE, gnc_time (NULL), NULL, order_close_date_finished, request);
+    g_object_unref (window);
+}
+
+static void
+order_close_verify_finished (GtkWindow *parent, gint response,
+                             gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+
+    (void)parent;
+    if (response == GTK_RESPONSE_YES && request->ow &&
+        !qof_book_shutting_down (request->book))
+        order_close_start_date_dialog (request);
+    else
+        order_close_request_free (request);
+}
+
 void
 gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
+    OrderCloseRequest *request;
     GncOrder *order;
     GList *entries;
-    char *message, *label;
     gboolean non_inv = FALSE;
-    time64 t = gnc_time (NULL);
 
-    /* Make sure the order is ok */
-    if (!gnc_order_window_verify_ok (ow))
+    (void)widget;
+    if (!ow || !ow->ledger || ow->save_pending || ow->close_pending ||
+        !gnc_order_window_verify_ok (ow))
         return;
 
-    /* Make sure the order exists */
     order = ow_get_order (ow);
     if (!order)
         return;
 
-    /* Check that there is at least one Entry */
     if (gncOrderGetEntries (order) == NULL)
     {
         gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
@@ -278,54 +477,43 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
         return;
     }
 
-    /* Make sure we can close the order. Are there any uninvoiced entries? */
-    entries = gncOrderGetEntries (order);
-    for ( ; entries ; entries = entries->next)
+    for (entries = gncOrderGetEntries (order); entries; entries = entries->next)
     {
         GncEntry *entry = entries->data;
-        if (gncEntryGetInvoice (entry) == NULL)
+
+        if (!gncEntryGetInvoice (entry))
         {
             non_inv = TRUE;
             break;
         }
     }
 
+    request = g_new0 (OrderCloseRequest, 1);
+    request->ow = ow;
+    request->book = ow->book;
+    request->order_guid = ow->order_guid;
+    request->restore_close_button = TRUE;
+    ow->close_pending = TRUE;
+    g_weak_ref_init (&request->window, ow->dialog);
+    request->destroy_handler = g_signal_connect (
+        ow->dialog, "destroy", G_CALLBACK (order_close_request_destroyed), request);
+    if (ow->close_order_button)
+        gtk_widget_set_sensitive (ow->close_order_button, FALSE);
+
     if (non_inv)
     {
-        /* Damn; yes.  Well, ask the user to make sure they REALLY want to
-         * close this order!
-         */
-
-        message = _("This order contains entries that have not been invoiced. "
-                    "Are you sure you want to close it out before "
-                    "you invoice all the entries?");
-
-        if (gnc_verify_dialog (GTK_WINDOW (ow->dialog), FALSE, "%s", message) == FALSE)
-            return;
+        gnc_verify_dialog_async (
+            GTK_WINDOW (ow->dialog), FALSE, order_close_verify_finished, request,
+            "%s", _("This order contains entries that have not been invoiced. "
+                     "Are you sure you want to close it out before "
+                     "you invoice all the entries?"));
+        return;
     }
 
-    /* Ok, we can close this.  Ask for verification and set the closed date */
-    message = _("Do you really want to close the order?");
-    label = _("Close Date");
-
-    if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &t))
-        return;
-
-    gncOrderSetDateClosed (order, t);
-
-    /* save it off */
-    gnc_order_window_ok_save (ow);
-
-    /* Reset the type; change to read-only */
-    ow->dialog_type = VIEW_ORDER;
-    gnc_entry_ledger_set_readonly (ow->ledger, TRUE);
-
-    /* And redisplay the window */
-    gnc_order_update_window (ow);
+    order_close_start_date_dialog (request);
 }
-
 void
-gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
+gnc_order_window_destroy_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
     GncOrder *order = ow_get_order (ow);
@@ -341,9 +529,14 @@ gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     if (ow->ledger)
         gnc_entry_ledger_destroy (ow->ledger);
-    gnc_unregister_gui_component (ow->component_id);
+    if (ow->component_id != NO_COMPONENT)
+    {
+        gnc_unregister_gui_component (ow->component_id);
+        ow->component_id = NO_COMPONENT;
+    }
     gnc_resume_gui_refresh ();
 
+    ow->dialog = NULL;
     g_free (ow);
 }
 
@@ -374,15 +567,52 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
     case GNC_OWNER_JOB:
     {
         char const *msg = gncJobGetReference (gncOwnerGetJob (&(ow->owner)));
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
         break;
     }
     default:
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
         break;
     }
 
     return FALSE;
+}
+
+static gboolean
+gnc_order_window_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    OrderWindow *ow = user_data;
+
+    if (!ow || ow->dialog != GTK_WIDGET (window))
+        return FALSE;
+
+    gnc_order_window_request_close (ow);
+    return TRUE;
+}
+
+static gboolean
+gnc_order_window_key_pressed_cb (G_GNUC_UNUSED GtkEventControllerKey *key,
+                                  guint keyval, G_GNUC_UNUSED guint keycode,
+                                  G_GNUC_UNUSED GdkModifierType state,
+                                  gpointer user_data)
+{
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+
+    gnc_order_window_request_close (user_data);
+    return TRUE;
+}
+
+static void
+gnc_order_window_request_close (OrderWindow *ow)
+{
+    if (!ow)
+        return;
+
+    if (ow->component_id != NO_COMPONENT)
+        gnc_close_gui_component (ow->component_id);
+    else if (ow->dialog)
+        gtk_window_destroy (GTK_WINDOW (ow->dialog));
 }
 
 static void
@@ -390,7 +620,8 @@ gnc_order_window_close_handler (gpointer user_data)
 {
     OrderWindow *ow = user_data;
 
-    gtk_widget_destroy (ow->dialog);
+    if (ow && ow->dialog)
+        gtk_window_destroy (GTK_WINDOW (ow->dialog));
 }
 
 static void
@@ -427,12 +658,14 @@ gnc_order_update_window (OrderWindow *ow)
     gboolean hide_cd = FALSE;
 
     order = ow_get_order (ow);
+    if (!order)
+        return;
     owner = gncOrderGetOwner (order);
 
     if (ow->owner_choice)
     {
-        gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
-        gtk_widget_destroy (ow->owner_choice);
+        gtk_box_remove (GTK_BOX (ow->owner_box), ow->owner_choice);
+        ow->owner_choice = NULL;
     }
 
     switch (ow->dialog_type)
@@ -450,18 +683,19 @@ gnc_order_update_window (OrderWindow *ow)
         break;
     }
 
-    g_signal_connect (ow->owner_choice, "changed",
-                      G_CALLBACK (gnc_order_owner_changed_cb),
-                      ow);
-
-    gtk_widget_show_all (ow->dialog);
+    if (ow->owner_choice)
+    {
+        g_signal_connect (ow->owner_choice, "changed",
+                          G_CALLBACK (gnc_order_owner_changed_cb), ow);
+        gtk_widget_set_visible (ow->owner_choice, TRUE);
+    }
 
     {
         GtkTextBuffer* text_buffer;
         const char *string;
         time64 tt;
 
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry),
                             gncOrderGetReference (order));
 
         string = gncOrderGetNotes (order);
@@ -495,7 +729,7 @@ gnc_order_update_window (OrderWindow *ow)
             gnc_date_edit_set_time (GNC_DATE_EDIT (ow->closed_date), tt);
         }
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (ow->active_check),
                                       gncOrderGetActive (order));
 
     }
@@ -508,8 +742,8 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (hide_cd)
     {
-        gtk_widget_hide (ow->closed_date);
-        gtk_widget_hide (ow->cd_label);
+        gtk_widget_set_visible (GTK_WIDGET(ow->closed_date), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(ow->cd_label), FALSE);
     }
 
     if (ow->dialog_type == VIEW_ORDER)
@@ -521,7 +755,7 @@ gnc_order_update_window (OrderWindow *ow)
         gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
 
         /* Hide the 'close order' button */
-        gtk_widget_hide (ow->close_order_button);
+        gtk_widget_set_visible (GTK_WIDGET(ow->close_order_button), FALSE);
     }
 }
 
@@ -540,7 +774,7 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
 {
     OrderWindow *ow;
     GtkBuilder *builder;
-    GtkWidget *vbox, *regWidget, *hbox, *date;
+    GtkWidget *vbox, *regWidget, *hbox, *date, *default_button;
     GncEntryLedger *entry_ledger = NULL;
     const char * class_name;
 
@@ -578,6 +812,7 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
      * No existing order window found.  Build a new one.
      */
     ow = g_new0 (OrderWindow, 1);
+    ow->component_id = NO_COMPONENT;
     ow->book = bookp;
     ow->dialog_type = type;
 
@@ -609,14 +844,14 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     /* Setup Date Widgets */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "opened_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "closed_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->closed_date = date;
 
     /* Build the ledger */
@@ -649,21 +884,34 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
     vbox = GTK_WIDGET(gtk_builder_get_object (builder, "ledger_vbox"));
-    gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(regWidget));
+    gtk_box_set_spacing (GTK_BOX(vbox), 2);
 
-    /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
+    /* Setup Builder callbacks and GTK4 window lifecycle. */
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
+    g_signal_connect (ow->dialog, "close-request",
+                      G_CALLBACK (gnc_order_window_close_request_cb), ow);
+
+    GtkEventController *key_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (ow->dialog, key_controller);
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_order_window_key_pressed_cb), ow);
+
+    default_button = GTK_WIDGET (gtk_builder_get_object (builder, "closebutton"));
+    gtk_window_set_default_widget (GTK_WINDOW (ow->dialog), default_button);
 
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
 
-    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
+    gnc_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
 
     ow->component_id =
         gnc_register_gui_component (class_name,
                                     gnc_order_window_refresh_handler,
                                     gnc_order_window_close_handler,
                                     ow);
+
+    gnc_gui_component_set_session (ow->component_id, gnc_get_current_session ());
 
     gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 
@@ -672,6 +920,8 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
 
     /* Maybe set the reference */
     gnc_order_owner_changed_cb (ow->owner_choice, ow);
+
+    gtk_window_present (GTK_WINDOW (ow->dialog));
 
     g_object_unref(G_OBJECT(builder));
 
@@ -685,9 +935,10 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     GtkBuilder *builder;
     GncOrder *order;
     gchar *string;
-    GtkWidget *hbox, *date;
+    GtkWidget *hbox, *date, *default_button;
 
     ow = g_new0 (OrderWindow, 1);
+    ow->component_id = NO_COMPONENT;
     ow->book = bookp;
     ow->dialog_type = NEW_ORDER;
 
@@ -720,17 +971,27 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     /* Setup date Widget */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_opened_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
-    /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
+    /* Setup Builder callbacks and GTK4 window lifecycle. */
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
+    g_signal_connect (ow->dialog, "close-request",
+                      G_CALLBACK (gnc_order_window_close_request_cb), ow);
+
+    GtkEventController *key_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (ow->dialog, key_controller);
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_order_window_key_pressed_cb), ow);
+
+    default_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
+    gtk_window_set_default_widget (GTK_WINDOW (ow->dialog), default_button);
 
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
     string = gncOrderNextID(bookp);
-    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
+    gnc_entry_set_text (GTK_ENTRY (ow->id_entry), string);
     g_free(string);
 
     ow->component_id =
@@ -738,6 +999,8 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
                                     gnc_order_window_refresh_handler,
                                     gnc_order_window_close_handler,
                                     ow);
+
+    gnc_gui_component_set_session (ow->component_id, gnc_get_current_session ());
 
     /* Now fill in a lot of the pieces and display properly */
     gnc_order_update_window (ow);
@@ -750,6 +1013,8 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
 
     /* Maybe set the reference */
     gnc_order_owner_changed_cb (ow->owner_choice, ow);
+
+    gtk_window_present (GTK_WINDOW (ow->dialog));
 
     g_object_unref(G_OBJECT(builder));
 

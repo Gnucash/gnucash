@@ -55,7 +55,12 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 
 /** The instance data structure for a content plugin. */
-typedef struct GncPluginPage
+typedef struct GncPluginPage GncPluginPage;
+typedef void (*GncPluginPagePendingCallback) (GncPluginPage *plugin_page,
+                                               gboolean accepted,
+                                               gpointer user_data);
+
+struct GncPluginPage
 {
     GObject gobject;            /**< The parent object data. */
 
@@ -73,7 +78,7 @@ typedef struct GncPluginPage
                                 *   plugin.  This field is private to
                                 *   the gnucash window management
                                 *   code.  */
-} GncPluginPage;
+};
 
 
 /** The class data structure for a content plugin. */
@@ -200,7 +205,14 @@ typedef struct
      *  @return FALSE if the page could not or would not comply,
      *  which should cancel the pending operation.  TRUE
      *  otherwise */
-    gboolean (* finish_pending) (GncPluginPage *plugin_page);
+    /** Complete outstanding page work without entering a nested main loop.
+     * Implementations must invoke @a callback exactly once. The page pointer
+     * passed to the callback may be NULL if the page vanished before it could
+     * complete; that always implies @a accepted is FALSE. */
+    void (* finish_pending_async) (GncPluginPage *plugin_page,
+                                   GCancellable *cancellable,
+                                   GncPluginPagePendingCallback callback,
+                                   gpointer user_data);
 } GncPluginPageClass;
 
 
@@ -593,7 +605,10 @@ void gnc_plugin_page_unselected (GncPluginPage *plugin_page);
  *  @return FALSE if the page could not or would not comply, which
  *  should cancel the pending operation.  TRUE otherwise
  */
-gboolean gnc_plugin_page_finish_pending (GncPluginPage *plugin_page);
+void gnc_plugin_page_finish_pending_async (GncPluginPage *plugin_page,
+                                           GCancellable *cancellable,
+                                           GncPluginPagePendingCallback callback,
+                                           gpointer user_data);
 
 G_END_DECLS
 

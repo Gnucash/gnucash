@@ -72,6 +72,11 @@ struct gncpolicy_s
 
     gboolean (*PolicyIsOpeningSplit) (GNCPolicy *, GNCLot *lot,
                                       Split *split);
+    gboolean (*PolicyCandidateIsBetter) (GNCPolicy *, Split *candidate,
+                                          Split *current_best);
 };
+
+gboolean gnc_policy_candidate_is_better (GNCPolicy *policy, Split *candidate,
+                                          Split *current_best);
 
 #endif /* XACC_POLICY_P_H */

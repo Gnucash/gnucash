@@ -68,15 +68,16 @@ void gnc_gnome_help (GtkWindow *parent, const char *file_name,
  */
 void gnc_launch_doclink (GtkWindow *parent, const char *uri);
 
-/** Given a file name, find and load the requested pixmap.  This
+/** Given a file name, find and load the requested picture.  This
  *  routine will display an error message if it can't find the file or
- *  load the pixmap.
+ *  load the picture.
  *
- *  @param name The name of the pixmap file to load.
+ *  @param name The name of the picture file to load.
  *
- *  @return A pointer to the pixmap, or NULL of the file couldn't
+ *  @return A pointer to the picture, or NULL of the file couldn't
  *  be found or loaded..
  */
+GtkWidget * gnc_gnome_get_picture (const char *name);
 GtkWidget * gnc_gnome_get_pixmap (const char *name);
 
 
@@ -103,6 +104,7 @@ void gnc_shutdown (int exit_status);
 /** Initialize the gnucash gui */
 GncMainWindow *gnc_gui_init (void);
 int gnc_ui_start_event_loop (void);
+void gnc_ui_stop_event_loop (void);
 gboolean gnucash_ui_is_running (void);
 
 #ifdef __cplusplus

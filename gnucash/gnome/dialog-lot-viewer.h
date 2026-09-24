@@ -37,6 +37,11 @@ typedef struct _GNCLotViewer GNCLotViewer;
 /** Create and realize and show a lot-viewing dialog. */
 GNCLotViewer * gnc_lot_viewer_dialog (GtkWindow *parent, Account *account);
 
+/** Product seams shared by the callbacks and focused UI tests. */
+gboolean gnc_lot_viewer_account_uses_async_scrub (const Account *account);
+void gnc_lot_viewer_set_scrub_controls_sensitive (
+    GtkWidget *lot_button, GtkWidget *account_button, gboolean sensitive);
+
 #ifdef __cplusplus
 }
 #endif

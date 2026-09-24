@@ -63,6 +63,7 @@ add_engine_test(test-query test-query.cpp)
 add_engine_test(test-split-vs-account test-split-vs-account.cpp)
 add_engine_test(test-transaction-reversal test-transaction-reversal.cpp)
 add_engine_test(test-transaction-voiding test-transaction-voiding.cpp)
+add_engine_test(test-transfer-transaction test-transfer-transaction.c)
 add_engine_test(test-recurrence test-recurrence.c)
 add_engine_test(test-business test-business.c)
 add_engine_test(test-address test-address.c)
@@ -258,6 +259,7 @@ set(test_engine_SOURCES_DIST
         test-split-vs-account.cpp
         test-transaction-reversal.cpp
         test-transaction-voiding.cpp
+        test-transfer-transaction.c
         test-vendor.c
         utest-Account.cpp
         utest-Budget.c

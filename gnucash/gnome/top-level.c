@@ -81,6 +81,80 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+typedef struct
+{
+    GWeakRef page;
+    GWeakRef window;
+    QofBook *book;
+    GncGUID split_guid;
+    GncGUID transaction_guid;
+} HtmlRegisterRevealRequest;
+
+static void
+gnc_html_register_reveal_request_free (gpointer user_data)
+{
+    HtmlRegisterRevealRequest *request = user_data;
+
+    g_weak_ref_clear (&request->window);
+    g_weak_ref_clear (&request->page);
+    g_free (request);
+}
+
+static void
+gnc_html_register_reveal_finished (GNCSplitReg *gsr, Split *split,
+                                   GncSplitRegRevealResult result,
+                                   gpointer user_data)
+{
+    HtmlRegisterRevealRequest *request = user_data;
+    GObject *page_object = g_weak_ref_get (&request->page);
+    GObject *window = g_weak_ref_get (&request->window);
+    GncPluginPage *page;
+    Transaction *transaction;
+
+    if (!page_object || !window || !GNC_IS_PLUGIN_PAGE_REGISTER (page_object) ||
+        !GTK_IS_WINDOW (window) || request->book != gnc_get_current_book () ||
+        qof_book_shutting_down (request->book))
+        goto out;
+
+    page = GNC_PLUGIN_PAGE (page_object);
+    transaction = xaccTransLookup (&request->transaction_guid, request->book);
+    if (gnc_plugin_page_get_window (page) != GTK_WIDGET (window) ||
+        gnc_plugin_page_register_get_gsr (page) != gsr ||
+        xaccSplitLookup (&request->split_guid, request->book) != split ||
+        !transaction || xaccSplitGetParent (split) != transaction)
+        goto out;
+
+    if (result == GNC_SPLIT_REG_REVEAL_FILTER_CLEARED)
+        gnc_plugin_page_register_clear_current_filter (page);
+    gnc_split_reg_jump_to_split (gsr, split);
+
+out:
+    g_clear_object (&window);
+    g_clear_object (&page_object);
+}
+
+static void
+gnc_html_register_reveal_split_async (GncPluginPage *page, GNCSplitReg *gsr,
+                                      Split *split)
+{
+    HtmlRegisterRevealRequest *request;
+    GtkWidget *window;
+    Transaction *transaction;
+
+    if (!page || !gsr || !split || !(transaction = xaccSplitGetParent (split)) ||
+        !(window = gnc_plugin_page_get_window (page)))
+        return;
+
+    request = g_new0 (HtmlRegisterRevealRequest, 1);
+    request->book = gnc_get_current_book ();
+    request->split_guid = *xaccSplitGetGUID (split);
+    request->transaction_guid = *xaccTransGetGUID (transaction);
+    g_weak_ref_init (&request->page, G_OBJECT (page));
+    g_weak_ref_init (&request->window, G_OBJECT (window));
+    gnc_split_reg_reveal_split_async (gsr, split, gnc_html_register_reveal_finished,
+                                      request, gnc_html_register_reveal_request_free);
+}
+
 /* ============================================================== */
 /* HTML Handler for reports. */
 
@@ -215,12 +289,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
     if (split)
     {
         gsr = gnc_plugin_page_register_get_gsr (page);
-
-        /* Test for visibility of split */ 
-        if (gnc_split_reg_clear_filter_for_split (gsr, split))
-            gnc_plugin_page_register_clear_current_filter (page);
-
-        gnc_split_reg_jump_to_split (gsr, split);
+        gnc_html_register_reveal_split_async (page, gsr, split);
     }
     return TRUE;
 }

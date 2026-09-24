@@ -32,6 +32,10 @@ static const char* log_module{"gnc.engine.gnc-option"};
 
 #include "qoflog.h"
 
+GncOption::~GncOption() noexcept = default;
+GncOption::GncOption(GncOption&&) noexcept = default;
+GncOption& GncOption::operator=(GncOption&&) noexcept = default;
+
 template <typename ValueType,
           typename std::enable_if_t<!is_OptionClassifier_v<ValueType>,
                                     int>>

@@ -89,15 +89,37 @@ typedef struct
 typedef gboolean (*GnumericPopupMenuHandler) (GnumericPopupMenuElement const *e,
         gpointer user_data);
 
-/* Use this on menus that are popped up */
-void gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event);
+/*
+ * Present a GMenuModel as a GTK4 popover. The anchor owns the popover until
+ * it closes; pointing_to is in anchor coordinates and may be NULL.
+ */
+void gnumeric_popup_menu (GtkWidget *anchor, GMenuModel *menu,
+                          const GdkRectangle *pointing_to);
 
-void gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
+/*
+ * Build and present a descriptor menu. Element visibility and sensitivity use
+ * the original filter masks. The caller retains user_data; the handler returns TRUE when
+ * the selected popover should close.
+ */
+void gnumeric_create_popup_menu (GtkWidget *anchor,
+                                 GnumericPopupMenuElement const *elements,
                                  GnumericPopupMenuHandler handler,
                                  gpointer user_data,
                                  int display_filter,
                                  int sensitive_filter,
-                                 GdkEventButton *event);
+                                 const GdkRectangle *pointing_to);
+
+/*
+ * Attach the complete keyboard and pointer contract to a CSV cell/editor:
+ * secondary click opens at the pointer; Menu and Shift+F10 open at the cell.
+ * The anchor owns both controllers and releases all temporary popup state.
+ */
+void gnumeric_popup_menu_attach (GtkWidget *anchor,
+                                 GnumericPopupMenuElement const *elements,
+                                 GnumericPopupMenuHandler handler,
+                                 gpointer user_data,
+                                 int display_filter,
+                                 int sensitive_filter);
 
 #ifdef __cplusplus
 }

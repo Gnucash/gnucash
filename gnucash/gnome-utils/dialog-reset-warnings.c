@@ -40,27 +40,62 @@ static QofLogModule log_module = GNC_MOD_PREFS;
 
 #define GNC_PREFS_GROUP                 "dialogs.reset-warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS  "reset-warnings"
-#define TIPS_STRING                     "tips"
 
 typedef struct
 {
-    GtkWidget   *dialog;
-    GtkWidget   *perm_vbox_label;
-    GtkWidget   *perm_vbox;
-    GtkWidget   *temp_vbox_label;
-    GtkWidget   *temp_vbox;
-    GtkWidget   *buttonbox;
-    GtkWidget   *nolabel;
-    GtkWidget   *applybutton;
+    GtkWindow *window;
+    GtkWidget *perm_vbox_label;
+    GtkWidget *perm_vbox;
+    GtkWidget *temp_vbox_label;
+    GtkWidget *temp_vbox;
+    GtkWidget *buttonbox;
+    GtkWidget *nolabel;
+    GtkWidget *applybutton;
+    GtkWidget *okbutton;
+    gboolean closing;
 } RWDialog;
 
-void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
-void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
-void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
-static void gnc_reset_warnings_add_section (RWDialog *rw_dialog,
-                                            const gchar *section, GtkWidget *box);
-static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
+typedef void (*RWDialogChildFunc) (GtkWidget *child, gpointer user_data);
 
+static void gnc_reset_warnings_add_section (RWDialog *rw_dialog,
+                                            const gchar *prefs_group,
+                                            GtkWidget *box);
+static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
+static void gnc_reset_warnings_close (RWDialog *rw_dialog);
+
+static void
+rw_dialog_for_each_child (GtkWidget *box, RWDialogChildFunc callback,
+                          gpointer user_data)
+{
+    GtkWidget *child;
+
+    for (child = gtk_widget_get_first_child (box); child; )
+    {
+        GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+        callback (child, user_data);
+        child = next;
+    }
+}
+
+static gboolean
+rw_dialog_box_has_active_warning (GtkWidget *box, gboolean *has_warnings)
+{
+    GtkWidget *child;
+    gboolean active = FALSE;
+
+    for (child = gtk_widget_get_first_child (box); child;
+         child = gtk_widget_get_next_sibling (child))
+    {
+        if (!GTK_IS_TOGGLE_BUTTON (child))
+            continue;
+
+        *has_warnings = TRUE;
+        if (gtk_check_button_get_active (GTK_CHECK_BUTTON (child)))
+            active = TRUE;
+    }
+    return active;
+}
 
 /****************************************************
  *  Update the Dialog Widgets
@@ -70,182 +105,149 @@ static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
 static void
 gnc_reset_warnings_update_widgets (RWDialog *rw_dialog)
 {
-    GList *list, *tmp;
-    gboolean any = FALSE, checked = FALSE;
+    gboolean permanent_warnings = FALSE;
+    gboolean temporary_warnings = FALSE;
+    gboolean permanent_checked;
+    gboolean temporary_checked;
+    gboolean any_warnings;
+    gboolean checked;
 
-    ENTER("rw_dialog %p", rw_dialog);
+    ENTER ("rw_dialog %p", rw_dialog);
 
-    list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->perm_vbox));
-    if (list)
-    {
-        gtk_widget_show_all(rw_dialog->perm_vbox_label);
-        for (tmp = list; tmp; tmp = g_list_next(tmp))
-        {
-            if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tmp->data)))
-            {
-                checked = TRUE;
-                break;
-            }
-        }
-        g_list_free(list);
-        any = TRUE;
-    }
-    else
-    {
-        gtk_widget_hide(rw_dialog->perm_vbox_label);
-    }
+    permanent_checked = rw_dialog_box_has_active_warning (rw_dialog->perm_vbox,
+                                                           &permanent_warnings);
+    temporary_checked = rw_dialog_box_has_active_warning (rw_dialog->temp_vbox,
+                                                           &temporary_warnings);
+    any_warnings = permanent_warnings || temporary_warnings;
+    checked = permanent_checked || temporary_checked;
 
-    list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->temp_vbox));
-    if (list)
-    {
-        gtk_widget_show_all(rw_dialog->temp_vbox_label);
-        for (tmp = list; tmp; tmp = g_list_next(tmp))
-        {
-            if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tmp->data)))
-            {
-                checked = TRUE;
-                break;
-            }
-        }
-        g_list_free(list);
-        any = TRUE;
-    }
-    else
-    {
-        gtk_widget_hide(rw_dialog->temp_vbox_label);
-    }
-
-    if (any)
-    {
-        gtk_widget_show(rw_dialog->buttonbox);
-        gtk_widget_hide(rw_dialog->nolabel);
-        gtk_widget_set_sensitive(rw_dialog->applybutton, checked);
-    }
-    else
-    {
-        gtk_widget_hide(rw_dialog->buttonbox);
-        gtk_widget_show(rw_dialog->nolabel);
-        gtk_widget_set_sensitive(rw_dialog->applybutton, FALSE);
-    }
-    LEAVE(" ");
+    gtk_widget_set_visible (rw_dialog->perm_vbox_label, permanent_warnings);
+    gtk_widget_set_visible (rw_dialog->temp_vbox_label, temporary_warnings);
+    gtk_widget_set_visible (rw_dialog->buttonbox, any_warnings);
+    gtk_widget_set_visible (rw_dialog->nolabel, !any_warnings);
+    gtk_widget_set_sensitive (rw_dialog->applybutton, checked);
+    gtk_window_set_default_widget (rw_dialog->window,
+                                   checked ? rw_dialog->applybutton :
+                                   rw_dialog->okbutton);
+    LEAVE ("");
 }
-
 
 /***************************/
 /*  Helper functions       */
 /***************************/
 static void
-gnc_reset_warnings_apply_one (GtkWidget *widget,
-                              GtkDialog *dialog)
+gnc_reset_warnings_apply_one (GtkWidget *widget, gpointer user_data)
 {
-    const gchar *pref = NULL;
-    const gchar *prefs_group = NULL;
+    const gchar *pref;
+    const gchar *prefs_group;
 
-    ENTER("widget %p, dialog %p", widget, dialog);
-
-    if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-    {
-        LEAVE("not active");
+    if (!GTK_IS_TOGGLE_BUTTON (widget) ||
+        !gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)))
         return;
-    }
 
-    pref = gtk_widget_get_name(widget);
+    pref = gtk_widget_get_name (widget);
     prefs_group = g_object_get_data (G_OBJECT (widget), "prefs-group");
-    if (prefs_group)
+    if (prefs_group && pref)
         gnc_prefs_reset (prefs_group, pref);
-    gtk_widget_destroy(widget);
-    LEAVE(" ");
+    (void)user_data;
 }
-
 
 static void
 gnc_reset_warnings_apply_changes (RWDialog *rw_dialog)
 {
-    ENTER("rw_dialog %p", rw_dialog);
+    ENTER ("rw_dialog %p", rw_dialog);
 
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->perm_vbox),
-                          (GtkCallback)gnc_reset_warnings_apply_one,
-                          rw_dialog->dialog);
-
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->temp_vbox),
-                          (GtkCallback)gnc_reset_warnings_apply_one,
-                          rw_dialog->dialog);
-    gnc_reset_warnings_update_widgets(rw_dialog);
-    LEAVE(" ");
+    rw_dialog_for_each_child (rw_dialog->perm_vbox,
+                              gnc_reset_warnings_apply_one, NULL);
+    rw_dialog_for_each_child (rw_dialog->temp_vbox,
+                              gnc_reset_warnings_apply_one, NULL);
+    gnc_reset_warnings_update_widgets (rw_dialog);
+    LEAVE ("");
 }
-
-
-/***************************/
-/*    Dialog Callbacks     */
-/***************************/
-void
-gnc_reset_warnings_response_cb (GtkDialog *dialog,
-                                gint response,
-                                gpointer user_data)
-{
-    RWDialog *rw_dialog = user_data;
-
-    ENTER("dialog %p, response %d, user_data %p", dialog, response, user_data);
-
-    switch (response)
-    {
-    case GTK_RESPONSE_APPLY:
-        gnc_reset_warnings_apply_changes(rw_dialog);
-        break;
-
-    case GTK_RESPONSE_OK:
-        gnc_reset_warnings_apply_changes(rw_dialog);
-        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog));
-        gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
-                                             rw_dialog);
-        gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
-        break;
-
-    default:
-        gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
-                                             rw_dialog);
-        gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
-        break;
-    }
-    LEAVE("");
-}
-
 
 static void
-gnc_reset_warnings_select_common (RWDialog *rw_dialog,
-                                  gboolean selected)
+gnc_reset_warnings_set_one (GtkWidget *widget, gpointer user_data)
 {
-    ENTER("rw_dialog %p, selected %d", rw_dialog, selected);
+    gboolean selected = GPOINTER_TO_INT (user_data);
 
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->perm_vbox),
-                          (GtkCallback)gtk_toggle_button_set_active,
-                          GINT_TO_POINTER(selected));
-
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->temp_vbox),
-                          (GtkCallback)gtk_toggle_button_set_active,
-                          GINT_TO_POINTER(selected));
-    gnc_reset_warnings_update_widgets(rw_dialog);
-    LEAVE(" ");
+    if (GTK_IS_TOGGLE_BUTTON (widget))
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), selected);
 }
 
+static void
+gnc_reset_warnings_select_common (RWDialog *rw_dialog, gboolean selected)
+{
+    ENTER ("rw_dialog %p, selected %d", rw_dialog, selected);
 
-void
-gnc_reset_warnings_select_all_cb (GtkButton *button,
-                                  gpointer user_data)
+    rw_dialog_for_each_child (rw_dialog->perm_vbox,
+                              gnc_reset_warnings_set_one,
+                              GINT_TO_POINTER (selected));
+    rw_dialog_for_each_child (rw_dialog->temp_vbox,
+                              gnc_reset_warnings_set_one,
+                              GINT_TO_POINTER (selected));
+    gnc_reset_warnings_update_widgets (rw_dialog);
+    LEAVE ("");
+}
+
+/***************************/
+/*    Window Callbacks     */
+/***************************/
+static void
+gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data)
+{
+    gnc_reset_warnings_select_common (user_data, TRUE);
+    (void)button;
+}
+
+static void
+gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data)
+{
+    gnc_reset_warnings_select_common (user_data, FALSE);
+    (void)button;
+}
+
+static void
+gnc_reset_warnings_apply_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    gnc_reset_warnings_apply_changes (user_data);
+    (void)button;
+}
+
+static void
+gnc_reset_warnings_ok_clicked_cb (GtkButton *button, gpointer user_data)
 {
     RWDialog *rw_dialog = user_data;
-    gnc_reset_warnings_select_common(rw_dialog, TRUE);
+
+    gnc_reset_warnings_apply_changes (rw_dialog);
+    gnc_save_window_size (GNC_PREFS_GROUP, rw_dialog->window);
+    gnc_reset_warnings_close (rw_dialog);
+    (void)button;
 }
 
-
-void
-gnc_reset_warnings_unselect_all_cb (GtkButton *button,
-                                    gpointer user_data)
+static void
+gnc_reset_warnings_cancel_clicked_cb (GtkButton *button, gpointer user_data)
 {
-    RWDialog *rw_dialog = user_data;
-    gnc_reset_warnings_select_common(rw_dialog, FALSE);
+    gnc_reset_warnings_close (user_data);
+    (void)button;
 }
 
+static gboolean
+gnc_reset_warnings_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    gnc_reset_warnings_close (user_data);
+    (void)window;
+    return TRUE;
+}
+
+/***************************/
+/*    Warning list         */
+/***************************/
+static void
+gnc_reset_warnings_toggled_cb (GtkCheckButton *button, gpointer user_data)
+{
+    gnc_reset_warnings_update_widgets (user_data);
+    (void)button;
+}
 
 /***********************************************************************
  *  This call back function adds a warning to the correct dialog box.
@@ -262,21 +264,21 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, const gchar *prefs_group,
 {
     GtkWidget *checkbox;
 
-    ENTER("rw_dialog %p, warning %p, box %p", rw_dialog, warning, box);
+    ENTER ("rw_dialog %p, warning %p, box %p", rw_dialog, warning, box);
 
-    checkbox = gtk_check_button_new_with_label( _(warning->warn_desc ? warning->warn_desc : warning->warn_name));
+    checkbox = gtk_check_button_new_with_label (
+        _(warning->warn_desc ? warning->warn_desc : warning->warn_name));
     if (warning->warn_long_desc)
-        gtk_widget_set_tooltip_text(checkbox, _(warning->warn_long_desc));
+        gtk_widget_set_tooltip_text (checkbox, _(warning->warn_long_desc));
 
-    gtk_widget_set_name(checkbox, warning->warn_name);
-    g_object_set_data_full (G_OBJECT (checkbox), "prefs-group", g_strdup(prefs_group),
-                            (GDestroyNotify) g_free);
-    g_signal_connect_swapped(G_OBJECT(checkbox), "toggled",
-                             (GCallback)gnc_reset_warnings_update_widgets, rw_dialog);
-    gtk_box_pack_start(GTK_BOX(box), checkbox, TRUE, TRUE, 0);
-    LEAVE(" ");
+    gtk_widget_set_name (checkbox, warning->warn_name);
+    g_object_set_data_full (G_OBJECT (checkbox), "prefs-group",
+                            g_strdup (prefs_group), g_free);
+    g_signal_connect (checkbox, "toggled",
+                      G_CALLBACK (gnc_reset_warnings_toggled_cb), rw_dialog);
+    gtk_box_append (GTK_BOX (box), checkbox);
+    LEAVE ("");
 }
-
 
 /********************************************************************
  *  Add all warnings found in the given preference group
@@ -288,138 +290,167 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, const gchar *prefs_group,
  *  @param The required dialog box to update.
  ********************************************************************/
 static void
-gnc_reset_warnings_add_section (RWDialog *rw_dialog, const gchar *prefs_group, GtkWidget *box)
+gnc_reset_warnings_add_section (RWDialog *rw_dialog, const gchar *prefs_group,
+                                GtkWidget *box)
 {
-    const GncWarningSpec *warning = gnc_get_warnings();
-    gint i = 0;
+    const GncWarningSpec *warning = gnc_get_warnings ();
+    gint i;
 
-    ENTER("rw_dialog %p, section %s, box %p", rw_dialog, prefs_group, box);
+    ENTER ("rw_dialog %p, section %s, box %p", rw_dialog, prefs_group, box);
 
     for (i = 0; warning[i].warn_name; i++)
     {
-        if (gnc_prefs_get_int(prefs_group, warning[i].warn_name) != 0)
-        {
-            gnc_reset_warnings_add_one(rw_dialog, prefs_group, &warning[i], box);
-        }
+        if (gnc_prefs_get_int (prefs_group, warning[i].warn_name) != 0)
+            gnc_reset_warnings_add_one (rw_dialog, prefs_group, &warning[i],
+                                        box);
     }
 
-    LEAVE(" ");
+    LEAVE ("");
 }
 
-
 /***********************************************************************
- *  Raise the rw dialog to the top of the window stack.  This
- *  function is called if the user attempts to create a second rw
- *  dialog.
- *
- *  @internal
- *  @param class_name Unused.
- *  @param component_id Unused.
- *  @param user_data A pointer to the rw structure.
- *  @param iter_data Unused.
+ *  Raise the reset warnings window if the user opens it a second time.
  ***********************************************************************/
 static gboolean
-show_handler (const char *class_name, gint component_id,
-              gpointer user_data, gpointer iter_data)
+show_handler (const char *class_name, gint component_id, gpointer user_data,
+              gpointer iter_data)
 {
     RWDialog *rw_dialog = user_data;
 
-    ENTER(" ");
-    if (!rw_dialog)
-    {
-        LEAVE("no data structure");
-        return(FALSE);
-    }
+    if (!rw_dialog || !rw_dialog->window || rw_dialog->closing)
+        return FALSE;
 
-    ENTER(" ");
-    gtk_window_present(GTK_WINDOW(rw_dialog->dialog));
-    LEAVE(" ");
-
-    return(TRUE);
+    gtk_window_present (rw_dialog->window);
+    (void)class_name;
+    (void)component_id;
+    (void)iter_data;
+    return TRUE;
 }
 
+static void
+gnc_reset_warnings_destroy_cb (GtkWidget *widget, gpointer user_data)
+{
+    RWDialog *rw_dialog = user_data;
+
+    rw_dialog->window = NULL;
+    gnc_unregister_gui_component_by_data (DIALOG_RESET_WARNINGS_CM_CLASS,
+                                          rw_dialog);
+    g_free (rw_dialog);
+    (void)widget;
+}
 
 /****************************************************
- *  Close the reset warnings dialog.
- *  @internal
- *  @param user_data A pointer to the rw structure.
+ *  Close the reset warnings dialog. The component manager uses this
+ *  callback when it needs the window to go away. Deregistration and
+ *  final cleanup happen exclusively in the destroy handler.
  ****************************************************/
 static void
 close_handler (gpointer user_data)
 {
     RWDialog *rw_dialog = user_data;
 
-    ENTER(" ");
-    gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS, rw_dialog);
-    gtk_widget_destroy(rw_dialog->dialog);
-    LEAVE(" ");
+    gnc_reset_warnings_close (rw_dialog);
 }
 
+static void
+gnc_reset_warnings_close (RWDialog *rw_dialog)
+{
+    if (!rw_dialog || rw_dialog->closing || !rw_dialog->window)
+        return;
+
+    rw_dialog->closing = TRUE;
+    gtk_window_destroy (rw_dialog->window);
+}
 
 /***********************************************/
-/*     Create the Reset Warnings Dialog        */
+/*     Create the Reset Warnings Window        */
 /***********************************************/
 void
 gnc_reset_warnings_dialog (GtkWindow *parent)
 {
-    RWDialog   *rw_dialog;
-    GtkWidget  *dialog;
+    RWDialog *rw_dialog;
     GtkBuilder *builder;
 
-    ENTER("");
-    if (gnc_forall_gui_components(DIALOG_RESET_WARNINGS_CM_CLASS,
-                                  show_handler, NULL))
+    ENTER ("");
+    if (gnc_forall_gui_components (DIALOG_RESET_WARNINGS_CM_CLASS,
+                                   show_handler, NULL))
     {
-        LEAVE("existing window");
+        LEAVE ("existing window");
         return;
     }
 
-    DEBUG("Opening dialog-reset-warnings.glade:");
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-reset-warnings.glade", "reset_warnings_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reset_warnings_dialog"));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-reset-warnings");
-
-    gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
-
     rw_dialog = g_new0 (RWDialog, 1);
-    rw_dialog->dialog = dialog;
-    PINFO("rw_dialog %p, dialog %p", rw_dialog, dialog);
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "dialog-reset-warnings.glade",
+                               "reset_warnings_window");
 
-    /* Connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, rw_dialog);
+    rw_dialog->window = GTK_WINDOW (gtk_builder_get_object (
+        builder, "reset_warnings_window"));
+    rw_dialog->perm_vbox_label = GTK_WIDGET (gtk_builder_get_object (
+        builder, "perm_vbox_and_label"));
+    rw_dialog->perm_vbox = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                 "perm_vbox"));
+    rw_dialog->temp_vbox_label = GTK_WIDGET (gtk_builder_get_object (
+        builder, "temp_vbox_and_label"));
+    rw_dialog->temp_vbox = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                 "temp_vbox"));
+    rw_dialog->buttonbox = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                 "hbuttonbox"));
+    rw_dialog->nolabel = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                               "no_warnings"));
+    rw_dialog->applybutton = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                   "applybutton"));
+    rw_dialog->okbutton = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                                "okbutton"));
 
-    DEBUG("permanent");
-    rw_dialog->perm_vbox_label = GTK_WIDGET(gtk_builder_get_object (builder, "perm_vbox_and_label"));
-    rw_dialog->perm_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "perm_vbox"));
-    gnc_reset_warnings_add_section(rw_dialog, GNC_PREFS_GROUP_WARNINGS_PERM, rw_dialog->perm_vbox);
+    if (!rw_dialog->window || !rw_dialog->perm_vbox_label ||
+        !rw_dialog->perm_vbox || !rw_dialog->temp_vbox_label ||
+        !rw_dialog->temp_vbox || !rw_dialog->buttonbox ||
+        !rw_dialog->nolabel || !rw_dialog->applybutton ||
+        !rw_dialog->okbutton)
+    {
+        PWARN ("The reset warnings window is incomplete");
+        g_object_unref (builder);
+        g_free (rw_dialog);
+        LEAVE ("incomplete window");
+        return;
+    }
 
-    DEBUG("temporary");
-    rw_dialog->temp_vbox_label = GTK_WIDGET(gtk_builder_get_object (builder, "temp_vbox_and_label"));
-    rw_dialog->temp_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "temp_vbox"));
-    gnc_reset_warnings_add_section(rw_dialog, GNC_PREFS_GROUP_WARNINGS_TEMP, rw_dialog->temp_vbox);
+    gtk_widget_set_name (GTK_WIDGET (rw_dialog->window),
+                         "gnc-id-reset-warnings");
+    if (parent)
+        gtk_window_set_transient_for (rw_dialog->window, parent);
+    gtk_window_set_modal (rw_dialog->window, TRUE);
 
-    rw_dialog->buttonbox = GTK_WIDGET(gtk_builder_get_object (builder, "hbuttonbox"));
+    g_signal_connect (gtk_builder_get_object (builder, "select_all_button"),
+                      "clicked", G_CALLBACK (gnc_reset_warnings_select_all_cb),
+                      rw_dialog);
+    g_signal_connect (gtk_builder_get_object (builder, "unselect_all_button"),
+                      "clicked", G_CALLBACK (gnc_reset_warnings_unselect_all_cb),
+                      rw_dialog);
+    g_signal_connect (rw_dialog->applybutton, "clicked",
+                      G_CALLBACK (gnc_reset_warnings_apply_clicked_cb), rw_dialog);
+    g_signal_connect (rw_dialog->okbutton, "clicked",
+                      G_CALLBACK (gnc_reset_warnings_ok_clicked_cb), rw_dialog);
+    g_signal_connect (gtk_builder_get_object (builder, "cancelbutton"),
+                      "clicked", G_CALLBACK (gnc_reset_warnings_cancel_clicked_cb),
+                      rw_dialog);
+    g_signal_connect (rw_dialog->window, "close-request",
+                      G_CALLBACK (gnc_reset_warnings_close_request_cb), rw_dialog);
+    g_signal_connect (rw_dialog->window, "destroy",
+                      G_CALLBACK (gnc_reset_warnings_destroy_cb), rw_dialog);
 
-    rw_dialog->nolabel = GTK_WIDGET(gtk_builder_get_object (builder, "no_warnings"));
-    rw_dialog->applybutton = GTK_WIDGET(gtk_builder_get_object (builder, "applybutton"));
+    gnc_reset_warnings_add_section (rw_dialog, GNC_PREFS_GROUP_WARNINGS_PERM,
+                                    rw_dialog->perm_vbox);
+    gnc_reset_warnings_add_section (rw_dialog, GNC_PREFS_GROUP_WARNINGS_TEMP,
+                                    rw_dialog->temp_vbox);
+    gnc_reset_warnings_update_widgets (rw_dialog);
 
-    /* Enable the proper response buttons */
-    gnc_reset_warnings_update_widgets(rw_dialog);
+    gnc_restore_window_size (GNC_PREFS_GROUP, rw_dialog->window, parent);
+    gnc_register_gui_component (DIALOG_RESET_WARNINGS_CM_CLASS, NULL,
+                                close_handler, rw_dialog);
 
-    /* Record the pointer to the rw data structure and clean up after */
-    g_object_set_data_full(G_OBJECT(rw_dialog->dialog), "dialog-structure", rw_dialog, g_free);
-
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog), parent);
-
-    gnc_register_gui_component (DIALOG_RESET_WARNINGS_CM_CLASS,
-                                NULL, close_handler, rw_dialog);
-
-    gtk_widget_show(GTK_WIDGET(rw_dialog->dialog));
-
-    g_object_unref(G_OBJECT(builder));
-
-    LEAVE(" ");
+    g_object_unref (builder);
+    gtk_window_present (rw_dialog->window);
+    LEAVE ("");
 }

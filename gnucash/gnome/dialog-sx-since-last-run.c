@@ -31,15 +31,18 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+/********************************************************************\
+ * dialog-sx-since-last-run.c : GTK4 scheduled transaction runner   *
+\********************************************************************/
 #include <config.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "dialog-utils.h"
-#include "gnc-sx-instance-model.h"
+#include "gnc-gtk-utils.h"
 #include "dialog-sx-since-last-run.h"
-
+#include "gnc-sx-instance-model.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -55,1587 +58,1043 @@
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.sx.slr"
-
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
-
 #define GNC_PREF_SET_REVIEW     "review-transactions"
 #define GNC_PREF_SLR_SORT_COL   "sort-column"
 #define GNC_PREF_SLR_SORT_ASC   "sort-ascending"
 #define GNC_PREF_SLR_SORT_DEPTH "sort-depth"
+
+typedef enum
+{
+    SLR_ROW_SCHEDULE,
+    SLR_ROW_INSTANCE,
+    SLR_ROW_VARIABLE
+} SlrRowKind;
+
+typedef struct _GncSxSlrRow GncSxSlrRow;
+struct _GncSxSlrRow
+{
+    GObject parent_instance;
+    SlrRowKind kind;
+    GncSxInstances *instances;
+    GncSxInstance *instance;
+    GncSxVariable *variable;
+    GListStore *children;
+    gchar *name;
+};
+
+typedef struct _GncSxSlrRowClass { GObjectClass parent_class; } GncSxSlrRowClass;
+#define GNC_TYPE_SX_SLR_ROW (gnc_sx_slr_row_get_type ())
+#define GNC_SX_SLR_ROW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_SLR_ROW, GncSxSlrRow))
+#define GNC_IS_SX_SLR_ROW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_SLR_ROW))
+GType gnc_sx_slr_row_get_type (void);
+
+struct _GncSxSlrTreeModelAdapter
+{
+    GObject parent_instance;
+    GncSxInstanceModel *instances;
+    GListStore *roots;
+    gboolean disposed;
+    gboolean closing;
+    gboolean sort_by_date;
+    gboolean sort_ascending;
+    guint refresh_source;
+};
+typedef struct _GncSxSlrTreeModelAdapterClass { GObjectClass parent_class; } GncSxSlrTreeModelAdapterClass;
+#define GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER (gnc_sx_slr_tree_model_adapter_get_type ())
+#define GNC_SX_SLR_TREE_MODEL_ADAPTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, GncSxSlrTreeModelAdapter))
+#define GNC_IS_SX_SLR_TREE_MODEL_ADAPTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER))
+GType gnc_sx_slr_tree_model_adapter_get_type (void);
 
 struct _GncSxSinceLastRunDialog
 {
     GtkWidget *dialog;
     gint component_id;
     GncSxSlrTreeModelAdapter *editing_model;
-    GtkTreeView *instance_view;
-    GtkToggleButton *review_created_txns_toggle;
+    GtkTreeListModel *tree_model;
+    GtkSingleSelection *selection;
+    GtkColumnView *instance_view;
+    GtkCheckButton *review_created_txns_toggle;
     GList *created_txns;
-
-    GtkCellEditable *temp_ce; // used when editing values
-    gint sort_selection_depth; // used when sorting transaction column
+    gboolean shutting_down;
 };
 
-/* ------------------------------------------------------------ */
-
-
-struct _GncSxSlrTreeModelAdapter
+typedef struct
 {
-    GObject parent;
+    grefcount ref_count;
+    GWeakRef item;
+    GWeakRef adapter;
+} SlrListItemBinding;
 
-    /* protected: */
-    gulong updated_cb_id;
-    gboolean disposed;
-
-    GncSxInstanceModel *instances;
-    GtkTreeStore *real;
+G_GNUC_UNUSED static const gchar *instance_state_names[] =
+{
+    N_("Ignored"), N_("Postponed"), N_("To-Create"), N_("Reminder"), N_("Created"), NULL
 };
 
-typedef struct _GncSxSlrTreeModelAdapterClass
-{
-    GObjectClass parent;
-} GncSxSlrTreeModelAdapterClass;
+static void slr_close_handler (gpointer user_data);
+static void slr_destroy_cb (GtkWidget *object, gpointer user_data);
+static void slr_refresh (GncSxSlrTreeModelAdapter *adapter);
+static void show_created_transactions (GncSxSinceLastRunDialog *dialog, GList *guids);
 
-GType gnc_sx_slr_tree_model_adapter_get_type (void);
-static void gnc_sx_slr_tree_model_adapter_interface_init (GtkTreeModelIface *tree_model);
-GncSxSlrTreeModelAdapter* gnc_sx_slr_tree_model_adapter_new (GncSxInstanceModel *instances);
-static void gnc_sx_slr_tree_model_adapter_dispose (GObject *obj);
-static void gnc_sx_slr_tree_model_adapter_finalize (GObject *obj);
-
-GncSxInstanceModel* gnc_sx_slr_tree_model_adapter_get_instance_model (GncSxSlrTreeModelAdapter *slr_model);
-
-/** @return null if the iter is not actually an GncSxInstance. **/
-GncSxInstance* gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter);
-static GncSxInstance* _gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model,
-                                                      GtkTreeIter *iter,
-                                                      gboolean check_depth);
-
-/** @return false if the iter is not actually an GncSxInstance's variable. **/
-gboolean gnc_sx_slr_model_get_instance_and_variable (GncSxSlrTreeModelAdapter *model,
-                                                     GtkTreeIter *iter,
-                                                     GncSxInstance **instance_loc,
-                                                     GncSxVariable **var_loc);
-
-void gnc_sx_slr_model_effect_change (GncSxSlrTreeModelAdapter *model,
-                                     gboolean auto_create_only,
-                                     GList **created_transaction_guids,
-                                     GList **creation_errors);
-
-GtkTreeModel* gnc_sx_get_slr_state_model (void);
-
-#define GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER            (gnc_sx_slr_tree_model_adapter_get_type ())
-#define GNC_SX_SLR_TREE_MODEL_ADAPTER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, GncSxSlrTreeModelAdapter))
-#define GNC_SX_SLR_TREE_MODEL_ADAPTER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, GncSxSlrTreeModelAdapterClass))
-#define GNC_IS_SX_SLR_TREE_MODEL_ADAPTER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER))
-#define GNC_IS_SX_SLR_TREE_MODEL_ADAPTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER))
-#define GNC_SX_SLR_TREE_MODEL_ADAPTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, GncSxSlrTreeModelAdapterClass))
-
-/* ------------------------------------------------------------ */
-
-static void _show_created_transactions (GncSxSinceLastRunDialog *app_dialog, GList *created_txn_guids);
-
-static void close_handler (gpointer user_data);
-static void dialog_destroy_cb (GtkWidget *object, GncSxSinceLastRunDialog *app_dialog);
-static void dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog);
-
-#define debug_path(fn, text, path) {\
-    gchar *path_string = gtk_tree_path_to_string (path);\
-    fn("%s %s", text, path_string? path_string : "NULL");\
-    g_free (path_string);\
-}
-
-/* ------------------------------------------------------------ */
+G_DEFINE_TYPE (GncSxSlrRow, gnc_sx_slr_row, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GncSxSlrTreeModelAdapter, gnc_sx_slr_tree_model_adapter, G_TYPE_OBJECT)
 
 static void
-_var_numeric_to_string (gnc_numeric *value, GString **str)
+slr_row_finalize (GObject *object)
 {
-    *str = g_string_sized_new (5);
-    g_string_printf (*str, "%0.2f", gnc_numeric_to_double (*value));
+    GncSxSlrRow *row = GNC_SX_SLR_ROW (object);
+    g_clear_object (&row->children);
+    g_clear_pointer (&row->name, g_free);
+    G_OBJECT_CLASS (gnc_sx_slr_row_parent_class)->finalize (object);
 }
 
-/* ------------------------------------------------------------ */
+static void
+gnc_sx_slr_row_class_init (GncSxSlrRowClass *klass)
+{
+    G_OBJECT_CLASS (klass)->finalize = slr_row_finalize;
+}
 
-G_DEFINE_TYPE_WITH_CODE (GncSxSlrTreeModelAdapter, gnc_sx_slr_tree_model_adapter, G_TYPE_OBJECT,
-     G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, gnc_sx_slr_tree_model_adapter_interface_init))
+static void
+gnc_sx_slr_row_init (GncSxSlrRow *row)
+{
+}
+
+static gchar*
+slr_format_date (const GDate *date, const gchar *invalid)
+{
+    char buffer[MAX_DATE_LENGTH + 1];
+    if (!date || !g_date_valid (date))
+        return g_strdup (invalid);
+    qof_print_gdate (buffer, MAX_DATE_LENGTH, date);
+    return g_strdup (buffer);
+}
+
+static void
+slr_numeric_to_string (const gnc_numeric *value, GString **string)
+{
+    *string = g_string_sized_new (5);
+    g_string_printf (*string, "%0.2f", gnc_numeric_to_double (*value));
+}
+
+static GncSxSlrRow*
+slr_row_new_schedule (GncSxInstances *instances)
+{
+    GncSxSlrRow *row = g_object_new (GNC_TYPE_SX_SLR_ROW, NULL);
+    row->kind = SLR_ROW_SCHEDULE;
+    row->instances = instances;
+    row->name = g_strdup (xaccSchedXactionGetName (instances->sx));
+    row->children = g_list_store_new (GNC_TYPE_SX_SLR_ROW);
+    return row;
+}
+
+static GncSxSlrRow*
+slr_row_new_instance (GncSxInstances *instances, GncSxInstance *instance)
+{
+    GncSxSlrRow *row = g_object_new (GNC_TYPE_SX_SLR_ROW, NULL);
+    row->kind = SLR_ROW_INSTANCE;
+    row->instances = instances;
+    row->instance = instance;
+    row->name = slr_format_date (&instance->date, _("Never"));
+    row->children = g_list_store_new (GNC_TYPE_SX_SLR_ROW);
+    return row;
+}
+
+static GncSxSlrRow*
+slr_row_new_variable (GncSxInstances *instances, GncSxInstance *instance,
+                      GncSxVariable *variable)
+{
+    GncSxSlrRow *row = g_object_new (GNC_TYPE_SX_SLR_ROW, NULL);
+    row->kind = SLR_ROW_VARIABLE;
+    row->instances = instances;
+    row->instance = instance;
+    row->variable = variable;
+    row->name = g_strdup (variable->name);
+    return row;
+}
+
+static gint
+slr_instances_first_date_compare (GncSxInstances *left, GncSxInstances *right)
+{
+    GncSxInstance *left_instance = left->instance_list ? left->instance_list->data : NULL;
+    GncSxInstance *right_instance = right->instance_list ? right->instance_list->data : NULL;
+    if (!left_instance && !right_instance)
+        return 0;
+    if (!left_instance)
+        return 1;
+    if (!right_instance)
+        return -1;
+    return g_date_compare (&left_instance->date, &right_instance->date);
+}
+
+static gint
+slr_instances_compare (gconstpointer left_data, gconstpointer right_data, gpointer user_data)
+{
+    GncSxSlrTreeModelAdapter *adapter = user_data;
+    GncSxInstances *left = (GncSxInstances *)left_data;
+    GncSxInstances *right = (GncSxInstances *)right_data;
+    gint result;
+
+    if (adapter->sort_by_date)
+        result = slr_instances_first_date_compare (left, right);
+    else
+        result = g_utf8_collate (xaccSchedXactionGetName (left->sx),
+                                 xaccSchedXactionGetName (right->sx));
+    if (result == 0)
+    {
+        if (adapter->sort_by_date)
+            result = g_utf8_collate (xaccSchedXactionGetName (left->sx),
+                                     xaccSchedXactionGetName (right->sx));
+        else
+            result = slr_instances_first_date_compare (left, right);
+    }
+    return adapter->sort_ascending ? result : -result;
+}
+
+static gint
+slr_instance_compare (gconstpointer left_data, gconstpointer right_data)
+{
+    const GncSxInstance *left = left_data;
+    const GncSxInstance *right = right_data;
+    return g_date_compare (&left->date, &right->date);
+}
+
+static void
+slr_add_instance_children (GncSxSlrRow *instance_row)
+{
+    GList *variables = gnc_sx_instance_get_variables (instance_row->instance);
+    for (GList *node = variables; node; node = node->next)
+    {
+        GncSxVariable *variable = node->data;
+        if (!variable->editable)
+            continue;
+        GncSxSlrRow *row = slr_row_new_variable (instance_row->instances,
+                                                  instance_row->instance, variable);
+        g_list_store_append (instance_row->children, row);
+        g_object_unref (row);
+    }
+    g_list_free (variables);
+}
+
+static void
+slr_rebuild (GncSxSlrTreeModelAdapter *adapter)
+{
+    GList *schedules;
+
+    if (adapter->disposed || adapter->closing)
+        return;
+    g_list_store_remove_all (adapter->roots);
+    schedules = g_list_copy (gnc_sx_instance_model_get_sx_instances_list (adapter->instances));
+    schedules = g_list_sort_with_data (schedules, slr_instances_compare, adapter);
+    for (GList *schedule_node = schedules; schedule_node; schedule_node = schedule_node->next)
+    {
+        GncSxInstances *instances = schedule_node->data;
+        GncSxSlrRow *schedule_row;
+        GList *instance_list;
+        if (!instances->instance_list)
+            continue;
+        schedule_row = slr_row_new_schedule (instances);
+        instance_list = g_list_copy (instances->instance_list);
+        instance_list = g_list_sort (instance_list, slr_instance_compare);
+        for (GList *instance_node = instance_list; instance_node; instance_node = instance_node->next)
+        {
+            GncSxSlrRow *instance_row = slr_row_new_instance (instances, instance_node->data);
+            slr_add_instance_children (instance_row);
+            g_list_store_append (schedule_row->children, instance_row);
+            g_object_unref (instance_row);
+        }
+        g_list_free (instance_list);
+        g_list_store_append (adapter->roots, schedule_row);
+        g_object_unref (schedule_row);
+    }
+    g_list_free (schedules);
+}
+
+static void
+slr_adapter_added (GncSxInstanceModel *instances, SchedXaction *sx, gpointer user_data)
+{
+    GncSxSlrTreeModelAdapter *adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER (user_data);
+
+    if (!adapter->closing)
+        slr_rebuild (adapter);
+}
+
+static void
+slr_adapter_updated (GncSxInstanceModel *instances, SchedXaction *sx, gpointer user_data)
+{
+    GncSxSlrTreeModelAdapter *adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER (user_data);
+
+    if (adapter->closing)
+        return;
+    gnc_sx_instance_model_update_sx_instances (instances, sx);
+    slr_rebuild (adapter);
+}
+
+static void
+slr_adapter_removing (GncSxInstanceModel *instances, SchedXaction *sx, gpointer user_data)
+{
+    GncSxSlrTreeModelAdapter *adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER (user_data);
+
+    if (adapter->closing)
+        return;
+    gnc_sx_instance_model_remove_sx_instances (instances, sx);
+    slr_rebuild (adapter);
+}
+
+static void
+slr_adapter_cancel_refresh (GncSxSlrTreeModelAdapter *adapter)
+{
+    guint refresh_source = adapter->refresh_source;
+
+    adapter->refresh_source = 0;
+    if (refresh_source)
+        g_source_remove (refresh_source);
+}
+
+static void
+gnc_sx_slr_tree_model_adapter_dispose (GObject *object)
+{
+    GncSxSlrTreeModelAdapter *adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER (object);
+    if (adapter->disposed)
+        return;
+    adapter->disposed = TRUE;
+    slr_adapter_cancel_refresh (adapter);
+    if (adapter->instances)
+    {
+        g_signal_handlers_disconnect_by_data (adapter->instances, adapter);
+        g_clear_object (&adapter->instances);
+    }
+    g_clear_object (&adapter->roots);
+    G_OBJECT_CLASS (gnc_sx_slr_tree_model_adapter_parent_class)->dispose (object);
+}
 
 static void
 gnc_sx_slr_tree_model_adapter_class_init (GncSxSlrTreeModelAdapterClass *klass)
 {
-    GObjectClass *obj_class = G_OBJECT_CLASS(klass);
-
-    obj_class->dispose = gnc_sx_slr_tree_model_adapter_dispose;
-    obj_class->finalize = gnc_sx_slr_tree_model_adapter_finalize;
+    G_OBJECT_CLASS (klass)->dispose = gnc_sx_slr_tree_model_adapter_dispose;
 }
-
-static GtkTreeModelFlags
-gsslrtma_get_flags (GtkTreeModel *tree_model)
-{
-    return gtk_tree_model_get_flags (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real));
-}
-
-static gint
-gsslrtma_get_n_columns (GtkTreeModel *tree_model)
-{
-    return gtk_tree_model_get_n_columns (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real));
-}
-
-static GType
-gsslrtma_get_column_type (GtkTreeModel *tree_model, gint index)
-{
-    return gtk_tree_model_get_column_type (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), index);
-}
-
-static gboolean
-gsslrtma_get_iter (GtkTreeModel *tree_model,
-                   GtkTreeIter *iter,
-                   GtkTreePath *path)
-{
-    return gtk_tree_model_get_iter (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter, path);
-}
-
-static GtkTreePath*
-gsslrtma_get_path (GtkTreeModel *tree_model,
-                   GtkTreeIter *iter)
-{
-    return gtk_tree_model_get_path (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter);
-}
-
-static void
-gsslrtma_get_value (GtkTreeModel *tree_model,
-                    GtkTreeIter *iter,
-                    gint column,
-                    GValue *value)
-{
-    gtk_tree_model_get_value (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter, column, value);
-}
-
-static gboolean
-gsslrtma_iter_next (GtkTreeModel *tree_model,
-                    GtkTreeIter *iter)
-{
-    return gtk_tree_model_iter_next (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter);
-}
-
-static gboolean
-gsslrtma_iter_children (GtkTreeModel *tree_model,
-                        GtkTreeIter *iter,
-                        GtkTreeIter *parent)
-{
-    return gtk_tree_model_iter_children (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter, parent);
-}
-
-static gboolean
-gsslrtma_iter_has_child (GtkTreeModel *tree_model,
-                         GtkTreeIter *iter)
-{
-    return gtk_tree_model_iter_has_child (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter);
-}
-
-static gint
-gsslrtma_iter_n_children (GtkTreeModel *tree_model,
-                          GtkTreeIter *iter)
-{
-    return gtk_tree_model_iter_n_children (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter);
-}
-
-static gboolean
-gsslrtma_iter_nth_child (GtkTreeModel *tree_model,
-                         GtkTreeIter *iter,
-                         GtkTreeIter *parent,
-                         gint n)
-{
-    return gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter, parent, n);
-}
-
-static gboolean
-gsslrtma_iter_parent (GtkTreeModel *tree_model,
-                      GtkTreeIter *iter,
-                      GtkTreeIter *child)
-{
-    return gtk_tree_model_iter_parent (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter, child);
-}
-
-static void
-gsslrtma_ref_node (GtkTreeModel *tree_model,
-                   GtkTreeIter *iter)
-{
-    gtk_tree_model_ref_node (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter);
-}
-
-static void
-gsslrtma_unref_node (GtkTreeModel *tree_model,
-                     GtkTreeIter *iter)
-{
-    gtk_tree_model_unref_node (GTK_TREE_MODEL(GNC_SX_SLR_TREE_MODEL_ADAPTER(tree_model)->real), iter);
-}
-
-static void
-gnc_sx_slr_tree_model_adapter_interface_init (GtkTreeModelIface *tree_model)
-{
-    tree_model->get_flags = gsslrtma_get_flags;
-    tree_model->get_n_columns = gsslrtma_get_n_columns;
-    tree_model->get_column_type = gsslrtma_get_column_type;
-    tree_model->get_iter = gsslrtma_get_iter;
-    tree_model->get_path = gsslrtma_get_path;
-    tree_model->get_value = gsslrtma_get_value;
-    tree_model->iter_next = gsslrtma_iter_next;
-    tree_model->iter_children = gsslrtma_iter_children;
-    tree_model->iter_has_child = gsslrtma_iter_has_child;
-    tree_model->iter_n_children = gsslrtma_iter_n_children;
-    tree_model->iter_nth_child = gsslrtma_iter_nth_child;
-    tree_model->iter_parent = gsslrtma_iter_parent;
-    tree_model->ref_node = gsslrtma_ref_node;
-    tree_model->unref_node = gsslrtma_unref_node;
-}
-
-static void
-gsslrtma_proxy_row_changed (GtkTreeModel *treemodel,
-                            GtkTreePath *arg1,
-                            GtkTreeIter *arg2,
-                            gpointer user_data)
-{
-    g_signal_emit_by_name (user_data, "row-changed", arg1, arg2);
-}
-
-static void
-gsslrtma_proxy_row_deleted (GtkTreeModel *treemodel,
-                            GtkTreePath *arg1,
-                            gpointer user_data)
-{
-    g_signal_emit_by_name (user_data, "row-deleted", arg1);
-}
-
-static void
-gsslrtma_proxy_row_has_child_toggled (GtkTreeModel *treemodel,
-                                      GtkTreePath *arg1,
-                                      GtkTreeIter *arg2,
-                                      gpointer user_data)
-{
-    g_signal_emit_by_name (user_data, "row-has-child-toggled", arg1, arg2);
-}
-
-static void
-gsslrtma_proxy_row_inserted (GtkTreeModel *treemodel,
-                             GtkTreePath *arg1,
-                             GtkTreeIter *arg2,
-                             gpointer user_data)
-{
-    g_signal_emit_by_name (user_data, "row-inserted", arg1, arg2);
-}
-
-static void
-gsslrtma_proxy_rows_reordered (GtkTreeModel *treemodel,
-                               GtkTreePath *arg1,
-                               GtkTreeIter *arg2,
-                               gpointer arg3,
-                               gpointer user_data)
-{
-    g_signal_emit_by_name (user_data, "rows-reordered", arg1, arg2, arg3);
-}
-
-// model columns
-enum
-{
-    SLR_MODEL_COL_NAME = 0,
-    SLR_MODEL_COL_INSTANCE_PTR,
-    SLR_MODEL_COL_INSTANCE_STATE,
-    SLR_MODEL_COL_VARAIBLE_VALUE,
-    SLR_MODEL_COL_INSTANCE_VISIBILITY,
-    SLR_MODEL_COL_VARIABLE_VISIBILITY,
-    SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
-    SLR_MODEL_COL_INSTANCE_DATE,
-};
 
 static void
 gnc_sx_slr_tree_model_adapter_init (GncSxSlrTreeModelAdapter *adapter)
 {
-    // columns:    thing-name, ptr,       instance-state, variable-value, instance-visible, variable-visible, instance_state_sensitivity, date
-    // at depth=0: <sx>,       instances, N/A,            N/A             N/A,              N/A               N/A                         N/A
-    // at depth=1: <instance>, instance,  <state>,        N/A,            <valid>,          N/A,              <valid>                     <date>
-    // at depth=2: <variable>, var,       N/A,            <value>,        N/A,              <valid>,          N/A                         N/A
-    adapter->real = gtk_tree_store_new (8, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_INT64);
-
-    g_signal_connect (adapter->real, "row-changed", G_CALLBACK(gsslrtma_proxy_row_changed), adapter);
-    g_signal_connect (adapter->real, "row-deleted", G_CALLBACK(gsslrtma_proxy_row_deleted), adapter);
-    g_signal_connect (adapter->real, "row-has-child-toggled", G_CALLBACK(gsslrtma_proxy_row_has_child_toggled), adapter);
-    g_signal_connect (adapter->real, "row-inserted", G_CALLBACK(gsslrtma_proxy_row_inserted), adapter);
-    g_signal_connect (adapter->real, "rows-reordered", G_CALLBACK(gsslrtma_proxy_rows_reordered), adapter);
+    adapter->sort_ascending = TRUE;
+    adapter->roots = g_list_store_new (GNC_TYPE_SX_SLR_ROW);
 }
 
-static char* gnc_sx_instance_state_names[] =
+static GncSxSlrTreeModelAdapter*
+slr_adapter_new (GncSxInstanceModel *instances)
 {
-    N_("Ignored"),
-    N_("Postponed"),
-    N_("To-Create"),
-    N_("Reminder"),
-    N_("Created"),
-    NULL
-};
+    GncSxSlrTreeModelAdapter *adapter = g_object_new (GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, NULL);
+    adapter->instances = g_object_ref (instances);
+    adapter->sort_by_date = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_DEPTH) != 1;
+    adapter->sort_ascending = gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC);
+    slr_rebuild (adapter);
+    g_signal_connect_object (instances, "added", G_CALLBACK (slr_adapter_added), adapter, 0);
+    g_signal_connect_object (instances, "updated", G_CALLBACK (slr_adapter_updated), adapter, 0);
+    g_signal_connect_object (instances, "removing", G_CALLBACK (slr_adapter_removing), adapter, 0);
+    return adapter;
+}
 
-static GtkTreeModel* _singleton_slr_state_model = NULL;
-
-GtkTreeModel*
-gnc_sx_get_slr_state_model (void)
+static GListModel*
+slr_children_for_row (gpointer item, gpointer user_data)
 {
-    if (_singleton_slr_state_model == NULL)
-    {
-        int i;
-        GtkTreeIter iter;
-
-        _singleton_slr_state_model = GTK_TREE_MODEL(gtk_list_store_new (1, G_TYPE_STRING));
-        for (i = 0; i != SX_INSTANCE_STATE_CREATED; i++)
-        {
-            gtk_list_store_insert_with_values (GTK_LIST_STORE(_singleton_slr_state_model),
-                                               &iter,
-                                               SX_INSTANCE_STATE_MAX_STATE + 1,
-                                               0, _(gnc_sx_instance_state_names[i]), -1);
-        }
-    }
-    return _singleton_slr_state_model;
+    GncSxSlrRow *row = GNC_SX_SLR_ROW (item);
+    return row->children ? G_LIST_MODEL (g_object_ref (row->children)) : NULL;
 }
 
 static void
-_consume_excess_rows (GtkTreeStore *store, int last_index, GtkTreeIter *parent_iter, GtkTreeIter *maybe_invalid_iter)
+slr_refresh (GncSxSlrTreeModelAdapter *adapter)
 {
-    if (last_index == -1)
-    {
-        // try to get whatever was there beforehand, if it exists
-        if (!gtk_tree_model_iter_children (GTK_TREE_MODEL(store), maybe_invalid_iter, parent_iter))
-            return;
-    }
-    else
-    {
-        // increment the iter, or bail out.
-        if (!gtk_tree_model_iter_next (GTK_TREE_MODEL(store), maybe_invalid_iter))
-            return;
-    }
-
-    // consume until we're done.
-    while (gtk_tree_store_remove (store, maybe_invalid_iter));
+    slr_rebuild (adapter);
 }
-
 
 static void
-gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
+slr_expand_all (GtkTreeListModel *model)
 {
-    GtkTreeIter sx_tree_iter;
-    GList *sx_iter;
-    int instances_index = -1;
-
-    for (sx_iter = gnc_sx_instance_model_get_sx_instances_list (model->instances); sx_iter != NULL; sx_iter = sx_iter->next)
+    for (guint position = 0; position < g_list_model_get_n_items (G_LIST_MODEL (model)); position++)
     {
-        GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-        char last_occur_date_buf[MAX_DATE_LENGTH+1];
-
-        {
-            const GDate *last_occur = xaccSchedXactionGetLastOccurDate (instances->sx);
-            if (last_occur == NULL || !g_date_valid (last_occur))
-            {
-                g_stpcpy (last_occur_date_buf, _("Never"));
-            }
-            else
-            {
-                qof_print_gdate (last_occur_date_buf,
-                                 MAX_DATE_LENGTH,
-                                 last_occur);
-            }
-        }
-
-        // if there are no instances for the instance skip adding
-        if (g_list_length (instances->instance_list) == 0)
-            continue;
-
-        if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(model->real), &sx_tree_iter, NULL, ++instances_index))
-        {
-            gtk_tree_store_append (model->real, &sx_tree_iter, NULL);
-        }
-
-        gtk_tree_store_set (model->real, &sx_tree_iter,
-                            SLR_MODEL_COL_NAME, xaccSchedXactionGetName (instances->sx),
-                            SLR_MODEL_COL_INSTANCE_STATE, NULL,
-                            SLR_MODEL_COL_VARAIBLE_VALUE, NULL,
-                            SLR_MODEL_COL_INSTANCE_VISIBILITY, FALSE,
-                            SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
-                            SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
-                            SLR_MODEL_COL_INSTANCE_DATE, INT64_MAX,
-                            SLR_MODEL_COL_INSTANCE_PTR, instances,
-                            -1);
-
-        if (qof_log_check (GNC_MOD_GUI_SX, QOF_LOG_DEBUG))
-        {
-            gchar *path_str = gtk_tree_path_to_string (gtk_tree_model_get_path (GTK_TREE_MODEL(model->real), &sx_tree_iter));
-            DEBUG("Add schedule [%s], instances %p at path [%s]", xaccSchedXactionGetName (instances->sx), instances, path_str);
-            g_free (path_str);
-        }
-
-        // Insert instance information
-        {
-            GList *inst_iter;
-            GtkTreeIter inst_tree_iter;
-            char instance_date_buf[MAX_DATE_LENGTH+1];
-            int instance_index = -1;
-
-            for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
-            {
-                GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
-                qof_print_gdate (instance_date_buf, MAX_DATE_LENGTH, &inst->date);
-                time64 t = gdate_to_time64 (inst->date);
-
-                if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(model->real), &inst_tree_iter, &sx_tree_iter, ++instance_index))
-                {
-                    gtk_tree_store_append (model->real, &inst_tree_iter, &sx_tree_iter);
-                }
-                gtk_tree_store_set (model->real, &inst_tree_iter,
-                                    SLR_MODEL_COL_NAME, instance_date_buf,
-                                    SLR_MODEL_COL_INSTANCE_STATE, _(gnc_sx_instance_state_names[inst->state]),
-                                    SLR_MODEL_COL_VARAIBLE_VALUE, NULL,
-                                    SLR_MODEL_COL_INSTANCE_VISIBILITY, TRUE,
-                                    SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
-                                    SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, inst->state != SX_INSTANCE_STATE_CREATED,
-                                    SLR_MODEL_COL_INSTANCE_DATE, t,
-                                    SLR_MODEL_COL_INSTANCE_PTR, inst,
-                                    -1);
-
-                // Insert variable information
-                {
-                    GList *vars = NULL, *var_iter;
-                    GtkTreeIter var_tree_iter;
-                    gint visible_variable_index = -1;
-
-                    vars = gnc_sx_instance_get_variables (inst);
-                    for (var_iter = vars; var_iter != NULL; var_iter = var_iter->next)
-                    {
-                        GncSxVariable *var = (GncSxVariable*)var_iter->data;
-                        GString *tmp_str;
-
-                        if (!var->editable)
-                            continue;
-
-                        if (gnc_numeric_check (var->value) == GNC_ERROR_OK)
-                        {
-                            _var_numeric_to_string (&var->value, &tmp_str);
-                        }
-                        else
-                        {
-                            tmp_str = g_string_new (_("(Need Value)"));
-                        }
-
-                        if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(model->real),
-                                                            &var_tree_iter, &inst_tree_iter,
-                                                            ++visible_variable_index))
-                        {
-                            gtk_tree_store_append (model->real, &var_tree_iter, &inst_tree_iter);
-                        }
-                        gtk_tree_store_set (model->real, &var_tree_iter,
-                                            SLR_MODEL_COL_NAME, var->name,
-                                            SLR_MODEL_COL_INSTANCE_STATE, NULL,
-                                            SLR_MODEL_COL_VARAIBLE_VALUE, tmp_str->str,
-                                            SLR_MODEL_COL_INSTANCE_VISIBILITY, FALSE,
-                                            SLR_MODEL_COL_VARIABLE_VISIBILITY, TRUE,
-                                            SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
-                                            SLR_MODEL_COL_INSTANCE_DATE, INT64_MAX,
-                                            SLR_MODEL_COL_INSTANCE_PTR, var,
-                                            -1);
-                        g_string_free (tmp_str, TRUE);
-                    }
-                    g_list_free (vars);
-
-                    _consume_excess_rows (model->real, visible_variable_index, &inst_tree_iter, &var_tree_iter);
-                }
-            }
-
-            // if there are more instance iters, remove
-            _consume_excess_rows (model->real, instance_index, &sx_tree_iter, &inst_tree_iter);
-        }
+        GtkTreeListRow *row = GTK_TREE_LIST_ROW (g_list_model_get_item (G_LIST_MODEL (model), position));
+        if (gtk_tree_list_row_is_expandable (row))
+            gtk_tree_list_row_set_expanded (row, TRUE);
+        g_object_unref (row);
     }
-    _consume_excess_rows (model->real, instances_index, NULL, &sx_tree_iter);
 }
 
-GncSxInstanceModel*
-gnc_sx_slr_tree_model_adapter_get_instance_model (GncSxSlrTreeModelAdapter *slr_model)
+static GncSxSlrRow*
+slr_get_list_item_row (GtkListItem *item)
 {
-    return slr_model->instances;
-}
-
-GncSxInstance*
-gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter)
-{
-    return _gnc_sx_slr_model_get_instance (model, iter, TRUE);
+    GtkTreeListRow *tree_row = GTK_TREE_LIST_ROW (gtk_list_item_get_item (item));
+    if (!tree_row)
+        return NULL;
+    GObject *row_item = gtk_tree_list_row_get_item (tree_row);
+    GncSxSlrRow *row = GNC_SX_SLR_ROW (row_item);
+    g_object_unref (row_item);
+    return row;
 }
 
 static GncSxInstance*
-_gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, gboolean check_depth)
+slr_find_instance (GncSxInstanceModel *model, SchedXaction *sx, const GDate *date)
 {
-    GtkTreePath *model_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), iter);
-    gint *indices, instances_index, instance_index;
-    GncSxInstance *instance = NULL;
-    GtkTreeIter new_iter;
-
-    debug_path (DEBUG, "model path is:", model_path);
-
-    if (check_depth && gtk_tree_path_get_depth (model_path) != 2)
+    for (GList *schedule_node = gnc_sx_instance_model_get_sx_instances_list (model);
+         schedule_node; schedule_node = schedule_node->next)
     {
-        PWARN("path depth not equal to 2");
-        gtk_tree_path_free (model_path);
-        return NULL;
+        GncSxInstances *instances = schedule_node->data;
+
+        if (instances->sx != sx)
+            continue;
+        for (GList *instance_node = instances->instance_list;
+             instance_node; instance_node = instance_node->next)
+        {
+            GncSxInstance *instance = instance_node->data;
+
+            if (g_date_compare (&instance->date, date) == 0)
+                return instance;
+        }
     }
-
-    if (gtk_tree_path_get_depth (model_path) == 1)
-    {
-        PWARN("path depth equal to 1");
-        gtk_tree_path_free (model_path);
-        return NULL;
-    }
-
-    indices = gtk_tree_path_get_indices (model_path);
-    instances_index = indices[0];
-    instance_index = indices[1];
-
-    gtk_tree_path_free (model_path);
-
-    model_path = gtk_tree_path_new_from_indices (instances_index, instance_index, -1);
-
-    debug_path (DEBUG, "new model path is:", model_path);
-
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &new_iter, model_path))
-        gtk_tree_model_get (GTK_TREE_MODEL(model), &new_iter, SLR_MODEL_COL_INSTANCE_PTR, &instance, -1);
-
-    gtk_tree_path_free (model_path);
-
-    DEBUG("instance is %p", instance);
-
-    return instance;
+    return NULL;
 }
 
-gboolean
-gnc_sx_slr_model_get_instance_and_variable (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, GncSxInstance **instance_loc, GncSxVariable **var_loc)
+static GncSxVariable*
+slr_find_variable (GncSxInstance *instance, const gchar *name)
 {
-    GtkTreePath *model_path;
-    gint *indices, variable_index;
-    GncSxInstance *instance;
-    GList *variables;
+    GList *variables = gnc_sx_instance_get_variables (instance);
+    GncSxVariable *match = NULL;
 
-    instance = _gnc_sx_slr_model_get_instance (model, iter, FALSE);
-    if (instance == NULL)
+    for (GList *node = variables; node; node = node->next)
     {
-        gchar *iter_str = gtk_tree_model_get_string_from_iter (GTK_TREE_MODEL(model), iter);
-        PWARN("instance is NULL for iter %s", iter_str);
-        g_free (iter_str);
-        return FALSE;
-    }
-    variables = gnc_sx_instance_get_variables (instance);
+        GncSxVariable *variable = node->data;
 
-    model_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), iter);
-    if (gtk_tree_path_get_depth (model_path) != 3)
-    {
-        gchar *path_str = gtk_tree_path_to_string (model_path);
-        PWARN("invalid path [%s] for variable, not at depth 3", path_str);
-        gtk_tree_path_free (model_path);
-        g_free (path_str);
-        return FALSE;
-    }
-
-    debug_path (DEBUG, "model path is:", model_path);
-
-    indices = gtk_tree_path_get_indices (model_path);
-    variable_index = indices[2];
-
-    gtk_tree_path_free (model_path);
-
-    if (variable_index < 0 || variable_index >= g_list_length (variables))
-    {
-        PWARN("variable index %d out of range", variable_index);
-        g_list_free (variables);
-        return FALSE;
-    }
-
-    if (instance_loc != NULL)
-    {
-        *instance_loc = instance;
-    }
-
-    if (var_loc != NULL)
-    {
-        GncSxVariable *var;
-
-        gtk_tree_model_get (GTK_TREE_MODEL(model), iter, SLR_MODEL_COL_INSTANCE_PTR, &var, -1);
-
-        *var_loc = var;
+        if (g_strcmp0 (variable->name, name) == 0)
+        {
+            match = variable;
+            break;
+        }
     }
     g_list_free (variables);
+    return match;
+}
+
+static void
+slr_name_setup (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GtkWidget *label = gtk_label_new (NULL);
+    GtkWidget *expander = gtk_tree_expander_new ();
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), label);
+    gtk_list_item_set_child (item, expander);
+}
+
+static void
+slr_name_bind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GtkTreeListRow *tree_row = GTK_TREE_LIST_ROW (gtk_list_item_get_item (item));
+    GObject *row_item = gtk_tree_list_row_get_item (tree_row);
+    GncSxSlrRow *row = GNC_SX_SLR_ROW (row_item);
+    GtkTreeExpander *expander = GTK_TREE_EXPANDER (gtk_list_item_get_child (item));
+    GtkWidget *label = gtk_tree_expander_get_child (expander);
+    gtk_tree_expander_set_list_row (expander, tree_row);
+    gtk_label_set_text (GTK_LABEL (label), row->name);
+    g_object_unref (row_item);
+}
+
+static gboolean
+slr_refresh_idle (gpointer user_data)
+{
+    GncSxSlrTreeModelAdapter *adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER (user_data);
+
+    adapter->refresh_source = 0;
+    if (!adapter->disposed && !adapter->closing)
+        slr_refresh (adapter);
+    return G_SOURCE_REMOVE;
+}
+
+static void
+slr_schedule_refresh (GncSxSlrTreeModelAdapter *adapter)
+{
+    if (adapter->disposed || adapter->closing || adapter->refresh_source)
+        return;
+    adapter->refresh_source = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                                                slr_refresh_idle,
+                                                g_object_ref (adapter),
+                                                g_object_unref);
+}
+
+static SlrListItemBinding*
+slr_list_item_binding_new (GtkListItem *item)
+{
+    SlrListItemBinding *binding = g_new0 (SlrListItemBinding, 1);
+
+    g_ref_count_init (&binding->ref_count);
+    g_weak_ref_init (&binding->item, item);
+    g_weak_ref_init (&binding->adapter, NULL);
+    return binding;
+}
+
+static SlrListItemBinding*
+slr_list_item_binding_ref (SlrListItemBinding *binding)
+{
+    g_ref_count_inc (&binding->ref_count);
+    return binding;
+}
+
+static void
+slr_list_item_binding_unref (SlrListItemBinding *binding)
+{
+    if (!g_ref_count_dec (&binding->ref_count))
+        return;
+    g_weak_ref_clear (&binding->item);
+    g_weak_ref_clear (&binding->adapter);
+    g_free (binding);
+}
+
+static void
+slr_list_item_binding_closure_notify (gpointer data, GClosure *closure)
+{
+    (void)closure;
+    slr_list_item_binding_unref (data);
+}
+
+static gboolean
+slr_list_item_binding_get (SlrListItemBinding *binding, GtkListItem **item,
+                           GncSxSlrTreeModelAdapter **adapter)
+{
+    *item = NULL;
+    *adapter = NULL;
+    if (!binding)
+        return FALSE;
+    *item = g_weak_ref_get (&binding->item);
+    *adapter = g_weak_ref_get (&binding->adapter);
+    if (!*item || !*adapter || (*adapter)->disposed || (*adapter)->closing)
+    {
+        g_clear_object (item);
+        g_clear_object (adapter);
+        return FALSE;
+    }
     return TRUE;
 }
 
-/**
- * Special-case list indexing that only refers to "editable" variables. :(
- **/
-static gint
-_variable_list_index (GList *variables, GncSxVariable *variable)
+static void
+slr_state_changed (GObject *dropdown, GParamSpec *pspec, gpointer user_data)
 {
-    gint index = 0;
-    for (; variables != NULL; variables = variables->next)
+    SlrListItemBinding *binding = user_data;
+    GtkListItem *item;
+    GncSxSlrTreeModelAdapter *adapter;
+    GncSxSlrRow *row;
+    guint selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (dropdown));
+
+    if (!slr_list_item_binding_get (binding, &item, &adapter))
+        return;
+    row = slr_get_list_item_row (item);
+    if (!row || !adapter || row->kind != SLR_ROW_INSTANCE ||
+        row->instance->state == SX_INSTANCE_STATE_CREATED || selected >= SX_INSTANCE_STATE_CREATED)
+        goto out;
+    if (selected == row->instance->state)
+        goto out;
     {
-        GncSxVariable *var = (GncSxVariable*)variables->data;
-        if (!var->editable)
-            continue;
-        if (variable == var)
-            return index;
-        index++;
+        GncSxInstanceModel *instances = g_object_ref (adapter->instances);
+
+        gnc_sx_instance_model_change_instance_state (instances, row->instance, selected);
+        g_object_unref (instances);
     }
-    return -1;
-}
+    if (!adapter->closing)
+        slr_schedule_refresh (adapter);
 
-typedef struct _findInstanceData
-{
-    gpointer     find_item;
-    GtkTreePath *found_path;
-} FindInstanceData;
-
-static gboolean
-for_each_find_item (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data)
-{
-    FindInstanceData* to_find = (FindInstanceData*)user_data;
-    gpointer item;
-
-    gtk_tree_model_get (model, iter, SLR_MODEL_COL_INSTANCE_PTR, &item, -1);
-
-    if (item == to_find->find_item)
-    {
-        to_find->found_path = gtk_tree_path_copy (path);
-        return TRUE;
-    }
-    return FALSE;
-}
-
-static GtkTreePath*
-_get_model_path_for_item (GtkTreeModel *model, gpointer find_item)
-{
-    GtkTreePath *model_path = NULL;
-    FindInstanceData* to_find_data;
-
-    to_find_data = (FindInstanceData*)g_new0 (FindInstanceData, 1);
-    to_find_data->find_item = find_item;
-    to_find_data->found_path = NULL;
-
-    gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)for_each_find_item, to_find_data);
-
-    if (to_find_data->found_path)
-    {
-        model_path = gtk_tree_path_copy (to_find_data->found_path);
-        gtk_tree_path_free (to_find_data->found_path);
-    }
-    g_free (to_find_data);
-
-    return model_path;
-}
-
-static GtkTreePath*
-_get_model_path_for_instance (GtkTreeModel *model, GncSxInstance *instance)
-{
-    return _get_model_path_for_item (model, instance);
-}
-
-static GtkTreePath*
-_get_model_path_for_instances (GtkTreeModel *model, GncSxInstances *instances)
-{
-    return _get_model_path_for_item (model, instances);
-}
-
-static GtkTreePath*
-_get_path_for_variable (GncSxSinceLastRunDialog *app_dialog, GncSxInstance *instance, GncSxVariable *variable)
-{
-    GncSxSlrTreeModelAdapter *model = app_dialog->editing_model;
-    GtkTreeModel *sort_model = gtk_tree_view_get_model (app_dialog->instance_view);
-    gint *indices, instances_index, instance_index, variable_index;
-    GtkTreePath *view_path, *model_path;
-    GList *variables;
-
-    model_path = _get_model_path_for_instance (GTK_TREE_MODEL(model), instance);
-
-    if (!model_path)
-    {
-        PWARN("model path is NULL for instance %p", instance);
-        return NULL;
-    }
-
-    debug_path (DEBUG, "instance model path is:", model_path);
-
-    indices = gtk_tree_path_get_indices (model_path);
-    instances_index = indices[0];
-    instance_index = indices[1];
-
-    gtk_tree_path_free (model_path);
-
-    variables = gnc_sx_instance_get_variables (instance);
-    variable_index = _variable_list_index (variables, variable);
-    g_list_free (variables);
-    if (variable_index == -1)
-        return NULL;
-
-    model_path = gtk_tree_path_new_from_indices (instances_index, instance_index, variable_index, -1);
-    debug_path (DEBUG, "model variable path is:", model_path);
-
-    view_path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT(sort_model), model_path);
-    gtk_tree_path_free (model_path);
-
-    debug_path (DEBUG, "return view variable path is:", view_path);
-
-    return view_path;
+out:
+    g_object_unref (item);
+    g_object_unref (adapter);
 }
 
 static void
-gsslrtma_added_cb (GncSxInstanceModel *instances, SchedXaction *added_sx, gpointer user_data)
+slr_state_setup (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
 {
-    GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data);
-    // this is wasteful, but fine.
-    gsslrtma_populate_tree_store (model);
+    const char *states[] = { _("Ignored"), _("Postponed"), _("To-Create"), _("Reminder"), NULL };
+    GtkStringList *model = gtk_string_list_new (states);
+    GtkWidget *dropdown = GTK_WIDGET (gnc_gtk_drop_down_new (G_LIST_MODEL (model), NULL));
+    SlrListItemBinding *binding = slr_list_item_binding_new (item);
+
+    g_object_set_data_full (G_OBJECT (item), "slr-list-item-binding", binding,
+                            (GDestroyNotify)slr_list_item_binding_unref);
+    g_signal_connect_data (dropdown, "notify::selected", G_CALLBACK (slr_state_changed),
+                           slr_list_item_binding_ref (binding),
+                           slr_list_item_binding_closure_notify, 0);
+    gtk_list_item_set_child (item, dropdown);
 }
 
 static void
-gsslrtma_updated_cb (GncSxInstanceModel *instances, SchedXaction *updated_sx, gpointer user_data)
+slr_state_bind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
 {
-    GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data);
-    gnc_sx_instance_model_update_sx_instances (instances, updated_sx);
-    gsslrtma_populate_tree_store (model);
+    GncSxSlrRow *row = slr_get_list_item_row (item);
+    GtkWidget *dropdown = gtk_list_item_get_child (item);
+    SlrListItemBinding *binding = g_object_get_data (G_OBJECT (item), "slr-list-item-binding");
+
+    g_return_if_fail (binding);
+    g_weak_ref_set (&binding->adapter, user_data);
+    g_signal_handlers_block_by_func (dropdown, slr_state_changed, binding);
+    gtk_widget_set_visible (dropdown, row->kind == SLR_ROW_INSTANCE);
+    if (row->kind == SLR_ROW_INSTANCE)
+    {
+        gtk_widget_set_sensitive (dropdown, row->instance->state != SX_INSTANCE_STATE_CREATED);
+        gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown),
+                                     MIN ((guint)row->instance->state, SX_INSTANCE_STATE_CREATED - 1));
+    }
+    g_signal_handlers_unblock_by_func (dropdown, slr_state_changed, binding);
 }
 
 static void
-gsslrtma_removing_cb (GncSxInstanceModel *inst_model, SchedXaction *to_remove_sx, gpointer user_data)
+slr_state_unbind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
 {
-    GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data);
-    GtkTreePath *model_path;
-    GtkTreeIter tree_iter;
-    GList *iter;
-    GncSxInstances *instances;
+    SlrListItemBinding *binding = g_object_get_data (G_OBJECT (item), "slr-list-item-binding");
 
-    // get instances, create path, remove
-    for (iter = gnc_sx_instance_model_get_sx_instances_list (inst_model); iter != NULL; iter = iter->next)
+    if (binding)
+        g_weak_ref_set (&binding->adapter, NULL);
+}
+
+static void
+slr_variable_commit (GtkEntry *entry, SlrListItemBinding *binding)
+{
+    GtkListItem *item;
+    GncSxSlrTreeModelAdapter *adapter;
+    GncSxSlrRow *row;
+    gnc_numeric value;
+    char *end = NULL;
+    const gchar *text;
+
+    if (!slr_list_item_binding_get (binding, &item, &adapter))
+        return;
+    row = slr_get_list_item_row (item);
+    if (!row || row->kind != SLR_ROW_VARIABLE)
+        goto out;
+    text = gtk_editable_get_text (GTK_EDITABLE (entry));
+    if (!xaccParseAmount (text, TRUE, &value, &end) || gnc_numeric_check (value) != GNC_ERROR_OK)
     {
-        instances = (GncSxInstances*)iter->data;
-        if (instances->sx == to_remove_sx)
-            break;
+        gchar *copy = g_strdup (text);
+        if (*g_strstrip (copy) == '\0')
+        {
+            gnc_numeric invalid = gnc_numeric_error (GNC_ERROR_ARG);
+            GncSxInstanceModel *instances = g_object_ref (adapter->instances);
+
+            gnc_sx_instance_model_set_variable (instances, row->instance, row->variable, &invalid);
+            g_object_unref (instances);
+        }
+        else
+        {
+            gnc_warning_dialog_async (NULL, NULL, _("Invalid Value"),
+                                      _("The value is not a valid amount."), _("_Close"),
+                                      GTK_RESPONSE_CLOSE, TRUE, NULL, NULL);
+        }
+        g_free (copy);
+        goto out;
     }
-    if (iter == NULL)
     {
-        PWARN("could not find sx %p in the model", to_remove_sx);
-        return; // couldn't find sx in our model, which is weird.
+        GncSxInstanceModel *instances = g_object_ref (adapter->instances);
+
+        if (row->instance->state == SX_INSTANCE_STATE_REMINDER)
+        {
+            SchedXaction *sx = row->instance->parent->sx;
+            GDate date = row->instance->date;
+            gchar *name = g_strdup (row->variable->name);
+            GncSxInstance *instance;
+            GncSxVariable *variable;
+
+            gnc_sx_instance_model_change_instance_state (instances, row->instance,
+                                                          SX_INSTANCE_STATE_TO_CREATE);
+            instance = adapter->closing ? NULL : slr_find_instance (instances, sx, &date);
+            variable = instance ? slr_find_variable (instance, name) : NULL;
+            if (variable)
+                gnc_sx_instance_model_set_variable (instances, instance, variable, &value);
+            g_free (name);
+        }
+        else
+            gnc_sx_instance_model_set_variable (instances, row->instance, row->variable, &value);
+        g_object_unref (instances);
     }
+    if (!adapter->closing)
+        slr_schedule_refresh (adapter);
 
-    model_path = _get_model_path_for_instances (GTK_TREE_MODEL(model), instances);
+out:
+    g_object_unref (item);
+    g_object_unref (adapter);
+}
 
-    debug_path (DEBUG, "remove model_path", model_path);
+static void
+slr_value_activate (GtkEntry *entry, gpointer user_data)
+{
+    slr_variable_commit (entry, user_data);
+}
 
-    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model->real), &tree_iter, model_path))
+static void
+slr_value_focus_changed (GObject *entry, GParamSpec *pspec, gpointer user_data)
+{
+    if (!gtk_widget_has_focus (GTK_WIDGET (entry)))
+        slr_variable_commit (GTK_ENTRY (entry), user_data);
+}
+
+static void
+slr_value_setup (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GtkWidget *entry = gtk_entry_new ();
+    SlrListItemBinding *binding = slr_list_item_binding_new (item);
+
+    g_object_set_data_full (G_OBJECT (item), "slr-list-item-binding", binding,
+                            (GDestroyNotify)slr_list_item_binding_unref);
+    g_signal_connect_data (entry, "activate", G_CALLBACK (slr_value_activate),
+                           slr_list_item_binding_ref (binding),
+                           slr_list_item_binding_closure_notify, 0);
+    g_signal_connect_data (entry, "notify::has-focus", G_CALLBACK (slr_value_focus_changed),
+                           slr_list_item_binding_ref (binding),
+                           slr_list_item_binding_closure_notify, 0);
+    gtk_list_item_set_child (item, entry);
+}
+
+static void
+slr_value_bind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GncSxSlrRow *row = slr_get_list_item_row (item);
+    GtkWidget *entry = gtk_list_item_get_child (item);
+    GString *value;
+    SlrListItemBinding *binding = g_object_get_data (G_OBJECT (item), "slr-list-item-binding");
+
+    g_return_if_fail (binding);
+    g_weak_ref_set (&binding->adapter, user_data);
+    g_signal_handlers_block_by_func (entry, slr_value_focus_changed, binding);
+    gtk_widget_set_visible (entry, row->kind == SLR_ROW_VARIABLE);
+    if (row->kind == SLR_ROW_VARIABLE)
     {
-        gchar *path_str = gtk_tree_path_to_string (model_path);
-        PWARN("invalid path [%s] for instances %p to remove", path_str, instances);
-        gtk_tree_path_free (model_path);
-        g_free (path_str);
+        if (gnc_numeric_check (row->variable->value) == GNC_ERROR_OK)
+        {
+            slr_numeric_to_string (&row->variable->value, &value);
+            gtk_editable_set_text (GTK_EDITABLE (entry), value->str);
+            g_string_free (value, TRUE);
+        }
+        else
+            gtk_editable_set_text (GTK_EDITABLE (entry), _("(Need Value)"));
+    }
+    g_signal_handlers_unblock_by_func (entry, slr_value_focus_changed, binding);
+}
+
+static void
+slr_value_unbind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    SlrListItemBinding *binding = g_object_get_data (G_OBJECT (item), "slr-list-item-binding");
+
+    if (binding)
+        g_weak_ref_set (&binding->adapter, NULL);
+}
+
+static void
+slr_append_column (GtkColumnView *view, const gchar *title,
+                   GCallback setup, GCallback bind, GCallback unbind,
+                   GObject *bind_data, gboolean expand)
+{
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+    GtkColumnViewColumn *column = gtk_column_view_column_new (title, factory);
+    g_signal_connect (factory, "setup", setup, NULL);
+    if (bind_data)
+        g_signal_connect_object (factory, "bind", bind, bind_data, 0);
+    else
+        g_signal_connect (factory, "bind", bind, NULL);
+    if (unbind)
+        g_signal_connect (factory, "unbind", unbind, NULL);
+    gtk_column_view_column_set_resizable (column, TRUE);
+    gtk_column_view_column_set_expand (column, expand);
+    gtk_column_view_append_column (view, column);
+    g_object_unref (column);
+}
+
+static void
+slr_select_first_unbound (GncSxSinceLastRunDialog *dialog, GncSxVariableNeeded *needed)
+{
+    guint n = g_list_model_get_n_items (G_LIST_MODEL (dialog->tree_model));
+    for (guint position = 0; position < n; position++)
+    {
+        GtkTreeListRow *tree_row = GTK_TREE_LIST_ROW (g_list_model_get_item
+                                                       (G_LIST_MODEL (dialog->tree_model), position));
+        GObject *row_item = gtk_tree_list_row_get_item (tree_row);
+        GncSxSlrRow *row = GNC_SX_SLR_ROW (row_item);
+        if (row->kind == SLR_ROW_VARIABLE && row->instance == needed->instance &&
+            row->variable == needed->variable)
+        {
+            gtk_single_selection_set_selected (dialog->selection, position);
+            gtk_column_view_scroll_to (dialog->instance_view, position, NULL,
+                                       GTK_LIST_SCROLL_FOCUS, NULL);
+            g_object_unref (row_item);
+            g_object_unref (tree_row);
+            return;
+        }
+        g_object_unref (row_item);
+        g_object_unref (tree_row);
+    }
+}
+
+static void
+slr_finish (GncSxSinceLastRunDialog *dialog)
+{
+    gnc_close_gui_component (dialog->component_id);
+}
+
+static void
+slr_help_clicked (GtkButton *button, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+    gnc_gnome_help (GTK_WINDOW (dialog->dialog), DF_MANUAL, DL_SX_SLR);
+}
+
+static void
+slr_cancel_clicked (GtkButton *button, gpointer user_data)
+{
+    slr_finish (user_data);
+}
+
+static void
+slr_ok_clicked (GtkButton *button, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+    GList *errors = NULL;
+    GList *unbound = gnc_sx_instance_model_check_variables (dialog->editing_model->instances);
+
+    if (unbound)
+    {
+        slr_select_first_unbound (dialog, unbound->data);
+        g_list_free_full (unbound, g_free);
         return;
     }
-    gtk_tree_path_free (model_path);
+    gnc_suspend_gui_refresh ();
+    gnc_sx_instance_model_effect_change (dialog->editing_model->instances, FALSE,
+                                         &dialog->created_txns, &errors);
+    gnc_resume_gui_refresh ();
+    gnc_gui_refresh_all ();
+    if (errors)
+        gnc_ui_sx_creation_error_dialog (&errors);
+    if (gtk_check_button_get_active (dialog->review_created_txns_toggle) && dialog->created_txns)
+        show_created_transactions (dialog, dialog->created_txns);
+    slr_finish (dialog);
+}
 
-    gtk_tree_store_remove (model->real, &tree_iter);
-
-    gnc_sx_instance_model_remove_sx_instances (inst_model, to_remove_sx);
+static gboolean
+slr_close_request (GtkWindow *window, gpointer user_data)
+{
+    slr_finish (user_data);
+    return TRUE;
 }
 
 static void
-gnc_sx_slr_tree_model_adapter_dispose (GObject *obj)
+since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *instances, GList *auto_created_txns)
 {
-    GncSxSlrTreeModelAdapter *adapter;
-    g_return_if_fail (obj != NULL);
-    adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER(obj);
-    g_return_if_fail (!adapter->disposed);
-    adapter->disposed = TRUE;
+    GncSxSinceLastRunDialog *dialog = g_new0 (GncSxSinceLastRunDialog, 1);
+    GtkBuilder *builder = gtk_builder_new ();
+    GtkWidget *button;
 
-    g_object_unref (G_OBJECT(adapter->instances));
-    adapter->instances = NULL;
-    g_object_unref (G_OBJECT(adapter->real));
-    adapter->real = NULL;
+    gnc_builder_add_from_file (builder, "dialog-sx.ui", "since_last_run_dialog");
+    dialog->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "since_last_run_dialog"));
+    dialog->editing_model = slr_adapter_new (instances);
+    dialog->tree_model = gtk_tree_list_model_new
+        (G_LIST_MODEL (g_object_ref (dialog->editing_model->roots)), FALSE, TRUE,
+         slr_children_for_row, NULL, NULL);
+    dialog->selection = gtk_single_selection_new (G_LIST_MODEL (g_object_ref (dialog->tree_model)));
+    gtk_single_selection_set_autoselect (dialog->selection, FALSE);
+    dialog->instance_view = GTK_COLUMN_VIEW (gtk_builder_get_object (builder, "instance_view"));
+    gtk_column_view_set_model (dialog->instance_view, GTK_SELECTION_MODEL (dialog->selection));
+    gtk_column_view_set_show_row_separators
+        (dialog->instance_view, gnc_prefs_get_bool ("general", "grid-lines-horizontal"));
+    gtk_column_view_set_show_column_separators
+        (dialog->instance_view, gnc_prefs_get_bool ("general", "grid-lines-vertical"));
+    slr_append_column (dialog->instance_view, _("Transaction"),
+                       G_CALLBACK (slr_name_setup), G_CALLBACK (slr_name_bind), NULL, NULL, TRUE);
+    slr_append_column (dialog->instance_view, _("Status"), G_CALLBACK (slr_state_setup),
+                       G_CALLBACK (slr_state_bind), G_CALLBACK (slr_state_unbind),
+                       G_OBJECT (dialog->editing_model), FALSE);
+    slr_append_column (dialog->instance_view, _("Value"), G_CALLBACK (slr_value_setup),
+                       G_CALLBACK (slr_value_bind), G_CALLBACK (slr_value_unbind),
+                       G_OBJECT (dialog->editing_model), FALSE);
+    slr_expand_all (dialog->tree_model);
 
-    G_OBJECT_CLASS(gnc_sx_slr_tree_model_adapter_parent_class)->dispose (obj);
-}
-
-static void
-gnc_sx_slr_tree_model_adapter_finalize (GObject *obj)
-{
-    g_return_if_fail (obj != NULL);
-    G_OBJECT_CLASS(gnc_sx_slr_tree_model_adapter_parent_class)->finalize (obj);
-}
-
-GncSxSlrTreeModelAdapter*
-gnc_sx_slr_tree_model_adapter_new (GncSxInstanceModel *instances)
-{
-    GncSxSlrTreeModelAdapter *rtn;
-    rtn = GNC_SX_SLR_TREE_MODEL_ADAPTER(g_object_new (GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, NULL));
-    rtn->instances = instances;
-    g_object_ref (G_OBJECT(rtn->instances));
-    gsslrtma_populate_tree_store (rtn);
-    g_signal_connect (G_OBJECT(rtn->instances), "added", (GCallback)gsslrtma_added_cb, (gpointer)rtn);
-    rtn->updated_cb_id = g_signal_connect (G_OBJECT(rtn->instances), "updated", (GCallback)gsslrtma_updated_cb, (gpointer)rtn);
-    g_signal_connect (G_OBJECT(rtn->instances), "removing", (GCallback)gsslrtma_removing_cb, (gpointer)rtn);
-    return rtn;
+    gtk_window_set_transient_for (GTK_WINDOW (dialog->dialog), parent);
+    gtk_widget_set_name (dialog->dialog, "gnc-id-sx-since-last-run");
+    gtk_widget_add_css_class (dialog->dialog, "gnc-class-sx");
+    dialog->review_created_txns_toggle = GTK_CHECK_BUTTON
+        (gtk_builder_get_object (builder, "review_txn_toggle"));
+    gtk_check_button_set_active (dialog->review_created_txns_toggle,
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SET_REVIEW));
+    dialog->created_txns = auto_created_txns;
+    button = GTK_WIDGET (gtk_builder_get_object (builder, "helpbutton2"));
+    g_signal_connect (button, "clicked", G_CALLBACK (slr_help_clicked), dialog);
+    button = GTK_WIDGET (gtk_builder_get_object (builder, "cancelbutton2"));
+    g_signal_connect (button, "clicked", G_CALLBACK (slr_cancel_clicked), dialog);
+    button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton2"));
+    g_signal_connect (button, "clicked", G_CALLBACK (slr_ok_clicked), dialog);
+    g_signal_connect (dialog->dialog, "close-request", G_CALLBACK (slr_close_request), dialog);
+    g_signal_connect (dialog->dialog, "destroy", G_CALLBACK (slr_destroy_cb), dialog);
+    gnc_restore_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW (dialog->dialog), parent);
+    dialog->component_id = gnc_register_gui_component (DIALOG_SX_SINCE_LAST_RUN_CM_CLASS,
+        NULL, slr_close_handler, dialog);
+    gnc_gui_component_set_session (dialog->component_id, gnc_get_current_session ());
+    gtk_window_present (GTK_WINDOW (dialog->dialog));
+    g_object_unref (builder);
 }
 
 void
 gnc_ui_sx_creation_error_dialog (GList **creation_errors)
 {
-    GtkWidget *dialog = NULL;
-    gchar *message = NULL;
-    if (*creation_errors == NULL) return;
+    GtkAlertDialog *alert;
+    gchar *message;
+    if (!creation_errors || !*creation_errors)
+        return;
     message = gnc_g_list_stringjoin (*creation_errors, "\n");
     g_list_free_full (*creation_errors, g_free);
-    creation_errors = NULL;
-    dialog = gtk_message_dialog_new (NULL, 0,
-                                     GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
-                                     "\t%s\t", _("Invalid Transactions"));
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                              "%s", message);
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK(gtk_widget_destroy), dialog);
-    gtk_dialog_run (GTK_DIALOG(dialog));
+    *creation_errors = NULL;
+    alert = gtk_alert_dialog_new ("%s", _("Invalid Transactions"));
+    gtk_alert_dialog_set_detail (alert, message);
+    gtk_alert_dialog_show (alert, NULL);
+    g_object_unref (alert);
     g_free (message);
 }
 
-static GtkTreePath *
-instance_get_model_path (GtkTreeView *view, const gchar *path)
-{
-    GtkTreePath *view_path = gtk_tree_path_new_from_string (path);
-    GtkTreeModelSort *sort_model = GTK_TREE_MODEL_SORT(gtk_tree_view_get_model (view));
-
-    GtkTreePath *model_path = gtk_tree_model_sort_convert_path_to_child_path (sort_model, view_path);
-
-    gtk_tree_path_free (view_path);
-
-    return model_path;
-}
-
 static void
-instance_state_changed_cb (GtkCellRendererText *cell,
-                           const gchar *path,
-                           const gchar *value,
-                           GncSxSinceLastRunDialog *dialog)
+sx_since_last_run_dialog (GncSxInstanceModel *instances, int book_opened)
 {
-    GncSxInstance *inst;
-    int i;
-    GncSxInstanceState new_state;
-    GtkTreePath *model_path = instance_get_model_path (dialog->instance_view, path);
-    GtkTreeIter tree_iter;
-
-    DEBUG("change instance state to [%s] at path [%s]", value, path);
-
-    debug_path (DEBUG, "instance model path is:", model_path);
-
-    for (i = 0; i < SX_INSTANCE_STATE_CREATED; i++)
-    {
-        if (strcmp (value, _(gnc_sx_instance_state_names[i])) == 0)
-            break;
-    }
-    if (i == SX_INSTANCE_STATE_CREATED)
-    {
-        PWARN("unknown value [%s]", value);
-        return;
-    }
-    new_state = i;
-
-    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, model_path))
-    {
-        gtk_tree_path_free (model_path);
-        PWARN("unknown path [%s]", path);
-        return;
-    }
-    gtk_tree_path_free (model_path);
-
-    inst = gnc_sx_slr_model_get_instance (dialog->editing_model, &tree_iter);
-
-    if (inst == NULL)
-    {
-        PWARN("invalid path [%s]", path);
-        return;
-    }
-
-    DEBUG("instance is %p", inst);
-
-    gnc_sx_instance_model_change_instance_state (dialog->editing_model->instances, inst, new_state);
-}
-
-static void
-control_scroll_bars (GncSxSinceLastRunDialog *dialog)
-{
-    GtkWidget *sw = gtk_widget_get_parent (GTK_WIDGET(dialog->instance_view));
-    GtkWidget *vsbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW(sw));
-    gboolean enable = TRUE;
-
-    if (dialog->temp_ce)
-        enable = FALSE;
-
-    gtk_widget_set_sensitive (vsbar, enable);
-    gtk_widget_set_visible (vsbar, enable);
-}
-
-static void
-variable_value_changed_cb (GtkCellRendererText *cell,
-                           const gchar *path,
-                           const gchar *value,
-                           GncSxSinceLastRunDialog *dialog)
-{
-    GncSxVariable *var = NULL;
-    GncSxInstance *inst;
-    gnc_numeric parsed_num;
-    char *endStr = NULL;
-    GtkTreePath *model_path = instance_get_model_path (dialog->instance_view, path);
-    GtkTreeIter tree_iter;
-
-    DEBUG("change variable to [%s] at view path [%s]", value, path);
-
-    debug_path (DEBUG, "instance model path is:", model_path);
-
-    dialog->temp_ce = NULL;
-    control_scroll_bars (dialog);
-
-    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, model_path))
-    {
-        gtk_tree_path_free (model_path);
-        PWARN("invalid path [%s]", path);
-        return;
-    }
-    gtk_tree_path_free (model_path);
-
-    if (!gnc_sx_slr_model_get_instance_and_variable (dialog->editing_model, &tree_iter, &inst, &var))
-    {
-        PWARN("path [%s] doesn't correspond to a valid variable", path);
-        return;
-    }
-
-    if (!xaccParseAmount (value, TRUE, &parsed_num, &endStr)
-            || gnc_numeric_check (parsed_num) != GNC_ERROR_OK)
-    {
-        gchar *value_copy = g_strdup (value);
-        DEBUG ("value=[%s] endStr[%s]", value, endStr);
-        if (strlen (g_strstrip (value_copy)) == 0)
-        {
-            gnc_numeric invalid_num = gnc_numeric_error (GNC_ERROR_ARG);
-            gnc_sx_instance_model_set_variable (dialog->editing_model->instances, inst, var, &invalid_num);
-        }
-        else
-        {
-            PWARN("error parsing value [%s]", value);
-        }
-        g_free (value_copy);
-        return;
-    }
-
-    if (inst->state == SX_INSTANCE_STATE_REMINDER)
-    {
-        gnc_sx_instance_model_change_instance_state (dialog->editing_model->instances, inst,
-                                                     SX_INSTANCE_STATE_TO_CREATE);
-    }
-    gnc_sx_instance_model_set_variable (dialog->editing_model->instances, inst, var, &parsed_num);
-}
-
-static void
-variable_value_start_changed_cb (GtkCellRenderer *renderer, GtkCellEditable *editable,
-                                 gchar *path, gpointer user_data)
-{
-    GncSxSinceLastRunDialog *dialog = user_data;
-    dialog->temp_ce = editable;
-    control_scroll_bars (dialog);
-}
-
-static void
-variable_value_cancel_changed_cb (GtkCellRenderer *renderer, gpointer user_data)
-{
-    GncSxSinceLastRunDialog *dialog = user_data;
-    dialog->temp_ce = NULL;
-    control_scroll_bars (dialog);
-}
-
-static gint
-_sort_text (const gchar *text_a, const gchar *text_b)
-{
-    gchar *a_caseless, *b_caseless;
-    gint rtn = 0;
-
-    if (text_a == NULL && text_b == NULL) return 0;
-    if (text_a == NULL) return 1;
-    if (text_b == NULL) return -1;
-
-    a_caseless = g_utf8_casefold (text_a, -1);
-    b_caseless = g_utf8_casefold (text_b, -1);
-    rtn = g_strcmp0 (a_caseless, b_caseless);
-    g_free (a_caseless);
-    g_free (b_caseless);
-
-    return rtn;
-}
-
-static gint
-_transaction_sort_func_date (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b)
-{
-    GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
-    gint depth = gtk_tree_path_get_depth (path_a);
-    gint64 date_a = 0, date_b = 0;
-    gint rtn = 0;
-
-    gtk_tree_path_free (path_a);
-
-    if (depth == 3)
-        return rtn;
-
-    // if top level, look at the first date for order
-    if (depth == 1)
-    {
-        GtkTreeIter child_iter_a, child_iter_b;
-
-        if (gtk_tree_model_iter_nth_child (model, &child_iter_a, iter_a, 0))
-            gtk_tree_model_get (model, &child_iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
-
-        if (gtk_tree_model_iter_nth_child (model, &child_iter_b, iter_b, 0))
-            gtk_tree_model_get (model, &child_iter_b, SLR_MODEL_COL_INSTANCE_DATE, &date_b, -1);
-
-        if (date_a > date_b)
-            rtn = 1;
-        if (date_b > date_a)
-            rtn = -1;
-
-        if (rtn == 0) // if dates are equal, look at name
-        {
-            gchar *name_text_a, *name_text_b;
-
-            gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
-            gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
-
-            rtn = _sort_text (name_text_a, name_text_b);
-
-            g_free (name_text_a);
-            g_free (name_text_b);
-        }
-        return rtn;
-    }
-
-    gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
-    gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_INSTANCE_DATE, &date_b, -1);
-
-    if (date_a > date_b)
-        rtn = 1;
-    if (date_b > date_a)
-        rtn = -1;
-
-    return rtn;
-}
-
-static gint
-_transaction_sort_func_desc (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b)
-{
-    GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
-    gint depth = gtk_tree_path_get_depth (path_a);
-    gchar *name_text_a, *name_text_b;
-    gint rtn = 0;
-
-    gtk_tree_path_free (path_a);
-
-    if (depth == 3)
-        return rtn;
-
-    if (depth == 1)
-    {
-        gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
-        gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
-
-        rtn = _sort_text (name_text_a, name_text_b);
-
-        g_free (name_text_a);
-        g_free (name_text_b);
-    }
-
-    if (depth == 2)
-    {
-        gint64 date_a = 0, date_b = 0;
-
-        gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
-        gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_INSTANCE_DATE, &date_b, -1);
-
-        if (date_a > date_b)
-            rtn = 1;
-        if (date_b > date_a)
-            rtn = -1;
-    }
-    return rtn;
-}
-
-static gint
-_transaction_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b, gpointer user_data)
-{
-    GncSxSinceLastRunDialog *dialog = user_data;
-
-    if (dialog->sort_selection_depth == 1)
-        return _transaction_sort_func_desc (model, iter_a, iter_b);
-    else
-        return _transaction_sort_func_date (model, iter_a, iter_b);
-}
-
-static gboolean
-finish_editing_before_ok_cb (GtkWidget *button, GdkEvent *event,
-                             GncSxSinceLastRunDialog *dialog)
-{
-    // finish editing
-    if (dialog->temp_ce)
-        gtk_cell_editable_editing_done (dialog->temp_ce);
-
-    dialog->temp_ce = NULL;
-
-    return FALSE;
-}
-
-static gboolean
-scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
-{
-    GncSxSinceLastRunDialog *dialog = user_data;
-
-    if (dialog->temp_ce)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-static void
-set_transaction_sort_column_tooltip (GncSxSinceLastRunDialog *dialog)
-{
-    GtkTreeViewColumn *col = gtk_tree_view_get_column (GTK_TREE_VIEW(dialog->instance_view), 0);
-    const gchar *date_text = _("Highlight a date first to sort by occurrence date.");
-    const gchar *sched_text = _("Highlight a schedule first to sort by schedule name.");
-    gchar *tooltip;
-
-    if (dialog->sort_selection_depth == 1)
-        tooltip = g_strconcat (sched_text, " *\n", date_text, NULL);
-    else
-        tooltip = g_strconcat (sched_text, "\n", date_text, " *", NULL);
-
-    gtk_widget_set_tooltip_text (gtk_tree_view_column_get_button (col), tooltip);
-    g_free (tooltip);
-}
-
-static gboolean
-follow_select_tree_path (GtkTreeView *view)
-{
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (view);
-    GtkTreeModel *sort_model;
-    GtkTreeIter iter;
-
-    if (gtk_tree_selection_get_selected (selection, &sort_model, &iter))
-    {
-        GtkTreePath *view_path = gtk_tree_model_get_path (sort_model, &iter);
-
-        gtk_tree_view_scroll_to_cell (view, view_path, NULL, TRUE, 0.5, 0.0);
-
-        gtk_tree_path_free (view_path);
-    }
-    return FALSE;
-}
-
-static void
-sort_column_changed (GtkTreeSortable* self, gpointer user_data)
-{
-    // this is triggered before a sort change
-    GncSxSinceLastRunDialog *dialog = user_data;
-    GtkTreeIter iter;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (dialog->instance_view);
-    GtkTreeModel *sort_model;
-
-    if (gtk_tree_selection_get_selected (selection, &sort_model, &iter))
-    {
-        GtkTreePath *view_path = gtk_tree_model_get_path (sort_model, &iter);
-
-        dialog->sort_selection_depth = gtk_tree_path_get_depth (view_path);
-
-        gtk_tree_path_free (view_path);
-    }
-    else
-        dialog->sort_selection_depth = 1;
-
-    set_transaction_sort_column_tooltip (dialog);
-
-    g_idle_add ((GSourceFunc)follow_select_tree_path, dialog->instance_view);
-}
-
-static void
-since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
-{
-    GncSxSinceLastRunDialog *dialog;
-    GtkBuilder *builder;
-    GtkWidget *ok_button;
-
-    dialog = g_new0 (GncSxSinceLastRunDialog, 1);
-
-    builder = gtk_builder_new ();
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "since_last_run_dialog");
-
-    dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
-    gtk_window_set_transient_for (GTK_WINDOW(dialog->dialog), parent);
-
-    // Set the name of this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog->dialog), "gnc-id-sx-since-last-run");
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog->dialog), "gnc-class-sx");
-
-    dialog->editing_model = gnc_sx_slr_tree_model_adapter_new (sx_instances);
-    dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));
-
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dialog->review_created_txns_toggle),
-                                  gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SET_REVIEW));
-
-    dialog->created_txns = auto_created_txn_guids;
-
-    ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton2"));
-
-    g_signal_connect (G_OBJECT(ok_button), "button-press-event",
-                      G_CALLBACK(finish_editing_before_ok_cb), dialog);
-
-    {
-        GtkCellRenderer *renderer;
-        GtkTreeViewColumn *col;
-        GtkTreeModel *sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL(dialog->editing_model));
-
-        dialog->instance_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "instance_view"));
-        gtk_tree_view_set_model (dialog->instance_view, GTK_TREE_MODEL(sort_model));
-        g_object_unref (sort_model);
-
-        /* default sort order */
-        dialog->sort_selection_depth = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_DEPTH);
-        gboolean sort_ascending = gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC);
-        gint sort_column = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL);
-        GtkSortType sort_type = sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
-
-        if (sort_column != 0)
-            sort_column = 0;
-
-        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
-                                              sort_column, sort_type);
-
-        g_signal_connect (G_OBJECT(dialog->instance_view), "scroll-event",
-                          G_CALLBACK(scroll_event), dialog);
-
-        renderer = gtk_cell_renderer_text_new ();
-        col = gtk_tree_view_column_new_with_attributes (_("Transaction"), renderer,
-                "text", SLR_MODEL_COL_NAME,
-                NULL);
-        gtk_tree_view_append_column (dialog->instance_view, col);
-
-        gtk_tree_view_column_set_sort_column_id (col, SLR_MODEL_COL_NAME);
-
-        gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sort_model), SLR_MODEL_COL_NAME,
-                                         _transaction_sort_func, dialog, NULL);
-
-        set_transaction_sort_column_tooltip (dialog);
-
-        renderer = gtk_cell_renderer_combo_new ();
-        g_object_set (G_OBJECT(renderer),
-                      "model", gnc_sx_get_slr_state_model (),
-                      "text-column", 0,
-                      "has-entry", FALSE,
-                      "editable", TRUE,
-                      NULL);
-        g_signal_connect (G_OBJECT(renderer),
-                          "edited",
-                          G_CALLBACK(instance_state_changed_cb),
-                          dialog);
-        col = gtk_tree_view_column_new_with_attributes (_("Status"), renderer,
-                "text", SLR_MODEL_COL_INSTANCE_STATE,
-                "visible", SLR_MODEL_COL_INSTANCE_VISIBILITY,
-                // you might think only "sensitive" is required to
-                // control the ability of the combo box to select
-                // a new state, but you'd be wrong.
-                "editable", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
-                "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
-                NULL);
-
-        g_signal_connect (G_OBJECT(sort_model), "sort-column-changed",
-                          G_CALLBACK(sort_column_changed), dialog);
-
-        renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (G_OBJECT(renderer),
-                      "icon-name", "pan-down-symbolic",
-                      NULL);
-        gtk_tree_view_column_pack_end (col, renderer, FALSE);
-        gtk_tree_view_column_set_attributes (col, renderer,
-                "visible", SLR_MODEL_COL_INSTANCE_VISIBILITY,
-                "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
-                NULL);
-        gtk_tree_view_append_column (dialog->instance_view, col);
-        gtk_tree_view_column_set_resizable (col, FALSE);
-
-        renderer = gtk_cell_renderer_text_new ();
-        g_object_set (G_OBJECT(renderer),
-                      "editable", TRUE,
-                      NULL);
-        g_signal_connect (G_OBJECT(renderer),
-                          "edited",
-                          G_CALLBACK(variable_value_changed_cb),
-                          dialog);
-
-        g_signal_connect (G_OBJECT(renderer),
-                          "editing-started",
-                          G_CALLBACK(variable_value_start_changed_cb),
-                          dialog);
-
-        g_signal_connect (G_OBJECT(renderer),
-                          "editing-canceled",
-                          (GCallback)variable_value_cancel_changed_cb,
-                          dialog);
-
-        col = gtk_tree_view_column_new_with_attributes (_("Value"), renderer,
-                "text", SLR_MODEL_COL_VARAIBLE_VALUE,
-                "visible", SLR_MODEL_COL_VARIABLE_VISIBILITY,
-                NULL);
-        gtk_tree_view_append_column (dialog->instance_view, col);
-
-        gtk_tree_view_expand_all (dialog->instance_view);
-    }
-
-    // Set grid lines option to preference
-    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(dialog->instance_view), gnc_tree_view_get_grid_lines_pref ());
-
-    g_signal_connect (G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
-    g_signal_connect (G_OBJECT(dialog->dialog), "destroy", G_CALLBACK(dialog_destroy_cb), dialog);
-
-    gnc_restore_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(dialog->dialog), parent);
-
-    dialog->component_id = gnc_register_gui_component (DIALOG_SX_SINCE_LAST_RUN_CM_CLASS,
-                                                       NULL, close_handler, dialog);
-    gnc_gui_component_set_session (dialog->component_id,
-                                   gnc_get_current_session ());
-
-    gtk_widget_show_all (dialog->dialog);
-
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
-
-    g_object_unref (G_OBJECT(builder));
-}
-
-static void
-sx_since_last_run_dialog (GncSxInstanceModel *sx_instances, int book_opened)
-{
-    if (qof_book_is_readonly (gnc_get_current_book ()))
-        return;
-
     GncSxSummary summary;
+    GList *auto_created = NULL;
+    GList *errors = NULL;
 
-    gnc_sx_instance_model_summarize (sx_instances, &summary);
-
+    if (qof_book_is_readonly (gnc_get_current_book ()))
+    {
+        g_object_unref (instances);
+        return;
+    }
+    gnc_sx_instance_model_summarize (instances, &summary);
     if (book_opened)
         gnc_sx_summary_print (&summary);
-
-    GList *auto_created_txns = NULL;
-    GList *creation_errors = NULL;
-
-    gnc_sx_instance_model_effect_change (sx_instances, TRUE, &auto_created_txns, &creation_errors);
-
-    if (auto_created_txns)
+    gnc_sx_instance_model_effect_change (instances, TRUE, &auto_created, &errors);
+    if (auto_created)
         gnc_gui_refresh_all ();
-
     if (summary.need_dialog)
-        since_last_run_dialog (gnc_ui_get_main_window (NULL), sx_instances, auto_created_txns);
+        since_last_run_dialog (gnc_ui_get_main_window (NULL), instances, auto_created);
     else
     {
         if (summary.num_auto_create_no_notify_instances == 0)
         {
             if (!book_opened)
-            {
-                const char *nothing_to_do_msg = _( "There are no Scheduled Transactions to be entered at this time." );
-
-                gnc_info_dialog (gnc_ui_get_main_window (NULL), "%s", nothing_to_do_msg);
-            }
+                gnc_info_dialog (gnc_ui_get_main_window (NULL), "%s",
+                                 _("There are no Scheduled Transactions to be entered at this time."));
         }
         else if (!book_opened || gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SHOW_AT_FOPEN))
         {
             gnc_info_dialog (gnc_ui_get_main_window (NULL), ngettext
-                    /* Translators: %d is the number of transactions. This is a ngettext(3) message. */
-                    ("There are no Scheduled Transactions to be entered at this time. "
-                     "(%d transaction automatically created)",
-                     "There are no Scheduled Transactions to be entered at this time. "
-                     "(%d transactions automatically created)",
-                     summary.num_auto_create_no_notify_instances),
-                    summary.num_auto_create_no_notify_instances);
+                ("There are no Scheduled Transactions to be entered at this time. "
+                 "(%d transaction automatically created)",
+                 "There are no Scheduled Transactions to be entered at this time. "
+                 "(%d transactions automatically created)", summary.num_auto_create_no_notify_instances),
+                 summary.num_auto_create_no_notify_instances);
         }
-        g_list_free (auto_created_txns);
+        g_list_free (auto_created);
     }
-
-    g_object_unref (G_OBJECT(sx_instances));
-
-    if (creation_errors)
-        gnc_ui_sx_creation_error_dialog (&creation_errors);
+    g_object_unref (instances);
+    if (errors)
+        gnc_ui_sx_creation_error_dialog (&errors);
 }
 
 void
-gnc_ui_sx_since_last_run_dialog (GncSxInstanceModel *sx_instances)
+gnc_ui_sx_since_last_run_dialog (GncSxInstanceModel *instances)
 {
-    sx_since_last_run_dialog (sx_instances, FALSE);
+    sx_since_last_run_dialog (instances, FALSE);
 }
 
 void
 gnc_sx_sxsincelast_book_opened (void)
 {
-    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_RUN_AT_FOPEN))
-        return;
-
-    sx_since_last_run_dialog (gnc_sx_get_current_instances (), TRUE);
-
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_RUN_AT_FOPEN))
+        sx_since_last_run_dialog (gnc_sx_get_current_instances (), TRUE);
 }
 
 static void
-_show_created_transactions (GncSxSinceLastRunDialog *app_dialog, GList *created_txn_guids)
+show_created_transactions (GncSxSinceLastRunDialog *dialog, GList *guids)
 {
+    Query *book_query = qof_query_create_for (GNC_ID_SPLIT);
+    Query *guid_query = qof_query_create_for (GNC_ID_SPLIT);
+    Query *query;
     GNCLedgerDisplay *ledger;
     GncPluginPage *page;
-    Query *book_query, *guid_query, *query;
-    GList *guid_iter;
 
-    book_query = qof_query_create_for (GNC_ID_SPLIT);
-    guid_query = qof_query_create_for (GNC_ID_SPLIT);
     qof_query_set_book (book_query, gnc_get_current_book ());
-    for (guid_iter = created_txn_guids; guid_iter != NULL; guid_iter = guid_iter->next)
-    {
-        xaccQueryAddGUIDMatch (guid_query, (GncGUID*)guid_iter->data, GNC_ID_TRANS, QOF_QUERY_OR);
-    }
+    for (GList *node = guids; node; node = node->next)
+        xaccQueryAddGUIDMatch (guid_query, node->data, GNC_ID_TRANS, QOF_QUERY_OR);
     query = qof_query_merge (book_query, guid_query, QOF_QUERY_AND);
-    // inspired by dialog-find-transactions:do_find_cb:
     ledger = gnc_ledger_display_query (query, SEARCH_LEDGER, REG_STYLE_JOURNAL);
     gnc_ledger_display_refresh (ledger);
     page = gnc_plugin_page_register_new_ledger (ledger);
-    g_object_set (G_OBJECT(page), "page-name", _("Created Transactions"), NULL);
+    g_object_set (page, "page-name", _("Created Transactions"), NULL);
     gnc_main_window_open_page (NULL, page);
-
     qof_query_destroy (query);
     qof_query_destroy (book_query);
     qof_query_destroy (guid_query);
 }
 
 static void
-close_handler (gpointer user_data)
+slr_quiesce_view (GncSxSinceLastRunDialog *dialog)
 {
-    GncSxSinceLastRunDialog *app_dialog = user_data;
-    GtkSortType order;
-    gint column;
-
-    if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE(
-                                              gtk_tree_view_get_model (app_dialog->instance_view)),
-                                              &column, &order))
-    {
-        gboolean sort_ascending = TRUE;
-        if (order == GTK_SORT_DESCENDING)
-            sort_ascending = FALSE;
-
-        gnc_prefs_set_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC, sort_ascending);
-        gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL, column);
-        gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_DEPTH,
-                           app_dialog->sort_selection_depth);
-    }
-
-    gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
-    gtk_widget_destroy (app_dialog->dialog);
-    g_free (app_dialog);
+    /* The bound factories carry the adapter as callback data. Detach the
+     * model while it is still alive so GTK unbinds the real list items first. */
+    if (dialog->instance_view)
+        gtk_column_view_set_model (dialog->instance_view, NULL);
 }
 
 static void
-dialog_destroy_cb (GtkWidget *object, GncSxSinceLastRunDialog *app_dialog)
+slr_disconnect_widget_callbacks (GtkWidget *widget, gpointer data)
 {
-    gnc_unregister_gui_component (app_dialog->component_id);
-
-    g_object_unref (G_OBJECT(app_dialog->editing_model));
-    app_dialog->editing_model = NULL;
+    g_signal_handlers_disconnect_by_data (widget, data);
+    for (GtkWidget *child = gtk_widget_get_first_child (widget); child;
+         child = gtk_widget_get_next_sibling (child))
+        slr_disconnect_widget_callbacks (child, data);
 }
 
 static void
-dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
+slr_shutdown (GncSxSinceLastRunDialog *dialog)
 {
-    GList* creation_errors = NULL;
-    switch (response_id)
-    {
-    case GTK_RESPONSE_HELP:
-        gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_SX_SLR);
-        break;
-
-    case GTK_RESPONSE_OK:
-        // @@fixme validate current state(GError *errs);
-        // - [ ] instance state constraints
-        // - [x] required variable binding
-        // - [?] ability to create transactions
-        {
-            GList *unbound_variables;
-            gint unbound_len;
-            unbound_variables = gnc_sx_instance_model_check_variables (app_dialog->editing_model->instances);
-            unbound_len = g_list_length (unbound_variables);
-            PINFO("%d variables unbound", unbound_len);
-            if (unbound_len > 0)
-            {
-                // focus first variable
-                GncSxVariableNeeded *first_unbound;
-                GtkTreePath *variable_path;
-                GtkTreeViewColumn *variable_col;
-                gint variable_view_column = 2;
-                gboolean start_editing = TRUE;
-
-                first_unbound = (GncSxVariableNeeded*)unbound_variables->data;
-
-                variable_path = _get_path_for_variable (app_dialog, first_unbound->instance, first_unbound->variable);
-                variable_col = gtk_tree_view_get_column (app_dialog->instance_view, variable_view_column);
-
-                gtk_tree_view_set_cursor (app_dialog->instance_view, variable_path, variable_col, start_editing);
-
-                gtk_tree_view_scroll_to_cell (app_dialog->instance_view, variable_path, variable_col,
-                                              TRUE, 0.5, 0.5);
-
-                gtk_tree_path_free (variable_path);
-                g_list_foreach (unbound_variables, (GFunc)g_free, NULL);
-                g_list_free (unbound_variables);
-                return;
-            }
-        }
-        gnc_suspend_gui_refresh ();
-        gnc_sx_slr_model_effect_change (app_dialog->editing_model, FALSE, &app_dialog->created_txns, &creation_errors);
-        gnc_resume_gui_refresh ();
-        gnc_gui_refresh_all (); // force a refresh of all registers
-        if (creation_errors)
-            gnc_ui_sx_creation_error_dialog (&creation_errors);
-
-        if (gtk_toggle_button_get_active (app_dialog->review_created_txns_toggle)
-                && g_list_length (app_dialog->created_txns) > 0)
-        {
-            _show_created_transactions (app_dialog, app_dialog->created_txns);
-        }
-
-    /* FALL THROUGH */
-    case GTK_RESPONSE_CANCEL:
-    case GTK_RESPONSE_DELETE_EVENT:
-        g_list_free (app_dialog->created_txns);
-        app_dialog->created_txns = NULL;
-        gnc_close_gui_component (app_dialog->component_id);
-        break;
-    default:
-        PWARN("unknown response id [%d]", response_id);
-        break;
-    }
-}
-
-/**
- * @param auto_create_only Will only affect auto-create transactions; the
- * rest of the state will be left alone.
- **/
-void
-gnc_sx_slr_model_effect_change (GncSxSlrTreeModelAdapter *model,
-                                gboolean auto_create_only,
-                                GList **created_transaction_guids,
-                                GList **creation_errors)
-{
-    if (qof_book_is_readonly (gnc_get_current_book ()))
-    {
-        /* Is the book read-only? Then don't change anything here. */
+    if (dialog->shutting_down)
         return;
+    dialog->shutting_down = TRUE;
+    dialog->editing_model->closing = TRUE;
+    slr_disconnect_widget_callbacks (dialog->dialog, dialog);
+    slr_quiesce_view (dialog);
+    dialog->instance_view = NULL;
+    if (dialog->component_id)
+    {
+        gnc_unregister_gui_component (dialog->component_id);
+        dialog->component_id = 0;
     }
+    slr_adapter_cancel_refresh (dialog->editing_model);
+    g_clear_object (&dialog->selection);
+    g_clear_object (&dialog->tree_model);
+    g_clear_object (&dialog->editing_model);
+    g_list_free (dialog->created_txns);
+    dialog->created_txns = NULL;
+}
 
-    g_signal_handler_block (model->instances, model->updated_cb_id);
-    gnc_sx_instance_model_effect_change (model->instances, auto_create_only, created_transaction_guids, creation_errors);
-    g_signal_handler_unblock (model->instances, model->updated_cb_id);
+static void
+slr_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+
+    slr_shutdown (dialog);
+    g_free (dialog);
+}
+
+static void
+slr_close_handler (gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+
+    if (dialog->shutting_down)
+        return;
+    gnc_prefs_set_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC,
+                        dialog->editing_model->sort_ascending);
+    gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL, 0);
+    gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_DEPTH,
+                       dialog->editing_model->sort_by_date ? 2 : 1);
+    gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW (dialog->dialog));
+    slr_shutdown (dialog);
+    gtk_window_destroy (GTK_WINDOW (dialog->dialog));
+    g_free (dialog);
 }

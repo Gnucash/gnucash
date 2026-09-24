@@ -32,6 +32,8 @@
 
 #include "gnc-string-utils.h"
 #include "gnc-ui-util.h"
+#include "dialog-utils.h"
+#include "gnc-ui.h"
 #include <regex.h>
 #include "Account.h"
 #include "gnc-component-manager.h"
@@ -40,12 +42,47 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
-/* This helper function takes a regexp match and fills the model */
+#define CSV_IMPORT_ROW_VALUES "csv-import-row-values"
+
+GObject *
+csv_import_row_new (void)
+{
+    GObject *row = g_object_new (G_TYPE_OBJECT, NULL);
+    gchar **values = g_new0 (gchar *, N_COLUMNS + 1);
+
+    g_object_set_data_full (row, CSV_IMPORT_ROW_VALUES, values,
+                            (GDestroyNotify)g_strfreev);
+    return row;
+}
+
+const gchar *
+csv_import_row_get (GObject *row, guint column)
+{
+    gchar **values;
+
+    g_return_val_if_fail (G_IS_OBJECT (row), "");
+    g_return_val_if_fail (column < N_COLUMNS, "");
+    values = g_object_get_data (row, CSV_IMPORT_ROW_VALUES);
+    return values[column] ? values[column] : "";
+}
+
+void
+csv_import_row_set (GObject *row, guint column, const gchar *value)
+{
+    gchar **values;
+
+    g_return_if_fail (G_IS_OBJECT (row));
+    g_return_if_fail (column < N_COLUMNS);
+    values = g_object_get_data (row, CSV_IMPORT_ROW_VALUES);
+    g_free (values[column]);
+    values[column] = g_strdup (value ? value : "");
+}
+
+/* This helper function takes a regexp match and fills an import row. */
 static void
 fill_model_with_match(GMatchInfo *match_info,
                const gchar *match_name,
-               GtkListStore *store,
-               GtkTreeIter *iterptr,
+               GObject *row,
                gint column)
 {
     gchar *temp;
@@ -68,7 +105,7 @@ fill_model_with_match(GMatchInfo *match_info,
                 g_free (toptail);
             }
         }
-        gtk_list_store_set (store, iterptr, column, temp, -1);
+        csv_import_row_set (row, column, temp);
         g_free (temp);
      }
 }
@@ -81,7 +118,7 @@ fill_model_with_match(GMatchInfo *match_info,
 csv_import_result
 csv_import_read_file (GtkWindow *window, const gchar *filename,
                       const gchar *parser_regexp,
-                      GtkListStore *store, guint max_rows)
+                      GListStore *store, guint max_rows)
 {
     gchar      *locale_cont, *contents;
     GMatchInfo *match_info = NULL;
@@ -89,9 +126,6 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
     GError     *err;
     gint       row = 0;
     gboolean   match_found = FALSE;
-
-    // model
-    GtkTreeIter iter;
 
     if (!g_file_get_contents (filename, &locale_cont, NULL, NULL))
     {
@@ -121,19 +155,13 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
         g_regex_new (parser_regexp, G_REGEX_OPTIMIZE, 0, &err);
     if (err != NULL)
     {
-        GtkWidget *dialog;
         gchar *errmsg;
 
         errmsg = g_strdup_printf (_("Error in regular expression '%s':\n%s"),
                                   parser_regexp, err->message);
         g_error_free (err);
 
-        dialog = gtk_message_dialog_new (window,
-                                         GTK_DIALOG_MODAL,
-                                         GTK_MESSAGE_ERROR,
-                                         GTK_BUTTONS_OK, "%s", errmsg);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+        gnc_error_dialog (window, "%s", errmsg);
         g_free (errmsg);
         g_free (contents);
 
@@ -145,30 +173,31 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
     {
         // fill in the values, pattern match names must match those defined in
         // regular expression
-        gtk_list_store_append (store, &iter);
-        fill_model_with_match (match_info, "type", store, &iter, TYPE);
-        fill_model_with_match (match_info, "full_name", store, &iter, FULL_NAME);
-        fill_model_with_match (match_info, "name", store, &iter, NAME);
-        fill_model_with_match (match_info, "code", store, &iter, CODE);
-        fill_model_with_match (match_info, "description", store, &iter, DESCRIPTION);
-        fill_model_with_match (match_info, "color", store, &iter, COLOR);
-        fill_model_with_match (match_info, "notes", store, &iter, NOTES);
-        fill_model_with_match (match_info, "symbol", store, &iter, SYMBOL);
-        fill_model_with_match (match_info, "namespace", store, &iter, NAMESPACE);
-        fill_model_with_match (match_info, "hidden", store, &iter, HIDDEN);
-        fill_model_with_match (match_info, "tax", store, &iter, TAX);
-        fill_model_with_match (match_info, "placeholder", store, &iter, PLACE_HOLDER);
-        gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
+        GObject *row_object = csv_import_row_new ();
+        fill_model_with_match (match_info, "type", row_object, TYPE);
+        fill_model_with_match (match_info, "full_name", row_object, FULL_NAME);
+        fill_model_with_match (match_info, "name", row_object, NAME);
+        fill_model_with_match (match_info, "code", row_object, CODE);
+        fill_model_with_match (match_info, "description", row_object, DESCRIPTION);
+        fill_model_with_match (match_info, "color", row_object, COLOR);
+        fill_model_with_match (match_info, "notes", row_object, NOTES);
+        fill_model_with_match (match_info, "symbol", row_object, SYMBOL);
+        fill_model_with_match (match_info, "namespace", row_object, NAMESPACE);
+        fill_model_with_match (match_info, "hidden", row_object, HIDDEN);
+        fill_model_with_match (match_info, "tax", row_object, TAX);
+        fill_model_with_match (match_info, "placeholder", row_object, PLACE_HOLDER);
+        csv_import_row_set (row_object, ROW_COLOR, "");
 
         if (row == 0)
         {
-            gchar *str_type;
-            gtk_tree_model_get (GTK_TREE_MODEL(store), &iter, TYPE, &str_type, -1);
+            const gchar *str_type = csv_import_row_get (row_object, TYPE);
 
             if (g_strcmp0 (_("Type"), str_type) == 0)
                 match_found = TRUE;
-            g_free (str_type);
         }
+
+        g_list_store_append (store, row_object);
+        g_object_unref (row_object);
 
         row++;
         if (row == max_rows)
@@ -203,9 +232,7 @@ csv_account_import (CsvImportInfo *info)
 {
     QofBook       *book;
     Account       *acc, *parent, *root;
-    gboolean       valid;
     GdkRGBA       testcolor;
-    GtkTreeIter    iter;
     gchar         *type, *full_name, *name, *code, *description, *color;
     gchar         *notes, *symbol, *namespace, *hidden, *tax, *place_holder;
     int            row;
@@ -219,23 +246,22 @@ csv_account_import (CsvImportInfo *info)
 
     /* Move to the first valid entry in store */
     row = info->header_rows;
-    valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(info->store), &iter, NULL, row );
-    while (valid)
+    while (row < g_list_model_get_n_items (G_LIST_MODEL (info->store)))
     {
         /* Walk through the list, reading each row */
-        gtk_tree_model_get (GTK_TREE_MODEL (info->store), &iter,
-                            TYPE, &type,
-                            FULL_NAME, &full_name,
-                            NAME, &name,
-                            CODE, &code,
-                            DESCRIPTION, &description,
-                            COLOR, &color,
-                            NOTES, &notes,
-                            SYMBOL, &symbol,
-                            NAMESPACE, &namespace,
-                            HIDDEN, &hidden,
-                            TAX, &tax,
-                            PLACE_HOLDER, &place_holder, -1);
+        GObject *row_object = g_list_model_get_item (G_LIST_MODEL (info->store), row);
+        type = g_strdup (csv_import_row_get (row_object, TYPE));
+        full_name = g_strdup (csv_import_row_get (row_object, FULL_NAME));
+        name = g_strdup (csv_import_row_get (row_object, NAME));
+        code = g_strdup (csv_import_row_get (row_object, CODE));
+        description = g_strdup (csv_import_row_get (row_object, DESCRIPTION));
+        color = g_strdup (csv_import_row_get (row_object, COLOR));
+        notes = g_strdup (csv_import_row_get (row_object, NOTES));
+        symbol = g_strdup (csv_import_row_get (row_object, SYMBOL));
+        namespace = g_strdup (csv_import_row_get (row_object, NAMESPACE));
+        hidden = g_strdup (csv_import_row_get (row_object, HIDDEN));
+        tax = g_strdup (csv_import_row_get (row_object, TAX));
+        place_holder = g_strdup (csv_import_row_get (row_object, PLACE_HOLDER));
 
         /* See if we can find the account by full name */
         acc = gnc_account_lookup_by_full_name (root, full_name);
@@ -353,7 +379,6 @@ csv_account_import (CsvImportInfo *info)
             if (g_strcmp0 (code, "") != 0)
                 xaccAccountSetCode (acc, code);
         }
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (info->store), &iter);
         row++;
 
         /* free resources */
@@ -369,6 +394,7 @@ csv_account_import (CsvImportInfo *info)
         g_free (hidden);
         g_free (tax);
         g_free (place_holder);
+        g_object_unref (row_object);
     }
     LEAVE("");
 }

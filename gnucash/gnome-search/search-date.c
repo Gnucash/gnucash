@@ -95,8 +95,7 @@ gnc_search_date_finalize (GObject *obj)
     g_assert (GNC_IS_SEARCH_DATE (obj));
 
     o = GNC_SEARCH_DATE(obj);
-    if (o->entry)
-        gtk_widget_destroy (o->entry);
+    g_clear_object (&o->entry);
 
     G_OBJECT_CLASS (gnc_search_date_parent_class)->finalize(obj);
 }
@@ -180,20 +179,20 @@ static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
     GNCSearchDate *fi = (GNCSearchDate *)fe;
-    GtkComboBox *combo;
+    GtkDropDown *drop_down;
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+    drop_down = GTK_DROP_DOWN(gnc_search_drop_down_new());
 
-    gnc_combo_box_search_add(combo, _("is before"), QOF_COMPARE_LT);
-    gnc_combo_box_search_add(combo, _("is before or on"), QOF_COMPARE_LTE);
-    gnc_combo_box_search_add(combo, _("is on"), QOF_COMPARE_EQUAL);
-    gnc_combo_box_search_add(combo, _("is not on"), QOF_COMPARE_NEQ);
-    gnc_combo_box_search_add(combo, _("is after"), QOF_COMPARE_GT);
-    gnc_combo_box_search_add(combo, _("is on or after"), QOF_COMPARE_GTE);
-    gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_COMPARE_LT);
+    gnc_search_drop_down_add(drop_down, _("is before"), QOF_COMPARE_LT);
+    gnc_search_drop_down_add(drop_down, _("is before or on"), QOF_COMPARE_LTE);
+    gnc_search_drop_down_add(drop_down, _("is on"), QOF_COMPARE_EQUAL);
+    gnc_search_drop_down_add(drop_down, _("is not on"), QOF_COMPARE_NEQ);
+    gnc_search_drop_down_add(drop_down, _("is after"), QOF_COMPARE_GT);
+    gnc_search_drop_down_add(drop_down, _("is on or after"), QOF_COMPARE_GTE);
+    gnc_search_drop_down_changed(drop_down, &fi->how);
+    gnc_search_drop_down_set_active(drop_down, fi->how ? fi->how : QOF_COMPARE_LT);
 
-    return GTK_WIDGET(combo);
+    return GTK_WIDGET(drop_down);
 }
 
 static void
@@ -234,12 +233,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the date entry window */
     entry = gnc_date_edit_new (fi->tt, FALSE, FALSE);
     g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     g_object_ref (entry);
     fi->entry = entry;
 

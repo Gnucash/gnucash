@@ -1,0 +1,255 @@
+/* This is an example GTK CSS file that can be used with Gnucash.
+   Simply copy this file to the location specified below according
+   to your platform and then restart gnucash.
+
+  - Windows: CSIDL_APPDATA/GnuCash
+    (or the default is users\%USERNAME%\AppData\Roaming\GnuCash)
+
+  - macOS: $HOME/Application Support/GnuCash
+
+  - Linux: $XDG_CONFIG_HOME/gnucash
+    (or the default is $HOME/.config/gnucash)
+
+  These settings are mainly to do with register colors and can be seen
+  when the preference setting 'Register\Use GnuCash built-in color theme'
+  is unset.
+
+  Note: Widgets obtained from GtkBuilder files will not be addressable
+  directly by name as these are not brought in when loaded, only the
+  widget type can be configured unless they are named in code.
+*/
+
+
+/* Application wide font setting */
+* {
+  font: 12px arial;
+}
+
+
+/* Scrollbar size */
+scrollbar slider {
+    /* Size of the slider */
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 22px;
+
+    /* Padding around the slider */
+    border: 5px solid transparent;
+}
+
+
+/* Register sheet font setting */
+gnc-id-sheet {
+  font: 10px arial;
+}
+
+
+/* Register header font setting */
+gnc-id-header {
+  background-color: pink;
+  color:blue;
+}
+
+
+/* Register cursor font setting */
+gnc-id-cursor {
+  background-color: #BDB76B;
+  color: white;
+}
+
+gnc-id-cursor button {
+  border-width: 1px;
+  border-color: green;
+}
+
+
+/* Register sheet calendar */
+gnc-id-sheet calendar {
+  font: 13px arial;
+  background-color:lightgreen;
+  border-color: green;
+  border-width: 1px;
+}
+
+
+/* Register User Colors, remove 'user' for builtin register values */
+.gnc-class-user-register-header {
+  background-color: seagreen;
+  color: white;
+}
+
+.gnc-class-user-register-primary {
+  background-color: pink;
+}
+
+.gnc-class-user-register-primary:disabled {
+  background-color: plum;
+}
+
+.gnc-class-user-register-secondary {
+  background-color: lightgreen;
+}
+
+.gnc-class-user-register-secondary:disabled {
+  background-color: plum;
+}
+
+.gnc-class-user-register-split {
+  background-color: lightblue;
+}
+
+.gnc-class-user-register-split:disabled {
+  background-color: plum;
+}
+
+.gnc-class-user-register-cursor {
+  background-color: #00BFFF;
+  color: white;
+  border-radius: 0px;
+}
+
+
+/* Toolbar buttons are regular GTK4 widgets. Apply these selectors to the
+ * toolbar container's application CSS class when customising it. */
+.gnc-class-toolbar button {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.gnc-class-toolbar button label {
+  font-size: 0px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+
+/* Negative number color */
+.gnc-class-negative-numbers {
+  color: orange;
+}
+
+
+/* Gnucash Main Window, reduce size */
+#gnc-id-main-window notebook tab {
+  min-height: 0px;
+  min-width: 0px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+}
+
+#gnc-id-main-window notebook label {
+  font: 14px arial, sans-serif;
+}
+
+#gnc-id-main-window notebook tab button {
+  min-height: 0;
+  min-width: 0;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+
+/* Dense Calendar Settings, use widget name gnc-id-dense-calendar
+ * or gtk css name calendar which would also apply to other calendar
+ * widgets */
+#gnc-id-dense-calendar .frame {
+  border-color: blue;
+  border-width: 1px;
+}
+
+calendar .frame {
+  border-color: blue;
+  border-width: 1px;
+}
+
+#gnc-id-dense-calendar .header {
+ background-color: lightgreen;
+}
+
+calendar .header {
+ background-color: lightgreen;
+}
+
+#gnc-id-dense-calendar .primary {
+  background-color: darksalmon;
+}
+
+#gnc-id-dense-calendar .secondary {
+  background-color: darkseagreen;
+}
+
+#gnc-id-dense-calendar .markers {
+  background-color: indianred;
+}
+
+#gnc-id-dense-calendar-popup {
+  background-color: darksalmon;
+  color: black;
+}
+
+#gnc-id-dense-calendar-popup listbox {
+  background-color: lightcoral;
+}
+
+
+/* Progress bar */
+progressbar progress {
+  background-color: lime;
+}
+
+
+/* Status Bar */
+.statusbar {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.statusbar label {
+  font-size: 12px;
+  color: red;
+}
+
+
+/* Reconcile Window */
+#gnc-id-reconcile-totals * {
+  background-color: darkgrey;
+}
+
+.gnc-class-credits columnview row {
+  background-color: pink;
+}
+
+.gnc-class-credits columnview row:selected {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.gnc-class-debits columnview row {
+  background-color: lightblue;
+}
+
+.gnc-class-debits columnview row:selected {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+
+/* Highlight Text */
+.gnc-class-highlight {
+  color: blue;
+}
+
+
+/* Summary bar */
+#gnc-id-summarybar {
+  background-color:lightblue;
+}
+
+#gnc-id-summarybar .gnc-class-highlight {
+  color: red;
+}

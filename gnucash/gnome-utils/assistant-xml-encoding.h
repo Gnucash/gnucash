@@ -24,8 +24,22 @@
 #ifndef ASSISTANT_XML_ENCODING_H
 #define ASSISTANT_XML_ENCODING_H
 
+#include <gio/gio.h>
+#include <gtk/gtk.h>
+
 #include "qof.h"
 
+void gnc_xml_convert_single_file_async (const gchar *filename,
+                                        GtkWindow *parent,
+                                        GCancellable *cancellable,
+                                        GAsyncReadyCallback callback,
+                                        gpointer user_data);
+
+gboolean gnc_xml_convert_single_file_finish (GAsyncResult *result,
+                                             GError **error);
+
+/* This compatibility function only supports files that need no user choice.
+ * Callers that can show the encoding chooser must use the asynchronous API. */
 gboolean gnc_xml_convert_single_file (const gchar *filename);
 
 #endif /* ASSISTANT_XML_ENCODING_H */

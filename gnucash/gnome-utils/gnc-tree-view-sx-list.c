@@ -1,8 +1,9 @@
 /**
- * @brief GncTreeView implementation for Scheduled Transaction List.
- * @author Copyright (C) 2007 Joshua Sled <jsled@asynchronous.org>
- **/
+ * @brief GTK4 ColumnView implementation for Scheduled Transaction List.
+ */
 /********************************************************************
+ * Copyright (C) 2007 Joshua Sled <jsled@asynchronous.org>
+ * Author: Joshua Sled <jsled@asynchronous.org>
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of version 2 and/or version 3 of the   *
  * GNU General Public                                               *
@@ -32,217 +33,345 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
-
 #include <config.h>
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <string.h>
+#include <gtk/gtk.h>
 
-#include "gnc-tree-view.h"
 #include "gnc-tree-view-sx-list.h"
+#include "gnc-tree-view.h"
 #include "gnc-sx-list-tree-model-adapter.h"
 
-#define LOG_MOD "gnc.ui.tree-view.sx-list"
-static QofLogModule log_module = LOG_MOD;
-#undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
-
-static void gnc_tree_view_sx_list_dispose (GObject *object);
-static void gnc_tree_view_sx_list_finalize (GObject *object);
-
-struct _GncTreeViewSxList
+typedef enum
 {
-    GncTreeView gnc_tree_view;
+    SX_LIST_COLUMN_NAME,
+    SX_LIST_COLUMN_ENABLED,
+    SX_LIST_COLUMN_FREQUENCY,
+    SX_LIST_COLUMN_POSTPONED,
+    SX_LIST_COLUMN_LAST_OCCUR,
+    SX_LIST_COLUMN_NEXT_OCCUR
+} SxListColumn;
 
-    GtkTreeModel *tree_model;
-
-    SchedXaction *sx;
-    GtkAdjustment *adjustment;
-    gdouble position;
-
-    gboolean disposed;
-};
-
-G_DEFINE_TYPE(GncTreeViewSxList, gnc_tree_view_sx_list, GNC_TYPE_TREE_VIEW)
-
-static void
-gnc_tree_view_sx_list_class_init (GncTreeViewSxListClass *klass)
+typedef struct
 {
-    GObjectClass *o_class = G_OBJECT_CLASS(klass);
+    GncSxListTreeModelAdapter *adapter;
+    GtkSortListModel *sorted;
+    GtkMultiSelection *selection;
+    GtkColumnViewColumn *enabled_column;
+} GncSxListViewData;
 
-    o_class->dispose =  gnc_tree_view_sx_list_dispose;
-    o_class->finalize = gnc_tree_view_sx_list_finalize;
+static GQuark sx_list_view_data_quark (void)
+{
+    return g_quark_from_static_string ("gnc-sx-list-view-data");
+}
+
+static GncSxListViewData*
+sx_list_view_data (GtkColumnView *view)
+{
+    return g_object_get_qdata (G_OBJECT (view), sx_list_view_data_quark ());
 }
 
 static void
-gnc_tree_view_sx_list_init (GncTreeViewSxList *view)
+sx_list_view_data_free (GncSxListViewData *data)
 {
-    ; /* nop */
-}
-
-static void
-gnc_tree_view_sx_list_dispose (GObject *object)
-{
-    GncTreeViewSxList *view;
-
-    gnc_leave_return_if_fail (object != NULL);
-    gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_SX_LIST(object));
-
-    view = GNC_TREE_VIEW_SX_LIST(object);
-
-    if (view->disposed)
+    if (!data)
         return;
-    view->disposed = TRUE;
+    g_clear_object (&data->enabled_column);
+    g_clear_object (&data->selection);
+    g_clear_object (&data->sorted);
+    g_clear_object (&data->adapter);
+    g_free (data);
+}
 
-    g_object_unref (G_OBJECT(view->tree_model));
-    view->tree_model = NULL;
+static gint
+safe_invalidable_date_compare (const GDate *a, const GDate *b)
+{
+    if (!g_date_valid (a) && !g_date_valid (b))
+        return 0;
+    if (!g_date_valid (a))
+        return 1;
+    if (!g_date_valid (b))
+        return -1;
+    return g_date_compare (a, b);
+}
 
-    G_OBJECT_CLASS(gnc_tree_view_sx_list_parent_class)->dispose (object);
+static gint
+sx_list_row_compare (gconstpointer a, gconstpointer b, gpointer user_data)
+{
+    GncSxListRow *left = GNC_SX_LIST_ROW ((gpointer)a);
+    GncSxListRow *right = GNC_SX_LIST_ROW ((gpointer)b);
+    SxListColumn column = GPOINTER_TO_INT (user_data);
+    SchedXaction *left_sx = gnc_sx_list_row_get_sx (left);
+    SchedXaction *right_sx = gnc_sx_list_row_get_sx (right);
+    gint result = 0;
+
+    switch (column)
+    {
+        case SX_LIST_COLUMN_NAME:
+            result = g_utf8_collate (gnc_sx_list_row_get_name (left),
+                                     gnc_sx_list_row_get_name (right));
+            break;
+        case SX_LIST_COLUMN_ENABLED:
+            result = (gint)gnc_sx_list_row_get_enabled (left) -
+                     (gint)gnc_sx_list_row_get_enabled (right);
+            break;
+        case SX_LIST_COLUMN_FREQUENCY:
+            result = recurrenceListCmp (gnc_sx_get_schedule (left_sx),
+                                        gnc_sx_get_schedule (right_sx));
+            break;
+        case SX_LIST_COLUMN_POSTPONED:
+            result = (gint)gnc_sx_list_row_get_num_postponed (left) -
+                     (gint)gnc_sx_list_row_get_num_postponed (right);
+            break;
+        case SX_LIST_COLUMN_LAST_OCCUR:
+            result = safe_invalidable_date_compare (xaccSchedXactionGetLastOccurDate (left_sx),
+                                                    xaccSchedXactionGetLastOccurDate (right_sx));
+            break;
+        case SX_LIST_COLUMN_NEXT_OCCUR:
+            result = g_utf8_collate (gnc_sx_list_row_get_next_occur (left),
+                                     gnc_sx_list_row_get_next_occur (right));
+            break;
+    }
+
+    if (result != 0 || column == SX_LIST_COLUMN_NAME)
+        return result;
+    return g_utf8_collate (gnc_sx_list_row_get_name (left),
+                           gnc_sx_list_row_get_name (right));
+}
+
+static const gchar*
+sx_list_row_text (GncSxListRow *row, SxListColumn column, gchar *number, gsize number_size)
+{
+    switch (column)
+    {
+        case SX_LIST_COLUMN_NAME: return gnc_sx_list_row_get_name (row);
+        case SX_LIST_COLUMN_FREQUENCY: return gnc_sx_list_row_get_frequency (row);
+        case SX_LIST_COLUMN_POSTPONED:
+            g_snprintf (number, number_size, "%u", gnc_sx_list_row_get_num_postponed (row));
+            return number;
+        case SX_LIST_COLUMN_LAST_OCCUR: return gnc_sx_list_row_get_last_occur (row);
+        case SX_LIST_COLUMN_NEXT_OCCUR: return gnc_sx_list_row_get_next_occur (row);
+        case SX_LIST_COLUMN_ENABLED: break;
+    }
+    return "";
 }
 
 static void
-gnc_tree_view_sx_list_finalize(GObject *object)
+sx_list_text_setup (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
 {
-    gnc_leave_return_if_fail (object != NULL);
-    gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_SX_LIST(object));
-
-    G_OBJECT_CLASS(gnc_tree_view_sx_list_parent_class)->finalize (object);
+    GtkWidget *label = gtk_label_new (NULL);
+    gtk_label_set_xalign (GTK_LABEL (label),
+                          GPOINTER_TO_INT (user_data) == SX_LIST_COLUMN_POSTPONED ? 1.0f : 0.0f);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child (item, label);
 }
 
-/************************************************************
- *                        Callbacks                         *
- ************************************************************/
+static void
+sx_list_text_bind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GncSxListRow *row = GNC_SX_LIST_ROW (gtk_list_item_get_item (item));
+    gchar number[32];
+    const gchar *text = sx_list_row_text (row, GPOINTER_TO_INT (user_data), number, sizeof number);
+    gtk_label_set_text (GTK_LABEL (gtk_list_item_get_child (item)), text ? text : "");
+}
 
 static gboolean
-gnc_tree_view_sx_list_restore (gpointer user_data)
+sx_list_refresh_idle (gpointer user_data)
 {
-    GncTreeViewSxList *view = user_data;
-
-    if (view->adjustment)
-    {
-        gtk_adjustment_set_value (view->adjustment, view->position);
-        view->adjustment = NULL;
-    }
-    if (view->sx)
-    {
-        SchedXaction *sx = view->sx;
-        GtkTreePath *path = gtk_tree_path_new_first ();
-
-        while (gnc_tree_view_path_is_valid (GNC_TREE_VIEW(view), path))
-        {
-            if (sx == gnc_tree_view_sx_list_get_sx_from_path (view, path))
-            {
-                GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
-
-                gtk_tree_selection_unselect_all (selection);
-                gtk_tree_selection_select_path (selection, path);
-                gtk_tree_view_set_cursor (GTK_TREE_VIEW(view), path, NULL, FALSE);
-                gtk_widget_grab_focus (GTK_WIDGET(view));
-                gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, FALSE, 0.0, 0.0);
-                break;
-            }
-            gtk_tree_path_next (path);
-        }
-        gtk_tree_path_free (path);
-
-        view->sx = NULL;
-    }
-
-    return FALSE;
+    GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER (user_data);
+    gnc_sx_list_tree_model_adapter_refresh (adapter);
+    return G_SOURCE_REMOVE;
 }
 
 static void
-gnc_tree_view_sx_list_enabled_toggled (GtkCellRendererToggle *cell,
-                                      const gchar *path_str,
-                                      gpointer user_data)
+sx_list_enabled_toggled (GtkCheckButton *button, GtkListItem *item)
 {
-    GncTreeViewSxList *view = user_data;
-    GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
-    SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path (view, path);
+    GncSxListRow *row = GNC_SX_LIST_ROW (gtk_list_item_get_item (item));
+    GncSxListTreeModelAdapter *adapter = g_object_get_data (G_OBJECT (item), "sx-list-adapter");
 
-    if (sx)
+    if (!row || !adapter)
+        return;
+    if (gtk_check_button_get_active (button) == gnc_sx_list_row_get_enabled (row))
+        return;
+
+    xaccSchedXactionSetEnabled (gnc_sx_list_row_get_sx (row),
+                                gtk_check_button_get_active (button));
+    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, sx_list_refresh_idle,
+                     g_object_ref (adapter), g_object_unref);
+}
+
+static void
+sx_list_enabled_setup (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GtkWidget *button = gtk_check_button_new ();
+    gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    g_signal_connect (button, "toggled", G_CALLBACK (sx_list_enabled_toggled), item);
+    gtk_list_item_set_child (item, button);
+}
+
+static void
+sx_list_enabled_bind (GtkSignalListItemFactory *factory, GtkListItem *item, gpointer user_data)
+{
+    GncSxListRow *row = GNC_SX_LIST_ROW (gtk_list_item_get_item (item));
+    GtkCheckButton *button = GTK_CHECK_BUTTON (gtk_list_item_get_child (item));
+
+    g_object_set_data (G_OBJECT (item), "sx-list-adapter", user_data);
+    g_signal_handlers_block_by_func (button, sx_list_enabled_toggled, item);
+    gtk_check_button_set_active (button, gnc_sx_list_row_get_enabled (row));
+    g_signal_handlers_unblock_by_func (button, sx_list_enabled_toggled, item);
+}
+
+static GtkColumnViewColumn*
+sx_list_append_text_column (GtkColumnView *view, const gchar *title, SxListColumn column,
+                            gboolean expand, gboolean visible)
+{
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+    GtkColumnViewColumn *view_column = gtk_column_view_column_new (title, factory);
+    GtkSorter *sorter = GTK_SORTER (gtk_custom_sorter_new (sx_list_row_compare,
+                                                           GINT_TO_POINTER (column), NULL));
+
+    g_signal_connect (factory, "setup", G_CALLBACK (sx_list_text_setup), GINT_TO_POINTER (column));
+    g_signal_connect (factory, "bind", G_CALLBACK (sx_list_text_bind), GINT_TO_POINTER (column));
+    gtk_column_view_column_set_sorter (view_column, sorter);
+    gtk_column_view_column_set_resizable (view_column, TRUE);
+    gtk_column_view_column_set_expand (view_column, expand);
+    gtk_column_view_column_set_visible (view_column, visible);
+    gtk_column_view_append_column (view, view_column);
+    g_object_unref (sorter);
+    return view_column;
+}
+
+GtkColumnView*
+gnc_sx_list_view_new (GncSxInstanceModel *sx_instances)
+{
+    GtkColumnView *view;
+    GncSxListViewData *data;
+    GtkSorter *sorter;
+    GtkColumnViewColumn *name_column;
+    GtkColumnViewColumn *column;
+    GtkListItemFactory *enabled_factory;
+
+    g_return_val_if_fail (GNC_IS_SX_INSTANCE_MODEL (sx_instances), NULL);
+    view = GTK_COLUMN_VIEW (gtk_column_view_new (NULL));
+    gtk_widget_set_name (GTK_WIDGET (view), "gnc-id-sx-list");
+    gtk_column_view_set_reorderable (view, TRUE);
+    gnc_column_view_bind_grid_line_preferences (view);
+
+    data = g_new0 (GncSxListViewData, 1);
+    data->adapter = gnc_sx_list_tree_model_adapter_new (sx_instances);
+    /* GtkSortListModel consumes both references; the view keeps its sorter. */
+    sorter = g_object_ref (gtk_column_view_get_sorter (view));
+    data->sorted = gtk_sort_list_model_new
+        (g_object_ref (gnc_sx_list_tree_model_adapter_get_model (data->adapter)), sorter);
+    data->selection = gtk_multi_selection_new (G_LIST_MODEL (g_object_ref (data->sorted)));
+    gtk_column_view_set_model (view, GTK_SELECTION_MODEL (data->selection));
+
+    name_column = sx_list_append_text_column (view, _("Name"), SX_LIST_COLUMN_NAME, TRUE, TRUE);
+    enabled_factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (enabled_factory, "setup", G_CALLBACK (sx_list_enabled_setup), NULL);
+    g_signal_connect (enabled_factory, "bind", G_CALLBACK (sx_list_enabled_bind), data->adapter);
+    data->enabled_column = gtk_column_view_column_new
+        (C_("Single-character short column-title form of 'Enabled'", "E"), enabled_factory);
+    gtk_column_view_column_set_resizable (data->enabled_column, TRUE);
+    gtk_column_view_append_column (view, data->enabled_column);
+    column = sx_list_append_text_column (view, _("Frequency"), SX_LIST_COLUMN_FREQUENCY,
+                                         TRUE, TRUE);
+    g_object_unref (column);
+    column = sx_list_append_text_column (view, _("Postponed"), SX_LIST_COLUMN_POSTPONED,
+                                         FALSE, FALSE);
+    g_object_unref (column);
+    column = sx_list_append_text_column (view, _("Last Occur"), SX_LIST_COLUMN_LAST_OCCUR,
+                                         FALSE, TRUE);
+    g_object_unref (column);
+    column = sx_list_append_text_column (view, _("Next Occur"), SX_LIST_COLUMN_NEXT_OCCUR,
+                                         FALSE, TRUE);
+    g_object_unref (column);
+    gtk_column_view_sort_by_column (view, name_column, GTK_SORT_ASCENDING);
+    g_object_unref (name_column);
+
+    g_object_set_qdata_full (G_OBJECT (view), sx_list_view_data_quark (), data,
+                             (GDestroyNotify)sx_list_view_data_free);
+    return view;
+}
+
+GtkSelectionModel*
+gnc_sx_list_view_get_selection (GtkColumnView *view)
+{
+    GncSxListViewData *data = sx_list_view_data (view);
+    return data ? GTK_SELECTION_MODEL (data->selection) : NULL;
+}
+
+GList*
+gnc_sx_list_view_get_selected_sxes (GtkColumnView *view)
+{
+    GtkSelectionModel *selection = gnc_sx_list_view_get_selection (view);
+    GListModel *model;
+    GtkBitset *selected;
+    GtkBitsetIter iter;
+    guint position;
+    GList *sxs = NULL;
+
+    if (!selection)
+        return NULL;
+    model = G_LIST_MODEL (selection);
+    selected = gtk_selection_model_get_selection (selection);
+    if (gtk_bitset_iter_init_first (&iter, selected, &position))
     {
-        GtkTreeSortable *sortable = GTK_TREE_SORTABLE(view->tree_model);
-        gint sort_column_id;
-        GtkSortType sort_order;
-
-        if (gtk_tree_sortable_get_sort_column_id (sortable, &sort_column_id, &sort_order) &&
-            sort_column_id == SXLTMA_COL_ENABLED)
+        do
         {
-            view->sx = sx;
+            GncSxListRow *row = GNC_SX_LIST_ROW (g_list_model_get_item (model, position));
+            sxs = g_list_prepend (sxs, gnc_sx_list_row_get_sx (row));
+            g_object_unref (row);
         }
-        else
-        {
-            view->adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(view));
-            view->position = gtk_adjustment_get_value (view->adjustment);
-        }
-
-        gboolean enabled = !gtk_cell_renderer_toggle_get_active (cell);
-
-        xaccSchedXactionSetEnabled (sx, enabled);
-
-        g_idle_add((GSourceFunc)gnc_tree_view_sx_list_restore, user_data);
+        while (gtk_bitset_iter_next (&iter, &position));
     }
-
-    gtk_tree_path_free (path);
+    gtk_bitset_unref (selected);
+    return g_list_reverse (sxs);
 }
 
-
-GtkTreeView*
-gnc_tree_view_sx_list_new (GncSxInstanceModel *sx_instances)
+void
+gnc_sx_list_view_select_sxes (GtkColumnView *view, GList *sxs)
 {
-    GncTreeViewSxList *view = (GncTreeViewSxList*)g_object_new (GNC_TYPE_TREE_VIEW_SX_LIST, NULL);
-    g_object_set (view, "name", "gnc-id-sx-list-tree", NULL);
+    GtkSelectionModel *selection = gnc_sx_list_view_get_selection (view);
+    GListModel *model;
+    guint position, n_items;
+    gboolean selected = FALSE;
 
-    view->tree_model = GTK_TREE_MODEL(gnc_sx_list_tree_model_adapter_new (sx_instances));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(view), GTK_TREE_MODEL(view->tree_model));
-
-    GtkTreeViewColumn *col = gnc_tree_view_add_text_column (GNC_TREE_VIEW(view), _("Name"), "name", NULL,
-                                                            "Semi-Monthly Paycheck",
-                                                             SXLTMA_COL_NAME, -1, NULL);
-    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
-    col = gnc_tree_view_add_toggle_column (GNC_TREE_VIEW(view), _("Enabled"),
-                                           C_("Single-character short column-title form of 'Enabled'", "E"),
-                                           "enabled", SXLTMA_COL_ENABLED,
-                                           GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                           NULL, gnc_tree_view_sx_list_enabled_toggled);
-    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
-    col = gnc_tree_view_add_text_column (GNC_TREE_VIEW(view), _("Frequency"), "frequency", NULL,
-                                         "Weekly (x3): -------",
-                                         SXLTMA_COL_FREQUENCY, -1, NULL);
-    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
-    col = gnc_tree_view_add_numeric_column (GNC_TREE_VIEW(view), _("Postponed"),
-                                           "postponed", "    Postponed",
-                                           SXLTMA_COL_NUM_POSTPONED,
-                                           GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-                                           GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS, NULL);
-    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(0));
-
-    col = gnc_tree_view_add_text_column (GNC_TREE_VIEW(view), _("Last Occur"), "last-occur", NULL,
-                                         "2007-01-02",
-                                         SXLTMA_COL_LAST_OCCUR, -1, NULL);
-    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
-    col = gnc_tree_view_add_text_column (GNC_TREE_VIEW(view), _("Next Occur"), "next-occur", NULL,
-                                         "2007-01-02",
-                                         SXLTMA_COL_NEXT_OCCUR, -1, NULL);
-    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
-    gnc_tree_view_configure_columns (GNC_TREE_VIEW(view));
-
-    gtk_widget_show (GTK_WIDGET(view));
-    return GTK_TREE_VIEW(view);
+    if (!selection)
+        return;
+    gtk_selection_model_unselect_all (selection);
+    model = G_LIST_MODEL (selection);
+    n_items = g_list_model_get_n_items (model);
+    for (position = 0; position < n_items; position++)
+    {
+        GncSxListRow *row = GNC_SX_LIST_ROW (g_list_model_get_item (model, position));
+        if (g_list_find (sxs, gnc_sx_list_row_get_sx (row)))
+        {
+            gtk_selection_model_select_item (selection, position, FALSE);
+            if (!selected)
+            {
+                gtk_column_view_scroll_to (view, position, NULL, GTK_LIST_SCROLL_FOCUS, NULL);
+                selected = TRUE;
+            }
+        }
+        g_object_unref (row);
+    }
+    if (!selected && n_items > 0)
+        gtk_selection_model_select_item (selection, 0, TRUE);
 }
 
-SchedXaction*
-gnc_tree_view_sx_list_get_sx_from_path (GncTreeViewSxList *view, GtkTreePath *path)
+void
+gnc_sx_list_view_refresh (GtkColumnView *view)
 {
-    GtkTreeIter iter;
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(view->tree_model), &iter, path);
-    return gnc_sx_list_tree_model_adapter_get_sx_instances(
-               GNC_SX_LIST_TREE_MODEL_ADAPTER(view->tree_model), &iter)->sx;
+    GncSxListViewData *data = sx_list_view_data (view);
+    if (data)
+        gnc_sx_list_tree_model_adapter_refresh (data->adapter);
+}
+
+gboolean
+gnc_sx_list_view_enabled_column_visible (GtkColumnView *view)
+{
+    GncSxListViewData *data = sx_list_view_data (view);
+    return data && gtk_column_view_column_get_visible (data->enabled_column);
 }

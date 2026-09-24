@@ -23,40 +23,36 @@
    @{ */
 
 /** @file gnc-tree-model-budget.h
- * @brief provides some utilities for working with the list of
- * budgets in a book.*/
-
-/** @todo This file is poorly named, since it
- * covers both model and view.*/
+ * @brief Provides GTK4 list-model utilities for budgets in a book. */
 
 #ifndef __GNC_TREE_MODEL_BUDGET_H__
 #define __GNC_TREE_MODEL_BUDGET_H__
 
+#include <gio/gio.h>
 #include "gnc-budget.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* The budget list columns. */
-enum
-{
-    BUDGET_GUID_COLUMN,
-    BUDGET_NAME_COLUMN,
-    BUDGET_DESCRIPTION_COLUMN,
-    BUDGET_LIST_NUM_COLS
-};
+#define GNC_TYPE_BUDGET_LIST_ITEM (gnc_budget_list_item_get_type ())
+G_DECLARE_FINAL_TYPE (GncBudgetListItem, gnc_budget_list_item, GNC,
+                      BUDGET_LIST_ITEM, GObject)
 
-GtkTreeModel * gnc_tree_model_budget_new(QofBook *book);
+/**
+ * Create a stable list model of the budgets in @a book. Each item retains the
+ * budget GUID and displayed text, so callers resolve the current engine object
+ * only when the user acts on a selection.
+ */
+GListModel *gnc_budget_list_model_new (QofBook *book);
 
-void gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm);
+GncBudget *gnc_budget_list_item_get_budget (GncBudgetListItem *item);
+const gchar *gnc_budget_list_item_get_name (GncBudgetListItem *item);
+const gchar *gnc_budget_list_item_get_description (GncBudgetListItem *item);
 
-GncBudget *gnc_tree_model_budget_get_budget(GtkTreeModel *tm,
-        GtkTreeIter *iter);
+/** Return the position of @a budget in @a model, or G_MAXUINT if absent. */
+guint gnc_budget_list_model_get_position (GListModel *model, GncBudget *budget);
 
-gboolean gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm,
-        GtkTreeIter *iter,
-        GncBudget *bgt);
 /** @} */
 #ifdef __cplusplus
 }

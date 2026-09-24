@@ -195,10 +195,6 @@ gchar * ultostr (gulong val, gint base);
  * whitespace. */
 gboolean gnc_strisnum(const gchar *s);
 
-#ifndef HAVE_STPCPY
-#define stpcpy g_stpcpy
-#endif
-
 /** begin_edit
  *
  * @param  inst: an instance of QofInstance

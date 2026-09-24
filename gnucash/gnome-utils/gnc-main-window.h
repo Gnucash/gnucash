@@ -87,6 +87,11 @@ typedef struct
 
 typedef void (*GncMainWindowFunc) (GncMainWindow *window, GncPluginPage *page);
 typedef void (*GncMainWindowPageFunc) (GncPluginPage *page, gpointer user_data);
+typedef void (*GncMainWindowPendingCallback) (GncMainWindow *window,
+                                               gboolean accepted,
+                                               gpointer user_data);
+typedef void (*GncMainWindowAllPendingCallback) (gboolean accepted,
+                                                  gpointer user_data);
 
 /* function prototypes */
 
@@ -283,19 +288,6 @@ void gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
                                                  const gchar **action_names,
                                                  gboolean vis);
 
-/** Find the menu item with the given action name for the window
- *  specified.
- *
- *  @param window A pointer to the window whose user interface should
- *  be updated.
- *
- *  @param action_name The action name of the tool item to find.
- *
- *  @return The found menu item widget or NULL.
- */
-GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
-                                                const gchar *action_name);
-
 /** Find the toolbar item with the given action name for the window
  *  specified.
  *
@@ -406,9 +398,11 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
  *  @return Returns TRUE if this was a right-click, meaning Gnucash
  *  handled the click.
  */
-gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
-        GdkEventButton *event,
-        GncPluginPage *page);
+gboolean gnc_main_window_button_press_cb (GtkGestureClick *gesture,
+                                          int n_press,
+                                          double x,
+                                          double y,
+                                          gpointer user_data);
 
 /** Callback function invoked when the user requests that Gnucash
  *  popup the contextual menu via the keyboard context-menu request
@@ -462,28 +456,18 @@ void gnc_main_window_save_all_windows(GKeyFile *keyfile);
 void gnc_main_window_restore_default_state(GncMainWindow *window);
 
 
-/** Tell a window to finish any outstanding activities.  This function
- *  will call gnc_plugin_page_finish_pending for each installed page.
- *  If any page returns a failure indication, then the function stops
- *  walking pages and immediately returns a failure.
- *
- *  @param window The window whose pages should be checked.
- *
- *  @return FALSE if any page could not or would not comply, which
- *  should cancel the pending operation.  TRUE otherwise */
-gboolean gnc_main_window_finish_pending (GncMainWindow *window);
+/** Finish the outstanding work of every page in @a window without entering a
+ * nested main loop. The callback is invoked exactly once. */
+void gnc_main_window_finish_pending_async (GncMainWindow *window,
+                                           GCancellable *cancellable,
+                                           GncMainWindowPendingCallback callback,
+                                           gpointer user_data);
 
-
-/** Tell all pages in all windows to finish any outstanding
- *  activities.  This function will call
- *  gnc_plugin_page_finish_pending for each installed page.  If any
- *  page returns a failure indication, then the function stops walking
- *  pages and immediately returns a failure.
- *
- *  @return FALSE if any page could not or would not comply, which
- *  should cancel the pending operation.  TRUE otherwise */
-gboolean gnc_main_window_all_finish_pending (void);
-
+/** Finish the outstanding work of every page in every main window without
+ * blocking. The callback is invoked exactly once. */
+void gnc_main_window_all_finish_pending_async (GCancellable *cancellable,
+                                               GncMainWindowAllPendingCallback callback,
+                                               gpointer user_data);
 /** Change the sensitivity of a command in all windows.  This can be
  *  used to serialize access to a command so that in cannot be
  *  reinvoked until the current invocation is finished.
@@ -556,7 +540,7 @@ gboolean gnc_main_window_just_plugin_prefs (GncMainWindow* window);
  *
  *  @param title Title of the dialog; "Book Options" if NULL.
  *
- *  @param parent The toplevel GdkWindow with which the dialog will
+ *  @param parent The toplevel GtkWindow with which the dialog will
  *  be transient for.
  *
  *  @return A pointer to the GtkWidget for the dialog that can be used

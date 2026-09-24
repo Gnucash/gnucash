@@ -60,10 +60,7 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN GNC_MOD_GUI_SX
 
-static QofLogModule log_module = GNC_MOD_GUI_SX;
-
-static void sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data );
-static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 static void sxftd_destroy( GtkWidget *w, gpointer user_data );
 
@@ -81,11 +78,11 @@ typedef struct
     GtkBuilder *builder;
     GtkWidget *dialog;
     GtkEntry *name;
-    GtkComboBox *freq_combo;
+    GtkDropDown *freq_combo;
 
-    GtkToggleButton *ne_but;
-    GtkToggleButton *ed_but;
-    GtkToggleButton *oc_but;
+    GtkCheckButton *ne_but;
+    GtkCheckButton *ed_but;
+    GtkCheckButton *oc_but;
     GtkEntry *n_occurences;
 
     Transaction *trans;
@@ -96,7 +93,18 @@ typedef struct
 
     GNCDateEdit *startDateGDE, *endDateGDE;
 
+    /* Keep the controller stable while a non-blocking decision is active. */
+    gboolean decision_pending;
 } SXFromTransInfo;
+
+static void sxftd_freq_combo_changed (GtkDropDown *drop_down, GParamSpec *pspec,
+                                      gpointer user_data);
+static void sxftd_ok_clicked (SXFromTransInfo *sxfti);
+static void sxftd_advanced_clicked (SXFromTransInfo *sxfti);
+static void sxftd_ok_button_clicked (GtkButton *button, gpointer user_data);
+static void sxftd_advanced_button_clicked (GtkButton *button, gpointer user_data);
+static void sxftd_cancel_clicked (GtkButton *button, gpointer user_data);
+static gboolean sxftd_close_request (GtkWindow *window, gpointer user_data);
 
 typedef struct
 {
@@ -115,8 +123,6 @@ struct widgetSignalHandlerTuple
     void (*handlerFn)(GObject*,gpointer);
 };
 
-static void sxftd_ok_clicked(SXFromTransInfo *sxfti);
-static void sxftd_advanced_clicked(SXFromTransInfo *sxfti);
 
 static void
 sxfti_attach_callbacks(SXFromTransInfo *sxfti)
@@ -145,9 +151,14 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
                           sxfti );
     }
 
-    g_signal_connect (G_OBJECT(sxfti->dialog), "response",
-                      G_CALLBACK (gnc_sx_trans_window_response_cb),
-                      sxfti);
+    g_signal_connect (gtk_builder_get_object (sxfti->builder, "ok_button1"),
+                      "clicked", G_CALLBACK (sxftd_ok_button_clicked), sxfti);
+    g_signal_connect (gtk_builder_get_object (sxfti->builder, "advanced_button"),
+                      "clicked", G_CALLBACK (sxftd_advanced_button_clicked), sxfti);
+    g_signal_connect (gtk_builder_get_object (sxfti->builder, "cancel_button1"),
+                      "clicked", G_CALLBACK (sxftd_cancel_clicked), sxfti);
+    g_signal_connect (sxfti->dialog, "close-request",
+                      G_CALLBACK (sxftd_close_request), sxfti);
 }
 
 
@@ -160,13 +171,13 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     g_date_clear( &(retval.end_date), 1 );
     retval.n_occurrences = 0;
 
-    if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxfti->ne_but)))
+    if (gtk_check_button_get_active( GTK_CHECK_BUTTON(sxfti->ne_but)))
     {
         retval.type = NEVER_END;
         return retval;
     }
 
-    if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxfti->ed_but)))
+    if (gtk_check_button_get_active( GTK_CHECK_BUTTON(sxfti->ed_but)))
     {
         time64 end_tt;
         retval.type = END_ON_DATE;
@@ -176,11 +187,11 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
         return retval;
     }
 
-    if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxfti->oc_but) ))
+    if (gtk_check_button_get_active( GTK_CHECK_BUTTON(sxfti->oc_but) ))
     {
         guint n_occs;
 
-        const gchar *text = gtk_entry_get_text (GTK_ENTRY(sxfti->n_occurences));
+        const gchar *text = gnc_entry_get_text (GTK_ENTRY(sxfti->n_occurences));
         if (!text || !text[0])
         {
             n_occs = 0;
@@ -204,7 +215,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
 
 
 static guint
-sxftd_add_template_trans(SXFromTransInfo *sxfti)
+sxftd_add_template_trans (SXFromTransInfo *sxfti, gboolean accept_unbalanced)
 {
 
     Transaction *tr = sxfti->trans;
@@ -255,17 +266,8 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
         tti->append_template_split (ttsi);
     }
 
-    if ( ! gnc_numeric_zero_p( runningBalance )
-            && !gnc_verify_dialog (GTK_WINDOW (sxfti->dialog),
-                                   FALSE, "%s",
-                                   _("The Scheduled Transaction Editor "
-                                     "cannot automatically balance "
-                                     "this transaction. "
-                                     "Should it still be "
-                                     "entered?") ) )
-    {
+    if (!gnc_numeric_zero_p (runningBalance) && !accept_unbalanced)
         return SXFTD_ERRNO_UNBALANCED_XACTION;
-    }
 
     gnc_suspend_gui_refresh ();
     xaccSchedXactionSetTemplateTrans (sxfti->sx, { tti }, gnc_get_current_book ());
@@ -283,7 +285,7 @@ sxftd_update_schedule( SXFromTransInfo *sxfti, GDate *date, GList **recurrences)
     /* Note that we make the start date the *NEXT* instance, not the
      * present one. */
 
-    index = gtk_combo_box_get_active(GTK_COMBO_BOX(sxfti->freq_combo));
+    index = gtk_drop_down_get_selected (sxfti->freq_combo);
 
     switch (index)
     {
@@ -352,9 +354,9 @@ sxftd_init( SXFromTransInfo *sxfti )
 
     /* Setup Widgets */
     {
-        sxfti->ne_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "never_end_button"));
-        sxfti->ed_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "end_on_date_button"));
-        sxfti->oc_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "n_occurrences_button"));
+        sxfti->ne_but = GTK_CHECK_BUTTON(gtk_builder_get_object(sxfti->builder, "never_end_button"));
+        sxfti->ed_but = GTK_CHECK_BUTTON(gtk_builder_get_object(sxfti->builder, "end_on_date_button"));
+        sxfti->oc_but = GTK_CHECK_BUTTON(gtk_builder_get_object(sxfti->builder, "n_occurrences_button"));
         sxfti->n_occurences = GTK_ENTRY(gtk_builder_get_object(sxfti->builder, "n_occurrences_entry"));
     }
 
@@ -382,7 +384,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         g_assert(sxfti->example_cal);
         gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxfti->example_cal, SXFTD_EXCAL_MONTHS_PER_COL );
-        gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxfti->example_cal) );
+        gtk_frame_set_child (GTK_FRAME(w), GTK_WIDGET(sxfti->example_cal));
     }
 
     /* Setup the start and end dates as GNCDateEdits */
@@ -406,9 +408,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         sxfti->endDateGDE =
             GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL),
                                               FALSE, FALSE));
-        gtk_box_pack_start( GTK_BOX( endDateBox ),
-                            GTK_WIDGET( sxfti->endDateGDE ),
-                            TRUE, TRUE, 0 );
+        gtk_box_append (GTK_BOX(endDateBox), GTK_WIDGET(sxfti->endDateGDE));
         g_signal_connect( sxfti->endDateGDE, "date-changed",
                           G_CALLBACK( sxftd_update_excal_adapt ),
                           sxfti );
@@ -418,20 +418,18 @@ sxftd_init( SXFromTransInfo *sxfti )
     /* compute good initial date. */
     start_tt = xaccTransGetDate( sxfti->trans );
     gnc_gdate_set_time64( &date, start_tt );
-    sxfti->freq_combo = GTK_COMBO_BOX(gtk_builder_get_object(sxfti->builder, "freq_combo_box"));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(sxfti->freq_combo), 0);
-    g_signal_connect( sxfti->freq_combo, "changed",
-                      G_CALLBACK(sxftd_freq_combo_changed),
-                      sxfti );
+    sxfti->freq_combo = GTK_DROP_DOWN (gtk_builder_get_object (sxfti->builder,
+                                                                   "freq_combo_box"));
+    gtk_drop_down_set_selected (sxfti->freq_combo, FREQ_DAILY);
+    g_signal_connect (sxfti->freq_combo, "notify::selected",
+                      G_CALLBACK (sxftd_freq_combo_changed), sxfti);
     sxftd_update_schedule( sxfti, &date, &schedule);
     recurrenceListNextInstance(schedule, &date, &nextDate);
     recurrenceListFree(&schedule);
     start_tt = gnc_time64_get_day_start_gdate (&nextDate);
     gnc_date_edit_set_time( sxfti->startDateGDE, start_tt );
 
-    g_signal_connect( G_OBJECT(sxfti->name), "destroy",
-                      G_CALLBACK(sxftd_destroy),
-                      sxfti );
+    g_signal_connect (sxfti->dialog, "destroy", G_CALLBACK (sxftd_destroy), sxfti);
 
     sxftd_update_example_cal( sxfti );
 
@@ -440,7 +438,7 @@ sxftd_init( SXFromTransInfo *sxfti )
 
 
 static guint
-sxftd_compute_sx(SXFromTransInfo *sxfti)
+sxftd_compute_sx (SXFromTransInfo *sxfti, gboolean accept_unbalanced)
 {
     GDate date;
     GList *schedule = NULL;
@@ -450,7 +448,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     SchedXaction *sx = sxfti->sx;
 
     /* get the name */
-    xaccSchedXactionSetName(sx, gtk_entry_get_text (sxfti->name));
+    xaccSchedXactionSetName(sx, gnc_entry_get_text (sxfti->name));
 
     gnc_gdate_set_time64( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
 
@@ -506,7 +504,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
         xaccSchedXactionSetAdvanceReminder( sx, daysInAdvance );
     }
 
-    if ( sxftd_add_template_trans( sxfti ) != 0 )
+    if (sxftd_add_template_trans (sxfti, accept_unbalanced) != 0)
     {
         sxftd_errno = SXFTD_ERRNO_UNBALANCED_XACTION;
     }
@@ -516,48 +514,167 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
 
 
 static void
-sxftd_close(SXFromTransInfo *sxfti, gboolean delete_sx)
+sxftd_close (SXFromTransInfo *sxfti, gboolean delete_sx)
 {
-    if ( sxfti->sx && delete_sx )
+    if (sxfti->sx && delete_sx)
     {
-        gnc_sx_begin_edit(sxfti->sx);
-        xaccSchedXactionDestroy(sxfti->sx);
+        gnc_sx_begin_edit (sxfti->sx);
+        xaccSchedXactionDestroy (sxfti->sx);
     }
     sxfti->sx = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET (sxfti->dialog));
+    if (sxfti->dialog)
+    {
+        GtkWidget *dialog = sxfti->dialog;
+        sxfti->dialog = NULL;
+        gtk_window_destroy (GTK_WINDOW (dialog));
+    }
 }
 
 
 static void
-sxftd_ok_clicked(SXFromTransInfo *sxfti)
+sxftd_commit (SXFromTransInfo *sxfti)
 {
     QofBook *book;
     SchedXactions *sxes;
-    guint sx_error = sxftd_compute_sx(sxfti);
 
-    if (sx_error != 0
-            && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION)
-    {
-        g_critical("sxftd_compute_sx after ok_clicked [%d]", sx_error);
-    }
-    else
-    {
-        if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION )
-        {
-            gnc_error_dialog (GTK_WINDOW (sxfti->dialog), "%s",
-                              _( "The Scheduled Transaction is unbalanced. "
-                                 "You are strongly encouraged to correct this situation." ) );
-        }
-        book = gnc_get_current_book ();
-        sxes = gnc_book_get_schedxactions(book);
-        gnc_sxes_add_sx(sxes, sxfti->sx);
-    }
+    if (!sxfti->sx)
+        return;
 
-    sxftd_close(sxfti, FALSE);
-    return;
+    book = gnc_get_current_book ();
+    sxes = gnc_book_get_schedxactions (book);
+    gnc_sxes_add_sx (sxes, sxfti->sx);
+    sxftd_close (sxfti, FALSE);
 }
 
+
+static void
+sxftd_open_advanced (SXFromTransInfo *sxfti)
+{
+    GtkWindow *parent;
+
+    if (!sxfti->sx || !sxfti->dialog)
+        return;
+
+    parent = gnc_ui_get_main_window (sxfti->dialog);
+    gnc_ui_scheduled_xaction_editor_dialog_create (parent, sxfti->sx, TRUE);
+    sxftd_close (sxfti, FALSE);
+}
+
+
+static void
+sxftd_unbalanced_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    SXFromTransInfo *sxfti = static_cast<SXFromTransInfo *> (user_data);
+    gboolean advanced = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (sxfti->dialog),
+                                                             "sxftd-advanced"));
+
+    (void) parent;
+
+    sxfti->decision_pending = FALSE;
+    if (sxfti->dialog)
+        gtk_widget_set_sensitive (sxfti->dialog, TRUE);
+
+    if (response != GTK_RESPONSE_YES || !sxfti->sx)
+        return;
+
+    if (sxftd_compute_sx (sxfti, TRUE) != 0)
+    {
+        gnc_error_dialog (GTK_WINDOW (sxfti->dialog), "%s",
+                          _("The Scheduled Transaction could not be created."));
+        return;
+    }
+
+    if (advanced)
+        sxftd_open_advanced (sxfti);
+    else
+        sxftd_commit (sxfti);
+}
+
+
+static void
+sxftd_finish (SXFromTransInfo *sxfti, gboolean advanced)
+{
+    guint sx_error = sxftd_compute_sx (sxfti, FALSE);
+
+    if (sx_error == SXFTD_ERRNO_UNBALANCED_XACTION)
+    {
+        sxfti->decision_pending = TRUE;
+        gtk_widget_set_sensitive (sxfti->dialog, FALSE);
+        g_object_set_data (G_OBJECT (sxfti->dialog), "sxftd-advanced",
+                           GINT_TO_POINTER (advanced));
+        gnc_verify_dialog_async (
+            GTK_WINDOW (sxfti->dialog), FALSE, sxftd_unbalanced_finished, sxfti,
+            "%s",
+            _("The Scheduled Transaction Editor cannot automatically balance this "
+              "transaction. Should it still be entered?"));
+        return;
+    }
+
+    if (sx_error != 0)
+    {
+        g_warning ("sxftd_compute_sx failed [%d]", sx_error);
+        return;
+    }
+
+    if (advanced)
+        sxftd_open_advanced (sxfti);
+    else
+        sxftd_commit (sxfti);
+}
+
+
+static void
+sxftd_ok_clicked (SXFromTransInfo *sxfti)
+{
+    sxftd_finish (sxfti, FALSE);
+}
+
+
+static void
+sxftd_advanced_clicked (SXFromTransInfo *sxfti)
+{
+    sxftd_finish (sxfti, TRUE);
+}
+
+
+static void
+sxftd_ok_button_clicked (GtkButton *button, gpointer user_data)
+{
+    (void) button;
+    sxftd_ok_clicked (static_cast<SXFromTransInfo *> (user_data));
+}
+
+
+static void
+sxftd_advanced_button_clicked (GtkButton *button, gpointer user_data)
+{
+    (void) button;
+    sxftd_advanced_clicked (static_cast<SXFromTransInfo *> (user_data));
+}
+
+
+static void
+sxftd_cancel_clicked (GtkButton *button, gpointer user_data)
+{
+    SXFromTransInfo *sxfti = static_cast<SXFromTransInfo *> (user_data);
+
+    (void) button;
+    if (!sxfti->decision_pending)
+        sxftd_close (sxfti, TRUE);
+}
+
+
+static gboolean
+sxftd_close_request (GtkWindow *window, gpointer user_data)
+{
+    SXFromTransInfo *sxfti = static_cast<SXFromTransInfo *> (user_data);
+
+    (void) window;
+    if (!sxfti->decision_pending)
+        sxftd_close (sxfti, TRUE);
+    return TRUE;
+}
 
 /**
  * Update start date... right now we always base this off the transaction
@@ -565,9 +682,11 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
  * somehow.
  **/
 static void
-sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
+sxftd_freq_combo_changed (GtkDropDown *drop_down, GParamSpec *pspec, gpointer user_data)
 {
     SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
+    (void) drop_down;
+    (void) pspec;
     GDate date, nextDate;
     time64 tmp_tt;
     GList *schedule = NULL;
@@ -587,79 +706,22 @@ sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
 
 
 static void
-sxftd_advanced_clicked(SXFromTransInfo *sxfti)
+sxftd_destroy (GtkWidget *widget, gpointer user_data)
 {
-    guint sx_error = sxftd_compute_sx(sxfti);
-    GMainContext *context;
+    SXFromTransInfo *sxfti = static_cast<SXFromTransInfo *> (user_data);
 
-    if ( sx_error != 0 && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
+    (void) widget;
+
+    if (sxfti->sx)
     {
-        // unbalanced-xaction is "okay", since this is also checked for by
-        // the advanced editor.
-        g_warning("something bad happened in sxftd_compute_sx [%d]", sx_error);
-        return;
-    }
-    gtk_widget_hide( sxfti->dialog );
-    /* force a gui update. */
-    context = g_main_context_default();
-    while (g_main_context_iteration(context, FALSE));
-
-    gnc_ui_scheduled_xaction_editor_dialog_create(gnc_ui_get_main_window (sxfti->dialog),
-        sxfti->sx, TRUE /* newSX */);
-    /* close ourself, since advanced editing entails us, and there are sync
-     * issues otherwise. */
-    sxftd_close(sxfti, FALSE);
-}
-
-
-static void
-sxftd_destroy( GtkWidget *w, gpointer user_data )
-{
-    SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
-
-    if ( sxfti->sx )
-    {
-        gnc_sx_begin_edit(sxfti->sx);
-        xaccSchedXactionDestroy(sxfti->sx);
+        gnc_sx_begin_edit (sxfti->sx);
+        xaccSchedXactionDestroy (sxfti->sx);
         sxfti->sx = NULL;
     }
-    if (sxfti->dense_cal_model)
-        g_object_unref(G_OBJECT(sxfti->dense_cal_model));
-    if (sxfti->example_cal)
-        g_object_unref(G_OBJECT(sxfti->example_cal));
-
-    g_free(sxfti);
+    g_clear_object (&sxfti->dense_cal_model);
+    g_clear_object (&sxfti->example_cal);
+    g_free (sxfti);
 }
-
-
-static void
-gnc_sx_trans_window_response_cb (GtkDialog *dialog,
-                                 gint response,
-                                 gpointer data)
-{
-    SXFromTransInfo *sxfti = (SXFromTransInfo *)data;
-
-    ENTER(" dialog %p, response %d, sx %p", dialog, response, sxfti);
-    switch (response)
-    {
-    case GTK_RESPONSE_OK:
-        DEBUG(" OK");
-        sxftd_ok_clicked(sxfti);
-        break;
-    case SXFTD_RESPONSE_ADVANCED:
-        DEBUG(" ADVANCED");
-        sxftd_advanced_clicked(sxfti);
-        break;
-    case GTK_RESPONSE_CANCEL:
-    default:
-        DEBUG(" CANCEL");
-        sxftd_close(sxfti, TRUE);
-        break;
-
-    }
-    LEAVE(" ");
-}
-
 
 /**
  * Update the example calendar; make sure to take into account the end
@@ -688,7 +750,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     recurrenceListNextInstance(schedule, &date, &nextDate);
 
     gnc_dense_cal_store_update_name (sxfti->dense_cal_model,
-                                     gtk_entry_get_text (sxfti->name));
+                                     gnc_entry_get_text (sxfti->name));
 
     {
         gchar *schedule_desc;
@@ -748,10 +810,9 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
     GtkWidget *dialog;
 
     builder = gtk_builder_new();
+    gnc_builder_add_from_file  (builder , "dialog-sx.ui", "freq_liststore");
 
-    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "freq_liststore");
-
-    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans_dialog");
+    gnc_builder_add_from_file  (builder , "dialog-sx.ui", "sx_from_real_trans_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sx_from_real_trans_dialog"));
 
     // Set the name of this dialog so it can be easily manipulated with css
@@ -784,8 +845,6 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
         }
     }
 
-    gtk_widget_show_all(GTK_WIDGET(sxfti->dialog));
-
-    gtk_builder_connect_signals(builder, sxfti);
-    g_object_unref(G_OBJECT(builder));
+    gtk_window_present (GTK_WINDOW (sxfti->dialog));
+    g_object_unref (builder);
 }

@@ -1,7 +1,7 @@
 add_subdirectory(examples)
 
 set(doc_DATA
-  gtk-3.0.css
+  gtk-4.0.css
 )
 
 set(doc_noinst_DATA

@@ -37,19 +37,95 @@
 #include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
 #include "window-main-summarybar.h"
-#include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 
 typedef struct
 {
-    GtkWidget    *hbox;
-    GtkWidget    *totals_combo;
-    GtkListStore *datamodel;
-    int           component_id;
-    int           cnxn_id;
-    gboolean      combo_popped;
-    gboolean      show_negative_color;
-    gchar        *negative_color;
+    GtkWidget      *hbox;
+    GtkDropDown    *totals_combo;
+    GListStore     *datamodel;
+    int             component_id;
+    gulong          cnxn_id;
+    gulong          negative_color_cnxn_id;
+    gboolean        show_negative_color;
 } GNCMainSummary;
+
+typedef struct _GncSummaryRow
+{
+    GObject parent_instance;
+    gchar *mnemonic_type;
+    gchar *assets_label;
+    gchar *assets_value;
+    gchar *profits_label;
+    gchar *profits_value;
+    gboolean assets_negative;
+    gboolean profits_negative;
+    gboolean show_negative_color;
+} GncSummaryRow;
+
+typedef struct _GncSummaryRowClass
+{
+    GObjectClass parent_class;
+} GncSummaryRowClass;
+
+GType gnc_summary_row_get_type (void);
+
+#define GNC_TYPE_SUMMARY_ROW (gnc_summary_row_get_type ())
+#define GNC_SUMMARY_ROW(object) \
+    (G_TYPE_CHECK_INSTANCE_CAST ((object), GNC_TYPE_SUMMARY_ROW, GncSummaryRow))
+#define GNC_IS_SUMMARY_ROW(object) \
+    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GNC_TYPE_SUMMARY_ROW))
+
+G_DEFINE_TYPE (GncSummaryRow, gnc_summary_row, G_TYPE_OBJECT)
+
+static void
+gnc_summary_row_finalize (GObject *object)
+{
+    GncSummaryRow *row = GNC_SUMMARY_ROW (object);
+
+    g_clear_pointer (&row->mnemonic_type, g_free);
+    g_clear_pointer (&row->assets_label, g_free);
+    g_clear_pointer (&row->assets_value, g_free);
+    g_clear_pointer (&row->profits_label, g_free);
+    g_clear_pointer (&row->profits_value, g_free);
+
+    G_OBJECT_CLASS (gnc_summary_row_parent_class)->finalize (object);
+}
+
+static void
+gnc_summary_row_class_init (GncSummaryRowClass *klass)
+{
+    G_OBJECT_CLASS (klass)->finalize = gnc_summary_row_finalize;
+}
+
+static void
+gnc_summary_row_init (G_GNUC_UNUSED GncSummaryRow *row)
+{
+}
+
+static GncSummaryRow *
+gnc_summary_row_new (const gchar *mnemonic_type,
+                     const gchar *assets_label,
+                     const gchar *assets_value,
+                     gboolean assets_negative,
+                     const gchar *profits_label,
+                     const gchar *profits_value,
+                     gboolean profits_negative,
+                     gboolean show_negative_color)
+{
+    GncSummaryRow *row = g_object_new (GNC_TYPE_SUMMARY_ROW, NULL);
+
+    row->mnemonic_type = g_strdup (mnemonic_type);
+    row->assets_label = g_strdup (assets_label);
+    row->assets_value = g_strdup (assets_value);
+    row->profits_label = g_strdup (profits_label);
+    row->profits_value = g_strdup (profits_value);
+    row->assets_negative = assets_negative;
+    row->profits_negative = profits_negative;
+    row->show_negative_color = show_negative_color;
+
+    return row;
+}
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
 
@@ -322,18 +398,6 @@ get_total_mode_label (GNCCurrencyAcc *currency_accum)
     return label_str;
 }
 
-enum
-{
-    COLUMN_MNEMONIC_TYPE,
-    COLUMN_ASSETS,
-    COLUMN_ASSETS_VALUE,
-    COLUMN_PROFITS,
-    COLUMN_PROFITS_VALUE,
-    COLUMN_ASSETS_NEG,
-    COLUMN_PROFITS_NEG,
-    N_COLUMNS
-};
-
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
  * information. The statusbar includes two fields, titled 'profits'
  * and 'assets'. The total assets equal the sum of all of the
@@ -390,251 +454,248 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     gnc_ui_accounts_recurse(root, &currency_list, options);
 
     {
-        GtkTreeIter iter;
         char asset_amount_string[256], profit_amount_string[256];
 
-        g_object_ref(summary->datamodel);
-        gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
-        gtk_list_store_clear(summary->datamodel);
-        for (current = g_list_first(currency_list); current; current = g_list_next(current))
+        g_list_store_remove_all (summary->datamodel);
+        for (current = g_list_first (currency_list); current; current = g_list_next (current))
         {
+            GncSummaryRow *row;
             gchar *total_mode_label;
             gchar *bidi_total, *bidi_asset_amount, *bidi_profit_amount;
 
             currency_accum = current->data;
 
-            xaccSPrintAmount(asset_amount_string,
-                             currency_accum->assets,
-                             gnc_commodity_print_info(currency_accum->currency, TRUE));
+            xaccSPrintAmount (asset_amount_string,
+                              currency_accum->assets,
+                              gnc_commodity_print_info (currency_accum->currency, TRUE));
 
-            xaccSPrintAmount(profit_amount_string,
-                             currency_accum->profits,
-                             gnc_commodity_print_info(currency_accum->currency, TRUE));
+            xaccSPrintAmount (profit_amount_string,
+                              currency_accum->profits,
+                              gnc_commodity_print_info (currency_accum->currency, TRUE));
 
-            gtk_list_store_append(summary->datamodel, &iter);
             total_mode_label = get_total_mode_label (currency_accum);
-            bidi_total = gnc_wrap_text_with_bidi_ltr_isolate(total_mode_label);
-            bidi_asset_amount = gnc_wrap_text_with_bidi_ltr_isolate(asset_amount_string);
-            bidi_profit_amount = gnc_wrap_text_with_bidi_ltr_isolate(profit_amount_string);    
-            gtk_list_store_set(summary->datamodel, &iter,
-                               COLUMN_MNEMONIC_TYPE, bidi_total,
-                               COLUMN_ASSETS,        _("Net Assets:"),
-                               COLUMN_ASSETS_VALUE,  bidi_asset_amount,
-                               COLUMN_ASSETS_NEG,    gnc_numeric_negative_p(currency_accum->assets),
-                               COLUMN_PROFITS,       _("Profits:"),
-                               COLUMN_PROFITS_VALUE, bidi_profit_amount,
-                               COLUMN_PROFITS_NEG,   gnc_numeric_negative_p(currency_accum->profits),
-                               -1);
-            g_free(total_mode_label);
-            g_free(bidi_total);
-            g_free(bidi_asset_amount);
-            g_free(bidi_profit_amount);
-        }
-        gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo),
-                                GTK_TREE_MODEL(summary->datamodel));
-        g_object_unref(summary->datamodel);
+            bidi_total = gnc_wrap_text_with_bidi_ltr_isolate (total_mode_label);
+            bidi_asset_amount = gnc_wrap_text_with_bidi_ltr_isolate (asset_amount_string);
+            bidi_profit_amount = gnc_wrap_text_with_bidi_ltr_isolate (profit_amount_string);
 
-        gtk_combo_box_set_active(GTK_COMBO_BOX(summary->totals_combo), 0);
+            row = gnc_summary_row_new (bidi_total,
+                                       _("Net Assets:"), bidi_asset_amount,
+                                       gnc_numeric_negative_p (currency_accum->assets),
+                                       _("Profits:"), bidi_profit_amount,
+                                       gnc_numeric_negative_p (currency_accum->profits),
+                                       summary->show_negative_color);
+            g_list_store_append (summary->datamodel, row);
+            g_object_unref (row);
+
+            g_free (total_mode_label);
+            g_free (bidi_total);
+            g_free (bidi_asset_amount);
+            g_free (bidi_profit_amount);
+        }
+
+        gtk_drop_down_set_selected (summary->totals_combo, 0);
     }
 
     g_list_free_full (currency_list, g_free);
 }
 
-static gchar*
-get_negative_color_str (void)
-{
-    GdkRGBA color;
-    gchar *color_str;
-    GtkWidget *label = gtk_label_new ("Color");
-    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
-    g_object_ref_sink (label);
-    gtk_style_context_add_class (context, "gnc-class-negative-numbers");
-    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
-    color_str = g_strdup_printf ("#%02X%02X%02X",
-                                 (int)(0.5 + CLAMP (color.red, 0., 1.) * 255.),
-                                 (int)(0.5 + CLAMP (color.green, 0., 1.) * 255.),
-                                 (int)(0.5 + CLAMP (color.blue, 0., 1.) * 255.));
-    g_object_unref (label);
-    return color_str;
-}
-
 static void
-summarybar_update_color (gpointer gsettings, gchar *key, gpointer user_data)
+summarybar_update_color (G_GNUC_UNUSED gpointer gsettings,
+                         G_GNUC_UNUSED gchar *key, gpointer user_data)
 {
     GNCMainSummary *summary = user_data;
 
-    g_free(summary->negative_color);
-    summary->negative_color = get_negative_color_str();
-    summary->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-
+    summary->show_negative_color =
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
     gnc_main_window_summary_refresh (summary);
 }
 
 static void
-gnc_main_window_summary_destroy_cb(GNCMainSummary *summary, gpointer data)
+gnc_main_window_summary_destroy_cb (GNCMainSummary *summary,
+                                    G_GNUC_UNUSED gpointer data)
 {
     gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP, summary->cnxn_id);
-    gnc_unregister_gui_component(summary->component_id);
+    gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL, summary->negative_color_cnxn_id);
+    gnc_unregister_gui_component (summary->component_id);
 
-    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
-                                summarybar_update_color, summary);
-
-    g_free (summary->negative_color);
+    g_clear_object (&summary->datamodel);
     g_free (summary);
 }
 
 static void
-summarybar_refresh_handler(GHashTable * changes, gpointer user_data)
+summarybar_refresh_handler(G_GNUC_UNUSED GHashTable *changes, gpointer user_data)
 {
     GNCMainSummary * summary = user_data;
     gnc_main_window_summary_refresh(summary);
 }
 
 static void
-prefs_changed_cb (gpointer prefs, gchar *pref, gpointer user_data)
+prefs_changed_cb (G_GNUC_UNUSED gpointer prefs,
+                  G_GNUC_UNUSED gchar *pref, gpointer user_data)
 {
     GNCMainSummary * summary = user_data;
     gnc_main_window_summary_refresh(summary);
 }
 
 
-static gchar *
-make_markup (GtkTreeModel *model, GtkTreeIter *iter,
-             const GNCMainSummary *summary,
-             gint label_col, gint value_col, gint neg_col)
+typedef struct
 {
-    gchar *label, *value;
-    gboolean neg;
-    gtk_tree_model_get (model, iter, label_col, &label, value_col, &value, neg_col, &neg,
-                        -1);
-    gchar* markup = summary->show_negative_color && neg
-        ? g_markup_printf_escaped ("%s <span foreground='%s'>%s</span>",
-                                   label, summary->negative_color, value)
-        : g_markup_printf_escaped ("%s %s", label, value);
-    g_free (label);
-    g_free (value);
-    return markup;
+    GtkLabel *mnemonic_type;
+    GtkLabel *assets_label;
+    GtkLabel *assets_value;
+    GtkLabel *profits_label;
+    GtkLabel *profits_value;
+} SummarybarItemWidgets;
+
+#define SUMMARYBAR_ITEM_WIDGETS_KEY "gnc-summarybar-item-widgets"
+
+static GtkWidget *
+summarybar_value_cell_new (GtkLabel **label, GtkLabel **value)
+{
+    GtkWidget *cell = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+
+    *label = GTK_LABEL (gtk_label_new (NULL));
+    *value = GTK_LABEL (gtk_label_new (NULL));
+
+    gtk_label_set_xalign (*label, 0.0);
+    gtk_label_set_xalign (*value, 0.0);
+    gtk_label_set_ellipsize (*label, PANGO_ELLIPSIZE_END);
+    gtk_label_set_ellipsize (*value, PANGO_ELLIPSIZE_END);
+    gtk_box_append (GTK_BOX (cell), GTK_WIDGET (*label));
+    gtk_box_append (GTK_BOX (cell), GTK_WIDGET (*value));
+
+    return cell;
 }
 
 static void
-cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter,
-                          gpointer user_data)
+summarybar_item_setup (G_GNUC_UNUSED GtkListItemFactory *factory, GtkListItem *item,
+                       gpointer user_data)
 {
-    GNCMainSummary * summary = user_data;
-    gint viewcol;
+    gboolean popup = GPOINTER_TO_INT (user_data);
+    SummarybarItemWidgets *widgets = g_new0 (SummarybarItemWidgets, 1);
+    GtkWidget *content = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+    GtkWidget *assets;
+    GtkWidget *profits;
 
-    viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "view_column"));
+    widgets->mnemonic_type = GTK_LABEL (gtk_label_new (NULL));
+    gtk_label_set_xalign (widgets->mnemonic_type, 0.0);
+    gtk_label_set_ellipsize (widgets->mnemonic_type, PANGO_ELLIPSIZE_END);
+    gtk_widget_set_size_request (GTK_WIDGET (widgets->mnemonic_type), 50, -1);
 
-    if (summary->combo_popped)
-        g_object_set (cell, "xalign", 0.0, NULL);
-    else
-        g_object_set (cell, "xalign", 0.5, NULL);
+    assets = summarybar_value_cell_new (&widgets->assets_label, &widgets->assets_value);
+    profits = summarybar_value_cell_new (&widgets->profits_label, &widgets->profits_value);
 
-    if (viewcol == 0)
-    {
-        gchar *type;
-        gtk_tree_model_get (GTK_TREE_MODEL (tree_model), iter,
-                            COLUMN_MNEMONIC_TYPE, &type,
-                            -1);
-        g_object_set (cell, "text", type, NULL);
-        g_free (type);
-    }
-
-    if (viewcol == 2)
-    {
-        gchar *markup = make_markup (tree_model, iter, summary,
-                                     COLUMN_ASSETS, COLUMN_ASSETS_VALUE, COLUMN_ASSETS_NEG);
-        g_object_set (cell, "markup", markup, NULL);
-        g_free (markup);
-    }
-
-    if (viewcol == 4)
-    {
-        gchar *markup = make_markup (tree_model, iter, summary,
-                                     COLUMN_PROFITS, COLUMN_PROFITS_VALUE, COLUMN_PROFITS_NEG);
-        g_object_set (cell, "markup", markup, NULL);
-        g_free (markup);
-    }
+    gtk_box_append (GTK_BOX (content), GTK_WIDGET (widgets->mnemonic_type));
+    gtk_box_append (GTK_BOX (content), assets);
+    gtk_box_append (GTK_BOX (content), profits);
+    gtk_widget_set_halign (content, popup ? GTK_ALIGN_START : GTK_ALIGN_CENTER);
+    g_object_set_data_full (G_OBJECT (content), SUMMARYBAR_ITEM_WIDGETS_KEY,
+                            widgets, g_free);
+    gtk_list_item_set_child (item, content);
 }
 
 static void
-summary_combo_popped (GObject *widget, GParamSpec *pspec, gpointer user_data)
+summarybar_value_label_set (GtkLabel *label, const gchar *value, gboolean negative)
 {
-    GNCMainSummary * summary = user_data;
-    if (summary->combo_popped)
-        summary->combo_popped = FALSE;
+    gtk_label_set_text (label, value ? value : "");
+
+    if (negative)
+        gtk_widget_add_css_class (GTK_WIDGET (label), "gnc-class-negative-numbers");
     else
-        summary->combo_popped = TRUE;
+        gtk_widget_remove_css_class (GTK_WIDGET (label), "gnc-class-negative-numbers");
+}
+
+static void
+summarybar_item_bind (G_GNUC_UNUSED GtkListItemFactory *factory, GtkListItem *item,
+                      G_GNUC_UNUSED gpointer user_data)
+{
+    GtkWidget *content = gtk_list_item_get_child (item);
+    SummarybarItemWidgets *widgets;
+    GObject *object;
+    GncSummaryRow *row;
+
+    g_return_if_fail (content != NULL);
+    widgets = g_object_get_data (G_OBJECT (content), SUMMARYBAR_ITEM_WIDGETS_KEY);
+    g_return_if_fail (widgets != NULL);
+
+    object = gtk_list_item_get_item (item);
+    if (!GNC_IS_SUMMARY_ROW (object))
+    {
+        gtk_label_set_text (widgets->mnemonic_type, "");
+        gtk_label_set_text (widgets->assets_label, "");
+        summarybar_value_label_set (widgets->assets_value, "", FALSE);
+        gtk_label_set_text (widgets->profits_label, "");
+        summarybar_value_label_set (widgets->profits_value, "", FALSE);
+        return;
+    }
+
+    row = GNC_SUMMARY_ROW (object);
+    gtk_label_set_text (widgets->mnemonic_type, row->mnemonic_type);
+    gtk_label_set_text (widgets->assets_label, row->assets_label);
+    summarybar_value_label_set (widgets->assets_value, row->assets_value,
+                                row->show_negative_color && row->assets_negative);
+    gtk_label_set_text (widgets->profits_label, row->profits_label);
+    summarybar_value_label_set (widgets->profits_value, row->profits_value,
+                                row->show_negative_color && row->profits_negative);
 }
 
 GtkWidget *
 gnc_main_window_summary_new (void)
 {
-    GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
-    GtkCellRenderer *textRenderer;
-    int i;
+    GNCMainSummary *retval = g_new0 (GNCMainSummary, 1);
+    GtkListItemFactory *selected_factory;
+    GtkListItemFactory *list_factory;
 
-    retval->datamodel = gtk_list_store_new (N_COLUMNS,
-                                            G_TYPE_STRING,
-                                            G_TYPE_STRING,
-                                            G_TYPE_STRING,
-                                            G_TYPE_STRING,
-                                            G_TYPE_STRING,
-                                            G_TYPE_BOOLEAN,
-                                            G_TYPE_BOOLEAN);
+    retval->datamodel = g_list_store_new (GNC_TYPE_SUMMARY_ROW);
 
     retval->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (retval->hbox), FALSE);
 
-    // Set the name for this wodget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(retval->hbox), "gnc-id-account-summary-bar");
+    // Set the name for this widget so it can be easily manipulated with CSS.
+    gtk_widget_set_name (retval->hbox, "gnc-id-account-summary-bar");
 
-    retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
-    g_object_unref (retval->datamodel);
+    retval->totals_combo = GTK_DROP_DOWN (
+        gnc_gtk_drop_down_new (G_LIST_MODEL (g_object_ref (retval->datamodel)), NULL));
 
-    retval->negative_color = get_negative_color_str();
-    retval->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
-                          summarybar_update_color, retval);
+    selected_factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (selected_factory, "setup", G_CALLBACK (summarybar_item_setup), NULL);
+    g_signal_connect (selected_factory, "bind", G_CALLBACK (summarybar_item_bind), NULL);
+    gtk_drop_down_set_factory (retval->totals_combo, selected_factory);
+    g_object_unref (selected_factory);
+
+    list_factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (list_factory, "setup", G_CALLBACK (summarybar_item_setup),
+                      GINT_TO_POINTER (TRUE));
+    g_signal_connect (list_factory, "bind", G_CALLBACK (summarybar_item_bind), NULL);
+    gtk_drop_down_set_list_factory (retval->totals_combo, list_factory);
+    g_object_unref (list_factory);
+
+    retval->show_negative_color =
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
+    retval->negative_color_cnxn_id =
+        gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
+                               summarybar_update_color, retval);
 
     retval->component_id = gnc_register_gui_component (WINDOW_SUMMARYBAR_CM_CLASS,
-                           summarybar_refresh_handler,
-                           NULL, retval);
+                                                        summarybar_refresh_handler,
+                                                        NULL, retval);
     gnc_gui_component_watch_entity_type (retval->component_id,
                                          GNC_ID_ACCOUNT,
-                                         QOF_EVENT_DESTROY
-                                         | GNC_EVENT_ITEM_CHANGED);
+                                         QOF_EVENT_DESTROY | GNC_EVENT_ITEM_CHANGED);
 
-    // Allows you to get when the popup menu is present
-    g_signal_connect (retval->totals_combo, "notify::popup-shown",G_CALLBACK (summary_combo_popped), retval);
+    gnc_widget_set_all_margins (retval->hbox, 2);
+    gnc_box_append_full (GTK_BOX (retval->hbox), GTK_WIDGET (retval->totals_combo),
+                         TRUE, TRUE, 5);
+    gtk_widget_set_visible (GTK_WIDGET (retval->totals_combo), TRUE);
+    gtk_widget_set_visible (retval->hbox, TRUE);
 
-    retval->combo_popped = FALSE;
+    g_signal_connect_swapped (retval->hbox, "destroy",
+                              G_CALLBACK (gnc_main_window_summary_destroy_cb), retval);
 
-    for (i = 0; i <= N_COLUMNS - 2; i += 2)
-    {
-        textRenderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
+    gnc_main_window_summary_refresh (retval);
 
-        gtk_cell_renderer_set_fixed_size (textRenderer, 50, -1);
-
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, TRUE);
-
-        g_object_set_data (G_OBJECT(textRenderer), "view_column", GINT_TO_POINTER (i));
-        gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, cdf, retval, NULL);
-    }
-
-    gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
-    gtk_box_pack_start (GTK_BOX(retval->hbox), retval->totals_combo, TRUE, TRUE, 5);
-    gtk_widget_show (retval->totals_combo);
-    gtk_widget_show (retval->hbox);
-
-    g_signal_connect_swapped (G_OBJECT (retval->hbox), "destroy",
-                              G_CALLBACK (gnc_main_window_summary_destroy_cb),
-                              retval);
-
-    gnc_main_window_summary_refresh(retval);
-
-    retval->cnxn_id =  gnc_prefs_register_cb (GNC_PREFS_GROUP, NULL,
-                       prefs_changed_cb, retval);
+    retval->cnxn_id = gnc_prefs_register_cb (GNC_PREFS_GROUP, NULL,
+                                              prefs_changed_cb, retval);
 
     return retval->hbox;
 }

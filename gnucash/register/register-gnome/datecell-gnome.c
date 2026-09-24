@@ -38,7 +38,7 @@
 #include <string.h>
 #include <time.h>
 #include <glib/gi18n.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 
 #include "datecell.h"
 #include "dialog-utils.h"
@@ -86,7 +86,7 @@ static gboolean gnc_date_cell_direct_update (BasicCell *bcell,
         int *cursor_position,
         int *start_selection,
         int *end_selection,
-        void *gui_data);
+        const GncRegisterInput *input);
 static gboolean gnc_date_cell_enter (BasicCell *bcell,
                                      int *cursor_position,
                                      int *start_selection,
@@ -106,15 +106,10 @@ check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
                           "this book. This setting can be changed in "
                           "File->Properties->Accounts, resetting to the threshold.");
             gchar *dialog_title = _("Cannot store a transaction at this date");
-            GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (NULL),
-                                   0,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_OK,
-                                   "%s", dialog_title);
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
-                                 "%s", dialog_msg);
-            gtk_dialog_run (GTK_DIALOG(dialog));
-            gtk_widget_destroy (dialog);
+            GtkAlertDialog *dialog = gtk_alert_dialog_new ("%s", dialog_title);
+            gtk_alert_dialog_set_detail (dialog, dialog_msg);
+            gtk_alert_dialog_show (dialog, gnc_ui_get_main_window (NULL));
+            g_object_unref (dialog);
 
 //        g_warning("Entered date %s is before the \"auto-read-only threshold\";"
 //              " resetting to the threshold.", datestr);
@@ -257,7 +252,7 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
     guint day, month, year;
     char buffer[DATE_BUF];
 
-    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
+    gnc_date_picker_get_date (gdp, &day, &month, &year);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
@@ -277,7 +272,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
     guint day, month, year;
     char buffer[DATE_BUF];
 
-    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
+    gnc_date_picker_get_date (gdp, &day, &month, &year);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
@@ -286,26 +281,16 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
     box->in_date_select = FALSE;
 }
 
-static gboolean
-key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
+static void
+date_picker_cancelled_cb (GNCDatePicker *gdp, gpointer data)
 {
     DateCell *cell = data;
     PopBox *box = cell->cell.gui_private;
 
-    switch (event->keyval)
-    {
-    case GDK_KEY_Escape:
-        gnc_item_edit_hide_popup (box->item_edit);
-        box->calendar_popped = FALSE;
-        break;
-
-    default:
-        gtk_widget_event(GTK_WIDGET (box->sheet), (GdkEvent *) event);
-        break;
-    }
-    return TRUE;
+    g_return_if_fail (IS_GNC_DATE_PICKER (gdp));
+    gnc_item_edit_hide_popup (box->item_edit);
+    box->calendar_popped = FALSE;
 }
-
 static void
 date_picker_disconnect_signals (DateCell *cell)
 {
@@ -334,8 +319,8 @@ date_picker_connect_signals (DateCell *cell)
     g_signal_connect(box->date_picker, "date_picked",
                      G_CALLBACK(date_picked_cb), cell);
 
-    g_signal_connect(box->date_picker, "key_press_event",
-                     G_CALLBACK(key_press_item_cb), cell);
+    g_signal_connect (box->date_picker, "cancelled",
+                      G_CALLBACK (date_picker_cancelled_cb), cell);
 
     box->signals_connected = TRUE;
 }
@@ -492,14 +477,13 @@ gnc_date_cell_direct_update (BasicCell *bcell,
                              int *cursor_position,
                              int *start_selection,
                              int *end_selection,
-                             void *gui_data)
+                             const GncRegisterInput *input)
 {
     DateCell *cell = (DateCell *) bcell;
     PopBox *box = cell->cell.gui_private;
-    GdkEventKey *event = gui_data;
     char buff[DATE_BUF];
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (input->key == GNC_REGISTER_KEY_ESCAPE)
     {
         if (bcell->changed)
         {
@@ -515,7 +499,7 @@ gnc_date_cell_direct_update (BasicCell *bcell,
         return FALSE;
     }
 
-    if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
+    if (!gnc_handle_date_accelerator_input (input, &(box->date), bcell->value))
         return FALSE;
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
@@ -640,7 +624,7 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     box->sheet = sheet;
     box->item_edit = item_edit;
     box->date_picker = GNC_DATE_PICKER (gnc_date_picker_new ());
-    gtk_widget_show_all (GTK_WIDGET(box->date_picker));
+    gtk_widget_set_visible (GTK_WIDGET(box->date_picker), TRUE);
     g_object_ref_sink(box->date_picker);
 
     /* to mark cell as realized, remove the realize method */
@@ -670,14 +654,12 @@ popup_get_height (GtkWidget *widget,
                   G_GNUC_UNUSED gpointer user_data)
 {
     GtkWidget *cal = GTK_WIDGET (GNC_DATE_PICKER (widget)->calendar);
-    GtkRequisition req;
+    int minimum;
+    int natural;
 
-    req.height = 0;
-    req.width = 0;
-
-    gtk_widget_get_preferred_size (cal, &req, NULL);
-
-    return req.height;
+    gtk_widget_measure (cal, GTK_ORIENTATION_VERTICAL, -1,
+                        &minimum, &natural, NULL, NULL);
+    return natural;
 }
 
 static void

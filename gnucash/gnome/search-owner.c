@@ -36,9 +36,68 @@
 #include "business-gnome-utils.h"
 #include "search-owner.h"
 #include "search-core-utils.h"
+#include "gnc-gtk-utils.h"
 
 #define d(x)
 
+#define OWNER_SEARCH_VALUE "owner-search-value"
+
+static GtkDropDown *
+owner_search_dropdown_new (void)
+{
+    GtkStringList *model = gtk_string_list_new (NULL);
+    GtkDropDown *dropdown = gnc_gtk_drop_down_new (G_LIST_MODEL (model), NULL);
+    return dropdown;
+}
+
+static void
+owner_search_dropdown_add (GtkDropDown *dropdown, const gchar *label, gint value)
+{
+    GtkStringList *model = GTK_STRING_LIST (gtk_drop_down_get_model (dropdown));
+    guint position = g_list_model_get_n_items (G_LIST_MODEL (model));
+    GtkStringObject *item;
+
+    gtk_string_list_append (model, label);
+    item = GTK_STRING_OBJECT (g_list_model_get_item (G_LIST_MODEL (model), position));
+    g_object_set_data (G_OBJECT (item), OWNER_SEARCH_VALUE, GINT_TO_POINTER (value));
+    g_object_unref (item);
+}
+
+static gint
+owner_search_dropdown_get_active (GtkDropDown *dropdown)
+{
+    GListModel *model = gtk_drop_down_get_model (dropdown);
+    guint position = gtk_drop_down_get_selected (dropdown);
+    GObject *item;
+    gint value;
+
+    if (!model || position == GTK_INVALID_LIST_POSITION)
+        return 0;
+    item = g_list_model_get_item (model, position);
+    value = GPOINTER_TO_INT (g_object_get_data (item, OWNER_SEARCH_VALUE));
+    g_object_unref (item);
+    return value;
+}
+
+static void
+owner_search_dropdown_set_active (GtkDropDown *dropdown, gint value)
+{
+    GListModel *model = gtk_drop_down_get_model (dropdown);
+    guint count = g_list_model_get_n_items (model);
+
+    for (guint i = 0; i < count; i++)
+    {
+        GObject *item = g_list_model_get_item (model, i);
+        gint item_value = GPOINTER_TO_INT (g_object_get_data (item, OWNER_SEARCH_VALUE));
+        g_object_unref (item);
+        if (item_value == value)
+        {
+            gtk_drop_down_set_selected (dropdown, i);
+            return;
+        }
+    }
+    gtk_drop_down_set_selected (dropdown, GTK_INVALID_LIST_POSITION);
+}
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
@@ -149,7 +208,7 @@ set_owner_widget (GNCSearchOwner *fe)
 {
     /* Remove the old choice widget */
     if (fe->owner_choice)
-        gtk_container_remove (GTK_CONTAINER (fe->owner_box), fe->owner_choice);
+        gtk_box_remove (GTK_BOX(fe->owner_box), GTK_WIDGET(fe->owner_choice));
 
     /* Create a new choice widget */
     fe->owner_choice =
@@ -160,19 +219,16 @@ set_owner_widget (GNCSearchOwner *fe)
     g_signal_connect (G_OBJECT (fe->owner_choice), "changed",
                       G_CALLBACK (owner_changed_cb), fe);
 
-    gtk_widget_show_all (fe->owner_choice);
+    gtk_widget_set_visible (fe->owner_choice, TRUE);
 }
 
 static void
-type_combo_changed (GtkWidget *widget, GNCSearchOwner *fe)
+type_combo_changed (GtkDropDown *dropdown, GParamSpec *pspec, GNCSearchOwner *fe)
 {
     GncOwnerType type;
+    (void)pspec;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX(widget));
-
-    type = gnc_combo_box_search_get_active(GTK_COMBO_BOX(widget));
-
-    /* If the type changed or if we don't have a type create the owner_choice */
+    type = (GncOwnerType)owner_search_dropdown_get_active (dropdown);
     if (type != gncOwnerGetType (&(fe->owner)))
     {
         fe->owner.type = type;
@@ -187,38 +243,40 @@ static GtkWidget *
 make_type_menu (GNCSearchCoreType *fe)
 {
     GNCSearchOwner *fi = (GNCSearchOwner *)fe;
-    GtkComboBox *combo;
-    GncOwnerType type;
+    GtkDropDown *dropdown;
+    GncOwnerType type = gncOwnerGetType (&(fi->owner));
 
-    type = gncOwnerGetType (&(fi->owner));
+    dropdown = owner_search_dropdown_new ();
+    owner_search_dropdown_add (dropdown, _("Customer"), GNC_OWNER_CUSTOMER);
+    owner_search_dropdown_add (dropdown, _("Vendor"), GNC_OWNER_VENDOR);
+    owner_search_dropdown_add (dropdown, _("Employee"), GNC_OWNER_EMPLOYEE);
+    owner_search_dropdown_add (dropdown, _("Job"), GNC_OWNER_JOB);
+    g_signal_connect (dropdown, "notify::selected", G_CALLBACK (type_combo_changed), fe);
+    owner_search_dropdown_set_active (dropdown, type);
+    return GTK_WIDGET (dropdown);
+}
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("Customer"), GNC_OWNER_CUSTOMER);
-    gnc_combo_box_search_add(combo, _("Vendor"), GNC_OWNER_VENDOR);
-    gnc_combo_box_search_add(combo, _("Employee"), GNC_OWNER_EMPLOYEE);
-    gnc_combo_box_search_add(combo, _("Job"), GNC_OWNER_JOB);
-
-    g_signal_connect (combo, "changed", G_CALLBACK (type_combo_changed), fe);
-    gnc_combo_box_search_set_active(combo, type);
-
-    return GTK_WIDGET(combo);
-
-
+static void
+owner_search_how_changed (GtkDropDown *dropdown, GParamSpec *pspec,
+                          GNCSearchOwner *fi)
+{
+    (void)pspec;
+    fi->how = (QofGuidMatch)owner_search_dropdown_get_active (dropdown);
 }
 
 static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
     GNCSearchOwner *fi = (GNCSearchOwner *)fe;
-    GtkComboBox *combo;
+    GtkDropDown *dropdown;
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("is"), QOF_GUID_MATCH_ANY);
-    gnc_combo_box_search_add(combo, _("is not"), QOF_GUID_MATCH_NONE);
-    gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_GUID_MATCH_ANY);
+    dropdown = owner_search_dropdown_new ();
+    owner_search_dropdown_add (dropdown, _("is"), QOF_GUID_MATCH_ANY);
+    owner_search_dropdown_add (dropdown, _("is not"), QOF_GUID_MATCH_NONE);
+    g_signal_connect (dropdown, "notify::selected", G_CALLBACK (owner_search_how_changed), fi);
+    owner_search_dropdown_set_active (dropdown, fi->how ? fi->how : QOF_GUID_MATCH_ANY);
 
-    return GTK_WIDGET(combo);
+    return GTK_WIDGET(dropdown);
 }
 
 static void
@@ -246,7 +304,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the "how" option menu. */
     how_menu = make_how_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), how_menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(how_menu));
+    gtk_box_set_spacing (GTK_BOX(box), 3);
 
     /* Create the owner box */
     fi->owner_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -257,11 +316,11 @@ gncs_get_widget (GNCSearchCoreType *fe)
      * put it in the owner_box we just created.
      */
     type_menu = make_type_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
-
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(type_menu));
+    gtk_box_set_spacing (GTK_BOX(box), 3);
     /* connect the owner box */
-    gtk_box_pack_start (GTK_BOX (box), fi->owner_box, FALSE, FALSE, 3);
-
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(fi->owner_box));
+    gtk_box_set_spacing (GTK_BOX(box), 3);
     /* And return the box */
     return box;
 }

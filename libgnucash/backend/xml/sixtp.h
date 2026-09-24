@@ -171,6 +171,16 @@ typedef enum
     SIXTP_CHARS_FAIL_ID,
 } sixtp_handler_type;
 
+typedef struct sixtp_push_plan sixtp_push_plan;
+
+typedef enum
+{
+    SIXTP_PUSH_PLAN_ACTIVE,
+    SIXTP_PUSH_PLAN_FINISHED,
+    SIXTP_PUSH_PLAN_CANCELLED,
+    SIXTP_PUSH_PLAN_ERROR,
+} sixtp_push_plan_status;
+
 /* completely invalid tag for xml */
 #define SIXTP_MAGIC_CATCHER "&MAGIX&"
 
@@ -230,6 +240,49 @@ gboolean sixtp_parse_buffer (sixtp* sixtp, char* bufp, int bufsz,
 gboolean sixtp_parse_push (sixtp* sixtp, sixtp_push_handler push_handler,
                            gpointer push_user_data, gpointer data_for_top_level,
                            gpointer global_data, gpointer* parse_result);
+
+/**
+ * Create a resumable libxml push parser. The plan takes ownership of @a parser
+ * on every return path; do not destroy it separately. The plan owns only
+ * parser machinery and the parser tree, never QOF objects published by a
+ * parser handler.
+ */
+sixtp_push_plan* sixtp_push_plan_new (sixtp* parser,
+                                      gpointer data_for_top_level,
+                                      gpointer global_data);
+
+/**
+ * Feed one input chunk. An active call invokes xmlParseChunk() exactly once
+ * with terminate=0, including a zero-length chunk. @a bytes may be NULL only
+ * when @a len is zero. A nonzero chunk larger than INT_MAX is rejected as a
+ * terminal parse error because libxml accepts an int length.
+ *
+ * SAX, end, and failure handlers may cancel or free this plan synchronously.
+ * Such requests are terminalized only after the active feed() or finish()
+ * call has returned from all parser callbacks. A free request invalidates the
+ * plan at the end of that API call; callers must not use it afterwards.
+ */
+sixtp_push_plan_status sixtp_push_plan_feed (sixtp_push_plan* plan,
+                                             const gchar* bytes,
+                                             gsize len);
+
+/**
+ * Finalize an active plan. The first call sends exactly one empty final libxml
+ * chunk with terminate=1 and runs the top-level end handler exactly once.
+ * On success, @a parse_result receives the top-level result if non-NULL.
+ */
+sixtp_push_plan_status sixtp_push_plan_finish (sixtp_push_plan* plan,
+                                               gpointer* parse_result);
+
+/**
+ * Cancel an active plan. Cancellation and parser errors run catastrophe
+ * cleanup and release the parser context exactly once. Later feed(), finish()
+ * or cancel() calls only return the terminal status.
+ */
+sixtp_push_plan_status sixtp_push_plan_cancel (sixtp_push_plan* plan);
+
+/** Release a plan and its parser tree. Active plans are cancelled first. */
+void sixtp_push_plan_free (sixtp_push_plan* plan);
 
 void sixtp_set_start (sixtp* parser, sixtp_start_handler start_handler);
 void sixtp_set_before_child (sixtp* parser,

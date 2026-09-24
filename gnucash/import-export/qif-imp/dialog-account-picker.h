@@ -1,35 +1,32 @@
 /********************************************************************\
- * dialog-account-picker.h -- window for picking a GNUcash account  *
- *                       (GnuCash)                                  *
+ * dialog-account-picker.h -- account picker for the QIF importer  *
+ *                                                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2026 GnuCash Contributors                          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
  * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #ifndef DIALOG_ACCOUNT_PICKER_H
 #define DIALOG_ACCOUNT_PICKER_H
 
+#include <gtk/gtk.h>
 #include <libguile.h>
 
 #include "assistant-qif-import.h"
 
-gboolean qif_account_picker_dialog (GtkWindow *parent, QIFImportWindow * wind, SCM initial_sel);
-
 typedef struct _accountpickerdialog QIFAccountPickerDialog;
+
+typedef void (*QIFAccountPickerCallback) (gboolean accepted,
+                                          gpointer user_data);
+
+void qif_account_picker_dialog_async (GtkWindow *parent,
+                                      QIFImportWindow *qif_wind,
+                                      SCM map_entry,
+                                      QIFAccountPickerCallback callback,
+                                      gpointer user_data);
 
 #endif

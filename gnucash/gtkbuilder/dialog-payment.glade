@@ -1,758 +1,464 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAdjustment" id="docs_list_hor_adj">
-    <property name="upper">100</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
-  </object>
-  <object class="GtkListStore" id="docs_list_model">
-    <columns>
-      <!-- column-name doc_date -->
-      <column type="gint64"/>
-      <!-- column-name doc_id -->
-      <column type="gchararray"/>
-      <!-- column-name doc_type -->
-      <column type="gchararray"/>
-      <!-- column-name doc_deb -->
-      <column type="gchararray"/>
-      <!-- column-name doc_cred -->
-      <column type="gchararray"/>
-      <!-- column-name doc_lot -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkAdjustment" id="docs_list_vert_adj">
-    <property name="upper">100</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
-  </object>
-  <object class="GtkListStore" id="owner_type_combo_model">
-    <columns>
-      <!-- column-name Partner -->
-      <column type="gchararray"/>
-      <!-- column-name PartnerType -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Customer</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Vendor</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Employee</col>
-        <col id="1">0</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="post_combo_model">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkDialog" id="payment_dialog">
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">Process Payment</property>
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkWindow" id="payment_dialog">
+    <property name="title" translatable="1">Process Payment</property>
     <property name="default-height">560</property>
-    <property name="type-hint">dialog</property>
-    <signal name="destroy" handler="gnc_payment_window_destroy_cb" swapped="no"/>
-    <child internal-child="vbox">
+    <property name="child">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_payment_cancel_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_payment_ok_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
-          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="table1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="border-width">3</property>
-            <property name="row-spacing">3</property>
+            <property name="vexpand">1</property>
+<property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkFrame" id="frame1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="label-xalign">0</property>
-                <child>
+                <property name="hexpand">1</property>
+                <property name="child">
                   <object class="GtkBox" id="owner_box">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="has-tooltip">True</property>
+                    <property name="has-tooltip">1</property>
                     <property name="tooltip-markup">The company associated with this payment.</property>
-                    <property name="tooltip-text" translatable="yes">The company associated with this payment.</property>
-                    <property name="border-width">3</property>
-                    <property name="spacing">5</property>
+                    <property name="tooltip-text" translatable="1">The company associated with this payment.</property>
+<property name="spacing">5</property>
                     <child>
-                      <object class="GtkComboBox" id="owner_type_combo">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="model">owner_type_combo_model</property>
-                        <property name="active">0</property>
-                        <property name="entry-text-column">0</property>
-                        <property name="id-column">1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="Partner Type"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
+                      <object class="GtkBox" id="owner_type_box">
+                        <property name="orientation">horizontal</property>
+                        <property name="hexpand">1</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                   </object>
-                </child>
+                </property>
                 <child type="label">
                   <object class="GtkLabel" id="owner_frame_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="has-tooltip">True</property>
+                    <property name="has-tooltip">1</property>
                     <property name="tooltip-markup">The company associated with this payment.</property>
-                    <property name="tooltip-text" translatable="yes">The company associated with this payment.</property>
-                    <property name="label" translatable="yes">Partner</property>
+                    <property name="tooltip-text" translatable="1">The company associated with this payment.</property>
+                    <property name="label" translatable="1">Partner</property>
                     <style>
-                      <class name="gnc-class-strong"/>
+                      <class name="gnc-class-strong" />
                     </style>
                   </object>
                 </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame5">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <object class="GtkComboBox" id="post_combo">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">3</property>
-                    <property name="model">post_combo_model</property>
-                    <property name="has-entry">True</property>
-                    <property name="entry-text-column">0</property>
-                    <signal name="changed" handler="gnc_payment_dialog_post_to_changed_cb" swapped="no"/>
-                    <child internal-child="entry">
-                      <object class="GtkEntry" id="combobox-entry">
-                        <property name="can-focus">True</property>
-                      </object>
-                    </child>
+                <property name="hexpand">1</property>
+                <property name="child">
+                  <object class="GtkBox" id="post_account_box">
+                    <property name="orientation">horizontal</property>
+                    <property name="hexpand">1</property>
                   </object>
-                </child>
+                </property>
                 <child type="label">
                   <object class="GtkLabel" id="label4">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Post To</property>
+                    <property name="label" translatable="1">Post To</property>
                     <style>
-                      <class name="gnc-class-strong"/>
+                      <class name="gnc-class-strong" />
                     </style>
                   </object>
                 </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame4">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="label-xalign">0</property>
-                <child>
+                <property name="hexpand">1</property>
+                <property name="child">
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="border-width">3</property>
-                    <property name="hadjustment">docs_list_hor_adj</property>
-                    <property name="vadjustment">docs_list_vert_adj</property>
+                    <property name="focusable">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                     <property name="hscrollbar-policy">always</property>
                     <property name="vscrollbar-policy">always</property>
-                    <property name="shadow-type">in</property>
-                    <child>
-                      <object class="GtkTreeView" id="docs_list_tree_view">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hadjustment">docs_list_hor_adj</property>
-                        <property name="vadjustment">docs_list_vert_adj</property>
-                        <property name="model">docs_list_model</property>
-                        <property name="reorderable">True</property>
-                        <property name="search-column">0</property>
-                        <property name="fixed-height-mode">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="docs_list_treeview_sel">
-                            <signal name="changed" handler="gnc_payment_dialog_document_selection_changed_cb" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="docs_list_col_date">
-                            <property name="resizable">True</property>
-                            <property name="sizing">fixed</property>
-                            <property name="min-width">50</property>
-                            <property name="title" translatable="yes">Date</property>
-                            <property name="clickable">True</property>
-                            <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="docs_list_col_num">
-                            <property name="resizable">True</property>
-                            <property name="sizing">fixed</property>
-                            <property name="min-width">50</property>
-                            <property name="title" translatable="yes">Number</property>
-                            <property name="clickable">True</property>
-                            <property name="sort-column-id">1</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="docs_list_num_renderer"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="docs_list_col_type">
-                            <property name="resizable">True</property>
-                            <property name="sizing">fixed</property>
-                            <property name="min-width">50</property>
-                            <property name="title" translatable="yes">Type</property>
-                            <property name="clickable">True</property>
-                            <property name="sort-column-id">2</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="docs_list_type_renderer"/>
-                              <attributes>
-                                <attribute name="text">2</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="docs_list_col_deb">
-                            <property name="resizable">True</property>
-                            <property name="sizing">fixed</property>
-                            <property name="min-width">50</property>
-                            <property name="title" translatable="yes">Debit</property>
-                            <property name="clickable">True</property>
-                            <property name="sort-column-id">3</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="docs_list_deb_renderer"/>
-                              <attributes>
-                                <attribute name="text">3</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="docs_list_col_cred">
-                            <property name="resizable">True</property>
-                            <property name="sizing">fixed</property>
-                            <property name="min-width">50</property>
-                            <property name="title" translatable="yes">Credit</property>
-                            <property name="clickable">True</property>
-                            <property name="sort-column-id">4</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="docs_list_cred_renderer"/>
-                              <attributes>
-                                <attribute name="text">4</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
+<property name="child">
+                      <object class="GtkBox" id="docs_list_box">
+                        <property name="orientation">vertical</property>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
                       </object>
-                    </child>
-                  </object>
-                </child>
+                    </property>
+                </object>
+                </property>
                 <child type="label">
                   <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Business items</property>
+                    <property name="label" translatable="1">Business items</property>
                     <style>
-                      <class name="gnc-class-strong"/>
+                      <class name="gnc-class-strong" />
                     </style>
                   </object>
                 </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                  <property name="column-span">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-                <property name="width">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=1 -->
           <object class="GtkGrid" id="table3">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkFrame" id="frame3">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <!-- n-columns=2 n-rows=9 -->
+                <property name="child">
                   <object class="GtkGrid" id="table2">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">6</property>
-                    <property name="row-spacing">3</property>
+<property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="date_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Date</property>
+                        <property name="label" translatable="1">Date</property>
                         <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="date_box">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
                         <child>
-                          <placeholder/>
+                          <placeholder />
                         </child>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="amount_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Amount</property>
+                        <property name="label" translatable="1">Amount</property>
                         <property name="justify">right</property>
                         <style>
-                          <class name="gnc-class-strong"/>
+                          <class name="gnc-class-strong" />
                         </style>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="debit_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Payment</property>
+                        <property name="label" translatable="1">Payment</property>
                         <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">3</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="credit_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Refund</property>
+                        <property name="label" translatable="1">Refund</property>
                         <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">4</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="num_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Num</property>
+                        <property name="label" translatable="1">Num</property>
                         <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">6</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">6</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="memo_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Memo</property>
+                        <property name="label" translatable="1">Memo</property>
                         <property name="justify">right</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">7</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">7</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="amount_payment_box">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                        </layout>
                         <child>
-                          <placeholder/>
+                          <placeholder />
                         </child>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="amount_refund_box">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">4</property>
+                        </layout>
                         <child>
-                          <placeholder/>
+                          <placeholder />
                         </child>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="num_entry">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="invisible-char">●</property>
+                        <property name="focusable">1</property>
+<layout>
+                          <property name="column">1</property>
+                          <property name="row">6</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">6</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="memo_entry">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="invisible-char">●</property>
+                        <property name="focusable">1</property>
+<layout>
+                          <property name="column">1</property>
+                          <property name="row">7</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">7</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="amount_top_filler">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
                         <child>
-                          <placeholder/>
+                          <placeholder />
                         </child>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="amount_bot_filler">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-tooltip">True</property>
+                        <property name="has-tooltip">1</property>
                         <property name="tooltip-markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                        <property name="tooltip-text" translatable="yes">The amount to pay for this invoice.
+                        <property name="tooltip-text" translatable="1">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">5</property>
+                        </layout>
                         <child>
-                          <placeholder/>
+                          <placeholder />
                         </child>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">5</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="print_check">
-                        <property name="label" translatable="yes">Print Check</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
+                        <property name="label" translatable="1">Print Check</property>
+                        <property name="focusable">1</property>
                         <property name="halign">center</property>
-                        <property name="draw-indicator">True</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">8</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">8</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="commodity_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">(USD)</property>
+                        <property name="label" translatable="1">(USD)</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <placeholder />
                     </child>
                     <child>
-                      <placeholder/>
+                      <placeholder />
                     </child>
                     <child>
-                      <placeholder/>
+                      <placeholder />
                     </child>
                   </object>
-                </child>
+                </property>
                 <child type="label">
                   <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Transaction Details</property>
+                    <property name="label" translatable="1">Transaction Details</property>
                     <style>
-                      <class name="gnc-class-strong"/>
+                      <class name="gnc-class-strong" />
                     </style>
                   </object>
                 </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="label-xalign">0</property>
-                <child>
+                <property name="hexpand">1</property>
+                <property name="child">
                   <object class="GtkScrolledWindow" id="acct_window">
                     <property name="width-request">250</property>
                     <property name="height-request">200</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="border-width">3</property>
-                    <property name="hscrollbar-policy">always</property>
+                    <property name="focusable">1</property>
+<property name="hscrollbar-policy">always</property>
                     <property name="vscrollbar-policy">always</property>
                     <child>
-                      <placeholder/>
+                      <placeholder />
                     </child>
                   </object>
-                </child>
+                </property>
                 <child type="label">
                   <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Transfer Account</property>
+                    <property name="label" translatable="1">Transfer Account</property>
                     <style>
-                      <class name="gnc-class-strong"/>
+                      <class name="gnc-class-strong" />
                     </style>
                   </object>
                 </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=1 -->
           <object class="GtkGrid" id="table4">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkImage" id="payment_warning">
-                <property name="can-focus">False</property>
+                <property name="visible">0</property>
                 <property name="icon-name">dialog-warning</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="conflict_message">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area1">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="halign">end</property>
+            <child>
+              <object class="GtkButton" id="cancelbutton">
+                <property name="label" translatable="1">_Cancel</property>
+                <property name="focusable">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton">
+                <property name="label" translatable="1">_OK</property>
+                <property name="focusable">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
+    </property>
   </object>
 </interface>

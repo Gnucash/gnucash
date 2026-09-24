@@ -41,29 +41,28 @@
 #include "dialog-report-column-view.hpp"
 #include <gnc-report.h>
 
-enum available_cols
-{
-    AVAILABLE_COL_NAME = 0,
-    AVAILABLE_COL_GUID,
-    NUM_AVAILABLE_COLS
-};
-
-enum contents_cols
-{
-    CONTENTS_COL_NAME = 0,
-    CONTENTS_COL_ROW,
-    CONTENTS_COL_REPORT_ROWS,
-    CONTENTS_COL_REPORT_COLS,
-    NUM_CONTENTS_COLS
-};
-
 using StrVec = std::vector<std::string>;
+
+struct ReportPlacementData
+{
+    int id;
+    int columns;
+    int rows;
+};
+
+struct ReportSizeRequest;
+static void report_size_request_complete(ReportSizeRequest *request, gboolean apply);
 
 struct gncp_column_view_edit
 {
     std::unique_ptr<GncOptionsDialog> optwin;
-    GtkTreeView  * available;
-    GtkTreeView  * contents;
+    GtkColumnView *available;
+    GtkColumnView *contents;
+    GListStore *available_store;
+    GListStore *contents_store;
+    GtkSingleSelection *available_selection;
+    GtkSingleSelection *contents_selection;
+    ReportSizeRequest *size_request;
 
     SCM          view;
     GncOptionDB  * odb;
@@ -77,6 +76,15 @@ struct gncp_column_view_edit
     GtkWidget *up_button;
     GtkWidget *down_button;
     GtkWidget *size_button;
+};
+
+struct ReportSizeRequest
+{
+    gncp_column_view_edit *editor;
+    GtkWindow *window;
+    GtkSpinButton *row_spin;
+    GtkSpinButton *column_spin;
+    gboolean completed;
 };
 
 /* Even though these aren't external nor used outside this file they must be
@@ -103,6 +111,15 @@ gnc_column_view_set_option(GncOptionDB* odb, const char* section,
 static void
 gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 {
+    if (view->size_request)
+        report_size_request_complete(view->size_request, FALSE);
+
+    gtk_column_view_set_model(view->available, nullptr);
+    gtk_column_view_set_model(view->contents, nullptr);
+    g_clear_object(&view->available_selection);
+    g_clear_object(&view->contents_selection);
+    g_clear_object(&view->available_store);
+    g_clear_object(&view->contents_store);
     scm_gc_unprotect_object(view->view);
     gnc_option_db_destroy(view->odb);
     delete view;
@@ -122,140 +139,244 @@ get_available_reports ()
     return sv;
 }
 
-static void
-update_available_lists(gnc_column_view_edit * view)
+static GQuark
+available_guid_quark(void)
 {
-    SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
-    std::string selection;
+    static GQuark quark;
 
+    if (!quark)
+        quark = g_quark_from_static_string("gnc-report-template-guid");
+    return quark;
+}
 
-    GtkTreeIter iter;
+static GQuark
+contents_row_quark(void)
+{
+    static GQuark quark;
 
-    /* Update the list of available reports (left selection box). */
-    auto tree_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view->available));
-    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(view->available));
+    if (!quark)
+        quark = g_quark_from_static_string("gnc-report-placement-data");
+    return quark;
+}
 
-    if (gtk_tree_selection_get_selected(tree_selection, &model, &iter))
-    {
-        gchar *guid_str;
-        gtk_tree_model_get(model, &iter,
-                           AVAILABLE_COL_GUID, &guid_str,
-                           -1);
-        selection = std::string(guid_str);
-        g_free (guid_str);
-    }
-    view->available_list = get_available_reports();
+static guint
+selection_position(GtkSingleSelection *selection)
+{
+    return gtk_single_selection_get_selected(selection);
+}
 
-    auto store = GTK_LIST_STORE(model);
-    gtk_list_store_clear(store);
+static std::string
+selected_available_guid(gncp_column_view_edit *view)
+{
+    const auto position = selection_position(view->available_selection);
+    GObject *item;
 
-    for (const auto& guid : view->available_list)
-    {
-       auto rpt_guid{scm_from_utf8_string(guid.c_str())};
-       auto name =
-           gnc_scm_to_utf8_string (scm_call_2(template_menu_name, rpt_guid, SCM_BOOL_F));
+    if (position == GTK_INVALID_LIST_POSITION)
+        return {};
+    item = G_OBJECT(g_list_model_get_item(G_LIST_MODEL(view->available_selection), position));
+    const auto guid = item ? static_cast<const gchar *>(g_object_get_qdata(item,
+                                                                             available_guid_quark()))
+                           : nullptr;
+    std::string result = guid ? guid : "";
 
-       gtk_list_store_append(store, &iter);
-       gtk_list_store_set(store, &iter,
-                          AVAILABLE_COL_NAME, _(name),
-                          AVAILABLE_COL_GUID, guid.c_str(),
-                          -1);
-
-       if (guid == selection)
-           gtk_tree_selection_select_iter (tree_selection, &iter);
-
-       g_free (name);
-    }
+    if (item)
+        g_object_unref(item);
+    return result;
 }
 
 static void
-update_contents_lists(gnc_column_view_edit * view)
+select_available_guid(gncp_column_view_edit *view, const std::string& guid)
 {
-    SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
-    auto contents{view->odb->find_option("__general", "report-list")->get_value<GncOptionReportPlacementVec>()};
-    GtkTreeIter iter;
-    GncOptionReportPlacement selection{0, 0, 0};
+    const auto count = g_list_model_get_n_items(G_LIST_MODEL(view->available_selection));
 
-    /* Update the list of selected reports (right selection box). */
-    auto tree_selection = gtk_tree_view_get_selection(view->contents);
-
-    view->contents_list = contents;
-
-    if (!contents.empty() && static_cast<size_t>(view->contents_selected) < contents.size())
-        selection = contents[view->contents_selected];
-
-    auto store = GTK_LIST_STORE(gtk_tree_view_get_model(view->contents));
-    gtk_list_store_clear(store);
-
-    for (size_t i = 0; i < contents.size(); ++i)
+    gtk_single_selection_set_selected(view->available_selection, GTK_INVALID_LIST_POSITION);
+    for (guint position = 0; position < count; position++)
     {
-        auto [id, wide, high] = contents[i];
-        auto this_report = gnc_report_find(id);
-        auto name = gnc_scm_to_utf8_string (scm_call_1(report_menu_name, this_report));
+        auto item = G_OBJECT(g_list_model_get_item(G_LIST_MODEL(view->available_selection), position));
+        const auto item_guid = item ? static_cast<const gchar *>(g_object_get_qdata(item,
+                                                                                      available_guid_quark()))
+                                    : nullptr;
+        const auto matches = item_guid && guid == item_guid;
 
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set
-            (store, &iter,
-             CONTENTS_COL_NAME, _(name),
-             CONTENTS_COL_ROW, i,
-             CONTENTS_COL_REPORT_COLS, wide,
-             CONTENTS_COL_REPORT_ROWS, high,
-             -1);
-
-        if (id == std::get<0>(selection))
-            gtk_tree_selection_select_iter (tree_selection, &iter);
-
-        g_free (name);
-    }
-}
-
-static void
-gnc_column_view_update_buttons_cb (GtkTreeSelection *selection,
-                                       gnc_column_view_edit *r)
-{
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    gboolean is_selected;
-
-    /* compare treeviews to establish which selected treeview */
-    if (gtk_tree_selection_get_tree_view (selection) == r->available)
-    {
-        /* available treeview */
-        is_selected = gtk_tree_selection_get_selected (selection, &model, &iter);
-        gtk_widget_set_sensitive (r->add_button, is_selected);
-        return;
-    }
-
-    /* contents treeview */
-    is_selected = gtk_tree_selection_get_selected (selection, &model, &iter);
-    gtk_widget_set_sensitive (r->size_button, is_selected);
-    gtk_widget_set_sensitive (r->remove_button, is_selected);
-
-    if (is_selected)
-    {
-        int len = r->contents_list.size();
-
-        gtk_tree_model_get (model, &iter,
-                           CONTENTS_COL_ROW, &r->contents_selected, -1);
-
-        if (len > 1)
+        if (item)
+            g_object_unref(item);
+        if (matches)
         {
-            gtk_widget_set_sensitive (r->up_button, TRUE);
-            gtk_widget_set_sensitive (r->down_button, TRUE);
-
-            if (r->contents_selected == len -1)
-                gtk_widget_set_sensitive (r->down_button, FALSE);
-
-            if (r->contents_selected == 0)
-                gtk_widget_set_sensitive (r->up_button, FALSE);
+            gtk_single_selection_set_selected(view->available_selection, position);
+            return;
         }
     }
-    else
-    {
-        gtk_widget_set_sensitive (r->up_button, FALSE);
-        gtk_widget_set_sensitive (r->down_button, FALSE);
-    }
 }
+
+static void
+report_text_factory_setup_cb(G_GNUC_UNUSED GtkListItemFactory *factory,
+                             GtkListItem *list_item,
+                             G_GNUC_UNUSED gpointer user_data)
+{
+    auto label = gtk_label_new(nullptr);
+
+    gtk_label_set_xalign(GTK_LABEL(label), 0.0F);
+    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child(list_item, label);
+}
+
+static void
+report_available_factory_bind_cb(G_GNUC_UNUSED GtkListItemFactory *factory,
+                                 GtkListItem *list_item,
+                                 G_GNUC_UNUSED gpointer user_data)
+{
+    auto object = GTK_STRING_OBJECT(gtk_list_item_get_item(list_item));
+    auto label = GTK_LABEL(gtk_list_item_get_child(list_item));
+
+    gtk_label_set_text(label, object ? gtk_string_object_get_string(object) : "");
+}
+
+static ReportPlacementData *
+report_placement_from_list_item(GtkListItem *list_item)
+{
+    auto object = G_OBJECT(gtk_list_item_get_item(list_item));
+
+    return object ? static_cast<ReportPlacementData *>(g_object_get_qdata(object,
+                                                                            contents_row_quark()))
+                  : nullptr;
+}
+
+static void
+report_contents_name_factory_bind_cb(G_GNUC_UNUSED GtkListItemFactory *factory,
+                                     GtkListItem *list_item,
+                                     G_GNUC_UNUSED gpointer user_data)
+{
+    auto object = GTK_STRING_OBJECT(gtk_list_item_get_item(list_item));
+    auto label = GTK_LABEL(gtk_list_item_get_child(list_item));
+
+    gtk_label_set_text(label, object ? gtk_string_object_get_string(object) : "");
+}
+
+static void
+report_contents_span_factory_bind_cb(G_GNUC_UNUSED GtkListItemFactory *factory,
+                                     GtkListItem *list_item,
+                                     gpointer user_data)
+{
+    auto placement = report_placement_from_list_item(list_item);
+    auto label = GTK_LABEL(gtk_list_item_get_child(list_item));
+    const auto span = GPOINTER_TO_INT(user_data) ? placement ? placement->columns : 0
+                                                 : placement ? placement->rows : 0;
+    auto text = g_strdup_printf("%d", span);
+
+    gtk_label_set_text(label, text);
+    g_free(text);
+}
+
+using ReportFactoryBindFunc = void (*)(GtkListItemFactory *, GtkListItem *, gpointer);
+
+static void
+append_report_column(GtkColumnView *view, const gchar *title, gboolean expand,
+                     ReportFactoryBindFunc bind, gpointer bind_data)
+{
+    auto factory = gtk_signal_list_item_factory_new();
+    GtkColumnViewColumn *column;
+
+    g_signal_connect(factory, "setup", G_CALLBACK(report_text_factory_setup_cb), nullptr);
+    g_signal_connect(factory, "bind", G_CALLBACK(bind), bind_data);
+    column = gtk_column_view_column_new(title, GTK_LIST_ITEM_FACTORY(factory));
+    gtk_column_view_column_set_expand(column, expand);
+    gtk_column_view_append_column(view, column);
+    g_object_unref(column);
+}
+
+static void gnc_column_view_update_buttons(gncp_column_view_edit *view);
+
+static void
+update_available_lists(gncp_column_view_edit *view)
+{
+    SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
+    const auto selection = selected_available_guid(view);
+
+    view->available_list = get_available_reports();
+    g_list_store_remove_all(view->available_store);
+    for (const auto& guid : view->available_list)
+    {
+        auto report_guid = scm_from_utf8_string(guid.c_str());
+        auto name = gnc_scm_to_utf8_string(scm_call_2(template_menu_name, report_guid, SCM_BOOL_F));
+        auto row = gtk_string_object_new(_(name));
+
+        g_object_set_qdata_full(G_OBJECT(row), available_guid_quark(), g_strdup(guid.c_str()), g_free);
+        g_list_store_append(view->available_store, row);
+        g_object_unref(row);
+        g_free(name);
+    }
+    select_available_guid(view, selection);
+    gnc_column_view_update_buttons(view);
+}
+
+static void
+update_contents_lists(gncp_column_view_edit *view)
+{
+    SCM report_menu_name = scm_c_eval_string("gnc:report-menu-name");
+    auto contents = view->odb->find_option("__general", "report-list")
+                        ->get_value<GncOptionReportPlacementVec>();
+    int selected_id = 0;
+    gboolean have_selection = FALSE;
+
+    if (view->contents_selected >= 0 &&
+        static_cast<size_t>(view->contents_selected) < view->contents_list.size())
+    {
+        selected_id = std::get<0>(view->contents_list[view->contents_selected]);
+        have_selection = TRUE;
+    }
+    view->contents_list = contents;
+    gtk_single_selection_set_selected(view->contents_selection, GTK_INVALID_LIST_POSITION);
+    g_list_store_remove_all(view->contents_store);
+    for (size_t position = 0; position < contents.size(); position++)
+    {
+        auto [id, columns, rows] = contents[position];
+        auto report = gnc_report_find(id);
+        auto name = gnc_scm_to_utf8_string(scm_call_1(report_menu_name, report));
+        auto row = gtk_string_object_new(_(name));
+        auto placement = g_new(ReportPlacementData, 1);
+
+        *placement = {static_cast<int>(id), static_cast<int>(columns), static_cast<int>(rows)};
+        g_object_set_qdata_full(G_OBJECT(row), contents_row_quark(), placement, g_free);
+        g_list_store_append(view->contents_store, row);
+        g_object_unref(row);
+        g_free(name);
+        if (have_selection && id == static_cast<guint>(selected_id))
+        {
+            gtk_single_selection_set_selected(view->contents_selection, position);
+            view->contents_selected = static_cast<int>(position);
+        }
+    }
+    if (!have_selection)
+        gtk_single_selection_set_selected(view->contents_selection, GTK_INVALID_LIST_POSITION);
+    gnc_column_view_update_buttons(view);
+}
+
+static void
+selection_changed_cb(G_GNUC_UNUSED GObject *selection,
+                     G_GNUC_UNUSED GParamSpec *property,
+                     gpointer user_data)
+{
+    gnc_column_view_update_buttons(static_cast<gncp_column_view_edit *>(user_data));
+}
+
+static void
+gnc_column_view_update_buttons(gncp_column_view_edit *view)
+{
+    const auto available_position = selection_position(view->available_selection);
+    const auto contents_position = selection_position(view->contents_selection);
+    const auto available_selected = available_position != GTK_INVALID_LIST_POSITION;
+    const auto contents_selected = contents_position != GTK_INVALID_LIST_POSITION &&
+                                   contents_position < view->contents_list.size();
+
+    gtk_widget_set_sensitive(view->add_button, available_selected);
+    gtk_widget_set_sensitive(view->size_button, contents_selected);
+    gtk_widget_set_sensitive(view->remove_button, contents_selected);
+    gtk_widget_set_sensitive(view->up_button, contents_selected && contents_position > 0);
+    gtk_widget_set_sensitive(view->down_button, contents_selected &&
+                             contents_position + 1 < view->contents_list.size());
+    view->contents_selected = contents_selected ? static_cast<int>(contents_position) : -1;
+}
+
 
 static void
 gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
@@ -267,15 +388,8 @@ gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
     auto results = gnc_option_db_commit (dlg->get_option_db());
     for (auto iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog =
-            gtk_message_dialog_new(GTK_WINDOW(dlg->get_widget()),
-                                   GTK_DIALOG_MODAL,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_OK,
-                                   "%s",
-                                   (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_error_dialog (GTK_WINDOW (dlg->get_widget()), "%s",
+                          static_cast<char *> (iter->data));
         g_free (iter->data);
     }
     g_list_free (results);
@@ -303,261 +417,276 @@ GtkWidget *
 gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
 {
     SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
-    SCM ptr;
-    GtkWidget * editor;
-    GtkListStore *store;
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
-    GtkTreeSelection *selection;
+    SCM ptr = scm_call_1(get_editor, view);
 
-    ptr = scm_call_1(get_editor, view);
     if (ptr != SCM_BOOL_F)
     {
 #define FUNC_NAME "gtk_window_present"
-        auto w{static_cast<GtkWindow*>(SWIG_MustGetPtr(ptr, SWIG_TypeQuery("_p_GtkWidget"), 1, 0))};
-        gtk_window_present(w);
+        auto window = static_cast<GtkWindow *>(SWIG_MustGetPtr(ptr,
+                                                                 SWIG_TypeQuery("_p_GtkWidget"),
+                                                                 1, 0));
+        gtk_window_present(window);
 #undef FUNC_NAME
         return nullptr;
     }
-    else
-    {
-        auto r = new gnc_column_view_edit;
-        GtkBuilder *builder;
 
-        r->optwin = std::make_unique<GncOptionsDialog>(nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
+    auto editor = new gncp_column_view_edit{};
+    auto builder = gtk_builder_new();
+    GtkWidget *contents_page;
+    GtkExpression *expression;
+    GtkSorter *sorter;
+    GtkSortListModel *sorted_model;
 
-        /* Hide the generic dialog page list. */
-        gtk_widget_hide(r->optwin->get_page_list());
+    editor->optwin = std::make_unique<GncOptionsDialog>(nullptr,
+        GTK_WINDOW(gnc_ui_get_main_window(nullptr)));
+    gtk_widget_set_visible(GTK_WIDGET(editor->optwin->get_page_list()), false);
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "view_contents_table");
 
-        builder = gtk_builder_new();
-        gnc_builder_add_from_file (builder, "dialog-report.glade", "view_contents_table");
+    contents_page = GTK_WIDGET(gtk_builder_get_object(builder, "view_contents_table"));
+    editor->available = GTK_COLUMN_VIEW(gtk_builder_get_object(builder, "available_view"));
+    editor->contents = GTK_COLUMN_VIEW(gtk_builder_get_object(builder, "contents_view"));
+    editor->add_button = GTK_WIDGET(gtk_builder_get_object(builder, "add_button1"));
+    editor->remove_button = GTK_WIDGET(gtk_builder_get_object(builder, "remove_button1"));
+    editor->up_button = GTK_WIDGET(gtk_builder_get_object(builder, "up_button1"));
+    editor->down_button = GTK_WIDGET(gtk_builder_get_object(builder, "down_button1"));
+    editor->size_button = GTK_WIDGET(gtk_builder_get_object(builder, "size_button1"));
+    editor->view = view;
+    editor->odb = odb;
+    editor->contents_selected = -1;
 
-        editor       = GTK_WIDGET(gtk_builder_get_object (builder, "view_contents_table"));
-        r->available = GTK_TREE_VIEW (gtk_builder_get_object (builder, "available_view"));
-        r->contents  = GTK_TREE_VIEW (gtk_builder_get_object (builder, "contents_view"));
+    editor->available_store = g_list_store_new(GTK_TYPE_STRING_OBJECT);
+    expression = gtk_property_expression_new(GTK_TYPE_STRING_OBJECT, nullptr, "string");
+    sorter = GTK_SORTER(gtk_string_sorter_new(expression));
+    sorted_model = gtk_sort_list_model_new(G_LIST_MODEL(g_object_ref(editor->available_store)),
+                                           sorter);
+    editor->available_selection = gtk_single_selection_new(G_LIST_MODEL(sorted_model));
+    gtk_single_selection_set_autoselect(editor->available_selection, FALSE);
+    gtk_single_selection_set_can_unselect(editor->available_selection, TRUE);
+    gtk_column_view_set_model(editor->available, GTK_SELECTION_MODEL(editor->available_selection));
+    append_report_column(editor->available, "", TRUE, report_available_factory_bind_cb, nullptr);
 
-        r->add_button = GTK_WIDGET(gtk_builder_get_object (builder, "add_button1"));
-        r->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button1"));
-        r->up_button = GTK_WIDGET(gtk_builder_get_object (builder, "up_button1"));
-        r->down_button = GTK_WIDGET(gtk_builder_get_object (builder, "down_button1"));
-        r->size_button = GTK_WIDGET(gtk_builder_get_object (builder, "size_button1"));
+    editor->contents_store = g_list_store_new(GTK_TYPE_STRING_OBJECT);
+    editor->contents_selection = gtk_single_selection_new(
+        G_LIST_MODEL(g_object_ref(editor->contents_store)));
+    gtk_single_selection_set_autoselect(editor->contents_selection, FALSE);
+    gtk_single_selection_set_can_unselect(editor->contents_selection, TRUE);
+    gtk_column_view_set_model(editor->contents, GTK_SELECTION_MODEL(editor->contents_selection));
+    append_report_column(editor->contents, _("Report"), TRUE,
+                         report_contents_name_factory_bind_cb, nullptr);
+    append_report_column(editor->contents, _("Rows"), FALSE,
+                         report_contents_span_factory_bind_cb, nullptr);
+    append_report_column(editor->contents, _("Cols"), FALSE,
+                         report_contents_span_factory_bind_cb, GINT_TO_POINTER(1));
 
-        r->view      = view;
-        r->available_list.clear();
-        r->contents_selected = 0;
-        r->contents_list.clear();
-        r->odb       = odb;
+    g_signal_connect(editor->available_selection, "notify::selected",
+                     G_CALLBACK(selection_changed_cb), editor);
+    g_signal_connect(editor->contents_selection, "notify::selected",
+                     G_CALLBACK(selection_changed_cb), editor);
+    editor->optwin->build_contents(editor->odb);
+    gtk_notebook_append_page(GTK_NOTEBOOK(editor->optwin->get_notebook()),
+                             contents_page, gtk_label_new(_("Contents")));
+    scm_gc_protect_object(editor->view);
+    update_available_lists(editor);
+    update_contents_lists(editor);
+    editor->optwin->set_apply_cb(gnc_column_view_edit_apply_cb, editor);
+    editor->optwin->set_close_cb(gnc_column_view_edit_close_cb, editor);
+    gnc_builder_connect_signals_full(builder, gnc_builder_connect_full_func, editor);
+    g_object_unref(builder);
+    gtk_widget_set_visible(GTK_WIDGET(editor->optwin->get_widget()), true);
 
-        r->optwin->build_contents(r->odb);
-
-        gtk_notebook_append_page(GTK_NOTEBOOK(r->optwin->get_notebook()),
-                                 editor,
-                                 gtk_label_new(_("Contents")));
-
-        scm_gc_protect_object(r->view);
-
-        /* Build the 'available' view */
-        store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_STRING);
-        gtk_tree_view_set_model(r->available, GTK_TREE_MODEL(store));
-        gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), AVAILABLE_COL_NAME, GTK_SORT_ASCENDING);
-        g_object_unref(store);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes("", renderer,
-                 "text", AVAILABLE_COL_NAME,
-                 nullptr);
-        gtk_tree_view_append_column(r->available, column);
-
-        /* use the selection cb to update buttons */
-        selection = gtk_tree_view_get_selection(r->available);
-        g_signal_connect(selection, "changed",
-                         G_CALLBACK(gnc_column_view_update_buttons_cb), r);
-
-        /* Build the 'contents' view */
-        store = gtk_list_store_new (NUM_CONTENTS_COLS, G_TYPE_STRING, G_TYPE_INT,
-                                    G_TYPE_INT, G_TYPE_INT);
-        gtk_tree_view_set_model(r->contents, GTK_TREE_MODEL(store));
-        g_object_unref(store);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Report"), renderer,
-                 "text", CONTENTS_COL_NAME,
-                 nullptr);
-        gtk_tree_view_append_column(r->contents, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Rows"), renderer,
-                 "text", CONTENTS_COL_REPORT_ROWS,
-                 nullptr);
-        gtk_tree_view_append_column(r->contents, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Cols"), renderer,
-                 "text", CONTENTS_COL_REPORT_COLS,
-                 nullptr);
-        gtk_tree_view_append_column(r->contents, column);
-
-        /* use the selection cb to update buttons */
-        selection = gtk_tree_view_get_selection(r->contents);
-        g_signal_connect(selection, "changed",
-                         G_CALLBACK(gnc_column_view_update_buttons_cb), r);
-
-        update_available_lists(r);
-        update_contents_lists(r);
-
-        r->optwin->set_apply_cb(gnc_column_view_edit_apply_cb, r);
-        r->optwin->set_close_cb(gnc_column_view_edit_close_cb, r);
-
-        gtk_widget_show(r->optwin->get_widget());
-
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, r);
-
-        g_object_unref(G_OBJECT(builder));
-
-        return r->optwin->get_widget();
-    }
+    return editor->optwin->get_widget();
 }
-
 void
-gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
+gnc_column_view_edit_add_cb(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
-    auto r = static_cast<gnc_column_view_edit *>(user_data);
+    auto editor = static_cast<gnc_column_view_edit *>(user_data);
     SCM make_report = scm_c_eval_string("gnc:make-report");
     SCM mark_report = scm_c_eval_string("gnc:report-set-needs-save?!");
-    gchar *guid_str;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->available));
-    GtkTreeModel *model;
-    GtkTreeIter iter;
+    const auto guid = editor ? selected_available_guid(editor) : std::string{};
 
-    /* make sure there is a selected entry */
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter,
-                           AVAILABLE_COL_GUID, &guid_str, -1);
-    else
+    if (guid.empty())
         return;
 
-    auto template_name = scm_from_utf8_string(guid_str);
-
+    auto template_name = scm_from_utf8_string(guid.c_str());
     auto new_report = scm_call_1(make_report, template_name);
     auto id = scm_to_int(new_report);
+    auto old_length = editor->contents_list.size();
+    size_t insert_at = old_length;
+
     scm_call_2(mark_report, gnc_report_find(id), SCM_BOOL_T);
-    auto oldlength = r->contents_list.size();
-    GncOptionReportPlacement new_rpt_placement{id, 1, 1};
-
-    if (oldlength > static_cast<size_t>(r->contents_selected))
-        r->contents_list.emplace(r->contents_list.begin() + r->contents_selected + 1, id, 1, 1);
-    else
-    {
-        r->contents_list.emplace_back(id, 1, 1);
-        r->contents_selected = oldlength;
-    }
-
-    gnc_column_view_set_option(r->odb, "__general", "report-list",
-                               r->contents_list);
-    g_free (guid_str);
-    r->optwin->changed();
-    update_contents_lists(r);
+    if (editor->contents_selected >= 0 &&
+        static_cast<size_t>(editor->contents_selected) < old_length)
+        insert_at = static_cast<size_t>(editor->contents_selected) + 1;
+    editor->contents_list.emplace(editor->contents_list.begin() + insert_at, id, 1, 1);
+    editor->contents_selected = static_cast<int>(insert_at);
+    gnc_column_view_set_option(editor->odb, "__general", "report-list",
+                               editor->contents_list);
+    editor->optwin->changed();
+    update_contents_lists(editor);
 }
 
 void
-gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
+gnc_column_view_edit_remove_cb(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
-    auto r = static_cast<gnc_column_view_edit *>(user_data);
+    auto editor = static_cast<gnc_column_view_edit *>(user_data);
 
-    r->contents_list.erase(r->contents_list.begin() + r->contents_selected);
-    if (r->contents_selected)
-        --r->contents_selected;
-    gnc_column_view_set_option(r->odb, "__general", "report-list",
-                               r->contents_list);
+    if (!editor || editor->contents_selected < 0 ||
+        static_cast<size_t>(editor->contents_selected) >= editor->contents_list.size())
+        return;
 
-    r->optwin->changed();
-    update_contents_lists(r);
+    editor->contents_list.erase(editor->contents_list.begin() + editor->contents_selected);
+    if (editor->contents_selected >= static_cast<int>(editor->contents_list.size()))
+        editor->contents_selected = static_cast<int>(editor->contents_list.size()) - 1;
+    gnc_column_view_set_option(editor->odb, "__general", "report-list",
+                               editor->contents_list);
+    editor->optwin->changed();
+    update_contents_lists(editor);
 }
 
 static void
-move_selected_item(gnc_column_view_edit* r, int increment)
+move_selected_item(gncp_column_view_edit *editor, int increment)
 {
-    if (!r || !increment)
+    if (!editor || !increment || editor->contents_selected < 0)
         return;
 
-    auto cur_sel{r->contents_list.begin() + r->contents_selected};
-    auto move_to{cur_sel + increment};
-    if (increment > 0)
-        std::reverse(cur_sel, move_to + 1);
-    else
-        std::reverse(move_to, cur_sel + 1);
-    r->contents_selected += increment;
+    const auto from = static_cast<size_t>(editor->contents_selected);
+    const auto destination = static_cast<int>(from) + increment;
 
-    gnc_column_view_set_option(r->odb, "__general", "report-list",
-                               r->contents_list);
-    r->optwin->changed();
-    update_contents_lists(r);
+    if (from >= editor->contents_list.size() || destination < 0 ||
+        static_cast<size_t>(destination) >= editor->contents_list.size())
+        return;
+
+    std::iter_swap(editor->contents_list.begin() + from,
+                   editor->contents_list.begin() + destination);
+    editor->contents_selected = destination;
+    gnc_column_view_set_option(editor->odb, "__general", "report-list",
+                               editor->contents_list);
+    editor->optwin->changed();
+    update_contents_lists(editor);
 }
 
 void
-gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
+gnc_edit_column_view_move_up_cb(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
-    auto r = static_cast<gnc_column_view_edit *>(user_data);
-    move_selected_item(r, -1);
+    move_selected_item(static_cast<gnc_column_view_edit *>(user_data), -1);
 }
 
 void
-gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
+gnc_edit_column_view_move_down_cb(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
-    auto r = static_cast<gnc_column_view_edit *>(user_data);
-    move_selected_item(r, 1);
+    move_selected_item(static_cast<gnc_column_view_edit *>(user_data), 1);
+}
+
+static void
+report_size_request_complete(ReportSizeRequest *request, gboolean apply)
+{
+    auto editor = request ? request->editor : nullptr;
+
+    if (!request || request->completed)
+        return;
+
+    request->completed = TRUE;
+    if (editor && editor->size_request == request)
+        editor->size_request = nullptr;
+    if (apply && editor && editor->contents_selected >= 0 &&
+        static_cast<size_t>(editor->contents_selected) < editor->contents_list.size())
+    {
+        auto& placement = editor->contents_list[editor->contents_selected];
+
+        std::get<1>(placement) = gtk_spin_button_get_value_as_int(request->column_spin);
+        std::get<2>(placement) = gtk_spin_button_get_value_as_int(request->row_spin);
+        gnc_column_view_set_option(editor->odb, "__general", "report-list",
+                                   editor->contents_list);
+        editor->optwin->changed();
+        update_contents_lists(editor);
+    }
+    request->editor = nullptr;
+    if (request->window)
+        gtk_window_destroy(request->window);
+    g_clear_object(&request->window);
+    g_free(request);
+}
+
+static gboolean
+report_size_close_request_cb(G_GNUC_UNUSED GtkWindow *window, gpointer user_data)
+{
+    report_size_request_complete(static_cast<ReportSizeRequest *>(user_data), FALSE);
+    return TRUE;
+}
+
+static void
+report_size_destroy_cb(G_GNUC_UNUSED GtkWidget *window, gpointer user_data)
+{
+    auto request = static_cast<ReportSizeRequest *>(user_data);
+
+    if (!request->completed)
+        report_size_request_complete(request, FALSE);
+}
+
+static void
+report_size_accept_cb(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
+{
+    report_size_request_complete(static_cast<ReportSizeRequest *>(user_data), TRUE);
+}
+
+static void
+report_size_cancel_cb(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
+{
+    report_size_request_complete(static_cast<ReportSizeRequest *>(user_data), FALSE);
 }
 
 void
-gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
+gnc_column_view_edit_size_cb(GtkButton *button, gpointer user_data)
 {
-    auto r = static_cast<gnc_column_view_edit *>(user_data);
-    GtkWidget * rowspin;
-    GtkWidget * colspin;
-    GtkWidget * dlg;
+    auto editor = static_cast<gnc_column_view_edit *>(user_data);
     GtkBuilder *builder;
-    int dlg_ret;
+    GtkWindow *window;
+    GtkSpinButton *row_spin;
+    GtkSpinButton *column_spin;
+    GtkWidget *cancel_button;
+    GtkWidget *ok_button;
+    GtkRoot *root;
+    ReportSizeRequest *request;
+
+    if (!editor || editor->contents_selected < 0 ||
+        static_cast<size_t>(editor->contents_selected) >= editor->contents_list.size())
+        return;
+    if (editor->size_request)
+    {
+        gtk_window_present(editor->size_request->window);
+        return;
+    }
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "col_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "row_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "edit_report_size");
-    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "edit_report_size"));
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "col_adjustment");
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "row_adjustment");
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "edit_report_size");
+    window = GTK_WINDOW(gtk_builder_get_object(builder, "edit_report_size"));
+    row_spin = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "row_spin"));
+    column_spin = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "col_spin"));
+    cancel_button = GTK_WIDGET(gtk_builder_get_object(builder, "cancelbutton"));
+    ok_button = GTK_WIDGET(gtk_builder_get_object(builder, "okbutton"));
+    root = gtk_widget_get_root(GTK_WIDGET(button));
+    if (GTK_IS_WINDOW(root))
+        gtk_window_set_transient_for(window, GTK_WINDOW(root));
 
-    gtk_window_set_transient_for (GTK_WINDOW(dlg),
-                         GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(button))));
-
-    /* get the spinner widgets */
-    rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));
-    colspin = GTK_WIDGET(gtk_builder_get_object (builder, "col_spin"));
-
-    if (r->contents_list.size() > static_cast<size_t>(r->contents_selected))
-    {
-        auto [id, wide, high] = r->contents_list[r->contents_selected];
-
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(colspin),
-                                  static_cast<float>(wide));
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(rowspin),
-                                  static_cast<float>(high));
-
-        dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
-        gtk_widget_hide(dlg);
-
-        if (dlg_ret == GTK_RESPONSE_OK)
-        {
-            std::get<1>(r->contents_list[r->contents_selected]) =
-                gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(colspin));
-            std::get<2>(r->contents_list[r->contents_selected]) =
-                gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(rowspin));
-
-            gnc_column_view_set_option(r->odb, "__general", "report-list",
-                                       r->contents_list);
-            r->optwin->changed();
-            update_contents_lists(r);
-        }
-
-        g_object_unref(G_OBJECT(builder));
-
-        gtk_widget_destroy(dlg);
-    }
+    auto [id, columns, rows] = editor->contents_list[editor->contents_selected];
+    gtk_spin_button_set_value(column_spin, columns);
+    gtk_spin_button_set_value(row_spin, rows);
+    gtk_window_set_modal(window, TRUE);
+    gtk_window_set_default_widget(window, ok_button);
+    request = g_new0(ReportSizeRequest, 1);
+    request->editor = editor;
+    request->window = GTK_WINDOW(g_object_ref(window));
+    request->row_spin = row_spin;
+    request->column_spin = column_spin;
+    editor->size_request = request;
+    g_signal_connect(window, "close-request", G_CALLBACK(report_size_close_request_cb), request);
+    g_signal_connect(window, "destroy", G_CALLBACK(report_size_destroy_cb), request);
+    g_signal_connect(cancel_button, "clicked", G_CALLBACK(report_size_cancel_cb), request);
+    g_signal_connect(ok_button, "clicked", G_CALLBACK(report_size_accept_cb), request);
+    g_object_unref(builder);
+    gtk_window_present(window);
+    gtk_widget_grab_focus(GTK_WIDGET(column_spin));
+    (void)id;
 }

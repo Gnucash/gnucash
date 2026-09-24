@@ -209,39 +209,46 @@ gchar *gnc_ab_memo_to_gnc (const AB_TRANSACTION *ab_trans);
 Transaction *gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc);
 
 /**
- * Import balances and transactions found in a AB_IMEXPORTER_CONTEXT into
- * GnuCash.  By using @a awaiting the caller can specify what the user will
- * expect to receive.  By using @a execute_txns, transactions in @a context can
- * be used to generate corresponding AqBanking jobs, e.g. after a file import.
- *
- * @param context AB_IMEXPORTER_CONTEXT to import
- *
- * @param awaiting Information the caller expects to receive or wants to ignore,
- * bitmask of AWAIT_* or IGNORE_* values
- *
- * @param execute_txns If @a awaiting contains AWAIT_TRANSACTIONS, whether to
- * create an aqbanking job for each of the transactions found
- *
- * @param api If @a execute_txns is TRUE, the AB_BANKING to get
- * GNC_AB_ACCOUNT_SPECs from
- *
- * @param parent Widget to set new dialogs transient for, may be NULL
- *
- * @return A new GncABImExContextImport object which must be freed with
- * g_free(), or NULL otherwise.  If execute_txns is TRUE, additionally
- * gnc_ab_ieci_get_job_list() must be called and the result freed with
- * AB_Job_List2_FreeAll()
+ * Completion callback for gnc_ab_import_context_async(). The import context is
+ * borrowed for the duration of the callback. A false @a completed value means
+ * cancellation, parent destruction, or a book switch; no more import mutation
+ * is performed in that case.
  */
-GncABImExContextImport *gnc_ab_import_context (AB_IMEXPORTER_CONTEXT *context,
-                                               guint awaiting,
-                                               gboolean execute_txns,
-                                               AB_BANKING *api,
-                                               GtkWidget *parent);
+typedef void (*GncABImportContextDoneCB) (GncABImExContextImport *ieci,
+                                          gboolean completed,
+                                          gpointer user_data);
 
+/**
+ * Import balances and transactions without entering a nested main loop.
+ *
+ * The function takes ownership of @a context and keeps it alive until all
+ * confirmation and reconciliation continuations have finished. It verifies the
+ * original parent and book before every continuation so that cancellation,
+ * parent destruction, and a book switch cannot mutate the import target.
+ *
+ * @param context (transfer full): AqBanking response context to import
+ * @param awaiting Expected or ignored response types, using AWAIT_* and
+ * IGNORE_* bits
+ * @param execute_txns Whether accepted imported transactions create AqBanking
+ * jobs; this requires @a api and AWAIT_TRANSACTIONS
+ * @param api AqBanking instance used only when @a execute_txns is true
+ * @param parent Parent for import UI, or NULL for an unparented import
+ * @param cancellable (nullable): cancellation token for pending UI
+ * @param done_cb (nullable): completion callback
+ * @param user_data opaque callback data
+ */
+void gnc_ab_import_context_async (AB_IMEXPORTER_CONTEXT *context,
+                                  guint awaiting,
+                                  gboolean execute_txns,
+                                  AB_BANKING *api,
+                                  GtkWidget *parent,
+                                  GCancellable *cancellable,
+                                  GncABImportContextDoneCB done_cb,
+                                  gpointer user_data);
 /**
  * Extract awaiting from @a data.
  *
- * @param ieci The return value of gnc_ab_import_context()
+ * @param ieci The import context passed to the asynchronous completion callback
  * @return The initial awaiting bitmask plus IGNORE_* for unexpected and then
  * ignored items, and FOUND_* for non-empty items
  */
@@ -250,18 +257,21 @@ guint gnc_ab_ieci_get_found (GncABImExContextImport *ieci);
 /**
  * Extract the job list from @a data.
  *
- * @param ieci The return value of gnc_ab_import_context()
- * @return The list of jobs, freeable with AB_Job_List2_FreeAll()
+ * @param ieci The import context passed to the asynchronous completion callback
+ * @return A borrowed list, valid only while the import context is retained by
+ * its completion callback or matcher continuation.
  */
 GNC_AB_JOB_LIST2 *gnc_ab_ieci_get_job_list (GncABImExContextImport *ieci);
 
-/**
- * Run the generic transaction matcher dialog.
- *
- * @param ieci The return value of gnc_ab_import_context()
- * @return The return value of gnc_gen_trans_list_run().
- */
-gboolean gnc_ab_ieci_run_matcher (GncABImExContextImport *ieci);
+typedef void (*GncABMatcherDoneCB) (GncABImExContextImport *ieci,
+                                    gboolean accepted,
+                                    gpointer user_data);
+
+/** Present the generic transaction matcher without blocking the application.
+ * @a done_cb is called when the user accepts or cancels the matcher. */
+void gnc_ab_ieci_run_matcher_async (GncABImExContextImport *ieci,
+                                    GncABMatcherDoneCB done_cb,
+                                    gpointer user_data);
 
 
 /**

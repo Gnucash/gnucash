@@ -33,6 +33,7 @@
 #define GNC_COMMODITY_EDIT_H
 
 #include "gnc-commodity.h"
+#include "gnc-general-select.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,8 +47,11 @@ const char * gnc_commodity_edit_get_string (gpointer ptr);
  * The generic argument is a pointer to a dialog_commodity_mode
  * enum. This tells the dialog how to limit the namespaces provided.
  */
-gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
-                                        GtkWidget *toplevel);
+void gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
+                                    GtkWidget *toplevel,
+                                    GCancellable *cancellable,
+                                    GNCGeneralSelectSelectionCB completion_cb,
+                                    gpointer completion_data);
 
 #ifdef __cplusplus
 }

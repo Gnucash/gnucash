@@ -177,11 +177,21 @@ sixtp_context_run_end_handler (sixtp_parser_context* ctxt)
 void
 sixtp_context_destroy (sixtp_parser_context* context)
 {
+    if (!context)
+        return;
     sixtp_stack_frame_destroy (context->top_frame);
     g_slist_free (context->data.stack);
-    context->data.saxParserCtxt->userData = NULL;
-    context->data.saxParserCtxt->sax = NULL;
-    xmlFreeParserCtxt (context->data.saxParserCtxt);
-    context->data.saxParserCtxt = NULL;
+    if (context->data.saxParserCtxt)
+    {
+        context->data.saxParserCtxt->userData = NULL;
+        context->data.saxParserCtxt->sax = NULL;
+        xmlFreeParserCtxt (context->data.saxParserCtxt);
+        context->data.saxParserCtxt = NULL;
+    }
+    if (context->data.bad_xml_parser)
+    {
+        sixtp_destroy (context->data.bad_xml_parser);
+        context->data.bad_xml_parser = NULL;
+    }
     g_free (context);
 }

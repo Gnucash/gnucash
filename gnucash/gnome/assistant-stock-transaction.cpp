@@ -73,20 +73,21 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
  *
  * The Assistant is built with the Model-View-Controller pattern where
  * StockAssistantModel manages the data for the transaction, StockAssistantView
- * creates the visuals using a GtkAssistant and a class for each page type, and
+ * creates the visuals using a GtkWindow with a GtkStack and a class for each page type, and
  * StockAssistantController handles user input events.
  *
 */
 
 extern "C"
 {
-// These functions are the GtkAssistant primary button callbacks. They're
+// These functions are the stock-transaction window callbacks. They're
 // connected to their signals in assistant-stock-transaction.glade so they
 // mustn't be name-mangled.
-void stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
-                                 gpointer user_data);
-void stock_assistant_finish_cb  (GtkAssistant *assistant, gpointer user_data);
-void stock_assistant_cancel_cb  (GtkAssistant *gtkassistant, gpointer user_data);
+void stock_assistant_back_cb (GtkButton *button, gpointer user_data);
+void stock_assistant_next_cb (GtkButton *button, gpointer user_data);
+void stock_assistant_finish_cb (GtkButton *button, gpointer user_data);
+void stock_assistant_cancel_cb (GtkButton *button, gpointer user_data);
+gboolean stock_assistant_close_request_cb (GtkWindow *window, gpointer user_data);
 }
 
 static const char* GNC_PREFS_GROUP = "dialogs.stock-assistant";
@@ -446,7 +447,7 @@ public:
  *
  * Functions are simple accessors and setters unless noted.
  */
- 
+
 using Log = std::vector<LogMessage>;
 
 class Logger
@@ -1501,7 +1502,7 @@ static void
 stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
 {
     auto model{static_cast<StockAssistantModel*>(data)};
-    model->set_transaction_desc(gtk_entry_get_text(GTK_ENTRY(widget)));
+    model->set_transaction_desc(gnc_entry_get_text(GTK_ENTRY(widget)));
 }
 
 /* ********************* View Classes ************************/
@@ -1510,7 +1511,7 @@ stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
 static void
 text_entry_changed_cb (GtkWidget *widget, StockTransactionEntry* entry)
 {
-    entry->set_memo(gtk_entry_get_text (GTK_ENTRY (widget)));
+    entry->set_memo(gnc_entry_get_text (GTK_ENTRY (widget)));
 }
 
 
@@ -1547,7 +1548,7 @@ GncDateEdit::attach(GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget (builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
-    gtk_widget_show(m_edit);
+    gtk_widget_set_visible (GTK_WIDGET(m_edit), true);
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(m_edit), label);
 }
 
@@ -1601,7 +1602,7 @@ GncAmountEdit::attach (GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget(builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
-    gtk_widget_show(m_edit);
+    gtk_widget_set_visible (GTK_WIDGET(m_edit), true);
     gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(m_edit), label);
 }
 
@@ -1677,7 +1678,7 @@ GncAccountSelector::attach (GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget(builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_selector, 1, row, 1, 1);
-    gtk_widget_show(m_selector);
+    gtk_widget_set_visible (GTK_WIDGET(m_selector), true);
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), m_selector);
 }
 
@@ -1694,23 +1695,6 @@ GncAccountSelector::set_sensitive(bool sensitive)
 }
 
 
-/** GtkContainer focus signal handler.
- *
- * When an assistant page (a GtkContainer) is displayed it emits a
- * focus signal. This handler grabs the passed-in widget so that it
- * will have the initial focus instead of the first item on the
- * page. The focus signal is also used by GtkContainer to handle tab
- * and arrow keys, so we immediately disconnect it to allow them to
- * function. It's connected in the page's prepare function instead of
- * the connect one so that it can set the initial focus every time the
- * user visits the page.
- */
-static void
-assistant_page_set_focus(GtkWidget* page, [[maybe_unused]]GtkDirectionType type,  GtkWidget* entry)
-{
-    gtk_widget_grab_focus(entry);
-    g_signal_handlers_disconnect_by_data(page, entry);
-}
 /** Page classes generate the several pages of the assistant. In
  * general they have two functions, prepare and connect, plus a
  * callback for each widget on the page and helper functions.
@@ -1771,7 +1755,7 @@ PageTransType::PageTransType(GtkBuilder *builder)
 }
 
 static void
-page_trans_type_changed_cb (GtkWidget* widget, StockAssistantModel *model)
+page_trans_type_changed_cb (GObject* widget, GParamSpec*, StockAssistantModel *model)
 {
     auto me = static_cast<PageTransType *>(g_object_get_data (G_OBJECT (widget), "owner"));
     g_return_if_fail (me);
@@ -1787,26 +1771,25 @@ PageTransType::prepare(StockAssistantModel *model)
 
     set_transaction_types(txn_types.value());
     change_txn_type (model);
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_type);
 }
 
 int
 PageTransType::get_transaction_type_index ()
 {
-    return gtk_combo_box_get_active (GTK_COMBO_BOX (m_type));
+    const auto selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (m_type));
+    return selected == GTK_INVALID_LIST_POSITION ? -1 : static_cast<int> (selected);
 }
 
 void
 PageTransType::set_transaction_types (const TxnTypeVec& txn_types)
 {
-    auto combo = GTK_COMBO_BOX_TEXT (m_type);
-    gtk_combo_box_text_remove_all (combo);
-    std::for_each (txn_types.begin(), txn_types.end(),
-                   [&combo](const auto& it)
-                   { gtk_combo_box_text_append_text (combo, _(it.friendly_name)); });
-    gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+    auto types = gtk_string_list_new (nullptr);
+    for (const auto& type : txn_types)
+        gtk_string_list_append (types, _(type.friendly_name));
+    gtk_drop_down_set_model (GTK_DROP_DOWN (m_type), G_LIST_MODEL (types));
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (m_type), 0);
+    g_object_unref (types);
 }
-
 void
 PageTransType::set_txn_type_explanation (const gchar *txt)
 {
@@ -1829,8 +1812,7 @@ PageTransType::change_txn_type (StockAssistantModel *model)
 void
 PageTransType::connect(StockAssistantModel *model)
 {
-    g_signal_connect(m_type, "changed",
-                     G_CALLBACK (page_trans_type_changed_cb), model);
+    g_signal_connect (m_type, "notify::selected", G_CALLBACK (page_trans_type_changed_cb), model);
 }
 
 /** Transaction Details page. Collects the transaction date (changing
@@ -1847,7 +1829,7 @@ class PageTransDeets
 public:
     PageTransDeets (GtkBuilder *builder);
     time64 get_date_time () { return m_date.get_date_time(); }
-    const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
+    const char* get_description () { return gnc_entry_get_text (GTK_ENTRY (m_description)); }
     void connect (StockAssistantModel*);
     void prepare(StockAssistantModel*);
 };
@@ -1875,7 +1857,6 @@ PageTransDeets::prepare(StockAssistantModel* model)
 {
     model->set_transaction_date(get_date_time());
     model->set_transaction_desc(get_description());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_description);
 }
 
 /** Stock Amount page. Display and the amount entered depend on the
@@ -1935,7 +1916,6 @@ PageStockAmount::prepare (StockTransactionEntry* entry)
     if (!gnc_numeric_check(get_stock_amount()))
         entry->set_amount(get_stock_amount());
     set_stock_amount(entry->amount_str_for_display());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_amount.widget());
 }
 
 static void
@@ -2011,13 +1991,12 @@ PageStockValue::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     set_price(entry->print_price());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 const char *
 PageStockValue::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 void
@@ -2072,13 +2051,12 @@ PageCash::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     entry->set_account(m_account.get());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 const char *
 PageCash::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 /** Fees page. Controls for selecting whether to capitalize
@@ -2124,21 +2102,21 @@ PageFees::PageFees(GtkBuilder *builder, Account* account)
 bool
 PageFees::get_capitalize_fees()
 {
-    return gtk_toggle_button_get_active(
-        GTK_TOGGLE_BUTTON(m_capitalize));
+    return gtk_check_button_get_active(
+        GTK_CHECK_BUTTON(m_capitalize));
 }
 
 const char *
 PageFees::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 void
 PageFees::set_capitalize_fees(bool state)
 {
-    gtk_toggle_button_set_active(
-        GTK_TOGGLE_BUTTON(m_capitalize), state);
+    gtk_check_button_set_active(
+        GTK_CHECK_BUTTON(m_capitalize), state);
 }
 
 void
@@ -2178,7 +2156,6 @@ PageFees::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value (m_value.get());
     entry->set_account(m_account.get());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 /** Dividend page, collects an amount, an INCOME account, and a memo.
@@ -2224,13 +2201,12 @@ PageDividend::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     entry->set_account(m_account.get());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 const char *
 PageDividend::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 class PageCapGain
@@ -2261,7 +2237,7 @@ PageCapGain::PageCapGain (GtkBuilder *builder, Account* account) :
 const char *
 PageCapGain::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 
@@ -2280,156 +2256,150 @@ PageCapGain::prepare(StockTransactionEntry* entry)
     if (gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     entry->set_account(m_account.get());
-    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 
-enum split_cols
+struct FinishColumn
 {
-    SPLIT_COL_ACCOUNT = 0,
-    SPLIT_COL_MEMO,
-    SPLIT_COL_TOOLTIP,
-    SPLIT_COL_DEBIT,
-    SPLIT_COL_CREDIT,
-    SPLIT_COL_UNITS,
-    SPLIT_COL_UNITS_COLOR,
-    NUM_SPLIT_COLS
+    const char *key;
+    const char *title;
+    gboolean expand;
+    gboolean numeric;
 };
 
-/* Displays a summary of the transactions as a list. */
-class GncFinishTreeview
+static const FinishColumn finish_columns[] =
 {
-    GtkWidget *m_treeview;
-public:
-    GncFinishTreeview(GtkBuilder *builder);
-    /** Extract the information from the StockTransactionEntries in
-     * the vector created by the model's `make_list_of_splits`
-     * function and write it into the list view.
-     */
-    void load(const EntryVec& list_of_splits);
+    { "account", N_("Account"), FALSE, FALSE },
+    { "memo",    N_("Memo"),    TRUE,  FALSE },
+    { "debit",   N_("Debit"),   FALSE, TRUE  },
+    { "credit",  N_("Credit"),  FALSE, TRUE  },
+    { "units",   N_("Units"),   FALSE, TRUE  },
 };
 
-GncFinishTreeview::GncFinishTreeview (GtkBuilder *builder) :
-    m_treeview{get_widget (builder, "transaction_view")}
+static void
+finish_list_item_setup (GtkSignalListItemFactory*, GtkListItem *item,
+                        gpointer user_data)
 {
-    auto view = GTK_TREE_VIEW (m_treeview);
-    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+    const auto column = static_cast<const FinishColumn *> (user_data);
+    auto label = GTK_LABEL (gtk_label_new (nullptr));
+    gtk_label_set_xalign (label, column->numeric ? 1.0F : 0.0F);
+    gtk_label_set_ellipsize (label, column->expand ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
+    gtk_widget_set_hexpand (GTK_WIDGET (label), column->expand);
+    gtk_list_item_set_child (item, GTK_WIDGET (label));
+}
 
-    auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING, G_TYPE_STRING);
-    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-    gtk_tree_selection_set_mode (gtk_tree_view_get_selection (view),
-                                     GTK_SELECTION_NONE);
-    g_object_unref(store);
-
-    auto renderer = gtk_cell_renderer_text_new();
-    auto column = gtk_tree_view_column_new_with_attributes
-        (_("Account"), renderer, "text", SPLIT_COL_ACCOUNT, nullptr);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, nullptr);
-    column = gtk_tree_view_column_new_with_attributes
-        (_("Memo"), renderer, "text", SPLIT_COL_MEMO, nullptr);
-    gtk_tree_view_column_set_expand (column, true);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
-    gtk_cell_renderer_set_padding (renderer, 5, 0);
-    column = gtk_tree_view_column_new_with_attributes
-        (_("Debit"), renderer, "text", SPLIT_COL_DEBIT, nullptr);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
-    gtk_cell_renderer_set_padding (renderer, 5, 0);
-    column = gtk_tree_view_column_new_with_attributes
-        (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
-    gtk_cell_renderer_set_padding (renderer, 5, 0);
-    column = gtk_tree_view_column_new_with_attributes
-        (_("Units"), renderer,
-         "text", SPLIT_COL_UNITS,
-         "foreground", SPLIT_COL_UNITS_COLOR,
-         nullptr);
-    gtk_tree_view_append_column(view, column);
-    gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(m_treeview),
-                                     SPLIT_COL_TOOLTIP);}
-
-void
-GncFinishTreeview::load(const EntryVec& list_of_splits)
+static void
+finish_list_item_bind (GtkSignalListItemFactory*, GtkListItem *item,
+                       gpointer user_data)
 {
-    auto gtv = GTK_TREE_VIEW(m_treeview);
-    bool negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
-                                               GNC_PREF_NEGATIVE_IN_RED);
-    auto list = GTK_LIST_STORE(gtk_tree_view_get_model(gtv));
-    gtk_list_store_clear(list);
-    for (const auto &entry : list_of_splits) {
-        GtkTreeIter iter;
-        auto memo{entry->memo()};
-        auto tooltip = (memo && *memo ?
-                        g_markup_escape_text(memo, -1) : strdup(""));
-        /* print_value and print_amount rely on xaccPrintAmount that
-         * uses static memory so the result needs to be copied
-         * immediately or the second call overwrites the results of
-         * the first one.
-         */
-        auto char2str{[](const char* str) -> std::string {
-            return std::string{ str ? str : "" }; }};
-        auto amount{char2str(entry->print_value())};
-        auto units{char2str(entry->has_amount() ?
-                            entry->print_amount(entry->debit_side() ? entry->amount() :
-                                                       gnc_numeric_neg(entry->amount())) : "")};
-        auto units_in_red{negative_in_red && !entry->debit_side()};
-        gtk_list_store_append(list, &iter);
-        gtk_list_store_set(
-            list, &iter,
-            SPLIT_COL_ACCOUNT,
-            entry->print_account(), SPLIT_COL_MEMO,
-            entry->memo(), SPLIT_COL_TOOLTIP, tooltip, SPLIT_COL_DEBIT,
-            entry->debit_side() ? amount.c_str() : nullptr,
-            SPLIT_COL_CREDIT,
-            entry->debit_side() ? nullptr : amount.c_str(),
-            SPLIT_COL_UNITS, units.c_str(),
-            SPLIT_COL_UNITS_COLOR, units_in_red ? "red" : nullptr, -1);
-        g_free(tooltip);
+    const auto column = static_cast<const FinishColumn *> (user_data);
+    auto row = G_OBJECT (gtk_list_item_get_item (item));
+    auto label = GTK_LABEL (gtk_list_item_get_child (item));
+    auto value = static_cast<const char *> (g_object_get_data (row, column->key));
+
+    gtk_label_set_text (label, value ? value : "");
+    if (g_strcmp0 (column->key, "memo") == 0)
+        gtk_widget_set_tooltip_text (GTK_WIDGET (label),
+                                     static_cast<const char *> (g_object_get_data (row, "tooltip")));
+    if (g_strcmp0 (column->key, "units") == 0)
+    {
+        gtk_widget_remove_css_class (GTK_WIDGET (label), "error");
+        if (GPOINTER_TO_INT (g_object_get_data (row, "units-negative")))
+            gtk_widget_add_css_class (GTK_WIDGET (label), "error");
     }
 }
 
-/** Finish page. Displays the List View summarizing the transaction
+class GncFinishColumnView
+{
+    GtkColumnView *m_view;
+    GListStore *m_rows;
+public:
+    GncFinishColumnView (GtkBuilder *builder);
+    ~GncFinishColumnView ();
+    void load (const EntryVec& list_of_splits);
+};
+
+GncFinishColumnView::GncFinishColumnView (GtkBuilder *builder)
+    : m_view (GTK_COLUMN_VIEW (get_widget (builder, "transaction_view"))),
+      m_rows (g_list_store_new (G_TYPE_OBJECT))
+{
+    auto selection = gtk_no_selection_new (G_LIST_MODEL (g_object_ref (m_rows)));
+    gtk_column_view_set_model (m_view, GTK_SELECTION_MODEL (selection));
+    g_object_unref (selection);
+
+    for (const auto& column_data : finish_columns)
+    {
+        auto factory = gtk_signal_list_item_factory_new ();
+        g_signal_connect (factory, "setup", G_CALLBACK (finish_list_item_setup),
+                          const_cast<FinishColumn *> (&column_data));
+        g_signal_connect (factory, "bind", G_CALLBACK (finish_list_item_bind),
+                          const_cast<FinishColumn *> (&column_data));
+        auto column = gtk_column_view_column_new (_(column_data.title),
+                                                  GTK_LIST_ITEM_FACTORY (factory));
+        gtk_column_view_column_set_expand (column, column_data.expand);
+        gtk_column_view_append_column (m_view, column);
+        g_object_unref (column);
+    }
+}
+
+GncFinishColumnView::~GncFinishColumnView ()
+{
+    g_clear_object (&m_rows);
+}
+
+void
+GncFinishColumnView::load (const EntryVec& list_of_splits)
+{
+    const auto negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                                      GNC_PREF_NEGATIVE_IN_RED);
+    g_list_store_remove_all (m_rows);
+    for (const auto& entry : list_of_splits)
+    {
+        auto row = G_OBJECT (g_object_new (G_TYPE_OBJECT, nullptr));
+        auto char2str = [] (const char *str) { return std::string {str ? str : ""}; };
+        auto amount = char2str (entry->print_value ());
+        auto units = char2str (entry->has_amount ()
+            ? entry->print_amount (entry->debit_side () ? entry->amount ()
+                                                        : gnc_numeric_neg (entry->amount ()))
+            : "");
+        auto memo = entry->memo ();
+        g_object_set_data_full (row, "account", g_strdup (entry->print_account ()), g_free);
+        g_object_set_data_full (row, "memo", g_strdup (memo ? memo : ""), g_free);
+        g_object_set_data_full (row, "tooltip", g_strdup (memo ? memo : ""), g_free);
+        g_object_set_data_full (row, "debit", g_strdup (entry->debit_side () ? amount.c_str () : ""), g_free);
+        g_object_set_data_full (row, "credit", g_strdup (entry->debit_side () ? "" : amount.c_str ()), g_free);
+        g_object_set_data_full (row, "units", g_strdup (units.c_str ()), g_free);
+        g_object_set_data (row, "units-negative",
+                           GINT_TO_POINTER (negative_in_red && !entry->debit_side ()));
+        g_list_store_append (m_rows, row);
+        g_object_unref (row);
+    }
+}
+/** Finish page. Displays the list view summarizing the transaction
  * along with any diagnostic messages recorded by the model's logger.
  */
 class PageFinish
 {
-    // finish page
-    GtkWidget * m_page;
-    GncFinishTreeview m_view;
-    GtkWidget * m_summary;
+    GncFinishColumnView m_view;
+    GtkWidget *m_summary;
 public:
     PageFinish (GtkBuilder *builder);
-    void prepare (GtkWidget *window, StockAssistantModel *model);
+    bool prepare (StockAssistantModel *model);
 };
 
-PageFinish::PageFinish (GtkBuilder *builder) :
-    m_page (get_widget (builder, "finish_page")), m_view (builder),
-    m_summary (get_widget (builder, "finish_summary")) {}
+PageFinish::PageFinish (GtkBuilder *builder)
+    : m_view (builder), m_summary (get_widget (builder, "finish_summary")) {}
 
-
-void
-PageFinish::prepare (GtkWidget *window, StockAssistantModel *model)
+bool
+PageFinish::prepare (StockAssistantModel *model)
 {
     auto [success, summary, list_of_splits] = model->generate_list_of_splits ();
-    m_view.load(list_of_splits);
-    gtk_label_set_text(GTK_LABEL(m_summary), summary.c_str());
-    gtk_assistant_set_page_complete(GTK_ASSISTANT(window), m_page, success);
+    m_view.load (list_of_splits);
+    gtk_label_set_text (GTK_LABEL (m_summary), summary.c_str ());
+    return success;
 }
 
-enum assistant_pages
+enum stock_transaction_pages
 {
     PAGE_INTRO = 0,
     PAGE_TRANSACTION_DETAILS,
@@ -2443,9 +2413,56 @@ enum assistant_pages
     PAGE_FINISH
 };
 
-/** Contains the pages and manages displaying them one at a time. */
-class StockAssistantView {
-    GtkWidget * m_window;
+static const char *stock_transaction_page_names[] =
+{
+    "intro", "transaction-details", "transaction-type", "stock-amount",
+    "stock-value", "cash", "fees", "dividend", "capital-gains", "finish"
+};
+
+static const char *stock_transaction_page_titles[] =
+{
+    N_("Stock Transaction Assistant"), N_("Transaction Details"),
+    N_("Transaction Type"), N_("Stock Amount"), N_("Stock Value"),
+    N_("Cash"), N_("Fees"), N_("Dividend"), N_("Capital Gains"), N_("Finish")
+};
+
+/** Determines the next page from the current business state. */
+static int
+next_page_for_model (int current_page, StockAssistantModel *model)
+{
+    ++current_page;
+    if (!model->txn_type_valid ())
+        return current_page;
+
+    if (!model->stock_entry ()->has_amount () && current_page == PAGE_STOCK_AMOUNT)
+        ++current_page;
+    if (!model->stock_entry ()->enabled () && current_page == PAGE_STOCK_VALUE)
+        ++current_page;
+    if (!model->cash_entry ()->enabled () && current_page == PAGE_CASH)
+        ++current_page;
+    if (!model->fees_entry ()->enabled () && current_page == PAGE_FEES)
+        ++current_page;
+    if (!model->dividend_entry ()->enabled () && current_page == PAGE_DIVIDEND)
+        ++current_page;
+    if (!model->capgains_entry ()->enabled () && current_page == PAGE_CAPGAINS)
+        ++current_page;
+
+    return current_page;
+}
+
+/** Contains the pages and displays the active one in a GtkStack. */
+class StockAssistantView
+{
+    GtkWindow *m_window;
+    GtkStack *m_stack;
+    GtkLabel *m_title;
+    GtkButton *m_back;
+    GtkButton *m_next;
+    GtkButton *m_apply;
+    StockAssistantModel *m_model = nullptr;
+    int m_current_page = PAGE_INTRO;
+    bool m_finish_valid = false;
+    bool m_window_destroyed = false;
 
     PageTransType m_type_page;
     PageTransDeets m_deets_page;
@@ -2456,150 +2473,203 @@ class StockAssistantView {
     PageDividend m_dividend_page;
     PageCapGain m_capgain_page;
     PageFinish m_finish_page;
+
+    bool page_is_visible (int page) const;
+    void show_page (int page);
+    void update_navigation ();
 public:
-    StockAssistantView(GtkBuilder *builder, Account* account, GtkWidget *parent);
-    ~StockAssistantView();
-    /** Calls each page's connect function.
-     *
-     * @param The model.
-     */
-    void connect(StockAssistantModel*);
-    /** Calls the specified page's prepare function. As with connect
-     * the association with the model's entry might be better at the
-     * Assistant level.
-     *
-     * @param page The page who's prepare function to call.
-     * @param model
-     */
-    void prepare(int page, StockAssistantModel*);
-    GtkWidget* window() { return m_window; }
+    StockAssistantView (GtkBuilder *builder, Account *account, GtkWidget *parent);
+    ~StockAssistantView ();
+    void connect (StockAssistantModel *model);
+    bool prepare (int page, StockAssistantModel *model);
+    void next ();
+    void back ();
+    void present ();
+    void window_destroyed () { m_window_destroyed = true; }
+    bool can_finish () const { return m_finish_valid; }
+    GtkWindow *window () const { return m_window; }
 };
 
-StockAssistantView::StockAssistantView (GtkBuilder *builder, Account* account, GtkWidget *parent) :
-    m_window (get_widget (builder, "stock_transaction_assistant")), m_type_page(builder), m_deets_page(builder),
-    m_stock_amount_page (builder, account), m_stock_value_page (builder, account), m_cash_page (builder, account),
-    m_fees_page (builder, account), m_dividend_page (builder, account), m_capgain_page (builder, account),
-    m_finish_page (builder)
+StockAssistantView::StockAssistantView (GtkBuilder *builder, Account *account,
+                                        GtkWidget *parent)
+    : m_window (GTK_WINDOW (g_object_ref (get_widget (builder, "stock_transaction_assistant")))),
+      m_stack (GTK_STACK (get_widget (builder, "stock_assistant_stack"))),
+      m_title (GTK_LABEL (get_widget (builder, "stock_assistant_page_title"))),
+      m_back (GTK_BUTTON (get_widget (builder, "stock_assistant_back"))),
+      m_next (GTK_BUTTON (get_widget (builder, "stock_assistant_next"))),
+      m_apply (GTK_BUTTON (get_widget (builder, "stock_assistant_apply"))),
+      m_type_page (builder), m_deets_page (builder),
+      m_stock_amount_page (builder, account), m_stock_value_page (builder, account),
+      m_cash_page (builder, account), m_fees_page (builder, account),
+      m_dividend_page (builder, account), m_capgain_page (builder, account),
+      m_finish_page (builder)
 {
-    // Set the name for this assistant so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(m_window), "gnc-id-assistant-stock-transaction");
-    gtk_window_set_transient_for (GTK_WINDOW (m_window), GTK_WINDOW(parent));
-    gnc_window_adjust_for_screen (GTK_WINDOW(m_window));
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window),
-                             GTK_WINDOW(parent));
-    gtk_widget_show_all (m_window);
+    auto parent_window = parent && GTK_IS_WINDOW (parent) ? GTK_WINDOW (parent) : nullptr;
+    gtk_widget_set_name (GTK_WIDGET (m_window), "gnc-id-assistant-stock-transaction");
+    gtk_window_set_transient_for (m_window, parent_window);
+    gnc_window_adjust_for_screen (m_window);
+    gnc_restore_window_size (GNC_PREFS_GROUP, m_window, parent_window);
     DEBUG ("StockAssistantView constructor\n");
-};
+}
 
-StockAssistantView::~StockAssistantView()
+StockAssistantView::~StockAssistantView ()
 {
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
-    gtk_widget_destroy (m_window);
+    if (m_window)
+    {
+        gnc_save_window_size (GNC_PREFS_GROUP, m_window);
+        if (!m_window_destroyed)
+            gtk_window_destroy (m_window);
+        g_object_unref (m_window);
+    }
     DEBUG ("StockAssistantView destructor\n");
-};
+}
 
-/** Callback for determining the next page.
- *
- * @param current page: Inout parameter.
- * @param data The model as a void*.
- */
-
-static gint
-forward_page_func (gint current_page, void* data)
+bool
+StockAssistantView::page_is_visible (int page) const
 {
-    auto model{static_cast<StockAssistantModel*>(data)};
-    current_page++;
-    if (!model->txn_type_valid())
-        return current_page;
+    if (!m_model || page < PAGE_INTRO || page > PAGE_FINISH)
+        return false;
+    if (page < PAGE_STOCK_AMOUNT)
+        return true;
+    if (!m_model->txn_type_valid ())
+        return false;
 
-    if (!model->stock_entry()->has_amount() && current_page == PAGE_STOCK_AMOUNT)
-        current_page++;
-    if (!model->stock_entry()->enabled() && current_page == PAGE_STOCK_VALUE)
-        current_page++;
-    if (!model->cash_entry()->enabled() && current_page == PAGE_CASH)
-        current_page++;
-    if (!model->fees_entry()->enabled() && current_page == PAGE_FEES)
-        current_page++;
-    if (!model->dividend_entry()->enabled() && current_page == PAGE_DIVIDEND)
-        current_page++;
-    if (!model->capgains_entry()->enabled() && current_page == PAGE_CAPGAINS)
-        current_page++;
-
-    return current_page;
+    switch (page)
+    {
+    case PAGE_STOCK_AMOUNT:
+        return m_model->stock_entry ()->has_amount ();
+    case PAGE_STOCK_VALUE:
+        return m_model->stock_entry ()->enabled ();
+    case PAGE_CASH:
+        return m_model->cash_entry ()->enabled ();
+    case PAGE_FEES:
+        return m_model->fees_entry ()->enabled ();
+    case PAGE_DIVIDEND:
+        return m_model->dividend_entry ()->enabled ();
+    case PAGE_CAPGAINS:
+        return m_model->capgains_entry ()->enabled ();
+    case PAGE_FINISH:
+        return true;
+    default:
+        return false;
+    }
 }
 
 void
-StockAssistantView::connect(StockAssistantModel* model)
+StockAssistantView::update_navigation ()
 {
-    m_type_page.connect(model);
-    m_deets_page.connect(model);
-    m_stock_amount_page.connect(model->stock_entry());
-    m_stock_value_page.connect(model->stock_entry());
-    m_cash_page.connect(model->cash_entry());
-    m_fees_page.connect(model->fees_entry());
-    m_dividend_page.connect(model->dividend_entry());
-    m_capgain_page.connect(model->capgains_entry());
+    const auto at_finish = m_current_page == PAGE_FINISH;
+    const auto on_valid_type = m_current_page != PAGE_TRANSACTION_TYPE ||
+                               m_model->txn_type_valid ();
 
-    gtk_assistant_set_forward_page_func (GTK_ASSISTANT(m_window),
-                                         (GtkAssistantPageFunc)forward_page_func,
-                                         model, nullptr);
+    gtk_widget_set_sensitive (GTK_WIDGET (m_back), m_current_page != PAGE_INTRO);
+    gtk_widget_set_visible (GTK_WIDGET (m_next), !at_finish);
+    gtk_widget_set_visible (GTK_WIDGET (m_apply), at_finish);
+    gtk_widget_set_sensitive (GTK_WIDGET (m_next), on_valid_type);
+    gtk_widget_set_sensitive (GTK_WIDGET (m_apply), at_finish && m_finish_valid);
+    gtk_window_set_default_widget (m_window, at_finish ? GTK_WIDGET (m_apply) :
+                                   GTK_WIDGET (m_next));
 }
 
 void
-StockAssistantView::prepare(int page, StockAssistantModel* model)
+StockAssistantView::show_page (int page)
 {
-    g_return_if_fail (page < PAGE_STOCK_AMOUNT || model->txn_type_valid());
+    if (page < PAGE_INTRO || page > PAGE_FINISH || !page_is_visible (page))
+        return;
+
+    m_current_page = page;
+    m_finish_valid = prepare (page, m_model);
+    gtk_stack_set_visible_child_name (m_stack, stock_transaction_page_names[page]);
+    gtk_label_set_text (m_title, _(stock_transaction_page_titles[page]));
+    update_navigation ();
+}
+
+void
+StockAssistantView::connect (StockAssistantModel *model)
+{
+    m_model = model;
+    m_type_page.connect (model);
+    m_deets_page.connect (model);
+    m_stock_amount_page.connect (model->stock_entry ());
+    m_stock_value_page.connect (model->stock_entry ());
+    m_cash_page.connect (model->cash_entry ());
+    m_fees_page.connect (model->fees_entry ());
+    m_dividend_page.connect (model->dividend_entry ());
+    m_capgain_page.connect (model->capgains_entry ());
+    show_page (PAGE_INTRO);
+}
+
+bool
+StockAssistantView::prepare (int page, StockAssistantModel *model)
+{
+    g_return_val_if_fail (page < PAGE_STOCK_AMOUNT || model->txn_type_valid (), false);
     switch (page)
     {
     case PAGE_TRANSACTION_TYPE:
-        if (!model->maybe_reset_txn_types())
-            break;
-        m_type_page.prepare(model);
+        if (model->maybe_reset_txn_types ())
+            m_type_page.prepare (model);
         break;
     case PAGE_TRANSACTION_DETAILS:
-        m_deets_page.prepare(model);
+        m_deets_page.prepare (model);
         break;
     case PAGE_STOCK_AMOUNT:
-    {
-        m_stock_amount_page.prepare(model->stock_entry());
+        m_stock_amount_page.prepare (model->stock_entry ());
         break;
-    }
     case PAGE_STOCK_VALUE:
-        m_stock_value_page.prepare(model->stock_entry());
+        m_stock_value_page.prepare (model->stock_entry ());
         break;
     case PAGE_CASH:
-        m_cash_page.prepare(model->cash_entry());
+        m_cash_page.prepare (model->cash_entry ());
         break;
     case PAGE_FEES:
-    {
-        m_fees_page.prepare(model->fees_entry());
+        m_fees_page.prepare (model->fees_entry ());
         break;
-    }
     case PAGE_DIVIDEND:
-        m_dividend_page.prepare(model->dividend_entry());
+        m_dividend_page.prepare (model->dividend_entry ());
         break;
     case PAGE_CAPGAINS:
-    {
-        m_capgain_page.prepare(model->capgains_entry());
+        m_capgain_page.prepare (model->capgains_entry ());
         break;
-    }
     case PAGE_FINISH:
-    {
-        m_finish_page.prepare (m_window, model);
-        break;
-    }
+        return m_finish_page.prepare (model);
     default:
         break;
     }
+    return true;
 }
 
-/** The overall manager for the assistant, contains the model and view
- * objects and is responsible for creating, connecting, and destroying
- * both.
- */
+void
+StockAssistantView::next ()
+{
+    if (!m_model || (m_current_page == PAGE_TRANSACTION_TYPE && !m_model->txn_type_valid ()))
+        return;
+    show_page (next_page_for_model (m_current_page, m_model));
+}
 
-static void stock_account_destroyed_handler(QofInstance *inst, QofEventId event,
-                                            void* handler_data, [[maybe_unused]]void* event_data);
+void
+StockAssistantView::back ()
+{
+    if (!m_model || m_current_page == PAGE_INTRO)
+        return;
+
+    auto page = m_current_page - 1;
+    while (page > PAGE_INTRO && !page_is_visible (page))
+        --page;
+    show_page (page);
+}
+
+void
+StockAssistantView::present ()
+{
+    gtk_window_present (m_window);
+}
+
+/** The overall manager for the window, contains the model and view
+ * objects and is responsible for creating, connecting, and destroying both.
+ */
+static void stock_account_destroyed_handler (QofInstance *inst, QofEventId event,
+                                             void *handler_data,
+                                             [[maybe_unused]] void *event_data);
 
 class StockAssistantController
 {
@@ -2608,40 +2678,87 @@ class StockAssistantController
     bool m_destroying = false;
     int m_qof_event_handler;
 public:
-    StockAssistantController (GtkWidget *parent, GtkBuilder* builder, Account* acct)
-        : m_model{std::make_unique<StockAssistantModel>(acct)},
-          m_view{builder, acct, parent},
-          m_qof_event_handler{qof_event_register_handler(stock_account_destroyed_handler, this)}
+    StockAssistantController (GtkWidget *parent, GtkBuilder *builder, Account *acct)
+        : m_model {std::make_unique<StockAssistantModel> (acct)},
+          m_view {builder, acct, parent},
+          m_qof_event_handler {qof_event_register_handler (stock_account_destroyed_handler, this)}
     {
         connect_signals (builder);
+        m_view.present ();
         DEBUG ("StockAssistantController constructor\n");
-    };
+    }
     ~StockAssistantController ();
-    void connect_signals(GtkBuilder *builder);
-    void prepare(GtkAssistant* assistant, GtkWidget *page);
-    void finish();
-    bool destroying() { return m_destroying; }
-    Account* model_account() { return m_model->account(); }
+    void connect_signals (GtkBuilder *builder);
+    void next ();
+    void back ();
+    void finish ();
+    void cancel ();
+    void window_destroyed () { m_view.window_destroyed (); }
+    bool destroying () const { return m_destroying; }
+    Account *model_account () const { return m_model->account (); }
 };
 
-static void stock_assistant_window_destroy_cb(GtkWidget *object, gpointer user_data);
+static void stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data);
 static void close_handler (gpointer user_data);
+static gboolean stock_assistant_key_pressed_cb (GtkEventControllerKey *controller,
+                                                 guint keyval, guint keycode,
+                                                 GdkModifierType state, gpointer user_data);
 
-StockAssistantController::~StockAssistantController()
+struct StockRegisterRevealRequest
+{
+    GWeakRef page;
+};
+
+static void
+stock_register_reveal_request_free (gpointer user_data)
+{
+    auto request = static_cast<StockRegisterRevealRequest *> (user_data);
+
+    g_weak_ref_clear (&request->page);
+    g_free (request);
+}
+
+static void
+stock_register_reveal_finished (GNCSplitReg *gsr, Split *split,
+                                GncSplitRegRevealResult result,
+                                gpointer user_data)
+{
+    auto request = static_cast<StockRegisterRevealRequest *> (user_data);
+    auto object = static_cast<GObject *> (g_weak_ref_get (&request->page));
+
+    if (object && GNC_IS_PLUGIN_PAGE_REGISTER (object))
+    {
+        auto page = GNC_PLUGIN_PAGE (object);
+
+        if (gnc_plugin_page_register_get_gsr (page) == gsr)
+        {
+            if (result == GNC_SPLIT_REG_REVEAL_FILTER_CLEARED)
+                gnc_plugin_page_register_clear_current_filter (page);
+            gnc_split_reg_jump_to_split (gsr, split);
+        }
+    }
+    g_clear_object (&object);
+}
+
+StockAssistantController::~StockAssistantController ()
 {
     m_destroying = true;
     gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
-    qof_event_unregister_handler(m_qof_event_handler);
+    qof_event_unregister_handler (m_qof_event_handler);
 }
 
 void
 StockAssistantController::connect_signals (GtkBuilder *builder)
 {
-    m_view.connect(m_model.get());
-    gtk_builder_connect_signals (builder, this); //Stock Assistant View: cancel, close, prepare
-    g_signal_connect (m_view.window(), "destroy",
+    m_view.connect (m_model.get ());
+    gnc_builder_connect_signals (builder, this);
+    g_signal_connect (m_view.window (), "destroy",
                       G_CALLBACK (stock_assistant_window_destroy_cb), this);
 
+    auto key_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET (m_view.window ()), key_controller);
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (stock_assistant_key_pressed_cb), this);
 
     auto component_id = gnc_register_gui_component
         (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, nullptr, close_handler, this);
@@ -2650,101 +2767,128 @@ StockAssistantController::connect_signals (GtkBuilder *builder)
 }
 
 void
-StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
+StockAssistantController::next ()
 {
-    auto currentpage = gtk_assistant_get_current_page(assistant);
-    m_view.prepare(currentpage, m_model.get());
+    if (!m_destroying)
+        m_view.next ();
 }
 
 void
-StockAssistantController::finish()
+StockAssistantController::back ()
 {
-    g_return_if_fail (m_model->txn_type_valid());
+    if (!m_destroying)
+        m_view.back ();
+}
+
+void
+StockAssistantController::finish ()
+{
+    if (m_destroying || !m_model->txn_type_valid () ||
+        !m_view.prepare (PAGE_FINISH, m_model.get ()))
+        return;
 
     gnc_suspend_gui_refresh ();
-    auto [success, trans] = m_model->create_transaction();
+    auto [success, trans] = m_model->create_transaction ();
     gnc_resume_gui_refresh ();
 
     if (success && trans)
     {
-        auto split = xaccTransFindSplitByAccount (trans, m_model->account());
+        auto split = xaccTransFindSplitByAccount (trans, m_model->account ());
         if (split)
         {
-            auto page = gnc_plugin_page_register_new (m_model->account(), FALSE);
+            auto page = gnc_plugin_page_register_new (m_model->account (), FALSE);
             gnc_main_window_open_page (nullptr, page);
             auto gsr = gnc_plugin_page_register_get_gsr (page);
             gnc_split_reg_raise (gsr);
+            auto request = g_new0 (StockRegisterRevealRequest, 1);
 
-            if (gnc_split_reg_clear_filter_for_split (gsr, split))
-                gnc_plugin_page_register_clear_current_filter (page);
-
-            gnc_split_reg_jump_to_split (gsr, split);
+            g_weak_ref_init (&request->page, G_OBJECT (page));
+            gnc_split_reg_reveal_split_async (
+                gsr, split, stock_register_reveal_finished, request,
+                stock_register_reveal_request_free);
         }
     }
 
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
 }
 
-static void
-stock_account_destroyed_handler(QofInstance *inst, QofEventId event,
-                          void* handler_data, [[maybe_unused]]void* event_data)
+void
+StockAssistantController::cancel ()
 {
-    auto controller{static_cast<StockAssistantController*>(handler_data)};
-    if ((inst && inst != QOF_INSTANCE(controller->model_account())) || (event & QOF_EVENT_DESTROY) == 0 ||
-        controller->destroying())
+    if (!m_destroying)
+        gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
+}
+
+static void
+stock_account_destroyed_handler (QofInstance *inst, QofEventId event,
+                                 void *handler_data,
+                                 [[maybe_unused]] void *event_data)
+{
+    auto controller {static_cast<StockAssistantController *> (handler_data)};
+    if ((inst && inst != QOF_INSTANCE (controller->model_account ())) ||
+        (event & QOF_EVENT_DESTROY) == 0 || controller->destroying ())
         return;
     delete controller;
 }
 
-// These callbacks must be registered with the GtkAssistant so they can't be member functions.
-/* The StockAssistantController manages the event handlers and user input. */
-void
-stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
-                         gpointer user_data)
-{
-    auto info = static_cast<StockAssistantController*>(user_data);
-    info->prepare(assistant, page);
-}
-
-
 static void
-stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data) //crashes before this gets called.
+stock_assistant_window_destroy_cb ([[maybe_unused]] GtkWidget *object, gpointer user_data)
 {
-    auto controller = static_cast<StockAssistantController*>(user_data);
-    if (controller->destroying())
-        return;
-
-    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
+    auto controller = static_cast<StockAssistantController *> (user_data);
+    controller->window_destroyed ();
+    controller->cancel ();
 }
 
+static gboolean
+stock_assistant_key_pressed_cb ([[maybe_unused]] GtkEventControllerKey *controller,
+                                guint keyval, [[maybe_unused]] guint keycode,
+                                [[maybe_unused]] GdkModifierType state,
+                                gpointer user_data)
+{
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+    static_cast<StockAssistantController *> (user_data)->cancel ();
+    return TRUE;
+}
 
 void
-stock_assistant_finish_cb (GtkAssistant *assistant, gpointer user_data)
+stock_assistant_back_cb ([[maybe_unused]] GtkButton *button, gpointer user_data)
 {
-    auto controller = static_cast<StockAssistantController*>(user_data);
-    controller->finish();
+    static_cast<StockAssistantController *> (user_data)->back ();
 }
-
 
 void
-stock_assistant_cancel_cb (GtkAssistant *assistant, gpointer user_data)
+stock_assistant_next_cb ([[maybe_unused]] GtkButton *button, gpointer user_data)
 {
-    auto controller = static_cast<StockAssistantController*>(user_data);
-    if (controller->destroying())
-        return;
-    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
+    static_cast<StockAssistantController *> (user_data)->next ();
 }
 
+void
+stock_assistant_finish_cb ([[maybe_unused]] GtkButton *button, gpointer user_data)
+{
+    static_cast<StockAssistantController *> (user_data)->finish ();
+}
+
+void
+stock_assistant_cancel_cb ([[maybe_unused]] GtkButton *button, gpointer user_data)
+{
+    static_cast<StockAssistantController *> (user_data)->cancel ();
+}
+
+gboolean
+stock_assistant_close_request_cb ([[maybe_unused]] GtkWindow *window, gpointer user_data)
+{
+    static_cast<StockAssistantController *> (user_data)->cancel ();
+    return TRUE;
+}
 
 static void
 close_handler (gpointer user_data)
 {
-    auto controller = static_cast<StockAssistantController*>(user_data);
-    if (controller->destroying())
-        return;
-    delete controller;
+    auto controller = static_cast<StockAssistantController *> (user_data);
+    if (!controller->destroying ())
+        delete controller;
 }
-
 /********************************************************************\
  * gnc_stock_transaction_assistant                                  *
  *   opens up a assistant to record a stock transaction             *

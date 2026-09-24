@@ -86,6 +86,9 @@ typedef struct GNCLotPrivate
     /* List of splits that belong to this lot. */
     SplitList *splits;
 
+    /* Invalidates bounded split-list and amount/value collectors. */
+    guint64 scrub_generation;
+
     char *title;
     char *notes;
 
@@ -117,6 +120,7 @@ gnc_lot_init(GNCLot* lot)
     priv = GET_PRIVATE(lot);
     priv->account = nullptr;
     priv->splits = nullptr;
+    priv->scrub_generation = 1;
     priv->cached_invoice = nullptr;
     priv->is_closed = LOT_CLOSED_UNKNOWN;
     priv->marker = 0;
@@ -438,6 +442,22 @@ gint gnc_lot_count_splits (const GNCLot *lot)
     return g_list_length (priv->splits);
 }
 
+guint64
+gnc_lot_get_scrub_generation (const GNCLot *lot)
+{
+    g_return_val_if_fail (GNC_IS_LOT (lot), 0);
+    return GET_PRIVATE (lot)->scrub_generation;
+}
+
+void
+gnc_lot_bump_scrub_generation (GNCLot *lot)
+{
+    if (!GNC_IS_LOT (lot))
+        return;
+    ++GET_PRIVATE (lot)->scrub_generation;
+    GET_PRIVATE (lot)->is_closed = LOT_CLOSED_UNKNOWN;
+}
+
 /* ============================================================== */
 /* Hmm, we should probably inline these. */
 
@@ -618,6 +638,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
     xaccSplitSetLot(split, lot);
 
     priv->splits = g_list_append (priv->splits, split);
+    ++priv->scrub_generation;
 
     /* for recomputation of is-closed */
     priv->is_closed = LOT_CLOSED_UNKNOWN;
@@ -638,6 +659,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
     gnc_lot_begin_edit(lot);
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     priv->splits = g_list_remove (priv->splits, split);
+    ++priv->scrub_generation;
     xaccSplitSetLot(split, nullptr);
     priv->is_closed = LOT_CLOSED_UNKNOWN;   /* force an is-closed computation */
 
@@ -652,6 +674,25 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 }
 
 /* ============================================================== */
+static void
+lot_sort_splits_by_date (GNCLotPrivate *priv)
+{
+    gboolean reordered = FALSE;
+    for (auto node = priv->splits; node && node->next; node = node->next)
+    {
+        if (xaccSplitOrderDateOnly (GNC_SPLIT (node->data),
+                                    GNC_SPLIT (node->next->data)) > 0)
+        {
+            reordered = TRUE;
+            break;
+        }
+    }
+    priv->splits = g_list_sort (priv->splits,
+                                (GCompareFunc) xaccSplitOrderDateOnly);
+    if (reordered)
+        ++priv->scrub_generation;
+}
+
 /* Utility function, get earliest split in lot */
 
 Split *
@@ -661,7 +702,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
     if (!lot) return nullptr;
     priv = GET_PRIVATE(lot);
     if (! priv->splits) return nullptr;
-    priv->splits = g_list_sort (priv->splits, (GCompareFunc) xaccSplitOrderDateOnly);
+    lot_sort_splits_by_date (priv);
     return GNC_SPLIT(priv->splits->data);
 }
 
@@ -675,7 +716,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
     if (!lot) return nullptr;
     priv = GET_PRIVATE(lot);
     if (! priv->splits) return nullptr;
-    priv->splits = g_list_sort (priv->splits, (GCompareFunc) xaccSplitOrderDateOnly);
+    lot_sort_splits_by_date (priv);
 
     for (node = priv->splits; node->next; node = node->next)
         ;

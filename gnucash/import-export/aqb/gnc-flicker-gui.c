@@ -50,15 +50,15 @@ static guint flicker_data (char const *challenge);
 static gboolean time_handler (GtkWidget *widget);
 static void do_marker_drawing (cairo_t *cr);
 static void draw_bit (cairo_t *cr, _Bool bit, int i);
-static void do_flicker_drawing (GtkWidget *widget, cairo_t *cr);
+static void do_flicker_drawing (gint width, cairo_t *cr);
 static void do_flicker_load_state (GtkWidget *dialog);
 static void do_flicker_store_state (GtkWidget *dialog);
-static gboolean on_flicker_challenge_draw (GtkWidget *widget, cairo_t *cr,
-                                           gpointer user_data);
+static void on_flicker_challenge_draw (GtkDrawingArea *area, cairo_t *cr,
+                                       int width, int height, gpointer user_data);
 static void on_flicker_challenge_map (GtkWidget *widget);
 static void on_flicker_challenge_destroy (GtkWidget *widget, gpointer user_data);
-static gboolean on_flicker_marker_draw (GtkWidget *widget, cairo_t *cr,
-                                        gpointer user_data);
+static void on_flicker_marker_draw (GtkDrawingArea *area, cairo_t *cr,
+                                    int width, int height, gpointer user_data);
 static void on_flicker_marker_map (GtkWidget *widget);
 static void on_spin_barwidth_value_changed (GtkSpinButton *spin, GtkWidget *widget);
 static void on_spin_delay_value_changed (GtkSpinButton *spin, GtkWidget *widget);
@@ -217,10 +217,10 @@ draw_bit (cairo_t *cr, _Bool bit, int i)
 
 /* Prepares the drawing area for the flicker graphic. */
 static void
-do_flicker_drawing (GtkWidget *widget, cairo_t *cr)
+do_flicker_drawing (gint width, cairo_t *cr)
 {
     /* Always align the flicker display in the middle of the drawing area */
-    flickerdraw.width = gtk_widget_get_allocated_width (widget);
+    flickerdraw.width = width;
 
     /* Start position of the first bar */
     flickerdraw.x_drawpos = (flickerdraw.width - 4 * flickerdraw.margin -
@@ -318,13 +318,14 @@ on_flicker_challenge_map (GtkWidget *widget)
 }
 
 /* Initialize the drawingarea to black and paint the flickerchallenge */
-static gboolean
-on_flicker_challenge_draw (GtkWidget *widget, cairo_t *cr,
+static void
+on_flicker_challenge_draw (GtkDrawingArea *area, cairo_t *cr,
+                           int width,
+                           __attribute__((unused)) int height,
                            __attribute__((unused)) gpointer user_data)
 {
-    do_flicker_drawing (widget, cr);
+    do_flicker_drawing (width, cr);
 
-    return FALSE;
 }
 
 /* called when the drawing area is destroyed */
@@ -338,13 +339,14 @@ on_flicker_challenge_destroy (GtkWidget *widget,
 
 /* Initialize the drawing area "flicker marker" in black and draw the marker for
  * the position of the TAN-Generator */
-static gboolean
-on_flicker_marker_draw (__attribute__((unused)) GtkWidget *widget, cairo_t *cr,
+static void
+on_flicker_marker_draw (__attribute__((unused)) GtkDrawingArea *area, cairo_t *cr,
+                        __attribute__((unused)) int width,
+                        __attribute__((unused)) int height,
                         __attribute__((unused)) gpointer data)
 {
     do_marker_drawing (cr);
 
-    return FALSE;
 }
 
 /* This signal is emitted when the drawing area "flicker marker" is visible */
@@ -410,15 +412,17 @@ ini_flicker_gui (const char *pChallenge, GncFlickerGui *gui)
 
     g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "map",
                       G_CALLBACK (on_flicker_challenge_map), NULL);
-    g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "draw",
-                      G_CALLBACK (on_flicker_challenge_draw), NULL);
+    gtk_drawing_area_set_draw_func (
+        GTK_DRAWING_AREA (flickergui->flicker_challenge),
+        on_flicker_challenge_draw, NULL, NULL);
     g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "destroy",
                       G_CALLBACK (on_flicker_challenge_destroy), NULL);
 
     g_signal_connect (GTK_WIDGET (flickergui->flicker_marker), "map",
                       G_CALLBACK (on_flicker_marker_map), NULL);
-    g_signal_connect (GTK_WIDGET (flickergui->flicker_marker), "draw",
-                      G_CALLBACK (on_flicker_marker_draw), NULL);
+    gtk_drawing_area_set_draw_func (
+        GTK_DRAWING_AREA (flickergui->flicker_marker),
+        on_flicker_marker_draw, NULL, NULL);
 
     flickergui->adj_barwidth = gtk_adjustment_new (0.0, 10.0, 80.0, 1.0, 10.0, 0.0);
     gtk_spin_button_set_adjustment (flickergui->spin_barwidth, flickergui->adj_barwidth);

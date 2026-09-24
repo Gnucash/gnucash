@@ -95,6 +95,7 @@
 	     x))))
 
 (define (create-test-env)
+  (gnc-get-current-book)
   (list (cons 'random (seed->random-state (random 1000)))
 	(cons 'counter (make-counter))))
 

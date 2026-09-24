@@ -42,6 +42,9 @@
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
+#if !defined(G_OS_WIN32) && !defined(F_SETNOSIGPIPE)
+# include <signal.h>
+#endif
 #include <zlib.h>
 #include <errno.h>
 #include <cstdint>
@@ -60,6 +63,12 @@
 #define __STRICT_ANSI__ 1
 #endif
 #endif
+#include <deque>
+#include <guid.hpp>
+#include <new>
+#include <unordered_set>
+#include <vector>
+#include "qofinstance-p.h"
 #if COMPILER(MSVC)
 # define g_fopen fopen
 # define g_open _open
@@ -865,6 +874,632 @@ qof_session_load_from_xml_file_v2 (GncXmlBackend* xml_be, QofBook* book,
     return qof_session_load_from_xml_file_v2_full (xml_be, book, NULL, NULL, type);
 }
 
+constexpr gsize GNC_XML_V2_LOAD_CHUNK {4096};
+
+enum class GncXmlV2LoadPhase
+{
+    PARSE,
+    BACKEND_SCRUB,
+    SCAN_QUOTE_COMMODITIES,
+    COLLECT_MAIN_ACCOUNTS,
+    COLLECT_TEMPLATE_ACCOUNTS,
+    MOVE_QUOTE_SOURCE,
+    COLLECT_TRANSACTIONS,
+    COLLECT_SPLITS,
+    SCRUB_TRANSACTION_COMMODITY,
+    SCRUB_ACCOUNT_COMMODITY,
+    SCRUB_SPLIT,
+    COMMIT_ONE_ACCOUNT,
+    MARK_SAVED,
+};
+
+enum class GncXmlV2CollectorStatus
+{
+    ACTIVE,
+    FINISHED,
+    FAILED,
+};
+
+struct GncXmlV2AccountCursor
+{
+    GncGUID guid{};
+    guint64 children_generation{};
+    size_t child_index{};
+    bool entered{};
+};
+
+struct GncXmlV2LoadPlan
+{
+    QofBook *book{};
+    sixtp_gdv2 *gd{};
+    sixtp_push_plan *parser{};
+    struct file_backend be_data{};
+    gxpf_data gpdata{};
+    FILE *file{};
+    GThread *thread{};
+    GncDataScrubSuspension *scrub_suspension{};
+    GncTransLogSuppression *log_suppression{};
+    GncXmlV2LoadPhase phase{GncXmlV2LoadPhase::PARSE};
+    size_t registry_index{};
+    QofCollectionCursor *commodity_cursor{};
+    bool quote_new_style{};
+    std::vector<GncGUID> main_accounts{};
+    std::vector<GncGUID> main_accounts_postorder{};
+    std::vector<GncGUID> template_accounts{};
+    std::vector<GncGUID> template_accounts_postorder{};
+    std::vector<GncGUID> split_guids{};
+    std::vector<GncGUID> transaction_guids{};
+    std::unordered_set<GncGUID> queued_transactions{};
+    std::deque<GncXmlV2AccountCursor> account_cursors{};
+    size_t work_index{};
+    size_t split_account_index{};
+    size_t split_index{};
+    guint64 split_generation{};
+    bool split_account_active{};
+    size_t commit_tree{};
+    gchar buffer[GNC_XML_V2_LOAD_CHUNK]{};
+    GncXmlV2LoadStatus status{GNC_XML_V2_LOAD_ACTIVE};
+};
+
+static gpointer
+gnc_xml_v2_load_plan_gzip_reaper (gpointer user_data)
+{
+    g_thread_join (static_cast<GThread *> (user_data));
+    return nullptr;
+}
+
+static void
+gnc_xml_v2_load_plan_close_input (GncXmlV2LoadPlan *plan)
+{
+    if (!plan)
+        return;
+    if (plan->file)
+    {
+        fclose (plan->file);
+        plan->file = NULL;
+    }
+    if (plan->thread)
+    {
+        /* Closing the pipe unblocks a cancelled GZip producer. Transfer its
+         * joinable GThread to a detached reaper so cancellation never blocks
+         * the UI while the worker's FDs and parameters are released. */
+        auto producer = plan->thread;
+        plan->thread = NULL;
+        auto reaper = g_thread_new ("xml_gzip_reaper",
+                                    gnc_xml_v2_load_plan_gzip_reaper,
+                                    producer);
+        g_thread_unref (reaper);
+    }
+}
+
+static GncXmlV2LoadStatus
+gnc_xml_v2_load_plan_terminal (GncXmlV2LoadPlan *plan,
+                               GncXmlV2LoadStatus status)
+{
+    plan->status = status;
+    gnc_xml_v2_load_plan_close_input (plan);
+    return status;
+}
+
+static void
+gnc_xml_v2_account_cursor_start (GncXmlV2LoadPlan *plan, Account *root)
+{
+    plan->account_cursors.clear ();
+    if (!root)
+        return;
+    GncXmlV2AccountCursor cursor{};
+    cursor.guid = *xaccAccountGetGUID (root);
+    cursor.children_generation = gnc_account_get_children_generation (root);
+    plan->account_cursors.push_back (cursor);
+}
+
+static GncXmlV2CollectorStatus
+gnc_xml_v2_collect_account_step (GncXmlV2LoadPlan *plan,
+                                 std::vector<GncGUID>& preorder,
+                                 std::vector<GncGUID>& postorder)
+{
+    if (plan->account_cursors.empty ())
+        return GncXmlV2CollectorStatus::FINISHED;
+
+    auto &cursor = plan->account_cursors.back ();
+    auto account = xaccAccountLookup (&cursor.guid, plan->book);
+    if (!account || gnc_account_get_children_generation (account) !=
+                        cursor.children_generation)
+        return GncXmlV2CollectorStatus::FAILED;
+
+    if (!cursor.entered)
+    {
+        cursor.entered = true;
+        preorder.push_back (cursor.guid);
+        return GncXmlV2CollectorStatus::ACTIVE;
+    }
+
+    GncGUID child_guid{};
+    if (gnc_account_get_child_guid_at (account, cursor.children_generation,
+                                       cursor.child_index, &child_guid))
+    {
+        ++cursor.child_index;
+        auto child = xaccAccountLookup (&child_guid, plan->book);
+        if (!child)
+            return GncXmlV2CollectorStatus::FAILED;
+        GncXmlV2AccountCursor child_cursor{};
+        child_cursor.guid = child_guid;
+        child_cursor.children_generation =
+            gnc_account_get_children_generation (child);
+        plan->account_cursors.push_back (child_cursor);
+        return GncXmlV2CollectorStatus::ACTIVE;
+    }
+
+    postorder.push_back (cursor.guid);
+    plan->account_cursors.pop_back ();
+    return GncXmlV2CollectorStatus::ACTIVE;
+}
+
+static void
+gnc_xml_v2_move_quote_source (Account *account, bool new_style)
+{
+    auto commodity = account ? xaccAccountGetCommodity (account) : nullptr;
+    if (!commodity)
+        return;
+
+    if (!new_style)
+    {
+        auto source = dxaccAccountGetPriceSrc (account);
+        if (!source || !*source)
+            return;
+        auto quote_source = gnc_quote_source_lookup_by_internal (source);
+        if (!quote_source)
+            quote_source = gnc_quote_source_add_new (source, FALSE);
+        gnc_commodity_set_quote_flag (commodity, TRUE);
+        gnc_commodity_set_quote_source (commodity, quote_source);
+        gnc_commodity_set_quote_tz (commodity,
+                                    dxaccAccountGetQuoteTZ (account));
+    }
+
+    dxaccAccountSetPriceSrc (account, nullptr);
+    dxaccAccountSetQuoteTZ (account, nullptr);
+}
+
+static void
+gnc_xml_v2_scrub_account_commodity (Account *account)
+{
+    if (!account)
+        return;
+    xaccAccountScrubCommodity (account);
+    xaccAccountBeginEdit (account);
+    qof_instance_set_kvp (QOF_INSTANCE (account), nullptr, 1, "old-currency");
+    qof_instance_set_kvp (QOF_INSTANCE (account), nullptr, 1, "old-security");
+    qof_instance_set_kvp (QOF_INSTANCE (account), nullptr, 1,
+                          "old-currency-scu");
+    qof_instance_set_kvp (QOF_INSTANCE (account), nullptr, 1,
+                          "old-security-scu");
+    qof_instance_set_dirty (QOF_INSTANCE (account));
+    xaccAccountCommitEdit (account);
+}
+
+static GncXmlV2LoadStatus
+gnc_xml_v2_collect_split_step (GncXmlV2LoadPlan *plan,
+                               const std::vector<GncGUID>& accounts,
+                               bool collect_transactions)
+{
+    if (plan->split_account_index >= accounts.size ())
+    {
+        plan->split_account_index = 0;
+        plan->split_account_active = false;
+        if (collect_transactions)
+            plan->phase = GncXmlV2LoadPhase::COLLECT_SPLITS;
+        else
+        {
+            plan->phase = GncXmlV2LoadPhase::SCRUB_TRANSACTION_COMMODITY;
+            plan->work_index = 0;
+        }
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+
+    auto account = xaccAccountLookup (
+        &accounts[plan->split_account_index], plan->book);
+    if (!account)
+        return GNC_XML_V2_LOAD_ERROR;
+    if (!plan->split_account_active)
+    {
+        plan->split_generation = gnc_account_get_splits_generation (account);
+        plan->split_index = 0;
+        plan->split_account_active = true;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+    if (gnc_account_get_splits_generation (account) != plan->split_generation)
+        return GNC_XML_V2_LOAD_ERROR;
+
+    GncGUID split_guid{};
+    if (!gnc_account_get_split_guid_at (account, plan->split_generation,
+                                        plan->split_index, &split_guid))
+    {
+        ++plan->split_account_index;
+        plan->split_account_active = false;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+    ++plan->split_index;
+    auto split = xaccSplitLookup (&split_guid, plan->book);
+    if (!split)
+        return GNC_XML_V2_LOAD_ERROR;
+    if (collect_transactions)
+    {
+        auto transaction = xaccSplitGetParent (split);
+        if (transaction)
+        {
+            auto transaction_guid = *xaccTransGetGUID (transaction);
+            if (plan->queued_transactions.insert (transaction_guid).second)
+                plan->transaction_guids.push_back (transaction_guid);
+        }
+    }
+    else
+        plan->split_guids.push_back (split_guid);
+    return GNC_XML_V2_LOAD_ACTIVE;
+}
+
+static GncXmlV2LoadStatus
+gnc_xml_v2_commit_account_step (GncXmlV2LoadPlan *plan)
+{
+    auto accounts = plan->commit_tree == 0 ?
+        &plan->main_accounts : &plan->template_accounts;
+    if (accounts->empty ())
+    {
+        if (plan->commit_tree == 0)
+        {
+            plan->commit_tree = 1;
+            plan->work_index = 0;
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->phase = GncXmlV2LoadPhase::MARK_SAVED;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+
+    /* Match the legacy order: descendants in preorder, then the root. */
+    const auto descendant_count = accounts->size () - 1;
+    size_t account_index;
+    if (plan->work_index < descendant_count)
+        account_index = plan->work_index + 1;
+    else if (plan->work_index == descendant_count)
+        account_index = 0;
+    else
+    {
+        if (plan->commit_tree == 0)
+        {
+            plan->commit_tree = 1;
+            plan->work_index = 0;
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->phase = GncXmlV2LoadPhase::MARK_SAVED;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+
+    auto account = xaccAccountLookup (&(*accounts)[account_index], plan->book);
+    if (!account)
+        return GNC_XML_V2_LOAD_ERROR;
+    if (qof_instance_get_editlevel (account) != 0)
+        xaccAccountCommitEdit (account);
+    ++plan->work_index;
+    return GNC_XML_V2_LOAD_ACTIVE;
+}
+
+static GncXmlV2LoadStatus
+gnc_xml_v2_load_plan_finalization_step (GncXmlV2LoadPlan *plan)
+{
+    switch (plan->phase)
+    {
+    case GncXmlV2LoadPhase::BACKEND_SCRUB:
+        if (plan->registry_index < backend_registry.size ())
+        {
+            scrub (backend_registry[plan->registry_index], &plan->be_data);
+            ++plan->registry_index;
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->commodity_cursor = qof_collection_cursor_new (
+            qof_book_get_collection (plan->book, GNC_ID_COMMODITY));
+        if (!plan->commodity_cursor)
+            return GNC_XML_V2_LOAD_ERROR;
+        plan->phase = GncXmlV2LoadPhase::SCAN_QUOTE_COMMODITIES;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    case GncXmlV2LoadPhase::SCAN_QUOTE_COMMODITIES:
+    {
+        GncGUID guid{};
+        auto status = qof_collection_cursor_next (plan->commodity_cursor, &guid);
+        if (status == QOF_COLLECTION_CURSOR_STALE)
+            return GNC_XML_V2_LOAD_ERROR;
+        if (status == QOF_COLLECTION_CURSOR_END)
+        {
+            qof_collection_cursor_free (plan->commodity_cursor);
+            plan->commodity_cursor = nullptr;
+            gnc_xml_v2_account_cursor_start (
+                plan, gnc_book_get_root_account (plan->book));
+            plan->phase = GncXmlV2LoadPhase::COLLECT_MAIN_ACCOUNTS;
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        auto commodity = gnc_commodity_find_commodity_by_guid (&guid, plan->book);
+        if (!commodity)
+            return GNC_XML_V2_LOAD_ERROR;
+        if (!gnc_commodity_is_iso (commodity) &&
+            gnc_commodity_get_quote_flag (commodity))
+            plan->quote_new_style = true;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+    case GncXmlV2LoadPhase::COLLECT_MAIN_ACCOUNTS:
+    {
+        auto status = gnc_xml_v2_collect_account_step (
+            plan, plan->main_accounts, plan->main_accounts_postorder);
+        if (status == GncXmlV2CollectorStatus::FAILED)
+            return GNC_XML_V2_LOAD_ERROR;
+        if (status == GncXmlV2CollectorStatus::FINISHED)
+        {
+            gnc_xml_v2_account_cursor_start (
+                plan, gnc_book_get_template_root (plan->book));
+            plan->phase = GncXmlV2LoadPhase::COLLECT_TEMPLATE_ACCOUNTS;
+        }
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+    case GncXmlV2LoadPhase::COLLECT_TEMPLATE_ACCOUNTS:
+    {
+        auto status = gnc_xml_v2_collect_account_step (
+            plan, plan->template_accounts, plan->template_accounts_postorder);
+        if (status == GncXmlV2CollectorStatus::FAILED)
+            return GNC_XML_V2_LOAD_ERROR;
+        if (status == GncXmlV2CollectorStatus::FINISHED)
+        {
+            plan->phase = GncXmlV2LoadPhase::MOVE_QUOTE_SOURCE;
+            plan->work_index = 0;
+        }
+        return GNC_XML_V2_LOAD_ACTIVE;
+    }
+    case GncXmlV2LoadPhase::MOVE_QUOTE_SOURCE:
+        if (plan->work_index < plan->main_accounts.size ())
+        {
+            auto account = xaccAccountLookup (
+                &plan->main_accounts[plan->work_index++], plan->book);
+            if (!account)
+                return GNC_XML_V2_LOAD_ERROR;
+            gnc_xml_v2_move_quote_source (account, plan->quote_new_style);
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->phase = GncXmlV2LoadPhase::COLLECT_TRANSACTIONS;
+        plan->split_account_index = 0;
+        plan->split_account_active = false;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    case GncXmlV2LoadPhase::COLLECT_TRANSACTIONS:
+        return gnc_xml_v2_collect_split_step (
+            plan, plan->main_accounts_postorder, true);
+    case GncXmlV2LoadPhase::COLLECT_SPLITS:
+        return gnc_xml_v2_collect_split_step (
+            plan, plan->main_accounts, false);
+    case GncXmlV2LoadPhase::SCRUB_TRANSACTION_COMMODITY:
+        if (plan->work_index < plan->transaction_guids.size ())
+        {
+            auto transaction = xaccTransLookup (
+                &plan->transaction_guids[plan->work_index++], plan->book);
+            if (!transaction)
+                return GNC_XML_V2_LOAD_ERROR;
+            xaccTransScrubCurrency (transaction);
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->phase = GncXmlV2LoadPhase::SCRUB_ACCOUNT_COMMODITY;
+        plan->work_index = 0;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    case GncXmlV2LoadPhase::SCRUB_ACCOUNT_COMMODITY:
+        if (plan->work_index < plan->main_accounts.size ())
+        {
+            auto account = xaccAccountLookup (
+                &plan->main_accounts[plan->work_index++], plan->book);
+            if (!account)
+                return GNC_XML_V2_LOAD_ERROR;
+            gnc_xml_v2_scrub_account_commodity (account);
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->phase = GncXmlV2LoadPhase::SCRUB_SPLIT;
+        plan->work_index = 0;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    case GncXmlV2LoadPhase::SCRUB_SPLIT:
+        if (plan->work_index < plan->split_guids.size ())
+        {
+            auto split = xaccSplitLookup (
+                &plan->split_guids[plan->work_index++], plan->book);
+            if (!split)
+                return GNC_XML_V2_LOAD_ERROR;
+            xaccSplitScrub (split);
+            return GNC_XML_V2_LOAD_ACTIVE;
+        }
+        plan->phase = GncXmlV2LoadPhase::COMMIT_ONE_ACCOUNT;
+        plan->commit_tree = 0;
+        plan->work_index = 0;
+        return GNC_XML_V2_LOAD_ACTIVE;
+    case GncXmlV2LoadPhase::COMMIT_ONE_ACCOUNT:
+        return gnc_xml_v2_commit_account_step (plan);
+    case GncXmlV2LoadPhase::MARK_SAVED:
+        /* Publishable only after the last bounded account commit. */
+        qof_book_mark_session_saved (plan->book);
+        return GNC_XML_V2_LOAD_FINISHED;
+    case GncXmlV2LoadPhase::PARSE:
+        return GNC_XML_V2_LOAD_ERROR;
+    }
+    return GNC_XML_V2_LOAD_ERROR;
+}
+
+GncXmlV2LoadPlan *
+gnc_xml_v2_load_plan_new (GncXmlBackend *xml_be, QofBook *book,
+                          QofBookFileType type)
+{
+    auto plan = new (std::nothrow) GncXmlV2LoadPlan;
+    sixtp *top_parser;
+    sixtp *main_parser;
+    sixtp *book_parser;
+    gchar *v2type = NULL;
+    const char *filename = NULL;
+    std::pair<FILE*, GThread*> input {NULL, NULL};
+
+    if (!plan || !xml_be || !book)
+    {
+        delete plan;
+        return NULL;
+    }
+    plan->book = book;
+    plan->gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback,
+                                   xml_be->get_percentage ());
+    top_parser = sixtp_new ();
+    main_parser = sixtp_new ();
+    book_parser = sixtp_new ();
+    if (!plan->gd || !top_parser || !main_parser || !book_parser)
+        goto fail;
+
+    if (type == GNC_BOOK_XML2_FILE)
+        v2type = g_strdup (GNC_V2_STRING);
+    if (!sixtp_add_some_sub_parsers (top_parser, TRUE, v2type, main_parser,
+                                     NULL, NULL))
+        goto fail;
+    g_free (v2type);
+    v2type = NULL;
+    if (!sixtp_add_some_sub_parsers (
+            main_parser, TRUE,
+            COUNT_DATA_TAG, gnc_counter_sixtp_parser_create (),
+            BOOK_TAG, book_parser,
+            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create (),
+            COMMODITY_TAG, gnc_commodity_sixtp_parser_create (),
+            ACCOUNT_TAG, gnc_account_sixtp_parser_create (),
+            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create (),
+            SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create (),
+            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create (),
+            NULL, NULL))
+        goto fail;
+    if (!sixtp_add_some_sub_parsers (
+            book_parser, TRUE,
+            BOOK_ID_TAG, gnc_book_id_sixtp_parser_create (),
+            BOOK_SLOTS_TAG, gnc_book_slots_sixtp_parser_create (),
+            COUNT_DATA_TAG, gnc_counter_sixtp_parser_create (),
+            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create (),
+            COMMODITY_TAG, gnc_commodity_sixtp_parser_create (),
+            ACCOUNT_TAG, gnc_account_sixtp_parser_create (),
+            BUDGET_TAG, gnc_budget_sixtp_parser_create (),
+            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create (),
+            SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create (),
+            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create (),
+            NULL, NULL))
+        goto fail;
+
+    plan->be_data.ok = TRUE;
+    plan->be_data.parser = book_parser;
+    for (auto data : backend_registry)
+        add_parser (data, &plan->be_data);
+    if (!plan->be_data.ok)
+        goto fail;
+
+    plan->gpdata.cb = generic_callback;
+    plan->gpdata.parsedata = plan->gd;
+    plan->gpdata.bookdata = book;
+    plan->parser = sixtp_push_plan_new (top_parser, NULL, &plan->gpdata);
+    /* sixtp_push_plan_new takes ownership of top_parser, including when it
+     * reports construction failure. Never let the common failure cleanup
+     * destroy that ownership a second time. */
+    top_parser = NULL;
+    if (!plan->parser)
+        goto fail;
+
+    plan->scrub_suspension = xaccDataScrubSuspendForBook (book);
+    if (!plan->scrub_suspension)
+        goto fail;
+    plan->log_suppression = xaccTransLogSuppressForBook (book);
+    if (!plan->log_suppression)
+        goto fail;
+
+    filename = xml_be->get_filename ();
+    input = try_gz_open (
+        filename, "r", is_gzipped_file (filename), FALSE);
+    plan->file = input.first;
+    plan->thread = input.second;
+    if (!plan->file)
+        goto fail;
+    return plan;
+
+fail:
+    g_free (v2type);
+    if (top_parser)
+        sixtp_destroy (top_parser);
+    gnc_xml_v2_load_plan_free (plan);
+    return NULL;
+}
+
+GncXmlV2LoadStatus
+gnc_xml_v2_load_plan_step (GncXmlV2LoadPlan *plan,
+                           QofBackendLoadAsyncGuard guard,
+                           gpointer guard_data)
+{
+    if (!plan)
+        return GNC_XML_V2_LOAD_ERROR;
+    if (plan->status != GNC_XML_V2_LOAD_ACTIVE)
+        return plan->status;
+    if (guard && !guard (guard_data))
+    {
+        if (plan->parser)
+            sixtp_push_plan_cancel (plan->parser);
+        return gnc_xml_v2_load_plan_terminal (plan, GNC_XML_V2_LOAD_CANCELLED);
+    }
+    if (plan->phase != GncXmlV2LoadPhase::PARSE)
+        return gnc_xml_v2_load_plan_finalization_step (plan);
+
+
+    auto bytes = fread (plan->buffer, 1, sizeof (plan->buffer), plan->file);
+    if (bytes > 0)
+    {
+        auto status = sixtp_push_plan_feed (plan->parser, plan->buffer, bytes);
+        if (status == SIXTP_PUSH_PLAN_ACTIVE)
+            return GNC_XML_V2_LOAD_ACTIVE;
+        return gnc_xml_v2_load_plan_terminal (
+            plan, status == SIXTP_PUSH_PLAN_CANCELLED ?
+            GNC_XML_V2_LOAD_CANCELLED : GNC_XML_V2_LOAD_ERROR);
+    }
+    if (ferror (plan->file))
+    {
+        sixtp_push_plan_cancel (plan->parser);
+        return gnc_xml_v2_load_plan_terminal (plan, GNC_XML_V2_LOAD_ERROR);
+    }
+
+    auto status = sixtp_push_plan_finish (plan->parser, NULL);
+    if (status != SIXTP_PUSH_PLAN_FINISHED)
+        return gnc_xml_v2_load_plan_terminal (
+            plan, status == SIXTP_PUSH_PLAN_CANCELLED ?
+            GNC_XML_V2_LOAD_CANCELLED : GNC_XML_V2_LOAD_ERROR);
+    debug_print_counter_data (&plan->gd->counter);
+    sixtp_push_plan_free (plan->parser);
+    plan->parser = NULL;
+    gnc_xml_v2_load_plan_close_input (plan);
+    plan->phase = GncXmlV2LoadPhase::BACKEND_SCRUB;
+    memset (&plan->be_data, 0, sizeof (plan->be_data));
+    plan->be_data.book = plan->book;
+    plan->registry_index = 0;
+    return GNC_XML_V2_LOAD_ACTIVE;
+}
+
+void
+gnc_xml_v2_load_plan_cancel (GncXmlV2LoadPlan *plan)
+{
+    if (!plan || plan->status != GNC_XML_V2_LOAD_ACTIVE)
+        return;
+    if (plan->parser)
+        sixtp_push_plan_cancel (plan->parser);
+    gnc_xml_v2_load_plan_terminal (plan, GNC_XML_V2_LOAD_CANCELLED);
+}
+
+void
+gnc_xml_v2_load_plan_free (GncXmlV2LoadPlan *plan)
+{
+    if (!plan)
+        return;
+    gnc_xml_v2_load_plan_close_input (plan);
+    if (plan->parser)
+        sixtp_push_plan_free (plan->parser);
+    qof_collection_cursor_free (plan->commodity_cursor);
+    xaccDataScrubSuspensionRelease (plan->scrub_suspension);
+    xaccTransLogSuppressionRelease (plan->log_suppression);
+    g_free (plan->gd);
+    delete plan;
+}
+
 /***********************************************************************/
 
 static gboolean
@@ -1457,8 +2092,12 @@ gz_thread_read (gzFile file, gz_thread_params_t* params)
         {
             if (WRITE_FN (params->fd, buffer, gzval) < 0)
             {
-                g_warning ("Could not write to pipe. The error is '%s' (%d)",
-                           g_strerror (errno) ? g_strerror (errno) : "", errno);
+                /* A reader that cancels or rejects input closes its end of
+                 * the pipe deliberately. EPIPE is therefore the expected
+                 * producer shutdown path, not a separate I/O failure. */
+                if (errno != EPIPE)
+                    g_warning ("Could not write to pipe. The error is '%s' (%d)",
+                               g_strerror (errno) ? g_strerror (errno) : "", errno);
                 success = false;
             }
         }
@@ -1485,6 +2124,16 @@ gz_thread_func (gz_thread_params_t* params)
 {
     gint gzval;
     bool success = true;
+
+#if !defined(G_OS_WIN32) && !defined(F_SETNOSIGPIPE)
+    /* The loading side may close its pipe during cancellation. Keep SIGPIPE
+     * blocked in this worker on systems without per-descriptor suppression so
+     * write() reports EPIPE instead of terminating the process. */
+    sigset_t sigpipe;
+    sigemptyset (&sigpipe);
+    sigaddset (&sigpipe, SIGPIPE);
+    pthread_sigmask (SIG_BLOCK, &sigpipe, nullptr);
+#endif
 
     auto file = do_gzopen (params->filename, params->perms);
 
@@ -1532,11 +2181,11 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
                                           nullptr);
 
     {
-        int filedes[2]{};
+        int filedes[2] {-1, -1};
+        bool pipe_ready = false;
 
 #ifdef G_OS_WIN32
-        if (_pipe (filedes, 4096, _O_BINARY) < 0)
-        {
+        pipe_ready = _pipe (filedes, 4096, _O_BINARY) == 0;
 #else
         /* Set CLOEXEC on the pipe FDs so that if the user runs a
          * report while saving WebKit's fork won't get an open copy
@@ -1544,17 +2193,32 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
          * https://bugs.gnucash.org/show_bug.cgi?id=798250. Win32
          * doesn't fork nor does it support CLOEXEC.
          */
-        if (pipe (filedes) < 0 ||
-            fcntl(filedes[0], F_SETFD, FD_CLOEXEC) == -1 ||
-	    fcntl(filedes[1], F_SETFD, FD_CLOEXEC) == -1)
-        {
+        pipe_ready = pipe (filedes) == 0;
+        if (pipe_ready &&
+            (fcntl (filedes[0], F_SETFD, FD_CLOEXEC) == -1 ||
+             fcntl (filedes[1], F_SETFD, FD_CLOEXEC) == -1))
+            pipe_ready = false;
+#ifdef F_SETNOSIGPIPE
+        /* Darwin delivers a pipe's SIGPIPE to the process, so masking it in
+         * only the GZip worker cannot protect the application. Make this
+         * internal pipe's write end report EPIPE without generating SIGPIPE.
+         * The setting follows the file description and is inherited by the
+         * worker without changing the process-wide signal disposition. */
+        if (pipe_ready &&
+            fcntl (filedes[1], F_SETNOSIGPIPE, 1) == -1)
+            pipe_ready = false;
 #endif
-            g_warning ("Pipe setup failed with errno %d. Opening uncompressed file.", errno);
-            if (filedes[0])
-            {
-                close(filedes[0]);
-                close(filedes[1]);
-            }
+#endif
+        if (!pipe_ready)
+        {
+            auto pipe_errno = errno;
+            g_warning ("Pipe setup failed with errno %d. Opening uncompressed file.",
+                       pipe_errno);
+            if (filedes[0] >= 0)
+                close (filedes[0]);
+            if (filedes[1] >= 0)
+                close (filedes[1]);
+            errno = pipe_errno;
 
             return std::pair<FILE*, GThread*>(g_fopen (filename, perms),
                                               nullptr);
@@ -1587,6 +2251,14 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
                 file = fdopen (filedes[1], "w");
             else
                 file = fdopen (filedes[0], "r");
+
+            if (!file)
+            {
+                g_warning ("Could not open pipe stream for (de)compression.");
+                close (filedes[write ? 1 : 0]);
+                g_thread_join (thread);
+                thread = nullptr;
+            }
         }
 
         return std::pair<FILE*, GThread*>(file, thread);
@@ -1706,6 +2378,17 @@ gnc_is_xml_data_file_v2 (const gchar* name, gboolean* with_encoding)
     }
 
     return (gnc_is_our_xml_file (name, with_encoding));
+}
+
+extern "C" gboolean
+gnc_xml_file_needs_encoding_conversion (const gchar* filename)
+{
+    gboolean with_encoding = FALSE;
+
+    g_return_val_if_fail (filename != nullptr, FALSE);
+
+    return gnc_is_xml_data_file_v2 (filename, &with_encoding)
+        == GNC_BOOK_XML2_FILE && !with_encoding;
 }
 
 

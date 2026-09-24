@@ -7,6 +7,9 @@ jobs:
         name: Windows ucrt64 CI Tests
         env:
           TZ: America/Los_Angeles
+          # Ninja runs guild in parallel. Compile project modules explicitly,
+          # but don't let each guild process rebuild its own startup modules.
+          GUILE_AUTO_COMPILE: '0'
         defaults:
           run:
             shell: msys2 {0}
@@ -21,12 +24,33 @@ jobs:
 
         - name: Add our repo
           shell: msys2 {0}
+          env:
+            DEPENDENCY_OVERLAY_NAME: ${{ vars.WINDOWS_DEPENDENCY_OVERLAY_NAME }}
+            DEPENDENCY_OVERLAY_URL: ${{ vars.WINDOWS_DEPENDENCY_OVERLAY_URL }}
           run: |
+            set -euo pipefail
             sed -i "/^# SigLevel = Never/a [gnc-ucrt64]\nSigLevel = Optional TrustAll\nServer = https://github.com/gnucash/gnucash-windows-deps-repo/releases/download/gnc-ucrt64-repo/" /etc/pacman.conf
+            if [[ -n "$DEPENDENCY_OVERLAY_NAME" || -n "$DEPENDENCY_OVERLAY_URL" ]]; then
+              if [[ -z "$DEPENDENCY_OVERLAY_NAME" || -z "$DEPENDENCY_OVERLAY_URL" ]]; then
+                echo 'Both Windows dependency overlay variables must be set.' >&2
+                exit 1
+              fi
+              if [[ ! "$DEPENDENCY_OVERLAY_NAME" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+                echo "Invalid dependency overlay name: $DEPENDENCY_OVERLAY_NAME" >&2
+                exit 1
+              fi
+              dependency_overlay_url="${DEPENDENCY_OVERLAY_URL%/}/"
+              if [[ ! "$dependency_overlay_url" =~ ^https://[A-Za-z0-9._/-]+/$ ]]; then
+                echo "Invalid dependency overlay URL: $DEPENDENCY_OVERLAY_URL" >&2
+                exit 1
+              fi
+              sed -i "/^# SigLevel = Never/a [$DEPENDENCY_OVERLAY_NAME]\nSigLevel = Optional TrustAll\nServer = $dependency_overlay_url" /etc/pacman.conf
+            fi
             sed -i "s/^# ParallelDownloads/ParallelDownloads/" /etc/pacman.conf
 
             pacman -Syv
-            pacboy --noconfirm -S swig:p appstream-glib:p aqbanking:p boost:p docbook-xsl:p gettext-tools:p gtest:p guile3:p icu:p pdcurses:p libdbi-drivers:p libofx:p webview2-loader zlib:p
+            pacboy --noconfirm -S swig:p appstream-glib:p aqbanking:p boost:p gtk4:p gsettings-desktop-schemas:p docbook-xsl:p gettext-tools:p gtest:p guile3:p harfbuzz-icu:p icu:p iso-codes:p pdcurses:p libdbi-drivers:p libofx:p libsecret:p webview2-loader zlib:p
+            pkg-config --exists aqbanking gwengui-gtk4
             ls -l $MSYSTEM_PREFIX/lib/dbd
 
         - name: Checkout
@@ -37,17 +61,30 @@ jobs:
             GUILE_LOAD_PATH: "${{ env.MSYSTEM_PREFIX }}/share/guile/3.0/"
             GUILE_LOAD_COMPILED_PATH: "${{ env.MSYSTEM_PREFIX }}/lib/guile/3.0/ccache"
           run: |
+            set -euo pipefail
             mkdir build && cd build
-            cmake -G Ninja ..
+            cmake -G Ninja -DWITH_AQBANKING=ON ..
         - name: Build and Test GnuCash
+          id: build_test
           env:
             GUILE_LOAD_PATH: "${{ env.MSYSTEM_PREFIX }}/share/guile/3.0/"
             GUILE_LOAD_COMPILED_PATH: "${{ env.MSYSTEM_PREFIX }}/lib/guile/3.0/ccache"
             CTEST_OUTPUT_ON_FAILURE: On
           run: |
+            set -euo pipefail
             cd build
             ninja
+            printf 'build_succeeded=true\n' >> "$GITHUB_OUTPUT"
             ninja check
+
+        - name: Capture matcher IME backtrace after test failure
+          if: ${{ github.repository == 'copystring/gnucash' && failure() && steps.build_test.outcome == 'failure' && steps.build_test.outputs.build_succeeded == 'true' }}
+          timeout-minutes: 4
+          shell: msys2 {0}
+          env:
+            GUILE_LOAD_PATH: "${{ env.MSYSTEM_PREFIX }}/share/guile/3.0/"
+            GUILE_LOAD_COMPILED_PATH: "${{ env.MSYSTEM_PREFIX }}/lib/guile/3.0/ccache"
+          run: bash ./util/ci/windows-matcher-ime-backtrace.sh build
 
         - uses: actions/upload-artifact@v7
           if: failure()
@@ -55,3 +92,4 @@ jobs:
             name: TestResults
             path: |
               build/Testing/Temporary/LastTest.log
+              build/matcher-ime-backtrace.log

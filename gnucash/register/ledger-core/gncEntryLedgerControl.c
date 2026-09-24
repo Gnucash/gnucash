@@ -641,306 +641,492 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     return TRUE;
 }
 
-static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
-        gncTableTraversalDir dir,
-        gpointer user_data)
+typedef struct
+{
+    GncEntryLedgerAsyncRequest base;
+    VirtualLocation source_loc;
+    VirtualLocation destination;
+    gncTableTraversalDir direction;
+    GncGUID source_entry_guid;
+    GncGUID destination_entry_guid;
+    char *cell_name;
+    char *cell_value;
+} EntryLedgerTraverseRequest;
+
+static gboolean
+entry_ledger_virtual_location_equal (VirtualLocation first, VirtualLocation second)
+{
+    return first.vcell_loc.virt_row == second.vcell_loc.virt_row &&
+           first.vcell_loc.virt_col == second.vcell_loc.virt_col &&
+           first.phys_row_offset == second.phys_row_offset &&
+           first.phys_col_offset == second.phys_col_offset;
+}
+
+static GtkWindow *
+entry_ledger_parent_window (GncEntryLedger *ledger)
+{
+    return ledger && GTK_IS_WINDOW (ledger->parent) ? GTK_WINDOW (ledger->parent) : NULL;
+}
+
+static EntryLedgerTraverseRequest *
+entry_ledger_traverse_request_new (GncEntryLedger *ledger,
+                                   VirtualLocation destination,
+                                   gncTableTraversalDir direction)
+{
+    EntryLedgerTraverseRequest *request;
+    GncEntry *source;
+    GncEntry *target;
+
+    request = g_new0 (EntryLedgerTraverseRequest, 1);
+    request->source_loc = ledger->table->current_cursor_loc;
+    request->destination = destination;
+    request->direction = direction;
+    source = gnc_entry_ledger_get_current_entry (ledger);
+    target = gnc_entry_ledger_get_entry (ledger, destination.vcell_loc);
+    request->source_entry_guid = source ? *gncEntryGetGUID (source) : *guid_null ();
+    request->destination_entry_guid = target ? *gncEntryGetGUID (target) : *guid_null ();
+    gnc_entry_ledger_async_request_track (ledger, &request->base);
+    return request;
+}
+
+static void
+entry_ledger_traverse_request_free (EntryLedgerTraverseRequest *request)
+{
+    if (!request)
+        return;
+
+    gnc_entry_ledger_async_request_untrack (&request->base);
+    g_free (request->cell_name);
+    g_free (request->cell_value);
+    g_free (request);
+}
+
+static gboolean
+entry_ledger_traverse_request_is_current (const EntryLedgerTraverseRequest *request)
+{
+    GncEntryLedger *ledger;
+    GncEntry *entry;
+
+    if (!request || !(ledger = request->base.ledger) ||
+        qof_book_shutting_down (ledger->book) ||
+        !entry_ledger_virtual_location_equal (ledger->table->current_cursor_loc,
+                                              request->source_loc))
+        return FALSE;
+
+    entry = gnc_entry_ledger_get_current_entry (ledger);
+    if (!entry || !guid_equal (gncEntryGetGUID (entry), &request->source_entry_guid))
+        return FALSE;
+
+    if (request->cell_name)
+    {
+        const char *value = gnc_table_layout_get_cell_value (ledger->table->layout,
+                                                              request->cell_name);
+        if (g_strcmp0 (value, request->cell_value) != 0)
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+static gboolean
+entry_ledger_traverse_request_destination (const EntryLedgerTraverseRequest *request,
+                                           VirtualLocation *destination)
+{
+    GncEntryLedger *ledger;
+    GncEntry *entry;
+    VirtualCellLocation location;
+
+    g_return_val_if_fail (request != NULL, FALSE);
+    g_return_val_if_fail (destination != NULL, FALSE);
+
+    ledger = request->base.ledger;
+    if (!ledger)
+        return FALSE;
+
+    *destination = request->destination;
+    if (!guid_equal (&request->destination_entry_guid, guid_null ()))
+    {
+        entry = gncEntryLookup (ledger->book, &request->destination_entry_guid);
+        if (!entry || !gnc_entry_ledger_find_entry (ledger, entry, &location))
+            return FALSE;
+        destination->vcell_loc = location;
+    }
+
+    return gnc_table_find_close_valid_cell (ledger->table, destination, FALSE);
+}
+
+static void
+entry_ledger_resume_traverse_request (EntryLedgerTraverseRequest *request)
+{
+    GncEntryLedger *ledger;
+    VirtualLocation source;
+    VirtualLocation destination;
+    gboolean abort_move;
+    gboolean skip_missing_tax_table_creation;
+    gncTableTraversalDir direction;
+
+    if (!entry_ledger_traverse_request_is_current (request))
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    source = request->source_loc;
+    destination = request->destination;
+    direction = request->direction;
+    skip_missing_tax_table_creation = ledger->skip_missing_tax_table_creation;
+    entry_ledger_traverse_request_free (request);
+
+    abort_move = gnc_table_traverse_update (ledger->table, source,
+                                            direction, &destination);
+    if (skip_missing_tax_table_creation)
+        ledger->skip_missing_tax_table_creation = FALSE;
+    if (!abort_move)
+        gnc_table_move_cursor_gui (ledger->table, destination);
+}
+
+static void
+entry_ledger_account_created (Account *account, gboolean accepted,
+                              gpointer user_data)
+{
+    EntryLedgerTraverseRequest *request = user_data;
+    GncEntryLedger *ledger;
+    BasicCell *cell;
+    char *account_name;
+
+    if (!accepted || !account || !entry_ledger_traverse_request_is_current (request))
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    cell = gnc_table_layout_get_cell (ledger->table->layout, request->cell_name);
+    if (!cell)
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    account_name = gnc_get_account_name_for_register (account);
+    gnc_combo_cell_set_value ((ComboCell *)cell, account_name);
+    gnc_basic_cell_set_changed (cell, TRUE);
+    g_free (account_name);
+    ledger->full_refresh = TRUE;
+    g_clear_pointer (&request->cell_name, g_free);
+    g_clear_pointer (&request->cell_value, g_free);
+
+    entry_ledger_resume_traverse_request (request);
+}
+
+static void
+entry_ledger_account_creation_confirmed (GtkWindow *parent, gint response,
+                                         gpointer user_data)
+{
+    EntryLedgerTraverseRequest *request = user_data;
+    GncEntryLedger *ledger;
+    GList *account_types = NULL;
+
+    (void)parent;
+    if (response != GTK_RESPONSE_YES || !entry_ledger_traverse_request_is_current (request))
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (ACCT_TYPE_CREDIT));
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (ACCT_TYPE_ASSET));
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (ACCT_TYPE_LIABILITY));
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (
+        ledger->is_cust_doc ? ACCT_TYPE_INCOME : ACCT_TYPE_EXPENSE));
+
+    gnc_ui_new_accounts_from_name_with_defaults_async (
+        entry_ledger_parent_window (ledger), request->cell_value, account_types,
+        NULL, NULL, entry_ledger_account_created, request);
+    g_list_free (account_types);
+}
+
+static void
+entry_ledger_tax_table_created (GncTaxTable *table, gboolean accepted,
+                                gpointer user_data)
+{
+    EntryLedgerTraverseRequest *request = user_data;
+    GncEntryLedger *ledger;
+    BasicCell *cell;
+
+    if (!entry_ledger_traverse_request_is_current (request))
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    if (!accepted || !table)
+    {
+        ledger->skip_missing_tax_table_creation = TRUE;
+        entry_ledger_resume_traverse_request (request);
+        return;
+    }
+
+    cell = gnc_table_layout_get_cell (ledger->table->layout, request->cell_name);
+    if (!cell)
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    gnc_combo_cell_set_value ((ComboCell *)cell, gncTaxTableGetName (table));
+    gnc_basic_cell_set_changed (cell, TRUE);
+    ledger->full_refresh = TRUE;
+    g_clear_pointer (&request->cell_name, g_free);
+    g_clear_pointer (&request->cell_value, g_free);
+    entry_ledger_resume_traverse_request (request);
+}
+
+static void
+entry_ledger_tax_table_creation_confirmed (GtkWindow *parent, gint response,
+                                           gpointer user_data)
+{
+    EntryLedgerTraverseRequest *request = user_data;
+    GncEntryLedger *ledger;
+
+    (void)parent;
+    if (!entry_ledger_traverse_request_is_current (request))
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    if (response != GTK_RESPONSE_YES)
+    {
+        ledger->skip_missing_tax_table_creation = TRUE;
+        entry_ledger_resume_traverse_request (request);
+        return;
+    }
+
+    gnc_ui_tax_table_new_from_name_async (entry_ledger_parent_window (ledger),
+                                          ledger->book, request->cell_value,
+                                          entry_ledger_tax_table_created, request);
+}
+
+static gboolean
+entry_ledger_begin_account_or_tax_table_request (GncEntryLedger *ledger,
+                                                 VirtualLocation destination,
+                                                 gncTableTraversalDir direction,
+                                                 const char *current_cell_name)
+{
+    const char *account_cell_name = NULL;
+    BasicCell *cell;
+    const char *name;
+    Account *account;
+    GncTaxTable *tax_table;
+    EntryLedgerTraverseRequest *request;
+
+    switch (ledger->type)
+    {
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+        account_cell_name = ENTRY_IACCT_CELL;
+        break;
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+        account_cell_name = ENTRY_BACCT_CELL;
+        break;
+    default:
+        break;
+    }
+
+    if (account_cell_name && gnc_cell_name_equal (current_cell_name, account_cell_name) &&
+        gnc_table_layout_get_cell_changed (ledger->table->layout, account_cell_name, FALSE))
+    {
+        cell = gnc_table_layout_get_cell (ledger->table->layout, account_cell_name);
+        name = cell ? gnc_basic_cell_get_value (cell) : NULL;
+        if (name && *name)
+        {
+            account = gnc_entry_ledger_get_account_by_name (ledger, cell, name,
+                                                             &ledger->full_refresh);
+            if (!account)
+            {
+                request = entry_ledger_traverse_request_new (ledger, destination, direction);
+                request->cell_name = g_strdup (account_cell_name);
+                request->cell_value = g_strdup (name);
+                gnc_verify_dialog_async (
+                    entry_ledger_parent_window (ledger), TRUE,
+                    entry_ledger_account_creation_confirmed, request,
+                    _("The account %s does not exist. Would you like to create it?"), name);
+                return TRUE;
+            }
+        }
+    }
+
+    if (!ledger->skip_missing_tax_table_creation &&
+        gnc_cell_name_equal (current_cell_name, ENTRY_TAXTABLE_CELL) &&
+        gnc_table_layout_get_cell_changed (ledger->table->layout, ENTRY_TAXTABLE_CELL, FALSE))
+    {
+        cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTABLE_CELL);
+        name = cell ? gnc_basic_cell_get_value (cell) : NULL;
+        tax_table = name && *name ? gncTaxTableLookupByName (ledger->book, name) : NULL;
+        if (name && *name && !tax_table)
+        {
+            request = entry_ledger_traverse_request_new (ledger, destination, direction);
+            request->cell_name = g_strdup (ENTRY_TAXTABLE_CELL);
+            request->cell_value = g_strdup (name);
+            gnc_verify_dialog_async (
+                entry_ledger_parent_window (ledger), TRUE,
+                entry_ledger_tax_table_creation_confirmed, request,
+                _("The tax table %s does not exist. Would you like to create it?"), name);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+static void
+entry_ledger_order_change_response (gint response, gpointer user_data)
+{
+    EntryLedgerTraverseRequest *request = user_data;
+    GncEntryLedger *ledger;
+    VirtualLocation destination;
+
+    if (!entry_ledger_traverse_request_is_current (request))
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    if (response == GTK_RESPONSE_ACCEPT)
+    {
+        entry_ledger_resume_traverse_request (request);
+        return;
+    }
+
+    if (response != GTK_RESPONSE_REJECT)
+    {
+        entry_ledger_traverse_request_free (request);
+        return;
+    }
+
+    gnc_entry_ledger_cancel_cursor_changes (ledger);
+    if (entry_ledger_traverse_request_destination (request, &destination))
+        gnc_table_move_cursor_gui (ledger->table, destination);
+    entry_ledger_traverse_request_free (request);
+}
+
+static gboolean
+entry_ledger_begin_order_change_request (GncEntryLedger *ledger,
+                                         VirtualLocation destination,
+                                         gncTableTraversalDir direction)
+{
+    GncEntry *entry = gnc_entry_ledger_get_current_entry (ledger);
+    EntryLedgerTraverseRequest *request;
+
+    if ((ledger->type != GNCENTRY_INVOICE_ENTRY &&
+         ledger->type != GNCENTRY_CUST_CREDIT_NOTE_ENTRY) ||
+        !entry || !gncEntryGetOrder (entry))
+        return FALSE;
+
+    request = entry_ledger_traverse_request_new (ledger, destination, direction);
+    gnc_warning_dialog_choice_async (
+        entry_ledger_parent_window (ledger), GNC_PREF_WARN_INV_ENTRY_MOD,
+        _("Save the current entry?"),
+        _("The current entry has been changed. However, this entry is "
+          "part of an existing order. Would you like to record the change "
+          "and effectively change your order?"),
+        _("_Don't Record"), GTK_RESPONSE_REJECT, _("_Record"),
+        GTK_RESPONSE_ACCEPT, TRUE, entry_ledger_order_change_response, request);
+    return TRUE;
+}
+
+static gboolean
+gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
+                           gncTableTraversalDir dir,
+                           gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
-    GncEntry *entry, *new_entry;
-    gint response;
+    GncEntry *entry;
+    GncEntry *new_entry;
     VirtualLocation virt_loc;
     int changed;
-    char const *cell_name;
+    const char *cell_name;
     gboolean exact_traversal;
 
-    if (!ledger) return FALSE;
+    if (!ledger)
+        return FALSE;
 
-    exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
-
+    exact_traversal = dir == GNC_TABLE_TRAVERSE_POINTER;
     entry = gnc_entry_ledger_get_current_entry (ledger);
     if (!entry)
         return FALSE;
 
-    /* no changes, make sure we aren't going off the end */
     changed = gnc_table_current_cursor_changed (ledger->table, FALSE);
     if (!changed)
         return FALSE;
 
     virt_loc = *p_new_virt_loc;
-
     cell_name = gnc_table_get_current_cell_name (ledger->table);
+    if (entry_ledger_begin_account_or_tax_table_request (ledger, virt_loc, dir,
+                                                         cell_name))
+        return TRUE;
 
-    /* See if we are leaving the account field */
-    do
+    if (dir == GNC_TABLE_TRAVERSE_RIGHT &&
+        (changed || ledger->blank_entry_edited))
     {
-        ComboCell *cell;
-        char *name;
-        char *cell_name = NULL;
+        VirtualLocation end_loc = ledger->table->current_cursor_loc;
 
-        switch (ledger->type)
+        if (!gnc_table_move_vertical_position (ledger->table, &end_loc, 1))
         {
-        case GNCENTRY_INVOICE_ENTRY:
-        case GNCENTRY_INVOICE_VIEWER:
-        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
-        case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
-            cell_name = ENTRY_IACCT_CELL;
-            break;
-        case GNCENTRY_BILL_ENTRY:
-        case GNCENTRY_BILL_VIEWER:
-        case GNCENTRY_EXPVOUCHER_ENTRY:
-        case GNCENTRY_EXPVOUCHER_VIEWER:
-        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
-        case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
-        case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
-        case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
-            cell_name = ENTRY_BACCT_CELL;
-            break;
-        default:
-            g_warning ("Unhandled ledger type");
-            break;
+            end_loc = ledger->table->current_cursor_loc;
+            if (!gnc_table_move_tab (ledger->table, &end_loc, TRUE))
+            {
+                *p_new_virt_loc = ledger->table->current_cursor_loc;
+                if (!gnc_entry_ledger_verify_can_save (ledger))
+                    return TRUE;
+
+                p_new_virt_loc->vcell_loc.virt_row++;
+                p_new_virt_loc->phys_row_offset = 0;
+                p_new_virt_loc->phys_col_offset = 0;
+                ledger->traverse_to_new = TRUE;
+                return FALSE;
+            }
         }
-
-        if (!cell_name)
-            break;
-
-        if (!gnc_cell_name_equal (cell_name, cell_name))
-            break;
-
-        if (!gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                                cell_name, FALSE))
-            break;
-
-        cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
-                cell_name);
-        if (!cell)
-            break;
-
-        name = cell->cell.value;
-        if (!name || *name == '\0')
-            break;
-
-        /* Create the account if necessary. Also checks for a placeholder */
-        if (!gnc_entry_ledger_get_account_by_name (ledger, (BasicCell *) cell,
-                cell->cell.value,
-                &ledger->full_refresh))
-            return TRUE;
-
     }
-    while (FALSE);
 
-
-    /* See if we are leaving the TaxTable field */
-    do
-    {
-        ComboCell *cell;
-        GncTaxTable *table;
-        char *name;
-
-        if (!gnc_cell_name_equal (cell_name, ENTRY_TAXTABLE_CELL))
-            break;
-
-        if (!gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                                ENTRY_TAXTABLE_CELL, FALSE))
-            break;
-
-        cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
-                ENTRY_TAXTABLE_CELL);
-        if (!cell)
-            break;
-
-        name = cell->cell.value;
-        if (!name || *name == '\0')
-            break;
-
-        table = gncTaxTableLookupByName (ledger->book, cell->cell.value);
-        if (table)
-            break;
-
-        {
-            const char *format = _("The tax table %s does not exist. "
-                                   "Would you like to create it?");
-            if (!gnc_verify_dialog (GTK_WINDOW (ledger->parent), TRUE, format, name))
-                break;
-        }
-
-        ledger->full_refresh = FALSE;
-
-        table = gnc_ui_tax_table_new_from_name (GTK_WINDOW (ledger->parent), ledger->book, name);
-        if (!table)
-            break;
-
-        ledger->full_refresh = TRUE;
-
-        name = (char *)gncTaxTableGetName (table);
-        gnc_combo_cell_set_value (cell, name);
-        gnc_basic_cell_set_changed (&cell->cell, TRUE);
-
-    }
-    while (FALSE);
-
-
-    /* See if we are tabbing off the end of the very last line
-     * (i.e. the blank entry)
-     */
-    do
-    {
-        VirtualLocation virt_loc;
-
-        if (!changed && !ledger->blank_entry_edited)
-            break;
-
-        if (dir != GNC_TABLE_TRAVERSE_RIGHT)
-            break;
-
-        virt_loc = ledger->table->current_cursor_loc;
-        if (gnc_table_move_vertical_position (ledger->table, &virt_loc, 1))
-            break;
-
-        virt_loc = ledger->table->current_cursor_loc;
-        if (gnc_table_move_tab (ledger->table, &virt_loc, TRUE))
-            break;
-
-        *p_new_virt_loc = ledger->table->current_cursor_loc;
-
-        /* Yep, we're trying to leave the blank entry -- make sure
-         * we are allowed to do so by verifying the current cursor.
-         * If the current cursor is ok, then move on!
-         */
-
-        /* Verify that the cursor is ok.  If we can't save the cell, don't move! */
-        if (!gnc_entry_ledger_verify_can_save (ledger))
-        {
-            return TRUE;
-        }
-
-        (p_new_virt_loc->vcell_loc.virt_row)++;
-        p_new_virt_loc->phys_row_offset = 0;
-        p_new_virt_loc->phys_col_offset = 0;
-
-        ledger->traverse_to_new = TRUE;
-
-        /* If we're here, we're tabbing off the end of the 'blank entry' */
+    if (!gnc_table_virtual_cell_out_of_bounds (ledger->table, virt_loc.vcell_loc) &&
+        gnc_entry_ledger_auto_completion (ledger, dir, p_new_virt_loc))
         return FALSE;
 
-    }
-    while (FALSE);
-
-    /* Now see if we are changing cursors. If not, we may be able to
-     * auto-complete. */
-    if (!gnc_table_virtual_cell_out_of_bounds (ledger->table,
-            virt_loc.vcell_loc))
-    {
-        if (gnc_entry_ledger_auto_completion (ledger, dir, p_new_virt_loc))
-            return FALSE;
-    }
-
-    /* Check for going off the end */
     gnc_table_find_close_valid_cell (ledger->table, &virt_loc, exact_traversal);
-
-    /* Same entry, no problem -- we're just moving backwards in the cursor */
     new_entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
     if (entry == new_entry)
     {
         *p_new_virt_loc = virt_loc;
-
         return FALSE;
     }
 
-    /* If we are here, then we are trying to leave the cursor.  Make sure
-     * the cursor we are leaving is valid.  If so, ask the user if the
-     * changes should be recorded.  If not, don't go anywhere.
-     */
-
-    /* Verify this cursor -- if it's not valid, don't let them move on */
     if (!gnc_entry_ledger_verify_can_save (ledger))
     {
         *p_new_virt_loc = ledger->table->current_cursor_loc;
         return TRUE;
     }
 
-    /*
-     * XXX  GNCENTRY_INVOICE_EDIT processing to be added:
-     * 1) check if the qty field changed.
-     * 2) if so, check if this entry is part of an order.
-     * 3) if so, ask if they want to change the entry or
-     *    split the entry into two parts.
-     */
-
-    /* Ok, we are changing lines and the current entry has
-     * changed. We only ask them what they want to do in
-     * limited cases -- usually just let the change go through.
-     */
-    {
-        GtkWidget *dialog;
-        const char *title = _("Save the current entry?");
-        const char *message =
-            _("The current entry has been changed. However, this entry is "
-              "part of an existing order. Would you like to record the change "
-              "and effectively change your order?");
-
-        switch (ledger->type)
-        {
-        case GNCENTRY_INVOICE_ENTRY:
-        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
-            if (gncEntryGetOrder (entry) != NULL)
-            {
-                dialog = gtk_message_dialog_new(GTK_WINDOW(ledger->parent),
-                                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                GTK_MESSAGE_QUESTION,
-                                                GTK_BUTTONS_NONE,
-                                                "%s", title);
-                gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                        "%s", message);
-                gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                                       _("_Don't Record"), GTK_RESPONSE_REJECT,
-                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                       _("_Record"), GTK_RESPONSE_ACCEPT,
-                                       NULL);
-                response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_MOD);
-                gtk_widget_destroy(dialog);
-                break;
-            }
-
-            /* FALL THROUGH */
-        default:
-            response = GTK_RESPONSE_ACCEPT;
-            break;
-        }
-    }
-
-    switch (response)
-    {
-    case GTK_RESPONSE_ACCEPT:
-        break;
-
-    case GTK_RESPONSE_REJECT:
-    {
-        VirtualCellLocation vcell_loc;
-        GncEntry *new_entry;
-
-        new_entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-
-        gnc_entry_ledger_cancel_cursor_changes (ledger);
-
-        if (gnc_entry_ledger_find_entry (ledger, new_entry, &vcell_loc))
-            virt_loc.vcell_loc = vcell_loc;
-
-        gnc_table_find_close_valid_cell (ledger->table, &virt_loc,
-                                         exact_traversal);
-
-        *p_new_virt_loc = virt_loc;
-    }
-
-    break;
-
-    case GTK_RESPONSE_CANCEL:
-    default:
+    if (entry_ledger_begin_order_change_request (ledger, virt_loc, dir))
         return TRUE;
-    }
 
     return FALSE;
 }
-
 TableControl * gnc_entry_ledger_control_new (void)
 {
     TableControl * control;
@@ -974,73 +1160,413 @@ void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
     gnc_table_refresh_gui (ledger->table, TRUE);
 }
 
-static gboolean
-gnc_entry_ledger_check_close_internal (GtkWidget *parent,
-                                       GncEntryLedger *ledger,
-                                       gboolean dontask)
+typedef struct
 {
-    const char *message = _("The current entry has been changed. "
-                            "Would you like to save it?");
-    VirtualLocation virt_loc;
+    GncEntryLedgerAsyncRequest base;
+    VirtualLocation source_loc;
+    GncGUID source_entry_guid;
+    GtkWidget *parent;
+    GncEntryLedgerFinishedCB callback;
+    gpointer user_data;
+    GDestroyNotify user_data_destroy;
+    char *cell_name;
+    char *cell_value;
+    gboolean ask_before_saving;
+    gboolean skip_missing_tax_table_creation;
+} EntryLedgerSaveRequest;
 
-    virt_loc = ledger->table->current_cursor_loc;
+static EntryLedgerSaveRequest *
+entry_ledger_save_request_new (GncEntryLedger *ledger, GtkWidget *parent,
+                               gboolean ask_before_saving,
+                               GncEntryLedgerFinishedCB callback,
+                               gpointer user_data,
+                               GDestroyNotify user_data_destroy)
+{
+    EntryLedgerSaveRequest *request = g_new0 (EntryLedgerSaveRequest, 1);
+    GncEntry *entry = gnc_entry_ledger_get_current_entry (ledger);
 
-    if (gnc_entry_ledger_traverse (&virt_loc, GNC_TABLE_TRAVERSE_POINTER,
-                                   ledger))
+    request->source_loc = ledger->table->current_cursor_loc;
+    request->source_entry_guid = entry ? *gncEntryGetGUID (entry) : *guid_null ();
+    request->parent = parent;
+    request->ask_before_saving = ask_before_saving;
+    request->callback = callback;
+    request->user_data = user_data;
+    request->user_data_destroy = user_data_destroy;
+    gnc_entry_ledger_async_request_track (ledger, &request->base);
+    return request;
+}
+
+static void
+entry_ledger_save_request_complete (EntryLedgerSaveRequest *request,
+                                    gboolean completed)
+{
+    GncEntryLedger *ledger;
+    GncEntryLedgerFinishedCB callback;
+    gpointer user_data;
+    GDestroyNotify user_data_destroy;
+
+    if (!request)
+        return;
+
+    ledger = request->base.ledger;
+    callback = request->callback;
+    user_data = request->user_data;
+    user_data_destroy = request->user_data_destroy;
+    gnc_entry_ledger_async_request_untrack (&request->base);
+    g_free (request->cell_name);
+    g_free (request->cell_value);
+    g_free (request);
+    if (ledger && callback)
+        callback (ledger, completed, user_data);
+    if (user_data_destroy)
+        user_data_destroy (user_data);
+}
+
+static gboolean
+entry_ledger_save_request_is_current (const EntryLedgerSaveRequest *request)
+{
+    GncEntryLedger *ledger;
+    GncEntry *entry;
+
+    if (!request || !(ledger = request->base.ledger) ||
+        qof_book_shutting_down (ledger->book) ||
+        !entry_ledger_virtual_location_equal (ledger->table->current_cursor_loc,
+                                              request->source_loc))
         return FALSE;
 
-    if (!gnc_entry_ledger_verify_can_save (ledger))
+    entry = gnc_entry_ledger_get_current_entry (ledger);
+    if (!entry || !guid_equal (gncEntryGetGUID (entry), &request->source_entry_guid))
         return FALSE;
 
-    if (dontask || gnc_verify_dialog (GTK_WINDOW (parent), TRUE, "%s", message))
+    if (request->cell_name)
+    {
+        const char *value = gnc_table_layout_get_cell_value (ledger->table->layout,
+                                                              request->cell_name);
+        if (g_strcmp0 (value, request->cell_value) != 0)
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+static GtkWindow *
+entry_ledger_save_request_parent (const EntryLedgerSaveRequest *request)
+{
+    if (request->parent && GTK_IS_WINDOW (request->parent))
+        return GTK_WINDOW (request->parent);
+    return entry_ledger_parent_window (request->base.ledger);
+}
+
+static void entry_ledger_save_request_continue (EntryLedgerSaveRequest *request);
+
+static void
+entry_ledger_save_account_created (Account *account, gboolean accepted,
+                                   gpointer user_data)
+{
+    EntryLedgerSaveRequest *request = user_data;
+    GncEntryLedger *ledger;
+    BasicCell *cell;
+    char *account_name;
+
+    if (!accepted || !account || !entry_ledger_save_request_is_current (request))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    cell = gnc_table_layout_get_cell (ledger->table->layout, request->cell_name);
+    if (!cell)
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    account_name = gnc_get_account_name_for_register (account);
+    gnc_combo_cell_set_value ((ComboCell *)cell, account_name);
+    gnc_basic_cell_set_changed (cell, TRUE);
+    g_free (account_name);
+    ledger->full_refresh = TRUE;
+    g_clear_pointer (&request->cell_name, g_free);
+    g_clear_pointer (&request->cell_value, g_free);
+    entry_ledger_save_request_continue (request);
+}
+
+static void
+entry_ledger_save_account_confirmed (GtkWindow *parent, gint response,
+                                     gpointer user_data)
+{
+    EntryLedgerSaveRequest *request = user_data;
+    GncEntryLedger *ledger;
+    GList *account_types = NULL;
+
+    (void)parent;
+    if (response != GTK_RESPONSE_YES || !entry_ledger_save_request_is_current (request))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (ACCT_TYPE_CREDIT));
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (ACCT_TYPE_ASSET));
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (ACCT_TYPE_LIABILITY));
+    account_types = g_list_prepend (account_types, GINT_TO_POINTER (
+        ledger->is_cust_doc ? ACCT_TYPE_INCOME : ACCT_TYPE_EXPENSE));
+    gnc_ui_new_accounts_from_name_with_defaults_async (
+        entry_ledger_save_request_parent (request), request->cell_value,
+        account_types, NULL, NULL, entry_ledger_save_account_created, request);
+    g_list_free (account_types);
+}
+
+static void
+entry_ledger_save_tax_table_created (GncTaxTable *table, gboolean accepted,
+                                     gpointer user_data)
+{
+    EntryLedgerSaveRequest *request = user_data;
+    GncEntryLedger *ledger;
+    BasicCell *cell;
+
+    if (!entry_ledger_save_request_is_current (request))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    if (accepted && table)
+    {
+        cell = gnc_table_layout_get_cell (ledger->table->layout, request->cell_name);
+        if (!cell)
+        {
+            entry_ledger_save_request_complete (request, FALSE);
+            return;
+        }
+        gnc_combo_cell_set_value ((ComboCell *)cell, gncTaxTableGetName (table));
+        gnc_basic_cell_set_changed (cell, TRUE);
+        ledger->full_refresh = TRUE;
+        g_clear_pointer (&request->cell_name, g_free);
+        g_clear_pointer (&request->cell_value, g_free);
+    }
+    else
+        request->skip_missing_tax_table_creation = TRUE;
+
+    entry_ledger_save_request_continue (request);
+}
+
+static void
+entry_ledger_save_tax_table_confirmed (GtkWindow *parent, gint response,
+                                       gpointer user_data)
+{
+    EntryLedgerSaveRequest *request = user_data;
+    GncEntryLedger *ledger;
+
+    (void)parent;
+    if (!entry_ledger_save_request_is_current (request))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    if (response != GTK_RESPONSE_YES)
+    {
+        request->skip_missing_tax_table_creation = TRUE;
+        entry_ledger_save_request_continue (request);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    gnc_ui_tax_table_new_from_name_async (
+        entry_ledger_save_request_parent (request), ledger->book,
+        request->cell_value, entry_ledger_save_tax_table_created, request);
+}
+
+static void
+entry_ledger_save_confirmed (GtkWindow *parent, gint response,
+                             gpointer user_data)
+{
+    EntryLedgerSaveRequest *request = user_data;
+    GncEntryLedger *ledger;
+
+    (void)parent;
+    if (!entry_ledger_save_request_is_current (request))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    if (response == GTK_RESPONSE_YES)
         gnc_entry_ledger_save (ledger, TRUE);
     else
         gnc_entry_ledger_cancel_cursor_changes (ledger);
-
-    return TRUE;
+    entry_ledger_save_request_complete (request, TRUE);
 }
 
-gboolean
-gnc_entry_ledger_commit_entry (GncEntryLedger *ledger)
+static gboolean
+entry_ledger_save_request_begin_account_or_tax_table (EntryLedgerSaveRequest *request)
 {
-    if (!ledger) return TRUE;
+    GncEntryLedger *ledger = request->base.ledger;
+    const char *account_cell_name = NULL;
+    const char *current_cell_name;
+    BasicCell *cell;
+    const char *name;
+    Account *account;
 
-    return gnc_entry_ledger_check_close_internal (NULL, ledger, TRUE);
-}
-
-gboolean
-gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
-{
-    if (!ledger) return TRUE;
-
-    if (gnc_entry_ledger_changed (ledger))
+    current_cell_name = gnc_table_get_current_cell_name (ledger->table);
+    switch (ledger->type)
     {
-        gboolean dontask = FALSE;
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+        account_cell_name = ENTRY_IACCT_CELL;
+        break;
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+        account_cell_name = ENTRY_BACCT_CELL;
+        break;
+    default:
+        break;
+    }
 
-        if (ledger->type ==  GNCENTRY_INVOICE_ENTRY ||
-                ledger->type ==  GNCENTRY_CUST_CREDIT_NOTE_ENTRY)
+    if (account_cell_name && gnc_cell_name_equal (current_cell_name, account_cell_name) &&
+        gnc_table_layout_get_cell_changed (ledger->table->layout, account_cell_name, FALSE))
+    {
+        cell = gnc_table_layout_get_cell (ledger->table->layout, account_cell_name);
+        name = cell ? gnc_basic_cell_get_value (cell) : NULL;
+        if (name && *name)
         {
-            gboolean inv_value;
-            gboolean only_inv_changed = FALSE;
-
-            if (gnc_table_current_cursor_changed (ledger->table, FALSE) == 1 &&
-                    gnc_table_layout_get_cell_changed (ledger->table->layout,
-                            ENTRY_INV_CELL, TRUE))
-                only_inv_changed = TRUE;
-
-            inv_value = gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL);
-
-            if (inv_value && only_inv_changed)
+            account = gnc_entry_ledger_get_account_by_name (ledger, cell, name,
+                                                             &ledger->full_refresh);
+            if (!account)
             {
-                /* If the only change is that the 'inv' entry was clicked
-                 * "on", then just accept the change it without question.
-                 */
-                dontask = TRUE;
+                request->cell_name = g_strdup (account_cell_name);
+                request->cell_value = g_strdup (name);
+                gnc_verify_dialog_async (
+                    entry_ledger_save_request_parent (request), TRUE,
+                    entry_ledger_save_account_confirmed, request,
+                    _("The account %s does not exist. Would you like to create it?"), name);
+                return TRUE;
             }
         }
-
-        return gnc_entry_ledger_check_close_internal (parent, ledger, dontask);
-
     }
-    return TRUE;
+
+    if (!request->skip_missing_tax_table_creation &&
+        gnc_cell_name_equal (current_cell_name, ENTRY_TAXTABLE_CELL) &&
+        gnc_table_layout_get_cell_changed (ledger->table->layout, ENTRY_TAXTABLE_CELL, FALSE))
+    {
+        cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTABLE_CELL);
+        name = cell ? gnc_basic_cell_get_value (cell) : NULL;
+        if (name && *name && !gncTaxTableLookupByName (ledger->book, name))
+        {
+            request->cell_name = g_strdup (ENTRY_TAXTABLE_CELL);
+            request->cell_value = g_strdup (name);
+            gnc_verify_dialog_async (
+                entry_ledger_save_request_parent (request), TRUE,
+                entry_ledger_save_tax_table_confirmed, request,
+                _("The tax table %s does not exist. Would you like to create it?"), name);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+static void
+entry_ledger_save_request_continue (EntryLedgerSaveRequest *request)
+{
+    GncEntryLedger *ledger;
+
+    if (!entry_ledger_save_request_is_current (request))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    ledger = request->base.ledger;
+    if (entry_ledger_save_request_begin_account_or_tax_table (request))
+        return;
+    if (!gnc_entry_ledger_verify_can_save (ledger))
+    {
+        entry_ledger_save_request_complete (request, FALSE);
+        return;
+    }
+
+    if (request->ask_before_saving)
+    {
+        gnc_verify_dialog_async (
+            entry_ledger_save_request_parent (request), TRUE,
+            entry_ledger_save_confirmed, request,
+            "%s", _("The current entry has been changed. Would you like to save it?"));
+        return;
+    }
+
+    gnc_entry_ledger_save (ledger, TRUE);
+    entry_ledger_save_request_complete (request, TRUE);
+}
+
+void
+gnc_entry_ledger_commit_entry_async (GncEntryLedger *ledger,
+                                     GncEntryLedgerFinishedCB callback,
+                                     gpointer user_data)
+{
+    EntryLedgerSaveRequest *request;
+
+    if (!ledger)
+    {
+        if (callback)
+            callback (NULL, TRUE, user_data);
+        return;
+    }
+
+    request = entry_ledger_save_request_new (ledger, NULL, FALSE, callback, user_data, NULL);
+    entry_ledger_save_request_continue (request);
+}
+
+void
+gnc_entry_ledger_check_close_async (GtkWidget *parent, GncEntryLedger *ledger,
+                                    GncEntryLedgerFinishedCB callback,
+                                    gpointer user_data)
+{
+    gnc_entry_ledger_check_close_async_full (parent, ledger, callback, user_data, NULL);
+}
+
+void
+gnc_entry_ledger_check_close_async_full (GtkWidget *parent, GncEntryLedger *ledger,
+                                         GncEntryLedgerFinishedCB callback,
+                                         gpointer user_data,
+                                         GDestroyNotify user_data_destroy)
+{
+    EntryLedgerSaveRequest *request;
+    gboolean dontask = FALSE;
+
+    if (!ledger || !gnc_entry_ledger_changed (ledger))
+    {
+        if (callback)
+            callback (ledger, TRUE, user_data);
+        if (user_data_destroy)
+            user_data_destroy (user_data);
+        return;
+    }
+
+    if (ledger->type == GNCENTRY_INVOICE_ENTRY ||
+        ledger->type == GNCENTRY_CUST_CREDIT_NOTE_ENTRY)
+    {
+        gboolean only_inv_changed =
+            gnc_table_current_cursor_changed (ledger->table, FALSE) == 1 &&
+            gnc_table_layout_get_cell_changed (ledger->table->layout, ENTRY_INV_CELL, TRUE);
+        if (only_inv_changed && gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL))
+            dontask = TRUE;
+    }
+
+    request = entry_ledger_save_request_new (ledger, parent, !dontask, callback,
+                                             user_data, user_data_destroy);
+    entry_ledger_save_request_continue (request);
 }

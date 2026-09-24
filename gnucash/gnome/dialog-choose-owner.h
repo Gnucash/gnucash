@@ -1,5 +1,4 @@
 /*
- * dialog-choose-owner.h -- Dialog to choose an owner for a business Split
  * Copyright (C) 2006 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  *
@@ -21,18 +20,19 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-
 #ifndef GNC_DIALOG_CHOOSE_OWNER_H_
 #define GNC_DIALOG_CHOOSE_OWNER_H_
 
 #include "Split.h"
 
-typedef struct _choose_owner_dialog DialogChooseOwner;
+typedef void (*GncSplitAssignOwnerCallback) (Split *split, gboolean assigned,
+                                             gpointer user_data);
 
-/**
- * This split was added to an A/R or A/P account.  Make sure it
- * has an owner attached to it so the business reports work.
- */
-gboolean gnc_split_assign_owner(GtkWidget* window, Split* split);
+/* Presents a non-blocking owner selection. The callback is invoked only while
+ * the original split GUID still resolves in the original book. */
+void gnc_split_assign_owner_async (GtkWindow *parent, Split *split,
+                                   GncSplitAssignOwnerCallback callback,
+                                   gpointer user_data,
+                                   GDestroyNotify destroy);
 
-#endif /* GNC_DIALOG_CHOOSE_OWNER_H_ */
+#endif

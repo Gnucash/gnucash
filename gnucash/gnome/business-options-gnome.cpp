@@ -61,7 +61,16 @@ ui_type_to_owner_type(GncOptionUIType ui_type)
     oss << "UI type " << static_cast<unsigned int>(ui_type) << " could not be converted to owner type\n";
     throw std::invalid_argument(oss.str());
 }
-
+namespace
+{
+void
+option_dropdown_selection_changed_cb (GObject *object, GParamSpec *,
+                                      gpointer user_data)
+{
+    gnc_option_changed_widget_cb (GTK_WIDGET (object),
+                                  static_cast<GncOption *> (user_data));
+}
+}
 
 class GncGtkOwnerUIItem : public GncOptionGtkUIItem
 {
@@ -97,8 +106,7 @@ create_option_widget<GncOptionUIType::OWNER>(GncOption& option,
 
     option.set_ui_item(std::make_unique<GncGtkOwnerUIItem>(widget, ui_type));
     option.set_ui_item_from_option();
-    g_signal_connect (G_OBJECT (widget), "changed",
-                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
+    g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (gnc_option_changed_widget_cb), &option);
     set_name_label(option, page_box, row, false);
     set_tool_tip(option, enclosing);
     grid_attach_widget(page_box, enclosing, row);
@@ -133,8 +141,7 @@ create_option_widget<GncOptionUIType::INVOICE>(GncOption& option,
 
     option.set_ui_item(std::make_unique<GncGtkInvoiceUIItem>(widget));
     option.set_ui_item_from_option();
-    g_signal_connect(G_OBJECT (widget), "changed",
-                     G_CALLBACK (gnc_option_changed_widget_cb), &option);
+    g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (gnc_option_changed_widget_cb), &option);
 
     set_name_label(option, page_box, row, false);
     set_tool_tip(option, enclosing);
@@ -150,15 +157,15 @@ public:
     {
         auto taxtable{option.get_value<const QofInstance*>()};
         if (taxtable)
-            gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
+            gnc_simple_dropdown_set_value(GTK_DROP_DOWN(get_widget()),
                                        GNC_TAXTABLE(taxtable));
         else
-            gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
+            gnc_simple_dropdown_set_value(GTK_DROP_DOWN(get_widget()),
                                        nullptr);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto taxtable{gnc_simple_combo_get_value(GTK_COMBO_BOX(get_widget()))};
+        auto taxtable{gnc_simple_dropdown_get_value(GTK_DROP_DOWN(get_widget()))};
         option.set_value<const QofInstance*>(qof_instance_cast(taxtable));
     }
 };
@@ -168,19 +175,16 @@ create_option_widget<GncOptionUIType::TAX_TABLE>(GncOption& option,
                                                  GtkGrid *page_box, int row)
 {
     constexpr const char* glade_file{"business-options-gnome.glade"};
-    constexpr const char* glade_store{"taxtable_store"};
     constexpr const char* glade_menu{"taxtable_menu"};
     auto builder{gtk_builder_new()};
-    gnc_builder_add_from_file(builder, glade_file, glade_store);
     gnc_builder_add_from_file(builder, glade_file, glade_menu);
     auto widget{GTK_WIDGET(gtk_builder_get_object(builder, glade_menu))};
-    gnc_taxtables_combo(GTK_COMBO_BOX(widget), gnc_get_current_book(), TRUE,
+    gnc_taxtables_dropdown(GTK_DROP_DOWN(widget), gnc_get_current_book(), TRUE,
                         nullptr);
     option.set_ui_item(std::make_unique<GncGtkTaxTableUIItem>(widget));
     option.set_ui_item_from_option();
     g_object_unref(builder); // Needs to wait until after widget has been reffed.
-    g_signal_connect (G_OBJECT (widget), "changed",
-                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
+    g_signal_connect (G_OBJECT (widget), "notify::selected", G_CALLBACK (option_dropdown_selection_changed_cb), &option);
 
     wrap_widget(option, widget, page_box, row);
 }
@@ -224,8 +228,7 @@ create_option_widget<GncOptionUIType::INV_REPORT>(GncOption& option,
     option.set_ui_item(std::make_unique<GncGtkInvReportUIItem>(widget));
     option.set_ui_item_from_option();
 
-    g_signal_connect (G_OBJECT (widget), "changed",
-                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
+    g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (gnc_option_changed_widget_cb), &option);
 
     wrap_widget (option, widget, page_box, row);
 }

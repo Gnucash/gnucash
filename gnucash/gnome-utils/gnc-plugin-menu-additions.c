@@ -124,11 +124,14 @@ gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin)
 static void
 gnc_plugin_menu_additions_finalize (GObject *object)
 {
+    GncPluginMenuAdditions *plugin;
+
     g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS(object));
 
+    plugin = GNC_PLUGIN_MENU_ADDITIONS (object);
     ENTER("plugin %p", object);
 
-    g_hash_table_destroy (GNC_PLUGIN_MENU_ADDITIONS(object)->item_hash);
+    g_clear_pointer (&plugin->item_hash, g_hash_table_unref);
 
     G_OBJECT_CLASS (gnc_plugin_menu_additions_parent_class)->finalize (object);
     LEAVE("");

@@ -392,16 +392,28 @@ GncOptionAccountListValue::validate(const GncOptionAccountList& values) const
         PWARN("GncOptionAccountListValue::validate: Multiple values for a non-multiselect option.");
         return false;
     }
-    if (m_allowed.empty())
-        return true;
     auto book{get_current_book()};
-    for(auto& guid : values)
+    for (const auto& guid : values)
     {
-        if (std::find(m_allowed.begin(), m_allowed.end(),
-                      xaccAccountGetType(xaccAccountLookup(&guid, book))) == m_allowed.end())
+        auto account{xaccAccountLookup(&guid, book)};
+        if (!account)
         {
-            PWARN("GncOptionAccountListValue::validate: Account %s is not of an allowed type", gnc::GUID(guid).to_string().c_str());
-            return false; }
+            PWARN (
+                "GncOptionAccountListValue::validate: Account %s "
+                "no longer exists",
+                gnc::GUID(guid).to_string().c_str());
+            return false;
+        }
+        if (!m_allowed.empty() &&
+            std::find(m_allowed.begin(), m_allowed.end(),
+                      xaccAccountGetType(account)) == m_allowed.end())
+        {
+            PWARN (
+                "GncOptionAccountListValue::validate: Account %s is "
+                "not of an allowed type",
+                gnc::GUID(guid).to_string().c_str());
+            return false;
+        }
     }
     return true;
 }

@@ -45,7 +45,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /* =================================================================== */
 
 static gchar *
-convert_uri_to_abs_path (const gchar *path_head, const gchar *uri, 
+convert_uri_to_abs_path (const gchar *path_head, const gchar *uri,
                          gchar *uri_scheme, gboolean return_uri)
 {
     gchar *ret_value = NULL;
@@ -387,15 +387,119 @@ change_relative_and_absolute_uri_paths (const gchar *old_path_head_uri, gboolean
     g_free (doclink_update);
 }
 
-void
-gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_uri)
+typedef struct
 {
-    GtkWidget  *dialog;
+    GWeakRef parent;
+    gulong parent_destroy_handler;
+    GtkWindow *dialog;
+    GtkCheckButton *use_old_path_head;
+    GtkCheckButton *use_new_path_head;
+    char *old_path_head_uri;
+    char *new_path_head_uri;
+    gboolean completed;
+} DoclinkPathHeadRequest;
+
+static void doclink_path_head_complete (DoclinkPathHeadRequest *request,
+                                        gboolean accepted);
+
+static void
+doclink_path_head_request_free (DoclinkPathHeadRequest *request)
+{
+    GtkWindow *parent = g_weak_ref_get (&request->parent);
+
+    if (parent && request->parent_destroy_handler)
+        g_signal_handler_disconnect (parent, request->parent_destroy_handler);
+    g_clear_object (&parent);
+    g_weak_ref_clear (&request->parent);
+    g_free (request->old_path_head_uri);
+    g_free (request->new_path_head_uri);
+    g_free (request);
+}
+
+static void
+doclink_path_head_destroy_dialog (DoclinkPathHeadRequest *request)
+{
+    GtkWindow *dialog = g_steal_pointer (&request->dialog);
+
+    if (!dialog)
+        return;
+
+    g_signal_handlers_disconnect_by_data (dialog, request);
+    gtk_window_destroy (dialog);
+    g_object_unref (dialog);
+}
+
+static void
+doclink_path_head_complete (DoclinkPathHeadRequest *request, gboolean accepted)
+{
+    gboolean use_old = FALSE;
+    gboolean use_new = FALSE;
+
+    if (!request || request->completed)
+        return;
+
+    request->completed = TRUE;
+    if (accepted)
+    {
+        use_old = gtk_check_button_get_active (request->use_old_path_head);
+        use_new = gtk_check_button_get_active (request->use_new_path_head);
+    }
+
+    doclink_path_head_destroy_dialog (request);
+    if (use_old || use_new)
+        change_relative_and_absolute_uri_paths (request->old_path_head_uri,
+                                                use_old, request->new_path_head_uri,
+                                                use_new);
+    doclink_path_head_request_free (request);
+}
+
+static void
+doclink_path_head_parent_destroyed_cb (GtkWidget *widget,
+                                       DoclinkPathHeadRequest *request)
+{
+    (void)widget;
+    request->parent_destroy_handler = 0;
+    doclink_path_head_complete (request, FALSE);
+}
+
+static void
+doclink_path_head_ok_clicked_cb (GtkButton *button,
+                                 DoclinkPathHeadRequest *request)
+{
+    (void)button;
+    doclink_path_head_complete (request, TRUE);
+}
+
+static gboolean
+doclink_path_head_close_request_cb (GtkWindow *dialog,
+                                    DoclinkPathHeadRequest *request)
+{
+    (void)dialog;
+    doclink_path_head_complete (request, FALSE);
+    return TRUE;
+}
+
+static void
+doclink_path_head_destroy_cb (GtkWidget *widget,
+                              DoclinkPathHeadRequest *request)
+{
+    (void)widget;
+    if (!request->completed)
+        g_clear_object (&request->dialog);
+    doclink_path_head_complete (request, FALSE);
+}
+
+void
+gnc_doclink_pref_path_head_changed (GtkWindow *parent,
+                                    const gchar *old_path_head_uri)
+{
     GtkBuilder *builder;
-    GtkWidget  *use_old_path_head, *use_new_path_head;
-    GtkWidget  *old_head_label, *new_head_label;
-    gint        result;
-    gchar      *new_path_head_uri = gnc_doclink_get_path_head ();
+    GtkWidget *dialog;
+    GtkWidget *ok_button;
+    GtkWidget *old_head_label;
+    GtkWidget *new_head_label;
+    DoclinkPathHeadRequest *request;
+    gchar *new_path_head_uri = gnc_doclink_get_path_head ();
 
     if (g_strcmp0 (old_path_head_uri, new_path_head_uri) == 0)
     {
@@ -403,42 +507,62 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
         return;
     }
 
-    /* Create the dialog box */
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-doclink.glade", "link_path_head_changed_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "link_path_head_changed_dialog"));
+    request = g_new0 (DoclinkPathHeadRequest, 1);
+    request->old_path_head_uri = g_strdup (old_path_head_uri);
+    request->new_path_head_uri = new_path_head_uri;
+    g_weak_ref_init (&request->parent, parent);
+    if (parent)
+        request->parent_destroy_handler = g_signal_connect (
+            parent, "destroy", G_CALLBACK (doclink_path_head_parent_destroyed_cb),
+            request);
 
-    if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
-
-    // Set the name and style context for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-doclink-change");
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
-
-    old_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "existing_path_head"));
-    new_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "new_path_head"));
-
-    use_old_path_head = GTK_WIDGET(gtk_builder_get_object (builder, "use_old_path_head"));
-    use_new_path_head = GTK_WIDGET(gtk_builder_get_object (builder, "use_new_path_head"));
-
-    // display path head text and test if present
-    gnc_doclink_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
-    gnc_doclink_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
-
-    gtk_widget_show (dialog);
-    g_object_unref (G_OBJECT(builder));
-
-    // run the dialog
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
-    if (result == GTK_RESPONSE_OK)
+    builder = gtk_builder_new ();
+    if (!gnc_builder_add_from_file (builder, "dialog-doclink.ui",
+                                    "link_path_head_changed_window"))
     {
-        gboolean use_old = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(use_old_path_head));
-        gboolean use_new = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(use_new_path_head));
-
-        if (use_old || use_new)
-            change_relative_and_absolute_uri_paths (old_path_head_uri, use_old,
-                                                    new_path_head_uri, use_new);
+        g_object_unref (builder);
+        doclink_path_head_request_free (request);
+        return;
     }
-    g_free (new_path_head_uri);
-    gtk_widget_destroy (dialog);
+
+    dialog = GTK_WIDGET (gtk_builder_get_object (
+        builder, "link_path_head_changed_window"));
+    ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "button4"));
+    old_head_label = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                          "existing_path_head"));
+    new_head_label = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                          "new_path_head"));
+    request->use_old_path_head = GTK_CHECK_BUTTON (gtk_builder_get_object (
+        builder, "use_old_path_head"));
+    request->use_new_path_head = GTK_CHECK_BUTTON (gtk_builder_get_object (
+        builder, "use_new_path_head"));
+    if (!dialog || !ok_button || !old_head_label || !new_head_label ||
+        !request->use_old_path_head || !request->use_new_path_head)
+    {
+        g_object_unref (builder);
+        doclink_path_head_request_free (request);
+        return;
+    }
+
+    request->dialog = g_object_ref (GTK_WINDOW (dialog));
+    if (parent)
+        gtk_window_set_transient_for (request->dialog, parent);
+    gtk_window_set_modal (request->dialog, TRUE);
+    gtk_window_set_default_widget (request->dialog, ok_button);
+    gtk_widget_set_name (GTK_WIDGET (request->dialog), "gnc-id-doclink-change");
+    gnc_widget_style_context_add_class (GTK_WIDGET (request->dialog),
+                                        "gnc-class-doclink");
+    gnc_doclink_set_path_head_label (old_head_label, request->old_path_head_uri,
+                                     _("Existing"));
+    gnc_doclink_set_path_head_label (new_head_label, request->new_path_head_uri,
+                                     _("New"));
+    g_signal_connect (ok_button, "clicked",
+                      G_CALLBACK (doclink_path_head_ok_clicked_cb), request);
+    g_signal_connect (request->dialog, "close-request",
+                      G_CALLBACK (doclink_path_head_close_request_cb), request);
+    g_signal_connect (request->dialog, "destroy",
+                      G_CALLBACK (doclink_path_head_destroy_cb), request);
+    g_object_unref (builder);
+
+    gtk_window_present (request->dialog);
 }

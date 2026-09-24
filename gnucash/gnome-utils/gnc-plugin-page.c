@@ -174,10 +174,7 @@ gnc_plugin_page_show_summarybar (GncPluginPage *page,
     if (!page->summarybar)
         return;
 
-    if (visible)
-        gtk_widget_show (page->summarybar);
-    else
-        gtk_widget_hide (page->summarybar);
+    gtk_widget_set_visible (GTK_WIDGET(page->summarybar), visible);
 }
 
 
@@ -1101,20 +1098,26 @@ gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page)
     return priv->simple_action_group_name;
 }
 
-gboolean
-gnc_plugin_page_finish_pending (GncPluginPage *page)
+void
+
+gnc_plugin_page_finish_pending_async (GncPluginPage *page,
+                                      GCancellable *cancellable,
+                                      GncPluginPagePendingCallback callback,
+                                      gpointer user_data)
 {
-    if (!page)
-        return TRUE;
+    GncPluginPageClass *klass;
 
-    if (!GNC_IS_PLUGIN_PAGE(page))
-        return TRUE;
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
-    if (!GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)
-        return TRUE;
+    klass = GNC_PLUGIN_PAGE_GET_CLASS (page);
+    if (klass && klass->finish_pending_async)
+    {
+        klass->finish_pending_async (page, cancellable, callback, user_data);
+        return;
+    }
 
-    return (GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)(page);
+    if (callback)
+        callback (page, TRUE, user_data);
 }
-
 /** @} */
 /** @} */

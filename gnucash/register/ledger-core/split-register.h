@@ -23,6 +23,7 @@
 #define SPLIT_REGISTER_H
 
 #include <glib.h>
+#include <gtk/gtk.h>
 
 #include "Transaction.h"
 #include "table-allgui.h"
@@ -464,11 +465,10 @@ gboolean
 gnc_split_register_get_split_amount_virt_loc (SplitRegister* reg, Split* split,
                                               VirtualLocation* virt_loc);
 
-/** Duplicates either the current transaction or the current split
- *    depending on the register mode and cursor position. Returns the
- *    split just created, or the 'main' split of the transaction just
- *    created, or NULL if nothing happened. */
-Split* gnc_split_register_duplicate_current (SplitRegister* reg);
+/** Starts asynchronous duplication of the current transaction or split.
+ * The owner keeps the register alive until completion; page, book, and cursor
+ * identity are revalidated before any mutation. */
+void gnc_split_register_duplicate_current_async (SplitRegister *reg, GObject *owner);
 
 /** Return TRUE if copied_item holds a transaction or split.
  */
@@ -549,6 +549,22 @@ void gnc_split_register_load (SplitRegister* reg, GList* slist,
  *    result in a new blank transaction.  The method returns TRUE if
  *    something was changed. */
 gboolean gnc_split_register_save (SplitRegister* reg, gboolean do_commit);
+
+/** Completion of a register save request. The register is NULL when its
+ * lifetime ended before the request could complete. */
+typedef void (*GncSplitRegisterSaveCallback) (SplitRegister *reg,
+                                               gboolean saved,
+                                               gpointer user_data);
+
+/** Persist the current cursor without entering a nested main loop. The
+ * callback runs exactly once after recalculation and exchange-rate decisions
+ * have either completed or been cancelled. */
+void gnc_split_register_save_async (SplitRegister *reg, gboolean do_commit,
+                                    GncSplitRegisterSaveCallback callback,
+                                    gpointer user_data);
+
+/** TRUE while the register owns an unresolved save decision. */
+gboolean gnc_split_register_save_pending (SplitRegister *reg);
 
 /** Causes a redraw of the register window associated with reg. */
 void gnc_split_register_redraw (SplitRegister* reg);

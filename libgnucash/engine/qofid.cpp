@@ -43,15 +43,31 @@ struct QofCollection_s
     gboolean     is_dirty;
 
     GuidEntityMap guid_entity_map;
+    guint64 mutation_generation;
     gpointer     data;       /* place where object class can hang arbitrary data */
 
     QofCollection_s (QofIdType type) : e_type{static_cast<QofIdType>(CACHE_INSERT(type))}
                                      , is_dirty{FALSE}
+                                     , mutation_generation{1}
                                      , data{NULL} {}
     ~QofCollection_s ()
     {
         CACHE_REMOVE (e_type);
     }
+
+    void bump_generation ()
+    {
+        if (++mutation_generation == 0)
+            mutation_generation = 1;
+    }
+};
+
+struct QofCollectionCursor_s
+{
+    const QofCollection *collection;
+    guint64 generation;
+    GuidEntityMap::const_iterator current;
+    GuidEntityMap::const_iterator end;
 };
 
 /* =============================================================== */
@@ -89,7 +105,8 @@ qof_collection_remove_entity (QofInstance *ent)
     col = qof_instance_get_collection(ent);
     if (!col) return;
     guid = qof_instance_get_guid(ent);
-    col->guid_entity_map.erase(*guid);
+    if (col->guid_entity_map.erase(*guid) != 0)
+        col->bump_generation ();
     qof_instance_set_collection(ent, NULL);
 }
 
@@ -101,7 +118,8 @@ qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
     if (guid_equal(guid, guid_null())) return;
     g_return_if_fail (col->e_type == ent->e_type);
     qof_collection_remove_entity (ent);
-    col->guid_entity_map[*guid] = ent;
+    col->guid_entity_map.insert_or_assign (*guid, ent);
+    col->bump_generation ();
     qof_instance_set_collection(ent, col);
 }
 
@@ -112,7 +130,10 @@ qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
     const GncGUID *guid = qof_instance_get_guid(ent);
     if (guid_equal(guid, guid_null())) return FALSE;
     g_return_val_if_fail (coll->e_type == ent->e_type, FALSE);
-    return coll->guid_entity_map.try_emplace (*guid, ent).second;
+    if (!coll->guid_entity_map.try_emplace (*guid, ent).second)
+        return FALSE;
+    coll->bump_generation ();
+    return TRUE;
 }
 
 
@@ -198,6 +219,42 @@ qof_collection_lookup_entity (const QofCollection *col, const GncGUID * guid)
     if (it == col->guid_entity_map.end() || qof_instance_get_destroying(it->second))
         return nullptr;
     return it->second;
+}
+
+QofCollectionCursor *
+qof_collection_cursor_new (const QofCollection *collection)
+{
+    if (!collection)
+        return nullptr;
+    return new (std::nothrow) QofCollectionCursor {
+        collection,
+        collection->mutation_generation,
+        collection->guid_entity_map.cbegin (),
+        collection->guid_entity_map.cend ()};
+}
+
+QofCollectionCursorStatus
+qof_collection_cursor_next (QofCollectionCursor *cursor, GncGUID *guid)
+{
+    if (!cursor || !cursor->collection || !guid)
+        return QOF_COLLECTION_CURSOR_STALE;
+
+    /* Never touch an iterator after its collection generation drifted: a
+     * boost::unordered_flat_map mutation may have invalidated it. */
+    if (cursor->generation != cursor->collection->mutation_generation)
+        return QOF_COLLECTION_CURSOR_STALE;
+    if (cursor->current == cursor->end)
+        return QOF_COLLECTION_CURSOR_END;
+
+    *guid = cursor->current->first;
+    ++cursor->current;
+    return QOF_COLLECTION_CURSOR_ITEM;
+}
+
+void
+qof_collection_cursor_free (QofCollectionCursor *cursor)
+{
+    delete cursor;
 }
 
 guint

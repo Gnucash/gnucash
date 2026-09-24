@@ -351,10 +351,57 @@ draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
 }
 
 static void
-set_cell_insensitive (GtkStyleContext *stylectxt)
+sheet_cell_colors (RegisterColor color_type, gboolean insensitive,
+                   GdkRGBA *background, GdkRGBA *foreground)
 {
-    if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
-        gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
+    static GdkRGBA primary_bg, secondary_bg, split_bg, cursor_bg;
+    static gboolean parsed = FALSE;
+    if (!parsed)
+    {
+        gdk_rgba_parse (&primary_bg, "#BFDEB9");
+        gdk_rgba_parse (&secondary_bg, "#F6FFDA");
+        gdk_rgba_parse (&split_bg, "#EDE7D3");
+        gdk_rgba_parse (&cursor_bg, "#FFEF98");
+        parsed = TRUE;
+    }
+
+    *background = primary_bg;
+    *foreground = gn_black;
+
+    if (color_type >= COLOR_NEGATIVE)
+    {
+        *foreground = gn_red;
+        color_type -= COLOR_NEGATIVE;
+    }
+
+    switch (color_type)
+    {
+    case COLOR_PRIMARY:
+        *background = primary_bg;
+        break;
+    case COLOR_SECONDARY:
+        *background = secondary_bg;
+        break;
+    case COLOR_SPLIT:
+        *background = split_bg;
+        break;
+    case COLOR_PRIMARY_ACTIVE:
+    case COLOR_SECONDARY_ACTIVE:
+    case COLOR_SPLIT_ACTIVE:
+        *background = cursor_bg;
+        break;
+    default:
+        *background = primary_bg;
+        break;
+    }
+
+    if (insensitive)
+    {
+        *foreground = gn_dark_gray;
+        background->red = background->red * 0.8 + 0.2 * gn_light_gray.red;
+        background->green = background->green * 0.8 + 0.2 * gn_light_gray.green;
+        background->blue = background->blue * 0.8 + 0.2 * gn_light_gray.blue;
+    }
 }
 
 static void
@@ -362,7 +409,7 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
            VirtualLocation virt_loc, cairo_t *cr,
            int x, int y, int width, int height)
 {
-    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (sheet->item_editor);
     Table *table = sheet->table;
     PhysicalCellBorders borders;
     const char *text;
@@ -370,214 +417,115 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
     PangoContext *context;
     PangoFontDescription *font;
     PangoRectangle logical_rect;
-    GdkRGBA *bg_color, *fg_color;
     GdkRectangle rect;
+    GdkRGBA background;
+    GdkRGBA foreground;
     gboolean hatching;
-    guint32 color_type;
+    gboolean insensitive = sheet->read_only;
+    RegisterColor color_type;
     int x_offset;
-    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(sheet));
-    GdkRGBA color;
-    gboolean use_neg_class = TRUE;
-
-    gtk_style_context_save (stylectxt);
 
     text = gnc_table_get_entry (table, virt_loc);
-
-    // test for any text, if no text we do not want to add gnc-class-negative-numbers
-    if (!text || *text == '\0')
-        use_neg_class = FALSE;
-
-    // Get the color type and apply the css class
     color_type = gnc_table_get_color (table, virt_loc, &hatching);
-    gnucash_get_style_classes (sheet, stylectxt, color_type, use_neg_class);
 
-    if (sheet->read_only)
-        set_cell_insensitive (stylectxt);
-    else
-    {
-        if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
-            gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_NORMAL);
-    }
-
-    // Are we in a read-only row? Then make the background color somewhat more grey.
-    if ((virt_loc.phys_row_offset < block->style->nrows)
-         && (table->model->dividing_row_upper >= 0))
+    if (virt_loc.phys_row_offset < block->style->nrows &&
+        table->model->dividing_row_upper >= 0)
     {
         if (table->model->reverse_sort)
-        {
-            if ((table->model->blank_trans_row < table->model->dividing_row_upper)
-                 && (virt_loc.vcell_loc.virt_row >= table->model->dividing_row_upper))
-            {
-                set_cell_insensitive (stylectxt); // future trans after blank
-            }
-
-            if ((virt_loc.vcell_loc.virt_row >= table->model->dividing_row_upper)
-                 && (virt_loc.vcell_loc.virt_row < table->model->blank_trans_row))
-            {
-                set_cell_insensitive (stylectxt);
-            }
-        }
-        else // normal order
-        {
-            if (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper)
-                set_cell_insensitive (stylectxt);
-        }
+            insensitive = insensitive ||
+                ((table->model->blank_trans_row < table->model->dividing_row_upper &&
+                  virt_loc.vcell_loc.virt_row >= table->model->dividing_row_upper) ||
+                 (virt_loc.vcell_loc.virt_row >= table->model->dividing_row_upper &&
+                  virt_loc.vcell_loc.virt_row < table->model->blank_trans_row));
+        else
+            insensitive = insensitive ||
+                virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper;
     }
 
-    gtk_render_background (stylectxt, cr, x, y, width, height);
-
-    gdk_rgba_parse (&color, "black");
-    gnc_style_context_get_background_color (stylectxt, gtk_style_context_get_state (stylectxt),
-                                            &color);
-    bg_color = &color;
+    sheet_cell_colors (color_type, insensitive, &background, &foreground);
+    cairo_set_source_rgba (cr, background.red, background.green,
+                           background.blue, background.alpha);
+    cairo_rectangle (cr, x, y, width, height);
+    cairo_fill (cr);
 
     get_cell_borders (sheet, virt_loc, &borders);
-
-    /* top */
-    draw_cell_line (cr, bg_color,
-                    (borders.top >= borders.left ? x : x + 1.0),
-                    y - 0.5,
-                    (borders.top >= borders.right ?
-                     x + width : x + width - 1),
-                    y - 0.5,
-                    borders.top);
-
-    /* bottom */
-    draw_cell_line (cr, bg_color,
-                    (borders.bottom >= borders.left ? x : x + 1.0),
+    draw_cell_line (cr, &background,
+                    borders.top >= borders.left ? x : x + 1.0, y - 0.5,
+                    borders.top >= borders.right ? x + width : x + width - 1,
+                    y - 0.5, borders.top);
+    draw_cell_line (cr, &background,
+                    borders.bottom >= borders.left ? x : x + 1.0,
                     y + height - 0.5,
-                    (borders.bottom >= borders.right ?
-                     x + width : x + width - 1),
-                    y + height - 0.5,
-                    borders.bottom);
-
-    /* left */
-    draw_cell_line (cr, bg_color,
-                    (x == 0 ? x + 0.5 : x - 0.5),
-                    (borders.left > borders.top ? y : y),
-                    (x == 0 ? x + 0.5 : x - 0.5),
-                    (borders.left > borders.bottom ?
-                     y + height : y + height),
+                    borders.bottom >= borders.right ? x + width : x + width - 1,
+                    y + height - 0.5, borders.bottom);
+    draw_cell_line (cr, &background, x == 0 ? x + 0.5 : x - 0.5,
+                    y, x == 0 ? x + 0.5 : x - 0.5, y + height,
                     borders.left);
-
-    /* right */
-    draw_cell_line (cr, bg_color,
-                    x + width - 0.5,
-                    (borders.right > borders.top ? y : y),
-                    x + width - 0.5,
-                    (borders.right > borders.bottom ?
-                     y + height : y + height),
-                    borders.right);
+    draw_cell_line (cr, &background, x + width - 0.5, y,
+                    x + width - 0.5, y + height, borders.right);
 
     if (hatching)
         draw_hatching (cr, x, y, width, height);
+    draw_divider_line (cr, virt_loc, table->model->dividing_row_upper,
+                       block->style->nrows, &gn_red, x, y, width, height);
+    draw_divider_line (cr, virt_loc, table->model->dividing_row,
+                       block->style->nrows, &gn_blue, x, y, width, height);
+    draw_divider_line (cr, virt_loc, table->model->dividing_row_lower,
+                       block->style->nrows, &gn_blue, x, y, width, height);
 
-    /* dividing line upper (red) */
-    fg_color = &gn_red;
-    draw_divider_line (cr, virt_loc,
-                       table->model->dividing_row_upper, block->style->nrows,
-                       fg_color, x, y, width, height);
-
-    /* dividing line (blue) */
-    fg_color = &gn_blue;
-    draw_divider_line (cr, virt_loc,
-                       table->model->dividing_row, block->style->nrows,
-                       fg_color, x, y, width, height);
-
-    /* dividing line lower (blue) */
-    draw_divider_line (cr, virt_loc,
-                       table->model->dividing_row_lower, block->style->nrows,
-                       fg_color, x, y, width, height);
-
-    layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
-
-    if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_VIEW))
-        gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_VIEW);
-
-    // We don't need word wrap or line wrap
+    layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text ? text : "");
     pango_layout_set_width (layout, -1);
     context = pango_layout_get_context (layout);
     font = pango_font_description_copy (pango_context_get_font_description (context));
 
-#ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
-    // Are we in a read-only row? Then make the foreground color somewhat less black
-    if ((virt_loc.phys_row_offset < block->style->nrows)
-            && (table->model->dividing_row_upper >= 0)
-            && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
-    {
-        // Make text color greyed
-        gtk_style_context_add_class (stylectxt, "gnc-class-lighter-grey-mix");
-    }
-#endif
-
-    if ((text != NULL) && (*text != '\0') && g_strcmp0 (PRICE_CELL_TYPE_NAME,
-         gnc_table_get_cell_type_name (table, virt_loc)) == 0)
+    if (text && *text && g_strcmp0 (PRICE_CELL_TYPE_NAME,
+                                    gnc_table_get_cell_type_name (table, virt_loc)) == 0)
     {
         int text_width;
-        int text_border_padding;
-
+        int text_border_padding = gnc_item_edit_get_margin (item_edit, left_right) +
+                                  gnc_item_edit_get_padding_border (item_edit, left_right);
         pango_layout_get_pixel_size (layout, &text_width, NULL);
-
-        text_border_padding = gnc_item_edit_get_margin (item_edit, left_right) +
-                              gnc_item_edit_get_padding_border (item_edit, left_right);
-
         if (text_width + text_border_padding > width)
         {
-            int pango_width = (width - text_border_padding) * PANGO_SCALE;
-
-            pango_layout_set_width (layout, pango_width); //pango units
+            pango_layout_set_width (layout,
+                                    (width - text_border_padding) * PANGO_SCALE);
             pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
         }
     }
 
-    /* If this is the currently open transaction and
-       there is no text in this cell */
-    if ((table->current_cursor_loc.vcell_loc.virt_row ==
-            virt_loc.vcell_loc.virt_row) &&
-            (!text || strlen(text) == 0))
+    if (table->current_cursor_loc.vcell_loc.virt_row == virt_loc.vcell_loc.virt_row &&
+        (!text || !*text))
     {
         text = gnc_table_get_label (table, virt_loc);
-        if ((text == NULL) || (*text == '\0'))
-            goto exit;
-
-        // Make text color greyed
-        gtk_style_context_add_class (stylectxt, "gnc-class-lighter-grey-mix");
-
-        pango_layout_set_text (layout, text, strlen (text));
-        pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
-        pango_context_set_font_description (context, font);
+        if (text && *text)
+        {
+            foreground = gn_dark_gray;
+            pango_layout_set_text (layout, text, -1);
+            pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
+            pango_context_set_font_description (context, font);
+        }
     }
 
-    if ((text == NULL) || (*text == '\0'))
+    if (text && *text)
     {
-        goto exit;
+        pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+        gnucash_sheet_set_text_bounds (sheet, &rect, x, y, width, height);
+        x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
+                                                  rect.width, logical_rect.width);
+        cairo_save (cr);
+        cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
+        cairo_clip (cr);
+        cairo_set_source_rgba (cr, foreground.red, foreground.green,
+                               foreground.blue, foreground.alpha);
+        cairo_move_to (cr, rect.x + x_offset,
+                       rect.y + gnc_item_edit_get_padding_border (item_edit, top));
+        pango_cairo_show_layout (cr, layout);
+        cairo_restore (cr);
     }
 
-    pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-
-    gnucash_sheet_set_text_bounds (sheet, &rect, x, y, width, height);
-
-    cairo_save (cr);
-    cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
-    cairo_clip (cr);
-
-    x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
-                                              rect.width, logical_rect.width);
-
-    gtk_render_layout (stylectxt, cr, rect.x + x_offset,
-                       rect.y + gnc_item_edit_get_padding_border (item_edit, top), layout);
-
-    cairo_restore (cr);
-
-exit:
-    pango_font_description_set_style (font, PANGO_STYLE_NORMAL);
-    pango_context_set_font_description (context, font);
     pango_font_description_free (font);
     g_object_unref (layout);
-
-    gtk_style_context_restore (stylectxt);
 }
-
 static void
 draw_block (GnucashSheet *sheet, SheetBlock *block,
             VirtualLocation virt_loc, cairo_t *cr,

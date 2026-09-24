@@ -1,8 +1,11 @@
 include(CheckSymbolExists)
 
+add_subdirectory(test)
+
 set (register_gnome_SOURCES
   combocell-gnome.c
   completioncell-gnome.c
+  gnc-completion-model.c
   datecell-gnome.c
   formulacell-gnome.c
   gnucash-color.c
@@ -22,6 +25,7 @@ set (register_gnome_SOURCES
 
 set (register_gnome_noinst_HEADERS
   formulacell-gnome.h
+  gnc-completion-model.h
   gnucash-color.h
   gnucash-cursor.h
   gnucash-date-picker.h
@@ -42,7 +46,7 @@ set_source_files_properties (${register_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS
 
 add_library (gnc-register-gnome ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
 
-target_link_libraries(gnc-register-gnome gnc-register-core PkgConfig::GTK3)
+target_link_libraries(gnc-register-gnome gnc-register-core PkgConfig::GTK4)
 
 target_compile_definitions(gnc-register-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.register.gnome\")
 

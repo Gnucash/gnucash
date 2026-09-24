@@ -89,6 +89,96 @@ static int gen_logs = 1;
 static std::ofstream trans_log_stream; /**< current log file handle */
 static std::string trans_log_name; /**< current log file name */
 static std::string log_base_name;
+static constexpr char trans_log_suppression_key[] =
+    "gnc-transaction-log-suppression";
+
+struct TransLogSuppressionState
+{
+    gatomicrefcount ref_count;
+    guint token_count;
+    gboolean attached;
+};
+
+struct GncTransLogSuppression
+{
+    TransLogSuppressionState *state;
+};
+
+static TransLogSuppressionState *trans_log_suppression_state_ref (
+    TransLogSuppressionState *state)
+{
+    if (state)
+        g_atomic_ref_count_inc (&state->ref_count);
+    return state;
+}
+
+static void trans_log_suppression_state_unref (
+    TransLogSuppressionState *state)
+{
+    if (state && g_atomic_ref_count_dec (&state->ref_count))
+        g_free (state);
+}
+
+static void trans_log_suppression_book_finalizer (
+    QofBook *, gpointer, gpointer data)
+{
+    auto state = static_cast<TransLogSuppressionState *> (data);
+    if (!state)
+        return;
+    state->attached = FALSE;
+    trans_log_suppression_state_unref (state);
+}
+
+GncTransLogSuppression *xaccTransLogSuppressForBook (QofBook *book)
+{
+    if (!book)
+        return nullptr;
+    auto suppression = g_new0 (GncTransLogSuppression, 1);
+    if (!suppression)
+        return nullptr;
+    auto state = static_cast<TransLogSuppressionState *> (
+        qof_book_get_data (book, trans_log_suppression_key));
+    if (!state)
+    {
+        state = g_new0 (TransLogSuppressionState, 1);
+        if (!state)
+        {
+            g_free (suppression);
+            return nullptr;
+        }
+        g_atomic_ref_count_init (&state->ref_count);
+        state->attached = TRUE;
+        qof_book_set_data_fin (book, trans_log_suppression_key, state,
+                               trans_log_suppression_book_finalizer);
+    }
+    suppression->state = trans_log_suppression_state_ref (state);
+    ++state->token_count;
+    return suppression;
+}
+
+void xaccTransLogSuppressionRelease (GncTransLogSuppression *suppression)
+{
+    if (!suppression)
+        return;
+    auto state = suppression->state;
+    suppression->state = nullptr;
+    if (state)
+    {
+        g_assert (state->token_count > 0);
+        --state->token_count;
+        trans_log_suppression_state_unref (state);
+    }
+    g_free (suppression);
+}
+
+gboolean xaccTransLogSuppressedForBook (const QofBook *book)
+{
+    auto state = book ? static_cast<TransLogSuppressionState *> (
+        qof_book_get_data (const_cast<QofBook *> (book),
+                           trans_log_suppression_key)) : nullptr;
+    return state && state->attached && state->token_count > 0;
+}
+
 
 /********************************************************************\
 \********************************************************************/
@@ -226,6 +316,9 @@ xaccTransWriteLog (Transaction *trans, char flag)
     char split_guid_str[GUID_ENCODING_LENGTH + 1];
     const char *trans_notes;
     char dnow[100], dent[100], dpost[100], drecn[100];
+    if (xaccTransLogSuppressedForBook (xaccTransGetBook (trans)))
+        return;
+
 
     if (!gen_logs)
     {

@@ -35,6 +35,14 @@
 #include "gnc-datetime.hpp"
 #include <vector>
 #include <iostream>
+
+/* windows.h defines ABSOLUTE, which conflicts with the persisted date-period
+ * enumerator below. The option API must remain usable after GTK/GDK headers.
+ */
+#ifdef ABSOLUTE
+#undef ABSOLUTE
+#endif
+
 /**
  * Reporting periods relative to the current date.
  *

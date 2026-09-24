@@ -1,7 +1,34 @@
-Github Actions Continuous Integration Testing Workflows.
+GitHub Actions Continuous Integration Testing Workflows
 
-ci-tests.yml runs Ubuntu 18.04 and Ubuntu 20.04 using Github-provided virtual environments. The virtual environments are about twice as fast as Docker ones and getting Docker to run Ubuntu images was problematic. Note that updating Ubuntu 18.04 updates ICU4C from v60 to v65 and that causes conflicts with Boost, so don't.
+`ci-tests.yml` runs Ubuntu 26.04 build, distribution, and AddressSanitizer
+tests. `coverage.yml` collects C++ coverage on the same platform. These jobs
+exercise the Guile 2.2 configuration without optional AqBanking support.
+The Ubuntu job also saves an import matcher preview from the GTK regression
+test using synthetic transactions and the application stylesheets. This
+artifact supports visual review without opening a user's financial data.
 
-ci-docker.yml runs tests in a Docker container running Arch Linux.
+`linux-aqbanking-gtk4-preflight.yml` builds the pinned Gwenhywfar GTK4,
+libchipcard, and AqBanking sources before running the GnuCash distribution
+tests with AqBanking and Guile 3.0 enabled. This separate configuration is
+needed until distribution packages provide the GTK4 Gwenhywfar backend.
+It also runs the Gwenhywfar tests under a virtual display.
 
-mac-tests.yml runs tests on macOS using a Github-provided virtual machine. Note that this test relies on a prebuilt tarball containing all of the dependencies. Instructions for building that tarball along with some support scripts may be found in utils/ci/macos-ci-deps.
+`ci-docker.yml` runs tests in an Arch Linux container.
+
+`windows-tests.yml` uses the upstream UCRT64 package repository and runs the
+full test suite with AqBanking. A validation fork can set the repository
+variables `WINDOWS_DEPENDENCY_OVERLAY_NAME` and
+`WINDOWS_DEPENDENCY_OVERLAY_URL` together to place a staging package
+repository before the upstream repository. The URL must point to a release
+whose package database matches the configured repository name. Use an
+immutable release containing packages built from the reviewed recipes.
+
+`mac-tests.yaml` uses the macOS 26 runner and a prebuilt dependency archive.
+The archive is assembled and tested using the JHBuild procedure in
+`gnucash-on-osx`; see `util/ci/macos-ci-deps/README.md` for the upstream
+publication procedure. Validation forks can set `MACOS_DEPENDENCIES_URL`
+and `MACOS_DEPENDENCIES_SHA256` together to test an immutable staging
+archive with the same workflow. The downloaded archive must provide GTK4,
+gtk4-macos, gwengui-gtk4, and AqBanking. These overrides do not replace the
+upstream requirement to publish the new dependency packages/archive before
+merging the migration and updating the default URL and checksum.

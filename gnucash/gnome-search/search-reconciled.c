@@ -148,9 +148,9 @@ gncs_validate (GNCSearchCoreType *fe)
 }
 
 static void
-toggle_changed (GtkToggleButton *button, GNCSearchReconciled *fe)
+toggle_changed (GtkCheckButton *button, GNCSearchReconciled *fe)
 {
-    gboolean is_on = gtk_toggle_button_get_active (button);
+    gboolean is_on = gtk_check_button_get_active (button);
     cleared_match_t value =
         (cleared_match_t) ((uintptr_t)g_object_get_data (G_OBJECT (button), "button-value") & 0xffffffff); // Binary mask to silence void-pointer-to-enum-cast warning.
 
@@ -164,15 +164,15 @@ static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
     GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
-    GtkComboBox *combo;
+    GtkDropDown *drop_down;
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("is"), QOF_CHAR_MATCH_ANY);
-    gnc_combo_box_search_add(combo, _("is not"), QOF_CHAR_MATCH_NONE);
-    gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_CHAR_MATCH_ANY);
+    drop_down = GTK_DROP_DOWN(gnc_search_drop_down_new());
+    gnc_search_drop_down_add(drop_down, _("is"), QOF_CHAR_MATCH_ANY);
+    gnc_search_drop_down_add(drop_down, _("is not"), QOF_CHAR_MATCH_NONE);
+    gnc_search_drop_down_changed(drop_down, &fi->how);
+    gnc_search_drop_down_set_active(drop_down, fi->how ? fi->how : QOF_CHAR_MATCH_ANY);
 
-    return GTK_WIDGET(combo);
+    return GTK_WIDGET(drop_down);
 }
 
 static GtkWidget *
@@ -181,7 +181,7 @@ make_toggle (GNCSearchReconciled *fi, char *label, cleared_match_t option)
     GtkWidget *toggle;
 
     toggle = gtk_check_button_new_with_label (label);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), (fi->value & option));
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), (fi->value & option));
     g_object_set_data (G_OBJECT (toggle), "button-value", (gpointer) option);
     g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fi);
 
@@ -202,23 +202,23 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the toggles */
     toggle = make_toggle (fi, _("Not Cleared"), CLEARED_NO);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Cleared"), CLEARED_CLEARED);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Reconciled"), CLEARED_RECONCILED);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Frozen"), CLEARED_FROZEN);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Voided"), CLEARED_VOIDED);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     /* And return the box */
     return box;

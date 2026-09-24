@@ -19,6 +19,32 @@ macro(add_gnome_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
 endmacro()
 
+add_gnome_test(test-dialog-date-close test-dialog-date-close.c)
+add_gnome_test(test-dialog-lot-viewer-scrub test-dialog-lot-viewer-scrub.c)
+add_gnome_test(test-budget-view-column-ownership test-budget-view-column-ownership.c)
+set_property(TEST test-budget-view-column-ownership APPEND PROPERTY ENVIRONMENT
+  GSETTINGS_SCHEMA_DIR=${CMAKE_BINARY_DIR}/share/glib-2.0/schemas)
+add_gnome_test(test-plugin-page-budget-window-lifetime test-plugin-page-budget-window-lifetime.c)
+set_property(TEST test-plugin-page-budget-window-lifetime APPEND PROPERTY ENVIRONMENT
+  GSETTINGS_SCHEMA_DIR=${CMAKE_BINARY_DIR}/share/glib-2.0/schemas)
+
+set(test_dialog_sx_since_last_run_ownership_INCLUDE_DIRS
+  ${GNOME_TEST_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
+  ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
+)
+gnc_add_test_with_guile(test-dialog-sx-since-last-run-ownership
+  "test-dialog-sx-since-last-run-ownership.c;test-sx-variable-fixture.cpp"
+  test_dialog_sx_since_last_run_ownership_INCLUDE_DIRS GNOME_TEST_LIBS
+  GSETTINGS_SCHEMA_DIR=${CMAKE_BINARY_DIR}/share/glib-2.0/schemas)
+# The scheduled-transaction fixture loads gnucash/app-utils/fin at runtime.
+add_dependencies(test-dialog-sx-since-last-run-ownership scm-expressions)
+
+gnc_add_test_with_guile(test-assistant-hierarchy-ownership
+  test-assistant-hierarchy-ownership.cpp GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
+set_property(TEST test-assistant-hierarchy-ownership APPEND PROPERTY ENVIRONMENT
+  GSETTINGS_SCHEMA_DIR=${CMAKE_BINARY_DIR}/share/glib-2.0/schemas)
+
 gnc_add_test_with_guile(test-invoice-report-builtin-default test-invoice-report-builtin-default.cpp
   GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS
 )
@@ -63,6 +89,14 @@ gnc_add_test (test-assistant-stock-transaction
 set_dist_list(test_gnome_DIST
   CMakeLists.txt
   test-invoice-report-builtin-default.cpp
+  test-dialog-date-close.c
+  test-dialog-lot-viewer-scrub.c
+  test-budget-view-column-ownership.c
+  test-plugin-page-budget-window-lifetime.c
+  test-dialog-sx-since-last-run-ownership.c
+  test-sx-variable-fixture.h
+  test-sx-variable-fixture.cpp
+  test-assistant-hierarchy-ownership.cpp
   ${test_gnome_scheme_SOURCES}
   ${test_gnome_SOURCES}
   ${test_assistant-stock-transaction_SOURCES}

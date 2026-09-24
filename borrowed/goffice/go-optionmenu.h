@@ -40,10 +40,17 @@ G_BEGIN_DECLS
 #define GO_TYPE_OPTION_MENU              (go_option_menu_get_type ())
 G_DECLARE_FINAL_TYPE (GOOptionMenu, go_option_menu, GO, OPTION_MENU, GtkButton)
 
-GtkWidget* go_option_menu_new(void);
+GtkWidget *go_option_menu_new(void);
 void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu);
+void go_option_menu_register_item(GOOptionMenu *option_menu,
+                                  const GSList *selection,
+                                  GtkWidget *item);
 void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection);
 GtkWidget *go_option_menu_get_history(GOOptionMenu *option_menu);
+void go_option_menu_set_active_item(GOOptionMenu *option_menu,
+                                    GtkWidget *item);
+void go_option_menu_activate_item(GOOptionMenu *option_menu,
+                                 GtkWidget *item);
 
 G_END_DECLS
 

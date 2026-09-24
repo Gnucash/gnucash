@@ -11,6 +11,7 @@ if (WITH_PYTHON)
   set(PYTHON_ENV "GNC_UNINSTALLED=1;GNC_BUILDDIR=${CMAKE_BINARY_DIR};PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${LIBDIR_BUILD}/gnucash:${test_core_dir}")
   set(ASAN_ENV "${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_TEST_OPTIONS}")
   set_tests_properties(python-bindings PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${PYTHON_ENV};${ASAN_ENV},${PYTHON_ENV}>")
+  gnc_add_test_runtime_path(python-bindings)
 
 endif()
 

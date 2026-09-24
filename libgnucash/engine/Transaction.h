@@ -87,6 +87,7 @@ Splits plus the value of all of its sub-Accounts.
 #define XACC_TRANSACTION_H
 
 typedef struct _TransactionClass TransactionClass;
+struct GncScrubContext;
 
 #include <time.h>
 
@@ -280,6 +281,30 @@ Split * xaccTransFindSplitByAccount(const Transaction *trans,
  */
 void xaccTransScrubGains (Transaction *trans, Account *gain_acc);
 
+typedef struct GncTransactionGainsPlan GncTransactionGainsPlan;
+typedef enum
+{
+    GNC_TRANSACTION_GAINS_PLAN_RUNNING,
+    GNC_TRANSACTION_GAINS_PLAN_DONE,
+    GNC_TRANSACTION_GAINS_PLAN_CANCELLED,
+    GNC_TRANSACTION_GAINS_PLAN_STALE,
+    GNC_TRANSACTION_GAINS_PLAN_FAILED,
+} GncTransactionGainsPlanState;
+
+/** Resumable form of transaction gains scrubbing. Date repair, ADIRTY lot
+ * repair/assignment, and VDIRTY value repair each use generation-guarded
+ * scans and nested bounded plans. Dirty flags remain set until the nested
+ * repair that owns them reaches DONE. */
+GncTransactionGainsPlan *gnc_transaction_gains_plan_begin (
+    Transaction *transaction, Account *gain_account,
+    struct GncScrubContext *context);
+GncTransactionGainsPlanState gnc_transaction_gains_plan_step (
+    GncTransactionGainsPlan *plan, guint max_work);
+GncTransactionGainsPlanState gnc_transaction_gains_plan_get_state (
+    const GncTransactionGainsPlan *plan);
+void gnc_transaction_gains_plan_cancel (GncTransactionGainsPlan *plan);
+void gnc_transaction_gains_plan_free (GncTransactionGainsPlan *plan);
+
 
 /** \warning XXX FIXME
  * gnc_book_count_transactions is a utility function,
@@ -389,6 +414,74 @@ void xaccTransClearSplits(Transaction* trans);
     @return A Split* or NULL if i is out of range.
 */
 Split* xaccTransGetSplit (const Transaction *trans, int i);
+
+/** Opaque cursor for a stable, read-only transaction split scan. */
+typedef struct GncTransactionSplitCursor GncTransactionSplitCursor;
+
+/** Result of advancing a transaction split cursor by one bounded unit. */
+typedef enum
+{
+    GNC_TRANSACTION_SPLIT_CURSOR_NEXT,
+    GNC_TRANSACTION_SPLIT_CURSOR_DONE,
+    GNC_TRANSACTION_SPLIT_CURSOR_CANCELLED,
+    GNC_TRANSACTION_SPLIT_CURSOR_STALE,
+} GncTransactionSplitCursorState;
+
+/**
+ * Start an opaque, generation-guarded split scan under @a context's active
+ * SCRUB lease.
+ *
+ * The cursor retains an internal list node only while the main thread performs
+ * a read-only scan. Every xaccTransBeginEdit() advances the transaction scan
+ * generation; next() verifies that generation before dereferencing the node
+ * and reports STALE after any edit. Each next() call yields at most one split
+ * GUID. The caller must free the cursor before a mutation and must never
+ * retain a Split pointer across turns.
+ */
+GncTransactionSplitCursor *gnc_transaction_split_cursor_begin (
+    Transaction *trans, struct GncScrubContext *context);
+
+/** Advance one split lookup/scan unit and copy the next split GUID to @a guid. */
+GncTransactionSplitCursorState gnc_transaction_split_cursor_next (
+    GncTransactionSplitCursor *cursor, GncGUID *guid);
+
+/** Release a transaction split cursor. */
+void gnc_transaction_split_cursor_free (GncTransactionSplitCursor *cursor);
+
+/** Opaque collector for one transaction's trading-aware imbalance. */
+typedef struct GncTransactionImbalanceCollector GncTransactionImbalanceCollector;
+
+/**
+ * Start a collector bound to @a context whose consume calls may be interleaved
+ * with an active transaction split cursor. The collector captures the
+ * transaction generation and keeps only GUIDs and numeric accumulators between
+ * calls. Any xaccTransBeginEdit() invalidates it; consume(), accessors, and
+ * finish() then fail without mixing pre- and post-edit values.
+ */
+GncTransactionImbalanceCollector *gnc_transaction_imbalance_collector_begin (
+    const Transaction *trans, struct GncScrubContext *context);
+
+/** Consume one split from the collector's transaction. */
+gboolean gnc_transaction_imbalance_collector_consume (
+    GncTransactionImbalanceCollector *collector, const Split *split);
+
+/** Finish the collector and return the same monetary imbalance list as
+ * xaccTransGetImbalance(). The returned list belongs to the caller. */
+MonetaryList *gnc_transaction_imbalance_collector_finish (
+    GncTransactionImbalanceCollector *collector);
+
+/** Return the number of first-encountered commodity totals. */
+guint gnc_transaction_imbalance_collector_get_count (
+    const GncTransactionImbalanceCollector *collector);
+
+/** Copy one first-encountered commodity total. */
+gboolean gnc_transaction_imbalance_collector_get_entry (
+    const GncTransactionImbalanceCollector *collector, guint index,
+    GncGUID *commodity_guid, gnc_numeric *amount, gnc_numeric *value);
+
+/** Release a collector without producing a result. */
+void gnc_transaction_imbalance_collector_free (
+    GncTransactionImbalanceCollector *collector);
 
 /** Inverse of xaccTransGetSplit() */
 int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);

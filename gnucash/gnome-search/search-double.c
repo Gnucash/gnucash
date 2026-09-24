@@ -168,20 +168,20 @@ static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GtkComboBox *combo;
+    GtkDropDown *drop_down;
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+    drop_down = GTK_DROP_DOWN(gnc_search_drop_down_new());
 
-    gnc_combo_box_search_add(combo, _("is less than"), QOF_COMPARE_LT);
-    gnc_combo_box_search_add(combo, _("is less than or equal to"), QOF_COMPARE_LTE);
-    gnc_combo_box_search_add(combo, _("equals"), QOF_COMPARE_EQUAL);
-    gnc_combo_box_search_add(combo, _("does not equal"), QOF_COMPARE_NEQ);
-    gnc_combo_box_search_add(combo, _("is greater than"), QOF_COMPARE_GT);
-    gnc_combo_box_search_add(combo, _("is greater than or equal to"), QOF_COMPARE_GTE);
-    gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_COMPARE_LT);
+    gnc_search_drop_down_add(drop_down, _("is less than"), QOF_COMPARE_LT);
+    gnc_search_drop_down_add(drop_down, _("is less than or equal to"), QOF_COMPARE_LTE);
+    gnc_search_drop_down_add(drop_down, _("equals"), QOF_COMPARE_EQUAL);
+    gnc_search_drop_down_add(drop_down, _("does not equal"), QOF_COMPARE_NEQ);
+    gnc_search_drop_down_add(drop_down, _("is greater than"), QOF_COMPARE_GT);
+    gnc_search_drop_down_add(drop_down, _("is greater than or equal to"), QOF_COMPARE_GTE);
+    gnc_search_drop_down_changed(drop_down, &fi->how);
+    gnc_search_drop_down_set_active(drop_down, fi->how ? fi->how : QOF_COMPARE_LT);
 
-    return GTK_WIDGET(combo);
+    return GTK_WIDGET(drop_down);
 }
 
 static void
@@ -222,14 +222,14 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the entry window */
     entry = gnc_amount_edit_new ();
     if (fi->value)
         gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
     fi->gae = GNC_AMOUNT_EDIT (entry);
 

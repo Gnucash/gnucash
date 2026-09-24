@@ -59,20 +59,25 @@ typedef enum
 /** Datatypes ***********************************************************/
 struct _FinCalcDialog
 {
-    GtkWidget *dialog;
+    GtkWindow *window;
 
     GtkWidget *amounts[NUM_FIN_CALC_VALUES];
 
     GtkWidget *calc_button;
+    GtkWidget *help_button;
+    GtkWidget *close_button;
 
-    GtkWidget *compounding_combo;
-    GtkWidget *payment_combo;
+    GtkDropDown *compounding_combo;
+    GtkDropDown *payment_combo;
 
     GtkWidget *end_of_period_radio;
     GtkWidget *precision;
     GtkWidget *discrete_compounding_radio;
 
     GtkWidget *payment_total_label;
+    gboolean closing;
+    gboolean window_destroyed;
+    gboolean window_size_saved;
 
     financial_info financial_info;
 };
@@ -97,12 +102,14 @@ __attribute__((unused)) static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /** Prototypes **********************************************************/
-void fincalc_update_calc_button_cb (GtkWidget *unused, FinCalcDialog *fcd);
-void fincalc_calc_clicked_cb (GtkButton *button, FinCalcDialog *fcd);
-void fincalc_compounding_radio_toggled (GtkToggleButton *togglebutton, gpointer user_data);
-void fincalc_amount_clear_clicked_cb (GtkButton *button, FinCalcDialog *fcd);
-void fincalc_precision_spin_value_changed_cb (GtkButton *button, FinCalcDialog *fcd);
-void fincalc_response_cb (GtkDialog *dialog, gint response, FinCalcDialog *fcd);
+void fincalc_update_calc_button_cb (GtkWidget *unused, gpointer user_data);
+void fincalc_calc_clicked_cb (GtkButton *button, gpointer user_data);
+void fincalc_compounding_radio_toggled (GtkCheckButton *checkbutton, gpointer user_data);
+void fincalc_amount_clear_clicked_cb (GtkButton *button, gpointer user_data);
+void fincalc_precision_spin_value_changed_cb (GtkSpinButton *button, gpointer user_data);
+void fincalc_response_button_cb (GtkWidget *widget, gpointer user_data);
+
+static void fincalc_close (FinCalcDialog *fcd);
 
 /** Implementations *****************************************************/
 
@@ -164,26 +171,32 @@ fi_to_gui (FinCalcDialog *fcd)
     gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
     i = normalize_period (&fcd->financial_info.CF);
-    gtk_combo_box_set_active (GTK_COMBO_BOX(fcd->compounding_combo), i);
+    gtk_drop_down_set_selected (fcd->compounding_combo, i);
 
     i = normalize_period (&fcd->financial_info.PF);
-    gtk_combo_box_set_active (GTK_COMBO_BOX(fcd->payment_combo), i);
+    gtk_drop_down_set_selected (fcd->payment_combo, i);
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(fcd->end_of_period_radio),
-                                  !fcd->financial_info.bep);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(fcd->end_of_period_radio),
+                                 !fcd->financial_info.bep);
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(fcd->discrete_compounding_radio),
-                                  fcd->financial_info.disc);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(fcd->discrete_compounding_radio),
+                                 fcd->financial_info.disc);
+}
+
+static unsigned int
+selected_period (GtkDropDown *drop_down)
+{
+    const guint selected = gtk_drop_down_get_selected (drop_down);
+    return selected < G_N_ELEMENTS (periods) ? periods[selected] : periods[0];
 }
 
 /* Copy the values in the GUI to the financial_info structure */
 static void
 gui_to_fi (FinCalcDialog *fcd)
 {
-    GtkToggleButton *toggle;
+    GtkCheckButton *check_button;
     GtkWidget *entry;
     gnc_numeric npp;
-    int i;
     const gchar *text;
 
     if (fcd == NULL)
@@ -191,7 +204,7 @@ gui_to_fi (FinCalcDialog *fcd)
 
     /* treat PAYMENT_PERIODS as a plain GtkEntry */
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]));
-    text = gtk_entry_get_text (GTK_ENTRY(entry));
+    text = gnc_entry_get_text (GTK_ENTRY(entry));
     if (text && *text)
     {
         gnc_numeric out = gnc_numeric_from_string (text);
@@ -217,25 +230,23 @@ gui_to_fi (FinCalcDialog *fcd)
         gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
     fcd->financial_info.fv = -fcd->financial_info.fv;
 
-    i = gtk_combo_box_get_active (GTK_COMBO_BOX(fcd->compounding_combo));
-    fcd->financial_info.CF = periods[i];
+    fcd->financial_info.CF = selected_period (fcd->compounding_combo);
+    fcd->financial_info.PF = selected_period (fcd->payment_combo);
 
-    i = gtk_combo_box_get_active (GTK_COMBO_BOX(fcd->payment_combo));
-    fcd->financial_info.PF = periods[i];
+    check_button = GTK_CHECK_BUTTON(fcd->end_of_period_radio);
+    fcd->financial_info.bep = !gtk_check_button_get_active (check_button);
 
-    toggle = GTK_TOGGLE_BUTTON(fcd->end_of_period_radio);
-    fcd->financial_info.bep = !gtk_toggle_button_get_active (toggle);
-
-    toggle = GTK_TOGGLE_BUTTON(fcd->discrete_compounding_radio);
-    fcd->financial_info.disc = gtk_toggle_button_get_active (toggle);
+    check_button = GTK_CHECK_BUTTON(fcd->discrete_compounding_radio);
+    fcd->financial_info.disc = gtk_check_button_get_active (check_button);
 
     fcd->financial_info.prec = gnc_locale_decimal_places ();
 }
 
 /* Set the sensitivity of the calculation buttons based on the argument. */
-void
-fincalc_update_calc_button_cb (GtkWidget *unused, FinCalcDialog *fcd)
+static void
+fincalc_update_calc_button_internal_cb (GtkWidget *widget, gpointer user_data)
 {
+    FinCalcDialog *fcd = user_data;
     const gchar *text;
     gint i;
 
@@ -245,33 +256,58 @@ fincalc_update_calc_button_cb (GtkWidget *unused, FinCalcDialog *fcd)
     for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
     {
         GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[i]));
-        text = gtk_entry_get_text (GTK_ENTRY(entry));
+        text = gnc_entry_get_text (GTK_ENTRY(entry));
         if ((text == NULL) || (*text == '\0'))
         {
             gtk_widget_set_sensitive (GTK_WIDGET(fcd->calc_button), TRUE);
             return;
         }
     }
-
     gtk_widget_set_sensitive (GTK_WIDGET(fcd->calc_button), FALSE);
 }
 
-/* Free the calc button list and free the FinCalcDialog structure. */
+void
+fincalc_update_calc_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    FinCalcDialog *fcd = user_data;
+    fincalc_update_calc_button_internal_cb (widget, fcd);
+}
+
 static void
-fincalc_dialog_destroy (GObject *object, gpointer user_data)
+fincalc_dropdown_selected_cb (GObject *drop_down, G_GNUC_UNUSED GParamSpec *pspec,
+                              gpointer user_data)
+{
+    fincalc_update_calc_button_internal_cb (GTK_WIDGET (drop_down), user_data);
+}
+
+static void
+fincalc_save_window_size (FinCalcDialog *fcd)
+{
+    if (fcd && fcd->window && !fcd->window_size_saved)
+    {
+        gnc_save_window_size (GNC_PREFS_GROUP, fcd->window);
+        fcd->window_size_saved = TRUE;
+    }
+}
+
+/* Release the component and clear the borrowed window after destruction. */
+static void
+fincalc_dialog_destroy (G_GNUC_UNUSED GtkWidget *window, gpointer user_data)
 {
     FinCalcDialog *fcd = user_data;
 
-    if (fcd == NULL)
+    if (!fcd || fcd->window_destroyed)
         return;
 
+    fincalc_save_window_size (fcd);
+    fcd->window_destroyed = TRUE;
     gnc_unregister_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
-
+    fcd->window = NULL;
     g_free (fcd);
 }
 
 void
-fincalc_compounding_radio_toggled (GtkToggleButton *togglebutton, gpointer user_data)
+fincalc_compounding_radio_toggled (GtkCheckButton *checkbutton, gpointer user_data)
 {
     FinCalcDialog *fcd = user_data;
     gboolean sensitive;
@@ -279,30 +315,31 @@ fincalc_compounding_radio_toggled (GtkToggleButton *togglebutton, gpointer user_
     if (fcd == NULL)
         return;
 
-    fincalc_update_calc_button_cb (GTK_WIDGET(togglebutton), fcd);
-
-    sensitive = gtk_toggle_button_get_active (togglebutton);
-
-    gtk_widget_set_sensitive (fcd->compounding_combo, sensitive);
+    fincalc_update_calc_button_cb (GTK_WIDGET(checkbutton), fcd);
+    sensitive = gtk_check_button_get_active (checkbutton);
+    gtk_widget_set_sensitive (GTK_WIDGET (fcd->compounding_combo), sensitive);
 }
 
 void
-fincalc_amount_clear_clicked_cb (GtkButton *button, FinCalcDialog *fcd)
+fincalc_amount_clear_clicked_cb (GtkButton *button, G_GNUC_UNUSED gpointer user_data)
 {
-    GNCAmountEdit * edit = GNC_AMOUNT_EDIT(g_object_get_data (G_OBJECT(button), "edit"));
-    GtkWidget * entry = gnc_amount_edit_gtk_entry (edit);
+    GNCAmountEdit *edit = GNC_AMOUNT_EDIT(g_object_get_data (G_OBJECT(button), "edit"));
+    GtkWidget *entry = gnc_amount_edit_gtk_entry (edit);
     gnc_numeric value;
 
     if (entry && GTK_IS_ENTRY(entry))
-        gtk_entry_set_text (GTK_ENTRY(entry), "");
+        gnc_entry_set_text (GTK_ENTRY(entry), "");
 
     gnc_amount_edit_expr_is_valid (edit, &value, TRUE, NULL);
 }
 
 void
-fincalc_precision_spin_value_changed_cb (GtkButton *button, FinCalcDialog *fcd)
+fincalc_precision_spin_value_changed_cb (G_GNUC_UNUSED GtkSpinButton *button,
+                                         gpointer user_data)
 {
-    gtk_widget_set_sensitive (GTK_WIDGET(fcd->calc_button), TRUE);
+    FinCalcDialog *fcd = user_data;
+    if (fcd)
+        gtk_widget_set_sensitive (GTK_WIDGET(fcd->calc_button), TRUE);
 }
 
 static void
@@ -350,7 +387,7 @@ can_calc_value (FinCalcDialog *fcd, FinCalcValue value, int *error_item)
         if (i != value)
         {
             GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[i]));
-            string = gtk_entry_get_text (GTK_ENTRY(entry));
+            string = gnc_entry_get_text (GTK_ENTRY(entry));
             if ((string == NULL) || (*string == '\0'))
             {
                 *error_item = i;
@@ -437,7 +474,7 @@ calc_value (FinCalcDialog *fcd, FinCalcValue value)
     {
         GtkWidget *entry;
 
-        gnc_error_dialog (GTK_WINDOW (fcd->dialog), "%s", string);
+        gnc_error_dialog (GTK_WINDOW (fcd->window), "%s", string);
         if (error_item == 0)
             entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[0]));
         else
@@ -475,15 +512,18 @@ calc_value (FinCalcDialog *fcd, FinCalcValue value)
 }
 
 void
-fincalc_calc_clicked_cb (GtkButton *button, FinCalcDialog *fcd)
+fincalc_calc_clicked_cb (G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
+    FinCalcDialog *fcd = user_data;
+    if (!fcd || fcd->closing)
+        return;
     const gchar *text;
     gint i;
 
     for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
     {
         GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[i]));
-        text = gtk_entry_get_text (GTK_ENTRY(entry));
+        text = gnc_entry_get_text (GTK_ENTRY(entry));
         if ((text != NULL) && (*text != '\0'))
             continue;
         calc_value (fcd, i);
@@ -492,30 +532,19 @@ fincalc_calc_clicked_cb (GtkButton *button, FinCalcDialog *fcd)
     calc_value (fcd, NUM_FIN_CALC_VALUES);
 }
 
-void fincalc_response_cb (GtkDialog *dialog,
-                          gint response,
-                          FinCalcDialog *fcd)
+void
+fincalc_response_button_cb (GtkWidget *widget, gpointer user_data)
 {
-    switch (response)
-    {
-    case GTK_RESPONSE_HELP:
-        gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_FIN_CALC);
+    FinCalcDialog *fcd = user_data;
+
+    if (!fcd || fcd->closing)
         return;
-
-    case GTK_RESPONSE_OK:
-        /* Do something here whenever the hidden schedule button is clicked. */
-        /* Fall through */
-
-    case GTK_RESPONSE_CLOSE:
-        gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog));
-        break;
-
-    default:
-        /* Cancel, destroy, etc.  Do nothing. */
-        break;
+    if (widget == fcd->help_button)
+    {
+        gnc_gnome_help (fcd->window, DF_MANUAL, DL_FIN_CALC);
+        return;
     }
-
-    gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
+    fincalc_close (fcd);
 }
 
 
@@ -524,18 +553,40 @@ close_handler (gpointer user_data)
 {
     FinCalcDialog *fcd = user_data;
 
-    gtk_widget_destroy (fcd->dialog);
+    if (!fcd || fcd->window_destroyed || !fcd->window)
+        return;
+
+    fcd->closing = TRUE;
+    fincalc_save_window_size (fcd);
+    gtk_window_destroy (fcd->window);
+}
+
+static void
+fincalc_close (FinCalcDialog *fcd)
+{
+    if (!fcd || fcd->closing || fcd->window_destroyed)
+        return;
+
+    fcd->closing = TRUE;
+    gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
 }
 
 static gboolean
-show_handler (const char *klass, gint component_id,
-              gpointer user_data, gpointer iter_data)
+fincalc_close_request_cb (G_GNUC_UNUSED GtkWindow *window, gpointer user_data)
+{
+    fincalc_close (user_data);
+    return TRUE;
+}
+
+static gboolean
+show_handler (G_GNUC_UNUSED const char *klass, G_GNUC_UNUSED gint component_id,
+              gpointer user_data, G_GNUC_UNUSED gpointer iter_data)
 {
     FinCalcDialog *fcd = user_data;
 
-    if (!fcd)
+    if (!fcd || fcd->closing || fcd->window_destroyed)
         return FALSE;
-    gtk_window_present (GTK_WINDOW(fcd->dialog));
+    gtk_window_present (fcd->window);
     return TRUE;
 }
 
@@ -596,52 +647,70 @@ fincalc_init_commodity_gae (GNCAmountEdit *edit)
     gtk_entry_set_alignment (GTK_ENTRY(entry), 1.0);
 }
 
+static gboolean
+fincalc_dialog_key_press_cb (G_GNUC_UNUSED GtkEventControllerKey *key, guint keyval,
+                             G_GNUC_UNUSED guint keycode,
+                             G_GNUC_UNUSED GdkModifierType state,
+                             gpointer user_data)
+{
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+
+    fincalc_close (user_data);
+    return TRUE;
+}
+
 void
 gnc_ui_fincalc_dialog_create (GtkWindow *parent)
 {
     FinCalcDialog *fcd;
     GtkWidget *button;
-    GtkWidget *combo;
+    GtkDropDown *drop_down;
     GtkWidget *edit;
     GtkWidget *spin;
     GtkWidget *hbox;
     GtkBuilder *builder;
     GtkAdjustment *adjustment;
 
-    if (gnc_forall_gui_components (DIALOG_FINCALC_CM_CLASS,
-                                   show_handler, NULL))
+    if (gnc_forall_gui_components (DIALOG_FINCALC_CM_CLASS, show_handler, NULL))
         return;
-
 
     fcd = g_new0 (FinCalcDialog, 1);
 
     builder = gtk_builder_new ();
-    gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "liststore1");
-    gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "liststore2");
-    gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "financial_calculator_dialog");
+    gnc_builder_add_from_file (builder, "dialog-fincalc.ui", "periods_model");
+    gnc_builder_add_from_file (builder, "dialog-fincalc.ui", "financial_calculator_window");
 
-    fcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "financial_calculator_dialog"));
+    fcd->window = GTK_WINDOW (gtk_builder_get_object
+        (builder, "financial_calculator_window"));
 
     // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(fcd->dialog), "gnc-id-financial-calc");
+    gtk_widget_set_name (GTK_WIDGET (fcd->window), "gnc-id-financial-calc");
 
-    /* parent */
     if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW(fcd->dialog), GTK_WINDOW(parent));
+        gtk_window_set_transient_for (fcd->window, parent);
 
     gnc_register_gui_component (DIALOG_FINCALC_CM_CLASS,
                                 NULL, close_handler, fcd);
 
-    g_signal_connect (G_OBJECT(fcd->dialog), "destroy",
-                      G_CALLBACK(fincalc_dialog_destroy), fcd);
+    g_signal_connect (fcd->window, "destroy",
+                      G_CALLBACK (fincalc_dialog_destroy), fcd);
+    g_signal_connect (fcd->window, "close-request",
+                      G_CALLBACK (fincalc_close_request_cb), fcd);
+
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(fcd->window), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window),
+                      "key-pressed",
+                      G_CALLBACK(fincalc_dialog_key_press_cb), fcd);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "payment_periods_hbox"));
     edit = gnc_amount_edit_new ();
     fincalc_init_gae (GNC_AMOUNT_EDIT(edit), 0, 0, 1);
     fcd->amounts[PAYMENT_PERIODS] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
-                      G_CALLBACK(fincalc_update_calc_button_cb), fcd);
+                      G_CALLBACK(fincalc_update_calc_button_internal_cb), fcd);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "payment_periods_clear_button"));
     g_object_set_data (G_OBJECT(button), "edit", edit);
@@ -650,9 +719,9 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_gae (GNC_AMOUNT_EDIT(edit), 2, 5, 100000);
     fcd->amounts[INTEREST_RATE] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
-                      G_CALLBACK(fincalc_update_calc_button_cb), fcd);
+                      G_CALLBACK(fincalc_update_calc_button_internal_cb), fcd);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "interest_rate_clear_button"));
     g_object_set_data (G_OBJECT(button), "edit", edit);
@@ -661,9 +730,9 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_commodity_gae (GNC_AMOUNT_EDIT(edit));
     fcd->amounts[PRESENT_VALUE] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
-                      G_CALLBACK(fincalc_update_calc_button_cb), fcd);
+                      G_CALLBACK(fincalc_update_calc_button_internal_cb), fcd);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "present_value_clear_button"));
     g_object_set_data (G_OBJECT(button), "edit", edit);
@@ -672,9 +741,9 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_commodity_gae (GNC_AMOUNT_EDIT(edit));
     fcd->amounts[PERIODIC_PAYMENT] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
-                      G_CALLBACK(fincalc_update_calc_button_cb), fcd);
+                      G_CALLBACK(fincalc_update_calc_button_internal_cb), fcd);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "periodic_payment_clear_button"));
     g_object_set_data (G_OBJECT(button), "edit", edit);
@@ -683,24 +752,26 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_commodity_gae (GNC_AMOUNT_EDIT(edit));
     fcd->amounts[FUTURE_VALUE] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
-                      G_CALLBACK(fincalc_update_calc_button_cb), fcd);
+                      G_CALLBACK(fincalc_update_calc_button_internal_cb), fcd);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "future_value_clear_button"));
     g_object_set_data (G_OBJECT(button), "edit", edit);
 
     fcd->calc_button = GTK_WIDGET(gtk_builder_get_object (builder, "calc_button"));
+    fcd->help_button = GTK_WIDGET(gtk_builder_get_object (builder, "help_button"));
+    fcd->close_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
 
-    combo = GTK_WIDGET(gtk_builder_get_object (builder, "compounding_combo"));
-    fcd->compounding_combo = combo;
-    g_signal_connect(fcd->compounding_combo, "changed",
-                     G_CALLBACK (fincalc_update_calc_button_cb), fcd);
+    drop_down = GTK_DROP_DOWN (gtk_builder_get_object (builder, "compounding_combo"));
+    fcd->compounding_combo = drop_down;
+    g_signal_connect (fcd->compounding_combo, "notify::selected",
+                      G_CALLBACK (fincalc_dropdown_selected_cb), fcd);
 
-    combo = GTK_WIDGET(gtk_builder_get_object (builder, "payment_combo"));
-    fcd->payment_combo = combo;
-    g_signal_connect (fcd->compounding_combo, "changed",
-                      G_CALLBACK(fincalc_update_calc_button_cb), fcd);
+    drop_down = GTK_DROP_DOWN (gtk_builder_get_object (builder, "payment_combo"));
+    fcd->payment_combo = drop_down;
+    g_signal_connect (fcd->payment_combo, "notify::selected",
+                      G_CALLBACK (fincalc_dropdown_selected_cb), fcd);
 
     spin = GTK_WIDGET(gtk_builder_get_object (builder, "precision_spin"));
     adjustment = gtk_adjustment_new (2, 0, 10, 1, 1, 1);
@@ -716,20 +787,17 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     fcd->payment_total_label = GTK_WIDGET(gtk_builder_get_object (builder, "payment_total_label"));
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "schedule_button"));
-    gtk_widget_hide (button);
+    gtk_widget_set_visible (GTK_WIDGET(button), FALSE);
 
+    gnc_builder_connect_signals (builder, fcd);
     init_fi (fcd);
-
     fi_to_gui (fcd);
-
     gtk_widget_grab_focus (fcd->amounts[PAYMENT_PERIODS]);
 
-    /* Connect all signals specified in glade. */
-    gtk_builder_connect_signals (builder, fcd);
-    g_object_unref (G_OBJECT(builder));
+    g_object_unref (builder);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(fcd->dialog), parent);
-    gtk_widget_show (fcd->dialog);
+    gnc_restore_window_size (GNC_PREFS_GROUP, fcd->window, parent);
+    gtk_window_present (fcd->window);
 }
 
 void
@@ -738,5 +806,5 @@ gnc_ui_fincalc_dialog_destroy (FinCalcDialog *fcd)
     if (fcd == NULL)
         return;
 
-    gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
+    fincalc_close (fcd);
 }

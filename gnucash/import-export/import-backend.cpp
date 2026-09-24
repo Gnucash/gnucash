@@ -134,7 +134,11 @@ void
 gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info)
 {
     g_return_if_fail (info);
-    info->match_list = g_list_remove (info->match_list, static_cast<gpointer>(info->match_list->data));
+    if (!info->match_list)
+        return;
+
+    auto removed = info->match_list->data;
+    info->match_list = g_list_delete_link (info->match_list, info->match_list);
     if (info->match_list)
         info->selected_match_info.selected_match = static_cast<GNCImportMatchInfo*>(info->match_list->data);
     else
@@ -142,6 +146,71 @@ gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info)
         info->selected_match_info.selected_match = nullptr;
         gnc_import_TransInfo_set_action (info, GNCImport_ADD);
     };
+    g_free (removed);
+}
+
+static GNCImportMatchInfo*
+gnc_import_TransInfo_get_top_match (GNCImportTransInfo *info)
+{
+    auto matches = info ? info->match_list : nullptr;
+    return matches ? static_cast<GNCImportMatchInfo*> (matches->data) : nullptr;
+}
+
+void
+gnc_import_TransInfo_resolve_conflicts (GList *trans_infos)
+{
+    bool changed;
+    do
+    {
+        changed = false;
+        for (auto import_iter = trans_infos; import_iter; import_iter = import_iter->next)
+        {
+            auto current = static_cast<GNCImportTransInfo*> (import_iter->data);
+            auto current_match = gnc_import_TransInfo_get_top_match (current);
+            if (!current_match)
+                continue;
+
+            auto best_import = current;
+            auto best_score = current_match->probability;
+            GList *conflicts = nullptr;
+            auto match_id = xaccTransGetGUID (current_match->trans);
+
+            /* Preserve the original greedy ordering: Seed the current import,
+             * then consider only the rows after it. Restarting from the first
+             * row after each removal catches conflicts introduced by a newly
+             * exposed next match. Iterating from trans_infos here would add
+             * current twice and could remove its only match twice. */
+            conflicts = g_list_prepend (conflicts, current);
+            for (auto candidate_iter = import_iter->next; candidate_iter;
+                 candidate_iter = candidate_iter->next)
+            {
+                auto candidate = static_cast<GNCImportTransInfo*> (candidate_iter->data);
+                auto candidate_match = gnc_import_TransInfo_get_top_match (candidate);
+                if (!candidate_match ||
+                    !guid_equal (match_id, xaccTransGetGUID (candidate_match->trans)))
+                    continue;
+
+                conflicts = g_list_prepend (conflicts, candidate);
+                if (candidate_match->probability > best_score)
+                {
+                    best_score = candidate_match->probability;
+                    best_import = candidate;
+                }
+            }
+
+            conflicts = g_list_remove (conflicts, best_import);
+            if (!conflicts)
+                continue;
+
+            for (auto conflict = conflicts; conflict; conflict = conflict->next)
+                gnc_import_TransInfo_remove_top_match (
+                    static_cast<GNCImportTransInfo*> (conflict->data));
+            g_list_free (conflicts);
+            changed = true;
+            break;
+        }
+    }
+    while (changed);
 }
 
 Transaction *
@@ -338,13 +407,15 @@ gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info)
         return 0;
 }
 
-void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
+static void
+gnc_import_trans_info_free (GNCImportTransInfo *info,
+                            gboolean destroy_transaction)
 {
     if (info)
     {
         g_list_free_full (info->match_list, g_free);
         /*If the transaction exists and is still open, it must be destroyed*/
-        if (xaccTransIsOpen(info->trans))
+        if (destroy_transaction && xaccTransIsOpen(info->trans))
         {
             xaccTransDestroy(info->trans);
             xaccTransCommitEdit(info->trans);
@@ -355,6 +426,18 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 
         g_free(info);
     }
+}
+
+void
+gnc_import_TransInfo_delete (GNCImportTransInfo *info)
+{
+    gnc_import_trans_info_free (info, TRUE);
+}
+
+void
+gnc_import_TransInfo_discard (GNCImportTransInfo *info)
+{
+    gnc_import_trans_info_free (info, FALSE);
 }
 
 GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settings, GtkWidget * widget)
@@ -422,6 +505,20 @@ GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settin
         PERR("Failed to create pixbuf from XPM data: %s", err->message);
 
     return retval;
+}
+
+GtkPicture*
+gnc_import_match_score_picture_new (void)
+{
+    auto picture = GTK_PICTURE (gtk_picture_new ());
+
+    /* GtkImage fits a paintable into its icon-size square. GtkPicture retains
+     * the intrinsic geometry of the wide score bar instead. */
+    gtk_picture_set_can_shrink (picture, FALSE);
+    gtk_picture_set_content_fit (picture, GTK_CONTENT_FIT_SCALE_DOWN);
+    gtk_widget_set_halign (GTK_WIDGET (picture), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (picture), GTK_ALIGN_CENTER);
+    return picture;
 }
 
 /*************************************************************************

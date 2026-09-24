@@ -60,6 +60,16 @@ extern "C"
  * statically linked into the application. */
 void gnc_module_init_backend_xml (void);
 
+/**
+ * Check whether @a filename is a GnuCash XML v2 file that omits its XML
+ * encoding declaration.
+ *
+ * This is a non-mutating preflight check. It returns %FALSE for files that
+ * are not GnuCash XML v2 files, files that declare an encoding, and files
+ * that cannot be read.
+ */
+gboolean gnc_xml_file_needs_encoding_conversion (const gchar* filename);
+
 #ifndef GNC_NO_LOADABLE_MODULES
 /** This is the standardized initialization function of a qof_backend
  * GModule, but compiling this can be disabled by defining

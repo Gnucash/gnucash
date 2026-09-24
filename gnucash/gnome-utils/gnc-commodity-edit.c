@@ -30,7 +30,7 @@
  * Commodity editor widget
  *
  * Authors: Dave Peticolas <dave@krondo.com>
- * 	    Derek Atkins <warlord@MIT.EDU>
+ *          Derek Atkins <warlord@MIT.EDU>
  */
 
 #include <config.h>
@@ -43,16 +43,37 @@
 const char * gnc_commodity_edit_get_string (gpointer ptr)
 {
     gnc_commodity * comm = (gnc_commodity *)ptr;
-    return gnc_commodity_get_printname(comm);
+    return gnc_commodity_get_printname (comm);
 }
 
-gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
-                                        GtkWidget *toplevel)
+typedef struct
 {
-    gnc_commodity * comm = (gnc_commodity *)ptr;
-    dialog_commodity_mode *mode_ptr = arg;
-    dialog_commodity_mode mode;
+    GNCGeneralSelectSelectionCB callback;
+    gpointer callback_data;
+} CommoditySelectionCompletion;
 
-    mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
-    return gnc_ui_select_commodity_modal(comm, toplevel, mode);
+static void
+commodity_selection_completed (gnc_commodity *commodity, gpointer user_data)
+{
+    CommoditySelectionCompletion *completion = user_data;
+
+    completion->callback (commodity, completion->callback_data);
+    g_free (completion);
+}
+
+void
+gnc_commodity_edit_new_select (gpointer arg, gpointer ptr, GtkWidget *toplevel,
+                               GCancellable *cancellable,
+                               GNCGeneralSelectSelectionCB completion_cb,
+                               gpointer completion_data)
+{
+    dialog_commodity_mode *mode_ptr = arg;
+    CommoditySelectionCompletion *completion = g_new0 (CommoditySelectionCompletion, 1);
+    dialog_commodity_mode mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
+
+    completion->callback = completion_cb;
+    completion->callback_data = completion_data;
+    gnc_ui_select_commodity_async (GNC_COMMODITY (ptr), toplevel, mode,
+                                   cancellable, commodity_selection_completed,
+                                   completion);
 }

@@ -1,167 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0" />
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text">1234567890123456789012345678901234567890</property>
   </object>
   <object class="GtkWindow" id="progress_dialog">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="border-width">6</property>
-    <property name="title" translatable="yes">Working…</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="type-hint">dialog</property>
-    <child>
-      <object class="GtkBox" id="vbox85">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">5</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="primary_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label">Primary text</property>
-            <style>
-              <class name="gnc-class-title"/>
-            </style>
-            <property name="use-markup">True</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="secondary_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label">Secondary text.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="progress_vbox1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
+    <property name="visible">1</property>
+<property name="title" translatable="1">Working…</property>
+    <property name="resizable">0</property>
+    <property name="modal">1</property>
+<property name="child">
+      <object class="GtkCenterBox" id="vbox85">
+<property name="orientation">vertical</property>
+
+        <property name="start-widget">
+          <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkProgressBar" id="progress_bar">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="pulse-step">0.10000000149</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="sub_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Sub-operation text</property>
+              <object class="GtkLabel" id="primary_label">
+                <property name="valign">center</property>
+                <property name="label">Primary text</property>
                 <style>
-                  <class name="gnc-class-emphasis"/>
+                  <class name="gnc-class-title" />
                 </style>
-                <property name="use-markup">True</property>
-                <property name="wrap">True</property>
+                <property name="use-markup">1</property>
+                <property name="wrap">1</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="secondary_label">
+                <property name="valign">center</property>
+                <property name="label">Secondary text.</property>
+                <property name="wrap">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="progress_vbox1">
+                <property name="valign">center</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkProgressBar" id="progress_bar">
+                    <property name="valign">center</property>
+                    <property name="pulse-step">0.10000000149</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="sub_label">
+                    <property name="valign">center</property>
+                    <property name="label">Sub-operation text</property>
+                    <style>
+                      <class name="gnc-class-emphasis" />
+                    </style>
+                    <property name="use-markup">1</property>
+                    <property name="wrap">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="progress_log_window">
+                <property name="vexpand">1</property>
+<property name="child">
+                  <object class="GtkTextView" id="progress_log">
+                    <property name="focusable">1</property>
+                    <property name="margin-start">3</property>
+                    <property name="margin-end">3</property>
+                    <property name="editable">0</property>
+                    <property name="wrap-mode">word</property>
+                    <property name="cursor-visible">0</property>
+                    <property name="buffer">textbuffer1</property>
+                    <property name="accepts-tab">0</property>
+                  </object>
+                </property>
+              </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">6</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="progress_log_window">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="shadow-type">in</property>
+        </property>
+        <property name="end-widget">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkTextView" id="progress_log">
+              <object class="GtkBox" id="hbuttonbox1">
+                <property name="halign">end</property>
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-start">3</property>
-                <property name="margin-end">3</property>
-                <property name="editable">False</property>
-                <property name="wrap-mode">word</property>
-                <property name="cursor-visible">False</property>
-                <property name="buffer">textbuffer1</property>
-                <property name="accepts-tab">False</property>
+<property name="spacing">6</property>
+<child>
+                  <object class="GtkButton" id="cancel_button">
+                    <property name="visible">0</property>
+                    <property name="label" translatable="1">_Cancel</property>
+                    <property name="focusable">1</property>
+<property name="use-underline">1</property>
+                  </object>
+
+                </child>
+                <child>
+                  <object class="GtkButton" id="ok_button">
+                    <property name="label" translatable="1">_OK</property>
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+<property name="use-underline">1</property>
+                  </object>
+
+                </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButtonBox" id="hbuttonbox1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="spacing">6</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="cancel_button">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="ok_button">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

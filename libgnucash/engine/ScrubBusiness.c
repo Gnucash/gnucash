@@ -39,6 +39,7 @@
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 #include "Scrub.h"
+#include "ScrubP.h"
 #include "Scrub2.h"
 #include "ScrubBusiness.h"
 #include "Transaction.h"
@@ -463,8 +464,8 @@ gncScrubLotIsSingleLotLinkSplit (GNCLot *lot)
     return TRUE;
 }
 
-gboolean
-gncScrubBusinessLot (GNCLot *lot)
+static gboolean
+gncScrubBusinessLotImpl (GNCLot *lot)
 {
     gboolean splits_deleted = FALSE;
     gboolean dangling_payments = FALSE;
@@ -525,8 +526,8 @@ gncScrubBusinessLot (GNCLot *lot)
     return splits_deleted;
 }
 
-gboolean
-gncScrubBusinessSplit (Split *split)
+static gboolean
+gncScrubBusinessSplitImpl (Split *split)
 {
     Transaction *txn;
     gboolean deleted_split = FALSE;
@@ -614,10 +615,53 @@ gncScrubBusinessSplit (Split *split)
     return deleted_split;
 }
 
+gboolean
+gncScrubBusinessLot (GNCLot *lot)
+{
+    QofBook *book = lot ? qof_instance_get_book (QOF_INSTANCE (lot)) : NULL;
+    if (!lot || !gnc_scrub_legacy_operation_allowed (book,
+                                                       "business lot scrub"))
+        return FALSE;
+    return gncScrubBusinessLotImpl (lot);
+}
+
+gboolean
+gncScrubBusinessLotWithContext (GNCLot *lot, GncScrubContext *context)
+{
+    QofBook *book = lot ? qof_instance_get_book (QOF_INSTANCE (lot)) : NULL;
+    if (!lot || !gnc_scrub_context_validate_for_book (
+                    context, book, "business lot scrub"))
+        return FALSE;
+    return gncScrubBusinessLotImpl (lot);
+}
+
+gboolean
+gncScrubBusinessSplit (Split *split)
+{
+    QofBook *book = split ? qof_instance_get_book (QOF_INSTANCE (split)) : NULL;
+    if (!split || !gnc_scrub_legacy_operation_allowed (
+                      book, "business split scrub"))
+        return FALSE;
+    return gncScrubBusinessSplitImpl (split);
+}
+
+gboolean
+gncScrubBusinessSplitWithContext (Split *split,
+                                  GncScrubContext *context)
+{
+    QofBook *book = split ? qof_instance_get_book (QOF_INSTANCE (split)) : NULL;
+    if (!split || !gnc_scrub_context_validate_for_book (
+                      context, book, "business split scrub"))
+        return FALSE;
+    return gncScrubBusinessSplitImpl (split);
+}
+
 /* ============================================================== */
 
-void
-gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
+static void
+gncScrubBusinessAccountLotsImpl (Account *acc,
+                                 QofPercentageFunc percentagefunc,
+                                 GncScrubContext *context)
 {
     LotList *lots, *node;
     gint lot_count = 0;
@@ -627,8 +671,11 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
 
     if (!acc) return;
 
-    if (gnc_get_abort_scrub())
+    if (gnc_scrub_context_is_cancelled (context))
+    {
         (percentagefunc)(NULL, -1.0);
+        return;
+    }
 
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
@@ -643,6 +690,9 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
     lot_count = g_list_length (lots);
     for (node = lots; node; node = node->next)
     {
+        if (gnc_scrub_context_is_cancelled (context))
+            break;
+
         GNCLot *lot = node->data;
 
         PINFO("Start processing lot %d of %d",
@@ -656,7 +706,7 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
         }
 
         if (lot)
-            gncScrubBusinessLot (lot);
+            gncScrubBusinessLotImpl (lot);
 
         PINFO("Finished processing lot %d of %d",
               curr_lot_no + 1, lot_count);
@@ -670,8 +720,10 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
 
 /* ============================================================== */
 
-void
-gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
+static void
+gncScrubBusinessAccountSplitsImpl (Account *acc,
+                                   QofPercentageFunc percentagefunc,
+                                   GncScrubContext *context)
 {
     SplitList *splits, *node;
     gint split_count = 0;
@@ -681,8 +733,11 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
 
     if (!acc) return;
 
-    if (gnc_get_abort_scrub())
+    if (gnc_scrub_context_is_cancelled (context))
+    {
         (percentagefunc)(NULL, -1.0);
+        return;
+    }
 
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
@@ -704,7 +759,7 @@ restart:
         PINFO("Start processing split %d of %d",
               curr_split_no + 1, split_count);
 
-        if (gnc_get_abort_scrub ())
+        if (gnc_scrub_context_is_cancelled (context))
             break;
 
         if (curr_split_no % 100 == 0)
@@ -717,7 +772,7 @@ restart:
         if (split)
             // If gncScrubBusinessSplit returns true, a split was deleted and hence
             // The account split list has become invalid, so we need to start over
-            if (gncScrubBusinessSplit (split))
+            if (gncScrubBusinessSplitImpl (split))
                 goto restart;
 
         PINFO("Finished processing split %d of %d",
@@ -732,32 +787,135 @@ restart:
 
 /* ============================================================== */
 
-void
-gncScrubBusinessAccount (Account *acc, QofPercentageFunc percentagefunc)
+static void
+gncScrubBusinessAccountImpl (Account *acc,
+                             QofPercentageFunc percentagefunc,
+                             GncScrubContext *context)
 {
     if (!acc) return;
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
-    gncScrubBusinessAccountLots (acc, percentagefunc);
-    gncScrubBusinessAccountSplits (acc, percentagefunc);
+    gncScrubBusinessAccountLotsImpl (acc, percentagefunc, context);
+    gncScrubBusinessAccountSplitsImpl (acc, percentagefunc, context);
 }
 
 /* ============================================================== */
 
+typedef struct
+{
+    QofPercentageFunc percentagefunc;
+    GncScrubContext *context;
+} BusinessTreeScrubData;
+
 static void
 lot_scrub_cb (Account *acc, gpointer data)
 {
+    BusinessTreeScrubData *scrub_data = data;
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
-    gncScrubBusinessAccount (acc, data);
+    if (gnc_scrub_context_is_cancelled (scrub_data->context)) return;
+    gncScrubBusinessAccountImpl (acc, scrub_data->percentagefunc,
+                                 scrub_data->context);
+}
+
+static void
+gncScrubBusinessAccountTreeImpl (Account *acc,
+                                 QofPercentageFunc percentagefunc,
+                                 GncScrubContext *context)
+{
+    BusinessTreeScrubData data = { percentagefunc, context };
+    if (!acc) return;
+
+    gnc_account_foreach_descendant (acc, lot_scrub_cb, &data);
+    if (!gnc_scrub_context_is_cancelled (context))
+        gncScrubBusinessAccountImpl (acc, percentagefunc, context);
+}
+
+void
+gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_legacy_operation_allowed (
+                    book, "business account-lot scrub"))
+        return;
+    gncScrubBusinessAccountLotsImpl (acc, percentagefunc, NULL);
+}
+
+void
+gncScrubBusinessAccountLotsWithContext (Account *acc,
+                                        QofPercentageFunc percentagefunc,
+                                        GncScrubContext *context)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_context_validate_for_book (
+                    context, book, "business account-lot scrub"))
+        return;
+    gncScrubBusinessAccountLotsImpl (acc, percentagefunc, context);
+}
+
+void
+gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_legacy_operation_allowed (
+                    book, "business account-split scrub"))
+        return;
+    gncScrubBusinessAccountSplitsImpl (acc, percentagefunc, NULL);
+}
+
+void
+gncScrubBusinessAccountSplitsWithContext (Account *acc,
+                                          QofPercentageFunc percentagefunc,
+                                          GncScrubContext *context)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_context_validate_for_book (
+                    context, book, "business account-split scrub"))
+        return;
+    gncScrubBusinessAccountSplitsImpl (acc, percentagefunc, context);
+}
+
+void
+gncScrubBusinessAccount (Account *acc, QofPercentageFunc percentagefunc)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_legacy_operation_allowed (
+                    book, "business account scrub"))
+        return;
+    gncScrubBusinessAccountImpl (acc, percentagefunc, NULL);
+}
+
+void
+gncScrubBusinessAccountWithContext (Account *acc,
+                                    QofPercentageFunc percentagefunc,
+                                    GncScrubContext *context)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_context_validate_for_book (
+                    context, book, "business account scrub"))
+        return;
+    gncScrubBusinessAccountImpl (acc, percentagefunc, context);
 }
 
 void
 gncScrubBusinessAccountTree (Account *acc, QofPercentageFunc percentagefunc)
 {
-    if (!acc) return;
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_legacy_operation_allowed (
+                    book, "business account-tree scrub"))
+        return;
+    gncScrubBusinessAccountTreeImpl (acc, percentagefunc, NULL);
+}
 
-    gnc_account_foreach_descendant(acc, lot_scrub_cb, percentagefunc);
-    gncScrubBusinessAccount (acc, percentagefunc);
+void
+gncScrubBusinessAccountTreeWithContext (Account *acc,
+                                        QofPercentageFunc percentagefunc,
+                                        GncScrubContext *context)
+{
+    QofBook *book = acc ? qof_instance_get_book (QOF_INSTANCE (acc)) : NULL;
+    if (!acc || !gnc_scrub_context_validate_for_book (
+                    context, book, "business account-tree scrub"))
+        return;
+    gncScrubBusinessAccountTreeImpl (acc, percentagefunc, context);
 }
 
 /* ========================== END OF FILE  ========================= */

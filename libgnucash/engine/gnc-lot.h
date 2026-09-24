@@ -130,6 +130,11 @@ void gnc_lot_remove_split (GNCLot *, Split *);
 SplitList * gnc_lot_get_split_list (const GNCLot *);
 gint gnc_lot_count_splits (const GNCLot *);
 
+/** Generation for bounded split-list and amount/value collectors. */
+guint64 gnc_lot_get_scrub_generation (const GNCLot *lot);
+/** Invalidate bounded collectors after a split amount/value edit. */
+void gnc_lot_bump_scrub_generation (GNCLot *lot);
+
 /** Returns the account with which this lot is associated.
  */
 /*@ dependent @*/

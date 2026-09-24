@@ -1,6 +1,6 @@
 /*
- * import-format-dialog.c -- provides a UI to ask for users to resolve
- *                           ambiguities.
+ * import-format-dialog.cpp -- provides a GTK4 UI to resolve import format
+ *                             ambiguities without a nested event loop.
  *
  * Created by:	Derek Atkins <derek@ihtfp.com>
  * Copyright (c) 2003 Derek Atkins <warlord@MIT.EDU>
@@ -29,133 +29,121 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "import-parse.h"
-#include "gnc-ui-util.h"
 
 #define MAX_CHOICES 6
 
-static void
-option_changed_cb (GtkWidget *widget, gpointer index_p)
+struct FormatPicker
 {
-    auto my_index = static_cast<gint*>(index_p);
-    *my_index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-}
-
-
-static GncImportFormat
-add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat fmt)
-{
-    GtkComboBox  *combo;
-    GtkListStore *store;
-    GtkTreeIter iter;
-    GtkCellRenderer *cell;
-    gint index = 0, count = 0;
-    gint *index_p = &index;
-    GncImportFormat formats[MAX_CHOICES];
-
-    store = gtk_list_store_new(1, G_TYPE_STRING);
-
-    if (fmt & GNCIF_NUM_PERIOD)
-    {
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, _("Period: 123,456.78"), -1);
-        formats[count] = GNCIF_NUM_PERIOD;
-        count++;
-    }
-
-    if (fmt & GNCIF_NUM_COMMA)
-    {
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, _("Comma: 123.456,78"), -1);
-        formats[count] = GNCIF_NUM_COMMA;
-        count++;
-    }
-
-    if (fmt & GNCIF_DATE_MDY)
-    {
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, _("m/d/y"), -1);
-        formats[count] = GNCIF_DATE_MDY;
-        count++;
-    }
-
-    if (fmt & GNCIF_DATE_DMY)
-    {
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, _("d/m/y"), -1);
-        formats[count] = GNCIF_DATE_DMY;
-        count++;
-    }
-
-    if (fmt & GNCIF_DATE_YMD)
-    {
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, _("y/m/d"), -1);
-        formats[count] = GNCIF_DATE_YMD;
-        count++;
-    }
-
-    if (fmt & GNCIF_DATE_YDM)
-    {
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, _("y/d/m"), -1);
-        formats[count] = GNCIF_DATE_YDM;
-        count++;
-    }
-
-    g_assert(count > 1);
-
-    combo = GTK_COMBO_BOX(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
-    g_object_unref(store);
-
-    /* Create cell renderer. */
-    cell = gtk_cell_renderer_text_new();
-
-    /* Pack it to the combo box. */
-    gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( combo ), cell, FALSE );
-
-    /* Connect renderer to data source */
-    gtk_cell_layout_set_attributes( GTK_CELL_LAYOUT( combo ), cell, "text", 0, NULL );
-
-    g_signal_connect(G_OBJECT(combo), "changed",
-                     G_CALLBACK(option_changed_cb), index_p);
-
-    gtk_box_pack_start(GTK_BOX(menu_box), GTK_WIDGET(combo), TRUE, TRUE, 0);
-
-    gtk_widget_show_all(dialog);
-    gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-
-    return formats[index];
-}
-
-
-GncImportFormat
-gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
-{
-    GtkBuilder *builder;
     GtkWidget *dialog;
-    GtkWidget *widget;
+    GtkDropDown *dropdown;
+    GncImportFormat formats[MAX_CHOICES];
+    guint count;
+    GncImportFormatChosenCB chosen_cb;
+    gpointer user_data;
+    gboolean finished;
+};
 
-    g_return_val_if_fail (fmts, GNCIF_NONE);
+static void
+format_picker_finish (FormatPicker *picker, gint response)
+{
+    if (!picker || picker->finished)
+        return;
+    picker->finished = TRUE;
 
-    /* if there is only one format available, just return it */
+    auto format = GNCIF_NONE;
+    if (response == GTK_RESPONSE_OK)
+    {
+        auto selected = gtk_drop_down_get_selected (picker->dropdown);
+        if (selected < picker->count)
+            format = picker->formats[selected];
+    }
+
+    auto chosen_cb = picker->chosen_cb;
+    auto user_data = picker->user_data;
+    gtk_window_destroy (GTK_WINDOW (picker->dialog));
+    g_free (picker);
+    if (chosen_cb)
+        chosen_cb (format, user_data);
+}
+
+static void
+format_picker_ok_clicked_cb (GtkButton *button, FormatPicker *picker)
+{
+    (void)button;
+    format_picker_finish (picker, GTK_RESPONSE_OK);
+}
+
+static gboolean
+format_picker_close_request_cb (GtkWindow *window, FormatPicker *picker)
+{
+    (void)window;
+    format_picker_finish (picker, GTK_RESPONSE_CANCEL);
+    return TRUE;
+}
+
+static void
+format_picker_add_choice (FormatPicker *picker, const char **labels,
+                          GncImportFormat format, const char *label)
+{
+    picker->formats[picker->count] = format;
+    labels[picker->count] = label;
+    ++picker->count;
+}
+
+void
+gnc_import_choose_fmt_async (GtkWindow *parent, const char *msg,
+                             GncImportFormat fmts,
+                             GncImportFormatChosenCB chosen_cb,
+                             gpointer user_data)
+{
+    g_return_if_fail (fmts);
+
     if (!(fmts & (fmts - 1)))
     {
-        return fmts;
+        if (chosen_cb)
+            chosen_cb (fmts, user_data);
+        return;
     }
-    /* Open the Glade Builder file */
-    builder = gtk_builder_new();
+
+    auto picker = g_new0 (FormatPicker, 1);
+    picker->chosen_cb = chosen_cb;
+    picker->user_data = user_data;
+    const char *labels[MAX_CHOICES + 1] {};
+    if (fmts & GNCIF_NUM_PERIOD)
+        format_picker_add_choice (picker, labels, GNCIF_NUM_PERIOD, _("Period: 123,456.78"));
+    if (fmts & GNCIF_NUM_COMMA)
+        format_picker_add_choice (picker, labels, GNCIF_NUM_COMMA, _("Comma: 123.456,78"));
+    if (fmts & GNCIF_DATE_MDY)
+        format_picker_add_choice (picker, labels, GNCIF_DATE_MDY, _("m/d/y"));
+    if (fmts & GNCIF_DATE_DMY)
+        format_picker_add_choice (picker, labels, GNCIF_DATE_DMY, _("d/m/y"));
+    if (fmts & GNCIF_DATE_YMD)
+        format_picker_add_choice (picker, labels, GNCIF_DATE_YMD, _("y/m/d"));
+    if (fmts & GNCIF_DATE_YDM)
+        format_picker_add_choice (picker, labels, GNCIF_DATE_YDM, _("y/d/m"));
+    g_assert (picker->count > 1);
+
+    auto builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "format_picker_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_picker_dialog"));
-    widget = GTK_WIDGET(gtk_builder_get_object (builder, "msg_label"));
-    gtk_label_set_text(GTK_LABEL(widget), msg);
+    picker->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "format_picker_dialog"));
+    auto message = GTK_LABEL (gtk_builder_get_object (builder, "msg_label"));
+    auto menu_box = GTK_BOX (gtk_builder_get_object (builder, "menu_box"));
+    auto ok_button = GTK_BUTTON (gtk_builder_get_object (builder, "okbutton1"));
+    g_return_if_fail (picker->dialog && message && menu_box && ok_button);
 
-    widget = GTK_WIDGET(gtk_builder_get_object (builder, "menu_box"));
-
-    g_object_unref(G_OBJECT(builder));
-
-    return add_menu_and_run_dialog(dialog, widget, fmts);
+    gtk_label_set_text (message, msg);
+    picker->dropdown = gnc_gtk_drop_down_new_from_strings (labels);
+    gtk_box_append (menu_box, GTK_WIDGET (picker->dropdown));
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (picker->dialog), parent);
+    gtk_window_set_modal (GTK_WINDOW (picker->dialog), TRUE);
+    g_signal_connect (ok_button, "clicked", G_CALLBACK (format_picker_ok_clicked_cb), picker);
+    g_signal_connect (picker->dialog, "close-request", G_CALLBACK (format_picker_close_request_cb), picker);
+    gtk_window_set_default_widget (GTK_WINDOW (picker->dialog), GTK_WIDGET (ok_button));
+    g_object_unref (builder);
+    gtk_widget_set_visible (picker->dialog, TRUE);
 }

@@ -24,6 +24,7 @@
 #include "config.h"
 #include <glib.h>
 #include "../assistant-stock-transaction.cpp"
+#include <array>
 #include <iomanip>
 #include <memory>
 #include <Account.h>
@@ -227,6 +228,107 @@ TEST_F(StockAssistantTest, testFailureModes)
 
     auto [success_create, txn] = model.create_transaction();
     EXPECT_FALSE (success_create); // no transaction created.
+}
+
+class WeakObject
+{
+public:
+    WeakObject () { g_weak_ref_init (&m_ref, nullptr); }
+    ~WeakObject () { g_weak_ref_clear (&m_ref); }
+
+    WeakObject (const WeakObject&) = delete;
+    WeakObject& operator= (const WeakObject&) = delete;
+
+    void set (GObject *object) { g_weak_ref_set (&m_ref, object); }
+
+    bool finalized () const
+    {
+        auto object = g_weak_ref_get (&m_ref);
+        if (!object)
+            return true;
+        g_object_unref (object);
+        return false;
+    }
+
+private:
+    mutable GWeakRef m_ref;
+};
+
+struct GObjectUnref
+{
+    void operator() (gpointer object) const
+    {
+        if (object)
+            g_object_unref (object);
+    }
+};
+
+struct ErrorFree
+{
+    void operator() (GError *error) const
+    {
+        if (error)
+            g_error_free (error);
+    }
+};
+
+TEST_F(StockAssistantTest, FinishColumnViewReleasesColumnsAndFactories)
+{
+    static const gchar builder_xml[] =
+        "<interface>"
+        "  <object class=\"GtkColumnView\" id=\"transaction_view\"/>"
+        "</interface>";
+
+    gtk_init ();
+    std::unique_ptr<GtkBuilder, GObjectUnref> builder (gtk_builder_new ());
+    GtkColumnView *view;
+    GListModel *columns;
+    GError *raw_builder_error = nullptr;
+    std::unique_ptr<GError, ErrorFree> builder_error;
+    static constexpr guint finish_column_count = G_N_ELEMENTS (finish_columns);
+    WeakObject view_ref;
+    std::array<WeakObject, finish_column_count> column_refs;
+    std::array<WeakObject, finish_column_count> factory_refs;
+    guint watched = 0;
+
+    ASSERT_NE (builder, nullptr);
+    auto loaded = gtk_builder_add_from_string (builder.get (), builder_xml, -1,
+                                               &raw_builder_error);
+    builder_error.reset (raw_builder_error);
+    ASSERT_TRUE (loaded)
+        << (builder_error ? builder_error->message : "unknown builder error");
+    view = GTK_COLUMN_VIEW (gtk_builder_get_object (builder.get (), "transaction_view"));
+    ASSERT_NE (view, nullptr);
+
+    {
+        GncFinishColumnView finish_view (builder.get ());
+
+        columns = gtk_column_view_get_columns (view);
+        ASSERT_NE (columns, nullptr);
+        ASSERT_EQ (g_list_model_get_n_items (columns), finish_column_count);
+        for (guint index = 0; index < finish_column_count; index++)
+        {
+            std::unique_ptr<GtkColumnViewColumn, GObjectUnref> column (
+                GTK_COLUMN_VIEW_COLUMN (g_list_model_get_item (columns, index)));
+
+            ASSERT_NE (column, nullptr);
+            auto factory = gtk_column_view_column_get_factory (column.get ());
+            ASSERT_NE (factory, nullptr);
+            column_refs[watched].set (G_OBJECT (column.get ()));
+            factory_refs[watched].set (G_OBJECT (factory));
+            watched++;
+        }
+    }
+    EXPECT_EQ (watched, finish_column_count);
+
+    view_ref.set (G_OBJECT (view));
+    builder.reset ();
+    EXPECT_TRUE (view_ref.finalized ());
+    for (guint index = 0; index < finish_column_count; index++)
+    {
+        EXPECT_TRUE (column_refs[index].finalized ());
+        EXPECT_TRUE (factory_refs[index].finalized ());
+    }
 }
 
 static void dump_acct (Account *acct)

@@ -151,6 +151,22 @@ FIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
     return (split == opening_split);
 }
 
+static gboolean
+FIFOPolicyCandidateIsBetter (GNCPolicy *, Split *candidate,
+                             Split *current_best)
+{
+    return candidate && (!current_best ||
+           xaccSplitOrderDateOnly (candidate, current_best) < 0);
+}
+
+gboolean
+gnc_policy_candidate_is_better (GNCPolicy *policy, Split *candidate,
+                                Split *current_best)
+{
+    return policy && policy->PolicyCandidateIsBetter &&
+           policy->PolicyCandidateIsBetter (policy, candidate, current_best);
+}
+
 GNCPolicy *
 xaccGetFIFOPolicy (void)
 {
@@ -163,6 +179,7 @@ xaccGetFIFOPolicy (void)
         pcy->PolicyGetSplit = FIFOPolicyGetSplit;
         pcy->PolicyGetLotOpening = FIFOPolicyGetLotOpening;
         pcy->PolicyIsOpeningSplit = FIFOPolicyIsOpeningSplit;
+        pcy->PolicyCandidateIsBetter = FIFOPolicyCandidateIsBetter;
     }
     return pcy;
 }

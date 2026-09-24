@@ -56,11 +56,36 @@ GncABSelectImExDlg* gnc_ab_select_imex_dlg_new (GtkWidget* parent,
 void gnc_ab_select_imex_dlg_destroy (GncABSelectImExDlg* imexd);
 
 /**
- * Run an AQBanking importer/exporter selection dialog.
- * @param imexd the dialog.
- * @return A GTK_RESPONSE status.
+ * gnc_ab_select_imex_dlg_run_async:
+ * @imexd: (transfer full): the dialog to present
+ * @cancellable: (nullable): operation cancellation token
+ * @callback: (nullable): completion callback
+ * @user_data: data passed to @callback
+ *
+ * Presents the importer/profile dialog without entering a nested main loop.
+ * The asynchronous operation owns and destroys @imexd. Retrieve the selected
+ * names with gnc_ab_select_imex_dlg_run_finish().
  */
-int gnc_ab_select_imex_dlg_run (GncABSelectImExDlg* imexd);
+void gnc_ab_select_imex_dlg_run_async (GncABSelectImExDlg *imexd,
+                                       GCancellable *cancellable,
+                                       GAsyncReadyCallback callback,
+                                       gpointer user_data);
+
+/**
+ * gnc_ab_select_imex_dlg_run_finish:
+ * @result: asynchronous result returned by gnc_ab_select_imex_dlg_run_async()
+ * @imexporter: (out) (transfer full): selected importer name
+ * @profile: (out) (transfer full): selected profile name
+ * @error: (out) (nullable): operation error
+ *
+ * Returns %TRUE after an accepted response. A cancelled response returns
+ * %FALSE without an error. Either selected name may be %NULL when the
+ * selected importer has no profile.
+ */
+gboolean gnc_ab_select_imex_dlg_run_finish (GAsyncResult *result,
+                                            gchar **imexporter,
+                                            gchar **profile,
+                                            GError **error);
 
 /**
  * Get the selected importer/exporter name

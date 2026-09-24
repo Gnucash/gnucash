@@ -24,121 +24,164 @@
 
 #include <config.h>
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #include "gnc-tree-model-budget.h"
 #include "gnc-budget.h"
 #include "gnc-ui-util.h"
 
-/* Add the new budget object to the tree model.  */
-static void add_budget_to_model(QofInstance* data, gpointer user_data )
+struct _GncBudgetListItem
 {
-    GtkTreeIter iter;
-    GncBudget* budget = GNC_BUDGET(data);
-    GtkTreeModel* treeModel = user_data;
+    GObject parent_instance;
+    GncGUID guid;
+    gchar *name;
+    gchar *description;
+};
 
-    g_return_if_fail(GNC_IS_BUDGET(budget));
-    g_return_if_fail(budget && treeModel);
+G_DEFINE_TYPE (GncBudgetListItem, gnc_budget_list_item, G_TYPE_OBJECT)
 
-    gtk_list_store_append (GTK_LIST_STORE(treeModel), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(treeModel), &iter,
-                        BUDGET_GUID_COLUMN, gnc_budget_get_guid(budget),
-                        BUDGET_NAME_COLUMN, gnc_budget_get_name(budget),
-                        BUDGET_DESCRIPTION_COLUMN,
-                        gnc_budget_get_description(budget), -1);
+enum
+{
+    PROP_0,
+    PROP_NAME,
+    PROP_DESCRIPTION,
+    N_PROPERTIES
+};
+
+static GParamSpec *properties[N_PROPERTIES] = { NULL };
+
+static void
+budget_list_item_get_property (GObject *object, guint property_id,
+                               GValue *value, GParamSpec *pspec)
+{
+    GncBudgetListItem *item = GNC_BUDGET_LIST_ITEM (object);
+
+    switch (property_id)
+    {
+    case PROP_NAME:
+        g_value_set_string (value, item->name);
+        break;
+    case PROP_DESCRIPTION:
+        g_value_set_string (value, item->description);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
 }
 
-/* CAS: Even though it works, something feels not-quite-right with
- * this design.  The idea here is to _not_ provide yet another
- * implementation of GtkTreeModel, this time for budgets.  Instead,
- * right now, we're using the already implemented GtkListStore.  This
- * has a couple consequences: 1) We allocate a new store upon every
- * call, so the memory is owned by caller.  2) The model won't reflect
- * later updates to the book, so the model shouldn't be expected to
- * track asynchronous changes.
- *
- * If, for some reason, I decide I can't live with or remove those
- * consequences, I still think there must be some better way than
- * re-implementing GtkTreeModel.  One idea I'm toying with is to
- * implement a GtkTreeModel for QofCollections, which would offer only
- * the GncGUID as a field.  Then, TreeViews could add their own columns
- * with custom CellDataFuncs to display the object-specific fields.
- * Or, something like that.  :)
- *
- */
-GtkTreeModel *
-gnc_tree_model_budget_new(QofBook *book)
+static void
+budget_list_item_finalize (GObject *object)
 {
-    GtkListStore* store;
+    GncBudgetListItem *item = GNC_BUDGET_LIST_ITEM (object);
 
-    store = gtk_list_store_new (BUDGET_LIST_NUM_COLS,
-                                G_TYPE_POINTER,
-                                G_TYPE_STRING,
-                                G_TYPE_STRING);
-
-    qof_collection_foreach(qof_book_get_collection(book, GNC_ID_BUDGET),
-                           add_budget_to_model, GTK_TREE_MODEL(store));
-
-    return GTK_TREE_MODEL(store);
+    g_clear_pointer (&item->name, g_free);
+    g_clear_pointer (&item->description, g_free);
+    G_OBJECT_CLASS (gnc_budget_list_item_parent_class)->finalize (object);
 }
 
-void
-gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm)
+static void
+gnc_budget_list_item_class_init (GncBudgetListItemClass *klass)
 {
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-    gtk_tree_view_set_model (tv, tm);
+    object_class->get_property = budget_list_item_get_property;
+    object_class->finalize = budget_list_item_finalize;
+    properties[PROP_NAME] =
+        g_param_spec_string ("name", "Name", "The budget name", NULL,
+                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+    properties[PROP_DESCRIPTION] =
+        g_param_spec_string ("description", "Description", "The budget description", NULL,
+                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+    g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+}
 
-    /* column for name */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (
-                 _("Name"), renderer, "text", BUDGET_NAME_COLUMN, NULL);
-    gtk_tree_view_append_column (tv, column);
+static void
+gnc_budget_list_item_init (GncBudgetListItem *item)
+{
+}
 
-    /* column for description */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (
-                 _("Description"), renderer, "text", BUDGET_DESCRIPTION_COLUMN, NULL);
-    gtk_tree_view_append_column (tv, column);
+static GncBudgetListItem *
+budget_list_item_new (GncBudget *budget)
+{
+    GncBudgetListItem *item = g_object_new (GNC_TYPE_BUDGET_LIST_ITEM, NULL);
 
+    item->guid = *gnc_budget_get_guid (budget);
+    item->name = g_strdup (gnc_budget_get_name (budget));
+    item->description = g_strdup (gnc_budget_get_description (budget));
+    return item;
+}
+
+/* Add a budget object to the list model. */
+static void
+add_budget_to_model (QofInstance *data, gpointer user_data)
+{
+    GncBudget *budget = GNC_BUDGET (data);
+    GListStore *store = G_LIST_STORE (user_data);
+
+    g_return_if_fail (GNC_IS_BUDGET (budget));
+    g_return_if_fail (store != NULL);
+
+    GncBudgetListItem *item = budget_list_item_new (budget);
+    g_list_store_append (store, item);
+    g_object_unref (item);
+}
+
+GListModel *
+gnc_budget_list_model_new (QofBook *book)
+{
+    GListStore *store = g_list_store_new (GNC_TYPE_BUDGET_LIST_ITEM);
+
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
+                            add_budget_to_model, store);
+    return G_LIST_MODEL (store);
 }
 
 GncBudget *
-gnc_tree_model_budget_get_budget(GtkTreeModel *tm, GtkTreeIter *iter)
+gnc_budget_list_item_get_budget (GncBudgetListItem *item)
 {
-    GncBudget *bgt;
-    GncGUID *guid;
+    g_return_val_if_fail (GNC_IS_BUDGET_LIST_ITEM (item), NULL);
 
-    gtk_tree_model_get (tm, iter, BUDGET_GUID_COLUMN, &guid, -1);
-    bgt = gnc_budget_lookup(guid, gnc_get_current_book());
-    return bgt;
+    return gnc_budget_lookup (&item->guid, gnc_get_current_book ());
 }
 
-gboolean
-gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
-        GncBudget *bgt)
+const gchar *
+gnc_budget_list_item_get_name (GncBudgetListItem *item)
 {
-    const GncGUID *guid1;
-    GncGUID *guid2;
+    g_return_val_if_fail (GNC_IS_BUDGET_LIST_ITEM (item), NULL);
 
-    g_return_val_if_fail(GNC_BUDGET(bgt), FALSE);
+    return item->name;
+}
 
-    guid1 = gnc_budget_get_guid(bgt);
-    if (!gtk_tree_model_get_iter_first(tm, iter))
-        return FALSE;
-    while (gtk_list_store_iter_is_valid(GTK_LIST_STORE(tm), iter))
+const gchar *
+gnc_budget_list_item_get_description (GncBudgetListItem *item)
+{
+    g_return_val_if_fail (GNC_IS_BUDGET_LIST_ITEM (item), NULL);
+
+    return item->description;
+}
+
+guint
+gnc_budget_list_model_get_position (GListModel *model, GncBudget *budget)
+{
+    const GncGUID *guid;
+    guint count;
+
+    g_return_val_if_fail (G_IS_LIST_MODEL (model), G_MAXUINT);
+    g_return_val_if_fail (GNC_IS_BUDGET (budget), G_MAXUINT);
+
+    guid = gnc_budget_get_guid (budget);
+    count = g_list_model_get_n_items (model);
+
+    for (guint index = 0; index < count; index++)
     {
-        gtk_tree_model_get (tm, iter, BUDGET_GUID_COLUMN, &guid2, -1);
+        GncBudgetListItem *item = GNC_BUDGET_LIST_ITEM (
+            g_list_model_get_item (model, index));
+        gboolean found = guid_equal (guid, &item->guid);
 
-        if (guid_equal(guid1, guid2))
-            return TRUE;
-
-        if (!gtk_tree_model_iter_next(tm, iter))
-            return FALSE;
+        g_object_unref (item);
+        if (found)
+            return index;
     }
-    return FALSE;
+
+    return G_MAXUINT;
 }
 
 /** @} */
-

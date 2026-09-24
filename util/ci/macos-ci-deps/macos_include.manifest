@@ -1,5 +1,4 @@
 aqbanking6
-atk-1.0
 boost
 cairo
 dbi
@@ -9,15 +8,13 @@ gdk-pixbuf-2.0
 gio-unix-2.0
 glib-2.0
 gmp.h
-gtk-3.0
-gtkmacintegration
+gtk-4.0
 guile
 gwenhywfar5
 harfbuzz
 libintl.h
 libofx
 libpng16
-libsoup-2.4
 libxml2
 libxslt
 lzma
@@ -29,4 +26,3 @@ unicase.h
 unicode
 uniconv.h
 unictype.h
-webkitgtk-4.0

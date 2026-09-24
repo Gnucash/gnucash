@@ -1,11 +1,6 @@
-/**
- * gnc-cell-renderer-text-flag.h -- text cell renderer with flag.
- * 
- * Copyright (C) 2019 Adrian Panella <ianchi74@outlook.com>
- * All rights reserved.
- **/
-
-/* GnuCash is free software; you can redistribute it and/or modify
+/* Copyright (C) 2019 Adrian Panella <ianchi74@outlook.com>
+ *
+ * GnuCash is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
@@ -25,13 +20,9 @@
 
 #ifndef __GNC_CELL_RENDERER_TEXT_FLAG_H__
 #define __GNC_CELL_RENDERER_TEXT_FLAG_H__
-
 #include <gtk/gtk.h>
-
-
-#define GNC_TYPE_CELL_RENDERER_TEXT_FLAG		(gnc_cell_renderer_text_flag_get_type ())
-G_DECLARE_FINAL_TYPE (GncCellRendererTextFlag, gnc_cell_renderer_text_flag, GNC, CELL_RENDERER_TEXT_FLAG, GtkCellRendererText)
-
-GtkCellRenderer *gnc_cell_renderer_text_flag_new(void);
-
-#endif /* __GNC_CELL_RENDERER_TEXT_FLAG_H__ */
+G_BEGIN_DECLS
+/* GTK4 factory for a textual value with an optional state icon. */
+GtkListItemFactory *gnc_cell_renderer_text_flag_new (void);
+G_END_DECLS
+#endif

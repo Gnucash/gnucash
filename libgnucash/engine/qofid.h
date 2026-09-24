@@ -82,6 +82,7 @@ typedef const gchar * QofIdType;
 typedef const gchar * QofIdTypeConst;
 
 typedef struct QofCollection_s QofCollection;
+typedef struct QofCollectionCursor_s QofCollectionCursor;
 
 #include "qofinstance.h"
 
@@ -141,6 +142,36 @@ QofIdType qof_collection_get_type (const QofCollection *);
 /** Find the entity going only from its guid */
 /*@ dependent @*/
 QofInstance * qof_collection_lookup_entity (const QofCollection *, const GncGUID *);
+
+/** Result of advancing a generation-guarded collection cursor. */
+typedef enum
+{
+    QOF_COLLECTION_CURSOR_ITEM,
+    QOF_COLLECTION_CURSOR_END,
+    QOF_COLLECTION_CURSOR_STALE
+} QofCollectionCursorStatus;
+
+/**
+ * Create an opaque, read-only cursor over @a collection.
+ *
+ * The cursor retains only the collection identity, its mutation generation,
+ * and an internal iterator. It never retains a QofInstance pointer. The
+ * collection must outlive the cursor.
+ */
+QofCollectionCursor *qof_collection_cursor_new (const QofCollection *collection);
+
+/**
+ * Copy exactly one entity GUID to @a guid.
+ *
+ * If the collection changed since cursor construction, this returns
+ * QOF_COLLECTION_CURSOR_STALE without dereferencing the invalidated internal
+ * iterator. END is stable for an unchanged collection.
+ */
+QofCollectionCursorStatus qof_collection_cursor_next (
+    QofCollectionCursor *cursor, GncGUID *guid);
+
+/** Free @a cursor. NULL is accepted. */
+void qof_collection_cursor_free (QofCollectionCursor *cursor);
 
 /** Callback type for qof_collection_foreach */
 typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);

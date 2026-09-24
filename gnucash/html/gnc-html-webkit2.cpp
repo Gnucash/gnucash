@@ -46,14 +46,14 @@
 #include <unistd.h>
 #include <regex.h>
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 #include "Account.h"
 #include "gnc-prefs.h"
 #include "gnc-gui-query.h"
 #include "gnc-engine.h"
 #include "gnc-html.h"
-#include "gnc-html-webkit.hpp"
+#include "gnc-html-webkit2.hpp"
 #include "gnc-html-history.h"
 #include "print-session.h"
 
@@ -112,48 +112,55 @@ static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
-static void impl_webkit_print (GncHtml* self,const gchar* jobname);
+static void impl_webkit_print (GncHtml* self, const gchar* jobname,
+                               gboolean export_pdf);
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data);
 
+static void
+gnc_html_webkit_configure_report_sandbox (void)
+{
+    static gsize configured = 0;
+
+    if (g_once_init_enter (&configured))
+    {
+        const gchar *root = gnc_html_get_report_document_root ();
+
+        if (root)
+            webkit_web_context_add_path_to_sandbox
+                (webkit_web_context_get_default (), root, TRUE);
+        g_once_init_leave (&configured, 1);
+    }
+}
+
 static GtkWidget*
 gnc_html_webkit_webview_new (void)
 {
+     gnc_html_webkit_configure_report_sandbox ();
      GtkWidget *view = webkit_web_view_new ();
      WebKitSettings *webkit_settings = nullptr;
      const char *default_font_family = nullptr;
-     GtkStyleContext *style = gtk_widget_get_style_context (view);
-     GValue val = G_VALUE_INIT;
-     GtkStateFlags state = gtk_style_context_get_state (style);
-     gtk_style_context_get_property (style, GTK_STYLE_PROPERTY_FONT,
-                     state, &val);
+     const PangoFontDescription *font = pango_context_get_font_description
+          (gtk_widget_get_pango_context (view));
 
-     if (G_VALUE_HOLDS_BOXED (&val))
-     {
-      const PangoFontDescription *font =
-           (const PangoFontDescription*)g_value_get_boxed (&val);
-      default_font_family = pango_font_description_get_family (font);
-     }
+     if (font != nullptr)
+          default_font_family = pango_font_description_get_family (font);
 /* Set default webkit settings */
      webkit_settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (view));
      g_object_set (G_OBJECT(webkit_settings),
                    "default-charset", "utf-8",
-                   "allow-file-access-from-file-urls", TRUE,
-                   "allow-universal-access-from-file-urls", TRUE,
+                   "allow-universal-access-from-file-urls", FALSE,
                    "enable-java", FALSE,
                    "enable-page-cache", FALSE,
-                   "enable-plugins", FALSE,
                    "enable-site-specific-quirks", FALSE,
-                   "enable-xss-auditor", FALSE,
-                   "enable-developer-extras", TRUE,
+                   "enable-developer-extras", FALSE,
                    nullptr);
      if (default_font_family != nullptr)
      {
           g_object_set (G_OBJECT (webkit_settings),
               "default-font-family", default_font_family, nullptr);
      }
-     g_value_unset (&val);
      return view;
 }
 
@@ -167,6 +174,13 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 
      priv->html_string = nullptr;
      priv->web_view = WEBKIT_WEB_VIEW (gnc_html_webkit_webview_new ());
+     priv->temporary_report = nullptr;
+     priv->pending_anchor = nullptr;
+
+     /* GncHtml is a controller. The backend exposes its actual visible widget
+      * instead of wrapping it in a legacy container. */
+     g_clear_object (&priv->base.container);
+     priv->base.container = GTK_WIDGET (g_object_ref_sink (priv->web_view));
 
 
      /* Scale everything up */
@@ -174,11 +188,6 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                  GNC_PREF_RPT_DFLT_ZOOM);
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
-
-     gtk_container_add( GTK_CONTAINER(priv->base.container),
-                        GTK_WIDGET(priv->web_view) );
-
-     g_object_ref_sink( priv->base.container );
 
      /* signals */
      g_signal_connect (priv->web_view, "decide-policy",
@@ -234,9 +243,6 @@ gnc_html_webkit_dispose( GObject* obj )
 
      if ( priv->web_view != nullptr )
      {
-          gtk_container_remove (GTK_CONTAINER(priv->base.container),
-                                GTK_WIDGET(priv->web_view));
-
           priv->web_view = nullptr;
      }
 
@@ -245,6 +251,12 @@ gnc_html_webkit_dispose( GObject* obj )
           g_free( priv->html_string );
           priv->html_string = nullptr;
      }
+     if ( priv->temporary_report != nullptr )
+     {
+          g_remove (priv->temporary_report);
+          g_clear_pointer (&priv->temporary_report, g_free);
+     }
+     g_clear_pointer (&priv->pending_anchor, g_free);
 
      gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
                                   GNC_PREF_RPT_DFLT_ZOOM,
@@ -503,6 +515,8 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                          g_free( priv->html_string );
                     }
                     priv->html_string = g_strdup( fdata );
+                    g_free (priv->pending_anchor);
+                    priv->pending_anchor = g_strdup (label);
                     impl_webkit_show_data( GNC_HTML(self), fdata, strlen(fdata) );
                }
                else
@@ -516,14 +530,6 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
                g_free( fdata );
 
-               if ( label )
-               {
-                    while ( gtk_events_pending() )
-                    {
-                         gtk_main_iteration();
-                    }
-                    /* No action required: Webkit jumps to the anchor on its own. */
-               }
                return TRUE;
           }
      }
@@ -575,37 +581,78 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 }
 
 static gboolean
-perform_navigation_policy (WebKitWebView *web_view,
-               WebKitNavigationPolicyDecision *decision,
-               GncHtml *self)
+documents_match (const gchar *first, const gchar *second)
 {
-     gchar *location = nullptr, *label = nullptr;
-     bool ignore = false;
-     WebKitNavigationAction *action =
-      webkit_navigation_policy_decision_get_navigation_action (decision);
-     if (webkit_navigation_action_get_navigation_type (action) !=
-         WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
-     {
-          webkit_policy_decision_use ((WebKitPolicyDecision*)decision);
-          return TRUE;
-     }
-     auto req = webkit_navigation_action_get_request (action);
-     const gchar *uri = webkit_uri_request_get_uri (req);
-     const gchar *scheme =  gnc_html_parse_url (self, uri, &location, &label);
-     if (strcmp (scheme, URL_TYPE_FILE) != 0)
-     {
-          impl_webkit_show_url (self, scheme, location, label, FALSE);
-          ignore = true;
-     }
-     g_free (location);
-     g_free (label);
-     if (ignore)
-          webkit_policy_decision_ignore ((WebKitPolicyDecision*)decision);
-     else
-          webkit_policy_decision_use ((WebKitPolicyDecision*)decision);
-     return TRUE;
+     gchar *current_document;
+     gchar *requested_document;
+     gchar *fragment;
+     gboolean matches;
+
+     if (!first || !second)
+          return FALSE;
+
+     current_document = g_strdup (first);
+     requested_document = g_strdup (second);
+     fragment = strchr (current_document, '#');
+     if (fragment)
+          *fragment = '\0';
+     fragment = strchr (requested_document, '#');
+     if (fragment)
+          *fragment = '\0';
+     matches = g_strcmp0 (current_document, requested_document) == 0;
+     g_free (current_document);
+     g_free (requested_document);
+     return matches;
 }
 
+static gboolean
+is_current_document_navigation (WebKitWebView *web_view,
+                                GncHtmlWebkitPrivate *priv, const gchar *uri)
+{
+     const gchar *current_uri = webkit_web_view_get_uri (web_view);
+     gchar *report_uri = nullptr;
+     gboolean matches = documents_match (current_uri, uri);
+
+     if (!matches && !g_strcmp0 (uri, BASE_URI_NAME))
+          matches = TRUE;
+     if (!matches && priv->temporary_report)
+          report_uri = g_filename_to_uri (priv->temporary_report, nullptr, nullptr);
+     if (!matches)
+          matches = documents_match (report_uri, uri);
+     g_free (report_uri);
+     return matches;
+}
+
+static gboolean
+perform_navigation_policy (WebKitWebView *web_view,
+               WebKitNavigationPolicyDecision *decision,
+               GncHtml *self, gboolean new_window)
+{
+     WebKitNavigationAction *action =
+      webkit_navigation_policy_decision_get_navigation_action (decision);
+     auto req = webkit_navigation_action_get_request (action);
+     const gchar *uri = webkit_uri_request_get_uri (req);
+     auto priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
+     if (gnc_html_handle_internal_url (self, uri, new_window))
+     {
+          /* GnuCash actions never cross the renderer boundary directly.
+           * This is also used for target=_blank, which remains in this
+           * controller instead of creating an unmanaged WebKit window. */
+     }
+     else if (!new_window && is_current_document_navigation (web_view, priv, uri))
+     {
+          /* Initial loads, reloads, and fragment links within the generated
+           * report are safe and remain renderer-native. */
+          webkit_policy_decision_use ((WebKitPolicyDecision *)decision);
+          return TRUE;
+     }
+     else
+     {
+          PWARN ("Blocked report navigation to '%s'", uri ? uri : "(null)");
+     }
+     webkit_policy_decision_ignore ((WebKitPolicyDecision*)decision);
+     return TRUE;
+}
 static gboolean
 webkit_decide_policy_cb (WebKitWebView *web_view,
              WebKitPolicyDecision *decision,
@@ -613,14 +660,16 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
              gpointer user_data)
 {
 /* This turns out to be the signal to intercept for handling a link-click. */
-     if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
+     if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION ||
+         decision_type == WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
      {
-          webkit_policy_decision_use (decision);
-          return TRUE;
+          return perform_navigation_policy (
+              web_view, WEBKIT_NAVIGATION_POLICY_DECISION (decision),
+              GNC_HTML (user_data),
+              decision_type == WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION);
      }
-     return perform_navigation_policy (
-      web_view, (WebKitNavigationPolicyDecision*) decision,
-      GNC_HTML (user_data));
+     webkit_policy_decision_use (decision);
+     return TRUE;
 }
 
 static void
@@ -650,14 +699,14 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
      g_return_val_if_fail (self != nullptr, FALSE);
      g_return_val_if_fail (note != nullptr, FALSE);
 
-     auto top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
-     auto dialog = gtk_message_dialog_new (top, GTK_DIALOG_MODAL,
-                                      GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
-                                      "%s\n%s",
-                                      webkit_notification_get_title (note),
-                                      webkit_notification_get_body (note));
-     gtk_dialog_run (GTK_DIALOG (dialog));
-     gtk_widget_destroy (dialog);
+     auto root = gtk_widget_get_root (GTK_WIDGET (web_view));
+     auto top = GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : nullptr;
+     auto dialog = gtk_alert_dialog_new ("%s\n%s",
+                                         webkit_notification_get_title (note),
+                                         webkit_notification_get_body (note));
+     gtk_alert_dialog_set_modal (dialog, TRUE);
+     gtk_alert_dialog_show (dialog, top);
+     g_object_unref (dialog);
      return TRUE;
 }
 
@@ -723,27 +772,61 @@ gnc_html_open_scm( GncHtmlWebkit* self, const gchar * location,
 static void
 impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 {
-     constexpr char TEMPLATE_REPORT_FILE_NAME[] = "gnc-report-XXXXXX.html";
      g_return_if_fail( self != nullptr );
      g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
      ENTER( "datalen %d, data %20.20s", datalen, data );
 
      auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+     GError *error = nullptr;
+     gchar *filename = gnc_html_create_report_document (&error);
 
-     /* Export the HTML to a file and load the file URI.   On Linux, this seems to get around some
-        security problems (otherwise, it can complain that embedded images aren't permitted to be
-        viewed because they are local resources).  On Windows, this allows the embedded images to
-        be viewed (maybe for the same reason as on Linux, but I haven't found where it puts those
-        messages. */
-     gchar *filename = g_build_filename(g_get_tmp_dir(), TEMPLATE_REPORT_FILE_NAME, (gchar *)nullptr);
-     int fd = g_mkstemp( filename );
-     impl_webkit_export_to_file( self, filename );
-     close( fd );
-     gchar *uri = g_strdup_printf( "file://%s", filename );
-     g_free(filename);
+     if (!filename)
+     {
+          PERR ("Unable to create the temporary report file: %s",
+                error ? error->message : "unknown error");
+          g_clear_error (&error);
+          return;
+     }
+
+     g_free (priv->html_string);
+     priv->html_string = g_strndup (data, datalen);
+     if (!impl_webkit_export_to_file( self, filename ))
+     {
+          g_remove (filename);
+          g_free (filename);
+          return;
+     }
+
+     if (priv->temporary_report)
+          g_remove (priv->temporary_report);
+     g_clear_pointer (&priv->temporary_report, g_free);
+     priv->temporary_report = filename;
+     gchar *uri = g_filename_to_uri (priv->temporary_report, nullptr, &error);
+     if (!uri)
+     {
+          PERR ("Unable to create a URI for the temporary report: %s",
+                error->message);
+          g_clear_error (&error);
+          g_remove (priv->temporary_report);
+          g_clear_pointer (&priv->temporary_report, g_free);
+          return;
+     }
+
+     if (priv->pending_anchor && *priv->pending_anchor)
+     {
+          gchar *fragment = g_uri_escape_string (priv->pending_anchor, nullptr,
+                                                  TRUE);
+          gchar *anchored_uri = g_strconcat (uri, "#", fragment, nullptr);
+
+          webkit_web_view_load_uri (priv->web_view, anchored_uri);
+          g_free (anchored_uri);
+          g_free (fragment);
+     }
+     else
+          webkit_web_view_load_uri (priv->web_view, uri);
+     g_clear_pointer (&priv->pending_anchor, g_free);
      DEBUG("Loading uri '%s'", uri);
-     webkit_web_view_load_uri( priv->web_view, uri );
      g_free( uri );
 
      LEAVE("");
@@ -971,6 +1054,7 @@ impl_webkit_cancel( GncHtml* self )
 
      auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
+     webkit_web_view_stop_loading (priv->web_view);
      g_hash_table_foreach_remove( priv->base.request_info, webkit_cancel_helper, nullptr );
 }
 
@@ -1024,42 +1108,224 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
      }
 }
 
-/* Webkit2 exposes only a very simple WebKitPrintOperation API. In order to
- * implement the above if it proves still to be necessary we'll have to use
- * GtkPrintOperation instead, passing it the results of
- * webkit_web_view_get_snapshot for each page.
- */
-static void
-impl_webkit_print (GncHtml* self,const gchar* jobname)
-{
-     g_return_if_fail (self != nullptr);
-     g_return_if_fail (GNC_IS_HTML_WEBKIT (self));
+constexpr char webkit_print_request_data_key[] = "gnc-html-webkit-print-request";
 
-     auto priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
-     auto op = webkit_print_operation_new (priv->web_view);
-     gchar *basename = g_path_get_basename(jobname);
-     auto print_settings = gtk_print_settings_new();
-     webkit_print_operation_set_print_settings(op, print_settings);
-     gchar *export_filename = g_strdup(jobname);
-     g_free(basename);
-     gtk_print_settings_set(print_settings,
-                    GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
-                    export_filename);
-     webkit_print_operation_set_print_settings(op, print_settings);
-     // Open a print dialog
-     auto top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (priv->web_view)));
-     auto print_response = webkit_print_operation_run_dialog (op, top);
-     if (print_response == WEBKIT_PRINT_OPERATION_RESPONSE_PRINT)
-     {
-          // Get the newly updated print settings
-          g_object_unref(print_settings);
-          print_settings = g_object_ref(webkit_print_operation_get_print_settings(op));
-     }
-     g_free(export_filename);
-     g_object_unref (op);
-     g_object_unref (print_settings);
+struct WebkitPrintRequest
+{
+    GncHtmlWebkit *backend;
+    WebKitWebView *web_view;
+    WebKitPrintOperation *operation;
+    GtkPrintDialog *dialog;
+    GCancellable *cancellable;
+    GWeakRef parent;
+    GError *error;
+};
+
+static void
+webkit_print_request_parent_destroyed (gpointer user_data,
+                                       G_GNUC_UNUSED GObject *where_parent_was)
+{
+    auto request = static_cast<WebkitPrintRequest *> (user_data);
+
+    g_cancellable_cancel (request->cancellable);
 }
 
+static void
+webkit_print_request_free (WebkitPrintRequest *request)
+{
+    auto parent = GTK_WINDOW (g_weak_ref_get (&request->parent));
+
+    if (parent)
+    {
+        g_object_weak_unref (G_OBJECT (parent),
+                             webkit_print_request_parent_destroyed, request);
+        g_object_unref (parent);
+    }
+    if (request->backend &&
+        g_object_get_data (G_OBJECT (request->backend),
+                           webkit_print_request_data_key) == request)
+        g_object_set_data (G_OBJECT (request->backend),
+                           webkit_print_request_data_key, nullptr);
+    g_weak_ref_clear (&request->parent);
+    g_clear_error (&request->error);
+    g_clear_object (&request->cancellable);
+    g_clear_object (&request->dialog);
+    g_clear_object (&request->operation);
+    g_clear_object (&request->web_view);
+    g_clear_object (&request->backend);
+    g_free (request);
+}
+
+static void
+webkit_print_request_complete (WebkitPrintRequest *request)
+{
+    auto parent = GTK_WINDOW (g_weak_ref_get (&request->parent));
+
+    if (request->error &&
+        !g_error_matches (request->error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+        if (parent && !gtk_widget_in_destruction (GTK_WIDGET (parent)))
+            gnc_error_dialog (parent, "%s", request->error->message);
+        else
+            PERR ("Report printing failed: %s", request->error->message);
+    }
+    g_clear_object (&parent);
+    webkit_print_request_free (request);
+}
+
+static void
+webkit_print_operation_failed (WebKitPrintOperation *operation, GError *error,
+                               gpointer user_data)
+{
+    auto request = static_cast<WebkitPrintRequest *> (user_data);
+
+    g_clear_error (&request->error);
+    request->error = g_error_copy (error);
+    (void)operation;
+}
+
+static void
+webkit_print_operation_finished (WebKitPrintOperation *operation,
+                                 gpointer user_data)
+{
+    auto request = static_cast<WebkitPrintRequest *> (user_data);
+
+    webkit_print_request_complete (request);
+    (void)operation;
+}
+
+static void
+webkit_print_request_start_operation (WebkitPrintRequest *request)
+{
+    g_signal_connect (request->operation, "failed",
+                      G_CALLBACK (webkit_print_operation_failed), request);
+    g_signal_connect (request->operation, "finished",
+                      G_CALLBACK (webkit_print_operation_finished), request);
+    webkit_print_operation_print (request->operation);
+}
+
+static void
+webkit_print_setup_finished (GObject *source, GAsyncResult *result,
+                             gpointer user_data)
+{
+    auto request = static_cast<WebkitPrintRequest *> (user_data);
+    GError *error = nullptr;
+    auto setup = gtk_print_dialog_setup_finish (GTK_PRINT_DIALOG (source), result,
+                                                &error);
+
+    if (!setup)
+    {
+        if (error)
+            request->error = g_error_copy (error);
+        g_clear_error (&error);
+        webkit_print_request_complete (request);
+        return;
+    }
+
+    gnc_print_setup_save (setup);
+    webkit_print_operation_set_print_settings (
+        request->operation, gtk_print_setup_get_print_settings (setup));
+    webkit_print_operation_set_page_setup (
+        request->operation, gtk_print_setup_get_page_setup (setup));
+    gtk_print_setup_unref (setup);
+    webkit_print_request_start_operation (request);
+}
+
+static WebkitPrintRequest *
+webkit_print_request_new (GncHtmlWebkit *self)
+{
+    auto priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
+    auto request = g_new0 (WebkitPrintRequest, 1);
+    auto root = gtk_widget_get_root (GTK_WIDGET (priv->web_view));
+    auto parent = GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : nullptr;
+
+    request->backend = GNC_HTML_WEBKIT (g_object_ref (self));
+    request->web_view = WEBKIT_WEB_VIEW (g_object_ref (priv->web_view));
+    request->operation = webkit_print_operation_new (request->web_view);
+    request->cancellable = g_cancellable_new ();
+    g_weak_ref_init (&request->parent, parent);
+    if (parent)
+        g_object_weak_ref (G_OBJECT (parent),
+                           webkit_print_request_parent_destroyed, request);
+    g_object_set_data (G_OBJECT (self), webkit_print_request_data_key, request);
+    return request;
+}
+
+static void
+impl_webkit_print (GncHtml *self, const gchar *jobname, gboolean export_pdf)
+{
+    g_return_if_fail (self != nullptr);
+    g_return_if_fail (GNC_IS_HTML_WEBKIT (self));
+
+    auto backend = GNC_HTML_WEBKIT (self);
+    auto priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
+    WebkitPrintRequest *request;
+
+    if (!priv->web_view ||
+        g_object_get_data (G_OBJECT (backend), webkit_print_request_data_key))
+        return;
+
+    request = webkit_print_request_new (backend);
+    if (export_pdf)
+    {
+        GError *error = nullptr;
+        auto print_settings = gtk_print_settings_new ();
+
+        if (!jobname || !*jobname)
+        {
+            request->error = g_error_new (G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT,
+                                          "%s", _("A PDF export needs an output path."));
+            g_object_unref (print_settings);
+            webkit_print_request_complete (request);
+            return;
+        }
+
+        gchar *output_uri = g_filename_to_uri (jobname, nullptr, &error);
+        if (!output_uri)
+        {
+            request->error = error;
+            g_object_unref (print_settings);
+            webkit_print_request_complete (request);
+            return;
+        }
+
+        gtk_print_settings_set (print_settings, GTK_PRINT_SETTINGS_PRINTER,
+                                "Print to File");
+        gtk_print_settings_set (print_settings,
+                                GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, "pdf");
+        gtk_print_settings_set (print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI,
+                                output_uri);
+        webkit_print_operation_set_print_settings (request->operation,
+                                                    print_settings);
+        g_object_unref (print_settings);
+        g_free (output_uri);
+        webkit_print_request_start_operation (request);
+        return;
+    }
+
+    {
+        auto print_operation = gtk_print_operation_new ();
+        auto parent = GTK_WINDOW (g_weak_ref_get (&request->parent));
+
+        gnc_print_operation_init (print_operation,
+                                  jobname && *jobname ? jobname : _("Report"));
+        auto settings = gtk_print_operation_get_print_settings (print_operation);
+        auto page_setup = gtk_print_operation_get_default_page_setup (print_operation);
+        request->dialog = gtk_print_dialog_new ();
+        gtk_print_dialog_set_title (request->dialog,
+                                    jobname && *jobname ? jobname : _("Print Report"));
+        gtk_print_dialog_set_accept_label (request->dialog, _("_Print"));
+        gtk_print_dialog_set_modal (request->dialog, TRUE);
+        if (settings)
+            gtk_print_dialog_set_print_settings (request->dialog, settings);
+        if (page_setup)
+            gtk_print_dialog_set_page_setup (request->dialog, page_setup);
+        gtk_print_dialog_setup (request->dialog, parent, request->cancellable,
+                                webkit_print_setup_finished, request);
+        g_clear_object (&parent);
+        g_object_unref (print_operation);
+    }
+}
 static void
 impl_webkit_set_parent( GncHtml* self, GtkWindow* parent )
 {

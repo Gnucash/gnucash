@@ -22,6 +22,7 @@
 \********************************************************************/
 
 #include <gtk/gtk.h>
+#include <cstring>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
@@ -90,6 +91,32 @@ gboolean
 qof_log_check(QofLogModule log_module, QofLogLevel log_level)
 {
     return FALSE;
+}
+
+// Fakes from qofinstance.cpp and guid.cpp. The isolated backend test doesn't
+// link the engine GUID implementation, but conflict resolution deliberately
+// retains the product contract of comparing matched transaction GUIDs.
+const GncGUID *
+qof_entity_get_guid (gconstpointer entity)
+{
+    if (!entity)
+        return nullptr;
+    auto object = G_OBJECT (entity);
+    auto guid = static_cast<GncGUID*> (
+        g_object_get_data (object, "test-guid"));
+    if (!guid)
+    {
+        guid = g_new0 (GncGUID, 1);
+        g_object_set_data_full (object, "test-guid", guid, g_free);
+    }
+    return guid;
+}
+
+gboolean
+guid_equal (const GncGUID *first, const GncGUID *second)
+{
+    return first && second &&
+           std::memcmp (first, second, sizeof (GncGUID)) == 0;
 }
 
 // fake function from engine-helpers.c
@@ -195,6 +222,76 @@ protected:
     GList*            m_splitList;
 };
 
+static void
+set_test_guid (GObject *object, guint8 value)
+{
+    auto guid = const_cast<GncGUID*> (qof_entity_get_guid (object));
+    std::memset (guid, 0, sizeof (GncGUID));
+    guid->reserved[0] = value;
+}
+
+class MockMatchTarget
+{
+public:
+    MockMatchTarget (guint8 guid, const char *description) :
+        trans {new MockTransaction()}, split {new MockSplit()}
+    {
+        using namespace testing;
+        const auto amount = gnc_numeric_create (100, 1);
+        ON_CALL(*split, get_amount()).WillByDefault(Return(amount));
+        ON_CALL(*split, get_memo()).WillByDefault(Return(nullptr));
+        ON_CALL(*split, get_parent()).WillByDefault(Return(trans));
+        ON_CALL(*trans, get_date()).WillByDefault(Return(1000));
+        ON_CALL(*trans, get_num()).WillByDefault(Return(nullptr));
+        ON_CALL(*trans, get_description()).WillByDefault(Return(description));
+        set_test_guid (G_OBJECT (trans), guid);
+    }
+
+    ~MockMatchTarget ()
+    {
+        split->free();
+        trans->free();
+    }
+
+    MockTransaction *trans;
+    MockSplit *split;
+};
+
+class MockImportedTransaction
+{
+public:
+    MockImportedTransaction (Account *base_account, const char *description) :
+        trans {new MockTransaction()}, split {new MockSplit()}
+    {
+        using namespace testing;
+        const auto amount = gnc_numeric_create (100, 1);
+        ON_CALL(*trans, get_split(0)).WillByDefault(Return(split));
+        ON_CALL(*trans, get_description()).WillByDefault(Return(description));
+        ON_CALL(*trans, get_date()).WillByDefault(Return(1000));
+        ON_CALL(*trans, get_num()).WillByDefault(Return(nullptr));
+        ON_CALL(*trans, is_open()).WillByDefault(Return(false));
+        ON_CALL(*split, get_amount()).WillByDefault(Return(amount));
+        ON_CALL(*split, get_memo()).WillByDefault(Return(nullptr));
+        info = gnc_import_TransInfo_new (trans, base_account);
+    }
+
+    ~MockImportedTransaction ()
+    {
+        gnc_import_TransInfo_delete (info);
+        split->free();
+        trans->free();
+    }
+
+    void add_match (const MockMatchTarget& target)
+    {
+        split_find_match (info, target.split, 0, 4, 14, 0.0);
+    }
+
+    GNCImportTransInfo *info;
+    MockTransaction *trans;
+    MockSplit *split;
+};
+
 
 
 /* Tests using fixture ImportBackendTest */
@@ -234,6 +331,246 @@ TEST_F(ImportBackendTest, CreateTransInfo)
     // delete transaction info
     gnc_import_TransInfo_delete(trans_info);
 };
+
+TEST_F(ImportBackendTest, DiscardTransInfoDoesNotInspectTransaction)
+{
+    using namespace testing;
+
+    ON_CALL(*m_trans, get_split(0))
+        .WillByDefault(Return(m_split));
+    ON_CALL(*m_trans, get_split_list())
+        .WillByDefault(Return(m_splitList));
+    ON_CALL(*m_trans, get_description())
+        .WillByDefault(Return("This is the description"));
+    EXPECT_CALL(*m_import_acc, find_account(_, StrEq("This is the description")))
+        .WillOnce(Return(m_dest_acc));
+
+    auto trans_info = gnc_import_TransInfo_new (m_trans, m_import_acc);
+    EXPECT_CALL(*m_trans, is_open()).Times(0);
+    gnc_import_TransInfo_discard (trans_info);
+}
+
+TEST_F(ImportBackendTest, RemoveTopMatchWithEmptyListIsSafe)
+{
+    using namespace testing;
+
+    ON_CALL(*m_trans, get_split(0))
+        .WillByDefault(Return(m_split));
+    ON_CALL(*m_trans, get_description())
+        .WillByDefault(Return("No match"));
+    ON_CALL(*m_trans, is_open())
+        .WillByDefault(Return(false));
+
+    auto trans_info = gnc_import_TransInfo_new (m_trans, m_import_acc);
+    ASSERT_EQ (gnc_import_TransInfo_get_match_list (trans_info), nullptr);
+
+    gnc_import_TransInfo_remove_top_match (trans_info);
+
+    EXPECT_EQ (gnc_import_TransInfo_get_match_list (trans_info), nullptr);
+    gnc_import_TransInfo_delete (trans_info);
+}
+
+TEST_F(ImportBackendTest, ResolveConflictsKeepsSingleCandidate)
+{
+    using namespace testing;
+
+    auto existing_trans = new MockTransaction();
+    auto existing_split = new MockSplit();
+    const auto amount = gnc_numeric_create (100, 1);
+
+    ON_CALL(*m_trans, get_split(0))
+        .WillByDefault(Return(m_split));
+    ON_CALL(*m_trans, get_description())
+        .WillByDefault(Return("Imported"));
+    ON_CALL(*m_trans, get_date())
+        .WillByDefault(Return(1000));
+    ON_CALL(*m_trans, get_num())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*m_trans, is_open())
+        .WillByDefault(Return(false));
+    ON_CALL(*m_split, get_amount())
+        .WillByDefault(Return(amount));
+    ON_CALL(*m_split, get_memo())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*existing_split, get_amount())
+        .WillByDefault(Return(amount));
+    ON_CALL(*existing_split, get_memo())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*existing_split, get_parent())
+        .WillByDefault(Return(existing_trans));
+    ON_CALL(*existing_trans, get_date())
+        .WillByDefault(Return(1000));
+    ON_CALL(*existing_trans, get_num())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*existing_trans, get_description())
+        .WillByDefault(Return("Existing"));
+
+    auto trans_info = gnc_import_TransInfo_new (m_trans, m_import_acc);
+    split_find_match (trans_info, existing_split, 0, 4, 14, 0.0);
+    ASSERT_EQ (g_list_length (gnc_import_TransInfo_get_match_list (trans_info)), 1u);
+    GList *imports = g_list_append (nullptr, trans_info);
+
+    gnc_import_TransInfo_resolve_conflicts (imports);
+
+    EXPECT_EQ (g_list_length (gnc_import_TransInfo_get_match_list (trans_info)), 1u);
+    g_list_free (imports);
+    gnc_import_TransInfo_delete (trans_info);
+    existing_split->free();
+    existing_trans->free();
+}
+
+TEST_F(ImportBackendTest, ResolveConflictsKeepsLaterHigherScoringImport)
+{
+    using namespace testing;
+
+    auto better_trans = new MockTransaction();
+    auto better_split = new MockSplit();
+    auto existing_trans = new MockTransaction();
+    auto existing_split = new MockSplit();
+    const auto amount = gnc_numeric_create (100, 1);
+
+    ON_CALL(*m_trans, get_split(0))
+        .WillByDefault(Return(m_split));
+    ON_CALL(*m_trans, get_description())
+        .WillByDefault(Return("Lower score"));
+    ON_CALL(*m_trans, get_date())
+        .WillByDefault(Return(1000));
+    ON_CALL(*m_trans, get_num())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*m_trans, is_open())
+        .WillByDefault(Return(false));
+    ON_CALL(*m_split, get_amount())
+        .WillByDefault(Return(amount));
+    ON_CALL(*m_split, get_memo())
+        .WillByDefault(Return(nullptr));
+
+    ON_CALL(*better_trans, get_split(0))
+        .WillByDefault(Return(better_split));
+    ON_CALL(*better_trans, get_description())
+        .WillByDefault(Return("Existing"));
+    ON_CALL(*better_trans, get_date())
+        .WillByDefault(Return(1000));
+    ON_CALL(*better_trans, get_num())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*better_trans, is_open())
+        .WillByDefault(Return(false));
+    ON_CALL(*better_split, get_amount())
+        .WillByDefault(Return(amount));
+    ON_CALL(*better_split, get_memo())
+        .WillByDefault(Return(nullptr));
+
+    ON_CALL(*existing_split, get_amount())
+        .WillByDefault(Return(amount));
+    ON_CALL(*existing_split, get_memo())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*existing_split, get_parent())
+        .WillByDefault(Return(existing_trans));
+    ON_CALL(*existing_trans, get_date())
+        .WillByDefault(Return(1000));
+    ON_CALL(*existing_trans, get_num())
+        .WillByDefault(Return(nullptr));
+    ON_CALL(*existing_trans, get_description())
+        .WillByDefault(Return("Existing"));
+
+    auto lower = gnc_import_TransInfo_new (m_trans, m_import_acc);
+    auto higher = gnc_import_TransInfo_new (better_trans, m_import_acc);
+    split_find_match (lower, existing_split, 0, 4, 14, 0.0);
+    split_find_match (higher, existing_split, 0, 4, 14, 0.0);
+    ASSERT_LT (gnc_import_MatchInfo_get_probability (
+                   static_cast<GNCImportMatchInfo*> (
+                       gnc_import_TransInfo_get_match_list (lower)->data)),
+               gnc_import_MatchInfo_get_probability (
+                   static_cast<GNCImportMatchInfo*> (
+                       gnc_import_TransInfo_get_match_list (higher)->data)));
+    GList *imports = nullptr;
+    imports = g_list_append (imports, lower);
+    imports = g_list_append (imports, higher);
+
+    gnc_import_TransInfo_resolve_conflicts (imports);
+
+    EXPECT_EQ (gnc_import_TransInfo_get_match_list (lower), nullptr);
+    EXPECT_EQ (g_list_length (gnc_import_TransInfo_get_match_list (higher)), 1u);
+    g_list_free (imports);
+    gnc_import_TransInfo_delete (lower);
+    gnc_import_TransInfo_delete (higher);
+    existing_split->free();
+    existing_trans->free();
+    better_split->free();
+    better_trans->free();
+}
+
+TEST_F(ImportBackendTest, ResolveConflictsKeepsEarlierHigherScoringImport)
+{
+    MockMatchTarget existing {1, "Existing"};
+    MockImportedTransaction higher {m_import_acc, "Existing"};
+    MockImportedTransaction lower {m_import_acc, "Unrelated"};
+    higher.add_match (existing);
+    lower.add_match (existing);
+    GList *imports = nullptr;
+    imports = g_list_append (imports, higher.info);
+    imports = g_list_append (imports, lower.info);
+
+    gnc_import_TransInfo_resolve_conflicts (imports);
+
+    EXPECT_EQ (g_list_length (gnc_import_TransInfo_get_match_list (higher.info)), 1u);
+    EXPECT_EQ (gnc_import_TransInfo_get_match_list (lower.info), nullptr);
+    g_list_free (imports);
+}
+
+TEST_F(ImportBackendTest, ResolveConflictsKeepsEarlierImportOnTie)
+{
+    MockMatchTarget existing {2, "Existing"};
+    MockImportedTransaction first {m_import_acc, "First unrelated"};
+    MockImportedTransaction second {m_import_acc, "Second unrelated"};
+    first.add_match (existing);
+    second.add_match (existing);
+    ASSERT_EQ (gnc_import_MatchInfo_get_probability (
+                   static_cast<GNCImportMatchInfo*> (
+                       gnc_import_TransInfo_get_match_list (first.info)->data)),
+               gnc_import_MatchInfo_get_probability (
+                   static_cast<GNCImportMatchInfo*> (
+                       gnc_import_TransInfo_get_match_list (second.info)->data)));
+    GList *imports = nullptr;
+    imports = g_list_append (imports, first.info);
+    imports = g_list_append (imports, second.info);
+
+    gnc_import_TransInfo_resolve_conflicts (imports);
+
+    EXPECT_EQ (g_list_length (gnc_import_TransInfo_get_match_list (first.info)), 1u);
+    EXPECT_EQ (gnc_import_TransInfo_get_match_list (second.info), nullptr);
+    g_list_free (imports);
+}
+
+TEST_F(ImportBackendTest, ResolveConflictsRestartsForExposedNextMatch)
+{
+    MockMatchTarget first_existing {3, "First existing"};
+    MockMatchTarget second_existing {4, "Second existing"};
+    MockImportedTransaction two_matches {m_import_acc, "Unrelated"};
+    MockImportedTransaction first_winner {m_import_acc, "First existing"};
+    MockImportedTransaction second_winner {m_import_acc, "Second existing"};
+
+    /* Match insertion prepends. Add the eventual fallback first so that the
+     * first-existing transaction is initially selected. */
+    two_matches.add_match (second_existing);
+    two_matches.add_match (first_existing);
+    first_winner.add_match (first_existing);
+    second_winner.add_match (second_existing);
+    ASSERT_EQ (g_list_length (
+                   gnc_import_TransInfo_get_match_list (two_matches.info)), 2u);
+    GList *imports = nullptr;
+    imports = g_list_append (imports, two_matches.info);
+    imports = g_list_append (imports, first_winner.info);
+    imports = g_list_append (imports, second_winner.info);
+
+    gnc_import_TransInfo_resolve_conflicts (imports);
+
+    EXPECT_EQ (gnc_import_TransInfo_get_match_list (two_matches.info), nullptr);
+    EXPECT_EQ (g_list_length (
+                   gnc_import_TransInfo_get_match_list (first_winner.info)), 1u);
+    EXPECT_EQ (g_list_length (
+                   gnc_import_TransInfo_get_match_list (second_winner.info)), 1u);
+    g_list_free (imports);
+}
 
 
 

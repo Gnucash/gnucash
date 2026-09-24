@@ -18,6 +18,11 @@ gnc_add_test(test-import-pending-matches test-import-pending-matches.cpp
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
 
+set(IMPORT_SELECTION_MODEL_TEST_LIBS PkgConfig::GTK4)
+gnc_add_test(test-import-selection-model test-import-selection-model.c
+  GENERIC_IMPORT_TEST_INCLUDE_DIRS IMPORT_SELECTION_MODEL_TEST_LIBS
+)
+
 set(GTEST_IMPORT_PARSE_LIBS gnc-generic-import gnc-test-engine test-core gtest)
 gnc_add_test(test-gnc-import-parse gtest-import-parse.cpp
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GTEST_IMPORT_PARSE_LIBS
@@ -26,15 +31,24 @@ gnc_add_test(test-gnc-import-parse gtest-import-parse.cpp
 set(IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/gnucash/import-export
+  ${CMAKE_SOURCE_DIR}/gnucash/import-export/ofx
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
   ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
   ${GTEST_INCLUDE_DIR}
   )
 
+set(IMPORT_ACCOUNT_MATCHER_TEST_SOURCES
+  gtest-import-account-matcher.cpp
+  ${CMAKE_SOURCE_DIR}/gnucash/import-export/ofx/gnc-ofx-import-teardown.cpp)
+
 set(IMPORT_ACCOUNT_MATCHER_TEST_LIBS gnc-generic-import gnc-engine test-core gtest)
-gnc_add_test(test-import-account-matcher gtest-import-account-matcher.cpp
-  IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS IMPORT_ACCOUNT_MATCHER_TEST_LIBS)
+gnc_add_test(test-import-account-matcher "${IMPORT_ACCOUNT_MATCHER_TEST_SOURCES}"
+  IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS IMPORT_ACCOUNT_MATCHER_TEST_LIBS
+  "GSETTINGS_BACKEND=memory"
+  GSETTINGS_SCHEMA_DIR=${CMAKE_BINARY_DIR}/share/glib-2.0/schemas)
+target_compile_definitions(test-import-account-matcher PRIVATE
+  GNC_IMPORT_MATCHER_TEST_SRCDIR="${CMAKE_SOURCE_DIR}")
 
 set(gtest_import_backend_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
@@ -51,7 +65,7 @@ set(gtest_import_backend_INCLUDE_DIRS
 )
 
 set(gtest_import_backend_LIBS
-  PkgConfig::GTK3
+  PkgConfig::GTK4
   ${Boost_LIBRARIES}
   ${GMODULE_LDFLAGS}
   ${GTHREAD_LDFLAGS}
@@ -94,5 +108,6 @@ set_dist_list(test_generic_import_DIST
     test-import-parse.c
     gtest-import-parse.cpp
     test-import-pending-matches.cpp
+    test-import-selection-model.c
     gtest-import-account-matcher.cpp
     gtest-import-backend.cpp)

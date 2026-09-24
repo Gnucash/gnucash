@@ -35,7 +35,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
 #include "dialog-options.hpp"
 #include <libguile.h>
 
@@ -66,6 +65,7 @@
 #include "gnc-hooks.h"
 #include "gnc-icons.h"
 #include "gnc-session.h"
+#include "gnc-session-transition.h"
 #include "gnc-state.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -78,9 +78,6 @@
 #include "gnc-optiondb.h"
 #include "gnc-autosave.h"
 #include "print-session.h"
-#ifdef MAC_INTEGRATION
-#include <gtkmacintegration/gtkosxapplication.h>
-#endif
 #ifdef HAVE_SYS_STAT_H
 # define __need_system_sys_stat_h //To block Guile-2.0's evil substitute
 # include <sys/types.h>
@@ -102,6 +99,7 @@ enum
 
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 #define PLUGIN_PAGE_TAB_LABEL    "label"
+#define PLUGIN_PAGE_TAB_COLOR_CSS_CLASS "tab-color-css-class"
 
 #define GNC_PREF_SHOW_CLOSE_BUTTON    "tab-close-buttons"
 #define GNC_PREF_TAB_NEXT_RECENT      "tab-next-recent"
@@ -144,15 +142,17 @@ static GQuark window_type = 0;
 /** A list of all extant main windows. This is for convenience as the
  *  same information can be obtained from the object tracking code. */
 static GList *active_windows = nullptr;
-/** Count down timer for the save changes dialog. If the timer reaches zero
- *  any changes will be saved and the save dialog closed automatically */
-static guint secs_to_save = 0;
+/** Save-before-close is an application-wide operation. Keep exactly one
+ *  decision active so repeated accelerators and close requests cannot race. */
+static gboolean quit_request_pending = FALSE;
+static gboolean shutdown_started = FALSE;
+static struct GncMainWindowAllFinishPendingRequest *all_finish_pending_request = nullptr;
 #define MSG_AUTO_SAVE _("Changes will be saved automatically in %u seconds")
 
 /* Declarations *********************************************************/
 static void gnc_main_window_constructed (GObject *object);
 static void gnc_main_window_finalize (GObject *object);
-static void gnc_main_window_destroy (GtkWidget *widget);
+static void gnc_main_window_dispose (GObject *object);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowInterface *iface);
@@ -195,24 +195,30 @@ static void gnc_main_window_cmd_help_tutorial (GSimpleAction *simple, GVariant *
 static void gnc_main_window_cmd_help_contents (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_main_window_cmd_help_about (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
-static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
+static void do_popup_menu (GncPluginPage *page,
+                           GtkWidget *relative_to,
+                           const GdkRectangle *pointing_to);
 static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified (void);
 static void gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data);
 static void gnc_main_window_remove_prefs (GncMainWindow *window);
 
 #ifdef MAC_INTEGRATION
-static void gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data);
-static gboolean gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window);
-static void gnc_quartz_set_menu (GncMainWindow* window);
+static void gnc_macos_set_menu (GncMainWindow *window);
+static void gnc_macos_active_window_changed (GObject *object, GParamSpec *pspec,
+                                             GncMainWindow *window);
 #endif
 static void gnc_main_window_init_menu_updaters (GncMainWindow *window);
+
+typedef struct GncMainWindowFinishPendingRequest GncMainWindowFinishPendingRequest;
+typedef struct GncMainWindowAllFinishPendingRequest GncMainWindowAllFinishPendingRequest;
 
 struct _GncMainWindow
 {
     GtkApplicationWindow gtk_application_window;  /**< The parent object for a main window. */
     gboolean window_quitting;                     /**< Set to TRUE when quitting from this window. */
     gboolean just_plugin_prefs;                   /**< Just remove preferences only from plugins */
+    gboolean close_request_pending;                /**< An asynchronous close request owns this window. */
 };
 
 /** The instance private data structure for an embedded window
@@ -259,10 +265,15 @@ typedef struct
     const gchar   *previous_plugin_page_name;
     const gchar   *previous_menu_qualifier;
 
-    /** The accelerator group for the window */
-    GtkAccelGroup *accel_group;
+    /** The shortcut controller for the window. */
+    GtkEventController *shortcut_controller;
 
     GHashTable    *display_item_hash;
+    /* GTK4 does not expose inserted action groups for lookup. Keep the
+     * window-owned groups explicitly so plugin actions retain one clear
+     * lifetime and can still be queried by group name. */
+    GHashTable    *action_groups;
+    GncMainWindowFinishPendingRequest *finish_pending_request;
 
 } GncMainWindowPrivate;
 
@@ -410,6 +421,13 @@ gnc_main_window_is_restoring_pages (GncMainWindow *window)
     return priv->restoring_pages;
 }
 
+gboolean
+gnc_main_window_is_quitting (GncMainWindow *window)
+{
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), FALSE);
+    return window->window_quitting;
+}
+
 
 /*  Iterator function to walk all pages in all windows, calling the
  *  specified function for each page. */
@@ -534,22 +552,27 @@ intersects_some_monitor(const GdkRectangle& rect)
     if (!display)
         return false;
 
-    int n = gdk_display_get_n_monitors(display);
-    for (int i = 0; i < n; ++i)
+    auto monitors = gdk_display_get_monitors(display);
+    auto n_monitors = g_list_model_get_n_items(monitors);
+    for (guint index = 0; index < n_monitors; ++index)
     {
-        auto monitor = gdk_display_get_monitor(display, i);
+        auto monitor = GDK_MONITOR(g_list_model_get_item(monitors, index));
+        if (!monitor)
+            continue;
+
         GdkRectangle monitor_geometry;
         gdk_monitor_get_geometry(monitor, &monitor_geometry);
-        DEBUG("Monitor %d: position (%d,%d), size %dx%d\n", i,
-                        monitor_geometry.x, monitor_geometry.y,
-                        monitor_geometry.width, monitor_geometry.height);
-        if (gdk_rectangle_intersect(&rect, &monitor_geometry, nullptr))
+        DEBUG("Monitor %u: position (%d,%d), size %dx%d\n", index,
+              monitor_geometry.x, monitor_geometry.y,
+              monitor_geometry.width, monitor_geometry.height);
+        auto intersects = gdk_rectangle_intersect(&rect, &monitor_geometry, nullptr);
+        g_object_unref(monitor);
+        if (intersects)
             return true;
     }
 
     return false;
 }
-
 static void
 set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *window_group)
 {
@@ -571,7 +594,7 @@ set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *w
     }
     else
     {
-        gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
+        gtk_window_set_default_size (GTK_WINDOW (window), geom[0], geom[1]);
         DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
     }
 
@@ -593,16 +616,17 @@ set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *w
     }
     else if (pos)
     {
-        // Prevent restoring coordinates if this would move the window off-screen
-        // If missing geom, use height=width=1 to make the intersection check work
+        // GTK4 deliberately has no cross-platform window positioning API. Keep
+        // validated legacy coordinates for session compatibility, but let the
+        // compositor choose the actual placement.
+        // If missing geom, use height=width=1 to make the intersection check work.
         GdkRectangle geometry{pos[0], pos[1], geom ? geom[0] : 1, geom ? geom[1] : 1};
         if (intersects_some_monitor(geometry))
         {
-            gtk_window_move(GTK_WINDOW(window), geometry.x, geometry.y);
             auto priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
             priv->pos[0] = geometry.x;
             priv->pos[1] = geometry.y;
-            DEBUG("window (%p) position (%d,%d)", window, geometry.x, geometry.y);
+            DEBUG("window (%p) saved position (%d,%d)", window, geometry.x, geometry.y);
         }
         else
         {
@@ -715,8 +739,9 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    // need to add the accelerator keys
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, priv->accel_group);
+    // Rebuild shortcuts after the menu model changes.
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model,
+                                       priv->shortcut_controller);
 
     /* Common view menu items */
     action = gnc_main_window_find_action (window, "ViewToolbarAction");
@@ -802,9 +827,6 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
             added_page_offsets = g_slist_append (added_page_offsets,
                                                  GINT_TO_POINTER(offset));
 
-        /* give the page a chance to display */
-        while (gtk_events_pending ())
-            gtk_main_iteration ();
     }
     priv->restoring_pages = FALSE;
     /* Restore page ordering within the notebook. Use +1 notation so the
@@ -870,7 +892,7 @@ cleanup:
         g_error_free(error);
     g_free(window_group);
     if (window)
-        gtk_widget_show (GTK_WIDGET(window));
+        gtk_window_present (GTK_WINDOW (window));
 }
 
 void
@@ -916,14 +938,18 @@ gnc_main_window_restore_default_state (GncMainWindow *window)
 
     /* The default state should be to have an Account Tree page open
      * in the window. */
-    DEBUG("no saved state file");
     if (!window)
+    {
         window = static_cast<GncMainWindow*>(g_list_nth_data(active_windows, 0));
-    gtk_widget_show (GTK_WIDGET(window));
+        if (!window)
+            window = gnc_main_window_new ();
+    }
+    gtk_window_present (GTK_WINDOW (window));
     action = gnc_main_window_find_action_in_group (window,
                                                    "gnc-plugin-account-tree-actions",
                                                    "ViewAccountTreeAction");
-    g_action_activate (action, nullptr);
+    if (action)
+        g_action_activate (action, nullptr);
 }
 
 /** Save the state of a single page to a disk.  This function handles
@@ -974,7 +1000,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
     GncMainWindowPrivate *priv;
     GAction *action;
     gint i, num_pages, coords[4], *order;
-    gboolean maximized, minimized, visible = true;
+    gboolean maximized, visible = true;
     gchar *window_group;
 
     /* Setup */
@@ -1010,24 +1036,15 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
                                 WINDOW_PAGEORDER, order, num_pages);
     g_free(order);
 
-    /* Save the window coordinates, etc. */
-    gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
-    gtk_window_get_size(GTK_WINDOW(window), &coords[2], &coords[3]);
-    maximized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
-                 & GDK_WINDOW_STATE_MAXIMIZED) != 0;
-    minimized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
-                 & GDK_WINDOW_STATE_ICONIFIED) != 0;
-
-    if (minimized)
-    {
-        gint *pos = priv->pos;
-        g_key_file_set_integer_list(data->key_file, window_group,
-                                    WINDOW_POSITION, &pos[0], 2);
-        DEBUG("window minimized (%p) position (%d,%d)", window, pos[0], pos[1]);
-    }
-    else
-        g_key_file_set_integer_list(data->key_file, window_group,
-                                    WINDOW_POSITION, &coords[0], 2);
+    /* GTK4 provides default size and maximization state but intentionally no
+     * cross-platform position or iconification state. Persist the last known
+     * validated position for backwards-compatible sessions. */
+    coords[0] = priv->pos[0];
+    coords[1] = priv->pos[1];
+    gtk_window_get_default_size (GTK_WINDOW (window), &coords[2], &coords[3]);
+    maximized = gtk_window_is_maximized (GTK_WINDOW (window));
+    g_key_file_set_integer_list(data->key_file, window_group,
+                                WINDOW_POSITION, &coords[0], 2);
     g_key_file_set_integer_list(data->key_file, window_group,
                                 WINDOW_GEOMETRY, &coords[2], 2);
     g_key_file_set_boolean(data->key_file, window_group,
@@ -1090,47 +1107,309 @@ gnc_main_window_save_all_windows(GKeyFile *keyfile)
 }
 
 
-gboolean
-gnc_main_window_finish_pending (GncMainWindow *window)
+
+
+struct GncMainWindowFinishPendingRequest
+{
+    gatomicrefcount ref_count;
+    GWeakRef window;
+    GCancellable *cancellable;
+    gulong window_destroy_handler;
+    GList *pages;
+    GncPluginPage *current_page;
+    GncMainWindowPendingCallback callback;
+    gpointer user_data;
+    gboolean completed;
+};
+
+struct GncMainWindowAllFinishPendingRequest
+{
+    gatomicrefcount ref_count;
+    GCancellable *cancellable;
+    GList *windows;
+    GncMainWindow *current_window;
+    GncMainWindowAllPendingCallback callback;
+    gpointer user_data;
+    gboolean completed;
+};
+
+static GncMainWindowFinishPendingRequest*
+main_window_finish_pending_request_ref (GncMainWindowFinishPendingRequest *request)
+{
+    g_atomic_ref_count_inc (&request->ref_count);
+    return request;
+}
+
+static void
+main_window_finish_pending_request_free (GncMainWindowFinishPendingRequest *request)
+{
+    GObject *object = G_OBJECT (g_weak_ref_get (&request->window));
+
+    if (object && request->window_destroy_handler)
+        g_signal_handler_disconnect (object, request->window_destroy_handler);
+    g_clear_object (&object);
+    g_list_free_full (request->pages, g_object_unref);
+    g_clear_object (&request->current_page);
+    g_clear_object (&request->cancellable);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+main_window_finish_pending_request_unref (GncMainWindowFinishPendingRequest *request)
+{
+    if (request && g_atomic_ref_count_dec (&request->ref_count))
+        main_window_finish_pending_request_free (request);
+}
+
+static void
+main_window_finish_pending_request_complete (GncMainWindowFinishPendingRequest *request,
+                                             gboolean accepted)
+{
+    GncMainWindow *window;
+
+    if (!request || request->completed)
+        return;
+
+    request->completed = TRUE;
+    window = GNC_MAIN_WINDOW (g_weak_ref_get (&request->window));
+    if (window)
+    {
+        auto priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+        if (priv->finish_pending_request == request)
+            priv->finish_pending_request = nullptr;
+    }
+    if (request->callback)
+        request->callback (window, accepted && window != nullptr, request->user_data);
+    g_clear_object (&window);
+    main_window_finish_pending_request_unref (request);
+}
+
+static void main_window_finish_pending_request_continue
+    (GncMainWindowFinishPendingRequest *request);
+
+static void
+main_window_finish_pending_page_finished (GncPluginPage *page, gboolean accepted,
+                                          gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowFinishPendingRequest *> (user_data);
+
+    g_clear_object (&request->current_page);
+    if (!accepted || !page)
+        main_window_finish_pending_request_complete (request, FALSE);
+    else
+        main_window_finish_pending_request_continue (request);
+    main_window_finish_pending_request_unref (request);
+}
+
+static void
+main_window_finish_pending_window_destroyed (GtkWidget *widget, gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowFinishPendingRequest *> (user_data);
+
+    (void)widget;
+    request->window_destroy_handler = 0;
+    g_cancellable_cancel (request->cancellable);
+    main_window_finish_pending_request_complete (request, FALSE);
+}
+
+static void
+main_window_finish_pending_request_continue (GncMainWindowFinishPendingRequest *request)
+{
+    GncMainWindow *window;
+
+    if (!request || request->completed)
+        return;
+    if (g_cancellable_is_cancelled (request->cancellable))
+    {
+        main_window_finish_pending_request_complete (request, FALSE);
+        return;
+    }
+
+    window = GNC_MAIN_WINDOW (g_weak_ref_get (&request->window));
+    if (!window)
+    {
+        main_window_finish_pending_request_complete (request, FALSE);
+        return;
+    }
+
+    while (request->pages)
+    {
+        auto link = request->pages;
+        auto page = static_cast<GncPluginPage *> (link->data);
+        request->pages = g_list_delete_link (request->pages, link);
+        request->current_page = page;
+        if (gnc_plugin_page_get_window (page) != GTK_WIDGET (window))
+        {
+            g_clear_object (&request->current_page);
+            continue;
+        }
+        gnc_plugin_page_finish_pending_async
+            (page, request->cancellable, main_window_finish_pending_page_finished,
+             main_window_finish_pending_request_ref (request));
+        g_object_unref (window);
+        return;
+    }
+
+    g_object_unref (window);
+    main_window_finish_pending_request_complete (request, TRUE);
+}
+
+void
+
+gnc_main_window_finish_pending_async (GncMainWindow *window,
+                                      GCancellable *cancellable,
+                                      GncMainWindowPendingCallback callback,
+                                      gpointer user_data)
 {
     GncMainWindowPrivate *priv;
-    GList *item;
+    GncMainWindowFinishPendingRequest *request;
 
-    g_return_val_if_fail(GNC_IS_MAIN_WINDOW(window), TRUE);
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    for (item = priv->installed_pages; item; item = g_list_next(item))
+    if (!GNC_IS_MAIN_WINDOW (window))
     {
-        if (!gnc_plugin_page_finish_pending(static_cast<GncPluginPage*>(item->data)))
-        {
-            return FALSE;
-        }
+        if (callback)
+            callback (nullptr, FALSE, user_data);
+        return;
     }
-    return TRUE;
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+    if (priv->finish_pending_request)
+    {
+        if (callback)
+            callback (window, FALSE, user_data);
+        return;
+    }
+
+    request = g_new0 (GncMainWindowFinishPendingRequest, 1);
+    g_atomic_ref_count_init (&request->ref_count);
+    g_weak_ref_init (&request->window, window);
+    request->cancellable = cancellable ? G_CANCELLABLE (g_object_ref (cancellable)) :
+                                         g_cancellable_new ();
+    request->pages = g_list_copy_deep (priv->installed_pages,
+                                       (GCopyFunc)g_object_ref, nullptr);
+    request->callback = callback;
+    request->user_data = user_data;
+    request->window_destroy_handler = g_signal_connect
+        (window, "destroy", G_CALLBACK (main_window_finish_pending_window_destroyed), request);
+    priv->finish_pending_request = request;
+    main_window_finish_pending_request_continue (request);
 }
 
-
-gboolean
-gnc_main_window_all_finish_pending (void)
+static GncMainWindowAllFinishPendingRequest*
+main_window_all_finish_pending_request_ref (GncMainWindowAllFinishPendingRequest *request)
 {
-    const GList *windows, *item;
-
-    windows = gnc_gobject_tracking_get_list(GNC_MAIN_WINDOW_NAME);
-    for (item = windows; item; item = g_list_next(item))
-    {
-        if (!gnc_main_window_finish_pending(static_cast<GncMainWindow*>(item->data)))
-        {
-            return FALSE;
-        }
-    }
-    if (gnc_gui_refresh_suspended ())
-    {
-        gnc_warning_dialog (nullptr, "%s", "An operation is still running, wait for it to complete before quitting.");
-        return FALSE;
-    }
-    return TRUE;
+    g_atomic_ref_count_inc (&request->ref_count);
+    return request;
 }
 
+static void
+main_window_all_finish_pending_request_free (GncMainWindowAllFinishPendingRequest *request)
+{
+    g_list_free_full (request->windows, g_object_unref);
+    g_clear_object (&request->current_window);
+    g_clear_object (&request->cancellable);
+    g_free (request);
+}
+
+static void
+main_window_all_finish_pending_request_unref (GncMainWindowAllFinishPendingRequest *request)
+{
+    if (request && g_atomic_ref_count_dec (&request->ref_count))
+        main_window_all_finish_pending_request_free (request);
+}
+
+static void
+main_window_all_finish_pending_request_complete (GncMainWindowAllFinishPendingRequest *request,
+                                                 gboolean accepted)
+{
+    if (!request || request->completed)
+        return;
+
+    request->completed = TRUE;
+    if (all_finish_pending_request == request)
+        all_finish_pending_request = nullptr;
+    if (request->callback)
+        request->callback (accepted, request->user_data);
+    main_window_all_finish_pending_request_unref (request);
+}
+
+static void main_window_all_finish_pending_request_continue
+    (GncMainWindowAllFinishPendingRequest *request);
+
+static void
+main_window_all_finish_pending_window_finished (GncMainWindow *window, gboolean accepted,
+                                                gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowAllFinishPendingRequest *> (user_data);
+
+    (void)window;
+    g_clear_object (&request->current_window);
+    if (!accepted)
+        main_window_all_finish_pending_request_complete (request, FALSE);
+    else
+        main_window_all_finish_pending_request_continue (request);
+    main_window_all_finish_pending_request_unref (request);
+}
+
+static void
+main_window_all_finish_pending_request_continue (GncMainWindowAllFinishPendingRequest *request)
+{
+    if (!request || request->completed)
+        return;
+    if (g_cancellable_is_cancelled (request->cancellable))
+    {
+        main_window_all_finish_pending_request_complete (request, FALSE);
+        return;
+    }
+
+    if (!request->windows)
+    {
+        if (gnc_gui_refresh_suspended ())
+        {
+            g_warning ("An operation is still running; wait for it to complete before continuing.");
+            main_window_all_finish_pending_request_complete (request, FALSE);
+        }
+        else
+            main_window_all_finish_pending_request_complete (request, TRUE);
+        return;
+    }
+
+    auto link = request->windows;
+    auto window = static_cast<GncMainWindow *> (link->data);
+    request->windows = g_list_delete_link (request->windows, link);
+    request->current_window = window;
+    gnc_main_window_finish_pending_async
+        (window, request->cancellable, main_window_all_finish_pending_window_finished,
+         main_window_all_finish_pending_request_ref (request));
+}
+
+void
+
+gnc_main_window_all_finish_pending_async (GCancellable *cancellable,
+                                          GncMainWindowAllPendingCallback callback,
+                                          gpointer user_data)
+{
+    GncMainWindowAllFinishPendingRequest *request;
+    const GList *windows;
+
+    if (all_finish_pending_request)
+    {
+        if (callback)
+            callback (FALSE, user_data);
+        return;
+    }
+
+    request = g_new0 (GncMainWindowAllFinishPendingRequest, 1);
+    g_atomic_ref_count_init (&request->ref_count);
+    request->cancellable = cancellable ? G_CANCELLABLE (g_object_ref (cancellable)) :
+                                         g_cancellable_new ();
+    windows = gnc_gobject_tracking_get_list (GNC_MAIN_WINDOW_NAME);
+    request->windows = g_list_copy_deep ((GList *)windows, (GCopyFunc)g_object_ref, nullptr);
+    request->callback = callback;
+    request->user_data = user_data;
+    all_finish_pending_request = request;
+    main_window_all_finish_pending_request_continue (request);
+}
 
 /** See if the page already exists.  For each open window, look
  *  through the list of pages installed in that window and see if the
@@ -1160,159 +1439,79 @@ gnc_main_window_page_exists (GncPluginPage *page)
     return FALSE;
 }
 
-static gboolean auto_save_countdown (GtkWidget *dialog)
+typedef enum
 {
-    GtkWidget *label;
-    gchar *timeoutstr = nullptr;
+    GNC_MAIN_WINDOW_SAVE_DISCARD,
+    GNC_MAIN_WINDOW_SAVE_CANCEL,
+    GNC_MAIN_WINDOW_SAVE_APPLY
+} GncMainWindowSaveResponse;
 
-    /* Stop count down if user closed the dialog since the last time we were called */
-    if (!GTK_IS_DIALOG (dialog))
-        return FALSE; /* remove timer */
-
-    /* Stop count down if count down text can't be updated */
-    label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "count-down-label"));
-    if (!GTK_IS_LABEL (label))
-        return FALSE; /* remove timer */
-
-    /* Protect against rolling over to MAXUINT */
-    if (secs_to_save)
-        --secs_to_save;
-    DEBUG ("Counting down: %d seconds", secs_to_save);
-
-    timeoutstr = g_strdup_printf (MSG_AUTO_SAVE, secs_to_save);
-    gtk_label_set_text (GTK_LABEL (label), timeoutstr);
-    g_free (timeoutstr);
-
-    /* Count down reached 0. Save and close dialog */
-    if (!secs_to_save)
-    {
-        gtk_dialog_response (GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
-        return FALSE; /* remove timer */
-    }
-
-    /* Run another cycle */
-    return TRUE;
-}
-
-
-/** This function prompts the user to save the file with a dialog that
- *  follows the HIG guidelines.
- *
- *  @internal
- *
- *  @returns This function returns TRUE if the user clicked the Cancel
- *  button.  It returns FALSE if the closing of the window should
- *  continue.
- */
-static gboolean
-gnc_main_window_prompt_for_save (GtkWidget *window)
+typedef struct
 {
+    GWeakRef window;
     QofSession *session;
     QofBook *book;
-    GtkWidget *dialog, *msg_area, *label;
-    gint response;
-    const gchar *filename, *tmp;
-    const gchar *title = _("Save changes to file %s before closing?");
-    /* This should be the same message as in gnc-file.c */
-    const gchar *message_hours =
-        _("If you don't save, changes from the past %d hours and %d minutes will be discarded.");
-    const gchar *message_days =
-        _("If you don't save, changes from the past %d days and %d hours will be discarded.");
-    time64 oldest_change;
-    gint minutes, hours, days;
-    guint timer_source = 0;
-    if (!gnc_current_session_exist())
-        return FALSE;
-    session = gnc_get_current_session();
-    book = qof_session_get_book(session);
-    if (!qof_book_session_not_saved(book))
-        return FALSE;
-    filename = qof_session_get_url(session);
-    if (!strlen (filename))
-        filename = _("<unknown>");
-    if ((tmp = strrchr(filename, '/')) != nullptr)
-        filename = tmp + 1;
+    GtkWindow *dialog;
+    GtkLabel *countdown_label;
+    gulong dialog_destroy_handler;
+    guint timer_source;
+    guint seconds_to_save;
+    gboolean deciding;
+    gboolean completed;
+    GncSessionTransition *transition;
+} GncMainWindowQuitRequest;
 
-    /* Remove any pending auto-save timeouts */
-    gnc_autosave_remove_timer(book);
+typedef struct
+{
+    GWeakRef window;
+    gboolean destroy_window;
+} GncMainWindowCloseRequest;
 
-    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-                                    GTK_DIALOG_MODAL,
-                                    GTK_MESSAGE_WARNING,
-                                    GTK_BUTTONS_NONE,
-                                    title,
-                                    filename);
-    oldest_change = qof_book_get_session_dirty_time(book);
-    minutes = (gnc_time (nullptr) - oldest_change) / 60 + 1;
-    hours = minutes / 60;
-    minutes = minutes % 60;
-    days = hours / 24;
-    hours = hours % 24;
-    if (days > 0)
-    {
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                message_days, days, hours);
-    }
-    else if (hours > 0)
-    {
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                message_hours, hours, minutes);
-    }
-    else
-    {
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                ngettext("If you don't save, changes from the past %d minute will be discarded.",
-                         "If you don't save, changes from the past %d minutes will be discarded.",
-                         minutes), minutes);
-    }
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                           _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
-                           _("_Cancel"), GTK_RESPONSE_CANCEL,
-                           _("_Save"), GTK_RESPONSE_APPLY,
-                           nullptr);
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
+typedef struct
+{
+    GWeakRef window;
+    GncSessionTransition *transition;
+    gboolean finish_pending;
+} GncMainWindowQuitAfterPendingRequest;
 
-    /* If requested by the user, add a timeout to the question to save automatically
-     * if the user doesn't answer after a chosen number of seconds.
-     */
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_CLOSE_EXPIRES))
-    {
-        gchar *timeoutstr = nullptr;
+static void gnc_main_window_quit_request_finish (GncMainWindowQuitRequest *request,
+                                                  gboolean proceed);
+static void gnc_main_window_enqueue_quit (GncMainWindow *window,
+                                          gboolean finish_pending);
 
-        secs_to_save = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_CLOSE_WAIT_TIME);
-        timeoutstr = g_strdup_printf (MSG_AUTO_SAVE, secs_to_save);
-        label = GTK_WIDGET(gtk_label_new (timeoutstr));
-        g_free (timeoutstr);
-        gtk_widget_show (label);
 
-        msg_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG(dialog));
-        gtk_box_pack_end (GTK_BOX(msg_area), label, TRUE, TRUE, 0);
-        g_object_set (G_OBJECT (label), "xalign", 0.0, nullptr);
 
-        g_object_set_data (G_OBJECT (dialog), "count-down-label", label);
-        timer_source = g_timeout_add_seconds (1, (GSourceFunc)auto_save_countdown, dialog);
-    }
-
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
-    if (timer_source)
-        g_source_remove (timer_source);
-    gtk_widget_destroy(dialog);
-
-    switch (response)
-    {
-    case GTK_RESPONSE_APPLY:
-        gnc_file_save (GTK_WINDOW (window));
-        return FALSE;
-
-    case GTK_RESPONSE_CLOSE:
-        qof_book_mark_session_saved(book);
-        return FALSE;
-
-    default:
-        return TRUE;
-    }
+static gboolean
+gnc_main_window_quit_request_is_current (const GncMainWindowQuitRequest *request)
+{
+    return gnc_current_session_exist () &&
+           gnc_get_current_session () == request->session &&
+           qof_session_get_book (gnc_get_current_session ()) == request->book;
 }
 
+static void
+gnc_main_window_quit_request_free (GncMainWindowQuitRequest *request)
+{
+    if (request->timer_source)
+        g_source_remove (request->timer_source);
+    if (request->dialog_destroy_handler && request->dialog)
+        g_signal_handler_disconnect (request->dialog, request->dialog_destroy_handler);
+    g_clear_object (&request->dialog);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+gnc_main_window_quit_request_dialog_destroyed (GtkWidget *dialog, gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowQuitRequest *> (user_data);
+
+    (void)dialog;
+    request->dialog_destroy_handler = 0;
+    g_clear_object (&request->dialog);
+    request->countdown_label = nullptr;
+    gnc_main_window_quit_request_finish (request, FALSE);
+}
 
 static void
 gnc_main_window_add_plugin (gpointer plugin,
@@ -1321,11 +1520,11 @@ gnc_main_window_add_plugin (gpointer plugin,
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-    ENTER(" ");
+    ENTER (" ");
     gnc_plugin_add_to_window (GNC_PLUGIN (plugin),
                               GNC_MAIN_WINDOW (window),
                               window_type);
-    LEAVE(" ");
+    LEAVE (" ");
 }
 
 static void
@@ -1335,126 +1534,594 @@ gnc_main_window_remove_plugin (gpointer plugin,
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-    ENTER(" ");
+    ENTER (" ");
     gnc_plugin_remove_from_window (GNC_PLUGIN (plugin),
                                    GNC_MAIN_WINDOW (window),
                                    window_type);
-    LEAVE(" ");
+    LEAVE (" ");
 }
-
 
 static gboolean
 gnc_main_window_timed_quit (gpointer dummy)
 {
-    if (gnc_file_save_in_progress())
+    (void)dummy;
+    if (gnc_file_save_in_progress ())
         return TRUE;
 
     gnc_shutdown (0);
     return FALSE;
 }
 
-static gboolean
-gnc_main_window_quit(GncMainWindow *window)
+static void
+gnc_main_window_begin_shutdown (void)
 {
-    QofSession *session;
-    gboolean needs_save, do_shutdown = TRUE;
-    if (gnc_current_session_exist())
-    {
-        session = gnc_get_current_session();
-        needs_save =
-            qof_book_session_not_saved(qof_session_get_book(session)) &&
-            !gnc_file_save_in_progress();
-        do_shutdown = !needs_save ||
-            (needs_save &&
-             !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
-    }
-    if (do_shutdown)
-    {
-        GList *w, *next;
+    GList *item;
 
-        /* This is not a typical list iteration. There is a possibility
-         * that the window may be removed from the active_windows list so
-         * we have to cache the 'next' pointer before executing any code
-         * in the loop. */
-        for (w = active_windows; w; w = next)
+    if (shutdown_started)
+        return;
+    shutdown_started = TRUE;
+
+    for (item = active_windows; item; )
+    {
+        GList *next = g_list_next (item);
+        auto window = static_cast<GncMainWindow *> (item->data);
+        auto priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+
+        window->window_quitting = TRUE;
+        if (priv->installed_pages == NULL)
+            gtk_window_destroy (GTK_WINDOW (window));
+        item = next;
+    }
+
+    if (active_windows)
+        gnc_main_window_remove_prefs (GNC_MAIN_WINDOW (active_windows->data));
+    g_timeout_add (250, gnc_main_window_timed_quit, nullptr);
+}
+
+static void
+gnc_main_window_quit_request_finish (GncMainWindowQuitRequest *request,
+                                     gboolean proceed)
+{
+    GObject *object;
+    GncMainWindow *window = nullptr;
+    GncSessionTransition *transition;
+
+    if (request->completed)
+        return;
+    request->completed = TRUE;
+    quit_request_pending = FALSE;
+
+    object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+    if (object && GNC_IS_MAIN_WINDOW (object))
+    {
+        window = GNC_MAIN_WINDOW (object);
+        window->close_request_pending = FALSE;
+    }
+
+    transition = request->transition;
+    request->transition = nullptr;
+    g_clear_object (&object);
+    gnc_main_window_quit_request_free (request);
+
+    if (proceed)
+    {
+        gnc_session_transition_begin_shutdown (transition);
+        gnc_main_window_begin_shutdown ();
+    }
+    else
+        gnc_session_transition_complete (transition);
+}
+
+static void
+gnc_main_window_quit_request_after_save (GtkWindow *parent, gboolean saved,
+                                         gpointer user_data);
+
+static void
+gnc_main_window_quit_request_respond (GncMainWindowQuitRequest *request,
+                                      GncMainWindowSaveResponse response)
+{
+    GObject *object;
+    GtkWindow *parent = nullptr;
+
+    if (!request->deciding || request->completed)
+        return;
+    request->deciding = FALSE;
+
+    if (request->timer_source)
+    {
+        g_source_remove (request->timer_source);
+        request->timer_source = 0;
+    }
+    if (request->dialog_destroy_handler && request->dialog)
+    {
+        g_signal_handler_disconnect (request->dialog, request->dialog_destroy_handler);
+        request->dialog_destroy_handler = 0;
+    }
+    if (request->dialog)
+        gtk_window_destroy (request->dialog);
+    g_clear_object (&request->dialog);
+    request->countdown_label = nullptr;
+
+    object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+    if (object && GTK_IS_WINDOW (object))
+        parent = GTK_WINDOW (object);
+
+    if (response == GNC_MAIN_WINDOW_SAVE_APPLY)
+    {
+        if (!parent)
         {
-            GncMainWindowPrivate *priv;
-            GncMainWindow *window = static_cast<GncMainWindow*>(w->data);
-
-            next = g_list_next (w);
-
-            window->window_quitting = TRUE; //set window_quitting on all windows
-
-            priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-            // if there are no pages destroy window
-            if (priv->installed_pages == NULL)
-                gtk_widget_destroy (GTK_WIDGET(window));
+            g_clear_object (&object);
+            gnc_main_window_quit_request_finish (request, FALSE);
+            return;
         }
-        /* remove the preference callbacks from the main window */
-        gnc_main_window_remove_prefs (window);
-        g_timeout_add(250, gnc_main_window_timed_quit, nullptr);
-        return TRUE;
+        gnc_file_save_async (parent, gnc_main_window_quit_request_after_save, request);
+        g_clear_object (&object);
+        return;
     }
-    return FALSE;
-}
 
-gboolean
-gnc_main_window_is_quitting (GncMainWindow *window)
-{
-    g_return_val_if_fail(GNC_IS_MAIN_WINDOW(window), FALSE);
-    return window->window_quitting;
+    gboolean discard_current_book = response == GNC_MAIN_WINDOW_SAVE_DISCARD &&
+                                    gnc_main_window_quit_request_is_current (request);
+    if (discard_current_book)
+        qof_book_mark_session_saved (request->book);
+
+    g_clear_object (&object);
+    gnc_main_window_quit_request_finish (request, discard_current_book);
 }
 
 static gboolean
-gnc_main_window_delete_event (GtkWidget *window,
-                              GdkEvent *event,
-                              gpointer user_data)
+gnc_main_window_quit_request_countdown (gpointer user_data)
 {
-    static gboolean already_dead = FALSE;
+    auto request = static_cast<GncMainWindowQuitRequest *> (user_data);
+    gchar *message;
 
-    if (already_dead)
-        return TRUE;
+    request->timer_source = 0;
+    if (!request->deciding || request->completed || !request->countdown_label)
+        return G_SOURCE_REMOVE;
 
-    if (gnc_list_length_cmp (active_windows, 1) > 0)
+    if (request->seconds_to_save)
+        --request->seconds_to_save;
+    DEBUG ("Counting down: %u seconds", request->seconds_to_save);
+
+    message = g_strdup_printf (MSG_AUTO_SAVE, request->seconds_to_save);
+    gtk_label_set_text (request->countdown_label, message);
+    g_free (message);
+
+    if (!request->seconds_to_save)
     {
-        gint response;
-        GtkWidget *dialog;
-        gchar *message = _("This window is closing and will not be restored.");
-
-        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_QUESTION,
-                                         GTK_BUTTONS_NONE,
-                                         "%s", _("Close Window?"));
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
-                                                  "%s", message);
-
-        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
-                              _("_Cancel"), GTK_RESPONSE_CANCEL,
-                              _("_OK"), GTK_RESPONSE_YES,
-                               (gchar *)NULL);
-        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-        response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_CLOSING_WINDOW_QUESTION);
-        gtk_widget_destroy (dialog);
-
-        if (response == GTK_RESPONSE_CANCEL)
-            return TRUE;
+        gnc_main_window_quit_request_respond (request, GNC_MAIN_WINDOW_SAVE_APPLY);
+        return G_SOURCE_REMOVE;
     }
 
-    if (!gnc_main_window_finish_pending(GNC_MAIN_WINDOW(window)))
-    {
-        /* Don't close the window. */
-        return TRUE;
-    }
+    request->timer_source = g_timeout_add_seconds (
+        1, gnc_main_window_quit_request_countdown, request);
+    return G_SOURCE_REMOVE;
+}
 
-    if (gnc_list_length_cmp (active_windows, 1) > 0)
-        return FALSE;
 
-    already_dead = gnc_main_window_quit(GNC_MAIN_WINDOW(window));
+static gboolean
+gnc_main_window_quit_request_dialog_close (GtkWindow *dialog, gpointer user_data)
+{
+    (void)dialog;
+    gnc_main_window_quit_request_respond (
+        static_cast<GncMainWindowQuitRequest *> (user_data), GNC_MAIN_WINDOW_SAVE_CANCEL);
     return TRUE;
 }
 
+static void
+gnc_main_window_quit_request_discard_clicked (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    gnc_main_window_quit_request_respond (
+        static_cast<GncMainWindowQuitRequest *> (user_data), GNC_MAIN_WINDOW_SAVE_DISCARD);
+}
+
+static void
+gnc_main_window_quit_request_cancel_clicked (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    gnc_main_window_quit_request_respond (
+        static_cast<GncMainWindowQuitRequest *> (user_data), GNC_MAIN_WINDOW_SAVE_CANCEL);
+}
+
+static void
+gnc_main_window_quit_request_save_clicked (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    gnc_main_window_quit_request_respond (
+        static_cast<GncMainWindowQuitRequest *> (user_data), GNC_MAIN_WINDOW_SAVE_APPLY);
+}
+
+static gboolean
+gnc_main_window_quit_request_key_pressed (GtkEventControllerKey *controller,
+                                          guint keyval, guint keycode,
+                                          GdkModifierType state, gpointer user_data)
+{
+    (void)controller;
+    (void)keycode;
+    (void)state;
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+
+    gnc_main_window_quit_request_respond (
+        static_cast<GncMainWindowQuitRequest *> (user_data), GNC_MAIN_WINDOW_SAVE_CANCEL);
+    return TRUE;
+}
+
+static void
+gnc_main_window_quit_request_present (GncMainWindowQuitRequest *request)
+{
+    QofSession *session;
+    QofBook *book;
+    GObject *object;
+    GtkWindow *parent = nullptr;
+    GtkWidget *content, *heading, *detail, *button_box, *discard, *cancel, *save;
+    const gchar *filename, *basename;
+    time64 oldest_change;
+    gint minutes, hours, days;
+    gchar *title, *message, *timeout;
+
+    if (!gnc_main_window_quit_request_is_current (request))
+    {
+        gnc_main_window_quit_request_finish (request, FALSE);
+        return;
+    }
+
+    session = gnc_get_current_session ();
+    book = qof_session_get_book (session);
+    if (!qof_book_session_not_saved (book))
+    {
+        gnc_main_window_quit_request_finish (request, TRUE);
+        return;
+    }
+
+    object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+    if (object && GTK_IS_WINDOW (object))
+        parent = GTK_WINDOW (object);
+    if (!parent)
+    {
+        g_clear_object (&object);
+        gnc_main_window_quit_request_finish (request, FALSE);
+        return;
+    }
+
+    filename = qof_session_get_url (session);
+    if (!filename || !*filename)
+        filename = _("<unknown>");
+    basename = strrchr (filename, '/');
+    if (basename)
+        filename = basename + 1;
+
+    oldest_change = qof_book_get_session_dirty_time (book);
+    minutes = (gnc_time (nullptr) - oldest_change) / 60 + 1;
+    hours = minutes / 60;
+    minutes %= 60;
+    days = hours / 24;
+    hours %= 24;
+    if (days > 0)
+        message = g_strdup_printf (
+            _("If you don't save, changes from the past %d days and %d hours will be discarded."),
+            days, hours);
+    else if (hours > 0)
+        message = g_strdup_printf (
+            _("If you don't save, changes from the past %d hours and %d minutes will be discarded."),
+            hours, minutes);
+    else
+        message = g_strdup_printf (
+            ngettext ("If you don't save, changes from the past %d minute will be discarded.",
+                      "If you don't save, changes from the past %d minutes will be discarded.",
+                      minutes), minutes);
+    title = g_strdup_printf (_("Save changes to file %s before closing?"), filename);
+
+    /* The outstanding autosave must not compete with this explicit decision. */
+    gnc_autosave_remove_timer (book);
+
+    request->dialog = GTK_WINDOW (g_object_ref_sink (gtk_window_new ()));
+    gnc_window_bind_to_application (request->dialog);
+    gtk_window_set_title (request->dialog, title);
+    gtk_window_set_transient_for (request->dialog, parent);
+    gtk_window_set_modal (request->dialog, TRUE);
+    gtk_window_set_resizable (request->dialog, FALSE);
+    gtk_window_set_destroy_with_parent (request->dialog, TRUE);
+
+    content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    gtk_widget_set_margin_start (content, 18);
+    gtk_widget_set_margin_end (content, 18);
+    gtk_widget_set_margin_top (content, 18);
+    gtk_widget_set_margin_bottom (content, 18);
+    gtk_window_set_child (request->dialog, content);
+
+    heading = gtk_label_new (title);
+    gtk_label_set_wrap (GTK_LABEL (heading), TRUE);
+    gtk_label_set_xalign (GTK_LABEL (heading), 0.0);
+    gtk_widget_add_css_class (heading, "title-2");
+    gtk_box_append (GTK_BOX (content), heading);
+    gtk_widget_set_visible (heading, TRUE);
+
+    detail = gtk_label_new (message);
+    gtk_label_set_wrap (GTK_LABEL (detail), TRUE);
+    gtk_label_set_xalign (GTK_LABEL (detail), 0.0);
+    gtk_label_set_max_width_chars (GTK_LABEL (detail), 72);
+    gtk_box_append (GTK_BOX (content), detail);
+    gtk_widget_set_visible (detail, TRUE);
+
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_CLOSE_EXPIRES))
+    {
+        request->seconds_to_save = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL,
+                                                       GNC_PREF_SAVE_CLOSE_WAIT_TIME);
+        timeout = g_strdup_printf (MSG_AUTO_SAVE, request->seconds_to_save);
+        request->countdown_label = GTK_LABEL (gtk_label_new (timeout));
+        g_free (timeout);
+        gtk_label_set_xalign (request->countdown_label, 0.0);
+        gtk_box_append (GTK_BOX (content), GTK_WIDGET (request->countdown_label));
+        gtk_widget_set_visible (GTK_WIDGET (request->countdown_label), TRUE);
+    }
+
+    button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    gtk_widget_set_halign (button_box, GTK_ALIGN_END);
+    discard = gtk_button_new_with_mnemonic (_("Close _Without Saving"));
+    cancel = gtk_button_new_with_mnemonic (_("_Cancel"));
+    save = gtk_button_new_with_mnemonic (_("_Save"));
+    gtk_box_append (GTK_BOX (button_box), discard);
+    gtk_box_append (GTK_BOX (button_box), cancel);
+    gtk_box_append (GTK_BOX (button_box), save);
+    gtk_box_append (GTK_BOX (content), button_box);
+    gtk_widget_set_visible (discard, TRUE);
+    gtk_widget_set_visible (cancel, TRUE);
+    gtk_widget_set_visible (save, TRUE);
+    gtk_widget_set_visible (button_box, TRUE);
+    gtk_widget_set_visible (content, TRUE);
+
+    g_signal_connect (discard, "clicked",
+                      G_CALLBACK (gnc_main_window_quit_request_discard_clicked), request);
+    g_signal_connect (cancel, "clicked",
+                      G_CALLBACK (gnc_main_window_quit_request_cancel_clicked), request);
+    g_signal_connect (save, "clicked",
+                      G_CALLBACK (gnc_main_window_quit_request_save_clicked), request);
+    g_signal_connect (request->dialog, "close-request",
+                      G_CALLBACK (gnc_main_window_quit_request_dialog_close), request);
+    request->dialog_destroy_handler = g_signal_connect (
+        request->dialog, "destroy",
+        G_CALLBACK (gnc_main_window_quit_request_dialog_destroyed), request);
+    gtk_window_set_default_widget (request->dialog, save);
+
+    auto key_controller = gtk_event_controller_key_new ();
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_main_window_quit_request_key_pressed), request);
+    gtk_widget_add_controller (GTK_WIDGET (request->dialog), key_controller);
+
+    request->deciding = TRUE;
+    gtk_window_present (request->dialog);
+    if (request->countdown_label)
+        request->timer_source = g_timeout_add_seconds (
+            1, gnc_main_window_quit_request_countdown, request);
+
+    g_free (title);
+    g_free (message);
+    g_clear_object (&object);
+}
+
+static void
+gnc_main_window_quit_request_after_save (GtkWindow *parent, gboolean saved,
+                                         gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowQuitRequest *> (user_data);
+
+    (void)parent;
+    if (saved && gnc_main_window_quit_request_is_current (request))
+        gnc_main_window_quit_request_finish (request, TRUE);
+    else
+        gnc_main_window_quit_request_present (request);
+}
+
+static void
+gnc_main_window_request_quit (GncMainWindow *window,
+                              GncSessionTransition *transition)
+{
+    QofSession *session;
+    QofBook *book;
+    GncMainWindowQuitRequest *request;
+
+    if (quit_request_pending || shutdown_started)
+    {
+        gnc_session_transition_complete (transition);
+        return;
+    }
+
+    if (!gnc_current_session_exist () || gnc_file_save_in_progress ())
+    {
+        gnc_session_transition_begin_shutdown (transition);
+        gnc_main_window_begin_shutdown ();
+        return;
+    }
+
+    session = gnc_get_current_session ();
+    book = qof_session_get_book (session);
+    if (!qof_book_session_not_saved (book))
+    {
+        gnc_session_transition_begin_shutdown (transition);
+        gnc_main_window_begin_shutdown ();
+        return;
+    }
+
+    request = g_new0 (GncMainWindowQuitRequest, 1);
+    g_weak_ref_init (&request->window, window);
+
+    request->session = session;
+    request->book = book;
+    request->transition = transition;
+    quit_request_pending = TRUE;
+    gnc_main_window_quit_request_present (request);
+}
+
+static void
+gnc_main_window_close_request_free (GncMainWindowCloseRequest *request)
+{
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+gnc_main_window_close_request_pending_finished (GncMainWindow *window,
+                                                 gboolean accepted,
+                                                 gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowCloseRequest *> (user_data);
+
+    if (window)
+    {
+        window->close_request_pending = FALSE;
+        if (accepted)
+        {
+            if (request->destroy_window)
+                gtk_window_destroy (GTK_WINDOW (window));
+            else
+            {
+                window->close_request_pending = TRUE;
+                gnc_main_window_enqueue_quit (window, FALSE);
+            }
+        }
+    }
+    gnc_main_window_close_request_free (request);
+}
+
+static void
+gnc_main_window_close_request_confirmed (gint response, gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowCloseRequest *> (user_data);
+    GObject *object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+
+    if (object && GNC_IS_MAIN_WINDOW (object))
+    {
+        auto window = GNC_MAIN_WINDOW (object);
+        if (response == GTK_RESPONSE_YES)
+        {
+            request->destroy_window = TRUE;
+            gnc_main_window_finish_pending_async
+                (window, nullptr, gnc_main_window_close_request_pending_finished, request);
+            request = nullptr;
+        }
+        else
+            window->close_request_pending = FALSE;
+    }
+    g_clear_object (&object);
+    if (request)
+        gnc_main_window_close_request_free (request);
+}
+
+static void
+gnc_main_window_quit_after_pending_finished (gboolean accepted, gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowQuitAfterPendingRequest *> (user_data);
+    auto object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+    auto transition = request->transition;
+
+    request->transition = nullptr;
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+    if (accepted && object && GNC_IS_MAIN_WINDOW (object))
+        gnc_main_window_request_quit (GNC_MAIN_WINDOW (object), transition);
+    else
+        gnc_session_transition_complete (transition);
+    g_clear_object (&object);
+}
+
+static void
+gnc_main_window_quit_admission_cancelled (gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowQuitAfterPendingRequest *> (user_data);
+    auto object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+
+    if (object && GNC_IS_MAIN_WINDOW (object))
+        GNC_MAIN_WINDOW (object)->close_request_pending = FALSE;
+    g_clear_object (&object);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+gnc_main_window_quit_admission_start (GncSessionTransition *transition,
+                                      gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowQuitAfterPendingRequest *> (user_data);
+    auto object = static_cast<GObject *> (g_weak_ref_get (&request->window));
+
+    request->transition = transition;
+    if (!object || !GNC_IS_MAIN_WINDOW (object))
+    {
+        g_clear_object (&object);
+        request->transition = nullptr;
+        gnc_main_window_quit_admission_cancelled (request);
+        gnc_session_transition_complete (transition);
+        return;
+    }
+
+    if (request->finish_pending)
+        gnc_main_window_all_finish_pending_async (
+            nullptr, gnc_main_window_quit_after_pending_finished, request);
+    else
+    {
+        request->transition = nullptr;
+        g_weak_ref_clear (&request->window);
+        g_free (request);
+        gnc_main_window_request_quit (GNC_MAIN_WINDOW (object), transition);
+    }
+    g_clear_object (&object);
+}
+
+static void
+gnc_main_window_enqueue_quit (GncMainWindow *window, gboolean finish_pending)
+{
+    auto request = g_new0 (GncMainWindowQuitAfterPendingRequest, 1);
+    GncSessionTransitionDisposition disposition;
+
+    g_weak_ref_init (&request->window, window);
+    request->finish_pending = finish_pending;
+    disposition = gnc_session_transition_enqueue (
+        GNC_SESSION_TRANSITION_QUIT, gnc_main_window_quit_admission_start,
+        gnc_main_window_quit_admission_cancelled, request);
+    if (disposition == GNC_SESSION_TRANSITION_REJECTED)
+        gnc_main_window_quit_admission_cancelled (request);
+}
+
+static void
+gnc_main_window_request_quit_after_pending (GncMainWindow *window)
+{
+    gnc_main_window_enqueue_quit (window, TRUE);
+}
+static gboolean
+gnc_main_window_close_request (GtkWindow *gtk_window, gpointer user_data)
+{
+    auto window = GNC_MAIN_WINDOW (gtk_window);
+
+    (void)user_data;
+    if (!GNC_IS_MAIN_WINDOW (window) || window->window_quitting ||
+        window->close_request_pending || quit_request_pending || shutdown_started ||
+        gnc_session_transition_quit_pending ())
+        return TRUE;
+
+    if (gnc_list_length_cmp (active_windows, 1) > 0)
+    {
+        auto request = g_new0 (GncMainWindowCloseRequest, 1);
+
+        window->close_request_pending = TRUE;
+        g_weak_ref_init (&request->window, window);
+        gnc_warning_dialog_async (gtk_window, GNC_PREF_WARN_CLOSING_WINDOW_QUESTION,
+                                  _("Close Window?"),
+                                  _("This window is closing and will not be restored."),
+                                  _("_OK"), GTK_RESPONSE_YES, TRUE,
+                                  gnc_main_window_close_request_confirmed, request);
+        return TRUE;
+    }
+
+    auto request = g_new0 (GncMainWindowCloseRequest, 1);
+
+    window->close_request_pending = TRUE;
+    g_weak_ref_init (&request->window, window);
+    request->destroy_window = FALSE;
+    gnc_main_window_finish_pending_async
+        (window, nullptr, gnc_main_window_close_request_pending_finished, request);
+    return TRUE;
+}
 
 /** This function handles any event notifications from the engine.
  *  The only event it currently cares about is the deletion of a book.
@@ -1510,7 +2177,7 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
     }
 
     if (GTK_IS_WIDGET(window) && window->window_quitting)
-        gtk_widget_destroy (GTK_WIDGET(window));
+        gtk_window_destroy (GTK_WINDOW(window));
 
     LEAVE(" ");
 }
@@ -1644,25 +2311,20 @@ gnc_main_window_update_all_titles (void)
  *  when it's clicked using the middle mouse button;
  *  there does not seem to be a way to do this with GtkNotebook natively.
  *
- *  @param widget The event box in the tab, which was clicked.
- *
- *  @param event The event parameter describing where on the screen
- *  the mouse was pointing when clicked, type of click, modifiers,
- *  etc.
+ *  @param gesture The click controller attached to the tab.
  *
  *  @param page This is the GncPluginPage corresponding to the tab.
  *
- *  @return Returns TRUE if this was a middle-click, meaning Gnucash
- *  handled the click.
  */
-static gboolean
-gnc_tab_clicked_cb(GtkWidget *widget, GdkEventButton *event, GncPluginPage *page) {
-    if (event->type == GDK_BUTTON_PRESS && event->button == 2)
-    {
-        gnc_main_window_close_page(page);
-        return TRUE;
-    }
-    return FALSE;
+static void
+gnc_tab_clicked_cb (GtkGestureClick *gesture,
+                    gint,
+                    gdouble,
+                    gdouble,
+                    GncPluginPage *page)
+{
+    if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_MIDDLE)
+        gnc_main_window_close_page (page);
 }
 
 static void
@@ -1706,7 +2368,7 @@ static gboolean statusbar_notification_off(gpointer user_data_unused)
     if (mainwindow)
     {
         GtkWidget *statusbar = gnc_main_window_get_statusbar(GNC_WINDOW(mainwindow));
-        gtk_statusbar_remove(GTK_STATUSBAR(statusbar), 0, gnc_statusbar_notification_messageid);
+        gnc_statusbar_remove (statusbar, 0, gnc_statusbar_notification_messageid);
         gnc_statusbar_notification_messageid = 0;
     }
     else
@@ -1801,7 +2463,7 @@ statusbar_notification_lastmodified()
         gchar *msg = generate_statusbar_lastmodified_message();
         if (msg)
         {
-            gnc_statusbar_notification_messageid = gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, msg);
+            gnc_statusbar_notification_messageid = gnc_statusbar_push (statusbar, 0, msg);
         }
         g_free(msg);
 
@@ -2074,9 +2736,9 @@ gnc_main_window_update_tab_close_one_page (GncPluginPage *page,
     }
 
     if (*new_value)
-        gtk_widget_show (close_button);
+        gtk_widget_set_visible (close_button, TRUE);
     else
-        gtk_widget_hide (close_button);
+        gtk_widget_set_visible (close_button, FALSE);
     LEAVE(" ");
 }
 
@@ -2295,7 +2957,6 @@ main_window_find_tab_items (GncMainWindow *window,
 {
     GncMainWindowPrivate *priv;
     GtkWidget *tab_hbox, *widget, *tab_widget;
-    GList *children, *tmp;
 
     ENTER("window %p, page %p, label_p %p, entry_p %p",
           window, page, label_p, entry_p);
@@ -2311,15 +2972,13 @@ main_window_find_tab_items (GncMainWindow *window,
     tab_widget = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
                                            page->notebook_page);
 
-    // Walk through children to find the box containing label+entry
+    // Walk through the first-child path to find the box containing label+entry.
     tab_hbox = tab_widget;
-    while (tab_hbox) {
-        if (g_strcmp0(gtk_widget_get_name(tab_hbox), "tab-content") == 0) {
+    while (tab_hbox)
+    {
+        if (g_strcmp0(gtk_widget_get_name(tab_hbox), "tab-content") == 0)
             break;
-        }
-        GList* _children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
-        tab_hbox = _children ? GTK_WIDGET(_children->data) : nullptr;
-        g_list_free(_children);
+        tab_hbox = gtk_widget_get_first_child (tab_hbox);
     }
 
     if (!GTK_IS_BOX(tab_hbox))
@@ -2328,10 +2987,9 @@ main_window_find_tab_items (GncMainWindow *window,
         return FALSE;
     }
 
-    children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
-    for (tmp = children; tmp; tmp = g_list_next(tmp))
+    for (widget = gtk_widget_get_first_child (tab_hbox); widget;
+         widget = gtk_widget_get_next_sibling (widget))
     {
-        widget = static_cast<GtkWidget*>(tmp->data);
         if (GTK_IS_LABEL(widget))
         {
             *label_p = widget;
@@ -2341,10 +2999,75 @@ main_window_find_tab_items (GncMainWindow *window,
             *entry_p = widget;
         }
     }
-    g_list_free(children);
 
     LEAVE("label %p, entry %p", *label_p, *entry_p);
     return (*label_p && *entry_p);
+}
+
+static GtkCssProvider *tab_color_provider;
+static GHashTable *tab_color_rules;
+static GHashTable *tab_color_displays;
+
+static void
+main_window_update_tab_color_css (GtkWidget *tab_widget,
+                                  const GdkRGBA *tab_color)
+{
+    auto old_css_class = static_cast<const gchar *> (g_object_get_data (
+        G_OBJECT (tab_widget), PLUGIN_PAGE_TAB_COLOR_CSS_CLASS));
+
+    if (old_css_class)
+    {
+        gtk_widget_remove_css_class (tab_widget, old_css_class);
+        g_object_set_data (G_OBJECT (tab_widget), PLUGIN_PAGE_TAB_COLOR_CSS_CLASS, nullptr);
+    }
+
+    if (!tab_color)
+        return;
+
+    gchar css_class[sizeof ("gnc-tab-color-ffffffff")];
+    g_snprintf (css_class, sizeof css_class, "gnc-tab-color-%02x%02x%02x%02x",
+                (guint)(tab_color->red * 255.0 + 0.5),
+                (guint)(tab_color->green * 255.0 + 0.5),
+                (guint)(tab_color->blue * 255.0 + 0.5),
+                (guint)(tab_color->alpha * 255.0 + 0.5));
+
+    if (!tab_color_provider)
+    {
+        tab_color_provider = gtk_css_provider_new ();
+        tab_color_rules = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+        tab_color_displays = g_hash_table_new (g_direct_hash, g_direct_equal);
+    }
+
+    if (!g_hash_table_contains (tab_color_rules, css_class))
+    {
+        GHashTableIter iter;
+        gpointer key, value;
+        GString *css = g_string_new (nullptr);
+        gchar *color = gdk_rgba_to_string (tab_color);
+
+        g_hash_table_insert (tab_color_rules, g_strdup (css_class), color);
+        g_hash_table_iter_init (&iter, tab_color_rules);
+        while (g_hash_table_iter_next (&iter, &key, &value))
+            g_string_append_printf (css, ".%s { background-color: %s; }\n",
+                                    static_cast<const gchar *> (key),
+                                    static_cast<const gchar *> (value));
+
+        gtk_css_provider_load_from_string (tab_color_provider, css->str);
+        g_string_free (css, TRUE);
+    }
+
+    auto display = gtk_widget_get_display (tab_widget);
+    if (!g_hash_table_contains (tab_color_displays, display))
+    {
+        gtk_style_context_add_provider_for_display (display,
+                                                    GTK_STYLE_PROVIDER (tab_color_provider),
+                                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_hash_table_add (tab_color_displays, display);
+    }
+
+    gtk_widget_add_css_class (tab_widget, css_class);
+    g_object_set_data_full (G_OBJECT (tab_widget), PLUGIN_PAGE_TAB_COLOR_CSS_CLASS,
+                            g_strdup (css_class), g_free);
 }
 
 static gboolean
@@ -2507,45 +3230,9 @@ main_window_update_page_color (GncPluginPage *page,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
-    {
-        GtkCssProvider *provider = gtk_css_provider_new();
-        GtkStyleContext *stylectxt;
-        gchar *col_str, *widget_css;
-
-        if (!GTK_IS_EVENT_BOX (tab_widget))
-        {
-            GtkWidget *event_box = gtk_event_box_new ();
-            g_object_ref (tab_widget);
-            gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
-                                        page->notebook_page, event_box);
-            gtk_container_add (GTK_CONTAINER(event_box), tab_widget);
-            g_object_unref (tab_widget);
-            tab_widget = event_box;
-        }
-
-        stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
-        col_str = gdk_rgba_to_string (&tab_color);
-        widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", nullptr);
-
-        gtk_css_provider_load_from_data (provider, widget_css, -1, nullptr);
-        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
-                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_object_unref (provider);
-        g_free (col_str);
-        g_free (widget_css);
-    }
+        main_window_update_tab_color_css (tab_widget, &tab_color);
     else
-    {
-        if (GTK_IS_EVENT_BOX (tab_widget))
-        {
-            GtkWidget *tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
-            g_object_ref (tab_hbox);
-            gtk_container_remove (GTK_CONTAINER(tab_widget), tab_hbox);
-            gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
-                                        page->notebook_page, tab_hbox);
-            g_object_unref (tab_hbox);
-        }
-    }
+        main_window_update_tab_color_css (tab_widget, nullptr);
     g_free(color_string);
     LEAVE("done");
 }
@@ -2558,7 +3245,6 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
     GncMainWindow *window;
     GtkWidget *tab_widget;
     GtkWidget *image = NULL;
-    GList *children;
     gchar *image_name = NULL;
     const gchar *icon_name;
 
@@ -2580,18 +3266,27 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
         return;
     }
 
-    if (GTK_IS_EVENT_BOX(tab_widget))
-        tab_widget = gtk_bin_get_child (GTK_BIN(tab_widget));
-
-    children = gtk_container_get_children (GTK_CONTAINER(tab_widget));
     /* For each, walk the list of container children to get image widget */
-    for (GList *child = children; child; child = g_list_next (child))
+    for (GtkWidget *widget = gtk_widget_get_first_child (tab_widget); widget;
+         widget = gtk_widget_get_next_sibling (widget))
     {
-        GtkWidget *widget = static_cast<GtkWidget*>(child->data);
-        if (GTK_IS_IMAGE(widget))
-            image = widget;
+        auto tab_content = gtk_widget_get_first_child (widget);
+        if (!tab_content)
+            continue;
+
+        for (GtkWidget *content = gtk_widget_get_first_child (tab_content); content;
+             content = gtk_widget_get_next_sibling (content))
+        {
+            if (GTK_IS_IMAGE(content))
+            {
+                image = content;
+                break;
+            }
+        }
+
+        if (image)
+            break;
     }
-    g_list_free (children);
 
     if (!image)
     {
@@ -2612,13 +3307,7 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
         g_free (image_name);
         return;
     }
-    gtk_container_remove (GTK_CONTAINER(tab_widget), image);
-    image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
-    gtk_widget_show (image);
-
-    gtk_container_add (GTK_CONTAINER(tab_widget), image);
-    gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
-    gtk_box_reorder_child (GTK_BOX(tab_widget), image, 0);
+    gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_name);
 
     g_free (image_name);
     LEAVE("done");
@@ -2642,46 +3331,38 @@ gnc_main_window_tab_entry_activate (GtkWidget *entry,
         return;
     }
 
-    main_window_update_page_name(page, gtk_entry_get_text(GTK_ENTRY(entry)));
+    main_window_update_page_name(page, gnc_entry_get_text(GTK_ENTRY(entry)));
 
-    gtk_widget_hide(entry);
-    gtk_widget_show(label);
+    gtk_widget_set_visible (entry, FALSE);
+    gtk_widget_set_visible (label, TRUE);
     LEAVE("");
 }
 
 
-static gboolean
-gnc_main_window_tab_entry_editing_done (GtkWidget *entry,
-                                        GncPluginPage *page)
+static void
+gnc_main_window_tab_entry_focus_leave (GtkEventControllerFocus *controller,
+                                       GncPluginPage *page)
 {
     ENTER("");
-    gnc_main_window_tab_entry_activate(entry, page);
+    auto entry = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller));
+    gnc_main_window_tab_entry_activate (entry, page);
     LEAVE("");
-    return FALSE;
 }
 
 static gboolean
-gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
-        GdkEvent *event,
-        GncPluginPage *page)
+gnc_main_window_tab_entry_key_pressed (GtkEventControllerKey *controller,
+                                       guint keyval,
+                                       guint,
+                                       GdkModifierType,
+                                       GncPluginPage *page)
 {
-    ENTER("");
-    gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(entry));
-    LEAVE("");
-    return FALSE;
-}
-
-static gboolean
-gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
-        GdkEventKey *event,
-        GncPluginPage *page)
-{
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         GtkWidget *label, *entry2;
+        auto entry = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller));
 
-        g_return_val_if_fail(GTK_IS_ENTRY(entry), FALSE);
-        g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+        g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+        g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
 
         ENTER("");
         if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
@@ -2691,10 +3372,11 @@ gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
             return FALSE;
         }
 
-        gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
-        gtk_widget_hide(entry);
-        gtk_widget_show(label);
+        gnc_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+        gtk_widget_set_visible (entry, FALSE);
+        gtk_widget_set_visible (label, TRUE);
         LEAVE("");
+        return TRUE;
     }
     return FALSE;
 }
@@ -2716,7 +3398,6 @@ static void
 gnc_main_window_class_init (GncMainWindowClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-    GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
     window_type = g_quark_from_static_string ("gnc-main-window");
 
@@ -2724,7 +3405,7 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
     object_class->finalize = gnc_main_window_finalize;
 
     /* GtkWidget signals */
-    gtkwidget_class->destroy = gnc_main_window_destroy;
+    object_class->dispose = gnc_main_window_dispose;
 
     /**
      * GncMainWindow::page_added:
@@ -2815,18 +3496,21 @@ gnc_main_window_init (GncMainWindow *window)
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-main-window");
 
+    priv->action_groups = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                  g_free, g_object_unref);
+
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
     priv->restoring_pages = FALSE;
 
-    priv->display_item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
-
     priv->previous_plugin_page_name = nullptr;
     priv->previous_menu_qualifier = nullptr;
 
-    priv->accel_group = gtk_accel_group_new ();
-    gtk_window_add_accel_group (GTK_WINDOW(window), priv->accel_group);
+    priv->shortcut_controller = gtk_shortcut_controller_new ();
+    gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (priv->shortcut_controller),
+                                       GTK_SHORTCUT_SCOPE_GLOBAL);
+    gtk_widget_add_controller (GTK_WIDGET (window), priv->shortcut_controller);
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
@@ -2853,6 +3537,14 @@ gnc_main_window_constructed (GObject *obj)
     G_OBJECT_CLASS (gnc_main_window_parent_class)->constructed (obj);
 }
 
+static gboolean
+gnc_main_window_shutdown_idle (gpointer user_data)
+{
+    (void)user_data;
+    gnc_shutdown (0);
+    return G_SOURCE_REMOVE;
+}
+
 /** Finalize the GncMainWindow object.  This function is called from
  *  the G_Object level to complete the destruction of the object.  It
  *  should release any memory not previously released by the destroy
@@ -2872,7 +3564,7 @@ gnc_main_window_finalize (GObject *object)
     if (active_windows == nullptr)
     {
         /* Oops. User killed last window and we didn't catch it. */
-        g_idle_add((GSourceFunc)gnc_shutdown, 0);
+        g_idle_add (gnc_main_window_shutdown_idle, nullptr);
     }
 
     gnc_gobject_tracking_forget(object);
@@ -2938,21 +3630,27 @@ gnc_main_window_remove_prefs (GncMainWindow *window)
 
 
 static void
-gnc_main_window_destroy (GtkWidget *widget)
+gnc_main_window_disconnect (GncMainWindow *window,
+                            GncPluginPage *page);
+
+static void
+gnc_main_window_dispose (GObject *object)
 {
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GncPluginManager *manager;
     GList *plugins;
 
-    g_return_if_fail (widget != nullptr);
-    g_return_if_fail (GNC_IS_MAIN_WINDOW (widget));
+    g_return_if_fail (object != nullptr);
+    g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
 
-    window = GNC_MAIN_WINDOW (widget);
+    window = GNC_MAIN_WINDOW (object);
 #ifdef MAC_INTEGRATION
     auto entry = g_list_find (active_windows, window);
-    if (entry && (entry->next || entry->prev))
-        gnc_quartz_set_menu (GNC_MAIN_WINDOW (entry->next ? entry->next->data : entry->prev->data));
+    gnc_macos_set_menu (entry && (entry->next || entry->prev)
+                        ? GNC_MAIN_WINDOW (entry->next ? entry->next->data
+                                                      : entry->prev->data)
+                        : nullptr);
 #endif
     active_windows = g_list_remove (active_windows, window);
 
@@ -2962,9 +3660,15 @@ gnc_main_window_destroy (GtkWidget *widget)
     {
 
         /* Close any pages in this window */
-        while (priv->current_page)
-            gnc_main_window_close_page(priv->current_page);
+        while (priv->installed_pages)
+        {
+            auto page = GNC_PLUGIN_PAGE (priv->installed_pages->data);
 
+            gnc_main_window_disconnect (window, page);
+            gnc_plugin_page_destroy_widget (page);
+            g_object_unref (page);
+
+        }
         if (gnc_window_get_progressbar_window() == GNC_WINDOW(window))
             gnc_window_set_progressbar_window(nullptr);
 #ifndef MAC_INTEGRATION
@@ -2977,8 +3681,6 @@ gnc_main_window_destroy (GtkWidget *widget)
         qof_event_unregister_handler(priv->event_handler_id);
         priv->event_handler_id = 0;
 
-        g_hash_table_destroy (priv->display_item_hash);
-
         /* GncPluginManager stuff */
         manager = gnc_plugin_manager_get ();
         plugins = gnc_plugin_manager_get_plugins (manager);
@@ -2986,15 +3688,21 @@ gnc_main_window_destroy (GtkWidget *widget)
         g_list_free (plugins);
     }
 
-    GTK_WIDGET_CLASS (gnc_main_window_parent_class)->destroy (widget);
+    g_clear_pointer (&priv->action_groups, g_hash_table_unref);
+    G_OBJECT_CLASS (gnc_main_window_parent_class)->dispose (object);
 }
 
 
 static gboolean
-gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_main_window_key_press_event (GtkEventControllerKey *controller,
+                                 guint keyval,
+                                 guint,
+                                 GdkModifierType state,
+                                 gpointer)
 {
     GncMainWindowPrivate *priv;
     GdkModifierType modifiers;
+    auto widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller));
 
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(widget), FALSE);
 
@@ -3002,12 +3710,12 @@ gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer
 
     modifiers = gtk_accelerator_get_default_mod_mask ();
 
-    if ((event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
+    if ((state & modifiers) == (GDK_CONTROL_MASK | GDK_ALT_MASK)) // Ctrl+Alt+
     {
         const gchar *account_key = C_ ("lower case key for short cut to 'Accounts'", "a");
         guint account_keyval = gdk_keyval_from_name (account_key);
 
-        if ((account_keyval == event->keyval) || (account_keyval == gdk_keyval_to_lower (event->keyval)))
+        if ((account_keyval == keyval) || (account_keyval == gdk_keyval_to_lower (keyval)))
         {
             gint page = 0;
 
@@ -3023,17 +3731,12 @@ gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer
                  page++;
             }
         }
-        else if ((GDK_KEY_Menu == event->keyval) || (GDK_KEY_space == event->keyval))
+        else if ((GDK_KEY_Menu == keyval) || (GDK_KEY_space == keyval))
         {
-            GList *menu = gtk_menu_get_for_attach_widget (GTK_WIDGET(priv->notebook));
-
-            if (menu)
+            auto page = gnc_main_window_get_current_page (GNC_MAIN_WINDOW (widget));
+            if (page)
             {
-                gtk_menu_popup_at_widget (GTK_MENU(menu->data),
-                                          GTK_WIDGET(priv->notebook),
-                                          GDK_GRAVITY_SOUTH,
-                                          GDK_GRAVITY_SOUTH,
-                                          NULL);
+                do_popup_menu (page, GTK_WIDGET (priv->notebook), nullptr);
                 return TRUE;
             }
         }
@@ -3047,36 +3750,43 @@ gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer
 GncMainWindow *
 gnc_main_window_new (void)
 {
-    auto window{static_cast<GncMainWindow*>(g_object_new (GNC_TYPE_MAIN_WINDOW, nullptr))};
+    auto application = g_application_get_default ();
+    auto window = static_cast<GncMainWindow*> (GTK_IS_APPLICATION (application)
+        ? g_object_new (GNC_TYPE_MAIN_WINDOW, "application", application, nullptr)
+        : g_object_new (GNC_TYPE_MAIN_WINDOW, nullptr));
+
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
 
     auto old_window = gnc_ui_get_main_window (nullptr);
     if (old_window)
     {
-        gint width, height;
-        gtk_window_get_size (old_window, &width, &height);
-        gtk_window_resize (GTK_WINDOW (window), width, height);
-        if ((gdk_window_get_state((gtk_widget_get_window (GTK_WIDGET(old_window))))
-                & GDK_WINDOW_STATE_MAXIMIZED) != 0)
-        {
+        gint width;
+        gint height;
+        gtk_window_get_default_size (old_window, &width, &height);
+        if (width > 0 && height > 0)
+            gtk_window_set_default_size (GTK_WINDOW (window), width, height);
+        if (gtk_window_is_maximized (old_window))
             gtk_window_maximize (GTK_WINDOW (window));
-        }
     }
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
     window->window_quitting = FALSE;
     window->just_plugin_prefs = FALSE;
+    window->close_request_pending = FALSE;
 #ifdef MAC_INTEGRATION
-    gnc_quartz_set_menu(window);
+    gnc_macos_set_menu(window);
 #else
     gnc_main_window_update_all_menu_items();
 #endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
 
-    // set up a callback for notebook navigation
-    g_signal_connect (G_OBJECT(window), "key-press-event",
-                      G_CALLBACK(gnc_main_window_key_press_event),
-                      NULL);
+    // Set up a controller for notebook navigation.
+    auto key_controller = gtk_event_controller_key_new ();
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_main_window_key_press_event), nullptr);
+    gtk_widget_add_controller (GTK_WIDGET (window), key_controller);
+
+    gtk_window_present (GTK_WINDOW (window));
 
     return window;
 }
@@ -3090,19 +3800,11 @@ gnc_main_window_engine_commit_error_callback( gpointer data,
         QofBackendError errcode )
 {
     GncMainWindow* window = GNC_MAIN_WINDOW(data);
-    GtkWidget* dialog;
     const gchar *reason = _("Unable to save to database.");
+
     if ( errcode == ERR_BACKEND_READONLY )
         reason = _("Unable to save to database: Book is marked read-only.");
-    dialog = gtk_message_dialog_new( GTK_WINDOW(window),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_ERROR,
-                                     GTK_BUTTONS_CLOSE,
-                                     "%s",
-                                     reason );
-    gtk_dialog_run(GTK_DIALOG (dialog));
-    gtk_widget_destroy(dialog);
-
+    gnc_error_dialog (GTK_WINDOW (window), "%s", reason);
 }
 
 /** Connect a GncPluginPage to the window.  This function will insert
@@ -3153,10 +3855,12 @@ gnc_main_window_connect (GncMainWindow *window,
         (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)(page, GTK_WIDGET(window));
     g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
 
-    g_signal_connect(G_OBJECT(page->notebook_page), "popup-menu",
-                     G_CALLBACK(gnc_main_window_popup_menu_cb), page);
-    g_signal_connect_after(G_OBJECT(page->notebook_page), "button-press-event",
-                           G_CALLBACK(gnc_main_window_button_press_cb), page);
+    auto context_click = gtk_gesture_click_new ();
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (context_click), GDK_BUTTON_SECONDARY);
+    g_signal_connect (context_click, "pressed",
+                      G_CALLBACK (gnc_main_window_button_press_cb), page);
+    gtk_widget_add_controller (page->notebook_page,
+                               GTK_EVENT_CONTROLLER (context_click));
 }
 
 
@@ -3185,9 +3889,6 @@ gnc_main_window_disconnect (GncMainWindow *window,
     /* Disconnect the callbacks */
     g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
                                          (gpointer)gnc_main_window_popup_menu_cb, page);
-    g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
-                                         (gpointer)gnc_main_window_button_press_cb, page);
-
     // Remove the page_changed signal callback
     gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(page));
 
@@ -3212,12 +3913,6 @@ gnc_main_window_disconnect (GncMainWindow *window,
         {
             page_num = gtk_notebook_page_num(notebook, new_page->notebook_page);
             gtk_notebook_set_current_page(notebook, page_num);
-            /* This may have caused WebKit to schedule  a timer interrupt which it
-               sometimes  forgets to cancel before deleting the object.  See
-               <https://bugs.webkit.org/show_bug.cgi?id=119003>.   Get around this
-               by flushing all events to get rid of the timer interrupt. */
-            while (gtk_events_pending())
-                gtk_main_iteration();
         }
     }
 
@@ -3309,7 +4004,7 @@ gnc_main_window_open_page (GncMainWindow *window,
         }
         if (tmp == nullptr)
             window = gnc_main_window_new ();
-        gtk_widget_show(GTK_WIDGET(window));
+        gtk_window_present (GTK_WINDOW (window));
     }
     else if ((window == nullptr) && active_windows)
     {
@@ -3326,7 +4021,7 @@ gnc_main_window_open_page (GncMainWindow *window,
      * Component structure:
      *
      * tab_container (GtkBox)
-     * ├── tab_clickable_area (GtkEventBox)
+     * ├── tab_clickable_area (GtkBox with GtkGestureClick)
      * │   └── tab_content (GtkBox)
      * │       ├── image (GtkImage, optional)
      * │       ├── label (GtkLabel)
@@ -3342,7 +4037,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     gnc_main_window_update_tab_width_one_page (page, tw);
     g_free (tw);
 
-    gtk_widget_show (label);
+    gtk_widget_set_visible (label, TRUE);
 
     tab_container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
@@ -3356,73 +4051,74 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_widget_set_name (GTK_WIDGET(tab_container), "gnc-id-account-page-tab-box");
 
     gtk_box_set_homogeneous (GTK_BOX (tab_container), FALSE);
-    gtk_widget_show (tab_container);
+    gtk_widget_set_visible (tab_container, TRUE);
 
-    // Create a custom clickable area for the tab to support middle-clicking
-    tab_clickable_area = gtk_event_box_new();
-    gtk_widget_show(tab_clickable_area);
-    gtk_box_pack_start (GTK_BOX (tab_container), tab_clickable_area, TRUE, TRUE, 0);
+    // Create a custom clickable area for the tab to support middle-clicking.
+    tab_clickable_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_set_visible (tab_clickable_area, TRUE);
+    gnc_box_append_full (GTK_BOX (tab_container), tab_clickable_area, TRUE, TRUE, 0);
 
     // Create a box for the tab's content
     // Give it a name so we can find it later (see main_window_find_tab_items)
     GtkWidget *tab_content = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
     gtk_widget_set_name(tab_content, "tab-content");
-    gtk_container_add(GTK_CONTAINER(tab_clickable_area), tab_content);
-    gtk_widget_show(tab_content);
+    gnc_box_append_full (GTK_BOX (tab_clickable_area), tab_content, TRUE, TRUE, 0);
+    gtk_widget_set_visible (tab_content, TRUE);
 
     if (icon != nullptr)
     {
-        image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
-        gtk_widget_show (image);
-        gtk_box_pack_start (GTK_BOX (tab_content), image, FALSE, FALSE, 0);
+        image = gtk_image_new_from_icon_name (icon);
+        gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_NORMAL);
+        gtk_widget_set_visible (image, TRUE);
+        gnc_box_append_full (GTK_BOX (tab_content), image, FALSE, FALSE, 0);
         gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
-        gtk_box_pack_start (GTK_BOX (tab_content), label, TRUE, TRUE, 0);
+        gnc_box_append_full (GTK_BOX (tab_content), label, TRUE, TRUE, 0);
     }
     else
-        gtk_box_pack_start (GTK_BOX (tab_content), label, TRUE, TRUE, 0);
+        gnc_box_append_full (GTK_BOX (tab_content), label, TRUE, TRUE, 0);
 
     entry = gtk_entry_new();
-    gtk_widget_hide (entry);
-    gtk_box_pack_start (GTK_BOX (tab_content), entry, TRUE, TRUE, 0);
+    gtk_widget_set_visible (entry, FALSE);
+    gnc_box_append_full (GTK_BOX (tab_content), entry, TRUE, TRUE, 0);
     g_signal_connect(G_OBJECT(entry), "activate",
                      G_CALLBACK(gnc_main_window_tab_entry_activate), page);
-    g_signal_connect(G_OBJECT(entry), "focus-out-event",
-                     G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
-                     page);
-    g_signal_connect(G_OBJECT(entry), "key-press-event",
-                     G_CALLBACK(gnc_main_window_tab_entry_key_press_event),
-                     page);
-    g_signal_connect(G_OBJECT(entry), "editing-done",
-                     G_CALLBACK(gnc_main_window_tab_entry_editing_done),
-                     page);
+    auto entry_focus = gtk_event_controller_focus_new ();
+    g_signal_connect (entry_focus, "leave",
+                      G_CALLBACK (gnc_main_window_tab_entry_focus_leave), page);
+    gtk_widget_add_controller (entry, entry_focus);
+
+    auto entry_key = gtk_event_controller_key_new ();
+    g_signal_connect (entry_key, "key-pressed",
+                      G_CALLBACK (gnc_main_window_tab_entry_key_pressed), page);
+    gtk_widget_add_controller (entry, entry_key);
 
     /* Add close button - Not for immutable pages */
     if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE))
     {
         GtkWidget *close_image, *close_button;
-        GtkRequisition requisition;
+        GtkGesture *click;
 
         close_button = gtk_button_new();
-        gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-        close_image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
-        gtk_widget_show(close_image);
-        gtk_widget_get_preferred_size (close_image, &requisition, nullptr);
-        gtk_widget_set_size_request(close_button, requisition.width + 4,
-                                    requisition.height + 2);
-        gtk_container_add(GTK_CONTAINER(close_button), close_image);
+        gtk_button_set_has_frame (GTK_BUTTON (close_button), FALSE);
+        close_image = gtk_image_new_from_icon_name ("window-close");
+        gtk_image_set_icon_size (GTK_IMAGE (close_image), GTK_ICON_SIZE_NORMAL);
+        gtk_widget_set_visible (close_image, TRUE);
+        gtk_button_set_child (GTK_BUTTON (close_button), close_image);
         if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON))
-            gtk_widget_show (close_button);
+            gtk_widget_set_visible (close_button, TRUE);
         else
-            gtk_widget_hide (close_button);
+            gtk_widget_set_visible (close_button, FALSE);
 
-        // Custom handler to close on middle-clicks
-        g_signal_connect(G_OBJECT(tab_clickable_area), "button-press-event",
-                         G_CALLBACK(gnc_tab_clicked_cb), page);
+        // Custom handler to close on middle-clicks.
+        click = gtk_gesture_click_new ();
+        gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
+        g_signal_connect (click, "pressed", G_CALLBACK (gnc_tab_clicked_cb), page);
+        gtk_widget_add_controller (tab_clickable_area, GTK_EVENT_CONTROLLER (click));
 
         g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
-        gtk_box_pack_start (GTK_BOX (tab_container), close_button, FALSE, FALSE, 0);
+        gnc_box_append_full (GTK_BOX (tab_container), close_button, FALSE, FALSE, 0);
         gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
         g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
@@ -3443,6 +4139,47 @@ gnc_main_window_open_page (GncMainWindow *window,
 }
 
 
+typedef struct
+{
+    GncPluginPage *page;
+} GncMainWindowClosePageRequest;
+
+static void
+gnc_main_window_close_page_pending_finished (GncPluginPage *page, gboolean accepted,
+                                             gpointer user_data)
+{
+    auto request = static_cast<GncMainWindowClosePageRequest *> (user_data);
+    auto closing_page = request->page;
+
+    if (accepted && page && closing_page->notebook_page &&
+        GNC_IS_MAIN_WINDOW (closing_page->window))
+    {
+        auto window = GNC_MAIN_WINDOW (closing_page->window);
+        auto priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+
+        gnc_main_window_disconnect (window, closing_page);
+        gnc_plugin_page_destroy_widget (closing_page);
+        g_object_unref (closing_page);
+        if (priv->installed_pages == nullptr)
+        {
+            if (window->window_quitting)
+            {
+                GncPluginManager *manager = gnc_plugin_manager_get ();
+                GList *plugins = gnc_plugin_manager_get_plugins (manager);
+
+                window->just_plugin_prefs = TRUE;
+                g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
+                window->just_plugin_prefs = FALSE;
+                g_list_free (plugins);
+                gnc_main_window_remove_prefs (window);
+            }
+            if (gnc_list_length_cmp (active_windows, 1) > 0)
+                gtk_window_destroy (GTK_WINDOW(window));
+        }
+    }
+    g_object_unref (request->page);
+    g_free (request);
+}
 /*  Remove a data plugin page from a window and display the previous
  *  page.  If the page removed was the last page in the window, and
  *  there is more than one window open, then the entire window will be
@@ -3451,50 +4188,15 @@ gnc_main_window_open_page (GncMainWindow *window,
 void
 gnc_main_window_close_page (GncPluginPage *page)
 {
-    GncMainWindow *window;
-    GncMainWindowPrivate *priv;
+    GncMainWindowClosePageRequest *request;
 
-    if (!page || !page->notebook_page)
+    if (!page || !page->notebook_page || !GNC_IS_MAIN_WINDOW (page->window))
         return;
 
-    if (!gnc_plugin_page_finish_pending(page))
-        return;
-
-    if (!GNC_IS_MAIN_WINDOW (page->window))
-        return;
-
-    window = GNC_MAIN_WINDOW (page->window);
-    if (!window)
-    {
-        g_warning("Page is not in a window.");
-        return;
-    }
-
-    gnc_main_window_disconnect(window, page);
-    gnc_plugin_page_destroy_widget (page);
-    g_object_unref(page);
-
-    /* If this isn't the last window, go ahead and destroy the window. */
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    if (priv->installed_pages == nullptr)
-    {
-        if (window->window_quitting)
-        {
-            GncPluginManager *manager = gnc_plugin_manager_get ();
-            GList *plugins = gnc_plugin_manager_get_plugins (manager);
-
-            /* remove only the preference callbacks from the window plugins */
-            window->just_plugin_prefs = TRUE;
-            g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
-            window->just_plugin_prefs = FALSE;
-            g_list_free (plugins);
-
-            /* remove the preference callbacks from the main window */
-            gnc_main_window_remove_prefs (window);
-        }
-        if (window && (gnc_list_length_cmp (active_windows, 1) > 0))
-            gtk_widget_destroy (GTK_WIDGET(window));
-    }
+    request = g_new0 (GncMainWindowClosePageRequest, 1);
+    request->page = GNC_PLUGIN_PAGE (g_object_ref (page));
+    gnc_plugin_page_finish_pending_async
+        (page, nullptr, gnc_main_window_close_page_pending_finished, request);
 }
 
 
@@ -3515,6 +4217,27 @@ gnc_main_window_get_current_page (GncMainWindow *window)
 }
 
 
+/* GtkWidget inserts action groups for action resolution but GTK4 intentionally
+ * has no getter. The window keeps a strong reference for plugin-owned groups;
+ * the main window itself remains available directly as its GActionMap. */
+static void
+gnc_main_window_set_action_group (GncMainWindow *window,
+                                  const gchar *group_name,
+                                  GActionGroup *group)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+
+    gtk_widget_insert_action_group (GTK_WIDGET (window), group_name, group);
+
+    if (g_strcmp0 (group_name, "mainwin") == 0)
+        return;
+
+    if (group)
+        g_hash_table_replace (priv->action_groups, g_strdup (group_name),
+                              g_object_ref (group));
+    else
+        g_hash_table_remove (priv->action_groups, group_name);
+}
 /*  Manually add a set of actions to the specified window.  Plugins
  *  whose user interface is not hard coded (e.g. the menu-additions
  *  plugin) must create their actions at run time, then use this
@@ -3529,8 +4252,7 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
     g_return_if_fail (group_name != nullptr);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(group));
 
-    gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
-                                    G_ACTION_GROUP(group));
+    gnc_main_window_set_action_group (window, group_name, G_ACTION_GROUP (group));
 }
 
 
@@ -3615,9 +4337,15 @@ gnc_main_window_merge_actions (GncMainWindow *window,
                                      actions,
                                      n_actions,
                                      data);
+    /* Each action stores data as a non-owning callback pointer. Tie its
+     * allocation to the group, which owns the actions, so unmerging a plugin
+     * cannot retain stale per-window callback data. */
+    g_object_set_data_full (G_OBJECT (simple_action_group),
+                            "gnc-main-window-action-data", data, g_free);
 
-    gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
-                                    G_ACTION_GROUP(simple_action_group));
+    gnc_main_window_set_action_group (window, group_name,
+                                      G_ACTION_GROUP (simple_action_group));
+    g_object_unref (simple_action_group);
 
     if (ui_filename)
         update_menu_model (window, ui_filename, ui_updates);
@@ -3636,7 +4364,7 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (group_name != nullptr);
 
-    gtk_widget_insert_action_group (GTK_WIDGET(window), group_name, nullptr);
+    gnc_main_window_set_action_group (window, group_name, nullptr);
 }
 
 GAction *
@@ -3664,7 +4392,10 @@ gnc_main_window_find_action_in_group (GncMainWindow *window,
     g_return_val_if_fail (group_name != nullptr, nullptr);
     g_return_val_if_fail (action_name != nullptr, nullptr);
 
-    auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
+    auto action_group = g_strcmp0 (group_name, "mainwin") == 0
+        ? G_ACTION_GROUP (window)
+        : static_cast<GActionGroup *> (g_hash_table_lookup
+            (GNC_MAIN_WINDOW_GET_PRIVATE (window)->action_groups, group_name));
 
     if (action_group)
         action = g_action_map_lookup_action (G_ACTION_MAP(action_group), action_name);
@@ -3684,8 +4415,11 @@ gnc_main_window_get_action_group (GncMainWindow *window,
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
     g_return_val_if_fail (group_name != nullptr, nullptr);
 
-    auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
-    return (GSimpleActionGroup*)action_group;
+    auto action_group = g_strcmp0 (group_name, "mainwin") == 0
+        ? G_ACTION_GROUP (window)
+        : static_cast<GActionGroup *> (g_hash_table_lookup
+            (GNC_MAIN_WINDOW_GET_PRIVATE (window)->action_groups, group_name));
+    return G_IS_SIMPLE_ACTION_GROUP (action_group) ? G_SIMPLE_ACTION_GROUP (action_group) : nullptr;
 }
 
 GtkWidget *
@@ -3701,29 +4435,6 @@ gnc_main_window_toolbar_find_tool_item (GncMainWindow *window, const gchar *acti
     return gnc_find_toolbar_item (priv->toolbar, action_name);
 }
 
-GtkWidget *
-gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_name)
-{
-    GncMainWindowPrivate *priv;
-    GtkWidget *menu_item;
-
-    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
-    g_return_val_if_fail (action_name != nullptr, nullptr);
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-    menu_item = GTK_WIDGET(g_hash_table_lookup (priv->display_item_hash, action_name));
-
-    if (!menu_item)
-    {
-        menu_item = gnc_menubar_model_find_menu_item (priv->menubar_model, priv->menubar, action_name);
-
-        g_hash_table_insert (priv->display_item_hash, g_strdup (action_name), menu_item);
-    }
-    return menu_item;
-}
-
-
 void
 gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window)
 {
@@ -3733,7 +4444,8 @@ gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model, priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model,
+                                       priv->shortcut_controller);
 }
 
 
@@ -3771,36 +4483,34 @@ gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
     GncMainWindowPrivate *priv;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (action_names != nullptr);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     for (gint i = 0; action_names[i]; i++)
     {
         GtkWidget *tool_item = gnc_find_toolbar_item (priv->toolbar, action_names[i]);
-        GtkWidget *menu_item = gnc_main_window_menu_find_menu_item (window, action_names[i]);
+        gboolean menu_item_visible = gnc_menubar_model_set_item_visible (priv->menubar_model,
+                                                                           action_names[i], vis);
 
-        if (menu_item)
-        {
-            PINFO("Found menu_item %p with action name '%s', seting vis to '%s'",
-                    menu_item, action_names[i], vis ? "true" : "false");
-            gtk_widget_set_visible (menu_item, vis);
-        }
+        if (menu_item_visible)
+            PINFO("Updated GMenu item visibility for action '%s' to '%s'",
+                  action_names[i], vis ? "true" : "false");
         else
-            PINFO("Did not find menu_item with action name '%s' to set vis '%s'",
-                   action_names[i], vis ? "true" : "false");
+            PINFO("No GMenu item found for action '%s' while setting visibility to '%s'",
+                  action_names[i], vis ? "true" : "false");
 
         if (tool_item)
         {
-            PINFO("Found tool_item %p with action name '%s', seting vis to '%s'",
-                    tool_item, action_names[i], vis ? "true" : "false");
+            PINFO("Found tool_item %p with action name '%s', setting visibility to '%s'",
+                  tool_item, action_names[i], vis ? "true" : "false");
             gtk_widget_set_visible (tool_item, vis);
         }
         else
-             PINFO("Did not find tool_item with action name '%s' to set vis '%s'",
-                    action_names[i], vis ? "true" : "false");
+            PINFO("Did not find tool_item with action name '%s' to set visibility to '%s'",
+                  action_names[i], vis ? "true" : "false");
     }
 }
-
 
 void
 gnc_main_window_init_short_names (GncMainWindow *window,
@@ -3835,7 +4545,7 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
     if (builder)
     {
         gchar *toolbar_name;
-        gtk_container_remove (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+        gtk_box_remove (GTK_BOX(priv->menu_dock), priv->toolbar);
 
         if (toolbar_qualifier)
             toolbar_name = g_strconcat ("mainwin-toolbar-", toolbar_qualifier, nullptr);
@@ -3847,8 +4557,8 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
         if (!priv->toolbar)
             priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
 
-        g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-        gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+        gnc_plugin_prepare_toolbar (priv->toolbar);
+        gtk_box_append (GTK_BOX(priv->menu_dock), priv->toolbar);
         g_free (toolbar_name);
     }
 
@@ -3877,9 +4587,6 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     const gchar *menu_qualifier;
 
     GMenuModel *menu_model_part;
-#ifdef MAC_INTEGRATION
-    auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
-#endif
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
     g_return_if_fail (page != nullptr);
     g_return_if_fail (ui_updates != nullptr);
@@ -3898,8 +4605,9 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     if (!plugin_page_actions_group_name)
         return;
 
-    gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
-                                    G_ACTION_GROUP(gnc_plugin_page_get_action_group (page)));
+    gnc_main_window_set_action_group
+        (window, gnc_plugin_page_get_simple_action_group_name (page),
+         G_ACTION_GROUP (gnc_plugin_page_get_action_group (page)));
 
     if ((g_strcmp0 (priv->previous_plugin_page_name,
                     plugin_page_actions_group_name) == 0) &&
@@ -3912,8 +4620,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
 
     gnc_main_window_update_toolbar (window, page, menu_qualifier);
 
-    // reset hash table and remove added menu items
-    g_hash_table_remove_all (priv->display_item_hash);
+    // Remove page-specific menu items after restoring hidden model entries.
     gnc_menubar_model_remove_items_with_attrib (priv->menubar_model,
                                                 GNC_MENU_ATTRIBUTE_TEMPORARY);
 
@@ -3949,11 +4656,8 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     gnc_plugin_add_menu_tooltip_callbacks (priv->menubar, priv->menubar_model, priv->statusbar);
 
     // need to add the accelerator keys
-    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model, priv->accel_group);
-#ifdef MAC_INTEGRATION
-    gtkosx_application_sync_menubar (theApp);
-    g_object_unref (theApp);
-#endif
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model,
+                                       priv->shortcut_controller);
     // need to signal menu has been changed
     g_signal_emit_by_name (window, "menu_changed", page);
 
@@ -4083,60 +4787,29 @@ gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean
 }
 
 static void
-gnc_main_window_enable_edit_actions_sensitivity (GncMainWindow *window)
+gnc_main_window_init_menu_updaters (GncMainWindow *window)
 {
-    GAction *action;
-
-    action = gnc_main_window_find_action (window, "EditCopyAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
-
-    action = gnc_main_window_find_action (window, "EditCutAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
-
-    action = gnc_main_window_find_action (window, "EditPasteAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
-
-}
-
-static void
-gnc_main_window_edit_menu_show_cb (GtkWidget *menu,
-                                   GncMainWindow *window)
-{
+    /* GtkPopoverMenuBar derives item sensitivity directly from actions. Keep
+     * those actions synchronized with the focused editor instead of depending
+     * on legacy menu-widget show/hide signals. */
     gnc_main_window_update_edit_actions_sensitivity (window, FALSE);
 }
 
 static void
-gnc_main_window_edit_menu_hide_cb (GtkWidget *menu,
-                                   GncMainWindow *window)
+gnc_main_window_focus_changed (GObject *, GParamSpec *, GncMainWindow *window)
 {
-    gnc_main_window_enable_edit_actions_sensitivity (window);
-}
-
-static void
-gnc_main_window_init_menu_updaters (GncMainWindow *window)
-{
-    GtkWidget *edit_menu_item, *edit_menu;
-
-    edit_menu_item = gnc_main_window_menu_find_menu_item (window, "EditAction");
-
-    edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(edit_menu_item));
-
-    g_signal_connect (edit_menu, "show",
-                      G_CALLBACK(gnc_main_window_edit_menu_show_cb), window);
-    g_signal_connect (edit_menu, "hide",
-                      G_CALLBACK(gnc_main_window_edit_menu_hide_cb), window);
+    gnc_main_window_update_edit_actions_sensitivity (window, FALSE);
 }
 
 /* This is used to prevent the tab having focus */
-static gboolean
-gnc_main_window_page_focus_in (GtkWidget *widget, GdkEvent  *event,
-                               gpointer user_data)
+static void
+gnc_main_window_page_focus_enter (GtkEventControllerFocus *,
+                                  gpointer user_data)
 {
     auto window{static_cast<GncMainWindow *>(user_data)};
     GncPluginPage *page = gnc_main_window_get_current_page (window);
 
     g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
-    return FALSE;
 }
 
 static GAction *
@@ -4174,7 +4847,8 @@ main_window_realize_cb (GtkWidget *widget, gpointer user_data)
     GncMainWindow *window = (GncMainWindow*)user_data;
     GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model,
+                                       priv->shortcut_controller);
 
     /* need to signal menu has been changed, this will call the
        business function 'bind_extra_toolbuttons_visibility' */
@@ -4194,21 +4868,21 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     ENTER(" ");
 
-    /* Catch window manager delete signal */
-    g_signal_connect (G_OBJECT (window), "delete-event",
-                      G_CALLBACK (gnc_main_window_delete_event), window);
+    /* Catch the window manager close request. */
+    g_signal_connect (G_OBJECT (window), "close-request",
+                      G_CALLBACK (gnc_main_window_close_request), window);
 
     /* Create widgets and add them to the window */
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
-    gtk_widget_show (main_vbox);
-    gtk_container_add (GTK_CONTAINER (window), main_vbox);
+    gtk_widget_set_visible (main_vbox, TRUE);
+    gtk_window_set_child (GTK_WINDOW(window), main_vbox);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
-    gtk_widget_show (priv->menu_dock);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->menu_dock,
+    gtk_widget_set_visible (priv->menu_dock, TRUE);
+    gnc_box_append_full (GTK_BOX (main_vbox), priv->menu_dock,
                         FALSE, TRUE, 0);
 
     priv->notebook = gtk_notebook_new ();
@@ -4216,26 +4890,28 @@ gnc_main_window_setup_window (GncMainWindow *window)
                  "scrollable", TRUE,
                  "enable-popup", TRUE,
                  (char *)nullptr);
-    gtk_widget_show (priv->notebook);
+    gtk_widget_set_visible (priv->notebook, TRUE);
     g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
                       G_CALLBACK (gnc_main_window_switch_page), window);
     g_signal_connect (G_OBJECT (priv->notebook), "page-reordered",
                       G_CALLBACK (gnc_main_window_page_reordered), window);
-    g_signal_connect (G_OBJECT (priv->notebook), "focus-in-event",
-                      G_CALLBACK (gnc_main_window_page_focus_in), window);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
+    auto notebook_focus = gtk_event_controller_focus_new ();
+    g_signal_connect (notebook_focus, "enter",
+                      G_CALLBACK (gnc_main_window_page_focus_enter), window);
+    gtk_widget_add_controller (priv->notebook, notebook_focus);
+    gnc_box_append_full (GTK_BOX (main_vbox), priv->notebook,
                         TRUE, TRUE, 0);
 
-    priv->statusbar = gtk_statusbar_new ();
-    gtk_widget_show (priv->statusbar);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
+    priv->statusbar = gnc_statusbar_new ();
+    gtk_widget_set_visible (priv->statusbar, TRUE);
+    gnc_box_append_full (GTK_BOX (main_vbox), priv->statusbar,
                         FALSE, TRUE, 0);
 
     priv->progressbar = gtk_progress_bar_new ();
     gtk_progress_bar_set_show_text (GTK_PROGRESS_BAR(priv->progressbar), TRUE);
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
-    gtk_widget_show (priv->progressbar);
-    gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
+    gtk_widget_set_visible (priv->progressbar, TRUE);
+    gnc_box_append_full (GTK_BOX (priv->statusbar), priv->progressbar,
                         FALSE, TRUE, 0);
     gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(priv->progressbar),
                                     0.01);
@@ -4257,14 +4933,14 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                      window);
 
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
-    priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar);
-    gtk_widget_show (GTK_WIDGET(priv->menubar));
+    priv->menubar = gtk_popover_menu_bar_new_from_model (priv->menubar_model);
+    gtk_box_append (GTK_BOX(priv->menu_dock), priv->menubar);
+    gtk_widget_set_visible (GTK_WIDGET(priv->menubar), TRUE);
 
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
-    g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar));
-    gtk_widget_show (GTK_WIDGET(priv->toolbar));
+    gnc_plugin_prepare_toolbar (priv->toolbar);
+    gtk_box_append (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
+    gtk_widget_set_visible (GTK_WIDGET(priv->toolbar), TRUE);
 
     g_object_unref (builder);
 
@@ -4278,8 +4954,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_main_window_set_vis_of_items_by_action (window, always_hidden_actions,
                                                 false);
 
-    gtk_widget_insert_action_group (GTK_WIDGET(window), "mainwin",
-                                    G_ACTION_GROUP(window));
+    gnc_main_window_set_action_group (window, "mainwin", G_ACTION_GROUP (window));
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_TAB_POSITION_TOP,
@@ -4300,6 +4975,12 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_main_window_update_tab_position (nullptr, nullptr, window);
 
     gnc_main_window_init_menu_updaters (window);
+    g_signal_connect (window, "notify::focus-widget",
+                      G_CALLBACK (gnc_main_window_focus_changed), window);
+#ifdef MAC_INTEGRATION
+    g_signal_connect (window, "notify::is-active",
+                      G_CALLBACK (gnc_macos_active_window_changed), window);
+#endif
 
     /* Disable the Transaction menu */
     action = gnc_main_window_find_action (window, "TransactionAction");
@@ -4334,96 +5015,33 @@ gnc_main_window_setup_window (GncMainWindow *window)
 }
 
 #ifdef MAC_INTEGRATION
-/* Event handlers for the shutdown process.  Gnc_quartz_shutdown is
- * connected to NSApplicationWillTerminate, the last chance to do
- * anything before quitting. The problem is that it's launched from a
- * CFRunLoop, not a g_main_loop, and if we call anything that would
- * affect the main_loop we get an assert that we're in a subidiary
- * loop.
- */
 static void
-gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data)
+gnc_macos_set_menu (GncMainWindow *window)
 {
-    /* Do Nothing. It's too late. */
-}
-/* Should quit responds to NSApplicationBlockTermination; returning TRUE means
- * "don't terminate", FALSE means "do terminate". gnc_main_window_quit() queues
- * a timer that starts an orderly shutdown in 250ms and if we tell macOS it's OK
- * to quit GnuCash gets terminated instead of doing its orderly shutdown,
- * leaving the book locked.
- */
-static gboolean
-gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
-{
-    if (gnc_main_window_all_finish_pending())
-        gnc_main_window_quit (window);
-    return TRUE;
-}
-/* Enable GtkMenuItem accelerators */
-static gboolean
-can_activate_cb(GtkWidget *widget, guint signal_id, gpointer data)
-{
-    //return gtk_widget_is_sensitive (widget);
-    return TRUE;
+    auto application = g_application_get_default ();
+
+    if (!GTK_IS_APPLICATION (application))
+        return;
+    if (!window)
+    {
+        gtk_application_set_menubar (GTK_APPLICATION (application), nullptr);
+        return;
+    }
+
+    auto priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+    gtk_application_set_menubar (GTK_APPLICATION (application),
+                                  priv->menubar_model);
+    gtk_widget_set_visible (priv->menubar, FALSE);
 }
 
 static void
-gnc_quartz_set_menu (GncMainWindow* window)
+gnc_macos_active_window_changed (GObject *object, GParamSpec *pspec,
+                                 GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
-    GtkWidget       *item = nullptr;
-    GClosure *quit_closure;
-
-    gtk_widget_hide (priv->menubar);
-    gtk_widget_set_no_show_all (priv->menubar, true);
-
-    gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL(priv->menubar));
-
-    // File Quit
-    item = gnc_main_window_menu_find_menu_item (window, "FileQuitAction");
-    if (item)
-        gtk_widget_hide (GTK_WIDGET(item));
-
-    quit_closure = g_cclosure_new (G_CALLBACK (gnc_quartz_should_quit),
-                                   window, NULL);
-    gtk_accel_group_connect (priv->accel_group, 'q', GDK_META_MASK,
-                             GTK_ACCEL_MASK, quit_closure);
-
-
-    // Help About
-    item = gnc_main_window_menu_find_menu_item (window, "HelpAboutAction");
-    if (item)
-    {
-        gtk_widget_hide (item);
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 0);
-    }
-
-    // Edit Preferences
-    item = gnc_main_window_menu_find_menu_item (window, "EditPreferencesAction");
-    if (item)
-    {
-        gtk_widget_hide (GTK_WIDGET(item));
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 2);
-    }
-
-    // Help Menu
-    item = gnc_main_window_menu_find_menu_item (window, "HelpAction");
-    if (item)
-        gtkosx_application_set_help_menu (theApp, GTK_MENU_ITEM(item));
-    // Windows Menu
-    item = gnc_main_window_menu_find_menu_item (window, "WindowsAction");
-    if (item)
-        gtkosx_application_set_window_menu (theApp, GTK_MENU_ITEM(item));
-
-    g_signal_connect (theApp, "NSApplicationBlockTermination",
-                      G_CALLBACK(gnc_quartz_should_quit), window);
-
-    g_signal_connect (priv->menubar, "can-activate-accel",
-                      G_CALLBACK (can_activate_cb), nullptr);
-
-    gtkosx_application_set_use_quartz_accelerators (theApp, FALSE);
-    g_object_unref (theApp);
+    (void)object;
+    (void)pspec;
+    if (gtk_window_is_active (GTK_WINDOW (window)))
+        gnc_macos_set_menu (window);
 }
 #endif //MAC_INTEGRATION
 
@@ -4647,14 +5265,8 @@ gnc_book_options_dialog_apply_helper(GncOptionDB * options)
     results = gnc_option_db_commit (options);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (nullptr),
-                                                   (GtkDialogFlags)0,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_OK,
-                                                   "%s",
-                                                   (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_error_dialog (gnc_ui_get_main_window (nullptr), "%s",
+                          static_cast<char *> (iter->data));
         g_free (iter->data);
     }
     g_list_free (results);
@@ -4699,7 +5311,7 @@ gnc_book_options_dialog_close_cb(GncOptionsDialog * optionwin,
     auto options{static_cast<GncOptionDB *>(user_data)};
 
     delete optionwin;
-    gnc_option_db_destroy(options);
+    gnc_option_db_destroy_owned(options);
 }
 
 /** Calls gnc_book_option_num_field_source_change to initiate registered
@@ -4738,13 +5350,6 @@ show_handler (const char *class_name, gint component_id,
 GtkWidget *
 gnc_book_options_dialog_cb (gboolean modal, gchar *title, GtkWindow* parent)
 {
-    auto book = gnc_get_current_book ();
-
-    auto options = gnc_option_db_new();
-    gnc_option_db_book_options(options);
-    qof_book_load_options (book, gnc_option_db_load, options);
-    gnc_option_db_clean (options);
-
     /* Only allow one Book Options dialog if called from file->properties
        menu */
     if (gnc_forall_gui_components(DIALOG_BOOK_OPTIONS_CM_CLASS,
@@ -4752,6 +5357,13 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title, GtkWindow* parent)
     {
         return nullptr;
     }
+
+    auto book = gnc_get_current_book ();
+    auto options = gnc_option_db_new();
+    gnc_option_db_book_options(options);
+    qof_book_load_options (book, gnc_option_db_load, options);
+    gnc_option_db_clean (options);
+
     auto optionwin = new GncOptionsDialog (modal,
                                            (title ? title : _( "Book Options")),
                                            DIALOG_BOOK_OPTIONS_CM_CLASS, parent);
@@ -4797,10 +5409,20 @@ gnc_main_window_cmd_file_quit (GSimpleAction *simple,
                                gpointer       user_data)
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
-    if (!gnc_main_window_all_finish_pending())
+    gnc_main_window_request_quit_after_pending (window);
+}
+
+static void
+activate_clipboard_action (GtkWidget *widget, const gchar *action_name,
+                           const gchar *text_view_signal)
+{
+    if (!widget)
         return;
 
-    gnc_main_window_quit(window);
+    if (GTK_IS_TEXT_VIEW (widget))
+        g_signal_emit_by_name (widget, text_view_signal);
+    else if (GTK_IS_EDITABLE (widget))
+        gtk_widget_activate_action (widget, action_name, nullptr);
 }
 
 static void
@@ -4823,20 +5445,7 @@ gnc_main_window_cmd_edit_cut (GSimpleAction *simple,
         return;
     }
 
-    if (GTK_IS_EDITABLE(widget))
-    {
-        gtk_editable_cut_clipboard (GTK_EDITABLE(widget));
-    }
-    else if (GTK_IS_TEXT_VIEW(widget))
-    {
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
-                                                            GDK_SELECTION_CLIPBOARD);
-        gboolean editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
-
-        if (clipboard)
-            gtk_text_buffer_cut_clipboard (text_buffer, clipboard, editable);
-    }
+    activate_clipboard_action (widget, "clipboard.cut", "cut-clipboard");
 }
 
 static void
@@ -4859,18 +5468,7 @@ gnc_main_window_cmd_edit_copy (GSimpleAction *simple,
         return;
     }
 
-    if (GTK_IS_EDITABLE(widget))
-    {
-        gtk_editable_copy_clipboard (GTK_EDITABLE(widget));
-    }
-    else if (GTK_IS_TEXT_VIEW(widget))
-    {
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
-                                                            GDK_SELECTION_CLIPBOARD);
-        if (clipboard)
-            gtk_text_buffer_copy_clipboard (text_buffer, clipboard);
-    }
+    activate_clipboard_action (widget, "clipboard.copy", "copy-clipboard");
 }
 
 static void
@@ -4893,22 +5491,7 @@ gnc_main_window_cmd_edit_paste (GSimpleAction *simple,
         return;
     }
 
-    if (GTK_IS_EDITABLE(widget))
-    {
-        gtk_editable_paste_clipboard (GTK_EDITABLE(widget));
-    }
-    else if (GTK_IS_TEXT_VIEW(widget))
-    {
-        auto clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
-
-        if (clipboard)
-        {
-            auto text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-            auto editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
-            gtk_text_buffer_paste_clipboard (text_buffer, clipboard, nullptr,
-                                             editable);
-        }
-    }
+    activate_clipboard_action (widget, "clipboard.paste", "paste-clipboard");
 }
 
 static void
@@ -4961,10 +5544,10 @@ gnc_main_window_cmd_actions_rename_page (GSimpleAction *simple,
         return;
     }
 
-    gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+    gnc_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
     gtk_editable_select_region(GTK_EDITABLE(entry), 0, -1);
-    gtk_widget_hide(label);
-    gtk_widget_show(entry);
+    gtk_widget_set_visible (label, FALSE);
+    gtk_widget_set_visible (entry, TRUE);
     gtk_widget_grab_focus(entry);
     LEAVE("opened for editing");
 }
@@ -4983,9 +5566,9 @@ gnc_main_window_cmd_view_toolbar (GSimpleAction *simple,
     g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
 
     if (!g_variant_get_boolean (state))
-        gtk_widget_show (priv->toolbar);
+        gtk_widget_set_visible (priv->toolbar, TRUE);
     else
-        gtk_widget_hide (priv->toolbar);
+        gtk_widget_set_visible (priv->toolbar, FALSE);
 
     g_variant_unref (state);
 }
@@ -5025,9 +5608,9 @@ gnc_main_window_cmd_view_statusbar (GSimpleAction *simple,
     g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
 
     if (!g_variant_get_boolean (state))
-        gtk_widget_show (priv->statusbar);
+        gtk_widget_set_visible (priv->statusbar, TRUE);
     else
-        gtk_widget_hide (priv->statusbar);
+        gtk_widget_set_visible (priv->statusbar, FALSE);
 
     g_variant_unref (state);
 }
@@ -5042,7 +5625,7 @@ gnc_main_window_cmd_window_new (GSimpleAction *simple,
     /* Create the new window */
     ENTER(" ");
     new_window = gnc_main_window_new ();
-    gtk_widget_show(GTK_WIDGET(new_window));
+    gtk_window_present (GTK_WINDOW (new_window));
     LEAVE(" ");
 }
 
@@ -5096,7 +5679,7 @@ gnc_main_window_cmd_window_move_page (GSimpleAction *simple,
 
     /* Create the new window */
     new_window = gnc_main_window_new ();
-    gtk_widget_show(GTK_WIDGET(new_window));
+    gtk_window_present (GTK_WINDOW (new_window));
 
     /* Now add the page to the new window */
     gnc_main_window_connect (new_window, page, tab_widget, menu_widget);
@@ -5275,83 +5858,79 @@ url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
 
 #define DEFAULT_MARGIN 5
 
-static void
-set_text_cursor (GdkWindow *win, GdkCursorType type)
+static GtkTextTag *
+textview_get_link_tag_at_position (GtkTextView *textview,
+                                   gdouble x,
+                                   gdouble y)
 {
-    if (!win && !type)
-        return;
-
-    GdkCursor *current = gdk_window_get_cursor (win);
-    if (type == gdk_cursor_get_cursor_type (current))
-        return;
-
-    GdkCursor *cur = gdk_cursor_new_for_display (gdk_window_get_display (win), type);
-    gdk_window_set_cursor (win, cur);
-}
-
-static gboolean
-textview_motion_notify_cb (GtkWidget *textview,
-                           GdkEventMotion *event,
-                           gpointer user_data)
-{
-    if ((event->state & GDK_BUTTON1_MASK) ||
-         gtk_text_buffer_get_has_selection (gtk_text_view_get_buffer
-                                           (GTK_TEXT_VIEW(textview))))
-        return false;
-
     GtkTextIter iter;
-    gboolean valid = gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW(textview),
-                                                         &iter, event->x, event->y);
+    if (y <= DEFAULT_MARGIN ||
+        !gtk_text_view_get_iter_at_location (textview, &iter, (gint)x, (gint)y))
+        return nullptr;
 
-    if (valid && (event->y > DEFAULT_MARGIN))
+    GSList *tags = gtk_text_iter_get_tags (&iter);
+    GtkTextTag *link_tag = nullptr;
+    for (GSList *tag = tags; tag; tag = tag->next)
     {
-        GSList *tt_list = gtk_text_iter_get_tags (&iter);
-
-        if (tt_list)
+        auto candidate = GTK_TEXT_TAG (tag->data);
+        if (g_object_get_data (G_OBJECT (candidate), "link"))
         {
-            GtkTextTag *tt = (GtkTextTag*)g_slist_nth_data (tt_list, 0);
-
-            if (g_object_get_data (G_OBJECT(tt), "link"))
-                set_text_cursor (event->window, GDK_HAND1);
-            else
-                set_text_cursor (event->window, GDK_XTERM);
-
-            g_slist_free (tt_list);
+            link_tag = candidate;
+            break;
         }
-        else
-            set_text_cursor (event->window, GDK_XTERM);
     }
-    else
-        set_text_cursor (event->window, GDK_XTERM);
+    g_slist_free (tags);
 
-    return true;
+    return link_tag;
 }
 
-static gboolean
-textview_url_activate (GtkTextTag *tag,
-                       GObject *object,
-                       GdkEvent *event,
-                       GtkTextIter *iter,
+static void
+textview_motion_cb (GtkEventControllerMotion *controller,
+                    gdouble x,
+                    gdouble y,
+                    gpointer)
+{
+    auto textview = GTK_TEXT_VIEW (gtk_event_controller_get_widget (
+        GTK_EVENT_CONTROLLER (controller)));
+    if ((gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (controller)) &
+         GDK_BUTTON1_MASK) ||
+        gtk_text_buffer_get_has_selection (gtk_text_view_get_buffer (textview)))
+        return;
+
+    gtk_widget_set_cursor_from_name (GTK_WIDGET (textview),
+                                     textview_get_link_tag_at_position (textview, x, y)
+                                     ? "pointer" : "text");
+}
+
+static void
+textview_url_activate (GtkGestureClick *gesture,
+                       gint,
+                       gdouble x,
+                       gdouble y,
                        gpointer user_data)
 {
-    GdkEventButton *event_button = (GdkEventButton*)event;
+    if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) !=
+        GDK_BUTTON_PRIMARY)
+        return;
 
-    if ((event->type == GDK_BUTTON_RELEASE) &&
-        (event_button->button == 1) &&
-        !gtk_text_buffer_get_has_selection (gtk_text_view_get_buffer
-                                            (GTK_TEXT_VIEW (object))) &&
-        (event_button->y > DEFAULT_MARGIN))
-    {
-        gchar *link = (gchar*)g_object_get_data (G_OBJECT(tag), "link");
-        PINFO("Link is '%s'", link);
-        gchar *escaped_uri = g_uri_escape_string (link, ":/.\\", true);
-        PINFO("Escaped Link is '%s'", escaped_uri);
-        gnc_launch_doclink (GTK_WINDOW(user_data), escaped_uri);
-        g_free (escaped_uri);
+    auto textview = GTK_TEXT_VIEW (gtk_event_controller_get_widget (
+        GTK_EVENT_CONTROLLER (gesture)));
+    if (gtk_text_buffer_get_has_selection (gtk_text_view_get_buffer (textview)))
+        return;
 
-        return true;
-    }
-    return false;
+    auto tag = textview_get_link_tag_at_position (textview, x, y);
+    if (!tag)
+        return;
+
+    auto link = static_cast<const gchar *> (g_object_get_data (G_OBJECT (tag), "link"));
+    if (!link)
+        return;
+
+    PINFO("Link is '%s'", link);
+    gchar *escaped_uri = g_uri_escape_string (link, ":/.\\", true);
+    PINFO("Escaped Link is '%s'", escaped_uri);
+    gnc_launch_doclink (GTK_WINDOW (user_data), escaped_uri);
+    g_free (escaped_uri);
 }
 
 static gint
@@ -5397,21 +5976,8 @@ create_left_margin_text_tag (GtkTextView *textview,
     return lmargin_tt;
 }
 
-static GdkRGBA
-get_link_color (void)
-{
-    GdkRGBA link_color;
-    GtkWidget *dummy_link_button = gtk_link_button_new_with_label ("https://www.gnucash.org", "Dummy");
-    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(dummy_link_button));
-    gtk_style_context_get_color (context, GTK_STATE_FLAG_LINK, &link_color);
-
-    return link_color;
-}
-
 static GtkTextTag *
-create_url_text_tag (GtkDialog *dialog,
-                     GdkRGBA link_color,
-                     gchar *url_tag,
+create_url_text_tag (gchar *url_tag,
                      const gchar *uri)
 {
     if (!url_tag)
@@ -5420,32 +5986,17 @@ create_url_text_tag (GtkDialog *dialog,
     GtkTextTag *url_tt = gtk_text_tag_new (url_tag);
     g_object_set (G_OBJECT(url_tt), "underline", PANGO_UNDERLINE_SINGLE,
                                     "underline-set", true, nullptr);
-    g_object_set (G_OBJECT(url_tt), "foreground-rgba", &link_color, nullptr);
 
     g_object_set_data_full (G_OBJECT(url_tt), "link", g_strdup (uri), g_free);
 
-    g_signal_connect (G_OBJECT(url_tt), "event",
-                      G_CALLBACK(textview_url_activate), dialog);
     return url_tt;
 }
 
-static void
-add_textview_css_class (GtkTextView *textview)
-{
-    GdkRGBA color;
-    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(textview));
-    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
-
-    if (gnc_is_dark_theme (&color))
-        gtk_style_context_add_class (stylectxt, "gnc-class-textview-dark");
-    else
-        gtk_style_context_add_class (stylectxt, "gnc-class-textview");
-}
 
 static void
-add_about_paths (GtkDialog *dialog)
+add_about_paths (GtkAboutDialog *dialog)
 {
-    GtkWidget *page_vbox = gnc_get_dialog_widget_from_id (dialog, "page_vbox");
+    GtkWidget *page_vbox = gnc_get_widget_from_id (GTK_WIDGET (dialog), "page_vbox");
 
     if (!page_vbox)
     {
@@ -5462,10 +6013,7 @@ add_about_paths (GtkDialog *dialog)
     int ep_size = (int)ep_vec.size();
     int row = 1;
 
-    GdkRGBA link_color = get_link_color ();
     gint max_text_width = get_max_text_width (GTK_TEXT_VIEW(textview), ep_vec);
-
-    add_textview_css_class (GTK_TEXT_VIEW(textview));
 
     gtk_text_view_set_left_margin (GTK_TEXT_VIEW(textview), DEFAULT_MARGIN);
     gtk_text_view_set_right_margin (GTK_TEXT_VIEW(textview), DEFAULT_MARGIN);
@@ -5495,10 +6043,7 @@ add_about_paths (GtkDialog *dialog)
                                                                   lmargin_tag,
                                                                   env_name,
                                                                   max_text_width));
-        gtk_text_tag_table_add (ttt, create_url_text_tag (dialog,
-                                                          link_color,
-                                                          url_tag,
-                                                          uri));
+        gtk_text_tag_table_add (ttt, create_url_text_tag (url_tag, uri));
 
         gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, env_name, -1, lmargin_tag, nullptr);
         gtk_text_buffer_insert (buffer, &iter, " ", -1);
@@ -5522,12 +6067,18 @@ add_about_paths (GtkDialog *dialog)
     }
     gtk_text_view_set_editable (GTK_TEXT_VIEW(textview), false);
 
-    g_signal_connect (G_OBJECT(textview), "motion-notify-event",
-                      G_CALLBACK(textview_motion_notify_cb), nullptr);
+    auto motion = gtk_event_controller_motion_new ();
+    g_signal_connect (motion, "motion", G_CALLBACK (textview_motion_cb), nullptr);
+    gtk_widget_add_controller (textview, motion);
 
-    gtk_container_add_with_properties (GTK_CONTAINER(page_vbox), textview,
-                                       "position", 1, nullptr);
-    gtk_widget_show_all (page_vbox);
+    auto click = gtk_gesture_click_new ();
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), GDK_BUTTON_PRIMARY);
+    g_signal_connect (click, "released", G_CALLBACK (textview_url_activate), dialog);
+    gtk_widget_add_controller (textview, GTK_EVENT_CONTROLLER (click));
+
+    if (GTK_IS_BOX (page_vbox))
+        gnc_box_append_full (GTK_BOX (page_vbox), textview, TRUE, TRUE, 0);
+    gtk_widget_set_visible (page_vbox, TRUE);
 }
 
 /** Create and display the "about" dialog for gnucash.
@@ -5544,23 +6095,18 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
     gchar **authors = get_file_strsplit("AUTHORS");
     gchar **documenters = get_file_strsplit("DOCUMENTERS");
     gchar *license = get_file("LICENSE");
-    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-    GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
-                                                GNC_ICON_APP,
-                                                128,
-                                                GTK_ICON_LOOKUP_USE_BUILTIN,
-                                                nullptr);
     gchar *version = g_strdup_printf ("%s: %s\n%s: %s\nFinance::Quote: %s",
                                       _("Version"), gnc_version(),
                                       _("Build ID"), gnc_build_id(),
                                       gnc_quote_source_fq_version ()
                                       ? gnc_quote_source_fq_version ()
                                       : "-");
-    GtkDialog *dialog = GTK_DIALOG (gtk_about_dialog_new ());
+    GtkAboutDialog *dialog = GTK_ABOUT_DIALOG (gtk_about_dialog_new ());
     g_object_set(G_OBJECT(dialog), "authors", authors, "documenters",
                  documenters, "comments",
                  _("Accounting for personal and small business finance."),
-                 "copyright", copyright, "license", license, "logo", logo,
+                 "copyright", copyright, "license", license,
+                 "logo-icon-name", GNC_ICON_APP,
                  "name", "GnuCash",
                  /* Translators: the following string will be shown in
                   * Help->About->Credits It's intended to be generated
@@ -5583,7 +6129,6 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
         g_strfreev(documenters);
     if (authors)
         g_strfreev(authors);
-    g_object_unref (logo);
     g_signal_connect (dialog, "activate-link",
                       G_CALLBACK (url_signal_cb), nullptr);
 
@@ -5595,8 +6140,7 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                   GTK_WINDOW (window));
-    gtk_dialog_run (dialog);
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    gtk_window_present (GTK_WINDOW (dialog));
 }
 
 
@@ -5608,34 +6152,22 @@ void
 gnc_main_window_show_all_windows(void)
 {
     GList *window_iter;
-#ifdef MAC_INTEGRATION
-    auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
-#endif
     for (window_iter = active_windows; window_iter != nullptr; window_iter = window_iter->next)
     {
-        gtk_widget_show(GTK_WIDGET(window_iter->data));
+        gtk_window_present (GTK_WINDOW (window_iter->data));
     }
-#ifdef MAC_INTEGRATION
-    g_signal_connect(theApp, "NSApplicationWillTerminate",
-                     G_CALLBACK(gnc_quartz_shutdown), nullptr);
-    gtkosx_application_ready(theApp);
-    g_object_unref (theApp);
-#endif
 }
 
 GtkWindow *
 gnc_ui_get_gtk_window (GtkWidget *widget)
 {
-    GtkWidget *toplevel;
+    GtkRoot *root;
 
     if (!widget)
         return nullptr;
 
-    toplevel = gtk_widget_get_toplevel (widget);
-    if (toplevel && GTK_IS_WINDOW (toplevel))
-        return GTK_WINDOW (toplevel);
-    else
-        return nullptr;
+    root = gtk_widget_get_root (widget);
+    return root && GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : nullptr;
 }
 
 GtkWindow *
@@ -5657,6 +6189,9 @@ gnc_ui_get_main_window (GtkWidget *widget)
     for (window = active_windows; window; window = window->next)
         if (gtk_widget_get_mapped (GTK_WIDGET(window->data)))
             return static_cast<GtkWindow*>(window->data);
+
+    if (active_windows)
+        return static_cast<GtkWindow*>(active_windows->data);
 
     return nullptr;
 }
@@ -5769,7 +6304,7 @@ gnc_main_window_get_menubar_model (GncWindow *window)
  *  interface.
  *
  *  @param window_in A pointer to a generic window. */
-static GtkAccelGroup *
+static GtkEventController *
 gnc_main_window_get_accel_group (GncWindow *window)
 {
     GncMainWindowPrivate *priv;
@@ -5778,7 +6313,7 @@ gnc_main_window_get_accel_group (GncWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    return priv->accel_group;
+    return priv->shortcut_controller;
 }
 
 /** Initialize the generic window interface for a main window.
@@ -5819,12 +6354,21 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
  *  @param page This is the GncPluginPage corresponding to the visible
  *  page.
  *
- *  @param event The event parameter passed to the "button-press"
- *  callback.  May be null if there was no event (aka keyboard
- *  request).
+ *  @param relative_to The widget that owns the popover.
+ *
+ *  @param pointing_to Optional coordinates in @a relative_to at which
+ *  the popover should be placed. A null value represents a keyboard request.
  */
 static void
-do_popup_menu (GncPluginPage *page, GdkEventButton *event)
+gnc_main_window_popup_closed (GtkPopover *popover)
+{
+    gtk_widget_unparent (GTK_WIDGET (popover));
+}
+
+static void
+do_popup_menu (GncPluginPage *page,
+               GtkWidget *relative_to,
+               const GdkRectangle *pointing_to)
 {
     GtkBuilder *builder;
     GMenuModel *menu_model;
@@ -5836,7 +6380,7 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
-    ENTER("page %p, event %p", page, event);
+    ENTER("page %p, relative widget %p", page, relative_to);
 
     gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 
@@ -5865,7 +6409,7 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
     if (!menu_model)
         menu_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-popup");
 
-    menu = gtk_menu_new_from_model (menu_model);
+    menu = gtk_popover_menu_new_from_model (menu_model);
 
     if (!menu)
     {
@@ -5876,8 +6420,14 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
     // add tooltip redirect call backs
     gnc_plugin_add_menu_tooltip_callbacks (menu, menu_model, statusbar);
 
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(page->window), nullptr);
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+    if (!relative_to)
+        relative_to = GTK_WIDGET (page->window);
+    gtk_widget_set_parent (menu, relative_to);
+    gtk_popover_set_position (GTK_POPOVER (menu), GTK_POS_BOTTOM);
+    if (pointing_to)
+        gtk_popover_set_pointing_to (GTK_POPOVER (menu), pointing_to);
+    g_signal_connect (menu, "closed", G_CALLBACK (gnc_main_window_popup_closed), nullptr);
+    gtk_popover_popup (GTK_POPOVER (menu));
 
     g_free (popup_menu_name);
 
@@ -5903,34 +6453,33 @@ gnc_main_window_popup_menu_cb (GtkWidget *widget,
                                GncPluginPage *page)
 {
     ENTER("widget %p, page %p", widget, page);
-    do_popup_menu(page, nullptr);
+    do_popup_menu (page, widget, nullptr);
     LEAVE(" ");
     return TRUE;
 }
 
 
-/*  Callback function invoked when the user clicks in the content of
- *  any Gnucash window.  If this was a "right-click" then Gnucash will
- *  popup the contextual menu.
+/*  Callback function invoked for a secondary-button gesture in the content
+ *  of any Gnucash window. It opens the contextual menu.
  */
 gboolean
-gnc_main_window_button_press_cb (GtkWidget *whatever,
-                                 GdkEventButton *event,
-                                 GncPluginPage *page)
+gnc_main_window_button_press_cb (GtkGestureClick *gesture,
+                                 gint,
+                                 gdouble x,
+                                 gdouble y,
+                                 gpointer user_data)
 {
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+    auto page = GNC_PLUGIN_PAGE (user_data);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
 
-    ENTER("widget %p, event %p, page %p", whatever, event, page);
-    /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
-    {
-        do_popup_menu(page, event);
-        LEAVE("menu shown");
-        return TRUE;
-    }
+    ENTER("gesture %p, page %p", gesture, page);
+    GdkRectangle pointing_to{(int)x, (int)y, 1, 1};
+    do_popup_menu (page,
+                   gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
+                   &pointing_to);
 
-    LEAVE("other click");
-    return FALSE;
+    LEAVE("menu shown");
+    return TRUE;
 }
 
 void

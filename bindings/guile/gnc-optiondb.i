@@ -1165,6 +1165,11 @@ inline SCM return_scm_value(ValueType value)
 %ignore GncOptionDBCallback;
 %ignore operator<(const GncOption&, const GncOption&);
 %ignore operator<(const GncOptionSectionPtr&, const GncOptionSectionPtr&);
+/* Iteration is exposed through gnc_optiondb_foreach{,2}, which owns the
+ * Scheme callback conversion. SWIG cannot wrap these std::function overloads.
+ */
+%ignore GncOptionDB::foreach_section(std::function<void(GncOptionSectionPtr&)>);
+%ignore GncOptionDB::foreach_section(std::function<void(const GncOptionSectionPtr&)>) const;
 
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"

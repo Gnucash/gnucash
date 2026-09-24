@@ -485,6 +485,20 @@ typedef enum
      * anything other than currency, e.g. holding period of a security.
      */
     Account * xaccAccountGainsAccount (Account *acc, gnc_commodity *curr);
+
+    /** Bounded gains-account resolution helpers. The configured lookup is
+     * constant-time and never creates. The prepared creator never searches;
+     * its caller must first complete a generation-guarded tree scan. */
+    Account *gnc_account_get_configured_gains_account (
+        const Account *account, const gnc_commodity *currency);
+    void gnc_account_set_configured_gains_account (
+        Account *account, const gnc_commodity *currency,
+        const Account *gains_account);
+    Account *gnc_account_create_orphan_gains_account_prepared (
+        Account *root, gnc_commodity *currency);
+    gchar *gnc_account_dup_orphan_gains_name (
+        const gnc_commodity *currency);
+
     /** Set a string that identifies the Finance::Quote backend that
      *  should be used to retrieve online prices.  See price-quotes.scm
      *  for more information
@@ -1082,6 +1096,28 @@ typedef enum
     SplitList* xaccAccountGetSplitList (const Account *account);
 
     size_t xaccAccountGetSplitsSize (const Account *account);
+
+    /** Generations used by bounded scrub collectors. A collector must
+     * discard its cursor and restart when the corresponding generation
+     * changes before it dereferences retained container state. */
+    guint64 gnc_account_get_splits_generation (const Account *account);
+    guint64 gnc_account_get_lots_generation (const Account *account);
+    guint64 gnc_account_get_children_generation (const Account *account);
+    guint64 gnc_account_get_scrub_generation (const Account *account);
+
+    /** Resolve one vector-backed entry in constant time when @a generation
+     * still identifies the same container version. Only identity is copied. */
+    gboolean gnc_account_get_split_guid_at (const Account *account,
+                                             guint64 generation,
+                                             size_t index,
+                                             GncGUID *guid);
+    gboolean gnc_account_get_child_guid_at (const Account *account,
+                                             guint64 generation,
+                                             size_t index,
+                                             GncGUID *guid);
+
+    /** Invalidate scrub collectors after a non-structural amount/value edit. */
+    void gnc_account_bump_scrub_generation (Account *account);
 
     /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
      *  in accfrom to accto. */

@@ -11,6 +11,9 @@
 # - SRC (full path to gnc-vcs-info.h.in)
 # - DST (full path to destination for gnc-vcs-info.h)
 
+if (GIT_EXECUTABLE)
+    set(ENV{GIT_CMD} "${GIT_EXECUTABLE}")
+endif()
 
 execute_process(
     COMMAND ${SHELL} "${SRC_DIR}/util/gnc-vcs-info" -r "${SRC_DIR}"

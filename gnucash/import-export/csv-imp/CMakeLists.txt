@@ -42,6 +42,7 @@ set(csv_import_noinst_HEADERS
   gnc-plugin-csv-import.h
   csv-account-import.h
   gnc-csv-gnumeric-popup.h
+  gnc-csv-preview-refresh.hpp
   gnc-imp-props-price.hpp
   gnc-imp-props-tx.hpp
   gnc-imp-settings-csv.hpp

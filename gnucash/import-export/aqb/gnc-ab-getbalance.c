@@ -52,7 +52,6 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     GNC_AB_JOB_LIST2 *job_list = NULL;
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
-    GncABImExContextImport *ieci = NULL;
     GNC_AB_JOB_STATUS job_status;
 
     g_return_if_fail(parent && gnc_acc);
@@ -118,12 +117,12 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
         goto cleanup;
     }
 
-    /* Import the results */
-    ieci = gnc_ab_import_context(context, AWAIT_BALANCES, FALSE, NULL, parent);
+    /* Transfer context ownership before releasing the synchronous banking job. */
+    gnc_ab_import_context_async (context, AWAIT_BALANCES, FALSE, NULL, parent,
+                                 NULL, NULL, NULL);
+    context = NULL;
 
 cleanup:
-    if (ieci)
-        g_free(ieci);
     if (context)
         AB_ImExporterContext_free(context);
     if (gui)

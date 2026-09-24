@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-GtkWidget * gnc_main_window_summary_new(void);
+GtkWidget * gnc_main_window_summary_new (void);
 
 #ifdef __cplusplus
 }

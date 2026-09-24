@@ -33,6 +33,7 @@
 #include "gnucash-core-app.hpp"
 
 #include <gnc-filepath-utils.h>
+#include <gnc-uri-utils.h>
 #include <gnc-engine-guile.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
@@ -73,7 +74,8 @@ cleanup_and_exit_with_failure (QofSession *session)
     return 1;
 }
 
-static void gnc_shutdown_cli (int exit_status)
+[[noreturn]] static void
+gnc_shutdown_cli (int exit_status)
 {
     gnc_hook_run (HOOK_SHUTDOWN, NULL);
     gnc_engine_shutdown ();
@@ -124,9 +126,8 @@ write_report_file (const char *html, const char* file)
     // ofs destructor will close the file
 }
 
-static void
-scm_run_report (void *data,
-                [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+static void *
+scm_run_report (void *data)
 {
     auto args = static_cast<run_report_args*>(data);
 
@@ -164,7 +165,9 @@ scm_run_report (void *data,
     if (!session)
         scm_cleanup_and_exit_with_failure (session);
 
-    qof_session_begin (session, datafile, SESSION_READ_ONLY);
+    auto norm_file = gnc_uri_normalize_uri (datafile, FALSE);
+    qof_session_begin (session, norm_file ? norm_file : datafile, SESSION_READ_ONLY);
+    g_free (norm_file);
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
         scm_cleanup_and_exit_with_failure (session);
 
@@ -247,7 +250,7 @@ return a document object with export-string or export-error.") << std::endl;
 
     qof_event_resume ();
     gnc_shutdown_cli (0);
-    return;
+    return nullptr;
 }
 
 
@@ -256,9 +259,8 @@ struct show_report_args {
     const std::string& show_report;
 };
 
-static void
-scm_report_show (void *data,
-                [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+static void *
+scm_report_show (void *data)
 {
     auto args = static_cast<show_report_args*>(data);
 
@@ -277,7 +279,9 @@ scm_report_show (void *data,
         auto session = gnc_get_current_session ();
         if (session)
         {
-            qof_session_begin (session, datafile, SESSION_READ_ONLY);
+            auto norm_file = gnc_uri_normalize_uri (datafile, FALSE);
+            qof_session_begin (session, norm_file ? norm_file : datafile, SESSION_READ_ONLY);
+            g_free (norm_file);
             if (qof_session_get_error (session) == ERR_BACKEND_NO_ERR)
                 qof_session_load (session, report_session_percentage);
         }
@@ -287,13 +291,12 @@ scm_report_show (void *data,
                 scm_from_locale_string (args->show_report.c_str ()),
                 scm_current_output_port ());
     gnc_shutdown_cli (0);
-    return;
+    return nullptr;
 }
 
 
-static void
-scm_report_list ([[maybe_unused]] void *data,
-                 [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+static void *
+scm_report_list ([[maybe_unused]] void *data)
 {
     scm_c_eval_string("(debug-set! stack 200000)");
     scm_c_use_module ("gnucash app-utils");
@@ -304,7 +307,7 @@ scm_report_list ([[maybe_unused]] void *data,
     scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-list"),
                 scm_current_output_port ());
     gnc_shutdown_cli (0);
-    return;
+    return nullptr;
 }
 
 int
@@ -350,7 +353,9 @@ Gnucash::add_quotes (const bo_str& uri)
     if (!session)
         return 1;
 
-    qof_session_begin(session, uri->c_str(), SESSION_NORMAL_OPEN);
+    auto norm_uri = gnc_uri_normalize_uri (uri->c_str(), FALSE);
+    qof_session_begin(session, norm_uri ? norm_uri : uri->c_str(), SESSION_NORMAL_OPEN);
+    g_free (norm_uri);
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
         return cleanup_and_exit_with_failure (session);
 
@@ -414,7 +419,7 @@ Gnucash::run_report (const bo_str& file_to_load,
                                   export_type ? *export_type : empty_string,
                                   output_file ? *output_file : empty_string };
     if (run_report && !run_report->empty())
-        scm_boot_guile (0, nullptr, scm_run_report, &args);
+        scm_with_guile (scm_run_report, &args);
 
     return 0;
 }
@@ -426,7 +431,7 @@ Gnucash::report_show (const bo_str& file_to_load,
     auto args = show_report_args { file_to_load ? *file_to_load : empty_string,
                                    show_report ? *show_report : empty_string };
     if (show_report && !show_report->empty())
-        scm_boot_guile (0, nullptr, scm_report_show, &args);
+        scm_with_guile (scm_report_show, &args);
 
     return 0;
 }
@@ -434,6 +439,6 @@ Gnucash::report_show (const bo_str& file_to_load,
 int
 Gnucash::report_list (void)
 {
-    scm_boot_guile (0, nullptr, scm_report_list, NULL);
+    scm_with_guile (scm_report_list, NULL);
     return 0;
 }

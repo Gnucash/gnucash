@@ -17,6 +17,7 @@ set (generic_import_SOURCES
   import-account-matcher.cpp
   import-commodity-matcher.cpp
   import-backend.cpp
+  import-operation-teardown.cpp
   import-format-dialog.cpp
   import-match-picker.cpp
   import-parse.cpp
@@ -36,6 +37,8 @@ set (generic_import_noinst_HEADERS
   import-account-matcher.h
   import-backend.h
   import-commodity-matcher.h
+  import-operation-teardown.h
+  import-selection-model.h
   import-main-matcher.h
   import-match-picker.h
   import-pending-matches.h
@@ -49,7 +52,7 @@ add_library (gnc-generic-import
   ${generic_import_noinst_HEADERS}
 )
 
-target_link_libraries(gnc-generic-import gnc-gnome-utils gnc-engine PkgConfig::GTK3 PkgConfig::GLIB2)
+target_link_libraries(gnc-generic-import gnc-gnome-utils gnc-engine PkgConfig::GTK4 PkgConfig::GLIB2)
 
 target_compile_definitions (gnc-generic-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import\")
 

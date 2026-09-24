@@ -3,16 +3,31 @@ on: [push, pull_request]
 permissions: {}
 jobs:
   ci_tests_ubuntu-22:
-    runs-on: ubuntu-26.04
-    name: Ubuntu-26.04 CI Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-26.04
+            architecture: x86_64
+            debian_architecture: amd64
+          - runner: ubuntu-26.04-arm
+            architecture: aarch64
+            debian_architecture: arm64
+    runs-on: ${{ matrix.runner }}
+    name: ${{ matrix.runner }} (${{ matrix.architecture }}) CI Tests
+    timeout-minutes: 120
     env:
       TZ: America/Los_Angeles
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Verify runner architecture
+        run: |
+          test "$(uname -m)" = "${{ matrix.architecture }}"
+          test "$(dpkg --print-architecture)" = "${{ matrix.debian_architecture }}"
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-4-dev guile-2.2-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkitgtk-6.0-dev googletest python3-dev swig xvfb
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -22,10 +37,13 @@ jobs:
           pwd
           mkdir $ROOT_DIR/inst
           mkdir build
-      - name: Configure GnuCash
+      - name: Configure GnuCash without AqBanking
         run: |
           cd build
-          cmake -G Ninja -DWITH_PYTHON=ON -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE
+          # Ubuntu doesn't yet provide the required gwengui-gtk4 package.
+          cmake -G Ninja -DWITH_PYTHON=ON -DWITH_AQBANKING=OFF -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE
+      - name: Validate GTK4 builder resources
+        run: xvfb-run -a bash "$GITHUB_WORKSPACE/util/ci/validate-gtk4-builder-resources.sh" "$GITHUB_WORKSPACE/gnucash"
       - name: Build and Test GnuCash
         run: |
           cd build
@@ -33,14 +51,31 @@ jobs:
           ninja distcheck
         env:
           CTEST_OUTPUT_ON_FAILURE: On
+          GNC_TEST_IMPORT_MATCHER_SNAPSHOT: ${{ github.workspace }}/build/import-matcher-preview.png
+          GNC_TEST_IMPORT_MATCH_PICKER_SNAPSHOT: ${{ github.workspace }}/build/import-match-picker-preview.png
+      - name: Upload import matcher preview
+        uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: import-matcher-preview-${{ matrix.architecture }}-${{ matrix.runner }}
+          path: ${{ github.workspace }}/build/import-matcher-preview.png
+          if-no-files-found: error
+      - name: Upload import match picker preview
+        uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: import-match-picker-preview-${{ matrix.architecture }}-${{ matrix.runner }}
+          path: ${{ github.workspace }}/build/import-match-picker-preview.png
+          if-no-files-found: error
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: TestLog
+          name: TestLog-${{ matrix.architecture }}-${{ matrix.runner }}
           path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
   ci_tests_ASAN:
     runs-on: ubuntu-26.04
     name: Address Sanitizer CI Tests
+    timeout-minutes: 120
     continue-on-error: true
     env:
       TZ: America/Los_Angeles
@@ -49,7 +84,7 @@ jobs:
         uses: actions/checkout@v6
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-4-dev guile-2.2-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkitgtk-6.0-dev googletest python3-dev swig xvfb
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -59,10 +94,13 @@ jobs:
           pwd
           mkdir $ROOT_DIR/inst
           mkdir build
-      - name: Configure GnuCash
+      - name: Configure GnuCash without AqBanking
         run: |
           cd build
-          cmake -G Ninja -DWITH_PYTHON=ON -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Asan
+          # Ubuntu doesn't yet provide the required gwengui-gtk4 package.
+          cmake -G Ninja -DWITH_PYTHON=ON -DWITH_AQBANKING=OFF -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Asan
+      - name: Validate GTK4 builder resources
+        run: xvfb-run -a bash "$GITHUB_WORKSPACE/util/ci/validate-gtk4-builder-resources.sh" "$GITHUB_WORKSPACE/gnucash"
       - name: Build and Test GnuCash
         run: |
           cd build
@@ -73,5 +111,5 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: TestLog
+          name: ASAN-TestLog-ubuntu-26.04-x86_64
           path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log

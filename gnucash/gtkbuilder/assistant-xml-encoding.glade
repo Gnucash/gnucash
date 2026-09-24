@@ -1,507 +1,140 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAssistant" id="assistant_xml_encoding">
-    <property name="can-focus">False</property>
-    <property name="border-width">12</property>
-    <property name="default-width">500</property>
-    <signal name="cancel" handler="gxi_cancel_cb" swapped="no"/>
-    <signal name="close" handler="gxi_finish_cb" swapped="no"/>
-    <signal name="prepare" handler="gxi_prepare_cb" swapped="no"/>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="xml_encoding_window">
+    <property name="default-width">560</property>
+    <property name="default-height">420</property>
+    <property name="title" translatable="1">Ambiguous character encoding</property>
     <child>
-      <object class="GtkLabel" id="start_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Introduction placeholder</property>
-        <property name="wrap">True</property>
-      </object>
-      <packing>
-        <property name="page-type">intro</property>
-        <property name="title" translatable="yes">Title placeholder</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="conversion_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">16</property>
+      <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
         <child>
-          <object class="GtkBox" id="vbox10">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+          <object class="GtkLabel" id="message_label">
+            <property name="wrap">True</property>
+            <property name="xalign">0</property>
+            <style><class name="error"/></style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="xml_encoding_stack">
+            <property name="vexpand">True</property>
+            <property name="transition-type">slide-left-right</property>
             <child>
-              <object class="GtkBox" id="hbox10">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkButton" id="edit_encs_button">
-                    <property name="label" translatable="yes">_Edit list of encodings</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gxi_edit_encodings_clicked_cb" swapped="no"/>
+              <object class="GtkStackPage">
+                <property name="name">start</property>
+                <property name="title" translatable="1">Ambiguous character encoding</property>
+                <property name="child">
+                  <object class="GtkBox" id="start_page">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkLabel" id="start_page_label">
+                        <property name="wrap">True</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="default_enc_box">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">conversion</property>
+                <property name="title" translatable="1">Convert the file</property>
+                <property name="child">
+                  <object class="GtkBox" id="conversion_page">
+                    <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="label12">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Default encoding</property>
+                      <object class="GtkBox" id="default_enc_box">
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="1">Default encoding</property>
+                          </object>
+                        </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="impossible_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">placeholder: #unassigned, #impossible</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow4">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <child>
-                  <object class="GtkViewport" id="viewport1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkBox" id="string_box_container">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="orientation">vertical</property>
+                      <object class="GtkButton" id="edit_encs_button">
+                        <property name="label" translatable="1">_Edit list of encodings</property>
+                        <property name="use-underline">True</property>
+                        <property name="halign">start</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="impossible_label">
+                        <property name="wrap">True</property>
+                        <property name="xalign">0</property>
+                        <style><class name="error"/></style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="vexpand">True</property>
+                        <property name="child">
+                          <object class="GtkBox" id="string_box_container">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Convert the file</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="end_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">finish placeholder</property>
-        <property name="wrap">True</property>
-      </object>
-      <packing>
-        <property name="page-type">confirm</property>
-        <property name="title" translatable="yes">Finish GnuCash Datafile Import</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child internal-child="action_area">
-      <object class="GtkBox">
-        <property name="can-focus">False</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkDialog" id="encodings_dialog">
-    <property name="can-focus">False</property>
-    <property name="border-width">6</property>
-    <property name="title" translatable="yes">Edit the list of encodings</property>
-    <property name="modal">True</property>
-    <property name="window-position">center-on-parent</property>
-    <property name="default-height">300</property>
-    <property name="type-hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox4">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area4">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="cancelbutton1">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkButton" id="okbutton1">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
+              <object class="GtkStackPage">
+                <property name="name">finish</property>
+                <property name="title" translatable="1">Finish GnuCash Datafile Import</property>
+                <property name="child">
+                  <object class="GtkBox" id="end_page">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkLabel" id="end_page_label">
+                        <property name="wrap">True</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox6">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="spacing">18</property>
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <property name="halign">end</property>
             <child>
-              <object class="GtkBox" id="vbox4">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
-                <child>
-                  <object class="GtkBox" id="vbox5">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="label6">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">S_ystem input encodings</property>
-                        <style>
-                          <class name="gnc-class-strong"/>
-                        </style>
-                        <property name="use-markup">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">available_encs_view</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="hbox8">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="vexpand">True</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow2">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <property name="shadow-type">in</property>
-                            <child>
-                              <object class="GtkTreeView" id="available_encs_view">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="headers-visible">False</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="add_enc_button">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="valign">center</property>
-                            <signal name="clicked" handler="gxi_add_enc_clicked_cb" swapped="no"/>
-                            <child>
-                              <object class="GtkImage" id="image11">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="icon-name">go-next</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="vbox6">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Custom encoding</property>
-                        <style>
-                          <class name="gnc-class-strong"/>
-                        </style>
-                        <property name="use-markup">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">custom_enc_entry</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="hbox7">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkEntry" id="custom_enc_entry">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="invisible-char">●</property>
-                            <property name="primary-icon-activatable">False</property>
-                            <property name="secondary-icon-activatable">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="add_custom_enc_button">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <signal name="clicked" handler="gxi_add_custom_enc_clicked_cb" swapped="no"/>
-                            <child>
-                              <object class="GtkImage" id="image10">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="icon-name">go-next</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+              <object class="GtkButton" id="assistant_cancel">
+                <property name="label" translatable="1">_Cancel</property>
+                <property name="use-underline">True</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="vbox7">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label11">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Selected encodings</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                    <property name="use-markup">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">selected_encs_view</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="hbox9">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkButton" id="remove_enc_button">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="valign">center</property>
-                        <signal name="clicked" handler="gxi_remove_enc_clicked_cb" swapped="no"/>
-                        <child>
-                          <object class="GtkImage" id="image12">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="icon-name">go-previous</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow3">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="selected_encs_view">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="headers-visible">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection2"/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+              <object class="GtkButton" id="assistant_back">
+                <property name="label" translatable="1">_Back</property>
+                <property name="use-underline">True</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="assistant_next">
+                <property name="label" translatable="1">_Next</property>
+                <property name="use-underline">True</property>
+                <property name="receives-default">True</property>
+              </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-6">cancelbutton1</action-widget>
-      <action-widget response="-5">okbutton1</action-widget>
-    </action-widgets>
   </object>
 </interface>

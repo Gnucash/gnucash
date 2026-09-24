@@ -1,6 +1,7 @@
 /********************************************************************
- * gnc-html-webview2.hpp -- display html with gnc special tags        *
+ * gnc-html-webview2.hpp -- display reports with Microsoft WebView2 *
  * Copyright (C) 2026 John Ralls <jralls@ceridwen.us>                *
+ * Copyright (C) 2026 The GnuCash Project                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,44 +21,37 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/* GncHtml backend that hosts Microsoft Edge WebView2 as a native child
- * window parented to a plain GTK widget's own natively-backed HWND
- * (see gdk_window_ensure_native()). Windows-only;
- */
-
-#ifndef GNC_HTML_WEBVIEW2_H
-#define GNC_HTML_WEBVIEW2_H
+#ifndef GNC_HTML_WEBVIEW2_HPP
+#define GNC_HTML_WEBVIEW2_HPP
 
 #include <glib-object.h>
+
 #include "gnc-html.h"
 
 G_BEGIN_DECLS
 
-#define GNC_TYPE_HTML_WEBVIEW2       (gnc_html_webview2_get_type())
-#define GNC_HTML_WEBVIEW2(o)         (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_HTML_WEBVIEW2, GncHtmlWebview2))
-#define GNC_HTML_WEBVIEW2_CLASS(k)   (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_HTML_WEBVIEW2, GncHtmlWebview2Class))
-#define GNC_IS_HTML_WEBVIEW2(o)      (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_HTML_WEBVIEW2))
-#define GNC_IS_HTML_WEBVIEW2_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE((k), GNC_TYPE_HTML_WEBVIEW2))
-#define GNC_HTML_WEBVIEW2_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS((o), GNC_TYPE_HTML_WEBVIEW2, GncHtmlWebview2Class))
+#define GNC_TYPE_HTML_WEBVIEW2       (gnc_html_webview2_get_type ())
+#define GNC_HTML_WEBVIEW2(o)         (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_HTML_WEBVIEW2, GncHtmlWebView2))
+#define GNC_IS_HTML_WEBVIEW2(o)      (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_HTML_WEBVIEW2))
 
-struct GncHtmlWebview2Private;
+struct GncHtmlWebView2Private;
 
-struct GncHtmlWebview2
+struct GncHtmlWebView2
 {
     GncHtml parent_instance;
 
     /*< private >*/
-    GncHtmlWebview2Private* priv;
+    GncHtmlWebView2Private *priv;
 };
 
-struct GncHtmlWebview2Class
+struct GncHtmlWebView2Class
 {
     GncHtmlClass parent_class;
 };
 
-GType gnc_html_webview2_get_type( void );
-GncHtml* gnc_html_webview2_new( void ) NOEXCEPT;
+GType gnc_html_webview2_get_type (void);
+GncHtml *gnc_html_webview2_new (void) NOEXCEPT;
 
 G_END_DECLS
 
-#endif // GNC_HTML_WEBVIEW2_H
+#endif /* GNC_HTML_WEBVIEW2_HPP */

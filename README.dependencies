@@ -56,7 +56,9 @@ Libraries/Deps
   gcc or clang          8.0 (gcc)/6.0(clang)    C++17 C/C++ compiler
   cmake                 4.0.0                   Build system manager
   glib2                 2.88.0
-  gtk+3                 3.24.52
+  gtk4                  4.14.0
+  gtk4-macos            4.14.0                  macOS only, native GTK4
+                                                backend integration.
   guile                 3.0                     Must be built with regex
                                                 support enabled
   libxml2               2.15.0
@@ -73,8 +75,9 @@ Libraries/Deps
                                                 locale and regex libs must be
                                                 built with ICU support.
   swig                  4.4.0                   Makes Guile and Python Bindings.
-  webkit                2.4.11 (Windows,
-                        2.32.0 (Everything Else)
+  WebView2 Runtime      Windows report backend
+  WebKit framework      macOS report backend
+  webkitgtk-6.0        Linux and other Unix report backend
   googletest            1.8.0                   Some distros call it gtest.
                                                 Some distros also separate out
                                                 googlemock or gmock; both are
@@ -96,10 +99,6 @@ Libraries/Deps
   libofx                0.10.9                  OFX/QFX import
 
   libsecret             0.21
-  gtk-mac-integration                            MacOS only, for menus to go
-                                                 to the main menu bar instead
-                                                 of one on the window.
-
   doxygen                                        For building the Doxygen API
                                                  documentation.
 

@@ -39,6 +39,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-splash.h"
 #include "gnc-window.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-icons.h"
 #include "dialog-doclink-utils.h"
 #include "dialog-commodity.h"
@@ -61,9 +62,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static int gnome_is_running = FALSE;
 static int gnome_is_terminating = FALSE;
 static int gnome_is_initialized = FALSE;
+static guint ui_event_source_id = 0;
 
-
-#define ACCEL_MAP_NAME "accelerator-map"
 
 const gchar *msg_no_help_found =
     N_("GnuCash could not find the files of the help documentation.");
@@ -71,6 +71,68 @@ const gchar *msg_no_help_reason =
     N_("This is likely because the \"gnucash-docs\" package is not properly installed.");
     /* Translators: URI of missing help files */
 const gchar *msg_no_help_location = N_("Expected location");
+
+#if !defined(MAC_INTEGRATION) && !defined(G_OS_WIN32)
+typedef struct
+{
+    GWeakRef parent;
+    gchar *message;
+    gchar *detail;
+} GncUriLauncherData;
+
+static void
+gnc_uri_launcher_data_free (GncUriLauncherData *data)
+{
+    g_weak_ref_clear (&data->parent);
+    g_free (data->message);
+    g_free (data->detail);
+    g_free (data);
+}
+
+static void
+gnc_uri_launcher_cb (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+    GncUriLauncherData *data = user_data;
+    GError *error = NULL;
+    GtkWindow *parent;
+
+    if (gtk_uri_launcher_launch_finish (GTK_URI_LAUNCHER (source), result, &error))
+    {
+        gnc_uri_launcher_data_free (data);
+        return;
+    }
+
+    parent = g_weak_ref_get (&data->parent);
+    gnc_error_dialog (parent, "%s\n%s", data->message,
+                      data->detail ? data->detail : "");
+    g_clear_object (&parent);
+    if (error)
+    {
+        PERR ("%s", error->message);
+        g_error_free (error);
+    }
+    gnc_uri_launcher_data_free (data);
+}
+
+static void
+gnc_launch_uri (GtkWindow *parent, const gchar *uri, const gchar *message,
+                const gchar *detail)
+{
+    GncUriLauncherData *data;
+    GtkUriLauncher *launcher;
+
+    g_return_if_fail (uri != NULL);
+
+    data = g_new0 (GncUriLauncherData, 1);
+    g_weak_ref_init (&data->parent, parent);
+    data->message = g_strdup (message);
+    data->detail = g_strdup (detail);
+
+    launcher = gtk_uri_launcher_new (uri);
+    gtk_uri_launcher_launch (launcher, parent, NULL, gnc_uri_launcher_cb, data);
+    g_object_unref (launcher);
+}
+#endif
 
 void
 gnc_gnome_utils_init (void)
@@ -139,19 +201,29 @@ gnc_add_css_file (void)
 {
     GtkCssProvider *provider_user, *provider_app, *provider_fallback;
     GdkDisplay *display;
-    GdkScreen *screen;
     const gchar *var;
-    GError *error = 0;
 
     provider_user = gtk_css_provider_new ();
     provider_app = gtk_css_provider_new ();
     provider_fallback = gtk_css_provider_new ();
     display = gdk_display_get_default ();
-    screen = gdk_display_get_default_screen (display);
+    if (!display)
+    {
+        g_object_unref (provider_user);
+        g_object_unref (provider_app);
+        g_object_unref (provider_fallback);
+        return;
+    }
 
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_provider_for_display (display,
+                                                GTK_STYLE_PROVIDER (provider_fallback),
+                                                GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+    gtk_style_context_add_provider_for_display (display,
+                                                GTK_STYLE_PROVIDER (provider_app),
+                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    gtk_style_context_add_provider_for_display (display,
+                                                GTK_STYLE_PROVIDER (provider_user),
+                                                GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     gtk_css_provider_load_from_resource (provider_app, GNUCASH_RESOURCE_PREFIX "/gnucash.css");
     gtk_css_provider_load_from_resource (provider_fallback,  GNUCASH_RESOURCE_PREFIX "/gnucash-fallback.css");
@@ -160,8 +232,9 @@ gnc_add_css_file (void)
     if (var)
     {
         gchar *str;
-        str = g_build_filename (var, "gtk-3.0.css", (char *)NULL);
-        gtk_css_provider_load_from_path (provider_user, str, &error);
+        str = g_build_filename (var, "gtk-4.0.css", (char *)NULL);
+        if (g_file_test (str, G_FILE_TEST_EXISTS))
+            gtk_css_provider_load_from_path (provider_user, str);
         g_free (str);
     }
     g_object_unref (provider_user);
@@ -342,30 +415,17 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 void
 gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 {
-    GError *error = NULL;
-    gchar *uri = NULL;
-    gboolean success = TRUE;
+    gchar *uri;
 
     if (anchor)
         uri = g_strconcat ("help:", file_name, "/", anchor, NULL);
     else
         uri = g_strconcat ("help:", file_name, NULL);
 
-    DEBUG ("Attempting to opening help uri %s", uri);
+    DEBUG ("Attempting to open help URI %s", uri);
 
-    if (uri)
-        success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-
+    gnc_launch_uri (parent, uri, _(msg_no_help_found), _(msg_no_help_reason));
     g_free (uri);
-    if (success)
-        return;
-
-    g_assert(error != NULL);
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-    }
-    PERR ("%s", error->message);
-    g_error_free(error);
 }
 
 
@@ -437,39 +497,26 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
 void
 gnc_launch_doclink (GtkWindow *parent, const char *uri)
 {
-    GError *error = NULL;
-    gboolean success;
+    gchar *error_uri;
+    const gchar *message =
+        _("GnuCash could not open the linked document:");
 
     if (!uri)
         return;
 
-    DEBUG ("Attempting to open uri %s", uri);
+    DEBUG ("Attempting to open URI %s", uri);
 
-    success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-
-    if (success)
-        return;
-
-    g_assert (error != NULL);
+    if (gnc_uri_is_file_uri (uri))
     {
-        gchar *error_uri = NULL;
-        const gchar *message =
-            _("GnuCash could not open the linked document:");
-
-        if (gnc_uri_is_file_uri (uri))
-        {
-            gchar *uri_scheme = gnc_uri_get_scheme (uri);
-            error_uri = gnc_doclink_get_unescape_uri (NULL, uri, uri_scheme);
-            g_free (uri_scheme);
-        }
-        else
-            error_uri = g_strdup (uri);
-
-        gnc_error_dialog (parent, "%s\n%s", message, error_uri);
-        g_free (error_uri);
+        gchar *uri_scheme = gnc_uri_get_scheme (uri);
+        error_uri = gnc_doclink_get_unescape_uri (NULL, uri, uri_scheme);
+        g_free (uri_scheme);
     }
-    PERR ("%s", error->message);
-    g_error_free (error);
+    else
+        error_uri = g_strdup (uri);
+
+    gnc_launch_uri (parent, uri, message, error_uri);
+    g_free (error_uri);
 }
 
 #endif
@@ -544,9 +591,6 @@ gnc_ui_check_events (gpointer not_used)
     QofSession *session;
     gboolean force;
 
-    if (gtk_main_level() != 1)
-        return TRUE;
-
     if (!gnc_current_session_exist())
         return TRUE;
     session = gnc_get_current_session ();
@@ -573,33 +617,43 @@ gnc_ui_check_events (gpointer not_used)
 int
 gnc_ui_start_event_loop (void)
 {
-    guint id;
+    if (gnome_is_running)
+        return 0;
 
     gnome_is_running = TRUE;
 
-    id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
-                             gnc_ui_check_events, NULL, NULL);
+    ui_event_source_id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
+                                             gnc_ui_check_events, NULL, NULL);
 
     scm_call_1(scm_c_eval_string("gnc:set-ui-status"), SCM_BOOL_T);
 
-    /* Enter gnome event loop */
-    gtk_main ();
+    return 0;
+}
 
-    g_source_remove (id);
+void
+gnc_ui_stop_event_loop (void)
+{
+    /* GtkApplication owns the main loop. This function only tears down the
+     * GnuCash-specific sources that were registered for it. */
+    if (!gnome_is_running)
+        return;
+
+    if (ui_event_source_id != 0)
+    {
+        g_source_remove (ui_event_source_id);
+        ui_event_source_id = 0;
+    }
 
     scm_call_1(scm_c_eval_string("gnc:set-ui-status"), SCM_BOOL_F);
 
     gnome_is_running = FALSE;
     gnome_is_terminating = FALSE;
-
-    return 0;
 }
 
 GncMainWindow *
 gnc_gui_init(void)
 {
     static GncMainWindow *main_window;
-    gchar *map;
 
     ENTER ("");
 
@@ -643,37 +697,14 @@ gnc_gui_init(void)
 
     gnc_file_set_shutdown_callback (gnc_shutdown);
 
+    gchar *accelerator_map = gnc_build_userdata_path ("accelerator-map");
+    gnc_accelerator_overrides_load_legacy_map (accelerator_map);
+    g_free (accelerator_map);
+
     main_window = gnc_main_window_new ();
     // Bug#350993:
     // gtk_widget_show (GTK_WIDGET (main_window));
     gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
-
-
-    map = gnc_build_userdata_path(ACCEL_MAP_NAME);
-    if (!g_file_test (map, G_FILE_TEST_EXISTS))
-    {
-        gchar *text = NULL;
-        gsize length;
-        gchar *map_source;
-        gchar *data_dir = gnc_path_get_pkgdatadir();
-#ifdef MAC_INTEGRATION
-        map_source = g_build_filename (data_dir, "ui", "accelerator-map-osx", NULL);
-#else
-        map_source = g_build_filename (data_dir, "ui", "accelerator-map", NULL);
-#endif /* MAC_INTEGRATION */
-
-        if (map_source && g_file_get_contents (map_source, &text, &length, NULL))
-        {
-            if (length)
-                g_file_set_contents (map, text, length, NULL);
-            g_free (text);
-        }
-        g_free (map_source);
-        g_free(data_dir);
-    }
-
-    gtk_accel_map_load(map);
-    g_free(map);
 
     /* Load css configuration file */
     gnc_add_css_file ();
@@ -721,41 +752,53 @@ gnc_gui_destroy (void)
         gnc_ui_util_remove_registered_prefs ();
         gnc_prefs_remove_registered ();
     }
+    gnc_accelerator_overrides_clear ();
     gnc_extensions_shutdown ();
 }
 
 static void
 gnc_gui_shutdown (void)
 {
-//    gchar *map;
-
     if (gnome_is_running && !gnome_is_terminating)
     {
         gnome_is_terminating = TRUE;
-//        map = gnc_build_userdata_path(ACCEL_MAP_NAME);
-//        gtk_accel_map_save(map);
-//        g_free(map);
         gnc_component_manager_shutdown ();
-        gtk_main_quit();
+        GApplication *application = g_application_get_default ();
+        if (application)
+        {
+            /* Paired with Gnucash::activate(): a last-window close must not
+             * end the main loop before the save query has completed. */
+            g_application_release (application);
+            g_application_quit (application);
+        }
     }
 }
 
 /*  shutdown gnucash.  This function will initiate an orderly
  *  shutdown, and when that has finished it will exit the program.
  */
+static void
+gnc_shutdown_after_save_query (GtkWindow *parent, gboolean can_continue,
+                               gpointer user_data)
+{
+    (void)parent;
+    (void)user_data;
+
+    if (can_continue && !gnome_is_terminating)
+    {
+        gnc_hook_run (HOOK_UI_SHUTDOWN, NULL);
+        gnc_gui_shutdown ();
+    }
+}
+
 void
 gnc_shutdown (int exit_status)
 {
     if (gnucash_ui_is_running())
     {
         if (!gnome_is_terminating)
-        {
-            if (gnc_file_query_save (gnc_ui_get_main_window (NULL), FALSE))
-            {
-                gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
-                gnc_gui_shutdown();
-            }
-        }
+            gnc_file_query_save_async (gnc_ui_get_main_window (NULL), FALSE,
+                                       gnc_shutdown_after_save_query, NULL);
     }
     else
     {
@@ -765,4 +808,3 @@ gnc_shutdown (int exit_status)
         exit(exit_status);
     }
 }
-

@@ -31,6 +31,7 @@
 #include "gnc-version.h"
 #include "gnc-prefs.h"
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 
 #define MARKUP_STRING "<span size='small'>%s</span>"
 #define GNC_PREF_SHOW_SPLASH "show-splash-screen"
@@ -45,12 +46,20 @@ splash_destroy_cb (GtkWidget *object, gpointer user_data)
     splash = NULL;
 }
 
-static gboolean
-button_press_cb(GtkWidget *widget, GdkEventButton *event, gpointer unused)
+static void
+button_press_cb (GtkGestureClick *gesture, gint n_press, gdouble x, gdouble y,
+                 gpointer unused)
 {
+    (void)gesture;
+    (void)x;
+    (void)y;
+    (void)unused;
+
+    if (n_press != 1)
+        return;
+
     if (splash)
-        gtk_window_iconify (GTK_WINDOW (splash));
-    return TRUE;
+        gtk_window_minimize (GTK_WINDOW (splash));
 }
 
 void
@@ -67,9 +76,9 @@ gnc_show_splash_screen (void)
     if (splash) return;
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_SPLASH)) return;
 
-    splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    splash = gtk_window_new ();
+    gnc_window_bind_to_application (GTK_WINDOW (splash));
     gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
-    gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(splash), "gnc-id-splash");
@@ -78,15 +87,12 @@ gnc_show_splash_screen (void)
                       G_CALLBACK (splash_destroy_cb), NULL);
 
     gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
-    gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
-    gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_DIALOG);
-
     pixmap = gnc_gnome_get_pixmap ("gnucash_splash.png");
 
     if (!pixmap)
     {
         g_warning ("can't find splash pixmap");
-        gtk_widget_destroy (splash);
+        gtk_window_destroy (GTK_WINDOW (splash));
         return;
     }
 
@@ -117,26 +123,21 @@ gnc_show_splash_screen (void)
 
     progress_bar = gtk_progress_bar_new ();
 
-    gtk_container_add (GTK_CONTAINER (frame), pixmap);
-    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (vbox), version, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (hbox), progress, TRUE, TRUE, 0);
-    gtk_box_pack_start (GTK_BOX (hbox), progress_bar, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (splash), vbox);
+    gtk_frame_set_child (GTK_FRAME (frame), pixmap);
+    gtk_box_append (GTK_BOX (vbox), frame);
+    gtk_box_append (GTK_BOX (vbox), version);
+    gtk_box_append (GTK_BOX (vbox), separator);
+    gtk_widget_set_hexpand (progress, TRUE);
+    gtk_box_append (GTK_BOX (hbox), progress);
+    gtk_box_append (GTK_BOX (hbox), progress_bar);
+    gtk_box_append (GTK_BOX (vbox), hbox);
+    gtk_window_set_child (GTK_WINDOW (splash), vbox);
 
-    gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect(splash, "button_press_event",
-                     G_CALLBACK(button_press_cb), NULL);
+    GtkGesture *click = gtk_gesture_click_new ();
+    g_signal_connect (click, "pressed", G_CALLBACK (button_press_cb), NULL);
+    gtk_widget_add_controller (splash, GTK_EVENT_CONTROLLER (click));
 
-    gtk_window_set_auto_startup_notification (FALSE);
-    gtk_widget_show_all (splash);
-    gtk_window_set_auto_startup_notification (TRUE);
-
-    /* make sure splash is up */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+    gtk_window_present (GTK_WINDOW (splash));
 }
 
 void
@@ -144,7 +145,7 @@ gnc_destroy_splash_screen (void)
 {
     if (splash)
     {
-        gtk_widget_destroy (splash);
+        gtk_window_destroy (GTK_WINDOW (splash));
         progress = NULL;
         progress_bar = NULL;
         splash = NULL;
@@ -164,9 +165,6 @@ gnc_update_splash_screen (const gchar *string, double percentage)
             gtk_label_set_markup (GTK_LABEL(progress), markup);
             g_free (markup);
 
-            /* make sure new text is up */
-            while (gtk_events_pending ())
-                gtk_main_iteration ();
         }
     }
 
@@ -195,9 +193,6 @@ gnc_update_splash_screen (const gchar *string, double percentage)
             }
         }
 
-        /* make sure new status bar is up */
-        while (gtk_events_pending ())
-            gtk_main_iteration ();
     }
 }
 

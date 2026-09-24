@@ -21,19 +21,25 @@
  *
  */
 
-/* Functions for creating the common two column GtkComboBox used by
- * all the search widgets. */
+/* Functions for the common GTK4 search-operator selector used by all search
+ * widgets. Search operators are identified by their stable numeric value,
+ * never by the position of the displayed row.
+ */
 
-enum gnc_combo_search_cols
-{
-    GNC_COMBO_SEARCH_COL_TEXT = 0,
-    GNC_COMBO_SEARCH_COL_VALUE,
-    NUM_GNC_COMBO_SEARCH_COLS,
-};
+#ifndef GNC_SEARCH_CORE_UTILS_H
+#define GNC_SEARCH_CORE_UTILS_H
 
-GtkWidget *gnc_combo_box_new_search (void);
-void gnc_combo_box_search_add (GtkComboBox *combo, const gchar *text, guint value);
-guint gnc_combo_box_search_get_active (GtkComboBox *combo);
-void gnc_combo_box_search_set_active (GtkComboBox *combo, guint value);
-void gnc_combo_box_search_changed(GtkComboBox *combo, guint *value);
+#include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
+GtkWidget *gnc_search_drop_down_new (void);
+void gnc_search_drop_down_add (GtkDropDown *drop_down, const gchar *text,
+                               guint value);
+guint gnc_search_drop_down_get_active (GtkDropDown *drop_down);
+void gnc_search_drop_down_set_active (GtkDropDown *drop_down, guint value);
+void gnc_search_drop_down_changed (GtkDropDown *drop_down, guint *value);
+
+G_END_DECLS
+
+#endif /* GNC_SEARCH_CORE_UTILS_H */

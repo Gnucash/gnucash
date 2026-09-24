@@ -140,7 +140,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
     if (!cursor->sheet)
         return;
 
-    g_return_if_fail (GTK_IS_LAYOUT (cursor->sheet));
+    g_return_if_fail (GNUCASH_IS_SHEET (cursor->sheet));
 
     gnucash_cursor_get_pixel_coords (cursor, &x, &y, &w, &h);
     cursor->x = x;

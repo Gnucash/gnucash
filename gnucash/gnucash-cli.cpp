@@ -29,6 +29,7 @@
 
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
+#include "gnucash-guile-bootstrap.h"
 
 #include <glib/gi18n.h>
 #include <gnc-engine.h>
@@ -53,7 +54,7 @@ namespace Gnucash {
     {
     public:
         GnucashCli (const char* app_name);
-        void parse_command_line (int argc, char **argv);
+        CommandLineResult parse_command_line (int argc, char **argv);
         int start (int argc, char **argv);
     private:
         void configure_program_options (void);
@@ -75,16 +76,19 @@ Gnucash::GnucashCli::GnucashCli (const char *app_name) : Gnucash::CoreApp (app_n
     configure_program_options();
 }
 
-void
+Gnucash::CommandLineResult
 Gnucash::GnucashCli::parse_command_line (int argc, char **argv)
 {
-    Gnucash::CoreApp::parse_command_line (argc, argv);
+    auto result = Gnucash::CoreApp::parse_command_line (argc, argv);
+    if (result != CommandLineResult::Run)
+        return result;
 
     if (!m_log_to_filename || m_log_to_filename->empty())
         m_log_to_filename = "stderr";
 
     if (m_namespace)
         gnc_prefs_set_namespace_regexp (m_namespace->c_str());
+    return CommandLineResult::Run;
 }
 
 // Define command line options specific to gnucash-cli.
@@ -223,14 +227,23 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
     return 1;
 }
 
+static int
+run_gnucash_cli (int argc, char **argv, void *user_data)
+{
+    auto application = static_cast<Gnucash::GnucashCli *> (user_data);
+    return application->start (argc, argv);
+}
+
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
     const char *app_name = PROJECT_NAME "-cli";
     Gnucash::GnucashCli application (app_name);
 #ifdef __MINGW32__
     boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
 #endif
-    application.parse_command_line (argc, argv);
-    return application.start (argc, argv);
+    auto parse_result = application.parse_command_line (argc, argv);
+    if (parse_result != Gnucash::CommandLineResult::Run)
+        return parse_result == Gnucash::CommandLineResult::ExitSuccess ? 0 : 1;
+    gnc_run_with_guile (argc, argv, run_gnucash_cli, &application);
 }

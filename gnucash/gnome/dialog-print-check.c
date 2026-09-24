@@ -43,6 +43,7 @@
 #include "gnc-plugin-page-register.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "print-session.h"
 #include "gnc-ui.h"
 #include "gnc-date-format.h"
@@ -133,13 +134,15 @@ typedef enum format_combo_col_t
                                  *   this entry specifies a separator line. */
 } format_combo_col;
 
-void gnc_ui_print_check_response_cb (GtkDialog *dialog, gint response, PrintCheckDialog *pcd);
-void gnc_print_check_format_changed (GtkComboBox *widget, PrintCheckDialog *pcd);
-void gnc_print_check_position_changed (GtkComboBox *widget, PrintCheckDialog *pcd);
-void gnc_print_check_save_button_clicked (GtkButton *button, PrintCheckDialog *pcd);
-void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button);
-
-static void initialize_format_combobox (PrintCheckDialog *pcd);
+static void gnc_print_check_format_changed (GObject *object, GParamSpec *pspec, PrintCheckDialog *pcd);
+static void gnc_print_check_position_changed (GObject *object, GParamSpec *pspec, PrintCheckDialog *pcd);
+static void gnc_print_check_save_button_clicked (GtkButton *button, PrintCheckDialog *pcd);
+static void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button);
+static gboolean print_check_close_request (GtkWindow *window, PrintCheckDialog *pcd);
+static void print_check_help_clicked (GtkButton *button, PrintCheckDialog *pcd);
+static void print_check_cancel_clicked (GtkButton *button, PrintCheckDialog *pcd);
+static void print_check_clicked (GtkButton *button, PrintCheckDialog *pcd);
+static void initialize_format_dropdown (PrintCheckDialog *pcd);
 gchar* get_check_address (PrintCheckDialog *pcd);
 static gboolean check_format_has_address (PrintCheckDialog *pcd);
 gchar* get_check_splits_amount (PrintCheckDialog *pcd);
@@ -264,6 +267,8 @@ typedef struct _check_format
 } check_format_t;
 
 
+typedef struct _print_check_request PrintCheckRequest;
+
 /* This data structure is used to manage the print check dialog, and
  * the overall check printing process.  It contains pointers to many
  * of the widgets in the dialog, pointers to the check descriptions
@@ -272,18 +277,16 @@ typedef struct _check_format
  */
 struct _print_check_dialog
 {
-    GtkBuilder *builder;
-    GtkWidget *dialog;
+    GtkWindow *window;
     GtkWindow *caller_window;
-
     Split *split;
     GList *splits;
     Account* account;
-
-    GtkWidget *format_combobox;
-    gint format_max;
-    GtkWidget *position_combobox;
-    gint position_max;
+    GtkDropDown *format_dropdown;
+    guint format_max;
+    guint last_format;
+    GtkDropDown *position_dropdown;
+    guint position_max;
     GtkSpinButton *first_page_count;
     GtkWidget *custom_table;
     GtkSpinButton *payee_x, *payee_y;
@@ -299,59 +302,98 @@ struct _print_check_dialog
     GtkSpinButton *translation_x, *translation_y;
     GtkSpinButton *check_rotation;
     GtkWidget *translation_label;
-
-    GtkWidget *units_combobox;
-
+    GtkDropDown *units_dropdown;
     GtkWidget *date_format;
-
     GtkWidget *check_address_name;
     GtkWidget *check_address_1;
     GtkWidget *check_address_2;
     GtkWidget *check_address_3;
     GtkWidget *check_address_4;
-
     gchar *default_font;
-
     check_format_t *selected_format;
+    GListStore *format_model;
+    GtkWindow *format_title_window;
+    PrintCheckRequest *print_request;
+    gboolean close_after_print;
+    gboolean closing;
 };
 
-
-/* This function walks the list of available check formats looking for a
- * specific format as specified by guid number.  If found, a pointer to it is
- * returned to the caller.  Additionally, if the caller passed a pointer to a
- * GtkTreeIter, then the iter for that entry will also be returned.
- */
-static check_format_t *
-find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
+struct _print_check_request
 {
-    GtkTreeIter iter;
-    check_format_t *format;
+    GWeakRef window;
+    GtkPrintDialog *dialog;
+    GCancellable *cancellable;
+    GFile *file;
+};
 
-    g_return_val_if_fail(store, NULL);
-    g_return_val_if_fail(guid, NULL);
+static GQuark format_data_quark (void)
+{ return g_quark_from_static_string ("gnc-print-check-format"); }
+static GQuark format_separator_quark (void)
+{ return g_quark_from_static_string ("gnc-print-check-separator"); }
+static void free_check_format (check_format_t *data);
 
-    if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
-        return NULL;
+static GObject *
+format_row_new (const gchar *name, check_format_t *format, gboolean separator)
+{
+    GtkStringObject *row = gtk_string_object_new (name ? name : "");
+    if (format)
+        g_object_set_qdata_full (G_OBJECT (row), format_data_quark (), format,
+                                 (GDestroyNotify)free_check_format);
+    if (separator)
+        g_object_set_qdata (G_OBJECT (row), format_separator_quark (),
+                            GINT_TO_POINTER (TRUE));
+    return G_OBJECT (row);
+}
 
-    do
+static check_format_t *
+format_row_get_format (GObject *row)
+{ return row ? g_object_get_qdata (row, format_data_quark ()) : NULL; }
+
+static gboolean
+format_row_is_separator (GObject *row)
+{ return row && GPOINTER_TO_INT (g_object_get_qdata (row, format_separator_quark ())); }
+
+static check_format_t *
+find_existing_format (GListModel *model, const gchar *guid, guint *position_out)
+{
+    guint n_items = g_list_model_get_n_items (model);
+    for (guint position = 0; position < n_items; position++)
     {
-        gtk_tree_model_get(GTK_TREE_MODEL(store), &iter,
-                           COL_DATA, &format, -1);
-        if (format == NULL)
-            continue;
-        if (strcmp(format->guid, guid) != 0)
-            continue;
-
-        if (iter_out)
-            *iter_out = iter;
-        return format;
+        GObject *row = g_list_model_get_item (model, position);
+        check_format_t *format = format_row_get_format (row);
+        gboolean found = format && g_strcmp0 (format->guid, guid) == 0;
+        g_object_unref (row);
+        if (found)
+        {
+            if (position_out)
+                *position_out = position;
+            return format;
+        }
     }
-    while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
-
     return NULL;
 }
 
+static check_format_t *
+selected_format (PrintCheckDialog *pcd)
+{
+    GListModel *model = gtk_drop_down_get_model (pcd->format_dropdown);
+    guint position = gtk_drop_down_get_selected (pcd->format_dropdown);
+    GObject *row;
+    check_format_t *format;
+    if (!model || position == GTK_INVALID_LIST_POSITION)
+        return NULL;
+    row = g_list_model_get_item (model, position);
+    format = format_row_get_format (row);
+    g_object_unref (row);
+    return format;
+}
 
+static gint
+selected_position (GtkDropDown *dropdown)
+{
+    guint position = gtk_drop_down_get_selected (dropdown);
+    return position == GTK_INVALID_LIST_POSITION ? 0 : (gint)position;
+}
 /* This function returns a string containing the check address in a five-line
  * format.
  *
@@ -361,11 +403,11 @@ gchar *
 get_check_address( PrintCheckDialog *pcd)
 {
     gchar *address;
-    address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
+    address = g_strconcat(gnc_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
                           NULL);
     return address;
 }
@@ -562,25 +604,16 @@ check_format_has_address ( PrintCheckDialog *pcd )
 static void
 gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    check_format_t *check;
     const gchar *format;
+    check_format_t *check = selected_format (pcd);
     gint active;
 
-    /* Options page */
-    if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox),
-                                      &iter))
-    {
-        model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
-        gtk_tree_model_get(model, &iter, COL_DATA, &check, -1);
-        gnc_prefs_set_string (GNC_PREFS_GROUP, GNC_PREF_CHECK_FORMAT_GUID,
-                              check ? check->guid : "custom");
-    }
-    active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION, active);
-    active = gtk_spin_button_get_value_as_int(pcd->first_page_count);
-    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_FIRST_PAGE_COUNT, active);
+    gnc_prefs_set_string (GNC_PREFS_GROUP, GNC_PREF_CHECK_FORMAT_GUID,
+                          check ? check->guid : "custom");
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION,
+                      selected_position (pcd->position_dropdown));
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_FIRST_PAGE_COUNT,
+                      gtk_spin_button_get_value_as_int(pcd->first_page_count));
     active = gnc_date_format_get_format (GNC_DATE_FORMAT(pcd->date_format));
     gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT, active);
     if (active == QOF_DATE_FORMAT_CUSTOM)
@@ -589,170 +622,81 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
         gnc_prefs_set_string (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER, format);
     }
     else
-    {
         gnc_prefs_reset (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER);
-    }
 
-    /* Custom format page */
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE,
-                         gtk_spin_button_get_value(pcd->payee_x),
-                         gtk_spin_button_get_value(pcd->payee_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE,
-                         gtk_spin_button_get_value(pcd->date_x),
-                         gtk_spin_button_get_value(pcd->date_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS,
-                         gtk_spin_button_get_value(pcd->words_x),
-                         gtk_spin_button_get_value(pcd->words_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER,
-                         gtk_spin_button_get_value(pcd->number_x),
-                         gtk_spin_button_get_value(pcd->number_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES,
-                         gtk_spin_button_get_value(pcd->notes_x),
-                         gtk_spin_button_get_value(pcd->notes_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO,
-                         gtk_spin_button_get_value(pcd->memo_x),
-                         gtk_spin_button_get_value(pcd->memo_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS,
-                         gtk_spin_button_get_value(pcd->address_x),
-                         gtk_spin_button_get_value(pcd->address_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT,
-                         gtk_spin_button_get_value(pcd->splits_amount_x),
-                         gtk_spin_button_get_value(pcd->splits_amount_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO,
-                         gtk_spin_button_get_value(pcd->splits_memo_x),
-                         gtk_spin_button_get_value(pcd->splits_memo_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT,
-                         gtk_spin_button_get_value(pcd->splits_account_x),
-                         gtk_spin_button_get_value(pcd->splits_account_y));
-    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION,
-                         gtk_spin_button_get_value(pcd->translation_x),
-                         gtk_spin_button_get_value(pcd->translation_y));
-    gnc_prefs_set_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION,
-                        gtk_spin_button_get_value(pcd->check_rotation));
-    active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
-    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_UNITS, active);
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE, gtk_spin_button_get_value(pcd->payee_x), gtk_spin_button_get_value(pcd->payee_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE, gtk_spin_button_get_value(pcd->date_x), gtk_spin_button_get_value(pcd->date_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS, gtk_spin_button_get_value(pcd->words_x), gtk_spin_button_get_value(pcd->words_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER, gtk_spin_button_get_value(pcd->number_x), gtk_spin_button_get_value(pcd->number_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES, gtk_spin_button_get_value(pcd->notes_x), gtk_spin_button_get_value(pcd->notes_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO, gtk_spin_button_get_value(pcd->memo_x), gtk_spin_button_get_value(pcd->memo_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS, gtk_spin_button_get_value(pcd->address_x), gtk_spin_button_get_value(pcd->address_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT, gtk_spin_button_get_value(pcd->splits_amount_x), gtk_spin_button_get_value(pcd->splits_amount_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO, gtk_spin_button_get_value(pcd->splits_memo_x), gtk_spin_button_get_value(pcd->splits_memo_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT, gtk_spin_button_get_value(pcd->splits_account_x), gtk_spin_button_get_value(pcd->splits_account_y));
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION, gtk_spin_button_get_value(pcd->translation_x), gtk_spin_button_get_value(pcd->translation_y));
+    gnc_prefs_set_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION, gtk_spin_button_get_value(pcd->check_rotation));
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_UNITS, selected_position (pcd->units_dropdown));
 }
-
 
 static void
 gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
     gchar *format, *guid;
     gdouble x, y;
     gint active;
+    guint position;
 
-    /* Options page */
     guid = gnc_prefs_get_string (GNC_PREFS_GROUP, GNC_PREF_CHECK_FORMAT_GUID);
-    if (!(guid && *guid))
-        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
-    else if (strcmp(guid, "custom") == 0)
-    {
-        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
-                                 pcd->format_max - 1);
-    }
+    if (guid && *guid && g_strcmp0 (guid, "custom") != 0 &&
+        find_existing_format (G_LIST_MODEL (pcd->format_model), guid, &position))
+        gtk_drop_down_set_selected (pcd->format_dropdown, position);
+    else if (guid && g_strcmp0 (guid, "custom") == 0)
+        gtk_drop_down_set_selected (pcd->format_dropdown, pcd->format_max - 1);
     else
-    {
-        model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
-        if (find_existing_format(GTK_LIST_STORE(model), guid, &iter))
-        {
-            gtk_combo_box_set_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &iter);
-        }
-        else
-        {
-            gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
-        }
-    }
+        gtk_drop_down_set_selected (pcd->format_dropdown, 0);
     g_free (guid);
 
     active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION);
-
-    /* If the check format used last time no longer exists, then the saved check
-       position may be invalid.  If so set it to the first position. */
-    if (active < 0 || active > pcd->position_max)
+    if (active < 0 || active > (gint)pcd->position_max)
         active = 0;
-    gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), active);
-    active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_FIRST_PAGE_COUNT);
-    gtk_spin_button_set_value(pcd->first_page_count, (gdouble) active);
+    gtk_drop_down_set_selected (pcd->position_dropdown, active);
+    gtk_spin_button_set_value(pcd->first_page_count, (gdouble)gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_FIRST_PAGE_COUNT));
     active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT);
     gnc_date_format_set_format(GNC_DATE_FORMAT(pcd->date_format), active);
     if (active == QOF_DATE_FORMAT_CUSTOM)
     {
         format = gnc_prefs_get_string (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER);
         if (format && *format)
-        {
             gnc_date_format_set_custom(GNC_DATE_FORMAT(pcd->date_format), format);
-            g_free(format);
-        }
+        g_free(format);
     }
-
-    /* Custom format page */
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE, &x, &y);
-    gtk_spin_button_set_value(pcd->payee_x, x);
-    gtk_spin_button_set_value(pcd->payee_y, y);
-
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE, &x, &y);
-    gtk_spin_button_set_value(pcd->date_x, x);
-    gtk_spin_button_set_value(pcd->date_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS, &x, &y);
-    gtk_spin_button_set_value(pcd->words_x, x);
-    gtk_spin_button_set_value(pcd->words_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER, &x, &y);
-    gtk_spin_button_set_value(pcd->number_x, x);
-    gtk_spin_button_set_value(pcd->number_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS, &x, &y);
-    gtk_spin_button_set_value(pcd->address_x, x);
-    gtk_spin_button_set_value(pcd->address_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES, &x, &y);
-    gtk_spin_button_set_value(pcd->notes_x, x);
-    gtk_spin_button_set_value(pcd->notes_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO, &x, &y);
-    gtk_spin_button_set_value(pcd->memo_x, x);
-    gtk_spin_button_set_value(pcd->memo_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT, &x, &y);
-    gtk_spin_button_set_value(pcd->splits_amount_x, x);
-    gtk_spin_button_set_value(pcd->splits_amount_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO, &x, &y);
-    gtk_spin_button_set_value(pcd->splits_memo_x, x);
-    gtk_spin_button_set_value(pcd->splits_memo_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT, &x, &y);
-    gtk_spin_button_set_value(pcd->splits_account_x, x);
-    gtk_spin_button_set_value(pcd->splits_account_y, y);
-    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION, &x, &y);
-    gtk_spin_button_set_value(pcd->translation_x, x);
-    gtk_spin_button_set_value(pcd->translation_y, y);
-    x = gnc_prefs_get_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION);
-    gtk_spin_button_set_value(pcd->check_rotation, x);
-    active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_UNITS);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->units_combobox), active);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE, &x, &y); gtk_spin_button_set_value(pcd->payee_x, x); gtk_spin_button_set_value(pcd->payee_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE, &x, &y); gtk_spin_button_set_value(pcd->date_x, x); gtk_spin_button_set_value(pcd->date_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS, &x, &y); gtk_spin_button_set_value(pcd->words_x, x); gtk_spin_button_set_value(pcd->words_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER, &x, &y); gtk_spin_button_set_value(pcd->number_x, x); gtk_spin_button_set_value(pcd->number_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS, &x, &y); gtk_spin_button_set_value(pcd->address_x, x); gtk_spin_button_set_value(pcd->address_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES, &x, &y); gtk_spin_button_set_value(pcd->notes_x, x); gtk_spin_button_set_value(pcd->notes_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO, &x, &y); gtk_spin_button_set_value(pcd->memo_x, x); gtk_spin_button_set_value(pcd->memo_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT, &x, &y); gtk_spin_button_set_value(pcd->splits_amount_x, x); gtk_spin_button_set_value(pcd->splits_amount_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO, &x, &y); gtk_spin_button_set_value(pcd->splits_memo_x, x); gtk_spin_button_set_value(pcd->splits_memo_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT, &x, &y); gtk_spin_button_set_value(pcd->splits_account_x, x); gtk_spin_button_set_value(pcd->splits_account_y, y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION, &x, &y); gtk_spin_button_set_value(pcd->translation_x, x); gtk_spin_button_set_value(pcd->translation_y, y);
+    gtk_spin_button_set_value(pcd->check_rotation, gnc_prefs_get_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION));
+    gtk_drop_down_set_selected (pcd->units_dropdown, MAX (0, gnc_prefs_get_int (GNC_PREFS_GROUP, GNC_PREF_CUSTOM_UNITS)));
 }
-
 
 static gdouble
 pcd_get_custom_multip(PrintCheckDialog *pcd)
 {
-    gint selected;
-
-    selected = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
-    switch (selected)
+    switch (selected_position (pcd->units_dropdown))
     {
-    default:
-        return 72.0;        /* inches */
-    case 1:
-        return 28.346;      /* cm */
-    case 2:
-        return 2.8346;      /* mm */
-    case 3:
-        return 1.0;         /* points */
+    default: return 72.0;
+    case 1: return 28.346;
+    case 2: return 2.8346;
+    case 3: return 1.0;
     }
 }
-
-
-/* This function saves a coordinate pair into a check description file.  It
- * extracts the values from the spin buttons, adjusts them according to the
- * unit multiplier (inches, pixels, etc), then adds them to the gKeyFile.
- */
 static void
 pcd_key_file_save_xy (GKeyFile *key_file, const gchar *group_name,
                       const gchar *key_name, gdouble multip,
@@ -798,7 +742,6 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 {
     GKeyFile *key_file;
     GError *error = NULL;
-    GtkWidget *dialog;
     gdouble multip;
     gint i = 1;
     GncGUID guid;
@@ -848,83 +791,125 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     {
         if (!gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_PRINT_DATE_FMT))
             /* Reload the format combo box and reselect the "custom" entry */
-            initialize_format_combobox(pcd);
+            initialize_format_dropdown(pcd);
 
-        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
-                                 pcd->format_max - 1);
+        gtk_drop_down_set_selected (pcd->format_dropdown, pcd->format_max - 1);
     }
     else
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_CLOSE, "%s",
-                                        _("Cannot save check format file."));
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                                                 _("Cannot open file %s"),
-                                                 _(error->message));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-        g_error_free(error);
+        gchar *detail = g_strdup_printf (_("Cannot open file %s"),
+                                         error->message);
+
+        gnc_error_dialog (GTK_WINDOW (pcd->window), "%s\n\n%s",
+                          _("Cannot save check format file."), detail);
+        g_free (detail);
+        g_error_free (error);
     }
     g_free(pathname);
     g_free(filename);
 }
 
 
-/* This function makes the OK button active iff a title has been entered.
- */
-void
+typedef struct
+{
+    PrintCheckDialog *pcd;
+    GtkWindow *window;
+    GtkEntry *entry;
+} FormatTitleRequest;
+
+static void
+format_title_request_free (FormatTitleRequest *request)
+{
+    if (request->pcd && request->pcd->format_title_window == request->window)
+        request->pcd->format_title_window = NULL;
+    g_free (request);
+}
+
+static void
 gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
 {
-    const gchar *text;
-    gboolean sensitive;
-
-    text = gtk_entry_get_text(GTK_ENTRY(editable));
-    sensitive = text && *text;
-    gtk_widget_set_sensitive(ok_button, sensitive);
+    const gchar *text = gtk_editable_get_text (editable);
+    gtk_widget_set_sensitive (ok_button, text && *text);
 }
 
-
-/* This function is called when the user clicks the "save format" button in
- * the check printing dialog.  It presents another dialog to the user to get
- * the filename for saving the data.
- */
-void
-gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
+static void
+format_title_cancelled (GtkButton *button, FormatTitleRequest *request)
 {
-    GtkWidget *dialog, *entry, *button;
-    GtkBuilder *builder;
+    (void)button;
+    if (request->pcd)
+        request->pcd->format_title_window = NULL;
+    gtk_window_destroy (request->window);
+}
+
+static void
+format_title_accepted (GtkButton *button, FormatTitleRequest *request)
+{
     gchar *title;
+    (void)button;
+    title = g_strdup (gtk_editable_get_text (GTK_EDITABLE (request->entry)));
+    if (title && *title)
+        pcd_save_custom_data (request->pcd, title);
+    g_free (title);
+    if (request->pcd)
+        request->pcd->format_title_window = NULL;
+    gtk_window_destroy (request->window);
+}
 
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "format_title_dialog");
+static gboolean
+format_title_close_request (GtkWindow *window, FormatTitleRequest *request)
+{
+    (void)window;
+    if (request->pcd)
+        request->pcd->format_title_window = NULL;
+    return FALSE;
+}
 
-    /* Get a title for the new check format. */
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_title_dialog"));
-    entry = GTK_WIDGET(gtk_builder_get_object (builder, "format_title"));
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
-    gnc_check_format_title_changed(GTK_EDITABLE(entry), button);
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
-
-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
+static void
+gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd)
+{
+    GtkWidget *content, *description, *actions, *cancel, *ok;
+    FormatTitleRequest *request;
+    (void)button;
+    if (pcd->format_title_window)
     {
-        gtk_widget_destroy(dialog);
-        g_object_unref(G_OBJECT(builder));
+        gtk_window_present (pcd->format_title_window);
         return;
     }
-
-    title = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-    gtk_widget_destroy (dialog);
-
-    g_object_unref(G_OBJECT(builder));
-
-    pcd_save_custom_data(pcd, title);
-    g_free(title);
+    request = g_new0 (FormatTitleRequest, 1);
+    request->pcd = pcd;
+    request->window = GTK_WINDOW (gtk_window_new ());
+    gnc_window_bind_to_application (request->window);
+    request->entry = GTK_ENTRY (gtk_entry_new ());
+    pcd->format_title_window = request->window;
+    gtk_window_set_title (request->window, _("Save Custom Check Format"));
+    gtk_window_set_default_size (request->window, 500, -1);
+    gtk_window_set_transient_for (request->window, pcd->window);
+    gtk_window_set_modal (request->window, TRUE);
+    content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    gtk_widget_set_margin_top (content, 12); gtk_widget_set_margin_bottom (content, 12);
+    gtk_widget_set_margin_start (content, 12); gtk_widget_set_margin_end (content, 12);
+    description = gtk_label_new (_("Enter a title for this custom format. This title will appear in the \"Check format\" selector of the Print Check dialog. Using the title of an existing custom format will cause that format to be overwritten."));
+    gtk_label_set_wrap (GTK_LABEL (description), TRUE);
+    gtk_label_set_xalign (GTK_LABEL (description), 0.0);
+    gtk_box_append (GTK_BOX (content), description);
+    gtk_box_append (GTK_BOX (content), GTK_WIDGET (request->entry));
+    actions = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    gtk_widget_set_halign (actions, GTK_ALIGN_END);
+    cancel = gtk_button_new_with_mnemonic (_("_Cancel"));
+    ok = gtk_button_new_with_mnemonic (_("_OK"));
+    gtk_widget_set_sensitive (ok, FALSE);
+    gtk_box_append (GTK_BOX (actions), cancel);
+    gtk_box_append (GTK_BOX (actions), ok);
+    gtk_box_append (GTK_BOX (content), actions);
+    gtk_window_set_child (request->window, content);
+    gtk_window_set_default_widget (request->window, ok);
+    g_signal_connect (request->entry, "changed", G_CALLBACK (gnc_check_format_title_changed), ok);
+    g_signal_connect (cancel, "clicked", G_CALLBACK (format_title_cancelled), request);
+    g_signal_connect (ok, "clicked", G_CALLBACK (format_title_accepted), request);
+    g_signal_connect (request->window, "close-request", G_CALLBACK (format_title_close_request), request);
+    g_object_set_data_full (G_OBJECT (request->window), "gnc-print-check-format-title-request", request, (GDestroyNotify)format_title_request_free);
+    gtk_window_present (request->window);
 }
-
-
 /* This function is an auxiliary debugging function for converting an array of
  * doubles into a printable string.
  */
@@ -1517,279 +1502,203 @@ read_one_check_format(PrintCheckDialog *pcd, const gchar *groupname,
  * the file.
  */
 static void
-read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
+read_one_check_directory(PrintCheckDialog *pcd, GListStore *store,
                          const gchar *groupname, const gchar *dirname)
 {
-    check_format_t *format = NULL, *existing;
     GDir *dir;
     const gchar *filename;
-    GtkTreeIter iter;
-    GtkWidget *dialog;
     gboolean found = FALSE;
 
     dir = g_dir_open(dirname, 0, NULL);
-    if (dir == NULL)
+    if (!dir)
         return;
-
     while ((filename = g_dir_read_name(dir)) != NULL)
     {
-        if (g_str_has_prefix(filename, "#"))
+        check_format_t *format, *existing;
+        GObject *row;
+        if (g_str_has_prefix(filename, "#") || !g_str_has_suffix(filename, ".chk"))
             continue;
-        if (!g_str_has_suffix(filename, ".chk"))
-            continue;
-
         format = read_one_check_format(pcd, groupname, dirname, filename);
-        if (NULL == format)
+        if (!format)
             continue;
-
-        existing = find_existing_format(store, format->guid, NULL);
+        existing = find_existing_format (G_LIST_MODEL (store), format->guid, NULL);
         if (existing)
         {
-            dialog = gtk_message_dialog_new
-                     (GTK_WINDOW(pcd->dialog),
-                      GTK_DIALOG_DESTROY_WITH_PARENT,
-                      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s",
-                      _("There is a duplicate check format file."));
-            gtk_message_dialog_format_secondary_text
-            (GTK_MESSAGE_DIALOG(dialog),
-             /* Translators:
-                %1$s is the type of the first check format
-                 (user defined or application defined);
-                %2$s is the filename of that format;
-                %3$s the type of the other check format; and
-                %4$s the filename of that other format.      */
-             _("The GUIDs in the %s check format file '%s' and "
-               "the %s check format file '%s' match."),
-             existing->group, existing->filename,
-             format->group, format->filename);
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
+            gchar *detail = g_strdup_printf (_("The GUIDs in the %s check format file '%s' and the %s check format file '%s' match."),
+                                             existing->group, existing->filename,
+                                             format->group, format->filename);
+            gnc_error_dialog (pcd->window, "%s\n\n%s", _("There is a duplicate check format file."), detail);
+            g_free (detail);
             free_check_format (format);
+            continue;
         }
-        else
-        {
-            gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter, COL_NAME, format->title,
-                               COL_DATA, format, -1);
-            found = TRUE;
-        }
+        row = format_row_new (format->title, format, FALSE);
+        g_list_store_append (store, row);
+        g_object_unref (row);
+        found = TRUE;
     }
     g_dir_close(dir);
-
-    /* If any files were added to the list, add a separator between
-     *  this group and the next. */
     if (found)
     {
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, COL_SEP, TRUE, -1);
+        GObject *separator = format_row_new ("────────", NULL, TRUE);
+        g_list_store_append (store, separator);
+        g_object_unref (separator);
     }
 }
 
-
-/* Read all check formats.  This function first looks in the system directory
- * for check files, and then looks in the user's .gnucash directory for any
- * custom check files.
- */
 static void
-read_formats(PrintCheckDialog *pcd, GtkListStore *store)
+read_formats(PrintCheckDialog *pcd, GListStore *store)
 {
     gchar *dirname, *pkgdatadir;
-
     pkgdatadir = gnc_path_get_pkgdatadir();
-    dirname = g_build_filename(pkgdatadir, CHECK_FMT_DIR, (char *)NULL);
-    /* Translators: This is a directory name. It may be presented to
-     * the user to indicate that some data file was defined by the
-     * gnucash application. */
+    dirname = g_build_filename(pkgdatadir, CHECK_FMT_DIR, NULL);
     read_one_check_directory(pcd, store, _("application"), dirname);
     g_free(dirname);
     g_free(pkgdatadir);
-
     dirname = gnc_build_userdata_path(CHECK_FMT_DIR);
-    /* Translators: This is a directory name. It may be presented to
-     * the user to indicate that some data file was defined by a
-     * user herself. */
     read_one_check_directory(pcd, store, _("user"), dirname);
     g_free(dirname);
 }
 
-
-static gboolean
-format_is_a_separator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
-{
-    gboolean separator;
-
-    gtk_tree_model_get(model, iter, COL_SEP, &separator, -1);
-    return separator;
-}
-
-
 static void
-initialize_format_combobox (PrintCheckDialog *pcd)
+initialize_format_dropdown (PrintCheckDialog *pcd)
 {
-    GtkListStore *store;
-    GtkTreeIter iter;
+    GListStore *store = g_list_store_new (GTK_TYPE_STRING_OBJECT);
+    GObject *custom;
 
-    store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
-    read_formats(pcd, store);
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
-    pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store), NULL);
-    gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
-                            GTK_TREE_MODEL(store));
-    gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
-                                         format_is_a_separator, NULL, NULL);
-    g_object_unref (store);
+    read_formats (pcd, store);
+    custom = format_row_new (_("Custom"), NULL, FALSE);
+    g_list_store_append (store, custom);
+    g_object_unref (custom);
+    pcd->selected_format = NULL;
+    pcd->last_format = 0;
+    pcd->format_max = g_list_model_get_n_items (G_LIST_MODEL (store));
+    gtk_drop_down_set_model (pcd->format_dropdown, G_LIST_MODEL (store));
+    g_clear_object (&pcd->format_model);
+    pcd->format_model = store;
 }
-
-
 /*****************************************************
  * gnc_ui_print_check_dialog_create                  *
  * make a new print check dialog and wait for it.    *
  * If account is given, this is a parent account to  *
  * subtotal the amount of all splits under it.       *
  *****************************************************/
-void
-gnc_ui_print_check_dialog_create(GtkWidget *parent,
-                                 GList *splits,
-                                 Account* account)
+static void
+print_check_dialog_free (PrintCheckDialog *pcd)
 {
-    PrintCheckDialog *pcd;
-    GtkBuilder *builder;
-    GtkWidget *table;
+    if (pcd->print_request)
+        g_cancellable_cancel (pcd->print_request->cancellable);
+    if (pcd->format_title_window)
+    {
+        FormatTitleRequest *request = g_object_get_data (G_OBJECT (pcd->format_title_window), "gnc-print-check-format-title-request");
+        if (request)
+            request->pcd = NULL;
+        gtk_window_destroy (pcd->format_title_window);
+    }
+    g_clear_object (&pcd->format_model);
+    g_free (pcd->default_font);
+    g_list_free (pcd->splits);
+    g_free (pcd);
+}
+
+void
+gnc_ui_print_check_dialog_create(GtkWidget *parent, GList *splits, Account* account)
+{
+    PrintCheckDialog *pcd = g_new0 (PrintCheckDialog, 1);
+    GtkBuilder *builder = gtk_builder_new ();
+    GtkWidget *table, *lower_left;
+    GtkExpression *expression;
+    GtkStringList *units;
     gchar *font;
     Transaction *trans = NULL;
 
-    pcd = g_new0(PrintCheckDialog, 1);
-    pcd->caller_window = GTK_WINDOW(parent);
-    pcd->splits = g_list_copy(splits);
+    pcd->caller_window = parent ? GTK_WINDOW (parent) : NULL;
+    pcd->splits = g_list_copy (splits);
     pcd->account = account;
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment1");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment2");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment3");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment4");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment5");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment6");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment7");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment8");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment9");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment10");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment11");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment12");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment13");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment14");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment15");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment16");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment17");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment18");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment19");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment20");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment21");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment22");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment23");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment24");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore1");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore2");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore3");
+    for (guint i = 1; i <= 24; i++)
+    {
+        gchar *id = g_strdup_printf ("adjustment%u", i);
+        gnc_builder_add_from_file (builder, "dialog-print-check.glade", id);
+        g_free (id);
+    }
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "print_check_dialog");
+    pcd->window = GTK_WINDOW (gtk_builder_get_object (builder, "print_check_dialog"));
+    gtk_widget_set_name (GTK_WIDGET (pcd->window), "gnc-id-print-check");
+    gtk_window_set_transient_for (pcd->window, pcd->caller_window);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
-
-    pcd->builder = builder;
-    pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "print_check_dialog"));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(pcd->dialog), "gnc-id-print-check");
-
-    /* now pick out the relevant child widgets */
-    pcd->format_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "check_format_combobox"));
-    pcd->position_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "check_position_combobox"));
+    pcd->format_dropdown = GTK_DROP_DOWN (gtk_builder_get_object (builder, "check_format_combobox"));
+    pcd->position_dropdown = GTK_DROP_DOWN (gtk_builder_get_object (builder, "check_position_combobox"));
+    pcd->units_dropdown = GTK_DROP_DOWN (gtk_builder_get_object (builder, "units_combobox"));
+    expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
+    gtk_drop_down_set_expression (pcd->format_dropdown, expression);
+    gtk_expression_unref (expression);
     pcd->first_page_count = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "first_page_count_entry"));
-
     pcd->custom_table = GTK_WIDGET(gtk_builder_get_object (builder, "custom_table"));
-    pcd->payee_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "payee_x_entry"));
-    pcd->payee_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "payee_y_entry"));
-    pcd->date_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "date_x_entry"));
-    pcd->date_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "date_y_entry"));
-    pcd->words_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_words_x_entry"));
-    pcd->words_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_words_y_entry"));
-    pcd->number_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_numbers_x_entry"));
-    pcd->number_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_numbers_y_entry"));
-    pcd->notes_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "notes_x_entry"));
-    pcd->notes_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "notes_y_entry"));
-    pcd->memo_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "memo_x_entry"));
-    pcd->memo_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "memo_y_entry"));
-    pcd->address_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "address_x_entry"));
-    pcd->address_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "address_y_entry"));
-    pcd->splits_amount_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_amount_x_entry"));
-    pcd->splits_amount_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_amount_y_entry"));
-    pcd->splits_memo_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_memo_x_entry"));
-    pcd->splits_memo_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_memo_y_entry"));
-    pcd->splits_account_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_account_x_entry"));
-    pcd->splits_account_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_account_y_entry"));
-    pcd->translation_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "translation_x_entry"));
-    pcd->translation_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "translation_y_entry"));
+    pcd->payee_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "payee_x_entry")); pcd->payee_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "payee_y_entry"));
+    pcd->date_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "date_x_entry")); pcd->date_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "date_y_entry"));
+    pcd->words_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_words_x_entry")); pcd->words_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_words_y_entry"));
+    pcd->number_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_numbers_x_entry")); pcd->number_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "amount_numbers_y_entry"));
+    pcd->notes_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "notes_x_entry")); pcd->notes_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "notes_y_entry"));
+    pcd->memo_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "memo_x_entry")); pcd->memo_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "memo_y_entry"));
+    pcd->address_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "address_x_entry")); pcd->address_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "address_y_entry"));
+    pcd->splits_amount_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_amount_x_entry")); pcd->splits_amount_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_amount_y_entry"));
+    pcd->splits_memo_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_memo_x_entry")); pcd->splits_memo_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_memo_y_entry"));
+    pcd->splits_account_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_account_x_entry")); pcd->splits_account_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "splits_account_y_entry"));
+    pcd->translation_x = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "translation_x_entry")); pcd->translation_y = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "translation_y_entry"));
     pcd->translation_label = GTK_WIDGET(gtk_builder_get_object (builder, "translation_label"));
     pcd->check_rotation = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "check_rotation_entry"));
-    pcd->units_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "units_combobox"));
-
-    gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), pcd->caller_window);
-
-    /* Create and attach the date-format chooser */
-    table = GTK_WIDGET(gtk_builder_get_object (builder, "options_table"));
-    pcd->date_format = gnc_date_format_new_without_label();
-    gtk_grid_attach (GTK_GRID(table), pcd->date_format, 1, 4, 1, 1);
-
-    /* Default font (set in preferences) */
-    font = gnc_prefs_get_string(GNC_PREFS_GROUP, GNC_PREF_DEFAULT_FONT);
-    pcd->default_font = font && *font ? font : g_strdup(DEFAULT_FONT);
-
-    /* Update the combo boxes bases on the available check formats */
-    initialize_format_combobox(pcd);
-
-    /* address */
     pcd->check_address_name = GTK_WIDGET(gtk_builder_get_object (builder, "check_address_name"));
     pcd->check_address_1 = GTK_WIDGET(gtk_builder_get_object (builder, "check_address_1"));
     pcd->check_address_2 = GTK_WIDGET(gtk_builder_get_object (builder, "check_address_2"));
     pcd->check_address_3 = GTK_WIDGET(gtk_builder_get_object (builder, "check_address_3"));
     pcd->check_address_4 = GTK_WIDGET(gtk_builder_get_object (builder, "check_address_4"));
-    /* fill in any available address data */
-    /* Can't access business objects e.g. Customer,Vendor,Employee because
-     * it would create build problems */
+    table = GTK_WIDGET(gtk_builder_get_object (builder, "options_table"));
+    pcd->date_format = gnc_date_format_new_without_label();
+    gtk_grid_attach (GTK_GRID(table), pcd->date_format, 1, 4, 1, 1);
+    lower_left = GTK_WIDGET(gtk_builder_get_object (builder, "lower_left"));
+    gtk_widget_set_visible (lower_left, FALSE);
+
+    font = gnc_prefs_get_string(GNC_PREFS_GROUP, GNC_PREF_DEFAULT_FONT);
+    pcd->default_font = font && *font ? font : g_strdup(DEFAULT_FONT);
+    units = gtk_string_list_new ((const char * const[]){ _("Inches"), _("Centimeters"), _("Millimeters"), _("Points"), NULL });
+    gtk_drop_down_set_model (pcd->units_dropdown, G_LIST_MODEL (units));
+    g_object_unref (units);
+    initialize_format_dropdown (pcd);
+    g_signal_connect (pcd->format_dropdown, "notify::selected", G_CALLBACK (gnc_print_check_format_changed), pcd);
+    g_signal_connect (pcd->position_dropdown, "notify::selected", G_CALLBACK (gnc_print_check_position_changed), pcd);
+    if (gtk_drop_down_get_selected (pcd->format_dropdown) == GTK_INVALID_LIST_POSITION)
+        gtk_drop_down_set_selected (pcd->format_dropdown, 0);
+    gnc_print_check_format_changed (NULL, NULL, pcd);
+
     if (g_list_length(pcd->splits) == 1)
     {
         GncOwner txn_owner;
-
         trans = xaccSplitGetParent((Split *)(pcd->splits->data));
         if (gncOwnerGetOwnerFromTxn (trans, &txn_owner))
         {
             GncOwner owner;
             gncOwnerCopy (gncOwnerGetEndOwner (&txn_owner), &owner);
-
-            /* Got a business owner, get the address */
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
         }
     }
+    if (trans && gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name)) == 0)
+        gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
 
-    /* Use transaction description as address name if no better address has been found */
-    if ( trans && (0 == gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name))) )
-        gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
-
-    gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
-
+    g_object_set_data_full (G_OBJECT (pcd->window), "gnc-print-check-dialog", pcd, (GDestroyNotify)print_check_dialog_free);
     gnc_ui_print_restore_dialog(pcd);
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog), GTK_WINDOW (parent));
-
-    g_object_unref(G_OBJECT(builder));
-    gtk_widget_show_all(pcd->dialog);
+    gnc_restore_window_size(GNC_PREFS_GROUP, pcd->window, pcd->caller_window);
+    g_signal_connect (pcd->window, "close-request", G_CALLBACK (print_check_close_request), pcd);
+    g_signal_connect (gtk_builder_get_object (builder, "save_button"), "clicked", G_CALLBACK (gnc_print_check_save_button_clicked), pcd);
+    g_signal_connect (gtk_builder_get_object (builder, "helpbutton"), "clicked", G_CALLBACK (print_check_help_clicked), pcd);
+    g_signal_connect (gtk_builder_get_object (builder, "cancelbutton"), "clicked", G_CALLBACK (print_check_cancel_clicked), pcd);
+    g_signal_connect (gtk_builder_get_object (builder, "okbutton"), "clicked", G_CALLBACK (print_check_clicked), pcd);
+    g_object_unref(builder);
+    gtk_window_present (pcd->window);
 }
-
-
 /**************************************
  * Print check contents to the page.  *
  **************************************/
@@ -1929,124 +1838,96 @@ draw_text(GtkPrintContext *context, const gchar *text, check_item_t *data,
 }
 
 
-/* Find and load the specified image.  If the specified filename isn't an
- * absolute path name, this code will also look in the gnucash system check
- * format directory, and then in the user's private check format
- * directory.
- *
- * NOTE: The gtk_image_new_from_file() function never fails.  If it can't
- * find the specified file, it returns the "broken image" icon.  This function
- * takes advantage of that.
-*/
-static GtkWidget *
+/* Find and load the specified image from an absolute path, the application
+ * check-format directory, or the user check-format directory. */
+static GdkTexture *
 read_image (const gchar *filename)
 {
-    GtkWidget *image;
-    gchar *pkgdatadir, *dirname, *tmp_name;
+    gchar *pkgdatadir, *dirname, *pathname;
+    GdkTexture *texture;
+    GError *error = NULL;
 
-    if (g_path_is_absolute(filename))
-        return gtk_image_new_from_file(filename);
-
-    pkgdatadir = gnc_path_get_pkgdatadir();
-    tmp_name = g_build_filename(pkgdatadir, CHECK_FMT_DIR, filename, (char *)NULL);
-    if (!g_file_test(tmp_name, G_FILE_TEST_EXISTS))
+    if (g_path_is_absolute (filename))
+        pathname = g_strdup (filename);
+    else
     {
-        g_free(tmp_name);
-        dirname = gnc_build_userdata_path(CHECK_FMT_DIR);
-        tmp_name = g_build_filename(dirname, filename, (char *)NULL);
-        g_free(dirname);
+        pkgdatadir = gnc_path_get_pkgdatadir ();
+        pathname = g_build_filename (pkgdatadir, CHECK_FMT_DIR, filename, NULL);
+        g_free (pkgdatadir);
+        if (!g_file_test (pathname, G_FILE_TEST_EXISTS))
+        {
+            g_free (pathname);
+            dirname = gnc_build_userdata_path (CHECK_FMT_DIR);
+            pathname = g_build_filename (dirname, filename, NULL);
+            g_free (dirname);
+        }
     }
-    image = gtk_image_new_from_file(tmp_name);
-    g_free(tmp_name);
-    return image;
+    texture = gdk_texture_new_from_filename (pathname, &error);
+    if (!texture)
+    {
+        g_warning ("Filename '%s' cannot be read: %s", pathname,
+                   error ? error->message : "unknown error");
+        g_clear_error (&error);
+    }
+    g_free (pathname);
+    return texture;
 }
 
-
-/* Print a single image to the printed page.  This picture will be scaled
- * down to fit in the specified size rectangle.  Scaling is done with the
- * proportions locked 1:1 so as not to distort the image.
- */
+/* Print one image, preserving its aspect ratio and never scaling it up. */
 static void
 draw_picture(GtkPrintContext *context, check_item_t *data)
 {
-    cairo_t *cr;
-    GdkPixbuf *pixbuf, *scaled_pixbuf;
-    GtkImage *image;
+    cairo_t *cr = gtk_print_context_get_cairo_context (context);
+    GdkTexture *texture;
+    GdkTextureDownloader *downloader;
+    GBytes *pixels;
+    cairo_surface_t *surface;
+    const guchar *pixel_data;
+    gsize stride, length;
     gint pix_w, pix_h;
-    gdouble scale_w, scale_h, scale;
+    gdouble scale_w = 1, scale_h = 1, scale;
 
-    cr = gtk_print_context_get_cairo_context(context);
-    cairo_save(cr);
-
-    /* Get the picture. */
-    image = GTK_IMAGE(read_image(data->filename));
-    pixbuf = gtk_image_get_pixbuf(image);
-    if (pixbuf)
+    texture = read_image (data->filename);
+    if (!texture)
+        return;
+    pix_w = gdk_texture_get_width (texture);
+    pix_h = gdk_texture_get_height (texture);
+    downloader = gdk_texture_downloader_new (texture);
+    gdk_texture_downloader_set_format (downloader, GDK_MEMORY_DEFAULT);
+    pixels = gdk_texture_downloader_download_bytes (downloader, &stride);
+    gdk_texture_downloader_free (downloader);
+    g_object_unref (texture);
+    pixel_data = g_bytes_get_data (pixels, &length);
+    surface = cairo_image_surface_create_for_data ((unsigned char *)pixel_data,
+                                                   CAIRO_FORMAT_ARGB32,
+                                                   pix_w, pix_h, (int)stride);
+    if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     {
-        g_object_ref(pixbuf);
+        cairo_surface_destroy (surface);
+        g_bytes_unref (pixels);
+        return;
     }
-    else
-    {
-        GtkIconTheme *def_theme = gtk_icon_theme_get_default ();
-
-        g_warning("Filename '%s' cannot be read or understood.",
-                  data->filename);
-
-        pixbuf = gtk_icon_theme_load_icon (def_theme,
-                          "image-missing",
-                          16,
-                          GTK_ICON_LOOKUP_USE_BUILTIN,
-                          NULL);
-    }
-    pix_w = gdk_pixbuf_get_width(pixbuf);
-    pix_h = gdk_pixbuf_get_height(pixbuf);
-
-    /* Draw the enclosing rectangle */
-    if (data->w && data->h)
-    {
-        cairo_rectangle(cr, data->x, data->y - data->h, data->w, data->h);
-        DEBUG("Picture clip rectangle, user coords %f,%f, user size %f,%f",
-                data->x, data->y - data->h, data->w, data->h);
-    }
-    else
-    {
-        cairo_rectangle(cr, data->x, data->y - pix_h, pix_w, pix_h);
-        DEBUG("Picture clip rectangle, user coords %f,%f, pic size %d,%d",
-                data->x, data->y - data->h, pix_w, pix_h);
-    }
-    cairo_clip_preserve(cr);
-
-    /* Scale down to fit.  Never scale up. */
-    scale_w = scale_h = 1;
-    if (data->w && (pix_w > data->w))
+    if (data->w && pix_w > data->w)
         scale_w = data->w / pix_w;
-    if (data->h && (pix_h > data->h))
+    if (data->h && pix_h > data->h)
         scale_h = data->h / pix_h;
-    scale = MIN(scale_w, scale_h);
+    scale = MIN (scale_w, scale_h);
 
-    if (scale != 1)
-    {
-        scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, pix_w * scale,
-                                                pix_h * scale,
-                                                GDK_INTERP_BILINEAR);
-        pix_h = gdk_pixbuf_get_height(scaled_pixbuf);
-        gdk_cairo_set_source_pixbuf(cr, scaled_pixbuf, data->x,
-                                    data->y - pix_h);
-
-        g_object_unref(scaled_pixbuf);
-    }
+    cairo_save (cr);
+    if (data->w && data->h)
+        cairo_rectangle (cr, data->x, data->y - data->h, data->w, data->h);
     else
-    {
-        gdk_cairo_set_source_pixbuf(cr, pixbuf, data->x, data->y - pix_h);
-    }
-    g_object_unref(pixbuf);
-    cairo_paint(cr);
-
-    /* Clean up after ourselves */
-    cairo_restore(cr);
-    gtk_widget_destroy(GTK_WIDGET(image));
+        cairo_rectangle (cr, data->x, data->y - pix_h * scale,
+                         pix_w * scale, pix_h * scale);
+    cairo_clip (cr);
+    cairo_translate (cr, data->x, data->y - pix_h * scale);
+    cairo_scale (cr, scale, scale);
+    cairo_set_source_surface (cr, surface, 0, 0);
+    cairo_paint (cr);
+    cairo_restore (cr);
+    cairo_surface_destroy (surface);
+    g_bytes_unref (pixels);
 }
-
 
 #define DATE_FMT_HEIGHT 8
 #define DATE_FMT_SLOP   2
@@ -2444,7 +2325,7 @@ draw_page(GtkPrintOperation *operation,
         gint    first_page_count;
         guint   check_count = g_list_length(pcd->splits);
         gint    check_number;
-        gint    position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
+        gint    position = selected_position (pcd->position_dropdown);
         gint    last_blank_check_pos;
         gint    checks_per_page;
         GList   *next_split;
@@ -2528,7 +2409,7 @@ begin_print(GtkPrintOperation *operation,
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
     guint check_count = g_list_length(pcd->splits);
     gint pages;
-    gint position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
+    gint position = selected_position (pcd->position_dropdown);
 
     if (pcd->selected_format /* User selected a format other than custom */
             && pcd->position_max > 1 /* The format has more than one check per page
@@ -2559,181 +2440,376 @@ begin_print(GtkPrintOperation *operation,
 }
 
 
-/************************************
- * gnc_ui_print_check_dialog_ok_cb  *
- ************************************/
 static void
-gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog *pcd)
+print_check_request_free (PrintCheckRequest *request)
 {
-    GtkPrintOperation *print;
-    GtkPrintOperationResult res;
-
-    print = gtk_print_operation_new();
-
-    gnc_print_operation_init(print, "GnuCash-Checks");
-    gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
-    gtk_print_operation_set_use_full_page(print, TRUE);
-    g_signal_connect(print, "begin_print", G_CALLBACK(begin_print), pcd);
-    g_signal_connect(print, "draw_page", G_CALLBACK(draw_page), pcd);
-
-    res = gtk_print_operation_run(print,
-                                  GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
-                                  pcd->caller_window, NULL);
-
-    if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
-        gnc_print_operation_save_print_settings(print);
-
-    g_object_unref(print);
-}
-
-
-static void
-gnc_print_check_set_sensitive (GtkWidget *widget, gpointer data)
-{
-    gboolean sensitive;
-    if (GTK_IS_LABEL(widget) || GTK_IS_SEPARATOR(widget))
+    if (!request)
         return;
-    sensitive = GPOINTER_TO_INT(data);
-    gtk_widget_set_sensitive(widget, sensitive);
+    g_weak_ref_clear (&request->window);
+    g_clear_object (&request->dialog);
+    g_clear_object (&request->cancellable);
+    g_clear_object (&request->file);
+    g_free (request);
+}
+
+static void
+print_check_request_remove_file (PrintCheckRequest *request)
+{
+    GError *error = NULL;
+
+    if (!request->file)
+        return;
+    if (!g_file_delete (request->file, NULL, &error) &&
+        !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        g_warning ("Could not remove temporary check PDF: %s",
+                   error ? error->message : "unknown error");
+    g_clear_error (&error);
+    g_clear_object (&request->file);
+}
+
+static PrintCheckDialog *
+print_check_request_get_dialog (PrintCheckRequest *request,
+                                GtkWindow **window_out)
+{
+    GtkWindow *window = GTK_WINDOW (g_weak_ref_get (&request->window));
+    PrintCheckDialog *pcd = NULL;
+
+    if (window && !gtk_widget_in_destruction (GTK_WIDGET (window)))
+        pcd = g_object_get_data (G_OBJECT (window), "gnc-print-check-dialog");
+    if (!pcd || pcd->print_request != request)
+        pcd = NULL;
+    if (window_out)
+        *window_out = window;
+    else
+        g_clear_object (&window);
+    return pcd;
+}
+
+static void
+print_check_dialog_destroy (PrintCheckDialog *pcd)
+{
+    if (pcd->closing)
+        return;
+    pcd->closing = TRUE;
+    gnc_save_window_size (GNC_PREFS_GROUP, pcd->window);
+    gtk_window_destroy (pcd->window);
+}
+
+static void
+print_check_request_complete (PrintCheckRequest *request, gboolean printed,
+                              const GError *error)
+{
+    GtkWindow *window = NULL;
+    PrintCheckDialog *pcd = print_check_request_get_dialog (request, &window);
+
+    if (pcd)
+    {
+        pcd->print_request = NULL;
+        if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+            !pcd->close_after_print)
+            gnc_error_dialog (window, "%s", error->message);
+        if (printed)
+        {
+            gnc_ui_print_save_dialog (pcd);
+            print_check_dialog_destroy (pcd);
+        }
+        else if (pcd->close_after_print)
+            print_check_dialog_destroy (pcd);
+        else
+            gtk_widget_set_sensitive (GTK_WIDGET (window), TRUE);
+    }
+    g_clear_object (&window);
+    print_check_request_remove_file (request);
+    print_check_request_free (request);
+}
+
+static gboolean
+print_check_export_pdf (PrintCheckRequest *request, PrintCheckDialog *pcd,
+                        GtkPrintSetup *setup, GError **error)
+{
+    GtkPrintOperation *operation;
+    GtkPrintOperationResult result;
+    GFileIOStream *stream = NULL;
+    GtkPrintSettings *settings;
+    GtkPageSetup *page_setup;
+    gchar *filename;
+    gboolean exported;
+
+    request->file = g_file_new_tmp ("gnucash-checks-XXXXXX.pdf", &stream, error);
+    if (!request->file)
+        return FALSE;
+    if (!g_io_stream_close (G_IO_STREAM (stream), NULL, error))
+    {
+        g_object_unref (stream);
+        print_check_request_remove_file (request);
+        return FALSE;
+    }
+    g_object_unref (stream);
+
+    filename = g_file_get_path (request->file);
+    if (!filename)
+    {
+        g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                     "%s", _("The temporary check file has no local path."));
+        print_check_request_remove_file (request);
+        return FALSE;
+    }
+
+    operation = gtk_print_operation_new ();
+    gnc_print_operation_init (operation, "GnuCash-Checks");
+    settings = gtk_print_setup_get_print_settings (setup);
+    page_setup = gtk_print_setup_get_page_setup (setup);
+    if (settings)
+        gtk_print_operation_set_print_settings (operation, settings);
+    if (page_setup)
+        gtk_print_operation_set_default_page_setup (operation, page_setup);
+    gtk_print_operation_set_unit (operation, GTK_UNIT_POINTS);
+    gtk_print_operation_set_use_full_page (operation, TRUE);
+    gtk_print_operation_set_allow_async (operation, FALSE);
+    gtk_print_operation_set_export_filename (operation, filename);
+    g_signal_connect (operation, "begin_print", G_CALLBACK (begin_print), pcd);
+    g_signal_connect (operation, "draw_page", G_CALLBACK (draw_page), pcd);
+    result = gtk_print_operation_run (operation, GTK_PRINT_OPERATION_ACTION_EXPORT,
+                                      pcd->window, error);
+    exported = result == GTK_PRINT_OPERATION_RESULT_APPLY;
+    if (!exported && error && !*error)
+        g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                     "%s", _("Could not create the temporary check PDF."));
+    g_object_unref (operation);
+    g_free (filename);
+    if (!exported)
+        print_check_request_remove_file (request);
+    return exported;
+}
+
+static void
+print_check_file_finished (GObject *source, GAsyncResult *result,
+                           gpointer user_data)
+{
+    PrintCheckRequest *request = user_data;
+    GError *error = NULL;
+    gboolean printed = gtk_print_dialog_print_file_finish (
+        GTK_PRINT_DIALOG (source), result, &error);
+
+    print_check_request_complete (request, printed, error);
+    g_clear_error (&error);
+}
+
+static void
+print_check_setup_finished (GObject *source, GAsyncResult *result,
+                            gpointer user_data)
+{
+    PrintCheckRequest *request = user_data;
+    GError *error = NULL;
+    GtkPrintSetup *setup = gtk_print_dialog_setup_finish (
+        GTK_PRINT_DIALOG (source), result, &error);
+    GtkWindow *window = NULL;
+    PrintCheckDialog *pcd;
+
+    if (!setup)
+    {
+        print_check_request_complete (request, FALSE, error);
+        g_clear_error (&error);
+        return;
+    }
+
+    pcd = print_check_request_get_dialog (request, &window);
+    if (!pcd)
+    {
+        gtk_print_setup_unref (setup);
+        g_clear_object (&window);
+        print_check_request_complete (request, FALSE, NULL);
+        return;
+    }
+
+    gnc_print_setup_save (setup);
+    if (!print_check_export_pdf (request, pcd, setup, &error))
+    {
+        gtk_print_setup_unref (setup);
+        g_clear_object (&window);
+        print_check_request_complete (request, FALSE, error);
+        g_clear_error (&error);
+        return;
+    }
+
+    gtk_print_dialog_print_file (request->dialog, window, setup, request->file,
+                                 request->cancellable, print_check_file_finished,
+                                 request);
+    gtk_print_setup_unref (setup);
+    g_clear_object (&window);
+}
+
+static void
+print_check_request_start (PrintCheckDialog *pcd)
+{
+    PrintCheckRequest *request;
+    GtkPrintOperation *operation;
+    GtkPrintSettings *settings;
+    GtkPageSetup *page_setup;
+
+    if (pcd->print_request || pcd->closing)
+        return;
+
+    request = g_new0 (PrintCheckRequest, 1);
+    g_weak_ref_init (&request->window, pcd->window);
+    request->dialog = gtk_print_dialog_new ();
+    request->cancellable = g_cancellable_new ();
+    pcd->print_request = request;
+
+    operation = gtk_print_operation_new ();
+    gnc_print_operation_init (operation, "GnuCash-Checks");
+    settings = gtk_print_operation_get_print_settings (operation);
+    page_setup = gtk_print_operation_get_default_page_setup (operation);
+    gtk_print_dialog_set_title (request->dialog, _("Print Checks"));
+    gtk_print_dialog_set_accept_label (request->dialog, _("_Print"));
+    gtk_print_dialog_set_modal (request->dialog, TRUE);
+    if (settings)
+        gtk_print_dialog_set_print_settings (request->dialog, settings);
+    if (page_setup)
+        gtk_print_dialog_set_page_setup (request->dialog, page_setup);
+    gtk_print_dialog_setup (request->dialog, pcd->window, request->cancellable,
+                            print_check_setup_finished, request);
+    g_object_unref (operation);
 }
 
 
-void
-gnc_print_check_format_changed (GtkComboBox *widget,
+static void
+print_check_dialog_finish (PrintCheckDialog *pcd, gboolean print)
+{
+    if (pcd->closing)
+        return;
+    if (!print)
+    {
+        if (pcd->print_request)
+        {
+            pcd->close_after_print = TRUE;
+            g_cancellable_cancel (pcd->print_request->cancellable);
+            return;
+        }
+        print_check_dialog_destroy (pcd);
+        return;
+    }
+    if (pcd->print_request)
+        return;
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->window), FALSE);
+    print_check_request_start (pcd);
+}
+
+static void
+print_check_help_clicked (GtkButton *button, PrintCheckDialog *pcd)
+{
+    (void)button;
+    gnc_gnome_help (pcd->window, DF_MANUAL, DL_PRINTCHECK);
+}
+
+static void
+print_check_cancel_clicked (GtkButton *button, PrintCheckDialog *pcd)
+{
+    (void)button;
+    print_check_dialog_finish (pcd, FALSE);
+}
+
+static void
+print_check_clicked (GtkButton *button, PrintCheckDialog *pcd)
+{
+    (void)button;
+    print_check_dialog_finish (pcd, TRUE);
+}
+
+static gboolean
+print_check_close_request (GtkWindow *window, PrintCheckDialog *pcd)
+{
+    (void)window;
+    if (pcd->print_request)
+    {
+        pcd->close_after_print = TRUE;
+        g_cancellable_cancel (pcd->print_request->cancellable);
+        return TRUE;
+    }
+    if (!pcd->closing)
+    {
+        pcd->closing = TRUE;
+        gnc_save_window_size (GNC_PREFS_GROUP, pcd->window);
+    }
+    return FALSE;
+}
+
+static void
+gnc_print_check_format_changed (GObject *object, GParamSpec *pspec,
                                 PrintCheckDialog *pcd)
 {
-    GtkListStore *p_store;
-    GtkTreeModel *f_model;
-    GtkTreeIter f_iter, iter;
-    gboolean sensitive;
-    gint pnum;
+    GListModel *model = gtk_drop_down_get_model (pcd->format_dropdown);
+    guint selected = gtk_drop_down_get_selected (pcd->format_dropdown);
+    GObject *row;
     check_format_t *format;
-    gboolean separator;
-    GSList *elem;
+    GtkStringList *positions;
+    gint position;
+    gboolean sensitive;
 
-    if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &f_iter))
+    (void)object;
+    (void)pspec;
+    if (!model || selected == GTK_INVALID_LIST_POSITION)
         return;
-    f_model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
-    gtk_tree_model_get(f_model, &f_iter, COL_DATA, &format, COL_SEP, &separator, -1);
-    if (separator)
-        return;
-
-    pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-
-    /* Update the positions combobox */
-    pcd->selected_format = format;
-    p_store = gtk_list_store_new (1, G_TYPE_STRING);
-    gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->position_combobox),
-                            GTK_TREE_MODEL(p_store));
-    if (format)
+    row = g_list_model_get_item (model, selected);
+    if (format_row_is_separator (row))
     {
-        if (format->positions)
-        {
-            pcd->position_max = g_slist_length(format->positions); /* -1 for 0 base, +1 for custom entry */
-            for (elem = format->positions; elem; elem = g_slist_next(elem))
-            {
-                gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
-                gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, elem->data, -1);
-            }
-        }
-        else
-        {
-            /* Invent a "Top" position if format has no positions */
-            pcd->position_max = 1;
-            gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
-            gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, _("Top"), -1);
-        }
+        g_object_unref (row);
+        gtk_drop_down_set_selected (pcd->format_dropdown, pcd->last_format);
+        return;
+    }
+    format = format_row_get_format (row);
+    g_object_unref (row);
+    pcd->last_format = selected;
+    position = selected_position (pcd->position_dropdown);
+    pcd->selected_format = format;
+    positions = gtk_string_list_new (NULL);
+    if (format && format->positions)
+    {
+        pcd->position_max = g_slist_length (format->positions);
+        for (GSList *elem = format->positions; elem; elem = g_slist_next (elem))
+            gtk_string_list_append (positions, elem->data);
+    }
+    else if (format)
+    {
+        pcd->position_max = 1;
+        gtk_string_list_append (positions, _("Top"));
     }
     else
-    {
         pcd->position_max = 0;
-    }
-    gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, _("Custom"), -1);
-    g_object_unref (p_store);
-
-    /* If there's only one thing in the position combobox, make it insensitive */
-    sensitive = (pcd->position_max > 0);
-    gtk_widget_set_sensitive(GTK_WIDGET(pcd->position_combobox), sensitive);
-
-    /* Update the custom page, this must be done before setting the active
-       entry in the position combo box since gnc_print_check_position_changed
-       will adjust these settings in some cases. */
-    sensitive = (!separator && !format);
-    gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
-                          gnc_print_check_set_sensitive,
-                          GINT_TO_POINTER(sensitive));
-
-    /* Set the active entry in the position combo box, this will trigger a
-       call to gnc_print_check_position_changed */
-    pnum = MAX(MIN(pnum, pcd->position_max), 0);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), pnum);
-
-    /* Update address fields */
-    sensitive = check_format_has_address(pcd);
-    gtk_widget_set_sensitive(pcd->check_address_name, sensitive);
-    gtk_widget_set_sensitive(pcd->check_address_1, sensitive);
-    gtk_widget_set_sensitive(pcd->check_address_2, sensitive);
-    gtk_widget_set_sensitive(pcd->check_address_3, sensitive);
-    gtk_widget_set_sensitive(pcd->check_address_4, sensitive);
+    gtk_string_list_append (positions, _("Custom"));
+    gtk_drop_down_set_model (pcd->position_dropdown, G_LIST_MODEL (positions));
+    g_object_unref (positions);
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->position_dropdown), pcd->position_max > 0);
+    gtk_widget_set_sensitive (pcd->custom_table, format == NULL);
+    position = MAX (MIN (position, (gint)pcd->position_max), 0);
+    gtk_drop_down_set_selected (pcd->position_dropdown, position);
+    sensitive = check_format_has_address (pcd);
+    gtk_widget_set_sensitive (pcd->check_address_name, sensitive);
+    gtk_widget_set_sensitive (pcd->check_address_1, sensitive);
+    gtk_widget_set_sensitive (pcd->check_address_2, sensitive);
+    gtk_widget_set_sensitive (pcd->check_address_3, sensitive);
+    gtk_widget_set_sensitive (pcd->check_address_4, sensitive);
 }
 
-
-void
-gnc_print_check_position_changed (GtkComboBox *widget,
+static void
+gnc_print_check_position_changed (GObject *object, GParamSpec *pspec,
                                   PrintCheckDialog *pcd)
 {
+    gint position = selected_position (pcd->position_dropdown);
+    guint check_count = g_list_length (pcd->splits);
+    gint first_page_max, first_page_value;
     gboolean sensitive;
-    gint pnum;
-    guint check_count;
-    gint first_page_max, first_page_min, first_page_value;
 
-    pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-
-    /* Make the translation and rotation fields active if the position is "custom" */
-    sensitive = pnum == pcd->position_max;
-    gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_x), sensitive);
-    gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_y), sensitive);
-    gtk_widget_set_sensitive(GTK_WIDGET(pcd->check_rotation), sensitive);
-    gtk_widget_set_sensitive(GTK_WIDGET(pcd->units_combobox), sensitive);
-
-    /* Set up the first page check count spin box */
-    check_count = g_list_length(pcd->splits);
-    first_page_max = MAX(1, MIN(pcd->position_max - pnum, check_count));
-    first_page_min = 1;
-    pnum = gtk_spin_button_get_value_as_int(pcd->first_page_count);
-    first_page_value = MAX(MIN(pnum, first_page_max), first_page_min);
-    gtk_spin_button_set_range(pcd->first_page_count, (gdouble)first_page_min, (gdouble)first_page_max);
-    gtk_spin_button_set_value(pcd->first_page_count, (gdouble)first_page_value);
-    sensitive = first_page_max > 1;
-    gtk_widget_set_sensitive(GTK_WIDGET(pcd->first_page_count), sensitive);
-}
-
-
-void
-gnc_ui_print_check_response_cb(GtkDialog *dialog,
-                               gint response,
-                               PrintCheckDialog *pcd)
-{
-    switch (response)
-    {
-    case GTK_RESPONSE_HELP:
-        gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_PRINTCHECK);
-        return;
-
-    case GTK_RESPONSE_OK:
-        gnc_ui_print_check_dialog_ok_cb(pcd);
-        gnc_ui_print_save_dialog(pcd);
-        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
-        break;
-
-    case GTK_RESPONSE_CANCEL:
-        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
-        break;
-    }
-
-    gtk_widget_destroy(pcd->dialog);
-    g_free(pcd->default_font);
-    g_list_free(pcd->splits);
-    g_free(pcd);
+    (void)object;
+    (void)pspec;
+    sensitive = position == (gint)pcd->position_max;
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->translation_x), sensitive);
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->translation_y), sensitive);
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->check_rotation), sensitive);
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->units_dropdown), sensitive);
+    first_page_max = MAX (1, MIN ((gint)pcd->position_max - position, (gint)check_count));
+    first_page_value = MAX (MIN (gtk_spin_button_get_value_as_int (pcd->first_page_count), first_page_max), 1);
+    gtk_spin_button_set_range (pcd->first_page_count, 1, first_page_max);
+    gtk_spin_button_set_value (pcd->first_page_count, first_page_value);
+    gtk_widget_set_sensitive (GTK_WIDGET (pcd->first_page_count), first_page_max > 1);
 }

@@ -36,7 +36,7 @@
 
 struct _GnucashSheet
 {
-    GtkLayout layout;
+    GtkFixed fixed;
 
     GtkWidget *window;
 
@@ -84,13 +84,16 @@ struct _GnucashSheet
     gboolean sheet_has_focus;
 
     guint button; /* mouse button being held down */
-    gboolean grabbed; /* has the grab */
-    gdouble button_x, button_y;
+gdouble button_x, button_y;
 
     guint insert_signal;
     guint delete_signal;
 
-    GtkAdjustment *hadj, *vadj;
+GtkAdjustment *hadj, *vadj;
+    gulong hadj_handler;
+    gulong vadj_handler;
+    GtkScrollablePolicy hscroll_policy;
+    GtkScrollablePolicy vscroll_policy;
     GtkWidget *hscrollbar, *vscrollbar;
 
     GFunc moved_cb;
@@ -106,7 +109,7 @@ struct _GnucashSheet
 
 struct _GnucashSheetClass
 {
-    GtkLayoutClass parent_class;
+    GtkFixedClass parent_class;
 };
 
 
@@ -114,6 +117,13 @@ GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
 void gnucash_sheet_set_popup (GnucashSheet *sheet, GtkWidget *popup, gpointer data);
 void gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc);
 void gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet);
+void gnucash_sheet_overlay_put (GnucashSheet *sheet, GtkWidget *child,
+                                gint x, gint y);
+void gnucash_sheet_overlay_move (GnucashSheet *sheet, GtkWidget *child,
+                                 gint x, gint y);
+void gnucash_sheet_overlay_remove (GnucashSheet *sheet, GtkWidget *child);
+gboolean gnucash_sheet_handle_key (GnucashSheet *sheet, guint keyval,
+                                   guint keycode, GdkModifierType state);
 
 gboolean   gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
                                            VirtualLocation *vcell_loc);

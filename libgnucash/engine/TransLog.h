@@ -54,6 +54,14 @@ void    xaccOpenLog (void);
 void    xaccCloseLog (void);
 void    xaccReopenLog (void);
 
+/** Opaque, book-bound suppression of recovery-log records. It is safe to
+ * release after the book was destroyed; the token never dereferences it. */
+typedef struct GncTransLogSuppression GncTransLogSuppression;
+
+GncTransLogSuppression *xaccTransLogSuppressForBook (QofBook *book);
+void xaccTransLogSuppressionRelease (GncTransLogSuppression *suppression);
+gboolean xaccTransLogSuppressedForBook (const QofBook *book);
+
 /**
  * @param trans The transaction to write out to the log
  * @param flag The engine currently uses the log mechanism with flag char set as

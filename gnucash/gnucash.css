@@ -14,12 +14,16 @@
 
 /* Register Cursor settings, top, right, bottom, left */
 gnc-id-cursor entry {
+  min-height: 0;
   margin: 2px 5px 2px 5px;
   padding: 0px 2px 0px 2px;
 }
 
 gnc-id-cursor button {
+  min-width: 0;
+  min-height: 0;
   margin: 1px 1px 1px 1px;
+  padding: 0;
 }
 
 /* Register defaults */
@@ -90,14 +94,136 @@ dialog#GnuCash > box > box > label
   font-size: 24px;
 }
 
-/* Setting the Textview background for light and dark themes */
-.gnc-class-textview * {
-  background-color: rgb(246,245,244);
-}
-.gnc-class-textview-dark * {
-  background-color: rgb(53,53,53);
-}
 dialog#GnuCash * text selection {
   background-color: rgb(27,106,203);
 }
 
+/* Import matcher cells carry their semantic status colour on a full-width
+ * factory container. Keep geometry separate from the colour classes in the
+ * fallback sheet so user CSS can continue to override those meanings. */
+columnview.gnc-import-matcher > listview > row > cell {
+  padding: 0;
+}
+
+columnview.gnc-import-matcher .gnc-import-matcher-cell {
+  min-height: 1.8em;
+  padding: 0.15em 0.4em;
+}
+
+columnview.gnc-import-matcher .gnc-import-matcher-action-cell {
+  min-width: 2.8em;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
+
+columnview.gnc-import-matcher .gnc-import-matcher-info-cell {
+  min-width: 10em;
+}
+
+/* Let the native selected background and foreground remain a pair instead
+ * of drawing the status fill underneath the selection's text colour. */
+columnview.gnc-import-matcher row:selected .gnc-import-matcher-cell {
+  background-color: transparent;
+}
+
+/* ==================================================================== */
+/* GTK4 UI Parity: compact sizing in the main application window        */
+/* ==================================================================== */
+
+/*
+ * Keep the compact density local to the main application window. Do not
+ * set fonts or colours here: those are inherited from the active GTK theme so
+ * that dark themes, accessibility settings, and display scaling stay intact.
+ */
+
+/* Main-window ColumnView & ListView */
+#gnc-id-main-window columnview.view row,
+#gnc-id-main-window listview.view row {
+  min-height: 22px;
+  padding: 1px 2px;
+  margin: 0;
+}
+
+#gnc-id-main-window columnview.view cell,
+#gnc-id-main-window listview.view cell {
+  min-height: 20px;
+  padding: 1px 4px;
+}
+
+#gnc-id-main-window columnview.view cell editablelabel,
+#gnc-id-main-window columnview.view cell label {
+  min-height: 18px;
+  padding: 0 2px;
+}
+
+#gnc-id-main-window columnview.view treeexpander {
+  min-height: 20px;
+  min-width: 16px;
+}
+
+#gnc-id-main-window columnview.view treeexpander > image {
+  min-width: 14px;
+  min-height: 14px;
+  padding: 0;
+  margin: 0 2px 0 0;
+}
+
+/* Main-window ColumnView header */
+#gnc-id-main-window columnview header button {
+  min-height: 24px;
+  padding: 2px 6px;
+  font-weight: bold;
+  border-right: 1px solid alpha(currentColor, 0.1);
+}
+
+/* GtkColumnView has no headers-visible property. Account selectors that do
+ * not permit sorting retain their headerless presentation through this
+ * semantic class instead. */
+columnview.gnc-account-no-headers header,
+columnview.gnc-account-no-headers header button {
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border-width: 0;
+  font-size: 0;
+  color: transparent;
+}
+
+/* Main-window notebook tabs */
+#gnc-id-main-window notebook > header > tabs > tab {
+  min-height: 24px;
+  padding: 3px 8px;
+  margin: 0 1px;
+}
+
+#gnc-id-main-window notebook > header > tabs > tab button.flat {
+  min-width: 16px;
+  min-height: 16px;
+  padding: 0;
+  margin: 0 0 0 4px;
+}
+
+/* GnuCash toolbar buttons */
+.toolbar button {
+  min-width: 32px;
+  min-height: 24px;
+  padding: 5px 16px;
+  margin: 1px;
+}
+
+/* Main-window summary bar */
+#gnc-id-main-window #gnc-id-account-summary-bar {
+  padding: 2px 8px;
+  min-height: 24px;
+}
+
+#gnc-id-main-window #gnc-id-account-summary-bar label {
+  padding: 0 4px;
+}
+
+/* Main-window statusbar */
+#gnc-id-main-window .statusbar {
+  padding: 2px 6px;
+  min-height: 20px;
+}

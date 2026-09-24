@@ -34,16 +34,20 @@ extern "C" {
 #include "import-pending-matches.h"
 
 typedef struct _transpickerdialog GNCImportMatchPicker;
+typedef void (*GNCImportMatchPickerDoneCB) (GNCImportTransInfo *transaction_info,
+                                            gpointer user_data);
 
 /************************************************************************
  * GUI Functions
  ************************************************************************/
 
 /**
- * Run a match_picker dialog where the user should pick the best match for 'one' given
- * transaction, so that the selected-MatchInfo in the
- * given trans_info is updated accordingly. This functions will only
- * return after the user clicked Ok, Cancel, or Window-Close.
+ * Present a match_picker dialog where the user should pick the best match for one
+ * given transaction. The selected MatchInfo is updated before @a done_cb is called.
+ * The call returns immediately; the dialog result is delivered asynchronously.
+ * The returned handle is valid only until @a done_cb runs. A caller that still
+ * owns it may instead call gnc_import_match_picker_cancel(); that consumes and
+ * invalidates the handle, and likewise delivers @a done_cb exactly once.
  *
  * The dialog uses the same functionality as the one created through
  * gnc_import_add_trans(), except that its two listviews are shown
@@ -56,10 +60,17 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  * @param transaction_info The TransInfo for which the user is supposed to
  * pick a matching transaction.
  * @param pending_matches List of transactions */
-void
-gnc_import_match_picker_run_and_close (GtkWidget *parent,
-                                       GNCImportTransInfo *transaction_info,
-                                       GNCImportPendingMatches *pending_matches);
+GNCImportMatchPicker *
+gnc_import_match_picker_run (GtkWidget *parent,
+                             GNCImportTransInfo *transaction_info,
+                             GNCImportPendingMatches *pending_matches,
+                             GNCImportMatchPickerDoneCB done_cb,
+                             gpointer user_data);
+
+/** Cancel and destroy an outstanding asynchronous match-picker before the
+ * borrowed transaction and pending-match data are released. @a matcher is
+ * consumed and must not be reused after this call. */
+void gnc_import_match_picker_cancel (GNCImportMatchPicker *matcher);
 /**@}*/
 
 

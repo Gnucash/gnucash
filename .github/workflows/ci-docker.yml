@@ -11,6 +11,8 @@ jobs:
     - name: Test Action
       uses: ./util/ci/actions/archlinux-test
     - uses: actions/upload-artifact@v7
+      if: failure()
       with:
         name: TestLog
         path: ${{ github.workspace }}/LastTest.log
+        if-no-files-found: ignore
