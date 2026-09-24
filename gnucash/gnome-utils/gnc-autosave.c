@@ -286,6 +286,10 @@ autosave_timeout_cb (gpointer user_data)
                            autosave_remove_timer_cb);
 
     toplevel = GTK_WINDOW (gnc_ui_get_main_window (NULL));
+    /* The main-window lookup returns a borrowed pointer. Keep it alive while
+     * saving or opening the confirmation, then release only our own ref. */
+    if (toplevel)
+        g_object_ref (toplevel);
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
                             GNC_PREF_AUTOSAVE_SHOW_EXPLANATION))
         autosave_confirm_async (book, toplevel);
