@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-24 14:51+0000\n"
+"PO-Revision-Date: 2026-09-25 20:51+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -26091,47 +26091,42 @@ msgid "Show date columns"
 msgstr "Dátumoszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:59
-#, fuzzy
 msgid "Show bought columns"
-msgstr "Számlakód megjelenítése"
+msgstr "Vételi oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:60
-#, fuzzy
 msgid "Show sold columns"
-msgstr "Számlakód megjelenítése"
+msgstr "Eladási oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:61
-#, fuzzy
 msgid "Show end columns"
-msgstr "Számlakód megjelenítése"
+msgstr "Zárási oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
-#, fuzzy
 msgid "Show realized gain columns"
-msgstr "Csak az érvénytelen tranzakciók megjelenítése"
+msgstr "Realizált nyereségek oszlopainak megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
 msgid "Show unrealized gain columns"
-msgstr "Rej_tett számlák megjelenítése"
+msgstr "Nem realizált nyereségek oszlopainak megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
 msgstr ""
+"Nyereségek csoportosítása a futamidő szerint (rövid távú és hosszú távú "
+"befektetések)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:68
 msgid "Long term gains age (years)"
-msgstr ""
+msgstr "Hosszú távú nyereségek futamideje (év)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:69
-#, fuzzy
 msgid "Show ROI columns"
-msgstr "Számlakód megjelenítése"
+msgstr "Befektetés megtérülése (ROI) oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:70
-#, fuzzy
 msgid "Show CAGR columns"
-msgstr "Számlakód megjelenítése"
+msgstr "Összetett éves növekedési ráta (CAGR) oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:74
 msgid "Show mnemonic in amounts"
@@ -26303,10 +26298,8 @@ msgid "Unrealized ROI"
 msgstr "Nem realizált ROI"
 
 #: gnucash/report/reports/standard/investment-lots.scm:133
-#, fuzzy
-#| msgid "Unrealized ROI"
 msgid "Unrealized CAGR"
-msgstr "Nem realizált ROI"
+msgstr "Nem realizált CAGR"
 
 #: gnucash/report/reports/standard/investment-lots.scm:135
 msgid "Account Lots Total"
@@ -26367,21 +26360,22 @@ msgid "Gains Only"
 msgstr "Csak nyereségek"
 
 #: gnucash/report/reports/standard/investment-lots.scm:292
-#, fuzzy
 msgid "Gains and Sales"
-msgstr "Adótáblázatok"
+msgstr "Nyereségek és értékesítések"
 
 #: gnucash/report/reports/standard/investment-lots.scm:306
 msgid "Commodities held longer than this many years count as long-term (LT)."
 msgstr ""
+"Az ennél hosszabb ideig, több évig tartott értékpapírok hosszú távú (HT) "
+"befektetésnek minősülnek."
 
 #: gnucash/report/reports/standard/investment-lots.scm:317
 msgid "Show Return On Investment (ROI) columns"
-msgstr ""
+msgstr "A befektetés megtérülése (ROI) oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:324
 msgid "Show Compound Annual Growth Rate (CAGR) columns"
-msgstr ""
+msgstr "Az összetett éves növekedési ráta (CAGR) oszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:332
 msgid "Show long (instead of short) account names"
