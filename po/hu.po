@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-25 21:39+0000\n"
+"PO-Revision-Date: 2026-09-25 23:13+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -13335,11 +13335,11 @@ msgid ""
 "expensed. If there are no fees involved in this transaction, it can be left "
 "blank."
 msgstr ""
-"Ezen az oldalon adja meg a tranzakció során felmerült díjakat. A díj "
-"tőkésíthető az eszközszámlára, vagy költségként elszámolható a brókeri díjak "
-"számláján. A vételkor felszámított díjakat általában tőkésítik, az eladáskor "
-"felszámított díjakat pedig költségként számolják el. Ha a tranzakcióban nem "
-"merült fel díj, akkor az oldalt üresen is hagyhatja."
+"Ezen az oldalon adhatja meg a tranzakció során felmerült díjakat. A díj "
+"tőkésíthető az eszközszámlára, vagy költségként elszámolható a közvetítői "
+"díjak számláján. A vételkor felszámított díjakat általában tőkésítik, az "
+"eladáskor felszámított díjakat pedig költségként számolják el. Ha a "
+"tranzakcióban nem merült fel díj, akkor az oldalt üresen is hagyhatja."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:605
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:664
@@ -18167,10 +18167,8 @@ msgid "Show _All"
 msgstr "_Mindent mutat"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:110
-#, fuzzy
-#| msgid "Show _number of days"
 msgid "Show _from days ago"
-msgstr "_Napok számának megjelenítése"
+msgstr "Néhány nappal _korábbiak mutatása"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:130
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:272
@@ -30959,12 +30957,12 @@ msgstr "Új ütemezett tranzakció létrehozása"
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:61
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:176
 msgid "Edit the selected scheduled transaction"
-msgstr "A kiválasztott ütemezett tranzakciók szerkesztése"
+msgstr "A kiválasztott ütemezett tranzakció szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:67
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:201
 msgid "Delete the selected scheduled transaction"
-msgstr "A kiválasztott ütemezett tranzakciók törlése"
+msgstr "A kiválasztott ütemezett tranzakció törlése"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:73
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:216
@@ -30972,10 +30970,12 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Futtatja a kiválasztott ütemezett tranzakciót. Ha aznap az ütemezett "
+"tranzakció nem esedékes, akkor a legközelebbi ütemezése lesz végrehajtva."
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
-msgstr ""
+msgstr "_Futtatás"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
