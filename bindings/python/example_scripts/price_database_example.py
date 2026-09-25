@@ -82,7 +82,7 @@ for namespace in namespaces:
                source = pr.get_source()
                time = pr.get_time64()
                v=pr.get_value()
-               price = float(v.num)/v.denom
+               price = float(v.num())/v.denom()
 
                print("{0} {1:20}{2:10.4f} {3}".format(time,source,price,cur_name))
                # I didn't find out how to format the time option...
