@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-25 20:51+0000\n"
+"PO-Revision-Date: 2026-09-25 21:39+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3102,9 +3102,8 @@ msgid "Online Id"
 msgstr "Online azonosító"
 
 #: gnucash/gnome/dialog-imap-editor.c:763
-#, fuzzy
 msgid "Online HBCI"
-msgstr "Online HBCI"
+msgstr "AqBanking FinTS"
 
 #: gnucash/gnome/dialog-imap-editor.c:791
 msgid "OFX Income Account"
@@ -5650,10 +5649,8 @@ msgstr "Ütemezés _törlése"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:423
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:71
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Run Schedule"
-msgstr "_Ütemezés"
+msgstr "Ütemezés _futtatása"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:505
 #: gnucash/gtkbuilder/dialog-account.glade:556
@@ -31600,17 +31597,17 @@ msgstr "Financial Times befektetési szolgáltatás, GB"
 #: libgnucash/engine/gnc-commodity.cpp:203
 msgctxt "FQ Source"
 msgid "Finanzpartner, DE"
-msgstr "Finanzpartner, DE"
+msgstr "Finanzpartner – DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:204
 msgctxt "FQ Source"
 msgid "Finnhub, US"
-msgstr ""
+msgstr "Finnhub – US"
 
 #: libgnucash/engine/gnc-commodity.cpp:205
 msgctxt "FQ Source"
 msgid "FondsWeb, DE"
-msgstr "FondsWeb, DE"
+msgstr "FondsWeb – DE"
 
 #: libgnucash/engine/gnc-commodity.cpp:206
 msgctxt "FQ Source"
@@ -31775,12 +31772,9 @@ msgid "NYSE (Alphavantage, FinanceAPI, …)"
 msgstr "NYSE (Alphavantage, FinanceAPI, ….)"
 
 #: libgnucash/engine/gnc-commodity.cpp:243
-#, fuzzy
-#| msgctxt "FQ Source"
-#| msgid "U.K. Funds (FTfunds, MorningstarUK)"
 msgctxt "FQ Source"
 msgid "U.K. Funds (FTfunds)"
-msgstr "U.K. alapok (FTfunds, MorningstarUK)"
+msgstr "U.K. alapok (FTfunds)"
 
 #: libgnucash/engine/gnc-commodity.cpp:244
 msgctxt "FQ Source"
