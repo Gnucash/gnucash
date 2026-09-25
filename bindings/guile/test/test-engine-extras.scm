@@ -151,7 +151,6 @@
       (gnc-price-set-currency price currency)
       (gnc-price-set-time64 price time64)
       (gnc-price-set-source price PRICE-SOURCE-XFER-DLG-VAL)
-      (gnc-price-set-source-string price "test-price")
       (gnc-price-set-typestr price "test")
       (gnc-price-set-value price value)
       (gnc-price-commit-edit price)

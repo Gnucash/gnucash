@@ -56,6 +56,7 @@
 
 #include <numeric>
 #include <unordered_set>
+#include <libguile/deprecation.h>
 %}
 #if defined(SWIGGUILE) //Always C++
 %{
@@ -358,6 +359,14 @@ functions. */
 
 %include <policy.h>
 %include <gnc-pricedb.h>
+
+%feature("shadow") gnc_price_set_source_string %{
+    (define (gnc_price_set_source_string price str)
+      (issue-deprecation_warning
+          "gnc-price-set-source-string is deprecated and will be removed in GnuCash 6."
+          "Use gnc-price-set-source and the appropriate enum value instead.")
+      ($action price str))
+%}
 
 QofSession * qof_session_new (QofBook* book);
 QofBook * qof_session_get_book (QofSession *session);
