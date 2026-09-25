@@ -24,6 +24,7 @@
 #include "gnc-unicode.h"
 
 #include <memory>
+#include <vector>
 #include <unicode/stsearch.h>
 #include <unicode/tblcoll.h>
 #include <unicode/coll.h>
@@ -161,10 +162,15 @@ gnc_unicode_has_substring_identical(const char* needle,
     return false;
 }
 
-static int
-unicode_compare_internal(const char* one, const char* two,
-                         CompareStrength strength)
+static icu::Collator*
+get_collator(CompareStrength strength)
 {
+    thread_local std::vector<std::pair<CompareStrength, std::unique_ptr<icu::Collator>>> cache;
+
+    for (const auto& kvp : cache)
+        if (kvp.first == strength)
+            return kvp.second.get();
+
     UErrorCode status{U_ZERO_ERROR};
     auto locale{gnc_locale_name()};
     std::unique_ptr<icu::Collator> coll(
@@ -179,21 +185,37 @@ unicode_compare_internal(const char* one, const char* two,
               "Failed to create collator for locale %s: %s",
               locale, u_errorName(status));
         g_free(locale);
-        return -99;
+        cache.push_back ({strength, nullptr});
+        return nullptr;
     }
 
+    auto* ptr = coll.get();
+    cache.push_back ({strength, std::move(coll)});
+
+    g_free(locale);
+    return ptr;
+}
+
+
+static int
+unicode_compare_internal(const char* one, const char* two,
+                         CompareStrength strength)
+{
+    auto coll = get_collator (strength);
+    if (!coll)
+        return -99;
+
+    UErrorCode status{U_ZERO_ERROR};
     auto result = coll->compare(one, two, status);
 
     if (U_FAILURE(status))
     {
         g_log(logdomain, G_LOG_LEVEL_ERROR,
-              "Comparison of %s and %s in locale %s failed: %s",
-              one, two, locale, u_errorName(status));
-        g_free(locale);
+              "Comparison of %s and %s failed: %s",
+              one, two, u_errorName(status));
         return -99;
     }
 
-    g_free(locale);
     return result == UCOL_LESS ? -1 : result == UCOL_EQUAL ? 0 : 1;
 }
 
