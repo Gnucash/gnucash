@@ -73,16 +73,195 @@ extern "C" {
     for orphaned inodes.
     @{  */
 
-/** The gnc_set_abort_scrub () method causes a currently running scrub operation
- *    to stop, if abort is TRUE; gnc_set_abort_scrub(FALSE) must be called before
- *    any scrubbing operation.
- */
-void gnc_set_abort_scrub (gboolean abort);
-gboolean gnc_get_abort_scrub (void);
+/** Opaque, book-bound authority for one synchronous GUI scrub operation. */
+typedef struct GncScrubContext GncScrubContext;
 
-/** The gnc_get_ongoing_scrub () method returns TRUE if a scrub operation is ongoing.
+/** Opaque, resumable engine scrub operation. */
+typedef struct GncScrubJob GncScrubJob;
+
+/** Terminal and non-terminal states returned by gnc_scrub_job_step(). */
+typedef enum
+{
+    GNC_SCRUB_JOB_RUNNING,
+    GNC_SCRUB_JOB_DONE,
+    GNC_SCRUB_JOB_CANCELLED,
+    GNC_SCRUB_JOB_FAILED,
+} GncScrubJobState;
+
+/** The scrub operation executed by a GncScrubJob. */
+typedef enum
+{
+    GNC_SCRUB_JOB_ORPHANS,
+    GNC_SCRUB_JOB_IMBALANCE,
+    /** Run the orphan phase before the imbalance phase from one snapshot. */
+    GNC_SCRUB_JOB_ACCOUNT,
+    /** Drain the book's deferred transaction-gains FIFO. */
+    GNC_SCRUB_JOB_GAINS,
+    /** Scrub lots in one account or account tree, then drain gains. */
+    GNC_SCRUB_JOB_LOTS,
+    /** Scrub one non-business lot, then drain gains. */
+    GNC_SCRUB_JOB_LOT,
+} GncScrubJobKind;
+
+/** The currently executing phase of a resumable scrub job. */
+typedef enum
+{
+    GNC_SCRUB_JOB_PHASE_ORPHANS,
+    GNC_SCRUB_JOB_PHASE_IMBALANCE,
+    GNC_SCRUB_JOB_PHASE_GAINS,
+    GNC_SCRUB_JOB_PHASE_LOTS,
+} GncScrubJobPhase;
+
+/**
+ * Acquire the current session's exclusive SCRUB lease for @a book.
+ *
+ * Acquisition fails unless @a book belongs to the current session and no other
+ * operation owns that session. The caller must call
+ * gnc_scrub_context_end() before returning to the main loop and then release
+ * its reference with gnc_scrub_context_unref().
  */
-gboolean gnc_get_ongoing_scrub (void);
+GncScrubContext *gnc_scrub_context_begin (QofBook *book);
+
+/** Retain/release a context reference for an asynchronous cancel callback. */
+GncScrubContext *gnc_scrub_context_ref (GncScrubContext *context);
+void gnc_scrub_context_unref (GncScrubContext *context);
+
+/** Cancel only this operation. Cancellation of an ended context is a no-op. */
+void gnc_scrub_context_cancel (GncScrubContext *context);
+gboolean gnc_scrub_context_is_cancelled (const GncScrubContext *context);
+
+/** Return whether the context still owns its original current session and book. */
+gboolean gnc_scrub_context_is_active (const GncScrubContext *context);
+gboolean gnc_scrub_context_owns_book (const GncScrubContext *context,
+                                      const QofBook *book);
+
+/** Release the SCRUB lease exactly once without dropping context references. */
+void gnc_scrub_context_end (GncScrubContext *context);
+
+/** The automatic Transaction commit hook to defer. Kinds have independent
+ * FIFO/dedupe queues. */
+typedef enum
+{
+    GNC_SCRUB_DEFERRED_COMMIT_IMBALANCE,
+    GNC_SCRUB_DEFERRED_COMMIT_GAINS,
+} GncScrubDeferredCommitKind;
+
+/**
+ * Enable central commit-hook deferral for one hook kind in this active,
+ * non-cancelled context. Kinds are enabled independently. Every mode is off by
+ * default and all modes are removed when the context is cancelled or ends.
+ * Pending GUID work remains attached to the book for a later valid context.
+ */
+gboolean gnc_scrub_context_enable_commit_deferral (
+    GncScrubContext *context, GncScrubDeferredCommitKind kind);
+
+/** Return whether @a kind is actively deferred by this context. Pending work
+ * handed off from an earlier context does not make this return true. */
+gboolean gnc_scrub_context_commit_deferral_enabled (
+    const GncScrubContext *context, GncScrubDeferredCommitKind kind);
+
+/** Return the pending GUID count for one hook kind in @a context's book. */
+guint gnc_scrub_deferred_commit_pending_count (
+    const GncScrubContext *context, GncScrubDeferredCommitKind kind);
+
+/**
+ * Prepare one bounded unit without removing it. Call ack() only after the
+ * corresponding work completed; cancellation or context end before ack()
+ * leaves the GUID available to a later valid context.
+ */
+gboolean gnc_scrub_deferred_commit_peek (
+    const GncScrubContext *context, GncScrubDeferredCommitKind kind,
+    GncGUID *guid);
+
+/** Acknowledge the FIFO head returned by peek() after completing its work. */
+gboolean gnc_scrub_deferred_commit_ack (
+    const GncScrubContext *context, GncScrubDeferredCommitKind kind,
+    const GncGUID *guid);
+
+/**
+ * Start a resumable orphan-scrub pass for @a account.
+ *
+ * The job snapshots the affected transaction GUIDs while acquiring the
+ * current session's SCRUB lease. It never retains transaction pointers across
+ * steps. Call gnc_scrub_job_step() until it returns a terminal state, then
+ * call gnc_scrub_job_free().
+ */
+GncScrubJob *gnc_scrub_orphans_job_begin (Account *account,
+                                          gboolean descendants);
+
+/** Start a resumable imbalance-scrub pass for @a account. */
+GncScrubJob *gnc_scrub_imbalance_job_begin (Account *account,
+                                            gboolean descendants);
+
+/**
+ * Start the core account scrub phases used by Account and Account Tree.
+ *
+ * The job snapshots the selected transactions once, then processes that same
+ * snapshot in the ORPHANS phase followed by the IMBALANCE phase without
+ * releasing its SCRUB lease between phases. get_completed()/get_total() count
+ * phase units, so a non-empty job has twice as many total units as snapshot
+ * transactions and each phase accounts for one complete snapshot pass. Lots
+ * and Business scrubs are intentionally not part of this job.
+ */
+GncScrubJob *gnc_scrub_account_job_begin (Account *account,
+                                          gboolean descendants);
+
+/** Acquire a SCRUB lease, activate gains commit deferral, and drain the
+ * existing and newly appended FIFO with a nested transaction gains plan.
+ * The FIFO head is acknowledged only after every nested phase reaches DONE. */
+GncScrubJob *gnc_scrub_deferred_gains_job_begin (QofBook *book);
+
+/** Scrub lot assignment and every non-business lot in @a account (and,
+ * optionally, its descendants), then drain all deferred gains work before
+ * releasing the SCRUB lease. */
+GncScrubJob *gnc_scrub_lots_job_begin (Account *account,
+                                       gboolean descendants);
+
+/** Scrub one non-AP/AR lot and drain all deferred gains work generated by it.
+ * AP/AR lots remain owned by the business scrub path and are rejected. */
+GncScrubJob *gnc_scrub_lot_job_begin (GNCLot *lot);
+
+/**
+ * Process at most @a max_transactions bounded primitive units in this turn.
+ * Composite lot jobs pass unused units from their structural plan to their
+ * nested deferred-gains plan in the same call.
+ * A zero limit is invalid and terminates the job as failed.
+ */
+GncScrubJobState gnc_scrub_job_step (GncScrubJob *job,
+                                     guint max_transactions);
+
+/** Cancel a job and release its SCRUB lease without waiting for another step. */
+void gnc_scrub_job_cancel (GncScrubJob *job);
+
+GncScrubJobState gnc_scrub_job_get_state (const GncScrubJob *job);
+/** Return whether a structural primitive deleted at least one peer split. */
+gboolean gnc_scrub_job_get_changed (const GncScrubJob *job);
+GncScrubJobKind gnc_scrub_job_get_kind (const GncScrubJob *job);
+GncScrubJobPhase gnc_scrub_job_get_phase (const GncScrubJob *job);
+guint gnc_scrub_job_get_total (const GncScrubJob *job);
+guint gnc_scrub_job_get_completed (const GncScrubJob *job);
+
+/** Release a job. Releasing a running job cancels it first. */
+void gnc_scrub_job_free (GncScrubJob *job);
+
+/** Context-aware variants share cancellation and authority through recursion. */
+void xaccTransScrubOrphansWithContext (Transaction *trans,
+                                       GncScrubContext *context);
+void xaccAccountScrubOrphansWithContext (Account *acc,
+                                         QofPercentageFunc percentagefunc,
+                                         GncScrubContext *context);
+void xaccAccountTreeScrubOrphansWithContext (Account *acc,
+                                             QofPercentageFunc percentagefunc,
+                                             GncScrubContext *context);
+void xaccTransScrubImbalanceWithContext (Transaction *trans, Account *root,
+                                         Account *parent,
+                                         GncScrubContext *context);
+void xaccAccountScrubImbalanceWithContext (Account *acc,
+                                           QofPercentageFunc percentagefunc,
+                                           GncScrubContext *context);
+void xaccAccountTreeScrubImbalanceWithContext (Account *acc,
+                                               QofPercentageFunc percentagefunc,
+                                               GncScrubContext *context);
 
 /** The xaccTransScrubOrphans() method scrubs only the splits in the
  *    given transaction.

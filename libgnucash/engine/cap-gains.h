@@ -82,6 +82,9 @@ ToDo:
 
 #include "gnc-engine.h"
 
+typedef struct GncScrubContext GncScrubContext;
+typedef struct GncCapGainsPlan GncCapGainsPlan;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -109,6 +112,30 @@ gnc_numeric xaccSplitGetCapGains(Split *);
  *    FALSE.
  */
 gboolean xaccAccountHasTrades (const Account *);
+
+typedef struct GncAccountTradesPlan GncAccountTradesPlan;
+typedef enum
+{
+    GNC_ACCOUNT_TRADES_PLAN_RUNNING,
+    GNC_ACCOUNT_TRADES_PLAN_DONE,
+    GNC_ACCOUNT_TRADES_PLAN_CANCELLED,
+    GNC_ACCOUNT_TRADES_PLAN_STALE,
+    GNC_ACCOUNT_TRADES_PLAN_FAILED,
+} GncAccountTradesPlanState;
+
+/** Begin a bounded, generation-guarded account trade-eligibility collector.
+ * Each step examines at most @a max_work raw account splits and retains only
+ * the account GUID, generations, an index, and the boolean result. */
+GncAccountTradesPlan *gnc_account_trades_plan_begin (
+    const Account *account, GncScrubContext *context);
+GncAccountTradesPlanState gnc_account_trades_plan_step (
+    GncAccountTradesPlan *plan, guint max_work);
+GncAccountTradesPlanState gnc_account_trades_plan_get_state (
+    const GncAccountTradesPlan *plan);
+gboolean gnc_account_trades_plan_get_result (
+    const GncAccountTradesPlan *plan, gboolean *has_trades);
+void gnc_account_trades_plan_cancel (GncAccountTradesPlan *plan);
+void gnc_account_trades_plan_free (GncAccountTradesPlan *plan);
 
 /** The xaccAccountFindEarliestOpenLot() method is a handy
  *   utility routine for finding the earliest open lot in
@@ -187,6 +214,15 @@ gboolean xaccSplitAssign (Split *split);
  */
 Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
 
+/** Apply one split-to-lot mutation using a balance collected by a bounded,
+ * generation-guarded caller. This function never scans the lot. The caller
+ * must ensure that @a balance and @a had_splits describe the current lot
+ * generation immediately before this call. The synchronous compatibility
+ * wrapper xaccSplitAssignToLot() computes those values and delegates here. */
+Split *gnc_split_assign_to_lot_prepared (Split *split,
+                                         GNCLot *lot,
+                                         gnc_numeric balance,
+                                         gboolean had_splits);
 /** The xaccLotFreeSplitCapGain() method returns the value of capital gain
  *  (if any) associated with the indicated split against the indicated
  *  lot. In order for there to be any capital gain, a few things must
@@ -199,7 +235,6 @@ Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
  *        (or vice versa).
  */
 gnc_numeric xaccLotFreeSplitCapGain(Split *split, GNCLot *lot);
-
 
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into
@@ -222,6 +257,28 @@ gnc_numeric xaccLotFreeSplitCapGain(Split *split, GNCLot *lot);
 
 void xaccSplitComputeCapGains(Split *split, Account *gain_acc);
 void xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc);
+
+typedef enum
+{
+    GNC_CAP_GAINS_PLAN_RUNNING,
+    GNC_CAP_GAINS_PLAN_DONE,
+    GNC_CAP_GAINS_PLAN_CANCELLED,
+    GNC_CAP_GAINS_PLAN_STALE,
+    GNC_CAP_GAINS_PLAN_FAILED,
+} GncCapGainsPlanState;
+
+/** Begin a split gains computation whose lot scans and default-account
+ * resolution are resumable. The plan retains only GUIDs, numeric values,
+ * scalar flags, and generation-guarded container cursors between turns. */
+GncCapGainsPlan *gnc_cap_gains_plan_begin (Split *split,
+                                           Account *gain_account,
+                                           GncScrubContext *context);
+GncCapGainsPlanState gnc_cap_gains_plan_step (GncCapGainsPlan *plan,
+                                               guint max_work);
+GncCapGainsPlanState gnc_cap_gains_plan_get_state (
+    const GncCapGainsPlan *plan);
+void gnc_cap_gains_plan_cancel (GncCapGainsPlan *plan);
+void gnc_cap_gains_plan_free (GncCapGainsPlan *plan);
 
 #ifdef __cplusplus
 }

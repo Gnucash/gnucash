@@ -36,6 +36,47 @@
 #include "test-stuff.h"
 
 static void
+root_account_finalized (gpointer data, GObject *)
+{
+    *static_cast<gboolean*>(data) = TRUE;
+}
+
+static void
+run_root_account_ownership_test (void)
+{
+    auto book = qof_book_new ();
+    auto old_root = gnc_book_get_root_account (book);
+    auto replacement = xaccMallocAccount (book);
+    gboolean old_root_finalized = FALSE;
+    gboolean replacement_finalized = FALSE;
+
+    g_object_weak_ref (G_OBJECT (old_root), root_account_finalized,
+                       &old_root_finalized);
+    g_object_weak_ref (G_OBJECT (replacement), root_account_finalized,
+                       &replacement_finalized);
+
+    gnc_book_set_root_account (book, replacement);
+    do_test (gnc_book_get_root_account (book) == replacement,
+             "root account replaced");
+    do_test (old_root_finalized,
+             "replaced root account released");
+    if (!old_root_finalized)
+        g_object_weak_unref (G_OBJECT (old_root), root_account_finalized,
+                             &old_root_finalized);
+
+    gnc_book_set_root_account (book, replacement);
+    do_test (gnc_book_get_root_account (book) == replacement,
+             "same root account retained");
+
+    qof_book_destroy (book);
+    do_test (replacement_finalized,
+             "retained root account released with book");
+    if (!replacement_finalized)
+        g_object_weak_unref (G_OBJECT (replacement), root_account_finalized,
+                             &replacement_finalized);
+}
+
+static void
 run_test (void)
 {
     QofSession *sess;
@@ -98,6 +139,7 @@ main (int argc, char **argv)
 
     /* Run the tests */
     run_test ();
+    run_root_account_ownership_test ();
 
     print_test_results();
 

@@ -1,3 +1,5 @@
+add_subdirectory(test)
+
 
 set (html_HEADERS
   gnc-html-history.h
@@ -5,9 +7,6 @@ set (html_HEADERS
   gnc-html-p.h
   gnc-html-factory.hpp
   gnc-html-extras.h
-  gnc-html-webkit-p.hpp
-  gnc-html-webview2-p.hpp
-  gnc-html-webkit.hpp
 )
 
 # Command to generate the swig-gnc-html.cpp wrapper file
@@ -24,14 +23,30 @@ set (html_SOURCES
   gnc-html-factory.cpp
 )
 
-if (WEBVIEW2)
-  list(APPEND html_HEADERS gnc-html-webview2.hpp)
-  list(APPEND html_SOURCES gnc-html-webview2.cpp)
-  set(html_EXTRA_DIST gnc-html-webkit2.hpp gnc-html-webkit2.cpp)
-else ()
+set (html_BACKEND_HEADERS
+  gnc-html-webkit-p.hpp
+  gnc-html-webkit2.hpp
+  gnc-html-webview2.hpp
+  gnc-html-wkwebview.hpp
+)
+
+set (html_BACKEND_SOURCES
+  gnc-html-webkit2.cpp
+  gnc-html-webview2.cpp
+  gnc-html-wkwebview.mm
+)
+
+if (GNC_REPORT_WEBKITGTK6)
   list(APPEND html_HEADERS gnc-html-webkit2.hpp)
   list(APPEND html_SOURCES gnc-html-webkit2.cpp)
-  set(html_EXTRA_DIST gnc-html-webview2.hpp gnc-html-webview2.cpp)
+elseif (GNC_REPORT_WEBVIEW2)
+  list(APPEND html_HEADERS gnc-html-webview2.hpp)
+  list(APPEND html_SOURCES gnc-html-webview2.cpp)
+elseif (GNC_REPORT_WKWEBVIEW)
+  list(APPEND html_HEADERS gnc-html-wkwebview.hpp)
+  list(APPEND html_SOURCES gnc-html-wkwebview.mm)
+else ()
+  message(FATAL_ERROR "No report backend selected")
 endif()
 
 
@@ -47,7 +62,16 @@ gnc_add_scheme_targets(scm-gnc-html
     DEPENDS "${GUILE_DEPENDS}"
     MAKE_LINKS)
 
-set_dist_list(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST} html.scm)
+set (html_DIST_HEADERS ${html_HEADERS} ${html_BACKEND_HEADERS})
+set (html_DIST_SOURCES ${html_SOURCES} ${html_BACKEND_SOURCES})
+list(REMOVE_DUPLICATES html_DIST_HEADERS)
+list(REMOVE_DUPLICATES html_DIST_SOURCES)
+
+set_local_dist(html_DIST_local CMakeLists.txt ${html_DIST_HEADERS} ${html_DIST_SOURCES}
+  gnc-html-webview2-clipboard.hpp gnc-html-webview2-coordinates.hpp
+  gnc-html-webview2-visibility.hpp gnc-html-native-widget-lifecycle.hpp
+  gnc-html-webview2-loader-state.hpp
+  gnc-html.i ${html_EXTRA_DIST} html.scm)
 
 add_library (gnc-html
   ${html_SOURCES}
@@ -59,24 +83,35 @@ target_link_libraries(gnc-html
     PRIVATE
         gnc-engine
         gnc-gnome-utils
-        PkgConfig::GTK3
+        PkgConfig::GTK4
+        $<$<BOOL:${GNC_REPORT_WEBKITGTK6}>:PkgConfig::WEBKIT>
+        ${WEBKIT_FRAMEWORK}
         ${GUILE_LDFLAGS})
 
-if (WEBVIEW2)
-# The MSYS2 webview2-loader package doesn't include a link (.dll.a)
-# library so we have to dlopen the library at runtime. We just need to
-# include the header here.
-  target_include_directories(gnc-html PRIVATE ${WEBVIEW2_INCLUDE_DIRS})
-else()
-  target_link_libraries(gnc-html PRIVATE PkgConfig::WEBKIT)
+target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\"
+    $<$<BOOL:${GNC_REPORT_WEBVIEW2}>:GNC_REPORT_WEBVIEW2>
+    $<$<BOOL:${GNC_REPORT_WEBVIEW2_FIXED_RUNTIME}>:GNC_REPORT_WEBVIEW2_FIXED_RUNTIME>
+    $<$<BOOL:${GNC_REPORT_WKWEBVIEW}>:GNC_REPORT_WKWEBVIEW>)
+
+if (GNC_REPORT_WEBVIEW2)
+  target_link_libraries(gnc-html PRIVATE dcomp ole32)
+  if (MINGW)
+    # These warnings originate in the Windows SDK WebView2/DirectComposition headers.
+    target_compile_options(gnc-html PRIVATE -Wno-unknown-pragmas -Wno-class-conversion)
+  endif()
 endif()
 
-target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
+if (GNC_REPORT_WKWEBVIEW)
+  target_compile_options(gnc-html PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+  target_link_libraries(gnc-html PRIVATE PkgConfig::GTK4MACOS ${OSX_EXTRA_LIBRARIES})
+endif()
 
 
 target_include_directories (gnc-html
 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+PRIVATE
+    ${WEBVIEW2_INCLUDE_DIRS}
 )
 
 if (APPLE)
@@ -94,4 +129,14 @@ install(TARGETS gnc-html
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+if (GNC_REPORT_WEBVIEW2)
+  install(FILES "${WEBVIEW2_LOADER_DLL}" DESTINATION ${CMAKE_INSTALL_BINDIR})
+  if (GNC_REPORT_WEBVIEW2_FIXED_RUNTIME)
+    install(DIRECTORY "${WEBVIEW2_FIXED_RUNTIME_DIR}/"
+      DESTINATION "${CMAKE_INSTALL_BINDIR}/WebView2Runtime")
+  endif()
+endif()
+
 install(FILES ${html_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+
+set(html_DIST ${html_DIST_local} ${test_html_DIST} PARENT_SCOPE)

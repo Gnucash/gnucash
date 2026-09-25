@@ -31,6 +31,8 @@ struct GncHtmlWebkitPrivate
 
     WebKitWebView* web_view;				/* webkit widget itself */
     gchar* html_string;						/* html string being displayed */
+    gchar* temporary_report;				/* local file backing the active report */
+    gchar* pending_anchor;					/* fragment to apply with the next load */
 };
 
 #endif

@@ -1,123 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.14"/>
   <object class="GtkWindow" id="aqbanking_preferences">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">window1</property>
-    <child>
-      <!-- n-columns=3 n-rows=6 -->
+    <property name="visible">1</property>
+    <property name="title" translatable="1">window1</property>
+    <property name="child">
       <object class="GtkGrid" id="aqbanking_prefs">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
         <property name="row-spacing">3</property>
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label8877457">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Online Banking</property>
+            <property name="label" translatable="1">Online Banking</property>
             <style>
               <class name="gnc-class-strong"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.hbci/close-on-finish">
-            <property name="label" translatable="yes">_Close log window when finished</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+            <property name="label" translatable="1">_Close log window when finished</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">If active, the window will be closed automatically when you finish the AqBanking import process. Otherwise it will stay open.</property>
-            <property name="tooltip-text" translatable="yes">If active, the window will be closed automatically when you finish the AqBanking import process. Otherwise it will stay open.</property>
+            <property name="tooltip-text" translatable="1">If active, the window will be closed automatically when you finish the AqBanking import process. Otherwise it will stay open.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.hbci/remember-pin">
-            <property name="label" translatable="yes">Remember the _PIN in memory</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+            <property name="label" translatable="1">Remember the _PIN in memory</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">If active, the PIN for AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
-            <property name="tooltip-text" translatable="yes">If active, the PIN for AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
+            <property name="tooltip-text" translatable="1">If active, the PIN for AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.hbci/import-noted-transactions">
-            <property name="label" translatable="yes">Import noted or _pending transactions</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+            <property name="label" translatable="1">Import noted or _pending transactions</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">If active, GnuCash will import AqBanking noted or pending transactions. These transactions are not final and may later appear again as booked transactions.</property>
-            <property name="tooltip-text" translatable="yes">If active, GnuCash will import AqBanking noted or pending transactions. These transactions are not final and may later appear again as booked transactions.</property>
+            <property name="tooltip-text" translatable="1">If active, GnuCash will import AqBanking noted or pending transactions. These transactions are not final and may later appear again as booked transactions.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="checkbutton3">
-            <property name="label" translatable="yes">_Verbose debug messages</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+            <property name="label" translatable="1">_Verbose debug messages</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">Enables verbose debug messages for AqBanking.</property>
-            <property name="tooltip-text" translatable="yes">Enables verbose debug messages for AqBanking. See the Wiki for more information.</property>
+            <property name="tooltip-text" translatable="1">Enables verbose debug messages for AqBanking. See the Wiki for more information.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">5</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.hbci/use-ns-transaction-text">
-            <property name="label" translatable="yes">Use Non-SWIFT _transaction text</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
-            <property name="tooltip-markup">Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
-            <property name="tooltip-text" translatable="yes">Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
+            <property name="label" translatable="1">Use Non-SWIFT _transaction text</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
+            <property name="tooltip-markup">Some banks place part of transaction description as &quot;transaction text&quot; in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
+            <property name="tooltip-text" translatable="1">Some banks place part of transaction description as &quot;transaction text&quot; in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <placeholder/>
@@ -150,6 +131,6 @@
           <placeholder/>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

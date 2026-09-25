@@ -303,8 +303,7 @@ gnc_get_default_report_font_family(void)
 {
     GList                *top_list;
     GtkWidget            *top_widget;
-    PangoFontDescription *font_desc;
-    GtkStyleContext      *top_widget_style_c;
+    const PangoFontDescription *font_desc;
     gchar                *default_font_family;
 
     top_list = gtk_window_list_toplevels();
@@ -312,13 +311,12 @@ gnc_get_default_report_font_family(void)
         return g_strdup ("Arial");
     top_widget = GTK_WIDGET(top_list->data);
     g_list_free(top_list);
-    top_widget_style_c = gtk_widget_get_style_context (top_widget);
-    gtk_style_context_get (top_widget_style_c, gtk_widget_get_state_flags (GTK_WIDGET(top_widget)),
-                           "font", &font_desc, NULL);
+    font_desc = pango_context_get_font_description
+        (gtk_widget_get_pango_context (top_widget));
 
-    default_font_family = g_strdup(pango_font_description_get_family (font_desc));
-
-    pango_font_description_free (font_desc);
+    default_font_family = font_desc
+        ? g_strdup (pango_font_description_get_family (font_desc))
+        : NULL;
 
     if (!default_font_family)
         return g_strdup ("Arial");

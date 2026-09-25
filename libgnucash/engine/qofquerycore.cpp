@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "gnc-glib-utils.h"
+#include "gnc-string-utils.h"
 #include "qof.h"
 #include "qofquerycore-p.h"
 

@@ -1,251 +1,135 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkDialog" id="reset_warnings_dialog">
-    <property name="can-focus">False</property>
-    <property name="border-width">6</property>
-    <property name="title" translatable="yes">Reset Warnings</property>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="reset_warnings_window">
+    <property name="title" translatable="1">Reset Warnings</property>
     <property name="default-width">400</property>
-    <property name="type-hint">normal</property>
-    <signal name="response" handler="gnc_reset_warnings_response_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+    <property name="default-height">360</property>
+    <child>
+      <object class="GtkBox" id="reset_warnings_content">
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <child>
+          <object class="GtkLabel" id="warning_description">
+            <property name="label" translatable="1">You have requested that the following warning dialogs not be presented. To re-enable any of these dialogs, select the check box next to the dialog, then click OK.</property>
+            <property name="wrap">True</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="warnings_scrolled_window">
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="child">
+              <object class="GtkBox" id="warnings_content">
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="no_warnings">
+                    <property name="vexpand">True</property>
+                    <property name="label" translatable="1">No warnings to reset.</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="perm_vbox_and_label">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="permanent_warnings_label">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="1">Permanent Warnings</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="heading"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="perm_vbox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">3</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="temp_vbox_and_label">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="temporary_warnings_label">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="1">Temporary Warnings</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="heading"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="temp_vbox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">3</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbuttonbox">
+            <property name="halign">center</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
+              <object class="GtkButton" id="select_all_button">
+                <property name="label" translatable="1">_Select All</property>
                 <property name="use-underline">True</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="unselect_all_button">
+                <property name="label" translatable="1">_Unselect All</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="reset_warnings_actions">
+            <property name="halign">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="cancelbutton">
+                <property name="label" translatable="1">_Cancel</property>
+                <property name="use-underline">True</property>
+              </object>
             </child>
             <child>
               <object class="GtkButton" id="applybutton">
-                <property name="label" translatable="yes">_Apply</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
+                <property name="label" translatable="1">_Apply</property>
                 <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButton" id="okbutton">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
+                <property name="label" translatable="1">_OK</property>
                 <property name="use-underline">True</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="vbox1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkLabel" id="label65">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">You have requested that the following warning dialogs not be presented. To re-enable any of these dialogs, select the check box next to the dialog, then click OK.</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButtonBox" id="hbuttonbox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">center</property>
-                <property name="spacing">12</property>
-                <property name="layout-style">spread</property>
-                <child>
-                  <object class="GtkButton" id="button3">
-                    <property name="label" translatable="yes">_Select All</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="can-default">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gnc_reset_warnings_select_all_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button4">
-                    <property name="label" translatable="yes">_Unselect All</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="can-default">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gnc_reset_warnings_unselect_all_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="no_warnings">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">No warnings to reset.</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="perm_vbox_and_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="label64">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Permanent Warnings</property>
-                    <property name="use-markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="perm_vbox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="temp_vbox_and_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="label63">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Temporary Warnings</property>
-                    <property name="use-markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="temp_vbox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-10">applybutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
   </object>
 </interface>

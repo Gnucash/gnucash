@@ -42,6 +42,8 @@
 #include <string.h>
 #include <time.h>
 
+#include <gtk/gtk.h>
+
 #include "basiccell.h"
 #include "gnc-engine.h"
 #include "doclinkcell.h"

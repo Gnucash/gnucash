@@ -34,6 +34,8 @@
 #include <utility>
 #include <string>
 
+struct QofSessionAsyncLoad;
+
 struct QofSessionImpl
 {
     QofSessionImpl (QofBook* book = nullptr) noexcept;
@@ -74,6 +76,27 @@ struct QofSessionImpl
     const std::string& get_file_path () const noexcept;
     bool is_saving () const noexcept;
 
+    QofSessionOperationLease * acquire_operation_lease (
+        QofSessionOperationKind) noexcept;
+    bool operation_lease_is_valid (
+        const QofSessionOperationLease *) const noexcept;
+    bool has_active_operation_lease () const noexcept;
+    bool has_active_operation_kind (QofSessionOperationKind) const noexcept;
+    guint64 operation_generation () const noexcept;
+    void invalidate_operation_lease () noexcept;
+    void release_operation_lease (QofSessionOperationLease *) noexcept;
+
+    bool start_async_load (QofSessionOperationLease *, QofPercentageFunc,
+                           const QofSessionLoadExecutor *,
+                           QofSessionLoadAsyncCallback, gpointer) noexcept;
+    bool cancel_active_load () noexcept;
+    bool has_async_load () const noexcept;
+    void complete_async_load (QofSessionAsyncLoad *, gboolean) noexcept;
+
+    /* Called by the backend's deferred steps; no mutation is permitted once
+     * the lease, book binding, or current-session generation is stale. */
+    bool async_load_is_current (const QofSessionAsyncLoad *) const noexcept;
+
     /**
      * Terminates the current backend.
      */
@@ -99,6 +122,10 @@ private:
 
     bool m_saving;
     bool m_creating;
+    guint64 m_operation_generation;
+    guint64 m_next_operation_id;
+    QofSessionOperationLease *m_operation_lease;
+    QofSessionAsyncLoad *m_async_load;
 
     /* If any book subroutine failed, this records the failure reason
      * (file not found, etc).

@@ -1,631 +1,305 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAssistant" id="hierarchy_assistant">
-    <property name="can-focus">False</property>
-    <property name="border-width">12</property>
-    <property name="modal">True</property>
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkWindow" id="hierarchy_assistant">
+    <property name="title" translatable="1">New Account Hierarchy Setup</property>
+    <property name="modal">1</property>
     <property name="default-width">400</property>
     <property name="default-height">550</property>
-    <signal name="cancel" handler="on_cancel" swapped="no"/>
-    <signal name="close" handler="on_finish" swapped="no"/>
-    <signal name="prepare" handler="on_prepare" swapped="no"/>
-    <child>
-      <object class="GtkLabel" id="intro_page_label">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
-        <property name="label" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have.
+        <child>
+          <object class="GtkStack" id="hierarchy_stack">
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
+            <property name="transition-type">slide-left-right</property>
+            <child>
+              <object class="GtkStackPage">
+                <property name="title" translatable="1">New Account Hierarchy Setup</property>
+                <property name="child">
+                  <object class="GtkLabel" id="intro_page_label">
+                    <property name="valign">start</property>
+                    <property name="margin-top">12</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="1">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have.
 
 You can pick a set of accounts here that seem close to your needs. After the assistant completes you will be able to add, rename, modify, and remove accounts, at any time later on. You will also be able to add sub-accounts, as well as move accounts (along with their sub-accounts) from one parent to another.
 
 Click 'Cancel' if you do not wish to create any new accounts now.</property>
-        <property name="wrap">True</property>
-      </object>
-      <packing>
-        <property name="page-type">intro</property>
-        <property name="title" translatable="yes">New Account Hierarchy Setup</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="currency_book_option_page_vbox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">5</property>
-        <child>
-          <object class="GtkLabel" id="choose_currency_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Please choose the currency to use for new accounts.</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="currency_chooser_vbox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <object class="GtkLabel" id="label100">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                    <property name="wrap">1</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="currency_chooser_hbox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label102">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Choose Currency</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="choose_account_types_vbox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="pickAccountsDescriptionLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="label" translatable="yes">Select language and region specific categories that correspond to the ways that you foresee you will use GnuCash. Each category you select will cause several accounts to be created.</property>
-            <property name="wrap">True</property>
-            <property name="width-chars">75</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkPaned" id="hpaned100">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="margin-top">12</property>
-            <property name="position">300</property>
-            <property name="position-set">True</property>
-            <child>
-              <object class="GtkBox" id="vbox200">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkPaned" id="vpaned100">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+              <object class="GtkStackPage">
+                <property name="title" translatable="1">New Book Options</property>
+                <property name="child">
+                  <object class="GtkBox" id="book_options_page">
                     <property name="orientation">vertical</property>
+                    <property name="vexpand">1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="title" translatable="1">Choose Currency</property>
+                <property name="child">
+                  <object class="GtkBox" id="currency_book_option_page_vbox">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <property name="spacing">12</property>
                     <child>
-                      <object class="GtkBox" id="vbox101">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="vexpand">True</property>
-                        <property name="border-width">6</property>
-                        <property name="orientation">vertical</property>
+                      <object class="GtkLabel" id="choose_currency_label">
+                        <property name="label" translatable="1">Please choose the currency to use for new accounts.</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="currency_chooser_hbox">
+                        <property name="halign">center</property>
                         <property name="spacing">6</property>
-                        <child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="title" translatable="1">Choose accounts to create</property>
+                <property name="child">
+                  <object class="GtkBox" id="choose_account_types_vbox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="1">Select language and region specific categories that correspond to the ways that you foresee you will use GnuCash. Each category you select will cause several accounts to be created.</property>
+                        <property name="wrap">1</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkPaned">
+                        <property name="orientation">horizontal</property>
+                        <property name="wide-handle">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="position">300</property>
+                        <property name="position-set">1</property>
+                        <property name="resize-start-child">1</property>
+                        <property name="resize-end-child">1</property>
+                        <property name="shrink-start-child">0</property>
+                        <property name="shrink-end-child">0</property>
+                        <property name="start-child">
                           <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label101">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Categories</property>
-                                <style>
-                                  <class name="gnc-class-strong"/>
-                                </style>
-                                <property name="use-markup">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="language_combo">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
+                              <object class="GtkBox">
+                                <property name="spacing">6</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="1">Categories</property>
+                                    <property name="xalign">0</property>
+                                  </object>
                                 </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="region_combo">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext4"/>
-                                  <attributes>
-                                    <attribute name="text">1</attribute>
-                                  </attributes>
+                                  <object class="GtkDropDown" id="language_combo" />
                                 </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="region_label">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow101">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <property name="shadow-type">in</property>
-                            <child>
-                              <object class="GtkTreeView" id="account_categories_tree_view">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="reorderable">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection100"/>
+                                <child>
+                                  <object class="GtkDropDown" id="region_combo" />
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="region_label" />
                                 </child>
                               </object>
                             </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButtonBox" id="hbuttonbox100">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="border-width">6</property>
-                            <property name="layout-style">spread</property>
                             <child>
-                              <object class="GtkButton" id="select_all_button">
-                                <property name="label" translatable="yes">_Select All</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="can-default">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="select_all_clicked" swapped="no"/>
+                              <object class="GtkScrolledWindow">
+                                <property name="vexpand">1</property>
+                                <property name="child">
+                                  <object class="GtkColumnView" id="account_categories_view">
+                                    <property name="vexpand">1</property>
+                                    <property name="show-row-separators">1</property>
+                                  </object>
+                                </property>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="clear_all_button">
-                                <property name="label" translatable="yes">C_lear All</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="can-default">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="clear_all_clicked" swapped="no"/>
+                              <object class="GtkBox">
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkButton" id="select_all_button">
+                                    <property name="label" translatable="1">_Select All</property>
+                                    <property name="use-underline">1</property>
+                                    <signal name="clicked" handler="select_all_clicked" swapped="no" />
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="clear_all_button">
+                                    <property name="label" translatable="1">C_lear All</property>
+                                    <property name="use-underline">1</property>
+                                    <signal name="clicked" handler="clear_all_clicked" swapped="no" />
+                                  </object>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="category_description_heading">
+                                <property name="label" translatable="1">Category Description</property>
+                                <property name="xalign">0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="min-content-height">110</property>
+                                <property name="child">
+                                  <object class="GtkTextView" id="account_types_description">
+                                    <property name="editable">0</property>
+                                    <property name="cursor-visible">0</property>
+                                    <property name="wrap-mode">word</property>
+                                  </object>
+                                </property>
+                              </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
+                        </property>
+                        <property name="end-child">
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="accounts_in_category_label">
+                                <property name="label" translatable="1">Accounts in Category</property>
+                                <property name="xalign">0</property>
+                                <property name="use-markup">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="vexpand">1</property>
+                                <property name="child">
+                                  <object class="GtkColumnView" id="account_preview_view">
+                                    <property name="vexpand">1</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
                       </object>
-                      <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">False</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox102">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="border-width">6</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label103">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">Category Description</property>
-                            <style>
-                              <class name="gnc-class-strong"/>
-                            </style>
-                            <property name="use-markup">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow100">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="shadow-type">in</property>
-                            <child>
-                              <object class="GtkTextView" id="account_types_description">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can-focus">True</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="editable">False</property>
-                                <property name="wrap-mode">word</property>
-                                <property name="cursor-visible">False</property>
-                                <property name="accepts-tab">False</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="1">The selection you make here is only the starting point for your personalized account hierarchy. Accounts can be added, renamed, moved, or deleted by hand later at any time.</property>
+                        <property name="wrap">1</property>
+                        <property name="xalign">0</property>
                       </object>
-                      <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">False</property>
-                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLinkButton">
+                        <property name="label" translatable="1">GnuCash Account Template Wiki</property>
+                        <property name="uri">https://wiki.gnucash.org/wiki/Account_Hierarchy_Template</property>
+                        <property name="halign">start</property>
+                      </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="resize">True</property>
-                <property name="shrink">False</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="vbox100">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="border-width">6</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="accounts_in_category_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" comments="%s is an account template">Accounts in %s</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
+              <object class="GtkStackPage">
+                <property name="title" translatable="1">Setup selected accounts</property>
+                <property name="child">
+                  <object class="GtkBox" id="final_account_vbox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="1">Change account names, codes, descriptions, and notes directly in the table. Placeholder accounts are used to create a hierarchy and normally do not have transactions or opening balances. Set an opening balance only for non-placeholder, newly-created accounts.</property>
+                        <property name="wrap">1</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="vexpand">1</property>
+                        <property name="child">
+                          <object class="GtkColumnView" id="final_account_view">
+                            <property name="vexpand">1</property>
+                            <property name="show-row-separators">1</property>
+                            <property name="show-column-separators">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="accounts_in_category">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="shadow-type">in</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="resize">True</property>
-                <property name="shrink">False</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="label" translatable="yes">Notes</property>
-            <style>
-              <class name="gnc-class-strong"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <!-- n-columns=2 n-rows=2 -->
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="row-spacing">3</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
-                <property name="label">•</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
-                <property name="label">•</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">If not satisfied with the available templates, please read the wiki page linked below and share your new or improved template.</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">The selection you make here is only the starting point for your personalized account hierarchy. Accounts can be added, renamed, moved, or deleted by hand later at any time.</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLinkButton">
-            <property name="label" translatable="yes">GnuCash Account Template Wiki</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="relief">none</property>
-            <property name="uri">https://wiki.gnucash.org/wiki/Account_Hierarchy_Template</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Choose accounts to create</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="final_account_vbox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="finalAccountLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="label" translatable="yes">If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
-
-Some accounts are marked as "Placeholder". Placeholder accounts are used to create a hierarchy of accounts and normally do not have transactions or opening balances. If you would like an account to be a placeholder account, click the checkbox for that account.
-
-If you would like an account to have an opening balance, click on the row containing the account, then click on the opening balance field and enter the starting balance.</property>
-            <property name="use-markup">True</property>
-            <property name="wrap">True</property>
-            <property name="width-chars">75</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">5</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="label" translatable="yes">Note:</property>
-            <style>
-              <class name="gnc-class-strong"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="label" translatable="yes">All accounts except Equity and placeholder accounts may have an opening balance.</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="final_account_tree_box">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="margin-top">6</property>
-            <property name="shadow-type">in</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Setup selected accounts</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="finish_page_label">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <property name="label" translatable="yes">Press 'Apply' to create your new accounts. You will then be able to save them to a file or database.
+              <object class="GtkStackPage">
+                <property name="title" translatable="1">Finish Account Setup</property>
+                <property name="child">
+                  <object class="GtkLabel" id="finish_page_label">
+                    <property name="label" translatable="1">Press 'Apply' to create your new accounts. You will then be able to save them to a file or database.
 
 Press 'Back' to review your selections.
 
 Press 'Cancel' to close this dialog without creating any new accounts.</property>
-        <property name="wrap">True</property>
+                    <property name="wrap">1</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="halign">end</property>
+            <child>
+              <object class="GtkButton" id="hierarchy_cancel">
+                <property name="label" translatable="1">_Cancel</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="hierarchy_back">
+                <property name="label" translatable="1">_Back</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="hierarchy_next">
+                <property name="label" translatable="1">_Next</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="hierarchy_apply">
+                <property name="label" translatable="1">_Apply</property>
+                <property name="use-underline">1</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="page-type">confirm</property>
-        <property name="title" translatable="yes">Finish Account Setup</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child internal-child="action_area">
-      <object class="GtkBox">
-        <property name="can-focus">False</property>
-      </object>
-    </child>
+    </property>
   </object>
 </interface>

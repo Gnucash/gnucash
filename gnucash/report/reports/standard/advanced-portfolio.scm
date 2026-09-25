@@ -195,6 +195,21 @@ by preventing negative stock balances.<br/>")
         )
     )
 
+  ;; Remove negative units from the first lots in b-list. This always returns
+  ;; a basis list, including when the sale exceeds the available lots.
+  (define (remove-from-head b-list b-units)
+    (if (not (eqv? b-list '()))
+        (let ((units-left (gnc-numeric-add b-units (caar b-list)
+                                           units-denom GNC-RND-ROUND)))
+          (cond
+           ((gnc-numeric-positive-p units-left)
+            (cons (cons units-left (cdar b-list)) (cdr b-list)))
+           ((gnc-numeric-zero-p units-left)
+            (cdr b-list))
+           (else
+            (remove-from-head (cdr b-list) units-left))))
+        '()))
+
   ;; this builds a list for basis calculation and handles average, fifo and lifo methods
   ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
   ;; cell that mutates to the new average. Need to add a date checker so that we allow for prices
@@ -234,47 +249,22 @@ by preventing negative stock balances.<br/>")
                       (list (cons b-units (gnc-numeric-div
                                            b-value b-units price-denom GNC-RND-ROUND)))))))
 
-     ;; we have value and negative units, remove units from basis
-     ((and (not (gnc-numeric-zero-p b-value))
-           (gnc-numeric-negative-p b-units))
-      (if (not (eqv? b-list '()))
-          (case b-method
-            ((fifo-basis)
-             (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar b-list))
-               ((-1)
-                 ;; Sold less than the first lot, create a new first lot from the remainder
-                 (let ((new-units (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND)))
-                        (cons (cons new-units (cdar b-list)) (cdr b-list))))
-               ((0)
-                 ;; Sold all of the first lot
-                 (cdr b-list))
-               ((1)
-                 ;; Sold more than the first lot, delete it and recurse
-                 (basis-builder (cdr b-list) (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND)
-                                b-value  ;; Only the sign of b-value matters since the new b-units is negative
-                                b-method currency-frac))))
-            ((filo-basis)
-             (let ((rev-b-list (reverse b-list)))
-               (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar rev-b-list))
-                 ((-1)
-                   ;; Sold less than the last lot
-                 (let ((new-units (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND)))
-                        (reverse (cons (cons new-units (cdar rev-b-list)) (cdr rev-b-list)))))
-                 ((0)
-                   ;; Sold all of the last lot
-                   (reverse (cdr rev-b-list))
-                 )
-                 ((1)
-                   ;; Sold more than the last lot
-                   (basis-builder (reverse (cdr rev-b-list)) (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND)
-                                           b-value b-method currency-frac)
-                 ))))
-            ((average-basis)
-             (list (cons (gnc-numeric-add
-                          (caar b-list) b-units units-denom GNC-RND-ROUND)
-                         (cdar b-list)))))
-          '()
-          ))
+      ;; we have value and negative units, remove units from basis
+      ((and (not (gnc-numeric-zero-p b-value))
+            (gnc-numeric-negative-p b-units))
+       (if (not (eqv? b-list '()))
+           (case b-method
+             ((fifo-basis)
+              (remove-from-head b-list b-units))
+             ((filo-basis)
+              (reverse (remove-from-head (reverse b-list) b-units)))
+             ((average-basis)
+              (list (cons (gnc-numeric-add
+                           (caar b-list) b-units units-denom GNC-RND-ROUND)
+                          (cdar b-list)))))
+           '()
+           ))
+
 
      ;; no value, just units, this is a split/merge...
      ((and (gnc-numeric-zero-p b-value)

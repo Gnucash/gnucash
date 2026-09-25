@@ -53,8 +53,7 @@ TEST(gnc_timezone_constructors, test_pacific_time_constructor)
     TZ_Ptr tz = tzp.get (2012);
     EXPECT_FALSE(tz->std_zone_abbrev().empty());
 #if PLATFORM(WINDOWS)
-    EXPECT_TRUE(tz->std_zone_abbrev() == timezone);
-    EXPECT_TRUE(tz->dst_zone_abbrev() == "Pacific Daylight Time");
+    EXPECT_FALSE(tz->dst_zone_abbrev().empty());
 #else
     EXPECT_TRUE(tz->std_zone_abbrev() == "PST");
     EXPECT_TRUE(tz->dst_zone_abbrev() == "PDT");

@@ -40,12 +40,26 @@
 #ifndef QUICKFILL_ACCOUNT_H
 #define QUICKFILL_ACCOUNT_H
 
-#include <gtk/gtk.h>
+#include <gio/gio.h>
 
 #include "Account.h"
 #include "QuickFill.h"
 
+G_BEGIN_DECLS
+
 typedef gboolean (*AccountBoolCB) (Account*, gpointer);
+
+#define GNC_TYPE_ACCOUNT_LIST_ITEM (gnc_account_list_item_get_type ())
+G_DECLARE_FINAL_TYPE (GncAccountListItem, gnc_account_list_item, GNC,
+                      ACCOUNT_LIST_ITEM, GObject)
+
+/**
+ * A GTK4 list-model item representing one account in a shared quickfill.
+ * The item keeps account identity separate from its display name, so users
+ * of the model can retain a selection while account names change.
+ */
+Account* gnc_account_list_item_get_account (GncAccountListItem *item);
+const gchar* gnc_account_list_item_get_name (GncAccountListItem *item);
 
 /** Create/fetch a quickfill of account names.
  *
@@ -63,17 +77,22 @@ typedef gboolean (*AccountBoolCB) (Account*, gpointer);
  *  Each is identified with the 'key'.  Be sure to use distinct,
  *  unique keys that don't conflict with other users of QofBook.
  *
- *  This code listens to account creation events, and automatically
- *  adds new accounts to the quickfill list (assuming skip_cb allows
- *  it).  This code does not currently listen to account-destroy
- *  events.
+ *  This code keeps the quickfill and its shared list model synchronized with
+ *  account additions, removals, name changes and visibility changes.
  */
 QuickFill*
 gnc_get_shared_account_name_quickfill (Account* root, const char* key,
                                        AccountBoolCB skip_cb, gpointer cb_data);
-GtkListStore*
-gnc_get_shared_account_name_list_store (Account* root, const char* key,
-                                        AccountBoolCB cb, gpointer cb_data);
+/**
+ * Return the GTK4 model companion to the shared account quickfill. The
+ * model is owned by the book and changes whenever its account cache changes.
+ */
+GListModel* gnc_get_shared_account_name_list_model (Account* root,
+                                                    const char* key,
+                                                    AccountBoolCB cb,
+                                                    gpointer cb_data);
+
+G_END_DECLS
 
 #endif
 

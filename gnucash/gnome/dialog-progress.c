@@ -73,6 +73,19 @@ typedef struct
 } VirtualBar;
 
 static void
+gnc_progress_dialog_free(GNCProgressDialog *progress)
+{
+    g_return_if_fail(progress);
+
+    progress->cancel_func = NULL;
+    if (progress->cancel_scm_func != SCM_UNDEFINED)
+        scm_gc_unprotect_object(progress->cancel_scm_func);
+    progress->cancel_scm_func = SCM_UNDEFINED;
+    g_list_free_full(progress->bars, g_free);
+    g_free(progress);
+}
+
+static void
 gnc_progress_maybe_destroy(GNCProgressDialog *progress)
 {
     g_return_if_fail(progress);
@@ -81,7 +94,13 @@ gnc_progress_maybe_destroy(GNCProgressDialog *progress)
         return;
 
     if (progress->dialog != NULL)
-        gtk_widget_destroy(progress->dialog);
+    {
+        GtkWidget *dialog = progress->dialog;
+        progress->dialog = NULL;
+        gtk_window_destroy(GTK_WINDOW(dialog));
+    }
+    else
+        gnc_progress_dialog_free(progress);
 }
 
 
@@ -93,7 +112,7 @@ ok_cb(GtkWidget * widget, gpointer data)
     g_return_if_fail(progress);
 
     if (progress->dialog != NULL)
-        gtk_widget_hide(progress->dialog);
+        gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
     progress->closed = TRUE;
     gnc_progress_maybe_destroy(progress);
 }
@@ -120,23 +139,25 @@ cancel_cb(GtkWidget * widget, gpointer data)
     }
 
     if (progress->dialog != NULL)
-        gtk_widget_hide(progress->dialog);
+        gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
     progress->closed = TRUE;
     gnc_progress_maybe_destroy(progress);
 }
 
 
 static gboolean
-delete_cb(GtkWidget *widget, GdkEvent  *event, gpointer data)
+close_request_cb(GtkWindow *window, gpointer data)
 {
     GNCProgressDialog *progress = data;
+
+    (void)window;
 
     g_return_val_if_fail(progress, TRUE);
 
     if (progress->finished)
     {
         if (progress->dialog != NULL)
-            gtk_widget_hide(progress->dialog);
+            gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
         progress->closed = TRUE;
         gnc_progress_maybe_destroy(progress);
         return TRUE;
@@ -147,7 +168,7 @@ delete_cb(GtkWidget *widget, GdkEvent  *event, gpointer data)
         if (progress->cancel_func(progress->user_data))
         {
             if (progress->dialog != NULL)
-                gtk_widget_hide(progress->dialog);
+                gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
             progress->closed = TRUE;
             gnc_progress_maybe_destroy(progress);
             return TRUE;
@@ -163,7 +184,7 @@ delete_cb(GtkWidget *widget, GdkEvent  *event, gpointer data)
         if (scm_is_true(result))
         {
             if (progress->dialog != NULL)
-                gtk_widget_hide(progress->dialog);
+                gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
             progress->closed = TRUE;
             gnc_progress_maybe_destroy(progress);
             return TRUE;
@@ -180,15 +201,8 @@ destroy_cb(GtkWidget *object, gpointer data)
 {
     GNCProgressDialog *progress = data;
 
-    g_return_if_fail(progress);
-
-    /* Make sure the callbacks aren't invoked */
-    progress->cancel_func = NULL;
-    if (progress->cancel_scm_func != SCM_UNDEFINED)
-        scm_gc_unprotect_object(progress->cancel_scm_func);
-    progress->cancel_scm_func = SCM_UNDEFINED;
-
-    g_free(progress);
+    (void)object;
+    gnc_progress_dialog_free(progress);
 }
 
 
@@ -214,15 +228,15 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     if (parent != NULL)
         gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-    g_signal_connect(G_OBJECT(dialog), "delete_event", G_CALLBACK(delete_cb), progress);
+    g_signal_connect(dialog, "close-request", G_CALLBACK(close_request_cb), progress);
 
     g_signal_connect(G_OBJECT(dialog), "destroy", G_CALLBACK(destroy_cb), progress);
 
     progress->primary_label = GTK_WIDGET(gtk_builder_get_object (builder, "primary_label"));
-    gtk_widget_hide(progress->primary_label);
+    gtk_widget_set_visible (GTK_WIDGET(progress->primary_label), FALSE);
 
     progress->secondary_label = GTK_WIDGET(gtk_builder_get_object (builder, "secondary_label"));
-    gtk_widget_hide(progress->secondary_label);
+    gtk_widget_set_visible (GTK_WIDGET(progress->secondary_label), FALSE);
 
     progress->progress_bar = GTK_WIDGET(gtk_builder_get_object (builder, "progress_bar"));
     progress->total_offset = 0;
@@ -230,10 +244,10 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     progress->bar_value = 0;
 
     progress->sub_label = GTK_WIDGET(gtk_builder_get_object (builder, "sub_label"));
-    gtk_widget_hide(progress->sub_label);
+    gtk_widget_set_visible (GTK_WIDGET(progress->sub_label), FALSE);
 
     progress->log = GTK_WIDGET(gtk_builder_get_object (builder, "progress_log"));
-    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "progress_log_window")));
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "progress_log_window")), FALSE);
 
     progress->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
 
@@ -241,7 +255,7 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
                      G_CALLBACK(ok_cb), progress);
 
     if (!progress->use_ok_button)
-        gtk_widget_hide(progress->ok_button);
+        gtk_widget_set_visible (GTK_WIDGET(progress->ok_button), FALSE);
 
     progress->cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancel_button"));
 
@@ -258,7 +272,7 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     progress->destroyed = FALSE;
     progress->title_set = FALSE;
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, progress);
+gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, progress);
     g_object_unref(G_OBJECT(builder));
 }
 
@@ -274,7 +288,7 @@ gnc_progress_dialog_new(GtkWidget * parent, gboolean use_ok_button)
 
     gnc_progress_dialog_create(parent, progress);
 
-    gtk_widget_show(progress->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(progress->dialog), TRUE);
 
     gnc_progress_dialog_update(progress);
 
@@ -349,7 +363,7 @@ gnc_progress_dialog_set_primary(GNCProgressDialog *progress,
         return;
 
     if (str == NULL || *str == '\0')
-        gtk_widget_hide(progress->primary_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->primary_label), FALSE);
     else
     {
         /* Display the primary text with the HIG-recommended style. */
@@ -357,7 +371,7 @@ gnc_progress_dialog_set_primary(GNCProgressDialog *progress,
 
         gtk_label_set_markup(GTK_LABEL(progress->primary_label), markup);
         g_free(markup);
-        gtk_widget_show(progress->primary_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->primary_label), TRUE);
     }
 
     gnc_progress_dialog_update(progress);
@@ -374,11 +388,11 @@ gnc_progress_dialog_set_heading(GNCProgressDialog *progress,
         return;
 
     if (heading == NULL || *heading == '\0')
-        gtk_widget_hide(progress->primary_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->primary_label), FALSE);
     else
     {
         gtk_label_set_text(GTK_LABEL(progress->primary_label), heading);
-        gtk_widget_show(progress->primary_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->primary_label), TRUE);
     }
 
     gnc_progress_dialog_update(progress);
@@ -395,11 +409,11 @@ gnc_progress_dialog_set_secondary(GNCProgressDialog *progress,
         return;
 
     if (str == NULL || *str == '\0')
-        gtk_widget_hide(progress->secondary_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->secondary_label), FALSE);
     else
     {
         gtk_label_set_text(GTK_LABEL(progress->secondary_label), str);
-        gtk_widget_show(progress->secondary_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->secondary_label), TRUE);
     }
 
     gnc_progress_dialog_update(progress);
@@ -416,7 +430,7 @@ gnc_progress_dialog_set_sub(GNCProgressDialog *progress,
         return;
 
     if (str == NULL || *str == '\0')
-        gtk_widget_hide(progress->sub_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->sub_label), FALSE);
     else
     {
         /* Display the suboperation text with the HIG-recommended style. */
@@ -424,7 +438,7 @@ gnc_progress_dialog_set_sub(GNCProgressDialog *progress,
 
         gtk_label_set_markup(GTK_LABEL(progress->sub_label), markup);
         g_free(markup);
-        gtk_widget_show(progress->sub_label);
+        gtk_widget_set_visible (GTK_WIDGET(progress->sub_label), TRUE);
     }
 
     gnc_progress_dialog_update(progress);
@@ -447,8 +461,8 @@ gnc_progress_dialog_reset_log(GNCProgressDialog *progress)
     gtk_text_buffer_set_modified(buf, FALSE);
 
     /* Show the log and its parent (in case it is in a scrolled window). */
-    gtk_widget_show(progress->log);
-    gtk_widget_show(gtk_widget_get_parent(progress->log));
+    gtk_widget_set_visible (GTK_WIDGET(progress->log), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_widget_get_parent(progress->log)), TRUE);
 
     gnc_progress_dialog_update(progress);
 }
@@ -591,7 +605,7 @@ gnc_progress_dialog_set_cancel_func(GNCProgressDialog *progress,
     progress->user_data = user_data;
 
     if (cancel_func)
-        gtk_widget_show(progress->cancel_button);
+        gtk_widget_set_visible (GTK_WIDGET(progress->cancel_button), TRUE);
 }
 
 
@@ -611,7 +625,7 @@ gnc_progress_dialog_set_cancel_scm_func(GNCProgressDialog *progress,
     {
         progress->cancel_scm_func = cancel_scm_func;
         scm_gc_protect_object(cancel_scm_func);
-        gtk_widget_show(progress->cancel_button);
+        gtk_widget_set_visible (GTK_WIDGET(progress->cancel_button), TRUE);
     }
     else
         progress->cancel_scm_func = SCM_UNDEFINED;
@@ -742,8 +756,7 @@ gnc_progress_dialog_reset_value(GNCProgressDialog *progress)
 void
 gnc_progress_dialog_update(GNCProgressDialog *progress)
 {
-    while (gtk_events_pending())
-        gtk_main_iteration();
+    g_return_if_fail(progress);
 }
 
 
@@ -755,7 +768,7 @@ gnc_progress_dialog_finish(GNCProgressDialog *progress)
     if (!progress->use_ok_button)
     {
         if (progress->dialog != NULL)
-            gtk_widget_hide(progress->dialog);
+            gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
         progress->closed = TRUE;
     }
 
@@ -783,20 +796,10 @@ gnc_progress_dialog_destroy(GNCProgressDialog *progress)
 {
     g_return_if_fail(progress);
 
-    /* Make sure the callbacks aren't invoked */
-    progress->cancel_func = NULL;
-    if (progress->cancel_scm_func != SCM_UNDEFINED)
-        scm_gc_unprotect_object(progress->cancel_scm_func);
-    progress->cancel_scm_func = SCM_UNDEFINED;
+    if (progress->dialog != NULL)
+        gtk_widget_set_visible (GTK_WIDGET(progress->dialog), FALSE);
 
-    if (!progress->finished)
-    {
-        if (progress->dialog != NULL)
-            gtk_widget_hide(progress->dialog);
-        progress->closed = TRUE;
-    }
-
+    progress->closed = TRUE;
     progress->destroyed = TRUE;
-
     gnc_progress_maybe_destroy(progress);
 }

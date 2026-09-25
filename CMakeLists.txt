@@ -26,6 +26,16 @@ project (gnucash
 
 enable_testing()
 
+add_test(NAME check-no-local-main-loop-pumps
+  COMMAND ${CMAKE_COMMAND}
+    -DSOURCE_ROOT=${CMAKE_SOURCE_DIR}
+    -P ${CMAKE_SOURCE_DIR}/cmake/check-no-local-main-loop-pumps.cmake)
+
+add_test(NAME check-gtk-window-application-bindings
+  COMMAND ${CMAKE_COMMAND}
+    -DSOURCE_ROOT=${CMAKE_SOURCE_DIR}
+    -P ${CMAKE_SOURCE_DIR}/cmake/check-gtk-window-application-bindings.cmake)
+
 set (PACKAGE_NAME GnuCash)
 set (PACKAGE_BUGREPORT "https://bugs.gnucash.org")
 set (PACKAGE_STRING "${PACKAGE_NAME} ${PROJECT_VERSION}")
@@ -52,6 +62,7 @@ include (GncAddSchemeTargets)
 include (GncAddGSchemaTargets)
 include (GncAddTest)
 include (GncGenerateGResources)
+include (GncMinGWTargetPaths)
 include (MakeDistFiles)
 include (GNUInstallDirs)
 include (TestBigEndian)
@@ -170,6 +181,17 @@ else()
   set(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
   set(GENERATE_VCS_INFO "No")
 endif()
+
+if (BUILDING_FROM_VCS AND GIT_FOUND)
+  add_test(NAME check-gnc-vcs-info-worktree
+    COMMAND ${CMAKE_COMMAND}
+      -DSOURCE_ROOT=${CMAKE_SOURCE_DIR}
+      -DSHELL=${SHELL}
+      -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
+      -DTEST_ROOT=${CMAKE_BINARY_DIR}/Testing/gnc-vcs-info-worktree
+      -P ${CMAKE_SOURCE_DIR}/cmake/check-gnc-vcs-info-worktree.cmake)
+endif()
+
 # As the file's path is needed by several other build rules, we already define
 # that here. The actual build rules (if needed) are in libgnucash/core-utils.
 set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h CACHE STRING "path to gnc-vcs-info.h file")
@@ -182,7 +204,8 @@ if (WIN32)
   #set(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
   #set(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
   #Prevent creating a console window on startup and harden the executable.
-  set(CMAKE_EXE_LINKER_FLAGS "-mwindows -Wl,--nxcompat -Wl,--dynamicbase")
+  gnc_append_flags_once(CMAKE_EXE_LINKER_FLAGS
+    -mwindows -Wl,--nxcompat -Wl,--dynamicbase)
   #Find the winsock2 library
   find_library(WINSOCK_LIB wsock32)
   find_library(WS2_LIB ws2_32)
@@ -204,7 +227,7 @@ if (NOT PKG_CONFIG_FOUND)
 
 # glib et al.
 set(GLIB_MIN_VERSION 2.88.0)
-set(GTK_MIN_VERSION 3.24.52)
+set(GTK_MIN_VERSION 4.14.0)
 
 pkg_check_modules (GLIB2 REQUIRED IMPORTED_TARGET glib-2.0>=${GLIB_MIN_VERSION})
 pkg_check_modules (GIO REQUIRED gio-2.0)
@@ -216,27 +239,42 @@ pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.15.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
   if (WIN32)
-    # The MSYS2 mingw-w64-ucrt-x86_64-webview2-loader package ships
-    # only WebView2Loader.dll and WebView2.h, no pkg-config file so we
-    # must check for the header file instead.
-    find_path (WEBVIEW2_INCLUDE_DIR NAMES WebView2.h)
-    if (NOT WEBVIEW2_INCLUDE_DIR)
-      message (SEND_ERROR "WebView2.h not found. Install the MSYS2 "
-        "mingw-w64-ucrt-x86_64-webview2-loader package (or set "
-        "WEBVIEW2_INCLUDE_DIR manually).")
-    endif()
+    find_path (WEBVIEW2_INCLUDE_DIR NAMES WebView2.h
+      HINTS ${CMAKE_PREFIX_PATH} PATH_SUFFIXES include REQUIRED)
     set (WEBVIEW2_INCLUDE_DIRS ${WEBVIEW2_INCLUDE_DIR})
-    set(WEBVIEW2 1 CACHE INTERNAL "WebView2")
-  else()
-    # Hold at 2.32, the latest version successfully built on macOS.
-    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.32.0)
-    if (NOT WEBKIT_FOUND)
-      pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.1)
+    # The loader is loaded explicitly so that the packaged runtime can be
+    # selected at startup. MinGW's WebView2 package intentionally ships only
+    # this DLL, not an import library.
+    find_file (WEBVIEW2_LOADER_DLL NAMES WebView2Loader.dll
+      HINTS ${CMAKE_PREFIX_PATH} PATH_SUFFIXES bin REQUIRED)
+    unset (GNC_REPORT_WEBVIEW2_FIXED_RUNTIME CACHE)
+    set (WEBVIEW2_FIXED_RUNTIME_DIR "" CACHE PATH
+      "Path to a WebView2 Fixed Version Runtime to bundle with GnuCash")
+    if (WEBVIEW2_FIXED_RUNTIME_DIR)
+      find_file (WEBVIEW2_RUNTIME_EXECUTABLE NAMES msedgewebview2.exe
+        HINTS "${WEBVIEW2_FIXED_RUNTIME_DIR}" NO_DEFAULT_PATH NO_CACHE REQUIRED)
+      get_filename_component (WEBVIEW2_FIXED_RUNTIME_DIR
+        "${WEBVIEW2_RUNTIME_EXECUTABLE}" DIRECTORY)
+      set (GNC_REPORT_WEBVIEW2_FIXED_RUNTIME 1 CACHE INTERNAL
+        "WebView2 Fixed Version Runtime is bundled")
     endif()
-    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
+    set(GNC_REPORT_WEBVIEW2 1 CACHE INTERNAL "WebView2 report backend")
+  elseif (APPLE)
+    find_library (WEBKIT_FRAMEWORK WebKit REQUIRED)
+    set(GNC_REPORT_WKWEBVIEW 1 CACHE INTERNAL "WKWebView report backend")
+  else()
+    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-6.0)
+    set(GNC_REPORT_WEBKITGTK6 1 CACHE INTERNAL "WebKitGTK 6 report backend")
   endif()
 
-  pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=${GTK_MIN_VERSION})
+  pkg_check_modules (GTK4 REQUIRED IMPORTED_TARGET gtk4>=${GTK_MIN_VERSION})
+  if (APPLE)
+    # gdk_macos_surface_get_native_window is a supported GTK macOS backend API.
+    pkg_check_modules (GTK4MACOS REQUIRED IMPORTED_TARGET gtk4-macos>=${GTK_MIN_VERSION})
+    set(GNC_PLATFORM_COCOA 1)
+    set(MAC_INTEGRATION 1)
+    add_compile_definitions(MAC_INTEGRATION)
+  endif()
 endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
@@ -300,8 +338,12 @@ if (GUILE3_FOUND) # found guile-3.0
   set(GUILE_EFFECTIVE_VERSION 3.0)
   set(GUILE_INCLUDE_DIRS ${GUILE3_INCLUDE_DIRS})
   set(GUILE_LDFLAGS ${GUILE3_LDFLAGS})
-  pkg_get_variable (GUILD_EXECUTABLE guile-3.0 guild)
-  pkg_get_variable (GUILE_EXECUTABLE guile-3.0 guile)
+  if (NOT GUILD_EXECUTABLE)
+    pkg_get_variable (GUILD_EXECUTABLE guile-3.0 guild)
+  endif()
+  if (NOT GUILE_EXECUTABLE)
+    pkg_get_variable (GUILE_EXECUTABLE guile-3.0 guile)
+  endif()
   if (NOT GUILD_EXECUTABLE)
     find_program (GUILD_EXECUTABLE NAMES guild3.0 guild)
   endif()
@@ -319,8 +361,12 @@ elseif (GUILE22_FOUND) # found guile-2.2
   set(GUILE_EFFECTIVE_VERSION 2.2)
   set(GUILE_INCLUDE_DIRS ${GUILE22_INCLUDE_DIRS})
   set(GUILE_LDFLAGS ${GUILE22_LDFLAGS})
-  pkg_get_variable (GUILD_EXECUTABLE guile-2.2 guild)
-  pkg_get_variable (GUILE_EXECUTABLE guile-2.2 guile)
+  if (NOT GUILD_EXECUTABLE)
+    pkg_get_variable (GUILD_EXECUTABLE guile-2.2 guild)
+  endif()
+  if (NOT GUILE_EXECUTABLE)
+    pkg_get_variable (GUILE_EXECUTABLE guile-2.2 guile)
+  endif()
   if (NOT GUILD_EXECUTABLE)
     find_program (GUILD_EXECUTABLE NAMES guild2.2 guild)
   endif()
@@ -338,8 +384,12 @@ elseif (GUILE2_FOUND) # found guile-2.0
   set(GUILE_EFFECTIVE_VERSION 2.0)
   set(GUILE_INCLUDE_DIRS ${GUILE2_INCLUDE_DIRS})
   set(GUILE_LDFLAGS ${GUILE2_LDFLAGS})
-  pkg_get_variable (GUILD_EXECUTABLE guile-2.0 guild)
-  pkg_get_variable (GUILE_EXECUTABLE guile-2.0 guile)
+  if (NOT GUILD_EXECUTABLE)
+    pkg_get_variable (GUILD_EXECUTABLE guile-2.0 guild)
+  endif()
+  if (NOT GUILE_EXECUTABLE)
+    pkg_get_variable (GUILE_EXECUTABLE guile-2.0 guile)
+  endif()
   if (NOT GUILD_EXECUTABLE)
     find_program (GUILD_EXECUTABLE NAMES guild2.0 guild)
   endif()
@@ -390,25 +440,26 @@ if (WITH_AQBANKING)
   pkg_check_modules (AQBANKING REQUIRED aqbanking>=6.9.1)
   set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
     "${GWENHYWFAR_INCLUDE_DIRS}")
-  set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")
+  set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LDFLAGS}")
+  # These probe inputs are consumed before the global dependency-path check.
+  gnc_validate_mingw_target_paths(VARIABLES CMAKE_REQUIRED_INCLUDES
+    CMAKE_REQUIRED_LIBRARIES)
   include(CheckSymbolExists)
   check_symbol_exists("AB_Banking_RuntimeConfig_SetCharValue"
     "aqbanking/banking.h" AQB_HAS_RUNTIME_CONFIG)
   set(CMAKE_REQUIRED_INCLUDES)
   set(CMAKE_REQUIRED_LIBRARIES)
   if(WITH_GNUCASH)
-    pkg_check_modules (GWEN_GTK3 REQUIRED gwengui-gtk3)
+    pkg_check_modules (GWEN_GTK4 REQUIRED gwengui-gtk4)
   endif()
 endif()
 
 if (WITH_OFX)
   pkg_check_modules (LIBOFX REQUIRED libofx>=0.10.9)
   include(CheckCXXSourceRuns)
-  if (WIN32)
-      set(CMAKE_REQUIRED_LIBRARIES "-L ${CMAKE_PREFIX_PATH}/libofx/lib -lofx")
-  else()
-      set(CMAKE_REQUIRED_LIBRARIES "-lofx")
-  endif()
+  set(CMAKE_REQUIRED_LIBRARIES "${LIBOFX_LDFLAGS}")
+  # This probe runs before the global dependency-path check.
+  gnc_validate_mingw_target_paths(VARIABLES CMAKE_REQUIRED_LIBRARIES)
       CHECK_CXX_SOURCE_RUNS("
 #include <time.h>
 #include <stdlib.h>
@@ -442,24 +493,11 @@ endif()
 # ############################################################
 
 if(APPLE)
-  execute_process(
-      COMMAND ${PKG_CONFIG_EXECUTABLE} --variable=targets gdk-3.0
-      OUTPUT_VARIABLE TARGET_RESULT
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  if(TARGET_RESULT STREQUAL "quartz")
-    set(GNC_PLATFORM_COCOA 1)
-    set(GDK_QUARTZ 1)
-    pkg_check_modules(GTK_MAC IMPORTED_TARGET gtk-mac-integration-gtk3)
-    if (GTK_MAC_FOUND)
-      set(MAC_INTEGRATION 1)
-      find_library(COCOA_LIBRARY Cocoa)
-      find_library(SECURITY_LIBRARY Security)
-      find_library(CARBON_LIBRARY Carbon)
-      set(OSX_EXTRA_COMPILE_FLAGS $<$<COMPILE_LANGUAGE:C>:-xobjective-c> $<$<COMPILE_LANGUAGE:CXX>:-xobjective-c++>)
-      set(OSX_EXTRA_LIBRARIES objc ${COCOA_LIBRARY} ${SECURITY_LIBRARY} ${CARBON_LIBRARY})
-    endif()
-  endif()
+  find_library(COCOA_LIBRARY Cocoa REQUIRED)
+  find_library(SECURITY_LIBRARY Security REQUIRED)
+  find_library(CARBON_LIBRARY Carbon REQUIRED)
+  set(OSX_EXTRA_COMPILE_FLAGS $<$<COMPILE_LANGUAGE:C>:-xobjective-c> $<$<COMPILE_LANGUAGE:CXX>:-xobjective-c++>)
+  set(OSX_EXTRA_LIBRARIES objc ${COCOA_LIBRARY} ${SECURITY_LIBRARY} ${CARBON_LIBRARY} ${WEBKIT_FRAMEWORK})
 endif()
 
 # find_package(LibXslt) eats PKG_CONFIG_EXECUTABLE, so preserve it.
@@ -557,6 +595,30 @@ endif()
 get_filename_component(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
 
 find_program(POD2MAN_EXECUTABLE pod2man HINTS ${PERL_DIR})
+if (NOT POD2MAN_EXECUTABLE)
+  execute_process(COMMAND
+          ${PERL_EXECUTABLE} -MPod::Man -e ""
+          ERROR_QUIET
+          RESULT_VARIABLE have_pod_man)
+  if (${have_pod_man} EQUAL 0)
+    # Some Windows Perl distributions ship Pod::Man without the pod2man
+    # launcher. The generated man pages still only require the core module.
+    set(_POD2MAN_WRAPPER "${CMAKE_BINARY_DIR}/pod2man-wrapper.pl")
+    file(WRITE "${_POD2MAN_WRAPPER}" [=[
+use strict;
+use warnings;
+
+use Pod::Man;
+
+die "Usage: pod2man-wrapper.pl INPUT OUTPUT" unless @ARGV == 2;
+
+Pod::Man->new()->parse_from_file(@ARGV);
+]=])
+    set(POD2MAN_EXECUTABLE "${_POD2MAN_WRAPPER}")
+  else()
+    message(SEND_ERROR "pod2man executable or Perl Pod::Man module not found.")
+  endif()
+endif()
 
 #ICU
 find_package(ICU 78.0 REQUIRED COMPONENTS uc i18n)
@@ -583,6 +645,64 @@ endif()
 if (NOT HAVE_BOOST)
 message (SEND_ERROR "A suitable Boost is not installed, and is required. GnuCash requires that Boost be compatible and compiled with C++17. Please install it and ensure that the following libraries are built: date_time, filesystem, locale, regex, program_options and system.")
 endif()
+
+# MinGW build tools may run in an MSYS environment, but target compilation
+# must never consume the MSYS runtime's headers or libraries. Validate finder
+# results after discovery so that toolchain files, CMAKE_SYSROOT,
+# CMAKE_FIND_ROOT_PATH, and explicit cache values retain their normal meaning.
+# WebView2 and MinGW DLLs are target runtime artifacts. Build-host executables
+# such as Bash, pkg-config, Guile, SWIG, and Perl are intentionally not target
+# inputs and therefore aren't listed here.
+set(_GNC_MINGW_TARGET_PATH_VARIABLES
+  Iconv_INCLUDE_DIR Iconv_INCLUDE_DIRS Iconv_LIBRARY Iconv_LIBRARIES
+  Intl_INCLUDE_DIR Intl_INCLUDE_DIRS Intl_LIBRARY Intl_LIBRARIES
+  CMAKE_C_FLAGS CMAKE_CXX_FLAGS
+  CMAKE_EXE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS
+  CMAKE_MODULE_LINKER_FLAGS
+  LIBINTL_INCLUDE_PATH LIBINTL_LIBRARY
+  LTDL_INCLUDE_PATH
+  REGEX_INCLUDE_PATH REGEX_LIB_PATH REGEX_LIBRARY REGEX_LDFLAGS
+  WEBVIEW2_INCLUDE_DIR WEBVIEW2_LOADER_DLL
+  WEBVIEW2_RUNTIME_EXECUTABLE WEBVIEW2_FIXED_RUNTIME_DIR
+  HTMLHELP_INCLUDE_PATH HTMLHELP_LIBRARY WINSOCK_LIB WS2_LIB
+  LIBXSLT_INCLUDE_DIR LIBXSLT_INCLUDE_DIRS LIBXSLT_LIBRARIES
+  LIBDBI_INCLUDE_PATH LIBDBI_LIBRARY LIBDBI_DRIVERS
+  Python3_INCLUDE_DIRS Python3_LIBRARIES
+  ICU_INCLUDE_DIRS ICU_LIBRARIES
+  GUILE_INCLUDE_DIRS GUILE_LDFLAGS
+  Boost_INCLUDE_DIRS Boost_LIBRARIES)
+foreach(_pkg GLIB2 GIO GOBJECT GMODULE GTHREAD LIBXML2 LIBXSLT WEBKIT
+    GTK4 GTK4MACOS ZLIB GUILE3 GUILE22 GUILE2 GWENHYWFAR AQBANKING
+    GWEN_GTK4 LIBOFX LIBSECRET)
+  list(APPEND _GNC_MINGW_TARGET_PATH_VARIABLES
+    ${_pkg}_INCLUDE_DIRS ${_pkg}_LIBRARY_DIRS
+    ${_pkg}_CFLAGS ${_pkg}_CFLAGS_OTHER
+    ${_pkg}_LDFLAGS ${_pkg}_LDFLAGS_OTHER)
+endforeach()
+
+# CMake consumes configuration-specific flags only for configured build types.
+set(_GNC_MINGW_CONFIGURATIONS
+  ${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURATION_TYPES})
+foreach(_config IN LISTS _GNC_MINGW_CONFIGURATIONS)
+  if("${_config}" STREQUAL "")
+    continue()
+  endif()
+  string(TOUPPER "${_config}" _config_upper)
+  foreach(_flag_prefix CMAKE_C_FLAGS CMAKE_CXX_FLAGS
+      CMAKE_EXE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS
+      CMAKE_MODULE_LINKER_FLAGS)
+    list(APPEND _GNC_MINGW_TARGET_PATH_VARIABLES
+      ${_flag_prefix}_${_config_upper})
+  endforeach()
+endforeach()
+list(REMOVE_DUPLICATES _GNC_MINGW_TARGET_PATH_VARIABLES)
+gnc_validate_mingw_target_paths(
+  VARIABLES ${_GNC_MINGW_TARGET_PATH_VARIABLES})
+unset(_GNC_MINGW_CONFIGURATIONS)
+unset(_GNC_MINGW_TARGET_PATH_VARIABLES)
+unset(_config)
+unset(_config_upper)
+unset(_flag_prefix)
 
 
 # Compiler flags
@@ -706,9 +826,16 @@ endif()
 gnc_gtest_configure()
 
 # There are targets that need to build before tests will run
+set(GNC_USE_VIRTUAL_DISPLAY FALSE)
+if(UNIX AND NOT APPLE)
+  set(GNC_USE_VIRTUAL_DISPLAY TRUE)
+endif()
 add_custom_target(testbuild)
 add_custom_target(check DEPENDS testbuild
-  COMMAND ${CMAKE_CTEST_COMMAND}
+  COMMAND ${CMAKE_COMMAND}
+    -DCTEST_COMMAND=${CMAKE_CTEST_COMMAND}
+    -DUSE_VIRTUAL_DISPLAY=${GNC_USE_VIRTUAL_DISPLAY}
+    -P ${CMAKE_SOURCE_DIR}/cmake/run-ctest.cmake
 )
 
 if (COVERAGE)
@@ -833,7 +960,6 @@ set (HAVE_LOCALTIME_R 1)
 set (HAVE_PTHREAD_MUTEX_INIT 1)
 set (HAVE_PTHREAD_PRIO_INHERIT 1)
 set (HAVE_SETENV 1)
-set (HAVE_STPCPY 1)
 set (HAVE_STRPTIME 1)
 set (HAVE_TIMEGM 1)
 set (HAVE_TOWUPPER 1)
@@ -845,7 +971,6 @@ set (GNC_PLATFORM_WINDOWS 1)
 endif()
 
 if (APPLE)
-# FIXME: HANDLE gtk-mac-integration-gtk2
 set(GNC_PLATFORM_DARWIN 1)
 set(GNC_PLATFORM_OSX 1)
 set(PLATFORM_OSX 1)
@@ -861,9 +986,13 @@ set_property(TARGET PkgConfig::GLIB2 PROPERTY INTERFACE_COMPILE_DEFINITIONS
 if (WITH_GNUCASH)
 string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GTK_MIN_MATCH ${GTK_MIN_VERSION})
 set(GTK_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
-set_property(TARGET PkgConfig::GTK3 PROPERTY INTERFACE_COMPILE_DEFINITIONS
+set_property(TARGET PkgConfig::GTK4 PROPERTY INTERFACE_COMPILE_DEFINITIONS
+  GTK_VERSION_MIN_REQUIRED=GTK_VERSION_${GTK_API}
+  GTK_VERSION_MAX_ALLOWED=GTK_VERSION_${GTK_API}
   GDK_VERSION_MIN_REQUIRED=GDK_VERSION_${GTK_API}
-  GDK_VERSION_MAX_ALLOWED=GDK_VERSION_${GTK_API})
+  GDK_VERSION_MAX_ALLOWED=GDK_VERSION_${GTK_API}
+  GTK_DISABLE_DEPRECATED
+  GDK_DISABLE_DEPRECATED)
 endif()
 
 add_definitions (-DHAVE_CONFIG_H)
@@ -987,6 +1116,7 @@ add_custom_target(distcheck DEPENDS dist
             -D CMAKE_C_FLAGS=${CMAKE_C_FLAGS}
             -D CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
             -D GTEST_ROOT=${GTEST_ROOT}
+            -D WITH_AQBANKING=${WITH_AQBANKING}
             -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDistCheck.cmake
         )
 
@@ -1036,20 +1166,22 @@ endif()
 #automake-provided version.
 set (_CMD create_symlink)
 if (WIN32)
-  set(_CMD copy)
-endif()
-
-install(CODE
-" execute_process(
+  install(FILES "${CMAKE_SOURCE_DIR}/LICENSE"
+          DESTINATION ${CMAKE_INSTALL_DOCDIR}
+          RENAME COPYING)
+else()
+  install(CODE
+  " execute_process(
       COMMAND ${CMAKE_COMMAND} -E ${_CMD} LICENSE COPYING
       WORKING_DIRECTORY ${CMAKE_INSTALL_DOCDIR}
   )"
-)
+  )
+endif()
 
 #For windows, copy in some DLLs from Mingw
 
 if (WIN32)
-if ($ENV{MSYSTEM} STREQUAL "CLANG64")
+if ("$ENV{MSYSTEM}" STREQUAL "CLANG64")
   find_file(LIBSTDC++ libc++.dll)
 else()
   find_file(LIBSTDC++ libstdc++-6.dll)
@@ -1057,8 +1189,8 @@ endif()
   if (NOT LIBSTDC++)
     message(FATAL_ERROR "libstdc++ not found.")
   endif()
-  if(NOT $ENV{MSYSTEM} STREQUAL "CLANG64")
-    if ($ENV{MSYSTEM} STREQUAL "MINGW32")
+  if(NOT "$ENV{MSYSTEM}" STREQUAL "CLANG64")
+    if ("$ENV{MSYSTEM}" STREQUAL "MINGW32")
       find_file(LIBDW2 libgcc_s_dw2-1.dll)
     else()
       find_file(LIBDW2 libgcc_s_seh-1.dll)
@@ -1070,6 +1202,7 @@ endif()
     set(LIBDW2 "")
   endif()
   set(MINGW_DLLS ${LIBSTDC++} ${LIBDW2})
+  gnc_validate_mingw_target_paths(VARIABLES MINGW_DLLS)
   install(PROGRAMS ${MINGW_DLLS} DESTINATION ${CMAKE_INSTALL_BINDIR})
   file(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
     # Do permissions matter for windows?

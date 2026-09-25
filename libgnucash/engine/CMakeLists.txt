@@ -6,6 +6,7 @@ add_subdirectory(mocks)
 
 set(engine_noinst_HEADERS
   AccountP.hpp
+  ScrubP.h
   SplitP.hpp
   SX-book.h
   SX-ttinfo.hpp
@@ -73,6 +74,7 @@ set (engine_HEADERS
   gnc-rational-rounding.hpp
   gnc-session.h
   gnc-timezone.hpp
+  gnc-transfer-transaction.h
   gnc-uri-utils.h
   gnc-uri.hpp
   gncAddress.h
@@ -124,6 +126,7 @@ set (engine_HEADERS
   qofsession.hpp
   qofutil.h
   qof-gobject.h
+  qof-load-executor.h
   qof-string-cache.h
 )
 
@@ -175,6 +178,7 @@ set (engine_SOURCES
   gnc-rational.cpp
   gnc-session.c
   gnc-timezone.cpp
+  gnc-transfer-transaction.c
   gnc-uri.cpp
   engine-helpers.c
   guid.cpp

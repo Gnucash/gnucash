@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include "split-register.h"
+#include "recncell.h"
 
 /** @addtogroup SplitRegister
  * @{
@@ -47,6 +48,24 @@ typedef enum {
     RATE_RESET_REQD     = 1,
     RATE_RESET_DONE     = 2
 } RateReset_t;
+
+typedef struct _GncSplitRegisterAsyncRequest GncSplitRegisterAsyncRequest;
+typedef void (*GncSplitRegisterAsyncCancel) (GncSplitRegisterAsyncRequest *request);
+typedef void (*GncSplitRegisterExchangeCallback) (SplitRegister *reg,
+                                                   gboolean accepted,
+                                                   gpointer user_data);
+
+typedef enum {
+    GNC_SPLIT_REGISTER_EXCHANGE_CONTINUE,
+    GNC_SPLIT_REGISTER_EXCHANGE_DEFERRED,
+    GNC_SPLIT_REGISTER_EXCHANGE_REJECTED
+} GncSplitRegisterExchangeResult;
+
+struct _GncSplitRegisterAsyncRequest
+{
+    SplitRegister *reg;
+    GncSplitRegisterAsyncCancel cancel;
+};
 
 struct sr_info
 {
@@ -111,6 +130,11 @@ struct sr_info
      * split */
     gboolean change_confirmed;
 
+    /** Requests that must complete or cancel before the register is freed. */
+    GList *async_requests;
+    GncSplitRegisterAsyncRequest *active_save_request;
+    gboolean replaying_save_traverse;
+
     /** RATE_RESET_NOT_REQD => No exchange rate dialog needed for current split
      * RATE_RESET_REQD => Need new exchange rate for current split
      * RATE_RESET_DONE => Already got a new exchange rate for current split
@@ -144,6 +168,16 @@ struct sr_info
 
 
 SRInfo * gnc_split_register_get_info (SplitRegister *reg);
+
+void gnc_split_register_async_request_track
+    (SplitRegister *reg, GncSplitRegisterAsyncRequest *request,
+     GncSplitRegisterAsyncCancel cancel);
+void gnc_split_register_async_request_untrack
+    (GncSplitRegisterAsyncRequest *request);
+
+GncSplitRegisterExchangeResult gnc_split_register_handle_exchange_async
+    (SplitRegister *reg, gboolean force_dialog,
+     GncSplitRegisterExchangeCallback callback, gpointer user_data);
 
 GtkWidget *gnc_split_register_get_parent (SplitRegister *reg);
 
@@ -195,7 +229,8 @@ Account * gnc_split_register_get_account_by_name(
 Account * gnc_split_register_get_account (SplitRegister *reg,
         const char *cell_name);
 
-gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
+GncRecnCellConfirmResult gnc_split_register_recn_cell_confirm
+    (RecnCell *cell, char old_flag, char next_flag, gpointer data);
 
 gboolean gnc_split_register_check_cell (SplitRegister *reg,
                                         const char *cell_name);

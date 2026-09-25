@@ -1,721 +1,582 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAssistant" id="csv_export_assistant">
-    <property name="can-focus">False</property>
-    <property name="border-width">12</property>
-    <property name="title" translatable="yes">CSV Export Assistant</property>
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkWindow" id="csv_export_assistant">
+    <property name="title" translatable="1">CSV Export Assistant</property>
     <property name="default-width">400</property>
     <property name="default-height">500</property>
-    <signal name="apply" handler="csv_export_assistant_finish" swapped="no"/>
-    <signal name="cancel" handler="csv_export_assistant_cancel" swapped="no"/>
-    <signal name="close" handler="csv_export_assistant_close" swapped="no"/>
-    <signal name="prepare" handler="csv_export_assistant_prepare" swapped="no"/>
     <child>
-      <object class="GtkBox" id="start_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
+      <object class="GtkBox" id="gnc_export_assistant_content">
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
         <child>
-          <object class="GtkLabel" id="start_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
+          <object class="GtkLabel" id="gnc_export_assistant_page_title">
+            <property name="xalign">0</property>
+            <property name="wrap">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="gnc_export_assistant_stack">
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="transition-type">slide-left-right</property>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-0</property>
+        <property name="title" translatable="1">Choose Export Settings</property>
+<property name="child">
+          <object class="GtkBox" id="start_page">
+<property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="start_label">
+                <property name="valign">center</property>
+                <property name="label" translatable="1">
 Select the type of Export required and the separator that will be used.
 </property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator" id="hseparator1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="padding">6</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="frame1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="border-width">6</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="table1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="row-spacing">3</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <object class="GtkCheckButton" id="quote_tbutton">
-                    <property name="label" translatable="yes">Use Quotes</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="csv_export_quote_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="simple_layout">
-                    <property name="label" translatable="yes">Simple Layout</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="csv_export_simple_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
+                <property name="justify">center</property>
+                <property name="wrap">1</property>
               </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Options</property>
-                <style>
-                  <class name="gnc-class-strong"/>
-                </style>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="frame2">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="border-width">6</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <!-- n-columns=3 n-rows=2 -->
-              <object class="GtkGrid" id="table2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="row-spacing">3</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <object class="GtkRadioButton" id="comma_radio">
-                    <property name="label" translatable="yes">Comma (,)</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="csv_export_sep_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="colon_radio">
-                    <property name="label" translatable="yes">Colon (:)</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">comma_radio</property>
-                    <signal name="toggled" handler="csv_export_sep_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="semicolon_radio">
-                    <property name="label" translatable="yes">Semicolon (;)</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">comma_radio</property>
-                    <signal name="toggled" handler="csv_export_sep_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="custom_radio">
-                    <property name="label" translatable="yes">Custom</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">comma_radio</property>
-                    <signal name="toggled" handler="csv_export_sep_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="custom_entry">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="invisible-char">●</property>
-                    <property name="primary-icon-activatable">False</property>
-                    <property name="secondary-icon-activatable">False</property>
-                    <signal name="changed" handler="csv_export_custom_entry_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Select Separator Character</property>
-                <style>
-                  <class name="gnc-class-strong"/>
-                </style>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="page-type">intro</property>
-        <property name="title" translatable="yes">Choose Export Settings</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="account_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label5">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Select the accounts to be exported and date range if required.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkPaned" id="paned">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="position">1</property>
-            <child>
-              <object class="GtkBox" id="acct_info_vbox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">6</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="accounts_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Accounts</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="vbox96">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkScrolledWindow" id="account_scroll">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="shadow-type">in</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="hbox98">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="border-width">3</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkLabel" id="label42">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="num_accounts_label">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="justify">center</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label43">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">False</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButtonBox" id="hbox99">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="select_subaccounts_button">
-                            <property name="label" translatable="yes">_Select Subaccounts</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="border-width">3</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="select_all_button">
-                            <property name="label" translatable="yes">Select _All</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="border-width">3</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="resize">False</property>
-                <property name="shrink">False</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="date_vbox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">12</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="label847680">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Date Range</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="show_all">
-                    <property name="label" translatable="yes">_Select All</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="show_range">
-                    <property name="label" translatable="yes">Select _Range</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">show_all</property>
-                    <signal name="toggled" handler="csv_export_show_range_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=3 n-rows=6 -->
-                  <object class="GtkGrid" id="select_range_table">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="margin-top">12</property>
+              <object class="GtkSeparator" id="hseparator1" />
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame1">
+                <property name="child">
+                  <object class="GtkGrid" id="table1">
+                    <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="label847682">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Start</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="start_date_earliest">
-                        <property name="label" translatable="yes">_Earliest</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
+                      <object class="GtkCheckButton" id="quote_tbutton">
+                        <property name="label" translatable="1">Use Quotes</property>
+                        <property name="focusable">1</property>
                         <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                        <signal name="clicked" handler="csv_export_start_date_cb" swapped="no"/>
+                        <signal name="toggled" handler="csv_export_quote_cb" swapped="no" />
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="end_date_choose">
-                        <property name="label" translatable="yes">Cho_ose Date</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
+                      <object class="GtkCheckButton" id="simple_layout">
+                        <property name="label" translatable="1">Simple Layout</property>
+                        <property name="focusable">1</property>
                         <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">end_date_latest</property>
-                        <signal name="clicked" handler="csv_export_end_date_cb" swapped="no"/>
+                        <signal name="toggled" handler="csv_export_simple_cb" swapped="no" />
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="end_date_today">
-                        <property name="label" translatable="yes">Toda_y</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">end_date_latest</property>
-                        <signal name="clicked" handler="csv_export_end_date_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="end_date_latest">
-                        <property name="label" translatable="yes">_Latest</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="margin-top">6</property>
-                        <property name="use-underline">True</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                        <signal name="clicked" handler="csv_export_end_date_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label847684">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="margin-top">6</property>
-                        <property name="label" translatable="yes">End</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="start_date_choose">
-                        <property name="label" translatable="yes">C_hoose Date</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">start_date_earliest</property>
-                        <signal name="clicked" handler="csv_export_start_date_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="start_date_today">
-                        <property name="label" translatable="yes">_Today</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">start_date_earliest</property>
-                        <signal name="clicked" handler="csv_export_start_date_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="start_date_hbox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="end_date_hbox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">3</property>
-                  </packing>
+                </property>
+                <child type="label">
+                  <object class="GtkLabel" id="label1">
+                    <property name="label" translatable="1">Options</property>
+                    <style>
+                      <class name="gnc-class-strong" />
+                    </style>
+                  </object>
                 </child>
               </object>
-              <packing>
-                <property name="resize">False</property>
-                <property name="shrink">False</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame2">
+                <property name="child">
+                  <object class="GtkGrid" id="table2">
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="comma_radio">
+                        <property name="label" translatable="1">Comma (,)</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="csv_export_sep_cb" swapped="no" />
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="colon_radio">
+                        <property name="label" translatable="1">Colon (:)</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <property name="group">comma_radio</property>
+                        <signal name="toggled" handler="csv_export_sep_cb" swapped="no" />
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="semicolon_radio">
+                        <property name="label" translatable="1">Semicolon (;)</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <property name="group">comma_radio</property>
+                        <signal name="toggled" handler="csv_export_sep_cb" swapped="no" />
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="custom_radio">
+                        <property name="label" translatable="1">Custom</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="active">1</property>
+                        <property name="group">comma_radio</property>
+                        <signal name="toggled" handler="csv_export_sep_cb" swapped="no" />
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="custom_entry">
+                        <property name="focusable">1</property>
+<signal name="changed" handler="csv_export_custom_entry_cb" swapped="no" />
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <child type="label">
+                  <object class="GtkLabel" id="label2">
+                    <property name="label" translatable="1">Select Separator Character</property>
+                    <style>
+                      <class name="gnc-class-strong" />
+                    </style>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="title" translatable="yes">Account Selection</property>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkBox" id="file_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label4">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Enter file name and location for the Export…</property>
-            <property name="wrap">True</property>
+      <object class="GtkStackPage">
+        <property name="name">page-1</property>
+        <property name="title" translatable="1">Account Selection</property>
+<property name="child">
+          <object class="GtkBox" id="account_page">
+<property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="label5">
+                <property name="valign">center</property>
+                <property name="label" translatable="1">Select the accounts to be exported and date range if required.</property>
+                <property name="wrap">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkPaned" id="paned">
+                <property name="shrink-end-child">0</property>
+                <property name="resize-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
+                <property name="vexpand">1</property>
+                <property name="focusable">1</property>
+                <property name="position">1</property>
+                <property name="start-child">
+                  <object class="GtkBox" id="acct_info_vbox">
+<property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="accounts_label">
+                        <property name="valign">center</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="1">Accounts</property>
+                        <style>
+                          <class name="gnc-class-strong" />
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="vbox96">
+                        <property name="vexpand">1</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkScrolledWindow" id="account_scroll">
+                            <property name="vexpand">1</property>
+                            <property name="focusable">1</property>
+</object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox98">
+<property name="spacing">2</property>
+                            <child>
+                              <object class="GtkLabel" id="label42">
+                                <property name="halign">center</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="num_accounts_label">
+                                <property name="halign">center</property>
+                                <property name="justify">center</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label43">
+                                <property name="halign">center</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox99">
+                            <property name="visible">True</property>
+<property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkButton" id="select_subaccounts_button">
+                                <property name="label" translatable="1">_Select Subaccounts</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+<property name="use-underline">1</property>
+                              </object>
+
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="select_all_button">
+                                <property name="label" translatable="1">Select _All</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+<property name="use-underline">1</property>
+                              </object>
+
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="end-child">
+                  <object class="GtkBox" id="date_vbox">
+<property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label847680">
+                        <property name="valign">center</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="1">Date Range</property>
+                        <style>
+                          <class name="gnc-class-strong" />
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="show_all">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">_Select All</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">1</property>
+                        <property name="active">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="show_range">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">Select _Range</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">1</property>
+                        <property name="group">show_all</property>
+                        <signal name="toggled" handler="csv_export_show_range_cb" swapped="no" />
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="select_range_table">
+                        <property name="valign">center</property>
+                        <property name="margin-top">12</property>
+                        <property name="column-spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="label847682">
+                            <property name="halign">end</property>
+                            <property name="label" translatable="1">Start</property>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="start_date_earliest">
+                            <property name="label" translatable="1">_Earliest</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="use-underline">1</property>
+                            <property name="active">1</property>
+                            <signal name="toggled" handler="csv_export_start_date_cb" swapped="no" />
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="end_date_choose">
+                            <property name="label" translatable="1">Cho_ose Date</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="use-underline">1</property>
+                            <property name="group">end_date_latest</property>
+                            <signal name="toggled" handler="csv_export_end_date_cb" swapped="no" />
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">5</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="end_date_today">
+                            <property name="label" translatable="1">Toda_y</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="use-underline">1</property>
+                            <property name="group">end_date_latest</property>
+                            <signal name="toggled" handler="csv_export_end_date_cb" swapped="no" />
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">4</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="end_date_latest">
+                            <property name="label" translatable="1">_Latest</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="margin-top">6</property>
+                            <property name="use-underline">1</property>
+                            <property name="active">1</property>
+                            <signal name="toggled" handler="csv_export_end_date_cb" swapped="no" />
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">3</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label847684">
+                            <property name="halign">end</property>
+                            <property name="margin-top">6</property>
+                            <property name="label" translatable="1">End</property>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">3</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="start_date_choose">
+                            <property name="label" translatable="1">C_hoose Date</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="use-underline">1</property>
+                            <property name="group">start_date_earliest</property>
+                            <signal name="toggled" handler="csv_export_start_date_cb" swapped="no" />
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="start_date_today">
+                            <property name="label" translatable="1">_Today</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                            <property name="use-underline">1</property>
+                            <property name="group">start_date_earliest</property>
+                            <signal name="toggled" handler="csv_export_start_date_cb" swapped="no" />
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="start_date_hbox">
+                            <layout>
+                              <property name="column">2</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="end_date_hbox">
+                            <layout>
+                              <property name="column">2</property>
+                              <property name="row">5</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                        <child>
+                          <placeholder />
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="title" translatable="yes">Choose File Name for Export</property>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="end_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Press Apply to create export file.
+      <object class="GtkStackPage">
+        <property name="name">page-2</property>
+        <property name="title" translatable="1">Choose File Name for Export</property>
+<property name="child">
+          <object class="GtkBox" id="file_page">
+<property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="label4">
+                <property name="valign">center</property>
+                <property name="label" translatable="1">Choose file name and location for the Export…</property>
+                <property name="wrap">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="file_selection_box">
+                <property name="spacing">6</property>
+                <property name="margin-top">6</property>
+                <child>
+                  <object class="GtkButton" id="file_select_button">
+                    <property name="label" translatable="1">_Choose File…</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="file_name_label">
+                    <property name="label" translatable="1">No file selected</property>
+                    <property name="ellipsize">middle</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="selectable">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">page-3</property>
+        <property name="title" translatable="1">Export Now…</property>
+<property name="child">
+          <object class="GtkLabel" id="end_page">
+            <property name="label" translatable="1">Press Apply to create export file.
 Cancel to abort.</property>
-        <property name="wrap">True</property>
+            <property name="wrap">1</property>
+          </object>
+        </property>
       </object>
-      <packing>
-        <property name="page-type">confirm</property>
-        <property name="title" translatable="yes">Export Now…</property>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="summary_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Summary</property>
-        <property name="wrap">True</property>
+      <object class="GtkStackPage">
+        <property name="name">page-4</property>
+        <property name="title" translatable="1">Export Summary</property>
+<property name="child">
+          <object class="GtkLabel" id="summary_page">
+            <property name="label" translatable="1">Summary</property>
+            <property name="wrap">1</property>
+          </object>
+        </property>
       </object>
-      <packing>
-        <property name="page-type">summary</property>
-        <property name="title" translatable="yes">Export Summary</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
-    <child internal-child="action_area">
-      <object class="GtkBox">
-        <property name="can-focus">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="gnc_export_assistant_actions">
+            <property name="halign">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="gnc_export_assistant_cancel">
+                <property name="label">_Cancel</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_export_assistant_back">
+                <property name="label">_Back</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_export_assistant_next">
+                <property name="label">_Next</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_export_assistant_apply">
+                <property name="label">_Apply</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_export_assistant_close">
+                <property name="label">_Close</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

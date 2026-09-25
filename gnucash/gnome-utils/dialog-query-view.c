@@ -31,6 +31,7 @@
 #include "qof.h"
 
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-component-manager.h"
 
 #include "dialog-query-view.h"
@@ -130,31 +131,36 @@ dqv_save_window_size (DialogQueryView *dqv)
         gnc_save_window_size (dqv->pref_group, GTK_WINDOW(dqv->dialog));
 }
 
-static int
-gnc_dialog_query_view_delete_cb (GtkDialog *dialog, GdkEvent  *event, DialogQueryView *dqv)
+static void
+dqv_window_destroy_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer user_data)
 {
-    g_return_val_if_fail (dqv, TRUE);
+    DialogQueryView *dqv = user_data;
 
-    dqv_save_window_size (dqv);
+    g_return_if_fail (dqv);
 
-    gnc_unregister_gui_component (dqv->component_id);
+    if (dqv->component_id != NO_COMPONENT)
+        gnc_unregister_gui_component (dqv->component_id);
 
-    /* destroy the book list */
     dqv_clear_booklist (dqv);
-
-    /* Destroy and exit */
-    gtk_widget_destroy(dqv->dialog);
     g_free (dqv);
-    return FALSE;
 }
 
 static void
-close_handler (gpointer data)
+dqv_component_close_handler (gpointer user_data)
 {
-    DialogQueryView *dqv = data;
+    DialogQueryView *dqv = user_data;
 
     g_return_if_fail (dqv);
-    gnc_dialog_query_view_delete_cb (GTK_DIALOG(dqv->dialog), NULL, dqv);
+
+    dqv_save_window_size (dqv);
+    gtk_window_destroy (GTK_WINDOW (dqv->dialog));
+}
+
+static gboolean
+dqv_close_request_cb (G_GNUC_UNUSED GtkWindow *window, gpointer user_data)
+{
+    gnc_dialog_query_view_destroy (user_data);
+    return TRUE;
 }
 
 static void
@@ -179,24 +185,24 @@ gnc_dialog_query_view_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static void
-gnc_dialog_query_view_close (GtkButton *button, DialogQueryView *dqv)
+gnc_dialog_query_view_close (G_GNUC_UNUSED GtkButton *button, DialogQueryView *dqv)
 {
-    dqv_save_window_size (dqv);
-
-    /* Don't select anything */
+    /* Don't select anything. */
     gnc_dialog_query_view_destroy (dqv);
 }
 
 static gboolean
-dqv_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+dqv_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                         guint keycode, GdkModifierType state,
                          gpointer user_data)
 {
     DialogQueryView *dqv = user_data;
 
-    if (event->keyval == GDK_KEY_Escape)
-        dqv_save_window_size (dqv);
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
 
-    return FALSE;
+    gnc_dialog_query_view_destroy (dqv);
+    return TRUE;
 }
 
 /*****************************************************************/
@@ -207,10 +213,11 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
 {
     GtkBuilder  *builder;
     DialogQueryView *dqv;
-    GtkWidget *result_hbox, *close, *scrollWin, *frame;
+    GtkWidget *result_hbox, *close, *scrolled_window, *frame;
     GList *node;
 
     dqv = g_new0 (DialogQueryView, 1);
+    dqv->component_id = NO_COMPONENT;
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-query-view.glade", "query_view_dialog");
     dqv->pref_group = pref_group;
@@ -231,24 +238,26 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
     /* build the query list */
     dqv->qview = gnc_query_view_new (param_list, q);
 
-    frame = gtk_frame_new(NULL);
+    frame = gtk_frame_new (NULL);
 
-    scrollWin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
+    gnc_widget_set_all_margins (scrolled_window, 5);
 
-    gtk_container_add(GTK_CONTAINER(scrollWin), dqv->qview);
-    gtk_container_add(GTK_CONTAINER(frame), scrollWin);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(dqv->qview));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
 
-    gtk_box_pack_start (GTK_BOX (result_hbox), frame, TRUE, TRUE, 3);
+    gtk_box_append (GTK_BOX(result_hbox), GTK_WIDGET(frame));
 
     /* Create the button_box */
     dqv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
     gtk_box_set_homogeneous (GTK_BOX (dqv->button_box), FALSE);
 
-    gtk_box_pack_start (GTK_BOX (result_hbox), dqv->button_box, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(result_hbox), GTK_WIDGET(dqv->button_box));
+    gtk_box_set_spacing (GTK_BOX(result_hbox), 3);
 
     /* connect the double-click signal of the qview */
     g_signal_connect (G_OBJECT (dqv->qview), "double_click_entry",
@@ -258,14 +267,16 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
     g_signal_connect (G_OBJECT (close), "clicked",
                       G_CALLBACK (gnc_dialog_query_view_close), dqv);
 
-    /* connect to the cleanup */
-    g_signal_connect (G_OBJECT (dqv->dialog), "delete_event",
-                      G_CALLBACK (gnc_dialog_query_view_delete_cb), dqv);
+    /* The component manager owns close initiation; destruction releases it. */
+    g_signal_connect (dqv->dialog, "close-request",
+                      G_CALLBACK (dqv_close_request_cb), dqv);
+    g_signal_connect (dqv->dialog, "destroy",
+                      G_CALLBACK (dqv_window_destroy_cb), dqv);
 
-    /* register ourselves */
+    /* Register before watching books so a book close always tears down this window. */
     dqv->component_id = gnc_register_gui_component ("GNC Dialog Query View",
                         gnc_dialog_query_view_refresh_handler,
-                        close_handler, dqv);
+                        dqv_component_close_handler, dqv);
 
     /* Build the book list */
     dqv_build_booklist (dqv, q);
@@ -275,8 +286,11 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
         gnc_gui_component_watch_entity (dqv->component_id, (GncGUID*)node->data,
                                         QOF_EVENT_DESTROY);
 
-    g_signal_connect (G_OBJECT (dqv->dialog), "key_press_event",
-                      G_CALLBACK (dqv_window_key_press_cb), dqv);
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dqv->dialog), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window),
+                      "key-pressed",
+                      G_CALLBACK(dqv_window_key_press_cb), dqv);
 
     if (pref_group)
         gnc_restore_window_size (pref_group, GTK_WINDOW(dqv->dialog), GTK_WINDOW(parent));
@@ -321,7 +335,8 @@ void gnc_dialog_query_view_set_buttons (DialogQueryView *dqv,
         g_object_set_data (G_OBJECT (button), "data", &(dqv->buttons[i]));
         g_signal_connect (G_OBJECT (button), "clicked",
                           G_CALLBACK(gnc_dialog_query_view_button_clicked), dqv);
-        gtk_box_pack_start (GTK_BOX (dqv->button_box), button, FALSE, FALSE, 3);
+        gtk_box_append (GTK_BOX(dqv->button_box), GTK_WIDGET(button));
+        gtk_box_set_spacing (GTK_BOX(dqv->button_box), 3);
     }
 }
 
@@ -338,13 +353,18 @@ void gnc_dialog_query_view_refresh (DialogQueryView *dqv)
     if (!dqv) return;
 
     gnc_query_view_refresh (GNC_QUERY_VIEW(dqv->qview));
-    gtk_widget_show_all (dqv->dialog);
+    gtk_window_present (GTK_WINDOW (dqv->dialog));
 }
 
 void gnc_dialog_query_view_destroy (DialogQueryView *dqv)
 {
-    if (!dqv) return;
-    gnc_close_gui_component (dqv->component_id);
+    if (!dqv)
+        return;
+
+    if (dqv->component_id != NO_COMPONENT)
+        gnc_close_gui_component (dqv->component_id);
+    else
+        gtk_window_destroy (GTK_WINDOW (dqv->dialog));
 }
 
 DialogQueryView *

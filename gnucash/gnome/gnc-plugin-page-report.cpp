@@ -128,8 +128,8 @@ typedef struct GncPluginPageReportPrivate
 //        gnc_html *html;
     GncHtml *html;
 
-    /// the container the above HTML widget is in.
-    GtkContainer *container;
+    /// The report page widget containing the above HTML widget.
+    GtkWidget *container;
 } GncPluginPageReportPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageReport, gnc_plugin_page_report, GNC_TYPE_PLUGIN_PAGE)
@@ -149,7 +149,8 @@ static void gnc_plugin_page_report_save_page (GncPluginPage *plugin_page, GKeyFi
 static GncPluginPage *gnc_plugin_page_report_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name);
 static void gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide);
-static gboolean gnc_plugin_page_report_finish_pending (GncPluginPage *page);
+static void gnc_plugin_page_report_finish_pending_async (GncPluginPage *page, GCancellable *cancellable,
+                                                              GncPluginPagePendingCallback callback, gpointer user_data);
 static void gnc_plugin_page_report_load_uri (GncPluginPage *page);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
@@ -365,7 +366,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     gnc_plugin_page_class->recreate_page   = gnc_plugin_page_report_recreate_page;
     gnc_plugin_page_class->page_name_changed = gnc_plugin_page_report_name_changed;
     gnc_plugin_page_class->update_edit_menu_actions = gnc_plugin_page_report_update_edit_menu;
-    gnc_plugin_page_class->finish_pending   = gnc_plugin_page_report_finish_pending;
+    gnc_plugin_page_class->finish_pending_async = gnc_plugin_page_report_finish_pending_async;
     gnc_plugin_page_class->focus_page_function = gnc_plugin_page_report_focus_widget;
 
     // create the "reportId" property
@@ -393,14 +394,11 @@ static void
 gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
 {
     GtkWidget *progressbar;
-    GtkAllocation allocation;
 
     progressbar = gnc_window_get_progressbar (GNC_WINDOW(page->window));
-    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation);
-
     // this sets the minimum size of the progressbar to that allocated
     if (set)
-        gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, allocation.height);
+        gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, gtk_widget_get_height (GTK_WIDGET (progressbar)));
     else
         gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, -1); //reset
 }
@@ -435,7 +433,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     g_free(child_name);
 
     g_object_add_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
+    gtk_widget_set_visible (GTK_WIDGET(priv->container), TRUE);
 
     priv->loaded = TRUE;
 
@@ -462,8 +460,12 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
 /* used to capture Ctrl+Alt+PgUp/Down for tab selection */
 static gboolean
-webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+webkit_key_pressed_cb (GtkEventControllerKey *controller, guint keyval,
+                       guint keycode, GdkModifierType state, gpointer user_data)
 {
+    (void)controller;
+    (void)keycode;
+
     GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(user_data);
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
@@ -472,15 +474,19 @@ webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_
     if (GNC_PLUGIN_PAGE(report) != gnc_main_window_get_current_page (GNC_MAIN_WINDOW(window)))
         return FALSE;
 
-    if ((event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_Page_Down ||
-         event->keyval == GDK_KEY_KP_Page_Up || event->keyval == GDK_KEY_KP_Page_Down)
-          && (event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if ((keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_Page_Down ||
+         keyval == GDK_KEY_KP_Page_Up || keyval == GDK_KEY_KP_Page_Down)
+          && (state & modifiers) == (GDK_CONTROL_MASK | GDK_ALT_MASK))
     {
-        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->container)));
+        auto parent = gtk_widget_get_parent (priv->container);
+        if (!GTK_IS_NOTEBOOK (parent))
+            return FALSE;
+
+        GtkNotebook *notebook = GTK_NOTEBOOK(parent);
         gint pages = gtk_notebook_get_n_pages (notebook);
         gint current_page = gtk_notebook_get_current_page (notebook);
 
-        if (event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_KP_Page_Up)
+        if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_KP_Page_Up)
         {
             if (current_page == 0)
                 gtk_notebook_set_current_page (notebook, pages - 1);
@@ -528,14 +534,12 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                                          gnc_plugin_page_report_history_destroy_cb,
                                          (gpointer)priv);
 
-    priv->container = GTK_CONTAINER(gtk_frame_new(nullptr));
-    gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
+    priv->container = gtk_frame_new(nullptr);
 
     // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(priv->container), "gnc-id-report-page");
+    gtk_widget_set_name (priv->container, "gnc-id-report-page");
 
-    gtk_container_add(GTK_CONTAINER(priv->container),
-                      gnc_html_get_widget(priv->html));
+    gtk_frame_set_child (GTK_FRAME(priv->container), gnc_html_get_widget(priv->html));
 
     priv->component_manager_id =
         gnc_register_gui_component(WINDOW_REPORT_CM_CLASS, nullptr,
@@ -569,17 +573,17 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     webview = gnc_html_get_webview (priv->html);
     if (webview)
     {
-        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
-                               GDK_KEY_PRESS_MASK);
-
-        g_signal_connect (webview, "key-press-event",
-                          G_CALLBACK(webkit_key_press_event_cb),
+        auto controller = gtk_event_controller_key_new ();
+        gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+        gtk_widget_add_controller (webview, controller);
+        g_signal_connect (controller, "key-pressed",
+                          G_CALLBACK(webkit_key_pressed_cb),
                           page);
     }
 
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
+    gtk_widget_set_visible (priv->container, TRUE);
     LEAVE("container %p", priv->container);
-    return GTK_WIDGET( priv->container );
+    return priv->container;
 }
 
 /********************************************************************
@@ -1136,15 +1140,18 @@ gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide)
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 }
 
-static gboolean
-gnc_plugin_page_report_finish_pending (GncPluginPage *page)
+static void
+gnc_plugin_page_report_finish_pending_async (GncPluginPage *page,
+                                              GCancellable *cancellable,
+                                              GncPluginPagePendingCallback callback,
+                                              gpointer user_data)
 {
-    GncPluginPageReportPrivate *priv;
-    GncPluginPageReport *report;
+    auto report = GNC_PLUGIN_PAGE_REPORT(page);
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-    report = GNC_PLUGIN_PAGE_REPORT(page);
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    return !priv->reloading;
+    (void)cancellable;
+    if (callback)
+        callback (page, !priv->reloading, user_data);
 }
 
 
@@ -1167,10 +1174,13 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         scm_call_2(set_editor, SCM_CAR(edited), SCM_BOOL_F);
         if (editor != SCM_BOOL_F)
         {
-#define FUNC_NAME "gtk_widget_destroy"
+#define FUNC_NAME "gnc_plugin_page_report_destroy"
             auto w{static_cast<GtkWidget*>(SWIG_MustGetPtr(editor, SWIG_TypeQuery("_p_GtkWidget"), 1, 0))};
 #undef FUNC_NAME
-            gtk_widget_destroy(GTK_WIDGET(w));
+            if (GTK_IS_WINDOW (w))
+                gtk_window_destroy (GTK_WINDOW(w));
+            else if (gtk_widget_get_parent (w))
+                gtk_widget_unparent (w);
         }
     }
 
@@ -1273,8 +1283,6 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     action = gnc_main_window_find_action (window, "FilePrintAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
 
-    GtkWidget *pdf_item = gnc_main_window_menu_find_menu_item (window, "FilePrintPDFAction");
-    gtk_widget_hide (pdf_item);
     g_free (saved_reports_path);
     g_free (report_save_str);
     g_free (report_saveas_str);
@@ -1497,25 +1505,367 @@ gnc_plugin_page_report_stop_cb (GSimpleAction *simple,
     gnc_html_cancel(priv->html);
 }
 
-/* Returns SCM_BOOL_F if cancel. Returns SCM_BOOL_T if html.
- * Otherwise returns pair from export_types. */
-static SCM
-gnc_get_export_type_choice (SCM export_types, GtkWindow *parent)
-{
-    GList * choices = nullptr;
-    gboolean bad = FALSE;
-    GList * node;
-    int choice;
-    SCM tail;
 
-    if (!scm_is_list (export_types))
+static gchar *
+gnc_report_export_type (SCM choice)
+{
+    if (choice == SCM_BOOL_T)
+        return g_strdup (_("HTML"));
+
+    return gnc_scm_to_utf8_string (SCM_CAR (choice));
+}
+
+static gchar *
+gnc_report_export_title (SCM choice)
+{
+    gchar *type = gnc_report_export_type (choice);
+    gchar *title = g_strdup_printf (_("Save %s To File"), type);
+
+    g_free (type);
+    return title;
+}
+
+static gchar *
+gnc_report_export_filepath (GFile *file, SCM choice, GtkWindow *parent,
+                            gboolean *needs_overwrite_confirmation)
+{
+    gchar *filepath = g_file_get_path (file);
+    GStatBuf statbuf;
+    gchar *type;
+    gint rc;
+
+    *needs_overwrite_confirmation = FALSE;
+
+    if (!filepath)
+    {
+        gnc_error_dialog (parent, "%s", _("Please select a local file."));
+        return nullptr;
+    }
+
+    type = gnc_report_export_type (choice);
+    if (!strchr (filepath, '.'))
+    {
+        gchar *extension = g_ascii_strdown (type, -1);
+        gchar *newpath = g_strdup_printf ("%s.%s", filepath, extension);
+
+        g_free (extension);
+        g_free (filepath);
+        filepath = newpath;
+    }
+    g_free (type);
+
+    {
+        gchar *default_dir = g_path_get_dirname (filepath);
+        gnc_set_default_directory (GNC_PREFS_GROUP_REPORT, default_dir);
+        g_free (default_dir);
+    }
+
+    rc = g_stat (filepath, &statbuf);
+    if (rc != 0 && errno != ENOENT)
+    {
+        /* %s is the strerror(3) string of the error that occurred. */
+        const char *format = _("You cannot save to that filename.\n\n%s");
+
+        gnc_error_dialog (parent, format, strerror (errno));
+        g_free (filepath);
+        return nullptr;
+    }
+
+    if (rc == 0 && !S_ISREG (statbuf.st_mode))
+    {
+        gnc_error_dialog (parent, "%s", _("You cannot save to that file."));
+        g_free (filepath);
+        return nullptr;
+    }
+
+    if (rc == 0)
+        *needs_overwrite_confirmation = TRUE;
+
+    return filepath;
+}
+
+typedef struct
+{
+    GWeakRef page;
+    SCM report_id;
+    SCM choice;
+    SCM export_thunk;
+} GncReportExportData;
+
+static void
+gnc_report_export_data_free (GncReportExportData *data)
+{
+    scm_gc_unprotect_object (data->report_id);
+    scm_gc_unprotect_object (data->choice);
+    scm_gc_unprotect_object (data->export_thunk);
+    g_weak_ref_clear (&data->page);
+    g_free (data);
+}
+
+typedef struct
+{
+    GncReportExportData *data;
+    gchar *filepath;
+} GncReportExportOverwriteRequest;
+
+static void
+gnc_report_export_overwrite_request_free (GncReportExportOverwriteRequest *request)
+{
+    g_free (request->filepath);
+    gnc_report_export_data_free (request->data);
+    g_free (request);
+}
+
+static void
+gnc_plugin_page_report_export_to_file (GncPluginPageReport *report,
+                                       SCM report_id, SCM choice,
+                                       SCM export_thunk, GtkWindow *parent,
+                                       const gchar *filepath)
+{
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    gboolean result;
+
+    if (scm_is_pair (choice))
+    {
+        SCM type = scm_cdr (choice);
+        SCM document = scm_call_2 (export_thunk, report_id, type);
+        SCM query_result = scm_c_eval_string ("gnc:html-document?");
+        SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
+        SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
+
+        if (scm_is_false (scm_call_1 (query_result, document)))
+            gnc_error_dialog (parent, "%s",
+                              _("This report must be upgraded to return a "
+                                "document object with export-string or "
+                                "export-error."));
+        else
+        {
+            SCM export_string = scm_call_1 (get_export_string, document);
+            SCM export_error = scm_call_1 (get_export_error, document);
+
+            if (scm_is_string (export_string))
+            {
+                GError *error = nullptr;
+                gchar *exported = scm_to_utf8_string (export_string);
+
+                if (!g_file_set_contents (filepath, exported, -1, &error))
+                    gnc_error_dialog (parent, "Error during export: %s",
+                                      error->message);
+                g_free (exported);
+                g_clear_error (&error);
+            }
+            else if (scm_is_string (export_error))
+            {
+                gchar *str = scm_to_utf8_string (export_error);
+
+                gnc_error_dialog (parent, "error during export: %s", str);
+                g_free (str);
+            }
+            else
+                gnc_error_dialog (parent, "%s",
+                                  _("This report must be upgraded to return a "
+                                    "document object with export-string or "
+                                    "export-error."));
+        }
+        result = TRUE;
+    }
+    else
+        result = gnc_html_export_to_file (priv->html, filepath);
+
+    if (!result)
+    {
+        const char *format = _("Could not open the file %s. "
+                               "The error is: %s");
+
+        gnc_error_dialog (parent, format, filepath, strerror (errno));
+    }
+}
+
+static void
+gnc_report_export_data_to_file (GncReportExportData *data,
+                                const gchar *filepath)
+{
+    auto report = static_cast<GncPluginPageReport *> (
+        g_weak_ref_get (&data->page));
+
+    if (report)
+    {
+        auto parent = GTK_WINDOW (gnc_plugin_page_get_window (
+            GNC_PLUGIN_PAGE (report)));
+
+        gnc_plugin_page_report_export_to_file (report, data->report_id,
+                                               data->choice, data->export_thunk,
+                                               parent, filepath);
+        g_object_unref (report);
+    }
+}
+
+static void
+gnc_report_export_overwrite_finished (GtkWindow *parent, gint response,
+                                      gpointer user_data)
+{
+    auto request = static_cast<GncReportExportOverwriteRequest *> (user_data);
+
+    (void)parent;
+    if (response == GTK_RESPONSE_ACCEPT)
+        gnc_report_export_data_to_file (request->data, request->filepath);
+
+    gnc_report_export_overwrite_request_free (request);
+}
+
+static void
+gnc_report_export_file_selected (GObject *source, GAsyncResult *result,
+                                 gpointer user_data)
+{
+    GncReportExportData *data = static_cast<GncReportExportData *> (user_data);
+    auto request = GNC_FILE_DIALOG_REQUEST (source);
+    GError *error = nullptr;
+    GFile *file = gnc_file_dialog_request_finish (request, result, &error);
+    auto report = static_cast<GncPluginPageReport *> (g_weak_ref_get (&data->page));
+    gboolean waiting_for_overwrite_confirmation = FALSE;
+
+    if (report)
+    {
+        auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
+
+        if (file)
+        {
+            gboolean needs_overwrite_confirmation;
+            gchar *filepath = gnc_report_export_filepath (
+                file, data->choice, parent, &needs_overwrite_confirmation);
+
+            if (filepath)
+            {
+                if (needs_overwrite_confirmation)
+                {
+                    const char *format = _("The file %s already exists. "
+                                           "Are you sure you want to overwrite it?");
+                    auto overwrite = g_new0 (GncReportExportOverwriteRequest, 1);
+
+                    overwrite->data = data;
+                    overwrite->filepath = filepath;
+                    gnc_verify_dialog_async (
+                        parent, FALSE, gnc_report_export_overwrite_finished,
+                        overwrite, format, filepath);
+                    waiting_for_overwrite_confirmation = TRUE;
+                }
+                else
+                {
+                    gnc_plugin_page_report_export_to_file (
+                        report, data->report_id, data->choice,
+                        data->export_thunk, parent, filepath);
+                    g_free (filepath);
+                }
+            }
+        }
+        else if (error &&
+                 !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+            gnc_error_dialog (parent, "%s", error->message);
+        }
+    }
+
+    g_clear_object (&file);
+    g_clear_error (&error);
+    g_clear_object (&report);
+    if (!waiting_for_overwrite_confirmation)
+        gnc_report_export_data_free (data);
+}
+
+static void
+gnc_report_export_begin (GncPluginPageReport *report, SCM report_id,
+                         SCM choice, SCM export_thunk)
+{
+    GncReportExportData *data = g_new0 (GncReportExportData, 1);
+    GncFileDialogRequest *request;
+    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE (report)));
+    gchar *title = gnc_report_export_title (choice);
+    gchar *default_dir = gnc_get_default_directory (GNC_PREFS_GROUP_REPORT);
+
+    g_weak_ref_init (&data->page, report);
+    data->report_id = report_id;
+    data->choice = choice;
+    data->export_thunk = export_thunk;
+    scm_gc_protect_object (data->report_id);
+    scm_gc_protect_object (data->choice);
+    scm_gc_protect_object (data->export_thunk);
+
+    request = gnc_file_dialog_request_new (parent, title, nullptr, default_dir,
+                                           GNC_FILE_DIALOG_EXPORT);
+    gnc_file_dialog_request_save_async (request, nullptr,
+                                        gnc_report_export_file_selected, data);
+    g_object_unref (request);
+    g_free (title);
+    g_free (default_dir);
+}
+
+typedef struct
+{
+    GWeakRef page;
+    SCM report_id;
+    SCM export_types;
+    SCM export_thunk;
+} GncReportExportFormatRequest;
+
+static void
+gnc_report_export_format_request_free (GncReportExportFormatRequest *request)
+{
+    scm_gc_unprotect_object (request->report_id);
+    scm_gc_unprotect_object (request->export_types);
+    scm_gc_unprotect_object (request->export_thunk);
+    g_weak_ref_clear (&request->page);
+    g_free (request);
+}
+
+static SCM
+gnc_report_export_choice_for_index (SCM export_types, gint choice)
+{
+    if (choice < 0)
         return SCM_BOOL_F;
+    if (choice == 0)
+        return SCM_BOOL_T;
+
+    choice--;
+    if (choice >= scm_ilength (export_types))
+        return SCM_BOOL_F;
+
+    return scm_list_ref (export_types, scm_from_int (choice));
+}
+
+static void
+gnc_report_export_format_selected (GtkWindow *parent, gint choice,
+                                   gpointer user_data)
+{
+    auto request = static_cast<GncReportExportFormatRequest *> (user_data);
+    SCM export_choice = gnc_report_export_choice_for_index (
+        request->export_types, choice);
+    auto report = static_cast<GncPluginPageReport *> (
+        g_weak_ref_get (&request->page));
+
+    (void)parent;
+    if (report && export_choice != SCM_BOOL_F)
+        gnc_report_export_begin (report, request->report_id, export_choice,
+                                 request->export_thunk);
+
+    g_clear_object (&report);
+    gnc_report_export_format_request_free (request);
+}
+
+static void
+gnc_report_export_choose_format (GncPluginPageReport *report, SCM report_id,
+                                 SCM export_types, SCM export_thunk)
+{
+    GList *choices = nullptr;
+    GList *node;
+    SCM tail;
+    gboolean bad = FALSE;
+    GtkWindow *parent;
 
     for (tail = export_types; !scm_is_null (tail); tail = SCM_CDR (tail))
     {
         SCM pair = SCM_CAR (tail);
-        char * name;
-        SCM scm;
+        SCM value;
 
         if (!scm_is_pair (pair))
         {
@@ -1524,129 +1874,47 @@ gnc_get_export_type_choice (SCM export_types, GtkWindow *parent)
             break;
         }
 
-        scm = SCM_CAR (pair);
-        if (!scm_is_string (scm))
+        value = SCM_CAR (pair);
+        if (!scm_is_string (value))
         {
             g_warning ("unexpected pair element");
             bad = TRUE;
             break;
         }
 
-        name = gnc_scm_to_utf8_string (scm);
-        choices = g_list_prepend (choices, name);
+        choices = g_list_prepend (choices, gnc_scm_to_utf8_string (value));
     }
 
-    if (!bad)
+    if (bad)
     {
-        choices = g_list_reverse (choices);
-
-        choices = g_list_prepend (choices, g_strdup (_("HTML")));
-
-        choice = gnc_choose_radio_option_dialog
-            (GTK_WIDGET (parent), _("Choose export format"),
-             _("Choose the export format for this report:"),
-             nullptr, 0, choices);
+        g_list_free_full (choices, g_free);
+        return;
     }
-    else
-        choice = -1;
+
+    choices = g_list_reverse (choices);
+    choices = g_list_prepend (choices, g_strdup (_("HTML")));
+
+    {
+        auto request = g_new0 (GncReportExportFormatRequest, 1);
+
+        g_weak_ref_init (&request->page, report);
+        request->report_id = report_id;
+        request->export_types = export_types;
+        request->export_thunk = export_thunk;
+        scm_gc_protect_object (request->report_id);
+        scm_gc_protect_object (request->export_types);
+        scm_gc_protect_object (request->export_thunk);
+
+        parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
+        gnc_choose_option_dialog_async (
+            parent, _("Choose export format"),
+            _("Choose the export format for this report:"), choices, 0,
+            gnc_report_export_format_selected, request);
+    }
 
     for (node = choices; node; node = node->next)
         g_free (node->data);
     g_list_free (choices);
-
-    if (choice < 0)
-        return SCM_BOOL_F;
-
-    if (choice == 0)
-        return SCM_BOOL_T;
-
-    choice--;
-    if (choice >= scm_ilength (export_types))
-        return SCM_BOOL_F;
-
-    return scm_list_ref (export_types, scm_from_int  (choice));
-}
-
-static char *
-gnc_get_export_filename (SCM choice, GtkWindow *parent)
-{
-    char * filepath;
-    GStatBuf statbuf;
-    char * title;
-    const gchar * html_type = _("HTML");
-    char * type;
-    int rc;
-    char * default_dir;
-
-    if (choice == SCM_BOOL_T)
-        type = g_strdup (html_type);
-    else
-        type = gnc_scm_to_utf8_string(SCM_CAR (choice));
-
-    /* %s is the type of what is about to be saved, e.g. "HTML". */
-    title = g_strdup_printf (_("Save %s To File"), type);
-    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_REPORT);
-
-    filepath = gnc_file_dialog (parent, title, nullptr, default_dir,
-                                GNC_FILE_DIALOG_EXPORT);
-
-    /* Try to test for extension on file name, add if missing */
-    if (filepath && strchr (filepath, '.') == nullptr)
-    {
-        char* extension = g_ascii_strdown (type, -1);
-        char* newpath = g_strdup_printf ("%s.%s", filepath, extension);
-        g_free (extension);
-        g_free (filepath);
-        filepath = newpath;
-    }
-
-    g_free (type);
-    g_free (title);
-    g_free (default_dir);
-
-    if (!filepath)
-        return nullptr;
-
-    default_dir = g_path_get_dirname(filepath);
-    gnc_set_default_directory (GNC_PREFS_GROUP_REPORT, default_dir);
-    g_free(default_dir);
-
-    rc = g_stat (filepath, &statbuf);
-
-    /* Check for an error that isn't a non-existent file. */
-    if (rc != 0 && errno != ENOENT)
-    {
-        /* %s is the strerror(3) string of the error that occurred. */
-        const char *format = _("You cannot save to that filename.\n\n%s");
-
-        gnc_error_dialog (parent, format, strerror(errno));
-        g_free(filepath);
-        return nullptr;
-    }
-
-    /* Check for a file that isn't a regular file. */
-    if (rc == 0 && !S_ISREG (statbuf.st_mode))
-    {
-        const char *message = _("You cannot save to that file.");
-
-        gnc_error_dialog (parent, "%s", message);
-        g_free(filepath);
-        return nullptr;
-    }
-
-    if (rc == 0)
-    {
-        const char *format = _("The file %s already exists. "
-                               "Are you sure you want to overwrite it?");
-
-        if (!gnc_verify_dialog (parent, FALSE, format, filepath))
-        {
-            g_free(filepath);
-            return nullptr;
-        }
-    }
-
-    return filepath;
 }
 
 static void
@@ -1695,6 +1963,32 @@ gnc_plugin_page_report_save_as_cb (GSimpleAction *simple,
 
 }
 
+typedef struct
+{
+    SCM report_id;
+} GncReportOverwriteRequest;
+
+static void
+gnc_report_overwrite_request_free (GncReportOverwriteRequest *request)
+{
+    scm_gc_unprotect_object (request->report_id);
+    g_free (request);
+}
+
+static void
+gnc_report_overwrite_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    auto request = static_cast<GncReportOverwriteRequest *> (user_data);
+
+    (void)parent;
+    if (response == GTK_RESPONSE_ACCEPT)
+    {
+        SCM save_func = scm_c_eval_string ("gnc:report-to-template-update");
+        (void)scm_call_1 (save_func, request->report_id);
+    }
+    gnc_report_overwrite_request_free (request);
+}
+
 static void
 gnc_plugin_page_report_save_cb (GSimpleAction *simple,
                                 GVariant *parameter,
@@ -1702,8 +1996,7 @@ gnc_plugin_page_report_save_cb (GSimpleAction *simple,
 {
     GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
-    SCM check_func, save_func;
-    SCM rpt_id;
+    SCM check_func;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
@@ -1715,16 +2008,13 @@ gnc_plugin_page_report_save_cb (GSimpleAction *simple,
         auto report_name_str{priv->cur_odb->lookup_string_option("General", "Report name")};
         auto window{GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report)))};
 
-        if (!gnc_action_dialog (window, _("_Overwrite"), false, _("This will update and \
-overwrite the existing saved report named \"%s\"."), report_name_str.c_str()))
-            return;
-
-        /* The current report is already based on a custom report.
-         * Replace the existing one instead of adding a new one
-         */
-        save_func = scm_c_eval_string("gnc:report-to-template-update");
-        rpt_id = scm_call_1(save_func, priv->cur_report);
-        (void)rpt_id;
+        auto request = g_new0 (GncReportOverwriteRequest, 1);
+        request->report_id = priv->cur_report;
+        scm_gc_protect_object (request->report_id);
+        gnc_action_dialog_async (window, _("Overwrite"), false,
+                                 gnc_report_overwrite_finished, request,
+                                 _("This will update and overwrite the existing saved report "
+                                   "named \"%s\"."), report_name_str.c_str());
     }
     else
     {
@@ -1741,92 +2031,23 @@ gnc_plugin_page_report_export_cb (GSimpleAction *simple,
                                   GVariant *parameter,
                                   gpointer user_data)
 {
-    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
-    GncPluginPageReportPrivate *priv;
-    char * filepath;
-    SCM export_types;
-    SCM export_thunk;
-    gboolean result;
-    SCM choice;
-    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window
-                                    (GNC_PLUGIN_PAGE (report)));
-
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    export_types = scm_call_1 (scm_c_eval_string ("gnc:report-export-types"),
-                               priv->cur_report);
-
-    export_thunk = scm_call_1 (scm_c_eval_string ("gnc:report-export-thunk"),
-                               priv->cur_report);
+    auto report = static_cast<GncPluginPageReport *> (user_data);
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    SCM export_types = scm_call_1 (scm_c_eval_string ("gnc:report-export-types"),
+                                   priv->cur_report);
+    SCM export_thunk = scm_call_1 (scm_c_eval_string ("gnc:report-export-thunk"),
+                                   priv->cur_report);
 
     if (scm_is_list (export_types) && scm_is_procedure (export_thunk))
-        choice = gnc_get_export_type_choice (export_types, parent);
+        gnc_report_export_choose_format (report, priv->cur_report, export_types,
+                                         export_thunk);
     else
-        choice = SCM_BOOL_T;
+        gnc_report_export_begin (report, priv->cur_report, SCM_BOOL_T,
+                                 export_thunk);
 
-    if (choice == SCM_BOOL_F)
-        return;
-
-    filepath = gnc_get_export_filename (choice, parent);
-    if (!filepath)
-        return;
-
-    if (scm_is_pair (choice))
-    {
-        SCM type = scm_cdr (choice);
-        SCM document = scm_call_2 (export_thunk, priv->cur_report, type);
-        SCM query_result = scm_c_eval_string ("gnc:html-document?");
-        SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
-        SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
-
-        if (scm_is_false (scm_call_1 (query_result, document)))
-            gnc_error_dialog (parent, "%s",
-                              _("This report must be upgraded to return a "
-                                "document object with export-string or "
-                                "export-error."));
-        else
-        {
-            SCM export_string = scm_call_1 (get_export_string, document);
-            SCM export_error = scm_call_1 (get_export_error, document);
-
-            if (scm_is_string (export_string))
-            {
-                GError *err = nullptr;
-                gchar *exported = scm_to_utf8_string (export_string);
-                if (!g_file_set_contents (filepath, exported, -1, &err))
-                    gnc_error_dialog (parent, "Error during export: %s", err->message);
-                g_free (exported);
-                if (err)
-                    g_error_free (err);
-            }
-            else if (scm_is_string (export_error))
-            {
-                gchar *str = scm_to_utf8_string (export_error);
-                gnc_error_dialog (parent, "error during export: %s", str);
-                g_free (str);
-            }
-            else
-                gnc_error_dialog (parent, "%s",
-                                   _("This report must be upgraded to return a "
-                                     "document object with export-string or "
-                                     "export-error."));
-        }
-        result = TRUE;
-    }
-    else
-        result = gnc_html_export_to_file (priv->html, filepath);
-
-    if (!result)
-    {
-        const char *fmt = _("Could not open the file %s. "
-                            "The error is: %s");
-        gnc_error_dialog (parent, fmt, filepath ? filepath : "(null)",
-                          strerror (errno) ? strerror (errno) : "" );
-    }
-
-    g_free(filepath);
-    return;
+    (void)simple;
+    (void)parameter;
 }
-
 static void
 gnc_plugin_page_report_options_cb (GSimpleAction *simple,
                                    GVariant *parameter,
@@ -1982,20 +2203,154 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
     return job_name;
 }
 
+typedef struct
+{
+    GWeakRef page;
+} GncReportPdfData;
+
+static void
+report_pdf_data_free (GncReportPdfData *data)
+{
+    g_weak_ref_clear (&data->page);
+    g_free (data);
+}
+
+static gchar *
+report_pdf_filename (const gchar *job_name)
+{
+    return g_str_has_suffix (job_name, ".pdf") ? g_strdup (job_name)
+                                                  : g_strconcat (job_name, ".pdf", nullptr);
+}
+
+static gchar *
+report_pdf_starting_directory (const gchar *filename)
+{
+    gchar *directory = g_path_get_dirname (filename);
+    GtkPrintSettings *print_settings;
+    const gchar *stored_directory;
+
+    if (g_strcmp0 (directory, ".") != 0 &&
+        g_file_test (directory, static_cast<GFileTest>(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
+        return directory;
+    g_free (directory);
+
+    print_settings = gnc_print_get_settings ();
+    stored_directory = print_settings
+                           ? gtk_print_settings_get (print_settings,
+                                                     GNC_GTK_PRINT_SETTINGS_EXPORT_DIR)
+                           : nullptr;
+    if (stored_directory &&
+        g_file_test (stored_directory, static_cast<GFileTest>(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
+        return g_strdup (stored_directory);
+
+    directory = gnc_get_default_directory (GNC_PREFS_GROUP_REPORT);
+    if (directory &&
+        g_file_test (directory, static_cast<GFileTest>(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
+        return directory;
+    g_free (directory);
+    return g_get_current_dir ();
+}
+
+static GList *
+report_pdf_filters (void)
+{
+    GtkFileFilter *filter = gtk_file_filter_new ();
+
+    gtk_file_filter_set_name (filter, _("PDF files"));
+    gtk_file_filter_add_pattern (filter, "*.pdf");
+    return g_list_append (nullptr, filter);
+}
+
+static void
+report_pdf_store_output_directory (GncPluginPageReport *report,
+                                   const gchar *filename)
+{
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    gchar *directory = g_path_get_dirname (filename);
+    GtkPrintSettings *print_settings;
+    GncInvoice *invoice;
+    GncOwner *owner;
+
+    if (!g_file_test (directory, static_cast<GFileTest>(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
+    {
+        g_free (directory);
+        return;
+    }
+
+    gnc_set_default_directory (GNC_PREFS_GROUP_REPORT, directory);
+    print_settings = gnc_print_get_settings ();
+    if (print_settings)
+        gtk_print_settings_set (print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR,
+                                directory);
+
+    invoice = lookup_invoice (priv);
+    owner = invoice ? (GncOwner *)gncInvoiceGetOwner (invoice) : nullptr;
+    if (owner)
+    {
+        QofInstance *instance = qofOwnerGetOwner (owner);
+
+        gncOwnerBeginEdit (owner);
+        qof_instance_set (instance, "export-pdf-dir", directory);
+        gncOwnerCommitEdit (owner);
+    }
+    g_free (directory);
+}
+
+static void
+report_pdf_file_selected (GObject *source, GAsyncResult *result,
+                          gpointer user_data)
+{
+    GncReportPdfData *data = static_cast<GncReportPdfData *> (user_data);
+    GncFileDialogRequest *request = GNC_FILE_DIALOG_REQUEST (source);
+    GError *error = nullptr;
+    GFile *file = gnc_file_dialog_request_finish (request, result, &error);
+    auto report = static_cast<GncPluginPageReport *> (g_weak_ref_get (&data->page));
+
+    if (report)
+    {
+        auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
+
+        if (file)
+        {
+            gchar *filename = g_file_get_path (file);
+
+            if (filename)
+            {
+                auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+
+                gnc_html_print (priv->html, filename, TRUE);
+                report_pdf_store_output_directory (report, filename);
+                g_free (filename);
+            }
+            else
+                gnc_error_dialog (parent, "%s",
+                                  _("Please select a local file for the PDF export."));
+        }
+        else if (error &&
+                 !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+            gnc_error_dialog (parent, "%s", error->message);
+        g_object_unref (report);
+    }
+
+    g_clear_object (&file);
+    g_clear_error (&error);
+    report_pdf_data_free (data);
+}
+
 static void
 gnc_plugin_page_report_print_cb (GSimpleAction *simple,
                                  GVariant *parameter,
                                  gpointer user_data)
 {
-    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
-    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    gchar *job_name = report_create_jobname(priv);
+    auto report = static_cast<GncPluginPageReport *> (user_data);
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    gchar *job_name = report_create_jobname (priv);
 
-    //g_warning("Setting job name=%s", job_name);
-
-    gnc_html_print (priv->html, job_name);
-
+    gnc_html_print (priv->html, job_name, FALSE);
     g_free (job_name);
+
+    (void)simple;
+    (void)parameter;
 }
 
 static void
@@ -2003,66 +2358,34 @@ gnc_plugin_page_report_exportpdf_cb (GSimpleAction *simple,
                                      GVariant *parameter,
                                      gpointer user_data)
 {
-    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
-    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    gchar *job_name = report_create_jobname(priv);
-    GncInvoice *invoice;
-    GncOwner *owner = nullptr;
+    auto report = static_cast<GncPluginPageReport *> (user_data);
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
+    gchar *job_name = report_create_jobname (priv);
+    gchar *filename = report_pdf_filename (job_name);
+    gchar *directory = report_pdf_starting_directory (filename);
+    gchar *basename = g_path_get_basename (filename);
+    gchar *proposed_filename = g_build_filename (directory, basename, nullptr);
+    GFile *initial_file = g_file_new_for_path (proposed_filename);
+    GncReportPdfData *data = g_new0 (GncReportPdfData, 1);
+    GncFileDialogRequest *request = gnc_file_dialog_request_new_for_file (
+        parent, _("Export to PDF File"), report_pdf_filters (), initial_file,
+        GNC_FILE_DIALOG_EXPORT);
 
-    // Do we have an invoice report?
-    invoice = lookup_invoice(priv);
-    if (invoice)
-    {
-        // Does this invoice also have an owner?
-        owner = (GncOwner*) gncInvoiceGetOwner(invoice);
-        if (owner)
-        {
-            QofInstance *inst = qofOwnerGetOwner (owner);
-            gchar *dirname = nullptr;
-            qof_instance_get (inst, "export-pdf-dir", &dirname, nullptr);
-            // Yes. In the kvp, look up the key for the Export-PDF output
-            // directory. If it exists, prepend this to the job name so that
-            // we can export to PDF.
-            if (dirname && g_file_test (dirname,
-                       (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
-            {
-                gchar *tmp = g_build_filename (dirname, job_name, nullptr);
-                g_free (job_name);
-                job_name = tmp;
-            }
-        }
-    }
-
-    //g_warning("Setting job name=%s", job_name);
-
-    gnc_html_print (priv->html, job_name);
-
-    if (owner)
-    {
-        /* As this is an invoice report with some owner, we will try
-         * to look up the chosen output directory from the print
-         * settings and store it again in the owner kvp.
-         */
-        GtkPrintSettings *print_settings = gnc_print_get_settings();
-        if (print_settings && gtk_print_settings_has_key (print_settings,
-                                  GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
-        {
-            const char* dirname = gtk_print_settings_get (print_settings,
-                                      GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
-            // Only store the directory if it exists.
-            if (g_file_test (dirname,
-                            (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
-            {
-                QofInstance *inst = qofOwnerGetOwner (owner);
-                gncOwnerBeginEdit (owner);
-                qof_instance_set (inst, "export-pdf-dir", dirname);
-                gncOwnerCommitEdit (owner);
-            }
-        }
-    }
+    g_weak_ref_init (&data->page, report);
+    gnc_file_dialog_request_save_async (request, nullptr, report_pdf_file_selected,
+                                        data);
+    g_object_unref (request);
+    g_object_unref (initial_file);
+    g_free (proposed_filename);
+    g_free (basename);
+    g_free (directory);
+    g_free (filename);
     g_free (job_name);
-}
 
+    (void)simple;
+    (void)parameter;
+}
 static void
 gnc_plugin_page_report_copy_cb (GSimpleAction *simple,
                                 GVariant *parameter,

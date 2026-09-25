@@ -212,6 +212,11 @@ typedef struct
 } action_toolbar_labels;
 
 
+/** Validate the explicit GTK4 icon-above-label toolbar content and update
+ *  its accessible label. */
+void gnc_plugin_prepare_toolbar (GtkWidget *toolbar);
+
+
 /** Add "short" labels to existing actions.  The "short" label is the
  *  string used on toolbar buttons when the action is visible.  All
  *  toolbar buttons are homogeneous in size and are sized to fit the

@@ -34,12 +34,15 @@
 
 #include <glib.h>
 
+#include <deque>
+
 #include "qof.h"
 #include "Account.h"
 #include "AccountP.hpp"
 #include "Account.hpp"
 #include "Transaction.h"
 #include "TransactionP.hpp"
+#include "Scrub.h"
 #include "Scrub2.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
@@ -48,6 +51,360 @@
 #include "policy-p.h"
 
 static QofLogModule log_module = GNC_MOD_LOT;
+
+struct GncLotStatsPlan
+{
+    GncScrubContext *context;
+    QofBook *book;
+    GncGUID lot_guid;
+    GList *next;
+    guint64 generation;
+    gnc_numeric amount;
+    gnc_numeric value;
+    guint split_count;
+    GncGUID earliest_split;
+    GncGUID latest_split;
+    GncGUID currency;
+    gboolean has_earliest;
+    gboolean has_latest;
+    gboolean has_currency;
+    GncLotStatsPlanState state;
+};
+
+struct GncLotAssignmentPlan
+{
+    GncScrubContext *context;
+    QofBook *book;
+    GncGUID account_guid;
+    std::deque<GncGUID> split_guids;
+    guint completed;
+    guint examined;
+    GncLotAssignmentPlanState state;
+};
+
+static GncLotStatsPlanState
+lot_stats_validate (GncLotStatsPlan *plan)
+{
+    if (!plan || plan->state != GNC_LOT_STATS_RUNNING)
+        return plan ? plan->state : GNC_LOT_STATS_FAILED;
+    if (gnc_scrub_context_is_cancelled (plan->context))
+        return plan->state = GNC_LOT_STATS_CANCELLED;
+    if (!gnc_scrub_context_owns_book (plan->context, plan->book))
+        return plan->state = GNC_LOT_STATS_STALE;
+    auto lot = gnc_lot_lookup (&plan->lot_guid, plan->book);
+    if (!lot || gnc_lot_get_scrub_generation (lot) != plan->generation)
+        return plan->state = GNC_LOT_STATS_STALE;
+    return plan->state;
+}
+
+GncLotStatsPlan *
+gnc_lot_stats_plan_begin (GNCLot *lot, GncScrubContext *context)
+{
+    if (!lot || !context)
+        return nullptr;
+    auto book = qof_instance_get_book (QOF_INSTANCE (lot));
+    if (!gnc_scrub_context_owns_book (context, book))
+        return nullptr;
+    return new GncLotStatsPlan {
+        gnc_scrub_context_ref (context), book,
+        *qof_instance_get_guid (QOF_INSTANCE (lot)),
+        gnc_lot_get_split_list (lot), gnc_lot_get_scrub_generation (lot),
+        gnc_numeric_zero (), gnc_numeric_zero (), 0, *guid_null (), *guid_null (),
+        *guid_null (), FALSE, FALSE, FALSE, GNC_LOT_STATS_RUNNING};
+}
+
+GncLotStatsPlanState
+gnc_lot_stats_plan_step (GncLotStatsPlan *plan, guint max_work)
+{
+    if (lot_stats_validate (plan) != GNC_LOT_STATS_RUNNING || max_work == 0)
+        return plan ? plan->state : GNC_LOT_STATS_FAILED;
+
+    guint work = 0;
+    while (work++ < max_work && plan->next)
+    {
+        if (lot_stats_validate (plan) != GNC_LOT_STATS_RUNNING)
+            return plan->state;
+        auto split = GNC_SPLIT (plan->next->data);
+        plan->next = plan->next->next;
+        auto lot = gnc_lot_lookup (&plan->lot_guid, plan->book);
+        if (!split || xaccSplitGetLot (split) != lot)
+            return plan->state = GNC_LOT_STATS_STALE;
+
+        plan->amount = gnc_numeric_add (plan->amount, xaccSplitGetAmount (split),
+                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+        plan->value = gnc_numeric_add (plan->value, xaccSplitGetValue (split),
+                                       GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+        if (gnc_numeric_check (plan->amount) || gnc_numeric_check (plan->value))
+            return plan->state = GNC_LOT_STATS_FAILED;
+        ++plan->split_count;
+
+        auto transaction = xaccSplitGetParent (split);
+        if (!transaction)
+            return plan->state = GNC_LOT_STATS_STALE;
+        auto currency = xaccTransGetCurrency (transaction);
+        if (!plan->has_currency && currency)
+        {
+            plan->currency = *qof_instance_get_guid (QOF_INSTANCE (currency));
+            plan->has_currency = TRUE;
+        }
+        if (!plan->has_earliest)
+        {
+            plan->earliest_split = *qof_instance_get_guid (QOF_INSTANCE (split));
+            plan->has_earliest = TRUE;
+        }
+        else
+        {
+            auto earliest = xaccSplitLookup (&plan->earliest_split, plan->book);
+            if (!earliest || xaccSplitOrderDateOnly (split, earliest) < 0)
+                plan->earliest_split = *qof_instance_get_guid (QOF_INSTANCE (split));
+        }
+        if (!plan->has_latest)
+        {
+            plan->latest_split = *qof_instance_get_guid (QOF_INSTANCE (split));
+            plan->has_latest = TRUE;
+        }
+        else
+        {
+            auto latest = xaccSplitLookup (&plan->latest_split, plan->book);
+            if (!latest || xaccSplitOrderDateOnly (split, latest) > 0)
+                plan->latest_split = *qof_instance_get_guid (QOF_INSTANCE (split));
+        }
+    }
+    if (!plan->next)
+        plan->state = GNC_LOT_STATS_DONE;
+    return plan->state;
+}
+
+GncLotStatsPlanState
+gnc_lot_stats_plan_get_state (const GncLotStatsPlan *plan)
+{
+    return plan ? plan->state : GNC_LOT_STATS_FAILED;
+}
+
+gboolean
+gnc_lot_stats_plan_get_result (const GncLotStatsPlan *plan,
+                               gnc_numeric *amount, gnc_numeric *value,
+                               guint *split_count, GncGUID *earliest_split,
+                               GncGUID *latest_split, GncGUID *currency)
+{
+    if (!plan || plan->state != GNC_LOT_STATS_DONE)
+        return FALSE;
+    if (amount) *amount = plan->amount;
+    if (value) *value = plan->value;
+    if (split_count) *split_count = plan->split_count;
+    if (earliest_split) *earliest_split = plan->earliest_split;
+    if (latest_split) *latest_split = plan->latest_split;
+    if (currency) *currency = plan->currency;
+    return TRUE;
+}
+
+void
+gnc_lot_stats_plan_free (GncLotStatsPlan *plan)
+{
+    if (!plan) return;
+    gnc_scrub_context_unref (plan->context);
+    delete plan;
+}
+
+enum class LotAssignmentOutcome
+{
+    SKIPPED,
+    ASSIGNED,
+    FAILED,
+};
+
+struct LotAssignmentResult
+{
+    LotAssignmentOutcome outcome;
+    Split *remainder;
+};
+
+/*
+ * Execute exactly one policy-selected split-to-lot assignment. Both the
+ * synchronous scrub and the bounded plan use this primitive so that policy
+ * selection, FIFO ordering, and split remainder handling have one source of
+ * truth. Ineligible splits are explicitly skipped, matching xaccSplitAssign.
+ * The returned remainder is valid only in this call and must be converted to
+ * its GUID before returning to the main loop.
+ */
+static LotAssignmentResult
+assign_split_to_next_lot (Split *split)
+{
+    if (!split || split->lot)
+        return {LotAssignmentOutcome::SKIPPED, nullptr};
+    g_return_val_if_fail (split->gains == GAINS_STATUS_UNKNOWN ||
+                          (split->gains & GAINS_STATUS_GAINS) == FALSE,
+                          (LotAssignmentResult {LotAssignmentOutcome::FAILED,
+                                                nullptr}));
+
+    auto account = split->acc;
+    if (!xaccAccountHasTrades (account) || gnc_numeric_zero_p (split->amount))
+        return {LotAssignmentOutcome::SKIPPED, nullptr};
+
+    auto policy = gnc_account_get_policy (account);
+    if (!policy)
+        return {LotAssignmentOutcome::SKIPPED, nullptr};
+
+    split->gains |= GAINS_STATUS_VDIRTY;
+    auto lot = policy->PolicyGetLot (policy, split);
+    if (!lot)
+        lot = gnc_lot_make_default (account);
+    if (!lot)
+        return {LotAssignmentOutcome::FAILED, nullptr};
+
+    auto remainder = xaccSplitAssignToLot (split, lot);
+    if (!split->lot || remainder == split)
+        return {LotAssignmentOutcome::FAILED, nullptr};
+    return {LotAssignmentOutcome::ASSIGNED, remainder};
+}
+
+static void
+lot_assignment_plan_finish (GncLotAssignmentPlan *plan,
+                            GncLotAssignmentPlanState state)
+{
+    if (!plan || plan->state != GNC_LOT_ASSIGNMENT_PLAN_RUNNING)
+        return;
+
+    plan->split_guids.clear ();
+    plan->state = state;
+}
+
+static GncLotAssignmentPlanState
+lot_assignment_plan_validate (GncLotAssignmentPlan *plan)
+{
+    if (!plan || plan->state != GNC_LOT_ASSIGNMENT_PLAN_RUNNING)
+        return plan ? plan->state : GNC_LOT_ASSIGNMENT_PLAN_FAILED;
+
+    if (gnc_scrub_context_is_cancelled (plan->context))
+    {
+        lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_CANCELLED);
+        return plan->state;
+    }
+    if (!gnc_scrub_context_owns_book (plan->context, plan->book))
+    {
+        lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_STALE);
+        return plan->state;
+    }
+    if (g_getenv ("GNC_AUTO_SCRUB_LOTS") != nullptr &&
+        !gnc_scrub_context_commit_deferral_enabled (
+            plan->context, GNC_SCRUB_DEFERRED_COMMIT_GAINS))
+    {
+        lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_STALE);
+        return plan->state;
+    }
+    return GNC_LOT_ASSIGNMENT_PLAN_RUNNING;
+}
+
+GncLotAssignmentPlan *
+gnc_lot_assignment_plan_begin (Account *account, GncScrubContext *context)
+{
+    if (!account || !context)
+        return nullptr;
+
+    auto book = qof_instance_get_book (QOF_INSTANCE (account));
+    if (!gnc_scrub_context_owns_book (context, book))
+        return nullptr;
+    if (g_getenv ("GNC_AUTO_SCRUB_LOTS") != nullptr &&
+        !gnc_scrub_context_commit_deferral_enabled (
+            context, GNC_SCRUB_DEFERRED_COMMIT_GAINS))
+        return nullptr;
+
+    auto plan = new GncLotAssignmentPlan {gnc_scrub_context_ref (context),
+                                          book,
+                                          *xaccAccountGetGUID (account),
+                                          {}, 0,
+                                          0,
+                                          GNC_LOT_ASSIGNMENT_PLAN_RUNNING};
+    for (auto split : xaccAccountGetSplits (account))
+        plan->split_guids.push_back (*qof_instance_get_guid (QOF_INSTANCE (split)));
+    return plan;
+}
+
+GncLotAssignmentPlanState
+gnc_lot_assignment_plan_step (GncLotAssignmentPlan *plan, guint max_work)
+{
+    if (lot_assignment_plan_validate (plan) != GNC_LOT_ASSIGNMENT_PLAN_RUNNING ||
+        max_work == 0)
+        return plan ? plan->state : GNC_LOT_ASSIGNMENT_PLAN_FAILED;
+
+    auto account = xaccAccountLookup (&plan->account_guid, plan->book);
+    if (!account)
+    {
+        lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_STALE);
+        return plan->state;
+    }
+
+    guint work = 0;
+    while (work < max_work && !plan->split_guids.empty ())
+    {
+        if (lot_assignment_plan_validate (plan) != GNC_LOT_ASSIGNMENT_PLAN_RUNNING)
+            return plan->state;
+
+        auto guid = plan->split_guids.front ();
+        plan->split_guids.pop_front ();
+        ++work;
+        ++plan->examined;
+        auto split = xaccSplitLookup (&guid, plan->book);
+        if (!split || xaccSplitGetAccount (split) != account)
+            continue;
+
+        auto result = assign_split_to_next_lot (split);
+        if (result.outcome == LotAssignmentOutcome::SKIPPED)
+            continue;
+        if (result.outcome == LotAssignmentOutcome::FAILED)
+        {
+            lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_FAILED);
+            return plan->state;
+        }
+
+        g_assert (result.outcome == LotAssignmentOutcome::ASSIGNED);
+        ++plan->completed;
+        if (result.remainder)
+        {
+            plan->split_guids.push_front (
+                *qof_instance_get_guid (QOF_INSTANCE (result.remainder)));
+        }
+    }
+
+    if (plan->split_guids.empty ())
+        lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_DONE);
+    return plan->state;
+}
+
+void
+gnc_lot_assignment_plan_cancel (GncLotAssignmentPlan *plan)
+{
+    lot_assignment_plan_finish (plan, GNC_LOT_ASSIGNMENT_PLAN_CANCELLED);
+}
+
+GncLotAssignmentPlanState
+gnc_lot_assignment_plan_get_state (const GncLotAssignmentPlan *plan)
+{
+    return plan ? plan->state : GNC_LOT_ASSIGNMENT_PLAN_FAILED;
+}
+
+guint
+gnc_lot_assignment_plan_get_examined (const GncLotAssignmentPlan *plan)
+{
+    return plan ? plan->examined : 0;
+}
+
+guint
+gnc_lot_assignment_plan_get_completed (const GncLotAssignmentPlan *plan)
+{
+    return plan ? plan->completed : 0;
+}
+
+void
+gnc_lot_assignment_plan_free (GncLotAssignmentPlan *plan)
+{
+    if (!plan)
+        return;
+
+    plan->split_guids.clear ();
+    gnc_scrub_context_unref (plan->context);
+    delete plan;
+}
 
 /* ============================================================== */
 /** Loop over all splits, and make sure that every split
@@ -68,7 +425,7 @@ restart_loop:
     {
         /* If already in lot, then no-op */
         if (split->lot) continue;
-        
+
         /* Skip stock splits */
         if (xaccSplitIsStockSplit(split)) continue;
 
@@ -76,7 +433,22 @@ restart_loop:
         if (gnc_numeric_zero_p (split->amount) &&
                 xaccTransGetVoidStatus(split->parent)) continue;
 
-        if (xaccSplitAssign (split)) goto restart_loop;
+        auto remainder = split;
+        auto split_up = false;
+        while (remainder)
+        {
+            auto result = assign_split_to_next_lot (remainder);
+            if (result.outcome != LotAssignmentOutcome::ASSIGNED)
+                break;
+            split_up = split_up || result.remainder;
+            remainder = result.remainder;
+        }
+
+        /* A split remainder is inserted into the account, invalidating the
+         * vector cursor. Restart as the original scrubber did before the
+         * account split container was converted to std::vector. */
+        if (split_up)
+            goto restart_loop;
     }
     xaccAccountCommitEdit (acc);
     LEAVE ("acc=%s", xaccAccountGetName(acc));
@@ -326,6 +698,24 @@ merge_splits (Split *sa, Split *sb)
 }
 
 gboolean
+gnc_scrub_merge_split_pair_prepared (Split *keep, Split *remove,
+                                      gboolean strict)
+{
+    if (!keep || !remove || keep == remove ||
+        xaccSplitGetParent (keep) != xaccSplitGetParent (remove) ||
+        xaccSplitGetLot (keep) != xaccSplitGetLot (remove) ||
+        qof_instance_get_destroying (remove))
+        return FALSE;
+    auto transaction = xaccSplitGetParent (keep);
+    if (!transaction || gncInvoiceGetInvoiceFromTxn (transaction))
+        return FALSE;
+    if (strict && (!is_subsplit (keep) || !xaccSplitIsPeerSplit (keep, remove)))
+        return FALSE;
+    merge_splits (keep, remove);
+    return TRUE;
+}
+
+gboolean
 xaccScrubMergeSubSplits (Split *split, gboolean strict)
 {
     gboolean rc = FALSE;
@@ -370,7 +760,8 @@ restart:
                 continue;
         }
 
-        merge_splits (split, s);
+        if (!gnc_scrub_merge_split_pair_prepared (split, s, strict))
+            continue;
         rc = TRUE;
         goto restart;
     }

@@ -36,171 +36,296 @@
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
+#include "gnc-account-sel.h"
 #include "qof.h"
 #include "gnc-gui-query.h"
-#include "gnc-tree-view-account.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 
 
 #define ASSISTANT_STOCK_SPLIT_CM_CLASS "assistant-stock-split"
 
-enum split_cols
+typedef struct _StockSplitRow StockSplitRow;
+typedef struct _StockSplitRowClass StockSplitRowClass;
+
+struct _StockSplitRow
 {
-    SPLIT_COL_ACCOUNT = 0,
-    SPLIT_COL_FULLNAME,
-    SPLIT_COL_MNEMONIC,
-    SPLIT_COL_SHARES,
-    NUM_SPLIT_COLS
+    GObject parent_instance;
+    Account *account;
+    gchar *full_name;
+    gchar *mnemonic;
+    gchar *shares;
 };
+
+struct _StockSplitRowClass
+{
+    GObjectClass parent_class;
+};
+
+GType stock_split_row_get_type (void);
+
+G_DEFINE_FINAL_TYPE (StockSplitRow, stock_split_row, G_TYPE_OBJECT)
+
+static void
+stock_split_row_finalize (GObject *object)
+{
+    StockSplitRow *row = (StockSplitRow *)object;
+
+    g_free (row->full_name);
+    g_free (row->mnemonic);
+    g_free (row->shares);
+    G_OBJECT_CLASS (stock_split_row_parent_class)->finalize (object);
+}
+
+static void
+stock_split_row_class_init (StockSplitRowClass *klass)
+{
+    G_OBJECT_CLASS (klass)->finalize = stock_split_row_finalize;
+}
+
+static void
+stock_split_row_init (StockSplitRow *row)
+{
+    (void)row;
+}
+
+static StockSplitRow *
+stock_split_row_new (Account *account)
+{
+    StockSplitRow *row;
+    GNCPrintAmountInfo print_info;
+
+    row = g_object_new (stock_split_row_get_type (), NULL);
+    row->account = account;
+    row->full_name = gnc_account_get_full_name (account);
+    row->mnemonic = g_strdup (gnc_commodity_get_mnemonic
+                              (xaccAccountGetCommodity (account)));
+    print_info = gnc_account_print_info (account, FALSE);
+    row->shares = g_strdup (xaccPrintAmount (xaccAccountGetBalance (account),
+                                           print_info));
+    return row;
+}
 
 /** structures *********************************************************/
 typedef struct
 {
-    GtkWidget * window;
-    GtkWidget * assistant;
+    GtkWindow *window;
+    GtkStack *stack;
+    GtkWidget *pages[5];
+    GtkWidget *back_button;
+    GtkWidget *next_button;
+    GtkWidget *apply_button;
+    guint current_page;
 
     /* account page data */
-    GtkWidget * account_view;
-    Account   * acct;
+    GtkWidget *account_page;
+    GtkColumnView *account_view;
+    GListStore *account_rows;
+    GtkSingleSelection *account_selection;
+    Account *acct;
+    GncGUID account_guid;
+    gboolean has_account_guid;
+    gboolean updating_account_rows;
 
     /* info page data */
-    GtkWidget * date_edit;
-    GtkWidget * distribution_edit;
-    GtkWidget * description_entry;
-    GtkWidget * price_edit;
-    GtkWidget * price_currency_edit;
+    GtkWidget *date_edit;
+    GtkWidget *distribution_edit;
+    GtkWidget *description_entry;
+    GtkWidget *price_edit;
+    GtkWidget *price_currency_edit;
 
     /* cash in lieu page data */
-    GtkWidget * cash_edit;
-    GtkWidget * memo_entry;
-    GtkWidget * income_tree;
-    GtkWidget * asset_tree;
+    GtkWidget *cash_edit;
+    GtkWidget *memo_entry;
+    GNCAccountSel *income_account;
+    GNCAccountSel *asset_account;
 } StockSplitInfo;
 
-
 /** declarations *******************************************************/
-void     gnc_stock_split_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data);
-void     gnc_stock_split_assistant_prepare           (GtkAssistant  *assistant,
-        GtkWidget *page,
-        gpointer user_data);
-void     gnc_stock_split_assistant_details_prepare   (GtkAssistant *assistant,
-        gpointer user_data);
-gboolean gnc_stock_split_assistant_details_complete  (GtkAssistant *assistant,
-        gpointer user_data);
-gboolean gnc_stock_split_assistant_cash_complete     (GtkAssistant *assistant,
-        gpointer user_data);
-void     gnc_stock_split_assistant_finish            (GtkAssistant *assistant,
-        gpointer user_data);
-void     gnc_stock_split_assistant_cancel            (GtkAssistant *gtkassistant,
-        gpointer user_data);
+static void stock_split_update_navigation (StockSplitInfo *info);
+static void stock_split_show_page (StockSplitInfo *info, guint page);
+static gboolean stock_split_details_complete (StockSplitInfo *info);
+static gboolean stock_split_cash_complete (StockSplitInfo *info);
+static void stock_split_finish (StockSplitInfo *info);
+static void stock_split_cancel (StockSplitInfo *info);
 
 /******* implementations ***********************************************/
-void
+static void
 gnc_stock_split_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
     gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
 
+    g_signal_handlers_disconnect_by_data (info->account_selection, info);
+    g_clear_object (&info->account_selection);
+    g_clear_object (&info->account_rows);
     g_free (info);
 }
 
 
-static int
+static void
+stock_split_set_selected_account (StockSplitInfo *info, Account *account)
+{
+    info->acct = account;
+    info->has_account_guid = account != NULL;
+    if (account)
+        info->account_guid = *xaccAccountGetGUID (account);
+}
+
+static Account *
+stock_split_get_selected_account (const StockSplitInfo *info)
+{
+    if (!info->has_account_guid)
+        return NULL;
+
+    return xaccAccountLookup (&info->account_guid, gnc_get_current_book ());
+}
+
+static gboolean
+stock_split_account_is_eligible (Account *account)
+{
+    return xaccAccountIsPriced (account) &&
+           !gnc_numeric_zero_p (xaccAccountGetBalance (account)) &&
+           !xaccAccountGetPlaceholder (account);
+}
+
+static guint
 fill_account_list (StockSplitInfo *info, Account *selected_account)
 {
-    GtkTreeRowReference *reference = NULL;
-    GtkTreeView *view;
-    GtkListStore *list;
-    GtkTreeIter iter;
-    GtkTreePath *path;
     GList *accounts;
     GList *node;
-    gint rows = 0;
-    gchar *full_name;
+    guint rows = 0;
+    guint selected_position = GTK_INVALID_LIST_POSITION;
 
-    view = GTK_TREE_VIEW(info->account_view);
-    list = GTK_LIST_STORE(gtk_tree_view_get_model(view));
-
-    gtk_list_store_clear (list);
+    info->updating_account_rows = TRUE;
+    gtk_single_selection_set_selected (info->account_selection,
+                                       GTK_INVALID_LIST_POSITION);
+    g_list_store_remove_all (info->account_rows);
 
     accounts = gnc_account_get_descendants_sorted (gnc_get_current_root_account ());
     for (node = accounts; node; node = node->next)
     {
         Account *account = node->data;
-        GNCPrintAmountInfo print_info;
-        const gnc_commodity *commodity;
-        gnc_numeric balance;
+        StockSplitRow *row;
 
-        if (!xaccAccountIsPriced(account))
+        if (!stock_split_account_is_eligible (account))
             continue;
 
-        balance = xaccAccountGetBalance (account);
-        if (gnc_numeric_zero_p (balance))
-            continue;
-
-        if (xaccAccountGetPlaceholder (account))
-            continue;
-
-        commodity = xaccAccountGetCommodity (account);
-
-        full_name = gnc_account_get_full_name (account);
-        print_info = gnc_account_print_info (account, FALSE);
-
-        gtk_list_store_append(list, &iter);
-        gtk_list_store_set(list, &iter,
-                           SPLIT_COL_ACCOUNT,  account,
-                           SPLIT_COL_FULLNAME, full_name,
-                           SPLIT_COL_MNEMONIC, gnc_commodity_get_mnemonic(commodity),
-                           SPLIT_COL_SHARES,   xaccPrintAmount(balance, print_info),
-                           -1);
+        row = stock_split_row_new (account);
+        g_list_store_append (info->account_rows, row);
+        g_object_unref (row);
 
         if (account == selected_account)
-        {
-            path = gtk_tree_model_get_path(GTK_TREE_MODEL(list), &iter);
-            reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(list), path);
-            gtk_tree_path_free(path);
-        }
-
-        g_free (full_name);
-
+            selected_position = rows;
         rows++;
     }
-    g_list_free(accounts);
+    g_list_free (accounts);
+    info->updating_account_rows = FALSE;
 
-    if (reference)
+    if (rows == 0)
     {
-        GtkTreeSelection* selection = gtk_tree_view_get_selection(view);
-        path = gtk_tree_row_reference_get_path(reference);
-        gtk_tree_row_reference_free(reference);
-        if (path)
-        {
-            gtk_tree_selection_select_path(selection, path);
-            gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
-            gtk_tree_path_free(path);
-        }
+        stock_split_set_selected_account (info, NULL);
+        stock_split_update_navigation (info);
+        return 0;
     }
 
+    if (selected_position == GTK_INVALID_LIST_POSITION)
+        selected_position = 0;
+
+    gtk_single_selection_set_selected (info->account_selection, selected_position);
+    gtk_column_view_scroll_to (info->account_view, selected_position, NULL,
+                               GTK_LIST_SCROLL_FOCUS, NULL);
     return rows;
 }
 
-
 static void
-selection_changed_cb (GtkTreeSelection *selection,
-                      gpointer user_data)
+stock_split_selection_changed_cb (GtkSelectionModel *selection,
+                                  guint position, guint n_items,
+                                  StockSplitInfo *info)
 {
-    StockSplitInfo *info = user_data;
-    GtkTreeModel *list;
-    GtkTreeIter iter;
+    GObject *object;
+    StockSplitRow *row;
 
-    if (!gtk_tree_selection_get_selected(selection, &list, &iter))
+    if (info->updating_account_rows)
         return;
-    gtk_tree_model_get(list, &iter,
-                       SPLIT_COL_ACCOUNT, &info->acct,
-                       -1);
+
+    object = gtk_single_selection_get_selected_item (info->account_selection);
+    row = object ? (StockSplitRow *)object : NULL;
+    stock_split_set_selected_account (info, row ? row->account : NULL);
+    stock_split_update_navigation (info);
+    (void)selection;
+    (void)position;
+    (void)n_items;
 }
 
+typedef enum
+{
+    STOCK_SPLIT_ACCOUNT_COLUMN_NAME,
+    STOCK_SPLIT_ACCOUNT_COLUMN_SYMBOL,
+    STOCK_SPLIT_ACCOUNT_COLUMN_SHARES
+} StockSplitAccountColumn;
+
+static void
+stock_split_account_cell_setup (GtkListItemFactory *factory,
+                                GtkListItem *list_item, gpointer user_data)
+{
+    GtkWidget *label = gtk_label_new (NULL);
+
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_label_set_xalign (GTK_LABEL (label),
+                          GPOINTER_TO_UINT (user_data) ==
+                          STOCK_SPLIT_ACCOUNT_COLUMN_SHARES ? 1.0 : 0.0);
+    gtk_list_item_set_child (list_item, label);
+    (void)factory;
+}
+
+static void
+stock_split_account_cell_bind (GtkListItemFactory *factory,
+                               GtkListItem *list_item, gpointer user_data)
+{
+    StockSplitRow *row = (StockSplitRow *)gtk_list_item_get_item (list_item);
+    StockSplitAccountColumn column = GPOINTER_TO_UINT (user_data);
+    const gchar *text = "";
+
+    if (row)
+    {
+        switch (column)
+        {
+        case STOCK_SPLIT_ACCOUNT_COLUMN_NAME:
+            text = row->full_name;
+            break;
+        case STOCK_SPLIT_ACCOUNT_COLUMN_SYMBOL:
+            text = row->mnemonic;
+            break;
+        case STOCK_SPLIT_ACCOUNT_COLUMN_SHARES:
+            text = row->shares;
+            break;
+        }
+    }
+    gtk_label_set_text (GTK_LABEL (gtk_list_item_get_child (list_item)), text);
+    (void)factory;
+}
+
+static void
+stock_split_add_account_column (StockSplitInfo *info, const gchar *title,
+                                StockSplitAccountColumn column, gboolean expand)
+{
+    GtkListItemFactory *factory;
+    GtkColumnViewColumn *view_column;
+
+    factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (factory, "setup", G_CALLBACK (stock_split_account_cell_setup),
+                      GUINT_TO_POINTER (column));
+    g_signal_connect (factory, "bind", G_CALLBACK (stock_split_account_cell_bind),
+                      GUINT_TO_POINTER (column));
+    view_column = gtk_column_view_column_new (title, factory);
+    gtk_column_view_column_set_resizable (view_column, TRUE);
+    gtk_column_view_column_set_expand (view_column, expand);
+    gtk_column_view_append_column (info->account_view, view_column);
+    g_object_unref (view_column);
+}
 
 static void
 refresh_details_page (StockSplitInfo *info)
@@ -212,7 +337,8 @@ refresh_details_page (StockSplitInfo *info)
     GNCPriceDB *db;
     GList *prices;
 
-    account = info->acct;
+    account = stock_split_get_selected_account (info);
+    info->acct = account;
 
     g_return_if_fail (account != NULL);
 
@@ -249,31 +375,10 @@ refresh_details_page (StockSplitInfo *info)
 }
 
 
-void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                                        gpointer user_data)
+
+static gboolean
+stock_split_details_complete (StockSplitInfo *info)
 {
-    gint currentpage = gtk_assistant_get_current_page(assistant);
-
-    if (currentpage == 2) /* Current page is details page */
-        gnc_stock_split_assistant_details_prepare(assistant, user_data);
-}
-
-
-void
-gnc_stock_split_assistant_details_prepare (GtkAssistant *assistant,
-        gpointer user_data)
-{
-    StockSplitInfo *info = user_data;
-
-    refresh_details_page(info);
-}
-
-
-gboolean
-gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
-        gpointer user_data)
-{
-    StockSplitInfo *info = user_data;
     GNCPrintAmountInfo print_info;
     gnc_commodity *currency;
     gnc_numeric amount;
@@ -305,11 +410,9 @@ gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
 }
 
 
-gboolean
-gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
-        gpointer user_data)
+static gboolean
+stock_split_cash_complete (StockSplitInfo *info)
 {
-    StockSplitInfo *info = user_data;
     gnc_numeric amount;
     gint result;
     Account *account;
@@ -323,11 +426,11 @@ gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
         return FALSE; /* Negative cash amount is not allowed */
 
     /* We have a positive cash amount */
-    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
+    account = gnc_account_sel_get_account (info->income_account);
     if (!account)
         return FALSE;
 
-    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
+    account = gnc_account_sel_get_account (info->asset_account);
     if (!account)
         return FALSE;
 
@@ -335,11 +438,9 @@ gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
 }
 
 
-void
-gnc_stock_split_assistant_finish (GtkAssistant *assistant,
-                                  gpointer user_data)
+static void
+stock_split_finish (StockSplitInfo *info)
 {
-    StockSplitInfo *info = user_data;
     GList *account_commits;
     GList *node;
 
@@ -348,8 +449,16 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     Account *account;
     Split *split;
     time64 date;
+    if (!stock_split_get_selected_account (info) ||
+        !stock_split_details_complete (info) ||
+        !stock_split_cash_complete (info))
+    {
+        stock_split_update_navigation (info);
+        return;
+    }
 
-    account = info->acct;
+    account = stock_split_get_selected_account (info);
+    info->acct = account;
     g_return_if_fail (account != NULL);
 
     amount = gnc_amount_edit_get_amount
@@ -370,7 +479,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     {
         const char *description;
 
-        description = gtk_entry_get_text (GTK_ENTRY (info->description_entry));
+        description = gnc_entry_get_text (GTK_ENTRY (info->description_entry));
         xaccTransSetDescription (trans, description);
     }
 
@@ -423,10 +532,10 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     {
         const char *memo;
 
-        memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
+        memo = gnc_entry_get_text (GTK_ENTRY (info->memo_entry));
 
         /* asset split */
-        account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
+        account = gnc_account_sel_get_account (info->asset_account);
 
         split = xaccMallocSplit (gnc_get_current_book ());
 
@@ -444,7 +553,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
 
 
         /* income split */
-        account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
+        account = gnc_account_sel_get_account (info->income_account);
 
         split = xaccMallocSplit (gnc_get_current_book ());
 
@@ -473,135 +582,188 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
 }
 
 
-void
-gnc_stock_split_assistant_cancel (GtkAssistant *assistant, gpointer user_data)
+static void
+stock_split_cancel (StockSplitInfo *info)
 {
-    StockSplitInfo *info = user_data;
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
 }
 
-
 static gboolean
-gnc_stock_split_assistant_view_filter_income (Account  *account,
-        gpointer  data)
+stock_split_page_is_complete (StockSplitInfo *info, guint page)
 {
-    GNCAccountType type;
-
-    type = xaccAccountGetType(account);
-    return (type == ACCT_TYPE_INCOME);
+    switch (page)
+    {
+    case 1:
+        return stock_split_get_selected_account (info) != NULL;
+    case 2:
+        return stock_split_details_complete (info);
+    case 3:
+        return stock_split_cash_complete (info);
+    default:
+        return TRUE;
+    }
 }
 
+static void
+stock_split_update_navigation (StockSplitInfo *info)
+{
+    gboolean is_last = info->current_page == G_N_ELEMENTS (info->pages) - 1;
+    GtkWidget *default_widget = NULL;
+
+    gtk_widget_set_sensitive (info->back_button, info->current_page != 0);
+    gtk_widget_set_visible (info->next_button, !is_last);
+    gtk_widget_set_sensitive (info->next_button,
+                              stock_split_page_is_complete (info,
+                                                            info->current_page));
+    gtk_widget_set_visible (info->apply_button, is_last);
+    gtk_widget_set_sensitive (info->apply_button, is_last);
+
+    if (is_last)
+        default_widget = info->apply_button;
+    else if (gtk_widget_get_sensitive (info->next_button))
+        default_widget = info->next_button;
+    gtk_window_set_default_widget (info->window, default_widget);
+}
+
+static void
+stock_split_show_page (StockSplitInfo *info, guint page)
+{
+    g_return_if_fail (page < G_N_ELEMENTS (info->pages));
+
+    if (page == 2)
+        refresh_details_page (info);
+
+    info->current_page = page;
+    gtk_stack_set_visible_child (info->stack, info->pages[page]);
+    stock_split_update_navigation (info);
+}
+
+static void
+stock_split_back_clicked_cb (GtkButton *button, StockSplitInfo *info)
+{
+    if (info->current_page != 0)
+        stock_split_show_page (info, info->current_page - 1);
+    (void)button;
+}
+
+static void
+stock_split_next_clicked_cb (GtkButton *button, StockSplitInfo *info)
+{
+    if (info->current_page + 1 < G_N_ELEMENTS (info->pages) &&
+        stock_split_page_is_complete (info, info->current_page))
+        stock_split_show_page (info, info->current_page + 1);
+    (void)button;
+}
+
+static void
+stock_split_apply_clicked_cb (GtkButton *button, StockSplitInfo *info)
+{
+    stock_split_finish (info);
+    (void)button;
+}
+
+static void
+stock_split_cancel_clicked_cb (GtkButton *button, StockSplitInfo *info)
+{
+    stock_split_cancel (info);
+    (void)button;
+}
 
 static gboolean
-gnc_stock_split_assistant_view_filter_asset (Account  *account,
-        gpointer  data)
+stock_split_close_request_cb (GtkWindow *window, StockSplitInfo *info)
 {
-    GNCAccountType type;
-
-    type = xaccAccountGetType(account);
-    return ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
-            (type == ACCT_TYPE_ASSET));
+    stock_split_cancel (info);
+    (void)window;
+    return TRUE;
 }
+
 
 
 static void
 gnc_stock_split_details_valid_cb (GtkWidget *widget, gpointer user_data)
 {
-    StockSplitInfo *info = user_data;
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
-    gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_stock_split_assistant_details_complete (assistant, user_data));
+    stock_split_update_navigation (user_data);
+    (void)widget;
 }
-
 
 static void
 gnc_stock_split_cash_valid_cb (GtkWidget *widget, gpointer user_data)
 {
-    StockSplitInfo *info = user_data;
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
-    gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_stock_split_assistant_cash_complete (assistant, user_data));
+    stock_split_update_navigation (user_data);
+    (void)widget;
 }
 
+
+static void
+gnc_stock_split_cash_selection_changed_cb (GNCAccountSel *selector,
+                                           StockSplitInfo *info)
+{
+    gnc_stock_split_cash_valid_cb (NULL, info);
+    (void)selector;
+}
 
 static GtkWidget *
 gnc_stock_split_assistant_create (StockSplitInfo *info)
 {
     GtkBuilder *builder;
-    GtkWidget *window;
+    GtkWindow *window;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "stock_split_assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "stock_split_assistant"));
+    window = GTK_WINDOW (gtk_builder_get_object (builder, "stock_split_assistant"));
     info->window = window;
 
     // Set the name for this assistant so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-assistant-stock-split");
 
-    /* Enable buttons on first, second, fourth and last page. */
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "stock_account_page")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "stock_cash_page")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "finish_page_label")),
-                                     TRUE);
+    info->stack = GTK_STACK (gtk_builder_get_object (builder, "stock_split_stack"));
+    info->pages[0] = GTK_WIDGET (gtk_builder_get_object (builder, "intro_page_label"));
+    info->pages[1] = GTK_WIDGET (gtk_builder_get_object (builder, "stock_account_page"));
+    info->pages[2] = GTK_WIDGET (gtk_builder_get_object (builder, "stock_details_page"));
+    info->pages[3] = GTK_WIDGET (gtk_builder_get_object (builder, "stock_cash_page"));
+    info->pages[4] = GTK_WIDGET (gtk_builder_get_object (builder, "finish_page_label"));
+    info->back_button = GTK_WIDGET (gtk_builder_get_object (builder, "stock_split_back"));
+    info->next_button = GTK_WIDGET (gtk_builder_get_object (builder, "stock_split_next"));
+    info->apply_button = GTK_WIDGET (gtk_builder_get_object (builder, "stock_split_apply"));
+
+    g_signal_connect (info->back_button, "clicked",
+                      G_CALLBACK (stock_split_back_clicked_cb), info);
+    g_signal_connect (info->next_button, "clicked",
+                      G_CALLBACK (stock_split_next_clicked_cb), info);
+    g_signal_connect (info->apply_button, "clicked",
+                      G_CALLBACK (stock_split_apply_clicked_cb), info);
+    g_signal_connect (gtk_builder_get_object (builder, "stock_split_cancel"),
+                      "clicked", G_CALLBACK (stock_split_cancel_clicked_cb), info);
+    g_signal_connect (window, "close-request",
+                      G_CALLBACK (stock_split_close_request_cb), info);
 
     /* Account page Widgets */
-    {
-        GtkTreeView *view;
-        GtkListStore *store;
-        GtkTreeSelection *selection;
-        GtkCellRenderer *renderer;
-        GtkTreeViewColumn *column;
-
-        info->account_view = GTK_WIDGET(gtk_builder_get_object(builder, "account_view"));
-
-        view = GTK_TREE_VIEW(info->account_view);
-
-        // Set grid lines option to preference
-        gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
-
-        store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_POINTER, G_TYPE_STRING,
-                                   G_TYPE_STRING, G_TYPE_STRING);
-        gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-        g_object_unref(store);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
-                 "text", SPLIT_COL_FULLNAME,
-                 NULL);
-        gtk_tree_view_append_column(view, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Symbol"), renderer,
-                 "text", SPLIT_COL_MNEMONIC,
-                 NULL);
-        gtk_tree_view_append_column(view, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Shares"), renderer,
-                 "text", SPLIT_COL_SHARES,
-                 NULL);
-        gtk_tree_view_append_column(view, column);
-
-        selection = gtk_tree_view_get_selection(view);
-        gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
-        g_signal_connect (selection, "changed",
-                          G_CALLBACK (selection_changed_cb), info);
-
-    }
+    info->account_page = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                              "stock_account_page"));
+    info->account_view = GTK_COLUMN_VIEW (gtk_builder_get_object (builder,
+                                                                    "account_view"));
+    info->account_rows = g_list_store_new (stock_split_row_get_type ());
+    info->account_selection = gtk_single_selection_new
+        (G_LIST_MODEL (g_object_ref (info->account_rows)));
+    gtk_single_selection_set_autoselect (info->account_selection, FALSE);
+    gtk_column_view_set_model (info->account_view,
+                               GTK_SELECTION_MODEL (info->account_selection));
+    gtk_column_view_set_show_row_separators
+        (info->account_view,
+         gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                             GNC_PREF_GRID_LINES_HORIZONTAL));
+    gtk_column_view_set_show_column_separators
+        (info->account_view,
+         gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                             GNC_PREF_GRID_LINES_VERTICAL));
+    stock_split_add_account_column (info, _("Account"),
+                                    STOCK_SPLIT_ACCOUNT_COLUMN_NAME, TRUE);
+    stock_split_add_account_column (info, _("Symbol"),
+                                    STOCK_SPLIT_ACCOUNT_COLUMN_SYMBOL, FALSE);
+    stock_split_add_account_column (info, _("Shares"),
+                                    STOCK_SPLIT_ACCOUNT_COLUMN_SHARES, FALSE);
+    g_signal_connect (info->account_selection, "selection-changed",
+                      G_CALLBACK (stock_split_selection_changed_cb), info);
 
     /* Details Page Widgets */
     {
@@ -615,7 +777,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         gtk_grid_attach (GTK_GRID(table), date, 1, 0, 1, 1);
-        gtk_widget_show (date);
+        gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
         info->date_edit = date;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "date_label"));
@@ -626,7 +788,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_grid_attach (GTK_GRID(table), amount, 1, 1, 1, 1);
-        gtk_widget_show (amount);
+        gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
         info->distribution_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
@@ -639,7 +801,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_grid_attach (GTK_GRID(table), amount, 1, 5, 1, 1);
-        gtk_widget_show (amount);
+        gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
         info->price_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
@@ -647,7 +809,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
-        gtk_widget_show (info->price_currency_edit);
+        gtk_widget_set_visible (GTK_WIDGET(info->price_currency_edit), TRUE);
         gtk_grid_attach (GTK_GRID(table), info->price_currency_edit, 1, 6, 1, 1);
         g_signal_connect (info->price_currency_edit, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
@@ -656,76 +818,59 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     /* Cash page Widgets */
     {
         GtkWidget *box;
-        GtkWidget *tree;
         GtkWidget *amount;
         GtkWidget *label;
         GtkWidget *scroll;
-        GtkTreeSelection *selection;
+        GList *types = NULL;
 
-        box = GTK_WIDGET(gtk_builder_get_object(builder, "cash_box"));
+        box = GTK_WIDGET (gtk_builder_get_object (builder, "cash_box"));
         amount = gnc_amount_edit_new ();
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX (box), amount);
         info->cash_edit = amount;
 
-        label = GTK_WIDGET(gtk_builder_get_object(builder, "cash_label"));
-        gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
+        label = GTK_WIDGET (gtk_builder_get_object (builder, "cash_label"));
+        gtk_label_set_mnemonic_widget (GTK_LABEL (label), amount);
+        info->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
 
-        info->memo_entry = GTK_WIDGET(gtk_builder_get_object(builder, "memo_entry"));
+        info->income_account = GNC_ACCOUNT_SEL (gnc_account_sel_new ());
+        types = g_list_append (types, GINT_TO_POINTER (ACCT_TYPE_INCOME));
+        gnc_account_sel_set_acct_filters (info->income_account, types, NULL);
+        g_list_free (types);
+        g_signal_connect (info->income_account, "account_sel_changed",
+                          G_CALLBACK (gnc_stock_split_cash_selection_changed_cb), info);
+        label = GTK_WIDGET (gtk_builder_get_object (builder, "income_label"));
+        gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                       GTK_WIDGET (info->income_account));
+        scroll = GTK_WIDGET (gtk_builder_get_object (builder, "income_scroll"));
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroll),
+                                       GTK_WIDGET (info->income_account));
 
-        /* income tree */
-        tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-        info->income_tree = tree;
-        gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
-                                          gnc_stock_split_assistant_view_filter_income,
-                                          NULL, /* user data */
-                                          NULL  /* destroy callback */);
-
-        gtk_widget_show (tree);
-
-        gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
-        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
-        gtk_tree_selection_unselect_all (selection);
-        g_signal_connect (selection, "changed",
-                          G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
-
-        label = GTK_WIDGET(gtk_builder_get_object(builder, "income_label"));
-        gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
-
-        scroll = GTK_WIDGET(gtk_builder_get_object(builder, "income_scroll"));
-        gtk_container_add (GTK_CONTAINER (scroll), tree);
-
-        /* asset tree */
-        tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-        info->asset_tree = tree;
-        gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
-                                          gnc_stock_split_assistant_view_filter_asset,
-                                          NULL /* user data */,
-                                          NULL /* destroy callback */);
-
-        gtk_widget_show (tree);
-
-        label = GTK_WIDGET(gtk_builder_get_object(builder, "asset_label"));
-        gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
-
-        scroll = GTK_WIDGET(gtk_builder_get_object(builder, "asset_scroll"));
-        gtk_container_add (GTK_CONTAINER (scroll), tree);
-
-        gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
-        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
-        gtk_tree_selection_unselect_all (selection);
-        g_signal_connect (selection, "changed",
-                          G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
+        info->asset_account = GNC_ACCOUNT_SEL (gnc_account_sel_new ());
+        types = g_list_append (types, GINT_TO_POINTER (ACCT_TYPE_BANK));
+        types = g_list_append (types, GINT_TO_POINTER (ACCT_TYPE_CASH));
+        types = g_list_append (types, GINT_TO_POINTER (ACCT_TYPE_ASSET));
+        gnc_account_sel_set_acct_filters (info->asset_account, types, NULL);
+        g_list_free (types);
+        g_signal_connect (info->asset_account, "account_sel_changed",
+                          G_CALLBACK (gnc_stock_split_cash_selection_changed_cb), info);
+        label = GTK_WIDGET (gtk_builder_get_object (builder, "asset_label"));
+        gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                       GTK_WIDGET (info->asset_account));
+        scroll = GTK_WIDGET (gtk_builder_get_object (builder, "asset_scroll"));
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroll),
+                                       GTK_WIDGET (info->asset_account));
     }
 
-    g_signal_connect (G_OBJECT(window), "destroy",
+    g_signal_connect (window, "destroy",
                       G_CALLBACK (gnc_stock_split_assistant_window_destroy_cb), info);
 
-    gtk_builder_connect_signals(builder, info);
-    g_object_unref(G_OBJECT(builder));
-    return window;
+    info->current_page = 0;
+    stock_split_show_page (info, info->current_page);
+    g_object_unref (builder);
+    return GTK_WIDGET (window);
 
 }
 
@@ -733,17 +878,12 @@ static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
     StockSplitInfo *info = user_data;
-    Account *old_account;
+    Account *selected_account = stock_split_get_selected_account (info);
 
-    old_account = info->acct;
-
-    if (fill_account_list (info, info->acct) == 0)
-    {
+    if (fill_account_list (info, selected_account) == 0)
         gnc_close_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
-        return;
-    }
 
-    if (NULL == info->acct || old_account == info->acct) return;
+    (void)changes;
 }
 
 static void
@@ -751,7 +891,7 @@ close_handler (gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
-    gtk_widget_destroy (info->window);
+    gtk_window_destroy (GTK_WINDOW (info->window));
 }
 
 /********************************************************************\
@@ -790,7 +930,7 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
     }
 
     gtk_window_set_transient_for (GTK_WINDOW (info->window), GTK_WINDOW(parent));
-    gtk_widget_show_all (info->window);
+    gtk_window_present (GTK_WINDOW (info->window));
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

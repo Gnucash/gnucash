@@ -2104,9 +2104,9 @@ list_combine (gpointer element, gpointer data)
 }
 
 /* This function is used by gnc-tree-model-price.c for iterating through the
- * prices when building or filtering the pricedb dialog's
- * GtkTreeView. gtk-tree-view-price.c sorts the results after it has obtained
- * the values so there's nothing gained by sorting. However, for very large
+ * prices when building or filtering the pricedb dialog's price view.
+ * gnc-tree-view-price.c sorts the results after it has obtained the values so
+ * there's nothing gained by sorting. However, for very large
  * collections of prices in multiple currencies (here commodity is the one being
  * priced and currency the one in which the price is denominated; note that they
  * may both be currencies or not) just concatenating the price lists together

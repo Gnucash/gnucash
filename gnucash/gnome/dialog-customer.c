@@ -25,7 +25,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <gdk/gdkkeysyms.h>
 
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
@@ -57,7 +56,7 @@
 
 #define GNC_PREFS_GROUP_SEARCH "dialogs.business.customer-search"
 
-void gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
+void gnc_customer_taxtable_check_cb (GtkCheckButton *togglebutton,
                                      gpointer user_data);
 
 void gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data);
@@ -65,9 +64,9 @@ void gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_customer_terms_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_customer_taxincluded_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_customer_taxtable_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_customer_terms_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data);
+void gnc_customer_taxincluded_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data);
+void gnc_customer_taxtable_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data);
 void gnc_customer_addr2_insert_cb(GtkEditable *editable,
                                   gchar *new_text, gint new_text_length,
                                   gint *position, gpointer user_data);
@@ -87,23 +86,38 @@ void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
                                       gchar *new_text, gint new_text_length,
                                       gint *position, gpointer user_data);
 gboolean
-gnc_customer_addr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                 gpointer user_data );
+gnc_customer_addr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data);
 gboolean
-gnc_customer_addr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                 gpointer user_data );
+gnc_customer_addr3_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data);
 gboolean
-gnc_customer_addr4_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                 gpointer user_data );
+gnc_customer_addr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data);
 gboolean
-gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                     gpointer user_data );
+gnc_customer_shipaddr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data);
 gboolean
-gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                     gpointer user_data );
+gnc_customer_shipaddr3_key_press_cb(GtkEventControllerKey *key, guint keyval,
+                                    guint keycode, GdkModifierType state,
+                                    gpointer user_data);
 gboolean
-gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                     gpointer user_data );
+gnc_customer_shipaddr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data);
+
+static void
+connect_customer_key_controller (GtkWidget *entry, GCallback callback,
+                                 CustomerWindow *window)
+{
+    GtkEventController *controller = gtk_event_controller_key_new ();
+    g_signal_connect (controller, "key-pressed", callback, window);
+    gtk_widget_add_controller (entry, controller);
+}
 
 #define ADDR_QUICKFILL "GncAddress-Quickfill"
 
@@ -176,12 +190,12 @@ struct _customer_window
 };
 
 void
-gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
+gnc_customer_taxtable_check_cb (GtkCheckButton *togglebutton,
                                 gpointer user_data)
 {
     CustomerWindow *cw = user_data;
 
-    if (gtk_toggle_button_get_active (togglebutton))
+    if (gtk_check_button_get_active (togglebutton))
         gtk_widget_set_sensitive (cw->taxtable_menu, TRUE);
     else
         gtk_widget_set_sensitive (cw->taxtable_menu, FALSE);
@@ -213,28 +227,28 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
     if (cw->dialog_type == NEW_CUSTOMER)
         qof_event_gen(QOF_INSTANCE(cust), QOF_EVENT_ADD, NULL);
 
-    gncCustomerSetID (cust, gtk_entry_get_text (GTK_ENTRY (cw->id_entry)));
-    gncCustomerSetName (cust, gtk_entry_get_text (GTK_ENTRY (cw->company_entry)));
+    gncCustomerSetID (cust, gnc_entry_get_text (GTK_ENTRY (cw->id_entry)));
+    gncCustomerSetName (cust, gnc_entry_get_text (GTK_ENTRY (cw->company_entry)));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (cw->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (cw->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (cw->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (cw->email_entry)));
-    gncAddressSetName (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipname_entry)));
-    gncAddressSetAddr1 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr1_entry)));
-    gncAddressSetAddr2 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr2_entry)));
-    gncAddressSetAddr3 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr3_entry)));
-    gncAddressSetAddr4 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr4_entry)));
-    gncAddressSetPhone (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipphone_entry)));
-    gncAddressSetFax (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipfax_entry)));
-    gncAddressSetEmail (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipemail_entry)));
+    gncAddressSetName (addr, gnc_entry_get_text (GTK_ENTRY (cw->name_entry)));
+    gncAddressSetAddr1 (addr, gnc_entry_get_text (GTK_ENTRY (cw->addr1_entry)));
+    gncAddressSetAddr2 (addr, gnc_entry_get_text (GTK_ENTRY (cw->addr2_entry)));
+    gncAddressSetAddr3 (addr, gnc_entry_get_text (GTK_ENTRY (cw->addr3_entry)));
+    gncAddressSetAddr4 (addr, gnc_entry_get_text (GTK_ENTRY (cw->addr4_entry)));
+    gncAddressSetPhone (addr, gnc_entry_get_text (GTK_ENTRY (cw->phone_entry)));
+    gncAddressSetFax (addr, gnc_entry_get_text (GTK_ENTRY (cw->fax_entry)));
+    gncAddressSetEmail (addr, gnc_entry_get_text (GTK_ENTRY (cw->email_entry)));
+    gncAddressSetName (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipname_entry)));
+    gncAddressSetAddr1 (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipaddr1_entry)));
+    gncAddressSetAddr2 (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipaddr2_entry)));
+    gncAddressSetAddr3 (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipaddr3_entry)));
+    gncAddressSetAddr4 (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipaddr4_entry)));
+    gncAddressSetPhone (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipphone_entry)));
+    gncAddressSetFax (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipfax_entry)));
+    gncAddressSetEmail (shipaddr, gnc_entry_get_text (GTK_ENTRY (cw->shipemail_entry)));
 
-    gncCustomerSetActive (cust, gtk_toggle_button_get_active
-                          (GTK_TOGGLE_BUTTON (cw->active_check)));
+    gncCustomerSetActive (cust, gtk_check_button_get_active
+                          (GTK_CHECK_BUTTON (cw->active_check)));
     gncCustomerSetTaxIncluded (cust, cw->taxincluded);
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(cw->notes_text));
@@ -253,7 +267,7 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
                           (GNC_AMOUNT_EDIT (cw->credit_amount)));
 
     gncCustomerSetTaxTableOverride
-    (cust, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (cw->taxtable_check)));
+    (cust, gtk_check_button_get_active (GTK_CHECK_BUTTON (cw->taxtable_check)));
     gncCustomerSetTaxTable (cust, cw->taxtable);
 
     gncCustomerCommitEdit (cust);
@@ -290,7 +304,7 @@ static gboolean check_edit_amount (GtkWidget *amount,
 static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
-    const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
+    const char *res = gnc_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
@@ -336,10 +350,10 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Set the customer id if one has not been chosen */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0)
+    if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0)
     {
         string = gncCustomerNextID (cw->book);
-        gtk_entry_set_text (GTK_ENTRY (cw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (cw->id_entry), string);
         g_free(string);
     }
 
@@ -410,39 +424,39 @@ gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_customer_terms_changed_cb (GtkWidget *widget, gpointer data)
+gnc_customer_terms_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data)
 {
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    CustomerWindow *cw = data;
+    (void)pspec;
+        CustomerWindow *cw = data;
 
     if (!cw) return;
-    if (!cbox) return;
+    if (!dropdown) return;
 
-    cw->terms = gnc_simple_combo_get_value (cbox);
+    cw->terms = gnc_simple_dropdown_get_value (dropdown);
 }
 
 void
-gnc_customer_taxincluded_changed_cb (GtkWidget *widget, gpointer data)
+gnc_customer_taxincluded_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data)
 {
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    CustomerWindow *cw = data;
+    (void)pspec;
+        CustomerWindow *cw = data;
 
     if (!cw) return;
-    if (!cbox) return;
+    if (!dropdown) return;
 
-    cw->taxincluded = GPOINTER_TO_INT (gnc_simple_combo_get_value (cbox));
+    cw->taxincluded = GPOINTER_TO_INT (gnc_simple_dropdown_get_value (dropdown));
 }
 
 void
-gnc_customer_taxtable_changed_cb (GtkWidget *widget, gpointer data)
+gnc_customer_taxtable_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data)
 {
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    CustomerWindow *cw = data;
+    (void)pspec;
+        CustomerWindow *cw = data;
 
     if (!cw) return;
-    if (!cbox) return;
+    if (!dropdown) return;
 
-    cw->taxtable = gnc_simple_combo_get_value (cbox);
+    cw->taxtable = gnc_simple_dropdown_get_value (dropdown);
 }
 
 static void
@@ -450,7 +464,7 @@ gnc_customer_window_close_handler (gpointer user_data)
 {
     CustomerWindow *cw = user_data;
 
-    gtk_widget_destroy (cw->dialog);
+    gtk_window_destroy (GTK_WINDOW (cw->dialog));
     // cw has already been freed by this point.
     // cw->dialog = NULL;
 }
@@ -533,9 +547,6 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
 
     /* Find the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-customer.glade", "terms_store");
-    gnc_builder_add_from_file (builder, "dialog-customer.glade", "tax_included_store");
-    gnc_builder_add_from_file (builder, "dialog-customer.glade", "taxtable_store");
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "customer_dialog");
     cw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "customer_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(cw->dialog), parent);
@@ -568,6 +579,19 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     cw->shipfax_entry = GTK_WIDGET (gtk_builder_get_object (builder, "shipfax_entry"));
     cw->shipemail_entry = GTK_WIDGET (gtk_builder_get_object (builder, "shipemail_entry"));
 
+    connect_customer_key_controller (cw->addr2_entry,
+                                     G_CALLBACK (gnc_customer_addr2_key_press_cb), cw);
+    connect_customer_key_controller (cw->addr3_entry,
+                                     G_CALLBACK (gnc_customer_addr3_key_press_cb), cw);
+    connect_customer_key_controller (cw->addr4_entry,
+                                     G_CALLBACK (gnc_customer_addr4_key_press_cb), cw);
+    connect_customer_key_controller (cw->shipaddr2_entry,
+                                     G_CALLBACK (gnc_customer_shipaddr2_key_press_cb), cw);
+    connect_customer_key_controller (cw->shipaddr3_entry,
+                                     G_CALLBACK (gnc_customer_shipaddr3_key_press_cb), cw);
+    connect_customer_key_controller (cw->shipaddr4_entry,
+                                     G_CALLBACK (gnc_customer_shipaddr4_key_press_cb), cw);
+
     cw->active_check = GTK_WIDGET (gtk_builder_get_object (builder, "active_check"));
     cw->taxincluded_menu = GTK_WIDGET (gtk_builder_get_object (builder, "tax_included_menu"));
     cw->notes_text = GTK_WIDGET (gtk_builder_get_object (builder, "notes_text"));
@@ -583,7 +607,7 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     cw->currency_edit = edit;
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* DISCOUNT: Percentage Value */
     edit = gnc_amount_edit_new();
@@ -593,10 +617,10 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
     cw->discount_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "discount_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* CREDIT: Monetary Value */
     edit = gnc_amount_edit_new();
@@ -606,14 +630,13 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
                                   gnc_commodity_get_fraction (currency));
     cw->credit_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "credit_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full( builder,
-                                      gnc_builder_connect_full_func,
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
                                       cw);
 
     /* Setup initial values */
@@ -629,31 +652,31 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
         addr = gncCustomerGetAddr (cust);
         shipaddr = gncCustomerGetShipAddr (cust);
 
-        gtk_entry_set_text (GTK_ENTRY (cw->id_entry), gncCustomerGetID (cust));
-        gtk_entry_set_text (GTK_ENTRY (cw->company_entry), gncCustomerGetName (cust));
+        gnc_entry_set_text (GTK_ENTRY (cw->id_entry), gncCustomerGetID (cust));
+        gnc_entry_set_text (GTK_ENTRY (cw->company_entry), gncCustomerGetName (cust));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (cw->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->addr1_entry), gncAddressGetAddr1 (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->addr2_entry), gncAddressGetAddr2 (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->addr3_entry), gncAddressGetAddr3 (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->addr4_entry), gncAddressGetAddr4 (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->phone_entry), gncAddressGetPhone (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->fax_entry), gncAddressGetFax (addr));
-        gtk_entry_set_text (GTK_ENTRY (cw->email_entry), gncAddressGetEmail (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->name_entry), gncAddressGetName (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->addr1_entry), gncAddressGetAddr1 (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->addr2_entry), gncAddressGetAddr2 (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->addr3_entry), gncAddressGetAddr3 (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->addr4_entry), gncAddressGetAddr4 (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->phone_entry), gncAddressGetPhone (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->fax_entry), gncAddressGetFax (addr));
+        gnc_entry_set_text (GTK_ENTRY (cw->email_entry), gncAddressGetEmail (addr));
 
         /* Setup Ship-to Address */
-        gtk_entry_set_text (GTK_ENTRY (cw->shipname_entry), gncAddressGetName (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipaddr1_entry), gncAddressGetAddr1 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipaddr2_entry), gncAddressGetAddr2 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipaddr3_entry), gncAddressGetAddr3 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipaddr4_entry), gncAddressGetAddr4 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipphone_entry), gncAddressGetPhone (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipfax_entry), gncAddressGetFax (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (cw->shipemail_entry), gncAddressGetEmail (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipname_entry), gncAddressGetName (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipaddr1_entry), gncAddressGetAddr1 (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipaddr2_entry), gncAddressGetAddr2 (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipaddr3_entry), gncAddressGetAddr3 (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipaddr4_entry), gncAddressGetAddr4 (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipphone_entry), gncAddressGetPhone (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipfax_entry), gncAddressGetFax (shipaddr));
+        gnc_entry_set_text (GTK_ENTRY (cw->shipemail_entry), gncAddressGetEmail (shipaddr));
 
         /* Set toggle buttons */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->active_check),
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (cw->active_check),
                                       gncCustomerGetActive (cust));
 
         string = gncCustomerGetNotes (cust);
@@ -687,14 +710,14 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     /* I know that cust exists here -- either passed in or just created */
 
     cw->taxincluded = gncCustomerGetTaxIncluded (cust);
-    gnc_taxincluded_combo (GTK_COMBO_BOX(cw->taxincluded_menu), cw->taxincluded);
-    gnc_billterms_combo (GTK_COMBO_BOX(cw->terms_menu), bookp, TRUE, cw->terms);
+    gnc_taxincluded_dropdown (GTK_DROP_DOWN(cw->taxincluded_menu), cw->taxincluded);
+    gnc_billterms_dropdown (GTK_DROP_DOWN(cw->terms_menu), bookp, TRUE, cw->terms);
 
     cw->taxtable = gncCustomerGetTaxTable (cust);
-    gnc_taxtables_combo (GTK_COMBO_BOX(cw->taxtable_menu), bookp, TRUE, cw->taxtable);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->taxtable_check),
+    gnc_taxtables_dropdown (GTK_DROP_DOWN(cw->taxtable_menu), bookp, TRUE, cw->taxtable);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (cw->taxtable_check),
                                   gncCustomerGetTaxTableOverride (cust));
-    gnc_customer_taxtable_check_cb (GTK_TOGGLE_BUTTON (cw->taxtable_check), cw);
+    gnc_customer_taxtable_check_cb (GTK_CHECK_BUTTON (cw->taxtable_check), cw);
 
     /* Set up the addr line quickfill */
     cw->addr2_quickfill = gnc_get_shared_address_addr2_quickfill(cw->book, ADDR_QUICKFILL);
@@ -711,7 +734,7 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
                                          GNC_CUSTOMER_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (cw->dialog);
+    gtk_window_present (GTK_WINDOW (cw->dialog));
     g_object_unref(G_OBJECT(builder));
 
     return cw;
@@ -1230,10 +1253,11 @@ void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
     }
 }
 
+
 static gboolean
-gnc_customer_common_key_press_cb( GtkEntry *entry,
-                                  GdkEventKey *event,
-                                  gpointer user_data, GtkWidget* editable )
+gnc_customer_common_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                  guint keycode, GdkModifierType state,
+                                  GtkWidget* editable)
 {
     gboolean done_with_input = FALSE;
 
@@ -1241,75 +1265,75 @@ gnc_customer_common_key_press_cb( GtkEntry *entry,
      * the entry's key press handler, but in some cases that doesn't
      * seem to work right, so handle them here.
      */
-    switch ( event->keyval )
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
-        if ( !( event->state & GDK_SHIFT_MASK) )    /* Complete on Tab,
-                                                  * but not Shift-Tab */
         {
-            /* NOT done with input, though, since we need to focus to the next
-             * field.  Unselect the current field, though.
-             */
-            gtk_editable_select_region( GTK_EDITABLE(editable),
-                                        0, 0 );
+            if (!(state & GDK_SHIFT_MASK)) /* Complete on Tab,
+                                               * but not Shift-Tab */
+            {
+                /* NOT done with input, though, since we need to focus to the next
+                 * field.  Unselect the current field, though.
+                 */
+                gtk_editable_select_region (GTK_EDITABLE(editable), 0, 0);
+            }
         }
         break;
     }
+    return (done_with_input);
+}
 
-    return( done_with_input );
-}
 gboolean
-gnc_customer_addr2_key_press_cb( GtkEntry *entry,
-                                 GdkEventKey *event,
-                                 gpointer user_data )
+gnc_customer_addr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->addr2_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->addr2_entry);
 }
+
 gboolean
-gnc_customer_addr3_key_press_cb( GtkEntry *entry,
-                                 GdkEventKey *event,
-                                 gpointer user_data )
+gnc_customer_addr3_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->addr3_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->addr3_entry);
 }
+
 gboolean
-gnc_customer_addr4_key_press_cb( GtkEntry *entry,
-                                 GdkEventKey *event,
-                                 gpointer user_data )
+gnc_customer_addr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->addr4_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->addr4_entry);
 }
+
 gboolean
-gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry,
-                                     GdkEventKey *event,
-                                     gpointer user_data )
+gnc_customer_shipaddr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->shipaddr2_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->shipaddr2_entry);
 }
+
 gboolean
-gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry,
-                                     GdkEventKey *event,
-                                     gpointer user_data )
+gnc_customer_shipaddr3_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->shipaddr3_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->shipaddr3_entry);
 }
+
 gboolean
-gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry,
-                                     GdkEventKey *event,
-                                     gpointer user_data )
+gnc_customer_shipaddr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->shipaddr4_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->shipaddr4_entry);
 }

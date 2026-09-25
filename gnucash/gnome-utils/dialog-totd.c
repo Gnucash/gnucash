@@ -45,8 +45,8 @@
 #define GNC_RESPONSE_BACK    2
 
 /* Callbacks */
-void gnc_totd_dialog_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
-void gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button, gpointer user_data);
+
+void gnc_totd_dialog_startup_toggled_cb (GtkCheckButton *button, gpointer user_data);
 
 /* The Tips */
 static gchar **tip_list;
@@ -130,43 +130,63 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
 /***************************/
 /*    Dialog Callbacks     */
 /***************************/
-void gnc_totd_dialog_response_cb (GtkDialog *dialog,
-                                  gint       response,
-                                  gpointer   user_data)
+static void
+free_totd_dialog (GtkWidget *widget, TotdDialog *totd_dialog)
 {
-    TotdDialog *totd_dialog = user_data;
-
-    ENTER("dialog %p, response %d, user_data %p", dialog, response, user_data);
-    switch (response)
-    {
-    case GNC_RESPONSE_FORWARD:
-        gnc_new_tip_number(totd_dialog, 1);
-        break;
-
-    case GNC_RESPONSE_BACK:
-        gnc_new_tip_number(totd_dialog, -1);
-        break;
-
-    case GTK_RESPONSE_CLOSE:
-        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(totd_dialog->dialog));
-        /* fall through */
-
-    default:
-        gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, totd_dialog);
-        gtk_widget_destroy(GTK_WIDGET(totd_dialog->dialog));
-        break;
-    }
-    LEAVE("");
+    (void)widget;
+    gnc_unregister_gui_component_by_data (DIALOG_TOTD_CM_CLASS, totd_dialog);
+    g_free (totd_dialog);
 }
 
+static gboolean
+close_request_cb (GtkWindow *window, TotdDialog *totd_dialog)
+{
+    (void)totd_dialog;
+    gnc_save_window_size (GNC_PREFS_GROUP, window);
+    return FALSE;
+}
 
+static void
+gnc_totd_dialog_close (TotdDialog *totd_dialog)
+{
+    if (!totd_dialog || !totd_dialog->dialog)
+        return;
+
+    gnc_save_window_size (GNC_PREFS_GROUP,
+                          GTK_WINDOW (totd_dialog->dialog));
+    gtk_window_destroy (GTK_WINDOW (totd_dialog->dialog));
+}
+
+static void
+gnc_totd_dialog_forward_clicked_cb (GtkButton *button,
+                                     TotdDialog *totd_dialog)
+{
+    gnc_new_tip_number (totd_dialog, 1);
+    (void)button;
+}
+
+static void
+gnc_totd_dialog_back_clicked_cb (GtkButton *button,
+                                  TotdDialog *totd_dialog)
+{
+    gnc_new_tip_number (totd_dialog, -1);
+    (void)button;
+}
+
+static void
+gnc_totd_dialog_close_clicked_cb (GtkButton *button,
+                                   TotdDialog *totd_dialog)
+{
+    gnc_totd_dialog_close (totd_dialog);
+    (void)button;
+}
 void
-gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button,
+gnc_totd_dialog_startup_toggled_cb (GtkCheckButton *button,
                                     gpointer user_data)
 {
     gboolean active;
 
-    active = gtk_toggle_button_get_active(button);
+    active = gtk_check_button_get_active(button);
     gnc_prefs_set_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_TIPS, active);
 }
 
@@ -297,7 +317,7 @@ close_handler (gpointer user_data)
 
     ENTER(" ");
 
-    gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, totd_dialog);
+    gnc_totd_dialog_close (totd_dialog);
 
     LEAVE(" ");
 }
@@ -312,7 +332,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     TotdDialog *totd_dialog;
 
     GtkBuilder *builder;
-    GtkWidget *dialog, *button;
+    GtkWidget *dialog, *button, *back_button, *forward_button, *close_button;
     GtkTextView *textview;
     gboolean show_tips;
 
@@ -354,12 +374,27 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 
     ENTER("totd_dialog %p, dialog %p", totd_dialog, dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, totd_dialog);
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, totd_dialog);
+
+    back_button = GTK_WIDGET (gtk_builder_get_object (builder, "back-button"));
+    forward_button = GTK_WIDGET (gtk_builder_get_object (builder, "forward-button"));
+    close_button = GTK_WIDGET (gtk_builder_get_object (builder, "close-button"));
+    g_signal_connect (back_button, "clicked",
+                      G_CALLBACK (gnc_totd_dialog_back_clicked_cb), totd_dialog);
+    g_signal_connect (forward_button, "clicked",
+                      G_CALLBACK (gnc_totd_dialog_forward_clicked_cb), totd_dialog);
+    g_signal_connect (close_button, "clicked",
+                      G_CALLBACK (gnc_totd_dialog_close_clicked_cb), totd_dialog);
+    g_signal_connect (dialog, "close-request", G_CALLBACK (close_request_cb),
+                      totd_dialog);
+    g_signal_connect (dialog, "destroy", G_CALLBACK (free_totd_dialog),
+                      totd_dialog);
+    gtk_window_set_default_widget (GTK_WINDOW (dialog), forward_button);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_checkbutton"));
     totd_dialog->showcheck_button = button;
 
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (button), show_tips);
+    gtk_check_button_set_active(GTK_CHECK_BUTTON (button), show_tips);
 
     textview = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "tip_textview"));
     totd_dialog->textview = textview;
@@ -367,7 +402,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     gnc_new_tip_number(totd_dialog, 1);
 
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(totd_dialog->dialog), parent);
-    gtk_widget_show(GTK_WIDGET (totd_dialog->dialog));
+    gtk_widget_set_visible (GTK_WIDGET(totd_dialog->dialog), TRUE);
 
     gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,
                                NULL, close_handler, totd_dialog);

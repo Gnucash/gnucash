@@ -34,13 +34,16 @@
 #include <stdint.h>
 #include <glib/gi18n.h>
 #include <gwenhywfar/gui_be.h>
+#include <gwenhywfar/gwenhywfar.h>
 #include <gwenhywfar/inherit.h>
 #include <gwenhywfar/version.h>
 
 #include "dialog-utils.h"
 #include "gnc-ab-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-gwen-gui.h"
+#include "gnc-hooks.h"
 #include "gnc-session.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
@@ -56,7 +59,7 @@
 #define GNC_PREF_CLOSE_ON_FINISH   "close-on-finish"
 #define GNC_PREF_REMEMBER_PIN      "remember-pin"
 
-# include <gwen-gui-gtk3/gtk3_gui.h>
+# include <gwen-gui-gtk4/gtk4_gui.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -93,6 +96,35 @@ GWEN_INHERIT(GWEN_GUI, GncGWENGui)
 
 typedef struct _Progress Progress;
 typedef enum _GuiState GuiState;
+typedef struct _GncGwenWait GncGwenWait;
+typedef void (*GncGwenWaitCancelFunc) (GncGwenWait *wait);
+
+struct _GncGwenWait
+{
+    GMainLoop *loop;
+    GncGwenWaitCancelFunc cancel;
+    gboolean registered;
+};
+
+typedef struct
+{
+    gboolean dispatched;
+} GncGwenFinalizeSource;
+
+static GList *active_waits = NULL;
+static gboolean waits_shutting_down = FALSE;
+static gboolean ui_shutdown_hook_registered = FALSE;
+static guint active_abi_frames = 0;
+
+static gboolean shutdown_pending = FALSE;
+static gboolean gui_shutdown_finalized = FALSE;
+static gboolean shutdown_finalizing = FALSE;
+static gboolean gwen_library_fini_pending = FALSE;
+static gboolean gwen_library_owned = FALSE;
+static guint gwen_library_clients = 0;
+static guint shutdown_finalize_source_id = 0;
+static GApplication *shutdown_application = NULL;
+static gulong shutdown_application_handler_id = 0;
 
 static void register_callbacks(GncGWENGui *gui);
 static void unregister_callbacks(GncGWENGui *gui);
@@ -109,6 +141,38 @@ static void hide_progress(GncGWENGui *gui, Progress *progress);
 static void free_progress(Progress *progress, gpointer unused);
 static gboolean keep_alive(GncGWENGui *gui);
 static void cm_close_handler(gpointer user_data);
+static void gwen_shutdown_finish_now(void);
+static void gwen_shutdown_schedule(void);
+static void gwen_ui_shutdown_cb(gpointer hook_data, gpointer user_data);
+
+#ifdef GNC_GWEN_GUI_TESTING
+void gnc_gwen_gui_test_get_state (guint*, guint*, guint*, guint*, guint*,
+                                  guint*, guint*, guint*, guint*, guint*,
+                                  guint*, guint*, guint*, guint*, guint*,
+                                  gulong*);
+void gnc_gwen_gui_test_take_permanent_certs (GWEN_DB_NODE *certs);
+
+static guint test_init_wrapper_calls = 0;
+static guint test_fini_wrapper_calls = 0;
+static guint test_raw_init_calls = 0;
+static guint test_raw_fini_calls = 0;
+static guint test_finalize_source_calls = 0;
+static guint test_finalize_destroy_calls = 0;
+static guint test_gui_finalize_calls = 0;
+static guint test_component_register_calls = 0;
+static guint test_component_unregister_calls = 0;
+static guint test_application_barrier_connect_calls = 0;
+static guint test_application_barrier_disconnect_calls = 0;
+/* The lifecycle test transfers an empty certificate store before the GUI is
+ * created.  Keeping this injection here prevents test setup from initializing
+ * AqBanking's per-user configuration merely to obtain an otherwise unrelated
+ * certificate store. */
+static GWEN_DB_NODE *test_permanently_accepted_certs = NULL;
+# define GNC_GWEN_TEST_COUNT(counter) ((counter)++)
+#else
+# define GNC_GWEN_TEST_COUNT(counter) ((void)0)
+#endif
+
 static void erase_password(gchar *password);
 static gchar *strip_html(gchar *text);
 static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
@@ -124,6 +188,8 @@ static gint GNC_GWENHYWFAR_CB inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, con
 static guint32 GNC_GWENHYWFAR_CB showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                           const gchar *text, guint32 guiid);
 static void GWENHYWFAR_CB hidebox_cb(GWEN_GUI *gwen_gui, guint32 id);
+static gboolean showbox_close_request_cb(GtkWindow *window, gpointer user_data);
+static void showbox_close_clicked_cb(GtkButton *button, gpointer user_data);
 static guint32 GNC_GWENHYWFAR_CB progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags,
                                  const char *title, const char *text,
                                  uint64_t total, uint32_t guiid);
@@ -149,11 +215,10 @@ typedef GWEN_SYNCIO GWEN_IO_LAYER;
 static gint GNC_GWENHYWFAR_CB checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
         GWEN_IO_LAYER *io, guint32 guiid);
 
-gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event,
-                             gpointer user_data);
+gboolean ggg_delete_event_cb(GtkWindow *window, gpointer user_data);
 void ggg_abort_clicked_cb(GtkButton *button, gpointer user_data);
 void ggg_close_clicked_cb(GtkButton *button, gpointer user_data);
-void ggg_close_toggled_cb(GtkToggleButton *button, gpointer user_data);
+void ggg_close_toggled_cb(GtkCheckButton *button, gpointer user_data);
 
 enum _GuiState
 {
@@ -168,6 +233,7 @@ struct _GncGWENGui
 {
     GWEN_GUI *gwen_gui;
     GtkWidget *parent;
+    gint component_id;
     GtkWidget *dialog;
 
     /* Progress bars */
@@ -190,7 +256,7 @@ struct _GncGWENGui
     /* Buttons */
     GtkWidget *abort_button;
     GtkWidget *close_button;
-    GtkWidget *close_checkbutton;
+    GtkCheckButton *close_checkbutton;
 
     /* Flags to keep track on whether an HBCI action is running or not */
     gboolean keep_alive;
@@ -207,6 +273,7 @@ struct _GncGWENGui
 
     /* Dialogs */
     guint32 showbox_id;
+    guint32 showbox_last_id;
     GHashTable *showbox_hash;
     GtkWidget *showbox_last;
 
@@ -225,19 +292,531 @@ struct _Progress
     guint source;
 };
 
+static gboolean
+gwen_wait_register (GncGwenWait *wait)
+{
+    g_return_val_if_fail (wait && wait->loop && wait->cancel, FALSE);
+
+    if (waits_shutting_down)
+        return FALSE;
+
+    active_waits = g_list_prepend (active_waits, wait);
+    wait->registered = TRUE;
+    return TRUE;
+}
+
+static void
+gwen_abi_frame_enter (void)
+{
+    active_abi_frames++;
+}
+
+static void
+gwen_abi_frame_leave (void)
+{
+    g_assert (active_abi_frames > 0);
+    active_abi_frames--;
+    if (!active_abi_frames)
+        gwen_shutdown_schedule ();
+}
+
+static void
+gwen_wait_unregister (GncGwenWait *wait)
+{
+    if (!wait->registered)
+        return;
+
+    active_waits = g_list_remove (active_waits, wait);
+    wait->registered = FALSE;
+
+    if (!active_waits)
+        gwen_shutdown_schedule ();
+}
+
+static void
+gwen_gui_quiesce (GncGWENGui *gui)
+{
+    if (!gui)
+        return;
+
+    gui->state = ABORTED;
+    gui->keep_alive = FALSE;
+    for (GList *node = gui->progresses; node; node = node->next)
+    {
+        Progress *progress = node->data;
+
+        if (progress->source)
+        {
+            g_source_remove (progress->source);
+            progress->source = 0;
+        }
+    }
+    if (gui->showbox_hash)
+        g_hash_table_remove_all (gui->showbox_hash);
+    gui->showbox_last = NULL;
+    gui->showbox_last_id = 0;
+    if (gui->dialog)
+        gtk_widget_set_visible (gui->dialog, FALSE);
+}
+
+static void
+gwen_waits_shutdown (void)
+{
+    GList *snapshot;
+
+    waits_shutting_down = TRUE;
+    snapshot = g_list_copy (active_waits);
+    for (GList *node = snapshot; node; node = node->next)
+    {
+        GncGwenWait *wait = node->data;
+
+        wait->cancel (wait);
+    }
+    g_list_free (snapshot);
+    gwen_gui_quiesce (full_gui);
+}
+
+static void
+gwen_shutdown_application_barrier_clear (void)
+{
+    g_assert ((shutdown_application == NULL) ==
+              (shutdown_application_handler_id == 0));
+
+    if (!shutdown_application)
+        return;
+
+    g_signal_handler_disconnect (shutdown_application,
+                                 shutdown_application_handler_id);
+    shutdown_application_handler_id = 0;
+    GNC_GWEN_TEST_COUNT (test_application_barrier_disconnect_calls);
+    g_clear_object (&shutdown_application);
+}
+
+static void
+gwen_shutdown_application_shutdown_cb (GApplication *application,
+                                       gpointer user_data)
+{
+    guint source_id;
+
+    (void)user_data;
+    g_assert (application == shutdown_application);
+    g_assert (!active_waits && !active_abi_frames);
+
+    source_id = shutdown_finalize_source_id;
+    if (source_id && g_source_remove (source_id))
+    {
+        /* The source DestroyNotify finalizes synchronously and clears this
+         * signal handler and its strong application reference. */
+        return;
+    }
+
+    shutdown_finalize_source_id = 0;
+    gwen_shutdown_finish_now ();
+}
+
+static void
+gwen_shutdown_application_barrier_bind (void)
+{
+    GApplication *application;
+
+    if (shutdown_application_handler_id)
+        return;
+
+    application = g_application_get_default ();
+    if (!G_IS_APPLICATION (application))
+        return;
+
+    shutdown_application = g_object_ref (application);
+    shutdown_application_handler_id = g_signal_connect (
+        shutdown_application, "shutdown",
+        G_CALLBACK (gwen_shutdown_application_shutdown_cb), NULL);
+    GNC_GWEN_TEST_COUNT (test_application_barrier_connect_calls);
+}
+
+static void
+gwen_shutdown_finish_now (void)
+{
+    GncGWENGui *gui = full_gui;
+
+    if (!shutdown_pending || active_waits || active_abi_frames ||
+        shutdown_finalizing)
+        return;
+
+    shutdown_finalizing = TRUE;
+    shutdown_pending = FALSE;
+    gwen_shutdown_application_barrier_clear ();
+
+    if (!gui_shutdown_finalized)
+    {
+        GNC_GWEN_TEST_COUNT (test_gui_finalize_calls);
+
+        if (gui && gui->component_id != NO_COMPONENT)
+        {
+            gnc_unregister_gui_component (gui->component_id);
+            gui->component_id = NO_COMPONENT;
+            GNC_GWEN_TEST_COUNT (test_component_unregister_calls);
+        }
+        if (gui)
+        {
+            unregister_callbacks (gui);
+            g_signal_handlers_disconnect_by_data (gui->dialog, gui);
+            g_signal_handlers_disconnect_by_data (gui->abort_button, gui);
+            g_signal_handlers_disconnect_by_data (gui->close_button, gui);
+            g_signal_handlers_disconnect_by_data (gui->close_checkbutton, gui);
+        }
+        if (ui_shutdown_hook_registered)
+        {
+            gnc_hook_remove_dangler (HOOK_UI_SHUTDOWN,
+                                     (GFunc)gwen_ui_shutdown_cb);
+            ui_shutdown_hook_registered = FALSE;
+        }
+
+        if (gui)
+        {
+            full_gui = NULL;
+            gui->parent = NULL;
+            gtk_widget_set_visible (gui->dialog, FALSE);
+            gtk_window_destroy (GTK_WINDOW(gui->dialog));
+            gui->dialog = NULL;
+            g_list_foreach (gui->progresses, (GFunc)free_progress, NULL);
+            g_list_free (gui->progresses);
+            gui->progresses = NULL;
+            if (gui->passwords)
+                g_hash_table_destroy(gui->passwords);
+            if (gui->showbox_hash)
+                g_hash_table_destroy(gui->showbox_hash);
+            if (gui->permanently_accepted_certs)
+                GWEN_DB_Group_free(gui->permanently_accepted_certs);
+            if (gui->accepted_certs)
+                g_hash_table_destroy(gui->accepted_certs);
+            g_free(gui);
+        }
+        GWEN_Gui_SetGui(NULL);
+        if (log_gwen_gui)
+        {
+            GWEN_Gui_free(log_gwen_gui);
+            log_gwen_gui = NULL;
+        }
+        gui_shutdown_finalized = TRUE;
+    }
+
+    if (gwen_library_fini_pending)
+    {
+        gwen_library_fini_pending = FALSE;
+        if (gwen_library_owned)
+        {
+            GWEN_Logger_SetLevel (NULL, GWEN_LoggerLevel_Error);
+            GWEN_Logger_SetLevel (GWEN_LOGDOMAIN, GWEN_LoggerLevel_Warning);
+            GWEN_Logger_SetLevel (AQBANKING_LOGDOMAIN,
+                                  GWEN_LoggerLevel_Warning);
+            gwen_library_owned = FALSE;
+            GNC_GWEN_TEST_COUNT (test_raw_fini_calls);
+            GWEN_Fini();
+        }
+    }
+
+    shutdown_finalizing = FALSE;
+}
+
+static gboolean
+gwen_shutdown_finalize_source_cb (gpointer user_data)
+{
+    GncGwenFinalizeSource *source = user_data;
+
+    source->dispatched = TRUE;
+    shutdown_finalize_source_id = 0;
+    GNC_GWEN_TEST_COUNT (test_finalize_source_calls);
+    gwen_shutdown_finish_now ();
+    return G_SOURCE_REMOVE;
+}
+
+static void
+gwen_shutdown_finalize_source_destroyed (gpointer user_data)
+{
+    GncGwenFinalizeSource *source = user_data;
+
+    if (!source->dispatched)
+    {
+        shutdown_finalize_source_id = 0;
+        if (shutdown_pending && !active_waits && !active_abi_frames)
+        {
+            GNC_GWEN_TEST_COUNT (test_finalize_destroy_calls);
+            gwen_shutdown_finish_now ();
+        }
+    }
+    g_free (source);
+}
+
+static void
+gwen_shutdown_schedule (void)
+{
+    GncGwenFinalizeSource *source;
+
+    if (!shutdown_pending || active_waits || active_abi_frames ||
+        shutdown_finalize_source_id)
+        return;
+
+    source = g_new0 (GncGwenFinalizeSource, 1);
+    shutdown_finalize_source_id = g_idle_add_full (
+        G_PRIORITY_HIGH_IDLE, gwen_shutdown_finalize_source_cb, source,
+        gwen_shutdown_finalize_source_destroyed);
+}
+
+static void
+gwen_shutdown_request (gboolean finalize_library)
+{
+    if (gui_shutdown_finalized && !finalize_library)
+        return;
+
+    waits_shutting_down = TRUE;
+    shutdown_pending = TRUE;
+    if (finalize_library)
+        gwen_library_fini_pending = TRUE;
+
+    gwen_waits_shutdown ();
+    if (!active_waits && !active_abi_frames)
+    {
+        gwen_shutdown_finish_now ();
+        return;
+    }
+
+    /* The idle source handles ordinary unwind. The application barrier owns
+     * liveness when g_application_quit() prevents another idle dispatch. */
+    gwen_shutdown_application_barrier_bind ();
+    gwen_shutdown_schedule ();
+}
+
+static void
+gwen_ui_shutdown_cb (gpointer hook_data, gpointer user_data)
+{
+    (void)hook_data;
+    (void)user_data;
+    gnc_GWEN_Gui_shutdown ();
+}
+
+static gint GNC_GWENHYWFAR_CB
+messagebox_abi_cb (GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
+                   const gchar *text, const gchar *b1, const gchar *b2,
+                   const gchar *b3, guint32 guiid)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = messagebox_cb (gwen_gui, flags, title, text, b1, b2, b3, guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+inputbox_abi_cb (GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
+                 const gchar *text, gchar *buffer, gint min_len,
+                 gint max_len, guint32 guiid)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = inputbox_cb (gwen_gui, flags, title, text, buffer, min_len,
+                          max_len, guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static guint32 GNC_GWENHYWFAR_CB
+showbox_abi_cb (GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
+                const gchar *text, guint32 guiid)
+{
+    guint32 result;
+
+    gwen_abi_frame_enter ();
+    result = showbox_cb (gwen_gui, flags, title, text, guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static void GNC_GWENHYWFAR_CB
+hidebox_abi_cb (GWEN_GUI *gwen_gui, guint32 id)
+{
+    gwen_abi_frame_enter ();
+    hidebox_cb (gwen_gui, id);
+    gwen_abi_frame_leave ();
+}
+
+static guint32 GNC_GWENHYWFAR_CB
+progress_start_abi_cb (GWEN_GUI *gwen_gui, uint32_t progress_flags,
+                       const char *title, const char *text, uint64_t total,
+                       uint32_t guiid)
+{
+    guint32 result;
+
+    gwen_abi_frame_enter ();
+    result = progress_start_cb (gwen_gui, progress_flags, title, text, total,
+                                guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+progress_advance_abi_cb (GWEN_GUI *gwen_gui, uint32_t id,
+                         uint64_t progress)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = progress_advance_cb (gwen_gui, id, progress);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+progress_log_abi_cb (GWEN_GUI *gwen_gui, guint32 id,
+                     GWEN_LOGGER_LEVEL level, const gchar *text)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = progress_log_cb (gwen_gui, id, level, text);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+progress_end_abi_cb (GWEN_GUI *gwen_gui, guint32 id)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = progress_end_cb (gwen_gui, id);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+getpassword_abi_cb (GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
+                    const gchar *title, const gchar *text, gchar *buffer,
+                    gint min_len, gint max_len,
+                    GWEN_GUI_PASSWORD_METHOD method_id,
+                    GWEN_DB_NODE *method_params, guint32 guiid)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = getpassword_cb (gwen_gui, flags, token, title, text, buffer,
+                             min_len, max_len, method_id, method_params,
+                             guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+setpasswordstatus_abi_cb (GWEN_GUI *gwen_gui, const gchar *token,
+                          const gchar *pin, GWEN_GUI_PASSWORD_STATUS status,
+                          guint32 guiid)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = setpasswordstatus_cb (gwen_gui, token, pin, status, guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+loghook_abi_cb (GWEN_GUI *gwen_gui, const gchar *log_domain,
+                GWEN_LOGGER_LEVEL priority, const gchar *text)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = loghook_cb (gwen_gui, log_domain, priority, text);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+static gint GNC_GWENHYWFAR_CB
+checkcert_abi_cb (GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
+                  GWEN_IO_LAYER *io, guint32 guiid)
+{
+    gint result;
+
+    gwen_abi_frame_enter ();
+    result = checkcert_cb (gwen_gui, cert, io, guiid);
+    gwen_abi_frame_leave ();
+    return result;
+}
+
+void
+gnc_GWEN_Init (void)
+{
+    gchar* gwen_logging;
+    gchar* aqb_logging;
+
+    GNC_GWEN_TEST_COUNT (test_init_wrapper_calls);
+    if (waits_shutting_down)
+    {
+        g_warning ("Gwenhywfar cannot be reinitialized after UI shutdown");
+        return;
+    }
+
+    gwen_library_clients++;
+    if (gwen_library_owned)
+        return;
+
+    if (GWEN_Init() < 0)
+    {
+        gwen_library_clients--;
+        g_warning ("Could not initialize Gwenhywfar");
+        return;
+    }
+    gwen_library_owned = TRUE;
+    GNC_GWEN_TEST_COUNT (test_raw_init_calls);
+
+    gwen_logging = g_strdup (g_getenv ("GWEN_LOGLEVEL"));
+    aqb_logging = g_strdup (g_getenv ("AQBANKING_LOGLEVEL"));
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING, GNC_PREF_VERBOSE_DEBUG))
+    {
+        if (!gwen_logging)
+        {
+            GWEN_Logger_SetLevel (NULL, GWEN_LoggerLevel_Info);
+            GWEN_Logger_SetLevel (GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
+        }
+        if (!aqb_logging)
+            GWEN_Logger_SetLevel (AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
+    }
+    else
+    {
+        if (!gwen_logging)
+        {
+            GWEN_Logger_SetLevel (NULL, GWEN_LoggerLevel_Error);
+            GWEN_Logger_SetLevel (GWEN_LOGDOMAIN, GWEN_LoggerLevel_Error);
+        }
+        if (!aqb_logging)
+            GWEN_Logger_SetLevel (AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
+    }
+    g_free (gwen_logging);
+    g_free (aqb_logging);
+    gnc_GWEN_Gui_log_init();
+}
+
 void
 gnc_GWEN_Gui_log_init(void)
 {
+    if (!gwen_library_owned || waits_shutting_down)
+        return;
+
     if (!log_gwen_gui)
     {
-        log_gwen_gui = Gtk3_Gui_new();
+        if (!ui_shutdown_hook_registered)
+        {
+            gnc_hook_add_dangler (HOOK_UI_SHUTDOWN,
+                                  (GFunc)gwen_ui_shutdown_cb, NULL, NULL);
+            ui_shutdown_hook_registered = TRUE;
+        }
+        log_gwen_gui = Gtk4_Gui_new();
 
         /* Always use our own logging */
-        GWEN_Gui_SetLogHookFn(log_gwen_gui, loghook_cb);
-
-        /* Keep a reference so that the GWEN_GUI survives a GUI switch */
-        GWEN_Gui_Attach(log_gwen_gui);
+        GWEN_Gui_SetLogHookFn(log_gwen_gui, loghook_abi_cb);
     }
+
     GWEN_Gui_SetGui(log_gwen_gui);
 }
 
@@ -247,6 +826,12 @@ gnc_GWEN_Gui_get(GtkWidget *parent)
     GncGWENGui *gui;
 
     ENTER("parent=%p", parent);
+
+    if (waits_shutting_down)
+    {
+        LEAVE("GUI shutdown is in progress");
+        return NULL;
+    }
 
     if (full_gui)
     {
@@ -287,38 +872,33 @@ gnc_GWEN_Gui_release(GncGWENGui *gui)
 }
 
 void
-gnc_GWEN_Gui_shutdown(void)
+gnc_GWEN_Fini (void)
 {
-    GncGWENGui *gui = full_gui;
-
-    ENTER(" ");
-
-    if (log_gwen_gui)
-    {
-        GWEN_Gui_free(log_gwen_gui);
-        log_gwen_gui = NULL;
-    }
-    GWEN_Gui_SetGui(NULL);
-
-    if (!gui)
+    GNC_GWEN_TEST_COUNT (test_fini_wrapper_calls);
+    if (!gwen_library_clients)
         return;
 
-    gui->parent = NULL;
-    reset_dialog(gui);
-    if (gui->passwords)
-        g_hash_table_destroy(gui->passwords);
-    if (gui->showbox_hash)
-        g_hash_table_destroy(gui->showbox_hash);
-    if (gui->permanently_accepted_certs)
-        GWEN_DB_Group_free(gui->permanently_accepted_certs);
-    if (gui->accepted_certs)
-        g_hash_table_destroy(gui->accepted_certs);
-    gtk_widget_destroy(gui->dialog);
-    g_free(gui);
+    gwen_library_clients--;
+    if (gwen_library_clients)
+        return;
 
-    full_gui = NULL;
+    if (!gwen_library_owned && !gwen_library_fini_pending)
+        return;
 
-    LEAVE(" ");
+    gwen_shutdown_request (TRUE);
+}
+
+void
+gnc_GWEN_Gui_shutdown(void)
+{
+    ENTER(" ");
+
+    gwen_shutdown_request (FALSE);
+    if (active_waits)
+        LEAVE("waiting for %u synchronous Gwen callback(s) to unwind",
+              g_list_length (active_waits));
+    else
+        LEAVE("shutdown finalized");
 }
 
 void
@@ -330,13 +910,10 @@ gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
 
     if (full_gui)
     {
-        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(full_gui->close_checkbutton))
+        if (gtk_check_button_get_active(full_gui->close_checkbutton)
                 != close_when_finished)
-        {
-            gtk_toggle_button_set_active(
-                GTK_TOGGLE_BUTTON(full_gui->close_checkbutton),
-                close_when_finished);
-        }
+            gtk_check_button_set_active(full_gui->close_checkbutton,
+                                        close_when_finished);
     }
 }
 
@@ -351,6 +928,9 @@ gnc_GWEN_Gui_show_dialog()
 {
     GncGWENGui *gui = full_gui;
 
+    if (waits_shutting_down)
+        return FALSE;
+
     if (!gui)
     {
         gnc_GWEN_Gui_get(NULL);
@@ -363,8 +943,7 @@ gnc_GWEN_Gui_show_dialog()
         {
             gui->state = FINISHED;
         }
-        gtk_toggle_button_set_active(
-            GTK_TOGGLE_BUTTON(gui->close_checkbutton),
+        gtk_check_button_set_active(gui->close_checkbutton,
             gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH));
 
         gtk_widget_set_sensitive(gui->close_button, TRUE);
@@ -397,21 +976,21 @@ register_callbacks(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    gwen_gui = Gtk3_Gui_new();
+    gwen_gui = Gtk4_Gui_new();
     gui->gwen_gui = gwen_gui;
 
-    GWEN_Gui_SetMessageBoxFn(gwen_gui, messagebox_cb);
-    GWEN_Gui_SetInputBoxFn(gwen_gui, inputbox_cb);
-    GWEN_Gui_SetShowBoxFn(gwen_gui, showbox_cb);
-    GWEN_Gui_SetHideBoxFn(gwen_gui, hidebox_cb);
-    GWEN_Gui_SetProgressStartFn(gwen_gui, progress_start_cb);
-    GWEN_Gui_SetProgressAdvanceFn(gwen_gui, progress_advance_cb);
-    GWEN_Gui_SetProgressLogFn(gwen_gui, progress_log_cb);
-    GWEN_Gui_SetProgressEndFn(gwen_gui, progress_end_cb);
-    GWEN_Gui_SetGetPasswordFn(gwen_gui, getpassword_cb);
-    GWEN_Gui_SetSetPasswordStatusFn(gwen_gui, setpasswordstatus_cb);
-    GWEN_Gui_SetLogHookFn(gwen_gui, loghook_cb);
-    gui->builtin_checkcert = GWEN_Gui_SetCheckCertFn(gwen_gui, checkcert_cb);
+    GWEN_Gui_SetMessageBoxFn(gwen_gui, messagebox_abi_cb);
+    GWEN_Gui_SetInputBoxFn(gwen_gui, inputbox_abi_cb);
+    GWEN_Gui_SetShowBoxFn(gwen_gui, showbox_abi_cb);
+    GWEN_Gui_SetHideBoxFn(gwen_gui, hidebox_abi_cb);
+    GWEN_Gui_SetProgressStartFn(gwen_gui, progress_start_abi_cb);
+    GWEN_Gui_SetProgressAdvanceFn(gwen_gui, progress_advance_abi_cb);
+    GWEN_Gui_SetProgressLogFn(gwen_gui, progress_log_abi_cb);
+    GWEN_Gui_SetProgressEndFn(gwen_gui, progress_end_abi_cb);
+    GWEN_Gui_SetGetPasswordFn(gwen_gui, getpassword_abi_cb);
+    GWEN_Gui_SetSetPasswordStatusFn(gwen_gui, setpasswordstatus_abi_cb);
+    GWEN_Gui_SetLogHookFn(gwen_gui, loghook_abi_cb);
+    gui->builtin_checkcert = GWEN_Gui_SetCheckCertFn(gwen_gui, checkcert_abi_cb);
 
     GWEN_Gui_SetGui(gwen_gui);
     SETDATA_GUI(gwen_gui, gui);
@@ -432,9 +1011,9 @@ unregister_callbacks(GncGWENGui *gui)
         return;
     }
 
-    /* Switch to log_gwen_gui and free gui->gwen_gui */
-    gnc_GWEN_Gui_log_init();
-
+    if (GWEN_Gui_GetGui() == gui->gwen_gui)
+        GWEN_Gui_SetGui(log_gwen_gui);
+    GWEN_Gui_free(gui->gwen_gui);
     gui->gwen_gui = NULL;
 
     LEAVE(" ");
@@ -444,7 +1023,6 @@ static void
 setup_dialog(GncGWENGui *gui)
 {
     GtkBuilder *builder;
-    gint component_id;
 
     g_return_if_fail(gui);
 
@@ -453,6 +1031,7 @@ setup_dialog(GncGWENGui *gui)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_connection_dialog");
 
+    gui->component_id = NO_COMPONENT;
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_connection_dialog"));
 
     gui->entries_grid = GTK_WIDGET(gtk_builder_get_object (builder, "entries_grid"));
@@ -464,22 +1043,24 @@ setup_dialog(GncGWENGui *gui)
     gui->log_text = GTK_WIDGET(gtk_builder_get_object (builder, "log_text"));
     gui->abort_button = GTK_WIDGET(gtk_builder_get_object (builder, "abort_button"));
     gui->close_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-    gui->close_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "close_checkbutton"));
+    gui->close_checkbutton = GTK_CHECK_BUTTON(
+        gtk_builder_get_object (builder, "close_checkbutton"));
     gui->accepted_certs = NULL;
     gui->permanently_accepted_certs = NULL;
     gui->showbox_hash = NULL;
     gui->showbox_id = 1;
 
     /* Connect the Signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
 
-    gtk_toggle_button_set_active(
-        GTK_TOGGLE_BUTTON(gui->close_checkbutton),
+    gtk_check_button_set_active(gui->close_checkbutton,
         gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH));
 
-    component_id = gnc_register_gui_component(GWEN_GUI_CM_CLASS, NULL,
-                   cm_close_handler, gui);
-    gnc_gui_component_set_session(component_id, gnc_get_current_session());
+    gui->component_id = gnc_register_gui_component(GWEN_GUI_CM_CLASS, NULL,
+                                                    cm_close_handler, gui);
+    GNC_GWEN_TEST_COUNT (test_component_register_calls);
+    gnc_gui_component_set_session(gui->component_id,
+                                  gnc_get_current_session());
 
 
 
@@ -520,8 +1101,8 @@ reset_dialog(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    gtk_entry_set_text(GTK_ENTRY(gui->top_entry), "");
-    gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
+    gnc_entry_set_text(GTK_ENTRY(gui->top_entry), "");
+    gnc_entry_set_text(GTK_ENTRY(gui->second_entry), "");
     g_list_foreach(gui->progresses, (GFunc) free_progress, NULL);
     g_list_free(gui->progresses);
     gui->progresses = NULL;
@@ -530,14 +1111,14 @@ reset_dialog(GncGWENGui *gui)
     {
         gtk_grid_remove_row (GTK_GRID(gui->entries_grid),
                              OTHER_ENTRIES_ROW_OFFSET);
-        gtk_widget_destroy(gui->other_entries_box);
         gui->other_entries_box = NULL;
     }
     if (gui->showbox_hash)
         g_hash_table_destroy(gui->showbox_hash);
     gui->showbox_last = NULL;
-    gui->showbox_hash = g_hash_table_new_full(
-                            NULL, NULL, NULL, (GDestroyNotify) gtk_widget_destroy);
+    gui->showbox_last_id = 0;
+    gui->showbox_hash = g_hash_table_new_full(g_direct_hash, g_direct_equal,
+                                              NULL, (GDestroyNotify)gtk_window_destroy);
 
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(gui->dialog),
@@ -557,7 +1138,15 @@ reset_dialog(GncGWENGui *gui)
         gui->accepted_certs = g_hash_table_new_full(
                                   g_str_hash, g_str_equal, (GDestroyNotify) g_free, NULL);
     if (!gui->permanently_accepted_certs)
+#ifdef GNC_GWEN_GUI_TESTING
+    {
+        g_assert_nonnull (test_permanently_accepted_certs);
+        gui->permanently_accepted_certs = test_permanently_accepted_certs;
+        test_permanently_accepted_certs = NULL;
+    }
+#else
         gui->permanently_accepted_certs = gnc_ab_get_permanent_certs();
+#endif
 
     LEAVE(" ");
 }
@@ -566,6 +1155,12 @@ static void
 set_running(GncGWENGui *gui)
 {
     g_return_if_fail(gui);
+
+    if (waits_shutting_down)
+    {
+        gui->keep_alive = FALSE;
+        return;
+    }
 
     ENTER("gui=%p", gui);
 
@@ -590,7 +1185,7 @@ set_finished(GncGWENGui *gui)
 
     gtk_widget_set_sensitive(gui->abort_button, FALSE);
     gtk_widget_set_sensitive(gui->close_button, TRUE);
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gui->close_checkbutton)))
+    if (gtk_check_button_get_active(gui->close_checkbutton))
         hide_dialog(gui);
 
     LEAVE(" ");
@@ -619,9 +1214,12 @@ show_dialog(GncGWENGui *gui, gboolean clear_log)
 {
     g_return_if_fail(gui);
 
+    if (waits_shutting_down)
+        return;
+
     ENTER("gui=%p, clear_log=%d", gui, clear_log);
 
-    gtk_widget_show(gui->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(gui->dialog), TRUE);
 
     gnc_plugin_aqbanking_set_logwindow_visible(TRUE);
 
@@ -643,14 +1241,14 @@ hide_dialog(GncGWENGui *gui)
     ENTER("gui=%p", gui);
 
     /* Hide the dialog */
-    gtk_widget_hide(gui->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(gui->dialog), FALSE);
 
     gnc_plugin_aqbanking_set_logwindow_visible(FALSE);
 
-    /* Remember whether the dialog is to be closed when finished */
+    /* Cache the close check button state for next time */
     gnc_prefs_set_bool(
         GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
-        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gui->close_checkbutton)));
+        gtk_check_button_get_active(gui->close_checkbutton));
 
     /* Remember size and position of the dialog */
     gnc_save_window_size(GNC_PREFS_GROUP_CONNECTION, GTK_WINDOW(gui->dialog));
@@ -668,6 +1266,9 @@ show_progress_cb(gpointer user_data)
     Progress *progress = user_data;
 
     g_return_val_if_fail(progress, FALSE);
+
+    if (waits_shutting_down)
+        return G_SOURCE_REMOVE;
 
     ENTER("progress=%p", progress);
 
@@ -688,6 +1289,9 @@ show_progress(GncGWENGui *gui, Progress *progress)
 
     g_return_if_fail(gui);
 
+    if (waits_shutting_down)
+        return;
+
     ENTER("gui=%p, progress=%p", gui, progress);
 
     for (item = g_list_last(gui->progresses); item; item = item->prev)
@@ -704,12 +1308,12 @@ show_progress(GncGWENGui *gui, Progress *progress)
         {
             /* Top-level progress */
             show_dialog(gui, TRUE);
-            gtk_entry_set_text(GTK_ENTRY(gui->top_entry), current->title);
+            gnc_entry_set_text(GTK_ENTRY(gui->top_entry), current->title);
         }
         else if (!item->next->next)
         {
             /* Second-level progress */
-            gtk_entry_set_text(GTK_ENTRY(gui->second_entry), current->title);
+            gnc_entry_set_text(GTK_ENTRY(gui->second_entry), current->title);
         }
         else
         {
@@ -718,7 +1322,7 @@ show_progress(GncGWENGui *gui, Progress *progress)
             GtkWidget *box = gui->other_entries_box;
             gboolean new_box = box == NULL;
 
-            gtk_entry_set_text(GTK_ENTRY(entry), current->title);
+            gnc_entry_set_text(GTK_ENTRY(entry), current->title);
             if (new_box)
             {
                 gui->other_entries_box = box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
@@ -726,13 +1330,13 @@ show_progress(GncGWENGui *gui, Progress *progress)
                 gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
             }
 
-            gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
-            gtk_widget_show(entry);
+            gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
+            gtk_widget_set_visible (GTK_WIDGET(entry), TRUE);
             if (new_box)
             {
                 gtk_grid_attach (GTK_GRID(gui->entries_grid), box,
                                  1, OTHER_ENTRIES_ROW_OFFSET, 1, 1);
-                gtk_widget_show(box);
+                gtk_widget_set_visible (GTK_WIDGET(box), TRUE);
             }
         }
 
@@ -782,28 +1386,26 @@ hide_progress(GncGWENGui *gui, Progress *progress)
         if (!item->next)
         {
             /* Top-level progress */
-            gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
+            gnc_entry_set_text(GTK_ENTRY(gui->second_entry), "");
         }
         else if (!item->next->next)
         {
             /* Second-level progress */
-            gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
+            gnc_entry_set_text(GTK_ENTRY(gui->second_entry), "");
         }
         else
         {
             /* Other progress */
             GtkWidget *box = gui->other_entries_box;
-            GList *entries;
-
             g_return_if_fail(box);
-            entries = gtk_container_get_children(GTK_CONTAINER(box));
-            g_return_if_fail(entries);
-            if (entries->next)
+            GtkWidget *child = gtk_widget_get_last_child (box);
+
+            if (child)
             {
                 /* Another progress is still to be showed */
-                gtk_widget_destroy(GTK_WIDGET(g_list_last(entries)->data));
+                gtk_box_remove (GTK_BOX(box), child);
             }
-            else
+            if (!gtk_widget_get_first_child (box))
             {
                 /* Last other progress to be hidden */
                 gtk_grid_remove_row (GTK_GRID(gui->entries_grid),
@@ -811,7 +1413,6 @@ hide_progress(GncGWENGui *gui, Progress *progress)
                 /* Box destroyed, Null the reference. */
                 gui->other_entries_box = NULL;
             }
-            g_list_free(entries);
         }
 
         if (current == progress)
@@ -837,7 +1438,8 @@ keep_alive(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    /* Let the widgets be redrawn */
+    /* Gwen drives progress through synchronous callbacks. Drain only pending
+     * GTK work so the log window updates; this is not another main loop. */
     while (g_main_context_iteration(NULL, FALSE));
 
     LEAVE("alive=%d", gui->keep_alive);
@@ -900,6 +1502,292 @@ strip_html(gchar *text)
     return text;
 }
 
+typedef struct
+{
+    GncGwenWait wait;
+    GtkWindow *window;
+    gint response;
+    gboolean answered;
+    gboolean destroyed;
+} GncGwenWindowResponseState;
+
+typedef struct
+{
+    GtkButton *button;
+    gint response;
+    GncGwenWindowResponseState *state;
+    gulong handler;
+} GncGwenResponseButton;
+
+typedef struct
+{
+    GncGwenWait wait;
+    GCancellable *cancellable;
+    gint response;
+    gboolean answered;
+    gboolean parent_destroyed;
+} GncGwenAlertResponseState;
+
+static void gwen_window_wait_cancel (GncGwenWait *wait);
+
+static void
+gwen_window_response_finish (GncGwenWindowResponseState *state,
+                             gint response)
+{
+    if (state->answered)
+        return;
+
+    state->response = response;
+    state->answered = TRUE;
+    g_main_loop_quit (state->wait.loop);
+}
+
+static void
+gwen_window_wait_cancel (GncGwenWait *wait)
+{
+    GncGwenWindowResponseState *state = (GncGwenWindowResponseState *)wait;
+
+    if (!state->destroyed)
+        gtk_widget_set_visible (GTK_WIDGET (state->window), FALSE);
+    else
+        gwen_window_response_finish (state, GTK_RESPONSE_DELETE_EVENT);
+}
+
+static void
+gwen_window_button_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    GncGwenResponseButton *response_button = user_data;
+
+    (void)button;
+    gwen_window_response_finish (response_button->state,
+                                 response_button->response);
+}
+
+static gboolean
+gwen_window_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    (void)window;
+    gwen_window_response_finish (user_data, GTK_RESPONSE_DELETE_EVENT);
+    return TRUE;
+}
+
+static void
+gwen_window_visibility_cb (GObject *object, GParamSpec *pspec,
+                           gpointer user_data)
+{
+    GncGwenWindowResponseState *state = user_data;
+
+    (void)pspec;
+    if (gtk_widget_get_visible (GTK_WIDGET (object)))
+        return;
+
+    /* A logical GTK4 close hides the toplevel before dropping its owner refs.
+     * Visibility is therefore the terminal event that can be observed while
+     * this synchronous adapter still holds its lifetime ref. */
+    state->destroyed = TRUE;
+    gwen_window_response_finish (state, GTK_RESPONSE_DELETE_EVENT);
+}
+
+static gint
+wait_for_window_response (GtkWindow *window, GncGwenResponseButton *buttons,
+                          gsize n_buttons)
+{
+    GncGwenWindowResponseState state = { 0 };
+    gulong close_handler;
+    gulong visibility_handler;
+
+    g_return_val_if_fail (GTK_IS_WINDOW (window), GTK_RESPONSE_DELETE_EVENT);
+    g_return_val_if_fail (buttons && n_buttons, GTK_RESPONSE_DELETE_EVENT);
+
+    for (gsize index = 0; index < n_buttons; index++)
+        g_return_val_if_fail (GTK_IS_BUTTON (buttons[index].button),
+                              GTK_RESPONSE_DELETE_EVENT);
+
+    /* Gwen's C callback ABI needs a concrete response before it returns.
+     * This and the alert helper below are the only nested-loop adapters;
+     * the GtkWindow itself uses ordinary GTK4 button and close-request signals. */
+    g_object_ref (window);
+    state.wait.loop = g_main_loop_new (NULL, FALSE);
+    state.wait.cancel = gwen_window_wait_cancel;
+    state.window = window;
+    if (!gwen_wait_register (&state.wait))
+    {
+        g_main_loop_unref (state.wait.loop);
+        g_object_unref (window);
+        return GTK_RESPONSE_DELETE_EVENT;
+    }
+
+    for (gsize index = 0; index < n_buttons; index++)
+    {
+        buttons[index].state = &state;
+        buttons[index].handler = g_signal_connect (
+            buttons[index].button, "clicked",
+            G_CALLBACK (gwen_window_button_clicked_cb), &buttons[index]);
+    }
+    close_handler = g_signal_connect (window, "close-request",
+                                      G_CALLBACK (gwen_window_close_request_cb),
+                                      &state);
+    visibility_handler = g_signal_connect (
+        window, "notify::visible", G_CALLBACK (gwen_window_visibility_cb),
+        &state);
+    gtk_window_set_modal (window, TRUE);
+    gtk_window_present (window);
+    if (!state.answered)
+        g_main_loop_run (state.wait.loop);
+    gwen_wait_unregister (&state.wait);
+
+    for (gsize index = 0; index < n_buttons; index++)
+        g_signal_handler_disconnect (buttons[index].button,
+                                     buttons[index].handler);
+    g_signal_handler_disconnect (window, close_handler);
+    g_signal_handler_disconnect (window, visibility_handler);
+    g_main_loop_unref (state.wait.loop);
+    g_object_unref (window);
+
+    return state.answered && !state.destroyed ? state.response :
+        GTK_RESPONSE_DELETE_EVENT;
+}
+
+static gint
+wait_for_password_window_response (GtkWindow *window,
+                                   GtkButton *cancel_button,
+                                   GtkButton *ok_button)
+{
+    GncGwenResponseButton buttons[] =
+    {
+        { cancel_button, GTK_RESPONSE_CANCEL, NULL, 0 },
+        { ok_button, GTK_RESPONSE_OK, NULL, 0 }
+    };
+
+    return wait_for_window_response (window, buttons, G_N_ELEMENTS (buttons));
+}
+
+static void
+gwen_alert_wait_cancel (GncGwenWait *wait)
+{
+    GncGwenAlertResponseState *state = (GncGwenAlertResponseState *)wait;
+
+    if (!g_cancellable_is_cancelled (state->cancellable))
+        g_cancellable_cancel (state->cancellable);
+}
+
+static void
+gwen_alert_response_cb (GObject *source, GAsyncResult *result,
+                        gpointer user_data)
+{
+    GncGwenAlertResponseState *state = user_data;
+    GError *error = NULL;
+    gint response = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source),
+                                                     result, &error);
+
+    if (state->answered)
+        return;
+
+    if (error)
+    {
+        g_clear_error (&error);
+        response = 0;
+    }
+    state->response = response;
+    state->answered = TRUE;
+    g_main_loop_quit (state->wait.loop);
+}
+
+static void
+gwen_alert_parent_destroyed_cb (GtkWidget *widget, gpointer user_data)
+{
+    GncGwenAlertResponseState *state = user_data;
+
+    (void)widget;
+    state->parent_destroyed = TRUE;
+    g_cancellable_cancel (state->cancellable);
+}
+
+static gint
+wait_for_alert_response (GtkWindow *parent, const gchar *message,
+                         gboolean yes_is_default)
+{
+    const char *buttons[] = { _("_No"), _("_Yes"), NULL };
+    GncGwenAlertResponseState state = { 0 };
+    GtkAlertDialog *alert;
+    gulong parent_destroy_handler = 0;
+
+    alert = gtk_alert_dialog_new ("%s", message);
+    gtk_alert_dialog_set_buttons (alert, buttons);
+    gtk_alert_dialog_set_cancel_button (alert, 0);
+    gtk_alert_dialog_set_default_button (alert, yes_is_default ? 1 : 0);
+    /* GtkAlertDialog completes asynchronously; wait only at this Gwen ABI
+     * boundary and cancel the request if its parent disappears. */
+    state.wait.loop = g_main_loop_new (NULL, FALSE);
+    state.wait.cancel = gwen_alert_wait_cancel;
+    state.cancellable = g_cancellable_new ();
+    if (!gwen_wait_register (&state.wait))
+    {
+        g_object_unref (state.cancellable);
+        g_main_loop_unref (state.wait.loop);
+        g_object_unref (alert);
+        return 0;
+    }
+
+    if (parent)
+        parent_destroy_handler = g_signal_connect (
+            parent, "destroy", G_CALLBACK (gwen_alert_parent_destroyed_cb),
+            &state);
+    gtk_alert_dialog_choose (alert, parent, state.cancellable,
+                             gwen_alert_response_cb, &state);
+    if (!state.answered)
+        g_main_loop_run (state.wait.loop);
+    gwen_wait_unregister (&state.wait);
+
+    if (parent_destroy_handler && !state.parent_destroyed)
+        g_signal_handler_disconnect (parent, parent_destroy_handler);
+    g_object_unref (state.cancellable);
+    g_main_loop_unref (state.wait.loop);
+    g_object_unref (alert);
+
+    return state.answered ? state.response : 0;
+}
+
+static gboolean
+gwen_confirm (GtkWindow *parent, const gchar *message, gboolean yes_is_default)
+{
+    return wait_for_alert_response (parent, message, yes_is_default) == 1;
+}
+
+static GtkWindow *
+gwen_message_window_new (GtkWindow *parent, const gchar *title,
+                         const gchar *text, GtkBox **actions_out)
+{
+    GtkWindow *window = GTK_WINDOW (gtk_window_new ());
+    gnc_window_bind_to_application (window);
+    GtkWidget *content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    GtkWidget *actions = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    GtkWidget *label;
+    gchar *raw_text = strip_html (g_strdup (text));
+
+    label = gtk_label_new (raw_text);
+    g_free (raw_text);
+    gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+    gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_widget_set_halign (actions, GTK_ALIGN_END);
+    gtk_widget_set_margin_start (content, 12);
+    gtk_widget_set_margin_end (content, 12);
+    gtk_widget_set_margin_top (content, 12);
+    gtk_widget_set_margin_bottom (content, 12);
+    gtk_box_append (GTK_BOX (content), label);
+    gtk_box_append (GTK_BOX (content), actions);
+    gtk_window_set_child (window, content);
+    if (parent)
+        gtk_window_set_transient_for (window, parent);
+    if (title)
+        gtk_window_set_title (window, title);
+    if (actions_out)
+        *actions_out = GTK_BOX (actions);
+
+    return window;
+}
+
 static void
 get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                       const gchar *text, const char *mimeType,
@@ -912,8 +1800,10 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     GtkWidget *input_entry;
     GtkWidget *confirm_entry;
     GtkWidget *confirm_label;
-    GtkWidget *remember_pin_checkbutton;
+    GtkCheckButton *remember_pin_checkbutton;
     GtkImage *optical_challenge;
+    GtkButton *cancel_button;
+    GtkButton *ok_button;
 
     static GncFlickerGui *flickergui = NULL;
 
@@ -935,8 +1825,11 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     input_entry = GTK_WIDGET(gtk_builder_get_object (builder, "input_entry"));
     confirm_entry = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_entry"));
     confirm_label = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_label"));
-    remember_pin_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "remember_pin"));
+    remember_pin_checkbutton = GTK_CHECK_BUTTON(
+        gtk_builder_get_object (builder, "remember_pin"));
     optical_challenge = GTK_IMAGE(gtk_builder_get_object (builder, "optical_challenge"));
+    cancel_button = GTK_BUTTON(gtk_builder_get_object (builder, "cancelbutton2"));
+    ok_button = GTK_BUTTON(gtk_builder_get_object (builder, "okbutton2"));
     gtk_widget_set_visible(GTK_WIDGET(optical_challenge), FALSE);
 
     flickergui = g_slice_new(GncFlickerGui);
@@ -968,12 +1861,12 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     }
     if (is_tan)
     {
-        gtk_widget_hide(remember_pin_checkbutton);
+        gtk_widget_set_visible (GTK_WIDGET (remember_pin_checkbutton), FALSE);
     }
     else
     {
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(remember_pin_checkbutton),
-                                     gui->cache_passwords);
+        gtk_check_button_set_active(remember_pin_checkbutton,
+                                    gui->cache_passwords);
     }
 
     /* Enable the normal input visibility for TAN and for the set SHOW flag */
@@ -1025,28 +1918,47 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
         guchar *gudata = (guchar*)pChallenge;
 
         GError *error = NULL;
-        GdkPixbufLoader *loader = gdk_pixbuf_loader_new_with_mime_type(mimeType, &error);
-        GdkPixbuf *pixbuf;
+        GdkPixbufLoader *loader = gdk_pixbuf_loader_new_with_mime_type (mimeType,
+                                                                          &error);
 
-        if(error != NULL)
+        if (!loader)
         {
-            PERR("Pixbuf loader not loaded: %s, perhaps MIME type %s isn't supported.", error->message, mimeType);
+            PERR ("Pixbuf loader not loaded: %s, perhaps MIME type %s isn't supported.",
+                  error ? error->message : "unknown error", mimeType);
+            g_clear_error (&error);
         }
+        else if (gdk_pixbuf_loader_write (loader, gudata, lChallenge, &error) &&
+                 gdk_pixbuf_loader_close (loader, &error))
+        {
+            GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
-        gdk_pixbuf_loader_write(loader, gudata, lChallenge, NULL);
-        gdk_pixbuf_loader_close(loader, NULL);
+            if (pixbuf)
+            {
+                GdkTexture *texture = gnc_texture_new_from_pixbuf (pixbuf);
 
-        pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
-
-        g_object_ref(pixbuf);
-        g_object_unref(loader);
-
-        gtk_image_set_from_pixbuf(optical_challenge, pixbuf);
+                if (texture)
+                {
+                    gtk_image_set_from_paintable (optical_challenge,
+                                                   GDK_PAINTABLE (texture));
+                    g_object_unref (texture);
+                }
+                else
+                    gtk_image_clear (optical_challenge);
+            }
+            g_object_unref (loader);
+        }
+        else
+        {
+            PERR ("Could not load optical challenge: %s",
+                  error ? error->message : "unknown error");
+            g_clear_error (&error);
+            g_object_unref (loader);
+        }
     }
 
     if (*input)
     {
-        gtk_entry_set_text(GTK_ENTRY(input_entry), *input);
+        gnc_entry_set_text(GTK_ENTRY(input_entry), *input);
         erase_password(*input);
         *input = NULL;
     }
@@ -1062,37 +1974,37 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     {
         gtk_entry_set_activates_default(GTK_ENTRY(input_entry), TRUE);
         gtk_entry_set_max_length(GTK_ENTRY(input_entry), max_len);
-        gtk_widget_hide(confirm_entry);
-        gtk_widget_hide(confirm_label);
+        gtk_widget_set_visible (GTK_WIDGET(confirm_entry), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(confirm_label), FALSE);
     }
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+    gtk_window_set_default_widget (GTK_WINDOW(dialog), GTK_WIDGET(ok_button));
 
     /* Ask the user until he enters a valid input or cancels */
     while (TRUE)
     {
         gboolean remember_pin;
 
-        if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+        if (wait_for_password_window_response (GTK_WINDOW(dialog), cancel_button,
+                                               ok_button) != GTK_RESPONSE_OK)
             break;
 
         if (!is_tan)
         {
             /* Enable or disable the password cache */
-            remember_pin = gtk_toggle_button_get_active(
-                               GTK_TOGGLE_BUTTON(remember_pin_checkbutton));
+            remember_pin = gtk_check_button_get_active(remember_pin_checkbutton);
             enable_password_cache(gui, remember_pin);
             gnc_prefs_set_bool(GNC_PREFS_GROUP_AQBANKING, GNC_PREF_REMEMBER_PIN,
                                remember_pin);
         }
 
-        internal_input = gtk_entry_get_text(GTK_ENTRY(input_entry));
+        internal_input = gnc_entry_get_text(GTK_ENTRY(input_entry));
         if (strlen(internal_input) < min_len)
         {
             gboolean retval;
             gchar *msg = g_strdup_printf(
                              _("The PIN needs to be at least %d characters\n"
                                "long. Do you want to try again?"), min_len);
-            retval = gnc_verify_dialog (GTK_WINDOW (gui->parent), TRUE, "%s", msg);
+            retval = gwen_confirm (GTK_WINDOW (dialog), msg, TRUE);
             g_free(msg);
             if (!retval)
                 break;
@@ -1105,7 +2017,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
             break;
         }
 
-        internal_confirmed = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
+        internal_confirmed = gnc_entry_get_text(GTK_ENTRY(confirm_entry));
         if (strcmp(internal_input, internal_confirmed) == 0)
         {
             *input = g_strdup(internal_input);
@@ -1113,10 +2025,11 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
         }
     }
 
+    /* Destroy while the builder still owns the dialog. An external destroy
+     * may already have removed GTK's internal toplevel reference. */
+    gtk_window_destroy (GTK_WINDOW(dialog));
+    /* This trashes passwords in the entries' memory as well. */
     g_object_unref(G_OBJECT(builder));
-
-    /* This trashes passwords in the entries' memory as well */
-    gtk_widget_destroy(dialog);
 
     LEAVE("input %s", *input ? "non-NULL" : "NULL");
 }
@@ -1127,37 +2040,50 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
               const gchar *b3, guint32 guiid)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
-    GtkWidget *dialog;
-    GtkWidget *vbox;
-    GtkWidget *label;
-    gchar *raw_text;
+    const gchar *labels[] = { b1, b2, b3 };
+    GncGwenResponseButton buttons[3] = { 0 };
+    GtkBox *actions;
+    GtkWindow *window;
+    guint n_buttons = 0;
     gint result;
+
+    (void)flags;
+    (void)guiid;
+    if (!gui || waits_shutting_down)
+        return 0;
 
     ENTER("gui=%p, flags=%d, title=%s, b1=%s, b2=%s, b3=%s", gui, flags,
           title ? title : "(null)", b1 ? b1 : "(null)", b2 ? b2 : "(null)",
           b3 ? b3 : "(null)");
 
-    dialog = gtk_dialog_new_with_buttons(
-                 title, gui->parent ? GTK_WINDOW(gui->parent) : NULL,
-                 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                 b1, 1, b2, 2, b3, 3, (gchar*) NULL);
+    window = gwen_message_window_new (gui->parent ? GTK_WINDOW (gui->parent) : NULL,
+                                      title, text, &actions);
+    /* gtk_window_new() is transfer-none: GTK's toplevel list is the initial
+     * owner. Keep the callback's own reference so an external destroy cannot
+     * finalize the window before this Gwen ABI frame has unwound. */
+    g_object_ref (window);
+    gtk_window_set_destroy_with_parent (window, TRUE);
+    for (guint index = 0; index < G_N_ELEMENTS (labels); index++)
+    {
+        GtkButton *button;
 
-    raw_text = strip_html(g_strdup(text));
-    label = gtk_label_new(raw_text);
-    g_free(raw_text);
-    gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-    gtk_container_add(GTK_CONTAINER(vbox), label);
-    gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), vbox);
-    gtk_widget_show_all(dialog);
+        if (!labels[index])
+            continue;
+        button = GTK_BUTTON (gtk_button_new_with_mnemonic (labels[index]));
+        gtk_box_append (actions, GTK_WIDGET (button));
+        buttons[n_buttons].button = button;
+        buttons[n_buttons].response = index + 1;
+        n_buttons++;
+        if (n_buttons == 1)
+            gtk_window_set_default_widget (window, GTK_WIDGET (button));
+    }
 
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-
-    if (result < 1 || result > 3)
+    result = n_buttons ? wait_for_window_response (window, buttons, n_buttons) : 0;
+    gtk_window_destroy (window);
+    g_object_unref (window);
+    if (result == GTK_RESPONSE_DELETE_EVENT)
+        result = 0;
+    else if (result < 1 || result > 3)
     {
         g_warning("messagebox_cb: Bad result %d", result);
         result = 0;
@@ -1166,7 +2092,6 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     LEAVE("result=%d", result);
     return result;
 }
-
 static gint GNC_GWENHYWFAR_CB
 inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
             const gchar *text, gchar *buffer, gint min_len, gint max_len,
@@ -1176,6 +2101,9 @@ inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     gchar *input = NULL;
 
     g_return_val_if_fail(gui, -1);
+
+    if (waits_shutting_down)
+        return -1;
 
     ENTER("gui=%p, flags=%d", gui, flags);
 
@@ -1192,34 +2120,76 @@ inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     return input ? 0 : -1;
 }
 
+static void
+showbox_close (GncGWENGui *gui, GtkWindow *window)
+{
+    guint32 showbox_id = GPOINTER_TO_UINT (g_object_get_data (
+        G_OBJECT (window), "gnc-gwen-showbox-id"));
+
+    if (!gui || !gui->showbox_hash ||
+        !g_hash_table_remove (gui->showbox_hash,
+                              GUINT_TO_POINTER (showbox_id)))
+        gtk_window_destroy (window);
+    if (gui && gui->showbox_last_id == showbox_id)
+    {
+        gui->showbox_last = NULL;
+        gui->showbox_last_id = 0;
+    }
+}
+
+static gboolean
+showbox_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    showbox_close (user_data, window);
+    return TRUE;
+}
+
+static void
+showbox_close_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (button));
+
+    if (GTK_IS_WINDOW (root))
+        showbox_close (user_data, GTK_WINDOW (root));
+}
+
 static guint32 GNC_GWENHYWFAR_CB
 showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
            const gchar *text, guint32 guiid)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
-    GtkWidget *dialog;
+    GtkBox *actions;
+    GtkButton *close_button;
+    GtkWindow *window;
     guint32 showbox_id;
 
+    (void)flags;
+    (void)guiid;
     g_return_val_if_fail(gui, -1);
+
+    if (waits_shutting_down)
+        return 0;
 
     ENTER("gui=%p, flags=%d, title=%s", gui, flags, title ? title : "(null)");
 
-    dialog = gtk_message_dialog_new(
-                 gui->parent ? GTK_WINDOW(gui->parent) : NULL, 0, GTK_MESSAGE_INFO,
-                 GTK_BUTTONS_OK, "%s", text);
-
-    if (title)
-        gtk_window_set_title(GTK_WINDOW(dialog), title);
-
-    g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
-    gtk_widget_show_all(dialog);
+    window = gwen_message_window_new (gui->parent ? GTK_WINDOW (gui->parent) : NULL,
+                                      title, text, &actions);
+    close_button = GTK_BUTTON (gtk_button_new_with_mnemonic (_("_OK")));
+    gtk_box_append (actions, GTK_WIDGET (close_button));
 
     showbox_id = gui->showbox_id++;
-    g_hash_table_insert(gui->showbox_hash, GUINT_TO_POINTER(showbox_id),
-                        dialog);
-    gui->showbox_last = dialog;
+    g_hash_table_insert(gui->showbox_hash, GUINT_TO_POINTER(showbox_id), window);
+    gui->showbox_last = GTK_WIDGET (window);
+    gui->showbox_last_id = showbox_id;
+    g_object_set_data(G_OBJECT(window), "gnc-gwen-showbox-id",
+                      GUINT_TO_POINTER(showbox_id));
+    g_signal_connect (window, "close-request",
+                      G_CALLBACK (showbox_close_request_cb), gui);
+    g_signal_connect (close_button, "clicked",
+                      G_CALLBACK (showbox_close_clicked_cb), gui);
+    gtk_window_present (window);
 
-    /* Give it a change to be showed */
+    /* Give it a chance to be shown. */
     if (!keep_alive(gui))
         showbox_id = 0;
 
@@ -1232,6 +2202,9 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
 
+    if (waits_shutting_down)
+        return;
+
     g_return_if_fail(gui && gui->showbox_hash);
 
     ENTER("gui=%p, id=%d", gui, id);
@@ -1241,8 +2214,9 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
         if (gui->showbox_last)
         {
             g_hash_table_remove(gui->showbox_hash,
-                                GUINT_TO_POINTER(gui->showbox_id));
+                                GUINT_TO_POINTER(gui->showbox_last_id));
             gui->showbox_last = NULL;
+            gui->showbox_last_id = 0;
         }
         else
         {
@@ -1257,7 +2231,10 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
         {
             g_hash_table_remove(gui->showbox_hash, GUINT_TO_POINTER(id));
             if (p_var == gui->showbox_last)
+            {
                 gui->showbox_last = NULL;
+                gui->showbox_last_id = 0;
+            }
         }
         else
         {
@@ -1267,7 +2244,6 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
 
     LEAVE(" ");
 }
-
 static guint32 GNC_GWENHYWFAR_CB
 progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
                   const char *text, uint64_t total, uint32_t guiid)
@@ -1276,6 +2252,9 @@ progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
     Progress *progress;
 
     g_return_val_if_fail(gui, -1);
+
+    if (waits_shutting_down)
+        return 0;
 
     ENTER("gui=%p, flags=%d, title=%s, total=%" G_GUINT64_FORMAT, gui,
           progressFlags, title ? title : "(null)", (guint64)total);
@@ -1329,6 +2308,9 @@ progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id, uint64_t progress)
 
     g_return_val_if_fail(gui, -1);
 
+    if (waits_shutting_down)
+        return 1;
+
     ENTER("gui=%p, progress=%" G_GUINT64_FORMAT, gui, (guint64)progress);
 
     if (id == 1                                  /* top-level progress */
@@ -1359,6 +2341,9 @@ progress_log_cb(GWEN_GUI *gwen_gui, guint32 id, GWEN_LOGGER_LEVEL level,
 
     g_return_val_if_fail(gui, -1);
 
+    if (waits_shutting_down)
+        return 1;
+
     ENTER("gui=%p, text=%s", gui, text ? text : "(null)");
 
     tv = GTK_TEXT_VIEW(gui->log_text);
@@ -1385,6 +2370,9 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
     Progress *progress;
 
     g_return_val_if_fail(gui, -1);
+    if (waits_shutting_down)
+        return 0;
+
     g_return_val_if_fail(id == g_list_length(gui->progresses), -1);
 
     ENTER("gui=%p, id=%d", gui, id);
@@ -1430,6 +2418,9 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
     uint32_t lChallenge = 0;
 
     g_return_val_if_fail(gui, -1);
+
+    if (waits_shutting_down)
+        return -1;
 
     // cf. https://www.aquamaniac.de/rdm/projects/aqbanking/wiki/ImplementTanMethods
     if(is_tan && methodId == GWEN_Gui_PasswordMethod_OpticalHHD)
@@ -1574,6 +2565,9 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
 
     g_return_val_if_fail(gui && gui->accepted_certs, -1);
 
+    if (waits_shutting_down)
+        return -1;
+
     ENTER("gui=%p, cert=%p", gui, cert);
 
     hash = GWEN_SslCertDescr_GetFingerPrint(cert);
@@ -1624,10 +2618,11 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
 }
 
 gboolean
-ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+ggg_delete_event_cb(GtkWindow *window, gpointer user_data)
 {
     GncGWENGui *gui = user_data;
 
+    (void)window;
     g_return_val_if_fail(gui, FALSE);
 
     ENTER("gui=%p, state=%d", gui, gui->state);
@@ -1637,8 +2632,8 @@ ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
         const char *still_running_msg =
             _("The Online Banking job is still running; are you "
               "sure you want to cancel?");
-        if (!gnc_verify_dialog (GTK_WINDOW (gui->dialog), FALSE, "%s", still_running_msg))
-            return FALSE;
+        if (!gwen_confirm (GTK_WINDOW (gui->dialog), still_running_msg, FALSE))
+            return TRUE;
 
         set_aborted(gui);
     }
@@ -1679,18 +2674,66 @@ ggg_close_clicked_cb(GtkButton *button, gpointer user_data)
 }
 
 void
-ggg_close_toggled_cb(GtkToggleButton *button, gpointer user_data)
+ggg_close_toggled_cb(GtkCheckButton *button, gpointer user_data)
 {
     GncGWENGui *gui = user_data;
 
     g_return_if_fail(gui);
-    g_return_if_fail(gui->parent);
 
     ENTER("gui=%p", gui);
 
     gnc_prefs_set_bool(
         GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
-        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)));
+        gtk_check_button_get_active(button));
 
     LEAVE(" ");
 }
+
+#ifdef GNC_GWEN_GUI_TESTING
+void
+gnc_gwen_gui_test_take_permanent_certs (GWEN_DB_NODE *certs)
+{
+    g_return_if_fail (certs);
+    g_return_if_fail (!full_gui);
+    g_return_if_fail (!test_permanently_accepted_certs);
+
+    test_permanently_accepted_certs = certs;
+}
+
+void
+gnc_gwen_gui_test_get_state (guint *init_wrapper_calls,
+                              guint *fini_wrapper_calls,
+                              guint *raw_init_calls,
+                              guint *raw_fini_calls,
+                              guint *library_clients,
+                              guint *abi_frames,
+                              guint *wait_count,
+                              guint *finalize_source_calls,
+                              guint *finalize_destroy_calls,
+                              guint *gui_finalize_calls,
+                              guint *component_register_calls,
+                              guint *component_unregister_calls,
+                              guint *finalize_source_id,
+                              guint *application_barrier_connect_calls,
+                              guint *application_barrier_disconnect_calls,
+                              gulong *application_barrier_handler_id)
+{
+    *init_wrapper_calls = test_init_wrapper_calls;
+    *fini_wrapper_calls = test_fini_wrapper_calls;
+    *raw_init_calls = test_raw_init_calls;
+    *raw_fini_calls = test_raw_fini_calls;
+    *library_clients = gwen_library_clients;
+    *abi_frames = active_abi_frames;
+    *wait_count = g_list_length (active_waits);
+    *finalize_source_calls = test_finalize_source_calls;
+    *finalize_destroy_calls = test_finalize_destroy_calls;
+    *gui_finalize_calls = test_gui_finalize_calls;
+    *component_register_calls = test_component_register_calls;
+    *component_unregister_calls = test_component_unregister_calls;
+    *finalize_source_id = shutdown_finalize_source_id;
+    *application_barrier_connect_calls = test_application_barrier_connect_calls;
+    *application_barrier_disconnect_calls =
+        test_application_barrier_disconnect_calls;
+    *application_barrier_handler_id = shutdown_application_handler_id;
+}
+#endif

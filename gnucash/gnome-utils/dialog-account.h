@@ -25,6 +25,8 @@
 #define DIALOG_ACCOUNT_H
 
 #include "Account.h"
+#include "gnc-session.h"
+#include <gtk/gtk.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -130,45 +132,23 @@ void gnc_ui_new_account_with_types (GtkWindow *parent, QofBook *book,
 
 
 
-/** @name Modal
- @{ */
+/** @name Asynchronous account creation
+ * @{ */
+typedef void (*GncNewAccountCreatedCB) (Account *account, gboolean accepted,
+                                        gpointer user_data);
 
-/** Display a modal window for creating a new account
- *
- *  @param parent The widget on which to parent the dialog.
- *
- *  @param name The account name/path to be created.  This parameter
- *  is not used for determining the initially selected parent account.
- */
-Account * gnc_ui_new_accounts_from_name_window (GtkWindow *parent,
-                                                const char *name);
-
-
-/** Display a modal window for creating a new account.  This function
- *  will restrict the available account type values to the list
- *  specified by the caller.
- *
- *  @param parent The widget on which to parent the dialog.
- *
- *  @param name The account name/path to be created.  This parameter
- *  is not used for determining the initially selected parent account.
- *
- *  @param valid_types A GList of GNCAccountType gints [as pointers]
- *  which are allowed to be created.  The calling function is
- *  responsible for freeing this list.
- *
- *  @param default_commodity The commodity to initially select when
- *  the dialog is presented.
- *
- *  @param parent_acct The initially selected parent account.
- *
- *  @return A pointer to the newly created account.
- */
-Account * gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
-                                                       const char *name,
-                                                       GList *valid_types,
-                                                       const gnc_commodity *default_commodity,
-                                                       Account *parent_acct);
+/** Create an account without entering a nested event loop. Defaults, allowed
+ * types, initial parent, cancellation and component-manager cleanup have the
+ * same semantics as the legacy modal entry point. */
+void gnc_ui_new_accounts_from_name_with_defaults_async (
+    GtkWindow *parent, const char *name, GList *valid_types,
+    const gnc_commodity *default_commodity, Account *parent_acct,
+    GncNewAccountCreatedCB callback, gpointer user_data);
+void gnc_ui_new_accounts_from_name_with_defaults_async_with_operation_context (
+    GtkWindow *parent, const char *name, GList *valid_types,
+    const gnc_commodity *default_commodity, Account *parent_acct,
+    GncSessionOperationContext *operation_context,
+    GncNewAccountCreatedCB callback, gpointer user_data);
 
 /*
  * register a callback that gets called when the account has changed

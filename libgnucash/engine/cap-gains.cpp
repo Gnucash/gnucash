@@ -58,12 +58,16 @@ ToDo:
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include <deque>
+
 #include "Account.hpp"
 #include "AccountP.hpp"
+#include "Scrub.h"
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
 #include "TransactionP.hpp"
+#include "SplitP.hpp"
 #include "cap-gains.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
@@ -73,6 +77,60 @@ ToDo:
 
 static QofLogModule log_module = GNC_MOD_LOT;
 
+
+enum class CapPlanPhase
+{
+    SCAN_LOT,
+    EVALUATE,
+    RESOLVE_GAIN_ACCOUNT,
+    APPLY,
+};
+
+struct GncCapGainsPlan
+{
+    GncScrubContext *context;
+    QofBook *book;
+    GncGUID split_guid;
+    GncGUID lot_guid;
+    GncGUID gain_account_guid;
+    guint64 lot_generation;
+    GList *next;
+    GncGUID earliest_guid;
+    gboolean has_earliest;
+    gboolean earliest_dirty;
+    gnc_numeric balance_before_amount;
+    gnc_numeric balance_before_value;
+    gnc_numeric gain_value;
+    CapPlanPhase phase;
+    GncCapGainsPlanState state;
+    gchar *orphan_name;
+    std::deque<GncGUID> bfs_current;
+    std::deque<GncGUID> bfs_next;
+    GncGUID bfs_parent;
+    guint64 bfs_generation;
+    size_t bfs_index;
+    gboolean bfs_enumerating;
+};
+
+static gboolean
+cap_plan_valid (GncCapGainsPlan *plan)
+{
+    if (!plan || plan->state != GNC_CAP_GAINS_PLAN_RUNNING ||
+        gnc_scrub_context_is_cancelled (plan->context) ||
+        !gnc_scrub_context_owns_book (plan->context, plan->book))
+        return FALSE;
+    auto lot = gnc_lot_lookup (&plan->lot_guid, plan->book);
+    return lot && gnc_lot_get_scrub_generation (lot) == plan->lot_generation;
+}
+
+static void
+cap_plan_fail_validation (GncCapGainsPlan *plan)
+{
+    if (!plan || plan->state != GNC_CAP_GAINS_PLAN_RUNNING)
+        return;
+    plan->state = gnc_scrub_context_is_cancelled (plan->context)
+        ? GNC_CAP_GAINS_PLAN_CANCELLED : GNC_CAP_GAINS_PLAN_STALE;
+}
 
 /* ============================================================== */
 
@@ -96,6 +154,131 @@ xaccAccountHasTrades (const Account *acc)
     }
 
     return FALSE;
+}
+
+struct GncAccountTradesPlan
+{
+    GncScrubContext *context;
+    QofBook *book;
+    GncGUID account_guid;
+    guint64 splits_generation;
+    guint64 scrub_generation;
+    size_t index;
+    gboolean has_trades;
+    GncAccountTradesPlanState state;
+};
+
+static gboolean
+account_trades_plan_valid (GncAccountTradesPlan *plan)
+{
+    if (!plan || plan->state != GNC_ACCOUNT_TRADES_PLAN_RUNNING)
+        return FALSE;
+    if (gnc_scrub_context_is_cancelled (plan->context))
+    {
+        plan->state = GNC_ACCOUNT_TRADES_PLAN_CANCELLED;
+        return FALSE;
+    }
+    auto account = xaccAccountLookup (&plan->account_guid, plan->book);
+    if (!gnc_scrub_context_owns_book (plan->context, plan->book) || !account ||
+        gnc_account_get_splits_generation (account) != plan->splits_generation ||
+        gnc_account_get_scrub_generation (account) != plan->scrub_generation)
+    {
+        plan->state = GNC_ACCOUNT_TRADES_PLAN_STALE;
+        return FALSE;
+    }
+    return TRUE;
+}
+
+GncAccountTradesPlan *
+gnc_account_trades_plan_begin (const Account *account,
+                               GncScrubContext *context)
+{
+    if (!account || !context)
+        return nullptr;
+    auto book = qof_instance_get_book (QOF_INSTANCE (account));
+    if (!gnc_scrub_context_owns_book (context, book))
+        return nullptr;
+    return new GncAccountTradesPlan {
+        gnc_scrub_context_ref (context), book,
+        *qof_instance_get_guid (QOF_INSTANCE (account)),
+        gnc_account_get_splits_generation (account),
+        gnc_account_get_scrub_generation (account), 0, FALSE,
+        GNC_ACCOUNT_TRADES_PLAN_RUNNING};
+}
+
+GncAccountTradesPlanState
+gnc_account_trades_plan_step (GncAccountTradesPlan *plan, guint max_work)
+{
+    if (!plan || plan->state != GNC_ACCOUNT_TRADES_PLAN_RUNNING || max_work == 0)
+        return plan ? plan->state : GNC_ACCOUNT_TRADES_PLAN_FAILED;
+    guint work = 0;
+    while (work++ < max_work && plan->state == GNC_ACCOUNT_TRADES_PLAN_RUNNING)
+    {
+        if (!account_trades_plan_valid (plan)) break;
+        auto account = xaccAccountLookup (&plan->account_guid, plan->book);
+        if (xaccAccountIsPriced (account))
+        {
+            plan->has_trades = TRUE;
+            plan->state = GNC_ACCOUNT_TRADES_PLAN_DONE;
+            break;
+        }
+        if (plan->index >= xaccAccountGetSplitsSize (account))
+        {
+            plan->state = GNC_ACCOUNT_TRADES_PLAN_DONE;
+            break;
+        }
+        GncGUID guid;
+        if (!gnc_account_get_split_guid_at (account, plan->splits_generation,
+                                             plan->index++, &guid))
+        {
+            plan->state = GNC_ACCOUNT_TRADES_PLAN_STALE;
+            break;
+        }
+        auto split = xaccSplitLookup (&guid, plan->book);
+        auto transaction = split ? xaccSplitGetParent (split) : nullptr;
+        if (!split || !transaction || xaccSplitGetAccount (split) != account)
+        {
+            plan->state = GNC_ACCOUNT_TRADES_PLAN_STALE;
+            break;
+        }
+        if (split->gains != GAINS_STATUS_GAINS &&
+            xaccAccountGetCommodity (account) !=
+                xaccTransGetCurrency (transaction))
+        {
+            plan->has_trades = TRUE;
+            plan->state = GNC_ACCOUNT_TRADES_PLAN_DONE;
+        }
+    }
+    return plan->state;
+}
+
+GncAccountTradesPlanState
+gnc_account_trades_plan_get_state (const GncAccountTradesPlan *plan)
+{
+    return plan ? plan->state : GNC_ACCOUNT_TRADES_PLAN_FAILED;
+}
+
+gboolean
+gnc_account_trades_plan_get_result (const GncAccountTradesPlan *plan,
+                                    gboolean *has_trades)
+{
+    if (!plan || plan->state != GNC_ACCOUNT_TRADES_PLAN_DONE || !has_trades)
+        return FALSE;
+    *has_trades = plan->has_trades;
+    return TRUE;
+}
+
+void gnc_account_trades_plan_cancel (GncAccountTradesPlan *plan)
+{
+    if (plan && plan->state == GNC_ACCOUNT_TRADES_PLAN_RUNNING)
+        plan->state = GNC_ACCOUNT_TRADES_PLAN_CANCELLED;
+}
+
+void gnc_account_trades_plan_free (GncAccountTradesPlan *plan)
+{
+    if (!plan) return;
+    gnc_scrub_context_unref (plan->context);
+    delete plan;
 }
 
 /* ============================================================== */
@@ -216,10 +399,10 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
 /* ============================================================== */
 
 Split *
-xaccSplitAssignToLot (Split *split, GNCLot *lot)
+gnc_split_assign_to_lot_prepared (Split *split, GNCLot *lot,
+                                  gnc_numeric baln, gboolean had_splits)
 {
     Account *acc;
-    gnc_numeric baln;
     int cmp;
     gboolean baln_is_positive, amt_is_positive;
 
@@ -251,8 +434,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     }
 
     /* If the lot is closed, we can't add anything to it */
-    baln = gnc_lot_get_balance (lot);
-    if (gnc_lot_is_closed (lot)) return split;
+    if (had_splits && gnc_numeric_zero_p (baln)) return split;
 
     /* If the lot balance is zero, but the lot is open, then
      * the lot is empty. Unconditionally add the split. */
@@ -261,9 +443,6 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         acc = split->acc;
         xaccAccountBeginEdit (acc);
         gnc_lot_add_split (lot, split);
-        PINFO ("added split to empty lot, new lot baln=%s (%s)",
-               gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
-               gnc_lot_get_title (lot));
         xaccAccountCommitEdit (acc);
         return nullptr;
     }
@@ -283,7 +462,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     {
         PWARN ("accounting policy gave us split that enlarges the lot!\n"
                "old lot baln=%s split amt=%s lot=%s",
-               gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
+               gnc_num_dbg_to_string (baln),
                gnc_num_dbg_to_string (split->amount),
                gnc_lot_get_title (lot));
 
@@ -310,8 +489,6 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         acc = split->acc;
         xaccAccountBeginEdit (acc);
         gnc_lot_add_split (lot, split);
-        PINFO ("simple added split to lot, new lot baln=%s",
-               gnc_num_dbg_to_string (gnc_lot_get_balance(lot)));
         xaccAccountCommitEdit (acc);
         return nullptr;
     }
@@ -426,6 +603,18 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     }
 }
 
+Split *
+xaccSplitAssignToLot (Split *split, GNCLot *lot)
+{
+    if (!lot)
+        return split;
+    if (!split)
+        return nullptr;
+    auto had_splits = gnc_lot_get_split_list (lot) != nullptr;
+    auto balance = gnc_lot_get_balance (lot);
+    return gnc_split_assign_to_lot_prepared (split, lot, balance, had_splits);
+}
+
 /* ============================================================== */
 
 /* Accounting-policy callback.  Given an account and an amount,
@@ -514,6 +703,364 @@ Split *
 xaccSplitGetGainsSourceSplit (const Split *split)
 {
     return find_split_by_type ("gains-source", split);
+}
+
+static gboolean
+apply_cap_gains_value (Split *split, Account *gain_acc, gnc_numeric value)
+{
+    if (!split || !split->lot || gnc_numeric_zero_p (value))
+        return TRUE;
+    auto lot = split->lot;
+    auto currency = split->parent->common_currency;
+    auto zero = gnc_numeric_zero ();
+    auto negvalue = gnc_numeric_neg (value);
+    Transaction *trans;
+    Split *lot_split = split->gains_split;
+    Split *gain_split;
+    gboolean update;
+
+    if (!lot_split)
+    {
+        auto lot_acc = gnc_lot_get_account (lot);
+        auto book = qof_instance_get_book (QOF_INSTANCE (lot_acc));
+        auto base_txn = xaccSplitGetParent (split);
+        if (!gain_acc || !gnc_commodity_equiv (
+                currency, xaccAccountGetCommodity (gain_acc)))
+            return FALSE;
+
+        update = TRUE;
+        lot_split = xaccMallocSplit (book);
+        gain_split = xaccMallocSplit (book);
+        xaccAccountBeginEdit (gain_acc);
+        xaccAccountInsertSplit (gain_acc, gain_split);
+        xaccAccountCommitEdit (gain_acc);
+        xaccAccountBeginEdit (lot_acc);
+        xaccAccountInsertSplit (lot_acc, lot_split);
+        xaccAccountCommitEdit (lot_acc);
+        trans = xaccMallocTransaction (book);
+        xaccTransBeginEdit (trans);
+        xaccTransSetCurrency (trans, currency);
+        xaccTransSetDescription (trans, _("Realized Gain/Loss"));
+        xaccTransAppendSplit (trans, lot_split);
+        xaccTransAppendSplit (trans, gain_split);
+        xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
+        xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
+        xaccTransBeginEdit (base_txn);
+        qof_instance_set (QOF_INSTANCE (split), "gains-split",
+                          xaccSplitGetGUID (lot_split), nullptr);
+        xaccTransCommitEdit (base_txn);
+        qof_instance_set (QOF_INSTANCE (lot_split), "gains-source",
+                          xaccSplitGetGUID (split), nullptr);
+    }
+    else
+    {
+        trans = lot_split->parent;
+        gain_split = xaccSplitGetOtherSplit (lot_split);
+        if (!gain_split)
+            update = FALSE;
+        else if (split->gains_split == lot_split &&
+                 lot_split->gains_split == split &&
+                 gain_split->gains_split == split &&
+                 gnc_numeric_equal (xaccSplitGetValue (lot_split), value) &&
+                 gnc_numeric_zero_p (xaccSplitGetAmount (lot_split)) &&
+                 gnc_numeric_equal (xaccSplitGetValue (gain_split), negvalue) &&
+                 gnc_numeric_equal (xaccSplitGetAmount (gain_split), negvalue))
+            update = FALSE;
+        else
+        {
+            update = TRUE;
+            xaccTransBeginEdit (trans);
+            if (!gnc_commodity_equiv (currency, trans->common_currency))
+                xaccTransSetCurrency (trans, currency);
+        }
+    }
+
+    if (!update)
+        return TRUE;
+    auto posted = xaccTransRetDatePosted (split->parent);
+    xaccTransSetDatePostedSecs (trans, posted);
+    xaccTransSetDateEnteredSecs (trans, gnc_time (nullptr));
+    xaccSplitSetAmount (lot_split, zero);
+    xaccSplitSetValue (lot_split, value);
+    xaccSplitSetAmount (gain_split, negvalue);
+    xaccSplitSetValue (gain_split, negvalue);
+    gnc_split_bump_scrub_generations (split);
+    gnc_split_bump_scrub_generations (lot_split);
+    gnc_split_bump_scrub_generations (gain_split);
+    split->gains = GAINS_STATUS_CLEAN;
+    split->gains_split = lot_split;
+    lot_split->gains = GAINS_STATUS_GAINS;
+    lot_split->gains_split = split;
+    gain_split->gains = GAINS_STATUS_GAINS;
+    gain_split->gains_split = split;
+    gnc_lot_add_split (lot, lot_split);
+    xaccTransCommitEdit (trans);
+    return TRUE;
+}
+
+GncCapGainsPlan *
+gnc_cap_gains_plan_begin (Split *split, Account *gain_account,
+                          GncScrubContext *context)
+{
+    if (!split || !context)
+        return nullptr;
+    xaccSplitDetermineGainStatus (split);
+    if ((split->gains & GAINS_STATUS_GAINS) && split->gains_split)
+        split = split->gains_split;
+    auto lot = xaccSplitGetLot (split);
+    auto book = qof_instance_get_book (QOF_INSTANCE (split));
+    if (!lot || !gnc_scrub_context_owns_book (context, book))
+        return nullptr;
+    GncGUID gain_guid = *guid_null ();
+    if (gain_account)
+        gain_guid = *qof_instance_get_guid (QOF_INSTANCE (gain_account));
+    return new GncCapGainsPlan {
+        gnc_scrub_context_ref (context), book,
+        *qof_instance_get_guid (QOF_INSTANCE (split)),
+        *qof_instance_get_guid (QOF_INSTANCE (lot)), gain_guid,
+        gnc_lot_get_scrub_generation (lot), gnc_lot_get_split_list (lot),
+        *guid_null (), FALSE, FALSE, gnc_numeric_zero (), gnc_numeric_zero (),
+        gnc_numeric_zero (), CapPlanPhase::SCAN_LOT,
+        GNC_CAP_GAINS_PLAN_RUNNING, nullptr, {}, {}, *guid_null (), 0, 0, FALSE};
+}
+
+static gboolean
+cap_plan_scan_one (GncCapGainsPlan *plan)
+{
+    if (!plan->next)
+    {
+        plan->phase = CapPlanPhase::EVALUATE;
+        return TRUE;
+    }
+    auto candidate = GNC_SPLIT (plan->next->data);
+    plan->next = plan->next->next;
+    auto split = xaccSplitLookup (&plan->split_guid, plan->book);
+    auto lot = gnc_lot_lookup (&plan->lot_guid, plan->book);
+    if (!candidate || !split || xaccSplitGetLot (candidate) != lot)
+        return FALSE;
+    xaccSplitDetermineGainStatus (candidate);
+    if (!plan->has_earliest)
+    {
+        plan->earliest_guid = *qof_instance_get_guid (QOF_INSTANCE (candidate));
+        plan->earliest_dirty = candidate->gains & GAINS_STATUS_VDIRTY;
+        plan->has_earliest = TRUE;
+    }
+    else
+    {
+        auto earliest = xaccSplitLookup (&plan->earliest_guid, plan->book);
+        if (!earliest)
+            return FALSE;
+        if (xaccSplitOrderDateOnly (candidate, earliest) < 0)
+        {
+            plan->earliest_guid = *qof_instance_get_guid (QOF_INSTANCE (candidate));
+            plan->earliest_dirty = candidate->gains & GAINS_STATUS_VDIRTY;
+        }
+    }
+
+    auto target = xaccSplitGetGainsSourceSplit (split);
+    if (!target) target = split;
+    auto source = xaccSplitGetGainsSourceSplit (candidate);
+    if (!source) source = candidate;
+    auto ta = xaccSplitGetParent (source);
+    auto tb = xaccSplitGetParent (target);
+    if ((ta == tb && source != target) || xaccTransOrder (ta, tb) < 0)
+    {
+        plan->balance_before_amount = gnc_numeric_add_fixed (
+            plan->balance_before_amount, xaccSplitGetAmount (candidate));
+        plan->balance_before_value = gnc_numeric_add_fixed (
+            plan->balance_before_value, xaccSplitGetValue (candidate));
+    }
+    return !gnc_numeric_check (plan->balance_before_amount) &&
+           !gnc_numeric_check (plan->balance_before_value);
+}
+
+static gboolean
+cap_plan_complete (GncCapGainsPlan *plan)
+{
+    auto split = plan ? xaccSplitLookup (&plan->split_guid, plan->book) : nullptr;
+    if (!split)
+        return FALSE;
+    split->gains &= ~GAINS_STATUS_VDIRTY;
+    if (split->gains_split)
+        split->gains_split->gains &= ~GAINS_STATUS_VDIRTY;
+    plan->state = GNC_CAP_GAINS_PLAN_DONE;
+    return TRUE;
+}
+
+static gboolean
+cap_plan_evaluate (GncCapGainsPlan *plan)
+{
+    auto split = xaccSplitLookup (&plan->split_guid, plan->book);
+    auto earliest = xaccSplitLookup (&plan->earliest_guid, plan->book);
+    if (!split || !earliest)
+        return FALSE;
+    auto currency = xaccTransGetCurrency (xaccSplitGetParent (split));
+    auto account = xaccSplitGetAccount (split);
+    if (!currency || !account)
+        return FALSE;
+    if (gnc_commodity_equal (currency, xaccAccountGetCommodity (account)) ||
+        split == earliest || g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0 ||
+        (split->gains & GAINS_STATUS_GAINS) || gnc_numeric_zero_p (split->amount))
+    {
+        return cap_plan_complete (plan);
+    }
+    if (plan->earliest_dirty)
+        split->gains |= GAINS_STATUS_VDIRTY;
+    if (!(split->gains & GAINS_STATUS_A_VDIRTY) && split->gains_split &&
+        !(split->gains_split->gains & GAINS_STATUS_A_VDIRTY))
+    {
+        return cap_plan_complete (plan);
+    }
+    if (!gnc_commodity_equiv (currency,
+                              xaccTransGetCurrency (xaccSplitGetParent (earliest))))
+    {
+        return cap_plan_complete (plan);
+    }
+    if (gnc_numeric_compare (gnc_numeric_abs (plan->balance_before_amount),
+                             gnc_numeric_abs (split->amount)) < 0)
+        return FALSE;
+    auto frac = gnc_numeric_div (split->amount, plan->balance_before_amount,
+                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+    auto basis = gnc_numeric_mul (frac, plan->balance_before_value,
+                                  gnc_numeric_denom (xaccSplitGetValue (earliest)),
+                                  GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
+    plan->gain_value = gnc_numeric_sub (basis, split->value,
+                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+    if (gnc_numeric_check (plan->gain_value))
+        return FALSE;
+    if (gnc_numeric_zero_p (plan->gain_value)) return cap_plan_complete (plan);
+
+    if (guid_equal (&plan->gain_account_guid, guid_null ()))
+    {
+        auto configured = gnc_account_get_configured_gains_account (account, currency);
+        if (configured)
+            plan->gain_account_guid = *qof_instance_get_guid (QOF_INSTANCE (configured));
+    }
+    if (!guid_equal (&plan->gain_account_guid, guid_null ()))
+        plan->phase = CapPlanPhase::APPLY;
+    else
+    {
+        plan->orphan_name = gnc_account_dup_orphan_gains_name (currency);
+        auto root = gnc_account_get_root (account);
+        if (!root || !plan->orphan_name)
+            return FALSE;
+        plan->bfs_current.push_back (*qof_instance_get_guid (QOF_INSTANCE (root)));
+        plan->phase = CapPlanPhase::RESOLVE_GAIN_ACCOUNT;
+    }
+    return TRUE;
+}
+
+static gboolean
+cap_plan_resolve_account_one (GncCapGainsPlan *plan)
+{
+    if (!plan->bfs_enumerating)
+    {
+        if (plan->bfs_current.empty ())
+        {
+            if (!plan->bfs_next.empty ())
+                plan->bfs_current.swap (plan->bfs_next);
+            else
+            {
+                auto split = xaccSplitLookup (&plan->split_guid, plan->book);
+                auto account = split ? xaccSplitGetAccount (split) : nullptr;
+                auto currency = split ? xaccTransGetCurrency (xaccSplitGetParent (split)) : nullptr;
+                auto root = account ? gnc_account_get_root (account) : nullptr;
+                auto gains = gnc_account_create_orphan_gains_account_prepared (root, currency);
+                if (!gains) return FALSE;
+                gnc_account_set_configured_gains_account (account, currency, gains);
+                plan->gain_account_guid = *qof_instance_get_guid (QOF_INSTANCE (gains));
+                plan->phase = CapPlanPhase::APPLY;
+                return TRUE;
+            }
+        }
+        plan->bfs_parent = plan->bfs_current.front ();
+        plan->bfs_current.pop_front ();
+        auto parent = xaccAccountLookup (&plan->bfs_parent, plan->book);
+        if (!parent) return FALSE;
+        plan->bfs_generation = gnc_account_get_children_generation (parent);
+        plan->bfs_index = 0;
+        plan->bfs_enumerating = TRUE;
+    }
+    auto parent = xaccAccountLookup (&plan->bfs_parent, plan->book);
+    if (!parent || gnc_account_get_children_generation (parent) != plan->bfs_generation)
+        return FALSE;
+    if (plan->bfs_index >= static_cast<size_t> (gnc_account_n_children (parent)))
+    {
+        plan->bfs_enumerating = FALSE;
+        return TRUE;
+    }
+    GncGUID child_guid;
+    if (!gnc_account_get_child_guid_at (parent, plan->bfs_generation,
+                                        plan->bfs_index++, &child_guid))
+        return FALSE;
+    auto child = xaccAccountLookup (&child_guid, plan->book);
+    if (!child) return FALSE;
+    plan->bfs_next.push_back (child_guid);
+    if (g_strcmp0 (xaccAccountGetName (child), plan->orphan_name) == 0)
+    {
+        plan->gain_account_guid = child_guid;
+        auto split = xaccSplitLookup (&plan->split_guid, plan->book);
+        auto currency = split ? xaccTransGetCurrency (xaccSplitGetParent (split)) : nullptr;
+        gnc_account_set_configured_gains_account (xaccSplitGetAccount (split),
+                                                   currency, child);
+        plan->phase = CapPlanPhase::APPLY;
+    }
+    return TRUE;
+}
+
+GncCapGainsPlanState
+gnc_cap_gains_plan_step (GncCapGainsPlan *plan, guint max_work)
+{
+    if (!plan || plan->state != GNC_CAP_GAINS_PLAN_RUNNING || max_work == 0)
+        return plan ? plan->state : GNC_CAP_GAINS_PLAN_FAILED;
+    guint work = 0;
+    while (work++ < max_work && plan->state == GNC_CAP_GAINS_PLAN_RUNNING)
+    {
+        if (!cap_plan_valid (plan))
+        {
+            cap_plan_fail_validation (plan);
+            break;
+        }
+        gboolean ok = FALSE;
+        switch (plan->phase)
+        {
+        case CapPlanPhase::SCAN_LOT: ok = cap_plan_scan_one (plan); break;
+        case CapPlanPhase::EVALUATE: ok = cap_plan_evaluate (plan); break;
+        case CapPlanPhase::RESOLVE_GAIN_ACCOUNT:
+            ok = cap_plan_resolve_account_one (plan); break;
+        case CapPlanPhase::APPLY:
+        {
+            auto split = xaccSplitLookup (&plan->split_guid, plan->book);
+            auto gains = xaccAccountLookup (&plan->gain_account_guid, plan->book);
+            ok = apply_cap_gains_value (split, gains, plan->gain_value);
+            if (ok) ok = cap_plan_complete (plan);
+            break;
+        }
+        }
+        if (!ok && plan->state == GNC_CAP_GAINS_PLAN_RUNNING)
+            plan->state = GNC_CAP_GAINS_PLAN_FAILED;
+    }
+    return plan->state;
+}
+
+GncCapGainsPlanState
+gnc_cap_gains_plan_get_state (const GncCapGainsPlan *plan)
+{
+    return plan ? plan->state : GNC_CAP_GAINS_PLAN_FAILED;
+}
+
+void gnc_cap_gains_plan_cancel (GncCapGainsPlan *plan)
+{
+    if (plan && plan->state == GNC_CAP_GAINS_PLAN_RUNNING)
+        plan->state = GNC_CAP_GAINS_PLAN_CANCELLED;
+}
+
+void gnc_cap_gains_plan_free (GncCapGainsPlan *plan)
+{
+    if (!plan) return;
+    gnc_scrub_context_unref (plan->context);
+    g_free (plan->orphan_name);
+    delete plan;
 }
 
 /* ============================================================== */
@@ -872,6 +1419,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             xaccSplitSetAmount (gain_split, negvalue);
             xaccSplitSetValue (gain_split, negvalue);
 
+            gnc_split_bump_scrub_generations (split);
+            gnc_split_bump_scrub_generations (lot_split);
+            gnc_split_bump_scrub_generations (gain_split);
+
             /* Some short-cuts to help avoid the above property lookup. */
             split->gains = GAINS_STATUS_CLEAN;
             split->gains_split = lot_split;
@@ -918,7 +1469,7 @@ xaccLotFreeSplitCapGain(Split *split, GNCLot *lot)
         return gnc_numeric_zero();
     }
 
-    if (xaccTransGetDate (xaccSplitGetParent (esplit)) >= xaccTransGetDate (xaccSplitGetParent (split))) 
+    if (xaccTransGetDate (xaccSplitGetParent (esplit)) >= xaccTransGetDate (xaccSplitGetParent (split)))
     {
         LEAVE ("Split is too early, returning.");
         return gnc_numeric_zero();

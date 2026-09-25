@@ -24,16 +24,17 @@
 
 #include <libguile.h>
 #include <guile-mappings.h>
+
+#include "gnucash-core-app.hpp"
+
+#include <gtk/gtk.h>
 #ifdef __MINGW32__
 #include <Windows.h>
 #include <fcntl.h>
 #endif
 
 #include "gnucash-commands.hpp"
-#include "gnucash-core-app.hpp"
-#ifdef __MINGW32__
-#include "gnucash-locale-platform.h"
-#endif
+#include "gnucash-guile-bootstrap.h"
 
 #include <glib/gi18n.h>
 #include <dialog-new-user.h>
@@ -57,6 +58,7 @@
 #include <gnc-prefs-utils.h>
 #include <gnc-session.h>
 #include <gnc-splash.h>
+#include <gnc-ui.h>
 #include <gnucash-register.h>
 #include <search-core-type.h>
 #include <top-level.h>
@@ -67,6 +69,8 @@
 #include <boost/nowide/args.hpp>
 #endif
 #include <iostream>
+#include <string>
+#include <vector>
 #include <gnc-report.h>
 #include <gnc-locale-utils.hpp>
 #include <gnc-quotes.hpp>
@@ -117,13 +121,14 @@ load_gnucash_modules()
 }
 
 static char *
-get_file_to_load (const char* file_to_load)
+get_file_to_load (const char* file_to_load, bool nofile)
 {
     if (file_to_load && *file_to_load != '\0')
         return g_strdup(file_to_load);
-    else
-        /* Note history will always return a valid (possibly empty) string */
-        return gnc_history_get_last();
+    if (nofile)
+        return nullptr;
+    /* Note history will always return a valid (possibly empty) string */
+    return gnc_history_get_last();
 }
 
 extern SCM scm_init_sw_gnome_module(void);
@@ -131,6 +136,7 @@ extern SCM scm_init_sw_gnome_module(void);
 struct t_file_spec {
     int nofile;
     const char *file_to_load;
+    std::string *pending_open_file;
 };
 
 static void
@@ -173,7 +179,6 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL, NULL);
 
     /* Install Price Quote Sources */
-
     try
     {
         const auto checking = _("Checking Finance::Quote…");
@@ -195,11 +200,18 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     gnc_hook_run(HOOK_STARTUP, NULL);
 
     char* fn = nullptr;
-    if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
+    auto requested_file = user_file_spec->file_to_load;
+    auto from_open_event = (!requested_file || !*requested_file) &&
+                           !user_file_spec->pending_open_file->empty ();
+    if (from_open_event)
+        requested_file = user_file_spec->pending_open_file->c_str ();
+    if ((fn = get_file_to_load (requested_file, user_file_spec->nofile)) && *fn )
     {
+        if (from_open_event)
+            user_file_spec->pending_open_file->clear ();
         auto msg = _("Loading data…");
         gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-        gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
+        gnc_file_open_file(nullptr, fn, /*open_readonly*/ FALSE);
         g_free(fn);
     }
     else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))
@@ -217,9 +229,6 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     gnc_hook_run(HOOK_UI_POST_STARTUP, NULL);
     gnc_ui_start_event_loop();
-    gnc_hook_remove_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit);
-
-    gnc_shutdown(0);
     return;
 }
 
@@ -229,13 +238,24 @@ namespace Gnucash {
     {
     public:
         Gnucash (const char* app_name);
-        void parse_command_line (int argc, char **argv);
+        CommandLineResult parse_command_line (int argc, char **argv);
         int start (int argc, char **argv);
+        int run (int argc, char **argv);
+        void activate (void);
+        int command_line (GApplicationCommandLine *command_line);
+        void open (GFile **files, gint n_files);
 
     private:
         void configure_program_options (void);
 
         bool m_nofile = false;
+        bool m_started = false;
+        bool m_starting = false;
+        int m_exit_status = 0;
+        int m_argc = 0;
+        char **m_argv = nullptr;
+        std::string m_pending_open_file;
+        std::vector<std::string> m_pending_extra_files;
     };
 
 }
@@ -246,10 +266,10 @@ Gnucash::Gnucash::Gnucash (const char *app_name) : Gnucash::CoreApp (app_name)
 }
 
 
-void
+Gnucash::CommandLineResult
 Gnucash::Gnucash::parse_command_line (int argc, char **argv)
 {
-    Gnucash::CoreApp::parse_command_line (argc, argv);
+    return Gnucash::CoreApp::parse_command_line (argc, argv);
 }
 
 // Define command line options specific to gnucash.
@@ -267,7 +287,7 @@ Gnucash::Gnucash::configure_program_options (void)
 }
 
 int
-Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+Gnucash::Gnucash::start (int argc, char **argv)
 {
     Gnucash::CoreApp::start();
 
@@ -279,34 +299,271 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
 
     auto user_file_spec = t_file_spec {
         m_nofile,
-        m_file_to_load ? m_file_to_load->c_str() : ""};
-    scm_boot_guile (argc, argv, scm_run_gnucash, &user_file_spec);
+        m_file_to_load ? m_file_to_load->c_str() : "",
+        &m_pending_open_file};
+    scm_run_gnucash (&user_file_spec, argc, argv);
 
     return 0;
 }
 
+void
+Gnucash::Gnucash::activate (void)
+{
+    if (m_started)
+    {
+        gnc_main_window_show_all_windows ();
+        return;
+    }
+
+    m_started = true;
+    m_starting = true;
+    m_exit_status = start (m_argc, m_argv);
+    m_starting = false;
+    if (m_exit_status == 0)
+    {
+        /* A command-line file takes precedence at startup. Finder files that
+         * arrived alongside it, and additional open requests, follow it. */
+        if (!m_pending_open_file.empty ())
+            m_pending_extra_files.insert (m_pending_extra_files.begin (),
+                                          m_pending_open_file);
+        for (const auto& uri : m_pending_extra_files)
+            gnc_file_open_file (gnc_ui_get_main_window (nullptr), uri.c_str (),
+                                /*open_readonly*/ FALSE);
+    }
+    m_pending_open_file.clear ();
+    m_pending_extra_files.clear ();
+    auto application = g_application_get_default ();
+    if (m_exit_status == 0)
+    {
+        /* Keep the application alive after its last window is closed until
+         * GnuCash has completed the asynchronous save-and-shutdown path. */
+        if (application)
+            g_application_hold (application);
+    }
+    else
+    {
+        if (application)
+            g_application_quit (application);
+    }
+}
+
+static void
+on_application_activate ([[maybe_unused]] GtkApplication *application, gpointer user_data)
+{
+    static_cast<Gnucash::Gnucash*>(user_data)->activate ();
+}
+
+void
+Gnucash::Gnucash::open (GFile **files, gint n_files)
+{
+    for (gint i = 0; i < n_files; ++i)
+    {
+        auto uri = g_file_get_uri (files[i]);
+        if (!m_started || m_starting)
+        {
+            if (m_pending_open_file.empty ())
+                m_pending_open_file = uri;
+            else
+                m_pending_extra_files.emplace_back (uri);
+        }
+        else
+            gnc_file_open_file (gnc_ui_get_main_window (nullptr), uri,
+                                /*open_readonly*/ FALSE);
+        g_free (uri);
+    }
+
+    if (!m_started)
+        activate ();
+}
+
+static void
+on_application_open ([[maybe_unused]] GApplication *application, GFile **files,
+                     gint n_files, [[maybe_unused]] const char *hint,
+                     gpointer user_data)
+{
+    static_cast<Gnucash::Gnucash*>(user_data)->open (files, n_files);
+}
+
+#ifdef MAC_INTEGRATION
+static void
+on_macos_application_action (GSimpleAction *action, GVariant *parameter,
+                             gpointer user_data)
+{
+    auto application = GTK_APPLICATION (user_data);
+    auto active_window = gtk_application_get_active_window (application);
+    auto main_window = gnc_ui_get_main_window (active_window
+                                               ? GTK_WIDGET (active_window)
+                                               : nullptr);
+    const auto action_name = g_action_get_name (G_ACTION (action));
+    const char *window_action = nullptr;
+
+    (void)parameter;
+    if (g_str_equal (action_name, "quit"))
+        window_action = "FileQuitAction";
+    else if (g_str_equal (action_name, "preferences"))
+        window_action = "EditPreferencesAction";
+    else if (g_str_equal (action_name, "about"))
+        window_action = "HelpAboutAction";
+
+    if (main_window && window_action)
+        g_action_group_activate_action (G_ACTION_GROUP (main_window),
+                                        window_action, nullptr);
+    else if (g_str_equal (action_name, "quit"))
+        g_application_quit (G_APPLICATION (application));
+}
+
+static void
+on_macos_application_startup (GApplication *application, gpointer user_data)
+{
+    static const GActionEntry actions[] =
+    {
+        { "about", on_macos_application_action, nullptr, nullptr, nullptr },
+        { "preferences", on_macos_application_action, nullptr, nullptr, nullptr },
+        { "quit", on_macos_application_action, nullptr, nullptr, nullptr },
+    };
+    const char *quit_accels[] = { "<Meta>q", nullptr };
+    const char *preferences_accels[] = { "<Meta>comma", nullptr };
+
+    (void)user_data;
+    g_action_map_add_action_entries (G_ACTION_MAP (application), actions,
+                                     G_N_ELEMENTS (actions), application);
+    gtk_application_set_accels_for_action (GTK_APPLICATION (application),
+                                           "app.quit", quit_accels);
+    gtk_application_set_accels_for_action (GTK_APPLICATION (application),
+                                           "app.preferences",
+                                           preferences_accels);
+}
+#endif
+
+static int
+on_application_command_line ([[maybe_unused]] GApplication *application,
+                             GApplicationCommandLine *command_line,
+                             gpointer user_data)
+{
+    return static_cast<Gnucash::Gnucash*>(user_data)->command_line (command_line);
+}
+
 int
-main(int argc, char ** argv)
+Gnucash::Gnucash::command_line (GApplicationCommandLine *command_line)
+{
+    gint argc = 0;
+    auto argv = g_application_command_line_get_arguments (command_line, &argc);
+
+    if (!m_started)
+    {
+        m_argc = argc;
+        m_argv = argv;
+        activate ();
+        m_argc = 0;
+        m_argv = nullptr;
+        g_strfreev (argv);
+        return m_exit_status;
+    }
+
+    /* GApplication forwards later invocations to this process. GnuCash has a
+     * single active book, so it can only forward one positional data file to
+     * the existing file-opening path. Do not silently treat unsupported
+     * invocations as activation requests. */
+    if (argc == 1)
+    {
+        if (!m_starting)
+            activate ();
+    }
+    else if (argc == 2 && argv[1][0] != '-')
+    {
+        auto file = g_application_command_line_create_file_for_arg (
+            command_line, argv[1]);
+        auto filename = g_file_get_uri (file);
+
+        auto open_result = GNC_FILE_OPEN_QUEUED;
+        if (m_starting)
+            m_pending_extra_files.emplace_back (filename);
+        else
+            open_result = gnc_file_open_file (gnc_ui_get_main_window (nullptr),
+                                               filename,
+                                               /*open_readonly*/ FALSE);
+        g_free (filename);
+        g_object_unref (file);
+        if (open_result == GNC_FILE_OPEN_QUEUED)
+            g_application_command_line_print (
+                command_line, "%s\n",
+                _("GnuCash is busy completing another file operation. "
+                  "The requested file has been queued."));
+        else if (open_result == GNC_FILE_OPEN_REJECTED)
+        {
+            g_application_command_line_printerr (
+                command_line, "%s\n",
+                _("GnuCash is shutting down. "
+                  "The requested file was not opened."));
+            g_strfreev (argv);
+            return 1;
+        }
+    }
+    else
+    {
+        g_application_command_line_printerr (
+            command_line, "%s\n",
+            _("A separate GnuCash instance is already running. "
+              "Open files one at a time."));
+        g_strfreev (argv);
+        return 1;
+    }
+
+    g_strfreev (argv);
+    return 0;
+}
+
+int
+Gnucash::Gnucash::run (int argc, char **argv)
+{
+    /* Parse in the invoking process before GApplication forwards the
+     * command line. Informational options and parser errors must be written
+     * to that process's stdout/stderr, even if another instance owns the
+     * application name. */
+    auto parse_result = parse_command_line (argc, argv);
+    if (parse_result != CommandLineResult::Run)
+        return parse_result == CommandLineResult::ExitSuccess ? 0 : 1;
+
+    auto gtk_application = gtk_application_new ("org.gnucash.GnuCash",
+                                                static_cast<GApplicationFlags> (
+                                                    G_APPLICATION_HANDLES_COMMAND_LINE |
+                                                    G_APPLICATION_HANDLES_OPEN));
+#ifdef MAC_INTEGRATION
+    g_signal_connect (gtk_application, "startup",
+                      G_CALLBACK (on_macos_application_startup), nullptr);
+#endif
+    g_signal_connect (gtk_application, "activate", G_CALLBACK (on_application_activate), this);
+    g_signal_connect (gtk_application, "open", G_CALLBACK (on_application_open), this);
+    g_signal_connect (gtk_application, "command-line",
+                      G_CALLBACK (on_application_command_line), this);
+
+    auto status = g_application_run (G_APPLICATION (gtk_application), argc, argv);
+
+    if (m_started)
+    {
+        gnc_ui_stop_event_loop ();
+        gnc_hook_remove_dangler (HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit);
+    }
+    g_object_unref (gtk_application);
+
+    if (m_started)
+        gnc_shutdown (status == 0 ? m_exit_status : status);
+
+    return status == 0 ? m_exit_status : status;
+}
+
+static int
+run_gnucash_application (int argc, char **argv, void *user_data)
+{
+    return static_cast<Gnucash::Gnucash *> (user_data)->run (argc, argv);
+}
+
+int
+main (int argc, char **argv)
 {
     Gnucash::Gnucash application (PROJECT_NAME);
 #ifdef __MINGW32__
     boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
 #endif
-    /* We need to initialize gtk before looking up all modules */
-    if(!gtk_init_check (&argc, &argv))
-    {
-        std::cerr << bl::format (std::string{("Run '{1} --help' to see a full list of available command line options.")}) % *argv[0]
-        << "\n"
-        // Translators: Do not translate $DISPLAY! It is an environment variable for X11
-        << _("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
-        "Perhaps you need to set the $DISPLAY environment variable?")
-        << "\n";
-        return 1;
-    }
-#ifdef __MINGW32__
-    set_platform_ctype_to_acp ();
-#endif
-
-    application.parse_command_line (argc, argv);
-    return application.start (argc, argv);
+    gnc_run_with_guile (argc, argv, run_gnucash_application, &application);
 }

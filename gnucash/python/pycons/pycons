@@ -32,7 +32,7 @@ This console implements a python (or ipython) shell within a GTK window and
 handles python stdin/stderr/stdout redirection and system wide stdout/stderr
 redirection (using a pipe), provides history based on the GNU readline package
 and automatic completion. It is also able to display matplotlib figures
-inline. Each call to the show functions actually produces a FigureCanvasGTKAgg
+inline. Each call to the show functions actually produces a FigureCanvasGTK4Agg
 that is inserted within the console.
 
 Usage: ./pycons [--ipython] [--pylab] [--toolbar] file
@@ -44,24 +44,23 @@ back(), forward() and save() active figure.
 
 import os
 import sys
-import gc
-import gobject
-import gtk
-import pango
+import gi
+gi.require_version('Gtk', '4.0')
+from gi.repository import GdkPixbuf, GLib, Gtk
 
 pylab_available = True
 try:
     import matplotlib
-    matplotlib.use('GtkAgg')
-    from matplotlib.backends.backend_gtkagg \
-        import FigureCanvasGTKAgg as Canvas
-    from matplotlib.backends.backend_gtkagg \
-        import NavigationToolbar2GTKAgg as NavigationToolbar
-    import matplotlib.backends.backend_gtkagg as backend_gtkagg
+    matplotlib.use('GTK4Agg')
+    from matplotlib.backends.backend_gtk4agg \
+        import FigureCanvasGTK4Agg as Canvas
+    from matplotlib.backends.backend_gtk4 \
+        import NavigationToolbar2GTK4 as NavigationToolbar
+    import matplotlib.backends.backend_gtk4agg as backend_gtk4agg
     def draw_if_interactive():
         """ Is called after every pylab drawing command """
         show(console)
-    backend_gtkagg.draw_if_interactive = draw_if_interactive
+    backend_gtk4agg.draw_if_interactive = draw_if_interactive
     import pylab
     import matplotlib.pylab
     from matplotlib._pylab_helpers import Gcf
@@ -97,19 +96,15 @@ def replace (console, canvas, anchor):
     figures = console.figures
     view = console.view
     canvas.draw()
-    w, h = canvas.get_size_request()
-    pixbuf = gtk.gdk.pixbuf_new_from_data (
-        canvas.buffer_rgba(0,0), gtk.gdk.COLORSPACE_RGB, True,8,w,h,w*4)
-    image = gtk.Image()
-    image.set_from_pixbuf (pixbuf)
-    widget = anchor.get_widgets()
+    w, h = canvas.get_width(), canvas.get_height()
+    pixels = GLib.Bytes.new(bytes(canvas.buffer_rgba()))
+    pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
+        pixels, GdkPixbuf.Colorspace.RGB, True, 8, w, h, w * 4)
+    image = Gtk.Picture.new_for_pixbuf(pixbuf)
     for widget in anchor.get_widgets():
-        for child in widget.get_children():
-            widget.remove (child)
+        view.remove(widget)
     view.add_child_at_anchor(image, anchor)
-    image.show()
-    #gc.collect()
-    return widget
+    return image
 
 # ----------------------------------------------------------------------- refresh
 def refresh(console):
@@ -119,25 +114,22 @@ def refresh(console):
     for fig in figures:
         figure, canvas, anchor = fig
         canvas.draw()
-    while gtk.events_pending():
-        gtk.main_iteration()
+    context = GLib.MainContext.default()
+    while context.pending():
+        context.iteration(False)
 
 # ----------------------------------------------------------------------- refresh
-def figure_enter(widget, event, console):
+def figure_enter(controller, x, y, canvas, console):
     """ Change cursor to an arrow """
 
-    watch = gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW)
-    widget.window.set_cursor (watch)
-    widget.grab_focus()
-    console.active_canvas = widget.get_child()
+    canvas.grab_focus()
+    console.active_canvas = canvas
 
 # ----------------------------------------------------------------------- refresh
-def figure_leave(widget, event, console):
+def figure_leave(controller, canvas, console):
     """ Change cursor to text cursor """
 
-    cursor = gtk.gdk.Cursor(gtk.gdk.XTERM)
-    widget.window.set_cursor (cursor)
-    console.grab_focus()
+    console.view.grab_focus()
     console.active_canvas = None
 
 # ----------------------------------------------------------------------- insert
@@ -151,7 +143,7 @@ def insert (console, figure):
     buffer = console.buffer
 
     # Compute size of the canvas according to current console visible area
-    x,y,width,height = console.get_allocation()
+    width, height = console.get_width(), console.get_height()
     dpi = figure.get_dpi()
     figwidth = figure.get_figwidth() * dpi
     figheight = figure.get_figheight() * dpi
@@ -166,40 +158,22 @@ def insert (console, figure):
     for s,func in console.callbacks:
         canvas.mpl_connect(s,func)
     canvas.set_size_request (w,h)
-    canvas.show_all()
     console.write ('\n')
     console.write (' ', 'center')
     iter = buffer.get_iter_at_mark(buffer.get_mark('insert'))
     anchor = buffer.create_child_anchor(iter)
     console.write (' ', 'center')
 
-    if console.use_toolbar:
-        boxout = gtk.EventBox()
-        boxout.set_border_width(0)
-        boxin =  gtk.EventBox()
-        boxin.set_border_width(1)
-        boxout.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#cccccc"))
-        boxout.add (boxin)
-
-    vbox = gtk.VBox()
-    box = gtk.EventBox()
-    box.add(canvas)
-    box.connect ('enter-notify-event', figure_enter, console)
-    box.connect ('leave-notify-event', figure_leave, console)
-    vbox.add(box)
-    toolbar = NavigationToolbar(canvas, None)
-    vbox.add(toolbar)
-
-    if console.use_toolbar:
-        boxin.add(vbox)
-        boxout.show_all()
-        vbox.show()
-        box.show()
-        view.add_child_at_anchor(boxout, anchor)
-    else:
-        vbox.show_all()
-        toolbar.hide()
-        view.add_child_at_anchor(vbox, anchor)
+    vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+    vbox.append(canvas)
+    motion = Gtk.EventControllerMotion()
+    motion.connect('enter', figure_enter, canvas, console)
+    motion.connect('leave', figure_leave, canvas, console)
+    canvas.add_controller(motion)
+    toolbar = NavigationToolbar(canvas)
+    toolbar.set_visible(console.use_toolbar)
+    vbox.append(toolbar)
+    view.add_child_at_anchor(vbox, anchor)
 
     console.shell.namespace()['pan'] = toolbar.pan
     console.shell.namespace()['zoom'] = toolbar.zoom
@@ -245,8 +219,9 @@ def replot (console):
         console.figures = console.figures[0:-1]
         insert (console, figure)
     console.view.scroll_mark_onscreen(console.buffer.get_insert())
-    while gtk.events_pending():
-        gtk.main_iteration()
+    context = GLib.MainContext.default()
+    while context.pending():
+        context.iteration(False)
 
 
 # ---------------------------------------------------------------------- connect
@@ -281,34 +256,18 @@ class Console (cons.Console):
                  filename=None, size=100):
         cons.Console.__init__(self, argv, shelltype, banner, filename, size)
         self.buffer.create_tag('center',
-                               justification=gtk.JUSTIFY_CENTER,
+                               justification=Gtk.Justification.CENTER,
                                font='Mono 4')
         self.figures = []
         self.callbacks = []
         self.last_figure = None
         self.active_canvas = None
-        self.view.connect ('key-press-event', self.key_press_event)
-        self.view.connect ('button-press-event', self.button_press_event)
-        self.view.connect ('scroll-event', self.scroll_event)
 
 
-    def key_press_event (self, widget, event):
+    def key_press_event (self, controller, keyval, keycode, state):
         """ Handle key press event """
-        
-        if self.active_canvas:
-            self.active_canvas.emit ('key-press-event', event)
-            return True
-        return cons.Console.key_press_event (self, widget, event)
-
-    def scroll_event (self, widget, event):
-        """ Scroll event """
-        if self.active_canvas:
-            return True
-        return False
- 
-    def button_press_event (self, widget, event):
-        """ Button press event """
-        return self.refresh()
+        return cons.Console.key_press_event (self, controller, keyval,
+                                             keycode, state)
 
     def refresh (self):
         """ Refresh drawing """
@@ -337,7 +296,7 @@ if __name__ == "__main__":
 
     filename = os.path.expanduser("~/.pyhistory")
     p = 'Python %s' % sys.version.split(' ')[0]
-    l = 'matplotlib %s' % matplotlib.__version__
+    l = 'matplotlib %s' % matplotlib.__version__ if pylab_available else ''
     shelltype = 'python'
     if (options.ipython and ipython_available) is True:
         p = 'IPython %s' % IPython.__version__
@@ -356,43 +315,54 @@ if __name__ == "__main__":
             [' Extra commands: "replot", "refresh", "pan", "zoom", "back", "forward", "home"\n',
              'subtitle']
             ]
-    console = Console(argv=args, shelltype=shelltype,
-                      banner=banner, filename=filename, size=100)
-    if options.toolbar:
-        console.use_toolbar = True
-    else:
-        console.use_toolbar = False
-    window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    window.set_position(gtk.WIN_POS_CENTER)
-    window.set_default_size(800,600)
-    window.set_border_width(0)
-    window.connect('destroy-event', gtk.main_quit)
-    window.connect('delete-event', gtk.main_quit)
-    window.add (console)
-    window.show_all()
-    console.grab_focus()
+    application = Gtk.Application(application_id='org.gnucash.PyCons')
 
-    if pylab_available and options.pylab:
-        console.write ("from pylab import *")
-        console.execute()
-        pylab.show = partial (show, console)
-        matplotlib.pylab.show = pylab.show
-        matplotlib.pyplot.show = pylab.show
-        pylab.connect = partial (connect, console)
-        matplotlib.pylab.connect = pylab.connect
-        console.shell.namespace()['replot'] = partial (replot, console)
-        console.shell.namespace()['refresh'] = partial (refresh, console)
+    def activate(app):
+        global console
+        console = Console(argv=args, shelltype=shelltype,
+                          banner=banner, filename=filename, size=100)
+        console.use_toolbar = options.toolbar
 
-    def execfiles(console):
-        console.write ('execfile("%s")' % args[0])
-        #  execfile(console.argv[0], console.shell.namespace())
-        console.execute()
-        return False
-    if len(args):
-        gobject.timeout_add(50, execfiles, console)
+        window = Gtk.ApplicationWindow(application=app)
+        window.set_default_size(800, 600)
+        window.set_child(console)
 
+        def close_requested(widget):
+            console.quit()
+            app.quit()
+            return False
 
-    # Prevent external commands/scripts to quit
-    while console.do_quit == False:
-        gtk.main()
+        window.connect('close-request', close_requested)
+
+        if pylab_available and options.pylab:
+            console.write ("from pylab import *")
+            console.execute()
+            pylab.show = partial (show, console)
+            matplotlib.pylab.show = pylab.show
+            matplotlib.pyplot.show = pylab.show
+            pylab.connect = partial (connect, console)
+            matplotlib.pylab.connect = pylab.connect
+            console.shell.namespace()['replot'] = partial (replot, console)
+            console.shell.namespace()['refresh'] = partial (refresh, console)
+
+        def execfiles(console):
+            console.write ('exec(open("%s").read())' % args[0])
+            console.execute()
+            return False
+
+        if len(args):
+            GLib.timeout_add(50, execfiles, console)
+
+        def quit_when_done():
+            if console.do_quit:
+                app.quit()
+                return False
+            return True
+
+        GLib.timeout_add(50, quit_when_done)
+        window.present()
+        console.view.grab_focus()
+
+    application.connect('activate', activate)
+    application.run([sys.argv[0]])
 

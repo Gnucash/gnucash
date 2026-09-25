@@ -39,28 +39,45 @@
 
 G_BEGIN_DECLS
 
+typedef struct
+{
+    time64 from_date;
+    gboolean last_retrieval_date;
+    gboolean first_possible_date;
+    time64 to_date;
+    gboolean to_now;
+} GncABDateRange;
+
 /**
- * Show a dialog to pick a time frame using a sensible set of default options.
+ * gnc_ab_enter_daterange_async:
+ * @parent: (nullable): widget to use as the transient parent
+ * @heading: (nullable): descriptive text at the top
+ * @initial: initial range values
+ * @cancellable: (nullable): operation cancellation token
+ * @callback: (nullable): completion callback
+ * @user_data: data passed to @callback
  *
- * @param parent Widget to use as parent, may be NULL
- * @param heading Descriptive text showed at the top, may be NULL
- * @param from_date Location to read from the initial and write to the final
- * value of the from date entry
- * @param last_retv_date Location to read from whether the caller knows the last
- * retrieval date and write to whether the corresponding button has been chosen
- * @param first_possible_date Location to write to whether the earliest possible
- * date button has been chosen
- * @param to_date Location to read from the initial and write to the final value
- * of the to date entry
- * @param to_now Location to write to whether the to now button has been chosen
+ * Presents the date-range dialog without entering a nested main loop.
  */
-gboolean gnc_ab_enter_daterange(GtkWidget *parent,
-                                const char *heading,
-                                time64 *from_date,
-                                gboolean *last_retv_date,
-                                gboolean *first_possible_date,
-                                time64 *to_date,
-                                gboolean *to_now);
+void gnc_ab_enter_daterange_async (GtkWidget *parent,
+                                   const char *heading,
+                                   const GncABDateRange *initial,
+                                   GCancellable *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data);
+
+/**
+ * gnc_ab_enter_daterange_finish:
+ * @result: asynchronous result returned by gnc_ab_enter_daterange_async()
+ * @range: (out): selected range
+ * @error: (out) (nullable): operation error
+ *
+ * Returns %TRUE if the user accepted the dialog. Cancelling it returns %FALSE
+ * without an error and leaves @range unchanged.
+ */
+gboolean gnc_ab_enter_daterange_finish (GAsyncResult *result,
+                                        GncABDateRange *range,
+                                        GError **error);
 
 G_END_DECLS
 

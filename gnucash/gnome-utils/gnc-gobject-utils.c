@@ -27,9 +27,6 @@
 #include "gnc-gobject-utils.h"
 #include <qoflog.h>
 
-#include <gtk/gtk.h>	// For gtk_main_quit(). Can't get this to work with
-// a g_source attached to the main glib context.
-
 static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);

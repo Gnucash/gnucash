@@ -208,3 +208,113 @@ TEST(QofIDTest, collection_print_dirty)
     qof_collection_mark_clean(col);
     qof_collection_destroy(col);
 }
+
+TEST(QofIDTest, collection_cursor_empty_end_and_free)
+{
+    auto col = qof_collection_new (QOF_ID_BOOK);
+    auto cursor = qof_collection_cursor_new (col);
+    GncGUID guid{};
+
+    ASSERT_NE (cursor, nullptr);
+    EXPECT_EQ (qof_collection_cursor_next (cursor, &guid),
+               QOF_COLLECTION_CURSOR_END);
+    EXPECT_EQ (qof_collection_cursor_next (cursor, &guid),
+               QOF_COLLECTION_CURSOR_END);
+    EXPECT_EQ (qof_collection_cursor_next (nullptr, &guid),
+               QOF_COLLECTION_CURSOR_STALE);
+    EXPECT_EQ (qof_collection_cursor_next (cursor, nullptr),
+               QOF_COLLECTION_CURSOR_STALE);
+
+    qof_collection_cursor_free (cursor);
+    qof_collection_cursor_free (nullptr);
+    qof_collection_destroy (col);
+}
+
+TEST(QofIDTest, collection_cursor_yields_only_guids)
+{
+    auto col = qof_collection_new (QOF_ID_BOOK);
+    auto first = qof_book_new ();
+    auto second = qof_book_new ();
+    ASSERT_TRUE (qof_collection_add_entity (col, QOF_INSTANCE (first)));
+    ASSERT_TRUE (qof_collection_add_entity (col, QOF_INSTANCE (second)));
+    auto cursor = qof_collection_cursor_new (col);
+    std::vector<GncGUID> guids;
+    GncGUID guid{};
+    QofCollectionCursorStatus status;
+
+    while ((status = qof_collection_cursor_next (cursor, &guid)) ==
+           QOF_COLLECTION_CURSOR_ITEM)
+        guids.push_back (guid);
+
+    EXPECT_EQ (status, QOF_COLLECTION_CURSOR_END);
+    EXPECT_EQ (guids.size (), 2u);
+    EXPECT_TRUE (std::any_of (guids.begin (), guids.end (), [first] (auto value)
+    {
+        return guid_equal (&value, qof_instance_get_guid (QOF_INSTANCE (first)));
+    }));
+    EXPECT_TRUE (std::any_of (guids.begin (), guids.end (), [second] (auto value)
+    {
+        return guid_equal (&value, qof_instance_get_guid (QOF_INSTANCE (second)));
+    }));
+
+    qof_collection_cursor_free (cursor);
+    qof_collection_destroy (col);
+}
+
+TEST(QofIDTest, collection_cursor_insert_and_remove_invalidate)
+{
+    auto insert_col = qof_collection_new (QOF_ID_BOOK);
+    auto remove_col = qof_collection_new (QOF_ID_BOOK);
+    auto restore_col = qof_collection_new (QOF_ID_BOOK);
+    auto first = qof_book_new ();
+    auto second = qof_book_new ();
+    qof_collection_insert_entity (insert_col, QOF_INSTANCE (first));
+    auto insert_cursor = qof_collection_cursor_new (insert_col);
+    GncGUID guid{};
+
+    ASSERT_EQ (qof_collection_cursor_next (insert_cursor, &guid),
+               QOF_COLLECTION_CURSOR_ITEM);
+    ASSERT_TRUE (qof_collection_add_entity (insert_col, QOF_INSTANCE (second)));
+    EXPECT_EQ (qof_collection_cursor_next (insert_cursor, &guid),
+               QOF_COLLECTION_CURSOR_STALE);
+
+    qof_collection_insert_entity (remove_col, QOF_INSTANCE (second));
+    auto remove_cursor = qof_collection_cursor_new (remove_col);
+    qof_collection_remove_entity (QOF_INSTANCE (second));
+    EXPECT_EQ (qof_collection_cursor_next (remove_cursor, &guid),
+               QOF_COLLECTION_CURSOR_STALE);
+
+    qof_collection_cursor_free (insert_cursor);
+    qof_collection_cursor_free (remove_cursor);
+    qof_collection_insert_entity (restore_col, QOF_INSTANCE (first));
+    qof_collection_insert_entity (restore_col, QOF_INSTANCE (second));
+    qof_collection_destroy (insert_col);
+    qof_collection_destroy (remove_col);
+    qof_collection_destroy (restore_col);
+}
+
+TEST(QofIDTest, collection_cursors_are_collection_scoped)
+{
+    auto first_col = qof_collection_new (QOF_ID_BOOK);
+    auto second_col = qof_collection_new (QOF_ID_BOOK);
+    auto first = qof_book_new ();
+    auto second = qof_book_new ();
+    ASSERT_TRUE (qof_collection_add_entity (first_col, QOF_INSTANCE (first)));
+    ASSERT_TRUE (qof_collection_add_entity (second_col, QOF_INSTANCE (second)));
+    auto first_cursor = qof_collection_cursor_new (first_col);
+    auto second_cursor = qof_collection_cursor_new (second_col);
+    GncGUID guid{};
+
+    ASSERT_TRUE (qof_collection_add_entity (first_col, QOF_INSTANCE (second)));
+    EXPECT_EQ (qof_collection_cursor_next (first_cursor, &guid),
+               QOF_COLLECTION_CURSOR_STALE);
+    EXPECT_EQ (qof_collection_cursor_next (second_cursor, &guid),
+               QOF_COLLECTION_CURSOR_ITEM);
+    EXPECT_TRUE (guid_equal (&guid,
+                 qof_instance_get_guid (QOF_INSTANCE (second))));
+
+    qof_collection_cursor_free (first_cursor);
+    qof_collection_cursor_free (second_cursor);
+    qof_collection_destroy (first_col);
+    qof_collection_destroy (second_col);
+}

@@ -45,7 +45,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 #ifdef HAVE_SYS_WAIT_H
 #    include <sys/wait.h>
 #endif
@@ -70,27 +70,26 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 #define ASSISTANT_AB_INITIAL_CM_CLASS "assistant-ab-initial"
 
 typedef struct _ABInitialInfo ABInitialInfo;
-typedef struct _DeferredInfo DeferredInfo;
 typedef struct _AccCbData AccCbData;
 typedef struct _RevLookupData RevLookupData;
 
-void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                     gpointer user_data);
+#define AAI_PAGE_COUNT 4
 
-void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
-void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
-void aai_destroy_cb(GtkWidget *object, gpointer user_data);
+static const gchar *const aai_page_names[AAI_PAGE_COUNT] =
+{
+    "intro", "setup", "match", "finish"
+};
 
-gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-
-void aai_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void aai_button_clicked_cb(GtkButton *button, gpointer user_data);
-void aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data);
+static const gchar *const aai_page_titles[AAI_PAGE_COUNT] =
+{
+    N_("Initial Online Banking Setup"),
+    N_("Start Online Banking Setup"),
+    N_("Match Online accounts with GnuCash accounts"),
+    N_("Online Banking Setup Finished")
+};
 
 static guint aai_ab_account_hash(gconstpointer v);
 static gboolean aai_ab_account_equal(gconstpointer v1, gconstpointer v2);
-void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
-
 static gboolean banking_has_accounts(AB_BANKING *banking);
 static void hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
 static ABInitialInfo *single_info = NULL;
@@ -98,9 +97,7 @@ static gchar *ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc);
 static GNC_AB_ACCOUNT_SPEC *update_account_list_acc_cb(GNC_AB_ACCOUNT_SPEC *ab_acc, gpointer user_data);
 static void update_account_list(ABInitialInfo *info);
 static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data);
-static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
-static void account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
-                                     GtkTreeViewColumn  *col, gpointer user_data);
+static void account_list_clicked_cb (GtkColumnView *view, guint position, gpointer user_data);
 static void delete_account_match(ABInitialInfo *info, RevLookupData *data);
 static void delete_selected_match_cb(gpointer data, gpointer user_data);
 static void insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash);
@@ -108,35 +105,42 @@ static void remove_acc_from_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpoint
 static void clear_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void aai_close_handler(gpointer user_data);
+static ABInitialInfo *aai_info_ref (ABInitialInfo *info);
+static void aai_info_unref (ABInitialInfo *info);
+static void aai_request_close (ABInitialInfo *info);
+static void aai_prepare_current_page (ABInitialInfo *info);
+static void aai_update_navigation (ABInitialInfo *info);
+static void aai_match_page_prepare (ABInitialInfo *info);
 
 struct _ABInitialInfo
 {
-    GtkWidget *window;
-    GtkWidget *assistant;
+    gatomicrefcount ref_count;
+    GtkWindow *window;
+    GtkStack *stack;
+    GtkLabel *page_title;
+    GtkWidget *back_button;
+    GtkWidget *next_button;
+    GtkWidget *apply_button;
+    GtkWidget *cancel_button;
+    GtkWidget *setup_button;
+    guint page_index;
+    gboolean setup_running;
+    gboolean close_requested;
+    gboolean destroyed;
 
-    /* account match page */
+    /* Account match page. */
     gboolean match_page_prepared;
-    GtkTreeView *account_view;
-    GtkListStore *account_store;
+    GtkColumnView *account_view;
+    GListStore *account_store;
+    GtkMultiSelection *account_selection;
 
-    /* managed by child_exit_cb */
-    DeferredInfo *deferred_info;
-
-    /* AqBanking stuff */
+    /* AqBanking data. */
     AB_BANKING *api;
-    /* AB_ACCOUNT* -> Account* -- DO NOT DELETE THE KEYS! */
+    /* AB_ACCOUNT* -> Account* -- the API owns the keys. */
     GHashTable *gnc_hash;
-    /* Reverse hash table for lookup of matched GnuCash accounts */
+    /* Reverse hash table for lookup of matched GnuCash accounts. */
     GHashTable *gnc_revhash;
 };
-
-struct _DeferredInfo
-{
-    ABInitialInfo *initial_info;
-    gchar *wizard_path;
-    gboolean qt_probably_unavailable;
-};
-
 struct _AccCbData
 {
     AB_BANKING *api;
@@ -149,292 +153,421 @@ struct _RevLookupData
     GNC_AB_ACCOUNT_SPEC *ab_acc;
 };
 
-enum account_list_cols
-{
-    ACCOUNT_LIST_COL_INDEX = 0,
-    ACCOUNT_LIST_COL_AB_NAME,
-    ACCOUNT_LIST_COL_AB_ACCT,
-    ACCOUNT_LIST_COL_GNC_NAME,
-    ACCOUNT_LIST_COL_CHECKED,
-    NUM_ACCOUNT_LIST_COLS
-};
+#define ACCOUNT_ROW_AB_ACCOUNT "ab-account"
+#define ACCOUNT_ROW_GNC_NAME "gnc-name"
+#define ACCOUNT_ROW_CHANGED "changed"
 
-gboolean
-aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+static void
+account_row_factory_setup (GtkListItemFactory *factory, GtkListItem *list_item, gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    GtkWidget *child;
+    if (GPOINTER_TO_INT (user_data) == 2)
     {
-        gtk_widget_destroy(widget);
-        return TRUE;
+        child = gtk_check_button_new ();
+        gtk_widget_set_sensitive (child, FALSE);
     }
     else
     {
+        child = gtk_label_new (NULL);
+        gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+        gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
+    }
+    gtk_list_item_set_child (list_item, child);
+}
+
+static void
+account_row_factory_bind (GtkListItemFactory *factory, GtkListItem *list_item, gpointer user_data)
+{
+    GtkStringObject *row = GTK_STRING_OBJECT (gtk_list_item_get_item (list_item));
+    GtkWidget *child = gtk_list_item_get_child (list_item);
+    switch (GPOINTER_TO_INT (user_data))
+    {
+    case 0:
+        gtk_label_set_text (GTK_LABEL (child), gtk_string_object_get_string (row));
+        break;
+    case 1:
+        gtk_label_set_text (GTK_LABEL (child), g_object_get_data (G_OBJECT (row), ACCOUNT_ROW_GNC_NAME));
+        break;
+    default:
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
+                                     GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), ACCOUNT_ROW_CHANGED)));
+        break;
+    }
+}
+
+static GtkColumnViewColumn *
+account_view_add_column (GtkColumnView *view, const gchar *title, gint column, gboolean expand)
+{
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+    GtkColumnViewColumn *result;
+    g_signal_connect (factory, "setup", G_CALLBACK (account_row_factory_setup), GINT_TO_POINTER (column));
+    g_signal_connect (factory, "bind", G_CALLBACK (account_row_factory_bind), GINT_TO_POINTER (column));
+    result = gtk_column_view_column_new (title, factory);
+    gtk_column_view_column_set_expand (result, expand);
+    gtk_column_view_append_column (view, result);
+    g_object_unref (result);
+    return result;
+}
+
+static gint
+account_row_index (ABInitialInfo *info, GNC_AB_ACCOUNT_SPEC *ab_acc)
+{
+    for (guint index = 0; index < g_list_model_get_n_items (G_LIST_MODEL (info->account_store)); index++)
+    {
+        GtkStringObject *row = g_list_model_get_item (G_LIST_MODEL (info->account_store), index);
+        gboolean found = aai_ab_account_equal (g_object_get_data (G_OBJECT (row), ACCOUNT_ROW_AB_ACCOUNT), ab_acc);
+        g_object_unref (row);
+        if (found)
+            return index;
+    }
+    return -1;
+}
+
+static void
+account_row_update (ABInitialInfo *info, GNC_AB_ACCOUNT_SPEC *ab_acc, const gchar *gnc_name)
+{
+    gint index = account_row_index (info, ab_acc);
+    if (index >= 0)
+    {
+        GtkStringObject *row = g_list_model_get_item (G_LIST_MODEL (info->account_store), index);
+        g_object_set_data_full (G_OBJECT (row), ACCOUNT_ROW_GNC_NAME, g_strdup (gnc_name), g_free);
+        g_object_set_data (G_OBJECT (row), ACCOUNT_ROW_CHANGED, GINT_TO_POINTER (TRUE));
+        g_list_model_items_changed (G_LIST_MODEL (info->account_store), index, 1, 1);
+        g_object_unref (row);
+    }
+}
+
+static ABInitialInfo *
+aai_info_ref (ABInitialInfo *info)
+{
+    g_return_val_if_fail (info, NULL);
+    g_atomic_ref_count_inc (&info->ref_count);
+    return info;
+}
+
+static void
+aai_info_unref (ABInitialInfo *info)
+{
+    if (!info || !g_atomic_ref_count_dec (&info->ref_count))
+        return;
+
+    g_clear_object (&info->account_selection);
+    g_clear_object (&info->account_store);
+    g_clear_pointer (&info->gnc_hash, g_hash_table_destroy);
+    g_clear_pointer (&info->gnc_revhash, g_hash_table_destroy);
+    if (info->api)
+        gnc_AB_BANKING_delete (info->api);
+    g_free (info);
+}
+
+static gboolean
+aai_current_page_complete (ABInitialInfo *info)
+{
+    g_return_val_if_fail (info, FALSE);
+
+    switch (info->page_index)
+    {
+    case 0:
+    case 2:
+    case 3:
+        return TRUE;
+    case 1:
+        return info->api && banking_has_accounts (info->api);
+    default:
         return FALSE;
     }
 }
 
-void
-aai_on_cancel (GtkAssistant *gtkassistant, gpointer user_data)
+static void
+aai_update_navigation (ABInitialInfo *info)
 {
-    ABInitialInfo *info = user_data;
+    gboolean running;
+    gboolean complete;
+    GtkWidget *default_widget;
 
-    gtk_widget_destroy(info->window);
-}
-
-void
-aai_destroy_cb(GtkWidget *object, gpointer user_data)
-{
-    ABInitialInfo *info = user_data;
-    g_return_if_fail (single_info && info == single_info);
-
-    gnc_unregister_gui_component_by_data(ASSISTANT_AB_INITIAL_CM_CLASS, info);
-
-    if (info->deferred_info)
-    {
-        PINFO("Online Banking assistant is being closed but the wizard is still "
-                  "running.  Inoring.");
-
-        /* Tell child_exit_cb() that there is no assistant anymore */
-        info->deferred_info->initial_info = NULL;
-    }
-
-    if (info->gnc_hash)
-    {
-        g_hash_table_destroy(info->gnc_hash);
-        info->gnc_hash = NULL;
-    }
-
-    if (info->gnc_revhash)
-    {
-        g_hash_table_destroy(info->gnc_revhash);
-        info->gnc_revhash = NULL;
-    }
-
-    if (info->api)
-    {
-        gnc_AB_BANKING_delete(info->api);
-        info->api = NULL;
-    }
-
-    gtk_widget_destroy(info->window);
-    info->window = NULL;
-
-    g_free(info);
-    single_info = NULL;
-}
-
-void
-aai_page_prepare (GtkAssistant *assistant, gpointer user_data)
-{
-    ABInitialInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
-    g_return_if_fail(info->api);
-
-    /* Enable the Assistant Buttons if we accounts */
-    if (banking_has_accounts(info->api))
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
-    else
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
-}
-
-void
-aai_button_clicked_cb(GtkButton *button, gpointer user_data)
-{
-    ABInitialInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(info->window));
-    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
-
-    AB_BANKING *banking = info->api;
-    g_return_if_fail(banking);
-
-    ENTER("user_data: %p", user_data);
-
-    if (info->deferred_info)
-    {
-        LEAVE("Wizard is still running");
+    if (!info || info->destroyed || !info->window)
         return;
-    }
 
-    {
-        GWEN_DIALOG *dlg = AB_Banking_CreateSetupDialog(banking);
-        if (!dlg)
-        {
-            PERR("Could not lookup Setup Dialog of aqbanking!");
-        }
-        else
-        {
-            int rv = GWEN_Gui_ExecDialog(dlg, 0);
-            if (rv <= 0)
-            {
-                /* Dialog was aborted/rejected */
-                PERR("Setup Dialog of aqbanking aborted/rejected, code %d", rv);
-            }
-            GWEN_Dialog_free(dlg);
-        }
-    }
+    running = info->setup_running;
+    complete = aai_current_page_complete (info);
+    gtk_label_set_text (info->page_title, _(aai_page_titles[info->page_index]));
+    gtk_widget_set_visible (info->back_button, info->page_index > 0);
+    gtk_widget_set_sensitive (info->back_button, !running && info->page_index > 0);
+    gtk_widget_set_visible (info->next_button, info->page_index + 1 < AAI_PAGE_COUNT);
+    gtk_widget_set_sensitive (info->next_button, !running && complete &&
+                              info->page_index + 1 < AAI_PAGE_COUNT);
+    gtk_widget_set_visible (info->apply_button, info->page_index + 1 == AAI_PAGE_COUNT);
+    gtk_widget_set_sensitive (info->apply_button, !running && complete &&
+                              info->page_index + 1 == AAI_PAGE_COUNT);
+    gtk_widget_set_sensitive (info->cancel_button, !running);
+    gtk_widget_set_sensitive (info->setup_button, !running);
 
-    /* Enable the Assistant Buttons if we accounts */
-    if (banking_has_accounts(info->api))
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
-    else
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
-
-    LEAVE(" ");
-}
-
-static void delete_account_match(ABInitialInfo *info, RevLookupData *data)
-{
-    g_return_if_fail(info && info->gnc_hash &&
-        info->account_view && data && data->ab_acc);
-
-    g_hash_table_remove(info->gnc_hash, data->ab_acc);
-    gtk_tree_model_foreach(
-        GTK_TREE_MODEL(info->account_store),
-        (GtkTreeModelForeachFunc) clear_line_cb,
-        data);
+    default_widget = info->page_index + 1 == AAI_PAGE_COUNT
+        ? info->apply_button : info->next_button;
+    gtk_window_set_default_widget (info->window, default_widget);
 }
 
 static void
-delete_selected_match_cb(gpointer data, gpointer user_data)
+aai_match_page_prepare (ABInitialInfo *info)
 {
-    GtkTreeIter iter;
-    GtkTreeModel *model = NULL;
-    RevLookupData revLookupData = {NULL, NULL};
+    Account *root;
+    AccCbData data;
 
-    GtkTreePath *path = (GtkTreePath *) data;
-    ABInitialInfo *info = (ABInitialInfo *) user_data;
-    g_return_if_fail(path && info && info->account_view);
+    if (!info || info->destroyed || !info->api)
+        return;
 
-    model = gtk_tree_view_get_model(info->account_view);
-    g_return_if_fail(model);
-
-    if (gtk_tree_model_get_iter(model, &iter, path))
+    if (!info->match_page_prepared)
     {
-        gtk_tree_model_get(model, &iter, ACCOUNT_LIST_COL_AB_ACCT, &revLookupData.ab_acc, -1);
-        if (revLookupData.ab_acc)
-            delete_account_match(info, &revLookupData);
+        root = gnc_book_get_root_account (gnc_get_current_book ());
+        info->gnc_hash = g_hash_table_new (&aai_ab_account_hash, &aai_ab_account_equal);
+        data.api = info->api;
+        data.hash = info->gnc_hash;
+        gnc_account_foreach_descendant (root, (AccountCb) hash_from_kvp_acc_cb, &data);
+        info->gnc_revhash = g_hash_table_new (NULL, NULL);
+        g_hash_table_foreach (data.hash, (GHFunc) insert_acc_into_revhash_cb,
+                              info->gnc_revhash);
+        info->match_page_prepared = TRUE;
     }
+    update_account_list (info);
 }
 
-void
-aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data)
+static void
+aai_prepare_current_page (ABInitialInfo *info)
 {
-    GList *selected_matches = NULL;
-    GtkTreeSelection *selection = NULL;
-    ABInitialInfo *info = (ABInitialInfo *) user_data;
+    if (!info || info->destroyed)
+        return;
 
-    g_return_if_fail(info && info->api && info->account_view && info->gnc_hash);
+    if (info->page_index == 2)
+        aai_match_page_prepare (info);
+    aai_update_navigation (info);
+}
 
-    PINFO("Selected account matches are deleted");
+static void
+aai_set_page (ABInitialInfo *info, guint page_index)
+{
+    if (!info || info->destroyed || page_index >= AAI_PAGE_COUNT)
+        return;
 
-    selection = gtk_tree_view_get_selection (info->account_view);
-    if (selection)
+    info->page_index = page_index;
+    gtk_stack_set_visible_child_name (info->stack, aai_page_names[page_index]);
+    aai_prepare_current_page (info);
+}
+
+static void
+aai_request_close (ABInitialInfo *info)
+{
+    if (!info || info->destroyed || !info->window)
+        return;
+
+    if (info->setup_running)
     {
-        selected_matches = gtk_tree_selection_get_selected_rows (selection, NULL);
-        if (selected_matches)
+        info->close_requested = TRUE;
+        return;
+    }
+    gtk_window_destroy (info->window);
+}
+
+static gboolean
+aai_key_pressed_cb (GtkEventControllerKey *controller, guint keyval,
+                    guint keycode, GdkModifierType state, gpointer user_data)
+{
+    (void) controller;
+    (void) keycode;
+    (void) state;
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+
+    aai_request_close (user_data);
+    return TRUE;
+}
+
+static gboolean
+aai_window_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    (void) window;
+    aai_request_close (user_data);
+    return TRUE;
+}
+
+static void
+aai_back_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+
+    (void) button;
+    if (info && !info->destroyed && !info->setup_running && info->page_index > 0)
+        aai_set_page (info, info->page_index - 1);
+}
+
+static void
+aai_next_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+
+    (void) button;
+    if (info && !info->destroyed && !info->setup_running &&
+        aai_current_page_complete (info) && info->page_index + 1 < AAI_PAGE_COUNT)
+        aai_set_page (info, info->page_index + 1);
+}
+
+static void
+aai_cancel_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    (void) button;
+    aai_request_close (user_data);
+}
+
+static void
+aai_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+
+    (void) object;
+    if (!info || info->destroyed)
+        return;
+
+    info->destroyed = TRUE;
+    if (info->window)
+        gnc_save_window_size (GNC_PREFS_GROUP, info->window);
+    if (single_info == info)
+        single_info = NULL;
+    gnc_unregister_gui_component_by_data (ASSISTANT_AB_INITIAL_CM_CLASS, info);
+    info->window = NULL;
+    info->stack = NULL;
+    if (info->account_view)
+        gtk_column_view_set_model (info->account_view, NULL);
+    info->account_view = NULL;
+    aai_info_unref (info);
+}
+
+static void
+aai_button_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+    GWEN_DIALOG *dialog;
+    gint result;
+
+    (void) button;
+    if (!info || info->destroyed || info->setup_running || !info->api)
+        return;
+
+    info->setup_running = TRUE;
+    aai_update_navigation (info);
+    dialog = AB_Banking_CreateSetupDialog (info->api);
+    if (!dialog)
+    {
+        PERR ("Could not lookup Setup Dialog of aqbanking!");
+    }
+    else
+    {
+        /* AqBanking owns this native setup interaction; GnuCash does not run
+         * a GTK dialog loop here. Closing this window is deferred until it
+         * returns so that its AB_BANKING instance remains valid. */
+        result = GWEN_Gui_ExecDialog (dialog, 0);
+        if (result <= 0)
+            PERR ("Setup Dialog of aqbanking aborted/rejected, code %d", result);
+        GWEN_Dialog_free (dialog);
+    }
+    info->setup_running = FALSE;
+    aai_update_navigation (info);
+    if (info->close_requested)
+        aai_request_close (info);
+}
+
+static void
+delete_account_match (ABInitialInfo *info, RevLookupData *data)
+{
+    g_return_if_fail (info && !info->destroyed && info->gnc_hash &&
+                      info->account_view && data && data->ab_acc);
+
+    g_hash_table_remove (info->gnc_hash, data->ab_acc);
+    account_row_update (info, data->ab_acc, "");
+}
+
+static void
+delete_selected_match_cb (gpointer data, gpointer user_data)
+{
+    RevLookupData lookup_data = { NULL, NULL };
+    ABInitialInfo *info = user_data;
+    GtkStringObject *row = data;
+
+    g_return_if_fail (row && info && !info->destroyed && info->account_view);
+    lookup_data.ab_acc = g_object_get_data (G_OBJECT (row), ACCOUNT_ROW_AB_ACCOUNT);
+    if (lookup_data.ab_acc)
+        delete_account_match (info, &lookup_data);
+}
+
+static void
+aai_match_delete_button_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+
+    (void) button;
+    g_return_if_fail (info && !info->destroyed && info->api &&
+                      info->account_view && info->gnc_hash);
+
+    for (guint index = 0;
+         index < g_list_model_get_n_items (G_LIST_MODEL (info->account_store));
+         index++)
+    {
+        if (gtk_selection_model_is_selected (GTK_SELECTION_MODEL (info->account_selection), index))
         {
-            g_list_foreach (selected_matches, delete_selected_match_cb, info);
-            g_list_free_full (
-                selected_matches,
-                (GDestroyNotify) gtk_tree_path_free);
+            GtkStringObject *row = g_list_model_get_item (G_LIST_MODEL (info->account_store), index);
+            delete_selected_match_cb (row, info);
+            g_object_unref (row);
         }
     }
 }
 
 static guint
-aai_ab_account_hash (gconstpointer v)
+aai_ab_account_hash (gconstpointer value)
 {
-	if (v == NULL)
-		return 0;
-	else
-		/* Use the account unique id as hash value */
-		return AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v);
+    if (!value)
+        return 0;
+    return AB_AccountSpec_GetUniqueId ((const GNC_AB_ACCOUNT_SPEC *) value);
 }
 
 static gboolean
-aai_ab_account_equal (gconstpointer v1, gconstpointer v2)
+aai_ab_account_equal (gconstpointer first, gconstpointer second)
 {
-	if (v1 == NULL || v2 == NULL)
-		return v1 == v2;
-	else
-	{
-		/* Use the account unique id to check for equality */
-		uint32_t uid1 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v1);
-		uint32_t uid2 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v2);
-		return uid1 == uid2;
-	}
+    if (!first || !second)
+        return first == second;
+    return AB_AccountSpec_GetUniqueId ((const GNC_AB_ACCOUNT_SPEC *) first) ==
+           AB_AccountSpec_GetUniqueId ((const GNC_AB_ACCOUNT_SPEC *) second);
 }
 
 static void
-insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
+insert_acc_into_revhash_cb (gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
 {
-    g_return_if_fail(revhash && gnc_acc && ab_acc);
-    g_hash_table_insert((GHashTable *) revhash, gnc_acc, ab_acc);
+    g_return_if_fail (revhash && gnc_acc && ab_acc);
+    g_hash_table_insert (revhash, gnc_acc, ab_acc);
 }
 
 static void
-remove_acc_from_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
+remove_acc_from_revhash_cb (gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
 {
-    g_return_if_fail(revhash && gnc_acc);
-    g_hash_table_remove((GHashTable *) revhash, gnc_acc);
+    g_return_if_fail (revhash && gnc_acc);
+    g_hash_table_remove (revhash, gnc_acc);
 }
-
-void
-aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
-{
-    ABInitialInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
-    Account *root;
-    AccCbData data;
-
-    g_return_if_fail(info && info->api);
-
-    /* Do not run this twice */
-    if (!info->match_page_prepared)
-    {
-        /* Determine current mapping */
-        root = gnc_book_get_root_account(gnc_get_current_book());
-        info->gnc_hash = g_hash_table_new(&aai_ab_account_hash, &aai_ab_account_equal);
-        data.api = info->api;
-        data.hash = info->gnc_hash;
-        gnc_account_foreach_descendant(root, (AccountCb) hash_from_kvp_acc_cb, &data);
-        /* Memorize initial matches in reverse hash table */
-        info->gnc_revhash = g_hash_table_new(NULL, NULL);
-        g_hash_table_foreach(data.hash, (GHFunc) insert_acc_into_revhash_cb, (gpointer) info->gnc_revhash);
-
-        info->match_page_prepared = TRUE;
-    }
-    /* Update the graphical representation */
-    update_account_list(info);
-
-    /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
-}
-
-void
-aai_on_finish (GtkAssistant *assistant, gpointer user_data)
+static void
+aai_apply_clicked_cb (GtkButton *button, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
-    g_return_if_fail(info && info->gnc_hash && info->gnc_revhash);
+    (void) button;
+    if (!info || info->destroyed || info->setup_running || info->page_index != 3 ||
+        !info->gnc_hash || !info->gnc_revhash)
+        return;
 
-    /* Remove GnuCash accounts from reverse hash table which are still
-     * matched to an AqBanking account. For the remaining GnuCash accounts
-     * the KVPs must be cleared (i.e. deleted).
-     * Please note that the value (i.e. the GnuCash account) stored in info->gnc_hash
-     * is used as key for info->gnc_revhash */
-    g_hash_table_foreach(info->gnc_hash, (GHFunc) remove_acc_from_revhash_cb, info->gnc_revhash);
-    /* Commit the changes */
-    g_hash_table_foreach(info->gnc_revhash, (GHFunc) clear_kvp_acc_cb, NULL);
-    g_hash_table_foreach(info->gnc_hash, (GHFunc) save_kvp_acc_cb, NULL);
-
-    gtk_widget_destroy(info->window);
+    /* Accounts that remain in the reverse table no longer have a mapping and
+     * must have their AqBanking KVPs removed before the remaining mappings are
+     * persisted. */
+    g_hash_table_foreach (info->gnc_hash, (GHFunc) remove_acc_from_revhash_cb,
+                          info->gnc_revhash);
+    g_hash_table_foreach (info->gnc_revhash, (GHFunc) clear_kvp_acc_cb, NULL);
+    g_hash_table_foreach (info->gnc_hash, (GHFunc) save_kvp_acc_cb, NULL);
+    aai_request_close (info);
 }
-
 static gboolean
 banking_has_accounts(AB_BANKING *banking)
 {
@@ -494,7 +627,7 @@ update_account_list_acc_cb(GNC_AB_ACCOUNT_SPEC *ab_acc, gpointer user_data)
     ABInitialInfo *info = user_data;
     gchar *gnc_name, *ab_name;
     Account *gnc_acc;
-    GtkTreeIter iter;
+    GtkStringObject *row;
 
     g_return_val_if_fail(ab_acc && info, NULL);
 
@@ -510,13 +643,12 @@ update_account_list_acc_cb(GNC_AB_ACCOUNT_SPEC *ab_acc, gpointer user_data)
         gnc_name = g_strdup("");
 
     /* Add item to the list store */
-    gtk_list_store_append(info->account_store, &iter);
-    gtk_list_store_set(info->account_store, &iter,
-                       ACCOUNT_LIST_COL_AB_NAME, ab_name,
-                       ACCOUNT_LIST_COL_AB_ACCT, ab_acc,
-                       ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
-                       ACCOUNT_LIST_COL_CHECKED, FALSE,
-                       -1);
+    row = gtk_string_object_new (ab_name);
+    g_object_set_data (G_OBJECT (row), ACCOUNT_ROW_AB_ACCOUNT, ab_acc);
+    g_object_set_data_full (G_OBJECT (row), ACCOUNT_ROW_GNC_NAME, g_strdup (gnc_name), g_free);
+    g_object_set_data (G_OBJECT (row), ACCOUNT_ROW_CHANGED, GINT_TO_POINTER (FALSE));
+    g_list_store_append (info->account_store, row);
+    g_object_unref (row);
     g_free(gnc_name);
     g_free(ab_name);
 
@@ -530,23 +662,14 @@ update_account_list(ABInitialInfo *info)
 
     g_return_if_fail(info && info->api && info->gnc_hash);
 
-    /* Detach model from view while updating */
-    g_object_ref(info->account_store);
-    gtk_tree_view_set_model(info->account_view, NULL);
-
     /* Refill the list */
-    gtk_list_store_clear(info->account_store);
+    g_list_store_remove_all (info->account_store);
     if (AB_Banking_GetAccountSpecList(info->api, &acclist) >= 0 && acclist)
         AB_AccountSpec_List_ForEach(acclist, update_account_list_acc_cb, info);
     else
         g_warning("update_account_list: Oops, account list from AB_Banking "
                   "is NULL");
 
-    /* Attach model to view again */
-    gtk_tree_view_set_model(info->account_view,
-                            GTK_TREE_MODEL(info->account_store));
-
-    g_object_unref(info->account_store);
 }
 
 static gboolean
@@ -564,51 +687,74 @@ find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data)
     return FALSE;
 }
 
-static gboolean
-clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-              gpointer user_data)
+typedef struct
 {
-    RevLookupData *data = user_data;
-    GtkListStore *store = GTK_LIST_STORE(model);
-    gpointer ab_acc;
+    ABInitialInfo *info;
+    GWeakRef window;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
+    Account *old_value;
+} AccountPickerSelection;
 
-    g_return_val_if_fail(data && store, FALSE);
+static void
+account_picker_finished_cb (Account *gnc_acc, gboolean accepted, gpointer user_data)
+{
+    AccountPickerSelection *selection = user_data;
+    ABInitialInfo *info = selection->info;
+    GtkWidget *window = g_weak_ref_get (&selection->window);
 
-    gtk_tree_model_get(model, iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
-
-    if (aai_ab_account_equal(ab_acc, data->ab_acc))
+    if (window && accepted && !info->destroyed &&
+        GTK_WINDOW (window) == info->window && info->gnc_hash &&
+        selection->old_value != gnc_acc)
     {
-        gtk_list_store_set(store, iter, ACCOUNT_LIST_COL_GNC_NAME, "",
-                           ACCOUNT_LIST_COL_CHECKED, TRUE, -1);
-        return TRUE;
+        if (gnc_acc)
+        {
+            RevLookupData data;
+            gchar *gnc_name;
+
+            data.gnc_acc = gnc_acc;
+            data.ab_acc = NULL;
+            g_hash_table_find (info->gnc_hash, (GHRFunc) find_gnc_acc_cb, &data);
+            if (data.ab_acc)
+                delete_account_match (info, &data);
+
+            g_hash_table_insert (info->gnc_hash, selection->ab_acc, gnc_acc);
+            gnc_name = gnc_account_get_full_name (gnc_acc);
+            account_row_update (info, selection->ab_acc, gnc_name);
+            g_free (gnc_name);
+        }
+        else
+        {
+            g_hash_table_remove (info->gnc_hash, selection->ab_acc);
+            account_row_update (info, selection->ab_acc, "");
+        }
     }
-    return FALSE;
+
+    g_clear_object (&window);
+    g_weak_ref_clear (&selection->window);
+    aai_info_unref (info);
+    g_free (selection);
 }
 
 static void
-account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
-                         GtkTreeViewColumn  *col, gpointer user_data)
+account_list_clicked_cb (GtkColumnView *view, guint position, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
+    GtkStringObject *row;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
-    gchar *longname, *gnc_name;
-    Account *old_value, *gnc_acc;
+    gchar *longname;
+    Account *old_value;
     const gchar *currency;
     gnc_commodity *commodity = NULL;
-    gboolean ok_pressed;
+    AccountPickerSelection *selection;
 
     g_return_if_fail(info);
 
     PINFO("Row has been double-clicked.");
 
-    model = gtk_tree_view_get_model(view);
-
-    if (!gtk_tree_model_get_iter(model, &iter, path))
-        return; /* path describes a non-existing row - should not happen */
-
-    gtk_tree_model_get(model, &iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
+    row = g_list_model_get_item (G_LIST_MODEL (info->account_store), position);
+    if (!row)
+        return;
+    ab_acc = g_object_get_data (G_OBJECT (row), ACCOUNT_ROW_AB_ACCOUNT);
 
     if (ab_acc)
     {
@@ -624,45 +770,18 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                             currency);
         }
 
-        gnc_acc = gnc_import_select_account(info->window, NULL, TRUE,
-                                            longname, commodity, ACCT_TYPE_BANK,
-                                            old_value, &ok_pressed);
+        selection = g_new0 (AccountPickerSelection, 1);
+        selection->info = aai_info_ref (info);
+        selection->ab_acc = ab_acc;
+        selection->old_value = old_value;
+        g_weak_ref_init (&selection->window, info->window);
+        gnc_import_select_account_async (GTK_WIDGET (info->window), NULL, TRUE,
+                                         longname, commodity, ACCT_TYPE_BANK,
+                                         old_value, account_picker_finished_cb,
+                                         selection);
         g_free(longname);
-
-        if (ok_pressed && old_value != gnc_acc)
-        {
-            if (gnc_acc)
-            {
-                RevLookupData data;
-
-                /* Lookup and clear other mappings to gnc_acc */
-                data.gnc_acc = gnc_acc;
-                data.ab_acc = NULL;
-                g_hash_table_find(info->gnc_hash, (GHRFunc) find_gnc_acc_cb,
-                                  &data);
-                if (data.ab_acc)
-                    delete_account_match(info, &data);
-
-                /* Map ab_acc to gnc_acc */
-                g_hash_table_insert(info->gnc_hash, ab_acc, gnc_acc);
-                gnc_name = gnc_account_get_full_name(gnc_acc);
-                gtk_list_store_set(info->account_store, &iter,
-                                   ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
-                                   ACCOUNT_LIST_COL_CHECKED, TRUE,
-                                   -1);
-                g_free(gnc_name);
-
-            }
-            else
-            {
-                g_hash_table_remove(info->gnc_hash, ab_acc);
-                gtk_list_store_set(info->account_store, &iter,
-                                   ACCOUNT_LIST_COL_GNC_NAME, "",
-                                   ACCOUNT_LIST_COL_CHECKED, TRUE,
-                                   -1);
-            }
-        }
     }
+    g_object_unref (row);
 }
 
 static void
@@ -713,103 +832,105 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-aai_close_handler(gpointer user_data)
+aai_close_handler (gpointer user_data)
 {
-    ABInitialInfo *info = user_data;
-
-    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->window));
-    gtk_widget_destroy(info->window);
-}
-
-void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                     gpointer user_data)
-{
-    switch (gtk_assistant_get_current_page(assistant))
-    {
-    case 1:
-        /* Current page is wizard button page */
-        aai_page_prepare (assistant , user_data );
-        break;
-    case 2:
-        /* Current page is match page */
-        aai_match_page_prepare (assistant , user_data );
-        break;
-    }
+    aai_request_close (user_data);
 }
 
 static ABInitialInfo *
-gnc_ab_initial_assistant_new(void)
+gnc_ab_initial_assistant_new (void)
 {
     GtkBuilder *builder;
-    GtkTreeViewColumn *column;
-    GtkTreeSelection *selection;
+    GtkScrolledWindow *account_scrolledwindow;
+    GtkWidget *delete_button;
+    GtkEventController *key_controller;
+    ABInitialInfo *info;
     gint component_id;
 
-    ABInitialInfo *info = g_new0(ABInitialInfo, 1);
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "aqbanking_init_assistant");
+    info = g_new0 (ABInitialInfo, 1);
+    g_atomic_ref_count_init (&info->ref_count);
+    builder = gtk_builder_new ();
+    if (!gnc_builder_add_from_file (builder, "assistant-ab-initial.glade",
+                                    "aqbanking_init_assistant"))
+    {
+        g_object_unref (builder);
+        aai_info_unref (info);
+        return NULL;
+    }
 
-    info->window = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_init_assistant"));
+    info->window = GTK_WINDOW (gtk_builder_get_object (builder, "aqbanking_init_assistant"));
+    info->stack = GTK_STACK (gtk_builder_get_object (builder, "assistant_stack"));
+    info->page_title = GTK_LABEL (gtk_builder_get_object (builder, "assistant_page_title"));
+    info->back_button = GTK_WIDGET (gtk_builder_get_object (builder, "assistant_back_button"));
+    info->next_button = GTK_WIDGET (gtk_builder_get_object (builder, "assistant_next_button"));
+    info->apply_button = GTK_WIDGET (gtk_builder_get_object (builder, "assistant_apply_button"));
+    info->cancel_button = GTK_WIDGET (gtk_builder_get_object (builder, "assistant_cancel_button"));
+    info->setup_button = GTK_WIDGET (gtk_builder_get_object (builder, "ab_assistant_button"));
+    delete_button = GTK_WIDGET (gtk_builder_get_object (builder, "ab_match_delete_button"));
+    account_scrolledwindow = GTK_SCROLLED_WINDOW (gtk_builder_get_object (
+        builder, "account_scrolledwindow"));
+    if (!info->window || !info->stack || !info->page_title || !info->back_button ||
+        !info->next_button || !info->apply_button || !info->cancel_button ||
+        !info->setup_button || !delete_button || !account_scrolledwindow)
+    {
+        g_warning ("assistant-ab-initial.glade is missing a required object");
+        g_object_unref (builder);
+        aai_info_unref (info);
+        return NULL;
+    }
 
-    info->api = gnc_AB_BANKING_new();
-    info->deferred_info = NULL;
-    info->gnc_hash = NULL;
+    info->api = gnc_AB_BANKING_new ();
+    if (!info->api)
+    {
+        g_warning ("Could not initialise AqBanking for the initial assistant");
+        g_object_unref (builder);
+        aai_info_unref (info);
+        return NULL;
+    }
 
-    info->match_page_prepared = FALSE;
-    info->account_view =
-        GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_page_view"));
+    info->account_store = g_list_store_new (GTK_TYPE_STRING_OBJECT);
+    info->account_selection = gtk_multi_selection_new (
+        G_LIST_MODEL (g_object_ref (info->account_store)));
+    info->account_view = GTK_COLUMN_VIEW (gtk_column_view_new (
+        GTK_SELECTION_MODEL (g_object_ref (info->account_selection))));
+    account_view_add_column (info->account_view, _("Online Banking Account Name"), 0, FALSE);
+    account_view_add_column (info->account_view, _("GnuCash Account Name"), 1, TRUE);
+    account_view_add_column (info->account_view, _("New?"), 2, FALSE);
+    gtk_scrolled_window_set_child (account_scrolledwindow, GTK_WIDGET (info->account_view));
 
-    info->account_store = gtk_list_store_new(NUM_ACCOUNT_LIST_COLS,
-                          G_TYPE_INT, G_TYPE_STRING,
-                          G_TYPE_POINTER, G_TYPE_STRING,
-                          G_TYPE_BOOLEAN);
-    gtk_tree_view_set_model(info->account_view,
-                            GTK_TREE_MODEL(info->account_store));
-    g_object_unref(info->account_store);
+    g_signal_connect (info->window, "close-request",
+                      G_CALLBACK (aai_window_close_request_cb), info);
+    g_signal_connect (info->window, "destroy", G_CALLBACK (aai_destroy_cb), info);
+    g_signal_connect (info->back_button, "clicked", G_CALLBACK (aai_back_clicked_cb), info);
+    g_signal_connect (info->next_button, "clicked", G_CALLBACK (aai_next_clicked_cb), info);
+    g_signal_connect (info->apply_button, "clicked", G_CALLBACK (aai_apply_clicked_cb), info);
+    g_signal_connect (info->cancel_button, "clicked", G_CALLBACK (aai_cancel_clicked_cb), info);
+    g_signal_connect (info->setup_button, "clicked", G_CALLBACK (aai_button_clicked_cb), info);
+    g_signal_connect (delete_button, "clicked",
+                      G_CALLBACK (aai_match_delete_button_clicked_cb), info);
+    g_signal_connect (info->account_view, "activate",
+                      G_CALLBACK (account_list_clicked_cb), info);
 
-    column = gtk_tree_view_column_new_with_attributes(
-                 _("Online Banking Account Name"), gtk_cell_renderer_text_new(),
-                 "text", ACCOUNT_LIST_COL_AB_NAME, (gchar*) NULL);
-    gtk_tree_view_append_column(info->account_view, column);
+    key_controller = gtk_event_controller_key_new ();
+    g_signal_connect (key_controller, "key-pressed", G_CALLBACK (aai_key_pressed_cb), info);
+    gtk_widget_add_controller (GTK_WIDGET (info->window), key_controller);
 
-    column = gtk_tree_view_column_new_with_attributes(
-                 _("GnuCash Account Name"), gtk_cell_renderer_text_new(),
-                 "text", ACCOUNT_LIST_COL_GNC_NAME, (gchar*) NULL);
-    gtk_tree_view_column_set_expand(column, TRUE);
-    gtk_tree_view_append_column(info->account_view, column);
+    gnc_restore_window_size (GNC_PREFS_GROUP, info->window,
+                             gnc_ui_get_main_window (NULL));
+    component_id = gnc_register_gui_component (ASSISTANT_AB_INITIAL_CM_CLASS,
+                                                NULL, aai_close_handler, info);
+    gnc_gui_component_set_session (component_id, gnc_get_current_session ());
+    aai_set_page (info, 0);
 
-    column = gtk_tree_view_column_new_with_attributes(
-                 _("New?"), gtk_cell_renderer_toggle_new(),
-                 "active", ACCOUNT_LIST_COL_CHECKED, (gchar*) NULL);
-    gtk_tree_view_append_column(info->account_view, column);
-
-    selection = gtk_tree_view_get_selection(info->account_view);
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-
-    gnc_restore_window_size (GNC_PREFS_GROUP,
-                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
-
-    g_signal_connect(info->account_view, "row-activated",
-                     G_CALLBACK(account_list_clicked_cb), info);
-
-    g_signal_connect (G_OBJECT(info->window), "destroy",
-                      G_CALLBACK (aai_destroy_cb), info);
-
-    gtk_builder_connect_signals(builder, info);
-    g_object_unref(G_OBJECT(builder));
-
-    component_id = gnc_register_gui_component(ASSISTANT_AB_INITIAL_CM_CLASS,
-                   NULL, aai_close_handler, info);
-
-    gnc_gui_component_set_session(component_id, gnc_get_current_session());
+    g_object_unref (builder);
     return info;
 }
 
 void
-gnc_ab_initial_assistant(void)
+gnc_ab_initial_assistant (void)
 {
     if (!single_info)
-        single_info = gnc_ab_initial_assistant_new();
-    gtk_widget_show(single_info->window);
+        single_info = gnc_ab_initial_assistant_new ();
+    if (single_info && !single_info->destroyed)
+        gtk_window_present (single_info->window);
 }
-

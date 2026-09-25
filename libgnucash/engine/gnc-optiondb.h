@@ -78,13 +78,27 @@ extern "C"
 /**
  * Create an empty option database.
  *
- * @return A newly allocated GncOptionDB. Use delete to destroy it.
+ * @return A newly allocated GncOptionDB. Use gnc_option_db_destroy_owned() to
+ * destroy it.
  */
 GncOptionDB* gnc_option_db_new(void);
 
 /**
- * Destruct and release a GncOptionDB.
- * @param odb The GncOptionDB.
+ * Destruct and release an option database returned by gnc_option_db_new().
+ *
+ * This function consumes an owned database. It is intentionally separate from
+ * gnc_option_db_destroy(), whose callers can hold borrowed databases.
+ *
+ * @param odb An owned GncOptionDB, or nullptr.
+ */
+void gnc_option_db_destroy_owned(GncOptionDB* odb);
+
+/**
+ * Legacy option database destruction callback.
+ *
+ * Scheme callers can hold borrowed databases, so this callback intentionally
+ * does not consume @a odb.
+ * @param odb A borrowed GncOptionDB.
  */
 void gnc_option_db_destroy(GncOptionDB* odb);
 

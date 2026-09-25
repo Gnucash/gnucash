@@ -51,3 +51,16 @@ gnc_table_control_allow_move (TableControl *control,
     if (!control) return;
     control->allow_move = allow_move;
 }
+void
+gnc_table_control_set_input_suspended (TableControl *control,
+                                       gboolean suspended)
+{
+    if (control)
+        control->input_suspended = suspended;
+}
+
+gboolean
+gnc_table_control_input_suspended (const TableControl *control)
+{
+    return control && control->input_suspended;
+}

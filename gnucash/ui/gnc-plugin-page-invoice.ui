@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-
+  <requires lib="gtk" version="4.0"/>
   <menu id="FilePlaceholder3">
     <item>
       <attribute name="label" translatable="yes">_Print</attribute>
@@ -10,7 +10,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="EditPlaceholder1">
     <item>
       <attribute name="label" translatable="no">EditEditInvoiceAction</attribute>
@@ -37,7 +36,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="EditPlaceholder3">
     <item>
       <attribute name="label" translatable="yes">_Find…</attribute>
@@ -47,18 +45,14 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="EditPlaceholder5">
     <item>
-<!-- Translators: remember to reuse this translation in dialog-account.glade -->
       <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
       <attribute name="action">GncPluginPageAccountTreeActions.EditTaxOptionsAction</attribute>
-<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
       <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="ViewPlaceholder1">
     <item>
       <attribute name="label" translatable="no">ViewSaveLayoutAction</attribute>
@@ -73,7 +67,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="ViewPlaceholder2">
     <submenu>
       <attribute name="label" translatable="yes">Sort _Order</attribute>
@@ -119,7 +112,6 @@
       </section>
     </submenu>
   </menu>
-
   <menu id="ViewPlaceholder4">
     <item>
       <attribute name="label" translatable="yes">_Refresh</attribute>
@@ -129,7 +121,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="ActionsPlaceholder4">
     <item>
       <attribute name="label" translatable="yes">_Enter</attribute>
@@ -156,7 +147,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="ActionsPlaceholder5">
     <item>
       <attribute name="label" translatable="yes">Dup_licate Entry</attribute>
@@ -177,7 +167,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="BusinessPlaceholder2">
     <item>
       <attribute name="label" translatable="no">BusinessLinkAction</attribute>
@@ -192,7 +181,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="BusinessPlaceholder3">
     <item>
       <attribute name="label" translatable="no">ToolsProcessPaymentAction</attribute>
@@ -201,7 +189,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
   <menu id="ReportsPlaceholder1">
     <item>
       <attribute name="label" translatable="yes">_Company Report</attribute>
@@ -210,8 +197,6 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
-
-
   <menu id="mainwin-popup">
     <section>
       <item>
@@ -260,307 +245,469 @@
       </item>
     </section>
   </menu>
-
-
-  <object class="GtkToolbar" id="mainwin-toolbar">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
+  <object class="GtkBox" id="mainwin-toolbar">
+    <property name="css-classes">toolbar</property>
     <child>
-      <object class="GtkToolButton" id="but1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Save</property>
+      <object class="GtkButton" id="but1">
+
         <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
-        <property name="tooltip-text" translatable="yes">Save the current file</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">document-save</property>
+        <property name="tooltip-text" translatable="1">Save the current file</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">document-save</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Save</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but2">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Print Invoice</property>
+      <object class="GtkButton" id="but2">
+
         <property name="action-name">GncPluginPageInvoiceActions.FilePrintAction</property>
-        <property name="tooltip-text" translatable="yes">Make a printable invoice</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">document-print</property>
+        <property name="tooltip-text" translatable="1">Make a printable invoice</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">document-print</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Print Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but3">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Close</property>
+      <object class="GtkButton" id="but3">
+
         <property name="action-name">mainwin.FileCloseAction</property>
-        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">window-close</property>
+        <property name="tooltip-text" translatable="1">Close the currently active page</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">window-close</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Close</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkSeparator">
+        <property name="orientation">vertical</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but4">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice…</property>
+      <object class="GtkButton" id="but4">
+
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-new</property>
+        <property name="tooltip-text" translatable="1">Open the New Invoice dialog</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-new</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">New _Invoice…</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="extra_separator">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkSeparator" id="extra_separator">
+        <property name="orientation">vertical</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but5">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice</property>
+      <object class="GtkButton" id="but5">
+
         <property name="action-name">GncPluginPageInvoiceActions.BusinessNewInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Create a new invoice for the same owner as the current one</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-new</property>
+        <property name="tooltip-text" translatable="1">Create a new invoice for the same owner as the current one</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-new</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">New _Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but6">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Edit Invoice</property>
+      <object class="GtkButton" id="but6">
+
         <property name="action-name">GncPluginPageInvoiceActions.EditEditInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Edit this invoice</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-edit</property>
+        <property name="tooltip-text" translatable="1">Edit this invoice</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-edit</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Edit Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but7">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Duplicate Invoice</property>
+      <object class="GtkButton" id="but7">
+
         <property name="action-name">GncPluginPageInvoiceActions.EditDuplicateInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Create a new invoice as a duplicate of the current one</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-duplicate</property>
+        <property name="tooltip-text" translatable="1">Create a new invoice as a duplicate of the current one</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-duplicate</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Duplicate Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkSeparator">
+        <property name="orientation">vertical</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but8">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Enter</property>
+      <object class="GtkButton" id="but8">
+
         <property name="action-name">GncPluginPageInvoiceActions.RecordEntryAction</property>
-        <property name="tooltip-text" translatable="yes">Record the current entry</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">list-add</property>
+        <property name="tooltip-text" translatable="1">Record the current entry</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">list-add</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Enter</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but9">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Cancel</property>
+      <object class="GtkButton" id="but9">
+
         <property name="action-name">GncPluginPageInvoiceActions.CancelEntryAction</property>
-        <property name="tooltip-text" translatable="yes">Cancel the current entry</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">process-stop</property>
+        <property name="tooltip-text" translatable="1">Cancel the current entry</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">process-stop</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Cancel</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but10">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Delete</property>
+      <object class="GtkButton" id="but10">
+
         <property name="action-name">GncPluginPageInvoiceActions.DeleteEntryAction</property>
-        <property name="tooltip-text" translatable="yes">Delete the current entry</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">edit-delete</property>
+        <property name="tooltip-text" translatable="1">Delete the current entry</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">edit-delete</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Delete</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but11">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Dup_licate Entry</property>
+      <object class="GtkButton" id="but11">
+
         <property name="action-name">GncPluginPageInvoiceActions.DuplicateEntryAction</property>
-        <property name="tooltip-text" translatable="yes">Make a copy of the current entry</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">edit-copy</property>
+        <property name="tooltip-text" translatable="1">Make a copy of the current entry</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">edit-copy</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Dup_licate Entry</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but12">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Move Entry _Up</property>
+      <object class="GtkButton" id="but12">
+
         <property name="action-name">GncPluginPageInvoiceActions.EntryUpAction</property>
-        <property name="tooltip-text" translatable="yes">Move the current entry one row upwards</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">pan-up-symbolic</property>
+        <property name="tooltip-text" translatable="1">Move the current entry one row upwards</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">pan-up-symbolic</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Move Entry _Up</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but13">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Move Entry Do_wn</property>
+      <object class="GtkButton" id="but13">
+
         <property name="action-name">GncPluginPageInvoiceActions.EntryDownAction</property>
-        <property name="tooltip-text" translatable="yes">Move the current entry one row downwards</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">pan-down-symbolic</property>
+        <property name="tooltip-text" translatable="1">Move the current entry one row downwards</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Move Entry Do_wn</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but14">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Blank</property>
+      <object class="GtkButton" id="but14">
+
         <property name="action-name">GncPluginPageInvoiceActions.BlankEntryAction</property>
-        <property name="tooltip-text" translatable="yes">Move to the blank entry at the bottom of the Invoice</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">go-jump</property>
+        <property name="tooltip-text" translatable="1">Move to the blank entry at the bottom of the Invoice</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">go-jump</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Blank</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkSeparator">
+        <property name="orientation">vertical</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but15">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Post Invoice</property>
+      <object class="GtkButton" id="but15">
+
         <property name="action-name">GncPluginPageInvoiceActions.EditPostInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Post this invoice to your Chart of Accounts</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-post</property>
+        <property name="tooltip-text" translatable="1">Post this invoice to your Chart of Accounts</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-post</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Post Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but16">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Unpost Invoice</property>
+      <object class="GtkButton" id="but16">
+
         <property name="action-name">GncPluginPageInvoiceActions.EditUnpostInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Unpost this invoice and make it editable</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-unpost</property>
+        <property name="tooltip-text" translatable="1">Unpost this invoice and make it editable</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-unpost</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Unpost Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="but17">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Pay Invoice</property>
+      <object class="GtkButton" id="but17">
+
         <property name="action-name">GncPluginPageInvoiceActions.ToolsProcessPaymentAction</property>
-        <property name="tooltip-text" translatable="yes">Enter a payment for the owner of this invoice</property>
-        <property name="use-underline">True</property>
-        <property name="icon-name">gnc-invoice-pay</property>
+        <property name="tooltip-text" translatable="1">Enter a payment for the owner of this invoice</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gnc-invoice-pay</property>
+                <property name="pixel-size">24</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Pay Invoice</property>
+                <property name="use-underline">1</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
   </object>
-
 </interface>
-

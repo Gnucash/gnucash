@@ -50,10 +50,10 @@ if (COMPILE_GSCHEMAS)
 
     add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
 
-    # On Windows concatenating two absolute paths results in an invalid path (having two drive letters)
-    # If DESTDIR is not set on the other hand, the below install command works just fine
-    # So verify DESTDIR is not set on Windows
-    # Note we have to do this at build time, not configure time so the guard is part of the custom install command
+    # On Windows concatenating two absolute paths results in an invalid path (having two drive letters).
+    # Verify at install time that DESTDIR is not set so the native schema compiler receives one valid path.
+    set(GSCHEMA_INSTALL_DIR "\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas")
+
     install(CODE "
     if (WIN32)
         set (DESTDIR \$ENV\{DESTDIR\})
@@ -61,9 +61,13 @@ if (COMPILE_GSCHEMAS)
             message(SEND_ERROR \"GnuCash can't be built with the DESTDIR environment variable set on Windows (due to bad interference with glib-compile-schemas).\")
         endif()
     endif()
+    message(STATUS \"Compiling gschema files in \$ENV\{DESTDIR\}${GSCHEMA_INSTALL_DIR}\")
     execute_process(
-        COMMAND ${SHELL} -c \"echo Compiling gschema files in \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
-                              ${GLIB_COMPILE_SCHEMAS} --strict \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
+        COMMAND ${GLIB_COMPILE_SCHEMAS} --strict \"\$ENV\{DESTDIR\}${GSCHEMA_INSTALL_DIR}\"
+        RESULT_VARIABLE GSCHEMA_COMPILE_RESULT)
+    if (NOT GSCHEMA_COMPILE_RESULT STREQUAL \"0\")
+        message(FATAL_ERROR \"glib-compile-schemas failed with exit code \${GSCHEMA_COMPILE_RESULT} for \$ENV\{DESTDIR\}${GSCHEMA_INSTALL_DIR}\")
+    endif()")
 endif()
 
 set(gschemas_DIST_local pref_transformations.xml)

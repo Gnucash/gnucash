@@ -69,147 +69,282 @@
 
 #include <glib/gi18n.h>
 
-static void
-popup_item_activate (GtkWidget *item, gpointer *user_data)
+/* A binding is owned by the two controllers attached to a cell/editor. */
+typedef struct
 {
-    GnumericPopupMenuElement const *elem =
-        g_object_get_data (G_OBJECT (item), "descriptor");
-    GnumericPopupMenuHandler handler =
-        g_object_get_data (G_OBJECT (item), "handler");
+    gint refcount;
+    GtkWidget *anchor;
+    GnumericPopupMenuElement const *elements;
+    GnumericPopupMenuHandler handler;
+    gpointer user_data;
+    int display_filter;
+    int sensitive_filter;
+} GnumericPopupBinding;
 
-    g_return_if_fail (elem != NULL);
-    g_return_if_fail (handler != NULL);
+typedef struct
+{
+    GtkPopover *popover;
+    GnumericPopupBinding binding;
+} GnumericPopupContext;
 
-    if (handler (elem, user_data))
-        gtk_widget_destroy (gtk_widget_get_toplevel (item));
+static GnumericPopupBinding *
+popup_binding_ref (GnumericPopupBinding *binding)
+{
+    g_atomic_int_inc (&binding->refcount);
+    return binding;
 }
 
 static void
-gnumeric_create_popup_menu_list (GSList *elements,
-                                 GnumericPopupMenuHandler handler,
-                                 gpointer user_data,
-                                 int display_filter,
-                                 int sensitive_filter,
-                                 GdkEventButton *event)
+popup_binding_unref (GnumericPopupBinding *binding)
 {
-    GtkWidget *menu = gtk_menu_new ();
-    GtkWidget *item;
+    if (g_atomic_int_dec_and_test (&binding->refcount))
+        g_free (binding);
+}
 
-    for (; elements != NULL ; elements = elements->next)
+static void
+popup_closed_cb (GtkPopover *popover, gpointer user_data)
+{
+    (void)user_data;
+    if (gtk_widget_get_parent (GTK_WIDGET (popover)))
+        gtk_widget_unparent (GTK_WIDGET (popover));
+}
+static void
+popup_context_free (GnumericPopupContext *context)
+{
+    g_free (context);
+}
+
+static gboolean
+popup_escape_cb (GtkWidget *widget, GVariant *args, gpointer user_data)
+{
+    GnumericPopupContext *context = user_data;
+    (void)widget;
+    (void)args;
+
+    gtk_popover_popdown (context->popover);
+    return TRUE;
+}
+
+static void
+popup_add_escape_shortcut (GtkPopover *popover, GnumericPopupContext *context)
+{
+    GtkShortcutController *shortcuts = GTK_SHORTCUT_CONTROLLER (gtk_shortcut_controller_new ());
+    GtkShortcut *shortcut = gtk_shortcut_new (
+        GTK_SHORTCUT_TRIGGER (gtk_keyval_trigger_new (GDK_KEY_Escape, 0)),
+        GTK_SHORTCUT_ACTION (gtk_callback_action_new (popup_escape_cb, context, NULL)));
+
+    gtk_shortcut_controller_set_scope (shortcuts, GTK_SHORTCUT_SCOPE_LOCAL);
+    gtk_shortcut_controller_add_shortcut (shortcuts, shortcut);
+    gtk_widget_add_controller (GTK_WIDGET (popover), GTK_EVENT_CONTROLLER (shortcuts));
+}
+
+static void
+popup_item_clicked_cb (GtkButton *button, GnumericPopupContext *context)
+{
+    GnumericPopupMenuElement const *element =
+        g_object_get_data (G_OBJECT (button), "gnumeric-popup-element");
+    gboolean close_popup;
+
+    g_return_if_fail (element);
+    g_return_if_fail (context->binding.handler);
+
+    /* The handler can close the editor or its window. Keep the popover and
+     * its context alive until its return before using either again. */
+    g_object_ref (context->popover);
+    close_popup = context->binding.handler (element, context->binding.user_data);
+    if (close_popup && gtk_widget_get_parent (GTK_WIDGET (context->popover)))
+        gtk_popover_popdown (context->popover);
+    g_object_unref (context->popover);
+}
+
+static GtkWidget *
+popup_button_new (GnumericPopupMenuElement const *element,
+                  GnumericPopupContext *context)
+{
+    GtkWidget *button = gtk_button_new ();
+    GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    GtkWidget *label = gtk_label_new_with_mnemonic (element->name);
+
+    gtk_widget_set_halign (box, GTK_ALIGN_FILL);
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+    gtk_widget_set_hexpand (label, TRUE);
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
+    if (element->pixmap)
     {
-        GnumericPopupMenuElement const *element = elements->data;
-        char const * const name = element->name;
-        char const * const pix_name = element->pixmap;
+        GtkWidget *image = gtk_image_new_from_icon_name (element->pixmap);
+        gtk_box_append (GTK_BOX (box), image);
+    }
+    gtk_box_append (GTK_BOX (box), label);
+    gtk_button_set_child (GTK_BUTTON (button), box);
+    gtk_widget_set_sensitive (button, element->index != 0 &&
+        !(element->sensitive_filter &&
+          (element->sensitive_filter & context->binding.sensitive_filter)));
+    if (element->index != 0)
+    {
+        g_object_set_data (G_OBJECT (button), "gnumeric-popup-element", (gpointer)element);
+        g_signal_connect (button, "clicked", G_CALLBACK (popup_item_clicked_cb), context);
+    }
+    return button;
+}
 
-        if (element->display_filter != 0 &&
-                !(element->display_filter & display_filter))
+static void
+popup_present (GtkWidget *anchor, GnumericPopupBinding const *binding,
+               const GdkRectangle *pointing_to)
+{
+    GnumericPopupContext *context;
+    GtkWidget *box;
+    GtkWidget *first_button = NULL;
+
+    g_return_if_fail (GTK_IS_WIDGET (anchor));
+    g_return_if_fail (binding && binding->elements && binding->handler);
+
+    context = g_new0 (GnumericPopupContext, 1);
+    context->binding = *binding;
+    context->popover = GTK_POPOVER (gtk_popover_new ());
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_add_css_class (box, "menu");
+    gtk_popover_set_child (context->popover, box);
+    gtk_popover_set_autohide (context->popover, TRUE);
+    if (pointing_to)
+        gtk_popover_set_pointing_to (context->popover, pointing_to);
+    gtk_widget_set_parent (GTK_WIDGET (context->popover), anchor);
+    popup_add_escape_shortcut (context->popover, context);
+    g_signal_connect_data (context->popover, "closed", G_CALLBACK (popup_closed_cb),
+                           context, (GClosureNotify)popup_context_free, 0);
+
+    for (guint i = 0; binding->elements[i].name; i++)
+    {
+        GnumericPopupMenuElement const *element = binding->elements + i;
+        GtkWidget *item;
+
+        if (element->display_filter &&
+            !(element->display_filter & binding->display_filter))
             continue;
-
-        if (name != NULL && *name != '\0')
+        if (!*element->name)
         {
-            GtkWidget *label = gtk_label_new_with_mnemonic (name);
-            GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-
-            item = gtk_menu_item_new();
-            gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
-            gtk_widget_set_hexpand (GTK_WIDGET(box), FALSE);
-            gtk_widget_set_halign (GTK_WIDGET(box), GTK_ALIGN_START);
-
-            if (pix_name != NULL)
-            {
-                GtkWidget *image = gtk_image_new_from_icon_name (pix_name,
-                                   GTK_ICON_SIZE_MENU);
-
-                gtk_container_add (GTK_CONTAINER (box), image);
-                gtk_widget_show (image);
-            }
-            gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
-            gtk_container_add (GTK_CONTAINER (item), box);
-
-            if (element->sensitive_filter != 0 &&
-                    (element->sensitive_filter & sensitive_filter))
-                gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
+            gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+            continue;
         }
-        else
-        {
-            /* separator */
-            item = gtk_separator_menu_item_new ();
-        }
-        gtk_widget_show_all (item);
-
-        if (element->index != 0)
-        {
-            g_signal_connect (G_OBJECT (item),
-                              "activate",
-                              G_CALLBACK (&popup_item_activate), user_data);
-            g_object_set_data (
-                G_OBJECT (item), "descriptor", (gpointer)(element));
-            g_object_set_data (
-                G_OBJECT (item), "handler", (gpointer)handler);
-        }
-
-        gtk_widget_show (item);
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+        item = popup_button_new (element, context);
+        gtk_box_append (GTK_BOX (box), item);
+        if (!first_button && gtk_widget_get_sensitive (item))
+            first_button = item;
     }
 
-    gnumeric_popup_menu (GTK_MENU (menu), event);
+    gtk_popover_popup (context->popover);
+    if (first_button)
+        gtk_widget_grab_focus (first_button);
 }
 
 void
-gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
+gnumeric_popup_menu (GtkWidget *anchor, GMenuModel *menu,
+                     const GdkRectangle *pointing_to)
+{
+    GtkPopover *popover;
+
+    g_return_if_fail (GTK_IS_WIDGET (anchor));
+    g_return_if_fail (G_IS_MENU_MODEL (menu));
+
+    popover = GTK_POPOVER (gtk_popover_menu_new_from_model (menu));
+    if (pointing_to)
+        gtk_popover_set_pointing_to (popover, pointing_to);
+    gtk_widget_set_parent (GTK_WIDGET (popover), anchor);
+    g_signal_connect (popover, "closed", G_CALLBACK (popup_closed_cb), NULL);
+    gtk_popover_popup (popover);
+}
+
+void
+gnumeric_create_popup_menu (GtkWidget *anchor,
+                            GnumericPopupMenuElement const *elements,
                             GnumericPopupMenuHandler handler,
                             gpointer user_data,
                             int display_filter, int sensitive_filter,
-                            GdkEventButton *event)
+                            const GdkRectangle *pointing_to)
 {
-    int i;
-    GSList *tmp = NULL;
+    GnumericPopupBinding binding =
+    {
+        .refcount = 1,
+        .anchor = anchor,
+        .elements = elements,
+        .handler = handler,
+        .user_data = user_data,
+        .display_filter = display_filter,
+        .sensitive_filter = sensitive_filter
+    };
 
-    for (i = 0; elements [i].name != NULL; i++)
-        tmp = g_slist_prepend (tmp, (gpointer)(elements + i));
-
-    tmp = g_slist_reverse (tmp);
-    gnumeric_create_popup_menu_list (tmp, handler, user_data,
-                                     display_filter, sensitive_filter, event);
-    g_slist_free (tmp);
+    popup_present (anchor, &binding, pointing_to);
 }
 
 static void
-kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
+popup_context_pressed_cb (GtkGestureClick *gesture, int n_press,
+                          double x, double y, gpointer user_data)
 {
-    g_return_if_fail (menu != NULL);
-    g_return_if_fail (GTK_IS_MENU (menu));
+    GnumericPopupBinding *binding = user_data;
+    GdkRectangle rectangle = { (int)x, (int)y, 1, 1 };
+    (void)gesture;
+    (void)n_press;
 
-    g_object_unref (G_OBJECT (menu));
+    popup_present (binding->anchor, binding, &rectangle);
 }
 
-/**
- * gnumeric_popup_menu :
- * @menu : #GtkMenu
- * @event : #GdkEventButton optionally NULL
- *
- * Bring up a popup and if @event is non-NULL ensure that the popup is on the
- * right screen.
- **/
-void
-gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
+static gboolean
+popup_keyboard_cb (GtkWidget *widget, GVariant *args, gpointer user_data)
 {
-    g_return_if_fail (menu != NULL);
-    g_return_if_fail (GTK_IS_MENU (menu));
+    GnumericPopupBinding *binding = user_data;
+    GdkRectangle rectangle = { 0, 0, MAX (1, gtk_widget_get_width (widget)),
+                               MAX (1, gtk_widget_get_height (widget)) };
+    (void)args;
 
-    g_object_ref_sink (menu);
+    popup_present (binding->anchor, binding, &rectangle);
+    return TRUE;
+}
 
-    if (event)
-        gtk_menu_set_screen (menu,
-                             gdk_window_get_screen (event->window));
+static void
+popup_add_shortcut (GtkShortcutController *controller, guint keyval,
+                    GdkModifierType modifiers, GnumericPopupBinding *binding)
+{
+    GtkShortcut *shortcut = gtk_shortcut_new (
+        GTK_SHORTCUT_TRIGGER (gtk_keyval_trigger_new (keyval, modifiers)),
+        GTK_SHORTCUT_ACTION (gtk_callback_action_new (popup_keyboard_cb,
+                                                       popup_binding_ref (binding),
+                                                       (GDestroyNotify)popup_binding_unref)));
+    gtk_shortcut_controller_add_shortcut (controller, shortcut);
+}
 
-    g_signal_connect (G_OBJECT (menu),
-                      "hide",
-                      G_CALLBACK (kill_popup_menu), menu);
+void
+gnumeric_popup_menu_attach (GtkWidget *anchor,
+                            GnumericPopupMenuElement const *elements,
+                            GnumericPopupMenuHandler handler,
+                            gpointer user_data,
+                            int display_filter, int sensitive_filter)
+{
+    GnumericPopupBinding *binding;
+    GtkGesture *gesture;
+    GtkShortcutController *shortcuts;
 
-    /* Do NOT pass the button used to create the menu.
-     * instead pass 0.  Otherwise bringing up a menu with
-     * the right button will disable clicking on the menu with the left.
-     */
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+    g_return_if_fail (GTK_IS_WIDGET (anchor));
+    g_return_if_fail (elements && handler);
+
+    binding = g_new0 (GnumericPopupBinding, 1);
+    binding->refcount = 1;
+    binding->anchor = anchor;
+    binding->elements = elements;
+    binding->handler = handler;
+    binding->user_data = user_data;
+    binding->display_filter = display_filter;
+    binding->sensitive_filter = sensitive_filter;
+
+    gesture = gtk_gesture_click_new ();
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+    g_signal_connect_data (gesture, "pressed", G_CALLBACK (popup_context_pressed_cb),
+                           popup_binding_ref (binding),
+                           (GClosureNotify)popup_binding_unref, 0);
+    gtk_widget_add_controller (anchor, GTK_EVENT_CONTROLLER (gesture));
+
+    shortcuts = GTK_SHORTCUT_CONTROLLER (gtk_shortcut_controller_new ());
+    gtk_shortcut_controller_set_scope (shortcuts, GTK_SHORTCUT_SCOPE_LOCAL);
+    popup_add_shortcut (shortcuts, GDK_KEY_Menu, 0, binding);
+    popup_add_shortcut (shortcuts, GDK_KEY_F10, GDK_SHIFT_MASK, binding);
+    gtk_widget_add_controller (anchor, GTK_EVENT_CONTROLLER (shortcuts));
+    popup_binding_unref (binding);
 }

@@ -10,7 +10,16 @@
   (test-weeknum-calculator)
   (test-make-date-list)
   (test-date-get-quarter-string)
+  (test-time64-clock)
   (test-end "test-date-utilities.scm"))
+
+(define (test-time64-clock)
+  (test-equal "time64 after 2038 retains its local year"
+    2040
+    (gnc:time64-get-year (create-time64 '(2040 1 1 12 0 0))))
+  (test-equal "today uses the engine's 64-bit clock"
+    (gnc:time64-get-year (gnc-time 0))
+    (gnc:time64-get-year (gnc:get-today))))
 
 (define (create-datevec l)
   (let ((now (gnc-localtime (current-time))))

@@ -304,8 +304,8 @@ static GVariant* gnc_gsettings_enum_bool_mapping_set (const GValue *value,
     }
     else
     {
-        /* GtkRadioButtons will set the value to false when another option is
-         * selected, just ignore this. */
+        /* Grouped selection buttons set the value to false when another option
+         * is selected, so ignore the inactive transition. */
         return nullptr;
     }
 }

@@ -29,9 +29,11 @@ add_custom_command(
 set (gnome_utils_SOURCES
   account-quickfill.c
   assistant-xml-encoding.c
+  gnc-import-assistant.c
   cursors.c
   dialog-account.c
   dialog-doclink-utils.c
+  dialog-doclink-view.c
   dialog-book-close.c
   dialog-commodity.cpp
   dialog-dup-trans.c
@@ -73,6 +75,7 @@ set (gnome_utils_SOURCES
   gnc-icons.c
   gnc-keyring.c
   gnc-main-window.cpp
+  gnc-register-input.c
   gnc-menu-extensions.c
   gnc-option-gtk-ui.cpp
   gnc-plugin-file-history.c
@@ -83,6 +86,9 @@ set (gnome_utils_SOURCES
   gnc-period-select.c
   gnc-query-view.c
   gnc-report-combo.c
+  gnc-scrub-job-runner.c
+  gnc-session-load-executor.c
+  gnc-session-transition.c
   gnc-splash.c
   gnc-sx-instance-dense-cal-adapter.c
   gnc-sx-list-tree-model-adapter.c
@@ -113,7 +119,10 @@ set(gnome_utils_noinst_HEADERS
   gnc-autosave.h
   gnc-gobject-utils.h
   gnc-gtk-utils.h
+  gnc-import-assistant.h
   gnc-option-gtk-ui.hpp
+  gnc-session-load-executor.h
+  gnc-session-transition.h
   search-param.h
 )
 
@@ -122,6 +131,7 @@ set (gnome_utils_HEADERS
   assistant-xml-encoding.h
   dialog-account.h
   dialog-doclink-utils.h
+  dialog-doclink-view.h
   dialog-book-close.h
   dialog-commodity.h
   dialog-dup-trans.h
@@ -166,6 +176,7 @@ set (gnome_utils_HEADERS
   gnc-period-select.h
   gnc-query-view.h
   gnc-report-combo.h
+  gnc-scrub-job-runner.h
   gnc-splash.h
   gnc-sx-instance-dense-cal-adapter.h
   gnc-sx-list-tree-model-adapter.h
@@ -207,13 +218,11 @@ target_link_libraries(gnc-gnome-utils
     gnc-locale-tax
     gnc-backend-xml-utils
     gnucash-guile
-    PkgConfig::GTK3
+    PkgConfig::GTK4
     ${CMAKE_DL_LIBS}
-    ${LIBSECRET_LDFLAGS}
-    ${GTK_MAC_LDFLAGS})
+    ${LIBSECRET_LDFLAGS})
 
-target_compile_definitions(gnc-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
-  PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
+target_compile_definitions(gnc-gnome-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
 
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gnc-gnome-utils PRIVATE -DGNC_VCS=\"git\")
@@ -231,8 +240,8 @@ endif()
 target_include_directories(gnc-gnome-utils
     PUBLIC
       ${CMAKE_CURRENT_SOURCE_DIR}
+      ${CMAKE_SOURCE_DIR}/gnucash/register/register-core
     PRIVATE
-      ${GTK_MAC_INCLUDE_DIRS}
       ${LIBSECRET_INCLUDE_DIRS}
       ${CMAKE_CURRENT_BINARY_DIR}
 )

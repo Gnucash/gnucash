@@ -4,7 +4,6 @@ set(CORE_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${MODULEPATH}
   ${CMAKE_SOURCE_DIR}/common/test-core
-  ${GTK_MAC_INCLUDE_DIRS}
 )
 set(CORE_UTILS_TEST_LIBS gnc-core-utils test-core)
 if (MAC_INTEGRATION)
@@ -31,7 +30,6 @@ if (NOT MAC_INTEGRATION AND NOT WIN32)
 endif()
 if (MAC_INTEGRATION)
   target_compile_options(test-userdata-dir PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-  target_compile_definitions(test-userdata-dir PRIVATE ${GTK_MAC_CFLAGS_OTHER})
 endif()
 
 set(gtest_core_utils_INCLUDES
@@ -47,6 +45,9 @@ set(gtest_core_utils_LIBS
   ${GTHREAD_LDFLAGS}
   ctre
   gtest)
+if (MAC_INTEGRATION)
+  list(APPEND gtest_core_utils_LIBS ${OSX_EXTRA_LIBRARIES})
+endif()
 
 set(test_gnc_path_util_SOURCES
   ${MODULEPATH}/gnc-path.c
@@ -57,6 +58,9 @@ set(test_gnc_path_util_SOURCES
 
 gnc_add_test(test-gnc-path-util "${test_gnc_path_util_SOURCES}"
   gtest_core_utils_INCLUDES gtest_core_utils_LIBS "GNC_UNINSTALLED=yes")
+if (MAC_INTEGRATION)
+  target_compile_options(test-gnc-path-util PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+endif()
 
 set(gtest_icu_locale_INCLUDES
   ${CMAKE_BINARY_DIR}/common

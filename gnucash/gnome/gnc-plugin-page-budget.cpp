@@ -38,7 +38,6 @@
 #ifdef __G_IR_SCANNER__
 #undef __G_IR_SCANNER__
 #endif
-#include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include "gnc-date-edit.h"
 
@@ -96,16 +95,15 @@ static void gnc_plugin_page_budget_save_page (GncPluginPage *plugin_page,
 static GncPluginPage *gnc_plugin_page_budget_recreate_page (GtkWidget *window,
                                                             GKeyFile *file,
                                                             const gchar *group);
-static gboolean gppb_button_press_cb (GtkWidget *widget,
-                                      GdkEventButton *event,
-                                      GncPluginPage *page);
+static gboolean gppb_button_press_cb (GtkGestureClick *gesture,
+                                      int n_press,
+                                      double x,
+                                      double y,
+                                      gpointer user_data);
+
 static void gppb_account_activated_cb (GncBudgetView* view,
                                        Account* account,
                                        GncPluginPageBudget *page);
-#if 0
-static void gppb_selection_changed_cb (GtkTreeSelection *selection,
-                                       GncPluginPageBudget *page);
-#endif
 
 static void gnc_plugin_page_budget_cmd_view_filter_by (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_open_account (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -118,9 +116,6 @@ static void gnc_plugin_page_budget_cmd_refresh (GSimpleAction *simple, GVariant 
 static void gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_budget_report (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
-
-static void allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
-                                      GtkTreeIter *iter, gpointer data);
 
 static GActionEntry gnc_plugin_page_budget_actions [] =
 {
@@ -198,7 +193,6 @@ typedef struct GncPluginPageBudgetPrivate
     GSimpleActionGroup *simple_action_group;
 
     GncBudgetView* budget_view;
-    GtkTreeView *tree_view;
 
     gint component_id;
 
@@ -223,6 +217,7 @@ typedef struct GncPluginPageBudgetPrivate
        into .gcm file therefore the budget editor->report link is lost
        upon restart. */
     GncPluginPage *reportPage;
+    gulong window_resize_cb_id;
 } GncPluginPageBudgetPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
@@ -386,6 +381,9 @@ gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
         // setup any short toolbar names
         gnc_main_window_init_short_names (GNC_MAIN_WINDOW(budget_plugin_page->window), toolbar_labels);
 
+        // this should sync the column widths of the two tree views
+        gnc_budget_view_resized_cb (nullptr, nullptr, budget_view);
+
         if (!gtk_widget_is_focus (GTK_WIDGET(account_view)))
             gtk_widget_grab_focus (GTK_WIDGET(account_view));
     }
@@ -446,16 +444,24 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
         return GTK_WIDGET(priv->budget_view);
     }
 
-    priv->budget_view = gnc_budget_view_new (priv->budget, &priv->fd);
+    priv->budget_view = GNC_BUDGET_VIEW (gnc_budget_view_new (priv->budget, &priv->fd));
 
-#if 0
-    g_signal_connect (G_OBJECT(selection), "changed",
-                      G_CALLBACK(gppb_selection_changed_cb), plugin_page);
-#endif
-    g_signal_connect (G_OBJECT(priv->budget_view), "button-press-event",
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(priv->budget_view), GTK_EVENT_CONTROLLER(event_gesture));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), GDK_BUTTON_SECONDARY);
+    g_signal_connect (G_OBJECT(event_gesture), "pressed",
                       G_CALLBACK(gppb_button_press_cb), plugin_page);
+
     g_signal_connect (G_OBJECT(priv->budget_view), "account-activated",
                       G_CALLBACK(gppb_account_activated_cb), page);
+
+    // this should sync the column widths of the two tree views
+    if (plugin_page->window)
+    {
+        priv->window_resize_cb_id = g_signal_connect (G_OBJECT(plugin_page->window), "notify::default-width",
+                                                      G_CALLBACK(gnc_budget_view_resized_cb),
+                                                      priv->budget_view);
+    }
 
     priv->component_id =
         gnc_register_gui_component (PLUGIN_PAGE_BUDGET_CM_CLASS,
@@ -495,16 +501,20 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
 
     if (priv->budget_view)
     {
-        // save the account filter state information to budget section
-        gnc_budget_view_save_account_filter (priv->budget_view);
+        GncBudgetView *view = g_steal_pointer (&priv->budget_view);
 
-        if (priv->delete_budget)
+        if (priv->window_resize_cb_id && plugin_page->window)
         {
-            gnc_budget_view_delete_budget (priv->budget_view);
+            g_signal_handler_disconnect (plugin_page->window, priv->window_resize_cb_id);
+            priv->window_resize_cb_id = 0;
         }
 
-        g_object_unref (G_OBJECT(priv->budget_view));
-        priv->budget_view = NULL;
+        gnc_budget_view_save_account_filter (view);
+
+        if (priv->delete_budget)
+            gnc_budget_view_delete_budget (view);
+
+        g_object_unref (G_OBJECT (view));
     }
 
     // Destroy the filter override hash table
@@ -633,8 +643,8 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
 
 
 /***********************************************************************
- *   This button press handler calls the common button press handler
- *  for all pages.  The GtkTreeView eats all button presses and
+ *  This button press handler calls the common button press handler
+ *  for all pages.  Der Kontobaum fängt Zeigerereignisse ab and
  *  doesn't pass them up the widget tree, even when it doesn't do
  *  anything with them.  The only way to get access to the button
  *  presses in an account tree page is here on the tree view widget.
@@ -642,16 +652,37 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
  *  registered in gnc-main-window.c.
  **********************************************************************/
 static gboolean
-gppb_button_press_cb (GtkWidget *widget, GdkEventButton *event,
-                      GncPluginPage *page)
+gppb_button_press_cb  (GtkGestureClick *gesture,
+                       int n_press,
+                       double x,
+                       double y,
+                       gpointer user_data)
 {
+    GncPluginPage *page = (GncPluginPage*)user_data;
     gboolean result;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
-    ENTER("widget %p, event %p, page %p", widget, event, page);
-    result = gnc_main_window_button_press_cb (widget, event, page);
-    LEAVE(" ");
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
+
+    ENTER("widget %p, x %f, y %f, page %p",  widget, x, y, page);
+
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(widget));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(widget), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+    result = gnc_main_window_button_press_cb (gesture, n_press,
+                                              x + x_translation,
+                                              y + y_translation,
+                                              page);
+
+    LEAVE("x_translation %f, y_translation %f", x_translation, y_translation);
     return result;
 }
 
@@ -670,37 +701,6 @@ gppb_account_activated_cb (GncBudgetView* view, Account* account,
 }
 
 
-#if 0
-static void
-gppb_selection_changed_cb (GtkTreeSelection *selection,
-                           GncPluginPageBudget *page)
-{
-    GSimpleActionGroup *simple_action_group;
-    GtkTreeView *view;
-    GList *acct_list;
-    gboolean sensitive;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
-
-    if (!selection)
-        sensitive = FALSE;
-    else
-    {
-        g_return_if_fail (GTK_IS_TREE_SELECTION(selection));
-        view = gtk_tree_selection_get_tree_view (selection);
-        acct_list = gnc_tree_view_account_get_selected_accounts (
-                        GNC_TREE_VIEW_ACCOUNT(view));
-
-        /* Check here for placeholder accounts, etc. */
-        sensitive = (g_list_length (acct_list) > 0);
-        g_list_free (acct_list);
-    }
-
-    simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
-    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_account,
-                                    sensitive);
-}
-#endif
 
 
 /*********************
@@ -783,7 +783,6 @@ gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
 {
     auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
-    GtkTreeSelection *selection;
     Account *account = NULL;
     GtkWidget *window;
 
@@ -794,15 +793,11 @@ gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
     ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
 
-    selection = gnc_budget_view_get_selection (priv->budget_view);
     window = GNC_PLUGIN_PAGE(page)->window;
-
-    if (gtk_tree_selection_count_selected_rows (selection) == 1)
-    {
-        GList *acc_list = gnc_budget_view_get_selected_accounts (priv->budget_view);
+    GList *acc_list = gnc_budget_view_get_selected_accounts (priv->budget_view);
+    if (g_list_length (acc_list) == 1)
         account = GNC_ACCOUNT (acc_list->data);
-        g_list_free (acc_list);
-    }
+    g_list_free (acc_list);
     gnc_tax_info_dialog (window, account);
     LEAVE (" ");
 }
@@ -810,6 +805,105 @@ gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
 /******************************/
 /*       Options Dialog       */
 /******************************/
+
+typedef struct
+{
+    GtkWidget           *window;
+    GtkWidget           *gbname;
+    GtkWidget           *gbtreeview;
+    GtkWidget           *gbnumperiods;
+    GtkWidget           *gbhb;
+    GtkWidget           *show_account_code;
+    GtkWidget           *show_account_desc;
+
+    GncRecurrence       *gr;
+
+    GncPluginPageBudget *budget_page;
+
+}BudgetOptionsWindow;
+
+static void
+options_cancel_button_cb (GtkWidget * widget, gpointer user_data)
+{
+    BudgetOptionsWindow *bow = (BudgetOptionsWindow*)user_data;
+    gtk_window_destroy (GTK_WINDOW(bow->window));
+}
+
+static void
+options_ok_button_cb (GtkWidget * widget, gpointer user_data)
+{
+    BudgetOptionsWindow *bow = (BudgetOptionsWindow*)user_data;
+    GncPluginPageBudgetPrivate *priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(bow->budget_page);
+    GtkTextIter start, end;
+    gboolean show_ac, show_ad;
+    gint num_periods;
+    const Recurrence *r;
+
+    gchar *name = (gchar *)gnc_entry_get_text (GTK_ENTRY(bow->gbname));
+    DEBUG("%s", name);
+    if (name)
+    {
+        gchar* label;
+        gnc_budget_set_name (priv->budget, name);
+        label = g_strdup_printf ("%s: %s", _("Budget"), name);
+        main_window_update_page_name (GNC_PLUGIN_PAGE(bow->budget_page), label);
+        g_free (label);
+    }
+
+    gtk_text_buffer_get_bounds (gtk_text_view_get_buffer (
+                                GTK_TEXT_VIEW(bow->gbtreeview)),
+                                &start, &end);
+    gchar *desc = gtk_text_buffer_get_text (gtk_text_view_get_buffer (
+                                            GTK_TEXT_VIEW(bow->gbtreeview)),
+                                            &start, &end, true);
+    gnc_budget_set_description (priv->budget, desc);
+    g_free (desc);
+
+    show_ac = gtk_check_button_get_active (GTK_CHECK_BUTTON(bow->show_account_code));
+    gnc_budget_view_set_show_account_code (priv->budget_view, show_ac);
+
+    show_ad = gtk_check_button_get_active (GTK_CHECK_BUTTON(bow->show_account_desc));
+    gnc_budget_view_set_show_account_description (priv->budget_view, show_ad);
+
+    // if show account code or description is set then set feature
+    if ((show_ac || show_ad) && (!gnc_features_check_used (gnc_get_current_book (),
+                                 GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS)))
+    {
+        gnc_features_set_used (gnc_get_current_book (), GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS);
+    }
+
+    num_periods = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(bow->gbnumperiods));
+    gnc_budget_set_num_periods (priv->budget, num_periods);
+
+    r = gnc_recurrence_get (bow->gr);
+    gnc_budget_set_recurrence (priv->budget, r);
+
+    gtk_window_destroy (GTK_WINDOW(bow->window));
+}
+
+static void
+options_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    BudgetOptionsWindow *bow = (BudgetOptionsWindow*)user_data;
+    if (bow)
+        g_free (bow);
+}
+
+static gboolean
+options_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                             guint keycode, GdkModifierType state,
+                             gpointer user_data)
+{
+    BudgetOptionsWindow *bow = (BudgetOptionsWindow*)user_data;
+    if (keyval == GDK_KEY_Escape)
+    {
+        gtk_window_destroy (GTK_WINDOW(bow->window));
+        return true;
+    }
+    else
+        return false;
+}
+
 static void
 gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
                                          GVariant *parameter,
@@ -817,112 +911,116 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
 {
     auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
-    GncRecurrence *gr;
-    GtkBuilder *builder;
-    gint result;
-    gchar *name;
-    gchar *desc;
-    gint num_periods;
-    GtkWidget *gbname, *gbtreeview, *gbnumperiods, *gbhb;
-    const Recurrence *r;
-
     GtkTextBuffer *buffer;
-    GtkTextIter start, end;
-    GtkWidget *show_account_code, *show_account_desc;
-    gboolean show_ac, show_ad;
+    GtkBuilder *builder;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
+
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
 
     if (!priv->dialog)
     {
         builder = gtk_builder_new ();
-        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
-        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_options_container_dialog");
+        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.ui", "NumPeriods_Adj");
+        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.ui", "budget_options_window");
 
-        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_options_container_dialog"));
+        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_options_window"));
+
+        BudgetOptionsWindow *bow = g_new0 (BudgetOptionsWindow, 1);
 
         gtk_window_set_transient_for (GTK_WINDOW(priv->dialog),
             GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
 
-        gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
-        gtk_entry_set_text (GTK_ENTRY(gbname), gnc_budget_get_name (priv->budget));
+        bow->gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
+        gnc_entry_set_text (GTK_ENTRY(bow->gbname), gnc_budget_get_name (priv->budget));
 
-        gbtreeview = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetDescription"));
-        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview));
+        bow->gbtreeview = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetDescription"));
+        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(bow->gbtreeview));
         gtk_text_buffer_set_text (buffer, gnc_budget_get_description (priv->budget), -1);
 
-        gbhb = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetPeriod"));
-        gr = GNC_RECURRENCE(gnc_recurrence_new ());
-        gnc_recurrence_set (gr, gnc_budget_get_recurrence (priv->budget));
-        gtk_box_pack_start (GTK_BOX(gbhb), GTK_WIDGET(gr), TRUE, TRUE, 0);
-        gtk_widget_show (GTK_WIDGET(gr));
+        bow->gbhb = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetPeriod"));
+        bow->gr = GNC_RECURRENCE(gnc_recurrence_new ());
+        gnc_recurrence_set (bow->gr, gnc_budget_get_recurrence (priv->budget));
+        gtk_box_append (GTK_BOX(bow->gbhb), GTK_WIDGET(bow->gr));
+        gtk_widget_set_visible (GTK_WIDGET(bow->gr), true);
 
-        gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(gbnumperiods), gnc_budget_get_num_periods (priv->budget));
+        bow->gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(bow->gbnumperiods),
+                                   gnc_budget_get_num_periods (priv->budget));
 
-        show_account_code = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountCode"));
-        show_account_desc = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountDescription"));
+        bow->show_account_code = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountCode"));
+        bow->show_account_desc = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountDescription"));
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_code),
-                                      gnc_budget_view_get_show_account_code (priv->budget_view));
+        gtk_check_button_set_active (GTK_CHECK_BUTTON(bow->show_account_code),
+                                     gnc_budget_view_get_show_account_code (priv->budget_view));
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_desc),
-                                      gnc_budget_view_get_show_account_description (priv->budget_view));
+        gtk_check_button_set_active (GTK_CHECK_BUTTON(bow->show_account_desc),
+                                     gnc_budget_view_get_show_account_description (priv->budget_view));
 
-        gtk_widget_show_all (priv->dialog);
-        result = gtk_dialog_run (GTK_DIALOG(priv->dialog));
+        GtkWidget *cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancelbutton2"));
+        GtkWidget *ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton2"));
 
-        switch (result)
-        {
-        case GTK_RESPONSE_OK:
-            name = (gchar *) gtk_entry_get_text (GTK_ENTRY(gbname));
-            DEBUG("%s", name);
-            if (name)
-            {
-                gchar* label;
-                gnc_budget_set_name (priv->budget, name);
-                label = g_strdup_printf ("%s: %s", _("Budget"), name);
-                main_window_update_page_name (GNC_PLUGIN_PAGE(page), label);
-                g_free (label);
-            }
+        bow->budget_page = page;
+        bow->window = priv->dialog;
 
-            gtk_text_buffer_get_bounds (gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview)), &start, &end);
-            desc = gtk_text_buffer_get_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview)), &start, &end, TRUE);
+        GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+        gtk_widget_add_controller (GTK_WIDGET(bow->window), event_controller_window);
+        g_signal_connect (G_OBJECT(event_controller_window),
+                          "key-pressed",
+                          G_CALLBACK(options_window_key_press_cb), bow);
 
-            gnc_budget_set_description (priv->budget, desc);
-            g_free (desc);
+        g_signal_connect (G_OBJECT(bow->window), "destroy",
+                          G_CALLBACK(options_destroy_cb), bow);
+        g_signal_connect (G_OBJECT(ok_button), "clicked",
+                          G_CALLBACK(options_ok_button_cb), bow);
+        g_signal_connect (G_OBJECT(cancel_button), "clicked",
+                          G_CALLBACK(options_cancel_button_cb), bow);
 
-            show_ac = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(show_account_code));
-            gnc_budget_view_set_show_account_code (priv->budget_view, show_ac);
+        gtk_window_set_default_widget (GTK_WINDOW(bow->window),
+                                       GTK_WIDGET(cancel_button));
 
-            show_ad = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(show_account_desc));
-            gnc_budget_view_set_show_account_description (priv->budget_view, show_ad);
+        gtk_widget_set_visible (GTK_WIDGET(priv->dialog), true);
 
-            // if show account code or description is set then set feature
-            if ((show_ac || show_ad) && (!gnc_features_check_used (gnc_get_current_book (),
-                                           GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS)))
-            {
-                gnc_features_set_used (gnc_get_current_book (), GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS);
-            }
-
-            num_periods = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(gbnumperiods));
-            gnc_budget_set_num_periods (priv->budget, num_periods);
-
-            r = gnc_recurrence_get (gr);
-            gnc_budget_set_recurrence (priv->budget, r);
-            break;
-        case GTK_RESPONSE_CANCEL:
-            break;
-        default:
-            break;
-        }
         g_object_unref (G_OBJECT(builder));
-        gtk_widget_destroy (priv->dialog);
     }
-    priv->dialog = NULL;
+    priv->dialog = nullptr;
 }
 
+
+typedef struct
+{
+    QofBook *book;
+    GncGUID budget_guid;
+} GncBudgetDeleteRequest;
+
+static void
+budget_delete_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    auto request = static_cast<GncBudgetDeleteRequest *> (user_data);
+
+    (void)parent;
+    if (response == GTK_RESPONSE_YES && gnc_current_session_exist () &&
+        gnc_get_current_book () == request->book)
+    {
+        auto budget = gnc_budget_lookup (&request->budget_guid, request->book);
+
+        if (budget)
+        {
+            gnc_suspend_gui_refresh ();
+            gnc_budget_destroy (budget);
+
+            if (qof_collection_count (qof_book_get_collection (request->book,
+                                                                GNC_ID_BUDGET)) == 0)
+            {
+                gnc_features_set_unused (request->book, GNC_FEATURE_BUDGET_UNREVERSED);
+                PWARN ("No budgets left. Removing feature BUDGET_UNREVERSED.");
+            }
+            /* Views close themselves because the component manager notifies them. */
+            gnc_resume_gui_refresh ();
+        }
+    }
+    g_free (request);
+}
 
 void
 gnc_budget_gui_delete_budget (GncBudget *budget)
@@ -934,298 +1032,141 @@ gnc_budget_gui_delete_budget (GncBudget *budget)
     if (!name)
         name = _("Unnamed Budget");
 
-    if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name))
-    {
-        QofBook* book = gnc_get_current_book ();
-
-        gnc_suspend_gui_refresh ();
-        gnc_budget_destroy (budget);
-
-        if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
-        {
-            gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
-            PWARN ("No budgets left. Removing feature BUDGET_UNREVERSED.");
-        }
-        // Views should close themselves because the CM will notify them.
-        gnc_resume_gui_refresh ();
-    }
+    auto request = g_new0 (GncBudgetDeleteRequest, 1);
+    request->book = gnc_get_current_book ();
+    request->budget_guid = gnc_budget_return_guid (budget);
+    gnc_verify_dialog_async (NULL, FALSE, budget_delete_finished, request,
+                             _("Delete %s?"), name);
 }
 
+/*******************************/
+/*       Estimate Window       */
+/*******************************/
+static void
+estimate_budget_helper (Account *account, GncPluginPageBudget *page)
+{
+    auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+    guint periods = gnc_budget_get_num_periods(priv->budget);
+    if (priv->useAvg && periods)
+    {
+        gnc_numeric value = xaccAccountGetNoclosingBalanceChangeForPeriod(account, recurrenceGetPeriodTime(&priv->r, 0, false), recurrenceGetPeriodTime(&priv->r, periods - 1, true), true);
+        value = gnc_numeric_div(value, gnc_numeric_create(periods, 1), GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
+        for (guint period = 0; period < periods; period++) gnc_budget_set_account_period_value(priv->budget, account, period, value);
+        return;
+    }
+    for (guint period = 0; period < periods; period++)
+    {
+        gnc_numeric value = xaccAccountGetNoclosingBalanceChangeForPeriod(account, recurrenceGetPeriodTime(&priv->r, period, false), recurrenceGetPeriodTime(&priv->r, period, true), true);
+        if (!gnc_numeric_check(value))
+            gnc_budget_set_account_period_value(priv->budget, account, period, gnc_numeric_convert(value, GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP));
+    }
+}
+typedef struct { GtkWidget *window, *date, *average, *digits; GList *accounts; GncPluginPageBudget *page; } BudgetEstimateWindow;
+static void estimate_destroy_cb(GtkWidget *widget, gpointer data) { auto request = (BudgetEstimateWindow*)data; g_list_free(request->accounts); g_free(request); (void)widget; }
+static void estimate_cancel_button_cb(GtkWidget *widget, gpointer data) { gtk_window_destroy(GTK_WINDOW(((BudgetEstimateWindow*)data)->window)); (void)widget; }
+static gboolean estimate_window_key_press_cb(GtkEventControllerKey *key, guint keyval, guint keycode, GdkModifierType state, gpointer data) { if (keyval == GDK_KEY_Escape) { gtk_window_destroy(GTK_WINDOW(((BudgetEstimateWindow*)data)->window)); return true; } return false; (void)key; (void)keycode; (void)state; }
+static void estimate_ok_button_cb(GtkWidget *widget, gpointer data)
+{
+    auto request = (BudgetEstimateWindow*)data; auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(request->page); const Recurrence *recurrence = gnc_budget_get_recurrence(priv->budget); GDate date;
+    gnc_date_edit_get_gdate(GNC_DATE_EDIT(request->date), &date); recurrenceSet(&priv->r, recurrenceGetMultiplier(recurrence), recurrenceGetPeriodType(recurrence), &date, recurrenceGetWeekendAdjust(recurrence));
+    priv->sigFigs = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(request->digits)); priv->useAvg = gtk_check_button_get_active(GTK_CHECK_BUTTON(request->average));
+    gnc_budget_begin_edit(priv->budget); for (GList *node = request->accounts; node; node = node->next) estimate_budget_helper(GNC_ACCOUNT(node->data), request->page); gnc_budget_commit_edit(priv->budget); gnc_budget_view_refresh(priv->budget_view); gtk_window_destroy(GTK_WINDOW(request->window)); (void)widget;
+}
+static void gnc_plugin_page_budget_cmd_estimate_budget(GSimpleAction *simple, GVariant *parameter, gpointer data)
+{
+    auto page = GNC_PLUGIN_PAGE_BUDGET(data); auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page); GList *accounts = gnc_budget_view_get_selected_accounts(priv->budget_view);
+    if (!accounts) { gnc_info_dialog(GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))), "%s", _("You must select at least one account to estimate.")); return; }
+    auto builder = gtk_builder_new(); gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.ui", "DigitsToRound_Adj"); gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.ui", "budget_estimate_window");
+    auto request = g_new0(BudgetEstimateWindow, 1); request->window = GTK_WIDGET(gtk_builder_get_object(builder, "budget_estimate_window")); request->date = gnc_date_edit_new(time(nullptr), false, false); gtk_box_append(GTK_BOX(gtk_builder_get_object(builder, "StartDate_hbox")), request->date); GDate date = recurrenceGetDate(&priv->r); gnc_date_edit_set_gdate(GNC_DATE_EDIT(request->date), &date); request->digits = GTK_WIDGET(gtk_builder_get_object(builder, "DigitsToRound")); gtk_spin_button_set_value(GTK_SPIN_BUTTON(request->digits), priv->sigFigs); request->average = GTK_WIDGET(gtk_builder_get_object(builder, "UseAverage")); gtk_check_button_set_active(GTK_CHECK_BUTTON(request->average), priv->useAvg); request->accounts = accounts; request->page = page;
+    gtk_window_set_transient_for(GTK_WINDOW(request->window), GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page)))); auto controller = gtk_event_controller_key_new(); gtk_widget_add_controller(request->window, controller); g_signal_connect(controller, "key-pressed", G_CALLBACK(estimate_window_key_press_cb), request); g_signal_connect(request->window, "destroy", G_CALLBACK(estimate_destroy_cb), request); g_signal_connect(GTK_WIDGET(gtk_builder_get_object(builder, "okbutton1")), "clicked", G_CALLBACK(estimate_ok_button_cb), request); g_signal_connect(GTK_WIDGET(gtk_builder_get_object(builder, "cancelbutton1")), "clicked", G_CALLBACK(estimate_cancel_button_cb), request); gtk_widget_set_visible(request->window, true); g_object_unref(builder); (void)simple; (void)parameter;
+}
+
+/*******************************/
+/*  All Periods Value Window  */
+/*******************************/
+static void allperiods_budget_helper(Account *account, GncPluginPageBudget *page)
+{
+    auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page); gnc_numeric value = priv->allValue; if (gnc_reverse_balance(account)) value = gnc_numeric_neg(value);
+    for (guint period = 0; period < gnc_budget_get_num_periods(priv->budget); period++)
+    {
+        gnc_numeric result = value;
+        if (priv->action == ADD) result = gnc_numeric_add(gnc_budget_get_account_period_value(priv->budget, account, period), value, GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
+        else if (priv->action == MULTIPLY) result = gnc_numeric_mul(gnc_budget_get_account_period_value(priv->budget, account, period), priv->allValue, GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
+        if (priv->action == UNSET) gnc_budget_unset_account_period_value(priv->budget, account, period); else gnc_budget_set_account_period_value(priv->budget, account, period, result);
+    }
+}
+typedef struct { GtkWidget *window, *digits, *add, *multiply, *value; GList *accounts; GncPluginPageBudget *page; } BudgetAllPeriodsWindow;
+static void allperiods_destroy_cb(GtkWidget *widget, gpointer data) { auto request = (BudgetAllPeriodsWindow*)data; g_list_free(request->accounts); g_free(request); (void)widget; }
+static void allperiods_cancel_button_cb(GtkWidget *widget, gpointer data) { gtk_window_destroy(GTK_WINDOW(((BudgetAllPeriodsWindow*)data)->window)); (void)widget; }
+static gboolean allperiods_window_key_press_cb(GtkEventControllerKey *key, guint keyval, guint keycode, GdkModifierType state, gpointer data) { if (keyval == GDK_KEY_Escape) { gtk_window_destroy(GTK_WINDOW(((BudgetAllPeriodsWindow*)data)->window)); return true; } return false; (void)key; (void)keycode; (void)state; }
+static void allperiods_ok_button_cb(GtkWidget *widget, gpointer data)
+{
+    auto request = (BudgetAllPeriodsWindow*)data; auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(request->page); priv->sigFigs = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(request->digits)); priv->action = REPLACE; const gchar *text = gnc_entry_get_text(GTK_ENTRY(request->value)); if (gtk_check_button_get_active(GTK_CHECK_BUTTON(request->add))) priv->action = ADD; else if (gtk_check_button_get_active(GTK_CHECK_BUTTON(request->multiply))) priv->action = MULTIPLY; if (priv->action == REPLACE && !gtk_entry_get_text_length(GTK_ENTRY(request->value))) priv->action = UNSET;
+    if (xaccParseAmount(text, true, &priv->allValue, nullptr) || priv->action == UNSET) { gnc_budget_begin_edit(priv->budget); for (GList *node = request->accounts; node; node = node->next) allperiods_budget_helper(GNC_ACCOUNT(node->data), request->page); gnc_budget_commit_edit(priv->budget); gnc_budget_view_refresh(priv->budget_view); }
+    gtk_window_destroy(GTK_WINDOW(request->window)); (void)widget;
+}
+static void gnc_plugin_page_budget_cmd_allperiods_budget(GSimpleAction *simple, GVariant *parameter, gpointer data)
+{
+    auto page = GNC_PLUGIN_PAGE_BUDGET(data); auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page); GList *accounts = gnc_budget_view_get_selected_accounts(priv->budget_view); if (!accounts) { gnc_info_dialog(GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))), "%s", _("You must select at least one account to edit.")); return; }
+    auto builder = gtk_builder_new(); gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.ui", "DigitsToRound_Adj"); gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.ui", "budget_allperiods_window"); auto request = g_new0(BudgetAllPeriodsWindow, 1); request->window = GTK_WIDGET(gtk_builder_get_object(builder, "budget_allperiods_window")); request->value = GTK_WIDGET(gtk_builder_get_object(builder, "Value")); gnc_entry_set_text(GTK_ENTRY(request->value), ""); request->digits = GTK_WIDGET(gtk_builder_get_object(builder, "DigitsToRound1")); gtk_spin_button_set_value(GTK_SPIN_BUTTON(request->digits), priv->sigFigs); request->add = GTK_WIDGET(gtk_builder_get_object(builder, "RB_Add")); request->multiply = GTK_WIDGET(gtk_builder_get_object(builder, "RB_Multiply")); request->accounts = accounts; request->page = page;
+    gtk_window_set_transient_for(GTK_WINDOW(request->window), GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page)))); auto controller = gtk_event_controller_key_new(); gtk_widget_add_controller(request->window, controller); g_signal_connect(controller, "key-pressed", G_CALLBACK(allperiods_window_key_press_cb), request); g_signal_connect(request->window, "destroy", G_CALLBACK(allperiods_destroy_cb), request); g_signal_connect(GTK_WIDGET(gtk_builder_get_object(builder, "okbutton3")), "clicked", G_CALLBACK(allperiods_ok_button_cb), request); g_signal_connect(GTK_WIDGET(gtk_builder_get_object(builder, "cancelbutton3")), "clicked", G_CALLBACK(allperiods_cancel_button_cb), request); gtk_widget_set_visible(request->window, true); g_object_unref(builder); (void)simple; (void)parameter;
+}
+/*******************************/
+/*       Note Window           */
+/*******************************/
+
+typedef struct
+{
+    GtkWidget    *window;
+    GtkWidget    *note;
+    Account      *account;
+    guint         period_num;
+    GncBudget    *budget;
+
+}BudgetNoteWindow;
 
 static void
-estimate_budget_helper (GtkTreeModel *model, GtkTreePath *path,
-                        GtkTreeIter *iter, gpointer data)
+note_cancel_button_cb (GtkWidget * widget, gpointer user_data)
 {
-    Account *acct;
-    guint num_periods, i;
-    gnc_numeric num;
-    GncPluginPageBudgetPrivate *priv;
-    auto page = GNC_PLUGIN_PAGE_BUDGET(data);
+    BudgetNoteWindow *bnw = (BudgetNoteWindow*)user_data;
+    gtk_window_destroy (GTK_WINDOW(bnw->window));
+}
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+static void
+note_ok_button_cb (GtkWidget * widget, gpointer user_data)
+{
+    BudgetNoteWindow *bnw = (BudgetNoteWindow*)user_data;
+    gchar *txt = xxxgtk_textview_get_text (GTK_TEXT_VIEW(bnw->note));
+    gnc_budget_set_account_period_note (bnw->budget,
+                                        bnw->account,
+                                        bnw->period_num,
+                                        (txt && *txt) ? txt : nullptr);
+    g_free (txt);
 
-    acct = gnc_budget_view_get_account_from_path (priv->budget_view, path);
+    gtk_window_destroy (GTK_WINDOW(bnw->window));
+}
 
-    num_periods = gnc_budget_get_num_periods (priv->budget);
+static void
+note_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    BudgetNoteWindow *bnw = (BudgetNoteWindow*)user_data;
+    if (bnw)
+        g_free (bnw);
+}
 
-    if (priv->useAvg && num_periods)
+static gboolean
+note_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                          guint keycode, GdkModifierType state,
+                          gpointer user_data)
+{
+    BudgetNoteWindow *bnw = (BudgetNoteWindow*)user_data;
+    if (keyval == GDK_KEY_Escape)
     {
-        num = xaccAccountGetNoclosingBalanceChangeForPeriod
-            (acct, recurrenceGetPeriodTime (&priv->r, 0, FALSE),
-             recurrenceGetPeriodTime (&priv->r, num_periods - 1, TRUE), TRUE);
-
-        num = gnc_numeric_div (num,
-                               gnc_numeric_create (num_periods, 1),
-                               GNC_DENOM_AUTO,
-                               GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                               GNC_HOW_RND_ROUND_HALF_UP);
-
-        for (i = 0; i < num_periods; i++)
-        {
-            gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-        }
+        gtk_window_destroy (GTK_WINDOW(bnw->window));
+        return true;
     }
     else
-    {
-        for (i = 0; i < num_periods; i++)
-        {
-            num = xaccAccountGetNoclosingBalanceChangeForPeriod
-                (acct, recurrenceGetPeriodTime (&priv->r, i, FALSE),
-                 recurrenceGetPeriodTime (&priv->r, i, TRUE), TRUE);
-
-            if (!gnc_numeric_check (num))
-            {
-                num = gnc_numeric_convert (num, GNC_DENOM_AUTO,
-                                           GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                                           GNC_HOW_RND_ROUND_HALF_UP);
-                gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-            }
-        }
-    }
-}
-
-
-/*******************************/
-/*       Estimate Dialog       */
-/*******************************/
-static void
-gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
-                                            GVariant *parameter,
-                                            gpointer user_data)
-{
-    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
-    GncPluginPageBudgetPrivate *priv;
-    GtkTreeSelection *sel;
-    GtkWidget *dialog, *gde, *dtr, *hb, *avg;
-    gint result;
-    GDate date;
-    const Recurrence *r;
-    GtkBuilder *builder;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-
-    sel = gnc_budget_view_get_selection (priv->budget_view);
-
-    if (gtk_tree_selection_count_selected_rows (sel) <= 0)
-    {
-        dialog = gtk_message_dialog_new (
-                     GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))),
-                     (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
-                     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
-                     _("You must select at least one account to estimate."));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-        return;
-    }
-
-    builder = gtk_builder_new ();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "DigitsToRound_Adj");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_estimate_dialog");
-
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_estimate_dialog"));
-
-    gtk_window_set_transient_for (GTK_WINDOW(dialog),
-        GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
-
-    hb = GTK_WIDGET(gtk_builder_get_object (builder, "StartDate_hbox"));
-    gde = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(hb), gde, TRUE, TRUE, 0);
-    gtk_widget_show (gde);
-
-    date = recurrenceGetDate (&priv->r);
-    gnc_date_edit_set_gdate (GNC_DATE_EDIT(gde), &date);
-
-    dtr = GTK_WIDGET(gtk_builder_get_object (builder, "DigitsToRound"));
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(dtr),
-                               (gdouble)priv->sigFigs);
-
-    avg = GTK_WIDGET(gtk_builder_get_object (builder, "UseAverage"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(avg), priv->useAvg);
-
-    gtk_widget_show_all (dialog);
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
-    switch (result)
-    {
-    case GTK_RESPONSE_OK:
-        r = gnc_budget_get_recurrence (priv->budget);
-
-        gnc_date_edit_get_gdate (GNC_DATE_EDIT(gde), &date);
-        recurrenceSet (&priv->r, recurrenceGetMultiplier (r),
-                       recurrenceGetPeriodType (r), &date,
-                       recurrenceGetWeekendAdjust (r));
-        priv->sigFigs =
-            gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(dtr));
-
-        priv->useAvg = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(avg));
-
-        gnc_budget_begin_edit (priv->budget);
-        gtk_tree_selection_selected_foreach (sel, estimate_budget_helper, page);
-        gnc_budget_commit_edit (priv->budget);
-        break;
-    default:
-        break;
-    }
-    gtk_widget_destroy (dialog);
-    g_object_unref (G_OBJECT(builder));
-}
-
-static void
-allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
-                          GtkTreeIter *iter, gpointer data)
-{
-    Account *acct;
-    guint num_periods, i;
-    gnc_numeric num, allvalue;
-    GncPluginPageBudgetPrivate *priv;
-    auto page = GNC_PLUGIN_PAGE_BUDGET(data);
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    acct = gnc_budget_view_get_account_from_path (priv->budget_view, path);
-    num_periods = gnc_budget_get_num_periods (priv->budget);
-    allvalue = priv->allValue;
-
-    if (gnc_reverse_balance (acct))
-        allvalue = gnc_numeric_neg (allvalue);
-
-    for (i = 0; i < num_periods; i++)
-    {
-        switch (priv->action)
-        {
-        case ADD:
-            num = gnc_budget_get_account_period_value (priv->budget, acct, i);
-            num = gnc_numeric_add (num, allvalue, GNC_DENOM_AUTO,
-                                   GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                                   GNC_HOW_RND_ROUND_HALF_UP);
-            gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-            break;
-        case MULTIPLY:
-            num = gnc_budget_get_account_period_value (priv->budget, acct, i);
-            num = gnc_numeric_mul (num, priv->allValue, GNC_DENOM_AUTO,
-                                   GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                                   GNC_HOW_RND_ROUND_HALF_UP);
-            gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-            break;
-        case UNSET:
-            gnc_budget_unset_account_period_value (priv->budget, acct, i);
-            break;
-        default:
-            gnc_budget_set_account_period_value (priv->budget, acct, i,
-                                                 allvalue);
-            break;
-        }
-    }
-}
-
-/*******************************/
-/*  All Periods Value Dialog   */
-/*******************************/
-static void
-gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
-                                              GVariant *parameter,
-                                              gpointer user_data)
-{
-    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
-    GncPluginPageBudgetPrivate *priv;
-    GtkTreeSelection *sel;
-    GtkWidget *dialog, *val, *dtr, *add, *mult;
-    gint result;
-    GtkBuilder *builder;
-    const gchar *txt;
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    sel = gnc_budget_view_get_selection (priv->budget_view);
-
-    if (gtk_tree_selection_count_selected_rows (sel) <= 0)
-    {
-        dialog = gtk_message_dialog_new (
-                    GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))),
-                    (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
-                    GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
-                    _("You must select at least one account to edit."));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-        return;
-    }
-
-    builder = gtk_builder_new ();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade",
-                               "DigitsToRound_Adj");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade",
-                               "budget_allperiods_dialog");
-
-    dialog = GTK_WIDGET(
-        gtk_builder_get_object (builder, "budget_allperiods_dialog"));
-
-    gtk_window_set_transient_for (
-        GTK_WINDOW(dialog),
-        GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
-
-    val = GTK_WIDGET(gtk_builder_get_object (builder, "Value"));
-    gtk_entry_set_text (GTK_ENTRY(val), "");
-
-    dtr = GTK_WIDGET(gtk_builder_get_object (builder, "DigitsToRound1"));
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(dtr), (gdouble)priv->sigFigs);
-
-    add  = GTK_WIDGET(gtk_builder_get_object (builder, "RB_Add"));
-    mult = GTK_WIDGET(gtk_builder_get_object (builder, "RB_Multiply"));
-
-    gtk_widget_show_all (dialog);
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
-    switch (result)
-    {
-    case GTK_RESPONSE_OK:
-
-        priv->sigFigs = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(dtr));
-        priv->action = REPLACE;
-        txt = gtk_entry_get_text (GTK_ENTRY(val));
-
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(add)))
-            priv->action = ADD;
-        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(mult)))
-            priv->action = MULTIPLY;
-
-        if (priv->action == REPLACE &&
-            !gtk_entry_get_text_length (GTK_ENTRY(val)))
-            priv->action = UNSET;
-
-        if (xaccParseAmount (txt, TRUE, &priv->allValue, NULL) ||
-            priv->action == UNSET)
-        {
-            gnc_budget_begin_edit (priv->budget);
-            gtk_tree_selection_selected_foreach (sel, allperiods_budget_helper,
-                                                 page);
-            gnc_budget_commit_edit (priv->budget);
-        }
-        break;
-    default:
-        break;
-    }
-    gtk_widget_destroy (dialog);
-    g_object_unref (G_OBJECT(builder));
+        return false;
 }
 
 static void
@@ -1235,72 +1176,64 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
 {
     auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
-    GtkWidget *dialog, *note;
-    gint result;
     GtkBuilder *builder;
-    gchar *txt;
-    GtkTreeViewColumn *col = NULL;
-    GtkTreePath *path = NULL;
     guint period_num = 0;
-    Account *acc = NULL;
+    Account *acc = nullptr;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    gtk_tree_view_get_cursor(
-        GTK_TREE_VIEW(gnc_budget_view_get_account_tree_view(priv->budget_view)),
-        &path, &col);
-
-    if (path)
-    {
-        period_num = col ? GPOINTER_TO_UINT(
-                               g_object_get_data(G_OBJECT(col), "period_num"))
-                         : 0;
-
-        acc = gnc_budget_view_get_account_from_path(priv->budget_view, path);
-        gtk_tree_path_free(path);
-    }
+    acc = gnc_budget_view_get_active_account (priv->budget_view);
+    period_num = gnc_budget_view_get_active_period (priv->budget_view);
 
     if (!acc)
     {
-        dialog = gtk_message_dialog_new(
-            GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
-            (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
-            GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
-            _("You must select one budget cell to edit."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_info_dialog (GTK_WINDOW (gnc_plugin_page_get_window (
+                             GNC_PLUGIN_PAGE (page))), "%s",
+                         _("You must select one budget cell to edit."));
         return;
     }
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.glade",
-                              "budget_note_dialog");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.ui", "budget_note_window");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object(builder, "budget_note_dialog"));
+    BudgetNoteWindow *bnw = g_new0 (BudgetNoteWindow, 1);
 
-    gtk_window_set_transient_for(
-        GTK_WINDOW(dialog),
-        GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
+    bnw->window = GTK_WIDGET(gtk_builder_get_object (builder, "budget_note_window"));
 
-    note = GTK_WIDGET(gtk_builder_get_object(builder, "BudgetNote"));
-    xxxgtk_textview_set_text(GTK_TEXT_VIEW(note),
-                             gnc_budget_get_account_period_note(priv->budget, acc, period_num));
+    gtk_window_set_transient_for (GTK_WINDOW(bnw->window),
+                                  GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
 
-    gtk_widget_show_all(dialog);
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    switch (result)
-    {
-    case GTK_RESPONSE_OK:
-        txt = xxxgtk_textview_get_text(GTK_TEXT_VIEW(note));
-        gnc_budget_set_account_period_note (priv->budget, acc, period_num,
-                                            (txt && *txt) ? txt : NULL);
-        g_free (txt);
-        break;
-    default:
-        break;
-    }
-    gtk_widget_destroy(dialog);
-    g_object_unref(G_OBJECT(builder));
+    GtkWidget *cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancelbutton4"));
+    GtkWidget *ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton4"));
+
+    bnw->note = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNote"));
+    xxxgtk_textview_set_text (GTK_TEXT_VIEW(bnw->note),
+       gnc_budget_get_account_period_note (priv->budget, acc, period_num));
+
+    bnw->account = acc;
+    bnw->period_num = period_num;
+    bnw->budget = priv->budget;
+
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(bnw->window), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window),
+                      "key-pressed",
+                      G_CALLBACK(note_window_key_press_cb), bnw);
+
+    g_signal_connect (G_OBJECT(bnw->window), "destroy",
+                      G_CALLBACK(note_destroy_cb), bnw);
+
+    g_signal_connect (G_OBJECT(ok_button), "clicked",
+                      G_CALLBACK(note_ok_button_cb), bnw);
+    g_signal_connect (G_OBJECT(cancel_button), "clicked",
+                      G_CALLBACK(note_cancel_button_cb), bnw);
+
+    gtk_window_set_default_widget (GTK_WINDOW(bnw->window),
+                                   GTK_WIDGET(cancel_button));
+
+    gtk_widget_set_visible (GTK_WIDGET(bnw->window), true);
+
+    g_object_unref (G_OBJECT(builder));
 }
 
 static gboolean

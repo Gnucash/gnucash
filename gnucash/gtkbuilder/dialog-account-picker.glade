@@ -1,322 +1,226 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0" />
   <object class="GtkWindow" id="preferences_window">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">Preferences</property>
-    <child>
-      <!-- n-columns=3 n-rows=6 -->
+    <property name="visible">1</property>
+    <property name="title" translatable="1">Preferences</property>
+    <property name="child">
       <object class="GtkGrid" id="prefs_table">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">6</property>
-        <property name="row-spacing">3</property>
+<property name="row-spacing">3</property>
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label847718">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">QIF Import</property>
+            <property name="label" translatable="1">QIF Import</property>
             <style>
-              <class name="gnc-class-strong"/>
+              <class name="gnc-class-strong" />
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.qif/show-doc">
-            <property name="label" translatable="yes">_Show documentation</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+            <property name="label" translatable="1">_Show documentation</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">Show some documentation-only pages in QIF Import assistant.</property>
-            <property name="tooltip-text" translatable="yes">Show some documentation-only pages in QIF Import assistant.</property>
+            <property name="tooltip-text" translatable="1">Show some documentation-only pages in QIF Import assistant.</property>
             <property name="halign">start</property>
-            <property name="resize-mode">immediate</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkRadioButton" id="pref/dialogs.import.qif/default-status-reconciled">
-            <property name="label" translatable="yes">_Reconciled</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+          <object class="GtkCheckButton" id="pref/dialogs.import.qif/default-status-reconciled">
+            <property name="label" translatable="1">_Reconciled</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">When the status is not specified in a QIF file, the transactions are marked as reconciled.</property>
-            <property name="tooltip-text" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as reconciled.</property>
+            <property name="tooltip-text" translatable="1">When the status is not specified in a QIF file, the transactions are marked as reconciled.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="active">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
+            <property name="active">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">5</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkRadioButton" id="pref/dialogs.import.qif/default-status-cleared">
-            <property name="label" translatable="yes">_Cleared</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="has-tooltip">True</property>
+          <object class="GtkCheckButton" id="pref/dialogs.import.qif/default-status-cleared">
+            <property name="label" translatable="1">_Cleared</property>
+            <property name="focusable">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">When the status is not specified in a QIF file, the transactions are marked as cleared.</property>
-            <property name="tooltip-text" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as cleared.</property>
+            <property name="tooltip-text" translatable="1">When the status is not specified in a QIF file, the transactions are marked as cleared.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
             <property name="group">pref/dialogs.import.qif/default-status-reconciled</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkRadioButton" id="pref/dialogs.import.qif/default-status-notcleared">
-            <property name="label" translatable="yes">_Not cleared</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="has-tooltip">True</property>
+          <object class="GtkCheckButton" id="pref/dialogs.import.qif/default-status-notcleared">
+            <property name="label" translatable="1">_Not cleared</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="has-tooltip">1</property>
             <property name="tooltip-markup">When the status is not specified in a QIF file, the transactions are marked as not cleared.</property>
-            <property name="tooltip-text" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as not cleared.</property>
+            <property name="tooltip-text" translatable="1">When the status is not specified in a QIF file, the transactions are marked as not cleared.</property>
             <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="use-underline">1</property>
             <property name="group">pref/dialogs.import.qif/default-status-reconciled</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="qif_default_transaction_status">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Default transaction status (overridden by the status given by the QIF file)</property>
+            <property name="label" translatable="1">Default transaction status (overridden by the status given by the QIF file)</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+              <property name="column-span">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-            <property name="width">2</property>
-          </packing>
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
         <child>
-          <placeholder/>
+          <placeholder />
         </child>
       </object>
-    </child>
+    </property>
   </object>
-  <object class="GtkDialog" id="qif_import_account_picker_dialog">
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">Select Account</property>
+  <object class="GtkWindow" id="qif_import_account_picker_dialog">
+    <property name="title" translatable="1">Select Account</property>
     <property name="default-width">300</property>
     <property name="default-height">400</property>
-    <property name="type-hint">dialog</property>
-    <child internal-child="vbox">
+    <property name="child">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="newbutton">
-                <property name="label" translatable="yes">New Account</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
         <child>
           <object class="GtkBox" id="vbox2">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="vexpand">1</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">_Select or add a GnuCash account:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">account_tree</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="1">_Select or add a GnuCash account:</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">account_tree_scroller</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">5</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow24">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="account_tree">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                    </child>
-                  </object>
-                </child>
+              <object class="GtkScrolledWindow" id="account_tree_scroller">
+                <property name="vexpand">1</property>
+                <property name="focusable">1</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="placeholder_warning_hbox">
-                <property name="can-focus">False</property>
+                <property name="visible">0</property>
                 <property name="margin-start">6</property>
                 <property name="margin-end">6</property>
                 <property name="margin-top">6</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkImage" id="placeholder_warning_image">
-                    <property name="can-focus">False</property>
+                    <property name="visible">1</property>
                     <property name="halign">start</property>
                     <property name="icon-name">dialog-warning</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="placeholder_warning_label">
-                    <property name="can-focus">False</property>
+                    <property name="visible">1</property>
                     <property name="halign">start</property>
-                    <property name="wrap">True</property>
+                    <property name="wrap">1</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area1">
+            <property name="spacing">6</property>
+            <property name="halign">end</property>
+        <child>
+          <object class="GtkButton" id="newbutton">
+            <property name="label" translatable="1">New Account</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="use-underline">1</property>
+          </object>
+
+        </child>
+        <child>
+          <object class="GtkButton" id="cancelbutton">
+            <property name="label" translatable="1">_Cancel</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="use-underline">1</property>
+          </object>
+
+        </child>
+        <child>
+          <object class="GtkButton" id="okbutton">
+            <property name="label" translatable="1">_OK</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="use-underline">1</property>
+          </object>
+
+        </child>
+          </object>
         </child>
       </object>
-    </child>
-    <action-widgets>
-      <action-widget response="1">newbutton</action-widget>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
+    </property>
   </object>
 </interface>

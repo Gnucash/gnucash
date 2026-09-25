@@ -25,47 +25,59 @@
 #define _DIALOG_DATE_CLOSE_H
 
 #include "Account.h"
+#include <gio/gio.h>
+#include <gtk/gtk.h>
 #include "qof.h"
 #include "gncBillTerm.h"
 
-gboolean
-gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
-                                const char *label_message,
-                                gboolean ok_is_default,
-                                /* Returned data ... */
-                                time64 *date);
+void
+gnc_dialog_date_close_parented_async (GtkWidget *parent, const char *message,
+                                      const char *label_message,
+                                      gboolean ok_is_default, time64 date,
+                                      GCancellable *cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer user_data);
 
+gboolean
+gnc_dialog_date_close_parented_finish (GAsyncResult *result, time64 *date,
+                                       GError **error);
 
 /*
- * Note that the dialog will "own" (and free) the acct_types list.
- * it should be a list of GNCAccountTypes.  If memo is non-NULL,
- * it will g_malloc() a string.  The caller should g_free() it.
- * The value of *acct will be used as preselection of the account
- * selection widget.
+ * The dialog takes ownership of acct_types and copies acct_commodities.
+ * acct_types should be a list of GNCAccountTypes. The account is used as
+ * the initial selection. The dates/account/question finish function returns
+ * a newly allocated memo string when requested; the caller must free it.
  */
 
-gboolean
-gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
-        const char *ddue_label_message,
-        const char *post_label_message,
-        const char *acct_label_message,
-        const char *question_check_message,
-        gboolean ok_is_default,
-        gboolean set_default_acct,
-        GList * acct_types, GList * acct_commodities,
-        QofBook *book, GncBillTerm *terms,
-        /* Returned Data... */
-        time64 *ddue, time64 *post,
-        char **memo, Account **acct, gboolean *answer);
-
+void
+gnc_dialog_dates_acct_question_parented_async (
+    GtkWidget *parent, const char *message, const char *ddue_label_message,
+    const char *post_label_message, const char *acct_label_message,
+    const char *question_check_message, gboolean ok_is_default,
+    gboolean set_default_acct, GList *acct_types, GList *acct_commodities,
+    QofBook *book, GncBillTerm *terms, time64 ddue, time64 post,
+    const char *memo, Account *acct, gboolean answer,
+    GCancellable *cancellable, GAsyncReadyCallback callback,
+    gpointer user_data);
 
 gboolean
-gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
-                               const char *date_label_message,
-                               const char *acct_label_message,
-                               gboolean ok_is_default,
-                               GList * acct_types, QofBook *book,
-                               /* Returned Data... */
-                               time64 *date, Account **acct);
+gnc_dialog_dates_acct_question_parented_finish (
+    GAsyncResult *result, time64 *ddue, time64 *post, char **memo,
+    Account **acct, gboolean *answer, GError **error);
+
+void
+gnc_dialog_date_acct_parented_async (GtkWidget *parent, const char *message,
+                                     const char *date_label_message,
+                                     const char *acct_label_message,
+                                     gboolean ok_is_default,
+                                     GList *acct_types, QofBook *book,
+                                     time64 date, Account *acct,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data);
+
+gboolean
+gnc_dialog_date_acct_parented_finish (GAsyncResult *result, time64 *date,
+                                      Account **acct, GError **error);
 
 #endif /* _DIALOG_DATE_CLOSE_H */

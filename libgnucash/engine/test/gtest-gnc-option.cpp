@@ -596,6 +596,15 @@ TEST_F(GncOptionAccountTest, test_option_no_value_constructor)
     EXPECT_TRUE(option.get_default_value().empty());
 }
 
+TEST_F(GncOptionAccountTest, test_option_rejects_missing_account)
+{
+    GncOptionAccountList missing{guid_new_return()};
+    GncOptionAccountListValue option{"foo", "bar", "baz", "Bogus Option",
+                                     GncOptionUIType::ACCOUNT_LIST};
+
+    EXPECT_FALSE(option.validate(missing));
+}
+
 TEST_F(GncOptionAccountTest, test_option_value_constructor)
 {
     GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};

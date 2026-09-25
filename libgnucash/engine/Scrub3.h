@@ -33,6 +33,11 @@
 #define XACC_SCRUB3_H
 
 #include "gnc-engine.h"
+#include "Scrub.h"
+
+typedef struct GncSplitAssignPlan GncSplitAssignPlan;
+typedef struct GncLotScrubPlan GncLotScrubPlan;
+typedef struct GncAccountLotsPlan GncAccountLotsPlan;
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +62,8 @@ extern "C" {
  *    any splits were deleted.
  */
 gboolean xaccScrubLot (GNCLot *lot);
+gboolean xaccScrubLotWithContext (GNCLot *lot,
+                                  GncScrubContext *context);
 
 /** The xaccAccountScrubLots() routine makes sure that every split
  *    in the account is assigned to a lot, and that then, every
@@ -72,6 +79,72 @@ gboolean xaccScrubLot (GNCLot *lot);
  */
 void xaccAccountScrubLots (Account *acc);
 void xaccAccountTreeScrubLots (Account *acc);
+void xaccAccountScrubLotsWithContext (Account *acc,
+                                      GncScrubContext *context);
+void xaccAccountTreeScrubLotsWithContext (Account *acc,
+                                          GncScrubContext *context);
+
+typedef enum
+{
+    GNC_SPLIT_ASSIGN_PLAN_RUNNING,
+    GNC_SPLIT_ASSIGN_PLAN_DONE,
+    GNC_SPLIT_ASSIGN_PLAN_CANCELLED,
+    GNC_SPLIT_ASSIGN_PLAN_STALE,
+    GNC_SPLIT_ASSIGN_PLAN_FAILED,
+} GncSplitAssignPlanState;
+
+/** Assign one split (and any generated remainder) without a policy full-scan.
+ * Open-lot selection is a bounded best-candidate collection over raw lists. */
+GncSplitAssignPlan *gnc_split_assign_plan_begin (Split *split,
+                                                 GncScrubContext *context);
+GncSplitAssignPlanState gnc_split_assign_plan_step (
+    GncSplitAssignPlan *plan, guint max_work);
+GncSplitAssignPlanState gnc_split_assign_plan_get_state (
+    const GncSplitAssignPlan *plan);
+void gnc_split_assign_plan_cancel (GncSplitAssignPlan *plan);
+void gnc_split_assign_plan_free (GncSplitAssignPlan *plan);
+
+gboolean gnc_lot_scrub_plan_get_splits_deleted (
+    const GncLotScrubPlan *plan);
+typedef enum
+{
+    GNC_LOT_SCRUB_PLAN_RUNNING,
+    GNC_LOT_SCRUB_PLAN_DONE,
+    GNC_LOT_SCRUB_PLAN_CANCELLED,
+    GNC_LOT_SCRUB_PLAN_STALE,
+    GNC_LOT_SCRUB_PLAN_FAILED,
+} GncLotScrubPlanState;
+
+/** Run strict merge, rethin, policy fill, capital gains, and final double
+ * balance as individually bounded scans/mutations on one non-business lot. */
+GncLotScrubPlan *gnc_lot_scrub_plan_begin (GNCLot *lot,
+                                           GncScrubContext *context);
+GncLotScrubPlanState gnc_lot_scrub_plan_step (GncLotScrubPlan *plan,
+                                               guint max_work);
+GncLotScrubPlanState gnc_lot_scrub_plan_get_state (
+    const GncLotScrubPlan *plan);
+void gnc_lot_scrub_plan_cancel (GncLotScrubPlan *plan);
+void gnc_lot_scrub_plan_free (GncLotScrubPlan *plan);
+
+typedef enum
+{
+    GNC_ACCOUNT_LOTS_PLAN_RUNNING,
+    GNC_ACCOUNT_LOTS_PLAN_DONE,
+    GNC_ACCOUNT_LOTS_PLAN_CANCELLED,
+    GNC_ACCOUNT_LOTS_PLAN_STALE,
+    GNC_ACCOUNT_LOTS_PLAN_FAILED,
+} GncAccountLotsPlanState;
+
+/** Sequence bounded split assignment and lot scrub jobs over one account or
+ * a breadth-first account tree. AP/AR accounts remain in the business path. */
+GncAccountLotsPlan *gnc_account_lots_plan_begin (Account *account,
+                                                 gboolean descendants,
+                                                 GncScrubContext *context);
+GncAccountLotsPlanState gnc_account_lots_plan_step (
+    GncAccountLotsPlan *plan, guint max_work);
+guint gnc_account_lots_plan_get_completed (const GncAccountLotsPlan *plan);
+void gnc_account_lots_plan_cancel (GncAccountLotsPlan *plan);
+void gnc_account_lots_plan_free (GncAccountLotsPlan *plan);
 
 /** @} */
 

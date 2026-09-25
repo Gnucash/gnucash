@@ -1,8 +1,4 @@
-/********************************************************************
- * gnc-cell-renderer-label.h -- A GtkCellRendererText subclass that
- * shows a selectable (but not editable) GtkLabel when activated,
- * allowing the user to select and copy cell text via Ctrl+C.
- *
+/*
  * Copyright (C) 2026 GnuCash contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -23,13 +19,9 @@
 
 #ifndef __GNC_CELL_RENDERER_LABEL_H__
 #define __GNC_CELL_RENDERER_LABEL_H__
-
 #include <gtk/gtk.h>
-
-#define GNC_TYPE_CELL_RENDERER_LABEL (gnc_cell_renderer_label_get_type ())
-G_DECLARE_FINAL_TYPE (GncCellRendererLabel, gnc_cell_renderer_label,
-                      GNC, CELL_RENDERER_LABEL, GtkCellRendererText)
-
-GtkCellRenderer *gnc_cell_renderer_label_new (void);
-
-#endif /* __GNC_CELL_RENDERER_LABEL_H__ */
+G_BEGIN_DECLS
+/* GTK4 list-item factory used by views that need selectable text. */
+GtkListItemFactory *gnc_cell_renderer_label_new (void);
+G_END_DECLS
+#endif

@@ -44,7 +44,7 @@ typedef struct _GNCQueryViewClass GNCQueryViewClass;
 
 struct _GNCQueryView
 {
-    GtkTreeView qview;
+    GtkBox parent_instance;
 
     /* Query information */
     Query      *query;
@@ -65,11 +65,15 @@ struct _GNCQueryView
     /* Sorting info */
     gint        sort_column;
     gboolean    increasing;
+
+    /* The last boolean-cell interaction. The signal still carries the
+     * requested state; subclasses use this stable item identity. */
+    gpointer    toggled_entry;
 };
 
 struct _GNCQueryViewClass
 {
-    GtkTreeViewClass view_class;
+    GtkBoxClass parent_class;
 
     /* This signal is emitted when a toggle happens, the pointer has
        an integer value for the active setting of the toggle */
@@ -126,6 +130,35 @@ void gnc_query_scroll_to_selection (GNCQueryView *qview);
 void gnc_query_force_scroll_to_selection (GNCQueryView *qview);
 
 void gnc_query_use_scroll_to_selection (GNCQueryView *qview, gboolean scroll);
+
+/* GTK4 selection and navigation helpers for direct consumers. */
+void gnc_query_view_set_selection_mode (GNCQueryView *qview,
+                                        GtkSelectionMode mode);
+void gnc_query_view_select_first (GNCQueryView *qview);
+void gnc_query_view_grab_focus (GNCQueryView *qview);
+void gnc_query_view_select_entry (GNCQueryView *qview, gpointer entry,
+                                  gboolean exclusive);
+gboolean gnc_query_view_select_at_point (GNCQueryView *qview,
+                                         double x, double y);
+gpointer gnc_query_view_get_adjacent_entry (GNCQueryView *qview,
+                                            gpointer entry,
+                                            gboolean previous);
+GList *gnc_query_view_get_entry_list (GNCQueryView *qview);
+
+/* Reconciliation uses this for its derived Reconciled column. The compare
+ * result is ordered in the active query direction. */
+typedef gint (*GncQueryViewCompareFunc) (gpointer first, gpointer second,
+                                         gpointer user_data);
+void gnc_query_view_set_custom_sort_func (GNCQueryView *qview,
+                                          GncQueryViewCompareFunc compare,
+                                          gpointer user_data);
+
+void gnc_query_view_set_column_ellipsize (GNCQueryView *qview, gint column,
+                                          PangoEllipsizeMode mode,
+                                          gboolean show_tooltip);
+void gnc_query_view_add_column_padding (GNCQueryView *qview, gint column,
+                                        gint xpadding);
+gint gnc_query_view_get_column_width (GNCQueryView *qview, gint column);
 
 #ifdef __cplusplus
 }

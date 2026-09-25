@@ -196,50 +196,50 @@ static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GtkComboBox *combo;
+    GtkDropDown *drop_down;
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, (fi->is_debcred ?
+    drop_down = GTK_DROP_DOWN(gnc_search_drop_down_new());
+    gnc_search_drop_down_add(drop_down, (fi->is_debcred ?
                                      _("less than") : _("is less than")),
                              QOF_COMPARE_LT);
-    gnc_combo_box_search_add(combo, (fi->is_debcred ?
+    gnc_search_drop_down_add(drop_down, (fi->is_debcred ?
                                      _("less than or equal to") :
                                      _("is less than or equal to")),
                              QOF_COMPARE_LTE);
-    gnc_combo_box_search_add(combo, (fi->is_debcred ?
+    gnc_search_drop_down_add(drop_down, (fi->is_debcred ?
                                      _("equal to") : _("equals")),
                              QOF_COMPARE_EQUAL);
-    gnc_combo_box_search_add(combo, (fi->is_debcred ?
+    gnc_search_drop_down_add(drop_down, (fi->is_debcred ?
                                      _("not equal to") : _("does not equal")),
                              QOF_COMPARE_NEQ);
-    gnc_combo_box_search_add(combo, (fi->is_debcred ?
+    gnc_search_drop_down_add(drop_down, (fi->is_debcred ?
                                      _("greater than") : _("is greater than")),
                              QOF_COMPARE_GT);
-    gnc_combo_box_search_add(combo, (fi->is_debcred ?
+    gnc_search_drop_down_add(drop_down, (fi->is_debcred ?
                                      _("greater than or equal to") :
                                      _("is greater than or equal to")),
                              QOF_COMPARE_GTE);
 
-    gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_COMPARE_LT);
+    gnc_search_drop_down_changed(drop_down, &fi->how);
+    gnc_search_drop_down_set_active(drop_down, fi->how ? fi->how : QOF_COMPARE_LT);
 
-    return GTK_WIDGET(combo);
+    return GTK_WIDGET(drop_down);
 }
 
 static GtkWidget *
 make_option_menu (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GtkComboBox *combo;
+    GtkDropDown *drop_down;
 
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("has credits or debits"), QOF_NUMERIC_MATCH_ANY);
-    gnc_combo_box_search_add(combo, _("has debits"), QOF_NUMERIC_MATCH_DEBIT);
-    gnc_combo_box_search_add(combo, _("has credits"), QOF_NUMERIC_MATCH_CREDIT);
-    gnc_combo_box_search_changed(combo, &fi->option);
-    gnc_combo_box_search_set_active(combo, fi->option ? fi->option : QOF_NUMERIC_MATCH_ANY);
+    drop_down = GTK_DROP_DOWN(gnc_search_drop_down_new());
+    gnc_search_drop_down_add(drop_down, _("has credits or debits"), QOF_NUMERIC_MATCH_ANY);
+    gnc_search_drop_down_add(drop_down, _("has debits"), QOF_NUMERIC_MATCH_DEBIT);
+    gnc_search_drop_down_add(drop_down, _("has credits"), QOF_NUMERIC_MATCH_CREDIT);
+    gnc_search_drop_down_changed(drop_down, &fi->option);
+    gnc_search_drop_down_set_active(drop_down, fi->option ? fi->option : QOF_NUMERIC_MATCH_ANY);
 
-    return GTK_WIDGET(combo);
+    return GTK_WIDGET(drop_down);
 }
 
 static void
@@ -282,17 +282,17 @@ gncs_get_widget (GNCSearchCoreType *fe)
     if (fi->is_debcred)
     {
         menu = make_option_menu (fe);
-        gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
     }
 
     menu = make_how_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the entry window */
     entry = gnc_amount_edit_new ();
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     fi->gae = GNC_AMOUNT_EDIT (entry);
     fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
 

@@ -28,7 +28,7 @@
 /** @addtogroup GuiTreeModel GnuCash Tree Model
     @{ */
 /** @file gnc-tree-model.h
-    @brief GtkTreeModel implementation for a generic gnucash tree.
+    @brief Base GObject implementation for generic GnuCash tree data.
     @author David Hampton <hampton@employees.org>
 */
 

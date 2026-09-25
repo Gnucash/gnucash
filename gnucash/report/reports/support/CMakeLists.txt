@@ -5,7 +5,7 @@ set(stylesheets_DATA
 )
 
 install(FILES ${stylesheets_DATA}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/gnucash/reports/stylesheets)
+        DESTINATION share/guile/site/${GUILE_EFFECTIVE_VERSION}/gnucash/reports/stylesheets)
 
 set(templates_DATA
   taxinvoice.eguile.scm
@@ -14,7 +14,7 @@ set(templates_DATA
 )
 
 install(FILES ${templates_DATA}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/gnucash/reports/templates)
+        DESTINATION share/guile/site/${GUILE_EFFECTIVE_VERSION}/gnucash/reports/templates)
 
 set(support_EXTRA_DIST
   README

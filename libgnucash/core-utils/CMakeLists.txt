@@ -45,9 +45,7 @@ target_include_directories(gnc-core-utils
         ${CMAKE_SOURCE_DIR}/common
         ${CMAKE_BINARY_DIR}/common
         ${CMAKE_CURRENT_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE
-        ${GTK_MAC_INCLUDE_DIRS})
+        ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(gnc-core-utils
     PUBLIC
@@ -56,19 +54,17 @@ target_link_libraries(gnc-core-utils
     PRIVATE
         ${Boost_LIBRARIES}
         ${GOBJECT_LDFLAGS}
-        ${GTK_MAC_LDFLAGS}
         ${ICU_LIBRARIES}
         "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")
 
 target_compile_definitions(gnc-core-utils
     PRIVATE
         G_LOG_DOMAIN=\"gnc.core-utils\"
-        $<$<BOOL:${BUILDING_FROM_VCS}>:GNC_VCS=\"git\">
-        ${GTK_MAC_CFLAGS_OTHER})
+        $<$<BOOL:${BUILDING_FROM_VCS}>:GNC_VCS=\"git\">)
 
-target_compile_options(gnc-core-utils
-    PRIVATE
-        $<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_COMPILE_FLAGS}>)
+if (MAC_INTEGRATION)
+  target_compile_options(gnc-core-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+endif()
 
 install(TARGETS gnc-core-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -113,6 +109,7 @@ if (GENERATE_VCS_INFO)
                                -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
                                -D SRC_DIR=${CMAKE_SOURCE_DIR}
                                -D SHELL="${SHELL}"
+                               -D GIT_EXECUTABLE="${GIT_EXECUTABLE}"
                                -P ${CMAKE_SOURCE_DIR}/cmake/git2version-info.cmake)
   else()
     add_custom_target(gnc-vcs-info ALL

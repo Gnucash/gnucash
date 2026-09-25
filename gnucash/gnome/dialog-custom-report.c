@@ -5,20 +5,8 @@
  *                                                                        *
  * This program is free software; you can redistribute it and/or          *
  * modify it under the terms of the GNU General Public License as         *
- * published by the Free Software Foundation; either version 2 of         *
- * the License, or (at your option) any later version.                    *
- *                                                                        *
- * This program is distributed in the hope that it will be useful,        *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- * GNU General Public License for more details.                           *
- *                                                                        *
- * You should have received a copy of the GNU General Public License      *
- * along with this program; if not, contact:                              *
- *                                                                        *
- * Free Software Foundation           Voice:  +1-617-542-5942             *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652             *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                         *
+ * published by the Free Software Foundation; either version 2 of the     *
+ * License, or (at your option) any later version.                        *
 \*************************************************************************/
 
 #include <config.h>
@@ -32,656 +20,917 @@
 #include "dialog-custom-report.h"
 #include "dialog-utils.h"
 #include "gnc-main-window.h"
+#include "gnc-gtk-utils.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-report.h"
 #include "gnc-plugin-page-report.h"
 
 #define GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS "dialogs.report-saved-configs"
+#define CUSTOM_REPORT_DIALOG_DATA "gnc-custom-report-dialog"
+#define CUSTOM_REPORT_ACTION_DATA "gnc-custom-report-action"
+#define CUSTOM_REPORT_NAME_DATA "gnc-custom-report-name-request"
+#define CUSTOM_REPORT_DELETE_DATA "gnc-custom-report-delete-request"
 
-/* convenience for accessing columns in the GtkListStore that holds
-   the reports */
-enum
+typedef struct _CustomReportRow CustomReportRow;
+typedef struct _CustomReportRowClass CustomReportRowClass;
+typedef struct _CustomReportDialog CustomReportDialog;
+typedef struct _CustomReportNameRequest CustomReportNameRequest;
+typedef struct _CustomReportDeleteRequest CustomReportDeleteRequest;
+
+typedef enum
 {
-    COL_NAME = 0,
-    COL_NUM,
-    NUM_COLS
+    CUSTOM_REPORT_RUN,
+    CUSTOM_REPORT_EDIT,
+    CUSTOM_REPORT_DELETE
+} CustomReportAction;
+
+struct _CustomReportRow
+{
+    GObject parent_instance;
+    GncGUID guid;
+    gchar *name;
 };
 
-enum
+struct _CustomReportRowClass
 {
-    VIEW_COL_NAME = 0,
-    VIEW_COL_RUN,
-    VIEW_COL_EDIT,
-    VIEW_COL_DELETE,
-    NUM_VIEW_COLS
+    GObjectClass parent_class;
 };
 
-/* all the pertinent stuff needed to pass around */
-typedef struct _CustomReportDialog
+struct _CustomReportDialog
 {
-    /* dialog */
-    GtkWidget *dialog;
-    GtkWidget *reportview;
-    GncMainWindow *window;
-    GtkTreeViewColumn *namecol;
-    GtkCellRenderer *namerenderer;
-    GtkTreeViewColumn *runcol;
-    GtkTreeViewColumn *editcol;
-    GtkTreeViewColumn *delcol;
-    GtkTreeViewColumn *dummycol;
+    GtkWindow *window;
+    GtkColumnView *view;
+    GtkWidget *scroller;
+    GtkWidget *empty_label;
+    GtkLabel *status;
+    GListStore *rows;
+    GtkSortListModel *sorted_rows;
+    GtkSingleSelection *selection;
+    GWeakRef parent;
+    gulong parent_destroy_id;
+    gboolean closing;
+};
 
-    /* data */
-    SCM reportlist;
-
-} CustomReportDialog;
-
-void custom_report_dialog_destroy_cb (GtkWidget* widget, gpointer data);
-void custom_report_dialog_close_cb(GtkWidget* widget, gpointer data);
-void custom_report_help_cb(GtkWidget* widget, gpointer data);
-void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
-void custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
-        GtkTreeViewColumn *column, gpointer data);
-gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data);
-void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data);
-gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
-                                         gint        x,
-                                         gint        y,
-                                         gboolean    keyboard_mode,
-                                         GtkTooltip *tooltip,
-                                         gpointer    data);
-
-static gboolean
-tree_model_free (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-                 gpointer data)
+struct _CustomReportNameRequest
 {
-    GncGUID *guid;
-    gtk_tree_model_get (model, iter, COL_NUM, &guid, -1);
-    guid_free (guid);
-    return FALSE;
+    GtkWindow *window;
+    GtkEntry *entry;
+    GtkLabel *feedback;
+    GWeakRef parent;
+    GncGUID guid;
+    gulong parent_destroy_id;
+    gboolean completed;
+};
+
+struct _CustomReportDeleteRequest
+{
+    GtkWindow *window;
+    GWeakRef parent;
+    GncGUID guid;
+    gulong parent_destroy_id;
+    gboolean completed;
+};
+
+typedef struct
+{
+    CustomReportDialog *crd;
+    CustomReportAction action;
+} CustomReportActionFactory;
+
+typedef struct
+{
+    CustomReportDialog *crd;
+    GncGUID guid;
+    guint position;
+    CustomReportAction action;
+} CustomReportActionBinding;
+
+GType custom_report_row_get_type (void);
+
+G_DEFINE_FINAL_TYPE (CustomReportRow, custom_report_row, G_TYPE_OBJECT)
+
+static void custom_report_refresh (CustomReportDialog *crd,
+                                   const GncGUID *selected_guid);
+static void custom_report_close (CustomReportDialog *crd);
+static void custom_report_run_guid (CustomReportDialog *crd, const GncGUID *guid);
+static void custom_report_edit_guid (CustomReportDialog *crd, const GncGUID *guid);
+static void custom_report_delete_guid (CustomReportDialog *crd, const GncGUID *guid);
+
+static void
+custom_report_row_finalize (GObject *object)
+{
+    CustomReportRow *row = (CustomReportRow *)object;
+    g_free (row->name);
+    G_OBJECT_CLASS (custom_report_row_parent_class)->finalize (object);
 }
 
 static void
-empty_tree_model (GtkTreeModel *model)
+custom_report_row_class_init (CustomReportRowClass *klass)
 {
-    gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)tree_model_free, NULL);
-    gtk_list_store_clear (GTK_LIST_STORE (model));
+    G_OBJECT_CLASS (klass)->finalize = custom_report_row_finalize;
 }
 
-void
-custom_report_dialog_destroy_cb (GtkWidget* widget, gpointer data)
+static void
+custom_report_row_init (CustomReportRow *row)
+{
+    (void)row;
+}
+
+static CustomReportRow *
+custom_report_row_new (const GncGUID *guid, const gchar *name)
+{
+    CustomReportRow *row = g_object_new (custom_report_row_get_type (), NULL);
+    row->guid = *guid;
+    row->name = g_strdup (name ? name : "");
+    return row;
+}
+
+static GtkOrdering
+custom_report_row_compare (gconstpointer left, gconstpointer right, gpointer data)
+{
+    const CustomReportRow *first = left;
+    const CustomReportRow *second = right;
+    gint result = g_utf8_collate (first->name, second->name);
+    (void)data;
+    return result < 0 ? GTK_ORDERING_SMALLER :
+           result > 0 ? GTK_ORDERING_LARGER : GTK_ORDERING_EQUAL;
+}
+
+static gboolean
+custom_report_guid_to_scm (const GncGUID *guid, SCM *scm_guid)
+{
+    gchar *guid_text;
+    if (!guid || !scm_guid)
+        return FALSE;
+    guid_text = guid_to_string (guid);
+    if (!guid_text)
+        return FALSE;
+    *scm_guid = scm_from_utf8_string (guid_text);
+    g_free (guid_text);
+    return TRUE;
+}
+
+static void
+custom_report_set_status (CustomReportDialog *crd, const gchar *text)
+{
+    gtk_label_set_text (crd->status, text ? text : "");
+    gtk_widget_set_visible (GTK_WIDGET (crd->status), text && *text);
+}
+
+static gboolean
+custom_report_selected_guid (CustomReportDialog *crd, GncGUID *guid)
+{
+    CustomReportRow *row = (CustomReportRow *)gtk_single_selection_get_selected_item (crd->selection);
+    if (!row)
+        return FALSE;
+    *guid = row->guid;
+    return TRUE;
+}
+
+static guint
+custom_report_find_guid (CustomReportDialog *crd, const GncGUID *guid)
+{
+    guint index, count = g_list_model_get_n_items (G_LIST_MODEL (crd->selection));
+    for (index = 0; index < count; index++)
+    {
+        CustomReportRow *row = (CustomReportRow *)g_list_model_get_item (
+            G_LIST_MODEL (crd->selection), index);
+        gboolean match = row && guid_equal (&row->guid, guid);
+        g_clear_object (&row);
+        if (match)
+            return index;
+    }
+    return GTK_INVALID_LIST_POSITION;
+}
+
+static void
+custom_report_select_guid (CustomReportDialog *crd, const GncGUID *guid)
+{
+    guint position = custom_report_find_guid (crd, guid);
+    if (position == GTK_INVALID_LIST_POSITION)
+        return;
+    gtk_single_selection_set_selected (crd->selection, position);
+    gtk_column_view_scroll_to (crd->view, position, NULL, GTK_LIST_SCROLL_FOCUS, NULL);
+}
+
+static CustomReportDialog *
+custom_report_from_window (GtkWindow *window)
+{
+    return window ? g_object_get_data (G_OBJECT (window), CUSTOM_REPORT_DIALOG_DATA) : NULL;
+}
+
+static void
+custom_report_update_empty_state (CustomReportDialog *crd)
+{
+    gboolean populated = g_list_model_get_n_items (G_LIST_MODEL (crd->rows)) != 0;
+    gtk_widget_set_visible (crd->scroller, populated);
+    gtk_widget_set_visible (crd->empty_label, !populated);
+}
+
+static void
+custom_report_refresh (CustomReportDialog *crd, const GncGUID *selected_guid)
+{
+    SCM get_guids = scm_c_eval_string ("gnc:custom-report-template-guids");
+    SCM get_name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
+    SCM guid_list = scm_call_0 (get_guids);
+    GncGUID previous_guid;
+    const GncGUID *to_select = selected_guid;
+
+    if (!to_select && custom_report_selected_guid (crd, &previous_guid))
+        to_select = &previous_guid;
+
+    gtk_single_selection_set_selected (crd->selection, GTK_INVALID_LIST_POSITION);
+    g_list_store_remove_all (crd->rows);
+    while (scm_is_pair (guid_list))
+    {
+        GncGUID guid;
+        gchar *guid_text = scm_to_utf8_string (SCM_CAR (guid_list));
+        gchar *name = gnc_scm_to_utf8_string (scm_call_2 (get_name, SCM_CAR (guid_list), SCM_BOOL_F));
+        if (string_to_guid (guid_text, &guid))
+        {
+            CustomReportRow *row = custom_report_row_new (&guid, name);
+            g_list_store_append (crd->rows, row);
+            g_object_unref (row);
+        }
+        g_free (name);
+        g_free (guid_text);
+        guid_list = SCM_CDR (guid_list);
+    }
+    custom_report_update_empty_state (crd);
+    if (to_select)
+        custom_report_select_guid (crd, to_select);
+}
+
+static void
+custom_report_free (gpointer data)
 {
     CustomReportDialog *crd = data;
-    empty_tree_model (gtk_tree_view_get_model (GTK_TREE_VIEW(crd->reportview)));
+    GtkWindow *parent = g_weak_ref_get (&crd->parent);
+    if (parent && crd->parent_destroy_id)
+        g_signal_handler_disconnect (parent, crd->parent_destroy_id);
+    g_clear_object (&parent);
+    g_clear_object (&crd->selection);
+    g_clear_object (&crd->sorted_rows);
+    g_clear_object (&crd->rows);
+    g_weak_ref_clear (&crd->parent);
     g_free (crd);
 }
 
-void
-custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
-{
-    CustomReportDialog *crd = data;
-    gnc_save_window_size(GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
-
-    gtk_widget_destroy(crd->dialog);
-}
-
-void
-custom_report_help_cb (GtkWidget *widget, gpointer data)
-{
-    CustomReportDialog *crd = data;
-    gnc_gnome_help (GTK_WINDOW(crd->dialog), DF_MANUAL, DL_USAGE_CUSTOMREP);
-}
-
-void
-close_custom_report_clicked_cb(GtkWidget* widget, gpointer data)
-{
-    CustomReportDialog *crd = data;
-    custom_report_dialog_close_cb(NULL, crd);
-}
-
-/********************************************************************
- * update_report_list
- *
- * this procedure does the real work of displaying a sorted list of
- * available custom reports
- ********************************************************************/
 static void
-update_report_list(GtkListStore *store, CustomReportDialog *crd)
+custom_report_parent_destroyed (GtkWidget *parent, gpointer data)
 {
-    SCM get_rpt_guids = scm_c_eval_string("gnc:custom-report-template-guids");
-    SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
-    SCM rpt_guids;
-    GtkTreeIter iter;
-    GtkTreeModel *model = GTK_TREE_MODEL (store);
-
-    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), COL_NAME, GTK_SORT_ASCENDING);
-
-    crd->reportlist = scm_call_0(get_rpt_guids);
-    rpt_guids = crd->reportlist;
-
-    empty_tree_model (model);
-
-    if (scm_is_list(rpt_guids))
-    {
-        /* for all the report guids in the list, store them, with a reference,
-             in the gtkliststore */
-        while ( !scm_is_null(rpt_guids) )
-        {
-            GncGUID *guid = guid_malloc ();
-            gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
-            gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids), SCM_BOOL_F));
-
-            if (string_to_guid (guid_str, guid))
-            {
-                gtk_list_store_append(store, &iter);
-                gtk_list_store_set(store, &iter,
-                                   COL_NAME, name,
-                                   COL_NUM, guid,
-                                   -1);
-            }
-            g_free (name);
-            g_free (guid_str);
-
-            rpt_guids = SCM_CDR(rpt_guids);
-        }
-    }
-}
-
-static GtkTreeModel *
-create_and_fill_report_list(CustomReportDialog *crd)
-{
-    GtkListStore *store;
-
-    store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
-
-    update_report_list(store, crd);
-
-    return GTK_TREE_MODEL (store);
+    CustomReportDialog *crd = data;
+    (void)parent;
+    crd->parent_destroy_id = 0;
+    custom_report_close (crd);
 }
 
 static void
-set_reports_view_and_model(CustomReportDialog *crd)
+custom_report_close (CustomReportDialog *crd)
 {
-    GtkCellRenderer *renderer;
-    GtkTreeModel *model;
-    gint number_of_columns;
-
-    crd->namerenderer = gtk_cell_renderer_text_new();
-    g_signal_connect (G_OBJECT (crd->namerenderer), "edited",
-                      G_CALLBACK (custom_report_name_edited_cb), crd);
-    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-            "Report Name", crd->namerenderer,
-            "text", COL_NAME,
-            NULL);
-    crd->namecol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_NAME);
-    gtk_tree_view_column_set_expand (crd->namecol, TRUE);
-
-    renderer = gtk_cell_renderer_pixbuf_new();
-    g_object_set (G_OBJECT (renderer), "icon-name", "system-run", NULL);
-    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-            "R", renderer,
-            NULL);
-    crd->runcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_RUN);
-
-    renderer = gtk_cell_renderer_pixbuf_new();
-    g_object_set (G_OBJECT (renderer), "icon-name", "accessories-text-editor", NULL);
-    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-            "E", renderer,
-            NULL);
-    crd->editcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_EDIT);
-
-    renderer = gtk_cell_renderer_pixbuf_new();
-    g_object_set (G_OBJECT (renderer), "icon-name", "edit-delete", NULL);
-    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-             "D", renderer,
-             NULL);
-    crd->delcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_DELETE);
-
-    // this is a dummy column which will be set the same width of the vertical scrollbar
-    renderer = gtk_cell_renderer_text_new();
-    number_of_columns = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-             "", renderer,
-             NULL);
-
-    crd->dummycol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), number_of_columns -1);
-
-    model = create_and_fill_report_list(crd);
-
-    gtk_tree_view_set_model (GTK_TREE_VIEW (crd->reportview), model);
-
-    g_object_unref(model);
-}
-
-/**************************************************************
- * custom_report_run_report
- *
- * this procedure sets up and calls the report on the scheme
- * side. This is what makes the report actually run.
- **************************************************************/
-static void
-custom_report_run_report(SCM guid,
-                         CustomReportDialog *crd)
-{
-    SCM make_report = scm_c_eval_string("gnc:make-report");
-    int report_id;
-    GncMainWindow *window = crd->window;
-
-    if (scm_is_null(guid))
+    if (!crd || crd->closing)
         return;
-
-    /* this generates the report */
-    report_id = scm_to_int (scm_call_1(make_report, guid));
-
-    /* do this *before* displaying the report because sometimes that
-         takes a while... */
-    custom_report_dialog_close_cb(NULL, crd);
-
-    /* display the report */
-    gnc_main_window_open_report(report_id, window);
-
-}
-
-/**************************************************************
- * custom_report_run_report
- *
- * this procedure sets up and calls the report on the scheme
- * side. This is what makes the report actually run.
- **************************************************************/
-static void
-custom_report_edit_report_name (SCM guid,
-                                CustomReportDialog *crd,
-                                gchar *new_name)
-{
-    SCM rename_report = scm_c_eval_string("gnc:rename-report");
-    SCM new_name_scm = scm_from_utf8_string(new_name);
-
-    if (scm_is_null(guid) || !new_name || (*new_name == '\0'))
-        return;
-
-    /* rename the report */
-    scm_call_2(rename_report, guid, new_name_scm);
-    update_report_list(GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(crd->reportview))),
-                       crd);
-
-}
-
-/*********************************************************************
- * custom_report_delete
- *
- * this will delete the report, update the reports list and leave the
- * dialog active for additional usage.
- *********************************************************************/
-static void
-custom_report_delete (SCM guid, CustomReportDialog *crd)
-{
-    SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
-    gchar *report_name;
-
-    if (scm_is_null (guid))
-        return;
-
-    report_name = gnc_scm_to_utf8_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
-
-    /* we must confirm the user wants to delete their precious custom report! */
-    if (gnc_verify_dialog( GTK_WINDOW (crd->dialog), FALSE, _("Are you sure you want to delete %s?"), report_name))
-    {
-        SCM del_report = scm_c_eval_string("gnc:delete-report");
-        scm_call_1(del_report, guid);
-        update_report_list(GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(crd->reportview))),
-                           crd);
-    }
-    g_free (report_name);
-}
-
-/********************************************************************
- * get_custom_report_selection
- *
- * this helper function is called to get the selection when the user
- * clicks on "Run" or "Delete". Includes calling a dialog when there
- * is no selection.
- *
- * const gchar* message -- the message to provide user if there is no
- * actual selection found.
- *********************************************************************/
-static SCM
-get_custom_report_selection(CustomReportDialog *crd,
-                            const gchar* message)
-{
-    GtkTreeSelection *sel;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GncGUID *guid;
-    gchar *guid_str;
-    SCM scm_guid;
-
-    sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
-
-    if (!gtk_tree_selection_get_selected(sel, &model, &iter))
-    {
-        /* no selection, notify user */
-        gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s", message);
-        return SCM_EOL;
-    }
-
-    gtk_tree_model_get (model, &iter, COL_NUM, &guid, -1);
-    guid_str = guid_to_string (guid);
-    scm_guid = scm_from_utf8_string (guid_str);
-    g_free (guid_str);
-    return scm_guid;
-}
-
-/**************************************************************
- * custom_report_list_view_row_activated_cb
- *
- * this is the double-click signal. No need to call
- * get_custom_report_selection as the double-click implies the
- * selection.
- **************************************************************/
-void
-custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
-        GtkTreeViewColumn *column, gpointer data)
-{
-    CustomReportDialog *crd = data;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-
-    model = gtk_tree_view_get_model(view);
-
-    if (gtk_tree_model_get_iter(model, &iter, path))
-    {
-        if (column == crd->namecol)
-        {
-            GncGUID *guid;
-            gchar *guid_str;
-
-            gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
-            guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
-            guid_to_string_buff (guid, guid_str);
-
-            custom_report_run_report(scm_from_utf8_string (guid_str), crd);
-            g_free (guid_str);
-        }
-    }
-}
-
-/**************************************************************
- * custom_report_list_view_clicked_cb
- *
- * this callback is called whenever a user clicked somewhere in
- * the treeview widget. If the click was on an edit or delete
- * pictogram, the corresponding action will be executed on the
- * selected row.
- **************************************************************/
-gboolean
-custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data)
-{
-    CustomReportDialog *crd = data;
-    GtkTreePath *path = NULL;
-    GtkTreeViewColumn *column = NULL;
-    gint cellx, celly;
-
-    g_return_val_if_fail ( view != NULL, FALSE );
-
-    if (gtk_tree_view_get_path_at_pos (view, event->x, event->y,
-                                       &path, &column,
-                                       &cellx, &celly))
-    {
-        if (column == crd->runcol)
-        {
-            SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to load."));
-            custom_report_run_report (guid, crd);
-            gtk_tree_path_free (path);
-            return TRUE;
-        }
-        else if (column == crd->editcol)
-        {
-            g_object_set(G_OBJECT(crd->namerenderer), "editable", TRUE, NULL);
-            gtk_tree_view_set_cursor_on_cell (view, path, crd->namecol,
-                                              crd->namerenderer, TRUE);
-            gtk_tree_path_free (path);
-            return TRUE;
-        }
-        else if (column == crd->delcol)
-        {
-            SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to delete."));
-            custom_report_delete (guid, crd);
-            gtk_tree_path_free (path);
-            return TRUE;
-        }
-        gtk_tree_path_free (path);
-    }
-    return FALSE;
-}
-
-void
-custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data)
-{
-    CustomReportDialog *crd = data;
-    SCM guid = get_custom_report_selection(crd, _("Unable to change report configuration name."));
-    SCM unique_name_func = scm_c_eval_string("gnc:report-template-has-unique-name?");
-    SCM new_name_scm = scm_from_utf8_string(new_text);
-
-    g_object_set(G_OBJECT(crd->namerenderer), "editable", FALSE, NULL);
-    if (scm_is_null (guid))
-        return;
-
-    if (scm_is_true (scm_call_2 (unique_name_func, guid, new_name_scm)))
-    {
-        gchar *default_guid = gnc_get_default_invoice_print_report ();
-        gchar *guid_string = scm_to_utf8_string (guid);
-
-        custom_report_edit_report_name (guid, crd, new_text);
-
-        // check to see if default report name has been changed
-        if (g_strcmp0 (default_guid, guid_string) == 0)
-        {
-            QofBook *book = gnc_get_current_book ();
-            gchar *default_name = qof_book_get_default_invoice_report_name (book);
-
-            if (g_strcmp0 (default_name, new_text) != 0)
-                qof_book_set_default_invoice_report (book, default_guid, new_text);
-            g_free (default_name);
-        }
-        g_free (guid_string);
-        g_free (default_guid);
-    }
-    else
-        gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s",
-                          _("A saved report configuration with this name already exists, please choose another name.") );
-}
-
-gboolean
-custom_report_query_tooltip_cb (GtkTreeView  *view,
-                                gint        x,
-                                gint        y,
-                                gboolean    keyboard_mode,
-                                GtkTooltip *tooltip,
-                                gpointer    data)
-{
-    CustomReportDialog *crd = data;
-    GtkTreePath *path = NULL;
-    GtkTreeViewColumn *column = NULL;
-    gint cellx, celly;
-
-    g_return_val_if_fail ( view != NULL, FALSE );
-
-    if (gtk_tree_view_get_path_at_pos (view, x, y,
-                                       &path, &column,
-                                       &cellx, &celly))
-    {
-        if (column != crd->namecol)
-        {
-            gtk_tree_view_set_tooltip_cell (view, tooltip, path, column, NULL);
-            if (column == crd->runcol)
-                gtk_tooltip_set_text (tooltip, _("Load report configuration"));
-            else if (column == crd->editcol)
-                gtk_tooltip_set_text (tooltip, _("Edit report configuration name"));
-            else if (column == crd->delcol)
-                gtk_tooltip_set_text (tooltip, _("Delete report configuration"));
-            gtk_tree_path_free (path);
-            return TRUE;
-        }
-        else
-            gtk_tooltip_set_text (tooltip, NULL);
-        gtk_tree_path_free (path);
-    }
-    return FALSE;
+    crd->closing = TRUE;
+    gnc_save_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, crd->window);
+    gtk_window_destroy (crd->window);
 }
 
 static gboolean
-custom_report_event_cb (GtkWidget *widget, GdkEventKey *event,
-                        gpointer user_data)
+custom_report_close_request (GtkWindow *window, gpointer data)
 {
-    if (event->keyval == GDK_KEY_Escape)
-    {
-        custom_report_dialog_close_cb (widget, user_data);
-        return TRUE;
-     }
-     return FALSE;
+    (void)window;
+    custom_report_close (data);
+    return TRUE;
 }
 
+static void
+custom_report_help (GtkButton *button, gpointer data)
+{
+    CustomReportDialog *crd = data;
+    (void)button;
+    gnc_gnome_help (crd->window, DF_MANUAL, DL_USAGE_CUSTOMREP);
+}
 
-/* Internal function that builds the dialog */
+static void
+custom_report_close_clicked (GtkButton *button, gpointer data)
+{
+    (void)button;
+    custom_report_close (data);
+}
+
+static void
+custom_report_run_guid (CustomReportDialog *crd, const GncGUID *guid)
+{
+    SCM scm_guid, make_report;
+    GtkWindow *parent;
+    gint report_id;
+    if (!custom_report_guid_to_scm (guid, &scm_guid))
+        return;
+    make_report = scm_c_eval_string ("gnc:make-report");
+    report_id = scm_to_int (scm_call_1 (make_report, scm_guid));
+    parent = g_weak_ref_get (&crd->parent);
+    custom_report_close (crd);
+    if (parent)
+    {
+        gnc_main_window_open_report (report_id, GNC_MAIN_WINDOW (parent));
+        g_object_unref (parent);
+    }
+}
+
+static void
+custom_report_run_selected (CustomReportDialog *crd)
+{
+    GncGUID guid;
+    if (!custom_report_selected_guid (crd, &guid))
+    {
+        custom_report_set_status (crd, _("You must select a report configuration to load."));
+        return;
+    }
+    custom_report_set_status (crd, NULL);
+    custom_report_run_guid (crd, &guid);
+}
+
+static void
+custom_report_update_default_name (SCM guid, const gchar *new_name)
+{
+    gchar *default_guid = gnc_get_default_invoice_print_report ();
+    gchar *guid_text = scm_to_utf8_string (guid);
+    if (g_strcmp0 (default_guid, guid_text) == 0)
+    {
+        QofBook *book = gnc_get_current_book ();
+        gchar *default_name = book ? qof_book_get_default_invoice_report_name (book) : NULL;
+        if (book && g_strcmp0 (default_name, new_name) != 0)
+            qof_book_set_default_invoice_report (book, default_guid, new_name);
+        g_free (default_name);
+    }
+    g_free (guid_text);
+    g_free (default_guid);
+}
+
+static void
+custom_report_name_request_free (gpointer data)
+{
+    CustomReportNameRequest *request = data;
+    GtkWindow *parent = g_weak_ref_get (&request->parent);
+    if (parent && request->parent_destroy_id)
+        g_signal_handler_disconnect (parent, request->parent_destroy_id);
+    g_clear_object (&parent);
+    g_weak_ref_clear (&request->parent);
+    g_free (request);
+}
+
+static void
+custom_report_name_finish (CustomReportNameRequest *request)
+{
+    if (request->completed)
+        return;
+    request->completed = TRUE;
+    gtk_window_destroy (request->window);
+}
+
+static void
+custom_report_name_parent_destroyed (GtkWidget *parent, gpointer data)
+{
+    CustomReportNameRequest *request = data;
+    (void)parent;
+    request->parent_destroy_id = 0;
+    custom_report_name_finish (request);
+}
+
+static void
+custom_report_name_save (GtkButton *button, gpointer data)
+{
+    CustomReportNameRequest *request = data;
+    GtkWindow *parent;
+    CustomReportDialog *crd;
+    SCM guid, unique, new_name_scm;
+    const gchar *new_name;
+    (void)button;
+    if (request->completed)
+        return;
+    new_name = gtk_editable_get_text (GTK_EDITABLE (request->entry));
+    if (!new_name || !*new_name)
+    {
+        gtk_label_set_text (request->feedback, _("The report name cannot be empty."));
+        gtk_widget_set_visible (GTK_WIDGET (request->feedback), TRUE);
+        return;
+    }
+    if (!custom_report_guid_to_scm (&request->guid, &guid))
+    {
+        custom_report_name_finish (request);
+        return;
+    }
+    parent = g_weak_ref_get (&request->parent);
+    crd = custom_report_from_window (parent);
+    if (!crd || crd->closing)
+    {
+        g_clear_object (&parent);
+        custom_report_name_finish (request);
+        return;
+    }
+    unique = scm_c_eval_string ("gnc:report-template-has-unique-name?");
+    new_name_scm = scm_from_utf8_string (new_name);
+    if (!scm_is_true (scm_call_2 (unique, guid, new_name_scm)))
+    {
+        gtk_label_set_text (request->feedback,
+                            _("A saved report configuration with this name already exists, please choose another name."));
+        gtk_widget_set_visible (GTK_WIDGET (request->feedback), TRUE);
+        g_object_unref (parent);
+        return;
+    }
+    scm_call_2 (scm_c_eval_string ("gnc:rename-report"), guid, new_name_scm);
+    custom_report_update_default_name (guid, new_name);
+    custom_report_refresh (crd, &request->guid);
+    g_object_unref (parent);
+    custom_report_name_finish (request);
+}
+
+static void
+custom_report_name_cancel (GtkButton *button, gpointer data)
+{
+    (void)button;
+    custom_report_name_finish (data);
+}
+
+static gboolean
+custom_report_name_close_request (GtkWindow *window, gpointer data)
+{
+    (void)window;
+    custom_report_name_finish (data);
+    return TRUE;
+}
+
+static void
+custom_report_edit_guid (CustomReportDialog *crd, const GncGUID *guid)
+{
+    GtkWindow *owner;
+    guint position;
+    CustomReportRow *row;
+    CustomReportNameRequest *request;
+    GtkWidget *content, *label, *actions, *cancel, *save;
+    if (crd->closing)
+        return;
+    owner = GTK_WINDOW (g_object_ref (crd->window));
+    position = custom_report_find_guid (crd, guid);
+    row = position == GTK_INVALID_LIST_POSITION ? NULL :
+          (CustomReportRow *)g_list_model_get_item (G_LIST_MODEL (crd->selection), position);
+    if (!row)
+    {
+        g_object_unref (owner);
+        return;
+    }
+    request = g_new0 (CustomReportNameRequest, 1);
+    request->window = GTK_WINDOW (gtk_window_new ());
+    gnc_window_bind_to_application (request->window);
+    request->guid = *guid;
+    g_weak_ref_init (&request->parent, owner);
+    gtk_window_set_title (request->window, _("Edit Report Configuration Name"));
+    gtk_window_set_modal (request->window, TRUE);
+    gtk_window_set_transient_for (request->window, owner);
+    gtk_window_set_resizable (request->window, FALSE);
+    content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    label = gtk_label_new_with_mnemonic (_("_Name:"));
+    request->entry = GTK_ENTRY (gtk_entry_new ());
+    request->feedback = GTK_LABEL (gtk_label_new (NULL));
+    actions = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    cancel = gtk_button_new_with_mnemonic (_("_Cancel"));
+    save = gtk_button_new_with_mnemonic (_("_Save"));
+    gtk_widget_set_margin_start (content, 18);
+    gtk_widget_set_margin_end (content, 18);
+    gtk_widget_set_margin_top (content, 18);
+    gtk_widget_set_margin_bottom (content, 18);
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (request->entry));
+    gtk_editable_set_text (GTK_EDITABLE (request->entry), row->name);
+    gtk_widget_set_hexpand (GTK_WIDGET (request->entry), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET (request->feedback), FALSE);
+    gtk_label_set_wrap (request->feedback, TRUE);
+    gtk_widget_set_halign (actions, GTK_ALIGN_END);
+    gtk_box_append (GTK_BOX (actions), cancel);
+    gtk_box_append (GTK_BOX (actions), save);
+    gtk_box_append (GTK_BOX (content), label);
+    gtk_box_append (GTK_BOX (content), GTK_WIDGET (request->entry));
+    gtk_box_append (GTK_BOX (content), GTK_WIDGET (request->feedback));
+    gtk_box_append (GTK_BOX (content), actions);
+    gtk_window_set_child (request->window, content);
+    gtk_window_set_default_widget (request->window, save);
+    g_object_set_data_full (G_OBJECT (request->window), CUSTOM_REPORT_NAME_DATA,
+                            request, custom_report_name_request_free);
+    request->parent_destroy_id = g_signal_connect (
+        owner, "destroy", G_CALLBACK (custom_report_name_parent_destroyed), request);
+    g_signal_connect (cancel, "clicked", G_CALLBACK (custom_report_name_cancel), request);
+    g_signal_connect (save, "clicked", G_CALLBACK (custom_report_name_save), request);
+    g_signal_connect (request->window, "close-request",
+                      G_CALLBACK (custom_report_name_close_request), request);
+    gtk_window_present (request->window);
+    gtk_widget_grab_focus (GTK_WIDGET (request->entry));
+    g_object_unref (row);
+    g_object_unref (owner);
+}
+
+static void
+custom_report_edit_selected (CustomReportDialog *crd)
+{
+    GncGUID guid;
+    if (!custom_report_selected_guid (crd, &guid))
+    {
+        custom_report_set_status (crd, _("You must select a report configuration to rename."));
+        return;
+    }
+    custom_report_set_status (crd, NULL);
+    custom_report_edit_guid (crd, &guid);
+}
+
+static void
+custom_report_delete_request_free (gpointer data)
+{
+    CustomReportDeleteRequest *request = data;
+    GtkWindow *parent = g_weak_ref_get (&request->parent);
+    if (parent && request->parent_destroy_id)
+        g_signal_handler_disconnect (parent, request->parent_destroy_id);
+    g_clear_object (&parent);
+    g_weak_ref_clear (&request->parent);
+    g_free (request);
+}
+
+static void
+custom_report_delete_finish (CustomReportDeleteRequest *request, gboolean confirmed)
+{
+    GtkWindow *parent;
+    CustomReportDialog *crd;
+    SCM guid;
+    if (request->completed)
+        return;
+    request->completed = TRUE;
+    parent = g_weak_ref_get (&request->parent);
+    crd = custom_report_from_window (parent);
+    if (confirmed && crd && !crd->closing && custom_report_guid_to_scm (&request->guid, &guid))
+    {
+        scm_call_1 (scm_c_eval_string ("gnc:delete-report"), guid);
+        custom_report_refresh (crd, NULL);
+    }
+    g_clear_object (&parent);
+    gtk_window_destroy (request->window);
+}
+
+static void
+custom_report_delete_parent_destroyed (GtkWidget *parent, gpointer data)
+{
+    CustomReportDeleteRequest *request = data;
+    (void)parent;
+    request->parent_destroy_id = 0;
+    custom_report_delete_finish (request, FALSE);
+}
+
+static void
+custom_report_delete_cancel (GtkButton *button, gpointer data)
+{
+    (void)button;
+    custom_report_delete_finish (data, FALSE);
+}
+
+static void
+custom_report_delete_confirm (GtkButton *button, gpointer data)
+{
+    (void)button;
+    custom_report_delete_finish (data, TRUE);
+}
+
+static gboolean
+custom_report_delete_close_request (GtkWindow *window, gpointer data)
+{
+    (void)window;
+    custom_report_delete_finish (data, FALSE);
+    return TRUE;
+}
+
+static void
+custom_report_delete_guid (CustomReportDialog *crd, const GncGUID *guid)
+{
+    GtkWindow *owner;
+    CustomReportDeleteRequest *request;
+    SCM scm_guid, get_name;
+    gchar *name, *message;
+    GtkWidget *content, *detail, *actions, *cancel, *confirm;
+    if (crd->closing || !custom_report_guid_to_scm (guid, &scm_guid))
+        return;
+    owner = GTK_WINDOW (g_object_ref (crd->window));
+    get_name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
+    name = gnc_scm_to_utf8_string (scm_call_2 (get_name, scm_guid, SCM_BOOL_F));
+    message = g_strdup_printf (_("Are you sure you want to delete %s?"), name);
+    request = g_new0 (CustomReportDeleteRequest, 1);
+    request->window = GTK_WINDOW (gtk_window_new ());
+    gnc_window_bind_to_application (request->window);
+    request->guid = *guid;
+    g_weak_ref_init (&request->parent, owner);
+    gtk_window_set_title (request->window, _("Delete Report Configuration?"));
+    gtk_window_set_modal (request->window, TRUE);
+    gtk_window_set_transient_for (request->window, owner);
+    gtk_window_set_resizable (request->window, FALSE);
+    content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    detail = gtk_label_new (message);
+    actions = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    cancel = gtk_button_new_with_mnemonic (_("_Cancel"));
+    confirm = gtk_button_new_with_mnemonic (_("_Delete"));
+    gtk_widget_set_margin_start (content, 18);
+    gtk_widget_set_margin_end (content, 18);
+    gtk_widget_set_margin_top (content, 18);
+    gtk_widget_set_margin_bottom (content, 18);
+    gtk_label_set_wrap (GTK_LABEL (detail), TRUE);
+    gtk_label_set_xalign (GTK_LABEL (detail), 0.0);
+    gtk_widget_set_halign (actions, GTK_ALIGN_END);
+    gtk_box_append (GTK_BOX (actions), cancel);
+    gtk_box_append (GTK_BOX (actions), confirm);
+    gtk_box_append (GTK_BOX (content), detail);
+    gtk_box_append (GTK_BOX (content), actions);
+    gtk_window_set_child (request->window, content);
+    gtk_window_set_default_widget (request->window, confirm);
+    g_object_set_data_full (G_OBJECT (request->window), CUSTOM_REPORT_DELETE_DATA,
+                            request, custom_report_delete_request_free);
+    request->parent_destroy_id = g_signal_connect (
+        owner, "destroy", G_CALLBACK (custom_report_delete_parent_destroyed), request);
+    g_signal_connect (cancel, "clicked", G_CALLBACK (custom_report_delete_cancel), request);
+    g_signal_connect (confirm, "clicked", G_CALLBACK (custom_report_delete_confirm), request);
+    g_signal_connect (request->window, "close-request",
+                      G_CALLBACK (custom_report_delete_close_request), request);
+    gtk_window_present (request->window);
+    g_free (message);
+    g_free (name);
+    g_object_unref (owner);
+}
+
+static void
+custom_report_delete_selected (CustomReportDialog *crd)
+{
+    GncGUID guid;
+    if (!custom_report_selected_guid (crd, &guid))
+    {
+        custom_report_set_status (crd, _("You must select a report configuration to delete."));
+        return;
+    }
+    custom_report_set_status (crd, NULL);
+    custom_report_delete_guid (crd, &guid);
+}
+
+static void
+custom_report_action_binding_free (gpointer data)
+{
+    g_free (data);
+}
+
+static void
+custom_report_name_setup (GtkListItemFactory *factory, GtkListItem *item, gpointer data)
+{
+    GtkWidget *label = gtk_label_new (NULL);
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child (item, label);
+    (void)factory;
+    (void)data;
+}
+
+static void
+custom_report_name_bind (GtkListItemFactory *factory, GtkListItem *item, gpointer data)
+{
+    CustomReportRow *row = (CustomReportRow *)gtk_list_item_get_item (item);
+    gtk_label_set_text (GTK_LABEL (gtk_list_item_get_child (item)), row ? row->name : "");
+    (void)factory;
+    (void)data;
+}
+
+static void
+custom_report_action_clicked (GtkButton *button, gpointer data)
+{
+    CustomReportActionBinding *binding = g_object_get_data (G_OBJECT (button), CUSTOM_REPORT_ACTION_DATA);
+    (void)data;
+    if (!binding || !binding->crd || binding->crd->closing)
+        return;
+    gtk_single_selection_set_selected (binding->crd->selection, binding->position);
+    switch (binding->action)
+    {
+    case CUSTOM_REPORT_RUN: custom_report_run_guid (binding->crd, &binding->guid); break;
+    case CUSTOM_REPORT_EDIT: custom_report_edit_guid (binding->crd, &binding->guid); break;
+    case CUSTOM_REPORT_DELETE: custom_report_delete_guid (binding->crd, &binding->guid); break;
+    }
+}
+
+static void
+custom_report_action_setup (GtkListItemFactory *factory, GtkListItem *item, gpointer data)
+{
+    CustomReportActionFactory *factory_data = data;
+    GtkWidget *button = gtk_button_new ();
+    const gchar *icon = "edit-delete";
+    const gchar *tooltip = _("Delete report configuration");
+    if (factory_data->action == CUSTOM_REPORT_RUN)
+    {
+        icon = "system-run";
+        tooltip = _("Load report configuration");
+    }
+    else if (factory_data->action == CUSTOM_REPORT_EDIT)
+    {
+        icon = "accessories-text-editor";
+        tooltip = _("Edit report configuration name");
+    }
+    gtk_button_set_icon_name (GTK_BUTTON (button), icon);
+    gtk_widget_set_tooltip_text (button, tooltip);
+    gtk_list_item_set_child (item, button);
+    g_signal_connect (button, "clicked", G_CALLBACK (custom_report_action_clicked), NULL);
+    (void)factory;
+}
+
+static void
+custom_report_action_bind (GtkListItemFactory *factory, GtkListItem *item, gpointer data)
+{
+    CustomReportActionFactory *factory_data = data;
+    CustomReportRow *row = (CustomReportRow *)gtk_list_item_get_item (item);
+    GtkWidget *button = gtk_list_item_get_child (item);
+    CustomReportActionBinding *binding = g_new0 (CustomReportActionBinding, 1);
+    binding->crd = factory_data->crd;
+    binding->action = factory_data->action;
+    binding->position = gtk_list_item_get_position (item);
+    if (row)
+        binding->guid = row->guid;
+    g_object_set_data_full (G_OBJECT (button), CUSTOM_REPORT_ACTION_DATA,
+                            binding, custom_report_action_binding_free);
+    gtk_widget_set_sensitive (button, row != NULL);
+    (void)factory;
+}
+
+static void
+custom_report_action_unbind (GtkListItemFactory *factory, GtkListItem *item, gpointer data)
+{
+    g_object_set_data (G_OBJECT (gtk_list_item_get_child (item)), CUSTOM_REPORT_ACTION_DATA, NULL);
+    (void)factory;
+    (void)data;
+}
+
+static void
+custom_report_add_name_column (CustomReportDialog *crd)
+{
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+    GtkColumnViewColumn *column;
+    g_signal_connect (factory, "setup", G_CALLBACK (custom_report_name_setup), NULL);
+    g_signal_connect (factory, "bind", G_CALLBACK (custom_report_name_bind), NULL);
+    column = gtk_column_view_column_new (_("Report Name"), factory);
+    gtk_column_view_column_set_expand (column, TRUE);
+    gtk_column_view_append_column (crd->view, column);
+    g_object_unref (column);
+}
+
+static void
+custom_report_add_action_column (CustomReportDialog *crd, const gchar *title,
+                                 CustomReportAction action)
+{
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+    GtkColumnViewColumn *column;
+    CustomReportActionFactory *factory_data = g_new0 (CustomReportActionFactory, 1);
+    factory_data->crd = crd;
+    factory_data->action = action;
+    g_object_set_data_full (G_OBJECT (factory), "custom-report-action-factory",
+                            factory_data, g_free);
+    g_signal_connect (factory, "setup", G_CALLBACK (custom_report_action_setup), factory_data);
+    g_signal_connect (factory, "bind", G_CALLBACK (custom_report_action_bind), factory_data);
+    g_signal_connect (factory, "unbind", G_CALLBACK (custom_report_action_unbind), factory_data);
+    column = gtk_column_view_column_new (title, factory);
+    gtk_column_view_append_column (crd->view, column);
+    g_object_unref (column);
+}
+
+static void
+custom_report_activate (GtkColumnView *view, guint position, gpointer data)
+{
+    CustomReportDialog *crd = data;
+    CustomReportRow *row = (CustomReportRow *)g_list_model_get_item (G_LIST_MODEL (crd->selection), position);
+    (void)view;
+    if (!row)
+        return;
+    gtk_single_selection_set_selected (crd->selection, position);
+    custom_report_run_guid (crd, &row->guid);
+    g_object_unref (row);
+}
+
+static void
+custom_report_selection_changed (GtkSelectionModel *model, guint position, guint count, gpointer data)
+{
+    (void)model;
+    (void)position;
+    (void)count;
+    custom_report_set_status (data, NULL);
+}
+
+static gboolean
+custom_report_key_pressed (GtkEventControllerKey *controller, guint keyval,
+                           guint keycode, GdkModifierType state, gpointer data)
+{
+    CustomReportDialog *crd = data;
+    GtkWidget *focus = gtk_window_get_focus (crd->window);
+    (void)controller;
+    (void)keycode;
+    (void)state;
+    if (keyval == GDK_KEY_Escape)
+    {
+        custom_report_close (crd);
+        return TRUE;
+    }
+    if (GTK_IS_EDITABLE (focus))
+        return FALSE;
+    if (keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter)
+    {
+        custom_report_run_selected (crd);
+        return TRUE;
+    }
+    if (keyval == GDK_KEY_F2)
+    {
+        custom_report_edit_selected (crd);
+        return TRUE;
+    }
+    if (keyval == GDK_KEY_Delete)
+    {
+        custom_report_delete_selected (crd);
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static CustomReportDialog *
-gnc_ui_custom_report_internal(GncMainWindow * window)
+gnc_ui_custom_report_internal (GncMainWindow *window)
 {
     GtkBuilder *builder;
     CustomReportDialog *crd;
-    GtkTreeIter iter;
-    GtkTreeModel *model;
-    GtkWidget *no_report_notification;
-    GtkWidget *scroll_window;
-    GtkWidget *vscroll;
-    GtkRequisition nat_sb;
-
-    crd = g_new0(CustomReportDialog, 1);
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-custom-report.glade", "custom_report_dialog");
-
-    crd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_dialog"));
-    crd->reportview = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_list_view"));
-    scroll_window = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_sw"));
-    no_report_notification = GTK_WIDGET(gtk_builder_get_object (builder, "label2"));
-    set_reports_view_and_model(crd);
-    crd->window = window;
-
-    // get the vertical scroll bar width
-    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scroll_window));
-    gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
-
-    // set the width of the dummy column to that of the scrollbar
-    gtk_tree_view_column_set_fixed_width (crd->dummycol, nat_sb.width);
-
-    gtk_window_set_transient_for (GTK_WINDOW (crd->dialog), GTK_WINDOW(window));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(crd->dialog), "gnc-id-custom-report");
-
-    gnc_restore_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS,
-                             GTK_WINDOW(crd->dialog), GTK_WINDOW(window));
-
-    /* connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
-
-    gtk_widget_show_all(crd->dialog);
-
-    // Use this event to capture the escape key being pressed
-    g_signal_connect (crd->dialog, "key_press_event",
-                      G_CALLBACK(custom_report_event_cb), crd);
-
-    /* check if there are currently saved reports available
-     * by checking if there is a first element */
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW (crd->reportview));
-    if (gtk_tree_model_get_iter_first (model, &iter))
-    {
-        /* saved reports available
-           -> hide the "no reports available" notification */
-        gtk_widget_hide(no_report_notification);
-    }
-    else
-    {
-        /* hide the scrolled window of the report list */
-        gtk_widget_hide(crd->reportview);
-    }
-
-    g_object_unref(G_OBJECT(builder));
-
+    GtkWidget *help, *close;
+    GtkSorter *sorter;
+    GtkEventController *keys;
+    if (!window)
+        return NULL;
+    crd = g_new0 (CustomReportDialog, 1);
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "dialog-custom-report.glade", "custom_report_window");
+    crd->window = GTK_WINDOW (gtk_builder_get_object (builder, "custom_report_window"));
+    crd->view = GTK_COLUMN_VIEW (gtk_builder_get_object (builder, "custom_report_list_view"));
+    crd->scroller = GTK_WIDGET (gtk_builder_get_object (builder, "custom_report_sw"));
+    crd->empty_label = GTK_WIDGET (gtk_builder_get_object (builder, "no_report_notification"));
+    crd->status = GTK_LABEL (gtk_builder_get_object (builder, "custom_report_status"));
+    help = GTK_WIDGET (gtk_builder_get_object (builder, "help_button"));
+    close = GTK_WIDGET (gtk_builder_get_object (builder, "close_report_button"));
+    crd->rows = g_list_store_new (custom_report_row_get_type ());
+    sorter = GTK_SORTER (gtk_custom_sorter_new (custom_report_row_compare, NULL, NULL));
+    crd->sorted_rows = gtk_sort_list_model_new (G_LIST_MODEL (g_object_ref (crd->rows)), sorter);
+    crd->selection = gtk_single_selection_new (G_LIST_MODEL (g_object_ref (crd->sorted_rows)));
+    gtk_single_selection_set_autoselect (crd->selection, FALSE);
+    gtk_column_view_set_model (crd->view, GTK_SELECTION_MODEL (crd->selection));
+    custom_report_add_name_column (crd);
+    custom_report_add_action_column (crd, _("Run"), CUSTOM_REPORT_RUN);
+    custom_report_add_action_column (crd, _("Edit"), CUSTOM_REPORT_EDIT);
+    custom_report_add_action_column (crd, _("Delete"), CUSTOM_REPORT_DELETE);
+    g_weak_ref_init (&crd->parent, G_OBJECT (window));
+    gtk_window_set_transient_for (crd->window, GTK_WINDOW (window));
+    gtk_widget_set_name (GTK_WIDGET (crd->window), "gnc-id-custom-report");
+    g_object_set_data_full (G_OBJECT (crd->window), CUSTOM_REPORT_DIALOG_DATA, crd, custom_report_free);
+    crd->parent_destroy_id = g_signal_connect (window, "destroy",
+                                                G_CALLBACK (custom_report_parent_destroyed), crd);
+    g_signal_connect (crd->window, "close-request", G_CALLBACK (custom_report_close_request), crd);
+    g_signal_connect (help, "clicked", G_CALLBACK (custom_report_help), crd);
+    g_signal_connect (close, "clicked", G_CALLBACK (custom_report_close_clicked), crd);
+    g_signal_connect (crd->view, "activate", G_CALLBACK (custom_report_activate), crd);
+    g_signal_connect (crd->selection, "selection-changed", G_CALLBACK (custom_report_selection_changed), crd);
+    keys = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET (crd->window), keys);
+    g_signal_connect (keys, "key-pressed", G_CALLBACK (custom_report_key_pressed), crd);
+    gnc_restore_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, crd->window, GTK_WINDOW (window));
+    custom_report_refresh (crd, NULL);
+    gtk_window_present (crd->window);
+    g_object_unref (builder);
     return crd;
 }
 
-/***********************************************************
- * gnc_ui_custom_report
- *
- * this is the primary driver for the custom report dialog.
- ***********************************************************/
 void
-gnc_ui_custom_report(GncMainWindow * window)
+gnc_ui_custom_report (GncMainWindow *window)
 {
     gnc_ui_custom_report_internal (window);
 }
 
-/***********************************************************
- * gnc_ui_custom_report_edit_name
- *
- * open the custom report dialog and highlight the given
- * report's name for editing.
- ***********************************************************/
 void
-gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
+gnc_ui_custom_report_edit_name (GncMainWindow *window, SCM scm_guid)
 {
-    SCM is_custom_report;
-    CustomReportDialog *crd = gnc_ui_custom_report_internal (window);
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GncGUID *guid;
-    gchar *guid_str;
-    gboolean valid_iter;
-
-    is_custom_report = scm_c_eval_string ("gnc:report-template-is-custom/template-guid?");
-    if (scm_is_false (scm_call_1 (is_custom_report, scm_guid)))
+    SCM is_custom = scm_c_eval_string ("gnc:report-template-is-custom/template-guid?");
+    gchar *guid_text;
+    GncGUID guid;
+    CustomReportDialog *crd;
+    if (scm_is_false (scm_call_1 (is_custom, scm_guid)))
         return;
-
-    guid = guid_malloc ();
-    guid_str = scm_to_utf8_string (scm_guid);
-    if (!string_to_guid (guid_str, guid))
-        goto cleanup;
-
-    /* Look up the row for the requested guid */
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW (crd->reportview));
-    valid_iter = gtk_tree_model_get_iter_first (model, &iter);
-
-    while (valid_iter)
+    guid_text = scm_to_utf8_string (scm_guid);
+    if (!string_to_guid (guid_text, &guid))
     {
-        GncGUID *row_guid;
-        gtk_tree_model_get (model, &iter, COL_NUM, &row_guid, -1);
-
-        if (guid_equal (guid, row_guid))
-        {
-            /* We found the row for the requested guid
-             * Now let's set the report's name cell in edit mode
-             * so the user can edit the name.
-             */
-            GtkTreePath *path;
-            GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (crd->reportview));
-            gtk_tree_selection_select_iter (selection, &iter);
-            path = gtk_tree_model_get_path (model, &iter);
-            g_object_set(G_OBJECT(crd->namerenderer), "editable", TRUE, NULL);
-            gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (crd->reportview),
-                                              path, crd->namecol,
-                                              crd->namerenderer, TRUE);
-            gtk_tree_path_free (path);
-            break;
-        }
-
-        valid_iter = gtk_tree_model_iter_next (model, &iter);
+        g_free (guid_text);
+        return;
     }
-
-cleanup:
-    guid_free (guid);
-    g_free (guid_str);
+    g_free (guid_text);
+    crd = gnc_ui_custom_report_internal (window);
+    if (!crd || custom_report_find_guid (crd, &guid) == GTK_INVALID_LIST_POSITION)
+        return;
+    custom_report_select_guid (crd, &guid);
+    custom_report_edit_guid (crd, &guid);
 }

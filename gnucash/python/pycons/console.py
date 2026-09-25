@@ -32,8 +32,8 @@ import re
 import tempfile
 import readline
 import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import GObject
+gi.require_version('Gtk', '4.0')
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -104,12 +104,11 @@ class ConsoleIn:
     def readline(self):
         self.console.input_mode = True
         buffer = self.console.buffer
-        #console.write('\n')
         iter = buffer.get_iter_at_mark(buffer.get_insert())
         buffer.move_mark (buffer.get_mark('linestart'), iter)
+        context = GLib.MainContext.default()
         while self.console.input_mode:
-            #while Gtk.events_pending():
-            Gtk.main_iteration()
+            context.iteration(True)
         s = self.console.input
         self.console.input = ''
         return s+'\n'
@@ -132,14 +131,12 @@ class Console (Gtk.ScrolledWindow):
 
         # GTK interface
         self.do_quit = False
-        GObject.GObject.__init__(self)
+        Gtk.ScrolledWindow.__init__(self)
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.set_shadow_type (Gtk.ShadowType.NONE)
-        self.set_border_width(0)
         self.view = Gtk.TextView()
-        self.view.modify_font (Pango.FontDescription("Mono 10"))
+        self.view.set_monospace(True)
         self.view.set_editable (True)
-        self.view.set_wrap_mode(True)
+        self.view.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.view.set_left_margin(0)
         self.view.set_right_margin(0)
         self.buffer = self.view.get_buffer()
@@ -173,10 +170,10 @@ class Console (Gtk.ScrolledWindow):
             self.write (text, style)
         iter = self.buffer.get_iter_at_mark(self.buffer.get_insert())
         self.buffer.create_mark ('linestart', iter, True)
-        self.view.add_events(Gdk.EventMask.KEY_PRESS_MASK)
-        self.view.connect ('key-press-event', self.key_press_event)
-        self.add(self.view)
-        self.show_all()
+        self.key_controller = Gtk.EventControllerKey()
+        self.key_controller.connect ('key-pressed', self.key_press_event)
+        self.view.add_controller(self.key_controller)
+        self.set_child(self.view)
         self.killbuffer = None
 
         # Console stuff
@@ -303,13 +300,11 @@ class Console (Gtk.ScrolledWindow):
         self.buffer.move_mark (self.buffer.get_mark('linestart'), iter)
         self.history_reset()
         self.view.scroll_mark_onscreen(self.buffer.get_insert())
-        while Gtk.events_pending():
-            Gtk.main_iteration()
 
-    def key_press_event (self, widget, event):
+    def key_press_event (self, controller, keyval, keycode, state):
         """ Handle key press event """
 
-        keyname = Gdk.keyval_name (event.keyval)
+        keyname = Gdk.keyval_name (keyval)
 
         # New command
         if keyname in ['Return', 'KP_Enter']:
@@ -367,7 +362,7 @@ class Console (Gtk.ScrolledWindow):
             return True
 
         # Controls
-        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+        elif state & Gdk.ModifierType.CONTROL_MASK:
             if keyname in ['a','A']:
                 mark = self.buffer.get_mark('linestart')
                 linestart = self.buffer.get_iter_at_mark(mark)
@@ -422,8 +417,6 @@ class Console (Gtk.ScrolledWindow):
 
         self.shell.eval(self)
         self.view.scroll_mark_onscreen(self.buffer.get_insert())
-        while Gtk.events_pending():
-            Gtk.main_iteration()
 
         # Get system output and remove system redirection
         os.dup2 (sys_stdout, 1)

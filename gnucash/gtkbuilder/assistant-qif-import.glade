@@ -1,1379 +1,952 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="date_format_liststore">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkAssistant" id="qif_import_assistant">
-    <property name="can-focus">False</property>
-    <property name="border-width">12</property>
-    <property name="title" translatable="yes">QIF Import Assistant</property>
-    <signal name="apply" handler="gnc_ui_qif_import_finish_cb" swapped="no"/>
-    <signal name="cancel" handler="gnc_ui_qif_import_cancel_cb" swapped="no"/>
-    <signal name="close" handler="gnc_ui_qif_import_close_cb" swapped="no"/>
-    <signal name="prepare" handler="gnc_ui_qif_import_prepare_cb" swapped="no"/>
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkStringList" id="date_format_model" />
+  <object class="GtkWindow" id="qif_import_assistant">
+    <property name="title" translatable="1">QIF Import Assistant</property>
+    <property name="default-width">720</property>
+    <property name="default-height">520</property>
     <child>
-      <object class="GtkLabel" id="start_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
+      <object class="GtkBox" id="gnc_import_assistant_content">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
-        <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs.
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <child>
+          <object class="GtkLabel" id="gnc_import_assistant_page_title">
+            <property name="xalign">0</property>
+            <property name="wrap">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="gnc_import_assistant_stack">
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="transition-type">slide-left-right</property>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-0</property>
+                <property name="title" translatable="1">Import QIF files</property>
+                <property name="child">
+                  <object class="GtkLabel" id="start_page">
+                    <property name="valign">start</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="1" comments="Run the assistant in your language to see GTK's translation of the button labels.">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs.
 
 The import process has several steps. Your GnuCash accounts will not be changed until you click "Apply" at the end of the process.
 
 Click "Next" to start loading your QIF data, or "Cancel" to abort the process.</property>
-        <property name="wrap">True</property>
-      </object>
-      <packing>
-        <property name="page-type">intro</property>
-        <property name="title" translatable="yes">Import QIF files</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="load_file_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label822">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">Please select a file to load. When you click "Next", the file will be loaded and analyzed. You may need to answer some questions about the account(s) in the file.
+                    <property name="wrap">1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-1</property>
+                <property name="title" translatable="1">Select a QIF file to load</property>
+                <property name="child">
+                  <object class="GtkBox" id="load_file_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label822">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1" comments="Run the assistant in your language to see GTK's translation of the button labels.">Please select a file to load. When you click "Next", the file will be loaded and analyzed. You may need to answer some questions about the account(s) in the file.
 
 You will have the opportunity to load as many files as you wish, so don't worry if your data is in multiple files.
 </property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">5</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox69">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <object class="GtkEntry" id="qif_filename_entry">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="has-default">True</property>
-                <property name="editable">False</property>
-                <property name="invisible-char">●</property>
-                <property name="primary-icon-activatable">False</property>
-                <property name="secondary-icon-activatable">False</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button71">
-                <property name="label" translatable="yes">_Select…</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_import_select_file_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">3</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Select a QIF file to load</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="load_progress_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="load_progress_primary">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label">Primary text</property>
-            <style>
-              <class name="gnc-class-title"/>
-            </style>
-            <property name="use-markup">True</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="load_progress_secondary">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label">Secondary text.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="load_progress_vbox1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkProgressBar" id="load_progress_bar">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="pulse-step">0.10000000149</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="load_progress_sub">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Sub-operation text</property>
-                <style>
-                  <class name="gnc-class-emphasis"/>
-                </style>
-                <property name="use-markup">True</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButtonBox" id="load_progress_hbuttonbox1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="layout-style">end</property>
-                <child>
-                  <object class="GtkButton" id="load_progress_start">
-                    <property name="label" translatable="yes">_Start</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gnc_ui_qif_import_load_progress_start_cb" swapped="no"/>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox69">
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkEntry" id="qif_filename_entry">
+                            <property name="hexpand">1</property>
+                            <property name="focusable">1</property>
+                            <property name="editable">0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button71">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">_Select…</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="gnc_ui_qif_import_select_file_cb" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="load_progress_pause">
-                    <property name="label">P_ause</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="can-default">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gnc_ui_qif_import_load_progress_pause_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">6</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow25">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkTextView" id="load_progress_log">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-start">3</property>
-                <property name="margin-end">3</property>
-                <property name="editable">False</property>
-                <property name="wrap-mode">word</property>
-                <property name="cursor-visible">False</property>
-                <property name="accepts-tab">False</property>
+              <object class="GtkStackPage">
+                <property name="name">page-2</property>
+                <property name="title" translatable="1">Load QIF files</property>
+                <property name="child">
+                  <object class="GtkBox" id="load_progress_page">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="load_progress_primary">
+                        <property name="valign">center</property>
+                        <property name="label">Primary text</property>
+                        <style>
+                          <class name="gnc-class-title" />
+                        </style>
+                        <property name="use-markup">1</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="load_progress_secondary">
+                        <property name="valign">center</property>
+                        <property name="label">Secondary text.</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="load_progress_vbox1">
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkProgressBar" id="load_progress_bar">
+                            <property name="valign">center</property>
+                            <property name="pulse-step">0.10000000149</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="load_progress_sub">
+                            <property name="valign">center</property>
+                            <property name="label">Sub-operation text</property>
+                            <style>
+                              <class name="gnc-class-emphasis" />
+                            </style>
+                            <property name="use-markup">1</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="load_progress_hbuttonbox1">
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkButton" id="load_progress_start">
+                                <property name="label" translatable="1">_Start</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+                                <property name="use-underline">1</property>
+                                <signal name="clicked" handler="gnc_ui_qif_import_load_progress_start_cb" swapped="no" />
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="load_progress_pause">
+                                <property name="label">P_ause</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+                                <property name="use-underline">1</property>
+                                <signal name="clicked" handler="gnc_ui_qif_import_load_progress_pause_cb" swapped="no" />
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow25">
+                        <property name="vexpand">1</property>
+                        <property name="focusable">1</property>
+                        <property name="child">
+                          <object class="GtkTextView" id="load_progress_log">
+                            <property name="focusable">1</property>
+                            <property name="margin-start">3</property>
+                            <property name="margin-end">3</property>
+                            <property name="editable">0</property>
+                            <property name="wrap-mode">word</property>
+                            <property name="cursor-visible">0</property>
+                            <property name="accepts-tab">0</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Load QIF files</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="date_format_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label841">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">The QIF file format does not specify which order the day, month, and year components of a date are printed. In most cases, it is possible to automatically determine which format is in use in a particular file. However, in the file you have just imported there exist more than one possible format that fits the data.
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-3</property>
+                <property name="title" translatable="1">Set a date format for this QIF file</property>
+                <property name="child">
+                  <object class="GtkCenterBox" id="date_format_page">
+                    <property name="orientation">vertical</property>
+                    <property name="start-widget">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label841">
+                            <property name="valign">center</property>
+                            <property name="label" translatable="1">The QIF file format does not specify which order the day, month, and year components of a date are printed. In most cases, it is possible to automatically determine which format is in use in a particular file. However, in the file you have just imported there exist more than one possible format that fits the data.
 
 Please select a date format for the file. QIF files created by European software are likely to be in "d-m-y" or day-month-year format, where US QIF files are likely to be "m-d-y" or month-day-year.
 </property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBox" id="date_format_combobox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="model">date_format_liststore</property>
-            <signal name="changed" handler="gnc_ui_qif_import_date_valid_cb" swapped="no"/>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="date_format_dropdown">
+                            <property name="valign">center</property>
+                            <property name="model">date_format_model</property>
+                            <signal name="notify::selected" handler="gnc_ui_qif_import_date_valid_cb" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="end-widget">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label847713">
+                            <property name="valign">center</property>
+                            <property name="label" translatable="1">Click "Back" to cancel the loading of this file and choose another.</property>
+                            <property name="justify">center</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label847713">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Click "Back" to cancel the loading of this file and choose another.</property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Set a date format for this QIF file</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="account_name_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label823">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">The QIF file that you just loaded appears to contain transactions for just one account, but the file does not specify a name for that account.
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-4</property>
+                <property name="title" translatable="1">Set the default QIF account name</property>
+                <property name="child">
+                  <object class="GtkCenterBox" id="account_name_page">
+                    <property name="orientation">vertical</property>
+                    <property name="start-widget">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label823">
+                            <property name="valign">center</property>
+                            <property name="label" translatable="1">The QIF file that you just loaded appears to contain transactions for just one account, but the file does not specify a name for that account.
 
 Please enter a name for the account. If the file was exported from another accounting program, you should use the same account name that was used in that program.
 </property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">4</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox70">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <object class="GtkLabel" id="label824">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Account name</property>
-                <property name="justify">center</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">4</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="qif_account_entry">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="invisible-char">●</property>
-                <property name="primary-icon-activatable">False</property>
-                <property name="secondary-icon-activatable">False</property>
-                <signal name="activate" handler="gnc_ui_qif_import_acct_enter_cb" swapped="no"/>
-                <signal name="changed" handler="gnc_ui_qif_import_acct_valid_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label847714">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Click "Back" to cancel the loading of this file and choose another.</property>
-            <property name="justify">center</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Set the default QIF account name</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="loaded_files_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">4</property>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow26">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="selected_file_view">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="headers-visible">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                </child>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="hbox70">
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkLabel" id="label824">
+                                <property name="halign">center</property>
+                                <property name="label" translatable="1">Account name</property>
+                                <property name="justify">center</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="qif_account_entry">
+                                <property name="hexpand">1</property>
+                                <property name="focusable">1</property>
+                                <signal name="activate" handler="gnc_ui_qif_import_acct_enter_cb" swapped="no" />
+                                <signal name="changed" handler="gnc_ui_qif_import_acct_valid_cb" swapped="no" />
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="end-widget">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label847714">
+                            <property name="valign">center</property>
+                            <property name="label" translatable="1">Click "Back" to cancel the loading of this file and choose another.</property>
+                            <property name="justify">center</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label816">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">Click "Load another file" if you have more data to import at this time. Do this if you have saved your accounts to separate QIF files.
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-5</property>
+                <property name="title" translatable="1">QIF files you have loaded</property>
+                <property name="child">
+                  <object class="GtkBox" id="loaded_files_page">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">4</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow26">
+                        <property name="vexpand">1</property>
+                        <property name="focusable">1</property>
+                        <property name="child">
+                          <object class="GtkBox" id="selected_file_view">
+                            <property name="orientation">vertical</property>
+                            <property name="vexpand">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label816">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1" comments="Run the assistant in your language to see GTK's translation of the button labels.">Click "Load another file" if you have more data to import at this time. Do this if you have saved your accounts to separate QIF files.
 
 Click "Next" to finish loading files and move to the next step of the QIF import process.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">3</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButtonBox" id="hbox68">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">spread</property>
-            <child>
-              <object class="GtkButton" id="unload_file_button">
-                <property name="label" translatable="yes">_Unload selected file</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_import_unload_file_cb" swapped="no"/>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox68">
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkButton" id="unload_file_button">
+                            <property name="label" translatable="1">_Unload selected file</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="gnc_ui_qif_import_unload_file_cb" swapped="no" />
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button69">
+                            <property name="label" translatable="1">_Load another file</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="gnc_ui_qif_import_load_another_cb" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button69">
-                <property name="label" translatable="yes">_Load another file</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_import_load_another_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">QIF files you have loaded</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="account_doc_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label830">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">On the next page, the accounts in your QIF files and any stocks or mutual funds you own will be matched with GnuCash accounts. If a GnuCash account already exists with the same name, or a similar name and compatible type, that account will be used as a match; otherwise, GnuCash will create a new account with the same name and type as the QIF account. If you do not like the suggested GnuCash account, double-click to change it.
+              <object class="GtkStackPage">
+                <property name="name">page-6</property>
+                <property name="title" translatable="1">Accounts and stock holdings</property>
+                <property name="child">
+                  <object class="GtkBox" id="account_doc_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label830">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">On the next page, the accounts in your QIF files and any stocks or mutual funds you own will be matched with GnuCash accounts. If a GnuCash account already exists with the same name, or a similar name and compatible type, that account will be used as a match; otherwise, GnuCash will create a new account with the same name and type as the QIF account. If you do not like the suggested GnuCash account, double-click to change it.
 
 Note that GnuCash will be creating many accounts that did not exist on your other personal finance program, including a separate account for each stock you own, separate accounts for the brokerage commissions, special "Equity" accounts (subaccounts of Retained Earnings, by default) which are the source of your opening balances, etc. All of these accounts will appear on the next page so you can change them if you want to, but it is safe to leave them alone.
 </property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Accounts and stock holdings</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="account_match_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label7609">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">_Select the matchings you want to change</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">account_page_view</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">5</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow11">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="account_page_view">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection2"/>
-                </child>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox7609">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <child>
-              <object class="GtkLabel" id="label7610">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Matchings selected</property>
-                <property name="wrap">True</property>
+              <object class="GtkStackPage">
+                <property name="name">page-7</property>
+                <property name="title" translatable="1">Match QIF accounts with GnuCash accounts</property>
+                <property name="child">
+                  <object class="GtkBox" id="account_match_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label7609">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">_Select the matchings you want to change</property>
+                        <property name="use-underline">1</property>
+                        <property name="mnemonic-widget">account_page_view</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow11">
+                        <property name="vexpand">1</property>
+                        <property name="focusable">1</property>
+                        <property name="child">
+                          <object class="GtkBox" id="account_page_view">
+                            <property name="orientation">vertical</property>
+                            <property name="vexpand">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox7609">
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkLabel" id="label7610">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">Matchings selected</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="account_page_count">
+                            <property name="hexpand">1</property>
+                            <property name="label">0</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="account_page_change">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">Change GnuCash _Account…</property>
+                            <property name="sensitive">0</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="gnc_ui_qif_import_account_rematch_cb" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="account_page_count">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">0</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">3</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="account_page_change">
-                <property name="label" translatable="yes">Change GnuCash _Account…</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_import_account_rematch_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="category_doc_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label840">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">GnuCash uses separate Income and Expense accounts rather than categories to classify your transactions. Each of the categories in your QIF file will be converted to a GnuCash account.
+              <object class="GtkStackPage">
+                <property name="name">page-8</property>
+                <property name="title" translatable="1">Income and Expense categories</property>
+                <property name="child">
+                  <object class="GtkBox" id="category_doc_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label840">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">GnuCash uses separate Income and Expense accounts rather than categories to classify your transactions. Each of the categories in your QIF file will be converted to a GnuCash account.
 
 On the next page, you will have an opportunity to look at the suggested matches between QIF categories and GnuCash accounts. You may change matches that you do not like by double-clicking on the line containing the category name.
 
 If you change your mind later, you can reorganize the account structure safely within GnuCash.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Income and Expense categories</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="category_match_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label7611">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">_Select the matchings you want to change</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">category_page_view</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">5</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow12">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="category_page_view">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection3"/>
-                </child>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox7612">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <child>
-              <object class="GtkLabel" id="label7613">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Matchings selected</property>
-                <property name="wrap">True</property>
+              <object class="GtkStackPage">
+                <property name="name">page-9</property>
+                <property name="title" translatable="1">Match QIF categories with GnuCash accounts</property>
+                <property name="child">
+                  <object class="GtkBox" id="category_match_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label7611">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">_Select the matchings you want to change</property>
+                        <property name="use-underline">1</property>
+                        <property name="mnemonic-widget">category_page_view</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow12">
+                        <property name="vexpand">1</property>
+                        <property name="focusable">1</property>
+                        <property name="child">
+                          <object class="GtkBox" id="category_page_view">
+                            <property name="orientation">vertical</property>
+                            <property name="vexpand">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox7612">
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkLabel" id="label7613">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">Matchings selected</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="category_page_count">
+                            <property name="hexpand">1</property>
+                            <property name="label">0</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="category_page_change">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">Change GnuCash _Account…</property>
+                            <property name="sensitive">0</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="gnc_ui_qif_import_category_rematch_cb" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="category_page_count">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">0</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">3</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="category_page_change">
-                <property name="label" translatable="yes">Change GnuCash _Account…</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_import_category_rematch_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="memo_doc_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label847707">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">QIF files downloaded from banks and other financial institutions may not have information about Accounts and Categories which would allow them to be correctly assigned to GnuCash accounts.
+              <object class="GtkStackPage">
+                <property name="name">page-10</property>
+                <property name="title" translatable="1">Payees and memos</property>
+                <property name="child">
+                  <object class="GtkBox" id="memo_doc_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label847707">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">QIF files downloaded from banks and other financial institutions may not have information about Accounts and Categories which would allow them to be correctly assigned to GnuCash accounts.
 
 In the following page, you will see the text that appears in the Payee and Memo fields of transactions with no QIF Account or Category. By default these transactions are assigned to the 'Unspecified' account in GnuCash. If you select a different account, it will be remembered for future QIF files.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Payees and memos</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="memo_match_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label7614">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">_Select the matchings you want to change</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">memo_page_view</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">5</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="memo_page_view">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection4"/>
-                </child>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox7615">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <child>
-              <object class="GtkLabel" id="label7616">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Matchings selected</property>
-                <property name="wrap">True</property>
+              <object class="GtkStackPage">
+                <property name="name">page-11</property>
+                <property name="title" translatable="1">Match payees/memos to GnuCash accounts</property>
+                <property name="child">
+                  <object class="GtkBox" id="memo_match_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label7614">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">_Select the matchings you want to change</property>
+                        <property name="use-underline">1</property>
+                        <property name="mnemonic-widget">memo_page_view</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow1">
+                        <property name="vexpand">1</property>
+                        <property name="focusable">1</property>
+                        <property name="child">
+                          <object class="GtkBox" id="memo_page_view">
+                            <property name="orientation">vertical</property>
+                            <property name="vexpand">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox7615">
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkLabel" id="label7616">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">Matchings selected</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="memo_page_count">
+                            <property name="hexpand">1</property>
+                            <property name="label">0</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="memo_page_change">
+                            <property name="halign">center</property>
+                            <property name="label" translatable="1">Change GnuCash _Account…</property>
+                            <property name="sensitive">0</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="gnc_ui_qif_import_memo_rematch_cb" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="memo_page_count">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">0</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">3</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="memo_page_change">
-                <property name="label" translatable="yes">Change GnuCash _Account…</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_ui_qif_import_memo_rematch_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="currency_book_option_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label831">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">The QIF importer cannot currently handle multi-currency QIF files. All the accounts you are importing must be denominated in the same currency.
+              <object class="GtkStackPage">
+                <property name="name">page-12</property>
+                <property name="title" translatable="1">Choose the QIF file currency and select Book Options</property>
+                <property name="child">
+                  <object class="GtkBox" id="currency_book_option_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label831">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">The QIF importer cannot currently handle multi-currency QIF files. All the accounts you are importing must be denominated in the same currency.
 </property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label832">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">_Select the currency to use for all imported transactions:</property>
-            <property name="use-underline">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">5</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="currency_picker_hbox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <placeholder/>
+                        <property name="justify">center</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label832">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">_Select the currency to use for all imported transactions:</property>
+                        <property name="use-underline">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="currency_picker_hbox">
+                        <property name="valign">center</property>
+                        <child>
+                          <placeholder />
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="book_option_label">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">Book Options</property>
+                        <style>
+                          <class name="gnc-class-strong" />
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="book_option_message_label">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1">Since you are creating a new file, you will next see a dialog for setting book options. These can affect how GnuCash imports transactions. If you come back to this page without cancelling and starting over, the dialog for setting book options will not be shown a second time when you go forward. You can access it directly from the menu via File-&gt;Properties.</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="book_option_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Book Options</property>
-            <style>
-              <class name="gnc-class-strong"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="book_option_message_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Since you are creating a new file, you will next see a dialog for setting book options. These can affect how GnuCash imports transactions. If you come back to this page without cancelling and starting over, the dialog for setting book options will not be shown a second time when you go forward. You can access it directly from the menu via File-&gt;Properties.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Choose the QIF file currency and select Book Options</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="commodity_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
             <child>
-              <object class="GtkLabel" id="label833">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-bottom">12</property>
-                <property name="label" translatable="yes">Below you are asked to provide information about stocks, mutual funds, and other investments that appear in the QIF file(s) you are importing. GnuCash needs some additional details about these investments that the QIF format does not provide.
+              <object class="GtkStackPage">
+                <property name="name">page-13</property>
+                <property name="title" translatable="1">Tradable commodities</property>
+                <property name="child">
+                  <object class="GtkBox" id="commodity_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="vexpand">1</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="label833">
+                            <property name="margin-bottom">12</property>
+                            <property name="label" translatable="1">Below you are asked to provide information about stocks, mutual funds, and other investments that appear in the QIF file(s) you are importing. GnuCash needs some additional details about these investments that the QIF format does not provide.
 
 Each stock, mutual fund, or other investment must have a name and an abbreviation, such as a stock symbol. Because some unrelated investments have the same abbreviation, you also need to indicate what type of abbreviation you have entered. For example, you could select the exchange that assigned the symbol (NASDAQ, NYSE, etc.), or select an investment type.
 
 If you don't see your exchange listed, or none of the available choices are appropriate, you can enter a new one.</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label834">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Enter Information about…</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkNotebook" id="commodity_notebook">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="tab-pos">left</property>
-                <property name="scrollable">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label835">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">All fields must be complete to continue…</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Tradable commodities</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="convert_progress_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="convert_progress_primary">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label">Primary text</property>
-            <style>
-              <class name="gnc-class-title"/>
-            </style>
-            <property name="use-markup">True</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="convert_progress_secondary">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label">Secondary text.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="convert_progress_vbox1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkProgressBar" id="convert_progress_bar">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="pulse-step">0.10000000149</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="convert_progress_sub">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Sub-operation text</property>
-                <style>
-                  <class name="gnc-class-emphasis"/>
-                </style>
-                <property name="use-markup">True</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButtonBox" id="convert_progress_hbuttonbox1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="layout-style">end</property>
-                <child>
-                  <object class="GtkButton" id="convert_progress_start">
-                    <property name="label" translatable="yes">_Start Import</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gnc_ui_qif_import_convert_progress_start_cb" swapped="no"/>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label834">
+                            <property name="halign">start</property>
+                            <property name="label" translatable="1">Enter Information about…</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkNotebook" id="commodity_notebook">
+                            <property name="vexpand">1</property>
+                            <property name="focusable">1</property>
+                            <property name="tab-pos">left</property>
+                            <property name="scrollable">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label835">
+                            <property name="halign">start</property>
+                            <property name="label" translatable="1">All fields must be complete to continue…</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="convert_progress_pause">
-                    <property name="label" translatable="yes">P_ause</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="can-default">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="gnc_ui_qif_import_convert_progress_pause_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">6</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow2">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkTextView" id="convert_progress_log">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-start">3</property>
-                <property name="margin-end">3</property>
-                <property name="editable">False</property>
-                <property name="wrap-mode">word</property>
-                <property name="cursor-visible">False</property>
-                <property name="accepts-tab">False</property>
+              <object class="GtkStackPage">
+                <property name="name">page-14</property>
+                <property name="title" translatable="1">QIF Import</property>
+                <property name="child">
+                  <object class="GtkBox" id="convert_progress_page">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="convert_progress_primary">
+                        <property name="valign">center</property>
+                        <property name="label">Primary text</property>
+                        <style>
+                          <class name="gnc-class-title" />
+                        </style>
+                        <property name="use-markup">1</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="convert_progress_secondary">
+                        <property name="valign">center</property>
+                        <property name="label">Secondary text.</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="convert_progress_vbox1">
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkProgressBar" id="convert_progress_bar">
+                            <property name="valign">center</property>
+                            <property name="pulse-step">0.10000000149</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="convert_progress_sub">
+                            <property name="valign">center</property>
+                            <property name="label">Sub-operation text</property>
+                            <style>
+                              <class name="gnc-class-emphasis" />
+                            </style>
+                            <property name="use-markup">1</property>
+                            <property name="wrap">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="convert_progress_hbuttonbox1">
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkButton" id="convert_progress_start">
+                                <property name="label" translatable="1">_Start Import</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+                                <property name="use-underline">1</property>
+                                <signal name="clicked" handler="gnc_ui_qif_import_convert_progress_start_cb" swapped="no" />
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="convert_progress_pause">
+                                <property name="label" translatable="1">P_ause</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+                                <property name="use-underline">1</property>
+                                <signal name="clicked" handler="gnc_ui_qif_import_convert_progress_pause_cb" swapped="no" />
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow2">
+                        <property name="vexpand">1</property>
+                        <property name="focusable">1</property>
+                        <property name="child">
+                          <object class="GtkTextView" id="convert_progress_log">
+                            <property name="focusable">1</property>
+                            <property name="margin-start">3</property>
+                            <property name="margin-end">3</property>
+                            <property name="editable">0</property>
+                            <property name="wrap-mode">word</property>
+                            <property name="cursor-visible">0</property>
+                            <property name="accepts-tab">0</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">QIF Import</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="duplicates_doc_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">5</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="label847694">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">If you are importing a QIF file from a bank or other financial institution, some of the transactions may already exist in your GnuCash accounts. To avoid duplication, GnuCash has tried to identify matches and needs your help to review them.
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-15</property>
+                <property name="title" translatable="1">Match existing transactions</property>
+                <property name="child">
+                  <object class="GtkBox" id="duplicates_doc_page">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label847694">
+                        <property name="valign">center</property>
+                        <property name="label" translatable="1" comments="Run the assistant in your language to see GTK's translation of the button labels.">If you are importing a QIF file from a bank or other financial institution, some of the transactions may already exist in your GnuCash accounts. To avoid duplication, GnuCash has tried to identify matches and needs your help to review them.
 
 On the next page you will be shown a list of imported transactions. As you select each one, a list of possible matches will be shown below it. If you find a correct match, click on it. Your selection will be confirmed by a check mark in the "Match?" column.
 
 Click "Next" to review the possible matches.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Match existing transactions</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="duplicates_match_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">12</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkBox" id="vbox94">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+                        <property name="wrap">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
             <child>
-              <object class="GtkFrame" id="frame45">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label-xalign">0</property>
-                <property name="shadow-type">none</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow22">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="shadow-type">in</property>
+              <object class="GtkStackPage">
+                <property name="name">page-16</property>
+                <property name="title" translatable="1">Select possible duplicates</property>
+                <property name="child">
+                  <object class="GtkBox" id="duplicates_match_page">
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkTreeView" id="new_transaction_view">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection5"/>
+                      <object class="GtkBox" id="vbox94">
+                        <property name="vexpand">1</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkFrame" id="frame45">
+                            <property name="vexpand">1</property>
+                            <property name="child">
+                              <object class="GtkScrolledWindow" id="scrolledwindow22">
+                                <property name="focusable">1</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="new_transaction_view">
+                                    <property name="orientation">vertical</property>
+                                    <property name="vexpand">1</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </property>
+                            <child type="label">
+                              <object class="GtkLabel" id="label847716">
+                                <property name="label" translatable="1">_Imported transactions needing review</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">new_transaction_view</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="frame46">
+                            <property name="vexpand">1</property>
+                            <property name="child">
+                              <object class="GtkScrolledWindow" id="scrolledwindow23">
+                                <property name="focusable">1</property>
+                                <property name="child">
+                                  <object class="GtkBox" id="old_transaction_view">
+                                    <property name="orientation">vertical</property>
+                                    <property name="vexpand">1</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </property>
+                            <child type="label">
+                              <object class="GtkLabel" id="label847717">
+                                <property name="label" translatable="1">_Possible matches for the selected transaction</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">old_transaction_view</property>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </child>
                   </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label847716">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">_Imported transactions needing review</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">new_transaction_view</property>
-                  </object>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="frame46">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label-xalign">0</property>
-                <property name="shadow-type">none</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow23">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="shadow-type">in</property>
-                    <child>
-                      <object class="GtkTreeView" id="old_transaction_view">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection6"/>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label847717">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">_Possible matches for the selected transaction</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">old_transaction_view</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Select possible duplicates</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="end_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Click "Apply" to import data from the staging area and update your GnuCash accounts. The account and category matching information you have entered will be saved and used for defaults the next time you use the QIF import facility.
+              <object class="GtkStackPage">
+                <property name="name">page-17</property>
+                <property name="title" translatable="1">Update your GnuCash accounts</property>
+                <property name="child">
+                  <object class="GtkLabel" id="end_page">
+                    <property name="label" translatable="1">Click "Apply" to import data from the staging area and update your GnuCash accounts. The account and category matching information you have entered will be saved and used for defaults the next time you use the QIF import facility.
 
 Click "Back" to review your account and category matchings, to change currency and security settings for new accounts, or to add more files to the staging area.
 
 Click "Cancel" to abort the QIF import process.</property>
-        <property name="wrap">True</property>
-      </object>
-      <packing>
-        <property name="page-type">confirm</property>
-        <property name="title" translatable="yes">Update your GnuCash accounts</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="summary_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Summary Text</property>
-        <property name="use-markup">True</property>
-      </object>
-      <packing>
-        <property name="page-type">summary</property>
-        <property name="title" translatable="yes">Qif Import Summary</property>
-        <property name="complete">True</property>
-        <property name="has-padding">False</property>
-      </packing>
-    </child>
-    <child internal-child="action_area">
-      <object class="GtkBox">
-        <property name="can-focus">False</property>
+                    <property name="wrap">1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page-18</property>
+                <property name="title" translatable="1">Qif Import Summary</property>
+                <property name="child">
+                  <object class="GtkLabel" id="summary_page">
+                    <property name="label" translatable="1">Summary Text</property>
+                    <property name="use-markup">1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="gnc_import_assistant_actions">
+            <property name="halign">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="gnc_import_assistant_cancel">
+                <property name="label">_Cancel</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_import_assistant_back">
+                <property name="label">_Back</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_import_assistant_next">
+                <property name="label">_Next</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_import_assistant_apply">
+                <property name="label">_Apply</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="gnc_import_assistant_close">
+                <property name="label">_Close</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

@@ -35,67 +35,51 @@ extern "C"
 {
 #endif
 
+/** Result of an accepted duplicate transaction request. The completion
+ * callback owns the result and must release it with gnc_dup_trans_result_free().
+ * A NULL result denotes cancellation or parent destruction. */
+typedef struct
+{
+    time64 date;
+    GDate gdate;
+    gchar *num;
+    gchar *tnum;
+    gchar *doclink;
+} GncDupTransResult;
 
-/***********************************************************************\
- * gnc_dup_trans_dialog                                                 *
- *   opens up a window to do an automatic transfer between accounts     *
- *                                                                      *
- * Args:   parent        - the parent of the window to be created       *
- *         title         - the text of the title label, otherwise       *
- *                         defaults to "New Transaction Information"    *
- *         show_date     - TRUE to display date label and edit widgets  *
- *         date          - the initial date to use, and the output      *
- *                         parameter for the new date                   *
- *         num           - input num field                              *
- *         out_num       - output num field, g_newed string             *
- *         tnum          - input tnum field, if used, else NULL         *
- *         out_tnum      - output tnum field, g_newed string            *
- *         tdoclink      - input document link field, if used, else NULL*
- *         out_tdoclink  - output document link field, g_newed string   *
- * Return: TRUE if user closes dialog with 'OK'                         *
-\***********************************************************************/
-gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, const char* title,
-                      gboolean show_date, time64 *date_p,
-                      const char *num, char **out_num,
-                      const char *tnum, char **out_tnum,
-                      const char *tdoclink, char **out_tdoclink);
+typedef void (*GncDupTransDialogCallback) (GncDupTransResult *result,
+                                           gpointer user_data);
 
-gboolean
-gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
-                            const char *num, char **out_num);
+void gnc_dup_trans_result_free (GncDupTransResult *result);
 
+/** Presents the duplicate transaction request without entering a nested main
+ * loop. The callback is invoked exactly once and takes ownership of result. */
+void gnc_dup_trans_dialog_async (GtkWindow *parent,
+                                 const gchar *window_title,
+                                 const gchar *title,
+                                 gboolean show_date,
+                                 time64 initial_date,
+                                 const gchar *num,
+                                 const gchar *tnum,
+                                 const gchar *doclink,
+                                 GncDupTransDialogCallback completed,
+                                 gpointer user_data);
 
-/**
- * Opens up a window to ask for a date for the duplicated element
- *
- * \param parent The parent of the window to be created
- * \param title The text of the title label
- * \param date  The initial date to use, and the output
- *                   parameter for the new date. Must not be NULL.
- *
- * \return TRUE if user closes dialog with 'OK', otherwise FALSE
- */
-gboolean
-gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *date);
+void gnc_dup_date_dialog_async (GtkWindow *parent,
+                                const gchar *title,
+                                const GDate *initial_date,
+                                GncDupTransDialogCallback completed,
+                                gpointer user_data);
 
-/**
- * Opens up a window to ask for a date for the duplicated element
- *
- * \param parent The parent of the window to be created
- * \param window_title The title of the dialog window
- * \param title The text of the title label
- * \param date  The initial time64 date to use, and the output
- *                   parameter for the new date. Must not be NULL.
- *
- * \return TRUE if user closes dialog with 'OK', otherwise FALSE
- */
-gboolean
-gnc_dup_time64_dialog (GtkWidget * parent, const char *window_title,
-                       const char* title, time64 *date);
+void gnc_dup_time64_dialog_async (GtkWindow *parent,
+                                  const gchar *window_title,
+                                  const gchar *title,
+                                  time64 initial_date,
+                                  GncDupTransDialogCallback completed,
+                                  gpointer user_data);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // DIALOGDUPTRANS_H
+#endif /* DIALOGDUPTRANS_H */

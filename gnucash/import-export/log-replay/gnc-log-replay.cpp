@@ -539,112 +539,162 @@ static void  process_trans_record(  FILE *log_file)
     }
 }
 
-void gnc_file_log_replay (GtkWindow *parent)
+typedef struct
 {
-    char *selected_filename;
+    GWeakRef parent;
+    gboolean had_parent;
+} LogReplayFileDialogData;
+
+static void
+log_replay_file_dialog_data_free (LogReplayFileDialogData *data)
+{
+    g_weak_ref_clear (&data->parent);
+    g_free (data);
+}
+
+static void
+log_replay_selected_file (GtkWindow *parent, const gchar *selected_filename)
+{
     char *default_dir;
     char read_buf[256];
     char *read_retval;
-    GtkFileFilter *filter;
     FILE *log_file;
-    const char * record_start_str = "===== START";
+    const char *record_start_str = "===== START";
     /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
-    const char * expected_header = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+    const char *expected_header = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
         "date_entered\tdate_posted\tacc_guid\tacc_name\tnum\tdescription\t"
         "notes\tmemo\taction\treconciled\tamount\tvalue\tdate_reconciled";
 
-    // qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
-    ENTER(" ");
+    ENTER ();
 
-    /* Don't log the log replay. This would only result in redundant logs */
-    xaccLogDisable();
+    /* Don't log the log replay. This would only result in redundant logs. */
+    xaccLogDisable ();
 
-    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
+    /* Remember the directory as the default. */
+    default_dir = g_path_get_dirname (selected_filename);
+    gnc_set_default_directory (GNC_PREFS_GROUP, default_dir);
+    g_free (default_dir);
 
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, "*.log");
-    gtk_file_filter_add_pattern(filter, "*.[Ll][Oo][Gg]");
-    selected_filename = gnc_file_dialog(parent,
-                                        _("Select a .log file to replay"),
-                                        g_list_prepend(NULL, filter),
-                                        default_dir,
-                                        GNC_FILE_DIALOG_OPEN);
-    g_free(default_dir);
-
-    if (selected_filename != NULL)
+    DEBUG ("Filename found: %s", selected_filename);
+    if (xaccFileIsCurrentLog (selected_filename))
     {
-        /* Remember the directory as the default. */
-        default_dir = g_path_get_dirname(selected_filename);
-        gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
-        g_free(default_dir);
-
-        /*strncpy(file,selected_filename, 255);*/
-        DEBUG("Filename found: %s", selected_filename);
-        if (xaccFileIsCurrentLog(selected_filename))
+        g_warning ("Cannot open the current log file: %s", selected_filename);
+        gnc_error_dialog (parent,
+                          /* Translators: %s is the file name. */
+                          _("Cannot open the current log file: %s"),
+                          selected_filename);
+    }
+    else
+    {
+        DEBUG ("Opening selected file");
+        log_file = g_fopen (selected_filename, "r");
+        if (!log_file || ferror (log_file) != 0)
         {
-            g_warning("Cannot open the current log file: %s", selected_filename);
-            gnc_error_dialog(NULL,
-                             /* Translators: %s is the file name. */
-                             _("Cannot open the current log file: %s"),
-                             selected_filename);
+            int err = errno;
+            perror ("File open failed");
+            /* Translators: First argument is the filename,
+             * second argument is the error. */
+            gnc_error_dialog (parent, _("Failed to open log file: %s: %s"),
+                              selected_filename, strerror (err));
         }
         else
         {
-            DEBUG("Opening selected file");
-            log_file = g_fopen(selected_filename, "r");
-            if (!log_file || ferror(log_file) != 0)
+            if ((read_retval = fgets (read_buf, sizeof (read_buf), log_file)) == NULL)
             {
-                int err = errno;
-                perror("File open failed");
-                /* Translators: First argument is the filename,
-                 * second argument is the error.
-                 */
-                gnc_error_dialog(NULL,
-                                 _("Failed to open log file: %s: %s"),
-                                 selected_filename,
-                                 strerror(err));
+                DEBUG ("Read error or EOF");
+                gnc_info_dialog (parent, "%s",
+                                 _("The log file you selected was empty."));
+            }
+            else if (strncmp (expected_header, read_buf,
+                              strlen (expected_header)) != 0)
+            {
+                PERR ("File header not recognised:\n%s", read_buf);
+                PERR ("Expected:\n%s", expected_header);
+                gnc_error_dialog (parent, "%s",
+                                  _("The log file you selected cannot be read. "
+                                    "The file header was not recognized."));
             }
             else
             {
-                if ((read_retval = fgets(read_buf, sizeof(read_buf), log_file)) == NULL)
+                do
                 {
-                    DEBUG("Read error or EOF");
-                    gnc_info_dialog(NULL, "%s",
-                                    _("The log file you selected was empty."));
+                    read_retval = fgets (read_buf, sizeof (read_buf), log_file);
+                    if (read_retval &&
+                        strncmp (record_start_str, read_buf,
+                                 strlen (record_start_str)) == 0)
+                        process_trans_record (log_file);
                 }
-                else
-                {
-                    if (strncmp(expected_header, read_buf, strlen(expected_header)) != 0)
-                    {
-                        PERR("File header not recognised:\n%s", read_buf);
-                        PERR("Expected:\n%s", expected_header);
-                        gnc_error_dialog(NULL, "%s",
-                                         _("The log file you selected cannot be read. "
-                                           "The file header was not recognized."));
-                    }
-                    else
-                    {
-                        do
-                        {
-                            read_retval = fgets(read_buf, sizeof(read_buf), log_file);
-                            /*DEBUG("Chunk read: %s",read_retval);*/
-                            if (read_retval && strncmp(record_start_str, read_buf, strlen(record_start_str)) == 0) /* If a record started */
-                            {
-                                process_trans_record(log_file);
-                            }
-                        }
-                        while (feof(log_file) == 0);
-                    }
-                }
-                fclose(log_file);
+                while (feof (log_file) == 0);
             }
+            fclose (log_file);
         }
-        g_free(selected_filename);
     }
-    /* Start logging again */
-    xaccLogEnable();
 
-    LEAVE("");
+    xaccLogEnable ();
+    LEAVE ();
+}
+
+static void
+log_replay_file_dialog_finished (GObject *source, GAsyncResult *result,
+                                 gpointer user_data)
+{
+    auto data = static_cast<LogReplayFileDialogData *> (user_data);
+    GncFileDialogRequest *request = GNC_FILE_DIALOG_REQUEST (source);
+    GError *error = NULL;
+    GFile *file;
+    GtkWindow *parent;
+
+    file = gnc_file_dialog_request_finish (request, result, &error);
+    parent = GTK_WINDOW (g_weak_ref_get (&data->parent));
+    if (file)
+    {
+        gchar *filename = g_file_get_path (file);
+
+        if (!filename)
+        {
+            if (parent || !data->had_parent)
+                gnc_error_dialog (parent, "%s",
+                                  _("The selected file has no local path."));
+        }
+        else if (parent || !data->had_parent)
+            log_replay_selected_file (parent, filename);
+        g_free (filename);
+        g_object_unref (file);
+    }
+    else if ((parent || !data->had_parent) && error &&
+             !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        gnc_error_dialog (parent, "%s", error->message);
+
+    g_clear_error (&error);
+    g_clear_object (&parent);
+    log_replay_file_dialog_data_free (data);
+}
+
+void
+gnc_file_log_replay (GtkWindow *parent)
+{
+    gchar *default_dir;
+    GtkFileFilter *filter;
+    GList *filters;
+    GncFileDialogRequest *request;
+    LogReplayFileDialogData *data;
+
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, "*.log");
+    gtk_file_filter_add_pattern (filter, "*.[Ll][Oo][Gg]");
+    filters = g_list_prepend (NULL, filter);
+    default_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
+    request = gnc_file_dialog_request_new (
+        parent, _("Select a .log file to replay"), filters, default_dir,
+        GNC_FILE_DIALOG_OPEN);
+    g_free (default_dir);
+
+    data = g_new0 (LogReplayFileDialogData, 1);
+    data->had_parent = parent != NULL;
+    g_weak_ref_init (&data->parent, parent);
+    gnc_file_dialog_request_open_async (request, NULL,
+                                        log_replay_file_dialog_finished, data);
+    g_object_unref (request);
 }
 
 

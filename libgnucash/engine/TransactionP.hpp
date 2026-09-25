@@ -96,6 +96,7 @@ struct transaction_s
     gnc_commodity *common_currency;
 
     GList * splits; /* list of splits */
+    guint64 split_list_generation; /* invalidates active read-only cursors */
 
     /* marker is used to track the progress of transaction traversals.
      * 0 is never a legitimate marker value, so we can tell is we hit
@@ -170,7 +171,24 @@ QofBackend * xaccTransactionGetBackend (Transaction *trans);
 void xaccEnableDataScrubbing(void);
 void xaccDisableDataScrubbing(void);
 
+/**
+ * Temporarily suppress automatic transaction-commit data scrubbing for one
+ * book. The returned token is nestable and must be released with
+ * xaccDataScrubSuspensionRelease(). This is independent of the global
+ * xaccDisableDataScrubbing() switch, which retains its legacy semantics.
+ *
+ * Releasing a token after its book has been destroyed is safe; callers must
+ * not otherwise use a destroyed book.
+ */
+typedef struct GncDataScrubSuspension GncDataScrubSuspension;
+GncDataScrubSuspension *xaccDataScrubSuspendForBook (QofBook *book);
+void xaccDataScrubSuspensionRelease (GncDataScrubSuspension *suspension);
+gboolean xaccDataScrubbingSuspendedForBook (const QofBook *book);
+
 void xaccTransRemoveSplit (Transaction *trans, const Split *split);
+/* Invalidate every bounded collector whose result depends on transaction
+ * ordering, split relationships, accounts or lots. */
+void gnc_transaction_bump_scrub_generations (Transaction *trans);
 void check_open (const Transaction *trans);
 
 /* Structure for accessing static functions for testing */

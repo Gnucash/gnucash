@@ -28,6 +28,7 @@
 #define IMPORT_PARSE_H
 
 #include "qof.h"
+#include <gtk/gtk.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,8 +54,14 @@ GncImportFormat gnc_import_test_numeric(const char* str, GncImportFormat fmts);
 GncImportFormat gnc_import_test_date(const char* str, GncImportFormat fmts);
 
 
-GncImportFormat gnc_import_choose_fmt(const char* msg, GncImportFormat fmts,
-                                      gpointer user_data);
+typedef void (*GncImportFormatChosenCB) (GncImportFormat format, gpointer user_data);
+
+/** Present a non-blocking format chooser. The selected format, or GNCIF_NONE
+ * when the dialog is cancelled, is delivered to @a chosen_cb. */
+void gnc_import_choose_fmt_async (GtkWindow *parent, const char *msg,
+                                  GncImportFormat fmts,
+                                  GncImportFormatChosenCB chosen_cb,
+                                  gpointer user_data);
 
 gboolean gnc_import_parse_numeric(const char* str, GncImportFormat fmt,
                                   gnc_numeric *val);

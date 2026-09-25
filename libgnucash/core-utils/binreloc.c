@@ -44,10 +44,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdint.h>
-#ifdef MAC_INTEGRATION
-#include <gtkmacintegration/gtkosxapplication.h>
-#elif GNC_PLATFORM_OSX
+#if GNC_PLATFORM_OSX
 #include <mach-o/dyld.h>
+#ifdef MAC_INTEGRATION
+#include <Foundation/Foundation.h>
+#endif
 #endif
 #endif /* ENABLE_BINRELOC */
 #include <stdio.h>
@@ -107,13 +108,7 @@ _br_find_exe (Gnc_GbrInitError *error)
     size_t buf_size = PATH_MAX + 1;
     FILE *f;
 
-#ifdef MAC_INTEGRATION
-    result = gtkosx_application_get_executable_path();
-    strncpy (path2, result, buf_size - 1);
-    g_free (result);
-    g_print ("Application Path %s\n", path2);
-#elif defined GNC_PLATFORM_OSX
-    /* Native Mac, but not Aqua */
+#if defined GNC_PLATFORM_OSX
     uint32_t size2 = buf_size;
     if (_NSGetExecutablePath (path2, &size2) != 0)
     {
@@ -367,24 +362,25 @@ static inline gchar *
 get_mac_bundle_prefix()
 {
 #if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
-    gchar *id = gtkosx_application_get_bundle_id ();
-    gchar *path = gtkosx_application_get_resource_path ();
-    gchar *basename = g_path_get_basename (path);
-    /* If id is nullthe app is unbundled and the path 
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *identifier = [bundle bundleIdentifier];
+    NSString *resource_path = [bundle resourcePath];
+    gchar *path = resource_path
+                  ? g_strdup ([resource_path fileSystemRepresentation])
+                  : NULL;
+    gchar *basename = path ? g_path_get_basename (path) : NULL;
+    /* If identifier is null the app is unbundled and the path
        is just the path to the application directory.
        We already have that and our version is better.
        If GNC_UNINSTALLED is set then we're running from
        GNC_BUILDDIR.
     */
-    if (id == NULL || g_getenv ("GNC_UNINSTALLED"))
+    if (identifier == nil || path == NULL || g_getenv ("GNC_UNINSTALLED"))
     {
         g_free (basename);
         g_free (path);
-        g_free (id);
         return NULL;
     }
-
-    g_free (id);
 
     if (g_strcmp0 ("bin", basename) == 0)
     {

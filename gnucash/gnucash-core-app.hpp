@@ -41,12 +41,19 @@ namespace Gnucash {
 
 namespace bpo = boost::program_options;
 
+enum class CommandLineResult
+{
+    Run,
+    ExitSuccess,
+    ExitFailure,
+};
+
 class CoreApp
 {
 public:
     CoreApp (const char* app_name);
 
-    void parse_command_line (int argc, char **argv);
+    CommandLineResult parse_command_line (int argc, char **argv);
     void start (void);
 
 protected:

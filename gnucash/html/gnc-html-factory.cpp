@@ -26,7 +26,13 @@
 #include <gtk/gtk.h>
 
 #include "gnc-html.h"
-#include "gnc-html-webkit.hpp"
+#if defined(GNC_REPORT_WEBVIEW2)
+#include "gnc-html-webview2.hpp"
+#elif defined(GNC_REPORT_WKWEBVIEW)
+#include "gnc-html-wkwebview.hpp"
+#else
+#include "gnc-html-webkit2.hpp"
+#endif
 #include "qoflog.h"
 #include "gnc-engine.h"
 
@@ -38,8 +44,10 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
 GncHtml*
 gnc_html_factory_create_html( void ) noexcept
 {
-#ifdef WEBVIEW2
+#if defined(GNC_REPORT_WEBVIEW2)
     return gnc_html_webview2_new();
+#elif defined(GNC_REPORT_WKWEBVIEW)
+    return gnc_html_wkwebview_new();
 #else
     return gnc_html_webkit_new();
 #endif

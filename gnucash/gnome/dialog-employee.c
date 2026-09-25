@@ -32,6 +32,7 @@
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
@@ -60,7 +61,9 @@ void gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_employee_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_employee_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data);
+void gnc_employee_ccard_acct_toggled_cb (GtkCheckButton *button, gpointer data);
+
+static void gnc_employee_window_request_close (EmployeeWindow *ew);
 
 typedef enum
 {
@@ -131,20 +134,20 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
     if (ew->dialog_type == NEW_EMPLOYEE)
         qof_event_gen(QOF_INSTANCE(employee), QOF_EVENT_ADD, NULL);
 
-    gncEmployeeSetID (employee, gtk_entry_get_text (GTK_ENTRY (ew->id_entry)));
-    gncEmployeeSetUsername (employee, gtk_entry_get_text (GTK_ENTRY (ew->username_entry)));
+    gncEmployeeSetID (employee, gnc_entry_get_text (GTK_ENTRY (ew->id_entry)));
+    gncEmployeeSetUsername (employee, gnc_entry_get_text (GTK_ENTRY (ew->username_entry)));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (ew->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (ew->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (ew->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (ew->email_entry)));
-    gncEmployeeSetActive (employee, gtk_toggle_button_get_active
-                          (GTK_TOGGLE_BUTTON (ew->active_check)));
-    gncEmployeeSetLanguage (employee, gtk_entry_get_text (GTK_ENTRY (ew->language_entry)));
+    gncAddressSetName (addr, gnc_entry_get_text (GTK_ENTRY (ew->name_entry)));
+    gncAddressSetAddr1 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
+    gncAddressSetAddr2 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
+    gncAddressSetAddr3 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
+    gncAddressSetAddr4 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
+    gncAddressSetPhone (addr, gnc_entry_get_text (GTK_ENTRY (ew->phone_entry)));
+    gncAddressSetFax (addr, gnc_entry_get_text (GTK_ENTRY (ew->fax_entry)));
+    gncAddressSetEmail (addr, gnc_entry_get_text (GTK_ENTRY (ew->email_entry)));
+    gncEmployeeSetActive (employee, gtk_check_button_get_active
+                          (GTK_CHECK_BUTTON (ew->active_check)));
+    gncEmployeeSetLanguage (employee, gnc_entry_get_text (GTK_ENTRY (ew->language_entry)));
 
     /* Parse and set the workday and rate amounts */
     gncEmployeeSetWorkday (employee, gnc_amount_edit_get_amount
@@ -156,8 +159,8 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 
     /* Fill in the CCard Acct */
     gncEmployeeSetCCard (employee,
-                         (gtk_toggle_button_get_active
-                          (GTK_TOGGLE_BUTTON (ew->ccard_acct_check)) ?
+                         (gtk_check_button_get_active
+                          (GTK_CHECK_BUTTON (ew->ccard_acct_check)) ?
                           gnc_account_sel_get_account
                           (GNC_ACCOUNT_SEL (ew->ccard_acct_sel)) : NULL));
 
@@ -168,7 +171,7 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
-    const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
+    const char *res = gnc_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
@@ -190,8 +193,20 @@ static gboolean check_edit_amount (GtkWidget *amount)
     return FALSE;
 }
 
+static void
+gnc_employee_window_request_close (EmployeeWindow *ew)
+{
+    if (!ew)
+        return;
+
+    if (ew->component_id != NO_COMPONENT)
+        gnc_close_gui_component (ew->component_id);
+    else if (ew->dialog)
+        gtk_window_destroy (GTK_WINDOW (ew->dialog));
+}
+
 void
-gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
+gnc_employee_window_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
     gchar *string;
@@ -205,10 +220,10 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 
 
     /* Set the employee id if one has not been chosen */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
+    if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
     {
         string = gncEmployeeNextID (ew->book);
-        gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (ew->id_entry), string);
         g_free(string);
     }
 
@@ -237,26 +252,24 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
         ew->employee_guid = *guid_null ();
     }
 
-    gnc_close_gui_component (ew->component_id);
+    gnc_employee_window_request_close (ew);
 }
 
 void
-gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data)
+gnc_employee_window_cancel_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
-    EmployeeWindow *ew = data;
-
-    gnc_close_gui_component (ew->component_id);
+    gnc_employee_window_request_close (data);
 }
 
 void
-gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
+gnc_employee_window_help_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
     gnc_gnome_help (GTK_WINDOW(ew->dialog), DF_MANUAL, DL_USAGE_EMPLOYEE);
 }
 
 void
-gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data)
+gnc_employee_window_destroy_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
     GncEmployee *employee = ew_get_employee (ew);
@@ -270,9 +283,11 @@ gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data)
         ew->employee_guid = *guid_null ();
     }
 
-    gnc_unregister_gui_component (ew->component_id);
+    if (ew->component_id != NO_COMPONENT)
+        gnc_unregister_gui_component (ew->component_id);
     gnc_resume_gui_refresh ();
 
+    ew->dialog = NULL;
     g_free (ew);
 }
 
@@ -290,15 +305,40 @@ gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_employee_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data)
+gnc_employee_ccard_acct_toggled_cb (GtkCheckButton *button, gpointer data)
 {
     EmployeeWindow *ew = data;
 
     if (!ew)
         return;
 
-    bool active = gtk_toggle_button_get_active (button);
+    bool active = gtk_check_button_get_active (button);
     gtk_widget_set_sensitive (ew->ccard_acct_sel, active);
+}
+
+static gboolean
+gnc_employee_window_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    EmployeeWindow *ew = user_data;
+
+    if (!ew || ew->dialog != GTK_WIDGET (window))
+        return FALSE;
+
+    gnc_employee_window_request_close (ew);
+    return TRUE;
+}
+
+static gboolean
+gnc_employee_window_key_pressed_cb (G_GNUC_UNUSED GtkEventControllerKey *key,
+                                    guint keyval, G_GNUC_UNUSED guint keycode,
+                                    G_GNUC_UNUSED GdkModifierType state,
+                                    gpointer user_data)
+{
+    if (keyval != GDK_KEY_Escape)
+        return FALSE;
+
+    gnc_employee_window_request_close (user_data);
+    return TRUE;
 }
 
 static void
@@ -306,7 +346,8 @@ gnc_employee_window_close_handler (gpointer user_data)
 {
     EmployeeWindow *ew = user_data;
 
-    gtk_widget_destroy (ew->dialog);
+    if (ew && ew->dialog)
+        gtk_window_destroy (GTK_WINDOW (ew->dialog));
 }
 
 static void
@@ -351,7 +392,7 @@ gnc_employee_new_window (GtkWindow *parent,
 {
     EmployeeWindow *ew;
     GtkBuilder *builder;
-    GtkWidget *hbox, *edit;
+    GtkWidget *hbox, *edit, *ok_button;
     gnc_commodity *currency;
     GNCPrintAmountInfo print_info;
     GList *acct_types;
@@ -386,7 +427,7 @@ gnc_employee_new_window (GtkWindow *parent,
      * No existing employee window found.  Build a new one.
      */
     ew = g_new0 (EmployeeWindow, 1);
-
+    ew->component_id = NO_COMPONENT;
     ew->book = bookp;
 
     /* Find the dialog */
@@ -423,7 +464,7 @@ gnc_employee_new_window (GtkWindow *parent,
     ew->currency_edit = edit;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* WORKDAY: Value */
     edit = gnc_amount_edit_new();
@@ -433,10 +474,10 @@ gnc_employee_new_window (GtkWindow *parent,
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
     ew->workday_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "hours_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* RATE: Monetary Value */
     edit = gnc_amount_edit_new();
@@ -446,10 +487,10 @@ gnc_employee_new_window (GtkWindow *parent,
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
                                   gnc_commodity_get_fraction (currency));
     ew->rate_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* CCard Account Selection */
     ew->ccard_acct_check = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_check"));
@@ -460,13 +501,23 @@ gnc_employee_new_window (GtkWindow *parent,
     g_list_free (acct_types);
 
     ew->ccard_acct_sel = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_acct_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
-    /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);
+    /* Setup Builder callbacks and GTK4 window lifecycle. */
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);
+    g_signal_connect (ew->dialog, "close-request",
+                      G_CALLBACK (gnc_employee_window_close_request_cb), ew);
+
+    GtkEventController *key_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (ew->dialog, key_controller);
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_employee_window_key_pressed_cb), ew);
+
+    ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
+    gtk_window_set_default_widget (GTK_WINDOW (ew->dialog), ok_button);
 
     /* Setup initial values */
     if (employee != NULL)
@@ -478,24 +529,24 @@ gnc_employee_new_window (GtkWindow *parent,
 
         addr = gncEmployeeGetAddr (employee);
 
-        gtk_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
-        gtk_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
+        gnc_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
+        gnc_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (ew->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr1_entry), gncAddressGetAddr1 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr2_entry), gncAddressGetAddr2 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr3_entry), gncAddressGetAddr3 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr4_entry), gncAddressGetAddr4 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->phone_entry), gncAddressGetPhone (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->fax_entry), gncAddressGetFax (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->email_entry), gncAddressGetEmail (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->name_entry), gncAddressGetName (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr1_entry), gncAddressGetAddr1 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr2_entry), gncAddressGetAddr2 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr3_entry), gncAddressGetAddr3 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr4_entry), gncAddressGetAddr4 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->phone_entry), gncAddressGetPhone (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->fax_entry), gncAddressGetFax (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->email_entry), gncAddressGetEmail (addr));
 
-        gtk_entry_set_text (GTK_ENTRY (ew->language_entry),
+        gnc_entry_set_text (GTK_ENTRY (ew->language_entry),
                             gncEmployeeGetLanguage (employee));
 
         /* Set toggle buttons */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->active_check),
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (ew->active_check),
                                       gncEmployeeGetActive (employee));
 
         ew->component_id =
@@ -517,6 +568,7 @@ gnc_employee_new_window (GtkWindow *parent,
                                         ew);
     }
 
+    gnc_gui_component_set_session (ew->component_id, gnc_get_current_session ());
 
     /* I know that employee exists here -- either passed in or just created */
     /* Set the workday and rate values */
@@ -529,12 +581,12 @@ gnc_employee_new_window (GtkWindow *parent,
     ccard_acct = gncEmployeeGetCCard (employee);
     if (ccard_acct == NULL)
     {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->ccard_acct_check), FALSE);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (ew->ccard_acct_check), FALSE);
         gtk_widget_set_sensitive (ew->ccard_acct_sel, FALSE);
     }
     else
     {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->ccard_acct_check), TRUE);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (ew->ccard_acct_check), TRUE);
         gnc_account_sel_set_account (GNC_ACCOUNT_SEL (ew->ccard_acct_sel), ccard_acct, FALSE);
     }
 
@@ -544,7 +596,7 @@ gnc_employee_new_window (GtkWindow *parent,
                                          GNC_EMPLOYEE_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (ew->dialog);
+    gtk_window_present (GTK_WINDOW (ew->dialog));
 
     g_object_unref(G_OBJECT(builder));
 

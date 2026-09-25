@@ -43,6 +43,7 @@
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
+#include "import-selection-model.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -50,14 +51,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #if (AQBANKING_VERSION_INT >= 60400)
 /* Template handling */
 static void gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data);
-static gboolean gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model,
-        GtkTreePath *path,
-        GtkTreeIter *iter,
-        gpointer user_data);
-static gboolean gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model,
-        GtkTreePath *path,
-        GtkTreeIter *iter,
-        gpointer data);
+static GtkStringObject *gnc_ab_trans_dialog_template_row_new (GncABTransTempl *templ);
+static void gnc_ab_trans_dialog_template_factory_setup (GtkListItemFactory *factory,
+                                                         GtkListItem *list_item,
+                                                         gpointer user_data);
+static void gnc_ab_trans_dialog_template_factory_bind (GtkListItemFactory *factory,
+                                                        GtkListItem *list_item,
+                                                        gpointer user_data);
 #endif
 static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
 static GNC_AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
@@ -82,26 +82,43 @@ void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
         gint         length,
         gint        *position,
         gpointer     user_data);
-void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
-        GtkTreePath *path,
-        GtkTreeViewColumn *column,
-        gpointer user_data);
+void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkColumnView *view,
+        guint position, gpointer user_data);
+
+typedef struct _GncABTransDialogRunData GncABTransDialogRunData;
+typedef struct _TemplateDeleteRequest TemplateDeleteRequest;
+
+struct _TemplateDeleteRequest
+{
+    GncABTransDialog *dialog;
+    GtkStringObject *row;
+};
 
 static void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
+static gboolean gnc_ab_trans_dialog_prepare (GncABTransDialog *td);
+static void gnc_ab_trans_dialog_complete (GncABTransDialogRunData *data,
+                                          gint response);
+static void gnc_ab_trans_dialog_window_destroyed (GtkWidget *widget,
+                                                  gpointer user_data);
 
-
-enum
+struct _GncABTransDialogRunData
 {
-    TEMPLATE_NAME,
-    TEMPLATE_POINTER,
-    TEMPLATE_NUM_COLUMNS
+    GTask *task;
+    GncABTransDialog *dialog;
+    gulong now_handler;
+    gulong later_handler;
+    gulong cancel_handler;
+    gulong close_handler;
+    GtkEventController *shortcuts;
 };
+
 
 struct _GncABTransDialog
 {
     /* The dialog itself */
     GtkWidget *dialog;
     GtkWidget *parent;
+    GncABTransDialogRunData *run_data;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
 
     /* Whether this is a transfer or a direct debit */
@@ -127,12 +144,18 @@ struct _GncABTransDialog
     /* Originator's name (might have to be edited by the user) */
     GtkWidget *orig_name_entry;
 
-    /* The template choosing GtkTreeView/GtkListStore */
-    GtkTreeView *template_gtktreeview;
-    GtkListStore *template_list_store;
+    /* The template choosing GtkColumnView/GListStore */
+    GtkColumnView *template_view;
+    GListStore *template_store;
+    GtkSingleSelection *template_selection;
 
-    /* Exec button */
+    /* Execution controls */
     GtkWidget *exec_button;
+    GtkWidget *exec_later_button;
+    GtkWidget *cancel_button;
+
+    /* A pending confirmation owns itself; td_free() only invalidates td. */
+    TemplateDeleteRequest *template_delete_request;
 
     /* Flag, if template list has been changed */
     gboolean templ_changed;
@@ -160,19 +183,58 @@ gboolean gnc_ab_trans_isSEPA(GncABTransType t)
 }
 
 #if (AQBANKING_VERSION_INT >= 60400)
+#define TEMPLATE_ROW_POINTER "template-pointer"
+
+static GtkStringObject *
+gnc_ab_trans_dialog_template_row_new (GncABTransTempl *templ)
+{
+    GtkStringObject *row;
+
+    g_return_val_if_fail (templ, NULL);
+    row = gtk_string_object_new (gnc_ab_trans_templ_get_name (templ));
+    g_object_set_data_full (G_OBJECT (row), TEMPLATE_ROW_POINTER, templ,
+                            (GDestroyNotify)gnc_ab_trans_templ_free);
+    return row;
+}
+
+static void
+gnc_ab_trans_dialog_template_factory_setup (GtkListItemFactory *factory,
+                                            GtkListItem *list_item,
+                                            gpointer user_data)
+{
+    GtkWidget *label = gtk_label_new (NULL);
+
+    (void)factory;
+    (void)user_data;
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child (list_item, label);
+}
+
+static void
+gnc_ab_trans_dialog_template_factory_bind (GtkListItemFactory *factory,
+                                           GtkListItem *list_item,
+                                           gpointer user_data)
+{
+    GtkStringObject *row = GTK_STRING_OBJECT (gtk_list_item_get_item (list_item));
+
+    (void)factory;
+    (void)user_data;
+    gtk_label_set_text (GTK_LABEL (gtk_list_item_get_child (list_item)),
+                        gtk_string_object_get_string (row));
+}
+
 static void
 gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data)
 {
     GncABTransTempl *templ = data;
-    GtkListStore *store = user_data;
-    GtkTreeIter iter;
+    GListStore *store = user_data;
+    GtkStringObject *row;
 
     g_return_if_fail(templ && store);
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       TEMPLATE_NAME, gnc_ab_trans_templ_get_name(templ),
-                       TEMPLATE_POINTER, templ,
-                       -1);
+    row = gnc_ab_trans_dialog_template_row_new (templ);
+    g_list_store_append (store, row);
+    g_object_unref (row);
 }
 #endif
 /**
@@ -191,29 +253,29 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
         AB_Transaction_SetRemoteBic(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteIban(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
         AB_Transaction_SetLocalName(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
     }
     else
     {
         AB_Transaction_SetRemoteBankCode(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteAccountNumber(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
     }
     AB_Transaction_SetRemoteCountry(trans, "DE");
     AB_Transaction_SetRemoteName(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_entry)));
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
     value = AB_Value_fromDouble(gnc_amount_edit_get_damount(
                                     GNC_AMOUNT_EDIT(td->amount_edit)));
     /* FIXME: Replace "EUR" by account-dependent string here. */
@@ -262,13 +324,14 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     GtkWidget *orig_bankname_label;
     GtkWidget *orig_bankcode_heading;
     GtkWidget *orig_bankcode_label;
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
 #if (AQBANKING_VERSION_INT >= 60400)
     GtkExpander *template_expander;
     GtkWidget *template_label;
     GtkWidget *add_templ_button;
     GtkWidget *del_templ_button;
+    GtkScrolledWindow *template_scrolledwindow;
+    GtkListItemFactory *template_factory;
+    GtkColumnViewColumn *template_column;
 #endif
 
     g_return_val_if_fail(ab_acc, NULL);
@@ -309,6 +372,9 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     td->purpose_cont2_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont2_entry"));
     td->purpose_cont3_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont3_entry"));
     td->exec_button = GTK_WIDGET(gtk_builder_get_object(builder, "exec_now_button"));
+    td->exec_later_button = GTK_WIDGET(gtk_builder_get_object(
+        builder, "exec_later_button"));
+    td->cancel_button = GTK_WIDGET(gtk_builder_get_object(builder, "cancel_button"));
     orig_name_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_heading"));
     td->orig_name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_label"));
     orig_account_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_account_heading"));
@@ -317,27 +383,35 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     orig_bankname_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankname_label"));
     orig_bankcode_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankcode_heading"));
     orig_bankcode_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankcode_label"));
-    td->template_gtktreeview =
-        GTK_TREE_VIEW(gtk_builder_get_object (builder, "template_list"));
 #if (AQBANKING_VERSION_INT >= 60400)
     template_expander = GTK_EXPANDER(gtk_builder_get_object (builder, "expander1"));
     template_label = GTK_WIDGET(gtk_builder_get_object (builder, "label1"));
     add_templ_button= GTK_WIDGET(gtk_builder_get_object(builder, "add_templ_button"));
     del_templ_button= GTK_WIDGET(gtk_builder_get_object(builder, "del_templ_button"));
+    template_scrolledwindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object (builder,
+                                                  "template_scrolledwindow"));
 #endif
 
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
-    gtk_box_pack_start(GTK_BOX(amount_hbox), td->amount_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(amount_hbox), GTK_WIDGET(td->amount_edit));
     gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(td->amount_edit), amount_label);
     gnc_amount_edit_set_evaluate_on_enter(GNC_AMOUNT_EDIT(td->amount_edit),
                                           TRUE);
     gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(td->amount_edit),
                                  commodity_scu);
 
-    /* Use "focus-out" signal because "amount-changed" is only sent when ENTER is pressed */
-    g_signal_connect_swapped (gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(td->amount_edit)), "focus-out-event",
-                              G_CALLBACK(gnc_ab_trans_dialog_verify_values), td);
+    /* Amount changes are evaluated on Enter. Evaluate again when focus leaves
+     * the entry with GTK4's event controller. */
+    {
+        GtkEventController *focus = gtk_event_controller_focus_new ();
+
+        g_signal_connect_swapped (focus, "leave",
+                                  G_CALLBACK (gnc_ab_trans_dialog_verify_values),
+                                  td);
+        gtk_widget_add_controller (
+            gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (td->amount_edit)), focus);
+    }
 
     /* Check for what kind of transaction this should be, and change the
      * labels accordingly */
@@ -390,10 +464,10 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     	gtk_widget_set_sensitive(td->recp_bankcode_entry, FALSE);
     	gtk_widget_set_sensitive(add_templ_button, FALSE);
     	gtk_widget_set_visible(add_templ_button, FALSE);
-    	gtk_widget_set_can_focus(add_templ_button, FALSE);
+        gtk_widget_set_focusable (add_templ_button, FALSE);
     	gtk_widget_set_sensitive(del_templ_button, FALSE);
     	gtk_widget_set_visible(del_templ_button, FALSE);
-    	gtk_widget_set_can_focus(del_templ_button, FALSE);
+        gtk_widget_set_focusable (del_templ_button, FALSE);
         gtk_label_set_text(GTK_LABEL(template_label),
                            _("Target Accounts"));
         gtk_expander_set_expanded(template_expander, TRUE);
@@ -437,7 +511,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
         gtk_entry_set_max_length(GTK_ENTRY(td->recp_account_entry), 34);
     }
 
-    gtk_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
+    gnc_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
     gtk_label_set_text(GTK_LABEL(orig_bankname_label), ab_bankname);
     if (gnc_ab_trans_isSEPA(trans_type))
     {
@@ -456,22 +530,31 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
 
 #if (AQBANKING_VERSION_INT >= 60400)
     /* Fill list for choosing a transaction template */
-    td->template_list_store = gtk_list_store_new(TEMPLATE_NUM_COLUMNS,
-                              G_TYPE_STRING, G_TYPE_POINTER);
-    g_list_foreach(templates, gnc_ab_trans_dialog_fill_templ_helper, td->template_list_store);
-    gtk_tree_view_set_model(td->template_gtktreeview,
-                            GTK_TREE_MODEL(td->template_list_store));
+    td->template_store = g_list_store_new (GTK_TYPE_STRING_OBJECT);
+    g_list_foreach (templates, gnc_ab_trans_dialog_fill_templ_helper, td->template_store);
+    td->template_selection = gnc_import_single_selection_new (G_LIST_MODEL (td->template_store));
+    td->template_view = GTK_COLUMN_VIEW (gtk_column_view_new (GTK_SELECTION_MODEL
+                                                               (g_object_ref (td->template_selection))));
+    template_factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (template_factory, "setup",
+                      G_CALLBACK (gnc_ab_trans_dialog_template_factory_setup), NULL);
+    g_signal_connect (template_factory, "bind",
+                      G_CALLBACK (gnc_ab_trans_dialog_template_factory_bind), NULL);
+    template_column = gtk_column_view_column_new (_("Template Name"), template_factory);
+    gtk_column_view_column_set_expand (template_column, TRUE);
+    gtk_column_view_append_column (td->template_view, template_column);
+    g_object_unref (template_column);
+    gtk_scrolled_window_set_child (template_scrolledwindow, GTK_WIDGET (td->template_view));
+    g_signal_connect (td->template_view, "activate",
+                      G_CALLBACK (gnc_ab_trans_dialog_templ_list_row_activated_cb), td);
     td->templ_changed = FALSE;
-    /* Keep a reference to the store */
 #endif
-    /* Show this list */
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(
-                 "Template Name", renderer, "text", TEMPLATE_NAME, NULL);
-    gtk_tree_view_append_column(td->template_gtktreeview, column);
 
     /* Connect the Signals */
-    gtk_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
+    gnc_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
+    g_signal_connect (td->dialog, "destroy",
+                      G_CALLBACK (gnc_ab_trans_dialog_window_destroyed), td);
+    gtk_window_set_default_widget (GTK_WINDOW (td->dialog), td->exec_button);
 
     g_object_unref(G_OBJECT(builder));
 
@@ -658,130 +741,243 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     gnc_ab_trans_dialog_clear_transaction(td);
 }
 
-gint
-gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
+static gboolean
+gnc_ab_trans_dialog_prepare (GncABTransDialog *td)
 {
-    gint result;
     GNC_AB_JOB *job;
     const AB_TRANSACTION_LIMITS *joblimits;
     guint8 max_purpose_lines;
 
-    /* Check whether the account supports this job */
-    job = gnc_ab_trans_dialog_get_available_empty_job(td->ab_acc, td->trans_type);
+    job = gnc_ab_trans_dialog_get_available_empty_job (td->ab_acc,
+                                                        td->trans_type);
     if (!job)
     {
-        g_warning("gnc_ab_trans_dialog_run_until_ok: Oops, job not available");
-        return GTK_RESPONSE_CANCEL;
+        g_warning ("gnc_ab_trans_dialog_run_async: Oops, job not available");
+        return FALSE;
     }
 
-    /* Activate as many purpose entries as available for the job */
-    joblimits = AB_AccountSpec_GetTransactionLimitsForCommand(td->ab_acc, AB_Transaction_GetCommand(job));
-    max_purpose_lines = joblimits ?
-                        AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
-    gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
-    gtk_widget_set_sensitive(td->purpose_cont2_entry, max_purpose_lines > 2);
-    gtk_widget_set_sensitive(td->purpose_cont3_entry, max_purpose_lines > 3);
+    joblimits = AB_AccountSpec_GetTransactionLimitsForCommand (
+        td->ab_acc, AB_Transaction_GetCommand (job));
+    max_purpose_lines = joblimits
+        ? AB_TransactionLimits_GetMaxLinesPurpose (joblimits) : 2;
+    gtk_widget_set_sensitive (td->purpose_cont_entry, max_purpose_lines > 1);
+    gtk_widget_set_sensitive (td->purpose_cont2_entry, max_purpose_lines > 2);
+    gtk_widget_set_sensitive (td->purpose_cont3_entry, max_purpose_lines > 3);
     if (joblimits)
     {
-        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_entry),
-                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
-        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_cont_entry),
-                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
-        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_cont2_entry),
-                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
-        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_cont3_entry),
-                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
-        gtk_entry_set_max_length(GTK_ENTRY(td->recp_name_entry),
-                                 AB_TransactionLimits_GetMaxLenRemoteName(joblimits));
+        gtk_entry_set_max_length (GTK_ENTRY (td->purpose_entry),
+                                  AB_TransactionLimits_GetMaxLenPurpose (joblimits));
+        gtk_entry_set_max_length (GTK_ENTRY (td->purpose_cont_entry),
+                                  AB_TransactionLimits_GetMaxLenPurpose (joblimits));
+        gtk_entry_set_max_length (GTK_ENTRY (td->purpose_cont2_entry),
+                                  AB_TransactionLimits_GetMaxLenPurpose (joblimits));
+        gtk_entry_set_max_length (GTK_ENTRY (td->purpose_cont3_entry),
+                                  AB_TransactionLimits_GetMaxLenPurpose (joblimits));
+        gtk_entry_set_max_length (GTK_ENTRY (td->recp_name_entry),
+                                  AB_TransactionLimits_GetMaxLenRemoteName (joblimits));
     }
-
-    /* Show the dialog */
-    gtk_widget_show(td->dialog);
-
-    /* Now run the dialog until it gets closed by a button press */
-    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
-
-    /* Was cancel pressed or dialog closed?
-     *  GNC_RESPONSE_NOW == execute now
-     *  GNC_RESPONSE_LATER == scheduled for later execution (unimplemented)
-     *  GTK_RESPONSE_CANCEL == cancel
-     *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
-    if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
-    {
-        gtk_widget_destroy(td->dialog);
-        td->dialog = NULL;
-        return result;
-    }
-
-    /* Get the transaction details - have been checked beforehand */
-    td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
-
-    /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
-     * transactionCode according to some GUI selection here!! */
-    /*if (td->trans_type == SINGLE_DEBITNOTE)
-    AB_TRANSACTION_setTextKey (td->hbci_trans, 05); */
-
-
-    /* Hide the dialog */
-    if (td->dialog)
-        gtk_widget_hide(td->dialog);
-
-    return result;
+    AB_Transaction_free (job);
+    return TRUE;
 }
 
-#if (AQBANKING_VERSION_INT >= 60400)
-static gboolean
-gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model,
-                                       GtkTreePath *path,
-                                       GtkTreeIter *iter,
-                                       gpointer user_data)
+static void
+gnc_ab_trans_dialog_now_clicked (GtkButton *button, gpointer user_data)
 {
-    GncABTransTempl *templ;
-
-    g_return_val_if_fail(model && iter, TRUE);
-
-    gtk_tree_model_get(model, iter, TEMPLATE_POINTER, &templ, -1);
-    gnc_ab_trans_templ_free(templ);
-    return FALSE;
+    (void)button;
+    gnc_ab_trans_dialog_complete (user_data, GNC_RESPONSE_NOW);
 }
-#endif
+
+static void
+gnc_ab_trans_dialog_later_clicked (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    gnc_ab_trans_dialog_complete (user_data, GNC_RESPONSE_LATER);
+}
+
+static void
+gnc_ab_trans_dialog_cancel_clicked (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    gnc_ab_trans_dialog_complete (user_data, GTK_RESPONSE_CANCEL);
+}
+
+static gboolean
+gnc_ab_trans_dialog_close_requested (GtkWindow *window, gpointer user_data)
+{
+    (void)window;
+    gnc_ab_trans_dialog_complete (user_data, GTK_RESPONSE_CANCEL);
+    return TRUE;
+}
+
+static gboolean
+gnc_ab_trans_dialog_escape_pressed (GtkWidget *widget, GVariant *args,
+                                    gpointer user_data)
+{
+    (void)widget;
+    (void)args;
+    gnc_ab_trans_dialog_complete (user_data, GTK_RESPONSE_CANCEL);
+    return TRUE;
+}
+
+static void
+gnc_ab_trans_dialog_add_shortcuts (GncABTransDialogRunData *data)
+{
+    GtkShortcutController *controller = GTK_SHORTCUT_CONTROLLER (
+        gtk_shortcut_controller_new ());
+
+    gtk_shortcut_controller_set_scope (controller, GTK_SHORTCUT_SCOPE_MANAGED);
+    gtk_shortcut_controller_add_shortcut (
+        controller,
+        gtk_shortcut_new (
+            gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+            gtk_callback_action_new (gnc_ab_trans_dialog_escape_pressed, data, NULL)));
+    data->shortcuts = GTK_EVENT_CONTROLLER (controller);
+    gtk_widget_add_controller (data->dialog->dialog, data->shortcuts);
+}
+
+static void
+gnc_ab_trans_dialog_window_destroyed (GtkWidget *widget, gpointer user_data)
+{
+    GncABTransDialog *td = user_data;
+
+    if (td->dialog == widget)
+        td->dialog = NULL;
+    if (td->run_data)
+        gnc_ab_trans_dialog_complete (td->run_data, GTK_RESPONSE_CANCEL);
+}
+
+static void
+gnc_ab_trans_dialog_complete (GncABTransDialogRunData *data, gint response)
+{
+    GncABTransDialog *td;
+    GTask *task;
+
+    if (!data || !data->dialog || data->dialog->run_data != data)
+        return;
+
+    td = data->dialog;
+    td->run_data = NULL;
+    task = data->task;
+    if (td->dialog)
+    {
+        if (data->now_handler)
+            g_signal_handler_disconnect (td->exec_button, data->now_handler);
+        if (data->later_handler)
+            g_signal_handler_disconnect (td->exec_later_button, data->later_handler);
+        if (data->cancel_handler)
+            g_signal_handler_disconnect (td->cancel_button, data->cancel_handler);
+        if (data->close_handler)
+            g_signal_handler_disconnect (td->dialog, data->close_handler);
+        if (data->shortcuts)
+        {
+            gtk_widget_remove_controller (td->dialog, data->shortcuts);
+            data->shortcuts = NULL;
+        }
+    }
+
+    if (response == GNC_RESPONSE_NOW || response == GNC_RESPONSE_LATER)
+    {
+        g_clear_pointer (&td->ab_trans, AB_Transaction_free);
+        td->ab_trans = gnc_ab_trans_dialog_fill_values (td);
+        if (td->dialog)
+            gtk_widget_set_visible (td->dialog, FALSE);
+    }
+    else if (td->dialog)
+    {
+        gtk_window_destroy (GTK_WINDOW (td->dialog));
+        td->dialog = NULL;
+    }
+
+    g_task_return_int (task, response);
+    g_object_unref (task);
+    g_free (data);
+}
+
+void
+gnc_ab_trans_dialog_run_async (GncABTransDialog *td,
+                               GCancellable *cancellable,
+                               GAsyncReadyCallback callback,
+                               gpointer user_data)
+{
+    GncABTransDialogRunData *data;
+    GTask *task;
+
+    g_return_if_fail (td);
+    if (td->run_data || !td->dialog)
+    {
+        task = g_task_new (NULL, cancellable, callback, user_data);
+        g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                                 "The AqBanking transaction dialog is not available");
+        g_object_unref (task);
+        return;
+    }
+
+    if (!gnc_ab_trans_dialog_prepare (td))
+    {
+        task = g_task_new (NULL, cancellable, callback, user_data);
+        g_task_return_int (task, GTK_RESPONSE_CANCEL);
+        g_object_unref (task);
+        return;
+    }
+
+    data = g_new0 (GncABTransDialogRunData, 1);
+    data->task = g_task_new (NULL, cancellable, callback, user_data);
+    data->dialog = td;
+    td->run_data = data;
+    g_task_set_source_tag (data->task, gnc_ab_trans_dialog_run_async);
+    data->now_handler = g_signal_connect (
+        td->exec_button, "clicked", G_CALLBACK (gnc_ab_trans_dialog_now_clicked), data);
+    data->later_handler = g_signal_connect (
+        td->exec_later_button, "clicked",
+        G_CALLBACK (gnc_ab_trans_dialog_later_clicked), data);
+    data->cancel_handler = g_signal_connect (
+        td->cancel_button, "clicked",
+        G_CALLBACK (gnc_ab_trans_dialog_cancel_clicked), data);
+    data->close_handler = g_signal_connect (
+        td->dialog, "close-request",
+        G_CALLBACK (gnc_ab_trans_dialog_close_requested), data);
+    gnc_ab_trans_dialog_add_shortcuts (data);
+    gtk_window_present (GTK_WINDOW (td->dialog));
+}
+
+gboolean
+gnc_ab_trans_dialog_run_finish (GAsyncResult *result, gint *response,
+                                GError **error)
+{
+    GTask *task;
+
+    g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+    g_return_val_if_fail (response, FALSE);
+
+    task = G_TASK (result);
+    if (g_task_had_error (task))
+    {
+        g_task_propagate_int (task, error);
+        return FALSE;
+    }
+
+    *response = g_task_propagate_int (task, error);
+    return TRUE;
+}
 void
 gnc_ab_trans_dialog_free(GncABTransDialog *td)
 {
     if (!td) return;
     if (td->ab_trans)
         AB_Transaction_free(td->ab_trans);
+    if (td->template_delete_request)
+        td->template_delete_request->dialog = NULL;
     if (td->dialog)
-        gtk_widget_destroy(td->dialog);
+        gtk_window_destroy (GTK_WINDOW(td->dialog));
 
 #if (AQBANKING_VERSION_INT >= 60400)
-    if (td->template_list_store)
-    {
-        gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
-                               gnc_ab_trans_dialog_clear_templ_helper, NULL);
-        g_object_unref(td->template_list_store);
-    }
+    g_clear_object (&td->template_selection);
+    g_clear_object (&td->template_store);
 #endif
     g_free(td);
 }
 
 #if (AQBANKING_VERSION_INT >= 60400)
-static gboolean
-gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model,
-                                     GtkTreePath *path,
-                                     GtkTreeIter *iter,
-                                     gpointer data)
-{
-    GList **list = data;
-    GncABTransTempl *templ;
-
-    g_return_val_if_fail(model && iter, TRUE);
-
-    gtk_tree_model_get(model, iter, TEMPLATE_POINTER, &templ, -1);
-    *list = g_list_prepend(*list, templ);
-    return FALSE;
-}
-
 GList *
 gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td, gboolean *changed)
 {
@@ -796,9 +992,17 @@ gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td, gboolean *changed)
             return NULL;
     }
 
-    gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
-                           gnc_ab_trans_dialog_get_templ_helper, &list);
-    list = g_list_reverse(list);
+    for (guint position = 0;
+         position < g_list_model_get_n_items (G_LIST_MODEL (td->template_store));
+         position++)
+    {
+        GtkStringObject *row = g_list_model_get_item (G_LIST_MODEL (td->template_store),
+                                                       position);
+        list = g_list_prepend (list, g_object_get_data (G_OBJECT (row),
+                                                        TEMPLATE_ROW_POINTER));
+        g_object_unref (row);
+    }
+    list = g_list_reverse (list);
     return list;
 }
 #endif
@@ -891,13 +1095,12 @@ gnc_ab_get_trans_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
 
 #if (AQBANKING_VERSION_INT >= 60400)
 void
-gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
-        GtkTreePath *path,
-        GtkTreeViewColumn *column,
-        gpointer user_data)
+gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkColumnView *view,
+                                                 guint position,
+                                                 gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GtkTreeIter iter;
+    GtkStringObject *row;
     GncABTransTempl *templ;
     const gchar *new_name;
     const gchar *new_account;
@@ -907,16 +1110,16 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     gnc_numeric new_amount;
 
     g_return_if_fail(td);
+    (void)view;
 
     ENTER("td=%p", td);
-    if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(td->template_list_store), &iter,
-                                 path))
+    row = g_list_model_get_item (G_LIST_MODEL (td->template_store), position);
+    if (!row)
     {
-        LEAVE("Could not get iter");
+        LEAVE("Could not get row");
         return;
     }
-    gtk_tree_model_get(GTK_TREE_MODEL(td->template_list_store), &iter,
-                       TEMPLATE_POINTER, &templ, -1);
+    templ = g_object_get_data (G_OBJECT (row), TEMPLATE_ROW_POINTER);
 
     /* Get new values */
     new_name = gnc_ab_trans_templ_get_recp_name(templ);
@@ -932,245 +1135,374 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     if (!new_purpose_cont) new_purpose_cont = "";
 
     /* Fill in */
-    gtk_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
-    gtk_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
-    gtk_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
-    gtk_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
-    gtk_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
+    gnc_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
+    gnc_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(td->amount_edit), new_amount);
+    g_object_unref (row);
     LEAVE(" ");
 }
 
-
-struct _FindTemplData
-{
-    const gchar *name;
-    const GncABTransTempl *pointer;
-};
-
 static gboolean
-find_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-                  gpointer user_data)
+gnc_ab_trans_dialog_template_name_exists (const GncABTransDialog *td,
+                                          const gchar *name)
 {
-    struct _FindTemplData *data = user_data;
-    gchar *name;
-    GncABTransTempl *templ;
-    gboolean match;
-
-    g_return_val_if_fail(model && data, TRUE);
-    gtk_tree_model_get(model, iter,
-                       TEMPLATE_NAME, &name,
-                       TEMPLATE_POINTER, &templ,
-                       -1);
-    if (data->name)
+    for (guint position = 0;
+         position < g_list_model_get_n_items (G_LIST_MODEL (td->template_store));
+         position++)
     {
-        /* Search for the template by name */
-        g_return_val_if_fail(!data->pointer, TRUE);
-        match = strcmp(name, data->name) == 0;
-        if (match) data->pointer = templ;
+        GtkStringObject *row = g_list_model_get_item (G_LIST_MODEL (td->template_store),
+                                                       position);
+        gboolean exists = g_strcmp0 (gtk_string_object_get_string (row), name) == 0;
+        g_object_unref (row);
+        if (exists)
+            return TRUE;
     }
-    else
-    {
-        /* Search for the template by template pointer */
-        g_return_val_if_fail(!data->name, TRUE);
-        match = templ == data->pointer;
-        if (match) data->name = g_strdup(name);
-    }
-    g_free(name);
-    return match;
+    return FALSE;
 }
 
-void
-gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
+typedef struct
 {
-    GncABTransDialog *td = user_data;
     GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *entry;
-    gint retval;
+    GncABTransDialog *td;
+} TemplateNameDialog;
+
+static void
+template_name_dialog_free (TemplateNameDialog *info)
+{
+    if (!info)
+        return;
+
+    if (info->dialog)
+    {
+        g_signal_handlers_disconnect_by_data (info->dialog, info);
+        gtk_window_destroy (GTK_WINDOW (info->dialog));
+        info->dialog = NULL;
+    }
+    g_clear_object (&info->builder);
+    g_free (info);
+}
+
+static void
+template_name_dialog_destroyed (GtkWidget *widget, gpointer user_data)
+{
+    TemplateNameDialog *info = user_data;
+
+    if (info->dialog == widget)
+        info->dialog = NULL;
+    g_clear_object (&info->builder);
+    g_free (info);
+}
+
+static void
+template_name_dialog_accept_clicked (GtkButton *button, gpointer user_data)
+{
+    TemplateNameDialog *info = user_data;
     const gchar *name;
     GncABTransTempl *templ;
-    struct _FindTemplData data;
-    GtkTreeSelection *selection;
-    GtkTreeIter cur_iter;
-    GtkTreeIter new_iter;
+    GtkStringObject *row;
+    guint position;
 
-    g_return_if_fail(td);
-
-    ENTER("td=%p", td);
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_template_name_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_template_name_dialog"));
-
-    entry = GTK_WIDGET(gtk_builder_get_object (builder, "template_name"));
-
-    /* Suggest recipient name as name of the template */
-    gtk_entry_set_text(GTK_ENTRY(entry),
-                       gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
-
-    do
+    (void)button;
+    name = gnc_entry_get_text (GTK_ENTRY (info->entry));
+    if (!*name)
     {
-        retval = gtk_dialog_run(GTK_DIALOG(dialog));
-        if (retval != GTK_RESPONSE_OK)
-            break;
-
-        name = gtk_entry_get_text(GTK_ENTRY(entry));
-        if (!*name)
-            break;
-
-        data.name = name;
-        data.pointer = NULL;
-        gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
-                               find_templ_helper, &data);
-        if (data.pointer)
-        {
-            gnc_error_dialog(GTK_WINDOW (dialog), "%s",
-                             _("A template with the given name already exists. "
-                               "Please enter another name."));
-            continue;
-        }
-
-        /* Create a new template */
-        templ = gnc_ab_trans_templ_new_full(
-                    name,
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
-                    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)),
-                    gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)),
-                    gtk_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
-
-        /* Insert it, either after the selected one or at the end */
-        selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-        if (gtk_tree_selection_get_selected(selection, NULL, &cur_iter))
-        {
-            gtk_list_store_insert_after(td->template_list_store,
-                                        &new_iter, &cur_iter);
-        }
-        else
-        {
-            gtk_list_store_append(td->template_list_store, &new_iter);
-        }
-        gtk_list_store_set(td->template_list_store, &new_iter,
-                           TEMPLATE_NAME, name,
-                           TEMPLATE_POINTER, templ,
-                           -1);
-        td->templ_changed = TRUE;
-        DEBUG("Added template with name %s", name);
-        break;
+        template_name_dialog_free (info);
+        return;
     }
-    while (TRUE);
 
-    g_object_unref(G_OBJECT(builder));
+    if (gnc_ab_trans_dialog_template_name_exists (info->td, name))
+    {
+        gnc_error_dialog (GTK_WINDOW (info->dialog), "%s",
+                          _("A template with the given name already exists. "
+                            "Please enter another name."));
+        return;
+    }
 
-    gtk_widget_destroy(dialog);
+    templ = gnc_ab_trans_templ_new_full (
+        name, gnc_entry_get_text (GTK_ENTRY (info->td->recp_name_entry)),
+        gnc_entry_get_text (GTK_ENTRY (info->td->recp_account_entry)),
+        gnc_entry_get_text (GTK_ENTRY (info->td->recp_bankcode_entry)),
+        gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->td->amount_edit)),
+        gnc_entry_get_text (GTK_ENTRY (info->td->purpose_entry)),
+        gnc_entry_get_text (GTK_ENTRY (info->td->purpose_cont_entry)));
 
-    LEAVE(" ");
+    position = gnc_import_single_selection_get_insert_after_position (
+        info->td->template_selection);
+    row = gnc_ab_trans_dialog_template_row_new (templ);
+    g_list_store_insert (info->td->template_store, position, row);
+    gtk_single_selection_set_selected (info->td->template_selection, position);
+    g_object_unref (row);
+    info->td->templ_changed = TRUE;
+    DEBUG ("Added template with name %s", name);
+    template_name_dialog_free (info);
 }
-#endif
 
+static void
+template_name_dialog_cancel_clicked (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    template_name_dialog_free (user_data);
+}
+
+static gboolean
+template_name_dialog_close_requested (GtkWindow *window, gpointer user_data)
+{
+    (void)window;
+    template_name_dialog_free (user_data);
+    return TRUE;
+}
+
+static gboolean
+template_name_dialog_escape_pressed (GtkWidget *widget, GVariant *args,
+                                     gpointer user_data)
+{
+    (void)widget;
+    (void)args;
+    template_name_dialog_free (user_data);
+    return TRUE;
+}
+
+static void
+template_name_dialog_add_shortcuts (TemplateNameDialog *info)
+{
+    GtkShortcutController *controller = GTK_SHORTCUT_CONTROLLER (
+        gtk_shortcut_controller_new ());
+
+    gtk_shortcut_controller_set_scope (controller, GTK_SHORTCUT_SCOPE_MANAGED);
+    gtk_shortcut_controller_add_shortcut (
+        controller,
+        gtk_shortcut_new (
+            gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+            gtk_callback_action_new (template_name_dialog_escape_pressed, info, NULL)));
+    gtk_widget_add_controller (info->dialog, GTK_EVENT_CONTROLLER (controller));
+}
+
+void
+gnc_ab_trans_dialog_add_templ_cb (GtkButton *button, gpointer user_data)
+{
+    GncABTransDialog *td = user_data;
+    TemplateNameDialog *info;
+
+    (void)button;
+    g_return_if_fail (td);
+
+    ENTER ("td=%p", td);
+    info = g_new0 (TemplateNameDialog, 1);
+    info->td = td;
+    info->builder = gtk_builder_new ();
+    gnc_builder_add_from_file (info->builder, "dialog-ab.glade",
+                               "aqbanking_template_name_dialog");
+    info->dialog = GTK_WIDGET (gtk_builder_get_object (
+        info->builder, "aqbanking_template_name_dialog"));
+    info->entry = GTK_WIDGET (gtk_builder_get_object (info->builder,
+                                                       "template_name"));
+    if (!info->dialog || !info->entry)
+    {
+        template_name_dialog_free (info);
+        LEAVE ("Could not create template dialog");
+        return;
+    }
+
+    gnc_entry_set_text (GTK_ENTRY (info->entry),
+                        gnc_entry_get_text (GTK_ENTRY (td->recp_name_entry)));
+    if (td->dialog)
+        gtk_window_set_transient_for (GTK_WINDOW (info->dialog),
+                                      GTK_WINDOW (td->dialog));
+    g_signal_connect (gtk_builder_get_object (info->builder, "okbutton1"),
+                      "clicked", G_CALLBACK (template_name_dialog_accept_clicked), info);
+    g_signal_connect (gtk_builder_get_object (info->builder, "cancelbutton1"),
+                      "clicked", G_CALLBACK (template_name_dialog_cancel_clicked), info);
+    g_signal_connect (info->dialog, "close-request",
+                      G_CALLBACK (template_name_dialog_close_requested), info);
+    g_signal_connect (info->dialog, "destroy",
+                      G_CALLBACK (template_name_dialog_destroyed), info);
+    gtk_window_set_default_widget (
+        GTK_WINDOW (info->dialog),
+        GTK_WIDGET (gtk_builder_get_object (info->builder, "okbutton1")));
+    template_name_dialog_add_shortcuts (info);
+    gtk_window_present (GTK_WINDOW (info->dialog));
+    LEAVE (" ");
+}
 void
 gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GtkTreePath *prev_path;
-    GtkTreeIter prev_iter;
+    guint position;
+    GtkStringObject *row;
 
     g_return_if_fail(td);
 
-    selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    position = gtk_single_selection_get_selected (td->template_selection);
+    if (position == GTK_INVALID_LIST_POSITION || position == 0)
         return;
 
-    prev_path = gtk_tree_model_get_path(model, &iter);
-    if (gtk_tree_path_prev(prev_path))
-    {
-        if (gtk_tree_model_get_iter(model, &prev_iter, prev_path))
-        {
-            gtk_list_store_move_before(GTK_LIST_STORE(model), &iter, &prev_iter);
-            td->templ_changed = TRUE;
-        }
-    }
-    gtk_tree_path_free(prev_path);
+    row = g_list_model_get_item (G_LIST_MODEL (td->template_store), position);
+    g_list_store_remove (td->template_store, position);
+    g_list_store_insert (td->template_store, position - 1, row);
+    gtk_single_selection_set_selected (td->template_selection, position - 1);
+    g_object_unref (row);
+    td->templ_changed = TRUE;
 }
 
 void
 gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GtkTreeIter next_iter;
+    guint position;
+    guint count;
+    GtkStringObject *row;
 
     g_return_if_fail(td);
 
-    selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    position = gtk_single_selection_get_selected (td->template_selection);
+    count = g_list_model_get_n_items (G_LIST_MODEL (td->template_store));
+    if (position == GTK_INVALID_LIST_POSITION || position + 1 >= count)
         return;
 
-    next_iter = iter;
-    if (gtk_tree_model_iter_next(model, &next_iter))
-    {
-        gtk_list_store_move_after(GTK_LIST_STORE(model), &iter, &next_iter);
-        td->templ_changed = TRUE;
-    }
+    row = g_list_model_get_item (G_LIST_MODEL (td->template_store), position);
+    g_list_store_remove (td->template_store, position);
+    g_list_store_insert (td->template_store, position + 1, row);
+    gtk_single_selection_set_selected (td->template_selection, position + 1);
+    g_object_unref (row);
+    td->templ_changed = TRUE;
+}
+
+static gint
+gnc_ab_trans_dialog_template_compare (gconstpointer left, gconstpointer right,
+                                      gpointer user_data)
+{
+    (void)user_data;
+    return g_utf8_collate (gtk_string_object_get_string ((GtkStringObject *)left),
+                           gtk_string_object_get_string ((GtkStringObject *)right));
 }
 
 void
 gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
+    GtkStringObject *selected_row = NULL;
+    guint selected_position;
 
     g_return_if_fail(td);
 
     ENTER("td=%p", td);
-    gtk_tree_sortable_set_sort_column_id(
-        GTK_TREE_SORTABLE(td->template_list_store),
-        TEMPLATE_NAME, GTK_SORT_ASCENDING);
-    gtk_tree_sortable_set_sort_column_id(
-        GTK_TREE_SORTABLE(td->template_list_store),
-        GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
-        GTK_SORT_ASCENDING);
+    selected_position = gtk_single_selection_get_selected (td->template_selection);
+    if (selected_position != GTK_INVALID_LIST_POSITION)
+        selected_row = g_list_model_get_item (G_LIST_MODEL (td->template_store),
+                                              selected_position);
+    g_list_store_sort (td->template_store, gnc_ab_trans_dialog_template_compare, NULL);
+    if (selected_row)
+    {
+        for (guint position = 0;
+             position < g_list_model_get_n_items (G_LIST_MODEL (td->template_store));
+             position++)
+        {
+            GtkStringObject *row = g_list_model_get_item (G_LIST_MODEL (td->template_store),
+                                                           position);
+            gboolean is_selected = row == selected_row;
+            g_object_unref (row);
+            if (is_selected)
+            {
+                gtk_single_selection_set_selected (td->template_selection, position);
+                break;
+            }
+        }
+        g_object_unref (selected_row);
+    }
     td->templ_changed = TRUE;
     LEAVE(" ");
+}
+
+static void
+template_delete_request_free (TemplateDeleteRequest *request)
+{
+    if (!request)
+        return;
+
+    g_clear_object (&request->row);
+    g_free (request);
+}
+
+static void
+template_delete_finished (GtkWindow *parent, gint response, gpointer user_data)
+{
+    TemplateDeleteRequest *request = user_data;
+    GncABTransDialog *td = request->dialog;
+
+    (void)parent;
+    if (td && td->template_delete_request == request)
+        td->template_delete_request = NULL;
+
+    if (response == GTK_RESPONSE_YES && td)
+    {
+        guint n_items = g_list_model_get_n_items (G_LIST_MODEL (td->template_store));
+
+        for (guint position = 0; position < n_items; position++)
+        {
+            GtkStringObject *candidate = g_list_model_get_item (
+                G_LIST_MODEL (td->template_store), position);
+            gboolean is_target = candidate == request->row;
+
+            g_object_unref (candidate);
+            if (!is_target)
+                continue;
+
+            g_list_store_remove (td->template_store, position);
+            td->templ_changed = TRUE;
+            DEBUG ("Deleted template with name %s",
+                   gtk_string_object_get_string (request->row));
+            break;
+        }
+    }
+
+    template_delete_request_free (request);
 }
 
 void
 gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    gchar *name;
+    guint position;
+    GtkStringObject *row;
+    TemplateDeleteRequest *request;
 
-    g_return_if_fail(td);
+    (void)button;
+    g_return_if_fail (td);
+    if (td->template_delete_request)
+        return;
 
-    ENTER("td=%p", td);
-    selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    ENTER ("td=%p", td);
+    position = gtk_single_selection_get_selected (td->template_selection);
+    if (position == GTK_INVALID_LIST_POSITION)
     {
-        LEAVE("None selected");
+        LEAVE ("None selected");
         return;
     }
 
-    gtk_tree_model_get(model, &iter, TEMPLATE_NAME, &name, -1);
-    if (gnc_verify_dialog (
-                GTK_WINDOW (td->parent), FALSE,
-                _("Do you really want to delete the template with the name \"%s\"?"),
-                name))
+    row = g_list_model_get_item (G_LIST_MODEL (td->template_store), position);
+    if (!row)
     {
-        gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
-        td->templ_changed = TRUE;
-        DEBUG("Deleted template with name %s", name);
+        LEAVE ("Could not get selected template");
+        return;
     }
-    g_free(name);
-    LEAVE(" ");
+
+    request = g_new0 (TemplateDeleteRequest, 1);
+    request->dialog = td;
+    request->row = row;
+    td->template_delete_request = request;
+    gnc_verify_dialog_async (
+        GTK_WINDOW (td->dialog), FALSE, template_delete_finished, request,
+        _("Do you really want to delete the template with the name \"%s\"?"),
+        gtk_string_object_get_string (row));
+    LEAVE (" ");
 }
+
+#endif
 
 void
 gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
@@ -1213,7 +1545,7 @@ gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
             // SEPA: The rest depends on the country code: Either Alpha-numeric or numeric only
             else
             {
-                const gchar* acct_text = gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry));
+                const gchar* acct_text = gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry));
                 // Special case for German ("DE") IBAN: Numeric only. Otherwise allow alpha-numeric
                 if (acct_text[0] == 'D' && acct_text[1] == 'E')
                 {

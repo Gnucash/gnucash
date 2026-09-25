@@ -146,10 +146,9 @@ target_link_libraries(gnc-gnome
     gnc-locale-tax
     gnucash-guile
     ${Boost_LIBRARIES}
-    PkgConfig::GTK3
-    ${GTK_MAC_LDFLAGS})
+    PkgConfig::GTK4)
 
-target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
+target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
 
 target_include_directories(gnc-gnome
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}

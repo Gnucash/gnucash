@@ -36,7 +36,7 @@
     the name of a glade file and the content to load from that
     file along with a widget in that file.  If a partial
     page is added, the widget name provided must be that of
-    a GtkTable containing four columns. If a full page is added,
+    a GtkGrid containing four columns. If a full page is added,
     the widget name provided to this code can be any kind of
     widget, but for consistency it should probably be the same.
 
@@ -45,10 +45,10 @@
     to the preference named ccc in group aaa.bbb. This means that if
     the widget's value changes, the preference is automatically updated.
     The same goes the other way around. This code currently knows about
-    font buttons, radio buttons, check buttons, spin boxes, combo boxes,
+    font buttons, grouped and independent check buttons, spin boxes, drop-downs,
     gnucash currency select widgets, gnucash accounting period widgets,
-    and a gnucash date edit widget. (Combo boxes should not be used for
-    less than five choices. Use a radio button group instead.)
+    and a gnucash date edit widget. (Drop-downs should not be used for
+    less than five choices. Use a grouped check button instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is

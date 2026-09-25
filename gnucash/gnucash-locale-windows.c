@@ -75,26 +75,30 @@ rectify_environment_charset(const char* envvar)
   if (strcmp (envvar, "LANG") && strncmp (envvar, "LC_", 3))
     return;
   char* saveptr;
-  char* varval = getenv (envvar);
-  if (!varval || !*varval)
+  const char* environment_value = getenv (envvar);
+  if (!environment_value || !*environment_value)
     return;
+  char* varval = g_strdup (environment_value);
   char* locale = strtok_r (varval, ".", &saveptr);
   char* dot = strtok_r (NULL, "@", &saveptr);
 
   if (!dot) //strsep didn't find a .
+  {
+    g_free (varval);
     return;
+  }
 
   char* rest = strtok_r (NULL, "@", &saveptr);
 
   if ((strncasecmp (dot, "utf", 3) == 0 || strncasecmp (dot, "ucs", 3) == 0) &&
       dot[3] != '-')
-    return rectify_utf (envvar, locale, dot, rest);
+    rectify_utf (envvar, locale, dot, rest);
 
-  if (strncasecmp (dot, "iso", 3) == 0 && strlen (dot) >= 8 &&
-      dot[3] != '-' && dot[8] != '-')
-    return rectify_iso (envvar, locale, dot, rest);
+  else if (strncasecmp (dot, "iso", 3) == 0 && strlen (dot) >= 8 &&
+           dot[3] != '-' && dot[8] != '-')
+    rectify_iso (envvar, locale, dot, rest);
 
-  //Otherwise do nothing
+  g_free (varval);
 }
 
 /* If one of the Unix locale variables LC_ALL, LC_MESSAGES, or LANG is
@@ -119,37 +123,51 @@ set_platform_locale(void)
     rectify_environment_charset ("LC_MESSAGES");
     rectify_environment_charset ("LC_CTYPE");
 
-    if (((locale = getenv ("LC_ALL")) != NULL && locale[0] != '\0') ||
-      ((locale = getenv ("LC_MESSAGES")) != NULL && locale[0] != '\0') ||
-      ((locale = getenv ("LANG")) != NULL && locale[0] != '\0'))
+    const char *environment_locale = NULL;
+    if (((environment_locale = getenv ("LC_ALL")) != NULL && environment_locale[0] != '\0') ||
+        ((environment_locale = getenv ("LC_MESSAGES")) != NULL && environment_locale[0] != '\0') ||
+        ((environment_locale = getenv ("LANG")) != NULL && environment_locale[0] != '\0'))
     {
-        gunichar2* wlocale = NULL;
-        int len = 0;
-        len = strchr(locale, '.') - locale;
-        locale[2] = '-';
-        wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
-        if (IsValidLocaleName(wlocale))
+        gchar *dot;
+        gchar *locale_name;
+        gunichar2 *wlocale;
+
+        locale = g_strdup (environment_locale);
+        if (g_strcmp0 (locale, "C") == 0 || g_strcmp0 (locale, "POSIX") == 0)
         {
-            LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
-            SetThreadLocale(lcid);
-            locale[2] = '_';
             setlocale (LC_ALL, locale);
-            g_free(wlocale);
-            return g_strdup (locale);
+            return locale;
         }
-        g_free(locale);
-        g_free(wlocale);
+
+        dot = strchr (locale, '.');
+        locale_name = g_strndup (locale, dot ? (gsize)(dot - locale) : strlen (locale));
+        g_strdelimit (locale_name, "_", '-');
+        wlocale = g_utf8_to_utf16 (locale_name, -1, NULL, NULL, NULL);
+        if (wlocale && IsValidLocaleName (wlocale))
+        {
+            LCID lcid = LocaleNameToLCID (wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
+            SetThreadLocale (lcid);
+            setlocale (LC_ALL, locale);
+            g_free (wlocale);
+            g_free (locale_name);
+            return locale;
+        }
+        g_free (wlocale);
+        g_free (locale_name);
+        g_free (locale);
     }
-    if (GetUserDefaultLocaleName(lpLocaleName, LOCALE_NAME_MAX_LENGTH))
+    if (GetUserDefaultLocaleName (lpLocaleName, LOCALE_NAME_MAX_LENGTH))
     {
-        locale = g_utf16_to_utf8((gunichar2*)lpLocaleName,
-                                 LOCALE_NAME_MAX_LENGTH,
-                                 NULL, NULL, NULL);
-        (locale)[2] = '_';
-        setlocale (LC_ALL, locale);
-        return locale;
+        locale = g_utf16_to_utf8 ((gunichar2*)lpLocaleName, -1, NULL, NULL, NULL);
+        if (locale)
+        {
+            if (strlen (locale) > 2 && locale[2] == '-')
+                locale[2] = '_';
+            setlocale (LC_ALL, locale);
+            return locale;
+        }
     }
-    return g_strdup("C");
+    return g_strdup ("C");
 }
 
 void

@@ -5,6 +5,7 @@ jobs:
   coverage:
     runs-on: ubuntu-26.04
     name: C++ Code coverage analysis
+    timeout-minutes: 120
     continue-on-error: true
     env:
       TZ: America/Los_Angeles
@@ -13,7 +14,7 @@ jobs:
         uses: actions/checkout@v6
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest lcov
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-4-dev guile-2.2-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkitgtk-6.0-dev googletest lcov python3-dev swig xvfb
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -23,10 +24,13 @@ jobs:
           pwd
           mkdir $ROOT_DIR/inst
           mkdir build
-      - name: Configure GnuCash
+      - name: Configure GnuCash without AqBanking
         run: |
           cd build
-          cmake -G Ninja -DWITH_PYTHON=ON -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON
+          # Ubuntu doesn't yet provide the required gwengui-gtk4 package.
+          cmake -G Ninja -DWITH_PYTHON=ON -DWITH_AQBANKING=OFF -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON
+      - name: Validate GTK4 builder resources
+        run: xvfb-run -a bash "$GITHUB_WORKSPACE/util/ci/validate-gtk4-builder-resources.sh" "$GITHUB_WORKSPACE/gnucash"
       - name: Build and test GnuCash with coverage analysis
         run: |
           cd build
@@ -61,7 +65,7 @@ jobs:
         uses: actions/checkout@v6
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest doxygen
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-4-dev guile-2.2-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkitgtk-6.0-dev googletest doxygen swig
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -71,10 +75,11 @@ jobs:
           pwd
           mkdir $ROOT_DIR/inst
           mkdir build
-      - name: Configure GnuCash
+      - name: Configure GnuCash without AqBanking
         run: |
           cd build
-          cmake -G Ninja $GITHUB_WORKSPACE
+          # Ubuntu doesn't yet provide the required gwengui-gtk4 package.
+          cmake -G Ninja -DWITH_AQBANKING=OFF $GITHUB_WORKSPACE
       - name: Run Doxygen
         run: |
           cd build

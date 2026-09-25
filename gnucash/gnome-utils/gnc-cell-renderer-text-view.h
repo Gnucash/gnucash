@@ -1,6 +1,4 @@
-/*************************************************************************
- * The following code implements a text view in a custom GtkCellRenderer.
- *
+/*
  * Copyright (C) 2020 Robert Fewell
  *
  * This program is free software; you can redistribute it and/or
@@ -21,14 +19,9 @@
 
 #ifndef __GNC_CELL_RENDERER_TEXT_VIEW_H__
 #define __GNC_CELL_RENDERER_TEXT_VIEW_H__
-
-#include <pango/pango.h>
 #include <gtk/gtk.h>
-
-#define GNC_TYPE_CELL_RENDERER_TEXT_VIEW            (gnc_cell_renderer_text_view_get_type ())
-G_DECLARE_FINAL_TYPE (GncCellRendererTextView, gnc_cell_renderer_text_view, GNC, CELL_RENDERER_TEXT_VIEW, GtkCellRendererText)
-
-GtkCellRenderer *gnc_cell_renderer_text_view_new (void);
-
-
-#endif /* __GNC_CELL_RENDERER_TEXT_VIEW_H__ */
+G_BEGIN_DECLS
+/* GTK4 factory for multiline editable presentation. */
+GtkListItemFactory *gnc_cell_renderer_text_view_new (void);
+G_END_DECLS
+#endif

@@ -68,39 +68,38 @@ gnc_recn_cell_enter (BasicCell *_cell,
                      int *end_selection)
 {
     RecnCell *cell = (RecnCell *) _cell;
-    char * this_flag;
+    char *this_flag;
+    char next_flag;
+    GncRecnCellConfirmResult confirmed = GNC_RECN_CELL_CONFIRM_ACCEPT;
 
-    if (cell->confirm_cb &&
-            ! (cell->confirm_cb (cell->flag, cell->confirm_data)))
+    if (cell->read_only || cell->confirmation_pending)
         return FALSE;
 
-    if (cell->read_only == TRUE)
-        return FALSE;
-
-    /* Find the current flag in the list of flags */
+    /* Find the current flag in the list of flags and determine the proposed
+     * state before requesting a non-blocking confirmation. */
     this_flag = strchr (cell->flag_order, cell->flag);
-
     if (this_flag == NULL || *this_flag == '\0')
-    {
-        /* If it's not there (or the list is empty) use default_flag */
-        cell->flag = cell->default_flag;
-
-    }
+        next_flag = cell->default_flag;
     else
     {
-        /* It is in the list -- choose the -next- item in the list (wrapping
-         * around as necessary).
-         */
         this_flag++;
-        if (*this_flag != '\0')
-            cell->flag = *this_flag;
-        else
-            cell->flag = *(cell->flag_order);
+        next_flag = *this_flag != '\0' ? *this_flag : *(cell->flag_order);
     }
 
-    /* And set the display */
-    gnc_recn_cell_set_flag (cell, cell->flag);
+    if (cell->confirm_cb)
+    {
+        cell->confirmation_pending = TRUE;
+        cell->pending_flag = next_flag;
+        confirmed = cell->confirm_cb (cell, cell->flag, next_flag,
+                                      cell->confirm_data);
+        if (confirmed == GNC_RECN_CELL_CONFIRM_DEFERRED)
+            return FALSE;
+        cell->confirmation_pending = FALSE;
+        if (confirmed != GNC_RECN_CELL_CONFIRM_ACCEPT)
+            return FALSE;
+    }
 
+    gnc_recn_cell_set_flag (cell, next_flag);
     return FALSE;
 }
 
@@ -111,6 +110,7 @@ gnc_recn_cell_init (RecnCell *cell)
 
     gnc_recn_cell_set_flag (cell, '\0');
     cell->confirm_cb = NULL;
+    cell->confirmation_pending = FALSE;
     cell->get_string = NULL;
     cell->valid_flags = "";
     cell->flag_order = "";
@@ -190,6 +190,23 @@ gnc_recn_cell_set_confirm_cb (RecnCell *cell, RecnCellConfirm confirm_cb,
 
     cell->confirm_cb = confirm_cb;
     cell->confirm_data = data;
+}
+
+gboolean
+gnc_recn_cell_complete_confirm (RecnCell *cell, gboolean accepted)
+{
+    g_return_val_if_fail (cell != NULL, FALSE);
+
+    if (!cell->confirmation_pending)
+        return FALSE;
+
+    cell->confirmation_pending = FALSE;
+    if (!accepted)
+        return FALSE;
+
+    gnc_recn_cell_set_flag (cell, cell->pending_flag);
+    cell->cell.changed = TRUE;
+    return TRUE;
 }
 
 void

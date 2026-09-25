@@ -1,0 +1,143 @@
+name: linux-aqbanking-gtk4-preflight
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  build:
+    name: Ubuntu-26.04 AqBanking GTK4 Preflight
+    runs-on: ubuntu-26.04
+    timeout-minutes: 120
+    env:
+      TZ: America/Los_Angeles
+      AQ_PREFIX: ${{ github.workspace }}/../aqbanking-gtk4
+      ROOT_DIR: ${{ github.workspace }}/..
+    steps:
+      - name: Checkout GnuCash
+        uses: actions/checkout@v6
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            autoconf automake build-essential gettext intltool libtool \
+            pkg-config cmake ninja-build curl ca-certificates patch \
+            libboost-all-dev libdbi-dev libdbd-sqlite3 libgcrypt20-dev \
+            libgmp-dev libgnutls28-dev libgtk-4-dev libofx-dev \
+            libpcsclite-dev libssl-dev libudev-dev libwebkitgtk-6.0-dev \
+            libxml2-dev libxmlsec1-dev libxslt1-dev xsltproc googletest \
+            guile-3.0-dev python3-dev swig xvfb
+          sudo apt-get --reinstall install -y language-pack-en language-pack-fr
+
+      - name: Configure dependency prefix
+        run: |
+          mkdir -p "$AQ_PREFIX" "$ROOT_DIR/inst"
+          echo "$AQ_PREFIX/bin" >> "$GITHUB_PATH"
+          echo "PKG_CONFIG_PATH=$AQ_PREFIX/lib/pkgconfig:$AQ_PREFIX/share/pkgconfig" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$AQ_PREFIX/lib" >> "$GITHUB_ENV"
+          echo "ACLOCAL_PATH=$AQ_PREFIX/share/aclocal" >> "$GITHUB_ENV"
+
+      - name: Download verified sources
+        working-directory: ${{ runner.temp }}
+        run: |
+          curl --fail --location --show-error \
+            https://github.com/copystring/gwenhywfar/archive/be306f4c2b6d550e0595547a09966a9abef4ec56.tar.gz \
+            --output gwenhywfar-be306f4c2b6d550e0595547a09966a9abef4ec56.tar.gz
+          curl --fail --location --show-error \
+            https://aquamaniac.de/rdm/attachments/download/382/libchipcard-5.1.6.tar.gz \
+            --output libchipcard-5.1.6.tar.gz
+          curl --fail --location --show-error \
+            https://aquamaniac.de/rdm/attachments/download/654/aqbanking-6.9.2.tar.gz \
+            --output aqbanking-6.9.2.tar.gz
+          echo 'ed44c5d38a252e4eb4ea241a6f362a6a575f71f3edc9060b0a001faf79576c81  gwenhywfar-be306f4c2b6d550e0595547a09966a9abef4ec56.tar.gz' | sha256sum --check
+          echo '6c07f527417f7562074f99012da4d11eb4dbafd33f49e66b442ccd6e3b8cfd20  libchipcard-5.1.6.tar.gz' | sha256sum --check
+          echo '244b5f7a139f829928f5cdc3f5f7488517b3e8aa63625a92741c3efc1892bb3f  aqbanking-6.9.2.tar.gz' | sha256sum --check
+          tar -xf gwenhywfar-be306f4c2b6d550e0595547a09966a9abef4ec56.tar.gz
+          tar -xf libchipcard-5.1.6.tar.gz
+          tar -xf aqbanking-6.9.2.tar.gz
+
+      - name: Build Gwenhywfar with GTK4
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          autoreconf -fi gwenhywfar-be306f4c2b6d550e0595547a09966a9abef4ec56
+          mkdir gwenhywfar-build
+          cd gwenhywfar-build
+          ../gwenhywfar-be306f4c2b6d550e0595547a09966a9abef4ec56/configure \
+            --prefix="$AQ_PREFIX" \
+            --disable-static \
+            --enable-shared \
+            --with-guis=gtk4 \
+            --enable-local-install \
+            --disable-network-checks \
+            --disable-binreloc
+          make -j2
+          xvfb-run -a make check
+          make install
+
+      - name: Build libchipcard
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          mkdir libchipcard-build
+          cd libchipcard-build
+          ../libchipcard-5.1.6/configure \
+            --prefix="$AQ_PREFIX" \
+            --disable-static \
+            --enable-shared
+          make -j2
+          make install
+
+      - name: Build AqBanking
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          mkdir aqbanking-build
+          cd aqbanking-build
+          ../aqbanking-6.9.2/configure \
+            --prefix="$AQ_PREFIX" \
+            --disable-static \
+            --enable-shared \
+            --enable-local-install
+          make -j2
+          make install
+
+      - name: Verify AqBanking GTK4 dependency contract
+        run: |
+          pkg-config --atleast-version=5.14.1 gwenhywfar
+          pkg-config --atleast-version=6.9.1 aqbanking
+          pkg-config --exists gwengui-gtk4
+
+      - name: Configure GnuCash with AqBanking
+        run: |
+          mkdir build
+          cd build
+          cmake -G Ninja \
+            -DWITH_PYTHON=ON \
+            -DWITH_AQBANKING=ON \
+            -DCMAKE_PREFIX_PATH="$AQ_PREFIX" \
+            -DCMAKE_INSTALL_PREFIX="$ROOT_DIR/inst" \
+            "$GITHUB_WORKSPACE"
+
+      - name: Validate GTK4 builder resources
+        run: xvfb-run -a bash "$GITHUB_WORKSPACE/util/ci/validate-gtk4-builder-resources.sh" "$GITHUB_WORKSPACE/gnucash"
+
+      - name: Build and test GnuCash
+        working-directory: build
+        env:
+          CTEST_OUTPUT_ON_FAILURE: On
+        run: |
+          ninja
+          ninja distcheck
+
+      - name: Upload test log
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-aqbanking-gtk4-test-log
+          path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore

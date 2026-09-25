@@ -48,10 +48,10 @@
     to the preference named ccc in group aaa.bbb. This means that if
     the widget's value changes, the preference is automatically updated.
     The same goes the other way around. This code currently knows about
-    font buttons, radio buttons, check buttons, spin boxes, combo boxes,
+    font buttons, grouped and independent check buttons, spin boxes, drop-downs,
     gnucash currency select widgets, gnucash accounting period widgets,
-    and a gnucash date edit widget. (Combo boxes should not be used for
-    less than five choices. Use a radio button group instead.)
+    and a gnucash date edit widget. (Drop-downs should not be used for
+    less than five choices. Use a grouped check button instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is
@@ -66,6 +66,7 @@
 #include <glib/gi18n.h>
 
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-gobject-utils.h"
@@ -91,12 +92,14 @@
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
 
-void gnc_preferences_response_cb (GtkDialog *dialog, gint response, GtkDialog *unused);
 void gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog);
-void gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog);
-gboolean gnc_preferences_delete_event_cb (GtkWidget *widget,
-                                          GdkEvent  *event,
-                                          gpointer   user_data);
+void gnc_save_on_close_expires_cb (GtkCheckButton *button, GtkWidget *dialog);
+static void gnc_preferences_help_clicked_cb (GtkButton *button,
+                                              gpointer user_data);
+static void gnc_preferences_close_clicked_cb (GtkButton *button,
+                                               gpointer user_data);
+static gboolean gnc_preferences_close_request_cb (GtkWindow *window,
+                                                   gpointer   user_data);
 
 /** This data structure holds the information for a single addition to
  *  the preferences dialog. */
@@ -160,7 +163,8 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     gchar *sample;
     gchar *separator = NULL;
 
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
+    gchar *conflict_msg = gnc_account_separator_is_valid (
+        gtk_editable_get_text (GTK_EDITABLE (entry)), &separator);
 
     label = g_object_get_data (G_OBJECT(dialog), "sample_account");
     DEBUG("Sample Account pointer is %p", label);
@@ -183,71 +187,108 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     if (conflict_msg)
     {
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), conflict_msg);
-        gtk_widget_show (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
         g_free (conflict_msg);
     }
     else
-        gtk_widget_hide (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
 
     g_free (separator);
 }
 
 
-/** Called when the 'Close' button pressed or preference dialog closes
- *  to check if the account separator is valid.
- *  Offers two choices, to reset separator to original value and exit
- *  or go back to the 'Accounts' page to change separator
- *
- *  @internal
- *
- *  @param dialog the prefs dialog.
- */
-static gboolean
-gnc_account_separator_validate (GtkWidget *dialog)
+static void
+gnc_preferences_select_account_page (GtkWindow *dialog);
+
+typedef struct
 {
-    GtkWidget *entry = g_object_get_data (G_OBJECT(dialog), "account-separator");
-    gboolean ret = TRUE;
-    gchar *separator = NULL;
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (GTK_ENTRY(entry)), &separator);
+    GWeakRef dialog;
+} SeparatorValidationRequest;
 
-    /* Check if the new separator clashes with existing account names */
-    if (conflict_msg)
+static void
+gnc_preferences_close (GtkWindow *dialog)
+{
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog));
+    gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS,
+                                          dialog);
+    gtk_window_destroy (GTK_WINDOW(dialog));
+}
+
+static void
+separator_validation_request_free (SeparatorValidationRequest *request)
+{
+    g_weak_ref_clear (&request->dialog);
+    g_free (request);
+}
+
+static void
+separator_validation_response_cb (GObject *source, GAsyncResult *result,
+                                  gpointer user_data)
+{
+    SeparatorValidationRequest *request = user_data;
+    GError *error = NULL;
+    gint response = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG(source),
+                                                    result, &error);
+    GObject *object = g_weak_ref_get (&request->dialog);
+
+    if (object)
     {
-        GtkWidget   *msg_dialog, *msg_label;
-        GtkBuilder  *builder;
-        gint         response;
+        GtkWindow *dialog = GTK_WINDOW (object);
+        GtkWidget *entry = g_object_get_data (G_OBJECT(dialog),
+                                              "account-separator");
 
-        builder = gtk_builder_new ();
-        gnc_builder_add_from_file (builder, "dialog-preferences.glade", "separator_validation_dialog");
-
-        msg_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "separator_validation_dialog"));
-
-        msg_label = GTK_WIDGET(gtk_builder_get_object (builder, "conflict_message"));
-
-        gtk_label_set_text (GTK_LABEL(msg_label), conflict_msg);
-
-        g_object_unref (G_OBJECT(builder));
-        gtk_widget_show_all (msg_dialog);
-
-        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
-        if (response == GTK_RESPONSE_ACCEPT) // reset to original
+        if (!error && response == 0)
         {
-            gchar *original_sep = g_object_get_data (G_OBJECT(entry), "original_text");
+            const gchar *original = g_object_get_data (G_OBJECT(entry),
+                                                       "original_text");
 
-            if (original_sep != NULL)
-                gtk_entry_set_text (GTK_ENTRY(entry), original_sep);
+            if (original)
+                gtk_editable_set_text (GTK_EDITABLE (entry), original);
+            gnc_preferences_close (dialog);
         }
         else
-            ret = FALSE;
-
-        g_free (conflict_msg);
-        gtk_widget_destroy (msg_dialog);
+            gnc_preferences_select_account_page (dialog);
+        g_object_unref (object);
     }
-    g_free (separator);
-    return ret;
+
+    g_clear_error (&error);
+    separator_validation_request_free (request);
 }
 
+/** Called when the preferences dialog is closed to check whether the account
+ *  separator is valid. Conflicts are resolved asynchronously so that closing
+ *  the preferences window never enters a nested main loop. */
+static void
+gnc_account_separator_validate_async (GtkWindow *dialog)
+{
+    GtkWidget *entry = g_object_get_data (G_OBJECT(dialog),
+                                          "account-separator");
+    gchar *separator = NULL;
+    gchar *conflict_msg = gnc_account_separator_is_valid (
+        gtk_editable_get_text (GTK_EDITABLE (entry)), &separator);
 
+    if (conflict_msg)
+    {
+        const char *buttons[] = { _("Reset"), _("Close"), NULL };
+        GtkAlertDialog *alert = gtk_alert_dialog_new ("%s", conflict_msg);
+        SeparatorValidationRequest *request =
+            g_new0 (SeparatorValidationRequest, 1);
+
+        g_weak_ref_init (&request->dialog, G_OBJECT(dialog));
+        gtk_alert_dialog_set_modal (alert, TRUE);
+        gtk_alert_dialog_set_buttons (alert, buttons);
+        gtk_alert_dialog_set_default_button (alert, 1);
+        gtk_alert_dialog_set_cancel_button (alert, 1);
+        gtk_alert_dialog_choose (alert, GTK_WINDOW(dialog), NULL,
+                                 separator_validation_response_cb, request);
+        g_object_unref (alert);
+    }
+    else
+        gnc_preferences_close (dialog);
+
+    g_free (conflict_msg);
+    g_free (separator);
+}
 /** Used to select the 'Accounts' page when the user wants
  *  to return from the account separator validation dialog
  *  to the preference dialog.
@@ -257,28 +298,30 @@ gnc_account_separator_validate (GtkWidget *dialog)
  *  @param user_data A pointer to the dialog.
  */
 static void
-gnc_preferences_select_account_page (GtkDialog *dialog)
+gnc_preferences_select_account_page (GtkWindow *dialog)
 {
     GtkWidget *notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
-    GList *children = gtk_container_get_children (GTK_CONTAINER(notebook));
+    GtkWidget *acc_page = NULL;
+    gint n_pages;
 
-    if (children)
+    if (!notebook)
+        return;
+
+    n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+    for (gint page_num = 0; page_num < n_pages; page_num++)
     {
-        GtkWidget *acc_page = NULL;
-        GList *node;
-
-        for (node = children; node; node = node->next)
+        GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page_num);
+        if (g_strcmp0 (gtk_widget_get_name (page), "accounts_page") == 0)
         {
-            if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET(node->data)), "accounts_page") == 0)
-                acc_page = node->data;
+            acc_page = page;
+            break;
         }
-
-        if (acc_page)
-            gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook),
-                                           gtk_notebook_page_num (GTK_NOTEBOOK(notebook),
-                                           acc_page));
     }
-    g_list_free (children);
+
+    if (acc_page)
+        gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook),
+                                       gtk_notebook_page_num (GTK_NOTEBOOK(notebook),
+                                       acc_page));
 }
 
 
@@ -288,11 +331,11 @@ gnc_preferences_select_account_page (GtkDialog *dialog)
  * @param dialog the prefs dialog.
  */
 void
-gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog)
+gnc_save_on_close_expires_cb (GtkCheckButton *button, GtkWidget *dialog)
 {
     GtkWidget *spinner = g_object_get_data (G_OBJECT(dialog),
                                             "save_on_close_wait_time");
-    gtk_widget_set_sensitive (spinner, gtk_toggle_button_get_active (button));
+    gtk_widget_set_sensitive (spinner, gtk_check_button_get_active (button));
 }
 
 /** This function compares two add-ins to see if they specify the same
@@ -475,7 +518,7 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
         if (GTK_IS_WIDGET(widget))
         {
             wname = gtk_widget_get_name (widget);
-            name = gtk_buildable_get_name (GTK_BUILDABLE(widget));
+            name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
             if (g_str_has_prefix (name, "pref"))
                 g_hash_table_insert (prefs_table, (gchar *)name, widget);
@@ -553,12 +596,7 @@ gnc_prefs_get_grid_size (GtkWidget *child, gpointer data)
     struct copy_data *copydata = data;
     gint top, left, height, width;
 
-    gtk_container_child_get (GTK_CONTAINER(copydata->grid_to), child,
-                             "left-attach", &left,
-                             "top-attach", &top,
-                             "height", &height,
-                             "width", &width,
-                             NULL);
+    gtk_grid_query_child (copydata->grid_to, child, &left, &top, &width, &height);
 
     if (left + width >= copydata->cols)
         copydata->cols = left + width;
@@ -591,22 +629,19 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     gint topm, bottomm, leftm, rightm;
 
     ENTER("child %p, copy data %p", child, data);
-    gtk_container_child_get (GTK_CONTAINER(copydata->grid_from), child,
-                             "left-attach", &left,
-                             "top-attach", &top,
-                             "height", &height,
-                             "width", &width,
-                             NULL);
+    gtk_grid_query_child (copydata->grid_from, child, &left, &top, &width, &height);
     hexpand = gtk_widget_get_hexpand (child);
     vexpand = gtk_widget_get_vexpand (child);
     halign = gtk_widget_get_halign (child);
     valign = gtk_widget_get_valign (child);
 
-    g_object_get (child, "margin-top", &topm, "margin-bottom", &bottomm, NULL);
-    g_object_get (child, "margin-left", &leftm, "margin-right", &rightm, NULL);
+    topm = gtk_widget_get_margin_top (child);
+    bottomm = gtk_widget_get_margin_bottom (child);
+    leftm = gtk_widget_get_margin_start (child);
+    rightm = gtk_widget_get_margin_end (child);
 
     g_object_ref (child);
-    gtk_container_remove (GTK_CONTAINER(copydata->grid_from), child);
+    gtk_grid_remove (copydata->grid_from, child);
 
     gtk_grid_attach (copydata->grid_to, child, left, copydata->rows + top , width, height);
 
@@ -615,11 +650,26 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     gtk_widget_set_halign (child, halign);
     gtk_widget_set_valign (child, valign);
 
-    g_object_set (child, "margin-left", leftm, "margin-right", rightm, NULL);
-    g_object_set (child, "margin-top", topm, "margin-bottom", bottomm, NULL);
+    gtk_widget_set_margin_start (child, leftm);
+    gtk_widget_set_margin_end (child, rightm);
+    gtk_widget_set_margin_top (child, topm);
+    gtk_widget_set_margin_bottom (child, bottomm);
 
     g_object_unref (child);
     LEAVE(" ");
+}
+
+static void
+gnc_prefs_foreach_child (GtkWidget *parent,
+                         void (*callback) (GtkWidget *, gpointer),
+                         gpointer user_data)
+{
+    for (GtkWidget *child = gtk_widget_get_first_child (parent); child; )
+    {
+        GtkWidget *next = gtk_widget_get_next_sibling (child);
+        callback (child, user_data);
+        child = next;
+    }
 }
 
 
@@ -674,7 +724,7 @@ gnc_preferences_build_page (gpointer data,
     /* Connect the signals in this glade file. The dialog is passed in
      * so the callback can find "interesting" widgets from other
      * glade files if necessary (via the GPREFS_WIDGET_HASH hash table). */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Prepare for recursion */
     notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
@@ -707,18 +757,18 @@ gnc_preferences_build_page (gpointer data,
     {
         /* No existing content with this name.  Create a blank page */
         existing_content = gtk_grid_new ();
-        gtk_container_set_border_width (GTK_CONTAINER(existing_content), 6);
+        gnc_widget_set_all_margins (existing_content, 6);
         label = gtk_label_new (add_in->tabname);
         gnc_label_set_alignment (label, 0.0, 0.5);
         gtk_notebook_append_page (notebook, existing_content, label);
-        gtk_widget_show_all (existing_content);
+        gtk_widget_set_visible (existing_content, TRUE);
         DEBUG("created new page %s, appended it", add_in->tabname);
     }
     else
     {
         /* Lets get the size of the existing grid */
         copydata.grid_to = GTK_GRID(existing_content);
-        gtk_container_foreach (GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
+        gnc_prefs_foreach_child (existing_content, gnc_prefs_get_grid_size, &copydata);
 
         DEBUG("found existing page %s, grid size is %d x %d", add_in->tabname, copydata.rows, copydata.cols);
     }
@@ -727,7 +777,7 @@ gnc_preferences_build_page (gpointer data,
     if (copydata.rows > 0)
     {
         label = gtk_label_new ("");
-        gtk_widget_show (label);
+        gtk_widget_set_visible (label, TRUE);
         gtk_grid_attach (GTK_GRID(existing_content), label, 0, copydata.rows, 1, 1);
         copydata.rows = copydata.rows + 1;
 
@@ -737,7 +787,7 @@ gnc_preferences_build_page (gpointer data,
     /* Now copy all the entries in the grid */
     copydata.grid_from = GTK_GRID(new_content);
     copydata.grid_to = GTK_GRID(existing_content);
-    gtk_container_foreach (GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
+    gnc_prefs_foreach_child (new_content, gnc_prefs_move_grid_entry, &copydata);
 
     g_object_ref_sink (new_content);
     g_object_unref (G_OBJECT(builder));
@@ -799,87 +849,251 @@ gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref, gch
 
 /****************************************************************************/
 
-/** Connect a GtkFontButton widget to its stored value in the preferences database.
+typedef struct
+{
+    GWeakRef button;
+    gchar *group;
+    gchar *pref;
+    gboolean syncing;
+} GncPrefsFontBinding;
+
+static void
+gnc_prefs_font_button_pref_changed (gpointer prefs, gchar *pref,
+                                    gpointer user_data);
+
+static void
+gnc_prefs_font_binding_free (GncPrefsFontBinding *binding)
+{
+    if (!binding)
+        return;
+
+    gnc_prefs_remove_cb_by_func (binding->group, binding->pref,
+                                 gnc_prefs_font_button_pref_changed, binding);
+    g_weak_ref_clear (&binding->button);
+    g_free (binding->group);
+    g_free (binding->pref);
+    g_free (binding);
+}
+
+static void
+gnc_prefs_font_button_pref_changed (gpointer prefs, gchar *pref,
+                                    gpointer user_data)
+{
+    GncPrefsFontBinding *binding = user_data;
+    GtkFontDialogButton *button;
+    PangoFontDescription *description;
+    gchar *font;
+
+    (void)prefs;
+    (void)pref;
+
+    button = GTK_FONT_DIALOG_BUTTON (g_weak_ref_get (&binding->button));
+    if (!button)
+        return;
+
+    font = gnc_prefs_get_string (binding->group, binding->pref);
+    if (font && *font)
+    {
+        description = pango_font_description_from_string (font);
+        if (description)
+        {
+            binding->syncing = TRUE;
+            gtk_font_dialog_button_set_font_desc (button, description);
+            binding->syncing = FALSE;
+            pango_font_description_free (description);
+        }
+    }
+    g_free (font);
+    g_object_unref (button);
+}
+
+static void
+gnc_prefs_font_button_changed (GtkFontDialogButton *button,
+                               GParamSpec *pspec, gpointer user_data)
+{
+    GncPrefsFontBinding *binding = user_data;
+    PangoFontDescription *description;
+    gchar *font;
+
+    (void)pspec;
+
+    if (binding->syncing)
+        return;
+
+    description = gtk_font_dialog_button_get_font_desc (button);
+    if (!description)
+        return;
+
+    font = pango_font_description_to_string (description);
+    if (!gnc_prefs_set_string (binding->group, binding->pref, font))
+        PINFO ("Failed to save preference at %s, %s with %s",
+               binding->group, binding->pref, font);
+    g_free (font);
+}
+
+/** Connect a GtkFontDialogButton widget to its stored value in the preferences database.
  *
  *  @internal
  *
- *  @param fb A pointer to the font button that should be connected.
+ *  @param button A pointer to the font dialog button that should be connected.
  */
 static void
-gnc_prefs_connect_font_button (GtkFontButton *fb)
+gnc_prefs_connect_font_button (GtkFontDialogButton *button)
 {
+    GncPrefsFontBinding *binding;
     gchar *group, *pref;
 
-    g_return_if_fail (GTK_IS_FONT_BUTTON(fb));
+    g_return_if_fail (GTK_IS_FONT_DIALOG_BUTTON (button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fb)), &group, &pref, NULL);
-    gnc_prefs_bind (group, pref, NULL, G_OBJECT (fb), "font-name");
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (
+                                    GTK_BUILDABLE (button)),
+                                &group, &pref, NULL);
 
-    g_free (group);
-    g_free (pref);
+    binding = g_new0 (GncPrefsFontBinding, 1);
+    g_weak_ref_init (&binding->button, G_OBJECT (button));
+    binding->group = group;
+    binding->pref = pref;
+    g_object_set_data_full (G_OBJECT (button), "gnc-prefs-font-binding",
+                            binding, (GDestroyNotify)gnc_prefs_font_binding_free);
+    gnc_prefs_register_cb (binding->group, binding->pref,
+                           gnc_prefs_font_button_pref_changed, binding);
+    g_signal_connect (button, "notify::font-desc",
+                      G_CALLBACK (gnc_prefs_font_button_changed), binding);
+    gnc_prefs_font_button_pref_changed (NULL, NULL, binding);
 
-    gtk_widget_show_all (GTK_WIDGET(fb));
+    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
 }
 
 /****************************************************************************/
 
-/** Callback for a GtkFileChooser widget to store a value in the preferences database.
+/** Set the visible name of a preference folder chooser.
  *
  *  @internal
  *
- *  @param fc A pointer to the file chooser widget emitting signal.
+ *  @param button A button representing the selected folder.
+ *  @param uri The selected folder URI.
  */
 static void
-file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
+set_file_chooser_button_label (GtkButton *button, const gchar *uri)
 {
-    GtkImage    *image = g_object_get_data (G_OBJECT(fc), "path_head_error");
-    const gchar *group = g_object_get_data (G_OBJECT(fc), "group");
-    const gchar  *pref = g_object_get_data (G_OBJECT(fc), "pref");
-    gchar        *folder_uri = gtk_file_chooser_get_uri (fc);
-    gchar *old_path_head_uri = gnc_doclink_get_path_head ();
+    GFile *folder = uri && *uri ? g_file_new_for_uri (uri) : NULL;
+    gchar *label = folder ? g_file_get_parse_name (folder) : NULL;
 
-    // make sure path_head ends with a trailing '/', 3.5 onwards
+    gtk_button_set_label (button, label ? label : _("Select a folder"));
+
+    g_free (label);
+    g_clear_object (&folder);
+}
+
+static void
+file_chooser_selected_cb (GObject *source_object, GAsyncResult *result,
+                          gpointer user_data)
+{
+    GtkButton *button = GTK_BUTTON (user_data);
+    GtkImage *image = g_object_get_data (G_OBJECT(button), "path_head_error");
+    const gchar *group = g_object_get_data (G_OBJECT(button), "group");
+    const gchar *pref = g_object_get_data (G_OBJECT(button), "pref");
+    GError *error = NULL;
+    GFile *folder;
+    gchar *folder_uri;
+    gchar *old_path_head_uri = gnc_doclink_get_path_head ();
+    GtkRoot *root;
+
+    folder = gtk_file_dialog_select_folder_finish (GTK_FILE_DIALOG (source_object),
+                                                    result, &error);
+    if (!folder)
+    {
+        if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+            PINFO("Failed to select preference folder: %s", error->message);
+        g_clear_error (&error);
+        g_free (old_path_head_uri);
+        g_object_unref (button);
+        return;
+    }
+
+    folder_uri = g_file_get_uri (folder);
     if (!g_str_has_suffix (folder_uri, "/"))
     {
         gchar *folder_with_slash = g_strconcat (folder_uri, "/", NULL);
         g_free (folder_uri);
-        folder_uri = g_strdup (folder_with_slash);
-        g_free (folder_with_slash);
+        folder_uri = folder_with_slash;
     }
 
-    gtk_widget_hide (GTK_WIDGET(image));
+    gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
+    set_file_chooser_button_label (button, folder_uri);
 
     if (!gnc_prefs_set_string (group, pref, folder_uri))
         PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
     else
+    {
+        root = gtk_widget_get_root (GTK_WIDGET (button));
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fc))),
+            GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : NULL,
             old_path_head_uri);
+    }
 
+    g_object_unref (folder);
     g_free (old_path_head_uri);
     g_free (folder_uri);
+    g_object_unref (button);
 }
 
-/** Connect a GtkFileChooserButton widget to its stored value in the preferences database.
+static void
+file_chooser_button_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    const gchar *group = g_object_get_data (G_OBJECT(button), "group");
+    const gchar *pref = g_object_get_data (G_OBJECT(button), "pref");
+    GtkFileDialog *dialog;
+    GtkRoot *root;
+    GtkWindow *parent = NULL;
+    gchar *uri;
+    GFile *initial_folder = NULL;
+
+    (void)user_data;
+
+    dialog = gtk_file_dialog_new ();
+    gtk_file_dialog_set_title (dialog, _("Select a folder"));
+
+    uri = gnc_prefs_get_string (group, pref);
+    if (uri && *uri)
+    {
+        initial_folder = g_file_new_for_uri (uri);
+        gtk_file_dialog_set_initial_folder (dialog, initial_folder);
+    }
+
+    root = gtk_widget_get_root (GTK_WIDGET (button));
+    if (GTK_IS_WINDOW (root))
+        parent = GTK_WINDOW (root);
+
+    gtk_file_dialog_select_folder (dialog, parent, NULL,
+                                   file_chooser_selected_cb,
+                                   g_object_ref (button));
+
+    g_clear_object (&initial_folder);
+    g_object_unref (dialog);
+    g_free (uri);
+}
+
+/** Connect a folder chooser button to its stored value in the preferences database.
  *
  *  @internal
  *
- *  @param fb A pointer to the file chooser button that should be connected.
+ *  @param button A button that opens the folder chooser.
  *
- *  @param boxname The Hbox name that contains the GtkFileChooserButton and Clear button
+ *  @param boxname The Hbox name that contains the folder chooser and Clear button.
  */
 static void
-gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *boxname)
+gnc_prefs_connect_file_chooser_button (GtkButton *button, const gchar *boxname)
 {
     GtkImage *image;
     gchar *group, *pref;
     gchar *uri;
     gboolean folder_set = TRUE;
 
-    g_return_if_fail (GTK_FILE_CHOOSER_BUTTON(fcb));
+    g_return_if_fail (GTK_IS_BUTTON(button));
 
     if (boxname == NULL)
-        gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fcb)), &group, &pref, NULL);
+        gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(button)), &group, &pref, NULL);
     else
         gnc_prefs_split_widget_name (boxname, &group, &pref, NULL);
 
@@ -891,127 +1105,84 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     {
         gchar *path_head = gnc_uri_get_path (uri);
 
-        // test for current folder present and set chooser to it
+        // Test whether the current folder still exists.
         if (g_file_test (path_head, G_FILE_TEST_IS_DIR))
-            gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(fcb), uri);
+            set_file_chooser_button_label (button, uri);
         else
             folder_set = FALSE;
 
         g_free (path_head);
     }
 
-    image = g_object_get_data (G_OBJECT(fcb), "path_head_error");
+    image = g_object_get_data (G_OBJECT(button), "path_head_error");
 
     if (folder_set) // If current folder missing, display error and tt message
-        gtk_widget_hide (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
     else
     {
         gchar *path_head = gnc_doclink_get_unescape_uri (NULL, uri, "file");
         gchar *ttip = g_strconcat (_("Path does not exist, "), path_head, NULL);
 
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), ttip);
-        gtk_widget_show (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
 
         g_free (ttip);
         g_free (path_head);
     }
 
-    g_signal_connect (GTK_FILE_CHOOSER(fcb), "selection-changed",
-                      G_CALLBACK(file_chooser_selected_cb), NULL);
+    g_signal_connect (button, "clicked",
+                      G_CALLBACK(file_chooser_button_clicked_cb), NULL);
 
-    g_object_set_data_full (G_OBJECT(fcb),"group", g_strdup (group), (GDestroyNotify) g_free);
-    g_object_set_data_full (G_OBJECT(fcb),"pref", g_strdup (pref), (GDestroyNotify) g_free);
+    g_object_set_data_full (G_OBJECT(button), "group", g_strdup (group), (GDestroyNotify) g_free);
+    g_object_set_data_full (G_OBJECT(button), "pref", g_strdup (pref), (GDestroyNotify) g_free);
 
     g_free (group);
     g_free (pref);
     g_free (uri);
 
-    gtk_widget_show_all (GTK_WIDGET(fcb));
+    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
 }
 
-/** Callback for a 'Clear' button for GtkFileChooserButton widget.
+/** Callback for a Clear button for a folder chooser.
  *
  *  @internal
  *
  *  @param button A pointer to the button widget emitting signal.
  *
- *  @param user_data A Pointer to the GtkFileChooserButton widget.
+ *  @param user_data A pointer to the folder chooser button.
  */
 static void
 file_chooser_clear_cb (GtkButton *button, gpointer user_data)
 {
-    GtkFileChooserButton *fcb = GTK_FILE_CHOOSER_BUTTON(user_data);
-    const gchar          *group = g_object_get_data (G_OBJECT(fcb), "group");
-    const gchar          *pref = g_object_get_data (G_OBJECT(fcb), "pref");
-    GtkImage             *image = g_object_get_data (G_OBJECT(fcb), "path_head_error");
-    GtkWidget            *box;
-    GtkWidget            *fcb_new;
-    gchar                *boxname;
-    gchar                *old_path_head_uri = gnc_doclink_get_path_head ();
+    GtkButton *folder_button = GTK_BUTTON(user_data);
+    const gchar *group = g_object_get_data (G_OBJECT(folder_button), "group");
+    const gchar *pref = g_object_get_data (G_OBJECT(folder_button), "pref");
+    GtkImage *image = g_object_get_data (G_OBJECT(folder_button), "path_head_error");
+    gchar *old_path_head_uri = gnc_doclink_get_path_head ();
+    GtkRoot *root;
 
-    /* We need to destroy the GtkFileChooserButton and recreate as there
-       does not seem to be away of resetting the folder path to NONE */
-    box = gtk_widget_get_parent (GTK_WIDGET(fcb));
-    g_signal_handlers_disconnect_by_func (button, file_chooser_clear_cb, fcb);
+    (void)button;
 
     if (!gnc_prefs_set_string (group, pref, ""))
         PINFO("Failed to Clear preference at %s, %s", group, pref);
     else
+    {
+        root = gtk_widget_get_root (GTK_WIDGET (folder_button));
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fcb))),
+            GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : NULL,
             old_path_head_uri);
+    }
 
-    gtk_widget_destroy (GTK_WIDGET(fcb));
-
-    fcb_new = gtk_file_chooser_button_new (_("Select a folder"),
-                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-    g_object_set_data (G_OBJECT(fcb_new), "path_head_error", image);
-    g_object_set_data_full (G_OBJECT(fcb_new),"group", g_strdup (group), (GDestroyNotify) g_free);
-    g_object_set_data_full (G_OBJECT(fcb_new),"pref", g_strdup (pref), (GDestroyNotify) g_free);
-
-    gtk_box_pack_start (GTK_BOX(box), fcb_new, TRUE, TRUE, 0);
-    gtk_box_reorder_child (GTK_BOX(box), fcb_new, 0);
-    gtk_widget_show (fcb_new);
-
-    g_signal_connect (GTK_BUTTON(button), "clicked",
-                      G_CALLBACK(file_chooser_clear_cb), fcb_new);
-
-    boxname = g_strconcat ("pref/", group, "/", pref, NULL);
-
-    gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(fcb_new), boxname);
-    g_free (boxname);
+    set_file_chooser_button_label (folder_button, NULL);
+    gtk_widget_set_visible (GTK_WIDGET (image), FALSE);
     g_free (old_path_head_uri);
 }
 
 /****************************************************************************/
 
-/** Connect a GtkRadioButton widget to its stored value in the preferences database.
- *
- *  @internal
- *
- *  @param button A pointer to the radio button that should be
- *  connected.
- */
-static void
-gnc_prefs_connect_radio_button (GtkRadioButton *button)
-{
-    gchar *group, *pref, *value;
-
-    g_return_if_fail (GTK_IS_RADIO_BUTTON(button));
-
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref, &value);
-
-    gnc_prefs_bind (group, pref, value, G_OBJECT(button), "active");
-
-    g_free (group);
-    g_free (pref);
-    g_free (value);
-}
-
-/****************************************************************************/
-
 /** Connect a GtkCheckButton widget to its stored value in the preferences database.
+ *  This covers both independent boolean check buttons and grouped check
+ *  buttons.
  *
  *  @internal
  *
@@ -1025,9 +1196,9 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
 
     g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref, &value);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(button)), &group, &pref, &value);
 
-    gnc_prefs_bind (group, pref, NULL, G_OBJECT(button), "active");
+    gnc_prefs_bind (group, pref, value, G_OBJECT(button), "active");
 
     g_free (group);
     g_free (pref);
@@ -1050,7 +1221,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
     g_return_if_fail (GTK_IS_SPIN_BUTTON(spin));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(spin)), &group, &pref, NULL);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(spin)), &group, &pref, NULL);
 
     gnc_prefs_bind (group, pref, NULL, G_OBJECT(spin), "value");
 
@@ -1060,22 +1231,24 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
 /****************************************************************************/
 
-/** Connect a GtkComboBox widget to its stored value in the preferences database.
+/** Connect a GtkDropDown widget to its stored value in the preferences database.
  *
  *  @internal
  *
- *  @param box A pointer to the combo box that should be connected.
+ *  @param drop_down A pointer to the drop-down that should be connected.
  */
 static void
-gnc_prefs_connect_combo_box (GtkComboBox *box)
+gnc_prefs_connect_drop_down (GtkDropDown *drop_down)
 {
     gchar *group, *pref;
 
-    g_return_if_fail (GTK_IS_COMBO_BOX(box));
+    g_return_if_fail (GTK_IS_DROP_DOWN(drop_down));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(box)), &group, &pref, NULL);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (
+                                    GTK_BUILDABLE(drop_down)),
+                                &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, NULL, G_OBJECT(box), "active");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(drop_down), "selected");
 
     g_free (group);
     g_free (pref);
@@ -1103,7 +1276,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all (GTK_WIDGET(gce));
+    gtk_widget_set_visible (GTK_WIDGET(gce), TRUE);
 }
 
 /****************************************************************************/
@@ -1121,7 +1294,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
 
     g_return_if_fail (GTK_IS_ENTRY(entry));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(entry)), &group, &pref, NULL);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(entry)), &group, &pref, NULL);
 
     gnc_prefs_bind (group, pref, NULL, G_OBJECT(entry), "text");
 
@@ -1178,56 +1351,53 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 
 /****************************************************************************/
 
-/********************/
-/*    Callbacks     */
-/********************/
-
-gboolean
-gnc_preferences_delete_event_cb (GtkWidget *widget,
-                                 GdkEvent  *event,
-                                 gpointer   user_data)
+static void
+gnc_preferences_help_clicked_cb (GtkButton *button, gpointer user_data)
 {
-    /* need to block this for the account separator test */
+    (void)button;
+    gnc_gnome_help (GTK_WINDOW (user_data), DF_MANUAL, DL_GLOBPREFS);
+}
+
+static void
+gnc_preferences_close_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    (void)button;
+    gnc_account_separator_validate_async (GTK_WINDOW (user_data));
+}
+
+static gboolean
+gnc_preferences_close_request_cb (GtkWindow *window, gpointer user_data)
+{
+    (void)user_data;
+    gnc_account_separator_validate_async (window);
     return TRUE;
 }
 
-/** Handle a user click on one of the buttons at the bottom of the
- *  preference dialog.  Also handles delete_window events, which have
- *  conveniently converted to a response by GtkDialog.
- *
- *  @internal
- *
- *  @param dialog A pointer to the preferences dialog.
- *
- *  @param response Indicates which button was pressed by the user.
- *  The only expected values are HELP, CLOSE, and DELETE_EVENT.
- *
- *  @param unused
- */
-void
-gnc_preferences_response_cb (GtkDialog *dialog, gint response, GtkDialog *unused)
+static gboolean
+gnc_preferences_escape_cb (GtkWidget *widget, GVariant *args,
+                           gpointer user_data)
 {
-    switch (response)
-    {
-    case GTK_RESPONSE_HELP:
-        gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_GLOBPREFS);
-        break;
-
-    case GTK_RESPONSE_DELETE_EVENT:
-    default:
-        if (gnc_account_separator_validate (GTK_WIDGET(dialog)))
-        {
-            gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog));
-            gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS,
-                                                  dialog);
-            gtk_widget_destroy (GTK_WIDGET(dialog));
-        }
-        else
-            gnc_preferences_select_account_page (dialog);
-        break;
-    }
+    (void)widget;
+    (void)args;
+    gnc_account_separator_validate_async (GTK_WINDOW (user_data));
+    return TRUE;
 }
 
+static void
+gnc_preferences_add_shortcuts (GtkWindow *window)
+{
+    GtkShortcutController *controller = GTK_SHORTCUT_CONTROLLER (
+        gtk_shortcut_controller_new ());
+
+    gtk_shortcut_controller_set_scope (controller, GTK_SHORTCUT_SCOPE_MANAGED);
+    gtk_shortcut_controller_add_shortcut (
+        controller,
+        gtk_shortcut_new (
+            gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+            gtk_callback_action_new (gnc_preferences_escape_cb, window, NULL)));
+    gtk_widget_add_controller (GTK_WIDGET (window),
+                               GTK_EVENT_CONTROLLER (controller));
+}
 
 /********************/
 /*    Creation      */
@@ -1252,20 +1422,10 @@ gnc_prefs_connect_one (const gchar *name,
     /* These tests must be ordered from more specific widget to less
      * specific widget. */
 
-    if (GTK_IS_FONT_BUTTON(widget))
+    if (GTK_IS_FONT_DIALOG_BUTTON(widget))
     {
-        DEBUG("  %s - font button", name);
-        gnc_prefs_connect_font_button (GTK_FONT_BUTTON(widget));
-    }
-    else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
-    {
-        DEBUG("  %s - file chooser button", name);
-        gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
-    }
-    else if (GTK_IS_RADIO_BUTTON(widget))
-    {
-        DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button (GTK_RADIO_BUTTON(widget));
+        DEBUG("  %s - font dialog button", name);
+        gnc_prefs_connect_font_button (GTK_FONT_DIALOG_BUTTON(widget));
     }
     else if (GTK_IS_CHECK_BUTTON(widget))
     {
@@ -1277,10 +1437,10 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - spin button", name);
         gnc_prefs_connect_spin_button (GTK_SPIN_BUTTON(widget));
     }
-    else if (GTK_IS_COMBO_BOX(widget))
+    else if (GTK_IS_DROP_DOWN(widget))
     {
-        DEBUG("  %s - combo box", name);
-        gnc_prefs_connect_combo_box (GTK_COMBO_BOX(widget));
+        DEBUG("  %s - drop-down", name);
+        gnc_prefs_connect_drop_down (GTK_DROP_DOWN(widget));
     }
     else if (GTK_IS_ENTRY(widget))
     {
@@ -1290,10 +1450,9 @@ gnc_prefs_connect_one (const gchar *name,
     else if (GTK_IS_BOX(widget))
     {
         /* Test custom widgets are all children of a hbox */
-        GtkWidget *widget_child;
-        GList* child = gtk_container_get_children (GTK_CONTAINER(widget));
-        widget_child = child->data;
-        g_list_free (child);
+        GtkWidget *widget_child = gtk_widget_get_first_child (widget);
+        if (!widget_child)
+            return;
         DEBUG("  %s - box", name);
         DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name (GTK_WIDGET(widget_child)), name);
         if (GNC_IS_CURRENCY_EDIT(widget_child))
@@ -1311,10 +1470,10 @@ gnc_prefs_connect_one (const gchar *name,
             DEBUG("  %s - date_edit", name);
             gnc_prefs_connect_date_edit (GNC_DATE_EDIT(widget_child), name );
         }
-        else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
+        else if (g_object_get_data (G_OBJECT(widget_child), "file-chooser-button"))
         {
             DEBUG("  %s - file chooser button", name);
-            gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget_child), name );
+            gnc_prefs_connect_file_chooser_button (GTK_BUTTON(widget_child), name );
         }
     }
     else
@@ -1342,12 +1501,13 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     GtkBuilder *builder;
     GtkWidget *dialog, *notebook, *label, *image, *spinner, *entry;
     GtkWidget *box, *date, *period, *currency, *fcb, *button;
+    GtkWidget *help_button, *close_button;
     GHashTable *prefs_table;
     GDate* gdate = NULL;
     gchar buf[128];
-    GtkListStore *store;
-    GtkTreePath *path;
-    GtkTreeIter iter;
+    GtkStringList *date_formats;
+    const char *locale_items[2];
+    gchar *locale_item;
     gnc_commodity *locale_currency;
     gnc_commodity *root_currency;
     const gchar *currency_name;
@@ -1402,7 +1562,17 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     g_object_set_data (G_OBJECT(dialog), "save_on_close_wait_time", spinner);
 
     DEBUG("autoconnect");
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+
+    help_button = GTK_WIDGET (gtk_builder_get_object (builder, "helpbutton2"));
+    close_button = GTK_WIDGET (gtk_builder_get_object (builder, "closebutton2"));
+    g_signal_connect (help_button, "clicked",
+                      G_CALLBACK (gnc_preferences_help_clicked_cb), dialog);
+    g_signal_connect (close_button, "clicked",
+                      G_CALLBACK (gnc_preferences_close_clicked_cb), dialog);
+    g_signal_connect (dialog, "close-request",
+                      G_CALLBACK (gnc_preferences_close_request_cb), NULL);
+    gnc_preferences_add_shortcuts (GTK_WINDOW (dialog));
 
     DEBUG("done");
 
@@ -1415,49 +1585,49 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new (TRUE);
-    gtk_widget_show (period);
-    gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
+    gtk_widget_set_visible (period, TRUE);
+    gnc_box_append_full (GTK_BOX(box), period, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_PERIOD));
     period = gnc_period_select_new (FALSE);
-    gtk_widget_show (period);
-    gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
+    gtk_widget_set_visible (period, TRUE);
+    gnc_box_append_full (GTK_BOX(box), period, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_DATE));
     date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
+    gtk_widget_set_visible (date, TRUE);
+    gnc_box_append_full (GTK_BOX(box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_DATE));
     date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
+    gtk_widget_set_visible (date, TRUE);
+    gnc_box_append_full (GTK_BOX(box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
-    gtk_widget_show (currency);
-    gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
+    gtk_widget_set_visible (currency, TRUE);
+    gnc_box_append_full (GTK_BOX(box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL_REPORT "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
-    gtk_widget_show (currency);
-    gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
+    gtk_widget_set_visible (currency, TRUE);
+    gnc_box_append_full (GTK_BOX(box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_DOC_LINK_PATH_HEAD));
-    fcb = gtk_file_chooser_button_new (_("Select a folder"),
-                                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    gtk_box_pack_start (GTK_BOX(box), fcb, TRUE, TRUE, 0);
+    fcb = gtk_button_new_with_label (_("Select a folder"));
+    g_object_set_data (G_OBJECT(fcb), "file-chooser-button", GINT_TO_POINTER (TRUE));
+    gnc_box_append_full (GTK_BOX(box), fcb, TRUE, TRUE, 0);
     button = gtk_button_new_with_label (_("Clear"));
-    gtk_box_pack_start (GTK_BOX(box), button, TRUE, TRUE, 0);
-    gtk_widget_show (button);
+    gnc_box_append_full (GTK_BOX(box), button, TRUE, TRUE, 0);
+    gtk_widget_set_visible (button, TRUE);
     g_signal_connect (GTK_BUTTON(button), "clicked",
                       G_CALLBACK(file_chooser_clear_cb), fcb);
 
@@ -1482,12 +1652,15 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     /* Other stuff */
     gdate = g_date_new_dmy (31, G_DATE_JULY, 2013);
     g_date_strftime (buf, sizeof(buf), "%x", gdate);
-    store = GTK_LIST_STORE(gtk_builder_get_object (builder, "date_formats"));
-    path = gtk_tree_path_new_from_indices (QOF_DATE_FORMAT_LOCALE, -1);
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(store), &iter, path))
-        gtk_list_store_set (store, &iter, 1, buf, -1);
+    date_formats = GTK_STRING_LIST (
+        gtk_builder_get_object (builder, "date_formats"));
+    locale_item = g_strdup_printf ("%s  %s", _("Locale"), buf);
+    locale_items[0] = locale_item;
+    locale_items[1] = NULL;
+    gtk_string_list_splice (date_formats, QOF_DATE_FORMAT_LOCALE, 1,
+                            locale_items);
     g_date_free (gdate);
-    gtk_tree_path_free (path);
+    g_free (locale_item);
 
     locale_currency = gnc_locale_default_currency ();
     currency_name = gnc_commodity_get_printname (locale_currency);
@@ -1518,13 +1691,13 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     gtk_label_set_label (GTK_LABEL(label), currency_name);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-expires"));
-    gnc_save_on_close_expires_cb (GTK_TOGGLE_BUTTON(button), dialog);
+    gnc_save_on_close_expires_cb (GTK_CHECK_BUTTON(button), dialog);
 
     g_object_unref (G_OBJECT(builder));
 
     /* save the original account separator in case it changes */
     g_object_set_data_full (G_OBJECT(entry), "original_text",
-                            g_strdup (gtk_entry_get_text (GTK_ENTRY(entry))),
+                            g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))),
                             g_free);
 
     LEAVE("dialog %p", dialog);
@@ -1580,7 +1753,7 @@ close_handler (gpointer user_data)
     ENTER(" ");
     dialog = GTK_WIDGET(user_data);
     gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS, dialog);
-    gtk_widget_destroy (dialog);
+    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE(" ");
 }
 
@@ -1605,7 +1778,7 @@ gnc_preferences_dialog (GtkWindow *parent)
     dialog = gnc_preferences_dialog_create(parent);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog), parent);
-    gtk_widget_show (dialog);
+    gtk_window_present (GTK_WINDOW (dialog));
 
     gnc_register_gui_component (DIALOG_PREFERENCES_CM_CLASS,
                                 NULL, close_handler, dialog);

@@ -31,6 +31,8 @@
 #ifndef GNC_GENERAL_SELECT_H
 #define GNC_GENERAL_SELECT_H
 
+#include <gtk/gtk.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,8 +42,14 @@ extern "C" {
 #define GNC_GENERAL_SELECT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), \ GNCGeneralSelectClass)
 #define GNC_IS_GENERAL_SELECT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_general_select_get_type ())
 
-typedef const char *	(*GNCGeneralSelectGetStringCB) (gpointer);
-typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer cbarg, gpointer default_selection, GtkWidget *parent);
+typedef const char * (*GNCGeneralSelectGetStringCB) (gpointer);
+typedef void (*GNCGeneralSelectSelectionCB) (gpointer selection, gpointer user_data);
+typedef void (*GNCGeneralSelectNewSelectCB) (gpointer cbarg,
+                                              gpointer default_selection,
+                                              GtkWidget *parent,
+                                              GCancellable *cancellable,
+                                              GNCGeneralSelectSelectionCB completion_cb,
+                                              gpointer completion_data);
 
 typedef enum
 {
@@ -59,9 +67,10 @@ typedef struct
 
     gpointer selected_item;
 
-    GNCGeneralSelectGetStringCB	get_string;
-    GNCGeneralSelectNewSelectCB	new_select;
-    gpointer			cb_arg;
+    GNCGeneralSelectGetStringCB get_string;
+    GNCGeneralSelectNewSelectCB new_select;
+    gpointer cb_arg;
+    GCancellable *selection_cancellable;
 
     int disposed; /* private */
 } GNCGeneralSelect;
@@ -70,26 +79,26 @@ typedef struct
 {
     GtkBoxClass parent_class;
 
-    void 		(*changed) (GNCGeneralSelect *edit);
+    void (*changed) (GNCGeneralSelect *edit);
 } GNCGeneralSelectClass;
 
 
-GtkWidget *gnc_general_select_new            (GNCGeneralSelectType type,
-        GNCGeneralSelectGetStringCB get_string,
-        GNCGeneralSelectNewSelectCB new_select,
-        gpointer cb_arg);
-void       gnc_general_select_set_selected   (GNCGeneralSelect *gsl,
-        gpointer selected);
-gpointer   gnc_general_select_get_selected   (GNCGeneralSelect *gsl);
+GtkWidget *gnc_general_select_new (GNCGeneralSelectType type,
+                                   GNCGeneralSelectGetStringCB get_string,
+                                   GNCGeneralSelectNewSelectCB new_select,
+                                   gpointer cb_arg);
+void       gnc_general_select_set_selected (GNCGeneralSelect *gsl,
+                                            gpointer selected);
+gpointer   gnc_general_select_get_selected (GNCGeneralSelect *gsl);
 const char *gnc_general_select_get_printname (GNCGeneralSelect *gsl,
-        gpointer selection);
-GType      gnc_general_select_get_type       (void);
+                                              gpointer selection);
+GType      gnc_general_select_get_type (void);
 
-void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label);
+void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl,
+                                                    GtkWidget *label);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

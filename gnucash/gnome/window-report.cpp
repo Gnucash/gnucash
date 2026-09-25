@@ -38,6 +38,7 @@
 #include "swig-runtime.h"
 #include "gnc-guile-utils.h"
 #include "gnc-ui.h"
+#include "dialog-utils.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
@@ -79,14 +80,8 @@ gnc_options_dialog_apply_cb(GncOptionsDialog *opt_dialog,
     auto results = gnc_option_db_commit (win->odb);
     for (auto iter = results; iter; iter = iter->next)
     {
-        auto dialog = gtk_message_dialog_new(GTK_WINDOW (win->win),
-                                             static_cast<GtkDialogFlags>(0),
-                                             GTK_MESSAGE_ERROR,
-                                             GTK_BUTTONS_OK,
-                                             "%s",
-                                             (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_error_dialog (GTK_WINDOW (win->win), "%s",
+                          static_cast<char *> (iter->data));
         g_free (iter->data);
     }
     g_list_free (results);
@@ -100,16 +95,18 @@ gnc_options_dialog_help_cb(GncOptionsDialog *opt_dialog,
 {
     auto prm{static_cast<struct report_default_params_data*>(user_data)};
 
+    if (!prm || !prm->win)
+        return;
+
     auto parent = prm->win->get_widget();
-    auto dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_INFO,
-                                         GTK_BUTTONS_OK,
-                                         "%s",
-                                         _("Set the report options you want using this dialog."));
-    g_signal_connect(G_OBJECT(dialog), "response",
-                     (GCallback)gtk_widget_destroy, nullptr);
-    gtk_widget_show(dialog);
+    if (!parent)
+        return;
+    auto alert = gtk_alert_dialog_new (
+        "%s", _("Set the report options you want using this dialog."));
+
+    gtk_alert_dialog_show (alert, GTK_WINDOW (parent));
+    g_object_unref (alert);
+    (void)opt_dialog;
 }
 
 static void

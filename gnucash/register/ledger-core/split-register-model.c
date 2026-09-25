@@ -43,6 +43,7 @@
 #include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "engine-helpers.h"
+#include "table-allgui.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_LEDGER;
@@ -2101,31 +2102,137 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
     return XACC_CELL_ALLOW_SHADOW;
 }
 
-static gboolean
-xaccTransWarnReadOnly (GtkWidget* parent, Transaction* trans)
+typedef struct
 {
-    GtkWidget* dialog;
-    const gchar* reason;
-    const gchar* format =
+    GncSplitRegisterAsyncRequest base;
+    QofBook *book;
+    VirtualLocation virt_loc;
+    GncGUID split_guid;
+    GncGUID transaction_guid;
+    GWeakRef parent;
+    gboolean unreconcile_split;
+    gboolean cancelled;
+} SplitRegisterChangeConfirmRequest;
+
+static void
+split_register_readonly_warning_finished (G_GNUC_UNUSED gint response,
+                                          G_GNUC_UNUSED gpointer user_data)
+{
+}
+
+static gboolean
+xaccTransWarnReadOnly (GtkWidget *parent, Transaction *trans)
+{
+    const gchar *reason;
+    const gchar *format =
         _ ("Cannot modify or delete this transaction. This transaction is "
            "marked read-only because:\n\n'%s'");
 
-    if (!trans) return FALSE;
+    if (!trans)
+        return FALSE;
 
     reason = xaccTransGetReadOnly (trans);
     if (reason)
     {
-        dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-                                         0,
-                                         GTK_MESSAGE_ERROR,
-                                         GTK_BUTTONS_OK,
-                                         format,
-                                         reason);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+        gchar *message = g_strdup_printf (format, reason);
+        GtkWindow *window = GTK_IS_WINDOW (parent) ? GTK_WINDOW (parent) : NULL;
+
+        gnc_warning_dialog_async
+            (window, GNC_PREF_WARN_REG_IS_READ_ONLY,
+             _("Transaction is read-only"), message, _("_Close"),
+             GTK_RESPONSE_CLOSE, TRUE, split_register_readonly_warning_finished,
+             NULL);
+        g_free (message);
         return TRUE;
     }
     return FALSE;
+}
+
+static gboolean
+split_register_change_confirm_is_current
+    (SplitRegisterChangeConfirmRequest *request)
+{
+    SplitRegister *reg = request->base.reg;
+    GtkWindow *parent;
+    GtkWidget *current_parent;
+    Split *split;
+    Transaction *transaction;
+    gboolean current;
+
+    if (request->cancelled || !reg || !reg->table ||
+        request->book != gnc_get_current_book () ||
+        !virt_loc_equal (reg->table->current_cursor_loc, request->virt_loc))
+        return FALSE;
+
+    split = gnc_split_register_get_split (reg, request->virt_loc.vcell_loc);
+    transaction = split ? xaccSplitGetParent (split) : NULL;
+    if (!split || !transaction ||
+        !guid_equal (xaccSplitGetGUID (split), &request->split_guid) ||
+        !guid_equal (xaccTransGetGUID (transaction), &request->transaction_guid))
+        return FALSE;
+
+    parent = GTK_WINDOW (g_weak_ref_get (&request->parent));
+    current_parent = gnc_split_register_get_parent (reg);
+    current = parent && current_parent == GTK_WIDGET (parent);
+    g_clear_object (&parent);
+    return current;
+}
+
+static void
+split_register_change_confirm_free (SplitRegisterChangeConfirmRequest *request)
+{
+    gnc_split_register_async_request_untrack (&request->base);
+    g_weak_ref_clear (&request->parent);
+    g_free (request);
+}
+
+static void
+split_register_change_confirm_cancel (GncSplitRegisterAsyncRequest *base)
+{
+    SplitRegisterChangeConfirmRequest *request =
+        (SplitRegisterChangeConfirmRequest *)base;
+    SplitRegister *reg = request->base.reg;
+
+    request->cancelled = TRUE;
+    if (reg && reg->table)
+        gnc_table_confirm_change_complete (reg->table, FALSE);
+    gnc_split_register_async_request_untrack (&request->base);
+}
+
+static void
+split_register_change_confirm_finished (gint response, gpointer user_data)
+{
+    SplitRegisterChangeConfirmRequest *request = user_data;
+    SplitRegister *reg = request->base.reg;
+
+    if (response == GTK_RESPONSE_YES &&
+        split_register_change_confirm_is_current (request))
+    {
+        SRInfo *info = gnc_split_register_get_info (reg);
+
+        if (request->unreconcile_split)
+        {
+            Split *split = gnc_split_register_get_split
+                (reg, request->virt_loc.vcell_loc);
+
+            if (g_list_index (reg->unrecn_splits, split) == -1)
+            {
+                RecnCell *cell = (RecnCell *)gnc_table_layout_get_cell
+                    (reg->table->layout, RECN_CELL);
+
+                reg->unrecn_splits = g_list_append (reg->unrecn_splits, split);
+                gnc_recn_cell_set_flag (cell, NREC);
+            }
+        }
+        info->change_confirmed = TRUE;
+        PINFO ("Unreconcile split list length is %d",
+               g_list_length (reg->unrecn_splits));
+        gnc_table_confirm_change_complete (reg->table, TRUE);
+    }
+    else if (reg && reg->table)
+        gnc_table_confirm_change_complete (reg->table, FALSE);
+
+    split_register_change_confirm_free (request);
 }
 
 static gboolean reg_trans_has_reconciled_splits (SplitRegister* reg,
@@ -2148,51 +2255,54 @@ static gboolean reg_trans_has_reconciled_splits (SplitRegister* reg,
     return FALSE;
 }
 
-static gboolean
+static GncTableConfirmResult
 gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 {
-    SplitRegister* reg = user_data;
-    SRInfo* info = gnc_split_register_get_info (reg);
-    Transaction* trans;
-    Split* split;
+    SplitRegister *reg = user_data;
+    SRInfo *info = reg ? gnc_split_register_get_info (reg) : NULL;
+    Transaction *trans;
+    Split *split;
     char recn;
-    const char* cell_name;
+    const char *cell_name;
     gboolean protected_split_cell, protected_trans_cell;
-    const gchar* title = NULL;
-    const gchar* message = NULL;
+    const gchar *title = NULL;
+    gchar *message = NULL;
+    SplitRegisterChangeConfirmRequest *request;
+    GtkWidget *parent;
 
     /* This assumes we reset the flag whenever we change splits.
      * This happens in gnc_split_register_move_cursor(). */
+    if (!reg || !reg->table || !info)
+        return GNC_TABLE_CONFIRM_REJECT;
     if (info->change_confirmed)
-        return TRUE;
+        return GNC_TABLE_CONFIRM_ACCEPT;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
-        return TRUE;
+        return GNC_TABLE_CONFIRM_ACCEPT;
 
     trans = xaccSplitGetParent (split);
     if (xaccTransWarnReadOnly (gnc_split_register_get_parent (reg), trans))
-        return FALSE;
+        return GNC_TABLE_CONFIRM_REJECT;
 
     if (!reg_trans_has_reconciled_splits (reg, trans))
-        return TRUE;
+        return GNC_TABLE_CONFIRM_ACCEPT;
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
         recn = gnc_recn_cell_get_flag
-               ((RecnCell*) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));
+            ((RecnCell *)gnc_table_layout_get_cell (reg->table->layout,
+                                                     RECN_CELL));
     else if (g_list_index (reg->unrecn_splits, split) != -1)
-        recn = NREC;   /* A previous run of this function marked this split for unreconciling */
+        recn = NREC;   /* A previous run marked this split for unreconciling. */
     else
         recn = xaccSplitGetReconcile (split);
 
-    /* What Cell are we in */
     cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
-    /* if we change a transfer cell, we want the other split */
+    /* If changing a transfer cell, protect the other split. */
     if (g_strcmp0 (cell_name, "transfer") == 0)
         recn = xaccSplitGetReconcile (xaccSplitGetOtherSplit (split));
 
-    /* These cells can not be changed */
     protected_split_cell = (g_strcmp0 (cell_name, "account") == 0) ||
                            (g_strcmp0 (cell_name, "transfer") == 0) ||
                            (g_strcmp0 (cell_name, "debit") == 0) ||
@@ -2206,88 +2316,74 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 
     if (protected_trans_cell)
     {
-        GList* acc_g_list = NULL;
-        gchar* acc_list = NULL;
-        gchar* message_format;
+        GList *accounts = NULL;
+        gchar *account_list;
+        gchar *message_format;
 
         for (GList *node = xaccTransGetSplitList (trans); node; node = node->next)
         {
-            Split* split = node->data;
+            Split *transaction_split = node->data;
 
-            if (!xaccTransStillHasSplit (trans, split))
+            if (!xaccTransStillHasSplit (trans, transaction_split))
                 continue;
 
-            if (xaccSplitGetReconcile (split) == YREC)
+            if (xaccSplitGetReconcile (transaction_split) == YREC)
             {
-                gchar* name = gnc_account_get_full_name (xaccSplitGetAccount (split));
-                acc_g_list = g_list_prepend (acc_g_list, name);
+                gchar *name = gnc_account_get_full_name
+                    (xaccSplitGetAccount (transaction_split));
+                accounts = g_list_prepend (accounts, name);
             }
         }
-        acc_list = gnc_g_list_stringjoin (acc_g_list, "\n");
+        account_list = gnc_g_list_stringjoin (accounts, "\n");
         title = _ ("Change transaction containing a reconciled split?");
         message_format =
-            _ ("The transaction you are about to change contains reconciled splits in the following accounts:\n%s"
-               "\n\nAre you sure you want to continue with this change?");
-
-        message = g_strdup_printf (message_format, acc_list);
-        g_list_free_full (acc_g_list, g_free);
-        g_free (acc_list);
+            _ ("The transaction you are about to change contains reconciled "
+               "splits in the following accounts:\n%s\n\nAre you sure you "
+               "want to continue with this change?");
+        message = g_strdup_printf (message_format, account_list);
+        g_list_free_full (accounts, g_free);
+        g_free (account_list);
     }
 
     if (protected_split_cell)
     {
         title = _ ("Change reconciled split?");
         message =
-            _ ("You are about to change a protected field of a reconciled split. "
-               "If you continue editing this split it will be unreconciled. "
-               "This might make future reconciliation difficult! Continue with this change?");
+            g_strdup (_ ("You are about to change a protected field of a "
+                         "reconciled split. If you continue editing this split "
+                         "it will be unreconciled. This might make future "
+                         "reconciliation difficult! Continue with this change?"));
     }
 
-    if ((recn == YREC && protected_split_cell) || protected_trans_cell)
+    if (!((recn == YREC && protected_split_cell) || protected_trans_cell))
     {
-        GtkWidget* dialog, *window;
-        gint response;
-
-        /* Does the user want to be warned? */
-        window = gnc_split_register_get_parent (reg);
-        dialog =
-            gtk_message_dialog_new (GTK_WINDOW (window),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_WARNING,
-                                    GTK_BUTTONS_CANCEL,
-                                    "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                  "%s", message);
-
-        if (protected_split_cell)
-            gtk_dialog_add_button (GTK_DIALOG (dialog), _ ("Chan_ge Split"),
-                                   GTK_RESPONSE_YES);
-        else
-            gtk_dialog_add_button (GTK_DIALOG (dialog), _ ("Chan_ge Transaction"),
-                                   GTK_RESPONSE_YES);
-        response = gnc_dialog_run (GTK_DIALOG (dialog),
-                                   GNC_PREF_WARN_REG_RECD_SPLIT_MOD);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_YES)
-            return FALSE;
-
-        // Response is Change, so record the splits
-        if (recn == YREC && protected_split_cell)
-        {
-            if (g_list_index (reg->unrecn_splits, split) == -1)
-            {
-                reg->unrecn_splits = g_list_append (reg->unrecn_splits, split);
-                gnc_recn_cell_set_flag
-                ((RecnCell*) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-                 NREC);
-            }
-        }
-
-        PINFO ("Unreconcile split list length is %d",
-               g_list_length (reg->unrecn_splits));
-        info->change_confirmed = TRUE;
+        g_free (message);
+        return GNC_TABLE_CONFIRM_ACCEPT;
     }
-    return TRUE;
+
+    parent = gnc_split_register_get_parent (reg);
+    if (!GTK_IS_WINDOW (parent))
+    {
+        g_free (message);
+        return GNC_TABLE_CONFIRM_REJECT;
+    }
+
+    request = g_new0 (SplitRegisterChangeConfirmRequest, 1);
+    request->book = gnc_get_current_book ();
+    request->virt_loc = virt_loc;
+    request->split_guid = *xaccSplitGetGUID (split);
+    request->transaction_guid = *xaccTransGetGUID (trans);
+    request->unreconcile_split = recn == YREC && protected_split_cell;
+    g_weak_ref_init (&request->parent, parent);
+    gnc_split_register_async_request_track
+        (reg, &request->base, split_register_change_confirm_cancel);
+    gnc_table_control_set_input_suspended (reg->table->control, TRUE);
+    gnc_warning_dialog_async
+        (GTK_WINDOW (parent), GNC_PREF_WARN_REG_RECD_SPLIT_MOD, title, message,
+         protected_split_cell ? _("Chan_ge Split") : _("Chan_ge Transaction"),
+         GTK_RESPONSE_YES, FALSE, split_register_change_confirm_finished, request);
+    g_free (message);
+    return GNC_TABLE_CONFIRM_DEFERRED;
 }
 
 static gpointer

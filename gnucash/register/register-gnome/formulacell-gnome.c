@@ -29,7 +29,7 @@
 #include <config.h>
 
 #include <locale.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 
 #include "gnc-engine.h"
 
@@ -44,7 +44,7 @@
 #include "table-allgui.h"
 
 #ifdef G_OS_WIN32
-# include <gdk/gdkwin32.h>
+# include <gdk/win32/gdkwin32.h>
 #endif
 
 //static QofLogModule log_module = GNC_MOD_REGISTER;
@@ -55,29 +55,28 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
                                 int *cursor_position,
                                 int *start_selection,
                                 int *end_selection,
-                                void *gui_data )
+                                const GncRegisterInput *input)
 {
     FormulaCell *cell = (FormulaCell *)bcell;
-    GdkEventKey *event = gui_data;
     struct lconv *lc;
     gboolean is_return;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (!input->pressed)
         return FALSE;
 
     lc = gnc_localeconv ();
 
     is_return = FALSE;
 
-    /* FIXME!! This code is almost identical (except for GDK_KEY_KP_Enter
+    /* FIXME!! This code is almost identical (except for keypad Enter
      * handling) to pricecell-gnome.c:gnc_price_cell_direct_update.  I write
      * this after fixing a bug where one copy was kept up to date, and the
      * other not.  So, fix this.
      */
 
-    switch (event->keyval)
+    switch (input->key)
     {
-    case GDK_KEY_Escape:
+    case GNC_REGISTER_KEY_ESCAPE:
         if (bcell->changed)
         {
             GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
@@ -92,13 +91,13 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
         }
         return FALSE;
 
-    case GDK_KEY_Return:
-        if (!(event->state &
-                (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
+    case GNC_REGISTER_KEY_RETURN:
+        if (!(input->modifiers &
+                (GNC_REGISTER_MODIFIER_DEFAULT)))
             is_return = TRUE;
         /* FALL THROUGH */
 
-    case GDK_KEY_KP_Enter:
+    case GNC_REGISTER_KEY_KEYPAD_ENTER:
     {
         gnc_formula_cell_set_value( cell, cell->cell.value );
 
@@ -109,7 +108,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
         return !is_return;
     }
 
-    case GDK_KEY_KP_Decimal:
+    case GNC_REGISTER_KEY_KEYPAD_DECIMAL:
         break;
 
     default:

@@ -29,7 +29,7 @@
 #include <config.h>
 
 #include <locale.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 
 #include "gnc-locale-utils.h"
 #include "gnc-exp-parser.h"
@@ -41,7 +41,7 @@
 #include "table-allgui.h"
 
 #ifdef G_OS_WIN32
-# include <gdk/gdkwin32.h>
+# include <gdk/win32/gdkwin32.h>
 #endif
 
 static gboolean
@@ -49,23 +49,22 @@ gnc_price_cell_direct_update (BasicCell *bcell,
                               int *cursor_position,
                               int *start_selection,
                               int *end_selection,
-                              void *gui_data)
+                              const GncRegisterInput *input)
 {
     PriceCell *cell = (PriceCell *) bcell;
-    GdkEventKey *event = gui_data;
     struct lconv *lc;
     gboolean is_return;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (!input->pressed)
         return FALSE;
 
     lc = gnc_localeconv ();
 
     is_return = FALSE;
 
-    switch (event->keyval)
+    switch (input->key)
     {
-    case GDK_KEY_Escape:
+    case GNC_REGISTER_KEY_ESCAPE:
         if (bcell->changed)
         {
             GnucashSheet *sheet = (GnucashSheet *) bcell->gui_private;
@@ -80,13 +79,13 @@ gnc_price_cell_direct_update (BasicCell *bcell,
         }
         return FALSE;
 
-    case GDK_KEY_Return:
-        if (!(event->state &
-                (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
+    case GNC_REGISTER_KEY_RETURN:
+        if (!(input->modifiers &
+                (GNC_REGISTER_MODIFIER_DEFAULT)))
             is_return = TRUE;
         /* fall through */
 
-    case GDK_KEY_KP_Enter:
+    case GNC_REGISTER_KEY_KEYPAD_ENTER:
     {
         char *error_loc;
         gnc_numeric amount;
@@ -124,7 +123,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
         return !is_return;
     }
 
-    case GDK_KEY_KP_Decimal:
+    case GNC_REGISTER_KEY_KEYPAD_DECIMAL:
         break;
 
     default:

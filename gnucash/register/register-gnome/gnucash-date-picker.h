@@ -65,6 +65,8 @@ typedef struct
 
     void (*date_picked) (GNCDatePicker *date_picker);
 
+    void (*cancelled) (GNCDatePicker *date_picker);
+
 } GNCDatePickerClass;
 
 /** @} */

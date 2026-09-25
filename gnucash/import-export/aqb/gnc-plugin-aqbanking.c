@@ -322,6 +322,13 @@ gnc_plugin_ab_account_selected (GncPluginPage *plugin_page, Account *account,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+
+    /* Account selection signals can arrive from inactive account-tree pages,
+     * notably while their selection is restored at startup. The actions below
+     * are window-wide, so only the current page may determine their state. */
+    if (plugin_page != gnc_main_window_get_current_page (window))
+        return;
+
     simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 

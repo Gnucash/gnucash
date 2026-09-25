@@ -27,6 +27,7 @@
 #define DIALOG_UTILS_H
 
 #include <gtk/gtk.h>
+#include "gnc-register-input.h"
 #include "qof.h"
 
 #ifdef __cplusplus
@@ -69,7 +70,7 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
 /********************************************************************\
- * Sets the alignment of a Label Widget, GTK3 version specific.    *
+ * Sets the alignment of a Label Widget.                           *
  *                                                                  *
  * Args: widget - the label widget to set alignment on              *
  *       xalign - x alignment                                       *
@@ -78,13 +79,6 @@ void gnc_window_adjust_for_screen (GtkWindow * window);
 \********************************************************************/
 void gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign);
 
-/********************************************************************\
- * Get the preference for showing tree view grid lines              *
- *                                                                  *
- * Args: none                                                       *
- * Returns:  GtkTreeViewGridLines setting                           *
-\********************************************************************/
-GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
 
 /********************************************************************\
  * Add a style context to a Widget so it can be altered with css    *
@@ -104,23 +98,30 @@ void gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_clas
 \********************************************************************/
 void gnc_widget_style_context_remove_class (GtkWidget *widget, const char *gnc_class);
 
-/********************************************************************\
- * Draw an arrow on a Widget so it can be altered with css          *
- *                                                                  *
- * Args:     widget - widget to add arrow to in the draw callback   *
- *               cr - cairo context for the draw callback           *
- *        direction - 0 for up, 1 for down                          *
- * Returns:  TRUE, stop other handlers being invoked for the event  *
-\********************************************************************/
-gboolean gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction);
-
 gboolean gnc_gdate_in_valid_range (GDate *test_date, gboolean warn);
 
-gboolean gnc_handle_date_accelerator (GdkEventKey *event,
-                                      struct tm *tm,
-                                      const char *date_str);
+void gnc_register_input_from_keyval (GncRegisterInput *input,
+                                      guint keyval,
+                                      GdkModifierType state);
+
+gboolean gnc_handle_date_accelerator_input (const GncRegisterInput *input,
+                                             struct tm *tm,
+                                             const char *date_str);
 
 gboolean gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char *root);
+
+typedef void (*GncBuilderConnectFunc) (GtkBuilder *builder,
+                                       GObject *signal_object,
+                                       const gchar *signal_name,
+                                       const gchar *handler_name,
+                                       GObject *connect_object,
+                                       GConnectFlags flags,
+                                       gpointer user_data);
+
+void gnc_builder_connect_signals (GtkBuilder *builder, gpointer user_data);
+void gnc_builder_connect_signals_full (GtkBuilder *builder,
+                                       GncBuilderConnectFunc connect_func,
+                                       gpointer user_data);
 
 void gnc_builder_connect_full_func (GtkBuilder *builder,
                                     GObject *signal_object,
@@ -130,50 +131,90 @@ void gnc_builder_connect_full_func (GtkBuilder *builder,
                                     GConnectFlags flags,
                                     gpointer user_data);
 
-/** This function generates a button with icon and adds it to a
- *  GtkDialog.  This is similar to just adding a stock button to the
- *  dialog, only you can add an arbitrary pairing of button and label,
- *  which the stock system doesn't provide.
- *
- *  @param dialog The dialog where the button should be added.
- *
- *  @param label The text of the button.
- *
- *  @param icon_name The name of the icon button to use.
- *
- *  @param response The response id to return if this button is
- *  clicked.*/
-void gnc_gtk_dialog_add_button (GtkWidget *dialog,
-                                const gchar *label,
-                                const gchar *icon_name,
-                                guint response);
+/** Receives a response from a non-blocking warning dialog. */
+typedef void (*GncWarningDialogResponseCallback) (gint response,
+                                                  gpointer user_data);
 
-/** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)
+/**
+ * Present a non-blocking warning window without running a nested main loop.
+ *
+ * This preserves permanent and session warning preferences. The response
+ * callback is invoked exactly once, including when
+ * the parent or warning window is destroyed.
  */
-gint
-gnc_dialog_run(GtkDialog *dialog, const gchar *pref_key);
+void gnc_warning_dialog_async (GtkWindow *parent,
+                               const gchar *pref_key,
+                               const gchar *title,
+                               const gchar *message,
+                               const gchar *action,
+                               gint action_response,
+                               gboolean action_is_default,
+                               GncWarningDialogResponseCallback completed,
+                               gpointer user_data);
+/** Present a non-blocking warning window with an additional non-cancel
+ * response while preserving the warning preferences. */
+void gnc_warning_dialog_choice_async (GtkWindow *parent,
+                                      const gchar *pref_key,
+                                      const gchar *title,
+                                      const gchar *message,
+                                      const gchar *alternate_action,
+                                      gint alternate_response,
+                                      const gchar *action,
+                                      gint action_response,
+                                      gboolean action_is_default,
+                                      GncWarningDialogResponseCallback completed,
+                                      gpointer user_data);
 
-/* If this is a new book, this function can be used to display book options
- * dialog so user can specify options, before any transactions can be
- * imported/entered, since the book options can affect how transactions are
- * created. Note: This dialog is modal! */
-gboolean gnc_new_book_option_display (GtkWidget *parent);
+/** Callback for gnc_ok_to_close_window_async().
+ *
+ * @a window is NULL and @a close_allowed is FALSE when the target window was
+ * destroyed while its confirmation was open. The callback is invoked exactly
+ * once for every accepted request.
+ */
+typedef void (*GncOkToCloseWindowCallback) (GtkWindow *window,
+                                            gboolean close_allowed,
+                                            gpointer user_data);
+
+/** Ask whether @a window may be closed without entering a nested event loop.
+ *
+ * Requests made while a confirmation for the same window is pending are
+ * coalesced. Every callback is invoked exactly once; it receives TRUE only
+ * after an explicit affirmative response while the target window still exists.
+ */
+void gnc_ok_to_close_window_async (GtkWindow *window,
+                                   GncOkToCloseWindowCallback completed,
+                                   gpointer user_data);
+
+typedef void (*GncNewBookOptionsFinishedCB) (GtkWindow *parent,
+                                              gboolean applied,
+                                              gpointer user_data);
+
+/** Present the new-book options window without a nested event loop. The
+ * callback is invoked after the window closes. @a applied is true only after
+ * the book options have been applied; callers must revalidate the active book
+ * before continuing. */
+void gnc_new_book_option_display_async (GtkWidget *parent,
+                                        GncNewBookOptionsFinishedCB callback,
+                                        gpointer user_data);
 
 /** This function returns a widget for selecting a cost policy
   */
 GtkWidget *
 gnc_cost_policy_select_new (void);
 
-/** This function returns the color string for the CSS 'gnc-class-negative-numbers' class,
- *  the returned value must be freed.
- */
-gchar* gnc_get_negative_color (void);
-
-
-
 /** This function sets the title of an owner dialog */
 void gnc_owner_window_set_title (GtkWindow*, const char*, GtkWidget*, GtkWidget*);
 
+/** This function sets the entry buffer with text */
+void gnc_entry_set_text (GtkEntry *entry, const gchar *text);
+
+/** This function gets the text of the entry buffer */
+const gchar * gnc_entry_get_text (GtkEntry *entry);
+
+/** This function sets all margins of a GtkBox */
+void gnc_box_set_all_margins (GtkBox *box, gint margin);
+
+void gnc_builder_set_current_object (GtkBuilder *builder, gpointer user_data);
 
 #ifdef __cplusplus
 }

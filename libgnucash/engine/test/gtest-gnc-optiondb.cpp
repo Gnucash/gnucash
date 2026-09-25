@@ -26,12 +26,14 @@
 #include <gtest/gtest.h>
 #pragma GCC diagnostic pop
 
+#include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-ui.hpp"
 #include "kvp-value.hpp"
 #include <glib-2.0/glib.h>
 #include <cstdint>
+#include <memory>
 
 #include "gnc-session.h"
 
@@ -56,6 +58,25 @@ TEST_F(GncOptionDBTest, test_register_option)
                       std::string{"waldo"}};
     m_db->register_option("foo", std::move(option1));
     EXPECT_EQ(1u, m_db->num_sections());
+}
+
+TEST(GncOptionDBOwnershipTest, destroy_owned_releases_registered_sections)
+{
+    auto db = gnc_option_db_new();
+    std::weak_ptr<GncOptionSection> section;
+    GncOption option{"foo", "bar", "baz", "Phony Option",
+                     std::string{"waldo"}};
+
+    ASSERT_NE(nullptr, db);
+    db->register_option("foo", std::move(option));
+    db->foreach_section([&section](GncOptionSectionPtr& candidate) {
+        section = candidate;
+    });
+    ASSERT_FALSE(section.expired());
+
+    gnc_option_db_destroy_owned(db);
+
+    EXPECT_TRUE(section.expired());
 }
 
 TEST_F(GncOptionDBTest, test_lookup_string_option)

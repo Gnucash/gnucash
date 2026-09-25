@@ -28,6 +28,7 @@
 #include "go-optionmenu.h"
 #include "go-glib-extras.h"
 #include <glib/gi18n-lib.h>
+#include <gdk/gdk.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -257,7 +258,9 @@ struct _GOCharmapSel
 {
     GtkBox box;
     GOOptionMenu *encodings;
-    GtkMenu *encodings_menu;
+    GtkPopover *encodings_menu;
+    GtkStack *encodings_stack;
+    GHashTable *encoding_items;
     GOCharmapSelTestDirection test;
 };
 
@@ -336,7 +339,7 @@ static void set_menu_to_default(GOCharmapSel *cs, gint item)
     go_option_menu_set_history(cs->encodings, &sel);
 }
 
-static gboolean cs_mnemonic_activate(GtkWidget *w, gboolean group_cycling)
+static gboolean cs_mnemonic_activate(GtkWidget *w, G_GNUC_UNUSED gboolean group_cycling)
 {
     GOCharmapSel *cs = GO_CHARMAP_SEL(w);
     gtk_widget_grab_focus(GTK_WIDGET(cs->encodings));
@@ -352,102 +355,317 @@ static void cs_emphasize_label(GtkLabel *label)
     g_free(text);
 }
 
-static void go_charmap_sel_init(GOCharmapSel *cs)
+static GtkWidget *
+cs_create_leaf(const char *title, const char *encoding, gboolean emphasize)
 {
-    gtk_orientable_set_orientation (GTK_ORIENTABLE(cs), GTK_ORIENTATION_HORIZONTAL);
+    GtkWidget *row = gtk_list_box_row_new();
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+    GtkWidget *indicator = gtk_image_new_from_icon_name("object-select-symbolic");
+    GtkWidget *label = gtk_label_new(title);
 
-    cs->test = GO_CHARMAP_SEL_TO_UTF8;
+    gtk_widget_set_visible(indicator, FALSE);
+    gtk_widget_set_valign(indicator, GTK_ALIGN_CENTER);
+    gtk_box_append(GTK_BOX(box), indicator);
 
-    cs->encodings = GO_OPTION_MENU(go_option_menu_new());
+    gtk_label_set_xalign(GTK_LABEL(label), 0.0f);
+    gtk_widget_set_hexpand(label, TRUE);
+    if (emphasize)
+        cs_emphasize_label(GTK_LABEL(label));
+    gtk_box_append(GTK_BOX(box), label);
 
-    g_signal_connect(G_OBJECT(cs->encodings), "changed",
-            G_CALLBACK(encodings_changed_cb), cs);
-    gtk_box_pack_start(GTK_BOX(cs), GTK_WIDGET(cs->encodings), TRUE, TRUE, 0);
+    gtk_list_box_row_set_child(GTK_LIST_BOX_ROW(row), box);
+    gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(row), TRUE);
+    gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(row), TRUE);
+    g_object_set_data_full(G_OBJECT(row), "option-menu-text", g_strdup(title),
+                           g_free);
+    g_object_set_data(G_OBJECT(row), "go-option-menu-selected-indicator",
+                      indicator);
+    g_object_set_data(G_OBJECT(row), "go-option-menu-selectable",
+                      GINT_TO_POINTER(TRUE));
+    if (encoding)
+        g_object_set_data(G_OBJECT(row), CHARMAP_NAME_KEY, (gpointer) encoding);
+
+    return row;
 }
 
-static void cs_build_menu(GOCharmapSel *cs)
+static GtkWidget *
+cs_create_navigation_row(const char *title, const char *page)
 {
-    GtkWidget *item;
-    GtkMenu *menu;
-    LGroupInfo const *lgroup = lgroups;
-    gint lg_cnt = 0;
+    GtkWidget *row = gtk_list_box_row_new();
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+    GtkWidget *label = gtk_label_new(title);
+    GtkWidget *arrow = gtk_image_new_from_icon_name("go-next-symbolic");
 
-    menu = GTK_MENU(gtk_menu_new());
+    gtk_label_set_xalign(GTK_LABEL(label), 0.0f);
+    gtk_widget_set_hexpand(label, TRUE);
+    gtk_box_append(GTK_BOX(box), label);
+    gtk_widget_set_valign(arrow, GTK_ALIGN_CENTER);
+    gtk_box_append(GTK_BOX(box), arrow);
+
+    gtk_list_box_row_set_child(GTK_LIST_BOX_ROW(row), box);
+    gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(row), TRUE);
+    gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(row), TRUE);
+    g_object_set_data_full(G_OBJECT(row), "go-option-menu-page", g_strdup(page),
+                           g_free);
+
+    return row;
+}
+
+static GtkWidget *
+cs_create_separator_row(void)
+{
+    GtkWidget *row = gtk_list_box_row_new();
+    GtkWidget *separator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+
+    gtk_list_box_row_set_child(GTK_LIST_BOX_ROW(row), separator);
+    gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(row), FALSE);
+    gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(row), FALSE);
+
+    return row;
+}
+
+static gboolean
+cs_activate_menu_row(GOCharmapSel *cs, GtkListBoxRow *row)
+{
+    const char *page = g_object_get_data(G_OBJECT(row), "go-option-menu-page");
+
+    if (page)
+    {
+        GtkWidget *next = gtk_stack_get_child_by_name(cs->encodings_stack, page);
+
+        gtk_stack_set_visible_child_name(cs->encodings_stack, page);
+        if (GTK_IS_LIST_BOX(next))
+        {
+            GtkListBoxRow *first = gtk_list_box_get_row_at_index(GTK_LIST_BOX(next), 1);
+            if (!first)
+                first = gtk_list_box_get_row_at_index(GTK_LIST_BOX(next), 0);
+            if (first)
+                gtk_list_box_select_row(GTK_LIST_BOX(next), first);
+        }
+        return TRUE;
+    }
+
+    if (g_object_get_data(G_OBJECT(row), "go-option-menu-selectable"))
+    {
+        go_option_menu_activate_item(cs->encodings, GTK_WIDGET(row));
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static void
+cs_menu_row_activated(G_GNUC_UNUSED GtkListBox *list, GtkListBoxRow *row,
+                      GOCharmapSel *cs)
+{
+    cs_activate_menu_row(cs, row);
+}
+
+static void
+cs_menu_click_pressed(GtkGestureClick *gesture,
+                      G_GNUC_UNUSED gint n_press,
+                      G_GNUC_UNUSED gdouble x,
+                      gdouble y,
+                      GOCharmapSel *cs)
+{
+    GtkWidget *widget = gtk_event_controller_get_widget(
+            GTK_EVENT_CONTROLLER(gesture));
+    GtkListBoxRow *row = gtk_list_box_get_row_at_y(GTK_LIST_BOX(widget),
+                                                    (gint) y);
+
+    if (row && cs_activate_menu_row(cs, row))
+        gtk_gesture_set_state(GTK_GESTURE(gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static gboolean
+cs_menu_key_pressed(GtkEventControllerKey *controller, guint keyval,
+                    G_GNUC_UNUSED guint keycode,
+                    G_GNUC_UNUSED GdkModifierType state,
+                    GOCharmapSel *cs)
+{
+    GtkWidget *widget;
+    GtkListBoxRow *row;
+
+    switch (keyval)
+    {
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Space:
+    case GDK_KEY_space:
+        widget = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(controller));
+        row = gtk_list_box_get_selected_row(GTK_LIST_BOX(widget));
+        if (row && cs_activate_menu_row(cs, row))
+        {
+            gtk_event_controller_reset(GTK_EVENT_CONTROLLER(controller));
+            return TRUE;
+        }
+        break;
+    }
+
+    return FALSE;
+}
+
+static GtkWidget *
+cs_create_menu_page(GOCharmapSel *cs)
+{
+    GtkWidget *list = gtk_list_box_new();
+    GtkGesture *click_gesture;
+    GtkEventController *key_controller;
+
+    gtk_list_box_set_selection_mode(GTK_LIST_BOX(list), GTK_SELECTION_SINGLE);
+    g_signal_connect(list, "row-activated", G_CALLBACK(cs_menu_row_activated), cs);
+
+    click_gesture = gtk_gesture_click_new();
+    gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(click_gesture),
+                                  GDK_BUTTON_PRIMARY);
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(click_gesture),
+                                               GTK_PHASE_CAPTURE);
+    g_signal_connect(click_gesture, "pressed",
+                     G_CALLBACK(cs_menu_click_pressed), cs);
+    gtk_widget_add_controller(list, GTK_EVENT_CONTROLLER(click_gesture));
+
+    key_controller = gtk_event_controller_key_new();
+    gtk_event_controller_set_propagation_phase(key_controller, GTK_PHASE_CAPTURE);
+    g_signal_connect(key_controller, "key-pressed",
+                     G_CALLBACK(cs_menu_key_pressed), cs);
+    gtk_widget_add_controller(list, key_controller);
+
+    return list;
+}
+
+static void
+cs_register_leaf(GOCharmapSel *cs, gint root_index, gint child_index,
+                 GtkWidget *item)
+{
+    GSList root = { GINT_TO_POINTER(root_index), NULL };
+    GSList child = { GINT_TO_POINTER(child_index), NULL };
+
+    if (child_index >= 0)
+        root.next = &child;
+
+    go_option_menu_register_item(cs->encodings, &root, item);
+}
+
+static void
+go_charmap_sel_init(GOCharmapSel *cs)
+{
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(cs), GTK_ORIENTATION_HORIZONTAL);
+
+    cs->test = GO_CHARMAP_SEL_TO_UTF8;
+    cs->encoding_items = g_hash_table_new(g_str_hash, g_str_equal);
+    cs->encodings = GO_OPTION_MENU(go_option_menu_new());
+
+    g_signal_connect(cs->encodings, "changed",
+                     G_CALLBACK(encodings_changed_cb), cs);
+    gtk_widget_set_hexpand(GTK_WIDGET(cs->encodings), TRUE);
+    gtk_box_append(GTK_BOX(cs), GTK_WIDGET(cs->encodings));
+}
+
+static void
+cs_popover_closed(G_GNUC_UNUSED GtkPopover *popover, GOCharmapSel *cs)
+{
+    if (cs->encodings_stack)
+        gtk_stack_set_visible_child_name(cs->encodings_stack, "root");
+}
+
+static void
+cs_build_menu(GOCharmapSel *cs)
+{
+    GtkWidget *root;
+    GtkWidget *stack;
+    GtkWidget *menu;
+    LGroupInfo const *lgroup = lgroups;
+    gint root_index = 0;
+
+    g_hash_table_remove_all(cs->encoding_items);
+
+    menu = gtk_popover_new();
+    gtk_popover_set_position(GTK_POPOVER(menu), GTK_POS_BOTTOM);
+    stack = gtk_stack_new();
+    root = cs_create_menu_page(cs);
+    gtk_stack_add_named(GTK_STACK(stack), root, "root");
+    gtk_popover_set_child(GTK_POPOVER(menu), stack);
+
+    go_option_menu_set_menu(cs->encodings, menu);
+    cs->encodings_menu = GTK_POPOVER(menu);
+    cs->encodings_stack = GTK_STACK(stack);
+    g_signal_connect(menu, "closed", G_CALLBACK(cs_popover_closed), cs);
 
     while (lgroup->group_name)
     {
-        CharsetInfo const *charset_trans;
-        GtkMenu *submenu = NULL;
+        CharsetInfo const *charset_trans = charset_trans_array;
+        GtkWidget *submenu = cs_create_menu_page(cs);
+        gint child_index = 0;
 
-        charset_trans = charset_trans_array;
+        gtk_list_box_append(GTK_LIST_BOX(submenu),
+                            cs_create_navigation_row(_("Back"), "root"));
 
         while (charset_trans->lgroup != LG_LAST)
         {
-            GtkWidget *subitem;
             if (charset_trans->lgroup == lgroup->lgroup)
             {
                 const char *name =
-                        (cs->test == GO_CHARMAP_SEL_TO_UTF8) ?
-                                charset_trans->to_utf8_iconv_name :
-                                charset_trans->from_utf8_iconv_name;
+                        cs->test == GO_CHARMAP_SEL_TO_UTF8 ?
+                        charset_trans->to_utf8_iconv_name :
+                        charset_trans->from_utf8_iconv_name;
+
                 if (name)
                 {
-                    if (!submenu)
-                        submenu = GTK_MENU(gtk_menu_new());
-                    subitem = gtk_check_menu_item_new_with_label(
-                            _(charset_trans->charset_title));
-                    gtk_check_menu_item_set_draw_as_radio(
-                            GTK_CHECK_MENU_ITEM(subitem), TRUE);
-                    gtk_widget_show(subitem);
-                    gtk_menu_shell_append(GTK_MENU_SHELL(submenu), subitem);
-                    if (charset_trans->imp == CI_MAJOR)
-                        cs_emphasize_label(
-                                GTK_LABEL(gtk_bin_get_child(GTK_BIN(subitem))));
-                    g_object_set_data(G_OBJECT(subitem), CHARMAP_NAME_KEY,
-                            (gpointer) name);
-                }
-                else if (0)
-                {
-                    g_print("Unsupported: %s\n", charset_trans->aliases);
+                    GtkWidget *item = cs_create_leaf(_(charset_trans->charset_title),
+                            name, charset_trans->imp == CI_MAJOR);
+
+                    gtk_list_box_append(GTK_LIST_BOX(submenu), item);
+                    cs_register_leaf(cs, root_index, child_index, item);
+                    g_hash_table_insert(cs->encoding_items, (gpointer) name, item);
+                    child_index++;
                 }
             }
             charset_trans++;
         }
-        if (submenu)
-        {
-            GtkWidget *item = gtk_menu_item_new_with_label(
-                    _(lgroup->group_name));
 
-            gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), GTK_WIDGET(submenu));
-            gtk_widget_show(item);
-            gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-            lg_cnt++;
+        if (child_index > 0)
+        {
+            char *page = g_strdup_printf("group-%d", root_index);
+
+            gtk_stack_add_named(GTK_STACK(stack), submenu, page);
+            gtk_list_box_append(GTK_LIST_BOX(root),
+                    cs_create_navigation_row(_(lgroup->group_name), page));
+            g_free(page);
+            root_index++;
         }
+        else
+            g_object_unref(submenu);
+
         lgroup++;
     }
-    item = gtk_separator_menu_item_new();
-    gtk_widget_show(item);
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-    lg_cnt++;
+
+    gtk_list_box_append(GTK_LIST_BOX(root), cs_create_separator_row());
+    root_index++;
 
     {
-        char *locale_encoding_menu_title = g_strconcat(_("Locale: "),
-                get_locale_encoding_name(cs),
-                NULL);
-        item = gtk_check_menu_item_new_with_label(locale_encoding_menu_title);
-        gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item), TRUE);
-        g_free(locale_encoding_menu_title);
-        gtk_widget_show(item);
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-        lg_cnt++;
-        cs_emphasize_label(GTK_LABEL(gtk_bin_get_child(GTK_BIN(item))));
+        char *title = g_strconcat(_("Locale: "), get_locale_encoding_name(cs), NULL);
+        GtkWidget *item = cs_create_leaf(title, NULL, TRUE);
+
+        gtk_list_box_append(GTK_LIST_BOX(root), item);
+        cs_register_leaf(cs, root_index, -1, item);
+        g_free(title);
+        root_index++;
     }
 
-    go_option_menu_set_menu(cs->encodings, GTK_WIDGET(menu));
-    cs->encodings_menu = menu;
-    set_menu_to_default(cs, lg_cnt);
+    set_menu_to_default(cs, root_index);
 }
 
+static void
+go_charmap_sel_dispose(GObject *object)
+{
+    GOCharmapSel *cs = GO_CHARMAP_SEL(object);
+
+    g_clear_pointer(&cs->encoding_items, g_hash_table_unref);
+    cs->encodings_menu = NULL;
+    cs->encodings_stack = NULL;
+
+    G_OBJECT_CLASS(go_charmap_sel_parent_class)->dispose(object);
+}
 static void go_charmap_sel_class_init(GOCharmapSelClass *klass)
 {
     CharsetInfo *ci;
@@ -457,6 +675,7 @@ static void go_charmap_sel_class_init(GOCharmapSelClass *klass)
     GtkWidgetClass *widget_klass = GTK_WIDGET_CLASS(klass);
     widget_klass->mnemonic_activate = cs_mnemonic_activate;
 
+    gobject_class->dispose = go_charmap_sel_dispose;
     gobject_class->set_property = cs_set_property;
     gobject_class->get_property = cs_get_property;
 
@@ -589,7 +808,7 @@ go_charmap_sel_new(GOCharmapSelTestDirection test)
 gchar const *
 go_charmap_sel_get_encoding(GOCharmapSel *cs)
 {
-    GtkMenuItem *selection;
+    GtkWidget *selection;
     char const *locale_encoding;
     char const *encoding;
 
@@ -597,61 +816,17 @@ go_charmap_sel_get_encoding(GOCharmapSel *cs)
 
     g_return_val_if_fail(GO_IS_CHARMAP_SEL(cs), locale_encoding);
 
-    selection = GTK_MENU_ITEM(go_option_menu_get_history(cs->encodings));
-    encoding = (char const *) g_object_get_data(G_OBJECT(selection),
-    CHARMAP_NAME_KEY);
+    selection = go_option_menu_get_history(cs->encodings);
+    encoding = selection ? g_object_get_data(G_OBJECT(selection),
+                                             CHARMAP_NAME_KEY) : NULL;
     return encoding ? encoding : locale_encoding;
 }
 
-struct cb_find_entry
+gboolean
+go_charmap_sel_set_encoding(GOCharmapSel *cs, const char *enc)
 {
-    const char *enc;
-    gboolean found;
-    int i;
-    GSList *path;
-};
-
-static void cb_find_entry(GtkMenuItem *w, struct cb_find_entry *cl)
-{
-    GtkWidget *sub;
-
-    if (cl->found)
-        return;
-
-    sub = gtk_menu_item_get_submenu(w);
-    if (sub)
-    {
-        GSList *tmp = cl->path = g_slist_prepend(cl->path,
-                GINT_TO_POINTER(cl->i));
-        cl->i = 0;
-
-        gtk_container_foreach(GTK_CONTAINER(sub), (GtkCallback) cb_find_entry,
-                cl);
-        if (cl->found)
-            return;
-
-        cl->i = GPOINTER_TO_INT(cl->path->data);
-        cl->path = cl->path->next;
-        g_slist_free_1(tmp);
-    }
-    else
-    {
-        const char *this_enc = g_object_get_data(G_OBJECT(w), CHARMAP_NAME_KEY);
-        if (this_enc && strcmp(this_enc, cl->enc) == 0)
-        {
-            cl->found = TRUE;
-            cl->path = g_slist_prepend(cl->path, GINT_TO_POINTER(cl->i));
-            cl->path = g_slist_reverse(cl->path);
-            return;
-        }
-    }
-    cl->i++;
-}
-
-gboolean go_charmap_sel_set_encoding(GOCharmapSel *cs, const char *enc)
-{
-    struct cb_find_entry cl;
     CharsetInfo const *ci;
+    GtkWidget *item;
 
     g_return_val_if_fail(GO_IS_CHARMAP_SEL(cs), FALSE);
     g_return_val_if_fail(enc != NULL, FALSE);
@@ -660,26 +835,18 @@ gboolean go_charmap_sel_set_encoding(GOCharmapSel *cs, const char *enc)
     if (!ci)
         return FALSE;
 
-    enc = ci->to_utf8_iconv_name;
+    enc = cs->test == GO_CHARMAP_SEL_TO_UTF8 ? ci->to_utf8_iconv_name :
+                                               ci->from_utf8_iconv_name;
     if (!enc)
         return FALSE;
 
-    cl.enc = enc;
-    cl.found = FALSE;
-    cl.i = 0;
-    cl.path = NULL;
-
-    gtk_container_foreach(GTK_CONTAINER(cs->encodings_menu),
-            (GtkCallback) cb_find_entry, &cl);
-    if (!cl.found)
+    item = g_hash_table_lookup(cs->encoding_items, enc);
+    if (!item)
         return FALSE;
 
-    go_option_menu_set_history(cs->encodings, cl.path);
-    g_slist_free(cl.path);
-
+    go_option_menu_set_active_item(cs->encodings, item);
     return TRUE;
 }
-
 static void cs_set_property(GObject *object, guint prop_id, const GValue *value,
         GParamSpec *pspec)
 {

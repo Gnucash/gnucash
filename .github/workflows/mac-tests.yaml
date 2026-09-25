@@ -16,13 +16,26 @@ jobs:
         echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV
         echo "SRCROOT=$HOME/gnucash/source" >> $GITHUB_ENV
         brew install ninja
+    - name: Verify dependency archive override
+      env:
+        DEPENDENCIES_URL: ${{ vars.MACOS_DEPENDENCIES_URL }}
+        DEPENDENCIES_SHA256: ${{ vars.MACOS_DEPENDENCIES_SHA256 }}
+      run: |
+        if [ -n "$DEPENDENCIES_URL" ] || [ -n "$DEPENDENCIES_SHA256" ]; then
+          if [[ "$DEPENDENCIES_URL" != https://* ]] ||
+             [[ ! "$DEPENDENCIES_SHA256" =~ ^[[:xdigit:]]{64}$ ]]; then
+            echo 'Set both MACOS_DEPENDENCIES_URL (HTTPS) and MACOS_DEPENDENCIES_SHA256.' >&2
+            exit 1
+          fi
+        fi
     - name: download dependency tarball
       uses: carlosperate/download-file-action@v2
       id: dependencies
       with:
-        file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-future-mac-dependencies.tar.xz'
+        # Temporary GTK4 archive until gnucash-on-osx provides an upstream one.
+        file-url: ${{ vars.MACOS_DEPENDENCIES_URL || 'https://github.com/copystring/gnucash-on-osx/releases/download/gtk4-dependencies-20260906-c144445/gnucash-future-gtk4-mac-dependencies.tar.xz' }}
         file-name: gnucash-future-mac-dependencies.tar.xz
-        sha256: 'dbcecf47b368eee317d18e2ad547b754329c17075420aaecddaf99f9d53b6c7b'
+        sha256: ${{ vars.MACOS_DEPENDENCIES_SHA256 || '2938aed05574623ff6acf29698c8d7527c1b41084d4aca7e58b5fd8b1fcc9720' }}
     - name: download googletest
       uses: carlosperate/download-file-action@v2
 
@@ -40,11 +53,20 @@ jobs:
         cd $HOME/gnucash/source
         tar -xf $GITHUB_WORKSPACE/googletest-1.17.0.tar.gz
         mv googletest-* googletest
+    - name: Verify dependency archive
+      run: |
+        "$PREFIX/bin/pkgconf" --print-errors --exists \
+          'gtk4 >= 4.14' \
+          gtk4-macos \
+          gwengui-gtk4 \
+          aqbanking
     - name: Configure GnuCash
       run: |
         mkdir $HOME/gnucash/build
         cd $HOME/gnucash/build
         cmake -GNinja -DPKG_CONFIG_EXECUTABLE=$PREFIX/bin/pkgconf -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_PREFIX_PATH=$PREFIX -DWITH_PYTHON=ON -DGTEST_ROOT=$SRCROOT/googletest $GITHUB_WORKSPACE
+    - name: Validate GTK4 builder resources
+      run: bash "$GITHUB_WORKSPACE/util/ci/validate-gtk4-builder-resources.sh" "$GITHUB_WORKSPACE/gnucash"
     - name: Build and Test GnuCash
       run: |
         cd $HOME/gnucash/build
@@ -56,5 +78,5 @@ jobs:
       if: failure()
       with:
         name: TestLog
-        path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
+        path: /Users/runner/gnucash/build/Testing/Temporary/LastTest.log
         if-no-files-found: ignore

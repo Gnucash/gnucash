@@ -87,27 +87,31 @@ then
   # to the PATH in Windows results in a build failure).
   # So for platform independence, use GIT_CMD for all
   [ -n "$GIT_CMD" ] || GIT_CMD=git
+  git_in_worktree()
+  {
+    "$GIT_CMD" -C "$real_srcdir" "$@"
+  }
   if [ "$request" = "date" ]
   then
-    exec "$GIT_CMD" --git-dir "${real_gitdir}" log -1 --format=%cd --date=short
-    exit 0
+    git_in_worktree log -1 --format=%cd --date=short
+    exit $?
   fi
 
-  githead=$("$GIT_CMD" --git-dir "${real_gitdir}" describe 2>/dev/null)
+  githead=$(git_in_worktree describe 2>/dev/null)
   rc=$?
   if [ $rc != 0 ]; then
     # On travis describe seems to fail due to missing tags in the git clone the system takes
     # So specifically to catch those errors, use only the short commit hash as a backup
-    githead=$("$GIT_CMD" --git-dir "${real_gitdir}" log -1 --pretty=format:"%h" HEAD 2>/dev/null)
+    githead=$(git_in_worktree log -1 --pretty=format:"%h" HEAD 2>/dev/null)
     rc=$?
   fi
   if [ $rc = 0 ]; then
     # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)
     modified=""
     # "Ignores" untracked files
-    # [ $("$GIT_CMD" --git-dir "${real_gitdir}" ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && modified="+"
+    # [ -n "$(git_in_worktree ls-files -dkm 2>/dev/null)" ] && modified="+"
     # Includes untracked files
-    [ $("$GIT_CMD" --git-dir "${real_gitdir}" ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && modified="+"
+    [ -n "$(git_in_worktree ls-files -dkmo --exclude-standard 2>/dev/null)" ] && modified="+"
     echo ${githead}${modified}
     exit 0
   else

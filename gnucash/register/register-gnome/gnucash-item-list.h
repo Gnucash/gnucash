@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnucash-item-list.h -- A scrollable list box                     *
+ * gnucash-item-list.h -- A scrollable GTK4 list box                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,28 +30,30 @@
  * @{
  */
 /** @file gnucash-item-list.h
- * @brief Public Declarations for GncItemList class
+ * @brief Public declarations for the GTK4 GncItemList class.
  */
 #define GNC_TYPE_ITEM_LIST     (gnc_item_list_get_type ())
-#define GNC_ITEM_LIST(o)       (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_ITEM_LIST, GncItemList))
+#define GNC_ITEM_LIST(o)       (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ITEM_LIST, GncItemList))
 #define GNC_ITEM_LIST_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_LIST, GncItemListClass))
-#define IS_GNC_ITEM_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_LIST))
+#define IS_GNC_ITEM_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ITEM_LIST))
 
 typedef struct
 {
-    GtkEventBox ebox;
+    GtkBox box;
 
-    GtkTreeView *tree_view;
-    GtkScrolledWindow* scrollwin;
-    GtkListStore *list_store; /* Contains the list items */
-    GtkListStore *temp_store; /* Temporary store for typeahead select */
-    GtkCellRenderer *renderer;
+    GtkListView *list_view;
+    GtkScrolledWindow *scrollwin;
+    GListStore *list_store;  /* Permanent list items. */
+    GListStore *temp_store;  /* Typeahead result items. */
+    GtkSortListModel *sorted_model;
+    GtkSingleSelection *selection;
+    GtkCustomSorter *sorter;
     gint cell_height;
 } GncItemList;
 
 typedef struct
 {
-    GtkEventBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     void (*select_item) (GncItemList *item_list,
                          char        *item_string);
@@ -62,45 +64,40 @@ typedef struct
     void (*activate_item) (GncItemList *item_list,
                            char        *item_string);
 
+    gboolean (*key_pressed) (GncItemList     *item_list,
+                             guint            keyval,
+                             guint            keycode,
+                             GdkModifierType  state);
 } GncItemListClass;
-
 
 GType gnc_item_list_get_type (void);
 
-GtkWidget *gnc_item_list_new (GtkListStore *shared_store);
+/* The store owns generic row objects populated with the helpers below. */
+GListStore *gnc_item_list_store_new (void);
+void gnc_item_list_store_clear (GListStore *store);
+void gnc_item_list_store_append (GListStore *store, const char *text,
+                                 const char *markup, gint weight,
+                                 gint found_location);
+
+GtkWidget *gnc_item_list_new (GListStore *shared_store);
 
 gint gnc_item_list_num_entries (GncItemList *item_list);
-
 gint gnc_item_list_get_popup_height (GncItemList *item_list);
 
 void gnc_item_list_clear (GncItemList *item_list);
-
 void gnc_item_list_append (GncItemList *item_list, const char *string);
-
 void gnc_item_list_set_sort_column (GncItemList *item_list, gint column_id);
-
 gboolean gnc_item_in_list (GncItemList *item_list, const char *string);
-
 void gnc_item_list_select (GncItemList *item_list, const char *string);
-
+void gnc_item_list_select_at (GncItemList *item_list, guint position);
 void gnc_item_list_show_selected (GncItemList *item_list);
-
-/** Retrieve the selected string from the item_list's active GtkListStore.
- *
- * @param item_list the GncItemList
- * @return the string value. It must be freed with g_free().
- */
-char* gnc_item_list_get_selection (GncItemList *item_list);
+char *gnc_item_list_get_selection (GncItemList *item_list);
+gint gnc_item_list_get_selected_found_location (GncItemList *item_list);
+GtkWidget *gnc_item_list_get_view (GncItemList *item_list);
 
 int gnc_item_list_autosize (GncItemList *item_list);
-
-void gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store);
-
+void gnc_item_list_set_temp_store (GncItemList *item_list, GListStore *store);
 gboolean gnc_item_list_using_temp (GncItemList *item_list);
-
-GtkListStore * gnc_item_list_disconnect_store (GncItemList *item_list);
-
-void gnc_item_list_connect_store (GncItemList *item_list, GtkListStore *store);
 
 /** @} */
 #endif /* GNUCASH_ITEM_LIST_H */

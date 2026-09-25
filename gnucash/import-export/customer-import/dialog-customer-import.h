@@ -60,15 +60,20 @@ struct _customer_import_stats
 };
 typedef struct _customer_import_stats customer_import_stats;
 
+GObject *gnc_customer_import_row_new (void);
+const gchar *gnc_customer_import_row_get (GObject *row, guint column);
+gchar *gnc_customer_import_row_dup (GObject *row, guint column);
+void gnc_customer_import_row_set (GObject *row, guint column, const gchar *value);
+
 
 customer_import_result
-gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp, GtkListStore *store, guint max_rows, customer_import_stats *stats);
+gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp, GListStore *store, guint max_rows, customer_import_stats *stats);
 
 void
-gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *deleted, gchar * type);
+gnc_customer_import_fix_customers (GListStore *store, guint *fixed, guint *deleted, gchar * type);
 
 void
-gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint *n_customers_created, guint *n_customers_updated, gchar * type);
+gnc_customer_import_create_customers (GListStore *store, QofBook *book, guint *n_customers_created, guint *n_customers_updated, gchar * type);
 
 
 G_END_DECLS

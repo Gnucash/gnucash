@@ -22,12 +22,23 @@
 
 #include <string>
 
+#include <glib/gstdio.h>
+
+#include "gnc-backend-xml.h"
 #include "test-engine-stuff.h"
 #include "io-gncxml-v2.h"
 #include "test-file-stuff.h"
 #include "test-stuff.h"
 
 #define FILENAME "Money95bank_fr.gml2"
+
+static const char* s_xml_without_encoding =
+    "<?xml version=\"1.0\"?>\n"
+    "<gnc-v2 xmlns:gnc=\"http://www.gnucash.org/XML/gnc\">\n";
+
+static const char* s_not_gnucash_xml =
+    "<?xml version=\"1.0\"?>\n"
+    "<document/>\n";
 
 int
 main (int argc, char** argv)
@@ -40,7 +51,38 @@ main (int argc, char** argv)
     }
 
     auto filename = std::string{directory} + '/' + FILENAME;
-    do_test (gnc_is_xml_data_file_v2 (filename.c_str(), NULL), "gnc_is_xml_data_file_v2");
+    auto temp_directory = g_dir_make_tmp ("gnc-xml-encoding-XXXXXX", nullptr);
+    if (!temp_directory)
+    {
+        g_printerr ("Unable to create a temporary XML test directory.\n");
+        return EXIT_FAILURE;
+    }
+    auto no_encoding = g_build_filename (temp_directory, "no-encoding.xml",
+                                         nullptr);
+    auto not_gnucash = g_build_filename (temp_directory, "not-gnucash.xml",
+                                         nullptr);
+
+    do_test (gnc_is_xml_data_file_v2 (filename.c_str(), nullptr),
+             "gnc_is_xml_data_file_v2");
+    do_test (!gnc_xml_file_needs_encoding_conversion (filename.c_str()),
+             "encoded XML does not need conversion");
+    do_test (g_file_set_contents (no_encoding, s_xml_without_encoding, -1,
+                                  nullptr),
+             "write XML without encoding");
+    do_test (gnc_xml_file_needs_encoding_conversion (no_encoding),
+             "XML without encoding needs conversion");
+    do_test (g_file_set_contents (not_gnucash, s_not_gnucash_xml, -1,
+                                  nullptr),
+             "write non-GnuCash XML");
+    do_test (!gnc_xml_file_needs_encoding_conversion (not_gnucash),
+             "non-GnuCash XML does not need conversion");
+
+    g_remove (no_encoding);
+    g_remove (not_gnucash);
+    g_rmdir (temp_directory);
+    g_free (no_encoding);
+    g_free (not_gnucash);
+    g_free (temp_directory);
 
     print_test_results ();
     return get_rv ();

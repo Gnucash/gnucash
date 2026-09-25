@@ -331,6 +331,85 @@ gnc_plugin_basic_commands_finalize (GObject *object)
  *                    Command Callbacks                     *
  ************************************************************/
 
+typedef enum
+{
+    GNC_BASIC_COMMAND_NEW,
+    GNC_BASIC_COMMAND_OPEN,
+    GNC_BASIC_COMMAND_SAVE,
+    GNC_BASIC_COMMAND_SAVE_AS,
+    GNC_BASIC_COMMAND_REVERT,
+} GncBasicCommand;
+
+typedef struct
+{
+    GWeakRef window;
+    GncBasicCommand command;
+} GncBasicCommandRequest;
+
+static void
+gnc_basic_command_request_finished (gboolean accepted, gpointer user_data)
+{
+    GncBasicCommandRequest *request = user_data;
+    GObject *object = g_weak_ref_get (&request->window);
+
+    if (accepted && object && GNC_IS_MAIN_WINDOW (object))
+    {
+        GncMainWindow *window = GNC_MAIN_WINDOW (object);
+
+        if ((request->command == GNC_BASIC_COMMAND_SAVE ||
+             request->command == GNC_BASIC_COMMAND_SAVE_AS) &&
+            gnc_file_save_in_progress ())
+            goto out;
+
+        if (request->command == GNC_BASIC_COMMAND_OPEN)
+            gnc_account_reset_convert_bayes_to_flat ();
+
+        gnc_window_set_progressbar_window (GNC_WINDOW (window));
+        switch (request->command)
+        {
+        case GNC_BASIC_COMMAND_NEW:
+            gnc_file_new (GTK_WINDOW (window));
+            break;
+        case GNC_BASIC_COMMAND_OPEN:
+#ifdef HAVE_DBI_DBI_H
+            gnc_ui_file_access_for_open (GTK_WINDOW (window));
+#else
+            gnc_file_open (GTK_WINDOW (window));
+#endif
+            break;
+        case GNC_BASIC_COMMAND_SAVE:
+            gnc_file_save (GTK_WINDOW (window));
+            break;
+        case GNC_BASIC_COMMAND_SAVE_AS:
+#ifdef HAVE_DBI_DBI_H
+            gnc_ui_file_access_for_save_as (GTK_WINDOW (window));
+#else
+            gnc_file_save_as (GTK_WINDOW (window));
+#endif
+            break;
+        case GNC_BASIC_COMMAND_REVERT:
+            gnc_file_revert (GTK_WINDOW (window));
+            break;
+        }
+        gnc_window_set_progressbar_window (NULL);
+    }
+out:
+    g_clear_object (&object);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+gnc_basic_command_start_after_pending (GncMainWindow *window,
+                                       GncBasicCommand command)
+{
+    auto request = g_new0 (GncBasicCommandRequest, 1);
+
+    g_weak_ref_init (&request->window, window);
+    request->command = command;
+    gnc_main_window_all_finish_pending_async
+        (NULL, gnc_basic_command_request_finished, request);
+}
 static void
 gnc_main_window_cmd_file_new (GSimpleAction *simple,
                               GVariant      *parameter,
@@ -338,10 +417,8 @@ gnc_main_window_cmd_file_new (GSimpleAction *simple,
 {
     GncMainWindowActionData *data = user_data;
 
-    if (!gnc_main_window_all_finish_pending ())
-        return;
-
-    gnc_file_new (GTK_WINDOW(data->window));
+    g_return_if_fail (data != NULL);
+    gnc_basic_command_start_after_pending (data->window, GNC_BASIC_COMMAND_NEW);
 }
 
 static void
@@ -353,20 +430,7 @@ gnc_main_window_cmd_file_open (GSimpleAction *simple,
 
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending ())
-        return;
-
-    /* Reset the flag that indicates the conversion of the bayes KVP
-     * entries has been run */
-    gnc_account_reset_convert_bayes_to_flat ();
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-#ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_open (GTK_WINDOW(data->window));
-#else
-    gnc_file_open (GTK_WINDOW(data->window));
-#endif
-    gnc_window_set_progressbar_window (NULL);
+    gnc_basic_command_start_after_pending (data->window, GNC_BASIC_COMMAND_OPEN);
 }
 
 static void
@@ -378,13 +442,7 @@ gnc_main_window_cmd_file_save (GSimpleAction *simple,
 
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending () ||
-        gnc_file_save_in_progress())
-        return;
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_save (GTK_WINDOW(data->window));
-    gnc_window_set_progressbar_window (NULL);
+    gnc_basic_command_start_after_pending (data->window, GNC_BASIC_COMMAND_SAVE);
 }
 
 static void
@@ -396,17 +454,7 @@ gnc_main_window_cmd_file_save_as (GSimpleAction *simple,
 
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending () ||
-        gnc_file_save_in_progress())
-        return;
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-#ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_save_as (GTK_WINDOW(data->window));
-#else
-    gnc_file_save_as (GTK_WINDOW(data->window));
-#endif
-    gnc_window_set_progressbar_window (NULL);
+    gnc_basic_command_start_after_pending (data->window, GNC_BASIC_COMMAND_SAVE_AS);
 }
 
 static void
@@ -418,12 +466,7 @@ gnc_main_window_cmd_file_revert (GSimpleAction *simple,
 
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending ())
-        return;
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_revert (GTK_WINDOW(data->window));
-    gnc_window_set_progressbar_window (NULL);
+    gnc_basic_command_start_after_pending (data->window, GNC_BASIC_COMMAND_REVERT);
 }
 
 static void

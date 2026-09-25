@@ -68,53 +68,23 @@ void gnc_keyring_set_password ( const gchar *access_method,
                                 const gchar *user,
                                 const gchar* password );
 
-/** Attempt to retrieve a password to connect to
- *  a remote service. This is deliberately generic: the remote
- *  service can be a database, website, anything.
- *
- *  If a trusted keystore infrastructure is found (such as the
- *  Gnome's keyring or Mac OS X' keychain) this infrastructure
- *  will be queried first.
- *
- *  If no such infrastructure is available or the query didn't
- *  return a valid result, the user will be prompted for his
- *  password.
- *
- *  @warning When the user is prompted for a password, he can also
- *  change the username. So whenever you call this function, read
- *  both the username and password values before you continue !
- *
- *  @param parent Used to transition from in case the user is prompted
- *                for a password.
- *  @param access_method Service type the user attempts to access. Can
- *                things like 'mysql', 'postgres' and so on.
- *  @param server Server the user wishes to connect to.
- *  @param port   Port the service listens on. If set to 0, it will
- *                be ignored in the search for a password.
- *  @param service The service the user wishes to access on the server.
- *                This can be a database name or a path.
- *  @param user   The user name to access the service. Remember, although
- *                you pass it to search for the password, it can have
- *                changed when the function returns.
- *  @param password The password to access the service.
- *  @return       a boolean indicating whether or not a valid password
- *                has been retrieved. The function will return FALSE
- *                when the user explicitly cancels the password dialog or
- *                if it wasn't called properly. Otherwise it will return
- *                TRUE.
- *
- *  access_method, server, port, service and user will be the parameters
- *  passed to the trusted keystore (if available) to find the unique
- *  password for this service.
+/** Asynchronously retrieve credentials from the secure store or a native
+ * GTK4 password window. On success finish transfers user and password to the
+ * caller; cancellation, close, or parent destruction yields G_IO_ERROR_CANCELLED.
  */
-
-gboolean gnc_keyring_get_password ( GtkWidget *parent,
-                                    const gchar *access_method,
-                                    const gchar *server,
-                                    guint32 port,
-                                    const gchar *service,
-                                    gchar **user,
-                                    gchar **password );
+void gnc_keyring_get_password_async (GtkWindow *parent,
+                                     const gchar *access_method,
+                                     const gchar *server,
+                                     guint32 port,
+                                     const gchar *service,
+                                     const gchar *user,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data);
+gboolean gnc_keyring_get_password_finish (GAsyncResult *result,
+                                          gchar **user,
+                                          gchar **password,
+                                          GError **error);
 
 /* @} */
 /* @} */

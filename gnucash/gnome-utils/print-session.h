@@ -49,6 +49,13 @@ extern "C" {
 void gnc_print_operation_save_print_settings(GtkPrintOperation *op);
 
 /**
+ * Save the settings and page setup selected by a GtkPrintDialog.
+ *
+ * @param setup non-NULL print setup returned by GtkPrintDialog
+ */
+void gnc_print_setup_save(GtkPrintSetup *setup);
+
+/**
  * If print settings have been saved by
  * gnc_print_operation_save_print_settings(), then set them on the given
  * GtkPrintOperation @a op.  Set the default page setup as well.

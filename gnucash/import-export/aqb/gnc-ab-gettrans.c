@@ -44,202 +44,274 @@
 #include "gnc-ab-standing-orders.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
+#include "qof.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
-static gboolean gettrans_dates(GtkWidget *parent, Account *gnc_acc, GWEN_TIME **from_date, GWEN_TIME **to_date);
-
-static gboolean
-gettrans_dates(GtkWidget *parent, Account *gnc_acc,
-               GWEN_TIME **from_date, GWEN_TIME **to_date)
-{
-    time64 last, until;
-    gboolean use_last_date = TRUE;
-    gboolean use_earliest_date = TRUE;
-    gboolean use_until_now = TRUE;
-
-    g_return_val_if_fail(from_date && to_date, FALSE);
-
-    /* Get time of last retrieval */
-    last = gnc_ab_get_account_trans_retrieval(gnc_acc);
-    if (last == 0)
-    {
-        use_last_date = FALSE;
-        last = gnc_time (NULL);
-    }
-    until = gnc_time (NULL);
-
-    /* Let the user choose the date range of retrieval */
-    if (!gnc_ab_enter_daterange(parent, NULL,
-                                &last,
-                                &use_last_date, &use_earliest_date,
-                                &until, &use_until_now))
-        return FALSE;
-
-    /* Now calculate from date */
-    if (use_earliest_date)
-    {
-        *from_date = NULL;
-    }
-    else
-    {
-        if (use_last_date)
-            last = gnc_ab_get_account_trans_retrieval(gnc_acc);
-        *from_date = GWEN_Time_fromSeconds(last);
-    }
-
-    /* Now calculate to date */
-    if (use_until_now)
-        until = gnc_time (NULL);
-    *to_date = GWEN_Time_fromSeconds(until);
-
-    return TRUE;
-}
-
-void
-gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
+typedef struct
 {
     AB_BANKING *api;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
-    GWEN_TIME *from_date = NULL, *to_date = NULL;
+    Account *gnc_acc;
+    QofBook *book;
+    GncGUID book_guid;
+    GncGUID account_guid;
+    GWeakRef parent;
+} GetTransData;
+
+typedef struct
+{
+    GetTransData *data;
     time64 until;
+} GetTransImportRequest;
+
+static void
+gettrans_data_free (GetTransData *data)
+{
+    if (!data)
+        return;
+
+    g_weak_ref_clear (&data->parent);
+    if (data->api)
+        gnc_AB_BANKING_fini (data->api);
+    g_free (data);
+}
+
+static Account *
+gettrans_data_get_account (const GetTransData *data)
+{
+    QofBook *book;
+    Account *account;
+
+    if (!data)
+        return NULL;
+    book = gnc_get_current_book ();
+    if (!book || book != data->book ||
+        !guid_equal (qof_instance_get_guid (QOF_INSTANCE (book)), &data->book_guid))
+        return NULL;
+    account = xaccAccountLookup (&data->account_guid, book);
+    return account && !qof_instance_get_destroying (QOF_INSTANCE (account)) ?
+           account : NULL;
+}
+
+static void
+gettrans_show_no_transactions (GtkWidget *parent)
+{
+    GtkAlertDialog *dialog = gtk_alert_dialog_new (
+        "%s", _("The Online Banking import returned no transactions "
+                 "for the selected time period."));
+
+    gtk_alert_dialog_show (dialog, GTK_WINDOW (parent));
+    g_object_unref (dialog);
+}
+
+static void
+gettrans_import_finished (GncABImExContextImport *ieci, gboolean completed,
+                          gpointer user_data)
+{
+    GetTransImportRequest *request = user_data;
+    GetTransData *data = request->data;
+    GtkWidget *parent = g_weak_ref_get (&data->parent);
+    Account *account = gettrans_data_get_account (data);
+
+    if (completed && parent && account)
+    {
+        if (!(gnc_ab_ieci_get_found (ieci) & FOUND_TRANSACTIONS))
+            gettrans_show_no_transactions (parent);
+        gnc_ab_set_account_trans_retrieval (account, request->until);
+    }
+    g_clear_object (&parent);
+    gettrans_data_free (data);
+    g_free (request);
+}
+
+static gboolean
+gettrans_execute (GetTransData *data, GtkWidget *parent,
+                  const GncABDateRange *range)
+{
+    Account *account = gettrans_data_get_account (data);
+    GWEN_TIME *from_date = NULL;
+    GWEN_TIME *to_date = NULL;
+    time64 last = range->from_date;
+    time64 until = range->to_date;
     GNC_AB_JOB *job = NULL;
     GNC_AB_JOB_LIST2 *job_list = NULL;
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
-    GncABImExContextImport *ieci = NULL;
     GNC_AB_JOB_STATUS job_status;
+    gboolean pending = FALSE;
 
-    g_return_if_fail(parent && gnc_acc);
-
-    /* Get the API */
-    api = gnc_AB_BANKING_new();
-    if (!api)
+    if (!account)
+        return FALSE;
+    if (range->first_possible_date)
+        from_date = NULL;
+    else
     {
-        g_warning("gnc_ab_gettrans: Couldn't get AqBanking API");
-        return;
+        if (range->last_retrieval_date)
+            last = gnc_ab_get_account_trans_retrieval (account);
+        from_date = GWEN_Time_fromSeconds (last);
     }
-    /* Get the AqBanking Account */
-    ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
-    if (!ab_acc)
+
+    if (range->to_now)
+        until = gnc_time (NULL);
+    to_date = GWEN_Time_fromSeconds (until);
+
+    if (!AB_AccountSpec_GetTransactionLimitsForCommand (
+            data->ab_acc, AB_Transaction_CommandGetTransactions))
     {
-        g_warning("gnc_ab_gettrans: No AqBanking account found");
-        gnc_error_dialog (GTK_WINDOW (parent), _("No valid online banking account assigned."));
+        g_warning ("gnc_ab_gettrans: JobGetTransactions not available for this "
+                   "account");
+        gnc_error_dialog (GTK_WINDOW (parent),
+                          _("Online action \"Get Transactions\" not available "
+                            "for this account."));
         goto cleanup;
     }
 
-    /* Get the start and end dates for the GetTransactions job.  */
-    if (!gettrans_dates(parent, gnc_acc, &from_date, &to_date))
-    {
-        DEBUG("gnc_ab_gettrans: gettrans_dates aborted");
-        goto cleanup;
-    }
-    /* Use this as a local storage for the until_time below. */
-    until = GWEN_Time_toTime_t(to_date);
+    job = AB_Transaction_new ();
+    AB_Transaction_SetCommand (job, AB_Transaction_CommandGetTransactions);
+    AB_Transaction_SetUniqueAccountId (job,
+                                       AB_AccountSpec_GetUniqueId (data->ab_acc));
 
-    /* Get a GetTransactions job and enqueue it */
-    if (!AB_AccountSpec_GetTransactionLimitsForCommand(ab_acc, AB_Transaction_CommandGetTransactions))
+    if (from_date)
     {
-        g_warning("gnc_ab_gettrans: JobGetTransactions not available for this "
-                  "account");
-        gnc_error_dialog (GTK_WINDOW (parent), _("Online action \"Get Transactions\" not available for this account."));
-        goto cleanup;
-    }
-    job = AB_Transaction_new();
-    AB_Transaction_SetCommand(job, AB_Transaction_CommandGetTransactions);
-    AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
-
-    if (from_date) /* TODO: this should be simplified */
-    {
-        GWEN_DATE *dt;
-
-        dt=GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(from_date));
-        AB_Transaction_SetFirstDate(job, dt);
-        GWEN_Date_free(dt);
+        GWEN_DATE *date = GWEN_Date_fromLocalTime (GWEN_Time_toTime_t (from_date));
+        AB_Transaction_SetFirstDate (job, date);
+        GWEN_Date_free (date);
     }
 
     if (to_date)
     {
-        GWEN_DATE *dt;
-
-        dt=GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(to_date));
-        AB_Transaction_SetLastDate(job, dt);
-        GWEN_Date_free(dt);
+        GWEN_DATE *date = GWEN_Date_fromLocalTime (GWEN_Time_toTime_t (to_date));
+        AB_Transaction_SetLastDate (job, date);
+        GWEN_Date_free (date);
     }
 
-    job_list = AB_Transaction_List2_new();
-    AB_Transaction_List2_PushBack(job_list, job);
-    /* Get a GUI object */
-    gui = gnc_GWEN_Gui_get(parent);
+    job_list = AB_Transaction_List2_new ();
+    AB_Transaction_List2_PushBack (job_list, job);
+    gui = gnc_GWEN_Gui_get (parent);
     if (!gui)
     {
-        g_warning("gnc_ab_gettrans: Couldn't initialize Gwenhywfar GUI");
+        g_warning ("gnc_ab_gettrans: Couldn't initialize Gwenhywfar GUI");
         goto cleanup;
     }
 
-    /* Create a context to store the results */
-    context = AB_ImExporterContext_new();
-
-    /* Execute the job */
-    AB_Banking_SendCommands(api, job_list, context);
-
-    /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
-     * status always describes better whether the job was actually
-     * transferred to and accepted by the bank.  See also
-     * https://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
-     */
-    job_status = AB_Transaction_GetStatus(job);
-    if (job_status != AB_Transaction_StatusAccepted
-            && job_status != AB_Transaction_StatusPending)
+    context = AB_ImExporterContext_new ();
+    AB_Banking_SendCommands (data->api, job_list, context);
+    job_status = AB_Transaction_GetStatus (job);
+    if (job_status != AB_Transaction_StatusAccepted &&
+        job_status != AB_Transaction_StatusPending)
     {
-        g_warning("gnc_ab_gettrans: Error on executing job");
+        g_warning ("gnc_ab_gettrans: Error on executing job");
         gnc_error_dialog (GTK_WINDOW (parent),
                           _("Error on executing job.\n\nStatus: %s (%d)"),
-                          AB_Transaction_Status_toString(job_status),
-                          job_status);
+                          AB_Transaction_Status_toString (job_status), job_status);
         goto cleanup;
     }
 
-    /* Import the results */
-    ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS, FALSE, NULL,
-                                 parent);
-    if (!(gnc_ab_ieci_get_found(ieci) & FOUND_TRANSACTIONS))
     {
-        /* No transaction found */
-        GtkWidget *dialog = gtk_message_dialog_new(
-                                GTK_WINDOW(parent),
-                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                GTK_MESSAGE_INFO,
-                                GTK_BUTTONS_OK,
-                                "%s",
-                                _("The Online Banking import returned no transactions "
-                                  "for the selected time period."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        GetTransImportRequest *request = g_new0 (GetTransImportRequest, 1);
+        request->data = data;
+        request->until = until;
+        gnc_ab_import_context_async (context, AWAIT_TRANSACTIONS, FALSE, NULL,
+                                     parent, NULL, gettrans_import_finished, request);
+        context = NULL;
+        pending = TRUE;
     }
 
-    /* Store the date of this retrieval */
-    gnc_ab_set_account_trans_retrieval(gnc_acc, until);
-
 cleanup:
-    if (ieci)
-        g_free(ieci);
     if (context)
-        AB_ImExporterContext_free(context);
+        AB_ImExporterContext_free (context);
     if (gui)
-        gnc_GWEN_Gui_release(gui);
+        gnc_GWEN_Gui_release (gui);
     if (job_list)
-        AB_Transaction_List2_free(job_list);
+        AB_Transaction_List2_free (job_list);
     if (job)
-        AB_Transaction_free(job);
+        AB_Transaction_free (job);
     if (to_date)
-        GWEN_Time_free(to_date);
+        GWEN_Time_free (to_date);
     if (from_date)
-        GWEN_Time_free(from_date);
-    gnc_AB_BANKING_fini(api);
+        GWEN_Time_free (from_date);
+    return pending;
+}
+static void
+gettrans_dates_finished (GObject *source, GAsyncResult *result,
+                         gpointer user_data)
+{
+    GetTransData *data = user_data;
+    GncABDateRange range;
+    GError *error = NULL;
+    GtkWidget *parent;
+
+    (void)source;
+    if (!gnc_ab_enter_daterange_finish (result, &range, &error))
+    {
+        if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+            g_warning ("AqBanking date range: %s", error->message);
+        g_clear_error (&error);
+        gettrans_data_free (data);
+        return;
+    }
+
+    parent = g_weak_ref_get (&data->parent);
+    if (!parent)
+    {
+        gettrans_data_free (data);
+        return;
+    }
+
+    if (!gettrans_execute (data, parent, &range))
+        gettrans_data_free (data);
+    g_object_unref (parent);
 }
 
+void
+gnc_ab_gettrans (GtkWidget *parent, Account *gnc_acc)
+{
+    AB_BANKING *api;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
+    GncABDateRange initial;
+    GetTransData *data;
+
+    g_return_if_fail (parent && gnc_acc);
+
+    api = gnc_AB_BANKING_new ();
+    if (!api)
+    {
+        g_warning ("gnc_ab_gettrans: Couldn't get AqBanking API");
+        return;
+    }
+
+    ab_acc = gnc_ab_get_ab_account (api, gnc_acc);
+    if (!ab_acc)
+    {
+        g_warning ("gnc_ab_gettrans: No AqBanking account found");
+        gnc_error_dialog (GTK_WINDOW (parent),
+                          _("No valid online banking account assigned."));
+        gnc_AB_BANKING_fini (api);
+        return;
+    }
+
+    initial.from_date = gnc_ab_get_account_trans_retrieval (gnc_acc);
+    initial.last_retrieval_date = initial.from_date != 0;
+    if (!initial.last_retrieval_date)
+        initial.from_date = gnc_time (NULL);
+    initial.first_possible_date = TRUE;
+    initial.to_date = gnc_time (NULL);
+    initial.to_now = TRUE;
+
+    data = g_new0 (GetTransData, 1);
+    data->api = api;
+    data->ab_acc = ab_acc;
+    data->gnc_acc = gnc_acc;
+    data->book = gnc_account_get_book (gnc_acc);
+    data->book_guid = *qof_instance_get_guid (QOF_INSTANCE (data->book));
+    data->account_guid = *xaccAccountGetGUID (gnc_acc);
+    g_weak_ref_init (&data->parent, parent);
+    gnc_ab_enter_daterange_async (parent, NULL, &initial, NULL,
+                                  gettrans_dates_finished, data);
+}
 void
 gnc_ab_getstandingorders(GtkWidget *parent, Account *gnc_acc)
 {

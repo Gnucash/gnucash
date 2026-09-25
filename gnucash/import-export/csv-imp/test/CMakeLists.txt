@@ -28,6 +28,14 @@ if (NOT WIN32)
   #  gtest_csv_imp_INCLUDES gtest_csv_imp_LIBS)
 endif()
 
+set(GTEST_CSV_PREVIEW_REFRESH_INCLUDES
+  ${CMAKE_SOURCE_DIR}/gnucash/import-export/csv-imp
+  ${GTEST_INCLUDE_DIR}
+)
+set(GTEST_CSV_PREVIEW_REFRESH_LIBS PkgConfig::GLIB2 gtest)
+gnc_add_test(test-csv-preview-refresh test-csv-preview-refresh.cpp
+  GTEST_CSV_PREVIEW_REFRESH_INCLUDES GTEST_CSV_PREVIEW_REFRESH_LIBS)
+
 set(GNC_IMP_PROPS_TX_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/csv-imp
@@ -49,5 +57,6 @@ gnc_add_test(test-gnc-imp-props-tx "${GNC_IMP_PROPS_TX_TEST_SOURCES}"
   GNC_IMP_PROPS_TX_TEST_INCLUDE_DIRS GNC_IMP_PROPS_TX_TEST_LIBS)
 
 set_dist_list(test_csv_import_DIST CMakeLists.txt
-    test-tx-import.cpp test-tokenizer.cpp gtest-gnc-imp-props-tx.cpp
+    test-csv-preview-refresh.cpp test-tx-import.cpp test-tokenizer.cpp
+    gtest-gnc-imp-props-tx.cpp
     sample1.csv ${test_csv_imp_SOURCES})

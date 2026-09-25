@@ -164,16 +164,14 @@ void gnc_keyring_set_password (const gchar *access_method,
 }
 
 
-gboolean gnc_keyring_get_password ( GtkWidget *parent,
-                                    const gchar *access_method,
+static gboolean
+keyring_lookup_password (const gchar *access_method,
                                     const gchar *server,
                                     guint32 port,
                                     const gchar *service,
                                     gchar **user,
                                     gchar **password)
 {
-    gboolean password_found = FALSE;
-    gchar *db_path, *heading;
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     char* libsecret_password;
@@ -343,43 +341,178 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 
-    /* If we got here, either no proper password store is
-     * available on this system, or we couldn't retrieve
-     * a password from it. In both cases, just ask the user
-     * to enter one
-     */
+    return FALSE;
+}
 
-    if ( port == 0 )
-        db_path = g_strdup_printf ( "%s://%s/%s", access_method, server, service );
-    else
-        db_path = g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
-    heading = g_strdup_printf ( /* Translators: %s is a path to a database or any other url,
-                                   like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes */
-        _("Enter a user name and password to connect to: %s"),
-        db_path );
 
-    password_found = gnc_get_username_password ( parent, heading,
-                                                 *user, NULL,
-                                                 user, password );
-    g_free ( db_path );
-    g_free ( heading );
+typedef struct
+{
+    gchar *user;
+    gchar *password;
+} GncKeyringCredentials;
 
-    if ( password_found )
+typedef struct
+{
+    GTask *task;
+    gchar *access_method;
+    gchar *server;
+    guint32 port;
+    gchar *service;
+    gchar *user;
+    gboolean completed;
+} GncKeyringRequest;
+
+static void
+gnc_keyring_credentials_free (GncKeyringCredentials *credentials)
+{
+    if (!credentials)
+        return;
+
+    g_free (credentials->user);
+    g_free (credentials->password);
+    g_free (credentials);
+}
+
+static void
+gnc_keyring_request_free (GncKeyringRequest *request)
+{
+    g_clear_object (&request->task);
+    g_free (request->access_method);
+    g_free (request->server);
+    g_free (request->service);
+    g_free (request->user);
+    g_free (request);
+}
+
+static void
+gnc_keyring_request_complete (GncKeyringRequest *request,
+                              GncKeyringCredentials *credentials)
+{
+    if (request->completed)
     {
-        /* User entered new user/password information
-         * Let's try to add it to a password store.
-         */
-        gchar *newuser = g_strdup( *user );
-        gchar *newpassword = g_strdup( *password );
-        gnc_keyring_set_password ( access_method,
-                                   server,
-                                   port,
-                                   service,
-                                   newuser,
-                                   newpassword );
-        g_free ( newuser );
-        g_free ( newpassword );
+        gnc_keyring_credentials_free (credentials);
+        return;
+    }
+    request->completed = TRUE;
+    g_task_return_pointer (request->task, credentials,
+                           (GDestroyNotify)gnc_keyring_credentials_free);
+    gnc_keyring_request_free (request);
+}
+
+static void
+gnc_keyring_request_fail (GncKeyringRequest *request, GError *error)
+{
+    if (request->completed)
+    {
+        g_clear_error (&error);
+        return;
+    }
+    request->completed = TRUE;
+    if (error)
+        g_task_return_error (request->task, error);
+    else
+        g_task_return_new_error (request->task, G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "%s", _("Password retrieval failed."));
+    gnc_keyring_request_free (request);
+}
+
+static void
+gnc_keyring_password_entered (GObject *source, GAsyncResult *result,
+                              gpointer user_data)
+{
+    GncKeyringRequest *request = user_data;
+    GncKeyringCredentials *credentials;
+    GError *error = NULL;
+
+    (void)source;
+    credentials = g_new0 (GncKeyringCredentials, 1);
+    if (!gnc_get_username_password_finish (result, &credentials->user,
+                                           &credentials->password, &error))
+    {
+        gnc_keyring_credentials_free (credentials);
+        gnc_keyring_request_fail (request, error);
+        return;
     }
 
-    return password_found;
+    gnc_keyring_set_password (request->access_method, request->server,
+                              request->port, request->service,
+                              credentials->user, credentials->password);
+    gnc_keyring_request_complete (request, credentials);
+}
+
+void
+gnc_keyring_get_password_async (GtkWindow *parent,
+                                const gchar *access_method,
+                                const gchar *server,
+                                guint32 port,
+                                const gchar *service,
+                                const gchar *user,
+                                GCancellable *cancellable,
+                                GAsyncReadyCallback callback,
+                                gpointer user_data)
+{
+    GncKeyringRequest *request;
+    GncKeyringCredentials *credentials;
+    gchar *db_path;
+    gchar *heading;
+
+    g_return_if_fail (!parent || GTK_IS_WINDOW (parent));
+    g_return_if_fail (access_method != NULL);
+    g_return_if_fail (server != NULL);
+    g_return_if_fail (service != NULL);
+
+    request = g_new0 (GncKeyringRequest, 1);
+    request->task = g_task_new (NULL, cancellable, callback, user_data);
+    request->access_method = g_strdup (access_method);
+    request->server = g_strdup (server);
+    request->port = port;
+    request->service = g_strdup (service);
+    request->user = g_strdup (user);
+
+    credentials = g_new0 (GncKeyringCredentials, 1);
+    credentials->user = g_strdup (request->user);
+    if (keyring_lookup_password (request->access_method, request->server,
+                                 request->port, request->service,
+                                 &credentials->user, &credentials->password))
+    {
+        gnc_keyring_request_complete (request, credentials);
+        return;
+    }
+    gnc_keyring_credentials_free (credentials);
+
+    if (port == 0)
+        db_path = g_strdup_printf ("%s://%s/%s", access_method, server, service);
+    else
+        db_path = g_strdup_printf ("%s://%s:%d/%s", access_method, server,
+                                   port, service);
+    heading = g_strdup_printf (
+        _("Enter a user name and password to connect to: %s"), db_path);
+    gnc_get_username_password_async (parent, heading, request->user, NULL,
+                                     cancellable, gnc_keyring_password_entered,
+                                     request);
+    g_free (heading);
+    g_free (db_path);
+}
+
+gboolean
+gnc_keyring_get_password_finish (GAsyncResult *result, gchar **user,
+                                 gchar **password, GError **error)
+{
+    GncKeyringCredentials *credentials;
+
+    g_return_val_if_fail (user != NULL, FALSE);
+    g_return_val_if_fail (password != NULL, FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+
+    *user = NULL;
+    *password = NULL;
+    credentials = g_task_propagate_pointer (G_TASK (result), error);
+    if (!credentials)
+        return FALSE;
+
+    *user = g_steal_pointer (&credentials->user);
+    *password = g_steal_pointer (&credentials->password);
+    gnc_keyring_credentials_free (credentials);
+    return TRUE;
 }

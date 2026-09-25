@@ -30,42 +30,39 @@ extern "C" {
 #endif
 
 #include "gnc-commodity.h"
+#include "gnc-session.h"
+#include <gtk/gtk.h>
 
-/**
-  Must be called with a string containing a unique identifier for the
-  commodity.  If an commodity with a matching cusip is found, the
-  function immediately returns with a pointer to that commodity.
-  Otherwise, the user may be prompted to select a GnuCash commodity or
-  create a new one (in both cases, the cusip is written to the
-  commodity's cusip field, overwriting anything that was there before.
+/** Find a commodity by CUSIP without showing a user interface or changing
+ * any model data. The returned pointer belongs to the current book. */
+gnc_commodity *gnc_import_find_commodity_by_cusip (const char *cusip);
 
-  @param cusip The string containing the code for which you want a
-  matching commodity.  A CUISP code or similar UNIQUE code.  The stock
-  ticker is NOT appropriate, unless you have no other option. Must be
-  non-NULL.
 
-  @param ask_on_unknown If the cusip value is unknown and this parameter
-  is false (zero), the function returns NULL. Otherwise the user will
-  be asked to select an existing or create a new commodity.
+typedef void (*GncImportCommoditySelectedCB) (gnc_commodity *commodity,
+                                              gboolean accepted,
+                                              gpointer user_data);
 
-  @param default_fullname A human-readable description of the
-  commodity, such as the stock name.  Can be NULL. If it is not NULL,
-  it will be shown to the user when selecting a commodity.  It will
-  also be used as the default if a new commodity is created.
+/** Select a commodity without entering a nested main loop. The callback
+ * receives NULL and FALSE when no commodity is available or the user cancels. */
+void gnc_import_select_commodity_async (GtkWidget *parent,
+                                        const char *cusip,
+                                        gboolean ask_on_unknown,
+                                        const char *default_fullname,
+                                        const char *default_mnemonic,
+                                        GCancellable *cancellable,
+                                        GncImportCommoditySelectedCB callback,
+                                        gpointer user_data);
 
-  @param default_mnemonic Usually the stock ticker or similar. Can be
-  NULL.  If it is not NULL, it will be shown to the user when
-  selecting a commodity.  It will also be used as the default if a new
-  commodity is created.
-
-  @return A pointer to the found or created commodity, or NULL if no
-  commodity was found or created.
-
-*/
-gnc_commodity * gnc_import_select_commodity(const char * cusip,
-        gboolean ask_on_unknown,
-        const char * default_fullname,
-        const char * default_mnemonic);
+/** Context-aware variant for asynchronous imports. The context carries only
+ * identity between main-loop turns; every mutation acquires a fresh short
+ * operation section. */
+void gnc_import_select_commodity_async_with_operation_context (
+    GtkWidget *parent, const char *cusip, gboolean ask_on_unknown,
+    const char *default_fullname, const char *default_mnemonic,
+    GCancellable *cancellable,
+    GncSessionOperationContext *operation_context,
+    GncImportCommoditySelectedCB callback,
+    gpointer user_data);
 
 
 #ifdef __cplusplus

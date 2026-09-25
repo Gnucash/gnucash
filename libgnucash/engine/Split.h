@@ -345,7 +345,7 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
-/** Sets the stock split adjusted amount of a split.  
+/** Sets the stock split adjusted amount of a split.
  * @note The adjusted amount will be reset when the account is rebalanced.
  */
 void xaccSplitSetAdjustedAmount (Split *split, gnc_numeric amount);

@@ -4,7 +4,7 @@ from gnucash import _sw_app_utils
 from gnucash import _sw_core_utils
 from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled, gnc_prefs_is_debugging_enabled
 from gi import require_version
-require_version('Gtk', '3.0')
+require_version('Gtk', '4.0')
 from gi.repository import Gtk
 import os
 
@@ -63,32 +63,17 @@ class Console (cons.Console):
         self.callbacks = []
         self.last_figure = None
         self.active_canvas = None
-        self.view.connect ('key-press-event', self.key_press_event)
-        self.view.connect ('button-press-event', self.button_press_event)
-        self.view.connect ('scroll-event', self.scroll_event)
 
 
-    def key_press_event (self, widget, event):
+    def key_press_event (self, controller, keyval, keycode, state):
         """ Handle key press event """
-        
-        if self.active_canvas:
-            self.active_canvas.emit ('key-press-event', event)
-            return True
-        return cons.Console.key_press_event (self, widget, event)
+        return cons.Console.key_press_event (self, controller, keyval,
+                                             keycode, state)
 
-    def scroll_event (self, widget, event):
-        """ Scroll event """
-        if self.active_canvas:
-            return True
-        return False
- 
-    def button_press_event (self, widget, event):
-        """ Button press event """
-        return self.refresh()
-
-    def quit_event (self, widget, event):
+    def quit_event (self, widget):
         """ Event handler for closing of console window """
-        return self.quit()
+        self.quit()
+        return False
     
     def refresh (self):
         """ Refresh drawing """
@@ -116,18 +101,16 @@ if False:
     banner_style = 'title'
     # TRANSLATORS: %s is either Python or IPython
     banner = _("Welcome to GnuCash %s Shell") % shelltypeName
-    console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
-
-    window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
-    window.set_position(Gtk.WindowPosition.CENTER)
+    window = Gtk.Window()
     window.set_default_size(800,600)
-    window.set_border_width(0)
+    application = Gtk.Application.get_default()
+    if application:
+        window.set_application(application)
 
     console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]],
                             size = 100, user_local_ns=locals(), user_global_ns=globals())
 
-    window.connect('destroy-event', console.quit_event)
-    window.connect('delete-event', console.quit_event)
-    window.add (console)
-    window.show_all()
-    console.grab_focus()
+    window.connect('close-request', console.quit_event)
+    window.set_child(console)
+    window.present()
+    console.view.grab_focus()

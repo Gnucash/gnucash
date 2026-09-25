@@ -35,6 +35,7 @@
 
 #include "AccountP.hpp"
 #include "Account.hpp"
+#include "Scrub.h"
 #include "Split.h"
 #include "Transaction.h"
 #include "TransactionP.hpp"
@@ -302,6 +303,10 @@ gnc_account_init(Account* acc)
 
     priv = GET_PRIVATE(acc);
     priv->parent   = nullptr;
+    priv->children_generation = 1;
+    priv->splits_generation = 1;
+    priv->lots_generation = 1;
+    priv->scrub_generation = 1;
 
     priv->accountName = qof_string_cache_insert("");
     priv->accountCode = qof_string_cache_insert("");
@@ -1951,6 +1956,8 @@ gnc_account_insert_split (Account *acc, Split *s)
         return false;
 
     priv->splits.push_back (s);
+    ++priv->splits_generation;
+    ++priv->scrub_generation;
 
     if (qof_instance_get_editlevel(acc) == 0)
         std::sort (priv->splits.begin(), priv->splits.end(), split_cmp_less);
@@ -1989,6 +1996,8 @@ gnc_account_remove_split (Account *acc, Split *s)
         priv->splits.erase (std::remove (priv->splits.begin(), priv->splits.end(), s),
                             priv->splits.end());
 
+    ++priv->splits_generation;
+    ++priv->scrub_generation;
     //FIXME: find better event type
     qof_event_gen(&acc->inst, QOF_EVENT_MODIFY, nullptr);
     // And send the account-based event, too
@@ -2010,6 +2019,7 @@ xaccAccountSortSplits (Account *acc, gboolean force)
     if (!priv->sort_dirty || (!force && qof_instance_get_editlevel(acc) > 0))
         return;
     std::sort (priv->splits.begin(), priv->splits.end(), split_cmp_less);
+    ++priv->splits_generation;
     priv->sort_dirty = FALSE;
     priv->balance_dirty = TRUE;
 }
@@ -2111,7 +2121,11 @@ gnc_account_set_policy (Account *acc, GNCPolicy *policy)
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
     priv = GET_PRIVATE(acc);
-    priv->policy = policy ? policy : xaccGetFIFOPolicy();
+    auto normalized = policy ? policy : xaccGetFIFOPolicy();
+    if (priv->policy == normalized)
+        return;
+    priv->policy = normalized;
+    ++priv->scrub_generation;
 }
 
 /********************************************************************\
@@ -2130,6 +2144,8 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
     priv->lots = g_list_remove(priv->lots, lot);
+    ++priv->lots_generation;
+    ++priv->scrub_generation;
     qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_REMOVE, nullptr);
     qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, nullptr);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
@@ -2154,11 +2170,15 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
     {
         auto priv = GET_PRIVATE(lot_acc);
         priv->lots = g_list_remove(priv->lots, lot);
+        ++priv->lots_generation;
+        ++priv->scrub_generation;
         qof_event_gen (&lot_acc->inst, QOF_EVENT_MODIFY, nullptr);
     }
 
     auto priv = GET_PRIVATE(acc);
     priv->lots = g_list_prepend(priv->lots, lot);
+    ++priv->lots_generation;
+    ++priv->scrub_generation;
     gnc_lot_set_account(lot, acc);
 
     /* Don't move the splits to the new account.  The caller will do this
@@ -2448,6 +2468,7 @@ xaccAccountSetType (Account *acc, GNCAccountType tip)
 
     xaccAccountBeginEdit(acc);
     priv->type = tip;
+    ++priv->scrub_generation;
     priv->balance_dirty = TRUE; /* new type may affect balance computation */
     mark_account(acc);
     xaccAccountCommitEdit(acc);
@@ -2690,6 +2711,7 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
     xaccAccountBeginEdit(acc);
     gnc_commodity_decrement_usage_count(priv->commodity);
     priv->commodity = com;
+    ++priv->scrub_generation;
     gnc_commodity_increment_usage_count(com);
     priv->commodity_scu = gnc_commodity_get_fraction(com);
     priv->non_standard_scu = FALSE;
@@ -2879,6 +2901,7 @@ gnc_account_append_child (Account *new_parent, Account *child)
     }
     cpriv->parent = new_parent;
     ppriv->children.push_back (child);
+    ++ppriv->children_generation;
     qof_instance_set_dirty(&new_parent->inst);
     qof_instance_set_dirty(&child->inst);
 
@@ -2920,6 +2943,7 @@ gnc_account_remove_child (Account *parent, Account *child)
 
     ppriv->children.erase (std::remove (ppriv->children.begin(), ppriv->children.end(), child),
                            ppriv->children.end());
+    ++ppriv->children_generation;
 
     /* Now send the event. */
     qof_event_gen(&child->inst, QOF_EVENT_REMOVE, &ed);
@@ -3323,8 +3347,8 @@ gnc_account_get_full_name(const Account *account)
                    [&p, rv](auto a)
                    {
                        if (p != rv)
-                           p = stpcpy (p, account_separator);
-                       p = stpcpy (p, xaccAccountGetName (a));
+                           p = g_stpcpy (p, account_separator);
+                       p = g_stpcpy (p, xaccAccountGetName (a));
                    });
     *p = '\0';
 
@@ -3960,6 +3984,73 @@ xaccAccountGetSplitsSize (const Account *account)
     return GNC_IS_ACCOUNT(account) ? GET_PRIVATE(account)->splits.size() : 0;
 }
 
+guint64
+gnc_account_get_splits_generation (const Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), 0);
+    return GET_PRIVATE (account)->splits_generation;
+}
+
+guint64
+gnc_account_get_lots_generation (const Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), 0);
+    return GET_PRIVATE (account)->lots_generation;
+}
+
+guint64
+gnc_account_get_children_generation (const Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), 0);
+    return GET_PRIVATE (account)->children_generation;
+}
+
+guint64
+gnc_account_get_scrub_generation (const Account *account)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), 0);
+    return GET_PRIVATE (account)->scrub_generation;
+}
+
+gboolean
+gnc_account_get_split_guid_at (const Account *account, guint64 generation,
+                               size_t index, GncGUID *guid)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
+    g_return_val_if_fail (guid != nullptr, FALSE);
+    auto priv = GET_PRIVATE (account);
+    if (priv->splits_generation != generation || index >= priv->splits.size ())
+        return FALSE;
+    auto split = priv->splits[index];
+    if (!split)
+        return FALSE;
+    *guid = *qof_instance_get_guid (QOF_INSTANCE (split));
+    return TRUE;
+}
+
+gboolean
+gnc_account_get_child_guid_at (const Account *account, guint64 generation,
+                               size_t index, GncGUID *guid)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
+    g_return_val_if_fail (guid != nullptr, FALSE);
+    auto priv = GET_PRIVATE (account);
+    if (priv->children_generation != generation || index >= priv->children.size ())
+        return FALSE;
+    auto child = priv->children[index];
+    if (!child)
+        return FALSE;
+    *guid = *qof_instance_get_guid (QOF_INSTANCE (child));
+    return TRUE;
+}
+
+void
+gnc_account_bump_scrub_generation (Account *account)
+{
+    if (GNC_IS_ACCOUNT (account))
+        ++GET_PRIVATE (account)->scrub_generation;
+}
+
 gboolean
 gnc_account_and_descendants_empty (Account *acc)
 {
@@ -3975,6 +4066,63 @@ xaccAccountGetLotList (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
     return g_list_copy(GET_PRIVATE(acc)->lots);
+}
+
+struct GncAccountLotCursor
+{
+    GncScrubContext *context;
+    QofBook *book;
+    GncGUID account_guid;
+    GList *next;
+    guint64 generation;
+};
+
+GncAccountLotCursor *
+gnc_account_lot_cursor_begin (const Account *account, GncScrubContext *context)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), nullptr);
+    g_return_val_if_fail (context, nullptr);
+    auto book = qof_instance_get_book (QOF_INSTANCE (account));
+    if (gnc_scrub_context_is_cancelled (context) ||
+        !gnc_scrub_context_owns_book (context, book))
+        return nullptr;
+    auto priv = GET_PRIVATE (account);
+    return new GncAccountLotCursor {
+        gnc_scrub_context_ref (context), book,
+        *qof_instance_get_guid (QOF_INSTANCE (account)), priv->lots,
+        priv->lots_generation};
+}
+
+GncAccountLotCursorState
+gnc_account_lot_cursor_next (GncAccountLotCursor *cursor, GncGUID *guid)
+{
+    if (!cursor || !guid)
+        return GNC_ACCOUNT_LOT_CURSOR_STALE;
+    if (gnc_scrub_context_is_cancelled (cursor->context))
+        return GNC_ACCOUNT_LOT_CURSOR_CANCELLED;
+    if (!gnc_scrub_context_owns_book (cursor->context, cursor->book))
+        return GNC_ACCOUNT_LOT_CURSOR_STALE;
+    auto account = xaccAccountLookup (&cursor->account_guid, cursor->book);
+    if (!account ||
+        GET_PRIVATE (account)->lots_generation != cursor->generation)
+        return GNC_ACCOUNT_LOT_CURSOR_STALE;
+    if (!cursor->next)
+        return GNC_ACCOUNT_LOT_CURSOR_DONE;
+
+    auto lot = static_cast<GNCLot *> (cursor->next->data);
+    cursor->next = cursor->next->next;
+    if (!lot || gnc_lot_get_account (lot) != account)
+        return GNC_ACCOUNT_LOT_CURSOR_STALE;
+    *guid = *qof_instance_get_guid (QOF_INSTANCE (lot));
+    return GNC_ACCOUNT_LOT_CURSOR_NEXT;
+}
+
+void
+gnc_account_lot_cursor_free (GncAccountLotCursor *cursor)
+{
+    if (!cursor) return;
+    gnc_scrub_context_unref (cursor->context);
+    delete cursor;
 }
 
 LotList *
@@ -4810,6 +4958,60 @@ GetOrMakeOrphanAccount (Account *root, gnc_commodity * currency)
     g_free (accname);
 
     return acc;
+}
+
+gchar *
+gnc_account_dup_orphan_gains_name (const gnc_commodity *currency)
+{
+    if (!currency)
+        return nullptr;
+    return g_strconcat (_("Orphaned Gains"), "-",
+                        gnc_commodity_get_mnemonic (currency), nullptr);
+}
+
+Account *
+gnc_account_get_configured_gains_account (const Account *account,
+                                           const gnc_commodity *currency)
+{
+    if (!account || !currency)
+        return nullptr;
+    Path path {KEY_LOT_MGMT, "gains-acct",
+               gnc_commodity_get_unique_name (currency)};
+    return get_kvp_account_path (account, path);
+}
+
+void
+gnc_account_set_configured_gains_account (Account *account,
+                                           const gnc_commodity *currency,
+                                           const Account *gains_account)
+{
+    if (!account || !currency || !gains_account)
+        return;
+    Path path {KEY_LOT_MGMT, "gains-acct",
+               gnc_commodity_get_unique_name (currency)};
+    set_kvp_account_path (account, path, gains_account);
+}
+
+Account *
+gnc_account_create_orphan_gains_account_prepared (Account *root,
+                                                   gnc_commodity *currency)
+{
+    if (!root || !currency)
+        return nullptr;
+    auto name = gnc_account_dup_orphan_gains_name (currency);
+    auto account = xaccMallocAccount (gnc_account_get_book (root));
+    xaccAccountBeginEdit (account);
+    xaccAccountSetName (account, name);
+    xaccAccountSetCommodity (account, currency);
+    xaccAccountSetType (account, ACCT_TYPE_INCOME);
+    xaccAccountSetDescription (account, _("Realized Gain/Loss"));
+    xaccAccountSetNotes (account,
+        _("Realized Gains or Losses from Commodity or Trading Accounts "
+          "that haven't been recorded elsewhere."));
+    gnc_account_append_child (root, account);
+    xaccAccountCommitEdit (account);
+    g_free (name);
+    return account;
 }
 
 Account *

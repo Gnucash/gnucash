@@ -101,6 +101,7 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofclass.h"
+#include "qof-load-executor.h"
 #include "qofobject.h"
 
 #ifdef __cplusplus
@@ -134,14 +135,89 @@ typedef enum
 /* PROTOTYPES ******************************************************/
 
 typedef struct QofSessionImpl QofSession;
+typedef struct QofSessionOperationLease QofSessionOperationLease;
+
+/** Semantic type of an exclusive session operation. */
+typedef enum
+{
+    QOF_SESSION_OPERATION_GENERIC = 0,
+    QOF_SESSION_OPERATION_OPEN,
+    QOF_SESSION_OPERATION_SAVE,
+    QOF_SESSION_OPERATION_SAVE_AS,
+    QOF_SESSION_OPERATION_EXPORT,
+    QOF_SESSION_OPERATION_CLOSE,
+    QOF_SESSION_OPERATION_SCRUB,
+    QOF_SESSION_OPERATION_IMPORT,
+    QOF_SESSION_OPERATION_LOAD
+} QofSessionOperationKind;
+
+/**
+ * Acquire the exclusive mutation lease for @a session.
+ *
+ * The returned opaque token is bound to the session, its current book, a
+ * unique operation id, the session generation, and the current-session
+ * generation. It must be released with
+ * qof_session_operation_lease_release(). Acquisition fails while another
+ * valid lease owns the session.
+ */
+QofSessionOperationLease *
+qof_session_operation_lease_acquire (QofSession *session);
+
+/** Acquire an exclusive mutation lease tagged with @a kind. */
+QofSessionOperationLease *
+qof_session_operation_lease_acquire_for (QofSession *session,
+                                         QofSessionOperationKind kind);
+
+/** Return whether @a lease still owns @a session and its current book. */
+gboolean qof_session_operation_lease_is_valid (
+    const QofSessionOperationLease *lease, const QofSession *session);
+
+/** Return the unique operation id, or zero for an invalid token. */
+guint64 qof_session_operation_lease_get_id (
+    const QofSessionOperationLease *lease);
+
+/** Return the operation kind, or GENERIC for an invalid token. */
+QofSessionOperationKind qof_session_operation_lease_get_kind (
+    const QofSessionOperationLease *lease);
+
+/**
+ * Release and free @a lease.
+ *
+ * The token may already have been invalidated by a book replacement, current
+ * session change, swap, or session destruction. Releasing such a token is
+ * still safe.
+ */
+void qof_session_operation_lease_release (QofSessionOperationLease *lease);
+
+/** Return whether @a session currently has a valid exclusive lease. */
+gboolean qof_session_has_active_operation_lease (const QofSession *session);
+
+/** Return whether @a session is owned by a valid lease of @a kind. */
+gboolean qof_session_has_active_operation_kind (
+    const QofSession *session, QofSessionOperationKind kind);
+
+/** Return the generation of @a session's mutation-lease state. It changes
+ * whenever a lease is invalidated or released. */
+guint64 qof_session_get_operation_generation (const QofSession *session);
 
 QofSession * qof_session_new (QofBook* book);
 void         qof_session_destroy (QofSession *session);
+
+/** Destroy @a session if @a lease owns it. The lease is invalidated but must
+ * still be released by its caller. */
+gboolean qof_session_destroy_with_lease (
+    QofSession *session, QofSessionOperationLease *lease);
 
 /** The qof_session_swap_data () method swaps the book of
  *    the two given sessions. It is useful
  *    for 'Save As' type functionality. */
 void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
+
+/** Swap two sessions atomically under their respective leases. A successful
+ * swap invalidates both tokens because their bound books changed. */
+gboolean qof_session_swap_data_with_leases (
+    QofSession *session_1, QofSessionOperationLease *lease_1,
+    QofSession *session_2, QofSessionOperationLease *lease_2);
 
 /** Begins a new session.
  *
@@ -183,6 +259,12 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
 void qof_session_begin (QofSession *session, const char * new_uri,
                         SessionOpenMode mode);
 
+/** Token-aware variant. TRUE means that the lease authorized the call; backend
+ * errors remain available through qof_session_get_error(). */
+gboolean qof_session_begin_with_lease (
+    QofSession *session, const QofSessionOperationLease *lease,
+    const char *new_uri, SessionOpenMode mode);
+
 /**
  * The qof_session_load() method causes the QofBook to be made ready to
  *    to use with this URL/datastore.   When the URL points at a file,
@@ -199,6 +281,52 @@ void qof_session_begin (QofSession *session, const char * new_uri,
 typedef void (*QofPercentageFunc) (const char *message, double percent);
 void qof_session_load (QofSession *session,
                        QofPercentageFunc percentage_func);
+
+/** Terminal result of a deferred session load. */
+typedef enum
+{
+    QOF_SESSION_LOAD_COMPLETED,
+    QOF_SESSION_LOAD_CANCELLED,
+    QOF_SESSION_LOAD_STALE,
+    QOF_SESSION_LOAD_ERROR
+} QofSessionLoadAsyncStatus;
+
+typedef void (*QofSessionLoadAsyncCallback) (
+    QofSession *session, QofSessionLoadAsyncStatus status,
+    gpointer user_data);
+
+/**
+ * Start a deferred load after a successful BEGIN.
+ *
+ * @a lease must be the valid, exclusive LOAD lease for @a session. BEGIN and
+ * LOAD are deliberately separate operations: this function rejects a lease
+ * of any other kind, a session without a begun backend, and a non-empty book.
+ * @a executor supplies deferred execution to both resumable and legacy
+ * backends; its scheduling contract is described by QofSessionLoadExecutor.
+ *
+ * On TRUE the function consumes @a lease and releases it exactly once before
+ * invoking @a callback. The caller must not release or otherwise use the
+ * token after a successful call. @a callback is deferred exactly once and may
+ * destroy the session. On FALSE ownership remains with the caller and no
+ * callback is made.
+ */
+gboolean qof_session_load_async_with_lease (
+    QofSession *session, QofSessionOperationLease *lease,
+    QofPercentageFunc percentage_func, const QofSessionLoadExecutor *executor,
+    QofSessionLoadAsyncCallback callback, gpointer user_data);
+
+/**
+ * Request terminal cancellation of the active LOAD operation. The request is
+ * idempotent; its callback reports QOF_SESSION_LOAD_CANCELLED after parser
+ * cleanup. It never cancels a different operation kind.
+ */
+gboolean qof_session_cancel_active_load (QofSession *session);
+
+/** Token-aware load. A backend replacement of the bound book invalidates the
+ * lease before this function returns. */
+gboolean qof_session_load_with_lease (
+    QofSession *session, QofSessionOperationLease *lease,
+    QofPercentageFunc percentage_func);
 
 /** @name Session Errors
  @{ */
@@ -262,6 +390,9 @@ QofBackend * qof_session_get_backend(const QofSession *session);
  */
 void     qof_session_save (QofSession *session,
                            QofPercentageFunc percentage_func);
+gboolean qof_session_save_with_lease (
+    QofSession *session, const QofSessionOperationLease *lease,
+    QofPercentageFunc percentage_func);
 
 /**
  * A special version of save used in the sql backend which moves the
@@ -272,6 +403,9 @@ void     qof_session_save (QofSession *session,
  */
 void     qof_session_safe_save (QofSession *session,
                                 QofPercentageFunc percentage_func);
+gboolean qof_session_safe_save_with_lease (
+    QofSession *session, const QofSessionOperationLease *lease,
+    QofPercentageFunc percentage_func);
 
 /**
  * The qof_session_end() method will release the session lock. For the
@@ -282,6 +416,8 @@ void     qof_session_safe_save (QofSession *session,
  *    roll-back anything; it would just shut the connection.
  */
 void     qof_session_end  (QofSession *session);
+gboolean qof_session_end_with_lease (
+    QofSession *session, const QofSessionOperationLease *lease);
 
 /** @}
 */
@@ -300,11 +436,18 @@ gboolean qof_session_events_pending (const QofSession *session);
  *   TRUE if the engine was modified while engine events were suspended.
  */
 gboolean qof_session_process_events (QofSession *session);
+gboolean qof_session_process_events_with_lease (
+    QofSession *session, const QofSessionOperationLease *lease,
+    gboolean *engine_modified);
 /** @} */
 
 gboolean qof_session_export (QofSession *tmp_session,
                              QofSession *real_session,
                              QofPercentageFunc percentage_func);
+gboolean qof_session_export_with_leases (
+    QofSession *tmp_session, const QofSessionOperationLease *tmp_lease,
+    QofSession *real_session, const QofSessionOperationLease *real_lease,
+    QofPercentageFunc percentage_func, gboolean *exported);
 
 /** Return a list of strings for the registered access methods. The owner is
  *  responsible for freeing the list but not the strings.
@@ -314,6 +457,8 @@ GList* qof_backend_get_registered_access_method_list(void);
 /** Ensure all of the data is loaded from the session.
  */
 void qof_session_ensure_all_data_loaded(QofSession* session);
+gboolean qof_session_ensure_all_data_loaded_with_lease (
+    QofSession *session, const QofSessionOperationLease *lease);
 
 #ifdef __cplusplus
 }

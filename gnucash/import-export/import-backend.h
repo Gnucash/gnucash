@@ -28,8 +28,11 @@
 #ifndef IMPORT_BACKEND_H
 #define IMPORT_BACKEND_H
 
+#include <gio/gio.h>
+#include <gtk/gtk.h>
 #include "Transaction.h"
 #include "import-settings.h"
+#include "gnc-session.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -153,6 +156,11 @@ GdkPixbuf* gen_probability_pixbuf (gint score,
                                    GNCImportSettings *settings,
                                    GtkWidget * widget);
 
+/** Creates a score-picture renderer that retains a probability pixbuf's
+ * intrinsic dimensions, left aligned and vertically centred without scaling
+ * the score bars to the cell's available space. */
+GtkPicture* gnc_import_match_score_picture_new (void);
+
 /*@}*/
 
 
@@ -179,11 +187,22 @@ GNCImportTransInfo* gnc_import_TransInfo_new(Transaction* trans, Account* base_a
 /** Destructor */
 void gnc_import_TransInfo_delete (GNCImportTransInfo *info);
 
+/** Free importer-owned metadata without inspecting or changing the stored
+ * transaction. This is only for abandoning an asynchronous importer after its
+ * book/session snapshot has become invalid. */
+void gnc_import_TransInfo_discard (GNCImportTransInfo *info);
+
 /** Returns the stored list of possible matches. */
 GList *gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info);
 
 /** Remove the first match in the list of possible matches  */
 void gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info);
+
+/** Resolve conflicts between imported transactions that currently select the
+ * same existing transaction. Each GNCImportTransInfo must occur at most once
+ * in @a trans_infos. The highest-probability import keeps the shared match;
+ * the others advance to their next possible match until no conflicts remain. */
+void gnc_import_TransInfo_resolve_conflicts (GList *trans_infos);
 
 /** Returns the transaction of this TransInfo. */
 Transaction *gnc_import_TransInfo_get_trans (const GNCImportTransInfo *info);
@@ -296,5 +315,4 @@ gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info);
 
 #endif
 /** @} */
-
 

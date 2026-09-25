@@ -52,15 +52,15 @@
 
 #define GNC_PREFS_GROUP_SEARCH "dialogs.business.vendor-search"
 
-void gnc_vendor_taxtable_check_cb (GtkToggleButton *togglebutton, gpointer user_data);
+void gnc_vendor_taxtable_check_cb (GtkCheckButton *togglebutton, gpointer user_data);
 void gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_vendor_terms_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_vendor_taxincluded_changed_cb (GtkWidget *widget, gpointer data);
-void gnc_vendor_taxtable_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_terms_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data);
+void gnc_vendor_taxincluded_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data);
+void gnc_vendor_taxtable_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data);
 
 typedef enum
 {
@@ -111,12 +111,12 @@ struct _vendor_window
 };
 
 void
-gnc_vendor_taxtable_check_cb (GtkToggleButton *togglebutton,
+gnc_vendor_taxtable_check_cb (GtkCheckButton *togglebutton,
                               gpointer user_data)
 {
     VendorWindow *vw = user_data;
 
-    if (gtk_toggle_button_get_active (togglebutton))
+    if (gtk_check_button_get_active (togglebutton))
         gtk_widget_set_sensitive (vw->taxtable_menu, TRUE);
     else
         gtk_widget_set_sensitive (vw->taxtable_menu, FALSE);
@@ -146,20 +146,20 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
     if (vw->dialog_type == NEW_VENDOR)
         qof_event_gen(QOF_INSTANCE(vendor), QOF_EVENT_ADD, NULL);
 
-    gncVendorSetID (vendor, gtk_entry_get_text (GTK_ENTRY (vw->id_entry)));
-    gncVendorSetName (vendor, gtk_entry_get_text (GTK_ENTRY (vw->company_entry)));
+    gncVendorSetID (vendor, gnc_entry_get_text (GTK_ENTRY (vw->id_entry)));
+    gncVendorSetName (vendor, gnc_entry_get_text (GTK_ENTRY (vw->company_entry)));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (vw->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (vw->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (vw->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (vw->email_entry)));
+    gncAddressSetName (addr, gnc_entry_get_text (GTK_ENTRY (vw->name_entry)));
+    gncAddressSetAddr1 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr1_entry)));
+    gncAddressSetAddr2 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr2_entry)));
+    gncAddressSetAddr3 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr3_entry)));
+    gncAddressSetAddr4 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr4_entry)));
+    gncAddressSetPhone (addr, gnc_entry_get_text (GTK_ENTRY (vw->phone_entry)));
+    gncAddressSetFax (addr, gnc_entry_get_text (GTK_ENTRY (vw->fax_entry)));
+    gncAddressSetEmail (addr, gnc_entry_get_text (GTK_ENTRY (vw->email_entry)));
 
-    gncVendorSetActive (vendor, gtk_toggle_button_get_active
-                        (GTK_TOGGLE_BUTTON (vw->active_check)));
+    gncVendorSetActive (vendor, gtk_check_button_get_active
+                        (GTK_CHECK_BUTTON (vw->active_check)));
     gncVendorSetTaxIncluded (vendor, vw->taxincluded);
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(vw->notes_text));
@@ -173,7 +173,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
                                   (vw->currency_edit)));
 
     gncVendorSetTaxTableOverride
-    (vendor, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (vw->taxtable_check)));
+    (vendor, gtk_check_button_get_active (GTK_CHECK_BUTTON (vw->taxtable_check)));
     gncVendorSetTaxTable (vendor, vw->taxtable);
 
     gncVendorCommitEdit (vendor);
@@ -184,7 +184,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
-    const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
+    const char *res = gnc_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
@@ -207,10 +207,10 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Check for valid id and set one if necessary */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
+    if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
     {
         string = gncVendorNextID(vw->book);
-        gtk_entry_set_text (GTK_ENTRY (vw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (vw->id_entry), string);
         g_free(string);
     }
 
@@ -278,39 +278,39 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_vendor_terms_changed_cb (GtkWidget *widget, gpointer data)
+gnc_vendor_terms_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data)
 {
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    VendorWindow *vw = data;
+    (void)pspec;
+        VendorWindow *vw = data;
 
     if (!vw) return;
-    if (!cbox) return;
+    if (!dropdown) return;
 
-    vw->terms = gnc_simple_combo_get_value (cbox);
+    vw->terms = gnc_simple_dropdown_get_value (dropdown);
 }
 
 void
-gnc_vendor_taxincluded_changed_cb (GtkWidget *widget, gpointer data)
+gnc_vendor_taxincluded_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data)
 {
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    VendorWindow *vw = data;
+    (void)pspec;
+        VendorWindow *vw = data;
 
     if (!vw) return;
-    if (!cbox) return;
+    if (!dropdown) return;
 
-    vw->taxincluded = GPOINTER_TO_INT (gnc_simple_combo_get_value (cbox));
+    vw->taxincluded = GPOINTER_TO_INT (gnc_simple_dropdown_get_value (dropdown));
 }
 
 void
-gnc_vendor_taxtable_changed_cb (GtkWidget *widget, gpointer data)
+gnc_vendor_taxtable_changed_cb (GtkDropDown *dropdown, GParamSpec *pspec, gpointer data)
 {
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    VendorWindow *vw = data;
+    (void)pspec;
+        VendorWindow *vw = data;
 
     if (!vw) return;
-    if (!cbox) return;
+    if (!dropdown) return;
 
-    vw->taxtable = gnc_simple_combo_get_value (cbox);
+    vw->taxtable = gnc_simple_dropdown_get_value (dropdown);
 }
 
 static void
@@ -318,7 +318,7 @@ gnc_vendor_window_close_handler (gpointer user_data)
 {
     VendorWindow *vw = user_data;
 
-    gtk_widget_destroy (vw->dialog);
+    gtk_window_destroy (GTK_WINDOW (vw->dialog));
 }
 
 static void
@@ -398,9 +398,6 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 
     /* Find the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "terms_store");
-    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "tax_included_store");
-    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "vendor_dialog");
     vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "vendor_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(vw->dialog), parent);
@@ -436,11 +433,10 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
     vw->currency_edit = edit;
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full( builder,
-                                      gnc_builder_connect_full_func,
+    gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
                                       vw);
 
     /* Setup initial values */
@@ -455,21 +451,21 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 
         addr = gncVendorGetAddr (vendor);
 
-        gtk_entry_set_text (GTK_ENTRY (vw->id_entry), gncVendorGetID (vendor));
-        gtk_entry_set_text (GTK_ENTRY (vw->company_entry), gncVendorGetName (vendor));
+        gnc_entry_set_text (GTK_ENTRY (vw->id_entry), gncVendorGetID (vendor));
+        gnc_entry_set_text (GTK_ENTRY (vw->company_entry), gncVendorGetName (vendor));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (vw->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr1_entry), gncAddressGetAddr1 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr2_entry), gncAddressGetAddr2 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr3_entry), gncAddressGetAddr3 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr4_entry), gncAddressGetAddr4 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->phone_entry), gncAddressGetPhone (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->fax_entry), gncAddressGetFax (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->email_entry), gncAddressGetEmail (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->name_entry), gncAddressGetName (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr1_entry), gncAddressGetAddr1 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr2_entry), gncAddressGetAddr2 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr3_entry), gncAddressGetAddr3 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr4_entry), gncAddressGetAddr4 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->phone_entry), gncAddressGetPhone (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->fax_entry), gncAddressGetFax (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->email_entry), gncAddressGetEmail (addr));
 
         /* Set toggle buttons */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->active_check),
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (vw->active_check),
                                       gncVendorGetActive (vendor));
 
         string = gncVendorGetNotes (vendor);
@@ -504,20 +500,20 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
     /* I know that vendor exists here -- either passed in or just created */
 
     vw->taxincluded = gncVendorGetTaxIncluded (vendor);
-    gnc_taxincluded_combo (GTK_COMBO_BOX(vw->taxincluded_menu), vw->taxincluded);
-    gnc_billterms_combo (GTK_COMBO_BOX(vw->terms_menu), bookp, TRUE, vw->terms);
+    gnc_taxincluded_dropdown (GTK_DROP_DOWN(vw->taxincluded_menu), vw->taxincluded);
+    gnc_billterms_dropdown (GTK_DROP_DOWN(vw->terms_menu), bookp, TRUE, vw->terms);
 
     vw->taxtable = gncVendorGetTaxTable (vendor);
-    gnc_taxtables_combo (GTK_COMBO_BOX(vw->taxtable_menu), bookp, TRUE, vw->taxtable);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->taxtable_check),
+    gnc_taxtables_dropdown (GTK_DROP_DOWN(vw->taxtable_menu), bookp, TRUE, vw->taxtable);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (vw->taxtable_check),
                                   gncVendorGetTaxTableOverride (vendor));
-    gnc_vendor_taxtable_check_cb (GTK_TOGGLE_BUTTON (vw->taxtable_check), vw);
+    gnc_vendor_taxtable_check_cb (GTK_CHECK_BUTTON (vw->taxtable_check), vw);
 
     gnc_gui_component_watch_entity_type (vw->component_id,
                                          GNC_VENDOR_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (vw->dialog);
+    gtk_window_present (GTK_WINDOW (vw->dialog));
     g_object_unref(G_OBJECT(builder));
 
     return vw;

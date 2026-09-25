@@ -149,6 +149,11 @@ public:
               const char* key, const char* doc_string,
               ValueType value,
               GncOptionUIType ui_type = GncOptionUIType::INTERNAL);
+    ~GncOption() noexcept;
+    GncOption(const GncOption&) = delete;
+    GncOption& operator=(const GncOption&) = delete;
+    GncOption(GncOption&&) noexcept;
+    GncOption& operator=(GncOption&&) noexcept;
     template <typename ValueType> void set_value(ValueType value);
     template <typename ValueType> void set_default_value(ValueType value);
     template <typename ValueType> ValueType get_default_value() const;

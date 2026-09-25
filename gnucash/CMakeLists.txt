@@ -49,6 +49,7 @@ endif()
 set(gnucash_noinst_HEADERS
     gnucash-commands.hpp
     gnucash-core-app.hpp
+    gnucash-guile-bootstrap.h
     gnucash-locale-platform.h
 )
 
@@ -87,6 +88,7 @@ set (gnucash_SOURCES
   gnucash.cpp
   gnucash-commands.cpp
   gnucash-core-app.cpp
+  gnucash-guile-bootstrap.c
   ${CMAKE_CURRENT_BINARY_DIR}/gnucash-gresources.c
   ${GNUCASH_RESOURCE_FILE}
 )
@@ -110,7 +112,7 @@ target_link_libraries (gnucash
    gnc-engine gnc-module gnc-core-utils gnucash-guile
    gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
    gnc-bi-import gnc-customer-import gnc-report
-   PkgConfig::GTK3 ${GUILE_LDFLAGS} PkgConfig::GLIB2
+   PkgConfig::GTK4 ${GUILE_LDFLAGS} PkgConfig::GLIB2
    ${Boost_LIBRARIES}
 )
 
@@ -118,6 +120,7 @@ set(gnucash_cli_SOURCES
     gnucash-cli.cpp
     gnucash-commands.cpp
     gnucash-core-app.cpp
+    gnucash-guile-bootstrap.c
     )
 
 if (MINGW)
@@ -170,6 +173,51 @@ endif()
 install(TARGETS gnucash gnucash-cli DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
+set(test_gapplication_command_line_SOURCES
+  test-gapplication-command-line.c
+)
+set(GAPPLICATION_TEST_INCLUDE_DIRS ${GIO_INCLUDE_DIRS})
+set(GAPPLICATION_TEST_LIBS ${GIO_LDFLAGS})
+
+gnc_add_test(test-gapplication-command-line-file
+  "${test_gapplication_command_line_SOURCES}"
+  GAPPLICATION_TEST_INCLUDE_DIRS GAPPLICATION_TEST_LIBS)
+
+get_filename_component(_guile_runtime_bindir "${GUILE_EXECUTABLE}" DIRECTORY)
+get_filename_component(_guile_runtime_prefix "${_guile_runtime_bindir}" DIRECTORY)
+
+add_test(NAME test-gnucash-cli-report-bootstrap
+  COMMAND ${CMAKE_COMMAND}
+    -DGNUCASH_CLI_EXECUTABLE=$<TARGET_FILE:gnucash-cli>
+    -DBUILD_ROOT=${CMAKE_BINARY_DIR}
+    -DGUILE_RUNTIME_LIBDIR=${_guile_runtime_prefix}/${GUILE_REL_LIBDIR}
+    -DGUILE_RUNTIME_CCACHEDIR=${_guile_runtime_prefix}/${GUILE_REL_CCACHEDIR}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test-gnucash-cli-report-bootstrap.cmake)
+set_tests_properties(test-gnucash-cli-report-bootstrap PROPERTIES
+  ENVIRONMENT "$<$<CONFIG:Asan>:ASAN_OPTIONS=${ASAN_TEST_OPTIONS}>")
+gnc_add_test_runtime_path(test-gnucash-cli-report-bootstrap)
+add_dependencies(testbuild gnucash-cli scm-reports)
+
+if (UNIX AND NOT APPLE AND COMPILE_GSCHEMAS)
+  find_program(GAPPLICATION_TEST_PYTHON python3)
+  find_program(GAPPLICATION_TEST_GSETTINGS gsettings)
+  find_program(GAPPLICATION_TEST_GDBUS gdbus)
+  if (GAPPLICATION_TEST_PYTHON AND GAPPLICATION_TEST_GSETTINGS AND GAPPLICATION_TEST_GDBUS)
+    add_test(NAME test-gnucash-gapplication-instance
+      COMMAND ${GAPPLICATION_TEST_PYTHON}
+        ${CMAKE_CURRENT_SOURCE_DIR}/test-gapplication-instance.py
+        --gnucash $<TARGET_FILE:gnucash>
+        --build-root ${CMAKE_BINARY_DIR}
+        --sample-book ${CMAKE_SOURCE_DIR}/libgnucash/backend/xml/test/test-files/load-save/sample1.gnucash
+        --schema-dir ${SCHEMADIR_BUILD}
+        --guile-lib-dir ${_guile_runtime_prefix}/${GUILE_REL_LIBDIR}
+        --guile-compiled-lib-dir ${_guile_runtime_prefix}/${GUILE_REL_CCACHEDIR})
+    set_tests_properties(test-gnucash-gapplication-instance PROPERTIES
+      TIMEOUT 540 RUN_SERIAL TRUE)
+    add_dependencies(testbuild gnucash compiled-schemas)
+  endif()
+endif()
+
 
 set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR})
 set(GNUCASH_BIN_INSTALL_NAME "gnucash")
@@ -204,6 +252,13 @@ set(BUILD_ENV_FILE_OUT ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/envir
 
 file(WRITE ${ENV_FILE_OUT} "${ENV_STRINGS_CONF}")
 file(WRITE ${BUILD_ENV_FILE_OUT} "${ENV_STRINGS_CONF}")
+
+if (WIN32)
+  # Native decorations retain the standard Windows system menu and resizing
+  # frame, which are required for window snapping.
+  file(APPEND ${ENV_FILE_OUT} "GTK_CSD=0\n")
+  file(APPEND ${BUILD_ENV_FILE_OUT} "GTK_CSD=0\n")
+endif()
 
 set(XDG_TEXT "
 # GnuCash was not installed in the default location.
@@ -247,7 +302,7 @@ if (MAC_INTEGRATION)
   file(APPEND ${ENV_FILE_OUT} "FONTCONFIG_PATH={GNC_HOME}/etc/fonts\n")
   file(APPEND ${ENV_FILE_OUT} "OFX_DTD_PATH={GNC_HOME}/share/libofx/dtd\n")
   file(APPEND ${ENV_FILE_OUT} "GNC_DBD_DIR={SYS_LIB}/dbd\n")
-  file(APPEND ${ENV_FILE_OUT} "GTK_IM_MODULE_FILE={GNC_HOME}/lib/gtk-3.0/3.0.0/immodules.cache\n")
+  file(APPEND ${ENV_FILE_OUT} "GTK_IM_MODULE_FILE={GNC_HOME}/lib/gtk-4.0/4.0.0/immodules.cache\n")
   file(APPEND ${ENV_FILE_OUT} "MARIADB_PLUGIN_DIR={SYS_LIB}/mariadb/plugin\n")
 endif()
 
@@ -268,11 +323,22 @@ file(COPY ${ENV_FILE_OUT}
 
 install(FILES ${SCRIPT_LIST} ${VALGRIND_OUTDIR}/gnucash-valgrind DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES ${ENVIRONMENT_FILE_DIR}/environment DESTINATION
-  ${CMAKE_INSTALL_FULL_SYSCONFDIR}/gnucash)
+  ${CMAKE_INSTALL_SYSCONFDIR}/gnucash)
 
+if (WIN32)
+  add_test(NAME check-windows-native-decorations
+    COMMAND ${CMAKE_COMMAND}
+      -DENVIRONMENT_FILE=${ENVIRONMENT_FILE_DIR}/environment
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/test-windows-native-decorations.cmake)
+endif()
 
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
     gnucash.cpp gnucash-commands.cpp gnucash-cli.cpp gnucash-core-app.cpp
+    gnucash-guile-bootstrap.c
+    ${test_gapplication_command_line_SOURCES}
+    test-gapplication-instance.py
+    test-gnucash-cli-report-bootstrap.cmake
+    test-windows-native-decorations.cmake
     gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in
     gnucash-valgrind.in gnucash-manifest.rc gnucash-utf8.manifest
     ${gnucash_GRESOURCES}

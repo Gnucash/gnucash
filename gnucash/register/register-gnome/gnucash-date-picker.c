@@ -25,14 +25,16 @@
  */
 
 #include <config.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 #include "gnucash-date-picker.h"
+#include "gnc-gtk-utils.h"
 
 /* Item list signals */
 enum
 {
     DATE_SELECTED,
     DATE_PICKED,
+    CANCELLED,
     LAST_SIGNAL
 };
 
@@ -47,19 +49,27 @@ gnc_date_picker_set_date (GNCDatePicker *date_picker,
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
     g_return_if_fail (date_picker->calendar != NULL);
 
-    gtk_calendar_select_day (date_picker->calendar, 1);
-    gtk_calendar_select_month (date_picker->calendar, mon, year);
-    gtk_calendar_select_day (date_picker->calendar, day);
+    gtk_calendar_set_year (date_picker->calendar, year);
+    gtk_calendar_set_month (date_picker->calendar, mon);
+    gtk_calendar_set_day (date_picker->calendar, day);
 }
 
 void
 gnc_date_picker_get_date (GNCDatePicker *date_picker,
                           guint *day, guint *mon, guint *year)
 {
+    GDateTime *date;
+
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
     g_return_if_fail (date_picker->calendar != NULL);
 
-    gtk_calendar_get_date (date_picker->calendar, year, mon, day);
+    date = gtk_calendar_get_date (date_picker->calendar);
+    g_return_if_fail (date != NULL);
+
+    *day = g_date_time_get_day_of_month (date);
+    *mon = g_date_time_get_month (date) - 1;
+    *year = g_date_time_get_year (date);
+    g_date_time_unref (date);
 }
 
 static void
@@ -70,50 +80,28 @@ gnc_date_picker_init (GNCDatePicker *date_picker)
 }
 
 static gboolean
-gnc_date_picker_button_event (GtkWidget *widget, GdkEventButton *event,
-                              gpointer data)
-{
-    /* So the sheet doesn't use it. */
-    g_signal_stop_emission_by_name (widget, "button_press_event");
-
-    return TRUE;
-}
-
-static gboolean
-gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+gnc_date_picker_key_pressed (G_GNUC_UNUSED GtkEventControllerKey *controller,
+                             guint keyval,
+                             G_GNUC_UNUSED guint keycode,
+                             G_GNUC_UNUSED GdkModifierType state,
+                             gpointer data)
 {
     GNCDatePicker *date_picker = GNC_DATE_PICKER (data);
-    gboolean retval;
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
         g_signal_emit (date_picker, gnc_date_picker_signals[DATE_PICKED], 0);
-        g_signal_stop_emission_by_name (widget, "key_press_event");
-
         return TRUE;
 
-    case GDK_KEY_Up:
-    case GDK_KEY_Down:
-    case GDK_KEY_Left:
-    case GDK_KEY_Right:
-    case GDK_KEY_space:
-        /* these go to the calendar */
-        return FALSE;
-
-    default:
-        break;
+    case GDK_KEY_Escape:
+        g_signal_emit (date_picker, gnc_date_picker_signals[CANCELLED], 0);
+        return TRUE;
     }
 
-    /* These go to the sheet */
-    g_signal_stop_emission_by_name (widget, "key_press_event");
-
-    g_signal_emit_by_name (date_picker, "key_press_event", event, &retval);
-
-    return retval;
+    return GDK_EVENT_PROPAGATE;
 }
-
 static void
 gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 {
@@ -139,21 +127,37 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
+    gnc_date_picker_signals[CANCELLED] =
+        g_signal_new ("cancelled",
+                      G_TYPE_FROM_CLASS (object_class),
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GNCDatePickerClass, cancelled),
+                      NULL, NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE, 0);
+
     date_picker_class->date_selected = NULL;
     date_picker_class->date_picked = NULL;
+    date_picker_class->cancelled = NULL;
 }
 
 
 static void
 day_selected (GtkCalendar *calendar, GNCDatePicker *gdp)
 {
+    (void)calendar;
+
     g_signal_emit (gdp, gnc_date_picker_signals [DATE_SELECTED], 0);
 }
 
 static void
-day_selected_double_click (GtkCalendar *calendar, GNCDatePicker *gdp)
+calendar_released (GtkGestureClick *gesture, gint n_press,
+                  gdouble x, gdouble y, GNCDatePicker *gdp)
 {
-    g_signal_emit (gdp, gnc_date_picker_signals [DATE_PICKED], 0);
+    (void)gesture;
+
+    if (gnc_gtk_calendar_double_clicks_day (gdp->calendar, n_press, x, y))
+        g_signal_emit (gdp, gnc_date_picker_signals [DATE_PICKED], 0);
 }
 
 
@@ -162,8 +166,8 @@ gnc_date_picker_new (void)
 {
     GtkWidget *calendar;
     GNCDatePicker *date_picker;
-    GtkAllocation allocation;
-    GtkRequisition requisition;
+    GtkEventController *key_controller;
+    GtkGesture *click_gesture;
 
     date_picker = g_object_new (GNC_TYPE_DATE_PICKER,
                                 "homogeneous", FALSE,
@@ -172,30 +176,23 @@ gnc_date_picker_new (void)
     calendar = gtk_calendar_new ();
     date_picker->calendar = GTK_CALENDAR (calendar);
 
-    gtk_box_pack_start (GTK_BOX(date_picker), calendar, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX (date_picker), calendar);
 
-    gtk_widget_get_preferred_size (calendar, &requisition, NULL);
-    allocation.x = 0;
-    allocation.y = 0;
-    allocation.width = requisition.width;
-    allocation.height = requisition.height;
-    gtk_widget_size_allocate (calendar, &allocation);
-
-    g_signal_connect_after (calendar, "button_press_event",
-                            G_CALLBACK (gnc_date_picker_button_event),
-                            date_picker);
-
-    g_signal_connect (calendar, "key_press_event",
-                      G_CALLBACK (gnc_date_picker_key_event),
-                      date_picker);
-
-    g_signal_connect (calendar, "day_selected",
+    key_controller = gtk_event_controller_key_new ();
+    gtk_event_controller_set_static_name (key_controller, "gnc-date-picker-key");
+    g_signal_connect (key_controller, "key-pressed",
+                      G_CALLBACK (gnc_date_picker_key_pressed), date_picker);
+    gtk_widget_add_controller (calendar, key_controller);
+    g_signal_connect (calendar, "day-selected",
                       G_CALLBACK (day_selected),
                       date_picker);
 
-    g_signal_connect (calendar, "day_selected_double_click",
-                      G_CALLBACK (day_selected_double_click),
+    click_gesture = gtk_gesture_click_new ();
+    gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (click_gesture),
+                                          "gnc-date-picker-calendar-double-click");
+    g_signal_connect (click_gesture, "released", G_CALLBACK (calendar_released),
                       date_picker);
+    gtk_widget_add_controller (calendar, GTK_EVENT_CONTROLLER (click_gesture));
 
     return GTK_WIDGET(date_picker);
 }

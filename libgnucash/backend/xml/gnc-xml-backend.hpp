@@ -23,6 +23,8 @@
 #include <string>
 #include <qof-backend.hpp>
 
+struct GncXmlBackendAsyncLoad;
+
 class GncXmlBackend : public QofBackend
 {
 public:
@@ -37,6 +39,12 @@ public:
     void session_end() override;
     void load(QofBook* book, QofBackendLoadType loadType) override;
     /* The XML backend isn't able to do anything with individual instances. */
+    bool load_async (QofBook*, QofBackendLoadType,
+                     const QofSessionLoadExecutor*,
+                     QofBackendLoadAsyncGuard, gpointer,
+                     QofBackendLoadAsyncCallback, gpointer) override;
+    void cancel_load_async () override;
+
     void export_coa(QofBook*) override;
     void sync(QofBook* book) override;
     void safe_sync(QofBook* book) override { sync(book); } // XML sync is inherently safe.
@@ -46,6 +54,8 @@ public:
 
 private:
     bool save_may_clobber_data();
+    friend struct GncXmlBackendAsyncLoad;
+
     void get_file_lock(SessionOpenMode);
     bool link_or_make_backup(const std::string& orig, const std::string& bkup);
     bool backup_file();
@@ -60,5 +70,6 @@ private:
     int m_lockfd = -1;
 
     QofBook* m_book = nullptr;  /* The primary, main open book */
+    GncXmlBackendAsyncLoad *m_async_load = nullptr;
 };
 #endif // __GNC_XML_BACKEND_HPP__

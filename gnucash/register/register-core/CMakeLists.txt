@@ -28,6 +28,7 @@ set (register_core_HEADERS
   datecell.h
   formulacell.h
   gtable.h
+  gnc-register-input.h
   numcell.h
   pricecell.h
   quickfillcell.h

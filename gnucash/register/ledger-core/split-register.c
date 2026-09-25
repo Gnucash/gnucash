@@ -77,6 +77,17 @@ typedef struct
 } ft_fs_store;
 
 static ft_fs_store copied_item = { 0, { NULL } };
+/* Invalidates deferred paste requests when the process clipboard changes. */
+static guint64 copied_item_generation;
+
+typedef struct _SplitRegisterSaveRequest SplitRegisterSaveRequest;
+
+typedef enum
+{
+    GNC_SPLIT_REGISTER_SAVE_SAVED,
+    GNC_SPLIT_REGISTER_SAVE_FAILED,
+    GNC_SPLIT_REGISTER_SAVE_DEFERRED
+} GncSplitRegisterSaveResult;
 
 /** static prototypes *****************************************************/
 
@@ -84,11 +95,141 @@ static gboolean gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
                                                         FloatingTxn *ft,
                                                         FloatingSplit *fs,
                                                         gboolean use_cut_semantics);
-static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
-                                              Split *split);
+static GncSplitRegisterSaveResult gnc_split_register_auto_calc
+    (SplitRegister *reg, Split *split, SplitRegisterSaveRequest *request);
+static void split_register_save_exchange_finished (SplitRegister *reg,
+                                                   gboolean accepted,
+                                                   gpointer user_data);
+static void recalculate_shares (Split* split, SplitRegister* reg,
+                                gnc_numeric value, gnc_numeric price,
+                                gboolean value_changed);
+static void recalculate_price (Split* split, SplitRegister* reg,
+                               gnc_numeric value, gnc_numeric amount);
+static void recalculate_value (Split* split, SplitRegister* reg,
+                               gnc_numeric price, gnc_numeric amount,
+                               gboolean shares_changed);
 
 
 /** implementations *******************************************************/
+
+struct _SplitRegisterSaveRequest
+{
+    GncSplitRegisterAsyncRequest base;
+    gatomicrefcount ref_count;
+    QofBook *book;
+    gboolean do_commit;
+    gboolean completed;
+    GncSplitRegisterSaveCallback callback;
+    gpointer user_data;
+};
+
+static void split_register_save_request_continue (SplitRegisterSaveRequest *request);
+
+static SplitRegisterSaveRequest *
+split_register_save_request_ref (SplitRegisterSaveRequest *request)
+{
+    g_atomic_ref_count_inc (&request->ref_count);
+    return request;
+}
+
+static void
+split_register_save_request_unref (SplitRegisterSaveRequest *request)
+{
+    if (g_atomic_ref_count_dec (&request->ref_count))
+        g_free (request);
+}
+
+void
+gnc_split_register_async_request_track (SplitRegister *reg,
+                                        GncSplitRegisterAsyncRequest *request,
+                                        GncSplitRegisterAsyncCancel cancel)
+{
+    SRInfo *info;
+
+    g_return_if_fail (reg != NULL);
+    g_return_if_fail (request != NULL);
+
+    info = gnc_split_register_get_info (reg);
+    g_return_if_fail (info != NULL);
+    request->reg = reg;
+    request->cancel = cancel;
+    info->async_requests = g_list_prepend (info->async_requests, request);
+}
+
+void
+gnc_split_register_async_request_untrack (GncSplitRegisterAsyncRequest *request)
+{
+    SRInfo *info;
+
+    if (!request || !request->reg)
+        return;
+
+    info = gnc_split_register_get_info (request->reg);
+    if (info)
+        info->async_requests = g_list_remove (info->async_requests, request);
+    request->reg = NULL;
+    request->cancel = NULL;
+}
+
+static void
+split_register_save_request_complete (SplitRegisterSaveRequest *request,
+                                      gboolean saved)
+{
+    SplitRegister *reg;
+    GncSplitRegisterSaveCallback callback;
+    gpointer user_data;
+    SRInfo *info;
+
+    if (!request || request->completed)
+        return;
+
+    request->completed = TRUE;
+    reg = request->base.reg;
+    info = reg ? gnc_split_register_get_info (reg) : NULL;
+    if (info && info->active_save_request == &request->base)
+        info->active_save_request = NULL;
+    if (reg && reg->table && reg->table->control)
+        gnc_table_control_set_input_suspended (reg->table->control, FALSE);
+    gnc_split_register_async_request_untrack (&request->base);
+
+    callback = request->callback;
+    user_data = request->user_data;
+    request->callback = NULL;
+    request->user_data = NULL;
+    if (callback)
+        callback (reg, saved, user_data);
+    split_register_save_request_unref (request);
+}
+
+static void
+split_register_save_request_cancel (GncSplitRegisterAsyncRequest *base)
+{
+    split_register_save_request_complete ((SplitRegisterSaveRequest *)base, FALSE);
+}
+
+static void
+gnc_split_register_cancel_async_requests (SplitRegister *reg)
+{
+    SRInfo *info = gnc_split_register_get_info (reg);
+
+    while (info && info->async_requests)
+    {
+        GncSplitRegisterAsyncRequest *request = info->async_requests->data;
+
+        if (request && request->cancel)
+            request->cancel (request);
+        else
+            info->async_requests = g_list_delete_link (info->async_requests,
+                                                        info->async_requests);
+    }
+}
+
+gboolean
+gnc_split_register_save_pending (SplitRegister *reg)
+{
+    SRInfo *info = reg ? gnc_split_register_get_info (reg) : NULL;
+    return info && info->active_save_request != NULL;
+}
 
 static void
 clear_copied_item()
@@ -103,6 +244,7 @@ clear_copied_item()
     copied_item.cursor_class = CURSOR_CLASS_NONE;
     copied_item.leader_guid = *guid_null();
     copied_item.anchor_split_index = 0;
+    copied_item_generation++;
 }
 
 gboolean
@@ -436,326 +578,414 @@ gnc_split_register_get_split_amount_virt_loc (SplitRegister* reg, Split* split,
     return TRUE;
 }
 
-Split*
-gnc_split_register_duplicate_current (SplitRegister* reg)
+typedef struct
 {
-    SRInfo* info = gnc_split_register_get_info (reg);
+    GncSplitRegisterAsyncRequest base;
+    GWeakRef owner;
+    QofBook *book;
+    GncGUID transaction_guid;
+    GncGUID source_split_guid;
+    GncGUID trans_split_guid;
+    GncGUID cursor_split_guid;
     CursorClass cursor_class;
-    Transaction* trans;
-    Split* return_split;
-    Split* trans_split;
-    Split* blank_split;
-    gboolean changed;
-    Split* split;
+    gboolean has_source_split;
+    gboolean has_trans_split;
+    gboolean has_cursor_split;
+    gboolean cancelled;
+} SplitRegisterDuplicateRequest;
 
-    ENTER ("reg=%p", reg);
+static void
+split_register_duplicate_request_free (SplitRegisterDuplicateRequest *request)
+{
+    gnc_split_register_async_request_untrack (&request->base);
+    g_weak_ref_clear (&request->owner);
+    g_free (request);
+}
 
-    blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
-    split = gnc_split_register_get_current_split (reg);
-    trans = gnc_split_register_get_current_trans (reg);
-    trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
+static void
+split_register_duplicate_request_cancel (GncSplitRegisterAsyncRequest *base)
+{
+    SplitRegisterDuplicateRequest *request = (SplitRegisterDuplicateRequest *)base;
 
-    /* This shouldn't happen, but be paranoid. */
-    if (trans == NULL)
+    request->cancelled = TRUE;
+    gnc_split_register_async_request_untrack (&request->base);
+}
+
+static void
+split_register_duplicate_capture_cursor (SplitRegisterDuplicateRequest *request,
+                                         SplitRegister *reg)
+{
+    Split *split = gnc_split_register_get_current_split (reg);
+
+    request->has_cursor_split = split != NULL;
+    if (split)
+        request->cursor_split_guid = *xaccSplitGetGUID (split);
+}
+
+static gboolean
+split_register_duplicate_context (SplitRegisterDuplicateRequest *request,
+                                  GObject **owner_out, SRInfo **info_out,
+                                  Transaction **transaction_out,
+                                  Split **split_out, Split **trans_split_out)
+{
+    GObject *owner = g_weak_ref_get (&request->owner);
+    Transaction *current;
+    Split *current_split;
+    Split *split;
+    Split *trans_split;
+
+    if (request->cancelled || !request->base.reg ||
+        !owner || request->book != gnc_get_current_book ())
     {
-        LEAVE ("no transaction");
-        return NULL;
+        g_clear_object (&owner);
+        return FALSE;
+    }
+    current = gnc_split_register_get_current_trans (request->base.reg);
+    current_split = gnc_split_register_get_current_split (request->base.reg);
+    if (!current || gnc_split_register_get_current_cursor_class (request->base.reg) != request->cursor_class ||
+        !guid_equal (xaccTransGetGUID (current), &request->transaction_guid) ||
+        (request->has_cursor_split && (!current_split ||
+         !guid_equal (xaccSplitGetGUID (current_split), &request->cursor_split_guid))) ||
+        (!request->has_cursor_split && current_split))
+    {
+        g_object_unref (owner);
+        return FALSE;
     }
 
-    cursor_class = gnc_split_register_get_current_cursor_class (reg);
-
-    /* Can't do anything with this. */
-    if (cursor_class == CURSOR_CLASS_NONE)
+    split = request->has_source_split
+        ? xaccSplitLookup (&request->source_split_guid, request->book) : NULL;
+    trans_split = request->has_trans_split
+        ? xaccSplitLookup (&request->trans_split_guid, request->book) : NULL;
+    if ((request->has_source_split && (!split || xaccSplitGetParent (split) != current)) ||
+        (request->has_trans_split && (!trans_split || xaccSplitGetParent (trans_split) != current)))
     {
-        LEAVE ("no cursor class");
-        return NULL;
+        g_object_unref (owner);
+        return FALSE;
     }
 
-    /* This shouldn't happen, but be paranoid. */
-    if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
+    *owner_out = owner;
+    *info_out = gnc_split_register_get_info (request->base.reg);
+    *transaction_out = current;
+    *split_out = split;
+    *trans_split_out = trans_split;
+    return TRUE;
+}
+
+static void split_register_duplicate_apply (SplitRegisterDuplicateRequest *request,
+                                            const GncDupTransResult *result);
+
+static void
+split_register_duplicate_dialog_finished (GncDupTransResult *result,
+                                          gpointer user_data)
+{
+    SplitRegisterDuplicateRequest *request = user_data;
+
+    if (result)
+        split_register_duplicate_apply (request, result);
+    else
+        split_register_duplicate_request_free (request);
+    gnc_dup_trans_result_free (result);
+}
+
+static void
+split_register_duplicate_show_dialog (SplitRegisterDuplicateRequest *request)
+{
+    GObject *owner;
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+    GtkWindow *parent;
+
+    if (!split_register_duplicate_context (request, &owner, &info, &transaction,
+                                           &split, &trans_split))
     {
-        LEAVE ("no split with transaction class");
-        return NULL;
+        split_register_duplicate_request_free (request);
+        return;
+    }
+    parent = GTK_WINDOW (gnc_split_register_get_parent (request->base.reg));
+    if (!GTK_IS_WINDOW (parent))
+    {
+        g_object_unref (owner);
+        split_register_duplicate_request_free (request);
+        return;
     }
 
-    changed = gnc_table_current_cursor_changed (reg->table, FALSE);
-
-    /* See if we were asked to duplicate an unchanged blank split.
-     * There's no point in doing that! */
-    if (!changed && ((split == NULL) || (split == blank_split)))
+    if (request->cursor_class == CURSOR_CLASS_SPLIT)
     {
-        LEAVE ("skip unchanged blank split");
-        return NULL;
+        const char *number = gnc_get_num_action (NULL, split);
+        if (!request->base.reg->use_tran_num_for_num_field && gnc_strisnum (number))
+        {
+            Account *account = xaccSplitGetAccount (split);
+            const char *initial = account ? xaccAccountGetLastNum (account) : number;
+            gnc_dup_trans_dialog_async (parent, NULL, _("New Split Information"), FALSE,
+                                        info->last_date_entered, initial ? initial : "",
+                                        NULL, NULL,
+                                        split_register_duplicate_dialog_finished, request);
+            g_object_unref (owner);
+            return;
+        }
+        g_object_unref (owner);
+        split_register_duplicate_apply (request, NULL);
+        return;
+    }
+
+    {
+        Account *account = gnc_split_register_get_default_account (request->base.reg);
+        const char *number = (account && gnc_strisnum (gnc_get_num_action (transaction, trans_split)))
+            ? xaccAccountGetLastNum (account) : gnc_get_num_action (transaction, trans_split);
+        const char *tnum = request->base.reg->use_tran_num_for_num_field
+            ? NULL : gnc_get_num_action (transaction, NULL);
+        gnc_dup_trans_dialog_async (parent, NULL, NULL, !request->base.reg->is_template,
+                                    info->last_date_entered, number ? number : "", tnum,
+                                    xaccTransGetDocLink (transaction),
+                                    split_register_duplicate_dialog_finished, request);
+    }
+    g_object_unref (owner);
+}
+
+static void
+split_register_duplicate_apply (SplitRegisterDuplicateRequest *request,
+                                const GncDupTransResult *result)
+{
+    GObject *owner;
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+
+    if (!split_register_duplicate_context (request, &owner, &info, &transaction,
+                                           &split, &trans_split))
+    {
+        split_register_duplicate_request_free (request);
+        return;
     }
 
     gnc_suspend_gui_refresh ();
-
-    /* If the cursor has been edited, we are going to have to commit
-     * it before we can duplicate. Make sure the user wants to do that. */
-    if (changed)
+    if (request->cursor_class == CURSOR_CLASS_SPLIT)
     {
-        GtkWidget* dialog, *window;
-        gint response;
-        const char* title = _ ("Save transaction before duplicating?");
-        const char* message =
-            _ ("The current transaction has been changed. Would you like to "
-               "record the changes before duplicating the transaction, or "
-               "cancel the duplication?");
+        gboolean new_number = result && result->num;
+        Split *new_split = xaccMallocSplit (request->book);
+        Account *template_account = xaccAccountLookup (&info->template_account, request->book);
 
-        window = gnc_split_register_get_parent (reg);
-        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_QUESTION,
-                                         GTK_BUTTONS_CANCEL,
-                                         "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                  "%s", message);
-        gtk_dialog_add_button (GTK_DIALOG (dialog),
-                               _ ("_Record"), GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_TRANS_DUP);
-        gtk_widget_destroy (dialog);
-
-        if (response != GTK_RESPONSE_ACCEPT)
-        {
-            gnc_resume_gui_refresh ();
-            LEAVE ("save cancelled");
-            return NULL;
-        }
-
-        gnc_split_register_save (reg, TRUE);
-
-        /* If the split is NULL, then we were on a blank split row
-         * in an expanded transaction. The new split (created by
-         * gnc_split_register_save above) will be the last split in the
-         * current transaction, as it was just added. */
-        if (split == NULL)
-            split = xaccTransGetSplit (trans, xaccTransCountSplits (trans) - 1);
-    }
-
-    /* Ok, we are now ready to make the copy. */
-
-    if (cursor_class == CURSOR_CLASS_SPLIT)
-    {
-        Split* new_split;
-        char* out_num;
-        gboolean new_act_num = FALSE;
-
-        /* We are on a split in an expanded transaction.
-         * Just copy the split and add it to the transaction.
-         * However, if the split-action field is being used as the register
-         * number, and the action field is a number, request a new value or
-         * cancel. Need to get next number and update account last num from
-         * split account not register account, which may be the same or not */
-
-        if (!reg->use_tran_num_for_num_field
-            && gnc_strisnum (gnc_get_num_action (NULL, split)))
-        {
-            Account* account = xaccSplitGetAccount (split);
-            const char* in_num = NULL;
-            const char* title = _ ("New Split Information");
-            time64 date = info->last_date_entered;
-
-            if (account)
-                in_num = xaccAccountGetLastNum (account);
-            else
-                in_num = gnc_get_num_action (NULL, split);
-
-            if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg),
-                                       title, FALSE, &date, in_num, &out_num,
-                                       NULL, NULL, NULL, NULL))
-            {
-                gnc_resume_gui_refresh ();
-                LEAVE ("dup cancelled");
-                return NULL;
-            }
-            new_act_num = TRUE;
-        }
-
-        new_split = xaccMallocSplit (gnc_get_current_book ());
-
-        xaccTransBeginEdit (trans);
-        xaccSplitSetParent (new_split, trans);
-
-        Account *template_account = xaccAccountLookup (&info->template_account,
-                                                       gnc_get_current_book ());
-
+        xaccTransBeginEdit (transaction);
+        xaccSplitSetParent (new_split, transaction);
         gnc_copy_split_onto_split (split, new_split, template_account, FALSE);
-        if (new_act_num) /* if new number supplied by user dialog */
-            gnc_set_num_action (NULL, new_split, out_num, NULL);
+        if (new_number)
+            gnc_set_num_action (NULL, new_split, result->num, NULL);
+        xaccTransCommitEdit (transaction);
 
-        xaccTransCommitEdit (trans);
-
-        if (new_act_num && gnc_strisnum (out_num))
+        if (new_number && gnc_strisnum (result->num))
         {
-            Account* account = xaccSplitGetAccount (new_split);
-
-            /* If current register is for account, set last num */
-            if (xaccAccountEqual (account,
-                                  gnc_split_register_get_default_account (reg),
-                                  TRUE))
+            Account *account = xaccSplitGetAccount (new_split);
+            if (account && xaccAccountEqual (account,
+                                             gnc_split_register_get_default_account (request->base.reg), TRUE))
             {
-                NumCell* num_cell;
-                num_cell = (NumCell*) gnc_table_layout_get_cell (reg->table->layout,
-                                                                 NUM_CELL);
-                if (gnc_num_cell_set_last_num (num_cell, out_num))
-                    gnc_split_register_set_last_num (reg, out_num);
+                NumCell *num_cell = (NumCell *)gnc_table_layout_get_cell (
+                    request->base.reg->table->layout, NUM_CELL);
+                if (gnc_num_cell_set_last_num (num_cell, result->num))
+                    gnc_split_register_set_last_num (request->base.reg, result->num);
             }
-            else
-            {
-                xaccAccountSetLastNum (account, out_num);
-            }
+            else if (account)
+                xaccAccountSetLastNum (account, result->num);
         }
-
-        return_split = new_split;
-
         info->cursor_hint_split = new_split;
         info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
-        if (new_act_num)
-            g_free (out_num);
     }
-    else
+    else if (result)
     {
-        Account* account;
-        NumCell* num_cell;
-        Transaction* new_trans;
-        int trans_split_index;
+        GDate entered_date;
+        GDate *readonly_threshold = NULL;
         int split_index;
-        const char* in_num = NULL;
-        const char* in_tnum = NULL;
-        char* out_num = NULL;
-        char* out_tnum = NULL;
-        char* out_tdoclink = NULL;
-        time64 date;
-        gboolean use_autoreadonly = qof_book_uses_autoreadonly (
-            gnc_get_current_book ());
+        int trans_split_index;
+        Transaction *new_transaction;
+        Account *template_account;
+        NumCell *num_cell;
 
-        /* We are on a transaction row. Copy the whole transaction. */
-
-        date = info->last_date_entered;
-
-        account = gnc_split_register_get_default_account (reg);
-
-        if (account && gnc_strisnum (gnc_get_num_action (trans, trans_split)))
-            in_num = xaccAccountGetLastNum (account);
-        else
-            in_num = gnc_get_num_action (trans, trans_split);
-
-        in_tnum = (reg->use_tran_num_for_num_field
-                   ? NULL
-                   : gnc_get_num_action (trans, NULL));
-
-        if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg), NULL,
-                                   !reg->is_template, &date,
-                                   in_num, &out_num, in_tnum, &out_tnum,
-                                   xaccTransGetDocLink (trans), &out_tdoclink))
+        if (qof_book_uses_autoreadonly (request->book))
         {
-            gnc_resume_gui_refresh ();
-            LEAVE ("dup cancelled");
-            return NULL;
-        }
-
-        if (use_autoreadonly)
-        {
-            GDate d;
-            GDate* readonly_threshold = qof_book_get_autoreadonly_gdate (
-                gnc_get_current_book ());
-            gnc_gdate_set_time64 (&d, date);
-            if (g_date_compare (&d, readonly_threshold) < 0)
+            readonly_threshold = qof_book_get_autoreadonly_gdate (request->book);
+            gnc_gdate_set_time64 (&entered_date, result->date);
+            if (readonly_threshold && g_date_compare (&entered_date, readonly_threshold) < 0)
             {
-                GtkWidget* dialog = gtk_message_dialog_new (NULL,
-                                                            0,
-                                                            GTK_MESSAGE_ERROR,
-                                                            GTK_BUTTONS_OK,
-                                                            "%s", _ ("Cannot store a transaction at this date"));
-                gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                          "%s", _ ("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. "
-                                                                   "This setting can be changed in File->Properties->Accounts."));
-                gtk_dialog_run (GTK_DIALOG (dialog));
-                gtk_widget_destroy (dialog);
-
+                gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (request->base.reg)), "%s",
+                                  _("Cannot store a transaction at this date"));
                 g_date_free (readonly_threshold);
-                return NULL;
+                gnc_resume_gui_refresh ();
+                g_object_unref (owner);
+                split_register_duplicate_request_free (request);
+                return;
             }
             g_date_free (readonly_threshold);
         }
 
-        split_index = xaccTransGetSplitIndex (trans, split);
-        trans_split_index = xaccTransGetSplitIndex (trans, trans_split);
-
-        /* we should *always* find the split, but be paranoid */
-        if (split_index < 0)
+        split_index = xaccTransGetSplitIndex (transaction, split);
+        trans_split_index = xaccTransGetSplitIndex (transaction, trans_split);
+        if (split_index < 0 || trans_split_index < 0)
         {
             gnc_resume_gui_refresh ();
-            LEAVE ("no split");
-            return NULL;
+            g_object_unref (owner);
+            split_register_duplicate_request_free (request);
+            return;
         }
 
-        new_trans = xaccMallocTransaction (gnc_get_current_book ());
+        new_transaction = xaccMallocTransaction (request->book);
+        xaccTransBeginEdit (new_transaction);
+        template_account = xaccAccountLookup (&info->template_account, request->book);
+        gnc_copy_trans_onto_trans (transaction, new_transaction, FALSE, template_account, FALSE);
+        xaccTransSetDatePostedSecsNormalized (new_transaction, result->date);
+        xaccTransSetDateEnteredSecs (new_transaction, gnc_time (NULL));
+        xaccTransSetDocLink (new_transaction, result->doclink ? result->doclink : "");
+        gnc_set_num_action (new_transaction, NULL, result->num, result->tnum);
+        if (!request->base.reg->use_tran_num_for_num_field)
+            gnc_set_num_action (NULL, xaccTransGetSplit (new_transaction, trans_split_index),
+                                result->num, NULL);
+        xaccTransCommitEdit (new_transaction);
 
-        xaccTransBeginEdit (new_trans);
-
-        Account *template_account = xaccAccountLookup (&info->template_account,
-                                                       gnc_get_current_book ());
-
-        gnc_copy_trans_onto_trans (trans, new_trans, FALSE, template_account, FALSE);
-        xaccTransSetDatePostedSecsNormalized (new_trans, date);
-        /* We also must set a new DateEntered on the new entry
-         * because otherwise the ordering is not deterministic */
-        xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
-
-        /* clear the document link entry if returned value NULL */
-        if (out_tdoclink == NULL)
-            xaccTransSetDocLink (new_trans, "");
-        else
-            g_free (out_tdoclink);
-
-        /* set per book option */
-        gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
-        if (!reg->use_tran_num_for_num_field)
-        {
-            /* find split in new_trans that equals trans_split and set
-             * split_action to out_num */
-            gnc_set_num_action (NULL,
-                                xaccTransGetSplit (new_trans, trans_split_index),
-                                out_num, NULL);
-            /* note that if the transaction has multiple splits to the register
-             * account, only the anchor split will be set with user input. The
-             * user will have to adjust other splits manually. */
-        }
-        xaccTransCommitEdit (new_trans);
-
-        num_cell = (NumCell*) gnc_table_layout_get_cell (reg->table->layout,
-                                                         NUM_CELL);
-        if (gnc_num_cell_set_last_num (num_cell, out_num))
-            gnc_split_register_set_last_num (reg, out_num);
-
-        g_free (out_num);
-        if (!reg->use_tran_num_for_num_field)
-            g_free (out_tnum);
-
-        /* This shouldn't happen, but be paranoid. */
-        if (split_index >= xaccTransCountSplits (new_trans))
+        num_cell = (NumCell *)gnc_table_layout_get_cell (request->base.reg->table->layout, NUM_CELL);
+        if (gnc_num_cell_set_last_num (num_cell, result->num))
+            gnc_split_register_set_last_num (request->base.reg, result->num);
+        if (split_index >= xaccTransCountSplits (new_transaction))
             split_index = 0;
-
-        return_split = xaccTransGetSplit (new_trans, split_index);
-        trans_split = xaccTransGetSplit (new_trans, trans_split_index);
-
-        info->cursor_hint_trans = new_trans;
-        info->cursor_hint_split = return_split;
-        info->cursor_hint_trans_split = trans_split;
+        info->cursor_hint_trans = new_transaction;
+        info->cursor_hint_split = xaccTransGetSplit (new_transaction, split_index);
+        info->cursor_hint_trans_split = xaccTransGetSplit (new_transaction, trans_split_index);
         info->cursor_hint_cursor_class = CURSOR_CLASS_TRANS;
-
         info->trans_expanded = FALSE;
     }
-
-    /* Refresh the GUI. */
     gnc_resume_gui_refresh ();
-
-    LEAVE (" ");
-    return return_split;
+    g_object_unref (owner);
+    split_register_duplicate_request_free (request);
 }
 
+static void
+split_register_duplicate_save_completed (SplitRegister *reg, gboolean saved,
+                                         gpointer user_data)
+{
+    SplitRegisterDuplicateRequest *request = user_data;
+    GObject *owner;
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+
+    if (!saved || !reg || !split_register_duplicate_context
+        (request, &owner, &info, &transaction, &split, &trans_split))
+    {
+        split_register_duplicate_request_free (request);
+        return;
+    }
+
+    transaction = xaccTransLookup (&request->transaction_guid, request->book);
+    if (!transaction)
+    {
+        g_object_unref (owner);
+        split_register_duplicate_request_free (request);
+        return;
+    }
+    split = gnc_split_register_get_current_split (reg);
+    if (!split && request->cursor_class == CURSOR_CLASS_SPLIT)
+        split = xaccTransGetSplit (transaction, xaccTransCountSplits (transaction) - 1);
+    request->has_source_split = split != NULL;
+    if (split)
+        request->source_split_guid = *xaccSplitGetGUID (split);
+    trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
+    request->has_trans_split = trans_split != NULL;
+    if (trans_split)
+        request->trans_split_guid = *xaccSplitGetGUID (trans_split);
+    split_register_duplicate_capture_cursor (request, reg);
+    g_object_unref (owner);
+    split_register_duplicate_show_dialog (request);
+}
+
+static void
+split_register_duplicate_save_finished (gint response, gpointer user_data)
+{
+    SplitRegisterDuplicateRequest *request = user_data;
+    GObject *owner;
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+    SplitRegister *reg;
+
+    if (response != GTK_RESPONSE_ACCEPT ||
+        !split_register_duplicate_context (request, &owner, &info, &transaction,
+                                           &split, &trans_split))
+    {
+        split_register_duplicate_request_free (request);
+        return;
+    }
+
+    reg = request->base.reg;
+    g_object_unref (owner);
+    gnc_split_register_save_async (reg, TRUE,
+                                   split_register_duplicate_save_completed,
+                                   request);
+}
+
+void
+gnc_split_register_duplicate_current_async (SplitRegister *reg, GObject *owner)
+{
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+    Split *blank_split;
+    CursorClass cursor_class;
+    gboolean changed;
+    SplitRegisterDuplicateRequest *request;
+    GtkWindow *parent;
+
+    g_return_if_fail (reg != NULL);
+    g_return_if_fail (G_IS_OBJECT (owner));
+    info = gnc_split_register_get_info (reg);
+    transaction = gnc_split_register_get_current_trans (reg);
+    split = gnc_split_register_get_current_split (reg);
+    trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+    if (!transaction || cursor_class == CURSOR_CLASS_NONE ||
+        (!split && cursor_class == CURSOR_CLASS_TRANS))
+        return;
+
+    changed = gnc_table_current_cursor_changed (reg->table, FALSE);
+    blank_split = xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book ());
+    if (!changed && (!split || split == blank_split))
+        return;
+
+    request = g_new0 (SplitRegisterDuplicateRequest, 1);
+    request->book = gnc_get_current_book ();
+    request->base.reg = reg;
+    request->transaction_guid = *xaccTransGetGUID (transaction);
+    request->cursor_class = cursor_class;
+    request->has_source_split = split != NULL;
+    if (split)
+        request->source_split_guid = *xaccSplitGetGUID (split);
+    request->has_trans_split = trans_split != NULL;
+    if (trans_split)
+        request->trans_split_guid = *xaccSplitGetGUID (trans_split);
+    split_register_duplicate_capture_cursor (request, reg);
+    g_weak_ref_init (&request->owner, owner);
+    gnc_split_register_async_request_track (reg, &request->base,
+                                             split_register_duplicate_request_cancel);
+
+    if (!changed)
+    {
+        split_register_duplicate_show_dialog (request);
+        return;
+    }
+    parent = GTK_WINDOW (gnc_split_register_get_parent (reg));
+    if (!GTK_IS_WINDOW (parent))
+    {
+        split_register_duplicate_request_free (request);
+        return;
+    }
+    gnc_warning_dialog_async (parent, GNC_PREF_WARN_REG_TRANS_DUP,
+                              _("Save transaction before duplicating?"),
+                              _("The current transaction has been changed. Would you like to record the changes before duplicating the transaction, or cancel the duplication?"),
+                              _("_Record"), GTK_RESPONSE_ACCEPT, TRUE,
+                              split_register_duplicate_save_finished, request);
+}
 static void
 gnc_split_register_copy_current_internal (SplitRegister* reg,
                                           gboolean use_cut_semantics)
@@ -883,6 +1113,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     }
 
     copied_item.cursor_class = cursor_class;
+    copied_item_generation++;
     gnc_hook_add_dangler (HOOK_BOOK_CLOSED, (GFunc)clear_copied_item, NULL, NULL);
     LEAVE ("%s %s", use_cut_semantics ? "cut" : "copied",
            cursor_class == CURSOR_CLASS_SPLIT ? "split" : "transaction");
@@ -937,213 +1168,192 @@ gnc_split_register_cut_current (SplitRegister* reg)
         gnc_split_register_delete_current_trans (reg);
 }
 
-void
-gnc_split_register_paste_current (SplitRegister* reg)
+typedef struct
 {
-    SRInfo* info = gnc_split_register_get_info (reg);
+    GncSplitRegisterAsyncRequest base;
+    GWeakRef parent;
+    QofBook *book;
+    GncGUID transaction_guid;
+    GncGUID split_guid;
+    GncGUID trans_split_guid;
+    GncGUID blank_split_guid;
+    VirtualLocation cursor_loc;
     CursorClass cursor_class;
-    Transaction* trans;
-    Transaction* blank_trans;
-    Split* blank_split;
-    Split* trans_split;
-    Split* split;
-    Account *template_account = NULL;
+    GType copied_type;
+    CursorClass copied_cursor_class;
+    guint64 copied_item_generation;
+    gboolean has_split;
+    gboolean has_trans_split;
+    gboolean cancelled;
+} SplitRegisterPasteRequest;
 
-    ENTER ("reg=%p", reg);
+static gboolean
+split_register_paste_request_context (SplitRegisterPasteRequest *request,
+                                      SRInfo **info_out,
+                                      Transaction **transaction_out,
+                                      Split **split_out,
+                                      Split **trans_split_out,
+                                      Split **blank_split_out)
+{
+    SplitRegister *reg = request->base.reg;
+    GtkWidget *parent = NULL;
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+    Split *blank_split;
 
-    if (copied_item.cursor_class == CURSOR_CLASS_NONE)
-    {
-        LEAVE ("no copied cursor class");
-        return;
-    }
+    if (request->cancelled || !reg || !reg->table ||
+        request->book != gnc_get_current_book () ||
+        copied_item_generation != request->copied_item_generation ||
+        copied_item.ftype != request->copied_type ||
+        copied_item.cursor_class != request->copied_cursor_class ||
+        !virt_loc_equal (reg->table->current_cursor_loc, request->cursor_loc) ||
+        gnc_split_register_get_current_cursor_class (reg) != request->cursor_class)
+        return FALSE;
 
-    blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
-    blank_trans = xaccSplitGetParent (blank_split);
+    parent = GTK_WIDGET (g_weak_ref_get (&request->parent));
+    if (!parent || !GTK_IS_WINDOW (parent) ||
+        gnc_split_register_get_parent (reg) != parent)
+        goto out;
+
+    info = gnc_split_register_get_info (reg);
+    transaction = gnc_split_register_get_current_trans (reg);
     split = gnc_split_register_get_current_split (reg);
-    trans = gnc_split_register_get_current_trans (reg);
-
     trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
+    blank_split = xaccSplitLookup (&request->blank_split_guid, request->book);
+    if (!info || !transaction || !blank_split ||
+        !guid_equal (&info->blank_split_guid, &request->blank_split_guid) ||
+        !guid_equal (xaccTransGetGUID (transaction), &request->transaction_guid) ||
+        request->has_split != (split != NULL) ||
+        (split && (!guid_equal (xaccSplitGetGUID (split), &request->split_guid) ||
+                   xaccSplitGetParent (split) != transaction)) ||
+        request->has_trans_split != (trans_split != NULL) ||
+        (trans_split &&
+         (!guid_equal (xaccSplitGetGUID (trans_split), &request->trans_split_guid) ||
+          xaccSplitGetParent (trans_split) != transaction)))
+        goto out;
 
-    template_account = xaccAccountLookup (&info->template_account,
-                                          gnc_get_current_book ());
+    *info_out = info;
+    *transaction_out = transaction;
+    *split_out = split;
+    *trans_split_out = trans_split;
+    *blank_split_out = blank_split;
+    g_object_unref (parent);
+    return TRUE;
 
-    /* This shouldn't happen, but be paranoid. */
-    if (trans == NULL)
-    {
-        LEAVE ("no transaction");
+out:
+    g_clear_object (&parent);
+    return FALSE;
+}
+
+static void
+split_register_paste_request_free (SplitRegisterPasteRequest *request)
+{
+    gnc_split_register_async_request_untrack (&request->base);
+    g_weak_ref_clear (&request->parent);
+    g_free (request);
+}
+
+static void
+split_register_paste_request_cancel (GncSplitRegisterAsyncRequest *base)
+{
+    SplitRegisterPasteRequest *request = (SplitRegisterPasteRequest *)base;
+    SplitRegister *reg = request->base.reg;
+
+    request->cancelled = TRUE;
+    if (reg && reg->table && reg->table->control)
+        gnc_table_control_set_input_suspended (reg->table->control, FALSE);
+    /* GtkAlertDialog owns the completion callback. Keep this carrier alive
+     * until it observes cancellation, but detach it from the closing register. */
+    gnc_split_register_async_request_untrack (&request->base);
+}
+
+static void
+split_register_paste_request_apply (SplitRegisterPasteRequest *request)
+{
+    SplitRegister *reg = request->base.reg;
+    SRInfo *info;
+    Transaction *transaction;
+    Transaction *blank_transaction;
+    Split *split;
+    Split *trans_split;
+    Split *blank_split;
+    Account *template_account;
+    gboolean refresh_suspended = FALSE;
+
+    if (!split_register_paste_request_context (request, &info, &transaction,
+                                               &split, &trans_split, &blank_split))
         return;
-    }
 
-    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+    template_account = xaccAccountLookup (&info->template_account, request->book);
+    blank_transaction = xaccSplitGetParent (blank_split);
 
-    /* Can't do anything with this. */
-    if (cursor_class == CURSOR_CLASS_NONE)
+    if (request->cursor_class == CURSOR_CLASS_SPLIT)
     {
-        LEAVE ("no current cursor class");
-        return;
-    }
-
-    /* This shouldn't happen, but be paranoid. */
-    if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
-    {
-        g_warning ("BUG DETECTED: transaction cursor with no anchoring split!");
-        LEAVE ("transaction cursor with no anchoring split");
-        return;
-    }
-
-    if (cursor_class == CURSOR_CLASS_SPLIT)
-    {
-        const char* message = _ ("You are about to overwrite an existing split. "
-                                 "Are you sure you want to do that?");
-        const char* anchor_message = _ ("This is the split anchoring this transaction "
-                                        "to the register. You may not overwrite it from "
-                                        "this register window. You may overwrite it if "
-                                        "you navigate to a register that shows another "
-                                        "side of this same transaction.");
-
-        if (copied_item.cursor_class == CURSOR_CLASS_TRANS)
-        {
-            /* An entire transaction was copied, but we're just on a split. */
-            LEAVE ("can't copy trans to split");
+        if (gnc_split_register_begin_edit_or_warn (info, transaction))
             return;
-        }
-
-        if (split != NULL)
-        {
-            /* the General Journal does not have any anchoring splits */
-            if ((reg->type != GENERAL_JOURNAL) &&
-                split == gnc_split_register_get_current_trans_split (reg, NULL))
-            {
-                gnc_warning_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                                    "%s", anchor_message);
-                LEAVE ("anchore split");
-                return;
-            }
-            else if (!gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                                         FALSE, "%s", message))
-            {
-                LEAVE ("user cancelled");
-                return;
-            }
-        }
-
-        /* Open the transaction for editing. */
-        if (gnc_split_register_begin_edit_or_warn (info, trans))
-        {
-            LEAVE ("can't begin editing");
-            return;
-        }
 
         gnc_suspend_gui_refresh ();
-
-        if (split == NULL)
+        refresh_suspended = TRUE;
+        if (!split)
         {
             /* We are on a null split in an expanded transaction. */
-            split = xaccMallocSplit (gnc_get_current_book ());
-            xaccSplitSetParent (split, trans);
-        }
-
-        if (copied_item.ftype != GNC_TYPE_SPLIT)
-        {
-            LEAVE ("copy buffer doesn't represent a split");
-            return;
+            split = xaccMallocSplit (request->book);
+            xaccSplitSetParent (split, transaction);
         }
         gnc_float_split_to_split (copied_item.fs, split, template_account);
     }
     else
     {
-        const char *message = _("You are about to overwrite an existing "
-                                "transaction. "
-                                "Are you sure you want to do that?");
-        Account * copied_leader;
-        Account * default_account;
+        Account *copied_leader;
+        Account *default_account;
         int trans_split_index;
         int split_index;
         int num_splits;
 
-        if (copied_item.cursor_class == CURSOR_CLASS_SPLIT)
-        {
-            LEAVE ("can't copy split to transaction");
+        split_index = xaccTransGetSplitIndex (transaction, split);
+        trans_split_index = xaccTransGetSplitIndex (transaction, trans_split);
+        if (split_index < 0 || trans_split_index < 0)
             return;
-        }
 
-        if (copied_item.ftype != GNC_TYPE_TRANSACTION)
-        {
-            LEAVE ("copy buffer doesn't represent a transaction");
+        if (gnc_split_register_begin_edit_or_warn (info, transaction))
             return;
-        }
-
-        if ((reg->type != SEARCH_LEDGER) && (reg->type != GENERAL_JOURNAL))
-        {
-            if (gnc_float_txn_has_template (copied_item.ft))
-            {
-                const gchar *msg_text = _("Scheduled transactions can only be pasted to the General Journal");
-
-                gnc_warning_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", msg_text);
-
-                LEAVE ("Paste only allowed to General Journal from scheduled transactions");
-                return;
-            }
-        }
-
-        /* Ask before overwriting an existing transaction. */
-        if (split != blank_split &&
-            !gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                                FALSE, "%s", message))
-        {
-            LEAVE ("user cancelled");
-            return;
-        }
-
-        /* Open the transaction for editing. */
-        if (gnc_split_register_begin_edit_or_warn (info, trans))
-        {
-            LEAVE ("can't begin editing");
-            return;
-        }
 
         gnc_suspend_gui_refresh ();
+        refresh_suspended = TRUE;
 
         DEBUG ("Pasting txn, trans=%p, split=%p, blank_trans=%p, blank_split=%p",
-               trans, split, blank_trans, blank_split);
+               transaction, split, blank_transaction, blank_split);
 
-        split_index = xaccTransGetSplitIndex (trans, split);
-        trans_split_index = xaccTransGetSplitIndex (trans, trans_split);
-
-        copied_leader = xaccAccountLookup (&copied_item.leader_guid,
-                                           gnc_get_current_book ());
+        copied_leader = xaccAccountLookup (&copied_item.leader_guid, request->book);
         default_account = gnc_split_register_get_default_account (reg);
-
         if (copied_leader && default_account)
-        {
-            gnc_float_txn_to_txn_swap_accounts (copied_item.ft, trans,
-                                                copied_leader,
-                                                default_account,
-                                                FALSE);
-        }
+            gnc_float_txn_to_txn_swap_accounts (copied_item.ft, transaction,
+                                                 copied_leader, default_account,
+                                                 FALSE);
+        else if (reg->is_template)
+            gnc_float_txn_to_template_txn (copied_item.ft, transaction,
+                                            template_account, FALSE);
         else
-        {
-            if (reg->is_template)
-            {
-                gnc_float_txn_to_template_txn (copied_item.ft, trans,
-                                               template_account, FALSE);
-            }
-            else
-                gnc_float_txn_to_txn (copied_item.ft, trans, FALSE);
-        }
-        num_splits = xaccTransCountSplits (trans);
+            gnc_float_txn_to_txn (copied_item.ft, transaction, FALSE);
+
+        num_splits = xaccTransCountSplits (transaction);
         if (split_index >= num_splits)
             split_index = 0;
 
-        if (trans == blank_trans)
+        if (transaction == blank_transaction)
         {
-            /* In pasting, the blank split is deleted. Pick a new one. */
+            /* Pasting deletes the former blank split; choose the replacement
+             * from the original clipboard target. */
             gint anchor_split_index = copied_item.anchor_split_index;
-            if (anchor_split_index > num_splits)
+
+            if (anchor_split_index >= num_splits)
                 anchor_split_index = 0;
 
-            blank_split = xaccTransGetSplit (trans, anchor_split_index);
+            blank_split = xaccTransGetSplit (transaction, anchor_split_index);
+            if (!blank_split)
+                goto out;
             info->blank_split_guid = *xaccSplitGetGUID (blank_split);
             info->blank_split_edited = TRUE;
             info->auto_complete = FALSE;
@@ -1154,16 +1364,169 @@ gnc_split_register_paste_current (SplitRegister* reg)
              *       have to be reloaded (redrawn) to correct this. */
         }
 
-        info->cursor_hint_trans = trans;
-        info->cursor_hint_split = xaccTransGetSplit (trans, split_index);
-        info->cursor_hint_trans_split = xaccTransGetSplit (trans,
-                                                           trans_split_index);
+        info->cursor_hint_trans = transaction;
+        info->cursor_hint_split = xaccTransGetSplit (transaction, split_index);
+        info->cursor_hint_trans_split = xaccTransGetSplit (transaction,
+                                                            trans_split_index);
         info->cursor_hint_cursor_class = CURSOR_CLASS_TRANS;
     }
 
-    /* Refresh the GUI. */
-    gnc_resume_gui_refresh ();
-    LEAVE (" ");
+out:
+    if (refresh_suspended)
+        gnc_resume_gui_refresh ();
+}
+
+static void
+split_register_paste_request_finished (G_GNUC_UNUSED GtkWindow *parent,
+                                       gint response, gpointer user_data)
+{
+    SplitRegisterPasteRequest *request = user_data;
+    SplitRegister *reg = request->base.reg;
+
+    if (response == GTK_RESPONSE_YES)
+        split_register_paste_request_apply (request);
+    if (reg && reg->table && reg->table->control)
+        gnc_table_control_set_input_suspended (reg->table->control, FALSE);
+    split_register_paste_request_free (request);
+}
+
+static SplitRegisterPasteRequest *
+split_register_paste_request_new (SplitRegister *reg, gboolean *confirm_out)
+{
+    SRInfo *info;
+    Transaction *transaction;
+    Split *split;
+    Split *trans_split;
+    Split *blank_split;
+    GtkWidget *parent;
+    CursorClass cursor_class;
+
+    *confirm_out = FALSE;
+    if (!reg || !reg->table ||
+        (reg->table->control &&
+         gnc_table_control_input_suspended (reg->table->control)))
+        return NULL;
+
+    info = gnc_split_register_get_info (reg);
+    transaction = gnc_split_register_get_current_trans (reg);
+    split = gnc_split_register_get_current_split (reg);
+    trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
+    blank_split = info ? xaccSplitLookup (&info->blank_split_guid,
+                                          gnc_get_current_book ()) : NULL;
+    parent = gnc_split_register_get_parent (reg);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+    if (!info || !transaction || !blank_split || !GTK_IS_WINDOW (parent) ||
+        cursor_class == CURSOR_CLASS_NONE ||
+        (cursor_class == CURSOR_CLASS_TRANS && !split) ||
+        copied_item.cursor_class == CURSOR_CLASS_NONE)
+        return NULL;
+
+    if (cursor_class == CURSOR_CLASS_SPLIT)
+    {
+        const char *anchor_message =
+            _("This is the split anchoring this transaction to the register. "
+              "You may not overwrite it from this register window. You may "
+              "overwrite it if you navigate to a register that shows another "
+              "side of this same transaction.");
+
+        if (copied_item.cursor_class != CURSOR_CLASS_SPLIT ||
+            copied_item.ftype != GNC_TYPE_SPLIT)
+            return NULL;
+
+        /* The General Journal does not have any anchoring splits. */
+        if (split && reg->type != GENERAL_JOURNAL && split == trans_split)
+        {
+            gnc_warning_dialog (GTK_WINDOW (parent), "%s", anchor_message);
+            return NULL;
+        }
+        *confirm_out = split != NULL;
+    }
+    else if (cursor_class == CURSOR_CLASS_TRANS)
+    {
+        if (copied_item.cursor_class != CURSOR_CLASS_TRANS ||
+            copied_item.ftype != GNC_TYPE_TRANSACTION)
+            return NULL;
+
+        if (reg->type != SEARCH_LEDGER && reg->type != GENERAL_JOURNAL &&
+            gnc_float_txn_has_template (copied_item.ft))
+        {
+            gnc_warning_dialog (GTK_WINDOW (parent), "%s",
+                                _("Scheduled transactions can only be pasted "
+                                  "to the General Journal"));
+            return NULL;
+        }
+        *confirm_out = split != blank_split;
+    }
+    else
+        return NULL;
+
+    SplitRegisterPasteRequest *request = g_new0 (SplitRegisterPasteRequest, 1);
+    request->base.reg = reg;
+    request->book = gnc_get_current_book ();
+    request->transaction_guid = *xaccTransGetGUID (transaction);
+    request->cursor_loc = reg->table->current_cursor_loc;
+    request->cursor_class = cursor_class;
+    request->copied_type = copied_item.ftype;
+    request->copied_cursor_class = copied_item.cursor_class;
+    request->copied_item_generation = copied_item_generation;
+    request->has_split = split != NULL;
+    if (split)
+        request->split_guid = *xaccSplitGetGUID (split);
+    request->has_trans_split = trans_split != NULL;
+    if (trans_split)
+        request->trans_split_guid = *xaccSplitGetGUID (trans_split);
+    request->blank_split_guid = *xaccSplitGetGUID (blank_split);
+    g_weak_ref_init (&request->parent, G_OBJECT (parent));
+    return request;
+}
+
+void
+gnc_split_register_paste_current (SplitRegister* reg)
+{
+    SplitRegisterPasteRequest *request;
+    GtkWidget *parent;
+    gboolean confirm;
+
+    ENTER ("reg=%p", reg);
+    request = split_register_paste_request_new (reg, &confirm);
+    if (!request)
+    {
+        LEAVE ("paste request rejected");
+        return;
+    }
+
+    if (!confirm)
+    {
+        split_register_paste_request_apply (request);
+        split_register_paste_request_free (request);
+        LEAVE ("pasted without confirmation");
+        return;
+    }
+
+    parent = gnc_split_register_get_parent (reg);
+    if (!GTK_IS_WINDOW (parent))
+    {
+        split_register_paste_request_free (request);
+        LEAVE ("no parent window");
+        return;
+    }
+
+    gnc_split_register_async_request_track (reg, &request->base,
+                                             split_register_paste_request_cancel);
+    if (reg->table->control)
+        gnc_table_control_set_input_suspended (reg->table->control, TRUE);
+
+    if (request->cursor_class == CURSOR_CLASS_SPLIT)
+        gnc_verify_dialog_async (GTK_WINDOW (parent), FALSE,
+                                 split_register_paste_request_finished, request,
+                                 "%s", _("You are about to overwrite an existing split. "
+                                         "Are you sure you want to do that?"));
+    else
+        gnc_verify_dialog_async (GTK_WINDOW (parent), FALSE,
+                                 split_register_paste_request_finished, request,
+                                 "%s", _("You are about to overwrite an existing "
+                                         "transaction. Are you sure you want to do that?"));
+    LEAVE ("paste confirmation pending");
 }
 
 gboolean
@@ -1773,10 +2136,13 @@ unreconcile_splits (SplitRegister* reg)
     reg->unrecn_splits = NULL;
 }
 
-gboolean
-gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
+static GncSplitRegisterSaveResult
+split_register_save_now (SplitRegister* reg, gboolean do_commit,
+                         SplitRegisterSaveRequest *request)
 {
-    SRInfo* info = gnc_split_register_get_info (reg);
+    SRInfo* info;
+    GncSplitRegisterSaveResult save_result;
+    GncSplitRegisterExchangeResult exchange_result;
     Transaction* pending_trans;
     Transaction* blank_trans;
     Transaction* trans;
@@ -1791,8 +2157,10 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     if (!reg)
     {
         LEAVE ("no register");
-        return FALSE;
+        return GNC_SPLIT_REGISTER_SAVE_FAILED;
     }
+
+    info = gnc_split_register_get_info (reg);
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
                                    gnc_get_current_book ());
@@ -1808,7 +2176,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     if (trans == NULL)
     {
         LEAVE ("no transaction");
-        return FALSE;
+        return GNC_SPLIT_REGISTER_SAVE_FAILED;
     }
 
     /* use the changed flag to avoid heavy-weight updates
@@ -1819,13 +2187,13 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         if (!do_commit)
         {
             LEAVE ("commit unnecessary");
-            return FALSE;
+            return GNC_SPLIT_REGISTER_SAVE_FAILED;
         }
 
         if (!xaccTransIsOpen (trans))
         {
             LEAVE ("transaction not open");
-            return FALSE;
+            return GNC_SPLIT_REGISTER_SAVE_FAILED;
         }
 
         if (trans == pending_trans ||
@@ -1861,7 +2229,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             DEBUG ("leaving trans (%p) open", trans);
 
         LEAVE ("unchanged cursor");
-        return TRUE;
+        return GNC_SPLIT_REGISTER_SAVE_SAVED;
     }
 
     DEBUG ("save split=%p", split);
@@ -1873,24 +2241,33 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
                                         gnc_table_get_current_cell_name (reg->table)))
     {
         LEAVE ("need another go at changing cell");
-        return FALSE;
+        return GNC_SPLIT_REGISTER_SAVE_FAILED;
     }
 
-    if (!gnc_split_register_auto_calc (reg, split))
+    save_result = gnc_split_register_auto_calc (reg, split, request);
+    if (save_result != GNC_SPLIT_REGISTER_SAVE_SAVED)
     {
-        LEAVE ("auto calc failed");
-        return FALSE;
+        LEAVE ("auto calc pending or failed");
+        return save_result;
     }
 
     /* Validate the transfer account names */
     (void)gnc_split_register_get_account (reg, MXFRM_CELL);
     (void)gnc_split_register_get_account (reg, XFRM_CELL);
 
-    /* Maybe deal with exchange-rate transfers */
-    if (gnc_split_register_handle_exchange (reg, FALSE))
+    /* Maybe deal with exchange-rate transfers. A deferred dialog retains the
+     * same SaveRequest and resumes this function from its completion callback. */
+    exchange_result = gnc_split_register_handle_exchange_async
+        (reg, FALSE, split_register_save_exchange_finished, request);
+    if (exchange_result == GNC_SPLIT_REGISTER_EXCHANGE_DEFERRED)
     {
-        LEAVE ("no exchange rate");
-        return TRUE;
+        LEAVE ("exchange request pending");
+        return GNC_SPLIT_REGISTER_SAVE_DEFERRED;
+    }
+    if (exchange_result == GNC_SPLIT_REGISTER_EXCHANGE_REJECTED)
+    {
+        LEAVE ("exchange rate rejected");
+        return GNC_SPLIT_REGISTER_SAVE_FAILED;
     }
 
     gnc_suspend_gui_refresh ();
@@ -1930,7 +2307,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             {
                 gnc_resume_gui_refresh ();
                 LEAVE ("transaction opened elsewhere");
-                return FALSE;
+                return GNC_SPLIT_REGISTER_SAVE_FAILED;
             }
         }
         pending_trans = trans;
@@ -2043,13 +2420,171 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     gnc_resume_gui_refresh ();
 
     LEAVE (" ");
-    return TRUE;
+    return GNC_SPLIT_REGISTER_SAVE_SAVED;
 }
 
 
+static void
+split_register_save_exchange_finished (SplitRegister *reg, gboolean accepted,
+                                       gpointer user_data)
+{
+    SplitRegisterSaveRequest *request = user_data;
+
+    if (!request || request->completed)
+        return;
+    if (!accepted || !reg || request->book != gnc_get_current_book ())
+    {
+        split_register_save_request_complete (request, FALSE);
+        return;
+    }
+    split_register_save_request_continue (request);
+}
+
+static void
+split_register_save_request_continue (SplitRegisterSaveRequest *request)
+{
+    GncSplitRegisterSaveResult result;
+    SplitRegister *reg;
+
+    if (!request || request->completed)
+        return;
+
+    reg = request->base.reg;
+    if (!reg || !reg->table || request->book != gnc_get_current_book ())
+    {
+        split_register_save_request_complete (request, FALSE);
+        return;
+    }
+
+    result = split_register_save_now (reg, request->do_commit, request);
+    if (result == GNC_SPLIT_REGISTER_SAVE_DEFERRED)
+        return;
+    split_register_save_request_complete
+        (request, result == GNC_SPLIT_REGISTER_SAVE_SAVED);
+}
+
+void
+gnc_split_register_save_async (SplitRegister *reg, gboolean do_commit,
+                               GncSplitRegisterSaveCallback callback,
+                               gpointer user_data)
+{
+    SRInfo *info;
+    SplitRegisterSaveRequest *request;
+
+    if (!reg || !reg->table)
+    {
+        if (callback)
+            callback (NULL, FALSE, user_data);
+        return;
+    }
+
+    info = gnc_split_register_get_info (reg);
+    if (!info || info->active_save_request)
+    {
+        if (callback)
+            callback (reg, FALSE, user_data);
+        return;
+    }
+
+    request = g_new0 (SplitRegisterSaveRequest, 1);
+    g_atomic_ref_count_init (&request->ref_count);
+    request->book = gnc_get_current_book ();
+    request->do_commit = do_commit;
+    request->callback = callback;
+    request->user_data = user_data;
+    info->active_save_request = &request->base;
+    gnc_split_register_async_request_track (reg, &request->base,
+                                            split_register_save_request_cancel);
+    gnc_table_control_set_input_suspended (reg->table->control, TRUE);
+    split_register_save_request_continue (request);
+}
+
+typedef struct
+{
+    gboolean completed;
+    gboolean saved;
+} SplitRegisterSaveSyncResult;
+
+static void
+split_register_save_sync_finished (G_GNUC_UNUSED SplitRegister *reg,
+                                   gboolean saved, gpointer user_data)
+{
+    SplitRegisterSaveSyncResult *result = user_data;
+    result->completed = TRUE;
+    result->saved = saved;
+}
+
+gboolean
+gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
+{
+    SplitRegisterSaveSyncResult result = { FALSE, FALSE };
+
+    gnc_split_register_save_async (reg, do_commit,
+                                   split_register_save_sync_finished, &result);
+    /* No caller may use this compatibility result to advance a continuation:
+     * an unresolved request deliberately reports FALSE rather than success. */
+    return result.completed && result.saved;
+}
+#define SPLIT_REGISTER_ACCOUNT_CREATE_REQUEST "gnc-split-register-account-create-request"
+
+typedef struct
+{
+    GWeakRef parent;
+    QofBook *book;
+    gchar *name;
+} SplitRegisterAccountCreateRequest;
+
+static void
+split_register_account_create_request_free (SplitRegisterAccountCreateRequest *request)
+{
+    GtkWidget *parent = GTK_WIDGET (g_weak_ref_get (&request->parent));
+
+    if (parent && g_object_get_data (G_OBJECT (parent),
+                                     SPLIT_REGISTER_ACCOUNT_CREATE_REQUEST) == request)
+        g_object_steal_data (G_OBJECT (parent), SPLIT_REGISTER_ACCOUNT_CREATE_REQUEST);
+    g_clear_object (&parent);
+    g_weak_ref_clear (&request->parent);
+    g_free (request->name);
+    g_free (request);
+}
+
+static void
+split_register_account_create_finished (Account *account, gboolean accepted,
+                                        gpointer user_data)
+{
+    SplitRegisterAccountCreateRequest *request = user_data;
+    GtkWidget *parent = GTK_WIDGET (g_weak_ref_get (&request->parent));
+
+    if (accepted && account && parent && request->book == gnc_get_current_book () &&
+        gnc_account_get_book (account) == request->book)
+        gnc_gui_refresh_all ();
+    g_clear_object (&parent);
+    split_register_account_create_request_free (request);
+}
+
+static void
+split_register_account_create_confirmed (GtkWindow *parent, gint response,
+                                         gpointer user_data)
+{
+    SplitRegisterAccountCreateRequest *request = user_data;
+    GtkWidget *owner = GTK_WIDGET (g_weak_ref_get (&request->parent));
+
+    if (response == GTK_RESPONSE_YES && owner && GTK_IS_WINDOW (owner) &&
+        owner == GTK_WIDGET (parent) && request->book == gnc_get_current_book ())
+    {
+        gnc_ui_new_accounts_from_name_with_defaults_async (
+            GTK_WINDOW (owner), request->name, NULL, NULL, NULL,
+            split_register_account_create_finished, request);
+        g_clear_object (&owner);
+        return;
+    }
+    g_clear_object (&owner);
+    split_register_account_create_request_free (request);
+}
+
 Account*
 gnc_split_register_get_account_by_name (SplitRegister* reg, BasicCell* bcell,
-                                        const char* name)
+                                         const char* name)
 {
     const char* placeholder = _ ("The account %s does not allow transactions.");
     const char* missing = _ ("The account %s does not exist. "
@@ -2057,8 +2592,8 @@ gnc_split_register_get_account_by_name (SplitRegister* reg, BasicCell* bcell,
     char* account_name;
     ComboCell* cell = (ComboCell*) bcell;
     Account* account;
-    static gboolean creating_account = FALSE;
-    GtkWindow* parent = GTK_WINDOW (gnc_split_register_get_parent (reg));
+    GtkWidget *owner = gnc_split_register_get_parent (reg);
+    GtkWindow *parent = GTK_IS_WINDOW (owner) ? GTK_WINDOW (owner) : NULL;
 
     if (!name || (strlen (name) == 0))
         return NULL;
@@ -2069,24 +2604,25 @@ gnc_split_register_get_account_by_name (SplitRegister* reg, BasicCell* bcell,
     if (!account)
         account = gnc_account_lookup_by_code (gnc_get_current_root_account (), name);
 
-    /* if gnc_ui_new_accounts_from_name_window is used, there is a call to
-     * refresh which subsequently calls this function again, that's the
-     * reason for static creating_account. */
-
-    if (!account && !creating_account)
+    if (!account)
     {
-        /* Ask if they want to create a new one. */
-        if (!gnc_verify_dialog (parent, TRUE, missing, name))
+        SplitRegisterAccountCreateRequest *request;
+
+        if (!parent || g_object_get_data (G_OBJECT (parent),
+                                          SPLIT_REGISTER_ACCOUNT_CREATE_REQUEST))
             return NULL;
-        creating_account = TRUE;
-        /* User said yes, they want to create a new account. */
-        account = gnc_ui_new_accounts_from_name_window (parent, name);
-        creating_account = FALSE;
-        if (!account)
-            return NULL;
+        request = g_new0 (SplitRegisterAccountCreateRequest, 1);
+        request->book = gnc_get_current_book ();
+        request->name = g_strdup (name);
+        g_weak_ref_init (&request->parent, G_OBJECT (parent));
+        g_object_set_data (G_OBJECT (parent), SPLIT_REGISTER_ACCOUNT_CREATE_REQUEST,
+                           request);
+        gnc_verify_dialog_async (parent, TRUE, split_register_account_create_confirmed,
+                                 request, missing, name);
+        return NULL;
     }
 
-    if (!creating_account)
+    if (account)
     {
         /* Now have the account. */
         account_name = gnc_get_account_name_for_split_register (account,
@@ -2148,57 +2684,104 @@ calculate_value (SplitRegister* reg)
 }
 
 
-static int
-recalc_message_box (SplitRegister* reg, gboolean shares_changed,
-                    gboolean price_changed, gboolean value_changed)
+typedef struct
 {
-    int choice;
-    int default_value;
-    GList* node;
-    GList* radio_list = NULL;
-    const char* title = _ ("Recalculate Transaction");
-    const char* message = _ ("The values entered for this transaction "
-                             "are inconsistent. Which value would you "
-                             "like to have recalculated?");
+    GncSplitRegisterAsyncRequest base;
+    SplitRegisterSaveRequest *save_request;
+    QofBook *book;
+    GncGUID split_guid;
+    VirtualLocation virt_loc;
+    gnc_numeric value;
+    gnc_numeric price;
+    gnc_numeric amount;
+    gboolean shares_changed;
+    gboolean value_changed;
+    gboolean cancelled;
+} SplitRegisterRecalcRequest;
 
-    if (shares_changed)
-        radio_list = g_list_append (radio_list, g_strdup_printf ("%s (%s)",
-                                                                 _ ("_Shares"),
-                                                                 _ ("Changed")));
+static gboolean
+split_register_recalc_request_is_current (SplitRegisterRecalcRequest *request,
+                                          Split **split_out)
+{
+    SplitRegister *reg = request->base.reg;
+    Split *split;
+
+    if (!reg || !reg->table || request->book != gnc_get_current_book () ||
+        !virt_loc_equal (reg->table->current_cursor_loc, request->virt_loc))
+        return FALSE;
+
+    split = gnc_split_register_get_current_split (reg);
+    if (!split || !guid_equal (xaccSplitGetGUID (split), &request->split_guid))
+        return FALSE;
+
+    if (split_out)
+        *split_out = split;
+    return TRUE;
+}
+
+static void
+split_register_recalc_request_cancel (GncSplitRegisterAsyncRequest *base)
+{
+    SplitRegisterRecalcRequest *request = (SplitRegisterRecalcRequest *)base;
+
+    /* GtkAlertDialog still owns the completion callback.  Detach from the
+     * register now, but keep the request and its SaveRequest reference until
+     * that callback has observed cancellation and released both safely. */
+    request->cancelled = TRUE;
+    gnc_split_register_async_request_untrack (&request->base);
+    if (request->save_request)
+        split_register_save_request_complete (request->save_request, FALSE);
+}
+
+static void
+split_register_recalc_choice_finished (G_GNUC_UNUSED GtkWindow *dialog,
+                                       gint choice, gpointer user_data)
+{
+    SplitRegisterRecalcRequest *request = user_data;
+    SplitRegisterSaveRequest *save_request = request->save_request;
+    SplitRegister *reg = request->base.reg;
+    Split *split = NULL;
+    gboolean accepted = FALSE;
+
+    if (!request->cancelled && choice >= 0 && save_request &&
+        split_register_recalc_request_is_current (request, &split))
+    {
+        switch (choice)
+        {
+        case 0:
+            if (!gnc_numeric_zero_p (request->price))
+            {
+                recalculate_shares (split, reg, request->value, request->price,
+                                    request->value_changed);
+                accepted = TRUE;
+            }
+            break;
+        case 1:
+            if (!gnc_numeric_zero_p (request->amount))
+            {
+                recalculate_price (split, reg, request->value, request->amount);
+                accepted = TRUE;
+            }
+            break;
+        case 2:
+            recalculate_value (split, reg, request->price, request->amount,
+                               request->shares_changed);
+            accepted = TRUE;
+            break;
+        default:
+            break;
+        }
+    }
+
+    request->save_request = NULL;
+    gnc_split_register_async_request_untrack (&request->base);
+    g_free (request);
+    if (accepted)
+        split_register_save_request_continue (save_request);
     else
-        radio_list = g_list_append (radio_list, g_strdup (_ ("_Shares")));
-
-    if (price_changed)
-        radio_list = g_list_append (radio_list, g_strdup_printf ("%s (%s)",
-                                                                 _ ("_Price"),
-                                                                 _ ("Changed")));
-    else
-        radio_list = g_list_append (radio_list, g_strdup (_ ("_Price")));
-
-    if (value_changed)
-        radio_list = g_list_append (radio_list, g_strdup_printf ("%s (%s)",
-                                                                 _ ("_Value"),
-                                                                 _ ("Changed")));
-    else
-        radio_list = g_list_append (radio_list, g_strdup (_ ("_Value")));
-
-    if (price_changed) default_value = 2;  /* change the value */
-    else  default_value = 1;  /* change the value */
-
-    choice = gnc_choose_radio_option_dialog
-        (gnc_split_register_get_parent (reg),
-         title,
-         message,
-         _ ("_Recalculate"),
-         default_value,
-         radio_list);
-
-    for (node = radio_list; node; node = node->next)
-        g_free (node->data);
-
-    g_list_free (radio_list);
-
-    return choice;
+        split_register_save_request_complete (save_request, FALSE);
+    if (save_request)
+        split_register_save_request_unref (save_request);
 }
 
 static void
@@ -2225,30 +2808,9 @@ recalculate_price (Split* split, SplitRegister* reg,
                    gnc_numeric value, gnc_numeric amount)
 {
     BasicCell* price_cell;
-    gnc_numeric price = gnc_numeric_div (value, amount,
-                                         GNC_DENOM_AUTO,
-                                         GNC_HOW_DENOM_EXACT);
-
-    if (gnc_numeric_negative_p (price))
-    {
-        BasicCell* debit_cell;
-        BasicCell* credit_cell;
-
-        debit_cell = gnc_table_layout_get_cell (reg->table->layout,
-                                                DEBT_CELL);
-
-        credit_cell = gnc_table_layout_get_cell (reg->table->layout,
-                                                 CRED_CELL);
-
-        price = gnc_numeric_neg (price);
-
-        gnc_price_cell_set_debt_credit_value ((PriceCell*) debit_cell,
-                                              (PriceCell*) credit_cell,
-                                              gnc_numeric_neg (value));
-
-        gnc_basic_cell_set_changed (debit_cell, TRUE);
-        gnc_basic_cell_set_changed (credit_cell, TRUE);
-    }
+    gint64 denom = gnc_split_get_value_denom (split);
+    gnc_numeric price = gnc_numeric_div (value, amount, denom,
+                                         GNC_HOW_RND_ROUND_HALF_UP);
 
     price_cell = gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL);
     gnc_price_cell_set_value ((PriceCell*) price_cell, price);
@@ -2281,8 +2843,9 @@ recalculate_value (Split* split, SplitRegister* reg,
     }
 }
 
-static gboolean
-gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
+static GncSplitRegisterSaveResult
+ gnc_split_register_auto_calc (SplitRegister* reg, Split* split,
+                               SplitRegisterSaveRequest *save_request)
 {
     PriceCell* cell = NULL;
     gboolean recalc_shares = FALSE;
@@ -2297,23 +2860,18 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
     gnc_numeric amount;
     Account* account;
     int denom;
-    int choice;
 
-    if (STOCK_REGISTER    != reg->type &&
-        CURRENCY_REGISTER != reg->type &&
-        PORTFOLIO_LEDGER  != reg->type)
-        return TRUE;
+    if (STOCK_REGISTER != reg->type && CURRENCY_REGISTER != reg->type &&
+        PORTFOLIO_LEDGER != reg->type)
+        return GNC_SPLIT_REGISTER_SAVE_SAVED;
 
     account = gnc_split_register_get_account (reg, XFRM_CELL);
-
     if (!account)
         account = xaccSplitGetAccount (split);
-
     if (!account)
         account = gnc_split_register_get_default_account (reg);
-
     if (!xaccAccountIsPriced (account))
-        return TRUE;
+        return GNC_SPLIT_REGISTER_SAVE_SAVED;
 
     price_changed = gnc_table_layout_get_cell_changed (reg->table->layout,
                                                        PRIC_CELL, TRUE);
@@ -2323,19 +2881,14 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
                                                         CRED_CELL, TRUE));
     shares_changed = gnc_table_layout_get_cell_changed (reg->table->layout,
                                                         SHRS_CELL, TRUE);
-
     if (!price_changed && !value_changed && !shares_changed)
-        return TRUE;
+        return GNC_SPLIT_REGISTER_SAVE_SAVED;
 
-    /* If we are using commodity trading accounts then the value may
-       not really be the value.  Punt if so. */
     if (xaccTransUseTradingAccounts (xaccSplitGetParent (split)))
     {
-        gnc_commodity* acc_commodity;
-        acc_commodity = xaccAccountGetCommodity (account);
-        if (! (xaccAccountIsPriced (account) ||
-               !gnc_commodity_is_iso (acc_commodity)))
-            return TRUE;
+        gnc_commodity* acc_commodity = xaccAccountGetCommodity (account);
+        if (!(xaccAccountIsPriced (account) || !gnc_commodity_is_iso (acc_commodity)))
+            return GNC_SPLIT_REGISTER_SAVE_SAVED;
     }
 
     if (shares_changed)
@@ -2356,23 +2909,10 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
     else
         price = xaccSplitGetSharePrice (split);
 
-    if (value_changed)
-        value = calculate_value (reg);
-    else
-        value = xaccSplitGetValue (split);
-
-
-    /* Check if shares and price are BOTH zero (and value is non-zero).
-     * If so, we can assume that this is an income-correcting split
-     */
+    value = value_changed ? calculate_value (reg) : xaccSplitGetValue (split);
     if (gnc_numeric_zero_p (amount) && gnc_numeric_zero_p (price) &&
         !gnc_numeric_zero_p (value))
-    {
-        return TRUE;
-    }
-
-    /* Check if precisely one value is zero. If so, we can assume that the
-     * zero value needs to be recalculated.   */
+        return GNC_SPLIT_REGISTER_SAVE_SAVED;
 
     if (!gnc_numeric_zero_p (amount))
     {
@@ -2384,75 +2924,69 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
         else if (gnc_numeric_zero_p (value))
             recalc_value = TRUE;
     }
-    else if (!gnc_numeric_zero_p (price))
-        if (!gnc_numeric_zero_p (value))
-            recalc_shares = TRUE;
+    else if (!gnc_numeric_zero_p (price) && !gnc_numeric_zero_p (value))
+        recalc_shares = TRUE;
 
-    /* If we have not already flagged a recalc, check if this is a split
-     * which has 2 of the 3 values changed. */
-
-    if ((!recalc_shares) &&
-        (!recalc_price)  &&
-        (!recalc_value))
+    if (!recalc_shares && !recalc_price && !recalc_value)
     {
-        if (price_changed && value_changed)
-        {
-            if (!shares_changed)
-                recalc_shares = TRUE;
-        }
+        if (price_changed && value_changed && !shares_changed)
+            recalc_shares = TRUE;
         else if (value_changed && shares_changed)
             recalc_price = TRUE;
         else if (price_changed && shares_changed)
             recalc_value = TRUE;
     }
 
-    calc_value = gnc_numeric_mul (price, amount,
-                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-
+    calc_value = gnc_numeric_mul (price, amount, GNC_DENOM_AUTO,
+                                  GNC_HOW_DENOM_LCD);
     denom = gnc_split_get_value_denom (split);
-
-    /*  Now, if we have not flagged one of the recalcs, and value and
-     *  calc_value are not the same number, then we need to ask for
-     *  help from the user. */
-
-    if (!recalc_shares &&
-        !recalc_price &&
-        !recalc_value &&
+    if (!recalc_shares && !recalc_price && !recalc_value &&
         !gnc_numeric_same (value, calc_value, denom, GNC_HOW_RND_ROUND_HALF_UP))
     {
-        choice = recalc_message_box (reg, shares_changed,
-                                     price_changed,
-                                     value_changed);
-        switch (choice)
-        {
-            case 0: /* Modify number of shares */
-                recalc_shares = TRUE;
-                break;
-            case 1: /* Modify the share price */
-                recalc_price = TRUE;
-                break;
-            case 2: /* Modify total value */
-                recalc_value = TRUE;
-                break;
-            default: /* Cancel */
-                return FALSE;
-        }
+        GList *choices = NULL;
+        SplitRegisterRecalcRequest *request;
+        gint default_choice = price_changed ? 2 : 1;
+
+        choices = g_list_append (choices, g_strdup_printf
+                                 (shares_changed ? "%s (%s)" : "%s",
+                                  _("_Shares"), shares_changed ? _("Changed") : ""));
+        choices = g_list_append (choices, g_strdup_printf
+                                 (price_changed ? "%s (%s)" : "%s",
+                                  _("_Price"), price_changed ? _("Changed") : ""));
+        choices = g_list_append (choices, g_strdup_printf
+                                 (value_changed ? "%s (%s)" : "%s",
+                                  _("_Value"), value_changed ? _("Changed") : ""));
+        request = g_new0 (SplitRegisterRecalcRequest, 1);
+        request->save_request = split_register_save_request_ref (save_request);
+        request->book = gnc_get_current_book ();
+        request->split_guid = *xaccSplitGetGUID (split);
+        request->virt_loc = reg->table->current_cursor_loc;
+        request->value = value;
+        request->price = price;
+        request->amount = amount;
+        request->shares_changed = shares_changed;
+        request->value_changed = value_changed;
+        gnc_split_register_async_request_track (reg, &request->base,
+                                                split_register_recalc_request_cancel);
+        GtkWidget *owner = gnc_split_register_get_parent (reg);
+        gnc_choose_option_dialog_async
+            (GTK_IS_WINDOW (owner) ? GTK_WINDOW (owner) : NULL, _("Recalculate Transaction"),
+             _("The values entered for this transaction are inconsistent. Which "
+               "value would you like to have recalculated?"), choices,
+             default_choice, split_register_recalc_choice_finished, request);
+        g_list_free_full (choices, g_free);
+        return GNC_SPLIT_REGISTER_SAVE_DEFERRED;
     }
 
     if (recalc_shares && !gnc_numeric_zero_p (price))
         recalculate_shares (split, reg, value, price, value_changed);
-
     if (recalc_price && !gnc_numeric_zero_p (amount))
-    {
         recalculate_price (split, reg, value, amount);
-        price_changed = TRUE;
-    }
     if (recalc_value)
         recalculate_value (split, reg, price, amount, shares_changed);
 
-    return TRUE;
+    return GNC_SPLIT_REGISTER_SAVE_SAVED;
 }
-
 static GNCAccountType
 gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
 {
@@ -3059,6 +3593,10 @@ gnc_split_register_destroy_info (SplitRegister* reg)
     info = reg->sr_info;
     if (!info)
         return;
+
+    gnc_split_register_cancel_async_requests (reg);
+    g_assert (info->async_requests == NULL);
+    info->active_save_request = NULL;
 
     g_free (info->tdebit_str);
     g_free (info->tcredit_str);

@@ -1,8 +1,8 @@
 add_subdirectory(gschemas)
-add_subdirectory(test)
 
 set(ofx_SOURCES
   gnc-ofx-import.cpp
+  gnc-ofx-import-teardown.cpp
   gncmod-ofx-import.c
   gnc-plugin-ofx.c
 )
@@ -12,7 +12,11 @@ set_source_files_properties (${ofx_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H
 
 set(ofx_noinst_HEADERS
   gnc-ofx-import.h
+  gnc-ofx-import-teardown.h
   gnc-plugin-ofx.h
+)
+set(ofx_test_noinst_HEADERS
+  gnc-ofx-import-test-seam.h
 )
 
 set(ofx_UI gnc-plugin-ofx.ui)
@@ -59,5 +63,8 @@ if (WITH_OFX)
 
 endif()
 
-set_local_dist(ofx_DIST_local CMakeLists.txt ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})
+add_subdirectory(test)
+
+set_local_dist(ofx_DIST_local CMakeLists.txt ${ofx_SOURCES} ${ofx_noinst_HEADERS}
+               ${ofx_test_noinst_HEADERS} ${ofx_UI})
 set(ofx_DIST ${ofx_DIST_local} ${test_ofx_DIST} ${ofx_gschema_DIST} PARENT_SCOPE)

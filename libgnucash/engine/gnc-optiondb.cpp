@@ -1140,6 +1140,12 @@ gnc_option_db_new(void)
 }
 
 void
+gnc_option_db_destroy_owned(GncOptionDB* odb)
+{
+    delete odb;
+}
+
+void
 gnc_option_db_destroy(GncOptionDB* odb)
 {
     PWARN("Direct Destroy called on GncOptionDB %" G_GUINT64_FORMAT, (uint64_t)odb);

@@ -122,185 +122,112 @@
   </menu>
 
 
-  <object class="GtkToolbar" id="recwin-toolbar">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
+  <object class="GtkBox" id="recwin-toolbar">
+    <property name="orientation">horizontal</property>
+    <property name="spacing">6</property>
+    <style>
+      <class name="gnc-class-toolbar"/>
+    </style>
     <child>
-      <object class="GtkToolButton" id="autoclear_button">
-        <property name="visible">True</property>
+      <object class="GtkButton" id="autoclear_button">
         <property name="sensitive">False</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="no">Automatically clear matching transactions</property>
+        <property name="tooltip-text" translatable="no">Automatically clear matching transactions</property>
         <property name="label" translatable="yes">Auto Clear</property>
-        <property name="use_underline">True</property>
-        <property name="icon_name">media-playback-start</property>
-        <property name="action_name">recwin.RecnAutoClearAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">media-playback-start</property>
+        <property name="action-name">recwin.RecnAutoClearAction</property>
       </object>
     </child>
     <child>
-      <object class="GtkToolButton" id="but1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but1">
         <property name="tooltip-text" translatable="yes">Add a new balancing entry to the account</property>
         <property name="action-name">recwin.TransBalanceAction</property>
         <property name="label" translatable="yes" context="reconcile menu">_Balance</property>
         <property name="use-underline">True</property>
         <property name="icon-name">document-new</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but2">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="action-name">recwin.TransEditAction</property>
+      <object class="GtkButton" id="but2">
         <property name="tooltip-text" translatable="yes">Edit the current transaction</property>
+        <property name="action-name">recwin.TransEditAction</property>
         <property name="label" translatable="yes">_Edit</property>
         <property name="use-underline">True</property>
         <property name="icon-name">document-properties</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but3">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but3">
         <property name="tooltip-text" translatable="yes">Reconcile the selected transactions</property>
         <property name="action-name">recwin.TransRecAction</property>
         <property name="label" translatable="yes">Reconcile Selection</property>
         <property name="use-underline">True</property>
         <property name="icon-name">emblem-default</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but4">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but4">
         <property name="tooltip-text" translatable="yes">Unreconcile the selected transactions</property>
         <property name="action-name">recwin.TransUnRecAction</property>
         <property name="label" translatable="yes">Unreconcile Selection</property>
         <property name="use-underline">True</property>
         <property name="icon-name">edit-clear</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but5">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but5">
         <property name="tooltip-text" translatable="yes">Delete the selected transaction</property>
         <property name="action-name">recwin.TransDeleteAction</property>
         <property name="label" translatable="yes">_Delete</property>
         <property name="use-underline">True</property>
         <property name="icon-name">edit-delete</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkSeparatorToolItem">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkSeparator">
+        <property name="orientation">vertical</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but6">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but6">
         <property name="tooltip-text" translatable="yes">Open the account</property>
         <property name="action-name">recwin.AccountOpenAccountAction</property>
         <property name="label" translatable="yes">_Open</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-jumpto</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkSeparatorToolItem">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkSeparator">
+        <property name="orientation">vertical</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but7">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but7">
         <property name="tooltip-text" translatable="yes">Finish the reconciliation of this account</property>
         <property name="action-name">recwin.RecnFinishAction</property>
         <property name="label" translatable="yes">_Finish</property>
         <property name="use-underline">True</property>
         <property name="icon-name">system-run</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but8">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but8">
         <property name="tooltip-text" translatable="yes">Postpone the reconciliation of this account</property>
         <property name="action-name">recwin.RecnPostponeAction</property>
         <property name="label" translatable="yes">_Postpone</property>
         <property name="use-underline">True</property>
         <property name="icon-name">go-previous</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
-
     <child>
-      <object class="GtkToolButton" id="but9">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkButton" id="but9">
         <property name="tooltip-text" translatable="yes">Cancel the reconciliation of this account</property>
         <property name="action-name">recwin.RecnCancelAction</property>
         <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">True</property>
         <property name="icon-name">process-stop</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
     </child>
   </object>
 </interface>

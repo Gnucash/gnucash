@@ -33,6 +33,7 @@
 #define GNC_SCRUBBUSINESS_H
 
 #include "gnc-engine.h"
+#include "Scrub.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -58,6 +59,8 @@ extern "C"
  *    any splits were modified or deleted.
  */
 gboolean gncScrubBusinessLot (GNCLot *lot);
+gboolean gncScrubBusinessLotWithContext (GNCLot *lot,
+                                         GncScrubContext *context);
 
 /** The gncScrubBusinessSplit() function will fix all issues found with
  *    the given split.
@@ -78,6 +81,8 @@ gboolean gncScrubBusinessLot (GNCLot *lot);
  *    In this case the function returns true so the caller knows a split was removed.
  */
 gboolean gncScrubBusinessSplit (Split *split);
+gboolean gncScrubBusinessSplitWithContext (Split *split,
+                                           GncScrubContext *context);
 
 /** The gncScrubBusinessAccountLots() function will call
  *    gncScrubBusinessLot() on each lot in the given account.
@@ -87,11 +92,17 @@ gboolean gncScrubBusinessSplit (Split *split);
  *    order.
  */
 void gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc);
+void gncScrubBusinessAccountLotsWithContext (Account *acc,
+                                             QofPercentageFunc percentagefunc,
+                                             GncScrubContext *context);
 
 /** The gncScrubBusinessAccountSplits() function will call
  *    gncScrubBusinessSplit() on each split in the given account.
  */
 void gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc);
+void gncScrubBusinessAccountSplitsWithContext (Account *acc,
+                                               QofPercentageFunc percentagefunc,
+                                               GncScrubContext *context);
 
 /** The gncScrubBusinessAccount() function will call
  *    all scrub functions relevant for a given account
@@ -102,12 +113,18 @@ void gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefu
  *    (known) issues in a business account.
  */
 void gncScrubBusinessAccount (Account *acc, QofPercentageFunc percentagefunc);
+void gncScrubBusinessAccountWithContext (Account *acc,
+                                         QofPercentageFunc percentagefunc,
+                                         GncScrubContext *context);
 
 /** The gncScrubBusinessAccountTreeLots() function will call
  *    gncScrubBusinessAccount() on the given account
  *    and its sub accounts.
  */
 void gncScrubBusinessAccountTree (Account *acc, QofPercentageFunc percentagefunc);
+void gncScrubBusinessAccountTreeWithContext (Account *acc,
+                                             QofPercentageFunc percentagefunc,
+                                             GncScrubContext *context);
 
 #ifdef __cplusplus
 }

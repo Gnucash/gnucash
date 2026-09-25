@@ -29,6 +29,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-prefs.h"
 #include "gnc-session.h"
 
 #include "gnc-ui-util.h"
@@ -39,16 +40,15 @@
 #define DIALOG_FIND_ACCOUNT_CM_CLASS    "dialog-find-account"
 #define GNC_PREFS_GROUP                 "dialogs.find-account"
 
-/** Enumeration for the tree-store */
-enum GncFindAccountColumn {ACC_FULL_NAME, ACCOUNT, PLACE_HOLDER, HIDDEN, NOT_USED, BAL_ZERO, TAX};
-
 typedef struct
 {
     GtkWidget    *window;
     GtkWidget    *parent;
     QofSession   *session;
     Account      *account;
-    GtkWidget    *view;
+    GtkColumnView *view;
+    GListStore    *rows;
+    GtkSingleSelection *selection;
 
     GtkWidget    *radio_frame;
     GtkWidget    *radio_root;
@@ -64,20 +64,79 @@ typedef struct
 
 }FindAccountDialog;
 
+/* The legacy model kept display values separate from the account. Keep the
+ * rendered state with a plain GObject so GtkColumnView exposes one stable row
+ * contract to selection, activation, and item factories. */
+typedef struct
+{
+    Account *account;
+    gchar *full_name;
+    gboolean placeholder;
+    gboolean hidden;
+    gboolean unused;
+    gboolean zero_balance;
+    gboolean tax_related;
+} FindAccountRow;
+
+static GQuark find_account_row_quark = 0;
+
+static void
+find_account_row_free (gpointer data)
+{
+    FindAccountRow *row = data;
+
+    if (!row)
+        return;
+    g_free (row->full_name);
+    g_free (row);
+}
+
+static GObject *
+find_account_row_new (Account *account)
+{
+    GObject *object;
+    FindAccountRow *row;
+    gnc_numeric total;
+
+    if (G_UNLIKELY (!find_account_row_quark))
+        find_account_row_quark = g_quark_from_static_string ("gnc-find-account-row");
+
+    object = G_OBJECT (g_object_new (G_TYPE_OBJECT, NULL));
+    row = g_new0 (FindAccountRow, 1);
+    row->account = account;
+    row->full_name = gnc_account_get_full_name (account);
+    total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
+    row->placeholder = xaccAccountGetPlaceholder (account);
+    row->hidden = xaccAccountGetHidden (account);
+    row->unused = gnc_account_and_descendants_empty (account);
+    row->zero_balance = gnc_numeric_zero_p (total);
+    row->tax_related = xaccAccountGetTaxRelated (account);
+    g_object_set_qdata_full (object, find_account_row_quark, row,
+                             find_account_row_free);
+    return object;
+}
+
+static FindAccountRow *
+find_account_row_get (gpointer object)
+{
+    return object ? g_object_get_qdata (G_OBJECT (object), find_account_row_quark) : NULL;
+}
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static void close_handler (gpointer user_data);
 
 static gboolean
-gnc_find_account_dialog_window_delete_event_cb (GtkWidget *widget,
-                                                GdkEvent  *event,
-                                                gpointer   user_data)
+gnc_find_account_dialog_window_close_request_cb (GtkWindow *window,
+                                                 gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
+
     // this cb allows the window size to be saved on closing with the X
     gnc_save_window_size (GNC_PREFS_GROUP,
                           GTK_WINDOW(facc_dialog->window));
+    (void)window;
     return FALSE;
 }
 
@@ -95,26 +154,23 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
         facc_dialog->event_handler_id = 0;
     }
 
-    if (facc_dialog->saved_filter_text)
-        g_free (facc_dialog->saved_filter_text);
-
-    if (facc_dialog->window)
-    {
-        gtk_widget_destroy (facc_dialog->window);
-        facc_dialog->window = NULL;
-    }
+    g_clear_pointer (&facc_dialog->saved_filter_text, g_free);
+    g_clear_object (&facc_dialog->selection);
+    g_clear_object (&facc_dialog->rows);
+    facc_dialog->window = NULL;
     g_free (facc_dialog);
+    (void)object;
     LEAVE(" ");
 }
 
 static gboolean
-gnc_find_account_dialog_window_key_press_cb (GtkWidget *widget,
-                                             GdkEventKey *event,
+gnc_find_account_dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                             guint keycode, GdkModifierType state,
                                              gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (facc_dialog);
         return TRUE;
@@ -145,34 +201,23 @@ gnc_find_account_dialog_jump_set (FindAccountDialog *facc_dialog)
 static void
 gnc_find_account_dialog_jump_to (FindAccountDialog *facc_dialog)
 {
-    Account          *jump_account = NULL;
-    GtkTreeModel     *model;
-    GtkTreeIter       iter;
-    GtkTreeSelection *selection;
+    GObject *object;
+    FindAccountRow *row;
 
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(facc_dialog->view));
-
-    if (gtk_tree_selection_get_selected (selection, &model, &iter))
-        gtk_tree_model_get (model, &iter, ACCOUNT, &jump_account,  -1);
-
-    jump_to_account (facc_dialog, jump_account);
+    object = gtk_single_selection_get_selected_item (facc_dialog->selection);
+    row = find_account_row_get (object);
+    jump_to_account (facc_dialog, row ? row->account : NULL);
 }
 
 static void
-row_double_clicked (GtkTreeView *treeview, GtkTreePath *path,
-                    GtkTreeViewColumn *col, FindAccountDialog *facc_dialog)
+row_activated (GtkColumnView *view, guint position, FindAccountDialog *facc_dialog)
 {
-    Account      *jump_account = NULL;
-    GtkTreeModel *model;
-    GtkTreeIter   iter;
+    GObject *object = g_list_model_get_item (G_LIST_MODEL (facc_dialog->rows), position);
+    FindAccountRow *row = find_account_row_get (object);
 
-    model = gtk_tree_view_get_model (treeview);
-
-    if (gtk_tree_model_get_iter (model, &iter, path))
-       gtk_tree_model_get (model, &iter, ACCOUNT, &jump_account, -1);
-
-    jump_to_account (facc_dialog, jump_account);
+    jump_to_account (facc_dialog, row ? row->account : NULL);
+    g_clear_object (&object);
+    (void)view;
 }
 
 static void
@@ -197,39 +242,27 @@ gnc_find_account_dialog_close_button_cb (GtkWidget * widget, gpointer user_data)
 }
 
 static void
-fill_model (GtkTreeModel *model, Account *account)
+fill_model (FindAccountDialog *facc_dialog, Account *account)
 {
-    GtkTreeIter   iter;
-    gchar        *fullname = gnc_account_get_full_name (account);
-    gboolean      acc_empty = gnc_account_and_descendants_empty (account);
-    gnc_numeric   total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
+    GObject *object = find_account_row_new (account);
+    FindAccountRow *row = find_account_row_get (object);
 
-    PINFO("Add to Store: Account '%s'", fullname);
-
-    gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-
-    gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-                        ACC_FULL_NAME, fullname, ACCOUNT, account,
-                        PLACE_HOLDER, (xaccAccountGetPlaceholder (account) == TRUE ? "emblem-default" : NULL),
-                        HIDDEN, (xaccAccountGetHidden (account) == TRUE ? "emblem-default" : NULL),
-                        NOT_USED, (acc_empty ? "emblem-default" : NULL),
-                        BAL_ZERO, (gnc_numeric_zero_p (total) == TRUE ? "emblem-default" : NULL),
-                        TAX, (xaccAccountGetTaxRelated (account) == TRUE ? "emblem-default" : NULL), -1);
-    g_free (fullname);
+    PINFO("Add to model: Account '%s'", row->full_name);
+    g_list_store_append (facc_dialog->rows, object);
+    g_object_unref (object);
 }
 
 static void
 get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
 {
-    Account      *root;
-    GList        *accts;
-    GList        *ptr;
-    gchar        *filter_text;
-    gboolean      radio_root;
-    GtkTreeModel *model;
+    Account *root;
+    GList *accts;
+    GList *ptr;
+    gchar *filter_text;
+    gboolean radio_root;
 
     /* Get the state of the root radio button */
-    radio_root = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_root));
+    radio_root = gtk_check_button_get_active (GTK_CHECK_BUTTON(facc_dialog->radio_root));
 
      /* Get list of Accounts */
     if ((facc_dialog->account == NULL) || (radio_root == TRUE))
@@ -242,15 +275,11 @@ get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
     if (use_saved_filter)
         filter_text = g_ascii_strdown (facc_dialog->saved_filter_text, -1);
     else
-        filter_text = g_ascii_strdown (gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
+        filter_text = g_ascii_strdown (gnc_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
 
-    /* disconnect the model from the treeview */
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
-    g_object_ref (G_OBJECT(model));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(facc_dialog->view), NULL);
-
-    // Clear the list store
-    gtk_list_store_clear (GTK_LIST_STORE(model));
+    g_list_store_remove_all (facc_dialog->rows);
+    gtk_single_selection_set_selected (facc_dialog->selection,
+                                       GTK_INVALID_LIST_POSITION);
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
@@ -260,23 +289,17 @@ get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
         gchar   *match_string = g_ascii_strdown (full_name, -1);
 
         if ((g_strcmp0 (filter_text, "") == 0) || (g_strrstr (match_string, filter_text) != NULL))
-            fill_model (model, acc);
+            fill_model (facc_dialog, acc);
 
         g_free (match_string);
         g_free (full_name);
     }
     g_free (filter_text);
     g_list_free (accts);
-
-    /* reconnect the model to the treeview */
-    gtk_tree_view_set_model (GTK_TREE_VIEW(facc_dialog->view), model);
-    g_object_unref(G_OBJECT(model));
-
-    gtk_tree_view_columns_autosize (GTK_TREE_VIEW(facc_dialog->view));
 }
 
 static void
-list_type_selected_cb (GtkToggleButton* button, FindAccountDialog *facc_dialog)
+list_type_selected_cb (GtkCheckButton* button, FindAccountDialog *facc_dialog)
 {
     get_account_info (facc_dialog, FALSE);
 }
@@ -290,11 +313,11 @@ filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
         g_free (facc_dialog->saved_filter_text);
 
     // save the filter in case of an account event
-    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+    facc_dialog->saved_filter_text = g_strdup (gnc_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 }
 
 static void
@@ -306,7 +329,7 @@ filter_active_cb (GtkEntry *entry, FindAccountDialog *facc_dialog)
         g_free (facc_dialog->saved_filter_text);
 
     // save the filter in case of an account event
-    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+    facc_dialog->saved_filter_text = g_strdup (gnc_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     gtk_editable_select_region (GTK_EDITABLE(facc_dialog->filter_text_entry), 0, -1);
@@ -348,20 +371,119 @@ gnc_find_account_event_handler (QofInstance *entity,
     return;
 }
 
+enum FindAccountViewColumn
+{
+    FIND_ACCOUNT_NAME,
+    FIND_ACCOUNT_PLACEHOLDER,
+    FIND_ACCOUNT_HIDDEN,
+    FIND_ACCOUNT_UNUSED,
+    FIND_ACCOUNT_ZERO_BALANCE,
+    FIND_ACCOUNT_TAX_RELATED
+};
+
+static void
+find_account_text_setup (GtkListItemFactory *factory, GtkListItem *item,
+                         gpointer user_data)
+{
+    GtkWidget *label = gtk_label_new (NULL);
+
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child (item, label);
+    (void)factory;
+    (void)user_data;
+}
+
+static void
+find_account_text_bind (GtkListItemFactory *factory, GtkListItem *item,
+                        gpointer user_data)
+{
+    FindAccountRow *row = find_account_row_get (gtk_list_item_get_item (item));
+
+    gtk_label_set_text (GTK_LABEL (gtk_list_item_get_child (item)),
+                        row ? row->full_name : "");
+    (void)factory;
+    (void)user_data;
+}
+
+static gboolean
+find_account_row_has_status (FindAccountRow *row, guint column)
+{
+    if (!row)
+        return FALSE;
+
+    switch (column)
+    {
+    case FIND_ACCOUNT_PLACEHOLDER: return row->placeholder;
+    case FIND_ACCOUNT_HIDDEN: return row->hidden;
+    case FIND_ACCOUNT_UNUSED: return row->unused;
+    case FIND_ACCOUNT_ZERO_BALANCE: return row->zero_balance;
+    case FIND_ACCOUNT_TAX_RELATED: return row->tax_related;
+    default: return FALSE;
+    }
+}
+
+static void
+find_account_status_setup (GtkListItemFactory *factory, GtkListItem *item,
+                           gpointer user_data)
+{
+    GtkWidget *image = gtk_image_new ();
+
+    gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
+    gtk_list_item_set_child (item, image);
+    (void)factory;
+    (void)user_data;
+}
+
+static void
+find_account_status_bind (GtkListItemFactory *factory, GtkListItem *item,
+                          gpointer user_data)
+{
+    guint column = GPOINTER_TO_UINT (user_data);
+    FindAccountRow *row = find_account_row_get (gtk_list_item_get_item (item));
+    GtkImage *image = GTK_IMAGE (gtk_list_item_get_child (item));
+
+    gtk_image_set_from_icon_name (image,
+                                  find_account_row_has_status (row, column)
+                                  ? "emblem-default" : NULL);
+    (void)factory;
+}
+
+static void
+find_account_add_column (FindAccountDialog *facc_dialog, const gchar *title,
+                         guint column, gboolean expand)
+{
+    GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+    GtkColumnViewColumn *view_column;
+
+    if (column == FIND_ACCOUNT_NAME)
+    {
+        g_signal_connect (factory, "setup", G_CALLBACK (find_account_text_setup), NULL);
+        g_signal_connect (factory, "bind", G_CALLBACK (find_account_text_bind), NULL);
+    }
+    else
+    {
+        g_signal_connect (factory, "setup", G_CALLBACK (find_account_status_setup), NULL);
+        g_signal_connect (factory, "bind", G_CALLBACK (find_account_status_bind),
+                          GUINT_TO_POINTER (column));
+    }
+
+    view_column = gtk_column_view_column_new (title, factory);
+    gtk_column_view_column_set_resizable (view_column, TRUE);
+    gtk_column_view_column_set_expand (view_column, expand);
+    gtk_column_view_append_column (facc_dialog->view, view_column);
+    g_object_unref (view_column);
+}
+
 static void
 gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialog)
 {
-    GtkWidget         *window;
-    GtkBuilder        *builder;
-    GtkTreeSelection  *selection;
-
-    GtkTreeViewColumn *tree_column;
-    GtkCellRenderer   *cr;
-    GtkWidget         *button;
+    GtkWidget *window;
+    GtkBuilder *builder;
+    GtkWidget *button;
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-find-account.glade", "list-store");
     gnc_builder_add_from_file (builder, "dialog-find-account.glade", "find_account_window");
 
     window = GTK_WIDGET(gtk_builder_get_object (builder, "find_account_window"));
@@ -400,88 +522,41 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
     g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_close_button_cb), facc_dialog);
 
-    facc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
-    g_signal_connect (facc_dialog->view, "row-activated",
-                     G_CALLBACK(row_double_clicked), (gpointer)facc_dialog);
-
-    // Set grid lines option to preference
-    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(facc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
-
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(facc_dialog->view));
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-
-    /* Need to add pixbuf renderers here to get the xalign to work. */
-    tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Place Holder"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", PLACE_HOLDER, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
-
-    tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Hidden"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", HIDDEN, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
-
-    tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Not Used"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", NOT_USED, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
-
-    tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Balance Zero"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", BAL_ZERO, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
-
-    tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Tax related"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", TAX, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
+    facc_dialog->view = GTK_COLUMN_VIEW (gtk_builder_get_object (builder, "treeview"));
+    facc_dialog->rows = g_list_store_new (G_TYPE_OBJECT);
+    facc_dialog->selection = gtk_single_selection_new
+        (G_LIST_MODEL (g_object_ref (facc_dialog->rows)));
+    gtk_column_view_set_model (facc_dialog->view, GTK_SELECTION_MODEL (facc_dialog->selection));
+    gtk_column_view_set_show_row_separators (facc_dialog->view,
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL));
+    gtk_column_view_set_show_column_separators (facc_dialog->view,
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL));
+    find_account_add_column (facc_dialog, _("Account Full Name"), FIND_ACCOUNT_NAME, TRUE);
+    find_account_add_column (facc_dialog, _("Place Holder"), FIND_ACCOUNT_PLACEHOLDER, FALSE);
+    find_account_add_column (facc_dialog, _("Hidden"), FIND_ACCOUNT_HIDDEN, FALSE);
+    find_account_add_column (facc_dialog, _("Not Used"), FIND_ACCOUNT_UNUSED, FALSE);
+    find_account_add_column (facc_dialog, _("Balance Zero"), FIND_ACCOUNT_ZERO_BALANCE, FALSE);
+    find_account_add_column (facc_dialog, _("Tax related"), FIND_ACCOUNT_TAX_RELATED, FALSE);
+    g_signal_connect (facc_dialog->view, "activate", G_CALLBACK(row_activated), facc_dialog);
 
     g_signal_connect (facc_dialog->window, "destroy",
                       G_CALLBACK(gnc_find_account_dialog_window_destroy_cb), facc_dialog);
 
-    g_signal_connect (facc_dialog->window, "delete-event",
-                      G_CALLBACK(gnc_find_account_dialog_window_delete_event_cb), facc_dialog);
+    g_signal_connect (facc_dialog->window, "close-request",
+                      G_CALLBACK(gnc_find_account_dialog_window_close_request_cb), facc_dialog);
 
-    g_signal_connect (facc_dialog->window, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(facc_dialog->window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(gnc_find_account_dialog_window_key_press_cb), facc_dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
+gnc_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(facc_dialog->window), GTK_WINDOW(parent));
 
-    gtk_widget_show_all (GTK_WIDGET(facc_dialog->window));
 
     if (facc_dialog->account != NULL)
     {
@@ -496,13 +571,13 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
         g_free (sub_full_name);
         g_free (sub_label);
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_subroot), TRUE);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON(facc_dialog->radio_subroot), TRUE);
     }
     else
-        gtk_widget_hide (facc_dialog->radio_frame);
+        gtk_widget_set_visible (GTK_WIDGET(facc_dialog->radio_frame), FALSE);
 
     // Set the filter to Wildcard
-    gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 
     // add a handler to listen for account events
     facc_dialog->event_handler_id = qof_event_register_handler
@@ -520,7 +595,7 @@ close_handler (gpointer user_data)
     ENTER(" ");
     gnc_save_window_size (GNC_PREFS_GROUP,
                           GTK_WINDOW(facc_dialog->window));
-    gtk_widget_destroy (GTK_WIDGET(facc_dialog->window));
+    gtk_window_destroy (GTK_WINDOW(facc_dialog->window));
     LEAVE(" ");
 }
 

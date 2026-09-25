@@ -56,6 +56,9 @@ typedef struct table_control
 
     gboolean allow_move;
 
+    /* True while a deferred model decision owns the current edit. */
+    gboolean input_suspended;
+
     /* called to determine traversal when user requests a move */
     TableTraverseFunc traverse;
 
@@ -68,6 +71,9 @@ void gnc_table_control_destroy (TableControl *control);
 
 void gnc_table_control_allow_move (TableControl *control,
                                    gboolean allow_move);
+void gnc_table_control_set_input_suspended (TableControl *control,
+                                            gboolean suspended);
+gboolean gnc_table_control_input_suspended (const TableControl *control);
 
 #ifdef __cplusplus
 }

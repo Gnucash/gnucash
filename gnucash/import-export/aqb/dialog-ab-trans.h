@@ -84,15 +84,33 @@ GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC
         GList *templates);
 
 /**
- * Run the Aqbanking transfer dialog until correct values where entered or
- * the user cancelled the dialog.
+ * gnc_ab_trans_dialog_run_async:
+ * @td: transaction dialog to present
+ * @cancellable: (nullable): operation cancellation token
+ * @callback: (nullable): completion callback
+ * @user_data: data passed to @callback
  *
- * @param td Transaction dialog
- * @param ab_acc AqBanking account
- * @return GTK_RESPONSE_CANCEL or GTK_RESPONSE_DESTROY_EVENT if the user cancelled the dialog
- * and GNC_RESPONSE_NOW otherwise.
+ * Presents the transaction dialog without entering a nested main loop. The
+ * caller retains @td and must free it after the completion callback has
+ * consumed the selected transaction or cancellation response.
  */
-gint gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td);
+void gnc_ab_trans_dialog_run_async (GncABTransDialog *td,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data);
+
+/**
+ * gnc_ab_trans_dialog_run_finish:
+ * @result: asynchronous result returned by gnc_ab_trans_dialog_run_async()
+ * @response: (out): selected response
+ * @error: (out) (nullable): operation error
+ *
+ * Returns %TRUE if the dialog produced a response. Cancellation is reported
+ * through @response, not as an error.
+ */
+gboolean gnc_ab_trans_dialog_run_finish (GAsyncResult *result,
+                                         gint *response,
+                                         GError **error);
 
 /**
  * Free a Aqbanking transfer dialog

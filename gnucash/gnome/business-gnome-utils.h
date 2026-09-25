@@ -93,50 +93,50 @@ GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget);
 void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice);
 void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner);
 
-/* Fill in a combo box with the appropriate list of accounts
+/* Fill in a drop-down with the appropriate list of accounts
  * Returns the default selected account */
-Account * gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
+Account * gnc_account_select_dropdown_fill (GtkWidget *combo, QofBook *book,
         GList *acct_types,
         GList *acct_commodities);
 
-/* Returns the currently selected account in the combo box*/
-Account * gnc_account_select_combo_get_active (GtkWidget *combo);
+/* Returns the currently selected account in the drop-down*/
+Account * gnc_account_select_dropdown_get_active (GtkWidget *combo);
 
-/* Create a combo box of available billing terms based on
- * the combo box If none_ok is true, then add "none" as a
+/* Create a drop-down of available billing terms based on
+ * the drop-down If none_ok is true, then add "none" as a
  * choice (with data set to NULL).  If initial_choice is non-NULL,
  * then that will be the default option setting when the menu is
  * created.
  *
- * Note: if you are interested in the currently active combo box
- * item, you can use the function gnc_simple_combo_get_value below.
+ * Note: if you are interested in the currently active drop-down
+ * item, you can use the function gnc_simple_dropdown_get_value below.
  * This can be used for example in a callback function that triggers
- * on the combo box' "changed" signal"
+ * on the drop-down' "changed" signal"
  */
-void gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
+void gnc_billterms_dropdown (GtkDropDown *dropdown, QofBook *book,
                           gboolean none_ok, GncBillTerm *initial_choice);
 
 /* Same thing except for the tax tables */
 void
-gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
+gnc_taxtables_dropdown (GtkDropDown *dropdown, QofBook *book,
                      gboolean none_ok, GncTaxTable *initial_choice);
 
 /* Build an option menu for choosing a GncTaxIncluded */
-void gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice);
+void gnc_taxincluded_dropdown (GtkDropDown *dropdown, GncTaxIncluded initial_choice);
 
 
-/* Here are some "simple combo box" utilities that can be used with
- * ANY of the above combo box types.  In particular the following
- * functions are useful for hooking the above combo boxes into the
+/* Here are some "simple drop-down" utilities that can be used with
+ * ANY of the above drop-down types.  In particular the following
+ * functions are useful for hooking the above drop-downes into the
  * GNC Option infrastructure.
  */
 
-/** Get the value of the item that is currently selected in the combo box */
-gpointer gnc_simple_combo_get_value (GtkComboBox *cbox);
+/** Get the value of the item that is currently selected in the drop-down */
+gpointer gnc_simple_dropdown_get_value (GtkDropDown *dropdown);
 
-/** Find the item in the combo box whose value is "data"
+/** Find the item in the drop-down whose value is "data"
  *  and make it the active item. */
-void gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data);
+void gnc_simple_dropdown_set_value (GtkDropDown *dropdown, gpointer data);
 
 
 #ifdef __cplusplus

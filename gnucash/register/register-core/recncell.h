@@ -41,10 +41,23 @@
 
 #include "basiccell.h"
 
-typedef const char * (*RecnCellStringGetter) (char flag);
-typedef gboolean (*RecnCellConfirm) (char old_flag, gpointer data);
+typedef struct _RecnCell RecnCell;
 
-typedef struct
+typedef const char * (*RecnCellStringGetter) (char flag);
+
+typedef enum
+{
+    GNC_RECN_CELL_CONFIRM_ACCEPT,
+    GNC_RECN_CELL_CONFIRM_DEFERRED,
+    GNC_RECN_CELL_CONFIRM_REJECT
+} GncRecnCellConfirmResult;
+
+typedef GncRecnCellConfirmResult (*RecnCellConfirm) (RecnCell *cell,
+                                                      char old_flag,
+                                                      char next_flag,
+                                                      gpointer data);
+
+struct _RecnCell
 {
     BasicCell cell;
 
@@ -57,8 +70,10 @@ typedef struct
     RecnCellStringGetter get_string;
     RecnCellConfirm confirm_cb;
     gpointer confirm_data;
+    char pending_flag;
+    gboolean confirmation_pending;
     gboolean read_only;
-} RecnCell;
+};
 
 BasicCell * gnc_recn_cell_new (void);
 
@@ -68,6 +83,10 @@ char gnc_recn_cell_get_flag (RecnCell *cell);
 void gnc_recn_cell_set_confirm_cb (RecnCell *cell,
                                    RecnCellConfirm confirm_cb,
                                    gpointer data);
+
+/* Completes a deferred confirmation. Returns TRUE only when the proposed
+ * flag was applied and marked as a table change. */
+gboolean gnc_recn_cell_complete_confirm (RecnCell *cell, gboolean accepted);
 
 void gnc_recn_cell_set_string_getter (RecnCell *cell,
                                       RecnCellStringGetter getter);

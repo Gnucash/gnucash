@@ -24,10 +24,13 @@
 #include <gnc-option-impl.hpp>
 #include "gnc-option-gtk-ui.hpp"
 #include <config.h>  // for scanf format string
-#include <memory>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <algorithm>
 #include <cstdint>
+#include <memory>
 #include <qof.h>
 #include <gnc-engine.h> // for GNC_MOD_GUI
+#include <gnc-ui-util.h> // for gnc_get_current_book
 #include <gnc-commodity.h> // for GNC_COMMODITY
 #include "gnc-account-sel.h" // for GNC_ACCOUNT_SEL
 #include "gnc-currency-edit.h" //for GNC_CURRENCY_EDIT
@@ -36,12 +39,14 @@
 #include "gnc-date-format.h" //for GNC_DATE_FORMAT
 #include "gnc-general-select.h" // for GNC_GENERAL_SELECT
 #include "gnc-option-uitype.hpp"
-#include "gnc-tree-view-account.h" // for GNC_TREE_VIEW_ACCOUNT
-#include "gnc-tree-model-budget.h" // for gnc_tree_model_budget
+#include "account-quickfill.h" // for GncAccountListItem
+#include "gnc-tree-model-budget.h" // for GncBudgetListItem
 #include "misc-gnome-utils.h" // for xxxgtk_textview_set_text
+#include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 
-/*Something somewhere in windows.h defines ABSOLUTE to something and
- *that contaminates using it in RelativeDateType.  Undef it.
+/* GTK/GDK can include windows.h after the option headers. Its ABSOLUTE macro
+ * conflicts with the RelativeDatePeriod enumerator used below.
  */
 #ifdef ABSOLUTE
 #undef ABSOLUTE
@@ -147,9 +152,8 @@ wrap_check_button (const GncOption& option, GtkWidget* widget, GtkGrid* page_box
 {
     auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
     gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
     /* attach the option widget to the second column of the grid */
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
@@ -161,18 +165,18 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::BOOLEAN} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto widget{GTK_TOGGLE_BUTTON(get_widget())};
-        gtk_toggle_button_set_active(widget, option.get_value<bool>());
+        auto widget{GTK_CHECK_BUTTON(get_widget())};
+        gtk_check_button_set_active(widget, option.get_value<bool>());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto widget{GTK_TOGGLE_BUTTON(get_widget())};
-        option.set_value(static_cast<bool>(gtk_toggle_button_get_active(widget)));
+        auto widget{GTK_CHECK_BUTTON(get_widget())};
+        option.set_value(static_cast<bool>(gtk_check_button_get_active(widget)));
     }
     SCM get_widget_scm_value(const GncOption& option) const override
     {
-        auto widget{GTK_TOGGLE_BUTTON(get_widget())};
-        return gtk_toggle_button_get_active(widget) ?
+        auto widget{GTK_CHECK_BUTTON(get_widget())};
+        return gtk_check_button_get_active(widget) ?
                SCM_BOOL_T : SCM_BOOL_F;
     }
 };
@@ -207,12 +211,12 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        gtk_entry_set_text(widget, option.get_value<std::string>().c_str());
+        gnc_entry_set_text(widget, option.get_value<std::string>().c_str());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        option.set_value(std::string{gtk_entry_get_text(widget)});
+        option.set_value(std::string{gnc_entry_get_text(widget)});
     }
 };
 
@@ -233,10 +237,9 @@ create_option_widget<GncOptionUIType::STRING> (GncOption& option,
 
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
 
@@ -262,14 +265,13 @@ public:
 template<> void
 create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_box, int row)
 {
-    auto scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+    auto scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_NEVER,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scroll), 2);
-
+    gnc_widget_set_all_margins (scrolled_window, 2);
     auto frame = gtk_frame_new(NULL);
-    gtk_container_add(GTK_CONTAINER(frame), scroll);
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
 
     auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
@@ -288,11 +290,11 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
 
     g_signal_connect(G_OBJECT(text_buffer), "changed",
                      G_CALLBACK(gnc_option_changed_option_cb), &option);
-    gtk_container_add (GTK_CONTAINER (scroll), widget);
-    gtk_box_pack_start(GTK_BOX(enclosing), frame, TRUE, TRUE, 0);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(widget));
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(frame));
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
     grid_attach_widget(GTK_GRID(page_box), enclosing, row);
 }
 
@@ -369,31 +371,37 @@ create_option_widget<GncOptionUIType::COMMODITY> (GncOption& option, GtkGrid *pa
     wrap_widget(option, widget, page_box, row);
 }
 
-static GtkWidget*
-create_multichoice_widget(GncOption& option)
+static GtkStringList *
+create_permissible_values_model (GncOption& option)
 {
-    auto num_values = option.num_permissible_values();
+    auto values = gtk_string_list_new (nullptr);
+    auto count = option.num_permissible_values ();
 
-    g_return_val_if_fail(num_values >= 0, NULL);
-    auto renderer = gtk_cell_renderer_text_new();
-    auto store = gtk_list_store_new(1, G_TYPE_STRING);
-    /* Add values to the list store, entry and tooltip */
-    for (decltype(num_values) i = 0; i < num_values; i++)
+    g_return_val_if_fail (count >= 0, values);
+    for (decltype(count) index = 0; index < count; index++)
     {
-        GtkTreeIter iter;
-        auto itemstring = option.permissible_value_name(i);
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set(store, &iter, 0,
-                           (itemstring && *itemstring) ? _(itemstring) : "", -1);
-    }
-    /* Create the new Combo with tooltip and add the store */
-    auto widget{GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)))};
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(widget), renderer, TRUE);
-    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(widget),
-                                   renderer, "text", 0);
-    g_object_unref(store);
+        auto value = option.permissible_value_name (index);
 
-    return widget;
+        gtk_string_list_append (values, value && *value ? _(value) : "");
+    }
+
+    return values;
+}
+
+static void
+option_dropdown_selection_changed_cb (GObject *object, GParamSpec *pspec,
+                                      gpointer user_data)
+{
+    gnc_option_changed_widget_cb (GTK_WIDGET (object),
+                                  static_cast<GncOption *> (user_data));
+    (void)pspec;
+}
+
+static GtkWidget *
+create_multichoice_widget (GncOption& option)
+{
+    return GTK_WIDGET (gnc_gtk_drop_down_new (G_LIST_MODEL (create_permissible_values_model (option)),
+                                               nullptr));
 }
 
 class GncGtkMultichoiceUIItem : public GncOptionGtkUIItem
@@ -403,20 +411,26 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::MULTICHOICE} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto widget{GTK_COMBO_BOX(get_widget())};
-        gtk_combo_box_set_active(widget, option.get_value<uint16_t>());
+        auto widget{GTK_DROP_DOWN(get_widget())};
+        gtk_drop_down_set_selected(widget, option.get_value<uint16_t>());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto widget{GTK_COMBO_BOX(get_widget())};
-        option.set_value<uint16_t>(static_cast<uint16_t>(gtk_combo_box_get_active(widget)));
+        auto widget{GTK_DROP_DOWN(get_widget())};
+        auto selected{gtk_drop_down_get_selected(widget)};
+
+        if (selected != GTK_INVALID_LIST_POSITION)
+            option.set_value<uint16_t>(static_cast<uint16_t>(selected));
     }
     SCM get_widget_scm_value(const GncOption& option) const override
     {
-        auto widget{GTK_COMBO_BOX(get_widget())};
-        auto id{gtk_combo_box_get_active(widget)};
-        auto value{option.permissible_value(id)};
-        return scm_from_utf8_symbol(value);
+        auto widget{GTK_DROP_DOWN(get_widget())};
+        auto selected{gtk_drop_down_get_selected(widget)};
+
+        if (selected == GTK_INVALID_LIST_POSITION)
+            return SCM_BOOL_F;
+
+        return scm_from_utf8_symbol(option.permissible_value(selected));
     }
 };
 
@@ -428,11 +442,10 @@ create_option_widget<GncOptionUIType::MULTICHOICE> (GncOption& option, GtkGrid *
     auto ui_item{std::make_unique<GncGtkMultichoiceUIItem>(widget)};
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
-    g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+    g_signal_connect(G_OBJECT(widget), "notify::selected",
+                     G_CALLBACK(option_dropdown_selection_changed_cb), &option);
     wrap_widget(option, widget, page_box, row);
 }
-
 
 class GncDateEntry
 {
@@ -516,43 +529,27 @@ private:
 
 RelativeDateEntry::RelativeDateEntry(GncOption& option)
 {
-
-    auto renderer = gtk_cell_renderer_text_new();
-    auto store = gtk_list_store_new(1, G_TYPE_STRING);
-    /* Add values to the list store, entry and tooltip */
-    auto num = option.num_permissible_values();
-    for (decltype(num) index = 0; index < num; ++index)
-    {
-        GtkTreeIter  iter;
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0,
-                            _(option.permissible_value_name(index)), -1);
-    }
-
-    /* Create the new Combo with tooltip and add the store */
-    m_entry = GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(m_entry), 0);
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(m_entry), renderer, TRUE);
-    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(m_entry),
-                                   renderer, "text", 0);
-
-    g_object_unref(store);
-
-    m_handler_id = g_signal_connect(G_OBJECT(m_entry), "changed",
-                                    G_CALLBACK(gnc_option_changed_widget_cb),
-                                    &option);
+    m_entry = GTK_WIDGET (gnc_gtk_drop_down_new (G_LIST_MODEL (create_permissible_values_model (option)),
+                                                  nullptr));
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (m_entry), 0);
+    m_handler_id = g_signal_connect (m_entry, "notify::selected",
+                                     G_CALLBACK (option_dropdown_selection_changed_cb),
+                                     &option);
 }
 
 void
 RelativeDateEntry::set_entry_from_option(GncOption& option)
 {
-    gtk_combo_box_set_active(GTK_COMBO_BOX(m_entry), option.get_value<uint16_t>());
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (m_entry), option.get_value<uint16_t>());
 }
 
 void
 RelativeDateEntry::set_option_from_entry(GncOption& option)
 {
-    option.set_value<uint16_t>(gtk_combo_box_get_active(GTK_COMBO_BOX(m_entry)));
+    auto selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (m_entry));
+
+    if (selected != GTK_INVALID_LIST_POSITION)
+        option.set_value<uint16_t>(static_cast<uint16_t>(selected));
 }
 
 void
@@ -594,27 +591,22 @@ static void date_set_relative_cb(GtkWidget *widget, gpointer data1);
 
 BothDateEntry::BothDateEntry(GncOption& option) :
     m_widget{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)},
-    m_abs_button{gtk_radio_button_new(NULL)},
+    m_abs_button{gtk_check_button_new()},
     m_abs_entry{std::make_unique<AbsoluteDateEntry>(option)},
-    m_rel_button{
-        gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(m_abs_button))},
+    m_rel_button{gtk_check_button_new()},
     m_rel_entry{std::make_unique<RelativeDateEntry>(option)}
 {
+    gtk_check_button_set_group (GTK_CHECK_BUTTON(m_abs_button), GTK_CHECK_BUTTON(m_rel_button));
     gtk_box_set_homogeneous (GTK_BOX(m_widget), FALSE);
     m_abs_hdlr = g_signal_connect(G_OBJECT(m_abs_button), "toggled",
                                   G_CALLBACK(date_set_absolute_cb), &option);
     m_rel_hdlr = g_signal_connect(G_OBJECT(m_rel_button), "toggled",
                                   G_CALLBACK(date_set_relative_cb), &option);
 
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_abs_button, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_abs_entry->get_entry(), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_rel_button, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_rel_entry->get_entry(), FALSE, FALSE, 0);
-
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_abs_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_abs_entry->get_entry()));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_rel_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_rel_entry->get_entry()));
 }
 
 GtkWidget*
@@ -643,9 +635,9 @@ BothDateEntry::set_entry_from_option(GncOption& option)
         m_abs_entry->set_entry_from_option(option);
     else
         m_rel_entry->set_entry_from_option(option);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_rel_button),
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(m_rel_button),
                                  !m_use_absolute);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_abs_button),
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(m_abs_button),
                                  m_use_absolute);
 
     toggle_relative(m_use_absolute);
@@ -755,14 +747,14 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
         enclosing = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
         gtk_box_set_homogeneous(GTK_BOX (enclosing), FALSE);
 
-        gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     }
     else
     {
         enclosing = gtk_frame_new(nullptr);
         g_object_set(G_OBJECT(widget), "margin", 3, NULL);
 
-        gtk_container_add (GTK_CONTAINER(enclosing), widget);
+        gtk_frame_set_child (GTK_FRAME(enclosing), GTK_WIDGET(widget));
     }
 
     gtk_widget_set_halign (GTK_WIDGET(enclosing), GTK_ALIGN_START);
@@ -778,7 +770,6 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
         date_ui->block_signals(false);
     }
 
-    gtk_widget_show_all(enclosing);
 }
 
 template<> void
@@ -804,271 +795,682 @@ create_option_widget<GncOptionUIType::DATE_BOTH>(GncOption& option,
 
 using GncOptionAccountList = std::vector<GncGUID>;
 
-static void
-account_select_all_cb(GtkWidget *widget, gpointer data)
-{
-    GncOption* option = static_cast<decltype(option)>(data);
-    GncTreeViewAccount *tree_view;
-    GtkTreeSelection *selection;
+static constexpr const char* s_account_list_context_data{
+    "gnc-account-list-context"};
+static constexpr const char* s_account_list_model_data{
+    "gnc-account-list-model"};
+static constexpr const char* s_account_list_roots_data{
+    "gnc-account-list-roots"};
+static constexpr const char* s_account_list_selection_data{
+    "gnc-account-list-selection"};
+static constexpr const char* s_account_list_source_data{
+    "gnc-account-list-source"};
+static constexpr const char* s_account_list_expansion_listener_data{
+    "gnc-account-list-expansion-listener"};
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget (option));
-    gtk_tree_view_expand_all(GTK_TREE_VIEW(tree_view));
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
-    gtk_tree_selection_select_all(selection);
-    gnc_option_changed_widget_cb(widget, option);
+struct AccountListSelectionContext
+{
+    GncOption *option;
+    gboolean include_type[NUM_ACCOUNT_TYPES];
+    gboolean show_hidden;
+    gboolean synchronizing;
+    gboolean updating_expansion;
+    gboolean restore_expansion;
+    guint restore_source_id;
+    GWeakRef root;
+    GncOptionAccountList selected;
+    GncOptionAccountList expanded;
+    std::string search;
+};
+
+static void
+account_list_selection_context_free (gpointer data)
+{
+    auto context = static_cast<AccountListSelectionContext *> (data);
+
+    if (context->restore_source_id)
+        g_source_remove (context->restore_source_id);
+    g_weak_ref_clear (&context->root);
+    delete context;
+}
+
+static gboolean
+account_list_contains_guid (const GncOptionAccountList& accounts,
+                            const GncGUID *guid)
+{
+    for (const auto& account_guid : accounts)
+        if (guid_equal (&account_guid, guid))
+            return TRUE;
+    return FALSE;
 }
 
 static void
-account_clear_all_cb(GtkWidget *widget, gpointer data)
+account_list_set_guid_selected (GncOptionAccountList& accounts,
+                                const GncGUID *guid, gboolean selected)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    GncTreeViewAccount *tree_view;
-    GtkTreeSelection *selection;
+    auto iter = accounts.begin ();
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget (option));
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
-    gtk_tree_selection_unselect_all(selection);
-    gnc_option_changed_widget_cb(widget, option);
+    while (iter != accounts.end () && !guid_equal (&*iter, guid))
+        ++iter;
+    if (selected && iter == accounts.end ())
+        accounts.push_back (*guid);
+    else if (!selected && iter != accounts.end ())
+        accounts.erase (iter);
+}
+
+static AccountListSelectionContext *
+account_list_get_context (GtkWidget *root)
+{
+    return static_cast<AccountListSelectionContext *> (
+        g_object_get_data (G_OBJECT (root), s_account_list_context_data));
+}
+
+static GtkTreeListModel *
+account_list_get_model (GtkWidget *root)
+{
+    return GTK_TREE_LIST_MODEL (
+        g_object_get_data (G_OBJECT (root), s_account_list_model_data));
+}
+
+static GListStore *
+account_list_get_roots (GtkWidget *root)
+{
+    return G_LIST_STORE (
+        g_object_get_data (G_OBJECT (root), s_account_list_roots_data));
+}
+
+static GtkSelectionModel *
+account_list_get_selection (GtkWidget *root)
+{
+    return GTK_SELECTION_MODEL (
+        g_object_get_data (G_OBJECT (root), s_account_list_selection_data));
+}
+
+static Account *
+account_list_get_account (gpointer item)
+{
+    if (!GTK_IS_TREE_LIST_ROW (item))
+        return nullptr;
+    auto account = gtk_tree_list_row_get_item (GTK_TREE_LIST_ROW (item));
+    auto result = GNC_IS_ACCOUNT (account) ? GNC_ACCOUNT (account) : nullptr;
+    g_clear_object (&account);
+    return result;
+}
+
+static gboolean
+account_list_name_matches_search (Account *account, const std::string& search)
+{
+    if (search.empty ())
+        return TRUE;
+
+    auto name = xaccAccountGetName (account);
+    auto folded_search = g_utf8_casefold (search.c_str (), -1);
+    auto folded_name = g_utf8_casefold (name ? name : "", -1);
+    auto matches = g_strstr_len (folded_name, -1, folded_search) != nullptr;
+
+    g_free (folded_name);
+    g_free (folded_search);
+    return matches;
+}
+
+static gboolean
+account_list_account_matches_filter (Account *account,
+                                     AccountListSelectionContext *context)
+{
+    auto type = xaccAccountGetType (account);
+
+    return type >= 0 && type < NUM_ACCOUNT_TYPES &&
+           context->include_type[type] &&
+           (context->show_hidden || !xaccAccountIsHidden (account)) &&
+           account_list_name_matches_search (account, context->search);
+}
+
+static gboolean
+account_list_account_is_visible (Account *account,
+                                 AccountListSelectionContext *context)
+{
+    auto children = gnc_account_get_children (account);
+    gboolean visible = account_list_account_matches_filter (account, context);
+
+    for (auto node = children; node && !visible; node = node->next)
+        visible = account_list_account_is_visible (
+            static_cast<Account *> (node->data), context);
+    g_list_free (children);
+    return visible;
 }
 
 static void
-account_select_children_cb(GtkWidget *widget, gpointer data)
+account_list_append_children (GListStore *store, Account *parent,
+                              AccountListSelectionContext *context)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    GncTreeViewAccount *tree_view;
-    GList *acct_list = NULL, *acct_iter = NULL;
+    auto children = gnc_account_get_children_sorted (parent);
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget (option));
-    acct_list = gnc_tree_view_account_get_selected_accounts (tree_view);
+    for (auto node = children; node; node = node->next)
+    {
+        auto account = static_cast<Account *> (node->data);
 
-    for (acct_iter = acct_list; acct_iter; acct_iter = acct_iter->next)
-        gnc_tree_view_account_select_subaccounts (tree_view, static_cast<Account*>(acct_iter->data));
+        if (account_list_account_is_visible (account, context))
+            g_list_store_append (store, account);
+    }
+    g_list_free (children);
+}
 
-    g_list_free (acct_list);
+static GListModel *
+account_list_create_children_cb (gpointer item, gpointer user_data)
+{
+    auto root = GTK_WIDGET (user_data);
+    auto context = account_list_get_context (root);
+    auto account = GNC_ACCOUNT (item);
+    auto children = g_list_store_new (GNC_TYPE_ACCOUNT);
+
+    account_list_append_children (children, account, context);
+    return G_LIST_MODEL (children);
 }
 
 static void
-account_set_default_cb(GtkWidget* widget, gpointer data)
+account_list_prune_selection (AccountListSelectionContext *context)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    account_clear_all_cb(widget, data);
-    option->set_value(option->get_default_value<GncOptionAccountList>());
-    option->set_ui_item_from_option();
+    auto book = gnc_get_current_book ();
+    auto exists = [book] (const GncGUID& guid)
+    {
+        return xaccAccountLookup (&guid, book) != nullptr;
+    };
+
+    context->selected.erase (
+        std::remove_if (context->selected.begin (), context->selected.end (),
+                        [&exists] (const GncGUID& guid)
+                        {
+                            return !exists (guid);
+                        }),
+        context->selected.end ());
+    context->expanded.erase (
+        std::remove_if (context->expanded.begin (), context->expanded.end (),
+                        [&exists] (const GncGUID& guid)
+                        {
+                            return !exists (guid);
+                        }),
+        context->expanded.end ());
+}
+
+static gboolean
+account_list_has_selected_descendant (Account *account,
+                                      AccountListSelectionContext *context)
+{
+    auto book = gnc_get_current_book ();
+
+    for (const auto& guid : context->selected)
+    {
+        auto selected = xaccAccountLookup (&guid, book);
+
+        if (selected && xaccAccountHasAncestor (selected, account))
+            return TRUE;
+    }
+    return FALSE;
 }
 
 static void
-show_hidden_toggled_cb(GtkWidget *widget, GncOption* option)
+account_list_apply_expansion (GtkWidget *root);
+
+static void
+account_list_apply_selection (GtkWidget *root)
 {
-    if (option->get_ui_type() != GncOptionUIType::ACCOUNT_LIST &&
-        option->get_ui_type() != GncOptionUIType::ACCOUNT_SEL)
+    auto context = account_list_get_context (root);
+    auto selection = account_list_get_selection (root);
+    auto model = G_LIST_MODEL (account_list_get_model (root));
+    auto was_synchronizing = context->synchronizing;
+
+    context->synchronizing = TRUE;
+    gtk_selection_model_unselect_all (selection);
+    for (guint index = 0; index < g_list_model_get_n_items (model); ++index)
+    {
+        auto item = g_list_model_get_item (model, index);
+        auto account = account_list_get_account (item);
+
+        if (account && account_list_contains_guid (context->selected,
+                                                   xaccAccountGetGUID (account)))
+            gtk_selection_model_select_item (selection, index, FALSE);
+        g_clear_object (&item);
+    }
+    context->synchronizing = was_synchronizing;
+}
+
+static void
+account_list_apply_expansion (GtkWidget *root)
+{
+    auto context = account_list_get_context (root);
+    auto model = account_list_get_model (root);
+
+    context->updating_expansion = TRUE;
+    for (guint position = 0;
+         position < g_list_model_get_n_items (G_LIST_MODEL (model));
+         ++position)
+    {
+        auto row = gtk_tree_list_model_get_row (model, position);
+        auto account = account_list_get_account (row);
+
+        if (account && gtk_tree_list_row_is_expandable (row))
+        {
+            auto expanded = !context->search.empty () ||
+                account_list_contains_guid (context->expanded,
+                                            xaccAccountGetGUID (account)) ||
+                account_list_has_selected_descendant (account, context);
+
+            gtk_tree_list_row_set_expanded (row, expanded);
+        }
+        g_clear_object (&row);
+    }
+    context->updating_expansion = FALSE;
+}
+
+static gboolean
+account_list_restore_selection_cb (gpointer data)
+{
+    auto context = static_cast<AccountListSelectionContext *> (data);
+    auto root = GTK_WIDGET (g_weak_ref_get (&context->root));
+
+    auto restore_expansion = context->restore_expansion;
+    context->restore_source_id = 0;
+    context->restore_expansion = FALSE;
+    if (root)
+    {
+        if (restore_expansion)
+            account_list_apply_expansion (root);
+        account_list_apply_selection (root);
+        g_object_unref (root);
+    }
+    context->synchronizing = FALSE;
+    return G_SOURCE_REMOVE;
+}
+
+static void
+account_list_schedule_restore (AccountListSelectionContext *context,
+                               gboolean restore_expansion)
+{
+    context->synchronizing = TRUE;
+    context->restore_expansion |= restore_expansion;
+    if (!context->restore_source_id)
+        context->restore_source_id = g_idle_add (
+            account_list_restore_selection_cb, context);
+}
+
+static void
+account_list_rebuild (GtkWidget *root)
+{
+    auto context = account_list_get_context (root);
+    auto roots = account_list_get_roots (root);
+    auto book_root = gnc_book_get_root_account (gnc_get_current_book ());
+
+    account_list_prune_selection (context);
+    g_list_store_remove_all (roots);
+    account_list_append_children (roots, book_root, context);
+    account_list_schedule_restore (context, TRUE);
+}
+
+static void
+account_list_source_items_changed_cb (GListModel *source, guint position,
+                                      guint removed, guint added, GtkWidget *root)
+{
+    account_list_rebuild (root);
+    (void)source;
+    (void)position;
+    (void)removed;
+    (void)added;
+}
+
+static void
+account_list_model_items_changed_cb (GListModel *model, guint position,
+                                     guint removed, guint added,
+                                     GtkWidget *root)
+{
+    auto context = account_list_get_context (root);
+
+    if (!context->synchronizing && !context->updating_expansion)
+        account_list_schedule_restore (context, FALSE);
+    (void)model;
+    (void)position;
+    (void)removed;
+    (void)added;
+}
+
+static void
+account_list_selection_changed_cb (GtkSelectionModel *selection, guint position,
+                                   guint n_items, GtkWidget *root)
+{
+    auto context = account_list_get_context (root);
+    auto model = G_LIST_MODEL (account_list_get_model (root));
+
+    if (context->synchronizing)
         return;
+    for (guint index = position; index < position + n_items; ++index)
+    {
+        auto item = g_list_model_get_item (model, index);
+        auto account = account_list_get_account (item);
 
-    auto tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget(option));
-    AccountViewInfo avi;
-    gnc_tree_view_account_get_view_info (tree_view, &avi);
-    avi.show_hidden = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-    gnc_tree_view_account_set_view_info (tree_view, &avi);
-    gnc_option_changed_widget_cb(widget, option);
+        if (account)
+            account_list_set_guid_selected (
+                context->selected, xaccAccountGetGUID (account),
+                gtk_selection_model_is_selected (selection, index));
+        g_clear_object (&item);
+    }
+    gnc_option_changed_widget_cb (root, context->option);
+}
+
+static void
+account_list_row_expanded_cb (GtkTreeListRow *row, GParamSpec *pspec,
+                              GtkWidget *root)
+{
+    auto context = account_list_get_context (root);
+    auto account = account_list_get_account (row);
+
+    if (!context->updating_expansion && account)
+        account_list_set_guid_selected (
+            context->expanded, xaccAccountGetGUID (account),
+            gtk_tree_list_row_get_expanded (row));
+    (void)pspec;
+}
+
+static void
+account_list_item_setup_cb (GtkSignalListItemFactory *factory,
+                            GtkListItem *list_item, gpointer user_data)
+{
+    auto expander = GTK_TREE_EXPANDER (gtk_tree_expander_new ());
+    auto label = gtk_label_new (nullptr);
+
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_tree_expander_set_child (expander, label);
+    gtk_list_item_set_child (list_item, GTK_WIDGET (expander));
+    (void)factory;
+    (void)user_data;
+}
+
+static void
+account_list_item_bind_cb (GtkSignalListItemFactory *factory,
+                           GtkListItem *list_item, gpointer user_data)
+{
+    auto root = GTK_WIDGET (user_data);
+    auto row = GTK_TREE_LIST_ROW (gtk_list_item_get_item (list_item));
+    auto account = account_list_get_account (row);
+    auto expander = GTK_TREE_EXPANDER (gtk_list_item_get_child (list_item));
+    auto label = GTK_LABEL (gtk_tree_expander_get_child (expander));
+
+    gtk_label_set_text (label, account ? xaccAccountGetName (account) : "");
+    gtk_tree_expander_set_list_row (expander, row);
+    if (!g_object_get_data (G_OBJECT (row),
+                            s_account_list_expansion_listener_data))
+    {
+        g_signal_connect_object (row, "notify::expanded",
+                                 G_CALLBACK (account_list_row_expanded_cb),
+                                 root, G_CONNECT_DEFAULT);
+        g_object_set_data (G_OBJECT (row),
+                           s_account_list_expansion_listener_data, root);
+    }
+    (void)factory;
+}
+
+static void
+account_select_all_cb (GtkWidget *widget, gpointer data)
+{
+    auto root = GTK_WIDGET (data);
+    auto context = account_list_get_context (root);
+    auto book_root = gnc_book_get_root_account (gnc_get_current_book ());
+    auto accounts = gnc_account_get_descendants (book_root);
+
+    for (auto node = accounts; node; node = node->next)
+    {
+        auto account = static_cast<Account *> (node->data);
+
+        if (account_list_account_matches_filter (account, context))
+            account_list_set_guid_selected (context->selected,
+                                            xaccAccountGetGUID (account),
+                                            TRUE);
+    }
+    g_list_free (accounts);
+    account_list_apply_selection (root);
+    gnc_option_changed_widget_cb (widget, context->option);
+}
+
+static void
+account_clear_all_cb (GtkWidget *widget, gpointer data)
+{
+    auto root = GTK_WIDGET (data);
+    auto context = account_list_get_context (root);
+
+    context->selected.clear ();
+    account_list_apply_selection (root);
+    gnc_option_changed_widget_cb (widget, context->option);
+}
+
+static void
+account_select_children_cb (GtkWidget *widget, gpointer data)
+{
+    auto root = GTK_WIDGET (data);
+    auto context = account_list_get_context (root);
+    auto book = gnc_get_current_book ();
+    auto parents = context->selected;
+
+    for (const auto& guid : parents)
+    {
+        auto parent = xaccAccountLookup (&guid, book);
+        auto accounts = parent
+            ? gnc_account_get_descendants (parent)
+            : nullptr;
+
+        for (auto node = accounts; node; node = node->next)
+        {
+            auto account = static_cast<Account *> (node->data);
+
+            if (account_list_account_matches_filter (account, context))
+                account_list_set_guid_selected (
+                    context->selected, xaccAccountGetGUID (account), TRUE);
+        }
+        g_list_free (accounts);
+    }
+    account_list_apply_expansion (root);
+    account_list_apply_selection (root);
+    gnc_option_changed_widget_cb (widget, context->option);
+}
+
+static void
+account_set_default_cb (GtkWidget *widget, gpointer data)
+{
+    auto root = GTK_WIDGET (data);
+    auto context = account_list_get_context (root);
+
+    context->selected = context->option->get_default_value<GncOptionAccountList> ();
+    account_list_prune_selection (context);
+    account_list_apply_expansion (root);
+    account_list_apply_selection (root);
+    gnc_option_changed_widget_cb (widget, context->option);
+}
+
+static void
+show_hidden_toggled_cb (GtkWidget *widget, gpointer data)
+{
+    auto root = GTK_WIDGET (data);
+    auto context = account_list_get_context (root);
+
+    context->show_hidden = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
+    account_list_rebuild (root);
+    gnc_option_changed_widget_cb (widget, context->option);
+}
+
+static void
+account_list_search_changed_cb (GtkSearchEntry *entry, GtkWidget *root)
+{
+    auto context = account_list_get_context (root);
+
+    context->search = gtk_editable_get_text (GTK_EDITABLE (entry));
+    account_list_rebuild (root);
 }
 
 class GncGtkAccountListUIItem : public GncOptionGtkUIItem
 {
 public:
-    explicit GncGtkAccountListUIItem(GtkWidget* widget) :
+    explicit GncGtkAccountListUIItem (GtkWidget *widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::ACCOUNT_LIST} {}
-    void set_ui_item_from_option(GncOption& option) noexcept override
+    void set_ui_item_from_option (GncOption& option) noexcept override
     {
-        auto widget{GNC_TREE_VIEW_ACCOUNT(get_widget())};
-        GList *acc_list = nullptr;
-        const GncOptionAccountList& accounts =
-            option.get_value<GncOptionAccountList>();
-        auto book{gnc_get_current_book()};
-        for (auto guid : accounts)
-        {
-            auto account{xaccAccountLookup(&guid, book)};
-            acc_list = g_list_prepend(acc_list, account);
-        }
-        acc_list = g_list_reverse(acc_list);
-        gnc_tree_view_account_set_selected_accounts(widget, acc_list, TRUE);
-        g_list_free(acc_list);
+        auto root = get_widget ();
+        auto context = account_list_get_context (root);
+
+        context->selected = option.get_value<GncOptionAccountList> ();
+        account_list_prune_selection (context);
+        account_list_apply_expansion (root);
+        account_list_apply_selection (root);
     }
-    void set_option_from_ui_item(GncOption& option) noexcept override
+    void set_option_from_ui_item (GncOption& option) noexcept override
     {
-        auto widget{GNC_TREE_VIEW_ACCOUNT(get_widget())};
-        auto acc_list = gnc_tree_view_account_get_selected_accounts(widget);
-        GncOptionAccountList acc_vec;
-        acc_vec.reserve(g_list_length(acc_list));
-        for (auto node = acc_list; node; node = g_list_next(node))
-        {
-            auto guid{qof_entity_get_guid(node->data)};
-            acc_vec.push_back(*guid);
-        }
-        g_list_free(acc_list);
-        option.set_value(acc_vec);
+        auto context = account_list_get_context (get_widget ());
+
+        account_list_prune_selection (context);
+        option.set_value (context->selected);
     }
 };
 
-static GtkWidget*
-create_account_widget(GncOption& option, char *name)
+static GtkWidget *
+create_account_widget (GncOption& option, char *name)
 {
-    bool multiple_selection;
-    GtkWidget *scroll_win;
+    auto root = gtk_frame_new (name);
+    auto vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+    auto search_entry = gtk_search_entry_new ();
+    auto scrolled_window = gtk_scrolled_window_new ();
+    auto button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    auto context = new AccountListSelectionContext {};
+    auto account_types = option.account_type_list ();
+    auto source = gnc_get_shared_account_name_list_model (
+        gnc_book_get_root_account (gnc_get_current_book ()),
+        "gnc-option-account-list", nullptr, nullptr);
+    auto roots = g_list_store_new (GNC_TYPE_ACCOUNT);
+    GtkListItemFactory *factory;
+    GtkTreeListModel *model;
+    GtkSelectionModel *selection;
+    GtkWidget *view;
     GtkWidget *button;
-    GtkWidget *frame;
-    GtkWidget *tree;
-    GtkWidget *vbox;
-    GtkWidget *bbox;
-    GList *acct_type_list;
-    GtkTreeSelection *selection;
 
-    multiple_selection = option.is_multiselect();
-    acct_type_list = option.account_type_list();
-
-    frame = gtk_frame_new(name);
-
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-
-    gtk_container_add(GTK_CONTAINER(frame), vbox);
-
-    tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(tree), FALSE);
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
-    if (multiple_selection)
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-    else
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-
-    if (acct_type_list)
+    context->option = &option;
+    context->show_hidden = TRUE;
+    for (auto& include_type : context->include_type)
+        include_type = account_types == nullptr;
+    for (auto node = account_types; node; node = node->next)
     {
-        GList *node;
-        AccountViewInfo avi;
-        int i;
+        auto type = static_cast<GNCAccountType> (GPOINTER_TO_INT (node->data));
 
-        gnc_tree_view_account_get_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
-
-        for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-            avi.include_type[i] = FALSE;
-        avi.show_hidden = TRUE;
-
-        for (node = acct_type_list; node; node = node->next)
-        {
-            GNCAccountType type = static_cast<decltype(type)>(GPOINTER_TO_INT (node->data));
-            if (type < NUM_ACCOUNT_TYPES)
-                avi.include_type[type] = TRUE;
-        }
-
-        gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
-        g_list_free (acct_type_list);
+        if (type >= 0 && type < NUM_ACCOUNT_TYPES)
+            context->include_type[type] = TRUE;
     }
-    else
+    g_list_free (account_types);
+    g_weak_ref_init (&context->root, root);
+    g_object_set_data_full (G_OBJECT (root), s_account_list_context_data,
+                            context, account_list_selection_context_free);
+    g_object_set_data_full (G_OBJECT (root), s_account_list_roots_data, roots,
+                            g_object_unref);
+    g_object_set_data_full (G_OBJECT (root), s_account_list_source_data,
+                            g_object_ref (source), g_object_unref);
+    account_list_append_children (roots, gnc_book_get_root_account (
+                                   gnc_get_current_book ()), context);
+
+    model = gtk_tree_list_model_new (G_LIST_MODEL (roots), FALSE, FALSE,
+                                     account_list_create_children_cb, root,
+                                     nullptr);
+    selection = option.is_multiselect ()
+        ? GTK_SELECTION_MODEL (
+            gtk_multi_selection_new (G_LIST_MODEL (model)))
+        : GTK_SELECTION_MODEL (
+            gtk_single_selection_new (G_LIST_MODEL (model)));
+    g_object_set_data_full (G_OBJECT (root), s_account_list_model_data, model,
+                            g_object_unref);
+    g_object_set_data_full (G_OBJECT (root), s_account_list_selection_data,
+                            selection, g_object_unref);
+    g_signal_connect_object (model, "items-changed",
+                             G_CALLBACK (account_list_model_items_changed_cb),
+                             root, G_CONNECT_DEFAULT);
+    g_signal_connect_object (source, "items-changed",
+                             G_CALLBACK (account_list_source_items_changed_cb),
+                             root, G_CONNECT_DEFAULT);
+
+    factory = gtk_signal_list_item_factory_new ();
+    g_signal_connect (factory, "setup",
+                      G_CALLBACK (account_list_item_setup_cb), nullptr);
+    g_signal_connect (factory, "bind", G_CALLBACK (account_list_item_bind_cb),
+                      root);
+    view = gtk_list_view_new (GTK_SELECTION_MODEL (g_object_ref (selection)),
+                              GTK_LIST_ITEM_FACTORY (factory));
+    gtk_widget_set_vexpand (view, TRUE);
+    gtk_widget_set_hexpand (view, TRUE);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), view);
+    gnc_widget_set_all_margins (scrolled_window, 5);
+
+    gtk_frame_set_child (GTK_FRAME (root), vbox);
+    gtk_box_append (GTK_BOX (vbox), search_entry);
+    gtk_box_append (GTK_BOX (vbox), scrolled_window);
+    gtk_box_append (GTK_BOX (vbox), button_box);
+    option.set_ui_item (std::make_unique<GncGtkAccountListUIItem> (root));
+    option.set_ui_item_from_option ();
+
+    if (option.is_multiselect ())
     {
-        AccountViewInfo avi;
-        int i;
+        button = gtk_button_new_with_label (_("Select All"));
+        gtk_widget_set_tooltip_text (button, _("Select all accounts."));
+        gtk_box_append (GTK_BOX (button_box), button);
+        g_signal_connect (button, "clicked",
+                          G_CALLBACK (account_select_all_cb), root);
 
-        gnc_tree_view_account_get_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
+        button = gtk_button_new_with_label (_("Clear All"));
+        gtk_widget_set_tooltip_text (
+            button, _("Clear the selection and unselect all accounts."));
+        gtk_box_append (GTK_BOX (button_box), button);
+        g_signal_connect (button, "clicked", G_CALLBACK (account_clear_all_cb),
+                          root);
 
-        for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-            avi.include_type[i] = TRUE;
-        avi.show_hidden = TRUE;
-        gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
-    }
-
-    scroll_win = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
-                                   GTK_POLICY_AUTOMATIC,
-                                   GTK_POLICY_AUTOMATIC);
-
-    gtk_box_pack_start(GTK_BOX(vbox), scroll_win, TRUE, TRUE, 0);
-    gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
-
-    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
-    gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 10);
-
-    option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
-    option.set_ui_item_from_option();
-
-    if (multiple_selection)
-    {
-        button = gtk_button_new_with_label(_("Select All"));
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-        gtk_widget_set_tooltip_text(button, _("Select all accounts."));
-
-        g_signal_connect(G_OBJECT(button), "clicked",
-                         G_CALLBACK(account_select_all_cb), &option);
-
-        button = gtk_button_new_with_label(_("Clear All"));
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-        gtk_widget_set_tooltip_text(button, _("Clear the selection and unselect all accounts."));
-
-        g_signal_connect(G_OBJECT(button), "clicked",
-                         G_CALLBACK(account_clear_all_cb), &option);
-
-        button = gtk_button_new_with_label(_("Select Children"));
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-        gtk_widget_set_tooltip_text(button, _("Select all descendents of selected account."));
-
-        g_signal_connect(G_OBJECT(button), "clicked",
-                         G_CALLBACK(account_select_children_cb), &option);
+        button = gtk_button_new_with_label (_("Select Children"));
+        gtk_widget_set_tooltip_text (
+            button, _("Select all descendents of selected account."));
+        gtk_box_append (GTK_BOX (button_box), button);
+        g_signal_connect (button, "clicked",
+                          G_CALLBACK (account_select_children_cb), root);
     }
 
-    button = gtk_button_new_with_label(_("Select Default"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-    gtk_widget_set_tooltip_text(button, _("Select the default account selection."));
+    button = gtk_button_new_with_label (_("Select Default"));
+    gtk_widget_set_tooltip_text (button, _("Select the default account selection."));
+    gtk_box_append (GTK_BOX (button_box), button);
+    g_signal_connect (button, "clicked", G_CALLBACK (account_set_default_cb), root);
 
-    g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(account_set_default_cb), &option);
-
-    gtk_widget_set_margin_start (GTK_WIDGET(bbox), 6);
-    gtk_widget_set_margin_end (GTK_WIDGET(bbox), 6);
-
-    if (multiple_selection)
+    if (option.is_multiselect ())
     {
-        /* Put the "Show hidden" checkbox on a separate line since
-           the 4 buttons make the dialog too wide. */
-        bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-        gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
-        gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 0);
+        auto hidden_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+        gtk_box_append (GTK_BOX (vbox), hidden_box);
+        button_box = hidden_box;
     }
+    button = gtk_check_button_new_with_label (_("Show Hidden Accounts"));
+    gtk_widget_set_tooltip_text (
+        button, _("Show accounts that have been marked hidden."));
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
+    gtk_box_append (GTK_BOX (button_box), button);
+    g_signal_connect (button, "toggled", G_CALLBACK (show_hidden_toggled_cb), root);
 
-    button = gtk_check_button_new_with_label(_("Show Hidden Accounts"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-    gtk_widget_set_tooltip_text(button, _("Show accounts that have been marked hidden."));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-    g_signal_connect(G_OBJECT(button), "toggled",
-                     G_CALLBACK(show_hidden_toggled_cb), &option);
-
-    gtk_container_add(GTK_CONTAINER(scroll_win), tree);
-    return frame;
-}
-
-static void
-option_account_sel_changed_cb(GtkTreeSelection *sel, gpointer data)
-{
-    auto tree_view{gtk_tree_selection_get_tree_view(sel)};
-    gnc_option_changed_widget_cb(GTK_WIDGET(tree_view),
-                                 static_cast<GncOption*>(data));
+    g_signal_connect (search_entry, "search-changed",
+                      G_CALLBACK (account_list_search_changed_cb), root);
+    g_signal_connect (selection, "selection-changed",
+                      G_CALLBACK (account_list_selection_changed_cb), root);
+    return root;
 }
 
 template<> void
-create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
-                                                    GtkGrid *page_box, int row)
+create_option_widget<GncOptionUIType::ACCOUNT_LIST> (
+    GncOption& option, GtkGrid *page_box, int row)
 {
-    auto enclosing{create_account_widget(option, nullptr)};
-    gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
-    gtk_widget_set_hexpand (GTK_WIDGET(enclosing), TRUE);
-    set_name_label(option, page_box, row, true);
-    set_tool_tip(option, enclosing);
-    grid_attach_widget (GTK_GRID(page_box), enclosing, row);
+    auto enclosing = create_account_widget (option, nullptr);
 
-    auto widget{option_get_gtk_widget(&option)};
-    auto selection{gtk_tree_view_get_selection(GTK_TREE_VIEW(widget))};
-    g_signal_connect(G_OBJECT(selection), "changed",
-                     G_CALLBACK(option_account_sel_changed_cb), &option);
-    gtk_widget_show_all(enclosing);
+    gtk_widget_set_vexpand (enclosing, TRUE);
+    gtk_widget_set_hexpand (enclosing, TRUE);
+    set_name_label (option, page_box, row, true);
+    set_tool_tip (option, enclosing);
+    grid_attach_widget (page_box, enclosing, row);
 }
-
 class GncGtkAccountSelUIItem : public GncOptionGtkUIItem
 {
 public:
@@ -1099,7 +1501,8 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
                                      acct_type_list, NULL);
     g_list_free(acct_type_list);
 
-    // gnc_account_sel doesn't emit a changed signal
+    // Connect after the initial filter and value setup, so opening the option
+    // page does not mark it as user-modified.
     option.set_ui_item(std::make_unique<GncGtkAccountSelUIItem>(widget));
     option.set_ui_item_from_option();
 
@@ -1107,51 +1510,82 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
     wrap_widget(option, widget, page_box, row);
     // wrap_widget sets the parent so this comes after.
-    gtk_container_child_set(GTK_CONTAINER(gtk_widget_get_parent(widget)),
-                            widget, "fill", TRUE, "expand", TRUE,
-                            nullptr);
 }
 
 static void
-list_changed_cb(GtkTreeSelection *selection, GncOption* option)
+list_item_setup_cb (GtkSignalListItemFactory *factory,
+                    GtkListItem *list_item,
+                    gpointer user_data)
 {
-    GtkTreeView *view = GTK_TREE_VIEW(option_get_gtk_widget (option));
-    gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
+    auto label = gtk_label_new (nullptr);
+
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+    gtk_list_item_set_child (list_item, label);
 }
 
 static void
-list_select_all_cb(GtkWidget *widget, gpointer data)
+list_item_bind_cb (GtkSignalListItemFactory *factory,
+                   GtkListItem *list_item,
+                   gpointer user_data)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    GtkTreeView *view;
-    GtkTreeSelection *selection;
+    auto item = GTK_STRING_OBJECT (gtk_list_item_get_item (list_item));
+    auto label = GTK_LABEL (gtk_list_item_get_child (list_item));
 
-    view = GTK_TREE_VIEW(option_get_gtk_widget(option));
-    selection = gtk_tree_view_get_selection(view);
-    gtk_tree_selection_select_all(selection);
-    gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
+    gtk_label_set_text (label, gtk_string_object_get_string (item));
+}
+
+static GtkListItemFactory *
+list_item_factory_new ()
+{
+    auto factory = gtk_signal_list_item_factory_new ();
+
+    g_signal_connect (factory, "setup", G_CALLBACK (list_item_setup_cb), nullptr);
+    g_signal_connect (factory, "bind", G_CALLBACK (list_item_bind_cb), nullptr);
+    return GTK_LIST_ITEM_FACTORY (factory);
+}
+
+static GtkMultiSelection *
+list_selection_from_option (GncOption *option)
+{
+    auto view = GTK_LIST_VIEW (option_get_gtk_widget (option));
+
+    return GTK_MULTI_SELECTION (gtk_list_view_get_model (view));
 }
 
 static void
-list_clear_all_cb(GtkWidget *widget, gpointer data)
+list_changed_cb (GtkSelectionModel *selection, guint position, guint n_items,
+                 GncOption *option)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    GtkTreeView *view;
-    GtkTreeSelection *selection;
-
-    view = GTK_TREE_VIEW(option_get_gtk_widget(option));
-    selection = gtk_tree_view_get_selection(view);
-    gtk_tree_selection_unselect_all(selection);
-    gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
+    gnc_option_changed_widget_cb (GTK_WIDGET (option_get_gtk_widget (option)), option);
 }
 
 static void
-list_set_default_cb(GtkWidget *widget, gpointer data)
+list_select_all_cb (GtkWidget *widget, gpointer data)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    list_clear_all_cb(widget, data);
-    option->set_value(option->get_default_value<GncMultichoiceOptionIndexVec>());
-    option->set_ui_item_from_option();
+    auto option = static_cast<GncOption *>(data);
+    auto selection = list_selection_from_option (option);
+
+    gtk_selection_model_select_all (GTK_SELECTION_MODEL (selection));
+}
+
+static void
+list_clear_all_cb (GtkWidget *widget, gpointer data)
+{
+    auto option = static_cast<GncOption *>(data);
+    auto selection = list_selection_from_option (option);
+
+    gtk_selection_model_unselect_all (GTK_SELECTION_MODEL (selection));
+}
+
+static void
+list_set_default_cb (GtkWidget *widget, gpointer data)
+{
+    auto option = static_cast<GncOption *>(data);
+
+    option->set_value (option->get_default_value<GncMultichoiceOptionIndexVec> ());
+    option->set_ui_item_from_option ();
+    gnc_option_changed_widget_cb (option_get_gtk_widget (option), option);
 }
 
 class GncGtkListUIItem : public GncOptionGtkUIItem
@@ -1162,102 +1596,81 @@ public:
 
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto widget{GTK_TREE_VIEW(get_widget())};
-        auto selection{gtk_tree_view_get_selection(widget)};
-        gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
-        g_signal_handlers_block_by_func(selection, (gpointer)list_changed_cb, &option);
-        gtk_tree_selection_unselect_all(selection);
-        for (auto index : option.get_value<GncMultichoiceOptionIndexVec>())
+        auto selection = list_selection_from_option (&option);
+        auto model = gtk_multi_selection_get_model (selection);
+        const auto count = g_list_model_get_n_items (model);
+
+        g_signal_handlers_block_by_func (selection, (gpointer)list_changed_cb, &option);
+        gtk_selection_model_unselect_all (GTK_SELECTION_MODEL (selection));
+        for (auto index : option.get_value<GncMultichoiceOptionIndexVec> ())
         {
-            auto path{gtk_tree_path_new_from_indices(index, -1)};
-            gtk_tree_selection_select_path(selection, path);
-            gtk_tree_path_free(path);
+            if (static_cast<guint> (index) < count)
+                gtk_selection_model_select_item (GTK_SELECTION_MODEL (selection), index, FALSE);
         }
-        g_signal_handlers_unblock_by_func(selection, (gpointer)list_changed_cb, &option);
+        g_signal_handlers_unblock_by_func (selection, (gpointer)list_changed_cb, &option);
     }
 
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto widget{GTK_TREE_VIEW(get_widget())};
-        auto selection{gtk_tree_view_get_selection(widget)};
-        auto selected_rows{gtk_tree_selection_get_selected_rows(selection, nullptr)};
-        GncMultichoiceOptionIndexVec vec;
-        for (auto row = selected_rows; row; row = g_list_next(row))
+        auto selection = list_selection_from_option (&option);
+        auto selected = gtk_selection_model_get_selection (GTK_SELECTION_MODEL (selection));
+        GtkBitsetIter iter;
+        guint index;
+        GncMultichoiceOptionIndexVec values;
+
+        if (gtk_bitset_iter_init_first (&iter, selected, &index))
         {
-            auto path{static_cast<GtkTreePath*>(row->data)};
-            auto indices{gtk_tree_path_get_indices(path)};
-            vec.push_back(*indices);
+            do
+            {
+                values.push_back (static_cast<decltype(values)::value_type> (index));
+            } while (gtk_bitset_iter_next (&iter, &index));
         }
-        g_list_free_full(selected_rows, (GDestroyNotify)gtk_tree_path_free);
-        option.set_value(vec);
+        gtk_bitset_unref (selected);
+        option.set_value (values);
     }
 };
 
 static GtkWidget *
-create_list_widget(GncOption& option, char *name)
+create_list_widget (GncOption& option, char *name)
 {
-    auto frame = gtk_frame_new(name);
+    auto frame = gtk_frame_new (name);
     auto hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    auto values = create_permissible_values_model (option);
+    auto selection = gtk_multi_selection_new (G_LIST_MODEL (values));
+    auto view = gtk_list_view_new (GTK_SELECTION_MODEL (selection), list_item_factory_new ());
+    auto scrolled = gtk_scrolled_window_new ();
+
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_container_add(GTK_CONTAINER(frame), hbox);
+    gtk_frame_set_child (GTK_FRAME (frame), hbox);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), view);
+    gtk_widget_set_hexpand (scrolled, TRUE);
+    gtk_widget_set_vexpand (scrolled, TRUE);
 
-    auto store = gtk_list_store_new(1, G_TYPE_STRING);
-    auto view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
-    g_object_unref(store);
-    auto renderer = gtk_cell_renderer_text_new();
-    auto column = gtk_tree_view_column_new_with_attributes("", renderer,
-                                                           "text", 0,
-                                                           NULL);
-    gtk_tree_view_append_column(view, column);
-    gtk_tree_view_set_headers_visible(view, FALSE);
+    option.set_ui_item (std::make_unique<GncGtkListUIItem> (view));
+    option.set_ui_item_from_option ();
 
-    auto num_values = option.num_permissible_values();
-    for (decltype(num_values) i = 0; i < num_values; i++)
-    {
-        GtkTreeIter iter;
-        auto raw_string = option.permissible_value_name(i);
-        auto string = (raw_string && *raw_string) ? _(raw_string) : "";
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 0, string ? string : "", -1);
-    }
+    gtk_box_append (GTK_BOX (hbox), scrolled);
+    g_signal_connect (selection, "selection-changed", G_CALLBACK (list_changed_cb), &option);
 
-    option.set_ui_item(std::make_unique<GncGtkListUIItem>(GTK_WIDGET(view)));
-    option.set_ui_item_from_option();
+    auto bbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_append (GTK_BOX (hbox), bbox);
 
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
+    auto button = gtk_button_new_with_label (_("Select All"));
+    gtk_box_append (GTK_BOX (bbox), button);
+    gtk_widget_set_tooltip_text (button, _("Select all entries."));
+    g_signal_connect (button, "clicked", G_CALLBACK (list_select_all_cb), &option);
 
-    auto selection = gtk_tree_view_get_selection(view);
-    gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
-    g_signal_connect(selection, "changed",
-                     G_CALLBACK(list_changed_cb), &option);
+    button = gtk_button_new_with_label (_("Clear All"));
+    gtk_box_append (GTK_BOX (bbox), button);
+    gtk_widget_set_tooltip_text (button, _("Clear the selection and unselect all entries."));
+    g_signal_connect (button, "clicked", G_CALLBACK (list_clear_all_cb), &option);
 
-    auto bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
-    gtk_box_pack_end(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
+    button = gtk_button_new_with_label (_("Select Default"));
+    gtk_box_append (GTK_BOX (bbox), button);
+    gtk_widget_set_tooltip_text (button, _("Select the default selection."));
+    g_signal_connect (button, "clicked", G_CALLBACK (list_set_default_cb), &option);
 
-    auto button = gtk_button_new_with_label(_("Select All"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-    gtk_widget_set_tooltip_text(button, _("Select all entries."));
-
-    g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(list_select_all_cb), &option);
-
-    button = gtk_button_new_with_label(_("Clear All"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-    gtk_widget_set_tooltip_text(button, _("Clear the selection and unselect all entries."));
-
-    g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(list_clear_all_cb), &option);
-
-    button = gtk_button_new_with_label(_("Select Default"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-    gtk_widget_set_tooltip_text(button, _("Select the default selection."));
-
-    g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(list_set_default_cb), &option);
-
-    g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
-
+    g_object_set (hbox, "margin", 3, nullptr);
     return frame;
 }
 
@@ -1265,14 +1678,12 @@ template<> void
 create_option_widget<GncOptionUIType::LIST> (GncOption& option,
                                              GtkGrid *page_box, int row)
 {
-
     auto enclosing{create_list_widget(option, nullptr)};
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
-    gtk_widget_show(enclosing);
+    gtk_widget_set_visible (enclosing, true);
 }
-
 class GncGtkNumberRangeUIItem : public GncOptionGtkUIItem
 {
 public:
@@ -1339,7 +1750,7 @@ create_range_spinner(GncOption& option)
          bigger >= 1; bigger /= 10.0)
         ++num_digits;
     num_digits += num_decimals;
-    gtk_entry_set_width_chars(GTK_ENTRY(widget), num_digits);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(widget), num_digits);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),
                               (upper_bound / 2)); //default
     return GTK_SPIN_BUTTON(widget);
@@ -1374,25 +1785,26 @@ public:
         auto rgba_str{g_strdup_printf("#%s", value.c_str())};
         if (gdk_rgba_parse(&color, rgba_str))
         {
-            auto color_button = GTK_COLOR_CHOOSER(get_widget());
-            gtk_color_chooser_set_rgba(color_button, &color);
+            auto color_button = GTK_COLOR_DIALOG_BUTTON (get_widget ());
+            gtk_color_dialog_button_set_rgba (color_button, &color);
         }
         g_free(rgba_str);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        GdkRGBA color;
-        auto color_button = GTK_COLOR_CHOOSER(get_widget());
-        gtk_color_chooser_get_rgba(color_button, &color);
+        auto color_button = GTK_COLOR_DIALOG_BUTTON (get_widget ());
+        auto color = gtk_color_dialog_button_get_rgba (color_button);
+        if (!color)
+            return;
         auto rgba_str = g_strdup_printf("%2x%2x%2x%2x",
-                                        (uint8_t)(color.red * 255),
-                                        (uint8_t)(color.green * 255),
-                                        (uint8_t)(color.blue * 255),
-                                        (uint8_t)(color.alpha * 255));
+                                        (uint8_t)(color->red * 255),
+                                        (uint8_t)(color->green * 255),
+                                        (uint8_t)(color->blue * 255),
+                                        (uint8_t)(color->alpha * 255));
         auto rgb_str = g_strdup_printf("%2x%2x%2x",
-                                       (uint8_t)(color.red * 255),
-                                       (uint8_t)(color.green * 255),
-                                       (uint8_t)(color.blue * 255));
+                                       (uint8_t)(color->red * 255),
+                                       (uint8_t)(color->green * 255),
+                                       (uint8_t)(color->blue * 255));
 // sample-report.scm uses an old HTML4 attribute that doesn't understand alpha.
         option.set_value(std::string{rgb_str});
         g_free(rgba_str);
@@ -1403,13 +1815,15 @@ public:
 template<> void
 create_option_widget<GncOptionUIType::COLOR> (GncOption& option, GtkGrid *page_box, int row)
 {
-    auto widget = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(widget), TRUE);
+    auto dialog = gtk_color_dialog_new ();
+    gtk_color_dialog_set_with_alpha (dialog, TRUE);
+    auto widget = gtk_color_dialog_button_new (dialog);
+    g_object_unref (dialog);
 
     option.set_ui_item(std::make_unique<GncGtkColorUIItem>(widget));
     option.set_ui_item_from_option();
 
-    g_signal_connect(G_OBJECT(widget), "color-set",
+    g_signal_connect(G_OBJECT(widget), "notify::rgba",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
     wrap_widget(option, widget, page_box, row);
 }
@@ -1421,76 +1835,183 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::FONT} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        GtkFontChooser *font_chooser = GTK_FONT_CHOOSER(get_widget());
-        gtk_font_chooser_set_font(font_chooser,
-                                  option.get_value<std::string>().c_str());
-
+        auto description = pango_font_description_from_string (
+            option.get_value<std::string>().c_str ());
+        gtk_font_dialog_button_set_font_desc (
+            GTK_FONT_DIALOG_BUTTON (get_widget ()), description);
+        pango_font_description_free (description);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        GtkFontChooser *font_chooser = GTK_FONT_CHOOSER(get_widget());
-        option.set_value(std::string{gtk_font_chooser_get_font(font_chooser)});
+        auto description = gtk_font_dialog_button_get_font_desc (
+            GTK_FONT_DIALOG_BUTTON (get_widget ()));
+        if (!description)
+            return;
+        auto font = pango_font_description_to_string (description);
+        option.set_value(std::string{font});
+        g_free (font);
     }
 };
 
 template<> void
 create_option_widget<GncOptionUIType::FONT> (GncOption& option, GtkGrid *page_box, int row)
 {
-    auto widget{gtk_font_button_new()};
-    g_object_set(G_OBJECT(widget),
-                 "use-font", TRUE,
-                 "show-style", TRUE,
-                 "show-size", TRUE,
-                 (char *)NULL);
+    auto dialog = gtk_font_dialog_new ();
+    auto widget = gtk_font_dialog_button_new (dialog);
+    g_object_unref (dialog);
+    gtk_font_dialog_button_set_level (GTK_FONT_DIALOG_BUTTON (widget),
+                                      GTK_FONT_LEVEL_FONT);
+    gtk_font_dialog_button_set_use_font (GTK_FONT_DIALOG_BUTTON (widget),
+                                         TRUE);
+    gtk_font_dialog_button_set_use_size (GTK_FONT_DIALOG_BUTTON (widget),
+                                         TRUE);
 
     option.set_ui_item(std::make_unique<GncGtkFontUIItem>(widget));
     option.set_ui_item_from_option();
-    g_signal_connect(G_OBJECT(widget), "font-set",
+    g_signal_connect(G_OBJECT(widget), "notify::font-desc",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
     wrap_widget(option, widget, page_box, row);
 }
-/* A pointer to the last selected filename */
-#define LAST_SELECTION "last-selection"
+static constexpr const char* s_pixmap_path_data{"gnc-pixmap-path"};
+static constexpr const char* s_pixmap_entry_data{"gnc-pixmap-entry"};
+static constexpr const char* s_pixmap_picture_data{"gnc-pixmap-image"};
+static constexpr const char* s_pixmap_option_data{"gnc-pixmap-option"};
+static constexpr int s_pixmap_preview_size{128};
+
+struct PixmapOpenContext
+{
+    GWeakRef root;
+    GtkFileDialog *dialog;
+};
 
 static void
-update_preview_cb (GtkFileChooser *chooser, void* data)
+pixmap_open_context_free (PixmapOpenContext *context)
 {
-    g_return_if_fail(chooser != NULL);
+    g_clear_object (&context->dialog);
+    g_weak_ref_clear (&context->root);
+    g_free (context);
+}
 
-    ENTER("chooser %p", chooser);
-    auto filename = gtk_file_chooser_get_preview_filename(chooser);
-    DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
-    if (filename == NULL)
-    {
-        filename = g_strdup(static_cast<const char*>(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION)));
-        DEBUG("using last selection of %s", filename ? filename : "(null)");
-        if (filename == NULL)
-        {
-            LEAVE("no usable name");
-            return;
-        }
-    }
+static GncOption *
+pixmap_get_option (GtkWidget *root)
+{
+    return root ? static_cast<GncOption *> (
+        g_object_get_data (G_OBJECT (root), s_pixmap_option_data)) : nullptr;
+}
 
-    auto image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
-    auto pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
-    g_free(filename);
-    auto have_preview = (pixbuf != NULL);
-
-    gtk_image_set_from_pixbuf(image, pixbuf);
-    if (pixbuf)
-        g_object_unref(pixbuf);
-
-    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
-    LEAVE("preview visible is %d", have_preview);
+static gboolean
+pixmap_dialog_error_is_cancelled (const GError *error)
+{
+    return error && (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
+                     g_error_matches (error, GTK_DIALOG_ERROR,
+                                      GTK_DIALOG_ERROR_DISMISSED));
 }
 
 static void
-change_image_cb (GtkFileChooser *chooser, void* data)
+pixmap_set_path (GtkWidget *root, const char *path)
 {
-    auto filename{gtk_file_chooser_get_preview_filename(chooser)};
-    if (!filename)
+    auto entry = GTK_ENTRY (
+        g_object_get_data (G_OBJECT (root), s_pixmap_entry_data));
+    auto picture = GTK_PICTURE (
+        g_object_get_data (G_OBJECT (root), s_pixmap_picture_data));
+
+    g_object_set_data_full (G_OBJECT (root), s_pixmap_path_data,
+                            g_strdup (path), g_free);
+    gtk_editable_set_text (GTK_EDITABLE (entry), path ? path : "");
+    gtk_picture_set_paintable (picture, nullptr);
+
+    if (!path || !*path)
         return;
-    g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
+
+    GError *error = nullptr;
+    auto pixbuf = gdk_pixbuf_new_from_file_at_size (path,
+                                                  s_pixmap_preview_size,
+                                                  s_pixmap_preview_size,
+                                                  &error);
+    if (!pixbuf)
+    {
+        PERR ("Unable to load image preview '%s': %s", path,
+              error ? error->message : "unknown error");
+        g_clear_error (&error);
+        return;
+    }
+
+    auto texture = gnc_texture_new_from_pixbuf (pixbuf);
+    if (texture)
+        gtk_picture_set_paintable (picture, GDK_PAINTABLE (texture));
+    g_clear_object (&texture);
+    g_object_unref (pixbuf);
+}
+
+static void
+pixmap_dialog_open_cb (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+    auto context = static_cast<PixmapOpenContext *> (user_data);
+    auto root = GTK_WIDGET (g_weak_ref_get (&context->root));
+    auto option = pixmap_get_option (root);
+    GError *error = nullptr;
+    auto file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
+
+    if (file && root && option)
+    {
+        auto path = g_file_get_path (file);
+        if (path)
+        {
+            pixmap_set_path (root, path);
+            gnc_option_changed_widget_cb (root, option);
+            g_free (path);
+        }
+        else
+            PERR ("Image selections must be local files.");
+    }
+    else if (error && !pixmap_dialog_error_is_cancelled (error))
+        PERR ("Unable to select an image file: %s", error->message);
+
+    g_clear_error (&error);
+    g_clear_object (&file);
+    if (root)
+        g_object_unref (root);
+    pixmap_open_context_free (context);
+}
+
+static void
+pixmap_choose_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    auto root = GTK_WIDGET (user_data);
+    auto option = pixmap_get_option (root);
+    if (!option)
+        return;
+    auto dialog = gtk_file_dialog_new ();
+    auto path = static_cast<const char *> (
+        g_object_get_data (G_OBJECT (root), s_pixmap_path_data));
+    auto context = g_new0 (PixmapOpenContext, 1);
+    auto window_root = gtk_widget_get_root (root);
+
+    gtk_file_dialog_set_title (dialog, _("Select image"));
+    if (path && *path)
+    {
+        auto file = g_file_new_for_path (path);
+        gtk_file_dialog_set_initial_file (dialog, file);
+        g_object_unref (file);
+    }
+
+    context->dialog = GTK_FILE_DIALOG (g_object_ref (dialog));
+    g_weak_ref_init (&context->root, root);
+    gtk_file_dialog_open (dialog, GTK_IS_WINDOW (window_root) ? GTK_WINDOW (window_root) : nullptr,
+                          nullptr, pixmap_dialog_open_cb, context);
+    g_object_unref (dialog);
+}
+
+static void
+pixmap_clear_clicked_cb (GtkButton *button, gpointer user_data)
+{
+    auto root = GTK_WIDGET (user_data);
+    auto option = pixmap_get_option (root);
+    if (!option)
+        return;
+
+    pixmap_set_path (root, nullptr);
+    gnc_option_changed_widget_cb (root, option);
 }
 
 class GncGtkPixmapUIItem : public GncOptionGtkUIItem
@@ -1498,31 +2019,35 @@ class GncGtkPixmapUIItem : public GncOptionGtkUIItem
 public:
     GncGtkPixmapUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::PIXMAP} {}
+    ~GncGtkPixmapUIItem() override
+    {
+        invalidate_root_option ();
+    }
+    void clear_ui_item() override
+    {
+        invalidate_root_option ();
+        GncOptionGtkUIItem::clear_ui_item ();
+    }
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto string{option.get_value<std::string>()};
-        if (!string.empty())
-        {
-            DEBUG("string = %s", string.c_str());
-            auto chooser{GTK_FILE_CHOOSER(get_widget())};
-            gtk_file_chooser_select_filename(chooser, string.c_str());
-            auto filename{gtk_file_chooser_get_filename(chooser)};
-            g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION,
-                                   g_strdup(string.c_str()), g_free);
-            DEBUG("Set %s, retrieved %s", string.c_str(),
-                  filename ? filename : "(null)");
-            update_preview_cb(chooser, &option);
-        }
+        auto value = option.get_value<std::string> ();
+
+        pixmap_set_path (get_widget (), value.empty () ? nullptr : value.c_str ());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
-        DEBUG("filename %s", string ? string : "(null)");
-        if (string)
-        {
-            option.set_value(std::string{string});
-            g_free(string);
-        }
+        auto path = static_cast<const char *> (
+            g_object_get_data (G_OBJECT (get_widget ()), s_pixmap_path_data));
+
+        option.set_value (std::string {path ? path : ""});
+    }
+private:
+    void invalidate_root_option ()
+    {
+        auto root = get_widget ();
+
+        if (root)
+            g_object_set_data (G_OBJECT (root), s_pixmap_option_data, nullptr);
     }
 };
 
@@ -1530,155 +2055,157 @@ template<> void
 create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
                                                GtkGrid *page_box, int row)
 {
-    auto enclosing{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5)};
-    gtk_box_set_homogeneous(GTK_BOX(enclosing), FALSE);
-    auto button{gtk_button_new_with_label(_("Clear"))};
-    gtk_widget_set_tooltip_text(button, _("Clear any selected image file."));
-    auto widget{ gtk_file_chooser_button_new(_("Select image"),
-                                             GTK_FILE_CHOOSER_ACTION_OPEN)};
-    gtk_widget_set_tooltip_text(widget, _("Select an image file."));
-    g_object_set(G_OBJECT(widget),
-                 "width-chars", 30,
-                 "preview-widget", gtk_image_new(),
-                 (char *)NULL);
-    option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(widget));
-    option.set_ui_item_from_option();
+    auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    auto picture = GTK_PICTURE (gtk_picture_new ());
+    auto entry = gtk_entry_new ();
+    auto choose = gtk_button_new_with_label (_("Select image"));
+    auto clear = gtk_button_new_with_label (_("Clear"));
 
-    g_signal_connect(G_OBJECT (widget), "selection-changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    g_signal_connect(G_OBJECT (widget), "selection-changed",
-                     G_CALLBACK(change_image_cb), &option);
-    g_signal_connect(G_OBJECT (widget), "update-preview",
-                     G_CALLBACK(update_preview_cb), &option);
-    g_signal_connect_swapped(G_OBJECT (button), "clicked",
-                             G_CALLBACK(gtk_file_chooser_unselect_all), widget);
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+    gtk_picture_set_can_shrink (picture, TRUE);
+    gtk_picture_set_content_fit (picture, GTK_CONTENT_FIT_CONTAIN);
+    gtk_widget_set_size_request (GTK_WIDGET (picture), s_pixmap_preview_size,
+                                 s_pixmap_preview_size);
+    gtk_widget_set_halign (GTK_WIDGET (picture), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (picture), GTK_ALIGN_START);
+    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
+    gtk_widget_set_hexpand (entry, TRUE);
+    gtk_widget_set_tooltip_text (choose, _("Select an image file."));
+    gtk_widget_set_tooltip_text (clear, _("Clear any selected image file."));
+    g_object_set_data (G_OBJECT (enclosing), s_pixmap_entry_data, entry);
+    g_object_set_data (G_OBJECT (enclosing), s_pixmap_picture_data, picture);
+    g_object_set_data (G_OBJECT (enclosing), s_pixmap_option_data, &option);
 
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(enclosing), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX (enclosing), GTK_WIDGET (picture));
+    gtk_box_append (GTK_BOX (enclosing), entry);
+    gtk_box_append (GTK_BOX (enclosing), choose);
+    gtk_box_append (GTK_BOX (enclosing), clear);
+    option.set_ui_item (std::make_unique<GncGtkPixmapUIItem> (enclosing));
+    option.set_ui_item_from_option ();
 
-    gtk_widget_show(widget);
-    set_name_label(option, page_box, row, false);
-    set_tool_tip(option, enclosing);
-    gtk_widget_show(enclosing);
-    grid_attach_widget(page_box, enclosing, row);
+    g_signal_connect (choose, "clicked", G_CALLBACK (pixmap_choose_clicked_cb), enclosing);
+    g_signal_connect (clear, "clicked", G_CALLBACK (pixmap_clear_clicked_cb), enclosing);
+    set_name_label (option, page_box, row, false);
+    set_tool_tip (option, enclosing);
+    grid_attach_widget (page_box, enclosing, row);
+    gtk_widget_set_visible (enclosing, true);
+}
+static GtkCheckButton *
+radiobutton_get_button (GtkWidget *frame, guint index)
+{
+    auto buttons = static_cast<GPtrArray *> (
+        g_object_get_data (G_OBJECT (frame), "gnc-radiobutton-buttons"));
+
+    if (!buttons || index >= buttons->len)
+        return nullptr;
+
+    return GTK_CHECK_BUTTON (g_ptr_array_index (buttons, index));
 }
 
 static void
-radiobutton_set_cb(GtkWidget *w, gpointer data)
+radiobutton_button_array_free (gpointer data)
 {
-    GncOption* option = static_cast<decltype(option)>(data);
-    gpointer _current, _new_value;
-    gint current, new_value;
-
-    auto widget = option_get_gtk_widget(option);
-
-    _current = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
-    current = GPOINTER_TO_INT (_current);
-
-    _new_value = g_object_get_data (G_OBJECT(w), "gnc_radiobutton_index");
-    new_value = GPOINTER_TO_INT (_new_value);
-
-    if (current == new_value)
-        return;
-
-    g_object_set_data (G_OBJECT(widget), "gnc_radiobutton_index",
-                       GINT_TO_POINTER(new_value));
-    gnc_option_changed_widget_cb(widget, option);
+    g_ptr_array_unref (static_cast<GPtrArray *> (data));
 }
 
-class GncGtkRadioButtonUIItem : public GncOptionGtkUIItem
+static void
+radiobutton_set_cb (GtkCheckButton *button, gpointer data)
+{
+    auto option = static_cast<GncOption *>(data);
+    auto frame = option_get_gtk_widget (option);
+    const auto index = GPOINTER_TO_UINT (
+        g_object_get_data (G_OBJECT (button), "gnc_radiobutton_index"));
+    const auto current = GPOINTER_TO_UINT (
+        g_object_get_data (G_OBJECT (frame), "gnc_radiobutton_index"));
+
+    if (!gtk_check_button_get_active (button) || current == index)
+        return;
+
+    g_object_set_data (G_OBJECT (frame), "gnc_radiobutton_index",
+                       GUINT_TO_POINTER (index));
+    gnc_option_changed_widget_cb (frame, option);
+}
+
+class GncGtkCheckButtonGroupUIItem : public GncOptionGtkUIItem
 {
 public:
-    GncGtkRadioButtonUIItem(GtkWidget* widget) :
+    GncGtkCheckButtonGroupUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::RADIOBUTTON} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto index{option.get_value<uint16_t>()};
-        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
-        auto box{GTK_WIDGET(list->data)};
-        g_list_free(list);
+        auto index = option.get_value<uint16_t>();
+        auto button = radiobutton_get_button (get_widget(), index);
 
-        list = gtk_container_get_children(GTK_CONTAINER(box));
-        auto node{g_list_nth(list, index)};
-        GtkButton* button{};
-        if (node)
-        {
-            button = GTK_BUTTON(node->data);
-        }
-        else
+        if (!button)
         {
             PERR("Invalid Radio Button Selection %hu", index);
-            g_list_free(list);
             return;
         }
-        g_list_free(list);
-        auto val{g_object_get_data (G_OBJECT (button),
-                                    "gnc_radiobutton_index")};
-        g_return_if_fail (GPOINTER_TO_UINT (val) == index);
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+        g_signal_handlers_block_by_func (button, (gpointer)radiobutton_set_cb, &option);
+        gtk_check_button_set_active (button, TRUE);
+        g_signal_handlers_unblock_by_func (button, (gpointer)radiobutton_set_cb, &option);
+        g_object_set_data (G_OBJECT (get_widget()), "gnc_radiobutton_index",
+                           GUINT_TO_POINTER (index));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto index{g_object_get_data(G_OBJECT(get_widget()),
-                                     "gnc_radiobutton_index")};
-        option.set_value<uint16_t>(GPOINTER_TO_INT(index));
+        auto index = GPOINTER_TO_UINT (g_object_get_data (
+            G_OBJECT (get_widget()), "gnc_radiobutton_index"));
+        option.set_value<uint16_t>(static_cast<uint16_t>(index));
     }
 };
 
 static GtkWidget *
 create_radiobutton_widget(char *name, GncOption& option)
 {
-    GtkWidget *frame, *box;
-    GtkWidget *widget = NULL;
+    auto frame = gtk_frame_new (name);
+    auto box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    auto buttons = g_ptr_array_new ();
+    GtkCheckButton *first_button = nullptr;
+    auto count = option.num_permissible_values ();
 
-    auto num_values{option.num_permissible_values()};
-
-    g_return_val_if_fail(num_values >= 0, NULL);
-
-    /* Create our button frame */
-    frame = gtk_frame_new (name);
-
-    /* Create the button box */
-    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    g_return_val_if_fail (count >= 0, nullptr);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
-    gtk_container_add (GTK_CONTAINER (frame), box);
+    gtk_frame_set_child (GTK_FRAME (frame), box);
+    g_object_set_data_full (G_OBJECT (frame), "gnc-radiobutton-buttons", buttons,
+                            radiobutton_button_array_free);
 
-    option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(frame));
-    option.set_ui_item_from_option();
-
-    /* Iterate over the options and create a radio button for each one */
-    for (decltype(num_values) i = 0; i < num_values; i++)
+    for (decltype(count) index = 0; index < count; index++)
     {
-        auto label = option.permissible_value_name(i);
+        auto label = option.permissible_value_name (index);
+        auto button = GTK_CHECK_BUTTON (gtk_check_button_new_with_label (
+            label && *label ? _(label) : ""));
 
-        widget =
-            gtk_radio_button_new_with_label_from_widget (widget ?
-                                                         GTK_RADIO_BUTTON (widget) :
-                                                         NULL,
-                                                         label && *label ? _(label) : "");
-        g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
-                           GINT_TO_POINTER (i));
-        g_signal_connect(G_OBJECT(widget), "toggled",
-                         G_CALLBACK(radiobutton_set_cb), &option);
-        gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+        if (first_button)
+            gtk_check_button_set_group (button, first_button);
+        else
+            first_button = button;
+
+        g_object_set_data (G_OBJECT (button), "gnc_radiobutton_index",
+                           GUINT_TO_POINTER (index));
+        g_signal_connect (button, "toggled", G_CALLBACK (radiobutton_set_cb), &option);
+        g_ptr_array_add (buttons, button);
+        gtk_box_append (GTK_BOX (box), GTK_WIDGET (button));
     }
 
+    option.set_ui_item (std::make_unique<GncGtkCheckButtonGroupUIItem> (frame));
+    option.set_ui_item_from_option ();
     return frame;
 }
 
 template<> void
-create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option, GtkGrid *page_box, int row)
- {
-     auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-     gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
-     set_name_label(option, page_box, row, true);
-     set_tool_tip(option, enclosing);
-     auto widget = create_radiobutton_widget(NULL, option);
-     gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
-     gtk_widget_show_all(enclosing);
-     grid_attach_widget(page_box, enclosing, row);
- }
+create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option,
+                                                     GtkGrid *page_box, int row)
+{
+    auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+    set_name_label (option, page_box, row, true);
+    set_tool_tip (option, enclosing);
+    gtk_box_append (GTK_BOX (enclosing), create_radiobutton_widget (nullptr, option));
+    grid_attach_widget (page_box, enclosing, row);
+}
 
 class GncGtkDateFormatUIItem : public GncOptionGtkUIItem
 {
@@ -1719,7 +2246,6 @@ create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
 
     g_signal_connect(G_OBJECT(enclosing), "format_changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 }
 
@@ -1749,22 +2275,24 @@ public:
 };
 
 PlotSize::PlotSize(GncOption& option) :
-    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)}, m_pixel_button{gtk_radio_button_new_with_label(nullptr, _("Pixels"))},
-    m_percent_button{gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(m_pixel_button), _("Percent"))},
+    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)},
+    m_pixel_button{gtk_check_button_new_with_label(_("Pixels"))},
+    m_percent_button{gtk_check_button_new_with_label(_("Percent"))},
     m_range_spinner{GTK_WIDGET(create_range_spinner(option))},
     m_adj_pct{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(100.0, 10.0, 100.0, 1.0, 5.0, 0.0)))},
     m_adj_px{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(1000.0, 110.0, 10000.0, 10.0, 250.0, 0.0)))}
 {
+    gtk_check_button_set_group (GTK_CHECK_BUTTON(m_pixel_button), GTK_CHECK_BUTTON(m_percent_button));
     gtk_box_set_homogeneous(GTK_BOX(m_widget), FALSE);
     g_object_set (G_OBJECT(m_widget), "margin", 3, NULL);
     set_tool_tip(option, m_widget);
-    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_pixel_button), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_percent_button), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_range_spinner),
-                       FALSE, FALSE, 0);
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(m_pixel_button), FALSE);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(m_percent_button), TRUE);
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_pixel_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_percent_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_range_spinner));
+
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(m_pixel_button), FALSE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(m_percent_button), TRUE);
 
     m_pixel_handler = g_signal_connect(m_pixel_button, "toggled", G_CALLBACK(plot_size_set_pixels), this);
     m_percent_handler = g_signal_connect(m_percent_button, "toggled", G_CALLBACK(plot_size_set_percent), this);
@@ -1803,9 +2331,9 @@ PlotSize::set_entry_from_option(GncOption& option)
     }
 
     if (value > 100.0)
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pixel_button), TRUE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(m_pixel_button), TRUE);
     else
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_percent_button), TRUE);
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(m_percent_button), TRUE);
 
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(m_range_spinner), value);
 }
@@ -1856,9 +2384,8 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     option.set_ui_item_from_option();
 
     auto widget{option_get_gtk_widget(&option)};
-    gtk_container_add(GTK_CONTAINER(enclosing), widget);
+    gtk_frame_set_child (GTK_FRAME(enclosing), GTK_WIDGET(widget));
 
-    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 
     auto ui_item{dynamic_cast<GncGtkPlotSizeUIItem*>(option.get_ui_item())};
@@ -1868,21 +2395,22 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
 }
 
 static GtkWidget *
-create_budget_widget(GncOption& option)
+create_budget_widget (GncOption& option)
 {
-    GtkTreeModel *tm;
-    GtkComboBox *cb;
-    GtkCellRenderer *cr;
+    auto model = gnc_budget_list_model_new (gnc_get_current_book ());
+    auto expression = gtk_property_expression_new (GNC_TYPE_BUDGET_LIST_ITEM,
+                                                   nullptr, "name");
 
-    tm = gnc_tree_model_budget_new(gnc_get_current_book());
-    cb = GTK_COMBO_BOX(gtk_combo_box_new_with_model(tm));
-    g_object_unref(tm);
-    cr = gtk_cell_renderer_text_new();
-    gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(cb), cr, TRUE);
+    return GTK_WIDGET (gnc_gtk_drop_down_new (model, expression));
+}
 
-    gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(cb), cr, "text",
-                                   BUDGET_NAME_COLUMN, NULL);
-    return GTK_WIDGET(cb);
+static void
+budget_option_selection_changed_cb (GObject *object, GParamSpec *pspec,
+                                    gpointer user_data)
+{
+    gnc_option_changed_widget_cb (GTK_WIDGET (object),
+                                  static_cast<GncOption *> (user_data));
+    (void)pspec;
 }
 
 class GncGtkBudgetUIItem : public GncOptionGtkUIItem
@@ -1892,26 +2420,28 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::BUDGET} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        GtkTreeIter iter;
-        auto widget{GTK_COMBO_BOX(get_widget())};
+        auto widget{GTK_DROP_DOWN(get_widget())};
         auto instance{option.get_value<const QofInstance*>()};
         if (instance)
         {
-            auto tree_model{gtk_combo_box_get_model(widget)};
-            if (gnc_tree_model_budget_get_iter_for_budget(tree_model, &iter,
-                                                          GNC_BUDGET(instance)))
-                gtk_combo_box_set_active_iter(widget, &iter);
+            auto position = gnc_budget_list_model_get_position (
+                gtk_drop_down_get_model (widget), GNC_BUDGET (instance));
+            if (position != G_MAXUINT)
+                gtk_drop_down_set_selected (widget, position);
         }
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        GtkTreeIter iter;
-        auto widget{GTK_COMBO_BOX(get_widget())};
-        if (gtk_combo_box_get_active_iter(widget, &iter))
+        auto widget{GTK_DROP_DOWN(get_widget())};
+        auto position = gtk_drop_down_get_selected (widget);
+        if (position != GTK_INVALID_LIST_POSITION)
         {
-            auto tree_model{gtk_combo_box_get_model(widget)};
-            auto budget{gnc_tree_model_budget_get_budget(tree_model, &iter)};
-            option.set_value(qof_instance_cast(budget));
+            auto item = GNC_BUDGET_LIST_ITEM (g_list_model_get_item (
+                gtk_drop_down_get_model (widget), position));
+            auto budget = gnc_budget_list_item_get_budget (item);
+            g_object_unref (item);
+            if (budget)
+                option.set_value(qof_instance_cast(budget));
         }
     }
 };
@@ -1925,9 +2455,8 @@ create_option_widget<GncOptionUIType::BUDGET> (GncOption& option,
     option.set_ui_item(std::make_unique<GncGtkBudgetUIItem>(widget));
     option.set_ui_item_from_option();
 
-    /* Maybe connect destroy handler for tree model here? */
-    g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+    g_signal_connect(G_OBJECT(widget), "notify::selected",
+                     G_CALLBACK(budget_option_selection_changed_cb), &option);
 
     wrap_widget(option, widget, page_box, row);
 }
