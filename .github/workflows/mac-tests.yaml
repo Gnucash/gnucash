@@ -54,7 +54,7 @@ jobs:
         mv googletest-* googletest
     - name: Verify dependency archive
       run: |
-        "$PREFIX/bin/pkgconf" --exists \
+        "$PREFIX/bin/pkgconf" --print-errors --exists \
           'gtk4 >= 4.14' \
           gtk4-macos \
           gwengui-gtk4 \
