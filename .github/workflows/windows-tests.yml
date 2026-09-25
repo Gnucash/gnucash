@@ -30,6 +30,11 @@ jobs:
           run: |
             set -euo pipefail
             sed -i "/^# SigLevel = Never/a [gnc-ucrt64]\nSigLevel = Optional TrustAll\nServer = https://github.com/gnucash/gnucash-windows-deps-repo/releases/download/gnc-ucrt64-repo/" /etc/pacman.conf
+            if [[ -z "$DEPENDENCY_OVERLAY_NAME" && -z "$DEPENDENCY_OVERLAY_URL" ]]; then
+              # Temporary GTK4 packages until the upstream UCRT64 repo provides gwengui-gtk4.
+              DEPENDENCY_OVERLAY_NAME=gnc-ucrt64-gtk4
+              DEPENDENCY_OVERLAY_URL=https://github.com/copystring/gnucash-windows-deps-repo/releases/download/gnc-ucrt64-gtk4-reviewed-20260905-be306f4c/
+            fi
             if [[ -n "$DEPENDENCY_OVERLAY_NAME" || -n "$DEPENDENCY_OVERLAY_URL" ]]; then
               if [[ -z "$DEPENDENCY_OVERLAY_NAME" || -z "$DEPENDENCY_OVERLAY_URL" ]]; then
                 echo 'Both Windows dependency overlay variables must be set.' >&2
@@ -49,6 +54,10 @@ jobs:
             sed -i "s/^# ParallelDownloads/ParallelDownloads/" /etc/pacman.conf
 
             pacman -Syv
+            if [[ "$DEPENDENCY_OVERLAY_NAME" == gnc-ucrt64-gtk4 &&
+                  "$DEPENDENCY_OVERLAY_URL" == https://github.com/copystring/gnucash-windows-deps-repo/releases/download/gnc-ucrt64-gtk4-reviewed-20260905-be306f4c/ ]]; then
+              echo 'c8502a34fff81092e308c9849a423a8690f86505e3791dc3cf34c9ff2ac69aff  /var/lib/pacman/sync/gnc-ucrt64-gtk4.db' | sha256sum -c -
+            fi
             pacboy --noconfirm -S swig:p appstream-glib:p aqbanking:p boost:p gtk4:p gsettings-desktop-schemas:p docbook-xsl:p gettext-tools:p gtest:p guile3:p harfbuzz-icu:p icu:p iso-codes:p pdcurses:p libdbi-drivers:p libofx:p libsecret:p webview2-loader zlib:p
             "$MSYSTEM_PREFIX/bin/pkgconf" --print-errors --exists aqbanking gwengui-gtk4
             ls -l $MSYSTEM_PREFIX/lib/dbd
