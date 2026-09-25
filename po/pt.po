@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-08-09 10:02+0000\n"
+"PO-Revision-Date: 2026-09-20 09:45+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -5762,44 +5762,37 @@ msgid "With GnuCash you can (but are not limited to):"
 msgstr "Com o GnuCash pode (sem estar limitado a):"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:18
-#, fuzzy
-#| msgid "Keep track of your day to day personal income and expenses"
 msgid "Keep track of your day to day personal income and expenses."
-msgstr "Seguir diariamente as suas receitas e despesas pessoais"
+msgstr "Seguir diariamente as suas receitas e despesas pessoais."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
-#, fuzzy
-#| msgid "Manage your stock, bond and mutual fund accounts with ease"
 msgid "Manage your stock, bond and mutual fund accounts with ease."
-msgstr "Fazer a gestão de acções, obrigações e fundos facilmente"
+msgstr "Fazer a gestão de acções, obrigações e fundos facilmente."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
-#, fuzzy
-#| msgid "Keep your small business' accounting up to date"
 msgid "Keep your small business' accounting up to date."
-msgstr "Manter a sua contabilidade da empresa actualizada"
+msgstr "Manter a sua contabilidade da empresa actualizada."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
-#, fuzzy
-#| msgid "Create accurate reports and graphs from your financial data"
 msgid "Create accurate reports and graphs from your financial data."
-msgstr "Criar relatórios e gráficos precisos dos seus dados financeiros"
+msgstr "Criar relatórios e gráficos precisos dos seus dados financeiros."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
-#, fuzzy
-#| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Set up scheduled transactions to avoid repeated data entry."
-msgstr "Preparar transacções agendadas para evitar inserir dados repetidos"
+msgstr "Preparar transacções agendadas para evitar inserir dados repetidos."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Process your bank data via online banking using FinTS."
 msgstr ""
+"Processe os seus dados bancários através da banca online utilizando o FinTS."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:24
 msgid ""
 "Download Transactions and Balances and initiate various SEPA Actions using "
 "AqBanking."
 msgstr ""
+"Transfira o histórico de transacções e saldos e inicie várias acções SEPA "
+"através do AqBanking."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:25
 msgid ""
@@ -5807,18 +5800,17 @@ msgid ""
 "transactions and balances from many formats including CAMT, SWIFT-MT9xx, and "
 "OFX."
 msgstr ""
+"Importe contas, dados empresariais, preços e transacções a partir de "
+"ficheiros CSV, bem como transacções e saldos a partir de vários formatos, "
+"incluindo CAMT, SWIFT-MT9xx e OFX."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:26
-#, fuzzy
-#| msgid "Export the Account Tree to a CSV file"
 msgid "Export the account tree or transactions as CSV."
-msgstr "Exportar o plano de contas para um ficheiro CSV"
+msgstr "Exporte o plano de contas ou as transacções como ficheiro CSV."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:27
-#, fuzzy
-#| msgid "Perform financial calculations, such as a loan repayment"
 msgid "Perform financial calculations, such as a loan repayment."
-msgstr "Realizar cálculos financeiros, tais como o pagamento de um empréstimo"
+msgstr "Realize cálculos financeiros, tais como o pagamento de um empréstimo."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:50
 msgid ""
@@ -10530,7 +10522,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:387
 msgid "A chart's point style."
-msgstr ""
+msgstr "Estilo do ponto de um gráfico."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:388
 msgid ""
@@ -10539,10 +10531,14 @@ msgid ""
 "chose among varius rectangles, triangles, and such. Only applicable to line "
 "charts."
 msgstr ""
+"Esta configuração especifica que tipo de estilo de ponto os gráficos devem "
+"utilizar. Nas versões anteriores, era sempre o círculo; a partir de agora, é "
+"possível escolher entre vários rectângulos, triângulos e outras formas "
+"semelhantes. Aplicável apenas a gráficos de linhas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:392
 msgid "A chart's point size."
-msgstr ""
+msgstr "Tamanho do ponto dos gráficos."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:393
 #: gnucash/gtkbuilder/dialog-preferences.glade:3542
@@ -10550,10 +10546,12 @@ msgid ""
 "This setting specifies the default point's size (in pixels) displayed in "
 "charts. Only applicable to line charts."
 msgstr ""
+"Esta opção especifica o tamanho predefinido dos pontos (em pixels) mostrados "
+"nos gráficos. Aplicável apenas a gráficos de linhas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "A chart's hovered-point size."
-msgstr ""
+msgstr "O tamanho do ponto ao passar o cursor sobre um gráfico."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:398
 msgid ""
@@ -10561,10 +10559,14 @@ msgid ""
 "charts. It tends to be bigger than the default (i.e. not hovered over) size. "
 "Only applicable to line charts."
 msgstr ""
+"Esta opção especifica o tamanho do ponto ao passar o cursor (em pixels) "
+"mostrado nos gráficos. Tende a ser maior do que o tamanho predefinido (ou "
+"seja, quando não se passa o cursor por cima). Aplicável apenas a gráficos de "
+"linhas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:402
 msgid "A hover radius that would engage a tooltip."
-msgstr ""
+msgstr "Um raio de passagem do cursor que activaria uma dica."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:403
 #: gnucash/gtkbuilder/dialog-preferences.glade:3623
@@ -10573,10 +10575,14 @@ msgid ""
 "into the proximity of which the point / tooltip will be engaged. If set to "
 "zero, the user must precisely aim at that point."
 msgstr ""
+"Esta opção especifica o raio de aproximação do ponto (em pixels), o que "
+"corresponde à distância a partir da qual o ponto ou a dica de ajuda serão "
+"activados. Se for zero, o utilizador terá de apontar com precisão para esse "
+"ponto."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:407
 msgid "An arrow size (caret) coming out of a tooltip's body."
-msgstr ""
+msgstr "Uma seta (cursor) que sai do corpo de uma dica de ferramenta."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:408
 #: gnucash/gtkbuilder/dialog-preferences.glade:3651
@@ -10585,6 +10591,10 @@ msgid ""
 "from a tooltip's body toward the data point. On a regular basis, a very "
 "small value - this setting's default has increased it significantly."
 msgstr ""
+"Esta opção especifica o tamanho (em pixels) de uma seta (cursor) que se "
+"estende do corpo de uma dica de ferramenta em direcção ao ponto de dados. "
+"Normalmente, trata-se de um valor muito pequeno — o valor predefinido desta "
+"opção aumentou-o significativamente."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:420
 msgid "PDF export file name format"
@@ -11618,10 +11628,8 @@ msgstr "Hífen (-)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:415
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:405
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Enable escape character (\\)"
-msgstr "Activar gráfico"
+msgstr "Activar carácter de escape (\\)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:419
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:409
@@ -11632,6 +11640,13 @@ msgid ""
 "character; a backslash followed by any other character is treated literally: "
 "both the backslash and the following character become part of the data field."
 msgstr ""
+"Se activada, o carácter de escape, a barra invertida (\\), é processado de "
+"forma especial: a combinação «barra invertida-aspas» (\\\") transforma-se "
+"numa aspa (\"); a combinação «barra invertida-barra invertida» (\\\\) "
+"transforma-se numa única barra invertida (\\); a combinação «barra invertida-"
+"n» (\\n) transforma-se num carácter de nova linha; uma barra invertida "
+"seguida de qualquer outro carácter é tratada literalmente: tanto a barra "
+"invertida como o carácter seguinte passam a fazer parte do campo de dados."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:483
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:473
@@ -15071,10 +15086,8 @@ msgid "Delete the highlighted lot"
 msgstr "Eliminar o lote seleccionado"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:112
-#, fuzzy
-#| msgid "Gross adjustment accounts."
 msgid "Show stock split adjusted amounts"
-msgstr "Contas de ajuste bruto."
+msgstr "Mostrar valores ajustados em função da divisão de acções"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:152
 msgid "Enter a name for the highlighted lot."
@@ -15313,7 +15326,7 @@ msgstr "Cruz"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:163
 msgid "Cross - rotated"
-msgstr ""
+msgstr "Rotação cruzada"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:166
 #: gnucash/report/options-utilities.scm:181
@@ -15327,30 +15340,24 @@ msgid "Line"
 msgstr "Linha"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:172
-#, fuzzy
-#| msgid "Rotation angle"
 msgid "Rectangle"
-msgstr "Ângulo de rotação"
+msgstr "Rectângulo"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:175
 msgid "Rectangle - rounded"
-msgstr ""
+msgstr "Rectângulo arredondado"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
 msgid "Rectangle - rotated"
-msgstr ""
+msgstr "Rectângulo rodado"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:181
-#, fuzzy
-#| msgid "Start"
 msgid "Star"
-msgstr "Início"
+msgstr "Estrela"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:184
-#, fuzzy
-#| msgid "Si_ngle"
 msgid "Triangle"
-msgstr "Ú_nica"
+msgstr "Triângulo"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:205
 msgid "_Reset"
@@ -16213,31 +16220,27 @@ msgid "Default zoom level"
 msgstr "Ampliação pré-definida"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3483
-#, fuzzy
-#| msgid "Line Chart"
 msgid "Line Charts"
-msgstr "Gráfico de linhas"
+msgstr "Gráficos de linhas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3498
-#, fuzzy
-#| msgid "Points"
 msgid "Point style"
-msgstr "Pontos"
+msgstr "Estilo do ponto"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3511
 msgid ""
 "Which style should represent a data point. Only applicable to line charts. "
 msgstr ""
+"Que estilo deve ser utilizado para representar um ponto de dados. Aplicável "
+"apenas a gráficos de linhas. "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3531
-#, fuzzy
-#| msgid "Font size"
 msgid "Point size"
-msgstr "Tamanho da letra"
+msgstr "Tamanho do ponto"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3559
 msgid "Point hovered size"
-msgstr ""
+msgstr "Tamanho do ponto ao passar"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3570
 msgid ""
@@ -16245,50 +16248,50 @@ msgid ""
 "charts. It tends to be bigger than the default (i.e. not hovered over) "
 "size.  Only applicable to line charts."
 msgstr ""
+"Esta opção especifica o tamanho do ponto ao passar o cursor (em pixels) "
+"mostrado nos gráficos. Tende a ser maior do que o tamanho predefinido (ou "
+"seja, quando não se passa o cursor por cima). Aplica-se apenas a gráficos de "
+"linhas."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3597
-#, fuzzy
-#| msgid "_Tools"
 msgid "Tooltip"
-msgstr "Ferramen_tas"
+msgstr "Dica"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3612
 msgid "Engage within this radius"
-msgstr ""
+msgstr "Activar dentro deste raio"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3640
 msgid "Pointing arrow (caret) size"
-msgstr ""
+msgstr "Tamanho da seta (cursor)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3668
-#, fuzzy
-#| msgid "Position of payee name"
 msgid "Position  (for grouped only)"
-msgstr "Posição do nome do sacador"
+msgstr "Posição (só para agrupados)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
-#, fuzzy
-#| msgid "Average"
 msgid "average"
-msgstr "Média"
+msgstr "média"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3683
 msgid ""
 "Show tooltip at the AVERAGE value (i.e. in between) of engaged entry/"
 "entries. Only applicable to the grouped/indexed type of a tooltip."
 msgstr ""
+"Mostrar a dica no valor MÉDIO (i.e., no meio) das entradas seleccionadas. "
+"Aplicável apenas ao tipo de dica agrupada/indexada."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3697
-#, fuzzy
-#| msgid "Interest"
 msgid "nearest"
-msgstr "Juros"
+msgstr "mais próximo"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3703
 msgid ""
 "Show tooltip NEAREST to value of engaged entry/entries. Only applicable to "
 "the grouped/indexed type of a tooltip."
 msgstr ""
+"Mostrar a dica MAIS PRÓXIMO do valor das entradas seleccionadas. Aplicável "
+"apenas ao tipo de dica agrupada/indexada."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3743
 msgid "Reports"
@@ -18712,16 +18715,12 @@ msgstr "Fe_char janela de diário quando terminar"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:40
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:16
-#, fuzzy
-#| msgid ""
-#| "If active, the window will be closed automatically when you finish the "
-#| "HBCI/AqBanking import process. Otherwise it will stay open."
 msgid ""
 "If active, the window will be closed automatically when you finish the "
 "AqBanking import process. Otherwise it will stay open."
 msgstr ""
 "Se activa, a janela fecha automaticamente quando terminar o processo de "
-"importação HCBI/AqBanking. Senão, permanece aberta."
+"importação AqBanking. Senão, permanece aberta."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:52
 msgid "Remember the _PIN in memory"
@@ -18729,25 +18728,18 @@ msgstr "Lembrar o _PIN em memória"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:58
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:21
-#, fuzzy
-#| msgid ""
-#| "If active, the PIN for HBCI/AqBanking actions will be remembered in "
-#| "memory during a session. Otherwise it will have to be entered again each "
-#| "time during a session when it is needed."
 msgid ""
 "If active, the PIN for AqBanking actions will be remembered in memory during "
 "a session. Otherwise it will have to be entered again each time during a "
 "session when it is needed."
 msgstr ""
-"Se activa, o PIN das acções HCBI/AqBanking será mantido em memória durante a "
+"Se activa, o PIN das acções AqBanking será mantido em memória durante a "
 "sessão. Senão, terá de ser sempre inserido quando necessário durante a "
 "sessão."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
-#, fuzzy
-#| msgid "Enter notes for the transaction"
 msgid "Import noted or _pending transactions"
-msgstr "Insira notas para a transacção"
+msgstr "Importar transacções anotadas ou _pendentes"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
@@ -18756,19 +18748,21 @@ msgid ""
 "These transactions are not final and may later appear again as booked "
 "transactions."
 msgstr ""
+"Se activa, o GnuCash importará as transacções anotadas ou pendentes do "
+"AqBanking. Estas não são definitivas e poderão aparecer mais tarde como "
+"transacções lançadas."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:88
 msgid "_Verbose debug messages"
 msgstr "Mensagens de depuração _verbosas"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:94
-#, fuzzy
-#| msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgid ""
 "Enables verbose debug messages for AqBanking. See the Wiki for more "
 "information."
 msgstr ""
-"Activa mensagens verbosas de depuração para a banca em linha HBCI/AqBanking."
+"Activa mensagens verbosas de depuração para o AqBanking. Veja a Wiki para "
+"mais informação."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:106
 msgid "Use Non-SWIFT _transaction text"
@@ -19113,15 +19107,6 @@ msgstr ""
 #. in your country, you may safely ignore strings from the
 #. import-export/hbci subdirectory.
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1040
-#, fuzzy
-#| msgid ""
-#| "The downloaded Online Banking Balance was zero.\n"
-#| "\n"
-#| "Either this is the correct balance, or your bank does not support Balance "
-#| "download in this Online Banking version. In the latter case you should "
-#| "choose a different Online Banking version number in the Online Banking "
-#| "(AqBanking or HBCI) Setup. After that, try again to download the Online "
-#| "Banking Balance."
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
@@ -19131,12 +19116,12 @@ msgid ""
 "Banking (AqBanking) Setup. After that, try again to download the Online "
 "Banking Balance."
 msgstr ""
-"O saldo transferido da banca em linha é zero.\n"
+"O saldo transferido da banca oem linha é zero.\n"
 "\n"
-"Ou este é o saldo correcto ou o seu banco não suporta transferências de "
-"saldo nesta versão da banca em linha. Neste último caso, deve escolher uma "
-"versão diferente na configuração da banca em linha (AqBanking ou HBCI). A "
-"seguir, tente transferir o saldo da banca em linha novamente."
+"Ou este é o saldo correcto, ou o seu banco não suporta a transferência de "
+"saldo com os parâmetros escolhidos. Neste caso, verifique os detalhes da "
+"ligação, como URL do servidor, na configuração do AqBanking. Depois disso, "
+"tente novamente transferir o saldo da banca online."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1058
 #, c-format
@@ -19277,16 +19262,12 @@ msgid "_Online Banking Setup…"
 msgstr "C_onfiguração da banca em linha…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
-#, fuzzy
-#| msgid ""
-#| "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
-#| "AqBanking)"
 msgid ""
 "Initial setup of Online Banking access (FinTS or OFX DirectConnect) using "
 "AqBanking"
 msgstr ""
-"Configuração inicial do acesso à banca em linha (HBCI, ou OFX DirectConnect, "
-"usando o AqBanking)"
+"Configuração inicial do acesso à banca em linha (FinTS ou OFX DirectConnect) "
+"usando o AqBanking"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:15
 msgid "Close window when finished"
@@ -19301,23 +19282,16 @@ msgid "Put the transaction text in front of the purpose of a transaction."
 msgstr "Pôr o texto da transacção em frente do propósito da transacção."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
-#, fuzzy
-#| msgid "Enter notes for the transaction"
 msgid "Import noted or pending transactions"
-msgstr "Insira notas para a transacção"
+msgstr "Importar transacções anotadas ou pendentes"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:35
-#, fuzzy
-#| msgid "_Verbose debug messages"
 msgid "Verbose debug messages"
-msgstr "Mensagens de depuração _verbosas"
+msgstr "Mensagens de depuração verbosas"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:36
-#, fuzzy
-#| msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgid "Enables verbose debug messages for AqBanking."
-msgstr ""
-"Activa mensagens verbosas de depuração para a banca em linha HBCI/AqBanking."
+msgstr "Activa mensagens verbosas de depuração para o AqBanking."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:40
 msgid "DTAUS import data format"
@@ -21777,7 +21751,7 @@ msgstr "_Voltar a saldar"
 #: gnucash/register/ledger-core/split-register-control.cpp:1370
 #: gnucash/register/ledger-core/split-register-control.cpp:1383
 msgid "Edit prices/exchange rates directly in the split line."
-msgstr ""
+msgstr "Editar preços/taxas de câmbio directamente na linha de divisão."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1409
 msgid "You need to select a split in order to modify its exchange rate."
@@ -25112,20 +25086,17 @@ msgid "Show Full Account Names"
 msgstr "Mostrar nomes de conta completos"
 
 #: gnucash/report/reports/standard/cash-flow.scm:53
-#, fuzzy
-#| msgid "Selected Accounts"
 msgid "Show Selected Accounts"
-msgstr "Contas seleccionadas"
+msgstr "Mostrar contas seleccionadas"
 
 #: gnucash/report/reports/standard/cash-flow.scm:80
 msgid "Show full account names (including parent accounts)."
 msgstr "Mostrar nomes de conta completos (incluindo contas-mãe)."
 
 #: gnucash/report/reports/standard/cash-flow.scm:84
-#, fuzzy
-#| msgid "Money out of selected accounts goes to"
 msgid "Show the list of selected accounts on the top of this report."
-msgstr "Dinheiro saído das contas seleccionadas vai para"
+msgstr ""
+"Mostrar a lista das contas seleccionadas na parte superior deste relatório."
 
 #: gnucash/report/reports/standard/cash-flow.scm:204
 #, scheme-format
@@ -25205,12 +25176,12 @@ msgstr "Mostrar nomes longos de conta"
 #: gnucash/report/reports/standard/category-barchart.scm:85
 #: gnucash/report/reports/standard/net-charts.scm:59
 msgid "Show a grouped (indexed) tooltip"
-msgstr ""
+msgstr "Mostrar uma dica agrupada (indexada)"
 
 #: gnucash/report/reports/standard/category-barchart.scm:86
 #: gnucash/report/reports/standard/net-charts.scm:60
 msgid "Show only non-zero values in a tooltip"
-msgstr ""
+msgstr "Mostrar só valores não-zero numa dica"
 
 #: gnucash/report/reports/standard/category-barchart.scm:88
 msgid "Use Stacked Charts"
@@ -25246,11 +25217,13 @@ msgid ""
 "Show all items, along the x-axis, in a grouped tooltip. Otherwise - only a "
 "single entry, as per coursor's nearest proximity."
 msgstr ""
+"Mostrar todos os itens, ao longo do eixo x, numa dica agrupada. Senão, só "
+"uma entrada, de acordo com a proximidade do cursor."
 
 #: gnucash/report/reports/standard/category-barchart.scm:194
 #: gnucash/report/reports/standard/net-charts.scm:153
 msgid "Show only non-zero values in a tooltip."
-msgstr ""
+msgstr "Mostrar só valores não-zero numa dica."
 
 #: gnucash/report/reports/standard/category-barchart.scm:288
 msgid "Invalid dates"
@@ -25884,14 +25857,10 @@ msgid "Show end columns"
 msgstr "Mostrar colunas finais"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
-#, fuzzy
-#| msgid "Show realized gain column(s)"
 msgid "Show realized gain columns"
 msgstr "Mostrar colunas de ganhos realizados"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
-#| msgid "Show unrealized gain column(s)"
 msgid "Show unrealized gain columns"
 msgstr "Mostrar colunas de ganhos não realizados"
 
@@ -25904,16 +25873,12 @@ msgid "Long term gains age (years)"
 msgstr "Idade de ganhos a longo prazo (anos)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:69
-#, fuzzy
-#| msgid "Show end columns"
 msgid "Show ROI columns"
-msgstr "Mostrar colunas finais"
+msgstr "Mostrar colunas RDI"
 
 #: gnucash/report/reports/standard/investment-lots.scm:70
-#, fuzzy
-#| msgid "Show end columns"
 msgid "Show CAGR columns"
-msgstr "Mostrar colunas finais"
+msgstr "Mostrar colunas TCAC"
 
 #: gnucash/report/reports/standard/investment-lots.scm:74
 msgid "Show mnemonic in amounts"
@@ -26070,10 +26035,8 @@ msgid "Realized ROI"
 msgstr "RDI realizado"
 
 #: gnucash/report/reports/standard/investment-lots.scm:128
-#, fuzzy
-#| msgid "Realized ROI"
 msgid "Realized CAGR"
-msgstr "RDI realizado"
+msgstr "TCAC realizada"
 
 #: gnucash/report/reports/standard/investment-lots.scm:130
 msgid "ST Unrealized Gain"
@@ -26088,10 +26051,8 @@ msgid "Unrealized ROI"
 msgstr "RDI não realizado"
 
 #: gnucash/report/reports/standard/investment-lots.scm:133
-#, fuzzy
-#| msgid "Unrealized ROI"
 msgid "Unrealized CAGR"
-msgstr "RDI não realizado"
+msgstr "TCAC não realizada"
 
 #: gnucash/report/reports/standard/investment-lots.scm:135
 msgid "Account Lots Total"
@@ -26162,11 +26123,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:317
 msgid "Show Return On Investment (ROI) columns"
-msgstr ""
+msgstr "Mostrar colunas de Retorno Do Investimento (RDI)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:324
 msgid "Show Compound Annual Growth Rate (CAGR) columns"
-msgstr ""
+msgstr "Mostrar colunas de Taxa de Crescimento Anual Composta (TCAC)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:332
 msgid "Show long (instead of short) account names"
@@ -31408,7 +31369,7 @@ msgstr "Finanzpartner, DE"
 #: libgnucash/engine/gnc-commodity.cpp:204
 msgctxt "FQ Source"
 msgid "Finnhub, US"
-msgstr ""
+msgstr "Finnhub, EUA"
 
 #: libgnucash/engine/gnc-commodity.cpp:205
 msgctxt "FQ Source"
@@ -31576,12 +31537,9 @@ msgid "NYSE (Alphavantage, FinanceAPI, …)"
 msgstr "NYSE (Alphavantage, FinanceAPI, …)"
 
 #: libgnucash/engine/gnc-commodity.cpp:243
-#, fuzzy
-#| msgctxt "FQ Source"
-#| msgid "U.K. Funds (FTfunds, MorningstarUK)"
 msgctxt "FQ Source"
 msgid "U.K. Funds (FTfunds)"
-msgstr "U.K. Funds (FTfunds, MorningstarUK)"
+msgstr "U.K. Funds (FTfunds)"
 
 #: libgnucash/engine/gnc-commodity.cpp:244
 msgctxt "FQ Source"
