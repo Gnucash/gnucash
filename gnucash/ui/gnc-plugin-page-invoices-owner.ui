@@ -1,5 +1,330 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
 <interface>
+  <requires lib="gtk+" version="3.4"/>
+  <object class="GtkBox" id="invoices-filters">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="margin-left">10</property>
+    <property name="margin-right">10</property>
+    <property name="margin-top">5</property>
+    <property name="margin-bottom">5</property>
+    <property name="spacing">20</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Show paid</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="show-paid">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="active">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Show unpaid</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="show-unpaid">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="active">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolbar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkSeparatorToolItem">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Show posted</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="show-posted">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="active">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Show unposted</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="show-unposted">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="active">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkToolbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkSeparatorToolItem">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Display type</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="display-type">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="active">0</property>
+            <items>
+              <item id="both" translatable="yes">Both</item>
+              <item id="invoices" translatable="yes">Invoices</item>
+              <item id="credit-notes" translatable="yes">Credit notes</item>
+            </items>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkToolbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkSeparatorToolItem">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">7</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="search">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">start</property>
+            <property name="placeholder-text" translatable="yes">Type to search for invoices..</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">8</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkToolbar" id="mainwin-toolbar">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -7,9 +332,9 @@
       <object class="GtkToolButton" id="but1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Save</property>
-        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
         <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="label" translatable="yes">_Save</property>
         <property name="use-underline">True</property>
         <property name="icon-name">document-save</property>
       </object>
@@ -22,9 +347,9 @@
       <object class="GtkToolButton" id="but2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Close</property>
-        <property name="action-name">mainwin.FileCloseAction</property>
         <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="label" translatable="yes">_Close</property>
         <property name="use-underline">True</property>
         <property name="icon-name">window-close</property>
       </object>
@@ -47,9 +372,9 @@
       <object class="GtkToolButton" id="but3">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New</property>
-        <property name="action-name">GncPluginInvoicesOwnerActions.NewInvoice</property>
         <property name="tooltip-text" translatable="yes">Create a new invoice</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.NewInvoice</property>
+        <property name="label" translatable="yes">New</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-invoice-new</property>
       </object>
@@ -62,9 +387,9 @@
       <object class="GtkToolButton" id="but4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Edit</property>
-        <property name="action-name">GncPluginInvoicesOwnerActions.EditInvoice</property>
         <property name="tooltip-text" translatable="yes">Edit the selected invoice</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.EditInvoice</property>
+        <property name="label" translatable="yes">Edit</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-invoice-edit</property>
       </object>
@@ -77,9 +402,9 @@
       <object class="GtkToolButton" id="but5">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Duplicate</property>
-        <property name="action-name">GncPluginInvoicesOwnerActions.DuplicateInvoice</property>
         <property name="tooltip-text" translatable="yes">Duplicate the selected invoice</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.DuplicateInvoice</property>
+        <property name="label" translatable="yes">Duplicate</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-invoice-duplicate</property>
       </object>
@@ -92,9 +417,9 @@
       <object class="GtkToolButton" id="but6">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Print</property>
-        <property name="action-name">GncPluginInvoicesOwnerActions.PrintInvoice</property>
         <property name="tooltip-text" translatable="yes">Print the selected invoice</property>
+        <property name="action-name">GncPluginInvoicesOwnerActions.PrintInvoice</property>
+        <property name="label" translatable="yes">_Print</property>
         <property name="use-underline">True</property>
         <property name="icon-name">document-print</property>
       </object>
@@ -103,6 +428,15 @@
         <property name="homogeneous">True</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
   </object>
-
 </interface>
