@@ -362,7 +362,7 @@ functions. */
 
 %feature("shadow") gnc_price_set_source_string %{
     (define (gnc_price_set_source_string price str)
-      (issue-deprecation_warning
+      (issue-deprecation-warning
           "gnc-price-set-source-string is deprecated and will be removed in GnuCash 6."
           "Use gnc-price-set-source and the appropriate enum value instead.")
       ($action price str))
