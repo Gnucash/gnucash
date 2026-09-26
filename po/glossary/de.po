@@ -13,14 +13,15 @@
 # Christian Wehling <christian.wehling@web.de>, 2022, 2023, 2026.
 # Joachim Wetzig <jo.wetzig@web.de>, 2023, 2026.
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024, 2026.
+# Alois Levermann <alois@levermann.xyz>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-08 20:22+0800\n"
-"PO-Revision-Date: 2026-06-26 04:34+0000\n"
-"Last-Translator: Tobias Mohr <tobias_mohr_1991@gmx.de>\n"
+"PO-Revision-Date: 2026-09-22 07:51+0000\n"
+"Last-Translator: Alois Levermann <alois@levermann.xyz>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -28,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 # Tastenkürzel: [altgr]+[Y]/[X]
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -341,7 +342,7 @@ msgstr "fälliger Betrag"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
-msgstr "Durchschnitt/Durchschnittlich"
+msgstr "Durchschnitt"
 
 # (Bestand, Kontostand?)
 #. "The amount of money that is in one's account"
@@ -353,7 +354,7 @@ msgstr "Saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
-msgstr "Voriger Saldo"
+msgstr "Saldovortrag"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
@@ -395,7 +396,7 @@ msgstr "Geschäftsbuch"
 # Jahresabschluss; die Bücher abschließen; Jahresendabrechnung
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr "Buchabschluss"
+msgstr "Buchungsabschluss"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -506,7 +507,7 @@ msgstr "Dashboard"
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr "Datei"
+msgstr "Datenbank"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -533,11 +534,9 @@ msgid "default"
 msgstr "Voreinstellung"
 
 #. "see credit"
-#, fuzzy
-#| msgid "deposit (in the reconcile dialog)"
 msgctxt "reconcile dialog"
 msgid "deposit"
-msgstr "Gutschrift"
+msgstr "Einzahlung"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -562,7 +561,7 @@ msgstr "Doppelte Buchführung"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr "Verknüpfung, Verknüpftes Dokument"
+msgstr "Verknüpfung, verknüpftes Dokument"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
@@ -574,7 +573,7 @@ msgstr "E-Mail"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "Angestellter<"
+msgstr "Angestellter"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
@@ -682,7 +681,7 @@ msgstr "Verlust"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "verlorene Konten"
+msgstr "Verlustkonten"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
@@ -936,11 +935,9 @@ msgstr "Buchungsansicht: Einzeilig"
 
 # (bis 1.8.7: Hauptbuch)
 #. "another form of register"
-#, fuzzy
-#| msgid "register: general ledger"
 msgctxt "register"
 msgid "general ledger"
-msgstr "Journal"
+msgstr "Hauptbuch"
 
 # bis 1.8.7: Amerikanisches Journal
 #. "another form of register"

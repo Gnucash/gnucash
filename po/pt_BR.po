@@ -23,11 +23,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-06-26 04:23+0000\n"
-"Last-Translator: Willian Bruno <willianramos373@gmail.com>\n"
+"PO-Revision-Date: 2026-09-21 01:51+0000\n"
+"Last-Translator: Jonathan Santos Fernandes "
+"<jonathansantosfernandes@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -35,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -5271,12 +5272,16 @@ msgid ""
 "This transaction involves more than one other account. Select a specific "
 "split to jump to that account."
 msgstr ""
+"Esta transação envolve mais de uma outra conta. Selecione uma divisão "
+"específica para mudar para tal conta."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3474
 msgid ""
 "This transaction only involves the current account so there is no other "
 "account to jump to."
 msgstr ""
+"Esta transação envolve somente a conta atual, então não há outra conta para "
+"ir."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3628
 #, c-format
@@ -5329,6 +5334,8 @@ msgid ""
 "The Start date is after the End date.\n"
 "Select Cancel to change dates.\n"
 msgstr ""
+"A data de Início é depois da data Final..\n"
+"Selecione Cancelar para alterar as datas.\n"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register-filter.cpp:1475
@@ -5367,7 +5374,7 @@ msgstr "Salve a configuração como…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:243
 msgid "Export as PDF"
-msgstr "Exporte como PDF"
+msgstr "Exportar como PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:377
 #: gnucash/gnome/gnc-plugin-page-report.cpp:378
@@ -5455,6 +5462,7 @@ msgstr "Visão geral"
 #, c-format
 msgid "This will update and overwrite the existing saved report named \"%s\"."
 msgstr ""
+"Isso atualizará e substituirá o relatório salvo existente chamado \"%s\"."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1798
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1824
@@ -5885,13 +5893,14 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Process your bank data via online banking using FinTS."
-msgstr ""
+msgstr "Processe seus dados bancários online através do FinTS."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:24
 msgid ""
 "Download Transactions and Balances and initiate various SEPA Actions using "
 "AqBanking."
 msgstr ""
+"Baixe transações e saldos e inicie várias ações SEPA usando o AqBanking."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:25
 msgid ""
@@ -10454,7 +10463,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:267
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:412
 msgid "\"Jump\" behaviour when there are multiple splits"
-msgstr ""
+msgstr "Comportamento de \"Pular\" quando há múltiplas divisões"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:268
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:413
@@ -10462,6 +10471,8 @@ msgid ""
 "Select how the \"Jump\" operation should behave when a transaction has "
 "multiple splits."
 msgstr ""
+"Selecione como a operação \"Pular\" deve se comportar quando uma transação "
+"tiver múltiplas divisões."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
 msgid "Create a new window for each new register"
@@ -10733,7 +10744,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:387
 msgid "A chart's point style."
-msgstr ""
+msgstr "O estilo do ponto de um gráfico."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:388
 msgid ""
@@ -10742,6 +10753,10 @@ msgid ""
 "chose among varius rectangles, triangles, and such. Only applicable to line "
 "charts."
 msgstr ""
+"Esta configuração especifica que tipo de estilo de ponto os gráficos devem "
+"usar. Nas versões anteriores era sempre o círculo, a partir de agora é "
+"possível escolher entre vários retângulos, triângulos, etc. Aplicável apenas "
+"a gráficos de linhas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:392
 msgid "A chart's point size."
@@ -12119,6 +12134,10 @@ msgid ""
 "Choices are displayed with a Hyphen (-) separator, but will also match Dot "
 "(.) and Slash (/) as separator."
 msgstr ""
+"Escolha a ordem de dia, mês e ano para corresponder à formatação do arquivo "
+"importado.\n"
+"As opções são exibidas com o hífen (-) como separador, mas também serão "
+"compatíveis com o ponto (.) e a barra (/) como separadores."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:775
 msgid ""
@@ -12375,6 +12394,8 @@ msgid ""
 "All accounts except Equity and placeholder accounts may have an opening "
 "balance."
 msgstr ""
+"Todas as contas, exceto as de patrimônio líquido e as contas titulares, "
+"podem ter um saldo inicial."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:602
 msgid "Setup selected accounts"
@@ -16707,6 +16728,9 @@ msgid ""
 "Show tooltip at the AVERAGE value (i.e. in between) of engaged entry/"
 "entries. Only applicable to the grouped/indexed type of a tooltip."
 msgstr ""
+"Exibir a dica de ferramenta no valor MÉDIO (ou seja, no ponto intermediário) "
+"das entradas envolvidas. Aplicável apenas ao tipo de dica de ferramenta "
+"agrupada/indexada."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3697
 #, fuzzy
@@ -22324,7 +22348,7 @@ msgstr "_Reequilibre"
 #: gnucash/register/ledger-core/split-register-control.cpp:1370
 #: gnucash/register/ledger-core/split-register-control.cpp:1383
 msgid "Edit prices/exchange rates directly in the split line."
-msgstr ""
+msgstr "Edite preços/taxas de câmbio diretamente na linha de dividida."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1409
 msgid "You need to select a split in order to modify its exchange rate."
@@ -25798,7 +25822,7 @@ msgstr ""
 #: gnucash/report/reports/standard/category-barchart.scm:86
 #: gnucash/report/reports/standard/net-charts.scm:60
 msgid "Show only non-zero values in a tooltip"
-msgstr ""
+msgstr "Mostrar apenas valores diferentes de zero em uma dica"
 
 #: gnucash/report/reports/standard/category-barchart.scm:88
 msgid "Use Stacked Charts"
@@ -26762,11 +26786,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:317
 msgid "Show Return On Investment (ROI) columns"
-msgstr ""
+msgstr "Mostrar colunas de Retorno sobre Investimento (ROI)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:324
 msgid "Show Compound Annual Growth Rate (CAGR) columns"
-msgstr ""
+msgstr "Mostrar colunas da Taxa de Crescimento Anual Composta (CAGR)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:332
 msgid "Show long (instead of short) account names"
@@ -30911,6 +30935,8 @@ msgid ""
 "Open the Find Invoice Dialog with the invoices already filtered for this "
 "customer"
 msgstr ""
+"Abra a caixa de diálogo \"Localizar Fatura\" com as faturas já filtradas "
+"para este cliente"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:200
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:529
@@ -31407,10 +31433,12 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"Execute a transação agendada selecionada. Se não houver transações agendadas "
+"para serem lançadas, a próxima ocorrência será utilizada"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
-msgstr ""
+msgstr "_Executar"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
@@ -31525,10 +31553,12 @@ msgstr "Cancele a reconciliação desta conta"
 #: libgnucash/app-utils/gnc-autoclear.cpp:130
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
+"Não é possível determinar de forma única como resolver as divisões. Foram "
+"encontradas múltiplas possibilidades."
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:149
 msgid "Auto-clear exceeds allocated time"
-msgstr ""
+msgstr "A limpeza automática excedeu o tempo alocado"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:205
 msgid "Account is already at Auto-Clear Balance."

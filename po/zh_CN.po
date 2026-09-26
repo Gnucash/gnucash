@@ -40,10 +40,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-06 03:51+0000\n"
+"PO-Revision-Date: 2026-09-25 03:51+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.1.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -5000,7 +5000,7 @@ msgstr "跳转至交易？"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2577
 msgid "Reverse Transaction"
-msgstr "添加反向交易事项"
+msgstr "冲销"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2577
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:697
@@ -5593,34 +5593,24 @@ msgid "With GnuCash you can (but are not limited to):"
 msgstr "借助 GnuCash，您可以做到（但不限于）："
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:18
-#, fuzzy
-#| msgid "Keep track of your day to day personal income and expenses"
 msgid "Keep track of your day to day personal income and expenses."
-msgstr "追踪您的日常个人收入和支出"
+msgstr "追踪您的日常个人收入和支出。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
-#, fuzzy
-#| msgid "Manage your stock, bond and mutual fund accounts with ease"
 msgid "Manage your stock, bond and mutual fund accounts with ease."
-msgstr "轻松管理您的股票，债券以及共同基金账户"
+msgstr "轻松管理您的股票，债券以及共同基金账户。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
-#, fuzzy
-#| msgid "Keep your small business' accounting up to date"
 msgid "Keep your small business' accounting up to date."
-msgstr "保证您的小型企业账务永不落后"
+msgstr "保证您的小型企业账务永不落后。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
-#, fuzzy
-#| msgid "Create accurate reports and graphs from your financial data"
 msgid "Create accurate reports and graphs from your financial data."
-msgstr "依照财务数据创建精确的报告与图表"
+msgstr "依照财务数据创建精确的报告与图表。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
-#, fuzzy
-#| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Set up scheduled transactions to avoid repeated data entry."
-msgstr "设置计划交易事项，避免重复数据输入"
+msgstr "设置计划交易事项，避免重复数据输入。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Process your bank data via online banking using FinTS."
@@ -5640,16 +5630,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:26
-#, fuzzy
-#| msgid "Export the Account Tree to a CSV file"
 msgid "Export the account tree or transactions as CSV."
-msgstr "将科目导出至 CSV 文件"
+msgstr "将科目树或交易导出至 CSV 文件"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:27
-#, fuzzy
-#| msgid "Perform financial calculations, such as a loan repayment"
 msgid "Perform financial calculations, such as a loan repayment."
-msgstr "执行贷款偿还等各种财务计算"
+msgstr "执行贷款偿还等各种财务计算。"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:50
 msgid ""
@@ -10098,7 +10084,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:387
 msgid "A chart's point style."
-msgstr ""
+msgstr "统计图的数据点样式。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:388
 msgid ""
@@ -10107,21 +10093,23 @@ msgid ""
 "chose among varius rectangles, triangles, and such. Only applicable to line "
 "charts."
 msgstr ""
+"该选项指定统计图中数据点的样式。在旧版中数据点永远为圆形，而现在可被配置为长"
+"方形、三角形等。只适用于折线图。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:392
 msgid "A chart's point size."
-msgstr ""
+msgstr "统计图的数据点大小。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:393
 #: gnucash/gtkbuilder/dialog-preferences.glade:3542
 msgid ""
 "This setting specifies the default point's size (in pixels) displayed in "
 "charts. Only applicable to line charts."
-msgstr ""
+msgstr "该选项指定统计图中数据点的默认大小（以像素为单位）。只适用于折线图。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "A chart's hovered-point size."
-msgstr ""
+msgstr "统计图数据点悬浮时大小。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:398
 msgid ""
@@ -10129,10 +10117,12 @@ msgid ""
 "charts. It tends to be bigger than the default (i.e. not hovered over) size. "
 "Only applicable to line charts."
 msgstr ""
+"该设置指定统计图中的数据点在鼠标悬停时的大小（以像素为单位）。它一般比默认大"
+"小（非悬浮时的大小）要大。只适用于折线图。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:402
 msgid "A hover radius that would engage a tooltip."
-msgstr ""
+msgstr "会引起悬浮框显示的悬停范围半径。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:403
 #: gnucash/gtkbuilder/dialog-preferences.glade:3623
@@ -10141,6 +10131,8 @@ msgid ""
 "into the proximity of which the point / tooltip will be engaged. If set to "
 "zero, the user must precisely aim at that point."
 msgstr ""
+"该选项指定数据点的悬停半径。鼠标悬停在该半径范围内时数据点的悬浮窗将会显示。"
+"如果设为0，只有在光标精准指向该数据点时才会显示悬浮窗。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:407
 msgid "An arrow size (caret) coming out of a tooltip's body."
@@ -15514,10 +15506,8 @@ msgid "Position  (for grouped only)"
 msgstr "收款人姓名的位置"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
-#, fuzzy
-#| msgid "Average"
 msgid "average"
-msgstr "均值"
+msgstr "平均"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3683
 msgid ""
@@ -20801,7 +20791,7 @@ msgstr "初始短期资本收益"
 
 #: gnucash/register/ledger-core/split-register.c:2713
 msgid "Dist"
-msgstr "距离"
+msgstr "分配"
 
 #: gnucash/register/ledger-core/split-register-control.cpp:84
 msgid ""
@@ -27772,7 +27762,7 @@ msgstr "累计总计"
 #. brought forward".
 #: gnucash/report/trep-engine.scm:1606
 msgid "Balance b/f"
-msgstr "结转余额"
+msgstr "上期结转余额"
 
 #: gnucash/report/trep-engine.scm:1802
 msgid "Split Transaction"
