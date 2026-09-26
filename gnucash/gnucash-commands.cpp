@@ -350,38 +350,41 @@ Gnucash::add_quotes (const bo_str& uri)
     if (!session)
         return 1;
 
-    qof_session_begin(session, uri->c_str(), SESSION_NORMAL_OPEN);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
-
-    qof_session_load(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
-
     try
     {
         GncQuotes quotes;
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
         auto quote_sources = quotes.sources();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
+
+        qof_session_begin(session, uri->c_str(), SESSION_NORMAL_OPEN);
+        if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+            return cleanup_and_exit_with_failure (session);
+
+        qof_session_load(session, NULL);
+        if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+            return cleanup_and_exit_with_failure (session);
+
         quotes.fetch(qof_session_get_book(session));
         if (quotes.had_failures())
         {
             std::cerr << quotes.report_failures() << std::endl;
             rv = 2;
         }
+
+        qof_session_save(session, NULL);
+        if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+            return cleanup_and_exit_with_failure (session);
+
+        qof_session_destroy(session);
+        qof_event_resume();
+        return rv;
     }
     catch (const GncQuoteException& err)
     {
         std::cerr << bl::translate("Price retrieval failed: ") << err.what() << std::endl;
+        return cleanup_and_exit_with_failure(session);
     }
-    qof_session_save(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
-
-    qof_session_destroy(session);
-    qof_event_resume();
-    return rv;
 }
 
 int
