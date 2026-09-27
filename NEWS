@@ -22,7 +22,7 @@ Between 5.16 and 5.17, the following bugfixes were accomplished:
 		 represent individual points as well as all the points on a
 		 particular date.
     Bug 799799 - Enhancement - making the tooltip more readable
-    Bug 899803 - Split context/category to msgctxt field in gnc-glossary.txt to
+    Bug 799803 - Split context/category to msgctxt field in gnc-glossary.txt to
                  provide better translation experience Translations aren't
 		 changed but are marked fuzzy. Keywords that aren't proper
 		 nouns are lower cased, consistent with how words appear in
