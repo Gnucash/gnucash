@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
+<gnc-act:title>
+  Term Deposits and Savings
+</gnc-act:title>
+<gnc-act:short-description>
+  Accounts for term deposits and high interest savings accounts
+</gnc-act:short-description>
+<gnc-act:long-description>
+  You would want to select this set of accounts if you have term deposits or high interest savings accounts (term deposit, term deposit interest, high interest savings, high interest savings interest).
+</gnc-act:long-description>
+
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assets</act:name>
+  <act:id type="new">44c03b9b7c2852dc821dab02ae273b6e</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Assets</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Current Assets</act:name>
+  <act:id type="new">5472cc46bd5f596a923b3043f7cec6c5</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Current Assets</act:description>
+  <act:parent type="new">44c03b9b7c2852dc821dab02ae273b6e</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Term Deposit</act:name>
+  <act:id type="new">8f20695137ad5c02a0471b24e7f8c045</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Term Deposit</act:description>
+  <act:parent type="new">5472cc46bd5f596a923b3043f7cec6c5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>High Interest Savings</act:name>
+  <act:id type="new">2bfa8d10ef385eec8ebccdc976c3b288</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>High Interest Savings</act:description>
+  <act:parent type="new">5472cc46bd5f596a923b3043f7cec6c5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income</act:name>
+  <act:id type="new">4676ebac435a587f8db734ccb4d58d10</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Income</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest Income</act:name>
+  <act:id type="new">3e49be964eea598fa8880e56ac88cb5d</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Interest Income</act:description>
+  <act:parent type="new">4676ebac435a587f8db734ccb4d58d10</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Term Deposit Interest</act:name>
+  <act:id type="new">db9a622f3adb5bae8506aabb812f420b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Term Deposit Interest</act:description>
+  <act:parent type="new">3e49be964eea598fa8880e56ac88cb5d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>High Interest Savings Interest</act:name>
+  <act:id type="new">43f4153436d45befab421b9504c94a7f</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>High Interest Savings Interest</act:description>
+  <act:parent type="new">3e49be964eea598fa8880e56ac88cb5d</act:parent>
+</gnc:account>
+
+</gnc-account-example>
