@@ -65,6 +65,24 @@ const SecretSchema* gnucash_get_secret_schema(void)
 #define SECRET_SCHEMA_GNUCASH gnucash_get_secret_schema()
 #endif
 
+#ifdef HAVE_OSX_KEYCHAIN
+/* Log an OSStatus from the macOS keychain as a readable message. */
+static void
+gnc_log_osx_keychain_error (const gchar *context, OSStatus status)
+{
+    CFStringRef osx_resultstring = SecCopyErrorMessageString (status, NULL);
+    char resultstring[256] = "";
+    if (osx_resultstring)
+    {
+        CFStringGetCString (osx_resultstring, resultstring,
+                            sizeof resultstring, kCFStringEncodingUTF8);
+        CFRelease (osx_resultstring);
+    }
+    PWARN ("OS X keychain error in %s (status %d): %s",
+           context, (int) status, resultstring);
+}
+#endif
+
 void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *server,
                                guint32 port,
@@ -152,13 +170,8 @@ void gnc_keyring_set_password (const gchar *access_method,
 
     if ( status != noErr )
     {
-        CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
-        const gchar *resultstring =
-            CFStringGetCStringPtr(osx_resultstring,
-                                  GetApplicationTextEncoding());
-        PWARN ( "OS X keychain error: %s", resultstring );
+        gnc_log_osx_keychain_error ("gnc_keyring_set_password", status);
         PWARN ( "The user will be prompted for a password again next time." );
-        CFRelease ( osx_resultstring );
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 }
@@ -334,11 +347,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
         }
         else
         {
-            CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
-            const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
-                                                              GetApplicationTextEncoding());
-            PWARN ( "OS X keychain error: %s", resultstring );
-            CFRelease ( osx_resultstring );
+            gnc_log_osx_keychain_error ("gnc_keyring_get_password", status);
         }
     }
 #endif /* HAVE_OSX_KEYCHAIN */
