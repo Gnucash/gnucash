@@ -317,6 +317,7 @@ static const GncGUID * gncEntryGetGUID(GncEntry *x);
 %include <gncIDSearch.h>
 
 // Commodity prices includes and stuff
+%ignore gnc_price_set_source_string;
 %include <gnc-pricedb.h>
 
 %include <cap-gains.h>

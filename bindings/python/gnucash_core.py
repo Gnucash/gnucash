@@ -767,31 +767,6 @@ class GncPrice(GnuCashCoreClass):
     _new_instance = 'gnc_price_create'
 GncPrice.add_methods_with_prefix('gnc_price_')
 
-# Deprecate set_source_string() in favour of set_source() with a PriceSource
-# member. While it exists, guard it: the C setter maps a fixed set of canonical
-# strings to the PriceSource enum and silently leaves the source unchanged for
-# anything else, so a typo or obsolete string would change nothing -- detect
-# that (the round-tripped source no longer equals the input) and raise instead.
-_gnc_price_set_source_string = GncPrice.set_source_string
-def _deprecated_set_source_string(self, source):
-    """Deprecated: use set_source() with a PriceSource member.
-
-    Still raises ValueError if `source` is not a recognized PriceSource string
-    (the underlying C setter would otherwise leave the source unchanged)."""
-    _gnc_price_set_source_string(self, source)
-    if self.get_source_string() != source:
-        raise ValueError(
-            "%r is not a recognized price source string, so set_source_string() "
-            "left the source unchanged. Use set_source() with a PriceSource "
-            "member, e.g. set_source(PriceSource.FINANCE_QUOTE)." % (source,))
-# Report the deprecation under the public method name, not the wrapper's.
-_deprecated_set_source_string.__name__ = 'set_source_string'
-_deprecated_set_source_string.__qualname__ = 'GncPrice.set_source_string'
-GncPrice.set_source_string = deprecated(
-    "use set_source() with a PriceSource member, e.g. "
-    "price.set_source(PriceSource.FINANCE_QUOTE)")(_deprecated_set_source_string)
-
-
 class GncPriceDB(GnuCashCoreClass):
     '''
     a simple price database for gnucash.
