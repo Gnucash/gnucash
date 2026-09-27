@@ -14,6 +14,7 @@ from gnucash import (
     GncCommodity,
     GncNumeric,
     GncPrice,
+    PriceSource,
     Session,
     Split,
     Transaction,
@@ -451,6 +452,87 @@ class TestDoubleWrapProtection(TestCase):
         val = GncNumeric(instance=raw)
         self.assertEqual(val.num(), 5)
         self.assertEqual(val.denom(), 2)
+
+
+# ---------------------------------------------------------------------------
+# Test: PriceSource enum stays in sync with the C PRICE_SOURCE_* enum
+# ---------------------------------------------------------------------------
+class TestPriceSourceEnum(TestCase):
+    """PriceSource must cover the C PRICE_SOURCE_* enum exactly, so it can't
+    drift if a value is added, removed, or renumbered on the C side. Member
+    names are a Python-side choice (e.g. FINANCE_QUOTE spells out FQ), so the
+    check is on the set of values, which come straight from the C enum."""
+
+    def test_values_match_c_enum(self):
+        from gnucash import gnucash_core_c as c
+        c_values = sorted(getattr(c, n) for n in dir(c)
+                          if n.startswith("PRICE_SOURCE_"))
+        py_values = sorted(m.value for m in PriceSource)
+        self.assertEqual(py_values, c_values,
+                         "PriceSource is out of sync with the C PRICE_SOURCE_* "
+                         "enum -- add/remove members to match.")
+
+    def test_set_source_accepts_enum(self):
+        ses = Session()
+        book = ses.get_book()
+        table = book.get_table()
+        usd = table.lookup("CURRENCY", "USD")
+        stock = GncCommodity(book, "Test Stock", "NASDAQ", "TSTK", "TSTK", 10000)
+        table.insert(stock)
+        price = GncPrice(book)
+        price.set_commodity(stock)
+        price.set_currency(usd)
+        price.set_source(PriceSource.FINANCE_QUOTE)
+        self.assertEqual(price.get_source(), PriceSource.FINANCE_QUOTE)
+        self.assertEqual(price.get_source_string(), "Finance::Quote")
+        ses.end()
+
+
+# ---------------------------------------------------------------------------
+# Test: GncPrice.set_source_string -- deprecated, but still guards (raises on
+# an unrecognized source) during the deprecation period
+# ---------------------------------------------------------------------------
+class TestSetSourceStringGuard(PriceSession):
+    """set_source_string() is deprecated in favour of set_source(PriceSource.*),
+    but while it exists it must fail loud on an unrecognized source string
+    instead of silently leaving the source unchanged (the C setter no-ops).
+    These tests ignore the DeprecationWarning and check the guard behaviour;
+    the warning itself is covered by test_emits_deprecation_warning."""
+
+    def setUp(self):
+        super().setUp()
+        # These tests deliberately call the deprecated method.
+        self._warn_ctx = warnings.catch_warnings()
+        self._warn_ctx.__enter__()
+        warnings.simplefilter("ignore", DeprecationWarning)
+
+    def tearDown(self):
+        self._warn_ctx.__exit__(None, None, None)
+        super().tearDown()
+
+    def test_canonical_source_is_accepted(self):
+        self.price1.set_source_string("Finance::Quote")
+        self.assertEqual(self.price1.get_source_string(), "Finance::Quote")
+
+    def test_unknown_source_on_fresh_price_raises(self):
+        price = GncPrice(self.book)
+        with self.assertRaises(ValueError):
+            price.set_source_string("not-a-real-source")
+
+    def test_unknown_source_does_not_clobber_existing(self):
+        # The C setter no-ops on an unknown string; on a price that already has
+        # a valid source that leaves the old value in place (so a bare "is the
+        # source INVALID now?" check would miss it). The guard must still raise.
+        self.price1.set_source_string("Finance::Quote")
+        with self.assertRaises(ValueError):
+            self.price1.set_source_string("totally-bogus")
+        self.assertEqual(self.price1.get_source_string(), "Finance::Quote")
+
+    def test_emits_deprecation_warning(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DeprecationWarning)
+            with self.assertRaises(DeprecationWarning):
+                self.price1.set_source_string("Finance::Quote")
 
 
 if __name__ == '__main__':

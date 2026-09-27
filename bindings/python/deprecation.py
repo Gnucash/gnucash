@@ -24,10 +24,10 @@ def deprecated(message):
         def wrapper(*args, **kwargs):
             warning_msg = 'Call to deprecated function {}. {}'.format(
                 func.__name__, message)
-            frame = inspect.current_frame().f_back
+            frame = inspect.currentframe().f_back
 
-            warn_explicit(message,
-                          category=DeprecationWarnig,
+            warn_explicit(warning_msg,
+                          category=DeprecationWarning,
                           filename=inspect.getfile(frame.f_code),
                           lineno=frame.f_lineno)
             return func(*args, **kwargs)

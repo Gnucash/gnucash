@@ -34,8 +34,12 @@
 
 #include <vector>
 #include <functional>
+#include <algorithm>
+#include <optional>
 
 #include <Account.h>
+#include <SplitP.hpp>
+#include <TransactionP.hpp>
 
 using SplitsVec = std::vector<Split*>;
 using AccountVec = std::vector<Account*>;
@@ -43,6 +47,42 @@ using AccountVec = std::vector<Account*>;
 const SplitsVec& xaccAccountGetSplits (const Account*);
 
 void gnc_account_foreach_descendant (const Account *, std::function<void(Account*)> func);
+
+
+static inline SplitsVec::const_iterator
+splits_start (const SplitsVec& splits, std::optional<time64> start_date)
+{
+    if (!start_date) return splits.begin();
+    return std::lower_bound (splits.begin(), splits.end(), *start_date,
+                             [](auto s, time64 t){ return s->parent->date_posted < t; });
+}
+
+static inline SplitsVec::const_iterator
+splits_end (const SplitsVec& splits, std::optional<time64> end_date)
+{
+    if (!end_date) return splits.end();
+    return std::upper_bound (splits.begin(), splits.end(), *end_date,
+                             [](time64 t, auto s){ return t < s->parent->date_posted; });
+}
+
+template <typename Fn>
+void gnc_account_foreach_split_between_dates (const Account* account,
+                                              std::optional<time64> start_date,
+                                              std::optional<time64> end_date,
+                                              bool include_descendants, Fn&& fn)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT (account));
+    auto scan_account = [&](const Account* acc)
+    {
+        const auto& splits = xaccAccountGetSplits (acc);
+        std::for_each (splits_start (splits, start_date), splits_end (splits, end_date),
+                       fn);
+    };
+
+    scan_account (account);
+    if (include_descendants)
+        gnc_account_foreach_descendant (account, scan_account);
+}
 
 void gnc_account_foreach_split (const Account*, std::function<void(Split*)>);
 

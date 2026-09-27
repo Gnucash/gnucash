@@ -98,5 +98,18 @@ class TestGncNumeric(TestCase):
         with self.assertRaises(TypeError):
             GncNumeric(complex(1, 1))
 
+    def test_num_denom_read_only(self):
+        # num/denom are read-only accessor methods, not writable fields.
+        # Assigning to them used to silently do nothing and corrupt data
+        # (Bug 799796); it must now raise instead.
+        num = GncNumeric(1, 2)
+        with self.assertRaises(AttributeError):
+            num.num = 5
+        with self.assertRaises(AttributeError):
+            num.denom = 5
+        # The value is unchanged and the accessors still work.
+        self.assertEqual(num.num(), 1)
+        self.assertEqual(num.denom(), 2)
+
 if __name__ == '__main__':
     main()

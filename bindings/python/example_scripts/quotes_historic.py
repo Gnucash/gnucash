@@ -17,10 +17,9 @@
 #   https://wiki.gnucash.org/wiki/Stocks/get_prices
 #
 
-from gnucash import Session, Account, Split
-import gnucash
+from gnucash import Session, GncNumeric, GncPrice, PriceSource, GNC_HOW_DENOM_FIXED, GNC_HOW_RND_ROUND_HALF_UP
+from gnucash.gnucash_core_c import COMMODITY_DENOM_MULT
 import datetime
-from fractions import Fraction
 from gnc_convenience import find_account
 
 FILE = "./test.gnucash"
@@ -48,42 +47,35 @@ for i in range(1,len(data)):
     stock_price.append(float(data[i].rsplit(',')[5]))
 
 # Initialize Gnucash session
-session = Session(url, True, False, False)
+session = Session(url)
 root = session.book.get_root_account()
 book = session.book
 account = book.get_root_account()
 pdb = book.get_price_db()
 comm_table = book.get_table()
-ac = find_account(account,'Intel')[0] 
 
+# This example assumes the Intel holding is priced in USD.
+ac = find_account(account, 'Intel')[0]
 stock = ac.GetCommodity()
-# Add the prices
-pdb = book.get_price_db()
-if len(ac.GetSplitList())<1:
-  print('Need at least one Split to get currency info ... ')
-  raise SystemExit
-cur = ac.GetSplitList()[0].GetParent().GetCurrency()
+cur = comm_table.lookup("CURRENCY", "USD")
 
-# Get stock data
-pl = pdb.get_prices(stock,cur)
-if len(pl)<1:
-  print('Need at least one database entry to clone ...')
-  raise SystemExit
-
-pl0 = pl[0]
-for i in range(1,len(pl)):
-  pdb.remove_price(pl[i])
-
-for i in range(0,len(stock_date)):
-  p_new = pl0.clone(book)
-  p_new = gnucash.GncPrice(instance=p_new)
-  print('Adding',i,stock_date[i],stock_price[i])
+# Construct the price at the precision GnuCash uses for a commodity quoted in a
+# currency: the currency's smallest unit (its SCU -- get_fraction() is 100 for
+# USD, i.e. cents) times COMMODITY_DENOM_MULT (10000), the extra precision a
+# price carries beyond an ordinary amount. See "Price policy" in gnc-pricedb.h.
+price_denom = cur.get_fraction() * COMMODITY_DENOM_MULT
+for i in range(0, len(stock_date)):
+  print('Adding', i, stock_date[i], stock_price[i])
+  # --- Create a fresh price object with all properties set ------------------
+  p_new = GncPrice(book)
+  p_new.set_commodity(stock)
+  p_new.set_currency(cur)
   p_new.set_time64(stock_date[i])
-  v = p_new.get_value()
-  v.num = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).numerator)
-  v.denom = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).denominator)
-  p_new.set_value(v)
-  p_new.set_source("Finance::Quotes::Historic")
+  p_new.set_value(GncNumeric(stock_price[i], price_denom,
+                             GNC_HOW_DENOM_FIXED | GNC_HOW_RND_ROUND_HALF_UP))
+  p_new.set_source(PriceSource.FINANCE_QUOTE)
+  p_new.set_typestr("last")                    # bid / ask / last / nav / unknown
+  # --------------------------------------------------------------------------
   pdb.add_price(p_new)
 
 # Clean up

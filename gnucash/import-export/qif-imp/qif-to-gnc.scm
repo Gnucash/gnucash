@@ -1438,7 +1438,7 @@
     (gnc-price-begin-edit gnc-price)
     (gnc-price-set-commodity gnc-price commodity)
     (gnc-price-set-currency gnc-price default-currency)
-    (gnc-price-set-source-string gnc-price "user:price")
+    (gnc-price-set-source gnc-price PRICE-SOURCE-USER-PRICE)
 
     ;; other options for type are "last" or "nav" which are
     ;;  the last known price for a stock or the net asset value
