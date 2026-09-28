@@ -35,7 +35,7 @@
 %typemap(in) time64 {
     PyDateTime_IMPORT;
 
-    if (!PyDate_Check($input) && !PyInt_Check($input)) {
+    if (!PyDate_Check($input) && !PyLong_Check($input)) {
         PyErr_SetString(PyExc_ValueError,"date, datetime or integer expected");
         return NULL;
     }
@@ -49,7 +49,7 @@
                           PyDateTime_GET_YEAR($input) - 1900};
         $1 = gnc_mktime(&time);
     } else {
-        $1 = PyInt_AsLong($input);
+        $1 = PyLong_AsLong($input);
     }
 }
 
@@ -79,7 +79,7 @@
 %typemap(in) time64 * (time64 secs) {
     PyDateTime_IMPORT;
 
-    if (!PyDate_Check($input) && !PyInt_Check($input)) {
+    if (!PyDate_Check($input) && !PyLong_Check($input)) {
         PyErr_SetString(PyExc_ValueError,"date, datetime or integer expected");
         return NULL;
     }
@@ -94,7 +94,7 @@
         time64 secs = gnc_mktime(&time);
         $1 = &secs;
     } else {
-        time64 secs = PyInt_AsLong($input);
+        time64 secs = PyLong_AsLong($input);
         $1 = &secs;
     }
 }

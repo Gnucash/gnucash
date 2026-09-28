@@ -27,11 +27,11 @@
 #ifndef IMPORT_PARSE_H
 #define IMPORT_PARSE_H
 
+#include "qof.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "qof.h"
 
 typedef enum
 {

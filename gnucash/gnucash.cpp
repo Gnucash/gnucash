@@ -31,6 +31,9 @@
 
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
+#ifdef __MINGW32__
+#include "gnucash-locale-platform.h"
+#endif
 
 #include <glib/gi18n.h>
 #include <dialog-new-user.h>
@@ -300,6 +303,9 @@ main(int argc, char ** argv)
         << "\n";
         return 1;
     }
+#ifdef __MINGW32__
+    set_platform_ctype_to_acp ();
+#endif
 
     application.parse_command_line (argc, argv);
     return application.start (argc, argv);

@@ -927,7 +927,7 @@ gboolean gncCustomerRegister (void)
 {
     static QofParam params[] =
     {
-        { CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID, (QofSetterFunc)gncCustomerSetID },
+        { CUSTOMER_ID, QOF_TYPE_NATURAL, (QofAccessFunc)gncCustomerGetID, (QofSetterFunc)gncCustomerSetID },
         { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, (QofSetterFunc)gncCustomerSetName },
         { CUSTOMER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetNotes, (QofSetterFunc)gncCustomerSetNotes },
         {

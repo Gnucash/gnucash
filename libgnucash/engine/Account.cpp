@@ -1140,26 +1140,14 @@ xaccInitAccount (Account * acc, QofBook *book)
 void
 gnc_account_foreach_split (const Account *acc, std::function<void(Split*)> func)
 {
-    if (!GNC_IS_ACCOUNT (acc))
-        return;
-
-    auto& splits{GET_PRIVATE(acc)->splits};
-    std::for_each (splits.begin(), splits.end(), func);
+    gnc_account_foreach_split_between_dates (acc, {}, {}, false, func);
 }
 
 void
 gnc_account_foreach_split_until_date (const Account *acc, time64 end_date,
                                       std::function<void(Split*)> f)
 {
-    if (!GNC_IS_ACCOUNT (acc))
-        return;
-
-    auto after_date = [](time64 end_date, auto s) -> bool
-    { return (xaccTransGetDate (xaccSplitGetParent (s)) > end_date); };
-
-    auto& splits{GET_PRIVATE(acc)->splits};
-    auto after_date_iter = std::upper_bound (splits.begin(), splits.end(), end_date, after_date);
-    std::for_each (splits.begin(), after_date_iter, f);
+    gnc_account_foreach_split_between_dates (acc, {}, end_date, false, f);
 }
 
 

@@ -51,6 +51,35 @@ safe_utf8_collate (const char * da, const char * db)
     return 0;
 }
 
+int
+safe_utf8_collate_natural (const char * da, const char * db)
+{
+    if (da && !(*da))
+        da = NULL;
+
+    if (db && !(*db))
+        db = NULL;
+
+    if (da && db)
+    {
+        gchar *a = g_utf8_collate_key_for_filename(da ? da : "", -1);
+        gchar *b = g_utf8_collate_key_for_filename(db ? db : "", -1);
+
+        int result = strcmp(a, b);
+
+        g_free(a);
+        g_free(b);
+
+        return result;
+    }
+    else if (da)
+        return 1;
+    else if (db)
+        return -1;
+
+    return 0;
+}
+
 /********************************************************************
  * The following definitions are from gutf8.c, for use by
  * gnc_utf8_validate().  These are all verbatim copies, except for

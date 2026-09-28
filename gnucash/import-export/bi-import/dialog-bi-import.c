@@ -515,7 +515,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
         // If the id of the next row is blank, it takes the id of the previous row.
         if (valid && strlen(id) == 0)
         {
-            strcpy( id, running_id->str);
+            g_free (id);
+            id = g_strdup (running_id->str);
             gtk_list_store_set (store, &iter, ID, id, -1);
         }
 

@@ -59,6 +59,18 @@ extern "C" {
  *  compares after str2. */
 int safe_utf8_collate (const char *str1, const char *str2);
 
+/** Collate two UTF-8 strings _naturally_.  This function performs basic argument
+ *  checking before calling g_utf8_collate_key_for_filename.
+ *
+ *  @param str1 The first string.
+ *
+ *  @param str2 The first string.
+ *
+ *  @return Same return value as g_utf8_collate. The values are: < 0
+ *  if str1 compares before str2, 0 if they compare equal, > 0 if str1
+ *  compares after str2. */
+int safe_utf8_collate_natural (const char *str1, const char *str2);
+
 /**
  * @brief Validates UTF-8 encoded text for use in GnuCash.
  *

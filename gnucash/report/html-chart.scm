@@ -55,6 +55,10 @@
 (export gnc:html-chart-format-style)
 (export gnc:html-chart-set-format-style!)
 (export gnc:html-chart-render)
+(export gnc:html-chart-set-tooltip-mode!)
+(export gnc:html-chart-set-tooltip-caretpadding!)
+(export gnc:html-chart-set-tooltip-caretpadding-from-prefs!)
+(export gnc:html-chart-set-tooltip-non-zero-only!)
 (export gnc:html-chart-set-custom-x-axis-ticks?!)
 (export gnc:html-chart-set-title!)
 (export gnc:html-chart-set-data-labels!)
@@ -185,7 +189,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define (gnc:make-html-chart)
+(define (make-html-chart-object)
   (gnc:make-html-chart-internal
    '(percent . 100)  ;;width
    '(percent . 100)  ;;height
@@ -210,10 +214,17 @@
                                      (cons 'line (list
                                                   (cons 'tension 0)))
                                      (cons 'point (list
-                                                   (cons 'pointStyle #f)))))
+                                                   (cons 'pointStyle #f)
+                                                   (cons 'hoverBorderColor 'black)
+                                                   (cons 'hoverBorderWidth 1)))))
                     (cons 'tooltips (list
                                      (cons 'mode 'index)
                                      (cons 'intersect #f)
+                                     (cons 'backgroundColor "rgba(36, 36, 36, 0.94)")
+                                     (cons 'titleMarginBottom 14)
+                                     (cons 'xPadding 8)
+                                     (cons 'yPadding 9)
+                                     (cons 'bodySpacing 3)
                                      (cons 'callbacks (list
                                                        (cons 'label #f)))))
 
@@ -267,6 +278,11 @@
    #t        ;custom y-axis ticks?
    ))
 
+(define (gnc:make-html-chart)
+  (let ((chart (make-html-chart-object)))
+    (apply-report-preferences! chart)
+    chart))
+
 (define (gnc:html-chart-type chart)
   (gnc:html-chart-get chart '(type)))
 
@@ -289,6 +305,51 @@
 
 (define (gnc:html-chart-set-x-axis-type! chart type)
   (gnc:html-chart-set! chart '(options scales xAxes (0) type) type))
+
+(define (gnc:html-chart-set-tooltip-mode! chart mode)
+  (gnc:html-chart-set! chart '(options tooltips mode) mode))
+
+(define (gnc:html-chart-set-tooltip-caretpadding! chart padding)
+  (gnc:html-chart-set! chart '(options tooltips caretPadding) padding))
+
+(define (gnc:html-chart-set-tooltip-caretpadding-from-prefs! chart linechart? indexed?)
+  (gnc:html-chart-set-tooltip-caretpadding!
+   chart
+   (cond
+    ((not linechart?) 0)
+    (indexed?
+     (if (equal? (gnc-prefs-get-string "general.report" "chart-tooltip-position")
+                 "average")
+         0
+         (+ (gnc-prefs-get-int "general.report" "chart-point-size") 2)))
+    (else (+ (gnc-prefs-get-int "general.report" "chart-point-size-hover") 2)))))
+
+(define (gnc:html-chart-set-tooltip-non-zero-only! chart nonZeroOnly)
+  (gnc:html-chart-set! chart '(options tooltips showNonZeroOnly) nonZeroOnly))
+
+(define (apply-report-preferences! chart)
+
+  (define pointstyles
+    '(circle cross crossRot dash line rect rectRounded rectRot star triangle))
+
+  (let ((style (gnc-prefs-get-int "general.report" "chart-point-style")))
+    (gnc:html-chart-set! chart '(options elements point pointStyle)
+                         (or (list-ref-safe pointstyles style) 'circle)))
+
+  (gnc:html-chart-set! chart '(options elements point radius)
+                       (gnc-prefs-get-int "general.report" "chart-point-size"))
+
+  (gnc:html-chart-set! chart '(options elements point hoverRadius)
+                       (gnc-prefs-get-int "general.report" "chart-point-size-hover"))
+
+  (gnc:html-chart-set! chart '(options elements point hitRadius)
+                       (gnc-prefs-get-int "general.report" "chart-tooltip-engage-radius"))
+
+  (gnc:html-chart-set! chart '(options tooltips caretSize)
+                       (gnc-prefs-get-int "general.report" "chart-tooltip-caret-size"))
+
+  (gnc:html-chart-set! chart '(options tooltips position)
+                       (gnc-prefs-get-string "general.report" "chart-tooltip-position")))
 
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
@@ -374,14 +435,22 @@ function tooltipLabel(tooltipItem,data) {
   var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
   switch (typeof(label)) {
     case 'number':
-      return datasetLabel + ': ' + numformat(label);
+      return ' \u200A' + datasetLabel + ' :   ' + numformat(label) + '  ';
     default:
       return '';
   }
 }
 
 function tooltipTitle(array,data) {
-  return data.labels[array[0].index]; }
+  if (!data || array.length === 0) {
+    return '';
+  }
+  return data.labels[array[0].index] + '  ';
+}
+
+function tooltipFilter(tooltipItem, data) {
+    return tooltipItem.yLabel != 0;
+}
 
 // draw the background color
 Chart.pluginService.register({
@@ -471,6 +540,7 @@ document.getElementById(chartid).onclick = function(evt) {
     (push (format #f "<canvas id=~s></canvas>\n" id))
     (push "</div>\n")
     (push (format #f "<script id='script-~a'>\n" id))
+    (push "(function () {\n")
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
     (push (format #f "var formsty = ~s;\n" (gnc:html-chart-format-style chart)))
@@ -490,9 +560,11 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
     (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
+    (push "if (chartjsoptions.options.tooltips.showNonZeroOnly) { chartjsoptions.options.tooltips.filter = tooltipFilter; }\n")
     (push JS-setup)
 
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")
+    (push "})();\n")
     (push "</script>")
 
     retval))

@@ -60,27 +60,48 @@
 (define doclink-header (N_ "Document Links"))
 (define linked-txns-header (N_ "Transaction Links"))
 
-(define javascript "
+(define (make-javascript table-id)
+  (string-append "
 <script>
-  function getID(cell) { return cell.getAttribute('link-id'); }
+//<![CDATA[
+(function () {
+  var table = document.getElementById('" table-id "');
+  if (!table) return;
 
-  function clicky() {
-      var id = getID(this);
-      var ishighlighted = this.classList.contains('highlight');
-      TDs.forEach (function (item, idx) {
-          item.classList.remove('highlight')});
-      if (ishighlighted) return;
-      TDs.forEach (function (item, idx) {
-          if (getID(item) == id)
-              item.classList.add('highlight')})}
+  var linkedCells = Array.prototype.filter.call(table.getElementsByTagName('td'),
+      function (cell) { return cell.hasAttribute('link-id'); });
 
-  var TDs = document.getElementsByTagName('td');
-  TDs = Array.prototype.slice.call (TDs);
-  TDs = TDs.filter (getID);
-  TDs.forEach(function (item, idx) {
-      item.addEventListener('click', clicky)});
+  function toggleHighlight(cell)
+  {
+      var id = cell.getAttribute('link-id');
+      var noHighlight = !cell.classList.contains('highlight');
+      linkedCells.forEach(function (item)
+      {
+          if (noHighlight && item.getAttribute('link-id') === id)
+              item.classList.add('highlight');
+          else
+              item.classList.remove('highlight');
+      });
+  }
+
+  table.addEventListener('click', function (event)
+  {
+      var cell = event.target.closest('td[link-id]');
+      if (cell && table.contains(cell)) toggleHighlight(cell);
+  });
+
+  table.addEventListener('keydown', function (event)
+  {
+      if (event.key !== ' ') return;
+      var cell = event.target.closest('td[link-id]');
+      if (!cell || !table.contains(cell)) return;
+      event.preventDefault();
+      toggleHighlight(cell);
+  });
+})();
+//]]>
 </script>
-")
+"))
 
 ;; Depending on the report type we want to set up some lists/cases
 ;; with strings to ease overview and translation
@@ -464,7 +485,7 @@
            (link-data->cols (car link-rows))))
       (lp (cdr link-rows) #f))))
 
-(define (add-owner-table table splits acc start-date end-date date-type
+(define (add-owner-table table table-id splits acc start-date end-date date-type
                          used-columns payable? link-option)
   (define (AP-negate num)
     (if payable? (- num) num))
@@ -748,6 +769,7 @@ and do not match the transaction."))))))))
       (print-totals total debit credit tax sale invalid-splits)
       (gnc:html-table-set-style!
        table "table"
+       'attribute (list "id" table-id)
        'attribute (list "border" 1)
        'attribute (list "cellspacing" 0)
        'attribute (list "cellpadding" 4))
@@ -1045,6 +1067,7 @@ and do not match the transaction."))))))))
          (query (qof-query-create-for-splits))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
+         (table-id (symbol->string (gensym "owner-report-table-")))
          (section-headings (make-section-heading-list used-columns owner-descr))
          (headings (make-heading-list used-columns link-option))
          (report-title (string-append (G_ owner-descr) " " (G_ "Report"))))
@@ -1117,7 +1140,7 @@ and do not match the transaction."))))))))
                                (string-append (G_ "Account") ": "
                                               (xaccAccountGetName account)))))))
 
-                   (add-owner-table table splits account start-date end-date
+                   (add-owner-table table table-id splits account start-date end-date
                                     date-type used-columns payable? link-option)))
                accounts-and-splits))
 
@@ -1160,7 +1183,7 @@ and do not match the transaction."))))))))
 
           (gnc:html-document-add-object! document table)
 
-          (gnc:html-document-add-object! document javascript))))))
+          (gnc:html-document-add-object! document (make-javascript table-id)))))))
 
     document))
 

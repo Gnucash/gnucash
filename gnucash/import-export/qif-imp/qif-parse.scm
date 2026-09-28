@@ -387,7 +387,7 @@
      ((eq? dateformat 'd-m-y) (refs->list 0 1 2))
      ((eq? dateformat 'm-d-y) (refs->list 1 0 2))
      ((eq? dateformat 'y-m-d) (refs->list 2 1 0))
-     ((eq? dateformat 'y-d-m) (refs->list 2 0 1)))))
+     ((eq? dateformat 'y-d-m) (refs->list 1 2 0)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  number format predicates

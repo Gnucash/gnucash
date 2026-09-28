@@ -989,7 +989,7 @@ gboolean gncVendorRegister (void)
 {
     static QofParam params[] =
     {
-        { VENDOR_ID, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetID, (QofSetterFunc)gncVendorSetID },
+        { VENDOR_ID, QOF_TYPE_NATURAL, (QofAccessFunc)gncVendorGetID, (QofSetterFunc)gncVendorSetID },
         { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName, (QofSetterFunc)gncVendorSetName },
         { VENDOR_ADDR,    GNC_ID_ADDRESS, (QofAccessFunc)gncVendorGetAddr, (QofSetterFunc)qofVendorSetAddr },
         { VENDOR_NOTES,   QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetNotes, (QofSetterFunc)gncVendorSetNotes },

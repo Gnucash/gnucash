@@ -273,7 +273,7 @@ register_fs_to_template_split (const FloatingSplit *fs, Split *split)
     const GncGUID *guid = qof_instance_get_guid (QOF_INSTANCE (fs->m_account));
     qof_instance_set (QOF_INSTANCE(split), "sx-account", guid, NULL);
 
-    char string[32];
+    char string[64];
     gnc_commodity *acount_commodity =  xaccAccountGetCommodity (fs->m_account);
     GNCPrintAmountInfo print_info = gnc_commodity_print_info (acount_commodity, FALSE);
     gnc_numeric zero = gnc_numeric_zero ();

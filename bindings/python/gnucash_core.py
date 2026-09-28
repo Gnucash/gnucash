@@ -275,6 +275,25 @@ class SessionOpenMode(IntEnum):
     Open the session, taking over any existing lock."""
 
 
+class PriceSource(IntEnum):
+    """Price source, mirroring the C PriceSource enum in gnc-pricedb.h.
+
+    Pass a member to GncPrice.set_source().
+    """
+
+    EDIT_DLG          = gnucash_core_c.PRICE_SOURCE_EDIT_DLG
+    FINANCE_QUOTE     = gnucash_core_c.PRICE_SOURCE_FQ
+    USER_PRICE        = gnucash_core_c.PRICE_SOURCE_USER_PRICE
+    XFER_DLG_VAL      = gnucash_core_c.PRICE_SOURCE_XFER_DLG_VAL
+    SPLIT_REG         = gnucash_core_c.PRICE_SOURCE_SPLIT_REG
+    SPLIT_IMPORT      = gnucash_core_c.PRICE_SOURCE_SPLIT_IMPORT
+    STOCK_SPLIT       = gnucash_core_c.PRICE_SOURCE_STOCK_SPLIT
+    STOCK_TRANSACTION = gnucash_core_c.PRICE_SOURCE_STOCK_TRANSACTION
+    INVOICE           = gnucash_core_c.PRICE_SOURCE_INVOICE
+    TEMP              = gnucash_core_c.PRICE_SOURCE_TEMP
+    INVALID           = gnucash_core_c.PRICE_SOURCE_INVALID
+
+
 class Session(GnuCashCoreClass):
     """A GnuCash book editing session
 
@@ -545,6 +564,16 @@ class GncNumeric(GnuCashCoreClass):
             kargs['instance'] = GncNumeric.__args_to_instance(args)
         GnuCashCoreClass.__init__(self, [], **kargs)
 
+    def __setattr__(self, name, value):
+        # num and denom are read-only accessor methods, not writable fields.
+        if name in ('num', 'denom'):
+            raise AttributeError(
+                "Cannot assign to '%s': it is a read-only accessor method on "
+                "GncNumeric, not a writable field, so the assignment would not "
+                "change the value. Construct a new value instead, e.g. "
+                "GncNumeric(numerator, denominator)." % name)
+        super().__setattr__(name, value)
+
     @staticmethod
     def __args_to_instance(args):
         if len(args) == 0:
@@ -725,12 +754,9 @@ class GncPrice(GnuCashCoreClass):
       * currency: the denomination of the value of the item being priced.
       * value: the value of the item being priced.
       * time: the time the price was valid.
-      * source: a string describing the source of the quote. These strings will be something like this:
-      "Finance::Quote", "user:misc", "user:foo", etc. If the quote came from a user, as a matter of policy,
-      you *must* prefix the string you give with "user:". For now, the only other reserved values are
-      "Finance::Quote" and "old-file-import". Any string used must be added to the source_list array in
-      dialog-price-edit-db.c so that it can be properly translated. (There are unfortunately many strings
-      in users' databases, so this string must be translated on output instead of always being used in untranslated form).
+      * source: describes how the price was created. The string form used by
+      set_source_string() / get_source_string() must be one of the recognized
+      PriceSource values; set_source_string() raises ValueError otherwise.
       * type: the type of quote - types possible right now are bid, ask, last, nav, and
       unknown.Each price in the database represents an "instantaneous" quote for a given
       commodity with respect to another commodity.
@@ -740,6 +766,30 @@ class GncPrice(GnuCashCoreClass):
     '''
     _new_instance = 'gnc_price_create'
 GncPrice.add_methods_with_prefix('gnc_price_')
+
+# Deprecate set_source_string() in favour of set_source() with a PriceSource
+# member. While it exists, guard it: the C setter maps a fixed set of canonical
+# strings to the PriceSource enum and silently leaves the source unchanged for
+# anything else, so a typo or obsolete string would change nothing -- detect
+# that (the round-tripped source no longer equals the input) and raise instead.
+_gnc_price_set_source_string = GncPrice.set_source_string
+def _deprecated_set_source_string(self, source):
+    """Deprecated: use set_source() with a PriceSource member.
+
+    Still raises ValueError if `source` is not a recognized PriceSource string
+    (the underlying C setter would otherwise leave the source unchanged)."""
+    _gnc_price_set_source_string(self, source)
+    if self.get_source_string() != source:
+        raise ValueError(
+            "%r is not a recognized price source string, so set_source_string() "
+            "left the source unchanged. Use set_source() with a PriceSource "
+            "member, e.g. set_source(PriceSource.FINANCE_QUOTE)." % (source,))
+# Report the deprecation under the public method name, not the wrapper's.
+_deprecated_set_source_string.__name__ = 'set_source_string'
+_deprecated_set_source_string.__qualname__ = 'GncPrice.set_source_string'
+GncPrice.set_source_string = deprecated(
+    "use set_source() with a PriceSource member, e.g. "
+    "price.set_source(PriceSource.FINANCE_QUOTE)")(_deprecated_set_source_string)
 
 
 class GncPriceDB(GnuCashCoreClass):

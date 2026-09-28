@@ -173,7 +173,7 @@ gnc_gobject_tracking_forget_internal (GObject *object)
         return FALSE;
     }
 
-    list = g_list_remove_link(list, item);
+    list = g_list_delete_link (list, item);
     if (list)
     {
         g_hash_table_replace(table, g_strdup(name), list);

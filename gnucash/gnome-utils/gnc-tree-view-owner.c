@@ -243,6 +243,35 @@ sort_by_string (GtkTreeModel *f_model,
 }
 
 static gint
+sort_by_string_natural (GtkTreeModel *f_model,
+                        GtkTreeIter *f_iter1,
+                        GtkTreeIter *f_iter2,
+                        gpointer user_data)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter1, iter2;
+    gint column = GPOINTER_TO_INT(user_data);
+    gchar *str1, *str2;
+    const GncOwner *owner1, *owner2;
+    gint result;
+
+    model = sort_cb_setup_w_iters(f_model, f_iter1, f_iter2, &iter1, &iter2, &owner1, &owner2);
+
+    gtk_tree_model_get(GTK_TREE_MODEL(model), &iter1,  column, &str1, -1);
+    gtk_tree_model_get(GTK_TREE_MODEL(model), &iter2,  column, &str2, -1);
+    
+    result = safe_utf8_collate_natural(str1, str2);
+
+    g_free(str1);
+    g_free(str2);
+
+    if (result != 0)
+        return result;
+
+    return gncOwnerCompare(owner1, owner2);
+}
+
+static gint
 sort_by_boolean (GtkTreeModel *f_model,
                  GtkTreeIter *f_iter1,
                  GtkTreeIter *f_iter2,
@@ -390,7 +419,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                         NULL, "1-123-1234",
                                         GNC_TREE_MODEL_OWNER_COL_ID,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                        sort_by_string);
+                                        sort_by_string_natural);
     gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Currency"), GNC_OWNER_TREE_CURRENCY_COL,
                                   NULL, sample_currency,
                                   GNC_TREE_MODEL_OWNER_COL_CURRENCY,

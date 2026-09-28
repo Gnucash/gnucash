@@ -41,12 +41,12 @@ for pr in pl:
    source = pr.get_source()
    time = pr.get_time64()
    v=pr.get_value()
-   price = float(v.num)/v.denom
+   price = float(v.num())/v.denom()
    print(time, source, price)
 
 if len(pl) > 0:
    v0 = pl[0].get_value()
-   print(arm.get_fullname(), float(v0.num) / float(v0.denom ))
+   print(arm.get_fullname(), float(v0.num()) / float(v0.denom()))
 
 session.end()
 session.destroy()

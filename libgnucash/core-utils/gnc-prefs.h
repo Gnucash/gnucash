@@ -93,6 +93,13 @@
 #define GNC_PREF_CURRENCY_OTHER      "currency-other"
 #define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
 #define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
+/* Chart preferences */
+#define GNC_CHART_POINT_STYLE        "chart-point-style"
+#define GNC_CHART_POINT_SIZE         "chart-point-size"
+#define GNC_CHART_POINT_SIZE_HOVER   "chart-point-size-hover"
+#define GNC_CHART_TOOLTIP_CARET      "chart-tooltip-caret-size"
+#define GNC_CHART_TOOLTIP_POSITION   "chart-tooltip-position"
+#define GNC_CHART_TOOLTIP_ENGAGE_RADIUS "chart-tooltip-engage-radius"
 
 #ifdef __cplusplus
 extern "C" {

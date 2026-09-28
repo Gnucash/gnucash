@@ -56,12 +56,15 @@
 
 #include <numeric>
 #include <unordered_set>
+#include <libguile/deprecation.h>
 %}
 #if defined(SWIGGUILE) //Always C++
 %{
 
 using SplitsVec = std::vector<Split*>;
 using AccountVec = std::vector<Account*>;
+
+gchar* gnc_html_string_sanitize (const char* str);
 
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort);
@@ -154,10 +157,19 @@ static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 
+
+gchar*
+gnc_html_string_sanitize (const char* str)
+{
+    return g_markup_escape_text (str, -1);
+}
+
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort)
 {
     SplitsVec rv;
+    std::optional<time64> end;
+    if (use_end_date) end = end_date;
 
     auto maybe_accumulate = [&rv, comm](auto s)
     {
@@ -169,15 +181,12 @@ SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date
             rv.push_back (s);
     };
 
-    std::function<void(Account*)> scan_account;
-    if (use_end_date)
-        scan_account = [end_date, maybe_accumulate](auto acc)
-            { gnc_account_foreach_split_until_date (acc, end_date, maybe_accumulate); };
-    else
-        scan_account = [maybe_accumulate](auto acc)
-            { gnc_account_foreach_split (acc, maybe_accumulate); };
+    std::for_each (accounts.begin(), accounts.end(), [&](auto acc)
+                   {
+                       gnc_account_foreach_split_between_dates (acc, {}, end, false,
+                                                                maybe_accumulate);
+                   });
 
-    std::for_each (accounts.begin(), accounts.end(), scan_account);
     if (sort)
         std::sort (rv.begin(), rv.end(), [](auto a, auto b){ return xaccSplitOrder (a, b) < 0; });
     return rv;
@@ -247,26 +256,14 @@ gnc_accounts_and_all_descendants (AccountVec accounts)
 void
 gnc_account_foreach_split_between_dates (const Account* account,
                                          SCM start_date, SCM end_date,
-                                         bool include_children, SCM scm_cb)
+                                         bool incl_descendants, SCM scm_cb)
 {
     std::optional<time64> start, end;
     if (scm_is_exact_integer (start_date)) start = scm_to_int64 (start_date);
     if (scm_is_exact_integer (end_date))   end = scm_to_int64 (end_date);
-    auto maybe_call = [&](const Split* s)
-    {
-        if (!start || *start <= xaccTransGetDate (xaccSplitGetParent (s)))
-            scm_call_1 (scm_cb, gnc_split_to_scm (s));
-    };
-    std::function<void(const Account*)> scan_account;
-    if (end)
-        scan_account = [end, maybe_call](auto acc)
-            { gnc_account_foreach_split_until_date (acc, *end, maybe_call); };
-    else
-        scan_account = [maybe_call](auto acc)
-            { gnc_account_foreach_split (acc, maybe_call); };
-    scan_account (account);
-    if (include_children)
-        gnc_account_foreach_descendant (account, scan_account);
+
+    auto cb = [&](auto s) { scm_call_1 (scm_cb, gnc_split_to_scm (s)); };
+    gnc_account_foreach_split_between_dates (account, start, end, incl_descendants, cb);
 }
 
 %}
@@ -349,6 +346,14 @@ functions. */
 
 %include <policy.h>
 %include <gnc-pricedb.h>
+
+%feature("shadow") gnc_price_set_source_string %{
+    (define (gnc_price_set_source_string price str)
+      (issue-deprecation-warning
+          "gnc-price-set-source-string is deprecated and will be removed in GnuCash 6."
+          "Use gnc-price-set-source and the appropriate enum value instead.")
+      ($action price str))
+%}
 
 QofSession * qof_session_new (QofBook* book);
 QofBook * qof_session_get_book (QofSession *session);

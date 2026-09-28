@@ -913,7 +913,7 @@ gboolean gncEmployeeRegister (void)
 {
     static QofParam params[] =
     {
-        { EMPLOYEE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetID, (QofSetterFunc)gncEmployeeSetID },
+        { EMPLOYEE_ID, QOF_TYPE_NATURAL, (QofAccessFunc)gncEmployeeGetID, (QofSetterFunc)gncEmployeeSetID },
         {
             EMPLOYEE_USERNAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetUsername,
             (QofSetterFunc)gncEmployeeSetUsername
