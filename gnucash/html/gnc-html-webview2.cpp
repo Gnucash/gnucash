@@ -74,6 +74,7 @@
 #include "gnc-html.h"
 #include "gnc-html-webkit.hpp"
 #include "gnc-html-history.h"
+#include "gnc-gtk-utils.h"
 
 G_DEFINE_TYPE(GncHtmlWebview2, gnc_html_webview2, GNC_TYPE_HTML)
 
@@ -1607,6 +1608,11 @@ print (GncHtml* self, const gchar* jobname)
      webview7->PrintToPdf (reinterpret_cast<LPCWSTR> (wpath), nullptr, nullptr);
      g_free (wpath);
      webview7->Release ();
+
+     gchar *pdf_uri = g_filename_to_uri (pdf_path, nullptr, nullptr);
+     if (pdf_uri)
+          gnc_file_reveal (pdf_uri);
+     g_free (pdf_uri);
 
      gchar *msg = g_strdup_printf (
           _("Your WebView2 Runtime is too old to show a print dialog. "
