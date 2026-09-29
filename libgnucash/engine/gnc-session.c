@@ -58,6 +58,14 @@ gnc_set_current_session (QofSession *session)
     current_session = session;
 }
 
+QofSession *
+gnc_exchange_current_session (QofSession *session)
+{
+    QofSession *previous = current_session;
+    current_session = session;
+    return previous;
+}
+
 void gnc_clear_current_session()
 {
     if (current_session)

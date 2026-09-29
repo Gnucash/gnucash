@@ -651,13 +651,16 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
      g_return_val_if_fail (note != nullptr, FALSE);
 
      auto top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
-     auto dialog = gtk_message_dialog_new (top, GTK_DIALOG_MODAL,
+     auto dialog = gtk_message_dialog_new (top,
+                                      (GtkDialogFlags)(GTK_DIALOG_MODAL |
+                                                       GTK_DIALOG_DESTROY_WITH_PARENT),
                                       GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
                                       "%s\n%s",
                                       webkit_notification_get_title (note),
                                       webkit_notification_get_body (note));
-     gtk_dialog_run (GTK_DIALOG (dialog));
-     gtk_widget_destroy (dialog);
+     g_signal_connect (dialog, "response",
+                       G_CALLBACK (gtk_widget_destroy), nullptr);
+     gtk_widget_show (dialog);
      return TRUE;
 }
 
