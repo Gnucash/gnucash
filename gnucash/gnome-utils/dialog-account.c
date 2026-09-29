@@ -49,6 +49,8 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "guid.h"
+#include "qofbook.h"
 #include <gnc-locale-tax.h>
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
@@ -71,6 +73,17 @@ typedef enum
     EDIT_ACCOUNT
 } AccountDialogType;
 
+typedef struct
+{
+    GWeakRef parent;
+    QofBook *book;
+    QofSession *session;
+    gboolean parent_destroyed;
+    GncGUID created_guid;
+    GncAccountCreationCallback completed;
+    gpointer user_data;
+} AccountCreationRequest;
+
 typedef struct _AccountWindow
 {
     QofBook   *book;
@@ -81,6 +94,7 @@ typedef struct _AccountWindow
 
     GncGUID  account;
     Account *created_account;
+    AccountCreationRequest *creation_request;
 
     gchar **subaccount_names;
     gchar **next_name;
@@ -782,6 +796,8 @@ gnc_finish_ok (AccountWindow *aw)
 
     /* save for posterity */
     aw->created_account = aw_get_account (aw);
+    if (aw->creation_request && aw->created_account)
+        aw->creation_request->created_guid = *xaccAccountGetGUID(aw->created_account);
 
     /* so it doesn't get freed on close */
     aw->account = *guid_null ();
@@ -790,15 +806,143 @@ gnc_finish_ok (AccountWindow *aw)
     LEAVE("2");
 }
 
+typedef struct
+{
+    GtkWidget *parent;
+    GtkWidget *expander;
+    QofBook *book;
+    GncGUID account_guid;
+    GNCAccountType requested_type;
+    GNCAccountType original_type;
+    gboolean parent_destroyed;
+} AccountChildrenRequest;
+
+static gboolean gnc_common_ok (AccountWindow *aw);
+static void gnc_edit_account_ok (AccountWindow *aw);
+
 static void
-add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data)
+account_creation_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                   AccountCreationRequest *request)
+{
+    request->parent_destroyed = TRUE;
+}
+
+static gboolean
+account_creation_current_book (AccountCreationRequest *request)
+{
+    return request->book && !request->parent_destroyed &&
+        gnc_current_session_exist() && gnc_get_current_session() == request->session &&
+        gnc_get_current_book() == request->book &&
+        qof_book_is_open(request->book) && !qof_book_shutting_down(request->book) &&
+        !qof_book_is_readonly(request->book);
+}
+
+static void
+account_creation_complete (AccountCreationRequest *request, const GncGUID *guid)
+{
+    GtkWidget *parent = g_weak_ref_get(&request->parent);
+    Account *account = NULL;
+    if (parent)
+    {
+        g_signal_handlers_disconnect_by_data(parent, request);
+        if (gtk_widget_in_destruction(parent))
+            request->parent_destroyed = TRUE;
+    }
+    if (guid && account_creation_current_book(request))
+        account = xaccAccountLookup(guid, request->book);
+    if (request->book)
+        g_object_remove_weak_pointer(G_OBJECT(request->book), (gpointer *)&request->book);
+    GncAccountCreationCallback completed = request->completed;
+    gpointer user_data = request->user_data;
+    g_weak_ref_clear(&request->parent);
+    g_free(request);
+    completed(account, user_data);
+    g_clear_object(&parent);
+}
+
+static Account *
+account_children_request_account (AccountChildrenRequest *request)
+{
+    if (request->parent_destroyed || !request->book ||
+        !gnc_current_session_exist () ||
+        gnc_get_current_book () != request->book ||
+        !qof_book_is_open (request->book) ||
+        qof_book_shutting_down (request->book) ||
+        qof_book_is_readonly (request->book))
+        return NULL;
+    return xaccAccountLookup (&request->account_guid, request->book);
+}
+
+static void
+account_children_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                   AccountChildrenRequest *request)
+{
+    request->parent_destroyed = TRUE;
+}
+
+static void
+account_children_complete (GtkWidget *dialog, AccountChildrenRequest *request,
+                           gboolean accepted, gboolean destroying)
+{
+    AccountWindow *aw = NULL;
+    Account *account;
+
+    g_signal_handlers_disconnect_by_data (dialog, request);
+    g_signal_handlers_disconnect_by_data (request->expander, request);
+    g_object_set_data (G_OBJECT (request->parent), "children-type-question", NULL);
+    if (!destroying)
+        gtk_widget_destroy (dialog);
+    account = account_children_request_account (request);
+    if (accepted && account)
+        aw = g_object_get_data (G_OBJECT (request->parent), "dialog_info");
+    if (aw && guid_equal (&aw->account, &request->account_guid) &&
+        aw->type == request->requested_type)
+    {
+        /* A changed engine type needs a fresh question, not approval of a
+         * different change from the one shown to the user. */
+        if (xaccAccountGetType (account) != request->original_type)
+            gnc_edit_account_ok (aw);
+        else if (gnc_common_ok (aw) && account_children_request_account (request))
+        {
+            aw = g_object_get_data (G_OBJECT (request->parent), "dialog_info");
+            if (aw && guid_equal (&aw->account, &request->account_guid) &&
+                aw->type == request->requested_type)
+                gnc_finish_ok (aw);
+        }
+    }
+    g_signal_handlers_disconnect_by_data (request->parent, request);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                     (gpointer *)&request->book);
+    g_object_unref (request->expander);
+    g_object_unref (request->parent);
+    g_free (request);
+}
+
+static void
+account_children_response (GtkDialog *dialog, gint response,
+                           AccountChildrenRequest *request)
+{
+    account_children_complete (GTK_WIDGET (dialog), request,
+                                response == GTK_RESPONSE_OK, FALSE);
+}
+
+static void
+account_children_destroy (GtkWidget *dialog, AccountChildrenRequest *request)
+{
+    account_children_complete (dialog, request, FALSE, TRUE);
+}
+
+static void
+add_children_to_expander (GObject *object,
+                         [[maybe_unused]] GParamSpec *param_spec, gpointer data)
 {
     GtkExpander *expander = GTK_EXPANDER(object);
-    Account *account = data;
+    Account *account = account_children_request_account (data);
     GtkWidget *scrolled_window;
     GtkTreeView *view;
 
-    if (gtk_expander_get_expanded (expander) &&
+    if (account && gtk_expander_get_expanded (expander) &&
             !gtk_bin_get_child (GTK_BIN(expander)))
     {
         view = gnc_tree_view_account_new_with_root (account, FALSE);
@@ -826,9 +970,11 @@ verify_children_compatible (AccountWindow *aw)
     Account *account;
     GtkWidget *dialog, *vbox, *hbox, *label, *expander;
     gchar *str;
-    gboolean result;
+    AccountChildrenRequest *request;
 
     if (aw == NULL)
+        return FALSE;
+    if (g_object_get_data (G_OBJECT (aw->dialog), "children-type-question"))
         return FALSE;
 
     account = aw_get_account (aw);
@@ -840,6 +986,17 @@ verify_children_compatible (AccountWindow *aw)
 
     if (gnc_account_n_children (account) == 0)
         return TRUE;
+
+    request = g_new0 (AccountChildrenRequest, 1);
+    request->parent = g_object_ref (aw->dialog);
+    request->book = aw->book;
+    request->account_guid = aw->account;
+    request->requested_type = aw->type;
+    request->original_type = xaccAccountGetType (account);
+    g_object_add_weak_pointer (G_OBJECT (request->book),
+                              (gpointer *)&request->book);
+    g_signal_connect (aw->dialog, "destroy",
+                      G_CALLBACK (account_children_parent_destroyed), request);
 
     dialog = gtk_dialog_new_with_buttons ("",
                                           GTK_WINDOW(aw->dialog),
@@ -884,9 +1041,10 @@ verify_children_compatible (AccountWindow *aw)
 
     /* children */
     expander = gtk_expander_new_with_mnemonic (_("_Show children accounts"));
+    request->expander = g_object_ref_sink (expander);
     gtk_expander_set_spacing (GTK_EXPANDER(expander), 6);
     g_signal_connect (G_OBJECT(expander), "notify::expanded",
-                      G_CALLBACK(add_children_to_expander), account);
+                      G_CALLBACK(add_children_to_expander), request);
     gtk_box_pack_start (GTK_BOX(vbox), expander, TRUE, TRUE, 0);
 
     gtk_box_pack_start (GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
@@ -903,11 +1061,13 @@ verify_children_compatible (AccountWindow *aw)
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
-    result = (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK);
-
-    gtk_widget_destroy (dialog);
-
-    return result;
+    g_object_set_data (G_OBJECT (aw->dialog), "children-type-question", dialog);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (account_children_response), request);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (account_children_destroy), request);
+    gtk_widget_show (dialog);
+    return FALSE; /* The response continues gnc_edit_account_ok. */
 }
 
 static gboolean
@@ -956,7 +1116,7 @@ gnc_common_ok (AccountWindow *aw)
     if (g_strcmp0 (name, "") == 0)
     {
         const char *message = _("The account must be given a name.");
-        gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("bad name");
         return FALSE;
     }
@@ -982,7 +1142,7 @@ gnc_common_ok (AccountWindow *aw)
             !guid_equal (&aw->account, xaccAccountGetGUID (account)))
     {
         const char *message = _("There is already an account with that name.");
-        gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("duplicate name");
         return FALSE;
     }
@@ -991,7 +1151,7 @@ gnc_common_ok (AccountWindow *aw)
     if (!gnc_filter_parent_accounts (parent, aw))
     {
         const char *message = _("You must choose a valid parent account.");
-        gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("invalid parent");
         return FALSE;
     }
@@ -1000,7 +1160,7 @@ gnc_common_ok (AccountWindow *aw)
     if (aw->type == ACCT_TYPE_INVALID)
     {
         const char *message = _("You must select an account type.");
-        gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("invalid type");
         return FALSE;
     }
@@ -1010,7 +1170,7 @@ gnc_common_ok (AccountWindow *aw)
     {
         const char *message = _("The selected account type is incompatible with "
                                 "the one of the selected parent.");
-        gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("incompatible types");
         return FALSE;
     }
@@ -1021,7 +1181,7 @@ gnc_common_ok (AccountWindow *aw)
     if (!commodity)
     {
         const char *message = _("You must choose a commodity.");
-        gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("invalid commodity");
         return FALSE;
     }
@@ -1041,14 +1201,14 @@ gnc_common_ok (AccountWindow *aw)
         if ((compare == 0) && (!gnc_numeric_zero_p (higher_balance_limit)))
         {
             const char *message = _("Balance limits must be different unless they are both zero.");
-            gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+            gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
             LEAVE("invalid balance limit, both the same but not zero");
             return FALSE;
         }
         else if (compare == -1)
         {
             const char *message = _("The lower balance limit must be less than the higher limit.");
-            gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+            gnc_error_dialog_async (GTK_WINDOW(aw->dialog), "%s", message);
             LEAVE("invalid balance limit, lower limit not less than upper");
             return FALSE;
         }
@@ -1147,6 +1307,12 @@ gnc_account_window_response_cb (GtkDialog *dialog,
 {
     AccountWindow *aw = data;
 
+    if (aw->creation_request && !account_creation_current_book(aw->creation_request))
+    {
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        return;
+    }
+
     ENTER("dialog %p, response %d, aw %p", dialog, response, aw);
     switch (response)
     {
@@ -1196,9 +1362,16 @@ gnc_account_window_destroy_cb (GtkWidget *object, gpointer data)
 {
     AccountWindow *aw = data;
     Account *account;
+    AccountCreationRequest *request = aw->creation_request;
+    GncGUID created_guid = *guid_null();
+    aw->creation_request = NULL;
+    /* A caller may retain the destroyed GtkDialog to deliver a late response. */
+    g_signal_handlers_disconnect_by_data(object, aw);
+    if (request && account_creation_current_book(request))
+        created_guid = request->created_guid;
 
     ENTER("object %p, aw %p", object, aw);
-    account = aw_get_account (aw);
+    account = (!request || request->book) ? aw_get_account (aw) : NULL;
 
     aw_clear_selection_handler (aw);
     gnc_suspend_gui_refresh ();
@@ -1239,6 +1412,8 @@ gnc_account_window_destroy_cb (GtkWidget *object, gpointer data)
 
     g_free (aw);
     LEAVE(" ");
+    if (request)
+        account_creation_complete(request, guid_equal(&created_guid, guid_null()) ? NULL : &created_guid);
 }
 
 static void
@@ -1485,17 +1660,22 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
             gchar *dialog_msg = _("An account with opening balance already exists for the desired currency.");
             gchar *dialog_title = _("Cannot change currency");
             GtkWidget *dialog = gtk_message_dialog_new (gnc_ui_get_main_window (NULL),
-                                                        0,
+                                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         GTK_MESSAGE_ERROR,
                                                         GTK_BUTTONS_OK,
                                                         "%s", dialog_title);
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                                                       "%s", dialog_msg);
-            gtk_dialog_run (GTK_DIALOG(dialog));
-            gtk_widget_destroy (dialog);
+            g_signal_connect_swapped (dialog, "response",
+                                      G_CALLBACK (gtk_widget_destroy), dialog);
+            gtk_widget_show (dialog);
+            /* Selection notifications can destroy the account window. Keep
+             * only the selector alive until its handler is unblocked. */
+            g_object_ref (gsl);
             g_signal_handlers_block_by_func (gsl, commodity_changed_cb, data);
             gnc_general_select_set_selected (gsl, xaccAccountGetCommodity (account));
             g_signal_handlers_unblock_by_func (gsl, commodity_changed_cb, data);
+            g_object_unref (gsl);
             return;
         }
     }
@@ -1610,9 +1790,9 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
                                                       "notes_text"))));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_hbox"));
-    aw->commodity_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
+    aw->commodity_edit = gnc_general_select_new_async (GNC_GENERAL_SELECT_TYPE_SELECT,
                                                  gnc_commodity_edit_get_string,
-                                                 gnc_commodity_edit_new_select,
+                                                 gnc_commodity_edit_new_select_async,
                                                  &aw->commodity_mode);
 
     gtk_box_pack_start (GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
@@ -1857,7 +2037,7 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
                                     gchar **subaccount_names,
                                     GList *valid_types,
                                     const gnc_commodity * default_commodity,
-                                    gboolean modal)
+                                    gboolean modal, gboolean present)
 {
     const gnc_commodity *commodity, *parent_commodity;
     AccountWindow *aw;
@@ -1937,8 +2117,6 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
                                                 aw->parent_tree),
                                                 base_account);
 
-    gtk_widget_show (aw->dialog);
-
     gnc_window_adjust_for_screen (GTK_WINDOW(aw->dialog));
 
     gnc_account_window_set_name (aw);
@@ -1952,6 +2130,8 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
     gnc_gui_component_watch_entity_type (aw->component_id,
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+    if (present)
+        gtk_widget_show (aw->dialog);
     return aw;
 }
 
@@ -2000,80 +2180,52 @@ gnc_split_account_name (QofBook *book, const char *in_name, Account **base_accou
     return out_names;
 }
 
-/************************************************************
- *              Entry points for a Modal Dialog             *
- ************************************************************/
-
-Account *
-gnc_ui_new_accounts_from_name_window (GtkWindow *parent, const char *name)
+void
+gnc_ui_new_accounts_from_name_with_defaults_async (
+    GtkWindow *parent, const char *name, GList *valid_types,
+    const gnc_commodity *default_commodity, Account *parent_acct,
+    GncAccountCreationCallback completed, gpointer user_data)
 {
-    return  gnc_ui_new_accounts_from_name_with_defaults (parent, name, NULL,
-                                                         NULL, NULL);
-}
+    g_return_if_fail(completed != NULL);
+    if (!gnc_current_session_exist())
+    {
+        completed(NULL, user_data);
+        return;
+    }
+    QofBook *book = gnc_get_current_book();
+    if ((parent && gtk_widget_in_destruction(GTK_WIDGET(parent))) ||
+        !qof_book_is_open(book) || qof_book_shutting_down(book) ||
+        qof_book_is_readonly(book) ||
+        (parent_acct && gnc_account_get_book(parent_acct) != book) ||
+        (default_commodity && qof_instance_get_book(QOF_INSTANCE(default_commodity)) != book))
+    {
+        completed(NULL, user_data);
+        return;
+    }
 
-Account *
-gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
-                                             const char *name,
-                                             GList *valid_types,
-                                             const gnc_commodity * default_commodity,
-                                             Account * parent_acct)
-{
-    QofBook *book;
-    AccountWindow *aw;
     Account *base_account = NULL;
-    Account *created_account = NULL;
-    gchar ** subaccount_names;
-    gint response;
-    gboolean done = FALSE;
-
-    ENTER("name %s, valid %p, commodity %p, account %p",
-          name, valid_types, default_commodity, parent_acct);
-    book = gnc_get_current_book ();
-    if (!name || *name == '\0')
-    {
-        subaccount_names = NULL;
-        base_account = NULL;
-    }
-    else
-        subaccount_names = gnc_split_account_name (book, name, &base_account);
-
-    if (parent_acct != NULL)
-    {
+    gchar **subaccount_names = name && *name ?
+        gnc_split_account_name(book, name, &base_account) : NULL;
+    if (parent_acct)
         base_account = parent_acct;
-    }
-    aw = gnc_ui_new_account_window_internal (parent, book, base_account,
-                                             subaccount_names,
-                                             valid_types,
-                                             default_commodity,
-                                             TRUE);
-
-    while (!done)
-    {
-        response = gtk_dialog_run (GTK_DIALOG(aw->dialog));
-
-        /* This can destroy the dialog */
-        gnc_account_window_response_cb (GTK_DIALOG(aw->dialog), response, (gpointer)aw);
-
-        switch (response)
-        {
-        case GTK_RESPONSE_OK:
-            created_account = aw->created_account;
-            done = (created_account != NULL);
-            break;
-
-        case GTK_RESPONSE_HELP:
-            done = FALSE;
-            break;
-
-        default:
-            done = TRUE;
-            break;
-        }
-    }
-
-    close_handler (aw);
-    LEAVE("created %s (%p)", xaccAccountGetName (created_account), created_account);
-    return created_account;
+    /* Reuse the normal response-driven editor, including validation and the
+     * progression through missing ancestors. Modality is only a window policy. */
+    AccountWindow *aw = gnc_ui_new_account_window_internal(
+        parent, book, base_account, subaccount_names, valid_types, default_commodity, FALSE, FALSE);
+    AccountCreationRequest *request = g_new0(AccountCreationRequest, 1);
+    g_weak_ref_init(&request->parent, parent ? G_OBJECT(parent) : NULL);
+    request->book = book;
+    request->session = gnc_get_current_session();
+    request->completed = completed;
+    request->user_data = user_data;
+    g_object_add_weak_pointer(G_OBJECT(book), (gpointer *)&request->book);
+    aw->creation_request = request;
+    if (parent)
+        g_signal_connect(parent, "destroy", G_CALLBACK(account_creation_parent_destroyed), request);
+    gtk_window_set_modal(GTK_WINDOW(aw->dialog), TRUE);
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(aw->dialog), TRUE);
+    /* Showing can emit signals: all ownership and response state is ready. */
+    gtk_widget_show(aw->dialog);
 }
 
 /************************************************************
@@ -2165,7 +2317,7 @@ gnc_ui_new_account_with_types_and_commodity (GtkWindow *parent, QofBook *book, G
                                              gnc_commodity *default_commodity)
 {
     gnc_ui_new_account_window_internal (parent, book, NULL, NULL,
-                                        valid_types, default_commodity, FALSE);
+                                        valid_types, default_commodity, FALSE, TRUE);
 }
 
 /*
@@ -2183,7 +2335,7 @@ gnc_ui_new_account_window (GtkWindow *parent, QofBook *book,
         g_return_if_fail(gnc_account_get_book (parent_acct) == book);
 
     gnc_ui_new_account_window_internal (parent, book, parent_acct, NULL, NULL,
-                                        NULL, FALSE);
+                                        NULL, FALSE, TRUE);
 }
 
 /************************************************************
@@ -2419,6 +2571,207 @@ enable_box_cb (GtkToggleButton *toggle_button, gpointer user_data)
     gtk_widget_set_sensitive (GTK_WIDGET(user_data), sensitive);
 }
 
+typedef struct
+{
+    guint refs;
+    GtkBuilder *builder;
+    GtkWidget *dialog;
+    GtkWidget *color_button;
+    GtkWidget *replace_check;
+    GtkWidget *enable_color;
+    GtkWidget *enable_placeholder;
+    GtkWidget *enable_hidden;
+    GtkWidget *placeholder_button;
+    GtkWidget *hidden_button;
+    QofBook *book;
+    GncGUID *account_guid;
+    gchar *old_color;
+    gboolean completed;
+    gboolean destroyed;
+} CascadeDialogRequest;
+
+static CascadeDialogRequest *
+cascade_dialog_request_ref (CascadeDialogRequest *request)
+{
+    ++request->refs;
+    return request;
+}
+
+static void
+cascade_dialog_request_unref (CascadeDialogRequest *request)
+{
+    if (--request->refs)
+        return;
+
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+    if (request->builder)
+        g_object_unref (request->builder);
+    guid_free (request->account_guid);
+    g_free (request->old_color);
+    g_free (request);
+}
+
+static void
+cascade_dialog_request_closure_unref (gpointer data, GClosure *closure)
+{
+    cascade_dialog_request_unref (data);
+}
+
+static gboolean
+cascade_dialog_request_book_is_usable (CascadeDialogRequest *request)
+{
+    return request->book && qof_book_is_open (request->book) &&
+           !qof_book_shutting_down (request->book) &&
+           !qof_book_is_readonly (request->book);
+}
+
+static Account *
+cascade_dialog_request_lookup_account (CascadeDialogRequest *request,
+                                       const GncGUID *guid)
+{
+    Account *account;
+    Account *book_root;
+
+    if (!cascade_dialog_request_book_is_usable (request))
+        return NULL;
+
+    account = xaccAccountLookup (guid, request->book);
+    book_root = gnc_book_get_root_account (request->book);
+    if (!account || !book_root || gnc_account_get_root (account) != book_root)
+        return NULL;
+
+    return account;
+}
+
+static void
+cascade_dialog_request_apply_account (CascadeDialogRequest *request,
+                                     const GncGUID *guid, gboolean is_root,
+                                     gboolean color_active,
+                                     const gchar *new_color,
+                                     gboolean replace,
+                                     gboolean placeholder_active,
+                                     gboolean placeholder,
+                                     gboolean hidden_active,
+                                     gboolean hidden)
+{
+    Account *account;
+
+    account = cascade_dialog_request_lookup_account (request, guid);
+    if (color_active && account)
+    {
+        const gchar *old_color = is_root ? request->old_color :
+                                 xaccAccountGetColor (account);
+        update_account_color (account, old_color, new_color, replace);
+    }
+
+    /* Each setter emits account events. An event handler can delete this
+     * account or close its book, so resolve the GUID again before every write. */
+    account = cascade_dialog_request_lookup_account (request, guid);
+    if (placeholder_active && account)
+        xaccAccountSetPlaceholder (account, placeholder);
+
+    account = cascade_dialog_request_lookup_account (request, guid);
+    if (hidden_active && account)
+        xaccAccountSetHidden (account, hidden);
+}
+
+static void
+cascade_dialog_request_destroyed (GtkWidget *dialog, gpointer user_data)
+{
+    CascadeDialogRequest *request = user_data;
+
+    request->destroyed = TRUE;
+    request->completed = TRUE;
+    request->dialog = NULL;
+    request->color_button = NULL;
+    request->replace_check = NULL;
+    request->enable_color = NULL;
+    request->enable_placeholder = NULL;
+    request->enable_hidden = NULL;
+    request->placeholder_button = NULL;
+    request->hidden_button = NULL;
+    if (request->book)
+    {
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+        request->book = NULL;
+    }
+    if (request->builder)
+    {
+        g_object_unref (request->builder);
+        request->builder = NULL;
+    }
+}
+
+static void
+cascade_dialog_request_response (GtkDialog *dialog, gint response,
+                                 gpointer user_data)
+{
+    CascadeDialogRequest *request = cascade_dialog_request_ref (user_data);
+    gboolean color_active, replace, placeholder_active, placeholder;
+    gboolean hidden_active, hidden;
+    gchar *new_color = NULL;
+    GPtrArray *account_guids;
+    Account *account;
+    GList *descendants;
+
+    if (request->completed || request->destroyed)
+    {
+        cascade_dialog_request_unref (request);
+        return;
+    }
+    request->completed = TRUE;
+
+    color_active = response == GTK_RESPONSE_OK &&
+                   gtk_toggle_button_get_active (
+                       GTK_TOGGLE_BUTTON (request->enable_color));
+    replace = gtk_toggle_button_get_active (
+                  GTK_TOGGLE_BUTTON (request->replace_check));
+    placeholder_active = response == GTK_RESPONSE_OK &&
+                         gtk_toggle_button_get_active (
+                             GTK_TOGGLE_BUTTON (request->enable_placeholder));
+    placeholder = gtk_toggle_button_get_active (
+                      GTK_TOGGLE_BUTTON (request->placeholder_button));
+    hidden_active = response == GTK_RESPONSE_OK &&
+                    gtk_toggle_button_get_active (
+                        GTK_TOGGLE_BUTTON (request->enable_hidden));
+    hidden = gtk_toggle_button_get_active (
+                 GTK_TOGGLE_BUTTON (request->hidden_button));
+    if (color_active)
+    {
+        GdkRGBA color;
+        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (request->color_button),
+                                    &color);
+        new_color = gdk_rgba_to_string (&color);
+        if (g_strcmp0 (new_color, DEFAULT_COLOR) == 0)
+            g_clear_pointer (&new_color, g_free);
+    }
+
+    account_guids = g_ptr_array_new_with_free_func (g_free);
+    g_ptr_array_add (account_guids, guid_copy (request->account_guid));
+    account = cascade_dialog_request_lookup_account (request,
+                                                    request->account_guid);
+    descendants = account ? gnc_account_get_descendants (account) : NULL;
+    for (GList *node = descendants; node; node = g_list_next (node))
+        g_ptr_array_add (account_guids,
+                         guid_copy (xaccAccountGetGUID (node->data)));
+    g_list_free (descendants);
+
+    for (guint i = 0; i < account_guids->len && !request->destroyed; ++i)
+        cascade_dialog_request_apply_account (
+            request, g_ptr_array_index (account_guids, i), i == 0,
+            color_active, new_color, replace, placeholder_active, placeholder,
+            hidden_active, hidden);
+
+    g_ptr_array_unref (account_guids);
+    g_free (new_color);
+    if (!request->destroyed)
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+    cascade_dialog_request_unref (request);
+}
+
 void
 gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
 {
@@ -2434,7 +2787,7 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     const char *color_string;
     gchar *old_color_string = NULL;
     GdkRGBA color;
-    gint response;
+    CascadeDialogRequest *request;
 
     // check if we actually do have sub accounts
     g_return_if_fail (gnc_account_n_children (account) > 0);
@@ -2510,76 +2863,41 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     g_free (string);
     g_free (fullname);
 
+    /* The request owns the builder until the dialog is destroyed. */
+    request = g_new0 (CascadeDialogRequest, 1);
+    request->refs = 1;
+    request->builder = builder;
+    request->dialog = dialog;
+    request->color_button = color_button;
+    request->replace_check = over_write;
+    request->enable_color = enable_color;
+    request->enable_placeholder = enable_placeholder;
+    request->enable_hidden = enable_hidden;
+    request->placeholder_button = placeholder_button;
+    request->hidden_button = hidden_button;
+    request->book = gnc_account_get_book (account);
+    request->account_guid = guid_copy (xaccAccountGetGUID (account));
+    request->old_color = old_color_string;
+    old_color_string = NULL;
+    g_object_add_weak_pointer (G_OBJECT (request->book),
+                               (gpointer *)&request->book);
+
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
     gtk_builder_connect_signals (builder, dialog);
-    g_object_unref (G_OBJECT(builder));
+    g_signal_connect_data (dialog, "response",
+                           G_CALLBACK (cascade_dialog_request_response),
+                           cascade_dialog_request_ref (request),
+                           cascade_dialog_request_closure_unref, 0);
+    g_signal_connect_data (dialog, "destroy",
+                           G_CALLBACK (cascade_dialog_request_destroyed),
+                           cascade_dialog_request_ref (request),
+                           cascade_dialog_request_closure_unref, 0);
+    cascade_dialog_request_unref (request);
 
     gtk_widget_show_all (dialog);
-
-    response = gtk_dialog_run (GTK_DIALOG(dialog));
-
-    if (response == GTK_RESPONSE_OK)
-    {
-        GList *accounts = gnc_account_get_descendants (account);
-        GdkRGBA new_color;
-        gchar *new_color_string = NULL;
-        gboolean color_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(enable_color));
-        gboolean placeholder_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(enable_placeholder));
-        gboolean hidden_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(enable_hidden));
-        gboolean replace = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(over_write));
-        gboolean placeholder = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(placeholder_button));
-        gboolean hidden = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(hidden_button));
-
-        // Update Account Colors
-        if (color_active)
-        {
-            gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(color_button), &new_color);
-            new_color_string = gdk_rgba_to_string (&new_color);
-
-            if (g_strcmp0 (new_color_string, DEFAULT_COLOR) == 0)
-            {
-                g_free (new_color_string);
-                new_color_string = NULL;
-            }
-
-            // check/update selected account
-            update_account_color (account, old_color_string, new_color_string, replace);
-        }
-
-        // Update Account Placeholder value
-        if (placeholder_active)
-            xaccAccountSetPlaceholder (account, placeholder);
-
-        // Update Account Hidden value
-        if (hidden_active)
-            xaccAccountSetHidden (account, hidden);
-
-        // Update SubAccounts
-        if (accounts)
-        {
-            for (GList *acct = accounts; acct; acct = g_list_next(acct))
-            {
-                // Update SubAccount Colors
-                if (color_active)
-                {
-                    const char *string = xaccAccountGetColor (acct->data);
-                    update_account_color (acct->data, string, new_color_string, replace);
-                }
-                // Update SubAccount PlaceHolder
-                if (placeholder_active)
-                    xaccAccountSetPlaceholder (acct->data, placeholder);
-                // Update SubAccount Hidden
-                if (hidden_active)
-                    xaccAccountSetHidden (acct->data, hidden);
-            }
-        }
-        g_list_free (accounts);
-        g_free (new_color_string);
-    }
-    if (old_color_string)
-        g_free (old_color_string);
-
-    gtk_widget_destroy (dialog);
 }

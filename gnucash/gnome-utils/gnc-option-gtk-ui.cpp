@@ -356,10 +356,10 @@ template<> void
 create_option_widget<GncOptionUIType::COMMODITY> (GncOption& option, GtkGrid *page_box,
                                                   int row)
 {
-    auto widget = gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
-                                         gnc_commodity_edit_get_string,
-                                         gnc_commodity_edit_new_select,
-                                         NULL);
+    auto widget = gnc_general_select_new_async(GNC_GENERAL_SELECT_TYPE_SELECT,
+                                               gnc_commodity_edit_get_string,
+                                               gnc_commodity_edit_new_select_async,
+                                               NULL);
 
     auto ui_item{std::make_unique<GncGtkCommodityUIItem>(widget)};
     option.set_ui_item(std::move(ui_item));

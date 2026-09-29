@@ -33,6 +33,9 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-gui-query.h"
 #include "dialog-utils.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "guid.h"
 
 #include "search-account.h"
 #include "search-core-utils.h"
@@ -59,14 +62,111 @@ typedef struct _GNCSearchAccountPrivate GNCSearchAccountPrivate;
 struct _GNCSearchAccountPrivate
 {
     gboolean	match_all;
-    GList *	selected_accounts;
-    GtkWindow *parent;
+	GList *	selected_guids;
+    GncGUID book_guid;
+    gboolean has_book_guid;
+    GWeakRef parent;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchAccount, gnc_search_account, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
    ((GNCSearchAccountPrivate*)gnc_search_account_get_instance_private((GNCSearchAccount*)o))
+
+static gpointer
+copy_guid (gconstpointer source, [[maybe_unused]] gpointer user_data)
+{
+    return guid_copy (source);
+}
+
+static void
+selected_guids_clear (GNCSearchAccountPrivate *priv)
+{
+    g_list_free_full (priv->selected_guids, (GDestroyNotify)guid_free);
+    priv->selected_guids = NULL;
+    priv->has_book_guid = FALSE;
+}
+
+static QofBook *
+selected_accounts_current_book (const GncGUID *book_guid)
+{
+    QofBook *book = gnc_get_current_book ();
+
+    if (!book || !qof_book_is_open (book) || qof_book_shutting_down (book) ||
+        !guid_equal (book_guid, qof_book_get_guid (book)))
+        return NULL;
+    return book;
+}
+
+static GList *
+selected_accounts_for_current_book (GNCSearchAccount *fi)
+{
+    GNCSearchAccountPrivate *priv = _PRIVATE (fi);
+    QofBook *book;
+    GList *accounts = NULL;
+
+    if (!priv->has_book_guid)
+        return NULL;
+    book = selected_accounts_current_book (&priv->book_guid);
+    if (!book)
+        return NULL;
+
+    for (GList *node = priv->selected_guids; node; node = node->next)
+    {
+        Account *account = xaccAccountLookup (node->data, book);
+        if (!account)
+        {
+            g_list_free (accounts);
+            return NULL;
+        }
+        accounts = g_list_prepend (accounts, account);
+    }
+    return g_list_reverse (accounts);
+}
+
+static gboolean
+selection_is_valid (GNCSearchAccount *fi)
+{
+    GNCSearchAccountPrivate *priv = _PRIVATE (fi);
+    GList *accounts;
+    gboolean valid;
+
+    if (!priv->selected_guids)
+        return FALSE;
+    accounts = selected_accounts_for_current_book (fi);
+    valid = accounts != NULL;
+    g_list_free (accounts);
+    return valid;
+}
+
+static gboolean
+selected_guids_set_from_accounts (GNCSearchAccount *fi, QofBook *book,
+                                  GList *accounts)
+{
+    GNCSearchAccountPrivate *priv = _PRIVATE (fi);
+    GList *guids = NULL;
+
+    for (GList *node = accounts; node; node = node->next)
+    {
+        Account *account = node->data;
+        if (!GNC_IS_ACCOUNT (account) || gnc_account_get_book (account) != book)
+        {
+            g_list_free_full (guids, (GDestroyNotify)guid_free);
+            return FALSE;
+        }
+        guids = g_list_prepend (guids,
+                                guid_copy (xaccAccountGetGUID (account)));
+    }
+
+    selected_guids_clear (priv);
+    priv->selected_guids = g_list_reverse (guids);
+    if (priv->selected_guids)
+    {
+        priv->book_guid = *qof_book_get_guid (book);
+        priv->has_book_guid = TRUE;
+    }
+    return TRUE;
+}
 
 static void
 gnc_search_account_class_init (GNCSearchAccountClass *klass)
@@ -90,13 +190,18 @@ static void
 gnc_search_account_init (GNCSearchAccount *o)
 {
     o->how = QOF_GUID_MATCH_ANY;
+    g_weak_ref_init (&_PRIVATE (o)->parent, NULL);
 }
 
 static void
 gnc_search_account_finalize (GObject *obj)
 {
     GNCSearchAccount *o = (GNCSearchAccount *)obj;
+    GNCSearchAccountPrivate *priv = _PRIVATE (o);
     g_assert (GNC_IS_SEARCH_ACCOUNT (o));
+
+    selected_guids_clear (priv);
+    g_weak_ref_clear (&priv->parent);
 
     G_OBJECT_CLASS (gnc_search_account_parent_class)->finalize(obj);
 }
@@ -147,10 +252,12 @@ gncs_validate (GNCSearchCoreType *fe)
 
     priv = _PRIVATE(fi);
 
-    if (priv->selected_accounts == NULL && fi->how )
+    if (!selection_is_valid (fi) && fi->how )
     {
+        GtkWindow *parent = g_weak_ref_get (&priv->parent);
         valid = FALSE;
-        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", _("You have not selected any accounts"));
+        gnc_error_dialog_async (parent, "%s", _("You have not selected any accounts"));
+        g_clear_object (&parent);
     }
 
     /* XXX */
@@ -193,9 +300,77 @@ describe_button (GNCSearchAccount *fi)
     GNCSearchAccountPrivate *priv;
 
     priv = _PRIVATE(fi);
-    if (priv->selected_accounts)
+    if (priv->selected_guids)
         return (_("Selected Accounts"));
     return (_("Choose Accounts"));
+}
+
+typedef struct
+{
+    GWeakRef search, button, account_view;
+    QofBook *book;
+    GncGUID book_guid;
+    gboolean completed;
+} AccountSelectionRequest;
+
+static void
+account_selection_request_free (gpointer data)
+{
+    AccountSelectionRequest *request = data;
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+    g_weak_ref_clear (&request->search);
+    g_weak_ref_clear (&request->button);
+    g_weak_ref_clear (&request->account_view);
+    g_free (request);
+}
+
+static void
+account_selection_dialog_destroyed ([[maybe_unused]] GtkWidget *dialog,
+                                    gpointer data)
+{
+    ((AccountSelectionRequest *)data)->completed = TRUE;
+}
+
+static void
+account_selection_response (GtkDialog *dialog, gint response, gpointer data)
+{
+    AccountSelectionRequest *request = data;
+    GNCSearchAccount *fi;
+    GtkWidget *button, *view;
+    GList *accounts = NULL;
+    QofBook *book = request->book;
+
+    if (request->completed)
+        return;
+    request->completed = TRUE;
+    /* Label notifications may destroy the dialog. Its data owns request. */
+    g_object_ref (dialog);
+    fi = g_weak_ref_get (&request->search);
+    button = g_weak_ref_get (&request->button);
+    view = g_weak_ref_get (&request->account_view);
+
+    if (response == GTK_RESPONSE_OK && fi && button && view && book &&
+        !gtk_widget_in_destruction (button) && book == gnc_get_current_book () &&
+        qof_book_is_open (book) && !qof_book_shutting_down (book) &&
+        guid_equal (&request->book_guid, qof_book_get_guid (book)))
+    {
+        accounts = gnc_tree_view_account_get_selected_accounts (
+            GNC_TREE_VIEW_ACCOUNT (view));
+        if (selected_guids_set_from_accounts (fi, book, accounts))
+        {
+            GtkWidget *label = gtk_bin_get_child (GTK_BIN (button));
+            if (GTK_IS_LABEL (label))
+                gtk_label_set_text (GTK_LABEL (label), describe_button (fi));
+        }
+    }
+    g_list_free (accounts);
+    g_clear_object (&view);
+    g_clear_object (&button);
+    g_clear_object (&fi);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    g_object_unref (dialog);
 }
 
 static void
@@ -206,8 +381,13 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     GtkWidget *account_tree;
     GtkWidget *accounts_scroller;
     GtkWidget *label;
-    char *desc;
     GtkTreeSelection *selection;
+    AccountSelectionRequest *request;
+    QofBook *book = gnc_get_current_book ();
+    GtkWindow *parent;
+
+    if (!book || !qof_book_is_open (book) || qof_book_shutting_down (book))
+        return;
 
     /* Create the account tree */
     account_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
@@ -217,9 +397,11 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 
     /* Select the currently-selected accounts */
     priv = _PRIVATE(fi);
-    if (priv->selected_accounts)
+    GList *selected = selected_accounts_for_current_book (fi);
+    if (selected)
         gnc_tree_view_account_set_selected_accounts (GNC_TREE_VIEW_ACCOUNT(account_tree),
-                priv->selected_accounts, FALSE);
+                selected, FALSE);
+    g_list_free (selected);
 
     /* Create the account scroller and put the tree in it */
     accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
@@ -234,11 +416,31 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     /* Create the dialog */
     dialog =
         GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
-                   GTK_WINDOW(priv->parent),
-                   0,
+                   NULL,
+                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                    _("_Cancel"), GTK_RESPONSE_CANCEL,
                    _("_OK"), GTK_RESPONSE_OK,
                    NULL));
+    parent = g_weak_ref_get (&priv->parent);
+    if (parent)
+    {
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+        g_object_unref (parent);
+    }
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+    request = g_new0 (AccountSelectionRequest, 1);
+    g_weak_ref_init (&request->search, fi);
+    g_weak_ref_init (&request->button, button);
+    g_weak_ref_init (&request->account_view, account_tree);
+    request->book = book;
+    request->book_guid = *qof_book_get_guid (book);
+    g_object_add_weak_pointer (G_OBJECT (book), (gpointer *)&request->book);
+    g_object_set_data_full (G_OBJECT (dialog), "gnc-account-selection-request",
+                            request, account_selection_request_free);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (account_selection_response), request);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (account_selection_dialog_destroyed), request);
 
     /* Put the dialog together */
     gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), label,
@@ -248,20 +450,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 
     gtk_widget_show_all (GTK_WIDGET (dialog));
 
-    /* Now run the dialog */
-    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
-    {
-        if (priv->selected_accounts)
-            g_list_free (priv->selected_accounts);
-
-        priv->selected_accounts =
-            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
-
-        desc = describe_button (fi);
-        gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
-    }
-
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    /* Response handler owns the continuation and destroys the dialog. */
 }
 
 static GtkWidget *
@@ -288,7 +477,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     button = gtk_button_new ();
     gtk_container_add (GTK_CONTAINER (button), label);
-    g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (button_clicked), fe);
+    g_signal_connect_object (button, "clicked", G_CALLBACK (button_clicked), fe, 0);
     gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
 
     /* And return the box */
@@ -297,21 +486,21 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
-    GNCSearchAccountPrivate *priv;
     GNCSearchAccount *fi = (GNCSearchAccount *)fe;
-    GList *l = NULL, *node;
+    GList *l = NULL, *node, *accounts;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fi), NULL);
 
-    priv = _PRIVATE(fi);
-    for (node = priv->selected_accounts; node; node = node->next)
+    accounts = selected_accounts_for_current_book (fi);
+    for (node = accounts; node; node = node->next)
     {
         Account *acc = node->data;
         const GncGUID *guid = xaccAccountGetGUID (acc);
         l = g_list_prepend (l, (gpointer)guid);
     }
     l = g_list_reverse (l);
+    g_list_free (accounts);
 
     return qof_query_guid_predicate (fi->how, l);
 }
@@ -329,7 +518,10 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     se_priv = _PRIVATE(se);
     se->how = fse->how;
     se_priv->match_all = fse_priv->match_all;
-    se_priv->selected_accounts = g_list_copy (fse_priv->selected_accounts);
+    se_priv->selected_guids = g_list_copy_deep (fse_priv->selected_guids,
+                                                copy_guid, NULL);
+    se_priv->book_guid = fse_priv->book_guid;
+    se_priv->has_book_guid = fse_priv->has_book_guid;
 
     return (GNCSearchCoreType *)se;
 }
@@ -344,5 +536,5 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     g_return_if_fail (GNC_IS_SEARCH_ACCOUNT (fi));
 
     priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    g_weak_ref_set (&priv->parent, parent);
 }

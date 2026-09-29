@@ -150,7 +150,7 @@ gncs_validate (GNCSearchCoreType *fe)
 
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(fi->gae), &error))
     {
-        gnc_error_dialog (GTK_WINDOW(fi->parent), "%s", error->message);
+        gnc_error_dialog_async (GTK_WINDOW(fi->parent), "%s", error->message);
         valid = FALSE;
         g_error_free (error);
     }

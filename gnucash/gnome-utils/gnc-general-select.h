@@ -42,6 +42,13 @@ extern "C" {
 
 typedef const char *	(*GNCGeneralSelectGetStringCB) (gpointer);
 typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer cbarg, gpointer default_selection, GtkWidget *parent);
+typedef void (*GNCGeneralSelectAsyncResultCB) (gpointer selection,
+                                               gpointer user_data);
+/* Implementations must invoke completed exactly once, including on cancel or
+ * parent destruction. cb_arg and default_selection are borrowed for the call. */
+typedef void (*GNCGeneralSelectAsyncSelectCB) (
+    gpointer cb_arg, gpointer default_selection, GtkWidget *parent,
+    GNCGeneralSelectAsyncResultCB completed, gpointer user_data);
 
 typedef enum
 {
@@ -61,9 +68,12 @@ typedef struct
 
     GNCGeneralSelectGetStringCB	get_string;
     GNCGeneralSelectNewSelectCB	new_select;
+    GNCGeneralSelectAsyncSelectCB async_select;
     gpointer			cb_arg;
 
     int disposed; /* private */
+    gboolean destroyed; /* private: GtkWidget destroy has run */
+    gboolean selection_pending; /* private: async chooser is open */
 } GNCGeneralSelect;
 
 typedef struct
@@ -77,6 +87,10 @@ typedef struct
 GtkWidget *gnc_general_select_new            (GNCGeneralSelectType type,
         GNCGeneralSelectGetStringCB get_string,
         GNCGeneralSelectNewSelectCB new_select,
+        gpointer cb_arg);
+GtkWidget *gnc_general_select_new_async      (GNCGeneralSelectType type,
+        GNCGeneralSelectGetStringCB get_string,
+        GNCGeneralSelectAsyncSelectCB async_select,
         gpointer cb_arg);
 void       gnc_general_select_set_selected   (GNCGeneralSelect *gsl,
         gpointer selected);
@@ -92,4 +106,3 @@ void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWi
 #endif
 
 #endif
-
