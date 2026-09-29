@@ -27,6 +27,7 @@
 #define DIALOG_UTILS_H
 
 #include <gtk/gtk.h>
+#include "gnc-ui.h"
 #include "qof.h"
 
 #ifdef __cplusplus
@@ -114,6 +115,9 @@ void gnc_widget_style_context_remove_class (GtkWidget *widget, const char *gnc_c
 \********************************************************************/
 gboolean gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction);
 
+/* The validation result is immediate. If requested, an informational warning
+ * remains modal until answered; it does not retain test_date.
+ */
 gboolean gnc_gdate_in_valid_range (GDate *test_date, gboolean warn);
 
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
@@ -148,16 +152,25 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
                                 const gchar *icon_name,
                                 guint response);
 
-/** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)
+/** Present a dialog with remembered responses and asynchronous completion. A remembered
+ * response is delivered immediately (without showing the dialog); otherwise
+ * the dialog is shown and completed asynchronously. The dialog is destroyed
+ * before @a completed runs. Real response IDs (including GTK_RESPONSE_CLOSE)
+ * are preserved; cancel, NONE, DELETE_EVENT, and destruction are normalized
+ * to GTK_RESPONSE_CANCEL.
+ * @a pref_key may be NULL to omit remembered-response handling.
  */
-gint
-gnc_dialog_run(GtkDialog *dialog, const gchar *pref_key);
+void gnc_dialog_run_async (GtkDialog *dialog, const gchar *pref_key,
+                           GncGuiQueryResponseCallback completed,
+                           gpointer user_data);
 
 /* If this is a new book, this function can be used to display book options
  * dialog so user can specify options, before any transactions can be
  * imported/entered, since the book options can affect how transactions are
  * created. Note: This dialog is modal! */
-gboolean gnc_new_book_option_display (GtkWidget *parent);
+void gnc_new_book_option_display_async (GtkWidget *parent,
+                                         GncGuiQueryResponseCallback completed,
+                                         gpointer user_data);
 
 /** This function returns a widget for selecting a cost policy
   */
