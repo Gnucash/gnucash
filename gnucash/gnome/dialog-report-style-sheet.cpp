@@ -110,23 +110,12 @@ gnc_style_sheet_options_apply_cb (GncOptionsDialog * propertybox,
                                   gpointer user_data)
 {
     ss_info * ssi = (ss_info *)user_data;
-    GList *results = NULL, *iter;
+    GList *results = NULL;
 
     gnc_reports_foreach (dirty_same_stylesheet, ssi->stylesheet);
 
     results = gnc_option_db_commit (ssi->odb);
-    for (iter = results; iter; iter = iter->next)
-    {
-        GtkWidget *dialog = gtk_message_dialog_new(nullptr,
-                                                   GTK_DIALOG_MODAL,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_OK,
-                                                   "%s",
-                                                   (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-        g_free (iter->data);
-    }
+    gnc_error_dialog_async_list (GTK_WINDOW (propertybox->get_widget()), results);
     g_list_free (results);
 }
 
@@ -149,10 +138,18 @@ gnc_style_sheet_options_close_cb (GncOptionsDialog *opt_dialog,
     }
     gtk_tree_row_reference_free (ssi->row_ref);
     delete ssi->odialog;
-    gnc_option_db_destroy (ssi->odb);
+    /* The Scheme stylesheet owns this option database. Destroying the
+     * editor releases its UI items; the database remains with the sheet. */
     scm_gc_unprotect_object (ssi->stylesheet);
     g_free (ssi);
 }
+
+static void gnc_style_sheet_select_dialog_add_one (StyleSheetDialog *ss,
+                                                    SCM sheet_info,
+                                                    gboolean select);
+
+void gnc_style_sheet_select_dialog_edit_cb (GtkWidget *widget,
+                                             gpointer user_data);
 
 static ss_info *
 gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
@@ -190,18 +187,130 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
     return (ssinfo);
 }
 
-static SCM
+typedef struct
+{
+    GWeakRef owner;
+    GWeakRef dialog;
+    QofSession *session;
+    gchar *template_name;
+    gchar *style_sheet_name;
+    gulong response_handler;
+    gboolean response_captured;
+} NewStyleSheetRequest;
+
+static gboolean
+gnc_style_sheet_session_matches (QofSession *session)
+{
+    if (!session)
+        return !gnc_current_session_exist ();
+    return gnc_current_session_exist () &&
+        gnc_get_current_session () == session;
+}
+
+static void
+gnc_style_sheet_new_response_cb (GtkDialog *dialog, gint response,
+                                 NewStyleSheetRequest *request)
+{
+    if (request->response_captured)
+        return;
+    request->response_captured = TRUE;
+    if (request->response_handler &&
+        g_signal_handler_is_connected (dialog, request->response_handler))
+        g_signal_handler_disconnect (dialog, request->response_handler);
+    request->response_handler = 0;
+    if (response != GTK_RESPONSE_OK)
+        return;
+
+    auto combo = GTK_COMBO_BOX (g_object_get_data (G_OBJECT (dialog),
+                                                    "template-combo"));
+    auto entry = GTK_ENTRY (g_object_get_data (G_OBJECT (dialog),
+                                                "name-entry"));
+    if (!combo || !entry)
+        return;
+
+    auto names = static_cast<GList *>(g_object_get_data (G_OBJECT (dialog),
+                                                          "template-names"));
+    auto choice = gtk_combo_box_get_active (combo);
+    request->template_name = g_strdup (static_cast<const gchar *>(
+        g_list_nth_data (names, choice)));
+    request->style_sheet_name = g_strdup (gtk_entry_get_text (entry));
+}
+
+static void
+free_template_names (gpointer data)
+{
+    g_list_free_full (static_cast<GList *>(data), g_free);
+}
+
+static void
+gnc_style_sheet_new_complete_cb (GtkWindow *parent, gint response,
+                                 gpointer user_data)
+{
+    auto request = static_cast<NewStyleSheetRequest *>(user_data);
+    auto owner = GTK_WIDGET (g_weak_ref_get (&request->owner));
+    auto valid_owner = owner && parent && GTK_WIDGET (parent) == owner &&
+        gnc_style_sheet_dialog && gnc_style_sheet_dialog->toplevel == owner &&
+        gnc_style_sheet_dialog->session == request->session &&
+        gnc_style_sheet_session_matches (request->session);
+
+    if (valid_owner && response == GTK_RESPONSE_OK && request->template_name &&
+        request->style_sheet_name)
+    {
+        if (!*request->style_sheet_name)
+            gnc_error_dialog_async (GTK_WINDOW (owner), "%s",
+                _("You must provide a name for the new style sheet."));
+        else
+        {
+            auto make_ss = scm_c_eval_string ("gnc:make-html-style-sheet");
+            auto sheet_info = scm_call_2 (make_ss,
+                scm_from_utf8_string (request->template_name),
+                scm_from_utf8_string (request->style_sheet_name));
+            if (!scm_is_false (sheet_info))
+            {
+                auto still_valid = [&]() {
+                    return gnc_style_sheet_dialog &&
+                        gnc_style_sheet_dialog->toplevel == owner &&
+                        gnc_style_sheet_dialog->session == request->session &&
+                        gnc_style_sheet_session_matches (request->session);
+                };
+                if (still_valid ())
+                {
+                    gnc_style_sheet_select_dialog_add_one (
+                        gnc_style_sheet_dialog, sheet_info, TRUE);
+                    if (still_valid ())
+                        gnc_style_sheet_select_dialog_edit_cb (NULL,
+                                                               gnc_style_sheet_dialog);
+                }
+            }
+        }
+    }
+
+    if (owner)
+        g_object_unref (owner);
+    auto dialog = g_weak_ref_get (&request->dialog);
+    if (dialog)
+    {
+        if (request->response_handler &&
+            g_signal_handler_is_connected (dialog, request->response_handler))
+            g_signal_handler_disconnect (dialog, request->response_handler);
+        g_object_unref (dialog);
+    }
+    g_weak_ref_clear (&request->owner);
+    g_weak_ref_clear (&request->dialog);
+    g_free (request->template_name);
+    g_free (request->style_sheet_name);
+    g_free (request);
+}
+
+static void
 gnc_style_sheet_new (StyleSheetDialog * ssd)
 {
-    SCM            make_ss   = scm_c_eval_string ("gnc:make-html-style-sheet");
     SCM            templates = scm_c_eval_string ("(gnc:get-html-templates)");
     SCM            t_name    = scm_c_eval_string ("gnc:html-style-sheet-template-name");
-    SCM            new_ss    = SCM_BOOL_F;
     GtkWidget    * template_combo;
     GtkTreeModel * template_model;
     GtkTreeIter    iter;
     GtkWidget    * name_entry;
-    gint           dialog_retval;
     GList        * template_names = NULL;
 
     /* get the new name for the style sheet */
@@ -245,34 +354,20 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     /* get the name */
     gtk_window_set_transient_for (GTK_WINDOW(dlg), GTK_WINDOW(ssd->toplevel));
-    dialog_retval = gtk_dialog_run (GTK_DIALOG(dlg));
-
-    if (dialog_retval == GTK_RESPONSE_OK)
-    {
-        gint choice = gtk_combo_box_get_active (GTK_COMBO_BOX(template_combo));
-        auto template_str{static_cast<const char *>(g_list_nth_data (template_names, choice))};
-        const char *name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
-        if (name_str && strlen(name_str) == 0)
-        {
-            /* If the name is empty, we display an error dialog but
-             * refuse to create the new style sheet. */
-            gnc_error_dialog (GTK_WINDOW(ssd->toplevel), "%s", _("You must provide a name for the new style sheet."));
-            name_str = NULL;
-        }
-        if (template_str && name_str)
-        {
-            new_ss = scm_call_2 (make_ss,
-                                 scm_from_utf8_string (template_str),
-                                 scm_from_utf8_string (name_str));
-        }
-    }
-
-    g_list_free_full (template_names, g_free);
-
-    g_object_unref (G_OBJECT(builder));
-
-    gtk_widget_destroy (dlg);
-    return (new_ss);
+    auto request = g_new0 (NewStyleSheetRequest, 1);
+    g_weak_ref_init (&request->owner, G_OBJECT (ssd->toplevel));
+    g_weak_ref_init (&request->dialog, G_OBJECT (dlg));
+    request->session = ssd->session;
+    g_object_set_data (G_OBJECT (dlg), "template-combo", template_combo);
+    g_object_set_data (G_OBJECT (dlg), "name-entry", name_entry);
+    g_object_set_data_full (G_OBJECT (dlg), "template-names", template_names,
+                            free_template_names);
+    g_object_set_data_full (G_OBJECT (dlg), "builder", builder,
+                            g_object_unref);
+    request->response_handler = g_signal_connect (
+        dlg, "response", G_CALLBACK (gnc_style_sheet_new_response_cb), request);
+    gnc_dialog_run_async (GTK_DIALOG (dlg), NULL,
+                          gnc_style_sheet_new_complete_cb, request);
 }
 
 /************************************************************
@@ -292,23 +387,56 @@ gnc_style_sheet_select_dialog_add_one (StyleSheetDialog * ss,
     if (!c_name)
         return;
 
+    /* Keep these objects alive across model and selection notifications: an
+       observer may close the owner window while either operation emits. */
+    auto model = GTK_TREE_MODEL (g_object_ref (ss->list_store));
+    auto list_store = GTK_LIST_STORE (model);
+    auto view = GTK_TREE_VIEW (g_object_ref (ss->list_view));
+    GWeakRef owner_ref;
+    g_weak_ref_init (&owner_ref, G_OBJECT (ss->toplevel));
+    auto ss_identity = ss;
+    auto session = ss->session;
+
+    auto owner_is_live = [&]() {
+        auto owner = GTK_WIDGET (g_weak_ref_get (&owner_ref));
+        auto live = owner && !gtk_widget_in_destruction (owner) &&
+            gnc_style_sheet_dialog == ss_identity &&
+            gnc_style_sheet_dialog->toplevel == owner &&
+            gnc_style_sheet_dialog->session == session &&
+            gnc_style_sheet_session_matches (session);
+        if (owner)
+            g_object_unref (owner);
+        return live;
+    };
+
     /* add the column name */
     scm_gc_protect_object (sheet_info);
-    gtk_list_store_append (ss->list_store, &iter);
-    gtk_list_store_set (ss->list_store, &iter,
-                        /* Translate the displayed name */
-                        COLUMN_NAME, _(c_name),
-                        COLUMN_STYLESHEET, sheet_info,
-                        -1);
-    g_free (c_name);
-    /* The translation of the name fortunately doesn't affect the
-     * lookup because that is done through the sheet_info argument. */
-
-    if (select)
+    gtk_list_store_append (list_store, &iter);
+    if (!select || owner_is_live ())
     {
-        GtkTreeSelection * selection = gtk_tree_view_get_selection (ss->list_view);
-        gtk_tree_selection_select_iter (selection, &iter);
+        gtk_list_store_set (list_store, &iter,
+                            /* Translate the displayed name */
+                            COLUMN_NAME, _(c_name),
+                            COLUMN_STYLESHEET, sheet_info,
+                            -1);
+        g_free (c_name);
+        /* The translation of the name fortunately doesn't affect the
+         * lookup because that is done through the sheet_info argument. */
+
+        if (select && owner_is_live ())
+        {
+            GtkTreeSelection * selection = gtk_tree_view_get_selection (view);
+            gtk_tree_selection_select_iter (selection, &iter);
+        }
     }
+    else
+    {
+        scm_gc_unprotect_object (sheet_info);
+        g_free (c_name);
+    }
+    g_weak_ref_clear (&owner_ref);
+    g_object_unref (view);
+    g_object_unref (model);
 }
 
 static void
@@ -346,16 +474,7 @@ void
 gnc_style_sheet_select_dialog_new_cb (GtkWidget *widget, gpointer user_data)
 {
     StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
-    SCM                 sheet_info;
-
-    sheet_info = gnc_style_sheet_new (ss);
-    if (sheet_info == SCM_BOOL_F)
-        return;
-
-    gnc_style_sheet_select_dialog_add_one (ss, sheet_info, TRUE);
-
-    // now start the edit dialog
-    gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
+    gnc_style_sheet_new (ss);
 }
 
 void

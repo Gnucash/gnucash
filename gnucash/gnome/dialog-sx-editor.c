@@ -65,6 +65,7 @@
 #include "gnucash-sheet.h"
 #include "gnc-session.h"
 #include <gnc-string-utils.h>
+#include <stdarg.h>
 
 #include "gnc-split-reg.h"
 
@@ -138,6 +139,11 @@ struct _GncSxEditorDialog
 
     GncEmbeddedWindow *embed_window;
     GncPluginPage     *plugin_page;
+    gboolean allow_unbalanced;
+    gboolean allow_duplicate_name;
+    gboolean allow_invalid_schedule;
+    gboolean validation_resume;
+    gboolean template_checked;
 };
 
 /** Prototypes **********************************************************/
@@ -150,17 +156,72 @@ static void set_endgroup_toggle_states (GncSxEditorDialog *sxed, EndType t);
 static void advance_toggled_cb (GtkButton *b, GncSxEditorDialog *sxed);
 static void remind_toggled_cb (GtkButton *b, GncSxEditorDialog *sxed);
 static gboolean gnc_sxed_check_consistent (GncSxEditorDialog *sxed);
+static void editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed);
 static gboolean gnc_sxed_check_changed (GncSxEditorDialog *sxed);
 static void gnc_sxed_save_sx (GncSxEditorDialog *sxed);
 static void gnc_sxed_freq_changed (GncFrequency *gf, gpointer ud);
 static void sxed_excal_update_adapt_cb (GtkWidget *o, gpointer ud);
 static void gnc_sxed_update_cal (GncSxEditorDialog *sxed);
 void on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data);
-static void gnc_sxed_reg_check_close (GncSxEditorDialog *sxed);
+static gboolean gnc_sxed_reg_check_close_async (GncSxEditorDialog *sxed,
+                                                 gboolean resume_ok);
 static gboolean sxed_delete_event (GtkWidget *widget, GdkEvent *event, gpointer ud);
-static gboolean sxed_confirmed_cancel (GncSxEditorDialog *sxed);
+static void sxed_request_cancel (GncSxEditorDialog *sxed);
 static gboolean editor_component_sx_equality (gpointer find_data,
                                               gpointer user_data);
+
+typedef enum { SXED_ALLOW_UNBALANCED, SXED_ALLOW_DUPLICATE_NAME,
+               SXED_ALLOW_INVALID_SCHEDULE, SXED_CANCEL } SxedVerifyAction;
+typedef struct { GncSxEditorDialog *sxed; SxedVerifyAction action; } SxedVerifyRequest;
+
+static void
+sxed_verify_response (GtkWindow *parent, gint response, gpointer user_data)
+{
+    SxedVerifyRequest *request = user_data;
+    if (!parent || gtk_widget_in_destruction (GTK_WIDGET (parent)))
+    {
+        g_free (request);
+        return;
+    }
+    GncSxEditorDialog *sxed = request->sxed;
+    SxedVerifyAction action = request->action;
+    g_free (request);
+    if (response != GTK_RESPONSE_YES || !sxed->dialog ||
+        parent != GTK_WINDOW (sxed->dialog))
+        return;
+    if (action == SXED_CANCEL)
+    {
+        gnc_split_register_cancel_cursor_trans_changes
+            (gnc_ledger_display_get_split_register (sxed->ledger));
+        gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
+        return;
+    }
+    if (action == SXED_ALLOW_UNBALANCED)
+        sxed->allow_unbalanced = TRUE;
+    else if (action == SXED_ALLOW_DUPLICATE_NAME)
+        sxed->allow_duplicate_name = TRUE;
+    else
+        sxed->allow_invalid_schedule = TRUE;
+    sxed->validation_resume = TRUE;
+    editor_ok_button_clicked_cb (NULL, sxed);
+}
+
+static void
+sxed_prompt_async (GncSxEditorDialog *sxed, SxedVerifyAction action,
+                   const gchar *format, ...)
+{
+    va_list args;
+    SxedVerifyRequest *request = g_new (SxedVerifyRequest, 1);
+    request->sxed = sxed;
+    request->action = action;
+    va_start (args, format);
+    gchar *message = g_strdup_vprintf (format, args);
+    va_end (args);
+    gnc_verify_dialog_async (GTK_WINDOW (sxed->dialog), FALSE,
+                             sxed_verify_response, request,
+                             "%s", message);
+    g_free (message);
+}
 
 static GActionEntry gnc_sxed_menu_entries [] =
 {
@@ -178,19 +239,16 @@ sxed_close_handler (gpointer user_data)
 {
     GncSxEditorDialog *sxed = user_data;
 
-    gnc_sxed_reg_check_close (sxed);
-    gnc_save_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
-    gtk_widget_destroy (sxed->dialog);
-    /* The data will be cleaned up in the destroy handler. */
+    if (gnc_sxed_reg_check_close_async (sxed, FALSE))
+    {
+        gnc_save_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
+        gtk_widget_destroy (sxed->dialog);
+    }
 }
 
 
-/**
- * @return TRUE if the user does want to cancel, FALSE if not.  If TRUE is
- * returned, the register's changes have been cancelled.
- **/
-static gboolean
-sxed_confirmed_cancel (GncSxEditorDialog *sxed)
+static void
+sxed_request_cancel (GncSxEditorDialog *sxed)
 {
     SplitRegister *reg;
 
@@ -201,14 +259,12 @@ sxed_confirmed_cancel (GncSxEditorDialog *sxed)
         const char *sx_changed_msg =
             _("This Scheduled Transaction has changed; are you "
                "sure you want to cancel?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", sx_changed_msg))
-        {
-            return FALSE;
-        }
+        sxed_prompt_async (sxed, SXED_CANCEL, "%s", sx_changed_msg);
+        return;
     }
-    /* cancel ledger changes */
+    /* Cancel pending template edits before closing the editor. */
     gnc_split_register_cancel_cursor_trans_changes (reg);
-    return TRUE;
+    gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 }
 
 
@@ -218,12 +274,7 @@ sxed_confirmed_cancel (GncSxEditorDialog *sxed)
 static void
 editor_cancel_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed)
 {
-    /* close */
-    if (!sxed_confirmed_cancel (sxed))
-        return;
-
-    gnc_close_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
-                                     sxed);
+    sxed_request_cancel (sxed);
 }
 
 
@@ -239,6 +290,14 @@ editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed)
 {
     QofBook *book;
     SchedXactions *sxes;
+
+    if (!sxed->validation_resume)
+    {
+        sxed->allow_unbalanced = FALSE;
+        sxed->allow_duplicate_name = FALSE;
+        sxed->allow_invalid_schedule = FALSE;
+    }
+    sxed->validation_resume = FALSE;
 
     if (!gnc_sxed_check_consistent (sxed))
         return;
@@ -535,9 +594,12 @@ gnc_sxed_check_names (GncSxEditorDialog *sxed)
         const char *sx_has_existing_name_msg =
             _("A Scheduled Transaction with the name \"%s\" already exists. "
               "Are you sure you want to name this one the same?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE,
-                                sx_has_existing_name_msg, name))
+        if (!sxed->allow_duplicate_name)
+        {
+            sxed_prompt_async (sxed, SXED_ALLOW_DUPLICATE_NAME,
+                               sx_has_existing_name_msg, name);
             return FALSE;
+        }
     }
     return TRUE;
 }
@@ -607,9 +669,12 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
         const char *invalid_sx_check_msg =
             _("You have attempted to create a Scheduled Transaction which "
               "will never run. Do you really want to do this?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE,
-                               "%s", invalid_sx_check_msg))
+        if (!sxed->allow_invalid_schedule)
+        {
+            sxed_prompt_async (sxed, SXED_ALLOW_INVALID_SCHEDULE,
+                               "%s", invalid_sx_check_msg);
             return FALSE;
+        }
     }
     return TRUE;
 }
@@ -716,7 +781,8 @@ static void
 split_error_warning_dialog (GtkWidget *parent, const gchar *title,
                             gchar *message)
 {
-    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent), 0,
+    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                                 GTK_MESSAGE_ERROR,
                                                 GTK_BUTTONS_CLOSE,
                                                 "%s", title);
@@ -725,7 +791,7 @@ split_error_warning_dialog (GtkWidget *parent, const gchar *title,
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
     g_signal_connect_swapped (dialog, "response",
                               G_CALLBACK (gtk_widget_destroy), dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_show (dialog);
 
 }
 
@@ -829,11 +895,9 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
     gboolean unbalanceable = FALSE;
     gpointer unusedKey, unusedValue;
 
-    GHashTable *vars = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                  (GDestroyNotify)gnc_sx_variable_free);
-    GHashTable *txns = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                              NULL, g_free);
-    CheckTxnSplitData sd = {sxed, txns, vars, NULL, FALSE, FALSE};
+    GHashTable *vars;
+    GHashTable *txns;
+    CheckTxnSplitData sd;
 
     /**
      * Plan:
@@ -844,7 +908,14 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
      *   . false: indicate to user, allow decision.
      */
 
-    gnc_sxed_reg_check_close (sxed);
+    if (!sxed->template_checked && !gnc_sxed_reg_check_close_async (sxed, TRUE))
+        return FALSE;
+    sxed->template_checked = FALSE;
+    vars = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                  (GDestroyNotify)gnc_sx_variable_free);
+    txns = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                  NULL, g_free);
+    sd = (CheckTxnSplitData){sxed, txns, vars, NULL, FALSE, FALSE};
     /* numeric-formulas-get-balanced determination */
     gnc_sx_get_variables (sxed->sx, vars);
 
@@ -892,8 +963,11 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
             _("The Scheduled Transaction Editor cannot automatically balance "
               "all of the transactions in this this Scheduled Transaction.\n"
               "Should it still be entered?");
-        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", msg))
+        if (!sxed->allow_unbalanced)
+        {
+            sxed_prompt_async (sxed, SXED_ALLOW_UNBALANCED, "%s", msg);
             return FALSE;
+        }
     }
 
     if (!gnc_sxed_check_names (sxed))
@@ -1140,11 +1214,8 @@ sxed_delete_event (GtkWidget *widget, GdkEvent *event, gpointer ud)
         return FALSE;
     }
 
-    if (!sxed_confirmed_cancel (sxed))
-    {
-        return TRUE;
-    }
-    return FALSE;
+    sxed_request_cancel (sxed);
+    return TRUE;
 }
 
 static gboolean
@@ -1608,34 +1679,79 @@ endgroup_rb_toggled_cb (GtkButton *b, gpointer d)
  * Args:   regData - the data struct for this register              *
  * Return: none                                                     *
 \********************************************************************/
-static void
-gnc_sxed_reg_check_close (GncSxEditorDialog *sxed)
+typedef struct
 {
-    gboolean pending_changes;
-    SplitRegister *reg;
-    const char *message =
-        _("The current template transaction "
-          "has been changed. "
-          "Would you like to record the changes?");
+    GncSxEditorDialog *sxed;
+    gboolean resume_ok;
+} SxedRegCloseRequest;
 
-    reg = gnc_ledger_display_get_split_register (sxed->ledger);
-    pending_changes = gnc_split_register_changed (reg);
-    if (!pending_changes)
-    {
+static void
+sxed_reg_close_continue (SxedRegCloseRequest *request, gboolean saved)
+{
+    GncSxEditorDialog *sxed = request->sxed;
+    gboolean resume_ok = request->resume_ok;
+    g_free (request);
+    if (!saved)
         return;
-    }
-
-    if (gnc_verify_dialog (GTK_WINDOW (sxed->dialog), TRUE, "%s", message))
+    if (resume_ok)
     {
-        if (!gnc_split_register_save (reg, TRUE))
-            return;
-
-        gnc_split_register_redraw (reg);
+        sxed->template_checked = TRUE;
+        editor_ok_button_clicked_cb (NULL, sxed);
     }
     else
     {
-        gnc_split_register_cancel_cursor_trans_changes (reg);
+        gnc_save_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
+        gtk_widget_destroy (sxed->dialog);
     }
+}
+
+static void
+sxed_reg_close_saved (SplitRegister *reg, gboolean saved, gpointer user_data)
+{
+    if (reg && saved)
+        gnc_split_register_redraw (reg);
+    sxed_reg_close_continue ((SxedRegCloseRequest*)user_data,
+                             reg != NULL && saved);
+}
+
+static void
+sxed_reg_close_response (GtkWindow *parent, gint response, gpointer user_data)
+{
+    SxedRegCloseRequest *request = (SxedRegCloseRequest*)user_data;
+    if (!parent || gtk_widget_in_destruction (GTK_WIDGET (parent)))
+    {
+        g_free (request);
+        return;
+    }
+    GncSxEditorDialog *sxed = request->sxed;
+    SplitRegister *reg = gnc_ledger_display_get_split_register (sxed->ledger);
+    if (parent != GTK_WINDOW (sxed->dialog) || !reg)
+    {
+        g_free (request);
+        return;
+    }
+    if (response == GTK_RESPONSE_YES)
+    {
+        gnc_split_register_save_async (reg, TRUE, sxed_reg_close_saved, request);
+        return;
+    }
+    gnc_split_register_cancel_cursor_trans_changes (reg);
+    sxed_reg_close_continue (request, TRUE);
+}
+
+static gboolean
+gnc_sxed_reg_check_close_async (GncSxEditorDialog *sxed, gboolean resume_ok)
+{
+    SplitRegister *reg = gnc_ledger_display_get_split_register (sxed->ledger);
+    if (!reg || !gnc_split_register_changed (reg))
+        return TRUE;
+    SxedRegCloseRequest *request = g_new0 (SxedRegCloseRequest, 1);
+    request->sxed = sxed;
+    request->resume_ok = resume_ok;
+    gnc_verify_dialog_async (GTK_WINDOW (sxed->dialog), TRUE,
+                             sxed_reg_close_response, request,
+                             "%s", _("The current template transaction has been changed. Would you like to record the changes?"));
+    return FALSE;
 }
 
 

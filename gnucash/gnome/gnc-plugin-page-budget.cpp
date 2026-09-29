@@ -50,8 +50,10 @@
 #include "gnc-plugin-page-report.h"
 #include "gnc-budget.h"
 #include "gnc-features.h"
+#include "qofevent.h"
 
 #include "dialog-utils.h"
+#include "gnc-gui-query.h"
 #include "gnc-gnome-utils.h"
 #include "misc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
@@ -116,11 +118,20 @@ static void gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple, G
 static void gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_refresh (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+struct BudgetNoteRequest
+{
+    GWeakRef page;
+    GWeakRef book;
+    GtkDialog *dialog;
+    GtkTextView *note;
+    GncGUID budget_guid;
+    GncGUID account_guid;
+    guint period_num;
+    gchar *text{};
+};
+
 static void gnc_plugin_page_budget_cmd_budget_report (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
-
-static void allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
-                                      GtkTreeIter *iter, gpointer data);
 
 static GActionEntry gnc_plugin_page_budget_actions [] =
 {
@@ -229,6 +240,399 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE
 
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
    ((GncPluginPageBudgetPrivate*)gnc_plugin_page_budget_get_instance_private((GncPluginPageBudget*)o))
+
+typedef enum
+{
+    BUDGET_OPTIONS_REQUEST,
+    BUDGET_ESTIMATE_REQUEST,
+    BUDGET_ALL_PERIODS_REQUEST
+} BudgetMutationKind;
+
+struct BudgetMutationRequest
+{
+    GWeakRef page;
+    GWeakRef book;
+    GWeakRef owner;
+    GtkDialog *dialog;
+    GncGUID budget_guid;
+    GPtrArray *account_guids;
+    BudgetMutationKind kind;
+    gboolean captured;
+    GtkWidget *name;
+    GtkWidget *description;
+    GtkWidget *recurrence;
+    GtkWidget *periods;
+    GtkWidget *show_code;
+    GtkWidget *show_description;
+    GtkWidget *date;
+    GtkWidget *digits;
+    GtkWidget *average;
+    GtkWidget *value;
+    GtkWidget *add;
+    GtkWidget *multiply;
+    gchar *name_text;
+    gchar *description_text;
+    Recurrence recurrence_value;
+    gint period_count;
+    gboolean show_code_value;
+    gboolean show_description_value;
+    GDate date_value;
+    gint digits_value;
+    gboolean average_value;
+    gchar *amount_text;
+    gnc_numeric amount_value;
+    gboolean amount_valid;
+    allperiods_action action;
+};
+
+static void budget_mutation_complete (GtkWindow *parent, gint response,
+                                      gpointer user_data);
+
+static void
+budget_mutation_capture ([[maybe_unused]] GtkDialog *dialog, gint response,
+                         BudgetMutationRequest *request)
+{
+    if (response != GTK_RESPONSE_OK)
+        return;
+    request->captured = TRUE;
+    switch (request->kind)
+    {
+    case BUDGET_OPTIONS_REQUEST:
+    {
+        request->name_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (request->name)));
+        GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (request->description));
+        GtkTextIter start, end;
+        gtk_text_buffer_get_bounds (buffer, &start, &end);
+        request->description_text = gtk_text_buffer_get_text (buffer, &start, &end, TRUE);
+        request->recurrence_value = *gnc_recurrence_get (GNC_RECURRENCE (request->recurrence));
+        request->period_count = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (request->periods));
+        request->show_code_value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (request->show_code));
+        request->show_description_value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (request->show_description));
+        break;
+    }
+    case BUDGET_ESTIMATE_REQUEST:
+        gnc_date_edit_get_gdate (GNC_DATE_EDIT (request->date), &request->date_value);
+        request->digits_value = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (request->digits));
+        request->average_value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (request->average));
+        break;
+    case BUDGET_ALL_PERIODS_REQUEST:
+        request->amount_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (request->value)));
+        request->digits_value = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (request->digits));
+        request->action = REPLACE;
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (request->add)))
+            request->action = ADD;
+        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (request->multiply)))
+            request->action = MULTIPLY;
+        if (request->action == REPLACE &&
+            !gtk_entry_get_text_length (GTK_ENTRY (request->value)))
+            request->action = UNSET;
+        request->amount_valid = xaccParseAmount (request->amount_text, TRUE,
+                                                 &request->amount_value, NULL);
+        break;
+    }
+}
+
+static void
+budget_mutation_snapshot_account ([[maybe_unused]] GtkTreeModel *model,
+                                  GtkTreePath *path,
+                                  [[maybe_unused]] GtkTreeIter *iter,
+                                  gpointer user_data)
+{
+    auto request = static_cast<BudgetMutationRequest *> (user_data);
+    auto page = GNC_PLUGIN_PAGE_BUDGET (g_weak_ref_get (&request->page));
+    if (!page)
+        return;
+    auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+    auto account = gnc_budget_view_get_account_from_path (priv->budget_view, path);
+    if (account)
+    {
+        auto guid = g_new (GncGUID, 1);
+        *guid = *qof_instance_get_guid (QOF_INSTANCE (account));
+        g_ptr_array_add (request->account_guids, guid);
+    }
+    g_object_unref (page);
+}
+
+static BudgetMutationRequest *
+budget_mutation_request_new (GncPluginPageBudget *page, GtkWidget *dialog,
+                            BudgetMutationKind kind)
+{
+    auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+    auto book = qof_instance_get_book (QOF_INSTANCE (priv->budget));
+    auto owner = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
+    if (!book || !owner || qof_book_is_readonly (book) ||
+        gnc_get_current_book () != book)
+        return nullptr;
+
+    auto request = g_new0 (BudgetMutationRequest, 1);
+    g_weak_ref_init (&request->page, G_OBJECT (page));
+    g_weak_ref_init (&request->book, G_OBJECT (book));
+    g_weak_ref_init (&request->owner, G_OBJECT (owner));
+    request->dialog = GTK_DIALOG (g_object_ref (dialog));
+    request->budget_guid = *gnc_budget_get_guid (priv->budget);
+    request->account_guids = g_ptr_array_new_with_free_func (g_free);
+    request->kind = kind;
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+    g_signal_connect (dialog, "response", G_CALLBACK (budget_mutation_capture), request);
+    gnc_gui_query_bind_dialog_response (GTK_DIALOG (dialog),
+                                       budget_mutation_complete, request);
+    return request;
+}
+
+static gboolean
+budget_mutation_request_valid (BudgetMutationRequest *request,
+                               GncPluginPageBudget *page, QofBook *book,
+                               GtkWindow *owner, GncBudget **budget_out)
+{
+    auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+    auto budget = book ? gnc_budget_lookup (&request->budget_guid, book) : nullptr;
+    if (!book || !owner || !budget || !priv->budget_view ||
+        priv->budget != budget || GNC_PLUGIN_PAGE (page)->window != GTK_WIDGET (owner) ||
+        gtk_widget_in_destruction (GTK_WIDGET (owner)) ||
+        gnc_get_current_book () != book || qof_book_is_readonly (book) ||
+        qof_book_shutting_down (book) ||
+        qof_instance_get_book (QOF_INSTANCE (budget)) != book)
+        return FALSE;
+    *budget_out = budget;
+    return TRUE;
+}
+
+static void
+budget_mutation_request_free (BudgetMutationRequest *request)
+{
+    g_signal_handlers_disconnect_by_data (request->dialog, request);
+    g_clear_object (&request->dialog);
+    g_weak_ref_clear (&request->page);
+    g_weak_ref_clear (&request->book);
+    g_weak_ref_clear (&request->owner);
+    g_clear_pointer (&request->account_guids, g_ptr_array_unref);
+    g_clear_pointer (&request->name_text, g_free);
+    g_clear_pointer (&request->description_text, g_free);
+    g_clear_pointer (&request->amount_text, g_free);
+    g_free (request);
+}
+
+static void
+budget_estimate_account (GncBudget *budget, Account *account,
+                         const Recurrence *recurrence, gint sigfigs,
+                         gboolean use_average)
+{
+    auto periods = gnc_budget_get_num_periods (budget);
+    if (use_average && periods)
+    {
+        auto amount = xaccAccountGetNoclosingBalanceChangeForPeriod (
+            account, recurrenceGetPeriodTime (recurrence, 0, FALSE),
+            recurrenceGetPeriodTime (recurrence, periods - 1, TRUE), TRUE);
+        amount = gnc_numeric_div (amount, gnc_numeric_create (periods, 1),
+                                  GNC_DENOM_AUTO,
+                                  GNC_HOW_DENOM_SIGFIGS (sigfigs) |
+                                  GNC_HOW_RND_ROUND_HALF_UP);
+        for (guint period = 0; period < periods; ++period)
+            gnc_budget_set_account_period_value (budget, account, period, amount);
+        return;
+    }
+    for (guint period = 0; period < periods; ++period)
+    {
+        auto amount = xaccAccountGetNoclosingBalanceChangeForPeriod (
+            account, recurrenceGetPeriodTime (recurrence, period, FALSE),
+            recurrenceGetPeriodTime (recurrence, period, TRUE), TRUE);
+        if (!gnc_numeric_check (amount))
+        {
+            amount = gnc_numeric_convert (amount, GNC_DENOM_AUTO,
+                                          GNC_HOW_DENOM_SIGFIGS (sigfigs) |
+                                          GNC_HOW_RND_ROUND_HALF_UP);
+            gnc_budget_set_account_period_value (budget, account, period, amount);
+        }
+    }
+}
+
+static void
+budget_mutation_complete ([[maybe_unused]] GtkWindow *parent, gint response,
+                          gpointer user_data)
+{
+    auto request = static_cast<BudgetMutationRequest *> (user_data);
+    auto page = GNC_PLUGIN_PAGE_BUDGET (g_weak_ref_get (&request->page));
+    auto book = static_cast<QofBook *> (g_weak_ref_get (&request->book));
+    auto owner = GTK_WINDOW (g_weak_ref_get (&request->owner));
+    GncBudget *budget = nullptr;
+    const gboolean valid = response == GTK_RESPONSE_OK && request->captured &&
+        page && budget_mutation_request_valid (request, page, book, owner, &budget);
+    if (valid)
+    {
+        g_object_ref (budget);
+        auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+        auto view = GNC_BUDGET_VIEW (g_object_ref (priv->budget_view));
+        gchar *updated_page_label = nullptr;
+        gboolean budget_modified = FALSE;
+        gnc_suspend_gui_refresh ();
+        qof_event_suspend ();
+        switch (request->kind)
+        {
+        case BUDGET_OPTIONS_REQUEST:
+        {
+            budget_modified = TRUE;
+            gnc_budget_begin_edit (budget);
+            gnc_budget_set_name (budget, request->name_text);
+            gnc_budget_set_description (budget, request->description_text);
+            gnc_budget_view_set_show_account_code (view, request->show_code_value);
+            gnc_budget_view_set_show_account_description (view,
+                                                          request->show_description_value);
+            if ((request->show_code_value || request->show_description_value) &&
+                !gnc_features_check_used (book,
+                    GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS))
+                gnc_features_set_used (book,
+                    GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS);
+            gnc_budget_set_num_periods (budget, request->period_count);
+            gnc_budget_set_recurrence (budget, &request->recurrence_value);
+            updated_page_label = g_strdup_printf ("%s: %s", _("Budget"),
+                                                 request->name_text);
+            gnc_budget_commit_edit (budget);
+            break;
+        }
+        case BUDGET_ESTIMATE_REQUEST:
+        {
+            const auto recurrence = gnc_budget_get_recurrence (budget);
+            recurrenceSet (&priv->r, recurrenceGetMultiplier (recurrence),
+                           recurrenceGetPeriodType (recurrence),
+                           &request->date_value,
+                           recurrenceGetWeekendAdjust (recurrence));
+            priv->sigFigs = request->digits_value;
+            priv->useAvg = request->average_value;
+            budget_modified = request->account_guids->len != 0;
+            gnc_budget_begin_edit (budget);
+            for (guint i = 0; i < request->account_guids->len; ++i)
+            {
+                auto guid = static_cast<GncGUID *> (
+                    g_ptr_array_index (request->account_guids, i));
+                auto account = xaccAccountLookup (guid, book);
+                if (account && qof_instance_get_book (QOF_INSTANCE (account)) == book)
+                    budget_estimate_account (budget, account, &priv->r,
+                                             request->digits_value,
+                                             request->average_value);
+            }
+            gnc_budget_commit_edit (budget);
+            break;
+        }
+        case BUDGET_ALL_PERIODS_REQUEST:
+            if (request->action == UNSET || request->amount_valid)
+            {
+                priv->sigFigs = request->digits_value;
+                priv->action = request->action;
+                priv->allValue = request->amount_value;
+                budget_modified = request->account_guids->len != 0 &&
+                    gnc_budget_get_num_periods (budget) != 0;
+                gnc_budget_begin_edit (budget);
+                for (guint i = 0; i < request->account_guids->len; ++i)
+                {
+                    auto guid = static_cast<GncGUID *> (
+                        g_ptr_array_index (request->account_guids, i));
+                    auto account = xaccAccountLookup (guid, book);
+                    if (!account || qof_instance_get_book (QOF_INSTANCE (account)) != book)
+                        continue;
+                    auto allvalue = request->amount_value;
+                    if (gnc_reverse_balance (account))
+                        allvalue = gnc_numeric_neg (allvalue);
+                    for (guint period = 0; period < gnc_budget_get_num_periods (budget); ++period)
+                    {
+                        gnc_numeric value = allvalue;
+                        switch (request->action)
+                        {
+                        case ADD:
+                            value = gnc_numeric_add (
+                                gnc_budget_get_account_period_value (budget, account, period),
+                                allvalue, GNC_DENOM_AUTO,
+                                GNC_HOW_DENOM_SIGFIGS (request->digits_value) |
+                                GNC_HOW_RND_ROUND_HALF_UP);
+                            gnc_budget_set_account_period_value (budget, account, period, value);
+                            break;
+                        case MULTIPLY:
+                            value = gnc_numeric_mul (
+                                gnc_budget_get_account_period_value (budget, account, period),
+                                request->amount_value, GNC_DENOM_AUTO,
+                                GNC_HOW_DENOM_SIGFIGS (request->digits_value) |
+                                GNC_HOW_RND_ROUND_HALF_UP);
+                            gnc_budget_set_account_period_value (budget, account, period, value);
+                            break;
+                        case UNSET:
+                            gnc_budget_unset_account_period_value (budget, account, period);
+                            break;
+                        default:
+                            gnc_budget_set_account_period_value (budget, account, period, value);
+                            break;
+                        }
+                    }
+                }
+                gnc_budget_commit_edit (budget);
+            }
+            break;
+        }
+        /* Budget setters generate MODIFY for every field. Suppress those
+         * intermediate events so observers cannot tear down the page halfway
+        * through a logically atomic user edit. */
+        qof_event_resume ();
+        if (budget_modified)
+            qof_event_gen (QOF_INSTANCE (budget), QOF_EVENT_MODIFY, nullptr);
+        gnc_resume_gui_refresh ();
+        g_object_unref (view);
+        GncBudget *current_budget = nullptr;
+        if (updated_page_label && budget_mutation_request_valid (
+                request, page, book, owner, &current_budget))
+            main_window_update_page_name (GNC_PLUGIN_PAGE (page),
+                                          updated_page_label);
+        g_free (updated_page_label);
+        g_object_unref (budget);
+    }
+    if (page && request->kind == BUDGET_OPTIONS_REQUEST)
+    {
+        auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+        if (priv->dialog == GTK_WIDGET (request->dialog))
+            priv->dialog = NULL;
+    }
+    g_clear_object (&owner);
+    g_clear_object (&book);
+    g_clear_object (&page);
+    budget_mutation_request_free (request);
+}
+
+static void
+budget_note_capture ([[maybe_unused]] GtkDialog *dialog, gint response,
+                     BudgetNoteRequest *request)
+{
+    if (response == GTK_RESPONSE_OK)
+        request->text = xxxgtk_textview_get_text (request->note);
+}
+
+static void
+budget_note_complete ([[maybe_unused]] GtkWindow *parent, gint response,
+                      gpointer user_data)
+{
+    auto request = static_cast<BudgetNoteRequest *> (user_data);
+    auto page = GNC_PLUGIN_PAGE_BUDGET (g_weak_ref_get (&request->page));
+    auto book = static_cast<QofBook *> (g_weak_ref_get (&request->book));
+    if (response == GTK_RESPONSE_OK && request->text && page && book &&
+        gnc_get_current_book () == book && !qof_book_is_readonly (book) &&
+        !qof_book_shutting_down (book))
+    {
+        auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+        auto budget = gnc_budget_lookup (&request->budget_guid, book);
+        auto account = xaccAccountLookup (&request->account_guid, book);
+        if (budget && account && priv->budget == budget &&
+            request->period_num < gnc_budget_get_num_periods (budget) &&
+            qof_instance_get_book (QOF_INSTANCE (budget)) == book &&
+            qof_instance_get_book (QOF_INSTANCE (account)) == book)
+            gnc_budget_set_account_period_note (budget, account,
+                                                request->period_num,
+                                                *request->text ? request->text : NULL);
+    }
+    g_clear_object (&page);
+    g_clear_object (&book);
+    g_clear_pointer (&request->text, g_free);
+    g_weak_ref_clear (&request->page);
+    g_weak_ref_clear (&request->book);
+    g_signal_handlers_disconnect_by_data (request->dialog, request);
+    g_clear_object (&request->dialog);
+    g_free (request);
+}
 
 GncPluginPage *
 gnc_plugin_page_budget_new (GncBudget *budget)
@@ -819,110 +1223,98 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
     GncPluginPageBudgetPrivate *priv;
     GncRecurrence *gr;
     GtkBuilder *builder;
-    gint result;
-    gchar *name;
-    gchar *desc;
-    gint num_periods;
     GtkWidget *gbname, *gbtreeview, *gbnumperiods, *gbhb;
-    const Recurrence *r;
-
-    GtkTextBuffer *buffer;
-    GtkTextIter start, end;
     GtkWidget *show_account_code, *show_account_desc;
-    gboolean show_ac, show_ad;
+    BudgetMutationRequest *request;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-
-    if (!priv->dialog)
+    if (priv->dialog)
+        return;
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_options_container_dialog");
+    auto dialog = GTK_WIDGET (gtk_builder_get_object (builder, "budget_options_container_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog),
+        GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))));
+    gbname = GTK_WIDGET (gtk_builder_get_object (builder, "BudgetName"));
+    gtk_entry_set_text (GTK_ENTRY (gbname), gnc_budget_get_name (priv->budget));
+    gbtreeview = GTK_WIDGET (gtk_builder_get_object (builder, "BudgetDescription"));
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (gbtreeview)),
+                              gnc_budget_get_description (priv->budget), -1);
+    gbhb = GTK_WIDGET (gtk_builder_get_object (builder, "BudgetPeriod"));
+    gr = GNC_RECURRENCE (gnc_recurrence_new ());
+    gnc_recurrence_set (gr, gnc_budget_get_recurrence (priv->budget));
+    gtk_box_pack_start (GTK_BOX (gbhb), GTK_WIDGET (gr), TRUE, TRUE, 0);
+    gtk_widget_show (GTK_WIDGET (gr));
+    gbnumperiods = GTK_WIDGET (gtk_builder_get_object (builder, "BudgetNumPeriods"));
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (gbnumperiods),
+                               gnc_budget_get_num_periods (priv->budget));
+    show_account_code = GTK_WIDGET (gtk_builder_get_object (builder, "ShowAccountCode"));
+    show_account_desc = GTK_WIDGET (gtk_builder_get_object (builder, "ShowAccountDescription"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_account_code),
+                                  gnc_budget_view_get_show_account_code (priv->budget_view));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_account_desc),
+                                  gnc_budget_view_get_show_account_description (priv->budget_view));
+    request = budget_mutation_request_new (page, dialog, BUDGET_OPTIONS_REQUEST);
+    if (!request)
     {
-        builder = gtk_builder_new ();
-        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
-        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_options_container_dialog");
-
-        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_options_container_dialog"));
-
-        gtk_window_set_transient_for (GTK_WINDOW(priv->dialog),
-            GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
-
-        gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
-        gtk_entry_set_text (GTK_ENTRY(gbname), gnc_budget_get_name (priv->budget));
-
-        gbtreeview = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetDescription"));
-        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview));
-        gtk_text_buffer_set_text (buffer, gnc_budget_get_description (priv->budget), -1);
-
-        gbhb = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetPeriod"));
-        gr = GNC_RECURRENCE(gnc_recurrence_new ());
-        gnc_recurrence_set (gr, gnc_budget_get_recurrence (priv->budget));
-        gtk_box_pack_start (GTK_BOX(gbhb), GTK_WIDGET(gr), TRUE, TRUE, 0);
-        gtk_widget_show (GTK_WIDGET(gr));
-
-        gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(gbnumperiods), gnc_budget_get_num_periods (priv->budget));
-
-        show_account_code = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountCode"));
-        show_account_desc = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountDescription"));
-
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_code),
-                                      gnc_budget_view_get_show_account_code (priv->budget_view));
-
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_desc),
-                                      gnc_budget_view_get_show_account_description (priv->budget_view));
-
-        gtk_widget_show_all (priv->dialog);
-        result = gtk_dialog_run (GTK_DIALOG(priv->dialog));
-
-        switch (result)
-        {
-        case GTK_RESPONSE_OK:
-            name = (gchar *) gtk_entry_get_text (GTK_ENTRY(gbname));
-            DEBUG("%s", name);
-            if (name)
-            {
-                gchar* label;
-                gnc_budget_set_name (priv->budget, name);
-                label = g_strdup_printf ("%s: %s", _("Budget"), name);
-                main_window_update_page_name (GNC_PLUGIN_PAGE(page), label);
-                g_free (label);
-            }
-
-            gtk_text_buffer_get_bounds (gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview)), &start, &end);
-            desc = gtk_text_buffer_get_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview)), &start, &end, TRUE);
-
-            gnc_budget_set_description (priv->budget, desc);
-            g_free (desc);
-
-            show_ac = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(show_account_code));
-            gnc_budget_view_set_show_account_code (priv->budget_view, show_ac);
-
-            show_ad = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(show_account_desc));
-            gnc_budget_view_set_show_account_description (priv->budget_view, show_ad);
-
-            // if show account code or description is set then set feature
-            if ((show_ac || show_ad) && (!gnc_features_check_used (gnc_get_current_book (),
-                                           GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS)))
-            {
-                gnc_features_set_used (gnc_get_current_book (), GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS);
-            }
-
-            num_periods = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(gbnumperiods));
-            gnc_budget_set_num_periods (priv->budget, num_periods);
-
-            r = gnc_recurrence_get (gr);
-            gnc_budget_set_recurrence (priv->budget, r);
-            break;
-        case GTK_RESPONSE_CANCEL:
-            break;
-        default:
-            break;
-        }
-        g_object_unref (G_OBJECT(builder));
-        gtk_widget_destroy (priv->dialog);
+        gtk_widget_destroy (dialog);
+        g_object_unref (builder);
+        return;
     }
-    priv->dialog = NULL;
+    request->name = gbname;
+    request->description = gbtreeview;
+    request->recurrence = GTK_WIDGET (gr);
+    request->periods = gbnumperiods;
+    request->show_code = show_account_code;
+    request->show_description = show_account_desc;
+    priv->dialog = dialog;
+    gtk_widget_show_all (dialog);
+    g_object_unref (builder);
 }
 
+
+typedef struct
+{
+    GWeakRef book;
+    GncGUID budget_guid;
+} GncBudgetDeleteRequest;
+
+static void
+budget_delete_finished ([[maybe_unused]] GtkWindow *parent, gint response,
+                        gpointer user_data)
+{
+    auto request = static_cast<GncBudgetDeleteRequest *> (user_data);
+
+    auto book = static_cast<QofBook *> (g_weak_ref_get (&request->book));
+    if (response == GTK_RESPONSE_YES && book && gnc_current_session_exist () &&
+        gnc_get_current_book () == book && qof_book_is_open (book) &&
+        !qof_book_shutting_down (book) && !qof_book_is_readonly (book))
+    {
+        auto budget = gnc_budget_lookup (&request->budget_guid, book);
+
+        if (budget)
+        {
+            gnc_suspend_gui_refresh ();
+            gnc_budget_destroy (budget);
+
+            if (gnc_current_session_exist () && gnc_get_current_book () == book &&
+                qof_book_is_open (book) && !qof_book_shutting_down (book) &&
+                qof_collection_count (qof_book_get_collection (book,
+                                                                GNC_ID_BUDGET)) == 0)
+            {
+                gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
+                PWARN ("No budgets left. Removing feature BUDGET_UNREVERSED.");
+            }
+            /* Views close themselves because the component manager notifies them. */
+            gnc_resume_gui_refresh ();
+        }
+    }
+    g_clear_object (&book);
+    g_weak_ref_clear (&request->book);
+    g_free (request);
+}
 
 void
 gnc_budget_gui_delete_budget (GncBudget *budget)
@@ -934,77 +1326,12 @@ gnc_budget_gui_delete_budget (GncBudget *budget)
     if (!name)
         name = _("Unnamed Budget");
 
-    if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name))
-    {
-        QofBook* book = gnc_get_current_book ();
-
-        gnc_suspend_gui_refresh ();
-        gnc_budget_destroy (budget);
-
-        if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
-        {
-            gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
-            PWARN ("No budgets left. Removing feature BUDGET_UNREVERSED.");
-        }
-        // Views should close themselves because the CM will notify them.
-        gnc_resume_gui_refresh ();
-    }
+    auto request = g_new0 (GncBudgetDeleteRequest, 1);
+    g_weak_ref_init (&request->book, qof_instance_get_book (QOF_INSTANCE (budget)));
+    request->budget_guid = gnc_budget_return_guid (budget);
+    gnc_verify_dialog_async (NULL, FALSE, budget_delete_finished, request,
+                             _("Delete %s?"), name);
 }
-
-
-static void
-estimate_budget_helper (GtkTreeModel *model, GtkTreePath *path,
-                        GtkTreeIter *iter, gpointer data)
-{
-    Account *acct;
-    guint num_periods, i;
-    gnc_numeric num;
-    GncPluginPageBudgetPrivate *priv;
-    auto page = GNC_PLUGIN_PAGE_BUDGET(data);
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-
-    acct = gnc_budget_view_get_account_from_path (priv->budget_view, path);
-
-    num_periods = gnc_budget_get_num_periods (priv->budget);
-
-    if (priv->useAvg && num_periods)
-    {
-        num = xaccAccountGetNoclosingBalanceChangeForPeriod
-            (acct, recurrenceGetPeriodTime (&priv->r, 0, FALSE),
-             recurrenceGetPeriodTime (&priv->r, num_periods - 1, TRUE), TRUE);
-
-        num = gnc_numeric_div (num,
-                               gnc_numeric_create (num_periods, 1),
-                               GNC_DENOM_AUTO,
-                               GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                               GNC_HOW_RND_ROUND_HALF_UP);
-
-        for (i = 0; i < num_periods; i++)
-        {
-            gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-        }
-    }
-    else
-    {
-        for (i = 0; i < num_periods; i++)
-        {
-            num = xaccAccountGetNoclosingBalanceChangeForPeriod
-                (acct, recurrenceGetPeriodTime (&priv->r, i, FALSE),
-                 recurrenceGetPeriodTime (&priv->r, i, TRUE), TRUE);
-
-            if (!gnc_numeric_check (num))
-            {
-                num = gnc_numeric_convert (num, GNC_DENOM_AUTO,
-                                           GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                                           GNC_HOW_RND_ROUND_HALF_UP);
-                gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-            }
-        }
-    }
-}
-
 
 /*******************************/
 /*       Estimate Dialog       */
@@ -1018,10 +1345,9 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
     GtkWidget *dialog, *gde, *dtr, *hb, *avg;
-    gint result;
     GDate date;
-    const Recurrence *r;
     GtkBuilder *builder;
+    BudgetMutationRequest *request;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -1035,8 +1361,9 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
                      (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
                      GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                      _("You must select at least one account to estimate."));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        g_signal_connect (dialog, "response",
+                          G_CALLBACK (gtk_widget_destroy), nullptr);
+        gtk_widget_show (dialog);
         return;
     }
 
@@ -1063,80 +1390,19 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
 
     avg = GTK_WIDGET(gtk_builder_get_object (builder, "UseAverage"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(avg), priv->useAvg);
-
+    request = budget_mutation_request_new (page, dialog, BUDGET_ESTIMATE_REQUEST);
+    if (!request)
+    {
+        gtk_widget_destroy (dialog);
+        g_object_unref (builder);
+        return;
+    }
+    request->date = gde;
+    request->digits = dtr;
+    request->average = avg;
+    gtk_tree_selection_selected_foreach (sel, budget_mutation_snapshot_account, request);
     gtk_widget_show_all (dialog);
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
-    switch (result)
-    {
-    case GTK_RESPONSE_OK:
-        r = gnc_budget_get_recurrence (priv->budget);
-
-        gnc_date_edit_get_gdate (GNC_DATE_EDIT(gde), &date);
-        recurrenceSet (&priv->r, recurrenceGetMultiplier (r),
-                       recurrenceGetPeriodType (r), &date,
-                       recurrenceGetWeekendAdjust (r));
-        priv->sigFigs =
-            gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(dtr));
-
-        priv->useAvg = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(avg));
-
-        gnc_budget_begin_edit (priv->budget);
-        gtk_tree_selection_selected_foreach (sel, estimate_budget_helper, page);
-        gnc_budget_commit_edit (priv->budget);
-        break;
-    default:
-        break;
-    }
-    gtk_widget_destroy (dialog);
-    g_object_unref (G_OBJECT(builder));
-}
-
-static void
-allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
-                          GtkTreeIter *iter, gpointer data)
-{
-    Account *acct;
-    guint num_periods, i;
-    gnc_numeric num, allvalue;
-    GncPluginPageBudgetPrivate *priv;
-    auto page = GNC_PLUGIN_PAGE_BUDGET(data);
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    acct = gnc_budget_view_get_account_from_path (priv->budget_view, path);
-    num_periods = gnc_budget_get_num_periods (priv->budget);
-    allvalue = priv->allValue;
-
-    if (gnc_reverse_balance (acct))
-        allvalue = gnc_numeric_neg (allvalue);
-
-    for (i = 0; i < num_periods; i++)
-    {
-        switch (priv->action)
-        {
-        case ADD:
-            num = gnc_budget_get_account_period_value (priv->budget, acct, i);
-            num = gnc_numeric_add (num, allvalue, GNC_DENOM_AUTO,
-                                   GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                                   GNC_HOW_RND_ROUND_HALF_UP);
-            gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-            break;
-        case MULTIPLY:
-            num = gnc_budget_get_account_period_value (priv->budget, acct, i);
-            num = gnc_numeric_mul (num, priv->allValue, GNC_DENOM_AUTO,
-                                   GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
-                                   GNC_HOW_RND_ROUND_HALF_UP);
-            gnc_budget_set_account_period_value (priv->budget, acct, i, num);
-            break;
-        case UNSET:
-            gnc_budget_unset_account_period_value (priv->budget, acct, i);
-            break;
-        default:
-            gnc_budget_set_account_period_value (priv->budget, acct, i,
-                                                 allvalue);
-            break;
-        }
-    }
+    g_object_unref (builder);
 }
 
 /*******************************/
@@ -1151,9 +1417,8 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
     GtkWidget *dialog, *val, *dtr, *add, *mult;
-    gint result;
     GtkBuilder *builder;
-    const gchar *txt;
+    BudgetMutationRequest *request;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -1166,8 +1431,9 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
                     (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
                     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                     _("You must select at least one account to edit."));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        g_signal_connect (dialog, "response",
+                          G_CALLBACK (gtk_widget_destroy), nullptr);
+        gtk_widget_show (dialog);
         return;
     }
 
@@ -1192,40 +1458,21 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
 
     add  = GTK_WIDGET(gtk_builder_get_object (builder, "RB_Add"));
     mult = GTK_WIDGET(gtk_builder_get_object (builder, "RB_Multiply"));
-
-    gtk_widget_show_all (dialog);
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
-    switch (result)
+    request = budget_mutation_request_new (page, dialog,
+                                          BUDGET_ALL_PERIODS_REQUEST);
+    if (!request)
     {
-    case GTK_RESPONSE_OK:
-
-        priv->sigFigs = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(dtr));
-        priv->action = REPLACE;
-        txt = gtk_entry_get_text (GTK_ENTRY(val));
-
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(add)))
-            priv->action = ADD;
-        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(mult)))
-            priv->action = MULTIPLY;
-
-        if (priv->action == REPLACE &&
-            !gtk_entry_get_text_length (GTK_ENTRY(val)))
-            priv->action = UNSET;
-
-        if (xaccParseAmount (txt, TRUE, &priv->allValue, NULL) ||
-            priv->action == UNSET)
-        {
-            gnc_budget_begin_edit (priv->budget);
-            gtk_tree_selection_selected_foreach (sel, allperiods_budget_helper,
-                                                 page);
-            gnc_budget_commit_edit (priv->budget);
-        }
-        break;
-    default:
-        break;
+        gtk_widget_destroy (dialog);
+        g_object_unref (builder);
+        return;
     }
-    gtk_widget_destroy (dialog);
-    g_object_unref (G_OBJECT(builder));
+    request->value = val;
+    request->digits = dtr;
+    request->add = add;
+    request->multiply = mult;
+    gtk_tree_selection_selected_foreach (sel, budget_mutation_snapshot_account, request);
+    gtk_widget_show_all (dialog);
+    g_object_unref (builder);
 }
 
 static void
@@ -1236,9 +1483,7 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
     auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkWidget *dialog, *note;
-    gint result;
     GtkBuilder *builder;
-    gchar *txt;
     GtkTreeViewColumn *col = NULL;
     GtkTreePath *path = NULL;
     guint period_num = 0;
@@ -1267,8 +1512,9 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
             (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
             GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
             _("You must select one budget cell to edit."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        g_signal_connect(dialog, "response",
+                         G_CALLBACK(gtk_widget_destroy), nullptr);
+        gtk_widget_show(dialog);
         return;
     }
 
@@ -1281,25 +1527,33 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
     gtk_window_set_transient_for(
         GTK_WINDOW(dialog),
         GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
     note = GTK_WIDGET(gtk_builder_get_object(builder, "BudgetNote"));
     xxxgtk_textview_set_text(GTK_TEXT_VIEW(note),
                              gnc_budget_get_account_period_note(priv->budget, acc, period_num));
 
-    gtk_widget_show_all(dialog);
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    switch (result)
+    auto book = qof_instance_get_book (QOF_INSTANCE (priv->budget));
+    if (!book || qof_instance_get_book (QOF_INSTANCE (acc)) != book)
     {
-    case GTK_RESPONSE_OK:
-        txt = xxxgtk_textview_get_text(GTK_TEXT_VIEW(note));
-        gnc_budget_set_account_period_note (priv->budget, acc, period_num,
-                                            (txt && *txt) ? txt : NULL);
-        g_free (txt);
-        break;
-    default:
-        break;
+        gtk_widget_destroy (dialog);
+        g_object_unref (G_OBJECT (builder));
+        return;
     }
-    gtk_widget_destroy(dialog);
+
+    auto request = g_new0 (BudgetNoteRequest, 1);
+    g_weak_ref_init (&request->page, G_OBJECT (page));
+    g_weak_ref_init (&request->book, G_OBJECT (book));
+    request->dialog = GTK_DIALOG (g_object_ref (dialog));
+    request->note = GTK_TEXT_VIEW (note);
+    request->budget_guid = *gnc_budget_get_guid (priv->budget);
+    request->account_guid = *qof_instance_get_guid (QOF_INSTANCE (acc));
+    request->period_num = period_num;
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (budget_note_capture), request);
+    gnc_gui_query_bind_dialog_response (GTK_DIALOG (dialog),
+                                       budget_note_complete, request);
+    gtk_widget_show_all(dialog);
     g_object_unref(G_OBJECT(builder));
 }
 
