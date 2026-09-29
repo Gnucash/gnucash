@@ -846,16 +846,21 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 
     if (gnc_key_file_save_to_file(pathname, key_file, &error))
     {
+        GtkWidget *parent = g_object_ref (pcd->dialog);
         if (!gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_PRINT_DATE_FMT))
             /* Reload the format combo box and reselect the "custom" entry */
             initialize_format_combobox(pcd);
 
-        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
-                                 pcd->format_max - 1);
+        pcd = g_object_get_data (G_OBJECT(parent), "print-check-owner");
+        if (pcd)
+            gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
+                                     pcd->format_max - 1);
+        g_object_unref (parent);
     }
     else
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
+                                        GTK_DIALOG_MODAL |
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE, "%s",
@@ -863,12 +868,14 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                                                  _("Cannot open file %s"),
                                                  _(error->message));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         g_error_free(error);
+        g_signal_connect_swapped(dialog, "response",
+                                 G_CALLBACK(gtk_widget_destroy), dialog);
+        gtk_widget_show(dialog);
     }
     g_free(pathname);
     g_free(filename);
+    g_key_file_unref (key_file);
 }
 
 
@@ -890,12 +897,54 @@ gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
  * the check printing dialog.  It presents another dialog to the user to get
  * the filename for saving the data.
  */
+typedef struct
+{
+    GtkWidget *parent;
+    GtkWidget *entry;
+    GtkBuilder *builder;
+} CheckTitleRequest;
+
+static void
+check_title_destroy_cb (GtkWidget *dialog, gpointer data)
+{
+    CheckTitleRequest *request = data;
+    g_signal_handlers_disconnect_by_data (dialog, request);
+    if (g_object_get_data (G_OBJECT(request->parent), "check-title-dialog") == dialog)
+        g_object_set_data (G_OBJECT(request->parent), "check-title-dialog", NULL);
+    g_object_unref (request->builder);
+    g_object_unref (request->parent);
+    g_free (request);
+}
+
+static void
+check_title_response_cb (GtkDialog *dialog, gint response, gpointer data)
+{
+    CheckTitleRequest *request = data;
+    GtkWidget *parent = g_object_ref (request->parent);
+    gchar *title = response == GTK_RESPONSE_OK ?
+        g_strdup (gtk_entry_get_text (GTK_ENTRY(request->entry))) : NULL;
+    gtk_widget_destroy (GTK_WIDGET(dialog));
+    /* Destroy notifications may also have closed the printing dialog. */
+    PrintCheckDialog *pcd = g_object_get_data (G_OBJECT(parent), "print-check-owner");
+    if (pcd && title && *title)
+        pcd_save_custom_data (pcd, title);
+    g_free (title);
+    g_object_unref (parent);
+}
+
+static void
+check_owner_destroy_cb (GtkWidget *dialog, gpointer unused)
+{
+    g_object_set_data (G_OBJECT(dialog), "print-check-owner", NULL);
+}
+
 void
 gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
 {
     GtkWidget *dialog, *entry, *button;
     GtkBuilder *builder;
-    gchar *title;
+    if (g_object_get_data (G_OBJECT(pcd->dialog), "check-title-dialog"))
+        return;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "format_title_dialog");
@@ -908,20 +957,16 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
-    {
-        gtk_widget_destroy(dialog);
-        g_object_unref(G_OBJECT(builder));
-        return;
-    }
-
-    title = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-    gtk_widget_destroy (dialog);
-
-    g_object_unref(G_OBJECT(builder));
-
-    pcd_save_custom_data(pcd, title);
-    g_free(title);
+    gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW(dialog), TRUE);
+    CheckTitleRequest *request = g_new0 (CheckTitleRequest, 1);
+    request->parent = g_object_ref (pcd->dialog);
+    request->entry = entry;
+    request->builder = builder;
+    g_object_set_data (G_OBJECT(pcd->dialog), "check-title-dialog", dialog);
+    g_signal_connect (dialog, "response", G_CALLBACK(check_title_response_cb), request);
+    g_signal_connect (dialog, "destroy", G_CALLBACK(check_title_destroy_cb), request);
+    gtk_widget_show (dialog);
 }
 
 
@@ -1518,13 +1563,13 @@ read_one_check_format(PrintCheckDialog *pcd, const gchar *groupname,
  */
 static void
 read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
-                         const gchar *groupname, const gchar *dirname)
+                         const gchar *groupname, const gchar *dirname,
+                         GString *duplicates)
 {
     check_format_t *format = NULL, *existing;
     GDir *dir;
     const gchar *filename;
     GtkTreeIter iter;
-    GtkWidget *dialog;
     gboolean found = FALSE;
 
     dir = g_dir_open(dirname, 0, NULL);
@@ -1545,13 +1590,9 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
         existing = find_existing_format(store, format->guid, NULL);
         if (existing)
         {
-            dialog = gtk_message_dialog_new
-                     (GTK_WINDOW(pcd->dialog),
-                      GTK_DIALOG_DESTROY_WITH_PARENT,
-                      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s",
-                      _("There is a duplicate check format file."));
-            gtk_message_dialog_format_secondary_text
-            (GTK_MESSAGE_DIALOG(dialog),
+            if (duplicates->len)
+                g_string_append (duplicates, "\n\n");
+            g_string_append_printf (duplicates,
              /* Translators:
                 %1$s is the type of the first check format
                  (user defined or application defined);
@@ -1562,8 +1603,6 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
                "the %s check format file '%s' match."),
              existing->group, existing->filename,
              format->group, format->filename);
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
             free_check_format (format);
         }
         else
@@ -1594,13 +1633,14 @@ static void
 read_formats(PrintCheckDialog *pcd, GtkListStore *store)
 {
     gchar *dirname, *pkgdatadir;
+    GString *duplicates = g_string_new (NULL);
 
     pkgdatadir = gnc_path_get_pkgdatadir();
     dirname = g_build_filename(pkgdatadir, CHECK_FMT_DIR, (char *)NULL);
     /* Translators: This is a directory name. It may be presented to
      * the user to indicate that some data file was defined by the
      * gnucash application. */
-    read_one_check_directory(pcd, store, _("application"), dirname);
+    read_one_check_directory(pcd, store, _("application"), dirname, duplicates);
     g_free(dirname);
     g_free(pkgdatadir);
 
@@ -1608,8 +1648,13 @@ read_formats(PrintCheckDialog *pcd, GtkListStore *store)
     /* Translators: This is a directory name. It may be presented to
      * the user to indicate that some data file was defined by a
      * user herself. */
-    read_one_check_directory(pcd, store, _("user"), dirname);
+    read_one_check_directory(pcd, store, _("user"), dirname, duplicates);
     g_free(dirname);
+    if (duplicates->len)
+        gnc_error_dialog_async (GTK_WINDOW(pcd->dialog), "%s\n\n%s",
+                                _("There is a duplicate check format file."),
+                                duplicates->str);
+    g_string_free (duplicates, TRUE);
 }
 
 
@@ -1628,17 +1673,24 @@ initialize_format_combobox (PrintCheckDialog *pcd)
 {
     GtkListStore *store;
     GtkTreeIter iter;
+    GtkWidget *parent = g_object_ref (pcd->dialog);
+    GtkComboBox *combo = GTK_COMBO_BOX(g_object_ref (pcd->format_combobox));
 
     store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
     read_formats(pcd, store);
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
-    pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store), NULL);
-    gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
-                            GTK_TREE_MODEL(store));
-    gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
-                                         format_is_a_separator, NULL, NULL);
+    pcd = g_object_get_data (G_OBJECT(parent), "print-check-owner");
+    if (pcd)
+    {
+        pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store), NULL);
+        gtk_combo_box_set_model (combo, GTK_TREE_MODEL(store));
+        if (g_object_get_data (G_OBJECT(parent), "print-check-owner"))
+            gtk_combo_box_set_row_separator_func (combo, format_is_a_separator, NULL, NULL);
+    }
     g_object_unref (store);
+    g_object_unref (combo);
+    g_object_unref (parent);
 }
 
 
@@ -1698,6 +1750,8 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
 
     pcd->builder = builder;
     pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "print_check_dialog"));
+    g_object_set_data (G_OBJECT(pcd->dialog), "print-check-owner", pcd);
+    g_signal_connect (pcd->dialog, "destroy", G_CALLBACK(check_owner_destroy_cb), NULL);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(pcd->dialog), "gnc-id-print-check");
