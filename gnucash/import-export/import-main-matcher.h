@@ -48,6 +48,8 @@ typedef struct _main_matcher_info GNCImportMainMatcher;
 typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
                                            gboolean imported,
                                            gpointer user_data);
+typedef void (*GNCImportMainMatcherDoneCB) (gboolean accepted,
+                                            gpointer user_data);
 
 /** Create a new generic transaction dialog window and return it.
  *
@@ -200,13 +202,12 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui,
                                                guint32 ref_id);
 
 
-/** Run this dialog and return only after the user pressed Ok, Cancel,
-  or closed the window. This means that all actual importing will
-  have been finished upon returning.
- * @param info A pointer to the GNCImportMainMatcher structure.
- * @return The boolean return value of the dialog run.
-*/
-bool gnc_gen_trans_list_run (GNCImportMainMatcher *info);
+/** Present this dialog and notify when the user has accepted or cancelled.
+ * The matcher is destroyed before @p completed is called.
+ */
+void gnc_gen_trans_list_present (GNCImportMainMatcher *info,
+                                GNCImportMainMatcherDoneCB completed,
+                                gpointer user_data);
 
 
 /** Returns the widget of this dialog.

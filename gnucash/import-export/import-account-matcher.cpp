@@ -36,12 +36,16 @@
 #include "import-account-matcher.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
+#include "gnc-gui-query.h"
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-session.h"
+#include "gnc-ui-util.h"
 #include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
+#include "gnc-component-manager.h"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -56,8 +60,39 @@ typedef struct
     const char* online_id;
 } AccountOnlineMatch;
 
+typedef struct
+{
+    AccountPickerDialog picker;
+    GtkBuilder *builder;
+    gchar *online_id;
+    GncImportAccountCallback callback;
+    gpointer user_data;
+    GWeakRef dialog;
+    Account *selected_account;
+    GncGUID book_guid;
+    gint component_id;
+    gboolean completed;
+    gint refs;
+} AccountPickerState;
+
+static AccountPickerState *account_picker_state_ref(AccountPickerState *state)
+{
+    g_atomic_int_inc(&state->refs);
+    return state;
+}
+
+static void account_picker_state_unref(AccountPickerState *state)
+{
+    if (!g_atomic_int_dec_and_test(&state->refs))
+        return;
+    g_weak_ref_clear(&state->dialog);
+    g_free(state->online_id);
+    g_free((gpointer)state->picker.account_human_description);
+    g_free(state);
+}
+
 /*-******************************************************************\
- * Functions needed by gnc_import_select_account
+ * Functions needed by gnc_import_select_account_async
  *
 \********************************************************************/
 
@@ -72,7 +107,8 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
     const char *acct_online_id = xaccAccountGetOnlineID(acct);
     int acct_len, match_len;
 
-    if (acct_online_id == NULL || match->online_id == NULL)
+    if (acct_online_id == NULL || !*acct_online_id ||
+        match->online_id == NULL || !*match->online_id)
         return NULL;
 
     acct_len = strlen(acct_online_id);
@@ -176,10 +212,13 @@ build_acct_tree(AccountPickerDialog *picker)
  *
  * Callback for when user clicks to create a new account
  *******************************************************/
+static gboolean
+account_picker_book_is_current(AccountPickerState *state);
+
 static void
 gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
 {
-    Account *selected_account, *new_account;
+    Account *selected_account;
     GList * valid_types = NULL;
     GtkWindow *parent = NULL;
 
@@ -193,13 +232,27 @@ gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
         valid_types = g_list_prepend(valid_types, GINT_TO_POINTER(picker->new_account_default_type));
     }
     selected_account = gnc_tree_view_account_get_selected_account(picker->account_tree);
-    new_account = gnc_ui_new_accounts_from_name_with_defaults (parent,
-                                          picker->account_human_description,
-                                          valid_types,
-                                          picker->new_account_default_commodity,
-                                          selected_account);
+    auto state = static_cast<AccountPickerState*>(g_object_get_data(G_OBJECT(picker->dialog), "picker-state"));
+    account_picker_state_ref(state);
+    gnc_ui_new_accounts_from_name_with_defaults_async (parent,
+        picker->account_human_description, valid_types,
+        picker->new_account_default_commodity, selected_account,
+        [](Account *new_account, gpointer data)
+        {
+            auto state = static_cast<AccountPickerState*>(data);
+            if (!state->completed && state->builder && new_account &&
+                account_picker_book_is_current(state) &&
+                gnc_account_get_book(new_account) == gnc_get_current_book())
+            {
+                auto dialog = GTK_WIDGET(g_weak_ref_get(&state->dialog));
+                if (dialog && !gtk_widget_in_destruction(dialog))
+                    gnc_tree_view_account_set_selected_account(
+                        state->picker.account_tree, new_account);
+                g_clear_object(&dialog);
+            }
+            account_picker_state_unref(state);
+        }, state);
     g_list_free(valid_types);
-    gnc_tree_view_account_set_selected_account(picker->account_tree, new_account);
 }
 
 
@@ -326,47 +379,184 @@ account_tree_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
  *
  * Main call for use with a dialog
  *******************************************************/
-Account * gnc_import_select_account(GtkWidget *parent,
+Account *gnc_import_find_account_by_online_id(const gchar *account_online_id_value,
+                                             GNCAccountType new_account_default_type)
+{
+    if (!account_online_id_value)
+        return NULL;
+    AccountOnlineMatch match = {nullptr, 0, account_online_id_value};
+    auto retval = static_cast<Account*>(gnc_account_foreach_descendant_until (
+        gnc_get_current_root_account(), test_acct_online_id_match, &match));
+    if (!retval && match.count == 1 && new_account_default_type == ACCT_TYPE_NONE)
+        retval = match.partial_match;
+    return retval;
+}
+
+static void
+account_picker_response([[maybe_unused]] GtkWindow *parent, gint response,
+                        gpointer user_data)
+{
+    auto state = static_cast<AccountPickerState*>(user_data);
+    state->completed = TRUE;
+    auto accepted = response == GTK_RESPONSE_OK &&
+        state->selected_account != nullptr;
+    auto selected = accepted ? state->selected_account : nullptr;
+
+    // The binder destroys the dialog before invoking this callback. Do not
+    // inspect picker widgets here; the response validator captured selection
+    // while the tree and its model were still alive.
+    if (state->builder)
+        g_clear_object(&state->builder);
+    state->callback(selected, accepted, state->user_data);
+    account_picker_state_unref(state);
+}
+
+static gboolean
+account_picker_book_is_current(AccountPickerState *state)
+{
+    auto root = gnc_get_current_root_account();
+    auto book = root ? gnc_account_get_book(root) : nullptr;
+    return book && !qof_book_shutting_down(book) &&
+        gnc_get_current_book() == book &&
+        guid_equal(qof_book_get_guid(book), &state->book_guid);
+}
+
+static void
+account_picker_session_closed(gpointer user_data)
+{
+    auto state = static_cast<AccountPickerState*>(user_data);
+    auto dialog = GTK_WIDGET(g_weak_ref_get(&state->dialog));
+    if (dialog)
+    {
+        gtk_widget_destroy(dialog);
+        g_object_unref(dialog);
+    }
+}
+
+static void
+account_picker_validate_response(GtkDialog *dialog, gint response,
+                                 gpointer user_data)
+{
+    auto state = static_cast<AccountPickerState*>(user_data);
+    if (state->completed)
+    {
+        g_signal_stop_emission_by_name(dialog, "response");
+        return;
+    }
+    if (!account_picker_book_is_current(state))
+    {
+        state->selected_account = nullptr;
+        g_signal_stop_emission_by_name(dialog, "response");
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        return;
+    }
+    if (response == GNC_RESPONSE_NEW)
+    {
+        gnc_import_add_account(nullptr, &state->picker);
+        g_signal_stop_emission_by_name(dialog, "response");
+        return;
+    }
+    if (response != GTK_RESPONSE_OK)
+        return;
+
+    auto selected = gnc_tree_view_account_get_selected_account(
+        state->picker.account_tree);
+    auto root = gnc_get_current_root_account();
+    auto book = root ? gnc_account_get_book(root) : nullptr;
+    auto selected_book = selected ? gnc_account_get_book(selected) : nullptr;
+    if (!selected || xaccAccountGetPlaceholder(selected) || !book ||
+        !selected_book ||
+        !guid_equal(qof_book_get_guid(book), &state->book_guid) ||
+        !guid_equal(qof_book_get_guid(selected_book),
+                    &state->book_guid))
+    {
+        state->selected_account = nullptr;
+        if (selected && xaccAccountGetPlaceholder(selected))
+            show_placeholder_warning(&state->picker,
+                                     xaccAccountGetName(selected));
+        g_signal_stop_emission_by_name(dialog, "response");
+        return;
+    }
+
+    state->selected_account = selected;
+    if (state->online_id)
+        xaccAccountSetOnlineID(selected, state->online_id);
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
+}
+
+static void
+account_picker_disconnect_widget_signals(AccountPickerState *state)
+{
+    auto picker = &state->picker;
+    state->completed = TRUE;
+    if (state->component_id != NO_COMPONENT)
+    {
+        gnc_unregister_gui_component(state->component_id);
+        state->component_id = NO_COMPONENT;
+    }
+    if (picker->dialog)
+        g_signal_handlers_disconnect_by_data(picker->dialog, state);
+    if (picker->account_tree)
+    {
+        g_signal_handlers_disconnect_by_data(picker->account_tree, picker);
+        g_signal_handlers_disconnect_by_data(picker->account_tree,
+                                             picker->account_tree);
+        auto selection = gtk_tree_view_get_selection(
+            GTK_TREE_VIEW(picker->account_tree));
+        g_signal_handlers_disconnect_by_data(selection, picker);
+    }
+}
+
+void gnc_import_select_account_async(GtkWidget *parent,
                                     const gchar * account_online_id_value,
                                     gboolean prompt_on_no_match,
                                     const gchar * account_human_description,
                                     const gnc_commodity * new_account_default_commodity,
                                     GNCAccountType new_account_default_type,
                                     Account * default_selection,
-                                    gboolean * ok_pressed)
+                                    GncImportAccountCallback callback,
+                                    gpointer user_data)
 {
 #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
     AccountPickerDialog * picker;
-    gint response;
-    Account * retval = NULL;
-    const gchar *retval_name = NULL;
+    Account * retval = gnc_import_find_account_by_online_id(account_online_id_value, new_account_default_type);
     GtkBuilder *builder;
     GtkTreeSelection *selection;
     GtkWidget * online_id_label;
     gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE + 1] = "";
-    gboolean ok_pressed_retval = FALSE;
 
-    ENTER("Default commodity received: %s", gnc_commodity_get_fullname( new_account_default_commodity));
+    g_return_if_fail(callback != nullptr);
+    ENTER("Default commodity received: %s", new_account_default_commodity ?
+          gnc_commodity_get_fullname(new_account_default_commodity) : "(null)");
     DEBUG("Default account type received: %s", xaccAccountGetTypeStr( new_account_default_type));
-    picker = g_new0(AccountPickerDialog, 1);
-
-    picker->account_human_description =  account_human_description;
-    picker->new_account_default_commodity = new_account_default_commodity;
-    picker->new_account_default_type = new_account_default_type;
-
     /*DEBUG("Looking for account with online_id: \"%s\"", account_online_id_value);*/
-    if (account_online_id_value)
+    if (retval || !prompt_on_no_match)
     {
-        AccountOnlineMatch match = {NULL, 0, account_online_id_value};
-        retval = static_cast<Account*>(gnc_account_foreach_descendant_until (gnc_get_current_root_account (),
-                                                                             test_acct_online_id_match,
-                                                                             (void*)&match));
-        if (!retval && match.count == 1 &&
-            new_account_default_type == ACCT_TYPE_NONE)
-            retval = match.partial_match;
+        callback(retval, TRUE, user_data);
+        return;
     }
     if (!retval && prompt_on_no_match)
     {
+        auto state = g_new0(AccountPickerState, 1);
+        state->refs = 1;
+        state->component_id = NO_COMPONENT;
+        g_weak_ref_init(&state->dialog, nullptr);
+        picker = &state->picker;
+        picker->account_human_description = g_strdup(account_human_description);
+        picker->new_account_default_commodity = new_account_default_commodity;
+        picker->new_account_default_type = new_account_default_type;
+        state->online_id = g_strdup(account_online_id_value);
+        state->callback = callback;
+        state->user_data = user_data;
+        auto root = gnc_get_current_root_account();
+        auto book = root ? gnc_account_get_book(root) : nullptr;
+        if (!book)
+        {
+            account_picker_state_unref(state);
+            callback(nullptr, FALSE, user_data);
+            return;
+        }
+        state->book_guid = *qof_book_get_guid(book);
         /* load the interface */
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "dialog-import.glade", "account_new_icon");
@@ -377,6 +567,9 @@ Account * gnc_import_select_account(GtkWidget *parent,
             PERR("Error opening the glade builder interface");
         }
         picker->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_picker_dialog"));
+        state->builder = builder;
+        g_weak_ref_set(&state->dialog, G_OBJECT(picker->dialog));
+        g_object_set_data(G_OBJECT(picker->dialog), "picker-state", state);
         picker->whbox = GTK_WIDGET(gtk_builder_get_object (builder, "warning_hbox"));
         picker->warning = GTK_WIDGET(gtk_builder_get_object (builder, "warning_label"));
         picker->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton"));
@@ -386,8 +579,11 @@ Account * gnc_import_select_account(GtkWidget *parent,
         gnc_widget_style_context_add_class (GTK_WIDGET(picker->dialog), "gnc-class-imports");
 
         if (parent)
+        {
             gtk_window_set_transient_for (GTK_WINDOW (picker->dialog),
                                           GTK_WINDOW (parent));
+            gtk_window_set_destroy_with_parent(GTK_WINDOW(picker->dialog), TRUE);
+        }
 
         gnc_restore_window_size (GNC_PREFS_GROUP,
                                  GTK_WINDOW(picker->dialog), GTK_WINDOW (parent));
@@ -429,66 +625,27 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         gnc_tree_view_account_set_selected_account(picker->account_tree, default_selection);
 
-        do
+        g_signal_connect(picker->dialog, "response",
+                         G_CALLBACK(account_picker_validate_response), state);
+        g_signal_connect(picker->dialog, "destroy",
+                         G_CALLBACK(+[](GtkWidget*, gpointer data)
         {
-            response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
-            switch (response)
-            {
-            case GNC_RESPONSE_NEW:
-                gnc_import_add_account(NULL, picker);
-                response = GTK_RESPONSE_OK;
-                /* no break */
-
-            case GTK_RESPONSE_OK:
-                retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
-                if (!retval)
-                {
-                    response = GNC_RESPONSE_NEW;
-                    break;
-                }
-                retval_name = xaccAccountGetName(retval);
-                DEBUG("Selected account %p, %s", retval, retval_name ? retval_name : "(null)");
-
-                /* See if the selected account is a placeholder. */
-                if (retval && xaccAccountGetPlaceholder (retval))
-                {
-                    show_placeholder_warning (picker, retval_name);
-                    response = GNC_RESPONSE_NEW;
-                    break;
-                }
-
-                if (account_online_id_value)
-                {
-                    xaccAccountSetOnlineID(retval, account_online_id_value);
-                }
-                ok_pressed_retval = TRUE;
-                break;
-
-            default:
-                ok_pressed_retval = FALSE;
-                break;
-            }
-        }
-        while (response == GNC_RESPONSE_NEW);
-
-        g_object_unref(G_OBJECT(builder));
-        gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(picker->dialog));
-        gtk_widget_destroy(picker->dialog);
+            account_picker_disconnect_widget_signals(
+                static_cast<AccountPickerState*>(data));
+        }), state);
+        gnc_gui_query_bind_dialog_response(GTK_DIALOG(picker->dialog), account_picker_response, state);
+        state->component_id = gnc_register_gui_component(
+            "import-account-picker", nullptr, account_picker_session_closed,
+            state);
+        gnc_gui_component_set_session(state->component_id,
+                                      gnc_get_current_session());
+        gtk_widget_show(picker->dialog);
     }
     else
     {
-        retval_name = retval ? xaccAccountGetName(retval) : NULL;
-        ok_pressed_retval = TRUE; /* There was no dialog involved, so the computer "pressed" ok */
+        callback(nullptr, FALSE, user_data);
+        g_free(picker);
     }
-    /*FIXME: DEBUG("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); */
-    g_free(picker);
-    /*DEBUG("Return value: %p%s%s%s",retval,", account name:",xaccAccountGetName(retval),"\n");*/
-    if (ok_pressed != NULL)
-    {
-        *ok_pressed = ok_pressed_retval;
-    }
-    LEAVE("Selected account %p, %s", retval, retval_name ? retval_name : "(null)");
-    return retval;
 }
 
 /**@}*/

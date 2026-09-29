@@ -92,80 +92,63 @@ protected:
 
 TEST_F(ImportMatcherTest, test_simple_match)
 {
-    auto found = gnc_import_select_account(nullptr, "Bank", FALSE, nullptr,
-                                           nullptr, ACCT_TYPE_NONE, nullptr,
-                                           nullptr);
+    auto found = gnc_import_find_account_by_online_id("Bank", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("Bank", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_noisy_match)
 {
-    auto found = gnc_import_select_account(nullptr, "BankUSD", FALSE, nullptr,
-                                           nullptr, ACCT_TYPE_NONE, nullptr,
-                                           nullptr);
+    auto found = gnc_import_find_account_by_online_id("BankUSD", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("Bank", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_match_with_subaccounts)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerStocks", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_NONE,
-                                           nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerStocks", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("Stocks", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerStocksHPE", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_NONE,
-                                           nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerStocksHPE", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("HPE", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_trailing_noise)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerStocksHPEUSD", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_NONE,
-                                           nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerStocksHPEUSD", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("HPE", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_no_match)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerStocksINTC", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_STOCK,
-                                           nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerStocksINTC", ACCT_TYPE_STOCK);
     ASSERT_EQ(nullptr, found);
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_trailing_space)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerStocksMSFT ", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_NONE,
-                                           nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerStocksMSFT ", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("MSFT", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_trim_trailing_space)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerStocksMSFT", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_NONE,
-                                           nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerStocksMSFT", ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("MSFT", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_internal_space)
 {
-    auto found = gnc_import_select_account(nullptr, "BrokerCash Management",
-                                           FALSE, nullptr, nullptr,
-                                           ACCT_TYPE_NONE, nullptr, nullptr);
+    auto found = gnc_import_find_account_by_online_id("BrokerCash Management",
+                                                       ACCT_TYPE_NONE);
     ASSERT_NE(nullptr, found);
     EXPECT_STREQ("Cash Management", xaccAccountGetName(found));
 }

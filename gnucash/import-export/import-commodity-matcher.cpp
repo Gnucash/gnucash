@@ -46,78 +46,97 @@
  *   Constants, should ideally be defined a user preference dialog    *
 \********************************************************************/
 
-static QofLogModule log_module = GNC_MOD_IMPORT;
-
-
-
-gnc_commodity * gnc_import_select_commodity(const char * cusip,
-        gboolean ask_on_unknown,
-        const char * default_fullname,
-        const char * default_mnemonic)
+typedef struct
 {
-    const gnc_commodity_table * commodity_table = gnc_get_current_commodities ();
-    gnc_commodity * retval = NULL;
-    DEBUG("Default fullname received: %s", default_fullname);
-    DEBUG("Default mnemonic received: %s", default_mnemonic);
+    gchar *cusip;
+    QofBook *book;
+    GncImportCommodityCallback callback;
+    gpointer user_data;
+} CommoditySelection;
 
-    g_return_val_if_fail(cusip, NULL);
-    DEBUG("Looking for commodity with exchange_code: %s", cusip);
-
-    g_assert(commodity_table);
-    GList *namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
-
-    for (GList *n = namespace_list; !retval && n; n = g_list_next (n))
+gnc_commodity *
+gnc_import_find_commodity_by_cusip (const char *cusip)
+{
+    if (!cusip)
+        return nullptr;
+    const auto table = gnc_get_current_commodities ();
+    if (!table)
+        return nullptr;
+    gnc_commodity *result = nullptr;
+    auto namespaces = gnc_commodity_table_get_namespaces (table);
+    for (auto n = namespaces; !result && n; n = n->next)
     {
-        auto ns = static_cast<const char*>(n->data);
-        DEBUG("Looking at namespace %s", ns);
-        GList *comm_list = gnc_commodity_table_get_commodities (commodity_table, ns);
-        for (GList *m = comm_list; !retval && m; m = g_list_next (m))
+        auto commodities = gnc_commodity_table_get_commodities (
+            table, static_cast<const char *>(n->data));
+        for (auto c = commodities; !result && c; c = c->next)
         {
-            auto com = static_cast<gnc_commodity*>(m->data);
-            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (com));
-            if (!g_strcmp0 (gnc_commodity_get_cusip (com), cusip))
-            {
-                retval = com;
-                DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (com));
-            }
+            auto commodity = static_cast<gnc_commodity *>(c->data);
+            if (!g_strcmp0 (gnc_commodity_get_cusip (commodity), cusip))
+                result = commodity;
         }
-        g_list_free (comm_list);
+        g_list_free (commodities);
     }
-
-    g_list_free(namespace_list);
-
-    if (retval == NULL && ask_on_unknown != 0)
-    {
-        const gchar *message =
-            _("Please select a commodity to match the following exchange "
-              "specific code. Please note that the exchange code of the "
-              "commodity you select will be overwritten.");
-        retval = gnc_ui_select_commodity_modal_full(NULL,
-                 NULL,
-                 DIAG_COMM_ALL,
-                 message,
-                 cusip,
-                 default_fullname,
-                 default_mnemonic);
-
-    }
-    /* There seems to be a problem here - if the matched commodity does not
-       have a cusip defined (gnc_commodity_get_cusip returns NULL) then
-       it does not get overwritten - which is not consistent with the
-       message - so Im adding it to do this.  Looks like this is all
-       that was needed to fix the cash value used as stock units problem
-       for pre-defined commodities which didn't have the cusip defined! */
-    if (retval != NULL &&
-            gnc_commodity_get_cusip(retval) != NULL &&
-            cusip != NULL &&
-            (strncmp(gnc_commodity_get_cusip(retval), cusip, strlen(cusip)) != 0))
-    {
-        gnc_commodity_set_cusip(retval, cusip);
-    }
-    else if (gnc_commodity_get_cusip(retval) == NULL && cusip != NULL)
-    {
-        gnc_commodity_set_cusip(retval, cusip);
-    }
-    return retval;
+    g_list_free (namespaces);
+    return result;
 }
+
+static void
+commodity_selection_finished (QofBook *book, gnc_commodity *commodity,
+                              gpointer user_data)
+{
+    auto selection = static_cast<CommoditySelection *>(user_data);
+    gboolean accepted = book && commodity && book == selection->book &&
+        gnc_get_current_book () == selection->book &&
+        qof_book_is_open (selection->book);
+    if (accepted && selection->cusip)
+        gnc_commodity_set_cusip (commodity, selection->cusip);
+    selection->callback (accepted ? commodity : nullptr, accepted,
+                         selection->user_data);
+    g_free (selection->cusip);
+    g_object_unref (selection->book);
+    g_free (selection);
+}
+
+void
+gnc_import_select_commodity_async (GtkWidget *parent, const char *cusip,
+                                   gboolean ask_on_unknown,
+                                   const char *default_fullname,
+                                   const char *default_mnemonic,
+                                   GncImportCommodityCallback callback,
+                                   gpointer user_data)
+{
+    g_return_if_fail (callback != nullptr);
+    auto commodity = gnc_import_find_commodity_by_cusip (cusip);
+    if (commodity || !ask_on_unknown)
+    {
+        callback (commodity, commodity != nullptr, user_data);
+        return;
+    }
+
+    static const gchar *message =
+        N_("Please select a commodity to match the following exchange "
+           "specific code. Please note that the exchange code of the "
+           "commodity you select will be overwritten.");
+    auto selection = g_new0 (CommoditySelection, 1);
+    selection->cusip = g_strdup (cusip);
+    selection->book = gnc_get_current_book ();
+    if (!selection->book)
+    {
+        g_free (selection->cusip);
+        g_free (selection);
+        callback (nullptr, FALSE, user_data);
+        return;
+    }
+    g_object_ref (selection->book);
+    selection->callback = callback;
+    selection->user_data = user_data;
+    gnc_ui_select_commodity_async_full (nullptr, parent, DIAG_COMM_ALL,
+                                        _(message), cusip, default_fullname,
+                                        default_mnemonic,
+                                        commodity_selection_finished,
+                                        selection);
+}
+
+
+
 /**@}*/

@@ -30,29 +30,53 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "dialog-utils.h"
+#include "gnc-gui-query.h"
 #include "import-parse.h"
 #include "gnc-ui-util.h"
 
 #define MAX_CHOICES 6
 
-static void
-option_changed_cb (GtkWidget *widget, gpointer index_p)
+typedef struct
 {
-    auto my_index = static_cast<gint*>(index_p);
-    *my_index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+    GncImportFormatCallback completed;
+    gpointer user_data;
+    GncImportFormat formats[MAX_CHOICES];
+    GncImportFormat result;
+} ImportFormatRequest;
+
+static void
+format_response_captured ([[maybe_unused]] GtkDialog *dialog, gint response,
+                          gpointer user_data)
+{
+    auto request = static_cast<ImportFormatRequest*>(user_data);
+    if (response != GTK_RESPONSE_CANCEL && response != GTK_RESPONSE_DELETE_EVENT &&
+        response != GTK_RESPONSE_NONE)
+    {
+        auto combo = GTK_COMBO_BOX (g_object_get_data (G_OBJECT (dialog),
+                                                      "format-combo"));
+        auto index = gtk_combo_box_get_active (combo);
+        if (index >= 0)
+            request->result = request->formats[index];
+    }
 }
 
+static void
+format_dialog_completed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    auto request = static_cast<ImportFormatRequest*>(user_data);
+    request->completed (request->result, request->user_data);
+    delete request;
+}
 
-static GncImportFormat
-add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat fmt)
+static void
+add_menu_to_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat fmt,
+                   ImportFormatRequest *request)
 {
     GtkComboBox  *combo;
     GtkListStore *store;
     GtkTreeIter iter;
     GtkCellRenderer *cell;
-    gint index = 0, count = 0;
-    gint *index_p = &index;
-    GncImportFormat formats[MAX_CHOICES];
+    gint count = 0;
 
     store = gtk_list_store_new(1, G_TYPE_STRING);
 
@@ -60,7 +84,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     {
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0, _("Period: 123,456.78"), -1);
-        formats[count] = GNCIF_NUM_PERIOD;
+        request->formats[count] = GNCIF_NUM_PERIOD;
         count++;
     }
 
@@ -68,7 +92,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     {
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0, _("Comma: 123.456,78"), -1);
-        formats[count] = GNCIF_NUM_COMMA;
+        request->formats[count] = GNCIF_NUM_COMMA;
         count++;
     }
 
@@ -76,7 +100,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     {
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0, _("m/d/y"), -1);
-        formats[count] = GNCIF_DATE_MDY;
+        request->formats[count] = GNCIF_DATE_MDY;
         count++;
     }
 
@@ -84,7 +108,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     {
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0, _("d/m/y"), -1);
-        formats[count] = GNCIF_DATE_DMY;
+        request->formats[count] = GNCIF_DATE_DMY;
         count++;
     }
 
@@ -92,7 +116,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     {
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0, _("y/m/d"), -1);
-        formats[count] = GNCIF_DATE_YMD;
+        request->formats[count] = GNCIF_DATE_YMD;
         count++;
     }
 
@@ -100,7 +124,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     {
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0, _("y/d/m"), -1);
-        formats[count] = GNCIF_DATE_YDM;
+        request->formats[count] = GNCIF_DATE_YDM;
         count++;
     }
 
@@ -118,33 +142,35 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     /* Connect renderer to data source */
     gtk_cell_layout_set_attributes( GTK_CELL_LAYOUT( combo ), cell, "text", 0, NULL );
 
-    g_signal_connect(G_OBJECT(combo), "changed",
-                     G_CALLBACK(option_changed_cb), index_p);
+    g_object_set_data (G_OBJECT (dialog), "format-combo", combo);
+    gtk_combo_box_set_active (combo, 0);
 
     gtk_box_pack_start(GTK_BOX(menu_box), GTK_WIDGET(combo), TRUE, TRUE, 0);
 
     gtk_widget_show_all(dialog);
     gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-
-    return formats[index];
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (format_response_captured), request);
+    gnc_dialog_run_async (GTK_DIALOG (dialog), NULL,
+                          format_dialog_completed, request);
 }
 
-
-GncImportFormat
-gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
+void
+gnc_import_choose_fmt_async (const char* msg, GncImportFormat fmts,
+                             GncImportFormatCallback completed,
+                             gpointer data)
 {
     GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *widget;
 
-    g_return_val_if_fail (fmts, GNCIF_NONE);
+    g_return_if_fail (fmts && completed);
 
     /* if there is only one format available, just return it */
     if (!(fmts & (fmts - 1)))
     {
-        return fmts;
+        completed (fmts, data);
+        return;
     }
     /* Open the Glade Builder file */
     builder = gtk_builder_new();
@@ -157,5 +183,9 @@ gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
 
     g_object_unref(G_OBJECT(builder));
 
-    return add_menu_and_run_dialog(dialog, widget, fmts);
+    auto request = new ImportFormatRequest{};
+    request->completed = completed;
+    request->user_data = data;
+    request->result = GNCIF_NONE;
+    add_menu_to_dialog(dialog, widget, fmts, request);
 }
