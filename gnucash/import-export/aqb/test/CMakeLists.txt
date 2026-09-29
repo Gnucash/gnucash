@@ -16,6 +16,7 @@ set(test_aqb_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${AQBANKING_INCLUDE_DIRS}
+  ${GWENHYWFAR_INCLUDE_DIRS}
 )
 
 set(test_aqb_LIBS
@@ -24,11 +25,25 @@ set(test_aqb_LIBS
   gnc-backend-xml-utils gnc-engine gnc-core-utils gnc-module
 )
 
-set_dist_list(test_aqb_DIST ${test_aqb_SOURCES} file-book.gnucash
+set_dist_list(test_aqb_DIST ${test_aqb_SOURCES} test-gwen-worker-response.cpp
+  test-ab-import-context-response.cpp test-gwen-async-dialog.cpp
+  test-gwen-async-dialog.dlg file-book.gnucash
   file-book-hbcislot.gnucash CMakeLists.txt )
 if(WITH_AQBANKING)
   gnc_add_test(test-aqb
     "${test_aqb_SOURCES}"
+    test_aqb_INCLUDE_DIRS
+    test_aqb_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR})
+  gnc_add_test(test-gwen-worker-response
+    "${CMAKE_CURRENT_SOURCE_DIR}/test-gwen-worker-response.cpp"
+    test_aqb_INCLUDE_DIRS
+    test_aqb_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR})
+  gnc_add_test(test-ab-import-context-response
+    "${CMAKE_CURRENT_SOURCE_DIR}/test-ab-import-context-response.cpp"
+    test_aqb_INCLUDE_DIRS
+    test_aqb_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR})
+  gnc_add_test(test-gwen-async-dialog
+    "${CMAKE_CURRENT_SOURCE_DIR}/test-gwen-async-dialog.cpp"
     test_aqb_INCLUDE_DIRS
     test_aqb_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR})
  endif()
