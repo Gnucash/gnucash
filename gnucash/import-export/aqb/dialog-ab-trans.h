@@ -92,7 +92,12 @@ GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC
  * @return GTK_RESPONSE_CANCEL or GTK_RESPONSE_DESTROY_EVENT if the user cancelled the dialog
  * and GNC_RESPONSE_NOW otherwise.
  */
-gint gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td);
+typedef void (*GncABTransDialogCallback) (GncABTransDialog *td,
+                                          gint response,
+                                          gpointer user_data);
+void gnc_ab_trans_dialog_run_async (GncABTransDialog *td,
+                                    GncABTransDialogCallback completed,
+                                    gpointer user_data);
 
 /**
  * Free a Aqbanking transfer dialog

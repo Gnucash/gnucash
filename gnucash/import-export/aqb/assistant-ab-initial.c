@@ -57,11 +57,13 @@
 #include "assistant-ab-initial.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
+#include "gnc-gwen-gui.h"
 #include "gnc-component-manager.h"
 #include "gnc-string-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
+#include "gnc-gnome-utils.h"
 #include "import-account-matcher.h"
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
@@ -73,6 +75,7 @@ typedef struct _ABInitialInfo ABInitialInfo;
 typedef struct _DeferredInfo DeferredInfo;
 typedef struct _AccCbData AccCbData;
 typedef struct _RevLookupData RevLookupData;
+typedef struct _AccountSelectRequest AccountSelectRequest;
 
 void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
                      gpointer user_data);
@@ -101,6 +104,11 @@ static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data
 static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                                      GtkTreeViewColumn  *col, gpointer user_data);
+static void account_selected (Account *account, gboolean accepted,
+                              gpointer user_data);
+static void account_select_request_free (AccountSelectRequest *request);
+static void account_select_parent_destroyed (GtkWidget *window,
+                                             gpointer user_data);
 static void delete_account_match(ABInitialInfo *info, RevLookupData *data);
 static void delete_selected_match_cb(gpointer data, gpointer user_data);
 static void insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash);
@@ -108,6 +116,9 @@ static void remove_acc_from_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpoint
 static void clear_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void aai_close_handler(gpointer user_data);
+static void aai_operation_acquired (guint token, gpointer user_data);
+static void aai_setup_dialog_completed (gboolean accepted, gpointer user_data);
+static void aai_info_cleanup (ABInitialInfo *info);
 
 struct _ABInitialInfo
 {
@@ -124,6 +135,14 @@ struct _ABInitialInfo
 
     /* AqBanking stuff */
     AB_BANKING *api;
+    QofBook *book;
+    guint session_lease;
+    guint aq_operation;
+    gboolean aq_operation_pending;
+    gboolean setup_dialog_pending;
+    gboolean destroyed;
+    GncGWENGui *gwen_gui;
+    GWEN_DIALOG *setup_dialog;
     /* AB_ACCOUNT* -> Account* -- DO NOT DELETE THE KEYS! */
     GHashTable *gnc_hash;
     /* Reverse hash table for lookup of matched GnuCash accounts */
@@ -148,6 +167,39 @@ struct _RevLookupData
     Account *gnc_acc;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
 };
+
+struct _AccountSelectRequest
+{
+    ABInitialInfo *info;
+    GWeakRef window;
+    GNC_AB_ACCOUNT_SPEC *ab_account;
+    Account *old_account;
+    QofBook *book;
+    guint session_lease;
+    gulong parent_destroy_handler;
+    gboolean parent_destroyed;
+};
+
+static void
+account_select_request_free (AccountSelectRequest *request)
+{
+    GtkWidget *window = g_weak_ref_get (&request->window);
+    if (window && request->parent_destroy_handler &&
+        g_signal_handler_is_connected (window, request->parent_destroy_handler))
+        g_signal_handler_disconnect (window, request->parent_destroy_handler);
+    g_clear_object (&window);
+    gnc_gui_end_session_operation (request->session_lease);
+    g_object_unref (request->book);
+    g_weak_ref_clear (&request->window);
+    g_free (request);
+}
+
+static void
+account_select_parent_destroyed (G_GNUC_UNUSED GtkWidget *window,
+                                gpointer user_data)
+{
+    ((AccountSelectRequest *)user_data)->parent_destroyed = TRUE;
+}
 
 enum account_list_cols
 {
@@ -189,6 +241,21 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
 
     gnc_unregister_gui_component_by_data(ASSISTANT_AB_INITIAL_CM_CLASS, info);
 
+    if (info->aq_operation_pending || info->setup_dialog_pending)
+    {
+        info->destroyed = TRUE;
+        info->window = NULL;
+        return;
+    }
+
+    aai_info_cleanup (info);
+}
+
+static void
+aai_info_cleanup (ABInitialInfo *info)
+{
+    g_return_if_fail (info == single_info);
+
     if (info->deferred_info)
     {
         PINFO("Online Banking assistant is being closed but the wizard is still "
@@ -215,9 +282,18 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
         gnc_AB_BANKING_delete(info->api);
         info->api = NULL;
     }
-
-    gtk_widget_destroy(info->window);
-    info->window = NULL;
+    info->aq_operation_pending = FALSE;
+    if (info->aq_operation)
+    {
+        gnc_ab_operation_release (info->aq_operation);
+        info->aq_operation = 0;
+    }
+    if (info->session_lease)
+    {
+        gnc_gui_end_session_operation (info->session_lease);
+        info->session_lease = 0;
+    }
+    g_clear_object (&info->book);
 
     g_free(info);
     single_info = NULL;
@@ -257,31 +333,57 @@ aai_button_clicked_cb(GtkButton *button, gpointer user_data)
         return;
     }
 
+    info->setup_dialog = AB_Banking_CreateSetupDialog (banking);
+    if (!info->setup_dialog)
     {
-        GWEN_DIALOG *dlg = AB_Banking_CreateSetupDialog(banking);
-        if (!dlg)
-        {
-            PERR("Could not lookup Setup Dialog of aqbanking!");
-        }
-        else
-        {
-            int rv = GWEN_Gui_ExecDialog(dlg, 0);
-            if (rv <= 0)
-            {
-                /* Dialog was aborted/rejected */
-                PERR("Setup Dialog of aqbanking aborted/rejected, code %d", rv);
-            }
-            GWEN_Dialog_free(dlg);
-        }
+        PERR("Could not lookup Setup Dialog of aqbanking!");
+        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page,
+                                         banking_has_accounts (banking));
+        LEAVE(" ");
+        return;
     }
 
-    /* Enable the Assistant Buttons if we accounts */
-    if (banking_has_accounts(info->api))
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
-    else
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
+    info->gwen_gui = gnc_GWEN_Gui_get (info->window);
+    if (!info->gwen_gui)
+    {
+        GWEN_Dialog_free (info->setup_dialog);
+        info->setup_dialog = NULL;
+        PERR("Could not reserve AqBanking dialog GUI");
+        LEAVE(" ");
+        return;
+    }
+
+    info->setup_dialog_pending = TRUE;
+    gnc_GWEN_Gui_exec_dialog_async (info->gwen_gui, info->setup_dialog,
+                                    aai_setup_dialog_completed, info);
 
     LEAVE(" ");
+}
+
+static void
+aai_setup_dialog_completed (gboolean accepted, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+    GWEN_Dialog_free (info->setup_dialog);
+    info->setup_dialog = NULL;
+    gnc_GWEN_Gui_release (info->gwen_gui);
+    info->gwen_gui = NULL;
+    info->setup_dialog_pending = FALSE;
+
+    if (info->destroyed || !info->window)
+    {
+        aai_info_cleanup (info);
+        return;
+    }
+
+    if (!accepted)
+        PERR("Setup Dialog of aqbanking aborted/rejected");
+
+    gint page_num = gtk_assistant_get_current_page (GTK_ASSISTANT(info->window));
+    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window),
+                                                  page_num);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page,
+                                     banking_has_accounts (info->api));
 }
 
 static void delete_account_match(ABInitialInfo *info, RevLookupData *data)
@@ -586,6 +688,56 @@ clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 }
 
 static void
+account_selected (Account *account, gboolean accepted, gpointer user_data)
+{
+    AccountSelectRequest *request = user_data;
+    GtkWidget *window = g_weak_ref_get (&request->window);
+    if (accepted && window && !request->parent_destroyed &&
+        !gtk_widget_in_destruction (window) &&
+        gnc_get_current_book () == request->book &&
+        qof_book_is_open (request->book) &&
+        (!account || qof_instance_get_book (QOF_INSTANCE (account)) == request->book) &&
+        request->info->window == window &&
+        request->old_account != account)
+    {
+        ABInitialInfo *info = request->info;
+        if (account)
+        {
+            RevLookupData reverse = { account, NULL };
+            g_hash_table_find (info->gnc_hash, (GHRFunc)find_gnc_acc_cb,
+                               &reverse);
+            if (reverse.ab_acc)
+                delete_account_match (info, &reverse);
+            g_hash_table_insert (info->gnc_hash, request->ab_account, account);
+        }
+        else
+            g_hash_table_remove (info->gnc_hash, request->ab_account);
+
+        GtkTreeModel *model = GTK_TREE_MODEL (info->account_store);
+        GtkTreeIter iter;
+        gboolean valid = gtk_tree_model_get_iter_first (model, &iter);
+        while (valid)
+        {
+            GNC_AB_ACCOUNT_SPEC *row_account = NULL;
+            gtk_tree_model_get (model, &iter, ACCOUNT_LIST_COL_AB_ACCT,
+                                &row_account, -1);
+            if (row_account == request->ab_account)
+            {
+                gchar *name = account ? gnc_account_get_full_name (account) : g_strdup ("");
+                gtk_list_store_set (info->account_store, &iter,
+                    ACCOUNT_LIST_COL_GNC_NAME, name,
+                    ACCOUNT_LIST_COL_CHECKED, TRUE, -1);
+                g_free (name);
+                break;
+            }
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+    }
+    g_clear_object (&window);
+    account_select_request_free (request);
+}
+
+static void
 account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                          GtkTreeViewColumn  *col, gpointer user_data)
 {
@@ -593,11 +745,10 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
-    gchar *longname, *gnc_name;
-    Account *old_value, *gnc_acc;
+    gchar *longname;
+    Account *old_value;
     const gchar *currency;
     gnc_commodity *commodity = NULL;
-    gboolean ok_pressed;
 
     g_return_if_fail(info);
 
@@ -624,44 +775,34 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                             currency);
         }
 
-        gnc_acc = gnc_import_select_account(info->window, NULL, TRUE,
-                                            longname, commodity, ACCT_TYPE_BANK,
-                                            old_value, &ok_pressed);
-        g_free(longname);
-
-        if (ok_pressed && old_value != gnc_acc)
+        QofBook *book = gnc_get_current_book ();
+        if (!book)
         {
-            if (gnc_acc)
-            {
-                RevLookupData data;
-
-                /* Lookup and clear other mappings to gnc_acc */
-                data.gnc_acc = gnc_acc;
-                data.ab_acc = NULL;
-                g_hash_table_find(info->gnc_hash, (GHRFunc) find_gnc_acc_cb,
-                                  &data);
-                if (data.ab_acc)
-                    delete_account_match(info, &data);
-
-                /* Map ab_acc to gnc_acc */
-                g_hash_table_insert(info->gnc_hash, ab_acc, gnc_acc);
-                gnc_name = gnc_account_get_full_name(gnc_acc);
-                gtk_list_store_set(info->account_store, &iter,
-                                   ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
-                                   ACCOUNT_LIST_COL_CHECKED, TRUE,
-                                   -1);
-                g_free(gnc_name);
-
-            }
-            else
-            {
-                g_hash_table_remove(info->gnc_hash, ab_acc);
-                gtk_list_store_set(info->account_store, &iter,
-                                   ACCOUNT_LIST_COL_GNC_NAME, "",
-                                   ACCOUNT_LIST_COL_CHECKED, TRUE,
-                                   -1);
-            }
+            g_free (longname);
+            return;
         }
+        AccountSelectRequest *request = g_new0 (AccountSelectRequest, 1);
+        request->book = g_object_ref (book);
+        request->session_lease = gnc_gui_begin_session_operation (request->book);
+        if (!request->session_lease)
+        {
+            g_object_unref (request->book);
+            g_free (request);
+            g_free (longname);
+            return;
+        }
+        request->info = info;
+        request->ab_account = ab_acc;
+        request->old_account = old_value;
+        g_weak_ref_init (&request->window, G_OBJECT (info->window));
+        request->parent_destroy_handler = g_signal_connect (info->window,
+            "destroy", G_CALLBACK (account_select_parent_destroyed), request);
+        gnc_import_select_account_async (info->window, NULL, TRUE,
+                                         longname, commodity, ACCT_TYPE_BANK,
+                                         old_value,
+                                         account_selected,
+                                         request);
+        g_free(longname);
     }
 }
 
@@ -751,7 +892,7 @@ gnc_ab_initial_assistant_new(void)
 
     info->window = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_init_assistant"));
 
-    info->api = gnc_AB_BANKING_new();
+    info->api = NULL;
     info->deferred_info = NULL;
     info->gnc_hash = NULL;
 
@@ -809,7 +950,72 @@ void
 gnc_ab_initial_assistant(void)
 {
     if (!single_info)
+    {
         single_info = gnc_ab_initial_assistant_new();
-    gtk_widget_show(single_info->window);
+        QofBook *book = gnc_get_current_book ();
+        if (!book)
+        {
+            gtk_widget_destroy (single_info->window);
+            return;
+        }
+        single_info->book = g_object_ref (book);
+        single_info->session_lease = gnc_gui_begin_session_operation (book);
+        if (!single_info->session_lease)
+        {
+            gtk_widget_destroy (single_info->window);
+            return;
+        }
+        single_info->aq_operation_pending = TRUE;
+        gnc_ab_operation_acquire_async (aai_operation_acquired, single_info);
+    }
+    else if (single_info->api)
+        gtk_widget_show(single_info->window);
 }
 
+static void
+aai_operation_acquired (guint token, gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+    info->aq_operation_pending = FALSE;
+    info->aq_operation = token;
+    if (info->destroyed || !info->window)
+    {
+        gnc_ab_operation_release (info->aq_operation);
+        info->aq_operation = 0;
+        if (info->session_lease)
+        {
+            gnc_gui_end_session_operation (info->session_lease);
+            info->session_lease = 0;
+        }
+        g_clear_object (&info->book);
+        g_free (info);
+        single_info = NULL;
+        return;
+    }
+    if (gtk_widget_in_destruction (info->window) ||
+        !info->book || gnc_get_current_book () != info->book ||
+        !qof_book_is_open (info->book))
+    {
+        gnc_ab_operation_release (info->aq_operation);
+        info->aq_operation = 0;
+        if (info->session_lease)
+        {
+            gnc_gui_end_session_operation (info->session_lease);
+            info->session_lease = 0;
+        }
+        if (info->window && !gtk_widget_in_destruction (info->window))
+            gtk_widget_destroy (info->window);
+        return;
+    }
+    info->api = gnc_AB_BANKING_new ();
+    if (!info->api)
+    {
+        gnc_ab_operation_release (info->aq_operation);
+        info->aq_operation = 0;
+        gnc_gui_end_session_operation (info->session_lease);
+        info->session_lease = 0;
+        gtk_widget_destroy (info->window);
+        return;
+    }
+    gtk_widget_show (info->window);
+}
