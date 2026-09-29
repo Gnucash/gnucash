@@ -87,7 +87,14 @@ typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
         PhysicalCellBorders *borders,
         gpointer user_data);
 
-typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
+typedef enum
+{
+    GNC_TABLE_CONFIRM_REJECT,
+    GNC_TABLE_CONFIRM_ACCEPT,
+    GNC_TABLE_CONFIRM_DEFERRED
+} GncTableConfirmResult;
+
+typedef GncTableConfirmResult (*TableConfirmHandler) (VirtualLocation virt_loc,
         gpointer user_data);
 
 typedef void (*TableSaveCellHandler) (BasicCell * cell,

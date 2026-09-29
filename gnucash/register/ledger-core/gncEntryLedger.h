@@ -28,6 +28,8 @@
 #include "gncEntry.h"
 #include "gncOrder.h"
 #include "table-allgui.h"
+
+G_BEGIN_DECLS
 /** @ingroup Register
  * @addtogroup BusinessRegister Business Register
  * @brief A specialized register for Accounts Payable and Accounts Receivable.
@@ -113,11 +115,16 @@ gboolean gnc_entry_ledger_changed (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger);
 
-/** This will act just like hitting 'return' to record an entry */
-gboolean gnc_entry_ledger_commit_entry (GncEntryLedger *ledger);
-
-/** This will ask the user if they really want to make a change */
-gboolean gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger);
+typedef void (*GncEntryLedgerCloseCallback) (gboolean accepted,
+                                             gpointer user_data);
+void gnc_entry_ledger_check_close_async (GtkWidget *parent,
+                                         GncEntryLedger *ledger,
+                                         GncEntryLedgerCloseCallback callback,
+                                         gpointer user_data);
+void gnc_entry_ledger_commit_entry_async (GtkWidget *parent,
+                                          GncEntryLedger *ledger,
+                                          GncEntryLedgerCloseCallback callback,
+                                          gpointer user_data);
 
 void gnc_entry_ledger_reset_query (GncEntryLedger *ledger);
 
@@ -153,5 +160,6 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
 QofQuery * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_set_prefs_group (GncEntryLedger *ledger, const gchar *string);
+G_END_DECLS
 /** @} */
 #endif /* GNC_ENTRY_LEDGER_H */

@@ -39,6 +39,7 @@
 #include <string.h>
 
 #include <glib.h>
+#include <gtk/gtk.h>
 
 #include "table-allgui.h"
 #include "cellblock.h"
@@ -112,11 +113,17 @@ gnc_table_init (Table * table)
 
     table->virt_cells = NULL;
     table->ui_data = NULL;
+    table->confirm_pending = FALSE;
+    table->confirm_replay = NULL;
+    table->confirm_replay_data = NULL;
+    table->confirm_replay_destroy = NULL;
 }
 
 void
 gnc_table_destroy (Table * table)
 {
+    gnc_table_confirm_change_complete (table, FALSE);
+
     /* invoke destroy callback */
     if (table->gui_handlers.destroy)
         table->gui_handlers.destroy (table);
@@ -886,6 +893,8 @@ void
 gnc_table_move_cursor_gui (Table *table, VirtualLocation new_virt_loc)
 {
     if (!table) return;
+    if (table->control && gnc_table_control_input_suspended (table->control))
+        return;
 
     gnc_table_move_cursor_internal (table, new_virt_loc, TRUE);
 }
@@ -1066,6 +1075,8 @@ gnc_table_enter_update (Table *table,
 
     if (table == NULL)
         return FALSE;
+    if (table->control && gnc_table_control_input_suspended (table->control))
+        return FALSE;
 
     cb = table->current_cursor;
 
@@ -1182,23 +1193,178 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
     LEAVE("");
 }
 
-gboolean
+typedef enum
+{
+    GNC_TABLE_DEFERRED_MODIFY,
+    GNC_TABLE_DEFERRED_DIRECT
+} GncTableDeferredEditKind;
+
+typedef struct
+{
+    GncTableDeferredEditKind kind;
+    VirtualLocation virt_loc;
+    int cursor_position;
+    int start_selection;
+    int end_selection;
+    union
+    {
+        struct { gchar *change; gint change_len; gchar *newval; gint newval_len; } modify;
+        GdkEvent *event;
+    } data;
+} GncTableDeferredEdit;
+
+static void
+gnc_table_deferred_edit_free (gpointer data)
+{
+    GncTableDeferredEdit *edit = data;
+    if (!edit)
+        return;
+    if (edit->kind == GNC_TABLE_DEFERRED_MODIFY)
+    {
+        g_free (edit->data.modify.change);
+        g_free (edit->data.modify.newval);
+    }
+    else if (edit->data.event)
+        gdk_event_free (edit->data.event);
+    g_free (edit);
+}
+
+static void
+gnc_table_deferred_edit_replay (Table *table, gpointer data)
+{
+    GncTableDeferredEdit *edit = data;
+    char *newval = NULL;
+    if (!table || !edit ||
+        table->current_cursor_loc.vcell_loc.virt_row != edit->virt_loc.vcell_loc.virt_row ||
+        table->current_cursor_loc.vcell_loc.virt_col != edit->virt_loc.vcell_loc.virt_col ||
+        table->current_cursor_loc.phys_row_offset != edit->virt_loc.phys_row_offset ||
+        table->current_cursor_loc.phys_col_offset != edit->virt_loc.phys_col_offset)
+        return;
+
+    if (edit->kind == GNC_TABLE_DEFERRED_MODIFY)
+        (void)gnc_table_modify_update (table, edit->virt_loc,
+                                       edit->data.modify.change,
+                                       edit->data.modify.change_len,
+                                       edit->data.modify.newval,
+                                       edit->data.modify.newval_len,
+                                       &edit->cursor_position,
+                                       &edit->start_selection,
+                                       &edit->end_selection, NULL);
+    else
+        (void)gnc_table_direct_update (table, edit->virt_loc, &newval,
+                                       &edit->cursor_position,
+                                       &edit->start_selection,
+                                       &edit->end_selection, edit->data.event);
+    g_free (newval);
+    if (table->gui_handlers.cursor_refresh)
+        table->gui_handlers.cursor_refresh (table, edit->virt_loc.vcell_loc, FALSE);
+}
+
+static void
+gnc_table_defer_modify (Table *table, VirtualLocation virt_loc,
+                        const char *change, int change_len,
+                        const char *newval, int newval_len,
+                        int cursor_position, int start_selection, int end_selection)
+{
+    GncTableDeferredEdit *edit = g_new0 (GncTableDeferredEdit, 1);
+    edit->kind = GNC_TABLE_DEFERRED_MODIFY;
+    edit->virt_loc = virt_loc;
+    edit->cursor_position = cursor_position;
+    edit->start_selection = start_selection;
+    edit->end_selection = end_selection;
+    edit->data.modify.change = g_strndup (change, MAX (change_len, 0));
+    edit->data.modify.change_len = change_len;
+    edit->data.modify.newval = g_strndup (newval, MAX (newval_len, 0));
+    edit->data.modify.newval_len = newval_len;
+    gnc_table_confirm_change_set_replay (table, gnc_table_deferred_edit_replay,
+                                         edit, gnc_table_deferred_edit_free);
+}
+
+static void
+gnc_table_defer_direct (Table *table, VirtualLocation virt_loc, GdkEvent *event,
+                        int cursor_position, int start_selection, int end_selection)
+{
+    GncTableDeferredEdit *edit = g_new0 (GncTableDeferredEdit, 1);
+    edit->kind = GNC_TABLE_DEFERRED_DIRECT;
+    edit->virt_loc = virt_loc;
+    edit->cursor_position = cursor_position;
+    edit->start_selection = start_selection;
+    edit->end_selection = end_selection;
+    edit->data.event = event ? gdk_event_copy (event) : NULL;
+    gnc_table_confirm_change_set_replay (table, gnc_table_deferred_edit_replay,
+                                         edit, gnc_table_deferred_edit_free);
+}
+
+GncTableConfirmResult
 gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
 {
     TableConfirmHandler confirm_handler;
     const char *cell_name;
+    GncTableConfirmResult result;
 
     if (!table || !table->model)
-        return TRUE;
+        return GNC_TABLE_CONFIRM_ACCEPT;
+    if (table->confirm_pending ||
+        (table->control && gnc_table_control_input_suspended (table->control)))
+        return GNC_TABLE_CONFIRM_REJECT;
 
     cell_name = gnc_table_get_cell_name (table, virt_loc);
 
     confirm_handler = gnc_table_model_get_confirm_handler (table->model,
                       cell_name);
     if (!confirm_handler)
-        return TRUE;
+        return GNC_TABLE_CONFIRM_ACCEPT;
 
-    return confirm_handler (virt_loc, table->model->handler_user_data);
+    result = confirm_handler (virt_loc, table->model->handler_user_data);
+    if (result == GNC_TABLE_CONFIRM_DEFERRED)
+    {
+        table->confirm_pending = TRUE;
+        if (table->control)
+            gnc_table_control_set_input_suspended (table->control, TRUE);
+    }
+    return result;
+}
+
+void
+gnc_table_confirm_change_set_replay (Table *table,
+                                     GncTableConfirmReplayFunc replay,
+                                     gpointer user_data, GDestroyNotify destroy)
+{
+    if (!table || !table->confirm_pending)
+    {
+        if (destroy)
+            destroy (user_data);
+        return;
+    }
+    if (table->confirm_replay_destroy)
+        table->confirm_replay_destroy (table->confirm_replay_data);
+    table->confirm_replay = replay;
+    table->confirm_replay_data = user_data;
+    table->confirm_replay_destroy = destroy;
+}
+
+gboolean
+gnc_table_confirm_change_complete (Table *table, gboolean accepted)
+{
+    GncTableConfirmReplayFunc replay;
+    gpointer user_data;
+    GDestroyNotify destroy;
+    if (!table || !table->confirm_pending)
+        return FALSE;
+    replay = table->confirm_replay;
+    user_data = table->confirm_replay_data;
+    destroy = table->confirm_replay_destroy;
+    table->confirm_pending = FALSE;
+    table->confirm_replay = NULL;
+    table->confirm_replay_data = NULL;
+    table->confirm_replay_destroy = NULL;
+    if (table->control)
+        gnc_table_control_set_input_suspended (table->control, FALSE);
+    if (accepted && replay)
+        replay (table, user_data);
+    if (destroy)
+        destroy (user_data);
+    return accepted;
 }
 
 /* Returned result should not be touched by the caller.
@@ -1231,6 +1397,8 @@ gnc_table_modify_update (Table *table,
         PWARN ("change to read-only table");
         return NULL;
     }
+    if (table->control && gnc_table_control_input_suspended (table->control))
+        return NULL;
 
     cb = table->current_cursor;
 
@@ -1239,8 +1407,14 @@ gnc_table_modify_update (Table *table,
 
     ENTER ("");
 
-    if (!gnc_table_confirm_change (table, virt_loc))
+    GncTableConfirmResult confirmation = gnc_table_confirm_change (table, virt_loc);
+    if (confirmation != GNC_TABLE_CONFIRM_ACCEPT)
     {
+        if (confirmation == GNC_TABLE_CONFIRM_DEFERRED)
+            gnc_table_defer_modify (table, virt_loc, change, change_len, newval,
+                                    newval_len, cursor_position ? *cursor_position : 0,
+                                    start_selection ? *start_selection : 0,
+                                    end_selection ? *end_selection : 0);
         if (cancelled)
             *cancelled = TRUE;
 
@@ -1320,6 +1494,8 @@ gnc_table_direct_update (Table *table,
         PWARN ("input to read-only table");
         return FALSE;
     }
+    if (table->control && gnc_table_control_input_suspended (table->control))
+        return FALSE;
 
     cb = table->current_cursor;
 
@@ -1350,8 +1526,14 @@ gnc_table_direct_update (Table *table,
 
     if (g_strcmp0 (old_value, cell->value) != 0)
     {
-        if (!gnc_table_confirm_change (table, virt_loc))
+        GncTableConfirmResult confirmation = gnc_table_confirm_change (table, virt_loc);
+        if (confirmation != GNC_TABLE_CONFIRM_ACCEPT)
         {
+            if (confirmation == GNC_TABLE_CONFIRM_DEFERRED)
+                gnc_table_defer_direct (table, virt_loc, gui_data,
+                                        cursor_position ? *cursor_position : 0,
+                                        start_selection ? *start_selection : 0,
+                                        end_selection ? *end_selection : 0);
             gnc_basic_cell_set_value (cell, old_value);
             *newval_ptr = NULL;
             result = TRUE;
@@ -1706,6 +1888,8 @@ gnc_table_traverse_update(Table *table,
     gboolean abort_move;
 
     if ((table == NULL) || (dest_loc == NULL))
+        return FALSE;
+    if (table->control && gnc_table_control_input_suspended (table->control))
         return FALSE;
 
     ENTER("proposed (%d %d) -> (%d %d)\n",
