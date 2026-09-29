@@ -1474,60 +1474,21 @@ create_transaction(XferDialog *xferData, time64 time,
                    Account *from_account, Account* to_account,
                    gnc_numeric amount, gnc_numeric to_amount)
 {
-    Transaction *trans;
-    Split *from_split;
-    Split *to_split;
-    const char *string;
-    /* Create the transaction */
-    trans = xaccMallocTransaction(xferData->book);
-
-    xaccTransBeginEdit(trans);
-
-    xaccTransSetCurrency(trans, xferData->from_commodity);
-    xaccTransSetDatePostedSecsNormalized(trans, time);
-
-    /* Trans-Num or Split-Action set with gnc_set_num_action below per book
-     * option */
-
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-    xaccTransSetDescription(trans, string);
-
-    /* create from split */
-    from_split = xaccMallocSplit(xferData->book);
-    xaccTransAppendSplit(trans, from_split);
-
-    /* create to split */
-    to_split = xaccMallocSplit(xferData->book);
-    xaccTransAppendSplit(trans, to_split);
-
-    xaccAccountBeginEdit(from_account);
-    xaccAccountInsertSplit(from_account, from_split);
-
-    xaccAccountBeginEdit(to_account);
-    xaccAccountInsertSplit(to_account, to_split);
-
-    xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount),
-                          xferData->from_commodity);
-    xaccSplitSetBaseValue(to_split, amount, xferData->from_commodity);
-    xaccSplitSetBaseValue(to_split, to_amount, xferData->to_commodity);
-
-    /* Set the transaction number or split action field based on book option*/
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-    gnc_set_num_action (trans, from_split, string, NULL);
-
-    /* Set the transaction notes */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->notes_entry));
-    xaccTransSetNotes(trans, string);
-
-    /* Set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccSplitSetMemo(from_split, string);
-    xaccSplitSetMemo(to_split, string);
-
-    /* finish transaction */
-    xaccTransCommitEdit(trans);
-    xaccAccountCommitEdit(from_account);
-    xaccAccountCommitEdit(to_account);
+    GncTransactionInfo info = {
+        xferData->book,
+        from_account,
+        to_account,
+        xferData->from_commodity,
+        xferData->to_commodity,
+        time,
+        amount,
+        to_amount,
+        gtk_entry_get_text (GTK_ENTRY (xferData->num_entry)),
+        gtk_entry_get_text (GTK_ENTRY (xferData->description_entry)),
+        gtk_entry_get_text (GTK_ENTRY (xferData->notes_entry)),
+        gtk_entry_get_text (GTK_ENTRY (xferData->memo_entry))
+    };
+    auto trans = gnc_transaction_from_transaction_info (&info);
 
     /* If there is a registered callback handler that should be
        notified of the newly created Transaction, call it now. */
