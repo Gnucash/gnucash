@@ -38,8 +38,10 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
 GncHtml*
 gnc_html_factory_create_html( void ) noexcept
 {
-#ifdef WEBVIEW2
+#if defined(WEBVIEW2)
     return gnc_html_webview2_new();
+#elif defined(WKWEBVIEW)
+    return gnc_html_wkwebview_new();
 #else
     return gnc_html_webkit_new();
 #endif
