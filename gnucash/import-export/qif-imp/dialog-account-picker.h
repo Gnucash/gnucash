@@ -25,10 +25,14 @@
 #define DIALOG_ACCOUNT_PICKER_H
 
 #include <libguile.h>
+#include "gnc-gui-query.h"
 
 #include "assistant-qif-import.h"
 
-gboolean qif_account_picker_dialog (GtkWindow *parent, QIFImportWindow * wind, SCM initial_sel);
+void qif_account_picker_dialog (GtkWindow *parent, QIFImportWindow *wind,
+                               SCM initial_sel,
+                               GncGuiQueryResponseCallback completed,
+                               gpointer user_data);
 
 typedef struct _accountpickerdialog QIFAccountPickerDialog;
 

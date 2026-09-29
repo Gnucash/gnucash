@@ -33,6 +33,7 @@
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-date-edit.h"
 #include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
@@ -709,6 +710,34 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
 }
 
 
+typedef struct
+{
+    CsvExportInfo *owner;
+    gchar *filename;
+    gint page;
+} CsvOverwriteRequest;
+
+static void
+csv_export_overwrite_response (GtkWindow *parent, gint response, gpointer data)
+{
+    CsvOverwriteRequest *request = data;
+    if (parent)
+    {
+        CsvExportInfo *info = request->owner;
+        g_object_set_data (G_OBJECT (parent), "csv-overwrite-pending", NULL);
+        if (g_strcmp0 (info->file_name, request->filename) == 0 &&
+            gtk_assistant_get_current_page (GTK_ASSISTANT (parent)) == request->page)
+        {
+            if (response == GTK_RESPONSE_YES)
+                gtk_assistant_set_page_complete (GTK_ASSISTANT (parent), info->finish_label, TRUE);
+            else
+                gtk_assistant_previous_page (GTK_ASSISTANT (parent));
+        }
+    }
+    g_free (request->filename);
+    g_free (request);
+}
+
 void
 csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
@@ -738,9 +767,17 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
         const char *format = _("The file %s already exists. "
                                "Are you sure you want to overwrite it?");
 
-        /* if user says cancel, we should go back a page */
-        if (!gnc_verify_dialog (GTK_WINDOW (assistant), FALSE, format, info->file_name))
-            gtk_assistant_previous_page (assistant);
+        if (g_object_get_data (G_OBJECT (assistant), "csv-overwrite-pending"))
+            return;
+        CsvOverwriteRequest *request = g_new0 (CsvOverwriteRequest, 1);
+        request->owner = info;
+        request->filename = g_strdup (info->file_name);
+        request->page = gtk_assistant_get_current_page (assistant);
+        g_object_set_data (G_OBJECT (assistant), "csv-overwrite-pending", request);
+        gtk_assistant_set_page_complete (assistant, info->finish_label, FALSE);
+        gnc_verify_dialog_async (GTK_WINDOW (assistant), FALSE,
+                                 csv_export_overwrite_response, request, format, info->file_name);
+        return;
     }
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, info->finish_label, TRUE);
@@ -1013,9 +1050,10 @@ gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
         info->csva.account_list = g_list_prepend(info->csva.account_list, acc);
 
     csv_export_assistant_create (info);
-    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
+    gint component = gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
                                 NULL, csv_export_close_handler,
                                 info);
+    gnc_gui_component_set_session (component, gnc_get_current_session ());
     gtk_widget_show_all (info->assistant);
     gnc_window_adjust_for_screen (GTK_WINDOW(info->assistant));
 }

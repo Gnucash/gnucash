@@ -143,8 +143,8 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
                                          GTK_DIALOG_MODAL,
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK, "%s", errmsg);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+        g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+        gtk_widget_show (dialog);
         g_free (errmsg);
         errmsg = 0;
 
@@ -602,13 +602,39 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
 
  */
 
+gboolean
+gnc_bi_import_has_existing_bis (GtkListStore *store, QofBook *book,
+                                 const gchar *type)
+{
+    GtkTreeIter iter;
+    gboolean valid;
+    gchar *id = NULL;
+
+    g_return_val_if_fail (store && book && type, FALSE);
+    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+    while (valid)
+    {
+        GncInvoice *invoice;
+        gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+        invoice = g_ascii_strcasecmp (type, "BILL") == 0
+            ? gnc_search_bill_on_id (book, id)
+            : gnc_search_invoice_on_id (book, id);
+        g_free (id);
+        id = NULL;
+        if (invoice)
+            return TRUE;
+        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+    }
+    return FALSE;
+}
+
 void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
                           guint * n_invoices_updated,
                           guint * n_rows_ignored,
                           gchar * type, gchar * open_mode, GString * info,
-                          GtkWindow *parent)
+                          GtkWindow *parent, gboolean update_existing)
 {
     gboolean valid, on_first_row_of_invoice, invoice_posted;
     GtkTreeIter iter, first_row_of_invoice;
@@ -625,8 +651,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gnc_numeric value;
     GncOwner *owner;
     Account *acc = NULL;
-    enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO, NOT_ASKED = GTK_RESPONSE_NONE} update;
-    GtkWidget *dialog;
     time64 today;
     InvoiceWindow *iw;
     GString *running_id;
@@ -646,7 +670,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     *n_invoices_updated = 0;
 
     invoice = NULL;
-    update = NOT_ASKED;
     on_first_row_of_invoice = TRUE;
     running_id = g_string_new("");
 
@@ -727,19 +750,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             {
                 // For the first existing invoice in the import file,
                 // ask the user to confirm update of existing invoices.
-                if (update == NOT_ASKED)
-                {
-                    dialog = gtk_message_dialog_new (parent,
-                                                     GTK_DIALOG_MODAL,
-                                                     GTK_MESSAGE_ERROR,
-                                                     GTK_BUTTONS_YES_NO,
-                                                     "%s",
-                                                     _("Do you want to update existing bills/invoices?"));
-                    update = gtk_dialog_run (GTK_DIALOG (dialog));
-                    gtk_widget_destroy (dialog);
-                }
-
-                if (update == NO)
+                if (!update_existing)
                 {
                     // If the user does not want to update existing invoices, ignore all rows of the invoice.
                     g_string_append_printf (info,_("Invoice %s not updated because it already exists.\n"),id);
