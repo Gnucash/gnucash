@@ -63,7 +63,7 @@ isspace_str (const gchar* str, int nomorethan)
 }
 
 gboolean
-allow_and_ignore_only_whitespace (GSList* sibling_data,
+allow_and_ignore_only_whitespace (const sixtp_child_result_list& sibling_data,
                                   gpointer parent_data,
                                   gpointer global_data,
                                   gpointer* result,
@@ -74,7 +74,7 @@ allow_and_ignore_only_whitespace (GSList* sibling_data,
 }
 
 gboolean
-generic_accumulate_chars (GSList* sibling_data,
+generic_accumulate_chars (const sixtp_child_result_list& sibling_data,
                           gpointer parent_data,
                           gpointer global_data,
                           gpointer* result,
@@ -92,8 +92,8 @@ generic_accumulate_chars (GSList* sibling_data,
 
 void
 generic_free_data_for_children (gpointer data_for_children,
-                                GSList* data_from_children,
-                                GSList* sibling_data,
+                                const sixtp_child_result_list& data_from_children,
+                                const sixtp_child_result_list& sibling_data,
                                 gpointer parent_data,
                                 gpointer global_data,
                                 gpointer* result,
@@ -103,35 +103,28 @@ generic_free_data_for_children (gpointer data_for_children,
 }
 
 gchar*
-concatenate_child_result_chars (GSList* data_from_children)
+concatenate_child_result_chars (const sixtp_child_result_list& data_from_children)
 {
-    GSList* lp;
     gchar* name = g_strdup ("");
 
     g_return_val_if_fail (name, NULL);
 
-    /* child data lists are in reverse chron order */
-    data_from_children = g_slist_reverse (g_slist_copy (data_from_children));
-
-    for (lp = data_from_children; lp; lp = lp->next)
+    for (auto& cr : data_from_children)
     {
-        sixtp_child_result* cr = (sixtp_child_result*) lp->data;
-        if (cr->type != SIXTP_CHILD_RESULT_CHARS)
+        if (cr.type != SIXTP_CHILD_RESULT_CHARS)
         {
             PERR ("result type is not chars");
-            g_slist_free (data_from_children);
             g_free (name);
             return (NULL);
         }
         else
         {
             char* temp;
-            temp = g_strconcat (name, (gchar*) cr->data, nullptr);
+            temp = g_strconcat (name, (gchar*) cr.data, nullptr);
             g_free (name);
             name = temp;
         }
     }
-    g_slist_free (data_from_children);
     return (name);
 }
 
@@ -288,8 +281,8 @@ hex_string_to_binary (const gchar* str,  void** v, guint64* data_len)
 
 gboolean
 generic_return_chars_end_handler (gpointer data_for_children,
-                                  GSList* data_from_children,
-                                  GSList* sibling_data,
+                                  const sixtp_child_result_list& data_from_children,
+                                  const sixtp_child_result_list& sibling_data,
                                   gpointer parent_data,
                                   gpointer global_data,
                                   gpointer* result,
@@ -355,7 +348,7 @@ simple_chars_only_parser_new (sixtp_end_handler end_handler)
  */
 
 gboolean
-generic_timespec_start_handler (GSList* sibling_data, gpointer parent_data,
+generic_timespec_start_handler (const sixtp_child_result_list& sibling_data, gpointer parent_data,
                                 gpointer global_data,
                                 gpointer* data_for_children, gpointer* result,
                                 const gchar* tag, gchar** attrs)
@@ -398,7 +391,7 @@ timespec_parse_ok (Time64ParseInfo* info)
 
 gboolean
 generic_timespec_secs_end_handler (gpointer data_for_children,
-                                   GSList*  data_from_children, GSList* sibling_data,
+                                   const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                    gpointer parent_data, gpointer global_data,
                                    gpointer* result, const gchar* tag)
 {
@@ -439,7 +432,7 @@ generic_timespec_secs_end_handler (gpointer data_for_children,
 
 gboolean
 generic_timespec_nsecs_end_handler (gpointer data_for_children,
-                                    GSList*  data_from_children, GSList* sibling_data,
+                                    const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                     gpointer parent_data, gpointer global_data,
                                     gpointer* result, const gchar* tag)
 {
@@ -507,7 +500,7 @@ generic_timespec_parser_new (sixtp_end_handler end_handler)
 
 gboolean
 generic_guid_end_handler (gpointer data_for_children,
-                          GSList*  data_from_children, GSList* sibling_data,
+                          const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                           gpointer parent_data, gpointer global_data,
                           gpointer* result, const gchar* tag)
 {
@@ -576,7 +569,7 @@ generic_guid_parser_new (void)
 
 gboolean
 generic_gnc_numeric_end_handler (gpointer data_for_children,
-                                 GSList*  data_from_children, GSList* sibling_data,
+                                 const sixtp_child_result_list& data_from_children, const sixtp_child_result_list& sibling_data,
                                  gpointer parent_data, gpointer global_data,
                                  gpointer* result, const gchar* tag)
 {
