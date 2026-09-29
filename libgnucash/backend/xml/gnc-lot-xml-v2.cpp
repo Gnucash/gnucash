@@ -79,7 +79,7 @@ struct lot_pdata
 };
 
 static gboolean
-lot_id_handler (xmlNodePtr node, gpointer p)
+lot_id_handler (GncXmlNode* node, gpointer p)
 {
     struct lot_pdata* pdata = static_cast<decltype (pdata)> (p);
 
@@ -92,7 +92,7 @@ lot_id_handler (xmlNodePtr node, gpointer p)
 }
 
 static gboolean
-lot_slots_handler (xmlNodePtr node, gpointer p)
+lot_slots_handler (GncXmlNode* node, gpointer p)
 {
     struct lot_pdata* pdata = static_cast<decltype (pdata)> (p);
     gboolean success;
@@ -120,7 +120,7 @@ gnc_lot_end_handler (gpointer data_for_children,
                      gpointer* result, const gchar* tag)
 {
     GNCLot* lot;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -145,14 +145,14 @@ gnc_lot_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, lot);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     LEAVE ("");
     return lot != NULL;
 }
 
 GNCLot*
-dom_tree_to_lot (xmlNodePtr node, QofBook* book)
+dom_tree_to_lot (GncXmlNode* node, QofBook* book)
 {
     struct lot_pdata pdata;
     GNCLot* lot;

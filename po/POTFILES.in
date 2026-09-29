@@ -602,6 +602,7 @@ libgnucash/backend/xml/gnc-transaction-xml-v2.cpp
 libgnucash/backend/xml/gnc-vendor-xml-v2.cpp
 libgnucash/backend/xml/gnc-xml-backend.cpp
 libgnucash/backend/xml/gnc-xml-helper.cpp
+libgnucash/backend/xml/gnc-xml-sax-node.cpp
 libgnucash/backend/xml/io-example-account.cpp
 libgnucash/backend/xml/io-gncxml-gen.cpp
 libgnucash/backend/xml/io-gncxml-v1.cpp

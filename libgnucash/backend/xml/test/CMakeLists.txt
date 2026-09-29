@@ -47,6 +47,7 @@ set_local_dist(test_backend_xml_DIST_local
   test-xml-account.cpp
   test-xml-commodity.cpp
   test-xml-pricedb.cpp
+  test-xml-reader-edge-cases.cpp
   test-xml-transaction.cpp
 )
 set(test_backend_xml_DIST ${test_backend_xml_DIST_local} ${test_backend_xml_test_files_DIST} PARENT_SCOPE)
@@ -79,6 +80,7 @@ add_xml_test(test-xml-account "test-xml-account.cpp;test-file-stuff.cpp")
 add_xml_test(test-xml-commodity "test-xml-commodity.cpp;test-file-stuff.cpp")
 add_xml_test(test-xml-pricedb "test-xml-pricedb.cpp;test-file-stuff.cpp")
 add_xml_test(test-xml-transaction "test-xml-transaction.cpp;test-file-stuff.cpp")
+add_xml_test(test-xml-reader-edge-cases "test-xml-reader-edge-cases.cpp")
 add_xml_test(test-xml2-is-file "test-xml2-is-file.cpp"
    GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2)
 
