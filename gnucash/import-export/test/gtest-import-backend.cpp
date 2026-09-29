@@ -124,6 +124,10 @@ gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
     return TRUE;
 }
 
+// fake function from qofid.cpp
+void qof_collection_destroy (QofCollection *col)
+{
+}
 
 /* required fake functions from app-utils sources, which should not be linked to the test application */
 
