@@ -31,9 +31,7 @@
 #include <glib.h>
 #include <string.h>
 
-/* For regex */
-#include <sys/types.h>
-#include <regex.h>
+#include <ctre.hpp>
 
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
@@ -43,39 +41,20 @@
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* numeric regular expressions */
-static regex_t decimal_radix_regex;
-static regex_t comma_radix_regex;
+static constexpr ctll::fixed_string decimal_radix_regex(
+    "^ *\\$?[+\\-]?\\$?[0-9]+ *$|^ *\\$?[+\\-]?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?[+\\-]?\\$?[0-9]+\\.[0-9]* *$");
+static constexpr ctll::fixed_string comma_radix_regex(
+    "^ *\\$?[+\\-]?\\$?[0-9]+ *$|^ *\\$?[+\\-]?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*)? *$|^ *\\$?[+\\-]?\\$?[0-9]+,[0-9]* *$");
 
 /* date regular expressions */
-static regex_t date_regex;
-static regex_t date_mdy_regex;
-static regex_t date_ymd_regex;
-
-static gboolean regex_compiled = FALSE;
+static constexpr ctll::fixed_string date_regex(
+    "^ *([0-9]+) *[\\-/.'] *([0-9]+) *[\\-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$");
+static constexpr ctll::fixed_string date_mdy_regex("([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])");
+static constexpr ctll::fixed_string date_ymd_regex("([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])");
 
 /* Set and clear flags in bit-flags */
 #define import_set_flag(i,f) (i = static_cast<GncImportFormat>(static_cast<int>(i) | static_cast<int>(f)))
 #define import_clear_flag(i,f) (i = static_cast<GncImportFormat>(static_cast<int>(i) & static_cast<int>(~f)))
-
-static void
-compile_regex(void)
-{
-    int flags = REG_EXTENDED;
-
-    /* compile the numeric regular expressions */
-    regcomp(&decimal_radix_regex,
-            "^ *\\$?[+-]?\\$?[0-9]+ *$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+\\.[0-9]* *$", flags);
-    regcomp(&comma_radix_regex,
-            "^ *\\$?[+-]?\\$?[0-9]+ *$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+,[0-9]* *$", flags);
-
-    /* compile the date-parsing regular expressions */
-    regcomp(&date_regex,
-            "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$", flags);
-    regcomp(&date_mdy_regex, "([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])", flags);
-    regcomp(&date_ymd_regex, "([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])", flags);
-
-    regex_compiled = TRUE;
-}
 
 static gint
 my_strntol(const char *str, int len)
@@ -100,30 +79,51 @@ my_strntol(const char *str, int len)
     return res;
 }
 
+/* Extract the three numeric groups captured by date_regex, date_mdy_regex
+ * or date_ymd_regex (whichever ctre pattern produced Match) into val0-2
+ * (and their source lengths into len0-2). Returns false if any of the
+ * three groups didn't participate in the match - which shouldn't happen
+ * given none of the three groups in any of those patterns is optional,
+ * but is checked for defensively since the caller relies on it.
+ */
+template <typename Match>
+static bool
+extract_date_parts(Match &match, int &val0, int &val1, int &val2,
+                    int &len0, int &len1, int &len2)
+{
+    auto g0 = match.template get<1>();
+    auto g1 = match.template get<2>();
+    auto g2 = match.template get<3>();
+    if (!g0 || !g1 || !g2)
+        return false;
+
+    len0 = static_cast<int>(g0.size());
+    len1 = static_cast<int>(g1.size());
+    len2 = static_cast<int>(g2.size());
+
+    val0 = my_strntol(g0.data(), len0);
+    val1 = my_strntol(g1.data(), len1);
+    val2 = my_strntol(g2.data(), len2);
+    return true;
+}
+
 /*
  * based on a trio match (matches in spaces 1, 2, and 3), and a list
  * of possible date formats, return the list of formats that this string
  * could actually be.
  */
+template <typename Match>
 static GncImportFormat
-check_date_format(const char * str, regmatch_t *match, GncImportFormat fmts)
+check_date_format(Match &match, GncImportFormat fmts)
 {
     GncImportFormat res = GNCIF_NONE;
     int len0 = 0, len1 = 0, len2 = 0;
     int val0 = 0, val1 = 0, val2 = 0;
 
-    g_return_val_if_fail(match, res);
     g_return_val_if_fail(fmts, res);
 
-    /* Compute the lengths */
-    len0 = match[1].rm_eo - match[1].rm_so;
-    len1 = match[2].rm_eo - match[2].rm_so;
-    len2 = match[3].rm_eo - match[3].rm_so;
-
-    /* compute the numeric values */
-    val0 = my_strntol(str + match[1].rm_so, len0);
-    val1 = my_strntol(str + match[2].rm_so, len1);
-    val2 = my_strntol(str + match[3].rm_so, len2);
+    if (!extract_date_parts(match, val0, val1, val2, len0, len1, len2))
+        return res;
 
     /* Filter out the possibilities.  Hopefully only one will remain */
 
@@ -187,13 +187,10 @@ gnc_import_test_numeric(const char* str, GncImportFormat fmts)
 
     g_return_val_if_fail(str, fmts);
 
-    if (!regex_compiled)
-        compile_regex();
-
-    if ((fmts & GNCIF_NUM_PERIOD) && !regexec(&decimal_radix_regex, str, 0, NULL, 0))
+    if ((fmts & GNCIF_NUM_PERIOD) && ctre::search<decimal_radix_regex>(str))
         import_set_flag (res, GNCIF_NUM_PERIOD);
 
-    if ((fmts & GNCIF_NUM_COMMA) && !regexec(&comma_radix_regex, str, 0, NULL, 0))
+    if ((fmts & GNCIF_NUM_COMMA) && ctre::search<comma_radix_regex>(str))
         import_set_flag (res, GNCIF_NUM_COMMA);
 
     return res;
@@ -203,19 +200,15 @@ gnc_import_test_numeric(const char* str, GncImportFormat fmts)
 GncImportFormat
 gnc_import_test_date(const char* str, GncImportFormat fmts)
 {
-    regmatch_t match[5];
     GncImportFormat res = GNCIF_NONE;
 
     g_return_val_if_fail(str, fmts);
     g_return_val_if_fail(strlen(str) > 1, fmts);
 
-    if (!regex_compiled)
-        compile_regex();
-
-    if (!regexec(&date_regex, str, 5, match, 0))
+    if (auto match = ctre::search<date_regex>(str))
     {
-        if (match[1].rm_so != -1)
-            res = check_date_format(str, match, fmts);
+        if (match.get<1>())
+            res = check_date_format(match, fmts);
         else
         {
             /* Hmm, it matches XXXXXXXX, but is this YYYYxxxx or xxxxYYYY?
@@ -225,21 +218,25 @@ gnc_import_test_date(const char* str, GncImportFormat fmts)
             #define DATE_LEN 8
             char temp[DATE_LEN + 1];
 
-            g_return_val_if_fail(match[4].rm_so != -1, fmts);
-            g_return_val_if_fail(match[4].rm_eo - match[4].rm_so == DATE_LEN, fmts);
+            g_return_val_if_fail(match.get<4>(), fmts);
+            g_return_val_if_fail(match.get<4>().size() == DATE_LEN, fmts);
 
             /* make a temp copy of the XXXXXXXX string */
-            strncpy(temp, str + match[4].rm_so, DATE_LEN);
+            strncpy(temp, match.get<4>().data(), DATE_LEN);
             temp[DATE_LEN] = '\0';
 
             /* then check it against the ymd or mdy formats, as necessary */
-            if (((fmts & GNCIF_DATE_YDM) || (fmts & GNCIF_DATE_YMD)) &&
-                    !regexec(&date_ymd_regex, temp, 4, match, 0))
-                import_set_flag (res, check_date_format (temp, match, fmts));
+            if ((fmts & GNCIF_DATE_YDM) || (fmts & GNCIF_DATE_YMD))
+            {
+                if (auto match2 = ctre::search<date_ymd_regex>(temp))
+                    import_set_flag (res, check_date_format (match2, fmts));
+            }
 
-            if (((fmts & GNCIF_DATE_DMY) || (fmts & GNCIF_DATE_MDY)) &&
-                    !regexec(&date_mdy_regex, temp, 4, match, 0))
-                import_set_flag (res, check_date_format (temp, match, fmts));
+            if ((fmts & GNCIF_DATE_DMY) || (fmts & GNCIF_DATE_MDY))
+            {
+                if (auto match2 = ctre::search<date_mdy_regex>(temp))
+                    import_set_flag (res, check_date_format (match2, fmts));
+            }
         }
     }
 
@@ -299,65 +296,64 @@ fix_year(int y)
 gboolean
 gnc_import_parse_date(const char *str, GncImportFormat fmt, time64 *val)
 {
-    regmatch_t match[5];
     char temp[9];
-    const char *datestr;
 
     int v0 = 0, v1 = 0, v2 = 0;
     int m = 0, d = 0, y = 0;
-
-    if (!regex_compiled)
-        compile_regex();
+    int len0 = 0, len1 = 0, len2 = 0;
 
     g_return_val_if_fail(str, FALSE);
     g_return_val_if_fail(val, FALSE);
     g_return_val_if_fail(fmt, FALSE);
     g_return_val_if_fail(!(fmt & (fmt - 1)), FALSE);
 
-    if (!regexec(&date_regex, str, 5, match, 0))
+    if (auto match = ctre::search<date_regex>(str))
     {
-        if (match[1].rm_so != -1)
-            datestr = str;
+        bool have_parts = false;
+        if (match.get<1>())
+            have_parts = extract_date_parts(match, v0, v1, v2, len0, len1, len2);
         else
         {
             /* date is of the form XXXXXXX; save it to a temp string and
              * split it based on the format, either YYYYaabb or aabbYYYY
              */
-            g_return_val_if_fail(match[4].rm_so != -1, FALSE);
-            g_return_val_if_fail(match[4].rm_eo - match[4].rm_so == 8, FALSE);
+            g_return_val_if_fail(match.get<4>(), FALSE);
+            g_return_val_if_fail(match.get<4>().size() == 8, FALSE);
 
-            strncpy(temp, str + match[4].rm_so, 8);
+            strncpy(temp, match.get<4>().data(), 8);
             temp[8] = '\0';
 
             switch (fmt)
             {
             case GNCIF_DATE_DMY:
             case GNCIF_DATE_MDY:
-                g_return_val_if_fail(!regexec(&date_mdy_regex, temp, 4, match, 0), FALSE);
+            {
+                auto match2 = ctre::search<date_mdy_regex>(temp);
+                g_return_val_if_fail(match2, FALSE);
+                have_parts = extract_date_parts(match2, v0, v1, v2, len0, len1, len2);
                 break;
+            }
             case GNCIF_DATE_YMD:
             case GNCIF_DATE_YDM:
-                g_return_val_if_fail(!regexec(&date_ymd_regex, temp, 4, match, 0), FALSE);
+            {
+                auto match2 = ctre::search<date_ymd_regex>(temp);
+                g_return_val_if_fail(match2, FALSE);
+                have_parts = extract_date_parts(match2, v0, v1, v2, len0, len1, len2);
                 break;
+            }
             default:
                 PERR("Invalid date format provided: %d", fmt);
                 return FALSE;
             }
-            datestr = temp;
         }
 
-        /* datestr points to the date string, and match[123] contains the matches. */
+        /* have_parts is true iff v0-v2 were successfully extracted. */
 
-        if (match[1].rm_so == -1 || match[2].rm_so == -1 || match[3].rm_so == -1)
+        if (!have_parts)
         {
             PERR("can't interpret date %s", str);
             return FALSE;
         }
-
-        /* grab the numerics */
-        v0 = my_strntol(datestr + match[1].rm_so, match[1].rm_eo - match[1].rm_so);
-        v1 = my_strntol(datestr + match[2].rm_so, match[2].rm_eo - match[2].rm_so);
-        v2 = my_strntol(datestr + match[3].rm_so, match[3].rm_eo - match[3].rm_so);
 
         switch (fmt)
         {

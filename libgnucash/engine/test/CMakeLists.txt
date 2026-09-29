@@ -100,6 +100,7 @@ set(gtest_engine_INCLUDES
   ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
+  ${CMAKE_SOURCE_DIR}/borrowed/ctre # for gnc-numeric.cpp's ctre.hpp
   ../../../borrowed/libc
 )
 
