@@ -1011,6 +1011,27 @@ gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
     return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, FALSE, 0);
 }
 
+static gnc_numeric gncInvoiceGetTotalNegatedIfCreditNote(GncInvoice *invoice)
+{
+    if (!invoice) return gnc_numeric_zero ();
+
+    gnc_numeric total = gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, FALSE, 0);
+
+    GncInvoiceType type = gncInvoiceGetType (invoice);
+
+    switch (type)
+    {
+    case GNC_INVOICE_CUST_CREDIT_NOTE:
+    case GNC_INVOICE_VEND_CREDIT_NOTE:
+    case GNC_INVOICE_EMPL_CREDIT_NOTE:
+        total = gnc_numeric_neg (total);    
+        break;
+    default: break;
+    }
+
+    return total;
+}
+
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
@@ -2233,6 +2254,7 @@ gboolean gncInvoiceRegister (void)
         { INVOICE_JOB,       GNC_ID_JOB,       (QofAccessFunc)qofInvoiceGetJob,     (QofSetterFunc)qofInvoiceSetJob },
         { QOF_PARAM_ACTIVE,  QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, (QofSetterFunc)gncInvoiceSetActive },
         { INVOICE_IS_CN,     QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetIsCreditNote, (QofSetterFunc)gncInvoiceSetIsCreditNote },
+        { INVOICE_TOTAL,     QOF_TYPE_NUMERIC, (QofAccessFunc)gncInvoiceGetTotalNegatedIfCreditNote, NULL },
         { QOF_PARAM_BOOK,    QOF_ID_BOOK,      (QofAccessFunc)qof_instance_get_book, NULL },
         { QOF_PARAM_GUID,    QOF_TYPE_GUID,    (QofAccessFunc)qof_instance_get_guid, NULL },
         { NULL },
