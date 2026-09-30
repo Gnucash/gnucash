@@ -7,13 +7,13 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 #include <cstring>
+#include <string>
 #include "gnc-file.h"
 
 namespace
 {
-gboolean display_available;
-
 GtkWidget *
 find_notice (GtkWindow *parent)
 {
@@ -23,24 +23,45 @@ find_notice (GtkWindow *parent)
         if (GTK_IS_MESSAGE_DIALOG (node->data) &&
             gtk_window_get_transient_for (GTK_WINDOW (node->data)) == parent)
         {
-            g_assert_null (notice);
+            EXPECT_EQ (notice, nullptr);
             notice = GTK_WIDGET (node->data);
         }
     g_list_free (windows);
     return notice;
 }
 
-void
-test_terminal_error (gconstpointer data)
+struct ErrorCase
 {
-    if (!display_available)
+    const char *name;
+    QofBackendError code;
+};
+
+class FileErrorResponseTest : public ::testing::TestWithParam<ErrorCase>
+{
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (parent);
+        filename = g_strdup ("/synthetic-test/missing-book.gnucash");
     }
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    auto filename = g_strdup ("/synthetic-test/missing-book.gnucash");
-    auto code = static_cast<QofBackendError> (GPOINTER_TO_INT (data));
+
+    void TearDown () override
+    {
+        gtk_widget_destroy (GTK_WIDGET (parent));
+        g_clear_object (&notice);
+        g_clear_object (&parent);
+        g_free (filename);
+    }
+
+    GtkWindow *parent{};
+    GtkWidget *notice{};
+    gchar *filename{};
+};
+
+TEST_P (FileErrorResponseTest, NoticeOwnsMessageAndIgnoresLateParentResponse)
+{
+    auto code = GetParam ().code;
     if (code == static_cast<QofBackendError> (10000))
         g_test_expect_message ("gnc.gui", G_LOG_LEVEL_CRITICAL,
                                "*Unhandled error 10000*");
@@ -49,27 +70,19 @@ test_terminal_error (gconstpointer data)
     if (code == static_cast<QofBackendError> (10000))
         g_test_assert_expected_messages ();
     g_free (filename);
-    auto notice = find_notice (parent);
-    g_assert_nonnull (notice); // Product call returned before an answer.
+    filename = nullptr;
+    notice = find_notice (parent);
+    ASSERT_NE (notice, nullptr); // Product call returned before an answer.
+    g_object_ref (notice);
     gchar *message = nullptr;
     g_object_get (notice, "text", &message, nullptr);
-    g_assert_nonnull (message);
-    g_assert_cmpuint (std::strlen (message), >, 0);
+    ASSERT_NE (message, nullptr);
+    EXPECT_GT (std::strlen (message), 0u);
     g_free (message);
-    g_object_ref (notice);
     gtk_widget_destroy (GTK_WIDGET (parent));
     gtk_dialog_response (GTK_DIALOG (notice), GTK_RESPONSE_OK);
-    g_object_unref (notice);
 }
-}
-
-int
-main (int argc, char **argv)
-{
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY")) g_assert_true (display_available);
-    const struct { const char *name; QofBackendError code; } cases[] = {
+const ErrorCase cases[] = {
         {"no-handler", ERR_BACKEND_NO_HANDLER},
         {"no-backend", ERR_BACKEND_NO_BACKEND},
         {"bad-url", ERR_BACKEND_BAD_URL},
@@ -94,12 +107,28 @@ main (int argc, char **argv)
         {"unknown", static_cast<QofBackendError> (10000)},
         {"database-too-new-warning", ERR_SQL_DB_TOO_NEW},
         {"upgrade-warning", ERR_FILEIO_FILE_UPGRADE},
-    };
-    for (const auto &item : cases)
+};
+
+INSTANTIATE_TEST_SUITE_P (BackendErrors, FileErrorResponseTest,
+                         ::testing::ValuesIn (cases),
+                         [] (const auto &info) {
+                             std::string name{info.param.name};
+                             for (auto &character : name)
+                                 if (character == '-') character = '_';
+                             return name;
+                         });
+}
+
+int
+main (int argc, char **argv)
+{
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
     {
-        auto path = g_strdup_printf ("/gnome-utils/file-error/%s", item.name);
-        g_test_add_data_func (path, GINT_TO_POINTER (item.code), test_terminal_error);
-        g_free (path);
+        g_printerr ("GTK display initialization failed for file error response tests.\n");
+        return 1;
     }
-    return g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

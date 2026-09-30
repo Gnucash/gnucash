@@ -8,6 +8,8 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
+#include <string>
 
 #include "cashobjects.h"
 #include "dialog-doclink-utils.h"
@@ -25,8 +27,9 @@
 #include "Split.h"
 #include "gnc-commodity.h"
 
-static gboolean display_available;
 static gchar *path_head;
+enum class StaleResponseCase { read_only, session_switch, parent_destroy,
+                               preference_drift, disposed_book };
 
 static gchar *
 memory_get_string (const gchar *group, const gchar *name)
@@ -76,6 +79,12 @@ new_transaction (QofBook *book)
     return trans;
 }
 
+struct LinkReplacement
+{
+    Transaction *trans{};
+    bool replaced{};
+};
+
 static GtkWidget *
 find_path_head_dialog ()
 {
@@ -87,7 +96,7 @@ find_path_head_dialog ()
         if (g_strcmp0 (gtk_widget_get_name (widget),
                        "gnc-id-doclink-change") == 0)
         {
-            g_assert_null (dialog);
+            EXPECT_EQ (dialog, nullptr);
             dialog = widget;
         }
     }
@@ -103,52 +112,109 @@ set_doclink (Transaction *trans, const gchar *uri)
     xaccTransCommitEdit (trans);
 }
 
-static void
-test_path_head_response ()
+template <typename TestBase>
+class DoclinkPathHeadFixture : public TestBase
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        m_session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (m_session);
+        m_book = qof_session_get_book (m_session);
+        m_trans = new_transaction (m_book);
+        m_parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (m_parent);
     }
+    void TearDown () override
+    {
+        if (m_handler)
+        {
+            qof_event_unregister_handler (m_handler);
+            m_handler = 0;
+        }
+        if (m_parent)
+        {
+            gtk_widget_destroy (GTK_WIDGET (m_parent));
+            g_object_unref (m_parent);
+        }
+        auto current = gnc_exchange_current_session (nullptr);
+        if (current)
+            qof_session_destroy (current);
+        if (m_session && m_session != current)
+            qof_session_destroy (m_session);
+        g_clear_object (&m_retained_book);
+        if (m_dialog)
+            g_object_unref (m_dialog);
+    }
+    QofSession *m_session{};
+    QofBook *m_book{};
+    Transaction *m_trans{};
+    GtkWindow *m_parent{};
+    GtkWidget *m_dialog{};
+    QofBook *m_retained_book{};
+    LinkReplacement m_replacement{};
+    gint m_handler{};
+    void begin_stale_prompt ()
+    {
+        ASSERT_TRUE (memory_set_string (GNC_PREFS_GROUP_GENERAL,
+                                        GNC_DOC_LINK_PATH_HEAD,
+                                        "file:///new-head/"));
+        set_doclink (m_trans, "file:///new-head/document.pdf");
+        gnc_doclink_pref_path_head_changed (m_parent, "file:///old-head/");
+        m_dialog = find_path_head_dialog ();
+        ASSERT_NE (m_dialog, nullptr);
+        g_object_ref (m_dialog);
+    }
+};
 
-    auto book = gnc_get_current_book ();
-    auto trans = new_transaction (book);
+using DoclinkPathHeadTest = DoclinkPathHeadFixture<::testing::Test>;
+using DoclinkStaleResponseTest =
+    DoclinkPathHeadFixture<::testing::TestWithParam<StaleResponseCase>>;
+
+static std::string
+stale_response_name (const ::testing::TestParamInfo<StaleResponseCase> &info)
+{
+    const char *names[] = {"ReadOnly", "SessionSwitch", "ParentDestroy",
+                           "PreferenceDrift", "DisposedBookRetainedObject"};
+    return names[static_cast<int> (info.param)];
+}
+
+TEST_F (DoclinkPathHeadTest, CancelThenAcceptRewritesTheMatchingLink)
+{
+    auto trans = m_trans;
     const gchar *new_head = "file:///new-head/";
     const gchar *old_head = "file:///old-head/";
     const gchar *absolute_link = "file:///new-head/document.pdf";
-    g_assert_true (gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL,
-                                         GNC_DOC_LINK_PATH_HEAD, new_head));
+    ASSERT_TRUE (gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL,
+                                       GNC_DOC_LINK_PATH_HEAD, new_head));
     set_doclink (trans, absolute_link);
 
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
     auto borrowed_old_head = g_strdup (old_head);
-    gnc_doclink_pref_path_head_changed (parent, borrowed_old_head);
+    gnc_doclink_pref_path_head_changed (m_parent, borrowed_old_head);
     g_free (borrowed_old_head);
 
     auto dialog = find_path_head_dialog ();
-    g_assert_nonnull (dialog);
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, absolute_link);
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    EXPECT_STREQ (xaccTransGetDocLink (trans), absolute_link);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-    g_assert_null (find_path_head_dialog ());
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, absolute_link);
+    EXPECT_EQ (find_path_head_dialog (), nullptr);
+    EXPECT_STREQ (xaccTransGetDocLink (trans), absolute_link);
 
-    gnc_doclink_pref_path_head_changed (parent, old_head);
+    gnc_doclink_pref_path_head_changed (m_parent, old_head);
     dialog = find_path_head_dialog ();
-    g_assert_nonnull (dialog);
+    ASSERT_NE (dialog, nullptr);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (find_path_head_dialog ());
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, "document.pdf");
+    EXPECT_EQ (find_path_head_dialog (), nullptr);
+    EXPECT_STREQ (xaccTransGetDocLink (trans), "document.pdf");
 
     set_doclink (trans, absolute_link);
-    gnc_doclink_pref_path_head_changed (parent, old_head);
-    g_assert_nonnull (find_path_head_dialog ());
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    g_assert_null (find_path_head_dialog ());
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, absolute_link);
-    gnc_clear_current_session ();
+    gnc_doclink_pref_path_head_changed (m_parent, old_head);
+    ASSERT_NE (find_path_head_dialog (), nullptr);
+    gtk_widget_destroy (GTK_WIDGET (m_parent));
+    EXPECT_EQ (find_path_head_dialog (), nullptr);
+    EXPECT_STREQ (xaccTransGetDocLink (trans), absolute_link);
 }
 
 static void
@@ -156,12 +222,6 @@ destroy_parent ([[maybe_unused]] GtkWidget *dialog, gpointer parent)
 {
     gtk_widget_destroy (GTK_WIDGET (parent));
 }
-
-struct LinkReplacement
-{
-    Transaction *trans;
-    bool replaced;
-};
 
 static void
 replace_link_during_commit (QofInstance *instance, QofEventId event,
@@ -175,95 +235,77 @@ replace_link_during_commit (QofInstance *instance, QofEventId event,
     xaccTransSetDocLink (state->trans, "file:///newer/document.pdf");
 }
 
-static void
-test_reentrant_link_replacement ()
+TEST_F (DoclinkPathHeadTest, ReentrantLinkReplacementWins)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    gnc_set_current_session (qof_session_new (qof_book_new ()));
-    g_assert_true (memory_set_string (GNC_PREFS_GROUP_GENERAL,
+    EXPECT_TRUE (memory_set_string (GNC_PREFS_GROUP_GENERAL,
                                       GNC_DOC_LINK_PATH_HEAD, "file:///new-head/"));
-    auto trans = new_transaction (gnc_get_current_book ());
+    auto trans = m_trans;
     set_doclink (trans, "file:document.pdf");
-    LinkReplacement state{trans, false};
-    auto handler = qof_event_register_handler (replace_link_during_commit, &state);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    gnc_doclink_pref_path_head_changed (parent, "file:///old-head/");
+    m_replacement = {trans, false};
+    m_handler = qof_event_register_handler (replace_link_during_commit,
+                                            &m_replacement);
+    gnc_doclink_pref_path_head_changed (m_parent, "file:///old-head/");
     auto dialog = find_path_head_dialog ();
-    g_assert_nonnull (dialog);
+    ASSERT_NE (dialog, nullptr);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    qof_event_unregister_handler (handler);
-    g_assert_true (state.replaced);
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, "file:///newer/document.pdf");
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    gnc_clear_current_session ();
+    EXPECT_TRUE (m_replacement.replaced);
+    EXPECT_STREQ (xaccTransGetDocLink (trans), "file:///newer/document.pdf");
 }
 
-static void
-test_stale_response (gconstpointer data)
+TEST_P (DoclinkStaleResponseTest, RejectsStaleResponse)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto scenario = GPOINTER_TO_INT (data);
-    g_assert_true (memory_set_string (GNC_PREFS_GROUP_GENERAL,
-                                      GNC_DOC_LINK_PATH_HEAD, "file:///new-head/"));
-    auto session = qof_session_new (qof_book_new ());
-    gnc_set_current_session (session);
-    auto book = qof_session_get_book (session);
-    QofBook *retained_book = nullptr;
-    auto trans = new_transaction (book);
+    const auto scenario = GetParam ();
+    auto book = m_book;
+    auto trans = m_trans;
     const char *absolute = "file:///new-head/document.pdf";
     set_doclink (trans, absolute);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    gnc_doclink_pref_path_head_changed (parent, "file:///old-head/");
-    auto dialog = find_path_head_dialog ();
-    g_assert_nonnull (dialog);
-    g_object_ref (dialog);
-    if (scenario == 0)
+    gnc_doclink_pref_path_head_changed (m_parent, "file:///old-head/");
+    m_dialog = find_path_head_dialog ();
+    ASSERT_NE (m_dialog, nullptr);
+    g_object_ref (m_dialog);
+    if (scenario == StaleResponseCase::read_only)
         qof_book_mark_readonly (book);
-    else if (scenario == 1)
+    else if (scenario == StaleResponseCase::session_switch)
         gnc_set_current_session (qof_session_new (qof_book_new ()));
-    else if (scenario == 3)
-        g_assert_true (memory_set_string (GNC_PREFS_GROUP_GENERAL,
-                                          GNC_DOC_LINK_PATH_HEAD,
-                                          "file:///different-head/"));
-    else if (scenario == 4)
+    else if (scenario == StaleResponseCase::preference_drift)
+        ASSERT_TRUE (memory_set_string (GNC_PREFS_GROUP_GENERAL,
+                                        GNC_DOC_LINK_PATH_HEAD,
+                                        "file:///different-head/"));
+    else if (scenario == StaleResponseCase::disposed_book)
     {
-        retained_book = QOF_BOOK (g_object_ref (book));
+        m_retained_book = QOF_BOOK (g_object_ref (book));
         /* Release the instance's collection membership before session teardown
          * frees collections. The retained GObject remains alive but its book
          * contents are destroyed by gnc_clear_current_session below. */
-        g_object_run_dispose (G_OBJECT (retained_book));
+        g_object_run_dispose (G_OBJECT (m_retained_book));
         gnc_clear_current_session ();
+        m_session = nullptr;
+        m_book = nullptr;
+        m_trans = nullptr;
         gnc_set_current_session (qof_session_new (qof_book_new ()));
-        trans = new_transaction (gnc_get_current_book ());
+        m_session = gnc_get_current_session ();
+        m_book = qof_session_get_book (m_session);
+        m_trans = new_transaction (m_book);
+        trans = m_trans;
         set_doclink (trans, absolute);
     }
     else
-        g_signal_connect (dialog, "destroy", G_CALLBACK (destroy_parent), parent);
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (find_path_head_dialog ());
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, absolute);
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, absolute);
-    g_object_unref (dialog);
-    if (scenario != 2)
-        gtk_widget_destroy (GTK_WIDGET (parent));
-    if (scenario == 1)
-    {
-        gnc_clear_current_session ();
-        qof_session_destroy (session);
-    }
-    else
-        gnc_clear_current_session ();
-    g_clear_object (&retained_book);
+        g_signal_connect (m_dialog, "destroy", G_CALLBACK (destroy_parent), m_parent);
+    gtk_dialog_response (GTK_DIALOG (m_dialog), GTK_RESPONSE_OK);
+    EXPECT_EQ (find_path_head_dialog (), nullptr);
+    EXPECT_STREQ (xaccTransGetDocLink (trans), absolute);
+    gtk_dialog_response (GTK_DIALOG (m_dialog), GTK_RESPONSE_OK);
+    EXPECT_STREQ (xaccTransGetDocLink (trans), absolute);
 }
+
+INSTANTIATE_TEST_SUITE_P (
+    StaleSources, DoclinkStaleResponseTest,
+    ::testing::Values (StaleResponseCase::read_only,
+                       StaleResponseCase::session_switch,
+                       StaleResponseCase::parent_destroy,
+                       StaleResponseCase::preference_drift,
+                       StaleResponseCase::disposed_book),
+    stale_response_name);
 
 int
 main (int argc, char **argv)
@@ -274,29 +316,15 @@ main (int argc, char **argv)
     backend.set_string = memory_set_string;
     prefsbackend = &backend;
     path_head = g_strdup ("file:///new-head/");
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for doclink path-head tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
-    g_test_add_func ("/gnome-utils/doclink-path-head/response",
-                     test_path_head_response);
-    g_test_add_func ("/gnome-utils/doclink-path-head/reentrant-link-replacement",
-                     test_reentrant_link_replacement);
-    g_test_add_data_func ("/gnome-utils/doclink-path-head/read-only",
-                          GINT_TO_POINTER (0), test_stale_response);
-    g_test_add_data_func ("/gnome-utils/doclink-path-head/session-switch",
-                          GINT_TO_POINTER (1), test_stale_response);
-    g_test_add_data_func ("/gnome-utils/doclink-path-head/parent-destroy-during-response",
-                          GINT_TO_POINTER (2), test_stale_response);
-    g_test_add_data_func ("/gnome-utils/doclink-path-head/preference-drift",
-                          GINT_TO_POINTER (3), test_stale_response);
-    g_test_add_data_func ("/gnome-utils/doclink-path-head/book-destroy-with-retained-object",
-                          GINT_TO_POINTER (4), test_stale_response);
-    auto result = g_test_run ();
-    if (gnc_current_session_exist ())
-        gnc_clear_current_session ();
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     qof_close ();
     prefsbackend = saved_backend;
     g_free (path_head);

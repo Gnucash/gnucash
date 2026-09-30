@@ -10,6 +10,7 @@ set(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
 set(GNOME_UTILS_GUI_TEST_LIBS
   test-core
   gnc-gnome-utils
+  gtest
 )
 
 set(GUILE_DEPENDS

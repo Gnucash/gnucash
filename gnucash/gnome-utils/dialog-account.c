@@ -2749,7 +2749,7 @@ cascade_dialog_request_response (GtkDialog *dialog, gint response,
             g_clear_pointer (&new_color, g_free);
     }
 
-    account_guids = g_ptr_array_new_with_free_func (g_free);
+    account_guids = g_ptr_array_new_with_free_func ((GDestroyNotify) guid_free);
     g_ptr_array_add (account_guids, guid_copy (request->account_guid));
     account = cascade_dialog_request_lookup_account (request,
                                                     request->account_guid);

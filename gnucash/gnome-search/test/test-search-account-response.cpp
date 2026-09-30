@@ -1,14 +1,10 @@
 /* Copyright (C) 2026 GnuCash contributors
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <config.h>
-
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -19,9 +15,9 @@
 #include "search-account.h"
 #include "search-core-type.h"
 
-static gboolean display_available;
-
-static GtkWidget *
+namespace
+{
+GtkWidget *
 find_widget (GtkWidget *root, gboolean (*match)(GtkWidget *))
 {
     if (match (root))
@@ -36,20 +32,20 @@ find_widget (GtkWidget *root, gboolean (*match)(GtkWidget *))
     return found;
 }
 
-static gboolean is_button (GtkWidget *widget) { return GTK_IS_BUTTON (widget); }
-static gboolean is_account_view (GtkWidget *widget)
+gboolean is_button (GtkWidget *widget) { return GTK_IS_BUTTON (widget); }
+gboolean is_account_view (GtkWidget *widget)
 {
     return GNC_IS_TREE_VIEW_ACCOUNT (widget);
 }
 
-static const gchar *
+const gchar *
 button_text (GtkWidget *button)
 {
     auto label = gtk_bin_get_child (GTK_BIN (button));
     return GTK_IS_LABEL (label) ? gtk_label_get_text (GTK_LABEL (label)) : nullptr;
 }
 
-static GtkWidget *
+GtkWidget *
 find_selection_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -66,100 +62,145 @@ find_selection_dialog ()
     return found;
 }
 
-static void
-test_public_widget_response_lifetimes ()
+class AccountSearchResponseTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        book = qof_book_new ();
+        auto root = gnc_account_create_root (book);
+        account = xaccMallocAccount (book);
+        xaccAccountSetName (account, "Search selection target");
+        gnc_account_append_child (root, account);
+        session = qof_session_new (book);
+        gnc_set_current_session (session);
+
+        parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        contents = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+        gtk_container_add (GTK_CONTAINER (parent), contents);
+        search = gnc_search_account_new ();
+        gnc_search_core_type_pass_parent (GNC_SEARCH_CORE_TYPE (search),
+                                          GTK_WIDGET (parent));
+        auto widget = gnc_search_core_type_get_widget (
+            GNC_SEARCH_CORE_TYPE (search));
+        gtk_container_add (GTK_CONTAINER (contents), widget);
+        button = find_widget (widget, is_button);
+        ASSERT_NE (button, nullptr);
+        ASSERT_TRUE (GTK_IS_BUTTON (button));
     }
 
-    auto book = qof_book_new ();
-    auto root = gnc_account_create_root (book);
-    auto account = xaccMallocAccount (book);
-    xaccAccountSetName (account, "Search selection target");
-    gnc_account_append_child (root, account);
-    gnc_set_current_session (qof_session_new (book));
+    void TearDown () override
+    {
+        if (parent)
+            gtk_widget_destroy (GTK_WIDGET (parent));
+        g_object_unref (search);
+        gnc_clear_current_session ();
+    }
 
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    auto contents = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_add (GTK_CONTAINER (parent), contents);
-    auto search = gnc_search_account_new ();
-    gnc_search_core_type_pass_parent (GNC_SEARCH_CORE_TYPE (search), parent);
-    auto widget = gnc_search_core_type_get_widget (GNC_SEARCH_CORE_TYPE (search));
-    gtk_container_add (GTK_CONTAINER (contents), widget);
-    auto button = find_widget (widget, is_button);
-    g_assert_true (GTK_IS_BUTTON (button));
-    gtk_button_clicked (GTK_BUTTON (button));
-    auto dialog = find_selection_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    GtkWidget *open_dialog ()
+    {
+        gtk_button_clicked (GTK_BUTTON (button));
+        auto dialog = find_selection_dialog ();
+        EXPECT_NE (dialog, nullptr);
+        if (dialog)
+        {
+            EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+            EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+            EXPECT_NE (find_widget (dialog, is_account_view), nullptr);
+        }
+        return dialog;
+    }
+
+    QofBook *book{};
+    QofSession *session{};
+    Account *account{};
+    GtkWindow *parent{};
+    GtkWidget *contents{};
+    GNCSearchAccount *search{};
+    GtkWidget *button{};
+};
+
+TEST_F (AccountSearchResponseTest, AcceptsSelectedAccountAndCancelPreservesSelection)
+{
+    auto dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
     auto view = find_widget (dialog, is_account_view);
-    g_assert_true (GNC_IS_TREE_VIEW_ACCOUNT (view));
-
     GList selected{account, nullptr, nullptr};
     gnc_tree_view_account_set_selected_accounts (
         GNC_TREE_VIEW_ACCOUNT (view), &selected, FALSE);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     auto predicate = gnc_search_core_type_get_predicate (
         GNC_SEARCH_CORE_TYPE (search));
-    g_assert_nonnull (predicate);
+    ASSERT_NE (predicate, nullptr);
     qof_query_core_predicate_free (predicate);
-    g_assert_cmpstr (button_text (button), ==,
-                     "Selected Accounts");
+    EXPECT_STREQ (button_text (button), "Selected Accounts");
 
-    gtk_button_clicked (GTK_BUTTON (button));
-    dialog = find_selection_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
+    dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-    g_assert_cmpstr (button_text (button), ==,
-                     "Selected Accounts");
+    EXPECT_STREQ (button_text (button), "Selected Accounts");
+}
 
+TEST_F (AccountSearchResponseTest, OwnerMayBeDestroyedBeforeDialogResponse)
+{
     auto owner = gnc_search_account_new ();
-    gnc_search_core_type_pass_parent (GNC_SEARCH_CORE_TYPE (owner), parent);
+    gnc_search_core_type_pass_parent (GNC_SEARCH_CORE_TYPE (owner),
+                                      GTK_WIDGET (parent));
     auto owner_widget = gnc_search_core_type_get_widget (
         GNC_SEARCH_CORE_TYPE (owner));
     gtk_container_add (GTK_CONTAINER (contents), owner_widget);
     auto owner_button = find_widget (owner_widget, is_button);
+    ASSERT_NE (owner_button, nullptr);
     gtk_button_clicked (GTK_BUTTON (owner_button));
-    auto owner_dialog = find_selection_dialog ();
-    g_assert_true (GTK_IS_DIALOG (owner_dialog));
-    g_object_ref (owner_dialog);
+    auto dialog = find_selection_dialog ();
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
     g_object_unref (owner);
-    gtk_dialog_response (GTK_DIALOG (owner_dialog), GTK_RESPONSE_OK);
-    g_assert_cmpstr (button_text (owner_button), ==, "Choose Accounts");
-    g_object_unref (owner_dialog);
 
-    gtk_button_clicked (GTK_BUTTON (button));
-    dialog = find_selection_dialog ();
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_STREQ (button_text (owner_button), "Choose Accounts");
+    g_object_unref (dialog);
+}
+
+TEST_F (AccountSearchResponseTest, LateResponseAfterParentDestructionKeepsRetainedLabelSafe)
+{
+    auto dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
     g_object_ref (dialog);
     auto label = gtk_bin_get_child (GTK_BIN (button));
+    ASSERT_NE (label, nullptr);
     g_object_ref (label);
+
     gtk_widget_destroy (GTK_WIDGET (parent));
+    parent = nullptr;
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_cmpstr (gtk_label_get_text (GTK_LABEL (label)), ==,
-                     "Selected Accounts");
+    EXPECT_STREQ (gtk_label_get_text (GTK_LABEL (label)), "Choose Accounts");
+
     g_object_unref (label);
     g_object_unref (dialog);
-    g_object_unref (search);
-    gnc_clear_current_session ();
+}
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed for account search response tests.\n");
+        return 1;
+    }
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+    {
+        g_printerr ("Could not register cash objects for account search tests.\n");
+        qof_close ();
+        return 1;
+    }
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome-search/account/public-widget-response-lifetimes",
-                     test_public_widget_response_lifetimes);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     qof_close ();
     return result;

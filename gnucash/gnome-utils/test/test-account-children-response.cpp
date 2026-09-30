@@ -7,6 +7,9 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+
+#include <gtest/gtest.h>
+
 #include "Account.h"
 #include "cashobjects.h"
 #include "dialog-account.h"
@@ -19,15 +22,14 @@
 
 namespace
 {
-gboolean display_available;
-
 GtkWidget *
 find_control (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
         g_strcmp0 (gtk_buildable_get_name (GTK_BUILDABLE (root)), name) == 0)
         return root;
-    if (!GTK_IS_CONTAINER (root)) return nullptr;
+    if (!GTK_IS_CONTAINER (root))
+        return nullptr;
     auto children = gtk_container_get_children (GTK_CONTAINER (root));
     GtkWidget *result = nullptr;
     for (auto node = children; node && !result; node = node->next)
@@ -46,76 +48,15 @@ find_window (GtkWindow *parent = nullptr)
         auto widget = GTK_WIDGET (node->data);
         if ((parent && GTK_IS_DIALOG (widget) &&
              gtk_window_get_transient_for (GTK_WINDOW (widget)) == parent) ||
-            (!parent && g_strcmp0 (gtk_widget_get_name (widget), "gnc-id-account") == 0))
+            (!parent && g_strcmp0 (gtk_widget_get_name (widget),
+                                   "gnc-id-account") == 0))
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
             result = widget;
         }
     }
     g_list_free (windows);
     return result;
-}
-
-void
-test_children_confirmation ()
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    for (int scenario = 0; scenario != 4; ++scenario)
-    {
-        auto book = qof_book_new ();
-        gnc_set_current_session (qof_session_new (book));
-        auto root = gnc_account_create_root (book);
-        auto currency = gnc_commodity_new (book, "Test currency", "CURRENCY",
-                                            "TST", "", 100);
-        currency = gnc_commodity_table_insert (gnc_commodity_table_get_table (book),
-                                                currency);
-        auto account = xaccMallocAccount (book);
-        auto child = xaccMallocAccount (book);
-        xaccAccountSetName (account, "Confirmed parent");
-        xaccAccountSetName (child, "Confirmed child");
-        xaccAccountSetType (account, ACCT_TYPE_BANK);
-        xaccAccountSetType (child, ACCT_TYPE_BANK);
-        xaccAccountSetCommodity (account, currency);
-        xaccAccountSetCommodity (child, currency);
-        gnc_account_append_child (root, account);
-        gnc_account_append_child (account, child);
-        auto owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_widget_realize (owner);
-        gnc_ui_edit_account_window (GTK_WINDOW (owner), account);
-        auto parent = find_window ();
-        g_assert_true (GTK_IS_DIALOG (parent));
-        auto type = find_control (parent, "account_type_combo");
-        g_assert_true (GTK_IS_COMBO_BOX (type));
-        gnc_tree_model_account_types_set_active_combo (GTK_COMBO_BOX (type),
-                                                        1 << ACCT_TYPE_INCOME);
-        gtk_dialog_response (GTK_DIALOG (parent), GTK_RESPONSE_OK);
-        auto question = find_window (GTK_WINDOW (parent));
-        g_assert_true (GTK_IS_DIALOG (question));
-        g_assert_cmpint (xaccAccountGetType (account), ==, ACCT_TYPE_BANK);
-        g_assert_cmpint (xaccAccountGetType (child), ==, ACCT_TYPE_BANK);
-        if (scenario == 2)
-        {
-            g_object_ref (question);
-            gtk_widget_destroy (parent);
-        }
-        if (scenario == 3)
-            qof_book_mark_readonly (book);
-        gtk_dialog_response (GTK_DIALOG (question), scenario == 0 ?
-                              GTK_RESPONSE_CANCEL : GTK_RESPONSE_OK);
-        if (scenario == 2)
-            g_object_unref (question);
-        auto expected = scenario == 1 ? ACCT_TYPE_INCOME : ACCT_TYPE_BANK;
-        g_assert_cmpint (xaccAccountGetType (account), ==, expected);
-        g_assert_cmpint (xaccAccountGetType (child), ==, expected);
-        if (scenario == 0 || scenario == 3)
-            gtk_widget_destroy (parent);
-        gtk_widget_destroy (owner);
-        gnc_clear_current_session ();
-    }
 }
 
 struct CreationResult
@@ -127,110 +68,257 @@ struct CreationResult
 void
 creation_completed (Account *account, gpointer data)
 {
-    auto result = static_cast<CreationResult *>(data);
+    auto result = static_cast<CreationResult *> (data);
     ++result->calls;
     result->account = account;
 }
 
-void
-test_account_creation_response (gconstpointer data)
+class AccountChildrenResponseTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    static void SetUpTestSuite ()
     {
-        g_test_skip("No graphical display is available");
-        return;
+        g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
+        g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+        qof_init ();
+        ASSERT_TRUE (cashobjects_register ());
+        gnc_component_manager_init ();
+        gnc_gsettings_load_backend ();
     }
-    auto scenario = GPOINTER_TO_INT(data);
-    auto book = qof_book_new();
-    auto session = qof_session_new(book);
-    gnc_set_current_session(session);
-    auto root = gnc_account_create_root(book);
-    auto currency = gnc_commodity_new(book, "Test currency", "CURRENCY", "TST", "", 100);
-    currency = gnc_commodity_table_insert(gnc_commodity_table_get_table(book), currency);
-    auto base = xaccMallocAccount(book);
-    xaccAccountSetName(base, "Existing parent");
-    xaccAccountSetType(base, ACCT_TYPE_BANK);
-    xaccAccountSetCommodity(base, currency);
-    gnc_account_append_child(root, base);
-    auto owner = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-    g_object_ref_sink(owner);
-    gtk_widget_realize(GTK_WIDGET(owner));
-    CreationResult result;
-    auto types = g_list_prepend(nullptr, GINT_TO_POINTER(ACCT_TYPE_BANK));
-    auto name = g_strdup("Created child");
-    gnc_ui_new_accounts_from_name_with_defaults_async(
-        owner, name, types, currency, base, creation_completed, &result);
-    g_free(name);
-    g_list_free(types);
-    auto dialog = find_window(owner);
-    g_assert_true(GTK_IS_DIALOG(dialog));
-    g_assert_true(gtk_window_get_modal(GTK_WINDOW(dialog)));
-    g_assert_true(gtk_window_get_destroy_with_parent(GTK_WINDOW(dialog)));
-    g_assert_cmpuint(result.calls, ==, 0);
-    g_object_ref(dialog);
 
-    if (scenario == 2)
-        gtk_widget_destroy(GTK_WIDGET(owner));
-    else
+    static void TearDownTestSuite ()
     {
-        if (scenario == 3)
+        gnc_gsettings_shutdown ();
+        gnc_component_manager_shutdown ();
+        qof_close ();
+    }
+
+    void SetUp () override
+    {
+        m_session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (m_session);
+        m_book = qof_session_get_book (m_session);
+        auto root = gnc_account_create_root (m_book);
+        m_currency = gnc_commodity_new (m_book, "Test currency", "CURRENCY",
+                                        "TST", "", 100);
+        m_currency = gnc_commodity_table_insert (
+            gnc_commodity_table_get_table (m_book), m_currency);
+        m_account = xaccMallocAccount (m_book);
+        m_child = xaccMallocAccount (m_book);
+        xaccAccountSetName (m_account, "Confirmed parent");
+        xaccAccountSetName (m_child, "Confirmed child");
+        xaccAccountSetType (m_account, ACCT_TYPE_BANK);
+        xaccAccountSetType (m_child, ACCT_TYPE_BANK);
+        xaccAccountSetCommodity (m_account, m_currency);
+        xaccAccountSetCommodity (m_child, m_currency);
+        gnc_account_append_child (root, m_account);
+        gnc_account_append_child (m_account, m_child);
+
+        m_owner = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (m_owner);
+        gtk_widget_realize (GTK_WIDGET (m_owner));
+    }
+
+    void TearDown () override
+    {
+        if (m_question)
+            gtk_widget_destroy (GTK_WIDGET (m_question));
+        g_clear_object (&m_question);
+        if (m_edit_dialog)
+            gtk_widget_destroy (m_edit_dialog);
+        g_clear_object (&m_edit_dialog);
+        if (m_creation_dialog)
+            gtk_widget_destroy (GTK_WIDGET (m_creation_dialog));
+        g_clear_object (&m_creation_dialog);
+        if (m_owner)
         {
-            auto other = qof_session_new(qof_book_new());
-            gnc_set_current_session(other);
+            gtk_widget_destroy (GTK_WIDGET (m_owner));
+            g_object_unref (m_owner);
         }
-        gtk_dialog_response(GTK_DIALOG(dialog), scenario == 1 ?
-                             GTK_RESPONSE_CANCEL : GTK_RESPONSE_OK);
+        auto current_session = gnc_exchange_current_session (nullptr);
+        if (current_session == m_session)
+            m_session = nullptr;
+        else if (current_session == m_replacement_session)
+            m_replacement_session = nullptr;
+        if (current_session)
+            qof_session_destroy (current_session);
+        if (m_replacement_session)
+            qof_session_destroy (m_replacement_session);
+        if (m_session)
+            qof_session_destroy (m_session);
     }
-    g_assert_cmpuint(result.calls, ==, 1);
-    if (scenario == 0)
+
+    GtkWidget *start_type_change_confirmation ()
     {
-        g_assert_nonnull(result.account);
-        g_assert_cmpstr(xaccAccountGetName(result.account), ==, "Created child");
-        g_assert_true(gnc_account_get_parent(result.account) == base);
-        g_assert_true(gnc_account_get_book(result.account) == book);
+        gnc_ui_edit_account_window (m_owner, m_account);
+        m_edit_dialog = find_window ();
+        if (m_edit_dialog)
+            g_object_ref (m_edit_dialog);
+        if (!GTK_IS_DIALOG (m_edit_dialog))
+        {
+            ADD_FAILURE () << "Account editor dialog was not created";
+            return nullptr;
+        }
+        auto type = find_control (m_edit_dialog, "account_type_combo");
+        if (!GTK_IS_COMBO_BOX (type))
+        {
+            ADD_FAILURE () << "Account type combo was not found";
+            return nullptr;
+        }
+        gnc_tree_model_account_types_set_active_combo (
+            GTK_COMBO_BOX (type), 1 << ACCT_TYPE_INCOME);
+        gtk_dialog_response (GTK_DIALOG (m_edit_dialog), GTK_RESPONSE_OK);
+        m_question = GTK_DIALOG (find_window (GTK_WINDOW (m_edit_dialog)));
+        if (!m_question)
+            ADD_FAILURE () << "Confirmation dialog was not created";
+        else
+            g_object_ref (m_question);
+        return GTK_WIDGET (m_question);
     }
-    else
-        g_assert_null(result.account);
-    /* Even a late response to a retained destroyed dialog completes once. */
-    gtk_dialog_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-    g_assert_cmpuint(result.calls, ==, 1);
-    g_object_unref(dialog);
-    if (scenario != 2)
-        gtk_widget_destroy(GTK_WIDGET(owner));
-    g_object_unref(owner);
-    if (scenario == 3)
+
+    void expect_account_types (GNCAccountType expected)
     {
-        gnc_clear_current_session();
-        gnc_set_current_session(session);
+        EXPECT_EQ (xaccAccountGetType (m_account), expected);
+        EXPECT_EQ (xaccAccountGetType (m_child), expected);
     }
-    gnc_clear_current_session();
+
+    GtkDialog *start_account_creation ()
+    {
+        auto types = g_list_prepend (nullptr, GINT_TO_POINTER (ACCT_TYPE_BANK));
+        auto name = g_strdup ("Created child");
+        gnc_ui_new_accounts_from_name_with_defaults_async (
+            m_owner, name, types, m_currency, m_account, creation_completed,
+            &m_creation_result);
+        g_free (name);
+        g_list_free (types);
+        m_creation_dialog = GTK_DIALOG (find_window (m_owner));
+        if (!GTK_IS_DIALOG (m_creation_dialog))
+        {
+            ADD_FAILURE () << "Account creation dialog was not created";
+            return nullptr;
+        }
+        g_object_ref (m_creation_dialog);
+        EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (m_creation_dialog)));
+        EXPECT_TRUE (gtk_window_get_destroy_with_parent (
+                         GTK_WINDOW (m_creation_dialog)));
+        EXPECT_EQ (m_creation_result.calls, 0u);
+        return m_creation_dialog;
+    }
+
+    QofSession *m_session{};
+    QofSession *m_replacement_session{};
+    QofBook *m_book{};
+    gnc_commodity *m_currency{};
+    Account *m_account{};
+    Account *m_child{};
+    GtkWindow *m_owner{};
+    GtkWidget *m_edit_dialog{};
+    GtkDialog *m_question{};
+    GtkDialog *m_creation_dialog{};
+    CreationResult m_creation_result{};
+};
+
+TEST_F (AccountChildrenResponseTest, CancelLeavesParentAndChildTypesUnchanged)
+{
+    auto question = start_type_change_confirmation ();
+    ASSERT_NE (question, nullptr);
+    expect_account_types (ACCT_TYPE_BANK);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_CANCEL);
+    expect_account_types (ACCT_TYPE_BANK);
 }
+
+TEST_F (AccountChildrenResponseTest, AcceptChangesParentAndChildTypes)
+{
+    auto question = start_type_change_confirmation ();
+    ASSERT_NE (question, nullptr);
+    expect_account_types (ACCT_TYPE_BANK);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_OK);
+    expect_account_types (ACCT_TYPE_INCOME);
 }
+
+TEST_F (AccountChildrenResponseTest, LateConfirmationAfterParentDestroyIsIgnored)
+{
+    auto question = start_type_change_confirmation ();
+    ASSERT_NE (question, nullptr);
+    gtk_widget_destroy (m_edit_dialog);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_OK);
+    expect_account_types (ACCT_TYPE_BANK);
+}
+
+TEST_F (AccountChildrenResponseTest, ReadOnlyBookRejectsAcceptedTypeChange)
+{
+    auto question = start_type_change_confirmation ();
+    ASSERT_NE (question, nullptr);
+    qof_book_mark_readonly (m_book);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_OK);
+    expect_account_types (ACCT_TYPE_BANK);
+}
+
+TEST_F (AccountChildrenResponseTest, AcceptCreatesChildOnce)
+{
+    auto dialog = start_account_creation ();
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    ASSERT_EQ (m_creation_result.calls, 1u);
+    ASSERT_NE (m_creation_result.account, nullptr);
+    EXPECT_STREQ (xaccAccountGetName (m_creation_result.account), "Created child");
+    EXPECT_EQ (gnc_account_get_parent (m_creation_result.account), m_account);
+    EXPECT_EQ (gnc_account_get_book (m_creation_result.account), m_book);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    g_object_unref (dialog);
+}
+
+TEST_F (AccountChildrenResponseTest, CancelDoesNotCreateChild)
+{
+    auto dialog = start_account_creation ();
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
+    gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    EXPECT_EQ (m_creation_result.account, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    g_object_unref (dialog);
+}
+
+TEST_F (AccountChildrenResponseTest, DestroyingOwnerCompletesCreationOnce)
+{
+    auto dialog = start_account_creation ();
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
+    gtk_widget_destroy (GTK_WIDGET (m_owner));
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    EXPECT_EQ (m_creation_result.account, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    g_object_unref (dialog);
+}
+
+TEST_F (AccountChildrenResponseTest, SessionSwitchRejectsStaleCreation)
+{
+    auto dialog = start_account_creation ();
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
+    m_replacement_session = qof_session_new (qof_book_new ());
+    EXPECT_EQ (gnc_exchange_current_session (m_replacement_session), m_session);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    EXPECT_EQ (m_creation_result.account, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    g_object_unref (dialog);
+}
+} // namespace
 
 int
 main (int argc, char **argv)
 {
-    g_setenv("GNC_UNINSTALLED", "YES", TRUE);
-    g_setenv("GSETTINGS_BACKEND", "memory", TRUE);
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY")) g_assert_true (display_available);
-    qof_init ();
-    g_assert_true (cashobjects_register ());
-    gnc_component_manager_init ();
-    gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome-utils/account/children-response", test_children_confirmation);
-    const char *creation_cases[] = {"accept", "cancel", "parent-destroy", "session-switch"};
-    for (guint i = 0; i < G_N_ELEMENTS(creation_cases); ++i)
-    {
-        auto path = g_strdup_printf("/gnome-utils/account/create/%s", creation_cases[i]);
-        g_test_add_data_func(path, GINT_TO_POINTER(i), test_account_creation_response);
-        g_free(path);
-    }
-    auto result = g_test_run ();
-    gnc_gsettings_shutdown ();
-    gnc_component_manager_shutdown ();
-    gnc_clear_current_session ();
-    qof_close ();
-    return result;
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for account response tests");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

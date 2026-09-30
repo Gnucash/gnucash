@@ -10,19 +10,151 @@
 
 #include <gtk/gtk.h>
 
+#include <gtest/gtest.h>
+
+#include <vector>
+
 #include "cashobjects.h"
 #include "dialog-commodity.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
 #include "qof.h"
 
-static gboolean display_available;
-
 struct Completion
 {
     guint calls{};
     QofBook *book{};
     gnc_commodity *commodity{};
+};
+
+class CommodityResponseTest : public ::testing::Test
+{
+protected:
+    static void SetUpTestSuite ()
+    {
+        qof_init ();
+        ASSERT_TRUE (cashobjects_register ());
+    }
+
+    static void TearDownTestSuite ()
+    {
+        qof_close ();
+    }
+
+    void SetUp () override
+    {
+        m_session = qof_session_new (qof_book_new ());
+        m_book = qof_session_get_book (m_session);
+        gnc_set_current_session (m_session);
+    }
+
+    void TearDown () override
+    {
+        for (auto parent : m_parents)
+        {
+            gtk_widget_destroy (GTK_WIDGET (parent));
+            g_object_unref (parent);
+        }
+        for (auto dialog : m_retained_dialogs)
+            g_object_unref (dialog);
+        m_retained_dialogs.clear ();
+        auto current = gnc_exchange_current_session (nullptr);
+        if (current)
+            qof_session_destroy (current);
+        if (m_session && m_session != current)
+            qof_session_destroy (m_session);
+    }
+
+    GtkWindow *create_parent ()
+    {
+        auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (parent);
+        m_parents.push_back (parent);
+        return parent;
+    }
+    void retain_dialog (GtkWidget *dialog)
+    {
+        m_retained_dialogs.push_back (GTK_WIDGET (g_object_ref (dialog)));
+    }
+
+    QofSession *m_session{};
+    QofBook *m_book{};
+    std::vector<GtkWindow *> m_parents;
+    std::vector<GtkWidget *> m_retained_dialogs;
+    Completion m_primary{};
+    Completion m_secondary{};
+};
+
+struct NamespaceChange
+{
+    guint calls{};
+    QofBook *book{};
+    QofSession *replacement_session{};
+};
+
+static void
+switch_session_on_namespace_change (GtkComboBox *combo, gpointer data)
+{
+    auto change = static_cast<NamespaceChange *> (data);
+    ++change->calls;
+    g_signal_handlers_disconnect_by_data (combo, change);
+    change->replacement_session = qof_session_new (qof_book_new ());
+    gnc_exchange_current_session (change->replacement_session);
+}
+
+static void
+close_book_on_namespace_change (GtkComboBox *combo, gpointer data)
+{
+    auto change = static_cast<NamespaceChange *> (data);
+    ++change->calls;
+    g_signal_handlers_disconnect_by_data (combo, change);
+    qof_book_mark_closed (change->book);
+}
+
+static void
+replace_model_on_namespace_change (GtkComboBox *combo, gpointer data)
+{
+    auto change = static_cast<NamespaceChange *> (data);
+    ++change->calls;
+    g_signal_handlers_disconnect_by_data (combo, change);
+    auto replacement = gtk_list_store_new (1, G_TYPE_STRING);
+    gtk_combo_box_set_model (combo, GTK_TREE_MODEL (replacement));
+    g_object_unref (replacement);
+}
+
+class NamespacePickerTest : public CommodityResponseTest
+{
+protected:
+    void SetUp () override
+    {
+        CommodityResponseTest::SetUp ();
+        m_book = qof_session_get_book (m_session);
+        m_commodity = gnc_commodity_new (m_book, "Original", "NYSE", "ORG",
+                                          nullptr, 100);
+        gnc_commodity_table_insert (gnc_commodity_table_get_table (m_book),
+                                   m_commodity);
+        m_picker = gtk_combo_box_text_new ();
+        g_object_ref_sink (m_picker);
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (m_picker), "old");
+        gtk_combo_box_set_active (GTK_COMBO_BOX (m_picker), 0);
+        m_original_model = gtk_combo_box_get_model (GTK_COMBO_BOX (m_picker));
+        g_object_ref (m_original_model);
+        m_change.book = m_book;
+    }
+
+    void TearDown () override
+    {
+        if (m_picker)
+            gtk_widget_destroy (m_picker);
+        g_clear_object (&m_picker);
+        g_clear_object (&m_original_model);
+        CommodityResponseTest::TearDown ();
+    }
+
+    gnc_commodity *m_commodity{};
+    GtkWidget *m_picker{};
+    GtkTreeModel *m_original_model{};
+    NamespaceChange m_change{};
 };
 
 static void
@@ -73,77 +205,61 @@ destroy_parent_on_picker_change ([[maybe_unused]] GtkComboBox *picker,
     gtk_widget_destroy (parent);
 }
 
-static void
-test_new_cancel_and_parent_destroy ()
+TEST_F (CommodityResponseTest, CancelAndParentDestroyCompleteWithoutCommodity)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto book = qof_book_new ();
-    gnc_set_current_session (qof_session_new (book));
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Completion result;
+    auto parent = create_parent ();
+    auto &result = m_primary;
     gnc_ui_new_commodity_async_full ("NYSE", GTK_WIDGET (parent), nullptr,
                                      nullptr, nullptr, nullptr, 100,
                                      completed, &result);
     auto dialog = find_child_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
 
     /* Help opens the external manual viewer, so it remains an E2E check. */
-    g_object_ref (dialog);
+    retain_dialog (GTK_WIDGET (dialog));
     gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_null (result.book);
-    g_assert_null (result.commodity);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.book, nullptr);
+    EXPECT_EQ (result.commodity, nullptr);
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_object_unref (dialog);
+    EXPECT_EQ (result.calls, 1u);
     gtk_widget_destroy (GTK_WIDGET (parent));
 
-    Completion destroyed;
-    parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+    auto &destroyed = m_secondary;
+    parent = create_parent ();
     gnc_ui_new_commodity_async_full ("NYSE", GTK_WIDGET (parent), nullptr,
                                      nullptr, nullptr, nullptr, 100,
                                      completed, &destroyed);
     dialog = find_child_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (dialog));
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
     gtk_widget_destroy (GTK_WIDGET (parent));
-    g_assert_cmpuint (destroyed.calls, ==, 1);
-    g_assert_null (destroyed.book);
-    g_assert_null (destroyed.commodity);
-    gnc_clear_current_session ();
+    EXPECT_EQ (destroyed.calls, 1u);
+    EXPECT_EQ (destroyed.book, nullptr);
+    EXPECT_EQ (destroyed.commodity, nullptr);
 }
 
-static void
-test_selector_new_child_cancel_and_repeat_guard ()
+TEST_F (CommodityResponseTest, SelectorNewChildCancelAndRepeatGuard)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto book = qof_book_new ();
+    auto book = m_book;
     auto table = gnc_commodity_table_get_table (book);
     auto commodity = gnc_commodity_new (book, "Response test", "NYSE", "RSP",
                                         nullptr, 100);
     gnc_commodity_table_insert (table, commodity);
-    gnc_set_current_session (qof_session_new (book));
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Completion result;
+    auto parent = create_parent ();
+    auto &result = m_primary;
     gnc_ui_select_commodity_async_full (commodity, GTK_WIDGET (parent),
                                         DIAG_COMM_ALL, nullptr, nullptr, nullptr,
                                         nullptr, completed, &result);
     auto selector = find_child_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (selector));
+    ASSERT_TRUE (GTK_IS_DIALOG (selector));
+    retain_dialog (GTK_WIDGET (selector));
     gtk_dialog_response (selector, GNC_RESPONSE_NEW);
     auto child = find_child_dialog (GTK_WINDOW (selector));
-    g_assert_true (GTK_IS_DIALOG (child));
+    ASSERT_TRUE (GTK_IS_DIALOG (child));
+    retain_dialog (GTK_WIDGET (child));
     gtk_dialog_response (selector, GNC_RESPONSE_NEW);
     auto windows = gtk_window_list_toplevels ();
     guint child_count = 0;
@@ -153,198 +269,142 @@ test_selector_new_child_cancel_and_repeat_guard ()
                 GTK_WINDOW (selector))
             ++child_count;
     g_list_free (windows);
-    g_assert_cmpuint (child_count, ==, 1);
+    EXPECT_EQ (child_count, 1u);
 
     gtk_dialog_response (child, GTK_RESPONSE_CANCEL);
-    g_assert_cmpuint (result.calls, ==, 0);
+    EXPECT_EQ (result.calls, 0u);
     gtk_dialog_response (selector, GTK_RESPONSE_CANCEL);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_null (result.book);
-    g_assert_null (result.commodity);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.book, nullptr);
+    EXPECT_EQ (result.commodity, nullptr);
     gtk_widget_destroy (GTK_WIDGET (parent));
-    gnc_clear_current_session ();
 }
 
-static void
-test_child_success_parent_destroy_during_picker_update ()
+TEST_F (CommodityResponseTest, ChildSuccessWithParentDestroyedDuringPickerUpdate)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto book = qof_book_new ();
+    auto book = m_book;
     auto table = gnc_commodity_table_get_table (book);
     gnc_commodity_table_add_namespace (table, "NYSE", book);
     auto original = gnc_commodity_new (book, "Original", "NYSE", "ORG",
                                        nullptr, 100);
     gnc_commodity_table_insert (table, original);
-    gnc_set_current_session (qof_session_new (book));
-    auto parent = GTK_WIDGET (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    g_object_ref (parent);
-    Completion result;
+    auto parent = GTK_WIDGET (create_parent ());
+    auto &result = m_primary;
     gnc_ui_select_commodity_async_full (original, parent, DIAG_COMM_ALL,
                                         nullptr, nullptr, nullptr, nullptr,
                                         completed, &result);
     auto selector = find_child_dialog (GTK_WINDOW (parent));
-    g_assert_true (GTK_IS_DIALOG (selector));
+    ASSERT_TRUE (GTK_IS_DIALOG (selector));
+    retain_dialog (GTK_WIDGET (selector));
     auto namespace_picker = find_buildable (GTK_WIDGET (selector), "ss_namespace_cbwe");
-    g_assert_true (GTK_IS_COMBO_BOX (namespace_picker));
+    ASSERT_TRUE (GTK_IS_COMBO_BOX (namespace_picker));
     g_signal_connect (namespace_picker, "changed",
                       G_CALLBACK (destroy_parent_on_picker_change), parent);
     gtk_dialog_response (selector, GNC_RESPONSE_NEW);
     auto child = find_child_dialog (GTK_WINDOW (selector));
-    g_assert_true (GTK_IS_DIALOG (child));
+    ASSERT_TRUE (GTK_IS_DIALOG (child));
+    retain_dialog (GTK_WIDGET (child));
     auto fullname = find_buildable (GTK_WIDGET (child), "fullname_entry");
     auto mnemonic = find_buildable (GTK_WIDGET (child), "mnemonic_entry");
-    g_assert_true (GTK_IS_ENTRY (fullname));
-    g_assert_true (GTK_IS_ENTRY (mnemonic));
+    ASSERT_TRUE (GTK_IS_ENTRY (fullname));
+    ASSERT_TRUE (GTK_IS_ENTRY (mnemonic));
     gtk_entry_set_text (GTK_ENTRY (fullname), "Child created");
     gtk_entry_set_text (GTK_ENTRY (mnemonic), "CHD");
     gtk_dialog_response (child, GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_null (result.book);
-    g_assert_null (result.commodity);
-    g_object_unref (parent);
-    gnc_clear_current_session ();
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.book, nullptr);
+    EXPECT_EQ (result.commodity, nullptr);
 }
 
-static void
-test_create_then_edit_commit ()
+TEST_F (CommodityResponseTest, CreateThenEditCommits)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto book = qof_book_new ();
+    auto book = m_book;
     auto table = gnc_commodity_table_get_table (book);
     gnc_commodity_table_add_namespace (table, "NYSE", book);
-    gnc_set_current_session (qof_session_new (book));
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Completion created;
+    auto parent = create_parent ();
+    auto &created = m_primary;
     gnc_ui_new_commodity_async_full ("NYSE", GTK_WIDGET (parent), nullptr,
                                      "New response test", "NRT", "NRT", 100,
                                      completed, &created);
     auto dialog = find_child_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (dialog));
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpuint (created.calls, ==, 1);
-    g_assert_true (created.book == book);
-    g_assert_nonnull (created.commodity);
-    g_assert_true (gnc_commodity_table_lookup (table, "NYSE", "NRT") ==
+    EXPECT_EQ (created.calls, 1u);
+    EXPECT_TRUE (created.book == book);
+    ASSERT_NE (created.commodity, nullptr);
+    EXPECT_TRUE (gnc_commodity_table_lookup (table, "NYSE", "NRT") ==
                    created.commodity);
 
-    Completion edited;
+    auto &edited = m_secondary;
     gnc_ui_edit_commodity_async (created.commodity, GTK_WIDGET (parent),
                                  completed, &edited);
     dialog = find_child_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (dialog));
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
     auto fullname = find_buildable (GTK_WIDGET (dialog), "fullname_entry");
-    g_assert_true (GTK_IS_ENTRY (fullname));
+    ASSERT_TRUE (GTK_IS_ENTRY (fullname));
     gtk_entry_set_text (GTK_ENTRY (fullname), "Edited response test");
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpuint (edited.calls, ==, 1);
-    g_assert_true (edited.book == book);
-    g_assert_true (edited.commodity == created.commodity);
-    g_assert_cmpstr (gnc_commodity_get_fullname (created.commodity), ==,
-                     "Edited response test");
+    EXPECT_EQ (edited.calls, 1u);
+    EXPECT_TRUE (edited.book == book);
+    EXPECT_TRUE (edited.commodity == created.commodity);
+    EXPECT_STREQ (gnc_commodity_get_fullname (created.commodity), "Edited response test");
     gtk_widget_destroy (GTK_WIDGET (parent));
-    gnc_clear_current_session ();
 }
 
-struct NamespaceChange
+TEST_F (NamespacePickerTest, SessionSwitchCancelsNamespaceUpdate)
 {
-    gint mode;
-    guint calls{};
-};
+    g_signal_connect (m_picker, "changed",
+                      G_CALLBACK (switch_session_on_namespace_change), &m_change);
+    gnc_ui_update_namespace_picker (
+        m_picker, gnc_commodity_get_namespace (m_commodity),
+        DIAG_COMM_ALL);
 
-static void
-replace_namespace_context (GtkComboBox *combo, NamespaceChange *change)
-{
-    ++change->calls;
-    g_signal_handlers_disconnect_by_data (combo, change);
-    if (change->mode == 1)
-    {
-        gnc_clear_current_session ();
-        gnc_set_current_session (qof_session_new (qof_book_new ()));
-    }
-    else if (change->mode == 2)
-        qof_book_mark_closed (qof_session_get_book (gnc_get_current_session ()));
-    else
-    {
-        auto replacement = gtk_list_store_new (1, G_TYPE_STRING);
-        gtk_combo_box_set_model (combo, GTK_TREE_MODEL (replacement));
-        g_object_unref (replacement);
-    }
+    EXPECT_EQ (m_change.calls, 1u);
+    EXPECT_EQ (gtk_tree_model_iter_n_children (m_original_model, nullptr), 0);
+    auto current_model = gtk_combo_box_get_model (GTK_COMBO_BOX (m_picker));
+    EXPECT_EQ (gtk_tree_model_iter_n_children (current_model, nullptr), 0);
+    EXPECT_EQ (current_model, m_original_model);
 }
 
-static void
-test_namespace_context_change (gconstpointer data)
+TEST_F (NamespacePickerTest, ModelReplacementCancelsNamespaceUpdate)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto book = qof_book_new ();
-    gnc_set_current_session (qof_session_new (book));
-    auto commodity = gnc_commodity_new (book, "Original", "NYSE", "ORG",
-                                       nullptr, 100);
-    gnc_commodity_table_insert (gnc_commodity_table_get_table (book), commodity);
-    auto picker = gtk_combo_box_text_new ();
-    g_object_ref_sink (picker);
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (picker), "old");
-    gtk_combo_box_set_active (GTK_COMBO_BOX (picker), 0);
-    auto original_model = gtk_combo_box_get_model (GTK_COMBO_BOX (picker));
-    g_object_ref (original_model);
-    NamespaceChange change {GPOINTER_TO_INT (data)};
-    g_signal_connect (picker, "changed",
-                      G_CALLBACK (replace_namespace_context), &change);
+    g_signal_connect (m_picker, "changed",
+                      G_CALLBACK (replace_model_on_namespace_change), &m_change);
+    gnc_ui_update_namespace_picker (
+        m_picker, gnc_commodity_get_namespace (m_commodity),
+        DIAG_COMM_ALL);
 
-    gnc_ui_update_namespace_picker (picker,
-        gnc_commodity_get_namespace (commodity), DIAG_COMM_ALL);
+    EXPECT_EQ (m_change.calls, 1u);
+    EXPECT_EQ (gtk_tree_model_iter_n_children (m_original_model, nullptr), 0);
+    auto current_model = gtk_combo_box_get_model (GTK_COMBO_BOX (m_picker));
+    EXPECT_EQ (gtk_tree_model_iter_n_children (current_model, nullptr), 0);
+    EXPECT_NE (current_model, m_original_model);
+}
 
-    g_assert_cmpuint (change.calls, ==, 1);
-    g_assert_cmpint (gtk_tree_model_iter_n_children (original_model, nullptr), ==, 0);
-    auto current_model = gtk_combo_box_get_model (GTK_COMBO_BOX (picker));
-    g_assert_cmpint (gtk_tree_model_iter_n_children (current_model, nullptr), ==, 0);
-    if (change.mode != 0)
-        g_assert_true (current_model == original_model);
-    else
-        g_assert_true (current_model != original_model);
-    gtk_widget_destroy (picker);
-    g_object_unref (picker);
-    g_object_unref (original_model);
-    gnc_clear_current_session ();
+TEST_F (NamespacePickerTest, ClosedBookCancelsNamespaceUpdate)
+{
+    g_signal_connect (m_picker, "changed",
+                      G_CALLBACK (close_book_on_namespace_change), &m_change);
+    gnc_ui_update_namespace_picker (
+        m_picker, gnc_commodity_get_namespace (m_commodity),
+        DIAG_COMM_ALL);
+
+    EXPECT_EQ (m_change.calls, 1u);
+    EXPECT_EQ (gtk_tree_model_iter_n_children (m_original_model, nullptr), 0);
+    auto current_model = gtk_combo_box_get_model (GTK_COMBO_BOX (m_picker));
+    EXPECT_EQ (gtk_tree_model_iter_n_children (current_model, nullptr), 0);
+    EXPECT_EQ (current_model, m_original_model);
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    qof_init ();
-    g_assert_true (cashobjects_register ());
-    g_test_add_func ("/gnome-utils/commodity/new-cancel-parent-destroy",
-                     test_new_cancel_and_parent_destroy);
-    g_test_add_func ("/gnome-utils/commodity/selector-new-child-cancel",
-                     test_selector_new_child_cancel_and_repeat_guard);
-    g_test_add_func ("/gnome-utils/commodity/child-success-parent-destroy",
-                     test_child_success_parent_destroy_during_picker_update);
-    g_test_add_func ("/gnome-utils/commodity/create-edit-commit",
-                     test_create_then_edit_commit);
-    g_test_add_data_func ("/gnome-utils/commodity/namespace-session-switch",
-                          GINT_TO_POINTER (1), test_namespace_context_change);
-    g_test_add_data_func ("/gnome-utils/commodity/namespace-model-replacement",
-                          GINT_TO_POINTER (0), test_namespace_context_change);
-    g_test_add_data_func ("/gnome-utils/commodity/namespace-book-closed",
-                          GINT_TO_POINTER (2), test_namespace_context_change);
-    auto result = g_test_run ();
-    gnc_clear_current_session ();
-    qof_close ();
-    return result;
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for commodity response tests");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

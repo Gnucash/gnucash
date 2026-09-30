@@ -4,67 +4,116 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+
+#include <gtest/gtest.h>
+
 #include "cashobjects.h"
 #include "gnc-budget.h"
 #include "gnc-session.h"
 #include "gnc-tree-model-budget.h"
 
-static void
-test_snapshot_identity (gconstpointer data)
+namespace
 {
-    const auto scenario = GPOINTER_TO_INT (data);
-    auto session = qof_session_new (qof_book_new ());
-    gnc_set_current_session (session);
-    auto book = qof_session_get_book (session);
-    auto budget = gnc_budget_new (book);
-    const auto expected = *gnc_budget_get_guid (budget);
-    auto model = gnc_tree_model_budget_new (book);
-    GtkTreeIter iter;
-    g_assert_true (gnc_tree_model_budget_get_iter_for_budget (model, &iter, budget));
-    g_assert_true (gnc_tree_model_budget_get_budget (model, &iter) == budget);
-    g_assert_cmpuint (gtk_tree_model_get_column_type (model, BUDGET_GUID_COLUMN),
-                      ==, GNC_TYPE_GUID);
-
-    if (scenario == 0)
-        gnc_budget_destroy (budget);
-    else if (scenario == 1)
-        gnc_set_current_session (qof_session_new (qof_book_new ()));
-    else if (scenario == 3)
-        qof_book_mark_closed (book);
-    else
-        gnc_clear_current_session ();
-
-    GncGUID *stored = nullptr;
-    gtk_tree_model_get (model, &iter, BUDGET_GUID_COLUMN, &stored, -1);
-    g_assert_nonnull (stored);
-    g_assert_true (guid_equal (stored, &expected));
-    guid_free (stored);
-    g_assert_null (gnc_tree_model_budget_get_budget (model, &iter));
-    g_object_unref (model);
-    if (scenario == 1)
+class BudgetModelIdentityTest : public ::testing::Test
+{
+protected:
+    static void SetUpTestSuite ()
     {
-        gnc_clear_current_session ();
-        qof_session_destroy (session);
+        qof_init ();
+        ASSERT_TRUE (cashobjects_register ());
     }
-    else if (scenario == 0 || scenario == 3)
-        gnc_clear_current_session ();
+
+    static void TearDownTestSuite ()
+    {
+        qof_close ();
+    }
+
+    void SetUp () override
+    {
+        m_session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (m_session);
+        m_book = qof_session_get_book (m_session);
+        m_budget = gnc_budget_new (m_book);
+        m_expected = *gnc_budget_get_guid (m_budget);
+        m_model = gnc_tree_model_budget_new (m_book);
+        ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
+                         m_model, &m_iter, m_budget));
+        ASSERT_EQ (gnc_tree_model_budget_get_budget (m_model, &m_iter),
+                   m_budget);
+        ASSERT_EQ (gtk_tree_model_get_column_type (GTK_TREE_MODEL (m_model),
+                                                   BUDGET_GUID_COLUMN),
+                   GNC_TYPE_GUID);
+    }
+
+    void TearDown () override
+    {
+        g_clear_object (&m_model);
+        auto current_session = gnc_exchange_current_session (nullptr);
+        if (current_session == m_session)
+            m_session = nullptr;
+        else if (current_session == m_replacement_session)
+            m_replacement_session = nullptr;
+        if (current_session)
+            qof_session_destroy (current_session);
+        if (m_replacement_session)
+            qof_session_destroy (m_replacement_session);
+        if (m_session)
+            qof_session_destroy (m_session);
+    }
+
+    void expect_snapshot_keeps_identity_but_not_live_budget ()
+    {
+        GncGUID *stored = nullptr;
+        gtk_tree_model_get (GTK_TREE_MODEL (m_model), &m_iter,
+                            BUDGET_GUID_COLUMN, &stored, -1);
+        ASSERT_NE (stored, nullptr);
+        EXPECT_TRUE (guid_equal (stored, &m_expected));
+        guid_free (stored);
+        EXPECT_EQ (gnc_tree_model_budget_get_budget (m_model, &m_iter),
+                   nullptr);
+    }
+
+    QofSession *m_session{};
+    QofSession *m_replacement_session{};
+    QofBook *m_book{};
+    GncBudget *m_budget{};
+    GtkTreeModel *m_model{};
+    GncGUID m_expected{};
+    GtkTreeIter m_iter{};
+};
+
+TEST_F (BudgetModelIdentityTest, DeletedBudgetRetainsGuidSnapshot)
+{
+    gnc_budget_destroy (m_budget);
+    expect_snapshot_keeps_identity_but_not_live_budget ();
 }
+
+TEST_F (BudgetModelIdentityTest, SessionSwitchInvalidatesLiveBudget)
+{
+    m_replacement_session = qof_session_new (qof_book_new ());
+    EXPECT_EQ (gnc_exchange_current_session (m_replacement_session), m_session);
+    expect_snapshot_keeps_identity_but_not_live_budget ();
+}
+
+TEST_F (BudgetModelIdentityTest, ClearedCurrentSessionInvalidatesLiveBudget)
+{
+    gnc_clear_current_session ();
+    m_session = nullptr; // Clearing the current session destroys it.
+    expect_snapshot_keeps_identity_but_not_live_budget ();
+}
+
+TEST_F (BudgetModelIdentityTest, ClosedBookInvalidatesLiveBudget)
+{
+    qof_book_mark_closed (m_book);
+    expect_snapshot_keeps_identity_but_not_live_budget ();
+}
+} // namespace
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    qof_init ();
-    g_assert_true (cashobjects_register ());
-    g_test_add_data_func ("/gnome-utils/budget-model/deleted-budget", GINT_TO_POINTER (0),
-                          test_snapshot_identity);
-    g_test_add_data_func ("/gnome-utils/budget-model/session-switch", GINT_TO_POINTER (1),
-                          test_snapshot_identity);
-    g_test_add_data_func ("/gnome-utils/budget-model/closed-book", GINT_TO_POINTER (2),
-                          test_snapshot_identity);
-    g_test_add_data_func ("/gnome-utils/budget-model/marked-closed-book", GINT_TO_POINTER (3),
-                          test_snapshot_identity);
-    auto status = g_test_run ();
-    qof_close ();
-    return status;
+    ::testing::InitGoogleTest (&argc, argv);
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

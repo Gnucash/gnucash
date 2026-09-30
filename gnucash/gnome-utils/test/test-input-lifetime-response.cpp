@@ -3,6 +3,8 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
+#include <string>
 #include "dialog-dup-trans.h"
 #include "dialog-transfer.h"
 #include "cashobjects.h"
@@ -13,7 +15,10 @@
 #include "gnc-session.h"
 #include "gnc-ui.h"
 
-static gboolean display_available;
+enum class InputKind { credentials, duplicate };
+enum class InputAction { accept, cancel, owner_destroy, dialog_destroy, destroy_owner_on_response };
+struct InputCase { InputKind kind; InputAction action; };
+enum class TransferAction { cancel, owner_destroy, dialog_destroy, close };
 
 struct Result
 {
@@ -60,85 +65,141 @@ static void close_parent (GtkWidget *, gpointer parent)
     gtk_widget_destroy (GTK_WIDGET (parent));
 }
 
-static void test_input (gconstpointer data)
+class InputLifetimeTest : public ::testing::TestWithParam<InputCase>
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        m_parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (m_parent);
+        m_result = {};
+        m_dialog = nullptr;
     }
-    auto scenario = GPOINTER_TO_INT (data);
-    const auto duplicate = scenario >= 5;
-    const auto action = scenario % 5;
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    g_object_ref (parent);
-    Result result;
+    void TearDown () override
+    {
+        if (m_parent)
+            gtk_widget_destroy (GTK_WIDGET (m_parent));
+        if (m_dialog)
+            g_object_unref (m_dialog);
+        if (m_parent)
+            g_object_unref (m_parent);
+        g_free (m_result.username);
+        g_free (m_result.password);
+        gnc_dup_trans_result_free (m_result.duplicate);
+    }
+    GtkWindow *m_parent{};
+    GtkDialog *m_dialog{};
+    Result m_result{};
+};
+
+TEST_P (InputLifetimeTest, InputCompletion)
+{
+    const auto test_case = GetParam ();
+    const auto duplicate = test_case.kind == InputKind::duplicate;
+    const auto action = test_case.action;
+    auto parent = m_parent;
+    auto &result = m_result;
     if (duplicate)
         gnc_dup_trans_dialog_async (parent, "Duplicate", "Test", TRUE,
             1700000000, "10", "20", "test-link", duplicate_finished, &result);
     else
         gnc_get_username_password_async (parent, "Test", "Zähler", "synthetic-password",
                                          credentials_finished, &result);
-    g_assert_cmpuint (result.calls, ==, 0);
+    EXPECT_EQ (result.calls, 0u);
     auto windows = gtk_window_list_toplevels ();
     GtkDialog *dialog = nullptr;
     for (auto node = windows; node; node = node->next)
         if (GTK_IS_DIALOG (node->data) &&
             gtk_window_get_transient_for (GTK_WINDOW (node->data)) == parent)
         {
-            g_assert_null (dialog);
+            EXPECT_EQ (dialog, nullptr);
             dialog = GTK_DIALOG (node->data);
         }
     g_list_free (windows);
-    g_assert_nonnull (dialog);
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_object_ref (dialog);
+    ASSERT_NE (dialog, nullptr);
+    m_dialog = dialog;
+    g_object_ref (m_dialog);
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
     if (duplicate)
     {
-        gtk_entry_set_text (GTK_ENTRY (find_named (GTK_WIDGET (dialog), "num_entry")), "11");
-        gtk_entry_set_text (GTK_ENTRY (find_named (GTK_WIDGET (dialog), "tnum_entry")), "21");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (find_named (
-            GTK_WIDGET (dialog), "link_check_button")), TRUE);
+        auto num_entry = find_named (GTK_WIDGET (dialog), "num_entry");
+        auto tnum_entry = find_named (GTK_WIDGET (dialog), "tnum_entry");
+        auto link_check = find_named (GTK_WIDGET (dialog), "link_check_button");
+        ASSERT_NE (num_entry, nullptr);
+        ASSERT_NE (tnum_entry, nullptr);
+        ASSERT_NE (link_check, nullptr);
+        gtk_entry_set_text (GTK_ENTRY (num_entry), "11");
+        gtk_entry_set_text (GTK_ENTRY (tnum_entry), "21");
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (link_check), TRUE);
     }
-    if (action == 2)
+    if (action == InputAction::owner_destroy)
         gtk_widget_destroy (GTK_WIDGET (parent));
-    else if (action == 3)
+    else if (action == InputAction::dialog_destroy)
         gtk_widget_destroy (GTK_WIDGET (dialog));
     else
     {
-        if (action == 4)
+        if (action == InputAction::destroy_owner_on_response)
             g_signal_connect (dialog, "destroy", G_CALLBACK (close_parent), parent);
-        gtk_dialog_response (dialog, action == 1 ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_OK);
+        gtk_dialog_response (dialog, action == InputAction::cancel ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_OK);
     }
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_cmpint (result.accepted, ==, action == 0);
-    if (action == 0 && duplicate)
+    ASSERT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.accepted, action == InputAction::accept);
+    if (action == InputAction::accept && duplicate)
     {
-        g_assert_cmpstr (result.duplicate->num, ==, "11");
-        g_assert_cmpstr (result.duplicate->tnum, ==, "21");
-        g_assert_cmpstr (result.duplicate->doclink, ==, "test-link");
-        g_assert_true (g_date_valid (&result.duplicate->gdate));
+        ASSERT_NE (result.duplicate, nullptr);
+        EXPECT_STREQ (result.duplicate->num, "11");
+        EXPECT_STREQ (result.duplicate->tnum, "21");
+        EXPECT_STREQ (result.duplicate->doclink, "test-link");
+        EXPECT_TRUE (g_date_valid (&result.duplicate->gdate));
     }
-    else if (action == 0)
+    else if (action == InputAction::accept)
     {
-        g_assert_cmpstr (result.username, ==, "Zähler");
-        g_assert_cmpstr (result.password, ==, "synthetic-password");
+        EXPECT_STREQ (result.username, "Zähler");
+        EXPECT_STREQ (result.password, "synthetic-password");
     }
     else
     {
-        g_assert_null (result.username);
-        g_assert_null (result.password);
-        g_assert_null (result.duplicate);
+        EXPECT_EQ (result.username, nullptr);
+        EXPECT_EQ (result.password, nullptr);
+        EXPECT_EQ (result.duplicate, nullptr);
     }
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_object_unref (dialog);
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    g_object_unref (parent);
-    g_free (result.username);
-    g_free (result.password);
-    gnc_dup_trans_result_free (result.duplicate);
+    EXPECT_EQ (result.calls, 1u);
 }
+
+static std::string
+input_case_name (const ::testing::TestParamInfo<InputCase> &info)
+{
+        const char *kinds[] = {"Credentials", "Duplicate"};
+        const char *actions[] = {"Accept", "Cancel", "OwnerDestroy",
+                                 "DialogDestroy", "DestroyOwnerOnResponse"};
+        return std::string (kinds[static_cast<int> (info.param.kind)]) +
+               actions[static_cast<int> (info.param.action)];
+
+}
+
+static std::string
+transfer_case_name (const ::testing::TestParamInfo<TransferAction> &info)
+{
+        const char *names[] = {"Cancel", "OwnerDestroy", "DialogDestroy", "Close"};
+        return names[static_cast<int> (info.param)];
+
+}
+
+INSTANTIATE_TEST_SUITE_P (
+    CredentialsAndDuplicateTransactions, InputLifetimeTest,
+    ::testing::Values (
+        InputCase {InputKind::credentials, InputAction::accept},
+        InputCase {InputKind::credentials, InputAction::cancel},
+        InputCase {InputKind::credentials, InputAction::owner_destroy},
+        InputCase {InputKind::credentials, InputAction::dialog_destroy},
+        InputCase {InputKind::credentials, InputAction::destroy_owner_on_response},
+        InputCase {InputKind::duplicate, InputAction::accept},
+        InputCase {InputKind::duplicate, InputAction::cancel},
+        InputCase {InputKind::duplicate, InputAction::owner_destroy},
+        InputCase {InputKind::duplicate, InputAction::dialog_destroy},
+        InputCase {InputKind::duplicate, InputAction::destroy_owner_on_response}),
+    input_case_name);
 
 static void transfer_finished (gboolean accepted, gpointer data)
 {
@@ -147,34 +208,62 @@ static void transfer_finished (gboolean accepted, gpointer data)
     result->accepted = accepted;
 }
 
-static void test_transfer (gconstpointer data)
+class TransferLifetimeTest : public ::testing::TestWithParam<TransferAction>
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        m_session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (m_session);
+        m_book = qof_session_get_book (m_session);
+        auto root = gnc_account_create_root (m_book);
+        m_account = xaccMallocAccount (m_book);
+        xaccAccountBeginEdit (m_account);
+        xaccAccountSetName (m_account, "Cash");
+        xaccAccountSetType (m_account, ACCT_TYPE_ASSET);
+        m_currency = gnc_commodity_table_lookup (
+            gnc_commodity_table_get_table (m_book), "CURRENCY", "EUR");
+        ASSERT_NE (m_currency, nullptr);
+        xaccAccountSetCommodity (m_account, m_currency);
+        gnc_account_append_child (root, m_account);
+        xaccAccountCommitEdit (m_account);
+        m_parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (m_parent);
+        m_result = {};
+        m_dialog = nullptr;
+        m_transfer = nullptr;
     }
-    auto action = GPOINTER_TO_INT (data);
-    auto session = qof_session_new (qof_book_new ());
-    auto book = qof_session_get_book (session);
-    gnc_set_current_session (session);
-    auto root = gnc_account_create_root (book);
-    auto account = xaccMallocAccount (book);
-    xaccAccountBeginEdit (account);
-    xaccAccountSetName (account, "Cash");
-    xaccAccountSetType (account, ACCT_TYPE_ASSET);
-    auto currency = gnc_commodity_table_lookup (gnc_commodity_table_get_table (book), "CURRENCY", "EUR");
-    g_assert_nonnull (currency);
-    xaccAccountSetCommodity (account, currency);
-    gnc_account_append_child (root, account);
-    xaccAccountCommitEdit (account);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    g_object_ref (parent);
-    Result result;
+    void TearDown () override
+    {
+        if (m_parent)
+            gtk_widget_destroy (GTK_WIDGET (m_parent));
+        if (m_dialog)
+            g_object_unref (m_dialog);
+        if (m_parent)
+            g_object_unref (m_parent);
+        if (gnc_current_session_exist ())
+            gnc_clear_current_session ();
+    }
+    GtkWindow *m_parent{};
+    GtkDialog *m_dialog{};
+    QofSession *m_session{};
+    QofBook *m_book{};
+    Account *m_account{};
+    gnc_commodity *m_currency{};
+    XferDialog *m_transfer{};
+    Result m_result{};
+};
+
+TEST_P (TransferLifetimeTest, CancellationCompletesOnce)
+{
+    auto action = GetParam ();
+    auto account = m_account;
+    auto parent = m_parent;
     gtk_widget_show (GTK_WIDGET (parent));
-    auto transfer = gnc_xfer_dialog (GTK_WIDGET (parent), account);
-    gnc_xfer_dialog_run_async (transfer, transfer_finished, &result);
-    g_assert_cmpuint (result.calls, ==, 0);
+    m_transfer = gnc_xfer_dialog (GTK_WIDGET (parent), account);
+    gnc_xfer_dialog_run_async (m_transfer, transfer_finished, &m_result);
+    auto &result = m_result;
+    EXPECT_EQ (result.calls, 0u);
     auto windows = gtk_window_list_toplevels ();
     GtkDialog *dialog = nullptr;
     for (auto node = windows; node; node = node->next)
@@ -182,47 +271,39 @@ static void test_transfer (gconstpointer data)
             gtk_window_get_transient_for (GTK_WINDOW (node->data)) == parent)
             dialog = GTK_DIALOG (node->data);
     g_list_free (windows);
-    g_assert_nonnull (dialog);
-    g_object_ref (dialog);
-    if (action == 1) gtk_widget_destroy (GTK_WIDGET (parent));
-    else if (action == 2) gtk_widget_destroy (GTK_WIDGET (dialog));
-    else if (action == 3) gnc_xfer_dialog_close (transfer);
+    ASSERT_NE (dialog, nullptr);
+    m_dialog = dialog;
+    g_object_ref (m_dialog);
+    if (action == TransferAction::owner_destroy) gtk_widget_destroy (GTK_WIDGET (parent));
+    else if (action == TransferAction::dialog_destroy) gtk_widget_destroy (GTK_WIDGET (dialog));
+    else if (action == TransferAction::close) gnc_xfer_dialog_close (m_transfer);
     else gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_false (result.accepted);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_FALSE (result.accepted);
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_object_unref (dialog);
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    g_object_unref (parent);
-    gnc_clear_current_session ();
+    EXPECT_EQ (result.calls, 1u);
+    m_transfer = nullptr;
 }
+
+INSTANTIATE_TEST_SUITE_P (
+    TransferCancellation, TransferLifetimeTest,
+    ::testing::Values (TransferAction::cancel, TransferAction::owner_destroy,
+                       TransferAction::dialog_destroy, TransferAction::close),
+    transfer_case_name);
 
 int main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY")) g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for input lifetime tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    const char *names[] = {"accept", "cancel", "owner-destroy", "dialog-destroy", "destroy-owner-on-accept"};
-    for (guint i = 0; i < 10; ++i)
-    {
-        auto path = g_strdup_printf ("/gnome-utils/input/%s/%s",
-            i >= 5 ? "duplicate" : "credentials", names[i % 5]);
-        g_test_add_data_func (path, GINT_TO_POINTER (i), test_input);
-        g_free (path);
-    }
-    for (guint i = 0; i < 4; ++i)
-    {
-        const char *transfer_names[] = {"cancel", "owner-destroy", "dialog-destroy", "close"};
-        auto path = g_strdup_printf ("/gnome-utils/input/transfer/%s", transfer_names[i]);
-        g_test_add_data_func (path, GINT_TO_POINTER (i), test_transfer);
-        g_free (path);
-    }
-    auto status = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto status = RUN_ALL_TESTS ();
     gnc_component_manager_shutdown ();
     gnc_gsettings_shutdown ();
     qof_close ();

@@ -1,14 +1,19 @@
 /* Copyright (C) 2026 GnuCash contributors
  *
  * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  */
 
 #include <config.h>
 
 #include <gtk/gtk.h>
+
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <vector>
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -17,34 +22,141 @@
 #include "qofbook.h"
 #include "qofevent.h"
 
-static gboolean display_available;
-
-struct AccountTree
+struct RemoveChildOnModify
 {
-    QofBook *book;
-    Account *book_root;
-    Account *account;
-    Account *child;
-    Account *grandchild;
+    Account *target{};
+    Account *child{};
+    gboolean removed{};
 };
 
-static AccountTree
-make_account_tree ()
+static GtkWidget *find_cascade_dialog ();
+
+static void
+remove_child_on_modify (QofInstance *entity, QofEventId event,
+                        gpointer user_data, [[maybe_unused]] gpointer event_data)
 {
-    AccountTree tree{};
-    tree.book = qof_book_new ();
-    tree.book_root = gnc_account_create_root (tree.book);
-    tree.account = xaccMallocAccount (tree.book);
-    tree.child = xaccMallocAccount (tree.book);
-    tree.grandchild = xaccMallocAccount (tree.book);
-    xaccAccountSetName (tree.account, "Cascade target");
-    xaccAccountSetName (tree.child, "Cascade child");
-    xaccAccountSetName (tree.grandchild, "Cascade grandchild");
-    gnc_account_append_child (tree.book_root, tree.account);
-    gnc_account_append_child (tree.account, tree.child);
-    gnc_account_append_child (tree.child, tree.grandchild);
-    return tree;
+    auto removal = static_cast<RemoveChildOnModify *> (user_data);
+    if (!removal->removed && event == QOF_EVENT_MODIFY &&
+        entity == QOF_INSTANCE (removal->target))
+    {
+        removal->removed = TRUE;
+        xaccAccountBeginEdit (removal->child);
+        xaccAccountDestroy (removal->child);
+        removal->child = nullptr;
+    }
 }
+
+class AccountCascadeResponseTest : public ::testing::Test
+{
+protected:
+    static void SetUpTestSuite ()
+    {
+        qof_init ();
+        ASSERT_TRUE (cashobjects_register ());
+    }
+
+    static void TearDownTestSuite ()
+    {
+        qof_close ();
+    }
+
+    void SetUp () override
+    {
+        m_book = qof_book_new ();
+        m_book_root = gnc_account_create_root (m_book);
+        m_account = xaccMallocAccount (m_book);
+        m_child = xaccMallocAccount (m_book);
+        m_grandchild = xaccMallocAccount (m_book);
+        xaccAccountSetName (m_account, "Cascade target");
+        xaccAccountSetName (m_child, "Cascade child");
+        xaccAccountSetName (m_grandchild, "Cascade grandchild");
+        gnc_account_append_child (m_book_root, m_account);
+        gnc_account_append_child (m_account, m_child);
+        gnc_account_append_child (m_child, m_grandchild);
+
+        m_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (m_parent);
+    }
+
+    void TearDown () override
+    {
+        unregister_event_handler ();
+        if (m_weak_dialog)
+        {
+            g_object_remove_weak_pointer (G_OBJECT (m_weak_dialog),
+                                          reinterpret_cast<gpointer *> (
+                                              &m_weak_dialog));
+            m_weak_dialog = nullptr;
+        }
+        if (m_parent && !gtk_widget_in_destruction (m_parent))
+            gtk_widget_destroy (m_parent);
+        for (auto dialog : m_dialogs)
+        {
+            if (!gtk_widget_in_destruction (dialog))
+                gtk_widget_destroy (dialog);
+            g_object_unref (dialog);
+        }
+        m_dialogs.clear ();
+        if (m_parent)
+        {
+            g_object_unref (m_parent);
+            m_parent = nullptr;
+        }
+        if (m_book)
+        {
+            qof_book_destroy (m_book);
+            m_book = nullptr;
+        }
+        m_book_root = nullptr;
+        m_account = nullptr;
+        m_child = nullptr;
+        m_grandchild = nullptr;
+    }
+
+    GtkWidget *start_dialog ()
+    {
+        gnc_account_cascade_properties_dialog (m_parent, m_account);
+        auto dialog = find_cascade_dialog ();
+        if (dialog)
+            m_dialogs.push_back (GTK_WIDGET (g_object_ref (dialog)));
+        return dialog;
+    }
+
+    void release_dialog (GtkWidget *dialog)
+    {
+        auto found = std::find (m_dialogs.begin (), m_dialogs.end (), dialog);
+        ASSERT_NE (found, m_dialogs.end ());
+        m_dialogs.erase (found);
+        g_object_unref (dialog);
+    }
+
+    void register_event_handler ()
+    {
+        m_removal = {m_account, m_child, FALSE};
+        m_event_handler = qof_event_register_handler (remove_child_on_modify,
+                                                       &m_removal);
+    }
+
+    void unregister_event_handler ()
+    {
+        if (m_event_handler)
+        {
+            qof_event_unregister_handler (m_event_handler);
+            m_event_handler = 0;
+        }
+    }
+
+    QofBook *m_book{};
+    Account *m_book_root{};
+    Account *m_account{};
+    Account *m_child{};
+    Account *m_grandchild{};
+    GtkWidget *m_parent{};
+    GtkWidget *m_weak_dialog{};
+    std::vector<GtkWidget *> m_dialogs;
+    RemoveChildOnModify m_removal{};
+    gint m_event_handler{};
+};
 
 static GtkWidget *
 find_buildable (GtkWidget *widget, const gchar *name)
@@ -77,20 +189,10 @@ find_cascade_dialog ()
 }
 
 static GtkWidget *
-start_cascade_dialog (AccountTree &tree, GtkWidget **parent)
-{
-    *parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gnc_account_cascade_properties_dialog (*parent, tree.account);
-    auto dialog = find_cascade_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    return dialog;
-}
-
-static GtkWidget *
 control (GtkWidget *dialog, const gchar *name)
 {
     auto widget = find_buildable (dialog, name);
-    g_assert_nonnull (widget);
+    EXPECT_NE (widget, nullptr);
     return widget;
 }
 
@@ -115,61 +217,40 @@ select_all_updates (GtkWidget *dialog, gboolean replace)
         GTK_COLOR_CHOOSER (control (dialog, "color_button")), &color);
 }
 
-static void
-test_apply_and_late_response ()
+TEST_F (AccountCascadeResponseTest, ApplyAndLateResponse)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto tree = make_account_tree ();
-    xaccAccountSetColor (tree.account, "red");
-    xaccAccountSetColor (tree.child, "blue");
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    xaccAccountSetColor (m_account, "red");
+    xaccAccountSetColor (m_child, "blue");
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
     select_all_updates (dialog, TRUE);
-    g_object_ref (dialog);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     GdkRGBA color{0.2, 0.4, 0.6, 1.0};
     auto expected_color = gdk_rgba_to_string (&color);
-    g_assert_cmpstr (xaccAccountGetColor (tree.account), ==, expected_color);
-    g_assert_cmpstr (xaccAccountGetColor (tree.child), ==, expected_color);
-    g_assert_cmpstr (xaccAccountGetColor (tree.grandchild), ==, expected_color);
-    g_assert_true (xaccAccountGetPlaceholder (tree.account));
-    g_assert_true (xaccAccountGetPlaceholder (tree.child));
-    g_assert_true (xaccAccountGetHidden (tree.account));
-    g_assert_true (xaccAccountGetHidden (tree.child));
-    g_assert_true (xaccAccountGetHidden (tree.grandchild));
+    EXPECT_STREQ (xaccAccountGetColor (m_account), expected_color);
+    EXPECT_STREQ (xaccAccountGetColor (m_child), expected_color);
+    EXPECT_STREQ (xaccAccountGetColor (m_grandchild), expected_color);
+    EXPECT_TRUE (xaccAccountGetPlaceholder (m_account));
+    EXPECT_TRUE (xaccAccountGetPlaceholder (m_child));
+    EXPECT_TRUE (xaccAccountGetHidden (m_account));
+    EXPECT_TRUE (xaccAccountGetHidden (m_child));
+    EXPECT_TRUE (xaccAccountGetHidden (m_grandchild));
 
-    xaccAccountSetHidden (tree.child, FALSE);
+    xaccAccountSetHidden (m_child, FALSE);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_false (xaccAccountGetHidden (tree.child));
-
+    EXPECT_FALSE (xaccAccountGetHidden (m_child));
     g_free (expected_color);
-    g_object_unref (dialog);
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
 }
 
-static void
-test_replace_disabled ()
+TEST_F (AccountCascadeResponseTest, ReplaceDisabled)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto tree = make_account_tree ();
-    xaccAccountSetColor (tree.account, "red");
-    xaccAccountSetColor (tree.child, "blue");
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
+    xaccAccountSetColor (m_account, "red");
+    xaccAccountSetColor (m_child, "blue");
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     select_all_updates (dialog, FALSE);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_placeholder")), FALSE);
@@ -177,211 +258,130 @@ test_replace_disabled ()
         GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_hidden")), FALSE);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-    g_assert_cmpstr (xaccAccountGetColor (tree.account), ==, "red");
-    g_assert_cmpstr (xaccAccountGetColor (tree.child), ==, "blue");
+    EXPECT_STREQ (xaccAccountGetColor (m_account), "red");
+    EXPECT_STREQ (xaccAccountGetColor (m_child), "blue");
     GdkRGBA color{0.2, 0.4, 0.6, 1.0};
     auto expected_color = gdk_rgba_to_string (&color);
-    g_assert_cmpstr (xaccAccountGetColor (tree.grandchild), ==, expected_color);
+    EXPECT_STREQ (xaccAccountGetColor (m_grandchild), expected_color);
     g_free (expected_color);
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
 }
 
-static void
-test_cancel_and_parent_destroy ()
+TEST_F (AccountCascadeResponseTest, CancelDoesNotUpdateAccounts)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto tree = make_account_tree ();
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     select_all_updates (dialog, TRUE);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-    g_assert_null (xaccAccountGetColor (tree.account));
-    g_assert_false (xaccAccountGetPlaceholder (tree.child));
-    g_assert_false (xaccAccountGetHidden (tree.child));
-    gtk_widget_destroy (parent);
-
-    dialog = start_cascade_dialog (tree, &parent);
-    select_all_updates (dialog, TRUE);
-    gtk_widget_destroy (parent);
-    g_assert_null (find_cascade_dialog ());
-    g_assert_null (xaccAccountGetColor (tree.account));
-    g_assert_false (xaccAccountGetPlaceholder (tree.child));
-    g_assert_false (xaccAccountGetHidden (tree.child));
-    qof_book_destroy (tree.book);
+    EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
+    EXPECT_FALSE (xaccAccountGetPlaceholder (m_child));
+    EXPECT_FALSE (xaccAccountGetHidden (m_child));
 }
 
-static void
-test_dialog_destroy_and_late_response ()
+TEST_F (AccountCascadeResponseTest, ParentDestroyClosesDialogWithoutUpdating)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto tree = make_account_tree ();
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     select_all_updates (dialog, TRUE);
-    g_object_ref (dialog);
-    GtkWidget *weak_dialog = dialog;
+    gtk_widget_destroy (m_parent);
+    EXPECT_EQ (find_cascade_dialog (), nullptr);
+    EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
+    EXPECT_FALSE (xaccAccountGetPlaceholder (m_child));
+    EXPECT_FALSE (xaccAccountGetHidden (m_child));
+}
+
+TEST_F (AccountCascadeResponseTest, DialogDestroyIgnoresLateResponse)
+{
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    select_all_updates (dialog, TRUE);
+    m_weak_dialog = dialog;
     g_object_add_weak_pointer (G_OBJECT (dialog),
-                               reinterpret_cast<gpointer *> (&weak_dialog));
+                               reinterpret_cast<gpointer *> (&m_weak_dialog));
 
     gtk_widget_destroy (dialog);
-    g_assert_null (xaccAccountGetColor (tree.account));
-    g_assert_false (xaccAccountGetPlaceholder (tree.child));
-    g_assert_false (xaccAccountGetHidden (tree.child));
+    EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
+    EXPECT_FALSE (xaccAccountGetPlaceholder (m_child));
+    EXPECT_FALSE (xaccAccountGetHidden (m_child));
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (xaccAccountGetColor (tree.account));
-    g_assert_false (xaccAccountGetPlaceholder (tree.child));
-    g_assert_false (xaccAccountGetHidden (tree.child));
-
-    g_object_unref (dialog);
-    g_assert_null (weak_dialog);
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
+    EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
+    EXPECT_FALSE (xaccAccountGetPlaceholder (m_child));
+    EXPECT_FALSE (xaccAccountGetHidden (m_child));
+    release_dialog (dialog);
+    EXPECT_EQ (m_weak_dialog, nullptr);
 }
 
-static void
-test_readonly_and_closed_book ()
+TEST_F (AccountCascadeResponseTest, ReadonlyBookDoesNotUpdateAccounts)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto tree = make_account_tree ();
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     select_all_updates (dialog, TRUE);
-    qof_book_mark_readonly (tree.book);
+    qof_book_mark_readonly (m_book);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (xaccAccountGetColor (tree.account));
-    g_assert_false (xaccAccountGetHidden (tree.child));
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
-
-    tree = make_account_tree ();
-    dialog = start_cascade_dialog (tree, &parent);
-    select_all_updates (dialog, TRUE);
-    qof_book_mark_closed (tree.book);
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (xaccAccountGetColor (tree.account));
-    g_assert_false (xaccAccountGetPlaceholder (tree.child));
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
+    EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
+    EXPECT_FALSE (xaccAccountGetHidden (m_child));
 }
 
-static void
-test_removed_account_and_destroyed_book ()
+TEST_F (AccountCascadeResponseTest, ClosedBookDoesNotUpdateAccounts)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto tree = make_account_tree ();
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     select_all_updates (dialog, TRUE);
-    xaccAccountBeginEdit (tree.account);
-    xaccAccountDestroy (tree.account);
-    tree.account = nullptr;
-    tree.child = nullptr;
+    qof_book_mark_closed (m_book);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
-
-    tree = make_account_tree ();
-    dialog = start_cascade_dialog (tree, &parent);
-    select_all_updates (dialog, TRUE);
-    qof_book_destroy (tree.book);
-    tree.book = nullptr;
-    tree.account = nullptr;
-    tree.child = nullptr;
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    gtk_widget_destroy (parent);
+    EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
+    EXPECT_FALSE (xaccAccountGetPlaceholder (m_child));
 }
 
-struct RemoveChildOnModify
+TEST_F (AccountCascadeResponseTest, RemovedAccountIsIgnored)
 {
-    Account *target;
-    Account *child;
-    gboolean removed;
-};
-
-static void
-remove_child_on_modify (QofInstance *entity, QofEventId event,
-                        gpointer user_data, gpointer event_data)
-{
-    auto removal = static_cast<RemoveChildOnModify *> (user_data);
-    if (!removal->removed && event == QOF_EVENT_MODIFY &&
-        entity == QOF_INSTANCE (removal->target))
-    {
-        removal->removed = TRUE;
-        xaccAccountBeginEdit (removal->child);
-        xaccAccountDestroy (removal->child);
-        removal->child = nullptr;
-    }
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    select_all_updates (dialog, TRUE);
+    xaccAccountBeginEdit (m_account);
+    xaccAccountDestroy (m_account);
+    m_account = nullptr;
+    m_child = nullptr;
+    m_grandchild = nullptr;
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_EQ (find_cascade_dialog (), nullptr);
 }
 
-static void
-test_reentrant_account_event ()
+TEST_F (AccountCascadeResponseTest, DestroyedBookIsIgnored)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    select_all_updates (dialog, TRUE);
+    qof_book_destroy (m_book);
+    m_book = nullptr;
+    m_book_root = nullptr;
+    m_account = nullptr;
+    m_child = nullptr;
+    m_grandchild = nullptr;
 
-    auto tree = make_account_tree ();
-    RemoveChildOnModify removal{tree.account, tree.child, FALSE};
-    auto handler = qof_event_register_handler (remove_child_on_modify, &removal);
-    GtkWidget *parent;
-    auto dialog = start_cascade_dialog (tree, &parent);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_EQ (find_cascade_dialog (), nullptr);
+}
+
+TEST_F (AccountCascadeResponseTest, ReentrantAccountEvent)
+{
+    register_event_handler ();
+    auto dialog = start_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     select_all_updates (dialog, TRUE);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    qof_event_unregister_handler (handler);
+    unregister_event_handler ();
 
-    g_assert_true (removal.removed);
-    g_assert_true (xaccAccountGetHidden (tree.account));
-    gtk_widget_destroy (parent);
-    qof_book_destroy (tree.book);
+    EXPECT_TRUE (m_removal.removed);
+    EXPECT_TRUE (xaccAccountGetHidden (m_account));
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    qof_init ();
-    g_assert_true (cashobjects_register ());
-    g_test_add_func ("/gnome-utils/account-cascade/apply-and-late-response",
-                     test_apply_and_late_response);
-    g_test_add_func ("/gnome-utils/account-cascade/replace-disabled",
-                     test_replace_disabled);
-    g_test_add_func ("/gnome-utils/account-cascade/cancel-and-parent-destroy",
-                     test_cancel_and_parent_destroy);
-    g_test_add_func ("/gnome-utils/account-cascade/dialog-destroy-and-late-response",
-                     test_dialog_destroy_and_late_response);
-    g_test_add_func ("/gnome-utils/account-cascade/readonly-and-closed-book",
-                     test_readonly_and_closed_book);
-    g_test_add_func ("/gnome-utils/account-cascade/removed-account-and-destroyed-book",
-                     test_removed_account_and_destroyed_book);
-    g_test_add_func ("/gnome-utils/account-cascade/reentrant-account-event",
-                     test_reentrant_account_event);
-    auto result = g_test_run ();
-    qof_close ();
-    return result;
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for account-cascade response tests");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

@@ -9,6 +9,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#include <gtest/gtest.h>
 
 /* Include the QOF declarations as C++ first, then give the public C entrypoint
    C linkage. assistant-xml-encoding.h itself has no extern-C guard. */
@@ -25,13 +26,20 @@ extern "C"
 namespace
 {
 constexpr char xml_fixture[] = "<gnc>\xc3\xa9</gnc>\n";
-GtkWidget *assistant_under_test;
-gboolean display_available;
-guint driver_source_id;
-gboolean driver_ran;
-guint encoding_dialog_destroy_count;
-GWeakRef encoding_dialog_ref;
-GWeakRef encoding_error_ref;
+
+struct ImportResult
+{
+    bool completed{};
+    gboolean converted{};
+    gboolean driver_ran{};
+    guint driver_source_id{};
+    guint dialog_destroy_count{};
+    GtkWidget *assistant{};
+    GWeakRef dialog_ref{};
+    GWeakRef error_ref{};
+};
+
+ImportResult *active_result{};
 
 struct EncodingPath
 {
@@ -45,8 +53,7 @@ find_encoding_path (GtkTreeModel *model, GtkTreePath *path,
 {
     auto wanted = static_cast<EncodingPath *> (user_data);
     gpointer quark_ptr = nullptr;
-    g_assert_cmpuint (gtk_tree_model_get_column_type (model, 1), ==,
-                      G_TYPE_POINTER);
+    EXPECT_EQ (gtk_tree_model_get_column_type (model, 1), G_TYPE_POINTER);
     gtk_tree_model_get (model, iter, 1, &quark_ptr, -1);
     auto encoding = g_quark_to_string (GPOINTER_TO_UINT (quark_ptr));
     if (g_strcmp0 (encoding, wanted->encoding) != 0)
@@ -82,7 +89,7 @@ find_assistant ()
     {
         if (GTK_IS_ASSISTANT (node->data))
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
             result = GTK_WIDGET (node->data);
         }
     }
@@ -104,7 +111,7 @@ find_encoding_dialog (GtkWidget *assistant)
             gtk_window_get_transient_for (GTK_WINDOW (widget)) ==
             GTK_WINDOW (assistant))
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
             result = widget;
         }
     }
@@ -115,12 +122,12 @@ find_encoding_dialog (GtkWidget *assistant)
 void
 track_dialog_destruction (GtkWidget *dialog)
 {
-    g_weak_ref_set (&encoding_dialog_ref, G_OBJECT (dialog));
+    g_weak_ref_set (&active_result->dialog_ref, G_OBJECT (dialog));
     g_signal_connect (dialog, "destroy",
                       G_CALLBACK (+[] (GtkWidget *, gpointer data)
                       {
                           ++*static_cast<guint *> (data);
-                      }), &encoding_dialog_destroy_count);
+                      }), &active_result->dialog_destroy_count);
 }
 
 guint
@@ -135,13 +142,17 @@ remove_latin1_encoding (GtkWidget *dialog)
 {
     auto view = find_named_child (dialog, "selected_encs_view");
     auto remove = find_named_child (dialog, "remove_enc_button");
-    g_assert_nonnull (view);
-    g_assert_nonnull (remove);
+    EXPECT_NE (view, nullptr);
+    EXPECT_NE (remove, nullptr);
+    if (!view || !remove)
+        return;
 
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     EncodingPath wanted {"ISO-8859-1", nullptr};
     gtk_tree_model_foreach (model, find_encoding_path, &wanted);
-    g_assert_nonnull (wanted.path);
+    EXPECT_NE (wanted.path, nullptr);
+    if (!wanted.path)
+        return;
     gtk_tree_selection_select_path (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), wanted.path);
     gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), wanted.path, nullptr, FALSE);
@@ -154,17 +165,21 @@ add_latin1_encoding (GtkWidget *dialog)
 {
     auto view = find_named_child (dialog, "available_encs_view");
     auto add = find_named_child (dialog, "add_enc_button");
-    g_assert_nonnull (view);
-    g_assert_nonnull (add);
+    EXPECT_NE (view, nullptr);
+    EXPECT_NE (add, nullptr);
+    if (!view || !add)
+        return;
     EncodingPath wanted {"ISO-8859-1", nullptr};
     gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (view)),
                             find_encoding_path, &wanted);
-    g_assert_nonnull (wanted.path);
+    EXPECT_NE (wanted.path, nullptr);
+    if (!wanted.path)
+        return;
     gtk_tree_view_expand_to_path (GTK_TREE_VIEW (view), wanted.path);
     gtk_tree_selection_select_path (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), wanted.path);
     gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), wanted.path, nullptr, FALSE);
-    g_assert_true (gtk_tree_selection_path_is_selected (
+    EXPECT_TRUE (gtk_tree_selection_path_is_selected (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), wanted.path));
     gtk_tree_path_free (wanted.path);
     gtk_button_clicked (GTK_BUTTON (add));
@@ -175,150 +190,192 @@ check_rejected_encoding (GtkWidget *dialog, const char *encoding)
 {
     auto selected = find_named_child (dialog, "selected_encs_view");
     auto entry = find_named_child (dialog, "custom_enc_entry");
-    g_assert_true (GTK_IS_ENTRY (entry));
+    EXPECT_TRUE (GTK_IS_ENTRY (entry));
+    if (!selected || !GTK_IS_ENTRY (entry))
+        return;
     auto count = row_count (selected);
     gtk_entry_set_text (GTK_ENTRY (entry), encoding);
     auto add = find_named_child (dialog, "add_custom_enc_button");
-    g_assert_true (GTK_IS_BUTTON (add));
+    EXPECT_TRUE (GTK_IS_BUTTON (add));
+    if (!GTK_IS_BUTTON (add))
+        return;
     gtk_button_clicked (GTK_BUTTON (add));
     auto error = find_encoding_dialog (dialog);
-    g_assert_true (GTK_IS_MESSAGE_DIALOG (error));
-    g_assert_cmpuint (row_count (selected), ==, count);
+    EXPECT_TRUE (GTK_IS_MESSAGE_DIALOG (error));
+    if (!GTK_IS_MESSAGE_DIALOG (error))
+        return;
+    EXPECT_EQ (row_count (selected), count);
     gtk_dialog_response (GTK_DIALOG (error), GTK_RESPONSE_CLOSE);
-    g_assert_null (find_encoding_dialog (dialog));
+    EXPECT_EQ (find_encoding_dialog (dialog), nullptr);
 }
 
 gboolean
 drive_cancel_then_parent_cancel (gpointer)
 {
-    driver_source_id = 0;
-    driver_ran = TRUE;
-    assistant_under_test = find_assistant ();
-    g_assert_nonnull (assistant_under_test);
-    gtk_assistant_set_current_page (GTK_ASSISTANT (assistant_under_test), 1);
+    active_result->driver_source_id = 0;
+    active_result->driver_ran = TRUE;
+    active_result->assistant = find_assistant ();
+    EXPECT_NE (active_result->assistant, nullptr);
+    if (!active_result->assistant)
+        return G_SOURCE_REMOVE;
+    gtk_assistant_set_current_page (GTK_ASSISTANT (active_result->assistant), 1);
 
-    auto edit = find_named_child (assistant_under_test, "edit_encs_button");
-    g_assert_nonnull (edit);
+    auto edit = find_named_child (active_result->assistant, "edit_encs_button");
+    EXPECT_NE (edit, nullptr);
+    if (!edit)
+        return G_SOURCE_REMOVE;
     gtk_button_clicked (GTK_BUTTON (edit));
-    auto dialog = find_encoding_dialog (assistant_under_test);
-    g_assert_nonnull (dialog);
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    auto dialog = find_encoding_dialog (active_result->assistant);
+    EXPECT_NE (dialog, nullptr);
+    if (!dialog)
+        return G_SOURCE_REMOVE;
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
     auto selected = find_named_child (dialog, "selected_encs_view");
-    g_assert_nonnull (selected);
+    EXPECT_NE (selected, nullptr);
+    if (!selected)
+        return G_SOURCE_REMOVE;
     auto original_count = row_count (selected);
     check_rejected_encoding (dialog, "ISO-8859-1");
     check_rejected_encoding (dialog, "gnc-invalid-test-encoding");
     remove_latin1_encoding (dialog);
-    g_assert_cmpuint (row_count (selected), ==, original_count - 1);
+    EXPECT_EQ (row_count (selected), original_count - 1);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-    g_assert_null (find_encoding_dialog (assistant_under_test));
+    EXPECT_EQ (find_encoding_dialog (active_result->assistant), nullptr);
 
     gtk_button_clicked (GTK_BUTTON (edit));
-    dialog = find_encoding_dialog (assistant_under_test);
-    g_assert_nonnull (dialog);
+    dialog = find_encoding_dialog (active_result->assistant);
+    EXPECT_NE (dialog, nullptr);
+    if (!dialog)
+        return G_SOURCE_REMOVE;
     selected = find_named_child (dialog, "selected_encs_view");
-    g_assert_cmpuint (row_count (selected), ==, original_count);
+    EXPECT_EQ (row_count (selected), original_count);
     remove_latin1_encoding (dialog);
-    g_assert_cmpuint (row_count (selected), ==, original_count - 1);
+    EXPECT_EQ (row_count (selected), original_count - 1);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     gtk_button_clicked (GTK_BUTTON (edit));
-    dialog = find_encoding_dialog (assistant_under_test);
-    g_assert_nonnull (dialog);
+    dialog = find_encoding_dialog (active_result->assistant);
+    EXPECT_NE (dialog, nullptr);
+    if (!dialog)
+        return G_SOURCE_REMOVE;
     track_dialog_destruction (dialog);
     selected = find_named_child (dialog, "selected_encs_view");
-    g_assert_cmpuint (row_count (selected), ==, original_count - 1);
+    EXPECT_EQ (row_count (selected), original_count - 1);
     add_latin1_encoding (dialog);
-    g_assert_cmpuint (row_count (selected), ==, original_count);
+    EXPECT_EQ (row_count (selected), original_count);
     auto entry = find_named_child (dialog, "custom_enc_entry");
     gtk_entry_set_text (GTK_ENTRY (entry), "gnc-invalid-test-encoding");
     auto add = find_named_child (dialog, "add_custom_enc_button");
-    g_assert_true (GTK_IS_BUTTON (add));
+    EXPECT_TRUE (GTK_IS_BUTTON (add));
     gtk_button_clicked (GTK_BUTTON (add));
     auto error = find_encoding_dialog (dialog);
-    g_assert_true (GTK_IS_MESSAGE_DIALOG (error));
-    g_weak_ref_set (&encoding_error_ref, G_OBJECT (error));
+    EXPECT_TRUE (GTK_IS_MESSAGE_DIALOG (error));
+    if (!GTK_IS_MESSAGE_DIALOG (error))
+        return G_SOURCE_REMOVE;
+    g_weak_ref_set (&active_result->error_ref, G_OBJECT (error));
 
     /* Closing the parent while the editor is open must dispose the child and
        roll back its unaccepted working list before importer state is freed. */
-    g_signal_emit_by_name (assistant_under_test, "cancel");
+    g_signal_emit_by_name (active_result->assistant, "cancel");
     return G_SOURCE_REMOVE;
 }
 
-void
-test_public_import_assistant ()
+class XmlEncodingAssistantTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        gnc_set_current_session (qof_session_new (qof_book_new ()));
+        active_result = &result;
+        g_weak_ref_init (&result.dialog_ref, nullptr);
+        g_weak_ref_init (&result.error_ref, nullptr);
+        GError *error = nullptr;
+        const gint fd = g_file_open_tmp ("gnc-xml-encoding-XXXXXX", &filename,
+                                         &error);
+        ASSERT_GE (fd, 0) << (error ? error->message : "");
+        g_clear_error (&error);
+        ASSERT_TRUE (g_close (fd, &error));
+        g_clear_error (&error);
+        ASSERT_TRUE (g_file_set_contents (filename, xml_fixture,
+                                          sizeof (xml_fixture) - 1, &error))
+            << (error ? error->message : "");
+        g_clear_error (&error);
+        uri = g_filename_to_uri (filename, nullptr, &error);
+        ASSERT_NE (uri, nullptr) << (error ? error->message : "");
+        g_clear_error (&error);
     }
+    void TearDown () override
+    {
+        if (result.driver_source_id)
+        {
+            g_source_remove (result.driver_source_id);
+            result.driver_source_id = 0;
+        }
+        g_weak_ref_clear (&result.dialog_ref);
+        g_weak_ref_clear (&result.error_ref);
+        if (filename)
+        {
+            g_remove (filename);
+            g_free (filename);
+            filename = nullptr;
+        }
+        g_clear_pointer (&uri, g_free);
+        gnc_clear_current_session ();
+        active_result = nullptr;
+    }
+    gchar *filename{};
+    gchar *uri{};
+    ImportResult result{};
+};
 
-    gchar *filename = nullptr;
-    gint fd = g_file_open_tmp ("gnc-xml-encoding-XXXXXX", &filename, nullptr);
-    g_assert_cmpint (fd, >=, 0);
-    g_assert_cmpint (g_close (fd, nullptr), ==, TRUE);
-    g_assert_true (g_file_set_contents (filename, xml_fixture,
-                                        sizeof (xml_fixture) - 1, nullptr));
-    gchar *uri = g_filename_to_uri (filename, nullptr, nullptr);
-    g_assert_nonnull (uri);
-
-    driver_ran = FALSE;
-    encoding_dialog_destroy_count = 0;
-    g_weak_ref_set (&encoding_dialog_ref, nullptr);
-    driver_source_id = g_idle_add (drive_cancel_then_parent_cancel, nullptr);
-    struct Result { bool completed; gboolean converted; } result {false, FALSE};
+TEST_F (XmlEncodingAssistantTest, PublicImportAssistantCancelsChildEditor)
+{
+    result.driver_ran = FALSE;
+    result.dialog_destroy_count = 0;
+    g_weak_ref_set (&result.dialog_ref, nullptr);
+    result.driver_source_id = g_idle_add (drive_cancel_then_parent_cancel, nullptr);
     gnc_xml_convert_single_file_async (nullptr, uri,
         +[](gboolean converted, gpointer data) {
-            auto result = static_cast<Result *>(data);
-            g_assert_false (result->completed);
+            auto result = static_cast<ImportResult *>(data);
+            EXPECT_FALSE (result->completed);
             result->completed = true;
             result->converted = converted;
         }, &result);
-    g_assert_false (result.completed); // Product returned before any answer.
+    EXPECT_FALSE (result.completed); // Product returned before any answer.
     while (!result.completed)
         g_main_context_iteration (nullptr, TRUE);
-    if (driver_source_id)
+    if (result.driver_source_id)
     {
-        g_source_remove (driver_source_id);
-        driver_source_id = 0;
+        g_source_remove (result.driver_source_id);
+        result.driver_source_id = 0;
     }
-    g_assert_false (result.converted);
-    g_assert_true (driver_ran);
-    g_assert_cmpuint (encoding_dialog_destroy_count, ==, 1);
-    auto child_after_return = g_weak_ref_get (&encoding_dialog_ref);
-    g_assert_null (child_after_return);
+    EXPECT_FALSE (result.converted);
+    EXPECT_TRUE (result.driver_ran);
+    EXPECT_EQ (result.dialog_destroy_count, 1u);
+    auto child_after_return = g_weak_ref_get (&result.dialog_ref);
+    EXPECT_EQ (child_after_return, nullptr);
     g_clear_object (&child_after_return);
-    auto error_after_return = g_weak_ref_get (&encoding_error_ref);
-    g_assert_null (error_after_return);
+    auto error_after_return = g_weak_ref_get (&result.error_ref);
+    EXPECT_EQ (error_after_return, nullptr);
     g_clear_object (&error_after_return);
-    g_assert_null (find_assistant ());
+    EXPECT_EQ (find_assistant (), nullptr);
 
-    g_free (uri);
-    g_remove (filename);
-    g_free (filename);
 }
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for XML encoding assistant tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
-    gnc_set_current_session (qof_session_new (qof_book_new ()));
-    g_weak_ref_init (&encoding_dialog_ref, nullptr);
-    g_weak_ref_init (&encoding_error_ref, nullptr);
-    g_test_add_func ("/gnome-utils/xml-encoding/public-import-assistant",
-                     test_public_import_assistant);
-    auto result = g_test_run ();
-    g_weak_ref_clear (&encoding_dialog_ref);
-    g_weak_ref_clear (&encoding_error_ref);
-    gnc_clear_current_session ();
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     qof_close ();
     return result;
 }

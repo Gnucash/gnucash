@@ -10,16 +10,16 @@
 #include <glib/gstdio.h>
 #include <unistd.h>
 
+#include <gtest/gtest.h>
+
 #include "gnc-file.h"
 
 namespace
 {
-gboolean display_available;
-
 struct Result
 {
-    guint calls = 0;
-    GSList *filenames = nullptr;
+    guint calls{};
+    GSList *filenames{};
 };
 
 void
@@ -30,131 +30,122 @@ completed (GSList *filenames, gpointer user_data)
     result->filenames = filenames;
 }
 
-GtkWidget *
-find_chooser (GtkWindow *parent)
+class FileChooserResponseTest : public ::testing::Test
 {
-    auto windows = gtk_window_list_toplevels ();
-    GtkWidget *chooser = nullptr;
-    for (auto node = windows; node; node = node->next)
-        if (GTK_IS_FILE_CHOOSER_DIALOG (node->data) &&
-            gtk_window_get_transient_for (GTK_WINDOW (node->data)) == parent)
-        {
-            g_assert_null (chooser);
-            chooser = GTK_WIDGET (node->data);
-        }
-    g_list_free (windows);
-    return chooser;
-}
-
-void
-test_accept_and_late_response ()
-{
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        m_parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (m_parent);
     }
-    GError *error = nullptr;
-    /* Enumerate only this fixture, not the user's temporary directory and
-     * its unrelated files, permissions and concurrently running programs. */
-    auto directory = g_dir_make_tmp("gnc-file-chooser-XXXXXX", &error);
-    g_assert_no_error (error);
-    g_assert_nonnull(directory);
-    auto path = g_build_filename(directory, "selected.gnucash", nullptr);
-    g_assert_true(g_file_set_contents(path, "", 0, &error));
-    g_assert_no_error(error);
 
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Result result;
-    gnc_file_dialog_async (parent, "Choose test file", nullptr, directory,
-                           GNC_FILE_DIALOG_OPEN, FALSE, completed, &result, nullptr);
-    auto chooser = find_chooser (parent);
-    g_assert_nonnull (chooser);
-    g_object_ref (chooser);
-    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (chooser), path);
+    void TearDown () override
+    {
+        if (m_chooser)
+            gtk_widget_destroy (m_chooser);
+        g_clear_object (&m_chooser);
+        if (m_parent)
+        {
+            gtk_widget_destroy (GTK_WIDGET (m_parent));
+            g_object_unref (m_parent);
+        }
+        g_slist_free_full (m_result.filenames, g_free);
+        if (m_path)
+            g_unlink (m_path);
+        if (m_directory)
+            g_rmdir (m_directory);
+        g_clear_pointer (&m_path, g_free);
+        g_clear_pointer (&m_directory, g_free);
+    }
+
+    GtkWidget *start_chooser (const char *directory = nullptr)
+    {
+        gnc_file_dialog_async (m_parent, "Choose test file", nullptr, directory,
+                               GNC_FILE_DIALOG_OPEN, FALSE, completed,
+                               &m_result, nullptr);
+        auto windows = gtk_window_list_toplevels ();
+        for (auto node = windows; node; node = node->next)
+            if (GTK_IS_FILE_CHOOSER_DIALOG (node->data) &&
+                gtk_window_get_transient_for (GTK_WINDOW (node->data)) == m_parent)
+            {
+                EXPECT_EQ (m_chooser, nullptr);
+                m_chooser = GTK_WIDGET (node->data);
+                g_object_ref (m_chooser);
+            }
+        g_list_free (windows);
+        EXPECT_NE (m_chooser, nullptr);
+        return m_chooser;
+    }
+
+    GtkWindow *m_parent{};
+    GtkWidget *m_chooser{};
+    Result m_result{};
+    gchar *m_directory{};
+    gchar *m_path{};
+};
+
+TEST_F (FileChooserResponseTest, AcceptReturnsSelectedFileOnce)
+{
+    GError *error = nullptr;
+    m_directory = g_dir_make_tmp ("gnc-file-chooser-XXXXXX", &error);
+    ASSERT_EQ (error, nullptr);
+    ASSERT_NE (m_directory, nullptr);
+    m_path = g_build_filename (m_directory, "selected.gnucash", nullptr);
+    ASSERT_TRUE (g_file_set_contents (m_path, "", 0, &error));
+    ASSERT_EQ (error, nullptr);
+
+    auto chooser = start_chooser (m_directory);
+    ASSERT_NE (chooser, nullptr);
+    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (chooser), m_path);
     gboolean selected = FALSE;
     const gint64 deadline = g_get_monotonic_time () + 2 * G_USEC_PER_SEC;
     while (!selected && g_get_monotonic_time () < deadline)
     {
         g_main_context_iteration (nullptr, FALSE);
         gchar *current = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
-        selected = g_strcmp0 (current, path) == 0;
+        selected = g_strcmp0 (current, m_path) == 0;
         g_free (current);
         if (!selected)
             g_usleep (1000);
     }
-    g_assert_true (selected);
-    gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_nonnull (result.filenames);
-    g_assert_cmpstr (static_cast<const char *> (result.filenames->data), ==, path);
+    ASSERT_TRUE (selected);
 
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_slist_free_full (result.filenames, g_free);
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    g_object_unref (chooser);
-    g_unlink (path);
-    g_rmdir(directory);
-    g_free (path);
-    g_free(directory);
+    ASSERT_EQ (m_result.calls, 1u);
+    ASSERT_NE (m_result.filenames, nullptr);
+    EXPECT_STREQ (static_cast<const char *> (m_result.filenames->data), m_path);
+    gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
+    EXPECT_EQ (m_result.calls, 1u);
 }
 
-void
-test_cancel ()
+TEST_F (FileChooserResponseTest, CancelReturnsNoFiles)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Result result;
-    gnc_file_dialog_async (parent, "Choose test file", nullptr, nullptr,
-                           GNC_FILE_DIALOG_OPEN, FALSE, completed, &result, nullptr);
-    auto chooser = find_chooser (parent);
-    g_assert_nonnull (chooser);
+    auto chooser = start_chooser ();
+    ASSERT_NE (chooser, nullptr);
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_CANCEL);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_null (result.filenames);
-    gtk_widget_destroy (GTK_WIDGET (parent));
+    EXPECT_EQ (m_result.calls, 1u);
+    EXPECT_EQ (m_result.filenames, nullptr);
 }
 
-void
-test_owner_destroy_and_late_response ()
+TEST_F (FileChooserResponseTest, DestroyingOwnerCompletesOnceAndIgnoresLateResponse)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Result result;
-    gnc_file_dialog_async (parent, "Choose test file", nullptr, nullptr,
-                           GNC_FILE_DIALOG_OPEN, FALSE, completed, &result, nullptr);
-    auto chooser = find_chooser (parent);
-    g_assert_nonnull (chooser);
-    g_object_ref (chooser);
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_null (result.filenames);
+    auto chooser = start_chooser ();
+    ASSERT_NE (chooser, nullptr);
+    gtk_widget_destroy (GTK_WIDGET (m_parent));
+    EXPECT_EQ (m_result.calls, 1u);
+    EXPECT_EQ (m_result.filenames, nullptr);
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_object_unref (chooser);
+    EXPECT_EQ (m_result.calls, 1u);
 }
-}
+} // namespace
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    g_test_add_func ("/gnome-utils/file-chooser/accept-late-response",
-                     test_accept_and_late_response);
-    g_test_add_func ("/gnome-utils/file-chooser/cancel", test_cancel);
-    g_test_add_func ("/gnome-utils/file-chooser/owner-destroy-late-response",
-                     test_owner_destroy_and_late_response);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for file chooser response tests");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

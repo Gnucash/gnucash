@@ -8,12 +8,12 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 
 #include "gnc-general-select.h"
 
 namespace
 {
-gboolean display_available;
 int old_selection;
 int new_selection;
 GtkWidget *destroy_from_get_string;
@@ -66,7 +66,9 @@ complete_selection (Selector &selector, gpointer selection)
     auto data = selector.completion_data;
     selector.completed = nullptr;
     selector.completion_data = nullptr;
-    g_assert_nonnull (completed);
+    EXPECT_NE (completed, nullptr);
+    if (!completed)
+        return;
     completed (selection, data);
 }
 
@@ -85,46 +87,62 @@ create_select (GtkWidget *parent, Selector &selector)
     return widget;
 }
 
-void
-test_pending_cancel_update_and_inline_completion ()
+class GeneralSelectResponseTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        destroy_from_get_string = nullptr;
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (parent);
+        widget = create_select (parent, selector);
+        g_object_ref (widget);
+        select = GNC_GENERAL_SELECT (widget);
+        g_signal_connect (select, "changed", G_CALLBACK (count_changed), &changed);
     }
 
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    Selector selector;
-    auto widget = create_select (parent, selector);
-    auto select = GNC_GENERAL_SELECT (widget);
-    guint changed = 0;
+    void TearDown () override
+    {
+        gtk_widget_destroy (parent);
+        if (selector.completed)
+            complete_selection (selector, nullptr);
+        g_object_unref (widget);
+        g_object_unref (parent);
+        destroy_from_get_string = nullptr;
+    }
+
+    Selector selector{};
+    GtkWidget *parent{};
+    GtkWidget *widget{};
+    GNCGeneralSelect *select{};
+    guint changed{};
+};
+TEST_F (GeneralSelectResponseTest, PendingCancelUpdateAndInlineCompletion)
+{
     gnc_general_select_set_selected (select, &old_selection);
-    g_assert_true (gnc_general_select_get_selected (select) == &old_selection);
-    g_signal_connect (select, "changed", G_CALLBACK (count_changed), &changed);
+    EXPECT_EQ (gnc_general_select_get_selected (select), &old_selection);
+    changed = 0;
 
     gtk_button_clicked (GTK_BUTTON (select->button));
     gtk_button_clicked (GTK_BUTTON (select->button));
-    g_assert_cmpuint (selector.calls, ==, 1);
+    EXPECT_EQ (selector.calls, 1u);
     complete_selection (selector, nullptr);
-    g_assert_true (gnc_general_select_get_selected (select) == &old_selection);
-    g_assert_cmpuint (changed, ==, 0);
+    EXPECT_EQ (gnc_general_select_get_selected (select), &old_selection);
+    EXPECT_EQ (changed, 0u);
 
     gtk_button_clicked (GTK_BUTTON (select->button));
-    g_assert_cmpuint (selector.calls, ==, 2);
+    EXPECT_EQ (selector.calls, 2u);
     complete_selection (selector, &new_selection);
-    g_assert_true (gnc_general_select_get_selected (select) == &new_selection);
-    g_assert_cmpstr (gtk_entry_get_text (GTK_ENTRY (select->entry)), ==,
-                     "New selection");
-    g_assert_cmpuint (changed, ==, 1);
+    EXPECT_EQ (gnc_general_select_get_selected (select), &new_selection);
+    EXPECT_STREQ (gtk_entry_get_text (GTK_ENTRY (select->entry)), "New selection");
+    EXPECT_EQ (changed, 1u);
 
     selector.complete_inline = TRUE;
     selector.inline_selection = &old_selection;
     gtk_button_clicked (GTK_BUTTON (select->button));
-    g_assert_cmpuint (selector.calls, ==, 3);
-    g_assert_true (gnc_general_select_get_selected (select) == &old_selection);
-    g_assert_cmpuint (changed, ==, 2);
-    gtk_widget_destroy (parent);
+    EXPECT_EQ (selector.calls, 3u);
+    EXPECT_EQ (gnc_general_select_get_selected (select), &old_selection);
+    EXPECT_EQ (changed, 2u);
 }
 
 void
@@ -133,67 +151,32 @@ destroy_on_entry_changed (GtkEditable *, gpointer data)
     gtk_widget_destroy (GTK_WIDGET (data));
 }
 
-void
-test_late_completion_after_destroy_and_entry_notification_destroy ()
+TEST_F (GeneralSelectResponseTest, LateCompletionAfterParentDestroyIsIgnored)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    Selector selector;
-    auto widget = create_select (parent, selector);
-    auto select = GNC_GENERAL_SELECT (widget);
-    guint changed = 0;
-    g_signal_connect (select, "changed", G_CALLBACK (count_changed), &changed);
 
     gtk_button_clicked (GTK_BUTTON (select->button));
-    g_object_ref (widget);
     gtk_widget_destroy (parent);
     complete_selection (selector, &new_selection);
-    g_assert_null (gnc_general_select_get_selected (select));
-    g_assert_cmpuint (changed, ==, 0);
-    g_object_unref (widget);
+    EXPECT_EQ (gnc_general_select_get_selected (select), nullptr);
+    EXPECT_EQ (changed, 0u);
+}
 
-    parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    Selector second_selector;
-    widget = create_select (parent, second_selector);
-    select = GNC_GENERAL_SELECT (widget);
-    g_signal_connect (select, "changed", G_CALLBACK (count_changed), &changed);
+TEST_F (GeneralSelectResponseTest, EntryNotificationMayDestroyWidget)
+{
     g_signal_connect (select->entry, "changed",
                       G_CALLBACK (destroy_on_entry_changed), select);
     gtk_widget_show_all (parent);
-    g_object_ref (widget);
     gnc_general_select_set_selected (select, &new_selection);
-    g_assert_null (gnc_general_select_get_selected (select));
-    g_assert_cmpuint (changed, ==, 0);
-    g_object_unref (widget);
-    gtk_widget_destroy (parent);
+    EXPECT_EQ (gnc_general_select_get_selected (select), nullptr);
+    EXPECT_EQ (changed, 0u);
 }
 
-void
-test_get_string_can_destroy_widget ()
+TEST_F (GeneralSelectResponseTest, StringLookupMayDestroyWidget)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    Selector selector;
-    auto widget = create_select (parent, selector);
-    auto select = GNC_GENERAL_SELECT (widget);
-    guint changed = 0;
-    g_signal_connect (select, "changed", G_CALLBACK (count_changed), &changed);
-    g_object_ref (widget);
     destroy_from_get_string = widget;
     gnc_general_select_set_selected (select, &new_selection);
-    g_assert_null (gnc_general_select_get_selected (select));
-    g_assert_cmpuint (changed, ==, 0);
-    g_object_unref (widget);
+    EXPECT_EQ (gnc_general_select_get_selected (select), nullptr);
+    EXPECT_EQ (changed, 0u);
     gtk_widget_destroy (parent);
 }
 }
@@ -201,15 +184,10 @@ test_get_string_can_destroy_widget ()
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    g_test_add_func ("/gnome-utils/general-select/async-pending-cancel-update-inline",
-                     test_pending_cancel_update_and_inline_completion);
-    g_test_add_func ("/gnome-utils/general-select/async-late-completion-destroy",
-                     test_late_completion_after_destroy_and_entry_notification_destroy);
-    g_test_add_func ("/gnome-utils/general-select/get-string-destroys-widget",
-                     test_get_string_can_destroy_widget);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for general-select tests");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

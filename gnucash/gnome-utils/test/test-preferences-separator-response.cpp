@@ -8,6 +8,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -16,8 +17,6 @@
 #include "gnc-session.h"
 
 extern "C" void gnc_preferences_response_cb (GtkDialog *, gint, GtkDialog *);
-
-static gboolean display_available;
 
 static void
 observe_reset (GtkEditable *entry, guint *resets)
@@ -32,100 +31,124 @@ destroy_on_reset ([[maybe_unused]] GtkEditable *entry, GtkWidget *parent)
     gtk_widget_destroy (parent);
 }
 
-static void
-test_response (gconstpointer data)
+class PreferencesSeparatorResponseTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        auto book = qof_book_new ();
+        auto root = gnc_account_create_root (book);
+        auto account = xaccMallocAccount (book);
+        xaccAccountSetName (account, "Account-Conflict");
+        gnc_account_append_child (root, account);
+        gnc_set_current_session (qof_session_new (book));
+        parent = GTK_DIALOG (gtk_dialog_new ());
+        auto content = gtk_dialog_get_content_area (parent);
+        entry = gtk_entry_new ();
+        gtk_entry_set_text (GTK_ENTRY (entry), "-");
+        g_object_set_data (G_OBJECT (entry), "original_text", const_cast<char *> (":"));
+        g_object_set_data (G_OBJECT (parent), "account-separator", entry);
+        gtk_container_add (GTK_CONTAINER (content), entry);
+        notebook = gtk_notebook_new ();
+        auto first = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+        auto accounts = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+        gtk_widget_set_name (accounts, "accounts_page");
+        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), first, nullptr);
+        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), accounts, nullptr);
+        gtk_container_add (GTK_CONTAINER (content), notebook);
+        g_object_set_data (G_OBJECT (parent), "notebook", notebook);
+        gtk_widget_show_all (GTK_WIDGET (parent));
+        g_object_ref (parent);
+        g_object_ref (entry);
+        gnc_preferences_response_cb (parent, GTK_RESPONSE_CLOSE, nullptr);
+        question = GTK_DIALOG (g_object_get_data (G_OBJECT (parent), "separator-question"));
+        ASSERT_NE (question, nullptr);
+        g_object_ref (question);
+        ASSERT_TRUE (gtk_window_get_modal (GTK_WINDOW (question)));
+        gnc_preferences_response_cb (parent, GTK_RESPONSE_CLOSE, nullptr);
+        ASSERT_EQ (g_object_get_data (G_OBJECT (parent), "separator-question"), question);
+        g_signal_connect (entry, "changed", G_CALLBACK (observe_reset), &resets);
     }
-    auto book = qof_book_new ();
-    auto root = gnc_account_create_root (book);
-    auto account = xaccMallocAccount (book);
-    xaccAccountSetName (account, "Account-Conflict");
-    gnc_account_append_child (root, account);
-    gnc_set_current_session (qof_session_new (book));
-    auto parent = GTK_DIALOG (gtk_dialog_new ());
-    auto content = gtk_dialog_get_content_area (parent);
-    auto entry = gtk_entry_new ();
-    gtk_entry_set_text (GTK_ENTRY (entry), "-");
-    g_object_set_data (G_OBJECT (entry), "original_text", const_cast<char *> (":"));
-    g_object_set_data (G_OBJECT (parent), "account-separator", entry);
-    gtk_container_add (GTK_CONTAINER (content), entry);
-    auto notebook = gtk_notebook_new ();
-    auto first = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    auto accounts = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name (accounts, "accounts_page");
-    gtk_notebook_append_page (GTK_NOTEBOOK (notebook), first, nullptr);
-    gtk_notebook_append_page (GTK_NOTEBOOK (notebook), accounts, nullptr);
-    gtk_container_add (GTK_CONTAINER (content), notebook);
-    g_object_set_data (G_OBJECT (parent), "notebook", notebook);
-    gtk_widget_show_all (GTK_WIDGET (parent));
-    g_object_ref (parent);
-    g_object_ref (entry);
-    gnc_preferences_response_cb (parent, GTK_RESPONSE_CLOSE, nullptr);
-    auto question = GTK_DIALOG (g_object_get_data (G_OBJECT (parent), "separator-question"));
-    g_assert_nonnull (question);
-    g_object_ref (question);
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (question)));
-    gnc_preferences_response_cb (parent, GTK_RESPONSE_CLOSE, nullptr);
-    g_assert_true (g_object_get_data (G_OBJECT (parent), "separator-question") == question);
-    auto mode = GPOINTER_TO_INT (data);
-    guint resets = 0;
-    g_signal_connect (entry, "changed", G_CALLBACK (observe_reset), &resets);
-    if (mode == 2)
-        gtk_widget_destroy (GTK_WIDGET (parent));
-    else if (mode == 4)
-        gtk_widget_destroy (GTK_WIDGET (question));
-    else
+    void TearDown () override
     {
-        if (mode == 3)
-            g_signal_connect (entry, "changed", G_CALLBACK (destroy_on_reset), parent);
-        gtk_dialog_response (question, mode == 0 ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_ACCEPT);
+        if (parent && !gtk_widget_in_destruction (GTK_WIDGET (parent)))
+            gtk_widget_destroy (GTK_WIDGET (parent));
+        if (question) g_object_unref (question);
+        if (entry) g_object_unref (entry);
+        if (parent) g_object_unref (parent);
+        gnc_clear_current_session ();
     }
-    if (mode == 0 || mode == 4)
-    {
-        g_assert_cmpstr (gtk_entry_get_text (GTK_ENTRY (entry)), ==, "-");
-        g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 1);
-        g_assert_true (gtk_widget_get_visible (GTK_WIDGET (parent)));
-        gtk_widget_destroy (GTK_WIDGET (parent));
-    }
-    else if (mode == 1 || mode == 3)
-    {
-        /* GTK clears entry contents during destruction: observe the actual
-         * reset before teardown instead of inspecting a destroyed widget. */
-        g_assert_cmpuint (resets, ==, 1);
-        g_assert_false (gtk_widget_get_visible (GTK_WIDGET (parent)));
-    }
-    g_assert_null (g_object_get_data (G_OBJECT (parent), "separator-question"));
-    /* Holding the destroyed question must not permit a second continuation. */
+    GtkDialog *parent{};
+    GtkWidget *entry{};
+    GtkWidget *notebook{};
+    GtkDialog *question{};
+    guint resets{};
+};
+
+TEST_F (PreferencesSeparatorResponseTest, CancelReturnsToAccounts)
+{
+    gtk_dialog_response (question, GTK_RESPONSE_CANCEL);
+    EXPECT_STREQ (gtk_entry_get_text (GTK_ENTRY (entry)), "-");
+    EXPECT_EQ (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), 1);
+    EXPECT_TRUE (gtk_widget_get_visible (GTK_WIDGET (parent)));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (parent), "separator-question"), nullptr);
+}
+
+TEST_F (PreferencesSeparatorResponseTest, AcceptResetsSeparatorAndCloses)
+{
     gtk_dialog_response (question, GTK_RESPONSE_ACCEPT);
-    g_object_unref (question);
-    g_object_unref (entry);
-    g_object_unref (parent);
-    gnc_clear_current_session ();
+    EXPECT_EQ (resets, 1u);
+    EXPECT_FALSE (gtk_widget_get_visible (GTK_WIDGET (parent)));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (parent), "separator-question"), nullptr);
+    gtk_dialog_response (question, GTK_RESPONSE_ACCEPT);
+    EXPECT_EQ (resets, 1u);
+}
+
+TEST_F (PreferencesSeparatorResponseTest, ParentDestroyCancelsQuestion)
+{
+    gtk_widget_destroy (GTK_WIDGET (parent));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (parent), "separator-question"), nullptr);
+    EXPECT_EQ (resets, 0u);
+    gtk_dialog_response (question, GTK_RESPONSE_ACCEPT);
+    EXPECT_EQ (resets, 0u);
+}
+
+TEST_F (PreferencesSeparatorResponseTest, ReentrantResetCanDestroyParent)
+{
+    g_signal_connect (entry, "changed", G_CALLBACK (destroy_on_reset), parent);
+    gtk_dialog_response (question, GTK_RESPONSE_ACCEPT);
+    EXPECT_EQ (resets, 1u);
+    EXPECT_FALSE (gtk_widget_get_visible (GTK_WIDGET (parent)));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (parent), "separator-question"), nullptr);
+    gtk_dialog_response (question, GTK_RESPONSE_ACCEPT);
+    EXPECT_EQ (resets, 1u);
+}
+
+TEST_F (PreferencesSeparatorResponseTest, DestroyedQuestionCannotContinue)
+{
+    gtk_widget_destroy (GTK_WIDGET (question));
+    EXPECT_STREQ (gtk_entry_get_text (GTK_ENTRY (entry)), "-");
+    EXPECT_EQ (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), 1);
+    EXPECT_TRUE (gtk_widget_get_visible (GTK_WIDGET (parent)));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (parent), "separator-question"), nullptr);
+    gtk_dialog_response (question, GTK_RESPONSE_ACCEPT);
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for preferences separator tests");
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
     PrefsBackend memory_backend{};
     auto saved_backend = prefsbackend;
     prefsbackend = &memory_backend;
-    g_test_add_data_func ("/gnome-utils/separator/back-to-accounts", GINT_TO_POINTER (0), test_response);
-    g_test_add_data_func ("/gnome-utils/separator/reset-and-close", GINT_TO_POINTER (1), test_response);
-    g_test_add_data_func ("/gnome-utils/separator/parent-destroyed", GINT_TO_POINTER (2), test_response);
-    g_test_add_data_func ("/gnome-utils/separator/reentrant-reset", GINT_TO_POINTER (3), test_response);
-    g_test_add_data_func ("/gnome-utils/separator/question-destroyed", GINT_TO_POINTER (4), test_response);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     prefsbackend = saved_backend;
     gnc_component_manager_shutdown ();
     qof_close ();

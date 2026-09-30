@@ -1,22 +1,19 @@
 /* Copyright (C) 2026 GnuCash contributors
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 
 extern "C"
 {
 #include "search-string.h"
 }
 
-static gboolean display_available;
-
-static GtkWidget *
+namespace
+{
+GtkWidget *
 find_warning ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -24,57 +21,102 @@ find_warning ()
     for (auto window = windows; window; window = window->next)
         if (GTK_IS_MESSAGE_DIALOG (window->data))
         {
-            g_assert_null (dialog);
+            EXPECT_EQ (dialog, nullptr);
             dialog = GTK_WIDGET (window->data);
         }
     g_list_free (windows);
     return dialog;
 }
 
-static void
-test_validation (gconstpointer data)
+class StringSearchResponseTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        search = gnc_search_string_new ();
+        gnc_search_core_type_pass_parent (GNC_SEARCH_CORE_TYPE (search), parent);
     }
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    auto search = gnc_search_string_new ();
-    auto core = GNC_SEARCH_CORE_TYPE (search);
-    gnc_search_core_type_pass_parent (core, parent);
-    auto mode = GPOINTER_TO_INT (data);
-    gnc_search_string_set_value (search, mode == 0 ? "" : "[");
-    if (mode != 0)
-        gnc_search_string_set_how (search, SEARCH_STRING_MATCHES_REGEX);
-    g_assert_false (gnc_search_core_type_validate (core));
-    auto dialog = find_warning ();
-    g_assert_nonnull (dialog);
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
-    /* The notice owns its text, not the validator or its input storage. */
-    gnc_search_string_set_value (search, "valid");
-    g_assert_true (gnc_search_core_type_validate (core));
-    g_object_unref (search);
-    if (mode == 2)
-        gtk_widget_destroy (parent);
-    else
+
+    void TearDown () override
     {
-        gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-        gtk_widget_destroy (parent);
+        if (search)
+            g_object_unref (search);
+        if (parent)
+            gtk_widget_destroy (parent);
+        EXPECT_EQ (find_warning (), nullptr);
     }
-    g_assert_null (find_warning ());
+
+    GtkWidget *parent{};
+    GNCSearchString *search{};
+
+    GtkWidget *show_invalid_value (const char *value, gboolean regex)
+    {
+        gnc_search_string_set_value (search, value);
+        if (regex)
+            gnc_search_string_set_how (search, SEARCH_STRING_MATCHES_REGEX);
+        EXPECT_FALSE (gnc_search_core_type_validate (
+            GNC_SEARCH_CORE_TYPE (search)));
+        auto dialog = find_warning ();
+        EXPECT_NE (dialog, nullptr);
+        if (!dialog)
+            return nullptr;
+        EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+        EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+        return dialog;
+    }
+
+    void release_validator_after_warning (GtkWidget *dialog)
+    {
+        /* The notice owns its text, not the validator or its input storage. */
+        gnc_search_string_set_value (search, "valid");
+        EXPECT_TRUE (gnc_search_core_type_validate (
+            GNC_SEARCH_CORE_TYPE (search)));
+        g_object_unref (search);
+        search = nullptr;
+        EXPECT_NE (dialog, nullptr);
+    }
+};
+
+TEST_F (StringSearchResponseTest, RejectsEmptyValueAndClosesOnResponse)
+{
+    auto dialog = show_invalid_value ("", FALSE);
+    ASSERT_NE (dialog, nullptr);
+    release_validator_after_warning (dialog);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_EQ (find_warning (), nullptr);
+}
+
+TEST_F (StringSearchResponseTest, RejectsInvalidRegularExpressionAndClosesOnResponse)
+{
+    auto dialog = show_invalid_value ("[", TRUE);
+    ASSERT_NE (dialog, nullptr);
+    release_validator_after_warning (dialog);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_EQ (find_warning (), nullptr);
+}
+
+TEST_F (StringSearchResponseTest, WarningClosesWhenParentIsDestroyed)
+{
+    auto dialog = show_invalid_value ("[", TRUE);
+    ASSERT_NE (dialog, nullptr);
+    release_validator_after_warning (dialog);
+    gtk_widget_destroy (parent);
+    parent = nullptr;
+    EXPECT_EQ (find_warning (), nullptr);
+}
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    g_test_add_data_func ("/gnome-search/string/empty", GINT_TO_POINTER (0), test_validation);
-    g_test_add_data_func ("/gnome-search/string/regex", GINT_TO_POINTER (1), test_validation);
-    g_test_add_data_func ("/gnome-search/string/parent-destroyed", GINT_TO_POINTER (2), test_validation);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed for string search response tests.\n");
+        return 1;
+    }
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

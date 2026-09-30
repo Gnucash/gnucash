@@ -1,24 +1,26 @@
 /* test-dialog-object-references-response.cpp -- GTK3 response lifecycle.
  *
  * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  */
 
 #include <config.h>
 
 #include <gtk/gtk.h>
 
+#include <gtest/gtest.h>
+
 #include "dialog-object-references.h"
 
-static gboolean display_available;
-
-static GtkWidget *
-find_references_dialog (void)
+namespace
+{
+GtkWidget *
+find_references_dialog ()
 {
     GList *windows = gtk_window_list_toplevels ();
-    GtkWidget *dialog = NULL;
+    GtkWidget *dialog = nullptr;
 
     for (GList *node = windows; node; node = node->next)
     {
@@ -35,63 +37,94 @@ find_references_dialog (void)
     return dialog;
 }
 
-static void
+void
 dialog_destroyed ([[maybe_unused]] GtkWidget *dialog, gpointer user_data)
 {
-    auto destroy_count = static_cast<guint *> (user_data);
-
-    ++*destroy_count;
+    ++*static_cast<guint *> (user_data);
 }
 
-static void
-test_dialog_closes (gconstpointer data)
+class ObjectReferencesResponseTest : public ::testing::Test
 {
-    gboolean answer_button = GPOINTER_TO_INT (data);
-    GtkWidget *dialog;
-    guint destroy_count = 0;
-
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        gnc_ui_object_references_show ("References", nullptr);
+        m_dialog = find_references_dialog ();
+        if (m_dialog)
+            g_object_ref (m_dialog);
+        ASSERT_TRUE (GTK_IS_DIALOG (m_dialog));
+        m_destroy_handler = g_signal_connect (
+            m_dialog, "destroy", G_CALLBACK (dialog_destroyed), &m_destroy_count);
+        ASSERT_TRUE (gtk_window_get_modal (GTK_WINDOW (m_dialog)));
     }
 
-    gnc_ui_object_references_show ("References", NULL);
-    dialog = find_references_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_signal_connect (dialog, "destroy", G_CALLBACK (dialog_destroyed),
-                      &destroy_count);
-
-    if (answer_button)
-        gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    else
-        gtk_window_close (GTK_WINDOW (dialog));
-
-    /* gtk_window_close() dispatches a delete event through the main context. */
-    for (guint attempts = 0; destroy_count == 0 && attempts < 1000; ++attempts)
+    void TearDown () override
     {
-        while (g_main_context_iteration (NULL, FALSE))
-            ;
-        if (destroy_count == 0)
-            g_usleep (1000);
+        if (m_dialog)
+        {
+            if (!gtk_widget_in_destruction (m_dialog))
+                gtk_widget_destroy (m_dialog);
+            EXPECT_EQ (m_destroy_count, 1u);
+            if (m_destroy_handler &&
+                g_signal_handler_is_connected (m_dialog, m_destroy_handler))
+            {
+                g_signal_handler_disconnect (m_dialog, m_destroy_handler);
+                m_destroy_handler = 0;
+            }
+            g_clear_object (&m_dialog);
+        }
     }
 
-    g_assert_cmpuint (destroy_count, ==, 1);
-    g_assert_null (find_references_dialog ());
+    bool wait_for_destroy ()
+    {
+        for (guint attempts = 0; m_destroy_count == 0u && attempts < 1000;
+             ++attempts)
+        {
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+            if (m_destroy_count == 0u)
+                g_usleep (1000);
+        }
+        return m_destroy_count == 1 && find_references_dialog () == nullptr;
+    }
+
+    GtkWidget *m_dialog{};
+    guint m_destroy_count{};
+    gulong m_destroy_handler{};
+};
+
+TEST_F (ObjectReferencesResponseTest, ClosesAfterAcceptResponse)
+{
+    gtk_dialog_response (GTK_DIALOG (m_dialog), GTK_RESPONSE_OK);
+    EXPECT_TRUE (wait_for_destroy ());
+    EXPECT_EQ (m_destroy_count, 1u);
 }
+
+TEST_F (ObjectReferencesResponseTest, ClosesWithWindow)
+{
+    gtk_window_close (GTK_WINDOW (m_dialog));
+    EXPECT_TRUE (wait_for_destroy ());
+    EXPECT_EQ (m_destroy_count, 1u);
+}
+
+TEST_F (ObjectReferencesResponseTest, PendingDialogLeavesCleanupToFixture)
+{
+    while (g_main_context_iteration (nullptr, FALSE))
+        ;
+
+    EXPECT_EQ (m_destroy_count, 0u);
+    EXPECT_TRUE (gtk_widget_get_visible (m_dialog));
+    EXPECT_EQ (find_references_dialog (), m_dialog);
+}
+} // namespace
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, NULL);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-
-    g_test_add_data_func ("/gnome-utils/object-references/response",
-                          GINT_TO_POINTER (TRUE), test_dialog_closes);
-    g_test_add_data_func ("/gnome-utils/object-references/window-close",
-                          GINT_TO_POINTER (FALSE), test_dialog_closes);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("A graphical display is required for object-reference response tests");
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

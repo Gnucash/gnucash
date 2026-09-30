@@ -7,7 +7,7 @@ set(GNOME_SEARCH_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
   ${GUILE_INCLUDE_DIRS}
 )
-set(GNOME_SEARCH_TEST_LIBS test-core gnc-gnome-search)
+set(GNOME_SEARCH_TEST_LIBS test-core gnc-gnome-search gtest)
 
 gnc_add_test(test-search-account-response
   test-search-account-response.cpp
