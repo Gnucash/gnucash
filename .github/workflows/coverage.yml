@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v6
       - run: sudo apt-get update
       - name: Install additional dependencies
-        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev  googletest lcov
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.1-dev googletest lcov xvfb xauth dbus-daemon at-spi2-core
       - name: Install language packs.
         run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
       - run: |
@@ -32,7 +32,7 @@ jobs:
           cd build
           ninja
           ninja lcov-initialize
-          ninja check
+          GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ninja check
           ninja -k 0 lcov-collect
           ninja lcov-generate-html
         env:
