@@ -10,6 +10,10 @@
 #include <gwenhywfar/gui.h>
 #include <gwenhywfar/gui_be.h>
 
+#ifdef MAC_INTEGRATION
+#import <AppKit/AppKit.h>
+#endif
+
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
 #include "gnc-gsettings.h"
@@ -63,6 +67,35 @@ struct DialogRun
     gboolean parent_destroyed{};
     guint driver_source{};
 };
+
+#ifdef MAC_INTEGRATION
+static NSApplication *macos_application ()
+{
+    static NSApplication *application = [NSApplication sharedApplication];
+    static gboolean launch_finished = FALSE;
+    if (!launch_finished)
+    {
+        [application finishLaunching];
+        launch_finished = TRUE;
+    }
+    auto running_application = [NSRunningApplication currentApplication];
+    const auto activated = [running_application activateWithOptions:0];
+    if (!activated)
+    {
+        auto bundle_identifier = [running_application bundleIdentifier];
+        auto main_bundle_identifier = [[NSBundle mainBundle] bundleIdentifier];
+        const auto running_bundle = bundle_identifier.UTF8String;
+        const auto main_bundle = main_bundle_identifier.UTF8String;
+        g_print ("macOS activation request failed: pid=%d running-bundle=%s main-bundle=%s app-active=%d windows=%lu\n",
+                 static_cast<int> ([running_application processIdentifier]),
+                 running_bundle ? running_bundle : "(null)",
+                 main_bundle ? main_bundle : "(null)",
+                 static_cast<int> ([application isActive]),
+                 static_cast<unsigned long> ([application.windows count]));
+    }
+    return application;
+}
+#endif
 
 static int GWENHYWFAR_CB dialog_signal (GWEN_DIALOG *,
                                        GWEN_DIALOG_EVENTTYPE event,
@@ -181,6 +214,9 @@ protected:
         g_object_ref_sink (run.parent);
         gtk_widget_show (run.parent);
         gtk_widget_realize (run.parent);
+#ifdef MAC_INTEGRATION
+        auto application = macos_application ();
+#endif
         gtk_window_present (GTK_WINDOW (run.parent));
         const gint64 activation_deadline =
             g_get_monotonic_time () + 2 * G_TIME_SPAN_SECOND;
@@ -191,6 +227,18 @@ protected:
                 ;
             g_usleep (1000);
         }
+#ifdef MAC_INTEGRATION
+        if (!gtk_window_is_active (GTK_WINDOW (run.parent)))
+        {
+            auto key_window = [application keyWindow];
+            auto main_window = [application mainWindow];
+            g_print ("macOS focus diagnostic: app-active=%d key-window=%d main-window=%d gtk-active=%d mapped=%d\n",
+                     static_cast<int> ([application isActive]), key_window != nil,
+                     main_window != nil,
+                     gtk_window_is_active (GTK_WINDOW (run.parent)),
+                     gtk_widget_get_mapped (run.parent));
+        }
+#endif
         ASSERT_TRUE (gtk_window_is_active (GTK_WINDOW (run.parent)));
         run.gui = gnc_GWEN_Gui_get (run.parent);
         ASSERT_NE (run.gui, nullptr);
