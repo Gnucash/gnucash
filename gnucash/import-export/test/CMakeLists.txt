@@ -15,8 +15,9 @@ set(IMPORT_REGEX_TEST_INCLUDE_DIRS
   ${GENERIC_IMPORT_TEST_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/bi-import
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/customer-import
-  ${CMAKE_SOURCE_DIR}/gnucash/import-export/csv-imp)
-set(IMPORT_REGEX_TEST_LIBS gnc-gnome-utils gnc-bi-import gnc-customer-import gnc-csv-import)
+  ${CMAKE_SOURCE_DIR}/gnucash/import-export/csv-imp
+  ${GTEST_INCLUDE_DIR})
+set(IMPORT_REGEX_TEST_LIBS gnc-gnome-utils gnc-bi-import gnc-customer-import gnc-csv-import gtest)
 foreach(kind IN ITEMS bi customer csv)
   gnc_add_test(test-${kind}-import-regex-response test-import-regex-response.cpp
     IMPORT_REGEX_TEST_INCLUDE_DIRS IMPORT_REGEX_TEST_LIBS)
@@ -35,10 +36,12 @@ gnc_add_test(test-import-pending-matches test-import-pending-matches.cpp
 set(IMPORT_MATCHER_RESPONSE_INCLUDE_DIRS
   ${GENERIC_IMPORT_TEST_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
+  ${GTEST_INCLUDE_DIR}
 )
 set(IMPORT_MATCHER_RESPONSE_LIBS
   ${GENERIC_IMPORT_TEST_LIBS}
   gnc-gnome-utils
+  gtest
 )
 gnc_add_test(test-import-matcher-response test-import-matcher-response.cpp
   IMPORT_MATCHER_RESPONSE_INCLUDE_DIRS IMPORT_MATCHER_RESPONSE_LIBS)

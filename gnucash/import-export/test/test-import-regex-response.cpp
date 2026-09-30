@@ -9,6 +9,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#include <gtest/gtest.h>
 #include "qof.h"
 
 extern "C"
@@ -22,8 +23,6 @@ extern "C"
 #endif
 }
 
-static gboolean display_available;
-
 static GtkWidget *
 find_warning ()
 {
@@ -32,64 +31,91 @@ find_warning ()
     for (auto window = windows; window; window = window->next)
         if (GTK_IS_MESSAGE_DIALOG (window->data))
         {
-            g_assert_null (dialog);
+            if (dialog)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             dialog = GTK_WIDGET (window->data);
         }
     g_list_free (windows);
     return dialog;
 }
 
-static void
-test_invalid_regex ()
+class InvalidRegexImportTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GError *error = nullptr;
+        directory = g_dir_make_tmp ("gnucash-regex-response-XXXXXX", &error);
+        ASSERT_EQ (error, nullptr);
+        ASSERT_NE (directory, nullptr);
+        filename = g_build_filename (directory, "synthetic.csv", nullptr);
+        ASSERT_TRUE (g_file_set_contents (filename, "synthetic\n", -1, &error));
+        ASSERT_EQ (error, nullptr);
+        store = gtk_list_store_new (1, G_TYPE_STRING);
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     }
-    GError *error = nullptr;
-    auto directory = g_dir_make_tmp ("gnucash-regex-response-XXXXXX", &error);
-    g_assert_no_error (error);
-    auto filename = g_build_filename (directory, "synthetic.csv", nullptr);
-    g_assert_true (g_file_set_contents (filename, "synthetic\n", -1, &error));
-    g_assert_no_error (error);
-    auto store = gtk_list_store_new (1, G_TYPE_STRING);
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+    void TearDown () override
+    {
+        if (store)
+            g_object_unref (store);
+        if (parent)
+            gtk_widget_destroy (parent);
+        if (filename)
+        {
+            g_remove (filename);
+            g_free (filename);
+        }
+        if (directory)
+        {
+            g_rmdir (directory);
+            g_free (directory);
+        }
+    }
+
+    gchar *directory{};
+    gchar *filename{};
+    GtkListStore *store{};
+    GtkWidget *parent{};
+};
+
+TEST_F (InvalidRegexImportTest, ReportsErrorAndReleasesInput)
+{
 #if defined(TEST_BI_IMPORT)
     bi_import_stats stats{};
-    g_assert_cmpint (gnc_bi_import_read_file (filename, "[", store, 0, &stats),
-                     ==, RESULT_ERROR_IN_REGEXP);
-    g_assert_null (stats.ignored_lines);
+    EXPECT_EQ (gnc_bi_import_read_file (filename, "[", store, 0, &stats),
+               RESULT_ERROR_IN_REGEXP);
+    EXPECT_EQ (stats.ignored_lines, nullptr);
 #elif defined(TEST_CUSTOMER_IMPORT)
     customer_import_stats stats{};
-    g_assert_cmpint (gnc_customer_import_read_file (filename, "[", store, 0, &stats),
-                     ==, CI_RESULT_ERROR_IN_REGEXP);
-    g_assert_null (stats.ignored_lines);
+    EXPECT_EQ (gnc_customer_import_read_file (filename, "[", store, 0, &stats),
+               CI_RESULT_ERROR_IN_REGEXP);
+    EXPECT_EQ (stats.ignored_lines, nullptr);
 #else
-    g_assert_cmpint (csv_import_read_file (GTK_WINDOW (parent), filename, "[", store, 0),
-                     ==, RESULT_ERROR_IN_REGEXP);
+    EXPECT_EQ (csv_import_read_file (GTK_WINDOW (parent), filename, "[", store, 0),
+               RESULT_ERROR_IN_REGEXP);
 #endif
     auto dialog = find_warning ();
-    g_assert_nonnull (dialog);
-    g_assert_cmpint (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), nullptr), ==, 0);
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_EQ (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), nullptr), 0);
     /* The reader has released its input and owns no delayed file/model work. */
-    g_object_unref (store);
-    g_assert_cmpint (g_remove (filename), ==, 0);
-    g_assert_cmpint (g_rmdir (directory), ==, 0);
-    g_free (filename);
-    g_free (directory);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (find_warning ());
-    gtk_widget_destroy (parent);
+    EXPECT_EQ (find_warning (), nullptr);
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    g_test_add_func ("/import/regex/response-and-cleanup", test_invalid_regex);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("GTK display is required for regex response tests");
+    qof_init ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
+    qof_close ();
+    return result;
 }

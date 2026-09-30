@@ -93,11 +93,10 @@ aq_operation_schedule (void)
 }
 
 static gboolean
-aq_operation_grant_next (gpointer unused)
+aq_operation_grant_next ([[maybe_unused]] gpointer unused)
 {
     GncABOperationRequest *request;
     guint token;
-    (void)unused;
     aq_operation_source = 0;
     if (aq_operation_token || g_queue_is_empty (&aq_operation_queue))
         return G_SOURCE_REMOVE;

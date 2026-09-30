@@ -67,7 +67,7 @@ static void get_balance_matcher_completed (gboolean accepted,
                                            gpointer user_data);
 
 static void
-get_balance_parent_destroyed (G_GNUC_UNUSED GtkWidget *parent,
+get_balance_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
                               gpointer user_data)
 {
     ((GetBalanceRequest *)user_data)->parent_destroyed = TRUE;
@@ -138,7 +138,7 @@ get_balance_import_completed (GncABImExContextImport *ieci, gpointer user_data)
 }
 
 static void
-get_balance_matcher_completed (G_GNUC_UNUSED gboolean accepted,
+get_balance_matcher_completed ([[maybe_unused]] gboolean accepted,
                                gpointer user_data)
 {
     GetBalanceRequest *request = user_data;
@@ -177,7 +177,7 @@ get_balance_job_completed (gpointer user_data)
 }
 
 static void
-get_balance_job_work (G_GNUC_UNUSED GncGWENGui *gui, gpointer user_data)
+get_balance_job_work ([[maybe_unused]] GncGWENGui *gui, gpointer user_data)
 {
     GetBalanceRequest *request = user_data;
     AB_Banking_SendCommands (request->api, request->job_list, request->context);

@@ -9,6 +9,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#include <gtest/gtest.h>
 
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
@@ -16,7 +17,6 @@
 #include "gnc-session.h"
 #include "gnc-tree-view-account.h"
 
-static gboolean display_available;
 static guint parsed_fixture_transactions;
 
 static int
@@ -83,29 +83,31 @@ make_session (gboolean matching_account)
 }
 
 static gchar *
-write_fixture_file ()
+write_fixture_file (GError **error)
 {
-    GError *error = NULL;
     gchar *path = NULL;
-    gint fd = g_file_open_tmp ("gnucash-ofx-XXXXXX", &path, &error);
-    g_assert_no_error (error);
-    g_assert_cmpint (fd, >=, 0);
-    g_assert_true (g_close (fd, &error));
-    g_assert_no_error (error);
-    g_assert_true (g_file_set_contents (path, fixture_text, -1, &error));
-    g_assert_no_error (error);
+    gint fd = g_file_open_tmp ("gnucash-ofx-XXXXXX", &path, error);
+    if (fd < 0)
+        return nullptr;
+    if (!g_close (fd, error) ||
+        !g_file_set_contents (path, fixture_text, -1, error))
+    {
+        g_remove (path);
+        g_clear_pointer (&path, g_free);
+        return nullptr;
+    }
     return path;
 }
 
-static void
-assert_fixture_has_transactions(const gchar *path)
+static guint
+count_parsed_fixture_transactions (const gchar *path)
 {
     parsed_fixture_transactions = 0;
     auto context = libofx_get_new_context();
     ofx_set_transaction_cb(context, count_fixture_transaction, nullptr);
     libofx_proc_file(context, path, AUTODETECT);
     libofx_free_context(context);
-    g_assert_cmpuint(parsed_fixture_transactions, >, 0);
+    return parsed_fixture_transactions;
 }
 
 static GtkWidget *
@@ -211,14 +213,14 @@ wait_for_matcher_resolving_account_picker(GtkWindow *parent, Account *account)
     return nullptr;
 }
 
-static void
-assert_matcher_has_downloaded_transaction(GtkWidget *matcher)
+static gboolean
+matcher_has_downloaded_transaction (GtkWidget *matcher)
 {
-    auto view = find_named_widget(matcher, "downloaded_view");
-    g_assert_true(GTK_IS_TREE_VIEW(view));
-    auto model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
-    g_assert_nonnull(model);
-    g_assert_cmpint(gtk_tree_model_iter_n_children(model, nullptr), >, 0);
+    auto view = find_named_widget (matcher, "downloaded_view");
+    if (!GTK_IS_TREE_VIEW (view))
+        return FALSE;
+    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+    return model && gtk_tree_model_iter_n_children (model, nullptr) > 0;
 }
 
 static void
@@ -228,155 +230,159 @@ start_real_import (GtkWindow *parent, const gchar *path)
     gnc_file_ofx_import_files_selected (selected, parent);
 }
 
-static void
-finish_session (GtkWindow *parent)
+class OfxImportResponseTest : public ::testing::Test
 {
-    gtk_widget_destroy (GTK_WIDGET (parent));
-    g_object_unref (parent);
-    gnc_clear_current_session ();
-}
+protected:
+    void SetUp () override { ASSERT_TRUE (prepare_fixture (TRUE)); }
 
-static void
-test_ofx_two_pass_then_cancel_matcher ()
-{
-    if (!display_available)
+    void TearDown () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        if (gnc_gui_session_operation_pending ())
+        {
+            if (parent)
+                gtk_widget_destroy (GTK_WIDGET (parent));
+            const gint64 deadline =
+                g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+            while (gnc_gui_session_operation_pending () &&
+                   g_get_monotonic_time () < deadline)
+            {
+                while (g_main_context_iteration (nullptr, FALSE))
+                    ;
+                g_usleep (1000);
+            }
+        }
+        if (path)
+        {
+            g_remove (path);
+            g_free (path);
+        }
+        if (parent)
+        {
+            gtk_widget_destroy (GTK_WIDGET (parent));
+            g_object_unref (parent);
+        }
+        gnc_clear_current_session ();
     }
 
-    auto test_session = make_session (TRUE);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    g_object_ref_sink (parent);
-    gtk_widget_show (GTK_WIDGET (parent));
-    auto path = write_fixture_file ();
-    assert_fixture_has_transactions(path);
+    gboolean prepare_fixture (gboolean matching_account)
+    {
+        test_session = make_session (matching_account);
+        parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (parent);
+        gtk_widget_show (GTK_WIDGET (parent));
+        GError *error = nullptr;
+        path = write_fixture_file (&error);
+        if (!path)
+        {
+            ADD_FAILURE () << "Could not create OFX fixture file: "
+                           << (error ? error->message : "unknown error");
+            g_clear_error (&error);
+            return FALSE;
+        }
+        g_clear_error (&error);
+        EXPECT_GT (count_parsed_fixture_transactions (path), 0u);
+        return TRUE;
+    }
+
+    TestSession test_session{};
+    GtkWindow *parent{};
+    gchar *path{};
+};
+
+class OfxImportWithoutMatchingAccountTest : public OfxImportResponseTest
+{
+protected:
+    void SetUp () override { ASSERT_TRUE (prepare_fixture (FALSE)); }
+};
+
+TEST_F (OfxImportResponseTest, TwoPassImportCanBeCancelled)
+{
     start_real_import (parent, path);
     auto matcher_dialog = wait_for_matcher_resolving_account_picker (
         parent, test_session.bank);
-    g_assert_nonnull (matcher_dialog);
-    g_assert_true (gnc_gui_session_operation_pending ());
-    assert_matcher_has_downloaded_transaction(matcher_dialog);
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), ==, 0);
+    ASSERT_NE (matcher_dialog, nullptr);
+    EXPECT_TRUE (gnc_gui_session_operation_pending ());
+    EXPECT_TRUE (matcher_has_downloaded_transaction (matcher_dialog));
+    EXPECT_EQ (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
 
     g_object_ref (matcher_dialog);
     auto cancel = find_named_widget (matcher_dialog, "matcher_cancel");
-    g_assert_nonnull (cancel);
+    ASSERT_NE (cancel, nullptr);
     g_object_ref (cancel);
     gtk_button_clicked (GTK_BUTTON (cancel));
-    g_assert_false (gnc_gui_session_operation_pending ());
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), ==, 0);
+    EXPECT_FALSE (gnc_gui_session_operation_pending ());
+    EXPECT_EQ (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
 
     /* A retained, already-closed matcher must not resume the freed OFX request. */
     gtk_dialog_response (GTK_DIALOG (matcher_dialog), GTK_RESPONSE_ACCEPT);
     gtk_button_clicked (GTK_BUTTON (cancel));
-    g_assert_false (gnc_gui_session_operation_pending ());
+    EXPECT_FALSE (gnc_gui_session_operation_pending ());
     g_object_unref (cancel);
     g_object_unref (matcher_dialog);
-    g_remove (path);
-    g_free (path);
-    finish_session (parent);
 }
 
-static void
-test_ofx_two_pass_import_accepted ()
+TEST_F (OfxImportResponseTest, TwoPassImportCommitsAfterMatcherAcceptance)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto test_session = make_session (TRUE);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    g_object_ref_sink (parent);
-    gtk_widget_show (GTK_WIDGET (parent));
-    auto path = write_fixture_file ();
-
     start_real_import (parent, path);
     auto matcher_dialog = wait_for_matcher_resolving_account_picker (
         parent, test_session.bank);
-    g_assert_nonnull (matcher_dialog);
-    g_assert_true (gnc_gui_session_operation_pending ());
-    assert_matcher_has_downloaded_transaction(matcher_dialog);
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), ==, 0);
+    ASSERT_NE (matcher_dialog, nullptr);
+    EXPECT_TRUE (gnc_gui_session_operation_pending ());
+    EXPECT_TRUE (matcher_has_downloaded_transaction (matcher_dialog));
+    EXPECT_EQ (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
 
     g_object_ref (matcher_dialog);
     auto accept = find_named_widget (matcher_dialog, "matcher_ok");
-    g_assert_nonnull (accept);
+    ASSERT_NE (accept, nullptr);
     g_object_ref (accept);
     gtk_button_clicked (GTK_BUTTON (accept));
-    g_assert_false (gnc_gui_session_operation_pending ());
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), >, 0);
+    EXPECT_FALSE (gnc_gui_session_operation_pending ());
+    EXPECT_GT (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
 
     /* The committed matcher widget cannot complete the OFX request twice. */
     gtk_button_clicked (GTK_BUTTON (accept));
-    g_assert_false (gnc_gui_session_operation_pending ());
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), >, 0);
+    EXPECT_FALSE (gnc_gui_session_operation_pending ());
+    EXPECT_GT (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
     g_object_unref (accept);
     g_object_unref (matcher_dialog);
-    g_remove (path);
-    g_free (path);
-    finish_session (parent);
 }
 
-static void
-test_ofx_parent_destroy_during_account_selection ()
+TEST_F (OfxImportWithoutMatchingAccountTest, ParentDestroyCancelsAccountSelection)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto test_session = make_session (FALSE);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    g_object_ref_sink (parent);
-    gtk_widget_show (GTK_WIDGET (parent));
-    auto path = write_fixture_file ();
-
     start_real_import (parent, path);
     auto picker = wait_for_transient_dialog (parent, NULL);
-    g_assert_nonnull (picker);
+    ASSERT_NE (picker, nullptr);
     g_object_ref (picker);
-    g_assert_true (gnc_gui_session_operation_pending ());
+    EXPECT_TRUE (gnc_gui_session_operation_pending ());
 
     gtk_widget_destroy (GTK_WIDGET (parent));
     /* The account picker is destroyed with its owner, which cancels the
      * pending import before any account resolution or second parser pass. */
-    g_assert_false (gnc_gui_session_operation_pending ());
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), ==, 0);
+    EXPECT_FALSE (gnc_gui_session_operation_pending ());
+    EXPECT_EQ (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
 
     /* A late accept after teardown cannot run the cancelled continuation. */
     gtk_dialog_response (GTK_DIALOG (picker), GTK_RESPONSE_OK);
-    g_assert_false (gnc_gui_session_operation_pending ());
-    g_assert_cmpuint (g_list_length (xaccAccountGetSplitList (test_session.bank)), ==, 0);
+    EXPECT_FALSE (gnc_gui_session_operation_pending ());
+    EXPECT_EQ (g_list_length (xaccAccountGetSplitList (test_session.bank)), 0u);
     g_object_unref (picker);
-    g_object_unref (parent);
-    g_remove (path);
-    g_free (path);
-    gnc_clear_current_session ();
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, NULL);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("GTK display is required for OFX import response tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects for OFX import tests");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
 
-    g_test_add_func ("/ofx/import/two-pass-cancel-matcher",
-                     test_ofx_two_pass_then_cancel_matcher);
-    g_test_add_func ("/ofx/import/two-pass-accepted",
-                     test_ofx_two_pass_import_accepted);
-    g_test_add_func ("/ofx/import/parent-destroy-account-selection",
-                     test_ofx_parent_destroy_during_account_selection);
-    auto status = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto status = RUN_ALL_TESTS ();
 
     gnc_component_manager_shutdown ();
     gnc_gsettings_shutdown ();

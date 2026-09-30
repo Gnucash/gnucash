@@ -103,9 +103,8 @@ aq_gwen_finish_shutdown_waiters (void)
 }
 
 static gboolean
-aq_gwen_shutdown_poll (gpointer unused)
+aq_gwen_shutdown_poll ([[maybe_unused]] gpointer unused)
 {
-    (void)unused;
     if (aq_active_jobs || aq_gwen_has_leased_gui () ||
         gnc_gui_session_operation_pending ())
     {
@@ -537,21 +536,20 @@ gwen_async_dialog_signal (GWEN_DIALOG *dialog, GWEN_DIALOG_EVENTTYPE type,
 }
 
 static gboolean
-gwen_async_dialog_delete_event (GtkWidget *window, GdkEvent *event,
+gwen_async_dialog_delete_event ([[maybe_unused]] GtkWidget *window,
+                                [[maybe_unused]] GdkEvent *event,
                                 gpointer user_data)
 {
     GncGWENAsyncDialog *request = user_data;
-    (void)window;
-    (void)event;
     gwen_async_dialog_schedule_finish (request, FALSE);
     return TRUE;
 }
 
 static void
-gwen_async_dialog_window_destroyed (GtkWidget *window, gpointer user_data)
+gwen_async_dialog_window_destroyed ([[maybe_unused]] GtkWidget *window,
+                                    gpointer user_data)
 {
     GncGWENAsyncDialog *request = user_data;
-    (void)window;
     request->window_destroyed = TRUE;
     gwen_async_dialog_schedule_finish (request, FALSE);
 }

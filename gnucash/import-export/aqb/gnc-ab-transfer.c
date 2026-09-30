@@ -100,7 +100,7 @@ static void transfer_matcher_completed (gboolean accepted,
 static void transfer_parent_destroyed (GtkWidget *parent, gpointer user_data);
 
 static void
-transfer_parent_destroyed (G_GNUC_UNUSED GtkWidget *parent, gpointer user_data)
+transfer_parent_destroyed ([[maybe_unused]] GtkWidget *parent, gpointer user_data)
 {
     ((TransferRequest *)user_data)->parent_destroyed = TRUE;
 }
@@ -216,7 +216,7 @@ transfer_retry_response (GtkWindow *dialog_parent, gint response,
 }
 
 static void
-transfer_job_work (G_GNUC_UNUSED GncGWENGui *gui, gpointer user_data)
+transfer_job_work ([[maybe_unused]] GncGWENGui *gui, gpointer user_data)
 {
     TransferRequest *request = user_data;
     AB_Banking_SendCommands (request->api, request->jobs, request->context);
@@ -236,7 +236,7 @@ transfer_import_completed (GncABImExContextImport *ieci, gpointer user_data)
 }
 
 static void
-transfer_matcher_completed (G_GNUC_UNUSED gboolean accepted,
+transfer_matcher_completed ([[maybe_unused]] gboolean accepted,
                             gpointer user_data)
 {
     TransferRequest *request = user_data;
@@ -372,7 +372,7 @@ transfer_recreate_dialog (TransferRequest *request, GtkWidget *parent,
 }
 
 static void
-transfer_dialog_completed (G_GNUC_UNUSED GncABTransDialog *td,
+transfer_dialog_completed ([[maybe_unused]] GncABTransDialog *td,
                            gint response, gpointer user_data)
 {
     TransferRequest *request = user_data;

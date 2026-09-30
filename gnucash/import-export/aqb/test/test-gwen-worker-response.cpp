@@ -3,6 +3,7 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 #include <atomic>
 #include <thread>
 #include <vector>
@@ -15,8 +16,6 @@
 #include "qof.h"
 #include <gwenhywfar/gui.h>
 
-static gboolean display_available;
-
 struct State
 {
     GThread *gtk_thread{};
@@ -26,6 +25,7 @@ struct State
     guint completed{};
     guint destroyed{};
     gboolean callbacks_on_gtk{};
+    gboolean callbacks_on_worker{TRUE};
 };
 
 struct Request
@@ -55,7 +55,7 @@ struct OperationState
 static gboolean release_first_operation (gpointer user_data)
 {
     auto state = static_cast<OperationState *> (user_data);
-    g_assert_true (g_thread_self () == state->gtk_thread);
+    EXPECT_EQ (g_thread_self (), state->gtk_thread);
     state->events.push_back (2);
     gnc_ab_operation_release (state->first_token);
     return G_SOURCE_REMOVE;
@@ -64,7 +64,7 @@ static gboolean release_first_operation (gpointer user_data)
 static gboolean release_second_operation (gpointer user_data)
 {
     auto state = static_cast<OperationState *> (user_data);
-    g_assert_true (g_thread_self () == state->gtk_thread);
+    EXPECT_EQ (g_thread_self (), state->gtk_thread);
     state->events.push_back (4);
     gnc_ab_operation_release (state->second_token);
     return G_SOURCE_REMOVE;
@@ -73,7 +73,7 @@ static gboolean release_second_operation (gpointer user_data)
 static void operation_acquired (guint token, gpointer user_data)
 {
     auto state = static_cast<OperationState *> (user_data);
-    g_assert_true (g_thread_self () == state->gtk_thread);
+    EXPECT_EQ (g_thread_self (), state->gtk_thread);
     ++state->acquisitions;
     if (state->acquisitions == 1)
     {
@@ -91,7 +91,7 @@ static void operation_acquired (guint token, gpointer user_data)
         g_timeout_add (40, release_second_operation, state);
         return;
     }
-    g_assert_cmpuint (state->acquisitions, ==, 3);
+    EXPECT_EQ (state->acquisitions, 3u);
     state->third_token = token;
     state->events.push_back (5);
     gnc_ab_operation_release (token);
@@ -99,7 +99,7 @@ static void operation_acquired (guint token, gpointer user_data)
     state->completed = TRUE;
 }
 
-static void test_operation_slot ()
+TEST (AqbOperationSlotTest, SerializesLeasesAndIgnoresDuplicateRelease)
 {
     OperationState state;
     state.gtk_thread = g_thread_self ();
@@ -107,7 +107,7 @@ static void test_operation_slot ()
     gnc_ab_operation_acquire_async (operation_acquired, &state);
     gnc_ab_operation_acquire_async (operation_acquired, &state);
     gnc_ab_operation_acquire_async (operation_acquired, &state);
-    g_assert_true (state.events.empty ());
+    EXPECT_TRUE (state.events.empty ());
     const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     while (!state.completed && g_get_monotonic_time () < deadline)
     {
@@ -115,27 +115,27 @@ static void test_operation_slot ()
             ;
         g_usleep (1000);
     }
-    g_assert_true (state.completed);
-    g_assert_cmpuint (state.acquisitions, ==, 3);
-    g_assert_cmpuint (state.first_token, !=, 0);
-    g_assert_cmpuint (state.second_token, !=, 0);
-    g_assert_cmpuint (state.first_token, !=, state.second_token);
-    g_assert_cmpuint (state.third_token, !=, 0);
-    g_assert_cmpuint (state.second_token, !=, state.third_token);
-    g_assert_cmpuint (state.events.size (), ==, 6);
-    g_assert_cmpint (state.events[0], ==, 1);
-    g_assert_cmpint (state.events[1], ==, 2);
-    g_assert_cmpint (state.events[2], ==, 3);
-    g_assert_cmpint (state.events[3], ==, 4);
-    g_assert_cmpint (state.events[4], ==, 5);
-    g_assert_cmpint (state.events[5], ==, 6);
+    EXPECT_TRUE (state.completed);
+    EXPECT_EQ (state.acquisitions, 3u);
+    EXPECT_NE (state.first_token, 0u);
+    EXPECT_NE (state.second_token, 0u);
+    EXPECT_NE (state.first_token, state.second_token);
+    EXPECT_NE (state.third_token, 0u);
+    EXPECT_NE (state.second_token, state.third_token);
+    ASSERT_EQ (state.events.size (), 6u);
+    EXPECT_EQ (state.events[0], 1);
+    EXPECT_EQ (state.events[1], 2);
+    EXPECT_EQ (state.events[2], 3);
+    EXPECT_EQ (state.events[3], 4);
+    EXPECT_EQ (state.events[4], 5);
+    EXPECT_EQ (state.events[5], 6);
 }
 
 static void worker (GncGWENGui *, gpointer user_data)
 {
     auto request = static_cast<Request *> (user_data);
     auto state = request->state;
-    g_assert_true (g_thread_self () != state->gtk_thread);
+    state->callbacks_on_worker &= g_thread_self () != state->gtk_thread;
     int current = ++state->running;
     int observed = state->max_running.load ();
     while (current > observed &&
@@ -166,7 +166,8 @@ static void input_worker (GncGWENGui *, gpointer user_data)
 {
     auto request = static_cast<InputRequest *> (user_data);
     char input[32]{};
-    g_assert_true (g_thread_self () != request->state->gtk_thread);
+    request->state->callbacks_on_worker &=
+        g_thread_self () != request->state->gtk_thread;
     ++request->state->workers;
     request->first_result = GWEN_Gui_InputBox (
         GWEN_GUI_INPUT_FLAGS_SHOW, "Synthetic Gwen input", "Test input",
@@ -188,26 +189,61 @@ static GtkWidget *find_input_dialog (const char *title)
     return found;
 }
 
-static void test_input_parent_destroy ()
+class GwenWorkerResponseTest : public ::testing::Test
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        state.gtk_thread = g_thread_self ();
+        state.callbacks_on_gtk = TRUE;
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (parent);
+        gtk_widget_show (parent);
+        gtk_widget_realize (parent);
     }
+
+    void TearDown () override
+    {
+        if (parent)
+            gtk_widget_destroy (parent);
+        const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+        while (state.destroyed < expected_destroyed &&
+               g_get_monotonic_time () < deadline)
+        {
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+            g_usleep (1000);
+        }
+        if (gui1)
+            gnc_GWEN_Gui_release (gui1);
+        if (gui2)
+            gnc_GWEN_Gui_release (gui2);
+        if (parent)
+        {
+            g_object_unref (parent);
+            parent = nullptr;
+        }
+    }
+
     State state;
-    state.gtk_thread = g_thread_self ();
-    state.callbacks_on_gtk = TRUE;
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_object_ref_sink (parent);
-    gtk_widget_show (parent);
-    gtk_widget_realize (parent);
-    auto gui = gnc_GWEN_Gui_get (parent);
-    g_assert_nonnull (gui);
+    GtkWidget *parent{};
+    GncGWENGui *gui1{};
+    GncGWENGui *gui2{};
+    InputRequest input_request{};
+    Request first_request{};
+    Request second_request{};
+    guint expected_destroyed{};
+};
+
+TEST_F (GwenWorkerResponseTest, ParentDestroyCancelsInputAndLaterRequest)
+{
+    auto& state = this->state;
+    gui1 = gnc_GWEN_Gui_get (parent);
+    ASSERT_NE (gui1, nullptr);
     gui_initialized = TRUE;
-    InputRequest request;
-    request.state = &state;
-    gnc_GWEN_Gui_run_job_async (gui, input_worker, completed, &request,
+    input_request.state = &state;
+    expected_destroyed = 1;
+    gnc_GWEN_Gui_run_job_async (gui1, input_worker, completed, &input_request,
                                 destroyed);
 
     const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
@@ -220,7 +256,7 @@ static void test_input_parent_destroy ()
         if (!dialog)
             g_usleep (1000);
     }
-    g_assert_nonnull (dialog);
+    ASSERT_NE (dialog, nullptr);
     g_object_ref (dialog);
     gtk_widget_destroy (parent);
 
@@ -230,44 +266,31 @@ static void test_input_parent_destroy ()
             ;
         g_usleep (1000);
     }
-    g_assert_cmpuint (state.completed, ==, 1);
-    g_assert_cmpuint (state.destroyed, ==, 1);
-    g_assert_true (state.callbacks_on_gtk);
-    g_assert_cmpint (request.first_result, ==, -1);
-    g_assert_cmpint (request.second_result, ==, -1);
-    g_assert_null (find_input_dialog (
-        "Must not open after parent destroy"));
+    EXPECT_EQ (state.completed, 1u);
+    EXPECT_EQ (state.destroyed, 1u);
+    EXPECT_TRUE (state.callbacks_on_gtk);
+    EXPECT_EQ (input_request.first_result, -1);
+    EXPECT_EQ (input_request.second_result, -1);
+    EXPECT_TRUE (state.callbacks_on_worker);
+    EXPECT_EQ (find_input_dialog ("Must not open after parent destroy"), nullptr);
     g_object_unref (dialog);
-    gnc_GWEN_Gui_release (gui);
-    g_object_unref (parent);
 }
 
-static void test_serialized_workers ()
+TEST_F (GwenWorkerResponseTest, SerializesWorkersAndCompletesOnceOnGtkThread)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    State state;
-    state.gtk_thread = g_thread_self ();
-    state.callbacks_on_gtk = TRUE;
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_object_ref_sink (parent);
-    gtk_widget_show (parent);
-    gtk_widget_realize (parent);
-    auto gui1 = gnc_GWEN_Gui_get (parent);
-    auto gui2 = gnc_GWEN_Gui_get (parent);
+    auto& state = this->state;
+    gui1 = gnc_GWEN_Gui_get (parent);
+    gui2 = gnc_GWEN_Gui_get (parent);
     gui_initialized = gui1 && gui2;
-    g_assert_nonnull (gui1);
-    g_assert_nonnull (gui2);
-    g_assert_true (gui1 != gui2);
+    ASSERT_NE (gui1, nullptr);
+    ASSERT_NE (gui2, nullptr);
+    EXPECT_NE (gui1, gui2);
 
-    Request first{&state};
-    Request second{&state};
-    gnc_GWEN_Gui_run_job_async (gui1, worker, completed, &first, destroyed);
-    gnc_GWEN_Gui_run_job_async (gui2, worker, completed, &second, destroyed);
+    first_request.state = &state;
+    second_request.state = &state;
+    expected_destroyed = 2;
+    gnc_GWEN_Gui_run_job_async (gui1, worker, completed, &first_request, destroyed);
+    gnc_GWEN_Gui_run_job_async (gui2, worker, completed, &second_request, destroyed);
 
     const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     while (state.completed != 2 && g_get_monotonic_time () < deadline)
@@ -276,11 +299,12 @@ static void test_serialized_workers ()
             ;
         g_usleep (1000);
     }
-    g_assert_cmpuint (state.completed, ==, 2);
-    g_assert_cmpuint (state.destroyed, ==, 2);
-    g_assert_true (state.callbacks_on_gtk);
-    g_assert_cmpint (state.workers.load (), ==, 2);
-    g_assert_cmpint (state.max_running.load (), ==, 1);
+    EXPECT_EQ (state.completed, 2u);
+    EXPECT_EQ (state.destroyed, 2u);
+    EXPECT_TRUE (state.callbacks_on_gtk);
+    EXPECT_EQ (state.workers.load (), 2);
+    EXPECT_EQ (state.max_running.load (), 1);
+    EXPECT_TRUE (state.callbacks_on_worker);
 
     /* A later context turn must not repeat completion or destruction. */
     for (guint i = 0; i < 20; ++i)
@@ -289,29 +313,23 @@ static void test_serialized_workers ()
             ;
         g_usleep (1000);
     }
-    g_assert_cmpuint (state.completed, ==, 2);
-    g_assert_cmpuint (state.destroyed, ==, 2);
-    gnc_GWEN_Gui_release (gui1);
-    gnc_GWEN_Gui_release (gui2);
-    gtk_widget_destroy (parent);
-    g_object_unref (parent);
+    EXPECT_EQ (state.completed, 2u);
+    EXPECT_EQ (state.destroyed, 2u);
 }
 
 int main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("GTK display is required for Gwen worker response tests");
     qof_init ();
     if (!cashobjects_register ())
         return 1;
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/aqb/operation-slot", test_operation_slot);
-    g_test_add_func ("/aqb/gwen/serialized-workers", test_serialized_workers);
-    g_test_add_func ("/aqb/gwen/input-parent-destroy", test_input_parent_destroy);
-    int status = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    int status = RUN_ALL_TESTS ();
     if (gui_initialized)
         gnc_GWEN_Gui_shutdown ();
     gnc_component_manager_shutdown ();

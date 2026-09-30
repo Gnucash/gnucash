@@ -91,7 +91,7 @@ static void gettrans_matcher_completed (gboolean accepted,
                                         gpointer user_data);
 
 static void
-aqb_request_parent_destroyed (G_GNUC_UNUSED GtkWidget *parent,
+aqb_request_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
                               gpointer user_data)
 {
     *(gboolean *)user_data = TRUE;
@@ -125,7 +125,7 @@ standing_orders_request_free (StandingOrdersRequest *request)
 }
 
 static void
-standing_orders_work (G_GNUC_UNUSED GncGWENGui *gui, gpointer user_data)
+standing_orders_work ([[maybe_unused]] GncGWENGui *gui, gpointer user_data)
 {
     StandingOrdersRequest *request = user_data;
     AB_Banking_SendCommands (request->api, request->job_list, request->context);
@@ -229,7 +229,7 @@ gettrans_import_completed (GncABImExContextImport *ieci, gpointer user_data)
 }
 
 static void
-gettrans_matcher_completed (G_GNUC_UNUSED gboolean accepted,
+gettrans_matcher_completed ([[maybe_unused]] gboolean accepted,
                             gpointer user_data)
 {
     GetTransRequest *request = user_data;
@@ -279,7 +279,7 @@ gettrans_job_completed (gpointer user_data)
 }
 
 static void
-gettrans_job_work (G_GNUC_UNUSED GncGWENGui *gui, gpointer user_data)
+gettrans_job_work ([[maybe_unused]] GncGWENGui *gui, gpointer user_data)
 {
     GetTransRequest *request = user_data;
     AB_Banking_SendCommands (request->api, request->job_list, request->context);

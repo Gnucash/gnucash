@@ -15,10 +15,12 @@ if(WITH_OFX)
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
     ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
     ${GUILE_INCLUDE_DIRS}
+    ${GTEST_INCLUDE_DIR}
   )
   set(OFX_RESPONSE_TEST_LIBS
     gnc-generic-import gnc-engine gnc-app-utils gnc-core-utils
     gnc-gnome-utils gnc-gnome gnc-module gnc-test-engine test-core
+    gtest
     ${LIBOFX_LDFLAGS}
   )
 

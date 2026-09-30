@@ -3,6 +3,7 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 
 #include <aqbanking/types/imexporter_accountinfo.h>
 #include <aqbanking/types/imexporter_context.h>
@@ -22,26 +23,31 @@
 #include "gnc-gsettings.h"
 #include "gnc-session.h"
 
-static gboolean display_available;
-
 enum class Action { Accept, Cancel, DestroyParent };
 
 struct ImportRun
 {
-    GThread *gtk_thread{};
-    QofSession *session{};
-    QofBook *book{};
-    GtkWidget *parent{};
-    AB_IMEXPORTER_CONTEXT *context{};
-    GncABImExContextImport *ieci{};
-    Action action{};
-    guint session_lease{};
-    guint operation_token{};
-    guint dialog_source{};
-    guint completion_count{};
-    gboolean accepted{};
-    gboolean parent_destroyed{};
-    gboolean finished{};
+    GThread *gtk_thread;
+    QofSession *session;
+    QofBook *book;
+    GtkWidget *parent;
+    AB_IMEXPORTER_CONTEXT *context;
+    GncABImExContextImport *ieci;
+    Action action;
+    guint session_lease;
+    guint operation_token;
+    guint dialog_source;
+    guint completion_count;
+    gboolean accepted;
+    gboolean importer_started;
+    gboolean parent_destroyed;
+    gboolean finished;
+};
+
+struct ImportFixture
+{
+    Action action;
+    ImportRun run;
 };
 
 static GtkWidget *find_named (GtkWidget *widget, const gchar *name)
@@ -89,32 +95,39 @@ static GtkWidget *find_dialog_with_text (const gchar *needle)
 static void finish_import (GncABImExContextImport *ieci, gpointer user_data)
 {
     auto run = static_cast<ImportRun *> (user_data);
-    g_assert_true (g_thread_self () == run->gtk_thread);
+    EXPECT_EQ (g_thread_self (), run->gtk_thread);
     if (!ieci)
     {
         run->finished = TRUE;
         ++run->completion_count;
         gnc_ab_operation_release (run->operation_token);
+        run->operation_token = 0;
         gnc_gui_end_session_operation (run->session_lease);
+        run->session_lease = 0;
         return;
     }
     /* The real traversal must have materialized the bank transaction before
      * showing the generic matcher. Its acceptance is what commits it to QOF. */
+    run->importer_started = TRUE;
     run->ieci = ieci;
     gnc_ab_ieci_run_matcher_async (ieci,
         [](gboolean accepted, gpointer data)
         {
             auto state = static_cast<ImportRun *> (data);
-            g_assert_true (g_thread_self () == state->gtk_thread);
+            EXPECT_EQ (g_thread_self (), state->gtk_thread);
             state->accepted = accepted;
             ++state->completion_count;
             gnc_ab_ieci_free (state->ieci);
             state->ieci = nullptr;
             state->finished = TRUE;
             gnc_ab_operation_release (state->operation_token);
+            state->operation_token = 0;
             gnc_gui_end_session_operation (state->session_lease);
+            state->session_lease = 0;
         }, run);
 }
+
+static gboolean drive_dialogs (gpointer user_data);
 
 static void start_import (guint token, gpointer user_data)
 {
@@ -122,6 +135,13 @@ static void start_import (guint token, gpointer user_data)
     run->operation_token = token;
     gnc_ab_import_context_async (run->context, AWAIT_TRANSACTIONS, FALSE,
         nullptr, run->parent, finish_import, run);
+    /* Start the response driver after the import owns its parent lifetime.
+     * A timeout can otherwise fire before the operation-acquisition idle. */
+    if (run->action == Action::DestroyParent)
+        run->dialog_source = g_idle_add_full (
+            G_PRIORITY_DEFAULT, drive_dialogs, run, nullptr);
+    else
+        run->dialog_source = g_timeout_add (10, drive_dialogs, run);
 }
 
 static gboolean drive_dialogs (gpointer user_data)
@@ -136,7 +156,8 @@ static gboolean drive_dialogs (gpointer user_data)
             run->parent_destroyed = TRUE;
             gtk_widget_destroy (run->parent);
         }
-        return G_SOURCE_CONTINUE;
+        run->dialog_source = 0;
+        return G_SOURCE_REMOVE;
     }
 
     if (auto prompt = find_dialog_with_text (
@@ -158,7 +179,11 @@ static gboolean drive_dialogs (gpointer user_data)
     if (matcher)
     {
         auto view = find_named (matcher, "downloaded_view");
-        g_assert_true (GTK_IS_TREE_VIEW (view));
+        if (!GTK_IS_TREE_VIEW (view))
+        {
+            ADD_FAILURE () << "Matcher has no downloaded-transactions view";
+            return G_SOURCE_CONTINUE;
+        }
         auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
         /* Do not let an empty matcher count as successful acceptance: it
          * closes with accepted=TRUE but proves nothing about stage 3. */
@@ -167,7 +192,11 @@ static gboolean drive_dialogs (gpointer user_data)
         const auto button_name = run->action == Action::Accept ?
             "matcher_ok" : "matcher_cancel";
         auto button = find_named (matcher, button_name);
-        g_assert_nonnull (button);
+        if (!button)
+        {
+            ADD_FAILURE () << "Expected matcher action button was not found";
+            return G_SOURCE_CONTINUE;
+        }
         gtk_button_clicked (GTK_BUTTON (button));
     }
     return G_SOURCE_CONTINUE;
@@ -192,16 +221,14 @@ static gboolean contains_imported_transaction (QofBook *book,
     return found;
 }
 
-static void test_context_import (gconstpointer test_data)
+static gboolean setup_context_import (ImportFixture *fixture,
+                                      gconstpointer test_data)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    ImportRun run;
+    *fixture = {};
+    fixture->action = *static_cast<const Action *> (test_data);
+    auto& run = fixture->run;
     run.gtk_thread = g_thread_self ();
-    run.action = static_cast<Action>(GPOINTER_TO_INT (test_data));
+    run.action = fixture->action;
     run.session = qof_session_new (qof_book_new ());
     run.book = qof_session_get_book (run.session);
     gnc_account_create_root (run.book);
@@ -210,7 +237,11 @@ static void test_context_import (gconstpointer test_data)
     auto currency = gnc_commodity_table_lookup (
         gnc_commodity_table_get_table (run.book), GNC_COMMODITY_NS_CURRENCY,
         "EUR");
-    g_assert_nonnull (currency);
+    if (!currency)
+    {
+        ADD_FAILURE () << "EUR is missing from the fixture commodity table";
+        return FALSE;
+    }
     auto account = xaccMallocAccount (run.book);
     xaccAccountBeginEdit (account);
     xaccAccountSetName (account, "Imported checking");
@@ -247,10 +278,71 @@ static void test_context_import (gconstpointer test_data)
     run.parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_object_ref_sink (run.parent);
     gtk_widget_show (run.parent);
+    return TRUE;
+}
+
+static void teardown_context_import (ImportFixture *fixture,
+                                    [[maybe_unused]] gconstpointer test_data)
+{
+    auto& run = fixture->run;
+    if (run.session_lease && !run.finished && run.parent)
+    {
+        run.action = Action::DestroyParent;
+        gtk_widget_destroy (run.parent);
+        const gint64 deadline =
+            g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+        while (!run.finished && g_get_monotonic_time () < deadline)
+        {
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+            g_usleep (1000);
+        }
+        if (run.session_lease && !run.finished)
+            g_error ("AqBanking import did not stop before fixture cleanup");
+    }
+    if (run.dialog_source &&
+        g_main_context_find_source_by_id (nullptr, run.dialog_source))
+        g_source_remove (run.dialog_source);
+    if (run.parent)
+    {
+        gtk_widget_destroy (run.parent);
+        g_object_unref (run.parent);
+        run.parent = nullptr;
+    }
+    if (run.session_lease)
+    {
+        gnc_gui_end_session_operation (run.session_lease);
+        run.session_lease = 0;
+    }
+    if (run.context)
+        AB_ImExporterContext_free (run.context);
+    gnc_clear_current_session ();
+}
+
+class AqbContextImportTest : public ::testing::TestWithParam<Action>
+{
+protected:
+    void SetUp () override
+    {
+        action = GetParam ();
+        ASSERT_TRUE (setup_context_import (&fixture, &action));
+    }
+
+    void TearDown () override
+    {
+        teardown_context_import (&fixture, nullptr);
+    }
+
+    ImportFixture fixture{};
+    Action action;
+};
+
+TEST_P (AqbContextImportTest, CompletesWithExpectedBookState)
+{
+    auto& run = fixture.run;
     run.session_lease = gnc_gui_begin_session_operation (run.book);
-    g_assert_cmpuint (run.session_lease, !=, 0);
+    ASSERT_NE (run.session_lease, 0u);
     gnc_ab_operation_acquire_async (start_import, &run);
-    run.dialog_source = g_timeout_add (10, drive_dialogs, &run);
 
     const gint64 deadline = g_get_monotonic_time () + 8 * G_TIME_SPAN_SECOND;
     while (!run.finished && g_get_monotonic_time () < deadline)
@@ -259,36 +351,43 @@ static void test_context_import (gconstpointer test_data)
             ;
         g_usleep (1000);
     }
-    g_assert_true (run.finished);
-    g_assert_cmpuint (run.completion_count, ==, 1);
-    g_assert_cmpint (contains_imported_transaction (run.book,
-                    "stage3-regression-fitid"), ==,
-        run.action == Action::Accept);
-
-    if (run.dialog_source &&
-        g_main_context_find_source_by_id (nullptr, run.dialog_source))
-        g_source_remove (run.dialog_source);
-    run.dialog_source = 0;
-    gtk_widget_destroy (run.parent);
-    g_object_unref (run.parent);
-    AB_ImExporterContext_free (run.context);
-    gnc_clear_current_session ();
+    ASSERT_TRUE (run.finished);
+    EXPECT_EQ (run.completion_count, 1u);
+    EXPECT_EQ (run.importer_started, run.action != Action::DestroyParent);
+    EXPECT_EQ (contains_imported_transaction (run.book,
+                    "stage3-regression-fitid"), run.action == Action::Accept);
 }
+
+INSTANTIATE_TEST_SUITE_P (Responses, AqbContextImportTest,
+                          ::testing::Values (Action::Accept, Action::Cancel,
+                                             Action::DestroyParent),
+                          [] (const auto& info)
+                          {
+                              switch (info.param)
+                              {
+                              case Action::Accept: return "Accept";
+                              case Action::Cancel: return "Cancel";
+                              case Action::DestroyParent: return "ParentDestroy";
+                              }
+                              return "Unknown";
+                          });
 
 int main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("GTK display is required for AqBanking context import tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects for AqBanking import tests");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    const char *names[] = {"accept", "cancel", "parent-destroy"};
-    for (guint i = 0; i < G_N_ELEMENTS (names); ++i)
-        g_test_add_data_func (g_strdup_printf (
-            "/import-export/aqb/context-import/%s", names[i]),
-            GINT_TO_POINTER (i), test_context_import);
-    return g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    int result = RUN_ALL_TESTS ();
+    gnc_gsettings_shutdown ();
+    gnc_component_manager_shutdown ();
+    gnc_clear_current_session ();
+    qof_close ();
+    return result;
 }

@@ -148,7 +148,7 @@ static void aq_import_matcher_completed (gboolean accepted,
                                          gpointer user_data);
 
 static void
-aq_import_parent_destroyed (G_GNUC_UNUSED GtkWidget *parent,
+aq_import_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
                             gpointer user_data)
 {
     ((AqImportDialogRequest *)user_data)->parent_destroyed = TRUE;
@@ -184,7 +184,7 @@ aq_import_dialog_request_free (AqImportDialogRequest *request)
 }
 
 static void
-aq_import_work (G_GNUC_UNUSED GncGWENGui *gui, gpointer user_data)
+aq_import_work ([[maybe_unused]] GncGWENGui *gui, gpointer user_data)
 {
     AqImportDialogRequest *request = user_data;
     request->context = named_import_get_context (request->api,
@@ -227,7 +227,7 @@ aq_import_dialog_import_completed (GncABImExContextImport *ieci,
 }
 
 static void
-aq_import_matcher_completed (G_GNUC_UNUSED gboolean accepted,
+aq_import_matcher_completed ([[maybe_unused]] gboolean accepted,
                              gpointer user_data)
 {
     AqImportDialogRequest *request = user_data;

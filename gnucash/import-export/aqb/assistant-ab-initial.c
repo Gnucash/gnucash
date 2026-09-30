@@ -195,7 +195,7 @@ account_select_request_free (AccountSelectRequest *request)
 }
 
 static void
-account_select_parent_destroyed (G_GNUC_UNUSED GtkWidget *window,
+account_select_parent_destroyed ([[maybe_unused]] GtkWidget *window,
                                 gpointer user_data)
 {
     ((AccountSelectRequest *)user_data)->parent_destroyed = TRUE;

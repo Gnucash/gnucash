@@ -3,6 +3,7 @@
  */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <gtest/gtest.h>
 
 #include <gwenhywfar/dialog.h>
 #include <gwenhywfar/db.h>
@@ -14,8 +15,6 @@
 #include "gnc-gsettings.h"
 #include "gnc-gwen-gui.h"
 #include "qof.h"
-
-static gboolean display_available;
 
 static int GWENHYWFAR_CB read_dialog_prefs (GWEN_GUI *, const char *,
                                             const char *, GWEN_DB_NODE **db)
@@ -32,6 +31,20 @@ static int GWENHYWFAR_CB write_dialog_prefs (GWEN_GUI *, const char *,
 
 enum class Action { Accept, Reject, ParentDestroy };
 
+struct DialogScenario
+{
+    Action action;
+    gboolean worker_path;
+};
+
+static constexpr DialogScenario scenarios[] = {
+    {Action::Accept, FALSE},
+    {Action::Reject, FALSE},
+    {Action::ParentDestroy, FALSE},
+    {Action::Accept, TRUE},
+    {Action::ParentDestroy, TRUE}
+};
+
 struct DialogRun
 {
     GThread *gtk_thread{};
@@ -46,6 +59,7 @@ struct DialogRun
     gboolean accepted{};
     gboolean completed_on_gtk{};
     gboolean finished{};
+    gboolean started{};
     gboolean parent_destroyed{};
     guint driver_source{};
 };
@@ -145,62 +159,100 @@ static gboolean drive_dialog (gpointer user_data)
     }
     auto button = find_button (window,
         run->action == Action::Accept ? "Accept" : "Reject");
-    g_assert_nonnull (button);
+    if (!button)
+    {
+        ADD_FAILURE () << "Expected Gwen action button was not found";
+        return G_SOURCE_CONTINUE;
+    }
     gtk_button_clicked (GTK_BUTTON (button));
     return G_SOURCE_CONTINUE;
 }
 
-static void test_async_dialog (gconstpointer test_data)
+class GwenAsyncDialogTest : public ::testing::TestWithParam<DialogScenario>
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        run = {};
+        run.gtk_thread = g_thread_self ();
+        run.action = GetParam ().action;
+        run.worker_path = GetParam ().worker_path;
+        run.parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (run.parent);
+        gtk_widget_show (run.parent);
+        gtk_widget_realize (run.parent);
+        gtk_window_present (GTK_WINDOW (run.parent));
+        const gint64 activation_deadline =
+            g_get_monotonic_time () + 2 * G_TIME_SPAN_SECOND;
+        while (!gtk_window_is_active (GTK_WINDOW (run.parent)) &&
+               g_get_monotonic_time () < activation_deadline)
+        {
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+            g_usleep (1000);
+        }
+        ASSERT_TRUE (gtk_window_is_active (GTK_WINDOW (run.parent)));
+        run.gui = gnc_GWEN_Gui_get (run.parent);
+        ASSERT_NE (run.gui, nullptr);
+        auto gwen_gui = GWEN_Gui_GetGui ();
+        ASSERT_NE (gwen_gui, nullptr);
+        GWEN_Gui_SetReadDialogPrefsFn (gwen_gui, read_dialog_prefs);
+        GWEN_Gui_SetWriteDialogPrefsFn (gwen_gui, write_dialog_prefs);
+        run.dialog = GWEN_Dialog_new ("async_test");
+        ASSERT_NE (run.dialog, nullptr);
+        GWEN_Dialog_SetSignalHandler (run.dialog, dialog_signal);
+        const auto source_dir = g_getenv ("SRCDIR");
+        ASSERT_NE (source_dir, nullptr);
+        auto definition = g_build_filename (source_dir,
+                                            "test-gwen-async-dialog.dlg", nullptr);
+        auto read_result = GWEN_Dialog_ReadXmlFile (run.dialog, definition);
+        g_free (definition);
+        ASSERT_GE (read_result, 0);
     }
-    DialogRun run;
-    run.gtk_thread = g_thread_self ();
-    const auto scenario = GPOINTER_TO_INT (test_data);
-    run.worker_path = scenario >= 3;
-    run.action = scenario == 0 || scenario == 3 ? Action::Accept :
-        scenario == 1 ? Action::Reject : Action::ParentDestroy;
-    run.parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_object_ref_sink (run.parent);
-    gtk_widget_show (run.parent);
-    gtk_widget_realize (run.parent);
-    gtk_window_present (GTK_WINDOW (run.parent));
-    const gint64 activation_deadline =
-        g_get_monotonic_time () + 2 * G_TIME_SPAN_SECOND;
-    while (!gtk_window_is_active (GTK_WINDOW (run.parent)) &&
-           g_get_monotonic_time () < activation_deadline)
-    {
-        while (g_main_context_iteration (nullptr, FALSE))
-            ;
-        g_usleep (1000);
-    }
-    g_assert_true (gtk_window_is_active (GTK_WINDOW (run.parent)));
-    run.gui = gnc_GWEN_Gui_get (run.parent);
-    g_assert_nonnull (run.gui);
-    auto gwen_gui = GWEN_Gui_GetGui ();
-    g_assert_nonnull (gwen_gui);
-    GWEN_Gui_SetReadDialogPrefsFn (gwen_gui, read_dialog_prefs);
-    GWEN_Gui_SetWriteDialogPrefsFn (gwen_gui, write_dialog_prefs);
-    run.dialog = GWEN_Dialog_new ("async_test");
-    g_assert_nonnull (run.dialog);
-    GWEN_Dialog_SetSignalHandler (run.dialog, dialog_signal);
-    const auto source_dir = g_getenv ("SRCDIR");
-    g_assert_nonnull (source_dir);
-    auto definition = g_build_filename (source_dir,
-                                        "test-gwen-async-dialog.dlg", nullptr);
-    g_assert_cmpint (GWEN_Dialog_ReadXmlFile (run.dialog, definition), >=, 0);
-    g_free (definition);
 
+    void TearDown () override
+    {
+        if (run.started && !run.finished && run.parent)
+        {
+            gtk_widget_destroy (run.parent);
+            const gint64 deadline =
+                g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+            while (!run.finished && g_get_monotonic_time () < deadline)
+            {
+                while (g_main_context_iteration (nullptr, FALSE))
+                    ;
+                g_usleep (1000);
+            }
+            if (!run.finished)
+                g_error ("Gwen dialog operation did not stop before fixture cleanup");
+        }
+        if (run.driver_source &&
+            g_main_context_find_source_by_id (nullptr, run.driver_source))
+            g_source_remove (run.driver_source);
+        if (run.dialog)
+            GWEN_Dialog_free (run.dialog);
+        if (run.gui)
+            gnc_GWEN_Gui_release (run.gui);
+        if (run.parent)
+        {
+            gtk_widget_destroy (run.parent);
+            g_object_unref (run.parent);
+        }
+    }
+
+    DialogRun run;
+};
+
+TEST_P (GwenAsyncDialogTest, CompletesOnGtkThread)
+{
+    run.started = TRUE;
     if (run.worker_path)
         gnc_GWEN_Gui_run_job_async (run.gui, worker_exec_dialog,
                                     worker_exec_completed, &run, nullptr);
     else
         gnc_GWEN_Gui_exec_dialog_async (run.gui, run.dialog,
                                         dialog_finished, &run);
-    g_assert_cmpuint (run.calls, ==, 0);
+    EXPECT_EQ (run.calls, 0u);
     run.driver_source = g_timeout_add (5, drive_dialog, &run);
     const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     while (!run.finished && g_get_monotonic_time () < deadline)
@@ -209,35 +261,50 @@ static void test_async_dialog (gconstpointer test_data)
             ;
         g_usleep (1000);
     }
-    g_assert_true (run.finished);
-    g_assert_cmpuint (run.calls, ==, 1);
-    g_assert_true (run.completed_on_gtk);
+    ASSERT_TRUE (run.finished);
+    EXPECT_EQ (run.calls, 1u);
+    EXPECT_TRUE (run.completed_on_gtk);
     if (run.worker_path)
-        g_assert_true (run.worker_thread_ok);
-    g_assert_cmpint (run.accepted, ==, run.action == Action::Accept);
-    if (run.driver_source)
-        g_source_remove (run.driver_source);
-    gtk_widget_destroy (run.parent);
-    g_object_unref (run.parent);
+    {
+        EXPECT_TRUE (run.worker_thread_ok);
+    }
+    EXPECT_EQ (run.accepted, run.action == Action::Accept);
 }
+
+INSTANTIATE_TEST_SUITE_P (DialogAndWorkerPaths, GwenAsyncDialogTest,
+                          ::testing::ValuesIn (scenarios),
+                          [] (const auto& info)
+                          {
+                              const auto& scenario = info.param;
+                              if (scenario.worker_path)
+                                  return scenario.action == Action::Accept ?
+                                      "WorkerAccept" : "WorkerParentDestroy";
+                              switch (scenario.action)
+                              {
+                              case Action::Accept: return "Accept";
+                              case Action::Reject: return "Reject";
+                              case Action::ParentDestroy: return "ParentDestroy";
+                              }
+                              return "Unknown";
+                          });
 
 int main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("GTK display is required for Gwen asynchronous dialog tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects for Gwen dialog tests");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    const char *names[] = {"accept", "reject", "parent-destroy",
-                           "worker-accept", "worker-parent-destroy"};
-    for (guint i = 0; i < G_N_ELEMENTS (names); ++i)
-        g_test_add_data_func (g_strdup_printf (
-            "/import-export/aqb/gwen-async-dialog/%s", names[i]),
-            GINT_TO_POINTER (i), test_async_dialog);
-    auto result = g_test_run ();
+    gnc_GWEN_Gui_log_init ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_GWEN_Gui_shutdown ();
+    gnc_component_manager_shutdown ();
+    gnc_gsettings_shutdown ();
+    qof_close ();
     return result;
 }

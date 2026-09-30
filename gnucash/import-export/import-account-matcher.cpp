@@ -518,7 +518,6 @@ void gnc_import_select_account_async(GtkWidget *parent,
                                     gpointer user_data)
 {
 #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
-    AccountPickerDialog * picker;
     Account * retval = gnc_import_find_account_by_online_id(account_online_id_value, new_account_default_type);
     GtkBuilder *builder;
     GtkTreeSelection *selection;
@@ -535,13 +534,12 @@ void gnc_import_select_account_async(GtkWidget *parent,
         callback(retval, TRUE, user_data);
         return;
     }
-    if (!retval && prompt_on_no_match)
     {
         auto state = g_new0(AccountPickerState, 1);
         state->refs = 1;
         state->component_id = NO_COMPONENT;
         g_weak_ref_init(&state->dialog, nullptr);
-        picker = &state->picker;
+        auto picker = &state->picker;
         picker->account_human_description = g_strdup(account_human_description);
         picker->new_account_default_commodity = new_account_default_commodity;
         picker->new_account_default_type = new_account_default_type;
@@ -640,11 +638,6 @@ void gnc_import_select_account_async(GtkWidget *parent,
         gnc_gui_component_set_session(state->component_id,
                                       gnc_get_current_session());
         gtk_widget_show(picker->dialog);
-    }
-    else
-    {
-        callback(nullptr, FALSE, user_data);
-        g_free(picker);
     }
 }
 

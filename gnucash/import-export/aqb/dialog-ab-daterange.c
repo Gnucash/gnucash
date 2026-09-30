@@ -81,7 +81,7 @@ daterange_disconnect_builder_handlers (GtkWidget *widget, gpointer data)
 }
 
 static void
-daterange_parent_destroyed (G_GNUC_UNUSED GtkWidget *parent,
+daterange_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
                             DaterangeRequest *request)
 {
     request->parent_destroyed = TRUE;
