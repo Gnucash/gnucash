@@ -395,6 +395,17 @@ gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data)
     ENTER(" ");
     gnc_unregister_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
 
+    // Model notifications can continue while the view is being torn down.
+    // These callbacks use pdb_dialog, so disconnect them before releasing it.
+    if (pdb_dialog->price_tree)
+    {
+        auto selection = gtk_tree_view_get_selection (
+            GTK_TREE_VIEW (pdb_dialog->price_tree));
+        g_signal_handlers_disconnect_by_data (selection, pdb_dialog);
+        g_signal_handlers_disconnect_by_data (pdb_dialog->price_tree,
+                                              pdb_dialog);
+    }
+
     if (pdb_dialog->window)
     {
         g_object_set_data (G_OBJECT (pdb_dialog->window),
@@ -559,7 +570,10 @@ gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb, const gchar *ta
 {
     auto oldest = gnc_time (nullptr);
     auto model = gtk_tree_view_get_model (view);
-    const auto commodity_table = gnc_get_current_commodities ();
+    /* The view and price DB belong to the dialog's book, even if the active
+     * session changes while an asynchronous response is pending. */
+    auto book = qof_instance_get_book (QOF_INSTANCE (pdb));
+    const auto commodity_table = gnc_commodity_table_get_table (book);
     auto namespace_list = gnc_commodity_table_get_namespaces_list (commodity_table);
 
     // disconnect the model to the price treeview
@@ -970,7 +984,7 @@ static gboolean
 gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
                                  gpointer data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
+    auto price_db = static_cast<GNCPriceDB *> (data);
 
     /* Never show the template list */
     auto name = gnc_commodity_namespace_get_name (name_space);
@@ -984,7 +998,7 @@ gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
     {
         /* For each commodity, see if there are prices */
         auto comm = static_cast<gnc_commodity *> (item->data);
-        if (gnc_pricedb_has_prices (pdb_dialog->price_db, comm, nullptr))
+        if (gnc_pricedb_has_prices (price_db, comm, nullptr))
             rv = true;
     }
 
@@ -997,10 +1011,10 @@ static gboolean
 gnc_price_dialog_filter_cm_func (gnc_commodity *commodity,
                                  gpointer data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
+    auto price_db = static_cast<GNCPriceDB *> (data);
 
     /* Show any commodity that has prices */
-    return gnc_pricedb_has_prices(pdb_dialog->price_db, commodity, NULL);
+    return gnc_pricedb_has_prices(price_db, commodity, NULL);
 }
 
 
@@ -1074,7 +1088,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
                                     gnc_price_dialog_filter_ns_func,
                                     gnc_price_dialog_filter_cm_func,
                                     NULL,
-                                    pdb_dialog, NULL);
+                                    pdb_dialog->price_db, NULL);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);

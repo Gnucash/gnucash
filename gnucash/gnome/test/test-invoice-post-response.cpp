@@ -5,6 +5,8 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <libguile.h>
+#include <gtest/gtest.h>
+#include "test/gnome-response-test-fixture.h"
 #include <cstdlib>
 #include <utility>
 
@@ -21,11 +23,40 @@
 #include "gnc-commodity.h"
 #include "dialog-invoice.h"
 #include "gnc-amount-edit.h"
+#include "gnc-account-sel.h"
 #include "gnucash-register.h"
 
 namespace
 {
-gboolean display_available;
+
+QofSession *window_sentinel_session{};
+GncMainWindow *window_sentinel{};
+
+void
+create_window_sentinel ()
+{
+    window_sentinel_session = qof_session_new (qof_book_new ());
+    gnc_set_current_session (window_sentinel_session);
+    window_sentinel = gnc_main_window_new ();
+    g_object_ref_sink (window_sentinel);
+    gnc_exchange_current_session (nullptr);
+}
+
+void
+destroy_window_sentinel ()
+{
+    if (window_sentinel)
+    {
+        gtk_widget_destroy (GTK_WIDGET (window_sentinel));
+        g_object_unref (window_sentinel);
+        window_sentinel = nullptr;
+    }
+    if (window_sentinel_session)
+    {
+        qof_session_destroy (window_sentinel_session);
+        window_sentinel_session = nullptr;
+    }
+}
 
 struct Fixture
 {
@@ -34,6 +65,7 @@ struct Fixture
     GncMainWindow *window{};
     InvoiceWindow *invoice_window{};
     GncInvoice *invoice{};
+    Account *posting_account{};
 };
 
 Fixture
@@ -59,6 +91,7 @@ make_fixture ()
 
     auto root = gnc_account_create_root (f.book);
     auto receivable = xaccMallocAccount (f.book);
+    f.posting_account = receivable;
     xaccAccountSetName (receivable, "Test receivable");
     xaccAccountSetType (receivable, ACCT_TYPE_RECEIVABLE);
     xaccAccountSetCommodity (receivable, usd);
@@ -104,7 +137,6 @@ make_fixture ()
     f.window = gnc_main_window_new ();
     g_object_ref_sink (f.window);
     f.invoice_window = gnc_ui_invoice_edit (GTK_WINDOW (f.window), f.invoice);
-    g_assert_nonnull (f.invoice_window);
     return f;
 }
 
@@ -137,182 +169,355 @@ find_post_dialog ()
     return found;
 }
 
-void
-wait_for_post_dialog ()
+GtkWidget *
+find_transfer_dialog ()
 {
-    for (guint i = 0; i < 2000 && !find_post_dialog (); ++i)
+    auto windows = gtk_window_list_toplevels ();
+    GtkWidget *found = nullptr;
+    for (auto node = windows; node && !found; node = node->next)
+        if (!g_strcmp0 (gtk_widget_get_name (GTK_WIDGET (node->data)),
+                        "gnc-id-transfer"))
+            found = GTK_WIDGET (node->data);
+    g_list_free (windows);
+    return found;
+}
+
+GtkWidget *
+wait_for_dialog (GtkWidget *(*find_dialog) ())
+{
+    for (guint i = 0; i < 2000 && !find_dialog (); ++i)
     {
         while (g_main_context_iteration (nullptr, FALSE))
             ;
         g_usleep (1000);
     }
-    g_assert_nonnull (find_post_dialog ());
+    return find_dialog ();
 }
 
-void
-finish_fixture (Fixture &f)
+class InvoicePostResponseTest : public GnomeResponseTest
 {
-    gtk_widget_destroy (GTK_WIDGET (f.window));
+protected:
+    void SetUp () override
+    {
+        GnomeResponseTest::SetUp ();
+        fixture = make_fixture ();
+        ASSERT_NE (fixture.invoice_window, nullptr);
+        gtk_widget_realize (GTK_WIDGET (fixture.window));
+        auto foreign = gncInvoiceGetForeignCurrencies (fixture.invoice);
+        const auto foreign_count = g_hash_table_size (foreign);
+        g_hash_table_unref (foreign);
+        ASSERT_EQ (foreign_count, 2u);
+    }
+
+    void TearDown () override
+    {
+        if (auto notice = find_currency_notice ())
+        {
+            retain_widget (notice);
+            gtk_dialog_response (GTK_DIALOG (notice), GTK_RESPONSE_OK);
+        }
+        if (fixture.window)
+        {
+            gtk_widget_destroy (GTK_WIDGET (fixture.window));
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+            g_object_unref (fixture.window);
+            fixture.window = nullptr;
+        }
+        for (auto widget : retained_widgets)
+            g_object_unref (widget);
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+        fixture.session = nullptr;
+    }
+
+    Fixture fixture{};
+    std::vector<GtkWidget *> retained_widgets;
+
+    void retain_widget (GtkWidget *widget)
+    {
+        g_object_ref (widget);
+        retained_widgets.push_back (widget);
+    }
+
+    GNCAccountSel *posting_selector (GtkWidget *form)
+    {
+        auto box = find_widget (form, "acct_hbox");
+        if (!GTK_IS_CONTAINER (box))
+            return nullptr;
+        auto children = gtk_container_get_children (GTK_CONTAINER (box));
+        GNCAccountSel *selector = nullptr;
+        for (auto node = children; node; node = node->next)
+            if (GNC_IS_ACCOUNT_SEL (node->data))
+                selector = GNC_ACCOUNT_SEL (node->data);
+        g_list_free (children);
+        return selector;
+    }
+
+    guint dismiss_posting_errors (GtkWidget *form)
+    {
+        std::vector<GtkWidget *> errors;
+        auto windows = gtk_window_list_toplevels ();
+        for (auto node = windows; node; node = node->next)
+        {
+            auto widget = GTK_WIDGET (node->data);
+            if (!GTK_IS_MESSAGE_DIALOG (widget) ||
+                gtk_window_get_transient_for (GTK_WINDOW (widget)) != GTK_WINDOW (form))
+                continue;
+            GtkMessageType type;
+            g_object_get (widget, "message-type", &type, nullptr);
+            if (type == GTK_MESSAGE_ERROR)
+            {
+                retain_widget (widget);
+                errors.push_back (widget);
+            }
+        }
+        g_list_free (windows);
+        for (auto error : errors)
+            gtk_dialog_response (GTK_DIALOG (error), GTK_RESPONSE_CLOSE);
+        return errors.size ();
+    }
+
+    GtkWidget *find_currency_notice ()
+    {
+        GtkWidget *notice = nullptr;
+        auto windows = gtk_window_list_toplevels ();
+        for (auto node = windows; node; node = node->next)
+        {
+            auto widget = GTK_WIDGET (node->data);
+            if (!GTK_IS_MESSAGE_DIALOG (widget))
+                continue;
+            GtkMessageType type;
+            g_object_get (widget, "message-type", &type, nullptr);
+            if (type == GTK_MESSAGE_INFO &&
+                gtk_window_get_transient_for (GTK_WINDOW (widget)) ==
+                    GTK_WINDOW (fixture.window))
+            {
+                if (notice)
+                {
+                    g_list_free (windows);
+                    return nullptr;
+                }
+                notice = widget;
+            }
+        }
+        g_list_free (windows);
+        return notice;
+    }
+
+    bool dismiss_currency_notice ()
+    {
+        auto notice = find_currency_notice ();
+        if (!notice)
+        {
+            ADD_FAILURE () << "Invoice currency notice was not shown";
+            return false;
+        }
+
+        retain_widget (notice);
+        gtk_dialog_response (GTK_DIALOG (notice), GTK_RESPONSE_OK);
+        return true;
+    }
+
+};
+
+TEST_F (InvoicePostResponseTest, CancelDoesNotPostInvoice)
+{
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto post_dialog = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (post_dialog, nullptr);
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    gtk_dialog_response (GTK_DIALOG (post_dialog), GTK_RESPONSE_CANCEL);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+}
+
+TEST_F (InvoicePostResponseTest, MissingAccountShowsOneErrorPerClick)
+{
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto form = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (form, nullptr);
+    retain_widget (form);
+    auto selector = posting_selector (form);
+    ASSERT_NE (selector, nullptr);
+    gnc_account_sel_set_account (selector, nullptr, FALSE);
+    auto ok = find_widget (form, "okbutton1");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+
+    for (int attempt = 0; attempt < 2; ++attempt)
+    {
+        gtk_button_clicked (GTK_BUTTON (ok));
+        EXPECT_EQ (dismiss_posting_errors (form), 1u);
+        EXPECT_EQ (find_post_dialog (), form);
+        EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    }
+    gtk_dialog_response (GTK_DIALOG (form), GTK_RESPONSE_CANCEL);
+}
+
+TEST_F (InvoicePostResponseTest, PlaceholderAccountShowsOneErrorPerResponse)
+{
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto form = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (form, nullptr);
+    retain_widget (form);
+    auto selector = posting_selector (form);
+    ASSERT_NE (selector, nullptr);
+    xaccAccountSetPlaceholder (fixture.posting_account, TRUE);
+    gnc_account_sel_set_account (selector, fixture.posting_account, FALSE);
+
+    gtk_dialog_response (GTK_DIALOG (form), GTK_RESPONSE_OK);
+    EXPECT_EQ (dismiss_posting_errors (form), 1u);
+    EXPECT_EQ (find_post_dialog (), form);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+
+    auto ok = find_widget (form, "okbutton1");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+    gtk_button_clicked (GTK_BUTTON (ok));
+    EXPECT_EQ (dismiss_posting_errors (form), 1u);
+    EXPECT_EQ (find_post_dialog (), form);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    gtk_dialog_response (GTK_DIALOG (form), GTK_RESPONSE_CANCEL);
+}
+
+TEST_F (InvoicePostResponseTest, ParentDestroyPreventsLatePostResponse)
+{
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto dialog = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (dialog, nullptr);
+    retain_widget (dialog);
+    auto ok_button = find_widget (dialog, "okbutton1");
+    ASSERT_NE (ok_button, nullptr);
+    retain_widget (ok_button);
+    gtk_widget_destroy (GTK_WIDGET (fixture.window));
+    gtk_button_clicked (GTK_BUTTON (ok_button));
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+}
+
+TEST_F (InvoicePostResponseTest, CancelsForeignCurrencySelection)
+{
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto post_dialog = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (post_dialog, nullptr);
+    auto post_ok = find_widget (post_dialog, "okbutton1");
+    ASSERT_NE (post_ok, nullptr);
+    gtk_button_clicked (GTK_BUTTON (post_ok));
+    auto transfer = wait_for_dialog (find_transfer_dialog);
+    ASSERT_NE (transfer, nullptr);
+    ASSERT_TRUE (dismiss_currency_notice ());
+    retain_widget (transfer);
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    gtk_dialog_response (GTK_DIALOG (transfer), GTK_RESPONSE_CANCEL);
     while (g_main_context_iteration (nullptr, FALSE))
         ;
-    g_object_unref (f.window);
-    gnc_clear_current_session ();
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    gtk_dialog_response (GTK_DIALOG (transfer), GTK_RESPONSE_OK);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
 }
 
-void
-start_post_with_two_foreign_currencies (Fixture &f)
+TEST_F (InvoicePostResponseTest, ParentDestructionCancelsCurrencySelection)
 {
-    auto foreign = gncInvoiceGetForeignCurrencies (f.invoice);
-    g_assert_cmpuint (g_hash_table_size (foreign), ==, 2);
-    g_hash_table_unref (foreign);
-    gnc_invoice_window_postCB (nullptr, f.invoice_window);
-    wait_for_post_dialog ();
-    g_assert_cmpint (qof_instance_get_editlevel (f.invoice), ==, 0);
-    g_assert_false (gnc_gui_refresh_suspended ());
-    g_assert_false (gncInvoiceIsPosted (f.invoice));
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto post_dialog = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (post_dialog, nullptr);
+    auto post_ok = find_widget (post_dialog, "okbutton1");
+    ASSERT_NE (post_ok, nullptr);
+    gtk_button_clicked (GTK_BUTTON (post_ok));
+    auto transfer = wait_for_dialog (find_transfer_dialog);
+    ASSERT_NE (transfer, nullptr);
+    ASSERT_TRUE (dismiss_currency_notice ());
+    retain_widget (transfer);
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    gtk_widget_destroy (GTK_WIDGET (fixture.window));
+    while (g_main_context_iteration (nullptr, FALSE))
+        ;
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    gtk_dialog_response (GTK_DIALOG (transfer), GTK_RESPONSE_OK);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
 }
 
-void
-test_cancel_post_does_not_post_invoice ()
+TEST_F (InvoicePostResponseTest, AcceptsTwoForeignCurrenciesSequentially)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto f = make_fixture ();
-    start_post_with_two_foreign_currencies (f);
-    gtk_dialog_response (GTK_DIALOG (find_post_dialog ()), GTK_RESPONSE_CANCEL);
-    g_assert_false (gncInvoiceIsPosted (f.invoice));
-    g_assert_cmpint (qof_instance_get_editlevel (f.invoice), ==, 0);
-    g_assert_false (gnc_gui_refresh_suspended ());
-    finish_fixture (f);
-}
+    gnc_invoice_window_postCB (nullptr, fixture.invoice_window);
+    auto post_dialog = wait_for_dialog (find_post_dialog);
+    ASSERT_NE (post_dialog, nullptr);
+    auto post_ok = find_widget (post_dialog, "okbutton1");
+    ASSERT_NE (post_ok, nullptr);
+    gtk_button_clicked (GTK_BUTTON (post_ok));
+    auto first = wait_for_dialog (find_transfer_dialog);
+    ASSERT_NE (first, nullptr);
+    ASSERT_TRUE (dismiss_currency_notice ());
+    retain_widget (first);
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
 
-void
-test_parent_destroy_prevents_late_post_response ()
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto f = make_fixture ();
-    start_post_with_two_foreign_currencies (f);
-    auto dialog = find_post_dialog ();
-    g_object_ref (dialog);
-    auto ok_button = find_widget(dialog, "okbutton1");
-    g_assert_nonnull(ok_button);
-    g_object_ref(ok_button);
-    gtk_widget_destroy (GTK_WIDGET (f.window));
-    gtk_button_clicked(GTK_BUTTON(ok_button));
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_false (gncInvoiceIsPosted (f.invoice));
-    g_assert_cmpint (qof_instance_get_editlevel (f.invoice), ==, 0);
-    g_assert_false (gnc_gui_refresh_suspended ());
-    g_object_unref(ok_button);
-    g_object_unref (dialog);
-    g_object_unref (f.window);
-    gnc_clear_current_session ();
-}
+    auto price_box = find_widget (first, "price_hbox");
+    ASSERT_NE (price_box, nullptr);
+    auto children = gtk_container_get_children (GTK_CONTAINER (price_box));
+    ASSERT_NE (children, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (children->data),
+                                gnc_numeric_create (2, 1));
+    g_list_free (children);
+    gtk_dialog_response (GTK_DIALOG (first), GTK_RESPONSE_OK);
 
-GtkWidget *find_transfer_dialog()
-{
-    auto windows = gtk_window_list_toplevels();
-    GtkWidget *found = nullptr;
-    for (auto item = windows; item; item = item->next)
-        if (!g_strcmp0(gtk_widget_get_name(GTK_WIDGET(item->data)), "gnc-id-transfer"))
-            found = GTK_WIDGET(item->data);
-    g_list_free(windows);
-    return found;
-}
+    auto second = wait_for_dialog (find_transfer_dialog);
+    ASSERT_NE (second, nullptr);
+    EXPECT_NE (second, first);
+    EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    price_box = find_widget (second, "price_hbox");
+    ASSERT_NE (price_box, nullptr);
+    children = gtk_container_get_children (GTK_CONTAINER (price_box));
+    ASSERT_NE (children, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (children->data),
+                                gnc_numeric_create (3, 1));
+    g_list_free (children);
+    gtk_dialog_response (GTK_DIALOG (second), GTK_RESPONSE_OK);
 
-void wait_for_transfer_dialog()
-{
-    const auto deadline = g_get_monotonic_time() + 2 * G_TIME_SPAN_SECOND;
-    while (!find_transfer_dialog() && g_get_monotonic_time() < deadline)
-    {
-        while (g_main_context_iteration(nullptr, FALSE));
-        g_usleep(1000);
-    }
-    g_assert_nonnull(find_transfer_dialog());
-}
-
-void test_currency_responses(gconstpointer data)
-{
-    if (!display_available)
-    {
-        g_test_skip("No graphical display is available");
-        return;
-    }
-    const auto action = GPOINTER_TO_INT(data);
-    auto f = make_fixture();
-    start_post_with_two_foreign_currencies(f);
-    auto post_ok = find_widget(find_post_dialog(), "okbutton1");
-    g_assert_nonnull(post_ok);
-    gtk_button_clicked(GTK_BUTTON(post_ok));
-    wait_for_transfer_dialog();
-    auto first = find_transfer_dialog();
-    g_object_ref(first);
-    g_assert_cmpint(qof_instance_get_editlevel(f.invoice), ==, 0);
-    g_assert_false(gnc_gui_refresh_suspended());
-    g_assert_false(gncInvoiceIsPosted(f.invoice));
-    if (action == 0)
-        gtk_dialog_response(GTK_DIALOG(first), GTK_RESPONSE_CANCEL);
-    else if (action == 1)
-        gtk_widget_destroy(GTK_WIDGET(f.window));
-    else
-    {
-        auto price_box = find_widget(first, "price_hbox");
-        g_assert_nonnull(price_box);
-        auto children = gtk_container_get_children(GTK_CONTAINER(price_box));
-        g_assert_nonnull(children);
-        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(children->data), gnc_numeric_create(2, 1));
-        g_list_free(children);
-        gtk_dialog_response(GTK_DIALOG(first), GTK_RESPONSE_OK);
-        wait_for_transfer_dialog();
-        auto second = find_transfer_dialog();
-        g_assert_true(second != first);
-        g_assert_false(gncInvoiceIsPosted(f.invoice));
-        g_assert_cmpint(qof_instance_get_editlevel(f.invoice), ==, 0);
-        g_assert_false(gnc_gui_refresh_suspended());
-        price_box = find_widget(second, "price_hbox");
-        children = gtk_container_get_children(GTK_CONTAINER(price_box));
-        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(children->data), gnc_numeric_create(3, 1));
-        g_list_free(children);
-        gtk_dialog_response(GTK_DIALOG(second), GTK_RESPONSE_OK);
-    }
-    while (g_main_context_iteration(nullptr, FALSE));
-    g_assert_cmpint(gncInvoiceIsPosted(f.invoice), ==, action == 2);
-    g_assert_cmpint(qof_instance_get_editlevel(f.invoice), ==, 0);
-    g_assert_false(gnc_gui_refresh_suspended());
-    gtk_dialog_response(GTK_DIALOG(first), GTK_RESPONSE_OK);
-    g_assert_cmpint(gncInvoiceIsPosted(f.invoice), ==, action == 2);
-    g_object_unref(first);
-    finish_fixture(f);
+    while (g_main_context_iteration (nullptr, FALSE))
+        ;
+    EXPECT_TRUE (gncInvoiceIsPosted (fixture.invoice));
+    EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
+    EXPECT_FALSE (gnc_gui_refresh_suspended ());
+    gtk_dialog_response (GTK_DIALOG (first), GTK_RESPONSE_OK);
+    EXPECT_TRUE (gncInvoiceIsPosted (fixture.invoice));
 }
 }
 
 static int
 run_tests (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
     gnucash_register_add_cell_types ();
-    g_test_add_func ("/gnome/invoice-post/cancel-with-two-foreign-currencies",
-                     test_cancel_post_does_not_post_invoice);
-    g_test_add_func ("/gnome/invoice-post/parent-destroy-late-response",
-                     test_parent_destroy_prevents_late_post_response);
-    g_test_add_data_func("/gnome/invoice-post/currency-cancel", GINT_TO_POINTER(0), test_currency_responses);
-    g_test_add_data_func("/gnome/invoice-post/currency-parent-destroy", GINT_TO_POINTER(1), test_currency_responses);
-    g_test_add_data_func("/gnome/invoice-post/currency-accept-sequential", GINT_TO_POINTER(2), test_currency_responses);
-    auto result = g_test_run ();
+    create_window_sentinel ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
+    destroy_window_sentinel ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

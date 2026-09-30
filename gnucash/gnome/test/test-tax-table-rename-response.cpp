@@ -8,6 +8,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
@@ -23,13 +24,26 @@ extern "C"
 
 namespace
 {
-gboolean display_available;
-QofBook *test_book;
-QofSession *test_session;
-GncGUID test_table_guid;
-GtkWidget *tax_table_window;
-GncGUID monitored_table_guid;
-guint table_modify_count;
+struct ModificationMonitor
+{
+    GncGUID table_guid{};
+    guint modifications{};
+};
+
+class TaxTableRenameResponseTest : public GnomeResponseTest
+{
+protected:
+    void SetUp () override;
+    void TearDown () override;
+
+    QofBook *book{};
+    QofSession *session{};
+    GncGUID table_guid{};
+    GtkWidget *owner{};
+    GtkWidget *table_window{};
+    gint event_handler{};
+    ModificationMonitor monitor{};
+};
 
 GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
@@ -59,7 +73,11 @@ find_tax_table_window ()
         if (g_strcmp0 (gtk_widget_get_name (widget),
                        "gnc-id-new-tax-table") == 0)
         {
-            g_assert_null (result);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -82,7 +100,11 @@ find_rename_dialog (GtkWidget *parent)
             gtk_window_get_transient_for (GTK_WINDOW (widget)) ==
             GTK_WINDOW (parent) && find_entry (widget))
         {
-            g_assert_null (result);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -112,143 +134,170 @@ destroy_tax_table_parent (GtkWidget *, gpointer user_data)
 }
 
 void
-destroy_current_session (GtkWidget *, gpointer)
+destroy_current_session (GtkWidget *, gpointer user_data)
 {
-    gnc_close_gui_component_by_session (test_session);
-    gnc_clear_current_session ();
-    test_session = nullptr;
+    auto session = static_cast<QofSession **> (user_data);
+    if (*session)
+        gnc_close_gui_component_by_session (*session);
+    auto current = gnc_exchange_current_session (nullptr);
+    if (current)
+        qof_session_destroy (current);
+    *session = nullptr;
 }
 
 void
 count_table_modification (QofInstance *entity, QofEventId event_type,
-                          gpointer user_data, gpointer event_data)
+                          gpointer user_data,
+                          [[maybe_unused]] gpointer event_data)
 {
+    auto monitor = static_cast<ModificationMonitor *> (user_data);
     if ((event_type & QOF_EVENT_MODIFY) &&
-        guid_equal (qof_instance_get_guid (entity), &monitored_table_guid))
-        ++table_modify_count;
+        guid_equal (qof_instance_get_guid (entity), &monitor->table_guid))
+        ++monitor->modifications;
 }
 
-void
+bool
 select_tax_table (GtkWidget *window)
 {
     auto view = find_buildable (window, "tax_tables_view");
-    g_assert_true (GTK_IS_TREE_VIEW (view));
+    if (!GTK_IS_TREE_VIEW (view))
+        return false;
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     GtkTreeIter iter;
-    g_assert_true (gtk_tree_model_get_iter_first (model, &iter));
+    if (!gtk_tree_model_get_iter_first (model, &iter))
+        return false;
     auto path = gtk_tree_model_get_path (model, &iter);
     gtk_tree_selection_select_path (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), path);
     gtk_tree_path_free (path);
+    return true;
 }
 
 void
-test_public_rename_and_parent_destroy ()
+TaxTableRenameResponseTest::SetUp ()
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    test_book = qof_book_new ();
-    test_session = qof_session_new (test_book);
-    gnc_set_current_session (test_session);
-    auto table = gncTaxTableCreate (test_book);
+    GnomeResponseTest::SetUp ();
+    book = qof_book_new ();
+    ASSERT_NE (book, nullptr);
+    session = qof_session_new (book);
+    ASSERT_NE (session, nullptr);
+    gnc_set_current_session (session);
+    auto table = gncTaxTableCreate (book);
+    ASSERT_NE (table, nullptr);
     gncTaxTableSetName (table, "Tax table before response");
-    test_table_guid = *gncTaxTableGetGUID (table);
+    table_guid = *gncTaxTableGetGUID (table);
 
-    auto owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    ASSERT_NE (owner, nullptr);
     gtk_widget_realize (owner);
-    g_assert_nonnull (gnc_ui_tax_table_window_new (GTK_WINDOW (owner), test_book));
-    tax_table_window = find_tax_table_window ();
-    g_assert_nonnull (tax_table_window);
-    select_tax_table (tax_table_window);
-    auto rename_button = find_buildable (tax_table_window,
-                                         "rename_table_button");
-    g_assert_true (GTK_IS_BUTTON (rename_button));
+    ASSERT_NE (gnc_ui_tax_table_window_new (GTK_WINDOW (owner), book), nullptr);
+    table_window = find_tax_table_window ();
+    ASSERT_NE (table_window, nullptr);
+}
 
+void
+TaxTableRenameResponseTest::TearDown ()
+{
+    if (event_handler)
+    {
+        qof_event_unregister_handler (event_handler);
+        event_handler = 0;
+    }
+    if (session)
+        gnc_close_gui_component_by_session (session);
+    GnomeResponseTest::TearDown ();
+    auto current = gnc_exchange_current_session (nullptr);
+    if (current)
+        qof_session_destroy (current);
+    if (session && session != current)
+        qof_session_destroy (session);
+    session = nullptr;
+}
+
+TEST_F (TaxTableRenameResponseTest, AcceptRenamesPublicTaxTable)
+{
+    ASSERT_TRUE (select_tax_table (table_window));
+    auto rename_button = find_buildable (table_window, "rename_table_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (rename_button));
     gtk_button_clicked (GTK_BUTTON (rename_button));
-    auto dialog = find_rename_dialog (tax_table_window);
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    auto dialog = find_rename_dialog (table_window);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
     auto entry = find_entry (dialog);
-    g_assert_true (GTK_IS_ENTRY (entry));
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (GTK_ENTRY (entry), "Renamed asynchronously");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    table = gncTaxTableLookup (test_book, &test_table_guid);
-    g_assert_nonnull (table);
-    g_assert_cmpstr (gncTaxTableGetName (table), ==,
-                     "Renamed asynchronously");
-    g_assert_null (find_rename_dialog (tax_table_window));
+    auto table = gncTaxTableLookup (book, &table_guid);
+    ASSERT_NE (table, nullptr);
+    EXPECT_STREQ (gncTaxTableGetName (table), "Renamed asynchronously");
+    EXPECT_EQ (find_rename_dialog (table_window), nullptr);
+}
 
+TEST_F (TaxTableRenameResponseTest, DestroyedManagerIgnoresLateRename)
+{
+    ASSERT_TRUE (select_tax_table (table_window));
+    auto rename_button = find_buildable (table_window, "rename_table_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (rename_button));
     gtk_button_clicked (GTK_BUTTON (rename_button));
-    dialog = find_rename_dialog (tax_table_window);
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    entry = find_entry (dialog);
+    auto dialog = find_rename_dialog (table_window);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    auto entry = find_entry (dialog);
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (GTK_ENTRY (entry), "Must not be applied");
     g_signal_connect (dialog, "destroy",
-                      G_CALLBACK (destroy_tax_table_parent), tax_table_window);
+                      G_CALLBACK (destroy_tax_table_parent), table_window);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-    table = gncTaxTableLookup (test_book, &test_table_guid);
-    g_assert_nonnull (table);
-    g_assert_cmpstr (gncTaxTableGetName (table), ==,
-                     "Renamed asynchronously");
-    g_assert_null (find_tax_table_window ());
-    tax_table_window = nullptr;
+    auto table = gncTaxTableLookup (book, &table_guid);
+    ASSERT_NE (table, nullptr);
+    EXPECT_STREQ (gncTaxTableGetName (table), "Tax table before response");
+    EXPECT_EQ (find_tax_table_window (), nullptr);
+}
 
-    /* Repeat with a live prompt, but destroy the original session from the
-       prompt's destroy signal. The table is then gone, so the engine event
-       counter proves that no rename was committed before shutdown completed. */
-    gnc_clear_current_session ();
-    test_book = qof_book_new ();
-    test_session = qof_session_new (test_book);
-    gnc_set_current_session (test_session);
-    table = gncTaxTableCreate (test_book);
-    gncTaxTableSetName (table, "Tax table before session close");
-    monitored_table_guid = *gncTaxTableGetGUID (table);
-    auto event_handler = qof_event_register_handler (
-        count_table_modification, nullptr);
-    table_modify_count = 0;
-
-    g_assert_nonnull (gnc_ui_tax_table_window_new (GTK_WINDOW (owner), test_book));
-    tax_table_window = find_tax_table_window ();
-    g_assert_nonnull (tax_table_window);
-    select_tax_table (tax_table_window);
-    rename_button = find_buildable (tax_table_window, "rename_table_button");
+TEST_F (TaxTableRenameResponseTest, SessionCloseDuringResponseDoesNotRename)
+{
+    ASSERT_TRUE (select_tax_table (table_window));
+    auto rename_button = find_buildable (table_window, "rename_table_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (rename_button));
     gtk_button_clicked (GTK_BUTTON (rename_button));
-    dialog = find_rename_dialog (tax_table_window);
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    entry = find_entry (dialog);
+    auto dialog = find_rename_dialog (table_window);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    auto entry = find_entry (dialog);
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (GTK_ENTRY (entry), "Must not survive session close");
-    g_signal_connect (dialog, "destroy",
-                      G_CALLBACK (destroy_current_session), nullptr);
+    monitor.table_guid = table_guid;
+    event_handler = qof_event_register_handler (
+        count_table_modification, &monitor);
+    g_signal_connect (dialog, "destroy", G_CALLBACK (destroy_current_session),
+                      &session);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     qof_event_unregister_handler (event_handler);
-    g_assert_cmpuint (table_modify_count, ==, 0);
-    g_assert_false (gnc_current_session_exist ());
-    g_assert_null (find_tax_table_window ());
-    tax_table_window = nullptr;
-    gtk_widget_destroy (owner);
+    event_handler = 0;
+
+    EXPECT_EQ (monitor.modifications, 0u);
+    EXPECT_FALSE (gnc_current_session_exist ());
+    EXPECT_EQ (find_tax_table_window (), nullptr);
 }
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects for tax table tests");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome/tax-table/rename-response-parent-destroy",
-                     test_public_rename_and_parent_destroy);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

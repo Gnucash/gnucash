@@ -101,14 +101,9 @@ date_close_session_closed(gpointer data)
     gtk_widget_destroy(ddc->dialog);
 }
 
-void gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data);
-
-
-void
-gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
+static void
+gnc_dialog_date_close_capture_inputs (DialogDateClose *ddc)
 {
-    DialogDateClose *ddc = user_data;
-
     if (ddc->completed || (ddc->form_callback &&
         (!ddc->book || !gnc_current_session_exist() ||
          ddc->book != gnc_get_current_book() || qof_book_shutting_down(ddc->book))))
@@ -169,11 +164,11 @@ fill_in_acct_info (DialogDateClose *ddc, gboolean set_default_acct)
 }
 
 static void
-gnc_dialog_date_close_capture_response (GtkDialog *dialog, gint response,
+gnc_dialog_date_close_capture_response ([[maybe_unused]] GtkDialog *dialog, gint response,
                                         DialogDateClose *ddc)
 {
     if (response == GTK_RESPONSE_OK)
-        gnc_dialog_date_close_ok_cb (GTK_WIDGET (dialog), ddc);
+        gnc_dialog_date_close_capture_inputs (ddc);
 }
 
 static DialogDateClose *
@@ -220,8 +215,7 @@ gnc_dialog_date_close_create (GtkWidget *parent, const char *message,
     /* Setup signals */
     date_close_track_objects(ddc, builder);
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
-    /* Capture inputs before asynchronous completion. The dialog's action
-     * widget emits response before subsequently connected clicked handlers. */
+    /* Capture inputs once before asynchronous completion. */
     g_signal_connect (ddc->dialog, "response",
                       G_CALLBACK (gnc_dialog_date_close_capture_response), ddc);
     gtk_dialog_set_default_response (GTK_DIALOG (ddc->dialog),
@@ -553,6 +547,9 @@ gnc_dialog_dates_acct_question_async_parented (
                           G_CALLBACK (gnc_dialog_date_close_parent_destroyed),
                           ddc);
     }
+    /* Capture and validate once, before completing the dialog response. */
+    g_signal_connect (ddc->dialog, "response",
+                      G_CALLBACK (gnc_dialog_date_close_capture_response), ddc);
     g_signal_connect (ddc->dialog, "response",
                       G_CALLBACK (gnc_dialog_date_close_form_response), ddc);
     g_signal_connect (ddc->dialog, "destroy",

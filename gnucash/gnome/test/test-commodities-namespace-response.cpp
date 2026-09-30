@@ -9,6 +9,7 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 
 #include "cashobjects.h"
 #include "gnc-commodity.h"
@@ -20,7 +21,6 @@
 #include "qof.h"
 #include "gnc-ui.h"
 
-static gboolean display_available;
 
 static GtkWidget *
 find_buildable (GtkWidget *widget, const gchar *name)
@@ -89,91 +89,141 @@ select_namespace (GncTreeViewCommodity *view,
     return FALSE;
 }
 
-static void
-test_rename_response_and_parent_destroy ()
+class CommodityNamespaceResponseTest : public GnomeResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        book = qof_book_new ();
+        session = qof_session_new (book);
+        gnc_set_current_session (session);
+        table = gnc_commodity_table_get_table (book);
+        gnc_commodity_table_add_namespace (table, "OLDNS", book);
+        gnc_commodity_table_add_namespace (table, "EXISTS", book);
+        gnc_commodity_table_insert (
+            table, gnc_commodity_new (book, "Old namespace test", "OLDNS", "OLD",
+                                      nullptr, 100));
+        gnc_commodity_table_insert (
+            table, gnc_commodity_new (book, "Existing namespace test", "EXISTS",
+                                      "EXS", nullptr, 100));
+        owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (owner);
+        gtk_widget_realize (owner);
+        gnc_commodities_dialog (owner);
+        commodities_window = find_window_named ("gnc-id-commodity");
+        ASSERT_TRUE (GTK_IS_WINDOW (commodities_window));
+        view = GNC_TREE_VIEW_COMMODITY (find_commodity_view (commodities_window));
+        ASSERT_TRUE (GNC_IS_TREE_VIEW_COMMODITY (view));
+        original_namespace = gnc_commodity_table_find_namespace (table, "OLDNS");
+        ASSERT_TRUE (select_namespace (view, original_namespace));
+        rename_button = find_buildable (commodities_window, "rename_namespace_button");
+        ASSERT_TRUE (GTK_IS_BUTTON (rename_button));
     }
 
-    auto book = qof_book_new ();
-    auto table = gnc_commodity_table_get_table (book);
-    gnc_commodity_table_add_namespace (table, "OLDNS", book);
-    gnc_commodity_table_add_namespace (table, "EXISTS", book);
-    gnc_commodity_table_insert (
-        table, gnc_commodity_new (book, "Old namespace test", "OLDNS", "OLD",
-                                  nullptr, 100));
-    gnc_commodity_table_insert (
-        table, gnc_commodity_new (book, "Existing namespace test", "EXISTS",
-                                  "EXS", nullptr, 100));
-    gnc_set_current_session (qof_session_new (book));
+    void TearDown () override
+    {
+        if (commodities_window)
+        {
+            gtk_widget_destroy (commodities_window);
+            commodities_window = nullptr;
+        }
+        if (owner)
+        {
+            gtk_widget_destroy (owner);
+            g_object_unref (owner);
+            owner = nullptr;
+        }
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+        session = nullptr;
+    }
 
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (parent);
-    gnc_commodities_dialog (parent);
-    auto commodities_window = find_window_named ("gnc-id-commodity");
-    g_assert_true (GTK_IS_WINDOW (commodities_window));
-    auto view = GNC_TREE_VIEW_COMMODITY (find_commodity_view (commodities_window));
-    g_assert_true (GNC_IS_TREE_VIEW_COMMODITY (view));
-    auto original_namespace = gnc_commodity_table_find_namespace (table, "OLDNS");
-    g_assert_true (select_namespace (view, original_namespace));
-    auto rename_button = find_buildable (commodities_window, "rename_namespace_button");
-    g_assert_true (GTK_IS_BUTTON (rename_button));
+    QofBook *book{};
+    QofSession *session{};
+    gnc_commodity_table *table{};
+    gnc_commodity_namespace *original_namespace{};
+    GtkWidget *owner{};
+    GtkWidget *commodities_window{};
+    GncTreeViewCommodity *view{};
+    GtkWidget *rename_button{};
 
-    gtk_button_clicked (GTK_BUTTON (rename_button));
-    auto dialog = find_window_named ("gnc-id-rename-namespace");
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    GtkWidget *open_rename_dialog ()
+    {
+        gtk_button_clicked (GTK_BUTTON (rename_button));
+        return find_window_named ("gnc-id-rename-namespace");
+    }
+};
+
+TEST_F (CommodityNamespaceResponseTest, EmptyNameKeepsDialogOpen)
+{
+    auto dialog = open_rename_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     auto entry = GTK_ENTRY (find_buildable (dialog, "rename_entry"));
     auto label = GTK_LABEL (find_buildable (dialog, "rename_label"));
-    g_assert_true (GTK_IS_ENTRY (entry));
-    g_assert_true (GTK_IS_LABEL (label));
-
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
+    ASSERT_TRUE (GTK_IS_LABEL (label));
     gtk_entry_set_text (entry, "");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_true (GTK_IS_DIALOG (find_window_named ("gnc-id-rename-namespace")));
-    g_assert_cmpstr (gtk_label_get_text (label), ==, "No new name");
+    EXPECT_TRUE (GTK_IS_DIALOG (find_window_named ("gnc-id-rename-namespace")));
+    EXPECT_STREQ (gtk_label_get_text (label), "No new name");
+}
 
-    gtk_entry_set_text (entry, "EXISTS");
+TEST_F (CommodityNamespaceResponseTest, ExistingNameKeepsDialogOpen)
+{
+    auto dialog = open_rename_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    gtk_entry_set_text (GTK_ENTRY (find_buildable (dialog, "rename_entry")),
+                        "EXISTS");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_true (GTK_IS_DIALOG (find_window_named ("gnc-id-rename-namespace")));
+    EXPECT_TRUE (GTK_IS_DIALOG (find_window_named ("gnc-id-rename-namespace")));
+    EXPECT_EQ (gnc_commodity_table_find_namespace (table, "OLDNS"),
+               original_namespace);
+}
 
-    gtk_entry_set_text (entry, "NEWNS");
+TEST_F (CommodityNamespaceResponseTest, ValidNameRenamesNamespace)
+{
+    auto dialog = open_rename_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    gtk_entry_set_text (GTK_ENTRY (find_buildable (dialog, "rename_entry")),
+                        "NEWNS");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_true (gnc_commodity_table_find_namespace (table, "NEWNS") ==
-                   original_namespace);
-    g_assert_null (gnc_commodity_table_find_namespace (table, "OLDNS"));
-    g_assert_null (find_window_named ("gnc-id-rename-namespace"));
+    EXPECT_EQ (gnc_commodity_table_find_namespace (table, "NEWNS"),
+               original_namespace);
+    EXPECT_EQ (gnc_commodity_table_find_namespace (table, "OLDNS"), nullptr);
+    EXPECT_EQ (find_window_named ("gnc-id-rename-namespace"), nullptr);
+}
 
-    g_assert_true (select_namespace (view, original_namespace));
-    gtk_button_clicked (GTK_BUTTON (rename_button));
-    dialog = find_window_named ("gnc-id-rename-namespace");
-    g_assert_true (GTK_IS_DIALOG (dialog));
+TEST_F (CommodityNamespaceResponseTest, ParentDestructionClosesPendingDialog)
+{
+    auto dialog = open_rename_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     g_object_ref (dialog);
     gtk_widget_destroy (commodities_window);
+    commodities_window = nullptr;
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (find_window_named ("gnc-id-rename-namespace"));
+    EXPECT_EQ (find_window_named ("gnc-id-rename-namespace"), nullptr);
+    EXPECT_EQ (gnc_commodity_table_find_namespace (table, "OLDNS"),
+               original_namespace);
     g_object_unref (dialog);
-    gtk_widget_destroy (parent);
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome/commodities/namespace-response-parent-destroy",
-                     test_rename_response_and_parent_destroy);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

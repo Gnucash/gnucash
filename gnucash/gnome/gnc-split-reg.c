@@ -2545,13 +2545,11 @@ typedef struct dialog_args
 } dialog_args;
 
 static void
-split_reg_read_only_warning_response (GtkWindow *dialog, gint response,
-                                      gpointer user_data)
+split_reg_read_only_warning_response ([[maybe_unused]] GtkWindow *dialog,
+                                      [[maybe_unused]] gint response,
+                                      [[maybe_unused]] gpointer user_data)
 {
     /* The warning has no follow-up action; its response only closes it. */
-    (void)dialog;
-    (void)response;
-    (void)user_data;
 }
 
 /**

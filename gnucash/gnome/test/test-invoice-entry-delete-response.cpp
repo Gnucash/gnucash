@@ -4,8 +4,10 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
 #include <cstdlib>
+#include <vector>
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -23,7 +25,6 @@
 
 namespace
 {
-gboolean display_available;
 
 struct InvoiceFixture
 {
@@ -36,6 +37,35 @@ struct InvoiceFixture
     GncGUID entry_guids[2]{};
     guint entry_count{};
 };
+
+QofSession *window_sentinel_session{};
+GncMainWindow *window_sentinel{};
+
+void
+create_window_sentinel ()
+{
+    window_sentinel_session = qof_session_new (qof_book_new ());
+    gnc_set_current_session (window_sentinel_session);
+    window_sentinel = gnc_main_window_new ();
+    g_object_ref_sink (window_sentinel);
+    gnc_exchange_current_session (nullptr);
+}
+
+void
+destroy_window_sentinel ()
+{
+    if (window_sentinel)
+    {
+        gtk_widget_destroy (GTK_WIDGET (window_sentinel));
+        g_object_unref (window_sentinel);
+        window_sentinel = nullptr;
+    }
+    if (window_sentinel_session)
+    {
+        qof_session_destroy (window_sentinel_session);
+        window_sentinel_session = nullptr;
+    }
+}
 
 InvoiceFixture
 make_fixture (guint entry_count)
@@ -94,13 +124,17 @@ make_fixture (guint entry_count)
     g_object_ref_sink (fixture.main_window);
     fixture.invoice_window = gnc_ui_invoice_edit (
         GTK_WINDOW (fixture.main_window), fixture.invoice);
-    g_assert_nonnull (fixture.invoice_window);
+    EXPECT_NE (fixture.invoice_window, nullptr);
+    if (!fixture.invoice_window)
+        return fixture;
 
     /* The entry-ledger constructor starts at virtual row 1, column 0.
      * Re-select that row through the actual register widget so each test
      * begins on the first persisted invoice entry, not the blank row. */
     auto reg = gnc_invoice_get_register (fixture.invoice_window);
-    g_assert_true (GNUCASH_IS_REGISTER (reg));
+    EXPECT_TRUE (GNUCASH_IS_REGISTER (reg));
+    if (!GNUCASH_IS_REGISTER (reg))
+        return fixture;
     VirtualCellLocation first_entry{1, 0};
     gnucash_register_goto_virt_cell (GNUCASH_REGISTER (reg), first_entry);
     return fixture;
@@ -117,7 +151,12 @@ find_confirmation (GtkWindow *parent)
         if (GTK_IS_MESSAGE_DIALOG (widget) &&
             gtk_window_get_transient_for (GTK_WINDOW (widget)) == parent)
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -129,17 +168,17 @@ void
 request_delete (InvoiceFixture &fixture)
 {
     gnc_invoice_window_deleteCB (nullptr, fixture.invoice_window);
-    g_assert_nonnull (find_confirmation (GTK_WINDOW (fixture.main_window)));
 }
 
 void
 finish_fixture (InvoiceFixture &fixture)
 {
+    if (!fixture.main_window)
+        return;
     gtk_widget_destroy (GTK_WIDGET (fixture.main_window));
     while (g_main_context_iteration (nullptr, FALSE))
         ;
     g_object_unref (fixture.main_window);
-    gnc_clear_current_session ();
 }
 
 gboolean
@@ -148,81 +187,83 @@ entry_exists (InvoiceFixture &fixture, guint index)
     return gncEntryLookup (fixture.book, &fixture.entry_guids[index]) != nullptr;
 }
 
-void
-test_no_keeps_entry ()
+class InvoiceEntryDeleteResponseTest : public GnomeResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        fixture = make_fixture (1);
     }
-    auto fixture = make_fixture (1);
-    request_delete (fixture);
-    gtk_dialog_response (GTK_DIALOG (find_confirmation (
-        GTK_WINDOW (fixture.main_window))), GTK_RESPONSE_NO);
-    g_assert_true (entry_exists (fixture, 0));
-    g_assert_cmpuint (g_list_length (gncInvoiceGetEntries (fixture.invoice)), ==, 1);
-    finish_fixture (fixture);
-}
+    void TearDown () override
+    {
+        finish_fixture (fixture);
+        GnomeResponseTest::TearDown ();
+        for (auto widget : retained_widgets)
+            g_object_unref (widget);
+        gnc_clear_current_session ();
+    }
+    InvoiceFixture fixture{};
+    std::vector<GtkWidget *> retained_widgets;
+};
 
-void
-test_yes_deletes_original_entry ()
+class InvoiceEntryDeleteTwoEntryTest : public InvoiceEntryDeleteResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        fixture = make_fixture (2);
     }
-    auto fixture = make_fixture (1);
-    request_delete (fixture);
-    gtk_dialog_response (GTK_DIALOG (find_confirmation (
-        GTK_WINDOW (fixture.main_window))), GTK_RESPONSE_YES);
-    g_assert_false (entry_exists (fixture, 0));
-    g_assert_cmpuint (g_list_length (gncInvoiceGetEntries (fixture.invoice)), ==, 0);
-    finish_fixture (fixture);
-}
+};
 
-void
-test_page_destroy_then_late_yes_does_not_delete ()
+TEST_F (InvoiceEntryDeleteResponseTest, NoKeepsEntry)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture (1);
     request_delete (fixture);
     auto dialog = find_confirmation (GTK_WINDOW (fixture.main_window));
-    g_object_ref (dialog);
-    auto page = gnc_main_window_get_current_page (fixture.main_window);
-    g_assert_nonnull (page);
-    gnc_main_window_close_page (page);
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-    g_assert_true (entry_exists (fixture, 0));
-    g_assert_cmpuint (g_list_length (gncInvoiceGetEntries (fixture.invoice)), ==, 1);
-    g_object_unref (dialog);
-    finish_fixture (fixture);
+    ASSERT_NE (dialog, nullptr);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_NO);
+    EXPECT_TRUE (entry_exists (fixture, 0));
+    EXPECT_EQ (g_list_length (gncInvoiceGetEntries (fixture.invoice)), 1u);
 }
 
-void
-test_selection_drift_rejects_old_confirmation ()
+TEST_F (InvoiceEntryDeleteResponseTest, YesDeletesOriginalEntry)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture (2);
     request_delete (fixture);
+    auto dialog = find_confirmation (GTK_WINDOW (fixture.main_window));
+    ASSERT_NE (dialog, nullptr);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
+    EXPECT_FALSE (entry_exists (fixture, 0));
+    EXPECT_EQ (g_list_length (gncInvoiceGetEntries (fixture.invoice)), 0u);
+}
+
+TEST_F (InvoiceEntryDeleteResponseTest, PageDestroyIgnoresLateYes)
+{
+    request_delete (fixture);
+    auto dialog = find_confirmation (GTK_WINDOW (fixture.main_window));
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
+    retained_widgets.push_back (dialog);
+    auto page = gnc_main_window_get_current_page (fixture.main_window);
+    ASSERT_NE (page, nullptr);
+    gnc_main_window_close_page (page);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
+    EXPECT_TRUE (entry_exists (fixture, 0));
+    EXPECT_EQ (g_list_length (gncInvoiceGetEntries (fixture.invoice)), 1u);
+}
+
+TEST_F (InvoiceEntryDeleteTwoEntryTest, SelectionDriftRejectsOldConfirmation)
+{
+    request_delete (fixture);
+    auto dialog = find_confirmation (GTK_WINDOW (fixture.main_window));
+    ASSERT_NE (dialog, nullptr);
     auto reg = GNUCASH_REGISTER (gnc_invoice_get_register (
         fixture.invoice_window));
     gnucash_register_goto_next_virt_row (reg);
-    gtk_dialog_response (GTK_DIALOG (find_confirmation (
-        GTK_WINDOW (fixture.main_window))), GTK_RESPONSE_YES);
-    g_assert_true (entry_exists (fixture, 0));
-    g_assert_true (entry_exists (fixture, 1));
-    g_assert_cmpuint (g_list_length (gncInvoiceGetEntries (fixture.invoice)), ==, 2);
-    finish_fixture (fixture);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
+    EXPECT_TRUE (entry_exists (fixture, 0));
+    EXPECT_TRUE (entry_exists (fixture, 1));
+    EXPECT_EQ (g_list_length (gncInvoiceGetEntries (fixture.invoice)), 2u);
 }
 }
 
@@ -230,10 +271,12 @@ static int
 run_tests (int argc, char **argv)
 {
     /* CTest supplies build paths and an isolated memory preference backend. */
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
 
     qof_init ();
     g_assert_true (cashobjects_register ());
@@ -241,16 +284,12 @@ run_tests (int argc, char **argv)
     gnc_gsettings_load_backend ();
     gnucash_register_add_cell_types ();
 
-    g_test_add_func ("/gnome/invoice-entry-delete/no-keeps-entry",
-                     test_no_keeps_entry);
-    g_test_add_func ("/gnome/invoice-entry-delete/yes-deletes-original",
-                     test_yes_deletes_original_entry);
-    g_test_add_func ("/gnome/invoice-entry-delete/page-destroy-late-response",
-                     test_page_destroy_then_late_yes_does_not_delete);
-    g_test_add_func ("/gnome/invoice-entry-delete/selection-drift",
-                     test_selection_drift_rejects_old_confirmation);
+    create_window_sentinel ();
 
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
+    destroy_window_sentinel ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

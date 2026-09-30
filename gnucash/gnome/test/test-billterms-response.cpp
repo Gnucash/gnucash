@@ -8,6 +8,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
@@ -24,13 +25,15 @@ extern "C"
 
 namespace
 {
-gboolean display_available;
-QofSession *test_session;
-GtkWidget *parent_to_destroy;
-GtkWidget *dialog_to_reenter;
-GncGUID watched_term_guid;
-gboolean parent_destroyed_by_modify;
-gboolean response_reentered;
+struct ResponseState
+{
+    GtkWidget *parent_to_destroy{};
+    GtkWidget *dialog_to_reenter{};
+    GncGUID watched_term_guid{};
+    gboolean parent_destroyed_by_modify{};
+    gboolean response_reentered{};
+    gulong event_handler{};
+};
 
 GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
@@ -59,7 +62,12 @@ find_named_toplevel (const char *name, GtkWindow *parent = nullptr)
         if (g_strcmp0 (gtk_widget_get_name (widget), name) == 0 &&
             (!parent || gtk_window_get_transient_for (GTK_WINDOW(widget)) == parent))
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -69,219 +77,310 @@ find_named_toplevel (const char *name, GtkWindow *parent = nullptr)
 
 void
 destroy_parent_on_modify (QofInstance *entity, QofEventId event_type,
-                          gpointer, gpointer)
+                          gpointer user_data, gpointer)
 {
+    auto state = static_cast<ResponseState *> (user_data);
     if (!(event_type & QOF_EVENT_MODIFY) ||
-        !guid_equal (qof_instance_get_guid (entity), &watched_term_guid) ||
-        !parent_to_destroy)
+        !guid_equal (qof_instance_get_guid (entity), &state->watched_term_guid) ||
+        !state->parent_to_destroy)
         return;
-    auto parent = parent_to_destroy;
-    parent_to_destroy = nullptr;
-    parent_destroyed_by_modify = TRUE;
-    if (dialog_to_reenter)
+    auto parent = state->parent_to_destroy;
+    state->parent_to_destroy = nullptr;
+    state->parent_destroyed_by_modify = TRUE;
+    if (state->dialog_to_reenter)
     {
-        auto dialog = dialog_to_reenter;
-        dialog_to_reenter = nullptr;
-        response_reentered = TRUE;
+        auto dialog = state->dialog_to_reenter;
+        state->dialog_to_reenter = nullptr;
+        state->response_reentered = TRUE;
         gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     }
     gtk_widget_destroy (parent);
 }
 
-void
-test_delete_response ()
+class BillTermsResponseTest : public GnomeResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        book = qof_book_new ();
+        session = qof_session_new (book);
+        gnc_set_current_session (session);
+        owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (owner);
+        gtk_widget_realize (owner);
+        open_manager ();
+        ASSERT_NE (manager, nullptr);
     }
-    for (int scenario = 0; scenario != 4; ++scenario)
+
+    void TearDown () override
     {
-        auto book = qof_book_new ();
-        test_session = qof_session_new (book);
-        gnc_set_current_session (test_session);
+        if (state.event_handler)
+            qof_event_unregister_handler (state.event_handler);
+        state = {};
+        for (auto window : managers)
+        {
+            gtk_widget_destroy (window);
+            g_object_unref (window);
+        }
+        if (owner)
+        {
+            gtk_widget_destroy (owner);
+            g_object_unref (owner);
+        }
+        GnomeResponseTest::TearDown ();
+        for (auto widget : retained_widgets)
+            g_object_unref (widget);
+        retained_widgets.clear ();
+        gnc_clear_current_session ();
+        session = nullptr;
+        owner = nullptr;
+    }
+
+    QofBook *book{};
+    QofSession *session{};
+    GtkWidget *owner{};
+    GtkWidget *manager{};
+    std::vector<GtkWidget *> managers;
+    std::vector<GtkWidget *> retained_widgets;
+    ResponseState state;
+
+    void open_manager ()
+    {
+        ASSERT_NE (gnc_ui_billterms_window_new (GTK_WINDOW (owner), book), nullptr);
+        manager = find_named_toplevel ("gnc-id-bill-terms");
+        if (manager)
+        {
+            g_object_ref (manager);
+            managers.push_back (manager);
+        }
+    }
+
+    GncBillTerm *create_term (const char *name)
+    {
+        /* A CREATE event can refresh the manager immediately. Keep the GUI
+         * from observing the object before its type and name are initialized. */
+        gnc_suspend_gui_refresh ();
         auto term = gncBillTermCreate (book);
         gncBillTermSetType (term, GNC_TERM_TYPE_DAYS);
-        gncBillTermSetName (term, "Confirmed term");
-        auto guid = *gncBillTermGetGUID (term);
-        auto owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_widget_realize (owner);
-        g_assert_nonnull (gnc_ui_billterms_window_new (GTK_WINDOW (owner), book));
+        gncBillTermSetName (term, name);
+        gnc_resume_gui_refresh ();
+        return term;
+    }
+
+    void retain_widget (GtkWidget *widget)
+    {
+        ASSERT_NE (widget, nullptr);
+        g_object_ref (widget);
+        retained_widgets.push_back (widget);
+    }
+
+    GtkWidget *open_edit_dialog_for_first_term ()
+    {
         auto parent = find_named_toplevel ("gnc-id-bill-terms");
+        EXPECT_NE (parent, nullptr);
+        if (!parent)
+            return nullptr;
+        auto view = find_buildable (parent, "terms_view");
+        EXPECT_TRUE (GTK_IS_TREE_VIEW (view));
+        if (!GTK_IS_TREE_VIEW (view))
+            return nullptr;
+        auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+        GtkTreeIter iter;
+        auto has_first = gtk_tree_model_get_iter_first (model, &iter);
+        EXPECT_TRUE (has_first);
+        if (!has_first)
+            return nullptr;
+        auto path = gtk_tree_model_get_path (model, &iter);
+        gtk_tree_selection_select_path (
+            gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), path);
+        gtk_tree_path_free (path);
+        auto edit_button = find_buildable (parent, "edit_term_button");
+        EXPECT_TRUE (GTK_IS_BUTTON (edit_button));
+        if (!GTK_IS_BUTTON (edit_button))
+            return nullptr;
+        gtk_button_clicked (GTK_BUTTON (edit_button));
+        auto dialog = find_named_toplevel ("gnc-id-new-bill-terms",
+                                          GTK_WINDOW (parent));
+        EXPECT_TRUE (GTK_IS_DIALOG (dialog));
+        return GTK_IS_DIALOG (dialog) ? dialog : nullptr;
+    }
+
+    GtkWidget *find_delete_question ()
+    {
+        auto parent = find_named_toplevel ("gnc-id-bill-terms");
+        EXPECT_NE (parent, nullptr);
+        if (!parent)
+            return nullptr;
         auto button = find_buildable (parent, "delete_term_button");
-        g_assert_true (GTK_IS_BUTTON (button));
+        EXPECT_TRUE (GTK_IS_BUTTON (button));
+        if (!GTK_IS_BUTTON (button))
+            return nullptr;
         gtk_button_clicked (GTK_BUTTON (button));
-        GtkWidget *question = nullptr;
         auto windows = gtk_window_list_toplevels ();
+        GtkWidget *question = nullptr;
         for (auto node = windows; node; node = node->next)
             if (GTK_IS_MESSAGE_DIALOG (node->data) &&
                 gtk_window_get_transient_for (GTK_WINDOW (node->data)) ==
                     GTK_WINDOW (parent))
                 question = GTK_WIDGET (node->data);
         g_list_free (windows);
-        g_assert_nonnull (question);
-        g_assert_nonnull (gncBillTermLookup (book, &guid));
-        if (scenario == 2)
-            gncBillTermIncRef (term);
-        if (scenario == 3)
-        {
-            g_object_ref (question);
-            gtk_widget_destroy (parent);
-        }
-        gtk_dialog_response (GTK_DIALOG (question), scenario == 0 ?
-                              GTK_RESPONSE_NO : GTK_RESPONSE_YES);
-        if (scenario == 3)
-            g_object_unref (question);
-        term = gncBillTermLookup (book, &guid);
-        if (scenario == 1)
-            g_assert_null (term);
-        else
-            g_assert_nonnull (term);
-        if (scenario == 2)
-            gncBillTermDecRef (term);
-        if (scenario != 3)
-            gtk_widget_destroy (parent);
-        gtk_widget_destroy (owner);
-        gnc_clear_current_session ();
-        test_session = nullptr;
+        EXPECT_NE (question, nullptr);
+        return question;
     }
+};
+
+TEST_F (BillTermsResponseTest, DecliningDeleteKeepsTerm)
+{
+    auto term = create_term ("Confirmed term");
+    auto guid = *gncBillTermGetGUID (term);
+    auto question = find_delete_question ();
+    ASSERT_NE (question, nullptr);
+    EXPECT_NE (gncBillTermLookup (book, &guid), nullptr);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_NO);
+    EXPECT_NE (gncBillTermLookup (book, &guid), nullptr);
 }
 
-void
-test_new_edit_response_and_parent_destroy ()
+TEST_F (BillTermsResponseTest, AcceptingDeleteRemovesUnreferencedTerm)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
+    auto term = create_term ("Confirmed term");
+    auto guid = *gncBillTermGetGUID (term);
+    auto question = find_delete_question ();
+    ASSERT_NE (question, nullptr);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_YES);
+    EXPECT_EQ (gncBillTermLookup (book, &guid), nullptr);
+}
 
-    auto book = qof_book_new ();
-    test_session = qof_session_new (book);
-    gnc_set_current_session (test_session);
-    auto owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (owner);
-    g_assert_nonnull (gnc_ui_billterms_window_new (GTK_WINDOW (owner), book));
+TEST_F (BillTermsResponseTest, ReferencedTermSurvivesDeleteConfirmation)
+{
+    auto term = create_term ("Confirmed term");
+    auto guid = *gncBillTermGetGUID (term);
+    gncBillTermIncRef (term);
+    auto question = find_delete_question ();
+    ASSERT_NE (question, nullptr);
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_YES);
+    term = gncBillTermLookup (book, &guid);
+    ASSERT_NE (term, nullptr);
+    gncBillTermDecRef (term);
+}
+
+TEST_F (BillTermsResponseTest, LateDeleteResponseAfterManagerDestructionDoesNotDeleteTerm)
+{
+    auto term = create_term ("Confirmed term");
+    auto guid = *gncBillTermGetGUID (term);
+    auto question = find_delete_question ();
+    ASSERT_NE (question, nullptr);
+    retain_widget (question);
+    gtk_widget_destroy (find_named_toplevel ("gnc-id-bill-terms"));
+    gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_YES);
+    EXPECT_NE (gncBillTermLookup (book, &guid), nullptr);
+}
+
+TEST_F (BillTermsResponseTest, NewAcceptedCreatesTerm)
+{
     auto parent = find_named_toplevel ("gnc-id-bill-terms");
-    g_assert_nonnull (parent);
+    ASSERT_NE (parent, nullptr);
 
     auto new_button = find_buildable (parent, "new_term_button");
-    g_assert_true (GTK_IS_BUTTON (new_button));
+    ASSERT_TRUE (GTK_IS_BUTTON (new_button));
     gtk_button_clicked (GTK_BUTTON (new_button));
     auto dialog = find_named_toplevel ("gnc-id-new-bill-terms",
                                       GTK_WINDOW (parent));
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    ASSERT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    ASSERT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
     auto name = find_buildable (dialog, "name_entry");
-    g_assert_true (GTK_IS_ENTRY (name));
+    ASSERT_TRUE (GTK_IS_ENTRY (name));
     gtk_entry_set_text (GTK_ENTRY (name), "Response-created term");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     auto term = gncBillTermLookupByName (book, "Response-created term");
-    g_assert_nonnull (term);
-    auto term_guid = *gncBillTermGetGUID (term);
-    g_assert_null (find_named_toplevel ("gnc-id-new-bill-terms",
-                                       GTK_WINDOW (parent)));
+    ASSERT_NE (term, nullptr);
+    EXPECT_EQ (find_named_toplevel ("gnc-id-new-bill-terms",
+                                       GTK_WINDOW (parent)), nullptr);
 
-    auto view = find_buildable (parent, "terms_view");
-    g_assert_true (GTK_IS_TREE_VIEW (view));
-    GtkTreeIter iter;
-    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
-    g_assert_true (gtk_tree_model_get_iter_first (model, &iter));
-    auto path = gtk_tree_model_get_path (model, &iter);
-    gtk_tree_selection_select_path (
-        gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), path);
-    gtk_tree_path_free (path);
-    auto edit_button = find_buildable (parent, "edit_term_button");
-    g_assert_true (GTK_IS_BUTTON (edit_button));
-    gtk_button_clicked (GTK_BUTTON (edit_button));
-    dialog = find_named_toplevel ("gnc-id-new-bill-terms",
-                                 GTK_WINDOW (parent));
-    g_assert_true (GTK_IS_DIALOG (dialog));
+}
+
+TEST_F (BillTermsResponseTest, ParentDestroyedRejectsPendingEdit)
+{
+    auto term = create_term ("Pending edit term");
+    auto term_guid = *gncBillTermGetGUID (term);
+    auto parent = find_named_toplevel ("gnc-id-bill-terms");
+    ASSERT_NE (parent, nullptr);
+    auto dialog = open_edit_dialog_for_first_term ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     auto description = find_buildable (dialog, "entry_desc");
-    g_assert_true (GTK_IS_ENTRY (description));
+    ASSERT_TRUE (GTK_IS_ENTRY (description));
     gtk_entry_set_text (GTK_ENTRY (description), "Must not survive parent close");
 
-    /* Retain the destroyed widget so a late response also proves its handler
-       was disconnected before the response context was released. */
-    g_object_ref (dialog);
+    /* Retain the destroyed widget so a late response is safe to deliver. */
+    retain_widget (dialog);
     gtk_widget_destroy (parent);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_object_unref (dialog);
-    term = gncBillTermLookup (book, &term_guid);
-    g_assert_nonnull (term);
-    g_assert_cmpstr (gncBillTermGetDescription (term), ==, "");
-    g_assert_null (find_named_toplevel ("gnc-id-new-bill-terms"));
+    auto unchanged = gncBillTermLookup (book, &term_guid);
+    ASSERT_NE (unchanged, nullptr);
+    EXPECT_STREQ (gncBillTermGetDescription (unchanged), "");
+    EXPECT_EQ (find_named_toplevel ("gnc-id-new-bill-terms"), nullptr);
+}
 
-    /* The outer QOF edit defers MODIFY until commit, where an event handler
-       can reenter the response and destroy the parent before it returns. */
-    g_assert_nonnull (gnc_ui_billterms_window_new (GTK_WINDOW (owner), book));
-    parent = find_named_toplevel ("gnc-id-bill-terms");
-    g_assert_nonnull (parent);
-    view = find_buildable (parent, "terms_view");
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
-    g_assert_true (gtk_tree_model_get_iter_first (model, &iter));
-    path = gtk_tree_model_get_path (model, &iter);
-    gtk_tree_selection_select_path (
-        gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), path);
-    gtk_tree_path_free (path);
-    edit_button = find_buildable (parent, "edit_term_button");
-    gtk_button_clicked (GTK_BUTTON (edit_button));
-    dialog = find_named_toplevel ("gnc-id-new-bill-terms",
-                                 GTK_WINDOW (parent));
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    description = find_buildable (dialog, "entry_desc");
+TEST_F (BillTermsResponseTest, ModifyEventMayDestroyAndReenterOwner)
+{
+    auto term = create_term ("Reentrant edit term");
+    auto term_guid = *gncBillTermGetGUID (term);
+    auto parent = find_named_toplevel ("gnc-id-bill-terms");
+    ASSERT_NE (parent, nullptr);
+    auto dialog = open_edit_dialog_for_first_term ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_widget (dialog);
+    auto description = find_buildable (dialog, "entry_desc");
+    ASSERT_TRUE (GTK_IS_ENTRY (description));
     gtk_entry_set_text (GTK_ENTRY (description), "Committed before parent close");
     auto due_days = find_buildable (dialog, "days:due_days");
     auto discount_days = find_buildable (dialog, "days:discount_days");
-    g_assert_true (GTK_IS_SPIN_BUTTON (due_days));
-    g_assert_true (GTK_IS_SPIN_BUTTON (discount_days));
+    ASSERT_TRUE (GTK_IS_SPIN_BUTTON (due_days));
+    ASSERT_TRUE (GTK_IS_SPIN_BUTTON (discount_days));
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (due_days), 20);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (discount_days), 3);
-    watched_term_guid = term_guid;
-    parent_to_destroy = parent;
-    dialog_to_reenter = dialog;
-    parent_destroyed_by_modify = FALSE;
-    response_reentered = FALSE;
-    auto event_handler = qof_event_register_handler (destroy_parent_on_modify,
-                                                      nullptr);
+    state.watched_term_guid = term_guid;
+    state.parent_to_destroy = parent;
+    state.dialog_to_reenter = dialog;
+    state.parent_destroyed_by_modify = FALSE;
+    state.response_reentered = FALSE;
+    state.event_handler = qof_event_register_handler (
+        destroy_parent_on_modify, &state);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    qof_event_unregister_handler (event_handler);
-    g_assert_true (parent_destroyed_by_modify);
-    g_assert_true (response_reentered);
-    g_assert_null (dialog_to_reenter);
-    g_assert_null (find_named_toplevel ("gnc-id-bill-terms"));
+    qof_event_unregister_handler (state.event_handler);
+    state.event_handler = 0;
+    EXPECT_TRUE (state.parent_destroyed_by_modify);
+    EXPECT_TRUE (state.response_reentered);
+    EXPECT_EQ (state.dialog_to_reenter, nullptr);
+    EXPECT_EQ (find_named_toplevel ("gnc-id-bill-terms"), nullptr);
     term = gncBillTermLookup (book, &term_guid);
-    g_assert_nonnull (term);
-    g_assert_cmpstr (gncBillTermGetDescription (term), ==,
-                     "Committed before parent close");
-    g_assert_cmpint (gncBillTermGetDueDays (term), ==, 20);
-    g_assert_cmpint (gncBillTermGetDiscountDays (term), ==, 3);
-    g_assert_cmpint (qof_instance_get_editlevel (term), ==, 0);
+    ASSERT_NE (term, nullptr);
+    EXPECT_STREQ (gncBillTermGetDescription (term), "Committed before parent close");
+    EXPECT_EQ (gncBillTermGetDueDays (term), 20);
+    EXPECT_EQ (gncBillTermGetDiscountDays (term), 3);
+    EXPECT_EQ (qof_instance_get_editlevel (term), 0);
 
-    gtk_widget_destroy (owner);
-    gnc_clear_current_session ();
-    test_session = nullptr;
 }
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome/billterms/new-edit-response-parent-destroy",
-                     test_new_edit_response_and_parent_destroy);
-    g_test_add_func ("/gnome/billterms/delete-response", test_delete_response);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

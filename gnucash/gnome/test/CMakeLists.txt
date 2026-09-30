@@ -14,6 +14,7 @@ set(GNOME_TEST_LIBS
         gnc-gnome
         gnc-test-engine
         test-core
+        gtest
         ${GUILE_LDFLAGS})
 
 macro(add_gnome_test _TARGET _SOURCE_FILES)
@@ -159,6 +160,7 @@ set_dist_list(test_gnome_DIST
   CMakeLists.txt
   test-invoice-report-builtin-default.cpp
   test-new-user-response.cpp
+  gnome-response-test-fixture.h
   test-sx-creation-error-response.cpp
   test-tax-table-rename-response.cpp
   test-tax-table-entry-response.cpp

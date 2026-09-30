@@ -42,7 +42,6 @@
                 <property name="has-default">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_dialog_date_close_ok_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

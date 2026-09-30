@@ -8,6 +8,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 
 #include "cashobjects.h"
 #include "Account.h"
@@ -21,7 +22,6 @@
 
 namespace
 {
-gboolean display_available;
 
 GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
@@ -49,7 +49,12 @@ find_print_check_dialog ()
         auto widget = GTK_WIDGET (node->data);
         if (g_strcmp0 (gtk_widget_get_name (widget), "gnc-id-print-check") == 0)
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -69,7 +74,12 @@ find_title_dialog (GtkWidget *parent)
             gtk_window_get_transient_for (GTK_WINDOW (widget)) == GTK_WINDOW (parent) &&
             find_buildable (widget, "format_title"))
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -129,114 +139,123 @@ make_check_fixture ()
     return fixture;
 }
 
-GtkWidget *
-open_title_dialog (GtkWidget *check_dialog)
+struct CloseCheckParentState
 {
-    auto save = find_buildable (check_dialog, "save_button");
-    g_assert_true (GTK_IS_BUTTON (save));
-    gtk_button_clicked (GTK_BUTTON (save));
-    return find_title_dialog (check_dialog);
-}
+    GtkWidget *check{};
+};
 
 void
-close_check_parent_on_title_destroy (GtkWidget *, gpointer check_dialog)
+close_check_parent_on_title_destroy (GtkWidget *, gpointer user_data)
 {
-    gtk_dialog_response (GTK_DIALOG (check_dialog), GTK_RESPONSE_DELETE_EVENT);
+    auto state = static_cast<CloseCheckParentState *> (user_data);
+    gtk_dialog_response (GTK_DIALOG (state->check), GTK_RESPONSE_DELETE_EVENT);
 }
 
-void
-test_cancel_duplicate_and_retained_parent_late_response ()
+class PrintCheckTitleResponseTest : public GnomeResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        fixture = make_check_fixture ();
+        host = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (host);
+        gtk_widget_realize (host);
+        GList *splits = g_list_append (nullptr, fixture.check_split);
+        gnc_ui_print_check_dialog_create (host, splits, fixture.bank);
+        g_list_free (splits);
+        check = find_print_check_dialog ();
+        ASSERT_TRUE (GTK_IS_DIALOG (check));
+        g_object_ref (check);
     }
 
-    auto fixture = make_check_fixture ();
-    auto host = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (host);
-    GList *splits = g_list_append (nullptr, fixture.check_split);
-    gnc_ui_print_check_dialog_create (host, splits, fixture.bank);
-    g_list_free (splits);
-    auto check = find_print_check_dialog ();
-    g_assert_true (GTK_IS_DIALOG (check));
+    void TearDown () override
+    {
+        for (auto widget : retained_widgets)
+            g_object_unref (widget);
+        if (check)
+        {
+            gtk_widget_destroy (check);
+            g_object_unref (check);
+        }
+        if (host)
+        {
+            gtk_widget_destroy (host);
+            g_object_unref (host);
+        }
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+    }
+
+    CheckFixture fixture{};
+    GtkWidget *host{};
+    GtkWidget *check{};
+    CloseCheckParentState parent_state{};
+    std::vector<GtkWidget *> retained_widgets;
+};
+
+TEST_F (PrintCheckTitleResponseTest, CancelDuplicateAndLateResponseAfterParentDestroy)
+{
     auto save = find_buildable (check, "save_button");
-
-    auto title = open_title_dialog (check);
-    g_assert_true (GTK_IS_DIALOG (title));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (title)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (title)));
+    ASSERT_TRUE (GTK_IS_BUTTON (save));
     gtk_button_clicked (GTK_BUTTON (save));
-    g_assert_true (find_title_dialog (check) == title);
+    auto title = find_title_dialog (check);
+    ASSERT_TRUE (GTK_IS_DIALOG (title));
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (title)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (title)));
+    gtk_button_clicked (GTK_BUTTON (save));
+    EXPECT_EQ (find_title_dialog (check), title);
     gtk_dialog_response (GTK_DIALOG (title), GTK_RESPONSE_CANCEL);
-    g_assert_null (g_object_get_data (G_OBJECT (check), "check-title-dialog"));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (check), "check-title-dialog"), nullptr);
 
-    title = open_title_dialog (check);
-    g_assert_true (GTK_IS_DIALOG (title));
+    gtk_button_clicked (GTK_BUTTON (save));
+    title = find_title_dialog (check);
+    ASSERT_TRUE (GTK_IS_DIALOG (title));
     g_object_ref (title);
-    g_object_ref (check); // Keep the destroyed parent alive to exercise stale-owner handling.
+    retained_widgets.push_back (title);
     gtk_dialog_response (GTK_DIALOG (check), GTK_RESPONSE_DELETE_EVENT);
-    g_assert_null (g_object_get_data (G_OBJECT (check), "print-check-owner"));
-    g_assert_null (find_title_dialog (check));
+    EXPECT_EQ (g_object_get_data (G_OBJECT (check), "print-check-owner"), nullptr);
+    EXPECT_EQ (find_title_dialog (check), nullptr);
     gtk_dialog_response (GTK_DIALOG (title), GTK_RESPONSE_OK);
-    g_assert_null (g_object_get_data (G_OBJECT (check), "check-title-dialog"));
-    g_object_unref (title);
-    g_object_unref (check);
-    gtk_widget_destroy (host);
-    gnc_clear_current_session ();
+    EXPECT_EQ (g_object_get_data (G_OBJECT (check), "check-title-dialog"), nullptr);
 }
 
-void
-test_title_response_after_reentrant_parent_destroy ()
+TEST_F (PrintCheckTitleResponseTest, TitleResponseCanReentrantlyDestroyParent)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto fixture = make_check_fixture ();
-    auto host = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (host);
-    GList *splits = g_list_append (nullptr, fixture.check_split);
-    gnc_ui_print_check_dialog_create (host, splits, fixture.bank);
-    g_list_free (splits);
-    auto check = find_print_check_dialog ();
-    g_assert_true (GTK_IS_DIALOG (check));
-    auto title = open_title_dialog (check);
-    g_assert_true (GTK_IS_DIALOG (title));
+    auto save = find_buildable (check, "save_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (save));
+    gtk_button_clicked (GTK_BUTTON (save));
+    auto title = find_title_dialog (check);
+    ASSERT_TRUE (GTK_IS_DIALOG (title));
     auto entry = GTK_ENTRY (find_buildable (title, "format_title"));
-    g_assert_true (GTK_IS_ENTRY (entry));
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "synthetic-no-write-response");
 
-    g_object_ref (check);
+    parent_state.check = check;
     g_signal_connect (title, "destroy",
-                      G_CALLBACK (close_check_parent_on_title_destroy), check);
+                      G_CALLBACK (close_check_parent_on_title_destroy),
+                      &parent_state);
     gtk_dialog_response (GTK_DIALOG (title), GTK_RESPONSE_OK);
-    g_assert_null (g_object_get_data (G_OBJECT (check), "print-check-owner"));
-    g_assert_null (g_object_get_data (G_OBJECT (check), "check-title-dialog"));
-    g_object_unref (check);
-    gtk_widget_destroy (host);
-    gnc_clear_current_session ();
+    EXPECT_EQ (g_object_get_data (G_OBJECT (check), "print-check-owner"), nullptr);
+    EXPECT_EQ (g_object_get_data (G_OBJECT (check), "check-title-dialog"), nullptr);
 }
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome/print-check/title-cancel-duplicate-parent-destroy",
-                     test_cancel_duplicate_and_retained_parent_late_response);
-    g_test_add_func ("/gnome/print-check/title-response-reentrant-parent-destroy",
-                     test_title_response_after_reentrant_parent_destroy);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     qof_close ();
     return result;

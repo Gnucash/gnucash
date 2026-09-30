@@ -4,6 +4,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 
 extern "C"
 {
@@ -19,7 +20,38 @@ struct Result
     gboolean accepted{FALSE};
     time64 date{0};
 };
-gboolean display_available;
+
+GtkWidget *find_date_dialog ();
+void completed (gboolean accepted, time64 date, gpointer data);
+
+class DateCloseResponseTest : public GnomeResponseTest
+{
+protected:
+    void SetUp () override
+    {
+        GnomeResponseTest::SetUp ();
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (parent);
+    }
+
+    void TearDown () override
+    {
+        gtk_widget_destroy (parent);
+        g_object_unref (parent);
+        parent = nullptr;
+        GnomeResponseTest::TearDown ();
+    }
+
+    GtkWidget *parent{};
+    Result result;
+
+    GtkWidget *open_dialog ()
+    {
+        gnc_dialog_date_close_async_parented (
+            parent, "Close?", "Date", TRUE, 1234, completed, &result);
+        return find_date_dialog ();
+    }
+};
 
 GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
@@ -77,113 +109,68 @@ completed (gboolean accepted, time64 date, gpointer data)
 }
 
 void
-test_cancel_response ()
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    Result result;
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gnc_dialog_date_close_async_parented (
-        parent, "Close?", "Date", TRUE, 1234, completed, &result);
-    auto dialog = find_date_dialog ();
-    g_assert_nonnull (dialog);
-    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "cancelbutton")));
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_false (result.accepted);
-    gtk_widget_destroy (parent);
-}
-
-void
-test_ok_response ()
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    Result result;
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gnc_dialog_date_close_async_parented (
-        parent, "Close?", "Date", TRUE, 1234, completed, &result);
-    auto dialog = find_date_dialog ();
-    g_assert_nonnull (dialog);
-    auto date_edit = find_date_edit (dialog);
-    g_assert_nonnull (date_edit);
-    auto expected_date = gnc_date_edit_get_date (date_edit);
-    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "okbutton")));
-    g_assert_true (result.accepted);
-    g_assert_cmpint (result.date, ==, expected_date);
-    g_assert_cmpuint (result.calls, ==, 1);
-    gtk_widget_destroy (parent);
-}
-
-void
-test_parent_destroy_cancels ()
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    Result result;
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gnc_dialog_date_close_async_parented (
-        parent, "Close?", "Date", TRUE, 1234, completed, &result);
-    auto dialog = find_date_dialog ();
-    g_assert_nonnull (dialog);
-    g_object_ref (dialog);
-    gtk_widget_destroy (parent);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_false (result.accepted);
-    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_object_unref (dialog);
-}
-
-void
 destroy_parent_during_completion (GtkWidget *, gpointer parent)
 {
     gtk_widget_destroy (GTK_WIDGET(parent));
 }
 
-void
-test_parent_destroy_during_acceptance ()
+TEST_F (DateCloseResponseTest, CancelCompletesOnceAsRejected)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    Result result;
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_object_ref_sink (parent);
-    gnc_dialog_date_close_async_parented (
-        parent, "Close?", "Date", TRUE, 1234, completed, &result);
-    auto dialog = find_date_dialog ();
-    g_assert_nonnull (dialog);
+    auto dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
+    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "cancelbutton")));
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_FALSE (result.accepted);
+}
+
+TEST_F (DateCloseResponseTest, OkReturnsSelectedDate)
+{
+    auto dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
+    auto date_edit = find_date_edit (dialog);
+    ASSERT_NE (date_edit, nullptr);
+    auto expected_date = gnc_date_edit_get_date (date_edit);
+    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "okbutton")));
+    EXPECT_TRUE (result.accepted);
+    EXPECT_EQ (result.date, expected_date);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+TEST_F (DateCloseResponseTest, ParentDestroyCancelsAndLateResponseIsIgnored)
+{
+    auto dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
+    g_object_ref (dialog);
+    gtk_widget_destroy (parent);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_FALSE (result.accepted);
+    gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+    g_object_unref (dialog);
+}
+
+TEST_F (DateCloseResponseTest, ParentDestroyDuringAcceptanceCancels)
+{
+    auto dialog = open_dialog ();
+    ASSERT_NE (dialog, nullptr);
     g_signal_connect (dialog, "destroy",
-                      G_CALLBACK(destroy_parent_during_completion), parent);
-    gtk_button_clicked (GTK_BUTTON(find_buildable (dialog, "okbutton")));
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_assert_false (result.accepted);
-    g_object_unref (parent);
+                      G_CALLBACK (destroy_parent_during_completion), parent);
+    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "okbutton")));
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_FALSE (result.accepted);
 }
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    g_test_add_func ("/gnome/date-close/cancel", test_cancel_response);
-    g_test_add_func ("/gnome/date-close/ok", test_ok_response);
-    g_test_add_func ("/gnome/date-close/parent-destroy", test_parent_destroy_cancels);
-    g_test_add_func ("/gnome/date-close/parent-destroy-during-acceptance",
-                     test_parent_destroy_during_acceptance);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

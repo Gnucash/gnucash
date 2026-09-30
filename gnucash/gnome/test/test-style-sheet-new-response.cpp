@@ -8,6 +8,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
 #include <cstdlib>
 
@@ -20,7 +21,6 @@
 
 namespace
 {
-gboolean display_available;
 
 GtkWidget *
 find_named (GtkWidget *widget, const char *name)
@@ -68,6 +68,22 @@ find_new_sheet_dialog ()
     return found;
 }
 
+GtkWidget *
+find_style_sheet_options_window (GtkWindow *owner)
+{
+    auto windows = gtk_window_list_toplevels ();
+    GtkWidget *found = nullptr;
+    for (auto node = windows; node && !found; node = node->next)
+    {
+        auto widget = GTK_WIDGET (node->data);
+        if (g_strcmp0 (gtk_widget_get_name (widget), "gnc-id-options") == 0 &&
+            gtk_window_get_transient_for (GTK_WINDOW (widget)) == owner)
+            found = widget;
+    }
+    g_list_free (windows);
+    return found;
+}
+
 void
 destroy_sheet_owner (GtkWidget *, gpointer owner)
 {
@@ -81,73 +97,134 @@ destroy_owner_on_insert (GtkTreeModel *, GtkTreePath *, GtkTreeIter *,
     gtk_widget_destroy (GTK_WIDGET (owner));
 }
 
-void
-test_create_and_parent_destroy ()
+int style_sheet_count ()
 {
-    if (!display_available)
+    return scm_to_int (scm_c_eval_string (
+        "(length (gnc:get-html-style-sheets))"));
+}
+
+class StyleSheetCreationTest : public GnomeResponseTest
+{
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (session);
+        parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        ASSERT_NE (parent, nullptr);
+        gtk_widget_realize (GTK_WIDGET (parent));
+        gnc_style_sheet_dialog_open (parent);
+        owner = find_toplevel ("gnc-id-style-sheet-select");
+        ASSERT_NE (owner, nullptr);
+        add_button = find_named (owner, "add_button");
+        ASSERT_TRUE (GTK_IS_BUTTON (add_button));
     }
 
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    gtk_widget_realize (GTK_WIDGET (parent));
-    gnc_style_sheet_dialog_open (parent);
-    auto owner = find_toplevel ("gnc-id-style-sheet-select");
-    g_assert_nonnull (owner);
-    auto add = find_named (owner, "add_button");
-    g_assert_true (GTK_IS_BUTTON (add));
-    auto initial = scm_to_int (scm_c_eval_string (
-        "(length (gnc:get-html-style-sheets))"));
+    void TearDown () override
+    {
+        if (auto dialog = find_new_sheet_dialog ())
+            gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-    gtk_button_clicked (GTK_BUTTON (add));
+        auto manager = find_toplevel ("gnc-id-style-sheet-select");
+        while (manager)
+        {
+            g_object_ref (manager);
+            auto editor = find_style_sheet_options_window (GTK_WINDOW (manager));
+            while (editor)
+            {
+                g_object_ref (editor);
+                auto cancel = find_named (editor, "cancel_button");
+                EXPECT_TRUE (GTK_IS_BUTTON (cancel));
+                if (!GTK_IS_BUTTON (cancel))
+                {
+                    g_object_unref (editor);
+                    break;
+                }
+                gtk_button_clicked (GTK_BUTTON (cancel));
+                while (g_main_context_iteration (nullptr, FALSE))
+                    ;
+                g_object_unref (editor);
+                editor = find_style_sheet_options_window (GTK_WINDOW (manager));
+            }
+
+            if (!gtk_widget_in_destruction (manager))
+            {
+                auto close = find_named (manager, "close_button");
+                EXPECT_TRUE (GTK_IS_BUTTON (close));
+                if (GTK_IS_BUTTON (close))
+                    gtk_button_clicked (GTK_BUTTON (close));
+            }
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+            g_object_unref (manager);
+            manager = find_toplevel ("gnc-id-style-sheet-select");
+        }
+        if (parent)
+            gtk_widget_destroy (GTK_WIDGET (parent));
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+        session = nullptr;
+    }
+
+    QofSession *session{};
+    GtkWindow *parent{};
+    GtkWidget *owner{};
+    GtkWidget *add_button{};
+};
+
+TEST_F (StyleSheetCreationTest, AcceptCreatesOneStyleSheet)
+{
+    const auto initial = style_sheet_count ();
+    gtk_button_clicked (GTK_BUTTON (add_button));
     auto dialog = find_new_sheet_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
     auto combo = GTK_COMBO_BOX (find_named (dialog, "template_combobox"));
     auto entry = GTK_ENTRY (find_named (dialog, "name_entry"));
-    g_assert_true (GTK_IS_COMBO_BOX (combo));
-    g_assert_true (GTK_IS_ENTRY (entry));
+    ASSERT_TRUE (GTK_IS_COMBO_BOX (combo));
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "Async style sheet test");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-    g_assert_cmpint (scm_to_int (scm_c_eval_string (
-        "(length (gnc:get-html-style-sheets))")), ==, initial + 1);
-    g_assert_null (find_new_sheet_dialog ());
+    EXPECT_EQ (style_sheet_count (), initial + 1);
+    EXPECT_EQ (find_new_sheet_dialog (), nullptr);
+}
 
-    /* A pending completion must become a no-op when the owning window goes
-       away while the response dialog is being closed. */
-    gtk_button_clicked (GTK_BUTTON (add));
-    dialog = find_new_sheet_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+TEST_F (StyleSheetCreationTest, ClosingOwnerWithResponseDoesNotCreateSheet)
+{
+    const auto initial = style_sheet_count ();
+    gtk_button_clicked (GTK_BUTTON (add_button));
+    auto dialog = find_new_sheet_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    auto entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "Must not outlive owner");
     g_signal_connect (dialog, "destroy", G_CALLBACK (destroy_sheet_owner),
                       owner);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_cmpint (scm_to_int (scm_c_eval_string (
-        "(length (gnc:get-html-style-sheets))")), ==, initial + 1);
 
-    /* Reopen the manager, then destroy it from the model insertion emitted
-       after Scheme has already created the globally registered stylesheet. */
-    gnc_style_sheet_dialog_open (parent);
-    owner = find_toplevel ("gnc-id-style-sheet-select");
-    g_assert_nonnull (owner);
-    add = find_named (owner, "add_button");
+    EXPECT_EQ (style_sheet_count (), initial);
+    EXPECT_EQ (find_toplevel ("gnc-id-style-sheet-select"), nullptr);
+}
+
+TEST_F (StyleSheetCreationTest, OwnerMayCloseAfterSchemeCreatesSheet)
+{
+    const auto initial = style_sheet_count ();
     auto list = GTK_TREE_VIEW (find_named (owner, "style_sheet_list_view"));
-    g_assert_true (GTK_IS_TREE_VIEW (list));
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (list));
     g_signal_connect (gtk_tree_view_get_model (list), "row-inserted",
                       G_CALLBACK (destroy_owner_on_insert), owner);
-    gtk_button_clicked (GTK_BUTTON (add));
-    dialog = find_new_sheet_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+    gtk_button_clicked (GTK_BUTTON (add_button));
+    auto dialog = find_new_sheet_dialog ();
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    auto entry = GTK_ENTRY (find_named (dialog, "name_entry"));
+    ASSERT_TRUE (GTK_IS_ENTRY (entry));
     gtk_entry_set_text (entry, "Survives owner close after Scheme creation");
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_cmpint (scm_to_int (scm_c_eval_string (
-        "(length (gnc:get-html-style-sheets))")), ==, initial + 2);
-    g_assert_null (find_toplevel ("gnc-id-style-sheet-select"));
-    gtk_widget_destroy (GTK_WIDGET (parent));
+
+    EXPECT_EQ (style_sheet_count (), initial + 1);
+    EXPECT_EQ (find_toplevel ("gnc-id-style-sheet-select"), nullptr);
 }
 
 void
@@ -162,9 +239,9 @@ run_tests (void *, int, char **)
     scm_c_use_module ("gnucash report report-core");
     scm_c_eval_string (
         "(report-module-loader (list '(gnucash report stylesheets)))");
-    g_test_add_func ("/gnome/style-sheet/new-response-parent-destroy",
-                     test_create_and_parent_destroy);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_clear_current_session ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
@@ -176,10 +253,12 @@ run_tests (void *, int, char **)
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     scm_boot_guile (argc, argv, run_tests, nullptr);
     return 0;
 }

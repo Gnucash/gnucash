@@ -5,6 +5,9 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <libguile.h>
+#include <gtest/gtest.h>
+#include <string>
+#include "test/gnome-response-test-fixture.h"
 #include <cstdlib>
 #include "cashobjects.h"
 #include "gnc-plugin-budget.h"
@@ -18,41 +21,41 @@
 #include "gnc-tree-model-budget.h"
 #include "qofevent.h"
 
+namespace
+{
 struct Result
 {
     guint calls{};
     GncBudget *budget{};
 };
 
-static gboolean display_available;
+QofSession *window_sentinel_session{};
+GncMainWindow *window_sentinel{};
 
-static void
-assert_budget_value (GncBudget *budget, Account *account, guint period,
-                     gint64 expected)
+void
+create_window_sentinel ()
 {
-    g_assert_cmpint (gnc_numeric_compare (
-                         gnc_budget_get_account_period_value (budget, account, period),
-                         gnc_numeric_create (expected, 1)), ==, 0);
+    window_sentinel_session = qof_session_new (qof_book_new ());
+    gnc_set_current_session (window_sentinel_session);
+    window_sentinel = gnc_main_window_new ();
+    g_object_ref_sink (window_sentinel);
+    gnc_exchange_current_session (nullptr);
 }
 
-struct BudgetModifyClose
+void
+destroy_window_sentinel ()
 {
-    GtkWidget *window;
-    GncBudget *budget;
-    guint calls{};
-};
-
-static void
-close_window_on_budget_modify (QofInstance *instance, QofEventId event,
-                               gpointer data, [[maybe_unused]] gpointer event_data)
-{
-    auto state = static_cast<BudgetModifyClose *> (data);
-    if (instance != QOF_INSTANCE (state->budget) || event != QOF_EVENT_MODIFY)
-        return;
-    ++state->calls;
-    g_assert_cmpstr (gnc_budget_get_name (state->budget), ==, "Updated budget");
-    g_assert_cmpuint (gnc_budget_get_num_periods (state->budget), ==, 3);
-    gtk_widget_destroy (state->window);
+    if (window_sentinel)
+    {
+        gtk_widget_destroy (GTK_WIDGET (window_sentinel));
+        g_object_unref (window_sentinel);
+        window_sentinel = nullptr;
+    }
+    if (window_sentinel_session)
+    {
+        qof_session_destroy (window_sentinel_session);
+        window_sentinel_session = nullptr;
+    }
 }
 
 static void
@@ -168,303 +171,561 @@ find_builder_dialog (GtkWindow *parent, const gchar *name)
     return found;
 }
 
-static void
-test_budget_note_action (gconstpointer data)
+class BudgetSelectionResponseTest : public GnomeResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto scenario = GPOINTER_TO_INT (data);
-    auto session = qof_session_new (qof_book_new ());
-    gnc_set_current_session (session);
-    auto book = qof_session_get_book (session);
-    auto root = gnc_account_create_root (book);
-    auto account = xaccMallocAccount (book);
-    auto other_account = xaccMallocAccount (book);
-    xaccAccountSetName (account, "Budget note target");
-    xaccAccountSetName (other_account, "Unrelated budget account");
-    gnc_account_append_child (root, account);
-    gnc_account_append_child (root, other_account);
-    auto budget = gnc_budget_new (book);
-    gnc_budget_set_name (budget, "Budget note response test");
-    gnc_budget_set_num_periods (budget, 2);
-    gnc_budget_set_account_period_note (budget, account, 1, "original");
-    gnc_budget_set_account_period_note (budget, other_account, 1, "untouched");
-
-    auto window = gnc_main_window_new ();
-    g_object_ref_sink (window);
-    gtk_widget_realize (GTK_WIDGET (window));
-    auto page = gnc_plugin_page_budget_new (budget);
-    /* open_page transfers the initial page reference to the window; retain a
-     * fixture reference so close_page or parent destruction cannot free it. */
-    g_object_ref (page);
-    gnc_main_window_open_page (window, page);
-    gboolean page_installed = TRUE;
-    gboolean window_destroyed = FALSE;
-    auto view = GTK_TREE_VIEW (gnc_budget_view_get_account_tree_view (
-        GNC_BUDGET_VIEW (page->notebook_page)));
-    g_assert_nonnull (view);
-    auto model = GTK_TREE_MODEL (gtk_tree_view_get_model (view));
-    auto path = find_account_path (view, model, nullptr, account);
-    g_assert_nonnull (path);
-    GtkTreeViewColumn *target_column = nullptr;
-    auto columns = gtk_tree_view_get_columns (view);
-    for (auto node = columns; node; node = node->next)
-    {
-        auto column = GTK_TREE_VIEW_COLUMN (node->data);
-        if (GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (column), "period_num")) == 1)
-            target_column = column;
-    }
-    g_list_free (columns);
-    g_assert_nonnull (target_column);
-    gtk_tree_view_expand_all (view);
-    gtk_tree_view_set_cursor (view, path, target_column, FALSE);
-    gtk_tree_path_free (path);
-
-    auto action = gnc_plugin_page_get_action (page, "BudgetNoteAction");
-    g_assert_nonnull (action);
-    g_action_activate (action, nullptr);
-    auto dialog = find_budget_note_dialog (GTK_WINDOW (window));
-    g_assert_nonnull (dialog);
-    g_object_ref (dialog);
-    auto text_view = GTK_TEXT_VIEW (find_text_view (GTK_WIDGET (dialog)));
-    g_assert_nonnull (text_view);
-    if (scenario == 0)
-    {
-        auto buffer = gtk_text_view_get_buffer (text_view);
-        gtk_text_buffer_set_text (buffer, "captured note", -1);
-    }
-    else if (scenario == 2)
-    {
-        gnc_main_window_close_page (page);
-        page_installed = FALSE;
-        g_object_unref (page);
-        page = nullptr;
-    }
-    else if (scenario == 3)
-    {
-        gtk_widget_destroy (GTK_WIDGET (window));
-        page_installed = FALSE;
-        window_destroyed = TRUE;
+        GnomeResponseTest::SetUp ();
+        session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (session);
+        book = qof_session_get_book (session);
+        budget = gnc_budget_new (book);
+        parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+        g_object_ref_sink (parent);
     }
 
-    gtk_dialog_response (dialog, scenario == 0 ? GTK_RESPONSE_OK : GTK_RESPONSE_CANCEL);
-    g_assert_cmpstr (gnc_budget_get_account_period_note (budget, account, 1), ==,
-                     scenario == 0 ? "captured note" : "original");
-    g_assert_cmpstr (gnc_budget_get_account_period_note (budget, other_account, 1), ==,
-                     "untouched");
-    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpstr (gnc_budget_get_account_period_note (budget, account, 1), ==,
-                     scenario == 0 ? "captured note" : "original");
-    g_object_unref (dialog);
-
-    if (page)
+    void TearDown () override
     {
-        if (page_installed)
-            gnc_main_window_close_page (page);
-        g_object_unref (page);
-    }
-    if (!window_destroyed)
-        gtk_widget_destroy (GTK_WIDGET (window));
-    g_object_unref (window);
-    gnc_clear_current_session ();
-}
-
-static void
-test_budget_mutation_action (gconstpointer data)
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto scenario = GPOINTER_TO_INT (data);
-    const gboolean options = scenario < 2 || scenario == 6;
-    const gboolean estimate = scenario >= 4;
-    auto session = qof_session_new (qof_book_new ());
-    gnc_set_current_session (session);
-    auto book = qof_session_get_book (session);
-    auto root = gnc_account_create_root (book);
-    auto account = xaccMallocAccount (book);
-    auto other_account = xaccMallocAccount (book);
-    xaccAccountSetName (account, "Mutation target");
-    xaccAccountSetName (other_account, "Mutation bystander");
-    gnc_account_append_child (root, account);
-    gnc_account_append_child (root, other_account);
-    auto budget = gnc_budget_new (book);
-    gnc_budget_set_name (budget, "Original budget");
-    gnc_budget_set_num_periods (budget, 2);
-    gnc_budget_set_account_period_value (budget, account, 0, gnc_numeric_create (10, 1));
-    gnc_budget_set_account_period_value (budget, account, 1, gnc_numeric_create (15, 1));
-    gnc_budget_set_account_period_value (budget, other_account, 0, gnc_numeric_create (40, 1));
-
-    auto window = gnc_main_window_new ();
-    g_object_ref_sink (window);
-    gtk_widget_realize (GTK_WIDGET (window));
-    auto page = gnc_plugin_page_budget_new (budget);
-    /* open_page transfers the initial page reference to the window; retain a
-     * fixture reference across close and reentrant parent destruction. */
-    g_object_ref (page);
-    gnc_main_window_open_page (window, page);
-    gboolean page_installed = TRUE;
-    gboolean window_destroyed = FALSE;
-    auto view = GTK_TREE_VIEW (gnc_budget_view_get_account_tree_view (
-        GNC_BUDGET_VIEW (page->notebook_page)));
-    auto model = GTK_TREE_MODEL (gtk_tree_view_get_model (view));
-    auto account_path = find_account_path (view, model, nullptr, account);
-    g_assert_nonnull (account_path);
-    gtk_tree_selection_select_path (gtk_tree_view_get_selection (view), account_path);
-    gtk_tree_path_free (account_path);
-
-    auto action_name = options ? "OptionsBudgetAction" :
-        estimate ? "EstimateBudgetAction" : "AllPeriodsBudgetAction";
-    auto action = gnc_plugin_page_get_action (page, action_name);
-    g_assert_nonnull (action);
-    g_action_activate (action, nullptr);
-    auto dialog_name = options ? "budget_options_container_dialog" :
-        estimate ? "budget_estimate_dialog" : "budget_allperiods_dialog";
-    auto dialog = find_builder_dialog (GTK_WINDOW (window), dialog_name);
-    g_assert_nonnull (dialog);
-    g_object_ref (dialog);
-    if (options)
-    {
-        auto name = GTK_ENTRY (find_builder_widget (GTK_WIDGET (dialog), "BudgetName"));
-        g_assert_nonnull (name);
-        gtk_entry_set_text (name, "Updated budget");
-        if (scenario == 6)
+        if (parent)
         {
-            auto periods = GTK_SPIN_BUTTON (
-                find_builder_widget (GTK_WIDGET (dialog), "BudgetNumPeriods"));
-            g_assert_nonnull (periods);
-            gtk_spin_button_set_value (periods, 3);
+            gtk_widget_destroy (GTK_WIDGET (parent));
+            g_object_unref (parent);
         }
+        if (dialog)
+            g_object_unref (dialog);
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+        if (replacement_session)
+            qof_session_destroy (session);
     }
-    else if (estimate)
-    {
-        auto average = GTK_TOGGLE_BUTTON (
-            find_builder_widget (GTK_WIDGET (dialog), "UseAverage"));
-        g_assert_nonnull (average);
-        gtk_toggle_button_set_active (average, TRUE);
-    }
-    else
-    {
-        auto value = GTK_ENTRY (find_builder_widget (GTK_WIDGET (dialog), "Value"));
-        auto add = GTK_TOGGLE_BUTTON (
-            find_builder_widget (GTK_WIDGET (dialog), "RB_Add"));
-        g_assert_nonnull (value);
-        g_assert_nonnull (add);
-        gtk_entry_set_text (value, "7");
-        gtk_toggle_button_set_active (add, TRUE);
-    }
-    BudgetModifyClose close_state{GTK_WIDGET (window), budget};
-    auto handler_id = scenario == 6
-        ? qof_event_register_handler (close_window_on_budget_modify, &close_state)
-        : 0;
-    auto accept = scenario == 0 || scenario == 2 || scenario == 4 || scenario == 6;
-    gtk_dialog_response (dialog, accept ? GTK_RESPONSE_OK : GTK_RESPONSE_CANCEL);
-    if (handler_id)
-    {
-        qof_event_unregister_handler (handler_id);
-        g_assert_cmpuint (close_state.calls, ==, 1);
-        page_installed = FALSE;
-        window_destroyed = TRUE;
-    }
-    if (options)
-        g_assert_cmpstr (gnc_budget_get_name (budget), ==,
-                         accept ? "Updated budget" : "Original budget");
-    else if (estimate)
-    {
-        assert_budget_value (budget, account, 0, accept ? 0 : 10);
-        assert_budget_value (budget, account, 1, accept ? 0 : 15);
-        assert_budget_value (budget, other_account, 0, 40);
-    }
-    else
-    {
-        assert_budget_value (budget, account, 0, accept ? 17 : 10);
-        assert_budget_value (budget, account, 1, accept ? 22 : 15);
-        assert_budget_value (budget, other_account, 0, 40);
-    }
-    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    if (options)
-        g_assert_cmpstr (gnc_budget_get_name (budget), ==,
-                         accept ? "Updated budget" : "Original budget");
-    else if (estimate)
-        assert_budget_value (budget, other_account, 0, 40);
-    else
-    {
-        assert_budget_value (budget, account, 0, accept ? 17 : 10);
-        assert_budget_value (budget, account, 1, accept ? 22 : 15);
-        assert_budget_value (budget, other_account, 0, 40);
-    }
-    g_object_unref (dialog);
 
-    if (page_installed)
-        gnc_main_window_close_page (page);
-    g_object_unref (page);
-    if (!window_destroyed)
-        gtk_widget_destroy (GTK_WIDGET (window));
-    g_object_unref (window);
-    gnc_clear_current_session ();
-}
+    QofSession *session{};
+    QofSession *replacement_session{};
+    QofBook *book{};
+    GncBudget *budget{};
+    GtkWindow *parent{};
+    GtkDialog *dialog{};
+    Result result{};
+};
 
-static void
-test_selection (gconstpointer data)
+static GtkDialog *
+find_budget_selection_dialog (GtkWindow *parent)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto scenario = GPOINTER_TO_INT (data);
-    auto session = qof_session_new (qof_book_new ());
-    gnc_set_current_session (session);
-    auto book = qof_session_get_book (session);
-    auto budget = gnc_budget_new (book);
-    auto parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-    Result result;
-    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
-    g_assert_cmpuint (result.calls, ==, 0);
     auto windows = gtk_window_list_toplevels ();
     GtkDialog *dialog = nullptr;
     for (auto node = windows; node; node = node->next)
         if (GTK_IS_DIALOG (node->data) &&
             gtk_window_get_transient_for (GTK_WINDOW (node->data)) == parent)
+        {
+            EXPECT_EQ (dialog, nullptr);
+            if (dialog)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             dialog = GTK_DIALOG (node->data);
+    }
     g_list_free (windows);
-    g_assert_nonnull (dialog);
-    g_object_ref (dialog);
+    if (dialog)
+        g_object_ref (dialog);
+    return dialog;
+}
+
+TEST_F (BudgetSelectionResponseTest, AcceptReturnsSelectedBudget)
+{
+    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
+    EXPECT_EQ (result.calls, 0u);
+    dialog = find_budget_selection_dialog (parent);
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_EQ (result.calls, 0u);
     auto view = GTK_TREE_VIEW (find_tree (GTK_WIDGET (dialog)));
-    g_assert_nonnull (view);
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (view));
     GtkTreeIter iter;
-    g_assert_true (gnc_tree_model_budget_get_iter_for_budget (
+    ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
         gtk_tree_view_get_model (view), &iter, budget));
     gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
-
-    if (scenario == 2)
-        gtk_widget_destroy (GTK_WIDGET (parent));
-    else if (scenario == 3)
-        gnc_set_current_session (qof_session_new (qof_book_new ()));
-    else if (scenario == 4)
-        gnc_budget_destroy (budget);
-    else if (scenario == 5)
-        qof_book_mark_closed (book);
-
-    gtk_dialog_response (dialog, scenario == 1 ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    if (scenario == 0)
-        g_assert_true (result.budget == budget);
-    else
-        g_assert_null (result.budget);
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-    g_assert_cmpuint (result.calls, ==, 1);
-    g_object_unref (dialog);
-    if (scenario != 2)
-        gtk_widget_destroy (GTK_WIDGET (parent));
-    gnc_clear_current_session ();
-    if (scenario == 3)
-        qof_session_destroy (session);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.budget, budget);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+TEST_F (BudgetSelectionResponseTest, CancelReturnsNoBudget)
+{
+    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
+    EXPECT_EQ (result.calls, 0u);
+    dialog = find_budget_selection_dialog (parent);
+    ASSERT_NE (dialog, nullptr);
+    auto view = GTK_TREE_VIEW (find_tree (GTK_WIDGET (dialog)));
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (view));
+    GtkTreeIter iter;
+    ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
+        gtk_tree_view_get_model (view), &iter, budget));
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
+    gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.budget, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+TEST_F (BudgetSelectionResponseTest, ParentDestructionReturnsNoBudget)
+{
+    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
+    EXPECT_EQ (result.calls, 0u);
+    dialog = find_budget_selection_dialog (parent);
+    ASSERT_NE (dialog, nullptr);
+    auto view = GTK_TREE_VIEW (find_tree (GTK_WIDGET (dialog)));
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (view));
+    GtkTreeIter iter;
+    ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
+        gtk_tree_view_get_model (view), &iter, budget));
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
+    gtk_widget_destroy (GTK_WIDGET (parent));
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.budget, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+TEST_F (BudgetSelectionResponseTest, SessionSwitchReturnsNoBudget)
+{
+    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
+    EXPECT_EQ (result.calls, 0u);
+    dialog = find_budget_selection_dialog (parent);
+    ASSERT_NE (dialog, nullptr);
+    auto view = GTK_TREE_VIEW (find_tree (GTK_WIDGET (dialog)));
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (view));
+    GtkTreeIter iter;
+    ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
+        gtk_tree_view_get_model (view), &iter, budget));
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
+    replacement_session = qof_session_new (qof_book_new ());
+    gnc_set_current_session (replacement_session);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.budget, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+TEST_F (BudgetSelectionResponseTest, DeletedBudgetReturnsNoBudget)
+{
+    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
+    EXPECT_EQ (result.calls, 0u);
+    dialog = find_budget_selection_dialog (parent);
+    ASSERT_NE (dialog, nullptr);
+    auto view = GTK_TREE_VIEW (find_tree (GTK_WIDGET (dialog)));
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (view));
+    GtkTreeIter iter;
+    ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
+        gtk_tree_view_get_model (view), &iter, budget));
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
+    gnc_budget_destroy (budget);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.budget, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+TEST_F (BudgetSelectionResponseTest, ClosedBookReturnsNoBudget)
+{
+    gnc_budget_gui_select_budget_async (parent, book, selected, &result);
+    EXPECT_EQ (result.calls, 0u);
+    dialog = find_budget_selection_dialog (parent);
+    ASSERT_NE (dialog, nullptr);
+    auto view = GTK_TREE_VIEW (find_tree (GTK_WIDGET (dialog)));
+    ASSERT_TRUE (GTK_IS_TREE_VIEW (view));
+    GtkTreeIter iter;
+    ASSERT_TRUE (gnc_tree_model_budget_get_iter_for_budget (
+        gtk_tree_view_get_model (view), &iter, budget));
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
+    qof_book_mark_closed (book);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+    EXPECT_EQ (result.budget, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (result.calls, 1u);
+}
+
+struct BudgetModifyClose
+{
+    GtkWidget *window{};
+    GncBudget *budget{};
+    guint calls{};
+};
+
+static void
+close_window_on_budget_modify (QofInstance *instance, QofEventId event,
+                               gpointer data, [[maybe_unused]] gpointer event_data)
+{
+    auto state = static_cast<BudgetModifyClose *> (data);
+    if (instance != QOF_INSTANCE (state->budget) || event != QOF_EVENT_MODIFY)
+        return;
+    ++state->calls;
+    EXPECT_STREQ (gnc_budget_get_name (state->budget), "Updated budget");
+    EXPECT_EQ (gnc_budget_get_num_periods (state->budget), 3u);
+    gtk_widget_destroy (state->window);
+}
+
+class BudgetPageResponseTest : public GnomeResponseTest
+{
+protected:
+    void SetUp () override
+    {
+        GnomeResponseTest::SetUp ();
+        session = qof_session_new (qof_book_new ());
+        gnc_set_current_session (session);
+        book = qof_session_get_book (session);
+        auto root = gnc_account_create_root (book);
+        account = xaccMallocAccount (book);
+        other_account = xaccMallocAccount (book);
+        xaccAccountSetName (account, "Budget response target");
+        xaccAccountSetName (other_account, "Budget response bystander");
+        gnc_account_append_child (root, account);
+        gnc_account_append_child (root, other_account);
+        budget = gnc_budget_new (book);
+        gnc_budget_set_name (budget, "Original budget");
+        gnc_budget_set_num_periods (budget, 2);
+        gnc_budget_set_account_period_value (budget, account, 0,
+                                             gnc_numeric_create (10, 1));
+        gnc_budget_set_account_period_value (budget, account, 1,
+                                             gnc_numeric_create (15, 1));
+        gnc_budget_set_account_period_value (budget, other_account, 0,
+                                             gnc_numeric_create (40, 1));
+        gnc_budget_set_account_period_note (budget, account, 1, "original");
+        gnc_budget_set_account_period_note (budget, other_account, 1,
+                                           "untouched");
+
+        window = gnc_main_window_new ();
+        g_object_ref_sink (window);
+        gtk_widget_realize (GTK_WIDGET (window));
+        page = gnc_plugin_page_budget_new (budget);
+        ASSERT_NE (page, nullptr);
+        g_object_ref (page);
+        gnc_main_window_open_page (window, page);
+    }
+
+    void TearDown () override
+    {
+        if (event_handler)
+            qof_event_unregister_handler (event_handler);
+        if (page)
+        {
+            if (page_installed)
+                gnc_main_window_close_page (page);
+            g_object_unref (page);
+            page = nullptr;
+        }
+        if (window)
+        {
+            gtk_widget_destroy (GTK_WIDGET (window));
+            g_object_unref (window);
+            window = nullptr;
+        }
+        for (auto widget : retained_widgets)
+            g_object_unref (widget);
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+    }
+
+    QofSession *session{};
+    QofBook *book{};
+    Account *account{};
+    Account *other_account{};
+    GncBudget *budget{};
+    GncMainWindow *window{};
+    GncPluginPage *page{};
+    gboolean page_installed{TRUE};
+    gulong event_handler{};
+    BudgetModifyClose close_state{};
+    std::vector<GtkWidget *> retained_widgets;
+
+    void retain_widget (GtkWidget *widget)
+    {
+        g_object_ref (widget);
+        retained_widgets.push_back (widget);
+    }
+
+    bool select_account_period_one ()
+    {
+        auto view = GTK_TREE_VIEW (gnc_budget_view_get_account_tree_view (
+            GNC_BUDGET_VIEW (page->notebook_page)));
+        if (!GTK_IS_TREE_VIEW (view))
+        {
+            ADD_FAILURE () << "Budget page has no account tree view";
+            return false;
+        }
+        auto model = GTK_TREE_MODEL (gtk_tree_view_get_model (view));
+        auto path = find_account_path (view, model, nullptr, account);
+        if (!path)
+        {
+            ADD_FAILURE () << "Budget target account is missing from the view";
+            return false;
+        }
+        GtkTreeViewColumn *target_column = nullptr;
+        auto columns = gtk_tree_view_get_columns (view);
+        for (auto node = columns; node; node = node->next)
+        {
+            auto column = GTK_TREE_VIEW_COLUMN (node->data);
+            if (GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (column),
+                                                     "period_num")) == 1)
+                target_column = column;
+        }
+        g_list_free (columns);
+        if (!target_column)
+        {
+            ADD_FAILURE () << "Budget period-one column is missing";
+            gtk_tree_path_free (path);
+            return false;
+        }
+        gtk_tree_view_expand_all (view);
+        gtk_tree_view_set_cursor (view, path, target_column, FALSE);
+        gtk_tree_path_free (path);
+        return true;
+    }
+};
+
+struct BudgetNoteScenario
+{
+    const char *name;
+    gboolean accept;
+    gboolean close_page;
+    gboolean destroy_parent;
+};
+
+class BudgetNoteResponseTest : public BudgetPageResponseTest,
+                               public ::testing::WithParamInterface<BudgetNoteScenario>
+{};
+
+TEST_P (BudgetNoteResponseTest, Response)
+{
+    ASSERT_TRUE (select_account_period_one ());
+    auto action = gnc_plugin_page_get_action (page, "BudgetNoteAction");
+    ASSERT_NE (action, nullptr);
+    g_action_activate (action, nullptr);
+    auto dialog = find_budget_note_dialog (GTK_WINDOW (window));
+    ASSERT_NE (dialog, nullptr);
+    retain_widget (GTK_WIDGET (dialog));
+    auto text_view = GTK_TEXT_VIEW (find_text_view (GTK_WIDGET (dialog)));
+    ASSERT_TRUE (GTK_IS_TEXT_VIEW (text_view));
+
+    const auto scenario = GetParam ();
+    if (scenario.accept)
+    {
+        auto buffer = gtk_text_view_get_buffer (text_view);
+        gtk_text_buffer_set_text (buffer, "captured note", -1);
+    }
+    if (scenario.close_page)
+    {
+        gnc_main_window_close_page (page);
+        page_installed = FALSE;
+    }
+    if (scenario.destroy_parent)
+    {
+        gtk_widget_destroy (GTK_WIDGET (window));
+        page_installed = FALSE;
+    }
+
+    gtk_dialog_response (dialog, scenario.accept ? GTK_RESPONSE_OK :
+                         GTK_RESPONSE_CANCEL);
+    EXPECT_STREQ (gnc_budget_get_account_period_note (budget, account, 1),
+                  scenario.accept ? "captured note" : "original");
+    EXPECT_STREQ (gnc_budget_get_account_period_note (budget, other_account, 1),
+                  "untouched");
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_STREQ (gnc_budget_get_account_period_note (budget, account, 1),
+                  scenario.accept ? "captured note" : "original");
+}
+
+static std::string
+note_scenario_name (const ::testing::TestParamInfo<BudgetNoteScenario> &info)
+{
+    return info.param.name;
+}
+
+INSTANTIATE_TEST_SUITE_P (Responses, BudgetNoteResponseTest,
+    ::testing::Values (BudgetNoteScenario{"AcceptUpdatesSelectedAccount", TRUE,
+                                         FALSE, FALSE},
+                       BudgetNoteScenario{"CancelLeavesNotesUnchanged", FALSE,
+                                         FALSE, FALSE},
+                       BudgetNoteScenario{"PageCloseIgnoresResponse", FALSE,
+                                         TRUE, FALSE},
+                       BudgetNoteScenario{"ParentDestroyIgnoresResponse", FALSE,
+                                         FALSE, TRUE}),
+    note_scenario_name);
+
+enum class BudgetMutationKind { Options, AllPeriods, Estimate };
+
+struct BudgetMutationScenario
+{
+    const char *name;
+    BudgetMutationKind kind;
+    gboolean accept;
+};
+
+class BudgetMutationResponseTest : public BudgetPageResponseTest,
+                                   public ::testing::WithParamInterface<BudgetMutationScenario>
+{};
+
+TEST_P (BudgetMutationResponseTest, Response)
+{
+    ASSERT_TRUE (select_account_period_one ());
+    const auto scenario = GetParam ();
+    const char *action_name = scenario.kind == BudgetMutationKind::Options ?
+        "OptionsBudgetAction" :
+        scenario.kind == BudgetMutationKind::Estimate ? "EstimateBudgetAction" :
+        "AllPeriodsBudgetAction";
+    const char *dialog_name = scenario.kind == BudgetMutationKind::Options ?
+        "budget_options_container_dialog" :
+        scenario.kind == BudgetMutationKind::Estimate ? "budget_estimate_dialog" :
+        "budget_allperiods_dialog";
+    auto action = gnc_plugin_page_get_action (page, action_name);
+    ASSERT_NE (action, nullptr);
+    g_action_activate (action, nullptr);
+    auto dialog = find_builder_dialog (GTK_WINDOW (window), dialog_name);
+    ASSERT_NE (dialog, nullptr);
+    retain_widget (GTK_WIDGET (dialog));
+
+    if (scenario.kind == BudgetMutationKind::Options)
+    {
+        auto name = GTK_ENTRY (find_builder_widget (GTK_WIDGET (dialog),
+                                                    "BudgetName"));
+        ASSERT_TRUE (GTK_IS_ENTRY (name));
+        gtk_entry_set_text (name, "Updated budget");
+    }
+    else if (scenario.kind == BudgetMutationKind::Estimate)
+    {
+        auto average = GTK_TOGGLE_BUTTON (find_builder_widget (
+            GTK_WIDGET (dialog), "UseAverage"));
+        ASSERT_TRUE (GTK_IS_TOGGLE_BUTTON (average));
+        gtk_toggle_button_set_active (average, TRUE);
+    }
+    else
+    {
+        auto value = GTK_ENTRY (find_builder_widget (GTK_WIDGET (dialog),
+                                                      "Value"));
+        auto add = GTK_TOGGLE_BUTTON (find_builder_widget (
+            GTK_WIDGET (dialog), "RB_Add"));
+        ASSERT_TRUE (GTK_IS_ENTRY (value));
+        ASSERT_TRUE (GTK_IS_TOGGLE_BUTTON (add));
+        gtk_entry_set_text (value, "7");
+        gtk_toggle_button_set_active (add, TRUE);
+    }
+
+    gtk_dialog_response (dialog, scenario.accept ? GTK_RESPONSE_OK :
+                         GTK_RESPONSE_CANCEL);
+    if (scenario.kind == BudgetMutationKind::Options)
+        EXPECT_STREQ (gnc_budget_get_name (budget),
+                      scenario.accept ? "Updated budget" :
+                                        "Original budget");
+    else if (scenario.kind == BudgetMutationKind::Estimate)
+    {
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, account, 0),
+                      gnc_numeric_create (scenario.accept ? 0 : 10, 1)), 0);
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, account, 1),
+                      gnc_numeric_create (scenario.accept ? 0 : 15, 1)), 0);
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, other_account, 0),
+                      gnc_numeric_create (40, 1)), 0);
+    }
+    else
+    {
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, account, 0),
+                      gnc_numeric_create (scenario.accept ? 17 : 10, 1)), 0);
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, account, 1),
+                      gnc_numeric_create (scenario.accept ? 22 : 15, 1)), 0);
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, other_account, 0),
+                      gnc_numeric_create (40, 1)), 0);
+    }
+
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    if (scenario.kind == BudgetMutationKind::Options)
+        EXPECT_STREQ (gnc_budget_get_name (budget),
+                      scenario.accept ? "Updated budget" :
+                                        "Original budget");
+    else if (scenario.kind == BudgetMutationKind::Estimate)
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, other_account, 0),
+                      gnc_numeric_create (40, 1)), 0);
+    else
+    {
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, account, 0),
+                      gnc_numeric_create (scenario.accept ? 17 : 10, 1)), 0);
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, account, 1),
+                      gnc_numeric_create (scenario.accept ? 22 : 15, 1)), 0);
+        EXPECT_EQ (gnc_numeric_compare (
+                      gnc_budget_get_account_period_value (budget, other_account, 0),
+                      gnc_numeric_create (40, 1)), 0);
+    }
+}
+
+static std::string
+mutation_scenario_name (
+    const ::testing::TestParamInfo<BudgetMutationScenario> &info)
+{
+    return info.param.name;
+}
+
+INSTANTIATE_TEST_SUITE_P (Responses, BudgetMutationResponseTest,
+    ::testing::Values (BudgetMutationScenario{"OptionsAccept",
+                         BudgetMutationKind::Options, TRUE},
+                       BudgetMutationScenario{"OptionsCancel",
+                         BudgetMutationKind::Options, FALSE},
+                       BudgetMutationScenario{"AllPeriodsAccept",
+                         BudgetMutationKind::AllPeriods, TRUE},
+                       BudgetMutationScenario{"AllPeriodsCancel",
+                         BudgetMutationKind::AllPeriods, FALSE},
+                       BudgetMutationScenario{"EstimateAccept",
+                         BudgetMutationKind::Estimate, TRUE},
+                       BudgetMutationScenario{"EstimateCancel",
+                         BudgetMutationKind::Estimate, FALSE}),
+    mutation_scenario_name);
+
+TEST_F (BudgetPageResponseTest, ModifyEventMayCloseOwner)
+{
+    ASSERT_TRUE (select_account_period_one ());
+    auto action = gnc_plugin_page_get_action (page, "OptionsBudgetAction");
+    ASSERT_NE (action, nullptr);
+    g_action_activate (action, nullptr);
+    auto dialog = find_builder_dialog (GTK_WINDOW (window),
+                                       "budget_options_container_dialog");
+    ASSERT_NE (dialog, nullptr);
+    retain_widget (GTK_WIDGET (dialog));
+    auto name = GTK_ENTRY (find_builder_widget (GTK_WIDGET (dialog),
+                                                "BudgetName"));
+    auto periods = GTK_SPIN_BUTTON (find_builder_widget (
+        GTK_WIDGET (dialog), "BudgetNumPeriods"));
+    ASSERT_TRUE (GTK_IS_ENTRY (name));
+    ASSERT_TRUE (GTK_IS_SPIN_BUTTON (periods));
+    gtk_entry_set_text (name, "Updated budget");
+    gtk_spin_button_set_value (periods, 3);
+
+    close_state = {GTK_WIDGET (window), budget, 0};
+    event_handler = qof_event_register_handler (close_window_on_budget_modify,
+                                                &close_state);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    qof_event_unregister_handler (event_handler);
+    event_handler = 0;
+    page_installed = FALSE;
+    EXPECT_EQ (close_state.calls, 1u);
+    EXPECT_STREQ (gnc_budget_get_name (budget), "Updated budget");
+    EXPECT_EQ (gnc_budget_get_num_periods (budget), 3u);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_STREQ (gnc_budget_get_name (budget), "Updated budget");
+    EXPECT_EQ (gnc_budget_get_num_periods (budget), 3u);
+}
 }
 
 static int
@@ -472,39 +733,21 @@ run_tests (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
     g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    const char *names[] = {"accept", "cancel", "parent-destroy", "session-switch", "deleted-budget", "closed-book"};
-    for (guint i = 0; i < G_N_ELEMENTS (names); ++i)
-    {
-        auto path = g_strdup_printf ("/gnome/budget-selection/%s", names[i]);
-        g_test_add_data_func (path, GINT_TO_POINTER (i), test_selection);
-        g_free (path);
-    }
-    const char *note_names[] = {"ok-original-target", "cancel", "closed-page", "destroyed-parent"};
-    for (guint i = 0; i < G_N_ELEMENTS (note_names); ++i)
-    {
-        auto path = g_strdup_printf ("/gnome/budget-note/%s", note_names[i]);
-        g_test_add_data_func (path, GINT_TO_POINTER (i), test_budget_note_action);
-        g_free (path);
-    }
-    const char *mutation_names[] = {"options-ok", "options-cancel",
-                                    "all-periods-ok", "all-periods-cancel",
-                                    "estimate-ok", "estimate-cancel",
-                                    "options-modify-closes-owner"};
-    for (guint i = 0; i < G_N_ELEMENTS (mutation_names); ++i)
-    {
-        auto path = g_strdup_printf ("/gnome/budget-mutation/%s", mutation_names[i]);
-        g_test_add_data_func (path, GINT_TO_POINTER (i), test_budget_mutation_action);
-        g_free (path);
-    }
-    auto status = g_test_run ();
+    create_window_sentinel ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto status = RUN_ALL_TESTS ();
+    destroy_window_sentinel ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

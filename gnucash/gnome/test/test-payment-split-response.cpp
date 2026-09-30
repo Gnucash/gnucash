@@ -8,6 +8,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
 #include <cstdlib>
 
@@ -26,8 +27,19 @@
 
 namespace
 {
-gboolean display_available;
-gboolean parent_was_destroyed;
+struct ParentDestroyState
+{
+    GtkWidget *parent{};
+    gboolean destroyed{};
+};
+
+void
+destroy_parent_on_dialog_destroy (GtkWidget *, gpointer user_data)
+{
+    auto state = static_cast<ParentDestroyState *> (user_data);
+    state->destroyed = TRUE;
+    gtk_widget_destroy (state->parent);
+}
 
 GtkWidget *
 find_payment_split_dialog (GtkWidget *parent)
@@ -41,7 +53,12 @@ find_payment_split_dialog (GtkWidget *parent)
             gtk_window_get_transient_for (GTK_WINDOW (widget)) ==
             GTK_WINDOW (parent))
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -59,7 +76,12 @@ find_payment_window ()
         auto widget = GTK_WIDGET (node->data);
         if (g_strcmp0 (gtk_widget_get_name (widget), "gnc-id-payment") == 0)
         {
-            g_assert_null (result);
+            EXPECT_EQ (result, nullptr);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
@@ -159,135 +181,110 @@ find_split_radio (GtkWidget *root, const GncGUID *split_guid)
     return result;
 }
 
-void
-finish_fixture (PaymentFixture &fixture)
+class PaymentSplitResponseTest : public GnomeResponseTest
 {
-    gnc_clear_current_session ();
-    fixture.session = nullptr;
-}
-
-void
-destroy_parent_on_dialog_destroy (GtkWidget *, gpointer parent)
-{
-    parent_was_destroyed = TRUE;
-    gtk_widget_destroy (GTK_WIDGET (parent));
-}
-
-void
-test_parent_destroy_during_accepted_response ()
-{
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
+        fixture = make_payment_fixture ();
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        ASSERT_NE (parent, nullptr);
+        g_object_ref_sink (parent);
+        gtk_widget_realize (parent);
     }
+    void TearDown () override
+    {
+        if (parent)
+        {
+            gtk_widget_destroy (parent);
+            g_object_unref (parent);
+            parent = nullptr;
+        }
+        GnomeResponseTest::TearDown ();
+        gnc_clear_current_session ();
+        fixture.session = nullptr;
+    }
+    PaymentFixture fixture{};
+    GtkWidget *parent{};
+    ParentDestroyState parent_destroy_state{};
+};
 
-    auto fixture = make_payment_fixture ();
+TEST_F (PaymentSplitResponseTest, ParentDestroyDuringAcceptedResponse)
+{
     gnc_ui_payment_new_with_txn_async (nullptr, &fixture.owner, fixture.txn);
-    g_assert_null (find_payment_window ());
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    parent_was_destroyed = FALSE;
-    g_object_ref_sink (parent); // Retain the destroyed widget to exercise the weak-pointer boundary.
-    gtk_widget_realize (parent);
+    EXPECT_EQ (find_payment_window (), nullptr);
     gnc_ui_payment_new_with_txn_async (GTK_WINDOW (parent), &fixture.owner,
                                        fixture.txn);
     auto chooser = find_payment_split_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (chooser));
+    ASSERT_TRUE (GTK_IS_DIALOG (chooser));
+    parent_destroy_state = {parent, FALSE};
     g_signal_connect (chooser, "destroy",
-                      G_CALLBACK (destroy_parent_on_dialog_destroy), parent);
+                      G_CALLBACK (destroy_parent_on_dialog_destroy),
+                      &parent_destroy_state);
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_OK);
-
-    g_assert_true (parent_was_destroyed);
-    g_assert_null (find_payment_window ());
-    g_object_unref (parent);
-    finish_fixture (fixture);
+    EXPECT_TRUE (parent_destroy_state.destroyed);
+    EXPECT_EQ (find_payment_window (), nullptr);
 }
 
-void
-test_cancel_and_deleted_split ()
+TEST_F (PaymentSplitResponseTest, CancelDoesNotOpenPaymentWindow)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto fixture = make_payment_fixture ();
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (parent);
     gnc_ui_payment_new_with_txn_async (GTK_WINDOW (parent), &fixture.owner,
                                        fixture.txn);
     auto chooser = find_payment_split_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (chooser));
+    ASSERT_TRUE (GTK_IS_DIALOG (chooser));
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_CANCEL);
-    g_assert_null (find_payment_window ());
-    gtk_widget_destroy (parent);
+    EXPECT_EQ (find_payment_window (), nullptr);
+}
 
-    parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (parent);
+TEST_F (PaymentSplitResponseTest, DeletedSelectedSplitDoesNotOpenPaymentWindow)
+{
     gnc_ui_payment_new_with_txn_async (GTK_WINDOW (parent), &fixture.owner,
                                        fixture.txn);
-    chooser = find_payment_split_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (chooser));
+    auto chooser = find_payment_split_dialog (parent);
+    ASSERT_TRUE (GTK_IS_DIALOG (chooser));
     auto selected_guid = *xaccSplitGetGUID (fixture.first_split);
     auto radio = find_split_radio (chooser, &selected_guid);
-    g_assert_true (GTK_IS_RADIO_BUTTON (radio));
+    ASSERT_TRUE (GTK_IS_RADIO_BUTTON (radio));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
     xaccTransBeginEdit (fixture.txn);
-    xaccSplitSetAmount (fixture.counter_split,
-                        gnc_numeric_create (-10, 1));
-    xaccSplitSetValue (fixture.counter_split,
-                       gnc_numeric_create (-10, 1));
+    xaccSplitSetAmount (fixture.counter_split, gnc_numeric_create (-10, 1));
+    xaccSplitSetValue (fixture.counter_split, gnc_numeric_create (-10, 1));
     xaccSplitDestroy (fixture.first_split);
     xaccTransCommitEdit (fixture.txn);
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_OK);
-    g_assert_null (find_payment_window ());
-    gtk_widget_destroy (parent);
-    finish_fixture (fixture);
+    EXPECT_EQ (find_payment_window (), nullptr);
 }
 
-void
-test_accepted_response_opens_payment_window ()
+TEST_F (PaymentSplitResponseTest, AcceptedResponseOpensPaymentWindow)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-
-    auto fixture = make_payment_fixture ();
-    auto parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (parent);
     gnc_ui_payment_new_with_txn_async (GTK_WINDOW (parent), &fixture.owner,
                                        fixture.txn);
     auto chooser = find_payment_split_dialog (parent);
-    g_assert_true (GTK_IS_DIALOG (chooser));
+    ASSERT_TRUE (GTK_IS_DIALOG (chooser));
     gtk_dialog_response (GTK_DIALOG (chooser), GTK_RESPONSE_OK);
-    g_assert_nonnull (find_payment_window ());
-    gtk_widget_destroy (find_payment_window ());
-    gtk_widget_destroy (parent);
-    finish_fixture (fixture);
+    auto payment = find_payment_window ();
+    ASSERT_NE (payment, nullptr);
+    gtk_widget_destroy (payment);
 }
 }
 
 static int
 run_tests (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    g_test_add_func ("/gnome/payment-split/parent-destroy-response",
-                     test_parent_destroy_during_accepted_response);
-    g_test_add_func ("/gnome/payment-split/cancel-and-stale-split",
-                     test_cancel_and_deleted_split);
-    g_test_add_func ("/gnome/payment-split/accepted-response-opens-window",
-                     test_accepted_response_opens_payment_window);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

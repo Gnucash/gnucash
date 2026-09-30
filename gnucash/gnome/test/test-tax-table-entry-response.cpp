@@ -4,6 +4,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
 #include <cstdlib>
 
@@ -25,12 +26,19 @@ extern "C"
 
 namespace
 {
-gboolean display_available;
-QofBook *book;
-QofSession *session;
-GtkWidget *table_window;
-GncTaxTable *table;
-GncGUID account_guid;
+class TaxTableEntryResponseTest : public GnomeResponseTest
+{
+protected:
+    void SetUp () override;
+    void TearDown () override;
+
+    QofBook *book{};
+    QofSession *session{};
+    GtkWidget *owner{};
+    GtkWidget *table_window{};
+    GncTaxTable *table{};
+    GncGUID account_guid{};
+};
 
 GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
@@ -49,7 +57,7 @@ find_buildable (GtkWidget *root, const char *name)
 }
 
 GtkWidget *
-find_entry_dialog ()
+find_entry_dialog (GtkWidget *table_window)
 {
     auto windows = gtk_window_list_toplevels ();
     GtkWidget *result = nullptr;
@@ -61,10 +69,34 @@ find_entry_dialog ()
             GTK_WINDOW (table_window) &&
             g_strcmp0 (gtk_widget_get_name (widget), "gnc-id-tax-table") == 0)
         {
-            g_assert_null (result);
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
             result = widget;
         }
     }
+    g_list_free (windows);
+    return result;
+}
+
+GtkWidget *
+find_tax_table_window ()
+{
+    auto windows = gtk_window_list_toplevels ();
+    GtkWidget *result = nullptr;
+    for (auto node = windows; node; node = node->next)
+        if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET (node->data)),
+                       "gnc-id-new-tax-table") == 0)
+        {
+            if (result)
+            {
+                g_list_free (windows);
+                return nullptr;
+            }
+            result = GTK_WIDGET (node->data);
+        }
     g_list_free (windows);
     return result;
 }
@@ -99,138 +131,268 @@ find_amount_edit (GtkWidget *root)
     return result;
 }
 
-void
+bool
 select_first_row (GtkWidget *widget)
 {
+    if (!GTK_IS_TREE_VIEW (widget))
+        return false;
     auto view = GTK_TREE_VIEW (widget);
     GtkTreeIter iter;
     auto model = gtk_tree_view_get_model (view);
-    g_assert_true (gtk_tree_model_get_iter_first (model, &iter));
+    if (!gtk_tree_model_get_iter_first (model, &iter))
+        return false;
     auto path = gtk_tree_model_get_path (model, &iter);
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (view), path);
     gtk_tree_path_free (path);
+    return true;
 }
 
 void
-destroy_table_window (GtkWidget *, gpointer)
+destroy_table_window (GtkWidget *, gpointer window)
 {
-    if (table_window)
-        gtk_widget_destroy (table_window);
+    if (window)
+        gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 void
-test_add_cancel_and_late_response ()
+TaxTableEntryResponseTest::SetUp ()
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    GnomeResponseTest::SetUp ();
+    book = qof_book_new ();
+    ASSERT_NE (book, nullptr);
+    session = qof_session_new (book);
+    ASSERT_NE (session, nullptr);
+    gnc_set_current_session (session);
+    table = gncTaxTableCreate (book);
+    ASSERT_NE (table, nullptr);
+    gncTaxTableSetName (table, "Response test table");
+    auto root = gnc_account_create_root (book);
+    ASSERT_NE (root, nullptr);
+    auto commodity_table = gnc_commodity_table_get_table (book);
+    gnc_commodity_table_add_namespace (commodity_table, "CURRENCY", book);
+    auto currency = gnc_commodity_new (book, "Test Currency", "CURRENCY",
+                                       "TST", nullptr, 100);
+    ASSERT_NE (currency, nullptr);
+    currency = gnc_commodity_table_insert (commodity_table, currency);
+    ASSERT_NE (currency, nullptr);
+    auto account = xaccMallocAccount (book);
+    ASSERT_NE (account, nullptr);
+    xaccAccountSetName (account, "Tax account");
+    xaccAccountSetType (account, ACCT_TYPE_INCOME);
+    xaccAccountSetCommodity (account, currency);
+    gnc_account_append_child (root, account);
+    account_guid = *qof_instance_get_guid (QOF_INSTANCE (account));
+
+    owner = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    ASSERT_NE (owner, nullptr);
     gtk_widget_realize (owner);
-    g_assert_nonnull (gnc_ui_tax_table_window_new (GTK_WINDOW (owner), book));
-    auto windows = gtk_window_list_toplevels ();
-    for (auto node = windows; node; node = node->next)
-        if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET (node->data)),
-                       "gnc-id-new-tax-table") == 0)
-            table_window = GTK_WIDGET (node->data);
-    g_list_free (windows);
-    g_assert_nonnull (table_window);
+    ASSERT_NE (gnc_ui_tax_table_window_new (GTK_WINDOW (owner), book), nullptr);
+    table_window = find_tax_table_window ();
+    ASSERT_NE (table_window, nullptr);
+}
 
-    auto add_button = find_buildable (table_window, "new_entry_button");
-    g_assert_true (GTK_IS_BUTTON (add_button));
+void
+TaxTableEntryResponseTest::TearDown ()
+{
+    if (session)
+        gnc_close_gui_component_by_session (session);
+    GnomeResponseTest::TearDown ();
+    auto current = gnc_exchange_current_session (nullptr);
+    if (current)
+        qof_session_destroy (current);
+    if (session && session != current)
+        qof_session_destroy (session);
+    session = nullptr;
+}
+}
+
+TEST_F (TaxTableEntryResponseTest, NewTaxTableDialogCreatesTableWithEntry)
+{
     auto new_button = find_buildable (table_window, "new_table_button");
-    g_assert_true (GTK_IS_BUTTON (new_button));
+    ASSERT_TRUE (GTK_IS_BUTTON (new_button));
     gtk_button_clicked (GTK_BUTTON (new_button));
-    auto new_dialog = find_entry_dialog ();
-    g_assert_nonnull (new_dialog);
-    gtk_entry_set_text (GTK_ENTRY (find_buildable (new_dialog, "name_entry")),
-                        "Z response table");
-    gnc_tree_view_account_set_selected_account (
-        GNC_TREE_VIEW_ACCOUNT (find_account_tree (new_dialog)),
-        xaccAccountLookup (&account_guid, book));
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (find_amount_edit (new_dialog)),
-                                gnc_numeric_create (2, 1));
-    gtk_button_clicked (GTK_BUTTON (find_buildable (new_dialog, "ok_button")));
-    auto created_table = gncTaxTableLookupByName (book, "Z response table");
-    g_assert_nonnull (created_table);
-    g_assert_cmpuint (g_list_length (gncTaxTableGetEntries (created_table)), ==, 1);
-    select_first_row (find_buildable (table_window, "tax_tables_view"));
-    gtk_button_clicked (GTK_BUTTON (add_button));
-    auto dialog = find_entry_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
-    g_assert_true (gtk_window_get_modal (GTK_WINDOW (dialog)));
-    g_assert_true (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
-    auto cancel = find_buildable (dialog, "cancel_button");
-    g_assert_true (GTK_IS_BUTTON (cancel));
-    gtk_button_clicked (GTK_BUTTON (cancel));
-    g_assert_null (find_entry_dialog ());
-    g_assert_null (gncTaxTableGetEntries (table));
-
-    gtk_button_clicked (GTK_BUTTON (add_button));
-    dialog = find_entry_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
+    auto dialog = find_entry_dialog (table_window);
+    ASSERT_NE (dialog, nullptr);
+    auto name_entry = GTK_ENTRY (find_buildable (dialog, "name_entry"));
+    ASSERT_TRUE (GTK_IS_ENTRY (name_entry));
+    gtk_entry_set_text (name_entry, "Z response table");
     auto account_tree = find_account_tree (dialog);
-    g_assert_nonnull (account_tree);
+    ASSERT_NE (account_tree, nullptr);
+    auto account = xaccAccountLookup (&account_guid, book);
+    ASSERT_NE (account, nullptr);
     gnc_tree_view_account_set_selected_account (
         GNC_TREE_VIEW_ACCOUNT (account_tree),
-        xaccAccountLookup (&account_guid, book));
+        account);
     auto amount_edit = find_amount_edit (dialog);
-    g_assert_nonnull (amount_edit);
+    ASSERT_NE (amount_edit, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (amount_edit),
+                                gnc_numeric_create (2, 1));
+    auto ok = find_buildable (dialog, "ok_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+    gtk_button_clicked (GTK_BUTTON (ok));
+
+    auto created_table = gncTaxTableLookupByName (book, "Z response table");
+    ASSERT_NE (created_table, nullptr);
+    EXPECT_EQ (g_list_length (gncTaxTableGetEntries (created_table)), 1u);
+}
+
+TEST_F (TaxTableEntryResponseTest, CancelledAddLeavesTableEmpty)
+{
+    ASSERT_TRUE (select_first_row (
+        find_buildable (table_window, "tax_tables_view")));
+    auto add_button = find_buildable (table_window, "new_entry_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (add_button));
+    gtk_button_clicked (GTK_BUTTON (add_button));
+    auto dialog = find_entry_dialog (table_window);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
+    auto cancel = find_buildable (dialog, "cancel_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (cancel));
+    gtk_button_clicked (GTK_BUTTON (cancel));
+
+    EXPECT_EQ (find_entry_dialog (table_window), nullptr);
+    EXPECT_EQ (gncTaxTableGetEntries (table), nullptr);
+}
+
+TEST_F (TaxTableEntryResponseTest, AddAndEditEntryUpdatesAmount)
+{
+    ASSERT_TRUE (select_first_row (
+        find_buildable (table_window, "tax_tables_view")));
+    auto add_button = find_buildable (table_window, "new_entry_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (add_button));
+    gtk_button_clicked (GTK_BUTTON (add_button));
+    auto dialog = find_entry_dialog (table_window);
+    ASSERT_NE (dialog, nullptr);
+    auto account_tree = find_account_tree (dialog);
+    ASSERT_NE (account_tree, nullptr);
+    auto account = xaccAccountLookup (&account_guid, book);
+    ASSERT_NE (account, nullptr);
+    gnc_tree_view_account_set_selected_account (
+        GNC_TREE_VIEW_ACCOUNT (account_tree),
+        account);
+    auto amount_edit = find_amount_edit (dialog);
+    ASSERT_NE (amount_edit, nullptr);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (amount_edit),
                                 gnc_numeric_create (5, 1));
-    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "ok_button")));
+    auto ok = find_buildable (dialog, "ok_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+    gtk_button_clicked (GTK_BUTTON (ok));
     auto entries = gncTaxTableGetEntries (table);
-    g_assert_cmpuint (g_list_length (entries), ==, 1);
-    auto original_entry = static_cast<GncTaxTableEntry *> (entries->data);
-    g_assert_cmpint (gnc_numeric_compare (
-                         gncTaxTableEntryGetAmount (original_entry),
-                         gnc_numeric_create (5, 1)), ==, 0);
+    ASSERT_EQ (g_list_length (entries), 1u);
+    auto entry = static_cast<GncTaxTableEntry *> (entries->data);
+    EXPECT_EQ (gnc_numeric_compare (gncTaxTableEntryGetAmount (entry),
+                                    gnc_numeric_create (5, 1)), 0);
 
-    select_first_row (find_buildable (table_window, "tax_table_entries"));
+    ASSERT_TRUE (select_first_row (
+        find_buildable (table_window, "tax_table_entries")));
     auto edit_button = find_buildable (table_window, "edit_entry_button");
-    g_assert_true (GTK_IS_BUTTON (edit_button));
+    ASSERT_TRUE (GTK_IS_BUTTON (edit_button));
     gtk_button_clicked (GTK_BUTTON (edit_button));
-    dialog = find_entry_dialog ();
-    g_assert_nonnull (dialog);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (find_amount_edit (dialog)),
+    dialog = find_entry_dialog (table_window);
+    ASSERT_NE (dialog, nullptr);
+    amount_edit = find_amount_edit (dialog);
+    ASSERT_NE (amount_edit, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (amount_edit),
                                 gnc_numeric_create (7, 1));
-    gtk_button_clicked (GTK_BUTTON (find_buildable (dialog, "ok_button")));
-    g_assert_null (find_entry_dialog ());
-    g_assert_cmpuint (g_list_length (gncTaxTableGetEntries (table)), ==, 1);
-    g_assert_cmpint (gnc_numeric_compare (
-                         gncTaxTableEntryGetAmount (original_entry),
-                         gnc_numeric_create (7, 1)), ==, 0);
+    ok = find_buildable (dialog, "ok_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+    gtk_button_clicked (GTK_BUTTON (ok));
 
-    select_first_row (find_buildable (table_window, "tax_table_entries"));
+    EXPECT_EQ (find_entry_dialog (table_window), nullptr);
+    EXPECT_EQ (g_list_length (gncTaxTableGetEntries (table)), 1u);
+    EXPECT_EQ (gnc_numeric_compare (gncTaxTableEntryGetAmount (entry),
+                                    gnc_numeric_create (7, 1)), 0);
+}
+
+TEST_F (TaxTableEntryResponseTest, ExternalEditWinsOverStaleDialogResponse)
+{
+    ASSERT_TRUE (select_first_row (
+        find_buildable (table_window, "tax_tables_view")));
+    auto add_button = find_buildable (table_window, "new_entry_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (add_button));
+    gtk_button_clicked (GTK_BUTTON (add_button));
+    auto dialog = find_entry_dialog (table_window);
+    ASSERT_NE (dialog, nullptr);
+    auto account_tree = find_account_tree (dialog);
+    ASSERT_NE (account_tree, nullptr);
+    auto account = xaccAccountLookup (&account_guid, book);
+    ASSERT_NE (account, nullptr);
+    gnc_tree_view_account_set_selected_account (
+        GNC_TREE_VIEW_ACCOUNT (account_tree),
+        account);
+    auto amount_edit = find_amount_edit (dialog);
+    ASSERT_NE (amount_edit, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (amount_edit),
+                                gnc_numeric_create (5, 1));
+    auto ok = find_buildable (dialog, "ok_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+    gtk_button_clicked (GTK_BUTTON (ok));
+    auto entries = gncTaxTableGetEntries (table);
+    ASSERT_EQ (g_list_length (entries), 1u);
+    auto entry = static_cast<GncTaxTableEntry *> (entries->data);
+
+    ASSERT_TRUE (select_first_row (
+        find_buildable (table_window, "tax_table_entries")));
+    auto edit_button = find_buildable (table_window, "edit_entry_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (edit_button));
     gtk_button_clicked (GTK_BUTTON (edit_button));
-    dialog = find_entry_dialog ();
-    g_assert_nonnull (dialog);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (find_amount_edit (dialog)),
+    dialog = find_entry_dialog (table_window);
+    ASSERT_NE (dialog, nullptr);
+    amount_edit = find_amount_edit (dialog);
+    ASSERT_NE (amount_edit, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (amount_edit),
                                 gnc_numeric_create (9, 1));
-    gncTaxTableEntrySetAmount (original_entry, gnc_numeric_create (8, 1));
+    gncTaxTableEntrySetAmount (entry, gnc_numeric_create (8, 1));
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_null (find_entry_dialog ());
-    g_assert_cmpint (gnc_numeric_compare (
-                         gncTaxTableEntryGetAmount (original_entry),
-                         gnc_numeric_create (8, 1)), ==, 0);
+
+    EXPECT_EQ (find_entry_dialog (table_window), nullptr);
+    EXPECT_EQ (gnc_numeric_compare (gncTaxTableEntryGetAmount (entry),
+                                    gnc_numeric_create (8, 1)), 0);
+}
+
+TEST_F (TaxTableEntryResponseTest, DestroyedManagerIgnoresLateAddResponse)
+{
+    ASSERT_TRUE (select_first_row (
+        find_buildable (table_window, "tax_tables_view")));
+    auto add_button = find_buildable (table_window, "new_entry_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (add_button));
+    gtk_button_clicked (GTK_BUTTON (add_button));
+    auto dialog = find_entry_dialog (table_window);
+    ASSERT_NE (dialog, nullptr);
+    auto account_tree = find_account_tree (dialog);
+    ASSERT_NE (account_tree, nullptr);
+    auto account = xaccAccountLookup (&account_guid, book);
+    ASSERT_NE (account, nullptr);
+    gnc_tree_view_account_set_selected_account (
+        GNC_TREE_VIEW_ACCOUNT (account_tree),
+        account);
+    auto amount_edit = find_amount_edit (dialog);
+    ASSERT_NE (amount_edit, nullptr);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (amount_edit),
+                                gnc_numeric_create (5, 1));
+    auto ok = find_buildable (dialog, "ok_button");
+    ASSERT_TRUE (GTK_IS_BUTTON (ok));
+    gtk_button_clicked (GTK_BUTTON (ok));
+    auto entries = gncTaxTableGetEntries (table);
+    ASSERT_EQ (g_list_length (entries), 1u);
+    auto entry = static_cast<GncTaxTableEntry *> (entries->data);
+    gncTaxTableEntrySetAmount (entry, gnc_numeric_create (8, 1));
 
     gtk_button_clicked (GTK_BUTTON (add_button));
-    dialog = find_entry_dialog ();
-    g_assert_true (GTK_IS_DIALOG (dialog));
+    dialog = find_entry_dialog (table_window);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     g_object_ref (dialog);
     g_signal_connect (dialog, "destroy", G_CALLBACK (destroy_table_window),
-                      nullptr);
+                      table_window);
     gtk_widget_destroy (table_window);
     table_window = nullptr;
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    g_assert_cmpuint (g_list_length (gncTaxTableGetEntries (table)), ==, 1);
-    g_assert_cmpint (gnc_numeric_compare (
-                         gncTaxTableEntryGetAmount (original_entry),
-                         gnc_numeric_create (8, 1)), ==, 0);
+
+    EXPECT_EQ (g_list_length (gncTaxTableGetEntries (table)), 1u);
+    EXPECT_EQ (gnc_numeric_compare (gncTaxTableEntryGetAmount (entry),
+                                    gnc_numeric_create (8, 1)), 0);
     g_object_unref (dialog);
-    gtk_widget_destroy (owner);
-}
 }
 
 static int
@@ -238,34 +400,20 @@ run_tests (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
     g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects for tax table entry tests");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
-    book = qof_book_new ();
-    session = qof_session_new (book);
-    gnc_set_current_session (session);
-    table = gncTaxTableCreate (book);
-    gncTaxTableSetName (table, "Response test table");
-    auto root = gnc_account_create_root (book);
-    auto commodity_table = gnc_commodity_table_get_table (book);
-    gnc_commodity_table_add_namespace (commodity_table, "CURRENCY", book);
-    auto currency = gnc_commodity_new (book, "Test Currency", "CURRENCY",
-                                       "TST", nullptr, 100);
-    currency = gnc_commodity_table_insert (commodity_table, currency);
-    auto account = xaccMallocAccount (book);
-    xaccAccountSetName (account, "Tax account");
-    xaccAccountSetType (account, ACCT_TYPE_INCOME);
-    xaccAccountSetCommodity (account, currency);
-    gnc_account_append_child (root, account);
-    account_guid = *qof_instance_get_guid (QOF_INSTANCE (account));
-    g_test_add_func ("/gnome/tax-table-entry/cancel-late-response",
-                     test_add_cancel_and_late_response);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

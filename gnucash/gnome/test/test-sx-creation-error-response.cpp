@@ -8,51 +8,71 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "test/gnome-response-test-fixture.h"
 #include "dialog-sx-since-last-run.h"
 
-static gboolean display_available;
 
-static void
-test_error_list_consumed_before_response ()
+class ScheduledTransactionErrorResponseTest : public GnomeResponseTest
 {
-    if (!display_available)
+protected:
+    void SetUp () override
     {
-        g_test_skip ("No graphical display is available");
-        return;
+        GnomeResponseTest::SetUp ();
     }
+
+    void TearDown () override
+    {
+        if (dialog)
+        {
+            gtk_widget_destroy (dialog);
+            while (g_main_context_iteration (nullptr, FALSE))
+                ;
+        }
+        GnomeResponseTest::TearDown ();
+    }
+
+    GtkWidget *dialog{};
+};
+
+TEST_F (ScheduledTransactionErrorResponseTest, ErrorListIsConsumedBeforeResponse)
+{
     GList *errors = g_list_append (nullptr, g_strdup ("Synthetic creation error"));
     gnc_ui_sx_creation_error_dialog (&errors);
-    g_assert_null (errors);
+    ASSERT_EQ (errors, nullptr);
     auto windows = gtk_window_list_toplevels ();
-    GtkWidget *dialog = nullptr;
+    guint message_dialog_count = 0;
     for (auto node = windows; node; node = node->next)
         if (GTK_IS_MESSAGE_DIALOG (node->data))
         {
-            g_assert_null (dialog);
+            ++message_dialog_count;
             dialog = GTK_WIDGET (node->data);
         }
     g_list_free (windows);
-    g_assert_nonnull (dialog);
+    ASSERT_EQ (message_dialog_count, 1u);
+    ASSERT_NE (dialog, nullptr);
     gchar *message = nullptr;
     g_object_get (dialog, "secondary-text", &message, nullptr);
-    g_assert_cmpstr (message, ==, "Synthetic creation error");
+    EXPECT_STREQ (message, "Synthetic creation error");
     g_free (message);
     gpointer weak_dialog = dialog;
     g_object_add_weak_pointer (G_OBJECT (dialog), &weak_dialog);
-    /* A second call on the consumed list is harmless. */
+    /* Calling again with the consumed list remains harmless. */
     gnc_ui_sx_creation_error_dialog (&errors);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
-    g_assert_null (weak_dialog);
+    EXPECT_EQ (weak_dialog, nullptr);
+    dialog = nullptr;
 }
 
 int
 main (int argc, char **argv)
 {
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
-    g_test_add_func ("/gnome/sx/creation-errors-consumed-before-response",
-                     test_error_list_consumed_before_response);
-    return g_test_run ();
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
+        return 1;
+    }
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    return RUN_ALL_TESTS ();
 }

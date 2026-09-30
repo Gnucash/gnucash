@@ -1788,8 +1788,7 @@ gnc_plugin_page_report_save_confirmed (GtkWindow *parent, gint response,
     if (response == GTK_RESPONSE_ACCEPT && priv->cur_report != SCM_BOOL_F)
     {
         auto save_func = scm_c_eval_string ("gnc:report-to-template-update");
-        auto rpt_id = scm_call_1 (save_func, priv->cur_report);
-        (void)rpt_id;
+        scm_call_1 (save_func, priv->cur_report);
     }
     g_object_unref (report);
 }
