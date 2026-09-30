@@ -2,14 +2,15 @@
 # 이정희 <daemul72@gmail.com>, 2022, 2026.
 # Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>, 2022.
 # Subin Song <subin@subinsong.com>, 2026.
+# zugu <ye-seola@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-06-26 03:59+0000\n"
-"Last-Translator: Subin Song <subin@subinsong.com>\n"
+"PO-Revision-Date: 2026-09-29 16:51+0000\n"
+"Last-Translator: zugu <ye-seola@proton.me>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 
@@ -20888,7 +20889,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/split-register.c:2622
 #: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:172
 msgid "Charge"
-msgstr "수수료"
+msgstr "청구액"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:47
 msgid "Income Account"
