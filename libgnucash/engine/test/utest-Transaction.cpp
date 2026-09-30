@@ -33,6 +33,7 @@
 #include "../Account.h"
 #include "../gnc-lot.h"
 #include "../gnc-event.h"
+#include "../gnc-session.h"
 #include <qof.h>
 
 #if defined(__clang__)
@@ -224,6 +225,117 @@ teardown_with_gains (GainsFixture *fixture, gconstpointer pData)
     Fixture *base = &(fixture->base);
     test_destroy (fixture->gains_acc);
     teardown (base, NULL);
+}
+
+struct TransferFixture
+{
+    Fixture base;
+    QofSession *unrelated_session;
+    QofSession *previous_session;
+    GncTransactionInfo info;
+    Transaction *created;
+};
+
+static void
+setup_transfer (TransferFixture *fixture, [[maybe_unused]] gconstpointer data)
+{
+    setup (&fixture->base, nullptr);
+    auto book = qof_instance_get_book (QOF_INSTANCE (fixture->base.txn));
+    fixture->unrelated_session = qof_session_new (qof_book_new ());
+    fixture->previous_session = gnc_exchange_current_session (fixture->unrelated_session);
+    fixture->created = nullptr;
+    fixture->info = GncTransactionInfo {
+        book, fixture->base.acc2, fixture->base.acc1,
+        fixture->base.curr, fixture->base.comm, 1609502400,
+        gnc_numeric_create (10, 1), gnc_numeric_create (9, 1),
+        "123", "Transfer", "Notes", "Memo"
+    };
+}
+
+static void
+setup_transfer_transaction_number (TransferFixture *fixture, gconstpointer data)
+{
+    setup_transfer (fixture, data);
+    auto unrelated_book = qof_session_get_book (fixture->unrelated_session);
+    qof_book_begin_edit (unrelated_book);
+    qof_instance_set (QOF_INSTANCE (unrelated_book), "split-action-num-field", "t", nullptr);
+    qof_book_commit_edit (unrelated_book);
+}
+
+static void
+setup_transfer_split_number (TransferFixture *fixture, gconstpointer data)
+{
+    setup_transfer (fixture, data);
+    auto book = fixture->info.book;
+    qof_book_begin_edit (book);
+    qof_instance_set (QOF_INSTANCE (book), "split-action-num-field", "t", nullptr);
+    qof_book_commit_edit (book);
+}
+
+static void
+teardown_transfer (TransferFixture *fixture, [[maybe_unused]] gconstpointer data)
+{
+    if (fixture->created)
+        test_destroy (fixture->created);
+    gnc_exchange_current_session (fixture->previous_session);
+    qof_session_destroy (fixture->unrelated_session);
+    teardown (&fixture->base, nullptr);
+}
+
+static void
+assert_transfer_contract (TransferFixture *fixture)
+{
+    auto transaction = fixture->created;
+    g_assert_nonnull (transaction);
+    g_assert_true (qof_instance_get_book (QOF_INSTANCE (transaction)) == fixture->info.book);
+    g_assert_true (xaccTransGetCurrency (transaction) == fixture->base.curr);
+    g_assert_cmpstr (xaccTransGetDescription (transaction), ==, "Transfer");
+    g_assert_cmpstr (xaccTransGetNotes (transaction), ==, "Notes");
+    g_assert_cmpint (xaccTransCountSplits (transaction), ==, 2);
+    auto posted = xaccTransGetDatePostedGDate (transaction);
+    g_assert_cmpuint (g_date_get_year (&posted), ==, 2021);
+    g_assert_cmpuint (g_date_get_month (&posted), ==, G_DATE_JANUARY);
+    g_assert_cmpuint (g_date_get_day (&posted), ==, 1);
+    Split *from_split = nullptr;
+    Split *to_split = nullptr;
+    for (gint index = 0; index < 2; ++index)
+    {
+        auto split = xaccTransGetSplit (transaction, index);
+        if (xaccSplitGetAccount (split) == fixture->info.from_account)
+            from_split = split;
+        else if (xaccSplitGetAccount (split) == fixture->info.to_account)
+            to_split = split;
+    }
+    g_assert_nonnull (from_split);
+    g_assert_nonnull (to_split);
+    g_assert_true (gnc_numeric_equal (xaccSplitGetValue (from_split), gnc_numeric_create (-10, 1)));
+    g_assert_true (gnc_numeric_equal (xaccSplitGetAmount (from_split), gnc_numeric_create (-10, 1)));
+    g_assert_true (gnc_numeric_equal (xaccSplitGetValue (to_split), gnc_numeric_create (10, 1)));
+    g_assert_true (gnc_numeric_equal (xaccSplitGetAmount (to_split), gnc_numeric_create (9, 1)));
+    g_assert_cmpstr (xaccSplitGetMemo (from_split), ==, "Memo");
+    g_assert_cmpstr (xaccSplitGetMemo (to_split), ==, "Memo");
+}
+
+static void
+test_transfer_transaction_number (TransferFixture *fixture,
+                                  [[maybe_unused]] gconstpointer data)
+{
+    fixture->created = gnc_transaction_from_transaction_info (&fixture->info);
+    assert_transfer_contract (fixture);
+    g_assert_cmpstr (xaccTransGetNum (fixture->created), ==, "123");
+    auto from_split = xaccTransFindSplitByAccount (fixture->created, fixture->info.from_account);
+    g_assert_cmpstr (xaccSplitGetAction (from_split), ==, "");
+}
+
+static void
+test_transfer_split_number (TransferFixture *fixture,
+                            [[maybe_unused]] gconstpointer data)
+{
+    fixture->created = gnc_transaction_from_transaction_info (&fixture->info);
+    assert_transfer_contract (fixture);
+    g_assert_cmpstr (xaccTransGetNum (fixture->created), ==, "");
+    auto from_split = xaccTransFindSplitByAccount (fixture->created, fixture->info.from_account);
+    g_assert_cmpstr (xaccSplitGetAction (from_split), ==, "123");
 }
 
 /* check_open
@@ -2073,6 +2185,10 @@ test_xaccTransScrubGainsDate_gains_dirty (GainsFixture *fixture,
 void
 test_suite_transaction (void)
 {
+    GNC_TEST_ADD (suitename, "transfer transaction number", TransferFixture, nullptr,
+                  setup_transfer_transaction_number, test_transfer_transaction_number, teardown_transfer);
+    GNC_TEST_ADD (suitename, "transfer split action number", TransferFixture, nullptr,
+                  setup_transfer_split_number, test_transfer_split_number, teardown_transfer);
     GNC_TEST_ADD (suitename, "check open", Fixture, NULL, setup, test_check_open, teardown);
     GNC_TEST_ADD (suitename, "xaccTransStillHasSplit", Fixture, NULL, setup, test_xaccTransStillHasSplit, teardown);
     GNC_TEST_ADD (suitename, "mark trans", Fixture, NULL, setup, test_mark_trans, teardown);
