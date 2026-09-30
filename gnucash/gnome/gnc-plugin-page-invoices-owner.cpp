@@ -30,6 +30,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-query-view.h"
 #include "dialog-utils.h"
+#include <gnc-date-edit.h>
 extern "C" {
 #include "search-param.h"
 #include "dialog-invoice.h"
@@ -107,6 +108,10 @@ struct InvoicesFilter {
     bool          show_unposted = true;
     bool          show_invoices = true;
     bool          show_creditnotes = true;
+    bool          use_start_date = false;
+    bool          use_end_date = false;
+    time64        start_date = 0;
+    time64        end_date = 0;
     std::string   search_term;
     // State end
 
@@ -117,6 +122,10 @@ struct InvoicesFilter {
     GtkToggleButton *unposted_toggle = nullptr;
     GtkToggleButton *invoices_toggle = nullptr;
     GtkToggleButton *creditnotes_toggle = nullptr;
+    GtkToggleButton *start_toggle = nullptr;
+    GtkToggleButton *end_toggle = nullptr;
+    GNCDateEdit     *start_picker = nullptr;
+    GNCDateEdit     *end_picker = nullptr;
     GtkEntry        *search_entry = nullptr;
 
     bool 
@@ -125,7 +134,8 @@ struct InvoicesFilter {
         if (show_paid && show_unpaid
             && show_posted && show_unposted
             && show_invoices && show_creditnotes
-            && search_term == "")
+            && search_term == ""
+            && !use_start_date && !use_end_date)
         {
             return false;
         }
@@ -136,7 +146,11 @@ struct InvoicesFilter {
         set_unposted (true);
         set_invoices (true);
         set_creditnotes (true);
+        set_use_start_date (false);
+        set_use_end_date (false);
         set_search_term ("");
+
+        reset_dates ();
 
         g_warn_if_fail (dialog);
 
@@ -207,6 +221,72 @@ struct InvoicesFilter {
     }
 
     void
+    set_use_start_date (bool status)
+    {
+        use_start_date = status;
+
+        if (start_toggle)
+            gtk_toggle_button_set_active(start_toggle, use_start_date);
+        else g_warn_if_fail(true);
+
+        if (start_picker)
+            gtk_widget_set_sensitive (GTK_WIDGET (start_picker), use_start_date);
+        else g_warn_if_fail(true);
+    }
+
+    void
+    set_use_end_date (bool status)
+    {
+        use_end_date = status;
+
+        if (end_toggle)
+            gtk_toggle_button_set_active(end_toggle, use_end_date);
+        else g_warn_if_fail(true);
+
+        if (end_picker)
+            gtk_widget_set_sensitive (GTK_WIDGET (end_picker), use_end_date);
+        else g_warn_if_fail(true);
+    }
+
+    void
+    set_dates (bool init)
+    {
+        if (start_picker)
+        {
+            if (init && start_date != 0)
+            {
+                gnc_date_edit_set_time(start_picker, start_date);
+            }
+            else start_date = gnc_date_edit_get_date(start_picker);
+        }
+        else g_warn_if_fail(true);
+
+        if (end_picker)
+        {
+            if (init && end_date != 0)
+            {
+                gnc_date_edit_set_time(end_picker, end_date);
+            }
+            else end_date = gnc_date_edit_get_date_end(end_picker);
+        }
+        else g_warn_if_fail(true);
+    }
+
+    void
+    reset_dates ()
+    {
+        if (start_picker)
+            gnc_date_edit_set_time(start_picker, time(NULL));
+        else g_warn_if_fail(true);
+
+        if (end_picker)
+            gnc_date_edit_set_time(end_picker, time(NULL));
+        else g_warn_if_fail(true);
+
+        set_dates(false);
+    }
+
+    void
     dialog_close ()
     {
         dialog = nullptr;
@@ -217,6 +297,11 @@ struct InvoicesFilter {
         unposted_toggle = nullptr;
         invoices_toggle = nullptr;
         creditnotes_toggle = nullptr;
+        start_toggle = nullptr;
+        end_toggle = nullptr;
+        start_picker = nullptr;
+        end_picker = nullptr;
+        search_entry = nullptr;
     }
 };
 
@@ -375,6 +460,116 @@ class Controller {
 
             qof_query_merge_in_place (query, query_posted, QOF_QUERY_AND); 
             qof_query_destroy (query_posted);
+        }
+
+        if (filter.use_start_date && filter.start_date != 0)
+        {
+            QofQuery *query_start = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_start, book);
+
+            {
+                QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_posted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_posted,
+                                                type_path,
+                                                true,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
+                    QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, filter.start_date);
+                    qof_query_add_term(query_posted, type_path, pred_start, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_start, query_posted, QOF_QUERY_AND); 
+                qof_query_destroy (query_posted);
+            }
+
+            {
+                QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_unposted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_unposted,
+                                                type_path,
+                                                false,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
+                    QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, filter.start_date);
+                    qof_query_add_term(query_unposted, type_path, pred_start, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_start, query_unposted, QOF_QUERY_OR); 
+                qof_query_destroy (query_unposted);
+            }
+
+            qof_query_merge_in_place (query, query_start, QOF_QUERY_AND); 
+            qof_query_destroy (query_start);
+        }
+
+        if (filter.use_end_date && filter.end_date != 0)
+        {
+            QofQuery *query_end = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_end, book);
+
+            {
+                QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_posted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_posted,
+                                                type_path,
+                                                true,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
+                    QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, filter.end_date);
+                    qof_query_add_term(query_posted, type_path, pred_end, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_end, query_posted, QOF_QUERY_AND); 
+                qof_query_destroy (query_posted);
+            }
+
+            {
+                QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_unposted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_unposted,
+                                                type_path,
+                                                false,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
+                    QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, filter.end_date);
+                    qof_query_add_term(query_unposted, type_path, pred_end, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_end, query_unposted, QOF_QUERY_OR); 
+                qof_query_destroy (query_unposted);
+            }
+
+            qof_query_merge_in_place (query, query_end, QOF_QUERY_AND); 
+            qof_query_destroy (query_end);
         }
 
         if (filter.search_term.length ())
@@ -555,15 +750,11 @@ public:
 
     ~Controller ()
     {
-        ENTER ("page %p", plugin_page);
-
         gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE (plugin_page));
 
         g_list_free (columns);
 
         if (filter.dialog) gtk_widget_destroy (GTK_WIDGET (filter.dialog));
-
-        LEAVE("");
     }
 
     GtkWidget
@@ -790,7 +981,7 @@ public:
     void
     focus_page ()
     {
-        const gchar *load_ui [] =
+        static const gchar *load_ui [] =
         {
             "ViewPlaceholder1",
             "EditPlaceholder2",
@@ -1140,6 +1331,119 @@ public:
         }
 
         {
+            GtkWidget* start_box = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_box"));
+
+            if (!start_box) {
+                g_warn_if_fail (true);
+            }
+            else {
+                filter.start_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-start"));
+                filter.start_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
+
+                if (filter.start_picker)
+                {
+                    gtk_box_pack_start (GTK_BOX (start_box), GTK_WIDGET (filter.start_picker), TRUE, TRUE, 0);
+                }
+                else g_warn_if_fail (true);
+
+                if (filter.start_toggle)
+                {
+                    g_signal_connect(
+                        filter.start_toggle,
+                        "toggled",
+                        G_CALLBACK(
+                            +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                            {
+                                auto state = gtk_toggle_button_get_active(button);
+                                auto *controller = get_controller (user_data);
+
+                                controller->filter.set_use_start_date (state);
+                                controller->apply_filter ();
+
+                                return false;
+                            }
+                        ),
+                        plugin_page 
+                    );
+                }
+                else g_warn_if_fail (true);
+
+                filter.set_use_start_date (filter.use_start_date);
+                filter.set_dates(true);
+
+                gtk_widget_show_all (start_box);
+            }
+        }
+
+        {
+            GtkWidget* end_box = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_box"));
+
+            if (!end_box) {
+                g_warn_if_fail (true);
+            }
+            else {
+                filter.end_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-end"));
+                filter.end_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
+                if (filter.end_picker)
+                    gtk_box_pack_start (GTK_BOX (end_box), GTK_WIDGET (filter.end_picker), TRUE, TRUE, 0);
+                else g_warn_if_fail (true);
+
+                if (filter.end_toggle)
+                {
+                    g_signal_connect(
+                        filter.end_toggle,
+                        "toggled",
+                        G_CALLBACK(
+                            +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                            {
+                                auto state = gtk_toggle_button_get_active(button);
+                                auto *controller = get_controller (user_data);
+
+                                controller->filter.set_use_end_date (state);
+                                controller->apply_filter ();
+
+                                return false;
+                            }
+                        ),
+                        plugin_page 
+                    );
+                }
+                else g_warn_if_fail (true);
+
+                filter.set_use_end_date (filter.use_end_date);
+                filter.set_dates(true);
+
+                gtk_widget_show_all(end_box);
+            }
+        }
+
+        {
+            auto *apply_button = GTK_BUTTON (gtk_builder_get_object(builder, "apply-dates"));
+
+            if (!apply_button)
+            {
+                g_warn_if_fail(true);
+            }
+            else
+            {
+                g_signal_connect(
+                    apply_button,
+                    "clicked",
+                    G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
+                    {
+                        auto *controller = get_controller (user_data);
+                        controller->filter.set_dates (false);
+
+                        if (controller->filter.use_start_date || controller->filter.use_end_date)
+                            controller->apply_filter ();
+                    }),
+                    plugin_page 
+                );
+            }
+
+        }
+
+        {
             filter.search_entry = GTK_ENTRY (gtk_builder_get_object(builder, "search"));
 
             if (!filter.search_entry)
@@ -1233,6 +1537,8 @@ public:
         }
 
         g_object_unref(G_OBJECT(builder));
+
+        LEAVE("");
     }
 };
 
@@ -1263,7 +1569,7 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
 
         if (get_private (plugin_page)->owner_type != owner_type) continue;
 
-        LEAVE ("exiting page %p", plugin_page);
+        LEAVE ("existing page %p", plugin_page);
         return GNC_PLUGIN_PAGE (plugin_page);
     }
 
