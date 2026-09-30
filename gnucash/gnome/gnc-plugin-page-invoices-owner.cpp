@@ -820,11 +820,11 @@ public:
                                                 OWNER_NAME,
                                                 nullptr); 
 
-            /*columns = gnc_search_param_prepend (columns, _("Total"), 
+            columns = gnc_search_param_prepend (columns, _("Total"), 
                                                   nullptr, 
                                                   type,
-                                                  "total-sub",
-                                                  nullptr);*/ 
+                                                  INVOICE_TOTAL,
+                                                  nullptr); 
 
             columns = gnc_search_param_prepend (columns, _("Type"), 
                                                 nullptr, 
