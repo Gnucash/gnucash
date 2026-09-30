@@ -28,7 +28,7 @@ as a separate collection of tests that already pass unchanged on `future`.
 
 | Group | Reason and important files | Relevant validation |
 | --- | --- | --- |
-| Transfer constructor | Move transaction construction out of `dialog-transfer.cpp` into `Transaction.cpp` as `gnc_transaction_from_transaction_info`, declared in `Transaction.h`. Preserve book ownership, account/commodity amounts and the book's number/action setting. Keep borrowed input structures out of SWIG. | `test-transfer-transaction` |
+| Transfer constructor | Move transaction construction out of `dialog-transfer.cpp` into `Transaction.cpp` as `gnc_transaction_from_transaction_info`, declared in `Transaction.h`. Preserve book ownership, account/commodity amounts and the book's number/action setting. Keep borrowed input structures out of SWIG. | The two transfer cases in `utest-Transaction.cpp`, registered with the existing `test-engine` suite |
 | Windows SDK includes | Treat WebView2 include directories as external SDK headers in `gnucash/html/CMakeLists.txt`. This is independent of the dialog migration. | Windows product build |
 | Shared dialog contracts | `dialog-utils`, `gnc-gui-query`, user/password helpers and notice dialogs deliver results through callbacks. Request data owns strings and references; closing a parent is a terminal cancellation. `object_references_response_cb` uses `[[maybe_unused]]` for its unused parameters. | GUI-query, input-lifetime, object-reference, date-range and preferences tests |
 | Accounts and commodities | Account, commodity, tax and general selectors return through callbacks rather than assuming a stack-local result. A late selection cannot edit a closed account or book. | Account cascade/children, commodity, tax and general-selection tests |
@@ -59,19 +59,74 @@ widget signals after parent destruction. AqBanking's operation slot covers
 its shared backend and remains held through matcher completion; serializing
 only the worker would release that backend too early.
 
+## Response ordering and ownership corrections
+
+The date/account form captures its inputs before evaluating its response, as
+the simpler date dialog already does. GTK action widgets emit `response`
+before later `clicked` handlers; capturing only on the click left an accepted
+invoice-posting form open and prevented its currency continuation.
+The form validates only in that response path; an additional click handler
+would repeat validation and show two error notices for an invalid account.
+Regression cases cover missing and placeholder accounts, repeated clicks and
+direct responses while the form remains open without posting the invoice.
+
+The price list enumerates commodities from its price database's book, keeping
+model and database ownership consistent if the active session changes while
+an answer is pending. Its price model also rejects QOF events from other
+books before translating them into rows. Filters use the price database
+directly, because model notifications can continue after their dialog owner
+is destroyed. Owner-bound view signals are disconnected before that owner is
+released.
+
+## Test structure
+
+The transfer-constructor cases extend the existing GLib Transaction fixture in
+`utest-Transaction.cpp`. The new dialog test areas use GoogleTest with fixtures
+for shared books, sessions, widgets and callback state. Different response
+paths are named test cases or readable typed parameters. Fixtures retain
+objects used for late-response checks and close UI before releasing its book.
+GTK display initialization fails once at program setup when unavailable.
+The GoogleTest programs preserve fatal GTK/GLib warnings and critical errors,
+so a successful assertion summary cannot hide an invalid widget operation.
+
+Main-window tests keep a companion window alive during fixture cleanup where
+needed. Finalizing the last GnuCash window schedules normal application
+shutdown; allowing that idle callback to run would terminate the test process
+before GoogleTest reports all its cases. Complete framework summaries, rather
+than exit status alone, are checked for the GUI evidence below.
+
 ## Validation and limits
 
-The final GTK3 endpoint builds GnuCash, `gncmod-aqbanking` and `gncmod-ofx`
-with banking and OFX enabled. All 50 selected GTK/dialog/banking test programs
-pass without skipped cases, using native Windows binaries and a fresh GTK3
-Broadway display per program. The endpoint has no project `gtk_dialog_run`
+The original GTK3 endpoint built GnuCash, `gncmod-aqbanking` and `gncmod-ofx`
+with banking and OFX enabled. CTest recorded 50 selected GTK/dialog/banking
+programs as passing, using native Windows binaries and a fresh GTK3 Broadway
+display per program. The endpoint has no project `gtk_dialog_run`
 calls or remaining consumers of the removed synchronous project wrappers.
 
-The local validation logs are `validation/final-gtk3-build.log` and
-`validation/final-gtk3-runtime.log` in the task workspace, outside the source
-checkout. They are not files shipped by GnuCash. The reviewed dialog product
-and test sources are identical to that validated endpoint; only history and
-this guide/distribution entry have changed.
+The original endpoint validation logs are `validation/final-gtk3-build.log`
+and `validation/final-gtk3-runtime.log` in the task workspace, outside the
+source checkout. They are not files shipped by GnuCash. Subsequent test
+refactoring follows the review's fixture and framework conventions; the
+original logs do not validate those changed test sources.
+
+The refactored endpoint builds GnuCash, both import modules and all 48 dialog
+test programs. Those programs pass all 313 GoogleTest cases without skips or
+GTK/GLib warnings or critical errors, with a fresh Broadway display per
+program. The two transfer-constructor cases also pass in the existing GLib
+engine suite sources. On Windows these run through a local engine-suite
+build harness, preserving the upstream exclusion of the standard
+`test-engine` target on that platform.
+
+The current endpoint logs are
+`validation/john-test-framework-complete-build.log` and
+`validation/john-test-framework-complete-runtime.log` outside the source
+checkout. The local result inventory records complete framework summaries
+and hashes of the tested sources.
+After the account-validation and fixture corrections, the affected invoice,
+date-close, account-cascade and object-reference programs passed again.
+Their supplementary logs are `validation/john-final-validation-green-runtime.log`
+and `validation/john-final-fixture-runtime.log`; unchanged test sources retain
+the preceding run evidence. GnuCash and both import modules also rebuilt.
 
 These runs do not establish manual Win32, Linux/macOS or live-bank acceptance.
 The OFX fixture covers bank transactions, not the complete investment/security
