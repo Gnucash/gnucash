@@ -6,6 +6,7 @@
 #include <gtk/gtk.h>
 #include <libguile.h>
 #include <cstdlib>
+#include <gtest/gtest.h>
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -21,34 +22,68 @@
 
 namespace
 {
-gboolean display_available;
-
-struct Fixture
+class EntryLedgerCloseTest : public ::testing::Test
 {
+protected:
+    void SetUp () override
+    {
+        book = qof_book_new ();
+        ASSERT_NE (book, nullptr);
+        if (!gnc_book_get_root_account (book))
+            gnc_account_create_root (book);
+        session = qof_session_new (book);
+        ASSERT_NE (session, nullptr);
+        gnc_set_current_session (session);
+        invoice = gncInvoiceCreate (book);
+        ASSERT_NE (invoice, nullptr);
+        ledger = gnc_entry_ledger_new (book, GNCENTRY_INVOICE_ENTRY);
+        ASSERT_NE (ledger, nullptr);
+        parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        g_object_ref_sink (parent);
+        gtk_widget_realize (parent);
+        gnc_entry_ledger_set_parent (ledger, parent);
+        gnc_entry_ledger_set_default_invoice (ledger, invoice);
+    }
+
+    void TearDown () override
+    {
+        if (result == 0 && parent)
+        {
+            gtk_widget_destroy (parent);
+            const gint64 deadline =
+                g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+            while (result == 0 && g_get_monotonic_time () < deadline)
+            {
+                while (g_main_context_iteration (nullptr, FALSE))
+                    ;
+                g_usleep (1000);
+            }
+        }
+        if (ledger)
+            gnc_entry_ledger_destroy (ledger);
+        if (parent)
+        {
+            gtk_widget_destroy (parent);
+            g_object_unref (parent);
+        }
+        auto current = gnc_exchange_current_session (nullptr);
+        if (current)
+            qof_session_destroy (current);
+        if (session && session != current)
+            qof_session_destroy (session);
+        if (other_session && other_session != current &&
+            other_session != session)
+            qof_session_destroy (other_session);
+    }
+
     QofSession *session{};
     QofBook *book{};
     GncInvoice *invoice{};
     GncEntryLedger *ledger{};
     GtkWidget *parent{};
+    QofSession *other_session{};
+    gint result{};
 };
-
-Fixture
-make_fixture ()
-{
-    Fixture fixture{};
-    fixture.book = qof_book_new ();
-    if (!gnc_book_get_root_account (fixture.book))
-        gnc_account_create_root (fixture.book);
-    fixture.session = qof_session_new (fixture.book);
-    gnc_set_current_session (fixture.session);
-    fixture.invoice = gncInvoiceCreate (fixture.book);
-    fixture.ledger = gnc_entry_ledger_new (fixture.book, GNCENTRY_INVOICE_ENTRY);
-    fixture.parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_realize (fixture.parent);
-    gnc_entry_ledger_set_parent (fixture.ledger, fixture.parent);
-    gnc_entry_ledger_set_default_invoice (fixture.ledger, fixture.invoice);
-    return fixture;
-}
 
 GtkWidget *
 find_confirmation ()
@@ -58,7 +93,7 @@ find_confirmation ()
     for (auto node = windows; node; node = node->next)
         if (GTK_IS_MESSAGE_DIALOG (node->data))
         {
-            g_assert_null (found);
+            EXPECT_EQ (found, nullptr);
             found = GTK_WIDGET (node->data);
         }
     g_list_free (windows);
@@ -77,23 +112,12 @@ find_new_account_dialog ()
         if (GTK_IS_DIALOG (widget) && title &&
             g_str_has_prefix (title, "New Account"))
         {
-            g_assert_null (found);
+            EXPECT_EQ (found, nullptr);
             found = widget;
         }
     }
     g_list_free (windows);
     return found;
-}
-
-void
-edit_description (Fixture &fixture, const gchar *value)
-{
-    auto table = gnc_entry_ledger_get_table (fixture.ledger);
-    auto cell = static_cast<BasicCell *> (
-        gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
-    g_assert_nonnull (cell);
-    gnc_basic_cell_set_value (cell, value);
-    gnc_basic_cell_set_changed (cell, TRUE);
 }
 
 void
@@ -103,135 +127,96 @@ completed (gboolean accepted, gpointer data)
     *result = accepted ? 1 : -1;
 }
 
-void
-finish_fixture (Fixture &fixture)
+TEST_F (EntryLedgerCloseTest, AcceptedCloseCommitsBeforeCompletion)
 {
-    if (fixture.ledger)
-        gnc_entry_ledger_destroy (fixture.ledger);
-    if (fixture.parent)
-        gtk_widget_destroy (fixture.parent);
-    gnc_clear_current_session ();
-}
-
-void
-test_save_confirmation_commits_before_completion ()
-{
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    edit_description (fixture, "Saved through async close");
-    gboolean result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    auto table = gnc_entry_ledger_get_table (ledger);
+    auto cell = static_cast<BasicCell *>(
+        gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
+    ASSERT_NE (cell, nullptr);
+    gnc_basic_cell_set_value (cell, "Saved through async close");
+    gnc_basic_cell_set_changed (cell, TRUE);
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto dialog = find_confirmation ();
-    g_assert_nonnull (dialog);
+    ASSERT_NE (dialog, nullptr);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-    g_assert_cmpint (result, ==, 1);
-    auto entries = gncInvoiceGetEntries (fixture.invoice);
-    g_assert_nonnull (entries);
-    g_assert_cmpstr (gncEntryGetDescription (static_cast<GncEntry *>(entries->data)), ==,
-                     "Saved through async close");
-    finish_fixture (fixture);
+    EXPECT_EQ (result, 1);
+    auto entries = gncInvoiceGetEntries (invoice);
+    ASSERT_NE (entries, nullptr);
+    EXPECT_STREQ (gncEntryGetDescription (static_cast<GncEntry *>(entries->data)),
+                  "Saved through async close");
 }
 
-void
-test_destroyed_parent_aborts_once ()
+TEST_F (EntryLedgerCloseTest, DestroyedParentAbortsOnce)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    edit_description (fixture, "Must not be saved");
-    gint result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    auto table = gnc_entry_ledger_get_table (ledger);
+    auto cell = static_cast<BasicCell *>(
+        gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
+    ASSERT_NE (cell, nullptr);
+    gnc_basic_cell_set_value (cell, "Must not be saved");
+    gnc_basic_cell_set_changed (cell, TRUE);
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto dialog = find_confirmation ();
-    g_assert_nonnull (dialog);
+    ASSERT_NE (dialog, nullptr);
     g_object_ref (dialog);
-    gtk_widget_destroy (fixture.parent);
-    g_assert_cmpint (result, ==, -1);
+    gtk_widget_destroy (parent);
+    EXPECT_EQ (result, -1);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-    g_assert_cmpint (result, ==, -1);
+    EXPECT_EQ (result, -1);
     g_object_unref (dialog);
-    gnc_entry_ledger_destroy (fixture.ledger);
-    fixture.ledger = nullptr;
-    fixture.parent = nullptr;
-    gnc_clear_current_session ();
+    gnc_entry_ledger_destroy (ledger);
+    ledger = nullptr;
+    g_object_unref (parent);
+    parent = nullptr;
 }
 
-void
-test_session_switch_aborts_save ()
+TEST_F (EntryLedgerCloseTest, SessionSwitchAbortsSave)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    edit_description (fixture, "Must not cross sessions");
-    gint result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    auto table = gnc_entry_ledger_get_table (ledger);
+    auto cell = static_cast<BasicCell *> (
+        gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
+    ASSERT_NE (cell, nullptr);
+    gnc_basic_cell_set_value (cell, "Must not cross sessions");
+    gnc_basic_cell_set_changed (cell, TRUE);
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto dialog = find_confirmation ();
-    g_assert_nonnull (dialog);
-    auto other_session = qof_session_new (qof_book_new ());
-    gnc_set_current_session (other_session);
+    ASSERT_NE (dialog, nullptr);
+    other_session = qof_session_new (qof_book_new ());
+    EXPECT_EQ (gnc_exchange_current_session (other_session), session);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-    g_assert_cmpint (result, ==, -1);
-    g_assert_null (gncInvoiceGetEntries (fixture.invoice));
-    gnc_set_current_session (fixture.session);
-    finish_fixture (fixture);
+    EXPECT_EQ (result, -1);
+    EXPECT_EQ (gncInvoiceGetEntries (invoice), nullptr);
+    EXPECT_EQ (gnc_exchange_current_session (session), other_session);
 }
 
-void
-test_no_changes_completes_immediately ()
+TEST_F (EntryLedgerCloseTest, UnchangedLedgerCompletesImmediately)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    gint result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
-    g_assert_cmpint (result, ==, 1);
-    g_assert_null (find_confirmation ());
-    finish_fixture (fixture);
+    EXPECT_EQ (result, 1);
+    EXPECT_EQ (find_confirmation (), nullptr);
 }
 
-void
-test_account_creation_cancel_aborts_close ()
+TEST_F (EntryLedgerCloseTest, AccountCreationCancelAbortsClose)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    auto table = gnc_entry_ledger_get_table (fixture.ledger);
+    auto table = gnc_entry_ledger_get_table (ledger);
     auto cell = reinterpret_cast<ComboCell *> (
         gnc_table_layout_get_cell (table->layout, ENTRY_IACCT_CELL));
-    g_assert_nonnull (cell);
+    ASSERT_NE (cell, nullptr);
     gnc_combo_cell_set_value (cell, "New account from ledger test");
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    gint result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto confirmation = find_confirmation ();
-    g_assert_nonnull (confirmation);
+    ASSERT_NE (confirmation, nullptr);
     gtk_dialog_response (GTK_DIALOG (confirmation), GTK_RESPONSE_YES);
     auto dialog = find_new_account_dialog ();
-    g_assert_nonnull (dialog);
+    ASSERT_NE (dialog, nullptr);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-    g_assert_cmpint (result, ==, -1);
-    g_assert_null (gncInvoiceGetEntries (fixture.invoice));
-    finish_fixture (fixture);
+    EXPECT_EQ (result, -1);
+    EXPECT_EQ (gncInvoiceGetEntries (invoice), nullptr);
 }
 
 Account *
@@ -244,70 +229,52 @@ make_invoice_account (QofBook *book, const gchar *name)
     return account;
 }
 
-void
-test_account_removed_during_save_confirmation_reenters_async_creation ()
+TEST_F (EntryLedgerCloseTest, RemovedAccountRestartsAsyncCreation)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    auto account = make_invoice_account (fixture.book, "Account removed while saving");
-    auto table = gnc_entry_ledger_get_table (fixture.ledger);
+    auto account = make_invoice_account (book, "Account removed while saving");
+    auto table = gnc_entry_ledger_get_table (ledger);
     auto cell = reinterpret_cast<ComboCell *> (
         gnc_table_layout_get_cell (table->layout, ENTRY_IACCT_CELL));
     gnc_combo_cell_set_value (cell, "Account removed while saving");
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    gint result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto save_dialog = find_confirmation ();
-    g_assert_nonnull (save_dialog);
+    ASSERT_NE (save_dialog, nullptr);
     xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
     gtk_dialog_response (GTK_DIALOG (save_dialog), GTK_RESPONSE_YES);
     auto create_prompt = find_confirmation ();
-    g_assert_nonnull (create_prompt);
+    ASSERT_NE (create_prompt, nullptr);
     gtk_dialog_response (GTK_DIALOG (create_prompt), GTK_RESPONSE_YES);
     auto create_editor = find_new_account_dialog ();
-    g_assert_nonnull (create_editor);
+    ASSERT_NE (create_editor, nullptr);
     gtk_dialog_response (GTK_DIALOG (create_editor), GTK_RESPONSE_CANCEL);
-    g_assert_cmpint (result, ==, -1);
-    g_assert_null (gncInvoiceGetEntries (fixture.invoice));
-    finish_fixture (fixture);
+    EXPECT_EQ (result, -1);
+    EXPECT_EQ (gncInvoiceGetEntries (invoice), nullptr);
 }
 
-void
-test_tax_table_removed_during_save_confirmation_reprompts_then_saves ()
+TEST_F (EntryLedgerCloseTest, RemovedTaxTablePromptsAgainThenSaves)
 {
-    if (!display_available)
-    {
-        g_test_skip ("No graphical display is available");
-        return;
-    }
-    auto fixture = make_fixture ();
-    auto tax_table = gncTaxTableCreate (fixture.book);
+    auto tax_table = gncTaxTableCreate (book);
     gncTaxTableSetName (tax_table, "Tax table removed while saving");
-    auto table = gnc_entry_ledger_get_table (fixture.ledger);
+    auto table = gnc_entry_ledger_get_table (ledger);
     auto cell = reinterpret_cast<ComboCell *> (
         gnc_table_layout_get_cell (table->layout, ENTRY_TAXTABLE_CELL));
     gnc_combo_cell_set_value (cell, "Tax table removed while saving");
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    gint result = 0;
-    gnc_entry_ledger_check_close_async (fixture.parent, fixture.ledger,
+    gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto save_dialog = find_confirmation ();
-    g_assert_nonnull (save_dialog);
+    ASSERT_NE (save_dialog, nullptr);
     gncTaxTableBeginEdit (tax_table);
     gncTaxTableDestroy (tax_table);
     gtk_dialog_response (GTK_DIALOG (save_dialog), GTK_RESPONSE_YES);
     auto create_prompt = find_confirmation ();
-    g_assert_nonnull (create_prompt);
+    ASSERT_NE (create_prompt, nullptr);
     gtk_dialog_response (GTK_DIALOG (create_prompt), GTK_RESPONSE_NO);
-    g_assert_cmpint (result, ==, 1);
-    g_assert_nonnull (gncInvoiceGetEntries (fixture.invoice));
-    finish_fixture (fixture);
+    EXPECT_EQ (result, 1);
+    EXPECT_NE (gncInvoiceGetEntries (invoice), nullptr);
 }
 }
 
@@ -316,30 +283,18 @@ run_tests (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
     g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
-    g_test_init (&argc, &argv, nullptr);
-    display_available = gtk_init_check (&argc, &argv);
-    if (g_getenv ("GNC_REQUIRE_DISPLAY"))
-        g_assert_true (display_available);
+    ::testing::InitGoogleTest (&argc, argv);
+    if (!gtk_init_check (&argc, &argv))
+        g_error ("GTK display is required for the entry-ledger response tests");
     qof_init ();
-    g_assert_true (cashobjects_register ());
+    if (!cashobjects_register ())
+        g_error ("Failed to register cash objects for entry-ledger tests");
     gnc_gsettings_load_backend ();
     gnc_component_manager_init ();
     gnucash_register_add_cell_types ();
-    g_test_add_func ("/ledger/close-async/commit-before-completion",
-                     test_save_confirmation_commits_before_completion);
-    g_test_add_func ("/ledger/close-async/account-drift-restarts-async-creation",
-                     test_account_removed_during_save_confirmation_reenters_async_creation);
-    g_test_add_func ("/ledger/close-async/tax-table-drift-reprompts",
-                     test_tax_table_removed_during_save_confirmation_reprompts_then_saves);
-    g_test_add_func ("/ledger/close-async/destroyed-parent-aborts-once",
-                     test_destroyed_parent_aborts_once);
-    g_test_add_func ("/ledger/close-async/session-switch-aborts-save",
-                     test_session_switch_aborts_save);
-    g_test_add_func ("/ledger/close-async/unchanged-completes-immediately",
-                     test_no_changes_completes_immediately);
-    g_test_add_func ("/ledger/close-async/account-creation-cancel-aborts",
-                     test_account_creation_cancel_aborts_close);
-    auto result = g_test_run ();
+    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
+        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_clear_current_session ();

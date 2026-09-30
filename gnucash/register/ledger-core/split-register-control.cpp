@@ -182,12 +182,17 @@ split_register_balance_response (GtkWindow *dialog, gint choice, gpointer user_d
             auto root = default_account ? gnc_account_get_root (default_account) : nullptr;
             switch (choice)
             {
-            case 1: xaccTransScrubImbalance (transaction, root, nullptr); break;
-            case 2: if (default_account) xaccTransScrubImbalance (transaction, root,
-                                                                  default_account); break;
-            case 3: if (request->has_other_account && other_account)
-                        xaccTransScrubImbalance (transaction, root, other_account);
-                    break;
+            case 1:
+                xaccTransScrubImbalance (transaction, root, nullptr);
+                break;
+            case 2:
+                if (default_account)
+                    xaccTransScrubImbalance (transaction, root, default_account);
+                break;
+            case 3:
+                if (request->has_other_account && other_account)
+                    xaccTransScrubImbalance (transaction, root, other_account);
+                break;
             default: break;
             }
             gnc_split_register_redraw (reg);
@@ -1990,9 +1995,9 @@ split_register_transaction_change_response (GtkWindow *parent, gint response,
 }
 
 static gboolean
-transaction_changed_confirm (G_GNUC_UNUSED VirtualLocation *p_new_virt_loc,
+transaction_changed_confirm ([[maybe_unused]] VirtualLocation *p_new_virt_loc,
                              VirtualLocation *virt_loc,
-                             SplitRegister *reg, G_GNUC_UNUSED Transaction *new_trans,
+                             SplitRegister *reg, [[maybe_unused]] Transaction *new_trans,
                              gboolean exact_traversal,
                              gncTableTraversalDir direction)
 {

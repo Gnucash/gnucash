@@ -26,11 +26,13 @@ set(READONLY_THRESHOLD_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
     ${CMAKE_SOURCE_DIR}/gnucash/register/register-core
     ${CMAKE_BINARY_DIR}/common # for config.h
+    ${GTEST_INCLUDE_DIR}
 )
 
 set(READONLY_THRESHOLD_TEST_LIBS
     gnc-engine
     gnc-ledger-core
+    gtest
 )
 
 gnc_add_test(test-readonly-threshold-response
@@ -47,8 +49,9 @@ set(ENTRY_LEDGER_CLOSE_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/gnucash/register/register-core
     ${CMAKE_BINARY_DIR}/common
     ${GUILE_INCLUDE_DIRS}
+    ${GTEST_INCLUDE_DIR}
 )
-set(ENTRY_LEDGER_CLOSE_TEST_LIBS gnc-engine gnc-ledger-core)
+set(ENTRY_LEDGER_CLOSE_TEST_LIBS gnc-engine gnc-ledger-core gtest)
 gnc_add_test_with_guile(test-entry-ledger-close-response
     test-entry-ledger-close-response.cpp
     ENTRY_LEDGER_CLOSE_TEST_INCLUDE_DIRS ENTRY_LEDGER_CLOSE_TEST_LIBS)
@@ -63,8 +66,9 @@ endif()
 set(RECN_CELL_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/gnucash/register/register-core
     ${CMAKE_BINARY_DIR}/common # for config.h
+    ${GTEST_INCLUDE_DIR}
 )
-set(RECN_CELL_TEST_LIBS gnc-ledger-core)
+set(RECN_CELL_TEST_LIBS gnc-ledger-core gtest)
 gnc_add_test(test-recncell-deferred
     test-recncell-deferred.cpp
     RECN_CELL_TEST_INCLUDE_DIRS RECN_CELL_TEST_LIBS)
@@ -72,8 +76,9 @@ gnc_add_test(test-recncell-deferred
 set(TABLE_DEFERRED_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/gnucash/register/register-core
     ${CMAKE_BINARY_DIR}/common # for config.h
+    ${GTEST_INCLUDE_DIR}
 )
-set(TABLE_DEFERRED_TEST_LIBS gnc-register-core)
+set(TABLE_DEFERRED_TEST_LIBS gnc-register-core gtest)
 gnc_add_test(test-table-deferred-confirm
     test-table-deferred-confirm.cpp
     TABLE_DEFERRED_TEST_INCLUDE_DIRS TABLE_DEFERRED_TEST_LIBS)
@@ -81,6 +86,6 @@ set_tests_properties(test-table-deferred-confirm PROPERTIES TIMEOUT 30)
 
 set_dist_list(test_ledger_core_DIST CMakeLists.txt ${SPLIT_REG_TEST_SOURCES}
     test-readonly-threshold-response.cpp
-    test-entry-ledger-close-response.cpp)
-list(APPEND test_ledger_core_DIST test-recncell-deferred.cpp
+    test-entry-ledger-close-response.cpp
+    test-recncell-deferred.cpp
     test-table-deferred-confirm.cpp)
