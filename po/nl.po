@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-30 14:51+0000\n"
+"PO-Revision-Date: 2026-09-30 18:51+0000\n"
 "Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
@@ -10718,7 +10718,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:392
 msgid "A chart's point size."
-msgstr ""
+msgstr "De grootte van de punt van de grafiek."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:393
 #: gnucash/gtkbuilder/dialog-preferences.glade:3542
@@ -10726,10 +10726,12 @@ msgid ""
 "This setting specifies the default point's size (in pixels) displayed in "
 "charts. Only applicable to line charts."
 msgstr ""
+"Deze instelling bepaalt de standaard grootte van een punt (in pixels) van "
+"grafieken. Alleen van toepassing op lijngrafieken."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "A chart's hovered-point size."
-msgstr ""
+msgstr "De grootte van een zwevende punt van een grafiek."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:398
 msgid ""
@@ -10737,10 +10739,14 @@ msgid ""
 "charts. It tends to be bigger than the default (i.e. not hovered over) size. "
 "Only applicable to line charts."
 msgstr ""
+"Deze instelling bepaalt de grootte (in pixels) van de punt van een grafiek "
+"als je er met de muis overheen beweegt. Deze is meestal groter dan de "
+"standaard waarde als je er niet met de muis overheen beweegt. Alleen van "
+"toepassing op lijngrafieken."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:402
 msgid "A hover radius that would engage a tooltip."
-msgstr ""
+msgstr "De beweegradius om een tooltip te laten zien."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:403
 #: gnucash/gtkbuilder/dialog-preferences.glade:3623
