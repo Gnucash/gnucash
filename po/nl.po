@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-30 18:51+0000\n"
+"PO-Revision-Date: 2026-10-01 19:51+0000\n"
 "Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Bugs: Report translation errors to https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 
@@ -933,9 +933,9 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
-"U kunt meerdere rapporten in één venster samenvoegen via menukeuze "
-"‘Voorbeeld & Aangepast‣Aangepast multi-kolom rapport’, zodat u alle gewenste "
-"financiële gegevens in één oogopslag kunt raadplegen."
+"U kunt meerdere rapporten in één venster samenvoegen via menukeuze ‘Multi-"
+"kolom -> Aangepast multi-kolom rapport’, zodat u alle gewenste financiële "
+"gegevens in één oogopslag kunt raadplegen."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -5816,36 +5816,26 @@ msgid "With GnuCash you can (but are not limited to):"
 msgstr "Met GnuCash kunt u (maar bent u niet beperkt tot):"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:18
-#, fuzzy
-#| msgid "Keep track of your day to day personal income and expenses"
 msgid "Keep track of your day to day personal income and expenses."
-msgstr "Uw persoonlijke inkomsten en uitgaven van dag tot dag volgen"
+msgstr "Volg uw dagelijkse persoonlijke inkomsten en uitgaven."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
-#, fuzzy
-#| msgid "Manage your stock, bond and mutual fund accounts with ease"
 msgid "Manage your stock, bond and mutual fund accounts with ease."
-msgstr "Beheer eenvoudig uw beleggingen, obligaties en fondsen"
+msgstr "Beheer eenvoudig uw beleggingen, obligaties en fondsen."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
-#, fuzzy
-#| msgid "Keep your small business' accounting up to date"
 msgid "Keep your small business' accounting up to date."
-msgstr "De boekhouding van uw kleine onderneming bijhouden"
+msgstr "Hou de boekhouding van uw kleine onderneming actueel."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
-#, fuzzy
-#| msgid "Create accurate reports and graphs from your financial data"
 msgid "Create accurate reports and graphs from your financial data."
-msgstr "Accurate rapporten en grafieken maken van uw financiële gegevens"
+msgstr "Maak accurate rapporten en grafieken van uw financiële gegevens."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
-#, fuzzy
-#| msgid "Set up scheduled transactions to avoid repeated data entry"
 msgid "Set up scheduled transactions to avoid repeated data entry."
 msgstr ""
-"Vaste journaalposten instellen om te voorkomen dat telkens dezelfde gegevens "
-"moeten worden ingevoerd"
+"Stel vaste journaalposten in om te voorkomen dat telkens dezelfde gegevens "
+"moeten worden ingevoerd."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Process your bank data via online banking using FinTS."
@@ -5869,17 +5859,12 @@ msgstr ""
 "CAMT, SWIFT-MT9xx en OFX."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:26
-#, fuzzy
-#| msgid "Export the Account Tree to a CSV file"
 msgid "Export the account tree or transactions as CSV."
-msgstr "Het rekeningschema naar een CSV-bestand exporteren"
+msgstr "Exporteer het rekeningschema of de transacties naar CSV."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:27
-#, fuzzy
-#| msgid "Perform financial calculations, such as a loan repayment"
 msgid "Perform financial calculations, such as a loan repayment."
-msgstr ""
-"Financiële berekeningen maken, zoals de annuïtaire aflossing van een lening"
+msgstr "Maak financiële berekeningen, zoals het terugbetalen van een lening."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:50
 msgid ""
@@ -6826,16 +6811,12 @@ msgid "Action/Number"
 msgstr "Actie/nummer"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 3306"
-msgstr "Standaard"
+msgstr "Standaard: 3306"
 
 #: gnucash/gnome-utils/dialog-file-access.c:224
-#, fuzzy
-#| msgid "Default"
 msgid "Default: 5432"
-msgstr "Standaard"
+msgstr "Standaard: 5432"
 
 #: gnucash/gnome-utils/dialog-file-access.c:345
 msgid "Open…"
@@ -7846,10 +7827,8 @@ msgstr ""
 "elementen meer toegevoegd."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5510
-#, fuzzy
-#| msgid "(user modifiable)"
 msgid "(User modifiable)"
-msgstr "(door gebruiker aanpasbaar)"
+msgstr "(Instelbaar)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.cpp:5537
@@ -8092,10 +8071,8 @@ msgid "Reconciled (Report)"
 msgstr "Afgestemd (rapport)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:901
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest Date"
-msgstr "_Eerste"
+msgstr "Vroegste Datum"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:907
 msgid "Last Reconcile Date"
@@ -8824,14 +8801,6 @@ msgstr "Automatisch betalen bij het boeken."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
-#| msgid ""
-#| "At post time, automatically attempt to pay customer documents with "
-#| "outstanding pre-payments and counter documents. The pre-payments and "
-#| "documents obviously have to be against the same customer. Counter "
-#| "documents are documents with opposite sign. For example for an invoice, "
-#| "customer credit notes and negative invoices are considered counter "
-#| "documents."
 msgid ""
 "At post time, automatically attempt to pay customer items with outstanding "
 "pre-payments and counter items. The pre-payments and items obviously have to "
@@ -8841,9 +8810,9 @@ msgid ""
 msgstr ""
 "Probeer tijdens het boeken verkoopfacturen automatisch te verrekenen met "
 "uitstaande vooruitbetalingen en contra-documenten. De vooruitbetalingen en "
-"documenten moeten betrekking hebben op dezelfde klant. Contra-documenten "
-"zijn documenten met een omgekeerd teken. Voor een verkoopfactuur is dit "
-"bijvoorbeeld een verzonden creditnota of een negatieve verkoopfactuur."
+"documenten moeten uiteraard betrekking hebben op dezelfde klant. Contra-"
+"documenten zijn documenten met een omgekeerd teken. Voor een verkoopfactuur "
+"is dit bijvoorbeeld een verzonden creditnota of een negatieve verkoopfactuur."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
@@ -8929,13 +8898,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:250
-#, fuzzy
-#| msgid ""
-#| "At post time, automatically attempt to pay vendor documents with "
-#| "outstanding pre-payments and counter documents. The pre-payments and "
-#| "documents obviously have to be against the same vendor. Counter documents "
-#| "are documents with opposite sign. For example for a bill, vendor credit "
-#| "notes and negative bills are considered counter documents."
 msgid ""
 "At post time, automatically attempt to pay vendor items with outstanding pre-"
 "payments and counter items. The pre-payments and items obviously have to be "
@@ -8943,11 +8905,12 @@ msgid ""
 "example for a bill, vendor credit notes and negative bills are considered "
 "counter items."
 msgstr ""
-"Probeer tijdens het boeken inkoopfacturen automatisch te verrekenen met "
-"uitstaande vooruitbetalingen en contra-documenten. De vooruitbetalingen en "
-"documenten moeten betrekking hebben op dezelfde leverancier. Contra-"
-"documenten zijn documenten met een omgekeerd teken. Voor een inkoopfactuur "
-"is dit bijvoorbeeld een ontvangen creditnota of een negatieve inkoopfactuur."
+"Probeer tijdens het invoeren leveranciersboekingen automatisch te verrekenen "
+"met uitstaande vooruitbetalingen en contra-boekingenten. De "
+"vooruitbetalingen en boekingen moeten uiteraard betrekking hebben op "
+"dezelfde leverancier. Contra-boekingen zijn boekingen met een omgekeerd "
+"teken. Voor een inkoopfactuur is dit bijvoorbeeld een ontvangen creditnota "
+"of een negatieve inkoopfactuur."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
@@ -9583,13 +9546,12 @@ msgid "Enable autoclear tools in reconciliation"
 msgstr "Automatisch vereffenen bij afstemming toestaan"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
-#, fuzzy
 msgid ""
 "If active, suggests transactions to clear based on amounts summing to the "
 "statement balance"
 msgstr ""
 "Indien actief worden transacties aangemerkt om verwerkt te worden op basis "
-"van bedragen die optellen tot het overschijvingsbedrag"
+"van bedragen die optellen tot het totaalbedrag"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
