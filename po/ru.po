@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-01 15:51+0000\n"
+"PO-Revision-Date: 2026-10-01 17:51+0000\n"
 "Last-Translator: Yegor Derevenets <yegor.derevenets@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -31448,7 +31448,7 @@ msgstr "Баланс %s %s должен быть равен нулю."
 #: libgnucash/app-utils/gnc-ui-util.cpp:474
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
-msgstr "Н"
+msgstr "н"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:476
 msgctxt "Reconciled flag 'cleared'"
