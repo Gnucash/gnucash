@@ -114,6 +114,7 @@ struct InvoicesFilter {
     bool          use_end_date = false;
     time64        start_date = 0;
     time64        end_date = 0;
+    bool          only_overdue = false;
     std::string   search_term;
     // State end
 
@@ -128,6 +129,7 @@ struct InvoicesFilter {
     GtkToggleButton *end_toggle = nullptr;
     GNCDateEdit     *start_picker = nullptr;
     GNCDateEdit     *end_picker = nullptr;
+    GtkToggleButton *overdue_toggle = nullptr;
     GtkEntry        *search_entry = nullptr;
 
     void dialog_open();
@@ -155,6 +157,7 @@ struct InvoicesFilter {
         end_toggle = nullptr;
         start_picker = nullptr;
         end_picker = nullptr;
+        overdue_toggle = nullptr;
         search_entry = nullptr;
     }
 
@@ -165,7 +168,8 @@ struct InvoicesFilter {
             && show_posted && show_unposted
             && show_invoices && show_creditnotes
             && search_term == ""
-            && !use_start_date && !use_end_date)
+            && !use_start_date && !use_end_date
+            && !only_overdue)
         {
             return false;
         }
@@ -178,6 +182,7 @@ struct InvoicesFilter {
         set_creditnotes (true);
         set_use_start_date (false);
         set_use_end_date (false);
+        set_overdue (false);
         set_search_term ("");
 
         reset_dates ();
@@ -238,6 +243,15 @@ struct InvoicesFilter {
         show_creditnotes = status;
 
         if (creditnotes_toggle) gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
+        else g_warn_if_fail(true);
+    }
+
+    void
+    set_overdue (bool status)
+    {
+        only_overdue = status;
+
+        if (overdue_toggle) gtk_toggle_button_set_active(overdue_toggle, only_overdue);
         else g_warn_if_fail(true);
     }
 
@@ -1179,7 +1193,55 @@ InvoicesFilter::dialog_open()
                 this
             );
         }
+    }
 
+    {
+        overdue_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "only-overdue"));
+
+        if (!overdue_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            auto owner_type = controller->get_owner();
+
+            if (owner_type == GNC_OWNER_VENDOR)
+            {
+                gtk_button_set_label(
+                    GTK_BUTTON (overdue_toggle),
+                    _("ONLY overdue Bills")
+                );
+            }
+            else if (owner_type == GNC_OWNER_EMPLOYEE)
+            {
+                gtk_button_set_label(
+                    GTK_BUTTON (overdue_toggle),
+                    _("ONLY overdue Expense Vouchers")
+                );
+            }
+
+            gtk_toggle_button_set_active(overdue_toggle, only_overdue);
+            set_overdue (only_overdue);
+
+            g_signal_connect(
+                overdue_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_overdue (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this
+            );
+        }
     }
 
     {
@@ -1395,6 +1457,40 @@ InvoicesFilter::make_filter()
 
         qof_query_merge_in_place (query, query_posted, QOF_QUERY_AND); 
         qof_query_destroy (query_posted);
+    }
+
+    if (only_overdue)
+    {
+        QofQuery *query_overdue = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_overdue, book);
+
+        {
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
+
+            qof_query_add_boolean_match(query_overdue,
+                                        type_path,
+                                        false,
+                                        QOF_QUERY_AND);
+        }
+
+        {
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+            qof_query_add_boolean_match(query_overdue,
+                                        type_path,
+                                        true,
+                                        QOF_QUERY_AND);
+        }
+
+        {
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_DUE, nullptr);
+            QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LT, QOF_DATE_MATCH_NORMAL, gnc_time64_get_today_end());
+
+            qof_query_add_term(query_overdue, type_path, pred_end, QOF_QUERY_AND);
+        }
+
+        qof_query_merge_in_place (query, query_overdue, QOF_QUERY_AND); 
+        qof_query_destroy (query_overdue);
     }
 
     if (use_start_date && start_date != 0)
