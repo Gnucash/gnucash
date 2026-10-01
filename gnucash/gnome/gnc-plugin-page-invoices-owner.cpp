@@ -100,9 +100,7 @@ get_controller (gpointer user_data)
 
 namespace { // Isolate class-scope to this file.
 
-struct InvoicesFilter {
-    Controller *controller = nullptr;
-
+class InvoicesFilter {
     // State
     bool          show_paid = true;
     bool          show_unpaid = true;
@@ -117,6 +115,9 @@ struct InvoicesFilter {
     bool          only_overdue = false;
     std::string   search_term;
     // State end
+
+public:
+    Controller *controller = nullptr;
 
     GtkWidget       *dialog = nullptr;
     GtkToggleButton *paid_toggle = nullptr;
@@ -142,6 +143,7 @@ struct InvoicesFilter {
         qof_query_destroy (query);
     }
 
+private:
     void
     dialog_close ()
     {
