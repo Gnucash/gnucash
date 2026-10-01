@@ -101,6 +101,8 @@ get_controller (gpointer user_data)
 namespace { // Isolate class-scope to this file.
 
 struct InvoicesFilter {
+    Controller *controller = nullptr;
+
     // State
     bool          show_paid = true;
     bool          show_unpaid = true;
@@ -127,6 +129,34 @@ struct InvoicesFilter {
     GNCDateEdit     *start_picker = nullptr;
     GNCDateEdit     *end_picker = nullptr;
     GtkEntry        *search_entry = nullptr;
+
+    void dialog_open();
+
+    QofQuery *make_filter();
+
+    void
+    free_filter (QofQuery *query)
+    {
+        qof_query_destroy (query);
+    }
+
+    void
+    dialog_close ()
+    {
+        dialog = nullptr;
+
+        paid_toggle = nullptr;
+        unpaid_toggle = nullptr;
+        posted_toggle = nullptr;
+        unposted_toggle = nullptr;
+        invoices_toggle = nullptr;
+        creditnotes_toggle = nullptr;
+        start_toggle = nullptr;
+        end_toggle = nullptr;
+        start_picker = nullptr;
+        end_picker = nullptr;
+        search_entry = nullptr;
+    }
 
     bool 
     reset ()
@@ -285,50 +315,17 @@ struct InvoicesFilter {
 
         set_dates(false);
     }
-
-    void
-    dialog_close ()
-    {
-        dialog = nullptr;
-
-        paid_toggle = nullptr;
-        unpaid_toggle = nullptr;
-        posted_toggle = nullptr;
-        unposted_toggle = nullptr;
-        invoices_toggle = nullptr;
-        creditnotes_toggle = nullptr;
-        start_toggle = nullptr;
-        end_toggle = nullptr;
-        start_picker = nullptr;
-        end_picker = nullptr;
-        search_entry = nullptr;
-    }
 };
 
 class Controller {
+public:
     GncPluginPageInvoicesOwner *plugin_page = nullptr;
+
+private:
+    InvoicesFilter filter;
     GtkWidget     *widget = nullptr; // Managed/freed by gtk
     GtkWidget     *query_view = nullptr; // Managed/freed by gtk
     GList         *columns = nullptr;
-    InvoicesFilter filter;
-
-    GncOwnerType
-    get_owner ()
-    {
-        return get_private (plugin_page)->owner_type;
-    }
-
-    GtkWindow *
-    get_window ()
-    {
-        auto *p = GNC_PLUGIN_PAGE (plugin_page);
-        g_assert (p);
-
-        auto *window = GTK_WINDOW (gnc_plugin_page_get_window (p));
-        g_assert (window);
-
-        return window;
-    }
 
     GncInvoice *
     get_selected ()
@@ -346,288 +343,6 @@ class Controller {
         return invoice;
     }
 
-    QofQuery * 
-    create_filter ()
-    {
-        auto owner_type = get_owner ();
-        auto *book = gnc_get_current_book ();
-
-        auto *query = qof_query_create_for (GNC_ID_INVOICE);
-        qof_query_set_book (query, book);
-
-        {
-            auto none = !filter.show_invoices && !filter.show_creditnotes;
-        
-            if (filter.show_invoices || none)
-            {
-                GncInvoiceType inv_type;
-
-                switch (owner_type)
-                {
-                  case GNC_OWNER_CUSTOMER: inv_type = GNC_INVOICE_CUST_INVOICE; break;
-                  case GNC_OWNER_VENDOR: inv_type = GNC_INVOICE_VEND_INVOICE; break;
-                  case GNC_OWNER_EMPLOYEE: inv_type = GNC_INVOICE_EMPL_INVOICE; break;
-                  default: g_assert_not_reached ();
-                }
-
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
-                QofQueryPredData *type_pred = qof_query_int32_predicate (QOF_COMPARE_EQUAL, inv_type);
-                qof_query_add_term (query, type_path, type_pred, QOF_QUERY_AND);
-            }
-
-            if (filter.show_creditnotes || none)
-            {
-                GncInvoiceType credit_type;
-
-                switch (owner_type)
-                {
-                  case GNC_OWNER_CUSTOMER: credit_type = GNC_INVOICE_CUST_CREDIT_NOTE; break;
-                  case GNC_OWNER_VENDOR: credit_type = GNC_INVOICE_VEND_CREDIT_NOTE; break;
-                  case GNC_OWNER_EMPLOYEE: credit_type = GNC_INVOICE_EMPL_CREDIT_NOTE; break;
-                  default: g_assert_not_reached ();
-                }
-
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
-                QofQueryPredData *type_pred = qof_query_int32_predicate (QOF_COMPARE_EQUAL, credit_type);
-                qof_query_add_term (query, type_path, type_pred,
-                    none || !filter.show_invoices ? QOF_QUERY_AND : QOF_QUERY_OR);
-            }
-        }
-
-        { // Filter only active invoices.
-            QofQuery *query_active = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_active, book);
-
-            qof_query_add_boolean_match(
-                query_active,
-                qof_query_build_param_list(QOF_PARAM_ACTIVE, nullptr),
-                true,
-                QOF_QUERY_AND);
-
-            qof_query_merge_in_place (query, query_active, QOF_QUERY_AND); 
-            qof_query_destroy (query_active);
-        }
-
-        if (filter.show_paid != filter.show_unpaid || !filter.show_paid)
-        {
-            QofQuery *query_paid = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_paid, book);
-
-            {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
-
-                qof_query_add_boolean_match(query_paid,
-                                            type_path,
-                                            filter.show_paid,
-                                            QOF_QUERY_AND);
-            }
-
-            if (!filter.show_paid && !filter.show_unpaid) { // If both options are false, add a TRUE match so no results are shown.
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
-
-                qof_query_add_boolean_match(query_paid,
-                                            type_path,
-                                            true,
-                                            QOF_QUERY_AND);
-            }
-
-            qof_query_merge_in_place (query, query_paid, QOF_QUERY_AND); 
-            qof_query_destroy (query_paid);
-        }
-
-        if (filter.show_posted != filter.show_unposted || !filter.show_posted)
-        {
-            QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_posted, book);
-
-            {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                qof_query_add_boolean_match(query_posted,
-                                            type_path,
-                                            filter.show_posted,
-                                            QOF_QUERY_AND);
-            }
-
-            if (!filter.show_posted && !filter.show_unposted) { // If both options are false, add a TRUE match so no results are shown.
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                qof_query_add_boolean_match(query_posted,
-                                            type_path,
-                                            true,
-                                            QOF_QUERY_AND);
-            }
-
-            qof_query_merge_in_place (query, query_posted, QOF_QUERY_AND); 
-            qof_query_destroy (query_posted);
-        }
-
-        if (filter.use_start_date && filter.start_date != 0)
-        {
-            QofQuery *query_start = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_start, book);
-
-            {
-                QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
-                qof_query_set_book (query_posted, book);
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                    qof_query_add_boolean_match(query_posted,
-                                                type_path,
-                                                true,
-                                                QOF_QUERY_AND);
-                }
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
-                    QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, filter.start_date);
-                    qof_query_add_term(query_posted, type_path, pred_start, QOF_QUERY_AND);
-                }
-
-                qof_query_merge_in_place (query_start, query_posted, QOF_QUERY_AND); 
-                qof_query_destroy (query_posted);
-            }
-
-            {
-                QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
-                qof_query_set_book (query_unposted, book);
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                    qof_query_add_boolean_match(query_unposted,
-                                                type_path,
-                                                false,
-                                                QOF_QUERY_AND);
-                }
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
-                    QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, filter.start_date);
-                    qof_query_add_term(query_unposted, type_path, pred_start, QOF_QUERY_AND);
-                }
-
-                qof_query_merge_in_place (query_start, query_unposted, QOF_QUERY_OR); 
-                qof_query_destroy (query_unposted);
-            }
-
-            qof_query_merge_in_place (query, query_start, QOF_QUERY_AND); 
-            qof_query_destroy (query_start);
-        }
-
-        if (filter.use_end_date && filter.end_date != 0)
-        {
-            QofQuery *query_end = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_end, book);
-
-            {
-                QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
-                qof_query_set_book (query_posted, book);
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                    qof_query_add_boolean_match(query_posted,
-                                                type_path,
-                                                true,
-                                                QOF_QUERY_AND);
-                }
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
-                    QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, filter.end_date);
-                    qof_query_add_term(query_posted, type_path, pred_end, QOF_QUERY_AND);
-                }
-
-                qof_query_merge_in_place (query_end, query_posted, QOF_QUERY_AND); 
-                qof_query_destroy (query_posted);
-            }
-
-            {
-                QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
-                qof_query_set_book (query_unposted, book);
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                    qof_query_add_boolean_match(query_unposted,
-                                                type_path,
-                                                false,
-                                                QOF_QUERY_AND);
-                }
-
-                {
-                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
-                    QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, filter.end_date);
-                    qof_query_add_term(query_unposted, type_path, pred_end, QOF_QUERY_AND);
-                }
-
-                qof_query_merge_in_place (query_end, query_unposted, QOF_QUERY_OR); 
-                qof_query_destroy (query_unposted);
-            }
-
-            qof_query_merge_in_place (query, query_end, QOF_QUERY_AND); 
-            qof_query_destroy (query_end);
-        }
-
-        if (filter.search_term.length ())
-        {
-            QofQuery *query_term = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_term, book);
-
-            QofQueryParamList *params[4] = {
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
-            };
-
-            // Customer name
-            params[0] = qof_query_build_param_list (INVOICE_OWNER, OWNER_PARENT,
-                                                    OWNER_NAME, nullptr);
-
-            // Job name
-            params[1] = qof_query_build_param_list (INVOICE_OWNER, OWNER_NAME,
-                                                    nullptr);
-
-            // Invoice id
-            params[2] = qof_query_build_param_list (INVOICE_ID, nullptr);
-
-            // Invoice billing id 
-            params[3] = qof_query_build_param_list (INVOICE_BILLINGID, nullptr);
-
-            for (size_t i = 0; i < std::size(params); i++) {
-                auto *path = params[i];
-
-                QofQueryPredData *owner_name_pred =
-                    qof_query_string_predicate(
-                        QOF_COMPARE_CONTAINS,
-                        filter.search_term.c_str(),
-                        QOF_STRING_MATCH_CASEINSENSITIVE,
-                        false);
-
-                qof_query_add_term(
-                    query_term,
-                    path,
-                    owner_name_pred,
-                    i == 0 ? QOF_QUERY_AND : QOF_QUERY_OR);
-            }
-
-            qof_query_merge_in_place (query, query_term, QOF_QUERY_AND); 
-            qof_query_destroy (query_term);
-        }
-
-        return query;
-    }
-
-    void
-    free_filter (QofQuery *query)
-    {
-        qof_query_destroy (query);
-    }
-
 public:
     Controller (GncPluginPageInvoicesOwner *p) : plugin_page (p)
     {
@@ -635,6 +350,8 @@ public:
         // We only need to do this once here, for the rest of the class
         // we can skip nullptr checks when doing PAGE casts.
         g_assert (GNC_IS_PLUGIN_PAGE_INVOICES_OWNER (plugin_page));
+
+        filter.controller = this;
 
         auto owner_type = get_owner();
 
@@ -707,7 +424,7 @@ public:
                    GVariant      *parameter,
                    gpointer       user_data)
               {
-                  get_controller (user_data)->open_filter_by_dialog ();
+                  get_controller (user_data)->filter.dialog_open ();
               },
               nullptr, nullptr, nullptr
             },
@@ -755,6 +472,24 @@ public:
         g_list_free (columns);
 
         if (filter.dialog) gtk_widget_destroy (GTK_WIDGET (filter.dialog));
+    }
+
+    GncOwnerType
+    get_owner ()
+    {
+        return get_private (plugin_page)->owner_type;
+    }
+
+    GtkWindow *
+    get_window ()
+    {
+        auto *p = GNC_PLUGIN_PAGE (plugin_page);
+        g_assert (p);
+
+        auto *window = GTK_WINDOW (gnc_plugin_page_get_window (p));
+        g_assert (window);
+
+        return window;
     }
 
     GtkWidget
@@ -838,11 +573,11 @@ public:
                                                 nullptr);
         }
 
-        auto *query = create_filter ();
+        auto *query = filter.make_filter ();
 
         query_view = gnc_query_view_new (columns, query);
 
-        free_filter (query);
+        filter.free_filter (query);
         
         {
             auto *qview = GNC_QUERY_VIEW (query_view);
@@ -1060,487 +795,767 @@ public:
     void
     apply_filter ()
     {
-        auto *query = create_filter ();
+        auto *query = filter.make_filter ();
 
         gnc_query_view_reset_query (GNC_QUERY_VIEW (query_view), query);
 
-        free_filter (query);
-    }
-
-    void
-    open_filter_by_dialog ()
-    {
-        ENTER ("(fd %p, page %p)", filter.dialog, plugin_page);
-
-        if (filter.dialog)
-        {
-            gtk_window_present (GTK_WINDOW (filter.dialog));
-            LEAVE ("existing dialog");
-            return;
-        }
-
-        auto resource = std::string (GNUCASH_RESOURCE_PREFIX) +  "/" + UI_FILE;
-        auto *builder = gtk_builder_new ();
-        GError *error = NULL;
-
-        gtk_builder_set_translation_domain (builder, PROJECT_NAME);
-
-        gtk_builder_add_from_resource (builder, resource.c_str(), &error);
-
-        if (error)
-        {
-            g_object_unref (G_OBJECT(builder));
-            g_return_if_fail (false);
-        }
-
-        filter.dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoices-filters"));
-
-        if (!filter.dialog) {
-            g_object_unref (G_OBJECT (builder));
-            g_return_if_fail (false);
-        }
-
-        gtk_window_set_transient_for(GTK_WINDOW (filter.dialog), get_window ());
-
-        /* Translators: The %s is the name of the plugin page */
-        gchar *title = g_strdup_printf(
-            _("Filter %s by…"),
-            gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (plugin_page))
-        );
-
-        gtk_window_set_title(GTK_WINDOW(filter.dialog), title);
-
-        g_free(title);
-
-        gtk_widget_show_all (filter.dialog);
-
-        g_signal_connect(
-            filter.dialog, "destroy",
-            G_CALLBACK (
-                +[] (GtkWidget *w, gpointer user_data)
-                {
-                  get_controller (user_data)->filter.dialog_close ();
-                }
-            ),
-            plugin_page 
-        );
-
-        {
-            filter.paid_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-paid"));
-
-            if (!filter.paid_toggle)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                filter.set_paid (filter.show_paid);
-
-                g_signal_connect(
-                    filter.paid_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_paid (state);
-                            controller->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            filter.unpaid_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-unpaid"));
-
-
-            if (!filter.unpaid_toggle)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                filter.set_unpaid (filter.show_unpaid);
-
-                g_signal_connect(
-                    filter.unpaid_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_unpaid (state);
-                            controller->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            filter.posted_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-posted"));
-
-            if (!filter.posted_toggle)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                filter.set_posted (filter.show_posted);
-
-                g_signal_connect(
-                    filter.posted_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_posted (state);
-                            controller->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            filter.unposted_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-unposted"));
-
-            if (!filter.unposted_toggle)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                filter.set_unposted (filter.show_unposted);
-
-                g_signal_connect(
-                    filter.unposted_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_unposted (state);
-                            controller->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            filter.invoices_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-invoices"));
-            
-            if (!filter.invoices_toggle)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                auto owner_type = get_owner();
-
-                if (owner_type == GNC_OWNER_VENDOR)
-                {
-                    gtk_button_set_label(
-                        GTK_BUTTON (filter.invoices_toggle),
-                        _("Show Bills")
-                    );
-                }
-                else if (owner_type == GNC_OWNER_EMPLOYEE)
-                {
-                    gtk_button_set_label(
-                        GTK_BUTTON (filter.invoices_toggle),
-                        _("Show Expense Vouchers")
-                    );
-                }
-
-                filter.set_invoices (filter.show_invoices);
-
-                g_signal_connect(
-                    filter.invoices_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_invoices (state);
-                            controller->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            filter.creditnotes_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-creditnotes"));
-
-            if (!filter.creditnotes_toggle)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                gtk_toggle_button_set_active(filter.creditnotes_toggle, filter.show_creditnotes);
-                filter.set_creditnotes (filter.show_creditnotes);
-
-                g_signal_connect(
-                    filter.creditnotes_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_creditnotes (state);
-                            controller->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            GtkWidget* start_box = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_box"));
-
-            if (!start_box) {
-                g_warn_if_fail (true);
-            }
-            else {
-                filter.start_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-start"));
-                filter.start_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
-
-                if (filter.start_picker)
-                {
-                    gtk_box_pack_start (GTK_BOX (start_box), GTK_WIDGET (filter.start_picker), TRUE, TRUE, 0);
-                }
-                else g_warn_if_fail (true);
-
-                if (filter.start_toggle)
-                {
-                    g_signal_connect(
-                        filter.start_toggle,
-                        "toggled",
-                        G_CALLBACK(
-                            +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                            {
-                                auto state = gtk_toggle_button_get_active(button);
-                                auto *controller = get_controller (user_data);
-
-                                controller->filter.set_use_start_date (state);
-                                controller->apply_filter ();
-
-                                return false;
-                            }
-                        ),
-                        plugin_page 
-                    );
-                }
-                else g_warn_if_fail (true);
-
-                filter.set_use_start_date (filter.use_start_date);
-                filter.set_dates(true);
-
-                gtk_widget_show_all (start_box);
-            }
-        }
-
-        {
-            GtkWidget* end_box = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_box"));
-
-            if (!end_box) {
-                g_warn_if_fail (true);
-            }
-            else {
-                filter.end_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-end"));
-                filter.end_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
-                if (filter.end_picker)
-                    gtk_box_pack_start (GTK_BOX (end_box), GTK_WIDGET (filter.end_picker), TRUE, TRUE, 0);
-                else g_warn_if_fail (true);
-
-                if (filter.end_toggle)
-                {
-                    g_signal_connect(
-                        filter.end_toggle,
-                        "toggled",
-                        G_CALLBACK(
-                            +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                            {
-                                auto state = gtk_toggle_button_get_active(button);
-                                auto *controller = get_controller (user_data);
-
-                                controller->filter.set_use_end_date (state);
-                                controller->apply_filter ();
-
-                                return false;
-                            }
-                        ),
-                        plugin_page 
-                    );
-                }
-                else g_warn_if_fail (true);
-
-                filter.set_use_end_date (filter.use_end_date);
-                filter.set_dates(true);
-
-                gtk_widget_show_all(end_box);
-            }
-        }
-
-        {
-            auto *apply_button = GTK_BUTTON (gtk_builder_get_object(builder, "apply-dates"));
-
-            if (!apply_button)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                g_signal_connect(
-                    apply_button,
-                    "clicked",
-                    G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
-                    {
-                        auto *controller = get_controller (user_data);
-                        controller->filter.set_dates (false);
-
-                        if (controller->filter.use_start_date || controller->filter.use_end_date)
-                            controller->apply_filter ();
-                    }),
-                    plugin_page 
-                );
-            }
-
-        }
-
-        {
-            filter.search_entry = GTK_ENTRY (gtk_builder_get_object(builder, "search"));
-
-            if (!filter.search_entry)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                auto owner_type = get_owner();
-
-                if (owner_type == GNC_OWNER_VENDOR)
-                {
-                    gtk_entry_set_placeholder_text(
-                        filter.search_entry,
-                        "Type to search for Bills..."
-                    );
-                }
-                else if (owner_type == GNC_OWNER_EMPLOYEE)
-                {
-                    gtk_entry_set_placeholder_text(
-                        filter.search_entry,
-                        "Type to search for Expense Vouchers..."
-                    );
-                }
-
-                if (filter.search_term.length())
-                    filter.set_search_term (filter.search_term.c_str());
-
-                g_signal_connect(
-                    filter.search_entry,
-                    "changed",
-                    G_CALLBACK(
-                        +[] (GtkEditable *editable,
-                              gpointer    user_data)
-                        {
-                            const gchar *text = gtk_entry_get_text(GTK_ENTRY(editable));
-                            auto *controller = get_controller (user_data);
-
-                            controller->filter.set_search_term (text);
-                            controller->apply_filter ();
-                        }
-                    ),
-                    plugin_page 
-                );
-            }
-        }
-
-        {
-            auto *reset_button = GTK_BUTTON (gtk_builder_get_object(builder, "reset"));
-
-            if (!reset_button)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                g_signal_connect (
-                    reset_button,
-                    "clicked",
-                    G_CALLBACK (
-                        +[] (GtkButton *button, gpointer user_data)
-                        {
-                            if (get_controller(user_data)->filter.reset ())
-                                get_controller(user_data)->apply_filter ();
-                        }
-                    ),
-                    plugin_page
-                );
-            }
-        }
-
-        {
-            auto *close_button = GTK_BUTTON (gtk_builder_get_object(builder, "close"));
-
-            if (!close_button)
-            {
-                g_warn_if_fail(true);
-            }
-            else
-            {
-                g_signal_connect(
-                    close_button,
-                    "clicked",
-                    G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
-                    {
-                        gtk_widget_destroy (GTK_WIDGET (user_data));
-                    }),
-                    filter.dialog
-                );
-            }
-        }
-
-        g_object_unref(G_OBJECT(builder));
-
-        LEAVE("");
+        filter.free_filter (query);
     }
 };
+
+void
+InvoicesFilter::dialog_open()
+{
+    g_assert (controller);
+
+    ENTER ("(fd %p, page %p)", dialog, controller->plugin_page);
+
+    if (dialog)
+    {
+        gtk_window_present (GTK_WINDOW (dialog));
+        LEAVE ("existing dialog");
+        return;
+    }
+
+    auto resource = std::string (GNUCASH_RESOURCE_PREFIX) +  "/" + UI_FILE;
+    auto *builder = gtk_builder_new ();
+    GError *error = NULL;
+
+    gtk_builder_set_translation_domain (builder, PROJECT_NAME);
+
+    gtk_builder_add_from_resource (builder, resource.c_str(), &error);
+
+    if (error)
+    {
+        g_object_unref (G_OBJECT(builder));
+        g_return_if_fail (false);
+    }
+
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoices-filters"));
+
+    if (!dialog) {
+        g_object_unref (G_OBJECT (builder));
+        g_return_if_fail (false);
+    }
+
+    gtk_window_set_transient_for(GTK_WINDOW (dialog), controller->get_window ());
+
+    /* Translators: The %s is the name of the plugin page */
+    gchar *title = g_strdup_printf(
+        _("Filter %s by…"),
+        gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (controller->plugin_page))
+    );
+
+    gtk_window_set_title(GTK_WINDOW(dialog), title);
+
+    g_free(title);
+
+    gtk_widget_show_all (dialog);
+
+    g_signal_connect(
+        dialog, "destroy",
+        G_CALLBACK (
+            +[] (GtkWidget *w, gpointer user_data)
+            {
+                static_cast<InvoicesFilter *> (user_data)->dialog_close();
+            }
+        ),
+        this 
+    );
+
+    {
+        paid_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-paid"));
+
+        if (!paid_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            set_paid (show_paid);
+
+            g_signal_connect(
+                paid_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_paid (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this 
+            );
+        }
+    }
+
+    {
+        unpaid_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-unpaid"));
+
+
+        if (!unpaid_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            set_unpaid (show_unpaid);
+
+            g_signal_connect(
+                unpaid_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_unpaid (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this 
+            );
+        }
+    }
+
+    {
+        posted_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-posted"));
+
+        if (!posted_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            set_posted (show_posted);
+
+            g_signal_connect(
+                posted_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_posted (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this 
+            );
+        }
+    }
+
+    {
+        unposted_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-unposted"));
+
+        if (!unposted_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            set_unposted (show_unposted);
+
+            g_signal_connect(
+                unposted_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_unposted (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this
+            );
+        }
+    }
+
+    {
+        invoices_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-invoices"));
+        
+        if (!invoices_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            auto owner_type = controller->get_owner();
+
+            if (owner_type == GNC_OWNER_VENDOR)
+            {
+                gtk_button_set_label(
+                    GTK_BUTTON (invoices_toggle),
+                    _("Show Bills")
+                );
+            }
+            else if (owner_type == GNC_OWNER_EMPLOYEE)
+            {
+                gtk_button_set_label(
+                    GTK_BUTTON (invoices_toggle),
+                    _("Show Expense Vouchers")
+                );
+            }
+
+            set_invoices (show_invoices);
+
+            g_signal_connect(
+                invoices_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_invoices (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this
+            );
+        }
+    }
+
+    {
+        creditnotes_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-creditnotes"));
+
+        if (!creditnotes_toggle)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
+            set_creditnotes (show_creditnotes);
+
+            g_signal_connect(
+                creditnotes_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        auto state = gtk_toggle_button_get_active(button);
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_creditnotes (state);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this
+            );
+        }
+    }
+
+    {
+        GtkWidget* start_box = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_box"));
+
+        if (!start_box) {
+            g_warn_if_fail (true);
+        }
+        else {
+            start_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-start"));
+            start_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
+
+            if (start_picker)
+            {
+                gtk_box_pack_start (GTK_BOX (start_box), GTK_WIDGET (start_picker), TRUE, TRUE, 0);
+            }
+            else g_warn_if_fail (true);
+
+            if (start_toggle)
+            {
+                g_signal_connect(
+                    start_toggle,
+                    "toggled",
+                    G_CALLBACK(
+                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                        {
+                            auto state = gtk_toggle_button_get_active(button);
+                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                            filter->set_use_start_date (state);
+                            filter->controller->apply_filter ();
+
+                            return false;
+                        }
+                    ),
+                    this
+                );
+            }
+            else g_warn_if_fail (true);
+
+            set_use_start_date (use_start_date);
+            set_dates(true);
+
+            gtk_widget_show_all (start_box);
+        }
+    }
+
+    {
+        GtkWidget* end_box = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_box"));
+
+        if (!end_box) {
+            g_warn_if_fail (true);
+        }
+        else {
+            end_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-end"));
+            end_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
+            if (end_picker)
+                gtk_box_pack_start (GTK_BOX (end_box), GTK_WIDGET (end_picker), TRUE, TRUE, 0);
+            else g_warn_if_fail (true);
+
+            if (end_toggle)
+            {
+                g_signal_connect(
+                    end_toggle,
+                    "toggled",
+                    G_CALLBACK(
+                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                        {
+                            auto state = gtk_toggle_button_get_active(button);
+                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                            filter->set_use_end_date (state);
+                            filter->controller->apply_filter ();
+
+                            return false;
+                        }
+                    ),
+                    this
+                );
+            }
+            else g_warn_if_fail (true);
+
+            set_use_end_date (use_end_date);
+            set_dates(true);
+
+            gtk_widget_show_all(end_box);
+        }
+    }
+
+    {
+        auto *apply_button = GTK_BUTTON (gtk_builder_get_object(builder, "apply-dates"));
+
+        if (!apply_button)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            g_signal_connect(
+                apply_button,
+                "clicked",
+                G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
+                {
+                    auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                    filter->set_dates (false);
+
+                    if (filter->use_start_date || filter->use_end_date)
+                        filter->controller->apply_filter ();
+                }),
+                this
+            );
+        }
+
+    }
+
+    {
+        search_entry = GTK_ENTRY (gtk_builder_get_object(builder, "search"));
+
+        if (!search_entry)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            auto owner_type = controller->get_owner();
+
+            if (owner_type == GNC_OWNER_VENDOR)
+            {
+                gtk_entry_set_placeholder_text(
+                    search_entry,
+                    "Type to search for Bills..."
+                );
+            }
+            else if (owner_type == GNC_OWNER_EMPLOYEE)
+            {
+                gtk_entry_set_placeholder_text(
+                    search_entry,
+                    "Type to search for Expense Vouchers..."
+                );
+            }
+
+            if (search_term.length())
+                set_search_term (search_term.c_str());
+
+            g_signal_connect(
+                search_entry,
+                "changed",
+                G_CALLBACK(
+                    +[] (GtkEditable *editable,
+                          gpointer    user_data)
+                    {
+                        const gchar *text = gtk_entry_get_text(GTK_ENTRY(editable));
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_search_term (text);
+                        filter->controller->apply_filter ();
+                    }
+                ),
+                this
+            );
+        }
+    }
+
+    {
+        auto *reset_button = GTK_BUTTON (gtk_builder_get_object(builder, "reset"));
+
+        if (!reset_button)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            g_signal_connect (
+                reset_button,
+                "clicked",
+                G_CALLBACK (
+                    +[] (GtkButton *button, gpointer user_data)
+                    {
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        if (filter->reset ())
+                            filter->controller->apply_filter ();
+                    }
+                ),
+                this
+            );
+        }
+    }
+
+    {
+        auto *close_button = GTK_BUTTON (gtk_builder_get_object(builder, "close"));
+
+        if (!close_button)
+        {
+            g_warn_if_fail(true);
+        }
+        else
+        {
+            g_signal_connect(
+                close_button,
+                "clicked",
+                G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
+                {
+                    gtk_widget_destroy (GTK_WIDGET (user_data));
+                }),
+                dialog
+            );
+        }
+    }
+
+    g_object_unref(G_OBJECT(builder));
+
+    LEAVE("");
+}
+
+QofQuery *
+InvoicesFilter::make_filter()
+{
+    auto owner_type = controller->get_owner ();
+    auto *book = gnc_get_current_book ();
+
+    auto *query = qof_query_create_for (GNC_ID_INVOICE);
+    qof_query_set_book (query, book);
+
+    {
+        auto none = !show_invoices && !show_creditnotes;
+    
+        if (show_invoices || none)
+        {
+            GncInvoiceType inv_type;
+
+            switch (owner_type)
+            {
+              case GNC_OWNER_CUSTOMER: inv_type = GNC_INVOICE_CUST_INVOICE; break;
+              case GNC_OWNER_VENDOR: inv_type = GNC_INVOICE_VEND_INVOICE; break;
+              case GNC_OWNER_EMPLOYEE: inv_type = GNC_INVOICE_EMPL_INVOICE; break;
+              default: g_assert_not_reached ();
+            }
+
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
+            QofQueryPredData *type_pred = qof_query_int32_predicate (QOF_COMPARE_EQUAL, inv_type);
+            qof_query_add_term (query, type_path, type_pred, QOF_QUERY_AND);
+        }
+
+        if (show_creditnotes || none)
+        {
+            GncInvoiceType credit_type;
+
+            switch (owner_type)
+            {
+              case GNC_OWNER_CUSTOMER: credit_type = GNC_INVOICE_CUST_CREDIT_NOTE; break;
+              case GNC_OWNER_VENDOR: credit_type = GNC_INVOICE_VEND_CREDIT_NOTE; break;
+              case GNC_OWNER_EMPLOYEE: credit_type = GNC_INVOICE_EMPL_CREDIT_NOTE; break;
+              default: g_assert_not_reached ();
+            }
+
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
+            QofQueryPredData *type_pred = qof_query_int32_predicate (QOF_COMPARE_EQUAL, credit_type);
+            qof_query_add_term (query, type_path, type_pred,
+                none || !show_invoices ? QOF_QUERY_AND : QOF_QUERY_OR);
+        }
+    }
+
+    { // Filter only active invoices.
+        QofQuery *query_active = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_active, book);
+
+        qof_query_add_boolean_match(
+            query_active,
+            qof_query_build_param_list(QOF_PARAM_ACTIVE, nullptr),
+            true,
+            QOF_QUERY_AND);
+
+        qof_query_merge_in_place (query, query_active, QOF_QUERY_AND); 
+        qof_query_destroy (query_active);
+    }
+
+    if (show_paid != show_unpaid || !show_paid)
+    {
+        QofQuery *query_paid = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_paid, book);
+
+        {
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
+
+            qof_query_add_boolean_match(query_paid,
+                                        type_path,
+                                        show_paid,
+                                        QOF_QUERY_AND);
+        }
+
+        if (!show_paid && !show_unpaid) { // If both options are false, add a TRUE match so no results are shown.
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
+
+            qof_query_add_boolean_match(query_paid,
+                                        type_path,
+                                        true,
+                                        QOF_QUERY_AND);
+        }
+
+        qof_query_merge_in_place (query, query_paid, QOF_QUERY_AND); 
+        qof_query_destroy (query_paid);
+    }
+
+    if (show_posted != show_unposted || !show_posted)
+    {
+        QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_posted, book);
+
+        {
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+            qof_query_add_boolean_match(query_posted,
+                                        type_path,
+                                        show_posted,
+                                        QOF_QUERY_AND);
+        }
+
+        if (!show_posted && !show_unposted) { // If both options are false, add a TRUE match so no results are shown.
+            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+            qof_query_add_boolean_match(query_posted,
+                                        type_path,
+                                        true,
+                                        QOF_QUERY_AND);
+        }
+
+        qof_query_merge_in_place (query, query_posted, QOF_QUERY_AND); 
+        qof_query_destroy (query_posted);
+    }
+
+    if (use_start_date && start_date != 0)
+    {
+        QofQuery *query_start = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_start, book);
+
+        {
+            QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_posted, book);
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                qof_query_add_boolean_match(query_posted,
+                                            type_path,
+                                            true,
+                                            QOF_QUERY_AND);
+            }
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
+                QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, start_date);
+                qof_query_add_term(query_posted, type_path, pred_start, QOF_QUERY_AND);
+            }
+
+            qof_query_merge_in_place (query_start, query_posted, QOF_QUERY_AND); 
+            qof_query_destroy (query_posted);
+        }
+
+        {
+            QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_unposted, book);
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                qof_query_add_boolean_match(query_unposted,
+                                            type_path,
+                                            false,
+                                            QOF_QUERY_AND);
+            }
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
+                QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, start_date);
+                qof_query_add_term(query_unposted, type_path, pred_start, QOF_QUERY_AND);
+            }
+
+            qof_query_merge_in_place (query_start, query_unposted, QOF_QUERY_OR); 
+            qof_query_destroy (query_unposted);
+        }
+
+        qof_query_merge_in_place (query, query_start, QOF_QUERY_AND); 
+        qof_query_destroy (query_start);
+    }
+
+    if (use_end_date && end_date != 0)
+    {
+        QofQuery *query_end = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_end, book);
+
+        {
+            QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_posted, book);
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                qof_query_add_boolean_match(query_posted,
+                                            type_path,
+                                            true,
+                                            QOF_QUERY_AND);
+            }
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
+                QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
+                qof_query_add_term(query_posted, type_path, pred_end, QOF_QUERY_AND);
+            }
+
+            qof_query_merge_in_place (query_end, query_posted, QOF_QUERY_AND); 
+            qof_query_destroy (query_posted);
+        }
+
+        {
+            QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_unposted, book);
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                qof_query_add_boolean_match(query_unposted,
+                                            type_path,
+                                            false,
+                                            QOF_QUERY_AND);
+            }
+
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
+                QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
+                qof_query_add_term(query_unposted, type_path, pred_end, QOF_QUERY_AND);
+            }
+
+            qof_query_merge_in_place (query_end, query_unposted, QOF_QUERY_OR); 
+            qof_query_destroy (query_unposted);
+        }
+
+        qof_query_merge_in_place (query, query_end, QOF_QUERY_AND); 
+        qof_query_destroy (query_end);
+    }
+
+    if (search_term.length ())
+    {
+        QofQuery *query_term = qof_query_create_for (GNC_ID_INVOICE);
+        qof_query_set_book (query_term, book);
+
+        QofQueryParamList *params[4] = {
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+        };
+
+        // Customer name
+        params[0] = qof_query_build_param_list (INVOICE_OWNER, OWNER_PARENT,
+                                                OWNER_NAME, nullptr);
+
+        // Job name
+        params[1] = qof_query_build_param_list (INVOICE_OWNER, OWNER_NAME,
+                                                nullptr);
+
+        // Invoice id
+        params[2] = qof_query_build_param_list (INVOICE_ID, nullptr);
+
+        // Invoice billing id 
+        params[3] = qof_query_build_param_list (INVOICE_BILLINGID, nullptr);
+
+        for (size_t i = 0; i < std::size(params); i++) {
+            auto *path = params[i];
+
+            QofQueryPredData *owner_name_pred =
+                qof_query_string_predicate(
+                    QOF_COMPARE_CONTAINS,
+                    search_term.c_str(),
+                    QOF_STRING_MATCH_CASEINSENSITIVE,
+                    false);
+
+            qof_query_add_term(
+                query_term,
+                path,
+                owner_name_pred,
+                i == 0 ? QOF_QUERY_AND : QOF_QUERY_OR);
+        }
+
+        qof_query_merge_in_place (query, query_term, QOF_QUERY_AND); 
+        qof_query_destroy (query_term);
+    }
+
+    return query;
+}
 
 } // End namespace
 
