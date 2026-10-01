@@ -76,17 +76,17 @@ select_namespace (GncTreeViewCommodity *view,
     auto selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
     GtkTreeIter iter;
     if (!gtk_tree_model_get_iter_first (model, &iter))
-        return FALSE;
+        return false;
     do
     {
         auto path = gtk_tree_model_get_path (model, &iter);
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
         if (gnc_tree_view_commodity_get_selected_namespace (view) == target)
-            return TRUE;
+            return true;
     }
     while (gtk_tree_model_iter_next (model, &iter));
-    return FALSE;
+    return false;
 }
 
 class CommodityNamespaceResponseTest : public GnomeResponseTest

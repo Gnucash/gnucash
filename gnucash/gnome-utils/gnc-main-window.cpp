@@ -32,6 +32,7 @@
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
+#include <cstdint>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
@@ -1099,7 +1100,7 @@ struct GncMainWindowFinishPendingRequest
 {
     gatomicrefcount ref_count;
     GWeakRef book;
-    gboolean had_book;
+    bool had_book;
     GWeakRef window;
     GCancellable *cancellable;
     gulong window_destroy_handler;
@@ -1107,28 +1108,28 @@ struct GncMainWindowFinishPendingRequest
     GncPluginPage *current_page;
     GncMainWindowPendingCallback callback;
     gpointer user_data;
-    gboolean completed;
+    bool completed;
 };
 
 struct GncMainWindowAllFinishPendingRequest
 {
     gatomicrefcount ref_count;
     GWeakRef book;
-    gboolean had_book;
+    bool had_book;
     GCancellable *cancellable;
     GList *windows;
     GncMainWindow *current_window;
     GncMainWindowAllPendingCallback callback;
     gpointer user_data;
-    gboolean completed;
-    gboolean drain_session_operations;
+    bool completed;
+    bool drain_session_operations;
 };
 
-static gboolean
-main_window_pending_book_is_current (GWeakRef *reference, gboolean had_book)
+static bool
+main_window_pending_book_is_current (GWeakRef *reference, bool had_book)
 {
     auto book = static_cast<QofBook *> (g_weak_ref_get (reference));
-    gboolean valid = had_book ? book && gnc_current_session_exist () &&
+    bool valid = had_book ? book && gnc_current_session_exist () &&
         book == gnc_get_current_book () && qof_book_is_open (book) &&
         !qof_book_shutting_down (book) : !gnc_current_session_exist ();
     g_clear_object (&book);
@@ -1166,14 +1167,14 @@ main_window_finish_pending_request_unref (GncMainWindowFinishPendingRequest *req
 
 static void
 main_window_finish_pending_request_complete (GncMainWindowFinishPendingRequest *request,
-                                             gboolean accepted)
+                                             bool accepted)
 {
     GncMainWindow *window;
 
     if (!request || request->completed)
         return;
 
-    request->completed = TRUE;
+    request->completed = true;
     window = GNC_MAIN_WINDOW (g_weak_ref_get (&request->window));
     if (window)
     {
@@ -1336,12 +1337,12 @@ main_window_all_finish_pending_request_unref (GncMainWindowAllFinishPendingReque
 
 static void
 main_window_all_finish_pending_request_complete (GncMainWindowAllFinishPendingRequest *request,
-                                                 gboolean accepted)
+                                                 bool accepted)
 {
     if (!request || request->completed)
         return;
 
-    request->completed = TRUE;
+    request->completed = true;
     if (all_finish_pending_request == request)
         all_finish_pending_request = nullptr;
     if (request->callback)
@@ -1405,7 +1406,7 @@ static void
 main_window_all_finish_pending_async_full (GCancellable *cancellable,
                                             GncMainWindowAllPendingCallback callback,
                                             gpointer user_data,
-                                            gboolean drain_session_operations)
+                                            bool drain_session_operations)
 {
     GncMainWindowAllFinishPendingRequest *request;
     const GList *windows;
@@ -1467,8 +1468,8 @@ struct MainWindowSaveRequest
     QofBook *book;
     QofSession *session;
     GtkDialog *dialog;
-    guint timer_source;
-    guint seconds;
+    std::uint32_t timer_source;
+    std::uint32_t seconds;
 };
 
 static GncMainWindow *

@@ -22,7 +22,7 @@
 namespace
 {
 
-GtkWidget *
+static GtkWidget *
 find_named (GtkWidget *widget, const char *name)
 {
     if (g_strcmp0 (gtk_widget_get_name (widget), name) == 0)
@@ -40,7 +40,7 @@ find_named (GtkWidget *widget, const char *name)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_toplevel (const char *name)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -51,7 +51,7 @@ find_toplevel (const char *name)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_new_sheet_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -68,7 +68,7 @@ find_new_sheet_dialog ()
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_style_sheet_options_window (GtkWindow *owner)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -84,20 +84,20 @@ find_style_sheet_options_window (GtkWindow *owner)
     return found;
 }
 
-void
+static void
 destroy_sheet_owner (GtkWidget *, gpointer owner)
 {
     gtk_widget_destroy (GTK_WIDGET (owner));
 }
 
-void
+static void
 destroy_owner_on_insert (GtkTreeModel *, GtkTreePath *, GtkTreeIter *,
                          gpointer owner)
 {
     gtk_widget_destroy (GTK_WIDGET (owner));
 }
 
-int style_sheet_count ()
+static int style_sheet_count ()
 {
     return scm_to_int (scm_c_eval_string (
         "(length (gnc:get-html-style-sheets))"));
@@ -142,7 +142,7 @@ protected:
                     break;
                 }
                 gtk_button_clicked (GTK_BUTTON (cancel));
-                while (g_main_context_iteration (nullptr, FALSE))
+                while (g_main_context_iteration (nullptr, false))
                     ;
                 g_object_unref (editor);
                 editor = find_style_sheet_options_window (GTK_WINDOW (manager));
@@ -155,7 +155,7 @@ protected:
                 if (GTK_IS_BUTTON (close))
                     gtk_button_clicked (GTK_BUTTON (close));
             }
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             g_object_unref (manager);
             manager = find_toplevel ("gnc-id-style-sheet-select");
@@ -227,7 +227,7 @@ TEST_F (StyleSheetCreationTest, OwnerMayCloseAfterSchemeCreatesSheet)
     EXPECT_EQ (find_toplevel ("gnc-id-style-sheet-select"), nullptr);
 }
 
-void
+static void
 run_tests (void *, int, char **)
 {
     qof_init ();

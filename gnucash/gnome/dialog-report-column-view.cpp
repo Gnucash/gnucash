@@ -21,6 +21,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#include <cstdint>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <algorithm>
@@ -82,7 +83,7 @@ struct gncp_column_view_edit
     {
         gnc_column_view_edit *owner{nullptr};
         GtkWidget *dialog{nullptr};
-        guint64 contents_revision{0};
+        std::uint64_t contents_revision{0};
     };
     std::shared_ptr<SizeDialogOwner> size_dialog_owner;
 };
@@ -523,7 +524,7 @@ struct SizeDialogRequest
     GtkWidget *col_spin;
     size_t selected;
     unsigned int report_id;
-    guint64 revision;
+    std::uint64_t revision;
     GncOptionReportPlacementVec placements;
 };
 

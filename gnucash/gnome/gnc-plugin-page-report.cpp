@@ -1650,14 +1650,14 @@ report_export_start (GncPluginPageReport *report)
         return;
     }
     GList *choices = g_list_append (nullptr, g_strdup (_("HTML")));
-    gboolean valid = TRUE;
+    bool valid = true;
     for (SCM tail = request->export_types; !scm_is_null (tail); tail = SCM_CDR (tail))
     {
         SCM pair = SCM_CAR (tail);
         if (!scm_is_pair (pair) || !scm_is_string (SCM_CAR (pair)))
         {
             g_warning ("unexpected report export type element");
-            valid = FALSE;
+            valid = false;
             break;
         }
         choices = g_list_append (choices, gnc_scm_to_utf8_string (SCM_CAR (pair)));
@@ -1688,7 +1688,7 @@ report_export_write (ReportExportRequest *request)
         return;
     }
 
-    gboolean result = TRUE;
+    bool result = true;
     if (scm_is_pair (request->choice))
     {
         SCM type = SCM_CDR (request->choice);

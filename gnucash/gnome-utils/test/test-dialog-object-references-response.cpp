@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 
@@ -16,7 +17,7 @@
 
 namespace
 {
-GtkWidget *
+static GtkWidget *
 find_references_dialog ()
 {
     GList *windows = gtk_window_list_toplevels ();
@@ -37,10 +38,10 @@ find_references_dialog ()
     return dialog;
 }
 
-void
+static void
 dialog_destroyed ([[maybe_unused]] GtkWidget *dialog, gpointer user_data)
 {
-    ++*static_cast<guint *> (user_data);
+    ++*static_cast<std::uint32_t *> (user_data);
 }
 
 class ObjectReferencesResponseTest : public ::testing::Test
@@ -77,10 +78,10 @@ protected:
 
     bool wait_for_destroy ()
     {
-        for (guint attempts = 0; m_destroy_count == 0u && attempts < 1000;
+        for (std::uint32_t attempts = 0; m_destroy_count == 0u && attempts < 1000;
              ++attempts)
         {
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             if (m_destroy_count == 0u)
                 g_usleep (1000);
@@ -89,7 +90,7 @@ protected:
     }
 
     GtkWidget *m_dialog{};
-    guint m_destroy_count{};
+    std::uint32_t m_destroy_count{};
     gulong m_destroy_handler{};
 };
 
@@ -109,7 +110,7 @@ TEST_F (ObjectReferencesResponseTest, ClosesWithWindow)
 
 TEST_F (ObjectReferencesResponseTest, PendingDialogLeavesCleanupToFixture)
 {
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
 
     EXPECT_EQ (m_destroy_count, 0u);

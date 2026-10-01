@@ -85,7 +85,7 @@ commodity_selection_finished (QofBook *book, gnc_commodity *commodity,
                               gpointer user_data)
 {
     auto selection = static_cast<CommoditySelection *>(user_data);
-    gboolean accepted = book && commodity && book == selection->book &&
+    bool accepted = book && commodity && book == selection->book &&
         gnc_get_current_book () == selection->book &&
         qof_book_is_open (selection->book);
     if (accepted && selection->cusip)

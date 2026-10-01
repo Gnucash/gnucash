@@ -25,6 +25,7 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
+#include <cstdint>
 #endif
 
 #include <gtk/gtk.h>
@@ -76,7 +77,7 @@ add_menu_to_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat fmt,
     GtkListStore *store;
     GtkTreeIter iter;
     GtkCellRenderer *cell;
-    gint count = 0;
+    std::int32_t count = 0;
 
     store = gtk_list_store_new(1, G_TYPE_STRING);
 

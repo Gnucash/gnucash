@@ -195,10 +195,10 @@ typedef struct
     gchar *template_name;
     gchar *style_sheet_name;
     gulong response_handler;
-    gboolean response_captured;
+    bool response_captured;
 } NewStyleSheetRequest;
 
-static gboolean
+static bool
 gnc_style_sheet_session_matches (QofSession *session)
 {
     if (!session)
@@ -213,7 +213,7 @@ gnc_style_sheet_new_response_cb (GtkDialog *dialog, gint response,
 {
     if (request->response_captured)
         return;
-    request->response_captured = TRUE;
+    request->response_captured = true;
     if (request->response_handler &&
         g_signal_handler_is_connected (dialog, request->response_handler))
         g_signal_handler_disconnect (dialog, request->response_handler);

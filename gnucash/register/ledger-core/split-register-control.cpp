@@ -128,7 +128,7 @@ check_imbalance_fraction (const SplitRegister *reg,
     return denom_diff;
 }
 
-static gboolean
+static bool
 split_register_balance_virt_loc_equal (VirtualLocation a, VirtualLocation b)
 {
     return a.vcell_loc.virt_row == b.vcell_loc.virt_row &&
@@ -145,9 +145,9 @@ typedef struct
     GncGUID transaction_guid;
     GncGUID default_account_guid;
     GncGUID other_account_guid;
-    gboolean has_default_account;
-    gboolean has_other_account;
-    gboolean cancelled;
+    bool has_default_account;
+    bool has_other_account;
+    bool cancelled;
     VirtualLocation cursor;
 } SplitRegisterBalanceRequest;
 
@@ -155,7 +155,7 @@ static void
 split_register_balance_request_cancel (GncSplitRegisterAsyncRequest *base)
 {
     auto request = reinterpret_cast<SplitRegisterBalanceRequest *>(base);
-    request->cancelled = TRUE;
+    request->cancelled = true;
     gnc_split_register_async_request_untrack (base);
 }
 
@@ -330,12 +330,12 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     if (default_account)
     {
         request->default_account_guid = *xaccAccountGetGUID (default_account);
-        request->has_default_account = TRUE;
+        request->has_default_account = true;
     }
     if (two_accounts && other_account)
     {
         request->other_account_guid = *xaccAccountGetGUID (other_account);
-        request->has_other_account = TRUE;
+        request->has_other_account = true;
     }
     g_weak_ref_init (&request->parent, G_OBJECT (parent));
     gnc_split_register_async_request_track (reg, &request->base,
@@ -535,12 +535,12 @@ typedef struct
 {
     VirtualLocation source;
     VirtualLocation destination;
-    gboolean completed;
-    gboolean saved;
-    gboolean deferred;
+    bool completed;
+    bool saved;
+    bool deferred;
 } SplitRegisterMoveSaveRequest;
 
-static gboolean
+static bool
 split_register_move_virt_loc_equal (VirtualLocation a, VirtualLocation b)
 {
     return a.vcell_loc.virt_row == b.vcell_loc.virt_row &&
@@ -554,7 +554,7 @@ split_register_move_save_finished (SplitRegister *reg, gboolean saved,
                                    gpointer user_data)
 {
     auto request = static_cast<SplitRegisterMoveSaveRequest *>(user_data);
-    request->completed = TRUE;
+    request->completed = true;
     request->saved = saved;
     if (!request->deferred)
         return;
@@ -659,7 +659,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     if (info->replaying_save_traverse)
     {
         info->replaying_save_traverse = FALSE;
-        saved = TRUE;
+        saved = true;
     }
     else
     {
@@ -670,7 +670,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                        split_register_move_save_finished, request);
         if (!request->completed)
         {
-            request->deferred = TRUE;
+            request->deferred = true;
             *p_new_virt_loc = request->source;
             gnc_resume_gui_refresh ();
             LEAVE ("save pending");
@@ -1511,7 +1511,7 @@ gnc_split_register_xfer_dialog (SplitRegister *reg, Transaction *txn,
  * @param force_dialog pop a dialog even if we don't think we need it.
  * @return whether more handling is required.
  */
-static gboolean
+static bool
 split_register_exchange_virt_loc_equal (VirtualLocation first, VirtualLocation second)
 {
     return first.vcell_loc.virt_row == second.vcell_loc.virt_row &&
@@ -1531,11 +1531,11 @@ typedef struct
     Account *rate_account;
     GncSplitRegisterExchangeCallback callback;
     gpointer callback_data;
-    gboolean completed;
-    gboolean has_split;
+    bool completed;
+    bool has_split;
 } RegisterExchangeRequest;
 
-static gboolean
+static bool
 register_exchange_request_is_current (RegisterExchangeRequest *request)
 {
     SplitRegister *reg = request->base.reg;
@@ -1544,7 +1544,7 @@ register_exchange_request_is_current (RegisterExchangeRequest *request)
 
     if (!reg || !reg->table ||
         !split_register_exchange_virt_loc_equal (reg->table->current_cursor_loc, request->virt_loc))
-        return FALSE;
+        return false;
 
     transaction = gnc_split_register_get_current_trans (reg);
     split = gnc_split_register_get_current_split (reg);
@@ -1557,7 +1557,7 @@ register_exchange_request_is_current (RegisterExchangeRequest *request)
 
 static void
 register_exchange_request_notify (RegisterExchangeRequest *request,
-                                  SplitRegister *reg, gboolean accepted)
+                                  SplitRegister *reg, bool accepted)
 {
     GncSplitRegisterExchangeCallback callback;
     gpointer callback_data;
@@ -1565,7 +1565,7 @@ register_exchange_request_notify (RegisterExchangeRequest *request,
     if (request->completed)
         return;
 
-    request->completed = TRUE;
+    request->completed = true;
     callback = request->callback;
     callback_data = request->callback_data;
     request->callback = NULL;
@@ -1593,7 +1593,7 @@ register_exchange_request_finished_cb (gboolean completed, gnc_numeric exch_rate
     RegisterExchangeRequest *request = static_cast<RegisterExchangeRequest *>(user_data);
     GtkWidget *parent = static_cast<GtkWidget *>(g_weak_ref_get (&request->parent));
     SplitRegister *reg = request->base.reg;
-    gboolean accepted = FALSE;
+    bool accepted = false;
 
     if (!request->completed && completed && parent &&
         register_exchange_request_is_current (request) &&
@@ -1605,7 +1605,7 @@ register_exchange_request_finished_cb (gboolean completed, gnc_numeric exch_rate
         info->rate_account = request->rate_account;
         info->rate_reset = RATE_RESET_DONE;
         gnc_table_refresh_gui (reg->table, FALSE);
-        accepted = TRUE;
+        accepted = true;
     }
     g_clear_object (&parent);
     gnc_split_register_async_request_untrack (&request->base);
@@ -1880,7 +1880,7 @@ typedef struct
     GncGUID source_transaction_guid;
 } SplitRegisterExchangeReplayRequest;
 
-static gboolean
+static bool
 split_register_exchange_replay_is_current (SplitRegisterExchangeReplayRequest *request,
                                            SplitRegister *reg)
 {
@@ -1888,7 +1888,7 @@ split_register_exchange_replay_is_current (SplitRegisterExchangeReplayRequest *r
     if (!reg || !reg->table ||
         !split_register_exchange_virt_loc_equal (reg->table->current_cursor_loc,
                                                  request->source))
-        return FALSE;
+        return false;
     transaction = gnc_split_register_get_current_trans (reg);
     return transaction && guid_equal (xaccTransGetGUID (transaction),
                                       &request->source_transaction_guid);
@@ -1909,14 +1909,14 @@ split_register_exchange_replay_finished (SplitRegister *reg, gboolean accepted,
     g_free (request);
 }
 
-static gboolean
+static bool
 split_register_traverse_request_exchange (SplitRegister *reg,
                                           VirtualLocation destination,
                                           gncTableTraversalDir direction)
 {
     auto transaction = gnc_split_register_get_current_trans (reg);
     if (!transaction)
-        return TRUE;
+        return true;
     auto request = g_new0 (SplitRegisterExchangeReplayRequest, 1);
     request->source = reg->table->current_cursor_loc;
     request->destination = destination;
@@ -1925,7 +1925,7 @@ split_register_traverse_request_exchange (SplitRegister *reg,
     auto result = gnc_split_register_handle_exchange_async (
         reg, FALSE, split_register_exchange_replay_finished, request);
     if (result == GNC_SPLIT_REGISTER_EXCHANGE_DEFERRED)
-        return TRUE;
+        return true;
     g_free (request);
     return result == GNC_SPLIT_REGISTER_EXCHANGE_REJECTED;
 }
@@ -1937,7 +1937,7 @@ typedef struct
     VirtualLocation destination;
     gncTableTraversalDir direction;
     GncGUID source_transaction_guid;
-    gboolean exact_traversal;
+    bool exact_traversal;
 } SplitRegisterTransactionChangeRequest;
 
 static void
@@ -1946,7 +1946,7 @@ split_register_transaction_change_cancel (GncSplitRegisterAsyncRequest *base)
     gnc_split_register_async_request_untrack (base);
 }
 
-static gboolean
+static bool
 split_register_transaction_change_is_current (SplitRegisterTransactionChangeRequest *request)
 {
     SplitRegister *reg = request->base.reg;
@@ -1954,7 +1954,7 @@ split_register_transaction_change_is_current (SplitRegisterTransactionChangeRequ
     if (!reg || !reg->table ||
         !split_register_exchange_virt_loc_equal (reg->table->current_cursor_loc,
                                                  request->source))
-        return FALSE;
+        return false;
     transaction = gnc_split_register_get_current_trans (reg);
     return transaction && guid_equal (xaccTransGetGUID (transaction),
                                       &request->source_transaction_guid);
@@ -1998,7 +1998,7 @@ static gboolean
 transaction_changed_confirm ([[maybe_unused]] VirtualLocation *p_new_virt_loc,
                              VirtualLocation *virt_loc,
                              SplitRegister *reg, [[maybe_unused]] Transaction *new_trans,
-                             gboolean exact_traversal,
+                             bool exact_traversal,
                              gncTableTraversalDir direction)
 {
     GtkWidget *dialog, *window;

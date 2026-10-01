@@ -23,7 +23,7 @@
 namespace
 {
 
-GtkWidget *
+static GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -39,7 +39,7 @@ find_buildable (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_print_check_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -62,7 +62,7 @@ find_print_check_dialog ()
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_title_dialog (GtkWidget *parent)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -97,7 +97,7 @@ struct CheckFixture
     Split *check_split;
 };
 
-CheckFixture
+static CheckFixture
 make_check_fixture ()
 {
     CheckFixture fixture{};
@@ -144,7 +144,7 @@ struct CloseCheckParentState
     GtkWidget *check{};
 };
 
-void
+static void
 close_check_parent_on_title_destroy (GtkWidget *, gpointer user_data)
 {
     auto state = static_cast<CloseCheckParentState *> (user_data);

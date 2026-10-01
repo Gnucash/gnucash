@@ -24,6 +24,7 @@
 \********************************************************************/
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -102,7 +103,7 @@ static PriceRemoveKeepOptions get_keep_options_value (GtkBuilder *);
 
 struct PriceRemovalOperation
 {
-    guint refs{1};
+    std::uint32_t refs{1};
     PricesDialog *owner{};
     GtkWidget *dialog{};
     GtkBuilder *builder{};
@@ -118,9 +119,9 @@ struct PriceRemovalOperation
     GDate fiscal_end{};
     PriceRemoveKeepOptions keep{PRICE_REMOVE_KEEP_LAST_WEEKLY};
     PriceRemoveSourceFlags source{};
-    gint requested_response{GTK_RESPONSE_NONE};
-    gboolean pending{};
-    gboolean destroyed{};
+    std::int32_t requested_response{GTK_RESPONSE_NONE};
+    bool pending{};
+    bool destroyed{};
 };
 
 struct PriceCommodityIdentity
@@ -176,7 +177,7 @@ price_removal_resolve_commodities (PriceRemovalOperation *operation)
     return g_list_reverse (commodities);
 }
 
-static gboolean
+static bool
 price_removal_context_is_current (PriceRemovalOperation *operation,
                                   GtkWindow *parent)
 {
@@ -310,7 +311,7 @@ finished:
     g_list_free_full (operation->commodity_identities,
                       price_commodity_identity_free);
     operation->commodity_identities = nullptr;
-    operation->pending = FALSE;
+    operation->pending = false;
     price_removal_unref (operation); // async confirmation reference
     price_removal_unref (keep_operation);
 }
@@ -319,7 +320,7 @@ static void
 price_removal_dialog_destroyed (GtkWidget *dialog, gpointer user_data)
 {
     auto operation = static_cast<PriceRemovalOperation *> (user_data);
-    operation->destroyed = TRUE;
+    operation->destroyed = true;
     g_signal_handlers_disconnect_by_data (dialog, operation);
     auto widgets = gtk_builder_get_objects (operation->builder);
     for (auto node = widgets; node; node = node->next)
@@ -379,7 +380,7 @@ price_removal_response (GtkDialog *dialog, gint response, gpointer user_data)
     operation->source = static_cast<PriceRemoveSourceFlags> (
         operation->owner->remove_source);
     operation->requested_response = response;
-    operation->pending = TRUE;
+    operation->pending = true;
     price_removal_ref (operation); // owned by the confirmation callback
     gnc_verify_dialog_async (GTK_WINDOW (dialog), FALSE,
                              price_removal_confirmed, operation,
@@ -497,7 +498,7 @@ price_delete_decided (GtkWindow *parent, gint response, gpointer user_data)
     {
         auto database = gnc_pricedb_get_db (book);
         gnc_suspend_gui_refresh ();
-        for (guint i = 0; i < request->guids->len; ++i)
+        for (std::uint32_t i = 0; i < request->guids->len; ++i)
         {
             auto price = gnc_price_lookup (static_cast<GncGUID *> (
                 g_ptr_array_index (request->guids, i)), book);

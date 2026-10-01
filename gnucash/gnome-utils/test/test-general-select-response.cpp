@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 
@@ -20,14 +21,14 @@ GtkWidget *destroy_from_get_string;
 
 struct Selector
 {
-    guint calls = 0;
-    gboolean complete_inline = FALSE;
+    std::uint32_t calls = 0;
+    bool complete_inline = false;
     gpointer inline_selection = nullptr;
     GNCGeneralSelectAsyncResultCB completed = nullptr;
     gpointer completion_data = nullptr;
 };
 
-const char *
+static const char *
 get_string (gpointer selection)
 {
     if (destroy_from_get_string)
@@ -43,7 +44,7 @@ get_string (gpointer selection)
     return "Unknown selection";
 }
 
-void
+static void
 select_async ([[maybe_unused]] gpointer cb_arg, gpointer,
               [[maybe_unused]] GtkWidget *parent,
               GNCGeneralSelectAsyncResultCB completed, gpointer user_data)
@@ -59,7 +60,7 @@ select_async ([[maybe_unused]] gpointer cb_arg, gpointer,
     selector->completion_data = user_data;
 }
 
-void
+static void
 complete_selection (Selector &selector, gpointer selection)
 {
     auto completed = selector.completed;
@@ -72,13 +73,13 @@ complete_selection (Selector &selector, gpointer selection)
     completed (selection, data);
 }
 
-void
+static void
 count_changed (GNCGeneralSelect *, gpointer data)
 {
-    ++*static_cast<guint *> (data);
+    ++*static_cast<std::uint32_t *> (data);
 }
 
-GtkWidget *
+static GtkWidget *
 create_select (GtkWidget *parent, Selector &selector)
 {
     auto widget = gnc_general_select_new_async (
@@ -115,7 +116,7 @@ protected:
     GtkWidget *parent{};
     GtkWidget *widget{};
     GNCGeneralSelect *select{};
-    guint changed{};
+    std::uint32_t changed{};
 };
 TEST_F (GeneralSelectResponseTest, PendingCancelUpdateAndInlineCompletion)
 {
@@ -137,7 +138,7 @@ TEST_F (GeneralSelectResponseTest, PendingCancelUpdateAndInlineCompletion)
     EXPECT_STREQ (gtk_entry_get_text (GTK_ENTRY (select->entry)), "New selection");
     EXPECT_EQ (changed, 1u);
 
-    selector.complete_inline = TRUE;
+    selector.complete_inline = true;
     selector.inline_selection = &old_selection;
     gtk_button_clicked (GTK_BUTTON (select->button));
     EXPECT_EQ (selector.calls, 3u);
@@ -145,7 +146,7 @@ TEST_F (GeneralSelectResponseTest, PendingCancelUpdateAndInlineCompletion)
     EXPECT_EQ (changed, 2u);
 }
 
-void
+static void
 destroy_on_entry_changed (GtkEditable *, gpointer data)
 {
     gtk_widget_destroy (GTK_WIDGET (data));

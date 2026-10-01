@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <libguile.h>
 #include <gtest/gtest.h>
@@ -25,14 +26,14 @@ namespace
 {
 struct Result
 {
-    guint calls{};
+    std::uint32_t calls{};
     GncBudget *budget{};
 };
 
 QofSession *window_sentinel_session{};
 GncMainWindow *window_sentinel{};
 
-void
+static void
 create_window_sentinel ()
 {
     window_sentinel_session = qof_session_new (qof_book_new ());
@@ -42,7 +43,7 @@ create_window_sentinel ()
     gnc_exchange_current_session (nullptr);
 }
 
-void
+static void
 destroy_window_sentinel ()
 {
     if (window_sentinel)
@@ -356,7 +357,7 @@ struct BudgetModifyClose
 {
     GtkWidget *window{};
     GncBudget *budget{};
-    guint calls{};
+    std::uint32_t calls{};
 };
 
 static void
@@ -440,7 +441,7 @@ protected:
     GncBudget *budget{};
     GncMainWindow *window{};
     GncPluginPage *page{};
-    gboolean page_installed{TRUE};
+    bool page_installed{true};
     gulong event_handler{};
     BudgetModifyClose close_state{};
     std::vector<GtkWidget *> retained_widgets;
@@ -484,7 +485,7 @@ protected:
             return false;
         }
         gtk_tree_view_expand_all (view);
-        gtk_tree_view_set_cursor (view, path, target_column, FALSE);
+        gtk_tree_view_set_cursor (view, path, target_column, false);
         gtk_tree_path_free (path);
         return true;
     }
@@ -493,9 +494,9 @@ protected:
 struct BudgetNoteScenario
 {
     const char *name;
-    gboolean accept;
-    gboolean close_page;
-    gboolean destroy_parent;
+    bool accept;
+    bool close_page;
+    bool destroy_parent;
 };
 
 class BudgetNoteResponseTest : public BudgetPageResponseTest,
@@ -523,12 +524,12 @@ TEST_P (BudgetNoteResponseTest, Response)
     if (scenario.close_page)
     {
         gnc_main_window_close_page (page);
-        page_installed = FALSE;
+        page_installed = false;
     }
     if (scenario.destroy_parent)
     {
         gtk_widget_destroy (GTK_WIDGET (window));
-        page_installed = FALSE;
+        page_installed = false;
     }
 
     gtk_dialog_response (dialog, scenario.accept ? GTK_RESPONSE_OK :
@@ -549,14 +550,14 @@ note_scenario_name (const ::testing::TestParamInfo<BudgetNoteScenario> &info)
 }
 
 INSTANTIATE_TEST_SUITE_P (Responses, BudgetNoteResponseTest,
-    ::testing::Values (BudgetNoteScenario{"AcceptUpdatesSelectedAccount", TRUE,
-                                         FALSE, FALSE},
-                       BudgetNoteScenario{"CancelLeavesNotesUnchanged", FALSE,
-                                         FALSE, FALSE},
-                       BudgetNoteScenario{"PageCloseIgnoresResponse", FALSE,
-                                         TRUE, FALSE},
-                       BudgetNoteScenario{"ParentDestroyIgnoresResponse", FALSE,
-                                         FALSE, TRUE}),
+    ::testing::Values (BudgetNoteScenario{"AcceptUpdatesSelectedAccount", true,
+                                         false, false},
+                       BudgetNoteScenario{"CancelLeavesNotesUnchanged", false,
+                                         false, false},
+                       BudgetNoteScenario{"PageCloseIgnoresResponse", false,
+                                         true, false},
+                       BudgetNoteScenario{"ParentDestroyIgnoresResponse", false,
+                                         false, true}),
     note_scenario_name);
 
 enum class BudgetMutationKind { Options, AllPeriods, Estimate };
@@ -565,7 +566,7 @@ struct BudgetMutationScenario
 {
     const char *name;
     BudgetMutationKind kind;
-    gboolean accept;
+    bool accept;
 };
 
 class BudgetMutationResponseTest : public BudgetPageResponseTest,
@@ -603,7 +604,7 @@ TEST_P (BudgetMutationResponseTest, Response)
         auto average = GTK_TOGGLE_BUTTON (find_builder_widget (
             GTK_WIDGET (dialog), "UseAverage"));
         ASSERT_TRUE (GTK_IS_TOGGLE_BUTTON (average));
-        gtk_toggle_button_set_active (average, TRUE);
+        gtk_toggle_button_set_active (average, true);
     }
     else
     {
@@ -614,7 +615,7 @@ TEST_P (BudgetMutationResponseTest, Response)
         ASSERT_TRUE (GTK_IS_ENTRY (value));
         ASSERT_TRUE (GTK_IS_TOGGLE_BUTTON (add));
         gtk_entry_set_text (value, "7");
-        gtk_toggle_button_set_active (add, TRUE);
+        gtk_toggle_button_set_active (add, true);
     }
 
     gtk_dialog_response (dialog, scenario.accept ? GTK_RESPONSE_OK :
@@ -680,17 +681,17 @@ mutation_scenario_name (
 
 INSTANTIATE_TEST_SUITE_P (Responses, BudgetMutationResponseTest,
     ::testing::Values (BudgetMutationScenario{"OptionsAccept",
-                         BudgetMutationKind::Options, TRUE},
+                         BudgetMutationKind::Options, true},
                        BudgetMutationScenario{"OptionsCancel",
-                         BudgetMutationKind::Options, FALSE},
+                         BudgetMutationKind::Options, false},
                        BudgetMutationScenario{"AllPeriodsAccept",
-                         BudgetMutationKind::AllPeriods, TRUE},
+                         BudgetMutationKind::AllPeriods, true},
                        BudgetMutationScenario{"AllPeriodsCancel",
-                         BudgetMutationKind::AllPeriods, FALSE},
+                         BudgetMutationKind::AllPeriods, false},
                        BudgetMutationScenario{"EstimateAccept",
-                         BudgetMutationKind::Estimate, TRUE},
+                         BudgetMutationKind::Estimate, true},
                        BudgetMutationScenario{"EstimateCancel",
-                         BudgetMutationKind::Estimate, FALSE}),
+                         BudgetMutationKind::Estimate, false}),
     mutation_scenario_name);
 
 TEST_F (BudgetPageResponseTest, ModifyEventMayCloseOwner)
@@ -718,7 +719,7 @@ TEST_F (BudgetPageResponseTest, ModifyEventMayCloseOwner)
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
     qof_event_unregister_handler (event_handler);
     event_handler = 0;
-    page_installed = FALSE;
+    page_installed = false;
     EXPECT_EQ (close_state.calls, 1u);
     EXPECT_STREQ (gnc_budget_get_name (budget), "Updated budget");
     EXPECT_EQ (gnc_budget_get_num_periods (budget), 3u);
@@ -731,8 +732,8 @@ TEST_F (BudgetPageResponseTest, ModifyEventMayCloseOwner)
 static int
 run_tests (int argc, char **argv)
 {
-    g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
-    g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+    g_setenv ("GNC_UNINSTALLED", "YES", true);
+    g_setenv ("GSETTINGS_BACKEND", "memory", true);
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
     {

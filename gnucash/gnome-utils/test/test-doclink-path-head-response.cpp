@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <string>
@@ -45,10 +46,10 @@ memory_set_string (const gchar *group, const gchar *name, const gchar *value)
 {
     if (g_strcmp0 (group, GNC_PREFS_GROUP_GENERAL) != 0 ||
         g_strcmp0 (name, GNC_DOC_LINK_PATH_HEAD) != 0)
-        return FALSE;
+        return false;
     g_free (path_head);
     path_head = g_strdup (value);
-    return TRUE;
+    return true;
 }
 
 static Transaction *
@@ -66,7 +67,7 @@ new_transaction (QofBook *book)
     auto trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, currency);
-    for (guint i = 0; i < 2; ++i)
+    for (std::uint32_t i = 0; i < 2; ++i)
     {
         auto split = xaccMallocSplit (book);
         xaccSplitSetParent (split, trans);
@@ -153,7 +154,7 @@ protected:
     GtkWidget *m_dialog{};
     QofBook *m_retained_book{};
     LinkReplacement m_replacement{};
-    gint m_handler{};
+    std::int32_t m_handler{};
     void begin_stale_prompt ()
     {
         ASSERT_TRUE (memory_set_string (GNC_PREFS_GROUP_GENERAL,

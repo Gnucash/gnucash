@@ -4,6 +4,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include <cstdint>
 
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
@@ -14,8 +15,8 @@
 
 struct Result
 {
-    guint calls{};
-    gboolean accepted{};
+    std::uint32_t calls{};
+    bool accepted{};
 };
 
 static GtkWidget *find_named (GtkWidget *widget, const gchar *name);
@@ -30,7 +31,7 @@ protected:
         parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         g_object_ref_sink (parent);
         gtk_widget_show (parent);
-        matcher = gnc_gen_trans_list_new (parent, nullptr, TRUE, 14, TRUE);
+        matcher = gnc_gen_trans_list_new (parent, nullptr, true, 14, true);
         ASSERT_NE (matcher, nullptr);
         auto widget = gnc_gen_trans_list_widget (matcher);
         ASSERT_TRUE (GTK_IS_DIALOG (widget));

@@ -10,6 +10,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <gtest/gtest.h>
+#include <cstdint>
 
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
@@ -17,7 +18,7 @@
 #include "gnc-session.h"
 #include "gnc-tree-view-account.h"
 
-static guint parsed_fixture_transactions;
+static std::uint32_t parsed_fixture_transactions;
 
 static int
 count_fixture_transaction(OfxTransactionData data, void *)
@@ -51,7 +52,7 @@ struct TestSession
 };
 
 static TestSession
-make_session (gboolean matching_account)
+make_session (bool matching_account)
 {
     TestSession result;
     auto book = qof_book_new ();
@@ -86,7 +87,7 @@ static gchar *
 write_fixture_file (GError **error)
 {
     gchar *path = NULL;
-    gint fd = g_file_open_tmp ("gnucash-ofx-XXXXXX", &path, error);
+    std::int32_t fd = g_file_open_tmp ("gnucash-ofx-XXXXXX", &path, error);
     if (fd < 0)
         return nullptr;
     if (!g_close (fd, error) ||
@@ -99,7 +100,7 @@ write_fixture_file (GError **error)
     return path;
 }
 
-static guint
+static std::uint32_t
 count_parsed_fixture_transactions (const gchar *path)
 {
     parsed_fixture_transactions = 0;
@@ -161,9 +162,9 @@ find_transient_dialog (GtkWindow *parent, const gchar *child_name)
 static GtkWidget *
 wait_for_transient_dialog (GtkWindow *parent, const gchar *child_name)
 {
-    for (guint i = 0; i < 2000; ++i)
+    for (std::uint32_t i = 0; i < 2000; ++i)
     {
-        while (g_main_context_iteration (NULL, FALSE))
+        while (g_main_context_iteration (NULL, false))
             ;
         auto dialog = find_transient_dialog (parent, child_name);
         if (dialog)
@@ -176,9 +177,9 @@ wait_for_transient_dialog (GtkWindow *parent, const gchar *child_name)
 static GtkWidget *
 wait_for_matcher_resolving_account_picker(GtkWindow *parent, Account *account)
 {
-    for (guint i = 0; i < 3000; ++i)
+    for (std::uint32_t i = 0; i < 3000; ++i)
     {
-        while (g_main_context_iteration (NULL, FALSE))
+        while (g_main_context_iteration (NULL, false))
             ;
         auto windows = gtk_window_list_toplevels ();
         GtkWidget *matcher = nullptr;
@@ -213,12 +214,12 @@ wait_for_matcher_resolving_account_picker(GtkWindow *parent, Account *account)
     return nullptr;
 }
 
-static gboolean
+static bool
 matcher_has_downloaded_transaction (GtkWidget *matcher)
 {
     auto view = find_named_widget (matcher, "downloaded_view");
     if (!GTK_IS_TREE_VIEW (view))
-        return FALSE;
+        return false;
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     return model && gtk_tree_model_iter_n_children (model, nullptr) > 0;
 }
@@ -233,7 +234,7 @@ start_real_import (GtkWindow *parent, const gchar *path)
 class OfxImportResponseTest : public ::testing::Test
 {
 protected:
-    void SetUp () override { ASSERT_TRUE (prepare_fixture (TRUE)); }
+    void SetUp () override { ASSERT_TRUE (prepare_fixture (true)); }
 
     void TearDown () override
     {
@@ -241,12 +242,12 @@ protected:
         {
             if (parent)
                 gtk_widget_destroy (GTK_WIDGET (parent));
-            const gint64 deadline =
+            const std::int64_t deadline =
                 g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
             while (gnc_gui_session_operation_pending () &&
                    g_get_monotonic_time () < deadline)
             {
-                while (g_main_context_iteration (nullptr, FALSE))
+                while (g_main_context_iteration (nullptr, false))
                     ;
                 g_usleep (1000);
             }
@@ -264,7 +265,7 @@ protected:
         gnc_clear_current_session ();
     }
 
-    gboolean prepare_fixture (gboolean matching_account)
+    bool prepare_fixture (bool matching_account)
     {
         test_session = make_session (matching_account);
         parent = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
@@ -277,11 +278,11 @@ protected:
             ADD_FAILURE () << "Could not create OFX fixture file: "
                            << (error ? error->message : "unknown error");
             g_clear_error (&error);
-            return FALSE;
+            return false;
         }
         g_clear_error (&error);
         EXPECT_GT (count_parsed_fixture_transactions (path), 0u);
-        return TRUE;
+        return true;
     }
 
     TestSession test_session{};
@@ -292,7 +293,7 @@ protected:
 class OfxImportWithoutMatchingAccountTest : public OfxImportResponseTest
 {
 protected:
-    void SetUp () override { ASSERT_TRUE (prepare_fixture (FALSE)); }
+    void SetUp () override { ASSERT_TRUE (prepare_fixture (false)); }
 };
 
 TEST_F (OfxImportResponseTest, TwoPassImportCanBeCancelled)

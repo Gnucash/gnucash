@@ -30,12 +30,12 @@ struct ResponseState
     GtkWidget *parent_to_destroy{};
     GtkWidget *dialog_to_reenter{};
     GncGUID watched_term_guid{};
-    gboolean parent_destroyed_by_modify{};
-    gboolean response_reentered{};
+    bool parent_destroyed_by_modify{};
+    bool response_reentered{};
     gulong event_handler{};
 };
 
-GtkWidget *
+static GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -51,7 +51,7 @@ find_buildable (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_named_toplevel (const char *name, GtkWindow *parent = nullptr)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -75,7 +75,7 @@ find_named_toplevel (const char *name, GtkWindow *parent = nullptr)
     return result;
 }
 
-void
+static void
 destroy_parent_on_modify (QofInstance *entity, QofEventId event_type,
                           gpointer user_data, gpointer)
 {
@@ -86,12 +86,12 @@ destroy_parent_on_modify (QofInstance *entity, QofEventId event_type,
         return;
     auto parent = state->parent_to_destroy;
     state->parent_to_destroy = nullptr;
-    state->parent_destroyed_by_modify = TRUE;
+    state->parent_destroyed_by_modify = true;
     if (state->dialog_to_reenter)
     {
         auto dialog = state->dialog_to_reenter;
         state->dialog_to_reenter = nullptr;
-        state->response_reentered = TRUE;
+        state->response_reentered = true;
         gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     }
     gtk_widget_destroy (parent);
@@ -344,8 +344,8 @@ TEST_F (BillTermsResponseTest, ModifyEventMayDestroyAndReenterOwner)
     state.watched_term_guid = term_guid;
     state.parent_to_destroy = parent;
     state.dialog_to_reenter = dialog;
-    state.parent_destroyed_by_modify = FALSE;
-    state.response_reentered = FALSE;
+    state.parent_destroyed_by_modify = false;
+    state.response_reentered = false;
     state.event_handler = qof_event_register_handler (
         destroy_parent_on_modify, &state);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);

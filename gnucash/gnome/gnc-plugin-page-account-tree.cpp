@@ -33,6 +33,7 @@
 */
 
 #include <config.h>
+#include <cstdint>
 
 #include <algorithm>
 
@@ -308,8 +309,8 @@ gnc_plugin_page_account_tree_new (void)
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageAccountTree, gnc_plugin_page_account_tree, GNC_TYPE_PLUGIN_PAGE)
 
 static gboolean show_abort_verify = TRUE;
-static guint64 scrub_epoch = 0;
-static gboolean scrub_question_pending = FALSE;
+static std::uint64_t scrub_epoch = 0;
+static bool scrub_question_pending = false;
 
 static void
 prepare_scrubbing ()
@@ -336,7 +337,7 @@ struct ScrubDecision
     GCancellable *cancellable;
     GncPluginPagePendingCallback callback;
     gpointer data;
-    guint64 epoch;
+    std::uint64_t epoch;
 };
 
 static void
@@ -348,7 +349,7 @@ scrub_abort_decided (GtkWindow *, gint response, gpointer user_data)
         (!request->cancellable || !g_cancellable_is_cancelled (request->cancellable));
     const auto accepted = valid && response == GTK_RESPONSE_YES;
     if (accepted && gnc_get_ongoing_scrub ()) gnc_set_abort_scrub (TRUE);
-    scrub_question_pending = FALSE;
+    scrub_question_pending = false;
     if (request->callback) request->callback (page, accepted, request->data);
     g_clear_object (&page);
     g_clear_object (&request->cancellable);
@@ -385,7 +386,7 @@ gnc_plugin_page_account_finish_pending_async (GncPluginPage *page,
     request->data = user_data;
     request->epoch = scrub_epoch;
     show_abort_verify = FALSE;
-    scrub_question_pending = TRUE;
+    scrub_question_pending = true;
     gnc_verify_dialog_async (GTK_WINDOW (page->window), FALSE,
                              scrub_abort_decided, request, "%s", _(check_repair_abort_YN));
 }
@@ -1495,9 +1496,9 @@ enum DeleteAccountMismatch
 struct DeleteAccountRequest
 {
     gint ref_count;
-    gboolean dialog_destroyed;
-    gboolean changed;
-    gint event_handler;
+    bool dialog_destroyed;
+    bool changed;
+    int event_handler;
     Adopters adopters;
     GWeakRef page;
     GWeakRef dialog;
@@ -1506,12 +1507,12 @@ struct DeleteAccountRequest
     GncGUID trans_guid;
     GncGUID subaccount_guid;
     GncGUID subtrans_guid;
-    gboolean has_trans;
-    gboolean has_subaccount;
-    gboolean has_subtrans;
-    gboolean trans_mismatch_confirmed;
-    gboolean subtrans_mismatch_confirmed;
-    gboolean processing;
+    bool has_trans;
+    bool has_subaccount;
+    bool has_subtrans;
+    bool trans_mismatch_confirmed;
+    bool subtrans_mismatch_confirmed;
+    bool processing;
     DeleteAccountMismatch pending_mismatch;
 };
 
@@ -1556,14 +1557,14 @@ delete_account_request_close_dialog (DeleteAccountRequest *request)
     g_object_unref (dialog);
 }
 
-static gboolean
+static bool
 delete_account_request_get_source (DeleteAccountRequest *request,
                                    GncPluginPageAccountTree **page_out,
                                    Account **account_out)
 {
     auto object = g_weak_ref_get (&request->page);
     if (!object)
-        return FALSE;
+        return false;
 
     auto page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
     auto book = gnc_get_current_book ();
@@ -1577,16 +1578,16 @@ delete_account_request_get_source (DeleteAccountRequest *request,
         gnc_plugin_page_account_tree_get_current_account (page) != account)
     {
         g_object_unref (page);
-        return FALSE;
+        return false;
     }
 
     *page_out = page;
     *account_out = account;
-    return TRUE;
+    return true;
 }
 
 static Account *
-delete_account_request_lookup (const GncGUID *guid, gboolean present, QofBook *book)
+delete_account_request_lookup (const GncGUID *guid, bool present, QofBook *book)
 {
     auto account = present && book ? xaccAccountLookup (guid, book) : nullptr;
     return account && !qof_instance_get_destroying (account) ? account : nullptr;
@@ -1602,14 +1603,14 @@ delete_account_dialog_selected_account (GtkWindow *dialog, const gchar *selector
     return gnc_account_sel_get_account (GNC_ACCOUNT_SEL (selector));
 }
 
-static gboolean
+static bool
 delete_account_request_capture_destinations (DeleteAccountRequest *request,
                                              GtkWindow *dialog)
 {
     GncPluginPageAccountTree *page;
     Account *account;
     if (!delete_account_request_get_source (request, &page, &account))
-        return FALSE;
+        return false;
 
     auto trans = delete_account_dialog_selected_account (dialog, DELETE_DIALOG_TRANS_MAS);
     auto subaccount = delete_account_dialog_selected_account (dialog, DELETE_DIALOG_SA_MAS);
@@ -1625,11 +1626,11 @@ delete_account_request_capture_destinations (DeleteAccountRequest *request,
     if (request->has_subtrans)
         request->subtrans_guid = *xaccAccountGetGUID (subtrans);
 
-    request->trans_mismatch_confirmed = FALSE;
-    request->subtrans_mismatch_confirmed = FALSE;
+    request->trans_mismatch_confirmed = false;
+    request->subtrans_mismatch_confirmed = false;
     request->pending_mismatch = DELETE_ACCOUNT_MISMATCH_NONE;
     g_object_unref (page);
-    return TRUE;
+    return true;
 }
 static void delete_account_request_continue (DeleteAccountRequest *request);
 
@@ -1643,14 +1644,14 @@ delete_account_mismatch_finished (GtkWindow *, gint response, gpointer user_data
     if (response == GTK_RESPONSE_ACCEPT)
     {
         if (mismatch == DELETE_ACCOUNT_MISMATCH_TRANSACTIONS)
-            request->trans_mismatch_confirmed = TRUE;
+            request->trans_mismatch_confirmed = true;
         else if (mismatch == DELETE_ACCOUNT_MISMATCH_SUBACCOUNT_TRANSACTIONS)
-            request->subtrans_mismatch_confirmed = TRUE;
+            request->subtrans_mismatch_confirmed = true;
         delete_account_request_continue (request);
     }
     else
     {
-        request->processing = FALSE;
+        request->processing = false;
         auto dialog = delete_account_request_get_dialog (request);
         if (dialog)
         {
@@ -1781,14 +1782,14 @@ delete_account_confirmation_message (Account *account, Account *trans,
     return g_string_free (message, FALSE);
 }
 
-static gboolean
+static bool
 delete_account_request_show_confirmation (DeleteAccountRequest *request,
                                           Account *account, Account *trans,
                                           Account *subaccount, Account *subtrans)
 {
     auto dialog = delete_account_request_get_dialog (request);
     if (!dialog)
-        return FALSE;
+        return false;
 
     delete_helper_t delete_res = { FALSE, FALSE };
     if (gnc_account_n_children (account))
@@ -1802,13 +1803,13 @@ delete_account_request_show_confirmation (DeleteAccountRequest *request,
                              "%s", message);
     g_free (message);
     g_object_unref (dialog);
-    return TRUE;
+    return true;
 }
 
 static void
 delete_account_request_abort (DeleteAccountRequest *request)
 {
-    request->processing = FALSE;
+    request->processing = false;
     delete_account_request_close_dialog (request);
 }
 
@@ -1902,8 +1903,8 @@ delete_account_dialog_response_cb (GtkWindow *dialog, gint response, gpointer us
     if (request->processing)
         return;
 
-    request->processing = TRUE;
-    request->changed = FALSE;
+    request->processing = true;
+    request->changed = false;
     if (!delete_account_request_capture_destinations (request, dialog))
     {
         delete_account_request_abort (request);
@@ -1915,7 +1916,7 @@ static void
 delete_account_dialog_destroyed (GtkWidget *dialog, gpointer user_data)
 {
     auto request = static_cast<DeleteAccountRequest *> (user_data);
-    request->dialog_destroyed = TRUE;
+    request->dialog_destroyed = true;
     g_signal_handlers_disconnect_by_data (dialog, request);
     if (request->event_handler)
     {
@@ -1939,7 +1940,7 @@ delete_account_entity_changed (QofInstance *entity, QofEventId type,
              (source || (request->has_trans && guid_equal (guid, &request->trans_guid)) ||
               (request->has_subaccount && guid_equal (guid, &request->subaccount_guid)) ||
               (request->has_subtrans && guid_equal (guid, &request->subtrans_guid))))
-        request->changed = TRUE;
+        request->changed = true;
 }
 
 }
@@ -2347,7 +2348,7 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
                 auto request = g_new0 (ScrubDecision, 1);
                 g_weak_ref_init (&request->page, data);
                 request->epoch = scrub_epoch;
-                scrub_question_pending = TRUE;
+                scrub_question_pending = true;
                 gnc_verify_dialog_async (GTK_WINDOW (widget), FALSE,
                     scrub_abort_decided, request, "%s", _(check_repair_abort_YN));
             }

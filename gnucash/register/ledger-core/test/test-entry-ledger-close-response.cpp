@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <libguile.h>
 #include <cstdlib>
@@ -50,11 +51,11 @@ protected:
         if (result == 0 && parent)
         {
             gtk_widget_destroy (parent);
-            const gint64 deadline =
+            const std::int64_t deadline =
                 g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
             while (result == 0 && g_get_monotonic_time () < deadline)
             {
-                while (g_main_context_iteration (nullptr, FALSE))
+                while (g_main_context_iteration (nullptr, false))
                     ;
                 g_usleep (1000);
             }
@@ -82,10 +83,10 @@ protected:
     GncEntryLedger *ledger{};
     GtkWidget *parent{};
     QofSession *other_session{};
-    gint result{};
+    std::int32_t result{};
 };
 
-GtkWidget *
+static GtkWidget *
 find_confirmation ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -100,7 +101,7 @@ find_confirmation ()
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_new_account_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -120,10 +121,10 @@ find_new_account_dialog ()
     return found;
 }
 
-void
+static void
 completed (gboolean accepted, gpointer data)
 {
-    auto result = static_cast<gboolean *> (data);
+    auto result = static_cast<std::int32_t *> (data);
     *result = accepted ? 1 : -1;
 }
 
@@ -134,7 +135,7 @@ TEST_F (EntryLedgerCloseTest, AcceptedCloseCommitsBeforeCompletion)
         gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
     ASSERT_NE (cell, nullptr);
     gnc_basic_cell_set_value (cell, "Saved through async close");
-    gnc_basic_cell_set_changed (cell, TRUE);
+    gnc_basic_cell_set_changed (cell, true);
     gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto dialog = find_confirmation ();
@@ -154,7 +155,7 @@ TEST_F (EntryLedgerCloseTest, DestroyedParentAbortsOnce)
         gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
     ASSERT_NE (cell, nullptr);
     gnc_basic_cell_set_value (cell, "Must not be saved");
-    gnc_basic_cell_set_changed (cell, TRUE);
+    gnc_basic_cell_set_changed (cell, true);
     gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto dialog = find_confirmation ();
@@ -178,7 +179,7 @@ TEST_F (EntryLedgerCloseTest, SessionSwitchAbortsSave)
         gnc_table_layout_get_cell (table->layout, ENTRY_DESC_CELL));
     ASSERT_NE (cell, nullptr);
     gnc_basic_cell_set_value (cell, "Must not cross sessions");
-    gnc_basic_cell_set_changed (cell, TRUE);
+    gnc_basic_cell_set_changed (cell, true);
     gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto dialog = find_confirmation ();
@@ -206,7 +207,7 @@ TEST_F (EntryLedgerCloseTest, AccountCreationCancelAbortsClose)
         gnc_table_layout_get_cell (table->layout, ENTRY_IACCT_CELL));
     ASSERT_NE (cell, nullptr);
     gnc_combo_cell_set_value (cell, "New account from ledger test");
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    gnc_basic_cell_set_changed (&cell->cell, true);
     gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto confirmation = find_confirmation ();
@@ -219,7 +220,7 @@ TEST_F (EntryLedgerCloseTest, AccountCreationCancelAbortsClose)
     EXPECT_EQ (gncInvoiceGetEntries (invoice), nullptr);
 }
 
-Account *
+static Account *
 make_invoice_account (QofBook *book, const gchar *name)
 {
     auto account = xaccMallocAccount (book);
@@ -236,7 +237,7 @@ TEST_F (EntryLedgerCloseTest, RemovedAccountRestartsAsyncCreation)
     auto cell = reinterpret_cast<ComboCell *> (
         gnc_table_layout_get_cell (table->layout, ENTRY_IACCT_CELL));
     gnc_combo_cell_set_value (cell, "Account removed while saving");
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    gnc_basic_cell_set_changed (&cell->cell, true);
     gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto save_dialog = find_confirmation ();
@@ -262,7 +263,7 @@ TEST_F (EntryLedgerCloseTest, RemovedTaxTablePromptsAgainThenSaves)
     auto cell = reinterpret_cast<ComboCell *> (
         gnc_table_layout_get_cell (table->layout, ENTRY_TAXTABLE_CELL));
     gnc_combo_cell_set_value (cell, "Tax table removed while saving");
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    gnc_basic_cell_set_changed (&cell->cell, true);
     gnc_entry_ledger_check_close_async (parent, ledger,
                                         completed, &result);
     auto save_dialog = find_confirmation ();
@@ -281,8 +282,8 @@ TEST_F (EntryLedgerCloseTest, RemovedTaxTablePromptsAgainThenSaves)
 static int
 run_tests (int argc, char **argv)
 {
-    g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
-    g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+    g_setenv ("GNC_UNINSTALLED", "YES", true);
+    g_setenv ("GSETTINGS_BACKEND", "memory", true);
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("GTK display is required for the entry-ledger response tests");

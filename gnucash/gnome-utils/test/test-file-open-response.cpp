@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <vector>
@@ -50,16 +51,16 @@ public:
     bool type_check (const char *) override { return true; }
 };
 
-struct Result { unsigned calls = 0; gboolean opened = FALSE; };
+struct Result { unsigned calls = 0; bool opened = false; };
 
-void completed (gboolean opened, gpointer data)
+static void completed (gboolean opened, gpointer data)
 {
     auto result = static_cast<Result *>(data);
     ++result->calls;
     result->opened = opened;
 }
 
-GtkDialog *find_dialog (GtkWindow *parent)
+static GtkDialog *find_dialog (GtkWindow *parent)
 {
     auto windows = gtk_window_list_toplevels ();
     GtkDialog *found = nullptr;
@@ -117,7 +118,7 @@ protected:
     GtkWindow *parent{};
     GtkDialog *retained_dialog{};
     Result result{};
-    std::vector<guint> leases;
+    std::vector<std::uint32_t> leases;
 };
 
 class FileOpenResponseTest : public FileOpenFixture,
@@ -134,7 +135,7 @@ TEST_P (FileOpenResponseTest, PreservesSessionUntilTerminalResponse)
     load_error = !locked ? ERR_FILEIO_FILE_TOO_OLD : ERR_BACKEND_NO_ERR;
     loads = 0;
 
-    gnc_file_open_file_async (parent, "xml:///synthetic-response/open.gnucash", FALSE,
+    gnc_file_open_file_async (parent, "xml:///synthetic-response/open.gnucash", false,
                               completed, &result);
     EXPECT_EQ (result.calls, 0u);
     ASSERT_TRUE (gnc_get_current_session () == original);
@@ -194,10 +195,10 @@ TEST_F (FileOpenFixture, SessionOperationGateRejectsOverlappingCommands)
     ASSERT_TRUE (gnc_gui_session_operation_pending ());
     loads = 0;
     Result open, save, query;
-    gnc_file_open_file_async (parent, "xml:///synthetic-response/open.gnucash", FALSE,
+    gnc_file_open_file_async (parent, "xml:///synthetic-response/open.gnucash", false,
                               completed, &open);
     gnc_file_save_async (parent, completed, &save);
-    gnc_file_query_save_async (parent, TRUE, completed, &query);
+    gnc_file_query_save_async (parent, true, completed, &query);
     for (auto result : {&open, &save, &query})
     {
         EXPECT_EQ (result->calls, 1u);
@@ -214,7 +215,7 @@ TEST_F (FileOpenFixture, SessionOperationGateRejectsOverlappingCommands)
 
     begin_error = ERR_BACKEND_LOCKED;
     load_error = ERR_BACKEND_NO_ERR;
-    gnc_file_open_file_async (parent, "xml:///synthetic-response/open.gnucash", FALSE,
+    gnc_file_open_file_async (parent, "xml:///synthetic-response/open.gnucash", false,
                               completed, &result);
     EXPECT_EQ (result.calls, 0u);
     EXPECT_EQ (gnc_gui_begin_session_operation (book), 0u);

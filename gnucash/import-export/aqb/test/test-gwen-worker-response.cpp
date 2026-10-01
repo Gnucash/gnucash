@@ -4,6 +4,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include <cstdint>
 #include <atomic>
 #include <thread>
 #include <vector>
@@ -22,10 +23,10 @@ struct State
     std::atomic<int> running{0};
     std::atomic<int> max_running{0};
     std::atomic<int> workers{0};
-    guint completed{};
-    guint destroyed{};
-    gboolean callbacks_on_gtk{};
-    gboolean callbacks_on_worker{TRUE};
+    std::uint32_t completed{};
+    std::uint32_t destroyed{};
+    bool callbacks_on_gtk{};
+    bool callbacks_on_worker{true};
 };
 
 struct Request
@@ -33,22 +34,22 @@ struct Request
     State *state;
 };
 
-static gboolean gui_initialized;
+static bool gui_initialized;
 
 struct InputRequest : Request
 {
-    gint first_result{G_MININT};
-    gint second_result{G_MININT};
+    std::int32_t first_result{G_MININT};
+    std::int32_t second_result{G_MININT};
 };
 
 struct OperationState
 {
     GThread *gtk_thread{};
-    guint first_token{};
-    guint second_token{};
-    guint third_token{};
-    guint acquisitions{};
-    gboolean completed{};
+    std::uint32_t first_token{};
+    std::uint32_t second_token{};
+    std::uint32_t third_token{};
+    std::uint32_t acquisitions{};
+    bool completed{};
     std::vector<int> events;
 };
 
@@ -96,7 +97,7 @@ static void operation_acquired (guint token, gpointer user_data)
     state->events.push_back (5);
     gnc_ab_operation_release (token);
     state->events.push_back (6);
-    state->completed = TRUE;
+    state->completed = true;
 }
 
 TEST (AqbOperationSlotTest, SerializesLeasesAndIgnoresDuplicateRelease)
@@ -108,10 +109,10 @@ TEST (AqbOperationSlotTest, SerializesLeasesAndIgnoresDuplicateRelease)
     gnc_ab_operation_acquire_async (operation_acquired, &state);
     gnc_ab_operation_acquire_async (operation_acquired, &state);
     EXPECT_TRUE (state.events.empty ());
-    const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+    const std::int64_t deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     while (!state.completed && g_get_monotonic_time () < deadline)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }
@@ -195,7 +196,7 @@ protected:
     void SetUp () override
     {
         state.gtk_thread = g_thread_self ();
-        state.callbacks_on_gtk = TRUE;
+        state.callbacks_on_gtk = true;
         parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         g_object_ref_sink (parent);
         gtk_widget_show (parent);
@@ -206,11 +207,11 @@ protected:
     {
         if (parent)
             gtk_widget_destroy (parent);
-        const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+        const std::int64_t deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
         while (state.destroyed < expected_destroyed &&
                g_get_monotonic_time () < deadline)
         {
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             g_usleep (1000);
         }
@@ -232,7 +233,7 @@ protected:
     InputRequest input_request{};
     Request first_request{};
     Request second_request{};
-    guint expected_destroyed{};
+    std::uint32_t expected_destroyed{};
 };
 
 TEST_F (GwenWorkerResponseTest, ParentDestroyCancelsInputAndLaterRequest)
@@ -240,17 +241,17 @@ TEST_F (GwenWorkerResponseTest, ParentDestroyCancelsInputAndLaterRequest)
     auto& state = this->state;
     gui1 = gnc_GWEN_Gui_get (parent);
     ASSERT_NE (gui1, nullptr);
-    gui_initialized = TRUE;
+    gui_initialized = true;
     input_request.state = &state;
     expected_destroyed = 1;
     gnc_GWEN_Gui_run_job_async (gui1, input_worker, completed, &input_request,
                                 destroyed);
 
-    const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+    const std::int64_t deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     GtkWidget *dialog = nullptr;
     while (!dialog && g_get_monotonic_time () < deadline)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         dialog = find_input_dialog ("Synthetic Gwen input");
         if (!dialog)
@@ -262,7 +263,7 @@ TEST_F (GwenWorkerResponseTest, ParentDestroyCancelsInputAndLaterRequest)
 
     while (state.completed != 1 && g_get_monotonic_time () < deadline)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }
@@ -292,10 +293,10 @@ TEST_F (GwenWorkerResponseTest, SerializesWorkersAndCompletesOnceOnGtkThread)
     gnc_GWEN_Gui_run_job_async (gui1, worker, completed, &first_request, destroyed);
     gnc_GWEN_Gui_run_job_async (gui2, worker, completed, &second_request, destroyed);
 
-    const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+    const std::int64_t deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     while (state.completed != 2 && g_get_monotonic_time () < deadline)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }
@@ -307,9 +308,9 @@ TEST_F (GwenWorkerResponseTest, SerializesWorkersAndCompletesOnceOnGtkThread)
     EXPECT_TRUE (state.callbacks_on_worker);
 
     /* A later context turn must not repeat completion or destruction. */
-    for (guint i = 0; i < 20; ++i)
+    for (std::uint32_t i = 0; i < 20; ++i)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }

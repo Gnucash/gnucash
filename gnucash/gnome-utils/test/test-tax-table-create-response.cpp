@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <libguile.h>
@@ -27,7 +28,7 @@ namespace
 {
 struct Completion
 {
-    guint calls = 0;
+    std::uint32_t calls = 0;
     GtkWindow *parent = nullptr;
     GncTaxTable *table = nullptr;
 };
@@ -35,10 +36,10 @@ struct Completion
 struct ShowDestroy
 {
     GtkWindow *owner;
-    gboolean fired = FALSE;
+    bool fired = false;
 };
 
-GtkWidget *find_named_window (const char *name, GtkWindow *transient = nullptr);
+static GtkWidget *find_named_window (const char *name, GtkWindow *transient = nullptr);
 
 class TaxTableCreateResponseTest : public ::testing::Test
 {
@@ -86,7 +87,7 @@ protected:
     ShowDestroy m_show_destroy{};
 };
 
-void
+static void
 completed (GtkWindow *parent, GncTaxTable *table, gpointer user_data)
 {
     auto result = static_cast<Completion *> (user_data);
@@ -95,25 +96,25 @@ completed (GtkWindow *parent, GncTaxTable *table, gpointer user_data)
     result->table = table;
 }
 
-gboolean
+static gboolean
 destroy_owner_on_editor_show ([[maybe_unused]] GSignalInvocationHint *hint,
                               guint n_values, const GValue *values,
                               gpointer user_data)
 {
     if (n_values == 0u)
-        return TRUE;
+        return true;
     auto request = static_cast<ShowDestroy *> (user_data);
     auto widget = GTK_WIDGET (g_value_get_object (&values[0]));
     if (!request->fired &&
         g_strcmp0 (gtk_widget_get_name (widget), "gnc-id-new-tax-table") == 0)
     {
-        request->fired = TRUE;
+        request->fired = true;
         gtk_widget_destroy (GTK_WIDGET (request->owner));
     }
-    return TRUE;
+    return true;
 }
 
-GtkWidget *
+static GtkWidget *
 find_named_window (const char *name, GtkWindow *transient)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -132,7 +133,7 @@ find_named_window (const char *name, GtkWindow *transient)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_account_tree (GtkWidget *widget)
 {
     if (GNC_IS_TREE_VIEW_ACCOUNT (widget))
@@ -147,7 +148,7 @@ find_account_tree (GtkWidget *widget)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_amount_edit (GtkWidget *widget)
 {
     if (GNC_IS_AMOUNT_EDIT (widget))
@@ -239,8 +240,8 @@ TEST_F (TaxTableCreateResponseTest, OwnerDestroyedDuringEditorShowCancels)
 static int
 run_tests (int argc, char **argv)
 {
-    g_setenv("GNC_UNINSTALLED", "YES", TRUE);
-    g_setenv("GSETTINGS_BACKEND", "memory", TRUE);
+    g_setenv("GNC_UNINSTALLED", "YES", true);
+    g_setenv("GSETTINGS_BACKEND", "memory", true);
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("A graphical display is required for tax table tests");

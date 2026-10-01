@@ -4,6 +4,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include <cstdint>
 
 #include <aqbanking/types/imexporter_accountinfo.h>
 #include <aqbanking/types/imexporter_context.h>
@@ -34,14 +35,14 @@ struct ImportRun
     AB_IMEXPORTER_CONTEXT *context;
     GncABImExContextImport *ieci;
     Action action;
-    guint session_lease;
-    guint operation_token;
-    guint dialog_source;
-    guint completion_count;
-    gboolean accepted;
-    gboolean importer_started;
-    gboolean parent_destroyed;
-    gboolean finished;
+    std::uint32_t session_lease;
+    std::uint32_t operation_token;
+    std::uint32_t dialog_source;
+    std::uint32_t completion_count;
+    bool accepted;
+    bool importer_started;
+    bool parent_destroyed;
+    bool finished;
 };
 
 struct ImportFixture
@@ -65,15 +66,15 @@ static GtkWidget *find_named (GtkWidget *widget, const gchar *name)
     return found;
 }
 
-static gboolean label_contains (GtkWidget *widget, const gchar *needle)
+static bool label_contains (GtkWidget *widget, const gchar *needle)
 {
     if (GTK_IS_LABEL (widget) &&
         g_strstr_len (gtk_label_get_text (GTK_LABEL (widget)), -1, needle))
-        return TRUE;
+        return true;
     if (!GTK_IS_CONTAINER (widget))
-        return FALSE;
+        return false;
     auto children = gtk_container_get_children (GTK_CONTAINER (widget));
-    gboolean found = FALSE;
+    bool found = false;
     for (auto node = children; node && !found; node = node->next)
         found = label_contains (GTK_WIDGET (node->data), needle);
     g_list_free (children);
@@ -98,7 +99,7 @@ static void finish_import (GncABImExContextImport *ieci, gpointer user_data)
     EXPECT_EQ (g_thread_self (), run->gtk_thread);
     if (!ieci)
     {
-        run->finished = TRUE;
+        run->finished = true;
         ++run->completion_count;
         gnc_ab_operation_release (run->operation_token);
         run->operation_token = 0;
@@ -108,7 +109,7 @@ static void finish_import (GncABImExContextImport *ieci, gpointer user_data)
     }
     /* The real traversal must have materialized the bank transaction before
      * showing the generic matcher. Its acceptance is what commits it to QOF. */
-    run->importer_started = TRUE;
+    run->importer_started = true;
     run->ieci = ieci;
     gnc_ab_ieci_run_matcher_async (ieci,
         [](gboolean accepted, gpointer data)
@@ -119,7 +120,7 @@ static void finish_import (GncABImExContextImport *ieci, gpointer user_data)
             ++state->completion_count;
             gnc_ab_ieci_free (state->ieci);
             state->ieci = nullptr;
-            state->finished = TRUE;
+            state->finished = true;
             gnc_ab_operation_release (state->operation_token);
             state->operation_token = 0;
             gnc_gui_end_session_operation (state->session_lease);
@@ -133,7 +134,7 @@ static void start_import (guint token, gpointer user_data)
 {
     auto run = static_cast<ImportRun *> (user_data);
     run->operation_token = token;
-    gnc_ab_import_context_async (run->context, AWAIT_TRANSACTIONS, FALSE,
+    gnc_ab_import_context_async (run->context, AWAIT_TRANSACTIONS, false,
         nullptr, run->parent, finish_import, run);
     /* Start the response driver after the import owns its parent lifetime.
      * A timeout can otherwise fire before the operation-acquisition idle. */
@@ -153,7 +154,7 @@ static gboolean drive_dialogs (gpointer user_data)
     {
         if (!run->parent_destroyed)
         {
-            run->parent_destroyed = TRUE;
+            run->parent_destroyed = true;
             gtk_widget_destroy (run->parent);
         }
         run->dialog_source = 0;
@@ -186,7 +187,7 @@ static gboolean drive_dialogs (gpointer user_data)
         }
         auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
         /* Do not let an empty matcher count as successful acceptance: it
-         * closes with accepted=TRUE but proves nothing about stage 3. */
+         * closes with accepted=true but proves nothing about stage 3. */
         if (gtk_tree_model_iter_n_children (model, nullptr) == 0)
             return G_SOURCE_CONTINUE;
         const auto button_name = run->action == Action::Accept ?
@@ -202,12 +203,12 @@ static gboolean drive_dialogs (gpointer user_data)
     return G_SOURCE_CONTINUE;
 }
 
-static gboolean contains_imported_transaction (QofBook *book,
-                                              const gchar *fitid)
+static bool contains_imported_transaction (QofBook *book,
+                                           const gchar *fitid)
 {
     auto root = gnc_book_get_root_account (book);
     auto accounts = gnc_account_get_descendants (root);
-    gboolean found = FALSE;
+    bool found = false;
     for (auto node = accounts; node && !found; node = node->next)
     {
         auto account = static_cast<Account *>(node->data);
@@ -215,14 +216,14 @@ static gboolean contains_imported_transaction (QofBook *book,
              split = split->next)
             if (g_strcmp0 (xaccSplitGetOnlineID (
                     static_cast<Split *>(split->data)), fitid) == 0)
-                found = TRUE;
+                found = true;
     }
     g_list_free (accounts);
     return found;
 }
 
-static gboolean setup_context_import (ImportFixture *fixture,
-                                      gconstpointer test_data)
+static bool setup_context_import (ImportFixture *fixture,
+                                  gconstpointer test_data)
 {
     *fixture = {};
     fixture->action = *static_cast<const Action *> (test_data);
@@ -240,7 +241,7 @@ static gboolean setup_context_import (ImportFixture *fixture,
     if (!currency)
     {
         ADD_FAILURE () << "EUR is missing from the fixture commodity table";
-        return FALSE;
+        return false;
     }
     auto account = xaccMallocAccount (run.book);
     xaccAccountBeginEdit (account);
@@ -278,7 +279,7 @@ static gboolean setup_context_import (ImportFixture *fixture,
     run.parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     g_object_ref_sink (run.parent);
     gtk_widget_show (run.parent);
-    return TRUE;
+    return true;
 }
 
 static void teardown_context_import (ImportFixture *fixture,
@@ -289,11 +290,11 @@ static void teardown_context_import (ImportFixture *fixture,
     {
         run.action = Action::DestroyParent;
         gtk_widget_destroy (run.parent);
-        const gint64 deadline =
+        const std::int64_t deadline =
             g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
         while (!run.finished && g_get_monotonic_time () < deadline)
         {
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             g_usleep (1000);
         }
@@ -344,10 +345,10 @@ TEST_P (AqbContextImportTest, CompletesWithExpectedBookState)
     ASSERT_NE (run.session_lease, 0u);
     gnc_ab_operation_acquire_async (start_import, &run);
 
-    const gint64 deadline = g_get_monotonic_time () + 8 * G_TIME_SPAN_SECOND;
+    const std::int64_t deadline = g_get_monotonic_time () + 8 * G_TIME_SPAN_SECOND;
     while (!run.finished && g_get_monotonic_time () < deadline)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }

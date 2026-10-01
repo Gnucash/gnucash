@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 
@@ -26,7 +27,7 @@ struct RemoveChildOnModify
 {
     Account *target{};
     Account *child{};
-    gboolean removed{};
+    bool removed{};
 };
 
 static GtkWidget *find_cascade_dialog ();
@@ -39,7 +40,7 @@ remove_child_on_modify (QofInstance *entity, QofEventId event,
     if (!removal->removed && event == QOF_EVENT_MODIFY &&
         entity == QOF_INSTANCE (removal->target))
     {
-        removal->removed = TRUE;
+        removal->removed = true;
         xaccAccountBeginEdit (removal->child);
         xaccAccountDestroy (removal->child);
         removal->child = nullptr;
@@ -132,7 +133,7 @@ protected:
 
     void register_event_handler ()
     {
-        m_removal = {m_account, m_child, FALSE};
+        m_removal = {m_account, m_child, false};
         m_event_handler = qof_event_register_handler (remove_child_on_modify,
                                                        &m_removal);
     }
@@ -155,7 +156,7 @@ protected:
     GtkWidget *m_weak_dialog{};
     std::vector<GtkWidget *> m_dialogs;
     RemoveChildOnModify m_removal{};
-    gint m_event_handler{};
+    std::int32_t m_event_handler{};
 };
 
 static GtkWidget *
@@ -197,20 +198,20 @@ control (GtkWidget *dialog, const gchar *name)
 }
 
 static void
-select_all_updates (GtkWidget *dialog, gboolean replace)
+select_all_updates (GtkWidget *dialog, bool replace)
 {
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_color")), TRUE);
+        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_color")), true);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (control (dialog, "replace_check")), replace);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_placeholder")), TRUE);
+        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_placeholder")), true);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "placeholder_check_button")), TRUE);
+        GTK_TOGGLE_BUTTON (control (dialog, "placeholder_check_button")), true);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_hidden")), TRUE);
+        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_hidden")), true);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "hidden_check_button")), TRUE);
+        GTK_TOGGLE_BUTTON (control (dialog, "hidden_check_button")), true);
 
     GdkRGBA color{0.2, 0.4, 0.6, 1.0};
     gtk_color_chooser_set_rgba (
@@ -225,7 +226,7 @@ TEST_F (AccountCascadeResponseTest, ApplyAndLateResponse)
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
     EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
     EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     GdkRGBA color{0.2, 0.4, 0.6, 1.0};
@@ -239,7 +240,7 @@ TEST_F (AccountCascadeResponseTest, ApplyAndLateResponse)
     EXPECT_TRUE (xaccAccountGetHidden (m_child));
     EXPECT_TRUE (xaccAccountGetHidden (m_grandchild));
 
-    xaccAccountSetHidden (m_child, FALSE);
+    xaccAccountSetHidden (m_child, false);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     EXPECT_FALSE (xaccAccountGetHidden (m_child));
     g_free (expected_color);
@@ -251,11 +252,11 @@ TEST_F (AccountCascadeResponseTest, ReplaceDisabled)
     xaccAccountSetColor (m_child, "blue");
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, FALSE);
+    select_all_updates (dialog, false);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_placeholder")), FALSE);
+        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_placeholder")), false);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_hidden")), FALSE);
+        GTK_TOGGLE_BUTTON (control (dialog, "enable_cascade_hidden")), false);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
     EXPECT_STREQ (xaccAccountGetColor (m_account), "red");
@@ -270,7 +271,7 @@ TEST_F (AccountCascadeResponseTest, CancelDoesNotUpdateAccounts)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
     EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
     EXPECT_FALSE (xaccAccountGetPlaceholder (m_child));
@@ -281,7 +282,7 @@ TEST_F (AccountCascadeResponseTest, ParentDestroyClosesDialogWithoutUpdating)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     gtk_widget_destroy (m_parent);
     EXPECT_EQ (find_cascade_dialog (), nullptr);
     EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
@@ -293,7 +294,7 @@ TEST_F (AccountCascadeResponseTest, DialogDestroyIgnoresLateResponse)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     m_weak_dialog = dialog;
     g_object_add_weak_pointer (G_OBJECT (dialog),
                                reinterpret_cast<gpointer *> (&m_weak_dialog));
@@ -314,7 +315,7 @@ TEST_F (AccountCascadeResponseTest, ReadonlyBookDoesNotUpdateAccounts)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     qof_book_mark_readonly (m_book);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
@@ -325,7 +326,7 @@ TEST_F (AccountCascadeResponseTest, ClosedBookDoesNotUpdateAccounts)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     qof_book_mark_closed (m_book);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     EXPECT_EQ (xaccAccountGetColor (m_account), nullptr);
@@ -336,7 +337,7 @@ TEST_F (AccountCascadeResponseTest, RemovedAccountIsIgnored)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     xaccAccountBeginEdit (m_account);
     xaccAccountDestroy (m_account);
     m_account = nullptr;
@@ -350,7 +351,7 @@ TEST_F (AccountCascadeResponseTest, DestroyedBookIsIgnored)
 {
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     qof_book_destroy (m_book);
     m_book = nullptr;
     m_book_root = nullptr;
@@ -367,7 +368,7 @@ TEST_F (AccountCascadeResponseTest, ReentrantAccountEvent)
     register_event_handler ();
     auto dialog = start_dialog ();
     ASSERT_TRUE (GTK_IS_DIALOG (dialog));
-    select_all_updates (dialog, TRUE);
+    select_all_updates (dialog, true);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     unregister_event_handler ();
 

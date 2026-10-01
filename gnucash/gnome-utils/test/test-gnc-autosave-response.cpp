@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include "Account.h"
@@ -31,7 +32,7 @@ struct AutosaveState
     QofSession *original_session{};
     QofSession *temporary_session{};
     GtkWidget *retained_dialog{};
-    std::unordered_map<std::string, gboolean> bool_prefs;
+    std::unordered_map<std::string, bool> bool_prefs;
     std::unordered_map<std::string, gdouble> float_prefs;
     PrefHook pref_hook{PrefHook::none};
 };
@@ -47,7 +48,7 @@ static gboolean
 memory_get_bool (const gchar *group, const gchar *name)
 {
     auto it = active_state->bool_prefs.find (pref_key (group, name));
-    return it == active_state->bool_prefs.end () ? FALSE : it->second;
+    return it == active_state->bool_prefs.end () ? false : it->second;
 }
 
 static gdouble
@@ -63,7 +64,7 @@ memory_set_bool (const gchar *group, const gchar *name, gboolean value)
     active_state->bool_prefs[pref_key (group, name)] = value;
     if (pref_key (group, name) != pref_key (GNC_PREFS_GROUP_GENERAL,
                                             "autosave-show-explanation"))
-        return TRUE;
+        return true;
 
     if (active_state->pref_hook == PrefHook::destroy_parent)
     {
@@ -87,14 +88,14 @@ memory_set_bool (const gchar *group, const gchar *name, gboolean value)
         active_state->test_session = nullptr;
         active_state->book = nullptr;
     }
-    return TRUE;
+    return true;
 }
 
 static gboolean
 memory_set_float (const gchar *group, const gchar *name, gdouble value)
 {
     active_state->float_prefs[pref_key (group, name)] = value;
-    return TRUE;
+    return true;
 }
 
 static PrefsBackend memory_backend = [] {
@@ -123,7 +124,7 @@ find_confirmation ()
     return dialog;
 }
 
-static guint
+static std::uint32_t
 timer_id ()
 {
     return GPOINTER_TO_UINT (qof_book_get_data (active_state->book, "autosave_source_id"));
@@ -141,9 +142,9 @@ fire_timer ()
     if (!source)
         return;
     g_source_set_ready_time (source, 0);
-    for (guint attempt = 0; !find_confirmation () && attempt < 1000; ++attempt)
+    for (std::uint32_t attempt = 0; !find_confirmation () && attempt < 1000; ++attempt)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         if (!find_confirmation ())
             g_usleep (1000);
@@ -154,9 +155,9 @@ fire_timer ()
 static void
 drain_events ()
 {
-    for (guint attempt = 0; attempt < 1000; ++attempt)
+    for (std::uint32_t attempt = 0; attempt < 1000; ++attempt)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         if (!find_confirmation ())
             return;
@@ -229,10 +230,10 @@ protected:
         gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL,
                              "autosave-interval-minutes", 1);
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL,
-                            "autosave-show-explanation", TRUE);
+                            "autosave-show-explanation", true);
         gnc_account_create_root (m_state.book);
         qof_book_mark_session_dirty (m_state.book);
-        gnc_autosave_dirty_handler (m_state.book, TRUE);
+        gnc_autosave_dirty_handler (m_state.book, true);
         fire_timer ();
     }
 };
@@ -243,14 +244,14 @@ TEST_F (AutosaveResponseTest, ConsumedTimerAfterSessionSwitch)
     auto temporary_book = qof_session_get_book (active_state->temporary_session);
     gnc_set_current_session (active_state->temporary_session);
     gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL, "autosave-interval-minutes", 1);
-    gnc_autosave_dirty_handler (temporary_book, TRUE);
+    gnc_autosave_dirty_handler (temporary_book, true);
     auto id = GPOINTER_TO_UINT (qof_book_get_data (temporary_book, "autosave_source_id"));
     ASSERT_GT (id, 0u);
     auto source = g_main_context_find_source_by_id (nullptr, id);
     ASSERT_NE (source, nullptr);
     gnc_set_current_session (active_state->test_session);
     g_source_set_ready_time (source, 0);
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
     EXPECT_EQ (g_main_context_find_source_by_id (nullptr, id), nullptr);
     EXPECT_EQ (qof_book_get_data (temporary_book, "autosave_source_id"), nullptr);

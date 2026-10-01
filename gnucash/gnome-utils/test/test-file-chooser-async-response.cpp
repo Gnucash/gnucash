@@ -6,6 +6,7 @@
  * any later version.
  */
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <unistd.h>
@@ -18,11 +19,11 @@ namespace
 {
 struct Result
 {
-    guint calls{};
+    std::uint32_t calls{};
     GSList *filenames{};
 };
 
-void
+static void
 completed (GSList *filenames, gpointer user_data)
 {
     auto result = static_cast<Result *> (user_data);
@@ -61,7 +62,7 @@ protected:
     GtkWidget *start_chooser (const char *directory = nullptr)
     {
         gnc_file_dialog_async (m_parent, "Choose test file", nullptr, directory,
-                               GNC_FILE_DIALOG_OPEN, FALSE, completed,
+                               GNC_FILE_DIALOG_OPEN, false, completed,
                                &m_result, nullptr);
         auto windows = gtk_window_list_toplevels ();
         for (auto node = windows; node; node = node->next)
@@ -97,11 +98,11 @@ TEST_F (FileChooserResponseTest, AcceptReturnsSelectedFileOnce)
     auto chooser = start_chooser (m_directory);
     ASSERT_NE (chooser, nullptr);
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (chooser), m_path);
-    gboolean selected = FALSE;
-    const gint64 deadline = g_get_monotonic_time () + 2 * G_USEC_PER_SEC;
+    bool selected = false;
+    const std::int64_t deadline = g_get_monotonic_time () + 2 * G_USEC_PER_SEC;
     while (!selected && g_get_monotonic_time () < deadline)
     {
-        g_main_context_iteration (nullptr, FALSE);
+        g_main_context_iteration (nullptr, false);
         gchar *current = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
         selected = g_strcmp0 (current, m_path) == 0;
         g_free (current);

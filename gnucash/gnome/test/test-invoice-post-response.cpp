@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <libguile.h>
 #include <gtest/gtest.h>
@@ -32,7 +33,7 @@ namespace
 QofSession *window_sentinel_session{};
 GncMainWindow *window_sentinel{};
 
-void
+static void
 create_window_sentinel ()
 {
     window_sentinel_session = qof_session_new (qof_book_new ());
@@ -42,7 +43,7 @@ create_window_sentinel ()
     gnc_exchange_current_session (nullptr);
 }
 
-void
+static void
 destroy_window_sentinel ()
 {
     if (window_sentinel)
@@ -68,7 +69,7 @@ struct Fixture
     Account *posting_account{};
 };
 
-Fixture
+static Fixture
 make_fixture ()
 {
     Fixture f{};
@@ -140,7 +141,7 @@ make_fixture ()
     return f;
 }
 
-GtkWidget *
+static GtkWidget *
 find_widget (GtkWidget *root, const char *name)
 {
     if (g_strcmp0 (gtk_widget_get_name (root), name) == 0 ||
@@ -156,7 +157,7 @@ find_widget (GtkWidget *root, const char *name)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_post_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -169,7 +170,7 @@ find_post_dialog ()
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_transfer_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -182,12 +183,12 @@ find_transfer_dialog ()
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 wait_for_dialog (GtkWidget *(*find_dialog) ())
 {
-    for (guint i = 0; i < 2000 && !find_dialog (); ++i)
+    for (std::uint32_t i = 0; i < 2000 && !find_dialog (); ++i)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }
@@ -219,7 +220,7 @@ protected:
         if (fixture.window)
         {
             gtk_widget_destroy (GTK_WIDGET (fixture.window));
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             g_object_unref (fixture.window);
             fixture.window = nullptr;
@@ -254,7 +255,7 @@ protected:
         return selector;
     }
 
-    guint dismiss_posting_errors (GtkWidget *form)
+    std::uint32_t dismiss_posting_errors (GtkWidget *form)
     {
         std::vector<GtkWidget *> errors;
         auto windows = gtk_window_list_toplevels ();
@@ -343,7 +344,7 @@ TEST_F (InvoicePostResponseTest, MissingAccountShowsOneErrorPerClick)
     retain_widget (form);
     auto selector = posting_selector (form);
     ASSERT_NE (selector, nullptr);
-    gnc_account_sel_set_account (selector, nullptr, FALSE);
+    gnc_account_sel_set_account (selector, nullptr, false);
     auto ok = find_widget (form, "okbutton1");
     ASSERT_TRUE (GTK_IS_BUTTON (ok));
 
@@ -365,8 +366,8 @@ TEST_F (InvoicePostResponseTest, PlaceholderAccountShowsOneErrorPerResponse)
     retain_widget (form);
     auto selector = posting_selector (form);
     ASSERT_NE (selector, nullptr);
-    xaccAccountSetPlaceholder (fixture.posting_account, TRUE);
-    gnc_account_sel_set_account (selector, fixture.posting_account, FALSE);
+    xaccAccountSetPlaceholder (fixture.posting_account, true);
+    gnc_account_sel_set_account (selector, fixture.posting_account, false);
 
     gtk_dialog_response (GTK_DIALOG (form), GTK_RESPONSE_OK);
     EXPECT_EQ (dismiss_posting_errors (form), 1u);
@@ -415,7 +416,7 @@ TEST_F (InvoicePostResponseTest, CancelsForeignCurrencySelection)
     EXPECT_FALSE (gnc_gui_refresh_suspended ());
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
     gtk_dialog_response (GTK_DIALOG (transfer), GTK_RESPONSE_CANCEL);
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
     EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
@@ -440,7 +441,7 @@ TEST_F (InvoicePostResponseTest, ParentDestructionCancelsCurrencySelection)
     EXPECT_FALSE (gnc_gui_refresh_suspended ());
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
     gtk_widget_destroy (GTK_WIDGET (fixture.window));
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
     EXPECT_FALSE (gncInvoiceIsPosted (fixture.invoice));
     EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);
@@ -489,7 +490,7 @@ TEST_F (InvoicePostResponseTest, AcceptsTwoForeignCurrenciesSequentially)
     g_list_free (children);
     gtk_dialog_response (GTK_DIALOG (second), GTK_RESPONSE_OK);
 
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
     EXPECT_TRUE (gncInvoiceIsPosted (fixture.invoice));
     EXPECT_EQ (qof_instance_get_editlevel (fixture.invoice), 0);

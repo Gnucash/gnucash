@@ -40,7 +40,7 @@ protected:
     GncGUID account_guid{};
 };
 
-GtkWidget *
+static GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -56,7 +56,7 @@ find_buildable (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_entry_dialog (GtkWidget *table_window)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -81,7 +81,7 @@ find_entry_dialog (GtkWidget *table_window)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_tax_table_window ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -101,7 +101,7 @@ find_tax_table_window ()
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_account_tree (GtkWidget *root)
 {
     if (GNC_IS_TREE_VIEW_ACCOUNT (root))
@@ -116,7 +116,7 @@ find_account_tree (GtkWidget *root)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_amount_edit (GtkWidget *root)
 {
     if (GNC_IS_AMOUNT_EDIT (root))
@@ -131,7 +131,7 @@ find_amount_edit (GtkWidget *root)
     return result;
 }
 
-bool
+static bool
 select_first_row (GtkWidget *widget)
 {
     if (!GTK_IS_TREE_VIEW (widget))
@@ -147,7 +147,7 @@ select_first_row (GtkWidget *widget)
     return true;
 }
 
-void
+static void
 destroy_table_window (GtkWidget *, gpointer window)
 {
     if (window)
@@ -398,8 +398,8 @@ TEST_F (TaxTableEntryResponseTest, DestroyedManagerIgnoresLateAddResponse)
 static int
 run_tests (int argc, char **argv)
 {
-    g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
-    g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+    g_setenv ("GNC_UNINSTALLED", "YES", true);
+    g_setenv ("GSETTINGS_BACKEND", "memory", true);
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
     {

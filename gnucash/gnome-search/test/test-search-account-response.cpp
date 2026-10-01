@@ -17,8 +17,8 @@
 
 namespace
 {
-GtkWidget *
-find_widget (GtkWidget *root, gboolean (*match)(GtkWidget *))
+static GtkWidget *
+find_widget (GtkWidget *root, bool (*match)(GtkWidget *))
 {
     if (match (root))
         return root;
@@ -32,20 +32,20 @@ find_widget (GtkWidget *root, gboolean (*match)(GtkWidget *))
     return found;
 }
 
-gboolean is_button (GtkWidget *widget) { return GTK_IS_BUTTON (widget); }
-gboolean is_account_view (GtkWidget *widget)
+static bool is_button (GtkWidget *widget) { return GTK_IS_BUTTON (widget); }
+static bool is_account_view (GtkWidget *widget)
 {
     return GNC_IS_TREE_VIEW_ACCOUNT (widget);
 }
 
-const gchar *
+static const gchar *
 button_text (GtkWidget *button)
 {
     auto label = gtk_bin_get_child (GTK_BIN (button));
     return GTK_IS_LABEL (label) ? gtk_label_get_text (GTK_LABEL (label)) : nullptr;
 }
 
-GtkWidget *
+static GtkWidget *
 find_selection_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -127,7 +127,7 @@ TEST_F (AccountSearchResponseTest, AcceptsSelectedAccountAndCancelPreservesSelec
     auto view = find_widget (dialog, is_account_view);
     GList selected{account, nullptr, nullptr};
     gnc_tree_view_account_set_selected_accounts (
-        GNC_TREE_VIEW_ACCOUNT (view), &selected, FALSE);
+        GNC_TREE_VIEW_ACCOUNT (view), &selected, false);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     auto predicate = gnc_search_core_type_get_predicate (
         GNC_SEARCH_CORE_TYPE (search));

@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 
@@ -27,7 +28,7 @@ namespace
 struct ModificationMonitor
 {
     GncGUID table_guid{};
-    guint modifications{};
+    std::uint32_t modifications{};
 };
 
 class TaxTableRenameResponseTest : public GnomeResponseTest
@@ -41,11 +42,11 @@ protected:
     GncGUID table_guid{};
     GtkWidget *owner{};
     GtkWidget *table_window{};
-    gint event_handler{};
+    std::int32_t event_handler{};
     ModificationMonitor monitor{};
 };
 
-GtkWidget *
+static GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -62,7 +63,7 @@ find_buildable (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_tax_table_window ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -85,10 +86,10 @@ find_tax_table_window ()
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_entry (GtkWidget *root);
 
-GtkWidget *
+static GtkWidget *
 find_rename_dialog (GtkWidget *parent)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -112,7 +113,7 @@ find_rename_dialog (GtkWidget *parent)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_entry (GtkWidget *root)
 {
     if (GTK_IS_ENTRY (root))
@@ -127,13 +128,13 @@ find_entry (GtkWidget *root)
     return result;
 }
 
-void
+static void
 destroy_tax_table_parent (GtkWidget *, gpointer user_data)
 {
     gtk_widget_destroy (GTK_WIDGET (user_data));
 }
 
-void
+static void
 destroy_current_session (GtkWidget *, gpointer user_data)
 {
     auto session = static_cast<QofSession **> (user_data);
@@ -145,7 +146,7 @@ destroy_current_session (GtkWidget *, gpointer user_data)
     *session = nullptr;
 }
 
-void
+static void
 count_table_modification (QofInstance *entity, QofEventId event_type,
                           gpointer user_data,
                           [[maybe_unused]] gpointer event_data)
@@ -156,7 +157,7 @@ count_table_modification (QofInstance *entity, QofEventId event_type,
         ++monitor->modifications;
 }
 
-bool
+static bool
 select_tax_table (GtkWidget *window)
 {
     auto view = find_buildable (window, "tax_tables_view");

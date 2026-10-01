@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <vector>
@@ -22,12 +23,12 @@ namespace
 {
 GncMainWindow *suite_sentinel{};
 
-void count_destroy (GtkWidget *, gpointer data)
+static void count_destroy (GtkWidget *, gpointer data)
 {
-    ++*static_cast<guint *>(data);
+    ++*static_cast<std::uint32_t *>(data);
 }
 
-GtkDialog *find_question (GtkWindow *parent)
+static GtkDialog *find_question (GtkWindow *parent)
 {
     GtkDialog *question = nullptr;
     auto windows = gtk_window_list_toplevels();
@@ -42,7 +43,7 @@ GtkDialog *find_question (GtkWindow *parent)
     return question;
 }
 
-GtkDialog *find_save_chooser (GtkWindow *parent)
+static GtkDialog *find_save_chooser (GtkWindow *parent)
 {
     GtkDialog *chooser = nullptr;
     auto windows = gtk_window_list_toplevels();
@@ -57,9 +58,9 @@ GtkDialog *find_save_chooser (GtkWindow *parent)
     return chooser;
 }
 
-void request_close (GncMainWindow *window)
+static void request_close (GncMainWindow *window)
 {
-    gboolean handled = FALSE;
+    gboolean handled = false;
     g_signal_emit_by_name(window, "delete-event", nullptr, &handled);
     EXPECT_TRUE(handled);
 }
@@ -123,7 +124,7 @@ protected:
     QofBook *m_book{};
     GncMainWindow *m_sentinel{};
     GncMainWindow *m_window{};
-    guint m_destroyed{};
+    std::uint32_t m_destroyed{};
     std::vector<GtkWidget *> m_retained;
 };
 
@@ -189,7 +190,7 @@ TEST_F (MainWindowCloseTest, LastWindowSaveCancelAndRetry)
      * four additional-window cases above. */
     destroy_sentinel ();
 
-    gnc_prefs_set_bool(GNC_PREFS_GROUP_GENERAL, "save-on-close-expires", FALSE);
+    gnc_prefs_set_bool(GNC_PREFS_GROUP_GENERAL, "save-on-close-expires", false);
     auto book = m_book;
     auto root = gnc_account_create_root(book);
     auto account = xaccMallocAccount(book);
@@ -247,8 +248,8 @@ TEST_F (MainWindowCloseTest, LastWindowSaveCancelAndRetry)
 
 int main (int argc, char **argv)
 {
-    g_setenv("GNC_UNINSTALLED", "YES", TRUE);
-    g_setenv("GSETTINGS_BACKEND", "memory", TRUE);
+    g_setenv("GNC_UNINSTALLED", "YES", true);
+    g_setenv("GSETTINGS_BACKEND", "memory", true);
     ::testing::InitGoogleTest(&argc, argv);
     if (!gtk_init_check(&argc, &argv))
         g_error("A graphical display is required for main-window close tests");

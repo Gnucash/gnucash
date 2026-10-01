@@ -30,18 +30,18 @@ namespace
 struct ParentDestroyState
 {
     GtkWidget *parent{};
-    gboolean destroyed{};
+    bool destroyed{};
 };
 
-void
+static void
 destroy_parent_on_dialog_destroy (GtkWidget *, gpointer user_data)
 {
     auto state = static_cast<ParentDestroyState *> (user_data);
-    state->destroyed = TRUE;
+    state->destroyed = true;
     gtk_widget_destroy (state->parent);
 }
 
-GtkWidget *
+static GtkWidget *
 find_payment_split_dialog (GtkWidget *parent)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -66,7 +66,7 @@ find_payment_split_dialog (GtkWidget *parent)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_payment_window ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -100,7 +100,7 @@ struct PaymentFixture
     GncOwner owner;
 };
 
-PaymentFixture
+static PaymentFixture
 make_payment_fixture ()
 {
     PaymentFixture fixture{};
@@ -161,7 +161,7 @@ make_payment_fixture ()
     return fixture;
 }
 
-GtkWidget *
+static GtkWidget *
 find_split_radio (GtkWidget *root, const GncGUID *split_guid)
 {
     if (GTK_IS_RADIO_BUTTON (root))
@@ -218,7 +218,7 @@ TEST_F (PaymentSplitResponseTest, ParentDestroyDuringAcceptedResponse)
                                        fixture.txn);
     auto chooser = find_payment_split_dialog (parent);
     ASSERT_TRUE (GTK_IS_DIALOG (chooser));
-    parent_destroy_state = {parent, FALSE};
+    parent_destroy_state = {parent, false};
     g_signal_connect (chooser, "destroy",
                       G_CALLBACK (destroy_parent_on_dialog_destroy),
                       &parent_destroy_state);
@@ -246,7 +246,7 @@ TEST_F (PaymentSplitResponseTest, DeletedSelectedSplitDoesNotOpenPaymentWindow)
     auto selected_guid = *xaccSplitGetGUID (fixture.first_split);
     auto radio = find_split_radio (chooser, &selected_guid);
     ASSERT_TRUE (GTK_IS_RADIO_BUTTON (radio));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), true);
     xaccTransBeginEdit (fixture.txn);
     xaccSplitSetAmount (fixture.counter_split, gnc_numeric_create (-10, 1));
     xaccSplitSetValue (fixture.counter_split, gnc_numeric_create (-10, 1));

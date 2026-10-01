@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 
@@ -16,13 +17,13 @@ namespace
 {
 struct Result
 {
-    guint calls{0};
-    gboolean accepted{FALSE};
+    std::uint32_t calls{0};
+    bool accepted{false};
     time64 date{0};
 };
 
-GtkWidget *find_date_dialog ();
-void completed (gboolean accepted, time64 date, gpointer data);
+static GtkWidget *find_date_dialog ();
+static void completed (gboolean accepted, time64 date, gpointer data);
 
 class DateCloseResponseTest : public GnomeResponseTest
 {
@@ -48,12 +49,12 @@ protected:
     GtkWidget *open_dialog ()
     {
         gnc_dialog_date_close_async_parented (
-            parent, "Close?", "Date", TRUE, 1234, completed, &result);
+            parent, "Close?", "Date", true, 1234, completed, &result);
         return find_date_dialog ();
     }
 };
 
-GtkWidget *
+static GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -69,7 +70,7 @@ find_buildable (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_date_dialog ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -84,7 +85,7 @@ find_date_dialog ()
     return result;
 }
 
-GNCDateEdit *
+static GNCDateEdit *
 find_date_edit (GtkWidget *root)
 {
     if (GNC_IS_DATE_EDIT (root))
@@ -99,7 +100,7 @@ find_date_edit (GtkWidget *root)
     return result;
 }
 
-void
+static void
 completed (gboolean accepted, time64 date, gpointer data)
 {
     auto result = static_cast<Result *> (data);
@@ -108,7 +109,7 @@ completed (gboolean accepted, time64 date, gpointer data)
     result->date = date;
 }
 
-void
+static void
 destroy_parent_during_completion (GtkWidget *, gpointer parent)
 {
     gtk_widget_destroy (GTK_WIDGET(parent));

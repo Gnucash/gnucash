@@ -22,7 +22,7 @@ extern "C"
 
 namespace
 {
-GtkWidget *
+static GtkWidget *
 find_amount (GtkWidget *widget)
 {
     if (GNC_IS_AMOUNT_EDIT (widget))
@@ -37,7 +37,7 @@ find_amount (GtkWidget *widget)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_notice (GtkWidget *parent)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -184,7 +184,7 @@ run_tests (int argc, char **argv)
     ::testing::InitGoogleTest (&argc, argv);
     qof_init ();
     /* No saved user variables are needed for these literal test expressions. */
-    gnc_exp_parser_real_init (FALSE);
+    gnc_exp_parser_real_init (false);
     g_log_set_always_fatal (static_cast<GLogLevelFlags> (
         G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
     auto result = RUN_ALL_TESTS ();

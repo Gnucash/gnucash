@@ -43,10 +43,10 @@ TEST_F (ReconcileCellTest, AcceptedConfirmationAdvancesOnce)
     ASSERT_TRUE (cell->cell.enter_cell (&cell->cell, &cursor, &start, &end));
     EXPECT_EQ (gnc_recn_cell_get_flag (cell), 'y');
     EXPECT_TRUE (cell->confirm_pending);
-    EXPECT_TRUE (gnc_recn_cell_complete_confirm (cell, TRUE));
+    EXPECT_TRUE (gnc_recn_cell_complete_confirm (cell, true));
     EXPECT_EQ (gnc_recn_cell_get_flag (cell), 'n');
     EXPECT_FALSE (cell->confirm_pending);
-    EXPECT_FALSE (gnc_recn_cell_complete_confirm (cell, TRUE));
+    EXPECT_FALSE (gnc_recn_cell_complete_confirm (cell, true));
 
 }
 
@@ -58,7 +58,7 @@ TEST_F (ReconcileCellTest, CancelledConfirmationKeepsFlag)
     gnc_recn_cell_set_flag (cell, 'n');
     ASSERT_TRUE (cell->cell.enter_cell (&cell->cell, &cursor, &start, &end));
     EXPECT_TRUE (cell->confirm_pending);
-    EXPECT_FALSE (gnc_recn_cell_complete_confirm (cell, FALSE));
+    EXPECT_FALSE (gnc_recn_cell_complete_confirm (cell, false));
     EXPECT_EQ (gnc_recn_cell_get_flag (cell), 'n');
 }
 

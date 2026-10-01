@@ -33,6 +33,7 @@
     @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -98,7 +99,7 @@ struct _main_matcher_info
     MatcherLifetime *lifetime;
     GPtrArray *signal_objects;
     GtkTreeModel *model;
-    gboolean closing;
+    bool closing;
     GtkWidget *main_widget;
     GtkTreeView *view;
     GNCImportSettings *user_settings;
@@ -108,7 +109,7 @@ struct _main_matcher_info
     gpointer user_data;
     GNCImportMainMatcherDoneCB done_cb;
     gpointer done_user_data;
-    gboolean done_accepted;
+    bool done_accepted;
     GNCImportPendingMatches *pending_matches;
     GtkTreeViewColumn       *account_column;
     GtkTreeViewColumn       *memo_column;
@@ -236,11 +237,11 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     if (info == NULL || info->closing)
         return;
 
-    info->closing = TRUE;
+    info->closing = true;
     // Retained widgets can emit signals even after their window is destroyed.
     // Remove every callback using this controller before destroying children
     // or invoking transaction callbacks that may close the matcher again.
-    for (guint i = 0; i < info->signal_objects->len; ++i)
+    for (std::uint32_t i = 0; i < info->signal_objects->len; ++i)
         g_signal_handlers_disconnect_by_data(
             g_ptr_array_index(info->signal_objects, i), info);
 
@@ -320,7 +321,7 @@ matcher_track_signal_object(GNCImportMainMatcher *info, gpointer object)
 static void
 matcher_window_destroyed(GtkWidget *, GNCImportMainMatcher *info)
 {
-    info->done_accepted = FALSE;
+    info->done_accepted = false;
     gnc_gen_trans_list_delete(info);
 }
 
@@ -612,7 +613,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     if (!gtk_tree_model_get_iter_first (model, &iter))
     {
         // No transaction, we can just close the dialog.
-        info->done_accepted = TRUE;
+        info->done_accepted = true;
         gnc_gen_trans_list_delete (info);
         return;
     }
@@ -667,7 +668,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     }
     while (gtk_tree_model_iter_next (model, &iter));
 
-    info->done_accepted = TRUE;
+    info->done_accepted = true;
     gnc_gen_trans_list_delete (info);
 
     DEBUG ("End");
@@ -683,7 +684,7 @@ void
 on_matcher_cancel_clicked (GtkButton *button, gpointer user_data)
 {
     auto info = static_cast<GNCImportMainMatcher *>(user_data);
-    info->done_accepted = FALSE;
+    info->done_accepted = false;
     gnc_gen_trans_list_delete (info);
 }
 
@@ -691,7 +692,7 @@ bool
 on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     auto info = static_cast<GNCImportMainMatcher *>(data);
-    info->done_accepted = FALSE;
+    info->done_accepted = false;
     gnc_gen_trans_list_delete (info);
     return false;
 }
@@ -2156,7 +2157,7 @@ gnc_gen_trans_list_present (GNCImportMainMatcher *info,
     g_return_if_fail(!info->closing && info->done_cb == nullptr);
     info->done_cb = completed;
     info->done_user_data = user_data;
-    info->done_accepted = FALSE;
+    info->done_accepted = false;
     if (GTK_IS_WINDOW(info->main_widget))
         gtk_window_set_modal(GTK_WINDOW(info->main_widget), TRUE);
     /* Importers queue transactions outside the tree model while collecting

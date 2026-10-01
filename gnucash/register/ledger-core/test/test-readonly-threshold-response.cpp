@@ -14,6 +14,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
@@ -28,7 +29,7 @@
 static void
 warning_destroyed ([[maybe_unused]] GtkWidget *widget, gpointer data)
 {
-    ++*static_cast<guint *> (data);
+    ++*static_cast<std::uint32_t *> (data);
 }
 
 class ReadonlyThresholdTest : public ::testing::Test
@@ -71,7 +72,7 @@ TEST_F (ReadonlyThresholdTest, DateAdjustmentShowsSingleModalWarning)
     auto threshold = qof_book_get_autoreadonly_gdate (book);
     ASSERT_NE (threshold, nullptr);
     time64 actual{};
-    gnc_date_cell_get_date (date_cell, &actual, TRUE);
+    gnc_date_cell_get_date (date_cell, &actual, true);
     /* Register dates use local midnight; gdate_to_time64 uses the neutral
      * time convention. The read-only boundary is a calendar date. */
     auto actual_date = time64_to_gdate (actual);
@@ -92,7 +93,7 @@ TEST_F (ReadonlyThresholdTest, DateAdjustmentShowsSingleModalWarning)
     ASSERT_NE (warning, nullptr);
     EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (warning)));
     EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (warning)));
-    guint destroy_count = 0;
+    std::uint32_t destroy_count = 0;
     g_signal_connect (warning, "destroy", G_CALLBACK (warning_destroyed),
                       &destroy_count);
     g_object_ref (warning);

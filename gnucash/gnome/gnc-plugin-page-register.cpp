@@ -34,6 +34,7 @@
 */
 
 #include <config.h>
+#include <cstdint>
 
 #include <optional>
 
@@ -1645,13 +1646,13 @@ struct _RegisterFinishPendingRequest
 
 static void
 register_finish_pending_complete (RegisterFinishPendingRequest *request,
-                                  gboolean accepted)
+                                  bool accepted)
 {
     auto page = request ? GNC_PLUGIN_PAGE (g_weak_ref_get (&request->page)) : NULL;
     auto book = gnc_current_session_exist () ? gnc_get_current_book () : NULL;
     if (!book || !request || !guid_equal (qof_instance_get_guid (QOF_INSTANCE (book)),
                                            &request->book))
-        accepted = FALSE;
+        accepted = false;
     if (request && request->callback)
         request->callback (page, accepted && page != NULL, request->user_data);
     g_clear_object (&page);
@@ -1677,7 +1678,7 @@ register_finish_pending_dialog_response (GtkWindow *parent, gint response,
 {
     auto request = static_cast<RegisterFinishPendingRequest *> (user_data);
     auto page = request ? GNC_PLUGIN_PAGE_REGISTER (g_weak_ref_get (&request->page)) : NULL;
-    gboolean accepted = FALSE;
+    bool accepted = false;
     if (page && parent == GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))) &&
         (!request->cancellable || !g_cancellable_is_cancelled (request->cancellable)))
     {
@@ -1715,7 +1716,7 @@ register_finish_pending_scrub_response (GtkWindow *parent, gint response,
 {
     auto request = static_cast<RegisterFinishPendingRequest *> (user_data);
     auto page = request ? GNC_PLUGIN_PAGE (g_weak_ref_get (&request->page)) : NULL;
-    gboolean valid_parent = page && parent == GTK_WINDOW (
+    bool valid_parent = page && parent == GTK_WINDOW (
         gnc_plugin_page_get_window (page));
     if (valid_parent)
     {
@@ -2049,7 +2050,7 @@ struct RegisterJumpRequest
     GncPluginPageRegister *page;
     QofBook *book;
     GncGUID split_guid;
-    gboolean amount;
+    bool amount;
 };
 
 static void
@@ -2075,7 +2076,7 @@ register_jump_after_filter_response (gboolean clear_filter, gpointer user_data)
 
 static void
 register_jump_to_split_async (GncPluginPage *plugin_page, Split *split,
-                              gboolean amount)
+                              bool amount)
 {
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
     g_return_if_fail (split != nullptr);
@@ -2769,7 +2770,7 @@ register_reverse_request_free (RegisterReverseRequest *request)
     g_free (request);
 }
 
-static gboolean
+static bool
 register_reverse_request_valid (RegisterReverseRequest *request,
                                 Transaction **transaction)
 {
@@ -2778,9 +2779,9 @@ register_reverse_request_valid (RegisterReverseRequest *request,
     auto trans = xaccTransLookup (&request->transaction, request->book);
     if (!reg || !trans || gnc_split_register_get_current_trans (reg) != trans ||
         !gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (request->page)))
-        return FALSE;
+        return false;
     *transaction = trans;
-    return TRUE;
+    return true;
 }
 
 static void
@@ -3397,7 +3398,7 @@ linked_invoice_choice_completed (GtkWindow *parent, gint response,
         GNC_IS_PLUGIN_PAGE_REGISTER (page) && book &&
         guid_equal (qof_instance_get_guid (QOF_INSTANCE (book)), &request->book) &&
         GNC_PLUGIN_PAGE (page)->window && response >= 0 &&
-        static_cast<guint> (response) < request->invoices->len)
+        static_cast<std::uint32_t> (response) < request->invoices->len)
     {
         auto guid = &g_array_index (request->invoices, GncGUID, response);
         auto invoice = gncInvoiceLookup (book, guid);

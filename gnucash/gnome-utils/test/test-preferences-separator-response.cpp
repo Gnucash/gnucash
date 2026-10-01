@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 
@@ -19,7 +20,7 @@
 extern "C" void gnc_preferences_response_cb (GtkDialog *, gint, GtkDialog *);
 
 static void
-observe_reset (GtkEditable *entry, guint *resets)
+observe_reset (GtkEditable *entry, std::uint32_t *resets)
 {
     if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (entry)), ":") == 0)
         ++*resets;
@@ -82,7 +83,7 @@ protected:
     GtkWidget *entry{};
     GtkWidget *notebook{};
     GtkDialog *question{};
-    guint resets{};
+    std::uint32_t resets{};
 };
 
 TEST_F (PreferencesSeparatorResponseTest, CancelReturnsToAccounts)

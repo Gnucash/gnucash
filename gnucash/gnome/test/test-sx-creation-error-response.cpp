@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 #include "dialog-sx-since-last-run.h"
@@ -25,7 +26,7 @@ protected:
         if (dialog)
         {
             gtk_widget_destroy (dialog);
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
         }
         GnomeResponseTest::TearDown ();
@@ -40,7 +41,7 @@ TEST_F (ScheduledTransactionErrorResponseTest, ErrorListIsConsumedBeforeResponse
     gnc_ui_sx_creation_error_dialog (&errors);
     ASSERT_EQ (errors, nullptr);
     auto windows = gtk_window_list_toplevels ();
-    guint message_dialog_count = 0;
+    std::uint32_t message_dialog_count = 0;
     for (auto node = windows; node; node = node->next)
         if (GTK_IS_MESSAGE_DIALOG (node->data))
         {

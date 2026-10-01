@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <gtest/gtest.h>
@@ -30,10 +31,10 @@ constexpr char xml_fixture[] = "<gnc>\xc3\xa9</gnc>\n";
 struct ImportResult
 {
     bool completed{};
-    gboolean converted{};
-    gboolean driver_ran{};
-    guint driver_source_id{};
-    guint dialog_destroy_count{};
+    bool converted{};
+    bool driver_ran{};
+    std::uint32_t driver_source_id{};
+    std::uint32_t dialog_destroy_count{};
     GtkWidget *assistant{};
     GWeakRef dialog_ref{};
     GWeakRef error_ref{};
@@ -47,7 +48,7 @@ struct EncodingPath
     GtkTreePath *path;
 };
 
-gboolean
+static gboolean
 find_encoding_path (GtkTreeModel *model, GtkTreePath *path,
                     GtkTreeIter *iter, gpointer user_data)
 {
@@ -57,12 +58,12 @@ find_encoding_path (GtkTreeModel *model, GtkTreePath *path,
     gtk_tree_model_get (model, iter, 1, &quark_ptr, -1);
     auto encoding = g_quark_to_string (GPOINTER_TO_UINT (quark_ptr));
     if (g_strcmp0 (encoding, wanted->encoding) != 0)
-        return FALSE;
+        return false;
     wanted->path = gtk_tree_path_copy (path);
-    return TRUE;
+    return true;
 }
 
-GtkWidget *
+static GtkWidget *
 find_named_child (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -80,7 +81,7 @@ find_named_child (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_assistant ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -97,7 +98,7 @@ find_assistant ()
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_encoding_dialog (GtkWidget *assistant)
 {
     if (!assistant)
@@ -119,25 +120,25 @@ find_encoding_dialog (GtkWidget *assistant)
     return result;
 }
 
-void
+static void
 track_dialog_destruction (GtkWidget *dialog)
 {
     g_weak_ref_set (&active_result->dialog_ref, G_OBJECT (dialog));
     g_signal_connect (dialog, "destroy",
                       G_CALLBACK (+[] (GtkWidget *, gpointer data)
                       {
-                          ++*static_cast<guint *> (data);
+                          ++*static_cast<std::uint32_t *> (data);
                       }), &active_result->dialog_destroy_count);
 }
 
-guint
+static std::uint32_t
 row_count (GtkWidget *view)
 {
     return gtk_tree_model_iter_n_children (
         gtk_tree_view_get_model (GTK_TREE_VIEW (view)), nullptr);
 }
 
-void
+static void
 remove_latin1_encoding (GtkWidget *dialog)
 {
     auto view = find_named_child (dialog, "selected_encs_view");
@@ -155,12 +156,12 @@ remove_latin1_encoding (GtkWidget *dialog)
         return;
     gtk_tree_selection_select_path (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), wanted.path);
-    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), wanted.path, nullptr, FALSE);
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), wanted.path, nullptr, false);
     gtk_tree_path_free (wanted.path);
     gtk_button_clicked (GTK_BUTTON (remove));
 }
 
-void
+static void
 add_latin1_encoding (GtkWidget *dialog)
 {
     auto view = find_named_child (dialog, "available_encs_view");
@@ -178,14 +179,14 @@ add_latin1_encoding (GtkWidget *dialog)
     gtk_tree_view_expand_to_path (GTK_TREE_VIEW (view), wanted.path);
     gtk_tree_selection_select_path (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), wanted.path);
-    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), wanted.path, nullptr, FALSE);
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), wanted.path, nullptr, false);
     EXPECT_TRUE (gtk_tree_selection_path_is_selected (
         gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), wanted.path));
     gtk_tree_path_free (wanted.path);
     gtk_button_clicked (GTK_BUTTON (add));
 }
 
-void
+static void
 check_rejected_encoding (GtkWidget *dialog, const char *encoding)
 {
     auto selected = find_named_child (dialog, "selected_encs_view");
@@ -209,11 +210,11 @@ check_rejected_encoding (GtkWidget *dialog, const char *encoding)
     EXPECT_EQ (find_encoding_dialog (dialog), nullptr);
 }
 
-gboolean
+static gboolean
 drive_cancel_then_parent_cancel (gpointer)
 {
     active_result->driver_source_id = 0;
-    active_result->driver_ran = TRUE;
+    active_result->driver_ran = true;
     active_result->assistant = find_assistant ();
     EXPECT_NE (active_result->assistant, nullptr);
     if (!active_result->assistant)
@@ -291,7 +292,7 @@ protected:
         g_weak_ref_init (&result.dialog_ref, nullptr);
         g_weak_ref_init (&result.error_ref, nullptr);
         GError *error = nullptr;
-        const gint fd = g_file_open_tmp ("gnc-xml-encoding-XXXXXX", &filename,
+        const std::int32_t fd = g_file_open_tmp ("gnc-xml-encoding-XXXXXX", &filename,
                                          &error);
         ASSERT_GE (fd, 0) << (error ? error->message : "");
         g_clear_error (&error);
@@ -331,7 +332,7 @@ protected:
 
 TEST_F (XmlEncodingAssistantTest, PublicImportAssistantCancelsChildEditor)
 {
-    result.driver_ran = FALSE;
+    result.driver_ran = false;
     result.dialog_destroy_count = 0;
     g_weak_ref_set (&result.dialog_ref, nullptr);
     result.driver_source_id = g_idle_add (drive_cancel_then_parent_cancel, nullptr);
@@ -344,7 +345,7 @@ TEST_F (XmlEncodingAssistantTest, PublicImportAssistantCancelsChildEditor)
         }, &result);
     EXPECT_FALSE (result.completed); // Product returned before any answer.
     while (!result.completed)
-        g_main_context_iteration (nullptr, TRUE);
+        g_main_context_iteration (nullptr, true);
     if (result.driver_source_id)
     {
         g_source_remove (result.driver_source_id);

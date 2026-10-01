@@ -23,6 +23,7 @@
 \********************************************************************/
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -128,14 +129,14 @@ struct _xferDialog
     gnc_xfer_dialog_cb transaction_cb;
     /* , and its user_data */
     gpointer transaction_user_data;
-    gboolean completed;
+    bool completed;
     void (*finished_cb) (gboolean completed, gpointer user_data);
     gpointer finished_user_data;
     GPtrArray *bound_widgets;
     GWeakRef parent;
-    gboolean has_parent;
-    gboolean parent_destroyed;
-    gboolean closing;
+    bool has_parent;
+    bool parent_destroyed;
+    bool closing;
 };
 
 /** Structure passed to "filter tree accounts" function to provide it information */
@@ -1699,7 +1700,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     /* Refresh everything */
     gnc_resume_gui_refresh ();
 
-    xferData->completed = TRUE;
+    xferData->completed = true;
     DEBUG("close component");
     gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
     LEAVE("ok");
@@ -1993,7 +1994,7 @@ retain_transfer_widgets (GtkWidget *widget, gpointer user_data)
 static void
 transfer_mark_parent_destroyed (GtkWidget *, gpointer user_data)
 {
-    *static_cast<gboolean *> (user_data) = TRUE;
+    *static_cast<bool *> (user_data) = true;
 }
 
 static void
@@ -2001,12 +2002,12 @@ close_handler (gpointer user_data)
 {
     auto xferData = static_cast<XferDialog *> (user_data);
     if (xferData->closing) return;
-    xferData->closing = TRUE;
+    xferData->closing = true;
     auto parent = g_weak_ref_get (&xferData->parent);
     auto completed = xferData->completed;
     if (xferData->has_parent && (!parent || xferData->parent_destroyed ||
-        gtk_widget_in_destruction (GTK_WIDGET (parent)))) completed = FALSE;
-    gboolean parent_destroyed = xferData->parent_destroyed;
+        gtk_widget_in_destruction (GTK_WIDGET (parent)))) completed = false;
+    bool parent_destroyed = xferData->parent_destroyed;
     gulong parent_watch = parent ? g_signal_connect (parent, "destroy",
         G_CALLBACK (transfer_mark_parent_destroyed), &parent_destroyed) : 0;
     if (parent) g_signal_handlers_disconnect_by_data (parent, xferData);
@@ -2014,7 +2015,7 @@ close_handler (gpointer user_data)
     auto finished_cb = xferData->finished_cb;
     auto finished_user_data = xferData->finished_user_data;
     auto widgets = xferData->bound_widgets;
-    for (guint i = 0; i < widgets->len; ++i)
+    for (std::uint32_t i = 0; i < widgets->len; ++i)
         g_signal_handlers_disconnect_by_data (g_ptr_array_index (widgets, i), xferData);
 
     ENTER(" ");
@@ -2030,7 +2031,7 @@ close_handler (gpointer user_data)
     g_object_set_data (G_OBJECT (dialog), "builder", nullptr);
     g_ptr_array_unref (widgets);
     if (parent && parent_watch) g_signal_handler_disconnect (parent, parent_watch);
-    if (parent_destroyed) completed = FALSE;
+    if (parent_destroyed) completed = false;
     g_clear_object (&parent);
     g_free (to_info);
     to_info = NULL;
@@ -2050,7 +2051,7 @@ transfer_dialog_destroyed (GtkWidget *, gpointer user_data)
 static void
 transfer_parent_destroyed (GtkWidget *, gpointer user_data)
 {
-    static_cast<XferDialog *> (user_data)->parent_destroyed = TRUE;
+    static_cast<XferDialog *> (user_data)->parent_destroyed = true;
 }
 
 /********************************************************************\
@@ -2346,7 +2347,7 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
 typedef struct
 {
     gnc_numeric exch_rate;
-    gboolean swap_amounts;
+    bool swap_amounts;
     gnc_xfer_dialog_exchange_finished_cb finished_cb;
     gpointer user_data;
 } ExchangeDialogRequest;
@@ -2410,9 +2411,9 @@ gnc_xfer_dialog_run_exchange_async (
         request->swap_amounts = expanded;
     }
     else if (gnc_commodity_equal (reg_com, txn_cur))
-        request->swap_amounts = FALSE;
+        request->swap_amounts = false;
     else if (gnc_commodity_equal (reg_com, xfer_com))
-        request->swap_amounts = TRUE;
+        request->swap_amounts = true;
     else
     {
         gnc_numeric rate = xaccTransGetAccountConvRate (txn, reg_acc);

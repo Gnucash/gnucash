@@ -1264,7 +1264,7 @@ gnc_plugin_page_invoice_doclink_completed (GtkWindow *parent, gchar *uri,
         auto invoice = gncInvoiceLookup (request->book, &request->invoice_guid);
         if (invoice)
         {
-            gboolean has_uri = uri != NULL;
+            bool has_uri = uri != NULL;
             auto priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE (plugin_page);
             if (uri && g_strcmp0 (request->old_uri, uri) != 0)
             {
@@ -1272,7 +1272,7 @@ gnc_plugin_page_invoice_doclink_completed (GtkWindow *parent, gchar *uri,
                     gnc_invoice_window_get_doclink_button (priv->iw);
                 if (g_strcmp0 (uri, "") == 0)
                 {
-                    has_uri = FALSE;
+                    has_uri = false;
                     if (doclink_button)
                         gtk_widget_hide (doclink_button);
                 }

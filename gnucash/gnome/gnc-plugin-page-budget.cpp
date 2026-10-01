@@ -33,6 +33,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #ifdef __G_IR_SCANNER__
@@ -126,7 +127,7 @@ struct BudgetNoteRequest
     GtkTextView *note;
     GncGUID budget_guid;
     GncGUID account_guid;
-    guint period_num;
+    std::uint32_t period_num;
     gchar *text{};
 };
 
@@ -257,7 +258,7 @@ struct BudgetMutationRequest
     GncGUID budget_guid;
     GPtrArray *account_guids;
     BudgetMutationKind kind;
-    gboolean captured;
+    bool captured;
     GtkWidget *name;
     GtkWidget *description;
     GtkWidget *recurrence;
@@ -273,15 +274,15 @@ struct BudgetMutationRequest
     gchar *name_text;
     gchar *description_text;
     Recurrence recurrence_value;
-    gint period_count;
-    gboolean show_code_value;
-    gboolean show_description_value;
+    std::int32_t period_count;
+    bool show_code_value;
+    bool show_description_value;
     GDate date_value;
-    gint digits_value;
-    gboolean average_value;
+    std::int32_t digits_value;
+    bool average_value;
     gchar *amount_text;
     gnc_numeric amount_value;
-    gboolean amount_valid;
+    bool amount_valid;
     allperiods_action action;
 };
 
@@ -294,7 +295,7 @@ budget_mutation_capture ([[maybe_unused]] GtkDialog *dialog, gint response,
 {
     if (response != GTK_RESPONSE_OK)
         return;
-    request->captured = TRUE;
+    request->captured = true;
     switch (request->kind)
     {
     case BUDGET_OPTIONS_REQUEST:
@@ -379,7 +380,7 @@ budget_mutation_request_new (GncPluginPageBudget *page, GtkWidget *dialog,
     return request;
 }
 
-static gboolean
+static bool
 budget_mutation_request_valid (BudgetMutationRequest *request,
                                GncPluginPageBudget *page, QofBook *book,
                                GtkWindow *owner, GncBudget **budget_out)
@@ -392,9 +393,9 @@ budget_mutation_request_valid (BudgetMutationRequest *request,
         gnc_get_current_book () != book || qof_book_is_readonly (book) ||
         qof_book_shutting_down (book) ||
         qof_instance_get_book (QOF_INSTANCE (budget)) != book)
-        return FALSE;
+        return false;
     *budget_out = budget;
-    return TRUE;
+    return true;
 }
 
 static void
@@ -414,8 +415,8 @@ budget_mutation_request_free (BudgetMutationRequest *request)
 
 static void
 budget_estimate_account (GncBudget *budget, Account *account,
-                         const Recurrence *recurrence, gint sigfigs,
-                         gboolean use_average)
+                         const Recurrence *recurrence, std::int32_t sigfigs,
+                         bool use_average)
 {
     auto periods = gnc_budget_get_num_periods (budget);
     if (use_average && periods)
@@ -427,11 +428,11 @@ budget_estimate_account (GncBudget *budget, Account *account,
                                   GNC_DENOM_AUTO,
                                   GNC_HOW_DENOM_SIGFIGS (sigfigs) |
                                   GNC_HOW_RND_ROUND_HALF_UP);
-        for (guint period = 0; period < periods; ++period)
+        for (std::uint32_t period = 0; period < periods; ++period)
             gnc_budget_set_account_period_value (budget, account, period, amount);
         return;
     }
-    for (guint period = 0; period < periods; ++period)
+    for (std::uint32_t period = 0; period < periods; ++period)
     {
         auto amount = xaccAccountGetNoclosingBalanceChangeForPeriod (
             account, recurrenceGetPeriodTime (recurrence, period, FALSE),
@@ -455,7 +456,7 @@ budget_mutation_complete ([[maybe_unused]] GtkWindow *parent, gint response,
     auto book = static_cast<QofBook *> (g_weak_ref_get (&request->book));
     auto owner = GTK_WINDOW (g_weak_ref_get (&request->owner));
     GncBudget *budget = nullptr;
-    const gboolean valid = response == GTK_RESPONSE_OK && request->captured &&
+    const bool valid = response == GTK_RESPONSE_OK && request->captured &&
         page && budget_mutation_request_valid (request, page, book, owner, &budget);
     if (valid)
     {
@@ -463,14 +464,14 @@ budget_mutation_complete ([[maybe_unused]] GtkWindow *parent, gint response,
         auto priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
         auto view = GNC_BUDGET_VIEW (g_object_ref (priv->budget_view));
         gchar *updated_page_label = nullptr;
-        gboolean budget_modified = FALSE;
+        bool budget_modified = false;
         gnc_suspend_gui_refresh ();
         qof_event_suspend ();
         switch (request->kind)
         {
         case BUDGET_OPTIONS_REQUEST:
         {
-            budget_modified = TRUE;
+            budget_modified = true;
             gnc_budget_begin_edit (budget);
             gnc_budget_set_name (budget, request->name_text);
             gnc_budget_set_description (budget, request->description_text);
@@ -500,7 +501,7 @@ budget_mutation_complete ([[maybe_unused]] GtkWindow *parent, gint response,
             priv->useAvg = request->average_value;
             budget_modified = request->account_guids->len != 0;
             gnc_budget_begin_edit (budget);
-            for (guint i = 0; i < request->account_guids->len; ++i)
+            for (std::uint32_t i = 0; i < request->account_guids->len; ++i)
             {
                 auto guid = static_cast<GncGUID *> (
                     g_ptr_array_index (request->account_guids, i));
@@ -522,7 +523,7 @@ budget_mutation_complete ([[maybe_unused]] GtkWindow *parent, gint response,
                 budget_modified = request->account_guids->len != 0 &&
                     gnc_budget_get_num_periods (budget) != 0;
                 gnc_budget_begin_edit (budget);
-                for (guint i = 0; i < request->account_guids->len; ++i)
+                for (std::uint32_t i = 0; i < request->account_guids->len; ++i)
                 {
                     auto guid = static_cast<GncGUID *> (
                         g_ptr_array_index (request->account_guids, i));
@@ -532,7 +533,7 @@ budget_mutation_complete ([[maybe_unused]] GtkWindow *parent, gint response,
                     auto allvalue = request->amount_value;
                     if (gnc_reverse_balance (account))
                         allvalue = gnc_numeric_neg (allvalue);
-                    for (guint period = 0; period < gnc_budget_get_num_periods (budget); ++period)
+                    for (std::uint32_t period = 0; period < gnc_budget_get_num_periods (budget); ++period)
                     {
                         gnc_numeric value = allvalue;
                         switch (request->action)

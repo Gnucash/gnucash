@@ -89,8 +89,8 @@ struct RenameNamespaceRequest
     gchar *old_name{};
     GWeakRef entry;
     GWeakRef label;
-    gboolean completed{};
-    gboolean responding{};
+    bool completed{};
+    bool responding{};
 };
 
 static void
@@ -110,7 +110,7 @@ static void
 rename_namespace_dialog_destroyed ([[maybe_unused]] GtkWidget *dialog,
                                   gpointer data)
 {
-    static_cast<RenameNamespaceRequest*>(data)->completed = TRUE;
+    static_cast<RenameNamespaceRequest*>(data)->completed = true;
 }
 
 static void
@@ -126,12 +126,12 @@ rename_namespace_response (GtkDialog *dialog, gint response, gpointer data)
 
     if (response != GTK_RESPONSE_OK)
     {
-        request->completed = TRUE;
+        request->completed = true;
         gtk_widget_destroy (GTK_WIDGET (dialog));
         g_object_unref (dialog);
         return;
     }
-    request->responding = TRUE;
+    request->responding = true;
 
     auto entry = GTK_ENTRY (g_weak_ref_get (&request->entry));
     auto label = GTK_LABEL (g_weak_ref_get (&request->label));
@@ -139,7 +139,7 @@ rename_namespace_response (GtkDialog *dialog, gint response, gpointer data)
     {
         g_clear_object (&entry);
         g_clear_object (&label);
-        request->responding = FALSE;
+        request->responding = false;
         g_object_unref (dialog);
         return;
     }
@@ -151,13 +151,13 @@ rename_namespace_response (GtkDialog *dialog, gint response, gpointer data)
         g_free (new_name);
         g_object_unref (entry);
         g_object_unref (label);
-        request->responding = FALSE;
+        request->responding = false;
         g_object_unref (dialog);
         return;
     }
 
     auto book = request->book;
-    gboolean renamed = FALSE;
+    bool renamed = false;
     if (book && book == gnc_get_current_book () && qof_book_is_open (book) &&
         !qof_book_shutting_down (book) && !qof_book_is_readonly (book))
     {
@@ -174,8 +174,8 @@ rename_namespace_response (GtkDialog *dialog, gint response, gpointer data)
     if (renamed)
     {
         // The engine call may emit events that close this dialog or book.
-        request->completed = TRUE;
-        request->responding = FALSE;
+        request->completed = true;
+        request->responding = false;
         if (request->book && request->book == gnc_get_current_book () &&
             qof_book_is_open (request->book) &&
             !qof_book_shutting_down (request->book))
@@ -187,10 +187,10 @@ rename_namespace_response (GtkDialog *dialog, gint response, gpointer data)
              !gtk_widget_in_destruction (GTK_WIDGET (dialog)))
     {
         gtk_label_set_text (label, _("Rename failed, possibly new name exists"));
-        request->responding = FALSE;
+        request->responding = false;
     }
     else
-        request->responding = FALSE;
+        request->responding = false;
 
     g_free (new_name);
     g_object_unref (entry);
@@ -233,7 +233,7 @@ struct CommodityActionRequest
     QofBook *book{};
     GWeakRef tree;
     GncGUID original_guid{};
-    gboolean edit{};
+    bool edit{};
 };
 
 static void
@@ -243,7 +243,7 @@ commodity_action_complete (QofBook *book, gnc_commodity *commodity,
     auto request = static_cast<CommodityActionRequest*>(data);
     auto tree = GNC_TREE_VIEW_COMMODITY (g_weak_ref_get (&request->tree));
     auto original_book = request->book;
-    gboolean valid = commodity && book && book == original_book &&
+    bool valid = commodity && book && book == original_book &&
         original_book == gnc_get_current_book () &&
         qof_book_is_open (original_book) &&
         !qof_book_shutting_down (original_book) &&
@@ -344,11 +344,11 @@ commodity_delete_decided (GtkWindow *parent, gint response, gpointer user_data)
         gnc_get_current_book () == book && !qof_book_is_readonly (book))
     {
         auto commodity = gnc_commodity_find_commodity_by_guid (&request->original_guid, book);
-        gboolean in_use = FALSE;
+        bool in_use = false;
         if (commodity)
             gnc_account_foreach_descendant (gnc_book_get_root_account (book),
                 [commodity, &in_use] (auto account) {
-                    if (xaccAccountGetCommodity (account) == commodity) in_use = TRUE;
+                    if (xaccAccountGetCommodity (account) == commodity) in_use = true;
                 });
         if (commodity && !in_use)
         {

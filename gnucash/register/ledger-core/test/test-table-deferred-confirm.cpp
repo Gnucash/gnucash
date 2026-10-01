@@ -2,6 +2,7 @@
  * that its continuation is released exactly once on completion or teardown. */
 
 #include <config.h>
+#include <cstdint>
 #include <glib.h>
 #include <gtest/gtest.h>
 
@@ -14,9 +15,9 @@ namespace
 {
 struct Probe
 {
-    guint handler_calls;
-    guint replay_calls;
-    guint destroy_calls;
+    std::uint32_t handler_calls;
+    std::uint32_t replay_calls;
+    std::uint32_t destroy_calls;
 };
 
 static GncTableConfirmResult
@@ -88,12 +89,12 @@ TEST_F (TableDeferredConfirmTest, AcceptedChangeReplaysOnce)
     EXPECT_EQ (gnc_table_confirm_change (table, table->current_cursor_loc),
                GNC_TABLE_CONFIRM_REJECT);
     EXPECT_EQ (probe.handler_calls, 1u);
-    EXPECT_TRUE (gnc_table_confirm_change_complete (table, TRUE));
+    EXPECT_TRUE (gnc_table_confirm_change_complete (table, true));
     EXPECT_FALSE (table->confirm_pending);
     EXPECT_FALSE (gnc_table_control_input_suspended (table->control));
     EXPECT_EQ (probe.replay_calls, 1u);
     EXPECT_EQ (probe.destroy_calls, 1u);
-    EXPECT_FALSE (gnc_table_confirm_change_complete (table, TRUE));
+    EXPECT_FALSE (gnc_table_confirm_change_complete (table, true));
     EXPECT_EQ (probe.replay_calls, 1u);
 }
 
@@ -103,7 +104,7 @@ TEST_F (TableDeferredConfirmTest, CancelDiscardsReplay)
     ASSERT_EQ (result, GNC_TABLE_CONFIRM_DEFERRED);
     EXPECT_TRUE (table->confirm_pending);
 
-    EXPECT_FALSE (gnc_table_confirm_change_complete (table, FALSE));
+    EXPECT_FALSE (gnc_table_confirm_change_complete (table, false));
     EXPECT_FALSE (table->confirm_pending);
     EXPECT_FALSE (gnc_table_control_input_suspended (table->control));
     EXPECT_EQ (probe.replay_calls, 0u);

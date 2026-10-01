@@ -14,7 +14,7 @@
 
 namespace
 {
-GtkWidget *
+static GtkWidget *
 find_notice (GtkWindow *parent)
 {
     auto windows = gtk_window_list_toplevels ();

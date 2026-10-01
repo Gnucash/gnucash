@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <vector>
@@ -21,7 +22,7 @@ namespace
 {
 bool fail_write;
 bool require_overwrite;
-guint writes;
+std::uint32_t writes;
 QofBook *expected_book;
 
 class SaveBackend : public QofBackend
@@ -58,11 +59,11 @@ public:
 
 struct Result
 {
-    guint calls = 0;
-    gboolean saved = FALSE;
+    std::uint32_t calls = 0;
+    bool saved = false;
 };
 
-QofBook *dirty_book()
+static QofBook *dirty_book()
 {
     auto book = qof_book_new();
     auto root = gnc_account_create_root(book);
@@ -75,14 +76,14 @@ QofBook *dirty_book()
     return book;
 }
 
-void completed(gboolean saved, gpointer data)
+static void completed(gboolean saved, gpointer data)
 {
     auto result = static_cast<Result *>(data);
     ++result->calls;
     result->saved = saved;
 }
 
-GtkDialog *find_dialog(GtkWindow *parent, bool chooser = false)
+static GtkDialog *find_dialog(GtkWindow *parent, bool chooser = false)
 {
     GtkDialog *found = nullptr;
     auto windows = gtk_window_list_toplevels();
@@ -99,7 +100,7 @@ GtkDialog *find_dialog(GtkWindow *parent, bool chooser = false)
     return found;
 }
 
-void close_dialogs(GtkWindow *parent)
+static void close_dialogs(GtkWindow *parent)
 {
     auto windows = gtk_window_list_toplevels();
     for (auto node = windows; node; node = node->next)
@@ -250,7 +251,7 @@ TEST_F (FileSaveFixture, ChoosingCancelKeepsUnsavedBook)
 TEST_P (SaveQueryResponseTest, DestructiveContinuationRequiresDecision)
 {
     auto scenario = GetParam ();
-    gnc_file_query_save_async(parent, TRUE, completed, &result);
+    gnc_file_query_save_async(parent, true, completed, &result);
     auto question = find_dialog(parent);
     ASSERT_NE (question, nullptr);
     retain (question);

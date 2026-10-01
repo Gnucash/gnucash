@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <string>
@@ -37,22 +38,22 @@ enum class RadioQueryCase { accept_first, cancel, parent_destroy };
 
 struct Completion
 {
-    guint count = 0;
-    gint response = GTK_RESPONSE_NONE;
+    std::uint32_t count = 0;
+    std::int32_t response = GTK_RESPONSE_NONE;
     GtkWindow *parent = nullptr;
 };
 
 struct Info2Completion
 {
-    guint calls{0};
+    std::uint32_t calls{0};
     GtkWindow *parent{nullptr};
-    gint response{GTK_RESPONSE_NONE};
+    std::int32_t response{GTK_RESPONSE_NONE};
 };
 
 struct DialogRunResult
 {
-    guint count = 0;
-    gint response = GTK_RESPONSE_NONE;
+    std::uint32_t count = 0;
+    std::int32_t response = GTK_RESPONSE_NONE;
     GtkWindow *parent = nullptr;
 };
 
@@ -108,7 +109,7 @@ protected:
     Info2Completion info2_completion{};
     DialogRunResult dialog_run_result{};
     InputResult input_result{};
-    guint destroy_count{};
+    std::uint32_t destroy_count{};
     GtkWidget *weak_dialog{};
     bool weak_pointer_registered{};
 };
@@ -153,8 +154,8 @@ TEST_P (QueryResponseTest, CompletesOnceForEveryResponsePath)
     const auto action = test_case.action;
     auto parent = this->parent;
     auto &result = completion;
-    gint accept = GTK_RESPONSE_OK;
-    gint cancel = GTK_RESPONSE_CANCEL;
+    std::int32_t accept = GTK_RESPONSE_OK;
+    std::int32_t cancel = GTK_RESPONSE_CANCEL;
     if (family == QueryFamily::ok_cancel)
         gnc_ok_cancel_dialog_async (parent, GTK_RESPONSE_CANCEL, completed,
                                     &result, "query %d", 1);
@@ -162,13 +163,13 @@ TEST_P (QueryResponseTest, CompletesOnceForEveryResponsePath)
     {
         accept = GTK_RESPONSE_YES;
         cancel = GTK_RESPONSE_NO;
-        gnc_verify_dialog_async (parent, FALSE, completed, &result,
+        gnc_verify_dialog_async (parent, false, completed, &result,
                                  "query %d", 2);
     }
     else
     {
         accept = GTK_RESPONSE_ACCEPT;
-        gnc_action_dialog_async (parent, "Action", FALSE, completed,
+        gnc_action_dialog_async (parent, "Action", false, completed,
                                  &result, "query %d", 3);
     }
     EXPECT_EQ (result.count, 0u);
@@ -195,9 +196,9 @@ TEST_P (QueryResponseTest, CompletesOnceForEveryResponsePath)
         gtk_dialog_response (GTK_DIALOG (dialog), accept);
         break;
     }
-    for (guint attempt = 0; result.count == 0u && attempt < 1000; ++attempt)
+    for (std::uint32_t attempt = 0; result.count == 0u && attempt < 1000; ++attempt)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         if (result.count == 0u)
             g_usleep (1000);
@@ -321,7 +322,7 @@ INSTANTIATE_TEST_SUITE_P (
 static void
 notice_destroyed (GtkWidget *, gpointer user_data)
 {
-    ++*static_cast<guint *> (user_data);
+    ++*static_cast<std::uint32_t *> (user_data);
 }
 
 class NoticeResponseTest : public GuiQueryFixture<NoticeCase> {};
@@ -345,7 +346,7 @@ TEST_P (NoticeResponseTest, CopiesMessageAndClosesOnce)
     EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
     EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
     gchar *message = nullptr;
-    gint type = GTK_MESSAGE_OTHER;
+    std::int32_t type = GTK_MESSAGE_OTHER;
     g_object_get (dialog, "text", &message, "message-type", &type, nullptr);
     const GtkMessageType types[] = {GTK_MESSAGE_ERROR, GTK_MESSAGE_WARNING,
                                     GTK_MESSAGE_INFO};
@@ -366,9 +367,9 @@ TEST_P (NoticeResponseTest, CopiesMessageAndClosesOnce)
     case NoticeAction::parent_destroy: gtk_widget_destroy (GTK_WIDGET (parent)); break;
     case NoticeAction::dialog_destroy: gtk_widget_destroy (dialog); break;
     }
-    for (guint attempt = 0; destroy_count == 0u && attempt < 1000; ++attempt)
+    for (std::uint32_t attempt = 0; destroy_count == 0u && attempt < 1000; ++attempt)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         if (destroy_count == 0u)
             g_usleep (1000);
@@ -514,7 +515,7 @@ TEST_P (Info2ResponseTest, CopiesStringsAndCompletesOnce)
     GtkTextIter start, end;
     auto buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
     gtk_text_buffer_get_bounds (buffer, &start, &end);
-    auto copied_text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+    auto copied_text = gtk_text_buffer_get_text (buffer, &start, &end, false);
     EXPECT_STREQ (copied_text, "Copied message");
     g_free (copied_text);
 
@@ -557,7 +558,7 @@ TEST_P (InfoDialogResponseTest, CopiesSummaryAndCompletesOnce)
     EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (dialog)));
     EXPECT_TRUE (gtk_window_get_destroy_with_parent (GTK_WINDOW (dialog)));
     gchar *message = nullptr;
-    gint type = GTK_MESSAGE_OTHER;
+    std::int32_t type = GTK_MESSAGE_OTHER;
     g_object_get (dialog, "text", &message, "message-type", &type, nullptr);
     EXPECT_STREQ (message, "Copied summary");
     EXPECT_EQ (type, GTK_MESSAGE_INFO);
@@ -707,10 +708,10 @@ TEST_P (RememberedDialogResponseTest, AppliesRememberedResponseSafely)
     if (scenario == DialogRunCase::permanent_accept ||
         scenario == DialogRunCase::permanent_cancel ||
         scenario == DialogRunCase::notification_destroys_parent)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (permanent), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (permanent), true);
     else if (scenario == DialogRunCase::temporary_reject)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (temporary), TRUE);
-    gint selected_response = scenario == DialogRunCase::temporary_reject ? GTK_RESPONSE_REJECT :
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (temporary), true);
+    std::int32_t selected_response = scenario == DialogRunCase::temporary_reject ? GTK_RESPONSE_REJECT :
                              scenario == DialogRunCase::permanent_cancel ? GTK_RESPONSE_CANCEL :
                              GTK_RESPONSE_ACCEPT;
     gtk_dialog_response (dialog, selected_response);
@@ -732,9 +733,9 @@ TEST_P (RememberedDialogResponseTest, AppliesRememberedResponseSafely)
     gtk_dialog_response (dialog, GTK_RESPONSE_ACCEPT);
     EXPECT_EQ (result.count, 1u);
 
-    gint permanent_value = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_PERM,
+    std::int32_t permanent_value = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_PERM,
                                                remembered_response_key);
-    gint temporary_value = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_TEMP,
+    std::int32_t temporary_value = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_TEMP,
                                                remembered_response_key);
     /* The preference is committed before its notification destroys the parent.
      * Only the caller's action is cancelled; do not roll back a notified value. */
@@ -892,13 +893,13 @@ INSTANTIATE_TEST_SUITE_P (
 int
 main (int argc, char **argv)
 {
-    g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+    g_setenv ("GSETTINGS_BACKEND", "memory", true);
     const gchar *builddir = g_getenv ("GNC_BUILDDIR");
     if (builddir)
     {
         auto schema_dir = g_build_filename (builddir, "share",
                                             "glib-2.0", "schemas", nullptr);
-        g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
+        g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, true);
         g_free (schema_dir);
     }
     ::testing::InitGoogleTest (&argc, argv);

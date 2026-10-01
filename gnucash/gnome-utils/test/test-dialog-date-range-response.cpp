@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 
 #include <gtest/gtest.h>
@@ -18,7 +19,7 @@
 
 namespace
 {
-GtkWidget *
+static GtkWidget *
 find_warning ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -33,10 +34,10 @@ find_warning ()
     return warning;
 }
 
-void
+static void
 warning_destroyed ([[maybe_unused]] GtkWidget *dialog, gpointer data)
 {
-    ++*static_cast<guint *> (data);
+    ++*static_cast<std::uint32_t *> (data);
 }
 
 class DateRangeResponseTest : public ::testing::Test
@@ -73,12 +74,12 @@ protected:
 
     QofSession *m_session{};
     GtkWidget *m_parent{};
-    guint m_destroy_count{};
+    std::uint32_t m_destroy_count{};
 
     GtkWidget *create_warning ()
     {
         auto date = g_date_new_dmy (1, G_DATE_JANUARY, 1300);
-        EXPECT_FALSE (gnc_gdate_in_valid_range (date, TRUE));
+        EXPECT_FALSE (gnc_gdate_in_valid_range (date, true));
         g_date_free (date);
         return find_warning ();
     }
@@ -91,9 +92,9 @@ protected:
 
     void expect_warning_destroyed ()
     {
-        for (guint attempts = 0; m_destroy_count == 0u && attempts < 1000; ++attempts)
+        for (std::uint32_t attempts = 0; m_destroy_count == 0u && attempts < 1000; ++attempts)
         {
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             if (m_destroy_count == 0u)
                 g_usleep (1000);
@@ -107,9 +108,9 @@ protected:
 TEST_F (DateRangeResponseTest, ValidDateRangeDoesNotShowWarning)
 {
     auto date = g_date_new_dmy (1, G_DATE_JANUARY, 2026);
-    EXPECT_TRUE (gnc_gdate_in_valid_range (date, FALSE));
+    EXPECT_TRUE (gnc_gdate_in_valid_range (date, false));
     g_date_set_year (date, 1300);
-    EXPECT_FALSE (gnc_gdate_in_valid_range (date, FALSE));
+    EXPECT_FALSE (gnc_gdate_in_valid_range (date, false));
     g_date_free (date);
     EXPECT_EQ (find_warning (), nullptr);
 }

@@ -22,10 +22,10 @@ namespace
 struct PriceEventState
 {
     GtkWidget *window{};
-    gboolean destroy_window{};
+    bool destroy_window{};
 };
 
-void
+static void
 destroy_window_on_price_event_cb (QofInstance *, QofEventId event_type,
                                   gpointer user_data, gpointer)
 {
@@ -33,12 +33,12 @@ destroy_window_on_price_event_cb (QofInstance *, QofEventId event_type,
     if (!state->destroy_window ||
         !(event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY)))
         return;
-    state->destroy_window = FALSE;
+    state->destroy_window = false;
     gtk_widget_destroy (state->window);
     state->window = nullptr;
 }
 
-GtkWidget *
+static GtkWidget *
 find_buildable (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -54,8 +54,8 @@ find_buildable (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
-find_transient_dialog (GtkWindow *parent, gboolean message)
+static GtkWidget *
+find_transient_dialog (GtkWindow *parent, bool message)
 {
     auto windows = gtk_window_list_toplevels ();
     GtkWidget *result = nullptr;
@@ -79,7 +79,7 @@ find_transient_dialog (GtkWindow *parent, gboolean message)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_price_window ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -100,7 +100,7 @@ find_price_window ()
     return result;
 }
 
-bool
+static bool
 setup_price (QofBook *book, gnc_commodity **commodity_out)
 {
     auto table = gnc_commodity_table_get_table (book);
@@ -191,7 +191,7 @@ protected:
     QofBook *book{};
     QofSession *session{};
     QofSession *replacement_session{};
-    gboolean session_switched{};
+    bool session_switched{};
     gnc_commodity *commodity{};
     GtkWidget *owner{};
     GtkWidget *price_window{};
@@ -212,11 +212,11 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveConfirmedAsyncSingle)
     auto remove_old = find_buildable (price_window, "remove_old_button");
     ASSERT_TRUE (GTK_IS_BUTTON (remove_old));
     gtk_button_clicked (GTK_BUTTON (remove_old));
-    auto removal = find_transient_dialog (GTK_WINDOW (price_window), FALSE);
+    auto removal = find_transient_dialog (GTK_WINDOW (price_window), false);
     ASSERT_TRUE (GTK_IS_DIALOG (removal));
 
     auto user_source = find_buildable (removal, "checkbutton_user");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (user_source), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (user_source), true);
     auto view = find_buildable (removal, "commodty_treeview");
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     GtkTreeIter iter;
@@ -231,7 +231,7 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveConfirmedAsyncSingle)
     /* Returning from Apply must not enter a nested loop; confirmation remains
        pending while the caller continues to run this test. */
     gtk_dialog_response (GTK_DIALOG (removal), GTK_RESPONSE_APPLY);
-    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), TRUE);
+    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), true);
     ASSERT_NE (confirmation, nullptr);
     retain_widget (confirmation);
     gtk_dialog_response (GTK_DIALOG (confirmation), GTK_RESPONSE_YES);
@@ -247,9 +247,9 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveParentDestroyLateResponse)
 {
     auto remove_old = find_buildable (price_window, "remove_old_button");
     gtk_button_clicked (GTK_BUTTON (remove_old));
-    auto removal = find_transient_dialog (GTK_WINDOW (price_window), FALSE);
+    auto removal = find_transient_dialog (GTK_WINDOW (price_window), false);
     auto user_source = find_buildable (removal, "checkbutton_user");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (user_source), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (user_source), true);
     auto view = find_buildable (removal, "commodty_treeview");
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     GtkTreeIter iter;
@@ -259,7 +259,7 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveParentDestroyLateResponse)
                                     path);
     gtk_tree_path_free (path);
     gtk_dialog_response (GTK_DIALOG (removal), GTK_RESPONSE_APPLY);
-    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), TRUE);
+    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), true);
     ASSERT_NE (confirmation, nullptr);
     retain_widget (confirmation);
 
@@ -274,9 +274,9 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveSessionChange)
     replacement_session = qof_session_new (qof_book_new ());
     gtk_button_clicked (GTK_BUTTON (find_buildable (price_window,
                                                     "remove_old_button")));
-    auto removal = find_transient_dialog (GTK_WINDOW (price_window), FALSE);
+    auto removal = find_transient_dialog (GTK_WINDOW (price_window), false);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (find_buildable (removal, "checkbutton_user")), TRUE);
+        GTK_TOGGLE_BUTTON (find_buildable (removal, "checkbutton_user")), true);
     auto view = find_buildable (removal, "commodty_treeview");
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     GtkTreeIter iter;
@@ -286,11 +286,11 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveSessionChange)
                                     path);
     gtk_tree_path_free (path);
     gtk_dialog_response (GTK_DIALOG (removal), GTK_RESPONSE_APPLY);
-    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), TRUE);
+    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), true);
     ASSERT_NE (confirmation, nullptr);
 
     gnc_set_current_session (replacement_session);
-    session_switched = TRUE;
+    session_switched = true;
     gtk_dialog_response (GTK_DIALOG (confirmation), GTK_RESPONSE_YES);
     EXPECT_EQ (gnc_pricedb_num_prices (gnc_pricedb_get_db (book),
                                              commodity), 2);
@@ -300,7 +300,7 @@ TEST_F (PriceRemoveResponseTest, PriceRemoveDialogDestroyLateResponse)
 {
     gtk_button_clicked (GTK_BUTTON (find_buildable (price_window,
                                                     "remove_old_button")));
-    auto removal = find_transient_dialog (GTK_WINDOW (price_window), FALSE);
+    auto removal = find_transient_dialog (GTK_WINDOW (price_window), false);
     retain_widget (removal);
     gtk_widget_destroy (removal);
     gtk_dialog_response (GTK_DIALOG (removal), GTK_RESPONSE_APPLY);
@@ -312,9 +312,9 @@ TEST_F (PriceRemoveResponseTest, PriceRemovalEventMayDestroyOwner)
 {
     gtk_button_clicked (GTK_BUTTON (find_buildable (price_window,
                                                     "remove_old_button")));
-    auto removal = find_transient_dialog (GTK_WINDOW (price_window), FALSE);
+    auto removal = find_transient_dialog (GTK_WINDOW (price_window), false);
     gtk_toggle_button_set_active (
-        GTK_TOGGLE_BUTTON (find_buildable (removal, "checkbutton_user")), TRUE);
+        GTK_TOGGLE_BUTTON (find_buildable (removal, "checkbutton_user")), true);
     auto view = find_buildable (removal, "commodty_treeview");
     auto model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     GtkTreeIter iter;
@@ -324,10 +324,10 @@ TEST_F (PriceRemoveResponseTest, PriceRemovalEventMayDestroyOwner)
                                     path);
     gtk_tree_path_free (path);
     gtk_dialog_response (GTK_DIALOG (removal), GTK_RESPONSE_APPLY);
-    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), TRUE);
+    auto confirmation = find_transient_dialog (GTK_WINDOW (removal), true);
     ASSERT_NE (confirmation, nullptr);
 
-    event_state = {price_window, TRUE};
+    event_state = {price_window, true};
     event_handler = qof_event_register_handler (
         destroy_window_on_price_event_cb, &event_state);
     gtk_dialog_response (GTK_DIALOG (confirmation), GTK_RESPONSE_YES);

@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
@@ -35,13 +36,13 @@ struct InvoiceFixture
     GncInvoice *invoice{};
     GncEntry *entries[2]{};
     GncGUID entry_guids[2]{};
-    guint entry_count{};
+    std::uint32_t entry_count{};
 };
 
 QofSession *window_sentinel_session{};
 GncMainWindow *window_sentinel{};
 
-void
+static void
 create_window_sentinel ()
 {
     window_sentinel_session = qof_session_new (qof_book_new ());
@@ -51,7 +52,7 @@ create_window_sentinel ()
     gnc_exchange_current_session (nullptr);
 }
 
-void
+static void
 destroy_window_sentinel ()
 {
     if (window_sentinel)
@@ -67,8 +68,8 @@ destroy_window_sentinel ()
     }
 }
 
-InvoiceFixture
-make_fixture (guint entry_count)
+static InvoiceFixture
+make_fixture (std::uint32_t entry_count)
 {
     InvoiceFixture fixture{};
     fixture.entry_count = entry_count;
@@ -106,7 +107,7 @@ make_fixture (guint entry_count)
     gncInvoiceSetOwner (fixture.invoice, &owner);
     gncInvoiceSetCurrency (fixture.invoice, currency);
 
-    for (guint i = 0; i < entry_count; ++i)
+    for (std::uint32_t i = 0; i < entry_count; ++i)
     {
         auto entry = gncEntryCreate (fixture.book);
         gncEntrySetDate (entry, gnc_time (nullptr));
@@ -140,7 +141,7 @@ make_fixture (guint entry_count)
     return fixture;
 }
 
-GtkWidget *
+static GtkWidget *
 find_confirmation (GtkWindow *parent)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -164,25 +165,25 @@ find_confirmation (GtkWindow *parent)
     return result;
 }
 
-void
+static void
 request_delete (InvoiceFixture &fixture)
 {
     gnc_invoice_window_deleteCB (nullptr, fixture.invoice_window);
 }
 
-void
+static void
 finish_fixture (InvoiceFixture &fixture)
 {
     if (!fixture.main_window)
         return;
     gtk_widget_destroy (GTK_WIDGET (fixture.main_window));
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
     g_object_unref (fixture.main_window);
 }
 
-gboolean
-entry_exists (InvoiceFixture &fixture, guint index)
+static bool
+entry_exists (InvoiceFixture &fixture, std::uint32_t index)
 {
     return gncEntryLookup (fixture.book, &fixture.entry_guids[index]) != nullptr;
 }

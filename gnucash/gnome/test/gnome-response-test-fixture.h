@@ -54,7 +54,7 @@ protected:
             gtk_widget_destroy (window);
             g_object_unref (window);
         }
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         for (auto window : windows_before_test)
         {

@@ -444,7 +444,7 @@ match_picker_response(GtkWindow *, gint response, gpointer user_data)
 {
     auto state = static_cast<MatchPickerResponseState*>(user_data);
     auto parent = g_weak_ref_get(&state->parent);
-    gboolean accepted = parent && !gtk_widget_in_destruction(GTK_WIDGET(parent)) &&
+    bool accepted = parent && !gtk_widget_in_destruction(GTK_WIDGET(parent)) &&
                         response == GTK_RESPONSE_OK;
     if (accepted &&
         state->matcher->selected_match_info != state->old)

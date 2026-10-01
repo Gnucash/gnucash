@@ -637,7 +637,7 @@ sxftd_destroy( GtkWidget *w, gpointer user_data )
     g_free(sxfti);
 }
 
-static gboolean
+static bool
 sxftd_template_would_be_unbalanced (SXFromTransInfo *sxfti)
 {
     gnc_numeric running = gnc_numeric_zero ();

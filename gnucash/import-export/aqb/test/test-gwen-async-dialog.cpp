@@ -4,6 +4,8 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include <cstdint>
+#include <cstddef>
 
 #include <gwenhywfar/dialog.h>
 #include <gwenhywfar/db.h>
@@ -38,15 +40,15 @@ enum class Action { Accept, Reject, ParentDestroy };
 struct DialogScenario
 {
     Action action;
-    gboolean worker_path;
+    bool worker_path;
 };
 
 static constexpr DialogScenario scenarios[] = {
-    {Action::Accept, FALSE},
-    {Action::Reject, FALSE},
-    {Action::ParentDestroy, FALSE},
-    {Action::Accept, TRUE},
-    {Action::ParentDestroy, TRUE}
+    {Action::Accept, false},
+    {Action::Reject, false},
+    {Action::ParentDestroy, false},
+    {Action::Accept, true},
+    {Action::ParentDestroy, true}
 };
 
 struct DialogRun
@@ -56,27 +58,27 @@ struct DialogRun
     GncGWENGui *gui{};
     GWEN_DIALOG *dialog{};
     Action action{};
-    gboolean worker_path{};
-    gboolean worker_thread_ok{};
-    gint worker_result{};
-    guint calls{};
-    gboolean accepted{};
-    gboolean completed_on_gtk{};
-    gboolean finished{};
-    gboolean started{};
-    gboolean parent_destroyed{};
-    guint driver_source{};
+    bool worker_path{};
+    bool worker_thread_ok{};
+    std::int32_t worker_result{};
+    std::uint32_t calls{};
+    bool accepted{};
+    bool completed_on_gtk{};
+    bool finished{};
+    bool started{};
+    bool parent_destroyed{};
+    std::uint32_t driver_source{};
 };
 
 #ifdef MAC_INTEGRATION
 static NSApplication *macos_application ()
 {
     static NSApplication *application = [NSApplication sharedApplication];
-    static gboolean launch_finished = FALSE;
+    static bool launch_finished = false;
     if (!launch_finished)
     {
         [application finishLaunching];
-        launch_finished = TRUE;
+        launch_finished = true;
     }
     auto running_application = [NSRunningApplication currentApplication];
     const auto activated = [running_application activateWithOptions:0];
@@ -86,12 +88,12 @@ static NSApplication *macos_application ()
         auto main_bundle_identifier = [[NSBundle mainBundle] bundleIdentifier];
         const auto running_bundle = bundle_identifier.UTF8String;
         const auto main_bundle = main_bundle_identifier.UTF8String;
-        g_print ("macOS activation request failed: pid=%d running-bundle=%s main-bundle=%s app-active=%d windows=%lu\n",
+        g_print ("macOS activation request failed: pid=%d running-bundle=%s main-bundle=%s app-active=%d windows=%zu\n",
                  static_cast<int> ([running_application processIdentifier]),
                  running_bundle ? running_bundle : "(null)",
                  main_bundle ? main_bundle : "(null)",
                  static_cast<int> ([application isActive]),
-                 static_cast<unsigned long> ([application.windows count]));
+                 static_cast<std::size_t> ([application.windows count]));
     }
     return application;
 }
@@ -146,7 +148,7 @@ static void dialog_finished (gboolean accepted, gpointer user_data)
     ++run->calls;
     run->accepted = accepted;
     run->completed_on_gtk = g_thread_self () == run->gtk_thread;
-    run->finished = TRUE;
+    run->finished = true;
     GWEN_Dialog_free (run->dialog);
     run->dialog = nullptr;
     gnc_GWEN_Gui_release (run->gui);
@@ -166,7 +168,7 @@ static void worker_exec_completed (gpointer user_data)
     ++run->calls;
     run->accepted = run->worker_result == 1;
     run->completed_on_gtk = g_thread_self () == run->gtk_thread;
-    run->finished = TRUE;
+    run->finished = true;
     GWEN_Dialog_free (run->dialog);
     run->dialog = nullptr;
     gnc_GWEN_Gui_release (run->gui);
@@ -185,7 +187,7 @@ static gboolean drive_dialog (gpointer user_data)
     {
         if (!run->parent_destroyed)
         {
-            run->parent_destroyed = TRUE;
+            run->parent_destroyed = true;
             gtk_widget_destroy (run->parent);
         }
         return G_SOURCE_CONTINUE;
@@ -218,12 +220,12 @@ protected:
         auto application = macos_application ();
 #endif
         gtk_window_present (GTK_WINDOW (run.parent));
-        const gint64 activation_deadline =
+        const std::int64_t activation_deadline =
             g_get_monotonic_time () + 2 * G_TIME_SPAN_SECOND;
         while (!gtk_window_is_active (GTK_WINDOW (run.parent)) &&
                g_get_monotonic_time () < activation_deadline)
         {
-            while (g_main_context_iteration (nullptr, FALSE))
+            while (g_main_context_iteration (nullptr, false))
                 ;
             g_usleep (1000);
         }
@@ -263,11 +265,11 @@ protected:
         if (run.started && !run.finished && run.parent)
         {
             gtk_widget_destroy (run.parent);
-            const gint64 deadline =
+            const std::int64_t deadline =
                 g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
             while (!run.finished && g_get_monotonic_time () < deadline)
             {
-                while (g_main_context_iteration (nullptr, FALSE))
+                while (g_main_context_iteration (nullptr, false))
                     ;
                 g_usleep (1000);
             }
@@ -293,7 +295,7 @@ protected:
 
 TEST_P (GwenAsyncDialogTest, CompletesOnGtkThread)
 {
-    run.started = TRUE;
+    run.started = true;
     if (run.worker_path)
         gnc_GWEN_Gui_run_job_async (run.gui, worker_exec_dialog,
                                     worker_exec_completed, &run, nullptr);
@@ -302,10 +304,10 @@ TEST_P (GwenAsyncDialogTest, CompletesOnGtkThread)
                                         dialog_finished, &run);
     EXPECT_EQ (run.calls, 0u);
     run.driver_source = g_timeout_add (5, drive_dialog, &run);
-    const gint64 deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
+    const std::int64_t deadline = g_get_monotonic_time () + 5 * G_TIME_SPAN_SECOND;
     while (!run.finished && g_get_monotonic_time () < deadline)
     {
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         g_usleep (1000);
     }

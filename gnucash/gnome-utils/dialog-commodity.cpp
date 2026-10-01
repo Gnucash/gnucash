@@ -35,6 +35,7 @@
 
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -80,12 +81,12 @@ struct select_commodity_window
     gchar *selection_namespace;
     gchar *selection_mnemonic;
     GncGUID selection_guid;
-    gboolean selection_guid_set;
+    bool selection_guid_set;
     GncCommodityDialogCallback callback;
     gpointer callback_data;
-    guint async_refs;
-    gboolean completed;
-    gboolean new_dialog_active;
+    std::uint32_t async_refs;
+    bool completed;
+    bool new_dialog_active;
 };
 
 struct commodity_window
@@ -118,16 +119,16 @@ struct commodity_window
     gchar *edit_namespace;
     gchar *edit_mnemonic;
     GncGUID edit_guid;
-    gboolean edit_guid_set;
+    bool edit_guid_set;
     GncGUID result_guid;
-    gboolean result_guid_set;
+    bool result_guid_set;
     gchar *result_namespace;
     gchar *result_mnemonic;
     GncCommodityDialogCallback callback;
     gpointer callback_data;
-    gboolean completed;
-    gboolean response_active;
-    gboolean async_mode;
+    bool completed;
+    bool response_active;
+    bool async_mode;
 };
 
 typedef struct select_commodity_window SelectCommodityWindow;
@@ -145,13 +146,13 @@ static void gnc_ui_select_commodity_new_async_cb (QofBook *book,
                                                   gnc_commodity *commodity,
                                                   gpointer data);
 
-static gboolean
+static bool
 commodity_book_is_live (QofBook *book)
 {
     return book && !qof_book_shutting_down (book) && qof_book_is_open (book);
 }
 
-static gboolean
+static bool
 commodity_book_is_current (QofBook *book)
 {
     return commodity_book_is_live (book) && gnc_current_session_exist () &&
@@ -224,7 +225,7 @@ gnc_ui_select_commodity_unref (SelectCommodityWindow *window)
         gnc_ui_select_commodity_free (window);
 }
 
-static gboolean
+static bool
 gnc_ui_select_commodity_is_valid (SelectCommodityWindow *window,
                                   gnc_commodity **result)
 {
@@ -232,7 +233,7 @@ gnc_ui_select_commodity_is_valid (SelectCommodityWindow *window,
     *result = nullptr;
     if (!commodity_book_is_current (window->book) || !window->selection ||
         !window->selection_namespace || !window->selection_mnemonic)
-        return FALSE;
+        return false;
     table = gnc_commodity_table_get_table (window->book);
     *result = gnc_commodity_table_lookup (table, window->selection_namespace,
                                           window->selection_mnemonic);
@@ -271,7 +272,7 @@ gnc_ui_select_commodity_destroy_cb (GtkWidget *dialog, gpointer data)
         dialog, reinterpret_cast<gpointer> (gnc_ui_select_commodity_response_cb), window);
     if (!window->completed)
     {
-        window->completed = TRUE;
+        window->completed = true;
         gnc_ui_select_commodity_complete (window, nullptr);
     }
     gnc_ui_select_commodity_unref (window); // dialog ownership
@@ -287,7 +288,7 @@ gnc_ui_select_commodity_response_cb (GtkDialog *dialog, gint response,
         if (window->completed || window->new_dialog_active)
             return TRUE;
         auto name_space = gnc_ui_namespace_picker_ns (window->namespace_combo);
-        window->new_dialog_active = TRUE;
+        window->new_dialog_active = true;
         gnc_ui_select_commodity_ref (window); // child continuation ownership
         gnc_ui_new_commodity_async_full (
             name_space, window->dialog, window->default_cusip,
@@ -300,7 +301,7 @@ gnc_ui_select_commodity_response_cb (GtkDialog *dialog, gint response,
 
     if (window->completed)
         return TRUE;
-    window->completed = TRUE;
+    window->completed = true;
     g_signal_handlers_disconnect_by_func (
         dialog, reinterpret_cast<gpointer> (gnc_ui_select_commodity_response_cb), window);
     gnc_ui_select_commodity_ref (window); // response continuation ownership
@@ -321,7 +322,7 @@ gnc_ui_select_commodity_new_async_cb (QofBook *book, gnc_commodity *commodity,
                                      gpointer data)
 {
     auto window = static_cast<SelectCommodityWindow*>(data);
-    window->new_dialog_active = FALSE;
+    window->new_dialog_active = false;
     if (!window->completed && window->dialog && commodity &&
         book == window->book && commodity_book_is_current (window->book))
     {
@@ -763,7 +764,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         GtkTreeModel *model;
         QofSession *session;
         QofBook *book{};
-        gboolean destroyed{};
+        bool destroyed{};
         gulong destroy_handler;
 
         UpdateScope (GtkComboBox *combo, GtkTreeModel *model)
@@ -776,7 +777,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
                 combo, "destroy", G_CALLBACK (+[] ([[maybe_unused]] GtkWidget *widget,
                                                    gpointer data)
                 {
-                    static_cast<UpdateScope*> (data)->destroyed = TRUE;
+                    static_cast<UpdateScope*> (data)->destroyed = true;
                 }), this);
         }
 
@@ -1338,7 +1339,7 @@ gnc_ui_commodity_destroy_cb (GtkWidget *dialog, gpointer data)
         dialog, reinterpret_cast<gpointer> (gnc_ui_commodity_response_cb), window);
     if (!window->completed)
     {
-        window->completed = TRUE;
+        window->completed = true;
         gnc_ui_commodity_complete (window, nullptr);
     }
     if (!window->response_active)
@@ -1350,10 +1351,10 @@ gnc_ui_commodity_response_cb (GtkDialog *dialog, gint response, gpointer data)
 {
     auto window = static_cast<CommodityWindow*>(data);
     g_object_ref (dialog);
-    window->response_active = TRUE;
+    window->response_active = true;
     if (window->completed)
     {
-        window->response_active = FALSE;
+        window->response_active = false;
         gnc_ui_commodity_window_free (window);
         g_object_unref (dialog);
         return;
@@ -1363,7 +1364,7 @@ gnc_ui_commodity_response_cb (GtkDialog *dialog, gint response, gpointer data)
     {
         gnc_gnome_help (GTK_WINDOW (dialog), DF_MANUAL, DL_COMMODITY);
         if (!window->completed)
-            window->response_active = FALSE;
+            window->response_active = false;
         else
             gnc_ui_commodity_window_free (window);
         g_object_unref (dialog);
@@ -1388,7 +1389,7 @@ gnc_ui_commodity_response_cb (GtkDialog *dialog, gint response, gpointer data)
         else if (!gnc_ui_commodity_dialog_to_object (window))
         {
             if (!window->completed)
-                window->response_active = FALSE;
+                window->response_active = false;
             else
                 gnc_ui_commodity_window_free (window);
             g_object_unref (dialog);
@@ -1398,12 +1399,12 @@ gnc_ui_commodity_response_cb (GtkDialog *dialog, gint response, gpointer data)
             result = window->edit_commodity;
     }
 
-    window->completed = TRUE;
+    window->completed = true;
     g_signal_handlers_disconnect_by_func (
         dialog, reinterpret_cast<gpointer> (gnc_ui_commodity_response_cb), window);
     gtk_widget_destroy (GTK_WIDGET (dialog));
     gnc_ui_commodity_complete (window, result);
-    window->response_active = FALSE;
+    window->response_active = false;
     gnc_ui_commodity_window_free (window);
     g_object_unref (dialog);
 }
@@ -1465,7 +1466,7 @@ gnc_ui_commodity_show_async (CommodityWindow *window, GtkWidget *parent,
     }
     window->callback = callback;
     window->callback_data = user_data;
-    window->async_mode = TRUE;
+    window->async_mode = true;
     if (parent && GTK_IS_WINDOW (parent))
     {
         gtk_window_set_transient_for (GTK_WINDOW (window->dialog),
@@ -1532,9 +1533,9 @@ gnc_ui_edit_commodity_async (gnc_commodity *commodity, GtkWidget *parent,
     window->edit_namespace = name_space;
     window->edit_mnemonic = mnemonic;
     window->edit_guid = *qof_instance_get_guid (commodity);
-    window->edit_guid_set = TRUE;
+    window->edit_guid_set = true;
     window->result_guid = window->edit_guid;
-    window->result_guid_set = TRUE;
+    window->result_guid_set = true;
     window->result_namespace = g_strdup (name_space);
     window->result_mnemonic = g_strdup (mnemonic);
     gnc_ui_commodity_update_quote_info (window, commodity);
@@ -1569,7 +1570,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                    (GTK_SPIN_BUTTON(w->fraction_spinbutton));
     const char *string = gnc_timezone_menu_position_to_string (
         gtk_combo_box_get_active (GTK_COMBO_BOX (w->quote_tz_menu)));
-    gboolean quote_set = gtk_toggle_button_get_active (
+    bool quote_set = gtk_toggle_button_get_active (
         GTK_TOGGLE_BUTTON (w->get_quote_check));
     gnc_commodity * c;
     gnc_commodity *registered_edit = nullptr;
@@ -1693,7 +1694,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             }
             w->edit_commodity = c;
             w->result_guid = *qof_instance_get_guid (c);
-            w->result_guid_set = TRUE;
+            w->result_guid_set = true;
             gnc_commodity_begin_edit(c);
             if (!commodity_book_is_live (w->book))
             {

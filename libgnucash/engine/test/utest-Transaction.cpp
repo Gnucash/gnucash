@@ -298,7 +298,7 @@ assert_transfer_contract (TransferFixture *fixture)
     g_assert_cmpuint (g_date_get_day (&posted), ==, 1);
     Split *from_split = nullptr;
     Split *to_split = nullptr;
-    for (gint index = 0; index < 2; ++index)
+    for (int index = 0; index < 2; ++index)
     {
         auto split = xaccTransGetSplit (transaction, index);
         if (xaccSplitGetAccount (split) == fixture->info.from_account)

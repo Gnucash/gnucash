@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include <string>
@@ -22,8 +23,8 @@ enum class TransferAction { cancel, owner_destroy, dialog_destroy, close };
 
 struct Result
 {
-    guint calls{};
-    gboolean accepted{};
+    std::uint32_t calls{};
+    bool accepted{};
     gchar *username{};
     gchar *password{};
     GncDupTransResult *duplicate{};
@@ -100,7 +101,7 @@ TEST_P (InputLifetimeTest, InputCompletion)
     auto parent = m_parent;
     auto &result = m_result;
     if (duplicate)
-        gnc_dup_trans_dialog_async (parent, "Duplicate", "Test", TRUE,
+        gnc_dup_trans_dialog_async (parent, "Duplicate", "Test", true,
             1700000000, "10", "20", "test-link", duplicate_finished, &result);
     else
         gnc_get_username_password_async (parent, "Test", "Zähler", "synthetic-password",
@@ -130,7 +131,7 @@ TEST_P (InputLifetimeTest, InputCompletion)
         ASSERT_NE (link_check, nullptr);
         gtk_entry_set_text (GTK_ENTRY (num_entry), "11");
         gtk_entry_set_text (GTK_ENTRY (tnum_entry), "21");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (link_check), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (link_check), true);
     }
     if (action == InputAction::owner_destroy)
         gtk_widget_destroy (GTK_WIDGET (parent));

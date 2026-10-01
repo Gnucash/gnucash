@@ -6,6 +6,7 @@
  * any later version.
  */
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 
 #include <gtest/gtest.h>
@@ -22,7 +23,7 @@
 
 namespace
 {
-GtkWidget *
+static GtkWidget *
 find_control (GtkWidget *root, const char *name)
 {
     if (GTK_IS_BUILDABLE (root) &&
@@ -38,7 +39,7 @@ find_control (GtkWidget *root, const char *name)
     return result;
 }
 
-GtkWidget *
+static GtkWidget *
 find_window (GtkWindow *parent = nullptr)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -61,11 +62,11 @@ find_window (GtkWindow *parent = nullptr)
 
 struct CreationResult
 {
-    guint calls{};
+    std::uint32_t calls{};
     Account *account{};
 };
 
-void
+static void
 creation_completed (Account *account, gpointer data)
 {
     auto result = static_cast<CreationResult *> (data);
@@ -78,8 +79,8 @@ class AccountChildrenResponseTest : public ::testing::Test
 protected:
     static void SetUpTestSuite ()
     {
-        g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
-        g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+        g_setenv ("GNC_UNINSTALLED", "YES", true);
+        g_setenv ("GSETTINGS_BACKEND", "memory", true);
         qof_init ();
         ASSERT_TRUE (cashobjects_register ());
         gnc_component_manager_init ();

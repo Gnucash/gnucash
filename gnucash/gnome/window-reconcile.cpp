@@ -157,8 +157,8 @@ typedef struct _startRecnWindowData
     gboolean       include_children;
 
     time64         date;            /* the interest xfer reconcile date        */
-    gboolean       completed;
-    gboolean       dialog_ref;
+    bool       completed;
+    bool       dialog_ref;
     gnc_numeric    xfer_before;
     GncReconcileStartedCallback callback;
     gpointer       user_data;
@@ -190,7 +190,7 @@ static void   gnc_recn_set_window_name (RecnWindow *recnData);
 static gboolean find_by_account (gpointer find_data, gpointer user_data);
 static void start_recn_open (GtkWidget *parent, Account *account,
                              gnc_numeric initial_ending, time64 statement_date,
-                             gboolean enable_subaccount,
+                             bool enable_subaccount,
                              GncReconcileStartedCallback callback,
                              gpointer user_data);
 static void start_recn_dialog_response_cb (GtkDialog *dialog, gint response,
@@ -201,7 +201,7 @@ static void recn_interest_xfer_finished (gboolean completed, gpointer user_data)
 static void recn_confirm (RecnWindow *recnData, RecnConfirmationKind kind,
                           Split *split, const char *message);
 static void recn_confirmation_set_actions_enabled (RecnWindow *recnData,
-                                                    gboolean enabled);
+                                                    bool enabled);
 static void recn_finish (RecnWindow *recnData);
 static void recn_postpone (RecnWindow *recnData);
 static void recn_delete_transaction (RecnWindow *recnData,
@@ -842,7 +842,7 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
 static void
 start_recn_open(GtkWidget *parent, Account *account,
                 gnc_numeric initial_ending, time64 statement_date,
-                gboolean enable_subaccount,
+                bool enable_subaccount,
                 GncReconcileStartedCallback callback, gpointer user_data)
 {
     auto book = gnc_get_current_book ();
@@ -1026,7 +1026,7 @@ start_recn_dialog_response_cb (GtkDialog *dialog, gint response,
         return;
     if (response != GTK_RESPONSE_OK)
     {
-        data->completed = TRUE;
+        data->completed = true;
         start_recn_ref (data);
         gtk_widget_destroy (GTK_WIDGET (dialog));
         if (callback)
@@ -1038,7 +1038,7 @@ start_recn_dialog_response_cb (GtkDialog *dialog, gint response,
     account = start_recn_get_account (data);
     if (!account)
     {
-        data->completed = TRUE;
+        data->completed = true;
         start_recn_ref (data);
         gtk_widget_destroy (GTK_WIDGET (dialog));
         if (callback)
@@ -1059,7 +1059,7 @@ start_recn_dialog_response_cb (GtkDialog *dialog, gint response,
     xaccAccountSetReconcileChildrenStatus (account, data->include_children);
     gnc_save_reconcile_interval (account, statement_date);
 
-    data->completed = TRUE;
+    data->completed = true;
     start_recn_ref (data);
     gtk_widget_destroy (GTK_WIDGET (dialog));
     if (callback)
@@ -1076,7 +1076,7 @@ start_recn_dialog_destroyed_cb (GtkWidget *dialog, startRecnWindowData *data)
         return;
     if (!data->completed)
     {
-        data->completed = TRUE;
+        data->completed = true;
         if (callback)
             callback (FALSE, gnc_numeric_zero (), 0, user_data);
     }
@@ -2501,7 +2501,7 @@ recn_confirmation_request_free (RecnConfirmationRequest *request)
 }
 
 static void
-recn_confirmation_set_actions_enabled (RecnWindow *recnData, gboolean enabled)
+recn_confirmation_set_actions_enabled (RecnWindow *recnData, bool enabled)
 {
     static const char *const disabled_names[] = { "RecnFinishAction", "RecnPostponeAction",
                                                    "RecnCancelAction", "TransDeleteAction" };
@@ -2540,7 +2540,7 @@ recn_confirmation_finished (GtkWindow *parent, gint response, gpointer user_data
     GncGUID split_guid = {};
     GncGUID transaction_guid = {};
     RecnConfirmationKind kind = request ? request->kind : RECN_CONFIRM_CANCEL;
-    gboolean accepted;
+    bool accepted;
 
     if (request && request->book && request->book == gnc_get_current_book () &&
         !qof_book_shutting_down (request->book))
@@ -2734,7 +2734,7 @@ recnFinishCB (GSimpleAction *simple,
 static void
 recn_finish (RecnWindow *recnData)
 {
-    gboolean auto_payment;
+    bool auto_payment;
     Account *account;
     time64 date;
 

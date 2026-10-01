@@ -70,8 +70,8 @@ typedef struct
     GWeakRef dialog;
     Account *selected_account;
     GncGUID book_guid;
-    gint component_id;
-    gboolean completed;
+    int component_id;
+    bool completed;
     gint refs;
 } AccountPickerState;
 
@@ -212,7 +212,7 @@ build_acct_tree(AccountPickerDialog *picker)
  *
  * Callback for when user clicks to create a new account
  *******************************************************/
-static gboolean
+static bool
 account_picker_book_is_current(AccountPickerState *state);
 
 static void
@@ -397,7 +397,7 @@ account_picker_response([[maybe_unused]] GtkWindow *parent, gint response,
                         gpointer user_data)
 {
     auto state = static_cast<AccountPickerState*>(user_data);
-    state->completed = TRUE;
+    state->completed = true;
     auto accepted = response == GTK_RESPONSE_OK &&
         state->selected_account != nullptr;
     auto selected = accepted ? state->selected_account : nullptr;
@@ -411,7 +411,7 @@ account_picker_response([[maybe_unused]] GtkWindow *parent, gint response,
     account_picker_state_unref(state);
 }
 
-static gboolean
+static bool
 account_picker_book_is_current(AccountPickerState *state)
 {
     auto root = gnc_get_current_root_account();
@@ -488,7 +488,7 @@ static void
 account_picker_disconnect_widget_signals(AccountPickerState *state)
 {
     auto picker = &state->picker;
-    state->completed = TRUE;
+    state->completed = true;
     if (state->component_id != NO_COMPONENT)
     {
         gnc_unregister_gui_component(state->component_id);

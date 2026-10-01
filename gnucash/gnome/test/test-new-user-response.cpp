@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include "test/gnome-response-test-fixture.h"
@@ -14,20 +15,20 @@ namespace
 {
 struct PreferenceState
 {
-    guint writes{};
-    gboolean first_startup{TRUE};
+    std::uint32_t writes{};
+    bool first_startup{true};
     GtkWidget *destroy_on_write{};
 };
 
 PreferenceState *active_state{};
 
-gboolean
+static gboolean
 set_bool (const gchar *group, const gchar *name, gboolean value)
 {
     if (!active_state)
     {
         ADD_FAILURE () << "Preference callback ran without an active fixture";
-        return FALSE;
+        return false;
     }
     EXPECT_STREQ (group, GNC_PREFS_GROUP_NEW_USER);
     EXPECT_STREQ (name, GNC_PREF_FIRST_STARTUP);
@@ -39,10 +40,10 @@ set_bool (const gchar *group, const gchar *name, gboolean value)
         active_state->destroy_on_write = nullptr;
         gtk_widget_destroy (window);
     }
-    return TRUE;
+    return true;
 }
 
-GtkWidget *
+static GtkWidget *
 find_named (GtkWidget *widget, const char *name)
 {
     if (GTK_IS_BUILDABLE (widget) &&
@@ -58,7 +59,7 @@ find_named (GtkWidget *widget, const char *name)
     return found;
 }
 
-GtkWidget *
+static GtkWidget *
 find_window (const char *name)
 {
     auto windows = gtk_window_list_toplevels ();
@@ -104,7 +105,7 @@ protected:
             gtk_widget_destroy (question);
         if (window)
             gtk_widget_destroy (window);
-        while (g_main_context_iteration (nullptr, FALSE))
+        while (g_main_context_iteration (nullptr, false))
             ;
         prefsbackend = saved_backend;
         GnomeResponseTest::TearDown ();
@@ -146,7 +147,7 @@ protected:
         return question;
     }
 
-    void expect_finished (gboolean expected_first_startup)
+    void expect_finished (bool expected_first_startup)
     {
         EXPECT_EQ (state.writes, 1u);
         EXPECT_EQ (state.first_startup, expected_first_startup);
@@ -161,7 +162,7 @@ TEST_F (NewUserResponseTest, NoKeepsFirstStartupDisabled)
     auto question = open_cancel_question ();
     ASSERT_NE (question, nullptr);
     gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_NO);
-    expect_finished (FALSE);
+    expect_finished (false);
 }
 
 TEST_F (NewUserResponseTest, YesConfirmsFirstStartup)
@@ -169,14 +170,14 @@ TEST_F (NewUserResponseTest, YesConfirmsFirstStartup)
     auto question = open_cancel_question ();
     ASSERT_NE (question, nullptr);
     gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_YES);
-    expect_finished (TRUE);
+    expect_finished (true);
 }
 
 TEST_F (NewUserResponseTest, ClosingMainWindowBeforeIdleDoesNotLeaveDialog)
 {
     gtk_widget_destroy (window);
     window = nullptr;
-    while (g_main_context_iteration (nullptr, FALSE))
+    while (g_main_context_iteration (nullptr, false))
         ;
     EXPECT_EQ (state.writes, 1u);
     EXPECT_FALSE (state.first_startup);
@@ -190,7 +191,7 @@ TEST_F (NewUserResponseTest, DestroyingParentClosesCancellationQuestion)
     ASSERT_NE (question, nullptr);
     gtk_widget_destroy (window);
     window = nullptr;
-    expect_finished (FALSE);
+    expect_finished (false);
 }
 
 TEST_F (NewUserResponseTest, PreferenceCallbackMayDestroyMainWindow)
@@ -200,7 +201,7 @@ TEST_F (NewUserResponseTest, PreferenceCallbackMayDestroyMainWindow)
     state.destroy_on_write = window;
     gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_YES);
     window = nullptr;
-    expect_finished (TRUE);
+    expect_finished (true);
 }
 
 TEST_F (NewUserResponseTest, DestroyedQuestionIgnoresLateResponse)
@@ -210,7 +211,7 @@ TEST_F (NewUserResponseTest, DestroyedQuestionIgnoresLateResponse)
     retain_widget (question);
     gtk_widget_destroy (question);
     gtk_dialog_response (GTK_DIALOG (question), GTK_RESPONSE_YES);
-    expect_finished (FALSE);
+    expect_finished (false);
 }
 }
 

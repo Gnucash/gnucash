@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 
@@ -22,7 +23,7 @@
 
 struct Completion
 {
-    guint calls{};
+    std::uint32_t calls{};
     QofBook *book{};
     gnc_commodity *commodity{};
 };
@@ -87,7 +88,7 @@ protected:
 
 struct NamespaceChange
 {
-    guint calls{};
+    std::uint32_t calls{};
     QofBook *book{};
     QofSession *replacement_session{};
 };
@@ -262,7 +263,7 @@ TEST_F (CommodityResponseTest, SelectorNewChildCancelAndRepeatGuard)
     retain_dialog (GTK_WIDGET (child));
     gtk_dialog_response (selector, GNC_RESPONSE_NEW);
     auto windows = gtk_window_list_toplevels ();
-    guint child_count = 0;
+    std::uint32_t child_count = 0;
     for (auto node = windows; node; node = node->next)
         if (GTK_IS_DIALOG (node->data) &&
             gtk_window_get_transient_for (GTK_WINDOW (node->data)) ==

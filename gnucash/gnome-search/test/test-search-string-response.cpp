@@ -13,7 +13,7 @@ extern "C"
 
 namespace
 {
-GtkWidget *
+static GtkWidget *
 find_warning ()
 {
     auto windows = gtk_window_list_toplevels ();
@@ -50,7 +50,7 @@ protected:
     GtkWidget *parent{};
     GNCSearchString *search{};
 
-    GtkWidget *show_invalid_value (const char *value, gboolean regex)
+    GtkWidget *show_invalid_value (const char *value, bool regex)
     {
         gnc_search_string_set_value (search, value);
         if (regex)
@@ -80,7 +80,7 @@ protected:
 
 TEST_F (StringSearchResponseTest, RejectsEmptyValueAndClosesOnResponse)
 {
-    auto dialog = show_invalid_value ("", FALSE);
+    auto dialog = show_invalid_value ("", false);
     ASSERT_NE (dialog, nullptr);
     release_validator_after_warning (dialog);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -89,7 +89,7 @@ TEST_F (StringSearchResponseTest, RejectsEmptyValueAndClosesOnResponse)
 
 TEST_F (StringSearchResponseTest, RejectsInvalidRegularExpressionAndClosesOnResponse)
 {
-    auto dialog = show_invalid_value ("[", TRUE);
+    auto dialog = show_invalid_value ("[", true);
     ASSERT_NE (dialog, nullptr);
     release_validator_after_warning (dialog);
     gtk_dialog_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -98,7 +98,7 @@ TEST_F (StringSearchResponseTest, RejectsInvalidRegularExpressionAndClosesOnResp
 
 TEST_F (StringSearchResponseTest, WarningClosesWhenParentIsDestroyed)
 {
-    auto dialog = show_invalid_value ("[", TRUE);
+    auto dialog = show_invalid_value ("[", true);
     ASSERT_NE (dialog, nullptr);
     release_validator_after_warning (dialog);
     gtk_widget_destroy (parent);
