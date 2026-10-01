@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-30 06:27+0000\n"
+"PO-Revision-Date: 2026-10-01 15:51+0000\n"
 "Last-Translator: Yegor Derevenets <yegor.derevenets@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -8114,10 +8114,8 @@ msgid "Reconciled (Report)"
 msgstr "Сверено (отчёт)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:901
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest Date"
-msgstr "Сам_ые ранние"
+msgstr "Дата первой проводки"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:907
 msgid "Last Reconcile Date"
@@ -8205,7 +8203,7 @@ msgstr "Исполнено (%s)"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1818
 #, c-format
 msgid "Reconciled (%s)"
-msgstr "Сверенное (%s)"
+msgstr "Сверено (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1821
@@ -31450,27 +31448,27 @@ msgstr "Баланс %s %s должен быть равен нулю."
 #: libgnucash/app-utils/gnc-ui-util.cpp:474
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
-msgstr "н"
+msgstr "Н"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:476
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
-msgstr "и"
+msgstr "И"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:478
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
-msgstr "с"
+msgstr "С"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:480
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr "з"
+msgstr "З"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:482
 msgctxt "Reconciled flag 'void'"
 msgid "v"
-msgstr "п"
+msgstr "А"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:522
 msgctxt "Document Link flag for 'web'"
