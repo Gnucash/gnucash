@@ -1097,6 +1097,22 @@ InvoicesFilter::dialog_open()
             if (start_picker)
             {
                 gtk_box_pack_start (GTK_BOX (start_box), GTK_WIDGET (start_picker), TRUE, TRUE, 0);
+
+                g_signal_connect(
+                    start_picker->date_entry,
+                    "activate",
+                    G_CALLBACK(
+                        +[](GtkWidget *date,
+                            gpointer user_data)
+                        {
+                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                            filter->set_dates (false);
+                            filter->controller->apply_filter ();
+                        }
+                    ),
+                    this 
+                );
             }
             else g_warn_if_fail (true);
 
@@ -1138,8 +1154,27 @@ InvoicesFilter::dialog_open()
         else {
             end_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "filter-by-end"));
             end_picker = GNC_DATE_EDIT (gnc_date_edit_new (time (NULL), FALSE, TRUE));
+
             if (end_picker)
+            {
                 gtk_box_pack_start (GTK_BOX (end_box), GTK_WIDGET (end_picker), TRUE, TRUE, 0);
+
+                g_signal_connect(
+                    end_picker->date_entry,
+                    "activate",
+                    G_CALLBACK(
+                        +[](GtkWidget *date,
+                            gpointer user_data)
+                        {
+                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                            filter->set_dates (false);
+                            filter->controller->apply_filter ();
+                        }
+                    ),
+                    this 
+                );
+            }
             else g_warn_if_fail (true);
 
             if (end_toggle)
