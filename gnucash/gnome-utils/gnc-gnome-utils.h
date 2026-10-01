@@ -99,6 +99,23 @@ GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
  */
 void gnc_shutdown (int exit_status);
 
+/** Register a provider that drains outstanding work before save/shutdown.
+ * Called on the GTK thread. The provider must stop accepting work and call
+ * finished exactly once on that thread after all its completions have run.
+ * It must keep GTK responsive while waiting for workers or dialog responses. */
+typedef void (*GncGuiShutdownBarrier) (gpointer provider_data,
+                                     GSourceFunc finished, gpointer finished_data);
+guint gnc_gui_add_shutdown_barrier (GncGuiShutdownBarrier provider, gpointer data);
+void gnc_gui_remove_shutdown_barrier (guint identifier);
+
+/** Lease the current book for an asynchronous operation. Zero means a file
+ * command or shutdown has already reserved it. Release after the GTK-thread
+ * result continuation has finished, including cancellation. File operations
+ * reject a session change/save while any lease remains active. */
+guint gnc_gui_begin_session_operation (QofBook *book);
+void gnc_gui_end_session_operation (guint identifier);
+gboolean gnc_gui_session_operation_pending (void);
+
 
 /** Initialize the gnucash gui */
 GncMainWindow *gnc_gui_init (void);

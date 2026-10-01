@@ -39,9 +39,17 @@ PaymentWindow * gnc_ui_payment_new_with_invoice (GtkWindow *parent,
                                                  const GncOwner *owner,
                                                  QofBook *book,
                                                  GncInvoice *invoice);
-PaymentWindow * gnc_ui_payment_new_with_txn (GtkWindow *parent, GncOwner *owner, Transaction *txn);
+/** Start payment assignment without a nested dialog loop. A live parent
+ * window is required. If the transaction
+ * has multiple possible payment splits, its response will continue setup
+ * asynchronously. The function returns no PaymentWindow; cancel, parent
+ * destruction, or stale engine identities abandon the request. */
+void gnc_ui_payment_new_with_txn_async (GtkWindow *parent,
+                                        const GncOwner *owner,
+                                        Transaction *txn);
 
-/** Returns TRUE if the given transaction (to be used with gnc_ui_payment_new_with_txn() )
+/** Returns TRUE if the given transaction (to be used with
+ * gnc_ui_payment_new_with_txn_async() )
  * is for a customer, or FALSE if it's from a vendor or employee voucher. */
 gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn);
 

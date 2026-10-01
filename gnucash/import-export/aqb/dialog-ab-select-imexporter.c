@@ -39,14 +39,35 @@ struct _GncABSelectImExDlg
 {
     GtkWidget *dialog;
     GtkWidget *parent;
+    gulong parent_destroy_handler;
     GtkListStore *imexporter_list;
     GtkListStore *profile_list;
     GtkWidget *select_imexporter;
     GtkWidget *select_profile;
     GtkWidget *ok_button;
+    GtkTreeSelection *imex_selection;
+    GtkTreeSelection *profile_selection;
+    gchar *selected_imexporter;
+    gchar *selected_profile;
 
     AB_BANKING* abi;
 };
+
+typedef struct
+{
+    GncABSelectImExDlg *dialog;
+    GtkWidget *widget;
+    gulong capture_handler;
+    GncABSelectImExCallback completed;
+    gpointer user_data;
+} GncABSelectImExRunRequest;
+
+static char *tree_view_get_name (GtkTreeView *tv);
+static void gnc_ab_select_imex_capture_response (GtkDialog *dialog,
+                                                  gint response,
+                                                  gpointer user_data);
+static void gnc_ab_select_imex_completed (GtkWindow *parent, gint response,
+                                          gpointer user_data);
 
 // Expose the selection handlers to GtkBuilder.
 static gboolean imexporter_changed(GtkTreeSelection* sel,
@@ -91,8 +112,8 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
     imexd->parent = parent;
     imexd->abi = abi;
 
-    g_signal_connect (parent, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &imexd->parent);
+    imexd->parent_destroy_handler = g_signal_connect (parent, "destroy",
+        G_CALLBACK (gtk_widget_destroyed), &imexd->parent);
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "imexporter-list");
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "profile-list");
@@ -103,10 +124,10 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
                                             "aqbanking-select-imexporter-dialog"));
     g_signal_connect (imexd->dialog, "destroy",
                       G_CALLBACK (gtk_widget_destroyed), &imexd->dialog);
-    imexd->imexporter_list =
-        GTK_LIST_STORE (gtk_builder_get_object (builder, "imexporter-list"));
-    imexd->profile_list =
-        GTK_LIST_STORE (gtk_builder_get_object (builder, "profile-list"));
+    imexd->imexporter_list = g_object_ref (GTK_LIST_STORE (
+        gtk_builder_get_object (builder, "imexporter-list")));
+    imexd->profile_list = g_object_ref (GTK_LIST_STORE (
+        gtk_builder_get_object (builder, "profile-list")));
     imexd->select_imexporter =
         GTK_WIDGET (gtk_builder_get_object (builder, "imexporter-sel"));
     imexd->select_profile =
@@ -116,6 +137,8 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
 
     imex_select = GTK_TREE_SELECTION (gtk_builder_get_object (builder, "imex-selection"));
     prof_select = GTK_TREE_SELECTION (gtk_builder_get_object (builder, "prof-selection"));
+    imexd->imex_selection = g_object_ref (imex_select);
+    imexd->profile_selection = g_object_ref (prof_select);
     populate_list_store (imexd->imexporter_list,
                          imexporters);
 
@@ -128,23 +151,60 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
 
     gtk_window_set_transient_for (GTK_WINDOW (imexd->dialog),
                                   GTK_WINDOW (imexd->parent));
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (imexd->dialog), TRUE);
 
     return imexd;
+}
+
+static void
+gnc_ab_select_imex_disconnect_widget_callbacks (GtkWidget *widget,
+                                               gpointer data)
+{
+    g_signal_handlers_disconnect_by_data (widget, data);
+    if (!GTK_IS_CONTAINER (widget))
+        return;
+    GList *children = gtk_container_get_children (GTK_CONTAINER (widget));
+    for (GList *node = children; node; node = node->next)
+        gnc_ab_select_imex_disconnect_widget_callbacks (GTK_WIDGET (node->data),
+                                                        data);
+    g_list_free (children);
 }
 
 void
 gnc_ab_select_imex_dlg_destroy (GncABSelectImExDlg* imexd)
 {
+    if (imexd->imex_selection)
+        g_signal_handlers_disconnect_by_data (imexd->imex_selection, imexd);
+    if (imexd->profile_selection)
+        g_signal_handlers_disconnect_by_data (imexd->profile_selection, imexd);
+    if (imexd->dialog)
+        gnc_ab_select_imex_disconnect_widget_callbacks (imexd->dialog, imexd);
+    if (imexd->parent && imexd->parent_destroy_handler &&
+        g_signal_handler_is_connected (imexd->parent,
+                                       imexd->parent_destroy_handler))
+        g_signal_handler_disconnect (imexd->parent,
+                                     imexd->parent_destroy_handler);
 
     if (imexd->imexporter_list)
+    {
         gtk_list_store_clear (imexd->imexporter_list);
+        g_clear_object (&imexd->imexporter_list);
+    }
 
     if (imexd->profile_list)
+    {
         gtk_list_store_clear (imexd->profile_list);
+        g_clear_object (&imexd->profile_list);
+    }
+
+    g_clear_object (&imexd->imex_selection);
+    g_clear_object (&imexd->profile_selection);
 
     if (imexd->dialog)
         gtk_widget_destroy (imexd->dialog);
 
+    g_free (imexd->selected_imexporter);
+    g_free (imexd->selected_profile);
     g_free (imexd);
 }
 
@@ -210,12 +270,67 @@ profile_changed (GtkTreeSelection* sel, gpointer data)
     return TRUE;
 }
 
-gboolean
-gnc_ab_select_imex_dlg_run (GncABSelectImExDlg* imexd)
+void
+gnc_ab_select_imex_dlg_run_async (GncABSelectImExDlg *imexd,
+                                  GncABSelectImExCallback completed,
+                                  gpointer user_data)
 {
+    g_return_if_fail (imexd && imexd->dialog && completed);
+    GncABSelectImExRunRequest *request = g_new0 (GncABSelectImExRunRequest, 1);
+    request->dialog = imexd;
+    request->completed = completed;
+    request->user_data = user_data;
+    g_clear_pointer (&imexd->selected_imexporter, g_free);
+    g_clear_pointer (&imexd->selected_profile, g_free);
+    request->widget = g_object_ref (imexd->dialog);
+    request->capture_handler = g_signal_connect (imexd->dialog, "response",
+        G_CALLBACK (gnc_ab_select_imex_capture_response), imexd);
+    gnc_dialog_run_async (GTK_DIALOG (imexd->dialog), NULL,
+                          gnc_ab_select_imex_completed, request);
+    return;
+}
 
-    int response = gtk_dialog_run (GTK_DIALOG (imexd->dialog));
-    return response == GTK_RESPONSE_OK ? TRUE : FALSE;
+static void
+gnc_ab_select_imex_capture_response (GtkDialog *dialog, gint response,
+                                    gpointer user_data)
+{
+    GncABSelectImExDlg *imexd = user_data;
+    if (response != GTK_RESPONSE_OK)
+        return;
+    g_free (imexd->selected_imexporter);
+    g_free (imexd->selected_profile);
+    imexd->selected_imexporter = tree_view_get_name (
+        GTK_TREE_VIEW (imexd->select_imexporter));
+    imexd->selected_profile = tree_view_get_name (
+        GTK_TREE_VIEW (imexd->select_profile));
+}
+
+static void
+gnc_ab_select_imex_completed (GtkWindow *parent, gint response,
+                              gpointer user_data)
+{
+    GncABSelectImExRunRequest *request = user_data;
+    GncABSelectImExDlg *imexd = request->dialog;
+    if (request->capture_handler &&
+        g_signal_handler_is_connected (request->widget,
+                                       request->capture_handler))
+        g_signal_handler_disconnect (request->widget, request->capture_handler);
+    if (imexd->imex_selection)
+        g_signal_handlers_disconnect_by_data (imexd->imex_selection, imexd);
+    if (imexd->profile_selection)
+        g_signal_handlers_disconnect_by_data (imexd->profile_selection, imexd);
+    gnc_ab_select_imex_disconnect_widget_callbacks (request->widget, imexd);
+    g_object_unref (request->widget);
+    request->widget = NULL;
+    gboolean accepted = parent && imexd->parent &&
+                        !gtk_widget_in_destruction (imexd->parent) &&
+                        response == GTK_RESPONSE_OK &&
+                        imexd->selected_imexporter && imexd->selected_profile;
+    request->completed (accepted,
+                        accepted ? imexd->selected_imexporter : NULL,
+                        accepted ? imexd->selected_profile : NULL,
+                        request->user_data);
+    g_free (request);
 }
 
 static char*

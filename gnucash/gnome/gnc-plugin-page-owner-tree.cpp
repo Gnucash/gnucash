@@ -1031,78 +1031,7 @@ gnc_plugin_page_owner_tree_cmd_search_invoices (GSimpleAction *simple,
 }
 
 
-#if 0 /* Disabled due to crash */
-static void
-gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
-                                             GVariant *parameter,
-                                             gpointer user_data)
 
-{
-    auto page = GNC_PLUGIN_PAGE_OWNER_TREE (user_data);
-    GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
-    gchar *owner_name;
-    GtkWidget *window;
-    GtkWidget *dialog = NULL;
-    gint response;
-    GList* list;
-
-    if (NULL == owner) return;
-
-    /* If the owner has objects referring to it, show the list - the owner can't be deleted until these
-       references are dealt with. */
-    list = qof_instance_get_referring_object_list(QOF_INSTANCE(gncOwnerGetUndefined(owner)));
-    if (list != NULL)
-    {
-#define EXPLANATION "The list below shows objects which make use of the owner which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another owner"
-
-        gnc_ui_object_references_show( _(EXPLANATION), list);
-        g_list_free(list);
-        return;
-    }
-
-    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
-    owner_name = g_strdup (gncOwnerGetName(owner));
-    if (!owner_name)
-    {
-        owner_name = g_strdup (_("(no name)"));
-    }
-
-    /*
-     * Present a message to the user which specifies what will be
-     * deleted, then ask for verification.
-     */
-    {
-        char *message = g_strdup_printf(_("The owner %s will be deleted.\nAre you sure you want to do this?"), owner_name);
-
-        dialog =  gtk_message_dialog_new(GTK_WINDOW(window),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_QUESTION,
-                                         GTK_BUTTONS_NONE,
-                                         "%s", message);
-        g_free(message);
-        gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               _("_Cancel"), GTK_RESPONSE_CANCEL,
-                               _("_Delete"), GTK_RESPONSE_ACCEPT,
-                               (gchar *)NULL);
-        gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-
-        if (GTK_RESPONSE_ACCEPT == response)
-        {
-            /* FIXME The code below results in a crash.
-             *       The corresponding menu item/toolbar button is disabled until this is fixed. */
-            gnc_set_busy_cursor(NULL, TRUE);
-            gnc_suspend_gui_refresh ();
-            gncOwnerBeginEdit (owner);
-            gncOwnerDestroy (owner);
-            gnc_resume_gui_refresh ();
-            gnc_unset_busy_cursor(NULL);
-        }
-    }
-    g_free(owner_name);
-}
-#endif /* Disabled due to crash */
 
 /*********************/
 

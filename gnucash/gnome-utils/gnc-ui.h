@@ -90,21 +90,30 @@ extern "C" {
 
 /* Dialog windows ***************************************************/
 
-extern gboolean
-gnc_verify_dialog (GtkWindow *parent,
-                   gboolean yes_is_default,
-                   const char *format, ...) G_GNUC_PRINTF (3, 4);
+/** Completion of a non-blocking decision dialog, exactly once.
+ * parent is borrowed for the duration of the callback, or NULL if destroyed.
+ * Closing or destroying the dialog, destroying its parent, or an unknown
+ * response produces the negative response
+ * (NO for verify, CANCEL otherwise). The caller must keep user_data valid
+ * until completion. Existing synchronous callers retain their old contract.
+ */
+typedef void (*GncGuiQueryResponseCallback) (GtkWindow *parent,
+                                            gint response,
+                                            gpointer user_data);
 
-extern gint
-gnc_ok_cancel_dialog (GtkWindow *parent,
-                      gint default_result,
-                      const char *format, ...) G_GNUC_PRINTF (3, 4);
-
-extern gboolean
-gnc_action_dialog (GtkWindow *parent,
-                   const gchar *action,
-                   gboolean action_default,
-                   const gchar *format, ...) G_GNUC_PRINTF (4, 5);
+void gnc_ok_cancel_dialog_async (GtkWindow *parent, gint default_result,
+                                 GncGuiQueryResponseCallback completed,
+                                 gpointer user_data,
+                                 const gchar *format, ...) G_GNUC_PRINTF (5, 6);
+void gnc_verify_dialog_async (GtkWindow *parent, gboolean yes_is_default,
+                              GncGuiQueryResponseCallback completed,
+                              gpointer user_data,
+                              const gchar *format, ...) G_GNUC_PRINTF (5, 6);
+void gnc_action_dialog_async (GtkWindow *parent, const gchar *action,
+                              gboolean action_default,
+                              GncGuiQueryResponseCallback completed,
+                              gpointer user_data,
+                              const gchar *format, ...) G_GNUC_PRINTF (6, 7);
 
 extern void
 gnc_warning_dialog (GtkWindow *parent,
@@ -118,24 +127,75 @@ extern void
 gnc_error_dialog (GtkWindow *parent,
                   const char *format, ...) G_GNUC_PRINTF (2, 3);
 
-extern gchar *
-gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
+/** Show a modal error notice without waiting for dismissal.
+ * Use only when the caller has no work that depends on closing the notice.
+ * Formatting arguments are copied before returning; destruction of the
+ * parent closes the notice. Callers that depend on dismissal must use a completion callback.
+ */
+extern void
+gnc_error_dialog_async (GtkWindow *parent,
+                        const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
-extern gchar *
-gnc_input_dialog_with_entry (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
+/** Show ordered error strings in one non-waiting modal notice.
+ * The list and its strings are borrowed and may be freed immediately after
+ * returning. An empty list produces no notice.
+ */
+void gnc_error_dialog_async_list (GtkWindow *parent, const GList *errors);
+
+/** Same non-waiting lifetime contract as gnc_error_dialog_async. */
+void gnc_warning_dialog_async (GtkWindow *parent,
+                               const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+void gnc_info_dialog_async (GtkWindow *parent,
+                            const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+/** Show a modal info notice and continue exactly once after dismissal or
+ * destruction. Parent is borrowed during the callback, or NULL if destroyed.
+ */
+void gnc_info_dialog_async_response (GtkWindow *parent,
+                                    GncGuiQueryResponseCallback completed,
+                                     gpointer user_data,
+                                     const gchar *format, ...) G_GNUC_PRINTF (4, 5);
+
+/** Show a modal notice of the requested type. An optional completion runs
+ * exactly once after dismissal or destruction; parent is then borrowed, or
+ * NULL if destroyed. With no completion this is a terminal notice. */
+void gnc_message_dialog_async_response (GtkWindow *parent, GtkMessageType type,
+                                       GncGuiQueryResponseCallback completed,
+                                       gpointer user_data,
+                                       const gchar *format, ...) G_GNUC_PRINTF (5, 6);
+
+/** Input is owned by the callback; NULL means cancellation or owner loss. */
+typedef void (*GncInputDialogCallback) (GtkWindow *parent, gchar *input,
+                                       gpointer user_data);
+void gnc_input_dialog_async (GtkWidget *parent, const gchar *title,
+                             const gchar *msg, const gchar *default_input,
+                             GncInputDialogCallback completed, gpointer user_data);
+void gnc_input_dialog_with_entry_async (GtkWidget *parent, const gchar *title,
+                                        const gchar *msg, const gchar *default_input,
+                                        GncInputDialogCallback completed, gpointer user_data);
 
 extern void
 gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
 
+/** Show a modal text-view notice without waiting for dismissal.
+ * The title and message are copied before returning. The completion callback
+ * runs exactly once after dismissal or destruction; parent is borrowed for
+ * the callback duration, or NULL if its window was destroyed.
+ */
+void gnc_info2_dialog_async (GtkWidget *parent, const gchar *title,
+                             const gchar *msg,
+                             GncGuiQueryResponseCallback completed,
+                             gpointer user_data);
+
 extern void
 gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *target_link);
 
-int      gnc_choose_radio_option_dialog (GtkWidget *parent,
+void     gnc_choose_radio_option_dialog_async (GtkWidget *parent,
         const char *title,
         const char *msg,
         const char *button_name,
         int default_value,
-        GList *radio_list);
+        GList *radio_list,
+        GncGuiQueryResponseCallback completed, gpointer user_data);
 
 void     gnc_tax_info_dialog (GtkWidget *parent, Account *account);
 void     gnc_stock_split_dialog (GtkWidget *parent, Account * initial);
@@ -152,18 +212,18 @@ GNCPrice* gnc_price_edit_by_guid (GtkWidget * parent, const GncGUID * guid);
 void     gnc_prices_dialog (GtkWidget *parent);
 void     gnc_commodities_dialog (GtkWidget *parent);
 
-/* Open a dialog asking for username and password. The heading and
- * either 'initial_*' arguments may be NULL. If the dialog returns
- * TRUE, the user pressed OK and the entered strings are stored in the
- * output variables. They should be g_freed when no longer needed. If
- * the dialog returns FALSE, the user pressed CANCEL and NULL was
- * stored in username and password. */
-gboolean gnc_get_username_password (GtkWidget *parent,
-                                    const char *heading,
-                                    const char *initial_username,
-                                    const char *initial_password,
-                                    char **username,
-                                    char **password);
+/** Completion strings are owned by the callback. Cancellation and owner
+ * destruction pass accepted FALSE and NULL strings. */
+typedef void (*GncUsernamePasswordCallback) (gboolean accepted,
+                                             gchar *username,
+                                             gchar *password,
+                                             gpointer user_data);
+void gnc_get_username_password_async (GtkWindow *parent,
+                                      const gchar *heading,
+                                      const gchar *initial_username,
+                                      const gchar *initial_password,
+                                      GncUsernamePasswordCallback completed,
+                                      gpointer user_data);
 
 /* Managing the GUI Windows *****************************************/
 

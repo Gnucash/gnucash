@@ -36,6 +36,8 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
+#include "dialog-utils.h"
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-budget-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-budget.ui"
@@ -199,6 +201,38 @@ GnuCash 3.8 or later.");
 
 /* If only one budget exists, open it; otherwise user selects one to open */
 static void
+open_selected_budget (GtkWindow *parent, GncBudget *budget,
+                       [[maybe_unused]] gpointer user_data)
+{
+    if (parent && budget)
+        gnc_main_window_open_page (GNC_MAIN_WINDOW (parent),
+                                   gnc_plugin_page_budget_new (budget));
+}
+
+static void
+copy_selected_budget (GtkWindow *parent, GncBudget *budget,
+                       [[maybe_unused]] gpointer user_data)
+{
+    if (parent && budget && !qof_book_is_readonly (gnc_get_current_book ()))
+    {
+        gchar *name = g_strdup_printf ("Copy of %s", gnc_budget_get_name (budget));
+        GncBudget *copy = gnc_budget_clone (budget);
+        gnc_budget_set_name (copy, name);
+        g_free (name);
+        gnc_main_window_open_page (GNC_MAIN_WINDOW (parent),
+                                   gnc_plugin_page_budget_new (copy));
+    }
+}
+
+static void
+delete_selected_budget ([[maybe_unused]] GtkWindow *parent, GncBudget *budget,
+                         [[maybe_unused]] gpointer user_data)
+{
+    if (budget && !qof_book_is_readonly (gnc_get_current_book ()))
+        gnc_budget_gui_delete_budget (budget);
+}
+
+static void
 gnc_plugin_budget_cmd_open_budget (GSimpleAction *simple,
                                    GVariant      *parameter,
                                    gpointer       user_data)
@@ -219,7 +253,11 @@ gnc_plugin_budget_cmd_open_budget (GSimpleAction *simple,
         if (count == 1)
             bgt = gnc_budget_get_default (book);
         else
-            bgt = gnc_budget_gui_select_budget (GTK_WINDOW(data->window), book);
+        {
+            gnc_budget_gui_select_budget_async (GTK_WINDOW(data->window), book,
+                                                open_selected_budget, NULL);
+            return;
+        }
 
         if (bgt)
            gnc_main_window_open_page (data->window,
@@ -251,7 +289,11 @@ gnc_plugin_budget_cmd_copy_budget (GSimpleAction *simple,
         if (count == 1)
             bgt = gnc_budget_get_default(book);
         else
-            bgt = gnc_budget_gui_select_budget (GTK_WINDOW(data->window), book);
+        {
+            gnc_budget_gui_select_budget_async (GTK_WINDOW(data->window), book,
+                                                copy_selected_budget, NULL);
+            return;
+        }
 
         if (bgt)
         {
@@ -278,7 +320,6 @@ gnc_plugin_budget_cmd_delete_budget (GSimpleAction *simple,
                                      gpointer       user_data)
 {
     GncMainWindowActionData *data = user_data;
-    GncBudget *bgt;
     QofBook *book;
 
     g_return_if_fail (data != NULL);
@@ -287,10 +328,8 @@ gnc_plugin_budget_cmd_delete_budget (GSimpleAction *simple,
     if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
         return;
 
-    bgt = gnc_budget_gui_select_budget (GTK_WINDOW(data->window), book);
-    if (!bgt) return;
-
-    gnc_budget_gui_delete_budget (bgt);
+    gnc_budget_gui_select_budget_async (GTK_WINDOW(data->window), book,
+                                        delete_selected_budget, NULL);
 }
 
 /************************************************************
@@ -304,8 +343,8 @@ row_activated_cb (GtkTreeView *tv, GtkTreePath *path,
     gtk_dialog_response (GTK_DIALOG(user_data), GTK_RESPONSE_OK);
 }
 
-GncBudget *
-gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
+static GtkDialog *
+budget_selection_dialog_new (GtkWindow *parent, QofBook *book, GtkTreeView **view)
 {
     GncBudget *bgt;
     GtkDialog *dlg;
@@ -313,8 +352,6 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
     GtkTreeIter iter;
     GtkTreeSelection *sel;
     GtkTreeModel *tm;
-    gint response;
-    gboolean ok;
 
     dlg = GTK_DIALOG(gtk_dialog_new_with_buttons (
                          _("Select a Budget"), parent, GTK_DIALOG_MODAL,
@@ -329,7 +366,6 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
     gnc_tree_view_budget_set_model (tv, tm);
     g_object_unref (tm);
     gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area (dlg)), GTK_WIDGET(tv));
-    gtk_widget_show_all (GTK_WIDGET(dlg));
 
     // Preselect the default budget
     bgt = gnc_budget_get_default (book);
@@ -341,20 +377,95 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
         gtk_tree_path_free (path);
     }
 
-    bgt = NULL;
-    response = gtk_dialog_run (dlg);
-    switch (response)
-    {
-    case GTK_RESPONSE_OK:
-        ok = gtk_tree_selection_get_selected (sel, &tm, &iter);
-        if (ok)
-            bgt = gnc_tree_model_budget_get_budget (tm, &iter);
-        break;
-    default:
-        break;
-    }
-
-    gtk_widget_destroy (GTK_WIDGET(dlg));
-    return bgt;
+    *view = tv;
+    return dlg;
 }
 
+typedef struct
+{
+    GtkDialog *dialog;
+    GtkTreeView *view;
+    GWeakRef book;
+    GncGUID selected;
+    gboolean has_selection;
+    gulong response_id;
+    GncBudgetSelectionCallback callback;
+    gpointer user_data;
+} BudgetSelectionRequest;
+
+static QofBook *
+budget_selection_current_book (BudgetSelectionRequest *request)
+{
+    QofBook *book = g_weak_ref_get (&request->book);
+    if (book && (!gnc_current_session_exist () ||
+                 book != gnc_get_current_book () || !qof_book_is_open (book) ||
+                 qof_book_shutting_down (book)))
+        g_clear_object (&book);
+    return book;
+}
+
+static void
+budget_selection_capture (GtkDialog *dialog, gint response,
+                           BudgetSelectionRequest *request)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    QofBook *book;
+    g_signal_handler_disconnect (dialog, request->response_id);
+    request->response_id = 0;
+    book = budget_selection_current_book (request);
+    if (response == GTK_RESPONSE_OK && book &&
+        gtk_tree_selection_get_selected (gtk_tree_view_get_selection (request->view),
+                                          &model, &iter))
+    {
+        GncBudget *budget = gnc_tree_model_budget_get_budget (model, &iter);
+        if (budget && qof_instance_get_book (QOF_INSTANCE (budget)) == book)
+        {
+            request->selected = *gnc_budget_get_guid (budget);
+            request->has_selection = TRUE;
+        }
+    }
+    g_clear_object (&book);
+}
+
+static void
+budget_selection_complete (GtkWindow *parent, gint response, gpointer user_data)
+{
+    BudgetSelectionRequest *request = user_data;
+    QofBook *book;
+    GncBudget *budget;
+    GncBudgetSelectionCallback callback = request->callback;
+    gpointer callback_data = request->user_data;
+    if (request->response_id)
+        g_signal_handler_disconnect (request->dialog, request->response_id);
+    g_clear_object (&request->view);
+    g_clear_object (&request->dialog);
+    /* Finalizing the model can emit notifications. Resolve the identity only
+     * after all UI references have been released and revalidate the session. */
+    book = budget_selection_current_book (request);
+    budget = response == GTK_RESPONSE_OK && book && request->has_selection
+        ? gnc_budget_lookup (&request->selected, book) : NULL;
+    g_weak_ref_clear (&request->book);
+    g_free (request);
+    g_clear_object (&book);
+    callback (parent, budget, callback_data);
+}
+
+void
+gnc_budget_gui_select_budget_async (GtkWindow *parent, QofBook *book,
+                                    GncBudgetSelectionCallback callback,
+                                    gpointer user_data)
+{
+    BudgetSelectionRequest *request;
+    g_return_if_fail (book != NULL && callback != NULL);
+    request = g_new0 (BudgetSelectionRequest, 1);
+    request->dialog = budget_selection_dialog_new (parent, book, &request->view);
+    g_object_ref (request->dialog);
+    g_object_ref (request->view);
+    g_weak_ref_init (&request->book, book);
+    request->callback = callback;
+    request->user_data = user_data;
+    request->response_id = g_signal_connect (request->dialog, "response",
+                                             G_CALLBACK (budget_selection_capture), request);
+    gnc_dialog_run_async (request->dialog, NULL, budget_selection_complete, request);
+}

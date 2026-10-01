@@ -32,6 +32,7 @@
 #include <glib/gi18n.h>
 
 #include "import-match-picker.h"
+#include "gnc-gui-query.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
@@ -384,6 +385,7 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
     g_return_if_fail (builder != NULL);
 
     matcher->transaction_matcher = GTK_WIDGET(gtk_builder_get_object (builder, "match_picker_dialog"));
+    g_object_ref_sink(matcher->transaction_matcher);
     matcher->downloaded_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "download_view"));
     matcher->match_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "matched_view"));
     matcher->reconciled_chk = (GtkCheckButton *)GTK_WIDGET(gtk_builder_get_object(builder, "hide_reconciled_check1"));
@@ -417,25 +419,61 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
     
     gnc_restore_window_size(GNC_PREFS_GROUP,
                             GTK_WINDOW (matcher->transaction_matcher), GTK_WINDOW(parent));
-    gtk_widget_show(matcher->transaction_matcher);
-
     g_object_unref(G_OBJECT(builder));
 
 }/* end init_match_picker_gui */
 
 /**
- * Run a match_picker dialog so that the selected-MatchInfo in the
- * given trans_info is updated accordingly. This functions will only
- * return after the user clicked Ok, Cancel, or Window-Close.
+ * Present a match_picker dialog and update selected-MatchInfo when accepted.
+ * Completion runs after the picker has been destroyed.
  */
-void
-gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *transaction_info,
-                                       GNCImportPendingMatches *pending_matches)
+struct MatchPickerResponseState
 {
     GNCImportMatchPicker *matcher;
-    gint response;
+    GNCImportTransInfo *transaction_info;
+    GNCImportPendingMatches *pending_matches;
     GNCImportMatchInfo *old;
     gboolean old_selected_manually;
+    GWeakRef parent;
+    void (*completed)(gboolean, gpointer);
+    gpointer user_data;
+};
+
+static void
+match_picker_response(GtkWindow *, gint response, gpointer user_data)
+{
+    auto state = static_cast<MatchPickerResponseState*>(user_data);
+    auto parent = g_weak_ref_get(&state->parent);
+    bool accepted = parent && !gtk_widget_in_destruction(GTK_WIDGET(parent)) &&
+                        response == GTK_RESPONSE_OK;
+    if (accepted &&
+        state->matcher->selected_match_info != state->old)
+    {
+        gnc_import_TransInfo_set_selected_match_info(state->transaction_info,
+            state->matcher->selected_match_info, TRUE);
+        gnc_import_PendingMatches_remove_match(state->pending_matches,
+            state->old, state->old_selected_manually);
+        gnc_import_PendingMatches_add_match(state->pending_matches,
+            state->matcher->selected_match_info, TRUE);
+    }
+    if (parent)
+        g_object_unref(parent);
+    gnc_import_Settings_delete(state->matcher->user_settings);
+    g_object_unref(state->matcher->transaction_matcher);
+    g_free(state->matcher);
+    g_weak_ref_clear(&state->parent);
+    if (state->completed)
+        state->completed(accepted, state->user_data);
+    g_free(state);
+}
+
+void
+gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *transaction_info,
+                                       GNCImportPendingMatches *pending_matches,
+                                       void (*completed)(gboolean, gpointer),
+                                       gpointer user_data)
+{
+    GNCImportMatchPicker *matcher;
     g_assert (transaction_info);
 
     /* Create a new match_picker, even though it's stored in a
@@ -450,36 +488,24 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *tr
     /* Append this single transaction to the view and select it */
     downloaded_transaction_append(matcher, transaction_info);
 
-    old = gnc_import_TransInfo_get_selected_match (transaction_info);
-    old_selected_manually = 
-        gnc_import_TransInfo_get_match_selected_manually (transaction_info);
-
-    /* Let this dialog run and close. */
-    /*DEBUG("Right before run and close");*/
+    auto state = g_new0(MatchPickerResponseState, 1);
+    state->matcher = matcher;
+    state->transaction_info = transaction_info;
+    state->pending_matches = pending_matches;
+    state->old = gnc_import_TransInfo_get_selected_match(transaction_info);
+    state->old_selected_manually = gnc_import_TransInfo_get_match_selected_manually(transaction_info);
+    state->completed = completed;
+    state->user_data = user_data;
+    g_weak_ref_init(&state->parent, parent ? G_OBJECT(parent) : NULL);
     gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
-    response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
-    
-    gnc_save_window_size(GNC_PREFS_GROUP,
-                         GTK_WINDOW (matcher->transaction_matcher));
-    gtk_widget_destroy (matcher->transaction_matcher);
-    /*DEBUG("Right after run and close");*/
-    /* DEBUG("Response was %d.", response); */
-    if (response == GTK_RESPONSE_OK && matcher->selected_match_info != old)
-    {
-        /* OK was pressed */
-        gnc_import_TransInfo_set_selected_match_info (transaction_info,
-                matcher->selected_match_info,
-                TRUE);
-        
-        gnc_import_PendingMatches_remove_match (pending_matches,
-                                                old,
-                                                old_selected_manually);
-        gnc_import_PendingMatches_add_match (pending_matches,
-                                             matcher->selected_match_info,
-                                             TRUE);
-    }
-    gnc_import_Settings_delete (matcher->user_settings);
-    g_free (matcher);
+    g_signal_connect(matcher->transaction_matcher, "response",
+        G_CALLBACK(+[](GtkDialog *dialog, gint, gpointer)
+        {
+            gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
+        }), nullptr);
+    gnc_gui_query_bind_dialog_response(GTK_DIALOG(matcher->transaction_matcher),
+                                       match_picker_response, state);
+    gtk_widget_show(matcher->transaction_matcher);
 }
 
 /** @} */

@@ -167,7 +167,10 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         }
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
         {
-            gnc_file_do_save_as (GTK_WINDOW(dialog), url);
+            /* The access dialog is destroyed below. Own subsequent overwrite
+             * questions with its persistent parent, not this short-lived chooser. */
+            GtkWindow *owner = gtk_window_get_transient_for (GTK_WINDOW (dialog));
+            gnc_file_do_save_as_async (owner, url, NULL, NULL);
         }
         else if ( faw->type == FILE_ACCESS_EXPORT )
         {

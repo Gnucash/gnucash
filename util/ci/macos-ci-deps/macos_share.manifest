@@ -5,3 +5,8 @@ guile
 itstool
 pkgconfig
 swig
+gtk-3.0
+icons
+libofx
+mime
+themes

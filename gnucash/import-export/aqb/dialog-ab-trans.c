@@ -290,7 +290,10 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_transaction_dialog"));
 
     if (parent)
+    {
         gtk_window_set_transient_for(GTK_WINDOW(td->dialog), GTK_WINDOW(parent));
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (td->dialog), TRUE);
+    }
 
     /* Extract widgets */
     trans_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "trans_vbox"));
@@ -658,24 +661,79 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     gnc_ab_trans_dialog_clear_transaction(td);
 }
 
-gint
-gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
+typedef struct
 {
-    gint result;
+    GncABTransDialog *td;
+    GtkWidget *dialog;
+    gulong capture_handler;
+    GncABTransDialogCallback completed;
+    gpointer user_data;
+} TransDialogRunRequest;
+
+static void
+trans_dialog_disconnect_builder_callbacks (GtkWidget *widget, gpointer data)
+{
+    g_signal_handlers_disconnect_by_data (widget, data);
+    if (!GTK_IS_CONTAINER (widget))
+        return;
+    GList *children = gtk_container_get_children (GTK_CONTAINER (widget));
+    for (GList *node = children; node; node = node->next)
+        trans_dialog_disconnect_builder_callbacks (GTK_WIDGET (node->data), data);
+    g_list_free (children);
+}
+
+static void
+trans_dialog_capture_response (GtkDialog *dialog, gint response,
+                               TransDialogRunRequest *request)
+{
+    if (response == GNC_RESPONSE_NOW || response == GNC_RESPONSE_LATER)
+        request->td->ab_trans = gnc_ab_trans_dialog_fill_values (request->td);
+}
+
+static void
+trans_dialog_run_completed (GtkWindow *parent, gint response,
+                            gpointer user_data)
+{
+    TransDialogRunRequest *request = user_data;
+    GncABTransDialog *td = request->td;
+    GncABTransDialogCallback completed = request->completed;
+    gpointer callback_data = request->user_data;
+    if (request->capture_handler &&
+        g_signal_handler_is_connected (request->dialog,
+                                       request->capture_handler))
+        g_signal_handler_disconnect (request->dialog, request->capture_handler);
+    trans_dialog_disconnect_builder_callbacks (request->dialog, td);
+    g_object_unref (request->dialog);
+    td->dialog = NULL;
+    if (!parent)
+        response = GTK_RESPONSE_CANCEL;
+    completed (td, response, callback_data);
+    g_free (request);
+}
+
+void
+gnc_ab_trans_dialog_run_async (GncABTransDialog *td,
+                               GncABTransDialogCallback completed,
+                               gpointer user_data)
+{
     GNC_AB_JOB *job;
     const AB_TRANSACTION_LIMITS *joblimits;
     guint8 max_purpose_lines;
+
+    g_return_if_fail (td && td->dialog && completed);
 
     /* Check whether the account supports this job */
     job = gnc_ab_trans_dialog_get_available_empty_job(td->ab_acc, td->trans_type);
     if (!job)
     {
         g_warning("gnc_ab_trans_dialog_run_until_ok: Oops, job not available");
-        return GTK_RESPONSE_CANCEL;
+        completed (td, GTK_RESPONSE_CANCEL, user_data);
+        return;
     }
 
     /* Activate as many purpose entries as available for the job */
     joblimits = AB_AccountSpec_GetTransactionLimitsForCommand(td->ab_acc, AB_Transaction_GetCommand(job));
+    AB_Transaction_free (job);
     max_purpose_lines = joblimits ?
                         AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
@@ -695,38 +753,15 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
                                  AB_TransactionLimits_GetMaxLenRemoteName(joblimits));
     }
 
-    /* Show the dialog */
-    gtk_widget_show(td->dialog);
-
-    /* Now run the dialog until it gets closed by a button press */
-    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
-
-    /* Was cancel pressed or dialog closed?
-     *  GNC_RESPONSE_NOW == execute now
-     *  GNC_RESPONSE_LATER == scheduled for later execution (unimplemented)
-     *  GTK_RESPONSE_CANCEL == cancel
-     *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
-    if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
-    {
-        gtk_widget_destroy(td->dialog);
-        td->dialog = NULL;
-        return result;
-    }
-
-    /* Get the transaction details - have been checked beforehand */
-    td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
-
-    /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
-     * transactionCode according to some GUI selection here!! */
-    /*if (td->trans_type == SINGLE_DEBITNOTE)
-    AB_TRANSACTION_setTextKey (td->hbci_trans, 05); */
-
-
-    /* Hide the dialog */
-    if (td->dialog)
-        gtk_widget_hide(td->dialog);
-
-    return result;
+    TransDialogRunRequest *request = g_new0 (TransDialogRunRequest, 1);
+    request->td = td;
+    request->completed = completed;
+    request->user_data = user_data;
+    request->dialog = g_object_ref (td->dialog);
+    request->capture_handler = g_signal_connect (td->dialog, "response",
+        G_CALLBACK (trans_dialog_capture_response), request);
+    gnc_dialog_run_async (GTK_DIALOG (td->dialog), NULL,
+                          trans_dialog_run_completed, request);
 }
 
 #if (AQBANKING_VERSION_INT >= 60400)
@@ -980,92 +1015,137 @@ find_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
     return match;
 }
 
+typedef struct
+{
+    GncABTransDialog *td;
+    GtkWidget *entry;
+    GtkWidget *dialog;
+    gulong capture_handler;
+    gchar *name;
+} TemplateSaveRequest;
+
+static void
+template_save_release_dialog (TemplateSaveRequest *request)
+{
+    if (request->dialog && request->capture_handler &&
+        g_signal_handler_is_connected (request->dialog,
+                                       request->capture_handler))
+        g_signal_handler_disconnect (request->dialog, request->capture_handler);
+    request->capture_handler = 0;
+    g_clear_object (&request->dialog);
+    request->entry = NULL;
+}
+
+static void template_save_show_dialog (TemplateSaveRequest *request);
+
+static void
+template_save_duplicate_answered (GtkWindow *parent, gint response,
+                                  gpointer user_data)
+{
+    TemplateSaveRequest *request = user_data;
+    template_save_release_dialog (request);
+    if (parent && !gtk_widget_in_destruction (GTK_WIDGET (parent)) &&
+        request->td->dialog)
+        template_save_show_dialog (request);
+    else
+    {
+        g_free (request->name);
+        g_free (request);
+    }
+}
+
+static void
+template_save_answered (GtkWindow *parent, gint response, gpointer user_data)
+{
+    TemplateSaveRequest *request = user_data;
+    template_save_release_dialog (request);
+    GncABTransDialog *td = request->td;
+    struct _FindTemplData find = { request->name, NULL };
+    if (!parent || gtk_widget_in_destruction (GTK_WIDGET (parent)) ||
+        !td->dialog || response != GTK_RESPONSE_OK || !request->name ||
+        !*request->name)
+        goto done;
+
+    gtk_tree_model_foreach (GTK_TREE_MODEL (td->template_list_store),
+                            find_templ_helper, &find);
+    if (find.pointer)
+    {
+        GtkWidget *error = gtk_message_dialog_new (parent,
+            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s",
+            _("A template with the given name already exists. Please enter another name."));
+        gnc_dialog_run_async (GTK_DIALOG (error), NULL,
+                              template_save_duplicate_answered, request);
+        return;
+    }
+
+    GncABTransTempl *templ = gnc_ab_trans_templ_new_full (
+        request->name,
+        gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)),
+        gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)),
+        gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)),
+        gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (td->amount_edit)),
+        gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)),
+        gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (
+        td->template_gtktreeview);
+    GtkTreeIter iter, new_iter;
+    if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+        gtk_list_store_insert_after (td->template_list_store, &new_iter, &iter);
+    else
+        gtk_list_store_append (td->template_list_store, &new_iter);
+    gtk_list_store_set (td->template_list_store, &new_iter,
+                        TEMPLATE_NAME, request->name,
+                        TEMPLATE_POINTER, templ, -1);
+    td->templ_changed = TRUE;
+
+done:
+    g_free (request->name);
+    g_free (request);
+}
+
+static void
+template_save_capture_name (GtkDialog *dialog, gint response,
+                            TemplateSaveRequest *request)
+{
+    if (response == GTK_RESPONSE_OK && request->entry)
+    {
+        g_free (request->name);
+        request->name = g_strdup (gtk_entry_get_text (GTK_ENTRY (request->entry)));
+    }
+}
+
+static void
+template_save_show_dialog (TemplateSaveRequest *request)
+{
+    GtkBuilder *builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "dialog-ab.glade",
+                               "aqbanking_template_name_dialog");
+    GtkWidget *dialog = GTK_WIDGET (gtk_builder_get_object (
+        builder, "aqbanking_template_name_dialog"));
+    request->entry = GTK_WIDGET (gtk_builder_get_object (builder,
+                                                         "template_name"));
+    gtk_entry_set_text (GTK_ENTRY (request->entry), request->name ?
+        request->name : gtk_entry_get_text (GTK_ENTRY (request->td->recp_name_entry)));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog),
+                                  GTK_WINDOW (request->td->parent));
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+    request->dialog = g_object_ref (dialog);
+    request->capture_handler = g_signal_connect (dialog, "response",
+        G_CALLBACK (template_save_capture_name), request);
+    g_object_unref (builder);
+    gnc_dialog_run_async (GTK_DIALOG (dialog), NULL,
+                          template_save_answered, request);
+}
+
 void
-gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
+gnc_ab_trans_dialog_add_templ_cb (GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GtkBuilder *builder;
-    GtkWidget *dialog;
-    GtkWidget *entry;
-    gint retval;
-    const gchar *name;
-    GncABTransTempl *templ;
-    struct _FindTemplData data;
-    GtkTreeSelection *selection;
-    GtkTreeIter cur_iter;
-    GtkTreeIter new_iter;
-
-    g_return_if_fail(td);
-
-    ENTER("td=%p", td);
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_template_name_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_template_name_dialog"));
-
-    entry = GTK_WIDGET(gtk_builder_get_object (builder, "template_name"));
-
-    /* Suggest recipient name as name of the template */
-    gtk_entry_set_text(GTK_ENTRY(entry),
-                       gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
-
-    do
-    {
-        retval = gtk_dialog_run(GTK_DIALOG(dialog));
-        if (retval != GTK_RESPONSE_OK)
-            break;
-
-        name = gtk_entry_get_text(GTK_ENTRY(entry));
-        if (!*name)
-            break;
-
-        data.name = name;
-        data.pointer = NULL;
-        gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
-                               find_templ_helper, &data);
-        if (data.pointer)
-        {
-            gnc_error_dialog(GTK_WINDOW (dialog), "%s",
-                             _("A template with the given name already exists. "
-                               "Please enter another name."));
-            continue;
-        }
-
-        /* Create a new template */
-        templ = gnc_ab_trans_templ_new_full(
-                    name,
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
-                    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)),
-                    gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)),
-                    gtk_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
-
-        /* Insert it, either after the selected one or at the end */
-        selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-        if (gtk_tree_selection_get_selected(selection, NULL, &cur_iter))
-        {
-            gtk_list_store_insert_after(td->template_list_store,
-                                        &new_iter, &cur_iter);
-        }
-        else
-        {
-            gtk_list_store_append(td->template_list_store, &new_iter);
-        }
-        gtk_list_store_set(td->template_list_store, &new_iter,
-                           TEMPLATE_NAME, name,
-                           TEMPLATE_POINTER, templ,
-                           -1);
-        td->templ_changed = TRUE;
-        DEBUG("Added template with name %s", name);
-        break;
-    }
-    while (TRUE);
-
-    g_object_unref(G_OBJECT(builder));
-
-    gtk_widget_destroy(dialog);
-
-    LEAVE(" ");
+    g_return_if_fail (td && td->dialog);
+    TemplateSaveRequest *request = g_new0 (TemplateSaveRequest, 1);
+    request->td = td;
+    template_save_show_dialog (request);
 }
 #endif
 
@@ -1139,6 +1219,41 @@ gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data)
     LEAVE(" ");
 }
 
+typedef struct
+{
+    GncABTransDialog *td;
+    gchar *name;
+} DeleteTemplateRequest;
+
+static void
+delete_template_response (GtkWindow *parent, gint response, gpointer user_data)
+{
+    DeleteTemplateRequest *request = user_data;
+    if (parent && !gtk_widget_in_destruction (GTK_WIDGET (parent)) &&
+        response == GTK_RESPONSE_YES && request->td->dialog)
+    {
+        GtkTreeModel *model = GTK_TREE_MODEL (request->td->template_list_store);
+        GtkTreeIter iter;
+        gboolean valid = gtk_tree_model_get_iter_first (model, &iter);
+        while (valid)
+        {
+            gchar *row_name = NULL;
+            gtk_tree_model_get (model, &iter, TEMPLATE_NAME, &row_name, -1);
+            gboolean match = g_strcmp0 (row_name, request->name) == 0;
+            g_free (row_name);
+            if (match)
+            {
+                gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+                request->td->templ_changed = TRUE;
+                break;
+            }
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+    }
+    g_free (request->name);
+    g_free (request);
+}
+
 void
 gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
 {
@@ -1146,30 +1261,19 @@ gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
     GtkTreeSelection *selection;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    gchar *name;
+    DeleteTemplateRequest *request;
 
     g_return_if_fail(td);
-
-    ENTER("td=%p", td);
     selection = gtk_tree_view_get_selection(td->template_gtktreeview);
     if (!gtk_tree_selection_get_selected (selection, &model, &iter))
-    {
-        LEAVE("None selected");
         return;
-    }
-
-    gtk_tree_model_get(model, &iter, TEMPLATE_NAME, &name, -1);
-    if (gnc_verify_dialog (
-                GTK_WINDOW (td->parent), FALSE,
-                _("Do you really want to delete the template with the name \"%s\"?"),
-                name))
-    {
-        gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
-        td->templ_changed = TRUE;
-        DEBUG("Deleted template with name %s", name);
-    }
-    g_free(name);
-    LEAVE(" ");
+    request = g_new0 (DeleteTemplateRequest, 1);
+    request->td = td;
+    gtk_tree_model_get (model, &iter, TEMPLATE_NAME, &request->name, -1);
+    gnc_verify_dialog_async (GTK_WINDOW (td->parent), FALSE,
+                             delete_template_response, request,
+                             _("Do you really want to delete the template with the name \"%s\"?"),
+                             request->name);
 }
 
 void

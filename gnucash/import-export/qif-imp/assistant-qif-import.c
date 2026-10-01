@@ -47,6 +47,7 @@
 #include "dialog-file-access.h"
 #include "assistant-qif-import.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "qof.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
@@ -70,6 +71,8 @@
 #define GNC_PREF_DEFAULT_TRANS_STATUS_RECONCILED "default-status-reconciled"
 
 #define PREV_ROW "prev_row"
+#define QIF_CONTROLLER_KEY "gnc-qif-import-controller"
+#define QIF_PICKER_PENDING_KEY "gnc-qif-import-file-picker-pending"
 
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
@@ -220,6 +223,20 @@ static void gnc_ui_qif_import_assistant_close_handler (gpointer user_data);
 
 static gboolean gnc_ui_qif_import_assistant_skip_page (GtkAssistant *assistant, GtkWidget *page, QIFImportWindow *wind);
 static int gnc_ui_qif_import_assistant_page_forward (int current_page, gpointer data);
+
+typedef struct
+{
+    QIFImportWindow *wind;
+    GtkWidget *owner;
+    GList *pathlist;
+    GtkTreeModel *model;
+    SCM display_info;
+    SCM map_info;
+    void (*update_page)(QIFImportWindow *);
+} QifRematchRequest;
+
+static void qif_rematch_picker_done (GtkWindow *parent, gint response,
+                                    gpointer user_data);
 
 void gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data);
 void gnc_ui_qif_import_prepare_cb (GtkAssistant *assistant, GtkWidget *page, gpointer user_data);
@@ -458,6 +475,9 @@ gnc_ui_qif_import_assistant_destroy (GtkWidget *object, gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
 
+    g_object_set_data (G_OBJECT (object), QIF_CONTROLLER_KEY, NULL);
+    g_object_set_data (G_OBJECT (object), QIF_PICKER_PENDING_KEY, NULL);
+
     /* Destroy the progress dialog helpers. */
     gnc_progress_dialog_destroy (wind->load_progress);
 
@@ -621,13 +641,7 @@ rematch_line (QIFImportWindow *wind, GtkTreeSelection *selection,
               SCM display_info, SCM map_info,
               void (*update_page)(QIFImportWindow *))
 {
-    SCM           get_qif_name = scm_c_eval_string ("qif-map-entry:qif-name");
-    SCM           get_gnc_name = scm_c_eval_string ("qif-map-entry:gnc-name");
-    SCM           set_gnc_name = scm_c_eval_string ("qif-map-entry:set-gnc-name!");
-    SCM           map_entry;
-    SCM           gnc_name;
     GList        *pathlist;
-    GList        *current;
     GtkTreeModel *model;
     GtkTreeIter   iter;
     gint          row;
@@ -643,48 +657,88 @@ rematch_line (QIFImportWindow *wind, GtkTreeSelection *selection,
 
     /* Get the row number of the first selected row. */
     if (!gtk_tree_model_get_iter (model, &iter, (GtkTreePath *) pathlist->data))
+    {
+        g_list_free_full (pathlist, (GDestroyNotify)gtk_tree_path_free);
         return;
+    }
     gtk_tree_model_get (model, &iter, ACCOUNT_COL_INDEX, &row, -1);
 
     /* Save the row number. */
     g_object_set_data (G_OBJECT(model), PREV_ROW, GINT_TO_POINTER(row));
     if (row == -1)
-        return;
-
-    /* Find the <qif-map-entry> corresponding to the selected row. */
-    map_entry = scm_list_ref (display_info, scm_from_int (row));
-
-    /* Call the account picker to update it. */
-    if (!qif_account_picker_dialog (GTK_WINDOW(wind->window), wind, map_entry))
-        return;
-    gnc_name = scm_call_1 (get_gnc_name, map_entry);
-
-    /* Update the mapping hash table. */
-    scm_hash_set_x (map_info, scm_call_1 (get_qif_name, map_entry), map_entry);
-
-    /*
-     * Map all other selected rows to the same GnuCash account.
-     */
-    for (current = pathlist->next; current; current = current->next)
     {
-        /* Get the row number. */
-        gtk_tree_model_get_iter (model, &iter, (GtkTreePath *) current->data);
-        gtk_tree_model_get (model, &iter, ACCOUNT_COL_INDEX, &row, -1);
-
-        /* Update the <qif-map-entry> for the selected row. */
-        map_entry = scm_list_ref (display_info, scm_from_int (row));
-        scm_call_2 (set_gnc_name, map_entry, gnc_name);
-
-        /* Update the mapping hash table. */
-        scm_hash_set_x (map_info, scm_call_1 (get_qif_name, map_entry), map_entry);
+        g_list_free_full (pathlist, (GDestroyNotify)gtk_tree_path_free);
+        return;
     }
 
-    /* Free the path list. */
-    g_list_foreach (pathlist, (GFunc) gtk_tree_path_free, NULL);
-    g_list_free (pathlist);
+    /* Find the <qif-map-entry> corresponding to the selected row. */
+    QifRematchRequest *request = g_new0 (QifRematchRequest, 1);
+    request->wind = wind;
+    request->owner = wind->window;
+    g_object_add_weak_pointer (G_OBJECT (request->owner),
+                               (gpointer *)&request->owner);
+    request->pathlist = pathlist;
+    request->model = model;
+    request->display_info = display_info;
+    request->map_info = map_info;
+    request->update_page = update_page;
+    scm_gc_protect_object (display_info);
+    scm_gc_protect_object (map_info);
+    qif_account_picker_dialog (GTK_WINDOW (wind->window), wind,
+                               scm_list_ref (display_info, scm_from_int (row)),
+                               qif_rematch_picker_done, request);
+}
 
-    /* Update the display. */
-    update_page (wind);
+static void
+qif_rematch_picker_done (GtkWindow *parent, gint response, gpointer user_data)
+{
+    QifRematchRequest *request = user_data;
+    if (request->owner && parent && response == GTK_RESPONSE_OK)
+    {
+        SCM get_qif_name = scm_c_eval_string ("qif-map-entry:qif-name");
+        SCM get_gnc_name = scm_c_eval_string ("qif-map-entry:gnc-name");
+        SCM set_gnc_name = scm_c_eval_string ("qif-map-entry:set-gnc-name!");
+        GtkTreeIter iter;
+        GList *current;
+        gint row;
+
+        if (gtk_tree_model_get_iter (request->model, &iter,
+                                     request->pathlist->data))
+        {
+            gtk_tree_model_get (request->model, &iter,
+                                ACCOUNT_COL_INDEX, &row, -1);
+            SCM map_entry = scm_list_ref (request->display_info,
+                                          scm_from_int (row));
+            SCM gnc_name = scm_call_1 (get_gnc_name, map_entry);
+            scm_hash_set_x (request->map_info,
+                            scm_call_1 (get_qif_name, map_entry), map_entry);
+
+            for (current = request->pathlist->next; current;
+                 current = current->next)
+            {
+                if (!gtk_tree_model_get_iter (request->model, &iter,
+                                              current->data))
+                    continue;
+                gtk_tree_model_get (request->model, &iter,
+                                    ACCOUNT_COL_INDEX, &row, -1);
+                map_entry = scm_list_ref (request->display_info,
+                                          scm_from_int (row));
+                scm_call_2 (set_gnc_name, map_entry, gnc_name);
+                scm_hash_set_x (request->map_info,
+                                scm_call_1 (get_qif_name, map_entry),
+                                map_entry);
+            }
+            request->update_page (request->wind);
+        }
+    }
+
+    g_list_free_full (request->pathlist, (GDestroyNotify)gtk_tree_path_free);
+    scm_gc_unprotect_object (request->display_info);
+    scm_gc_unprotect_object (request->map_info);
+    if (request->owner)
+        g_object_remove_weak_pointer (G_OBJECT (request->owner),
+                                      (gpointer *)&request->owner);
+    g_free (request);
 }
 
 
@@ -1382,6 +1436,26 @@ cancel_timeout_cb (gpointer data)
  *
  * Invoked when the "Cancel" button is clicked.
  ****************************************************************/
+static void
+qif_cancel_verify_response (GtkWindow *parent, gint response,
+                            gpointer user_data)
+{
+    QIFImportWindow *wind = user_data;
+    if (!parent || response != GTK_RESPONSE_YES ||
+        g_object_get_data (G_OBJECT (parent), QIF_CONTROLLER_KEY) != wind)
+        return;
+    if (wind->busy)
+    {
+        /* Cancel any long-running Scheme operation. */
+        scm_c_eval_string ("(qif-import:cancel)");
+
+        /* Wait for the busy flag to be lowered. */
+        g_timeout_add (200, cancel_timeout_cb, wind);
+    }
+    else
+        do_cancel (wind);
+}
+
 void
 gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data)
 {
@@ -1399,19 +1473,9 @@ gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data)
     }
     else
     {
-        if (!gnc_verify_dialog (GTK_WINDOW(gtkassistant), FALSE, "%s", fmt))
-            return;
-
-        if (wind->busy)
-        {
-            /* Cancel any long-running Scheme operation. */
-            scm_c_eval_string ("(qif-import:cancel)");
-
-            /* Wait for the busy flag to be lowered. */
-            g_timeout_add (200, cancel_timeout_cb, user_data);
-        }
-        else
-            do_cancel (wind);
+        gnc_verify_dialog_async (GTK_WINDOW (gtkassistant), FALSE,
+                                 qif_cancel_verify_response, wind,
+                                 "%s", fmt);
     }
 }
 
@@ -1707,9 +1771,9 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 
     /* Validate the chosen filename. */
     if (strlen (path_to_load) == 0)
-        gnc_error_dialog (GTK_WINDOW(assistant), "%s", _("Please select a file to load."));
+        gnc_error_dialog_async (GTK_WINDOW(assistant), "%s", _("Please select a file to load."));
     else if (g_access (path_to_load, R_OK) < 0)
-        gnc_error_dialog (GTK_WINDOW(assistant), "%s",
+        gnc_error_dialog_async (GTK_WINDOW(assistant), "%s",
                           _("File not found or read permission denied. "
                             "Please select another file."));
     else
@@ -1720,7 +1784,7 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
         if (scm_call_2 (qif_file_loaded,
                         scm_from_locale_string (path_to_load ? path_to_load : ""),
                         wind->imported_files) == SCM_BOOL_T)
-            gnc_error_dialog (GTK_WINDOW(assistant), "%s",
+            gnc_error_dialog_async (GTK_WINDOW(assistant), "%s",
                               _("That QIF file is already loaded. "
                                 "Please select another file."));
         else
@@ -1766,56 +1830,131 @@ gnc_ui_qif_import_load_file_prepare (GtkAssistant *assistant, gpointer user_data
  * this is just to pick a file name and reset-to-defaults all the
  * fields describing how to parse the file.
  ********************************************************************/
+typedef struct
+{
+    GWeakRef owner;
+    GWeakRef entry;
+    GWeakRef book;
+    QIFImportWindow *controller;
+    QofSession *session;
+    gchar *default_dir;
+} QIFFilePicker;
+
+static void
+qif_file_picker_free (gpointer data)
+{
+    QIFFilePicker *picker = data;
+    g_weak_ref_clear (&picker->owner);
+    g_weak_ref_clear (&picker->entry);
+    g_weak_ref_clear (&picker->book);
+    g_free (picker->default_dir);
+    g_free (picker);
+}
+
+static gboolean
+qif_file_picker_owner_is_current (QIFFilePicker *picker, GtkWidget *owner,
+                                  GtkWidget *entry)
+{
+    QofBook *book;
+    gboolean same_book;
+    if (!owner || !entry || gtk_widget_in_destruction (owner) ||
+        gtk_widget_in_destruction (entry) ||
+        g_object_get_data (G_OBJECT (owner), QIF_CONTROLLER_KEY) != picker->controller ||
+        !GTK_IS_ASSISTANT (owner) ||
+        gtk_assistant_get_current_page (GTK_ASSISTANT (owner)) != 1 ||
+        !gnc_current_session_exist ())
+        return FALSE;
+    if (gnc_get_current_session () != picker->session)
+        return FALSE;
+    book = g_weak_ref_get (&picker->book);
+    same_book = book && qof_session_get_book (picker->session) == book;
+    if (book)
+        g_object_unref (book);
+    return same_book &&
+        !gtk_widget_in_destruction (entry) &&
+        g_object_get_data (G_OBJECT (owner), QIF_CONTROLLER_KEY) == picker->controller;
+}
+
+static void
+qif_file_picker_response (GSList *filenames, gpointer data)
+{
+    QIFFilePicker *picker = data;
+    GtkWidget *owner = g_weak_ref_get (&picker->owner);
+    GtkWidget *entry = g_weak_ref_get (&picker->entry);
+    gchar *chosen = NULL;
+    gboolean page_complete = FALSE;
+
+    if (filenames && filenames->data &&
+        qif_file_picker_owner_is_current (picker, owner, entry))
+    {
+        const gchar *selected = filenames->data;
+        if (g_path_is_absolute (selected))
+            chosen = g_strdup (selected);
+        else
+            chosen = g_build_filename (picker->default_dir, selected, NULL);
+
+        if (g_path_is_absolute (selected))
+        {
+            gchar *directory = g_path_get_dirname (chosen);
+            gnc_set_default_directory (GNC_PREFS_GROUP, directory);
+            g_free (directory);
+        }
+
+        if (qif_file_picker_owner_is_current (picker, owner, entry))
+        {
+            gtk_entry_set_text (GTK_ENTRY (entry), chosen);
+            if (qif_file_picker_owner_is_current (picker, owner, entry))
+                page_complete = gnc_ui_qif_import_load_file_complete (
+                    GTK_ASSISTANT (owner), picker->controller);
+            if (qif_file_picker_owner_is_current (picker, owner, entry))
+                mark_page_complete (GTK_ASSISTANT (owner), page_complete);
+        }
+    }
+
+    if (owner && g_object_get_data (G_OBJECT (owner), QIF_PICKER_PENDING_KEY) == picker)
+        g_object_set_data (G_OBJECT (owner), QIF_PICKER_PENDING_KEY, NULL);
+    g_free (chosen);
+    g_slist_free_full (filenames, g_free);
+    if (entry)
+        g_object_unref (entry);
+    if (owner)
+        g_object_unref (owner);
+}
+
 void
-gnc_ui_qif_import_select_file_cb (GtkButton * button,
+gnc_ui_qif_import_select_file_cb ([[maybe_unused]] GtkButton * button,
                                   gpointer user_data)
 {
-    QIFImportWindow * wind = user_data;
-
-    GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-
+    QIFImportWindow *wind = user_data;
+    GtkWidget *owner = wind->window;
     GtkFileFilter *filter;
-    char * new_file_name;
-    char *file_name, *default_dir;
+    gchar *default_dir;
+    QofSession *session;
 
-    /* Default to whatever's already present */
+    if (g_object_get_data (G_OBJECT (owner), QIF_PICKER_PENDING_KEY))
+        return;
+    if (!gnc_current_session_exist ())
+        return;
+    session = gnc_get_current_session ();
     default_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
-
+    QIFFilePicker *picker = g_new0 (QIFFilePicker, 1);
+    g_weak_ref_init (&picker->owner, G_OBJECT (owner));
+    g_weak_ref_init (&picker->entry, G_OBJECT (wind->filename_entry));
+    picker->controller = wind;
+    picker->session = session;
+    g_weak_ref_init (&picker->book,
+                     G_OBJECT (qof_session_get_book (session)));
+    picker->default_dir = g_strdup (default_dir);
+    g_object_set_data (G_OBJECT (owner), QIF_PICKER_PENDING_KEY, picker);
     filter = gtk_file_filter_new ();
     gtk_file_filter_set_name (filter, "*.qif");
     gtk_file_filter_add_pattern (filter, "*.[Qq][Ii][Ff]");
-    new_file_name = gnc_file_dialog (gnc_ui_get_gtk_window (GTK_WIDGET(button)),
-                                     _("Select QIF File"),
-                                     g_list_prepend (NULL, filter),
-                                     default_dir,
-                                     GNC_FILE_DIALOG_IMPORT);
-    /* If NULL then the user cancelled the file dialog. */
-    if (new_file_name == NULL)
-    {
-        g_free (default_dir);
-        return;
-    }
-    else if (!g_path_is_absolute (new_file_name))
-    {
-        file_name = g_build_filename (default_dir, new_file_name, NULL);
-        g_free (new_file_name);
-    }
-    else
-    {
-        file_name = new_file_name;
-        /* Update the working directory */
-        g_free (default_dir);
-        default_dir = g_path_get_dirname (file_name);
-        gnc_set_default_directory (GNC_PREFS_GROUP, default_dir);
-    }
+    gnc_file_dialog_async (GTK_WINDOW (owner), _("Select QIF File"),
+                           g_list_prepend (NULL, filter), default_dir,
+                           GNC_FILE_DIALOG_IMPORT, FALSE,
+                           qif_file_picker_response, picker,
+                           qif_file_picker_free);
     g_free (default_dir);
-
-    /* set the filename entry for what was selected */
-    gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), file_name);
-    g_free (file_name);
-
-    mark_page_complete (assistant,
-                        gnc_ui_qif_import_load_file_complete (assistant, user_data));
 }
 
 
@@ -3316,6 +3455,19 @@ gnc_ui_qif_import_convert_progress_start_cb (GtkButton * button,
  *
  * Prepare the data conversion progress page for display.
  ********************************************************************/
+static void
+qif_import_book_options_response (GtkWindow *parent, gint response, gpointer data)
+{
+    if (!parent) return;
+    QIFImportWindow *wind = data;
+    g_object_set_data (G_OBJECT (parent), "qif-book-options-pending", NULL);
+    if (response == GTK_RESPONSE_OK)
+    {
+        wind->new_book = FALSE;
+        gtk_widget_set_sensitive (wind->convert_start, TRUE);
+    }
+}
+
 void
 gnc_ui_qif_import_convert_progress_prepare (GtkAssistant *assistant,
         gpointer user_data)
@@ -3342,7 +3494,15 @@ gnc_ui_qif_import_convert_progress_prepare (GtkAssistant *assistant,
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (wind->new_book)
-        wind->new_book = gnc_new_book_option_display (wind->window);
+    {
+        gtk_widget_set_sensitive (wind->convert_start, FALSE);
+        if (!g_object_get_data (G_OBJECT (wind->window), "qif-book-options-pending"))
+        {
+            g_object_set_data (G_OBJECT (wind->window), "qif-book-options-pending", wind);
+            gnc_new_book_option_display_async (wind->window,
+                                               qif_import_book_options_response, wind);
+        }
+    }
 }
 
 
@@ -3983,6 +4143,7 @@ gnc_ui_qif_import_assistant_make (QIFImportWindow *qif_win)
 
     g_signal_connect (qif_win->window, "destroy",
                       G_CALLBACK(gnc_ui_qif_import_assistant_destroy), qif_win);
+    g_object_set_data (G_OBJECT (qif_win->window), QIF_CONTROLLER_KEY, qif_win);
 
     gtk_builder_connect_signals (builder, qif_win);
 

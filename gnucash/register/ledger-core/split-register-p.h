@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include "split-register.h"
+#include "recncell.h"
 
 /** @addtogroup SplitRegister
  * @{
@@ -47,6 +48,8 @@ typedef enum {
     RATE_RESET_REQD     = 1,
     RATE_RESET_DONE     = 2
 } RateReset_t;
+
+typedef struct _GncSplitRegisterAsyncRequest GncSplitRegisterAsyncRequest;
 
 struct sr_info
 {
@@ -140,7 +143,25 @@ struct sr_info
 
     /** true if the account separator has changed */
     gboolean separator_changed;
+    GList *async_requests;
+    gboolean async_transaction_change_confirmed;
+    GncSplitRegisterAsyncRequest *active_save_request;
+    gboolean replaying_save_traverse;
+    gboolean async_paste_confirmed;
 };
+
+typedef void (*GncSplitRegisterAsyncCancel) (GncSplitRegisterAsyncRequest *request);
+struct _GncSplitRegisterAsyncRequest
+{
+    SplitRegister *reg;
+    GncSplitRegisterAsyncCancel cancel;
+};
+
+void gnc_split_register_async_request_track (SplitRegister *reg,
+                                             GncSplitRegisterAsyncRequest *request,
+                                             GncSplitRegisterAsyncCancel cancel);
+void gnc_split_register_async_request_untrack (GncSplitRegisterAsyncRequest *request);
+void gnc_split_register_async_request_cancel_all (SplitRegister *reg);
 
 
 SRInfo * gnc_split_register_get_info (SplitRegister *reg);
@@ -195,7 +216,8 @@ Account * gnc_split_register_get_account_by_name(
 Account * gnc_split_register_get_account (SplitRegister *reg,
         const char *cell_name);
 
-gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
+RecnCellConfirmResult gnc_split_register_recn_cell_confirm (char old_flag,
+                                                              gpointer data);
 
 gboolean gnc_split_register_check_cell (SplitRegister *reg,
                                         const char *cell_name);

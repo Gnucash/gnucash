@@ -42,6 +42,7 @@
 #include "gnc-ui.h"
 #include "gnc-uri.hpp"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include "dialog-utils.h"
 
 #include "gnc-component-manager.h"
@@ -177,6 +178,7 @@ public:
 
     void preview_settings_delete ();
     void preview_settings_save ();
+    void preview_settings_save_ready ();
     void preview_settings_name (GtkEntry* entry);
     void preview_settings_load ();
     void preview_update_skipped_rows ();
@@ -873,25 +875,44 @@ CsvImpTransAssist::preview_settings_load ()
 void
 CsvImpTransAssist::preview_settings_delete ()
 {
-    // Get the Active Selection
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
+    if (g_object_get_data (G_OBJECT (csv_imp_asst), "csv-settings-pending"))
         return;
-
+    GtkTreeIter iter;
+    if (!gtk_combo_box_get_active_iter (settings_combo, &iter)) return;
     CsvTransImpSettings *preset = nullptr;
-    auto model = gtk_combo_box_get_model (settings_combo);
-    gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-    auto response = gnc_ok_cancel_dialog (GTK_WINDOW (csv_imp_asst),
-                                GTK_RESPONSE_CANCEL,
-                                "%s", _("Delete the Import Settings."));
-    if (response == GTK_RESPONSE_OK)
-    {
-        preset->remove();
-        preview_populate_settings_combo();
-        gtk_combo_box_set_active (settings_combo, 0); // Default
-        preview_refresh (); // Reset the widgets
-    }
+    gtk_tree_model_get (gtk_combo_box_get_model (settings_combo), &iter,
+                        SET_GROUP, &preset, -1);
+    if (!preset) return;
+    struct Request { CsvImpTransAssist *owner; std::string name; };
+    auto request = new Request {this, preset->m_name};
+    g_object_set_data (G_OBJECT (csv_imp_asst), "csv-settings-pending", request);
+    gtk_widget_set_sensitive (GTK_WIDGET (csv_imp_asst), FALSE);
+    gnc_ok_cancel_dialog_async (GTK_WINDOW (csv_imp_asst), GTK_RESPONSE_CANCEL,
+        +[](GtkWindow *parent, gint response, gpointer data)
+        {
+            std::unique_ptr<Request> request (static_cast<Request *> (data));
+            if (!parent) return;
+            g_object_set_data (G_OBJECT (parent), "csv-settings-pending", nullptr);
+            gtk_widget_set_sensitive (GTK_WIDGET (parent), TRUE);
+            if (response != GTK_RESPONSE_OK) return;
+            auto self = request->owner;
+            auto model = gtk_combo_box_get_model (self->settings_combo);
+            GtkTreeIter iter;
+            for (bool valid = gtk_tree_model_get_iter_first (model, &iter); valid;
+                 valid = gtk_tree_model_iter_next (model, &iter))
+            {
+                CsvTransImpSettings *preset = nullptr;
+                gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
+                if (preset && preset->m_name == request->name)
+                {
+                    preset->remove ();
+                    self->preview_populate_settings_combo ();
+                    gtk_combo_box_set_active (self->settings_combo, 0);
+                    self->preview_refresh ();
+                    break;
+                }
+            }
+        }, request, "%s", _("Delete the Import Settings."));
 }
 
 /* Callback to save the current settings to the gnucash state file.
@@ -899,35 +920,44 @@ CsvImpTransAssist::preview_settings_delete ()
 void
 CsvImpTransAssist::preview_settings_save ()
 {
-    auto new_name = tx_imp->settings_name();
-
-    /* Check if the entry text matches an already existing preset */
+    if (g_object_get_data (G_OBJECT (csv_imp_asst), "csv-settings-pending"))
+        return;
+    auto name = tx_imp->settings_name ();
     GtkTreeIter iter;
     if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
     {
-
         auto model = gtk_combo_box_get_model (settings_combo);
-        bool valid = gtk_tree_model_get_iter_first (model, &iter);
-        while (valid)
+        for (bool valid = gtk_tree_model_get_iter_first (model, &iter); valid;
+             valid = gtk_tree_model_iter_next (model, &iter))
         {
-            // Walk through the list, reading each row
-            CsvTransImpSettings *preset;
+            CsvTransImpSettings *preset = nullptr;
             gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-            if (preset && (preset->m_name == std::string(new_name)))
-            {
-                auto response = gnc_ok_cancel_dialog (GTK_WINDOW (csv_imp_asst),
-                        GTK_RESPONSE_OK,
-                        "%s", _("Setting name already exists, overwrite?"));
-                if (response != GTK_RESPONSE_OK)
-                    return;
-
-                break;
-            }
-            valid = gtk_tree_model_iter_next (model, &iter);
+            if (!preset || preset->m_name != name) continue;
+            struct Request { CsvImpTransAssist *owner; std::string name; };
+            auto request = new Request {this, name};
+            g_object_set_data (G_OBJECT (csv_imp_asst), "csv-settings-pending", request);
+            gtk_widget_set_sensitive (GTK_WIDGET (csv_imp_asst), FALSE);
+            gnc_ok_cancel_dialog_async (GTK_WINDOW (csv_imp_asst), GTK_RESPONSE_OK,
+                +[](GtkWindow *parent, gint response, gpointer data)
+                {
+                    std::unique_ptr<Request> request (static_cast<Request *> (data));
+                    if (!parent) return;
+                    g_object_set_data (G_OBJECT (parent), "csv-settings-pending", nullptr);
+                    gtk_widget_set_sensitive (GTK_WIDGET (parent), TRUE);
+                    if (response == GTK_RESPONSE_OK &&
+                        request->owner->tx_imp->settings_name () == request->name)
+                        request->owner->preview_settings_save_ready ();
+                }, request, "%s", _("Setting name already exists, overwrite?"));
+            return;
         }
     }
+    preview_settings_save_ready ();
+}
 
+void
+CsvImpTransAssist::preview_settings_save_ready ()
+{
+    auto new_name = tx_imp->settings_name ();
     /* All checks passed, let's save this preset */
     if (!tx_imp->save_settings())
     {
@@ -958,6 +988,7 @@ CsvImpTransAssist::preview_settings_save ()
     else
         gnc_error_dialog (GTK_WINDOW (csv_imp_asst),
             "%s", _("There was a problem saving the settings, please try again."));
+
 }
 
 /* Callback triggered when user adjusts skip start lines
@@ -1893,59 +1924,111 @@ csv_tximp_acct_match_text_parse (std::string acct_name)
 }
 
 void
-CsvImpTransAssist::acct_match_select(GtkTreeModel *model, GtkTreeIter* iter)
+CsvImpTransAssist::acct_match_select (GtkTreeModel *model, GtkTreeIter *iter)
 {
-    // Get the stored string and account (if any)
+    if (g_object_get_data (G_OBJECT (csv_imp_asst), "csv-account-pending")) return;
     gchar *text = nullptr;
     Account *account = nullptr;
-    gtk_tree_model_get (model, iter, MAPPING_STRING, &text,
-                                     MAPPING_ACCOUNT, &account, -1);
-
-    auto acct_name = csv_tximp_acct_match_text_parse (text);
-    auto gnc_acc = gnc_import_select_account (GTK_WIDGET(csv_imp_asst), nullptr, true,
-            acct_name.c_str(), nullptr, ACCT_TYPE_NONE, account, nullptr);
-
-    if (gnc_acc) // We may have canceled
+    gtk_tree_model_get (model, iter, MAPPING_STRING, &text, MAPPING_ACCOUNT, &account, -1);
+    auto name = csv_tximp_acct_match_text_parse (text);
+    struct Request
     {
-        auto fullpath = gnc_account_get_full_name (gnc_acc);
-        gtk_list_store_set (GTK_LIST_STORE(model), iter,
-                MAPPING_ACCOUNT, gnc_acc,
-                MAPPING_FULLPATH, fullpath, -1);
-
-        // Update the account kvp mappings
-        if (text && *text)
+        CsvImpTransAssist *owner;
+        GtkAssistant *assistant;
+        GtkTreeModel *model;
+        GtkTreeRowReference *row;
+        gchar *text;
+        GncGUID previous_account;
+        GWeakRef book;
+        bool destroyed = false;
+        ~Request ()
         {
-            gnc_account_imap_delete_account (account, IMAP_CAT_CSV, text);
-            gnc_account_imap_add_account (gnc_acc, IMAP_CAT_CSV, text, gnc_acc);
+            g_signal_handlers_disconnect_by_data (assistant, this);
+            g_weak_ref_clear (&book);
+            gtk_tree_row_reference_free (row);
+            g_object_unref (model);
+            g_object_unref (assistant);
+            g_free (text);
         }
-
+    };
+    auto path = gtk_tree_model_get_path (model, iter);
+    auto request = new Request;
+    request->owner = this;
+    request->assistant = GTK_ASSISTANT (g_object_ref (csv_imp_asst));
+    request->model = GTK_TREE_MODEL (g_object_ref (model));
+    request->row = gtk_tree_row_reference_new (model, path);
+    request->text = text;
+    request->previous_account = account ? *xaccAccountGetGUID (account) : *guid_null ();
+    g_weak_ref_init (&request->book, G_OBJECT (gnc_get_current_book ()));
+    gtk_tree_path_free (path);
+    g_signal_connect (csv_imp_asst, "destroy",
+        G_CALLBACK (+[](GtkWidget *, gpointer data) { static_cast<Request *> (data)->destroyed = true; }), request);
+    g_object_set_data (G_OBJECT (csv_imp_asst), "csv-account-pending", request);
+    gtk_widget_set_sensitive (account_match_view, FALSE);
+    gtk_widget_set_sensitive (account_match_btn, FALSE);
+    gnc_import_select_account_async (GTK_WIDGET (csv_imp_asst), nullptr, TRUE,
+        name.c_str (), nullptr, ACCT_TYPE_NONE, account,
+        +[](Account *selected, gboolean accepted, gpointer data)
+        {
+            std::unique_ptr<Request> request (static_cast<Request *> (data));
+            auto book = static_cast<QofBook *> (g_weak_ref_get (&request->book));
+            bool valid_book = book && gnc_current_session_exist () && book == gnc_get_current_book ();
+            if (book) g_object_unref (book);
+            if (request->destroyed || !valid_book) return;
+            auto self = request->owner;
+            auto model = request->model;
+            g_object_set_data (G_OBJECT (request->assistant), "csv-account-pending", nullptr);
+            gtk_widget_set_sensitive (self->account_match_view, TRUE);
+            gtk_widget_set_sensitive (self->account_match_btn, TRUE);
+            auto path = gtk_tree_row_reference_get_path (request->row);
+            GtkTreeIter iter;
+            bool valid = path && gtk_tree_model_get_iter (model, &iter, path);
+            if (path) gtk_tree_path_free (path);
+            if (!valid) return;
+            gchar *current_text = nullptr;
+            gtk_tree_model_get (model, &iter, MAPPING_STRING, &current_text, -1);
+            valid = g_strcmp0 (current_text, request->text) == 0;
+            g_free (current_text);
+            if (!valid) return;
+            if (accepted && selected)
+            {
+                auto fullpath = gnc_account_get_full_name (selected);
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                    MAPPING_ACCOUNT, selected, MAPPING_FULLPATH, fullpath, -1);
+                g_free (fullpath);
+                if (request->text && *request->text)
+                {
+                    auto previous = xaccAccountLookup (&request->previous_account, gnc_get_current_book ());
+                    if (previous) gnc_account_imap_delete_account (previous, IMAP_CAT_CSV, request->text);
+                    gnc_account_imap_add_account (selected, IMAP_CAT_CSV, request->text, selected);
+                }
         // Force reparsing of account columns - may impact multi-currency mode
-        auto col_types = tx_imp->column_types();
+        auto col_types = self->tx_imp->column_types();
         auto col_type_it = std::find (col_types.cbegin(),
                                       col_types.cend(), GncTransPropType::ACCOUNT);
         if (col_type_it != col_types.cend())
-            tx_imp->set_column_type(col_type_it - col_types.cbegin(),
+            self->tx_imp->set_column_type(col_type_it - col_types.cbegin(),
                                     GncTransPropType::ACCOUNT, true);
         col_type_it = std::find (col_types.cbegin(),
                                  col_types.cend(), GncTransPropType::TACCOUNT);
         if (col_type_it != col_types.cend())
-            tx_imp->set_column_type(col_type_it - col_types.cbegin(),
+            self->tx_imp->set_column_type(col_type_it - col_types.cbegin(),
                                     GncTransPropType::TACCOUNT, true);
 
-        g_free (fullpath);
     }
-    g_free (text);
 
 
     /* Enable the "Next" Assistant Button */
     auto all_checked = csv_tximp_acct_match_check_all (model);
-    gtk_assistant_set_page_complete (csv_imp_asst, account_match_page,
+    gtk_assistant_set_page_complete (self->csv_imp_asst, self->account_match_page,
                                      all_checked);
 
     /* Update information message and whether to display account errors */
-    m_req_mapped_accts = all_checked;
-    auto errs = tx_imp->verify(m_req_mapped_accts);
-    gtk_label_set_text (GTK_LABEL(account_match_label), errs.c_str());
+    self->m_req_mapped_accts = all_checked;
+    auto errs = self->tx_imp->verify(self->m_req_mapped_accts);
+    gtk_label_set_text (GTK_LABEL(self->account_match_label), errs.c_str());
+
+        }, request);
 }
 
 void
@@ -2111,7 +2194,25 @@ CsvImpTransAssist::assist_doc_page_prepare ()
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (new_book)
-        new_book = gnc_new_book_option_display (GTK_WIDGET(csv_imp_asst));
+    {
+        gtk_assistant_set_page_complete (csv_imp_asst, doc_page, FALSE);
+        if (!g_object_get_data (G_OBJECT (csv_imp_asst), "csv-book-options-pending"))
+        {
+            g_object_set_data (G_OBJECT (csv_imp_asst), "csv-book-options-pending", this);
+            gnc_new_book_option_display_async (GTK_WIDGET (csv_imp_asst),
+                +[](GtkWindow *parent, gint response, gpointer data)
+                {
+                    if (!parent) return;
+                    auto self = static_cast<CsvImpTransAssist *> (data);
+                    g_object_set_data (G_OBJECT (parent), "csv-book-options-pending", nullptr);
+                    if (response == GTK_RESPONSE_OK)
+                    {
+                        self->new_book = false;
+                        gtk_assistant_set_page_complete (self->csv_imp_asst, self->doc_page, TRUE);
+                    }
+                }, this);
+        }
+    }
 
     /* Add the Cancel button for the matcher */
     cancel_button = gtk_button_new_with_mnemonic (_("_Cancel"));
@@ -2309,7 +2410,8 @@ void
 gnc_file_csv_trans_import(void)
 {
     auto info = new CsvImpTransAssist;
-    gnc_register_gui_component (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS,
+    auto component = gnc_register_gui_component (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS,
                                 nullptr, csv_tximp_close_handler,
                                 info);
+    gnc_gui_component_set_session (component, gnc_get_current_session ());
 }

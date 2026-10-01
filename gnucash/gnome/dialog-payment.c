@@ -29,6 +29,8 @@
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
@@ -47,6 +49,7 @@
 #include "engine-helpers.h"
 
 #include "gncInvoice.h"
+#include "gnc-lot.h"
 
 #include "dialog-payment.h"
 #include "business-gnome-utils.h"
@@ -80,6 +83,21 @@ typedef struct
     Account     * post_acct;
     GList       * lots;
 } InitialPaymentInfo;
+
+typedef struct
+{
+    GtkWidget   *parent;
+    QofBook     *book;
+    QofSession  *session;
+    GncGUID      book_guid;
+    GncGUID      txn_guid;
+    GncGUID      owner_guid;
+    GncOwnerType owner_type;
+    gboolean     owner_has_guid;
+    GtkWidget   *first_radio;
+    gboolean     response_active;
+    gboolean     parent_destroyed;
+} PaymentSplitRequest;
 
 struct _payment_window
 {
@@ -116,7 +134,25 @@ struct _payment_window
 
     InitialPaymentInfo *tx_info;
     gboolean      print_check_state;
+    struct _PaymentAsyncRequest *pending_payment;
 };
+
+typedef struct _PaymentAsyncRequest
+{
+    PaymentWindow *owner;
+    QofBook *book;
+    GncGUID book_guid;
+    GncGUID transaction;
+    GncGUID post_account;
+    GncGUID transfer_account;
+    GPtrArray *selected_lots;
+    gchar *memo;
+    gchar *num;
+    time64 post_date;
+    gnc_numeric amount;
+    gnc_numeric exchange_rate;
+    guint session_lease;
+} PaymentAsyncRequest;
 
 void gnc_ui_payment_window_set_num (PaymentWindow *pw, const char* num)
 {
@@ -208,6 +244,13 @@ void gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
                                   PaymentWindow *pw);
 void gnc_payment_activate_amount_cb (GtkWidget *widget, PaymentWindow *pw);
 void gnc_payment_window_fill_docs_list (PaymentWindow *pw);
+static void payment_split_dialog_response_cb (GtkDialog *dialog,
+                                               gint response,
+                                               PaymentSplitRequest *request);
+static PaymentWindow *payment_window_from_txn_split (GtkWindow *parent,
+                                                      GncOwner *owner,
+                                                      Transaction *txn,
+                                                      Split *payment_split);
 
 
 static void
@@ -329,6 +372,12 @@ gnc_payment_window_close_handler (gpointer data)
     PaymentWindow *pw = data;
 
     if (!pw) return;
+
+    if (pw->pending_payment)
+    {
+        pw->pending_payment->owner = NULL;
+        pw->pending_payment = NULL;
+    }
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(pw->dialog));
     gtk_widget_destroy (pw->dialog);
 }
@@ -944,13 +993,114 @@ get_selected_lots (GtkTreeModel *model,
         *return_list = g_list_insert_sorted (*return_list, lot, (GCompareFunc)gncOwnerLotsSortFunc);
 }
 
+static void
+payment_request_free (PaymentAsyncRequest *request)
+{
+    g_ptr_array_unref (request->selected_lots);
+    g_free (request->memo);
+    g_free (request->num);
+    gnc_gui_end_session_operation (request->session_lease);
+    g_object_unref (request->book);
+    g_free (request);
+}
+
+static gboolean
+payment_request_is_current (PaymentAsyncRequest *request, PaymentWindow **owner,
+                            Transaction **transaction, Account **post_account,
+                            Account **transfer_account)
+{
+    PaymentWindow *pw = request->owner;
+    if (!pw || !pw->dialog || gtk_widget_in_destruction (pw->dialog) ||
+        pw->pending_payment != request || gnc_get_current_book () != request->book ||
+        !qof_book_is_open (request->book) ||
+        !guid_equal (&request->book_guid,
+                     qof_instance_get_guid (QOF_INSTANCE (request->book))))
+        return FALSE;
+    *transaction = xaccTransLookup (&request->transaction, request->book);
+    *post_account = xaccAccountLookup (&request->post_account, request->book);
+    *transfer_account = xaccAccountLookup (&request->transfer_account, request->book);
+    if (!*transaction || !*post_account || !*transfer_account ||
+        (*transaction && xaccTransGetBook (*transaction) != request->book))
+        return FALSE;
+    *owner = pw;
+    return TRUE;
+}
+
+static void
+payment_exchange_completed (gboolean completed, gpointer user_data)
+{
+    PaymentAsyncRequest *request = user_data;
+    PaymentWindow *pw = request->owner;
+    Transaction *transaction = NULL;
+    Account *post_account = NULL, *transfer_account = NULL;
+    if (!completed || !payment_request_is_current (request, &pw, &transaction,
+                                                   &post_account, &transfer_account))
+    {
+        if (pw && pw->pending_payment == request)
+        {
+            pw->pending_payment = NULL;
+            gtk_widget_set_sensitive (pw->dialog, TRUE);
+            gtk_widget_set_sensitive (pw->ok_button, TRUE);
+        }
+        request->owner = NULL;
+        payment_request_free (request);
+        return;
+    }
+
+    GList *selected_lots = NULL;
+    for (guint i = 0; i < request->selected_lots->len; i++)
+    {
+        GncGUID *guid = g_ptr_array_index (request->selected_lots, i);
+        GNCLot *lot = gnc_lot_lookup (guid, request->book);
+        if (!lot)
+        {
+            g_list_free (selected_lots);
+            pw->pending_payment = NULL;
+            gtk_widget_set_sensitive (pw->dialog, TRUE);
+            gtk_widget_set_sensitive (pw->ok_button, TRUE);
+            payment_request_free (request);
+            return;
+        }
+        selected_lots = g_list_append (selected_lots, lot);
+    }
+    gnc_gui_component_clear_watches (pw->component_id);
+    gnc_suspend_gui_refresh ();
+    gboolean auto_pay = gncOwnerGetType (&pw->owner) == GNC_OWNER_CUSTOMER ?
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY) :
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
+    gncOwnerApplyPaymentSecs (&pw->owner, &transaction, selected_lots,
+        post_account, transfer_account, request->amount, request->exchange_rate,
+        request->post_date, request->memo, request->num, auto_pay);
+    gnc_resume_gui_refresh ();
+    g_list_free (selected_lots);
+    if (!transaction)
+    {
+        pw->pending_payment = NULL;
+        payment_request_free (request);
+        gtk_widget_set_sensitive (pw->dialog, TRUE);
+        gtk_widget_set_sensitive (pw->ok_button, TRUE);
+        return;
+    }
+    gnc_payment_dialog_remember_account (pw, transfer_account);
+    if (gtk_widget_is_sensitive (pw->print_check) &&
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pw->print_check)))
+    {
+        Split *split = xaccTransFindSplitByAccount (transaction, transfer_account);
+        GList *splits = g_list_append (NULL, split);
+        gnc_ui_print_check_dialog_create (NULL, splits, NULL);
+        g_list_free (splits);
+    }
+    pw->pending_payment = NULL;
+    payment_request_free (request);
+    gnc_ui_payment_window_destroy (pw);
+}
+
 void
 gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
-    const char *text = NULL;
 
-    if (!pw)
+    if (!pw || pw->pending_payment)
         return;
 
     /* The gnc_payment_window_check_payment function
@@ -967,87 +1117,62 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
      * the gui refresh may result in a crash.
      * See https://bugs.gnucash.org/show_bug.cgi?id=740471
      */
-    gnc_gui_component_clear_watches (pw->component_id);
-
-    gnc_suspend_gui_refresh ();
+    PaymentAsyncRequest *request = g_new0 (PaymentAsyncRequest, 1);
+    request->owner = pw;
+    request->book = g_object_ref (pw->book);
+    request->book_guid = *qof_instance_get_guid (QOF_INSTANCE (pw->book));
+    request->transaction = *qof_instance_get_guid (QOF_INSTANCE (pw->tx_info->txn));
+    request->post_account = *qof_instance_get_guid (QOF_INSTANCE (pw->post_acct));
+    request->transfer_account = *qof_instance_get_guid (QOF_INSTANCE (pw->xfer_acct));
+    request->selected_lots = g_ptr_array_new_with_free_func (g_free);
+    request->memo = g_strdup (gtk_entry_get_text (GTK_ENTRY (pw->memo_entry)));
+    request->num = g_strdup (gtk_entry_get_text (GTK_ENTRY (pw->num_entry)));
+    GDate date;
+    g_date_clear (&date, 1);
+    gnc_date_edit_get_gdate (GNC_DATE_EDIT (pw->date_edit), &date);
+    request->post_date = gdate_to_time64 (date);
+    request->amount = pw->amount_tot;
+    request->exchange_rate = gnc_numeric_create (1, 1);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (
+        GTK_TREE_VIEW (pw->docs_list_tree_view));
+    GList *selected_lots = NULL;
+    gtk_tree_selection_selected_foreach (selection, get_selected_lots,
+                                         &selected_lots);
+    for (GList *node = selected_lots; node; node = node->next)
     {
-        const char *memo, *num;
-        GDate date;
-        time64 t;
-        gnc_numeric exch = gnc_numeric_create(1, 1); //default to "one to one" rate
-        GList *selected_lots = NULL;
-        GtkTreeSelection *selection;
-        gboolean auto_pay;
-
-        /* Obtain all our ancillary information */
-        memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
-        num = gtk_entry_get_text (GTK_ENTRY (pw->num_entry));
-        g_date_clear (&date, 1);
-        gnc_date_edit_get_gdate (GNC_DATE_EDIT (pw->date_edit), &date);
-        t = gdate_to_time64 (date);
-
-        /* Obtain the list of selected lots (documents/payments) from the dialog */
-        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
-        gtk_tree_selection_selected_foreach (selection, get_selected_lots, &selected_lots);
-
-        /* When the payment amount is 0, the selected documents cancel each other out
-         * so no money is actually transferred.
-         * For non-zero payments money will be transferred between the post account
-         * and the transfer account. In that case if these two accounts don't have
-         * the same currency the user is asked to enter the exchange rate.
-         */
-        if (!gnc_numeric_zero_p (pw->amount_tot) &&
-            !gnc_commodity_equal(xaccAccountGetCommodity(pw->xfer_acct), xaccAccountGetCommodity(pw->post_acct)))
-        {
-            XferDialog* xfer;
-
-            text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
-
-            xfer = gnc_xfer_dialog(pw->dialog, pw->post_acct);
-            gnc_info_dialog (GTK_WINDOW (pw->dialog), "%s", text);
-
-            gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
-            gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
-            gnc_xfer_dialog_set_date (xfer, t);
-
-            /* All we want is the exchange rate so prevent the user from thinking
-               it makes sense to mess with other stuff */
-            gnc_xfer_dialog_set_from_show_button_active(xfer, FALSE);
-            gnc_xfer_dialog_set_to_show_button_active(xfer, FALSE);
-            gnc_xfer_dialog_hide_from_account_tree(xfer);
-            gnc_xfer_dialog_hide_to_account_tree(xfer);
-            gnc_xfer_dialog_is_exchange_dialog(xfer, &exch);
-
-            if (!gnc_xfer_dialog_run_until_done(xfer))
-                return; /* If the user cancels, return to the payment dialog without changes */
-        }
-
-        /* Perform the payment */
-        if (gncOwnerGetType (&(pw->owner)) == GNC_OWNER_CUSTOMER)
-            auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
-        else
-            auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
-
-        gncOwnerApplyPaymentSecs (&pw->owner, &(pw->tx_info->txn), selected_lots,
-                                  pw->post_acct, pw->xfer_acct, pw->amount_tot,
-                                  exch, t, memo, num, auto_pay);
+        GncGUID *guid = g_new (GncGUID, 1);
+        *guid = *qof_instance_get_guid (QOF_INSTANCE (node->data));
+        g_ptr_array_add (request->selected_lots, guid);
     }
-    gnc_resume_gui_refresh ();
-
-    /* Save the transfer account, xfer_acct */
-    gnc_payment_dialog_remember_account(pw, pw->xfer_acct);
-
-    if (gtk_widget_is_sensitive (pw->print_check) &&
-        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(pw->print_check)))
+    g_list_free (selected_lots);
+    request->session_lease = gnc_gui_begin_session_operation (request->book);
+    if (!request->session_lease)
     {
-        Split *split = xaccTransFindSplitByAccount (pw->tx_info->txn, pw->xfer_acct);
-        GList *splits = NULL;
-        splits = g_list_append(splits, split);
-        gnc_ui_print_check_dialog_create(NULL, splits, NULL);
-        g_list_free (splits);
+        payment_request_free (request);
+        return;
     }
+    pw->pending_payment = request;
 
-    gnc_ui_payment_window_destroy (pw);
+    if (!gnc_numeric_zero_p (request->amount) &&
+        !gnc_commodity_equal (xaccAccountGetCommodity (pw->xfer_acct),
+                              xaccAccountGetCommodity (pw->post_acct)))
+    {
+        XferDialog *xfer = gnc_xfer_dialog (pw->dialog, pw->post_acct);
+        gnc_info_dialog (GTK_WINDOW (pw->dialog), "%s",
+            _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate."));
+        gnc_xfer_dialog_select_to_account (xfer, pw->xfer_acct);
+        gnc_xfer_dialog_set_amount (xfer, request->amount);
+        gnc_xfer_dialog_set_date (xfer, request->post_date);
+        gnc_xfer_dialog_set_from_show_button_active (xfer, FALSE);
+        gnc_xfer_dialog_set_to_show_button_active (xfer, FALSE);
+        gnc_xfer_dialog_hide_from_account_tree (xfer);
+        gnc_xfer_dialog_hide_to_account_tree (xfer);
+        gnc_xfer_dialog_is_exchange_dialog (xfer, &request->exchange_rate);
+        gtk_widget_set_sensitive (pw->dialog, FALSE);
+        gnc_xfer_dialog_run_async (xfer, payment_exchange_completed, request);
+        return;
+    }
+    payment_exchange_completed (TRUE, request);
 }
 
 void
@@ -1063,6 +1188,12 @@ gnc_payment_window_destroy_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
     PaymentWindow *pw = data;
 
     if (!pw) return;
+
+    if (pw->pending_payment)
+    {
+        pw->pending_payment->owner = NULL;
+        pw->pending_payment = NULL;
+    }
 
     gnc_unregister_gui_component (pw->component_id);
 
@@ -1611,102 +1742,252 @@ static char *gen_split_desc (Transaction *txn, Split *split)
     return split_str;
 }
 
-static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
+static GtkDialog *
+payment_split_dialog_new (GtkWindow *parent, Transaction *txn,
+                          GList *payment_splits, GtkWidget **first_radio)
 {
-    /* We require the txn to have one split in an Asset account.
-     * The only exception would be a lot link transaction
-     */
-    GList *payment_splits = xaccTransGetPaymentAcctSplitList (txn);
-    Split *selected_split = NULL;
+    const char *message = _("While this transaction has multiple splits that can be considered\n"
+                            "as 'the payment split', GnuCash only knows how to handle one.\n"
+                            "Please select one, the others will be discarded.\n\n");
+    GtkDialog *dialog = GTK_DIALOG (gtk_dialog_new_with_buttons (
+        _("Warning"), parent,
+        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+        _("Continue"), GTK_RESPONSE_OK,
+        _("Cancel"), GTK_RESPONSE_CANCEL, NULL));
+    GtkWidget *content = gtk_dialog_get_content_area (dialog);
+    GtkWidget *label = gtk_label_new (message);
+
+    gtk_box_pack_start (GTK_BOX(content), label, FALSE, TRUE, 0);
+    *first_radio = NULL;
+    for (GList *node = payment_splits; node; node = node->next)
+    {
+        GtkWidget *radio;
+        Split *split = node->data;
+        char *split_str = gen_split_desc (txn, split);
+        if (!*first_radio)
+        {
+            *first_radio = gtk_radio_button_new_with_label (NULL, split_str);
+            radio = *first_radio;
+        }
+        else
+            radio = gtk_radio_button_new_with_label_from_widget (
+                GTK_RADIO_BUTTON(*first_radio), split_str);
+        g_object_set_data (G_OBJECT(radio), "split", split);
+        GncGUID *guid = g_new (GncGUID, 1);
+        *guid = *xaccSplitGetGUID (split);
+        g_object_set_data_full (G_OBJECT(radio), "split-guid", guid, g_free);
+        gtk_box_pack_start (GTK_BOX(content), radio, FALSE, FALSE, 0);
+        g_free (split_str);
+    }
+    gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CANCEL);
+    return dialog;
+}
+
+static gboolean
+payment_split_request_is_current (PaymentSplitRequest *request)
+{
+    QofSession *session;
+    QofBook *book = request->book;
+    if (request->parent_destroyed || !request->parent ||
+        gtk_widget_in_destruction (request->parent) ||
+        !book || !gnc_current_session_exist ())
+        return FALSE;
+    session = gnc_get_current_session ();
+    return session == request->session && qof_session_get_book (session) == book &&
+        qof_book_is_open (book) && !qof_book_shutting_down (book) &&
+        !qof_book_is_readonly (book) &&
+        guid_equal (&request->book_guid, qof_book_get_guid (book));
+}
+
+static void
+payment_split_request_free (GtkWidget *dialog, PaymentSplitRequest *request)
+{
+    g_signal_handlers_disconnect_by_data (dialog, request);
+    if (request->parent)
+        g_signal_handlers_disconnect_by_data (request->parent, request);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT(request->book),
+                                      (gpointer *)&request->book);
+    if (request->parent)
+        g_object_remove_weak_pointer (G_OBJECT(request->parent),
+                                      (gpointer *)&request->parent);
+    g_free (request);
+    g_object_unref (dialog);
+}
+
+static void
+payment_split_parent_destroy_cb ([[maybe_unused]] GtkWidget *parent,
+                                  PaymentSplitRequest *request)
+{
+    request->parent_destroyed = TRUE;
+}
+
+static void
+payment_split_dialog_destroy_cb (GtkWidget *dialog,
+                                 PaymentSplitRequest *request)
+{
+    if (!request->response_active)
+        payment_split_request_free (dialog, request);
+}
+
+static gboolean
+payment_split_request_resolve (PaymentSplitRequest *request,
+                               const GncGUID *split_guid)
+{
+    GncOwner owner = {0};
+    QofBook *book;
+    Transaction *txn;
+    Split *split;
+
+    if (!payment_split_request_is_current (request))
+        return FALSE;
+    book = request->book;
+    txn = xaccTransLookup (&request->txn_guid, book);
+    split = xaccSplitLookup (split_guid, book);
+    if (!txn || !split || xaccSplitGetParent (split) != txn)
+        return FALSE;
+    if (request->owner_has_guid &&
+        !gncOwnerGetOwnerFromTypeGuid (book, &owner,
+            gncOwnerTypeToQofIdType (request->owner_type),
+            &request->owner_guid))
+        return FALSE;
+    if (!request->owner_has_guid &&
+        request->owner_type == GNC_OWNER_UNDEFINED)
+        gncOwnerInitUndefined (&owner, NULL);
+
+    payment_window_from_txn_split (GTK_WINDOW(request->parent), &owner,
+                                   txn, split);
+    return TRUE;
+}
+
+static void
+payment_split_dialog_response_cb (GtkDialog *dialog, gint response,
+                                  PaymentSplitRequest *request)
+{
+    GncGUID split_guid;
+    gboolean have_split_guid = FALSE;
+
+    request->response_active = TRUE;
+    /* This request is now completing. Prevent a queued response or the
+       destroy signal from entering a second cleanup path. */
+    g_signal_handlers_disconnect_by_data (dialog, request);
+    if (response == GTK_RESPONSE_OK && payment_split_request_is_current (request))
+    {
+        GSList *group = gtk_radio_button_get_group (
+            GTK_RADIO_BUTTON(request->first_radio));
+        for (GSList *node = group; node; node = node->next)
+        {
+            GtkWidget *radio = node->data;
+            GncGUID *guid = g_object_get_data (G_OBJECT(radio), "split-guid");
+            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)) && guid)
+            {
+                split_guid = *guid;
+                have_split_guid = TRUE;
+                break;
+            }
+        }
+    }
+
+    gtk_widget_destroy (GTK_WIDGET(dialog));
+    if (have_split_guid)
+        payment_split_request_resolve (request, &split_guid);
+    request->response_active = FALSE;
+    payment_split_request_free (GTK_WIDGET(dialog), request);
+}
+
+void
+gnc_ui_payment_new_with_txn_async (GtkWindow *parent, const GncOwner *owner,
+                                   Transaction *txn)
+{
+    GList *payment_splits;
+    PaymentSplitRequest *request;
+    QofBook *book;
+    QofSession *session;
+    GtkDialog *dialog;
+    GtkWidget *first_radio;
+
+    if (!parent || !txn || !xaccTransGetSplitList (txn))
+        return;
+    payment_splits = xaccTransGetPaymentAcctSplitList (txn);
     if (!payment_splits)
     {
-        GtkWidget *dialog;
-
-        if (xaccTransGetTxnType(txn) == TXN_TYPE_LINK)
-            return NULL;
-
-        dialog = gtk_message_dialog_new (parent,
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_INFO,
-                                         GTK_BUTTONS_CLOSE,
-                                         "%s",
-                                         _("The selected transaction doesn't have splits that can be assigned as a payment"));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-        PINFO("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
-                  xaccTransGetDescription(txn));
-        return NULL;
+        if (xaccTransGetTxnType (txn) != TXN_TYPE_LINK)
+        {
+            GtkWidget *dialog = gtk_message_dialog_new (
+                parent, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+                GTK_BUTTONS_CLOSE, "%s",
+                _("The selected transaction doesn't have splits that can be assigned as a payment"));
+            PINFO ("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
+                   xaccTransGetDescription (txn));
+            g_signal_connect_swapped (dialog, "response",
+                                      G_CALLBACK (gtk_widget_destroy), dialog);
+            gtk_widget_show (dialog);
+        }
+        return;
     }
-
-    if (g_list_length(payment_splits) > 1)
+    if (!payment_splits->next)
     {
-        GtkWidget *first_rb = NULL;
-        int answer = GTK_BUTTONS_OK;
-        const char *message = _("While this transaction has multiple splits that can be considered\n"
-                                "as 'the payment split', GnuCash only knows how to handle one.\n"
-                                "Please select one, the others will be discarded.\n\n");
-        GtkDialog *dialog = GTK_DIALOG(
-                            gtk_dialog_new_with_buttons (_("Warning"),
-                                                         parent,
-                                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                         _("Continue"), GTK_BUTTONS_OK,
-                                                         _("Cancel"), GTK_BUTTONS_CANCEL,
-                                                         NULL));
-        GtkWidget *content = gtk_dialog_get_content_area(dialog);
-        GtkWidget *label = gtk_label_new (message);
-        gtk_box_pack_start (GTK_BOX(content), label, FALSE, TRUE, 0);
-
-        /* Add splits as selectable options to the dialog */
-        for (GList *node = payment_splits; node; node = node->next)
-        {
-            GtkWidget *rbutton;
-            Split *split = node->data;
-            char *split_str = gen_split_desc (txn, split);
-
-            if (node == payment_splits)
-            {
-                first_rb = gtk_radio_button_new_with_label (NULL, split_str);
-                rbutton = first_rb;
-            }
-            else
-                rbutton = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(first_rb), split_str);
-
-            g_object_set_data(G_OBJECT(rbutton), "split", split);
-            gtk_box_pack_start (GTK_BOX(content), rbutton, FALSE, FALSE, 0);
-
-            g_free (split_str);
-        }
-
-        gtk_dialog_set_default_response (dialog, GTK_BUTTONS_CANCEL);
-        gtk_widget_show_all (GTK_WIDGET(dialog));
-        answer = gtk_dialog_run (dialog);
-
-        if (answer == GTK_BUTTONS_OK)
-        {
-            GSList *rbgroup = gtk_radio_button_get_group(GTK_RADIO_BUTTON(first_rb));
-            GSList *rbnode;
-            for (rbnode = rbgroup; rbnode; rbnode = rbnode->next)
-            {
-                GtkWidget *rbutton = rbnode->data;
-                if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rbutton)))
-                {
-                    selected_split = g_object_get_data(G_OBJECT(rbutton), "split");
-                    break;
-                }
-            }
-        }
-
-        gtk_widget_destroy (GTK_WIDGET(dialog));
+        payment_window_from_txn_split (parent, (GncOwner *)owner, txn,
+                                       payment_splits->data);
+        g_list_free (payment_splits);
+        return;
     }
-    else
-        selected_split = payment_splits->data;
 
+    book = xaccTransGetBook (txn);
+    if (!book || !gnc_current_session_exist ())
+    {
+        g_list_free (payment_splits);
+        return;
+    }
+    session = gnc_get_current_session ();
+    if (!session || qof_session_get_book (session) != book ||
+        !qof_book_is_open (book) || qof_book_shutting_down (book) ||
+        qof_book_is_readonly (book))
+    {
+        g_list_free (payment_splits);
+        return;
+    }
+    if (owner && gncOwnerIsValid (owner) &&
+        qof_instance_get_book (qofOwnerGetOwner (owner)) != book)
+    {
+        g_list_free (payment_splits);
+        return;
+    }
+
+    request = g_new0 (PaymentSplitRequest, 1);
+    request->parent = GTK_WIDGET(parent);
+    request->book = book;
+    request->session = session;
+    request->book_guid = *qof_book_get_guid (book);
+    request->txn_guid = *xaccTransGetGUID (txn);
+    request->owner_type = owner ? gncOwnerGetType (owner) : GNC_OWNER_NONE;
+    if (owner && gncOwnerGetGUID (owner))
+    {
+        request->owner_guid = *gncOwnerGetGUID (owner);
+        request->owner_has_guid = TRUE;
+    }
+    g_object_add_weak_pointer (G_OBJECT(parent),
+                                (gpointer *)&request->parent);
+    g_object_add_weak_pointer (G_OBJECT(book), (gpointer *)&request->book);
+
+    dialog = payment_split_dialog_new (parent, txn, payment_splits,
+                                       &first_radio);
+    request->first_radio = first_radio;
+    gtk_window_set_destroy_with_parent (GTK_WINDOW(dialog), TRUE);
+    g_object_ref (dialog);
+    g_signal_connect (parent, "destroy",
+                      G_CALLBACK(payment_split_parent_destroy_cb), request);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK(payment_split_dialog_response_cb), request);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK(payment_split_dialog_destroy_cb), request);
+    gtk_widget_show_all (GTK_WIDGET(dialog));
     g_list_free (payment_splits);
-    return selected_split;
 }
 
 static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **post_acct, gboolean *abort)
 {
+    GtkWidget *notice = NULL;
     SplitList *apar_splits = NULL; /* all spits in txn that are APAR type */
     SplitList *apar_splits_no_lot = NULL; /* all splits in txn that are APAR type, but not tied to a lot */
     SplitList *iter;
@@ -1771,6 +2052,7 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
         }
 
         dialog = gtk_message_dialog_new (parent,
+                                         GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_MESSAGE_INFO,
                                          GTK_BUTTONS_CLOSE,
@@ -1778,12 +2060,13 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
                                          "GnuCash can only handle transactions that post to a single account.\n\n"
                                          "Please correct this manually by editing the transaction directly and then try again."),
                                          split_str);
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
         PINFO("Multiple asset accounts in splits of txn \"%s\"; cannot use this for assigning a payment.",
               xaccTransGetDescription(txn));
         g_free (split_str);
 
+        g_signal_connect_swapped (dialog, "response",
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        notice = dialog;
         *abort = TRUE;
         g_list_free_full (txn_lots, g_free);
         txn_lots = NULL;
@@ -1792,29 +2075,22 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
     g_list_free (apar_splits);
     g_list_free (apar_splits_no_lot);
     g_list_free (unique_apar_accts);
+    if (notice)
+        gtk_widget_show (notice);
     return txn_lots;
 }
 
-PaymentWindow * gnc_ui_payment_new_with_txn (GtkWindow* parent, GncOwner *owner, Transaction *txn)
+static PaymentWindow *
+payment_window_from_txn_split (GtkWindow *parent, GncOwner *owner,
+                               Transaction *txn, Split *payment_split)
 {
-    Split *payment_split = NULL;
     Account *post_acct = NULL;
     InitialPaymentInfo *tx_info = NULL;
     GList *txn_lots = NULL;
     gboolean abort = FALSE;
     PaymentWindow *pw;
 
-    if (!txn)
-        return NULL;
-
-    if (!xaccTransGetSplitList(txn))
-        return NULL;
-
-    /* We require the txn to have one split in an Asset account.
-     * The only exception would be a lot link transaction
-     */
-    payment_split = select_payment_split (parent, txn);
-    if (!payment_split && (xaccTransGetTxnType(txn) != TXN_TYPE_LINK))
+    if (!txn || (!payment_split && xaccTransGetTxnType (txn) != TXN_TYPE_LINK))
         return NULL;
 
     /* Get all APAR related lots. Watch out: there might be none */

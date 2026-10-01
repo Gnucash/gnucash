@@ -108,13 +108,20 @@ void gnc_keyring_set_password ( const gchar *access_method,
  *  password for this service.
  */
 
-gboolean gnc_keyring_get_password ( GtkWidget *parent,
-                                    const gchar *access_method,
-                                    const gchar *server,
-                                    guint32 port,
-                                    const gchar *service,
-                                    gchar **user,
-                                    gchar **password );
+typedef void (*GncKeyringPasswordCallback) (gboolean accepted,
+                                             gchar *owned_username,
+                                             gchar *owned_password,
+                                             gpointer user_data);
+
+void gnc_keyring_get_password_async (GtkWidget *parent,
+                                     const gchar *access_method,
+                                     const gchar *server,
+                                     guint32 port,
+                                     const gchar *service,
+                                     const gchar *initial_user,
+                                     const gchar *initial_password,
+                                     GncKeyringPasswordCallback completed,
+                                     gpointer user_data);
 
 /* @} */
 /* @} */

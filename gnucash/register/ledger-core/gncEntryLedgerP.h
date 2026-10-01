@@ -60,7 +60,19 @@ struct GncEntryLedger_s
     gboolean   is_credit_note;   /** is this an invoice (or a bill)? */
 
     const gchar * prefs_group;
+    GList *async_close_requests;
+    GList *async_requests;
+    gboolean skip_missing_tax_table_creation;
 };
+
+typedef struct
+{
+    GncEntryLedger *ledger;
+} GncEntryLedgerAsyncRequest;
+
+void gnc_entry_ledger_async_request_track (GncEntryLedger *ledger,
+                                           GncEntryLedgerAsyncRequest *request);
+void gnc_entry_ledger_async_request_untrack (GncEntryLedgerAsyncRequest *request);
 
 GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
                                        VirtualCellLocation vcell_loc);

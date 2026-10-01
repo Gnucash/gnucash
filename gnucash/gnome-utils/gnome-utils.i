@@ -48,10 +48,6 @@ SCM scm_init_sw_gnome_utils_module (void);
 
 %import "base-typemaps.i"
 
-gboolean
-gnc_verify_dialog (GtkWindow *parent, gboolean yes_is_default,
-		   const gchar *format, ...);
-
 void
 gnc_warning_dialog (GtkWindow *parent,
                     const gchar *format, ...);

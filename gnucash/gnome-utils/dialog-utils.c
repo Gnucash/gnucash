@@ -34,6 +34,7 @@
 #endif
 
 #include "dialog-utils.h"
+#include "gnc-gui-query.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-path.h"
@@ -43,6 +44,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
 #include "gnc-main-window.h"
+#include "gnc-session.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -179,8 +181,9 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
         {
             wsize[0] = MIN(wsize[0], monitor_size.width - 10);
             wsize[1] = MIN(wsize[1], monitor_size.height - 10);
-
-            gtk_window_resize(window, wsize[0], wsize[1]);
+            /* A display backend may not yet report a usable monitor area. */
+            if (wsize[0] > 0 && wsize[1] > 0)
+                gtk_window_resize(window, wsize[0], wsize[1]);
         }
     }
     g_variant_unref (geometry);
@@ -261,6 +264,9 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
     mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
     gdk_monitor_get_geometry (mon, &monitor_size);
+
+    if (monitor_size.width <= 0 || monitor_size.height <= 0)
+        return;
 
     DEBUG("monitor width is %d, height is %d; wwindow width is %d, height is %d",
            monitor_size.width, monitor_size.height, width, height);
@@ -436,14 +442,15 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
                   "01/01/1400 - 31/12/9999, resetting to this year");
         gchar *dialog_title = _("Date out of range");
         GtkWidget *dialog = gtk_message_dialog_new (gnc_ui_get_main_window (NULL),
-                               0,
+                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                GTK_MESSAGE_ERROR,
                                GTK_BUTTONS_OK,
                                "%s", dialog_title);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                              "%s", dialog_msg);
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        g_signal_connect_swapped (dialog, "response",
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_widget_show_all (dialog);
     }
     g_date_free (max_date);
     g_date_free (min_date);
@@ -732,89 +739,288 @@ gnc_perm_button_cb (GtkButton *perm, gpointer user_data)
     gtk_widget_set_sensitive(user_data, !perm_active);
 }
 
-gint
-gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
+typedef struct
 {
-    GtkWidget *perm, *temp;
-    gboolean ask = TRUE;
-    gint response;
+    gchar *pref_name;
+    GncGuiQueryResponseCallback completed;
+    gpointer user_data;
+    GtkWidget *perm;
+    GtkWidget *temp;
+    gboolean remember_perm;
+    gboolean remember_temp;
+    gboolean cached;
+    gulong capture_handler;
+    gulong destroy_handler;
+} GncDialogRunAsync;
 
-    /* Does the user want to see this question? If not, return the
-     * previous answer. */
-    response = gnc_prefs_get_int(GNC_PREFS_GROUP_WARNINGS_PERM, pref_name);
-    if (response != 0)
-        return response;
-    response = gnc_prefs_get_int(GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name);
-    if (response != 0)
-        return response;
-
-    /* Add in the checkboxes to find out if the answer should be remembered. */
-    if (GTK_IS_MESSAGE_DIALOG(dialog))
-    {
-        GtkMessageType type;
-        g_object_get(dialog, "message-type", &type, (gchar*)NULL);
-        ask = (type == GTK_MESSAGE_QUESTION || type == GTK_MESSAGE_WARNING);
-    }
-    perm = gtk_check_button_new_with_mnemonic
-           (ask
-            ? _("Remember and don't _ask me again.")
-            : _("Don't _tell me again."));
-    temp = gtk_check_button_new_with_mnemonic
-           (ask
-            ? _("Remember and don't ask me again this _session.")
-            : _("Don't tell me again this _session."));
-    gtk_widget_show(perm);
-    gtk_widget_show(temp);
-    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), perm, TRUE, TRUE, 0);
-    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), temp, TRUE, TRUE, 0);
-    g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
-
-    /* OK. Present the dialog. */
-    GtkWidget *button_cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-    gtk_widget_grab_focus(button_cancel);
-    response = gtk_dialog_run(dialog);
-    if ((response == GTK_RESPONSE_NONE) || (response == GTK_RESPONSE_DELETE_EVENT))
-    {
-        return GTK_RESPONSE_CANCEL;
-    }
-
-    if (response != GTK_RESPONSE_CANCEL)
-    {
-        /* Save the answer? */
-        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm)))
-        {
-            gnc_prefs_set_int(GNC_PREFS_GROUP_WARNINGS_PERM, pref_name, response);
-        }
-        else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(temp)))
-        {
-            gnc_prefs_set_int(GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name, response);
-        }
-    }
-    return response;
+static void
+gnc_dialog_run_async_capture (GtkDialog *dialog, [[maybe_unused]] gint response,
+                              GncDialogRunAsync *request)
+{
+    if (request->cached)
+        return;
+    request->remember_perm = gtk_toggle_button_get_active (
+        GTK_TOGGLE_BUTTON (request->perm));
+    request->remember_temp = gtk_toggle_button_get_active (
+        GTK_TOGGLE_BUTTON (request->temp));
+    if (request->capture_handler &&
+        g_signal_handler_is_connected (dialog, request->capture_handler))
+        g_signal_handler_disconnect (dialog, request->capture_handler);
+    request->capture_handler = 0;
 }
 
-/* If this is a new book, this function can be used to display book options
- * dialog so user can specify options, before any transactions can be
- * imported/entered, since the book options can affect how transactions are
- * created. Note: This dialog is modal! */
-gboolean
-gnc_new_book_option_display (GtkWidget *parent)
+static void
+gnc_dialog_run_async_dialog_destroyed (GtkWidget *dialog,
+                                       GncDialogRunAsync *request)
 {
-    GtkWidget *window;
-    gint result = GTK_RESPONSE_HELP;
+    if (request->capture_handler &&
+        g_signal_handler_is_connected (dialog, request->capture_handler))
+        g_signal_handler_disconnect (dialog, request->capture_handler);
+    request->capture_handler = 0;
+    if (request->destroy_handler &&
+        g_signal_handler_is_connected (dialog, request->destroy_handler))
+        g_signal_handler_disconnect (dialog, request->destroy_handler);
+    request->destroy_handler = 0;
+}
 
-    window = gnc_book_options_dialog_cb (TRUE, _( "New Book Options"),
-                                         GTK_WINDOW (parent));
-    if (window)
+static void
+gnc_dialog_run_async_widget_destroyed ([[maybe_unused]] GtkWidget *widget,
+                                     gboolean *destroyed)
+{
+    *destroyed = TRUE;
+}
+
+static void
+gnc_dialog_run_async_show_modal (GtkDialog *dialog)
+{
+    gboolean destroyed = FALSE;
+    gulong destroy_handler;
+    GtkWidget *cancel;
+
+    /* Setting modal emits notify::modal. A handler can synchronously destroy
+     * the dialog and complete/free the request, so this guard owns no request
+     * data and keeps the dialog object valid until we stop using it. */
+    g_object_ref (dialog);
+    destroy_handler = g_signal_connect (dialog, "destroy",
+        G_CALLBACK (gnc_dialog_run_async_widget_destroyed), &destroyed);
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    if (destroyed)
+        goto cleanup;
+
+    cancel = gtk_dialog_get_widget_for_response (dialog, GTK_RESPONSE_CANCEL);
+    if (cancel)
+        gtk_widget_grab_focus (cancel);
+    if (destroyed)
+        goto cleanup;
+
+    gtk_widget_show_all (GTK_WIDGET (dialog));
+    if (destroyed)
+        goto cleanup;
+
+cleanup:
+    if (destroy_handler && g_signal_handler_is_connected (dialog, destroy_handler))
+        g_signal_handler_disconnect (dialog, destroy_handler);
+    g_object_unref (dialog);
+}
+
+static void
+gnc_dialog_run_async_complete (GtkWindow *parent, gint response,
+                               gpointer user_data)
+{
+    GncDialogRunAsync *request = (GncDialogRunAsync *)user_data;
+    gboolean parent_destroyed = FALSE;
+    gulong destroy_handler = 0;
+
+    /* Preference notifications can synchronously destroy the parent. Keep a
+     * temporary object reference, and separately observe widget destruction
+     * so that a retained GObject is never mistaken for a live window. */
+    if (parent && !request->cached && response != GTK_RESPONSE_CANCEL &&
+        request->pref_name && (request->remember_perm || request->remember_temp))
     {
-        /* close dialog and proceed unless help button selected */
-        while (result == GTK_RESPONSE_HELP)
+        GtkWindow *held_parent = g_object_ref (parent);
+        destroy_handler = g_signal_connect (parent, "destroy",
+            G_CALLBACK (gnc_dialog_run_async_widget_destroyed), &parent_destroyed);
+        if (request->remember_perm)
+            gnc_prefs_set_int (GNC_PREFS_GROUP_WARNINGS_PERM,
+                               request->pref_name, response);
+        else if (request->remember_temp)
+            gnc_prefs_set_int (GNC_PREFS_GROUP_WARNINGS_TEMP,
+                               request->pref_name, response);
+        if (destroy_handler && g_signal_handler_is_connected (held_parent, destroy_handler))
+            g_signal_handler_disconnect (held_parent, destroy_handler);
+        if (parent_destroyed || gtk_widget_in_destruction (GTK_WIDGET (held_parent)))
         {
-            result = gtk_dialog_run(GTK_DIALOG(window));
+            parent = NULL;
+            response = GTK_RESPONSE_CANCEL;
         }
-        return FALSE;
+        g_object_unref (held_parent);
     }
-    return TRUE;
+
+    GncGuiQueryResponseCallback callback = request->completed;
+    gpointer callback_data = request->user_data;
+    g_free (request->pref_name);
+    g_free (request);
+    callback (parent, response, callback_data);
+}
+
+void
+gnc_dialog_run_async (GtkDialog *dialog, const gchar *pref_name,
+                      GncGuiQueryResponseCallback completed,
+                      gpointer user_data)
+{
+    g_return_if_fail (GTK_IS_DIALOG (dialog));
+    g_return_if_fail (completed != NULL);
+
+    GncDialogRunAsync *request = g_new0 (GncDialogRunAsync, 1);
+    request->pref_name = g_strdup (pref_name);
+    request->completed = completed;
+    request->user_data = user_data;
+
+    if (pref_name)
+    {
+        gint remembered = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_PERM,
+                                              pref_name);
+        if (!remembered)
+            remembered = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_TEMP,
+                                             pref_name);
+        if (remembered)
+        {
+            request->cached = TRUE;
+            gnc_gui_query_bind_dialog_response (dialog,
+                gnc_dialog_run_async_complete, request);
+            gtk_dialog_response (dialog, remembered);
+            return;
+        }
+
+        gboolean ask = TRUE;
+        if (GTK_IS_MESSAGE_DIALOG (dialog))
+        {
+            GtkMessageType type;
+            g_object_get (dialog, "message-type", &type, NULL);
+            ask = type == GTK_MESSAGE_QUESTION || type == GTK_MESSAGE_WARNING;
+        }
+        request->perm = gtk_check_button_new_with_mnemonic
+            (ask ? _("Remember and don't _ask me again.") :
+                   _("Don't _tell me again."));
+        request->temp = gtk_check_button_new_with_mnemonic
+            (ask ? _("Remember and don't ask me again this _session.") :
+                   _("Don't tell me again this _session."));
+        gtk_widget_show (request->perm);
+        gtk_widget_show (request->temp);
+        gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)),
+                            request->perm, TRUE, TRUE, 0);
+        gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)),
+                            request->temp, TRUE, TRUE, 0);
+        g_signal_connect (request->perm, "clicked",
+                          G_CALLBACK (gnc_perm_button_cb), request->temp);
+        request->capture_handler = g_signal_connect (
+            dialog, "response", G_CALLBACK (gnc_dialog_run_async_capture), request);
+        request->destroy_handler = g_signal_connect (
+            dialog, "destroy",
+            G_CALLBACK (gnc_dialog_run_async_dialog_destroyed), request);
+    }
+
+    gnc_gui_query_bind_dialog_response (dialog,
+        gnc_dialog_run_async_complete, request);
+    gnc_dialog_run_async_show_modal (dialog);
+}
+
+typedef struct
+{
+    GtkWindow *parent;
+    gboolean parent_destroyed;
+    GWeakRef book;
+    GtkWidget *window;
+    gboolean completion_queued;
+    gboolean initializing;
+    GncGuiQueryResponseCallback completed;
+    gpointer user_data;
+} NewBookOptionsRequest;
+
+static gboolean new_book_options_complete (gpointer user_data);
+
+static void
+new_book_options_queue_complete (NewBookOptionsRequest *request)
+{
+    if (request->completion_queued) return;
+    request->completion_queued = TRUE;
+    g_idle_add (new_book_options_complete, request);
+}
+
+static void
+new_book_options_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                  NewBookOptionsRequest *request)
+{
+    request->parent_destroyed = TRUE;
+    if (request->window && !gtk_widget_in_destruction (request->window))
+        gtk_widget_destroy (request->window);
+    new_book_options_queue_complete (request);
+}
+
+static gboolean
+new_book_options_complete (gpointer user_data)
+{
+    NewBookOptionsRequest *request = user_data;
+    if (request->initializing) return G_SOURCE_CONTINUE;
+    QofBook *book = g_weak_ref_get (&request->book);
+    gboolean valid_book = book && gnc_current_session_exist () &&
+                          book == gnc_get_current_book () && qof_book_is_open (book) &&
+                          !qof_book_shutting_down (book);
+    GtkWindow *parent = request->parent_destroyed ? NULL : request->parent;
+    if (request->parent)
+        g_signal_handlers_disconnect_by_data (request->parent, request);
+    if (request->window)
+        g_signal_handlers_disconnect_by_data (request->window, request);
+    request->completed (parent, request->parent_destroyed || !valid_book ? GTK_RESPONSE_CANCEL :
+                         GTK_RESPONSE_OK, request->user_data);
+    g_clear_object (&book);
+    g_weak_ref_clear (&request->book);
+    g_clear_object (&request->window);
+    g_clear_object (&request->parent);
+    g_free (request);
+    return G_SOURCE_REMOVE;
+}
+
+static void
+new_book_options_destroyed ([[maybe_unused]] GtkWidget *window,
+                            NewBookOptionsRequest *request)
+{
+    /* The options manager must finish applying/retiring its state before an
+     * importer resumes. There is no nested dispatch while the dialog is open. */
+    new_book_options_queue_complete (request);
+}
+
+void
+gnc_new_book_option_display_async (GtkWidget *parent,
+                                   GncGuiQueryResponseCallback completed,
+                                   gpointer user_data)
+{
+    g_return_if_fail (completed != NULL);
+    NewBookOptionsRequest *request = g_new0 (NewBookOptionsRequest, 1);
+    request->initializing = TRUE;
+    request->completed = completed;
+    request->user_data = user_data;
+    g_weak_ref_init (&request->book, gnc_current_session_exist () ?
+                     G_OBJECT (gnc_get_current_book ()) : NULL);
+    if (parent)
+    {
+        request->parent = g_object_ref (GTK_WINDOW (parent));
+        g_signal_connect (parent, "destroy",
+                          G_CALLBACK (new_book_options_parent_destroyed), request);
+    }
+    GtkWidget *window = gnc_book_options_dialog_cb (TRUE, _("New Book Options"),
+                                                    parent ? GTK_WINDOW (parent) : NULL);
+    if (!window)
+        new_book_options_queue_complete (request);
+    else
+    {
+        request->window = g_object_ref (window);
+        g_signal_connect_after (window, "destroy",
+                                 G_CALLBACK (new_book_options_destroyed), request);
+        if (request->parent_destroyed)
+            gtk_widget_destroy (window);
+    }
+    request->initializing = FALSE;
 }
 
 gchar*

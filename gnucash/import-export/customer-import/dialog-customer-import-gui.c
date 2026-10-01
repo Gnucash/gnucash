@@ -41,6 +41,8 @@
 #include "dialog-customer-import.h"
 #include "dialog-customer-import-gui.h"
 
+typedef struct _CustomerImportNoticeSequence CustomerImportNoticeSequence;
+
 struct _customer_import_gui
 {
     GtkWidget    *dialog;
@@ -51,7 +53,80 @@ struct _customer_import_gui
     GString      *regexp;
     gchar       *type;
     QofBook      *book;
+    CustomerImportNoticeSequence *notice_sequence;
 };
+
+struct _CustomerImportNoticeSequence
+{
+    CustomerImportGui *gui;
+    guint count;
+    guint next;
+    gchar *titles[2];
+    gchar *messages[2];
+};
+
+static void customer_import_notice_dismissed (GtkWindow *parent, gint response,
+                                               gpointer user_data);
+
+static void
+customer_import_notice_sequence_free (CustomerImportNoticeSequence *sequence)
+{
+    for (guint i = 0; i < sequence->count; ++i)
+    {
+        g_free (sequence->titles[i]);
+        g_free (sequence->messages[i]);
+    }
+    g_free (sequence);
+}
+
+static void
+customer_import_notice_show_next (GtkWindow *parent,
+                                 CustomerImportNoticeSequence *sequence)
+{
+    CustomerImportGui *gui = sequence->gui;
+    if (!parent || !gui || GTK_WIDGET (parent) != gui->dialog)
+    {
+        if (gui)
+            gui->notice_sequence = NULL;
+        customer_import_notice_sequence_free (sequence);
+        return;
+    }
+    if (sequence->next < sequence->count)
+    {
+        guint index = sequence->next++;
+        if (sequence->titles[index])
+            gnc_info2_dialog_async (GTK_WIDGET (parent), sequence->titles[index],
+                                    sequence->messages[index],
+                                    customer_import_notice_dismissed, sequence);
+        else
+            gnc_info_dialog_async_response (parent,
+                                            customer_import_notice_dismissed,
+                                            sequence, "%s",
+                                            sequence->messages[index]);
+        return;
+    }
+    gui->notice_sequence = NULL;
+    gint component_id = gui->component_id;
+    customer_import_notice_sequence_free (sequence);
+    gnc_close_gui_component (component_id);
+}
+
+static void
+customer_import_notice_dismissed (GtkWindow *parent,
+                                  [[maybe_unused]] gint response,
+                                  gpointer user_data)
+{
+    customer_import_notice_show_next (parent, user_data);
+}
+
+static void
+customer_import_notice_add (CustomerImportNoticeSequence *sequence,
+                            const gchar *title, const gchar *message)
+{
+    guint index = sequence->count++;
+    sequence->titles[index] = g_strdup (title);
+    sequence->messages[index] = g_strdup (message);
+}
 
 // callback routines
 void gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data);
@@ -152,15 +227,35 @@ gnc_plugin_customer_import_showGUI(GtkWindow *parent)
     return gui;
 }
 
-static gchar *
-gnc_plugin_customer_import_getFilename (GtkWindow *parent)
+typedef struct
 {
-    // prepare file import dialog
-    gchar *filename;
-    GList *filters;
-    GtkFileFilter *filter;
-    filters = NULL;
-    filter = gtk_file_filter_new ();
+    GtkWidget *entry;
+} CustomerImportFileRequest;
+
+static void
+customer_import_file_selected (GSList *filenames, gpointer user_data)
+{
+    CustomerImportFileRequest *request = user_data;
+    if (request->entry && filenames)
+        gtk_entry_set_text (GTK_ENTRY (request->entry), filenames->data);
+    g_slist_free_full (filenames, g_free);
+}
+
+static void
+customer_import_file_request_free (gpointer user_data)
+{
+    CustomerImportFileRequest *request = user_data;
+    if (request->entry)
+        g_object_remove_weak_pointer (G_OBJECT (request->entry),
+                                      (gpointer *)&request->entry);
+    g_free (request);
+}
+
+static void
+gnc_plugin_customer_import_getFilename (GtkWindow *parent, GtkWidget *entry)
+{
+    GList *filters = NULL;
+    GtkFileFilter *filter = gtk_file_filter_new ();
     gtk_file_filter_set_name (filter, "comma separated values (*.csv)");
     gtk_file_filter_add_pattern (filter, "*.csv");
     filters = g_list_append( filters, filter );
@@ -168,16 +263,21 @@ gnc_plugin_customer_import_getFilename (GtkWindow *parent)
     gtk_file_filter_set_name (filter, "text files (*.txt)");
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
-    filename = gnc_file_dialog(parent,
-                               _("Import Customers from CSV"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
-
-    return filename;
+    CustomerImportFileRequest *request = g_new0 (CustomerImportFileRequest, 1);
+    request->entry = entry;
+    g_object_add_weak_pointer (G_OBJECT (entry), (gpointer *)&request->entry);
+    gnc_file_dialog_async (parent, _("Import Customers from CSV"), filters,
+                           NULL, GNC_FILE_DIALOG_IMPORT, FALSE,
+                           customer_import_file_selected, request,
+                           customer_import_file_request_free);
 }
 
 void
 gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
+    if (!gui || gui->notice_sequence)
+        return;
     gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
     customer_import_stats stats;
     customer_import_result res;
@@ -192,25 +292,39 @@ gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     res = gnc_customer_import_read_file (filename, gui->regexp->str, gui->store, 0, &stats);
     if (res == CI_RESULT_OK)
     {
+        CustomerImportNoticeSequence *sequence =
+            g_new0 (CustomerImportNoticeSequence, 1);
+        gchar *summary;
         gnc_customer_import_fix_customers (gui->store, &n_fixed, &n_deleted, gui->type);
         gnc_customer_import_create_customers (gui->store, gui->book, &n_customers_created, &n_customers_updated, gui->type);
-        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u %s fixed\n   %u %s ignored (not fixable)\n\n   %u %s created\n   %u %s updated (based on id)"), \
-                         stats.n_ignored, stats.n_imported, n_fixed, cv_type_text, n_deleted, cv_type_text, n_customers_created, cv_type_text, n_customers_updated, cv_type_text);
+        summary = g_strdup_printf (_("Import results:\n%i lines were ignored\n%i lines imported:\n   %u %s fixed\n   %u %s ignored (not fixable)\n\n   %u %s created\n   %u %s updated (based on id)"),
+                                   stats.n_ignored, stats.n_imported, n_fixed,
+                                   cv_type_text, n_deleted, cv_type_text,
+                                   n_customers_created, cv_type_text,
+                                   n_customers_updated, cv_type_text);
+        customer_import_notice_add (sequence, NULL, summary);
+        g_free (summary);
 
         if (stats.n_ignored > 0)
-            gnc_info2_dialog (gui->dialog, _("These lines were ignored during import"), stats.ignored_lines->str);
+            customer_import_notice_add (
+                sequence, _("These lines were ignored during import"),
+                stats.ignored_lines->str);
 
         g_string_free (stats.ignored_lines, TRUE);
-        gnc_close_gui_component (gui->component_id);
+        sequence->gui = gui;
+        gui->notice_sequence = sequence;
+        customer_import_notice_show_next (GTK_WINDOW (gui->dialog), sequence);
     }
     else if (res == CI_RESULT_OPEN_FAILED)
     {
-        gnc_error_dialog (GTK_WINDOW (gui->dialog), _("The input file can not be opened."));
+        gnc_error_dialog_async (GTK_WINDOW (gui->dialog), "%s",
+                                _("The input file can not be opened."));
     }
     else if (res == CI_RESULT_ERROR_IN_REGEXP)
     {
         //gnc_error_dialog (GTK_WINDOW (gui->dialog), "The regular expression is faulty:\n\n%s", stats.err->str);
     }
+    g_free (filename);
 }
 
 void
@@ -243,6 +357,12 @@ gnc_customer_import_gui_destroy_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
 
+    if (gui->notice_sequence)
+    {
+        gui->notice_sequence->gui = NULL;
+        gui->notice_sequence = NULL;
+    }
+
     gnc_suspend_gui_refresh ();
     gnc_unregister_gui_component (gui->component_id);
     gnc_resume_gui_refresh ();
@@ -254,15 +374,9 @@ gnc_customer_import_gui_destroy_cb (GtkWidget *widget, gpointer data)
 
 void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 {
-    gchar *filename;
     CustomerImportGui *gui = data;
-
-    filename = gnc_plugin_customer_import_getFilename (gnc_ui_get_gtk_window (widget));
-    if (filename)
-    {
-        gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
-        g_free( filename );
-    }
+    gnc_plugin_customer_import_getFilename (gnc_ui_get_gtk_window (widget),
+                                            gui->entryFilename);
 }
 
 void gnc_customer_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
@@ -312,19 +426,45 @@ void gnc_customer_import_gui_option4_cb (GtkWidget *widget, gpointer data)
     g_string_assign (gui->regexp, "^(\\x{FEFF})?((?<id>[^\",]*)|\"(?<id>[^\"]*)\"),((?<company>[^\",]*)|\"(?<company>[^\"]*)\"),((?<name>[^\",]*)|\"(?<name>[^\"]*)\"),((?<addr1>[^\",]*)|\"(?<addr1>[^\"]*)\"),((?<addr2>[^\",]*)|\"(?<addr2>[^\"]*)\"),((?<addr3>[^\",]*)|\"(?<addr3>[^\"]*)\"),((?<addr4>[^\",]*)|\"(?<addr4>[^\"]*)\"),((?<phone>[^\",]*)|\"(?<phone>[^\"]*)\"),((?<fax>[^\",]*)|\"(?<fax>[^\"]*)\"),((?<email>[^\",]*)|\"(?<email>[^\"]*)\"),((?<notes>[^\",]*)|\"(?<notes>[^\"]*)\"),((?<shipname>[^\",]*)|\"(?<shipname>[^\"]*)\"),((?<shipaddr1>[^\",]*)|\"(?<shipaddr1>[^\"]*)\"),((?<shipaddr2>[^\",]*)|\"(?<shipaddr2>[^\"]*)\"),((?<shipaddr3>[^\",]*)|\"(?<shipaddr3>[^\"]*)\"),((?<shipaddr4>[^\",]*)|\"(?<shipaddr4>[^\"]*)\"),((?<shipphone>[^\",]*)|\"(?<shipphone>[^\"]*)\"),((?<shipfax>[^\",]*)|\"(?<shipfax>[^\"]*)\"),((?<shipemail>[^\",]*)|\"(?<shipemail>[^\"]*)\")$");
     gnc_customer_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
+typedef struct
+{
+    CustomerImportGui *gui;
+    GtkWidget *window;
+} CustomerImportRegexpRequest;
+
+static void
+customer_import_regexp_received (GtkWindow *parent, gchar *input,
+                                 gpointer user_data)
+{
+    CustomerImportRegexpRequest *request = user_data;
+    if (request->window && input)
+    {
+        g_string_assign (request->gui->regexp, input);
+        gnc_customer_import_gui_filenameChanged_cb (
+            request->gui->entryFilename, request->gui);
+    }
+    if (request->window)
+        g_object_remove_weak_pointer (G_OBJECT (request->window),
+                                      (gpointer *)&request->window);
+    g_free (input);
+    g_free (request);
+}
+
 void gnc_customer_import_gui_option5_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
-    gchar *temp;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    temp = gnc_input_dialog (0, _("Adjust regular expression used for import"), _("This regular expression is used to parse the import file. Modify according to your needs.\n"), gui->regexp->str);
-    if (temp)
-    {
-        g_string_assign (gui->regexp, temp);
-        g_free (temp);
-        gnc_customer_import_gui_filenameChanged_cb (gui->entryFilename, gui);
-    }
+    CustomerImportRegexpRequest *request =
+        g_new0 (CustomerImportRegexpRequest, 1);
+    request->gui = gui;
+    request->window = GTK_WIDGET (gui->dialog);
+    g_object_add_weak_pointer (G_OBJECT (request->window),
+                               (gpointer *)&request->window);
+    gnc_input_dialog_async (
+        request->window, _("Adjust regular expression used for import"),
+        _("This regular expression is used to parse the import file. Modify according to your needs.\n"),
+        gui->regexp->str, customer_import_regexp_received, request);
 }
 
 

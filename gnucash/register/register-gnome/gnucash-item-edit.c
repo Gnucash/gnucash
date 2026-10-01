@@ -454,7 +454,7 @@ gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
         table = item_edit->sheet->table;
         virt_loc = table->current_cursor_loc;
 
-        if (!gnc_table_confirm_change (table, virt_loc))
+        if (gnc_table_confirm_change (table, virt_loc) != GNC_TABLE_CONFIRM_ACCEPT)
         {
             g_signal_handlers_block_matched
                  (button, G_SIGNAL_MATCH_DATA,
@@ -1181,4 +1181,3 @@ gnc_item_edit_get_has_selection (GncItemEdit *item_edit)
     editable = GTK_EDITABLE(item_edit->editor);
     return gtk_editable_get_selection_bounds (editable, NULL, NULL);
 }
-

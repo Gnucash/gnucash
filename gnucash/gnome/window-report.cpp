@@ -77,18 +77,7 @@ gnc_options_dialog_apply_cb(GncOptionsDialog *opt_dialog,
 
     if (!win) return;
     auto results = gnc_option_db_commit (win->odb);
-    for (auto iter = results; iter; iter = iter->next)
-    {
-        auto dialog = gtk_message_dialog_new(GTK_WINDOW (win->win),
-                                             static_cast<GtkDialogFlags>(0),
-                                             GTK_MESSAGE_ERROR,
-                                             GTK_BUTTONS_OK,
-                                             "%s",
-                                             (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-        g_free (iter->data);
-    }
+    gnc_error_dialog_async_list (GTK_WINDOW (opt_dialog->get_widget()), results);
     g_list_free (results);
 
     scm_call_2(dirty_report, win->cur_report, SCM_BOOL_T);
@@ -121,7 +110,7 @@ gnc_options_dialog_close_cb(GncOptionsDialog *opt_dialog,
 
     scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
     delete win->win;
-    gnc_option_db_destroy(win->odb);
+    /* The report keeps ownership of its option database after editor close. */
     g_free(win);
 }
 

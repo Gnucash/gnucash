@@ -82,6 +82,122 @@ void gnc_commodities_dialog_rename_namespace_clicked (GtkWidget *widget, gpointe
 void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
 }
 
+struct RenameNamespaceRequest
+{
+    QofBook *book{};
+    GncGUID namespace_guid{};
+    gchar *old_name{};
+    GWeakRef entry;
+    GWeakRef label;
+    bool completed{};
+    bool responding{};
+};
+
+static void
+rename_namespace_request_free (gpointer data)
+{
+    auto request = static_cast<RenameNamespaceRequest*>(data);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      reinterpret_cast<gpointer*>(&request->book));
+    g_weak_ref_clear (&request->entry);
+    g_weak_ref_clear (&request->label);
+    g_free (request->old_name);
+    delete request;
+}
+
+static void
+rename_namespace_dialog_destroyed ([[maybe_unused]] GtkWidget *dialog,
+                                  gpointer data)
+{
+    static_cast<RenameNamespaceRequest*>(data)->completed = true;
+}
+
+static void
+rename_namespace_response (GtkDialog *dialog, gint response, gpointer data)
+{
+    auto request = static_cast<RenameNamespaceRequest*>(data);
+    g_object_ref (dialog);
+    if (request->completed || request->responding)
+    {
+        g_object_unref (dialog);
+        return;
+    }
+
+    if (response != GTK_RESPONSE_OK)
+    {
+        request->completed = true;
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+        g_object_unref (dialog);
+        return;
+    }
+    request->responding = true;
+
+    auto entry = GTK_ENTRY (g_weak_ref_get (&request->entry));
+    auto label = GTK_LABEL (g_weak_ref_get (&request->label));
+    if (!entry || !label)
+    {
+        g_clear_object (&entry);
+        g_clear_object (&label);
+        request->responding = false;
+        g_object_unref (dialog);
+        return;
+    }
+
+    auto new_name = g_strdup (gtk_entry_get_text (entry));
+    if (!new_name || !*new_name)
+    {
+        gtk_label_set_text (label, _("No new name"));
+        g_free (new_name);
+        g_object_unref (entry);
+        g_object_unref (label);
+        request->responding = false;
+        g_object_unref (dialog);
+        return;
+    }
+
+    auto book = request->book;
+    bool renamed = false;
+    if (book && book == gnc_get_current_book () && qof_book_is_open (book) &&
+        !qof_book_shutting_down (book) && !qof_book_is_readonly (book))
+    {
+        auto table = gnc_commodity_table_get_table (book);
+        auto current_namespace = gnc_commodity_table_find_namespace (
+            table, request->old_name);
+        if (current_namespace &&
+            guid_equal (&request->namespace_guid,
+                        qof_instance_get_guid (current_namespace)))
+            renamed = gnc_commodity_table_rename_namespace (
+                table, request->old_name, new_name);
+    }
+
+    if (renamed)
+    {
+        // The engine call may emit events that close this dialog or book.
+        request->completed = true;
+        request->responding = false;
+        if (request->book && request->book == gnc_get_current_book () &&
+            qof_book_is_open (request->book) &&
+            !qof_book_shutting_down (request->book))
+            qof_book_mark_session_dirty (request->book);
+        if (!gtk_widget_in_destruction (GTK_WIDGET (dialog)))
+            gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+    else if (!request->completed &&
+             !gtk_widget_in_destruction (GTK_WIDGET (dialog)))
+    {
+        gtk_label_set_text (label, _("Rename failed, possibly new name exists"));
+        request->responding = false;
+    }
+    else
+        request->responding = false;
+
+    g_free (new_name);
+    g_object_unref (entry);
+    g_object_unref (label);
+    g_object_unref (dialog);
+}
+
 static gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
                                                      GdkEventKey *event,
                                                      gpointer data);
@@ -112,6 +228,69 @@ gnc_commodities_window_delete_event_cb (GtkWidget *widget,
     return FALSE;
 }
 
+struct CommodityActionRequest
+{
+    QofBook *book{};
+    GWeakRef tree;
+    GncGUID original_guid{};
+    bool edit{};
+};
+
+static void
+commodity_action_complete (QofBook *book, gnc_commodity *commodity,
+                           gpointer data)
+{
+    auto request = static_cast<CommodityActionRequest*>(data);
+    auto tree = GNC_TREE_VIEW_COMMODITY (g_weak_ref_get (&request->tree));
+    auto original_book = request->book;
+    bool valid = commodity && book && book == original_book &&
+        original_book == gnc_get_current_book () &&
+        qof_book_is_open (original_book) &&
+        !qof_book_shutting_down (original_book) &&
+        !qof_book_is_readonly (original_book);
+    if (valid)
+    {
+        auto name_space = gnc_commodity_get_namespace (commodity);
+        auto mnemonic = gnc_commodity_get_mnemonic (commodity);
+        auto registered = gnc_commodity_table_lookup (
+            gnc_commodity_table_get_table (original_book), name_space, mnemonic);
+        valid = registered == commodity &&
+            (!request->edit ||
+             guid_equal (&request->original_guid,
+                         qof_instance_get_guid (commodity)));
+    }
+    if (tree && valid)
+    {
+        gnc_tree_view_commodity_select_commodity (tree, commodity);
+        gnc_gui_refresh_all ();
+    }
+    g_clear_object (&tree);
+    g_weak_ref_clear (&request->tree);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      reinterpret_cast<gpointer*>(&request->book));
+    delete request;
+}
+
+static CommodityActionRequest *
+commodity_action_request_new (CommoditiesDialog *cd, gnc_commodity *original)
+{
+    auto book = gnc_get_current_book ();
+    if (!cd || !cd->commodity_tree || !book || book != cd->book ||
+        !qof_book_is_open (book) || qof_book_shutting_down (book) ||
+        qof_book_is_readonly (book))
+        return nullptr;
+    auto request = new CommodityActionRequest;
+    request->book = book;
+    request->edit = original != nullptr;
+    if (original)
+        request->original_guid = *qof_instance_get_guid (original);
+    g_weak_ref_init (&request->tree, G_OBJECT (cd->commodity_tree));
+    g_object_add_weak_pointer (G_OBJECT (book),
+                               reinterpret_cast<gpointer*>(&request->book));
+    return request;
+}
+
 void
 gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data)
 {
@@ -122,11 +301,10 @@ gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data)
     if (commodity == NULL)
         return;
 
-    if (gnc_ui_edit_commodity_modal (commodity, cd->window))
-    {
-        gnc_tree_view_commodity_select_commodity (cd->commodity_tree, commodity);
-        gnc_gui_refresh_all ();
-    }
+    auto request = commodity_action_request_new (cd, commodity);
+    if (request)
+        gnc_ui_edit_commodity_async (commodity, cd->window,
+                                     commodity_action_complete, request);
 }
 
 static void
@@ -156,17 +334,52 @@ row_activated_cb (GtkTreeView *view, GtkTreePath *path,
     }
 }
 
+static void
+commodity_delete_decided (GtkWindow *parent, gint response, gpointer user_data)
+{
+    auto request = static_cast<CommodityActionRequest *> (user_data);
+    auto book = request->book;
+    if (book) g_object_ref (book);
+    if (parent && response == GTK_RESPONSE_OK && book && gnc_current_session_exist () &&
+        gnc_get_current_book () == book && !qof_book_is_readonly (book))
+    {
+        auto commodity = gnc_commodity_find_commodity_by_guid (&request->original_guid, book);
+        bool in_use = false;
+        if (commodity)
+            gnc_account_foreach_descendant (gnc_book_get_root_account (book),
+                [commodity, &in_use] (auto account) {
+                    if (xaccAccountGetCommodity (account) == commodity) in_use = true;
+                });
+        if (commodity && !in_use)
+        {
+            auto database = gnc_pricedb_get_db (book);
+            auto prices = gnc_pricedb_get_prices (database, commodity, nullptr);
+            gnc_suspend_gui_refresh ();
+            for (auto node = prices; node; node = node->next)
+                gnc_pricedb_remove_price (database, GNC_PRICE (node->data));
+            gnc_price_list_destroy (prices);
+            gnc_commodity_table_remove (gnc_commodity_table_get_table (book), commodity);
+            gnc_commodity_destroy (commodity);
+            auto tree = g_weak_ref_get (&request->tree);
+            if (tree)
+                gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree)));
+            g_clear_object (&tree);
+            gnc_resume_gui_refresh ();
+        }
+    }
+    commodity_action_complete (nullptr, nullptr, request);
+    g_clear_object (&book);
+}
+
 void
 gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 {
     auto cd = static_cast<CommoditiesDialog*>(data);
     GNCPriceDB *pdb;
-    GList *node;
     GList *prices;
     gnc_commodity *commodity;
     GtkWidget *dialog;
     const gchar *message, *warning;
-    gint response;
 
     commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
     if (commodity == NULL)
@@ -226,27 +439,14 @@ gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
                             _("_Cancel"), GTK_RESPONSE_CANCEL,
                             _("_Delete"), GTK_RESPONSE_OK,
                             (gchar *)NULL);
-    response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
-    gtk_widget_destroy (dialog);
-
-    if (response == GTK_RESPONSE_OK)
+    gnc_price_list_destroy (prices);
+    auto request = commodity_action_request_new (cd, commodity);
+    if (!request)
     {
-        gnc_commodity_table *ct;
-
-        ct = gnc_commodity_table_get_table (cd->book);
-        for (node = prices; node; node = node->next)
-            gnc_pricedb_remove_price(pdb, GNC_PRICE(node->data));
-
-        gnc_commodity_table_remove (ct, commodity);
-        gnc_commodity_destroy (commodity);
-        commodity = NULL;
-
-        // to be consistent, unselect all after remove
-        gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW(cd->commodity_tree)));
+        gtk_widget_destroy (dialog);
+        return;
     }
-
-    gnc_price_list_destroy(prices);
-    gnc_gui_refresh_all ();
+    gnc_dialog_run_async (GTK_DIALOG (dialog), warning, commodity_delete_decided, request);
 }
 
 void
@@ -254,17 +454,14 @@ gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data)
 {
     auto cd = static_cast<CommoditiesDialog*>(data);
     gnc_commodity *commodity;
-    gnc_commodity *ret_commodity;
-    const char *name_space;
 
     commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
-    if (commodity)
-        name_space = gnc_commodity_get_namespace (commodity);
-    else
-        name_space = NULL;
-
-    ret_commodity = gnc_ui_new_commodity_modal (name_space, cd->window);
-    gnc_tree_view_commodity_select_commodity (cd->commodity_tree, ret_commodity);
+    auto request = commodity_action_request_new (cd, nullptr);
+    if (request)
+        gnc_ui_new_commodity_async_full (
+            commodity ? gnc_commodity_get_namespace (commodity) : nullptr,
+            cd->window, nullptr, nullptr, nullptr, nullptr, 10000,
+            commodity_action_complete, request);
 }
 
 void
@@ -284,7 +481,12 @@ gnc_commodities_dialog_rename_namespace_clicked (GtkWidget *widget, gpointer dat
     if (!ns)
         return;
 
-    const auto ns_name = gnc_commodity_namespace_get_name (ns);
+    auto book = gnc_get_current_book ();
+    if (!book || book != cd->book || !qof_book_is_open (book) ||
+        qof_book_shutting_down (book) || qof_book_is_readonly (book))
+        return;
+
+    const auto ns_name = g_strdup (gnc_commodity_namespace_get_name (ns));
 
     GtkBuilder *builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-commodities.glade", "rename_namespace_dialog");
@@ -303,35 +505,32 @@ gnc_commodities_dialog_rename_namespace_clicked (GtkWidget *widget, gpointer dat
     gtk_entry_set_activates_default (GTK_ENTRY(entry), true);
 
     // Set our parent
-    gtk_window_set_transient_for (GTK_WINDOW(dialog),
-                                  GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+    auto parent = gtk_widget_get_toplevel (widget);
+    if (GTK_IS_WINDOW (parent))
+    {
+        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
+        gtk_window_set_destroy_with_parent (GTK_WINDOW(dialog), TRUE);
+    }
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nullptr);
-    g_object_unref (G_OBJECT(builder));
-
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-
-    bool rename_ok = false;
-    while (!rename_ok && gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
-    {
-        const auto commodity_table = gnc_get_current_commodities ();
-        const auto new_ns_name = gtk_entry_get_text (GTK_ENTRY(entry));
-
-        if (new_ns_name && *new_ns_name)
-        {
-            rename_ok = gnc_commodity_table_rename_namespace (commodity_table,
-                                                              ns_name,
-                                                              new_ns_name);
-            if (rename_ok)
-                qof_book_mark_session_dirty (gnc_get_current_book());
-            else
-                gtk_label_set_text (GTK_LABEL(label),
-                                    _("Rename failed, possibly new name exists"));
-        }
-        else
-            gtk_label_set_text (GTK_LABEL(label), _("No new name"));
-    }
-    gtk_widget_destroy (GTK_WIDGET(dialog));
+    auto request = new RenameNamespaceRequest;
+    request->book = book;
+    request->namespace_guid = *qof_instance_get_guid (ns);
+    request->old_name = ns_name;
+    g_weak_ref_init (&request->entry, entry);
+    g_weak_ref_init (&request->label, label);
+    g_object_add_weak_pointer (G_OBJECT (book),
+                               reinterpret_cast<gpointer*>(&request->book));
+    g_object_set_data_full (G_OBJECT (dialog), "gnc-rename-namespace-request",
+                            request, rename_namespace_request_free);
+    g_signal_connect (dialog, "response", G_CALLBACK (rename_namespace_response),
+                      request);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (rename_namespace_dialog_destroyed), request);
+    g_object_unref (G_OBJECT(builder));
+    gtk_widget_show_all (GTK_WIDGET (dialog));
 }
 
 static void

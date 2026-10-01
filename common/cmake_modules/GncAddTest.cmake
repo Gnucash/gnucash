@@ -122,8 +122,11 @@ endfunction()
 
 function(gnc_add_test_with_guile _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_NAME)
   get_guile_env()
+  # This helper creates a native executable, whose sanitizer runtimes are
+  # linked by CMake. The external Guile interpreter in gnc_add_scheme_test
+  # still needs ASAN_DYNAMIC_LIB_ENV.
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" "${TEST_INCLUDE_VAR_NAME}" "${TEST_LIBS_VAR_NAME}"
-    "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV}>;${ARGN}"
+    "${GUILE_ENV};${ARGN}"
   )
 endfunction()
 

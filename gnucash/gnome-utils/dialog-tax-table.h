@@ -28,13 +28,26 @@ typedef struct _taxtable_window TaxTableWindow;
 
 #include "gncTaxTable.h"
 
-/* Create a new tax-table by name */
-GncTaxTable * gnc_ui_tax_table_new_from_name (GtkWindow *parent, QofBook *book, const char *name);
+G_BEGIN_DECLS
+
+/* Create a new tax-table by name without running a nested GTK loop. The
+ * callback receives the created table only while the original parent,
+ * session, and book are still current; cancellation or invalidation passes
+ * NULL. The table is borrowed for the duration of the callback. */
+typedef void (*GncTaxTableCreateCallback) (GtkWindow *parent,
+                                            GncTaxTable *table,
+                                            gpointer user_data);
+void gnc_ui_tax_table_new_from_name_async (GtkWindow *parent, QofBook *book,
+                                           const char *name,
+                                           GncTaxTableCreateCallback callback,
+                                           gpointer user_data);
 
 /* Create a tax-table window */
 TaxTableWindow * gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book);
 
 /* Destroy a tax-table window */
 void gnc_ui_tax_table_window_destroy (TaxTableWindow *ttw);
+
+G_END_DECLS
 
 #endif /* _DIALOG_TAX-TABLE_H */

@@ -34,6 +34,7 @@
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
 
 #include "gnc-component-manager.h"
 
@@ -273,42 +274,9 @@ static void csv_import_assistant_enable_account_forward (CsvImportInfo *info)
  *
  * call back for type of separator required
  *******************************************************/
-void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
+static void
+csv_import_refresh_preview (CsvImportInfo *info)
 {
-    CsvImportInfo *info = user_data;
-    const gchar *name;
-    gchar *temp;
-    gchar *sep = NULL;
-
-    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
-    {
-        LEAVE("1st callback of pair. Defer to 2nd callback.");
-        return;
-    }
-
-    name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
-    if (g_strcmp0 (name, "radio_semi") == 0)
-        sep = ";";
-    else if (g_strcmp0 (name, "radio_colon") == 0)
-        sep = ":";
-    else
-        sep = ","; /* Use as default as well */
-
-    create_regex (info->regexp, sep);
-
-    if (g_strcmp0 (name, "radio_custom") == 0)
-    {
-        temp = gnc_input_dialog (GTK_WIDGET (info->assistant),
-                                 _("Adjust regular expression used for import"),
-                                 _("This regular expression is used to parse the import file. Modify according to your needs.\n"),
-                                  info->regexp->str);
-        if (temp)
-        {
-            g_string_assign (info->regexp, temp);
-            g_free (temp);
-        }
-    }
-
     /* Generate preview */
     gtk_list_store_clear (info->store);
     gtk_widget_set_sensitive (info->header_row_spin, TRUE);
@@ -322,6 +290,42 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
     csv_import_assistant_enable_account_forward (info);
 }
 
+static void
+csv_import_regexp_response (GtkWindow *parent, gchar *text, gpointer data)
+{
+    if (parent)
+    {
+        CsvImportInfo *info = data;
+        g_object_set_data (G_OBJECT (parent), "csv-regexp-pending", NULL);
+        gtk_widget_set_sensitive (GTK_WIDGET (parent), TRUE);
+        if (text) g_string_assign (info->regexp, text);
+        csv_import_refresh_preview (info);
+    }
+    g_free (text);
+}
+
+void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
+{
+    CsvImportInfo *info = user_data;
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)) ||
+        g_object_get_data (G_OBJECT (info->assistant), "csv-regexp-pending"))
+        return;
+    const gchar *name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
+    const gchar *sep = g_strcmp0 (name, "radio_semi") == 0 ? ";" :
+                       g_strcmp0 (name, "radio_colon") == 0 ? ":" : ",";
+    create_regex (info->regexp, sep);
+    if (g_strcmp0 (name, "radio_custom") == 0)
+    {
+        g_object_set_data (G_OBJECT (info->assistant), "csv-regexp-pending", info);
+        gtk_widget_set_sensitive (info->assistant, FALSE);
+        gnc_input_dialog_async (info->assistant,
+            _("Adjust regular expression used for import"),
+            _("This regular expression is used to parse the import file. Modify according to your needs.\n"),
+            info->regexp->str, csv_import_regexp_response, info);
+        return;
+    }
+    csv_import_refresh_preview (info);
+}
 
 /*******************************************************
  * load_settings
@@ -447,8 +451,6 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
 
     /* Before creating accounts, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
-    if (info->new_book)
-        info->new_book = gnc_new_book_option_display (info->assistant);
 
     if (g_strcmp0 (info->error, "") != 0)
     {
@@ -531,14 +533,43 @@ csv_import_assistant_close (GtkAssistant *assistant, gpointer user_data)
     gnc_close_gui_component_by_data (ASSISTANT_CSV_IMPORT_CM_CLASS, info);
 }
 
+static void
+csv_import_accounts_ready (CsvImportInfo *info)
+{
+    gtk_list_store_clear (info->store);
+    csv_import_read_file (GTK_WINDOW (info->assistant), info->file_name,
+                          info->regexp->str, info->store, 0);
+    csv_account_import (info);
+}
+
+static void
+csv_import_book_options_response (GtkWindow *parent, gint response, gpointer data)
+{
+    if (!parent) return;
+    CsvImportInfo *info = data;
+    g_object_set_data (G_OBJECT (parent), "csv-book-options-pending", NULL);
+    gtk_widget_set_sensitive (GTK_WIDGET (parent), TRUE);
+    if (response == GTK_RESPONSE_OK)
+    {
+        info->new_book = FALSE;
+        csv_import_accounts_ready (info);
+    }
+}
+
 void
 csv_import_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
     CsvImportInfo *info = user_data;
-
-    gtk_list_store_clear (info->store);
-    csv_import_read_file (GTK_WINDOW (info->assistant), info->file_name, info->regexp->str, info->store, 0 );
-    csv_account_import (info);
+    if (g_object_get_data (G_OBJECT (assistant), "csv-book-options-pending")) return;
+    if (info->new_book)
+    {
+        g_object_set_data (G_OBJECT (assistant), "csv-book-options-pending", info);
+        gtk_widget_set_sensitive (GTK_WIDGET (assistant), FALSE);
+        gnc_new_book_option_display_async (GTK_WIDGET (assistant),
+                                           csv_import_book_options_response, info);
+        return;
+    }
+    csv_import_accounts_ready (info);
 }
 
 static void
@@ -681,9 +712,10 @@ gnc_file_csv_account_import(void)
 
     csv_import_assistant_create (info);
 
-    gnc_register_gui_component (ASSISTANT_CSV_IMPORT_CM_CLASS,
+    gint component = gnc_register_gui_component (ASSISTANT_CSV_IMPORT_CM_CLASS,
                                 NULL, csv_import_close_handler,
                                 info);
+    gnc_gui_component_set_session (component, gnc_get_current_session ());
 
     gtk_widget_show_all (info->assistant);
 

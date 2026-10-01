@@ -1528,12 +1528,18 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
           entity, event_type, user_data, event_data);
     model = (GncTreeModelPrice *)user_data;
 
+    /* hard failures */
+    g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
+
+    if (qof_instance_get_book (entity) != model->book)
+    {
+        LEAVE("not in this book");
+        return;
+    }
+
     /* Do deletions if any are pending. */
     if (pending_removals)
         gnc_tree_model_price_do_deletions (model->price_db);
-
-    /* hard failures */
-    g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
 
     /* get type specific data */
     if (GNC_IS_COMMODITY(entity))

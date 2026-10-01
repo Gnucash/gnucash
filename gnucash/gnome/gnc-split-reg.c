@@ -815,6 +815,108 @@ gsr_default_paste_handler( GNCSplitReg *gsr, gpointer data )
     gnucash_register_paste_clipboard( gsr->reg );
 }
 
+typedef enum
+{
+    SPLIT_REG_CONFIRM_CUT_CURRENT,
+    SPLIT_REG_CONFIRM_EMPTY_CURRENT,
+    SPLIT_REG_CONFIRM_DELETE_SPLIT,
+    SPLIT_REG_CONFIRM_DELETE_TRANSACTION
+} SplitRegConfirmAction;
+
+typedef struct
+{
+    GNCSplitReg *gsr;
+    GtkWidget *window;
+    QofBook *book;
+    GncGUID transaction;
+    GncGUID split;
+    gboolean has_split;
+    SplitRegConfirmAction action;
+} SplitRegConfirmRequest;
+
+static void
+split_reg_confirm_response (GtkWindow*, gint response, gpointer user_data)
+{
+    SplitRegConfirmRequest *request = (SplitRegConfirmRequest*)user_data;
+    GNCSplitReg *gsr = request->gsr;
+    if (response == GTK_RESPONSE_ACCEPT && request->window &&
+        !gtk_widget_in_destruction (request->window) && gsr->ledger && gsr->reg &&
+        gnc_get_current_book () == request->book &&
+        qof_book_is_open (request->book) &&
+        !qof_book_shutting_down (request->book))
+    {
+        Transaction *trans = xaccTransLookup (&request->transaction, request->book);
+        SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+        if (trans && gnc_split_register_get_current_trans (reg) == trans)
+        {
+            Split *split = gnc_split_register_get_current_split (reg);
+            if (!request->has_split ||
+                (split && guid_equal (xaccSplitGetGUID (split), &request->split)))
+            {
+                switch (request->action)
+                {
+                case SPLIT_REG_CONFIRM_CUT_CURRENT:
+                    gnc_split_register_cut_current (reg);
+                    break;
+                case SPLIT_REG_CONFIRM_EMPTY_CURRENT:
+                {
+                    VirtualCellLocation loc;
+                    if (split && gnc_split_register_get_split_virt_loc (reg, split, &loc))
+                    {
+                        split = gnc_split_register_get_current_trans_split (reg, &loc);
+                        gnc_split_register_empty_current_trans_except_split (reg, split);
+                    }
+                    break;
+                }
+                case SPLIT_REG_CONFIRM_DELETE_SPLIT:
+                    gnc_split_register_delete_current_split (reg);
+                    break;
+                case SPLIT_REG_CONFIRM_DELETE_TRANSACTION:
+                    gnc_split_register_delete_current_trans (reg);
+                    break;
+                }
+            }
+        }
+    }
+    g_object_unref (request->book);
+    g_object_unref (request->window);
+    g_object_unref (request->gsr);
+    g_free (request);
+}
+
+static void
+split_reg_confirm_async (GtkDialog *dialog, const gchar *pref_key,
+                         GNCSplitReg *gsr, Transaction *trans, Split *split,
+                         SplitRegConfirmAction action)
+{
+    SplitRegConfirmRequest *request;
+
+    g_return_if_fail (GTK_IS_DIALOG (dialog));
+    g_return_if_fail (IS_GNC_SPLIT_REG (gsr));
+    g_return_if_fail (GTK_IS_WIDGET (gsr->window));
+    g_return_if_fail (trans != NULL);
+
+    request = g_new0 (SplitRegConfirmRequest, 1);
+    request->gsr = GNC_SPLIT_REG (g_object_ref (gsr));
+    request->window = g_object_ref (gsr->window);
+    request->book = qof_instance_get_book (QOF_INSTANCE (trans));
+    if (!request->book)
+    {
+        g_object_unref (request->window);
+        g_object_unref (request->gsr);
+        g_free (request);
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+        return;
+    }
+    g_object_ref (request->book);
+    request->transaction = *xaccTransGetGUID (trans);
+    request->has_split = split != NULL;
+    if (split)
+        request->split = *xaccSplitGetGUID (split);
+    request->action = action;
+    gnc_dialog_run_async (dialog, pref_key, split_reg_confirm_response, request);
+}
+
 /**
  * Paste the clipboard to the selection.  This refers to the Split.
  **/
@@ -833,7 +935,6 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
     Transaction *trans;
     Split *split;
     GtkWidget *dialog;
-    gint response;
     const gchar *warning;
 
     reg = gnc_ledger_display_get_split_register (gsr->ledger);
@@ -903,8 +1004,9 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                                  "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                          "%s", anchor_split);
-                gtk_dialog_run (GTK_DIALOG(dialog));
-                gtk_widget_destroy (dialog);
+                g_signal_connect_swapped (dialog, "response",
+                                          G_CALLBACK (gtk_widget_destroy), dialog);
+                gtk_widget_show (dialog);
                 return;
             }
         }
@@ -939,12 +1041,8 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Cut Split"),
                                    "edit-delete", GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_ACCEPT)
-            return;
-
-        gnc_split_register_cut_current (reg);
+        split_reg_confirm_async (GTK_DIALOG (dialog), warning, gsr, trans, split,
+                                 SPLIT_REG_CONFIRM_CUT_CURRENT);
         return;
     }
 
@@ -977,12 +1075,8 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Cut Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run (GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_ACCEPT)
-            return;
-
-        gnc_split_register_cut_current (reg);
+        split_reg_confirm_async (GTK_DIALOG (dialog), warning, gsr, trans, NULL,
+                                 SPLIT_REG_CONFIRM_CUT_CURRENT);
         return;
     }
 }
@@ -1091,7 +1185,7 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
 
     if (xaccTransGetReversedBy(trans))
     {
-        gnc_error_dialog (GTK_WINDOW (gsr->window), "%s",
+        gnc_error_dialog_async (GTK_WINDOW (gsr->window), "%s",
                           _("A reversing entry has already been created for this transaction."));
         return;
     }
@@ -1128,15 +1222,16 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
     if (xaccTransIsReadonlyByPostedDate (trans))
     {
         dialog = gtk_message_dialog_new(parent,
-                                        0,
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
                                         "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
                         "This setting can be changed in File->Properties->Accounts."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        g_signal_connect_swapped (dialog, "response",
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_widget_show (dialog);
         return TRUE;
     }
 
@@ -1144,14 +1239,15 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
     if (reason)
     {
         dialog = gtk_message_dialog_new(parent,
-                                        0,
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
                                         "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 message, reason);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        g_signal_connect_swapped (dialog, "response",
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_widget_show (dialog);
         return TRUE;
     }
     return FALSE;
@@ -1161,12 +1257,9 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
 void
 gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
 {
-    VirtualCellLocation vcell_loc;
     SplitRegister *reg;
     Transaction *trans;
-    Split *split;
     GtkWidget *dialog;
-    gint response;
     const gchar *warning;
 
     const char *title = _("Remove the splits from this transaction?");
@@ -1201,21 +1294,9 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
                               /* Translators: This is the confirmation button in a warning dialog */
                               _("_Remove Splits"),
                               "edit-delete", GTK_RESPONSE_ACCEPT);
-    response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
-    gtk_widget_destroy (dialog);
-    if (response != GTK_RESPONSE_ACCEPT)
-        return;
-
-    /*
-     * Find the "transaction" split for the current transaction. This is
-     * the split that appears at the top of the transaction in the
-     * register.
-     */
-    split = gnc_split_register_get_current_split (reg);
-    if (!gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
-        return;
-    split = gnc_split_register_get_current_trans_split (reg, &vcell_loc);
-    gnc_split_register_empty_current_trans_except_split (reg, split);
+    Split *current_split = gnc_split_register_get_current_split (reg);
+    split_reg_confirm_async (GTK_DIALOG (dialog), warning, gsr, trans,
+                             current_split, SPLIT_REG_CONFIRM_EMPTY_CURRENT);
 }
 
 /**
@@ -1228,6 +1309,44 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "reinit_ent" );
 }
 
+typedef struct
+{
+    GtkWidget *window;
+    QofBook *book;
+    GncGUID trans_guid;
+    gchar *old_uri;
+} SplitRegDoclinkRequest;
+
+static void
+gsr_doclink_edit_completed (GtkWindow *parent, gchar *uri,
+                            gpointer user_data)
+{
+    SplitRegDoclinkRequest *request = user_data;
+    if (parent && request->window && request->book &&
+        GTK_WIDGET (parent) == request->window &&
+        gnc_get_current_book () == request->book &&
+        qof_book_is_open (request->book) &&
+        !qof_book_shutting_down (request->book))
+    {
+        Transaction *trans = xaccTransLookup (&request->trans_guid,
+                                               request->book);
+        if (trans && !xaccTransIsReadonlyByPostedDate (trans) &&
+            !xaccTransGetReadOnly (trans) &&
+            !qof_book_is_readonly (request->book) && uri &&
+            g_strcmp0 (request->old_uri, uri) != 0)
+            xaccTransSetDocLink (trans, uri);
+    }
+    if (request->window)
+        g_object_remove_weak_pointer (G_OBJECT (request->window),
+                                      (gpointer *)&request->window);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+    g_free (request->old_uri);
+    g_free (request);
+    g_free (uri);
+}
+
 /* Edit the document link for the current transaction. */
 void
 gsr_default_doclink_handler (GNCSplitReg *gsr)
@@ -1237,7 +1356,7 @@ gsr_default_doclink_handler (GNCSplitReg *gsr)
     Transaction *trans;
     CursorClass cursor_class;
     gchar *uri;
-    gchar *ret_uri;
+    SplitRegDoclinkRequest *request;
 
     /* get the current split based on cursor position */
     if (!split)
@@ -1258,15 +1377,25 @@ gsr_default_doclink_handler (GNCSplitReg *gsr)
     // fix an earlier error when storing relative paths before version 3.5
     uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    ret_uri =
-        gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
-                                    _("Change a Transaction Linked Document"),
-                                    uri);
-
-    if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-        xaccTransSetDocLink (trans, ret_uri);
-
-    g_free (ret_uri);
+    request = g_new0 (SplitRegDoclinkRequest, 1);
+    request->window = gsr->window;
+    request->book = xaccTransGetBook (trans);
+    request->trans_guid = *xaccTransGetGUID (trans);
+    request->old_uri = g_strdup (uri);
+    if (!request->book)
+    {
+        g_free (request->old_uri);
+        g_free (request);
+        g_free (uri);
+        return;
+    }
+    g_object_add_weak_pointer (G_OBJECT (request->window),
+                               (gpointer *)&request->window);
+    g_object_add_weak_pointer (G_OBJECT (request->book),
+                               (gpointer *)&request->book);
+    gnc_doclink_get_uri_dialog_async (
+        GTK_WINDOW (gsr->window), _("Change a Transaction Linked Document"),
+        uri, gsr_doclink_edit_completed, request);
     g_free (uri);
 }
 
@@ -1360,7 +1489,6 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     Transaction *trans;
     Split *split;
     GtkWidget *dialog;
-    gint response;
     const gchar *warning;
 
     reg = gnc_ledger_display_get_split_register( gsr->ledger );
@@ -1429,8 +1557,9 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                                                 "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                         "%s", anchor_split);
-                gtk_dialog_run(GTK_DIALOG(dialog));
-                gtk_widget_destroy (dialog);
+                g_signal_connect_swapped (dialog, "response",
+                                          G_CALLBACK (gtk_widget_destroy), dialog);
+                gtk_widget_show (dialog);
                 return;
             }
         }
@@ -1466,12 +1595,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                               _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_ACCEPT)
-            return;
-
-        gnc_split_register_delete_current_split (reg);
+        split_reg_confirm_async (GTK_DIALOG (dialog), warning, gsr, trans, split,
+                                 SPLIT_REG_CONFIRM_DELETE_SPLIT);
         return;
     }
 
@@ -1506,12 +1631,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                               _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_ACCEPT)
-            return;
-
-        gnc_split_register_delete_current_trans (reg);
+        split_reg_confirm_async (GTK_DIALOG (dialog), warning, gsr, trans, NULL,
+                                 SPLIT_REG_CONFIRM_DELETE_TRANSACTION);
         return;
     }
 }
@@ -1529,8 +1650,8 @@ gnc_split_reg_delete_trans_cb(GtkWidget *widget, gpointer data)
 void
 gsr_default_dup_handler( GNCSplitReg *gsr, gpointer data )
 {
-    gnc_split_register_duplicate_current
-    (gnc_ledger_display_get_split_register( gsr->ledger ));
+    gnc_split_register_duplicate_current_async
+    (gnc_ledger_display_get_split_register (gsr->ledger), G_OBJECT (gsr->window));
 }
 
 /**
@@ -1661,30 +1782,71 @@ gnc_split_reg_expand_trans_toolbar_cb (GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "expand_ent" );
 }
 
-gboolean
-gnc_split_reg_clear_filter_for_split (GNCSplitReg *gsr, Split *split)
+typedef struct
+{
+    GNCSplitReg *gsr;
+    GtkWidget *window;
+    GncSplitRegClearFilterCallback completed;
+    gpointer user_data;
+} SplitRegClearFilterRequest;
+
+static void
+split_reg_clear_filter_response (GtkWindow *dialog, gint response,
+                                 gpointer user_data)
+{
+    SplitRegClearFilterRequest *request =
+        (SplitRegClearFilterRequest*)user_data;
+    gboolean owner_alive = request->window &&
+        !gtk_widget_in_destruction (request->window) &&
+        request->gsr->ledger && request->gsr->reg;
+
+    request->completed (owner_alive && response == GTK_RESPONSE_OK,
+                        request->user_data);
+    g_object_unref (request->window);
+    g_object_unref (request->gsr);
+    g_free (request);
+}
+
+void
+gnc_split_reg_clear_filter_for_split_async (GNCSplitReg *gsr, Split *split,
+                                             GncSplitRegClearFilterCallback completed,
+                                             gpointer user_data)
 {
     VirtualCellLocation vcell_loc;
     SplitRegister *reg;
 
+    g_return_if_fail (completed != NULL);
     if (!gsr)
-        return FALSE;
+    {
+        completed (FALSE, user_data);
+        return;
+    }
+
+    if (!gsr->ledger || !gsr->reg || !gsr->window || !split)
+    {
+        completed (FALSE, user_data);
+        return;
+    }
 
     reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
     if (!gnc_split_register_get_split_virt_loc (reg, split, &vcell_loc))
     {
-        gint response = gnc_ok_cancel_dialog (GTK_WINDOW(gsr->window),
-             GTK_RESPONSE_CANCEL,
-             (_("Target split is currently hidden in this register.\n\n%s\n\n"
-                "Select OK to temporarily clear filter and proceed,\n"
-                "otherwise the last active cell will be selected.")),
-             gsr->filter_text);
-
-        if (response == GTK_RESPONSE_OK)
-            return TRUE;
+        SplitRegClearFilterRequest *request =
+            g_new (SplitRegClearFilterRequest, 1);
+        request->gsr = GNC_SPLIT_REG (g_object_ref (gsr));
+        request->window = g_object_ref (gsr->window);
+        request->completed = completed;
+        request->user_data = user_data;
+        gnc_ok_cancel_dialog_async (GTK_WINDOW (gsr->window), GTK_RESPONSE_CANCEL,
+            split_reg_clear_filter_response, request,
+            _("Target split is currently hidden in this register.\n\n%s\n\n"
+              "Select OK to temporarily clear filter and proceed,\n"
+              "otherwise the last active cell will be selected."),
+            gsr->filter_text);
+        return;
     }
-    return FALSE;
+    completed (FALSE, user_data);
 }
 
 /**
@@ -1841,6 +2003,17 @@ create_balancing_transaction(QofBook *book, Account *account,
     return trans;
 }
 
+static void
+gsr_blank_saved (SplitRegister *reg, gboolean saved, gpointer user_data)
+{
+    GNCSplitReg *gsr = GNC_SPLIT_REG (user_data);
+    if (reg && saved && !gtk_widget_in_destruction (GTK_WIDGET (gsr)))
+        gnc_split_register_redraw (reg);
+    if (!gtk_widget_in_destruction (GTK_WIDGET (gsr)))
+        gnc_split_reg_jump_to_blank (gsr);
+    g_object_unref (gsr);
+}
+
 void
 gsr_default_blank_handler( GNCSplitReg *gsr, gpointer data )
 {
@@ -1850,10 +2023,8 @@ gsr_default_blank_handler( GNCSplitReg *gsr, gpointer data )
 
     reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
-    if (gnc_split_register_save (reg, TRUE))
-        gnc_split_register_redraw (reg);
-
-    gnc_split_reg_jump_to_blank (gsr);
+    gnc_split_register_save_async (reg, TRUE, gsr_blank_saved,
+                                   g_object_ref (gsr));
     LEAVE(" ");
 }
 
@@ -2104,25 +2275,12 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, Refresh ref)
         gnc_ledger_display_refresh( gsr->ledger );
 }
 
-static gboolean
-gnc_split_reg_record (GNCSplitReg *gsr)
+typedef struct
 {
-    ENTER("gsr=%p", gsr);
-
-    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
-
-    if (!gnc_split_register_save (reg, TRUE))
-    {
-        LEAVE("no save");
-        return FALSE;
-    }
-
-    /* Explicit redraw shouldn't be needed,
-     * since gui_refresh events should handle this. */
-    /* gnc_split_register_redraw (reg); */
-    LEAVE(" ");
-    return TRUE;
-}
+    GNCSplitReg *gsr;
+    gboolean next_transaction;
+    gboolean goto_blank;
+} SplitRegEnterRequest;
 
 static gboolean
 gnc_split_reg_match_trans_row( VirtualLocation virt_loc,
@@ -2146,6 +2304,33 @@ gnc_split_reg_goto_next_trans_row (GNCSplitReg *gsr)
             gnc_split_reg_match_trans_row,
             gsr );
     LEAVE(" ");
+}
+
+static void
+gnc_split_reg_enter_after_save (SplitRegister *reg, gboolean saved,
+                                gpointer user_data)
+{
+    SplitRegEnterRequest *request = user_data;
+    GNCSplitReg *gsr = request->gsr;
+    if (!reg || gtk_widget_in_destruction (GTK_WIDGET (gsr)))
+        goto cleanup;
+    if (!saved)
+    {
+        gnc_split_reg_focus_on_sheet (gsr);
+        if (gnc_table_current_cursor_changed (reg->table, FALSE))
+            goto cleanup;
+    }
+    if (!request->goto_blank && request->next_transaction)
+        gnc_split_register_expand_current_trans (reg, FALSE);
+    if (request->goto_blank)
+        gnc_split_reg_jump_to_blank (gsr);
+    else if (request->next_transaction)
+        gnc_split_reg_goto_next_trans_row (gsr);
+    else
+        gnucash_register_goto_next_virt_row (gsr->reg);
+cleanup:
+    g_object_unref (gsr);
+    g_free (request);
 }
 
 void
@@ -2183,34 +2368,12 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
             }
         }
     }
-    /* First record the transaction. This will perform a refresh. */
-    if (!gnc_split_reg_record (gsr))
-    {
-        /* we may come here from the transfer cell if we decline to create a
-         * new account, make sure the sheet has the focus if the record is FALSE
-         * which results in no cursor movement. */
-        gnc_split_reg_focus_on_sheet (gsr);
-
-        /* if there are no changes, just enter was pressed, proceed to move
-         * other wise lets not move. */
-        if (gnc_table_current_cursor_changed (sr->table, FALSE))
-        {
-            LEAVE(" ");
-            return;
-        }
-    }
-
-    if (!goto_blank && next_transaction)
-        gnc_split_register_expand_current_trans (sr, FALSE);
-
-    /* Now move. */
-    if (goto_blank)
-        gnc_split_reg_jump_to_blank( gsr );
-    else if (next_transaction)
-        gnc_split_reg_goto_next_trans_row( gsr );
-    else
-        gnucash_register_goto_next_virt_row( gsr->reg );
-    LEAVE(" ");
+    SplitRegEnterRequest *request = g_new0 (SplitRegEnterRequest, 1);
+    request->gsr = GNC_SPLIT_REG (g_object_ref (gsr));
+    request->next_transaction = next_transaction;
+    request->goto_blank = goto_blank;
+    gnc_split_register_save_async (sr, TRUE, gnc_split_reg_enter_after_save, request);
+    LEAVE("waiting for save");
 }
 
 void
@@ -2381,6 +2544,14 @@ typedef struct dialog_args
     gchar *string;
 } dialog_args;
 
+static void
+split_reg_read_only_warning_response ([[maybe_unused]] GtkWindow *dialog,
+                                      [[maybe_unused]] gint response,
+                                      [[maybe_unused]] gpointer user_data)
+{
+    /* The warning has no follow-up action; its response only closes it. */
+}
+
 /**
  * Gtk has occasional problems with performing function as part of a
  * callback.  This routine gets called via a timer callback to get it out of
@@ -2422,8 +2593,8 @@ gtk_callback_bug_workaround (gpointer argp)
                                     "%s", read_only);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
             "%s", args->string);
-    gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
-    gtk_widget_destroy(dialog);
+    gnc_dialog_run_async (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_IS_READ_ONLY,
+                          split_reg_read_only_warning_response, NULL);
     g_free(read_only);
     g_free(args);
     return FALSE;

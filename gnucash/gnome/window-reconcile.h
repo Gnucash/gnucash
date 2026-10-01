@@ -25,6 +25,8 @@
 #define WINDOW_RECONCILE_H
 
 #include "Account.h"
+#include "gnc-date.h"
+#include "gnc-numeric.h"
 #include <gtk/gtk.h>
 
 #ifdef __cplusplus
@@ -34,6 +36,10 @@ extern "C" {
 
 /** STRUCTS *********************************************************/
 typedef struct _RecnWindow RecnWindow;
+typedef void (*GncReconcileStartedCallback) (gboolean accepted,
+                                              gnc_numeric ending,
+                                              time64 statement_date,
+                                              gpointer user_data);
 
 
 /** PROTOTYPES ******************************************************/
@@ -45,10 +51,14 @@ typedef struct _RecnWindow RecnWindow;
  * Args:   parent  - the parent of this window                      *
  *         account - the account to reconcile                       *
  *
- * Return: recnData - the instance of this RecnWindow, or NULL if the
- * user pressed Cancel in the initial date query.
+ * The callback receives accepted FALSE on cancellation or owner destruction.
+ * On acceptance it receives the entered ending balance and statement date;
+ * the caller can then create the reconciliation window with
+ * recnWindowWithBalance().
 \********************************************************************/
-RecnWindow *recnWindow (GtkWidget *parent, Account *account);
+void recnWindow_async (GtkWidget *parent, Account *account,
+                       GncReconcileStartedCallback callback,
+                       gpointer user_data);
 
 /********************************************************************\
  * recnWindowWithBalance

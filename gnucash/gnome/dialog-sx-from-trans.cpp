@@ -66,6 +66,9 @@ static void sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data );
 static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
 
 static void sxftd_destroy( GtkWidget *w, gpointer user_data );
+typedef struct _SXFromTransInfo SXFromTransInfo;
+static void sxftd_ok_clicked (SXFromTransInfo *sxfti);
+typedef struct _SxftiConfirmRequest SxftiConfirmRequest;
 
 typedef enum { FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
                                  * the numeric equivalences explicitly here */
@@ -76,7 +79,7 @@ typedef enum { FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
                FREQ_ANNUALLY
              } SxftiFreqType;
 
-typedef struct
+struct _SXFromTransInfo
 {
     GtkBuilder *builder;
     GtkWidget *dialog;
@@ -95,8 +98,15 @@ typedef struct
     GncDenseCal *example_cal;
 
     GNCDateEdit *startDateGDE, *endDateGDE;
+    SxftiConfirmRequest *confirm_request;
 
-} SXFromTransInfo;
+};
+
+struct _SxftiConfirmRequest
+{
+    SXFromTransInfo *sxfti;
+    QofBook *book;
+};
 
 typedef struct
 {
@@ -255,23 +265,13 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
         tti->append_template_split (ttsi);
     }
 
-    if ( ! gnc_numeric_zero_p( runningBalance )
-            && !gnc_verify_dialog (GTK_WINDOW (sxfti->dialog),
-                                   FALSE, "%s",
-                                   _("The Scheduled Transaction Editor "
-                                     "cannot automatically balance "
-                                     "this transaction. "
-                                     "Should it still be "
-                                     "entered?") ) )
-    {
-        return SXFTD_ERRNO_UNBALANCED_XACTION;
-    }
+    auto unbalanced = !gnc_numeric_zero_p (runningBalance);
 
     gnc_suspend_gui_refresh ();
     xaccSchedXactionSetTemplateTrans (sxfti->sx, { tti }, gnc_get_current_book ());
     gnc_resume_gui_refresh ();
 
-    return 0;
+    return unbalanced ? SXFTD_ERRNO_UNBALANCED_XACTION : 0;
 }
 
 
@@ -617,6 +617,12 @@ sxftd_destroy( GtkWidget *w, gpointer user_data )
 {
     SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
 
+    if (sxfti->confirm_request)
+    {
+        sxfti->confirm_request->sxfti = NULL;
+        sxfti->confirm_request = NULL;
+    }
+
     if ( sxfti->sx )
     {
         gnc_sx_begin_edit(sxfti->sx);
@@ -631,6 +637,37 @@ sxftd_destroy( GtkWidget *w, gpointer user_data )
     g_free(sxfti);
 }
 
+static bool
+sxftd_template_would_be_unbalanced (SXFromTransInfo *sxfti)
+{
+    gnc_numeric running = gnc_numeric_zero ();
+    for (auto node = xaccTransGetSplitList (sxfti->trans); node; node = node->next)
+        running = gnc_numeric_add (running,
+                                   xaccSplitGetValue (GNC_SPLIT (node->data)),
+                                   100, GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD);
+    return !gnc_numeric_zero_p (running);
+}
+
+static void
+sxftd_unbalanced_confirmed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    auto request = static_cast<SxftiConfirmRequest *> (user_data);
+    auto sxfti = request ? request->sxfti : NULL;
+    if (sxfti && parent == GTK_WINDOW (sxfti->dialog) &&
+        request->book == gnc_get_current_book () &&
+        !qof_book_shutting_down (request->book))
+    {
+        sxfti->confirm_request = NULL;
+        if (response == GTK_RESPONSE_YES)
+            sxftd_ok_clicked (sxfti);
+    }
+    if (request)
+    {
+        g_clear_object (&request->book);
+        g_free (request);
+    }
+}
+
 
 static void
 gnc_sx_trans_window_response_cb (GtkDialog *dialog,
@@ -640,10 +677,28 @@ gnc_sx_trans_window_response_cb (GtkDialog *dialog,
     SXFromTransInfo *sxfti = (SXFromTransInfo *)data;
 
     ENTER(" dialog %p, response %d, sx %p", dialog, response, sxfti);
+    if (!sxfti)
+        return;
     switch (response)
     {
     case GTK_RESPONSE_OK:
         DEBUG(" OK");
+        if (sxfti->confirm_request)
+            break;
+        if (sxftd_template_would_be_unbalanced (sxfti))
+        {
+            auto request = g_new0 (SxftiConfirmRequest, 1);
+            request->sxfti = sxfti;
+            request->book = static_cast<QofBook *> (
+                g_object_ref (gnc_get_current_book ()));
+            sxfti->confirm_request = request;
+            gnc_verify_dialog_async (GTK_WINDOW (dialog), FALSE,
+                                     sxftd_unbalanced_confirmed, request,
+                                     "%s", _("The Scheduled Transaction Editor "
+                                                "cannot automatically balance "
+                                                "this transaction. Should it still be entered?"));
+            break;
+        }
         sxftd_ok_clicked(sxfti);
         break;
     case SXFTD_RESPONSE_ADVANCED:
