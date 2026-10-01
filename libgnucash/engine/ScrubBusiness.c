@@ -693,10 +693,11 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
     PINFO ("Cleaning up superfluous lot links in account %s\n", str);
     xaccAccountBeginEdit(acc);
 
-restart:
-    curr_split_no = 0;
     splits = xaccAccountGetSplitList(acc);
     split_count = xaccAccountGetSplitsSize (acc);
+
+restart:
+    curr_split_no = 0;
     for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
