@@ -101,7 +101,14 @@ get_controller (gpointer user_data)
 namespace { // Isolate class-scope to this file.
 
 class InvoicesFilter {
+    enum Preset {
+        CUSTOM,
+        OVERDUE
+    };
+
     // State
+    Preset        preset = Preset::CUSTOM;
+    int           overdue_days = 0;
     bool          show_paid = true;
     bool          show_unpaid = true;
     bool          show_posted = true;
@@ -112,14 +119,25 @@ class InvoicesFilter {
     bool          use_end_date = false;
     time64        start_date = 0;
     time64        end_date = 0;
-    bool          only_overdue = false;
     std::string   search_term;
     // State end
 
 public:
-    Controller *controller = nullptr;
-
+    Controller      *controller = nullptr;
     GtkWidget       *dialog = nullptr;
+
+    GtkToggleButton *custom_toggle = nullptr;
+    GtkToggleButton *overdue_toggle = nullptr;
+    GtkWidget       *custom_controls = nullptr;
+    GtkWidget       *overdue_controls = nullptr;
+
+    GtkToggleButton *overdue_days_zero = nullptr;
+    GtkToggleButton *overdue_days_seven = nullptr;
+    GtkToggleButton *overdue_days_fourteen = nullptr;
+    GtkToggleButton *overdue_days_thirty = nullptr;
+    GtkToggleButton *overdue_days_sixty = nullptr;
+    GtkToggleButton *overdue_days_ninety = nullptr;
+
     GtkToggleButton *paid_toggle = nullptr;
     GtkToggleButton *unpaid_toggle = nullptr;
     GtkToggleButton *posted_toggle = nullptr;
@@ -130,7 +148,6 @@ public:
     GtkToggleButton *end_toggle = nullptr;
     GNCDateEdit     *start_picker = nullptr;
     GNCDateEdit     *end_picker = nullptr;
-    GtkToggleButton *overdue_toggle = nullptr;
     GtkEntry        *search_entry = nullptr;
 
     void dialog_open();
@@ -149,6 +166,18 @@ private:
     {
         dialog = nullptr;
 
+        custom_toggle = nullptr;
+        overdue_toggle = nullptr;
+        custom_controls = nullptr;
+        overdue_controls = nullptr;
+
+        overdue_days_zero = nullptr;
+        overdue_days_seven = nullptr;
+        overdue_days_fourteen = nullptr;
+        overdue_days_thirty = nullptr;
+        overdue_days_sixty = nullptr;
+        overdue_days_ninety = nullptr;
+
         paid_toggle = nullptr;
         unpaid_toggle = nullptr;
         posted_toggle = nullptr;
@@ -159,39 +188,109 @@ private:
         end_toggle = nullptr;
         start_picker = nullptr;
         end_picker = nullptr;
-        overdue_toggle = nullptr;
         search_entry = nullptr;
     }
 
     bool 
     reset ()
     {
-        if (show_paid && show_unpaid
+        if (preset == Preset::CUSTOM
+            && show_paid && show_unpaid
             && show_posted && show_unposted
             && show_invoices && show_creditnotes
             && search_term == ""
-            && !use_start_date && !use_end_date
-            && !only_overdue)
+            && !use_start_date && !use_end_date)
+        {
+            return false;
+        }
+        else if (preset == Preset::OVERDUE
+                 && overdue_days == 0
+                 && search_term == "")
         {
             return false;
         }
 
-        set_paid (true);
-        set_unpaid (true);
-        set_posted (true);
-        set_unposted (true);
-        set_invoices (true);
-        set_creditnotes (true);
-        set_use_start_date (false);
-        set_use_end_date (false);
-        set_overdue (false);
-        set_search_term ("");
+        if (preset == Preset::CUSTOM)
+        {
+            set_paid (true);
+            set_unpaid (true);
+            set_posted (true);
+            set_unposted (true);
+            set_invoices (true);
+            set_creditnotes (true);
+            set_use_start_date (false);
+            set_use_end_date (false);
+            reset_dates ();
+        }
+        else if (preset == Preset::OVERDUE)
+        {
+            set_overdue_days (overdue_days_zero);
+        }
 
-        reset_dates ();
+        set_search_term ("");
 
         g_warn_if_fail (dialog);
 
         return true;
+    }
+
+    void
+    resize_window ()
+    {
+        g_return_if_fail (dialog);
+
+        GtkRequisition requisition;
+        gtk_widget_get_preferred_size (GTK_WIDGET(dialog),
+                                       nullptr,
+                                       &requisition);
+
+        gtk_window_resize (GTK_WINDOW (dialog),
+                           requisition.width,
+                           requisition.height);
+    }
+
+    void
+    set_preset (Preset p)
+    {
+        preset = p;
+        GtkToggleButton *toggle;
+
+        switch (p)
+        {
+        case Preset::CUSTOM:
+          toggle = custom_toggle;
+          gtk_widget_hide (overdue_controls);
+          gtk_widget_show (custom_controls);
+          break;
+        case Preset::OVERDUE:
+            toggle = overdue_toggle;
+            gtk_widget_hide (custom_controls);
+            gtk_widget_show (overdue_controls);
+            break;
+        }
+
+        if (toggle) gtk_toggle_button_set_active (toggle, true);
+        else g_warn_if_fail (true);
+
+        resize_window ();
+    }
+
+    void
+    set_overdue_days (GtkToggleButton *button)
+    {
+        int days = 0;
+
+        g_return_if_fail (button);
+
+        gtk_toggle_button_set_active (button, true);
+
+        if (button == overdue_days_seven) days = 7;
+        else if (button == overdue_days_fourteen) days = 14;
+        else if (button == overdue_days_thirty) days = 30;
+        else if (button == overdue_days_sixty) days = 60;
+        else if (button == overdue_days_ninety) days = 90;
+
+        overdue_days = days;
     }
 
     void
@@ -249,21 +348,20 @@ private:
     }
 
     void
-    set_overdue (bool status)
-    {
-        only_overdue = status;
-
-        if (overdue_toggle) gtk_toggle_button_set_active(overdue_toggle, only_overdue);
-        else g_warn_if_fail(true);
-    }
-
-    void
     set_search_term (const char *term)
     {
         search_term = term;
 
         if (search_entry) gtk_entry_set_text(search_entry, search_term.c_str());
         else g_warn_if_fail(true);
+    }
+
+    void
+    set_search_term ()
+    {
+        const gchar *text = gtk_entry_get_text(search_entry);
+
+        set_search_term (text);
     }
 
     void
@@ -880,6 +978,129 @@ InvoicesFilter::dialog_open()
     );
 
     {
+        custom_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "preset-custom"));
+        overdue_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "preset-overdue"));
+        custom_controls = GTK_WIDGET (gtk_builder_get_object(builder, "custom-controls"));
+        overdue_controls = GTK_WIDGET (gtk_builder_get_object(builder, "overdue-controls"));
+
+        if (!custom_toggle || !overdue_toggle || !custom_controls || !overdue_controls)
+            g_warn_if_fail(true);
+        else
+        {
+            {
+                auto owner_type = controller->get_owner();
+
+                if (owner_type == GNC_OWNER_VENDOR)
+                {
+                    gtk_button_set_label(
+                        GTK_BUTTON (overdue_toggle),
+                        _("Overdue Bills")
+                    );
+                }
+                else if (owner_type == GNC_OWNER_EMPLOYEE)
+                {
+                    gtk_button_set_label(
+                        GTK_BUTTON (overdue_toggle),
+                        _("Overdue Expense Vouchers")
+                    );
+                }
+            }
+
+            g_signal_connect(
+                custom_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        if (!gtk_toggle_button_get_active(button)) return false;
+
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_preset (Preset::CUSTOM);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this
+            );
+
+            g_signal_connect(
+                overdue_toggle,
+                "toggled",
+                G_CALLBACK(
+                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                    {
+                        if (!gtk_toggle_button_get_active(button)) return false;
+
+                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                        filter->set_preset (Preset::OVERDUE);
+                        filter->controller->apply_filter ();
+
+                        return false;
+                    }
+                ),
+                this
+            );
+        }
+
+        set_preset (preset);
+    }
+
+    {
+        overdue_days_zero = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-0"));
+        overdue_days_seven = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-7"));
+        overdue_days_fourteen = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-14"));
+        overdue_days_thirty = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-30"));
+        overdue_days_sixty = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-60"));
+        overdue_days_ninety = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-90"));
+
+        if (!overdue_days_zero || !overdue_days_seven || !overdue_days_fourteen || !overdue_days_thirty || !overdue_days_sixty || !overdue_days_ninety)
+            g_warn_if_fail(true);
+        else
+        {
+            GtkToggleButton *toggles[] = {
+                overdue_days_zero, overdue_days_seven, overdue_days_fourteen,
+                overdue_days_thirty, overdue_days_sixty, overdue_days_ninety
+            };
+
+            switch (overdue_days)
+            {
+            case 0: set_overdue_days (overdue_days_zero); break;
+            case 7: set_overdue_days (overdue_days_seven); break;
+            case 14: set_overdue_days (overdue_days_fourteen); break;
+            case 30: set_overdue_days (overdue_days_thirty); break;
+            case 60: set_overdue_days (overdue_days_sixty); break;
+            case 90: set_overdue_days (overdue_days_ninety); break;
+            default: break;
+            }
+
+            for (size_t i = 0; i < std::size (toggles); i++)
+            {
+                g_signal_connect(
+                    toggles[i],
+                    "toggled",
+                    G_CALLBACK(
+                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
+                        {
+                            if (!gtk_toggle_button_get_active(button)) return false;
+
+                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                            filter->set_overdue_days (button);
+                            filter->controller->apply_filter ();
+
+                            return false;
+                        }
+                    ),
+                    this
+                );
+            }
+        }
+    }
+
+    {
         paid_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "show-paid"));
 
         if (!paid_toggle)
@@ -1233,55 +1454,6 @@ InvoicesFilter::dialog_open()
     }
 
     {
-        overdue_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "only-overdue"));
-
-        if (!overdue_toggle)
-        {
-            g_warn_if_fail(true);
-        }
-        else
-        {
-            auto owner_type = controller->get_owner();
-
-            if (owner_type == GNC_OWNER_VENDOR)
-            {
-                gtk_button_set_label(
-                    GTK_BUTTON (overdue_toggle),
-                    _("ONLY overdue Bills")
-                );
-            }
-            else if (owner_type == GNC_OWNER_EMPLOYEE)
-            {
-                gtk_button_set_label(
-                    GTK_BUTTON (overdue_toggle),
-                    _("ONLY overdue Expense Vouchers")
-                );
-            }
-
-            gtk_toggle_button_set_active(overdue_toggle, only_overdue);
-            set_overdue (only_overdue);
-
-            g_signal_connect(
-                overdue_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
-
-                        filter->set_overdue (state);
-                        filter->controller->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this
-            );
-        }
-    }
-
-    {
         search_entry = GTK_ENTRY (gtk_builder_get_object(builder, "search"));
 
         if (!search_entry)
@@ -1312,7 +1484,7 @@ InvoicesFilter::dialog_open()
 
             g_signal_connect(
                 search_entry,
-                "changed",
+                "activate",
                 G_CALLBACK(
                     +[] (GtkEditable *editable,
                           gpointer    user_data)
@@ -1324,6 +1496,27 @@ InvoicesFilter::dialog_open()
                         filter->controller->apply_filter ();
                     }
                 ),
+                this
+            );
+        }
+
+        auto *apply_button = GTK_BUTTON (gtk_builder_get_object(builder, "apply-search"));
+
+        if (!apply_button)
+        {
+            g_warn_if_fail(true);
+        }
+        else {
+            g_signal_connect(
+                apply_button,
+                "clicked",
+                G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
+                {
+                    auto *filter = static_cast<InvoicesFilter *> (user_data);
+
+                    filter->set_search_term ();
+                    filter->controller->apply_filter ();
+                }),
                 this
             );
         }
@@ -1390,9 +1583,11 @@ InvoicesFilter::make_filter()
     qof_query_set_book (query, book);
 
     {
-        auto none = !show_invoices && !show_creditnotes;
+        bool none = preset == Preset::CUSTOM && (!show_invoices && !show_creditnotes);
+        bool show_inv = show_invoices || preset != Preset::CUSTOM;
+        bool show_cred = show_creditnotes || preset != Preset::CUSTOM;
     
-        if (show_invoices || none)
+        if (show_inv || none)
         {
             GncInvoiceType inv_type;
 
@@ -1409,7 +1604,7 @@ InvoicesFilter::make_filter()
             qof_query_add_term (query, type_path, type_pred, QOF_QUERY_AND);
         }
 
-        if (show_creditnotes || none)
+        if (show_cred || none)
         {
             GncInvoiceType credit_type;
 
@@ -1424,7 +1619,7 @@ InvoicesFilter::make_filter()
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
             QofQueryPredData *type_pred = qof_query_int32_predicate (QOF_COMPARE_EQUAL, credit_type);
             qof_query_add_term (query, type_path, type_pred,
-                none || !show_invoices ? QOF_QUERY_AND : QOF_QUERY_OR);
+                none || !show_inv ? QOF_QUERY_AND : QOF_QUERY_OR);
         }
     }
 
@@ -1442,61 +1637,7 @@ InvoicesFilter::make_filter()
         qof_query_destroy (query_active);
     }
 
-    if (show_paid != show_unpaid || !show_paid)
-    {
-        QofQuery *query_paid = qof_query_create_for (GNC_ID_INVOICE);
-        qof_query_set_book (query_paid, book);
-
-        {
-            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
-
-            qof_query_add_boolean_match(query_paid,
-                                        type_path,
-                                        show_paid,
-                                        QOF_QUERY_AND);
-        }
-
-        if (!show_paid && !show_unpaid) { // If both options are false, add a TRUE match so no results are shown.
-            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
-
-            qof_query_add_boolean_match(query_paid,
-                                        type_path,
-                                        true,
-                                        QOF_QUERY_AND);
-        }
-
-        qof_query_merge_in_place (query, query_paid, QOF_QUERY_AND); 
-        qof_query_destroy (query_paid);
-    }
-
-    if (show_posted != show_unposted || !show_posted)
-    {
-        QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
-        qof_query_set_book (query_posted, book);
-
-        {
-            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-            qof_query_add_boolean_match(query_posted,
-                                        type_path,
-                                        show_posted,
-                                        QOF_QUERY_AND);
-        }
-
-        if (!show_posted && !show_unposted) { // If both options are false, add a TRUE match so no results are shown.
-            QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-            qof_query_add_boolean_match(query_posted,
-                                        type_path,
-                                        true,
-                                        QOF_QUERY_AND);
-        }
-
-        qof_query_merge_in_place (query, query_posted, QOF_QUERY_AND); 
-        qof_query_destroy (query_posted);
-    }
-
-    if (only_overdue)
+    if (preset == Preset::OVERDUE)
     {
         QofQuery *query_overdue = qof_query_create_for (GNC_ID_INVOICE);
         qof_query_set_book (query_overdue, book);
@@ -1520,8 +1661,16 @@ InvoicesFilter::make_filter()
         }
 
         {
+            GDate date;
+            gnc_gdate_set_today(&date);
+
+            if (overdue_days) g_date_subtract_days(&date, overdue_days);
+
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_DUE, nullptr);
-            QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LT, QOF_DATE_MATCH_NORMAL, gnc_time64_get_today_end());
+            QofQueryPredData *pred_end = qof_query_date_predicate(
+                QOF_COMPARE_LT, QOF_DATE_MATCH_NORMAL,
+                gnc_time64_get_day_end_gdate(&date)
+            );
 
             qof_query_add_term(query_overdue, type_path, pred_end, QOF_QUERY_AND);
         }
@@ -1529,12 +1678,35 @@ InvoicesFilter::make_filter()
         qof_query_merge_in_place (query, query_overdue, QOF_QUERY_AND); 
         qof_query_destroy (query_overdue);
     }
+    else if (preset == Preset::CUSTOM) {
+        if (show_paid != show_unpaid || !show_paid)
+        {
+            QofQuery *query_paid = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_paid, book);
 
-    if (use_start_date && start_date != 0)
-    {
-        QofQuery *query_start = qof_query_create_for (GNC_ID_INVOICE);
-        qof_query_set_book (query_start, book);
+            {
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
 
+                qof_query_add_boolean_match(query_paid,
+                                            type_path,
+                                            show_paid,
+                                            QOF_QUERY_AND);
+            }
+
+            if (!show_paid && !show_unpaid) { // If both options are false, add a TRUE match so no results are shown.
+                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_PAID, nullptr);
+
+                qof_query_add_boolean_match(query_paid,
+                                            type_path,
+                                            true,
+                                            QOF_QUERY_AND);
+            }
+
+            qof_query_merge_in_place (query, query_paid, QOF_QUERY_AND); 
+            qof_query_destroy (query_paid);
+        }
+
+        if (show_posted != show_unposted || !show_posted)
         {
             QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
             qof_query_set_book (query_posted, book);
@@ -1544,57 +1716,11 @@ InvoicesFilter::make_filter()
 
                 qof_query_add_boolean_match(query_posted,
                                             type_path,
-                                            true,
+                                            show_posted,
                                             QOF_QUERY_AND);
             }
 
-            {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
-                QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, start_date);
-                qof_query_add_term(query_posted, type_path, pred_start, QOF_QUERY_AND);
-            }
-
-            qof_query_merge_in_place (query_start, query_posted, QOF_QUERY_AND); 
-            qof_query_destroy (query_posted);
-        }
-
-        {
-            QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_unposted, book);
-
-            {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
-
-                qof_query_add_boolean_match(query_unposted,
-                                            type_path,
-                                            false,
-                                            QOF_QUERY_AND);
-            }
-
-            {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
-                QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, start_date);
-                qof_query_add_term(query_unposted, type_path, pred_start, QOF_QUERY_AND);
-            }
-
-            qof_query_merge_in_place (query_start, query_unposted, QOF_QUERY_OR); 
-            qof_query_destroy (query_unposted);
-        }
-
-        qof_query_merge_in_place (query, query_start, QOF_QUERY_AND); 
-        qof_query_destroy (query_start);
-    }
-
-    if (use_end_date && end_date != 0)
-    {
-        QofQuery *query_end = qof_query_create_for (GNC_ID_INVOICE);
-        qof_query_set_book (query_end, book);
-
-        {
-            QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_posted, book);
-
-            {
+            if (!show_posted && !show_unposted) { // If both options are false, add a TRUE match so no results are shown.
                 QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
 
                 qof_query_add_boolean_match(query_posted,
@@ -1603,41 +1729,119 @@ InvoicesFilter::make_filter()
                                             QOF_QUERY_AND);
             }
 
-            {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
-                QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
-                qof_query_add_term(query_posted, type_path, pred_end, QOF_QUERY_AND);
-            }
-
-            qof_query_merge_in_place (query_end, query_posted, QOF_QUERY_AND); 
+            qof_query_merge_in_place (query, query_posted, QOF_QUERY_AND); 
             qof_query_destroy (query_posted);
         }
 
+        if (use_start_date && start_date != 0)
         {
-            QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
-            qof_query_set_book (query_unposted, book);
+            QofQuery *query_start = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_start, book);
 
             {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+                QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_posted, book);
 
-                qof_query_add_boolean_match(query_unposted,
-                                            type_path,
-                                            false,
-                                            QOF_QUERY_AND);
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_posted,
+                                                type_path,
+                                                true,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
+                    QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, start_date);
+                    qof_query_add_term(query_posted, type_path, pred_start, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_start, query_posted, QOF_QUERY_AND); 
+                qof_query_destroy (query_posted);
             }
 
             {
-                QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
-                QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
-                qof_query_add_term(query_unposted, type_path, pred_end, QOF_QUERY_AND);
+                QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_unposted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_unposted,
+                                                type_path,
+                                                false,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
+                    QofQueryPredData *pred_start = qof_query_date_predicate(QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, start_date);
+                    qof_query_add_term(query_unposted, type_path, pred_start, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_start, query_unposted, QOF_QUERY_OR); 
+                qof_query_destroy (query_unposted);
             }
 
-            qof_query_merge_in_place (query_end, query_unposted, QOF_QUERY_OR); 
-            qof_query_destroy (query_unposted);
+            qof_query_merge_in_place (query, query_start, QOF_QUERY_AND); 
+            qof_query_destroy (query_start);
         }
 
-        qof_query_merge_in_place (query, query_end, QOF_QUERY_AND); 
-        qof_query_destroy (query_end);
+        if (use_end_date && end_date != 0)
+        {
+            QofQuery *query_end = qof_query_create_for (GNC_ID_INVOICE);
+            qof_query_set_book (query_end, book);
+
+            {
+                QofQuery *query_posted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_posted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_posted,
+                                                type_path,
+                                                true,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_POSTED, nullptr);
+                    QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
+                    qof_query_add_term(query_posted, type_path, pred_end, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_end, query_posted, QOF_QUERY_AND); 
+                qof_query_destroy (query_posted);
+            }
+
+            {
+                QofQuery *query_unposted = qof_query_create_for (GNC_ID_INVOICE);
+                qof_query_set_book (query_unposted, book);
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_IS_POSTED, nullptr);
+
+                    qof_query_add_boolean_match(query_unposted,
+                                                type_path,
+                                                false,
+                                                QOF_QUERY_AND);
+                }
+
+                {
+                    QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_OPENED, nullptr);
+                    QofQueryPredData *pred_end = qof_query_date_predicate(QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
+                    qof_query_add_term(query_unposted, type_path, pred_end, QOF_QUERY_AND);
+                }
+
+                qof_query_merge_in_place (query_end, query_unposted, QOF_QUERY_OR); 
+                qof_query_destroy (query_unposted);
+            }
+
+            qof_query_merge_in_place (query, query_end, QOF_QUERY_AND); 
+            qof_query_destroy (query_end);
+        }
     }
 
     if (search_term.length ())
