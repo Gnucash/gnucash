@@ -385,7 +385,7 @@ For example setting this to 2.0 will display reports at twice their typical size
     <key name="chart-point-style" type="i">
       <default>7</default>
       <summary>A chart's point style.</summary>
-      <description>This setting specifies what kind of a point style should charts use. In previous versions it was always the circle, as of now it is confiugrable to chose among varius rectangles, triangles, and such. Only applicable to line charts.</description>
+      <description>This setting specifies what kind of a point style should charts use. In previous versions it was always the circle, as of now it is configurable to choose among various rectangles, triangles, and such. Only applicable to line charts.</description>
     </key>
     <key name="chart-point-size" type="i">
       <default>4</default>
