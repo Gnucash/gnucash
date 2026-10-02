@@ -33,6 +33,8 @@
 #include "../Account.h"
 #include "../gnc-lot.h"
 #include "../gnc-event.h"
+#include "../cap-gains.h"
+#include "../policy.h"
 #include <qof.h>
 
 #if defined(__clang__)
@@ -2057,6 +2059,146 @@ test_xaccTransScrubGainsDate_gains_dirty (GainsFixture *fixture,
                      ==, 0);
 }
 
+/* xaccSplitComputeCapGains marker/source switch-over regression.
+ *
+ * When a lot is scrubbed, every split in the lot is passed to
+ * xaccSplitComputeCapGains(). A gains "marker" split and the "source"
+ * split it records gains for are linked by a forward "gains-split" KVP
+ * (source->marker) and a backward "gains-source" KVP (marker->source).
+ *
+ * If the marker is processed before its source (which happens on SQL
+ * backends whose row-load order places the marker first -- reproducible
+ * on MySQL, masked on SQLite), xaccSplitComputeCapGains() switches over
+ * to the source but must resolve the source's in-memory gain status;
+ * otherwise the source is left with gains==UNKNOWN and gains_split==NULL
+ * and a brand-new gains transaction is created, orphaning the existing
+ * one. This test drives exactly that order: it leaves the source
+ * unresolved and computes gains on the marker, then asserts that the
+ * existing gains split is reused rather than a duplicate created.
+ */
+static void
+test_xaccSplitComputeCapGains_unresolved_source (void)
+{
+    QofBook *book = qof_book_new ();
+    gnc_commodity *usd = gnc_commodity_new (book, "US Dollar", "CURRENCY",
+                                            "USD", "", 100);
+    gnc_commodity *stk = gnc_commodity_new (book, "Some Stock", "NYSE",
+                                            "STK", "", 1);
+    Account *root = gnc_account_create_root (book);
+
+    Account *stock_acc = xaccMallocAccount (book);
+    xaccAccountSetType (stock_acc, ACCT_TYPE_STOCK);
+    xaccAccountSetCommodity (stock_acc, stk);
+    gnc_account_append_child (root, stock_acc);
+    gnc_account_set_policy (stock_acc, xaccGetFIFOPolicy ());
+
+    Account *bank_acc = xaccMallocAccount (book);
+    xaccAccountSetType (bank_acc, ACCT_TYPE_BANK);
+    xaccAccountSetCommodity (bank_acc, usd);
+    gnc_account_append_child (root, bank_acc);
+
+    Account *gains_acc = xaccMallocAccount (book);
+    xaccAccountSetType (gains_acc, ACCT_TYPE_INCOME);
+    xaccAccountSetCommodity (gains_acc, usd);
+    gnc_account_append_child (root, gains_acc);
+
+    time64 t_buy = gnc_dmy2time64 (1, 1, 2020);
+    time64 t_sell = gnc_dmy2time64 (1, 6, 2020);
+
+    GNCLot *lot = gnc_lot_new (book);
+
+    /* BUY: +100 shares for $1000 (lot opening split). */
+    Transaction *buy = xaccMallocTransaction (book);
+    xaccTransBeginEdit (buy);
+    xaccTransSetCurrency (buy, usd);
+    xaccTransSetDatePostedSecs (buy, t_buy);
+    Split *buy_stock = xaccMallocSplit (book);
+    xaccSplitSetParent (buy_stock, buy);
+    xaccSplitSetAccount (buy_stock, stock_acc);
+    xaccSplitSetAmount (buy_stock, gnc_numeric_create (100, 1));
+    xaccSplitSetValue (buy_stock, gnc_numeric_create (100000, 100));
+    Split *buy_bank = xaccMallocSplit (book);
+    xaccSplitSetParent (buy_bank, buy);
+    xaccSplitSetAccount (buy_bank, bank_acc);
+    xaccSplitSetAmount (buy_bank, gnc_numeric_create (-100000, 100));
+    xaccSplitSetValue (buy_bank, gnc_numeric_create (-100000, 100));
+    xaccTransCommitEdit (buy);
+
+    /* SELL: -100 shares for $1200 (the gains source split). */
+    Transaction *sell = xaccMallocTransaction (book);
+    xaccTransBeginEdit (sell);
+    xaccTransSetCurrency (sell, usd);
+    xaccTransSetDatePostedSecs (sell, t_sell);
+    Split *sell_stock = xaccMallocSplit (book);
+    xaccSplitSetParent (sell_stock, sell);
+    xaccSplitSetAccount (sell_stock, stock_acc);
+    xaccSplitSetAmount (sell_stock, gnc_numeric_create (-100, 1));
+    xaccSplitSetValue (sell_stock, gnc_numeric_create (-120000, 100));
+    Split *sell_bank = xaccMallocSplit (book);
+    xaccSplitSetParent (sell_bank, sell);
+    xaccSplitSetAccount (sell_bank, bank_acc);
+    xaccSplitSetAmount (sell_bank, gnc_numeric_create (120000, 100));
+    xaccSplitSetValue (sell_bank, gnc_numeric_create (120000, 100));
+    xaccTransCommitEdit (sell);
+
+    /* Pre-existing Realized Gain/Loss transaction (as a prior scrub made):
+     * a $200 marker split in the stock account and the income split. */
+    Transaction *gain = xaccMallocTransaction (book);
+    xaccTransBeginEdit (gain);
+    xaccTransSetCurrency (gain, usd);
+    xaccTransSetDatePostedSecs (gain, t_sell);
+    Split *marker = xaccMallocSplit (book);
+    xaccSplitSetParent (marker, gain);
+    xaccSplitSetAccount (marker, stock_acc);
+    xaccSplitSetAmount (marker, gnc_numeric_zero ());
+    xaccSplitSetValue (marker, gnc_numeric_create (20000, 100));
+    Split *gain_inc = xaccMallocSplit (book);
+    xaccSplitSetParent (gain_inc, gain);
+    xaccSplitSetAccount (gain_inc, gains_acc);
+    xaccSplitSetAmount (gain_inc, gnc_numeric_create (-20000, 100));
+    xaccSplitSetValue (gain_inc, gnc_numeric_create (-20000, 100));
+    xaccTransCommitEdit (gain);
+
+    /* Persisted cap-gains links (these survive a reload). */
+    xaccTransBeginEdit (sell);
+    qof_instance_set (QOF_INSTANCE (sell_stock),
+                      "gains-split", xaccSplitGetGUID (marker), nullptr);
+    xaccTransCommitEdit (sell);
+    xaccTransBeginEdit (gain);
+    qof_instance_set (QOF_INSTANCE (marker),
+                      "gains-source", xaccSplitGetGUID (sell_stock), nullptr);
+    xaccTransCommitEdit (gain);
+
+    /* The buy, sell and marker are all lot members. */
+    gnc_lot_add_split (lot, buy_stock);
+    gnc_lot_add_split (lot, sell_stock);
+    gnc_lot_add_split (lot, marker);
+
+    /* adjusted_amount == amount (no stock split in history). Setting it is
+     * what the 5.17 code path requires; leaving it unset reverts to the
+     * pre-5.17 behaviour that never exercised this path. */
+    xaccSplitSetAdjustedAmount (buy_stock, gnc_numeric_create (100, 1));
+    xaccSplitSetAdjustedAmount (sell_stock, gnc_numeric_create (-100, 1));
+
+    /* Simulate the just-loaded state: gain status unresolved for every
+     * split, and -- critically -- the marker reaching the computation
+     * before its source has been resolved. */
+    buy_stock->gains = GAINS_STATUS_UNKNOWN;  buy_stock->gains_split = nullptr;
+    sell_stock->gains = GAINS_STATUS_UNKNOWN; sell_stock->gains_split = nullptr;
+    marker->gains = GAINS_STATUS_UNKNOWN;     marker->gains_split = nullptr;
+    gain_inc->gains = GAINS_STATUS_UNKNOWN;   gain_inc->gains_split = nullptr;
+
+    g_assert_cmpint (g_list_length (xaccAccountGetSplitList (gains_acc)), ==, 1);
+
+    /* Process the marker first, with the source still unresolved. */
+    xaccSplitComputeCapGains (marker, gains_acc);
+
+    /* The existing gains split must be reused, not duplicated/orphaned. */
+    g_assert_cmpint (g_list_length (xaccAccountGetSplitList (gains_acc)), ==, 1);
+
+    qof_book_destroy (book);
+}
+
 /* xaccTransScrubGains Local: 1:0:0
  * Non-trivial, but it passes through selected splits to functions in
  * cap-gains.c and Scrub3.c that are beyond the scope of this test
@@ -2123,5 +2265,6 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_no_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_no_dirty, teardown_with_gains);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_base_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_base_dirty, teardown_with_gains);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_gains_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_gains_dirty, teardown_with_gains);
+    GNC_TEST_ADD_FUNC (suitename, "xaccSplitComputeCapGains unresolved source", test_xaccSplitComputeCapGains_unresolved_source);
 
 }
