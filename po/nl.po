@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-01 19:51+0000\n"
+"PO-Revision-Date: 2026-10-02 18:51+0000\n"
 "Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
@@ -890,8 +890,8 @@ msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
-"Met de toetscombinatie Control+Page Up (of Page Down) kunt u tussen de "
-"verschillende tabbladen in het hoofdvenster wisselen."
+"Om tussen de verschillende tabbladen in het hoofdvenster te wisselen, druk "
+"Control+Page Up/Down."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -3441,7 +3441,7 @@ msgstr "Opdracht zoeken"
 #: gnucash/gnome/dialog-lot-viewer.c:605
 #, c-format
 msgid "Lots in Account %s"
-msgstr "Partijen binnen rekening %s"
+msgstr "Mandjes binnen rekening %s"
 
 #: gnucash/gnome/dialog-lot-viewer.c:843
 msgid "Empty"
@@ -3955,8 +3955,8 @@ msgid ""
 "transactions in this this Scheduled Transaction.\n"
 "Should it still be entered?"
 msgstr ""
-"De Geplande Transacties Editor kan niet alle transacties van deze geplande "
-"transactie boeking automatisch in balans brengen.\n"
+"De Vaste Journaalposten Editor kan niet alle transacties van deze vaste "
+"journaalpost automatisch in balans brengen.\n"
 "Moet hij toch worden ingevoerd?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1454
@@ -5337,7 +5337,7 @@ msgstr "Instellingen opslaan"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:242
 msgid "Save Config As…"
-msgstr "Config opslaan als…"
+msgstr "Instellingen opslaan als…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:243
 msgid "Export as PDF"
@@ -5377,7 +5377,7 @@ msgstr "_Rapportconfiguratie opslaan"
 #: gnucash/ui/gnc-plugin-page-report.ui:81
 #: gnucash/ui/gnc-plugin-page-report.ui:270
 msgid "Save Report Configuration As…"
-msgstr "Rapportconfiguratie opslaan als…"
+msgstr "Rapportinstellingen opslaan als…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1558
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1591
@@ -14575,8 +14575,8 @@ msgstr ""
 "Opgeslagen rapportconfiguraties zijn aangemaakt door\n"
 "1. het openen van een rapport vanuit het menu Rapporten ,\n"
 "2. de opties van het rapport naar uw smaak wijzigen\n"
-"3. de optie \"Rapportconfiguratie opslaan [als …]\" in het menu Rapporten \n"
-" of de knop \"Configuratie opslaan [als …]\" op de werkbalk."
+"3. de optie \"Rapportinstellingen opslaan [als …]\" in het menu Rapporten \n"
+" of de knop \"Instellingen opslaan [als …]\" op de werkbalk."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:260
@@ -31406,7 +31406,8 @@ msgstr "De afstemming van deze rekening annuleren"
 #: libgnucash/app-utils/gnc-autoclear.cpp:130
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
-"Kan de boekregels niet eenduidig goedkeuren. Meerder mogelijkheden gevonden."
+"Kan de boekregels niet eenduidig goedkeuren. Er zijn meerder mogelijkheden "
+"gevonden."
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:149
 msgid "Auto-clear exceeds allocated time"
