@@ -609,6 +609,12 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 #endif
         }
         split = s;
+        /* The source reached by switch-over may not have resolved its own
+         * gain status yet (e.g. the marker was scrubbed before its source);
+         * resolve it now so its existing gains split is reused instead of
+         * being re-created and orphaned. */
+        if (GAINS_STATUS_UNKNOWN == split->gains)
+            xaccSplitDetermineGainStatus (split);
     }
 
     /* Note: if the value of the 'opening' split(s) has changed,
