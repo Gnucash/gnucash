@@ -32,6 +32,7 @@
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
+#include <io.h>       /* _get_osfhandle */
 #endif
 
 #ifdef HAVE_UNISTD_H
@@ -45,6 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"
@@ -258,6 +260,57 @@ qof_log_init_filename(const gchar* log_filename)
     {
         g_critical("Cannot open log output file \"%s\", using stderr.", log_filename);
     }
+}
+
+gchar *
+qof_log_read_current (gsize *length)
+{
+    if (length)
+        *length = 0;
+
+    if (!fout || fout == stderr || fout == stdout)
+        return nullptr;
+
+    /* Read through the log's own descriptor, not by name. A descriptor refers
+       to the file itself, so this always reads THIS process's trace file even
+       when another instance has renamed the canonical name onto its own -- and
+       it does not depend on whether renaming succeeds on this platform. */
+    int fd = fileno(fout);
+    struct stat st;
+    if (fd < 0 || fstat(fd, &st) != 0 || !S_ISREG(st.st_mode))
+        return nullptr;
+
+    gsize size = (st.st_size > 0) ? (gsize) st.st_size : 0;
+    gchar *buf = (gchar*) g_malloc(size + 1);
+    gsize got = 0;
+
+    /* Positional read from offset 0: it must not disturb the position the
+       logger writes at. pread() does that on POSIX; ReadFile() with an
+       OVERLAPPED offset is the Windows equivalent. */
+    while (got < size)
+    {
+#if PLATFORM(WINDOWS)
+        HANDLE h = (HANDLE) _get_osfhandle(fd);
+        OVERLAPPED ov = { 0 };
+        DWORD n = 0;
+        ov.Offset = (DWORD) (got & 0xFFFFFFFFU);
+        ov.OffsetHigh = (DWORD) (got >> 32);
+        if (h == INVALID_HANDLE_VALUE ||
+            !ReadFile(h, buf + got, (DWORD) (size - got), &n, &ov) || n == 0)
+            break;
+        got += n;
+#else
+        ssize_t n = pread(fd, buf + got, size - got, (off_t) got);
+        if (n <= 0)
+            break;
+        got += (gsize) n;
+#endif
+    }
+
+    buf[got] = '\0';
+    if (length)
+        *length = got;
+    return buf;
 }
 
 void
