@@ -90,6 +90,7 @@ gnc_html_class_init( GncHtmlClass* klass )
 
     klass->show_url = nullptr;
     klass->show_data = nullptr;
+    klass->load_html_string = nullptr;
     klass->reload = nullptr;
     klass->copy_to_clipboard = nullptr;
     klass->export_to_file = nullptr;
@@ -345,6 +346,27 @@ gnc_html_show_data( GncHtml* self, const gchar* data, int datalen ) noexcept
     else
     {
         DEBUG( "'show_data' not implemented" );
+    }
+}
+
+/********************************************************************
+ * gnc_html_load_html_string
+ * display a self-contained HTML string, loaded in memory (no file://).
+ ********************************************************************/
+
+void
+gnc_html_load_html_string( GncHtml* self, const gchar* html_str ) noexcept
+{
+    g_return_if_fail( self != nullptr );
+    g_return_if_fail( GNC_IS_HTML(self) );
+
+    if ( GNC_HTML_GET_CLASS(self)->load_html_string != nullptr )
+    {
+        GNC_HTML_GET_CLASS(self)->load_html_string( self, html_str );
+    }
+    else
+    {
+        DEBUG( "'load_html_string' not implemented" );
     }
 }
 

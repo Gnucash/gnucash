@@ -104,6 +104,7 @@ gnucash/gnome/gnc-plugin-page-register-filter.cpp
 gnucash/gnome/gnc-plugin-page-register-sort.cpp
 gnucash/gnome/gnc-plugin-page-report.cpp
 gnucash/gnome/gnc-plugin-page-sx-list.cpp
+gnucash/gnome/gnc-plugin-page-tracelog.cpp
 gnucash/gnome/gnc-plugin-register.c
 gnucash/gnome/gnc-plugin-report-system.c
 gnucash/gnome/gnc-split-reg.c
@@ -528,6 +529,7 @@ gnucash/ui/gnc-plugin-page-owner-tree.ui
 gnucash/ui/gnc-plugin-page-register.ui
 gnucash/ui/gnc-plugin-page-report.ui
 gnucash/ui/gnc-plugin-page-sx-list.ui
+gnucash/ui/gnc-plugin-page-tracelog.ui
 gnucash/ui/gnc-plugin-qif-import.ui
 gnucash/ui/gnc-plugin-register.ui
 gnucash/ui/gnc-plugin-report-system.ui
