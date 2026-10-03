@@ -100,7 +100,7 @@ get_controller (gpointer user_data)
 
 namespace { // Isolate class-scope to this file.
 
-class InvoicesFilter {
+class FilterDialog {
     enum Preset {
         CUSTOM,
         OVERDUE
@@ -436,7 +436,7 @@ public:
     GncPluginPageInvoicesOwner *plugin_page = nullptr;
 
 private:
-    InvoicesFilter filter;
+    FilterDialog filter;
     GtkWidget     *widget = nullptr; // Managed/freed by gtk
     GtkWidget     *query_view = nullptr; // Managed/freed by gtk
     GList         *columns = nullptr;
@@ -918,7 +918,7 @@ public:
 };
 
 void
-InvoicesFilter::dialog_open()
+FilterDialog::dialog_open()
 {
     g_assert (controller);
 
@@ -971,7 +971,7 @@ InvoicesFilter::dialog_open()
         G_CALLBACK (
             +[] (GtkWidget *w, gpointer user_data)
             {
-                static_cast<InvoicesFilter *> (user_data)->dialog_close();
+                static_cast<FilterDialog *> (user_data)->dialog_close();
             }
         ),
         this 
@@ -1014,7 +1014,7 @@ InvoicesFilter::dialog_open()
                     {
                         if (!gtk_toggle_button_get_active(button)) return false;
 
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_preset (Preset::CUSTOM);
                         filter->controller->apply_filter ();
@@ -1033,7 +1033,7 @@ InvoicesFilter::dialog_open()
                     {
                         if (!gtk_toggle_button_get_active(button)) return false;
 
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_preset (Preset::OVERDUE);
                         filter->controller->apply_filter ();
@@ -1086,7 +1086,7 @@ InvoicesFilter::dialog_open()
                         {
                             if (!gtk_toggle_button_get_active(button)) return false;
 
-                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+                            auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_overdue_days (button);
                             filter->controller->apply_filter ();
@@ -1118,7 +1118,7 @@ InvoicesFilter::dialog_open()
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
                         auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_paid (state);
                         filter->controller->apply_filter ();
@@ -1150,7 +1150,7 @@ InvoicesFilter::dialog_open()
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
                         auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_unpaid (state);
                         filter->controller->apply_filter ();
@@ -1181,7 +1181,7 @@ InvoicesFilter::dialog_open()
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
                         auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_posted (state);
                         filter->controller->apply_filter ();
@@ -1212,7 +1212,7 @@ InvoicesFilter::dialog_open()
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
                         auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_unposted (state);
                         filter->controller->apply_filter ();
@@ -1260,7 +1260,7 @@ InvoicesFilter::dialog_open()
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
                         auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_invoices (state);
                         filter->controller->apply_filter ();
@@ -1292,7 +1292,7 @@ InvoicesFilter::dialog_open()
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
                         auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_creditnotes (state);
                         filter->controller->apply_filter ();
@@ -1326,7 +1326,7 @@ InvoicesFilter::dialog_open()
                         +[](GtkWidget *date,
                             gpointer user_data)
                         {
-                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+                            auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_dates (false);
                             filter->controller->apply_filter ();
@@ -1346,7 +1346,7 @@ InvoicesFilter::dialog_open()
                         +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                         {
                             auto state = gtk_toggle_button_get_active(button);
-                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+                            auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_use_start_date (state);
                             filter->controller->apply_filter ();
@@ -1387,7 +1387,7 @@ InvoicesFilter::dialog_open()
                         +[](GtkWidget *date,
                             gpointer user_data)
                         {
-                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+                            auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_dates (false);
                             filter->controller->apply_filter ();
@@ -1407,7 +1407,7 @@ InvoicesFilter::dialog_open()
                         +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                         {
                             auto state = gtk_toggle_button_get_active(button);
-                            auto *filter = static_cast<InvoicesFilter *> (user_data);
+                            auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_use_end_date (state);
                             filter->controller->apply_filter ();
@@ -1441,7 +1441,7 @@ InvoicesFilter::dialog_open()
                 "clicked",
                 G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
                 {
-                    auto *filter = static_cast<InvoicesFilter *> (user_data);
+                    auto *filter = static_cast<FilterDialog *> (user_data);
 
                     filter->set_dates (false);
 
@@ -1490,7 +1490,7 @@ InvoicesFilter::dialog_open()
                           gpointer    user_data)
                     {
                         const gchar *text = gtk_entry_get_text(GTK_ENTRY(editable));
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_search_term (text);
                         filter->controller->apply_filter ();
@@ -1512,7 +1512,7 @@ InvoicesFilter::dialog_open()
                 "clicked",
                 G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
                 {
-                    auto *filter = static_cast<InvoicesFilter *> (user_data);
+                    auto *filter = static_cast<FilterDialog *> (user_data);
 
                     filter->set_search_term ();
                     filter->controller->apply_filter ();
@@ -1537,7 +1537,7 @@ InvoicesFilter::dialog_open()
                 G_CALLBACK (
                     +[] (GtkButton *button, gpointer user_data)
                     {
-                        auto *filter = static_cast<InvoicesFilter *> (user_data);
+                        auto *filter = static_cast<FilterDialog *> (user_data);
                         if (filter->reset ())
                             filter->controller->apply_filter ();
                     }
@@ -1574,7 +1574,7 @@ InvoicesFilter::dialog_open()
 }
 
 QofQuery *
-InvoicesFilter::make_filter()
+FilterDialog::make_filter()
 {
     auto owner_type = controller->get_owner ();
     auto *book = gnc_get_current_book ();
