@@ -48,12 +48,12 @@ static const char * const PLUGIN_ACTIONS_NAME = "GncPluginInvoicesOwnerActions";
 static const char * const UI_FILE = "gnc-plugin-page-invoices-owner.ui";
 
 namespace { // Isolate class-scope to this file. 
-class Controller;
+class Page;
 }
 
 struct GncPluginPageInvoicesOwnerPrivate
 {
-    Controller *controller = nullptr;
+    Page *controller = nullptr;
     GncOwnerType owner_type;
 };
 
@@ -80,7 +80,7 @@ get_private (GncPluginPageInvoicesOwner *plugin_page)
     return GNC_PLUGIN_PAGE_INVOICES_OWNER_GET_PRIVATE (plugin_page);
 }
 
-static Controller *
+static Page *
 get_controller (GncPluginPage *plugin_page)
 {
     auto *priv = get_private (plugin_page);
@@ -89,7 +89,7 @@ get_controller (GncPluginPage *plugin_page)
     return priv->controller;
 }
 
-static Controller *
+static Page *
 get_controller (gpointer user_data)
 {
     auto *plugin_page = GNC_PLUGIN_PAGE (user_data);
@@ -123,7 +123,7 @@ class FilterDialog {
     // State end
 
 public:
-    Controller      *controller = nullptr;
+    Page      *controller = nullptr;
     GtkWidget       *dialog = nullptr;
 
     GtkToggleButton *custom_toggle = nullptr;
@@ -431,7 +431,7 @@ private:
     }
 };
 
-class Controller {
+class Page {
 public:
     GncPluginPageInvoicesOwner *plugin_page = nullptr;
 
@@ -458,7 +458,7 @@ private:
     }
 
 public:
-    Controller (GncPluginPageInvoicesOwner *p) : plugin_page (p)
+    Page (GncPluginPageInvoicesOwner *p) : plugin_page (p)
     {
         // Dynamically check plugin_page once on class initialization.
         // We only need to do this once here, for the rest of the class
@@ -579,7 +579,7 @@ public:
         );
     }
 
-    ~Controller ()
+    ~Page ()
     {
         gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE (plugin_page));
 
@@ -1930,7 +1930,7 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
 
     auto *priv = get_private (plugin_page);
     priv->owner_type = owner_type;
-    priv->controller = new Controller(plugin_page);
+    priv->controller = new Page(plugin_page);
 
     LEAVE ("new page %p", plugin_page);
     return GNC_PLUGIN_PAGE (plugin_page);
