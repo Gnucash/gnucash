@@ -2188,13 +2188,13 @@ test_xaccSplitComputeCapGains_unresolved_source (void)
     marker->gains = GAINS_STATUS_UNKNOWN;     marker->gains_split = nullptr;
     gain_inc->gains = GAINS_STATUS_UNKNOWN;   gain_inc->gains_split = nullptr;
 
-    g_assert_cmpint (g_list_length (xaccAccountGetSplitList (gains_acc)), ==, 1);
+    g_assert_cmpint (xaccAccountGetSplitsSize (gains_acc), ==, 1);
 
     /* Process the marker first, with the source still unresolved. */
     xaccSplitComputeCapGains (marker, gains_acc);
 
     /* The existing gains split must be reused, not duplicated/orphaned. */
-    g_assert_cmpint (g_list_length (xaccAccountGetSplitList (gains_acc)), ==, 1);
+    g_assert_cmpint (xaccAccountGetSplitsSize (gains_acc), ==, 1);
 
     qof_book_destroy (book);
 }
