@@ -46,6 +46,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static const char * const PLUGIN_NAME = "GncPluginPageInvoicesOwner";
 static const char * const PLUGIN_ACTIONS_NAME = "GncPluginInvoicesOwnerActions";
 static const char * const UI_FILE = "gnc-plugin-page-invoices-owner.ui";
+static const char * const DIALOG_FILE = "gnc-plugin-page-invoices-owner.glade";
 
 namespace { // Isolate class-scope to this file. 
 class Page;
@@ -53,7 +54,7 @@ class Page;
 
 struct GncPluginPageInvoicesOwnerPrivate
 {
-    Page *controller = nullptr;
+    Page *page = nullptr;
     GncOwnerType owner_type;
 };
 
@@ -86,7 +87,7 @@ get_controller (GncPluginPage *plugin_page)
     auto *priv = get_private (plugin_page);
     g_assert (priv);
 
-    return priv->controller;
+    return priv->page;
 }
 
 static Page *
@@ -123,7 +124,7 @@ class FilterDialog {
     // State end
 
 public:
-    Page      *controller = nullptr;
+    Page      *page = nullptr;
     GtkWidget       *dialog = nullptr;
 
     GtkToggleButton *custom_toggle = nullptr;
@@ -465,7 +466,7 @@ public:
         // we can skip nullptr checks when doing PAGE casts.
         g_assert (GNC_IS_PLUGIN_PAGE_INVOICES_OWNER (plugin_page));
 
-        filter.controller = this;
+        filter.page = this;
 
         auto owner_type = get_owner();
 
@@ -920,9 +921,9 @@ public:
 void
 FilterDialog::dialog_open()
 {
-    g_assert (controller);
+    g_assert (page);
 
-    ENTER ("(fd %p, page %p)", dialog, controller->plugin_page);
+    ENTER ("(fd %p, page %p)", dialog, page->plugin_page);
 
     if (dialog)
     {
@@ -931,15 +932,10 @@ FilterDialog::dialog_open()
         return;
     }
 
-    auto resource = std::string (GNUCASH_RESOURCE_PREFIX) +  "/" + UI_FILE;
     auto *builder = gtk_builder_new ();
-    GError *error = NULL;
+    bool add_from_file = gnc_builder_add_from_file (builder, DIALOG_FILE, "invoices-filters");
 
-    gtk_builder_set_translation_domain (builder, PROJECT_NAME);
-
-    gtk_builder_add_from_resource (builder, resource.c_str(), &error);
-
-    if (error)
+    if (!add_from_file)
     {
         g_object_unref (G_OBJECT(builder));
         g_return_if_fail (false);
@@ -952,12 +948,12 @@ FilterDialog::dialog_open()
         g_return_if_fail (false);
     }
 
-    gtk_window_set_transient_for(GTK_WINDOW (dialog), controller->get_window ());
+    gtk_window_set_transient_for(GTK_WINDOW (dialog), page->get_window ());
 
     /* Translators: The %s is the name of the plugin page */
     gchar *title = g_strdup_printf(
         _("Filter %s by…"),
-        gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (controller->plugin_page))
+        gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (page->plugin_page))
     );
 
     gtk_window_set_title(GTK_WINDOW(dialog), title);
@@ -988,7 +984,7 @@ FilterDialog::dialog_open()
         else
         {
             {
-                auto owner_type = controller->get_owner();
+                auto owner_type = page->get_owner();
 
                 if (owner_type == GNC_OWNER_VENDOR)
                 {
@@ -1017,7 +1013,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_preset (Preset::CUSTOM);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1036,7 +1032,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_preset (Preset::OVERDUE);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1089,7 +1085,7 @@ FilterDialog::dialog_open()
                             auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_overdue_days (button);
-                            filter->controller->apply_filter ();
+                            filter->page->apply_filter ();
 
                             return false;
                         }
@@ -1121,7 +1117,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_paid (state);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1153,7 +1149,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_unpaid (state);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1184,7 +1180,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_posted (state);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1215,7 +1211,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_unposted (state);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1234,7 +1230,7 @@ FilterDialog::dialog_open()
         }
         else
         {
-            auto owner_type = controller->get_owner();
+            auto owner_type = page->get_owner();
 
             if (owner_type == GNC_OWNER_VENDOR)
             {
@@ -1263,7 +1259,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_invoices (state);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1295,7 +1291,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_creditnotes (state);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
 
                         return false;
                     }
@@ -1329,7 +1325,7 @@ FilterDialog::dialog_open()
                             auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_dates (false);
-                            filter->controller->apply_filter ();
+                            filter->page->apply_filter ();
                         }
                     ),
                     this 
@@ -1349,7 +1345,7 @@ FilterDialog::dialog_open()
                             auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_use_start_date (state);
-                            filter->controller->apply_filter ();
+                            filter->page->apply_filter ();
 
                             return false;
                         }
@@ -1390,7 +1386,7 @@ FilterDialog::dialog_open()
                             auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_dates (false);
-                            filter->controller->apply_filter ();
+                            filter->page->apply_filter ();
                         }
                     ),
                     this 
@@ -1410,7 +1406,7 @@ FilterDialog::dialog_open()
                             auto *filter = static_cast<FilterDialog *> (user_data);
 
                             filter->set_use_end_date (state);
-                            filter->controller->apply_filter ();
+                            filter->page->apply_filter ();
 
                             return false;
                         }
@@ -1446,7 +1442,7 @@ FilterDialog::dialog_open()
                     filter->set_dates (false);
 
                     if (filter->use_start_date || filter->use_end_date)
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
                 }),
                 this
             );
@@ -1462,7 +1458,7 @@ FilterDialog::dialog_open()
         }
         else
         {
-            auto owner_type = controller->get_owner();
+            auto owner_type = page->get_owner();
 
             if (owner_type == GNC_OWNER_VENDOR)
             {
@@ -1493,7 +1489,7 @@ FilterDialog::dialog_open()
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
                         filter->set_search_term (text);
-                        filter->controller->apply_filter ();
+                        filter->page->apply_filter ();
                     }
                 ),
                 this
@@ -1515,7 +1511,7 @@ FilterDialog::dialog_open()
                     auto *filter = static_cast<FilterDialog *> (user_data);
 
                     filter->set_search_term ();
-                    filter->controller->apply_filter ();
+                    filter->page->apply_filter ();
                 }),
                 this
             );
@@ -1539,7 +1535,7 @@ FilterDialog::dialog_open()
                     {
                         auto *filter = static_cast<FilterDialog *> (user_data);
                         if (filter->reset ())
-                            filter->controller->apply_filter ();
+                            filter->page->apply_filter ();
                     }
                 ),
                 this
@@ -1576,7 +1572,7 @@ FilterDialog::dialog_open()
 QofQuery *
 FilterDialog::make_filter()
 {
-    auto owner_type = controller->get_owner ();
+    auto owner_type = page->get_owner ();
     auto *book = gnc_get_current_book ();
 
     auto *query = qof_query_create_for (GNC_ID_INVOICE);
@@ -1930,7 +1926,7 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
 
     auto *priv = get_private (plugin_page);
     priv->owner_type = owner_type;
-    priv->controller = new Page(plugin_page);
+    priv->page = new Page(plugin_page);
 
     LEAVE ("new page %p", plugin_page);
     return GNC_PLUGIN_PAGE (plugin_page);
@@ -1954,8 +1950,8 @@ gnc_plugin_page_invoices_owner_class_init (GncPluginPageInvoicesOwnerClass *klas
                                       {
                                           auto *priv = get_private (plugin_page);
 
-                                          delete priv->controller;
-                                          priv->controller = nullptr;
+                                          delete priv->page;
+                                          priv->page = nullptr;
                                       };
 
     page_class->focus_page_function = +[] (GncPluginPage *plugin_page) -> gboolean 
