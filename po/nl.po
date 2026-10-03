@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-02 18:51+0000\n"
+"PO-Revision-Date: 2026-10-03 06:51+0000\n"
 "Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
@@ -10717,10 +10717,13 @@ msgid ""
 "into the proximity of which the point / tooltip will be engaged. If set to "
 "zero, the user must precisely aim at that point."
 msgstr ""
+"Deze instelling bepaalt de radius (in pixels) wanneer de punt / tool tip "
+"wordt geactiveerd. Als deze op nul staat dan moet de gebruiker zeer precies "
+"op de juiste plek mikken."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:407
 msgid "An arrow size (caret) coming out of a tooltip's body."
-msgstr ""
+msgstr "De grootte van het pijtje van een tool tip."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:408
 #: gnucash/gtkbuilder/dialog-preferences.glade:3651
@@ -11784,10 +11787,8 @@ msgstr "Streepje (-)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:415
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:405
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Enable escape character (\\)"
-msgstr "Grafiek activeren"
+msgstr "Activeer escape karakter (\\)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:419
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:409
@@ -11798,6 +11799,12 @@ msgid ""
 "character; a backslash followed by any other character is treated literally: "
 "both the backslash and the following character become part of the data field."
 msgstr ""
+"Indien aangevinkt wordt het escape karakter backslash (\\) anders verwerkt: "
+"backslash-dubbele aanhalingsteken (\\\") wordt een enkel aanhalingsteken (')"
+"; backslah-backslash (\\\\) wordt een enkel aanhalingsteken (\\); backslash-"
+"n (\\n) wordt een nieuwe-regel teken; een backslash gevolgd door een "
+"willekeurig ander teken wordt letterlijk overgenomen: zowel de backslash als "
+"het volgende teken worden onderdeel van het data veld."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:483
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:473
@@ -12092,28 +12099,6 @@ msgid "Match Import and GnuCash accounts"
 msgstr "Import-rekeningen aan GnuCash-rekeningen koppelen"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1095
-#, fuzzy
-#| msgid ""
-#| "If you click \"Next\" Gnucash will perform a number of checks.\n"
-#| "\n"
-#| "If one of those <i>checks fails</i> you'll be automatically redirected to "
-#| "the preview page to try and correct.\n"
-#| "\n"
-#| "On the following page you will be able to associate each transaction to a "
-#| "category.\n"
-#| "\n"
-#| "If this is your <i>initial import into a new file</i>, you will first see "
-#| "a dialog for setting book options, since these can affect how imported "
-#| "data are converted to GnuCash transactions. If this is an existing file, "
-#| "the dialog will not be shown.\n"
-#| "\n"
-#| "If this is the <i>first time importing</i>, you will find that all lines "
-#| "may need to be associated. On subsequent imports, the importer will try "
-#| "to associate the transactions based on previous imports.\n"
-#| "\n"
-#| "The confidence of a correct association is displayed as a colored bar.\n"
-#| "\n"
-#| "More information can be displayed by using the help button."
 msgid ""
 "If you click \"Next\" Gnucash will perform a number of checks.\n"
 "\n"
@@ -12138,21 +12123,21 @@ msgid ""
 msgstr ""
 "Door op [Volgende] te klikken zal GnuCash een aantal testen uitvoeren.\n"
 "\n"
-"Als één van deze <i>testen faalt</i>, dan wordt je automatisch terug geleid "
-"naar de voorbeeld pagina om correcties aan te brengen.\n"
+"Als één van deze testen faalt, dan wordt je automatisch teruggeleid naar de "
+"voorbeeld pagina om correcties aan te brengen.\n"
 "\n"
 "Op de volgende pagina is het mogelijk om elke boeking aan een categorie te "
 "koppelen.\n"
 "\n"
-"Als dit uw <i>eerste import naar een nieuw bestand</i> is, wordt eerst een "
+"Als dit uw eerste import naar een nieuw bestand is, wordt eerst een "
 "dialoogvenster getoond om de opties voor een nieuwe boekhouding in te "
 "stellen, omdat dit van invloed kan zijn op de manier waarop de geïmporteerde "
 "gegevens in GnuCash-boekingen worden omgezet. Als dit een bestaand bestand "
 "is, wordt het dialoogvenster niet weergegeven.\n"
 "\n"
-"Als dit de <i>eerste import betreft</i>, moeten alle regels nog gekoppeld "
-"worden. Bij volgende imports probeert de importeermodule de boekingen te "
-"koppelen op basis van voorgaande imports.\n"
+"Als dit de eerste import betreft, moeten alle regels nog gekoppeld worden. "
+"Bij volgende imports probeert de importeermodule de boekingen te koppelen op "
+"basis van voorgaande imports.\n"
 "\n"
 "De mate van vertrouwen in een juiste koppeling wordt weergegeven als een "
 "gekleurde balk.\n"
@@ -12211,20 +12196,16 @@ msgstr ""
 "categorie zal een aantal rekeningen invoegen."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:162
-#, fuzzy
-#| msgid "<b>Categories</b>"
 msgid "Categories"
-msgstr "<b>Categorieën</b>"
+msgstr "Categorieën"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:275
 msgid "C_lear All"
 msgstr "Selectie _opheffen"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:313
-#, fuzzy
-#| msgid "<b>Category Description</b>"
 msgid "Category Description"
-msgstr "<b>Omschrijving van deze categorie</b>"
+msgstr "Categorie Omschrijving"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:382
@@ -12368,10 +12349,8 @@ msgid "APR (Compounded Quarterly)"
 msgstr "Jaarrente (verrekend per kwartaal)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
-#, fuzzy
-#| msgid "APR (Compounded Annually)"
 msgid "APR (Compounded Semi-annually)"
-msgstr "Jaarrente (verrekend per jaar)"
+msgstr "Effectieve rente (verrekend per half jaar)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:64
 msgid "APR (Compounded Annually)"
@@ -13404,16 +13383,12 @@ msgid "S_ystem input encodings"
 msgstr "Tekensets s_ysteeminvoer"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:328
-#, fuzzy
-#| msgid "<b>_Custom encoding</b>"
 msgid "_Custom encoding"
 msgstr "<b>_Aangepaste tekensets</b>"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:414
-#, fuzzy
-#| msgid "<b>_Selected encodings</b>"
 msgid "_Selected encodings"
-msgstr "<b>Ge_selecteerde tekensets</b>"
+msgstr "Ge_selecteerde tekensets"
 
 #: gnucash/gtkbuilder/business-prefs.glade:22
 #: gnucash/gtkbuilder/dialog-account-picker.glade:8
@@ -13491,10 +13466,8 @@ msgstr ""
 "het boeken zelf worden gewijzigd."
 
 #: gnucash/gtkbuilder/business-prefs.glade:115
-#, fuzzy
-#| msgid "_Invoices"
 msgid "Invoices"
-msgstr "_Verkoopfacturen"
+msgstr "Facturen"
 
 #: gnucash/gtkbuilder/business-prefs.glade:128
 msgid "Not_ify when due"
@@ -13524,8 +13497,6 @@ msgid "_Process payments on posting"
 msgstr "_Betalingen verwerken tijdens het boeken"
 
 #: gnucash/gtkbuilder/business-prefs.glade:195
-#, fuzzy
-#| msgid "Bill"
 msgid "Bills"
 msgstr "Inkoopfactuur"
 
@@ -13614,10 +13585,8 @@ msgid "Delete Account"
 msgstr "Rekening verwijderen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:447
-#, fuzzy
-#| msgid "<b>Sub-accounts</b>"
 msgid "Sub-accounts"
-msgstr "<b>Subrekeningen</b>"
+msgstr "Subrekeningen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:472
 msgid "This account has a sub-account. What would you like to do with it?"
@@ -13654,10 +13623,8 @@ msgstr ""
 "worden."
 
 #: gnucash/gtkbuilder/dialog-account.glade:677
-#, fuzzy
-#| msgid "<b>Sub-account Transactions</b>"
 msgid "Sub-account Transactions"
-msgstr "<b>Boekingen op subrekeningen</b>"
+msgstr "Boekingen op subrekeningen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:736
 msgid ""
@@ -13915,10 +13882,8 @@ msgid "More Properties"
 msgstr "Meer eigenschappen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1787
-#, fuzzy
-#| msgid "<b>Balance Information</b>"
 msgid "Balance Information"
-msgstr "<b>Saldo-informatie</b>"
+msgstr "Saldo Informatie"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1804
 msgid "Initial Balance Transfer"
@@ -14070,20 +14035,14 @@ msgid "4. Preview"
 msgstr "4. De resultaten vooraf beoordelen"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
-#, fuzzy
-#| msgid "Open imported documents in tabs"
 msgid "Open imported business items in tabs"
 msgstr "Geïmporteerde documenten als tabbladen openen"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs"
 msgid "Open not yet posted business items in tabs"
 msgstr "Nog niet geboekte documenten als tabbladen openen"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
-#, fuzzy
-#| msgid "Don't open imported documents in tabs"
 msgid "Don't open imported business items in tabs"
 msgstr "Geïmporteerde documenten niet als tabbladen openen"
 
@@ -14254,8 +14213,6 @@ msgid "The internal name of the Billing Term."
 msgstr "De interne naam van de betalingsvoorwaarde."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1078
-#, fuzzy
-#| msgid "Billing Terms"
 msgid "New Billing Term"
 msgstr "Betalingsvoorwaarden"
 
@@ -14278,10 +14235,8 @@ msgid "Choose Owner Dialog"
 msgstr "Eigenaar toewijzen"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:64
-#, fuzzy
-#| msgid "From Namespace"
 msgid "Rename Namespace"
-msgstr "Van naamruimte"
+msgstr "Hernoem categorie"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:114
 #: gnucash/gtkbuilder/dialog-commodities.glade:133
