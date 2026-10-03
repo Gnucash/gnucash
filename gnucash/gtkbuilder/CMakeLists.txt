@@ -60,6 +60,7 @@ set (gtkbuilder_SOURCES
         gnc-plugin-page-register.glade
         gnc-recurrence.glade
         gnc-tree-view-owner.glade
+        gnc-plugin-page-invoices-owner.glade
         window-autoclear.glade
         window-reconcile.glade
 )
