@@ -130,6 +130,11 @@
       <attribute name="action">gnc-plugin-basic-commands-actions.ToolsTransLinkedDocsAction</attribute>
       <attribute name="tooltip" translatable="yes">View all Transaction Linked Documents</attribute>
     </item>
+    <item>
+      <attribute name="label" translatable="yes">Show _Trace Log</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsShowTraceLogAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show the current session's trace log</attribute>
+    </item>
   </menu>
 
   <menu id="HelpPlaceholder1">

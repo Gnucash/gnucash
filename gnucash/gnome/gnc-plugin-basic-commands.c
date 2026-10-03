@@ -58,6 +58,7 @@
 #include "gnc-window.h"
 #include "gnc-session.h"
 #include "gnc-plugin-page-sx-list.h"
+#include "gnc-plugin-page-tracelog.h"
 #include "gnc-plugin-file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -89,6 +90,7 @@ static void gnc_main_window_cmd_tools_close_book (GSimpleAction *simple, GVarian
 static void gnc_main_window_cmd_tools_find_transactions (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_main_window_cmd_tools_price_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_main_window_cmd_tools_imap_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_show_tracelog (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_main_window_cmd_tools_trans_doclink (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_main_window_cmd_tools_commodity_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_main_window_cmd_help_totd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -123,6 +125,7 @@ static GActionEntry gnc_plugin_actions [] =
     { "ToolsFinancialCalculatorAction", gnc_main_window_cmd_tools_financial_calculator, NULL, NULL, NULL },
     { "ToolsBookCloseAction", gnc_main_window_cmd_tools_close_book, NULL, NULL, NULL },
     { "ToolsImapEditorAction", gnc_main_window_cmd_tools_imap_editor, NULL, NULL, NULL },
+    { "ToolsShowTraceLogAction", gnc_main_window_cmd_tools_show_tracelog, NULL, NULL, NULL },
     { "ToolsTransLinkedDocsAction", gnc_main_window_cmd_tools_trans_doclink, NULL, NULL, NULL },
     { "HelpTipsOfTheDayAction", gnc_main_window_cmd_help_totd, NULL, NULL, NULL },
 };
@@ -504,6 +507,15 @@ gnc_main_window_cmd_tools_imap_editor (GSimpleAction *simple,
     gnc_set_busy_cursor (NULL, TRUE);
     gnc_imap_dialog (GTK_WIDGET(data->window));
     gnc_unset_busy_cursor (NULL);
+}
+
+static void
+gnc_main_window_cmd_tools_show_tracelog (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
+{
+    GncPluginPage *page = gnc_plugin_page_tracelog_new ();
+    gnc_main_window_open_page (NULL, page);
 }
 
 static void
