@@ -260,6 +260,7 @@ gnucash/gtkbuilder/dialog-date-close.glade
 gnucash/gtkbuilder/dialog-doclink.glade
 gnucash/gtkbuilder/dialog-employee.glade
 gnucash/gtkbuilder/dialog-file-access.glade
+gnucash/gtkbuilder/dialog-filter-invoices.glade
 gnucash/gtkbuilder/dialog-fincalc.glade
 gnucash/gtkbuilder/dialog-find-account.glade
 gnucash/gtkbuilder/dialog-imap-editor.glade
@@ -290,7 +291,6 @@ gnucash/gtkbuilder/dialog-vendor.glade
 gnucash/gtkbuilder/gnc-date-format.glade
 gnucash/gtkbuilder/gnc-frequency.glade
 gnucash/gtkbuilder/gnc-plugin-page-budget.glade
-gnucash/gtkbuilder/gnc-plugin-page-invoices-owner.glade
 gnucash/gtkbuilder/gnc-plugin-page-register.glade
 gnucash/gtkbuilder/gnc-recurrence.glade
 gnucash/gtkbuilder/gnc-tree-view-owner.glade

@@ -8,7 +8,7 @@
 #include "dialog-utils.h"
 #include "dialog-filter-invoices.h"
 
-static const char * const UI_FILE = "gnc-plugin-page-invoices-owner.glade";
+static const char * const UI_FILE = "dialog-filter-invoices.glade";
 static QofLogModule log_module = GNC_MOD_GUI;
 
 class GncFilterInvoicesDialog::FilterDialog {
