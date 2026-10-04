@@ -28,10 +28,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.17\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-02 23:51+0000\n"
+"PO-Revision-Date: 2026-10-01 17:51+0000\n"
 "Last-Translator: Yegor Derevenets <yegor.derevenets@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -5554,7 +5554,7 @@ msgstr "Дата вступления"
 
 #: gnucash/gnome/gnc-split-reg.c:660 gnucash/gnome/window-reconcile.cpp:2158
 msgid "Statement Date"
-msgstr "Дата выписки"
+msgstr "Дата банковской выписки"
 
 #: gnucash/gnome/gnc-split-reg.c:683
 #: gnucash/report/reports/standard/customer-summary.scm:118
@@ -6019,18 +6019,18 @@ msgstr[2] ""
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] "Дата выписки наступает через %d день после сегодняшнего."
-msgstr[1] "Дата выписки наступает через %d дня после сегодняшнего."
-msgstr[2] "Дата выписки наступает через %d дней после сегодняшнего."
+msgstr[0] "Дата банковской выписки на %d день позже сегодняшней даты."
+msgstr[1] "Дата банковской выписки на %d дня позже сегодняшней даты."
+msgstr[2] "Дата банковской выписки на %d дней позже сегодняшней даты."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.cpp:481
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] "Дней до наступления выбранной вами даты выписки — %d."
-msgstr[1] "Дней до наступления выбранной вами даты выписки — %d."
-msgstr[2] "Дней до наступления выбранной вами даты выписки — %d."
+msgstr[0] "Введённая дата банковской выписки на %d день позже сегодняшней даты."
+msgstr[1] "Введённая дата банковской выписки на %d дня позже сегодняшней даты."
+msgstr[2] "Введённая дата банковской выписки на %d дней позже сегодняшней даты."
 
 #: gnucash/gnome/window-reconcile.cpp:486
 msgid ""
@@ -6088,8 +6088,8 @@ msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
-"ВНИМАНИЕ! Счёт содержит части с датой сверки позже даты выписки. Это может "
-"затруднить сверку."
+"ВНИМАНИЕ! Счёт содержит части с датой сверки позже даты банковской выписки. "
+"Это может затруднить сверку."
 
 #: gnucash/gnome/window-reconcile.cpp:2060
 msgid ""
@@ -6098,8 +6098,8 @@ msgid ""
 "the case, you may use Find Transactions to find them, unreconcile, and re-"
 "reconcile."
 msgstr ""
-"В этом счёте есть части, дата сверки которых позже даты данной выписки для "
-"сверки. Эти части могут затруднить сверку. В этом случае вы можете "
+"В этом счёте есть части, дата сверки которых позже даты данной банковской "
+"выписки. Эти части могут затруднить сверку. В этом случае вы можете "
 "воспользоваться поиском проводок, чтобы найти их, снять сверку и выполнить "
 "её заново."
 
@@ -8114,10 +8114,8 @@ msgid "Reconciled (Report)"
 msgstr "Сверено (отчёт)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:901
-#, fuzzy
-#| msgid "_Earliest"
 msgid "Earliest Date"
-msgstr "Сам_ые ранние"
+msgstr "Дата первой проводки"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:907
 msgid "Last Reconcile Date"
@@ -8205,7 +8203,7 @@ msgstr "Исполнено (%s)"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1818
 #, c-format
 msgid "Reconciled (%s)"
-msgstr "Сверенное (%s)"
+msgstr "Сверено (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1821
@@ -9587,8 +9585,8 @@ msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
 msgstr ""
-"Если включено, всегда открывать диалог сверки с датой выписки на сегодняшнее "
-"число, независимо от предыдущих сверок."
+"Если включено, при открытии диалога сверки всегда использовать сегодняшнюю "
+"дату в качестве даты банковской выписки, независимо от предыдущих сверок."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
@@ -16220,8 +16218,8 @@ msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
 msgstr ""
-"Всегда открывать диалог сверки с датой выписки на сегодняшнее число, "
-"независимо от предыдущих сверок."
+"При открытии диалога сверки всегда использовать сегодняшнюю дату в качестве "
+"даты банковской выписки, независимо от предыдущих сверок."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2847
 msgid ""
@@ -18263,14 +18261,14 @@ msgstr "Упорядочить по дате записи."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:972
 msgid "S_tatement Date"
-msgstr "_Дата декларации"
+msgstr "_Дата банковский выписки"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Упорядочить по дате выписки (и сгруппировать по статусу: исполненные, не "
-"сверенные, сверенные)."
+"Упорядочить по дате банковской выписки (и сгруппировать по статусу: "
+"исполненные, не сверенные, сверенные)."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:991
 msgid "Num_ber"
@@ -18443,11 +18441,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "Reconcile Information"
-msgstr "Информация о _сверке"
+msgstr "Данные сверки"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:96
 msgid "Statement _Date"
-msgstr "Дата _декларации"
+msgstr "Дата _банковской выписки"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:131
 msgid "Include _subaccounts"
@@ -18463,7 +18461,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:261
 msgid "Statement Date is after today"
-msgstr "Дата выписки — после сегодняшнего дня"
+msgstr "Дата банковской выписки находится в будущем"
 
 #: gnucash/html/gnc-html-webkit1.cpp:74 gnucash/html/gnc-html-webkit2.cpp:83
 msgid "Not found"
@@ -31076,7 +31074,7 @@ msgstr "_Сверить"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
 msgid "_Reconcile Information…"
-msgstr "Информация о _сверке…"
+msgstr "Данные _сверки…"
 
 #: gnucash/ui/gnc-reconcile-window.ui:14 gnucash/ui/gnc-reconcile-window.ui:264
 msgid "_Finish"
@@ -31455,22 +31453,22 @@ msgstr "н"
 #: libgnucash/app-utils/gnc-ui-util.cpp:476
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
-msgstr "и"
+msgstr "И"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:478
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
-msgstr "с"
+msgstr "С"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:480
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr "з"
+msgstr "З"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:482
 msgctxt "Reconciled flag 'void'"
 msgid "v"
-msgstr "п"
+msgstr "А"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:522
 msgctxt "Document Link flag for 'web'"
