@@ -477,8 +477,8 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
     gtk_combo_box_set_active (GTK_COMBO_BOX(gce), -1);
     gtk_combo_box_set_model (GTK_COMBO_BOX(gce), model);
 
-    g_signal_handlers_block_by_func (G_OBJECT(gce),
-                                     (gpointer)gnc_currency_edit_active_changed, gce);
+    g_signal_handlers_unblock_by_func (G_OBJECT(gce),
+                                       (gpointer)gnc_currency_edit_active_changed, gce);
 
     g_object_unref (model);
 }
