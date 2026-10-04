@@ -82,7 +82,7 @@ get_private (GncPluginPageInvoicesOwner *plugin_page)
 }
 
 static Page *
-get_controller (GncPluginPage *plugin_page)
+get_page (GncPluginPage *plugin_page)
 {
     auto *priv = get_private (plugin_page);
     g_assert (priv);
@@ -91,12 +91,12 @@ get_controller (GncPluginPage *plugin_page)
 }
 
 static Page *
-get_controller (gpointer user_data)
+get_page (gpointer user_data)
 {
     auto *plugin_page = GNC_PLUGIN_PAGE (user_data);
     g_assert (plugin_page);
 
-    return get_controller (plugin_page);
+    return get_page (plugin_page);
 }
 
 namespace { // Isolate class-scope to this file.
@@ -495,7 +495,7 @@ public:
                    GVariant      *parameter,
                    gpointer       user_data)
               {
-                  get_controller (user_data)->new_invoice ();
+                  get_page (user_data)->new_invoice ();
               },
               nullptr, nullptr, nullptr
             },
@@ -506,7 +506,7 @@ public:
                    GVariant      *parameter,
                    gpointer       user_data)
               {
-                  get_controller (user_data)->edit_invoice ();
+                  get_page (user_data)->edit_invoice ();
               },
               nullptr, nullptr, nullptr
             },
@@ -517,7 +517,7 @@ public:
                    GVariant      *parameter,
                    gpointer       user_data)
               {
-                  get_controller (user_data)->duplicate_invoice ();
+                  get_page (user_data)->duplicate_invoice ();
               },
               nullptr, nullptr, nullptr
             },
@@ -528,7 +528,7 @@ public:
                    GVariant      *parameter,
                    gpointer       user_data)
               {
-                  get_controller (user_data)->print_invoice ();
+                  get_page (user_data)->print_invoice ();
               },
               nullptr, nullptr, nullptr
             },
@@ -539,7 +539,7 @@ public:
                    GVariant      *parameter,
                    gpointer       user_data)
               {
-                  get_controller (user_data)->filter.dialog_open ();
+                  get_page (user_data)->filter.dialog_open ();
               },
               nullptr, nullptr, nullptr
             },
@@ -704,7 +704,7 @@ public:
                 G_CALLBACK (
                     +[] (GNCQueryView *qview, gpointer item, gpointer user_data)
                     {
-                      get_controller (user_data)->double_click_entry (item);
+                      get_page (user_data)->double_click_entry (item);
                     }
                 ),
                 plugin_page
@@ -717,7 +717,7 @@ public:
                     +[] (GNCQueryView *qview, GdkEventButton *event,
                          gpointer user_data) -> bool
                     {
-                        get_controller (user_data)->button_press (event);
+                        get_page (user_data)->button_press (event);
 
                         return false;
                     }
@@ -735,7 +735,7 @@ public:
                 G_CALLBACK(
                     +[] (GtkTreeSelection *selection, gpointer user_data)
                     {
-                        get_controller(user_data)->selection_changed ();
+                        get_page (user_data)->selection_changed ();
                     }
                 ),
                 plugin_page
@@ -1943,7 +1943,7 @@ gnc_plugin_page_invoices_owner_class_init (GncPluginPageInvoicesOwnerClass *klas
 
     page_class->create_widget       = +[] (GncPluginPage *plugin_page) -> GtkWidget *
                                       {
-                                          return get_controller (plugin_page)->create_widget ();
+                                          return get_page (plugin_page)->create_widget ();
                                       };
 
     page_class->destroy_widget      = +[] (GncPluginPage *plugin_page) 
@@ -1956,7 +1956,7 @@ gnc_plugin_page_invoices_owner_class_init (GncPluginPageInvoicesOwnerClass *klas
 
     page_class->focus_page_function = +[] (GncPluginPage *plugin_page) -> gboolean 
                                       {
-                                          get_controller (plugin_page)->focus_page ();
+                                          get_page (plugin_page)->focus_page ();
 
                                           return false;
                                       };
