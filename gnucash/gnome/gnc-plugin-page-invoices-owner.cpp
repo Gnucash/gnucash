@@ -123,10 +123,6 @@ class FilterDialog {
     std::string   search_term;
     // State end
 
-public:
-    Page      *page = nullptr;
-    GtkWidget       *dialog = nullptr;
-
     GtkToggleButton *custom_toggle = nullptr;
     GtkToggleButton *overdue_toggle = nullptr;
     GtkWidget       *custom_controls = nullptr;
@@ -150,6 +146,11 @@ public:
     GNCDateEdit     *start_picker = nullptr;
     GNCDateEdit     *end_picker = nullptr;
     GtkEntry        *search_entry = nullptr;
+
+public:
+    Page      *page = nullptr;
+    GtkWidget       *dialog = nullptr;
+
 
     void dialog_open();
 
