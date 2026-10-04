@@ -282,7 +282,12 @@ protected:
             return false;
         }
         g_clear_error (&error);
-        EXPECT_GT (count_parsed_fixture_transactions (path), 0u);
+        const auto transaction_count = count_parsed_fixture_transactions (path);
+        if (transaction_count == 0)
+        {
+            ADD_FAILURE () << "OFX fixture could not be parsed; check the LibOFX DTD installation";
+            return false;
+        }
         return true;
     }
 

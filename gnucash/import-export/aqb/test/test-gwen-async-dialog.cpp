@@ -13,10 +13,6 @@
 #include <gwenhywfar/gui.h>
 #include <gwenhywfar/gui_be.h>
 
-#ifdef MAC_INTEGRATION
-#include <gtkmacintegration/gtkosxapplication.h>
-#endif
-
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
 #include "gnc-gsettings.h"
@@ -68,13 +64,9 @@ struct DialogRun
     bool finished{};
     bool started{};
     bool parent_destroyed{};
+    bool parent_checked{};
     std::uint32_t driver_source{};
 };
-
-#ifdef MAC_INTEGRATION
-static GtkosxApplication *macos_application{};
-static bool macos_application_ready{};
-#endif
 
 static int GWENHYWFAR_CB dialog_signal (GWEN_DIALOG *,
                                        GWEN_DIALOG_EVENTTYPE event,
@@ -160,6 +152,13 @@ static gboolean drive_dialog (gpointer user_data)
     auto window = find_async_dialog_window ();
     if (!window)
         return G_SOURCE_CONTINUE;
+    if (!run->parent_checked)
+    {
+        EXPECT_EQ (gtk_window_get_transient_for (GTK_WINDOW (window)),
+                   GTK_WINDOW (run->parent));
+        run->parent_checked = true;
+        gtk_widget_show (run->parent);
+    }
     if (run->action == Action::ParentDestroy)
     {
         if (!run->parent_destroyed)
@@ -191,27 +190,10 @@ protected:
         run.worker_path = GetParam ().worker_path;
         run.parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         g_object_ref_sink (run.parent);
-        gtk_widget_show (run.parent);
         gtk_widget_realize (run.parent);
-#ifdef MAC_INTEGRATION
-        if (!macos_application_ready)
-        {
-            gtkosx_application_ready (macos_application);
-            macos_application_ready = true;
-        }
-#endif
-        gtk_window_present (GTK_WINDOW (run.parent));
-        const std::int64_t activation_deadline =
-            g_get_monotonic_time () + 2 * G_TIME_SPAN_SECOND;
-        while (!gtk_window_is_active (GTK_WINDOW (run.parent)) &&
-               g_get_monotonic_time () < activation_deadline)
-        {
-            while (g_main_context_iteration (nullptr, false))
-                ;
-            g_usleep (1000);
-        }
-
-        ASSERT_TRUE (gtk_window_is_active (GTK_WINDOW (run.parent)));
+        // Leave the parent unmapped until the dialog opens: its association
+        // must not depend on desktop focus or Gwen's active-window heuristic.
+        ASSERT_FALSE (gtk_window_is_active (GTK_WINDOW (run.parent)));
         run.gui = gnc_GWEN_Gui_get (run.parent);
         ASSERT_NE (run.gui, nullptr);
         auto gwen_gui = GWEN_Gui_GetGui ();
@@ -265,6 +247,8 @@ protected:
 
 TEST_P (GwenAsyncDialogTest, CompletesOnGtkThread)
 {
+    g_test_expect_message ("gwenhywfar", G_LOG_LEVEL_CRITICAL,
+                          "*No active window found*");
     run.started = true;
     if (run.worker_path)
         gnc_GWEN_Gui_run_job_async (run.gui, worker_exec_dialog,
@@ -282,6 +266,8 @@ TEST_P (GwenAsyncDialogTest, CompletesOnGtkThread)
         g_usleep (1000);
     }
     ASSERT_TRUE (run.finished);
+    g_test_assert_expected_messages ();
+    EXPECT_TRUE (run.parent_checked);
     EXPECT_EQ (run.calls, 1u);
     EXPECT_TRUE (run.completed_on_gtk);
     if (run.worker_path)
@@ -313,10 +299,6 @@ int main (int argc, char **argv)
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("GTK display is required for Gwen asynchronous dialog tests");
-#ifdef MAC_INTEGRATION
-    macos_application = static_cast<GtkosxApplication *> (
-        g_object_new (GTKOSX_TYPE_APPLICATION, nullptr));
-#endif
     qof_init ();
     if (!cashobjects_register ())
         g_error ("Failed to register cash objects for Gwen dialog tests");
@@ -329,8 +311,5 @@ int main (int argc, char **argv)
     gnc_component_manager_shutdown ();
     gnc_gsettings_shutdown ();
     qof_close ();
-#ifdef MAC_INTEGRATION
-    g_clear_object (&macos_application);
-#endif
     return result;
 }

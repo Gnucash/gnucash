@@ -700,6 +700,10 @@ gnc_GWEN_Gui_exec_dialog_async (GncGWENGui *gui, GWEN_DIALOG *dialog,
         return;
     }
     g_object_ref (request->window);
+    /* Gwen selects a transient parent from the active windows. The leased
+     * GnuCash GUI owns the parent contract regardless of desktop focus. */
+    gtk_window_set_transient_for (GTK_WINDOW (request->window),
+                                 gui->parent ? GTK_WINDOW (gui->parent) : NULL);
     request->delete_handler = g_signal_connect (request->window,
         "delete-event", G_CALLBACK (gwen_async_dialog_delete_event), request);
     request->destroy_handler = g_signal_connect (request->window, "destroy",

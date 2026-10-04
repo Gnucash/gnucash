@@ -42,6 +42,8 @@ jobs:
         cd $HOME/gnucash/source
         tar -xf $GITHUB_WORKSPACE/googletest-1.17.0.tar.gz
         mv googletest-* googletest
+    - name: Verify runtime dependencies
+      run: sh "$GITHUB_WORKSPACE/util/ci/macos-ci-deps/verify-macos-deps.sh" "$PREFIX"
     - name: Configure GnuCash
       run: |
         mkdir $HOME/gnucash/build
