@@ -1110,34 +1110,45 @@ void
 xaccSplitDetermineGainStatus (Split *split)
 {
     Split *other;
-    GncGUID *guid = nullptr;
 
     if (GAINS_STATUS_UNKNOWN != split->gains) return;
 
+    /* A gains source has a forward "gains-split" link to the split that
+     * records its gains. */
     other = xaccSplitGetCapGainsSplit (split);
     if (other)
     {
         split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
         split->gains_split = other;
+        /* Resolve the gains-recording split too, so it reuses this link
+         * rather than being re-created if it is processed first. */
+        if (GAINS_STATUS_UNKNOWN == other->gains)
+        {
+            other->gains = GAINS_STATUS_GAINS;
+            other->gains_split = split;
+        }
         return;
     }
 
-    if (auto v = qof_instance_get_path_kvp<GncGUID*> (QOF_INSTANCE (split), {"gains-source"}))
-        guid = const_cast<GncGUID*>(*v);
-
-    if (!guid)
+    /* A gains-recording split has a backward "gains-source" link to the
+     * split whose gains it records. */
+    other = xaccSplitGetGainsSourceSplit (split);
+    if (!other)
     {
         // CHECKME: We leave split->gains_split alone.  Is that correct?
         split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
     }
     else
     {
-        QofCollection *col;
-        col = qof_book_get_collection (qof_instance_get_book(split),
-				       GNC_ID_SPLIT);
         split->gains = GAINS_STATUS_GAINS;
-        other = (Split *) qof_collection_lookup_entity (col, guid);
         split->gains_split = other;
+        /* Resolve the source too, so it reuses this split rather than
+         * creating a duplicate if the source is processed afterward. */
+        if (GAINS_STATUS_UNKNOWN == other->gains)
+        {
+            other->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
+            other->gains_split = split;
+        }
     }
 }
 
