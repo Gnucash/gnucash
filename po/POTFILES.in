@@ -138,6 +138,7 @@ gnucash/gnome-utils/dialog-commodity.cpp
 gnucash/gnome-utils/dialog-doclink-utils.c
 gnucash/gnome-utils/dialog-dup-trans.c
 gnucash/gnome-utils/dialog-file-access.c
+gnucash/gnome-utils/dialog-filter-invoices.cpp
 gnucash/gnome-utils/dialog-object-references.c
 gnucash/gnome-utils/dialog-options.cpp
 gnucash/gnome-utils/dialog-preferences.c
