@@ -19,6 +19,13 @@
       <attribute name="tooltip" translatable="yes">Reload the trace log from disk</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
+    <item>
+      <attribute name="label" translatable="yes">_Filter…</attribute>
+      <attribute name="action">GncPluginPageTracelogActions.TracelogFilterAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Show only lines containing a given text</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
   </menu>
 
   <object class="GtkToolbar" id="mainwin-toolbar">
@@ -58,6 +65,21 @@
         <property name="tooltip-text" translatable="yes">Reload the trace log from disk</property>
         <property name="use-underline">True</property>
         <property name="icon-name">view-refresh</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="tl_filter">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Filter</property>
+        <property name="action-name">GncPluginPageTracelogActions.TracelogFilterAction</property>
+        <property name="tooltip-text" translatable="yes">Show only lines containing a given text</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-find</property>
       </object>
       <packing>
         <property name="expand">False</property>

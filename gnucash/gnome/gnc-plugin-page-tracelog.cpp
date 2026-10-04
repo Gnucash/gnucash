@@ -25,6 +25,12 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include <algorithm>
+#include <cctype>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "gnc-plugin-page-tracelog.h"
 #include "gnc-plugin-page.h"
 #include "gnc-main-window.h"
@@ -41,6 +47,7 @@ typedef struct GncPluginPageTracelogPrivate
 {
     GncHtml *html;
     GtkContainer *container;
+    gchar *filter;   /* case-insensitive substring filter; nullptr/empty = show all */
 } GncPluginPageTracelogPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageTracelog, gnc_plugin_page_tracelog, GNC_TYPE_PLUGIN_PAGE)
@@ -58,12 +65,14 @@ static void tracelog_render (GncPluginPageTracelog *page);
 
 static void gnc_plugin_page_tracelog_cmd_reload (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_tracelog_cmd_print (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_tracelog_cmd_filter (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /* Command callbacks */
 static GActionEntry gnc_plugin_page_tracelog_actions [] =
 {
     { "TracelogReloadAction", gnc_plugin_page_tracelog_cmd_reload, nullptr, nullptr, nullptr },
     { "TracelogPrintAction", gnc_plugin_page_tracelog_cmd_print, nullptr, nullptr, nullptr },
+    { "TracelogFilterAction", gnc_plugin_page_tracelog_cmd_filter, nullptr, nullptr, nullptr },
 };
 static guint gnc_plugin_page_tracelog_n_actions = G_N_ELEMENTS(gnc_plugin_page_tracelog_actions);
 
@@ -201,6 +210,8 @@ gnc_plugin_page_tracelog_destroy_widget (GncPluginPage *plugin_page)
         gnc_html_destroy (priv->html);
         priv->html = nullptr;
     }
+    g_free (priv->filter);
+    priv->filter = nullptr;
     priv->container = nullptr;
     LEAVE(" ");
 }
@@ -220,16 +231,27 @@ tracelog_line_class (const char *line)
     return "";
 }
 
+/* Case-insensitive (ASCII) substring test for the viewer's text filter. */
+static bool
+tracelog_line_matches (const std::string& line, const std::string& needle)
+{
+    if (needle.empty ())
+        return true;
+    auto eq = [](char a, char b) {
+        return std::tolower (static_cast<unsigned char>(a)) ==
+               std::tolower (static_cast<unsigned char>(b));
+    };
+    return std::search (line.begin (), line.end (),
+                        needle.begin (), needle.end (), eq) != line.end ();
+}
+
 /* Read the current trace file and render it as a self-contained colorized
-   HTML string, loaded in memory (no temp file / file://). Called on open and
-   from the Reload action. */
+   HTML string, loaded in memory (no temp file / file://). Called on open, from
+   the Reload action, and when the filter changes. */
 static void
 tracelog_render (GncPluginPageTracelog *page)
 {
     GncPluginPageTracelogPrivate *priv = GNC_PLUGIN_PAGE_TRACELOG_GET_PRIVATE(page);
-    gsize length = 0;
-    gchar *contents;
-    GString *html;
 
     /* The widget (and priv->html) may not exist yet: create_widget() calls us
        once it does, and gnc_plugin_page_tracelog_new() may call us on an
@@ -237,10 +259,11 @@ tracelog_render (GncPluginPageTracelog *page)
     if (priv->html == nullptr)
         return;
 
-    contents = qof_log_read_current (&length);
-    html = g_string_new (nullptr);
+    gsize length = 0;
+    gchar *contents = qof_log_read_current (&length);
+    const std::string filter = (priv->filter != nullptr) ? priv->filter : "";
 
-    g_string_append (html,
+    std::string html =
         "<html><head><meta charset=\"utf-8\"><style>"
         "body{font-family:monospace;font-size:12px;background:#fbfbfa;"
         "color:#1a1a1a;margin:0;padding:8px;}"
@@ -248,43 +271,71 @@ tracelog_render (GncPluginPageTracelog *page)
         ".ERROR,.FATAL{color:#b00020;}"
         ".WARN{color:#a15c00;}"
         ".empty{color:#666;font-style:italic;}"
-        "</style></head><body>");
+        ".filterinfo{color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
+        "</style></head><body>";
 
-    if (contents != nullptr && *contents != '\0')
+    /* Escape every value before it enters the HTML so nothing in the log -- e.g.
+       a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
+       first guards g_markup_escape_text() against invalid UTF-8. The class string
+       is one of our own fixed tokens, so it is not user data. */
+    auto append_div = [&html](const char *cls, const char *text) {
+        gchar *valid = g_utf8_make_valid (text, -1);
+        gchar *escaped = g_markup_escape_text (valid, -1);
+        html += "<div class=\"";
+        html += cls;
+        html += "\">";
+        html += escaped;
+        html += "</div>";
+        g_free (escaped);
+        g_free (valid);
+    };
+
+    if (contents == nullptr)
     {
-        gchar **lines = g_strsplit (contents, "\n", -1);
-        for (gint i = 0; lines[i] != nullptr; i++)
-        {
-            const char *cls = tracelog_line_class (lines[i]);
-            /* Escape every line before it enters the HTML so nothing in the log
-               -- e.g. a maliciously crafted security name -- can inject markup.
-               g_utf8_make_valid() first guards g_markup_escape_text() against
-               invalid UTF-8 in the log text. */
-            gchar *valid = g_utf8_make_valid (lines[i], -1);
-            gchar *eline = g_markup_escape_text (valid, -1);
-            g_string_append_printf (html, "<div class=\"line %s\">%s</div>",
-                                    cls, eline);
-            g_free (eline);
-            g_free (valid);
-        }
-        g_strfreev (lines);
-    }
-    else if (contents == nullptr)
-    {
-        g_string_append_printf (html, "<div class=\"empty\">%s</div>",
+        append_div ("empty",
             _("Logging is directed to the console; no trace file is available to display."));
     }
     else
     {
-        g_string_append_printf (html, "<div class=\"empty\">%s</div>",
-            _("No messages have been logged this session."));
+        /* Split once into a vector and filter that, rather than accumulating one
+           giant string and re-splitting it. */
+        std::vector<std::string> lines;
+        std::istringstream iss (contents);
+        for (std::string line; std::getline (iss, line); )
+            lines.push_back (std::move (line));
+
+        std::vector<const std::string*> matched;
+        matched.reserve (lines.size ());
+        for (const auto& line : lines)
+            if (tracelog_line_matches (line, filter))
+                matched.push_back (&line);
+
+        if (!filter.empty ())
+        {
+            gchar *note = g_strdup_printf (
+                _("Filtering on '%s' - showing %zu of %zu lines."),
+                filter.c_str (), matched.size (), lines.size ());
+            append_div ("filterinfo", note);
+            g_free (note);
+        }
+
+        if (lines.empty ())
+            append_div ("empty", _("No messages have been logged this session."));
+        else if (matched.empty ())
+            append_div ("empty", _("No lines match the filter."));
+
+        for (const std::string* line : matched)
+        {
+            std::string cls = "line ";
+            cls += tracelog_line_class (line->c_str ());
+            append_div (cls.c_str (), line->c_str ());
+        }
     }
 
-    g_string_append (html, "</body></html>");
+    html += "</body></html>";
 
-    gnc_html_load_html_string (priv->html, html->str);
+    gnc_html_load_html_string (priv->html, html.c_str ());
 
-    g_string_free (html, TRUE);
     g_free (contents);
 }
 
@@ -311,4 +362,55 @@ gnc_plugin_page_tracelog_cmd_print (GSimpleAction *simple,
     if (priv->html == nullptr)
         return;
     gnc_html_print (priv->html, _("GnuCash Trace Log"));
+}
+
+/* Prompt for a substring filter and re-render showing only matching lines.
+   An empty entry clears the filter (shows everything). */
+static void
+gnc_plugin_page_tracelog_cmd_filter (GSimpleAction *simple,
+                                     GVariant *parameter,
+                                     gpointer user_data)
+{
+    GncPluginPageTracelog *page = GNC_PLUGIN_PAGE_TRACELOG(user_data);
+    GncPluginPageTracelogPrivate *priv;
+    GtkWidget *toplevel, *dialog, *content, *box, *label, *entry;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_TRACELOG(page));
+    priv = GNC_PLUGIN_PAGE_TRACELOG_GET_PRIVATE(page);
+
+    toplevel = (priv->html != nullptr)
+        ? gtk_widget_get_toplevel (gnc_html_get_widget (priv->html)) : nullptr;
+
+    dialog = gtk_dialog_new_with_buttons (
+        _("Filter Trace Log"),
+        (toplevel && GTK_IS_WINDOW(toplevel)) ? GTK_WINDOW(toplevel) : nullptr,
+        GTK_DIALOG_MODAL,
+        _("_Cancel"), GTK_RESPONSE_CANCEL,
+        _("_Apply"),  GTK_RESPONSE_ACCEPT,
+        nullptr);
+
+    content = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+    gtk_container_set_border_width (GTK_CONTAINER(box), 12);
+    label = gtk_label_new (
+        _("Show only lines containing this text (leave empty to show all):"));
+    gtk_label_set_xalign (GTK_LABEL(label), 0.0);
+    entry = gtk_entry_new ();
+    if (priv->filter != nullptr)
+        gtk_entry_set_text (GTK_ENTRY(entry), priv->filter);
+    gtk_entry_set_activates_default (GTK_ENTRY(entry), TRUE);
+    gtk_box_pack_start (GTK_BOX(box), label, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX(box), entry, FALSE, FALSE, 0);
+    gtk_container_add (GTK_CONTAINER(content), box);
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+    gtk_widget_show_all (dialog);
+
+    if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        const gchar *text = gtk_entry_get_text (GTK_ENTRY(entry));
+        g_free (priv->filter);
+        priv->filter = (text != nullptr && *text != '\0') ? g_strdup (text) : nullptr;
+        tracelog_render (page);
+    }
+    gtk_widget_destroy (dialog);
 }
