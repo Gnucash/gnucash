@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
+<gnc-act:title>
+  Australian GST Accounts
+</gnc-act:title>
+<gnc-act:short-description>
+  Accounts for a business registered for GST, labelled for the business activity statement (BAS).
+</gnc-act:short-description>
+<gnc-act:long-description>
+  Select this set with the Business Accounts if the business is registered for GST. GST Collected and GST Paid hold the amounts reported at BAS labels 1A and 1B, and the sales accounts separate the sales reported at labels G2, G3 and G4.
+</gnc-act:long-description>
+<gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Liabilities</act:name>
+  <act:id type="new">efdb80491d805b009a08d912a69a55bc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Liabilities</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">d6c93af1d5bf5556be03503c8ecbc26b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>GST reported on the business activity statement (BAS)</act:description>
+  <act:parent type="new">efdb80491d805b009a08d912a69a55bc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST Collected</act:name>
+  <act:id type="new">4d6cb8402c8e59709c7e97a8d9b62a23</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>GST on sales, BAS label 1A</act:description>
+  <act:parent type="new">d6c93af1d5bf5556be03503c8ecbc26b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST Paid</act:name>
+  <act:id type="new">08c1354ce5cd500b85b8eb7302557cb2</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>GST credits on purchases, BAS label 1B</act:description>
+  <act:parent type="new">d6c93af1d5bf5556be03503c8ecbc26b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income</act:name>
+  <act:id type="new">57a8140802ab519780ba94f2557f32c0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Income</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sales</act:name>
+  <act:id type="new">51dd2af374885ac195a32a4076c7f5e9</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Total sales, BAS label G1</act:description>
+  <act:parent type="new">57a8140802ab519780ba94f2557f32c0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Export Sales</act:name>
+  <act:id type="new">9afff16a17e5522085422746e4fadd6b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>BAS label G2</act:description>
+  <act:parent type="new">51dd2af374885ac195a32a4076c7f5e9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST-free Sales</act:name>
+  <act:id type="new">9634b12da89c587ca73a20d5ba944f6e</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Other GST-free sales, BAS label G3</act:description>
+  <act:parent type="new">51dd2af374885ac195a32a4076c7f5e9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Input-taxed Sales</act:name>
+  <act:id type="new">d1c2c5388a2557da9b3d88d2e30ae539</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>BAS label G4</act:description>
+  <act:parent type="new">51dd2af374885ac195a32a4076c7f5e9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxable Sales</act:name>
+  <act:id type="new">1393bc2b406d58a6bdc810ec3facc602</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>AUD</cmdty:id>
+  </act:commodity>
+  <act:description>Sales that include GST</act:description>
+  <act:parent type="new">51dd2af374885ac195a32a4076c7f5e9</act:parent>
+</gnc:account>
+
+</gnc-account-example>
