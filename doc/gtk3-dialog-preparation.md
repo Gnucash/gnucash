@@ -86,8 +86,13 @@ for shared books, sessions, widgets and callback state. Different response
 paths are named test cases or readable typed parameters. Fixtures retain
 objects used for late-response checks and close UI before releasing its book.
 GTK display initialization fails once at program setup when unavailable.
-The GoogleTest programs preserve fatal GTK/GLib warnings and critical errors,
-so a successful assertion summary cannot hide an invalid widget operation.
+The GoogleTest programs share a logging policy: runtime warnings remain visible
+without aborting the run, and unexpected critical messages fail the test case
+without preventing cleanup. Negative cases can expect GLib messages by domain,
+severity and content. This applies to both traditional and structured logging;
+GLib ERROR-level messages remain fatal. File-error cases also check that owner
+destruction completes the operation exactly once and a late response cannot
+complete it again.
 
 Main-window tests keep a companion window alive during fixture cleanup where
 needed. Finalizing the last GnuCash window schedules normal application

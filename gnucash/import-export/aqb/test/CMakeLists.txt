@@ -52,18 +52,10 @@ if(WITH_AQBANKING)
     test_aqb_RESPONSE_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
   if(APPLE AND GTK_MAC_FOUND)
-    set_source_files_properties(test-gwen-async-dialog.cpp
-      PROPERTIES LANGUAGE OBJCXX)
     set_target_properties(test-gwen-async-dialog PROPERTIES
       MACOSX_BUNDLE TRUE
-      MACOSX_BUNDLE_GUI_IDENTIFIER org.gnucash.test-gwen-async-dialog
-      OBJCXX_STANDARD ${CMAKE_CXX_STANDARD}
-      OBJCXX_STANDARD_REQUIRED ON
-      OBJCXX_EXTENSIONS OFF)
-    target_compile_options(test-gwen-async-dialog PRIVATE
-      -Werror -Wall -Wmissing-declarations
-      ${character_conversions} ${volatile_warning})
-    target_link_libraries(test-gwen-async-dialog PRIVATE ${COCOA_LIBRARY})
+      MACOSX_BUNDLE_GUI_IDENTIFIER org.gnucash.test-gwen-async-dialog)
+    target_link_libraries(test-gwen-async-dialog PRIVATE PkgConfig::GTK_MAC)
   endif()
   if(COMPILE_GSCHEMAS)
     foreach(test_target test-gwen-worker-response test-ab-import-context-response

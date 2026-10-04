@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 
 /* Include the QOF declarations as C++ first, then give the public C entrypoint
    C linkage. assistant-xml-encoding.h itself has no extern-C guard. */
@@ -374,8 +375,7 @@ main (int argc, char **argv)
     qof_init ();
     if (!cashobjects_register ())
         g_error ("Failed to register cash objects");
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     qof_close ();
     return result;

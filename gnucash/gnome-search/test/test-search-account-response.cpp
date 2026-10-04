@@ -5,6 +5,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -198,8 +199,7 @@ main (int argc, char **argv)
         return 1;
     }
     gnc_gsettings_load_backend ();
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     qof_close ();

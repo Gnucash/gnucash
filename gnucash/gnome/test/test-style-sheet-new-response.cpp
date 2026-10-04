@@ -7,6 +7,7 @@
  */
 
 #include <config.h>
+#include "test-logging.hpp"
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
@@ -239,8 +240,7 @@ run_tests (void *, int, char **)
     scm_c_use_module ("gnucash report report-core");
     scm_c_eval_string (
         "(report-module-loader (list '(gnucash report stylesheets)))");
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     gnc_clear_current_session ();
     gnc_gsettings_shutdown ();

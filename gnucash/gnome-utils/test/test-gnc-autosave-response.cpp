@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 #include "Account.h"
 
 #include "cashobjects.h"
@@ -362,8 +363,7 @@ main (int argc, char **argv)
     prefsbackend = &memory_backend;
     if (!cashobjects_register ())
         g_error ("Failed to register cash objects");
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     prefsbackend = saved_backend;
     qof_close ();

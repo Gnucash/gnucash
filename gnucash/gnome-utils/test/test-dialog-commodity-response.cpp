@@ -12,6 +12,7 @@
 #include <gtk/gtk.h>
 
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 
 #include <vector>
 
@@ -405,7 +406,6 @@ main (int argc, char **argv)
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("A graphical display is required for commodity response tests");
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     return RUN_ALL_TESTS ();
 }

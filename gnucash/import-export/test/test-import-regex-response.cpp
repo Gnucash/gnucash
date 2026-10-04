@@ -10,6 +10,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 #include "qof.h"
 
 extern "C"
@@ -113,8 +114,7 @@ main (int argc, char **argv)
     if (!gtk_init_check (&argc, &argv))
         g_error ("GTK display is required for regex response tests");
     qof_init ();
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     qof_close ();
     return result;

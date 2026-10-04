@@ -3,6 +3,7 @@
  */
 
 #include <config.h>
+#include "test-logging.hpp"
 #include <cstdint>
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
@@ -287,8 +288,7 @@ run_tests (int argc, char **argv)
 
     create_window_sentinel ();
 
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     destroy_window_sentinel ();
     gnc_gsettings_shutdown ();

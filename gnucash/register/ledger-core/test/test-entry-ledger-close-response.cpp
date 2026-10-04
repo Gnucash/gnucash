@@ -8,6 +8,7 @@
 #include <libguile.h>
 #include <cstdlib>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 
 #include "Account.h"
 #include "cashobjects.h"
@@ -293,8 +294,7 @@ run_tests (int argc, char **argv)
     gnc_gsettings_load_backend ();
     gnc_component_manager_init ();
     gnucash_register_add_cell_types ();
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();

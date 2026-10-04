@@ -4,6 +4,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 #include <cstdint>
 #include <cstddef>
 
@@ -13,7 +14,7 @@
 #include <gwenhywfar/gui_be.h>
 
 #ifdef MAC_INTEGRATION
-#import <AppKit/AppKit.h>
+#include <gtkmacintegration/gtkosxapplication.h>
 #endif
 
 #include "cashobjects.h"
@@ -71,32 +72,8 @@ struct DialogRun
 };
 
 #ifdef MAC_INTEGRATION
-static NSApplication *macos_application ()
-{
-    static NSApplication *application = [NSApplication sharedApplication];
-    static bool launch_finished = false;
-    if (!launch_finished)
-    {
-        [application finishLaunching];
-        launch_finished = true;
-    }
-    auto running_application = [NSRunningApplication currentApplication];
-    const auto activated = [running_application activateWithOptions:0];
-    if (!activated)
-    {
-        auto bundle_identifier = [running_application bundleIdentifier];
-        auto main_bundle_identifier = [[NSBundle mainBundle] bundleIdentifier];
-        const auto running_bundle = bundle_identifier.UTF8String;
-        const auto main_bundle = main_bundle_identifier.UTF8String;
-        g_print ("macOS activation request failed: pid=%d running-bundle=%s main-bundle=%s app-active=%d windows=%zu\n",
-                 static_cast<int> ([running_application processIdentifier]),
-                 running_bundle ? running_bundle : "(null)",
-                 main_bundle ? main_bundle : "(null)",
-                 static_cast<int> ([application isActive]),
-                 static_cast<std::size_t> ([application.windows count]));
-    }
-    return application;
-}
+static GtkosxApplication *macos_application{};
+static bool macos_application_ready{};
 #endif
 
 static int GWENHYWFAR_CB dialog_signal (GWEN_DIALOG *,
@@ -217,7 +194,11 @@ protected:
         gtk_widget_show (run.parent);
         gtk_widget_realize (run.parent);
 #ifdef MAC_INTEGRATION
-        auto application = macos_application ();
+        if (!macos_application_ready)
+        {
+            gtkosx_application_ready (macos_application);
+            macos_application_ready = true;
+        }
 #endif
         gtk_window_present (GTK_WINDOW (run.parent));
         const std::int64_t activation_deadline =
@@ -229,18 +210,7 @@ protected:
                 ;
             g_usleep (1000);
         }
-#ifdef MAC_INTEGRATION
-        if (!gtk_window_is_active (GTK_WINDOW (run.parent)))
-        {
-            auto key_window = [application keyWindow];
-            auto main_window = [application mainWindow];
-            g_print ("macOS focus diagnostic: app-active=%d key-window=%d main-window=%d gtk-active=%d mapped=%d\n",
-                     static_cast<int> ([application isActive]), key_window != nil,
-                     main_window != nil,
-                     gtk_window_is_active (GTK_WINDOW (run.parent)),
-                     gtk_widget_get_mapped (run.parent));
-        }
-#endif
+
         ASSERT_TRUE (gtk_window_is_active (GTK_WINDOW (run.parent)));
         run.gui = gnc_GWEN_Gui_get (run.parent);
         ASSERT_NE (run.gui, nullptr);
@@ -343,18 +313,24 @@ int main (int argc, char **argv)
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("GTK display is required for Gwen asynchronous dialog tests");
+#ifdef MAC_INTEGRATION
+    macos_application = static_cast<GtkosxApplication *> (
+        g_object_new (GTKOSX_TYPE_APPLICATION, nullptr));
+#endif
     qof_init ();
     if (!cashobjects_register ())
         g_error ("Failed to register cash objects for Gwen dialog tests");
     gnc_component_manager_init ();
     gnc_gsettings_load_backend ();
     gnc_GWEN_Gui_log_init ();
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     gnc_GWEN_Gui_shutdown ();
     gnc_component_manager_shutdown ();
     gnc_gsettings_shutdown ();
     qof_close ();
+#ifdef MAC_INTEGRATION
+    g_clear_object (&macos_application);
+#endif
     return result;
 }

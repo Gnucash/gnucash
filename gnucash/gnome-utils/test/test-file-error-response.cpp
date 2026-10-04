@@ -8,6 +8,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 #include <cstring>
 #include <string>
 #include "gnc-file.h"
@@ -57,6 +58,13 @@ protected:
     GtkWindow *parent{};
     GtkWidget *notice{};
     gchar *filename{};
+    unsigned int completion_count{};
+
+    static void completed ([[maybe_unused]] GtkWindow *parent,
+                           [[maybe_unused]] gint response, gpointer data)
+    {
+        ++static_cast<FileErrorResponseTest *> (data)->completion_count;
+    }
 };
 
 TEST_P (FileErrorResponseTest, NoticeOwnsMessageAndIgnoresLateParentResponse)
@@ -66,13 +74,14 @@ TEST_P (FileErrorResponseTest, NoticeOwnsMessageAndIgnoresLateParentResponse)
         g_test_expect_message ("gnc.gui", G_LOG_LEVEL_CRITICAL,
                                "*Unhandled error 10000*");
     gnc_file_show_session_error_async (parent, code, filename,
-                                       GNC_FILE_DIALOG_OPEN, nullptr, nullptr);
+                                       GNC_FILE_DIALOG_OPEN, completed, this);
     if (code == static_cast<QofBackendError> (10000))
         g_test_assert_expected_messages ();
     g_free (filename);
     filename = nullptr;
     notice = find_notice (parent);
     ASSERT_NE (notice, nullptr); // Product call returned before an answer.
+    EXPECT_EQ (completion_count, 0u);
     g_object_ref (notice);
     gchar *message = nullptr;
     g_object_get (notice, "text", &message, nullptr);
@@ -80,7 +89,9 @@ TEST_P (FileErrorResponseTest, NoticeOwnsMessageAndIgnoresLateParentResponse)
     EXPECT_GT (std::strlen (message), 0u);
     g_free (message);
     gtk_widget_destroy (GTK_WIDGET (parent));
+    EXPECT_EQ (completion_count, 1u);
     gtk_dialog_response (GTK_DIALOG (notice), GTK_RESPONSE_OK);
+    EXPECT_EQ (completion_count, 1u);
 }
 const ErrorCase cases[] = {
         {"no-handler", ERR_BACKEND_NO_HANDLER},
@@ -128,7 +139,6 @@ main (int argc, char **argv)
         g_printerr ("GTK display initialization failed for file error response tests.\n");
         return 1;
     }
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     return RUN_ALL_TESTS ();
 }

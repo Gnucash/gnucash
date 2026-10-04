@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
+#include "test-logging.hpp"
 #include <vector>
 #include "Account.h"
 #include "cashobjects.h"
@@ -264,8 +265,7 @@ int main (int argc, char **argv)
     gnc_gsettings_load_backend ();
     qof_backend_unregister_all_providers ();
     qof_backend_register_provider (QofBackendProvider_ptr {new OpenProvider});
-    g_log_set_always_fatal (static_cast<GLogLevelFlags> (
-        G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL));
+    gnc::test::initialize_logging ();
     auto status = RUN_ALL_TESTS ();
     qof_backend_unregister_all_providers ();
     gnc_component_manager_shutdown ();
