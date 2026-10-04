@@ -68,6 +68,7 @@ static gchar* function_buffer = nullptr;
 static gint qof_log_num_spaces = 0;
 static GLogFunc previous_handler = nullptr;
 static gchar* qof_logger_format = nullptr;
+static QofLogAlertFunc alert_cb = nullptr;
 static QofLogModule log_module = "qof";
 
 using StrVec = std::vector<std::string>;
@@ -196,6 +197,13 @@ log4glib_handler(const gchar     *log_domain,
         fflush(fout);
     }
 
+    /* Notify a registered alert handler (e.g. the GUI status-bar indicator)
+       that a WARNING/ERROR/FATAL message was written.  Only the message that
+       passed the level filter above reaches here, so what the alert counts is
+       exactly what landed in the trace. */
+    if (level <= QOF_LOG_WARNING && alert_cb != nullptr)
+        alert_cb (level);
+
     /* chain?  ignore?  Only chain if it's going to be quiet...
     else
     {
@@ -203,6 +211,12 @@ log4glib_handler(const gchar     *log_domain,
          previous_handler(log_domain, log_level, message, nullptr);
     }
     */
+}
+
+void
+qof_log_set_alert_callback (QofLogAlertFunc func)
+{
+    alert_cb = func;
 }
 
 void

@@ -179,6 +179,18 @@ const gchar * qof_log_prettify (const gchar *name);
  * @a log_level.  This implements the "log.path.hierarchy" logic. **/
 gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
 
+/** Callback type for the log-alert hook; see qof_log_set_alert_callback(). */
+typedef void (*QofLogAlertFunc) (QofLogLevel level);
+
+/** Register a callback invoked whenever a message at WARNING or more severe
+ *  (WARNING/ERROR/FATAL, i.e. PWARN/PERR/FATAL) is actually written to the
+ *  log; pass NULL to clear.  This lets a GUI surface that something noteworthy
+ *  was logged without the (GUI-less) engine knowing anything about the GUI.
+ *  The callback runs on whatever thread emitted the message, so an
+ *  implementation that touches the GUI must marshal to the main thread
+ *  itself. **/
+void qof_log_set_alert_callback (QofLogAlertFunc func);
+
 #define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 
 #ifdef _MSC_VER

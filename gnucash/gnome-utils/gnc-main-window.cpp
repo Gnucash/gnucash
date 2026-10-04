@@ -55,6 +55,7 @@
 #include "gnc-component-manager.h"
 #include "dialog-doclink-utils.h"
 #include "gnc-engine.h"
+#include "qoflog.h"
 #include "gnc-features.h"
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
@@ -144,6 +145,13 @@ static GQuark window_type = 0;
 /** A list of all extant main windows. This is for convenience as the
  *  same information can be obtained from the object tracking code. */
 static GList *active_windows = nullptr;
+
+/* Cumulative count of WARNING/ERROR/FATAL messages logged this session, shown
+   in each window's status-bar alert pill.  Written from the qof-log alert
+   callback (possibly off the main thread) so accessed atomically; the UI
+   refresh is coalesced onto the main loop via a single pending idle. */
+static gint log_alert_count = 0;
+static gint log_alert_refresh_pending = 0;
 /** Count down timer for the save changes dialog. If the timer reaches zero
  *  any changes will be saved and the save dialog closed automatically */
 static guint secs_to_save = 0;
@@ -243,6 +251,11 @@ typedef struct
      *  window that is contained in the status bar.  This pointer
      *  provides easy access for updating the progressbar. */
     GtkWidget *progressbar;
+    /** The trace-log alert pill in the status bar -- hidden until a
+     *  WARNING/ERROR/FATAL is logged, then showing a running count -- and the
+     *  count label inside it. */
+    GtkWidget *log_alert;
+    GtkWidget *log_alert_label;
     /** A list of all pages that are installed in this window. */
     GList *installed_pages;
     /** A list of pages in order of use (most recent -> least recent) */
@@ -4181,6 +4194,60 @@ main_window_realize_cb (GtkWidget *widget, gpointer user_data)
     g_signal_emit_by_name (window, "menu_changed", nullptr);
 }
 
+/* Refresh every window's trace-log alert pill from log_alert_count.  Runs on
+   the main loop (scheduled from the alert callback), so touching widgets here
+   is safe. */
+static gboolean
+main_window_refresh_log_alert (gpointer user_data)
+{
+    gint count = g_atomic_int_get (&log_alert_count);
+
+    g_atomic_int_set (&log_alert_refresh_pending, 0);
+
+    for (GList *iter = active_windows; iter; iter = g_list_next (iter))
+    {
+        if (!GNC_IS_MAIN_WINDOW (iter->data))
+            continue;
+        GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE (iter->data);
+        if (priv->log_alert == nullptr || count <= 0)
+            continue;
+        gchar *text = g_strdup_printf ("%d", count);
+        gtk_label_set_text (GTK_LABEL(priv->log_alert_label), text);
+        g_free (text);
+        gtk_widget_show (priv->log_alert);
+    }
+    return G_SOURCE_REMOVE;
+}
+
+/* qof-log alert hook: a WARNING/ERROR/FATAL was written to the trace.  May be
+   called on any thread, so just bump the (atomic) counter and coalesce the UI
+   update onto the main loop -- a burst during book load or Check & Repair then
+   costs a single refresh. */
+static void
+main_window_log_alert_cb (QofLogLevel level)
+{
+    g_atomic_int_inc (&log_alert_count);
+    if (g_atomic_int_compare_and_exchange (&log_alert_refresh_pending, 0, 1))
+        g_idle_add (main_window_refresh_log_alert, nullptr);
+}
+
+/* Clicking the alert pill opens (or raises) the trace-log viewer by activating
+   the Tools->Show Trace Log action the basic-commands plugin installs on the
+   window.  Activating it by name keeps gnome-utils free of a link dependency on
+   the gnome-layer page. */
+static void
+main_window_log_alert_clicked (GtkButton *button, gpointer user_data)
+{
+    GncMainWindow *window = GNC_MAIN_WINDOW (user_data);
+    GSimpleActionGroup *group =
+        gnc_main_window_get_action_group (window, "gnc-plugin-basic-commands-actions");
+
+    if (group != nullptr &&
+        g_action_group_has_action (G_ACTION_GROUP(group), "ToolsShowTraceLogAction"))
+        g_action_group_activate_action (G_ACTION_GROUP(group),
+                                        "ToolsShowTraceLogAction", nullptr);
+}
+
 static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
@@ -4239,6 +4306,39 @@ gnc_main_window_setup_window (GncMainWindow *window)
                         FALSE, TRUE, 0);
     gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(priv->progressbar),
                                     0.01);
+
+    /* Status-bar trace-log alert: a flat button at the right edge, hidden until
+       a WARNING/ERROR/FATAL is logged, then showing a running count.  Clicking
+       it opens the trace-log viewer.  See main_window_log_alert_cb(). */
+    {
+        GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+        GtkWidget *icon = gtk_image_new_from_icon_name ("dialog-warning-symbolic",
+                                                        GTK_ICON_SIZE_MENU);
+        priv->log_alert_label = gtk_label_new ("0");
+        gtk_box_pack_start (GTK_BOX(box), icon, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX(box), priv->log_alert_label, FALSE, FALSE, 0);
+
+        priv->log_alert = gtk_button_new ();
+        gtk_button_set_relief (GTK_BUTTON(priv->log_alert), GTK_RELIEF_NONE);
+        gtk_container_add (GTK_CONTAINER(priv->log_alert), box);
+        gtk_widget_set_tooltip_text (priv->log_alert,
+            _("Warnings or errors have been written to the trace log this session."
+              " Click to view the trace log."));
+        /* Stay hidden through the window's gtk_widget_show_all(); revealed by
+           main_window_refresh_log_alert() once there is something to report. */
+        gtk_widget_set_no_show_all (priv->log_alert, TRUE);
+        gtk_widget_show_all (box);
+        g_signal_connect (priv->log_alert, "clicked",
+                          G_CALLBACK(main_window_log_alert_clicked), window);
+        gtk_box_pack_end (GTK_BOX(priv->statusbar), priv->log_alert, FALSE, FALSE, 0);
+    }
+
+    /* Register the engine->GUI log-alert hook (idempotent across windows), then
+       reflect anything already logged before this window existed. */
+    qof_log_set_alert_callback (main_window_log_alert_cb);
+    if (g_atomic_int_get (&log_alert_count) > 0 &&
+        g_atomic_int_compare_and_exchange (&log_alert_refresh_pending, 0, 1))
+        g_idle_add (main_window_refresh_log_alert, nullptr);
 
     builder = gtk_builder_new ();
     gtk_builder_set_translation_domain (builder, PROJECT_NAME);
