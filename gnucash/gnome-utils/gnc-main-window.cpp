@@ -490,10 +490,10 @@ gnc_main_window_restore_page (GncMainWindow *window,
     if (page)
     {
         class_type = GNC_PLUGIN_PAGE_GET_CLASS(page)->plugin_name;
-        if (strcmp(page_type, class_type) != 0)
+        if (g_strcmp0(page_type, class_type) != 0)
         {
             g_warning("error: page types don't match: state %s, existing page %s",
-                      page_type, class_type);
+                      page_type, class_type ? class_type : "(none)");
             goto cleanup;
         }
     }
