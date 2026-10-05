@@ -206,7 +206,7 @@ struct sx_pdata
 
 static
 gboolean
-sx_id_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_id_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -220,14 +220,14 @@ sx_id_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_name_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_name_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     return apply_xmlnode_text (xaccSchedXactionSetName, pdata->sx, node);
 }
 
 static gboolean
-sx_enabled_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_enabled_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     auto set_enabled = [](SchedXaction* sx, const char* txt)
@@ -238,7 +238,7 @@ sx_enabled_handler (xmlNodePtr node, gpointer sx_pdata)
 }
 
 static gboolean
-sx_autoCreate_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_autoCreate_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     auto set_autocreate = [](SchedXaction* sx, const char* txt)
@@ -249,7 +249,7 @@ sx_autoCreate_handler (xmlNodePtr node, gpointer sx_pdata)
 }
 
 static gboolean
-sx_notify_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_notify_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     auto set_notify = [](SchedXaction* sx, const char* txt)
@@ -260,7 +260,7 @@ sx_notify_handler (xmlNodePtr node, gpointer sx_pdata)
 }
 
 static gboolean
-sx_advCreate_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_advCreate_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -276,7 +276,7 @@ sx_advCreate_handler (xmlNodePtr node, gpointer sx_pdata)
 }
 
 static gboolean
-sx_advRemind_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_advRemind_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -293,7 +293,7 @@ sx_advRemind_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_set_date (xmlNodePtr node, SchedXaction* sx,
+sx_set_date (GncXmlNode* node, SchedXaction* sx,
              void (*settor) (SchedXaction* sx, const GDate* d))
 {
     GDate* date;
@@ -307,7 +307,7 @@ sx_set_date (xmlNodePtr node, SchedXaction* sx,
 
 static
 gboolean
-sx_instcount_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_instcount_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -324,7 +324,7 @@ sx_instcount_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_start_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_start_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -334,7 +334,7 @@ sx_start_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_last_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_last_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -344,7 +344,7 @@ sx_last_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_end_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_end_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -402,7 +402,7 @@ _fixup_recurrence_start_dates (const GDate* sx_start_date, GList* schedule)
 }
 
 static gboolean
-sx_freqspec_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_freqspec_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -424,7 +424,7 @@ sx_freqspec_handler (xmlNodePtr node, gpointer sx_pdata)
 }
 
 static gboolean
-sx_schedule_recurrence_handler (xmlNodePtr node, gpointer parsing_data)
+sx_schedule_recurrence_handler (GncXmlNode* node, gpointer parsing_data)
 {
     GList** schedule = (GList**)parsing_data;
     gchar* sched_str;
@@ -444,7 +444,7 @@ struct dom_tree_handler sx_recurrence_list_handlers[] =
 };
 
 static gboolean
-sx_recurrence_handler (xmlNodePtr node, gpointer _pdata)
+sx_recurrence_handler (GncXmlNode* node, gpointer _pdata)
 {
     struct sx_pdata* parsing_data = static_cast<decltype (parsing_data)> (_pdata);
     GList* schedule = NULL;
@@ -465,7 +465,7 @@ sx_recurrence_handler (xmlNodePtr node, gpointer _pdata)
 
 static
 gboolean
-sx_defer_last_handler (xmlNodePtr node, gpointer gpTSD)
+sx_defer_last_handler (GncXmlNode* node, gpointer gpTSD)
 {
     GDate* gd;
     SXTmpStateData* tsd = (SXTmpStateData*)gpTSD;
@@ -480,7 +480,7 @@ sx_defer_last_handler (xmlNodePtr node, gpointer gpTSD)
 
 static
 gboolean
-sx_defer_rem_occur_handler (xmlNodePtr node, gpointer gpTSD)
+sx_defer_rem_occur_handler (GncXmlNode* node, gpointer gpTSD)
 {
     gint64 remOccur;
     SXTmpStateData* tsd = (SXTmpStateData*)gpTSD;
@@ -496,7 +496,7 @@ sx_defer_rem_occur_handler (xmlNodePtr node, gpointer gpTSD)
 
 static
 gboolean
-sx_defer_inst_count_handler (xmlNodePtr node, gpointer gpTSD)
+sx_defer_inst_count_handler (GncXmlNode* node, gpointer gpTSD)
 {
     gint64 instCount;
     SXTmpStateData* tsd = (SXTmpStateData*)gpTSD;
@@ -521,7 +521,7 @@ struct dom_tree_handler sx_defer_dom_handlers[] =
 
 static
 gboolean
-sx_defer_inst_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_defer_inst_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -535,7 +535,7 @@ sx_defer_inst_handler (xmlNodePtr node, gpointer sx_pdata)
                                  sx_defer_dom_handlers,
                                  tsd))
     {
-        xmlElemDump (stdout, NULL, node);
+        gnc_xml_node_dump (stdout, node);
         g_free (tsd);
         tsd = NULL;
         return FALSE;
@@ -548,7 +548,7 @@ sx_defer_inst_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_numOccur_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_numOccur_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -567,7 +567,7 @@ sx_numOccur_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_templ_acct_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_templ_acct_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -588,7 +588,7 @@ sx_templ_acct_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_remOccur_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_remOccur_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -606,7 +606,7 @@ sx_remOccur_handler (xmlNodePtr node, gpointer sx_pdata)
 
 static
 gboolean
-sx_slots_handler (xmlNodePtr node, gpointer sx_pdata)
+sx_slots_handler (GncXmlNode* node, gpointer sx_pdata)
 {
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
@@ -645,7 +645,7 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
 {
     SchedXaction* sx;
     gboolean     successful = FALSE;
-    xmlNodePtr   tree = (xmlNodePtr)data_for_children;
+    GncXmlNode*   tree = (GncXmlNode*)data_for_children;
     gxpf_data*    gdata = (gxpf_data*)global_data;
     struct sx_pdata sx_pdata;
 
@@ -673,7 +673,7 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
     if (!successful)
     {
         g_critical ("failed to parse scheduled xaction");
-        xmlElemDump (stdout, NULL, tree);
+        gnc_xml_node_dump (stdout, tree);
         gnc_sx_begin_edit (sx);
         xaccSchedXactionDestroy (sx);
         goto done;
@@ -682,10 +682,10 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
     if (tree->properties)
     {
         gchar* sx_name = xaccSchedXactionGetName (sx);
-        xmlAttr* attr;
+        GncXmlAttr* attr;
         for (attr = tree->properties; attr != NULL; attr = attr->next)
         {
-            xmlChar* attr_value = attr->children->content;
+            char* attr_value = attr->value;
             DEBUG ("sx attribute name[%s] value[%s]", attr->name, attr_value);
             if (strcmp ((const char*)attr->name, "version") != 0)
             {
@@ -738,14 +738,14 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
         if (ra == NULL)
         {
             g_warning ("Error getting template root account from being-parsed Book.");
-            xmlFreeNode (tree);
+            gnc_xml_node_free (tree);
             return FALSE;
         }
         acct = gnc_account_lookup_by_name (ra, guidstr);
         if (acct == NULL)
         {
             g_warning ("no template account with name [%s]", guidstr);
-            xmlFreeNode (tree);
+            gnc_xml_node_free (tree);
             return FALSE;
         }
         DEBUG ("template account name [%s] for SX with GncGUID [%s]",
@@ -761,7 +761,7 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
     }
 
 done:
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return successful;
 }
@@ -774,7 +774,7 @@ gnc_schedXaction_sixtp_parser_create (void)
 
 static
 gboolean
-tt_act_handler (xmlNodePtr node, gpointer data)
+tt_act_handler (GncXmlNode* node, gpointer data)
 {
     gnc_template_xaction_data* txd = static_cast<decltype (txd)> (data);
     Account* acc;
@@ -825,7 +825,7 @@ tt_act_handler (xmlNodePtr node, gpointer data)
 
 static
 gboolean
-tt_trn_handler (xmlNodePtr node, gpointer data)
+tt_trn_handler (GncXmlNode* node, gpointer data)
 {
     gnc_template_xaction_data* txd = static_cast<decltype (txd)> (data);
     Transaction*        trn;
@@ -861,7 +861,7 @@ gnc_template_transaction_end_handler (gpointer data_for_children,
                                       const gchar* tag)
 {
     gboolean   successful = FALSE;
-    xmlNodePtr tree = static_cast<decltype (tree)> (data_for_children);
+    GncXmlNode* tree = static_cast<decltype (tree)> (data_for_children);
     gxpf_data*  gdata = static_cast<decltype (gdata)> (global_data);
     QofBook*    book = static_cast<decltype (book)> (gdata->bookdata);
     GList*      n;
@@ -900,7 +900,7 @@ gnc_template_transaction_end_handler (gpointer data_for_children,
     else
     {
         g_warning ("failed to parse template transaction");
-        xmlElemDump (stdout, NULL, tree);
+        gnc_xml_node_dump (stdout, tree);
     }
 
     /* cleanup */
@@ -915,7 +915,7 @@ gnc_template_transaction_end_handler (gpointer data_for_children,
     g_list_free (txd.accts);
     g_list_free (txd.transactions);
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return successful;
 }
