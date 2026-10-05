@@ -133,8 +133,8 @@ price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
 
 static gboolean
 price_parse_xml_end_handler (gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children,
+                             const sixtp_child_result_list& sibling_data,
                              gpointer parent_data,
                              gpointer global_data,
                              gpointer* result,
@@ -245,7 +245,7 @@ gnc_price_parser_new (void)
 */
 
 static gboolean
-pricedb_start_handler (GSList* sibling_data,
+pricedb_start_handler (const sixtp_child_result_list& sibling_data,
                        gpointer parent_data,
                        gpointer global_data,
                        gpointer* data_for_children,
@@ -264,8 +264,8 @@ pricedb_start_handler (GSList* sibling_data,
 
 static gboolean
 pricedb_after_child_handler (gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
+                             const sixtp_child_result_list& data_from_children,
+                             const sixtp_child_result_list& sibling_data,
                              gpointer parent_data,
                              gpointer global_data,
                              gpointer* result,
@@ -283,7 +283,7 @@ pricedb_after_child_handler (gpointer data_for_children,
     if (!child_result) return (FALSE);
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return (FALSE);
 
-    if (strcmp (child_result->tag, "price") == 0)
+    if (child_result->tag == "price")
     {
         GNCPrice* p = (GNCPrice*) child_result->data;
 
@@ -295,7 +295,7 @@ pricedb_after_child_handler (gpointer data_for_children,
     }
     else
     {
-        PERR ("unexpected tag %s\n", child_result->tag);
+        PERR ("unexpected tag %s\n", child_result->tag.c_str ());
         return FALSE;
     }
     return FALSE;
@@ -314,8 +314,8 @@ pricedb_cleanup_result_handler (sixtp_child_result* result)
 
 static gboolean
 pricedb_v2_end_handler (
-    gpointer data_for_children, GSList* data_from_children,
-    GSList* sibling_data, gpointer parent_data, gpointer global_data,
+    gpointer data_for_children, const sixtp_child_result_list& data_from_children,
+    const sixtp_child_result_list& sibling_data, gpointer parent_data, gpointer global_data,
     gpointer* result, const gchar* tag)
 {
     GNCPriceDB* db = static_cast<decltype (db)> (*result);
