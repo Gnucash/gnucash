@@ -5480,7 +5480,7 @@ add_about_paths (GtkDialog *dialog)
     for (const auto& ep : ep_vec)
     {
         gchar *env_name = g_strconcat (ep.env_name, ":", nullptr);
-        const gchar *uri = gnc_uri_create_uri ("file", nullptr, 0, nullptr, nullptr, ep.env_path);
+        const gchar *uri = gnc_uri_create_uri ("file", nullptr, 0, nullptr, nullptr, ep.env_path, nullptr);
         gchar *display_uri = gnc_doclink_get_unescaped_just_uri (uri);
 
         gchar *url_tag = g_strdup_printf ("%s%d", "url_tag", row);
