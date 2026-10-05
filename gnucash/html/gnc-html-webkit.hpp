@@ -23,6 +23,8 @@
 #include <config.h>
 #if defined(WEBVIEW2)
 #include "gnc-html-webview2.hpp"
+#elif defined(WKWEBVIEW)
+#include "gnc-html-wkwebview.hpp"
 #else
 #include "gnc-html-webkit2.hpp"
 #endif
