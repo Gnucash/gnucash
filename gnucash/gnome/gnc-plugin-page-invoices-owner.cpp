@@ -279,8 +279,8 @@ public:
         return window;
     }
 
-    GtkWidget
-    *create_widget ()
+    GtkWidget *
+    create_widget ()
     {
         ENTER ("page %p", plugin_page);
 
@@ -361,6 +361,8 @@ public:
         }
 
         auto *query = filter->make_filter ();
+
+        g_return_val_if_fail (query, nullptr);
 
         query_view = gnc_query_view_new (columns, query);
 
@@ -583,6 +585,8 @@ public:
     apply_filter ()
     {
         auto *query = filter->make_filter ();
+
+        g_return_if_fail (query);
 
         gnc_query_view_reset_query (GNC_QUERY_VIEW (query_view), query);
 
