@@ -24,7 +24,7 @@ jobs:
       with:
         file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-future-mac-dependencies.tar.xz'
         file-name: gnucash-future-mac-dependencies.tar.xz
-        sha256: '853d894b803a00a29c0a9aabaee4a5c0cd0963e9ef203b5726db59e365fcd419'
+        sha256: 'defd09caf5f5198be0892fb0709cf39dddbc407a3d5e2363c0d91cdbd6ad042f'
     - name: download googletest
       uses: carlosperate/download-file-action@v2
 
