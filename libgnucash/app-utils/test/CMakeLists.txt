@@ -31,16 +31,26 @@ gnc_add_test_with_guile(test-sx test-sx.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
 
-set(test_gnc_quotes_SOURCES
+set (test_gnc_app_utils_SOURCES
+     gtest-ui-util.cpp
+     )
+
+set (test_gnc_app_utils_INCLUDES
+    ${CMAKE_BINARY_DIR}/common # for config.h
+    ${MODULEPATH}
+     )
+
+set(gnc_apputils_gtest_SOURCES
         gtest-gnc-quotes.cpp
+        gtest-ui-util.cpp
         )
 
-set(test_gnc_quotes_INCLUDES
+set(gnc_apputils_gtest_INCLUDES
         ${CMAKE_BINARY_DIR}/common # for config.h
         ${MODULEPATH}
         )
 
-set(test_gnc_quotes_LIBS
+set(gnc_apputils_gtest_LIBS
         gnc-engine
         gtest
         ${Boost_FILESYSTEM_LIBRARY}
@@ -51,7 +61,8 @@ set(test_gnc_quotes_LIBS
         $<$<BOOL:${WIN32}>:${WS2_LIB}>
       )
 
-gnc_add_test(test-gnc-quotes "${test_gnc_quotes_SOURCES}" test_gnc_quotes_INCLUDES test_gnc_quotes_LIBS
+gnc_add_test(gnc-apputils-gtest "${gnc_apputils_gtest_SOURCES}"
+        gnc_apputils_gtest_INCLUDES gnc_apputils_gtest_LIBS
         "GTEST_FILTER=-GncQuotesTest.online_wiggle")
 
 
@@ -87,6 +98,7 @@ set(GUILE_DEPENDS
 set_dist_list(test_app_utils_DIST
   CMakeLists.txt
   gtest-gnc-quotes.cpp
+  gtest-ui-util.cpp
   test-exp-parser.c
   test-print-parse-amount.cpp
   test-sx.cpp
