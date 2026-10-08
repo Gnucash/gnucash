@@ -81,7 +81,6 @@ GNCPrintAmountInfo gnc_price_print_info (const gnc_commodity *curr,
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 
-gchar *number_to_words(gdouble val, gint64 denom);
 const gchar *printable_value (gdouble val, gint denom);
 
 gboolean gnc_reverse_balance (const Account *account);

@@ -1610,34 +1610,6 @@ static double round(double x)
 #endif
 
 char*
-number_to_words(double val, int64_t denom)
-{
-    if (val < 0) val = -val;
-    if (denom < 0) denom = -denom;
-
-    auto int_part = floor(val);
-    auto frac_part = static_cast<int64_t>(round((val - int_part) * denom));
-
-    auto int_string = integer_to_words(int_part);
-    /* Inside of the gettext macro _(...) we must not use any macros but
-       only plain string literals. For this reason, convert the strings
-       separately. */
-    auto nomin_string = g_strdup_printf("%02" PRId64, frac_part);
-    auto denom_string = g_strdup_printf("%" PRId64, denom);
-    auto full_string =
-        /* Translators: This is for the "amount, in words" field in check
-           printing. The first %s is the integer amount of dollars (or
-           whatever currency), the second and third %s the cent amount as
-           a fraction, e.g. 47/100.  */
-        g_strdup_printf("%s and %s/%s",
-                        int_string, nomin_string, denom_string);
-    g_free(int_string);
-    g_free(nomin_string);
-    g_free(denom_string);
-    return full_string;
-}
-
-char*
 numeric_to_words(gnc_numeric val)
 {
     return number_to_words(gnc_numeric_to_double(val),
