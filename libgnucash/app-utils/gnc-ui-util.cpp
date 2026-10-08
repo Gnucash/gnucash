@@ -45,6 +45,7 @@
 #include <unicode/uchar.h>
 #include <unicode/utf8.h>
 #include <unicode/listformatter.h>
+#include <string>
 
 #include "qof.h"
 #include "gnc-prefs.h"
@@ -860,7 +861,7 @@ gnc_default_print_info (gboolean use_symbol)
 }
 
 static bool
-is_decimal_fraction (int fraction, uint8_t *max_decimal_places_p)
+is_decimal_fraction (int64_t fraction, uint8_t *max_decimal_places_p)
 {
     uint8_t max_decimal_places = 0;
 
@@ -1499,8 +1500,6 @@ gnc_wrap_text_with_bidi_ltr_isolate (const char* text)
 /********************************************************************\
  ********************************************************************/
 
-#define FUDGE .00001
-
 /* This function is basically untranslatable. I'd
    guess out of the 29 translations we have, 20 will have their number
    wordings in a totally different way than English has (not to
@@ -1509,7 +1508,7 @@ gnc_wrap_text_with_bidi_ltr_isolate (const char* text)
    wrong. For this reason, we don't even start to pretend a
    word-by-word translation would be of any use, so we don't mark any
    of these strings for translation. cstim, 2007-04-15. */
-static const char* small_numbers[] =
+constexpr const char* small_numbers[] =
 {
     /* Translators: This section is for generating the "amount, in
        words" field when printing a check. This function gets the
@@ -1523,12 +1522,12 @@ static const char* small_numbers[] =
     "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
     "Twenty"
 };
-static const char* medium_numbers[] =
+constexpr const char* medium_numbers[] =
 {
     "Zero", "Ten", "Twenty", "Thirty", "Forty",
     "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
 };
-static const char* big_numbers[] =
+constexpr const char* big_numbers[] =
 {
     /* Translators: This is the word for the number 10^2 */
     "Hundred",
@@ -1552,55 +1551,6 @@ static const char* big_numbers[] =
     "Quintillion"
 };
 
-static char*
-integer_to_words(gint64 val)
-{
-    if (val == 0)
-        return g_strdup("zero");
-    if (val < 0)
-        val = -val;
-
-    auto result = g_string_sized_new(100);
-
-    while (val >= 1000)
-    {
-        int log_val = log10(val) / 3 + FUDGE;
-        int pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
-        int this_part = val / pow_val;
-        val -= this_part * pow_val;
-        auto tmp = integer_to_words(this_part);
-        g_string_append_printf(result, "%s %s ", tmp, gettext(big_numbers[log_val]));
-        g_free(tmp);
-    }
-
-    if (val >= 100)
-    {
-        int this_part = val / 100;
-        val -= this_part * 100;
-        g_string_append_printf(result, "%s %s ",
-                               gettext(small_numbers[this_part]),
-                               gettext(big_numbers[0]));
-    }
-
-    if (val > 20)
-    {
-        int this_part = val / 10;
-        val -= this_part * 10;
-        g_string_append(result, gettext(medium_numbers[this_part]));
-        g_string_append_c(result, ' ');
-    }
-
-    if (val > 0)
-    {
-        int this_part = val;
-        g_string_append(result, gettext(small_numbers[this_part]));
-        g_string_append_c(result, ' ');
-    }
-
-    result = g_string_truncate(result, result->len - 1);
-    return g_string_free(result, FALSE);
-}
-
 #ifdef _MSC_VER
 static double round(double x)
 {
@@ -1612,8 +1562,65 @@ static double round(double x)
 char*
 numeric_to_words(gnc_numeric val)
 {
-    return number_to_words(gnc_numeric_to_double(val),
-                           gnc_numeric_denom(val));
+    if (val.denom < 0)      // reciprocal denominator means num * -denom
+        val = gnc_numeric_convert (val, 1, GNC_HOW_RND_NEVER);
+    if (gnc_numeric_check (val))
+        return g_strdup ("");
+
+    std::string out;
+    out.reserve (300);
+    auto append_word = [&out](auto word){ if (!out.empty()) out += ' '; out += word; };
+    auto append_below_1000 = [&](uint64_t n)
+    {
+        if (n >= 100)
+        {
+            append_word (small_numbers[n / 100]);
+            append_word (big_numbers[0]);
+            n %= 100;
+        }
+        if (n > 20)
+        {
+            append_word (medium_numbers[n / 10]);
+            n %= 10;
+        }
+        if (n > 0)
+            append_word (small_numbers[n]);
+    };
+
+    auto absnum = val.num < 0 ? 0 - static_cast<uint64_t> (val.num)
+        : static_cast<uint64_t> (val.num);
+    auto denom = static_cast<uint64_t> (val.denom);
+    auto whole = absnum / denom;
+    if (whole == 0)
+        out = "zero";
+    else
+    {
+        std::vector<unsigned> groups;
+        for (; whole; whole /= 1000)
+            groups.push_back (whole % 1000);
+
+        for (int i = groups.size() - 1; i >= 0; --i)
+        {
+            if (groups[i] == 0)
+                continue;
+            append_below_1000 (groups[i]);
+            if (i > 0)
+                append_word (big_numbers[i]);
+        }
+    }
+
+    if (denom != 1)
+    {
+        out += " and ";
+        auto rem = absnum % denom;
+        for (auto d = denom, r = rem ? rem : 1; d % 10 == 0; d /= 10, r /= 10)
+            if (r == 0)
+                out += '0';
+        out += std::to_string (rem);
+        out += '/';
+        out += std::to_string (denom);
+    }
+    return g_strndup (out.c_str(), out.size());
 }
 
 const char*
