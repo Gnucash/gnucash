@@ -98,6 +98,7 @@ gnucash/gnome/gnc-plugin-business.c
 gnucash/gnome/gnc-plugin-page-account-tree.cpp
 gnucash/gnome/gnc-plugin-page-budget.cpp
 gnucash/gnome/gnc-plugin-page-invoice.cpp
+gnucash/gnome/gnc-plugin-page-invoices-owner.cpp
 gnucash/gnome/gnc-plugin-page-owner-tree.cpp
 gnucash/gnome/gnc-plugin-page-register.cpp
 gnucash/gnome/gnc-plugin-page-register-filter.cpp
@@ -137,6 +138,7 @@ gnucash/gnome-utils/dialog-commodity.cpp
 gnucash/gnome-utils/dialog-doclink-utils.c
 gnucash/gnome-utils/dialog-dup-trans.c
 gnucash/gnome-utils/dialog-file-access.c
+gnucash/gnome-utils/dialog-filter-invoices.cpp
 gnucash/gnome-utils/dialog-object-references.c
 gnucash/gnome-utils/dialog-options.cpp
 gnucash/gnome-utils/dialog-preferences.c
@@ -258,6 +260,7 @@ gnucash/gtkbuilder/dialog-date-close.glade
 gnucash/gtkbuilder/dialog-doclink.glade
 gnucash/gtkbuilder/dialog-employee.glade
 gnucash/gtkbuilder/dialog-file-access.glade
+gnucash/gtkbuilder/dialog-filter-invoices.glade
 gnucash/gtkbuilder/dialog-fincalc.glade
 gnucash/gtkbuilder/dialog-find-account.glade
 gnucash/gtkbuilder/dialog-imap-editor.glade
@@ -523,6 +526,7 @@ gnucash/ui/gnc-plugin-file-history.ui
 gnucash/ui/gnc-plugin-log-replay.ui
 gnucash/ui/gnc-plugin-page-account-tree.ui
 gnucash/ui/gnc-plugin-page-budget.ui
+gnucash/ui/gnc-plugin-page-invoices-owner.ui
 gnucash/ui/gnc-plugin-page-invoice.ui
 gnucash/ui/gnc-plugin-page-owner-tree.ui
 gnucash/ui/gnc-plugin-page-register.ui
