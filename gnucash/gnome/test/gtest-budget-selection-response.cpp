@@ -12,7 +12,6 @@
 #include "googletest-glib-log-handler.hpp"
 #include <string>
 #include "test/gnome-response-test-fixture.h"
-#include <cstdlib>
 #include "cashobjects.h"
 #include "gnc-plugin-budget.h"
 #include "gnc-plugin-page-budget.h"
@@ -717,8 +716,8 @@ TEST_F (BudgetPageResponseTest, ModifyEventMayCloseOwner)
 }
 }
 
-static int
-run_tests (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
     g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
@@ -728,6 +727,7 @@ run_tests (int argc, char **argv)
         g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
         return 1;
     }
+    scm_init_guile ();
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
@@ -741,17 +741,4 @@ run_tests (int argc, char **argv)
     gnc_clear_current_session ();
     qof_close ();
     return status;
-}
-
-static void
-guile_main ([[maybe_unused]] void *data, int argc, char **argv)
-{
-    std::exit (run_tests (argc, argv));
-}
-
-int
-main (int argc, char **argv)
-{
-    scm_boot_guile (argc, argv, guile_main, nullptr);
-    return 0;
 }

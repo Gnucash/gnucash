@@ -16,7 +16,6 @@
 
 #include "dialog-utils.h"
 #include "gnc-session.h"
-#include "qofbook.h"
 
 namespace
 {
@@ -44,36 +43,15 @@ warning_destroyed ([[maybe_unused]] GtkWidget *dialog, gpointer data)
 class DateRangeResponseTest : public ::testing::Test
 {
 protected:
-    static void SetUpTestSuite ()
-    {
-        qof_init ();
-    }
-
-    static void TearDownTestSuite ()
-    {
-        qof_close ();
-    }
-
-    void SetUp () override
-    {
-        // Date validation reads the current book's auto-read-only setting.
-        m_session = qof_session_new (qof_book_new ());
-        gnc_set_current_session (m_session);
-    }
-
     void TearDown () override
     {
         if (auto dialog = find_warning ())
             gtk_widget_destroy (dialog);
         if (m_parent)
             gtk_widget_destroy (m_parent);
-        auto session = gnc_exchange_current_session (nullptr);
-        EXPECT_EQ (session, m_session);
-        qof_session_destroy (session);
-        m_session = nullptr;
+        gnc_clear_current_session ();
     }
 
-    QofSession *m_session{};
     GtkWidget *m_parent{};
     std::uint32_t m_destroy_count{};
 

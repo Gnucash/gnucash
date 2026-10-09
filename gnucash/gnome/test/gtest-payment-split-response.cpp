@@ -12,7 +12,6 @@
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
-#include <cstdlib>
 
 #include "cashobjects.h"
 #include "gnc-component-manager.h"
@@ -271,8 +270,8 @@ TEST_F (PaymentSplitResponseTest, AcceptedResponseOpensPaymentWindow)
 }
 }
 
-static int
-run_tests (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
@@ -280,6 +279,7 @@ run_tests (int argc, char **argv)
         g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
         return 1;
     }
+    scm_init_guile ();
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
@@ -291,17 +291,4 @@ run_tests (int argc, char **argv)
     gnc_clear_current_session ();
     qof_close ();
     return result;
-}
-
-static void
-guile_main ([[maybe_unused]] void *data, int argc, char **argv)
-{
-    std::exit (run_tests (argc, argv));
-}
-
-int
-main (int argc, char **argv)
-{
-    scm_boot_guile (argc, argv, guile_main, nullptr);
-    return 0;
 }

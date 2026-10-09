@@ -8,7 +8,6 @@
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
-#include <cstdlib>
 #include <vector>
 
 #include "Account.h"
@@ -269,8 +268,8 @@ TEST_F (InvoiceEntryDeleteTwoEntryTest, SelectionDriftRejectsOldConfirmation)
 }
 }
 
-static int
-run_tests (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
     /* CTest supplies build paths and an isolated memory preference backend. */
     ::testing::InitGoogleTest (&argc, argv);
@@ -280,6 +279,7 @@ run_tests (int argc, char **argv)
         return 1;
     }
 
+    scm_init_guile ();
     qof_init ();
     g_assert_true (cashobjects_register ());
     gnc_component_manager_init ();
@@ -296,17 +296,4 @@ run_tests (int argc, char **argv)
     gnc_clear_current_session ();
     qof_close ();
     return result;
-}
-
-static void
-guile_main ([[maybe_unused]] void *data, int argc, char **argv)
-{
-    std::exit (run_tests (argc, argv));
-}
-
-int
-main (int argc, char **argv)
-{
-    scm_boot_guile (argc, argv, guile_main, nullptr);
-    return 0;
 }

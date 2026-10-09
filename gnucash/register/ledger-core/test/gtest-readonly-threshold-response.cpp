@@ -21,12 +21,11 @@
 #include <gtest/gtest.h>
 #include "googletest-glib-log-handler.hpp"
 
-#include "cashobjects.h"
 #include "datecell.h"
 #include "gnc-date.h"
 #include "gnc-session.h"
+#include "gnc-ui-util.h"
 #include "qofbook.h"
-#include "qofsession.h"
 
 static void
 warning_destroyed ([[maybe_unused]] GtkWidget *widget, gpointer data)
@@ -39,14 +38,11 @@ class ReadonlyThresholdTest : public ::testing::Test
 protected:
     void SetUp () override
     {
-        session = qof_session_new (qof_book_new ());
-        ASSERT_NE (session, nullptr);
-        book = qof_session_get_book (session);
+        book = gnc_get_current_book ();
         qof_book_begin_edit (book);
         qof_instance_set (QOF_INSTANCE (book), "autoreadonly-days", (gdouble)30,
                           NULL);
         qof_book_commit_edit (book);
-        gnc_set_current_session (session);
     }
 
     void TearDown () override
@@ -56,7 +52,6 @@ protected:
         gnc_clear_current_session ();
     }
 
-    QofSession *session{};
     QofBook *book{};
     BasicCell *cell{};
 };
@@ -116,11 +111,7 @@ main (int argc, char **argv)
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("GTK display is required for the read-only threshold test");
-    qof_init ();
-    if (!cashobjects_register ())
-        g_error ("Failed to register cash objects for the read-only threshold test");
     gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
-    qof_close ();
     return result;
 }

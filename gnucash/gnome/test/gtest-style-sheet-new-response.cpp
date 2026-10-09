@@ -12,7 +12,6 @@
 #include <gtk/gtk.h>
 #include "test/gnome-response-test-fixture.h"
 #include <libguile.h>
-#include <cstdlib>
 
 #include "dialog-report-style-sheet.h"
 #include "gnc-engine.h"
@@ -229,8 +228,8 @@ TEST_F (StyleSheetCreationTest, OwnerMayCloseAfterSchemeCreatesSheet)
     EXPECT_EQ (find_toplevel ("gnc-id-style-sheet-select"), nullptr);
 }
 
-static void
-run_tests (void *, int, char **)
+static int
+run_tests ()
 {
     qof_init ();
     gnc_engine_init (0, nullptr);
@@ -247,7 +246,7 @@ run_tests (void *, int, char **)
     gnc_gsettings_shutdown ();
     gnc_component_manager_shutdown ();
     qof_close ();
-    exit (result);
+    return result;
 }
 }
 
@@ -260,6 +259,6 @@ main (int argc, char **argv)
         g_printerr ("GTK display initialization failed; GUI tests require a display.\n");
         return 1;
     }
-    scm_boot_guile (argc, argv, run_tests, nullptr);
-    return 0;
+    scm_init_guile ();
+    return run_tests ();
 }

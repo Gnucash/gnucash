@@ -7,9 +7,7 @@
 #include <libguile.h>
 #include <gtest/gtest.h>
 #include "googletest-glib-log-handler.hpp"
-#include <cstdlib>
 
-#include "qof.h"
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
 
@@ -179,35 +177,20 @@ TEST_F (NumberSearchResponseTest, NumericSearchNoticeClosesWithParentAfterValida
 }
 }
 
-static int
-run_tests (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
     ::testing::InitGoogleTest (&argc, argv);
-    qof_init ();
-    /* Parser initialization loads fin.scm even for literal expressions.
-     * Guile must be initialized; saved user variables are not needed. */
+    if (!gtk_init_check (&argc, &argv))
+    {
+        g_printerr ("GTK display initialization failed for numeric search response tests.\n");
+        return 1;
+    }
+    scm_init_guile ();
+    // The parser loads fin.scm; saved user variables are not needed.
     gnc_exp_parser_real_init (FALSE);
     gnc::test::initialize_logging ();
     auto result = RUN_ALL_TESTS ();
     gnc_exp_parser_shutdown ();
-    qof_close ();
     return result;
-}
-
-static void
-guile_main ([[maybe_unused]] void *data, int argc, char **argv)
-{
-    if (!gtk_init_check (&argc, &argv))
-    {
-        g_printerr ("GTK display initialization failed for numeric search response tests.\n");
-        std::exit (1);
-    }
-    std::exit (run_tests (argc, argv));
-}
-
-int
-main (int argc, char **argv)
-{
-    scm_boot_guile (argc, argv, guile_main, nullptr);
-    return 0;
 }

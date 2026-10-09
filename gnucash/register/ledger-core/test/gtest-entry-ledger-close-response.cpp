@@ -6,7 +6,6 @@
 #include <cstdint>
 #include <gtk/gtk.h>
 #include <libguile.h>
-#include <cstdlib>
 #include <gtest/gtest.h>
 #include "googletest-glib-log-handler.hpp"
 
@@ -280,14 +279,15 @@ TEST_F (EntryLedgerCloseTest, RemovedTaxTablePromptsAgainThenSaves)
 }
 }
 
-static int
-run_tests (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "YES", TRUE);
     g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
     ::testing::InitGoogleTest (&argc, argv);
     if (!gtk_init_check (&argc, &argv))
         g_error ("GTK display is required for the entry-ledger response tests");
+    scm_init_guile ();
     qof_init ();
     if (!cashobjects_register ())
         g_error ("Failed to register cash objects for entry-ledger tests");
@@ -301,17 +301,4 @@ run_tests (int argc, char **argv)
     gnc_clear_current_session ();
     qof_close ();
     return result;
-}
-
-static void
-guile_main ([[maybe_unused]] void *data, int argc, char **argv)
-{
-    std::exit (run_tests (argc, argv));
-}
-
-int
-main (int argc, char **argv)
-{
-    scm_boot_guile (argc, argv, guile_main, nullptr);
-    return 0;
 }
