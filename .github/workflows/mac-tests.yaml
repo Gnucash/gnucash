@@ -15,6 +15,8 @@ jobs:
         echo "PATH=$HOME/gnucash/inst/bin:$PATH" >> $GITHUB_ENV
         echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV
         echo "SRCROOT=$HOME/gnucash/source" >> $GITHUB_ENV
+        echo "BUILD_DIR=$HOME/gnucash/build" >> $GITHUB_ENV
+        echo "XDG_DATA_DIRS=$HOME/gnucash/inst/share:/usr/local/share:/usr/share" >> $GITHUB_ENV
         brew install ninja
     - name: download dependency tarball
       uses: carlosperate/download-file-action@v2
@@ -40,6 +42,8 @@ jobs:
         cd $HOME/gnucash/source
         tar -xf $GITHUB_WORKSPACE/googletest-1.17.0.tar.gz
         mv googletest-* googletest
+    - name: Verify runtime dependencies
+      run: sh "$GITHUB_WORKSPACE/util/ci/macos-ci-deps/verify-macos-deps.sh" "$PREFIX"
     - name: Configure GnuCash
       run: |
         mkdir $HOME/gnucash/build
@@ -56,5 +60,5 @@ jobs:
       if: failure()
       with:
         name: TestLog
-        path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
+        path: ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
         if-no-files-found: ignore

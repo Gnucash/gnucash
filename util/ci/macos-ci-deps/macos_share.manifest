@@ -5,3 +5,8 @@ guile
 itstool
 pkgconfig
 swig
+glib-2.0
+icons
+libofx
+mime
+themes

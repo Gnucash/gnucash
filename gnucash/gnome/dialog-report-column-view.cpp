@@ -21,9 +21,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#include <cstdint>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <algorithm>
+#include <memory>
 #include <dialog-options.hpp>
 #include <gnc-optiondb-impl.hpp>
 #include <libguile.h>
@@ -77,6 +79,13 @@ struct gncp_column_view_edit
     GtkWidget *up_button;
     GtkWidget *down_button;
     GtkWidget *size_button;
+    struct SizeDialogOwner
+    {
+        gnc_column_view_edit *owner{nullptr};
+        GtkWidget *dialog{nullptr};
+        std::uint64_t contents_revision{0};
+    };
+    std::shared_ptr<SizeDialogOwner> size_dialog_owner;
 };
 
 /* Even though these aren't external nor used outside this file they must be
@@ -103,8 +112,10 @@ gnc_column_view_set_option(GncOptionDB* odb, const char* section,
 static void
 gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 {
+    if (view->size_dialog_owner)
+        view->size_dialog_owner->owner = nullptr;
     scm_gc_unprotect_object(view->view);
-    gnc_option_db_destroy(view->odb);
+    /* The report's Scheme option object owns the borrowed database. */
     delete view;
 }
 
@@ -179,7 +190,12 @@ update_contents_lists(gnc_column_view_edit * view)
     /* Update the list of selected reports (right selection box). */
     auto tree_selection = gtk_tree_view_get_selection(view->contents);
 
-    view->contents_list = contents;
+    if (view->contents_list != contents)
+    {
+        view->contents_list = contents;
+        if (view->size_dialog_owner)
+            ++view->size_dialog_owner->contents_revision;
+    }
 
     if (!contents.empty() && static_cast<size_t>(view->contents_selected) < contents.size())
         selection = contents[view->contents_selected];
@@ -265,19 +281,7 @@ gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
 
     if (!win) return;
     auto results = gnc_option_db_commit (dlg->get_option_db());
-    for (auto iter = results; iter; iter = iter->next)
-    {
-        GtkWidget *dialog =
-            gtk_message_dialog_new(GTK_WINDOW(dlg->get_widget()),
-                                   GTK_DIALOG_MODAL,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_OK,
-                                   "%s",
-                                   (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-        g_free (iter->data);
-    }
+    gnc_error_dialog_async_list (GTK_WINDOW (dlg->get_widget()), results);
     g_list_free (results);
 
     scm_call_2(dirty_report, win->view, SCM_BOOL_T);
@@ -343,6 +347,8 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         r->size_button = GTK_WIDGET(gtk_builder_get_object (builder, "size_button1"));
 
         r->view      = view;
+        r->size_dialog_owner = std::make_shared<gnc_column_view_edit::SizeDialogOwner>();
+        r->size_dialog_owner->owner = r;
         r->available_list.clear();
         r->contents_selected = 0;
         r->contents_list.clear();
@@ -451,6 +457,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
         r->contents_list.emplace_back(id, 1, 1);
         r->contents_selected = oldlength;
     }
+    ++r->size_dialog_owner->contents_revision;
 
     gnc_column_view_set_option(r->odb, "__general", "report-list",
                                r->contents_list);
@@ -465,6 +472,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
     auto r = static_cast<gnc_column_view_edit *>(user_data);
 
     r->contents_list.erase(r->contents_list.begin() + r->contents_selected);
+    ++r->size_dialog_owner->contents_revision;
     if (r->contents_selected)
         --r->contents_selected;
     gnc_column_view_set_option(r->odb, "__general", "report-list",
@@ -487,6 +495,7 @@ move_selected_item(gnc_column_view_edit* r, int increment)
     else
         std::reverse(move_to, cur_sel + 1);
     r->contents_selected += increment;
+    ++r->size_dialog_owner->contents_revision;
 
     gnc_column_view_set_option(r->odb, "__general", "report-list",
                                r->contents_list);
@@ -508,56 +517,107 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
     move_selected_item(r, 1);
 }
 
+struct SizeDialogRequest
+{
+    std::weak_ptr<gnc_column_view_edit::SizeDialogOwner> owner;
+    GtkWidget *row_spin;
+    GtkWidget *col_spin;
+    size_t selected;
+    unsigned int report_id;
+    std::uint64_t revision;
+    GncOptionReportPlacementVec placements;
+};
+
+static void
+size_dialog_response_cb(GtkDialog *dialog, gint response, gpointer data)
+{
+    /* Updating options may close the parent and destroy this dialog. */
+    auto dialog_ref = std::unique_ptr<GtkDialog, decltype(&g_object_unref)>(
+        GTK_DIALOG(g_object_ref(dialog)), g_object_unref);
+    auto request = static_cast<SizeDialogRequest *>(data);
+    auto owner = request->owner.lock();
+    if (!owner || !owner->owner || owner->dialog != GTK_WIDGET(dialog))
+    {
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        return;
+    }
+
+    auto view = owner->owner;
+    if (response == GTK_RESPONSE_OK &&
+        request->revision == owner->contents_revision &&
+        request->placements == view->contents_list &&
+        request->placements == view->odb->find_option("__general", "report-list")
+                                   ->get_value<GncOptionReportPlacementVec>() &&
+        request->selected == static_cast<size_t>(view->contents_selected) &&
+        request->selected < view->contents_list.size() &&
+        std::get<0>(view->contents_list[request->selected]) == request->report_id)
+    {
+        auto updated = view->contents_list;
+        std::get<1>(updated[request->selected]) =
+            gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(request->col_spin));
+        std::get<2>(updated[request->selected]) =
+            gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(request->row_spin));
+
+        gnc_column_view_set_option(view->odb, "__general", "report-list", updated);
+        if (owner->owner == view)
+        {
+            view->contents_list = std::move(updated);
+            ++owner->contents_revision;
+            view->optwin->changed();
+            if (owner->owner == view)
+                update_contents_lists(view);
+        }
+    }
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+static void
+size_dialog_destroy_cb(GtkWidget *dialog, gpointer data)
+{
+    auto request = static_cast<SizeDialogRequest *>(data);
+    if (auto owner = request->owner.lock(); owner && owner->dialog == dialog)
+        owner->dialog = nullptr;
+    g_object_unref(dialog);
+}
+
 void
-gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
+gnc_column_view_edit_size_cb(GtkButton *button, gpointer user_data)
 {
     auto r = static_cast<gnc_column_view_edit *>(user_data);
-    GtkWidget * rowspin;
-    GtkWidget * colspin;
-    GtkWidget * dlg;
-    GtkBuilder *builder;
-    int dlg_ret;
+    if (!r || !r->size_dialog_owner || r->size_dialog_owner->dialog ||
+        r->contents_selected < 0 ||
+        r->contents_list.size() <= static_cast<size_t>(r->contents_selected))
+        return;
 
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "col_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "row_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "edit_report_size");
-    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "edit_report_size"));
+    auto builder = gtk_builder_new();
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "col_adjustment");
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "row_adjustment");
+    gnc_builder_add_from_file(builder, "dialog-report.glade", "edit_report_size");
+    auto dlg = GTK_WIDGET(gtk_builder_get_object(builder, "edit_report_size"));
+    auto rowspin = GTK_WIDGET(gtk_builder_get_object(builder, "row_spin"));
+    auto colspin = GTK_WIDGET(gtk_builder_get_object(builder, "col_spin"));
+    auto [report_id, wide, high] = r->contents_list[r->contents_selected];
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(colspin), wide);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(rowspin), high);
+    auto parent = gtk_widget_get_toplevel(GTK_WIDGET(button));
+    gtk_window_set_transient_for(GTK_WINDOW(dlg), GTK_WINDOW(parent));
+    gtk_window_set_modal(GTK_WINDOW(dlg), TRUE);
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(dlg), TRUE);
 
-    gtk_window_set_transient_for (GTK_WINDOW(dlg),
-                         GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(button))));
+    auto request = new SizeDialogRequest{r->size_dialog_owner, rowspin, colspin,
+                                         static_cast<size_t>(r->contents_selected),
+                                         report_id,
+                                         r->size_dialog_owner->contents_revision,
+                                         r->contents_list};
+    r->size_dialog_owner->dialog = dlg;
+    g_signal_connect_data(dlg, "response", G_CALLBACK(size_dialog_response_cb), request,
+                          +[](gpointer data, GClosure *)
+                          { delete static_cast<SizeDialogRequest *>(data); },
+                          G_CONNECT_DEFAULT);
+    g_signal_connect(dlg, "destroy", G_CALLBACK(size_dialog_destroy_cb), request);
 
-    /* get the spinner widgets */
-    rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));
-    colspin = GTK_WIDGET(gtk_builder_get_object (builder, "col_spin"));
-
-    if (r->contents_list.size() > static_cast<size_t>(r->contents_selected))
-    {
-        auto [id, wide, high] = r->contents_list[r->contents_selected];
-
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(colspin),
-                                  static_cast<float>(wide));
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(rowspin),
-                                  static_cast<float>(high));
-
-        dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
-        gtk_widget_hide(dlg);
-
-        if (dlg_ret == GTK_RESPONSE_OK)
-        {
-            std::get<1>(r->contents_list[r->contents_selected]) =
-                gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(colspin));
-            std::get<2>(r->contents_list[r->contents_selected]) =
-                gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(rowspin));
-
-            gnc_column_view_set_option(r->odb, "__general", "report-list",
-                                       r->contents_list);
-            r->optwin->changed();
-            update_contents_lists(r);
-        }
-
-        g_object_unref(G_OBJECT(builder));
-
-        gtk_widget_destroy(dlg);
-    }
+    /* Keep the top-level alive after releasing the builder, but not the builder itself. */
+    g_object_ref(dlg);
+    g_object_unref(builder);
+    gtk_widget_show(dlg);
 }

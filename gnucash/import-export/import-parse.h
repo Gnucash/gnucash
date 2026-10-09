@@ -53,8 +53,11 @@ GncImportFormat gnc_import_test_numeric(const char* str, GncImportFormat fmts);
 GncImportFormat gnc_import_test_date(const char* str, GncImportFormat fmts);
 
 
-GncImportFormat gnc_import_choose_fmt(const char* msg, GncImportFormat fmts,
-                                      gpointer user_data);
+typedef void (*GncImportFormatCallback) (GncImportFormat format,
+                                         gpointer user_data);
+void gnc_import_choose_fmt_async (const char *msg, GncImportFormat fmts,
+                                  GncImportFormatCallback completed,
+                                  gpointer user_data);
 
 gboolean gnc_import_parse_numeric(const char* str, GncImportFormat fmt,
                                   gnc_numeric *val);

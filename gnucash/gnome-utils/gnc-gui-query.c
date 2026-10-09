@@ -31,138 +31,184 @@
 
 #define INDEX_LABEL "index"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_GUI; */
-
-/********************************************************************\
- * gnc_ok_cancel_dialog                                             *
- *   display a message, and asks the user to press "Ok" or "Cancel" *
- *                                                                  *
- * NOTE: This function does not return until the dialog is closed   *
- *                                                                  *
- * Args:   parent  - the parent window                              *
- *         default - the button that will be the default            *
- *         message - the message to display                         *
- *         format - the format string for the message to display    *
- *                   This is a standard 'printf' style string.      *
- *         args - a pointer to the first argument for the format    *
- *                string.                                           *
- * Return: the result the user selected                             *
-\********************************************************************/
-gint
-gnc_ok_cancel_dialog(GtkWindow *parent,
-                     gint default_result,
-                     const gchar *format, ...)
+typedef struct
 {
-    GtkWidget *dialog = NULL;
-    gint result;
-    gchar *buffer;
-    va_list args;
+    GWeakRef parent;
+    gboolean has_parent;
+    gboolean parent_destroyed;
+    GncGuiQueryResponseCallback callback;
+    gpointer user_data;
+    gint accept_response;
+    gint cancel_response;
+    gboolean preserve_responses;
+} GncGuiQueryRequest;
 
-    if (!parent)
-        parent = gnc_ui_get_main_window (NULL);
-
-    va_start(args, format);
-    buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (parent,
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION,
-                                     GTK_BUTTONS_OK_CANCEL,
-                                     "%s",
-                                     buffer);
-    g_free(buffer);
-    va_end(args);
-
-    if (!parent)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-
-    gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    return(result);
-}
-
-gboolean
-gnc_action_dialog (GtkWindow *parent, const gchar *action,
-                   gboolean action_default, const gchar *format, ...)
+static void
+gnc_gui_query_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                GncGuiQueryRequest *request)
 {
-    g_return_val_if_fail (action, FALSE);
-
-    if (!parent)
-        parent = gnc_ui_get_main_window (NULL);
-
-    va_list args;
-    va_start(args, format);
-    gchar *buffer = g_strdup_vprintf(format, args);
-    va_end(args);
-
-    GtkWidget *dialog = gtk_message_dialog_new (parent,
-                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-                                                "%s", buffer);
-
-    gtk_dialog_add_button (GTK_DIALOG(dialog), action, GTK_RESPONSE_ACCEPT);
-    gtk_dialog_add_button (GTK_DIALOG(dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
-    gtk_dialog_set_default_response (GTK_DIALOG(dialog), action_default ?
-                                     GTK_RESPONSE_ACCEPT : GTK_RESPONSE_CANCEL);
-
-    gint result = gtk_dialog_run(GTK_DIALOG(dialog));
-
-    gtk_widget_destroy (dialog);
-    g_free(buffer);
-
-    return result == GTK_RESPONSE_ACCEPT;
-}
-
-/********************************************************************\
- * gnc_verify_dialog                                                *
- *   display a message, and asks the user to press "Yes" or "No"    *
- *                                                                  *
- * NOTE: This function does not return until the dialog is closed   *
- *                                                                  *
- * Args:   parent  - the parent window                              *
- *         yes_is_default - If true, "Yes" is default,              *
- *                          "No" is the default button.             *
- *         format - the format string for the message to display    *
- *                   This is a standard 'printf' style string.      *
- *         args - a pointer to the first argument for the format    *
- *                string.                                           *
-\********************************************************************/
-gboolean
-gnc_verify_dialog(GtkWindow *parent, gboolean yes_is_default,
-                  const gchar *format, ...)
-{
-    GtkWidget *dialog;
-    gchar *buffer;
-    gint result;
-    va_list args;
-
-    if (!parent)
-        parent = gnc_ui_get_main_window (NULL);
-
-    va_start(args, format);
-    buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (parent,
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION,
-                                     GTK_BUTTONS_YES_NO,
-                                     "%s",
-                                     buffer);
-    g_free(buffer);
-    va_end(args);
-
-    if (!parent)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog),
-                                    (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-    return (result == GTK_RESPONSE_YES);
+    request->parent_destroyed = TRUE;
 }
 
 static void
-gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageType msg_type, va_list args)
+gnc_gui_query_complete (GtkWidget *dialog, GncGuiQueryRequest *request,
+                        gint response, gboolean destroying)
+{
+    GtkWindow *parent = g_weak_ref_get (&request->parent);
+    GncGuiQueryResponseCallback callback = request->callback;
+    gpointer user_data = request->user_data;
+
+    /* Disconnect before destroying: response and destroy are two ways of
+     * completing the same request, not two independent notifications. */
+    g_signal_handlers_disconnect_by_data (dialog, request);
+    if (!destroying)
+        gtk_widget_destroy (dialog);
+    /* Destroy notifications can themselves close the parent. A retained
+     * GObject reference does not keep its GTK window usable. */
+    if (parent)
+    {
+        g_signal_handlers_disconnect_by_data (parent, request);
+        if (request->parent_destroyed ||
+            gtk_widget_in_destruction (GTK_WIDGET (parent)))
+            g_clear_object (&parent);
+    }
+    if (request->preserve_responses)
+    {
+        if (destroying || response == GTK_RESPONSE_NONE ||
+            response == GTK_RESPONSE_DELETE_EVENT ||
+            (request->has_parent && !parent))
+            response = GTK_RESPONSE_CANCEL;
+    }
+    else if (response != request->accept_response || destroying ||
+             (request->has_parent && !parent))
+        response = request->cancel_response;
+    g_weak_ref_clear (&request->parent);
+    g_free (request);
+    callback (parent, response, user_data);
+    g_clear_object (&parent);
+}
+
+static void
+gnc_gui_query_response (GtkDialog *dialog, gint response, gpointer user_data)
+{
+    gnc_gui_query_complete (GTK_WIDGET (dialog), user_data, response, FALSE);
+}
+
+static void
+gnc_gui_query_destroyed (GtkWidget *dialog, gpointer user_data)
+{
+    gnc_gui_query_complete (dialog, user_data, GTK_RESPONSE_NONE, TRUE);
+}
+
+static void
+gnc_gui_query_bind_response (GtkWidget *dialog, GtkWindow *parent,
+                             gint accept_response, gint cancel_response,
+                             GncGuiQueryResponseCallback completed,
+                             gpointer user_data,
+                             gboolean preserve_responses)
+{
+    GncGuiQueryRequest *request = g_new0 (GncGuiQueryRequest, 1);
+    g_weak_ref_init (&request->parent, parent ? G_OBJECT (parent) : NULL);
+    request->has_parent = parent != NULL;
+    request->callback = completed;
+    request->user_data = user_data;
+    request->accept_response = accept_response;
+    request->cancel_response = cancel_response;
+    request->preserve_responses = preserve_responses;
+    if (parent)
+        g_signal_connect (parent, "destroy",
+                          G_CALLBACK (gnc_gui_query_parent_destroyed), request);
+    g_signal_connect (dialog, "response", G_CALLBACK (gnc_gui_query_response), request);
+    g_signal_connect (dialog, "destroy", G_CALLBACK (gnc_gui_query_destroyed), request);
+}
+
+void
+gnc_gui_query_bind_dialog_response (GtkDialog *dialog,
+                                   GncGuiQueryResponseCallback completed,
+                                   gpointer user_data)
+{
+    g_return_if_fail (GTK_IS_DIALOG (dialog));
+    g_return_if_fail (completed != NULL);
+    auto parent = gtk_window_get_transient_for (GTK_WINDOW (dialog));
+    gnc_gui_query_bind_response (GTK_WIDGET (dialog), parent, 0,
+                                 GTK_RESPONSE_CANCEL, completed, user_data,
+                                 TRUE);
+}
+
+static void
+gnc_gui_query_async_va (GtkWindow *parent, const gchar *accept_label,
+                        const gchar *cancel_label, gint accept_response,
+                        gint cancel_response, gboolean accept_default,
+                        GncGuiQueryResponseCallback completed,
+                        gpointer user_data, const gchar *format, va_list args)
+{
+    g_return_if_fail (completed != NULL);
+    if (!parent)
+        parent = gnc_ui_get_main_window (NULL);
+
+    gchar *message = g_strdup_vprintf (format, args);
+    GtkWidget *dialog = gtk_message_dialog_new (
+        parent, GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", message);
+    g_free (message);
+    gtk_dialog_add_button (GTK_DIALOG (dialog), cancel_label, cancel_response);
+    gtk_dialog_add_button (GTK_DIALOG (dialog), accept_label, accept_response);
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                    accept_default ? accept_response : cancel_response);
+    if (!parent)
+        gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), FALSE);
+
+    gnc_gui_query_bind_response (dialog, parent, accept_response,
+                                 cancel_response, completed, user_data, FALSE);
+    gtk_widget_show_all (dialog);
+}
+
+void
+gnc_ok_cancel_dialog_async (GtkWindow *parent, gint default_result,
+                            GncGuiQueryResponseCallback completed,
+                            gpointer user_data, const gchar *format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    gnc_gui_query_async_va (parent, _("_OK"), _("_Cancel"), GTK_RESPONSE_OK,
+                            GTK_RESPONSE_CANCEL, default_result == GTK_RESPONSE_OK,
+                            completed, user_data, format, args);
+    va_end (args);
+}
+
+void
+gnc_verify_dialog_async (GtkWindow *parent, gboolean yes_is_default,
+                         GncGuiQueryResponseCallback completed,
+                         gpointer user_data, const gchar *format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    gnc_gui_query_async_va (parent, _("_Yes"), _("_No"), GTK_RESPONSE_YES,
+                            GTK_RESPONSE_NO, yes_is_default,
+                            completed, user_data, format, args);
+    va_end (args);
+}
+
+void
+gnc_action_dialog_async (GtkWindow *parent, const gchar *action,
+                         gboolean action_default,
+                         GncGuiQueryResponseCallback completed,
+                         gpointer user_data, const gchar *format, ...)
+{
+    va_list args;
+    g_return_if_fail (action != NULL);
+    va_start (args, format);
+    gnc_gui_query_async_va (parent, action, _("_Cancel"), GTK_RESPONSE_ACCEPT,
+                            GTK_RESPONSE_CANCEL, action_default,
+                            completed, user_data, format, args);
+    va_end (args);
+}
+
+/* This static indicates the debugging module that this .o belongs to.  */
+/* static short module = MOD_GUI; */
+
+static GtkWidget *
+gnc_message_dialog_create (GtkWindow *parent, const gchar *format, GtkMessageType msg_type, va_list args)
 {
     GtkWidget *dialog = NULL;
     gchar *buffer;
@@ -182,8 +228,17 @@ gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageTyp
     if (!parent)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+    return dialog;
+}
+
+static void
+gnc_message_dialog_common (GtkWindow *parent, const gchar *format,
+                          GtkMessageType msg_type, va_list args)
+{
+    GtkWidget *dialog = gnc_message_dialog_create (parent, format, msg_type, args);
+    g_signal_connect_swapped (dialog, "response",
+                              G_CALLBACK (gtk_widget_destroy), dialog);
+    gtk_widget_show (dialog);
 }
 
 /********************************************************************\
@@ -253,6 +308,106 @@ void gnc_error_dialog (GtkWindow* parent, const char* format, ...)
 }
 
 static void
+gnc_message_dialog_async_va (GtkWindow *parent, GtkMessageType type,
+                             const gchar *format, va_list args)
+{
+    GtkWidget *dialog = gnc_message_dialog_create (parent, format, type, args);
+    g_signal_connect_swapped (dialog, "response",
+                              G_CALLBACK (gtk_widget_destroy), dialog);
+    gtk_widget_show (dialog);
+}
+
+void
+gnc_error_dialog_async (GtkWindow *parent, const gchar *format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    gnc_message_dialog_async_va (parent, GTK_MESSAGE_ERROR, format, args);
+    va_end (args);
+}
+
+void
+gnc_warning_dialog_async (GtkWindow *parent, const gchar *format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    gnc_message_dialog_async_va (parent, GTK_MESSAGE_WARNING, format, args);
+    va_end (args);
+}
+
+void
+gnc_error_dialog_async_list (GtkWindow *parent, const GList *errors)
+{
+    GString *message;
+    if (!errors)
+        return;
+
+    message = g_string_new (NULL);
+    for (const GList *node = errors; node; node = node->next)
+    {
+        if (node != errors)
+            g_string_append (message, "\n\n");
+        g_string_append (message, node->data);
+    }
+    gnc_error_dialog_async (parent, "%s", message->str);
+    g_string_free (message, TRUE);
+}
+
+void
+gnc_info_dialog_async (GtkWindow *parent, const gchar *format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    gnc_message_dialog_async_va (parent, GTK_MESSAGE_INFO, format, args);
+    va_end (args);
+}
+
+static void
+gnc_message_dialog_async_response_va (GtkWindow *parent, GtkMessageType type,
+                                     GncGuiQueryResponseCallback completed,
+                                     gpointer user_data, const gchar *format,
+                                     va_list args)
+{
+    GtkWidget *dialog;
+    GtkWindow *dialog_parent;
+    if (!completed)
+    {
+        gnc_message_dialog_async_va (parent, type, format, args);
+        return;
+    }
+    dialog = gnc_message_dialog_create (parent, format, type, args);
+    dialog_parent = gtk_window_get_transient_for (GTK_WINDOW (dialog));
+    gnc_gui_query_bind_response (dialog, dialog_parent, GTK_RESPONSE_CLOSE,
+                                 GTK_RESPONSE_CANCEL, completed, user_data, FALSE);
+    gtk_widget_show (dialog);
+}
+
+void
+gnc_message_dialog_async_response (GtkWindow *parent, GtkMessageType type,
+                                  GncGuiQueryResponseCallback completed,
+                                  gpointer user_data, const gchar *format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    gnc_message_dialog_async_response_va (parent, type, completed, user_data,
+                                         format, args);
+    va_end (args);
+}
+
+void
+gnc_info_dialog_async_response (GtkWindow *parent,
+                               GncGuiQueryResponseCallback completed,
+                               gpointer user_data, const gchar *format, ...)
+{
+    va_list args;
+    g_return_if_fail (completed != NULL);
+    va_start (args, format);
+    gnc_message_dialog_async_response_va (parent, GTK_MESSAGE_INFO, completed,
+                                         user_data, format, args);
+    va_end (args);
+}
+
+static void
 gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 {
     int *result = data;
@@ -268,15 +423,44 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
  the selected one
 */
 
-int
-gnc_choose_radio_option_dialog(GtkWidget *parent,
+typedef struct
+{
+    gint selected;
+    GPtrArray *buttons;
+    GncGuiQueryResponseCallback completed;
+    gpointer user_data;
+} RadioQuery;
+
+static void
+radio_query_completed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    RadioQuery *request = user_data;
+    gint selected = response == GTK_RESPONSE_OK ? request->selected : -1;
+    GncGuiQueryResponseCallback completed = request->completed;
+    gpointer data = request->user_data;
+    for (guint i = 0; i < request->buttons->len; ++i)
+        g_signal_handlers_disconnect_by_data (g_ptr_array_index (request->buttons, i),
+                                               &request->selected);
+    g_ptr_array_unref (request->buttons);
+    g_free (request);
+    completed (parent, selected, data);
+}
+
+void
+gnc_choose_radio_option_dialog_async(GtkWidget *parent,
                                const char *title,
                                const char *msg,
                                const char *button_name,
                                int default_value,
-                               GList *radio_list)
+                               GList *radio_list,
+                               GncGuiQueryResponseCallback completed,
+                               gpointer user_data)
 {
-    int radio_result = 0; /* initial selected value is first one */
+    g_return_if_fail (completed != NULL);
+    RadioQuery *request = g_new0 (RadioQuery, 1);
+    request->buttons = g_ptr_array_new_with_free_func (g_object_unref);
+    request->completed = completed;
+    request->user_data = user_data;
     GtkWidget *vbox;
     GtkWidget *main_vbox;
     GtkWidget *label;
@@ -312,15 +496,16 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
         if (i == default_value) /* default is first radio button */
         {
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), TRUE);
-            radio_result = default_value;
+            request->selected = default_value;
         }
 
         gtk_widget_show(radio_button);
         gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
+        g_ptr_array_add (request->buttons, g_object_ref (radio_button));
         g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
         g_signal_connect(radio_button, "clicked",
                          G_CALLBACK(gnc_choose_radio_button_cb),
-                         &radio_result);
+                         &request->selected);
     }
 
     if (!button_name)
@@ -338,100 +523,101 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
 
     gtk_box_pack_start(GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
 
-    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-        radio_result = -1;
-
-    gtk_widget_destroy (dialog);
-
-    return radio_result;
+    gnc_dialog_run_async (GTK_DIALOG (dialog), NULL,
+                          radio_query_completed, request);
 }
 
-static gchar *
-gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input, gboolean use_entry)
+typedef struct
 {
-    gint result;
+    GtkWidget *dialog;
     GtkWidget *view;
-    GtkTextBuffer *buffer;
-    gchar *user_input = NULL;
-    GtkTextIter start, end;
-    
-    /* Create the widgets */
-    GtkWidget* dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
-                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("_OK"), GTK_RESPONSE_ACCEPT,
-                                          _("_Cancel"), GTK_RESPONSE_REJECT,
-                                          NULL);
-    GtkWidget* content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-    
-    // add a label
-    GtkWidget* label = gtk_label_new (msg);
-    gtk_box_pack_start(GTK_BOX(content_area), label, FALSE, FALSE, 0);
-    
-    // add a textview or an entry.
+    gboolean use_entry;
+    gchar *text;
+    GncInputDialogCallback completed;
+    gpointer user_data;
+} InputQuery;
+
+static void
+input_query_capture ([[maybe_unused]] GtkDialog *dialog, gint response,
+                     InputQuery *request)
+{
+    if (response != GTK_RESPONSE_ACCEPT)
+        return;
+    if (request->use_entry)
+        request->text = g_strdup (gtk_entry_get_text (GTK_ENTRY (request->view)));
+    else
+    {
+        GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (request->view));
+        GtkTextIter start, end;
+        gtk_text_buffer_get_bounds (buffer, &start, &end);
+        request->text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+    }
+}
+
+static void
+input_query_completed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    InputQuery *request = user_data;
+    if (response != GTK_RESPONSE_ACCEPT)
+        g_clear_pointer (&request->text, g_free);
+    GncInputDialogCallback completed = request->completed;
+    gpointer data = request->user_data;
+    gchar *text = request->text;
+    g_signal_handlers_disconnect_by_data (request->dialog, request);
+    g_object_unref (request->dialog);
+    g_free (request);
+    completed (parent, text, data);
+}
+
+static void
+gnc_input_dialog_internal (GtkWidget *parent, const gchar *title,
+                           const gchar *msg, const gchar *default_input,
+                           gboolean use_entry, GncInputDialogCallback completed,
+                           gpointer user_data)
+{
+    g_return_if_fail (completed != NULL);
+    InputQuery *request = g_new0 (InputQuery, 1);
+    request->use_entry = use_entry;
+    request->completed = completed;
+    request->user_data = user_data;
+    GtkWidget *dialog = gtk_dialog_new_with_buttons (
+        title, parent ? GTK_WINDOW (parent) : NULL,
+        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+        _("_OK"), GTK_RESPONSE_ACCEPT, _("_Cancel"), GTK_RESPONSE_REJECT, NULL);
+    GtkWidget *content = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+    request->dialog = g_object_ref (dialog);
+    gtk_box_pack_start (GTK_BOX (content), gtk_label_new (msg), FALSE, FALSE, 0);
     if (use_entry)
     {
-        view = gtk_entry_new ();
-        gtk_entry_set_text (GTK_ENTRY (view), default_input);
+        request->view = gtk_entry_new ();
+        gtk_entry_set_text (GTK_ENTRY (request->view), default_input ? default_input : "");
     }
     else
     {
-        view = gtk_text_view_new ();
-        gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD_CHAR);
-        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-        gtk_text_buffer_set_text (buffer, default_input, -1);
+        request->view = gtk_text_view_new ();
+        gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (request->view), GTK_WRAP_WORD_CHAR);
+        gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (request->view)),
+                                  default_input ? default_input : "", -1);
     }
-    gtk_box_pack_start(GTK_BOX(content_area), view, TRUE, TRUE, 0);
-
-    // run the dialog
-    gtk_widget_show_all (dialog);
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
-    
-    if (result != GTK_RESPONSE_REJECT)
-    {
-        if (use_entry)
-            user_input = g_strdup (gtk_entry_get_text ((GTK_ENTRY (view))));
-        else
-        {
-            gtk_text_buffer_get_start_iter (buffer, &start);
-            gtk_text_buffer_get_end_iter (buffer, &end);
-            user_input = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-        }
-    }
-    
-    gtk_widget_destroy (dialog);
-    
-    return user_input;
+    gtk_box_pack_start (GTK_BOX (content), request->view, TRUE, TRUE, 0);
+    g_signal_connect (dialog, "response", G_CALLBACK (input_query_capture), request);
+    gnc_dialog_run_async (GTK_DIALOG (dialog), NULL, input_query_completed, request);
 }
 
-/********************************************************************\
- * gnc_input_dialog                                                 *
- *   simple convenience dialog to get a single value from the user  *
- *   user may choose between "Ok" and "Cancel"                      *
- *                                                                  *
- * NOTE: This function does not return until the dialog is closed   *
- *                                                                  *
- * Args:   parent  - the parent window or NULL                      *
- *         title   - the title of the dialog                        *
- *         msg     - the message to display                         *
- *         default_input - will be displayed as default input       *
- * Return: the input (text) the user entered, if pressed "Ok"       *
- *         NULL, if pressed "Cancel"                                *
- \********************************************************************/
-gchar *
-gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input)
+void
+gnc_input_dialog_async (GtkWidget *parent, const gchar *title, const gchar *msg,
+                        const gchar *default_input, GncInputDialogCallback completed,
+                        gpointer user_data)
 {
-    return gnc_input_dialog_internal (parent, title, msg, default_input, FALSE);
+    gnc_input_dialog_internal (parent, title, msg, default_input, FALSE, completed, user_data);
 }
 
-/********************************************************************\
- * gnc_input_dialog_with_entry                                      *
- *   Similar to gnc_input_dialog but use a single line entry widget *
- *   user may choose between "Ok" and "Cancel"                      *
- \********************************************************************/
-gchar *
-gnc_input_dialog_with_entry (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input)
+void
+gnc_input_dialog_with_entry_async (GtkWidget *parent, const gchar *title,
+                                   const gchar *msg, const gchar *default_input,
+                                   GncInputDialogCallback completed, gpointer user_data)
 {
-    return gnc_input_dialog_internal (parent, title, msg, default_input, TRUE);
+    gnc_input_dialog_internal (parent, title, msg, default_input, TRUE, completed, user_data);
 }
 
 void
@@ -466,6 +652,45 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
         gtk_window_set_default_size (GTK_WINDOW(dialog), width, height);
     }
     gtk_widget_show_all (dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+    g_signal_connect_swapped (dialog, "response",
+                              G_CALLBACK (gtk_widget_destroy), dialog);
+    gtk_widget_show (dialog);
+}
+
+void
+gnc_info2_dialog_async (GtkWidget *parent, const gchar *title,
+                       const gchar *msg,
+                       GncGuiQueryResponseCallback completed,
+                       gpointer user_data)
+{
+    GtkWidget *view;
+    GtkTextBuffer *buffer;
+    gint width, height;
+    GtkWindow *parent_window = parent && GTK_IS_WINDOW (parent) ?
+        GTK_WINDOW (parent) : NULL;
+    g_return_if_fail (completed != NULL);
+
+    GtkWidget *dialog = gtk_dialog_new_with_buttons (
+        title, parent_window,
+        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+        _("_OK"), GTK_RESPONSE_ACCEPT, NULL);
+    GtkWidget *content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+    GtkWidget *scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+
+    gtk_box_pack_start (GTK_BOX (content_area), scrolledwindow, TRUE, TRUE, 0);
+    view = gtk_text_view_new ();
+    gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+    gtk_text_buffer_set_text (buffer, msg ? msg : "", -1);
+    gtk_container_add (GTK_CONTAINER (scrolledwindow), view);
+
+    if (parent_window)
+    {
+        gtk_window_get_size (parent_window, &width, &height);
+        gtk_window_set_default_size (GTK_WINDOW (dialog), width, height);
+    }
+
+    gnc_gui_query_bind_response (dialog, parent_window, GTK_RESPONSE_ACCEPT,
+                                 GTK_RESPONSE_CANCEL, completed, user_data, FALSE);
+    gtk_widget_show_all (dialog);
 }

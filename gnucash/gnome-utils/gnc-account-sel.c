@@ -999,18 +999,38 @@ gnc_account_sel_set_new_account_modal (GNCAccountSel *gas,
     gas->isModal = state;
 }
 
+typedef struct
+{
+    GWeakRef selector;
+} AccountSelCreation;
+
+static void
+gas_new_account_created (Account *account, gpointer user_data)
+{
+    AccountSelCreation *request = user_data;
+    GNCAccountSel *selector = GNC_ACCOUNT_SEL (
+        g_weak_ref_get (&request->selector));
+    if (selector && account)
+        gnc_account_sel_set_account (selector, account, FALSE);
+    g_clear_object (&selector);
+    g_weak_ref_clear (&request->selector);
+    g_free (request);
+}
+
 static void
 gas_new_account_click (GtkButton *b, gpointer user_data)
 {
     GNCAccountSel *gas = (GNCAccountSel*)user_data;
-    GtkWindow *parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(gas)));
+    GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET(gas));
+    GtkWindow *parent = GTK_IS_WINDOW (toplevel) ? GTK_WINDOW (toplevel) : NULL;
 
     if (gas->isModal)
     {
-        Account *account = gnc_ui_new_accounts_from_name_with_defaults (parent, NULL, gas->acctTypeFilters,
-                                                                        gas->default_new_commodity, NULL);
-        if (account)
-            gnc_account_sel_set_account (gas, account, FALSE);
+        AccountSelCreation *request = g_new0 (AccountSelCreation, 1);
+        g_weak_ref_init (&request->selector, G_OBJECT (gas));
+        gnc_ui_new_accounts_from_name_with_defaults_async (
+            parent, NULL, gas->acctTypeFilters, gas->default_new_commodity,
+            NULL, gas_new_account_created, request);
     }
     else
         gnc_ui_new_account_with_types_and_commodity (parent, gnc_get_current_book(),

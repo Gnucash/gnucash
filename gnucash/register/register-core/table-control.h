@@ -55,6 +55,7 @@ typedef struct table_control
     TableMoveFunc move_cursor;
 
     gboolean allow_move;
+    gboolean input_suspended;
 
     /* called to determine traversal when user requests a move */
     TableTraverseFunc traverse;
@@ -68,6 +69,9 @@ void gnc_table_control_destroy (TableControl *control);
 
 void gnc_table_control_allow_move (TableControl *control,
                                    gboolean allow_move);
+void gnc_table_control_set_input_suspended (TableControl *control,
+                                            gboolean suspended);
+gboolean gnc_table_control_input_suspended (TableControl *control);
 
 #ifdef __cplusplus
 }

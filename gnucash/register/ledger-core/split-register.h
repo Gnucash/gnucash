@@ -249,6 +249,33 @@ typedef enum
 /** @brief A split register created with ::gnc_split_register_new */
 typedef struct split_register SplitRegister;
 typedef struct sr_info SRInfo;
+#ifdef __cplusplus
+extern "C" {
+#endif
+typedef void (*GncSplitRegisterExchangeCallback) (SplitRegister *reg,
+                                                  gboolean accepted,
+                                                  gpointer user_data);
+typedef enum {
+    GNC_SPLIT_REGISTER_EXCHANGE_CONTINUE,
+    GNC_SPLIT_REGISTER_EXCHANGE_DEFERRED,
+    GNC_SPLIT_REGISTER_EXCHANGE_REJECTED
+} GncSplitRegisterExchangeResult;
+/** Resolve an exchange rate without entering a nested GTK loop.
+ * CONTINUE means no dialog is needed and the caller may proceed immediately.
+ * DEFERRED means a dialog is active and callback (if non-NULL) will run once
+ * after it completes. REJECTED means the request could not proceed; no
+ * callback is made. A NULL callback is suitable for UI actions that only
+ * present the exchange dialog.
+ */
+GncSplitRegisterExchangeResult gnc_split_register_handle_exchange_async (
+    SplitRegister *reg, gboolean force_dialog,
+    GncSplitRegisterExchangeCallback callback, gpointer user_data);
+#ifdef __cplusplus
+}
+#endif
+typedef void (*GncSplitRegisterSaveCallback) (SplitRegister *reg,
+                                              gboolean saved,
+                                              gpointer user_data);
 
 /** @brief The type, style and table for the register. */
 struct split_register
@@ -464,11 +491,8 @@ gboolean
 gnc_split_register_get_split_amount_virt_loc (SplitRegister* reg, Split* split,
                                               VirtualLocation* virt_loc);
 
-/** Duplicates either the current transaction or the current split
- *    depending on the register mode and cursor position. Returns the
- *    split just created, or the 'main' split of the transaction just
- *    created, or NULL if nothing happened. */
-Split* gnc_split_register_duplicate_current (SplitRegister* reg);
+void gnc_split_register_duplicate_current_async (SplitRegister *reg,
+                                                  GObject *owner);
 
 /** Return TRUE if copied_item holds a transaction or split.
  */
@@ -548,7 +572,9 @@ void gnc_split_register_load (SplitRegister* reg, GList* slist,
  *    blank transaction, and the do_commit flag is set, a refresh will
  *    result in a new blank transaction.  The method returns TRUE if
  *    something was changed. */
-gboolean gnc_split_register_save (SplitRegister* reg, gboolean do_commit);
+void gnc_split_register_save_async (SplitRegister *reg, gboolean do_commit,
+                                    GncSplitRegisterSaveCallback callback,
+                                    gpointer user_data);
 
 /** Causes a redraw of the register window associated with reg. */
 void gnc_split_register_redraw (SplitRegister* reg);
@@ -593,9 +619,6 @@ void gnc_split_register_change_blank_split_ref (SplitRegister* reg,
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
  */
-gboolean
-gnc_split_register_handle_exchange (SplitRegister* reg, gboolean force_dialog);
-
 /* returns TRUE if begin_edit was aborted */
 gboolean
 gnc_split_register_begin_edit_or_warn (SRInfo* info, Transaction* trans);

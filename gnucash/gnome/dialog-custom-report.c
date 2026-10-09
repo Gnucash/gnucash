@@ -315,25 +315,43 @@ custom_report_edit_report_name (SCM guid,
  * this will delete the report, update the reports list and leave the
  * dialog active for additional usage.
  *********************************************************************/
+typedef struct
+{
+    CustomReportDialog *owner;
+    SCM guid;
+} CustomReportDelete;
+
+static void
+custom_report_delete_decided (GtkWindow *parent, gint response, gpointer user_data)
+{
+    CustomReportDelete *request = user_data;
+    if (parent)
+        g_object_set_data (G_OBJECT (parent), "gnc-custom-delete-pending", NULL);
+    if (parent && response == GTK_RESPONSE_YES)
+    {
+        SCM del_report = scm_c_eval_string ("gnc:delete-report");
+        scm_call_1 (del_report, request->guid);
+        update_report_list (GTK_LIST_STORE (gtk_tree_view_get_model (
+            GTK_TREE_VIEW (request->owner->reportview))), request->owner);
+    }
+    scm_gc_unprotect_object (request->guid);
+    g_free (request);
+}
+
 static void
 custom_report_delete (SCM guid, CustomReportDialog *crd)
 {
-    SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
-    gchar *report_name;
-
-    if (scm_is_null (guid))
-        return;
-
-    report_name = gnc_scm_to_utf8_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
-
-    /* we must confirm the user wants to delete their precious custom report! */
-    if (gnc_verify_dialog( GTK_WINDOW (crd->dialog), FALSE, _("Are you sure you want to delete %s?"), report_name))
-    {
-        SCM del_report = scm_c_eval_string("gnc:delete-report");
-        scm_call_1(del_report, guid);
-        update_report_list(GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(crd->reportview))),
-                           crd);
-    }
+    if (scm_is_null (guid) ||
+        g_object_get_data (G_OBJECT (crd->dialog), "gnc-custom-delete-pending")) return;
+    SCM name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
+    gchar *report_name = gnc_scm_to_utf8_string (scm_call_2 (name, guid, SCM_BOOL_F));
+    CustomReportDelete *request = g_new0 (CustomReportDelete, 1);
+    request->owner = crd;
+    request->guid = guid;
+    scm_gc_protect_object (guid);
+    g_object_set_data (G_OBJECT (crd->dialog), "gnc-custom-delete-pending", request);
+    gnc_verify_dialog_async (GTK_WINDOW (crd->dialog), FALSE,
+        custom_report_delete_decided, request, _("Are you sure you want to delete %s?"), report_name);
     g_free (report_name);
 }
 

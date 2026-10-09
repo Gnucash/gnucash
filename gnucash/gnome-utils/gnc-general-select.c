@@ -52,6 +52,11 @@ static void gnc_general_select_finalize     (GObject               *object);
 
 static guint general_select_signals[LAST_SIGNAL];
 
+typedef struct
+{
+    GWeakRef widget;
+} AsyncSelection;
+
 G_DEFINE_TYPE (GNCGeneralSelect, gnc_general_select, GTK_TYPE_BOX)
 
 static void
@@ -111,6 +116,7 @@ gnc_general_select_init (GNCGeneralSelect *gsl)
     gtk_widget_set_name (GTK_WIDGET(gsl), "gnc-id-general-select");
 
     gsl->disposed = FALSE;
+    gsl->destroyed = FALSE;
     gsl->selected_item = NULL;
 }
 
@@ -149,22 +155,69 @@ gnc_general_select_dispose (GObject *object)
 }
 
 static void
+gnc_general_select_destroy_cb (GtkWidget *widget,
+                             [[maybe_unused]] gpointer user_data)
+{
+    GNCGeneralSelect *gsl = GNC_GENERAL_SELECT (widget);
+    gsl->destroyed = TRUE;
+    gsl->selected_item = NULL;
+}
+
+static void
+gnc_general_select_async_completed (gpointer selection, gpointer user_data)
+{
+    AsyncSelection *request = user_data;
+    GNCGeneralSelect *gsl = g_weak_ref_get (&request->widget);
+    if (gsl)
+    {
+        if (!gsl->destroyed && !gsl->disposed)
+        {
+            gsl->selection_pending = FALSE;
+            if (selection)
+                gnc_general_select_set_selected (gsl, selection);
+        }
+        g_object_unref (gsl);
+    }
+    g_weak_ref_clear (&request->widget);
+    g_free (request);
+}
+
+static void
 select_cb(GtkButton * button, gpointer user_data)
 {
     GNCGeneralSelect *gsl = user_data;
     gpointer new_selection;
     GtkWidget *toplevel;
 
+    if (gsl->destroyed || gsl->disposed || gsl->selection_pending)
+        return;
+
+    g_object_ref (gsl);
     toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+
+    if (gsl->async_select)
+    {
+        AsyncSelection *request = g_new0 (AsyncSelection, 1);
+        g_weak_ref_init (&request->widget, G_OBJECT (gsl));
+        gsl->selection_pending = TRUE;
+        gsl->async_select (gsl->cb_arg, gsl->selected_item, toplevel,
+                           gnc_general_select_async_completed, request);
+        g_object_unref (gsl);
+        return;
+    }
 
     new_selection = (gsl->new_select)(gsl->cb_arg, gsl->selected_item,
                                       toplevel);
 
     /* NULL return means cancel; no change */
-    if (new_selection == NULL)
+    if (new_selection == NULL || gsl->destroyed || gsl->disposed)
+    {
+        g_object_unref (gsl);
         return;
+    }
 
     gnc_general_select_set_selected (gsl, new_selection);
+    g_object_unref (gsl);
 }
 
 static void
@@ -185,6 +238,8 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
     gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (gsl->button), "clicked",
                       G_CALLBACK (select_cb), gsl);
+    g_signal_connect (gsl, "destroy",
+                      G_CALLBACK (gnc_general_select_destroy_cb), NULL);
     gtk_widget_show (gsl->button);
 }
 
@@ -216,6 +271,24 @@ gnc_general_select_new (GNCGeneralSelectType type,
     return GTK_WIDGET (gsl);
 }
 
+GtkWidget *
+gnc_general_select_new_async (GNCGeneralSelectType type,
+                              GNCGeneralSelectGetStringCB get_string,
+                              GNCGeneralSelectAsyncSelectCB async_select,
+                              gpointer cb_arg)
+{
+    GNCGeneralSelect *gsl;
+    g_return_val_if_fail (get_string != NULL, NULL);
+    g_return_val_if_fail (async_select != NULL, NULL);
+
+    gsl = g_object_new (GNC_TYPE_GENERAL_SELECT, NULL, NULL);
+    create_children (gsl, type);
+    gsl->get_string = get_string;
+    gsl->async_select = async_select;
+    gsl->cb_arg = cb_arg;
+    return GTK_WIDGET (gsl);
+}
+
 /*
  * gnc_general_select_get_printname:
  * @gsl: the general selection widget
@@ -244,21 +317,28 @@ gnc_general_select_get_printname (GNCGeneralSelect *gsl, gpointer selection)
 void
 gnc_general_select_set_selected (GNCGeneralSelect *gsl, gpointer selection)
 {
-    const char *text;
+    char *text;
 
     g_return_if_fail(gsl != NULL);
     g_return_if_fail(GNC_IS_GENERAL_SELECT(gsl));
 
+    if (gsl->destroyed || gsl->disposed)
+        return;
+    g_object_ref (gsl);
     gsl->selected_item = selection;
 
     if (selection == NULL)
-        text = "";
+        text = g_strdup ("");
     else
-        text = gnc_general_select_get_printname(gsl, selection);
+        text = g_strdup (gnc_general_select_get_printname(gsl, selection));
 
-    gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
+    if (!gsl->destroyed && !gsl->disposed && gsl->entry)
+        gtk_entry_set_text(GTK_ENTRY(gsl->entry), text ? text : "");
+    g_free (text);
 
-    g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
+    if (!gsl->destroyed && !gsl->disposed)
+        g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
+    g_object_unref (gsl);
 }
 
 /**
@@ -293,4 +373,3 @@ gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label
 
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), gsl->entry);
 }
-

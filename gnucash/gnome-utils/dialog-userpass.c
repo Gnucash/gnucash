@@ -26,68 +26,95 @@
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
+#include "gnc-gui-query.h"
 
 
-gboolean
-gnc_get_username_password (GtkWidget *parent,
-                           const char *heading,
-                           const char *initial_username,
-                           const char *initial_password,
-                           char **username,
-                           char **password)
+typedef struct
 {
-    GtkWidget  *dialog;
-    GtkWidget  *heading_label;
-    GtkWidget  *username_entry;
-    GtkWidget  *password_entry;
+    GtkWidget *dialog;
+    GtkEntry *username_entry;
+    GtkEntry *password_entry;
+    gchar *username;
+    gchar *password;
+    GncUsernamePasswordCallback callback;
+    gpointer user_data;
+} UsernamePasswordRequest;
+
+static void
+username_password_capture (GtkDialog *dialog, gint response, gpointer user_data)
+{
+    UsernamePasswordRequest *request = user_data;
+    if (response != GTK_RESPONSE_OK) return;
+    request->username = gtk_editable_get_chars (GTK_EDITABLE (request->username_entry), 0, -1);
+    request->password = gtk_editable_get_chars (GTK_EDITABLE (request->password_entry), 0, -1);
+}
+
+static void
+username_password_finish (GtkWindow *parent, gint response, gpointer user_data)
+{
+    UsernamePasswordRequest *request = user_data;
+    gboolean accepted = response == GTK_RESPONSE_OK;
+    GncUsernamePasswordCallback callback = request->callback;
+    gpointer data = request->user_data;
+    gchar *username = request->username;
+    gchar *password = request->password;
+    g_signal_handlers_disconnect_by_data (request->dialog, request);
+    g_object_unref (request->dialog);
+    g_free (request);
+    if (!accepted)
+    {
+        g_clear_pointer (&username, g_free);
+        g_clear_pointer (&password, g_free);
+    }
+    callback (accepted, username, password, data);
+}
+
+void
+gnc_get_username_password_async (GtkWindow *parent, const gchar *heading,
+                                 const gchar *initial_username,
+                                 const gchar *initial_password,
+                                 GncUsernamePasswordCallback callback,
+                                 gpointer user_data)
+{
     GtkBuilder *builder;
-    gint result;
+    UsernamePasswordRequest *request;
+    GtkWidget *dialog;
+    GtkWidget *heading_label;
+    g_return_if_fail (callback != NULL);
 
-    g_return_val_if_fail (username != NULL, FALSE);
-    g_return_val_if_fail (password != NULL, FALSE);
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-userpass.glade", "username_password_dialog");
-
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "username_password_dialog"));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-user-password");
-
+    builder = gtk_builder_new ();
+    if (!gnc_builder_add_from_file (builder, "dialog-userpass.glade", "username_password_dialog"))
+    {
+        g_object_unref (builder);
+        callback (FALSE, NULL, NULL, user_data);
+        return;
+    }
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "username_password_dialog"));
+    request = g_new0 (UsernamePasswordRequest, 1);
+    request->dialog = g_object_ref (dialog);
+    request->username_entry = GTK_ENTRY (gtk_builder_get_object (builder, "username_entry"));
+    request->password_entry = GTK_ENTRY (gtk_builder_get_object (builder, "password_entry"));
+    request->callback = callback;
+    request->user_data = user_data;
+    gtk_widget_set_name (dialog, "gnc-id-user-password");
     if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-
-    heading_label  = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
-    username_entry = GTK_WIDGET(gtk_builder_get_object (builder, "username_entry"));
-    password_entry = GTK_WIDGET(gtk_builder_get_object (builder, "password_entry"));
-
+    {
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+    }
+    heading_label = GTK_WIDGET (gtk_builder_get_object (builder, "heading_label"));
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
-
     if (initial_username)
-        gtk_entry_set_text (GTK_ENTRY (username_entry), initial_username);
-    gtk_editable_select_region (GTK_EDITABLE (username_entry), 0, -1);
-
+        gtk_entry_set_text (request->username_entry, initial_username);
+    gtk_editable_select_region (GTK_EDITABLE (request->username_entry), 0, -1);
     if (initial_password)
-        gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
-
-    result = gtk_dialog_run(GTK_DIALOG (dialog));
-    gtk_widget_hide(dialog);
-
-    if (result == GTK_RESPONSE_OK)
-    {
-        *username = gtk_editable_get_chars (GTK_EDITABLE (username_entry), 0, -1);
-        *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
-
-        gtk_widget_destroy(dialog);
-        return TRUE;
-    }
-
-    *username = NULL;
-    *password = NULL;
-
-    g_object_unref(G_OBJECT(builder));
-
-    gtk_widget_destroy(dialog);
-    return FALSE;
+        gtk_entry_set_text (request->password_entry, initial_password);
+    /* Capture live entry contents before the common helper destroys the dialog.
+     * That helper also completes cancellation on owner/dialog destruction. */
+    g_signal_connect (dialog, "response", G_CALLBACK (username_password_capture), request);
+    gnc_gui_query_bind_dialog_response (GTK_DIALOG (dialog), username_password_finish, request);
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    g_object_unref (builder);
+    gtk_widget_show (dialog);
 }

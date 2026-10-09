@@ -40,19 +40,40 @@
 #include "dialog-commodity.h"
 #include "gnc-commodity-edit.h"
 
+typedef struct
+{
+    GNCGeneralSelectAsyncResultCB completed;
+    gpointer user_data;
+} CommoditySelectCompletion;
+
 const char * gnc_commodity_edit_get_string (gpointer ptr)
 {
     gnc_commodity * comm = (gnc_commodity *)ptr;
     return gnc_commodity_get_printname(comm);
 }
 
-gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
-                                        GtkWidget *toplevel)
+static void
+gnc_commodity_edit_select_completed (QofBook *book, gnc_commodity *commodity,
+                                     gpointer user_data)
 {
-    gnc_commodity * comm = (gnc_commodity *)ptr;
-    dialog_commodity_mode *mode_ptr = arg;
-    dialog_commodity_mode mode;
+    CommoditySelectCompletion *completion = user_data;
+    completion->completed (book ? commodity : NULL, completion->user_data);
+    g_free (completion);
+}
 
-    mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
-    return gnc_ui_select_commodity_modal(comm, toplevel, mode);
+void
+gnc_commodity_edit_new_select_async (
+    gpointer arg, gpointer ptr, GtkWidget *toplevel,
+    GNCGeneralSelectAsyncResultCB completed, gpointer user_data)
+{
+    dialog_commodity_mode mode = arg ? *(dialog_commodity_mode *)arg : DIAG_COMM_ALL;
+    CommoditySelectCompletion *completion;
+
+    g_return_if_fail (completed != NULL);
+    completion = g_new (CommoditySelectCompletion, 1);
+    completion->completed = completed;
+    completion->user_data = user_data;
+    gnc_ui_select_commodity_async_full (
+        GNC_COMMODITY (ptr), toplevel, mode, NULL, NULL, NULL, NULL,
+        gnc_commodity_edit_select_completed, completion);
 }

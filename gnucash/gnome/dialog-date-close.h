@@ -28,12 +28,24 @@
 #include "qof.h"
 #include "gncBillTerm.h"
 
-gboolean
-gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
-                                const char *label_message,
-                                gboolean ok_is_default,
-                                /* Returned data ... */
-                                time64 *date);
+typedef void (*GncDateCloseResponseCallback) (gboolean accepted,
+                                              time64 date,
+                                              gpointer user_data);
+
+/* Asynchronous counterpart. The callback runs once for acceptance, cancel,
+ * or parent destruction; the selected date is meaningful only when accepted. */
+void gnc_dialog_date_close_async_parented (
+    GtkWidget *parent, const char *message, const char *label_message,
+    gboolean ok_is_default, time64 initial_date,
+    GncDateCloseResponseCallback callback, gpointer user_data);
+
+/** Completion for the invoice posting date/account dialog. On acceptance the
+ * callback receives the selected values and owns @a memo; on cancellation,
+ * every returned pointer is NULL. Account is borrowed from the still-open
+ * book for the duration of the callback. */
+typedef void (*GncDateCloseFormResponseCallback) (
+    gboolean accepted, time64 due_date, time64 post_date, char *memo,
+    Account *account, gboolean answer, gpointer user_data);
 
 
 /*
@@ -44,28 +56,14 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
  * selection widget.
  */
 
-gboolean
-gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
-        const char *ddue_label_message,
-        const char *post_label_message,
-        const char *acct_label_message,
-        const char *question_check_message,
-        gboolean ok_is_default,
-        gboolean set_default_acct,
-        GList * acct_types, GList * acct_commodities,
-        QofBook *book, GncBillTerm *terms,
-        /* Returned Data... */
-        time64 *ddue, time64 *post,
-        char **memo, Account **acct, gboolean *answer);
-
-
-gboolean
-gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
-                               const char *date_label_message,
-                               const char *acct_label_message,
-                               gboolean ok_is_default,
-                               GList * acct_types, QofBook *book,
-                               /* Returned Data... */
-                               time64 *date, Account **acct);
+void gnc_dialog_dates_acct_question_async_parented (
+    GtkWidget *parent, const char *message, const char *ddue_label_message,
+    const char *post_label_message, const char *acct_label_message,
+    const char *question_check_message, gboolean ok_is_default,
+    gboolean set_default_acct, GList *acct_types, GList *acct_commodities,
+    QofBook *book, GncBillTerm *terms, time64 initial_due_date,
+    time64 initial_post_date, Account *initial_account,
+    gboolean initial_answer, GncDateCloseFormResponseCallback callback,
+    gpointer user_data);
 
 #endif /* _DIALOG_DATE_CLOSE_H */

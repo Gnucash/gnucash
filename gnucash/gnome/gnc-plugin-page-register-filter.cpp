@@ -1368,10 +1368,9 @@ gnc_ppr_filter_save_cb (GtkToggleButton* button,
  *
  *  @param rfd A pointer to the filter dialog structure.
  */
-void
-gnc_ppr_filter_response_cb (GtkDialog* dialog,
-                            gint response,
-                            RegisterFilterDialog* rfd)
+static void
+ppr_filter_response_continue (GtkDialog* dialog, gint response,
+                              RegisterFilterDialog* rfd)
 {
     g_return_if_fail (GTK_IS_DIALOG(dialog));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
@@ -1380,16 +1379,6 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
 
     auto fd = gnc_plugin_page_register_get_filter_data (rfd->plugin_page);
     auto gsr = gnc_plugin_page_register_get_gsr (rfd->plugin_page);
-
-    if ((fd->start_time > 0 && fd->end_time > 0) && (fd->start_time > fd->end_time))
-    {
-        auto response = gnc_ok_cancel_dialog (GTK_WINDOW(rfd->dialog),
-                                              GTK_RESPONSE_CANCEL,
-                                              _("The Start date is after the End date.\n"
-                                                "Select Cancel to change dates.\n"));
-        if (response == GTK_RESPONSE_CANCEL)
-            return;
-    }
 
     if (response != GTK_RESPONSE_OK)
     {
@@ -1426,6 +1415,35 @@ gnc_ppr_filter_response_cb (GtkDialog* dialog,
     g_free (rfd);
     gtk_widget_destroy (GTK_WIDGET(dialog));
     LEAVE(" ");
+}
+
+static void
+ppr_filter_invalid_dates_response (GtkWindow*, gint response, gpointer user_data)
+{
+    auto rfd = static_cast<RegisterFilterDialog*>(user_data);
+    if (!rfd || !rfd->dialog || !rfd->plugin_page)
+        return;
+    if (response == GTK_RESPONSE_OK)
+        ppr_filter_response_continue (GTK_DIALOG(rfd->dialog), GTK_RESPONSE_OK, rfd);
+}
+
+void
+gnc_ppr_filter_response_cb (GtkDialog* dialog, gint response,
+                            RegisterFilterDialog* rfd)
+{
+    g_return_if_fail (GTK_IS_DIALOG(dialog));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(rfd->plugin_page));
+    auto fd = gnc_plugin_page_register_get_filter_data (rfd->plugin_page);
+    if (response == GTK_RESPONSE_OK && fd->start_time > 0 && fd->end_time > 0 &&
+        fd->start_time > fd->end_time)
+    {
+        gnc_ok_cancel_dialog_async (GTK_WINDOW(rfd->dialog), GTK_RESPONSE_CANCEL,
+                                   ppr_filter_invalid_dates_response, rfd,
+                                   "%s", _("The Start date is after the End date.\n"
+                                             "Select Cancel to change dates.\n"));
+        return;
+    }
+    ppr_filter_response_continue (dialog, response, rfd);
 }
 
 static GtkWidget *

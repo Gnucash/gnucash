@@ -79,6 +79,7 @@ typedef struct
     GtkTreeView *selected_encs_view;    /* list view of selected encodings */
 
     GList *encodings;                   /* list of GQuarks for encodings */
+    GList *encodings_dialog_backup;     /* previous list until dialog is accepted */
     GQuark default_encoding;            /* default GQuark, may be zero */
 
     /* hash table that maps byte sequences to conversions, i.e. in the current
@@ -112,6 +113,8 @@ typedef struct
 
     gchar *filename;
     QofSession *session;
+    GncXmlConvertCallback completed;
+    gpointer user_data;
 } GncXmlImportData;
 
 /* used for the string combos, see ambiguous_free */
@@ -166,6 +169,10 @@ static void gxi_update_conversion_forward (GncXmlImportData *data);
 static void gxi_default_enc_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data);
 static void gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data);
 void gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data);
+static void gxi_edit_encodings_response_cb (GtkDialog *dialog, gint response,
+                                           GncXmlImportData *data);
+static void gxi_edit_encodings_destroy_cb (GtkWidget *dialog,
+                                           GncXmlImportData *data);
 void gxi_available_enc_activated_cb (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *column, GncXmlImportData *data);
 void gxi_add_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
 void gxi_custom_enc_activate_cb (GtkEntry *entry, GncXmlImportData *data);
@@ -262,10 +269,30 @@ void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     }
 }
 
-void
-gxi_finish_cb (GtkAssistant *assistant, GncXmlImportData *data)
+static void
+gxi_complete (GncXmlImportData *data, gboolean success)
 {
-    gtk_main_quit();
+    GncXmlConvertCallback completed = data->completed;
+    gpointer user_data = data->user_data;
+    if (data->assistant)
+        g_signal_handlers_disconnect_by_data (data->assistant, data);
+    gxi_data_destroy (data);
+    g_free (data);
+    completed (success, user_data);
+}
+
+static void
+gxi_assistant_destroyed ([[maybe_unused]] GtkWidget *assistant, GncXmlImportData *data)
+{
+    data->assistant = NULL;
+    data->string_box = NULL; /* Its destruction is owned by the assistant. */
+    gxi_complete (data, FALSE);
+}
+
+void
+gxi_finish_cb ([[maybe_unused]] GtkAssistant *assistant, GncXmlImportData *data)
+{
+    gxi_complete (data, !data->canceled && gxi_save_file (data));
 }
 
 static void
@@ -287,27 +314,34 @@ gxi_cancel_cb (GtkAssistant *gtkassistant, GncXmlImportData *data)
     gnc_suspend_gui_refresh ();
     data->canceled = TRUE;
     gnc_resume_gui_refresh ();
-    gtk_main_quit();
+    gxi_complete (data, FALSE);
 }
 
 /***************************************************/
 
-gboolean
-gnc_xml_convert_single_file (const gchar *filename)
+void
+gnc_xml_convert_single_file_async (GtkWindow *parent, const gchar *filename,
+                                   GncXmlConvertCallback completed, gpointer user_data)
 {
     GncXmlImportData *data;
     GtkWidget *widget;
     GtkBuilder *builder;
     gboolean success;
 
+    g_return_if_fail (completed != NULL);
     data = g_new0 (GncXmlImportData, 1);
+    data->completed = completed;
+    data->user_data = user_data;
     data->filename = gnc_uri_get_path (filename);
     data->canceled = FALSE;
 
     /* gather ambiguous info */
     gxi_check_file (data);
     if (data->n_impossible == -1)
-        return FALSE;
+    {
+        gxi_complete (data, FALSE);
+        return;
+    }
 
     if (!g_hash_table_size (data->ambiguous_ht))
     {
@@ -315,7 +349,8 @@ gnc_xml_convert_single_file (const gchar *filename)
         success = gxi_parse_file (data) &&
                   gxi_save_file (data);
 
-        gxi_data_destroy (data);
+        gxi_complete (data, success);
+        return;
     }
     else
     {
@@ -354,27 +389,19 @@ gnc_xml_convert_single_file (const gchar *filename)
 
         gtk_builder_connect_signals(builder, data);
 
-        gtk_widget_show_all (data->assistant);
+        gtk_window_set_transient_for (GTK_WINDOW (data->assistant), parent);
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (data->assistant), TRUE);
+        gtk_window_set_modal (GTK_WINDOW (data->assistant), TRUE);
+        g_signal_connect (data->assistant, "destroy",
+                          G_CALLBACK (gxi_assistant_destroyed), data);
 
         gxi_update_default_enc_combo (data);
         gxi_update_string_box (data);
 
         g_object_unref(G_OBJECT(builder));
 
-        /* This won't return until the assistant is finished */
-        gtk_main();
-
-        if (data->canceled)
-            success = FALSE;
-        else
-            success = gxi_save_file (data);
+        gtk_widget_show_all (data->assistant);
     }
-
-    /* destroy all the data variables */
-    gxi_data_destroy (data);
-    g_free (data);
-
-    return success;
 }
 
 static void
@@ -382,6 +409,10 @@ gxi_data_destroy (GncXmlImportData *data)
 {
     if (!data)
         return;
+
+    /* The child dialog's destroy handler rolls back its unaccepted list. */
+    if (data->encodings_dialog)
+        gtk_widget_destroy (data->encodings_dialog);
 
     if (data->filename)
     {
@@ -1177,11 +1208,14 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     GtkListStore *list_store;
     GtkTreeStore *tree_store;
     GtkTreeIter iter, parent, *parent_ptr;
-    GList *encodings_bak, *enc_iter;
+    GList *enc_iter;
     const gchar *encoding;
     system_encoding_type *system_enc;
     gpointer enc_ptr;
     gint i, j;
+
+    if (data->encodings_dialog)
+        return;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "encodings_dialog");
@@ -1194,6 +1228,8 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->assistant));
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
     data->available_encs_view = GTK_TREE_VIEW (gtk_builder_get_object (builder, "available_encs_view"));
 
@@ -1260,33 +1296,71 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
                              GTK_TREE_MODEL (tree_store));
     g_object_unref (tree_store);
 
-    /* run the dialog */
-    encodings_bak = g_list_copy (data->encodings);
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
-    {
-        g_list_free (encodings_bak);
-        if (data->encodings && !g_list_find (data->encodings,
-                          GUINT_TO_POINTER (data->default_encoding)))
-        {
-            /* choose top level encoding then */
-            data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
-        }
+    data->encodings_dialog_backup = g_list_copy (data->encodings);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (gxi_edit_encodings_response_cb), data);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (gxi_edit_encodings_destroy_cb), data);
+    g_object_unref (G_OBJECT(builder));
+    gtk_widget_show (dialog);
+}
 
-        /* update whole page */
-        gxi_check_file (data);
-        gxi_update_default_enc_combo (data);
-        gxi_update_string_box (data);
-        gxi_update_conversion_forward (data);
-    }
-    else
+static void
+gxi_edit_encodings_response_cb (GtkDialog *dialog, gint response,
+                                GncXmlImportData *data)
+{
+    GList *encodings_bak;
+
+    if (data->encodings_dialog != GTK_WIDGET (dialog))
+        return;
+
+    encodings_bak = data->encodings_dialog_backup;
+    data->encodings_dialog_backup = NULL;
+    data->encodings_dialog = NULL;
+    g_signal_handlers_disconnect_by_data (dialog, data);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    data->available_encs_view = NULL;
+    data->selected_encs_view = NULL;
+    data->custom_enc_entry = NULL;
+
+    if (response != GTK_RESPONSE_OK)
     {
         g_list_free (data->encodings);
         data->encodings = encodings_bak;
+        return;
     }
-    g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy (dialog);
+    g_list_free (encodings_bak);
+    if (data->encodings && !g_list_find (data->encodings,
+                      GUINT_TO_POINTER (data->default_encoding)))
+    {
+        /* choose top level encoding then */
+        data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
+    }
+
+    /* update whole page */
+    gxi_check_file (data);
+    gxi_update_default_enc_combo (data);
+    gxi_update_string_box (data);
+    gxi_update_conversion_forward (data);
+}
+
+static void
+gxi_edit_encodings_destroy_cb (GtkWidget *dialog, GncXmlImportData *data)
+{
+    if (data->encodings_dialog != dialog)
+        return;
+
     data->encodings_dialog = NULL;
+    data->available_encs_view = NULL;
+    data->selected_encs_view = NULL;
+    data->custom_enc_entry = NULL;
+    g_signal_handlers_disconnect_by_data (dialog, data);
+
+    /* NULL is a valid backup of an empty selection, not an accepted edit. */
+    g_list_free (data->encodings);
+    data->encodings = data->encodings_dialog_backup;
+    data->encodings_dialog_backup = NULL;
 }
 
 static void
@@ -1304,8 +1378,9 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
 
     if (g_list_find (data->encodings, encoding_ptr))
     {
+        g_free (enc_string);
         message = _("This encoding has been added to the list already.");
-        gnc_error_dialog (GTK_WINDOW (data->encodings_dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW (data->encodings_dialog), "%s", message);
         return;
     }
 
@@ -1313,10 +1388,9 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
     iconv = g_iconv_open ("UTF-8", enc_string);
     if (iconv == (GIConv) - 1)
     {
-        g_iconv_close (iconv);
         g_free (enc_string);
         message = _("This is an invalid encoding.");
-        gnc_error_dialog (GTK_WINDOW (data->encodings_dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW (data->encodings_dialog), "%s", message);
         return;
     }
     g_iconv_close (iconv);

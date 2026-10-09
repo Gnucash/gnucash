@@ -23,6 +23,7 @@
 \********************************************************************/
 
 #include <config.h>
+#include <cstdint>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -42,6 +43,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
+#include "gnc-session.h"
 #include "Transaction.h"
 #include "Account.h"
 #include "Account.hpp"
@@ -127,6 +129,14 @@ struct _xferDialog
     gnc_xfer_dialog_cb transaction_cb;
     /* , and its user_data */
     gpointer transaction_user_data;
+    bool completed;
+    void (*finished_cb) (gboolean completed, gpointer user_data);
+    gpointer finished_user_data;
+    GPtrArray *bound_widgets;
+    GWeakRef parent;
+    bool has_parent;
+    bool parent_destroyed;
+    bool closing;
 };
 
 /** Structure passed to "filter tree accounts" function to provide it information */
@@ -1474,60 +1484,21 @@ create_transaction(XferDialog *xferData, time64 time,
                    Account *from_account, Account* to_account,
                    gnc_numeric amount, gnc_numeric to_amount)
 {
-    Transaction *trans;
-    Split *from_split;
-    Split *to_split;
-    const char *string;
-    /* Create the transaction */
-    trans = xaccMallocTransaction(xferData->book);
-
-    xaccTransBeginEdit(trans);
-
-    xaccTransSetCurrency(trans, xferData->from_commodity);
-    xaccTransSetDatePostedSecsNormalized(trans, time);
-
-    /* Trans-Num or Split-Action set with gnc_set_num_action below per book
-     * option */
-
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-    xaccTransSetDescription(trans, string);
-
-    /* create from split */
-    from_split = xaccMallocSplit(xferData->book);
-    xaccTransAppendSplit(trans, from_split);
-
-    /* create to split */
-    to_split = xaccMallocSplit(xferData->book);
-    xaccTransAppendSplit(trans, to_split);
-
-    xaccAccountBeginEdit(from_account);
-    xaccAccountInsertSplit(from_account, from_split);
-
-    xaccAccountBeginEdit(to_account);
-    xaccAccountInsertSplit(to_account, to_split);
-
-    xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount),
-                          xferData->from_commodity);
-    xaccSplitSetBaseValue(to_split, amount, xferData->from_commodity);
-    xaccSplitSetBaseValue(to_split, to_amount, xferData->to_commodity);
-
-    /* Set the transaction number or split action field based on book option*/
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-    gnc_set_num_action (trans, from_split, string, NULL);
-
-    /* Set the transaction notes */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->notes_entry));
-    xaccTransSetNotes(trans, string);
-
-    /* Set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccSplitSetMemo(from_split, string);
-    xaccSplitSetMemo(to_split, string);
-
-    /* finish transaction */
-    xaccTransCommitEdit(trans);
-    xaccAccountCommitEdit(from_account);
-    xaccAccountCommitEdit(to_account);
+    GncTransactionInfo info = {
+        xferData->book,
+        from_account,
+        to_account,
+        xferData->from_commodity,
+        xferData->to_commodity,
+        time,
+        amount,
+        to_amount,
+        gtk_entry_get_text (GTK_ENTRY (xferData->num_entry)),
+        gtk_entry_get_text (GTK_ENTRY (xferData->description_entry)),
+        gtk_entry_get_text (GTK_ENTRY (xferData->notes_entry)),
+        gtk_entry_get_text (GTK_ENTRY (xferData->memo_entry))
+    };
+    auto trans = gnc_transaction_from_transaction_info (&info);
 
     /* If there is a registered callback handler that should be
        notified of the newly created Transaction, call it now. */
@@ -1729,6 +1700,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     /* Refresh everything */
     gnc_resume_gui_refresh ();
 
+    xferData->completed = true;
     DEBUG("close component");
     gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
     LEAVE("ok");
@@ -2009,22 +1981,77 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 }
 
 static void
+retain_transfer_widgets (GtkWidget *widget, gpointer user_data)
+{
+    auto widgets = static_cast<GPtrArray *> (user_data);
+    g_ptr_array_add (widgets, g_object_ref (widget));
+    if (GTK_IS_TREE_VIEW (widget))
+        g_ptr_array_add (widgets, g_object_ref (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget))));
+    if (GTK_IS_CONTAINER (widget))
+        gtk_container_forall (GTK_CONTAINER (widget), retain_transfer_widgets, widgets);
+}
+
+static void
+transfer_mark_parent_destroyed (GtkWidget *, gpointer user_data)
+{
+    *static_cast<bool *> (user_data) = true;
+}
+
+static void
 close_handler (gpointer user_data)
 {
     auto xferData = static_cast<XferDialog *> (user_data);
+    if (xferData->closing) return;
+    xferData->closing = true;
+    auto parent = g_weak_ref_get (&xferData->parent);
+    auto completed = xferData->completed;
+    if (xferData->has_parent && (!parent || xferData->parent_destroyed ||
+        gtk_widget_in_destruction (GTK_WIDGET (parent)))) completed = false;
+    bool parent_destroyed = xferData->parent_destroyed;
+    gulong parent_watch = parent ? g_signal_connect (parent, "destroy",
+        G_CALLBACK (transfer_mark_parent_destroyed), &parent_destroyed) : 0;
+    if (parent) g_signal_handlers_disconnect_by_data (parent, xferData);
+    g_weak_ref_clear (&xferData->parent);
+    auto finished_cb = xferData->finished_cb;
+    auto finished_user_data = xferData->finished_user_data;
+    auto widgets = xferData->bound_widgets;
+    for (std::uint32_t i = 0; i < widgets->len; ++i)
+        g_signal_handlers_disconnect_by_data (g_ptr_array_index (widgets, i), xferData);
 
     ENTER(" ");
     auto dialog = GTK_WIDGET (xferData->dialog);
 
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
-    gtk_widget_hide (dialog);
+    if (!gtk_widget_in_destruction (dialog))
+    {
+        gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
+        gtk_widget_hide (dialog);
+    }
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
-    gtk_widget_destroy (dialog);
+    if (!gtk_widget_in_destruction (dialog)) gtk_widget_destroy (dialog);
+    g_object_set_data (G_OBJECT (dialog), "builder", nullptr);
+    g_ptr_array_unref (widgets);
+    if (parent && parent_watch) g_signal_handler_disconnect (parent, parent_watch);
+    if (parent_destroyed) completed = false;
+    g_clear_object (&parent);
     g_free (to_info);
     to_info = NULL;
     g_free (from_info);
     from_info = NULL;
+    if (finished_cb)
+        finished_cb (completed, finished_user_data);
     LEAVE(" ");
+}
+
+static void
+transfer_dialog_destroyed (GtkWidget *, gpointer user_data)
+{
+    close_handler (user_data);
+}
+
+static void
+transfer_parent_destroyed (GtkWidget *, gpointer user_data)
+{
+    static_cast<XferDialog *> (user_data)->parent_destroyed = true;
 }
 
 /********************************************************************\
@@ -2064,10 +2091,22 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
     xferData->pricedb = gnc_pricedb_get_db (book);
 
     gnc_xfer_dialog_create(parent, xferData);
+    xferData->bound_widgets = g_ptr_array_new_with_free_func (g_object_unref);
+    retain_transfer_widgets (xferData->dialog, xferData->bound_widgets);
+    g_weak_ref_init (&xferData->parent, parent);
+    xferData->has_parent = parent != nullptr;
+    if (parent)
+    {
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (xferData->dialog), TRUE);
+        g_signal_connect (parent, "destroy", G_CALLBACK (transfer_parent_destroyed), xferData);
+    }
+    g_signal_connect (xferData->dialog, "destroy", G_CALLBACK (transfer_dialog_destroyed), xferData);
 
     DEBUG("register component");
-    gnc_register_gui_component (DIALOG_TRANSFER_CM_CLASS,
-                                NULL, close_handler, xferData);
+    auto component = gnc_register_gui_component (DIALOG_TRANSFER_CM_CLASS,
+                                                 NULL, close_handler, xferData);
+    if (gnc_current_session_exist () && gnc_get_current_book () == book)
+        gnc_gui_component_set_session (component, gnc_get_current_session ());
 
     gae = GNC_AMOUNT_EDIT(xferData->amount_edit);
     amount_entry = gnc_amount_edit_gtk_entry (gae);
@@ -2201,73 +2240,18 @@ void gnc_xfer_dialog_toggle_currency_table( XferDialog *xferData,
 }
 
 
-/* helper function */
-static gboolean
-find_xfer (gpointer find_data, gpointer user_data)
+/* Complete only after a valid transfer or cancellation has closed the dialog. */
+void gnc_xfer_dialog_run_async (XferDialog *xferData,
+                                gnc_xfer_dialog_finished_cb finished_cb,
+                                gpointer user_data)
 {
-    return( find_data == user_data );
-}
-
-/* Run the dialog until the user has either successfully completed the
- * transaction (just clicking OK doesn't always count) or clicked Cancel.
- * Return TRUE if the transaction was a success, FALSE otherwise.
- */
-gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
-{
-    GtkDialog *dialog;
-    gint count, response;
-
-    ENTER("xferData=%p", xferData);
-    if ( xferData == NULL )
-    {
-        LEAVE("bad args");
-        return( FALSE );
-    }
-
-    dialog = GTK_DIALOG (xferData->dialog);
-
-    /*
-     * We need to call the response_cb function by hand.  Calling it
-     * automatically on a button click can destroy the window, and
-     * that's bad mojo whole gtk_dialog_run is still in control.
-     */
-    count = g_signal_handlers_disconnect_by_func(dialog,
-                                                 (gpointer) gnc_xfer_dialog_response_cb,
-                                                 xferData);
-    g_assert(count == 1);
-
-    while ( TRUE )
-    {
-        DEBUG("calling gtk_dialog_run");
-        response = gtk_dialog_run (dialog);
-        DEBUG("gtk_dialog_run returned %d", response);
-        gnc_xfer_dialog_response_cb (dialog, response, xferData);
-
-        if ((response != GTK_RESPONSE_OK) && (response != GTK_RESPONSE_APPLY))
-        {
-            LEAVE("not ok");
-            return FALSE;
-        }
-
-        /* See if the dialog is still there.  For various reasons, the
-         * user could have hit OK but remained in the dialog.  We don't
-         * want to return processing back to anyone else until we clear
-         * off this dialog, so if the dialog is still there we'll just
-         * run it again.
-         */
-        if ( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
-                                            find_xfer, xferData ) )
-        {
-            /* no more dialog, and OK was clicked, so assume it's all good */
-            LEAVE("ok");
-            return TRUE;
-        }
-
-        /* else run the dialog again */
-    }
-
-    g_assert_not_reached();
-    return FALSE; /* to satisfy static code analysis */
+    g_return_if_fail (xferData != NULL);
+    g_return_if_fail (xferData->dialog != NULL);
+    g_return_if_fail (xferData->finished_cb == NULL);
+    xferData->finished_cb = finished_cb;
+    xferData->finished_user_data = user_data;
+    gtk_window_set_modal (GTK_WINDOW (xferData->dialog), TRUE);
+    gtk_widget_show (xferData->dialog);
 }
 
 
@@ -2360,107 +2344,105 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
 
 
 
-gboolean gnc_xfer_dialog_run_exchange_dialog(
-    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount,
-    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com,
-    gboolean expanded)
+typedef struct
 {
-    gboolean swap_amounts = FALSE;
-    gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
-    gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
+    gnc_numeric exch_rate;
+    bool swap_amounts;
+    gnc_xfer_dialog_exchange_finished_cb finished_cb;
+    gpointer user_data;
+} ExchangeDialogRequest;
 
-    g_return_val_if_fail(txn_cur && GNC_IS_COMMODITY (txn_cur), TRUE);
-    g_return_val_if_fail(xfer_com && GNC_IS_COMMODITY (xfer_com), TRUE);
+static void
+exchange_dialog_finished_cb (gboolean completed, gpointer user_data)
+{
+    auto request = static_cast<ExchangeDialogRequest *> (user_data);
+    gnc_numeric rate = request->exch_rate;
+    if (completed && request->swap_amounts)
+        rate = gnc_numeric_invert (rate);
+    request->finished_cb (completed, rate, request->user_data);
+    g_free (request);
+}
+
+static gboolean
+exchange_dialog_complete_idle_cb (gpointer user_data)
+{
+    auto request = static_cast<ExchangeDialogRequest *> (user_data);
+    request->finished_cb (TRUE, request->exch_rate, request->user_data);
+    g_free (request);
+    return G_SOURCE_REMOVE;
+}
+
+void
+gnc_xfer_dialog_run_exchange_async (
+    XferDialog *xfer, gnc_numeric exch_rate, gnc_numeric amount,
+    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com,
+    gboolean expanded,
+    gnc_xfer_dialog_exchange_finished_cb finished_cb,
+    gpointer user_data)
+{
+    g_return_if_fail (finished_cb != nullptr);
+    if (!xfer || !reg_acc || !txn || !GNC_IS_COMMODITY (xfer_com) ||
+        !GNC_IS_COMMODITY (xaccTransGetCurrency (txn)) ||
+        !GNC_IS_COMMODITY (xaccAccountGetCommodity (reg_acc)))
+    {
+        if (xfer) gnc_xfer_dialog_close (xfer);
+        finished_cb (FALSE, exch_rate, user_data);
+        return;
+    }
+
+    ExchangeDialogRequest *request = g_new0 (ExchangeDialogRequest, 1);
+    request->exch_rate = exch_rate;
+    request->finished_cb = finished_cb;
+    request->user_data = user_data;
+
+    gnc_commodity *txn_cur = xaccTransGetCurrency (txn);
+    gnc_commodity *reg_com = xaccAccountGetCommodity (reg_acc);
 
     if (xaccTransUseTradingAccounts (txn))
     {
-        /* If we're using commodity trading accounts then "amount" is
-           really the split's amount and it's in xfer_com commodity.
-           We need an exchange rate that will convert this amount
-           into a value in the transaction currency.  */
-        if (gnc_commodity_equal(xfer_com, txn_cur))
+        if (gnc_commodity_equal (xfer_com, txn_cur))
         {
-            /* Transaction is in the same currency as the split, exchange
-               rate is 1. */
-            *exch_rate = gnc_numeric_create(1, 1);
-            return FALSE;
+            request->exch_rate = gnc_numeric_create (1, 1);
+            gnc_xfer_dialog_close (xfer);
+            g_idle_add_full (G_PRIORITY_DEFAULT, exchange_dialog_complete_idle_cb,
+                             request, NULL);
+            return;
         }
-        swap_amounts = expanded;
+        request->swap_amounts = expanded;
+    }
+    else if (gnc_commodity_equal (reg_com, txn_cur))
+        request->swap_amounts = false;
+    else if (gnc_commodity_equal (reg_com, xfer_com))
+        request->swap_amounts = true;
+    else
+    {
+        gnc_numeric rate = xaccTransGetAccountConvRate (txn, reg_acc);
+        amount = gnc_numeric_div (amount, rate,
+                                  gnc_commodity_get_fraction (txn_cur),
+                                  GNC_HOW_DENOM_REDUCE);
     }
 
-    /* We know that "amount" is always in the reg_com currency.
-     * Unfortunately it is possible that neither xfer_com or txn_cur are
-     * the same as reg_com, in which case we need to convert to the txn
-     * currency...  Or, if the register commodity is the xfer_com, then we
-     * need to flip-flop the commodities and the exchange rates.
-     */
-
-    else if (gnc_commodity_equal(reg_com, txn_cur))
+    if (request->swap_amounts)
     {
-        /* we're working in the txn currency.  Great.  Nothing to do! */
-        swap_amounts = FALSE;
-
-    }
-    else if (gnc_commodity_equal(reg_com, xfer_com))
-    {
-        /* We're working in the xfer commodity.  Great.  Just swap the
-           amounts. */
-        swap_amounts = TRUE;
-
-        /* XXX: Do we need to check for expanded v. non-expanded
-           accounts here? */
-
+        gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
+        gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
+        if (!gnc_numeric_zero_p (request->exch_rate))
+            request->exch_rate = gnc_numeric_invert (request->exch_rate);
+        amount = gnc_numeric_neg (amount);
     }
     else
     {
-        /* UGGH -- we're not in either.  That means we need to convert
-         * 'amount' from the register commodity to the txn currency.
-         */
-        gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
-
-        /* XXX: should we tell the user we've done the conversion? */
-        amount = gnc_numeric_div(amount, rate,
-                                 gnc_commodity_get_fraction(txn_cur),
-                                 GNC_HOW_DENOM_REDUCE);
+        gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
+        gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
+        if (xaccTransUseTradingAccounts (txn))
+            amount = gnc_numeric_neg (amount);
     }
 
-    /* enter the accounts */
-    if (swap_amounts)
-    {
-        gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
-        gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
-        if (!gnc_numeric_zero_p(*exch_rate))
-            *exch_rate = gnc_numeric_invert(*exch_rate);
-        amount = gnc_numeric_neg(amount);
-    }
-    else
-    {
-        gnc_xfer_dialog_select_to_currency(xfer, xfer_com);
-        gnc_xfer_dialog_select_from_currency(xfer, txn_cur);
-        if (xaccTransUseTradingAccounts ( txn ))
-            amount = gnc_numeric_neg(amount);
-    }
-    gnc_xfer_dialog_hide_to_account_tree(xfer);
-    gnc_xfer_dialog_hide_from_account_tree(xfer);
-
-    gnc_xfer_dialog_set_amount(xfer, amount);
-    /* Now that from amount is set, set the to amount. */
-    gnc_xfer_update_to_amount(xfer);
-
-    /*
-     * When we flip, we should tell the dialog so it can deal with the
-     * pricedb properly.
-     */
-
-    /* Set the exchange rate */
-    gnc_xfer_dialog_set_price_edit(xfer, *exch_rate);
-
-    /* and run it... */
-    if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
-        return TRUE;
-    /* If we inverted the rate for the dialog, invert it back. */
-    if (swap_amounts)
-        *exch_rate = gnc_numeric_invert(*exch_rate);
-
-    return FALSE;
+    gnc_xfer_dialog_hide_to_account_tree (xfer);
+    gnc_xfer_dialog_hide_from_account_tree (xfer);
+    gnc_xfer_dialog_set_amount (xfer, amount);
+    gnc_xfer_update_to_amount (xfer);
+    gnc_xfer_dialog_is_exchange_dialog (xfer, &request->exch_rate);
+    gnc_xfer_dialog_set_price_edit (xfer, request->exch_rate);
+    gnc_xfer_dialog_run_async (xfer, exchange_dialog_finished_cb, request);
 }

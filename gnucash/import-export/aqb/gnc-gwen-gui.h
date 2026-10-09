@@ -34,10 +34,20 @@
 #define GNC_GWEN_GUI_H
 
 #include <gtk/gtk.h>
+#include <gwenhywfar/dialog.h>
 
 G_BEGIN_DECLS
 
 typedef struct _GncGWENGui GncGWENGui;
+
+/* The work function is called on the serialized AqBanking worker. It may use
+ * the prepared Gwen GUI callbacks, which marshal any GTK interaction back to
+ * the GTK thread. The completion and destroy functions run on the GTK thread.
+ */
+typedef void (*GncGwenJobWork) (GncGWENGui *gui, gpointer user_data);
+typedef void (*GncGwenJobComplete) (gpointer user_data);
+typedef void (*GncGWENDialogDoneCallback) (gboolean accepted,
+                                           gpointer user_data);
 
 /**
  * Hook our logging into the gwenhywfar logging framework by creating a
@@ -48,20 +58,37 @@ typedef struct _GncGWENGui GncGWENGui;
 void gnc_GWEN_Gui_log_init(void);
 
 /**
- * When called for the first time, create a unique GncGWENGui object featuring a
- * GWEN_GUI with all necessary callbacks, which can serve as a user interface
- * for AqBanking jobs.  On later calls, return the object only when it is not
- * active and save to use.  Typically, you only need to call
- * gnc_GWEN_Gui_release() once your job has finished.
+ * Reserve a GncGWENGui object featuring a GWEN_GUI with all necessary
+ * callbacks. Independent operations may reserve distinct objects; AqBanking
+ * work is serialized by gnc_GWEN_Gui_run_job_async(). Release the reservation
+ * after its final GTK-thread continuation has completed.
  *
  * @param parent Widget to set new dialogs transient for, may be NULL
- * @return The unique GncGWENGui object or NULL otherwise
+ * @return A reserved GUI object, or NULL when called outside the GTK thread
  */
 GncGWENGui *gnc_GWEN_Gui_get(GtkWidget *parent);
 
+/** Run one AqBanking operation off the GTK thread. Only one operation may be
+ * active at a time because AqBanking mutates shared bank/provider state.
+ * @a work must restrict itself to the prepared backend job phase; GnuCash/QOF
+ * continuations belong in @a completed.
+ */
+void gnc_GWEN_Gui_run_job_async (GncGWENGui *gui, GncGwenJobWork work,
+                                 GncGwenJobComplete completed,
+                                 gpointer user_data, GDestroyNotify destroy);
+
+/** Open a Gwen dialog without a nested GTK loop. Call on GTK's main thread
+ * with a reserved GUI. The callback runs exactly once on GTK's main thread
+ * after CloseDialog and signal-handler restoration. The caller retains
+ * ownership of @a dialog until the callback; parent destruction completes it
+ * as rejected. Keep @a gui reserved until that callback. */
+void gnc_GWEN_Gui_exec_dialog_async (GncGWENGui *gui, GWEN_DIALOG *dialog,
+                                     GncGWENDialogDoneCallback completed,
+                                     gpointer user_data);
+
 /**
- * Currently a no-op.  The GncGWENGui will not be freed and it is considered
- * finished once the first tracked progress has ended.
+ * Release a reservation on the GTK thread. The object remains cached for
+ * reuse and is freed by gnc_GWEN_Gui_shutdown() after shutdown barriers drain.
  *
  * @param gui The GncGwenGUI returned by gnc_GWEN_Gui_get()
  */

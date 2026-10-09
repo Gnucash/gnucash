@@ -785,7 +785,8 @@ QOF_GOBJECT_IMPL(gnc_pricedb, GNCPriceDB, QOF_TYPE_INSTANCE)
 static void
 gnc_pricedb_init(GNCPriceDB* pdb)
 {
-    pdb->reset_nth_price_cache = FALSE;
+    pdb->nth_price_commodity = nullptr;
+    pdb->nth_price_cache = nullptr;
 }
 
 static void
@@ -796,6 +797,7 @@ gnc_pricedb_dispose_real (GObject *pdbp)
 static void
 gnc_pricedb_finalize_real(GObject* pdbp)
 {
+    gnc_pricedb_nth_price_reset_cache (GNC_PRICEDB (pdbp));
 }
 
 static GNCPriceDB *
@@ -867,6 +869,7 @@ void
 gnc_pricedb_destroy(GNCPriceDB *db)
 {
     if (!db) return;
+    gnc_pricedb_nth_price_reset_cache (db);
     if (db->commodity_hash)
     {
         g_hash_table_foreach (db->commodity_hash,
@@ -1092,6 +1095,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
 
     g_hash_table_insert(currency_hash, currency, price_list);
     p->db = db;
+    gnc_pricedb_nth_price_reset_cache (db);
 
     qof_event_gen (&p->inst, QOF_EVENT_ADD, nullptr);
 
@@ -1210,6 +1214,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
         }
     }
 
+    gnc_pricedb_nth_price_reset_cache (db);
     gnc_price_unref(p);
     LEAVE ("db=%p, pr=%p", db, p);
     return TRUE;
@@ -2120,9 +2125,6 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
                        const gnc_commodity *c,
                        const int n)
 {
-    static const gnc_commodity *last_c = nullptr;
-    static GList *prices = nullptr;
-
     GNCPrice *result = nullptr;
     GHashTable *currency_hash;
     g_return_val_if_fail (GNC_IS_COMMODITY (c), nullptr);
@@ -2130,7 +2132,10 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
     if (!db || !c || n < 0) return nullptr;
     ENTER ("db=%p commodity=%s index=%d", db, gnc_commodity_get_mnemonic(c), n);
 
-    if (last_c && prices && last_c == c && db->reset_nth_price_cache == FALSE)
+    auto &last_c = db->nth_price_commodity;
+    auto &prices = db->nth_price_cache;
+
+    if (last_c && prices && last_c == c)
     {
         result = static_cast<GNCPrice*>(g_list_nth_data (prices, n));
         LEAVE ("price=%p", result);
@@ -2144,8 +2149,6 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
         g_list_free (prices);
         prices = nullptr;
     }
-
-    db->reset_nth_price_cache = FALSE;
 
     currency_hash = static_cast<GHashTable*>(g_hash_table_lookup (db->commodity_hash, c));
     if (currency_hash)
@@ -2163,8 +2166,10 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
 void
 gnc_pricedb_nth_price_reset_cache (GNCPriceDB *db)
 {
-    if (db)
-        db->reset_nth_price_cache = TRUE;
+    if (!db)
+        return;
+    g_clear_pointer (&db->nth_price_cache, g_list_free);
+    db->nth_price_commodity = nullptr;
 }
 
 GNCPrice *

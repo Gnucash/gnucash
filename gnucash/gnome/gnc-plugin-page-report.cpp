@@ -1497,156 +1497,240 @@ gnc_plugin_page_report_stop_cb (GSimpleAction *simple,
     gnc_html_cancel(priv->html);
 }
 
-/* Returns SCM_BOOL_F if cancel. Returns SCM_BOOL_T if html.
- * Otherwise returns pair from export_types. */
-static SCM
-gnc_get_export_type_choice (SCM export_types, GtkWindow *parent)
+struct ReportExportRequest
 {
-    GList * choices = nullptr;
-    gboolean bad = FALSE;
-    GList * node;
-    int choice;
-    SCM tail;
+    GncPluginPageReport *report;
+    SCM report_scm;
+    SCM export_types;
+    SCM export_thunk;
+    SCM choice;
+    gchar *filepath;
+};
 
-    if (!scm_is_list (export_types))
-        return SCM_BOOL_F;
-
-    for (tail = export_types; !scm_is_null (tail); tail = SCM_CDR (tail))
-    {
-        SCM pair = SCM_CAR (tail);
-        char * name;
-        SCM scm;
-
-        if (!scm_is_pair (pair))
-        {
-            g_warning ("unexpected list element");
-            bad = TRUE;
-            break;
-        }
-
-        scm = SCM_CAR (pair);
-        if (!scm_is_string (scm))
-        {
-            g_warning ("unexpected pair element");
-            bad = TRUE;
-            break;
-        }
-
-        name = gnc_scm_to_utf8_string (scm);
-        choices = g_list_prepend (choices, name);
-    }
-
-    if (!bad)
-    {
-        choices = g_list_reverse (choices);
-
-        choices = g_list_prepend (choices, g_strdup (_("HTML")));
-
-        choice = gnc_choose_radio_option_dialog
-            (GTK_WIDGET (parent), _("Choose export format"),
-             _("Choose the export format for this report:"),
-             nullptr, 0, choices);
-    }
-    else
-        choice = -1;
-
-    for (node = choices; node; node = node->next)
-        g_free (node->data);
-    g_list_free (choices);
-
-    if (choice < 0)
-        return SCM_BOOL_F;
-
-    if (choice == 0)
-        return SCM_BOOL_T;
-
-    choice--;
-    if (choice >= scm_ilength (export_types))
-        return SCM_BOOL_F;
-
-    return scm_list_ref (export_types, scm_from_int  (choice));
+static void
+report_export_request_free (gpointer data)
+{
+    auto request = static_cast<ReportExportRequest*> (data);
+    if (request->filepath)
+        g_free (request->filepath);
+    scm_gc_unprotect_object (request->choice);
+    scm_gc_unprotect_object (request->export_thunk);
+    scm_gc_unprotect_object (request->export_types);
+    scm_gc_unprotect_object (request->report_scm);
+    g_object_unref (request->report);
+    g_free (request);
 }
 
-static char *
-gnc_get_export_filename (SCM choice, GtkWindow *parent)
+static void report_export_start_file (ReportExportRequest *request);
+static void report_export_write (ReportExportRequest *request);
+
+static void
+report_export_choice_response (GtkWindow*, gint selected, gpointer data)
 {
-    char * filepath;
-    GStatBuf statbuf;
-    char * title;
-    const gchar * html_type = _("HTML");
-    char * type;
-    int rc;
-    char * default_dir;
-
-    if (choice == SCM_BOOL_T)
-        type = g_strdup (html_type);
-    else
-        type = gnc_scm_to_utf8_string(SCM_CAR (choice));
-
-    /* %s is the type of what is about to be saved, e.g. "HTML". */
-    title = g_strdup_printf (_("Save %s To File"), type);
-    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_REPORT);
-
-    filepath = gnc_file_dialog (parent, title, nullptr, default_dir,
-                                GNC_FILE_DIALOG_EXPORT);
-
-    /* Try to test for extension on file name, add if missing */
-    if (filepath && strchr (filepath, '.') == nullptr)
+    auto request = static_cast<ReportExportRequest*> (data);
+    if (selected < 0)
     {
-        char* extension = g_ascii_strdown (type, -1);
-        char* newpath = g_strdup_printf ("%s.%s", filepath, extension);
-        g_free (extension);
-        g_free (filepath);
-        filepath = newpath;
+        report_export_request_free (request);
+        return;
     }
+    SCM choice = selected == 0 ? SCM_BOOL_T :
+        scm_list_ref (request->export_types, scm_from_int (selected - 1));
+    scm_gc_unprotect_object (request->choice);
+    request->choice = choice;
+    scm_gc_protect_object (request->choice);
+    report_export_start_file (request);
+}
 
+static void
+report_export_file_chosen (GSList *filenames, gpointer data)
+{
+    auto request = static_cast<ReportExportRequest*> (data);
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (request->report)));
+    if (!filenames || !parent)
+    {
+        g_slist_free_full (filenames, g_free);
+        report_export_request_free (request);
+        return;
+    }
+    request->filepath = static_cast<gchar*> (filenames->data);
+    filenames->data = nullptr;
+    g_slist_free_full (filenames, g_free);
+
+    gchar *type = request->choice == SCM_BOOL_T ? g_strdup (_("HTML")) :
+                  gnc_scm_to_utf8_string (SCM_CAR (request->choice));
+    if (strchr (request->filepath, '.') == nullptr)
+    {
+        gchar *extension = g_ascii_strdown (type, -1);
+        gchar *newpath = g_strdup_printf ("%s.%s", request->filepath, extension);
+        g_free (extension);
+        g_free (request->filepath);
+        request->filepath = newpath;
+    }
     g_free (type);
-    g_free (title);
-    g_free (default_dir);
 
-    if (!filepath)
-        return nullptr;
+    gchar *directory = g_path_get_dirname (request->filepath);
+    gnc_set_default_directory (GNC_PREFS_GROUP_REPORT, directory);
+    g_free (directory);
 
-    default_dir = g_path_get_dirname(filepath);
-    gnc_set_default_directory (GNC_PREFS_GROUP_REPORT, default_dir);
-    g_free(default_dir);
-
-    rc = g_stat (filepath, &statbuf);
-
-    /* Check for an error that isn't a non-existent file. */
+    GStatBuf statbuf;
+    int rc = g_stat (request->filepath, &statbuf);
     if (rc != 0 && errno != ENOENT)
     {
-        /* %s is the strerror(3) string of the error that occurred. */
-        const char *format = _("You cannot save to that filename.\n\n%s");
-
-        gnc_error_dialog (parent, format, strerror(errno));
-        g_free(filepath);
-        return nullptr;
+        gnc_error_dialog (parent, _("You cannot save to that filename.\n\n%s"), strerror (errno));
+        report_export_request_free (request);
+        return;
     }
-
-    /* Check for a file that isn't a regular file. */
     if (rc == 0 && !S_ISREG (statbuf.st_mode))
     {
-        const char *message = _("You cannot save to that file.");
-
-        gnc_error_dialog (parent, "%s", message);
-        g_free(filepath);
-        return nullptr;
+        gnc_error_dialog (parent, "%s", _("You cannot save to that file."));
+        report_export_request_free (request);
+        return;
     }
-
     if (rc == 0)
     {
-        const char *format = _("The file %s already exists. "
-                               "Are you sure you want to overwrite it?");
+        gnc_verify_dialog_async (parent, FALSE,
+                                 [](GtkWindow*, gint response, gpointer data)
+                                 {
+                                     auto req = static_cast<ReportExportRequest*> (data);
+                                     if (response == GTK_RESPONSE_YES)
+                                         report_export_write (req);
+                                     else
+                                         report_export_request_free (req);
+                                 },
+                                 request,
+                                 _("The file %s already exists. Are you sure you want to overwrite it?"),
+                                 request->filepath);
+        return;
+    }
+    report_export_write (request);
+}
 
-        if (!gnc_verify_dialog (parent, FALSE, format, filepath))
+static void
+report_export_start_file (ReportExportRequest *request)
+{
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (request->report)));
+    if (!parent)
+    {
+        report_export_request_free (request);
+        return;
+    }
+    gchar *type = request->choice == SCM_BOOL_T ? g_strdup (_("HTML")) :
+                  gnc_scm_to_utf8_string (SCM_CAR (request->choice));
+    gchar *title = g_strdup_printf (_("Save %s To File"), type);
+    gchar *directory = gnc_get_default_directory (GNC_PREFS_GROUP_REPORT);
+    g_free (type);
+    gnc_file_dialog_async (parent, title, nullptr, directory,
+                           GNC_FILE_DIALOG_EXPORT, FALSE,
+                           report_export_file_chosen, request,
+                           nullptr);
+    g_free (title);
+    g_free (directory);
+}
+
+static void
+report_export_start (GncPluginPageReport *report)
+{
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    if (priv->cur_report == SCM_BOOL_F)
+        return;
+    auto request = g_new0 (ReportExportRequest, 1);
+    request->report = GNC_PLUGIN_PAGE_REPORT (g_object_ref (report));
+    request->report_scm = priv->cur_report;
+    request->export_types = scm_call_1 (scm_c_eval_string ("gnc:report-export-types"), request->report_scm);
+    request->export_thunk = scm_call_1 (scm_c_eval_string ("gnc:report-export-thunk"), request->report_scm);
+    request->choice = SCM_BOOL_T;
+    scm_gc_protect_object (request->report_scm);
+    scm_gc_protect_object (request->export_types);
+    scm_gc_protect_object (request->export_thunk);
+    scm_gc_protect_object (request->choice);
+
+    if (!scm_is_list (request->export_types) || !scm_is_procedure (request->export_thunk))
+    {
+        report_export_start_file (request);
+        return;
+    }
+    GList *choices = g_list_append (nullptr, g_strdup (_("HTML")));
+    bool valid = true;
+    for (SCM tail = request->export_types; !scm_is_null (tail); tail = SCM_CDR (tail))
+    {
+        SCM pair = SCM_CAR (tail);
+        if (!scm_is_pair (pair) || !scm_is_string (SCM_CAR (pair)))
         {
-            g_free(filepath);
-            return nullptr;
+            g_warning ("unexpected report export type element");
+            valid = false;
+            break;
         }
+        choices = g_list_append (choices, gnc_scm_to_utf8_string (SCM_CAR (pair)));
+    }
+    if (!valid)
+    {
+        g_list_free_full (choices, g_free);
+        report_export_request_free (request);
+        return;
+    }
+    gnc_choose_radio_option_dialog_async (GTK_WIDGET (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report))),
+                                           _("Choose export format"),
+                                           _("Choose the export format for this report:"),
+                                           nullptr, 0, choices,
+                                           report_export_choice_response, request);
+    g_list_free_full (choices, g_free);
+}
+
+static void
+report_export_write (ReportExportRequest *request)
+{
+    auto report = request->report;
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    auto parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
+    if (!parent)
+    {
+        report_export_request_free (request);
+        return;
     }
 
-    return filepath;
+    bool result = true;
+    if (scm_is_pair (request->choice))
+    {
+        SCM type = SCM_CDR (request->choice);
+        SCM document = scm_call_2 (request->export_thunk, request->report_scm, type);
+        SCM query_result = scm_c_eval_string ("gnc:html-document?");
+        SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
+        SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
+        if (scm_is_false (scm_call_1 (query_result, document)))
+            gnc_error_dialog_async (parent, "%s",
+                _("This report must be upgraded to return a document object with export-string or export-error."));
+        else
+        {
+            SCM export_string = scm_call_1 (get_export_string, document);
+            SCM export_error = scm_call_1 (get_export_error, document);
+            if (scm_is_string (export_string))
+            {
+                GError *err = nullptr;
+                gchar *exported = scm_to_utf8_string (export_string);
+                if (!g_file_set_contents (request->filepath, exported, -1, &err))
+                    gnc_error_dialog_async (parent, "Error during export: %s", err->message);
+                g_free (exported);
+                if (err)
+                    g_error_free (err);
+            }
+            else if (scm_is_string (export_error))
+            {
+                gchar *str = scm_to_utf8_string (export_error);
+                gnc_error_dialog_async (parent, "error during export: %s", str);
+                g_free (str);
+            }
+            else
+                gnc_error_dialog_async (parent, "%s",
+                    _("This report must be upgraded to return a document object with export-string or export-error."));
+        }
+    }
+    else
+        result = gnc_html_export_to_file (priv->html, request->filepath);
+
+    if (!result)
+        gnc_error_dialog_async (parent, _("Could not open the file %s. The error is: %s"),
+                                request->filepath, strerror (errno) ? strerror (errno) : "");
+    report_export_request_free (request);
 }
 
 static void
@@ -1696,14 +1780,27 @@ gnc_plugin_page_report_save_as_cb (GSimpleAction *simple,
 }
 
 static void
+gnc_plugin_page_report_save_confirmed (GtkWindow *parent, gint response,
+                                       gpointer user_data)
+{
+    auto report = GNC_PLUGIN_PAGE_REPORT (user_data);
+    auto priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE (report);
+    if (response == GTK_RESPONSE_ACCEPT && priv->cur_report != SCM_BOOL_F)
+    {
+        auto save_func = scm_c_eval_string ("gnc:report-to-template-update");
+        scm_call_1 (save_func, priv->cur_report);
+    }
+    g_object_unref (report);
+}
+
+static void
 gnc_plugin_page_report_save_cb (GSimpleAction *simple,
                                 GVariant *parameter,
                                 gpointer user_data)
 {
     GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
-    SCM check_func, save_func;
-    SCM rpt_id;
+    SCM check_func;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
@@ -1715,16 +1812,11 @@ gnc_plugin_page_report_save_cb (GSimpleAction *simple,
         auto report_name_str{priv->cur_odb->lookup_string_option("General", "Report name")};
         auto window{GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report)))};
 
-        if (!gnc_action_dialog (window, _("_Overwrite"), false, _("This will update and \
-overwrite the existing saved report named \"%s\"."), report_name_str.c_str()))
-            return;
-
-        /* The current report is already based on a custom report.
-         * Replace the existing one instead of adding a new one
-         */
-        save_func = scm_c_eval_string("gnc:report-to-template-update");
-        rpt_id = scm_call_1(save_func, priv->cur_report);
-        (void)rpt_id;
+        gnc_action_dialog_async (window, _("_Overwrite"), FALSE,
+                                gnc_plugin_page_report_save_confirmed,
+                                g_object_ref (report),
+                                _("This will update and overwrite the existing saved report named \"%s\"."),
+                                report_name_str.c_str());
     }
     else
     {
@@ -1741,90 +1833,7 @@ gnc_plugin_page_report_export_cb (GSimpleAction *simple,
                                   GVariant *parameter,
                                   gpointer user_data)
 {
-    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
-    GncPluginPageReportPrivate *priv;
-    char * filepath;
-    SCM export_types;
-    SCM export_thunk;
-    gboolean result;
-    SCM choice;
-    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window
-                                    (GNC_PLUGIN_PAGE (report)));
-
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    export_types = scm_call_1 (scm_c_eval_string ("gnc:report-export-types"),
-                               priv->cur_report);
-
-    export_thunk = scm_call_1 (scm_c_eval_string ("gnc:report-export-thunk"),
-                               priv->cur_report);
-
-    if (scm_is_list (export_types) && scm_is_procedure (export_thunk))
-        choice = gnc_get_export_type_choice (export_types, parent);
-    else
-        choice = SCM_BOOL_T;
-
-    if (choice == SCM_BOOL_F)
-        return;
-
-    filepath = gnc_get_export_filename (choice, parent);
-    if (!filepath)
-        return;
-
-    if (scm_is_pair (choice))
-    {
-        SCM type = scm_cdr (choice);
-        SCM document = scm_call_2 (export_thunk, priv->cur_report, type);
-        SCM query_result = scm_c_eval_string ("gnc:html-document?");
-        SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
-        SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
-
-        if (scm_is_false (scm_call_1 (query_result, document)))
-            gnc_error_dialog (parent, "%s",
-                              _("This report must be upgraded to return a "
-                                "document object with export-string or "
-                                "export-error."));
-        else
-        {
-            SCM export_string = scm_call_1 (get_export_string, document);
-            SCM export_error = scm_call_1 (get_export_error, document);
-
-            if (scm_is_string (export_string))
-            {
-                GError *err = nullptr;
-                gchar *exported = scm_to_utf8_string (export_string);
-                if (!g_file_set_contents (filepath, exported, -1, &err))
-                    gnc_error_dialog (parent, "Error during export: %s", err->message);
-                g_free (exported);
-                if (err)
-                    g_error_free (err);
-            }
-            else if (scm_is_string (export_error))
-            {
-                gchar *str = scm_to_utf8_string (export_error);
-                gnc_error_dialog (parent, "error during export: %s", str);
-                g_free (str);
-            }
-            else
-                gnc_error_dialog (parent, "%s",
-                                   _("This report must be upgraded to return a "
-                                     "document object with export-string or "
-                                     "export-error."));
-        }
-        result = TRUE;
-    }
-    else
-        result = gnc_html_export_to_file (priv->html, filepath);
-
-    if (!result)
-    {
-        const char *fmt = _("Could not open the file %s. "
-                            "The error is: %s");
-        gnc_error_dialog (parent, fmt, filepath ? filepath : "(null)",
-                          strerror (errno) ? strerror (errno) : "" );
-    }
-
-    g_free(filepath);
-    return;
+    report_export_start (GNC_PLUGIN_PAGE_REPORT (user_data));
 }
 
 static void

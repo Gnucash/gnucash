@@ -30,8 +30,10 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include "gnc-date-edit.h"
 #include "gnc-account-sel.h"
+#include "gnc-component-manager.h"
 
 #include "business-gnome-utils.h"
 #include "dialog-date-close.h"
@@ -53,15 +55,59 @@ typedef struct _dialog_date_close_window
     char **memo;
     gboolean retval;
     gboolean answer;
+    time64 async_date;
+    GncDateCloseResponseCallback callback;
+    gpointer callback_data;
+    gboolean completed;
+    gboolean parent_destroyed;
+    GWeakRef parent;
+    gboolean has_parent;
+    time64 async_post_date;
+    char *async_memo;
+    GncDateCloseFormResponseCallback form_callback;
+    GPtrArray *signal_objects;
+    gint component_id;
 } DialogDateClose;
 
-void gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data);
-
-
-void
-gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
+static void
+date_close_track_objects(DialogDateClose *ddc, GtkBuilder *builder)
 {
-    DialogDateClose *ddc = user_data;
+    ddc->signal_objects = g_ptr_array_new_with_free_func(g_object_unref);
+    GSList *objects = gtk_builder_get_objects(builder);
+    for (GSList *item = objects; item; item = item->next)
+        g_ptr_array_add(ddc->signal_objects, g_object_ref(item->data));
+    g_slist_free(objects);
+    if (ddc->post_date)
+        g_ptr_array_add(ddc->signal_objects, g_object_ref(ddc->post_date));
+}
+
+static void
+date_close_disconnect(DialogDateClose *ddc)
+{
+    if (ddc->component_id)
+    {
+        gnc_unregister_gui_component(ddc->component_id);
+        ddc->component_id = 0;
+    }
+    for (guint i = 0; i < ddc->signal_objects->len; ++i)
+        g_signal_handlers_disconnect_by_data(
+            g_ptr_array_index(ddc->signal_objects, i), ddc);
+}
+
+static void
+date_close_session_closed(gpointer data)
+{
+    DialogDateClose *ddc = data;
+    gtk_widget_destroy(ddc->dialog);
+}
+
+static void
+gnc_dialog_date_close_capture_inputs (DialogDateClose *ddc)
+{
+    if (ddc->completed || (ddc->form_callback &&
+        (!ddc->book || !gnc_current_session_exist() ||
+         ddc->book != gnc_get_current_book() || qof_book_shutting_down(ddc->book))))
+        return;
 
     if (ddc->acct_combo)
     {
@@ -117,21 +163,26 @@ fill_in_acct_info (DialogDateClose *ddc, gboolean set_default_acct)
     gnc_account_sel_set_account( gas, ddc->acct, set_default_acct );
 }
 
-gboolean
-gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
-                                const char *label_message,
-                                gboolean ok_is_default,
-                                /* Returned data ... */
-                                time64 *t)
+static void
+gnc_dialog_date_close_capture_response ([[maybe_unused]] GtkDialog *dialog, gint response,
+                                        DialogDateClose *ddc)
+{
+    if (response == GTK_RESPONSE_OK)
+        gnc_dialog_date_close_capture_inputs (ddc);
+}
+
+static DialogDateClose *
+gnc_dialog_date_close_create (GtkWidget *parent, const char *message,
+                              const char *label_message,
+                              gboolean ok_is_default, time64 *t,
+                              gboolean destroy_with_parent)
 {
     DialogDateClose *ddc;
     GtkWidget *date_box;
     GtkLabel *label;
     GtkBuilder *builder;
-    gboolean retval;
-
     if (!message || !label_message || !t)
-        return FALSE;
+        return NULL;
 
     ddc = g_new0 (DialogDateClose, 1);
     ddc->t = t;
@@ -148,8 +199,12 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
     gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *t);
 
-    if (parent)
+    if (parent && GTK_IS_WINDOW (parent))
+    {
         gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
+        if (destroy_with_parent)
+            gtk_window_set_destroy_with_parent (GTK_WINDOW(ddc->dialog), TRUE);
+    }
 
     /* Set the labels */
     label = GTK_LABEL (gtk_builder_get_object (builder, "msg_label"));
@@ -158,26 +213,355 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     gtk_label_set_text (label, label_message);
 
     /* Setup signals */
+    date_close_track_objects(ddc, builder);
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+    /* Capture inputs once before asynchronous completion. */
+    g_signal_connect (ddc->dialog, "response",
+                      G_CALLBACK (gnc_dialog_date_close_capture_response), ddc);
+    gtk_dialog_set_default_response (GTK_DIALOG (ddc->dialog),
+        ok_is_default ? GTK_RESPONSE_OK : GTK_RESPONSE_CANCEL);
 
-    gtk_widget_show_all (ddc->dialog);
+    g_object_unref (G_OBJECT(builder));
+    return ddc;
+}
 
-    ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+static void
+gnc_dialog_date_close_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                        DialogDateClose *ddc)
+{
+    ddc->parent_destroyed = TRUE;
+    if (!ddc->completed && ddc->dialog)
+        gtk_widget_destroy (ddc->dialog);
+}
+
+static void post_date_changed_cb (GNCDateEdit *gde, gpointer d);
+
+static void
+gnc_dialog_date_close_async_complete (GtkWidget *dialog,
+                                      DialogDateClose *ddc,
+                                      gboolean accepted, gboolean destroying)
+{
+    GncDateCloseResponseCallback callback = ddc->callback;
+    gpointer callback_data = ddc->callback_data;
+    time64 selected_date = ddc->async_date;
+    GtkWidget *parent = ddc->has_parent ?
+        GTK_WIDGET (g_weak_ref_get (&ddc->parent)) : NULL;
+
+    if (ddc->completed)
     {
-        /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
+        g_clear_object (&parent);
+        return;
+    }
+    ddc->completed = TRUE;
+    date_close_disconnect(ddc);
+    if (!destroying)
+        gtk_widget_destroy (dialog);
+    if (parent)
+    {
+        g_signal_handlers_disconnect_by_data (parent, ddc);
+        if (ddc->parent_destroyed || gtk_widget_in_destruction (parent))
+            accepted = FALSE;
+    }
+    else if (ddc->has_parent)
+        accepted = FALSE;
+    accepted = accepted && !destroying;
+    if (ddc->has_parent)
+        g_weak_ref_clear (&ddc->parent);
+    g_clear_object (&parent);
+    g_ptr_array_unref(ddc->signal_objects);
+    g_free (ddc);
+    callback (accepted, selected_date, callback_data);
+}
+
+static void
+gnc_dialog_date_close_async_response (GtkDialog *dialog, gint response,
+                                      DialogDateClose *ddc)
+{
+    if (response == GTK_RESPONSE_OK && !ddc->retval)
+        return;
+    gnc_dialog_date_close_async_complete (
+        GTK_WIDGET (dialog), ddc, response == GTK_RESPONSE_OK && ddc->retval,
+        FALSE);
+}
+
+static void
+gnc_dialog_date_close_async_destroy (GtkWidget *dialog, DialogDateClose *ddc)
+{
+    gnc_dialog_date_close_async_complete (dialog, ddc, FALSE, TRUE);
+}
+
+void
+gnc_dialog_date_close_async_parented (
+    GtkWidget *parent, const char *message, const char *label_message,
+    gboolean ok_is_default, time64 initial_date,
+    GncDateCloseResponseCallback callback, gpointer user_data)
+{
+    DialogDateClose *ddc;
+    time64 date_value = initial_date;
+    if (!callback)
+    {
+        return;
     }
 
-    g_object_unref(G_OBJECT(builder));
+    ddc = gnc_dialog_date_close_create (parent, message, label_message,
+                                        ok_is_default, &date_value,
+                                        TRUE);
+    if (!ddc)
+    {
+        callback (FALSE, initial_date, user_data);
+        return;
+    }
+    ddc->async_date = initial_date;
+    ddc->t = &ddc->async_date;
+    gtk_dialog_set_default_response (
+        GTK_DIALOG (ddc->dialog),
+        ok_is_default ? GTK_RESPONSE_OK : GTK_RESPONSE_CANCEL);
+    ddc->callback = callback;
+    ddc->callback_data = user_data;
+    ddc->retval = FALSE;
+    if (parent)
+    {
+        g_weak_ref_init (&ddc->parent, G_OBJECT (parent));
+        ddc->has_parent = TRUE;
+        g_signal_connect (parent, "destroy",
+                          G_CALLBACK (gnc_dialog_date_close_parent_destroyed), ddc);
+    }
+    g_signal_connect (ddc->dialog, "response",
+                      G_CALLBACK (gnc_dialog_date_close_async_response), ddc);
+    g_signal_connect (ddc->dialog, "destroy",
+                      G_CALLBACK (gnc_dialog_date_close_async_destroy), ddc);
+    gtk_widget_show_all (ddc->dialog);
+}
 
-    gtk_widget_destroy(ddc->dialog);
-    retval = ddc->retval;
-    g_list_free (ddc->acct_types);
+static void
+gnc_dialog_date_close_form_complete (GtkWidget *dialog,
+                                    DialogDateClose *ddc,
+                                    gboolean accepted, gboolean destroying)
+{
+    GncDateCloseFormResponseCallback callback = ddc->form_callback;
+    gpointer callback_data = ddc->callback_data;
+    time64 due_date = ddc->async_date;
+    time64 post_date = ddc->async_post_date;
+    char *memo = ddc->async_memo;
+    Account *account = ddc->acct;
+    gboolean answer = ddc->answer;
+    QofBook *book = ddc->book;
+    GtkWidget *parent = ddc->has_parent ?
+        GTK_WIDGET (g_weak_ref_get (&ddc->parent)) : NULL;
+
+    if (ddc->completed)
+    {
+        g_clear_object (&parent);
+        return;
+    }
+    ddc->completed = TRUE;
+    if (accepted && (!book || !gnc_current_session_exist () ||
+                     gnc_get_current_book () != book ||
+                     !qof_book_is_open (book) || qof_book_shutting_down (book)))
+        accepted = FALSE;
+    accepted = accepted && !destroying;
+    date_close_disconnect(ddc);
+    if (!destroying)
+        gtk_widget_destroy (dialog);
+    if (parent)
+    {
+        g_signal_handlers_disconnect_by_data (parent, ddc);
+        if (ddc->parent_destroyed || gtk_widget_in_destruction (parent))
+            accepted = FALSE;
+    }
+    else if (ddc->has_parent)
+        accepted = FALSE;
+    if (ddc->has_parent)
+        g_weak_ref_clear (&ddc->parent);
+    if (book)
+        g_object_remove_weak_pointer (G_OBJECT (book), (gpointer *)&ddc->book);
+    if (ddc->terms)
+        g_object_remove_weak_pointer(G_OBJECT(ddc->terms), (gpointer *)&ddc->terms);
+    g_clear_object (&parent);
+    if (!accepted)
+    {
+        g_free (memo);
+        memo = NULL;
+        account = NULL;
+        answer = FALSE;
+    }
+    g_list_free(ddc->acct_types);
+    g_list_free(ddc->acct_commodities);
+    g_ptr_array_unref(ddc->signal_objects);
     g_free (ddc);
+    callback (accepted, due_date, post_date, memo, account, answer,
+              callback_data);
+}
 
-    return retval;
+static void
+gnc_dialog_date_close_form_response (GtkDialog *dialog, gint response,
+                                     DialogDateClose *ddc)
+{
+    if (response == GTK_RESPONSE_OK && !ddc->retval)
+        return;
+    gnc_dialog_date_close_form_complete (
+        GTK_WIDGET (dialog), ddc, response == GTK_RESPONSE_OK && ddc->retval,
+        FALSE);
+}
+
+static void
+gnc_dialog_date_close_form_destroy (GtkWidget *dialog, DialogDateClose *ddc)
+{
+    gnc_dialog_date_close_form_complete (dialog, ddc, FALSE, TRUE);
+}
+
+typedef struct
+{
+    GncDateCloseFormResponseCallback callback;
+    gpointer user_data;
+    time64 due_date;
+    time64 post_date;
+} InvalidDateCloseFormRequest;
+
+static gboolean
+gnc_dialog_date_close_form_invalid_idle (gpointer user_data)
+{
+    InvalidDateCloseFormRequest *request = user_data;
+    request->callback (FALSE, request->due_date, request->post_date,
+                       NULL, NULL, FALSE, request->user_data);
+    g_free (request);
+    return G_SOURCE_REMOVE;
+}
+
+void
+gnc_dialog_dates_acct_question_async_parented (
+    GtkWidget *parent, const char *message, const char *ddue_label_message,
+    const char *post_label_message, const char *acct_label_message,
+    const char *question_check_message, gboolean ok_is_default,
+    gboolean set_default_acct, GList *acct_types, GList *acct_commodities,
+    QofBook *book, GncBillTerm *terms, time64 initial_due_date,
+    time64 initial_post_date, Account *initial_account,
+    gboolean initial_answer, GncDateCloseFormResponseCallback callback,
+    gpointer user_data)
+{
+    DialogDateClose *ddc;
+    GtkBuilder *builder;
+    GtkLabel *label;
+    GtkWidget *date_box, *acct_box;
+
+    g_return_if_fail (callback != NULL);
+    if (!message || !ddue_label_message || !post_label_message ||
+        !acct_label_message || !acct_types || !book)
+    {
+        InvalidDateCloseFormRequest *request =
+            g_new (InvalidDateCloseFormRequest, 1);
+        request->callback = callback;
+        request->user_data = user_data;
+        request->due_date = initial_due_date;
+        request->post_date = initial_post_date;
+        g_list_free (acct_types);
+        g_list_free (acct_commodities);
+        g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                         gnc_dialog_date_close_form_invalid_idle, request,
+                         NULL);
+        return;
+    }
+
+    ddc = g_new0 (DialogDateClose, 1);
+    ddc->async_date = initial_due_date;
+    ddc->async_post_date = initial_post_date;
+    ddc->t = &ddc->async_date;
+    ddc->t2 = &ddc->async_post_date;
+    ddc->book = book;
+    g_object_add_weak_pointer (G_OBJECT (book), (gpointer *)&ddc->book);
+    ddc->acct_types = acct_types;
+    ddc->acct_commodities = acct_commodities;
+    ddc->acct = initial_account;
+    ddc->memo = &ddc->async_memo;
+    ddc->terms = terms;
+    if (terms)
+        g_object_add_weak_pointer(G_OBJECT(terms), (gpointer *)&ddc->terms);
+    ddc->answer = initial_answer;
+    ddc->form_callback = callback;
+    ddc->callback_data = user_data;
+
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "dialog-date-close.glade",
+                               "date_account_dialog");
+    ddc->dialog = GTK_WIDGET (gtk_builder_get_object (
+        builder, "date_account_dialog"));
+    gtk_widget_set_name (ddc->dialog, "gnc-id-date-close");
+
+    acct_box = GTK_WIDGET (gtk_builder_get_object (builder, "acct_hbox"));
+    ddc->acct_combo = gnc_account_sel_new ();
+    gtk_box_pack_start (GTK_BOX (acct_box), ddc->acct_combo, TRUE, TRUE, 0);
+    date_box = GTK_WIDGET (gtk_builder_get_object (builder, "date_hbox"));
+    ddc->date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+    gtk_box_pack_start (GTK_BOX (date_box), ddc->date, TRUE, TRUE, 0);
+    date_box = GTK_WIDGET (gtk_builder_get_object (builder, "post_date_box"));
+    ddc->post_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+    gtk_box_pack_start (GTK_BOX (date_box), ddc->post_date, TRUE, TRUE, 0);
+    ddc->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
+    ddc->question_check = GTK_WIDGET (gtk_builder_get_object (
+        builder, "question_check"));
+
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (ddc->dialog),
+                                      GTK_WINDOW (parent));
+    label = GTK_LABEL (gtk_builder_get_object (builder, "top_msg_label"));
+    gtk_label_set_text (label, message);
+    label = GTK_LABEL (gtk_builder_get_object (builder, "date_label"));
+    gtk_label_set_text (label, ddue_label_message);
+    label = GTK_LABEL (gtk_builder_get_object (builder, "postdate_label"));
+    gtk_label_set_text (label, post_label_message);
+    label = GTK_LABEL (gtk_builder_get_object (builder, "acct_label"));
+    gtk_label_set_text (label, acct_label_message);
+    if (question_check_message)
+    {
+        gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (
+            GTK_BIN (ddc->question_check))), question_check_message);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ddc->question_check),
+                                      initial_answer);
+    }
+    else
+    {
+        gtk_widget_hide (ddc->question_check);
+        gtk_widget_hide (GTK_WIDGET (gtk_builder_get_object (builder, "hide1")));
+    }
+
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->post_date), initial_post_date);
+    if (terms)
+    {
+        g_signal_connect (ddc->post_date, "date_changed",
+                          G_CALLBACK (post_date_changed_cb), ddc);
+        gtk_widget_set_sensitive (ddc->date, FALSE);
+        post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
+    }
+    else
+        gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), initial_due_date);
+    fill_in_acct_info (ddc, set_default_acct);
+    date_close_track_objects(ddc, builder);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+                                      ddc);
+    ddc->retval = FALSE;
+    if (parent)
+    {
+        g_weak_ref_init (&ddc->parent, G_OBJECT (parent));
+        ddc->has_parent = TRUE;
+        g_signal_connect (parent, "destroy",
+                          G_CALLBACK (gnc_dialog_date_close_parent_destroyed),
+                          ddc);
+    }
+    /* Capture and validate once, before completing the dialog response. */
+    g_signal_connect (ddc->dialog, "response",
+                      G_CALLBACK (gnc_dialog_date_close_capture_response), ddc);
+    g_signal_connect (ddc->dialog, "response",
+                      G_CALLBACK (gnc_dialog_date_close_form_response), ddc);
+    g_signal_connect (ddc->dialog, "destroy",
+                      G_CALLBACK (gnc_dialog_date_close_form_destroy), ddc);
+    ddc->component_id = gnc_register_gui_component("date-account-question", NULL,
+                                                   date_close_session_closed, ddc);
+    gnc_gui_component_set_session(ddc->component_id, gnc_get_current_session());
+    gtk_dialog_set_default_response (GTK_DIALOG (ddc->dialog),
+        ok_is_default ? GTK_RESPONSE_OK : GTK_RESPONSE_CANCEL);
+    g_object_unref (builder);
+    gtk_widget_show_all (ddc->dialog);
+    gnc_date_grab_focus (GNC_DATE_EDIT (ddc->post_date));
 }
 
 static void
@@ -187,226 +571,12 @@ post_date_changed_cb (GNCDateEdit *gde, gpointer d)
     time64 post_date;
     time64 due_date = 0;
 
+    if (ddc->completed || !ddc->terms || !ddc->book ||
+        !gnc_current_session_exist() || ddc->book != gnc_get_current_book() ||
+        qof_book_shutting_down(ddc->book))
+        return;
+
     post_date = gnc_date_edit_get_date (gde);
     due_date = gncBillTermComputeDueDate (ddc->terms, post_date);
     gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), due_date);
-}
-
-gboolean
-gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
-        const char *ddue_label_message,
-        const char *post_label_message,
-        const char *acct_label_message,
-        const char *question_check_message,
-        gboolean ok_is_default,
-        gboolean set_default_acct,
-        GList * acct_types, GList * acct_commodities,
-        QofBook *book, GncBillTerm *terms,
-        /* Returned Data... */
-        time64 *ddue, time64 *post,
-        char **memo, Account **acct, gboolean *answer)
-{
-    DialogDateClose *ddc;
-    GtkLabel *label;
-    GtkWidget *date_box;
-    GtkWidget *acct_box;
-    GtkBuilder *builder;
-    gboolean retval;
-
-    if (!message || !ddue_label_message || !post_label_message ||
-            !acct_label_message || !acct_types || !book || !ddue || !post || !acct)
-        return FALSE;
-    if (question_check_message && !answer)
-        return FALSE;
-
-    ddc = g_new0 (DialogDateClose, 1);
-    ddc->t = ddue;
-    ddc->t2 = post;
-    ddc->book = book;
-    ddc->acct_types = acct_types;
-    ddc->acct_commodities = acct_commodities;
-    ddc->acct = *acct;
-    ddc->memo = memo;
-    ddc->terms = terms;
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
-    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
-    ddc->memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(ddc->dialog), "gnc-id-date-close");
-
-    acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
-    ddc->acct_combo = gnc_account_sel_new();
-    gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
-
-    date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
-    ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
-
-    date_box = GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box"));
-    ddc->post_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->post_date, TRUE, TRUE, 0);
-
-    ddc->question_check = GTK_WIDGET(gtk_builder_get_object (builder, "question_check"));
-
-    if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
-
-
-    /* Set the labels */
-    label = GTK_LABEL (gtk_builder_get_object (builder, "top_msg_label"));
-    gtk_label_set_text (label, message);
-    label = GTK_LABEL (gtk_builder_get_object (builder, "date_label"));
-    gtk_label_set_text (label, ddue_label_message);
-    label = GTK_LABEL (gtk_builder_get_object (builder, "postdate_label"));
-    gtk_label_set_text (label, post_label_message);
-    label = GTK_LABEL (gtk_builder_get_object (builder, "acct_label"));
-    gtk_label_set_text (label, acct_label_message);
-
-    if (question_check_message)
-    {
-        gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(ddc->question_check))), question_check_message);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ddc->question_check), *answer);
-    }
-    else
-    {
-        gtk_widget_hide(ddc->question_check);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "hide1")));
-    }
-
-
-    /* Set the post date widget */
-    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->post_date), *post);
-
-    /* Deal with the terms handling of the due date */
-    if (terms)
-    {
-        g_signal_connect (G_OBJECT (ddc->post_date), "date_changed",
-                          G_CALLBACK (post_date_changed_cb), ddc);
-        gtk_widget_set_sensitive (ddc->date, FALSE);
-        post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
-    }
-    else
-        gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *ddue);
-
-    /* Setup the account widget */
-    fill_in_acct_info (ddc, set_default_acct);
-
-    /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
-
-    gtk_widget_show_all (ddc->dialog);
-
-    /* Set the focus on the date widget */
-    gnc_date_grab_focus (GNC_DATE_EDIT (ddc->post_date));
-
-    ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
-        /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
-
-    g_object_unref(G_OBJECT(builder));
-
-    gtk_widget_destroy(ddc->dialog);
-    retval = ddc->retval;
-    *acct = ddc->acct;
-    if (question_check_message)
-        *answer = ddc->answer;
-    g_free (ddc);
-
-    return retval;
-}
-
-gboolean
-gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
-                               const char *date_label_message,
-                               const char *acct_label_message,
-                               gboolean ok_is_default,
-                               GList * acct_types, QofBook *book,
-                               /* Returned Data... */
-                               time64 *date, Account **acct)
-{
-    DialogDateClose *ddc;
-    GtkLabel *label;
-    GtkWidget *date_box;
-    GtkWidget *acct_box;
-    GtkBuilder *builder;
-    gboolean retval;
-
-    if (!message || !date_label_message || !acct_label_message ||
-            !acct_types || !book || !date || !acct)
-        return FALSE;
-
-    ddc = g_new0 (DialogDateClose, 1);
-    ddc->t = date;
-    ddc->book = book;
-    ddc->acct_types = acct_types;
-    ddc->acct = *acct;
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
-    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(ddc->dialog), "gnc-id-date-close");
-
-    acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
-    ddc->acct_combo = gnc_account_sel_new();
-    if (*acct)
-        gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct, FALSE);
-    gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
-
-    date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
-    ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
-
-    if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
-
-
-    /* Set the labels */
-    label = GTK_LABEL (gtk_builder_get_object (builder, "top_msg_label"));
-    gtk_label_set_text (label, message);
-    label = GTK_LABEL (gtk_builder_get_object (builder, "date_label"));
-    gtk_label_set_text (label, date_label_message);
-    label = GTK_LABEL (gtk_builder_get_object (builder, "acct_label"));
-    gtk_label_set_text (label, acct_label_message);
-
-    /* Set the date widget */
-    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *date);
-
-    /* Setup the account widget */
-    fill_in_acct_info (ddc, FALSE);
-
-    /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
-
-    gtk_widget_show_all (ddc->dialog);
-
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")));
-
-    ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
-        /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
-
-    g_object_unref(G_OBJECT(builder));
-
-    gtk_widget_destroy(ddc->dialog);
-    retval = ddc->retval;
-    *acct = ddc->acct;
-    g_free (ddc);
-
-    return retval;
 }

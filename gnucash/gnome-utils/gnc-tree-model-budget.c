@@ -29,6 +29,15 @@
 #include "gnc-tree-model-budget.h"
 #include "gnc-budget.h"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
+
+static void
+budget_model_book_free (gpointer data)
+{
+    GWeakRef *book = data;
+    g_weak_ref_clear (book);
+    g_free (book);
+}
 
 /* Add the new budget object to the tree model.  */
 static void add_budget_to_model(QofInstance* data, gpointer user_data )
@@ -54,8 +63,10 @@ static void add_budget_to_model(QofInstance* data, gpointer user_data )
  * right now, we're using the already implemented GtkListStore.  This
  * has a couple consequences: 1) We allocate a new store upon every
  * call, so the memory is owned by caller.  2) The model won't reflect
- * later updates to the book, so the model shouldn't be expected to
- * track asynchronous changes.
+ * later updates to the book. Each row owns its GUID snapshot; lookup resolves
+ * it only while the original book is still the active, open book. A budget
+ * removed after the snapshot is therefore an empty selection, not a borrowed
+ * pointer into a destroyed instance.
  *
  * If, for some reason, I decide I can't live with or remove those
  * consequences, I still think there must be some better way than
@@ -70,11 +81,15 @@ GtkTreeModel *
 gnc_tree_model_budget_new(QofBook *book)
 {
     GtkListStore* store;
+    GWeakRef *original_book = g_new0 (GWeakRef, 1);
 
     store = gtk_list_store_new (BUDGET_LIST_NUM_COLS,
-                                G_TYPE_POINTER,
+                                GNC_TYPE_GUID,
                                 G_TYPE_STRING,
                                 G_TYPE_STRING);
+    g_weak_ref_init (original_book, book);
+    g_object_set_data_full (G_OBJECT (store), "gnc-budget-original-book",
+                            original_book, budget_model_book_free);
 
     qof_collection_foreach(qof_book_get_collection(book, GNC_ID_BUDGET),
                            add_budget_to_model, GTK_TREE_MODEL(store));
@@ -109,9 +124,21 @@ gnc_tree_model_budget_get_budget(GtkTreeModel *tm, GtkTreeIter *iter)
 {
     GncBudget *bgt;
     GncGUID *guid;
+    GWeakRef *original_book = g_object_get_data (G_OBJECT (tm),
+                                                 "gnc-budget-original-book");
+    QofBook *book = original_book ? g_weak_ref_get (original_book) : NULL;
+
+    if (!book || !qof_book_is_open (book) || qof_book_shutting_down (book) ||
+        !gnc_current_session_exist () || book != gnc_get_current_book ())
+    {
+        g_clear_object (&book);
+        return NULL;
+    }
 
     gtk_tree_model_get (tm, iter, BUDGET_GUID_COLUMN, &guid, -1);
-    bgt = gnc_budget_lookup(guid, gnc_get_current_book());
+    bgt = guid ? gnc_budget_lookup (guid, book) : NULL;
+    guid_free (guid);
+    g_object_unref (book);
     return bgt;
 }
 
@@ -131,7 +158,9 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
     {
         gtk_tree_model_get (tm, iter, BUDGET_GUID_COLUMN, &guid2, -1);
 
-        if (guid_equal(guid1, guid2))
+        gboolean matches = guid2 && guid_equal (guid1, guid2);
+        guid_free (guid2);
+        if (matches)
             return TRUE;
 
         if (!gtk_tree_model_iter_next(tm, iter))
@@ -141,4 +170,3 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
 }
 
 /** @} */
-

@@ -36,6 +36,7 @@
 #include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "qofevent.h"
 #include "gnc-amount-edit.h"
 #include "gnc-tree-view-account.h"
 
@@ -80,6 +81,8 @@ struct _taxtable_window
     QofBook          *book;
     gint              component_id;
     QofSession       *session;
+    guint             ref_count;
+    gboolean          closing;
 };
 
 typedef struct _new_taxtable
@@ -94,7 +97,177 @@ typedef struct _new_taxtable
     GncTaxTableEntry *entry;
     gint              type;
     gboolean          new_table;
+    gboolean          asynchronous;
+    guint             ref_count;
+    GWeakRef          parent;
+    gboolean          has_parent;
+    GWeakRef          owner_parent;
+    gboolean          has_owner_parent;
+    gboolean          owner_destroyed;
+    gulong            owner_destroy_handler;
+    QofBook          *book;
+    QofSession       *session_identity;
+    GncGUID           book_guid;
+    GncGUID           table_guid;
+    GncGUID           entry_account_guid;
+    GncAmountType     entry_type;
+    gnc_numeric       entry_amount;
+    GncTaxTableEntry *entry_identity;
+    gboolean          has_table;
+    gboolean          has_entry;
+    gboolean          responding;
+    gulong            response_handler;
+    GncTaxTableCreateCallback create_callback;
+    gpointer          create_callback_data;
+    GncGUID           created_table_guid;
+    gboolean          has_created_table;
+    gboolean          parent_destroyed;
+    gulong            parent_destroy_handler;
+    guint             event_handler;
+    gboolean          stale_table;
 } NewTaxTable;
+
+static gboolean new_tax_table_resolve_context (NewTaxTable *ntt);
+
+static TaxTableWindow *
+tax_table_window_ref (TaxTableWindow *ttw)
+{
+    ++ttw->ref_count;
+    return ttw;
+}
+
+static void
+tax_table_window_unref (TaxTableWindow *ttw)
+{
+    if (--ttw->ref_count == 0)
+        g_free (ttw);
+}
+
+static void
+new_tax_table_free (NewTaxTable *ntt)
+{
+    if (--ntt->ref_count != 0)
+        return;
+    if (ntt->book)
+        g_object_remove_weak_pointer (G_OBJECT (ntt->book),
+                                      (gpointer *)&ntt->book);
+    if (ntt->event_handler)
+        qof_event_unregister_handler (ntt->event_handler);
+    if (ntt->has_parent)
+    {
+        GtkWidget *parent = g_weak_ref_get (&ntt->parent);
+        if (parent)
+        {
+            if (ntt->parent_destroy_handler &&
+                g_signal_handler_is_connected (parent,
+                                               ntt->parent_destroy_handler))
+                g_signal_handler_disconnect (parent,
+                                             ntt->parent_destroy_handler);
+            if (g_object_get_data (G_OBJECT (parent), "tax-entry-dialog-pending") == ntt)
+                g_object_set_data (G_OBJECT (parent), "tax-entry-dialog-pending", NULL);
+            g_object_unref (parent);
+        }
+        g_weak_ref_clear (&ntt->parent);
+    }
+    if (ntt->has_owner_parent)
+    {
+        GtkWidget *owner = g_weak_ref_get (&ntt->owner_parent);
+        if (owner)
+        {
+            if (ntt->owner_destroy_handler &&
+                g_signal_handler_is_connected (owner,
+                                               ntt->owner_destroy_handler))
+                g_signal_handler_disconnect (owner, ntt->owner_destroy_handler);
+            g_object_unref (owner);
+        }
+        g_weak_ref_clear (&ntt->owner_parent);
+    }
+    if (ntt->asynchronous && ntt->ttw)
+        tax_table_window_unref (ntt->ttw);
+    g_free (ntt);
+}
+
+static void
+new_tax_table_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                                NewTaxTable *ntt)
+{
+    ntt->parent_destroyed = TRUE;
+}
+
+static void
+new_tax_table_owner_destroyed ([[maybe_unused]] GtkWidget *owner,
+                               NewTaxTable *ntt)
+{
+    ntt->owner_destroyed = TRUE;
+    if (ntt->dialog && !gtk_widget_in_destruction (ntt->dialog))
+        gtk_widget_destroy (ntt->dialog);
+}
+
+static void
+new_tax_table_create_complete (NewTaxTable *ntt)
+{
+    GtkWidget *parent = NULL;
+    GtkWidget *owner = NULL;
+    GncTaxTable *table = NULL;
+    gboolean context_valid = FALSE;
+    GncTaxTableCreateCallback callback = ntt->create_callback;
+    gpointer user_data = ntt->create_callback_data;
+
+    if (!callback)
+        return;
+
+    /* Clear first: callback code may destroy the parent and re-enter the
+     * dialog's destroy path. */
+    ntt->create_callback = NULL;
+    ntt->create_callback_data = NULL;
+    if (!ntt->parent_destroyed && !ntt->owner_destroyed && ntt->book &&
+        gnc_current_session_exist () &&
+        gnc_get_current_session () == ntt->session_identity &&
+        qof_session_get_book (ntt->session_identity) == ntt->book &&
+        qof_book_is_open (ntt->book) && !qof_book_shutting_down (ntt->book) &&
+        !qof_book_is_readonly (ntt->book) &&
+        guid_equal (qof_book_get_guid (ntt->book), &ntt->book_guid))
+    {
+        parent = g_weak_ref_get (&ntt->parent);
+        context_valid = parent && !gtk_widget_in_destruction (parent) &&
+                        ntt->ttw && !ntt->ttw->closing &&
+                        ntt->ttw->dialog == parent;
+        if (context_valid && ntt->has_created_table)
+            table = gncTaxTableLookup (ntt->book, &ntt->created_table_guid);
+        if (context_valid && ntt->has_owner_parent)
+        {
+            owner = g_weak_ref_get (&ntt->owner_parent);
+            if (!owner || gtk_widget_in_destruction (owner))
+                g_clear_object (&owner);
+        }
+        if (context_valid && ntt->has_owner_parent && !owner)
+            table = NULL;
+        if (!context_valid)
+            g_clear_object (&parent);
+    }
+    callback (ntt->has_owner_parent && owner ? GTK_WINDOW (owner) : NULL,
+              table, user_data);
+    g_clear_object (&owner);
+    g_clear_object (&parent);
+}
+
+static void
+new_tax_table_target_event (QofInstance *entity, QofEventId event_type,
+                            gpointer user_data, [[maybe_unused]] gpointer event_data)
+{
+    NewTaxTable *ntt = user_data;
+    if (!ntt->has_table || ntt->stale_table || !ntt->book ||
+        !(event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY)) ||
+        !guid_equal (qof_instance_get_guid (entity), &ntt->table_guid))
+        return;
+    ntt->stale_table = TRUE;
+}
+
+static void
+new_tax_table_show_error (NewTaxTable *ntt, const char *message)
+{
+    gnc_error_dialog_async (GTK_WINDOW (ntt->dialog), "%s", message);
+}
 
 static gboolean
 new_tax_table_check_entry (NewTaxTable *ntt, GError **error)
@@ -144,20 +317,27 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     Account *acc;
     gnc_numeric amount;
     GError *error = NULL;
+    GncGUID account_guid;
+    QofBook *book;
+    GncTaxTable *table;
+    g_autofree char *name_copy = NULL;
+    gint input_type;
 
     g_return_val_if_fail (ntt, FALSE);
     ttw = ntt->ttw;
+    book = ttw->book;
 
     /* Verify that we've got real, valid data */
 
     /* verify the name, maybe */
     if (ntt->new_table)
     {
-        name = gtk_entry_get_text (GTK_ENTRY(ntt->name_entry));
+        name_copy = g_strdup (gtk_entry_get_text (GTK_ENTRY(ntt->name_entry)));
+        name = name_copy;
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Tax Table.");
-            gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
+            new_tax_table_show_error (ntt, message);
             return FALSE;
         }
         if (gncTaxTableLookupByName (ttw->book, name))
@@ -165,7 +345,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
             message = g_strdup_printf (_(
                                           "You must provide a unique name for this Tax Table. "
                                           "Your choice \"%s\" is already in use."), name);
-            gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
+            new_tax_table_show_error (ntt, message);
             g_free (message);
             return FALSE;
         }
@@ -175,7 +355,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     if (!new_tax_table_check_entry (ntt, &error))
     {
         message = g_strdup (error->message);
-        gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
+        new_tax_table_show_error (ntt, message);
         g_free (message);
         g_error_free (error);
         return FALSE;
@@ -188,7 +368,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
                                  gnc_numeric_create (100, 1)) > 0)
     {
         message = _("Percentage amount must be between -100 and 100.");
-        gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
+        new_tax_table_show_error (ntt, message);
         return FALSE;
     }
 
@@ -197,8 +377,23 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     if (acc == NULL)
     {
         message = _("You must choose a Tax Account.");
-        gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
+        new_tax_table_show_error (ntt, message);
         return FALSE;
+    }
+
+    account_guid = *qof_instance_get_guid (QOF_INSTANCE (acc));
+    input_type = ntt->type;
+    if (ntt->asynchronous && !new_tax_table_resolve_context (ntt))
+        return FALSE;
+    book = ntt->ttw->book;
+    acc = xaccAccountLookup (&account_guid, book);
+    if (!acc)
+        return FALSE;
+
+    if (ntt->event_handler)
+    {
+        qof_event_unregister_handler (ntt->event_handler);
+        ntt->event_handler = 0;
     }
 
     gnc_suspend_gui_refresh ();
@@ -206,15 +401,17 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     /* Ok, it's all valid, now either change to add this thing */
     if (ntt->new_table)
     {
-        GncTaxTable *table = gncTaxTableCreate (ttw->book);
-        gncTaxTableBeginEdit (table);
-        gncTaxTableSetName (table, name);
-        /* Reset the current table */
+        table = gncTaxTableCreate (book);
         ttw->current_table = table;
         ntt->created_table = table;
+        gncTaxTableBeginEdit (table);
+        gncTaxTableSetName (table, name_copy);
     }
     else
-        gncTaxTableBeginEdit (ttw->current_table);
+    {
+        table = ttw->current_table;
+        gncTaxTableBeginEdit (table);
+    }
 
     /* Create/edit the entry */
     {
@@ -227,18 +424,18 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
         else
         {
             entry = gncTaxTableEntryCreate ();
-            gncTaxTableAddEntry (ttw->current_table, entry);
+            gncTaxTableAddEntry (table, entry);
             ttw->current_entry = entry;
         }
 
         gncTaxTableEntrySetAccount (entry, acc);
-        gncTaxTableEntrySetType (entry, ntt->type);
+        gncTaxTableEntrySetType (entry, input_type);
         gncTaxTableEntrySetAmount (entry, amount);
     }
 
     /* Mark the table as changed and commit it */
-    gncTaxTableChanged (ttw->current_table);
-    gncTaxTableCommitEdit (ttw->current_table);
+    gncTaxTableChanged (table);
+    gncTaxTableCommitEdit (table);
 
     gnc_resume_gui_refresh ();
     return TRUE;
@@ -265,16 +462,137 @@ tax_table_account_selection_changed_cb (GtkTreeSelection *treeselection,
     new_tax_table_check_entry (ntt, NULL);
 }
 
+static gboolean
+new_tax_table_resolve_context (NewTaxTable *ntt)
+{
+    GtkWidget *parent = g_weak_ref_get (&ntt->parent);
+    QofSession *session;
+    TaxTableWindow *ttw;
+    GncTaxTable *table = NULL;
+    GncTaxTableEntry *entry = NULL;
+
+    if (!parent || gtk_widget_in_destruction (parent) || !ntt->book ||
+        ntt->stale_table ||
+        !gnc_current_session_exist () || qof_book_shutting_down (ntt->book) ||
+        !qof_book_is_open (ntt->book) || qof_book_is_readonly (ntt->book) ||
+        !guid_equal (qof_book_get_guid (ntt->book), &ntt->book_guid))
+        goto fail;
+    session = gnc_get_current_session ();
+    if (!session || session != ntt->session_identity ||
+        qof_session_get_book (session) != ntt->book)
+        goto fail;
+    ttw = g_object_get_data (G_OBJECT (parent), "dialog_info");
+    if (!ttw || ttw != ntt->ttw || ttw->closing || ttw->dialog != parent ||
+        ttw->book != ntt->book)
+        goto fail;
+    if (ntt->has_table)
+    {
+        table = gncTaxTableLookup (ntt->book, &ntt->table_guid);
+        if (!table)
+            goto fail;
+    }
+    if (ntt->has_entry)
+    {
+        gboolean found = FALSE;
+        GList *entries = gncTaxTableGetEntries (table);
+        for (GList *node = entries; node; node = node->next)
+        {
+            GncTaxTableEntry *candidate = node->data;
+            if (candidate != ntt->entry_identity)
+                continue;
+            Account *account = gncTaxTableEntryGetAccount (candidate);
+            if (account &&
+                guid_equal (qof_instance_get_guid (QOF_INSTANCE (account)),
+                            &ntt->entry_account_guid) &&
+                gncTaxTableEntryGetType (candidate) == ntt->entry_type &&
+                gnc_numeric_compare (gncTaxTableEntryGetAmount (candidate),
+                                     ntt->entry_amount) == 0)
+            {
+                entry = candidate;
+                found = TRUE;
+            }
+            break;
+        }
+        if (!found)
+            goto fail;
+    }
+    ttw->current_table = table ? table : ttw->current_table;
+    if (entry)
+        ttw->current_entry = entry;
+    ntt->ttw = ttw;
+    ntt->entry = entry;
+    g_object_unref (parent);
+    return TRUE;
+
+fail:
+    g_clear_object (&parent);
+    return FALSE;
+}
+
+static void
+new_tax_table_destroy_cb (GtkWidget *dialog, gpointer user_data)
+{
+    NewTaxTable *ntt = user_data;
+    g_signal_handlers_disconnect_by_data (dialog, ntt);
+    new_tax_table_create_complete (ntt);
+    new_tax_table_free (ntt);
+}
+
+static void
+new_tax_table_response_cb (GtkDialog *dialog, gint response, gpointer user_data)
+{
+    NewTaxTable *ntt = user_data;
+    if (ntt->responding)
+        return;
+    ntt->responding = TRUE;
+    g_object_ref (dialog);
+    ++ntt->ref_count;
+    if (response != GTK_RESPONSE_OK)
+    {
+        if (g_signal_handler_is_connected (dialog, ntt->response_handler))
+            g_signal_handler_disconnect (dialog, ntt->response_handler);
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+    else if (!new_tax_table_resolve_context (ntt))
+    {
+        if (g_signal_handler_is_connected (dialog, ntt->response_handler))
+            g_signal_handler_disconnect (dialog, ntt->response_handler);
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+    else if (new_tax_table_ok_cb (ntt))
+    {
+        if (ntt->create_callback && ntt->created_table)
+        {
+            ntt->created_table_guid = *gncTaxTableGetGUID (ntt->created_table);
+            ntt->has_created_table = TRUE;
+            /* The callback request carries only a stable identifier after
+             * this point; never retain the engine object across the destroy
+             * and response callbacks. */
+            ntt->created_table = NULL;
+        }
+        if (g_signal_handler_is_connected (dialog, ntt->response_handler))
+            g_signal_handler_disconnect (dialog, ntt->response_handler);
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+    if (g_signal_handler_is_connected (dialog, ntt->response_handler))
+        ntt->responding = FALSE;
+    new_tax_table_free (ntt);
+    g_object_unref (dialog);
+}
+
 static GncTaxTable *
 new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
-                      GncTaxTableEntry *entry, const char *name)
+                      GncTaxTableEntry *entry, const char *name,
+                      gboolean asynchronous,
+                      GtkWindow *owner_parent,
+                      GncTaxTableCreateCallback create_callback,
+                      gpointer callback_data,
+                      gboolean *async_started)
 {
-    GncTaxTable *created_table = NULL;
     NewTaxTable *ntt;
     GtkBuilder *builder;
     GtkWidget *box, *widget, *combo;
-    gboolean done;
-    gint response, index;
+    gint index;
     GtkTreeSelection *selection;
 
     if (!ttw) return NULL;
@@ -284,6 +602,61 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     ntt->ttw = ttw;
     ntt->entry = entry;
     ntt->new_table = new_table;
+    ntt->asynchronous = asynchronous;
+    ntt->create_callback = create_callback;
+    ntt->create_callback_data = callback_data;
+    ntt->ref_count = 1;
+    if (asynchronous)
+    {
+        if (g_object_get_data (G_OBJECT (ttw->dialog), "tax-entry-dialog-pending"))
+        {
+            g_free (ntt);
+            return NULL;
+        }
+        ntt->ttw = tax_table_window_ref (ttw);
+        ntt->book = ttw->book;
+        ntt->session_identity = ttw->session;
+        ntt->book_guid = *qof_book_get_guid (ttw->book);
+        if (!new_table && ttw->current_table)
+        {
+            ntt->has_table = TRUE;
+            ntt->table_guid = *gncTaxTableGetGUID (ttw->current_table);
+            ntt->event_handler = qof_event_register_handler (
+                new_tax_table_target_event, ntt);
+        }
+        if (entry)
+        {
+            ntt->has_entry = TRUE;
+            Account *account = gncTaxTableEntryGetAccount (entry);
+            if (!account)
+            {
+                tax_table_window_unref (ntt->ttw);
+                g_free (ntt);
+                return NULL;
+            }
+            ntt->entry_account_guid = *qof_instance_get_guid (QOF_INSTANCE (account));
+            ntt->entry_type = gncTaxTableEntryGetType (entry);
+            ntt->entry_amount = gncTaxTableEntryGetAmount (entry);
+            ntt->entry_identity = entry;
+        }
+        g_object_add_weak_pointer (G_OBJECT (ntt->book),
+                                   (gpointer *)&ntt->book);
+        g_weak_ref_init (&ntt->parent, G_OBJECT (ttw->dialog));
+        ntt->has_parent = TRUE;
+        if (owner_parent)
+        {
+            g_weak_ref_init (&ntt->owner_parent, G_OBJECT (owner_parent));
+            ntt->has_owner_parent = TRUE;
+            ntt->owner_destroy_handler = g_signal_connect (
+                owner_parent, "destroy",
+                G_CALLBACK (new_tax_table_owner_destroyed), ntt);
+        }
+        if (create_callback)
+            ntt->parent_destroy_handler = g_signal_connect (
+                ttw->dialog, "destroy",
+                G_CALLBACK (new_tax_table_parent_destroyed), ntt);
+        g_object_set_data (G_OBJECT (ttw->dialog), "tax-entry-dialog-pending", ntt);
+    }
 
     if (entry)
         ntt->type = gncTaxTableEntryGetType (entry);
@@ -353,8 +726,18 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
 
-    /* Show what we should */
-    gtk_widget_show_all (ntt->dialog);
+    if (asynchronous)
+    {
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (ntt->dialog), TRUE);
+        ntt->response_handler = g_signal_connect (
+            ntt->dialog, "response",
+            G_CALLBACK (new_tax_table_response_cb), ntt);
+        g_signal_connect (ntt->dialog, "destroy",
+                          G_CALLBACK (new_tax_table_destroy_cb), ntt);
+    }
+
+    /* Configure visibility and focus before showing: show signals may
+     * destroy the parent and complete/free this request re-entrantly. */
     if (new_table == FALSE)
     {
         gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")));
@@ -369,34 +752,11 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     else
         gtk_widget_grab_focus (ntt->name_entry);
 
-    /* Display the dialog now that we're done manipulating it */
-    gtk_widget_show (ntt->dialog);
-
-    done = FALSE;
-    while (!done)
-    {
-        response = gtk_dialog_run (GTK_DIALOG(ntt->dialog));
-        switch (response)
-        {
-        case GTK_RESPONSE_OK:
-            if (new_tax_table_ok_cb (ntt))
-            {
-                created_table = ntt->created_table;
-                done = TRUE;
-            }
-            break;
-        default:
-            done = TRUE;
-            break;
-        }
-    }
-
-    g_object_unref (G_OBJECT(builder));
-
-    gtk_widget_destroy (ntt->dialog);
-    g_free (ntt);
-
-    return created_table;
+    if (async_started)
+        *async_started = TRUE;
+    gtk_widget_show_all (ntt->dialog);
+    g_object_unref (G_OBJECT (builder));
+    return NULL;
 }
 
 /***********************************************************************/
@@ -616,23 +976,124 @@ tax_table_entry_row_activated (GtkTreeView       *tree_view,
 {
     TaxTableWindow *ttw = user_data;
 
-    new_tax_table_dialog (ttw, FALSE, ttw->current_entry, NULL);
+    new_tax_table_dialog (ttw, FALSE, ttw->current_entry, NULL, TRUE,
+                          NULL, NULL, NULL, NULL);
 }
 
 void
 tax_table_new_table_cb (GtkButton *button, TaxTableWindow *ttw)
 {
     g_return_if_fail (ttw);
-    new_tax_table_dialog (ttw, TRUE, NULL, NULL);
+    new_tax_table_dialog (ttw, TRUE, NULL, NULL, TRUE, NULL, NULL, NULL, NULL);
 }
 
 
-static const char
-*rename_tax_table_dialog (GtkWidget *parent,
-                          const char *title,
-                          const char *msg,
-                          const char *button_name,
-                          const char *text)
+typedef struct
+{
+    GtkWidget *entry;
+    GWeakRef parent;
+    QofBook *book; /* weak: cleared when the book is finalized */
+    QofSession *session_identity;
+    GncGUID book_guid;
+    GncGUID table_guid;
+    gboolean parent_destroyed;
+} RenameTaxTable;
+
+static void
+rename_tax_table_parent_destroy_cb (GtkWidget *parent, gpointer user_data)
+{
+    RenameTaxTable *rename = user_data;
+    rename->parent_destroyed = TRUE;
+}
+
+static void
+rename_tax_table_request_free (RenameTaxTable *rename)
+{
+    GtkWidget *parent = g_weak_ref_get (&rename->parent);
+    if (parent)
+    {
+        g_signal_handlers_disconnect_by_data (parent, rename);
+        g_object_unref (parent);
+    }
+    if (rename->book)
+        g_object_remove_weak_pointer (G_OBJECT (rename->book),
+                                      (gpointer *)&rename->book);
+    g_weak_ref_clear (&rename->parent);
+    g_free (rename);
+}
+
+static void
+rename_tax_table_destroy_cb (GtkWidget *dialog, gpointer user_data)
+{
+    rename_tax_table_request_free (user_data);
+}
+
+static void
+rename_tax_table_response_cb (GtkDialog *dialog, gint response,
+                              gpointer user_data)
+{
+    RenameTaxTable *rename = user_data;
+    GtkWidget *parent = g_weak_ref_get (&rename->parent);
+    QofSession *session_identity = rename->session_identity;
+    GncGUID book_guid = rename->book_guid;
+    GncGUID table_guid = rename->table_guid;
+    char *newname = response == GTK_RESPONSE_OK ?
+        g_strdup (gtk_entry_get_text (GTK_ENTRY (rename->entry))) : NULL;
+
+    /* Keep the request alive while destroying the prompt: its weak book
+       pointer must still be clearable if destruction reenters engine events. */
+    g_signal_handlers_disconnect_by_data (dialog, rename);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+
+    if (response != GTK_RESPONSE_OK || !parent || !newname || !*newname ||
+        rename->parent_destroyed || gtk_widget_in_destruction (parent))
+        goto cleanup;
+
+    /* Engine events may have changed the selection or book while the prompt
+       was open. Require the original session and weak book to still be live,
+       open, writable, and identical before resolving the table again. */
+    if (!rename->book || !gnc_current_session_exist ())
+        goto cleanup;
+    QofSession *session = gnc_get_current_session ();
+    if (!session || session != session_identity ||
+        qof_session_get_book (session) != rename->book ||
+        qof_book_shutting_down (rename->book) ||
+        !qof_book_is_open (rename->book) ||
+        qof_book_is_readonly (rename->book) ||
+        !guid_equal (qof_book_get_guid (rename->book), &book_guid))
+        goto cleanup;
+
+    GncTaxTable *table = gncTaxTableLookup (rename->book, &table_guid);
+    if (!table)
+        goto cleanup;
+
+    const char *current_name = gncTaxTableGetName (table);
+    if (g_strcmp0 (current_name, newname) == 0)
+        goto cleanup;
+
+    GncTaxTable *conflict = gncTaxTableLookupByName (rename->book, newname);
+    if (conflict && conflict != table)
+    {
+        char *message = g_strdup_printf (_("Tax table name \"%s\" already exists."),
+                                         newname);
+        gnc_error_dialog_async (GTK_WINDOW (parent), "%s", message);
+        g_free (message);
+    }
+    else
+        gncTaxTableSetName (table, newname);
+
+cleanup:
+    g_clear_object (&parent);
+    g_free (newname);
+    rename_tax_table_request_free (rename);
+}
+
+static void
+rename_tax_table_dialog (GtkWidget *parent, QofSession *session,
+                         QofBook *book,
+                         GncTaxTable *table, const char *title,
+                         const char *msg, const char *button_name,
+                         const char *text)
 {
     GtkWidget *vbox;
     GtkWidget *main_vbox;
@@ -640,6 +1101,7 @@ static const char
     GtkWidget *textbox;
     GtkWidget *dialog;
     GtkWidget *dvbox;
+    RenameTaxTable *rename;
 
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(main_vbox), FALSE);
@@ -669,49 +1131,108 @@ static const char
                                           NULL);
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
+    rename = g_new0 (RenameTaxTable, 1);
+    rename->entry = textbox;
+    rename->book = book;
+    rename->session_identity = session;
+    rename->book_guid = *qof_book_get_guid (book);
+    rename->table_guid = *gncTaxTableGetGUID (table);
+    g_weak_ref_init (&rename->parent, G_OBJECT (parent));
+    g_object_add_weak_pointer (G_OBJECT (book), (gpointer *)&rename->book);
+    g_signal_connect (parent, "destroy",
+                      G_CALLBACK (rename_tax_table_parent_destroy_cb), rename);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (rename_tax_table_response_cb), rename);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (rename_tax_table_destroy_cb), rename);
+
     dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
     gtk_box_pack_start (GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
-
-    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-    {
-        gtk_widget_destroy (dialog);
-        return NULL;
-    }
-
-    text = g_strdup (gtk_entry_get_text (GTK_ENTRY(textbox)));
-    gtk_widget_destroy (dialog);
-    return text;
+    gtk_widget_show_all (dialog);
+    gtk_widget_grab_focus (textbox);
 }
 
 void
 tax_table_rename_table_cb (GtkButton *button, TaxTableWindow *ttw)
 {
     const char *oldname;
-    const char *newname;
     g_return_if_fail (ttw);
 
     if (!ttw->current_table)
         return;
 
     oldname = gncTaxTableGetName (ttw->current_table);
-    newname = rename_tax_table_dialog (ttw->dialog, (_("Rename")),
-                                       (_("Please enter new name")),
-                                       (_("_Rename")), oldname);
+    rename_tax_table_dialog (ttw->dialog, ttw->session, ttw->book,
+                             ttw->current_table,
+                             _("Rename"), _("Please enter new name"),
+                             _("_Rename"), oldname);
+}
 
-    if (newname && *newname != '\0' && (g_strcmp0 (oldname, newname) != 0))
+typedef struct
+{
+    TaxTableWindow *ttw;
+    GncGUID table_guid;
+    GncTaxTableEntry *entry_identity;
+    gboolean delete_entry;
+} TaxTableDeleteRequest;
+
+static void
+tax_table_delete_confirmed (GtkWindow *parent, gint response, gpointer user_data)
+{
+    TaxTableDeleteRequest *request = user_data;
+    TaxTableWindow *ttw = request->ttw;
+    GncTaxTable *table = NULL;
+
+    if (response == GTK_RESPONSE_YES && parent && !ttw->closing &&
+        ttw->dialog == GTK_WIDGET (parent) && ttw->book &&
+        qof_book_is_open (ttw->book) && !qof_book_shutting_down (ttw->book) &&
+        gnc_current_session_exist () && gnc_get_current_book () == ttw->book)
+        table = gncTaxTableLookup (ttw->book, &request->table_guid);
+
+    if (table && request->delete_entry)
     {
-        if (gncTaxTableLookupByName (ttw->book, newname))
+        GList *entries = gncTaxTableGetEntries (table);
+        GList *node;
+        GncTaxTableEntry *entry = NULL;
+        for (node = entries; node; node = node->next)
+            if (node->data == request->entry_identity)
+            {
+                entry = node->data;
+                break;
+            }
+        if (entry && g_list_length (entries) > 1)
         {
-            char *message = g_strdup_printf (_("Tax table name \"%s\" already exists."),
-                                             newname);
-            gnc_error_dialog (GTK_WINDOW(ttw->dialog), "%s", message);
-            g_free (message);
-        }
-        else
-        {
-            gncTaxTableSetName (ttw->current_table, newname);
+            gnc_suspend_gui_refresh ();
+            gncTaxTableBeginEdit (table);
+            gncTaxTableRemoveEntry (table, entry);
+            gncTaxTableEntryDestroy (entry);
+            gncTaxTableChanged (table);
+            gncTaxTableCommitEdit (table);
+            if (ttw->current_table == table)
+                ttw->current_entry = NULL;
+            gnc_resume_gui_refresh ();
         }
     }
+    else if (table && !request->delete_entry &&
+             gncTaxTableGetRefcount (table) == 0)
+    {
+        gnc_suspend_gui_refresh ();
+        gncTaxTableBeginEdit (table);
+        gncTaxTableDestroy (table);
+        gncTaxTableCommitEdit (table);
+        if (ttw->current_table == table)
+        {
+            ttw->current_table = NULL;
+            ttw->current_entry = NULL;
+        }
+        gnc_resume_gui_refresh ();
+    }
+
+    tax_table_window_unref (ttw);
+    g_free (request);
 }
 
 
@@ -728,23 +1249,18 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
         char *message =
             g_strdup_printf (_("Tax table \"%s\" is in use. You cannot delete it."),
                              gncTaxTableGetName (ttw->current_table));
-            gnc_error_dialog (GTK_WINDOW(ttw->dialog), "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(ttw->dialog), "%s", message);
         g_free (message);
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW(ttw->dialog), FALSE,
-                           _("Are you sure you want to delete \"%s\"?"),
-                           gncTaxTableGetName (ttw->current_table)))
-    {
-        /* Ok, let's remove it */
-        gnc_suspend_gui_refresh ();
-        gncTaxTableBeginEdit (ttw->current_table);
-        gncTaxTableDestroy (ttw->current_table);
-        ttw->current_table = NULL;
-        ttw->current_entry = NULL;
-        gnc_resume_gui_refresh ();
-    }
+    TaxTableDeleteRequest *request = g_new0 (TaxTableDeleteRequest, 1);
+    request->ttw = tax_table_window_ref (ttw);
+    request->table_guid = *gncTaxTableGetGUID (ttw->current_table);
+    gnc_verify_dialog_async (GTK_WINDOW (ttw->dialog), FALSE,
+                             tax_table_delete_confirmed, request,
+                             _("Are you sure you want to delete \"%s\"?"),
+                             gncTaxTableGetName (ttw->current_table));
 }
 
 void
@@ -753,7 +1269,7 @@ tax_table_new_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     g_return_if_fail (ttw);
     if (!ttw->current_table)
         return;
-    new_tax_table_dialog (ttw, FALSE, NULL, NULL);
+    new_tax_table_dialog (ttw, FALSE, NULL, NULL, TRUE, NULL, NULL, NULL, NULL);
 }
 
 void
@@ -762,7 +1278,8 @@ tax_table_edit_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     g_return_if_fail (ttw);
     if (!ttw->current_entry)
         return;
-    new_tax_table_dialog (ttw, FALSE, ttw->current_entry, NULL);
+    new_tax_table_dialog (ttw, FALSE, ttw->current_entry, NULL, TRUE,
+                          NULL, NULL, NULL, NULL);
 }
 
 void
@@ -776,23 +1293,18 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     {
         char *message = _("You cannot remove the last entry from the tax table. "
                           "Try deleting the tax table if you want to do that.");
-        gnc_error_dialog (GTK_WINDOW(ttw->dialog)  , "%s", message);
+        gnc_error_dialog_async (GTK_WINDOW(ttw->dialog), "%s", message);
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW(ttw->dialog), FALSE, "%s",
-                           _("Are you sure you want to delete this entry?")))
-    {
-        /* Ok, let's remove it */
-        gnc_suspend_gui_refresh ();
-        gncTaxTableBeginEdit (ttw->current_table);
-        gncTaxTableRemoveEntry (ttw->current_table, ttw->current_entry);
-        gncTaxTableEntryDestroy (ttw->current_entry);
-        gncTaxTableChanged (ttw->current_table);
-        gncTaxTableCommitEdit (ttw->current_table);
-        ttw->current_entry = NULL;
-        gnc_resume_gui_refresh ();
-    }
+    TaxTableDeleteRequest *request = g_new0 (TaxTableDeleteRequest, 1);
+    request->ttw = tax_table_window_ref (ttw);
+    request->table_guid = *gncTaxTableGetGUID (ttw->current_table);
+    request->entry_identity = ttw->current_entry;
+    request->delete_entry = TRUE;
+    gnc_verify_dialog_async (GTK_WINDOW (ttw->dialog), FALSE,
+                             tax_table_delete_confirmed, request,
+                             "%s", _("Are you sure you want to delete this entry?"));
 }
 
 static void
@@ -839,6 +1351,9 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
     TaxTableWindow *ttw = data;
 
     if (!ttw) return;
+    if (ttw->closing)
+        return;
+    ttw->closing = TRUE;
 
     gnc_unregister_gui_component (ttw->component_id);
 
@@ -847,7 +1362,7 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
         gtk_widget_destroy (ttw->dialog);
         ttw->dialog = NULL;
     }
-    g_free (ttw);
+    tax_table_window_unref (ttw);
 }
 
 static gboolean
@@ -874,6 +1389,18 @@ find_handler (gpointer find_data, gpointer data)
     return (ttw != NULL && ttw->book == book);
 }
 
+typedef struct
+{
+    gboolean destroyed;
+} TaxTableOwnerStartGuard;
+
+static void
+tax_table_owner_start_destroyed ([[maybe_unused]] GtkWidget *owner,
+                                 TaxTableOwnerStartGuard *guard)
+{
+    guard->destroyed = TRUE;
+}
+
 /* Create a tax-table window */
 TaxTableWindow *
 gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
@@ -897,12 +1424,18 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
                                         book);
     if (ttw)
     {
+        tax_table_window_ref (ttw);
         gtk_window_present (GTK_WINDOW(ttw->dialog));
+        gboolean closing = ttw->closing;
+        tax_table_window_unref (ttw);
+        if (closing)
+            return NULL;
         return ttw;
     }
 
     /* Didn't find one -- create a new window */
     ttw = g_new0 (TaxTableWindow, 1);
+    ttw->ref_count = 1;
     ttw->book = book;
     ttw->session = gnc_get_current_session ();
 
@@ -910,6 +1443,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window");
     ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window"));
+    g_object_set_data (G_OBJECT (ttw->dialog), "dialog_info", ttw);
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
     ttw->entries_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_entries"));
 
@@ -987,23 +1521,104 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 
     tax_table_window_refresh (ttw);
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog), parent);
+    /* Showing a window can synchronously run user callbacks that close it.
+     * Keep the controller alive until the show operation has returned. */
+    tax_table_window_ref (ttw);
     gtk_widget_show_all (ttw->dialog);
 
     g_object_unref (G_OBJECT(builder));
-
+    gboolean closing = ttw->closing;
+    tax_table_window_unref (ttw);
+    if (closing)
+        return NULL;
     return ttw;
 }
 
-/* Create a new tax-table by name */
-GncTaxTable *
-gnc_ui_tax_table_new_from_name (GtkWindow *parent, QofBook *book, const char *name)
+void
+gnc_ui_tax_table_new_from_name_async (GtkWindow *parent, QofBook *book,
+                                      const char *name,
+                                      GncTaxTableCreateCallback callback,
+                                      gpointer user_data)
 {
     TaxTableWindow *ttw;
+    TaxTableWindow *existing;
+    GtkWindow *owner = NULL;
+    TaxTableOwnerStartGuard guard = { FALSE };
+    gulong owner_handler = 0;
+    gboolean destroyed_during_start;
 
-    if (!book) return NULL;
+    g_return_if_fail (callback != NULL);
+    if (!book || !name || !*name ||
+        (parent && gtk_widget_in_destruction (GTK_WIDGET (parent))) ||
+        !gnc_current_session_exist () || gnc_get_current_book () != book ||
+        !qof_book_is_open (book) || qof_book_shutting_down (book) ||
+        qof_book_is_readonly (book))
+    {
+        callback (NULL, NULL, user_data);
+        return;
+    }
 
-    ttw = gnc_ui_tax_table_window_new (parent, book);
-    if (!ttw) return NULL;
+    owner = parent ? g_object_ref (parent) : NULL;
+    existing = gnc_find_first_gui_component (DIALOG_TAX_TABLE_CM_CLASS,
+                                              find_handler, book);
+    if (owner)
+        owner_handler = g_signal_connect (owner, "destroy",
+                                          G_CALLBACK (tax_table_owner_start_destroyed),
+                                          &guard);
+    ttw = gnc_ui_tax_table_window_new (owner, book);
+    if (!ttw)
+    {
+        if (owner_handler && g_signal_handler_is_connected (owner, owner_handler))
+            g_signal_handler_disconnect (owner, owner_handler);
+        g_clear_object (&owner);
+        callback (NULL, NULL, user_data);
+        return;
+    }
 
-    return new_tax_table_dialog (ttw, TRUE, NULL, name);
+    destroyed_during_start = guard.destroyed ||
+        (owner && gtk_widget_in_destruction (GTK_WIDGET (owner)));
+    if (destroyed_during_start)
+    {
+        if (!existing && ttw->dialog && !gtk_widget_in_destruction (ttw->dialog))
+            gtk_widget_destroy (ttw->dialog);
+        if (owner_handler && g_signal_handler_is_connected (owner, owner_handler))
+            g_signal_handler_disconnect (owner, owner_handler);
+        g_clear_object (&owner);
+        callback (NULL, NULL, user_data);
+        return;
+    }
+
+    /* A shared tax-table window may already host an unrelated asynchronous
+     * edit. Do not attach this caller to that request or replace its callback. */
+    if (g_object_get_data (G_OBJECT (ttw->dialog), "tax-entry-dialog-pending"))
+    {
+        if (owner_handler && g_signal_handler_is_connected (owner, owner_handler))
+            g_signal_handler_disconnect (owner, owner_handler);
+        g_clear_object (&owner);
+        callback (NULL, NULL, user_data);
+        return;
+    }
+
+    gboolean started = FALSE;
+    new_tax_table_dialog (ttw, TRUE, NULL, name, TRUE, parent,
+                          callback, user_data, &started);
+    if (!started)
+    {
+        GtkWidget *dialog = ttw->dialog;
+        if (dialog)
+            g_object_ref (dialog);
+        if (dialog && !gtk_widget_in_destruction (dialog))
+            gtk_widget_destroy (dialog);
+        if (owner_handler && owner &&
+            g_signal_handler_is_connected (owner, owner_handler))
+            g_signal_handler_disconnect (owner, owner_handler);
+        g_clear_object (&owner);
+        callback (NULL, NULL, user_data);
+        g_clear_object (&dialog);
+        return;
+    }
+    if (owner_handler && owner &&
+        g_signal_handler_is_connected (owner, owner_handler))
+        g_signal_handler_disconnect (owner, owner_handler);
+    g_clear_object (&owner);
 }

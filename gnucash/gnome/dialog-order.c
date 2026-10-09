@@ -41,6 +41,7 @@
 
 #include "gncOrder.h"
 #include "gncOrderP.h"
+#include "gnc-session.h"
 
 #include "gncEntryLedger.h"
 
@@ -62,6 +63,23 @@ void gnc_order_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data);
+
+typedef struct
+{
+    OrderWindow *window;
+    GtkWidget *parent;
+    QofBook *book;
+    GncGUID order_guid;
+    gboolean parent_destroyed;
+    guint confirmed_uninvoiced_count;
+    time64 initial_closed_date;
+    time64 requested_closed_date;
+} OrderCloseRequest;
+
+typedef struct
+{
+    OrderWindow *window;
+} OrderSaveRequest;
 
 typedef enum
 {
@@ -105,10 +123,31 @@ struct _order_window
     QofBook *	book;
     GncOrder *	created_order;
     GncOwner	owner;
+    guint       ref_count;
+    gboolean    closing;
 
 };
 
 static void gnc_order_update_window (OrderWindow *ow);
+static gboolean gnc_order_window_verify_ok (OrderWindow *ow);
+static void order_close_uninvoiced_response (GtkWindow *dialog, gint response,
+                                             gpointer user_data);
+static void order_close_ledger_completed (gboolean accepted,
+                                          gpointer user_data);
+
+static OrderWindow *
+gnc_order_window_ref (OrderWindow *ow)
+{
+    ++ow->ref_count;
+    return ow;
+}
+
+static void
+gnc_order_window_unref (OrderWindow *ow)
+{
+    if (--ow->ref_count == 0)
+        g_free (ow);
+}
 
 static GncOrder *
 ow_get_order (OrderWindow *ow)
@@ -119,42 +158,206 @@ ow_get_order (OrderWindow *ow)
     return gncOrderLookup (ow->book, &ow->order_guid);
 }
 
-static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
+static void
+gnc_ui_to_order_with_closed_date (OrderWindow *ow, GncOrder *order,
+                                  gboolean set_closed_date,
+                                  time64 closed_date)
 {
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
-    gchar *text;
+    gchar *id, *text, *reference;
     time64 tt;
+    gboolean active = FALSE;
+    gboolean has_active;
+    GncOwner owner = ow->owner;
 
     /* Do nothing if this is view only */
     if (ow->dialog_type == VIEW_ORDER)
         return;
 
-    gnc_suspend_gui_refresh ();
-    gncOrderBeginEdit (order);
-
-    gncOrderSetID (order, gtk_entry_get_text (GTK_ENTRY (ow->id_entry)));
-
+    id = g_strdup (gtk_entry_get_text (GTK_ENTRY (ow->id_entry)));
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
-    gncOrderSetNotes (order, text);
-
-    gncOrderSetReference (order, gtk_entry_get_text (GTK_ENTRY (ow->ref_entry)));
-
+    reference = g_strdup (gtk_entry_get_text (GTK_ENTRY (ow->ref_entry)));
     tt = gnc_date_edit_get_date (GNC_DATE_EDIT (ow->opened_date));
+    has_active = ow->active_check != NULL;
+    if (has_active)
+        active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ow->active_check));
+    gnc_owner_get_owner (ow->owner_choice, &owner);
+    ow->owner = owner;
+
+    gnc_suspend_gui_refresh ();
+    gncOrderBeginEdit (order);
+    gncOrderSetID (order, id);
+    gncOrderSetNotes (order, text);
+    gncOrderSetReference (order, reference);
     gncOrderSetDateOpened (order, tt);
-
-    if (ow->active_check)
-        gncOrderSetActive (order, gtk_toggle_button_get_active
-                           (GTK_TOGGLE_BUTTON (ow->active_check)));
-
-    gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
-    gncOrderSetOwner (order, &(ow->owner));
+    if (has_active)
+        gncOrderSetActive (order, active);
+    gncOrderSetOwner (order, &owner);
+    if (set_closed_date)
+        gncOrderSetDateClosed (order, closed_date);
 
     gncOrderCommitEdit (order);
     gnc_resume_gui_refresh ();
+    g_free (id);
     g_free (text);
+    g_free (reference);
+}
+
+static void
+gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
+{
+    gnc_ui_to_order_with_closed_date (ow, order, FALSE, 0);
+}
+
+static void
+order_close_request_free (OrderCloseRequest *request)
+{
+    if (request->parent &&
+        g_object_get_data (G_OBJECT (request->parent), "order-close-pending") == request)
+        g_object_set_data (G_OBJECT (request->parent), "order-close-pending", NULL);
+    if (request->book)
+        g_object_remove_weak_pointer (G_OBJECT (request->book),
+                                      (gpointer *)&request->book);
+    if (request->parent)
+        g_signal_handlers_disconnect_by_data (request->parent, request);
+    g_clear_object (&request->parent);
+    gnc_order_window_unref (request->window);
+    g_free (request);
+}
+
+static guint
+order_close_uninvoiced_count (GncOrder *order)
+{
+    guint count = 0;
+    for (GList *node = gncOrderGetEntries (order); node; node = node->next)
+        if (!gncEntryGetInvoice (node->data))
+            ++count;
+    return count;
+}
+
+static void
+order_close_parent_destroyed (GtkWidget *parent, OrderCloseRequest *request)
+{
+    request->parent_destroyed = TRUE;
+}
+
+static OrderWindow *
+order_close_resolve (OrderCloseRequest *request, GncOrder **order_out)
+{
+    OrderWindow *ow;
+    GncOrder *order;
+    QofSession *session;
+    if (request->parent_destroyed || !request->parent ||
+        gtk_widget_in_destruction (request->parent) || !request->book ||
+        !qof_book_is_open (request->book) ||
+        qof_book_shutting_down (request->book) ||
+        qof_book_is_readonly (request->book) ||
+        !gnc_current_session_exist ())
+        return NULL;
+    session = gnc_get_current_session ();
+    if (!session || qof_session_get_book (session) != request->book)
+        return NULL;
+    ow = g_object_get_data (G_OBJECT (request->parent), "dialog_info");
+    if (!ow || ow != request->window || ow->closing ||
+        ow->dialog != request->parent || ow->book != request->book)
+        return NULL;
+    order = gncOrderLookup (request->book, &request->order_guid);
+    if (!order)
+        return NULL;
+    *order_out = order;
+    return ow;
+}
+
+static void
+order_close_apply (OrderCloseRequest *request, time64 date)
+{
+    GncOrder *order = NULL;
+    OrderWindow *ow = order_close_resolve (request, &order);
+    if (!ow)
+    {
+        order_close_request_free (request);
+        return;
+    }
+    if (!gnc_order_window_verify_ok (ow))
+    {
+        order_close_request_free (request);
+        return;
+    }
+    request->requested_closed_date = date;
+    gnc_entry_ledger_check_close_async (ow->dialog, ow->ledger,
+                                         order_close_ledger_completed, request);
+}
+
+static void
+order_close_ledger_completed (gboolean accepted, gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+    GncOrder *order = NULL;
+    OrderWindow *ow;
+    if (!accepted || !(ow = order_close_resolve (request, &order)) ||
+        !gnc_order_window_verify_ok (ow) ||
+        !order_close_resolve (request, &order) ||
+        ow->dialog_type == VIEW_ORDER || gncOrderGetEntries (order) == NULL ||
+        gncOrderGetDateClosed (order) != request->initial_closed_date ||
+        order_close_uninvoiced_count (order) !=
+            request->confirmed_uninvoiced_count)
+    {
+        order_close_request_free (request);
+        return;
+    }
+    ow = request->window;
+    gnc_ui_to_order_with_closed_date (ow, order, TRUE,
+                                      request->requested_closed_date);
+    if (!order_close_resolve (request, &order))
+    {
+        order_close_request_free (request);
+        return;
+    }
+    ow->created_order = order;
+    ow->dialog_type = VIEW_ORDER;
+    gnc_entry_ledger_set_readonly (ow->ledger, TRUE);
+    if (!order_close_resolve (request, &order))
+    {
+        order_close_request_free (request);
+        return;
+    }
+    ow = request->window;
+    gnc_order_update_window (ow);
+    order_close_request_free (request);
+}
+
+static void
+order_close_date_response (gboolean accepted, time64 date, gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+    GncOrder *order = NULL;
+    if (!accepted || !order_close_resolve (request, &order))
+    {
+        order_close_request_free (request);
+        return;
+    }
+    order_close_apply (request, date);
+}
+
+static void
+order_close_uninvoiced_response (GtkWindow *dialog, gint response,
+                                 gpointer user_data)
+{
+    OrderCloseRequest *request = user_data;
+    GncOrder *order = NULL;
+    if (response != GTK_RESPONSE_YES || !order_close_resolve (request, &order))
+    {
+        order_close_request_free (request);
+        return;
+    }
+    request->confirmed_uninvoiced_count = order_close_uninvoiced_count (order);
+    gnc_dialog_date_close_async_parented (
+        request->parent, _("Do you really want to close the order?"),
+        _("Close Date"), TRUE, gnc_time (NULL), order_close_date_response,
+        request);
 }
 
 static gboolean
@@ -166,7 +369,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
-        gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
+        gnc_error_dialog_async (GTK_WINDOW (ow->dialog), "%s",
                           _("The Order must be given an ID."));
         return FALSE;
     }
@@ -176,7 +379,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     res = gncOwnerGetName (&(ow->owner));
     if (res == NULL || g_strcmp0 (res, "") == 0)
     {
-        gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
+        gnc_error_dialog_async (GTK_WINDOW (ow->dialog), "%s",
                           _("You need to supply Billing Information."));
         return FALSE;
     }
@@ -187,10 +390,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
 static gboolean
 gnc_order_window_ok_save (OrderWindow *ow)
 {
-    if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
-        return FALSE;
-
-    if (!gnc_order_window_verify_ok (ow))
+    if (!ow || ow->closing || !gnc_order_window_verify_ok (ow) || ow->closing)
         return FALSE;
 
     /* Now save it off */
@@ -199,25 +399,48 @@ gnc_order_window_ok_save (OrderWindow *ow)
         if (order)
         {
             gnc_ui_to_order (ow, order);
-
         }
+        /* Committing the order can refresh and close its owner window. */
+        if (ow->closing)
+            return FALSE;
         ow->created_order = order;
     }
     return TRUE;
+}
+
+static void
+order_save_ledger_completed (gboolean accepted, gpointer user_data)
+{
+    OrderSaveRequest *request = user_data;
+    OrderWindow *ow = request->window;
+    if (accepted && ow && !ow->closing && gnc_order_window_ok_save (ow))
+    {
+        ow->order_guid = *guid_null ();
+        gnc_close_gui_component (ow->component_id);
+    }
+    if (ow && !ow->closing &&
+        g_object_get_data (G_OBJECT (ow->dialog),
+                           "order-ledger-close-pending") == request)
+        g_object_set_data (G_OBJECT (ow->dialog),
+                           "order-ledger-close-pending", NULL);
+    if (ow)
+        gnc_order_window_unref (ow);
+    g_free (request);
 }
 
 void
 gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
-
-    if (!gnc_order_window_ok_save (ow))
+    OrderSaveRequest *request;
+    if (!ow || ow->closing || g_object_get_data (G_OBJECT (ow->dialog),
+                                                  "order-ledger-close-pending"))
         return;
-
-    /* Ok, we don't need this anymore */
-    ow->order_guid = *guid_null ();
-
-    gnc_close_gui_component (ow->component_id);
+    request = g_new0 (OrderSaveRequest, 1);
+    request->window = gnc_order_window_ref (ow);
+    g_object_set_data (G_OBJECT (ow->dialog), "order-ledger-close-pending", request);
+    gnc_entry_ledger_check_close_async (ow->dialog, ow->ledger,
+                                         order_save_ledger_completed, request);
 }
 
 void
@@ -256,10 +479,9 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
     GncOrder *order;
-    GList *entries;
-    char *message, *label;
     gboolean non_inv = FALSE;
-    time64 t = gnc_time (NULL);
+    GList *entries;
+    OrderCloseRequest *request;
 
     /* Make sure the order is ok */
     if (!gnc_order_window_verify_ok (ow))
@@ -273,8 +495,8 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     /* Check that there is at least one Entry */
     if (gncOrderGetEntries (order) == NULL)
     {
-        gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
-                          _("The Order must have at least one Entry."));
+        gnc_error_dialog_async (GTK_WINDOW (ow->dialog), "%s",
+                                _("The Order must have at least one Entry."));
         return;
     }
 
@@ -290,38 +512,35 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
         }
     }
 
-    if (non_inv)
+    request = g_new0 (OrderCloseRequest, 1);
+    request->window = gnc_order_window_ref (ow);
+    request->parent = g_object_ref (ow->dialog);
+    request->book = ow->book;
+    g_object_add_weak_pointer (G_OBJECT (request->book),
+                               (gpointer *)&request->book);
+    request->order_guid = ow->order_guid;
+    request->initial_closed_date = gncOrderGetDateClosed (order);
+    request->confirmed_uninvoiced_count = order_close_uninvoiced_count (order);
+    if (g_object_get_data (G_OBJECT (request->parent), "order-close-pending"))
     {
-        /* Damn; yes.  Well, ask the user to make sure they REALLY want to
-         * close this order!
-         */
-
-        message = _("This order contains entries that have not been invoiced. "
-                    "Are you sure you want to close it out before "
-                    "you invoice all the entries?");
-
-        if (gnc_verify_dialog (GTK_WINDOW (ow->dialog), FALSE, "%s", message) == FALSE)
-            return;
-    }
-
-    /* Ok, we can close this.  Ask for verification and set the closed date */
-    message = _("Do you really want to close the order?");
-    label = _("Close Date");
-
-    if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &t))
+        order_close_request_free (request);
         return;
-
-    gncOrderSetDateClosed (order, t);
-
-    /* save it off */
-    gnc_order_window_ok_save (ow);
-
-    /* Reset the type; change to read-only */
-    ow->dialog_type = VIEW_ORDER;
-    gnc_entry_ledger_set_readonly (ow->ledger, TRUE);
-
-    /* And redisplay the window */
-    gnc_order_update_window (ow);
+    }
+    g_object_set_data (G_OBJECT (request->parent), "order-close-pending", request);
+    g_signal_connect (request->parent, "destroy",
+                      G_CALLBACK (order_close_parent_destroyed), request);
+    if (non_inv)
+        gnc_verify_dialog_async (
+            GTK_WINDOW (request->parent), FALSE,
+            order_close_uninvoiced_response, request,
+            "%s", _("This order contains entries that have not been invoiced. "
+                     "Are you sure you want to close it out before "
+                     "you invoice all the entries?"));
+    else
+        gnc_dialog_date_close_async_parented (
+            request->parent, _("Do you really want to close the order?"),
+            _("Close Date"), TRUE, gnc_time (NULL), order_close_date_response,
+            request);
 }
 
 void
@@ -329,6 +548,10 @@ gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
     GncOrder *order = ow_get_order (ow);
+
+    if (ow->closing)
+        return;
+    ow->closing = TRUE;
 
     gnc_suspend_gui_refresh ();
 
@@ -344,7 +567,7 @@ gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
     gnc_unregister_gui_component (ow->component_id);
     gnc_resume_gui_refresh ();
 
-    g_free (ow);
+    gnc_order_window_unref (ow);
 }
 
 static int
@@ -578,6 +801,7 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
      * No existing order window found.  Build a new one.
      */
     ow = g_new0 (OrderWindow, 1);
+    ow->ref_count = 1;
     ow->book = bookp;
     ow->dialog_type = type;
 
@@ -688,6 +912,7 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     GtkWidget *hbox, *date;
 
     ow = g_new0 (OrderWindow, 1);
+    ow->ref_count = 1;
     ow->book = bookp;
     ow->dialog_type = NEW_ORDER;
 

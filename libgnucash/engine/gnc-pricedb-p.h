@@ -61,7 +61,9 @@ struct gnc_price_db_s
     QofInstance inst;              /* globally unique object identifier */
     GHashTable *commodity_hash;
     gboolean bulk_update;		 /* TRUE while reading XML file, etc. */
-    gboolean reset_nth_price_cache;
+    /* Cache nodes belong to this database; prices and commodity are borrowed. */
+    const gnc_commodity *nth_price_commodity;
+    GList *nth_price_cache;
 };
 
 struct _GncPriceDBClass

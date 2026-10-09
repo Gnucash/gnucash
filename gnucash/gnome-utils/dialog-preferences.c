@@ -202,6 +202,90 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
  *
  *  @param dialog the prefs dialog.
  */
+static void gnc_preferences_select_account_page (GtkDialog *dialog);
+
+typedef struct
+{
+    GWeakRef parent;
+    GWeakRef entry;
+    gchar *original_separator;
+    gboolean parent_destroyed;
+    gboolean completed;
+} SeparatorValidation;
+
+static void
+separator_validation_free (gpointer data)
+{
+    SeparatorValidation *request = data;
+    g_weak_ref_clear (&request->parent);
+    g_weak_ref_clear (&request->entry);
+    g_free (request->original_separator);
+    g_free (request);
+}
+
+static void
+separator_parent_destroyed ([[maybe_unused]] GtkWidget *parent,
+                             GtkWidget *question)
+{
+    SeparatorValidation *request = g_object_get_data (
+        G_OBJECT (question), "separator-validation");
+    request->parent_destroyed = TRUE;
+}
+
+static void
+separator_question_destroyed (GtkWidget *question, gpointer data)
+{
+    SeparatorValidation *request = data;
+    GtkWidget *parent = g_weak_ref_get (&request->parent);
+    gboolean return_to_accounts = !request->completed && parent &&
+        !request->parent_destroyed && !gtk_widget_in_destruction (parent);
+    request->completed = TRUE;
+    if (parent && g_object_get_data (G_OBJECT (parent), "separator-question") == question)
+        g_object_set_data (G_OBJECT (parent), "separator-question", NULL);
+    if (return_to_accounts)
+        gnc_preferences_select_account_page (GTK_DIALOG (parent));
+    g_clear_object (&parent);
+}
+
+static void
+preferences_close (GtkDialog *dialog)
+{
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
+    gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS, dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+separator_validation_response (GtkDialog *question, gint response,
+                                gpointer data)
+{
+    SeparatorValidation *request = data;
+    GtkDialog *parent;
+    GtkEntry *entry;
+    if (request->completed)
+        return;
+    request->completed = TRUE;
+    g_object_ref (question); /* The reset can notify and destroy either dialog. */
+    parent = g_weak_ref_get (&request->parent);
+    entry = g_weak_ref_get (&request->entry);
+    if (parent && entry && !request->parent_destroyed)
+    {
+        if (response == GTK_RESPONSE_ACCEPT)
+        {
+            if (request->original_separator)
+                gtk_entry_set_text (entry, request->original_separator);
+            if (!request->parent_destroyed)
+                preferences_close (parent);
+        }
+        else
+            gnc_preferences_select_account_page (parent);
+    }
+    gtk_widget_destroy (GTK_WIDGET (question));
+    g_clear_object (&entry);
+    g_clear_object (&parent);
+    g_object_unref (question);
+}
+
 static gboolean
 gnc_account_separator_validate (GtkWidget *dialog)
 {
@@ -215,7 +299,17 @@ gnc_account_separator_validate (GtkWidget *dialog)
     {
         GtkWidget   *msg_dialog, *msg_label;
         GtkBuilder  *builder;
-        gint         response;
+        SeparatorValidation *request;
+
+        /* A repeated close request must not create a second question. */
+        msg_dialog = g_object_get_data (G_OBJECT (dialog), "separator-question");
+        if (msg_dialog)
+        {
+            gtk_window_present (GTK_WINDOW (msg_dialog));
+            g_free (conflict_msg);
+            g_free (separator);
+            return FALSE;
+        }
 
         builder = gtk_builder_new ();
         gnc_builder_add_from_file (builder, "dialog-preferences.glade", "separator_validation_dialog");
@@ -226,22 +320,31 @@ gnc_account_separator_validate (GtkWidget *dialog)
 
         gtk_label_set_text (GTK_LABEL(msg_label), conflict_msg);
 
+        request = g_new0 (SeparatorValidation, 1);
+        g_weak_ref_init (&request->parent, dialog);
+        g_weak_ref_init (&request->entry, entry);
+        request->original_separator = g_strdup (
+            g_object_get_data (G_OBJECT (entry), "original_text"));
+        g_object_set_data_full (G_OBJECT (msg_dialog), "separator-validation",
+                                request, separator_validation_free);
+        gtk_window_set_transient_for (GTK_WINDOW (msg_dialog), GTK_WINDOW (dialog));
+        gtk_window_set_modal (GTK_WINDOW (msg_dialog), TRUE);
+        gtk_window_set_destroy_with_parent (GTK_WINDOW (msg_dialog), TRUE);
+        g_signal_connect_object (dialog, "destroy",
+                                 G_CALLBACK (separator_parent_destroyed),
+                                 msg_dialog, 0);
+        g_signal_connect (msg_dialog, "response",
+                          G_CALLBACK (separator_validation_response), request);
+        g_signal_connect (msg_dialog, "destroy",
+                          G_CALLBACK (separator_question_destroyed), request);
+        /* The destroy callback clears this non-owning marker. */
+        g_object_set_data (G_OBJECT (dialog), "separator-question", msg_dialog);
+
         g_object_unref (G_OBJECT(builder));
         gtk_widget_show_all (msg_dialog);
 
-        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
-        if (response == GTK_RESPONSE_ACCEPT) // reset to original
-        {
-            gchar *original_sep = g_object_get_data (G_OBJECT(entry), "original_text");
-
-            if (original_sep != NULL)
-                gtk_entry_set_text (GTK_ENTRY(entry), original_sep);
-        }
-        else
-            ret = FALSE;
-
+        ret = FALSE;
         g_free (conflict_msg);
-        gtk_widget_destroy (msg_dialog);
     }
     g_free (separator);
     return ret;
@@ -1216,14 +1319,7 @@ gnc_preferences_response_cb (GtkDialog *dialog, gint response, GtkDialog *unused
     case GTK_RESPONSE_DELETE_EVENT:
     default:
         if (gnc_account_separator_validate (GTK_WIDGET(dialog)))
-        {
-            gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog));
-            gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS,
-                                                  dialog);
-            gtk_widget_destroy (GTK_WIDGET(dialog));
-        }
-        else
-            gnc_preferences_select_account_page (dialog);
+            preferences_close (dialog);
         break;
     }
 }

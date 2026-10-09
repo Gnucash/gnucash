@@ -53,10 +53,12 @@ struct _GNCNewUserDialog
     GtkWidget *import_qif_button;
     GtkWidget *tutorial_button;
     gboolean   ok_pressed;
+    GtkWidget *cancel_dialog;
+    guint present_source;
 };
 
 static void
-gnc_ui_new_user_cancel_dialog (GtkWindow *parent);
+gnc_ui_new_user_cancel_dialog (GNCNewUserDialog *new_user);
 
 void
 gnc_new_user_dialog_register_qif_assistant (void (*cb_fcn)(void))
@@ -87,7 +89,15 @@ gnc_ui_new_user_cancel_cb (GtkWidget * widget, gpointer data)
     GNCNewUserDialog *new_user = data;
 
     g_return_if_fail(new_user);
-    gtk_widget_destroy (new_user->window);
+    gnc_ui_new_user_cancel_dialog (new_user);
+}
+
+static gboolean
+gnc_ui_new_user_delete_cb ([[maybe_unused]] GtkWidget *widget,
+                           [[maybe_unused]] GdkEvent *event, gpointer data)
+{
+    gnc_ui_new_user_cancel_dialog (data);
+    return TRUE;
 }
 
 static void
@@ -96,8 +106,15 @@ gnc_ui_new_user_destroy_cb (GtkWidget * widget, gpointer data)
     GNCNewUserDialog *new_user = data;
 
     g_return_if_fail(new_user);
-    if (new_user->ok_pressed == FALSE)
-        gnc_ui_new_user_cancel_dialog (GTK_WINDOW(new_user->window));
+    if (new_user->present_source)
+        g_source_remove (new_user->present_source);
+    if (new_user->cancel_dialog)
+    {
+        g_signal_handlers_disconnect_by_data (new_user->cancel_dialog, new_user);
+        gtk_widget_destroy (new_user->cancel_dialog);
+    }
+    if (!new_user->ok_pressed)
+        gnc_set_first_startup (FALSE);
 
     g_free (new_user);
 }
@@ -128,9 +145,10 @@ gnc_ui_new_user_ok_cb (GtkWidget * widget, gpointer data)
 }
 
 static gboolean
-gnc_ui_new_user_window_present (GtkWindow *window)
+gnc_ui_new_user_window_present (GNCNewUserDialog *new_user)
 {
-    gtk_window_present (GTK_WINDOW(window));
+    new_user->present_source = 0;
+    gtk_window_present (GTK_WINDOW(new_user->window));
     return FALSE;
 }
 
@@ -161,6 +179,8 @@ gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
 
     g_signal_connect(G_OBJECT(new_user->window), "destroy",
             G_CALLBACK(gnc_ui_new_user_destroy_cb), new_user);
+    g_signal_connect (new_user->window, "delete-event",
+                      G_CALLBACK (gnc_ui_new_user_delete_cb), new_user);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_but"));
     g_signal_connect(button, "clicked", G_CALLBACK(gnc_ui_new_user_ok_cb), new_user);
@@ -170,34 +190,66 @@ gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
 
     new_user->ok_pressed = FALSE;
 
-    g_idle_add ((GSourceFunc)gnc_ui_new_user_window_present, GTK_WINDOW(new_user->window));
+    new_user->present_source = g_idle_add (
+        (GSourceFunc)gnc_ui_new_user_window_present, new_user);
 
     g_object_unref(G_OBJECT(builder));
     LEAVE(" ");
 }
 
 static void
-gnc_ui_new_user_cancel_dialog (GtkWindow *parent)
+gnc_ui_new_user_cancel_finished (GtkDialog *dialog, gint response,
+                                 gpointer user_data)
+{
+    GNCNewUserDialog *new_user = user_data;
+    GtkWidget *window = g_object_ref (new_user->window);
+
+    /* Finish the question before preferences can notify other consumers.
+     * Destroying either window must not re-enter this request. */
+    g_signal_handlers_disconnect_by_data (dialog, new_user);
+    new_user->cancel_dialog = NULL;
+    new_user->ok_pressed = TRUE;
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    gnc_set_first_startup (response == GTK_RESPONSE_YES);
+    gtk_widget_destroy (window);
+    g_object_unref (window);
+}
+
+static void
+gnc_ui_new_user_cancel_destroyed (GtkWidget *dialog,
+                                  gpointer user_data)
+{
+    gnc_ui_new_user_cancel_finished (GTK_DIALOG (dialog), GTK_RESPONSE_NO, user_data);
+}
+
+static void
+gnc_ui_new_user_cancel_dialog (GNCNewUserDialog *new_user)
 {
     GtkWidget *dialog;
     GtkBuilder  *builder;
-    gint result;
-    gboolean keepshowing;
+
+    if (new_user->cancel_dialog)
+    {
+        gtk_window_present (GTK_WINDOW (new_user->cancel_dialog));
+        return;
+    }
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_cancel_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_cancel_dialog"));
 
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+    new_user->cancel_dialog = dialog;
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (new_user->window));
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (gnc_ui_new_user_cancel_finished), new_user);
+    g_signal_connect (dialog, "destroy",
+                      G_CALLBACK (gnc_ui_new_user_cancel_destroyed), new_user);
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
-    keepshowing = (result == GTK_RESPONSE_YES);
-
-    gnc_set_first_startup (keepshowing);
-
+    gtk_widget_show (dialog);
     g_object_unref(G_OBJECT(builder));
-    gtk_widget_destroy(dialog);
 }
 
 void
@@ -215,4 +267,3 @@ gnc_ui_new_user_dialog (void)
     gnc_ui_new_user_dialog_create (new_user);
     gtk_widget_show (new_user->window);
 }
-

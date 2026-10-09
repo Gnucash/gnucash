@@ -331,99 +331,159 @@ gnc_plugin_basic_commands_finalize (GObject *object)
  *                    Command Callbacks                     *
  ************************************************************/
 
-static void
-gnc_main_window_cmd_file_new (GSimpleAction *simple,
-                              GVariant      *parameter,
-                              gpointer       user_data)
+typedef struct
 {
-    GncMainWindowActionData *data = user_data;
+    GWeakRef window;
+    GWeakRef book;
+    gboolean destroyed;
+    gulong destroy_handler;
+    void (*action) (GtkWindow *);
+} BasicFileRequest;
 
-    if (!gnc_main_window_all_finish_pending ())
-        return;
-
-    gnc_file_new (GTK_WINDOW(data->window));
+static void
+basic_file_window_destroyed (GtkWidget *window, gpointer user_data)
+{
+    ((BasicFileRequest *) user_data)->destroyed = TRUE;
 }
 
 static void
-gnc_main_window_cmd_file_open (GSimpleAction *simple,
-                               GVariant      *parameter,
-                               gpointer       user_data)
+basic_file_pending_finished (gboolean accepted, gpointer user_data)
+{
+    BasicFileRequest *request = user_data;
+    GtkWindow *window = g_weak_ref_get (&request->window);
+    QofBook *book = g_weak_ref_get (&request->book);
+    if (window)
+    {
+        g_object_set_data (G_OBJECT (window), "gnc-basic-file-pending", NULL);
+        if (request->destroy_handler)
+            g_signal_handler_disconnect (window, request->destroy_handler);
+    }
+    if (accepted && window && !request->destroyed && book &&
+        gnc_current_session_exist () && gnc_get_current_book () == book)
+        request->action (window);
+    g_clear_object (&window);
+    g_clear_object (&book);
+    g_weak_ref_clear (&request->window);
+    g_weak_ref_clear (&request->book);
+    g_free (request);
+}
+
+static void
+basic_file_after_pending (GncMainWindow *window, void (*action) (GtkWindow *))
+{
+    if (!window || g_object_get_data (G_OBJECT (window), "gnc-basic-file-pending") ||
+        !gnc_current_session_exist ()) return;
+    BasicFileRequest *request = g_new0 (BasicFileRequest, 1);
+    g_weak_ref_init (&request->window, window);
+    g_weak_ref_init (&request->book, gnc_get_current_book ());
+    request->action = action;
+    request->destroy_handler = g_signal_connect (window, "destroy",
+        G_CALLBACK (basic_file_window_destroyed), request);
+    g_object_set_data (G_OBJECT (window), "gnc-basic-file-pending", request);
+    gnc_main_window_all_finish_pending_async (NULL, basic_file_pending_finished, request);
+}
+
+static void
+basic_file_new_ready (GtkWindow *parent)
+{
+
+
+    gnc_file_new (parent);
+}
+
+static void
+gnc_main_window_cmd_file_new (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
     GncMainWindowActionData *data = user_data;
+    if (data) basic_file_after_pending (data->window, basic_file_new_ready);
+}
 
-    g_return_if_fail (data != NULL);
+static void
+basic_file_open_ready (GtkWindow *parent)
+{
 
-    if (!gnc_main_window_all_finish_pending ())
-        return;
+
 
     /* Reset the flag that indicates the conversion of the bayes KVP
      * entries has been run */
     gnc_account_reset_convert_bayes_to_flat ();
 
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(parent));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_open (GTK_WINDOW(data->window));
+    gnc_ui_file_access_for_open (parent);
 #else
-    gnc_file_open (GTK_WINDOW(data->window));
+    gnc_file_open (parent);
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_save (GSimpleAction *simple,
-                               GVariant      *parameter,
-                               gpointer       user_data)
+gnc_main_window_cmd_file_open (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
     GncMainWindowActionData *data = user_data;
+    if (data) basic_file_after_pending (data->window, basic_file_open_ready);
+}
 
-    g_return_if_fail (data != NULL);
+static void
+basic_file_save_ready (GtkWindow *parent)
+{
 
-    if (!gnc_main_window_all_finish_pending () ||
-        gnc_file_save_in_progress())
+
+    if (gnc_file_save_in_progress())
         return;
 
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_save (GTK_WINDOW(data->window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(parent));
+    gnc_file_save_async (parent, NULL, NULL);
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_save_as (GSimpleAction *simple,
-                                  GVariant      *parameter,
-                                  gpointer       user_data)
+gnc_main_window_cmd_file_save (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
     GncMainWindowActionData *data = user_data;
+    if (data) basic_file_after_pending (data->window, basic_file_save_ready);
+}
 
-    g_return_if_fail (data != NULL);
+static void
+basic_file_save_as_ready (GtkWindow *parent)
+{
 
-    if (!gnc_main_window_all_finish_pending () ||
-        gnc_file_save_in_progress())
+
+    if (gnc_file_save_in_progress())
         return;
 
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(parent));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_save_as (GTK_WINDOW(data->window));
+    gnc_ui_file_access_for_save_as (parent);
 #else
-    gnc_file_save_as (GTK_WINDOW(data->window));
+    gnc_file_save_as_async (parent, NULL, NULL);
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_revert (GSimpleAction *simple,
-                                 GVariant      *parameter,
-                                 gpointer       user_data)
+gnc_main_window_cmd_file_save_as (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
     GncMainWindowActionData *data = user_data;
+    if (data) basic_file_after_pending (data->window, basic_file_save_as_ready);
+}
 
-    g_return_if_fail (data != NULL);
+static void
+basic_file_revert_ready (GtkWindow *parent)
+{
 
-    if (!gnc_main_window_all_finish_pending ())
-        return;
 
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_revert (GTK_WINDOW(data->window));
+
+    gnc_window_set_progressbar_window (GNC_WINDOW(parent));
+    gnc_file_revert (parent);
     gnc_window_set_progressbar_window (NULL);
+}
+
+static void
+gnc_main_window_cmd_file_revert (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
+{
+    GncMainWindowActionData *data = user_data;
+    if (data) basic_file_after_pending (data->window, basic_file_revert_ready);
 }
 
 static void
