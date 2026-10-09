@@ -205,7 +205,7 @@ static action_toolbar_labels invoice_action_layout_labels[] =
 {
     {"ViewSaveLayoutAction", N_("_Use as Default Layout for Customer Business items"),
       N_("Use the current layout as default for all customer invoices and credit notes")},
-    {"ViewResetLayoutAction", N_("_Reset Default Layout for Customer business items"),
+    {"ViewResetLayoutAction", N_("_Reset Default Layout for Customer Business items"),
       N_("Reset default layout for all customer invoices and credit notes back to built-in defaults and update the current page accordingly")},
     {NULL, NULL, NULL},
 };

@@ -6,7 +6,7 @@ You can access the manual under the Help menu.")
 /* Translators: You can replace the link, if a translated page exists. */
  N_( "Mailing lists are the preferred form of communication in the \
 GnuCash community. For announcements of new releases, user groups etc. \
-see the table at https://wiki.gnucash.org/wiki/Mailing_Lists")
+see the table at https://wiki.gnucash.org/wiki/Mailing_Lists.")
 
  N_( "The GnuCash developers are easy to contact. As well \
 as several mailing lists, you can chat to them live on IRC! \
@@ -95,7 +95,7 @@ headings to change the display.")
 
  N_( "You can pack multiple reports into a single window, \
 providing all the financial information you want at a glance. \
-To do so, use the Sample & Custom->\"Custom Multicolumn Report\" \
+To do so, use the \"Multicolumn\"->\"Custom Multicolumn Report\" \
 report.")
 
  N_( "Style Sheets affect how reports are displayed. Choose \

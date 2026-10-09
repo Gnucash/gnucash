@@ -890,7 +890,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
     {
         const char *msg =
             _("The Scheduled Transaction Editor cannot automatically balance "
-              "all of the transactions in this this Scheduled Transaction.\n"
+              "all of the transactions in this Scheduled Transaction.\n"
               "Should it still be entered?");
         if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", msg))
             return FALSE;

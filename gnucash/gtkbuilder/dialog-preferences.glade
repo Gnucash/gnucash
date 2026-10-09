@@ -3648,7 +3648,7 @@ many months before the current month</property>
                   <object class="GtkSpinButton" id="pref/general.report/chart-tooltip-caret-size">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">This setting specifies the size (in pixels) of an arrow (caret) that extends from a tooltip's body toward the data point. On a regular basis, a very small value - this setting's default has increased it significantly.</property>
+                    <property name="tooltip-text" translatable="yes">This setting specifies the size (in pixels) of an arrow (caret) that extends from a tooltip's body toward the data point. On a regular basis, a very small value.</property>
                     <property name="halign">start</property>
                     <property name="text">1</property>
                     <property name="adjustment">default_chart_caret_size_adj</property>

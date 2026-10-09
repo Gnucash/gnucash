@@ -405,7 +405,7 @@ For example setting this to 2.0 will display reports at twice their typical size
     <key name="chart-tooltip-caret-size" type="i">
       <default>10</default>
       <summary>An arrow size (caret) coming out of a tooltip's body.</summary>
-      <description>This setting specifies the size (in pixels) of an arrow (caret) that extends from a tooltip's body toward the data point. On a regular basis, a very small value - this setting's default has increased it significantly.</description>
+      <description>This setting specifies the size (in pixels) of an arrow (caret) that extends from a tooltip's body toward the data point. On a regular basis, a very small value.</description>
     </key>
       <key name="chart-tooltip-position" enum="org.gnucash.GnuCash.general.report.TooltipPosition">
       <default>'nearest'</default>
