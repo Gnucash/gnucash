@@ -94,7 +94,7 @@
 	"email"	"Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 	"employee"	"a person who works for somebody or a company in return for wages"
 	"equity"	"1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
-	"equity statement"	"Report that ... FIXME: Add description."
+	"equity statement"	"Part of the balance sheet. It details the business' value comprising capital, retained earnings, losses, dividend distribution and reserves."
 "account"	"escrow"	"A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 	"exchange rate"	"The relation in value between the money used in different countries"
 	"field"	"in the account creation dialog??"
