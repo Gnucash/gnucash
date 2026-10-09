@@ -537,8 +537,22 @@ gnc_price_set_source_string(GNCPrice *p, const char* str)
             gnc_price_set_source(p, s);
             return;
         }
-
-
+    /* No match. PRICE_SOURCE_INVALID is only a loop sentinel, never a settable
+       source, so its string form "invalid" reaches here as well -- and like any
+       other unrecognized string it leaves the source unchanged. Name the price
+       (commodity -> currency and date) so a user who spots this in the trace log
+       can find it in the price editor to correct or remove it. */
+    gnc_commodity *commodity = gnc_price_get_commodity(p);
+    gnc_commodity *currency = gnc_price_get_currency(p);
+    char datebuff[MAX_DATE_LENGTH + 1];
+    memset(datebuff, 0, sizeof(datebuff));
+    qof_print_date_buff(datebuff, sizeof(datebuff), gnc_price_get_time64(p));
+    PWARN("unknown price source string \"%s\" for %s:%s -> %s on %s;"
+          " leaving the source unchanged", str,
+          commodity ? gnc_commodity_get_namespace(commodity) : "?",
+          commodity ? gnc_commodity_get_mnemonic(commodity) : "?",
+          currency ? gnc_commodity_get_mnemonic(currency) : "?",
+          datebuff);
 }
 void
 gnc_price_set_typestr(GNCPrice *p, const char* type)
