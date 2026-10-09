@@ -1108,6 +1108,16 @@ gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
 
     child = gtk_bin_get_child (GTK_BIN(tool_item));
 
+    /* GtkToolButton applies GAction sensitivity to its child button, but
+     * GtkToolItem uses its own sensitivity for the overflow menu item. */
+    if (!g_object_get_data (G_OBJECT(tool_item), "sensitivity-bound"))
+    {
+        g_object_bind_property (child, "sensitive", tool_item, "sensitive",
+                                G_BINDING_SYNC_CREATE);
+        g_object_set_data (G_OBJECT(tool_item), "sensitivity-bound",
+                           GINT_TO_POINTER(1));
+    }
+
     gtk_widget_add_events (GTK_WIDGET(child),
                            GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
                            | GDK_FOCUS_CHANGE_MASK);
