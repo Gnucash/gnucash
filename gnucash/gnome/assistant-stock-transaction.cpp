@@ -539,8 +539,9 @@ class StockTransactionEntry
 protected:
     bool m_enabled;
     bool m_debit_side;
+    bool m_default_debit_side = false;
     bool m_allow_zero;
-    bool m_allow_negative;
+    bool m_allow_negative = false;
     bool m_input_new_balance = false;
     Account *m_account;
     gnc_numeric m_value;
@@ -644,6 +645,7 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 {
     m_enabled = mask != FieldMask::DISABLED;
     m_debit_side = mask & FieldMask::ENABLED_DEBIT;
+    m_default_debit_side = m_debit_side;
     m_allow_zero = mask & FieldMask::ALLOW_ZERO;
     m_allow_negative = mask & FieldMask::ALLOW_NEGATIVE;
 }
@@ -667,15 +669,9 @@ StockTransactionEntry::set_value(gnc_numeric amount)
         return;
     }
 
-    if (gnc_numeric_negative_p (amount))
-    {
-        m_value = gnc_numeric_neg(amount);
-        m_debit_side = !m_debit_side;
-    }
-    else
-    {
-        m_value = amount;
-    }
+    m_value = gnc_numeric_abs(amount);
+    m_debit_side = !m_default_debit_side != gnc_numeric_negative_p (amount);
+
     PINFO("Set %s value to %" PRId64 "/%" PRId64, m_action, m_value.num, m_value.denom);
 }
 
@@ -819,6 +815,7 @@ StockTransactionStockEntry::set_fieldmask(FieldMask mask)
     m_enabled = mask & (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT);
     m_amount_enabled = mask & (FieldMask::AMOUNT_CREDIT | FieldMask::AMOUNT_DEBIT);
     m_debit_side = mask & (FieldMask::ENABLED_DEBIT | FieldMask::AMOUNT_DEBIT);
+    m_default_debit_side = m_debit_side;
     m_input_new_balance = mask & FieldMask::INPUT_NEW_BALANCE;
     m_marker = mask & FieldMask::MARKER_SPLIT;
 }
