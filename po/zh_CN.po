@@ -43,7 +43,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-09-25 03:51+0000\n"
+"PO-Revision-Date: 2026-10-07 09:45+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/gnucash/gnucash/zh_Hans/>\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:519
@@ -6649,14 +6649,14 @@ msgstr "清空"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:159
 msgid "You must provide a name for this Tax Table."
-msgstr "您必须提供这个税率表的名称。"
+msgstr "您必须提供这个计税表的名称。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:166
 #, c-format
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
-msgstr "您必须为这个税率表提供一个独一无二的名称。您的选择“%s”已经被使用了。"
+msgstr "您必须为这个计税表提供一个独一无二的名称。您的选择“%s”已经被使用了。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -6682,18 +6682,18 @@ msgstr "重命名(_R)"
 #: gnucash/gnome-utils/dialog-tax-table.c:705
 #, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "税表名称\"%s \"已经存在。"
+msgstr "计税表名称\"%s \"已经存在。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:729
 #, c-format
 msgid "Tax table \"%s\" is in use. You cannot delete it."
-msgstr "税率表“%s”正在使用中。您不能删除它。"
+msgstr "计税表“%s”正在使用中。您不能删除它。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:777
 msgid ""
 "You cannot remove the last entry from the tax table. Try deleting the tax "
 "table if you want to do that."
-msgstr "您不能从税率表删除最后一笔事项。如果您想要的话可以改试删除这个税率表。"
+msgstr "您不能从计税表删除最后一个条目。如果您确实想要这么做，可以删除这个计税表。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:784
 msgid "Are you sure you want to delete this entry?"
@@ -13596,12 +13596,12 @@ msgstr "含税"
 #: gnucash/gtkbuilder/dialog-vendor.glade:590
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:97
 msgid "Tax Table"
-msgstr "税率"
+msgstr "计税表"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:652
 #: gnucash/gtkbuilder/dialog-vendor.glade:594
 msgid "Override the global Tax Table?"
-msgstr "覆盖全局的税率表？"
+msgstr "覆盖全局的计税表？"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:688
 #: gnucash/gtkbuilder/dialog-customer.glade:710
@@ -14329,7 +14329,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1410
 msgid "Yes, reset the Tax Tables"
-msgstr "是的，重置税率表"
+msgstr "是的，重置计税表"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1427
 msgid "No, keep them as they are"
@@ -14337,7 +14337,7 @@ msgstr "不，保持现状"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1450
 msgid "Reset Tax Tables to present Values?"
-msgstr "重置税率表到当前值？"
+msgstr "重置计税表到当前值？"
 
 #: gnucash/gtkbuilder/dialog-job.glade:7
 msgid "Job Dialog"
@@ -16354,13 +16354,11 @@ msgstr "编号"
 #: gnucash/gtkbuilder/dialog-tax-table.glade:7
 #: gnucash/gtkbuilder/dialog-tax-table.glade:31
 msgid "Tax Tables"
-msgstr "税率"
+msgstr "计税表"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:142
-#, fuzzy
-#| msgid "<b>Tax Table Entries</b>"
 msgid "Tax Table Entries"
-msgstr "<b>税务科目</b>"
+msgstr "计税表项"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:200
 msgid "De_lete"
@@ -16379,10 +16377,8 @@ msgid "Percent %"
 msgstr "百分比"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:388
-#, fuzzy
-#| msgid "<b>Tax Table Entry</b>"
 msgid "Tax Table Entry"
-msgstr "<b>定义</b>"
+msgstr "计税表项"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:497
 #: gnucash/register/ledger-core/split-register.c:2180
@@ -18674,7 +18670,7 @@ msgstr "含税"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:155
 msgid "Tax-table"
-msgstr "须纳税的"
+msgstr "计税表"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:159
 msgid "Account-posted"
@@ -20322,7 +20318,7 @@ msgstr "这个账户通常应该是费用或资产类型。"
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:760
 #, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
-msgstr "税率表 %s 不存在。您想要创建它吗？"
+msgstr "计税表 %s 不存在。您想要创建它吗？"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:877
 msgid ""
@@ -20411,7 +20407,7 @@ msgstr "已税"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
 msgctxt "sample for 'Tax Table'"
 msgid "Tax Table 1"
-msgstr "税率表1"
+msgstr "计税表 1"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
 msgctxt "sample"
@@ -20569,7 +20565,7 @@ msgstr "编辑此交易的单位数量"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:701
 msgid "Enter the Tax Table to apply to this entry"
-msgstr "输入要应用到这笔交易的税率表"
+msgstr "输入要应用到这笔交易的计税表"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:710
 msgid "Is this entry taxable?"
@@ -24555,8 +24551,8 @@ msgid ""
 "from Business Invoices and Bills which will require Tax Tables to be set up "
 "correctly. Please see the documentation."
 msgstr ""
-"这些税收账户可以使用标准注册表来填充，或者从商业发票和账单中填充，这就需要正"
-"确设置税收表。请参阅文件。"
+"这些税收科目可以使用标准账簿来填充，或者在正确设置计税表的前提下从商业发票和"
+"账单中填充。请参阅文档。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:64
 msgid ""
@@ -28528,11 +28524,11 @@ msgstr "查看所有商业原始凭证"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
-msgstr "税率(_T)"
+msgstr "销售计税表(_T)"
 
 #: gnucash/ui/gnc-plugin-business.ui:148
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "查看并编辑税率表（消费税/增值税）"
+msgstr "查看并编辑销售计税表（商品及服务税、增值税）"
 
 #: gnucash/ui/gnc-plugin-business.ui:151
 msgid "_Billing Terms Editor"
@@ -29125,7 +29121,7 @@ msgstr "查找员工凭证…"
 msgid ""
 "Open the Find Employee Voucher Dialog with the vouchers already filtered for "
 "this employee"
-msgstr ""
+msgstr "打开“查找员工凭证”对话框，并显示该员工的凭证"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 msgid "_Print Checks…"
@@ -29572,6 +29568,8 @@ msgid ""
 "Run the selected scheduled transaction. If no transactions are scheduled to "
 "be entered, the next occurrence is used"
 msgstr ""
+"执行选中的计划交易。如果该计划未到达安排的执行时间，则执行该计划中的下一次交"
+"易"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:214
 msgid "_Run"
@@ -29693,13 +29691,11 @@ msgstr "自动清算未在时间限制内完成"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:205
 msgid "Account is already at Auto-Clear Balance."
-msgstr ""
+msgstr "科目余额已经等于自动结算余额。"
 
 #: libgnucash/app-utils/gnc-autoclear.cpp:239
-#, fuzzy
-#| msgid "The interest rate cannot be zero."
 msgid "The selected amount cannot be cleared."
-msgstr "利率不能为零。"
+msgstr "选中的金额无法结算。"
 
 #: libgnucash/app-utils/gnc-exp-parser.c:615
 msgid "Illegal variable in expression."
@@ -30812,24 +30808,20 @@ msgid ""
 msgstr "修改发票报表的时间长度。值为0则代表禁用。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1339
-#, fuzzy
-#| msgid "Default Customer TaxTable"
 msgid "Default Customer Tax Table"
-msgstr "销项税率"
+msgstr "客户默认计税表"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1340
 msgid "The default tax table to apply to customers."
-msgstr "适用于客户的默认税率。"
+msgstr "适用于客户的默认计税表。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1343
-#, fuzzy
-#| msgid "Default Vendor TaxTable"
 msgid "Default Vendor Tax Table"
-msgstr "进项税率"
+msgstr "供应商默认计税表"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1344
 msgid "The default tax table to apply to vendors."
-msgstr "适用于供应商的默认税率。"
+msgstr "适用于供应商的默认计税表。"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1349
 msgid "The default date format used for fancy printed dates."
@@ -30844,10 +30836,8 @@ msgid " (closed)"
 msgstr " (已关闭)"
 
 #: libgnucash/engine/gncOwner.c:1012
-#, fuzzy
-#| msgid "Offset between documents: "
 msgid "Offset between business items: "
-msgstr "文档之间的偏移： "
+msgstr "业务之间的偏移： "
 
 #: libgnucash/engine/gncOwner.c:1124
 msgid "Lot Link"
