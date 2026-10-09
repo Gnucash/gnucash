@@ -25,14 +25,14 @@ if(WITH_OFX)
   )
 
   gnc_add_test(test-link-ofx test-link.c OFX_TEST_INCLUDE_DIRS OFX_TEST_LIBS)
-  gnc_add_test_with_guile(test-ofx-import-response test-ofx-import-response.cpp
+  gnc_add_test_with_guile(gtest-ofx-import-response gtest-ofx-import-response.cpp
     OFX_RESPONSE_TEST_INCLUDE_DIRS OFX_RESPONSE_TEST_LIBS)
-  set_tests_properties(test-ofx-import-response PROPERTIES TIMEOUT 30)
-  set_property(TEST test-ofx-import-response APPEND PROPERTY ENVIRONMENT
+  set_tests_properties(gtest-ofx-import-response PROPERTIES TIMEOUT 30)
+  set_property(TEST gtest-ofx-import-response APPEND PROPERTY ENVIRONMENT
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
   if(COMPILE_GSCHEMAS)
-    add_dependencies(test-ofx-import-response compiled-schemas)
+    add_dependencies(gtest-ofx-import-response compiled-schemas)
   endif()
 endif()
 
-set_dist_list(test_ofx_DIST CMakeLists.txt test-link.c test-ofx-import-response.cpp)
+set_dist_list(test_ofx_DIST CMakeLists.txt test-link.c gtest-ofx-import-response.cpp)

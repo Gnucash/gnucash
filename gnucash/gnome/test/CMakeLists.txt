@@ -21,30 +21,30 @@ macro(add_gnome_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
 endmacro()
 
-add_gnome_test(test-new-user-response test-new-user-response.cpp)
-set_tests_properties(test-new-user-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-new-user-response gtest-new-user-response.cpp)
+set_tests_properties(gtest-new-user-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-sx-creation-error-response test-sx-creation-error-response.cpp)
-set_tests_properties(test-sx-creation-error-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-sx-creation-error-response gtest-sx-creation-error-response.cpp)
+set_tests_properties(gtest-sx-creation-error-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-tax-table-rename-response test-tax-table-rename-response.cpp)
-set_tests_properties(test-tax-table-rename-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-tax-table-rename-response gtest-tax-table-rename-response.cpp)
+set_tests_properties(gtest-tax-table-rename-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test_with_guile(test-tax-table-entry-response test-tax-table-entry-response.cpp
+gnc_add_test_with_guile(gtest-tax-table-entry-response gtest-tax-table-entry-response.cpp
   GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
-add_dependencies(test-tax-table-entry-response scm-expressions)
-set_tests_properties(test-tax-table-entry-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-tax-table-entry-response scm-expressions)
+set_tests_properties(gtest-tax-table-entry-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-billterms-response test-billterms-response.cpp)
-set_tests_properties(test-billterms-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-billterms-response gtest-billterms-response.cpp)
+set_tests_properties(gtest-billterms-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test_with_guile(test-payment-split-response test-payment-split-response.cpp
+gnc_add_test_with_guile(gtest-payment-split-response gtest-payment-split-response.cpp
   GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
-add_dependencies(test-payment-split-response scm-expressions)
-set_tests_properties(test-payment-split-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-payment-split-response scm-expressions)
+set_tests_properties(gtest-payment-split-response PROPERTIES TIMEOUT 30)
 
 set(INVOICE_ENTRY_DELETE_TEST_SOURCES
-  test-invoice-entry-delete-response.cpp
+  gtest-invoice-entry-delete-response.cpp
   ${CMAKE_BINARY_DIR}/gnucash/gnucash-gresources.c
 )
 set(INVOICE_ENTRY_DELETE_TEST_INCLUDE_DIRS
@@ -53,14 +53,14 @@ set(INVOICE_ENTRY_DELETE_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/gnucash/register/ledger-core
   ${CMAKE_SOURCE_DIR}/gnucash/register/register-gnome
 )
-gnc_add_test_with_guile(test-invoice-entry-delete-response
+gnc_add_test_with_guile(gtest-invoice-entry-delete-response
   "${INVOICE_ENTRY_DELETE_TEST_SOURCES}"
   INVOICE_ENTRY_DELETE_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
-add_dependencies(test-invoice-entry-delete-response scm-expressions)
-set_tests_properties(test-invoice-entry-delete-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-invoice-entry-delete-response scm-expressions)
+set_tests_properties(gtest-invoice-entry-delete-response PROPERTIES TIMEOUT 30)
 
 set(INVOICE_POST_TEST_SOURCES
-  test-invoice-post-response.cpp
+  gtest-invoice-post-response.cpp
   ${CMAKE_BINARY_DIR}/gnucash/gnucash-gresources.c
 )
 set(INVOICE_POST_TEST_INCLUDE_DIRS
@@ -69,45 +69,45 @@ set(INVOICE_POST_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/gnucash/register/ledger-core
   ${CMAKE_SOURCE_DIR}/gnucash/register/register-gnome
 )
-gnc_add_test_with_guile(test-invoice-post-response
+gnc_add_test_with_guile(gtest-invoice-post-response
   "${INVOICE_POST_TEST_SOURCES}"
   INVOICE_POST_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
-add_dependencies(test-invoice-post-response scm-expressions)
-set_tests_properties(test-invoice-post-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-invoice-post-response scm-expressions)
+set_tests_properties(gtest-invoice-post-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-print-check-title-response test-print-check-title-response.cpp)
-set_tests_properties(test-print-check-title-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-print-check-title-response gtest-print-check-title-response.cpp)
+set_tests_properties(gtest-print-check-title-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-date-close-response test-date-close-response.cpp)
-set_tests_properties(test-date-close-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-date-close-response gtest-date-close-response.cpp)
+set_tests_properties(gtest-date-close-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-commodities-namespace-response test-commodities-namespace-response.cpp)
-set_tests_properties(test-commodities-namespace-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-commodities-namespace-response gtest-commodities-namespace-response.cpp)
+set_tests_properties(gtest-commodities-namespace-response PROPERTIES TIMEOUT 30)
 
 set(BUDGET_SELECTION_TEST_SOURCES
-  test-budget-selection-response.cpp
+  gtest-budget-selection-response.cpp
   ${CMAKE_BINARY_DIR}/gnucash/gnucash-gresources.c
 )
-gnc_add_test_with_guile(test-budget-selection-response
+gnc_add_test_with_guile(gtest-budget-selection-response
   "${BUDGET_SELECTION_TEST_SOURCES}" GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
-add_dependencies(test-budget-selection-response scm-expressions)
-set_tests_properties(test-budget-selection-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-budget-selection-response scm-expressions)
+set_tests_properties(gtest-budget-selection-response PROPERTIES TIMEOUT 30)
 
-add_gnome_test(test-price-remove-response test-price-remove-response.cpp)
-set_tests_properties(test-price-remove-response PROPERTIES TIMEOUT 30)
+add_gnome_test(gtest-price-remove-response gtest-price-remove-response.cpp)
+set_tests_properties(gtest-price-remove-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test_with_guile(test-style-sheet-new-response test-style-sheet-new-response.cpp
+gnc_add_test_with_guile(gtest-style-sheet-new-response gtest-style-sheet-new-response.cpp
   GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
-set_tests_properties(test-style-sheet-new-response PROPERTIES TIMEOUT 30)
-add_dependencies(test-style-sheet-new-response scm-report scm-report-stylesheets scm-reports)
+set_tests_properties(gtest-style-sheet-new-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-style-sheet-new-response scm-report scm-report-stylesheets scm-reports)
 
-foreach(preference_test IN ITEMS test-tax-table-rename-response
-    test-tax-table-entry-response test-billterms-response
-    test-payment-split-response test-invoice-entry-delete-response
-    test-invoice-post-response
-    test-print-check-title-response test-commodities-namespace-response
-    test-style-sheet-new-response test-price-remove-response
-    test-budget-selection-response)
+foreach(preference_test IN ITEMS gtest-tax-table-rename-response
+    gtest-tax-table-entry-response gtest-billterms-response
+    gtest-payment-split-response gtest-invoice-entry-delete-response
+    gtest-invoice-post-response
+    gtest-print-check-title-response gtest-commodities-namespace-response
+    gtest-style-sheet-new-response gtest-price-remove-response
+    gtest-budget-selection-response)
   set_property(TEST ${preference_test} APPEND PROPERTY ENVIRONMENT
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
   if(COMPILE_GSCHEMAS)
@@ -159,21 +159,21 @@ gnc_add_test (test-assistant-stock-transaction
 set_dist_list(test_gnome_DIST
   CMakeLists.txt
   test-invoice-report-builtin-default.cpp
-  test-new-user-response.cpp
+  gtest-new-user-response.cpp
   gnome-response-test-fixture.h
-  test-sx-creation-error-response.cpp
-  test-tax-table-rename-response.cpp
-  test-tax-table-entry-response.cpp
-  test-billterms-response.cpp
-  test-invoice-entry-delete-response.cpp
-  test-invoice-post-response.cpp
-  test-payment-split-response.cpp
-  test-print-check-title-response.cpp
-  test-date-close-response.cpp
-  test-commodities-namespace-response.cpp
-  test-budget-selection-response.cpp
-  test-price-remove-response.cpp
-  test-style-sheet-new-response.cpp
+  gtest-sx-creation-error-response.cpp
+  gtest-tax-table-rename-response.cpp
+  gtest-tax-table-entry-response.cpp
+  gtest-billterms-response.cpp
+  gtest-invoice-entry-delete-response.cpp
+  gtest-invoice-post-response.cpp
+  gtest-payment-split-response.cpp
+  gtest-print-check-title-response.cpp
+  gtest-date-close-response.cpp
+  gtest-commodities-namespace-response.cpp
+  gtest-budget-selection-response.cpp
+  gtest-price-remove-response.cpp
+  gtest-style-sheet-new-response.cpp
   ${test_gnome_scheme_SOURCES}
   ${test_gnome_SOURCES}
   ${test_assistant-stock-transaction_SOURCES}

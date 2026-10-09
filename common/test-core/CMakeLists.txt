@@ -6,7 +6,8 @@ set(test_core_SOURCES
 set(test_core_noinst_HEADERS
   test-stuff.h
   unittest-support.h
-  test-logging.hpp
+  googletest-glib-log-handler.hpp
+  gtk-test-utils.hpp
 )
 
 include_directories(
@@ -18,8 +19,8 @@ include_directories(
   ${GUILE_INCLUDE_DIRS}
 )
 
-set_dist_list(test_core_DIST ${test_core_SOURCES} ${test_core_noinst_HEADERS} CMakeLists.txt
-        unittest-support.i unittest-support.scm test-logging.cpp)
+set_local_dist(test_core_DIST_local ${test_core_SOURCES} ${test_core_noinst_HEADERS} CMakeLists.txt
+        unittest-support.i unittest-support.scm)
 
 add_library(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})
 target_link_libraries(test-core gnc-engine PkgConfig::GLIB2)
@@ -88,9 +89,8 @@ else()
   )
 endif()
 target_include_directories(gtest INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-set(test_logging_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/common ${CMAKE_CURRENT_SOURCE_DIR})
-set(test_logging_LIBS gtest PkgConfig::GLIB2)
-gnc_add_test(test-logging test-logging.cpp test_logging_INCLUDE_DIRS test_logging_LIBS)
+add_subdirectory(test)
+set(test_core_DIST ${test_core_DIST_local} ${test_core_test_DIST} PARENT_SCOPE)
 
 if (GMOCK_SRC_DIR)
   set (lib_gmock_SOURCES ${GMOCK_SRC})

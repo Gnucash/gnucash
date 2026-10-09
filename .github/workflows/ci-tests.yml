@@ -32,7 +32,7 @@ jobs:
           ninja
           GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ninja distcheck
           ninja testbuild
-          GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ctest --test-dir . -R '^test-.*-response$|^test-xml-encoding-assistant$|^test-budget-model-identity$' --no-tests=error --verbose
+          GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ctest --test-dir . -R '^gtest-.*-response$|^gtest-xml-encoding-assistant$|^gtest-budget-model-identity$' --no-tests=error --verbose
         env:
           CTEST_OUTPUT_ON_FAILURE: On
       - uses: actions/upload-artifact@v7
@@ -70,7 +70,7 @@ jobs:
           cd build
           ninja
           GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ninja check
-          GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ctest --test-dir . -R '^test-.*-response$|^test-xml-encoding-assistant$|^test-budget-model-identity$' --no-tests=error --verbose
+          GNC_REQUIRE_DISPLAY=1 dbus-run-session -- xvfb-run -a ctest --test-dir . -R '^gtest-.*-response$|^gtest-xml-encoding-assistant$|^gtest-budget-model-identity$' --no-tests=error --verbose
         env:
           CTEST_OUTPUT_ON_FAILURE: On
       - uses: actions/upload-artifact@v7

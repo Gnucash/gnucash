@@ -27,33 +27,33 @@ set(test_aqb_LIBS
 )
 set(test_aqb_RESPONSE_LIBS ${test_aqb_LIBS} gtest)
 
-set_dist_list(test_aqb_DIST ${test_aqb_SOURCES} test-gwen-worker-response.cpp
-  test-ab-import-context-response.cpp test-gwen-async-dialog.cpp
-  test-gwen-async-dialog.dlg file-book.gnucash
+set_dist_list(test_aqb_DIST ${test_aqb_SOURCES} gtest-gwen-worker-response.cpp
+  gtest-ab-import-context-response.cpp gtest-gwen-async-dialog.cpp
+  gtest-gwen-async-dialog.dlg file-book.gnucash
   file-book-hbcislot.gnucash CMakeLists.txt )
 if(WITH_AQBANKING)
   gnc_add_test(test-aqb
     "${test_aqb_SOURCES}"
     test_aqb_INCLUDE_DIRS
     test_aqb_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR})
-  gnc_add_test(test-gwen-worker-response
-    "${CMAKE_CURRENT_SOURCE_DIR}/test-gwen-worker-response.cpp"
+  gnc_add_test(gtest-gwen-worker-response
+    "${CMAKE_CURRENT_SOURCE_DIR}/gtest-gwen-worker-response.cpp"
     test_aqb_INCLUDE_DIRS
     test_aqb_RESPONSE_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
-  gnc_add_test(test-ab-import-context-response
-    "${CMAKE_CURRENT_SOURCE_DIR}/test-ab-import-context-response.cpp"
+  gnc_add_test(gtest-ab-import-context-response
+    "${CMAKE_CURRENT_SOURCE_DIR}/gtest-ab-import-context-response.cpp"
     test_aqb_INCLUDE_DIRS
     test_aqb_RESPONSE_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
-  gnc_add_test(test-gwen-async-dialog
-    "${CMAKE_CURRENT_SOURCE_DIR}/test-gwen-async-dialog.cpp"
+  gnc_add_test(gtest-gwen-async-dialog
+    "${CMAKE_CURRENT_SOURCE_DIR}/gtest-gwen-async-dialog.cpp"
     test_aqb_INCLUDE_DIRS
     test_aqb_RESPONSE_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
   if(COMPILE_GSCHEMAS)
-    foreach(test_target test-gwen-worker-response test-ab-import-context-response
-                        test-gwen-async-dialog)
+    foreach(test_target gtest-gwen-worker-response gtest-ab-import-context-response
+                        gtest-gwen-async-dialog)
       add_dependencies(${test_target} compiled-schemas)
     endforeach()
   endif()

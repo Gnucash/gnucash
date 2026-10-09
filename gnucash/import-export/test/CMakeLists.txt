@@ -19,12 +19,12 @@ set(IMPORT_REGEX_TEST_INCLUDE_DIRS
   ${GTEST_INCLUDE_DIR})
 set(IMPORT_REGEX_TEST_LIBS gnc-gnome-utils gnc-bi-import gnc-customer-import gnc-csv-import gtest)
 foreach(kind IN ITEMS bi customer csv)
-  gnc_add_test(test-${kind}-import-regex-response test-import-regex-response.cpp
+  gnc_add_test(gtest-${kind}-import-regex-response gtest-import-regex-response.cpp
     IMPORT_REGEX_TEST_INCLUDE_DIRS IMPORT_REGEX_TEST_LIBS)
-  set_tests_properties(test-${kind}-import-regex-response PROPERTIES TIMEOUT 30)
+  set_tests_properties(gtest-${kind}-import-regex-response PROPERTIES TIMEOUT 30)
 endforeach()
-target_compile_definitions(test-bi-import-regex-response PRIVATE TEST_BI_IMPORT)
-target_compile_definitions(test-customer-import-regex-response PRIVATE TEST_CUSTOMER_IMPORT)
+target_compile_definitions(gtest-bi-import-regex-response PRIVATE TEST_BI_IMPORT)
+target_compile_definitions(gtest-customer-import-regex-response PRIVATE TEST_CUSTOMER_IMPORT)
 
 gnc_add_test_with_guile(test-import-parse test-import-parse.c
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
@@ -43,13 +43,13 @@ set(IMPORT_MATCHER_RESPONSE_LIBS
   gnc-gnome-utils
   gtest
 )
-gnc_add_test(test-import-matcher-response test-import-matcher-response.cpp
+gnc_add_test(gtest-import-matcher-response gtest-import-matcher-response.cpp
   IMPORT_MATCHER_RESPONSE_INCLUDE_DIRS IMPORT_MATCHER_RESPONSE_LIBS)
-set_tests_properties(test-import-matcher-response PROPERTIES TIMEOUT 30)
-set_property(TEST test-import-matcher-response APPEND PROPERTY ENVIRONMENT
+set_tests_properties(gtest-import-matcher-response PROPERTIES TIMEOUT 30)
+set_property(TEST gtest-import-matcher-response APPEND PROPERTY ENVIRONMENT
   "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
 if(COMPILE_GSCHEMAS)
-  add_dependencies(test-import-matcher-response compiled-schemas)
+  add_dependencies(gtest-import-matcher-response compiled-schemas)
 endif()
 
 set(GTEST_IMPORT_PARSE_LIBS gnc-generic-import gnc-test-engine test-core gtest)
@@ -126,9 +126,9 @@ gnc_add_test(test-import-backend "${gtest_import_backend_SOURCES}"
 set_dist_list(test_generic_import_DIST
     CMakeLists.txt
     test-import-parse.c
-    test-import-regex-response.cpp
+    gtest-import-regex-response.cpp
     gtest-import-parse.cpp
     test-import-pending-matches.cpp
-    test-import-matcher-response.cpp
+    gtest-import-matcher-response.cpp
     gtest-import-account-matcher.cpp
     gtest-import-backend.cpp)

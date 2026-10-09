@@ -1067,7 +1067,7 @@ sx_delete_confirmed (GtkWindow *parent, gint response, gpointer user_data)
         response == GTK_RESPONSE_YES && request->book == gnc_get_current_book () &&
         !qof_book_shutting_down (request->book))
     {
-        gppsl_update_selected_list (page, true, nullptr);
+        gppsl_update_selected_list (page, TRUE, nullptr);
         for (auto node = request->sxes; node; node = node->next)
         {
             auto sx = GNC_SCHEDXACTION (node->data);
@@ -1130,7 +1130,7 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
     request->sxes = g_list_copy_deep (to_delete,
         [](gconstpointer sx, gpointer) -> gpointer { return g_object_ref (const_cast<gpointer> (sx)); },
         nullptr);
-    gnc_verify_dialog_async (window, false, sx_delete_confirmed, request,
+    gnc_verify_dialog_async (window, FALSE, sx_delete_confirmed, request,
                              "%s", message);
 
     g_free (message);

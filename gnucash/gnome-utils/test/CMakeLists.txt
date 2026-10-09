@@ -29,82 +29,82 @@ gnc_add_scheme_test_targets(scm-test-load-gnome-utils-module
 
 gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
-gnc_add_test (test-dialog-object-references-response
-  test-dialog-object-references-response.cpp
+gnc_add_test (gtest-dialog-object-references-response
+  gtest-dialog-object-references-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
 
-gnc_add_test (test-dialog-date-range-response
-  test-dialog-date-range-response.cpp
+gnc_add_test (gtest-dialog-date-range-response
+  gtest-dialog-date-range-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-dialog-date-range-response PROPERTIES TIMEOUT 15)
+set_tests_properties(gtest-dialog-date-range-response PROPERTIES TIMEOUT 15)
 
-gnc_add_test (test-gui-query-response
-  test-gui-query-response.cpp
+gnc_add_test (gtest-gui-query-response
+  gtest-gui-query-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-gui-query-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-gui-query-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-input-lifetime-response
-  test-input-lifetime-response.cpp
+gnc_add_test (gtest-input-lifetime-response
+  gtest-input-lifetime-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-input-lifetime-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-input-lifetime-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-dialog-account-cascade-response
-  test-dialog-account-cascade-response.cpp
+gnc_add_test (gtest-dialog-account-cascade-response
+  gtest-dialog-account-cascade-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-dialog-account-cascade-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-dialog-account-cascade-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-doclink-path-head-response
-  test-doclink-path-head-response.cpp
+gnc_add_test (gtest-doclink-path-head-response
+  gtest-doclink-path-head-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-doclink-path-head-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-doclink-path-head-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-gnc-autosave-response
-  test-gnc-autosave-response.cpp
+gnc_add_test (gtest-gnc-autosave-response
+  gtest-gnc-autosave-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-gnc-autosave-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-gnc-autosave-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-preferences-separator-response
-  test-preferences-separator-response.cpp
+gnc_add_test (gtest-preferences-separator-response
+  gtest-preferences-separator-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-preferences-separator-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-preferences-separator-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-xml-encoding-assistant
-  test-xml-encoding-assistant.cpp
+gnc_add_test (gtest-xml-encoding-assistant
+  gtest-xml-encoding-assistant.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-xml-encoding-assistant PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-xml-encoding-assistant PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-dialog-commodity-response
-  test-dialog-commodity-response.cpp
+gnc_add_test (gtest-dialog-commodity-response
+  gtest-dialog-commodity-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-dialog-commodity-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-dialog-commodity-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-account-children-response
-  test-account-children-response.cpp
+gnc_add_test (gtest-account-children-response
+  gtest-account-children-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-account-children-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-account-children-response PROPERTIES TIMEOUT 30)
 
 # Use the actual main-window resource without depending on generation in the
 # application target, which brings unrelated report/HTML libraries into this test.
 gnc_generate_gresources(BASE test-main-window-resources
   RESOURCE_FILES ${CMAKE_SOURCE_DIR}/gnucash/ui/gnc-main-window.ui)
 set(MAIN_WINDOW_CLOSE_TEST_SOURCES
-  test-main-window-close-response.cpp
+  gtest-main-window-close-response.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/test-main-window-resources.c)
-gnc_add_test(test-main-window-close-response
+gnc_add_test(gtest-main-window-close-response
   "${MAIN_WINDOW_CLOSE_TEST_SOURCES}"
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS
   "GSETTINGS_BACKEND=memory")
-set_tests_properties(test-main-window-close-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-main-window-close-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test_with_guile (test-tax-table-create-response
-  test-tax-table-create-response.cpp
+gnc_add_test_with_guile (gtest-tax-table-create-response
+  gtest-tax-table-create-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-add_dependencies(test-tax-table-create-response scm-expressions)
-set_tests_properties(test-tax-table-create-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-tax-table-create-response scm-expressions)
+set_tests_properties(gtest-tax-table-create-response PROPERTIES TIMEOUT 30)
 
-foreach(preference_test IN ITEMS test-gui-query-response test-input-lifetime-response
-    test-account-children-response test-main-window-close-response
-    test-tax-table-create-response)
+foreach(preference_test IN ITEMS gtest-gui-query-response gtest-input-lifetime-response
+    gtest-account-children-response gtest-main-window-close-response
+    gtest-tax-table-create-response)
   set_property(TEST ${preference_test} APPEND PROPERTY ENVIRONMENT
     "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
   if(COMPILE_GSCHEMAS)
@@ -112,61 +112,61 @@ foreach(preference_test IN ITEMS test-gui-query-response test-input-lifetime-res
   endif()
 endforeach()
 
-gnc_add_test (test-file-error-response
-  test-file-error-response.cpp
+gnc_add_test (gtest-file-error-response
+  gtest-file-error-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-file-error-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-file-error-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test (test-file-chooser-async-response
-  test-file-chooser-async-response.cpp
+gnc_add_test (gtest-file-chooser-async-response
+  gtest-file-chooser-async-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-file-chooser-async-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-file-chooser-async-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test(test-file-save-response test-file-save-response.cpp
+gnc_add_test(gtest-file-save-response gtest-file-save-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-file-save-response PROPERTIES TIMEOUT 30)
-gnc_add_test(test-file-open-response test-file-open-response.cpp
+set_tests_properties(gtest-file-save-response PROPERTIES TIMEOUT 30)
+gnc_add_test(gtest-file-open-response gtest-file-open-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-file-open-response PROPERTIES TIMEOUT 30)
-set_property(TEST test-file-open-response APPEND PROPERTY ENVIRONMENT
+set_tests_properties(gtest-file-open-response PROPERTIES TIMEOUT 30)
+set_property(TEST gtest-file-open-response APPEND PROPERTY ENVIRONMENT
   "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
 if(COMPILE_GSCHEMAS)
-  add_dependencies(test-file-open-response compiled-schemas)
+  add_dependencies(gtest-file-open-response compiled-schemas)
 endif()
-set_property(TEST test-file-save-response APPEND PROPERTY ENVIRONMENT
+set_property(TEST gtest-file-save-response APPEND PROPERTY ENVIRONMENT
   "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
 if(COMPILE_GSCHEMAS)
-  add_dependencies(test-file-save-response compiled-schemas)
+  add_dependencies(gtest-file-save-response compiled-schemas)
 endif()
 
-gnc_add_test (test-general-select-response
-  test-general-select-response.cpp
+gnc_add_test (gtest-general-select-response
+  gtest-general-select-response.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-general-select-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-general-select-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test(test-budget-model-identity test-budget-model-identity.cpp
+gnc_add_test(gtest-budget-model-identity gtest-budget-model-identity.cpp
   GNOME_UTILS_GUI_TEST_INCLUDE_DIRS GNOME_UTILS_GUI_TEST_LIBS)
-set_tests_properties(test-budget-model-identity PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-budget-model-identity PROPERTIES TIMEOUT 30)
 
 set_dist_list(test_gnome_utils_DIST
   CMakeLists.txt
   test-load-gnome-utils-module.scm
-  test-dialog-object-references-response.cpp
-  test-dialog-date-range-response.cpp
-  test-gui-query-response.cpp
-  test-input-lifetime-response.cpp
-  test-dialog-account-cascade-response.cpp
-  test-doclink-path-head-response.cpp
-  test-gnc-autosave-response.cpp
-  test-preferences-separator-response.cpp
-  test-xml-encoding-assistant.cpp
-  test-dialog-commodity-response.cpp
-  test-account-children-response.cpp
-  test-main-window-close-response.cpp
-  test-tax-table-create-response.cpp
-  test-file-error-response.cpp
-  test-file-chooser-async-response.cpp
-  test-file-save-response.cpp
-  test-file-open-response.cpp
-  test-general-select-response.cpp
-  test-budget-model-identity.cpp)
+  gtest-dialog-object-references-response.cpp
+  gtest-dialog-date-range-response.cpp
+  gtest-gui-query-response.cpp
+  gtest-input-lifetime-response.cpp
+  gtest-dialog-account-cascade-response.cpp
+  gtest-doclink-path-head-response.cpp
+  gtest-gnc-autosave-response.cpp
+  gtest-preferences-separator-response.cpp
+  gtest-xml-encoding-assistant.cpp
+  gtest-dialog-commodity-response.cpp
+  gtest-account-children-response.cpp
+  gtest-main-window-close-response.cpp
+  gtest-tax-table-create-response.cpp
+  gtest-file-error-response.cpp
+  gtest-file-chooser-async-response.cpp
+  gtest-file-save-response.cpp
+  gtest-file-open-response.cpp
+  gtest-general-select-response.cpp
+  gtest-budget-model-identity.cpp)

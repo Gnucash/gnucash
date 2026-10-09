@@ -9,29 +9,29 @@ set(GNOME_SEARCH_TEST_INCLUDE_DIRS
 )
 set(GNOME_SEARCH_TEST_LIBS test-core gnc-gnome-search gtest)
 
-gnc_add_test(test-search-account-response
-  test-search-account-response.cpp
+gnc_add_test(gtest-search-account-response
+  gtest-search-account-response.cpp
   GNOME_SEARCH_TEST_INCLUDE_DIRS GNOME_SEARCH_TEST_LIBS)
-set_tests_properties(test-search-account-response PROPERTIES TIMEOUT 30)
-set_property(TEST test-search-account-response APPEND PROPERTY ENVIRONMENT
+set_tests_properties(gtest-search-account-response PROPERTIES TIMEOUT 30)
+set_property(TEST gtest-search-account-response APPEND PROPERTY ENVIRONMENT
   "GSETTINGS_SCHEMA_DIR=${SCHEMADIR_BUILD}" "GSETTINGS_BACKEND=memory")
 if(COMPILE_GSCHEMAS)
-  add_dependencies(test-search-account-response compiled-schemas)
+  add_dependencies(gtest-search-account-response compiled-schemas)
 endif()
 
-gnc_add_test(test-search-string-response
-  test-search-string-response.cpp
+gnc_add_test(gtest-search-string-response
+  gtest-search-string-response.cpp
   GNOME_SEARCH_TEST_INCLUDE_DIRS GNOME_SEARCH_TEST_LIBS)
-set_tests_properties(test-search-string-response PROPERTIES TIMEOUT 30)
+set_tests_properties(gtest-search-string-response PROPERTIES TIMEOUT 30)
 
-gnc_add_test_with_guile(test-search-number-response
-  test-search-number-response.cpp
+gnc_add_test_with_guile(gtest-search-number-response
+  gtest-search-number-response.cpp
   GNOME_SEARCH_TEST_INCLUDE_DIRS GNOME_SEARCH_TEST_LIBS)
-set_tests_properties(test-search-number-response PROPERTIES TIMEOUT 30)
-add_dependencies(test-search-number-response scm-expressions)
+set_tests_properties(gtest-search-number-response PROPERTIES TIMEOUT 30)
+add_dependencies(gtest-search-number-response scm-expressions)
 
 set_dist_list(test_gnome_search_DIST
   CMakeLists.txt
-  test-search-account-response.cpp
-  test-search-string-response.cpp
-  test-search-number-response.cpp)
+  gtest-search-account-response.cpp
+  gtest-search-string-response.cpp
+  gtest-search-number-response.cpp)
