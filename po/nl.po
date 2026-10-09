@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2026-09-19 15:17-0700\n"
-"PO-Revision-Date: 2026-10-03 06:51+0000\n"
+"PO-Revision-Date: 2026-10-09 21:41+0000\n"
 "Last-Translator: Ceaus <github@pohw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "nl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Bugs: Report translation errors to https://bugs.gnucash.org/"
 "enter_bug.cgi?product=GnuCash&component=Translations\n"
 
@@ -1008,9 +1008,9 @@ msgid ""
 "new window."
 msgstr ""
 "Om de inhoud van twee tabbladen op het scherm met elkaar te kunnen "
-"vergelijken kiest u, vanuit een van beide tabbladen, menukeuze "
-"‘Vensters‣Nieuw venster met pagina’ om dat tabblad in een nieuw venster te "
-"openen."
+"vergelijken kiest u, vanuit een van beide tabbladen, menukeuze Vensters ‣ "
+"Nieuw venster met pagina om dat tabblad naar een nieuw venster te "
+"verplaatsen."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
@@ -1530,8 +1530,9 @@ msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"Bedrijf geeft een fictieve uitkering uit, die wordt geregistreerd als "
-"meerwaarde en de kostenbasis verhoogt zonder # eenheden te beïnvloeden."
+"Bedrijf geeft een fictieve uitkering uit, wat gezien wordt als "
+"vermogenswinst en de kostenbasis verhoogt zonder het aantal eenheden te "
+"beïnvloeden."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1639,10 +1640,10 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
-"Bedrijf geeft kapitaal terug en de houder van de korte termijnbelegging moet "
-"een compenserende betaling doen voor het geretourneerde kapitaal. Dit "
-"verlaagt de kostenbasis (minder negatief, naar 0,00 waarde) zonder # "
-"eenheden te beïnvloeden."
+"Bedrijf geeft kapitaal terug en de belegger die short is moet een "
+"compenserende betaling doen voor het geretourneerde kapitaal. Dit verlaagt "
+"de kostenbasis (minder negatief, naar 0,00 waarde) zonder # eenheden te "
+"beïnvloeden."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
@@ -1659,11 +1660,11 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
-"Bedrijf geeft kapitaal terug en de houder van de kortetermijnbelegging moet "
-"een compenserende betaling doen voor het geretourneerde kapitaal. Dit "
-"verlaagt de kostenbasis (minder negatief, naar waarde 0,00) zonder # "
-"eenheden te beïnvloeden. Een uitkering die eerder als compenserend dividend "
-"was opgenomen, wordt opnieuw geclassificeerd als compenserend rendement van "
+"Bedrijf geeft kapitaal terug en de belegger die short is moet een "
+"compenserende betaling doen voor het geretourneerde kapitaal. Dit verlaagt "
+"de kostenbasis (minder negatief, richting waarde 0,00) zonder # eenheden te "
+"beïnvloeden. Een uitkering die eerder als compenserend dividend was "
+"opgenomen, wordt opnieuw geclassificeerd als compenserend rendement van "
 "kapitaal, vaak als gevolg van belastinginformatie aan het einde van het jaar."
 
 #. Translators: this is a stock transaction describing a
@@ -1806,7 +1807,7 @@ msgstr "Nieuw saldo moet lager zijn dan het oude."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:889
 msgid "Stock amount must be positive."
-msgstr "Het aantal beleggingen moet positief zijn."
+msgstr "Het aantal aandelen moet positief zijn."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:893
 msgid "Cannot sell more units than owned."
@@ -15309,10 +15310,8 @@ msgid "Delete the highlighted lot"
 msgstr "De geselecteerde partij verwijderen"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:112
-#, fuzzy
-#| msgid "Gross adjustment accounts."
 msgid "Show stock split adjusted amounts"
-msgstr "Bruto-correctierekeningen."
+msgstr "Met splitsing aangepaste bedragen"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:152
 msgid "Enter a name for the highlighted lot."
@@ -25520,10 +25519,10 @@ msgstr ""
 "Volledige rekeningnamen (inclusief bovenliggende rekeningen) weergeven."
 
 #: gnucash/report/reports/standard/cash-flow.scm:84
-#, fuzzy
-#| msgid "Money out of selected accounts goes to"
 msgid "Show the list of selected accounts on the top of this report."
-msgstr "Uitgaande geldstroom geselecteerde rekeningen afkomstig van"
+msgstr ""
+"Laat de lijst van geselecteerde rekeningen zien aan het begin van dit "
+"rapport."
 
 #: gnucash/report/reports/standard/cash-flow.scm:204
 #, scheme-format
