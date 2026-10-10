@@ -1,6 +1,8 @@
 /********************************************************************\
  * gnc-plugin-page-tracelog.h : in-app viewer for the trace log     *
  *                                                                  *
+ * Copyright 2026 GnuCash contributors                              *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of version 2 and/or version 3 of the   *
  * GNU General Public License as published by the Free Software     *
@@ -12,11 +14,8 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * along with this program.  If not, see                            *
+ * <https://www.gnu.org/licenses/>.                                 *
 \********************************************************************/
 
 /** @addtogroup ContentPlugins

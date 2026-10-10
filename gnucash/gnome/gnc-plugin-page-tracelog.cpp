@@ -1,6 +1,8 @@
 /********************************************************************\
  * gnc-plugin-page-tracelog.cpp : in-app viewer for the trace log   *
  *                                                                  *
+ * Copyright 2026 GnuCash contributors                              *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of version 2 and/or version 3 of the   *
  * GNU General Public License as published by the Free Software     *
@@ -12,11 +14,8 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * along with this program.  If not, see                            *
+ * <https://www.gnu.org/licenses/>.                                 *
 \********************************************************************/
 
 #include <config.h>
@@ -29,6 +28,7 @@
 #include <cctype>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "gnc-plugin-page-tracelog.h"
@@ -216,17 +216,21 @@ gnc_plugin_page_tracelog_destroy_widget (GncPluginPage *plugin_page)
     LEAVE(" ");
 }
 
-/* Classify a trace line by its level token (format: "* HH:MM:SS  LEVEL <dom> ..."). */
+/* Classify a trace line by its level. The log format is fixed --
+   "* HH:MM:SS <5-char level> <domain> ..." -- so test the level column directly
+   (index 11, a 5-wide right-justified field) rather than scanning the whole
+   line: faster, and it can't be fooled by one of these words in a message. */
 static const char *
-tracelog_line_class (const char *line)
+tracelog_line_class (const std::string& line)
 {
-    if (line == nullptr)
+    if (line.size () < 16)
         return "";
-    if (strstr (line, " FATAL "))
+    auto level = std::string_view (line).substr (11, 5);
+    if (level == "FATAL")
         return "FATAL";
-    if (strstr (line, " ERROR "))
+    if (level == "ERROR")
         return "ERROR";
-    if (strstr (line, " WARN "))
+    if (level == " WARN")             /* 4-char "WARN", right-justified in 5 */
         return "WARN";
     return "";
 }
@@ -327,7 +331,7 @@ tracelog_render (GncPluginPageTracelog *page)
         for (const std::string* line : matched)
         {
             std::string cls = "line ";
-            cls += tracelog_line_class (line->c_str ());
+            cls += tracelog_line_class (*line);
             append_div (cls.c_str (), line->c_str ());
         }
     }
@@ -362,6 +366,27 @@ gnc_plugin_page_tracelog_cmd_print (GSimpleAction *simple,
     if (priv->html == nullptr)
         return;
     gnc_html_print (priv->html, _("GnuCash Trace Log"));
+}
+
+/* Filter-dialog response handler. On Apply, read the entry and re-render; always
+   destroy the dialog. Response-driven (no gtk_dialog_run). */
+static void
+gnc_plugin_page_tracelog_filter_response (GtkDialog *dialog,
+                                          gint response,
+                                          gpointer user_data)
+{
+    GncPluginPageTracelog *page = GNC_PLUGIN_PAGE_TRACELOG(user_data);
+
+    if (response == GTK_RESPONSE_ACCEPT && GNC_IS_PLUGIN_PAGE_TRACELOG(page))
+    {
+        GncPluginPageTracelogPrivate *priv = GNC_PLUGIN_PAGE_TRACELOG_GET_PRIVATE(page);
+        GtkEntry *entry = GTK_ENTRY(g_object_get_data (G_OBJECT(dialog), "filter-entry"));
+        const gchar *text = gtk_entry_get_text (entry);
+        g_free (priv->filter);
+        priv->filter = (text != nullptr && *text != '\0') ? g_strdup (text) : nullptr;
+        tracelog_render (page);
+    }
+    gtk_widget_destroy (GTK_WIDGET(dialog));
 }
 
 /* Prompt for a substring filter and re-render showing only matching lines.
@@ -403,14 +428,14 @@ gnc_plugin_page_tracelog_cmd_filter (GSimpleAction *simple,
     gtk_box_pack_start (GTK_BOX(box), entry, FALSE, FALSE, 0);
     gtk_container_add (GTK_CONTAINER(content), box);
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
-    gtk_widget_show_all (dialog);
 
-    if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-    {
-        const gchar *text = gtk_entry_get_text (GTK_ENTRY(entry));
-        g_free (priv->filter);
-        priv->filter = (text != nullptr && *text != '\0') ? g_strdup (text) : nullptr;
-        tracelog_render (page);
-    }
-    gtk_widget_destroy (dialog);
+    /* Modal + transient keeps the page from closing underneath it; the handler
+       applies the filter and destroys the dialog. */
+    g_object_set_data (G_OBJECT(dialog), "filter-entry", entry);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK(gnc_plugin_page_tracelog_filter_response), page);
+    gtk_widget_show_all (dialog);
+    /* show_all alone doesn't make the dialog the active window, so some keys
+       (e.g. Backspace) go to the main window until it's clicked; present it. */
+    gtk_window_present (GTK_WINDOW(dialog));
 }

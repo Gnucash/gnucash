@@ -1,6 +1,8 @@
 /********************************************************************
  * gtest-qoflog.cpp -- unit tests for qof_log_read_current          *
  *                                                                  *
+ * Copyright 2026 GnuCash contributors                              *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -12,11 +14,8 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ * along with this program.  If not, see                            *
+ * <https://www.gnu.org/licenses/>.                                 *
  *******************************************************************/
 
 #pragma GCC diagnostic push
