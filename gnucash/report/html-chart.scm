@@ -286,7 +286,22 @@
 
 (define (gnc:html-chart-set-type! chart type)
   (gnc:html-chart-set! chart '(type) type)
-  (gnc:html-chart-set! chart '(options interaction intersect) (equal? type 'pie)))
+  (gnc:html-chart-set! chart '(options interaction intersect)
+                       (and (memq type '(pie sankey)) #t))
+  (when (eq? type 'sankey)
+    ;; the sankey controller lays its flows out on its own hidden
+    ;; linear scales; the default category x-axis and the axis tick
+    ;; callbacks would break it. the tooltip must also address a
+    ;; single flow rather than a whole index.
+    (gnc:html-chart-set! chart '(options interaction mode) 'nearest)
+    (gnc:html-chart-set! chart '(options plugins tooltip mode) 'nearest)
+    (gnc:html-chart-set! chart '(options plugins tooltip intersect) #t)
+    (gnc:html-chart-set! chart '(options scales x type) 'linear)
+    (gnc:html-chart-set! chart '(options scales x display) #f)
+    (gnc:html-chart-set! chart '(options scales x offset) #f)
+    (gnc:html-chart-set! chart '(options scales y display) #f)
+    (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
+    (gnc:html-chart-set-custom-y-axis-ticks?! chart #f)))
 
 (define (gnc:html-chart-title chart)
   (gnc:html-chart-get chart '(options plugins title text)))
@@ -420,9 +435,16 @@ function numformat(amount) {
 
 (define JS-setup "
 // Chart.js 4 tooltip callbacks receive a context object per data point.
+function isFlow(value) {
+  return value !== null && typeof value === 'object' && 'flow' in value;
+}
+
 function tooltipLabel(context) {
   var datasetLabel = context.dataset.label || 'Other';
   var value = context.raw;
+  // a sankey flow is described by {from, to, flow} instead of a
+  // number; its endpoints are reported by tooltipTitle below.
+  if (isFlow(value)) { return '  ' + numformat(value.flow) + '  '; }
   if (value !== null && typeof value === 'object') { value = value.y; }
   switch (typeof(value)) {
     case 'number':
@@ -434,6 +456,9 @@ function tooltipLabel(context) {
 
 function tooltipTitle(items) {
   if (!items || items.length === 0) { return ''; }
+  if (isFlow(items[0].raw)) {
+    return items[0].raw.from + ' -> ' + items[0].raw.to + '  ';
+  }
   var labels = items[0].chart.data.labels;
   var label = (labels && labels.length) ? labels[items[0].dataIndex] : items[0].label;
   return label + '  ';
@@ -524,6 +549,12 @@ document.getElementById(chartid).onclick = function(evt) {
          (id (symbol->string (gensym "chart"))))
 
     (push (gnc:html-js-include "chartjs-4/chart.umd.js"))
+
+    ;; the sankey chart type is not part of chartjs itself; its
+    ;; controller is registered by the following plugin.
+    (when (eq? (gnc:html-chart-type chart) 'sankey)
+      (push (gnc:html-js-include
+             "chartjs-chart-sankey/chartjs-chart-sankey.min.js")))
 
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
