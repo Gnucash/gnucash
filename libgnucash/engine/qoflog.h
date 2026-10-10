@@ -135,6 +135,14 @@ void qof_log_set_file (FILE *outfile);
 /** Specify a filename for log output. **/
 void qof_log_init_filename (const gchar* logfilename);
 
+/** Return a newly-allocated copy of the current trace-log contents, read via
+ *  the log's own file descriptor so it reflects THIS process's trace file even
+ *  if another instance has since renamed the canonical name onto its own file.
+ *  Returns NULL when logging is not going to a regular file (stderr/stdout or
+ *  none). Free the result with g_free(); @a length (may be NULL) receives the
+ *  number of bytes read. **/
+gchar *qof_log_read_current (gsize *length);
+
 /**
  * If @a log_to_filename is "stderr" or "stdout" (exactly,
  * case-insensitive), then those special files are used; otherwise, the
@@ -170,6 +178,18 @@ const gchar * qof_log_prettify (const gchar *name);
 /** Check to see if the given @a log_module is configured to log at the given
  * @a log_level.  This implements the "log.path.hierarchy" logic. **/
 gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
+
+/** Callback type for the log-alert hook; see qof_log_set_alert_callback(). */
+typedef void (*QofLogAlertFunc) (QofLogLevel level);
+
+/** Register a callback invoked whenever a message at WARNING or more severe
+ *  (WARNING/ERROR/FATAL, i.e. PWARN/PERR/FATAL) is actually written to the
+ *  log; pass NULL to clear.  This lets a GUI surface that something noteworthy
+ *  was logged without the (GUI-less) engine knowing anything about the GUI.
+ *  The callback runs on whatever thread emitted the message, so an
+ *  implementation that touches the GUI must marshal to the main thread
+ *  itself. **/
+void qof_log_set_alert_callback (QofLogAlertFunc func);
 
 #define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 

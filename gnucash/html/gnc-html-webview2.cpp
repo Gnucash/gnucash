@@ -106,6 +106,7 @@ static void show_url (GncHtml* self, URLType type,
                                     const gchar* location, const gchar* label,
                                     gboolean new_window);
 static void show_data (GncHtml* self, const gchar* data, int datalen);
+static void load_html_string (GncHtml* self, const gchar* html_str);
 static void reload (GncHtml* self, gboolean force_rebuild);
 static void copy_to_clipboard (GncHtml* self);
 static gboolean export_to_file (GncHtml* self, const gchar* filepath);
@@ -904,6 +905,7 @@ gnc_html_webview2_class_init (GncHtmlWebview2Class* klass)
 
      html_class->show_url = show_url;
      html_class->show_data = show_data;
+     html_class->load_html_string = load_html_string;
      html_class->reload = reload;
      html_class->copy_to_clipboard = copy_to_clipboard;
      html_class->export_to_file = export_to_file;
@@ -1316,6 +1318,33 @@ show_data (GncHtml* self, const gchar* data, int datalen)
      DEBUG("Loading uri '%s'", uri);
      navigate_uri (GNC_HTML_WEBVIEW2(self), uri);
      g_free (uri);
+
+     LEAVE("");
+}
+
+/********************************************************************
+ * gnc_html_load_html_string
+ * render a self-contained HTML string in memory (no temp file / file://).
+ ********************************************************************/
+
+static void
+load_html_string (GncHtml* self, const gchar* html_str)
+{
+     g_return_if_fail (self != nullptr);
+     g_return_if_fail (GNC_IS_HTML_WEBVIEW2(self));
+
+     auto priv = GNC_HTML_WEBVIEW2_GET_PRIVATE (self);
+
+     ENTER ("html_str %20.20s", html_str ? html_str : "(null)");
+
+     /* Keep a copy so export-to-file and print still work. */
+     g_free (priv->html_string);
+     priv->html_string = g_strdup (html_str ? html_str : "");
+
+     /* The string is self-contained (no external/local resources), so hand it
+        straight to NavigateToString rather than the temp-file file:// path that
+        show_data() uses for report-embedded local images. */
+     navigate_string (GNC_HTML_WEBVIEW2(self), priv->html_string);
 
      LEAVE("");
 }

@@ -32,6 +32,7 @@
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
+#include <io.h>       /* _get_osfhandle */
 #endif
 
 #ifdef HAVE_UNISTD_H
@@ -45,6 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"
@@ -66,6 +68,7 @@ static gchar* function_buffer = nullptr;
 static gint qof_log_num_spaces = 0;
 static GLogFunc previous_handler = nullptr;
 static gchar* qof_logger_format = nullptr;
+static QofLogAlertFunc alert_cb = nullptr;
 static QofLogModule log_module = "qof";
 
 using StrVec = std::vector<std::string>;
@@ -194,6 +197,13 @@ log4glib_handler(const gchar     *log_domain,
         fflush(fout);
     }
 
+    /* Notify a registered alert handler (e.g. the GUI status-bar indicator)
+       that a WARNING/ERROR/FATAL message was written.  Only the message that
+       passed the level filter above reaches here, so what the alert counts is
+       exactly what landed in the trace. */
+    if (level <= QOF_LOG_WARNING && alert_cb != nullptr)
+        alert_cb (level);
+
     /* chain?  ignore?  Only chain if it's going to be quiet...
     else
     {
@@ -201,6 +211,12 @@ log4glib_handler(const gchar     *log_domain,
          previous_handler(log_domain, log_level, message, nullptr);
     }
     */
+}
+
+void
+qof_log_set_alert_callback (QofLogAlertFunc func)
+{
+    alert_cb = func;
 }
 
 void
@@ -227,7 +243,7 @@ qof_log_init_filename(const gchar* log_filename)
 #if PLATFORM(WINDOWS)
             /* MSVC compiler: Somehow the OS thinks file descriptor from above
              * still isn't open. So we open normally with the file name and that's it. */
-            fout = g_fopen(fname, "wb");
+            fout = g_fopen(fname, "w+b");
 #else
             /* We must not overwrite /dev/null */
             g_assert(g_strcmp0(log_filename, "/dev/null") != 0);
@@ -258,6 +274,57 @@ qof_log_init_filename(const gchar* log_filename)
     {
         g_critical("Cannot open log output file \"%s\", using stderr.", log_filename);
     }
+}
+
+gchar *
+qof_log_read_current (gsize *length)
+{
+    if (length)
+        *length = 0;
+
+    if (!fout || fout == stderr || fout == stdout)
+        return nullptr;
+
+    /* Read through the log's own descriptor, not by name. A descriptor refers
+       to the file itself, so this always reads THIS process's trace file even
+       when another instance has renamed the canonical name onto its own -- and
+       it does not depend on whether renaming succeeds on this platform. */
+    int fd = fileno(fout);
+    struct stat st;
+    if (fd < 0 || fstat(fd, &st) != 0 || !S_ISREG(st.st_mode))
+        return nullptr;
+
+    gsize size = (st.st_size > 0) ? static_cast<gsize>(st.st_size) : 0;
+    gchar *buf = g_new(gchar, size + 1);
+    gsize got = 0;
+
+    /* Positional read from offset 0: it must not disturb the position the
+       logger writes at. pread() does that on POSIX; ReadFile() with an
+       OVERLAPPED offset is the Windows equivalent. */
+    while (got < size)
+    {
+#if PLATFORM(WINDOWS)
+        HANDLE h = reinterpret_cast<HANDLE>(_get_osfhandle(fd));
+        OVERLAPPED ov = { 0 };
+        DWORD n = 0;
+        ov.Offset = static_cast<DWORD>(got & 0xFFFFFFFFU);
+        ov.OffsetHigh = static_cast<DWORD>(got >> 32);
+        if (h == INVALID_HANDLE_VALUE ||
+            !ReadFile(h, buf + got, static_cast<DWORD>(size - got), &n, &ov) || n == 0)
+            break;
+        got += n;
+#else
+        ssize_t n = pread(fd, buf + got, size - got, static_cast<off_t>(got));
+        if (n <= 0)
+            break;
+        got += static_cast<gsize>(n);
+#endif
+    }
+
+    buf[got] = '\0';
+    if (length)
+        *length = got;
+    return buf;
 }
 
 void

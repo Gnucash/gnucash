@@ -206,6 +206,11 @@ gtest-qofevent.cpp)
 gnc_add_test(test-qofevent "${test_qofevent_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+set(test_qof_log_SOURCES
+  gtest-qoflog.cpp)
+gnc_add_test(test-qof-log "${test_qof_log_SOURCES}"
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 set(test_gnc_option_SOURCES
   gtest-gnc-option.cpp
   gtest-gnc-optiondb.cpp)
@@ -225,6 +230,7 @@ set(test_engine_SOURCES_DIST
         gtest-import-map.cpp
         gtest-qofquerycore.cpp
         gtest-qofevent.cpp
+        gtest-qoflog.cpp
         test-account-object.cpp
         test-address.c
         test-business.c

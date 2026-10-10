@@ -109,6 +109,7 @@ static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
                                   gboolean new_window );
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
+static void impl_webkit_load_html_string( GncHtml* self, const gchar* html_str );
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
@@ -218,6 +219,7 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
 
      html_class->show_url = impl_webkit_show_url;
      html_class->show_data = impl_webkit_show_data;
+     html_class->load_html_string = impl_webkit_load_html_string;
      html_class->reload = impl_webkit_reload;
      html_class->copy_to_clipboard = impl_webkit_copy_to_clipboard;
      html_class->export_to_file = impl_webkit_export_to_file;
@@ -745,6 +747,32 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
      DEBUG("Loading uri '%s'", uri);
      webkit_web_view_load_uri( priv->web_view, uri );
      g_free( uri );
+
+     LEAVE("");
+}
+
+/********************************************************************
+ * gnc_html_load_html_string
+ * render a self-contained HTML string in memory (no temp file / file://).
+ ********************************************************************/
+
+static void
+impl_webkit_load_html_string( GncHtml* self, const gchar* html_str )
+{
+     g_return_if_fail( self != nullptr );
+     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
+
+     auto priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+
+     ENTER( "html_str %20.20s", html_str ? html_str : "(null)" );
+
+     /* Keep a copy so export-to-file and print still work. */
+     g_free( priv->html_string );
+     priv->html_string = g_strdup( html_str ? html_str : "" );
+
+     /* The string is self-contained (no external/local resources), so load it
+        directly rather than via the temp-file file:// path used for reports. */
+     webkit_web_view_load_html( priv->web_view, priv->html_string, BASE_URI_NAME );
 
      LEAVE("");
 }

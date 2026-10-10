@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print…</attribute>
+      <attribute name="action">GncPluginPageTracelogActions.TracelogPrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the trace log</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Refresh</attribute>
+      <attribute name="action">GncPluginPageTracelogActions.TracelogReloadAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;r</attribute>
+      <attribute name="tooltip" translatable="yes">Reload the trace log from disk</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Filter…</attribute>
+      <attribute name="action">GncPluginPageTracelogActions.TracelogFilterAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Show only lines containing a given text</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="tl_close">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="tl_reload">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Refresh</property>
+        <property name="action-name">GncPluginPageTracelogActions.TracelogReloadAction</property>
+        <property name="tooltip-text" translatable="yes">Reload the trace log from disk</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">view-refresh</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="tl_filter">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Filter</property>
+        <property name="action-name">GncPluginPageTracelogActions.TracelogFilterAction</property>
+        <property name="tooltip-text" translatable="yes">Show only lines containing a given text</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-find</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="tl_print">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Print</property>
+        <property name="action-name">GncPluginPageTracelogActions.TracelogPrintAction</property>
+        <property name="tooltip-text" translatable="yes">Print the trace log</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-print</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

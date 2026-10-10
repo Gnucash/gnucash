@@ -138,6 +138,7 @@ struct _GncHtmlClass
                       const gchar* label,
                       gboolean new_window );
     void (*show_data)( GncHtml* html, const gchar* data, int datalen );
+    void (*load_html_string)( GncHtml* html, const gchar* html_str );
     void (*reload)( GncHtml* html, gboolean force_rebuild );
     void (*copy_to_clipboard)( GncHtml* html );
     gboolean (*export_to_file)( GncHtml* html, const gchar* file );
@@ -191,6 +192,19 @@ void gnc_html_show_url( GncHtml* html, URLType type, const gchar* location,
  * @param html GncHtml object
  */
 void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen ) NOEXCEPT;
+
+/**
+ * Renders a self-contained HTML string in a GncHtml object, in memory.
+ *
+ * Unlike gnc_html_show_data(), the string is loaded directly into the widget
+ * with no temp-file / file:// round-trip. It must be self-contained: any
+ * referenced images or other on-disk resources would be blocked as local
+ * resources.
+ *
+ * @param html GncHtml object
+ * @param html_str The HTML document to display
+ */
+void gnc_html_load_html_string( GncHtml* html, const gchar* html_str ) NOEXCEPT;
 
 /**
  * Reloads the current GncHtml object.
