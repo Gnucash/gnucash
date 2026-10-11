@@ -22,11 +22,9 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <string.h>
 
 #include <algorithm>
 #include <cctype>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -220,24 +218,24 @@ gnc_plugin_page_tracelog_destroy_widget (GncPluginPage *plugin_page)
    "* HH:MM:SS <5-char level> <domain> ..." -- so test the level column directly
    (index 11, a 5-wide right-justified field) rather than scanning the whole
    line: faster, and it can't be fooled by one of these words in a message. */
-static const char *
-tracelog_line_class (const std::string& line)
+static std::string_view
+tracelog_line_class (std::string_view line)
 {
     if (line.size () < 16)
-        return "";
-    auto level = std::string_view (line).substr (11, 5);
+        return "line";
+    auto level = line.substr (11, 5);
     if (level == "FATAL")
-        return "FATAL";
+        return "line FATAL";
     if (level == "ERROR")
-        return "ERROR";
+        return "line ERROR";
     if (level == " WARN")             /* 4-char "WARN", right-justified in 5 */
-        return "WARN";
-    return "";
+        return "line WARN";
+    return "line";
 }
 
 /* Case-insensitive (ASCII) substring test for the viewer's text filter. */
 static bool
-tracelog_line_matches (const std::string& line, const std::string& needle)
+tracelog_line_matches (std::string_view line, std::string_view needle)
 {
     if (needle.empty ())
         return true;
@@ -265,7 +263,7 @@ tracelog_render (GncPluginPageTracelog *page)
 
     gsize length = 0;
     gchar *contents = qof_log_read_current (&length);
-    const std::string filter = (priv->filter != nullptr) ? priv->filter : "";
+    std::string_view filter = std::string_view{priv->filter ? priv->filter : ""};
 
     std::string html =
         "<html><head><meta charset=\"utf-8\"><style>"
@@ -285,8 +283,9 @@ tracelog_render (GncPluginPageTracelog *page)
        a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
        first guards g_markup_escape_text() against invalid UTF-8. The class string
        is one of our own fixed tokens, so it is not user data. */
-    auto append_div = [&html](const char *cls, const char *text) {
-        gchar *valid = g_utf8_make_valid (text, -1);
+    auto append_div = [&html](std::string_view cls, std::string_view text)
+    {
+        gchar *valid = g_utf8_make_valid (text.data (), text.size ());
         gchar *escaped = g_markup_escape_text (valid, -1);
         html += "<div class=\"";
         html += cls;
@@ -297,6 +296,16 @@ tracelog_render (GncPluginPageTracelog *page)
         g_free (valid);
     };
 
+    auto for_each_line = [&] (auto&& fn)
+    {
+        for (std::string_view rest {contents, length}; !rest.empty (); )
+        {
+            auto nl = rest.find ('\n');
+            fn (rest.substr (0, nl));
+            rest.remove_prefix (nl == rest.npos ? rest.size () : nl + 1);
+        }
+    };
+
     if (contents == nullptr)
     {
         append_div ("empty",
@@ -304,39 +313,33 @@ tracelog_render (GncPluginPageTracelog *page)
     }
     else
     {
-        /* Split once into a vector and filter that, rather than accumulating one
-           giant string and re-splitting it. */
-        std::vector<std::string> lines;
-        std::istringstream iss (contents);
-        for (std::string line; std::getline (iss, line); )
-            lines.push_back (std::move (line));
-
-        std::vector<const std::string*> matched;
-        matched.reserve (lines.size ());
-        for (const auto& line : lines)
+        /* Pass 1: counts only. */
+        size_t total = 0, shown = 0;
+        for_each_line ([&] (std::string_view line)
+        {
+            ++total;
             if (tracelog_line_matches (line, filter))
-                matched.push_back (&line);
+                ++shown;
+        });
 
         if (!filter.empty ())
         {
             gchar *note = g_strdup_printf (
                 _("Filtering on '%s' - showing %zu of %zu lines."),
-                filter.c_str (), matched.size (), lines.size ());
+                priv->filter, shown, total);
             append_div ("filterinfo", note);
             g_free (note);
         }
 
-        if (lines.empty ())
-            append_div ("empty", _("No messages have been logged this session."));
-        else if (matched.empty ())
+        if (shown == 0)
             append_div ("empty", _("No lines match the filter."));
 
-        for (const std::string* line : matched)
+        /* Pass 2: emit. */
+        for_each_line ([&] (std::string_view line)
         {
-            std::string cls = "line ";
-            cls += tracelog_line_class (*line);
-            append_div (cls.c_str (), line->c_str ());
-        }
+            if (tracelog_line_matches (line, filter))
+                append_div (tracelog_line_class (line), line);
+        });
     }
 
     html += "</body></html>";
