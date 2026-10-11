@@ -278,6 +278,9 @@ tracelog_render (GncPluginPageTracelog *page)
         ".filterinfo{color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
         "</style></head><body>";
 
+    // reserve enough space for html header and entities
+    html.reserve (4096 + length);
+
     /* Escape every value before it enters the HTML so nothing in the log -- e.g.
        a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
        first guards g_markup_escape_text() against invalid UTF-8. The class string
