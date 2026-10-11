@@ -311,36 +311,33 @@ tracelog_render (GncPluginPageTracelog *page)
         append_div ("empty",
             _("Logging is directed to the console; no trace file is available to display."));
     }
-    else
+    else if (length == 0)
+        append_div ("empty", _("No messages have been logged in this session."));
+    else if (!filter.empty ())
     {
-        /* Pass 1: counts only. */
-        size_t total = 0, shown = 0;
+        std::vector<std::string_view> matches;
+        size_t total{0};
         for_each_line ([&] (std::string_view line)
         {
             ++total;
             if (tracelog_line_matches (line, filter))
-                ++shown;
+                matches.push_back (line);
         });
 
-        if (!filter.empty ())
-        {
-            gchar *note = g_strdup_printf (
-                _("Filtering on '%s' - showing %zu of %zu lines."),
-                priv->filter, shown, total);
-            append_div ("filterinfo", note);
-            g_free (note);
-        }
+        auto note = g_strdup_printf (_("Filtering on '%s' - showing %zu of %zu lines."),
+                                     priv->filter, matches.size (), total);
+        append_div ("filterinfo", note);
+        g_free (note);
 
-        if (shown == 0)
+        if (matches.empty ())
             append_div ("empty", _("No lines match the filter."));
-
-        /* Pass 2: emit. */
-        for_each_line ([&] (std::string_view line)
-        {
-            if (tracelog_line_matches (line, filter))
-                append_div (tracelog_line_class (line), line);
-        });
+        for (auto line : matches)
+            append_div (tracelog_line_class (line), line);
     }
+    else
+        // no filter; append all lines
+        for_each_line ([&] (std::string_view line)
+        { append_div (tracelog_line_class (line), line); });
 
     html += "</body></html>";
 
