@@ -23,6 +23,7 @@
 /* Includes the header in the wrapper code */
 #include <config.h>
 #include <gnc-report.h>
+#include <gnc-qrencode.h>
 %}
 #if defined(SWIGGUILE)
 %{
@@ -42,3 +43,6 @@ gchar* gnc_get_default_report_font_family();
 
 void gnc_saved_reports_backup (void);
 gboolean gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite);
+
+SCM gnc_qrcode_encodestring (gchar *str);
+SCM gnc_qrcode_available (void);
