@@ -1486,650 +1486,657 @@ many months before the current month</property>
               </packing>
             </child>
             <child>
-              <!-- n-columns=3 n-rows=25 -->
-              <object class="GtkGrid" id="table2">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">6</property>
-                <property name="row-spacing">3</property>
-                <property name="column-spacing">6</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
                 <child>
-                  <object class="GtkLabel" id="label50">
+                  <!-- n-columns=3 n-rows=25 -->
+                  <object class="GtkGrid" id="table2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">General</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/dialogs.new-hierarchy/show-on-new-file">
-                    <property name="label" translatable="yes">Perform account list _setup on new file</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Present the new account list dialog when you choose File-&gt;New File.</property>
-                    <property name="tooltip-text" translatable="yes">Present the new account list dialog when you choose File-&gt;New File.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/num-source">
-                    <property name="label" translatable="yes">Set book option on new files to use split "action" field for "Num" field on registers/reports</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">If selected, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the split &amp;quot;action&amp;quot; field and the transaction &amp;quot;num&amp;quot; field is shown on the second line in double line view (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the transaction &amp;quot;num&amp;quot; field.</property>
-                    <property name="tooltip-text" translatable="yes">If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line view (and is not visible if that's not set). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/dialogs.totd/show-at-startup">
-                    <property name="label" translatable="yes">Display "_tip of the day" dialog</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Display hints for using GnuCash at startup.</property>
-                    <property name="tooltip-text" translatable="yes">Display hints for using GnuCash at startup.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="hbox2">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="border-width">6</property>
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="pref/general/retain-days">
+                      <object class="GtkLabel" id="label50">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">General</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/dialogs.new-hierarchy/show-on-new-file">
+                        <property name="label" translatable="yes">Perform account list _setup on new file</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">Present the new account list dialog when you choose File-&gt;New File.</property>
+                        <property name="tooltip-text" translatable="yes">Present the new account list dialog when you choose File-&gt;New File.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/general/num-source">
+                        <property name="label" translatable="yes">Set book option on new files to use split "action" field for "Num" field on registers/reports</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">If selected, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the split &amp;quot;action&amp;quot; field and the transaction &amp;quot;num&amp;quot; field is shown on the second line in double line view (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the transaction &amp;quot;num&amp;quot; field.</property>
+                        <property name="tooltip-text" translatable="yes">If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line view (and is not visible if that's not set). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/dialogs.totd/show-at-startup">
+                        <property name="label" translatable="yes">Display "_tip of the day" dialog</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">Display hints for using GnuCash at startup.</property>
+                        <property name="tooltip-text" translatable="yes">Display hints for using GnuCash at startup.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox2">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkSpinButton" id="pref/general/retain-days">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="has-tooltip">True</property>
+                            <property name="tooltip-markup">How many days to keep old log/backup files.</property>
+                            <property name="tooltip-text" translatable="yes">How many days to keep old log/backup files.</property>
+                            <property name="invisible-char">●</property>
+                            <property name="text">30</property>
+                            <property name="primary-icon-activatable">False</property>
+                            <property name="secondary-icon-activatable">False</property>
+                            <property name="adjustment">retain_days_adj</property>
+                            <property name="climb-rate">1</property>
+                            <property name="value">30</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label58">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">days</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">17</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label18">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">_Retain log/backup files</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
+                        <property name="use-markup">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">pref/general/retain-days</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">15</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/general/file-compression">
+                        <property name="label" translatable="yes">Com_press files</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">Compress the data file with gzip when saving it to disk.</property>
+                        <property name="tooltip-text" translatable="yes">Compress the data file with gzip when saving it to disk.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">9</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label48">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Files</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
+                        <property name="use-markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label60">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">13</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label51">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label78">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Search Dialog</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
+                        <property name="use-markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">23</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label44">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">New search _limit</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">pref/dialogs.search/new-search-limit</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">24</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="pref/dialogs.search/new-search-limit">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="has-tooltip">True</property>
-                        <property name="tooltip-markup">How many days to keep old log/backup files.</property>
-                        <property name="tooltip-text" translatable="yes">How many days to keep old log/backup files.</property>
+                        <property name="tooltip-markup">Default to 'new search' if fewer than this number of items is returned.</property>
+                        <property name="tooltip-text" translatable="yes">Default to 'new search' if fewer than this number of items is returned.</property>
                         <property name="invisible-char">●</property>
-                        <property name="text">30</property>
+                        <property name="text">1</property>
                         <property name="primary-icon-activatable">False</property>
                         <property name="secondary-icon-activatable">False</property>
-                        <property name="adjustment">retain_days_adj</property>
+                        <property name="adjustment">new_search_limit_adj</property>
                         <property name="climb-rate">1</property>
-                        <property name="value">30</property>
+                        <property name="value">1</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">24</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label58">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">days</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">17</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label18">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Retain log/backup files</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                    <property name="use-markup">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">pref/general/retain-days</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">15</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/file-compression">
-                    <property name="label" translatable="yes">Com_press files</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Compress the data file with gzip when saving it to disk.</property>
-                    <property name="tooltip-text" translatable="yes">Compress the data file with gzip when saving it to disk.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label48">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Files</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                    <property name="use-markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label60">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label51">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label78">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Search Dialog</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                    <property name="use-markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">23</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label44">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">New search _limit</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">pref/dialogs.search/new-search-limit</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">24</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="pref/dialogs.search/new-search-limit">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Default to 'new search' if fewer than this number of items is returned.</property>
-                    <property name="tooltip-text" translatable="yes">Default to 'new search' if fewer than this number of items is returned.</property>
-                    <property name="invisible-char">●</property>
-                    <property name="text">1</property>
-                    <property name="primary-icon-activatable">False</property>
-                    <property name="secondary-icon-activatable">False</property>
-                    <property name="adjustment">new_search_limit_adj</property>
-                    <property name="climb-rate">1</property>
-                    <property name="value">1</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">24</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/show-splash-screen">
-                    <property name="label" translatable="yes">Show splash scree_n</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Show splash screen at startup.</property>
-                    <property name="tooltip-text" translatable="yes">Show splash screen at startup.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label119">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Auto-save time _interval</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">pref/general/autosave-interval-minutes</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">11</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="hbox4">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkSpinButton" id="pref/general/autosave-interval-minutes">
+                      <object class="GtkCheckButton" id="pref/general/show-splash-screen">
+                        <property name="label" translatable="yes">Show splash scree_n</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="has-tooltip">True</property>
-                        <property name="tooltip-markup">The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</property>
-                        <property name="tooltip-text" translatable="yes">The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</property>
-                        <property name="invisible-char">●</property>
-                        <property name="text">3</property>
-                        <property name="primary-icon-activatable">False</property>
-                        <property name="secondary-icon-activatable">False</property>
-                        <property name="adjustment">autosave_interval_minutes_adj</property>
-                        <property name="climb-rate">1</property>
-                        <property name="value">3</property>
+                        <property name="tooltip-markup">Show splash screen at startup.</property>
+                        <property name="tooltip-text" translatable="yes">Show splash screen at startup.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label120">
+                      <object class="GtkLabel" id="label119">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">minutes</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Auto-save time _interval</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">pref/general/autosave-interval-minutes</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">11</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">11</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/autosave-show-explanation">
-                    <property name="label" translatable="yes">Show auto-save confirmation _question</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown.</property>
-                    <property name="tooltip-text" translatable="yes">If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label84">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">14</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="pref/general/retain-type-never">
-                    <property name="label" translatable="yes">Never</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Do not create log/backup files.</property>
-                    <property name="tooltip-text" translatable="yes">Do not create log/backup files.</property>
-                    <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">pref/general/retain-type-days</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">16</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="pref/general/retain-type-days">
-                    <property name="label" translatable="yes" context="keep">For</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Delete old log/backup files after this many days (0 = never).</property>
-                    <property name="tooltip-text" translatable="yes">Delete old log/backup files after this many days (0 = never).</property>
-                    <property name="halign">start</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">17</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="pref/general/retain-type-forever">
-                    <property name="label" translatable="yes">Forever</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Do not delete log/backup files.</property>
-                    <property name="tooltip-text" translatable="yes">Do not delete log/backup files.</property>
-                    <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">pref/general/retain-type-days</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">18</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/save-on-close-expires">
-                    <property name="label" translatable="yes">Enable timeout on "Save changes on closing" question</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes">If enabled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="gnc_save_on_close_expires_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">12</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label15">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin-start">12</property>
-                    <property name="label" translatable="yes">Time to _wait for answer</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">pref/general/autosave-interval-minutes</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="hbox1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="pref/general/save-on-close-wait-time">
+                      <object class="GtkBox" id="hbox4">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkSpinButton" id="pref/general/autosave-interval-minutes">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="has-tooltip">True</property>
+                            <property name="tooltip-markup">The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</property>
+                            <property name="tooltip-text" translatable="yes">The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</property>
+                            <property name="invisible-char">●</property>
+                            <property name="text">3</property>
+                            <property name="primary-icon-activatable">False</property>
+                            <property name="secondary-icon-activatable">False</property>
+                            <property name="adjustment">autosave_interval_minutes_adj</property>
+                            <property name="climb-rate">1</property>
+                            <property name="value">3</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label120">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">minutes</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/general/autosave-show-explanation">
+                        <property name="label" translatable="yes">Show auto-save confirmation _question</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="tooltip-text" translatable="yes">The number of seconds to wait before the question window will be closed and the changes saved automatically.</property>
-                        <property name="invisible-char">●</property>
-                        <property name="text">20</property>
-                        <property name="primary-icon-activatable">False</property>
-                        <property name="secondary-icon-activatable">False</property>
-                        <property name="adjustment">save_on_close_adj</property>
-                        <property name="climb-rate">1</property>
-                        <property name="value">20</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown.</property>
+                        <property name="tooltip-text" translatable="yes">If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">10</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label16">
+                      <object class="GtkLabel" id="label84">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">seconds</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">14</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label19">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">19</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="pref/general/assoc-head">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="tooltip-markup" translatable="yes">Path head for Linked Files Relative Paths</property>
+                    <child>
+                      <object class="GtkRadioButton" id="pref/general/retain-type-never">
+                        <property name="label" translatable="yes">Never</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">Do not create log/backup files.</property>
+                        <property name="tooltip-text" translatable="yes">Do not create log/backup files.</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">pref/general/retain-type-days</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">16</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="pref/general/retain-type-days">
+                        <property name="label" translatable="yes" context="keep">For</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">Delete old log/backup files after this many days (0 = never).</property>
+                        <property name="tooltip-text" translatable="yes">Delete old log/backup files after this many days (0 = never).</property>
+                        <property name="halign">start</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">17</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="pref/general/retain-type-forever">
+                        <property name="label" translatable="yes">Forever</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="has-tooltip">True</property>
+                        <property name="tooltip-markup">Do not delete log/backup files.</property>
+                        <property name="tooltip-text" translatable="yes">Do not delete log/backup files.</property>
+                        <property name="halign">start</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">pref/general/retain-type-days</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">18</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/general/save-on-close-expires">
+                        <property name="label" translatable="yes">Enable timeout on "Save changes on closing" question</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes">If enabled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="gnc_save_on_close_expires_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">12</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label15">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">12</property>
+                        <property name="label" translatable="yes">Time to _wait for answer</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">pref/general/autosave-interval-minutes</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">13</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkSpinButton" id="pref/general/save-on-close-wait-time">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="tooltip-text" translatable="yes">The number of seconds to wait before the question window will be closed and the changes saved automatically.</property>
+                            <property name="invisible-char">●</property>
+                            <property name="text">20</property>
+                            <property name="primary-icon-activatable">False</property>
+                            <property name="secondary-icon-activatable">False</property>
+                            <property name="adjustment">save_on_close_adj</property>
+                            <property name="climb-rate">1</property>
+                            <property name="value">20</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label16">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">seconds</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">13</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label19">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">19</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="pref/general/assoc-head">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-markup" translatable="yes">Path head for Linked Files Relative Paths</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">21</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="label20">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Path head for Linked Files Relative Paths</property>
+                            <property name="use-markup">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="path_head_error">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">dialog-warning</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">21</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/general/grid-lines-horizontal">
+                        <property name="label" translatable="yes">Enable horizontal grid lines on table displays</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes">Enable horizontal grid lines on table displays. These will mainly be tree views like the Accounts page.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="pref/general/grid-lines-vertical">
+                        <property name="label" translatable="yes">Enable vertical grid lines on table displays</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes">Enable vertical grid lines on table displays. These will mainly be tree views like the Accounts page.</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">6</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label23">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Linked Files</property>
+                        <style>
+                          <class name="gnc-class-strong"/>
+                        </style>
+                        <property name="use-markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">20</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label24">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">22</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">21</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkLabel" id="label20">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Path head for Linked Files Relative Paths</property>
-                        <property name="use-markup">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="path_head_error">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="icon-name">dialog-warning</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">21</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/grid-lines-horizontal">
-                    <property name="label" translatable="yes">Enable horizontal grid lines on table displays</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes">Enable horizontal grid lines on table displays. These will mainly be tree views like the Accounts page.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">5</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/grid-lines-vertical">
-                    <property name="label" translatable="yes">Enable vertical grid lines on table displays</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes">Enable vertical grid lines on table displays. These will mainly be tree views like the Accounts page.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label23">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Linked Files</property>
-                    <style>
-                      <class name="gnc-class-strong"/>
-                    </style>
-                    <property name="use-markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">20</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label24">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">22</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
