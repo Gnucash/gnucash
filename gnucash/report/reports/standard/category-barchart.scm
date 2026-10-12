@@ -510,9 +510,8 @@ developing over time"))
              document
              (gnc:html-make-generic-warning
               report-title (gnc:report-id report-obj)
-              "Negative amounts detected"
-              "Charting ratios cannot occur on accounts with negative balances. \
-Please deselect the accounts with negative balances."))
+              (G_ "Negative amounts detected")
+              (G_ "Charting ratios cannot occur on accounts with negative balances. Please deselect the accounts with negative balances.")))
 
             (gnc:html-document-add-object!
              document (gnc:make-html-text (gnc:html-markup-ul neg-accounts)))))
