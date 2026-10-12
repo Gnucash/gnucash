@@ -143,7 +143,7 @@ struct ttentry_pdata
 };
 
 static gboolean
-ttentry_acct_handler (xmlNodePtr node, gpointer ttentry_pdata)
+ttentry_acct_handler (GncXmlNode* node, gpointer ttentry_pdata)
 {
     struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
     Account* acc;
@@ -158,7 +158,7 @@ ttentry_acct_handler (xmlNodePtr node, gpointer ttentry_pdata)
 }
 
 static gboolean
-ttentry_type_handler (xmlNodePtr node, gpointer ttentry_pdata)
+ttentry_type_handler (GncXmlNode* node, gpointer ttentry_pdata)
 {
     struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
     auto tte_settype = [](GncTaxTableEntry* tt, const char *str)
@@ -171,7 +171,7 @@ ttentry_type_handler (xmlNodePtr node, gpointer ttentry_pdata)
 }
 
 static gboolean
-ttentry_amount_handler (xmlNodePtr node, gpointer ttentry_pdata)
+ttentry_amount_handler (GncXmlNode* node, gpointer ttentry_pdata)
 {
     struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
 
@@ -188,7 +188,7 @@ static struct dom_tree_handler ttentry_handlers_v2[] =
 };
 
 static GncTaxTableEntry*
-dom_tree_to_ttentry (xmlNodePtr node, QofBook* book)
+dom_tree_to_ttentry (GncXmlNode* node, QofBook* book)
 {
     struct ttentry_pdata ttentry_pdata;
     gboolean successful;
@@ -218,7 +218,7 @@ struct taxtable_pdata
 };
 
 static gboolean
-set_parent_child (xmlNodePtr node, struct taxtable_pdata* pdata,
+set_parent_child (GncXmlNode* node, struct taxtable_pdata* pdata,
                   void (*func) (GncTaxTable*, GncTaxTable*))
 {
     GncTaxTable* table;
@@ -248,7 +248,7 @@ set_parent_child (xmlNodePtr node, struct taxtable_pdata* pdata,
 }
 
 static gboolean
-taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_guid_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     GncTaxTable* table;
@@ -271,14 +271,14 @@ taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
 }
 
 static gboolean
-taxtable_name_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_name_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     return apply_xmlnode_text (gncTaxTableSetName, pdata->table, node);
 }
 
 static gboolean
-taxtable_refcount_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_refcount_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     gint64 val;
@@ -289,7 +289,7 @@ taxtable_refcount_handler (xmlNodePtr node, gpointer taxtable_pdata)
 }
 
 static gboolean
-taxtable_invisible_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_invisible_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     gint64 val;
@@ -301,24 +301,24 @@ taxtable_invisible_handler (xmlNodePtr node, gpointer taxtable_pdata)
 }
 
 static gboolean
-taxtable_parent_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_parent_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     return set_parent_child (node, pdata, gncTaxTableSetParent);
 }
 
 static gboolean
-taxtable_child_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_child_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     return set_parent_child (node, pdata, gncTaxTableSetChild);
 }
 
 static gboolean
-taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_entries_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
-    xmlNodePtr mark;
+    GncXmlNode* mark;
 
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (node->xmlChildrenNode, FALSE);
@@ -345,7 +345,7 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
 }
 
 static gboolean
-taxtable_slots_handler (xmlNodePtr node, gpointer taxtable_pdata)
+taxtable_slots_handler (GncXmlNode* node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
 
@@ -366,7 +366,7 @@ static struct dom_tree_handler taxtable_handlers_v2[] =
 };
 
 static GncTaxTable*
-dom_tree_to_taxtable (xmlNodePtr node, QofBook* book)
+dom_tree_to_taxtable (GncXmlNode* node, QofBook* book)
 {
     struct taxtable_pdata taxtable_pdata;
     gboolean successful;
@@ -397,7 +397,7 @@ gnc_taxtable_end_handler (gpointer data_for_children,
                           gpointer* result, const gchar* tag)
 {
     GncTaxTable* table;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -421,7 +421,7 @@ gnc_taxtable_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, table);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return table != NULL;
 }

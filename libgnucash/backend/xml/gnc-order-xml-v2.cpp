@@ -115,7 +115,7 @@ struct order_pdata
 };
 
 static inline gboolean
-set_time64 (xmlNodePtr node, GncOrder* order,
+set_time64 (GncXmlNode* node, GncOrder* order,
               void (*func) (GncOrder* order, time64 tt))
 {
     time64 time = dom_tree_to_time64 (node);
@@ -125,7 +125,7 @@ set_time64 (xmlNodePtr node, GncOrder* order,
 }
 
 static gboolean
-order_guid_handler (xmlNodePtr node, gpointer order_pdata)
+order_guid_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
     GncOrder* order;
@@ -148,7 +148,7 @@ order_guid_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_id_handler (xmlNodePtr node, gpointer order_pdata)
+order_id_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
@@ -156,7 +156,7 @@ order_id_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_owner_handler (xmlNodePtr node, gpointer order_pdata)
+order_owner_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
     GncOwner owner;
@@ -170,7 +170,7 @@ order_owner_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_opened_handler (xmlNodePtr node, gpointer order_pdata)
+order_opened_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
@@ -178,7 +178,7 @@ order_opened_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_closed_handler (xmlNodePtr node, gpointer order_pdata)
+order_closed_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
@@ -186,7 +186,7 @@ order_closed_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_notes_handler (xmlNodePtr node, gpointer order_pdata)
+order_notes_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
@@ -194,7 +194,7 @@ order_notes_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_reference_handler (xmlNodePtr node, gpointer order_pdata)
+order_reference_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
@@ -202,7 +202,7 @@ order_reference_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_active_handler (xmlNodePtr node, gpointer order_pdata)
+order_active_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
     gint64 val;
@@ -216,7 +216,7 @@ order_active_handler (xmlNodePtr node, gpointer order_pdata)
 }
 
 static gboolean
-order_slots_handler (xmlNodePtr node, gpointer order_pdata)
+order_slots_handler (GncXmlNode* node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
@@ -238,7 +238,7 @@ static struct dom_tree_handler order_handlers_v2[] =
 };
 
 static GncOrder*
-dom_tree_to_order (xmlNodePtr node, QofBook* book)
+dom_tree_to_order (GncXmlNode* node, QofBook* book)
 {
     struct order_pdata order_pdata;
     gboolean successful;
@@ -269,7 +269,7 @@ gnc_order_end_handler (gpointer data_for_children,
                        gpointer* result, const gchar* tag)
 {
     GncOrder* order;
-    xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    GncXmlNode* tree = (GncXmlNode*)data_for_children;
     gxpf_data* gdata = (gxpf_data*)global_data;
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
@@ -293,7 +293,7 @@ gnc_order_end_handler (gpointer data_for_children,
         gdata->cb (tag, gdata->parsedata, order);
     }
 
-    xmlFreeNode (tree);
+    gnc_xml_node_free (tree);
 
     return order != NULL;
 }

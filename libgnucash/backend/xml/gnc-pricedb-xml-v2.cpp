@@ -84,7 +84,7 @@ static QofLogModule log_module = GNC_MOD_IO;
 */
 
 static gboolean
-price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
+price_parse_xml_sub_node (GNCPrice* p, GncXmlNode* sub_node, QofBook* book)
 {
     if (!p || !sub_node) return FALSE;
 
@@ -141,8 +141,8 @@ price_parse_xml_end_handler (gpointer data_for_children,
                              const gchar* tag)
 {
     gboolean ok = TRUE;
-    xmlNodePtr price_xml = (xmlNodePtr) data_for_children;
-    xmlNodePtr child;
+    GncXmlNode* price_xml = (GncXmlNode*) data_for_children;
+    GncXmlNode* child;
     GNCPrice* p = NULL;
     gxpf_data* gdata = static_cast<decltype (gdata)> (global_data);
     QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
@@ -209,7 +209,7 @@ cleanup_and_exit:
         *result = NULL;
         gnc_price_unref (p);
     }
-    xmlFreeNode (price_xml);
+    gnc_xml_node_free (price_xml);
     return ok;
 }
 
