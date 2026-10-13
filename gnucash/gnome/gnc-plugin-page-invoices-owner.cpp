@@ -116,7 +116,8 @@ private:
 
         gpointer selected_entry = gnc_query_view_get_selected_entry (qv); 
 
-        if (!selected_entry) return nullptr;
+        if (!selected_entry)
+            return nullptr;
 
         auto *invoice = GNC_INVOICE (selected_entry);
         g_assert (invoice);
@@ -464,7 +465,8 @@ public:
     {
         auto *invoice = GNC_INVOICE (item);
 
-        if (!invoice) return;
+        if (!invoice)
+            return;
 
         gnc_ui_invoice_edit (get_window (), invoice);
     }
@@ -542,7 +544,8 @@ public:
     {
         auto *invoice = get_selected (); 
 
-        if (!invoice) return;
+        if (!invoice)
+            return;
 
         gnc_ui_invoice_edit (get_window (), invoice);
     }
@@ -552,7 +555,8 @@ public:
     {
         auto *invoice = get_selected (); 
 
-        if (!invoice) return;
+        if (!invoice)
+            return;
 
         gnc_ui_invoice_duplicate (get_window (), invoice, true, nullptr);
     }
@@ -563,7 +567,8 @@ public:
         auto *window = get_window ();
         auto *invoice = get_selected (); 
 
-        if (!invoice) return;
+        if (!invoice)
+            return;
 
         gchar *report_guid = gnc_invoice_window_use_default_report_template_or_change (window);
 
@@ -616,7 +621,8 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
         plugin_page = GNC_PLUGIN_PAGE_INVOICES_OWNER (item->data);
         g_return_val_if_fail (plugin_page, nullptr);
 
-        if (get_private (plugin_page)->owner_type != owner_type) continue;
+        if (get_private (plugin_page)->owner_type != owner_type)
+            continue;
 
         LEAVE ("existing page %p", plugin_page);
         return GNC_PLUGIN_PAGE (plugin_page);

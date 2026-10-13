@@ -198,9 +198,11 @@ string_compare_func (gpointer a, gpointer b, gint options,
 
     g_return_val_if_fail (getter && getter->param_getfcn, COMPARE_ERROR);
 
-    if (a) s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
+    if (a)
+        s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
 
-    if (b) s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
+    if (b)
+        s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
 
     if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
         return safe_strcasecmp (s1, s2);
@@ -243,20 +245,27 @@ qof_string_number_compare_func (gpointer a, gpointer b, gint options,
 
     g_return_val_if_fail (getter && getter->param_getfcn, COMPARE_ERROR);
 
-    if (a) s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
+    if (a)
+        s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
 
-    if (b) s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
+    if (b)
+        s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
 
     // Deal with nullptr strings
-    if (s1 == s2)  return 0;
-    if (!s1 && s2) return -1;
-    if (s1 && !s2) return 1;
+    if (s1 == s2)
+        return 0;
+    if (!s1 && s2)
+        return -1;
+    if (s1 && !s2)
+        return 1;
 
     // Convert to integers and test
     i1 = strtol(s1, &sr1, 10);
     i2 = strtol(s2, &sr2, 10);
-    if (i1 < i2)  return -1;
-    if (i1 > i2)  return 1;
+    if (i1 < i2)
+        return -1;
+    if (i1 > i2)
+        return 1;
 
     // If the integers match, then test the REST of the string as text.
     if (options == QOF_STRING_MATCH_CASEINSENSITIVE)

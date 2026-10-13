@@ -1013,7 +1013,8 @@ gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
 
 static gnc_numeric gncInvoiceGetTotalNegatedIfCreditNote(GncInvoice *invoice)
 {
-    if (!invoice) return gnc_numeric_zero ();
+    if (!invoice)
+        return gnc_numeric_zero ();
 
     gnc_numeric total = gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, FALSE, 0);
 

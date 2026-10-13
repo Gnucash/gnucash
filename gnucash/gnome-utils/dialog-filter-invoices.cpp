@@ -83,7 +83,8 @@ public:
 
     ~FilterDialog ()
     {
-        if (dialog) gtk_widget_destroy (GTK_WIDGET (dialog));
+        if (dialog)
+            gtk_widget_destroy (GTK_WIDGET (dialog));
     }
 
     void dialog_open();
@@ -199,8 +200,10 @@ private:
             break;
         }
 
-        if (toggle) gtk_toggle_button_set_active (toggle, true);
-        else g_warn_if_fail (false);
+        if (toggle)
+            gtk_toggle_button_set_active (toggle, true);
+        else
+            g_warn_if_fail (false);
 
         resize_window ();
     }
@@ -214,11 +217,16 @@ private:
 
         gtk_toggle_button_set_active (button, true);
 
-        if (button == overdue_days_seven) days = 7;
-        else if (button == overdue_days_fourteen) days = 14;
-        else if (button == overdue_days_thirty) days = 30;
-        else if (button == overdue_days_sixty) days = 60;
-        else if (button == overdue_days_ninety) days = 90;
+        if (button == overdue_days_seven)
+            days = 7;
+        else if (button == overdue_days_fourteen)
+            days = 14;
+        else if (button == overdue_days_thirty)
+            days = 30;
+        else if (button == overdue_days_sixty)
+            days = 60;
+        else if (button == overdue_days_ninety)
+            days = 90;
 
         overdue_days = days;
     }
@@ -228,8 +236,10 @@ private:
     {
         show_paid = status;
 
-        if (paid_toggle) gtk_toggle_button_set_active(paid_toggle, show_paid);
-        else g_warn_if_fail(false);
+        if (paid_toggle)
+            gtk_toggle_button_set_active(paid_toggle, show_paid);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -237,8 +247,10 @@ private:
     {
         show_unpaid = status;
 
-        if (unpaid_toggle) gtk_toggle_button_set_active(unpaid_toggle, show_unpaid);
-        else g_warn_if_fail(false);
+        if (unpaid_toggle)
+            gtk_toggle_button_set_active(unpaid_toggle, show_unpaid);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -246,8 +258,10 @@ private:
     {
         show_posted = status;
 
-        if (posted_toggle) gtk_toggle_button_set_active(posted_toggle, show_posted);
-        else g_warn_if_fail(false);
+        if (posted_toggle)
+            gtk_toggle_button_set_active(posted_toggle, show_posted);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -255,8 +269,10 @@ private:
     {
         show_unposted = status;
 
-        if (unposted_toggle) gtk_toggle_button_set_active(unposted_toggle, show_unposted);
-        else g_warn_if_fail(false);
+        if (unposted_toggle)
+            gtk_toggle_button_set_active(unposted_toggle, show_unposted);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -264,8 +280,10 @@ private:
     {
         show_invoices = status;
 
-        if (invoices_toggle) gtk_toggle_button_set_active(invoices_toggle, show_invoices);
-        else g_warn_if_fail(false);
+        if (invoices_toggle)
+            gtk_toggle_button_set_active(invoices_toggle, show_invoices);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -273,8 +291,10 @@ private:
     {
         show_creditnotes = status;
 
-        if (creditnotes_toggle) gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
-        else g_warn_if_fail(false);
+        if (creditnotes_toggle)
+            gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -282,8 +302,10 @@ private:
     {
         search_term = term;
 
-        if (search_entry) gtk_entry_set_text(search_entry, search_term.c_str());
-        else g_warn_if_fail(false);
+        if (search_entry)
+            gtk_entry_set_text(search_entry, search_term.c_str());
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -301,11 +323,13 @@ private:
 
         if (start_toggle)
             gtk_toggle_button_set_active(start_toggle, use_start_date);
-        else g_warn_if_fail(false);
+        else
+            g_warn_if_fail(false);
 
         if (start_picker)
             gtk_widget_set_sensitive (GTK_WIDGET (start_picker), use_start_date);
-        else g_warn_if_fail(false);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -315,11 +339,13 @@ private:
 
         if (end_toggle)
             gtk_toggle_button_set_active(end_toggle, use_end_date);
-        else g_warn_if_fail(false);
+        else
+            g_warn_if_fail(false);
 
         if (end_picker)
             gtk_widget_set_sensitive (GTK_WIDGET (end_picker), use_end_date);
-        else g_warn_if_fail(false);
+        else
+            g_warn_if_fail(false);
     }
 
     void
@@ -331,7 +357,10 @@ private:
             {
                 gnc_date_edit_set_time(start_picker, start_date);
             }
-            else start_date = gnc_date_edit_get_date(start_picker);
+            else
+            {
+                start_date = gnc_date_edit_get_date(start_picker);
+            }
         }
         else g_warn_if_fail(false);
 
@@ -341,9 +370,15 @@ private:
             {
                 gnc_date_edit_set_time(end_picker, end_date);
             }
-            else end_date = gnc_date_edit_get_date_end(end_picker);
+            else
+            {
+                end_date = gnc_date_edit_get_date_end(end_picker);
+            }
         }
-        else g_warn_if_fail(false);
+        else
+        {
+            g_warn_if_fail(false);
+        }
     }
 
     void
@@ -351,11 +386,13 @@ private:
     {
         if (start_picker)
             gnc_date_edit_set_time(start_picker, time(NULL));
-        else g_warn_if_fail(false);
+        else
+            g_warn_if_fail(false);
 
         if (end_picker)
             gnc_date_edit_set_time(end_picker, time(NULL));
-        else g_warn_if_fail(false);
+        else
+            g_warn_if_fail(false);
 
         set_dates(false);
     }
@@ -454,7 +491,8 @@ GncFilterInvoicesDialog::FilterDialog::make_filter ()
             GDate date;
             gnc_gdate_set_today(&date);
 
-            if (overdue_days) g_date_subtract_days(&date, overdue_days);
+            if (overdue_days)
+                g_date_subtract_days(&date, overdue_days);
 
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_DUE, nullptr);
             QofQueryPredData *pred_end = qof_query_date_predicate(
@@ -754,7 +792,9 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         overdue_controls = GTK_WIDGET (gtk_builder_get_object(builder, "overdue-controls"));
 
         if (!custom_toggle || !overdue_toggle || !custom_controls || !overdue_controls)
+        {
             g_warn_if_fail(false);
+        }
         else
         {
             {
@@ -782,7 +822,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                 G_CALLBACK(
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
-                        if (!gtk_toggle_button_get_active(button)) return false;
+                        if (!gtk_toggle_button_get_active(button))
+                            return false;
 
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
@@ -801,7 +842,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                 G_CALLBACK(
                     +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                     {
-                        if (!gtk_toggle_button_get_active(button)) return false;
+                        if (!gtk_toggle_button_get_active(button))
+                            return false;
 
                         auto *filter = static_cast<FilterDialog *> (user_data);
 
@@ -826,8 +868,11 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         overdue_days_sixty = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-60"));
         overdue_days_ninety = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "overdue-days-90"));
 
-        if (!overdue_days_zero || !overdue_days_seven || !overdue_days_fourteen || !overdue_days_thirty || !overdue_days_sixty || !overdue_days_ninety)
+        if (!overdue_days_zero || !overdue_days_seven || !overdue_days_fourteen ||
+            !overdue_days_thirty || !overdue_days_sixty || !overdue_days_ninety)
+        {
             g_warn_if_fail(false);
+        }
         else
         {
             GtkToggleButton *toggles[] = {
@@ -854,7 +899,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                     G_CALLBACK(
                         +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
                         {
-                            if (!gtk_toggle_button_get_active(button)) return false;
+                            if (!gtk_toggle_button_get_active(button))
+                                return false;
 
                             auto *filter = static_cast<FilterDialog *> (user_data);
 
@@ -1127,7 +1173,10 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                     this
                 );
             }
-            else g_warn_if_fail (false);
+            else
+            {
+                g_warn_if_fail (false);
+            }
 
             set_use_start_date (use_start_date);
             set_dates(true);
@@ -1166,7 +1215,10 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                     this 
                 );
             }
-            else g_warn_if_fail (false);
+            else
+            {
+                g_warn_if_fail (false);
+            }
 
             if (end_toggle)
             {
@@ -1188,7 +1240,10 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                     this
                 );
             }
-            else g_warn_if_fail (false);
+            else
+            {
+                g_warn_if_fail (false);
+            }
 
             set_use_end_date (use_end_date);
             set_dates(true);
@@ -1348,8 +1403,10 @@ GncFilterInvoicesDialog::GncFilterInvoicesDialog (
     Callback apply_cb
 ) : plugin_page(&page), owner_type(owner)
 {
-    if (apply_cb) apply_filter = apply_cb;
-    else g_warn_if_fail (false);
+    if (apply_cb)
+        apply_filter = apply_cb;
+    else
+        g_warn_if_fail (false);
 
     switch (owner_type)
     {
