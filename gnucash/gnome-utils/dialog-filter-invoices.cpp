@@ -89,7 +89,7 @@ public:
 
     void dialog_open();
 
-    QofQuery *make_filter ();
+    QofQuery *create_qof_query ();
 
 private:
     void
@@ -399,7 +399,7 @@ private:
 };
 
 QofQuery *
-GncFilterInvoicesDialog::FilterDialog::make_filter ()
+GncFilterInvoicesDialog::FilterDialog::create_qof_query ()
 {
     g_assert (parent);
 
@@ -1460,9 +1460,9 @@ GncFilterInvoicesDialog::create_dialog ()
 }
 
 QofQuery *
-GncFilterInvoicesDialog::make_filter ()
+GncFilterInvoicesDialog::create_qof_query ()
 {
     g_return_val_if_fail (filter != nullptr, nullptr);
 
-    return filter->make_filter ();
+    return filter->create_qof_query ();
 }

@@ -46,7 +46,7 @@ public:
 
     void create_dialog ();
 
-    QofQuery *make_filter ();
+    QofQuery *create_qof_query ();
 };
 
 #endif /* GNC_FILTER_INVOICES_DIALOG_H_ */

@@ -373,7 +373,7 @@ public:
                                                 nullptr);
         }
 
-        auto *query = filter->make_filter ();
+        auto *query = filter->create_qof_query ();
 
         g_return_val_if_fail (query, nullptr);
 
@@ -601,7 +601,7 @@ public:
     void
     apply_filter ()
     {
-        auto *query = filter->make_filter ();
+        auto *query = filter->create_qof_query ();
 
         g_return_if_fail (query);
 
