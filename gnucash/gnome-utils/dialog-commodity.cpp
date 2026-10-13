@@ -737,6 +737,57 @@ gnc_ui_update_fq_info (CommodityWindow *cw)
 }
 
 
+/* Model notifications may close the dialog or switch books. Keep the
+   objects alive, but do not continue updating a destroyed or replaced view. */
+namespace
+{
+struct UpdateScope
+{
+    GtkComboBox *combo;
+    GtkTreeModel *model;
+    QofSession *session;
+    QofBook *book{};
+    bool destroyed{};
+    gulong destroy_handler;
+
+    UpdateScope (GtkComboBox *combo, GtkTreeModel *model);
+    ~UpdateScope ();
+    bool valid () const;
+};
+
+UpdateScope::UpdateScope (GtkComboBox *combo, GtkTreeModel *model)
+    : combo (combo), model (model), session (gnc_get_current_session ())
+{
+    g_object_ref (combo);
+    g_object_ref (model);
+    commodity_book_set_weak (&book);
+    destroy_handler = g_signal_connect (
+        combo, "destroy", G_CALLBACK (+[] ([[maybe_unused]] GtkWidget *widget,
+                                           gpointer data)
+        {
+            static_cast<UpdateScope*> (data)->destroyed = true;
+        }), this);
+}
+
+UpdateScope::~UpdateScope ()
+{
+    if (g_signal_handler_is_connected (combo, destroy_handler))
+        g_signal_handler_disconnect (combo, destroy_handler);
+    commodity_book_clear_weak (&book);
+    g_object_unref (model);
+    g_object_unref (combo);
+}
+
+bool
+UpdateScope::valid () const
+{
+    return !destroyed && commodity_book_is_current (book) &&
+        gnc_get_current_session () == session &&
+        gtk_combo_box_get_model (combo) == model;
+}
+} // namespace
+
+
 /********************************************************************
  * gnc_ui_update_namespace_picker
  ********************************************************************/
@@ -757,47 +808,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     model = gtk_combo_box_get_model(combo_box);
     g_return_if_fail (GTK_IS_LIST_STORE (model));
 
-    /* Model notifications may close the dialog or switch books. Keep the
-       objects alive, but do not continue updating a destroyed or replaced view. */
-    struct UpdateScope
-    {
-        GtkComboBox *combo;
-        GtkTreeModel *model;
-        QofSession *session;
-        QofBook *book{};
-        bool destroyed{};
-        gulong destroy_handler;
-
-        UpdateScope (GtkComboBox *combo, GtkTreeModel *model)
-            : combo (combo), model (model), session (gnc_get_current_session ())
-        {
-            g_object_ref (combo);
-            g_object_ref (model);
-            commodity_book_set_weak (&book);
-            destroy_handler = g_signal_connect (
-                combo, "destroy", G_CALLBACK (+[] ([[maybe_unused]] GtkWidget *widget,
-                                                   gpointer data)
-                {
-                    static_cast<UpdateScope*> (data)->destroyed = true;
-                }), this);
-        }
-
-        ~UpdateScope ()
-        {
-            if (g_signal_handler_is_connected (combo, destroy_handler))
-                g_signal_handler_disconnect (combo, destroy_handler);
-            commodity_book_clear_weak (&book);
-            g_object_unref (model);
-            g_object_unref (combo);
-        }
-
-        bool valid () const
-        {
-            return !destroyed && commodity_book_is_current (book) &&
-                gnc_get_current_session () == session &&
-                gtk_combo_box_get_model (combo) == model;
-        }
-    } update (combo_box, model);
+    UpdateScope update (combo_box, model);
     if (!update.valid ())
         return;
 

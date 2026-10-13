@@ -31,8 +31,14 @@
 #include "gnc-commodity.h"
 
 static gchar *path_head;
-enum class StaleResponseCase { read_only, session_switch, parent_destroy,
-                               preference_drift, disposed_book };
+enum class StaleResponseCase
+{
+    read_only,
+    session_switch,
+    parent_destroy,
+    preference_drift,
+    disposed_book
+};
 
 static gchar *
 memory_get_string (const gchar *group, const gchar *name)

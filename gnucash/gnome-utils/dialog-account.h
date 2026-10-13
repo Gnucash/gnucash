@@ -130,13 +130,42 @@ void gnc_ui_new_account_with_types (GtkWindow *parent, QofBook *book,
 
 
 
-/** Called once after the creation dialog closes. Account is borrowed and is
- * NULL on cancellation, parent destruction or a change of the original book. */
 typedef void (*GncAccountCreationCallback) (Account *account, gpointer user_data);
-void gnc_ui_new_accounts_from_name_with_defaults_async (
-    GtkWindow *parent, const char *name, GList *valid_types,
-    const gnc_commodity *default_commodity, Account *parent_acct,
-    GncAccountCreationCallback completed, gpointer user_data);
+
+/** Display a modal window for creating a new account.  This function
+ *  will restrict the available account type values to the list
+ *  specified by the caller.  It returns immediately; the result is
+ *  delivered to @a completed when the dialog closes.
+ *
+ *  @param parent The widget on which to parent the dialog.
+ *
+ *  @param name The account name/path to be created.  This parameter
+ *  is not used for determining the initially selected parent account.
+ *
+ *  @param valid_types A GList of GNCAccountType gints [as pointers]
+ *  which are allowed to be created.  The calling function is
+ *  responsible for freeing this list.
+ *
+ *  @param default_commodity The commodity to initially select when
+ *  the dialog is presented.
+ *
+ *  @param parent_acct The initially selected parent account.
+ *
+ *  @param completed Required callback, called once with a borrowed pointer
+ *  to the newly created account, or NULL on cancellation, parent destruction
+ *  or invalidation of the original book/session.  If the initial context is
+ *  invalid, the callback is called before this function returns.
+ *
+ *  @param user_data Passed unchanged to @a completed; the caller must keep
+ *  it valid until the callback is called.
+ */
+void gnc_ui_new_accounts_from_name_with_defaults_async (GtkWindow *parent,
+                                                        const char *name,
+                                                        GList *valid_types,
+                                                        const gnc_commodity *default_commodity,
+                                                        Account *parent_acct,
+                                                        GncAccountCreationCallback completed,
+                                                        gpointer user_data);
 
 /*
  * register a callback that gets called when the account has changed
