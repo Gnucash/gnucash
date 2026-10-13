@@ -71,6 +71,24 @@ get_lconv_wide_val (LCTYPE lctype)
         buffer[0] &= 0x0f; // The standard localeconv is a single uint8
         buffer[1] = '\0';
     }
+    else if (lctype == LOCALE_STHOUSAND || lctype == LOCALE_SMONTHOUSANDSEP ||
+             lctype == LOCALE_SDECIMAL || lctype == LOCALE_SMONDECIMALSEP)
+    {
+        wchar_t *p = buffer;
+
+        // Replace UTF-8 standard NBSP (0x00A0) and UTF-8 Narrow NBSP (0x202F) with
+        // a standard wide ASCII space.
+        // (NBSP = Non Breaking Space)
+        //
+        // Some locales use standard/narrow NBSP as thousand/decimal separator.
+        // In GTK on Windows these characters are not rendered correctly, that is
+        // why we replace them with a safe ASCII space instead.
+        if (*p == 0x00A0 || *p == 0x202F)
+        {
+            *p = L' '; // Set standard wide ASCII space.
+        }
+        p++;
+    }
     return buffer;
 }
 #else
