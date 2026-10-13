@@ -1435,15 +1435,9 @@ GncFilterInvoicesDialog::GncFilterInvoicesDialog (
     else
         g_warn_if_fail (false);
 
-    switch (owner_type)
-    {
-    case GNC_OWNER_CUSTOMER:
-    case GNC_OWNER_VENDOR:
-    case GNC_OWNER_EMPLOYEE:
-        break;
-    default:
-        g_return_if_fail (false);
-    }
+    g_return_if_fail(owner_type == GNC_OWNER_CUSTOMER ||
+                     owner_type == GNC_OWNER_VENDOR ||
+                     owner_type == GNC_OWNER_EMPLOYEE);
 
     filter = std::make_unique<FilterDialog> ();
     filter->parent = this;

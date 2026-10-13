@@ -621,17 +621,9 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
     GncPluginPageInvoicesOwner *plugin_page;
     const GList *item;
 
-    switch (owner_type)
-    {
-    case GNC_OWNER_CUSTOMER:
-        break;
-    case GNC_OWNER_VENDOR:
-        break;
-    case GNC_OWNER_EMPLOYEE:
-        break;
-    default:
-        g_return_val_if_fail (false, nullptr); // Fail if invalid value. 
-    }
+    g_return_val_if_fail(owner_type == GNC_OWNER_CUSTOMER ||
+                         owner_type == GNC_OWNER_VENDOR ||
+                         owner_type == GNC_OWNER_EMPLOYEE, nullptr);
 
     /* Is there an existing page? */
     item = gnc_gobject_tracking_get_list (PLUGIN_NAME);
