@@ -92,311 +92,345 @@ public:
     QofQuery *create_qof_query ();
 
 private:
-    void
-    dialog_close ()
-    {
-        dialog = nullptr;
+    void dialog_close ();
 
-        custom_toggle = nullptr;
-        overdue_toggle = nullptr;
-        custom_controls = nullptr;
-        overdue_controls = nullptr;
+    bool reset ();
 
-        overdue_days_zero = nullptr;
-        overdue_days_seven = nullptr;
-        overdue_days_fourteen = nullptr;
-        overdue_days_thirty = nullptr;
-        overdue_days_sixty = nullptr;
-        overdue_days_ninety = nullptr;
+    void resize_window ();
 
-        paid_toggle = nullptr;
-        unpaid_toggle = nullptr;
-        posted_toggle = nullptr;
-        unposted_toggle = nullptr;
-        invoices_toggle = nullptr;
-        creditnotes_toggle = nullptr;
-        start_toggle = nullptr;
-        end_toggle = nullptr;
-        start_picker = nullptr;
-        end_picker = nullptr;
-        search_entry = nullptr;
-    }
+    void set_preset (Preset p);
 
-    bool 
-    reset ()
-    {
-        if (preset == Preset::CUSTOM
-            && show_paid && show_unpaid
-            && show_posted && show_unposted
-            && show_invoices && show_creditnotes
-            && search_term == ""
-            && !use_start_date && !use_end_date)
-        {
-            return false;
-        }
-        else if (preset == Preset::OVERDUE
-                 && overdue_days == 0
-                 && search_term == "")
-        {
-            return false;
-        }
+    void set_overdue_days (GtkToggleButton *button);
 
-        if (preset == Preset::CUSTOM)
-        {
-            set_paid (true);
-            set_unpaid (true);
-            set_posted (true);
-            set_unposted (true);
-            set_invoices (true);
-            set_creditnotes (true);
-            set_use_start_date (false);
-            set_use_end_date (false);
-            reset_dates ();
-        }
-        else if (preset == Preset::OVERDUE)
-        {
-            set_overdue_days (overdue_days_zero);
-        }
+    void set_paid (bool status);
 
-        set_search_term ("");
+    void set_unpaid (bool status);
 
-        g_warn_if_fail (dialog);
+    void set_posted (bool status);
 
-        return true;
-    }
+    void set_unposted (bool status);
 
-    void
-    resize_window ()
-    {
-        g_return_if_fail (dialog);
+    void set_invoices (bool status);
 
-        GtkRequisition requisition;
-        gtk_widget_get_preferred_size (GTK_WIDGET(dialog),
-                                       nullptr,
-                                       &requisition);
+    void set_creditnotes (bool status);
 
-        gtk_window_resize (GTK_WINDOW (dialog),
-                           requisition.width,
-                           requisition.height);
-    }
+    void set_search_term (const char *term);
 
-    void
-    set_preset (Preset p)
-    {
-        preset = p;
-        GtkToggleButton *toggle;
+    void set_search_term ();
 
-        switch (p)
-        {
-        case Preset::CUSTOM:
-          toggle = custom_toggle;
-          gtk_widget_hide (overdue_controls);
-          gtk_widget_show (custom_controls);
-          break;
-        case Preset::OVERDUE:
-            toggle = overdue_toggle;
-            gtk_widget_hide (custom_controls);
-            gtk_widget_show (overdue_controls);
-            break;
-        }
+    void set_use_start_date (bool status);
 
-        if (toggle)
-            gtk_toggle_button_set_active (toggle, true);
-        else
-            g_warn_if_fail (false);
+    void set_use_end_date (bool status);
 
-        resize_window ();
-    }
+    void set_dates (bool init);
 
-    void
-    set_overdue_days (GtkToggleButton *button)
-    {
-        int days = 0;
-
-        g_return_if_fail (button);
-
-        gtk_toggle_button_set_active (button, true);
-
-        if (button == overdue_days_seven)
-            days = 7;
-        else if (button == overdue_days_fourteen)
-            days = 14;
-        else if (button == overdue_days_thirty)
-            days = 30;
-        else if (button == overdue_days_sixty)
-            days = 60;
-        else if (button == overdue_days_ninety)
-            days = 90;
-
-        overdue_days = days;
-    }
-
-    void
-    set_paid (bool status)
-    {
-        show_paid = status;
-
-        if (paid_toggle)
-            gtk_toggle_button_set_active(paid_toggle, show_paid);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_unpaid (bool status)
-    {
-        show_unpaid = status;
-
-        if (unpaid_toggle)
-            gtk_toggle_button_set_active(unpaid_toggle, show_unpaid);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_posted (bool status)
-    {
-        show_posted = status;
-
-        if (posted_toggle)
-            gtk_toggle_button_set_active(posted_toggle, show_posted);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_unposted (bool status)
-    {
-        show_unposted = status;
-
-        if (unposted_toggle)
-            gtk_toggle_button_set_active(unposted_toggle, show_unposted);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_invoices (bool status)
-    {
-        show_invoices = status;
-
-        if (invoices_toggle)
-            gtk_toggle_button_set_active(invoices_toggle, show_invoices);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_creditnotes (bool status)
-    {
-        show_creditnotes = status;
-
-        if (creditnotes_toggle)
-            gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_search_term (const char *term)
-    {
-        search_term = term;
-
-        if (search_entry)
-            gtk_entry_set_text(search_entry, search_term.c_str());
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_search_term ()
-    {
-        const gchar *text = gtk_entry_get_text(search_entry);
-
-        set_search_term (text);
-    }
-
-    void
-    set_use_start_date (bool status)
-    {
-        use_start_date = status;
-
-        if (start_toggle)
-            gtk_toggle_button_set_active(start_toggle, use_start_date);
-        else
-            g_warn_if_fail(false);
-
-        if (start_picker)
-            gtk_widget_set_sensitive (GTK_WIDGET (start_picker), use_start_date);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_use_end_date (bool status)
-    {
-        use_end_date = status;
-
-        if (end_toggle)
-            gtk_toggle_button_set_active(end_toggle, use_end_date);
-        else
-            g_warn_if_fail(false);
-
-        if (end_picker)
-            gtk_widget_set_sensitive (GTK_WIDGET (end_picker), use_end_date);
-        else
-            g_warn_if_fail(false);
-    }
-
-    void
-    set_dates (bool init)
-    {
-        if (start_picker)
-        {
-            if (init && start_date != 0)
-            {
-                gnc_date_edit_set_time(start_picker, start_date);
-            }
-            else
-            {
-                start_date = gnc_date_edit_get_date(start_picker);
-            }
-        }
-        else g_warn_if_fail(false);
-
-        if (end_picker)
-        {
-            if (init && end_date != 0)
-            {
-                gnc_date_edit_set_time(end_picker, end_date);
-            }
-            else
-            {
-                end_date = gnc_date_edit_get_date_end(end_picker);
-            }
-        }
-        else
-        {
-            g_warn_if_fail(false);
-        }
-    }
-
-    void
-    reset_dates ()
-    {
-        if (start_picker)
-            gnc_date_edit_set_time(start_picker, time(NULL));
-        else
-            g_warn_if_fail(false);
-
-        if (end_picker)
-            gnc_date_edit_set_time(end_picker, time(NULL));
-        else
-            g_warn_if_fail(false);
-
-        set_dates(false);
-    }
+    void reset_dates ();
 };
+
+void
+GncFilterInvoicesDialog::FilterDialog::dialog_close ()
+{
+    dialog = nullptr;
+
+    custom_toggle = nullptr;
+    overdue_toggle = nullptr;
+    custom_controls = nullptr;
+    overdue_controls = nullptr;
+
+    overdue_days_zero = nullptr;
+    overdue_days_seven = nullptr;
+    overdue_days_fourteen = nullptr;
+    overdue_days_thirty = nullptr;
+    overdue_days_sixty = nullptr;
+    overdue_days_ninety = nullptr;
+
+    paid_toggle = nullptr;
+    unpaid_toggle = nullptr;
+    posted_toggle = nullptr;
+    unposted_toggle = nullptr;
+    invoices_toggle = nullptr;
+    creditnotes_toggle = nullptr;
+    start_toggle = nullptr;
+    end_toggle = nullptr;
+    start_picker = nullptr;
+    end_picker = nullptr;
+    search_entry = nullptr;
+}
+
+bool 
+GncFilterInvoicesDialog::FilterDialog::reset ()
+{
+    if (preset == Preset::CUSTOM
+        && show_paid && show_unpaid
+        && show_posted && show_unposted
+        && show_invoices && show_creditnotes
+        && search_term == ""
+        && !use_start_date && !use_end_date)
+    {
+        return false;
+    }
+    else if (preset == Preset::OVERDUE
+             && overdue_days == 0
+             && search_term == "")
+    {
+        return false;
+    }
+
+    if (preset == Preset::CUSTOM)
+    {
+        set_paid (true);
+        set_unpaid (true);
+        set_posted (true);
+        set_unposted (true);
+        set_invoices (true);
+        set_creditnotes (true);
+        set_use_start_date (false);
+        set_use_end_date (false);
+        reset_dates ();
+    }
+    else if (preset == Preset::OVERDUE)
+    {
+        set_overdue_days (overdue_days_zero);
+    }
+
+    set_search_term ("");
+
+    g_warn_if_fail (dialog);
+
+    return true;
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::resize_window ()
+{
+    g_return_if_fail (dialog);
+
+    GtkRequisition requisition;
+    gtk_widget_get_preferred_size (GTK_WIDGET(dialog),
+                                   nullptr,
+                                   &requisition);
+
+    gtk_window_resize (GTK_WINDOW (dialog),
+                       requisition.width,
+                       requisition.height);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_preset (Preset p)
+{
+    preset = p;
+    GtkToggleButton *toggle;
+
+    switch (p)
+    {
+    case Preset::CUSTOM:
+      toggle = custom_toggle;
+      gtk_widget_hide (overdue_controls);
+      gtk_widget_show (custom_controls);
+      break;
+    case Preset::OVERDUE:
+        toggle = overdue_toggle;
+        gtk_widget_hide (custom_controls);
+        gtk_widget_show (overdue_controls);
+        break;
+    }
+
+    if (toggle)
+        gtk_toggle_button_set_active (toggle, true);
+    else
+        g_warn_if_fail (false);
+
+    resize_window ();
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_overdue_days (GtkToggleButton *button)
+{
+    int days = 0;
+
+    g_return_if_fail (button);
+
+    gtk_toggle_button_set_active (button, true);
+
+    if (button == overdue_days_seven)
+        days = 7;
+    else if (button == overdue_days_fourteen)
+        days = 14;
+    else if (button == overdue_days_thirty)
+        days = 30;
+    else if (button == overdue_days_sixty)
+        days = 60;
+    else if (button == overdue_days_ninety)
+        days = 90;
+
+    overdue_days = days;
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_paid (bool status)
+{
+    show_paid = status;
+
+    if (paid_toggle)
+        gtk_toggle_button_set_active(paid_toggle, show_paid);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_unpaid (bool status)
+{
+    show_unpaid = status;
+
+    if (unpaid_toggle)
+        gtk_toggle_button_set_active(unpaid_toggle, show_unpaid);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_posted (bool status)
+{
+    show_posted = status;
+
+    if (posted_toggle)
+        gtk_toggle_button_set_active(posted_toggle, show_posted);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_unposted (bool status)
+{
+    show_unposted = status;
+
+    if (unposted_toggle)
+        gtk_toggle_button_set_active(unposted_toggle, show_unposted);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_invoices (bool status)
+{
+    show_invoices = status;
+
+    if (invoices_toggle)
+        gtk_toggle_button_set_active(invoices_toggle, show_invoices);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_creditnotes (bool status)
+{
+    show_creditnotes = status;
+
+    if (creditnotes_toggle)
+        gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_search_term (const char *term)
+{
+    search_term = term;
+
+    if (search_entry)
+        gtk_entry_set_text(search_entry, search_term.c_str());
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_search_term ()
+{
+    const gchar *text = gtk_entry_get_text(search_entry);
+
+    set_search_term (text);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_use_start_date (bool status)
+{
+    use_start_date = status;
+
+    if (start_toggle)
+        gtk_toggle_button_set_active(start_toggle, use_start_date);
+    else
+        g_warn_if_fail(false);
+
+    if (start_picker)
+        gtk_widget_set_sensitive (GTK_WIDGET (start_picker), use_start_date);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_use_end_date (bool status)
+{
+    use_end_date = status;
+
+    if (end_toggle)
+        gtk_toggle_button_set_active(end_toggle, use_end_date);
+    else
+        g_warn_if_fail(false);
+
+    if (end_picker)
+        gtk_widget_set_sensitive (GTK_WIDGET (end_picker), use_end_date);
+    else
+        g_warn_if_fail(false);
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::set_dates (bool init)
+{
+    if (start_picker)
+    {
+        if (init && start_date != 0)
+        {
+            gnc_date_edit_set_time(start_picker, start_date);
+        }
+        else
+        {
+            start_date = gnc_date_edit_get_date(start_picker);
+        }
+    }
+    else g_warn_if_fail(false);
+
+    if (end_picker)
+    {
+        if (init && end_date != 0)
+        {
+            gnc_date_edit_set_time(end_picker, end_date);
+        }
+        else
+        {
+            end_date = gnc_date_edit_get_date_end(end_picker);
+        }
+    }
+    else
+    {
+        g_warn_if_fail(false);
+    }
+}
+
+void
+GncFilterInvoicesDialog::FilterDialog::reset_dates ()
+{
+    if (start_picker)
+        gnc_date_edit_set_time(start_picker, time(NULL));
+    else
+        g_warn_if_fail(false);
+
+    if (end_picker)
+        gnc_date_edit_set_time(end_picker, time(NULL));
+    else
+        g_warn_if_fail(false);
+
+    set_dates(false);
+}
 
 QofQuery *
 GncFilterInvoicesDialog::FilterDialog::create_qof_query ()
