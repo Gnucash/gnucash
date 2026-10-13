@@ -41,6 +41,7 @@
 #include <glib/gi18n.h>
 #include <stdio.h>
 #include <memory>
+#include <string>
 
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
@@ -1551,19 +1552,11 @@ gboolean
 gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 {
     gnc_quote_source *source;
-    std::unique_ptr<gchar, decltype(&g_free)> fullname_copy (
-        g_strdup (gtk_entry_get_text (GTK_ENTRY (w->fullname_entry))), g_free);
-    const char *fullname = fullname_copy.get ();
+    const std::string fullname {gtk_entry_get_text (GTK_ENTRY (w->fullname_entry))};
     gchar *name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
-    std::unique_ptr<gchar, decltype(&g_free)> mnemonic_copy (
-        g_strdup (gtk_entry_get_text (GTK_ENTRY (w->mnemonic_entry))), g_free);
-    std::unique_ptr<gchar, decltype(&g_free)> user_symbol_copy (
-        g_strdup (gtk_entry_get_text (GTK_ENTRY (w->user_symbol_entry))), g_free);
-    std::unique_ptr<gchar, decltype(&g_free)> code_copy (
-        g_strdup (gtk_entry_get_text (GTK_ENTRY (w->code_entry))), g_free);
-    const char *mnemonic = mnemonic_copy.get ();
-    const char *user_symbol = user_symbol_copy.get ();
-    const char *code = code_copy.get ();
+    const std::string mnemonic {gtk_entry_get_text (GTK_ENTRY (w->mnemonic_entry))};
+    const std::string user_symbol {gtk_entry_get_text (GTK_ENTRY (w->user_symbol_entry))};
+    const std::string code {gtk_entry_get_text (GTK_ENTRY (w->code_entry))};
     QofBook * book = w->book;
     gnc_commodity_table *table;
     int fraction = gtk_spin_button_get_value_as_int
@@ -1613,11 +1606,6 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         {
             c = w->edit_commodity;
             gnc_commodity_begin_edit(c);
-            if (!commodity_book_is_live (w->book))
-            {
-                g_free (name_space);
-                return FALSE;
-            }
             gnc_commodity_user_set_quote_flag (c, quote_set);
             if (!commodity_book_is_live (w->book))
             {
@@ -1636,7 +1624,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                 return FALSE;
             }
 
-            gnc_commodity_set_user_symbol(c, user_symbol);
+            gnc_commodity_set_user_symbol(c, user_symbol.c_str ());
             if (!commodity_book_is_live (w->book))
             {
                 g_free (name_space);
@@ -1670,11 +1658,11 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         return FALSE;
     }
 
-    if (fullname && fullname[0] &&
+    if (!fullname.empty () &&
             name_space && name_space[0] &&
-            mnemonic && mnemonic[0])
+            !mnemonic.empty ())
     {
-        c = gnc_commodity_table_lookup (table, name_space, mnemonic);
+        c = gnc_commodity_table_lookup (table, name_space, mnemonic.c_str ());
 
         if ((!w->edit_commodity && c) ||
                 (w->edit_commodity && c && (c != w->edit_commodity)))
@@ -1686,7 +1674,8 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 
         if (!w->edit_commodity)
         {
-            c = gnc_commodity_new(book, fullname, name_space, mnemonic, code, fraction);
+            c = gnc_commodity_new(book, fullname.c_str (), name_space, mnemonic.c_str (),
+                                  code.c_str (), fraction);
             if (!c)
             {
                 g_free (name_space);
@@ -1696,13 +1685,8 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             w->result_guid = *qof_instance_get_guid (c);
             w->result_guid_set = true;
             gnc_commodity_begin_edit(c);
-            if (!commodity_book_is_live (w->book))
-            {
-                g_free (name_space);
-                return FALSE;
-            }
 
-            gnc_commodity_set_user_symbol(c, user_symbol);
+            gnc_commodity_set_user_symbol(c, user_symbol.c_str ());
             if (!commodity_book_is_live (w->book))
             {
                 g_free (name_space);
@@ -1713,11 +1697,6 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         {
             c = w->edit_commodity;
             gnc_commodity_begin_edit(c);
-            if (!commodity_book_is_live (w->book))
-            {
-                g_free (name_space);
-                return FALSE;
-            }
 
             gnc_commodity_table_remove (table, c);
             if (!commodity_book_is_live (w->book))
@@ -1726,13 +1705,13 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                 return FALSE;
             }
 
-            gnc_commodity_set_fullname (c, fullname);
+            gnc_commodity_set_fullname (c, fullname.c_str ());
             if (!commodity_book_is_live (w->book))
             {
                 g_free (name_space);
                 return FALSE;
             }
-            gnc_commodity_set_mnemonic (c, mnemonic);
+            gnc_commodity_set_mnemonic (c, mnemonic.c_str ());
             if (!commodity_book_is_live (w->book))
             {
                 g_free (name_space);
@@ -1744,7 +1723,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                 g_free (name_space);
                 return FALSE;
             }
-            gnc_commodity_set_cusip (c, code);
+            gnc_commodity_set_cusip (c, code.c_str ());
             if (!commodity_book_is_live (w->book))
             {
                 g_free (name_space);
@@ -1756,7 +1735,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                 g_free (name_space);
                 return FALSE;
             }
-            gnc_commodity_set_user_symbol(c, user_symbol);
+            gnc_commodity_set_user_symbol(c, user_symbol.c_str ());
             if (!commodity_book_is_live (w->book))
             {
                 g_free (name_space);
@@ -1785,9 +1764,9 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         g_free (w->result_namespace);
         g_free (w->result_mnemonic);
         w->result_namespace = g_strdup (name_space);
-        w->result_mnemonic = g_strdup (mnemonic);
+        w->result_mnemonic = g_strdup (mnemonic.c_str ());
 
-        auto conflict = gnc_commodity_table_lookup (table, name_space, mnemonic);
+        auto conflict = gnc_commodity_table_lookup (table, name_space, mnemonic.c_str ());
         if (conflict && conflict != c)
         {
             g_free (name_space);

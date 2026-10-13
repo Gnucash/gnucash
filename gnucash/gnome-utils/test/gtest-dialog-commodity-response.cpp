@@ -18,6 +18,7 @@
 #include "googletest-glib-log-handler.hpp"
 
 #include <vector>
+#include <array>
 
 #include "cashobjects.h"
 #include "dialog-commodity.h"
@@ -55,6 +56,8 @@ protected:
 
     void TearDown () override
     {
+        if (m_event_handler)
+            qof_event_unregister_handler (m_event_handler);
         for (auto parent : m_parents)
         {
             gtk_widget_destroy (GTK_WIDGET (parent));
@@ -82,6 +85,21 @@ protected:
         m_retained_dialogs.push_back (GTK_WIDGET (g_object_ref (dialog)));
     }
 
+    static void change_entries_on_remove (QofInstance *entity, QofEventId event,
+                                           gpointer data, [[maybe_unused]] gpointer event_data)
+    {
+        auto fixture = static_cast<CommodityResponseTest *> (data);
+        if (entity != QOF_INSTANCE (fixture->m_event_commodity) || event != QOF_EVENT_REMOVE)
+            return;
+        ++fixture->m_remove_calls;
+        for (auto entry : fixture->m_entries)
+            gtk_entry_set_text (GTK_ENTRY (entry), "Changed synchronously");
+    }
+
+    int m_event_handler{};
+    gnc_commodity *m_event_commodity{};
+    std::array<GtkWidget *, 4> m_entries{};
+    unsigned m_remove_calls{};
     QofSession *m_session{};
     QofBook *m_book{};
     std::vector<GtkWindow *> m_parents;
@@ -340,6 +358,133 @@ TEST_F (CommodityResponseTest, CreateThenEditCommits)
     EXPECT_TRUE (edited.commodity == created.commodity);
     EXPECT_STREQ (gnc_commodity_get_fullname (created.commodity), "Edited response test");
     gtk_widget_destroy (GTK_WIDGET (parent));
+}
+
+class IsoCommodityResponseTest : public CommodityResponseTest,
+                                 public ::testing::WithParamInterface<bool> {};
+
+TEST_P (IsoCommodityResponseTest, CommitsSymbolAndQuoteFlag)
+{
+    auto table = gnc_commodity_table_get_table (m_book);
+    auto currency = gnc_commodity_new (m_book, "Test currency", GNC_COMMODITY_NS_CURRENCY,
+                                       "XTS", nullptr, 100);
+    currency = gnc_commodity_table_insert (table, currency);
+    auto parent = create_parent ();
+    gnc_ui_edit_commodity_async (currency, GTK_WIDGET (parent), completed, &m_primary);
+    auto dialog = find_child_dialog (parent);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
+    auto symbol = gnc::test::find_widget_by_buildable_name (GTK_WIDGET (dialog), "user_symbol_entry");
+    auto quotes = gnc::test::find_widget_by_buildable_name (GTK_WIDGET (dialog), "get_quote_check");
+    ASSERT_TRUE (GTK_IS_ENTRY (symbol));
+    ASSERT_TRUE (GTK_IS_TOGGLE_BUTTON (quotes));
+    gtk_entry_set_text (GTK_ENTRY (symbol), "Test symbol");
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (quotes), GetParam () ? TRUE : FALSE);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, m_book);
+    EXPECT_EQ (m_primary.commodity, currency);
+    EXPECT_EQ (gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, "XTS"), currency);
+    EXPECT_STREQ (gnc_commodity_get_user_symbol (currency), "Test symbol");
+    EXPECT_STREQ (gnc_commodity_get_fullname (currency), "Test currency");
+    EXPECT_EQ (static_cast<bool> (gnc_commodity_get_quote_flag (currency)), GetParam ());
+}
+
+INSTANTIATE_TEST_SUITE_P (QuoteFlag, IsoCommodityResponseTest,
+                         ::testing::Values (false, true));
+
+TEST_F (CommodityResponseTest, EditKeepsSubmittedStringsDuringSynchronousEvent)
+{
+    auto table = gnc_commodity_table_get_table (m_book);
+    m_event_commodity = gnc_commodity_new (m_book, "Original", "NYSE", "ORG",
+                                           nullptr, 100);
+    gnc_commodity_table_insert (table, m_event_commodity);
+    auto parent = create_parent ();
+    gnc_ui_edit_commodity_async (m_event_commodity, GTK_WIDGET (parent),
+                                 completed, &m_primary);
+    auto dialog = find_child_dialog (parent);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
+    const std::array<const char *, 4> names {
+        "fullname_entry", "mnemonic_entry", "user_symbol_entry", "code_entry"};
+    const std::array<const char *, 4> values {
+        "Submitted name", "SUB", "Submitted symbol", "Submitted code"};
+    for (unsigned i = 0; i < names.size (); ++i)
+    {
+        m_entries[i] = gnc::test::find_widget_by_buildable_name (GTK_WIDGET (dialog), names[i]);
+        ASSERT_TRUE (GTK_IS_ENTRY (m_entries[i]));
+        gtk_entry_set_text (GTK_ENTRY (m_entries[i]), values[i]);
+    }
+    // Synthetic QOF subscriber: events run inside the response, without a main-loop iteration.
+    m_event_handler = qof_event_register_handler (change_entries_on_remove, this);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_remove_calls, 1u);
+    EXPECT_EQ (m_primary.calls, 1u);
+    ASSERT_EQ (m_primary.commodity, m_event_commodity);
+    EXPECT_STREQ (gnc_commodity_get_fullname (m_event_commodity), values[0]);
+    EXPECT_STREQ (gnc_commodity_get_mnemonic (m_event_commodity), values[1]);
+    EXPECT_STREQ (gnc_commodity_get_user_symbol (m_event_commodity), values[2]);
+    EXPECT_STREQ (gnc_commodity_get_cusip (m_event_commodity), values[3]);
+}
+
+TEST_F (CommodityResponseTest, SessionSwitchBeforeResponseDoesNotCreateCommodity)
+{
+    auto original_table = gnc_commodity_table_get_table (m_book);
+    auto parent = create_parent ();
+    gnc_ui_new_commodity_async_full ("NYSE", GTK_WIDGET (parent), nullptr,
+                                     "Late response", "LATE", nullptr, 100,
+                                     completed, &m_primary);
+    auto dialog = find_child_dialog (parent);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
+    auto replacement = qof_session_new (qof_book_new ());
+    gnc_exchange_current_session (replacement);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (gnc_commodity_table_lookup (original_table, "NYSE", "LATE"), nullptr);
+    EXPECT_EQ (gnc_commodity_table_lookup (gnc_commodity_table_get_table (
+                   qof_session_get_book (replacement)), "NYSE", "LATE"), nullptr);
+}
+
+TEST_F (CommodityResponseTest, BookCloseBeforeResponseDoesNotCreateCommodity)
+{
+    auto table = gnc_commodity_table_get_table (m_book);
+    auto parent = create_parent ();
+    gnc_ui_new_commodity_async_full ("NYSE", GTK_WIDGET (parent), nullptr,
+                                     "Late response", "LATE", nullptr, 100,
+                                     completed, &m_primary);
+    auto dialog = find_child_dialog (parent);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
+    qof_book_mark_closed (m_book);
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (gnc_commodity_table_lookup (table, "NYSE", "LATE"), nullptr);
+}
+
+TEST_F (CommodityResponseTest, BookDestroyBeforeResponseCompletesWithoutCommodity)
+{
+    auto parent = create_parent ();
+    gnc_ui_new_commodity_async_full ("NYSE", GTK_WIDGET (parent), nullptr,
+                                     "Late response", "LATE", nullptr, 100,
+                                     completed, &m_primary);
+    auto dialog = find_child_dialog (parent);
+    ASSERT_TRUE (GTK_IS_DIALOG (dialog));
+    retain_dialog (GTK_WIDGET (dialog));
+    // Deliberately bypass normal UI-first file-close ordering to exercise the weak pointer.
+    gnc_clear_current_session ();
+    m_session = nullptr;
+    m_book = nullptr;
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
+    EXPECT_EQ (m_primary.calls, 1u);
 }
 
 TEST_F (NamespacePickerTest, SessionSwitchCancelsNamespaceUpdate)
