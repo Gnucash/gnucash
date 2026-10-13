@@ -47,12 +47,6 @@ public:
     void create_dialog ();
 
     QofQuery *make_filter ();
-
-    void
-    free_filter (QofQuery *query)
-    {
-        qof_query_destroy (query);
-    }
 };
 
 #endif /* GNC_FILTER_INVOICES_DIALOG_H_ */

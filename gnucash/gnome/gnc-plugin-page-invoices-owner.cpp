@@ -379,7 +379,7 @@ public:
 
         query_view = gnc_query_view_new (columns, query);
 
-        filter->free_filter (query);
+        qof_query_destroy (query);
         
         {
             auto *qview = GNC_QUERY_VIEW (query_view);
@@ -607,7 +607,7 @@ public:
 
         gnc_query_view_reset_query (GNC_QUERY_VIEW (query_view), query);
 
-        filter->free_filter (query);
+        qof_query_destroy (query);
     }
 };
 
