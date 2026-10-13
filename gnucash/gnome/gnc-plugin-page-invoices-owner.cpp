@@ -28,10 +28,8 @@
 #include "gnc-query-view.h"
 #include "dialog-utils.h"
 #include <gnc-date-edit.h>
-extern "C" {
-#include "search-param.h"
 #include "dialog-invoice.h"
-}
+#include "search-param.h"
 #include "gnc-icons.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-invoices-owner.h"
