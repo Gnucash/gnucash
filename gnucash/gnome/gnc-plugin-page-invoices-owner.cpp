@@ -618,18 +618,17 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
 {
     ENTER ("");
 
-    GncPluginPageInvoicesOwner *plugin_page;
-    const GList *item;
-
     g_return_val_if_fail(owner_type == GNC_OWNER_CUSTOMER ||
                          owner_type == GNC_OWNER_VENDOR ||
                          owner_type == GNC_OWNER_EMPLOYEE, nullptr);
 
     /* Is there an existing page? */
-    item = gnc_gobject_tracking_get_list (PLUGIN_NAME);
-    for ( ; item; item = g_list_next (item))
+    for (auto *item = gnc_gobject_tracking_get_list (PLUGIN_NAME); item;
+         item = g_list_next (item))
     {
-        plugin_page = GNC_PLUGIN_PAGE_INVOICES_OWNER (item->data);
+        auto *plugin_page =
+            GNC_PLUGIN_PAGE_INVOICES_OWNER (item->data);
+
         g_return_val_if_fail (plugin_page, nullptr);
 
         if (get_private (plugin_page)->owner_type != owner_type)
@@ -639,7 +638,7 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
         return GNC_PLUGIN_PAGE (plugin_page);
     }
 
-    plugin_page = GNC_PLUGIN_PAGE_INVOICES_OWNER (g_object_new (gnc_plugin_page_invoices_owner_get_type (), nullptr));
+    auto *plugin_page = GNC_PLUGIN_PAGE_INVOICES_OWNER (g_object_new (gnc_plugin_page_invoices_owner_get_type (), nullptr));
     g_return_val_if_fail (plugin_page, nullptr);
 
     auto *priv = get_private (plugin_page);
