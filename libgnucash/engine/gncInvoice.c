@@ -1027,7 +1027,8 @@ static gnc_numeric gncInvoiceGetTotalNegatedIfCreditNote(GncInvoice *invoice)
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
         total = gnc_numeric_neg (total);    
         break;
-    default: break;
+    default:
+        break;
     }
 
     return total;

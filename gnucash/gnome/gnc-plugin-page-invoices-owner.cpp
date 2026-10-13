@@ -156,7 +156,8 @@ public:
             gnc_plugin_page_set_menu_qualifier(
                 GNC_PLUGIN_PAGE (plugin_page), "e");
             break;
-        default: g_assert_not_reached (); // Fail if invalid type 
+        default:
+            g_assert_not_reached (); // Fail if invalid type 
         }
 
         static GActionEntry gnc_plugin_actions [] =
@@ -226,10 +227,17 @@ public:
 
             switch (owner_type)
             {
-            case GNC_OWNER_CUSTOMER: title = _("Invoices"); break;
-            case GNC_OWNER_VENDOR: title = _("Bills"); break;
-            case GNC_OWNER_EMPLOYEE: title = _("Expense Vouchers"); break;
-            default: g_assert_not_reached ();
+            case GNC_OWNER_CUSTOMER:
+                title = _("Invoices");
+                break;
+            case GNC_OWNER_VENDOR:
+                title = _("Bills");
+                break;
+            case GNC_OWNER_EMPLOYEE:
+                title = _("Expense Vouchers");
+                break;
+            default:
+                g_assert_not_reached ();
             }
 
             g_object_set (G_OBJECT (plugin_page), "page-name", title,
@@ -291,10 +299,17 @@ public:
 
             switch (owner_type)
             {
-            case GNC_OWNER_CUSTOMER: id_name = _("Invoice ID"); break;
-            case GNC_OWNER_VENDOR: id_name = _("Bill ID"); break;
-            case GNC_OWNER_EMPLOYEE: id_name = _("Voucher ID"); break;
-            default: g_assert_not_reached ();
+            case GNC_OWNER_CUSTOMER:
+                id_name = _("Invoice ID");
+                break;
+            case GNC_OWNER_VENDOR:
+                id_name = _("Bill ID");
+                break;
+            case GNC_OWNER_EMPLOYEE:
+                id_name = _("Voucher ID");
+                break;
+            default:
+                g_assert_not_reached ();
             }
 
             const char *owner_name = owner_type == GNC_OWNER_EMPLOYEE
@@ -608,10 +623,14 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
 
     switch (owner_type)
     {
-    case GNC_OWNER_CUSTOMER: break;
-    case GNC_OWNER_VENDOR: break;
-    case GNC_OWNER_EMPLOYEE: break;
-    default: g_return_val_if_fail (false, nullptr); // Fail if invalid value. 
+    case GNC_OWNER_CUSTOMER:
+        break;
+    case GNC_OWNER_VENDOR:
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        break;
+    default:
+        g_return_val_if_fail (false, nullptr); // Fail if invalid value. 
     }
 
     /* Is there an existing page? */

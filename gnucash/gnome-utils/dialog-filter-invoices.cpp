@@ -420,10 +420,17 @@ GncFilterInvoicesDialog::FilterDialog::make_filter ()
 
             switch (owner_type)
             {
-              case GNC_OWNER_CUSTOMER: inv_type = GNC_INVOICE_CUST_INVOICE; break;
-              case GNC_OWNER_VENDOR: inv_type = GNC_INVOICE_VEND_INVOICE; break;
-              case GNC_OWNER_EMPLOYEE: inv_type = GNC_INVOICE_EMPL_INVOICE; break;
-              default: g_assert_not_reached ();
+            case GNC_OWNER_CUSTOMER:
+                inv_type = GNC_INVOICE_CUST_INVOICE;
+                break;
+            case GNC_OWNER_VENDOR:
+                inv_type = GNC_INVOICE_VEND_INVOICE;
+                break;
+            case GNC_OWNER_EMPLOYEE:
+                inv_type = GNC_INVOICE_EMPL_INVOICE;
+                break;
+            default:
+                g_assert_not_reached ();
             }
 
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
@@ -437,10 +444,17 @@ GncFilterInvoicesDialog::FilterDialog::make_filter ()
 
             switch (owner_type)
             {
-              case GNC_OWNER_CUSTOMER: credit_type = GNC_INVOICE_CUST_CREDIT_NOTE; break;
-              case GNC_OWNER_VENDOR: credit_type = GNC_INVOICE_VEND_CREDIT_NOTE; break;
-              case GNC_OWNER_EMPLOYEE: credit_type = GNC_INVOICE_EMPL_CREDIT_NOTE; break;
-              default: g_assert_not_reached ();
+            case GNC_OWNER_CUSTOMER:
+                credit_type = GNC_INVOICE_CUST_CREDIT_NOTE;
+                break;
+            case GNC_OWNER_VENDOR:
+                credit_type = GNC_INVOICE_VEND_CREDIT_NOTE;
+                break;
+            case GNC_OWNER_EMPLOYEE:
+                credit_type = GNC_INVOICE_EMPL_CREDIT_NOTE;
+                break;
+            default:
+                g_assert_not_reached ();
             }
 
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
@@ -882,13 +896,26 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
 
             switch (overdue_days)
             {
-            case 0: set_overdue_days (overdue_days_zero); break;
-            case 7: set_overdue_days (overdue_days_seven); break;
-            case 14: set_overdue_days (overdue_days_fourteen); break;
-            case 30: set_overdue_days (overdue_days_thirty); break;
-            case 60: set_overdue_days (overdue_days_sixty); break;
-            case 90: set_overdue_days (overdue_days_ninety); break;
-            default: break;
+            case 0:
+                set_overdue_days (overdue_days_zero);
+                break;
+            case 7:
+                set_overdue_days (overdue_days_seven);
+                break;
+            case 14:
+                set_overdue_days (overdue_days_fourteen);
+                break;
+            case 30:
+                set_overdue_days (overdue_days_thirty);
+                break;
+            case 60:
+                set_overdue_days (overdue_days_sixty);
+                break;
+            case 90:
+                set_overdue_days (overdue_days_ninety);
+                break;
+            default:
+                break;
             }
 
             for (size_t i = 0; i < std::size (toggles); i++)
@@ -1412,8 +1439,10 @@ GncFilterInvoicesDialog::GncFilterInvoicesDialog (
     {
     case GNC_OWNER_CUSTOMER:
     case GNC_OWNER_VENDOR:
-    case GNC_OWNER_EMPLOYEE: break;
-    default: g_return_if_fail (false);
+    case GNC_OWNER_EMPLOYEE:
+        break;
+    default:
+        g_return_if_fail (false);
     }
 
     filter = std::make_unique<FilterDialog> ();
