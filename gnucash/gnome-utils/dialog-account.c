@@ -87,7 +87,6 @@ typedef struct
 typedef struct _AccountWindow
 {
     QofBook   *book;
-    gboolean   modal;
     GtkWidget *dialog;
 
     AccountDialogType dialog_type;
@@ -1755,7 +1754,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     const gchar *tt = _("This Account contains Transactions.\nChanging this option is not possible.");
     guint32 compat_types = xaccAccountTypesValid ();
 
-    ENTER("aw %p, modal %d", aw, aw->modal);
+    ENTER("aw %p", aw);
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-account.glade", "fraction_liststore");
     gnc_builder_add_from_file (builder, "dialog-account.glade", "account_dialog");
@@ -1773,11 +1772,8 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
 
     g_object_set_data (awo, "dialog_info", aw);
 
-    if (!aw->modal)
-        g_signal_connect (awo, "response",
-                          G_CALLBACK(gnc_account_window_response_cb), aw);
-    else
-        gtk_window_set_modal (GTK_WINDOW(aw->dialog), TRUE);
+    g_signal_connect (awo, "response",
+                      G_CALLBACK(gnc_account_window_response_cb), aw);
 
     aw->notebook = GTK_WIDGET(gtk_builder_get_object (builder, "account_notebook"));
     aw->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
@@ -1980,7 +1976,7 @@ close_handler (gpointer user_data)
 {
     AccountWindow *aw = user_data;
 
-    ENTER("aw %p, modal %d", aw, aw->modal);
+    ENTER("aw %p", aw);
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
 
     gtk_widget_destroy (GTK_WIDGET(aw->dialog));
@@ -2037,7 +2033,7 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
                                     gchar **subaccount_names,
                                     GList *valid_types,
                                     const gnc_commodity * default_commodity,
-                                    gboolean modal, gboolean present)
+                                    gboolean present)
 {
     const gnc_commodity *commodity, *parent_commodity;
     AccountWindow *aw;
@@ -2049,7 +2045,6 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
     aw = g_new0 (AccountWindow, 1);
 
     aw->book = book;
-    aw->modal = modal;
     aw->dialog_type = NEW_ACCOUNT;
 
     aw->valid_types = 0;
@@ -2123,7 +2118,7 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
 
     aw->component_id = gnc_register_gui_component (DIALOG_NEW_ACCOUNT_CM_CLASS,
                                                    refresh_handler,
-                                                   modal ? NULL : close_handler,
+                                                   close_handler,
                                                    aw);
 
     gnc_gui_component_set_session (aw->component_id, gnc_get_current_session());
@@ -2211,7 +2206,7 @@ gnc_ui_new_accounts_from_name_with_defaults_async (
     /* Reuse the normal response-driven editor, including validation and the
      * progression through missing ancestors. Modality is only a window policy. */
     AccountWindow *aw = gnc_ui_new_account_window_internal(
-        parent, book, base_account, subaccount_names, valid_types, default_commodity, FALSE, FALSE);
+        parent, book, base_account, subaccount_names, valid_types, default_commodity, FALSE);
     AccountCreationRequest *request = g_new0(AccountCreationRequest, 1);
     g_weak_ref_init(&request->parent, parent ? G_OBJECT(parent) : NULL);
     request->book = book;
@@ -2270,7 +2265,6 @@ gnc_ui_edit_account_window (GtkWindow *parent, Account *account)
     aw = g_new0 (AccountWindow, 1);
 
     aw->book = gnc_account_get_book (account);
-    aw->modal = FALSE;
     aw->dialog_type = EDIT_ACCOUNT;
     aw->account = *xaccAccountGetGUID (account);
     aw->subaccount_names = NULL;
@@ -2317,7 +2311,7 @@ gnc_ui_new_account_with_types_and_commodity (GtkWindow *parent, QofBook *book, G
                                              gnc_commodity *default_commodity)
 {
     gnc_ui_new_account_window_internal (parent, book, NULL, NULL,
-                                        valid_types, default_commodity, FALSE, TRUE);
+                                        valid_types, default_commodity, TRUE);
 }
 
 /*
@@ -2335,7 +2329,7 @@ gnc_ui_new_account_window (GtkWindow *parent, QofBook *book,
         g_return_if_fail(gnc_account_get_book (parent_acct) == book);
 
     gnc_ui_new_account_window_internal (parent, book, parent_acct, NULL, NULL,
-                                        NULL, FALSE, TRUE);
+                                        NULL, TRUE);
 }
 
 /************************************************************

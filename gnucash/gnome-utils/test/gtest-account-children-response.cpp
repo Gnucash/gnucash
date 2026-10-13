@@ -189,10 +189,23 @@ protected:
             return nullptr;
         }
         g_object_ref (m_creation_dialog);
+        EXPECT_TRUE (gtk_widget_get_visible (GTK_WIDGET (m_creation_dialog)));
         EXPECT_TRUE (gtk_window_get_modal (GTK_WINDOW (m_creation_dialog)));
         EXPECT_TRUE (gtk_window_get_destroy_with_parent (
                          GTK_WINDOW (m_creation_dialog)));
         EXPECT_EQ (m_creation_result.calls, 0u);
+        return m_creation_dialog;
+    }
+
+    GtkDialog *capture_creation_dialog ()
+    {
+        m_creation_dialog = GTK_DIALOG (find_window (m_owner));
+        if (!GTK_IS_DIALOG (m_creation_dialog))
+        {
+            ADD_FAILURE () << "Account creation dialog was not created";
+            return nullptr;
+        }
+        g_object_ref (m_creation_dialog);
         return m_creation_dialog;
     }
 
@@ -300,6 +313,79 @@ TEST_F (AccountChildrenResponseTest, SessionSwitchRejectsStaleCreation)
     gtk_dialog_response (dialog, GTK_RESPONSE_OK);
     EXPECT_EQ (m_creation_result.calls, 1u);
     g_object_unref (dialog);
+}
+
+TEST_F (AccountChildrenResponseTest, InvalidNameLeavesCreationOpenUntilAccepted)
+{
+    auto dialog = start_account_creation ();
+    ASSERT_NE (dialog, nullptr);
+    auto name = find_widget_by_buildable_name (GTK_WIDGET (dialog), "name_entry");
+    ASSERT_TRUE (GTK_IS_ENTRY (name));
+    gtk_entry_set_text (GTK_ENTRY (name), "");
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 0u);
+    EXPECT_TRUE (gtk_widget_get_visible (GTK_WIDGET (dialog)));
+    EXPECT_EQ (gnc_account_lookup_by_name (m_account, "Created child"), nullptr);
+    m_question = GTK_DIALOG (find_window (GTK_WINDOW (dialog)));
+    ASSERT_TRUE (GTK_IS_MESSAGE_DIALOG (m_question));
+    g_object_ref (m_question);
+    gtk_dialog_response (m_question, GTK_RESPONSE_OK);
+    gtk_entry_set_text (GTK_ENTRY (name), "Valid child");
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    ASSERT_EQ (m_creation_result.calls, 1u);
+    ASSERT_NE (m_creation_result.account, nullptr);
+    EXPECT_STREQ (xaccAccountGetName (m_creation_result.account), "Valid child");
+    gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+}
+
+TEST_F (AccountChildrenResponseTest, SessionComponentCloseCompletesCreationOnce)
+{
+    auto dialog = start_account_creation ();
+    ASSERT_NE (dialog, nullptr);
+    gnc_close_gui_component_by_session (m_session);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+    EXPECT_EQ (m_creation_result.account, nullptr);
+    EXPECT_FALSE (gtk_widget_get_visible (GTK_WIDGET (dialog)));
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_creation_result.calls, 1u);
+}
+
+TEST_F (AccountChildrenResponseTest, NormalNewAccountIsVisibleNonmodalAndAccepts)
+{
+    gnc_ui_new_account_window (m_owner, m_book, m_account);
+    auto dialog = capture_creation_dialog ();
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_TRUE (gtk_widget_get_visible (GTK_WIDGET (dialog)));
+    EXPECT_FALSE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_EQ (gtk_window_get_transient_for (GTK_WINDOW (dialog)), m_owner);
+    auto name = find_widget_by_buildable_name (GTK_WIDGET (dialog), "name_entry");
+    ASSERT_TRUE (GTK_IS_ENTRY (name));
+    gtk_entry_set_text (GTK_ENTRY (name), "Normal child");
+    gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+    EXPECT_FALSE (gtk_widget_get_visible (GTK_WIDGET (dialog)));
+    auto account = gnc_account_lookup_by_name (m_account, "Normal child");
+    ASSERT_NE (account, nullptr);
+    EXPECT_EQ (gnc_account_get_parent (account), m_account);
+}
+
+TEST_F (AccountChildrenResponseTest, TypedNewAccountIsVisibleNonmodalAndCancels)
+{
+    auto types = g_list_prepend (nullptr, GINT_TO_POINTER (ACCT_TYPE_BANK));
+    gnc_ui_new_account_with_types_and_commodity (m_owner, m_book, types, m_currency);
+    g_list_free (types);
+    auto dialog = capture_creation_dialog ();
+    ASSERT_NE (dialog, nullptr);
+    EXPECT_TRUE (gtk_widget_get_visible (GTK_WIDGET (dialog)));
+    EXPECT_FALSE (gtk_window_get_modal (GTK_WINDOW (dialog)));
+    EXPECT_EQ (gtk_window_get_transient_for (GTK_WINDOW (dialog)), m_owner);
+    auto name = find_widget_by_buildable_name (GTK_WIDGET (dialog), "name_entry");
+    ASSERT_TRUE (GTK_IS_ENTRY (name));
+    gtk_entry_set_text (GTK_ENTRY (name), "Cancelled normal account");
+    gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
+    EXPECT_FALSE (gtk_widget_get_visible (GTK_WIDGET (dialog)));
+    EXPECT_EQ (gnc_account_lookup_by_name (gnc_book_get_root_account (m_book),
+                                          "Cancelled normal account"), nullptr);
 }
 } // namespace
 
