@@ -410,11 +410,11 @@ GncFilterInvoicesDialog::FilterDialog::make_filter ()
     qof_query_set_book (query, book);
 
     {
-        bool none = preset == Preset::CUSTOM && (!show_invoices && !show_creditnotes);
+        bool filter_empty = preset == Preset::CUSTOM && (!show_invoices && !show_creditnotes);
         bool show_inv = show_invoices || preset != Preset::CUSTOM;
         bool show_cred = show_creditnotes || preset != Preset::CUSTOM;
     
-        if (show_inv || none)
+        if (show_inv || filter_empty)
         {
             GncInvoiceType inv_type;
 
@@ -438,7 +438,7 @@ GncFilterInvoicesDialog::FilterDialog::make_filter ()
             qof_query_add_term (query, type_path, type_pred, QOF_QUERY_AND);
         }
 
-        if (show_cred || none)
+        if (show_cred || filter_empty)
         {
             GncInvoiceType credit_type;
 
@@ -460,7 +460,7 @@ GncFilterInvoicesDialog::FilterDialog::make_filter ()
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
             QofQueryPredData *type_pred = qof_query_int32_predicate (QOF_COMPARE_EQUAL, credit_type);
             qof_query_add_term (query, type_path, type_pred,
-                none || !show_inv ? QOF_QUERY_AND : QOF_QUERY_OR);
+                filter_empty || !show_inv ? QOF_QUERY_AND : QOF_QUERY_OR);
         }
     }
 
