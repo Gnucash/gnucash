@@ -304,11 +304,11 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 
     auto module_parts = split_domain(log_module);
     auto module = get_modules();
-    for (auto part : module_parts)
+    for (const auto& part : module_parts)
     {
         auto iter = std::find_if(module->m_children.begin(),
                               module->m_children.end(),
-                              [part](auto& child){
+                              [part](const auto& child){
                                   return child && part == child->m_name;
                               });
         if (iter == module->m_children.end())
@@ -348,7 +348,7 @@ qof_log_check(QofLogModule domain, QofLogLevel level)
     {
         auto iter = std::find_if(module->m_children.begin(),
                                module->m_children.end(),
-                               [part](auto& child) {
+                               [part](const auto& child) {
                                    return child && part == child->m_name; });
 
         if (iter == module->m_children.end())
@@ -428,6 +428,7 @@ qof_log_parse_log_config(const char *filename)
     {
         g_warning("unable to parse [%s]: %s", filename, err->message);
         g_error_free(err);
+        g_key_file_free(conf);
         return;
     }
 
