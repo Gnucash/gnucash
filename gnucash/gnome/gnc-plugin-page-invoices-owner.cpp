@@ -49,8 +49,8 @@ class Page;
 
 struct GncPluginPageInvoicesOwnerPrivate
 {
-    Page *page = nullptr;
-    GncOwnerType owner_type;
+    Page *m_page = nullptr;
+    GncOwnerType m_owner_type;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GncPluginPageInvoicesOwner, gnc_plugin_page_invoices_owner, GNC_TYPE_PLUGIN_PAGE)
@@ -87,7 +87,7 @@ get_page (GncPluginPage *plugin_page)
     auto *priv = get_private (plugin_page);
     g_assert (priv);
 
-    return priv->page;
+    return priv->m_page;
 }
 
 static Page *
@@ -108,13 +108,13 @@ namespace { // Isolate class-scope to this file.
 
 class Page {
 public:
-    GncPluginPageInvoicesOwner *plugin_page = nullptr;
+    GncPluginPageInvoicesOwner *m_plugin_page = nullptr;
 
 private:
-    std::unique_ptr<GncFilterInvoicesDialog> filter;
-    GtkWidget     *widget = nullptr; // Managed/freed by gtk
-    GtkWidget     *query_view = nullptr; // Managed/freed by gtk
-    GList         *columns = nullptr;
+    std::unique_ptr<GncFilterInvoicesDialog> m_filter;
+    GtkWidget *m_widget = nullptr; // Managed/freed by gtk
+    GtkWidget *m_query_view = nullptr; // Managed/freed by gtk
+    GList *m_columns = nullptr;
 
     GncInvoice *get_selected ();
 
@@ -123,14 +123,14 @@ public:
 
     ~Page ()
     {
-        gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE (plugin_page));
-        g_list_free (columns);
+        gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE (m_plugin_page));
+        g_list_free (m_columns);
     }
 
     GncOwnerType
     get_owner ()
     {
-        return get_private (plugin_page)->owner_type;
+        return get_private (m_plugin_page)->m_owner_type;
     }
 
     GtkWindow *get_window ();
@@ -142,7 +142,7 @@ public:
     void
     button_press (GdkEventButton *event)
     {
-        gnc_main_window_button_press_cb (query_view, event, GNC_PLUGIN_PAGE (plugin_page));
+        gnc_main_window_button_press_cb (m_query_view, event, GNC_PLUGIN_PAGE (m_plugin_page));
     }
 
     void selection_changed ();
@@ -234,8 +234,8 @@ page_destroy_widget (GncPluginPage *plugin_page)
 {
     auto *priv = get_private (plugin_page);
 
-    delete priv->page;
-    priv->page = nullptr;
+    delete priv->m_page;
+    priv->m_page = nullptr;
 }
 
 static gboolean
@@ -254,7 +254,7 @@ page_focus_function (GncPluginPage *plugin_page)
 GncInvoice *
 Page::get_selected ()
 {
-    auto *qv = GNC_QUERY_VIEW (query_view); 
+    auto *qv = GNC_QUERY_VIEW (m_query_view); 
     g_assert (qv);
 
     gpointer selected_entry = gnc_query_view_get_selected_entry (qv); 
@@ -268,17 +268,17 @@ Page::get_selected ()
     return invoice;
 }
 
-Page::Page (GncPluginPageInvoicesOwner &p) : plugin_page (&p)
+Page::Page (GncPluginPageInvoicesOwner &p) : m_plugin_page (&p)
 {
-    // Dynamically check plugin_page once on class initialization.
+    // Dynamically check m_plugin_page once on class initialization.
     // We only need to do this once here, for the rest of the class
     // we can skip nullptr checks when doing PAGE casts.
-    g_assert (GNC_IS_PLUGIN_PAGE_INVOICES_OWNER (plugin_page));
+    g_assert (GNC_IS_PLUGIN_PAGE_INVOICES_OWNER (m_plugin_page));
 
     auto owner_type = get_owner();
 
-    filter = std::make_unique<GncFilterInvoicesDialog> (
-        *GNC_PLUGIN_PAGE (plugin_page), owner_type,
+    m_filter = std::make_unique<GncFilterInvoicesDialog> (
+        *GNC_PLUGIN_PAGE (m_plugin_page), owner_type,
         [this]() {
             this->apply_filter(); 
         }
@@ -288,15 +288,15 @@ Page::Page (GncPluginPageInvoicesOwner &p) : plugin_page (&p)
     {
     case GNC_OWNER_CUSTOMER:
         gnc_plugin_page_set_menu_qualifier(
-            GNC_PLUGIN_PAGE (plugin_page), "c");
+            GNC_PLUGIN_PAGE (m_plugin_page), "c");
         break;
     case GNC_OWNER_VENDOR:
         gnc_plugin_page_set_menu_qualifier(
-            GNC_PLUGIN_PAGE (plugin_page), "v");
+            GNC_PLUGIN_PAGE (m_plugin_page), "v");
         break;
     case GNC_OWNER_EMPLOYEE:
         gnc_plugin_page_set_menu_qualifier(
-            GNC_PLUGIN_PAGE (plugin_page), "e");
+            GNC_PLUGIN_PAGE (m_plugin_page), "e");
         break;
     default:
         g_assert_not_reached (); // Fail if invalid type 
@@ -333,30 +333,30 @@ Page::Page (GncPluginPageInvoicesOwner &p) : plugin_page (&p)
             g_assert_not_reached ();
         }
 
-        g_object_set (G_OBJECT (plugin_page), "page-name", title,
+        g_object_set (G_OBJECT (m_plugin_page), "page-name", title,
                       "ui-description", UI_FILE,
                       nullptr);
     }
 
     gnc_plugin_page_add_book (
-        GNC_PLUGIN_PAGE (plugin_page), gnc_get_current_book()
+        GNC_PLUGIN_PAGE (m_plugin_page), gnc_get_current_book()
     );
 
     simple_action_group = gnc_plugin_page_create_action_group (
-        GNC_PLUGIN_PAGE (plugin_page), PLUGIN_ACTIONS_NAME);
+        GNC_PLUGIN_PAGE (m_plugin_page), PLUGIN_ACTIONS_NAME);
 
     g_action_map_add_action_entries (
         G_ACTION_MAP (simple_action_group),
         gnc_plugin_actions,
         gnc_plugin_n_actions,
-        plugin_page
+        m_plugin_page
     );
 }
 
 GtkWindow *
 Page::get_window ()
 {
-    auto *p = GNC_PLUGIN_PAGE (plugin_page);
+    auto *p = GNC_PLUGIN_PAGE (m_plugin_page);
     g_assert (p);
 
     auto *window = GTK_WINDOW (gnc_plugin_page_get_window (p));
@@ -368,7 +368,7 @@ Page::get_window ()
 GtkWidget *
 Page::create_widget ()
 {
-    ENTER ("page %p", plugin_page);
+    ENTER ("page %p", m_plugin_page);
 
     QofIdType type = GNC_INVOICE_MODULE_NAME;
 
@@ -395,7 +395,7 @@ Page::create_widget ()
         const char *owner_name = owner_type == GNC_OWNER_EMPLOYEE
             ? _("Employee") : _("Company"); 
 
-        columns = gnc_search_param_prepend (columns, _("Job"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Job"), 
                                             nullptr, 
                                             type,
                                             INVOICE_OWNER,
@@ -403,31 +403,31 @@ Page::create_widget ()
                                             JOB_NAME,
                                             nullptr); 
 
-        columns = gnc_search_param_prepend (columns, _("Billing ID"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Billing ID"), 
                                             nullptr, 
                                             type,
                                             INVOICE_BILLINGID,
                                             nullptr); 
         
-        columns = gnc_search_param_prepend (columns, _("Due"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Due"), 
                                             nullptr, 
                                             type,
                                             INVOICE_DUE,
                                             nullptr); 
 
-        columns = gnc_search_param_prepend (columns, _("Paid"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Paid"), 
                                             nullptr, 
                                             type,
                                             INVOICE_IS_PAID,
                                             nullptr); 
 
-        columns = gnc_search_param_prepend (columns, _("Posted"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Posted"), 
                                             nullptr, 
                                             type,
                                             INVOICE_POSTED,
                                             nullptr); 
 
-        columns = gnc_search_param_prepend (columns, owner_name, 
+        m_columns = gnc_search_param_prepend (m_columns, owner_name, 
                                             nullptr, 
                                             type,
                                             INVOICE_OWNER,
@@ -435,55 +435,55 @@ Page::create_widget ()
                                             OWNER_NAME,
                                             nullptr); 
 
-        columns = gnc_search_param_prepend (columns, _("Total"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Total"), 
                                               nullptr, 
                                               type,
                                               INVOICE_TOTAL,
                                               nullptr); 
 
-        columns = gnc_search_param_prepend (columns, _("Type"), 
+        m_columns = gnc_search_param_prepend (m_columns, _("Type"), 
                                             nullptr, 
                                             type,
                                             INVOICE_TYPE_STRING,
                                             nullptr); 
 
-        columns = gnc_search_param_prepend (columns, id_name,
+        m_columns = gnc_search_param_prepend (m_columns, id_name,
                                             nullptr, type,
                                             INVOICE_ID,
                                             nullptr);
     }
 
-    auto *query = filter->create_qof_query ();
+    auto *query = m_filter->create_qof_query ();
 
     g_return_val_if_fail (query, nullptr);
 
-    query_view = gnc_query_view_new (columns, query);
+    m_query_view = gnc_query_view_new (m_columns, query);
 
     qof_query_destroy (query);
     
     {
-        auto *qview = GNC_QUERY_VIEW (query_view);
+        auto *qview = GNC_QUERY_VIEW (m_query_view);
         g_assert(qview);
 
         g_signal_connect (qview, "double_click_entry",
                           G_CALLBACK(action_double_click_entry),
-                          plugin_page);
+                          m_plugin_page);
 
         g_signal_connect (qview, "button-press-event",
                           G_CALLBACK (action_button_press_event),
-                          plugin_page);
+                          m_plugin_page);
 
         auto *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
 
         g_signal_connect (selection, "changed",
                           G_CALLBACK(action_selection_changed),
-                          plugin_page);
+                          m_plugin_page);
     }
 
-    widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+    m_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 
     {
-        auto *gtk_widget = GTK_WIDGET (widget);
+        auto *gtk_widget = GTK_WIDGET (m_widget);
         g_assert (gtk_widget);
 
         gtk_widget_set_name (gtk_widget, "gnc-id-invoices-owner-page");
@@ -492,7 +492,7 @@ Page::create_widget ()
     auto *scrolled = gtk_scrolled_window_new (nullptr, nullptr);
 
     {
-        auto *scrolled = GTK_SCROLLED_WINDOW (widget);
+        auto *scrolled = GTK_SCROLLED_WINDOW (m_widget);
         g_assert (scrolled);
 
         gtk_scrolled_window_set_policy (scrolled, GTK_POLICY_AUTOMATIC,
@@ -503,19 +503,19 @@ Page::create_widget ()
         auto *gtk_container = GTK_CONTAINER (scrolled);
         g_assert (gtk_container);
 
-        gtk_container_add (gtk_container, query_view);
+        gtk_container_add (gtk_container, m_query_view);
     }
 
     {
-        auto *box = GTK_BOX (widget);
+        auto *box = GTK_BOX (m_widget);
         g_assert (box);
 
         gtk_box_pack_start(box, scrolled, true, true, 0);
     }
 
-    gtk_widget_show_all (widget);
+    gtk_widget_show_all (m_widget);
 
-    g_signal_connect (G_OBJECT (plugin_page), "inserted",
+    g_signal_connect (G_OBJECT (m_plugin_page), "inserted",
                       G_CALLBACK (gnc_plugin_page_inserted_cb),
                       nullptr);
 
@@ -523,7 +523,7 @@ Page::create_widget ()
 
     LEAVE ("");
 
-    return widget;
+    return m_widget;
 }
 
 void
@@ -551,7 +551,7 @@ Page::selection_changed ()
 
     GSimpleActionGroup *simple_action_group =
         gnc_plugin_page_get_action_group (
-            GNC_PLUGIN_PAGE (plugin_page)
+            GNC_PLUGIN_PAGE (m_plugin_page)
         );
 
     gnc_plugin_set_actions_enabled (
@@ -574,7 +574,7 @@ Page::focus_page ()
 
     gnc_main_window_update_menu_and_toolbar (
         GNC_MAIN_WINDOW (get_window ()),
-        GNC_PLUGIN_PAGE (plugin_page),
+        GNC_PLUGIN_PAGE (m_plugin_page),
         load_ui 
     );
 }
@@ -646,11 +646,11 @@ Page::print_invoice ()
 void
 Page::apply_filter ()
 {
-    auto *query = filter->create_qof_query ();
+    auto *query = m_filter->create_qof_query ();
 
     g_return_if_fail (query);
 
-    gnc_query_view_reset_query (GNC_QUERY_VIEW (query_view), query);
+    gnc_query_view_reset_query (GNC_QUERY_VIEW (m_query_view), query);
 
     qof_query_destroy (query);
 }
@@ -658,7 +658,7 @@ Page::apply_filter ()
 void
 Page::open_filter_dialog ()
 {
-    filter->create_dialog();
+    m_filter->create_dialog();
 }
 
 } // End namespace
@@ -686,7 +686,7 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
 
         g_return_val_if_fail (plugin_page, nullptr);
 
-        if (get_private (plugin_page)->owner_type != owner_type)
+        if (get_private (plugin_page)->m_owner_type != owner_type)
             continue;
 
         LEAVE ("existing page %p", plugin_page);
@@ -697,8 +697,8 @@ gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
     g_return_val_if_fail (plugin_page, nullptr);
 
     auto *priv = get_private (plugin_page);
-    priv->owner_type = owner_type;
-    priv->page = new Page(*plugin_page);
+    priv->m_owner_type = owner_type;
+    priv->m_page = new Page(*plugin_page);
 
     LEAVE ("new page %p", plugin_page);
     return GNC_PLUGIN_PAGE (plugin_page);

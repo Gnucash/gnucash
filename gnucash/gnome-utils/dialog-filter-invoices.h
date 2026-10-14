@@ -28,7 +28,7 @@
 class GncFilterInvoicesDialogInternal;
 
 class GncFilterInvoicesDialog {
-    std::unique_ptr<GncFilterInvoicesDialogInternal> filter; 
+    std::unique_ptr<GncFilterInvoicesDialogInternal> m_filter; 
 
 public:
     GncFilterInvoicesDialog (GncPluginPage &plugin_page, GncOwnerType &owner_type,
