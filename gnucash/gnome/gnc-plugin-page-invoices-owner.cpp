@@ -103,6 +103,25 @@ get_page (gpointer user_data)
 
 namespace { // Isolate class-scope to this file.
 
+/************************************************************/
+/*         Forward-declare Command callbacks                */
+/************************************************************/
+
+static void action_new_invoice (GSimpleAction *simple, GVariant *parameter,
+                                gpointer user_data);
+
+static void action_edit_invoice (GSimpleAction *simple, GVariant *parameter,
+                                 gpointer user_data);
+
+static void action_duplicate_invoice (GSimpleAction *simple, GVariant *parameter,
+                                      gpointer user_data);
+
+static void action_print_invoice (GSimpleAction *simple, GVariant *parameter,
+                                  gpointer user_data);
+
+static void action_open_filter_dialog (GSimpleAction *simple, GVariant *parameter,
+                                       gpointer user_data);
+
 
 /************************************************************/
 /*                          Page Class                      */
@@ -119,9 +138,22 @@ private:
     GtkWidget *m_query_view = nullptr; // Managed/freed by gtk
     GList *m_columns = nullptr;
 
+    static constexpr GActionEntry k_plugin_actions [] =
+    {
+        { "NewInvoice", action_new_invoice, nullptr, nullptr, nullptr },
+        { "EditInvoice", action_edit_invoice, nullptr, nullptr, nullptr },
+        { "DuplicateInvoice", action_duplicate_invoice, nullptr, nullptr, nullptr },
+        { "PrintInvoice", action_print_invoice, nullptr, nullptr, nullptr },
+        { "OpenFilterBy", action_open_filter_dialog, nullptr, nullptr, nullptr },
+    };
+
+    static constexpr guint k_plugin_n_actions = std::size(k_plugin_actions);
+
     GncInvoice *get_selected ();
 
     void create_table_columns ();
+
+    void setup_actions ();
 
 public:
     Page (GncPluginPageInvoicesOwner &p, GncOwnerType owner);
@@ -383,6 +415,40 @@ Page::create_table_columns ()
                                         nullptr);
 }
 
+void
+Page::setup_actions ()
+{
+    switch (m_owner_type)
+    {
+    case GNC_OWNER_CUSTOMER:
+        gnc_plugin_page_set_menu_qualifier(
+            GNC_PLUGIN_PAGE (m_plugin_page), "c");
+        break;
+    case GNC_OWNER_VENDOR:
+        gnc_plugin_page_set_menu_qualifier(
+            GNC_PLUGIN_PAGE (m_plugin_page), "v");
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        gnc_plugin_page_set_menu_qualifier(
+            GNC_PLUGIN_PAGE (m_plugin_page), "e");
+        break;
+    default:
+        break;
+    }
+
+    GSimpleActionGroup *simple_action_group;
+
+    simple_action_group = gnc_plugin_page_create_action_group (
+        GNC_PLUGIN_PAGE (m_plugin_page), PLUGIN_ACTIONS_NAME);
+
+    g_action_map_add_action_entries (
+        G_ACTION_MAP (simple_action_group),
+        k_plugin_actions,
+        k_plugin_n_actions,
+        m_plugin_page
+    );
+}
+
 Page::Page (GncPluginPageInvoicesOwner &p, GncOwnerType owner) : m_plugin_page (&p),
                                                                  m_owner_type (owner)
 {
@@ -403,37 +469,6 @@ Page::Page (GncPluginPageInvoicesOwner &p, GncOwnerType owner) : m_plugin_page (
             this->apply_filter(); 
         }
     );
-
-    switch (m_owner_type)
-    {
-    case GNC_OWNER_CUSTOMER:
-        gnc_plugin_page_set_menu_qualifier(
-            GNC_PLUGIN_PAGE (m_plugin_page), "c");
-        break;
-    case GNC_OWNER_VENDOR:
-        gnc_plugin_page_set_menu_qualifier(
-            GNC_PLUGIN_PAGE (m_plugin_page), "v");
-        break;
-    case GNC_OWNER_EMPLOYEE:
-        gnc_plugin_page_set_menu_qualifier(
-            GNC_PLUGIN_PAGE (m_plugin_page), "e");
-        break;
-    default:
-        break;
-    }
-
-    static GActionEntry gnc_plugin_actions [] =
-    {
-        { "NewInvoice", action_new_invoice, nullptr, nullptr, nullptr },
-        { "EditInvoice", action_edit_invoice, nullptr, nullptr, nullptr },
-        { "DuplicateInvoice", action_duplicate_invoice, nullptr, nullptr, nullptr },
-        { "PrintInvoice", action_print_invoice, nullptr, nullptr, nullptr },
-        { "OpenFilterBy", action_open_filter_dialog, nullptr, nullptr, nullptr },
-    };
-
-    static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
-
-    GSimpleActionGroup *simple_action_group;
 
     {
         const char *title;
@@ -465,15 +500,7 @@ Page::Page (GncPluginPageInvoicesOwner &p, GncOwnerType owner) : m_plugin_page (
         GNC_PLUGIN_PAGE (m_plugin_page), gnc_get_current_book()
     );
 
-    simple_action_group = gnc_plugin_page_create_action_group (
-        GNC_PLUGIN_PAGE (m_plugin_page), PLUGIN_ACTIONS_NAME);
-
-    g_action_map_add_action_entries (
-        G_ACTION_MAP (simple_action_group),
-        gnc_plugin_actions,
-        gnc_plugin_n_actions,
-        m_plugin_page
-    );
+    setup_actions ();
 }
 
 GtkWindow *
