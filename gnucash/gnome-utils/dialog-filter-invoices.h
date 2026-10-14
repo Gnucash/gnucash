@@ -25,24 +25,16 @@
 #include <functional>
 #include "gnc-plugin.h"
 
+class GncFilterInvoicesDialogInternal;
+
 class GncFilterInvoicesDialog {
-    class FilterDialog;
-
-    std::unique_ptr<FilterDialog> filter; 
-    GncPluginPage                 *plugin_page = nullptr;
-    GncOwnerType                  owner_type;
-
-    using Callback = std::function<void()>;
+    std::unique_ptr<GncFilterInvoicesDialogInternal> filter; 
 
 public:
-    GncFilterInvoicesDialog (GncPluginPage &page, GncOwnerType &owner,
-                            Callback apply_cb);
+    GncFilterInvoicesDialog (GncPluginPage &plugin_page, GncOwnerType &owner_type,
+                            std::function<void()> apply_cb);
 
     ~GncFilterInvoicesDialog ();
-
-    Callback apply_filter = [](){
-        g_warn_if_fail (true);
-    };
 
     void create_dialog ();
 

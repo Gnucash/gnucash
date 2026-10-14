@@ -58,6 +58,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GncPluginPageInvoicesOwner, gnc_plugin_page_invoices
 #define GNC_PLUGIN_PAGE_INVOICES_OWNER_GET_PRIVATE(o)  \
    ((GncPluginPageInvoicesOwnerPrivate*)gnc_plugin_page_invoices_owner_get_instance_private ((GncPluginPageInvoicesOwner*)o))
 
+
+/************************************************************/
+/*                          Helpers                         */
+/************************************************************/
+
 static GncPluginPageInvoicesOwnerPrivate * 
 get_private (GncPluginPage *plugin_page)
 {
@@ -95,6 +100,11 @@ get_page (gpointer user_data)
 }
 
 namespace { // Isolate class-scope to this file.
+
+
+/************************************************************/
+/*                          Page Class                      */
+/************************************************************/
 
 class Page {
 public:
@@ -148,7 +158,98 @@ public:
     void print_invoice ();
 
     void apply_filter ();
+
+    void open_filter_dialog ();
 };
+
+
+/************************************************************/
+/*                     Command callbacks                    */
+/************************************************************/
+
+static void
+action_new_invoice (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
+{
+    get_page (user_data)->new_invoice ();
+}
+
+static void
+action_edit_invoice (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
+{
+    get_page (user_data)->edit_invoice ();
+}
+
+static void
+action_duplicate_invoice (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
+{
+    get_page (user_data)->duplicate_invoice ();
+}
+
+static void
+action_print_invoice (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
+{
+    get_page (user_data)->print_invoice ();
+}
+
+static void
+action_open_filter_dialog (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
+{
+    get_page (user_data)->open_filter_dialog ();
+}
+
+static void
+action_double_click_entry (GNCQueryView *qview, gpointer item, gpointer user_data)
+{
+    get_page (user_data)->double_click_entry (item);
+}
+
+static bool 
+action_button_press_event (GNCQueryView *qview, GdkEventButton *event,
+                           gpointer user_data)
+{
+    get_page (user_data)->button_press (event);
+
+    return false;
+}
+
+static void
+action_selection_changed (GtkTreeSelection *selection, gpointer user_data)
+{
+    get_page (user_data)->selection_changed ();
+}
+
+
+/************************************************************/
+/*                     Page callbacks                       */
+/************************************************************/
+
+static GtkWidget * 
+page_create_widget (GncPluginPage *plugin_page)
+{
+    return get_page (plugin_page)->create_widget ();
+}
+
+static void
+page_destroy_widget (GncPluginPage *plugin_page)
+{
+    auto *priv = get_private (plugin_page);
+
+    delete priv->page;
+    priv->page = nullptr;
+}
+
+static gboolean
+page_focus_function (GncPluginPage *plugin_page)
+{
+    get_page (plugin_page)->focus_page ();
+
+    return false;
+}
+
+
+/************************************************************/
+/*                     Implementation                       */
+/************************************************************/
 
 GncInvoice *
 Page::get_selected ()
@@ -203,60 +304,11 @@ Page::Page (GncPluginPageInvoicesOwner &p) : plugin_page (&p)
 
     static GActionEntry gnc_plugin_actions [] =
     {
-        {
-          "NewInvoice",
-          +[] (GSimpleAction *simple,
-               GVariant      *parameter,
-               gpointer       user_data)
-          {
-              get_page (user_data)->new_invoice ();
-          },
-          nullptr, nullptr, nullptr
-        },
-
-        {
-          "EditInvoice",
-          +[] (GSimpleAction *simple,
-               GVariant      *parameter,
-               gpointer       user_data)
-          {
-              get_page (user_data)->edit_invoice ();
-          },
-          nullptr, nullptr, nullptr
-        },
-
-        {
-          "DuplicateInvoice",
-          +[] (GSimpleAction *simple,
-               GVariant      *parameter,
-               gpointer       user_data)
-          {
-              get_page (user_data)->duplicate_invoice ();
-          },
-          nullptr, nullptr, nullptr
-        },
-
-        {
-          "PrintInvoice",
-          +[] (GSimpleAction *simple,
-               GVariant      *parameter,
-               gpointer       user_data)
-          {
-              get_page (user_data)->print_invoice ();
-          },
-          nullptr, nullptr, nullptr
-        },
-
-        {
-          "OpenFilterBy",
-          +[] (GSimpleAction *simple,
-               GVariant      *parameter,
-               gpointer       user_data)
-          {
-              get_page (user_data)->filter->create_dialog ();
-          },
-          nullptr, nullptr, nullptr
-        },
+        { "NewInvoice", action_new_invoice, nullptr, nullptr, nullptr },
+        { "EditInvoice", action_edit_invoice, nullptr, nullptr, nullptr },
+        { "DuplicateInvoice", action_duplicate_invoice, nullptr, nullptr, nullptr },
+        { "PrintInvoice", action_print_invoice, nullptr, nullptr, nullptr },
+        { "OpenFilterBy", action_open_filter_dialog, nullptr, nullptr, nullptr },
     };
 
     static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -413,48 +465,19 @@ Page::create_widget ()
         auto *qview = GNC_QUERY_VIEW (query_view);
         g_assert(qview);
 
-        g_signal_connect (
-            qview,
-            "double_click_entry",
-            G_CALLBACK (
-                +[] (GNCQueryView *qview, gpointer item, gpointer user_data)
-                {
-                  get_page (user_data)->double_click_entry (item);
-                }
-            ),
-            plugin_page
-        );
+        g_signal_connect (qview, "double_click_entry",
+                          G_CALLBACK(action_double_click_entry),
+                          plugin_page);
 
-        g_signal_connect (
-            qview,
-            "button-press-event",
-            G_CALLBACK (
-                +[] (GNCQueryView *qview, GdkEventButton *event,
-                     gpointer user_data) -> bool
-                {
-                    get_page (user_data)->button_press (event);
+        g_signal_connect (qview, "button-press-event",
+                          G_CALLBACK (action_button_press_event),
+                          plugin_page);
 
-                    return false;
-                }
-            ),
-            plugin_page
-        );
+        auto *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
 
-        auto *selection = gtk_tree_view_get_selection(
-            GTK_TREE_VIEW(qview)
-        );
-
-        g_signal_connect(
-            selection,
-            "changed",
-            G_CALLBACK(
-                +[] (GtkTreeSelection *selection, gpointer user_data)
-                {
-                    get_page (user_data)->selection_changed ();
-                }
-            ),
-            plugin_page
-        );
+        g_signal_connect (selection, "changed",
+                          G_CALLBACK(action_selection_changed),
+                          plugin_page);
     }
 
     widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
@@ -632,7 +655,18 @@ Page::apply_filter ()
     qof_query_destroy (query);
 }
 
+void
+Page::open_filter_dialog ()
+{
+    filter->create_dialog();
+}
+
 } // End namespace
+
+
+/************************************************************/
+/*                     Plugin page                          */
+/************************************************************/
 
 GncPluginPage *
 gnc_plugin_page_invoices_owner_new (GncOwnerType owner_type)
@@ -679,25 +713,11 @@ gnc_plugin_page_invoices_owner_class_init (GncPluginPageInvoicesOwnerClass *klas
 
     page_class->tab_icon            = GNC_ICON_INVOICE;
 
-    page_class->create_widget       = +[] (GncPluginPage *plugin_page) -> GtkWidget *
-                                      {
-                                          return get_page (plugin_page)->create_widget ();
-                                      };
+    page_class->create_widget       = page_create_widget;
 
-    page_class->destroy_widget      = +[] (GncPluginPage *plugin_page) 
-                                      {
-                                          auto *priv = get_private (plugin_page);
+    page_class->destroy_widget      = page_destroy_widget;
 
-                                          delete priv->page;
-                                          priv->page = nullptr;
-                                      };
-
-    page_class->focus_page_function = +[] (GncPluginPage *plugin_page) -> gboolean 
-                                      {
-                                          get_page (plugin_page)->focus_page ();
-
-                                          return false;
-                                      };
+    page_class->focus_page_function = page_focus_function;
 }
 
 static void 

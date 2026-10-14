@@ -31,11 +31,19 @@
 static const char * const UI_FILE = "dialog-filter-invoices.glade";
 static QofLogModule log_module = GNC_MOD_GUI;
 
-class GncFilterInvoicesDialog::FilterDialog {
-    enum Preset {
-        CUSTOM,
-        OVERDUE
-    };
+/************************************************************/
+/*       GncFilterInvoicesDialogInternal Class              */
+/************************************************************/
+
+enum Preset {
+    CUSTOM,
+    OVERDUE
+};
+
+class GncFilterInvoicesDialogInternal {
+    GncOwnerType owner_type;
+    GncPluginPage *plugin_page = nullptr;
+    GtkWidget *dialog = nullptr;
 
     // State
     Preset        preset = Preset::CUSTOM;
@@ -78,10 +86,21 @@ class GncFilterInvoicesDialog::FilterDialog {
     GtkEntry        *search_entry = nullptr;
 
 public:
-    GncFilterInvoicesDialog *parent = nullptr;
-    GtkWidget               *dialog = nullptr;
+    std::function<void()> apply_filter = [](){
+        g_warn_if_fail (false);
+    };
 
-    ~FilterDialog ()
+    GncFilterInvoicesDialogInternal (GncOwnerType &owner, GncPluginPage &page,
+                                     std::function<void()> apply_cb) :
+                                    owner_type(owner), plugin_page(&page)
+    {
+        if (apply_cb)
+            apply_filter = apply_cb;
+        else
+            g_warn_if_fail (false);
+    }
+ 
+    ~GncFilterInvoicesDialogInternal ()
     {
         if (dialog)
             gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -91,12 +110,7 @@ public:
 
     QofQuery *create_qof_query ();
 
-private:
     void dialog_close ();
-
-    bool reset ();
-
-    void resize_window ();
 
     void set_preset (Preset p);
 
@@ -114,21 +128,246 @@ private:
 
     void set_creditnotes (bool status);
 
-    void set_search_term (const char *term);
-
-    void set_search_term ();
+    void set_dates (bool init);
 
     void set_use_start_date (bool status);
 
     void set_use_end_date (bool status);
 
-    void set_dates (bool init);
+    void apply_filter_if_start_or_end_date ()
+    {
+        if (use_start_date || use_end_date)
+            apply_filter ();
+    }
+
+    void set_search_term ();
+
+    void set_search_term (const char *term);
+
+    bool reset ();
+
+private:
+    void resize_window ();
 
     void reset_dates ();
 };
 
+
+/************************************************************/
+/*                     Command callbacks                    */
+/************************************************************/
+
+static void
+dialog_destroy (GtkWidget *w, gpointer user_data)
+{
+    static_cast<GncFilterInvoicesDialogInternal *> (user_data)->dialog_close();
+}
+
+static gboolean
+action_custom_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    if (!gtk_toggle_button_get_active(button))
+        return false;
+
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_preset (Preset::CUSTOM);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_overdue_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    if (!gtk_toggle_button_get_active(button))
+        return false;
+
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_preset (Preset::OVERDUE);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_overdue_days_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    if (!gtk_toggle_button_get_active(button))
+        return false;
+
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_overdue_days (button);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_paid_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_paid (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_unpaid_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_unpaid (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_posted_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_posted (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_unposted_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_unposted (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_invoices_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_invoices (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static gboolean
+action_creditnotes_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_creditnotes (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static void
+action_start_picker_activate (GtkWidget *date, gpointer user_data)
+{
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_dates (false);
+    filter->apply_filter ();
+}
+
+static gboolean
+action_start_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_use_start_date (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static void
+action_end_picker_activate (GtkWidget *date, gpointer user_data)
+{
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_dates (false);
+    filter->apply_filter ();
+}
+
+static gboolean
+action_end_toggle (GtkToggleButton *button, gpointer user_data)
+{
+    auto state = gtk_toggle_button_get_active(button);
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_use_end_date (state);
+    filter->apply_filter ();
+
+    return false;
+}
+
+static void 
+action_apply_dates (GtkToggleButton *button, gpointer user_data)
+{
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_dates (false);
+    filter->apply_filter_if_start_or_end_date ();
+}
+
+static void
+action_search_entry_activate (GtkEditable *editable, gpointer user_data)
+{
+    const gchar *text = gtk_entry_get_text(GTK_ENTRY(editable));
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_search_term (text);
+    filter->apply_filter ();
+}
+
+static void
+action_apply_search_entry (GtkButton *button, gpointer user_data)
+{
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+
+    filter->set_search_term ();
+    filter->apply_filter ();
+}
+
+static void
+action_reset (GtkButton *button, gpointer user_data)
+{
+    auto *filter = static_cast<GncFilterInvoicesDialogInternal *> (user_data);
+    if (filter->reset ())
+        filter->apply_filter ();
+}
+
+static void
+action_close (GtkButton *button, gpointer user_data)
+{
+    gtk_widget_destroy (GTK_WIDGET (user_data));
+}
+
+
+/************************************************************/
+/*                     Implementation                       */
+/************************************************************/
+
 void
-GncFilterInvoicesDialog::FilterDialog::dialog_close ()
+GncFilterInvoicesDialogInternal::dialog_close ()
 {
     dialog = nullptr;
 
@@ -158,7 +397,7 @@ GncFilterInvoicesDialog::FilterDialog::dialog_close ()
 }
 
 bool 
-GncFilterInvoicesDialog::FilterDialog::reset ()
+GncFilterInvoicesDialogInternal::reset ()
 {
     if (preset == Preset::CUSTOM
         && show_paid && show_unpaid
@@ -201,7 +440,7 @@ GncFilterInvoicesDialog::FilterDialog::reset ()
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::resize_window ()
+GncFilterInvoicesDialogInternal::resize_window ()
 {
     g_return_if_fail (dialog);
 
@@ -216,7 +455,7 @@ GncFilterInvoicesDialog::FilterDialog::resize_window ()
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_preset (Preset p)
+GncFilterInvoicesDialogInternal::set_preset (Preset p)
 {
     preset = p;
     GtkToggleButton *toggle;
@@ -244,7 +483,7 @@ GncFilterInvoicesDialog::FilterDialog::set_preset (Preset p)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_overdue_days (GtkToggleButton *button)
+GncFilterInvoicesDialogInternal::set_overdue_days (GtkToggleButton *button)
 {
     int days = 0;
 
@@ -267,7 +506,7 @@ GncFilterInvoicesDialog::FilterDialog::set_overdue_days (GtkToggleButton *button
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_paid (bool status)
+GncFilterInvoicesDialogInternal::set_paid (bool status)
 {
     show_paid = status;
 
@@ -278,7 +517,7 @@ GncFilterInvoicesDialog::FilterDialog::set_paid (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_unpaid (bool status)
+GncFilterInvoicesDialogInternal::set_unpaid (bool status)
 {
     show_unpaid = status;
 
@@ -289,7 +528,7 @@ GncFilterInvoicesDialog::FilterDialog::set_unpaid (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_posted (bool status)
+GncFilterInvoicesDialogInternal::set_posted (bool status)
 {
     show_posted = status;
 
@@ -300,7 +539,7 @@ GncFilterInvoicesDialog::FilterDialog::set_posted (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_unposted (bool status)
+GncFilterInvoicesDialogInternal::set_unposted (bool status)
 {
     show_unposted = status;
 
@@ -311,7 +550,7 @@ GncFilterInvoicesDialog::FilterDialog::set_unposted (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_invoices (bool status)
+GncFilterInvoicesDialogInternal::set_invoices (bool status)
 {
     show_invoices = status;
 
@@ -322,7 +561,7 @@ GncFilterInvoicesDialog::FilterDialog::set_invoices (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_creditnotes (bool status)
+GncFilterInvoicesDialogInternal::set_creditnotes (bool status)
 {
     show_creditnotes = status;
 
@@ -333,7 +572,7 @@ GncFilterInvoicesDialog::FilterDialog::set_creditnotes (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_search_term (const char *term)
+GncFilterInvoicesDialogInternal::set_search_term (const char *term)
 {
     search_term = term;
 
@@ -344,7 +583,7 @@ GncFilterInvoicesDialog::FilterDialog::set_search_term (const char *term)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_search_term ()
+GncFilterInvoicesDialogInternal::set_search_term ()
 {
     const gchar *text = gtk_entry_get_text(search_entry);
 
@@ -352,7 +591,7 @@ GncFilterInvoicesDialog::FilterDialog::set_search_term ()
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_use_start_date (bool status)
+GncFilterInvoicesDialogInternal::set_use_start_date (bool status)
 {
     use_start_date = status;
 
@@ -368,7 +607,7 @@ GncFilterInvoicesDialog::FilterDialog::set_use_start_date (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_use_end_date (bool status)
+GncFilterInvoicesDialogInternal::set_use_end_date (bool status)
 {
     use_end_date = status;
 
@@ -384,7 +623,7 @@ GncFilterInvoicesDialog::FilterDialog::set_use_end_date (bool status)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::set_dates (bool init)
+GncFilterInvoicesDialogInternal::set_dates (bool init)
 {
     if (start_picker)
     {
@@ -417,7 +656,7 @@ GncFilterInvoicesDialog::FilterDialog::set_dates (bool init)
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::reset_dates ()
+GncFilterInvoicesDialogInternal::reset_dates ()
 {
     if (start_picker)
         gnc_date_edit_set_time(start_picker, time(NULL));
@@ -433,11 +672,8 @@ GncFilterInvoicesDialog::FilterDialog::reset_dates ()
 }
 
 QofQuery *
-GncFilterInvoicesDialog::FilterDialog::create_qof_query ()
+GncFilterInvoicesDialogInternal::create_qof_query ()
 {
-    g_assert (parent);
-
-    auto owner_type = parent->owner_type;
     auto *book = gnc_get_current_book ();
 
     auto *query = qof_query_create_for (GNC_ID_INVOICE);
@@ -771,13 +1007,12 @@ GncFilterInvoicesDialog::FilterDialog::create_qof_query ()
 }
 
 void
-GncFilterInvoicesDialog::FilterDialog::dialog_open ()
+GncFilterInvoicesDialogInternal::dialog_open ()
 {
-    g_assert (parent);
-    g_assert (parent->plugin_page);
-    g_assert (parent->apply_filter);
+    g_assert (plugin_page);
+    g_assert (apply_filter);
 
-    ENTER ("(fd %p, page %p)", dialog, parent->plugin_page);
+    ENTER ("(fd %p, page %p)", dialog, plugin_page);
 
     if (dialog)
     {
@@ -803,7 +1038,7 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
     }
 
     {
-        auto window = GTK_WINDOW (gnc_plugin_page_get_window (parent->plugin_page));
+        auto window = GTK_WINDOW (gnc_plugin_page_get_window (plugin_page));
 
         g_assert (window);
 
@@ -813,7 +1048,7 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
     /* Translators: The %s is the name of the plugin page */
     gchar *title = g_strdup_printf(
         _("Filter %s by…"),
-        gnc_plugin_page_get_page_name (parent->plugin_page)
+        gnc_plugin_page_get_page_name (plugin_page)
     );
 
     gtk_window_set_title(GTK_WINDOW(dialog), title);
@@ -822,16 +1057,7 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
 
     gtk_widget_show_all (dialog);
 
-    g_signal_connect(
-        dialog, "destroy",
-        G_CALLBACK (
-            +[] (GtkWidget *w, gpointer user_data)
-            {
-                static_cast<FilterDialog *> (user_data)->dialog_close();
-            }
-        ),
-        this 
-    );
+    g_signal_connect(dialog, "destroy", G_CALLBACK (dialog_destroy), this);
 
     {
         custom_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "preset-custom"));
@@ -846,8 +1072,6 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         else
         {
             {
-                auto owner_type = parent->owner_type;
-
                 if (owner_type == GNC_OWNER_VENDOR)
                 {
                     gtk_button_set_label(
@@ -864,45 +1088,11 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
                 }
             }
 
-            g_signal_connect(
-                custom_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        if (!gtk_toggle_button_get_active(button))
-                            return false;
+            g_signal_connect(custom_toggle, "toggled",
+                             G_CALLBACK(action_custom_toggle), this);
 
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_preset (Preset::CUSTOM);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this
-            );
-
-            g_signal_connect(
-                overdue_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        if (!gtk_toggle_button_get_active(button))
-                            return false;
-
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_preset (Preset::OVERDUE);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this
-            );
+            g_signal_connect(overdue_toggle, "toggled",
+                             G_CALLBACK(action_overdue_toggle), this);
         }
 
         set_preset (preset);
@@ -954,25 +1144,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
 
             for (size_t i = 0; i < std::size (toggles); i++)
             {
-                g_signal_connect(
-                    toggles[i],
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            if (!gtk_toggle_button_get_active(button))
-                                return false;
-
-                            auto *filter = static_cast<FilterDialog *> (user_data);
-
-                            filter->set_overdue_days (button);
-                            filter->parent->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    this
-                );
+                g_signal_connect(toggles[i], "toggled",
+                                 G_CALLBACK(action_overdue_days_toggle), this);
             }
         }
     }
@@ -988,23 +1161,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         {
             set_paid (show_paid);
 
-            g_signal_connect(
-                paid_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_paid (state);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this 
-            );
+            g_signal_connect(paid_toggle, "toggled",
+                             G_CALLBACK(action_paid_toggle), this);
         }
     }
 
@@ -1020,23 +1178,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         {
             set_unpaid (show_unpaid);
 
-            g_signal_connect(
-                unpaid_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_unpaid (state);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this 
-            );
+            g_signal_connect(unpaid_toggle, "toggled",
+                             G_CALLBACK(action_unpaid_toggle), this);
         }
     }
 
@@ -1051,23 +1194,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         {
             set_posted (show_posted);
 
-            g_signal_connect(
-                posted_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_posted (state);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this 
-            );
+            g_signal_connect(posted_toggle, "toggled",
+                             G_CALLBACK(action_posted_toggle), this);
         }
     }
 
@@ -1082,23 +1210,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         {
             set_unposted (show_unposted);
 
-            g_signal_connect(
-                unposted_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_unposted (state);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this
-            );
+            g_signal_connect(unposted_toggle, "toggled",
+                             G_CALLBACK(action_unposted_toggle), this);
         }
     }
 
@@ -1111,8 +1224,6 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         }
         else
         {
-            auto owner_type = parent->owner_type;
-
             if (owner_type == GNC_OWNER_VENDOR)
             {
                 gtk_button_set_label(
@@ -1130,23 +1241,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
 
             set_invoices (show_invoices);
 
-            g_signal_connect(
-                invoices_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_invoices (state);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this
-            );
+            g_signal_connect(invoices_toggle, "toggled",
+                             G_CALLBACK(action_invoices_toggle), this);
         }
     }
 
@@ -1162,23 +1258,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
             gtk_toggle_button_set_active(creditnotes_toggle, show_creditnotes);
             set_creditnotes (show_creditnotes);
 
-            g_signal_connect(
-                creditnotes_toggle,
-                "toggled",
-                G_CALLBACK(
-                    +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                    {
-                        auto state = gtk_toggle_button_get_active(button);
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_creditnotes (state);
-                        filter->parent->apply_filter ();
-
-                        return false;
-                    }
-                ),
-                this
-            );
+            g_signal_connect(creditnotes_toggle, "toggled",
+                             G_CALLBACK(action_creditnotes_toggle), this);
         }
     }
 
@@ -1196,43 +1277,15 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
             {
                 gtk_box_pack_start (GTK_BOX (start_box), GTK_WIDGET (start_picker), TRUE, TRUE, 0);
 
-                g_signal_connect(
-                    start_picker->date_entry,
-                    "activate",
-                    G_CALLBACK(
-                        +[](GtkWidget *date,
-                            gpointer user_data)
-                        {
-                            auto *filter = static_cast<FilterDialog *> (user_data);
-
-                            filter->set_dates (false);
-                            filter->parent->apply_filter ();
-                        }
-                    ),
-                    this 
-                );
+                g_signal_connect(start_picker->date_entry, "activate",
+                                 G_CALLBACK(action_start_picker_activate), this);
             }
             else g_warn_if_fail (false);
 
             if (start_toggle)
             {
-                g_signal_connect(
-                    start_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *filter = static_cast<FilterDialog *> (user_data);
-
-                            filter->set_use_start_date (state);
-                            filter->parent->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    this
-                );
+                g_signal_connect(start_toggle, "toggled",
+                                 G_CALLBACK(action_start_toggle), this);
             }
             else
             {
@@ -1260,21 +1313,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
             {
                 gtk_box_pack_start (GTK_BOX (end_box), GTK_WIDGET (end_picker), TRUE, TRUE, 0);
 
-                g_signal_connect(
-                    end_picker->date_entry,
-                    "activate",
-                    G_CALLBACK(
-                        +[](GtkWidget *date,
-                            gpointer user_data)
-                        {
-                            auto *filter = static_cast<FilterDialog *> (user_data);
-
-                            filter->set_dates (false);
-                            filter->parent->apply_filter ();
-                        }
-                    ),
-                    this 
-                );
+                g_signal_connect(end_picker->date_entry, "activate",
+                                 G_CALLBACK(action_end_picker_activate), this);
             }
             else
             {
@@ -1283,23 +1323,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
 
             if (end_toggle)
             {
-                g_signal_connect(
-                    end_toggle,
-                    "toggled",
-                    G_CALLBACK(
-                        +[] (GtkToggleButton *button, gpointer user_data) -> gboolean
-                        {
-                            auto state = gtk_toggle_button_get_active(button);
-                            auto *filter = static_cast<FilterDialog *> (user_data);
-
-                            filter->set_use_end_date (state);
-                            filter->parent->apply_filter ();
-
-                            return false;
-                        }
-                    ),
-                    this
-                );
+                g_signal_connect(end_toggle, "toggled",
+                                 G_CALLBACK(action_end_toggle), this);
             }
             else
             {
@@ -1322,20 +1347,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         }
         else
         {
-            g_signal_connect(
-                apply_button,
-                "clicked",
-                G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
-                {
-                    auto *filter = static_cast<FilterDialog *> (user_data);
-
-                    filter->set_dates (false);
-
-                    if (filter->use_start_date || filter->use_end_date)
-                        filter->parent->apply_filter ();
-                }),
-                this
-            );
+            g_signal_connect(apply_button, "clicked",
+                             G_CALLBACK(action_apply_dates), this);
         }
     }
 
@@ -1348,8 +1361,6 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         }
         else
         {
-            auto owner_type = parent->owner_type;
-
             if (owner_type == GNC_OWNER_VENDOR)
             {
                 gtk_entry_set_placeholder_text(
@@ -1368,22 +1379,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
             if (search_term.length())
                 set_search_term (search_term.c_str());
 
-            g_signal_connect(
-                search_entry,
-                "activate",
-                G_CALLBACK(
-                    +[] (GtkEditable *editable,
-                          gpointer    user_data)
-                    {
-                        const gchar *text = gtk_entry_get_text(GTK_ENTRY(editable));
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-
-                        filter->set_search_term (text);
-                        filter->parent->apply_filter ();
-                    }
-                ),
-                this
-            );
+            g_signal_connect(search_entry, "activate",
+                             G_CALLBACK(action_search_entry_activate), this);
         }
 
         auto *apply_button = GTK_BUTTON (gtk_builder_get_object(builder, "apply-search"));
@@ -1393,18 +1390,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
             g_warn_if_fail(false);
         }
         else {
-            g_signal_connect(
-                apply_button,
-                "clicked",
-                G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
-                {
-                    auto *filter = static_cast<FilterDialog *> (user_data);
-
-                    filter->set_search_term ();
-                    filter->parent->apply_filter ();
-                }),
-                this
-            );
+            g_signal_connect(apply_button, "clicked",
+                             G_CALLBACK(action_apply_search_entry), this);
         }
     }
 
@@ -1417,19 +1404,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         }
         else
         {
-            g_signal_connect (
-                reset_button,
-                "clicked",
-                G_CALLBACK (
-                    +[] (GtkButton *button, gpointer user_data)
-                    {
-                        auto *filter = static_cast<FilterDialog *> (user_data);
-                        if (filter->reset ())
-                            filter->parent->apply_filter ();
-                    }
-                ),
-                this
-            );
+            g_signal_connect (reset_button, "clicked",
+                              G_CALLBACK (action_reset), this);
         }
     }
 
@@ -1442,15 +1418,8 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
         }
         else
         {
-            g_signal_connect(
-                close_button,
-                "clicked",
-                G_CALLBACK(+[] (GtkButton *button, gpointer user_data)
-                {
-                    gtk_widget_destroy (GTK_WIDGET (user_data));
-                }),
-                dialog
-            );
+            g_signal_connect(close_button, "clicked",
+                             G_CALLBACK(action_close), dialog);
         }
     }
 
@@ -1460,21 +1429,17 @@ GncFilterInvoicesDialog::FilterDialog::dialog_open ()
 }
 
 GncFilterInvoicesDialog::GncFilterInvoicesDialog (
-    GncPluginPage &page, GncOwnerType &owner,
-    Callback apply_cb
-) : plugin_page(&page), owner_type(owner)
+    GncPluginPage &plugin_page, GncOwnerType &owner_type,
+    std::function<void()> apply_cb
+)
 {
-    if (apply_cb)
-        apply_filter = apply_cb;
-    else
-        g_warn_if_fail (false);
-
     g_return_if_fail(owner_type == GNC_OWNER_CUSTOMER ||
                      owner_type == GNC_OWNER_VENDOR ||
                      owner_type == GNC_OWNER_EMPLOYEE);
 
-    filter = std::make_unique<FilterDialog> ();
-    filter->parent = this;
+    filter = std::make_unique<GncFilterInvoicesDialogInternal> (
+        owner_type, plugin_page, apply_cb
+    ); 
 }
 
 GncFilterInvoicesDialog::~GncFilterInvoicesDialog() = default;
