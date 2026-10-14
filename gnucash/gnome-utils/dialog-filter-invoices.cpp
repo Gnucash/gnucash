@@ -1027,14 +1027,18 @@ GncFilterInvoicesDialogInternal::dialog_open ()
     if (!add_from_file)
     {
         g_object_unref (G_OBJECT(builder));
-        g_return_if_fail (false);
+        PERR("Failed to build filter dialog: Could not open file '%s'", UI_FILE);
+
+        return;
     }
 
     m_dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoices-filters"));
 
     if (!m_dialog) {
         g_object_unref (G_OBJECT (builder));
-        g_return_if_fail (false);
+        PERR("Failed to build filter dialog: Could not get object 'invoices-filters'");
+
+        return;
     }
 
     {
