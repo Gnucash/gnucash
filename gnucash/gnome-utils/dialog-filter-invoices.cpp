@@ -150,6 +150,8 @@ private:
     void resize_window ();
 
     void reset_dates ();
+
+    void setup_ui_elements (GtkBuilder *builder);
 };
 
 
@@ -1009,62 +1011,8 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
 }
 
 void
-GncFilterInvoicesDialogInternal::dialog_open ()
+GncFilterInvoicesDialogInternal::setup_ui_elements (GtkBuilder *builder)
 {
-    g_return_if_fail (m_plugin_page);
-    g_return_if_fail (m_apply_filter);
-
-    ENTER ("(fd %p, page %p)", m_dialog, m_plugin_page);
-
-    if (m_dialog)
-    {
-        gtk_window_present (GTK_WINDOW (m_dialog));
-        LEAVE ("existing m_dialog");
-        return;
-    }
-
-    auto *builder = gtk_builder_new ();
-    bool add_from_file = gnc_builder_add_from_file (builder, UI_FILE, "invoices-filters");
-
-    if (!add_from_file)
-    {
-        g_object_unref (G_OBJECT(builder));
-        PERR("Failed to build filter dialog: Could not open file '%s'", UI_FILE);
-
-        return;
-    }
-
-    m_dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoices-filters"));
-
-    if (!m_dialog) {
-        g_object_unref (G_OBJECT (builder));
-        PERR("Failed to build filter dialog: Could not get object 'invoices-filters'");
-
-        return;
-    }
-
-    {
-        auto window = GTK_WINDOW (gnc_plugin_page_get_window (m_plugin_page));
-        g_warn_if_fail (window);
-
-        if (window)
-            gtk_window_set_transient_for(GTK_WINDOW (m_dialog), window);
-    }
-
-    /* Translators: The %s is the name of the plugin page */
-    gchar *title = g_strdup_printf(
-        _("Filter %s by…"),
-        gnc_plugin_page_get_page_name (m_plugin_page)
-    );
-
-    gtk_window_set_title(GTK_WINDOW(m_dialog), title);
-
-    g_free(title);
-
-    gtk_widget_show_all (m_dialog);
-
-    g_signal_connect(m_dialog, "destroy", G_CALLBACK (dialog_destroy), this);
-
     {
         m_custom_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "preset-custom"));
         m_overdue_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object(builder, "preset-overdue"));
@@ -1428,6 +1376,66 @@ GncFilterInvoicesDialogInternal::dialog_open ()
                              G_CALLBACK(action_close), m_dialog);
         }
     }
+}
+
+void
+GncFilterInvoicesDialogInternal::dialog_open ()
+{
+    g_return_if_fail (m_plugin_page);
+    g_return_if_fail (m_apply_filter);
+
+    ENTER ("(fd %p, page %p)", m_dialog, m_plugin_page);
+
+    if (m_dialog)
+    {
+        gtk_window_present (GTK_WINDOW (m_dialog));
+        LEAVE ("existing m_dialog");
+        return;
+    }
+
+    auto *builder = gtk_builder_new ();
+    bool add_from_file = gnc_builder_add_from_file (builder, UI_FILE, "invoices-filters");
+
+    if (!add_from_file)
+    {
+        g_object_unref (G_OBJECT(builder));
+        PERR("Failed to build filter dialog: Could not open file '%s'", UI_FILE);
+
+        return;
+    }
+
+    m_dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoices-filters"));
+
+    if (!m_dialog) {
+        g_object_unref (G_OBJECT (builder));
+        PERR("Failed to build filter dialog: Could not get object 'invoices-filters'");
+
+        return;
+    }
+
+    {
+        auto window = GTK_WINDOW (gnc_plugin_page_get_window (m_plugin_page));
+        g_warn_if_fail (window);
+
+        if (window)
+            gtk_window_set_transient_for(GTK_WINDOW (m_dialog), window);
+    }
+
+    /* Translators: The %s is the name of the plugin page */
+    gchar *title = g_strdup_printf(
+        _("Filter %s by…"),
+        gnc_plugin_page_get_page_name (m_plugin_page)
+    );
+
+    gtk_window_set_title(GTK_WINDOW(m_dialog), title);
+
+    g_free(title);
+
+    gtk_widget_show_all (m_dialog);
+
+    g_signal_connect(m_dialog, "destroy", G_CALLBACK (dialog_destroy), this);
+
+    setup_ui_elements (builder);
 
     g_object_unref(G_OBJECT(builder));
 
