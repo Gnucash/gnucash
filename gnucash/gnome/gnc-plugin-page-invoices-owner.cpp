@@ -121,6 +121,8 @@ private:
 
     GncInvoice *get_selected ();
 
+    void create_table_columns ();
+
 public:
     Page (GncPluginPageInvoicesOwner &p, GncOwnerType owner);
 
@@ -296,6 +298,91 @@ Page::get_selected ()
     return invoice;
 }
 
+void
+Page::create_table_columns ()
+{
+    QofIdType type = GNC_INVOICE_MODULE_NAME;
+    const char *id_name;
+
+    switch (m_owner_type)
+    {
+    case GNC_OWNER_CUSTOMER:
+        id_name = _("Invoice ID");
+        break;
+    case GNC_OWNER_VENDOR:
+        id_name = _("Bill ID");
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        id_name = _("Voucher ID");
+        break;
+    default:
+        id_name = "ERROR"; // Should never happen, owner_type is
+                           // checked further up the stack in
+                           // gnc_plugin_page_invoices_owner_new ()
+        break;
+    }
+
+    const char *owner_name = m_owner_type == GNC_OWNER_EMPLOYEE
+        ? _("Employee") : _("Company"); 
+
+    m_columns = gnc_search_param_prepend (m_columns, _("Job"), 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_OWNER,
+                                        OWNER_JOB,
+                                        JOB_NAME,
+                                        nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, _("Billing ID"), 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_BILLINGID,
+                                        nullptr); 
+    
+    m_columns = gnc_search_param_prepend (m_columns, _("Due"), 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_DUE,
+                                        nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, _("Paid"), 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_IS_PAID,
+                                        nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, _("Posted"), 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_POSTED,
+                                        nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, owner_name, 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_OWNER,
+                                        OWNER_PARENT,
+                                        OWNER_NAME,
+                                        nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, _("Total"), 
+                                          nullptr, 
+                                          type,
+                                          INVOICE_TOTAL,
+                                          nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, _("Type"), 
+                                        nullptr, 
+                                        type,
+                                        INVOICE_TYPE_STRING,
+                                        nullptr); 
+
+    m_columns = gnc_search_param_prepend (m_columns, id_name,
+                                        nullptr, type,
+                                        INVOICE_ID,
+                                        nullptr);
+}
+
 Page::Page (GncPluginPageInvoicesOwner &p, GncOwnerType owner) : m_plugin_page (&p),
                                                                  m_owner_type (owner)
 {
@@ -406,89 +493,7 @@ Page::create_widget ()
 {
     ENTER ("page %p", m_plugin_page);
 
-    QofIdType type = GNC_INVOICE_MODULE_NAME;
-
-    { // Set up table columns.
-        const char *id_name;
-
-        switch (m_owner_type)
-        {
-        case GNC_OWNER_CUSTOMER:
-            id_name = _("Invoice ID");
-            break;
-        case GNC_OWNER_VENDOR:
-            id_name = _("Bill ID");
-            break;
-        case GNC_OWNER_EMPLOYEE:
-            id_name = _("Voucher ID");
-            break;
-        default:
-            id_name = "ERROR"; // Should never happen, owner_type is
-                               // checked further up the stack in
-                               // gnc_plugin_page_invoices_owner_new ()
-            break;
-        }
-
-        const char *owner_name = m_owner_type == GNC_OWNER_EMPLOYEE
-            ? _("Employee") : _("Company"); 
-
-        m_columns = gnc_search_param_prepend (m_columns, _("Job"), 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_OWNER,
-                                            OWNER_JOB,
-                                            JOB_NAME,
-                                            nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, _("Billing ID"), 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_BILLINGID,
-                                            nullptr); 
-        
-        m_columns = gnc_search_param_prepend (m_columns, _("Due"), 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_DUE,
-                                            nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, _("Paid"), 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_IS_PAID,
-                                            nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, _("Posted"), 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_POSTED,
-                                            nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, owner_name, 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_OWNER,
-                                            OWNER_PARENT,
-                                            OWNER_NAME,
-                                            nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, _("Total"), 
-                                              nullptr, 
-                                              type,
-                                              INVOICE_TOTAL,
-                                              nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, _("Type"), 
-                                            nullptr, 
-                                            type,
-                                            INVOICE_TYPE_STRING,
-                                            nullptr); 
-
-        m_columns = gnc_search_param_prepend (m_columns, id_name,
-                                            nullptr, type,
-                                            INVOICE_ID,
-                                            nullptr);
-    }
+    create_table_columns ();
 
     auto *query = m_filter->create_qof_query ();
 
