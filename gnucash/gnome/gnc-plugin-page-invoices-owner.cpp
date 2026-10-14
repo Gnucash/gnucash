@@ -522,13 +522,21 @@ Page::create_widget ()
 
     create_table_columns ();
 
-    auto *query = m_filter->create_qof_query ();
+    // We initialize with an empty query, for speed,
+    // because we defer the actual results to page-focus.
+    //
+    // This is to prevent a race condition when there are
+    // many results, which leads to the plugin_page
+    // argument callback containing an invalid ptr if you
+    // manage to mouse-click one of the action-callbacks
+    // fast enough after the page opens.
+    auto *empty_query = m_filter->create_qof_query (true);
 
-    g_return_val_if_fail (query, nullptr);
+    g_return_val_if_fail (empty_query, nullptr);
 
-    m_query_view = gnc_query_view_new (m_columns, query);
+    m_query_view = gnc_query_view_new (m_columns, empty_query);
 
-    qof_query_destroy (query);
+    qof_query_destroy (empty_query);
     
     {
         auto *qview = GNC_QUERY_VIEW (m_query_view);
@@ -659,6 +667,8 @@ Page::focus_page ()
         GNC_PLUGIN_PAGE (m_plugin_page),
         load_ui 
     );
+
+    apply_filter ();
 }
 
 void

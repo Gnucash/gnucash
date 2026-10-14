@@ -108,7 +108,7 @@ public:
 
     void dialog_open();
 
-    QofQuery *create_qof_query ();
+    QofQuery *create_qof_query (bool empty = false);
 
     void dialog_close ();
 
@@ -674,7 +674,7 @@ GncFilterInvoicesDialogInternal::reset_dates ()
 }
 
 QofQuery *
-GncFilterInvoicesDialogInternal::create_qof_query ()
+GncFilterInvoicesDialogInternal::create_qof_query (bool empty)
 {
     auto *book = gnc_get_current_book ();
 
@@ -683,7 +683,9 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
 
     { // Filter to show invoices/creditnotes for
       // either customers, vendors or employees.
-        bool filter_empty = m_preset == Preset::CUSTOM && (!m_show_invoices && !m_show_creditnotes);
+        bool filter_empty = empty ||
+                            (m_preset == Preset::CUSTOM &&
+                             (!m_show_invoices && !m_show_creditnotes));
         bool show_inv = m_show_invoices || m_preset != Preset::CUSTOM;
         bool show_cred = m_show_creditnotes || m_preset != Preset::CUSTOM;
     
@@ -737,6 +739,9 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
             qof_query_add_term (query, type_path, type_pred,
                 filter_empty || !show_inv ? QOF_QUERY_AND : QOF_QUERY_OR);
         }
+
+        if (filter_empty)
+            return query;
     }
 
     { // Filter only active invoices.
@@ -1468,9 +1473,9 @@ GncFilterInvoicesDialog::create_dialog ()
 }
 
 QofQuery *
-GncFilterInvoicesDialog::create_qof_query ()
+GncFilterInvoicesDialog::create_qof_query (bool empty)
 {
     g_return_val_if_fail (m_filter != nullptr, nullptr);
 
-    return m_filter->create_qof_query ();
+    return m_filter->create_qof_query (empty);
 }
