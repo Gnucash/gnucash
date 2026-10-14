@@ -135,14 +135,15 @@ void qof_log_set_file (FILE *outfile);
 /** Specify a filename for log output. **/
 void qof_log_init_filename (const gchar* logfilename);
 
-/** Return a newly-allocated copy of the current trace-log contents, read via
- *  the log's own file descriptor so it reflects THIS process's trace file even
- *  if another instance has since renamed the canonical name onto its own file.
- *  Returns NULL when logging is not going to a regular file (stderr/stdout or
- *  none). Free the result with g_free(); @a length (may be NULL) receives the
- *  number of bytes read. **/
-gchar *qof_log_read_current (gsize *length);
+/** Callback for qof_log_foreach_line. @a line is NUL-terminated, has no
+ *  trailing newline, and is valid only during the call (copy it to keep
+ *  it). Return TRUE to continue, FALSE to stop. **/
+typedef gboolean (*QofLogCB) (const char *line, gpointer user_data);
 
+/** Call @a line_func for each line of the current trace log, oldest first.
+ *  Returns FALSE if logging is not going to a regular file (stderr/stdout
+ *  or none), TRUE otherwise. **/
+gboolean qof_log_foreach_line (QofLogCB line_func, gpointer user_data);
 /**
  * If @a log_to_filename is "stderr" or "stdout" (exactly,
  * case-insensitive), then those special files are used; otherwise, the

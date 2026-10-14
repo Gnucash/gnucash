@@ -1,5 +1,5 @@
 /********************************************************************
- * gtest-qoflog.cpp -- unit tests for qof_log_read_current          *
+ * gtest-qoflog.cpp -- unit tests for qof_log_foreach_line          *
  *                                                                  *
  * Copyright 2026 GnuCash contributors                              *
  *                                                                  *
@@ -26,12 +26,32 @@
 #include <config.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <string>
+#include <vector>
 #include "qoflog.h"
 
 static QofLogModule log_module = "gnc.test.qoflog";
 
-/* A logged line must be readable back through qof_log_read_current(). */
-TEST(qoflog, read_current_returns_logged_lines)
+using Lines = std::vector<std::string>;
+
+static gboolean
+collect_line (const char *line, gpointer user_data)
+{
+    static_cast<Lines*> (user_data)->emplace_back (line);
+    return TRUE;
+}
+
+static bool
+contains (const Lines& lines, const char *needle)
+{
+    for (const auto& l : lines)
+        if (l.find (needle) != std::string::npos)
+            return true;
+    return false;
+}
+
+/* A logged line must be readable back through qof_log_foreach_line(). */
+TEST(qoflog, foreach_line_returns_logged_lines)
 {
     gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-lines", nullptr);
     qof_log_init ();
@@ -40,20 +60,18 @@ TEST(qoflog, read_current_returns_logged_lines)
 
     PWARN ("tracelog-marker-ABC123");
 
-    gsize len = 0;
-    gchar *content = qof_log_read_current (&len);
-    ASSERT_NE (content, nullptr);
-    EXPECT_GT (len, static_cast<gsize> (0));
-    EXPECT_NE (g_strstr_len (content, -1, "tracelog-marker-ABC123"), nullptr);
+    Lines lines;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &lines));
+    EXPECT_FALSE (lines.empty ());
+    EXPECT_TRUE (contains (lines, "tracelog-marker-ABC123"));
 
-    g_free (content);
     g_remove (path);
     g_free (path);
 }
 
 /* A re-read must reflect newly appended lines, and the positional read must not
    disturb the logger's write offset (so the second message still appends). */
-TEST(qoflog, read_current_sees_appended_lines_via_positional_read)
+TEST(qoflog, foreach_line_sees_appended_lines_via_positional_read)
 {
     gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-reread", nullptr);
     qof_log_init ();
@@ -61,31 +79,115 @@ TEST(qoflog, read_current_sees_appended_lines_via_positional_read)
     qof_log_set_level (log_module, QOF_LOG_DEBUG);
 
     PWARN ("first-line-marker");
-    gchar *first = qof_log_read_current (nullptr);
-    ASSERT_NE (first, nullptr);
-    EXPECT_NE (g_strstr_len (first, -1, "first-line-marker"), nullptr);
-    EXPECT_EQ (g_strstr_len (first, -1, "second-line-marker"), nullptr);
-    g_free (first);
+    Lines first;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &first));
+    EXPECT_TRUE (contains (first, "first-line-marker"));
+    EXPECT_FALSE (contains (first, "second-line-marker"));
 
     PWARN ("second-line-marker");
-    gchar *second = qof_log_read_current (nullptr);
-    ASSERT_NE (second, nullptr);
-    EXPECT_NE (g_strstr_len (second, -1, "first-line-marker"), nullptr);
-    EXPECT_NE (g_strstr_len (second, -1, "second-line-marker"), nullptr);
-    g_free (second);
+    Lines second;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &second));
+    EXPECT_TRUE (contains (second, "first-line-marker"));
+    EXPECT_TRUE (contains (second, "second-line-marker"));
+    EXPECT_EQ (second.size (), first.size () + 1);
 
     g_remove (path);
     g_free (path);
 }
 
 /* When logging is directed to a console stream there is no readable file, so
-   qof_log_read_current() reports nothing. */
-TEST(qoflog, read_current_null_for_console_sink)
+   qof_log_foreach_line() returns FALSE and never calls back. */
+TEST(qoflog, foreach_line_false_for_console_sink)
 {
     qof_log_init_filename_special ("stderr");
 
-    gsize len = 999;
-    gchar *content = qof_log_read_current (&len);
-    EXPECT_EQ (content, nullptr);
-    EXPECT_EQ (len, static_cast<gsize> (0));
+    Lines lines;
+    EXPECT_FALSE (qof_log_foreach_line (collect_line, &lines));
+    EXPECT_TRUE (lines.empty ());
+}
+
+/* Returning FALSE from the callback stops iteration; the call still returns TRUE. */
+static gboolean
+stop_after_one (const char *line, gpointer user_data)
+{
+    ++*static_cast<int*> (user_data);
+    return FALSE;
+}
+
+TEST(qoflog, foreach_line_stops_when_callback_returns_false)
+{
+    gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-stop", nullptr);
+    qof_log_init ();
+    qof_log_init_filename (path);
+    qof_log_set_level (log_module, QOF_LOG_DEBUG);
+
+    PWARN ("stop-line-1");
+    PWARN ("stop-line-2");
+    PWARN ("stop-line-3");
+
+    int calls = 0;
+    EXPECT_TRUE (qof_log_foreach_line (stop_after_one, &calls));
+    EXPECT_EQ (calls, 1);
+
+    g_remove (path);
+    g_free (path);
+}
+
+/* A line longer than the internal 4096-byte read chunk is delivered whole, once. */
+TEST(qoflog, foreach_line_handles_line_longer_than_read_chunk)
+{
+    gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-long", nullptr);
+    qof_log_init ();
+    qof_log_init_filename (path);
+    qof_log_set_level (log_module, QOF_LOG_DEBUG);
+
+    std::string payload (10000, 'x');
+    PWARN ("long-start %s long-end", payload.c_str ());
+    PWARN ("after-long-line");
+
+    Lines lines;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &lines));
+    ASSERT_EQ (lines.size (), static_cast<size_t> (2));
+    EXPECT_GE (lines[0].size (), payload.size ());
+    EXPECT_NE (lines[0].find ("long-start"), std::string::npos);
+    EXPECT_NE (lines[0].find ("long-end"), std::string::npos);
+    EXPECT_NE (lines[1].find ("after-long-line"), std::string::npos);
+
+    g_remove (path);
+    g_free (path);
+}
+
+/* Logging from inside the callback is safe: the new lines land after the
+   snapshot, are not visited, and are present on a later pass. */
+static gboolean
+warn_per_line (const char *line, gpointer user_data)
+{
+    ++*static_cast<int*> (user_data);
+    PWARN ("from-callback");
+    return TRUE;
+}
+
+TEST(qoflog, foreach_line_allows_logging_from_callback)
+{
+    gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-reentrant", nullptr);
+    qof_log_init ();
+    qof_log_init_filename (path);
+    qof_log_set_level (log_module, QOF_LOG_DEBUG);
+
+    PWARN ("reentrant-1");
+    PWARN ("reentrant-2");
+
+    int visited = 0;
+    ASSERT_TRUE (qof_log_foreach_line (warn_per_line, &visited));
+    EXPECT_EQ (visited, 2);
+
+    Lines lines;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &lines));
+    EXPECT_EQ (lines.size (), static_cast<size_t> (4));
+    EXPECT_TRUE (contains (lines, "reentrant-1"));
+    EXPECT_TRUE (contains (lines, "reentrant-2"));
+    EXPECT_TRUE (contains (lines, "from-callback"));
+
+    g_remove (path);
+    g_free (path);
 }

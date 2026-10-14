@@ -247,6 +247,22 @@ tracelog_line_matches (std::string_view line, std::string_view needle)
                         needle.begin (), needle.end (), eq) != line.end ();
 }
 
+struct foreach_data_struct
+{
+    size_t total{0};
+    std::vector<std::string> matches;
+    std::string_view filter;
+};
+
+static gboolean for_each_line (const char* line, gpointer user_data)
+{
+    auto data = static_cast<foreach_data_struct*>(user_data);
+    ++data->total;
+    if (tracelog_line_matches (line, data->filter))
+        data->matches.push_back (line);
+    return TRUE;
+}
+
 /* Read the current trace file and render it as a self-contained colorized
    HTML string, loaded in memory (no temp file / file://). Called on open, from
    the Reload action, and when the filter changes. */
@@ -261,10 +277,6 @@ tracelog_render (GncPluginPageTracelog *page)
     if (priv->html == nullptr)
         return;
 
-    gsize length = 0;
-    gchar *contents = qof_log_read_current (&length);
-    std::string_view filter = std::string_view{priv->filter ? priv->filter : ""};
-
     std::string html =
         "<html><head><meta charset=\"utf-8\"><style>"
         "body{font-family:monospace;font-size:12px;background:#fbfbfa;"
@@ -275,9 +287,6 @@ tracelog_render (GncPluginPageTracelog *page)
         ".empty{color:#666;font-style:italic;}"
         ".filterinfo{color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
         "</style></head><body>";
-
-    // reserve enough space for html header and entities
-    html.reserve (4096 + length);
 
     /* Escape every value before it enters the HTML so nothing in the log -- e.g.
        a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
@@ -296,54 +305,36 @@ tracelog_render (GncPluginPageTracelog *page)
         g_free (valid);
     };
 
-    auto for_each_line = [&] (auto&& fn)
-    {
-        for (std::string_view rest {contents, length}; !rest.empty (); )
-        {
-            auto nl = rest.find ('\n');
-            fn (rest.substr (0, nl));
-            rest.remove_prefix (nl == rest.npos ? rest.size () : nl + 1);
-        }
-    };
+    foreach_data_struct foreach_data;
+    foreach_data.filter = std::string_view{priv->filter ? priv->filter : ""};
 
-    if (contents == nullptr)
+    if (!qof_log_foreach_line (for_each_line, &foreach_data))
     {
         append_div ("empty",
-            _("Logging is directed to the console; no trace file is available to display."));
+                    _("Logging is directed to the console; no trace file is available to display."));
     }
-    else if (length == 0)
+    else if (foreach_data.total == 0)
         append_div ("empty", _("No messages have been logged in this session."));
-    else if (!filter.empty ())
+    else
     {
-        std::vector<std::string_view> matches;
-        size_t total{0};
-        for_each_line ([&] (std::string_view line)
+        if (!foreach_data.filter.empty ())
         {
-            ++total;
-            if (tracelog_line_matches (line, filter))
-                matches.push_back (line);
-        });
+            auto note = g_strdup_printf (_("Filtering on '%s' - showing %zu of %zu lines."),
+                                         priv->filter, foreach_data.matches.size (),
+                                         foreach_data.total);
+            append_div ("filterinfo", note);
+            g_free (note);
+        }
 
-        auto note = g_strdup_printf (_("Filtering on '%s' - showing %zu of %zu lines."),
-                                     priv->filter, matches.size (), total);
-        append_div ("filterinfo", note);
-        g_free (note);
-
-        if (matches.empty ())
+        if (foreach_data.matches.empty ())
             append_div ("empty", _("No lines match the filter."));
-        for (auto line : matches)
+        for (const auto& line : foreach_data.matches)
             append_div (tracelog_line_class (line), line);
     }
-    else
-        // no filter; append all lines
-        for_each_line ([&] (std::string_view line)
-        { append_div (tracelog_line_class (line), line); });
 
     html += "</body></html>";
 
     gnc_html_load_html_string (priv->html, html.c_str ());
-
-    g_free (contents);
 }
 
 static void
