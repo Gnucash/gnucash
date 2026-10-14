@@ -681,7 +681,8 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
     auto *query = qof_query_create_for (GNC_ID_INVOICE);
     qof_query_set_book (query, book);
 
-    {
+    { // Filter to show invoices/creditnotes for
+      // either customers, vendors or employees.
         bool filter_empty = m_preset == Preset::CUSTOM && (!m_show_invoices && !m_show_creditnotes);
         bool show_inv = m_show_invoices || m_preset != Preset::CUSTOM;
         bool show_cred = m_show_creditnotes || m_preset != Preset::CUSTOM;
@@ -752,7 +753,7 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
         qof_query_destroy (query_active);
     }
 
-    if (m_preset == Preset::OVERDUE)
+    if (m_preset == Preset::OVERDUE) // Use the OVERDUE preset filter.
     {
         QofQuery *query_overdue = qof_query_create_for (GNC_ID_INVOICE);
         qof_query_set_book (query_overdue, book);
@@ -794,7 +795,7 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
         qof_query_merge_in_place (query, query_overdue, QOF_QUERY_AND); 
         qof_query_destroy (query_overdue);
     }
-    else if (m_preset == Preset::CUSTOM) {
+    else if (m_preset == Preset::CUSTOM) { // Use the CUSTOM preset filter.
         if (m_show_paid != m_show_unpaid || !m_show_paid)
         {
             QofQuery *query_paid = qof_query_create_for (GNC_ID_INVOICE);
@@ -960,7 +961,7 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
         }
     }
 
-    if (m_search_term.length ())
+    if (m_search_term.length ()) // Add search term to filter if not empty.
     {
         QofQuery *query_term = qof_query_create_for (GNC_ID_INVOICE);
         qof_query_set_book (query_term, book);
