@@ -699,8 +699,9 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
             case GNC_OWNER_EMPLOYEE:
                 inv_type = GNC_INVOICE_EMPL_INVOICE;
                 break;
-            default:
-                g_assert_not_reached ();
+            default: // Should never happen.
+                inv_type = GNC_INVOICE_CUST_INVOICE;
+                g_warn_if_fail (false);
             }
 
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
@@ -723,8 +724,9 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
             case GNC_OWNER_EMPLOYEE:
                 credit_type = GNC_INVOICE_EMPL_CREDIT_NOTE;
                 break;
-            default:
-                g_assert_not_reached ();
+            default: // Should never happen.
+                credit_type = GNC_INVOICE_CUST_CREDIT_NOTE;
+                g_warn_if_fail (false);
             }
 
             QofQueryParamList *type_path = qof_query_build_param_list (INVOICE_TYPE, nullptr);
@@ -1009,8 +1011,8 @@ GncFilterInvoicesDialogInternal::create_qof_query ()
 void
 GncFilterInvoicesDialogInternal::dialog_open ()
 {
-    g_assert (m_plugin_page);
-    g_assert (m_apply_filter);
+    g_return_if_fail (m_plugin_page);
+    g_return_if_fail (m_apply_filter);
 
     ENTER ("(fd %p, page %p)", m_dialog, m_plugin_page);
 
@@ -1043,10 +1045,10 @@ GncFilterInvoicesDialogInternal::dialog_open ()
 
     {
         auto window = GTK_WINDOW (gnc_plugin_page_get_window (m_plugin_page));
+        g_warn_if_fail (window);
 
-        g_assert (window);
-
-        gtk_window_set_transient_for(GTK_WINDOW (m_dialog), window);
+        if (window)
+            gtk_window_set_transient_for(GTK_WINDOW (m_dialog), window);
     }
 
     /* Translators: The %s is the name of the plugin page */
