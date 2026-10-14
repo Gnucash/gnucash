@@ -48,6 +48,7 @@ set(gtest_import_backend_INCLUDE_DIRS
   ${GTEST_INCLUDE_DIR}
   ${GMOCK_INCLUDE_DIR}
   ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h
+  ${CMAKE_SOURCE_DIR}/borrowed/ctre # for gnc-numeric.cpp/gnc-datetime.cpp's ctre.hpp
 )
 
 set(gtest_import_backend_LIBS
