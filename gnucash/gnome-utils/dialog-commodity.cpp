@@ -64,6 +64,8 @@ enum
 
 struct select_commodity_window
 {
+    GObject parent_instance;
+
     GtkWidget * dialog;
     GtkWidget * namespace_combo;
     GtkWidget * commodity_combo;
@@ -85,7 +87,8 @@ struct select_commodity_window
     bool selection_guid_set;
     GncCommodityDialogCallback callback;
     gpointer callback_data;
-    std::uint32_t async_refs;
+    bool dialog_owned;
+    bool disposed;
     bool completed;
     bool new_dialog_active;
 };
@@ -135,6 +138,14 @@ struct commodity_window
 typedef struct select_commodity_window SelectCommodityWindow;
 typedef struct commodity_window CommodityWindow;
 
+struct SelectCommodityWindowClass
+{
+    GObjectClass parent_class;
+};
+
+static GType select_commodity_window_get_type ();
+G_DEFINE_TYPE (SelectCommodityWindow, select_commodity_window, G_TYPE_OBJECT)
+
 static gboolean gnc_ui_select_commodity_response_cb (GtkDialog *dialog,
                                                        gint response,
                                                        gpointer data);
@@ -177,17 +188,88 @@ commodity_book_clear_weak (QofBook **book)
                                       reinterpret_cast<gpointer *>(book));
 }
 
+// Widgets are borrowed. Weak locations also cover widgets destroyed before
+// the selector; object closures hold the selector only during signal emission.
 static void
-gnc_ui_select_commodity_free (SelectCommodityWindow *window)
+select_commodity_window_clear_widget (SelectCommodityWindow *window,
+                                      GtkWidget **widget)
 {
-    commodity_book_clear_weak (&window->book);
+    if (!*widget)
+        return;
+    g_signal_handlers_disconnect_by_data (*widget, window);
+    g_object_remove_weak_pointer (G_OBJECT (*widget),
+                                  reinterpret_cast<gpointer *> (widget));
+    *widget = nullptr;
+}
+
+static void
+select_commodity_window_disconnect_widgets (SelectCommodityWindow *window)
+{
+    if (window->dialog)
+        g_object_set_data (G_OBJECT (window->dialog),
+                           "gnc-select-commodity-window", nullptr);
+    select_commodity_window_clear_widget (window, &window->namespace_combo);
+    select_commodity_window_clear_widget (window, &window->commodity_combo);
+    select_commodity_window_clear_widget (window, &window->select_user_prompt);
+    select_commodity_window_clear_widget (window, &window->ok_button);
+    select_commodity_window_clear_widget (window, &window->dialog);
+}
+
+static void
+select_commodity_window_dispose (GObject *object)
+{
+    auto window = reinterpret_cast<SelectCommodityWindow *> (object);
+    bool release_dialog_ref = false;
+    if (!window->disposed)
+    {
+        window->disposed = true;
+        window->completed = true;
+        window->callback = nullptr;
+        window->callback_data = nullptr;
+        auto dialog = window->dialog ?
+            GTK_WIDGET (g_object_ref (window->dialog)) : nullptr;
+        release_dialog_ref = window->dialog_owned;
+        window->dialog_owned = false;
+        select_commodity_window_disconnect_widgets (window);
+        commodity_book_clear_weak (&window->book);
+        window->book = nullptr;
+        window->selection = nullptr;
+        if (dialog)
+        {
+            gtk_widget_destroy (dialog);
+            g_object_unref (dialog);
+        }
+    }
+    G_OBJECT_CLASS (select_commodity_window_parent_class)->dispose (object);
+    if (release_dialog_ref)
+        g_object_unref (object);
+}
+
+static void
+select_commodity_window_finalize (GObject *object)
+{
+    auto window = reinterpret_cast<SelectCommodityWindow *> (object);
     g_free (window->default_cusip);
     g_free (window->default_fullname);
     g_free (window->default_mnemonic);
     g_free (window->default_user_symbol);
     g_free (window->selection_namespace);
     g_free (window->selection_mnemonic);
-    g_free (window);
+    G_OBJECT_CLASS (select_commodity_window_parent_class)->finalize (object);
+}
+
+static void
+select_commodity_window_class_init (SelectCommodityWindowClass *klass)
+{
+    auto object_class = G_OBJECT_CLASS (klass);
+    object_class->dispose = select_commodity_window_dispose;
+    object_class->finalize = select_commodity_window_finalize;
+}
+
+static void
+select_commodity_window_init ([[maybe_unused]] SelectCommodityWindow *window)
+{
+    // GObject initializes the instance fields to zero.
 }
 
 static void
@@ -213,26 +295,13 @@ gnc_ui_commodity_warning (CommodityWindow *window, const char *message)
     gtk_widget_show (warning);
 }
 
-static void
-gnc_ui_select_commodity_ref (SelectCommodityWindow *window)
-{
-    ++window->async_refs;
-}
-
-static void
-gnc_ui_select_commodity_unref (SelectCommodityWindow *window)
-{
-    if (--window->async_refs == 0)
-        gnc_ui_select_commodity_free (window);
-}
-
 static bool
 gnc_ui_select_commodity_is_valid (SelectCommodityWindow *window,
                                   gnc_commodity **result)
 {
     gnc_commodity_table *table;
     *result = nullptr;
-    if (!commodity_book_is_current (window->book) || !window->selection ||
+    if (window->disposed || !commodity_book_is_current (window->book) || !window->selection ||
         !window->selection_namespace || !window->selection_mnemonic)
         return false;
     table = gnc_commodity_table_get_table (window->book);
@@ -260,6 +329,7 @@ gnc_ui_select_commodity_complete (SelectCommodityWindow *window,
     else
         result = current;
     window->callback = nullptr;
+    window->callback_data = nullptr;
     if (callback)
         callback (book, result, data);
 }
@@ -268,15 +338,16 @@ static void
 gnc_ui_select_commodity_destroy_cb (GtkWidget *dialog, gpointer data)
 {
     auto window = static_cast<SelectCommodityWindow*>(data);
-    window->dialog = nullptr;
-    g_signal_handlers_disconnect_by_func (
-        dialog, reinterpret_cast<gpointer> (gnc_ui_select_commodity_response_cb), window);
+    select_commodity_window_disconnect_widgets (window);
+    auto release_dialog_ref = window->dialog_owned;
+    window->dialog_owned = false;
     if (!window->completed)
     {
         window->completed = true;
         gnc_ui_select_commodity_complete (window, nullptr);
     }
-    gnc_ui_select_commodity_unref (window); // dialog ownership
+    if (release_dialog_ref)
+        g_object_unref (window); // dialog ownership
 }
 
 static gboolean
@@ -284,13 +355,15 @@ gnc_ui_select_commodity_response_cb (GtkDialog *dialog, gint response,
                                     gpointer data)
 {
     auto window = static_cast<SelectCommodityWindow*>(data);
+    if (window->disposed || window->completed || !window->dialog)
+        return TRUE;
     if (response == GNC_RESPONSE_NEW)
     {
         if (window->completed || window->new_dialog_active)
             return TRUE;
         auto name_space = gnc_ui_namespace_picker_ns (window->namespace_combo);
         window->new_dialog_active = true;
-        gnc_ui_select_commodity_ref (window); // child continuation ownership
+        g_object_ref (window); // child continuation ownership
         gnc_ui_new_commodity_async_full (
             name_space, window->dialog, window->default_cusip,
             window->default_fullname, window->default_mnemonic,
@@ -305,7 +378,7 @@ gnc_ui_select_commodity_response_cb (GtkDialog *dialog, gint response,
     window->completed = true;
     g_signal_handlers_disconnect_by_func (
         dialog, reinterpret_cast<gpointer> (gnc_ui_select_commodity_response_cb), window);
-    gnc_ui_select_commodity_ref (window); // response continuation ownership
+    g_object_ref (window); // response continuation ownership
     gtk_widget_destroy (GTK_WIDGET (dialog));
 
     gnc_commodity *result = nullptr;
@@ -314,7 +387,7 @@ gnc_ui_select_commodity_response_cb (GtkDialog *dialog, gint response,
         gnc_ui_select_commodity_complete (window, result);
     else
         gnc_ui_select_commodity_complete (window, nullptr);
-    gnc_ui_select_commodity_unref (window);
+    g_object_unref (window);
     return TRUE;
 }
 
@@ -351,7 +424,7 @@ gnc_ui_select_commodity_new_async_cb (QofBook *book, gnc_commodity *commodity,
         g_free (mnemonic);
         g_free (fullname);
     }
-    gnc_ui_select_commodity_unref (window);
+    g_object_unref (window);
 }
 
 /* The commodity selection window */
@@ -390,10 +463,8 @@ gnc_ui_select_commodity_async_full (gnc_commodity *orig_sel,
     window->default_fullname = g_strdup (fullname);
     window->default_mnemonic = g_strdup (mnemonic);
     window->default_user_symbol = g_strdup ("");
-    commodity_book_set_weak (&window->book);
     window->callback = callback;
     window->callback_data = user_data;
-    window->async_refs = 1; // owned by the selector widget until destruction
 
     const char *initial;
     if (user_message)
@@ -419,10 +490,12 @@ gnc_ui_select_commodity_async_full (gnc_commodity *orig_sel,
         gtk_window_set_destroy_with_parent (GTK_WINDOW (window->dialog), TRUE);
     }
     gtk_window_set_modal (GTK_WINDOW (window->dialog), TRUE);
-    g_signal_connect (window->dialog, "response",
-                      G_CALLBACK (gnc_ui_select_commodity_response_cb), window);
-    g_signal_connect (window->dialog, "destroy",
-                      G_CALLBACK (gnc_ui_select_commodity_destroy_cb), window);
+    g_signal_connect_object (window->dialog, "response",
+                             G_CALLBACK (gnc_ui_select_commodity_response_cb),
+                             window, GConnectFlags (0));
+    g_signal_connect_object (window->dialog, "destroy",
+                             G_CALLBACK (gnc_ui_select_commodity_destroy_cb),
+                             window, GConnectFlags (0));
     gtk_widget_show_all (window->dialog);
 }
 
@@ -434,7 +507,10 @@ static SelectCommodityWindow *
 gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                dialog_commodity_mode mode)
 {
-    SelectCommodityWindow * retval = g_new0(SelectCommodityWindow, 1);
+    auto retval = static_cast<SelectCommodityWindow *> (
+        g_object_new (select_commodity_window_get_type (), nullptr));
+    retval->dialog_owned = true; // initial reference belongs to the dialog
+    commodity_book_set_weak (&retval->book);
     GtkBuilder *builder;
     const char *title, *text;
     gchar *name_space;
@@ -445,7 +521,6 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_selector_dialog");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
     retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_selector_dialog"));
     retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_namespace_cbwe"));
@@ -453,6 +528,24 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     retval->select_user_prompt = GTK_WIDGET(gtk_builder_get_object (builder, "select_user_prompt"));
     retval->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ss_ok_button"));
     label = GTK_WIDGET(gtk_builder_get_object (builder, "item_label"));
+
+    for (auto widget : {&retval->dialog, &retval->namespace_combo,
+                        &retval->commodity_combo, &retval->select_user_prompt,
+                        &retval->ok_button})
+        g_object_add_weak_pointer (G_OBJECT (*widget),
+                                   reinterpret_cast<gpointer *> (widget));
+    g_object_set_data (G_OBJECT (retval->dialog),
+                       "gnc-select-commodity-window", retval);
+    // Connect the two selector Glade handlers with object closures instead of
+    // the generic builder's raw user_data binding.
+    g_signal_connect_object (
+        retval->namespace_combo, "changed",
+        G_CALLBACK (gnc_ui_select_commodity_namespace_changed_cb), retval,
+        GConnectFlags (0));
+    g_signal_connect_object (
+        retval->commodity_combo, "changed",
+        G_CALLBACK (gnc_ui_select_commodity_changed_cb), retval,
+        GConnectFlags (0));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(retval->dialog), "gnc-id-security-select");
@@ -526,7 +619,7 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
                                gpointer user_data)
 {
     auto w = static_cast<SelectCommodityWindow*>(user_data);
-    if (w && !w->completed && w->dialog)
+    if (w && !w->disposed && !w->completed && w->dialog)
         gtk_dialog_response (GTK_DIALOG (w->dialog), GNC_RESPONSE_NEW);
 }
 
@@ -555,6 +648,10 @@ gnc_ui_select_commodity_changed_cb (GtkComboBox *cbwe,
     const gchar *fullname;
     gboolean ok;
 
+    if (w->disposed || w->completed || !w->dialog ||
+        !w->namespace_combo || !w->commodity_combo || !w->ok_button ||
+        !commodity_book_is_current (w->book))
+        return;
     ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
     name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
     fullname = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(w->commodity_combo)))));
@@ -573,8 +670,13 @@ gnc_ui_select_commodity_changed_cb (GtkComboBox *cbwe,
     g_free(name_space);
 
     ok = (w->selection != nullptr);
-    gtk_widget_set_sensitive(w->ok_button, ok);
-    gtk_dialog_set_default_response(GTK_DIALOG(w->dialog), ok ? 0 : 2);
+    auto button = GTK_WIDGET (g_object_ref (w->ok_button));
+    auto dialog = GTK_DIALOG (g_object_ref (w->dialog));
+    gtk_widget_set_sensitive (button, ok);
+    if (!w->completed && !w->disposed && w->dialog == GTK_WIDGET (dialog))
+        gtk_dialog_set_default_response (dialog, ok ? 0 : 2);
+    g_object_unref (dialog);
+    g_object_unref (button);
     LEAVE("sensitive=%d, default = %d", ok, ok ? 0 : 2);
 }
 
@@ -602,10 +704,16 @@ gnc_ui_select_commodity_namespace_changed_cb (GtkComboBox *cbwe,
     auto w = static_cast<SelectCommodityWindow*>(user_data);
     gchar *name_space;
 
+    if (w->disposed || w->completed || !w->dialog ||
+        !w->namespace_combo || !w->commodity_combo || !w->ok_button ||
+        !commodity_book_is_current (w->book))
+        return;
     ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
     name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
     DEBUG("name_space=%s", name_space);
-    gnc_ui_update_commodity_picker(w->commodity_combo, name_space, nullptr);
+    auto picker = GTK_WIDGET (g_object_ref (w->commodity_combo));
+    gnc_ui_update_commodity_picker (picker, name_space, nullptr);
+    g_object_unref (picker);
     g_free(name_space);
     LEAVE(" ");
 }

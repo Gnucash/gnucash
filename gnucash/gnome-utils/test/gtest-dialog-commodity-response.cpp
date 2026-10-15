@@ -212,6 +212,265 @@ destroy_parent_on_picker_change ([[maybe_unused]] GtkComboBox *picker,
     gtk_widget_destroy (parent);
 }
 
+class SelectorResponseTest : public CommodityResponseTest
+{
+protected:
+    void SetUp () override
+    {
+        CommodityResponseTest::SetUp ();
+        auto table = gnc_commodity_table_get_table (m_book);
+        auto commodity = gnc_commodity_new (
+            m_book, "Selector original", "NYSE", "SEL", nullptr, 100);
+        m_original = gnc_commodity_table_insert (table, commodity);
+        m_parent = create_parent ();
+    }
+
+    void TearDown () override
+    {
+        if (m_child)
+            gtk_widget_destroy (GTK_WIDGET (m_child));
+        if (m_selector)
+            gtk_widget_destroy (GTK_WIDGET (m_selector));
+        g_clear_object (&m_held_state);
+        for (auto widget : m_held_pickers)
+            g_object_unref (widget);
+        m_held_pickers.clear ();
+        CommodityResponseTest::TearDown ();
+    }
+
+    void start_selector (GncCommodityDialogCallback callback = completed,
+                         gpointer data = nullptr)
+    {
+        gnc_ui_select_commodity_async_full (
+            m_original, GTK_WIDGET (m_parent), DIAG_COMM_ALL, nullptr, nullptr,
+            nullptr, nullptr, callback, data ? data : &m_primary);
+        m_selector = find_child_dialog (m_parent);
+        ASSERT_TRUE (GTK_IS_DIALOG (m_selector));
+        retain_dialog (GTK_WIDGET (m_selector));
+        m_state = G_OBJECT (g_object_get_data (
+            G_OBJECT (m_selector), "gnc-select-commodity-window"));
+        ASSERT_TRUE (G_IS_OBJECT (m_state));
+        EXPECT_STREQ (G_OBJECT_TYPE_NAME (m_state), "SelectCommodityWindow");
+        g_object_weak_ref (m_state, state_disposed, this);
+        g_object_set_data_full (m_state, "selector-test-finalization", this,
+                                state_finalized);
+        for (auto name : {"ss_namespace_cbwe", "ss_commodity_cbwe"})
+        {
+            auto picker = gnc::test::find_widget_by_buildable_name (
+                GTK_WIDGET (m_selector), name);
+            ASSERT_TRUE (GTK_IS_COMBO_BOX (picker));
+            m_held_pickers.push_back (GTK_WIDGET (g_object_ref (picker)));
+        }
+    }
+
+    void start_child ()
+    {
+        gtk_dialog_response (m_selector, GNC_RESPONSE_NEW);
+        m_child = find_child_dialog (GTK_WINDOW (m_selector));
+        ASSERT_TRUE (GTK_IS_DIALOG (m_child));
+        retain_dialog (GTK_WIDGET (m_child));
+    }
+
+    static void state_disposed (gpointer data, [[maybe_unused]] GObject *object)
+    {
+        auto fixture = static_cast<SelectorResponseTest *> (data);
+        ++fixture->m_disposed;
+        fixture->m_state = nullptr;
+    }
+
+    static void state_finalized (gpointer data)
+    {
+        ++static_cast<SelectorResponseTest *> (data)->m_finalized;
+    }
+
+    static void reentrant_completed (QofBook *book, gnc_commodity *commodity,
+                                      gpointer data)
+    {
+        auto fixture = static_cast<SelectorResponseTest *> (data);
+        completed (book, commodity, &fixture->m_primary);
+        gtk_dialog_response (fixture->m_selector, GTK_RESPONSE_CANCEL);
+        gtk_widget_destroy (GTK_WIDGET (fixture->m_parent));
+        // The response's temporary reference keeps the state alive even when
+        // user code explicitly disposes it from inside completion.
+        ASSERT_TRUE (G_IS_OBJECT (fixture->m_state));
+        auto state = fixture->m_state;
+        g_object_run_dispose (state);
+        g_object_run_dispose (state);
+    }
+
+    gnc_commodity *m_original{};
+    GtkWindow *m_parent{};
+    GtkDialog *m_selector{};
+    GtkDialog *m_child{};
+    GObject *m_state{}; // borrowed, nulled by weak notify
+    GObject *m_held_state{};
+    unsigned m_finalized{};
+    unsigned m_disposed{};
+    std::vector<GtkWidget *> m_held_pickers;
+};
+
+TEST_F (SelectorResponseTest, AcceptReturnsBorrowedSelectionAndFinalizesOnce)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, m_book);
+    EXPECT_EQ (m_primary.commodity, m_original);
+    EXPECT_EQ (m_finalized, 1u);
+    EXPECT_EQ (m_state, nullptr);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, CancelDisconnectsRetainedPickersAndLateResponses)
+{
+    start_selector ();
+    ASSERT_EQ (m_held_pickers.size (), 2u);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_CANCEL);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+    for (auto picker : m_held_pickers)
+        g_signal_emit_by_name (picker, "changed");
+    gtk_dialog_response (m_selector, GNC_RESPONSE_NEW);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, DestroyCompletesAndFinalizesOnce)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    gtk_widget_destroy (GTK_WIDGET (m_selector));
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+    gtk_widget_destroy (GTK_WIDGET (m_selector));
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+}
+
+TEST_F (SelectorResponseTest, ClosedBookRejectsSelection)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    qof_book_mark_closed (m_book);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, DestroyedBookRejectsSelection)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    // Synthetic lifetime edge: normal file close frees UI before the book.
+    gnc_clear_current_session ();
+    m_book = nullptr;
+    m_session = nullptr;
+    m_original = nullptr;
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, SessionSwitchRejectsSelection)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    auto replacement = qof_session_new (qof_book_new ());
+    gnc_exchange_current_session (replacement);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, nullptr);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, ParentDestroyWithActiveChildCompletesOnce)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    start_child ();
+    ASSERT_TRUE (m_child);
+    gtk_widget_destroy (GTK_WIDGET (m_parent));
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+    gtk_dialog_response (m_child, GTK_RESPONSE_OK);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, LateChildSuccessDoesNotReviveCompletedSelector)
+{
+    start_selector ();
+    ASSERT_TRUE (m_selector);
+    start_child ();
+    ASSERT_TRUE (m_child);
+    // Synthetic delayed continuation: keep the editor alive independently of
+    // its selector so that success really arrives after selector cancellation.
+    gtk_window_set_destroy_with_parent (GTK_WINDOW (m_child), FALSE);
+    gtk_window_set_transient_for (GTK_WINDOW (m_child), nullptr);
+    auto fullname = gnc::test::find_widget_by_buildable_name (
+        GTK_WIDGET (m_child), "fullname_entry");
+    auto mnemonic = gnc::test::find_widget_by_buildable_name (
+        GTK_WIDGET (m_child), "mnemonic_entry");
+    ASSERT_TRUE (GTK_IS_ENTRY (fullname));
+    ASSERT_TRUE (GTK_IS_ENTRY (mnemonic));
+    gtk_entry_set_text (GTK_ENTRY (fullname), "Late child");
+    gtk_entry_set_text (GTK_ENTRY (mnemonic), "LCH");
+    gtk_dialog_response (m_selector, GTK_RESPONSE_CANCEL);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_finalized, 0u); // continuation still owns a reference
+    gtk_dialog_response (m_child, GTK_RESPONSE_OK);
+    EXPECT_NE (gnc_commodity_table_lookup (
+                   gnc_commodity_table_get_table (m_book), "NYSE", "LCH"), nullptr);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.commodity, nullptr);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
+TEST_F (SelectorResponseTest, ReentrantCompletionCanDisposeAndCloseParent)
+{
+    start_selector (reentrant_completed, this);
+    ASSERT_TRUE (m_selector);
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 1u);
+    EXPECT_EQ (m_primary.book, m_book);
+    EXPECT_EQ (m_primary.commodity, m_original);
+    EXPECT_EQ (m_finalized, 1u);
+}
+TEST_F (SelectorResponseTest, RepeatedDisposeIsInertAndReleasesDialogOwnership)
+{
+    start_selector ();
+    ASSERT_TRUE (m_state);
+    m_held_state = G_OBJECT (g_object_ref (m_state));
+    g_object_run_dispose (m_held_state);
+    g_object_run_dispose (m_held_state);
+    EXPECT_EQ (m_primary.calls, 0u); // dispose is not a business completion
+    // Weak notify runs at dispose, even while our strong reference survives.
+    EXPECT_EQ (m_disposed, 1u);
+    EXPECT_EQ (m_finalized, 0u);
+    EXPECT_TRUE (G_IS_OBJECT (m_held_state));
+    for (auto picker : m_held_pickers)
+        g_signal_emit_by_name (picker, "changed");
+    gtk_dialog_response (m_selector, GTK_RESPONSE_OK);
+    EXPECT_EQ (m_primary.calls, 0u);
+    g_clear_object (&m_held_state);
+    EXPECT_EQ (m_finalized, 1u);
+}
+
 TEST_F (CommodityResponseTest, CancelAndParentDestroyCompleteWithoutCommodity)
 {
     auto parent = create_parent ();
