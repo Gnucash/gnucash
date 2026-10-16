@@ -909,7 +909,7 @@ def getTransactions(book, account_guid, date_posted_from, date_posted_to):
 
     for transaction in query.run():
         transactions.append(gnucash_simple.transactionToDict(
-            gnucash.gnucash_business.Transaction(instance=transaction)))
+            gnucash.gnucash_business.Transaction(instance=transaction), ['splits']))
 
     query.destroy()
 
