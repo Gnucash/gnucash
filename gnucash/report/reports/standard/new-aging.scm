@@ -40,6 +40,7 @@
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
 (define optname-show-zeros (N_ "Show zero balance items"))
+(define optname-show-inactive? (N_ "Show all owners including inactive"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
 ;; Display tab options
@@ -104,6 +105,10 @@ exist but have no suitable transactions."))
       gnc:pagename-general optname-show-zeros "j"
       (N_ "Show all vendors/customers even if they have a zero balance.")
       #f)
+
+    (gnc-register-simple-boolean-option
+     options gnc:pagename-general optname-show-inactive? "j5"
+     (N_ "Show all vendors/customers including inactive ones") #f)
 
     (gnc-register-multichoice-option
      options gnc:pagename-general optname-date-driver "k" (N_ "Leading date.")
@@ -196,6 +201,11 @@ exist but have no suitable transactions."))
          (date-type (op-value gnc:pagename-general optname-date-driver))
          (query (qof-query-create-for-splits))
          (document (gnc:make-html-document)))
+
+    (define split-owner-must-be-hidden?
+      (if (op-value gnc:pagename-general optname-show-inactive?)
+          (const #f)
+          (compose not gncOwnerGetActive split->owner)))
 
     (define (sort-aging<? a b)
       (match-let* (((own1 aging1 aging-total1) a)
@@ -363,6 +373,9 @@ exist but have no suitable transactions."))
                        acc-totals
                        (cons (list (G_ "Payment has no owner") this) invalid-splits)
                        owners-and-aging))
+
+                  (((? split-owner-must-be-hidden?) . rest)
+                   (lp rest acc-totals invalid-splits owners-and-aging))
 
                   ((this . _)
                    (match-let* ((owner (split->owner this))
