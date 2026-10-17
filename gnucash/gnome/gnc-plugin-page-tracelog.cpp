@@ -247,19 +247,42 @@ tracelog_line_matches (std::string_view line, std::string_view needle)
                         needle.begin (), needle.end (), eq) != line.end ();
 }
 
+/* Escape every value before it enters the HTML so nothing in the log -- e.g.
+   a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
+   first guards g_markup_escape_text() against invalid UTF-8. The class string
+   is one of our own fixed tokens, so it is not user data. */
+static void
+append_div (std::string& html, std::string_view cls, std::string_view text)
+{
+    gchar *valid = g_utf8_make_valid (text.data (), text.size ());
+    gchar *escaped = g_markup_escape_text (valid, -1);
+    html += "<div class=\"";
+    html += cls;
+    html += "\">";
+    html += escaped;
+    html += "</div>";
+    g_free (escaped);
+    g_free (valid);
+}
+
 struct foreach_data_struct
 {
-    size_t total{0};
-    std::vector<std::string> matches;
+    std::string& html;
     std::string_view filter;
+    size_t total{0};
+    size_t matched{0};
 };
 
 static gboolean for_each_line (const char* line, gpointer user_data)
 {
     auto data = static_cast<foreach_data_struct*>(user_data);
     ++data->total;
-    if (tracelog_line_matches (line, data->filter))
-        data->matches.push_back (line);
+    std::string_view sv{line};
+    if (tracelog_line_matches (sv, data->filter))
+    {
+        ++data->matched;
+        append_div (data->html, tracelog_line_class (sv), sv);
+    }
     return TRUE;
 }
 
@@ -277,61 +300,43 @@ tracelog_render (GncPluginPageTracelog *page)
     if (priv->html == nullptr)
         return;
 
+    /* body is a column flexbox so .filterinfo (order:-1) renders first even
+       though it is appended last, once the counts are known. */
     std::string html =
         "<html><head><meta charset=\"utf-8\"><style>"
         "body{font-family:monospace;font-size:12px;background:#fbfbfa;"
-        "color:#1a1a1a;margin:0;padding:8px;}"
+        "color:#1a1a1a;margin:0;padding:8px;display:flex;flex-direction:column;}"
         ".line{white-space:pre-wrap;}"
         ".ERROR,.FATAL{color:#b00020;}"
         ".WARN{color:#a15c00;}"
         ".empty{color:#666;font-style:italic;}"
-        ".filterinfo{color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
+        ".filterinfo{order:-1;color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
         "</style></head><body>";
 
     html.reserve (4096 + qof_log_get_size());
 
-    /* Escape every value before it enters the HTML so nothing in the log -- e.g.
-       a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
-       first guards g_markup_escape_text() against invalid UTF-8. The class string
-       is one of our own fixed tokens, so it is not user data. */
-    auto append_div = [&html](std::string_view cls, std::string_view text)
-    {
-        gchar *valid = g_utf8_make_valid (text.data (), text.size ());
-        gchar *escaped = g_markup_escape_text (valid, -1);
-        html += "<div class=\"";
-        html += cls;
-        html += "\">";
-        html += escaped;
-        html += "</div>";
-        g_free (escaped);
-        g_free (valid);
-    };
-
-    foreach_data_struct foreach_data;
-    foreach_data.filter = std::string_view{priv->filter ? priv->filter : ""};
+    foreach_data_struct foreach_data{html,
+                                     std::string_view{priv->filter ? priv->filter : ""}};
 
     if (!qof_log_foreach_line (for_each_line, &foreach_data))
     {
-        append_div ("empty",
+        append_div (html, "empty",
                     _("Logging is directed to the console; no trace file is available to display."));
     }
     else if (foreach_data.total == 0)
-        append_div ("empty", _("No messages have been logged in this session."));
+        append_div (html, "empty", _("No messages have been logged in this session."));
     else
     {
         if (!foreach_data.filter.empty ())
         {
             auto note = g_strdup_printf (_("Filtering on '%s' - showing %zu of %zu lines."),
-                                         priv->filter, foreach_data.matches.size (),
+                                         priv->filter, foreach_data.matched,
                                          foreach_data.total);
-            append_div ("filterinfo", note);
+            append_div (html, "filterinfo", note);
             g_free (note);
         }
-
-        if (foreach_data.matches.empty ())
-            append_div ("empty", _("No lines match the filter."));
-        for (const auto& line : foreach_data.matches)
-            append_div (tracelog_line_class (line), line);
+        if (foreach_data.matched == 0)
+            append_div (html, "empty", _("No lines match the filter."));
     }
 
     html += "</body></html>";
