@@ -3,11 +3,13 @@ on: [push, pull_request]
 permissions: {}
 jobs:
   ci_tests_archlinux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     name: Arch Linux (via Docker) CI
     steps:
     - name: Checkout
       uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - name: Test Action
       uses: ./util/ci/actions/archlinux-test
     - uses: actions/upload-artifact@v7
