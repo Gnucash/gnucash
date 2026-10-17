@@ -276,55 +276,105 @@ qof_log_init_filename(const gchar* log_filename)
     }
 }
 
-gchar *
-qof_log_read_current (gsize *length)
+/* Flush and stat the log. Returns false when the log can't be read back
+   (no file, stderr/stdout, or not a regular file). */
+static bool
+log_file_stat (int& fd, gsize& size)
 {
-    if (length)
-        *length = 0;
-
     if (!fout || fout == stderr || fout == stdout)
-        return nullptr;
+        return false;
 
-    /* Read through the log's own descriptor, not by name. A descriptor refers
-       to the file itself, so this always reads THIS process's trace file even
-       when another instance has renamed the canonical name onto its own -- and
-       it does not depend on whether renaming succeeds on this platform. */
-    int fd = fileno(fout);
+    fflush(fout);
+
+    fd = fileno(fout);
     struct stat st;
     if (fd < 0 || fstat(fd, &st) != 0 || !S_ISREG(st.st_mode))
-        return nullptr;
+        return false;
 
-    gsize size = (st.st_size > 0) ? static_cast<gsize>(st.st_size) : 0;
-    gchar *buf = g_new(gchar, size + 1);
-    gsize got = 0;
+    size = (st.st_size > 0) ? static_cast<gsize>(st.st_size) : 0;
+    return true;
+}
 
-    /* Positional read from offset 0: it must not disturb the position the
-       logger writes at. pread() does that on POSIX; ReadFile() with an
-       OVERLAPPED offset is the Windows equivalent. */
-    while (got < size)
-    {
+size_t
+qof_log_get_size (void)
+{
+    int fd;
+    gsize size;
+    return log_file_stat(fd, size) ? size : 0;
+}
+
+/* Positional read: must not disturb the position the logger writes at. */
+static gssize
+read_log_at (int fd, char *buf, gsize len, gsize offset)
+{
 #if PLATFORM(WINDOWS)
-        HANDLE h = reinterpret_cast<HANDLE>(_get_osfhandle(fd));
-        OVERLAPPED ov = { 0 };
-        DWORD n = 0;
-        ov.Offset = static_cast<DWORD>(got & 0xFFFFFFFFU);
-        ov.OffsetHigh = static_cast<DWORD>(got >> 32);
-        if (h == INVALID_HANDLE_VALUE ||
-            !ReadFile(h, buf + got, static_cast<DWORD>(size - got), &n, &ov) || n == 0)
-            break;
-        got += n;
+    HANDLE h = reinterpret_cast<HANDLE>(_get_osfhandle(fd));
+    OVERLAPPED ov = { 0 };
+    DWORD n = 0;
+    ov.Offset = static_cast<DWORD>(offset & 0xFFFFFFFFU);
+    ov.OffsetHigh = static_cast<DWORD>(offset >> 32);
+    if (h == INVALID_HANDLE_VALUE ||
+        !ReadFile(h, buf, static_cast<DWORD>(len), &n, &ov))
+        return -1;
+    return static_cast<gssize>(n);
 #else
-        ssize_t n = pread(fd, buf + got, size - got, static_cast<off_t>(got));
+    return pread(fd, buf, len, static_cast<off_t>(offset));
+#endif
+}
+
+gboolean
+qof_log_foreach_line (QofLogCB line_func, gpointer user_data)
+{
+    if (!line_func)
+        return FALSE;
+
+    int fd;
+    gsize size;                     // snapshot: anything logged from inside
+    if (!log_file_stat(fd, size))   // line_func lands past this point and is
+        return FALSE;               // not visited, so the loop terminates
+
+    /* Snapshot the size: anything logged from inside line_func lands past
+       this point and is not visited, so the loop always terminates. */
+    gsize offset = 0;
+    std::string pending;            // partial line carried across chunks
+    char buf[4096];
+
+    while (offset < size)
+    {
+        auto n = read_log_at(fd, buf, std::min(sizeof(buf), size - offset),
+                             offset);
         if (n <= 0)
             break;
-        got += static_cast<gsize>(n);
-#endif
+        offset += static_cast<gsize>(n);
+
+        for (char *p = buf, *end = buf + n; p < end;)
+        {
+            char *nl = static_cast<char*>(memchr(p, '\n', end - p));
+            if (!nl)
+            {
+                pending.append(p, end - p);
+                break;
+            }
+            *nl = '\0';             // terminate in place; nl < end <= buf+4096
+            gboolean keep_going;
+            if (pending.empty())
+                keep_going = line_func(p, user_data);
+            else
+            {
+                pending.append(p);
+                keep_going = line_func(pending.c_str(), user_data);
+                pending.clear();
+            }
+            if (!keep_going)
+                return TRUE;
+            p = nl + 1;
+        }
     }
 
-    buf[got] = '\0';
-    if (length)
-        *length = got;
-    return buf;
+    if (!pending.empty())           // final line without a newline
+        line_func(pending.c_str(), user_data);
+
+    return TRUE;
 }
 
 void

@@ -22,11 +22,9 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <string.h>
 
 #include <algorithm>
 #include <cctype>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -220,24 +218,24 @@ gnc_plugin_page_tracelog_destroy_widget (GncPluginPage *plugin_page)
    "* HH:MM:SS <5-char level> <domain> ..." -- so test the level column directly
    (index 11, a 5-wide right-justified field) rather than scanning the whole
    line: faster, and it can't be fooled by one of these words in a message. */
-static const char *
-tracelog_line_class (const std::string& line)
+static std::string_view
+tracelog_line_class (std::string_view line)
 {
     if (line.size () < 16)
-        return "";
-    auto level = std::string_view (line).substr (11, 5);
+        return "line";
+    auto level = line.substr (11, 5);
     if (level == "FATAL")
-        return "FATAL";
+        return "line FATAL";
     if (level == "ERROR")
-        return "ERROR";
+        return "line ERROR";
     if (level == " WARN")             /* 4-char "WARN", right-justified in 5 */
-        return "WARN";
-    return "";
+        return "line WARN";
+    return "line";
 }
 
 /* Case-insensitive (ASCII) substring test for the viewer's text filter. */
 static bool
-tracelog_line_matches (const std::string& line, const std::string& needle)
+tracelog_line_matches (std::string_view line, std::string_view needle)
 {
     if (needle.empty ())
         return true;
@@ -247,6 +245,45 @@ tracelog_line_matches (const std::string& line, const std::string& needle)
     };
     return std::search (line.begin (), line.end (),
                         needle.begin (), needle.end (), eq) != line.end ();
+}
+
+/* Escape every value before it enters the HTML so nothing in the log -- e.g.
+   a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
+   first guards g_markup_escape_text() against invalid UTF-8. The class string
+   is one of our own fixed tokens, so it is not user data. */
+static void
+append_div (std::string& html, std::string_view cls, std::string_view text)
+{
+    gchar *valid = g_utf8_make_valid (text.data (), text.size ());
+    gchar *escaped = g_markup_escape_text (valid, -1);
+    html += "<div class=\"";
+    html += cls;
+    html += "\">";
+    html += escaped;
+    html += "</div>";
+    g_free (escaped);
+    g_free (valid);
+}
+
+struct foreach_data_struct
+{
+    std::string& html;
+    std::string_view filter;
+    size_t total{0};
+    size_t matched{0};
+};
+
+static gboolean for_each_line (const char* line, gpointer user_data)
+{
+    auto data = static_cast<foreach_data_struct*>(user_data);
+    ++data->total;
+    std::string_view sv{line};
+    if (tracelog_line_matches (sv, data->filter))
+    {
+        ++data->matched;
+        append_div (data->html, tracelog_line_class (sv), sv);
+    }
+    return TRUE;
 }
 
 /* Read the current trace file and render it as a self-contained colorized
@@ -263,84 +300,48 @@ tracelog_render (GncPluginPageTracelog *page)
     if (priv->html == nullptr)
         return;
 
-    gsize length = 0;
-    gchar *contents = qof_log_read_current (&length);
-    const std::string filter = (priv->filter != nullptr) ? priv->filter : "";
-
+    /* body is a column flexbox so .filterinfo (order:-1) renders first even
+       though it is appended last, once the counts are known. */
     std::string html =
         "<html><head><meta charset=\"utf-8\"><style>"
         "body{font-family:monospace;font-size:12px;background:#fbfbfa;"
-        "color:#1a1a1a;margin:0;padding:8px;}"
+        "color:#1a1a1a;margin:0;padding:8px;display:flex;flex-direction:column;}"
         ".line{white-space:pre-wrap;}"
         ".ERROR,.FATAL{color:#b00020;}"
         ".WARN{color:#a15c00;}"
         ".empty{color:#666;font-style:italic;}"
-        ".filterinfo{color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
+        ".filterinfo{order:-1;color:#444;background:#ececec;padding:2px 4px;margin-bottom:6px;}"
         "</style></head><body>";
 
-    /* Escape every value before it enters the HTML so nothing in the log -- e.g.
-       a maliciously crafted security name -- can inject markup. g_utf8_make_valid()
-       first guards g_markup_escape_text() against invalid UTF-8. The class string
-       is one of our own fixed tokens, so it is not user data. */
-    auto append_div = [&html](const char *cls, const char *text) {
-        gchar *valid = g_utf8_make_valid (text, -1);
-        gchar *escaped = g_markup_escape_text (valid, -1);
-        html += "<div class=\"";
-        html += cls;
-        html += "\">";
-        html += escaped;
-        html += "</div>";
-        g_free (escaped);
-        g_free (valid);
-    };
+    html.reserve (4096 + qof_log_get_size());
 
-    if (contents == nullptr)
+    foreach_data_struct foreach_data{html,
+                                     std::string_view{priv->filter ? priv->filter : ""}};
+
+    if (!qof_log_foreach_line (for_each_line, &foreach_data))
     {
-        append_div ("empty",
-            _("Logging is directed to the console; no trace file is available to display."));
+        append_div (html, "empty",
+                    _("Logging is directed to the console; no trace file is available to display."));
     }
+    else if (foreach_data.total == 0)
+        append_div (html, "empty", _("No messages have been logged in this session."));
     else
     {
-        /* Split once into a vector and filter that, rather than accumulating one
-           giant string and re-splitting it. */
-        std::vector<std::string> lines;
-        std::istringstream iss (contents);
-        for (std::string line; std::getline (iss, line); )
-            lines.push_back (std::move (line));
-
-        std::vector<const std::string*> matched;
-        matched.reserve (lines.size ());
-        for (const auto& line : lines)
-            if (tracelog_line_matches (line, filter))
-                matched.push_back (&line);
-
-        if (!filter.empty ())
+        if (!foreach_data.filter.empty ())
         {
-            gchar *note = g_strdup_printf (
-                _("Filtering on '%s' - showing %zu of %zu lines."),
-                filter.c_str (), matched.size (), lines.size ());
-            append_div ("filterinfo", note);
+            auto note = g_strdup_printf (_("Filtering on '%s' - showing %zu of %zu lines."),
+                                         priv->filter, foreach_data.matched,
+                                         foreach_data.total);
+            append_div (html, "filterinfo", note);
             g_free (note);
         }
-
-        if (lines.empty ())
-            append_div ("empty", _("No messages have been logged this session."));
-        else if (matched.empty ())
-            append_div ("empty", _("No lines match the filter."));
-
-        for (const std::string* line : matched)
-        {
-            std::string cls = "line ";
-            cls += tracelog_line_class (*line);
-            append_div (cls.c_str (), line->c_str ());
-        }
+        if (foreach_data.matched == 0)
+            append_div (html, "empty", _("No lines match the filter."));
     }
 
     html += "</body></html>";
 
     gnc_html_load_html_string (priv->html, html.c_str ());
-
-    g_free (contents);
 }
 
 static void
