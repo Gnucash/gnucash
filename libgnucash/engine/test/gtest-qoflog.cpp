@@ -191,3 +191,68 @@ TEST(qoflog, foreach_line_allows_logging_from_callback)
     g_remove (path);
     g_free (path);
 }
+
+/* qof_log_get_size() tracks the file: it is non-zero after logging, grows
+   with each message, and equals the bytes foreach_line sees (each line plus
+   its newline), so it is a valid reserve() hint. */
+TEST(qoflog, get_size_matches_lines_read_back)
+{
+    gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-size", nullptr);
+    qof_log_init ();
+    qof_log_init_filename (path);
+    qof_log_set_level (log_module, QOF_LOG_DEBUG);
+
+    PWARN ("size-line-1");
+    size_t first_size = qof_log_get_size ();
+    EXPECT_GT (first_size, static_cast<size_t> (0));
+
+    PWARN ("size-line-2");
+    size_t second_size = qof_log_get_size ();
+    EXPECT_GT (second_size, first_size);
+
+    Lines lines;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &lines));
+    size_t total = 0;
+    for (const auto& l : lines)
+        total += l.size () + 1;     // + '\n'
+    EXPECT_EQ (total, second_size);
+
+    g_remove (path);
+    g_free (path);
+}
+
+/* No readable file for a console sink, so the size hint is 0. */
+TEST(qoflog, get_size_zero_for_console_sink)
+{
+    qof_log_init_filename_special ("stderr");
+    EXPECT_EQ (qof_log_get_size (), static_cast<size_t> (0));
+}
+
+/* Many short lines span several 4096-byte chunks, so some lines straddle a
+   chunk boundary. Each must arrive once, intact and in order. */
+TEST(qoflog, foreach_line_handles_lines_straddling_chunk_boundary)
+{
+    gchar *path = g_build_filename (g_get_tmp_dir (), "gnc-qoflog-test-straddle", nullptr);
+    qof_log_init ();
+    qof_log_init_filename (path);
+    qof_log_set_level (log_module, QOF_LOG_DEBUG);
+
+    constexpr int count = 200;
+    for (int i = 0; i < count; ++i)
+        PWARN ("straddle-%d-end", i);
+
+    ASSERT_GT (qof_log_get_size (), static_cast<size_t> (4096 * 2));
+
+    Lines lines;
+    ASSERT_TRUE (qof_log_foreach_line (collect_line, &lines));
+    ASSERT_EQ (lines.size (), static_cast<size_t> (count));
+    for (int i = 0; i < count; ++i)
+    {
+        std::string expected = "straddle-" + std::to_string (i) + "-end";
+        EXPECT_NE (lines[i].find (expected), std::string::npos)
+            << "line " << i << ": " << lines[i];
+    }
+
+    g_remove (path);
+    g_free (path);
+}

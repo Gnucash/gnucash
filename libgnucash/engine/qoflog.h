@@ -140,6 +140,9 @@ void qof_log_init_filename (const gchar* logfilename);
  *  it). Return TRUE to continue, FALSE to stop. **/
 typedef gboolean (*QofLogCB) (const char *line, gpointer user_data);
 
+/** Return the qof_log current size, or zero if unable to return **/
+size_t qof_log_get_size (void);
+
 /** Call @a line_func for each line of the current trace log, oldest first.
  *  Returns FALSE if logging is not going to a regular file (stderr/stdout
  *  or none), TRUE otherwise. **/

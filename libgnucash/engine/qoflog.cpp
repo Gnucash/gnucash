@@ -276,6 +276,33 @@ qof_log_init_filename(const gchar* log_filename)
     }
 }
 
+/* Flush and stat the log. Returns false when the log can't be read back
+   (no file, stderr/stdout, or not a regular file). */
+static bool
+log_file_stat (int& fd, gsize& size)
+{
+    if (!fout || fout == stderr || fout == stdout)
+        return false;
+
+    fflush(fout);
+
+    fd = fileno(fout);
+    struct stat st;
+    if (fd < 0 || fstat(fd, &st) != 0 || !S_ISREG(st.st_mode))
+        return false;
+
+    size = (st.st_size > 0) ? static_cast<gsize>(st.st_size) : 0;
+    return true;
+}
+
+size_t
+qof_log_get_size (void)
+{
+    int fd;
+    gsize size;
+    return log_file_stat(fd, size) ? size : 0;
+}
+
 /* Positional read: must not disturb the position the logger writes at. */
 static gssize
 read_log_at (int fd, char *buf, gsize len, gsize offset)
@@ -298,19 +325,16 @@ read_log_at (int fd, char *buf, gsize len, gsize offset)
 gboolean
 qof_log_foreach_line (QofLogCB line_func, gpointer user_data)
 {
-    if (!line_func || !fout || fout == stderr || fout == stdout)
+    if (!line_func)
         return FALSE;
 
-    fflush(fout);
-
-    int fd = fileno(fout);
-    struct stat st;
-    if (fd < 0 || fstat(fd, &st) != 0 || !S_ISREG(st.st_mode))
-        return FALSE;
+    int fd;
+    gsize size;                     // snapshot: anything logged from inside
+    if (!log_file_stat(fd, size))   // line_func lands past this point and is
+        return FALSE;               // not visited, so the loop terminates
 
     /* Snapshot the size: anything logged from inside line_func lands past
        this point and is not visited, so the loop always terminates. */
-    const gsize size = (st.st_size > 0) ? static_cast<gsize>(st.st_size) : 0;
     gsize offset = 0;
     std::string pending;            // partial line carried across chunks
     char buf[4096];
