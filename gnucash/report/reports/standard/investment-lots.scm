@@ -452,7 +452,10 @@ Returns #f if calculation is not possible, otherwise returns decimal CAGR."
           (gnc-numeric-negative-p basis)
           (gnc-numeric-negative-p end-value)
           (eq? years #f)
-          (zero? years))
+          (zero? years)
+          ;; Negative holding period (e.g. a purchase dated after the
+          ;; sale) has no meaningful CAGR.
+          (negative? years))
     #f
     (- (expt (/ (gnc-numeric-to-double end-value)
                (gnc-numeric-to-double basis))
@@ -1472,9 +1475,10 @@ Returns #t if held >= long-term-years, #f otherwise."
                   (years-held
                     (cond
                       (is-lot-row
-                        (gnc:date-year-delta
-                          latest-bought-split-date
-                          to-date))
+                        (and (not (null? latest-bought-split-date))
+                             (gnc:date-year-delta
+                               latest-bought-split-date
+                               to-date)))
                       (else #f)))
                   (unrealized-cagr
                       (cond
@@ -1583,8 +1587,11 @@ Returns #t if held >= long-term-years, #f otherwise."
               '())
 
             ;; Warn if the report-computed gains do not match the
-            ;; "Realized Gain/Loss" split.
-            (if warn-if-gains-mismatch
+            ;; "Realized Gain/Loss" split.  Skip lots with no purchase: their
+            ;; basis is undefined so the computed gain is not meaningful (and
+            ;; the negative-balance warning above already flags them).
+            (if (and warn-if-gains-mismatch
+                     (> bought-split-count 0))
               (let* ((all-terms-realized-gain (gnc-numeric-add-fixed
                                                 short-term-realized-gain
                                                 long-term-realized-gain))
@@ -1857,9 +1864,13 @@ Returns #t if held >= long-term-years, #f otherwise."
           (cond
             ((>= trans-date from-date)
               (let* ((years-held
-                        (gnc:date-year-delta
-                            latest-bought-split-date
-                            trans-date))
+                        ;; latest-bought-split-date is null if this sale
+                        ;; precedes any purchase (e.g. a malformed or
+                        ;; oversold lot); skip the CAGR in that case.
+                        (and (not (null? latest-bought-split-date))
+                             (gnc:date-year-delta
+                                latest-bought-split-date
+                                trans-date)))
                      (cagr (get-cagr basis value years-held)))
                 ;; Remember if a sale within the report window causes the
                 ;; lot's balance to go negative.
