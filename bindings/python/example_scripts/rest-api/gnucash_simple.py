@@ -119,8 +119,9 @@ def transactionToDict(transaction, entities):
         simple_transaction['date_due'] = transaction.RetDateDue().strftime(
             '%Y-%m-%d')
         simple_transaction['void_status'] = transaction.GetVoidStatus()
-        simple_transaction['void_time'] = transaction.GetVoidTime().strftime(
-            '%Y-%m-%d')
+        void_time = transaction.GetVoidTime()
+        simple_transaction['void_time'] = (
+            void_time.strftime('%Y-%m-%d') if void_time is not None else None)
 
         simple_transaction['description'] = transaction.GetDescription()
 
