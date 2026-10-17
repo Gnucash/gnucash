@@ -7,6 +7,7 @@
 (use-modules (srfi srfi-64))
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
+(use-modules (sxml xpath))
 
 ;; UUID for the investment-lots report
 (define uuid "ab2acc24afd14630a551f98f1a35fa81")
@@ -368,6 +369,117 @@
 
       account-alist)))
 
+;; A malformed lot with a sale but no purchase.  Its balance ends negative
+;; and it has no bought split, which previously crashed the report when it
+;; computed a holding period from a null bought date.
+(define (create-sale-without-purchase-test-data)
+  (let* ((book (gnc-get-current-book))
+         (env (create-test-env))
+         (USD (mnemonic->commodity "USD"))
+         (comm-table (gnc-commodity-table-get-table book))
+         (AAPL (gnc-commodity-new book "Apple" "NASDAQ" "AAPL" "" 1))
+         (structure
+           (list "Root" (list (cons 'type ACCT-TYPE-ASSET)
+                              (cons 'commodity USD))
+                 (list "Assets"
+                       (list "Broker" (list (cons 'commodity USD))
+                             (list "Cash" (list (cons 'commodity USD)))
+                             (list "AAPL" (list (cons 'commodity AAPL)
+                                                (cons 'type ACCT-TYPE-STOCK))))))))
+
+    (gnc-commodity-table-insert comm-table AAPL)
+
+    (let* ((account-alist (env-create-account-structure-alist env structure))
+           (cash (cdr (assoc "Cash" account-alist)))
+           (aapl-acct (cdr (assoc "AAPL" account-alist)))
+           (lot (gnc-lot-new book))
+           (sale-txn (xaccMallocTransaction book))
+           (sale-stock (xaccMallocSplit book))
+           (sale-cash (xaccMallocSplit book)))
+
+      ;; Sell 25 shares for $3,000 into a lot that was never bought into.
+      (xaccTransBeginEdit sale-txn)
+      (xaccTransSetCurrency sale-txn USD)
+      (xaccTransSetDate sale-txn 1 3 2020)
+      (xaccTransSetDescription sale-txn "Sell AAPL (no purchase)")
+      (xaccSplitSetAccount sale-stock aapl-acct)
+      (xaccSplitSetAmount sale-stock (gnc-numeric-create -25 1))
+      (xaccSplitSetValue sale-stock (gnc-numeric-create -3000 1))
+      (xaccSplitSetParent sale-stock sale-txn)
+      (gnc-lot-add-split lot sale-stock)
+      (xaccSplitSetAccount sale-cash cash)
+      (xaccSplitSetAmount sale-cash (gnc-numeric-create 3000 1))
+      (xaccSplitSetValue sale-cash (gnc-numeric-create 3000 1))
+      (xaccSplitSetParent sale-cash sale-txn)
+      (xaccTransCommitEdit sale-txn)
+
+      account-alist)))
+
+;; A lot whose purchase is dated after its sale.  The holding period is
+;; negative, which previously produced a bogus CAGR (and crashed on the
+;; null bought date seen while processing the earlier sale).
+(define (create-buy-after-sell-test-data)
+  (let* ((book (gnc-get-current-book))
+         (env (create-test-env))
+         (USD (mnemonic->commodity "USD"))
+         (comm-table (gnc-commodity-table-get-table book))
+         (AAPL (gnc-commodity-new book "Apple" "NASDAQ" "AAPL" "" 1))
+         (structure
+           (list "Root" (list (cons 'type ACCT-TYPE-ASSET)
+                              (cons 'commodity USD))
+                 (list "Assets"
+                       (list "Broker" (list (cons 'commodity USD))
+                             (list "Cash" (list (cons 'commodity USD)))
+                             (list "AAPL" (list (cons 'commodity AAPL)
+                                                (cons 'type ACCT-TYPE-STOCK))))))))
+
+    (gnc-commodity-table-insert comm-table AAPL)
+
+    (let* ((account-alist (env-create-account-structure-alist env structure))
+           (cash (cdr (assoc "Cash" account-alist)))
+           (aapl-acct (cdr (assoc "AAPL" account-alist)))
+           (lot (gnc-lot-new book))
+           (sale-txn (xaccMallocTransaction book))
+           (sale-stock (xaccMallocSplit book))
+           (sale-cash (xaccMallocSplit book))
+           (buy-txn (xaccMallocTransaction book))
+           (buy-stock (xaccMallocSplit book))
+           (buy-cash (xaccMallocSplit book)))
+
+      ;; Sell 25 shares for $3,000 in 2019.
+      (xaccTransBeginEdit sale-txn)
+      (xaccTransSetCurrency sale-txn USD)
+      (xaccTransSetDate sale-txn 1 1 2019)
+      (xaccTransSetDescription sale-txn "Sell AAPL (before buy)")
+      (xaccSplitSetAccount sale-stock aapl-acct)
+      (xaccSplitSetAmount sale-stock (gnc-numeric-create -25 1))
+      (xaccSplitSetValue sale-stock (gnc-numeric-create -3000 1))
+      (xaccSplitSetParent sale-stock sale-txn)
+      (gnc-lot-add-split lot sale-stock)
+      (xaccSplitSetAccount sale-cash cash)
+      (xaccSplitSetAmount sale-cash (gnc-numeric-create 3000 1))
+      (xaccSplitSetValue sale-cash (gnc-numeric-create 3000 1))
+      (xaccSplitSetParent sale-cash sale-txn)
+      (xaccTransCommitEdit sale-txn)
+
+      ;; Buy 100 shares for $5,000 in 2020, i.e. after the sale.
+      (xaccTransBeginEdit buy-txn)
+      (xaccTransSetCurrency buy-txn USD)
+      (xaccTransSetDate buy-txn 1 1 2020)
+      (xaccTransSetDescription buy-txn "Buy AAPL (after sale)")
+      (xaccSplitSetAccount buy-stock aapl-acct)
+      (xaccSplitSetAmount buy-stock (gnc-numeric-create 100 1))
+      (xaccSplitSetValue buy-stock (gnc-numeric-create 5000 1))
+      (xaccSplitSetParent buy-stock buy-txn)
+      (gnc-lot-add-split lot buy-stock)
+      (xaccSplitSetAccount buy-cash cash)
+      (xaccSplitSetAmount buy-cash (gnc-numeric-create -5000 1))
+      (xaccSplitSetValue buy-cash (gnc-numeric-create -5000 1))
+      (xaccSplitSetParent buy-cash buy-txn)
+      (xaccTransCommitEdit buy-txn)
+
+      account-alist)))
+
 (define (find-col-index labels target)
   (let loop ((rest labels) (i 1))
     (cond
@@ -380,6 +492,11 @@
     #f
     (or (pred (car lst))
         (list-any pred (cdr lst)))))
+
+;; #t if any text node in the sxml tree contains the given substring.
+(define (sxml-text-contains? sxml substr)
+  (list-any (lambda (s) (and (string? s) (string-contains s substr)))
+            ((sxpath '(// *text*)) sxml)))
 
 (define (test-investment-lots)
   ;; Test rendering with various configurations
@@ -833,4 +950,42 @@
       (test-assert "realized-gain-equal-equivalent-baseline"
         (equal? base-realized-values rev-realized-values))))
 
+    (gnc-clear-current-session))
+
+  ;; A lot with a sale but no purchase must render (not crash) and surface
+  ;; the negative-balance warning rather than a meaningless gains mismatch.
+  (test-group-with-cleanup "sale-without-purchase-renders"
+    (let* ((account-alist (create-sale-without-purchase-test-data))
+           (options (gnc:make-report-options uuid)))
+      (set-option! options "General" "Start date"
+                   (cons 'absolute (gnc-dmy2time64 01 01 2019)))
+      (set-option! options "General" "End date"
+                   (cons 'absolute (gnc-dmy2time64 31 12 2021)))
+      (set-option! options "Validation"
+                   "Warn if a lot's balance drops below zero" #t)
+      (set-option! options "Validation"
+                   "Warn if the 'Realized Gain/Loss' split(s) sum does not match the computed gains" #t)
+      (let ((sxml (options->sxml options "sale-without-purchase")))
+        (test-assert "renders-without-crash" sxml)
+        (test-assert "negative-balance-warning-shown"
+          (sxml-text-contains? sxml "balance is negative"))
+        (test-assert "no-gains-mismatch-warning"
+          (not (sxml-text-contains? sxml "is not equal to the")))))
+
+    (gnc-clear-current-session))
+
+  ;; A lot whose purchase is dated after its sale must render without crashing
+  ;; on the negative holding period (no bogus CAGR, no null-date error).
+  (test-group-with-cleanup "buy-after-sell-renders"
+    (let* ((account-alist (create-buy-after-sell-test-data))
+           (options (gnc:make-report-options uuid)))
+      (set-option! options "General" "Start date"
+                   (cons 'absolute (gnc-dmy2time64 01 01 2018)))
+      (set-option! options "General" "End date"
+                   (cons 'absolute (gnc-dmy2time64 31 12 2021)))
+      (set-option! options "Columns" "Show CAGR columns" #t)
+      (test-assert "renders-without-crash"
+        (render-report options "buy-after-sell")))
+
     (gnc-clear-current-session)))
+
