@@ -149,18 +149,16 @@ xmlNodePtr
 gdate_to_dom_tree (const char* tag, const GDate* date)
 {
     xmlNodePtr ret;
-    gchar* date_str = NULL;
+    gchar date_str[32];
 
     g_return_val_if_fail (date, NULL);
-    date_str = g_new (gchar, 512);
 
-    g_date_strftime (date_str, 512, "%Y-%m-%d", date);
+    if (!g_date_strftime (date_str, sizeof (date_str), "%Y-%m-%d", date))
+        date_str[0] = '\0';
 
     ret = xmlNewNode (NULL, BAD_CAST tag);
 
-    xmlNewTextChild (ret, NULL, BAD_CAST "gdate", checked_char_cast (date_str));
-
-    g_free (date_str);
+    xmlNewTextChild (ret, NULL, BAD_CAST "gdate", BAD_CAST date_str);
 
     return ret;
 }
