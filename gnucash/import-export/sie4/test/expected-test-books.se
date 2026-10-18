@@ -1,0 +1,81 @@
+#FLAGGA 0
+#FORMAT PC8
+#SIETYP 4
+#PROGRAM "GnuCash" 5.15
+#GEN 20260505
+#FNAMN "Gîteborgs èkeri AB"
+#ADRESS "" "èsa Andersson" "ôstra vÑgen 1 123 45 Gîteborg" ""
+#RAR 0 20240101 20241231
+#RAR -1 20230101 20231231
+#ORGNR 556677-8899
+#OMFATTN 20241231
+#KPTYP EUBAS97
+#VALUTA SEK
+
+#KONTO 1510 "Kundfordringar"
+#KTYP 1510 T
+#KONTO 1930 "Bank"
+#KTYP 1930 T
+#KONTO 2010 "Eget kapital"
+#KTYP 2010 S
+#KONTO 2440 "Leverantîrsskulder"
+#KTYP 2440 S
+#KONTO 2611 "UtgÜende moms"
+#KTYP 2611 S
+#KONTO 2641 "IngÜende moms"
+#KTYP 2641 T
+#KONTO 3010 "FîrsÑljning"
+#KTYP 3010 I
+#KONTO 4010 "Inkîp"
+#KTYP 4010 K
+
+#DIM 8 Kund
+#DIM 9 Leverantîr
+#DIM 10 Faktura
+
+#IB 0 1930 6250.00
+#IB 0 2010 -5000.00
+#IB 0 2440 -250.00
+#IB 0 2611 -250.00
+#IB 0 2641 50.00
+#IB -1 1930 5000.00
+#IB -1 2010 -5000.00
+
+#UB 0 1930 7000.00
+#UB 0 2010 -5000.00
+#UB 0 2440 -250.00
+#UB 0 2611 -500.00
+#UB 0 2641 150.00
+#UB -1 1930 6250.00
+#UB -1 2010 -5000.00
+#UB -1 2440 -250.00
+#UB -1 2611 -250.00
+#UB -1 2641 50.00
+
+#RES 0 3010 -1000.00
+#RES 0 4010 400.00
+#RES -1 3010 -1000.00
+#RES -1 4010 200.00
+
+#VER A 1 20240315 "FîrsÑljning" 20240315
+{
+#TRANS 1510 {} 1250.00 20240315 "kundfaktura"
+#TRANS 2611 {} -250.00 20240315 "utgÜende moms 25%"
+#TRANS 3010 {} -1000.00 20240315 "fîrsÑljning netto"
+}
+#VER A 2 20240410 "Inkîp" 20240410
+{
+#TRANS 2440 {} -500.00 20240410 "leverantîrsfaktura"
+#TRANS 2641 {} 100.00 20240410 "ingÜende moms 25%"
+#TRANS 4010 {} 400.00 20240410 "inkîp netto"
+}
+#VER A 3 20240501 "Kundbetalning" 20240501
+{
+#TRANS 1510 {} -1250.00 20240501 "kundbetalning"
+#TRANS 1930 {} 1250.00 20240501 "bankinbetalning"
+}
+#VER A 4 20240515 "Leverantîrsbetalning" 20240515
+{
+#TRANS 1930 {} -500.00 20240515 "bankutbetalning"
+#TRANS 2440 {} 500.00 20240515 "leverantîrsbetalning"
+}
