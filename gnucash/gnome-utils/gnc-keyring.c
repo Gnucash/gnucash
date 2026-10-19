@@ -68,7 +68,7 @@ const SecretSchema* gnucash_get_secret_schema(void)
 #ifdef HAVE_OSX_KEYCHAIN
 /* Log an OSStatus from the macOS keychain as a readable message. */
 static void
-gnc_log_osx_keychain_error (const gchar *context, OSStatus status)
+log_osx_keychain_error (const gchar *context, OSStatus status)
 {
     CFStringRef osx_resultstring = SecCopyErrorMessageString (status, NULL);
     char resultstring[256] = "";
@@ -170,7 +170,7 @@ void gnc_keyring_set_password (const gchar *access_method,
 
     if ( status != noErr )
     {
-        gnc_log_osx_keychain_error ("gnc_keyring_set_password", status);
+        log_osx_keychain_error ("gnc_keyring_set_password", status);
         PWARN ( "The user will be prompted for a password again next time." );
     }
 #endif /* HAVE_OSX_KEYCHAIN */
@@ -347,7 +347,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
         }
         else
         {
-            gnc_log_osx_keychain_error ("gnc_keyring_get_password", status);
+            log_osx_keychain_error ("gnc_keyring_get_password", status);
         }
     }
 #endif /* HAVE_OSX_KEYCHAIN */
