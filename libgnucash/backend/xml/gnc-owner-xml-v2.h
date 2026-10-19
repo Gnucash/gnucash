@@ -24,7 +24,8 @@
 #define GNC_OWNER_XML_V2_H
 #include "gncOwner.h"
 #include "qof.h"
-gboolean   gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner* owner,
+#include "gnc-xml-sax-node.h"
+gboolean   gnc_dom_tree_to_owner (GncXmlNode* node, GncOwner* owner,
                                   QofBook* book);
 xmlNodePtr gnc_owner_to_dom_tree (const char* tag, const GncOwner* addr);
 void gnc_owner_xml_initialize (void);
