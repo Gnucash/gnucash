@@ -73,13 +73,40 @@ typedef enum
     VIEW_ORDER
 } OrderDialogType;
 
-struct _order_select_window
+typedef struct _OrderSelectWindow
 {
+    GObject parent;
     QofBook  *book;
     GncOwner *owner;
     QofQuery *q;
     GncOwner  owner_def;
-};
+} OrderSelectWindow;
+
+typedef struct _OrderSelectWindowClass
+{
+    GObjectClass parent_class;
+} OrderSelectWindowClass;
+
+G_DEFINE_TYPE (OrderSelectWindow, order_select_window, G_TYPE_OBJECT)
+
+static void
+order_select_window_finalize (GObject *object)
+{
+    auto sw = ORDER_SELECT_WINDOW (object);
+    qof_query_destroy (sw->q);
+    G_OBJECT_CLASS (order_select_window_parent_class)->finalize (object);
+}
+
+static void
+order_select_window_class_init (OrderSelectWindowClass *klass)
+{
+    G_OBJECT_CLASS (klass)->finalize = order_select_window_finalize;
+}
+
+static void
+order_select_window_init (OrderSelectWindow *sw)
+{
+}
 
 struct _order_window
 {
@@ -1129,7 +1156,7 @@ edit_order_cb (GtkWindow *dialog, gpointer *order_p, gpointer user_data)
 static gpointer
 new_order_cb (GtkWindow *dialog, gpointer user_data)
 {
-    struct _order_select_window *sw = user_data;
+    OrderSelectWindow *sw = ORDER_SELECT_WINDOW (user_data);
     OrderWindow *ow;
 
     g_return_val_if_fail (user_data, NULL);
@@ -1141,19 +1168,18 @@ new_order_cb (GtkWindow *dialog, gpointer user_data)
 static void
 free_order_cb (gpointer user_data)
 {
-    struct _order_select_window *sw = user_data;
+    OrderSelectWindow *sw = ORDER_SELECT_WINDOW (user_data);
 
     g_return_if_fail (sw);
 
-    qof_query_destroy (sw->q);
-    g_free (sw);
+    g_object_unref (sw);
 }
 
 GNCSearchWindow *
 gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *book)
 {
     QofIdType type = GNC_ORDER_MODULE_NAME;
-    struct _order_select_window *sw;
+    OrderSelectWindow *sw;
     QofQuery *q, *q2 = NULL;
     static GList *params = NULL;
     static GList *columns = NULL;
@@ -1238,7 +1264,7 @@ gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *
 #endif
 
     /* launch select dialog and return the result */
-    sw = g_new0 (struct _order_select_window, 1);
+    sw = ORDER_SELECT_WINDOW (g_object_new (order_select_window_get_type (), NULL));
 
     if (owner)
     {

@@ -439,9 +439,9 @@ gnc_prices_dialog_get_commodities (GtkWidget *view)
     return g_list_reverse (comm_list);
 }
 
-struct PriceOldRemoveRequest
+typedef struct _PriceOldRemoveRequest
 {
-    gatomicrefcount ref_count;
+    GObject parent;
     GWeakRef price_window;
     GtkWindow *dialog;
     GtkWidget *date;
@@ -459,18 +459,19 @@ struct PriceOldRemoveRequest
     gboolean waiting_for_confirmation;
     gulong parent_destroy_handler;
     gulong dialog_destroy_handler;
-};
+} PriceOldRemoveRequest;
 
-static PriceOldRemoveRequest *
-price_old_remove_request_ref (PriceOldRemoveRequest *request)
+typedef struct _PriceOldRemoveRequestClass
 {
-    g_atomic_ref_count_inc (&request->ref_count);
-    return request;
-}
+    GObjectClass parent_class;
+} PriceOldRemoveRequestClass;
+
+G_DEFINE_TYPE (PriceOldRemoveRequest, price_old_remove_request, G_TYPE_OBJECT)
 
 static void
-price_old_remove_request_free (PriceOldRemoveRequest *request)
+price_old_remove_request_finalize (GObject *object)
 {
+    auto request = PRICE_OLD_REMOVE_REQUEST (object);
     auto window = GTK_WIDGET (g_weak_ref_get (&request->price_window));
 
     if (window && request->parent_destroy_handler)
@@ -479,14 +480,31 @@ price_old_remove_request_free (PriceOldRemoveRequest *request)
     g_clear_object (&request->dialog);
     g_weak_ref_clear (&request->price_window);
     g_free (request->target_namespace_name);
-    g_free (request);
+    G_OBJECT_CLASS (price_old_remove_request_parent_class)->finalize (object);
+}
+
+static void
+price_old_remove_request_class_init (PriceOldRemoveRequestClass *klass)
+{
+    G_OBJECT_CLASS (klass)->finalize = price_old_remove_request_finalize;
+}
+
+static void
+price_old_remove_request_init (PriceOldRemoveRequest *request)
+{
+}
+
+static PriceOldRemoveRequest *
+price_old_remove_request_ref (PriceOldRemoveRequest *request)
+{
+    return PRICE_OLD_REMOVE_REQUEST (g_object_ref (request));
 }
 
 static void
 price_old_remove_request_unref (PriceOldRemoveRequest *request)
 {
-    if (request && g_atomic_ref_count_dec (&request->ref_count))
-        price_old_remove_request_free (request);
+    if (request)
+        g_object_unref (request);
 }
 
 static PricesDialog *
@@ -847,8 +865,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         return;
     }
 
-    request = g_new0 (PriceOldRemoveRequest, 1);
-    g_atomic_ref_count_init (&request->ref_count);
+    request = PRICE_OLD_REMOVE_REQUEST (g_object_new (price_old_remove_request_get_type (), NULL));
     g_weak_ref_init (&request->price_window, pdb_dialog->window);
     request->dialog = GTK_WINDOW (g_object_ref (dialog));
     request->date = gnc_date_edit_new (time (nullptr), FALSE, FALSE);
