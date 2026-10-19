@@ -137,8 +137,12 @@ void qof_log_init_filename (const gchar* logfilename);
 
 /** Callback for qof_log_foreach_line. @a line is NUL-terminated, has no
  *  trailing newline, and is valid only during the call (copy it to keep
- *  it). Return TRUE to continue, FALSE to stop. **/
-typedef gboolean (*QofLogCB) (const char *line, gpointer user_data);
+ *  it). Return TRUE to continue, FALSE to stop.
+ *  @a fraction is the approximate portion of the file read so far in the
+ *  range [0, 1].
+ *  **/
+typedef gboolean (*QofLogCB) (const char *line, double fraction,
+                              gpointer user_data);
 
 /** Return the qof_log current size, or zero if unable to return **/
 size_t qof_log_get_size (void);

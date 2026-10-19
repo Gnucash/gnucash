@@ -35,7 +35,7 @@ static QofLogModule log_module = "gnc.test.qoflog";
 using Lines = std::vector<std::string>;
 
 static gboolean
-collect_line (const char *line, gpointer user_data)
+collect_line (const char *line, double, gpointer user_data)
 {
     static_cast<Lines*> (user_data)->emplace_back (line);
     return TRUE;
@@ -108,7 +108,7 @@ TEST(qoflog, foreach_line_false_for_console_sink)
 
 /* Returning FALSE from the callback stops iteration; the call still returns TRUE. */
 static gboolean
-stop_after_one (const char *line, gpointer user_data)
+stop_after_one (const char *line, double, gpointer user_data)
 {
     ++*static_cast<int*> (user_data);
     return FALSE;
@@ -160,7 +160,7 @@ TEST(qoflog, foreach_line_handles_line_longer_than_read_chunk)
 /* Logging from inside the callback is safe: the new lines land after the
    snapshot, are not visited, and are present on a later pass. */
 static gboolean
-warn_per_line (const char *line, gpointer user_data)
+warn_per_line (const char *line, double, gpointer user_data)
 {
     ++*static_cast<int*> (user_data);
     PWARN ("from-callback");

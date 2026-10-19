@@ -338,6 +338,7 @@ qof_log_foreach_line (QofLogCB line_func, gpointer user_data)
     gsize offset = 0;
     std::string pending;            // partial line carried across chunks
     char buf[4096];
+    const double total = size ? static_cast<double>(size) : 1.0;
 
     while (offset < size)
     {
@@ -346,6 +347,7 @@ qof_log_foreach_line (QofLogCB line_func, gpointer user_data)
         if (n <= 0)
             break;
         offset += static_cast<gsize>(n);
+        double fraction = static_cast<double>(offset) / total;
 
         for (char *p = buf, *end = buf + n; p < end;)
         {
@@ -358,11 +360,11 @@ qof_log_foreach_line (QofLogCB line_func, gpointer user_data)
             *nl = '\0';             // terminate in place; nl < end <= buf+4096
             gboolean keep_going;
             if (pending.empty())
-                keep_going = line_func(p, user_data);
+                keep_going = line_func(p, fraction, user_data);
             else
             {
                 pending.append(p);
-                keep_going = line_func(pending.c_str(), user_data);
+                keep_going = line_func(pending.c_str(), fraction, user_data);
                 pending.clear();
             }
             if (!keep_going)
@@ -371,8 +373,9 @@ qof_log_foreach_line (QofLogCB line_func, gpointer user_data)
         }
     }
 
+    double fraction = static_cast<double>(offset) / total;
     if (!pending.empty())           // final line without a newline
-        line_func(pending.c_str(), user_data);
+        line_func(pending.c_str(), fraction, user_data);
 
     return TRUE;
 }

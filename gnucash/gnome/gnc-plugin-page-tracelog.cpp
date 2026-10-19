@@ -28,6 +28,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <chrono>
 
 #include "gnc-plugin-page-tracelog.h"
 #include "gnc-plugin-page.h"
@@ -37,6 +38,7 @@
 #include "gnc-html-factory.hpp"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "qoflog.h"
 
 static QofLogModule log_module = "gnc.gui.tracelog";
@@ -271,9 +273,13 @@ struct foreach_data_struct
     std::string_view filter;
     size_t total{0};
     size_t matched{0};
+    std::chrono::steady_clock::time_point last_update{};
+    bool cancelled{false};
 };
 
-static gboolean for_each_line (const char* line, gpointer user_data)
+static constexpr auto progress_interval = std::chrono::milliseconds{200};
+
+static gboolean for_each_line (const char* line, double fraction, gpointer user_data)
 {
     auto data = static_cast<foreach_data_struct*>(user_data);
     ++data->total;
@@ -283,6 +289,20 @@ static gboolean for_each_line (const char* line, gpointer user_data)
         ++data->matched;
         append_div (data->html, tracelog_line_class (sv), sv);
     }
+    auto now = std::chrono::steady_clock::now();
+    if (now - data->last_update >= progress_interval)
+    {
+        data->last_update = now;
+        gnc_window_show_progress (_("Scanning tracefile..."), 100.0 * fraction);
+    }
+    return !data->cancelled;
+}
+
+static gboolean on_scan_key_press (GtkWidget*, GdkEventKey* event, gpointer user_data)
+{
+    if (event->keyval != GDK_KEY_Escape)
+        return FALSE;
+    static_cast<foreach_data_struct*>(user_data)->cancelled = true;
     return TRUE;
 }
 
@@ -318,11 +338,22 @@ tracelog_render (GncPluginPageTracelog *page)
     foreach_data_struct foreach_data{html,
                                      std::string_view{priv->filter ? priv->filter : ""}};
 
+    GtkWidget *win{gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))};
+    gulong key_id{0};
+    if (win)
+    {
+        g_object_ref (win);
+        key_id = g_signal_connect (win, "key-press-event",
+                                   G_CALLBACK (on_scan_key_press), &foreach_data);
+    }
+
     if (!qof_log_foreach_line (for_each_line, &foreach_data))
     {
         append_div (html, "empty",
                     _("Logging is directed to the console; no trace file is available to display."));
     }
+    else if (foreach_data.cancelled)
+        append_div (html, "empty", _("Scan cancelled; showing partial results."));
     else if (foreach_data.total == 0)
         append_div (html, "empty", _("No messages have been logged in this session."));
     else
@@ -338,6 +369,13 @@ tracelog_render (GncPluginPageTracelog *page)
         if (foreach_data.matched == 0)
             append_div (html, "empty", _("No lines match the filter."));
     }
+
+    if (win)
+    {
+        g_signal_handler_disconnect (win, key_id);
+        g_object_unref (win);
+    }
+    gnc_window_show_progress (nullptr, -1);
 
     html += "</body></html>";
 
